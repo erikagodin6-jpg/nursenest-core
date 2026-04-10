@@ -1,0 +1,533 @@
+{
+  "version": 1,
+  "label": "NP Question Bank Expansion — Overlap Risk and Realistic Limit Report",
+  "generatedDate": "2026-04-10",
+  "expansionPlanRef": "np-question-bank-expansion-plan.json",
+  "scopeFenceRef": "np-scope-fences.json",
+
+  "topicsThatCannotReach25WithoutDuplication": [
+    {
+      "topicSlug": "red-eye-differential-conjunctivitis-glaucoma",
+      "realisticMax": 18,
+      "reason": "Only 8 distinct clinical scenarios in primary care ophthalmology (angle-closure, gonococcal, uveitis, viral, bacterial, scleritis, CRAO, bacterial keratitis). A 9th question would require repeating presentation patterns or covering specialist-level retinal procedures outside NP scope.",
+      "recommendation": "Cap at 18. Do not pad with repeat scenarios."
+    },
+    {
+      "topicSlug": "adrenal-insufficiency-thyroid-storm-recognition",
+      "realisticMax": 18,
+      "reason": "Recognition-and-refer topic covering 7 distinct clinical crises. Detailed management is split across adrenal-insufficiency-stress-dosing-management and thyroid-disease-diagnosis-management by scope fence. Expanding beyond 18 would duplicate content already assigned to those topics.",
+      "recommendation": "Cap at 18. Cross-reference for management questions."
+    },
+    {
+      "topicSlug": "hypertension-red-flags-referral",
+      "realisticMax": 18,
+      "reason": "Emergency recognition and disposition decisions only (6 scenarios). Chronic management and drug selection owned by hypertension-step-therapy-guideline.",
+      "recommendation": "Cap at 18."
+    },
+    {
+      "topicSlug": "multiple-sclerosis-primary-care-monitoring",
+      "realisticMax": 18,
+      "reason": "NP role is coordination and symptom management only. Disease-modifying therapy selection, relapse management, and specialist escalation are outside NP primary care scope for this topic.",
+      "recommendation": "Cap at 18."
+    },
+    {
+      "topicSlug": "levothyroxine-dosing-monitoring-interactions",
+      "realisticMax": 18,
+      "reason": "Single drug class. Covers dosing by population, monitoring intervals, drug-food-drug interactions, and special populations (pregnancy, elderly). Beyond 18 would repeat scenarios already covered in thyroid-disease-diagnosis-management.",
+      "recommendation": "Cap at 18."
+    },
+    {
+      "topicSlug": "topical-corticosteroids-potency-use",
+      "realisticMax": 18,
+      "reason": "Potency classification, site-specific prescribing, and adverse effects. 18 covers all distinctions without repeating systemic corticosteroids content.",
+      "recommendation": "Cap at 18."
+    },
+    {
+      "topicSlug": "inhaler-device-technique-patient-matching",
+      "realisticMax": 18,
+      "reason": "Device types, spacer indications, patient-device matching, and technique. Beyond 18 would duplicate inhaler drug content already in asthma and COPD management topics.",
+      "recommendation": "Cap at 18."
+    },
+    {
+      "topicSlug": "depression-anxiety-screening-phq9-gad7",
+      "realisticMax": 18,
+      "reason": "Screening tool interpretation only. Treatment questions belong to antidepressant-selection and mdd-diagnosis topics. Expanding beyond 18 would cause scope fence violations.",
+      "recommendation": "Cap at 18."
+    },
+    {
+      "topicSlug": "prediabetes-screening-lifestyle-counseling",
+      "realisticMax": 18,
+      "reason": "Screening criteria and lifestyle intervention. Metformin for prediabetes prevention edges into t2dm-intensification scope.",
+      "recommendation": "Cap at 18."
+    },
+    {
+      "topicSlug": "sti-screening-risk-group-age",
+      "realisticMax": 18,
+      "reason": "Screening criteria by organism and population only. Treatment questions belong to acute primary care and women's health topics.",
+      "recommendation": "Cap at 18."
+    },
+    {
+      "topicSlug": "hearing-vision-loss-screening-referral",
+      "realisticMax": 18,
+      "reason": "Screening and referral criteria. Detailed ophthalmology management outside NP primary care scope in this topic.",
+      "recommendation": "Cap at 18."
+    },
+    {
+      "topicSlug": "cervical-cancer-screening-pap-hpv",
+      "realisticMax": 18,
+      "reason": "Guideline intervals, co-testing criteria, special populations. ASCCP colposcopy algorithms are gynecology referral scope; detailed colposcopy management not primary care NP content.",
+      "recommendation": "Cap at 18."
+    },
+    {
+      "topicSlug": "cancer-red-flags-primary-care",
+      "realisticMax": 18,
+      "reason": "Recognition of warning signs by cancer type. Detailed cancer management and screening protocols belong to separate topics; overlap risk is high beyond 18.",
+      "recommendation": "Cap at 18."
+    },
+    {
+      "topicSlug": "pediatric-red-flags-dont-miss",
+      "realisticMax": 18,
+      "reason": "Pediatric emergency recognition only. Detailed management of individual conditions (intussusception, epiglottitis, DKA) belongs to pediatric domain topics.",
+      "recommendation": "Cap at 18."
+    },
+    {
+      "topicSlug": "psychiatric-red-flags-safety",
+      "realisticMax": 18,
+      "reason": "Safety assessment and disposition. Detailed pharmacological management belongs to mdd, bipolar, and psychosis topics. Scope fence required.",
+      "recommendation": "Cap at 18."
+    },
+    {
+      "topicSlug": "childhood-immunization-schedule-np",
+      "realisticMax": 18,
+      "reason": "Schedule knowledge, catch-up protocols, and contraindications. Beyond 18 would repeat adult immunization content.",
+      "recommendation": "Cap at 18."
+    },
+    {
+      "topicSlug": "adolescent-heeadsss-confidentiality",
+      "realisticMax": 18,
+      "reason": "Assessment framework and confidentiality law. Clinical management questions belong to individual mental health, STI, and substance use topics.",
+      "recommendation": "Cap at 18."
+    },
+    {
+      "topicSlug": "kawasaki-disease-recognition-criteria-referral",
+      "realisticMax": 18,
+      "reason": "Recognition criteria + urgent referral. IVIG dosing and echocardiography interpretation are specialist-level and outside primary care NP management scope.",
+      "recommendation": "Cap at 18."
+    },
+    {
+      "topicSlug": "pediatric-obesity-screening-counseling",
+      "realisticMax": 18,
+      "reason": "Pediatric BMI screening + lifestyle counseling. Pharmacotherapy deferred to adult obesity management topic; duplicate risk beyond 18.",
+      "recommendation": "Cap at 18."
+    },
+    {
+      "topicSlug": "skin-cancer-recognition-abcde-referral",
+      "realisticMax": 18,
+      "reason": "Recognition + referral scope. Excision, Mohs surgery, staging, and systemic therapy are specialist content.",
+      "recommendation": "Cap at 18."
+    },
+    {
+      "topicSlug": "mens-health-screening-prostate-testosterone",
+      "realisticMax": 18,
+      "reason": "PSA interpretation + testosterone evaluation. Prostate cancer treatment and advanced testosterone replacement protocols are specialist content.",
+      "recommendation": "Cap at 18."
+    },
+    {
+      "topicSlug": "hyperparathyroidism-hypercalcemia-workup",
+      "realisticMax": 18,
+      "reason": "Diagnosis and referral. Parathyroidectomy decisions, MEN syndromes, and long-term management require specialist co-management.",
+      "recommendation": "Cap at 18."
+    },
+    {
+      "topicSlug": "diabetic-eye-glaucoma-screening-referral",
+      "realisticMax": 18,
+      "reason": "Screening + referral criteria. Laser photocoagulation, anti-VEGF therapy, and trabeculectomy are ophthalmology specialist content.",
+      "recommendation": "Cap at 18."
+    },
+    {
+      "topicSlug": "goals-of-care-framework-np-role",
+      "realisticMax": 18,
+      "reason": "Communication framework and legal documents. Clinical management belongs to disease-specific topics; ethics scenarios beyond 18 would be repetitive.",
+      "recommendation": "Cap at 18."
+    },
+    {
+      "topicSlug": "eating-disorder-screening-referral-primary-care",
+      "realisticMax": 18,
+      "reason": "Screening, medical complications recognition, referral. Intensive outpatient and inpatient eating disorder management is specialty content.",
+      "recommendation": "Cap at 18."
+    },
+    {
+      "topicSlug": "acute-respiratory-distress-transfer-decision",
+      "realisticMax": 18,
+      "reason": "Transfer decision scope. Detailed AECOPD, asthma, and PE management belongs to individual disease topics. Overlap risk is high beyond 18.",
+      "recommendation": "Cap at 18."
+    },
+    {
+      "topicSlug": "anaphylaxis-recognition-office-management",
+      "realisticMax": 18,
+      "reason": "Narrow clinical scope: epinephrine + supportive care + transfer. Allergy/immunology referral and immunotherapy belong to specialty.",
+      "recommendation": "Cap at 18."
+    },
+    {
+      "topicSlug": "acute-musculoskeletal-injury-ottawa-rules",
+      "realisticMax": 18,
+      "reason": "Decision rules + acute management. Detailed ligament reconstruction and chronic MSK management belongs to other topics.",
+      "recommendation": "Cap at 18."
+    },
+    {
+      "topicSlug": "dka-hhs-recognition-outpatient-stabilize",
+      "realisticMax": 18,
+      "reason": "Outpatient recognition and initial stabilization only. Inpatient management belongs to endocrine-crisis-recognition-dka-hhs-adrenal topic. Expanding beyond 18 causes SF-01 scope fence violations.",
+      "recommendation": "Cap at 18."
+    },
+    {
+      "topicSlug": "pediatric-dehydration-severity-rehydration",
+      "realisticMax": 18,
+      "reason": "Assessment + ORT vs IV decision. Detailed pediatric fluid management and electrolyte disorders are ED/hospitalist content.",
+      "recommendation": "Cap at 18."
+    },
+    {
+      "topicSlug": "wound-assessment-closure-decisions",
+      "realisticMax": 18,
+      "reason": "Wound classification + closure technique + tetanus. Reconstructive and specialty wound care is outside primary care NP scope.",
+      "recommendation": "Cap at 18."
+    },
+    {
+      "topicSlug": "acute-bronchitis-pneumonia-covid-differentiation",
+      "realisticMax": 18,
+      "reason": "Differential diagnosis scope only. Antibiotic selection for CAP belongs to cap-risk-stratification-antibiotic-admission topic. Expanding beyond 18 risks duplication.",
+      "recommendation": "Cap at 18."
+    },
+    {
+      "topicSlug": "acute-diarrhea-infectious-non-infectious",
+      "realisticMax": 18,
+      "reason": "Testing decisions + rehydration + antibiotic stewardship basics. IBD management belongs to ibs-vs-ibd topic. Detailed C. diff management is acute inpatient.",
+      "recommendation": "Cap at 18."
+    },
+    {
+      "topicSlug": "pharyngitis-strep-centor-antibiotic",
+      "realisticMax": 18,
+      "reason": "Centor scoring + testing + antibiotic selection. Very narrow clinical scope.",
+      "recommendation": "Cap at 18."
+    },
+    {
+      "topicSlug": "aom-vs-ome-management",
+      "realisticMax": 18,
+      "reason": "Pediatric acute otitis media scope + watchful waiting criteria. Tube placement and audiological assessment is specialist.",
+      "recommendation": "Cap at 18."
+    }
+  ],
+
+  "highOverlapRiskPairs": [
+    {
+      "pairId": "OVR-01",
+      "topicA": "chest-pain-differential-primary-care",
+      "topicB": "acs-ruleout-heart-score-disposition",
+      "overlapRisk": "HIGH",
+      "overlapZone": "HEART score calculation, aspirin initiation, initial ECG interpretation",
+      "resolution": "chest-pain-differential owns the DIFFERENTIAL of ACS vs non-ACS causes using HEART score as a tool. acs-ruleout owns HEART score-guided DISPOSITION decisions, serial troponin protocols, and invasive evaluation thresholds. Stems in chest-pain-differential test 'which diagnosis fits?' Stems in acs-ruleout test 'what is the next step given this HEART score?'",
+      "stemAnchorGuard": "All chest-pain-differential stems must present an undifferentiated presentation. All acs-ruleout stems must present ACS as the working diagnosis and test what to do next."
+    },
+    {
+      "pairId": "OVR-02",
+      "topicA": "t2dm-intensification-beyond-metformin",
+      "topicB": "glp1-sglt2-comorbidity-selection",
+      "overlapRisk": "CRITICAL",
+      "overlapZone": "GLP-1 and SGLT-2 drug class selection",
+      "resolution": "SF-01 scope fence defines exact boundary. t2dm-intensification owns: step therapy order, HbA1c targets, SU/DPP-4/TZD/insulin selection, and GLP-1/SGLT-2 only as options in the step map without mechanism or trial data. glp1-sglt2 owns: mechanism, cardiorenal trial data, agent-level selection within each class, and specific AE profiles.",
+      "stemAnchorGuard": "t2dm-intensification stems must not include trial names (EMPA-REG, LEADER, etc.). glp1-sglt2 stems must not include step therapy decision trees or A1c targets."
+    },
+    {
+      "pairId": "OVR-03",
+      "topicA": "thyroid-disease-diagnosis-management",
+      "topicB": "levothyroxine-dosing-monitoring-interactions",
+      "overlapRisk": "HIGH",
+      "overlapZone": "Hypothyroidism management questions involving levothyroxine",
+      "resolution": "SF-02: thyroid-disease owns diagnosis criteria (TSH + T4 levels, antibody testing, nodule evaluation). levothyroxine owns dosing algorithm, monitoring TSH after dose changes, drug-food interactions, and special population adjustments. Thyroid-disease may say 'treat with levothyroxine' but stops there. Levothyroxine topic owns all 'how to dose and monitor' content.",
+      "stemAnchorGuard": "thyroid-disease stems testing management should stop at 'initiate levothyroxine.' levothyroxine stems should present already-diagnosed hypothyroid patients requiring dosing decisions."
+    },
+    {
+      "pairId": "OVR-04",
+      "topicA": "ckd-progression-monitoring-medication",
+      "topicB": "medication-dose-adjustment-ckd",
+      "overlapRisk": "HIGH",
+      "overlapZone": "Medication decisions in CKD patients",
+      "resolution": "SF-03: ckd-progression owns ACEi/ARB use in CKD (renoprotective indication), SGLT-2 use, BP targets, referral thresholds, and complication monitoring. medication-dose-adjustment owns dose reduction tables, contraindicated drugs by eGFR cutoff, and perioperative medication management in CKD.",
+      "stemAnchorGuard": "ckd-progression stems should not specify exact dose adjustments. medication-dose-ckd stems should present a CKD patient with a new prescription and ask about safety/adjustment — not about progression management."
+    },
+    {
+      "pairId": "OVR-05",
+      "topicA": "mdd-diagnosis-risk-initial-management",
+      "topicB": "antidepressant-selection-ssri-snri-primary-care",
+      "overlapRisk": "CRITICAL",
+      "overlapZone": "Antidepressant prescribing decisions in MDD",
+      "resolution": "SF-04: mdd-diagnosis owns diagnostic criteria, PHQ-9 interpretation, suicidality risk assessment, referral decisions, and initial management plan (which may include 'start SSRI' but not specify which one). antidepressant-selection owns SSRI/SNRI/bupropion/mirtazapine agent-level selection, side effect profiles, titration, and switching logic.",
+      "stemAnchorGuard": "mdd-diagnosis stems should not name specific antidepressants in the question or ask which drug to use. antidepressant-selection stems should present an already-diagnosed MDD patient and ask about drug choice."
+    },
+    {
+      "pairId": "OVR-06",
+      "topicA": "mdd-diagnosis-risk-initial-management",
+      "topicB": "antidepressant-follow-up-response-side-effects",
+      "overlapRisk": "MEDIUM",
+      "overlapZone": "Initial vs follow-up management decisions",
+      "resolution": "mdd-diagnosis: stems concern new diagnosis, risk assessment, or initial prescribing decision. antidepressant-follow-up: stems present a patient already on antidepressants for 6-8 weeks seeking reassessment. Time-point in treatment is the distinguishing anchor.",
+      "stemAnchorGuard": "All mdd-diagnosis stems: patient newly presenting or newly diagnosed. All antidepressant-follow-up stems: patient on treatment for at least 4-8 weeks."
+    },
+    {
+      "pairId": "OVR-07",
+      "topicA": "heart-failure-gdmt-primary-care",
+      "topicB": "ace-arb-arni-indications-monitoring",
+      "overlapRisk": "HIGH",
+      "overlapZone": "ACEi/ARNi in heart failure management",
+      "resolution": "heart-failure-gdmt owns: GDMT medication classes, guideline thresholds for starting/up-titrating each class, ICD/CRT referral, decompensation triggers. ace-arb-arni owns: mechanism, class-specific adverse effects (cough, angioedema, hyperkalemia), contraindications, and monitoring parameters. An HF patient scenario testing 'which GDMT class?' goes to HF topic. A HF patient scenario testing 'what adverse effect requires stopping ACEi?' goes to ace-arb-arni topic.",
+      "stemAnchorGuard": "HF stems should stop before drug-specific side effect monitoring. Ace-arb-arni stems should not be about GDMT initiation threshold decisions."
+    },
+    {
+      "pairId": "OVR-08",
+      "topicA": "hypertension-step-therapy-guideline",
+      "topicB": "hypertension-follow-up-monitoring-labs",
+      "overlapRisk": "MEDIUM",
+      "overlapZone": "Drug adjustments at follow-up visits",
+      "resolution": "hypertension-step-therapy: stems present uncontrolled or newly diagnosed HTN, drug selection decisions. hypertension-follow-up: stems present a patient already on therapy for ≥1 month and the question is about monitoring, lab review, or treatment response. Visit purpose is the distinguishing anchor.",
+      "stemAnchorGuard": "Step-therapy stems: first visit or uncontrolled BP. Follow-up stems: returning patient on established therapy."
+    },
+    {
+      "pairId": "OVR-09",
+      "topicA": "syncope-differential-vasovagal-cardiac-neuro",
+      "topicB": "acs-ruleout-heart-score-disposition",
+      "overlapRisk": "LOW",
+      "overlapZone": "Cardiac causes of syncope overlap with ACS",
+      "resolution": "syncope topic: cardiac syncope stems test recognition (HOCM murmur, Brugada ECG pattern, long QT interval, severe AS) and correct disposition. acs-ruleout: focuses on chest pain workup, not syncope. Syncope without chest pain stays in syncope topic. No shared stems anticipated.",
+      "stemAnchorGuard": "Any syncope stem that also has chest pain should be in acs-ruleout or chest-pain topics, not syncope topic."
+    },
+    {
+      "pairId": "OVR-10",
+      "topicA": "bipolar-recognition-safety-prescribing",
+      "topicB": "mdd-diagnosis-risk-initial-management",
+      "overlapRisk": "MEDIUM",
+      "overlapZone": "Depressive episode that may represent bipolar depression",
+      "resolution": "mdd-diagnosis stems: patient with first depressive episode, no manic/hypomanic history, standard MDD presentation. bipolar-recognition stems: patient presents with depressive episode but history reveals prior hypomanic episode, rapid cycling, or family history of bipolar — the 'wrong diagnosis' or 'prescribing pitfall' (antidepressant without mood stabilizer) is the teaching point.",
+      "stemAnchorGuard": "bipolar stems testing the depressive phase must include a prior hypomanic/manic episode in the history. mdd stems must explicitly exclude bipolar history."
+    },
+    {
+      "pairId": "OVR-11",
+      "topicA": "oud-moud-buprenorphine-naltrexone-primary-care",
+      "topicB": "chronic-pain-non-opioid-safe-opioid",
+      "overlapRisk": "MEDIUM",
+      "overlapZone": "Opioid prescribing, buprenorphine use",
+      "resolution": "oud-moud: buprenorphine as MOUD for opioid addiction treatment. chronic-pain: buprenorphine patches (low-dose) as chronic pain analgesic are distinct. Stems in oud-moud present patients with opioid use disorder. Stems in chronic-pain present patients with non-cancer pain who are not diagnosed with OUD.",
+      "stemAnchorGuard": "OUD stems: patient with DSM-5 OUD. Chronic-pain stems: patient without OUD seeking pain management. Buprenorphine dosing forms are different (8-24mg/day sublingual for OUD vs 5-20mcg/h patch for pain)."
+    },
+    {
+      "pairId": "OVR-12",
+      "topicA": "adrenal-insufficiency-thyroid-storm-recognition",
+      "topicB": "adrenal-insufficiency-stress-dosing-management",
+      "overlapRisk": "HIGH",
+      "overlapZone": "Adrenal crisis recognition and management",
+      "resolution": "adrenal-insufficiency-thyroid-storm-recognition: recognition in the office setting, differential from other causes, ordering cosyntropin stimulation test. adrenal-insufficiency-stress-dosing-management: outpatient management, stress dosing rules, sick day counseling, replacement therapy monitoring. Crisis recognition → recognition topic. Sick day rules and dose titration → management topic.",
+      "stemAnchorGuard": "Recognition topic stems: which lab confirms, what distinguishes primary vs secondary, which findings indicate crisis. Management stems: established diagnosis, how to dose replacement, what to do when sick."
+    },
+    {
+      "pairId": "OVR-13",
+      "topicA": "fatigue-differential-endocrine-psych",
+      "topicB": "mdd-diagnosis-risk-initial-management",
+      "overlapRisk": "MEDIUM",
+      "overlapZone": "Depression presenting as fatigue",
+      "resolution": "fatigue-differential stems: depression is one of several differential diagnoses being considered. The question tests which lab or screening tool distinguishes depression from thyroid/anemia/sleep pathology. mdd-diagnosis stems: depression is already the focus; the question tests DSM-5 criteria application, risk assessment, or initial management.",
+      "stemAnchorGuard": "Fatigue-differential stems must not diagnose MDD in the stem — they must present a workup scenario where MDD is one possibility among several. mdd-diagnosis stems must present a clear primary psychiatric presentation."
+    },
+    {
+      "pairId": "OVR-14",
+      "topicA": "doac-selection-monitoring-reversal",
+      "topicB": "afib-rate-rhythm-stroke-risk",
+      "overlapRisk": "MEDIUM",
+      "overlapZone": "Anticoagulation decisions in AF",
+      "resolution": "afib-rate-rhythm-stroke-risk: CHA2DS2-VASc scoring, decision to anticoagulate or not, rate vs rhythm strategy. doac-selection: which DOAC, dose adjustments by renal function, reversal agents, perioperative management, drug interactions. AF stem testing 'should we anticoagulate?' → AF topic. AF stem testing 'which DOAC and what dose in this renal function?' → doac-selection topic.",
+      "stemAnchorGuard": "AF stems must stop at the anticoagulate-yes/no decision or rate-vs-rhythm decision. DOAC stems must present a patient already decided to anticoagulate, asking about agent or dose selection."
+    },
+    {
+      "pairId": "OVR-15",
+      "topicA": "contraception-counseling-efficacy-safety",
+      "topicB": "menopause-hormone-therapy-risk-benefit",
+      "overlapRisk": "LOW",
+      "overlapZone": "Estrogen-containing hormonal preparations",
+      "resolution": "contraception topic: reproductive-age women. HT topic: postmenopausal women. Age of patient and indication (contraception vs menopause symptom management) clearly separate these topics. No significant stem overlap anticipated.",
+      "stemAnchorGuard": "Contraception stems: women with reproductive goals or contraceptive need. HT stems: postmenopausal women with vasomotor symptoms."
+    }
+  ],
+
+  "overlapPreventionRules": [
+    {
+      "rule": "AGE-ANCHOR",
+      "description": "For topics that differ primarily by patient age (e.g., pediatric vs adult versions of the same condition), the patient age in the stem anchor must be explicit and different by at least 15 years."
+    },
+    {
+      "rule": "VISIT-STAGE-ANCHOR",
+      "description": "For topics that differ primarily by visit stage (diagnosis vs follow-up vs management), the stem must explicitly state the visit context (e.g., 'newly diagnosed,' 'returning for 8-week follow-up,' 'established patient on therapy for 3 months')."
+    },
+    {
+      "rule": "DECISION-POINT-ANCHOR",
+      "description": "For overlapping topics, each question must be anchored to a distinct clinical decision point. The question writer must confirm the decision point is assigned to the correct topic in the expansion plan before generating the stem."
+    },
+    {
+      "rule": "NO-CROSS-TOPIC-STEM-REUSE",
+      "description": "Identical clinical scenarios (same patient demographics, same chief complaint, same labs) may not appear in two different topics, even with different questions. Vary at least 3 of: age, sex, comorbidities, medications, presenting complaint, lab values."
+    },
+    {
+      "rule": "SCOPE-FENCE-BEFORE-GENERATION",
+      "description": "Before generating questions for any SF-fenced topic pair, the writer must review the scope fence file and identify which decision points belong to which topic. Questions generated in violation of a scope fence must be deleted and re-anchored."
+    }
+  ],
+
+  "questionCountSummary": {
+    "breakdown": [
+      { "tier": "premium (28-35 questions)", "topicCount": 16, "avgQ": 30.6, "subtotal": 490 },
+      { "tier": "standard (25-28 questions)", "topicCount": 71, "avgQ": 25.5, "subtotal": 1811 },
+      { "tier": "limited (18 questions)", "topicCount": 48, "avgQ": 18, "subtotal": 864 }
+    ],
+    "phase1AlreadyGenerated": 132,
+    "netNewQuestionsNeeded": 3165,
+    "projectedGrandTotal": 3297,
+    "roundedTotal": "~3,300",
+    "targetMet": true,
+    "targetNote": "~3,300 exceeds 3,000 target by ~10%. Buffer allows for scope fence pruning, duplicate removal, and content review without falling below 3,000 final unique questions.",
+
+    "perTopicCountsAll": {
+      "chest-pain-differential-primary-care": 35,
+      "dyspnea-differential-cardiac-pulmonary": 32,
+      "headache-differential-red-flags": 32,
+      "knee-pain-differential": 25,
+      "abdominal-pain-differential-age": 35,
+      "fatigue-differential-endocrine-psych": 25,
+      "fever-without-source-differential": 25,
+      "rash-differential-primary-care": 25,
+      "flank-pain-differential-uti-stones-pyelo": 25,
+      "red-eye-differential-conjunctivitis-glaucoma": 18,
+      "adrenal-insufficiency-thyroid-storm-recognition": 18,
+      "lymphadenopathy-reactive-malignant-workup": 25,
+      "syncope-differential-vasovagal-cardiac-neuro": 30,
+      "hemoptysis-differential-risk-workup": 25,
+      "hypertension-red-flags-referral": 18,
+      "neurological-red-flags-emergency": 25,
+      "cancer-red-flags-primary-care": 18,
+      "pediatric-red-flags-dont-miss": 18,
+      "psychiatric-red-flags-safety": 18,
+      "heart-failure-gdmt-primary-care": 32,
+      "hypertension-step-therapy-guideline": 30,
+      "afib-rate-rhythm-stroke-risk": 30,
+      "t2dm-intensification-beyond-metformin": 30,
+      "thyroid-disease-diagnosis-management": 28,
+      "copd-gold-staging-inhaler-selection": 30,
+      "asthma-stepwise-controller-rescue": 28,
+      "ckd-progression-monitoring-medication": 28,
+      "hyperlipidemia-risk-statin-therapy": 25,
+      "oa-vs-ra-management-referral": 25,
+      "anemia-workup-treatment-types": 25,
+      "hiv-primary-care-monitoring-art": 25,
+      "nafld-diagnosis-monitoring-management": 25,
+      "psoriasis-atopic-dermatitis-stepwise-biologic": 25,
+      "multiple-sclerosis-primary-care-monitoring": 18,
+      "cap-risk-stratification-antibiotic-admission": 30,
+      "uti-uncomplicated-complicated-stewardship": 25,
+      "ssti-cellulitis-abscess-antibiotics": 25,
+      "hypertensive-emergency-urgency-np": 25,
+      "acute-bronchitis-pneumonia-covid-differentiation": 18,
+      "acute-diarrhea-infectious-non-infectious": 18,
+      "pharyngitis-strep-centor-antibiotic": 18,
+      "aom-vs-ome-management": 18,
+      "antibiotic-stewardship-outpatient": 28,
+      "ace-arb-arni-indications-monitoring": 28,
+      "glp1-sglt2-comorbidity-selection": 30,
+      "antidepressant-selection-ssri-snri-primary-care": 30,
+      "anxiolytics-benzos-deprescribing": 25,
+      "chronic-pain-non-opioid-safe-opioid": 30,
+      "medication-dose-adjustment-ckd": 25,
+      "drug-interactions-primary-care-significant": 30,
+      "doac-selection-monitoring-reversal": 30,
+      "pediatric-weight-based-dosing-age": 25,
+      "levothyroxine-dosing-monitoring-interactions": 18,
+      "topical-corticosteroids-potency-use": 18,
+      "inhaler-device-technique-patient-matching": 18,
+      "mrsa-primary-care-recognition-treatment": 25,
+      "systemic-corticosteroids-tapering-adverse-effects": 25,
+      "seizure-medications-monitoring-interactions": 25,
+      "teratogenic-medications-pregnancy-category": 25,
+      "breast-cancer-screening-guidelines-sdm": 25,
+      "colorectal-cancer-screening-modality": 25,
+      "cervical-cancer-screening-pap-hpv": 18,
+      "cardiovascular-risk-pooled-cohort-prevention": 25,
+      "depression-anxiety-screening-phq9-gad7": 18,
+      "prediabetes-screening-lifestyle-counseling": 18,
+      "adult-immunization-schedule-high-risk": 25,
+      "osteoporosis-screening-frax-treatment": 25,
+      "sti-screening-risk-group-age": 18,
+      "prep-hiv-prevention-prescribing-monitoring": 25,
+      "hearing-vision-loss-screening-referral": 18,
+      "diabetes-follow-up-monitoring-labs": 25,
+      "hypertension-follow-up-monitoring-labs": 25,
+      "post-hospitalization-follow-up-med-rec": 25,
+      "antidepressant-follow-up-response-side-effects": 25,
+      "abnormal-labs-interpretation-action": 30,
+      "contraception-counseling-efficacy-safety": 32,
+      "pcos-diagnosis-management": 25,
+      "menopause-hormone-therapy-risk-benefit": 28,
+      "preconception-counseling-medication-safety": 25,
+      "abnormal-uterine-bleeding-differential-management": 28,
+      "vaginitis-bv-candida-trich-differentiation": 25,
+      "breast-mass-evaluation-imaging-referral": 25,
+      "gestational-dm-htn-recognition-referral": 25,
+      "prenatal-lab-interpretation-trimester": 25,
+      "postpartum-depression-screening-management": 25,
+      "pediatric-well-child-milestones-guidance": 30,
+      "childhood-immunization-schedule-np": 18,
+      "febrile-infant-risk-stratification": 30,
+      "pediatric-asthma-stepwise-acute": 28,
+      "croup-epiglottitis-foreign-body-differentiation": 25,
+      "adhd-pediatric-diagnosis-management": 28,
+      "pediatric-obesity-screening-counseling": 18,
+      "failure-to-thrive-assessment-workup": 25,
+      "child-abuse-recognition-reporting": 25,
+      "adolescent-heeadsss-confidentiality": 18,
+      "kawasaki-disease-recognition-criteria-referral": 18,
+      "geriatric-assessment-falls-polypharmacy-frailty": 30,
+      "dementia-delirium-depression-older-adult": 30,
+      "deprescribing-beers-criteria-older-adults": 25,
+      "obesity-management-pharmacotherapy-surgical": 25,
+      "aud-sbirt-pharmacotherapy": 25,
+      "smoking-cessation-pharmacotherapy-counseling": 25,
+      "skin-cancer-recognition-abcde-referral": 18,
+      "mens-health-screening-prostate-testosterone": 18,
+      "migraine-prophylaxis-abortive-therapy": 28,
+      "osa-screening-diagnosis-management": 25,
+      "gerd-stepup-ppi-safety-referral": 25,
+      "ibs-vs-ibd-distinguishing-features": 25,
+      "nephrolithiasis-evaluation-management-prevention": 25,
+      "gout-diagnosis-acute-urate-lowering": 25,
+      "adrenal-insufficiency-stress-dosing-management": 25,
+      "hyperparathyroidism-hypercalcemia-workup": 18,
+      "diabetic-eye-glaucoma-screening-referral": 18,
+      "pad-venous-insufficiency-diagnosis-management": 25,
+      "bph-symptom-scoring-management-referral": 25,
+      "goals-of-care-framework-np-role": 18,
+      "mdd-diagnosis-risk-initial-management": 30,
+      "bipolar-recognition-safety-prescribing": 30,
+      "gad-panic-disorder-diagnosis-management": 25,
+      "first-episode-psychosis-recognition-referral": 25,
+      "ptsd-primary-care-screening-management": 25,
+      "oud-moud-buprenorphine-naltrexone-primary-care": 30,
+      "eating-disorder-screening-referral-primary-care": 18,
+      "pediatric-anxiety-depression-recognition-prescribing": 25,
+      "adhd-adults-diagnosis-prescribing": 25,
+      "somatic-symptom-disorder-recognition-management": 25,
+      "acs-ruleout-heart-score-disposition": 30,
+      "acute-respiratory-distress-transfer-decision": 18,
+      "anaphylaxis-recognition-office-management": 18,
+      "acute-musculoskeletal-injury-ottawa-rules": 18,
+      "dka-hhs-recognition-outpatient-stabilize": 18,
+      "aki-outpatient-prerenal-intrinsic-referral": 25,
+      "pediatric-dehydration-severity-rehydration": 18,
+      "wound-assessment-closure-decisions": 18,
+      "sepsis-recognition-outpatient-qsofa-transfer": 25
+    }
+  }
+}

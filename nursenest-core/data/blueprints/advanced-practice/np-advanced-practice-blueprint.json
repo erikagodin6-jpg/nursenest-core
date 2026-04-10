@@ -1,0 +1,5653 @@
+{
+  "version": 1,
+  "label": "NP Advanced Practice Content Blueprint",
+  "description": "Blueprint map for NP-level (FNP/AGPCNP/PMHNP) advanced practice content. Each entry is a planned lesson+question unit at graduate clinical complexity. Targets AANP/ANCC exam domains and real-world primary/urgent care scope.",
+  "generatedDate": "2026-04-10",
+  "targetExams": [
+    "AANP-FNP",
+    "ANCC-FNP",
+    "ANCC-AGPCNP",
+    "ANCC-PMHNP",
+    "CNPLE-NP"
+  ],
+  "difficultyScale": {
+    "medium": "Requires synthesis of 2+ concepts, guideline application",
+    "hard": "Requires differential reasoning, management sequencing, or prescribing decision under ambiguity",
+    "expert": "Multi-system, competing priorities, high-stakes prescribing, or ethics-laden clinical judgment"
+  },
+  "topics": [
+    {
+      "domain": "Differential Diagnosis & Diagnostic Reasoning",
+      "subdomain": "Cardiovascular Differentials",
+      "topic": "Chest Pain Differential Diagnosis in Primary Care",
+      "topicSlug": "chest-pain-differential-primary-care",
+      "bodySystem": "Cardiovascular",
+      "complexity": "advanced",
+      "lessonTargetCount": 2,
+      "questionTargetCount": 12,
+      "difficultyMix": {
+        "medium": 20,
+        "hard": 50,
+        "expert": 30
+      },
+      "tags": [
+        "differential-diagnosis",
+        "chest-pain",
+        "cardiovascular",
+        "diagnostic-reasoning",
+        "red-flags",
+        "urgent-care"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "advanced",
+      "populationTags": [
+        "adult",
+        "urgent-care"
+      ]
+    },
+    {
+      "domain": "Differential Diagnosis & Diagnostic Reasoning",
+      "subdomain": "Cardiovascular Differentials",
+      "topic": "Dyspnea Differential: Cardiac vs Pulmonary vs Other",
+      "topicSlug": "dyspnea-differential-cardiac-pulmonary",
+      "bodySystem": "Cardiovascular",
+      "complexity": "advanced",
+      "lessonTargetCount": 2,
+      "questionTargetCount": 12,
+      "difficultyMix": {
+        "medium": 20,
+        "hard": 55,
+        "expert": 25
+      },
+      "tags": [
+        "differential-diagnosis",
+        "dyspnea",
+        "cardiovascular",
+        "pulmonary",
+        "diagnostic-reasoning"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "advanced",
+      "populationTags": [
+        "adult",
+        "urgent-care"
+      ]
+    },
+    {
+      "domain": "Differential Diagnosis & Diagnostic Reasoning",
+      "subdomain": "Neurological Differentials",
+      "topic": "Headache Differential: Benign vs Emergent Red Flags",
+      "topicSlug": "headache-differential-red-flags",
+      "bodySystem": "Neurological",
+      "complexity": "advanced",
+      "lessonTargetCount": 2,
+      "questionTargetCount": 14,
+      "difficultyMix": {
+        "medium": 15,
+        "hard": 50,
+        "expert": 35
+      },
+      "tags": [
+        "differential-diagnosis",
+        "headache",
+        "neurology",
+        "red-flags",
+        "diagnostic-reasoning"
+      ],
+      "clinicalPriority": "high-risk",
+      "careComplexity": "advanced",
+      "populationTags": [
+        "adult",
+        "urgent-care"
+      ]
+    },
+    {
+      "domain": "Differential Diagnosis & Diagnostic Reasoning",
+      "subdomain": "Musculoskeletal Differentials",
+      "topic": "Knee Pain Differential: Structural vs Inflammatory vs Referred",
+      "topicSlug": "knee-pain-differential",
+      "bodySystem": "Musculoskeletal",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 30,
+        "hard": 55,
+        "expert": 15
+      },
+      "tags": [
+        "differential-diagnosis",
+        "musculoskeletal",
+        "knee-pain",
+        "diagnostic-reasoning"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "adult"
+      ]
+    },
+    {
+      "domain": "Differential Diagnosis & Diagnostic Reasoning",
+      "subdomain": "GI Differentials",
+      "topic": "Abdominal Pain Differential Across Age Groups",
+      "topicSlug": "abdominal-pain-differential-age",
+      "bodySystem": "Gastrointestinal",
+      "complexity": "advanced",
+      "lessonTargetCount": 2,
+      "questionTargetCount": 14,
+      "difficultyMix": {
+        "medium": 20,
+        "hard": 50,
+        "expert": 30
+      },
+      "tags": [
+        "differential-diagnosis",
+        "abdominal-pain",
+        "gastrointestinal",
+        "diagnostic-reasoning",
+        "red-flags"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "advanced",
+      "populationTags": [
+        "adult",
+        "pediatric"
+      ]
+    },
+    {
+      "domain": "Differential Diagnosis & Diagnostic Reasoning",
+      "subdomain": "Endocrine Differentials",
+      "topic": "Fatigue Differential: Thyroid, Anemia, Depression, Diabetes",
+      "topicSlug": "fatigue-differential-endocrine-psych",
+      "bodySystem": "Endocrine",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 25,
+        "hard": 55,
+        "expert": 20
+      },
+      "tags": [
+        "differential-diagnosis",
+        "fatigue",
+        "endocrine",
+        "mental-health",
+        "diagnostic-reasoning"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "adult",
+        "older-adult",
+        "behavioral-health"
+      ]
+    },
+    {
+      "domain": "Differential Diagnosis & Diagnostic Reasoning",
+      "subdomain": "Infectious Disease Differentials",
+      "topic": "Fever Without Source: Differentiating Viral vs Bacterial vs Other",
+      "topicSlug": "fever-without-source-differential",
+      "bodySystem": "Multisystem",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 20,
+        "hard": 55,
+        "expert": 25
+      },
+      "tags": [
+        "differential-diagnosis",
+        "fever",
+        "infectious-disease",
+        "diagnostic-reasoning"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "adult",
+        "pediatric"
+      ]
+    },
+    {
+      "domain": "Differential Diagnosis & Diagnostic Reasoning",
+      "subdomain": "Dermatological Differentials",
+      "topic": "Rash Differential: Primary Care Approach",
+      "topicSlug": "rash-differential-primary-care",
+      "bodySystem": "Integumentary",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 30,
+        "hard": 50,
+        "expert": 20
+      },
+      "tags": [
+        "differential-diagnosis",
+        "rash",
+        "dermatology",
+        "diagnostic-reasoning"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "adult"
+      ]
+    },
+    {
+      "domain": "Differential Diagnosis & Diagnostic Reasoning",
+      "subdomain": "Urological Differentials",
+      "topic": "Flank Pain Differential: UTI vs Nephrolithiasis vs Pyelonephritis vs Other",
+      "topicSlug": "flank-pain-differential-uti-stones-pyelo",
+      "bodySystem": "Renal",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 20,
+        "hard": 55,
+        "expert": 25
+      },
+      "tags": [
+        "differential-diagnosis",
+        "renal",
+        "urological",
+        "diagnostic-reasoning",
+        "urgent-care"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "adult",
+        "urgent-care"
+      ]
+    },
+    {
+      "domain": "Differential Diagnosis & Diagnostic Reasoning",
+      "subdomain": "Ophthalmological Differentials",
+      "topic": "Red Eye Differential: Conjunctivitis vs Uveitis vs Acute Glaucoma vs Corneal Injury",
+      "topicSlug": "red-eye-differential-conjunctivitis-glaucoma",
+      "bodySystem": "ENT",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 20,
+        "hard": 50,
+        "expert": 30
+      },
+      "tags": [
+        "differential-diagnosis",
+        "ophthalmology",
+        "diagnostic-reasoning",
+        "red-flags",
+        "urgent-care"
+      ],
+      "clinicalPriority": "high-risk",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "adult",
+        "urgent-care"
+      ]
+    },
+    {
+      "domain": "Differential Diagnosis & Diagnostic Reasoning",
+      "subdomain": "Thyroid and Adrenal",
+      "topic": "Adrenal Insufficiency vs Thyroid Storm: Recognition in Primary Care",
+      "topicSlug": "adrenal-insufficiency-thyroid-storm-recognition",
+      "bodySystem": "Endocrine",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 10,
+        "hard": 45,
+        "expert": 45
+      },
+      "tags": [
+        "differential-diagnosis",
+        "endocrine",
+        "red-flags",
+        "diagnostic-reasoning",
+        "emergency"
+      ],
+      "clinicalPriority": "high-risk",
+      "careComplexity": "advanced",
+      "populationTags": [
+        "adult",
+        "urgent-care"
+      ]
+    },
+    {
+      "domain": "Differential Diagnosis & Diagnostic Reasoning",
+      "subdomain": "Hematological Differentials",
+      "topic": "Lymphadenopathy: Reactive vs Malignant Workup Algorithm",
+      "topicSlug": "lymphadenopathy-reactive-malignant-workup",
+      "bodySystem": "Hematological",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 15,
+        "hard": 50,
+        "expert": 35
+      },
+      "tags": [
+        "differential-diagnosis",
+        "hematology",
+        "oncology",
+        "red-flags",
+        "diagnostic-reasoning"
+      ],
+      "clinicalPriority": "high-risk",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "adult",
+        "older-adult"
+      ]
+    },
+    {
+      "domain": "Differential Diagnosis & Diagnostic Reasoning",
+      "subdomain": "Syncope Differential",
+      "topic": "Syncope Differential: Vasovagal vs Cardiac vs Neurological",
+      "topicSlug": "syncope-differential-vasovagal-cardiac-neuro",
+      "bodySystem": "Cardiovascular",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 12,
+      "difficultyMix": {
+        "medium": 15,
+        "hard": 50,
+        "expert": 35
+      },
+      "tags": [
+        "differential-diagnosis",
+        "syncope",
+        "cardiovascular",
+        "neurology",
+        "diagnostic-reasoning",
+        "red-flags"
+      ],
+      "clinicalPriority": "high-risk",
+      "careComplexity": "advanced",
+      "populationTags": [
+        "adult",
+        "urgent-care"
+      ]
+    },
+    {
+      "domain": "Differential Diagnosis & Diagnostic Reasoning",
+      "subdomain": "Respiratory Differentials",
+      "topic": "Hemoptysis Differential: Etiology, Risk Stratification, and Workup",
+      "topicSlug": "hemoptysis-differential-risk-workup",
+      "bodySystem": "Respiratory",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 15,
+        "hard": 45,
+        "expert": 40
+      },
+      "tags": [
+        "differential-diagnosis",
+        "respiratory",
+        "red-flags",
+        "diagnostic-reasoning",
+        "oncology"
+      ],
+      "clinicalPriority": "high-risk",
+      "careComplexity": "advanced",
+      "populationTags": [
+        "adult",
+        "older-adult",
+        "urgent-care"
+      ]
+    },
+    {
+      "domain": "Red Flags & Safety",
+      "subdomain": "Cardiovascular Red Flags",
+      "topic": "Red Flags in Hypertension: When to Refer or Admit",
+      "topicSlug": "hypertension-red-flags-referral",
+      "bodySystem": "Cardiovascular",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 20,
+        "hard": 50,
+        "expert": 30
+      },
+      "tags": [
+        "red-flags",
+        "hypertension",
+        "cardiovascular",
+        "urgent-care",
+        "referral"
+      ],
+      "clinicalPriority": "high-risk",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "adult",
+        "older-adult",
+        "urgent-care"
+      ]
+    },
+    {
+      "domain": "Red Flags & Safety",
+      "subdomain": "Neurological Red Flags",
+      "topic": "Neurological Red Flags Requiring Emergency Referral",
+      "topicSlug": "neurological-red-flags-emergency",
+      "bodySystem": "Neurological",
+      "complexity": "advanced",
+      "lessonTargetCount": 2,
+      "questionTargetCount": 12,
+      "difficultyMix": {
+        "medium": 10,
+        "hard": 45,
+        "expert": 45
+      },
+      "tags": [
+        "red-flags",
+        "neurology",
+        "emergency",
+        "referral",
+        "urgent-care"
+      ],
+      "clinicalPriority": "high-risk",
+      "careComplexity": "advanced",
+      "populationTags": [
+        "adult",
+        "urgent-care"
+      ]
+    },
+    {
+      "domain": "Red Flags & Safety",
+      "subdomain": "Oncological Red Flags",
+      "topic": "Cancer Red Flags in Primary Care: When to Expedite Workup",
+      "topicSlug": "cancer-red-flags-primary-care",
+      "bodySystem": "Multisystem",
+      "complexity": "advanced",
+      "lessonTargetCount": 2,
+      "questionTargetCount": 12,
+      "difficultyMix": {
+        "medium": 15,
+        "hard": 50,
+        "expert": 35
+      },
+      "tags": [
+        "red-flags",
+        "oncology",
+        "screening",
+        "diagnostic-reasoning",
+        "referral"
+      ],
+      "clinicalPriority": "high-risk",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "adult",
+        "older-adult",
+        "preventive-care"
+      ]
+    },
+    {
+      "domain": "Red Flags & Safety",
+      "subdomain": "Pediatric Red Flags",
+      "topic": "Red Flags in Pediatric Presentations: Don't-Miss Diagnoses",
+      "topicSlug": "pediatric-red-flags-dont-miss",
+      "bodySystem": "Multisystem",
+      "complexity": "advanced",
+      "lessonTargetCount": 2,
+      "questionTargetCount": 14,
+      "difficultyMix": {
+        "medium": 15,
+        "hard": 50,
+        "expert": 35
+      },
+      "tags": [
+        "red-flags",
+        "pediatrics",
+        "emergency",
+        "diagnostic-reasoning",
+        "urgent-care"
+      ],
+      "clinicalPriority": "high-risk",
+      "careComplexity": "advanced",
+      "populationTags": [
+        "pediatric",
+        "urgent-care"
+      ]
+    },
+    {
+      "domain": "Red Flags & Safety",
+      "subdomain": "Mental Health Red Flags",
+      "topic": "Psychiatric Red Flags: Suicidality, Psychosis, Violence Risk",
+      "topicSlug": "psychiatric-red-flags-safety",
+      "bodySystem": "Psychosocial",
+      "complexity": "advanced",
+      "lessonTargetCount": 2,
+      "questionTargetCount": 14,
+      "difficultyMix": {
+        "medium": 10,
+        "hard": 45,
+        "expert": 45
+      },
+      "tags": [
+        "red-flags",
+        "mental-health",
+        "suicidality",
+        "psychosis",
+        "safety",
+        "urgent-care"
+      ],
+      "clinicalPriority": "high-risk",
+      "careComplexity": "advanced",
+      "populationTags": [
+        "adult",
+        "behavioral-health",
+        "urgent-care"
+      ]
+    },
+    {
+      "domain": "Chronic Disease Management",
+      "subdomain": "Cardiovascular Chronic Disease",
+      "topic": "Heart Failure Management in Primary Care: GDMT Initiation and Titration",
+      "topicSlug": "heart-failure-gdmt-primary-care",
+      "bodySystem": "Cardiovascular",
+      "complexity": "advanced",
+      "lessonTargetCount": 2,
+      "questionTargetCount": 14,
+      "difficultyMix": {
+        "medium": 20,
+        "hard": 50,
+        "expert": 30
+      },
+      "tags": [
+        "chronic-disease",
+        "heart-failure",
+        "cardiovascular",
+        "prescribing",
+        "follow-up",
+        "pharmacology"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "advanced",
+      "populationTags": [
+        "adult",
+        "older-adult",
+        "chronic-disease"
+      ]
+    },
+    {
+      "domain": "Chronic Disease Management",
+      "subdomain": "Cardiovascular Chronic Disease",
+      "topic": "Hypertension: Guideline-Based Drug Selection and Step Therapy",
+      "topicSlug": "hypertension-step-therapy-guideline",
+      "bodySystem": "Cardiovascular",
+      "complexity": "advanced",
+      "lessonTargetCount": 2,
+      "questionTargetCount": 14,
+      "difficultyMix": {
+        "medium": 20,
+        "hard": 50,
+        "expert": 30
+      },
+      "tags": [
+        "chronic-disease",
+        "hypertension",
+        "cardiovascular",
+        "prescribing",
+        "pharmacology",
+        "follow-up"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "advanced",
+      "populationTags": [
+        "adult",
+        "older-adult",
+        "chronic-disease"
+      ]
+    },
+    {
+      "domain": "Chronic Disease Management",
+      "subdomain": "Cardiovascular Chronic Disease",
+      "topic": "Atrial Fibrillation: Rate vs Rhythm Control and Stroke Risk Stratification",
+      "topicSlug": "afib-rate-rhythm-stroke-risk",
+      "bodySystem": "Cardiovascular",
+      "complexity": "advanced",
+      "lessonTargetCount": 2,
+      "questionTargetCount": 14,
+      "difficultyMix": {
+        "medium": 15,
+        "hard": 50,
+        "expert": 35
+      },
+      "tags": [
+        "chronic-disease",
+        "afib",
+        "cardiovascular",
+        "prescribing",
+        "pharmacology",
+        "anticoagulation"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "advanced",
+      "populationTags": [
+        "adult",
+        "older-adult",
+        "chronic-disease"
+      ]
+    },
+    {
+      "domain": "Chronic Disease Management",
+      "subdomain": "Endocrine Chronic Disease",
+      "topic": "Type 2 Diabetes: Intensification Beyond Metformin",
+      "topicSlug": "t2dm-intensification-beyond-metformin",
+      "bodySystem": "Endocrine",
+      "complexity": "advanced",
+      "lessonTargetCount": 2,
+      "questionTargetCount": 14,
+      "difficultyMix": {
+        "medium": 20,
+        "hard": 50,
+        "expert": 30
+      },
+      "tags": [
+        "chronic-disease",
+        "diabetes",
+        "endocrine",
+        "prescribing",
+        "pharmacology",
+        "follow-up"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "advanced",
+      "populationTags": [
+        "adult",
+        "older-adult",
+        "chronic-disease"
+      ]
+    },
+    {
+      "domain": "Chronic Disease Management",
+      "subdomain": "Endocrine Chronic Disease",
+      "topic": "Hypothyroidism and Hyperthyroidism: Diagnosis, Monitoring, and Management",
+      "topicSlug": "thyroid-disease-diagnosis-management",
+      "bodySystem": "Endocrine",
+      "complexity": "advanced",
+      "lessonTargetCount": 2,
+      "questionTargetCount": 12,
+      "difficultyMix": {
+        "medium": 25,
+        "hard": 50,
+        "expert": 25
+      },
+      "tags": [
+        "chronic-disease",
+        "thyroid",
+        "endocrine",
+        "prescribing",
+        "pharmacology",
+        "follow-up"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "adult",
+        "chronic-disease"
+      ]
+    },
+    {
+      "domain": "Chronic Disease Management",
+      "subdomain": "Pulmonary Chronic Disease",
+      "topic": "COPD: GOLD Staging, Inhaler Selection, and Exacerbation Prevention",
+      "topicSlug": "copd-gold-staging-inhaler-selection",
+      "bodySystem": "Respiratory",
+      "complexity": "advanced",
+      "lessonTargetCount": 2,
+      "questionTargetCount": 14,
+      "difficultyMix": {
+        "medium": 20,
+        "hard": 50,
+        "expert": 30
+      },
+      "tags": [
+        "chronic-disease",
+        "copd",
+        "pulmonary",
+        "prescribing",
+        "pharmacology",
+        "follow-up"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "advanced",
+      "populationTags": [
+        "adult",
+        "older-adult",
+        "chronic-disease"
+      ]
+    },
+    {
+      "domain": "Chronic Disease Management",
+      "subdomain": "Pulmonary Chronic Disease",
+      "topic": "Asthma: Stepwise Management and Controller vs Rescue Therapy",
+      "topicSlug": "asthma-stepwise-controller-rescue",
+      "bodySystem": "Respiratory",
+      "complexity": "advanced",
+      "lessonTargetCount": 2,
+      "questionTargetCount": 12,
+      "difficultyMix": {
+        "medium": 20,
+        "hard": 55,
+        "expert": 25
+      },
+      "tags": [
+        "chronic-disease",
+        "asthma",
+        "pulmonary",
+        "prescribing",
+        "pharmacology",
+        "follow-up"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "adult",
+        "pediatric",
+        "chronic-disease"
+      ]
+    },
+    {
+      "domain": "Chronic Disease Management",
+      "subdomain": "Renal Chronic Disease",
+      "topic": "CKD Management: Slowing Progression, Monitoring, and Medication Adjustments",
+      "topicSlug": "ckd-progression-monitoring-medication",
+      "bodySystem": "Renal",
+      "complexity": "advanced",
+      "lessonTargetCount": 2,
+      "questionTargetCount": 12,
+      "difficultyMix": {
+        "medium": 20,
+        "hard": 50,
+        "expert": 30
+      },
+      "tags": [
+        "chronic-disease",
+        "ckd",
+        "renal",
+        "prescribing",
+        "pharmacology",
+        "follow-up"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "advanced",
+      "populationTags": [
+        "adult",
+        "older-adult",
+        "chronic-disease"
+      ]
+    },
+    {
+      "domain": "Chronic Disease Management",
+      "subdomain": "Lipid Management",
+      "topic": "Hyperlipidemia: Risk Stratification and Statin Therapy Decisions",
+      "topicSlug": "hyperlipidemia-risk-statin-therapy",
+      "bodySystem": "Cardiovascular",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 25,
+        "hard": 55,
+        "expert": 20
+      },
+      "tags": [
+        "chronic-disease",
+        "hyperlipidemia",
+        "cardiovascular",
+        "prescribing",
+        "pharmacology"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "adult",
+        "older-adult",
+        "chronic-disease",
+        "preventive-care"
+      ]
+    },
+    {
+      "domain": "Chronic Disease Management",
+      "subdomain": "Musculoskeletal Chronic Disease",
+      "topic": "Osteoarthritis vs Rheumatoid Arthritis: Management and Referral Criteria",
+      "topicSlug": "oa-vs-ra-management-referral",
+      "bodySystem": "Musculoskeletal",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 25,
+        "hard": 50,
+        "expert": 25
+      },
+      "tags": [
+        "chronic-disease",
+        "arthritis",
+        "musculoskeletal",
+        "prescribing",
+        "follow-up"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "adult",
+        "older-adult",
+        "chronic-disease"
+      ]
+    },
+    {
+      "domain": "Chronic Disease Management",
+      "subdomain": "Hematology",
+      "topic": "Iron-Deficiency Anemia vs B12 and Folate Deficiency: Workup and Treatment",
+      "topicSlug": "anemia-workup-treatment-types",
+      "bodySystem": "Hematological",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 25,
+        "hard": 55,
+        "expert": 20
+      },
+      "tags": [
+        "chronic-disease",
+        "anemia",
+        "hematology",
+        "prescribing",
+        "follow-up"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "adult",
+        "chronic-disease"
+      ]
+    },
+    {
+      "domain": "Chronic Disease Management",
+      "subdomain": "HIV Primary Care",
+      "topic": "HIV Primary Care: Monitoring, ART Adherence, and Complication Screening",
+      "topicSlug": "hiv-primary-care-monitoring-art",
+      "bodySystem": "Multisystem",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 20,
+        "hard": 50,
+        "expert": 30
+      },
+      "tags": [
+        "chronic-disease",
+        "hiv",
+        "infectious-disease",
+        "prescribing",
+        "screening",
+        "follow-up"
+      ],
+      "clinicalPriority": "special-population",
+      "careComplexity": "advanced",
+      "populationTags": [
+        "adult",
+        "chronic-disease",
+        "preventive-care"
+      ]
+    },
+    {
+      "domain": "Chronic Disease Management",
+      "subdomain": "Liver Disease",
+      "topic": "Non-Alcoholic Fatty Liver Disease: Diagnosis, Monitoring, and Management",
+      "topicSlug": "nafld-diagnosis-monitoring-management",
+      "bodySystem": "Gastrointestinal",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 25,
+        "hard": 55,
+        "expert": 20
+      },
+      "tags": [
+        "chronic-disease",
+        "liver",
+        "gastrointestinal",
+        "diagnostic-reasoning",
+        "follow-up"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "adult",
+        "chronic-disease"
+      ]
+    },
+    {
+      "domain": "Chronic Disease Management",
+      "subdomain": "Dermatology Chronic",
+      "topic": "Psoriasis and Atopic Dermatitis: Stepwise Treatment and Biologic Referral Criteria",
+      "topicSlug": "psoriasis-atopic-dermatitis-stepwise-biologic",
+      "bodySystem": "Integumentary",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 25,
+        "hard": 55,
+        "expert": 20
+      },
+      "tags": [
+        "chronic-disease",
+        "dermatology",
+        "prescribing",
+        "pharmacology",
+        "referral"
+      ],
+      "clinicalPriority": "supporting",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "adult",
+        "chronic-disease"
+      ]
+    },
+    {
+      "domain": "Chronic Disease Management",
+      "subdomain": "Neurology Chronic",
+      "topic": "Multiple Sclerosis in Primary Care: Monitoring and Referral Coordination",
+      "topicSlug": "multiple-sclerosis-primary-care-monitoring",
+      "bodySystem": "Neurological",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 20,
+        "hard": 55,
+        "expert": 25
+      },
+      "tags": [
+        "chronic-disease",
+        "neurology",
+        "multiple-sclerosis",
+        "referral",
+        "follow-up"
+      ],
+      "clinicalPriority": "supporting",
+      "careComplexity": "advanced",
+      "populationTags": [
+        "adult",
+        "chronic-disease"
+      ]
+    },
+    {
+      "domain": "Acute Primary Care Presentations",
+      "subdomain": "Respiratory Acute",
+      "topic": "Community-Acquired Pneumonia: Risk Stratification, Antibiotic Selection, and Admission Criteria",
+      "topicSlug": "cap-risk-stratification-antibiotic-admission",
+      "bodySystem": "Respiratory",
+      "complexity": "advanced",
+      "lessonTargetCount": 2,
+      "questionTargetCount": 14,
+      "difficultyMix": {
+        "medium": 15,
+        "hard": 50,
+        "expert": 35
+      },
+      "tags": [
+        "acute-care",
+        "pneumonia",
+        "pulmonary",
+        "prescribing",
+        "urgent-care",
+        "diagnostic-reasoning"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "advanced",
+      "populationTags": [
+        "adult",
+        "older-adult",
+        "urgent-care"
+      ]
+    },
+    {
+      "domain": "Acute Primary Care Presentations",
+      "subdomain": "Infectious Acute",
+      "topic": "UTI Management: Uncomplicated vs Complicated, Antibiotic Stewardship",
+      "topicSlug": "uti-uncomplicated-complicated-stewardship",
+      "bodySystem": "Renal",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 25,
+        "hard": 55,
+        "expert": 20
+      },
+      "tags": [
+        "acute-care",
+        "uti",
+        "infectious-disease",
+        "prescribing",
+        "pharmacology"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "adult",
+        "reproductive-health"
+      ]
+    },
+    {
+      "domain": "Acute Primary Care Presentations",
+      "subdomain": "Infectious Acute",
+      "topic": "Skin and Soft Tissue Infections: Cellulitis vs Abscess, Antibiotic Decisions",
+      "topicSlug": "ssti-cellulitis-abscess-antibiotics",
+      "bodySystem": "Integumentary",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 25,
+        "hard": 55,
+        "expert": 20
+      },
+      "tags": [
+        "acute-care",
+        "ssti",
+        "infectious-disease",
+        "prescribing",
+        "urgent-care"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "adult",
+        "urgent-care"
+      ]
+    },
+    {
+      "domain": "Acute Primary Care Presentations",
+      "subdomain": "Cardiovascular Acute",
+      "topic": "Acute Hypertensive Emergency vs Urgency: NP Decision Points",
+      "topicSlug": "hypertensive-emergency-urgency-np",
+      "bodySystem": "Cardiovascular",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 12,
+      "difficultyMix": {
+        "medium": 10,
+        "hard": 45,
+        "expert": 45
+      },
+      "tags": [
+        "acute-care",
+        "hypertension",
+        "cardiovascular",
+        "urgent-care",
+        "red-flags",
+        "prescribing"
+      ],
+      "clinicalPriority": "high-risk",
+      "careComplexity": "advanced",
+      "populationTags": [
+        "adult",
+        "urgent-care"
+      ]
+    },
+    {
+      "domain": "Acute Primary Care Presentations",
+      "subdomain": "Respiratory Acute",
+      "topic": "Acute Bronchitis vs Pneumonia vs COVID: Clinical Differentiation",
+      "topicSlug": "acute-bronchitis-pneumonia-covid-differentiation",
+      "bodySystem": "Respiratory",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 20,
+        "hard": 55,
+        "expert": 25
+      },
+      "tags": [
+        "acute-care",
+        "respiratory",
+        "diagnostic-reasoning",
+        "differential-diagnosis",
+        "infectious-disease"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "adult"
+      ]
+    },
+    {
+      "domain": "Acute Primary Care Presentations",
+      "subdomain": "GI Acute",
+      "topic": "Acute Diarrhea: Infectious vs Non-Infectious, When to Test and Treat",
+      "topicSlug": "acute-diarrhea-infectious-non-infectious",
+      "bodySystem": "Gastrointestinal",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 25,
+        "hard": 55,
+        "expert": 20
+      },
+      "tags": [
+        "acute-care",
+        "diarrhea",
+        "gastrointestinal",
+        "infectious-disease",
+        "prescribing"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "adult"
+      ]
+    },
+    {
+      "domain": "Acute Primary Care Presentations",
+      "subdomain": "ENT Acute",
+      "topic": "Pharyngitis and Strep: Centor Criteria, Testing, Antibiotic Stewardship",
+      "topicSlug": "pharyngitis-strep-centor-antibiotic",
+      "bodySystem": "ENT",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 25,
+        "hard": 55,
+        "expert": 20
+      },
+      "tags": [
+        "acute-care",
+        "pharyngitis",
+        "ent",
+        "prescribing",
+        "antibiotic-stewardship"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "foundational",
+      "populationTags": [
+        "adult",
+        "pediatric"
+      ]
+    },
+    {
+      "domain": "Acute Primary Care Presentations",
+      "subdomain": "ENT Acute",
+      "topic": "Acute Otitis Media vs Otitis Media with Effusion: Management Algorithm",
+      "topicSlug": "aom-vs-ome-management",
+      "bodySystem": "ENT",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 25,
+        "hard": 55,
+        "expert": 20
+      },
+      "tags": [
+        "acute-care",
+        "otitis-media",
+        "ent",
+        "pediatrics",
+        "prescribing",
+        "antibiotic-stewardship"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "foundational",
+      "populationTags": [
+        "pediatric"
+      ]
+    },
+    {
+      "domain": "Prescribing & Advanced Pharmacology",
+      "subdomain": "Antibiotic Prescribing",
+      "topic": "Antibiotic Stewardship Principles in Outpatient Practice",
+      "topicSlug": "antibiotic-stewardship-outpatient",
+      "bodySystem": "Multisystem",
+      "complexity": "advanced",
+      "lessonTargetCount": 2,
+      "questionTargetCount": 14,
+      "difficultyMix": {
+        "medium": 20,
+        "hard": 50,
+        "expert": 30
+      },
+      "tags": [
+        "prescribing",
+        "pharmacology",
+        "antibiotic-stewardship",
+        "infectious-disease"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "adult",
+        "pediatric"
+      ]
+    },
+    {
+      "domain": "Prescribing & Advanced Pharmacology",
+      "subdomain": "Cardiovascular Pharmacology",
+      "topic": "ACE Inhibitors, ARBs, and ARNIs: Indications, Contraindications, and Monitoring",
+      "topicSlug": "ace-arb-arni-indications-monitoring",
+      "bodySystem": "Cardiovascular",
+      "complexity": "advanced",
+      "lessonTargetCount": 2,
+      "questionTargetCount": 12,
+      "difficultyMix": {
+        "medium": 20,
+        "hard": 50,
+        "expert": 30
+      },
+      "tags": [
+        "prescribing",
+        "pharmacology",
+        "cardiovascular",
+        "heart-failure",
+        "hypertension"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "advanced",
+      "populationTags": [
+        "adult",
+        "older-adult",
+        "chronic-disease"
+      ]
+    },
+    {
+      "domain": "Prescribing & Advanced Pharmacology",
+      "subdomain": "Endocrine Pharmacology",
+      "topic": "GLP-1 Agonists and SGLT-2 Inhibitors: Selecting for Comorbidities",
+      "topicSlug": "glp1-sglt2-comorbidity-selection",
+      "bodySystem": "Endocrine",
+      "complexity": "advanced",
+      "lessonTargetCount": 2,
+      "questionTargetCount": 14,
+      "difficultyMix": {
+        "medium": 15,
+        "hard": 50,
+        "expert": 35
+      },
+      "tags": [
+        "prescribing",
+        "pharmacology",
+        "diabetes",
+        "endocrine",
+        "cardiovascular"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "advanced",
+      "populationTags": [
+        "adult",
+        "chronic-disease"
+      ]
+    },
+    {
+      "domain": "Prescribing & Advanced Pharmacology",
+      "subdomain": "Psychotropic Pharmacology",
+      "topic": "Antidepressant Selection: SSRIs vs SNRIs vs Other for Primary Care NPs",
+      "topicSlug": "antidepressant-selection-ssri-snri-primary-care",
+      "bodySystem": "Psychosocial",
+      "complexity": "advanced",
+      "lessonTargetCount": 2,
+      "questionTargetCount": 14,
+      "difficultyMix": {
+        "medium": 20,
+        "hard": 50,
+        "expert": 30
+      },
+      "tags": [
+        "prescribing",
+        "pharmacology",
+        "mental-health",
+        "antidepressants",
+        "psychotropic"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "advanced",
+      "populationTags": [
+        "adult",
+        "behavioral-health"
+      ]
+    },
+    {
+      "domain": "Prescribing & Advanced Pharmacology",
+      "subdomain": "Psychotropic Pharmacology",
+      "topic": "Anxiolytics and Benzodiazepines: Appropriate Use, Risks, and Deprescribing",
+      "topicSlug": "anxiolytics-benzos-deprescribing",
+      "bodySystem": "Psychosocial",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 12,
+      "difficultyMix": {
+        "medium": 15,
+        "hard": 50,
+        "expert": 35
+      },
+      "tags": [
+        "prescribing",
+        "pharmacology",
+        "mental-health",
+        "benzodiazepines",
+        "deprescribing",
+        "controlled-substances"
+      ],
+      "clinicalPriority": "high-risk",
+      "careComplexity": "advanced",
+      "populationTags": [
+        "adult",
+        "older-adult",
+        "behavioral-health"
+      ]
+    },
+    {
+      "domain": "Prescribing & Advanced Pharmacology",
+      "subdomain": "Pain Management",
+      "topic": "Chronic Pain Management: Non-Opioid First-Line and Safe Opioid Prescribing",
+      "topicSlug": "chronic-pain-non-opioid-safe-opioid",
+      "bodySystem": "Musculoskeletal",
+      "complexity": "advanced",
+      "lessonTargetCount": 2,
+      "questionTargetCount": 14,
+      "difficultyMix": {
+        "medium": 15,
+        "hard": 45,
+        "expert": 40
+      },
+      "tags": [
+        "prescribing",
+        "pharmacology",
+        "pain-management",
+        "opioids",
+        "controlled-substances"
+      ],
+      "clinicalPriority": "high-risk",
+      "careComplexity": "advanced",
+      "populationTags": [
+        "adult",
+        "older-adult",
+        "chronic-disease",
+        "behavioral-health"
+      ]
+    },
+    {
+      "domain": "Prescribing & Advanced Pharmacology",
+      "subdomain": "Renal Dosing",
+      "topic": "Medication Dosing Adjustments in CKD: High-Yield Drug Classes",
+      "topicSlug": "medication-dose-adjustment-ckd",
+      "bodySystem": "Renal",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 20,
+        "hard": 55,
+        "expert": 25
+      },
+      "tags": [
+        "prescribing",
+        "pharmacology",
+        "ckd",
+        "renal",
+        "medication-safety"
+      ],
+      "clinicalPriority": "high-risk",
+      "careComplexity": "advanced",
+      "populationTags": [
+        "adult",
+        "older-adult",
+        "chronic-disease"
+      ]
+    },
+    {
+      "domain": "Prescribing & Advanced Pharmacology",
+      "subdomain": "Drug Interactions",
+      "topic": "Clinically Significant Drug Interactions in Primary Care",
+      "topicSlug": "drug-interactions-primary-care-significant",
+      "bodySystem": "Multisystem",
+      "complexity": "advanced",
+      "lessonTargetCount": 2,
+      "questionTargetCount": 14,
+      "difficultyMix": {
+        "medium": 15,
+        "hard": 50,
+        "expert": 35
+      },
+      "tags": [
+        "prescribing",
+        "pharmacology",
+        "drug-interactions",
+        "medication-safety"
+      ],
+      "clinicalPriority": "high-risk",
+      "careComplexity": "advanced",
+      "populationTags": [
+        "adult",
+        "older-adult"
+      ]
+    },
+    {
+      "domain": "Prescribing & Advanced Pharmacology",
+      "subdomain": "Anticoagulation",
+      "topic": "Direct Oral Anticoagulants: Selection, Monitoring, and Reversal",
+      "topicSlug": "doac-selection-monitoring-reversal",
+      "bodySystem": "Cardiovascular",
+      "complexity": "advanced",
+      "lessonTargetCount": 2,
+      "questionTargetCount": 14,
+      "difficultyMix": {
+        "medium": 15,
+        "hard": 50,
+        "expert": 35
+      },
+      "tags": [
+        "prescribing",
+        "pharmacology",
+        "anticoagulation",
+        "cardiovascular",
+        "afib"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "advanced",
+      "populationTags": [
+        "adult",
+        "older-adult",
+        "chronic-disease"
+      ]
+    },
+    {
+      "domain": "Prescribing & Advanced Pharmacology",
+      "subdomain": "Pediatric Pharmacology",
+      "topic": "Weight-Based Dosing and Age-Specific Considerations in Pediatric Prescribing",
+      "topicSlug": "pediatric-weight-based-dosing-age",
+      "bodySystem": "Multisystem",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 25,
+        "hard": 50,
+        "expert": 25
+      },
+      "tags": [
+        "prescribing",
+        "pharmacology",
+        "pediatrics",
+        "medication-safety"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "pediatric"
+      ]
+    },
+    {
+      "domain": "Prescribing & Advanced Pharmacology",
+      "subdomain": "Thyroid Pharmacology",
+      "topic": "Levothyroxine Prescribing: Dosing, Monitoring, and Drug Interactions",
+      "topicSlug": "levothyroxine-dosing-monitoring-interactions",
+      "bodySystem": "Endocrine",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 25,
+        "hard": 55,
+        "expert": 20
+      },
+      "tags": [
+        "prescribing",
+        "pharmacology",
+        "thyroid",
+        "endocrine",
+        "drug-interactions"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "adult",
+        "chronic-disease"
+      ]
+    },
+    {
+      "domain": "Prescribing & Advanced Pharmacology",
+      "subdomain": "Dermatology Pharmacology",
+      "topic": "Topical Corticosteroids: Potency Classes, Appropriate Use, and Side Effects",
+      "topicSlug": "topical-corticosteroids-potency-use",
+      "bodySystem": "Integumentary",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 25,
+        "hard": 55,
+        "expert": 20
+      },
+      "tags": [
+        "prescribing",
+        "pharmacology",
+        "dermatology",
+        "medication-safety"
+      ],
+      "clinicalPriority": "supporting",
+      "careComplexity": "foundational",
+      "populationTags": [
+        "adult",
+        "pediatric"
+      ]
+    },
+    {
+      "domain": "Prescribing & Advanced Pharmacology",
+      "subdomain": "Respiratory Pharmacology",
+      "topic": "Inhaler Devices and Technique: Matching Device to Patient and Condition",
+      "topicSlug": "inhaler-device-technique-patient-matching",
+      "bodySystem": "Respiratory",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 25,
+        "hard": 55,
+        "expert": 20
+      },
+      "tags": [
+        "prescribing",
+        "pharmacology",
+        "respiratory",
+        "asthma",
+        "copd"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "adult",
+        "pediatric",
+        "chronic-disease"
+      ]
+    },
+    {
+      "domain": "Prescribing & Advanced Pharmacology",
+      "subdomain": "Antimicrobial Resistance",
+      "topic": "MRSA in Primary Care: Recognition, Testing, and Treatment Decisions",
+      "topicSlug": "mrsa-primary-care-recognition-treatment",
+      "bodySystem": "Integumentary",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 20,
+        "hard": 55,
+        "expert": 25
+      },
+      "tags": [
+        "prescribing",
+        "pharmacology",
+        "mrsa",
+        "infectious-disease",
+        "antibiotic-stewardship"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "adult",
+        "urgent-care"
+      ]
+    },
+    {
+      "domain": "Prescribing & Advanced Pharmacology",
+      "subdomain": "Corticosteroid Pharmacology",
+      "topic": "Systemic Corticosteroids: Indications, Tapering, and Adverse Effects",
+      "topicSlug": "systemic-corticosteroids-tapering-adverse-effects",
+      "bodySystem": "Multisystem",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 20,
+        "hard": 55,
+        "expert": 25
+      },
+      "tags": [
+        "prescribing",
+        "pharmacology",
+        "corticosteroids",
+        "medication-safety",
+        "drug-interactions"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "adult"
+      ]
+    },
+    {
+      "domain": "Prescribing & Advanced Pharmacology",
+      "subdomain": "Neurological Pharmacology",
+      "topic": "Seizure Medications in Primary Care: Monitoring and Drug Interactions",
+      "topicSlug": "seizure-medications-monitoring-interactions",
+      "bodySystem": "Neurological",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 20,
+        "hard": 50,
+        "expert": 30
+      },
+      "tags": [
+        "prescribing",
+        "pharmacology",
+        "neurology",
+        "epilepsy",
+        "drug-interactions",
+        "medication-safety"
+      ],
+      "clinicalPriority": "supporting",
+      "careComplexity": "advanced",
+      "populationTags": [
+        "adult",
+        "chronic-disease"
+      ]
+    },
+    {
+      "domain": "Prescribing & Advanced Pharmacology",
+      "subdomain": "Women's Pharmacology",
+      "topic": "Teratogenic Medications and Pregnancy Category Reasoning",
+      "topicSlug": "teratogenic-medications-pregnancy-category",
+      "bodySystem": "Reproductive",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 20,
+        "hard": 50,
+        "expert": 30
+      },
+      "tags": [
+        "prescribing",
+        "pharmacology",
+        "pregnancy",
+        "women-health",
+        "medication-safety"
+      ],
+      "clinicalPriority": "high-risk",
+      "careComplexity": "advanced",
+      "populationTags": [
+        "reproductive-health"
+      ]
+    },
+    {
+      "domain": "Health Promotion & Screening",
+      "subdomain": "Cancer Screening",
+      "topic": "Breast Cancer Screening: Evidence-Based Guidelines and Shared Decision-Making",
+      "topicSlug": "breast-cancer-screening-guidelines-sdm",
+      "bodySystem": "Reproductive",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 30,
+        "hard": 50,
+        "expert": 20
+      },
+      "tags": [
+        "health-promotion",
+        "screening",
+        "cancer",
+        "women-health",
+        "shared-decision-making"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "adult",
+        "reproductive-health",
+        "preventive-care"
+      ]
+    },
+    {
+      "domain": "Health Promotion & Screening",
+      "subdomain": "Cancer Screening",
+      "topic": "Colorectal Cancer Screening: Modality Selection and Risk Stratification",
+      "topicSlug": "colorectal-cancer-screening-modality",
+      "bodySystem": "Gastrointestinal",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 30,
+        "hard": 50,
+        "expert": 20
+      },
+      "tags": [
+        "health-promotion",
+        "screening",
+        "cancer",
+        "gastrointestinal",
+        "adult-primary-care"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "adult",
+        "older-adult",
+        "preventive-care"
+      ]
+    },
+    {
+      "domain": "Health Promotion & Screening",
+      "subdomain": "Cancer Screening",
+      "topic": "Cervical Cancer Screening: Pap Smear, HPV Co-Testing, and Intervals",
+      "topicSlug": "cervical-cancer-screening-pap-hpv",
+      "bodySystem": "Reproductive",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 25,
+        "hard": 55,
+        "expert": 20
+      },
+      "tags": [
+        "health-promotion",
+        "screening",
+        "cancer",
+        "women-health",
+        "gynecology"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "adult",
+        "reproductive-health",
+        "preventive-care"
+      ]
+    },
+    {
+      "domain": "Health Promotion & Screening",
+      "subdomain": "Cardiovascular Screening",
+      "topic": "Cardiovascular Risk Assessment: Pooled Cohort Equations and Preventive Interventions",
+      "topicSlug": "cardiovascular-risk-pooled-cohort-prevention",
+      "bodySystem": "Cardiovascular",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 25,
+        "hard": 55,
+        "expert": 20
+      },
+      "tags": [
+        "health-promotion",
+        "screening",
+        "cardiovascular",
+        "prevention",
+        "adult-primary-care"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "adult",
+        "older-adult",
+        "preventive-care",
+        "chronic-disease"
+      ]
+    },
+    {
+      "domain": "Health Promotion & Screening",
+      "subdomain": "Mental Health Screening",
+      "topic": "Depression and Anxiety Screening: PHQ-9, GAD-7, and Follow-Up Protocols",
+      "topicSlug": "depression-anxiety-screening-phq9-gad7",
+      "bodySystem": "Psychosocial",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 25,
+        "hard": 50,
+        "expert": 25
+      },
+      "tags": [
+        "health-promotion",
+        "screening",
+        "mental-health",
+        "depression",
+        "anxiety"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "foundational",
+      "populationTags": [
+        "adult",
+        "behavioral-health",
+        "preventive-care"
+      ]
+    },
+    {
+      "domain": "Health Promotion & Screening",
+      "subdomain": "Diabetes Screening",
+      "topic": "Prediabetes and Diabetes Screening: Risk Criteria and Lifestyle Counseling",
+      "topicSlug": "prediabetes-screening-lifestyle-counseling",
+      "bodySystem": "Endocrine",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 30,
+        "hard": 50,
+        "expert": 20
+      },
+      "tags": [
+        "health-promotion",
+        "screening",
+        "diabetes",
+        "endocrine",
+        "prevention"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "foundational",
+      "populationTags": [
+        "adult",
+        "preventive-care",
+        "chronic-disease"
+      ]
+    },
+    {
+      "domain": "Health Promotion & Screening",
+      "subdomain": "Immunizations",
+      "topic": "Adult Immunization Schedule: Evidence-Based Recommendations and High-Risk Groups",
+      "topicSlug": "adult-immunization-schedule-high-risk",
+      "bodySystem": "Multisystem",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 30,
+        "hard": 50,
+        "expert": 20
+      },
+      "tags": [
+        "health-promotion",
+        "immunization",
+        "prevention",
+        "adult-primary-care"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "foundational",
+      "populationTags": [
+        "adult",
+        "older-adult",
+        "preventive-care"
+      ]
+    },
+    {
+      "domain": "Health Promotion & Screening",
+      "subdomain": "Bone Health",
+      "topic": "Osteoporosis Screening, FRAX Tool, and Treatment Thresholds",
+      "topicSlug": "osteoporosis-screening-frax-treatment",
+      "bodySystem": "Musculoskeletal",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 25,
+        "hard": 55,
+        "expert": 20
+      },
+      "tags": [
+        "health-promotion",
+        "screening",
+        "osteoporosis",
+        "women-health",
+        "prescribing"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "adult",
+        "older-adult",
+        "preventive-care"
+      ]
+    },
+    {
+      "domain": "Health Promotion & Screening",
+      "subdomain": "STI Screening",
+      "topic": "STI Screening Recommendations by Risk Group and Age",
+      "topicSlug": "sti-screening-risk-group-age",
+      "bodySystem": "Reproductive",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 25,
+        "hard": 55,
+        "expert": 20
+      },
+      "tags": [
+        "health-promotion",
+        "screening",
+        "sti",
+        "women-health",
+        "adult-primary-care"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "adult",
+        "reproductive-health",
+        "preventive-care"
+      ]
+    },
+    {
+      "domain": "Health Promotion & Screening",
+      "subdomain": "Sexual Health",
+      "topic": "PrEP for HIV Prevention: Eligibility, Prescribing, and Monitoring",
+      "topicSlug": "prep-hiv-prevention-prescribing-monitoring",
+      "bodySystem": "Reproductive",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 20,
+        "hard": 55,
+        "expert": 25
+      },
+      "tags": [
+        "health-promotion",
+        "hiv",
+        "prescribing",
+        "pharmacology",
+        "sexual-health"
+      ],
+      "clinicalPriority": "special-population",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "adult",
+        "preventive-care",
+        "LGBTQ+"
+      ]
+    },
+    {
+      "domain": "Health Promotion & Screening",
+      "subdomain": "Vision and Hearing",
+      "topic": "Age-Related Hearing and Vision Loss: Screening and Referral Pathways",
+      "topicSlug": "hearing-vision-loss-screening-referral",
+      "bodySystem": "ENT",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 30,
+        "hard": 50,
+        "expert": 20
+      },
+      "tags": [
+        "health-promotion",
+        "screening",
+        "geriatrics",
+        "ent",
+        "adult-primary-care"
+      ],
+      "clinicalPriority": "supporting",
+      "careComplexity": "foundational",
+      "populationTags": [
+        "adult",
+        "older-adult",
+        "preventive-care"
+      ]
+    },
+    {
+      "domain": "Follow-Up Management",
+      "subdomain": "Chronic Disease Follow-Up",
+      "topic": "Diabetes Follow-Up: Monitoring Frequency, Labs, and Complication Surveillance",
+      "topicSlug": "diabetes-follow-up-monitoring-labs",
+      "bodySystem": "Endocrine",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 25,
+        "hard": 55,
+        "expert": 20
+      },
+      "tags": [
+        "follow-up",
+        "chronic-disease",
+        "diabetes",
+        "endocrine",
+        "monitoring"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "adult",
+        "older-adult",
+        "chronic-disease"
+      ]
+    },
+    {
+      "domain": "Follow-Up Management",
+      "subdomain": "Chronic Disease Follow-Up",
+      "topic": "Hypertension Follow-Up: Monitoring, Lab Surveillance, and Treatment Response",
+      "topicSlug": "hypertension-follow-up-monitoring-labs",
+      "bodySystem": "Cardiovascular",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 25,
+        "hard": 55,
+        "expert": 20
+      },
+      "tags": [
+        "follow-up",
+        "chronic-disease",
+        "hypertension",
+        "cardiovascular",
+        "monitoring"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "adult",
+        "older-adult",
+        "chronic-disease"
+      ]
+    },
+    {
+      "domain": "Follow-Up Management",
+      "subdomain": "Acute Care Follow-Up",
+      "topic": "Post-Hospitalization Follow-Up: Medication Reconciliation and Transition of Care",
+      "topicSlug": "post-hospitalization-follow-up-med-rec",
+      "bodySystem": "Multisystem",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 20,
+        "hard": 50,
+        "expert": 30
+      },
+      "tags": [
+        "follow-up",
+        "transition-of-care",
+        "medication-safety",
+        "adult-primary-care"
+      ],
+      "clinicalPriority": "high-risk",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "adult",
+        "older-adult"
+      ]
+    },
+    {
+      "domain": "Follow-Up Management",
+      "subdomain": "Mental Health Follow-Up",
+      "topic": "Antidepressant Follow-Up: Response Assessment, Side Effects, and Next Steps",
+      "topicSlug": "antidepressant-follow-up-response-side-effects",
+      "bodySystem": "Psychosocial",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 25,
+        "hard": 50,
+        "expert": 25
+      },
+      "tags": [
+        "follow-up",
+        "mental-health",
+        "antidepressants",
+        "prescribing",
+        "pharmacology"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "adult",
+        "behavioral-health"
+      ]
+    },
+    {
+      "domain": "Follow-Up Management",
+      "subdomain": "Lab Follow-Up",
+      "topic": "Interpreting and Acting on Abnormal Labs in Primary Care",
+      "topicSlug": "abnormal-labs-interpretation-action",
+      "bodySystem": "Multisystem",
+      "complexity": "advanced",
+      "lessonTargetCount": 2,
+      "questionTargetCount": 14,
+      "difficultyMix": {
+        "medium": 20,
+        "hard": 55,
+        "expert": 25
+      },
+      "tags": [
+        "follow-up",
+        "diagnostic-reasoning",
+        "labs",
+        "adult-primary-care"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "adult"
+      ]
+    },
+    {
+      "domain": "Women's Health",
+      "subdomain": "Reproductive Health",
+      "topic": "Contraception Counseling: Efficacy, Safety, and Patient Selection",
+      "topicSlug": "contraception-counseling-efficacy-safety",
+      "bodySystem": "Reproductive",
+      "complexity": "advanced",
+      "lessonTargetCount": 2,
+      "questionTargetCount": 14,
+      "difficultyMix": {
+        "medium": 20,
+        "hard": 50,
+        "expert": 30
+      },
+      "tags": [
+        "women-health",
+        "reproductive-health",
+        "contraception",
+        "prescribing",
+        "shared-decision-making"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "adult",
+        "reproductive-health",
+        "preventive-care"
+      ]
+    },
+    {
+      "domain": "Women's Health",
+      "subdomain": "Reproductive Health",
+      "topic": "Polycystic Ovary Syndrome: Diagnosis and Management",
+      "topicSlug": "pcos-diagnosis-management",
+      "bodySystem": "Reproductive",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 20,
+        "hard": 55,
+        "expert": 25
+      },
+      "tags": [
+        "women-health",
+        "pcos",
+        "endocrine",
+        "prescribing",
+        "diagnostic-reasoning"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "adult",
+        "reproductive-health",
+        "chronic-disease"
+      ]
+    },
+    {
+      "domain": "Women's Health",
+      "subdomain": "Menopause",
+      "topic": "Menopause Management: Hormone Therapy Indications, Risks, and Alternatives",
+      "topicSlug": "menopause-hormone-therapy-risk-benefit",
+      "bodySystem": "Reproductive",
+      "complexity": "advanced",
+      "lessonTargetCount": 2,
+      "questionTargetCount": 12,
+      "difficultyMix": {
+        "medium": 20,
+        "hard": 50,
+        "expert": 30
+      },
+      "tags": [
+        "women-health",
+        "menopause",
+        "hormone-therapy",
+        "prescribing",
+        "shared-decision-making"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "advanced",
+      "populationTags": [
+        "adult",
+        "older-adult",
+        "reproductive-health"
+      ]
+    },
+    {
+      "domain": "Women's Health",
+      "subdomain": "Pregnancy and Preconception",
+      "topic": "Preconception Counseling: Medication Safety, Supplementation, and Risk Assessment",
+      "topicSlug": "preconception-counseling-medication-safety",
+      "bodySystem": "Reproductive",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 20,
+        "hard": 50,
+        "expert": 30
+      },
+      "tags": [
+        "women-health",
+        "preconception",
+        "prescribing",
+        "medication-safety",
+        "reproductive-health"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "adult",
+        "reproductive-health",
+        "preventive-care"
+      ]
+    },
+    {
+      "domain": "Women's Health",
+      "subdomain": "Gynecological Conditions",
+      "topic": "Abnormal Uterine Bleeding: Differential Diagnosis and Management",
+      "topicSlug": "abnormal-uterine-bleeding-differential-management",
+      "bodySystem": "Reproductive",
+      "complexity": "advanced",
+      "lessonTargetCount": 2,
+      "questionTargetCount": 12,
+      "difficultyMix": {
+        "medium": 20,
+        "hard": 50,
+        "expert": 30
+      },
+      "tags": [
+        "women-health",
+        "gynecology",
+        "differential-diagnosis",
+        "diagnostic-reasoning",
+        "prescribing"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "advanced",
+      "populationTags": [
+        "adult",
+        "reproductive-health"
+      ]
+    },
+    {
+      "domain": "Women's Health",
+      "subdomain": "Gynecological Conditions",
+      "topic": "Vaginitis: Bacterial Vaginosis vs Candidiasis vs Trichomoniasis",
+      "topicSlug": "vaginitis-bv-candida-trich-differentiation",
+      "bodySystem": "Reproductive",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 25,
+        "hard": 55,
+        "expert": 20
+      },
+      "tags": [
+        "women-health",
+        "gynecology",
+        "infectious-disease",
+        "differential-diagnosis",
+        "prescribing"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "adult",
+        "reproductive-health"
+      ]
+    },
+    {
+      "domain": "Women's Health",
+      "subdomain": "Breast Health",
+      "topic": "Breast Mass Evaluation: Clinical Examination, Imaging, and Referral Criteria",
+      "topicSlug": "breast-mass-evaluation-imaging-referral",
+      "bodySystem": "Reproductive",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 15,
+        "hard": 50,
+        "expert": 35
+      },
+      "tags": [
+        "women-health",
+        "breast-health",
+        "cancer",
+        "diagnostic-reasoning",
+        "referral",
+        "red-flags"
+      ],
+      "clinicalPriority": "high-risk",
+      "careComplexity": "advanced",
+      "populationTags": [
+        "adult",
+        "reproductive-health"
+      ]
+    },
+    {
+      "domain": "Women's Health",
+      "subdomain": "Pregnancy Complications",
+      "topic": "Gestational Diabetes and Hypertension in Pregnancy: Recognition and Referral",
+      "topicSlug": "gestational-dm-htn-recognition-referral",
+      "bodySystem": "Reproductive",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 15,
+        "hard": 50,
+        "expert": 35
+      },
+      "tags": [
+        "women-health",
+        "pregnancy",
+        "gestational-diabetes",
+        "hypertension",
+        "referral",
+        "red-flags"
+      ],
+      "clinicalPriority": "high-risk",
+      "careComplexity": "advanced",
+      "populationTags": [
+        "adult",
+        "reproductive-health",
+        "urgent-care"
+      ]
+    },
+    {
+      "domain": "Women's Health",
+      "subdomain": "Prenatal Care",
+      "topic": "Prenatal Lab Interpretation: First and Second Trimester Screening",
+      "topicSlug": "prenatal-lab-interpretation-trimester",
+      "bodySystem": "Reproductive",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 20,
+        "hard": 55,
+        "expert": 25
+      },
+      "tags": [
+        "women-health",
+        "pregnancy",
+        "prenatal-care",
+        "labs",
+        "diagnostic-reasoning"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "adult",
+        "reproductive-health"
+      ]
+    },
+    {
+      "domain": "Women's Health",
+      "subdomain": "Postpartum Care",
+      "topic": "Postpartum Depression: Screening, Diagnosis, and Management",
+      "topicSlug": "postpartum-depression-screening-management",
+      "bodySystem": "Psychosocial",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 20,
+        "hard": 50,
+        "expert": 30
+      },
+      "tags": [
+        "women-health",
+        "postpartum",
+        "mental-health",
+        "depression",
+        "screening",
+        "prescribing"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "adult",
+        "reproductive-health",
+        "behavioral-health"
+      ]
+    },
+    {
+      "domain": "Pediatric Primary Care",
+      "subdomain": "Well Child Care",
+      "topic": "Pediatric Well-Child Visits: Developmental Milestones and Anticipatory Guidance",
+      "topicSlug": "pediatric-well-child-milestones-guidance",
+      "bodySystem": "Multisystem",
+      "complexity": "advanced",
+      "lessonTargetCount": 2,
+      "questionTargetCount": 14,
+      "difficultyMix": {
+        "medium": 25,
+        "hard": 50,
+        "expert": 25
+      },
+      "tags": [
+        "pediatrics",
+        "well-child",
+        "developmental-milestones",
+        "health-promotion",
+        "screening"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "pediatric",
+        "preventive-care"
+      ]
+    },
+    {
+      "domain": "Pediatric Primary Care",
+      "subdomain": "Immunizations",
+      "topic": "Childhood Immunization Schedule: High-Yield NP Testing Content",
+      "topicSlug": "childhood-immunization-schedule-np",
+      "bodySystem": "Multisystem",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 25,
+        "hard": 55,
+        "expert": 20
+      },
+      "tags": [
+        "pediatrics",
+        "immunization",
+        "health-promotion",
+        "prevention"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "foundational",
+      "populationTags": [
+        "pediatric",
+        "preventive-care"
+      ]
+    },
+    {
+      "domain": "Pediatric Primary Care",
+      "subdomain": "Pediatric Acute Illness",
+      "topic": "Febrile Child Under 3 Months: Risk Stratification and Management",
+      "topicSlug": "febrile-infant-risk-stratification",
+      "bodySystem": "Multisystem",
+      "complexity": "advanced",
+      "lessonTargetCount": 2,
+      "questionTargetCount": 14,
+      "difficultyMix": {
+        "medium": 10,
+        "hard": 40,
+        "expert": 50
+      },
+      "tags": [
+        "pediatrics",
+        "fever",
+        "red-flags",
+        "urgent-care",
+        "diagnostic-reasoning",
+        "infectious-disease"
+      ],
+      "clinicalPriority": "high-risk",
+      "careComplexity": "advanced",
+      "populationTags": [
+        "pediatric",
+        "urgent-care"
+      ]
+    },
+    {
+      "domain": "Pediatric Primary Care",
+      "subdomain": "Pediatric Respiratory",
+      "topic": "Pediatric Asthma: Stepwise Management and Acute Exacerbation in Office",
+      "topicSlug": "pediatric-asthma-stepwise-acute",
+      "bodySystem": "Respiratory",
+      "complexity": "advanced",
+      "lessonTargetCount": 2,
+      "questionTargetCount": 12,
+      "difficultyMix": {
+        "medium": 20,
+        "hard": 50,
+        "expert": 30
+      },
+      "tags": [
+        "pediatrics",
+        "asthma",
+        "pulmonary",
+        "prescribing",
+        "urgent-care"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "advanced",
+      "populationTags": [
+        "pediatric",
+        "chronic-disease",
+        "urgent-care"
+      ]
+    },
+    {
+      "domain": "Pediatric Primary Care",
+      "subdomain": "Pediatric Respiratory",
+      "topic": "Croup vs Epiglottitis vs Foreign Body Aspiration: Differentiation and Management",
+      "topicSlug": "croup-epiglottitis-foreign-body-differentiation",
+      "bodySystem": "Respiratory",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 12,
+      "difficultyMix": {
+        "medium": 10,
+        "hard": 45,
+        "expert": 45
+      },
+      "tags": [
+        "pediatrics",
+        "respiratory",
+        "red-flags",
+        "differential-diagnosis",
+        "urgent-care",
+        "emergency"
+      ],
+      "clinicalPriority": "high-risk",
+      "careComplexity": "advanced",
+      "populationTags": [
+        "pediatric",
+        "urgent-care"
+      ]
+    },
+    {
+      "domain": "Pediatric Primary Care",
+      "subdomain": "Neurodevelopmental",
+      "topic": "ADHD Diagnosis and Management in Pediatrics: DSM Criteria and Prescribing",
+      "topicSlug": "adhd-pediatric-diagnosis-management",
+      "bodySystem": "Neurological",
+      "complexity": "advanced",
+      "lessonTargetCount": 2,
+      "questionTargetCount": 12,
+      "difficultyMix": {
+        "medium": 20,
+        "hard": 50,
+        "expert": 30
+      },
+      "tags": [
+        "pediatrics",
+        "adhd",
+        "neurodevelopmental",
+        "prescribing",
+        "controlled-substances",
+        "mental-health"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "pediatric",
+        "behavioral-health"
+      ]
+    },
+    {
+      "domain": "Pediatric Primary Care",
+      "subdomain": "Pediatric Chronic Conditions",
+      "topic": "Pediatric Obesity: Screening, Counseling, and Intervention Planning",
+      "topicSlug": "pediatric-obesity-screening-counseling",
+      "bodySystem": "Endocrine",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 30,
+        "hard": 50,
+        "expert": 20
+      },
+      "tags": [
+        "pediatrics",
+        "obesity",
+        "health-promotion",
+        "screening",
+        "counseling"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "pediatric",
+        "preventive-care",
+        "chronic-disease"
+      ]
+    },
+    {
+      "domain": "Pediatric Primary Care",
+      "subdomain": "Pediatric GI",
+      "topic": "Failure to Thrive vs Normal Growth Variation: Assessment and Workup",
+      "topicSlug": "failure-to-thrive-assessment-workup",
+      "bodySystem": "Gastrointestinal",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 20,
+        "hard": 50,
+        "expert": 30
+      },
+      "tags": [
+        "pediatrics",
+        "failure-to-thrive",
+        "diagnostic-reasoning",
+        "red-flags",
+        "gastrointestinal"
+      ],
+      "clinicalPriority": "high-risk",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "pediatric"
+      ]
+    },
+    {
+      "domain": "Pediatric Primary Care",
+      "subdomain": "Pediatric Safety",
+      "topic": "Child Abuse and Neglect: Recognition, Mandatory Reporting, and Documentation",
+      "topicSlug": "child-abuse-recognition-reporting",
+      "bodySystem": "Multisystem",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 10,
+        "hard": 40,
+        "expert": 50
+      },
+      "tags": [
+        "pediatrics",
+        "child-abuse",
+        "mandatory-reporting",
+        "safety",
+        "red-flags",
+        "professional-role"
+      ],
+      "clinicalPriority": "high-risk",
+      "careComplexity": "advanced",
+      "populationTags": [
+        "pediatric",
+        "urgent-care"
+      ]
+    },
+    {
+      "domain": "Pediatric Primary Care",
+      "subdomain": "Adolescent Health",
+      "topic": "Adolescent Health Screening: HEEADSSS Assessment and Confidentiality",
+      "topicSlug": "adolescent-heeadsss-confidentiality",
+      "bodySystem": "Multisystem",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 20,
+        "hard": 50,
+        "expert": 30
+      },
+      "tags": [
+        "pediatrics",
+        "adolescent",
+        "screening",
+        "health-promotion",
+        "mental-health",
+        "professional-role"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "pediatric",
+        "behavioral-health",
+        "preventive-care"
+      ]
+    },
+    {
+      "domain": "Pediatric Primary Care",
+      "subdomain": "Infectious Disease Pediatric",
+      "topic": "Kawasaki Disease: Recognition, Criteria, and Urgent Referral",
+      "topicSlug": "kawasaki-disease-recognition-criteria-referral",
+      "bodySystem": "Cardiovascular",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 10,
+        "hard": 40,
+        "expert": 50
+      },
+      "tags": [
+        "pediatrics",
+        "kawasaki",
+        "cardiovascular",
+        "red-flags",
+        "referral",
+        "diagnostic-reasoning"
+      ],
+      "clinicalPriority": "high-risk",
+      "careComplexity": "advanced",
+      "populationTags": [
+        "pediatric",
+        "urgent-care"
+      ]
+    },
+    {
+      "domain": "Adult Primary Care",
+      "subdomain": "Geriatrics",
+      "topic": "Geriatric Assessment: Falls, Polypharmacy, Functional Status, and Frailty",
+      "topicSlug": "geriatric-assessment-falls-polypharmacy-frailty",
+      "bodySystem": "Multisystem",
+      "complexity": "advanced",
+      "lessonTargetCount": 2,
+      "questionTargetCount": 14,
+      "difficultyMix": {
+        "medium": 20,
+        "hard": 50,
+        "expert": 30
+      },
+      "tags": [
+        "adult-primary-care",
+        "geriatrics",
+        "polypharmacy",
+        "falls",
+        "functional-status"
+      ],
+      "clinicalPriority": "special-population",
+      "careComplexity": "advanced",
+      "populationTags": [
+        "adult",
+        "older-adult",
+        "chronic-disease"
+      ]
+    },
+    {
+      "domain": "Adult Primary Care",
+      "subdomain": "Geriatrics",
+      "topic": "Dementia vs Delirium vs Depression in Older Adults: Differential and Management",
+      "topicSlug": "dementia-delirium-depression-older-adult",
+      "bodySystem": "Neurological",
+      "complexity": "advanced",
+      "lessonTargetCount": 2,
+      "questionTargetCount": 14,
+      "difficultyMix": {
+        "medium": 15,
+        "hard": 50,
+        "expert": 35
+      },
+      "tags": [
+        "adult-primary-care",
+        "geriatrics",
+        "dementia",
+        "delirium",
+        "depression",
+        "differential-diagnosis"
+      ],
+      "clinicalPriority": "special-population",
+      "careComplexity": "advanced",
+      "populationTags": [
+        "adult",
+        "older-adult",
+        "behavioral-health"
+      ]
+    },
+    {
+      "domain": "Adult Primary Care",
+      "subdomain": "Geriatrics",
+      "topic": "Deprescribing in Older Adults: Beers Criteria and High-Risk Medications",
+      "topicSlug": "deprescribing-beers-criteria-older-adults",
+      "bodySystem": "Multisystem",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 20,
+        "hard": 50,
+        "expert": 30
+      },
+      "tags": [
+        "adult-primary-care",
+        "geriatrics",
+        "deprescribing",
+        "pharmacology",
+        "medication-safety",
+        "polypharmacy"
+      ],
+      "clinicalPriority": "special-population",
+      "careComplexity": "advanced",
+      "populationTags": [
+        "adult",
+        "older-adult",
+        "chronic-disease"
+      ]
+    },
+    {
+      "domain": "Adult Primary Care",
+      "subdomain": "Lifestyle Medicine",
+      "topic": "Obesity Management: Pharmacotherapy and Surgical Referral Criteria",
+      "topicSlug": "obesity-management-pharmacotherapy-surgical",
+      "bodySystem": "Endocrine",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 20,
+        "hard": 55,
+        "expert": 25
+      },
+      "tags": [
+        "adult-primary-care",
+        "obesity",
+        "prescribing",
+        "pharmacology",
+        "health-promotion"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "advanced",
+      "populationTags": [
+        "adult",
+        "chronic-disease"
+      ]
+    },
+    {
+      "domain": "Adult Primary Care",
+      "subdomain": "Preventive Care",
+      "topic": "Alcohol Use Disorder: AUDIT-C Screening, SBIRT Framework, and Pharmacotherapy",
+      "topicSlug": "aud-sbirt-pharmacotherapy",
+      "bodySystem": "Psychosocial",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 20,
+        "hard": 50,
+        "expert": 30
+      },
+      "tags": [
+        "adult-primary-care",
+        "substance-use",
+        "screening",
+        "prescribing",
+        "pharmacology",
+        "mental-health"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "adult",
+        "behavioral-health"
+      ]
+    },
+    {
+      "domain": "Adult Primary Care",
+      "subdomain": "Preventive Care",
+      "topic": "Smoking Cessation: Pharmacotherapy Options and Counseling Strategies",
+      "topicSlug": "smoking-cessation-pharmacotherapy-counseling",
+      "bodySystem": "Respiratory",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 25,
+        "hard": 55,
+        "expert": 20
+      },
+      "tags": [
+        "adult-primary-care",
+        "smoking-cessation",
+        "prescribing",
+        "pharmacology",
+        "health-promotion"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "adult",
+        "preventive-care"
+      ]
+    },
+    {
+      "domain": "Adult Primary Care",
+      "subdomain": "Dermatology",
+      "topic": "Skin Cancer Recognition: Melanoma vs Non-Melanoma, ABCDE Rule, and Referral",
+      "topicSlug": "skin-cancer-recognition-abcde-referral",
+      "bodySystem": "Integumentary",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 20,
+        "hard": 50,
+        "expert": 30
+      },
+      "tags": [
+        "adult-primary-care",
+        "dermatology",
+        "cancer",
+        "red-flags",
+        "referral",
+        "screening"
+      ],
+      "clinicalPriority": "supporting",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "adult",
+        "older-adult",
+        "preventive-care"
+      ]
+    },
+    {
+      "domain": "Adult Primary Care",
+      "subdomain": "Men's Health",
+      "topic": "Men's Health Screening: Prostate, Testosterone, and Cardiovascular Risk",
+      "topicSlug": "mens-health-screening-prostate-testosterone",
+      "bodySystem": "Reproductive",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 25,
+        "hard": 55,
+        "expert": 20
+      },
+      "tags": [
+        "adult-primary-care",
+        "mens-health",
+        "screening",
+        "health-promotion"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "adult",
+        "reproductive-health",
+        "preventive-care"
+      ]
+    },
+    {
+      "domain": "Adult Primary Care",
+      "subdomain": "Neurology Primary Care",
+      "topic": "Migraine Management: Prophylaxis Selection and Acute Abortive Therapy",
+      "topicSlug": "migraine-prophylaxis-abortive-therapy",
+      "bodySystem": "Neurological",
+      "complexity": "advanced",
+      "lessonTargetCount": 2,
+      "questionTargetCount": 12,
+      "difficultyMix": {
+        "medium": 20,
+        "hard": 55,
+        "expert": 25
+      },
+      "tags": [
+        "adult-primary-care",
+        "neurology",
+        "migraine",
+        "prescribing",
+        "pharmacology"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "adult"
+      ]
+    },
+    {
+      "domain": "Adult Primary Care",
+      "subdomain": "Sleep Medicine",
+      "topic": "Obstructive Sleep Apnea: Screening, Diagnosis, and Management Options",
+      "topicSlug": "osa-screening-diagnosis-management",
+      "bodySystem": "Respiratory",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 25,
+        "hard": 55,
+        "expert": 20
+      },
+      "tags": [
+        "adult-primary-care",
+        "sleep-apnea",
+        "respiratory",
+        "screening",
+        "diagnostic-reasoning"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "adult",
+        "older-adult",
+        "chronic-disease"
+      ]
+    },
+    {
+      "domain": "Adult Primary Care",
+      "subdomain": "GI Chronic",
+      "topic": "GERD Management: Step-Up Therapy, PPI Safety, and When to Refer",
+      "topicSlug": "gerd-stepup-ppi-safety-referral",
+      "bodySystem": "Gastrointestinal",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 25,
+        "hard": 55,
+        "expert": 20
+      },
+      "tags": [
+        "adult-primary-care",
+        "gerd",
+        "gastrointestinal",
+        "prescribing",
+        "pharmacology",
+        "follow-up"
+      ],
+      "clinicalPriority": "supporting",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "adult",
+        "chronic-disease"
+      ]
+    },
+    {
+      "domain": "Adult Primary Care",
+      "subdomain": "GI Chronic",
+      "topic": "Irritable Bowel Syndrome vs Inflammatory Bowel Disease: Distinguishing Features",
+      "topicSlug": "ibs-vs-ibd-distinguishing-features",
+      "bodySystem": "Gastrointestinal",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 20,
+        "hard": 55,
+        "expert": 25
+      },
+      "tags": [
+        "adult-primary-care",
+        "gastrointestinal",
+        "differential-diagnosis",
+        "diagnostic-reasoning",
+        "referral"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "adult"
+      ]
+    },
+    {
+      "domain": "Adult Primary Care",
+      "subdomain": "Nephrology",
+      "topic": "Nephrolithiasis: Evaluation, Acute Management, and Prevention Counseling",
+      "topicSlug": "nephrolithiasis-evaluation-management-prevention",
+      "bodySystem": "Renal",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 25,
+        "hard": 55,
+        "expert": 20
+      },
+      "tags": [
+        "adult-primary-care",
+        "renal",
+        "nephrolithiasis",
+        "urgent-care",
+        "prescribing"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "adult",
+        "urgent-care"
+      ]
+    },
+    {
+      "domain": "Adult Primary Care",
+      "subdomain": "Rheumatology",
+      "topic": "Gout: Diagnosis, Acute Management, and Long-Term Urate-Lowering Therapy",
+      "topicSlug": "gout-diagnosis-acute-urate-lowering",
+      "bodySystem": "Musculoskeletal",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 25,
+        "hard": 55,
+        "expert": 20
+      },
+      "tags": [
+        "adult-primary-care",
+        "gout",
+        "musculoskeletal",
+        "prescribing",
+        "pharmacology"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "adult",
+        "older-adult",
+        "chronic-disease"
+      ]
+    },
+    {
+      "domain": "Adult Primary Care",
+      "subdomain": "Endocrinology Advanced",
+      "topic": "Adrenal Insufficiency: Recognition, Stress Dosing, and Management",
+      "topicSlug": "adrenal-insufficiency-stress-dosing-management",
+      "bodySystem": "Endocrine",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 15,
+        "hard": 50,
+        "expert": 35
+      },
+      "tags": [
+        "adult-primary-care",
+        "endocrine",
+        "adrenal",
+        "red-flags",
+        "prescribing",
+        "pharmacology"
+      ],
+      "clinicalPriority": "high-risk",
+      "careComplexity": "advanced",
+      "populationTags": [
+        "adult",
+        "chronic-disease"
+      ]
+    },
+    {
+      "domain": "Adult Primary Care",
+      "subdomain": "Endocrinology Advanced",
+      "topic": "Hyperparathyroidism and Hypercalcemia: Recognition and Workup",
+      "topicSlug": "hyperparathyroidism-hypercalcemia-workup",
+      "bodySystem": "Endocrine",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 20,
+        "hard": 55,
+        "expert": 25
+      },
+      "tags": [
+        "adult-primary-care",
+        "endocrine",
+        "hypercalcemia",
+        "diagnostic-reasoning",
+        "referral"
+      ],
+      "clinicalPriority": "supporting",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "adult",
+        "older-adult"
+      ]
+    },
+    {
+      "domain": "Adult Primary Care",
+      "subdomain": "Ophthalmology Primary Care",
+      "topic": "Diabetic Eye Disease and Glaucoma: Screening and Referral Thresholds",
+      "topicSlug": "diabetic-eye-glaucoma-screening-referral",
+      "bodySystem": "ENT",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 25,
+        "hard": 55,
+        "expert": 20
+      },
+      "tags": [
+        "adult-primary-care",
+        "ophthalmology",
+        "diabetes",
+        "screening",
+        "referral"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "adult",
+        "older-adult",
+        "chronic-disease",
+        "preventive-care"
+      ]
+    },
+    {
+      "domain": "Adult Primary Care",
+      "subdomain": "Peripheral Vascular",
+      "topic": "Peripheral Arterial Disease vs Venous Insufficiency: Diagnosis and Management",
+      "topicSlug": "pad-venous-insufficiency-diagnosis-management",
+      "bodySystem": "Cardiovascular",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 25,
+        "hard": 55,
+        "expert": 20
+      },
+      "tags": [
+        "adult-primary-care",
+        "cardiovascular",
+        "peripheral-vascular",
+        "diagnostic-reasoning",
+        "prescribing"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "adult",
+        "older-adult",
+        "chronic-disease"
+      ]
+    },
+    {
+      "domain": "Adult Primary Care",
+      "subdomain": "Urology",
+      "topic": "Benign Prostatic Hyperplasia: Symptom Scoring, Medical Management, and Referral",
+      "topicSlug": "bph-symptom-scoring-management-referral",
+      "bodySystem": "Reproductive",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 25,
+        "hard": 55,
+        "expert": 20
+      },
+      "tags": [
+        "adult-primary-care",
+        "urology",
+        "mens-health",
+        "prescribing",
+        "pharmacology"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "adult",
+        "older-adult",
+        "reproductive-health"
+      ]
+    },
+    {
+      "domain": "Adult Primary Care",
+      "subdomain": "Palliative and End-of-Life",
+      "topic": "Goals of Care Conversations: Framework and NP Role in Primary Care",
+      "topicSlug": "goals-of-care-framework-np-role",
+      "bodySystem": "Multisystem",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 20,
+        "hard": 45,
+        "expert": 35
+      },
+      "tags": [
+        "adult-primary-care",
+        "palliative-care",
+        "end-of-life",
+        "professional-role",
+        "shared-decision-making"
+      ],
+      "clinicalPriority": "supporting",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "adult",
+        "older-adult"
+      ]
+    },
+    {
+      "domain": "Mental Health Presentations",
+      "subdomain": "Mood Disorders",
+      "topic": "Major Depressive Disorder: Diagnosis, Risk Assessment, and Initial Management",
+      "topicSlug": "mdd-diagnosis-risk-initial-management",
+      "bodySystem": "Psychosocial",
+      "complexity": "advanced",
+      "lessonTargetCount": 2,
+      "questionTargetCount": 14,
+      "difficultyMix": {
+        "medium": 20,
+        "hard": 50,
+        "expert": 30
+      },
+      "tags": [
+        "mental-health",
+        "depression",
+        "mood-disorders",
+        "prescribing",
+        "diagnostic-reasoning"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "advanced",
+      "populationTags": [
+        "adult",
+        "behavioral-health"
+      ]
+    },
+    {
+      "domain": "Mental Health Presentations",
+      "subdomain": "Mood Disorders",
+      "topic": "Bipolar Disorder: Recognition, Safety Screening, and Prescribing Pitfalls",
+      "topicSlug": "bipolar-recognition-safety-prescribing",
+      "bodySystem": "Psychosocial",
+      "complexity": "advanced",
+      "lessonTargetCount": 2,
+      "questionTargetCount": 14,
+      "difficultyMix": {
+        "medium": 15,
+        "hard": 45,
+        "expert": 40
+      },
+      "tags": [
+        "mental-health",
+        "bipolar",
+        "mood-disorders",
+        "prescribing",
+        "red-flags",
+        "medication-safety"
+      ],
+      "clinicalPriority": "high-risk",
+      "careComplexity": "advanced",
+      "populationTags": [
+        "adult",
+        "behavioral-health"
+      ]
+    },
+    {
+      "domain": "Mental Health Presentations",
+      "subdomain": "Anxiety Disorders",
+      "topic": "Generalized Anxiety Disorder and Panic Disorder: Diagnosis and Management",
+      "topicSlug": "gad-panic-disorder-diagnosis-management",
+      "bodySystem": "Psychosocial",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 25,
+        "hard": 50,
+        "expert": 25
+      },
+      "tags": [
+        "mental-health",
+        "anxiety",
+        "panic-disorder",
+        "prescribing",
+        "pharmacology"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "adult",
+        "behavioral-health"
+      ]
+    },
+    {
+      "domain": "Mental Health Presentations",
+      "subdomain": "Psychotic Disorders",
+      "topic": "First-Episode Psychosis in Primary Care: Recognition and Urgent Referral",
+      "topicSlug": "first-episode-psychosis-recognition-referral",
+      "bodySystem": "Psychosocial",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 12,
+      "difficultyMix": {
+        "medium": 10,
+        "hard": 40,
+        "expert": 50
+      },
+      "tags": [
+        "mental-health",
+        "psychosis",
+        "red-flags",
+        "referral",
+        "urgent-care",
+        "diagnostic-reasoning"
+      ],
+      "clinicalPriority": "high-risk",
+      "careComplexity": "advanced",
+      "populationTags": [
+        "adult",
+        "behavioral-health",
+        "urgent-care"
+      ]
+    },
+    {
+      "domain": "Mental Health Presentations",
+      "subdomain": "Trauma-Related",
+      "topic": "PTSD in Primary Care: Screening, Diagnosis, and First-Line Management",
+      "topicSlug": "ptsd-primary-care-screening-management",
+      "bodySystem": "Psychosocial",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 25,
+        "hard": 50,
+        "expert": 25
+      },
+      "tags": [
+        "mental-health",
+        "ptsd",
+        "trauma",
+        "screening",
+        "prescribing",
+        "pharmacology"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "adult",
+        "behavioral-health"
+      ]
+    },
+    {
+      "domain": "Mental Health Presentations",
+      "subdomain": "Substance Use",
+      "topic": "Opioid Use Disorder: MOUD with Buprenorphine and Naltrexone in Primary Care",
+      "topicSlug": "oud-moud-buprenorphine-naltrexone-primary-care",
+      "bodySystem": "Psychosocial",
+      "complexity": "advanced",
+      "lessonTargetCount": 2,
+      "questionTargetCount": 14,
+      "difficultyMix": {
+        "medium": 15,
+        "hard": 45,
+        "expert": 40
+      },
+      "tags": [
+        "mental-health",
+        "substance-use",
+        "opioid-use-disorder",
+        "prescribing",
+        "pharmacology",
+        "controlled-substances"
+      ],
+      "clinicalPriority": "high-risk",
+      "careComplexity": "advanced",
+      "populationTags": [
+        "adult",
+        "behavioral-health"
+      ]
+    },
+    {
+      "domain": "Mental Health Presentations",
+      "subdomain": "Eating Disorders",
+      "topic": "Eating Disorder Recognition in Primary Care: Screening and Referral",
+      "topicSlug": "eating-disorder-screening-referral-primary-care",
+      "bodySystem": "Psychosocial",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 20,
+        "hard": 50,
+        "expert": 30
+      },
+      "tags": [
+        "mental-health",
+        "eating-disorders",
+        "screening",
+        "referral",
+        "red-flags"
+      ],
+      "clinicalPriority": "high-risk",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "adult",
+        "behavioral-health"
+      ]
+    },
+    {
+      "domain": "Mental Health Presentations",
+      "subdomain": "Pediatric Mental Health",
+      "topic": "Pediatric Anxiety and Depression: Recognition and Safe Prescribing",
+      "topicSlug": "pediatric-anxiety-depression-recognition-prescribing",
+      "bodySystem": "Psychosocial",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 20,
+        "hard": 50,
+        "expert": 30
+      },
+      "tags": [
+        "mental-health",
+        "pediatrics",
+        "depression",
+        "anxiety",
+        "prescribing",
+        "medication-safety"
+      ],
+      "clinicalPriority": "high-risk",
+      "careComplexity": "advanced",
+      "populationTags": [
+        "pediatric",
+        "behavioral-health"
+      ]
+    },
+    {
+      "domain": "Mental Health Presentations",
+      "subdomain": "ADHD Adults",
+      "topic": "ADHD in Adults: Diagnosis, Prescribing Considerations, and Monitoring",
+      "topicSlug": "adhd-adults-diagnosis-prescribing",
+      "bodySystem": "Neurological",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 20,
+        "hard": 55,
+        "expert": 25
+      },
+      "tags": [
+        "mental-health",
+        "adhd",
+        "adult-primary-care",
+        "prescribing",
+        "controlled-substances"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "adult",
+        "behavioral-health"
+      ]
+    },
+    {
+      "domain": "Mental Health Presentations",
+      "subdomain": "Somatic Presentations",
+      "topic": "Somatic Symptom Disorder vs Functional Disorder: Recognition and Management",
+      "topicSlug": "somatic-symptom-disorder-recognition-management",
+      "bodySystem": "Psychosocial",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 20,
+        "hard": 55,
+        "expert": 25
+      },
+      "tags": [
+        "mental-health",
+        "somatic",
+        "differential-diagnosis",
+        "diagnostic-reasoning",
+        "adult-primary-care"
+      ],
+      "clinicalPriority": "supporting",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "adult",
+        "behavioral-health",
+        "chronic-disease"
+      ]
+    },
+    {
+      "domain": "Urgent Care Decision-Making",
+      "subdomain": "Cardiovascular Urgent",
+      "topic": "ACS Rule-Out in Primary Care: HEART Score and Disposition Decisions",
+      "topicSlug": "acs-ruleout-heart-score-disposition",
+      "bodySystem": "Cardiovascular",
+      "complexity": "advanced",
+      "lessonTargetCount": 2,
+      "questionTargetCount": 14,
+      "difficultyMix": {
+        "medium": 10,
+        "hard": 40,
+        "expert": 50
+      },
+      "tags": [
+        "urgent-care",
+        "cardiovascular",
+        "acs",
+        "diagnostic-reasoning",
+        "red-flags",
+        "emergency"
+      ],
+      "clinicalPriority": "high-risk",
+      "careComplexity": "advanced",
+      "populationTags": [
+        "adult",
+        "urgent-care"
+      ]
+    },
+    {
+      "domain": "Urgent Care Decision-Making",
+      "subdomain": "Respiratory Urgent",
+      "topic": "Acute Respiratory Distress in Outpatient: Decision to Transfer vs Treat",
+      "topicSlug": "acute-respiratory-distress-transfer-decision",
+      "bodySystem": "Respiratory",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 12,
+      "difficultyMix": {
+        "medium": 10,
+        "hard": 40,
+        "expert": 50
+      },
+      "tags": [
+        "urgent-care",
+        "respiratory",
+        "red-flags",
+        "emergency",
+        "diagnostic-reasoning"
+      ],
+      "clinicalPriority": "high-risk",
+      "careComplexity": "advanced",
+      "populationTags": [
+        "adult",
+        "urgent-care"
+      ]
+    },
+    {
+      "domain": "Urgent Care Decision-Making",
+      "subdomain": "Anaphylaxis and Allergy",
+      "topic": "Anaphylaxis Recognition and Emergency Management in Office Setting",
+      "topicSlug": "anaphylaxis-recognition-office-management",
+      "bodySystem": "Multisystem",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 10,
+        "hard": 40,
+        "expert": 50
+      },
+      "tags": [
+        "urgent-care",
+        "anaphylaxis",
+        "allergy",
+        "emergency",
+        "red-flags"
+      ],
+      "clinicalPriority": "high-risk",
+      "careComplexity": "advanced",
+      "populationTags": [
+        "adult",
+        "pediatric",
+        "urgent-care"
+      ]
+    },
+    {
+      "domain": "Urgent Care Decision-Making",
+      "subdomain": "Trauma and Injury",
+      "topic": "Acute Musculoskeletal Injury: Ottawa Rules, Imaging Decisions, and Management",
+      "topicSlug": "acute-musculoskeletal-injury-ottawa-rules",
+      "bodySystem": "Musculoskeletal",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 20,
+        "hard": 55,
+        "expert": 25
+      },
+      "tags": [
+        "urgent-care",
+        "musculoskeletal",
+        "trauma",
+        "diagnostic-reasoning",
+        "imaging"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "adult",
+        "urgent-care"
+      ]
+    },
+    {
+      "domain": "Urgent Care Decision-Making",
+      "subdomain": "Metabolic Urgent",
+      "topic": "DKA and HHS Recognition in Outpatient: Stabilize and Transfer Criteria",
+      "topicSlug": "dka-hhs-recognition-outpatient-stabilize",
+      "bodySystem": "Endocrine",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 12,
+      "difficultyMix": {
+        "medium": 10,
+        "hard": 40,
+        "expert": 50
+      },
+      "tags": [
+        "urgent-care",
+        "diabetes",
+        "endocrine",
+        "emergency",
+        "red-flags",
+        "diagnostic-reasoning"
+      ],
+      "clinicalPriority": "high-risk",
+      "careComplexity": "advanced",
+      "populationTags": [
+        "adult",
+        "urgent-care"
+      ]
+    },
+    {
+      "domain": "Urgent Care Decision-Making",
+      "subdomain": "Renal Urgent",
+      "topic": "Acute Kidney Injury in Outpatient: Pre-Renal vs Intrinsic, Management and Referral",
+      "topicSlug": "aki-outpatient-prerenal-intrinsic-referral",
+      "bodySystem": "Renal",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 15,
+        "hard": 50,
+        "expert": 35
+      },
+      "tags": [
+        "urgent-care",
+        "aki",
+        "renal",
+        "diagnostic-reasoning",
+        "referral",
+        "red-flags"
+      ],
+      "clinicalPriority": "high-risk",
+      "careComplexity": "advanced",
+      "populationTags": [
+        "adult",
+        "older-adult",
+        "urgent-care"
+      ]
+    },
+    {
+      "domain": "Urgent Care Decision-Making",
+      "subdomain": "Pediatric Urgent",
+      "topic": "Pediatric Dehydration: Severity Assessment and Oral vs IV Rehydration",
+      "topicSlug": "pediatric-dehydration-severity-rehydration",
+      "bodySystem": "Renal",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 15,
+        "hard": 50,
+        "expert": 35
+      },
+      "tags": [
+        "urgent-care",
+        "pediatrics",
+        "dehydration",
+        "emergency",
+        "diagnostic-reasoning"
+      ],
+      "clinicalPriority": "high-risk",
+      "careComplexity": "advanced",
+      "populationTags": [
+        "pediatric",
+        "urgent-care"
+      ]
+    },
+    {
+      "domain": "Urgent Care Decision-Making",
+      "subdomain": "Wound Care and Skin",
+      "topic": "Wound Assessment and Management in Urgent Care: Closure Decisions",
+      "topicSlug": "wound-assessment-closure-decisions",
+      "bodySystem": "Integumentary",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 25,
+        "hard": 55,
+        "expert": 20
+      },
+      "tags": [
+        "urgent-care",
+        "wound-care",
+        "dermatology",
+        "procedures"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "foundational",
+      "populationTags": [
+        "adult",
+        "urgent-care"
+      ]
+    },
+    {
+      "domain": "Urgent Care Decision-Making",
+      "subdomain": "Infectious Disease Urgent",
+      "topic": "Sepsis Recognition in Outpatient: qSOFA Criteria and Transfer Decision",
+      "topicSlug": "sepsis-recognition-outpatient-qsofa-transfer",
+      "bodySystem": "Multisystem",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 12,
+      "difficultyMix": {
+        "medium": 10,
+        "hard": 40,
+        "expert": 50
+      },
+      "tags": [
+        "urgent-care",
+        "sepsis",
+        "infectious-disease",
+        "red-flags",
+        "emergency",
+        "diagnostic-reasoning"
+      ],
+      "clinicalPriority": "high-risk",
+      "careComplexity": "advanced",
+      "populationTags": [
+        "adult",
+        "urgent-care"
+      ]
+    },
+    {
+      "domain": "Geriatrics & Older Adult Care",
+      "subdomain": "Polypharmacy and Deprescribing",
+      "topic": "Polypharmacy in Older Adults: Medication Review, Beer's Criteria, and Deprescribing Strategy",
+      "topicSlug": "polypharmacy-beers-criteria-deprescribing",
+      "bodySystem": "Multisystem",
+      "complexity": "advanced",
+      "lessonTargetCount": 2,
+      "questionTargetCount": 14,
+      "difficultyMix": {
+        "medium": 15,
+        "hard": 50,
+        "expert": 35
+      },
+      "tags": [
+        "geriatrics",
+        "polypharmacy",
+        "deprescribing",
+        "pharmacology",
+        "medication-safety",
+        "older-adults"
+      ],
+      "clinicalPriority": "special-population",
+      "careComplexity": "advanced",
+      "populationTags": [
+        "adult",
+        "older-adult",
+        "chronic-disease"
+      ]
+    },
+    {
+      "domain": "Geriatrics & Older Adult Care",
+      "subdomain": "Falls and Mobility",
+      "topic": "Falls Risk Assessment and Multifactorial Prevention in Older Adults",
+      "topicSlug": "falls-risk-assessment-prevention-elderly",
+      "bodySystem": "Musculoskeletal",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 20,
+        "hard": 55,
+        "expert": 25
+      },
+      "tags": [
+        "geriatrics",
+        "falls",
+        "older-adults",
+        "prevention",
+        "health-promotion",
+        "musculoskeletal"
+      ],
+      "clinicalPriority": "special-population",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "adult",
+        "older-adult",
+        "preventive-care"
+      ]
+    },
+    {
+      "domain": "Geriatrics & Older Adult Care",
+      "subdomain": "Cognitive Decline",
+      "topic": "Dementia vs Mild Cognitive Impairment: Diagnosis, Staging, and Care Planning",
+      "topicSlug": "dementia-mci-diagnosis-staging-care",
+      "bodySystem": "Neurological",
+      "complexity": "advanced",
+      "lessonTargetCount": 2,
+      "questionTargetCount": 14,
+      "difficultyMix": {
+        "medium": 15,
+        "hard": 50,
+        "expert": 35
+      },
+      "tags": [
+        "geriatrics",
+        "dementia",
+        "cognitive-decline",
+        "neurological",
+        "diagnostic-reasoning",
+        "follow-up"
+      ],
+      "clinicalPriority": "special-population",
+      "careComplexity": "advanced",
+      "populationTags": [
+        "adult",
+        "older-adult",
+        "behavioral-health"
+      ]
+    },
+    {
+      "domain": "Geriatrics & Older Adult Care",
+      "subdomain": "The 3 Ds",
+      "topic": "Delirium vs Dementia vs Depression in Older Adults: Differentiation and Management",
+      "topicSlug": "delirium-dementia-depression-3ds-elderly",
+      "bodySystem": "Psychosocial",
+      "complexity": "advanced",
+      "lessonTargetCount": 2,
+      "questionTargetCount": 14,
+      "difficultyMix": {
+        "medium": 10,
+        "hard": 45,
+        "expert": 45
+      },
+      "tags": [
+        "geriatrics",
+        "delirium",
+        "dementia",
+        "depression",
+        "differential-diagnosis",
+        "mental-health"
+      ],
+      "clinicalPriority": "special-population",
+      "careComplexity": "advanced",
+      "populationTags": [
+        "adult",
+        "older-adult",
+        "behavioral-health"
+      ]
+    },
+    {
+      "domain": "Geriatrics & Older Adult Care",
+      "subdomain": "Frailty and Functional Status",
+      "topic": "Frailty Assessment: FRAIL Scale, ADL/IADL Evaluation, and Care Goals",
+      "topicSlug": "frailty-assessment-adl-iadl-care-goals",
+      "bodySystem": "Multisystem",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 20,
+        "hard": 50,
+        "expert": 30
+      },
+      "tags": [
+        "geriatrics",
+        "frailty",
+        "functional-status",
+        "older-adults",
+        "chronic-disease",
+        "follow-up"
+      ],
+      "clinicalPriority": "special-population",
+      "careComplexity": "advanced",
+      "populationTags": [
+        "adult",
+        "older-adult",
+        "chronic-disease"
+      ]
+    },
+    {
+      "domain": "Geriatrics & Older Adult Care",
+      "subdomain": "Elder Mistreatment",
+      "topic": "Elder Abuse and Neglect: Screening, Recognition, and Mandatory Reporting",
+      "topicSlug": "elder-abuse-neglect-screening-reporting",
+      "bodySystem": "Psychosocial",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 15,
+        "hard": 50,
+        "expert": 35
+      },
+      "tags": [
+        "geriatrics",
+        "elder-abuse",
+        "screening",
+        "safety",
+        "red-flags",
+        "mandatory-reporting"
+      ],
+      "clinicalPriority": "high-risk",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "adult",
+        "older-adult"
+      ]
+    },
+    {
+      "domain": "Geriatrics & Older Adult Care",
+      "subdomain": "Continence and Pelvic Health",
+      "topic": "Urinary Incontinence in Older Adults: Types, Workup, and Stepwise Management",
+      "topicSlug": "urinary-incontinence-elderly-types-management",
+      "bodySystem": "Renal",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 25,
+        "hard": 55,
+        "expert": 20
+      },
+      "tags": [
+        "geriatrics",
+        "urinary-incontinence",
+        "renal",
+        "prescribing",
+        "older-adults"
+      ],
+      "clinicalPriority": "special-population",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "adult",
+        "older-adult",
+        "chronic-disease"
+      ]
+    },
+    {
+      "domain": "Geriatrics & Older Adult Care",
+      "subdomain": "Osteoporosis and Bone Health",
+      "topic": "Osteoporosis Management: DEXA Interpretation, FRAX Score, and Pharmacotherapy",
+      "topicSlug": "osteoporosis-dexa-frax-pharmacotherapy",
+      "bodySystem": "Musculoskeletal",
+      "complexity": "advanced",
+      "lessonTargetCount": 2,
+      "questionTargetCount": 12,
+      "difficultyMix": {
+        "medium": 20,
+        "hard": 50,
+        "expert": 30
+      },
+      "tags": [
+        "geriatrics",
+        "osteoporosis",
+        "musculoskeletal",
+        "prescribing",
+        "pharmacology",
+        "screening"
+      ],
+      "clinicalPriority": "special-population",
+      "careComplexity": "advanced",
+      "populationTags": [
+        "adult",
+        "older-adult",
+        "chronic-disease"
+      ]
+    },
+    {
+      "domain": "LGBTQ+ Health",
+      "subdomain": "Gender-Affirming Care",
+      "topic": "Gender-Affirming Hormone Therapy: Initiation, Monitoring, and Long-Term Care",
+      "topicSlug": "gender-affirming-hormone-therapy-monitoring",
+      "bodySystem": "Endocrine",
+      "complexity": "advanced",
+      "lessonTargetCount": 2,
+      "questionTargetCount": 14,
+      "difficultyMix": {
+        "medium": 15,
+        "hard": 50,
+        "expert": 35
+      },
+      "tags": [
+        "lgbtq",
+        "gender-affirming-care",
+        "transgender",
+        "prescribing",
+        "pharmacology",
+        "endocrine"
+      ],
+      "clinicalPriority": "special-population",
+      "careComplexity": "advanced",
+      "populationTags": [
+        "adult",
+        "LGBTQ+",
+        "reproductive-health",
+        "chronic-disease"
+      ]
+    },
+    {
+      "domain": "LGBTQ+ Health",
+      "subdomain": "HIV Prevention",
+      "topic": "PrEP Prescribing for HIV Prevention: Eligibility, Initiation, and Follow-Up",
+      "topicSlug": "prep-hiv-prevention-eligibility-follow-up",
+      "bodySystem": "Multisystem",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 12,
+      "difficultyMix": {
+        "medium": 20,
+        "hard": 50,
+        "expert": 30
+      },
+      "tags": [
+        "lgbtq",
+        "hiv",
+        "prevention",
+        "prescribing",
+        "pharmacology",
+        "screening"
+      ],
+      "clinicalPriority": "special-population",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "adult",
+        "LGBTQ+",
+        "preventive-care"
+      ]
+    },
+    {
+      "domain": "LGBTQ+ Health",
+      "subdomain": "Sexual Health",
+      "topic": "STI Screening and Management in MSM and Gender-Diverse Patients",
+      "topicSlug": "sti-screening-msm-gender-diverse",
+      "bodySystem": "Multisystem",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 20,
+        "hard": 55,
+        "expert": 25
+      },
+      "tags": [
+        "lgbtq",
+        "sti",
+        "screening",
+        "sexual-health",
+        "infectious-disease"
+      ],
+      "clinicalPriority": "special-population",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "adult",
+        "LGBTQ+",
+        "reproductive-health",
+        "preventive-care"
+      ]
+    },
+    {
+      "domain": "LGBTQ+ Health",
+      "subdomain": "Mental Health in LGBTQ+",
+      "topic": "Minority Stress, Mental Health Disparities, and Affirming Care for LGBTQ+ Patients",
+      "topicSlug": "minority-stress-lgbtq-mental-health-affirming-care",
+      "bodySystem": "Psychosocial",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 25,
+        "hard": 50,
+        "expert": 25
+      },
+      "tags": [
+        "lgbtq",
+        "mental-health",
+        "health-disparities",
+        "screening",
+        "affirming-care"
+      ],
+      "clinicalPriority": "special-population",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "adult",
+        "LGBTQ+",
+        "behavioral-health"
+      ]
+    },
+    {
+      "domain": "LGBTQ+ Health",
+      "subdomain": "Preventive Care",
+      "topic": "Preventive Health Screening for LGBTQ+ Patients: Adapting Guidelines to Anatomy and Risk",
+      "topicSlug": "preventive-screening-lgbtq-anatomy-risk",
+      "bodySystem": "Multisystem",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 25,
+        "hard": 55,
+        "expert": 20
+      },
+      "tags": [
+        "lgbtq",
+        "screening",
+        "health-promotion",
+        "prevention",
+        "primary-care"
+      ],
+      "clinicalPriority": "special-population",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "adult",
+        "LGBTQ+",
+        "preventive-care"
+      ]
+    },
+    {
+      "domain": "Substance Use & Addiction",
+      "subdomain": "Opioid Use Disorder",
+      "topic": "Buprenorphine Initiation for Opioid Use Disorder: MOUD Protocol and Follow-Up",
+      "topicSlug": "buprenorphine-moud-initiation-follow-up",
+      "bodySystem": "Psychosocial",
+      "complexity": "advanced",
+      "lessonTargetCount": 2,
+      "questionTargetCount": 14,
+      "difficultyMix": {
+        "medium": 10,
+        "hard": 45,
+        "expert": 45
+      },
+      "tags": [
+        "substance-use",
+        "opioid-use-disorder",
+        "buprenorphine",
+        "prescribing",
+        "controlled-substances",
+        "mental-health"
+      ],
+      "clinicalPriority": "high-risk",
+      "careComplexity": "advanced",
+      "populationTags": [
+        "adult",
+        "behavioral-health"
+      ]
+    },
+    {
+      "domain": "Substance Use & Addiction",
+      "subdomain": "Alcohol Use Disorder",
+      "topic": "Alcohol Use Disorder: AUDIT-C Screening, Brief Intervention, and Pharmacotherapy",
+      "topicSlug": "aud-screening-brief-intervention-pharmacotherapy",
+      "bodySystem": "Psychosocial",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 12,
+      "difficultyMix": {
+        "medium": 20,
+        "hard": 50,
+        "expert": 30
+      },
+      "tags": [
+        "substance-use",
+        "alcohol",
+        "screening",
+        "prescribing",
+        "pharmacology",
+        "mental-health"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "adult",
+        "behavioral-health",
+        "preventive-care"
+      ]
+    },
+    {
+      "domain": "Substance Use & Addiction",
+      "subdomain": "Tobacco and Nicotine",
+      "topic": "Tobacco Cessation: 5As Framework, NRT, Varenicline, and Bupropion",
+      "topicSlug": "tobacco-cessation-5as-nrt-pharmacotherapy",
+      "bodySystem": "Respiratory",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 25,
+        "hard": 55,
+        "expert": 20
+      },
+      "tags": [
+        "substance-use",
+        "tobacco",
+        "cessation",
+        "prescribing",
+        "pharmacology",
+        "health-promotion"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "adult",
+        "preventive-care"
+      ]
+    },
+    {
+      "domain": "Substance Use & Addiction",
+      "subdomain": "Cannabis and Stimulants",
+      "topic": "Cannabis Use Disorder and Stimulant Use: Recognition, Counseling, and Referral",
+      "topicSlug": "cannabis-stimulant-use-disorder-counseling",
+      "bodySystem": "Psychosocial",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 25,
+        "hard": 50,
+        "expert": 25
+      },
+      "tags": [
+        "substance-use",
+        "cannabis",
+        "stimulants",
+        "mental-health",
+        "screening",
+        "referral"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "adult",
+        "behavioral-health"
+      ]
+    },
+    {
+      "domain": "Substance Use & Addiction",
+      "subdomain": "Overdose Prevention",
+      "topic": "Naloxone Prescribing and Overdose Prevention Counseling in Primary Care",
+      "topicSlug": "naloxone-prescribing-overdose-prevention",
+      "bodySystem": "Psychosocial",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 20,
+        "hard": 50,
+        "expert": 30
+      },
+      "tags": [
+        "substance-use",
+        "overdose",
+        "naloxone",
+        "prescribing",
+        "controlled-substances",
+        "safety"
+      ],
+      "clinicalPriority": "high-risk",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "adult",
+        "behavioral-health"
+      ]
+    },
+    {
+      "domain": "Differential Diagnosis & Diagnostic Reasoning",
+      "subdomain": "Musculoskeletal Differentials",
+      "topic": "Low Back Pain Differential: Mechanical vs Inflammatory vs Neurological vs Red Flags",
+      "topicSlug": "low-back-pain-differential-mechanical-inflammatory",
+      "bodySystem": "Musculoskeletal",
+      "complexity": "advanced",
+      "lessonTargetCount": 2,
+      "questionTargetCount": 12,
+      "difficultyMix": {
+        "medium": 20,
+        "hard": 50,
+        "expert": 30
+      },
+      "tags": [
+        "differential-diagnosis",
+        "low-back-pain",
+        "musculoskeletal",
+        "diagnostic-reasoning",
+        "red-flags"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "adult",
+        "older-adult"
+      ]
+    },
+    {
+      "domain": "Differential Diagnosis & Diagnostic Reasoning",
+      "subdomain": "Systemic Differentials",
+      "topic": "Unintentional Weight Loss Differential: Malignancy, Endocrine, GI, and Psychiatric Causes",
+      "topicSlug": "weight-loss-differential-malignancy-endocrine",
+      "bodySystem": "Multisystem",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 15,
+        "hard": 50,
+        "expert": 35
+      },
+      "tags": [
+        "differential-diagnosis",
+        "weight-loss",
+        "oncology",
+        "endocrine",
+        "diagnostic-reasoning",
+        "red-flags"
+      ],
+      "clinicalPriority": "high-risk",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "adult",
+        "older-adult"
+      ]
+    },
+    {
+      "domain": "Differential Diagnosis & Diagnostic Reasoning",
+      "subdomain": "Cardiovascular Differentials",
+      "topic": "Peripheral Edema Differential: Cardiac vs Venous vs Hepatic vs Renal vs Lymphatic",
+      "topicSlug": "peripheral-edema-differential-multisystem",
+      "bodySystem": "Cardiovascular",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 20,
+        "hard": 55,
+        "expert": 25
+      },
+      "tags": [
+        "differential-diagnosis",
+        "edema",
+        "cardiovascular",
+        "renal",
+        "diagnostic-reasoning"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "adult",
+        "older-adult",
+        "chronic-disease"
+      ]
+    },
+    {
+      "domain": "Differential Diagnosis & Diagnostic Reasoning",
+      "subdomain": "Cardiovascular Differentials",
+      "topic": "Palpitations Differential: Benign vs Arrhythmia vs Metabolic vs Anxiety",
+      "topicSlug": "palpitations-differential-arrhythmia-metabolic",
+      "bodySystem": "Cardiovascular",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 20,
+        "hard": 55,
+        "expert": 25
+      },
+      "tags": [
+        "differential-diagnosis",
+        "palpitations",
+        "cardiovascular",
+        "diagnostic-reasoning",
+        "arrhythmia"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "adult"
+      ]
+    },
+    {
+      "domain": "Differential Diagnosis & Diagnostic Reasoning",
+      "subdomain": "Systemic Differentials",
+      "topic": "Night Sweats Differential: Infectious, Oncological, Hormonal, and Medication Causes",
+      "topicSlug": "night-sweats-differential-infectious-oncological",
+      "bodySystem": "Multisystem",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 20,
+        "hard": 50,
+        "expert": 30
+      },
+      "tags": [
+        "differential-diagnosis",
+        "night-sweats",
+        "oncology",
+        "infectious-disease",
+        "diagnostic-reasoning",
+        "red-flags"
+      ],
+      "clinicalPriority": "high-risk",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "adult",
+        "older-adult"
+      ]
+    },
+    {
+      "domain": "Prescribing & Advanced Pharmacology",
+      "subdomain": "Insulin and Diabetes Pharmacology",
+      "topic": "Insulin Initiation and Titration in Type 2 Diabetes: Basal, Bolus, and Mixed Regimens",
+      "topicSlug": "insulin-initiation-titration-t2dm-regimens",
+      "bodySystem": "Endocrine",
+      "complexity": "advanced",
+      "lessonTargetCount": 2,
+      "questionTargetCount": 14,
+      "difficultyMix": {
+        "medium": 15,
+        "hard": 50,
+        "expert": 35
+      },
+      "tags": [
+        "prescribing",
+        "pharmacology",
+        "insulin",
+        "diabetes",
+        "endocrine",
+        "prescribing"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "advanced",
+      "populationTags": [
+        "adult",
+        "older-adult",
+        "chronic-disease"
+      ]
+    },
+    {
+      "domain": "Prescribing & Advanced Pharmacology",
+      "subdomain": "Neurology Pharmacology",
+      "topic": "Migraine Pharmacotherapy: Acute Abortive Agents and Preventive Strategies",
+      "topicSlug": "migraine-pharmacotherapy-acute-preventive",
+      "bodySystem": "Neurological",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 12,
+      "difficultyMix": {
+        "medium": 20,
+        "hard": 50,
+        "expert": 30
+      },
+      "tags": [
+        "prescribing",
+        "pharmacology",
+        "migraine",
+        "neurological",
+        "triptans",
+        "preventive"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "adult"
+      ]
+    },
+    {
+      "domain": "Prescribing & Advanced Pharmacology",
+      "subdomain": "ADHD Pharmacology",
+      "topic": "ADHD Pharmacotherapy in Adults: Stimulant and Non-Stimulant Selection and Monitoring",
+      "topicSlug": "adhd-adult-pharmacotherapy-stimulant-nonstimulant",
+      "bodySystem": "Psychosocial",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 12,
+      "difficultyMix": {
+        "medium": 20,
+        "hard": 50,
+        "expert": 30
+      },
+      "tags": [
+        "prescribing",
+        "pharmacology",
+        "adhd",
+        "mental-health",
+        "controlled-substances",
+        "stimulants"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "advanced",
+      "populationTags": [
+        "adult",
+        "behavioral-health"
+      ]
+    },
+    {
+      "domain": "Prescribing & Advanced Pharmacology",
+      "subdomain": "Bone Health Pharmacology",
+      "topic": "Bisphosphonates and Alternative Osteoporosis Agents: Indications, Safety, and Holiday",
+      "topicSlug": "bisphosphonates-osteoporosis-safety-holiday",
+      "bodySystem": "Musculoskeletal",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 20,
+        "hard": 55,
+        "expert": 25
+      },
+      "tags": [
+        "prescribing",
+        "pharmacology",
+        "osteoporosis",
+        "musculoskeletal",
+        "geriatrics",
+        "medication-safety"
+      ],
+      "clinicalPriority": "supporting",
+      "careComplexity": "advanced",
+      "populationTags": [
+        "adult",
+        "older-adult",
+        "chronic-disease"
+      ]
+    },
+    {
+      "domain": "Prescribing & Advanced Pharmacology",
+      "subdomain": "Specialty and Biologic Drugs",
+      "topic": "Biologics and Specialty Medications: NP Role in Monitoring, Side Effects, and Coordination",
+      "topicSlug": "biologics-specialty-drugs-monitoring-np-role",
+      "bodySystem": "Multisystem",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 15,
+        "hard": 50,
+        "expert": 35
+      },
+      "tags": [
+        "prescribing",
+        "pharmacology",
+        "biologics",
+        "specialty-drugs",
+        "medication-safety",
+        "referral"
+      ],
+      "clinicalPriority": "supporting",
+      "careComplexity": "advanced",
+      "populationTags": [
+        "adult",
+        "chronic-disease"
+      ]
+    },
+    {
+      "domain": "Women's Health",
+      "subdomain": "Perimenopause and Menopause",
+      "topic": "Perimenopause and Menopause: Symptom Management and HRT Decision-Making",
+      "topicSlug": "perimenopause-menopause-hrt-decision",
+      "bodySystem": "Reproductive",
+      "complexity": "advanced",
+      "lessonTargetCount": 2,
+      "questionTargetCount": 14,
+      "difficultyMix": {
+        "medium": 15,
+        "hard": 50,
+        "expert": 35
+      },
+      "tags": [
+        "womens-health",
+        "menopause",
+        "hrt",
+        "prescribing",
+        "pharmacology",
+        "endocrine"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "advanced",
+      "populationTags": [
+        "adult",
+        "older-adult",
+        "reproductive-health"
+      ]
+    },
+    {
+      "domain": "Women's Health",
+      "subdomain": "Vulvovaginal Health",
+      "topic": "Vulvovaginal Conditions: BV vs VVC vs Trichomoniasis vs Atrophic Vaginitis",
+      "topicSlug": "vulvovaginal-bv-vvc-trich-atrophic-diff",
+      "bodySystem": "Reproductive",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 12,
+      "difficultyMix": {
+        "medium": 25,
+        "hard": 55,
+        "expert": 20
+      },
+      "tags": [
+        "womens-health",
+        "vulvovaginal",
+        "infectious-disease",
+        "diagnostic-reasoning",
+        "prescribing"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "adult",
+        "older-adult",
+        "reproductive-health"
+      ]
+    },
+    {
+      "domain": "Women's Health",
+      "subdomain": "Early Pregnancy Emergencies",
+      "topic": "Ectopic Pregnancy Recognition in Primary Care: HCG Trends, Ultrasound Referral, Red Flags",
+      "topicSlug": "ectopic-pregnancy-recognition-primary-care",
+      "bodySystem": "Reproductive",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 12,
+      "difficultyMix": {
+        "medium": 10,
+        "hard": 45,
+        "expert": 45
+      },
+      "tags": [
+        "womens-health",
+        "pregnancy",
+        "ectopic",
+        "red-flags",
+        "urgent-care",
+        "diagnostic-reasoning"
+      ],
+      "clinicalPriority": "high-risk",
+      "careComplexity": "advanced",
+      "populationTags": [
+        "adult",
+        "reproductive-health",
+        "urgent-care"
+      ]
+    },
+    {
+      "domain": "Women's Health",
+      "subdomain": "Lactation and Medication Safety",
+      "topic": "Medication Safety During Breastfeeding: LactMed, Risk Categories, and Prescribing Choices",
+      "topicSlug": "medication-safety-breastfeeding-lactmed",
+      "bodySystem": "Reproductive",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 20,
+        "hard": 55,
+        "expert": 25
+      },
+      "tags": [
+        "womens-health",
+        "lactation",
+        "prescribing",
+        "medication-safety",
+        "pharmacology"
+      ],
+      "clinicalPriority": "high-risk",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "adult",
+        "reproductive-health"
+      ]
+    },
+    {
+      "domain": "Women's Health",
+      "subdomain": "PCOS",
+      "topic": "Polycystic Ovary Syndrome: Comprehensive Diagnosis and Management",
+      "topicSlug": "pcos-diagnosis-management-comprehensive",
+      "bodySystem": "Endocrine",
+      "complexity": "advanced",
+      "lessonTargetCount": 2,
+      "questionTargetCount": 12,
+      "difficultyMix": {
+        "medium": 20,
+        "hard": 50,
+        "expert": 30
+      },
+      "tags": [
+        "womens-health",
+        "pcos",
+        "endocrine",
+        "prescribing",
+        "pharmacology",
+        "chronic-disease"
+      ],
+      "clinicalPriority": "special-population",
+      "careComplexity": "advanced",
+      "populationTags": [
+        "adult",
+        "reproductive-health",
+        "chronic-disease"
+      ]
+    },
+    {
+      "domain": "Pediatric Primary Care",
+      "subdomain": "Pediatric Obesity",
+      "topic": "Childhood Obesity: BMI Percentile Interpretation, Counseling, and Weight Management",
+      "topicSlug": "childhood-obesity-bmi-counseling-management",
+      "bodySystem": "Endocrine",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 25,
+        "hard": 55,
+        "expert": 20
+      },
+      "tags": [
+        "pediatrics",
+        "obesity",
+        "health-promotion",
+        "counseling",
+        "endocrine",
+        "screening"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "foundational",
+      "populationTags": [
+        "pediatric",
+        "preventive-care",
+        "chronic-disease"
+      ]
+    },
+    {
+      "domain": "Pediatric Primary Care",
+      "subdomain": "Developmental and Behavioral",
+      "topic": "Developmental and Learning Concerns in School-Age Children: Evaluation and Referral",
+      "topicSlug": "school-age-developmental-learning-concerns",
+      "bodySystem": "Neurological",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 25,
+        "hard": 55,
+        "expert": 20
+      },
+      "tags": [
+        "pediatrics",
+        "developmental",
+        "adhd",
+        "learning-disability",
+        "referral",
+        "screening"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "pediatric",
+        "behavioral-health"
+      ]
+    },
+    {
+      "domain": "Pediatric Primary Care",
+      "subdomain": "Pediatric Mental Health",
+      "topic": "Depression and Anxiety Screening in Adolescents: PHQ-A, GAD-7, and Next Steps",
+      "topicSlug": "adolescent-depression-anxiety-screening-management",
+      "bodySystem": "Psychosocial",
+      "complexity": "advanced",
+      "lessonTargetCount": 2,
+      "questionTargetCount": 14,
+      "difficultyMix": {
+        "medium": 15,
+        "hard": 50,
+        "expert": 35
+      },
+      "tags": [
+        "pediatrics",
+        "mental-health",
+        "screening",
+        "depression",
+        "anxiety",
+        "adolescents"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "pediatric",
+        "behavioral-health",
+        "preventive-care"
+      ]
+    },
+    {
+      "domain": "Pediatric Primary Care",
+      "subdomain": "Fever Management",
+      "topic": "Fever Management by Age: Neonatal, Infant, and Toddler Risk Stratification",
+      "topicSlug": "fever-management-by-age-neonatal-infant",
+      "bodySystem": "Multisystem",
+      "complexity": "advanced",
+      "lessonTargetCount": 2,
+      "questionTargetCount": 14,
+      "difficultyMix": {
+        "medium": 15,
+        "hard": 50,
+        "expert": 35
+      },
+      "tags": [
+        "pediatrics",
+        "fever",
+        "infectious-disease",
+        "diagnostic-reasoning",
+        "red-flags",
+        "urgent-care"
+      ],
+      "clinicalPriority": "high-risk",
+      "careComplexity": "advanced",
+      "populationTags": [
+        "pediatric",
+        "urgent-care"
+      ]
+    },
+    {
+      "domain": "Pediatric Primary Care",
+      "subdomain": "Immunizations",
+      "topic": "Catch-Up Immunization Scheduling and Vaccine-Hesitancy Counseling",
+      "topicSlug": "catch-up-immunization-scheduling-counseling",
+      "bodySystem": "Multisystem",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 30,
+        "hard": 50,
+        "expert": 20
+      },
+      "tags": [
+        "pediatrics",
+        "immunizations",
+        "health-promotion",
+        "counseling",
+        "prevention"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "foundational",
+      "populationTags": [
+        "pediatric",
+        "preventive-care"
+      ]
+    },
+    {
+      "domain": "Mental Health Presentations",
+      "subdomain": "Bipolar Disorder",
+      "topic": "Bipolar Disorder in Primary Care: Recognition, Screening, and Safe Co-Management",
+      "topicSlug": "bipolar-disorder-recognition-co-management-pc",
+      "bodySystem": "Psychosocial",
+      "complexity": "advanced",
+      "lessonTargetCount": 2,
+      "questionTargetCount": 14,
+      "difficultyMix": {
+        "medium": 15,
+        "hard": 50,
+        "expert": 35
+      },
+      "tags": [
+        "mental-health",
+        "bipolar",
+        "diagnostic-reasoning",
+        "prescribing",
+        "pharmacology",
+        "referral"
+      ],
+      "clinicalPriority": "high-risk",
+      "careComplexity": "advanced",
+      "populationTags": [
+        "adult",
+        "behavioral-health"
+      ]
+    },
+    {
+      "domain": "Mental Health Presentations",
+      "subdomain": "Trauma and PTSD",
+      "topic": "PTSD Screening in Primary Care: PC-PTSD-5, Trauma-Informed Care, and Initial Management",
+      "topicSlug": "ptsd-screening-trauma-informed-initial-management",
+      "bodySystem": "Psychosocial",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 12,
+      "difficultyMix": {
+        "medium": 20,
+        "hard": 50,
+        "expert": 30
+      },
+      "tags": [
+        "mental-health",
+        "ptsd",
+        "trauma",
+        "screening",
+        "prescribing",
+        "pharmacology"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "adult",
+        "behavioral-health"
+      ]
+    },
+    {
+      "domain": "Mental Health Presentations",
+      "subdomain": "Eating Disorders",
+      "topic": "Eating Disorder Recognition in Primary Care: Anorexia, Bulimia, and ARFID Management",
+      "topicSlug": "eating-disorders-recognition-primary-care",
+      "bodySystem": "Psychosocial",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 20,
+        "hard": 50,
+        "expert": 30
+      },
+      "tags": [
+        "mental-health",
+        "eating-disorders",
+        "screening",
+        "diagnostic-reasoning",
+        "referral"
+      ],
+      "clinicalPriority": "high-risk",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "adult",
+        "behavioral-health"
+      ]
+    },
+    {
+      "domain": "Mental Health Presentations",
+      "subdomain": "Somatic and Functional",
+      "topic": "Somatic Symptom and Functional Disorders: Diagnosis and Therapeutic Communication",
+      "topicSlug": "somatic-symptom-functional-disorder-management",
+      "bodySystem": "Psychosocial",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 25,
+        "hard": 50,
+        "expert": 25
+      },
+      "tags": [
+        "mental-health",
+        "somatic",
+        "functional",
+        "diagnostic-reasoning",
+        "chronic-disease"
+      ],
+      "clinicalPriority": "supporting",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "adult",
+        "behavioral-health",
+        "chronic-disease"
+      ]
+    },
+    {
+      "domain": "Mental Health Presentations",
+      "subdomain": "Neurodevelopmental in Adults",
+      "topic": "Autism Spectrum Disorder in Adults: Primary Care Recognition and Accommodation",
+      "topicSlug": "asd-adults-primary-care-accommodation",
+      "bodySystem": "Psychosocial",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 30,
+        "hard": 50,
+        "expert": 20
+      },
+      "tags": [
+        "mental-health",
+        "autism",
+        "neurodevelopmental",
+        "adults",
+        "diagnostic-reasoning"
+      ],
+      "clinicalPriority": "special-population",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "adult",
+        "behavioral-health"
+      ]
+    },
+    {
+      "domain": "Mental Health Presentations",
+      "subdomain": "Sleep Disorders",
+      "topic": "Insomnia and Sleep Disorders: CBTI-First Approach, Appropriate Pharmacotherapy",
+      "topicSlug": "insomnia-sleep-disorders-cbti-pharmacotherapy",
+      "bodySystem": "Psychosocial",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 25,
+        "hard": 55,
+        "expert": 20
+      },
+      "tags": [
+        "mental-health",
+        "insomnia",
+        "sleep",
+        "prescribing",
+        "pharmacology",
+        "chronic-disease"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "adult",
+        "older-adult",
+        "behavioral-health",
+        "chronic-disease"
+      ]
+    },
+    {
+      "domain": "Urgent Care Decision-Making",
+      "subdomain": "Vector-Borne and Tick Disease",
+      "topic": "Tick-Borne Illness Recognition: Lyme, RMSF, Ehrlichiosis \u2014 Diagnosis and Treatment",
+      "topicSlug": "tick-borne-illness-lyme-rmsf-ehrlichiosis",
+      "bodySystem": "Multisystem",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 12,
+      "difficultyMix": {
+        "medium": 20,
+        "hard": 50,
+        "expert": 30
+      },
+      "tags": [
+        "urgent-care",
+        "tick-borne",
+        "infectious-disease",
+        "diagnostic-reasoning",
+        "prescribing"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "adult",
+        "urgent-care"
+      ]
+    },
+    {
+      "domain": "Urgent Care Decision-Making",
+      "subdomain": "Ophthalmologic Urgent",
+      "topic": "Acute Vision Changes in Primary Care: Red Flags Requiring Emergency Ophthalmology",
+      "topicSlug": "acute-vision-changes-emergency-ophthalmology",
+      "bodySystem": "ENT",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 15,
+        "hard": 45,
+        "expert": 40
+      },
+      "tags": [
+        "urgent-care",
+        "ophthalmology",
+        "red-flags",
+        "diagnostic-reasoning",
+        "emergency"
+      ],
+      "clinicalPriority": "high-risk",
+      "careComplexity": "advanced",
+      "populationTags": [
+        "adult",
+        "older-adult",
+        "urgent-care"
+      ]
+    },
+    {
+      "domain": "Urgent Care Decision-Making",
+      "subdomain": "ENT Urgent",
+      "topic": "Peritonsillar Abscess and Deep Space Neck Infections: Recognition and Disposition",
+      "topicSlug": "peritonsillar-abscess-deep-neck-infection",
+      "bodySystem": "ENT",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 15,
+        "hard": 50,
+        "expert": 35
+      },
+      "tags": [
+        "urgent-care",
+        "ent",
+        "infectious-disease",
+        "red-flags",
+        "emergency",
+        "diagnostic-reasoning"
+      ],
+      "clinicalPriority": "high-risk",
+      "careComplexity": "advanced",
+      "populationTags": [
+        "adult",
+        "urgent-care"
+      ]
+    },
+    {
+      "domain": "Urgent Care Decision-Making",
+      "subdomain": "Urological Urgent",
+      "topic": "Acute Urinary Retention: Causes, Catheterization Decision, and Disposition",
+      "topicSlug": "acute-urinary-retention-catheterization-disposition",
+      "bodySystem": "Renal",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 20,
+        "hard": 50,
+        "expert": 30
+      },
+      "tags": [
+        "urgent-care",
+        "urological",
+        "renal",
+        "diagnostic-reasoning",
+        "procedures"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "adult",
+        "older-adult",
+        "urgent-care"
+      ]
+    },
+    {
+      "domain": "Urgent Care Decision-Making",
+      "subdomain": "Toxicology Urgent",
+      "topic": "Carbon Monoxide Poisoning: Clinical Recognition, Severity, and Emergency Management",
+      "topicSlug": "carbon-monoxide-poisoning-recognition-management",
+      "bodySystem": "Multisystem",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 10,
+        "hard": 45,
+        "expert": 45
+      },
+      "tags": [
+        "urgent-care",
+        "toxicology",
+        "emergency",
+        "red-flags",
+        "diagnostic-reasoning"
+      ],
+      "clinicalPriority": "high-risk",
+      "careComplexity": "advanced",
+      "populationTags": [
+        "adult",
+        "urgent-care"
+      ]
+    },
+    {
+      "domain": "Social Determinants & Population Health",
+      "subdomain": "SDOH Screening",
+      "topic": "Social Determinants of Health Screening: PRAPARE, HealthLeads, and Clinical Integration",
+      "topicSlug": "sdoh-screening-prapare-clinical-integration",
+      "bodySystem": "Multisystem",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 30,
+        "hard": 50,
+        "expert": 20
+      },
+      "tags": [
+        "sdoh",
+        "screening",
+        "health-promotion",
+        "population-health",
+        "primary-care"
+      ],
+      "clinicalPriority": "special-population",
+      "careComplexity": "foundational",
+      "populationTags": [
+        "adult",
+        "older-adult"
+      ]
+    },
+    {
+      "domain": "Social Determinants & Population Health",
+      "subdomain": "Intimate Partner Violence",
+      "topic": "Intimate Partner Violence Screening, Documentation, and Safety Planning in Primary Care",
+      "topicSlug": "ipv-screening-documentation-safety-planning",
+      "bodySystem": "Psychosocial",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 20,
+        "hard": 50,
+        "expert": 30
+      },
+      "tags": [
+        "sdoh",
+        "ipv",
+        "screening",
+        "safety",
+        "mandatory-reporting",
+        "women's-health"
+      ],
+      "clinicalPriority": "high-risk",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "adult",
+        "reproductive-health"
+      ]
+    },
+    {
+      "domain": "Social Determinants & Population Health",
+      "subdomain": "Health Disparities",
+      "topic": "Health Disparities in Chronic Disease: Structural Factors and Equitable Management",
+      "topicSlug": "health-disparities-chronic-disease-equity",
+      "bodySystem": "Multisystem",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 25,
+        "hard": 55,
+        "expert": 20
+      },
+      "tags": [
+        "sdoh",
+        "health-disparities",
+        "equity",
+        "chronic-disease",
+        "population-health"
+      ],
+      "clinicalPriority": "special-population",
+      "careComplexity": "foundational",
+      "populationTags": [
+        "adult",
+        "older-adult",
+        "chronic-disease"
+      ]
+    },
+    {
+      "domain": "Social Determinants & Population Health",
+      "subdomain": "Food and Housing Insecurity",
+      "topic": "Food Insecurity Screening and Clinical Implications for Chronic Disease Management",
+      "topicSlug": "food-insecurity-screening-clinical-implications",
+      "bodySystem": "Multisystem",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 30,
+        "hard": 50,
+        "expert": 20
+      },
+      "tags": [
+        "sdoh",
+        "food-insecurity",
+        "screening",
+        "chronic-disease",
+        "counseling"
+      ],
+      "clinicalPriority": "special-population",
+      "careComplexity": "foundational",
+      "populationTags": [
+        "adult",
+        "older-adult",
+        "chronic-disease"
+      ]
+    },
+    {
+      "domain": "Social Determinants & Population Health",
+      "subdomain": "Health Literacy",
+      "topic": "Health Literacy Assessment and Communication Strategies for Complex Patients",
+      "topicSlug": "health-literacy-communication-complex-patients",
+      "bodySystem": "Multisystem",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 35,
+        "hard": 50,
+        "expert": 15
+      },
+      "tags": [
+        "sdoh",
+        "health-literacy",
+        "communication",
+        "patient-education",
+        "population-health"
+      ],
+      "clinicalPriority": "special-population",
+      "careComplexity": "foundational",
+      "populationTags": [
+        "adult",
+        "older-adult"
+      ]
+    },
+    {
+      "domain": "Adult Primary Care",
+      "subdomain": "Erectile Dysfunction",
+      "topic": "Erectile Dysfunction: Workup, Cardiovascular Risk Linkage, and Pharmacotherapy",
+      "topicSlug": "erectile-dysfunction-workup-cardiovascular-pharmacotherapy",
+      "bodySystem": "Reproductive",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 25,
+        "hard": 55,
+        "expert": 20
+      },
+      "tags": [
+        "adult-primary-care",
+        "mens-health",
+        "erectile-dysfunction",
+        "prescribing",
+        "pharmacology",
+        "cardiovascular"
+      ],
+      "clinicalPriority": "supporting",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "adult",
+        "reproductive-health"
+      ]
+    },
+    {
+      "domain": "Adult Primary Care",
+      "subdomain": "Chronic Pain Syndromes",
+      "topic": "Fibromyalgia and Chronic Fatigue Syndrome: Diagnosis and Multimodal Management",
+      "topicSlug": "fibromyalgia-chronic-fatigue-diagnosis-management",
+      "bodySystem": "Musculoskeletal",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 20,
+        "hard": 55,
+        "expert": 25
+      },
+      "tags": [
+        "adult-primary-care",
+        "fibromyalgia",
+        "chronic-pain",
+        "prescribing",
+        "chronic-disease"
+      ],
+      "clinicalPriority": "supporting",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "adult",
+        "chronic-disease"
+      ]
+    },
+    {
+      "domain": "Adult Primary Care",
+      "subdomain": "Gastroenterology",
+      "topic": "GERD, Peptic Ulcer Disease, and H. pylori: Guideline-Based Management and PPI Safety",
+      "topicSlug": "gerd-pud-h-pylori-ppi-management",
+      "bodySystem": "Gastrointestinal",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 10,
+      "difficultyMix": {
+        "medium": 25,
+        "hard": 55,
+        "expert": 20
+      },
+      "tags": [
+        "adult-primary-care",
+        "gerd",
+        "peptic-ulcer",
+        "h-pylori",
+        "prescribing",
+        "pharmacology"
+      ],
+      "clinicalPriority": "supporting",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "adult",
+        "chronic-disease"
+      ]
+    },
+    {
+      "domain": "Health Promotion & Screening",
+      "subdomain": "Preventive Care Scheduling",
+      "topic": "USPSTF Preventive Care Recommendations: Applying Grade A and B Evidence in Practice",
+      "topicSlug": "uspstf-grade-ab-preventive-care-application",
+      "bodySystem": "Multisystem",
+      "complexity": "advanced",
+      "lessonTargetCount": 2,
+      "questionTargetCount": 14,
+      "difficultyMix": {
+        "medium": 25,
+        "hard": 50,
+        "expert": 25
+      },
+      "tags": [
+        "health-promotion",
+        "screening",
+        "uspstf",
+        "prevention",
+        "primary-care"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "intermediate",
+      "populationTags": [
+        "adult",
+        "preventive-care"
+      ]
+    },
+    {
+      "domain": "Health Promotion & Screening",
+      "subdomain": "Obesity Management",
+      "topic": "Obesity Pharmacotherapy: Anti-Obesity Medications and Patient Selection",
+      "topicSlug": "obesity-pharmacotherapy-aom-selection",
+      "bodySystem": "Endocrine",
+      "complexity": "advanced",
+      "lessonTargetCount": 1,
+      "questionTargetCount": 12,
+      "difficultyMix": {
+        "medium": 15,
+        "hard": 50,
+        "expert": 35
+      },
+      "tags": [
+        "health-promotion",
+        "obesity",
+        "prescribing",
+        "pharmacology",
+        "glp-1",
+        "endocrine"
+      ],
+      "clinicalPriority": "core",
+      "careComplexity": "advanced",
+      "populationTags": [
+        "adult",
+        "chronic-disease"
+      ]
+    }
+  ],
+  "summary": {
+    "totalTopics": 194,
+    "domainBreakdown": {
+      "Differential Diagnosis & Diagnostic Reasoning": 19,
+      "Red Flags & Safety": 5,
+      "Chronic Disease Management": 15,
+      "Acute Primary Care Presentations": 8,
+      "Prescribing & Advanced Pharmacology": 22,
+      "Health Promotion & Screening": 13,
+      "Follow-Up Management": 5,
+      "Women's Health": 15,
+      "Pediatric Primary Care": 16,
+      "Adult Primary Care": 23,
+      "Mental Health Presentations": 16,
+      "Urgent Care Decision-Making": 14,
+      "Geriatrics & Older Adult Care": 8,
+      "LGBTQ+ Health": 5,
+      "Substance Use & Addiction": 5,
+      "Social Determinants & Population Health": 5
+    },
+    "totalLessonTarget": 250,
+    "totalQuestionTarget": 2186,
+    "complexityLevel": "advanced",
+    "examAlignment": [
+      "AANP-FNP",
+      "ANCC-FNP",
+      "ANCC-AGPCNP",
+      "ANCC-PMHNP",
+      "CNPLE-NP"
+    ],
+    "enrichmentAdded": [
+      "clinicalPriority",
+      "careComplexity",
+      "populationTags"
+    ],
+    "clinicalPriorityCounts": {
+      "core": 103,
+      "high-risk": 52,
+      "special-population": 23,
+      "supporting": 16
+    },
+    "careComplexityCounts": {
+      "advanced": 76,
+      "intermediate": 103,
+      "foundational": 15
+    },
+    "populationTagCounts": {
+      "adult": 172,
+      "urgent-care": 40,
+      "pediatric": 29,
+      "older-adult": 64,
+      "behavioral-health": 38,
+      "preventive-care": 34,
+      "chronic-disease": 58,
+      "reproductive-health": 26,
+      "LGBTQ+": 6
+    }
+  }
+}
