@@ -60,10 +60,10 @@ export function PathwayLessonsStudyHero({
         <p className="nn-marketing-label nn-marketing-label--accent">
           {pathway.shortName} · {place}
         </p>
-        <h1 className="mt-3 max-w-4xl text-balance text-3xl font-extrabold tracking-tight text-[var(--theme-heading-text)] sm:text-4xl">
+        <h1 className="nn-marketing-h1 mt-3 max-w-4xl text-balance">
           {pathwayLessonHubH1(pathway)}
         </h1>
-        <p className="mt-4 max-w-3xl text-pretty text-base leading-relaxed text-[var(--theme-muted-text)] sm:text-[1.05rem]">
+        <p className="nn-marketing-body mt-4 max-w-3xl text-pretty text-[var(--theme-muted-text)]">
           {intro}
         </p>
 

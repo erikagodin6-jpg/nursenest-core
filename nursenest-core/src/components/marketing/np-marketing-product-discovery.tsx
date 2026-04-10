@@ -19,10 +19,10 @@ function CaNpCnmpleSection() {
 
   return (
     <section className="mt-10 border-t border-[var(--theme-card-border)] pt-10" aria-labelledby="np-ca-cnmple-heading">
-      <h2 id="np-ca-cnmple-heading" className="text-xl font-semibold text-[var(--theme-heading-text)]">
+      <h2 id="np-ca-cnmple-heading" className="nn-marketing-h3">
         Canadian Nurse Practitioner (CNPLE)
       </h2>
-      <p className="mt-2 text-sm text-[var(--theme-muted-text)]">
+      <p className="nn-marketing-body-sm mt-2 text-[var(--theme-muted-text)]">
         {waitlistOrUpcoming ? (
           <>
             This track is <strong className="text-[var(--theme-heading-text)]">coming online</strong> as national requirements
@@ -64,10 +64,10 @@ function UsNpTracksSection() {
 
   return (
     <section className="mt-10 border-t border-[var(--theme-card-border)] pt-10" aria-labelledby="np-us-tracks-heading">
-      <h2 id="np-us-tracks-heading" className="text-xl font-semibold text-[var(--theme-heading-text)]">
+      <h2 id="np-us-tracks-heading" className="nn-marketing-h3">
         US NP certification tracks
       </h2>
-      <p className="mt-2 text-sm text-[var(--theme-muted-text)]">
+      <p className="nn-marketing-body-sm mt-2 text-[var(--theme-muted-text)]">
         Each specialty has its own hub—FNP, AGPCNP, WHNP, PNP-PC, and PMHNP. Boards and item styles differ; marketing URLs and
         entitlements stay pathway-scoped even when clinical concepts overlap.
       </p>

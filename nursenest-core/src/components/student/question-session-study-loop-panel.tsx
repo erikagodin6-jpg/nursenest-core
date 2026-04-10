@@ -31,7 +31,7 @@ export function QuestionSessionStudyLoopPanel({ questions, graded, pathwayId, vi
 
   return (
     <aside
-      className="mt-6 rounded-xl border border-primary/25 bg-primary/[0.06] p-4 text-sm"
+      className="mt-6 nn-study-loop-outer p-4 text-sm"
       aria-label={t("learner.studyLoop.sessionPanelAria")}
     >
       <p className="text-xs font-semibold uppercase tracking-wide text-primary">{t("learner.studyLoop.sessionTitle")}</p>

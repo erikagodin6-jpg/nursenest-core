@@ -60,7 +60,7 @@ export function PathwayLessonDetailHeader({
         <div className="mt-5 flex flex-wrap items-start justify-between gap-4">
           <div className="min-w-0 flex-1">
             <p className="nn-marketing-caption font-semibold text-[var(--theme-muted-text)]">{pathway.displayName}</p>
-            <h1 className="mt-2 text-balance text-3xl font-extrabold tracking-tight text-[var(--theme-heading-text)] sm:text-[2rem] sm:leading-tight">
+            <h1 className="nn-marketing-h2 mt-2 text-balance">
               {lessonTitle}
             </h1>
             <p className="nn-marketing-body-sm mt-4 text-[var(--theme-muted-text)]">

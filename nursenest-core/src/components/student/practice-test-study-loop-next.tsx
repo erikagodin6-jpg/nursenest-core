@@ -21,7 +21,7 @@ export function PracticeTestStudyLoopNext({ results, pathwayId }: Props) {
     : `/app/questions${pathwayId?.trim() ? `?pathwayId=${encodeURIComponent(pathwayId.trim())}` : ""}`;
 
   return (
-    <div className="nn-card border border-primary/20 bg-primary/[0.04] p-6">
+    <div className="nn-study-loop-outer p-6">
       <p className="text-xs font-semibold uppercase tracking-wide text-primary">{t("learner.studyLoop.afterCatTitle")}</p>
       {results.readinessLabel != null ? (
         <p className="mt-2 text-sm text-foreground">
