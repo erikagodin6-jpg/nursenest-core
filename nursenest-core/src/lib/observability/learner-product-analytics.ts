@@ -2,6 +2,7 @@ import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { buildGlobalExamContext, examContextAnalyticsProps } from "@/lib/exam-context";
 import { analyticsDistinctId, captureServerEvent } from "@/lib/observability/posthog-server";
 import { PH } from "@/lib/observability/posthog-conversion-events";
+import { CAT_RESULTS_COACH_FALLBACK_HEADLINE } from "@/lib/practice-tests/cat-results-coach";
 import type { PracticeTestConfigJson, PracticeTestResultsJson } from "@/lib/practice-tests/types";
 
 /**
@@ -72,6 +73,10 @@ export function capturePracticeTestCompletedAnalytics(
         coach?.confidenceLevel === "low" || coach?.confidenceLevel === "medium" || coach?.confidenceLevel === "high"
           ? coach.confidenceLevel
           : undefined,
+      coach_reliability_level:
+        coach?.reliabilityLevel === "low" || coach?.reliabilityLevel === "medium" || coach?.reliabilityLevel === "high"
+          ? coach.reliabilityLevel
+          : undefined,
       cat_pattern_codes: patternCodes || undefined,
     });
 
@@ -85,6 +90,42 @@ export function capturePracticeTestCompletedAnalytics(
         ...examContextAnalyticsProps(examCtx),
       });
     }
+  } catch {
+    /* Analytics must never block completion or server responses. */
+  }
+}
+
+export function captureCatCoachGenerationAnalytics(
+  userId: string,
+  entitlement: AccessScope,
+  cfg: PracticeTestConfigJson,
+  results: unknown,
+): void {
+  try {
+    const res = results as PracticeTestResultsJson;
+    const coach = res?.catCoach;
+    const examCtx = buildGlobalExamContext(cfg?.pathwayId ?? null, "en");
+    const success =
+      coach != null &&
+      coach.readinessHeadline !== CAT_RESULTS_COACH_FALLBACK_HEADLINE &&
+      typeof coach.generatedAt === "string" &&
+      coach.generatedAt.length > 4;
+
+    captureLearnerProductEvent(userId, entitlement, PH.learnerCatCoachGenerated, {
+      selection_mode: String(cfg?.selectionMode ?? "unknown"),
+      cat_exam_feedback_mode: cfg?.selectionMode === "cat" ? (cfg.catExamFeedbackMode ?? "test") : undefined,
+      pathway_id: cfg?.pathwayId ?? undefined,
+      success,
+      coach_reliability_level:
+        coach?.reliabilityLevel === "low" || coach?.reliabilityLevel === "medium" || coach?.reliabilityLevel === "high"
+          ? coach.reliabilityLevel
+          : undefined,
+      cat_confidence_level:
+        coach?.confidenceLevel === "low" || coach?.confidenceLevel === "medium" || coach?.confidenceLevel === "high"
+          ? coach.confidenceLevel
+          : undefined,
+      ...examContextAnalyticsProps(examCtx),
+    });
   } catch {
     /* Analytics must never block completion or server responses. */
   }

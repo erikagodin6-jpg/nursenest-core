@@ -1,6 +1,6 @@
 import { catPathwayExamCodeLabel, catPathwayRegionalExamLine } from "@/lib/exam-pathways/cat-pathway-labels";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
-import { appPathwayCatSessionStartPath } from "@/lib/exam-pathways/pathway-cat-flow";
+import { resolveStudySurfaceCatHref, resolvePreferredCatPathwayId } from "@/lib/exam-pathways/pathway-cat-flow";
 import type { PremiumDashboardSnapshot } from "@/lib/learner/premium-dashboard-snapshot";
 import type { LearnerMarketingT } from "@/lib/learner/learner-marketing-server";
 import { MasteryLegend } from "@/components/student/product/mastery-legend";
@@ -22,20 +22,24 @@ function catQuickFromSnapshot(snapshot: PremiumDashboardSnapshot): {
 } {
   const ids = snapshot.pathways.map((p) => p.pathwayId);
   const preferred =
-    snapshot.learnerPath && ids.includes(snapshot.learnerPath)
-      ? snapshot.learnerPath
-      : ids.length === 1
-        ? ids[0]!
-        : null;
+    resolvePreferredCatPathwayId(snapshot.learnerPath, ids);
   if (!preferred) {
-    return { catStartHref: "/app/practice-tests/start", catPathwayLabel: null, catPathwayLine: null };
+    return {
+      catStartHref: resolveStudySurfaceCatHref({ pathwayId: snapshot.learnerPath, availablePathwayIds: ids }),
+      catPathwayLabel: null,
+      catPathwayLine: null,
+    };
   }
   const pw = getExamPathwayById(preferred);
   if (!pw) {
-    return { catStartHref: "/app/practice-tests/start", catPathwayLabel: null, catPathwayLine: null };
+    return {
+      catStartHref: resolveStudySurfaceCatHref({ pathwayId: preferred, availablePathwayIds: ids }),
+      catPathwayLabel: null,
+      catPathwayLine: null,
+    };
   }
   return {
-    catStartHref: appPathwayCatSessionStartPath(preferred),
+    catStartHref: resolveStudySurfaceCatHref({ pathwayId: preferred, availablePathwayIds: ids }),
     catPathwayLabel: catPathwayExamCodeLabel(pw),
     catPathwayLine: catPathwayRegionalExamLine(pw),
   };

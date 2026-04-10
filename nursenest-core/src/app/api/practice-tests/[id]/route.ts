@@ -42,8 +42,29 @@ import {
 import { mergeQuestionApiPayload } from "@/lib/i18n/educational-content-overlay";
 import { resolveMergedQuestionOverlayBundle } from "@/lib/i18n/educational-translation-db";
 import { getMarketingLocaleFromRequestCookie } from "@/lib/i18n/marketing-locale-cookie";
-import { capturePracticeTestCompletedAnalytics } from "@/lib/observability/learner-product-analytics";
+import {
+  captureCatCoachGenerationAnalytics,
+  capturePracticeTestCompletedAnalytics,
+} from "@/lib/observability/learner-product-analytics";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
+
+export const practiceTestRouteDeps = {
+  requireSubscriberSession,
+  prisma,
+  findPracticeTest: (args: Parameters<typeof prisma.practiceTest.findFirst>[0]) => prisma.practiceTest.findFirst(args),
+  updatePracticeTest: (args: Parameters<typeof prisma.practiceTest.update>[0]) => prisma.practiceTest.update(args),
+  setSentryServerContext,
+  advanceCatPracticeTest,
+  finalizeCatPracticeTest,
+  recordTopicOutcomesFromPracticeTest,
+  enrichPracticeTestResultsWithCatCoach,
+  computePracticeTestResults,
+  parsePracticeTestConfigAtBoundary,
+  capturePracticeTestCompletedAnalytics,
+  captureCatCoachGenerationAnalytics,
+  enforcePracticeTestDetailProtection,
+  enforcePracticeTestMutationProtection,
+};
 
 const previewSelect = {
   id: true,
@@ -63,10 +84,10 @@ function asIdList(raw: unknown): string[] {
 }
 
 export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string }> }) {
-  const gate = await requireSubscriberSession();
+  const gate = await practiceTestRouteDeps.requireSubscriberSession();
   if (!gate.ok) return gate.response;
 
-  const limited = enforcePracticeTestDetailProtection(req, gate.userId);
+  const limited = practiceTestRouteDeps.enforcePracticeTestDetailProtection(req, gate.userId);
   if (limited) return limited;
 
   const { id } = await ctx.params;
@@ -74,9 +95,13 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string 
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
 
-  setSentryServerContext({ route: "/api/practice-tests/[id]", feature: SERVER_FEATURE.practiceTest, userId: gate.userId });
+  practiceTestRouteDeps.setSentryServerContext({
+    route: "/api/practice-tests/[id]",
+    feature: SERVER_FEATURE.practiceTest,
+    userId: gate.userId,
+  });
 
-  const row = await prisma.practiceTest.findFirst({
+  const row = await practiceTestRouteDeps.findPracticeTest({
     where: { id, userId: gate.userId },
   });
   if (!row) {
@@ -90,7 +115,10 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string 
       ? (row.answers as Record<string, unknown>)
       : {};
 
-  const cfg = parsePracticeTestConfigAtBoundary(row.config, { practiceTestId: id, surface: "practice_test_api_get" });
+  const cfg = practiceTestRouteDeps.parsePracticeTestConfigAtBoundary(row.config, {
+    practiceTestId: id,
+    surface: "practice_test_api_get",
+  });
 
   const teachingReviewRequested = req.nextUrl.searchParams.get("teachingReview") === "1";
   const hydrateFull = req.nextUrl.searchParams.get("hydrate") === "full";
@@ -177,10 +205,10 @@ const patchSchema = z.object({
 });
 
 export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: string }> }) {
-  const gate = await requireSubscriberSession();
+  const gate = await practiceTestRouteDeps.requireSubscriberSession();
   if (!gate.ok) return gate.response;
 
-  const mutateLimited = enforcePracticeTestMutationProtection(req, gate.userId);
+  const mutateLimited = practiceTestRouteDeps.enforcePracticeTestMutationProtection(req, gate.userId);
   if (mutateLimited) return mutateLimited;
 
   const { id } = await ctx.params;
@@ -188,7 +216,11 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
 
-  setSentryServerContext({ route: "/api/practice-tests/[id]", feature: SERVER_FEATURE.practiceTest, userId: gate.userId });
+  practiceTestRouteDeps.setSentryServerContext({
+    route: "/api/practice-tests/[id]",
+    feature: SERVER_FEATURE.practiceTest,
+    userId: gate.userId,
+  });
 
   let body: unknown;
   try {
@@ -217,7 +249,7 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
     return NextResponse.json({ error: "Invalid body" }, { status: 400 });
   }
 
-  const row = await prisma.practiceTest.findFirst({
+  const row = await practiceTestRouteDeps.findPracticeTest({
     where: { id, userId: gate.userId },
   });
   if (!row) {
@@ -238,10 +270,13 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
     parsed.data.answers != null ? { ...prevAnswers, ...parsed.data.answers } : prevAnswers;
   const cursorIndex = parsed.data.cursorIndex ?? row.cursorIndex;
   const elapsedMs = parsed.data.elapsedMs ?? row.elapsedMs ?? undefined;
-  const cfg = parsePracticeTestConfigAtBoundary(row.config, { practiceTestId: id, surface: "practice_test_api_patch" });
+  const cfg = practiceTestRouteDeps.parsePracticeTestConfigAtBoundary(row.config, {
+    practiceTestId: id,
+    surface: "practice_test_api_patch",
+  });
 
   if (parsed.data.action === "save") {
-    await prisma.practiceTest.update({
+    await practiceTestRouteDeps.updatePracticeTest({
       where: { id },
       data: {
         answers: merged as object,
@@ -285,7 +320,7 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
     if (!feedback) {
       return NextResponse.json({ error: "Question not available" }, { status: 404 });
     }
-    await prisma.practiceTest.update({
+    await practiceTestRouteDeps.updatePracticeTest({
       where: { id },
       data: {
         answers: merged as object,
@@ -310,7 +345,7 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
   }
 
   if (parsed.data.action === "abandon") {
-    await prisma.practiceTest.update({
+    await practiceTestRouteDeps.updatePracticeTest({
       where: { id },
       data: {
         status: PracticeTestStatus.ABANDONED,
@@ -328,7 +363,7 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
       return NextResponse.json({ error: "Not a CAT session" }, { status: 400 });
     }
 
-    const adv = await advanceCatPracticeTest({
+    const adv = await practiceTestRouteDeps.advanceCatPracticeTest({
       questionIds: ids,
       adaptiveState: row.adaptiveState,
       mergedAnswers: merged,
@@ -343,7 +378,7 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
     }
 
     if (adv.kind === "study_reveal") {
-      await prisma.practiceTest.update({
+      await practiceTestRouteDeps.updatePracticeTest({
         where: { id },
         data: {
           answers: merged as object,
@@ -362,14 +397,14 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
     if (adv.kind === "completed") {
       const answeredCount = ids.filter((qid) => merged[qid] !== undefined).length;
       const resultsWithMeta = withCatSessionResultMeta(adv.results, cfg, answeredCount);
-      const resultsFinal = await enrichPracticeTestResultsWithCatCoach(
+      const resultsFinal = await practiceTestRouteDeps.enrichPracticeTestResultsWithCatCoach(
         resultsWithMeta,
         adv.adaptiveState,
         cfg,
         gate.entitlement,
         { practiceTestId: id },
       );
-      await prisma.practiceTest.update({
+      await practiceTestRouteDeps.updatePracticeTest({
         where: { id },
         data: {
           status: PracticeTestStatus.COMPLETED,
@@ -384,11 +419,12 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
       });
       let topicStatsSynced = true;
       try {
-        await recordTopicOutcomesFromPracticeTest(gate.userId, ids, merged, gate.entitlement);
+        await practiceTestRouteDeps.recordTopicOutcomesFromPracticeTest(gate.userId, ids, merged, gate.entitlement);
       } catch {
         topicStatsSynced = false;
       }
-      capturePracticeTestCompletedAnalytics(gate.userId, gate.entitlement, cfg, resultsFinal);
+      practiceTestRouteDeps.capturePracticeTestCompletedAnalytics(gate.userId, gate.entitlement, cfg, resultsFinal);
+      practiceTestRouteDeps.captureCatCoachGenerationAnalytics(gate.userId, gate.entitlement, cfg, resultsFinal);
       return NextResponse.json({
         ok: true,
         results: resultsFinal,
@@ -398,7 +434,7 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
       });
     }
 
-    await prisma.practiceTest.update({
+    await practiceTestRouteDeps.updatePracticeTest({
       where: { id },
       data: {
         answers: merged as object,
@@ -413,17 +449,17 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
 
   if (parsed.data.action === "complete") {
     if (cfg.selectionMode === "cat") {
-      const fin = await finalizeCatPracticeTest(ids, merged, gate.entitlement, row.adaptiveState);
+      const fin = await practiceTestRouteDeps.finalizeCatPracticeTest(ids, merged, gate.entitlement, row.adaptiveState);
       const answeredCount = ids.filter((qid) => merged[qid] !== undefined).length;
       const resultsWithMeta = withCatSessionResultMeta(fin.results, cfg, answeredCount);
-      const resultsFinal = await enrichPracticeTestResultsWithCatCoach(
+      const resultsFinal = await practiceTestRouteDeps.enrichPracticeTestResultsWithCatCoach(
         resultsWithMeta,
         fin.adaptiveState,
         cfg,
         gate.entitlement,
         { practiceTestId: id },
       );
-      await prisma.practiceTest.update({
+      await practiceTestRouteDeps.updatePracticeTest({
         where: { id },
         data: {
           status: PracticeTestStatus.COMPLETED,
@@ -437,17 +473,18 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
       });
       let topicStatsSynced = true;
       try {
-        await recordTopicOutcomesFromPracticeTest(gate.userId, ids, merged, gate.entitlement);
+        await practiceTestRouteDeps.recordTopicOutcomesFromPracticeTest(gate.userId, ids, merged, gate.entitlement);
       } catch {
         topicStatsSynced = false;
       }
-      capturePracticeTestCompletedAnalytics(gate.userId, gate.entitlement, cfg, resultsFinal);
+      practiceTestRouteDeps.capturePracticeTestCompletedAnalytics(gate.userId, gate.entitlement, cfg, resultsFinal);
+      practiceTestRouteDeps.captureCatCoachGenerationAnalytics(gate.userId, gate.entitlement, cfg, resultsFinal);
       return NextResponse.json({ ok: true, results: resultsFinal, topicStatsSynced });
     }
 
-    const results = await computePracticeTestResults(ids, merged, gate.entitlement);
+    const results = await practiceTestRouteDeps.computePracticeTestResults(ids, merged, gate.entitlement);
 
-    await prisma.practiceTest.update({
+    await practiceTestRouteDeps.updatePracticeTest({
       where: { id },
       data: {
         status: PracticeTestStatus.COMPLETED,
@@ -461,11 +498,11 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
 
     let topicStatsSynced = true;
     try {
-      await recordTopicOutcomesFromPracticeTest(gate.userId, ids, merged, gate.entitlement);
+      await practiceTestRouteDeps.recordTopicOutcomesFromPracticeTest(gate.userId, ids, merged, gate.entitlement);
     } catch {
       topicStatsSynced = false;
     }
-    capturePracticeTestCompletedAnalytics(gate.userId, gate.entitlement, cfg, results);
+    practiceTestRouteDeps.capturePracticeTestCompletedAnalytics(gate.userId, gate.entitlement, cfg, results);
     return NextResponse.json({ ok: true, results, topicStatsSynced });
   }
 

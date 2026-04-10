@@ -8,6 +8,7 @@ import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { getFreemiumSnapshot } from "@/lib/entitlements/freemium";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
+import { resolveStudySurfaceCatHref } from "@/lib/exam-pathways/pathway-cat-flow";
 import { listPathwaysCompatibleWithSubscription } from "@/lib/exam-pathways/pathway-entitlements";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 import { LearnerStudyQuickLinksCard } from "@/components/student/learner-study-quick-links-card";
@@ -82,6 +83,11 @@ export default async function QuestionBankPage() {
     );
   }
 
+  const catHref = resolveStudySurfaceCatHref({
+    pathwayId: defaultPathwayId,
+    availablePathwayIds: pathwayOptions.map((p) => p.id),
+  });
+
   return (
     <main className="space-y-6">
       <div className="mb-4">
@@ -91,7 +97,7 @@ export default async function QuestionBankPage() {
         <h1 className="text-3xl font-bold text-[var(--semantic-text-primary)]">{t("learner.questions.title")}</h1>
         <p className="mt-2 text-sm text-[var(--semantic-text-secondary)]">{t("learner.questions.subtitle.subscriber")}</p>
       </div>
-      <LearnerStudyQuickLinksCard t={t} id="questions-study-quick-links" />
+      <LearnerStudyQuickLinksCard t={t} id="questions-study-quick-links" catHref={catHref} />
       <aside className="nn-card border-[color-mix(in_srgb,var(--semantic-info)_20%,var(--semantic-border-soft))] bg-[var(--semantic-info-soft)] p-4 text-sm text-[var(--semantic-text-secondary)] shadow-[var(--semantic-shadow-soft)]">
         <p className="font-semibold text-[var(--semantic-text-primary)]">{t("learner.questions.howTo.title")}</p>
         <ul className="mt-2 list-inside list-disc space-y-1">

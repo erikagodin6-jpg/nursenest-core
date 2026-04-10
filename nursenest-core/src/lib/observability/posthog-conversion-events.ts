@@ -112,6 +112,8 @@ export const PH = {
   learnerLinearPracticeTestStarted: "learner_linear_practice_test_started",
   /** Practice test finished (linear complete, CAT advance completed, or CAT finalize). */
   learnerPracticeTestSessionCompleted: "learner_practice_test_session_completed",
+  /** CAT completion tried to persist a coaching snapshot. */
+  learnerCatCoachGenerated: "learner_cat_coach_generated",
   /** Learner opened a lesson / study link from CAT rationale or coach (follow-through). */
   learnerCatLearningLinkClicked: "learner_cat_learning_link_clicked",
   /** CAT / exam simulation produced a non-empty readiness label on completion. */

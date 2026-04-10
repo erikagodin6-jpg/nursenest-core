@@ -32,7 +32,7 @@ export function LearnerAccountCrossLinks({
     case "report-card": {
       if (weakTopicKey) {
         links.push({
-          href: remediationTopicDrillHref(weakTopicKey),
+          href: remediationTopicDrillHref(weakTopicKey, pathwayId ?? null),
           label: t("learner.account.crossLinks.reportCard.topicDrill"),
         });
         links.push({

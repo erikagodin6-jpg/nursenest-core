@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { isCoreHostedNonDefaultLocale, DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
 import { resolveMarketingCopy } from "@/lib/marketing-i18n-core";
-import { marketingAlternatesSharedPage, marketingCanonicalPathForLocale } from "@/lib/seo/marketing-alternates";
+import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
 import { getMarketingRegionFromCookies } from "@/lib/region/marketing-region-server";
 import {
   defaultQuestionBankMetaDescription,
@@ -13,6 +13,7 @@ import { PublicQuestionBankHubView } from "@/components/marketing/public-questio
 import { WebPageJsonLd } from "@/components/seo/seo-json-ld";
 import type { MarketingRegionToggle } from "@/lib/marketing/marketing-entry-routes";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
+import { buildMarketingWebPageJsonLdProps } from "@/lib/seo/marketing-webpage-jsonld";
 
 export const revalidate = 600;
 
@@ -73,10 +74,12 @@ export default async function LocalizedQuestionBankPage({ params }: Props) {
   return (
     <>
       <WebPageJsonLd
-        title={title}
-        description={description}
-        path={marketingCanonicalPathForLocale(locale, "/question-bank")}
-        inLanguage={locale}
+        {...buildMarketingWebPageJsonLdProps({
+          locale,
+          enPath: "/question-bank",
+          title,
+          description,
+        })}
       />
       <PublicQuestionBankHubView locale={locale} />
     </>

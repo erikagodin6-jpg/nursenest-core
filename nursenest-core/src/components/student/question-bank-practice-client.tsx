@@ -484,6 +484,7 @@ export function QuestionBankPracticeClient({
       incorrectMistakeIds,
       includeIdsFromUrl,
       examShell,
+      selectedExamContext,
       t,
     ],
   );
@@ -676,8 +677,8 @@ export function QuestionBankPracticeClient({
     };
   }, [g, measurementSystem]);
   const rationaleLessonLinksMerged = useMemo(
-    () => mergeRationaleLessonLinksWithTopicFallback(g?.rationaleLessonLinks, current?.topic ?? null),
-    [g?.rationaleLessonLinks, current?.topic],
+    () => mergeRationaleLessonLinksWithTopicFallback(g?.rationaleLessonLinks, current?.topic ?? null, pathwayIdFilter),
+    [g?.rationaleLessonLinks, current?.topic, pathwayIdFilter],
   );
 
   async function checkAnswer() {

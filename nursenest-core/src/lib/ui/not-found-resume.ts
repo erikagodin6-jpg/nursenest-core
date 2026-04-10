@@ -1,27 +1,27 @@
-import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { resolveLessonRefFromProgressId } from "@/lib/lessons/lesson-progress-resolver";
+import { isSafeRelativeNavHref, sanitizeRelativeNavHrefOrFallback } from "@/lib/ui/safe-relative-href";
 
 /**
  * Safe in-progress lesson link for 404 recovery (subscribers only, internal URLs).
+ * Caller must pass a verified user id (e.g. from a single `auth()` in `not-found.tsx`).
  */
-export async function loadResumeStudyingForNotFound(): Promise<{ title: string; href: string } | null> {
-  const session = await auth();
-  const userId = (session?.user as { id?: string } | undefined)?.id ?? "";
-  if (!userId || !isDatabaseUrlConfigured()) return null;
+export async function loadResumeStudyingForNotFound(userId: string): Promise<{ title: string; href: string } | null> {
+  const uid = userId?.trim() ?? "";
+  if (!uid || !isDatabaseUrlConfigured()) return null;
 
-  const ent = await resolveEntitlementForPage(userId);
+  const ent = await resolveEntitlementForPage(uid);
   if (ent === "error" || !ent.hasAccess) return null;
 
   const user = await prisma.user.findUnique({
-    where: { id: userId },
+    where: { id: uid },
     select: { learnerPath: true },
   });
 
   const incomplete = await prisma.progress.findFirst({
-    where: { userId, completed: false },
+    where: { userId: uid, completed: false },
     orderBy: { updatedAt: "desc" },
     select: { lessonId: true },
   });
@@ -33,8 +33,11 @@ export async function loadResumeStudyingForNotFound(): Promise<{ title: string; 
       entitlement: ent,
       learnerPath: user?.learnerPath ?? null,
     });
-    if (!ref?.href?.startsWith("/")) return null;
-    return { title: ref.title.trim() || "Resume studying", href: ref.href };
+    if (!ref?.href) return null;
+    const href = sanitizeRelativeNavHrefOrFallback(ref.href.trim());
+    if (!isSafeRelativeNavHref(href)) return null;
+    const title = ref.title.trim() || "Resume studying";
+    return { title, href };
   } catch {
     return null;
   }

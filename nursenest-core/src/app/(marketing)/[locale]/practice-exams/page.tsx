@@ -4,7 +4,7 @@ import { PracticeExamsHubContent } from "@/components/marketing/practice-exams-h
 import { DEFAULT_MARKETING_LOCALE, isCoreHostedNonDefaultLocale } from "@/lib/i18n/marketing-locale-policy";
 import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
 import { resolveMarketingCopy } from "@/lib/marketing-i18n-core";
-import { marketingAlternatesSharedPage, marketingCanonicalPathForLocale } from "@/lib/seo/marketing-alternates";
+import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
 import { getMarketingRegionFromCookies } from "@/lib/region/marketing-region-server";
 import {
   defaultPracticeExamsMetaDescription,
@@ -12,6 +12,7 @@ import {
 } from "@/lib/marketing/nursing-tier-public-labels";
 import { WebPageJsonLd } from "@/components/seo/seo-json-ld";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
+import { buildMarketingWebPageJsonLdProps } from "@/lib/seo/marketing-webpage-jsonld";
 
 export const revalidate = 600;
 
@@ -72,10 +73,12 @@ export default async function LocalizedPracticeExamsPage({ params }: Props) {
   return (
     <>
       <WebPageJsonLd
-        title={title}
-        description={description}
-        path={marketingCanonicalPathForLocale(locale, "/practice-exams")}
-        inLanguage={locale}
+        {...buildMarketingWebPageJsonLdProps({
+          locale,
+          enPath: "/practice-exams",
+          title,
+          description,
+        })}
       />
       <PracticeExamsHubContent locale={locale} />
     </>

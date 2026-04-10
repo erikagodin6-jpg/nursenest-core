@@ -55,7 +55,7 @@ function candidate(
       approxChars: 6000,
       depthScore,
     },
-    signals: ["title_similarity", "body_system"],
+    signals: ["exact_topicSlug", "title_similarity", "topic_field_overlap", "body_system"],
     ...overrides,
     lesson: { ...baseLesson, ...(overrides.lesson ?? {}) },
   };
@@ -147,6 +147,7 @@ describe("np-spine-execution-plan", () => {
       mergeTargetTopicId: undefined,
       rankedCandidates: [
         candidate(0.69, 0.46, {
+          signals: ["title_similarity", "body_system"],
           lesson: { id: "risk-1", slug: "risk-1", topicSlug: "cv-other", title: "Cardiovascular risk basics" },
         }),
       ],
@@ -258,6 +259,7 @@ describe("np-spine-execution-plan", () => {
           id: "cardiovascular",
           name: "Cardiovascular",
           topics: [
+            { id: "cv-pe", title: "Pulmonary embolism canonical", exams: ["FNP"] },
             { id: "cv-heart-failure", title: "Heart failure", exams: ["FNP"] },
             { id: "resp-pe", title: "Pulmonary embolism", exams: ["FNP"], auditDefault: "MERGE" },
           ],

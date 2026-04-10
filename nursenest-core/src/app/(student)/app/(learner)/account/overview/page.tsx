@@ -11,7 +11,7 @@ import { LockedStudyNextPreview } from "@/components/student/locked-study-next-p
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
-import { appPathwayCatSessionStartPath } from "@/lib/exam-pathways/pathway-cat-flow";
+import { resolveStudySurfaceCatHref } from "@/lib/exam-pathways/pathway-cat-flow";
 import { buildAdaptiveRecommendations } from "@/lib/learner/adaptive-recommendations";
 import { loadLearnerProfileActivity } from "@/lib/learner/load-learner-profile-activity";
 import { loadPremiumDashboardSnapshot } from "@/lib/learner/premium-dashboard-snapshot";
@@ -50,6 +50,7 @@ function tierLabel(t: string): string {
 
 export default async function LearnerAccountOverviewPage() {
   const { t, locale } = await getLearnerMarketingBundle();
+  const nowMs = Date.now();
   const session = await auth();
   const userId = (session?.user as { id?: string })?.id ?? "";
   const entitlement = await resolveEntitlementForPage(userId);
@@ -131,6 +132,9 @@ export default async function LearnerAccountOverviewPage() {
           mockCount: premiumSnapshot.mockCount,
           practiceSessionCount: premiumSnapshot.practice.sessionCount,
           subscriberCountry: entitlement.country,
+          preferredPathwayId:
+            premiumSnapshot.pathways.find((p) => p.lessonsTotal > 0)?.pathwayId ?? premiumSnapshot.pathways[0]?.pathwayId ?? null,
+          availablePathwayIds: premiumSnapshot.pathways.map((p) => p.pathwayId),
         });
       } catch {
         adaptive = null;
@@ -155,14 +159,17 @@ export default async function LearnerAccountOverviewPage() {
     premiumSnapshot?.pathways.find((p) => p.lessonsTotal > 0)?.pathwayId ??
     premiumSnapshot?.pathways[0]?.pathwayId ??
     null;
-  const catStartHref = preferredPathwayId ? appPathwayCatSessionStartPath(preferredPathwayId) : "/app/practice-tests/start";
+  const catStartHref = resolveStudySurfaceCatHref({
+    pathwayId: preferredPathwayId,
+    availablePathwayIds: premiumSnapshot?.pathways.map((p) => p.pathwayId),
+  });
   const practiceNextHref = primaryWeakTopic ? remediationTopicDrillHref(primaryWeakTopic) : "/app/questions";
   const lessonsNextHref = premiumSnapshot?.continueLesson?.href?.trim() || "/app/lessons";
   const catNextHref = remediationCatPracticeHref(primaryWeakTopic || undefined, preferredPathwayId);
   const hasInProgressLesson = Boolean(premiumSnapshot?.continueLesson?.href);
   const hasWeakAreasDetected = weakTop3.length > 0;
   const hasRecentCompletion = [...activity.mocks.map((m) => m.at), ...activity.practiceTests.map((pt) => pt.at)].some(
-    (at) => Date.now() - new Date(at).getTime() <= 72 * 60 * 60 * 1000,
+    (at) => nowMs - new Date(at).getTime() <= 72 * 60 * 60 * 1000,
   );
   const quickLinkPriority = resolveInteractionPriority({
     hasResume: hasInProgressLesson,

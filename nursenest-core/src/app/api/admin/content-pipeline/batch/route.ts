@@ -55,7 +55,7 @@ const batchRequestSchema = z.object({
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
   const adminCheck = await requireAdmin(req);
-  if (adminCheck) return adminCheck as NextResponse;
+  if (!adminCheck.ok) return adminCheck.response;
 
   if (!isDatabaseUrlConfigured()) {
     return NextResponse.json({ error: "Database not configured" }, { status: 503 });

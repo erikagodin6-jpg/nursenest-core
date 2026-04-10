@@ -67,6 +67,9 @@ export default async function StudyPlanPage() {
           mockCount: premiumSnapshot.mockCount,
           practiceSessionCount: premiumSnapshot.practice.sessionCount,
           subscriberCountry: entitlement.country,
+          preferredPathwayId:
+            premiumSnapshot.pathways.find((p) => p.lessonsTotal > 0)?.pathwayId ?? premiumSnapshot.pathways[0]?.pathwayId ?? null,
+          availablePathwayIds: premiumSnapshot.pathways.map((p) => p.pathwayId),
         });
       }
     } catch {

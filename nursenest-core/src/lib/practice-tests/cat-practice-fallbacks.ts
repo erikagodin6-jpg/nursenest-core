@@ -64,6 +64,10 @@ export function normalizeCatResultsCoachSnapshot(raw: unknown): CatResultsCoachS
         : base.passOutlookPercent,
     confidenceLevel:
       hadConfidenceLevel ? (raw.confidenceLevel as CatResultsCoachSnapshot["confidenceLevel"]) : base.confidenceLevel,
+    reliabilityLevel:
+      raw.reliabilityLevel === "low" || raw.reliabilityLevel === "medium" || raw.reliabilityLevel === "high"
+        ? raw.reliabilityLevel
+        : base.reliabilityLevel,
     keyRiskFactor:
       typeof raw.keyRiskFactor === "string"
         ? raw.keyRiskFactor

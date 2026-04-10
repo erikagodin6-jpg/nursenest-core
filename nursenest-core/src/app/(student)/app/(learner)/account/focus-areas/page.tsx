@@ -11,6 +11,7 @@ import { loadUnifiedTopicPerformance } from "@/lib/learner/topic-performance";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 import { appAccountBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
+import { emptyStateCopy } from "@/lib/ui/empty-state-copy";
 
 export async function generateMetadata(): Promise<Metadata> {
   return safeGenerateMetadata(
@@ -81,6 +82,7 @@ export default async function AccountFocusAreasPage() {
         <LearnerAccountEmptyState
           title={t("learner.account.focusAreas.emptyTitle")}
           body={t("learner.account.focusAreas.emptyBody")}
+          hint={emptyStateCopy.noWeakAreasYet.body}
           ctaHref="/app/questions"
           ctaLabel={t("learner.account.focusAreas.emptyCta")}
           secondaryHref="/app/lessons"

@@ -61,15 +61,22 @@ function PathwayLessonsZeroCatalogPanel({ pathway }: { pathway: ExamPathwayDefin
   const questionsHref = buildExamPathwayPath(pathway, "questions");
   const catHref = buildExamPathwayPath(pathway, "cat");
   const upcoming = pathway.status === "upcoming" || pathway.acquisitionMode === "waitlist";
+  const thinInventoryCopy = emptyStateCopy.thinInventory({
+    pathwayLine: pathway.shortName,
+    exam: pathway.displayName,
+  });
 
   return (
     <ContentEmptyState
       variant="lessons"
+      tone="growth"
+      headline={thinInventoryCopy.headline}
       body={
         upcoming
-          ? `Structured lessons will appear here as this track ships. You can already study with pathway-scoped questions, adaptive CAT practice, and timed practice exams — the same scope you will see in lessons.`
-          : `Lessons for ${pathway.shortName} are being finalized. Start with the question bank and CAT sessions — your rationales and weak-area signals are exam-scoped and will align with lessons when they go live.`
+          ? `${thinInventoryCopy.body} Structured lessons will appear here as this track ships, and pathway-scoped practice is already available.`
+          : `${thinInventoryCopy.body} Start with the question bank and CAT sessions while the lesson library expands.`
       }
+      hint={thinInventoryCopy.hint}
       primaryCta={{ label: "Start available topics", href: questionsHref }}
       secondaryCtas={[
         { label: "Try CAT exam", href: catHref },
@@ -169,6 +176,10 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
   if (pageResult.total === 0) {
     const { crumbs, schemaItems } = pathwayLessonsHubBreadcrumbs(pathway);
     if (qEffective) {
+      const noResultsCopy = emptyStateCopy.noSearchResults({
+        query: qEffective,
+        pathwayLine: pathway.shortName,
+      });
       return (
         <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8">
           <BreadcrumbJsonLd items={schemaItems} />
@@ -184,10 +195,12 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
           <PremiumEmptyState
             data-nn-empty="pathway-lessons-search"
             className="mt-6"
+            tone="default"
             visualLayout="split"
             Icon={Search}
-            headline={emptyStateCopy.noSearchResults.headline}
-            body={`Nothing matched “${qEffective}” for ${pathway.shortName}. ${emptyStateCopy.noSearchResults.body}`}
+            headline={noResultsCopy.headline}
+            body={noResultsCopy.body}
+            hint="Try a broader term, return to the full hub, or switch to pathway-scoped questions while you explore."
             primaryCta={{ label: "View all lessons", href: base, variant: "primary" }}
             secondaryCtas={[
               { label: "Pathway questions", href: buildExamPathwayPath(pathway, "questions"), variant: "secondary" },

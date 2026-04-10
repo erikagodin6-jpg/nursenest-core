@@ -25,12 +25,12 @@ export function PathwayLessonsNextStepCtas({ pathway, emphasizeStudyLoop }: Prop
       aria-labelledby="lessons-next-steps-heading"
     >
       <h2 id="lessons-next-steps-heading" className="nn-marketing-h3 max-w-3xl">
-        Next steps on this pathway
+        Keep moving on this pathway
       </h2>
       <p className="nn-marketing-body-sm mt-2 max-w-2xl text-[var(--theme-muted-text)]">
         {emphasizeStudyLoop
-          ? "Lessons pair with the same exam scope in the bank. Run items and CAT practice so rationales and difficulty track what you are sitting."
-          : "After each lesson, stress-test judgment with pathway-matched items, then adaptive CAT sessions to approximate exam pacing."}
+          ? "Lessons connect directly to the same scoped question bank and CAT flow, so you can keep building momentum even while this library grows."
+          : "After each lesson, reinforce the same exam scope with pathway-matched questions and adaptive practice that stays aligned to this track."}
       </p>
       {/* nn-study-card + nn-card-interactive: same recipe as exam hub study tiles (drift fix). */}
       <div className="mt-6 grid gap-4 sm:grid-cols-2">

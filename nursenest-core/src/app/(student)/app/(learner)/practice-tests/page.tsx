@@ -11,6 +11,7 @@ import {
   listPathwaysCompatibleWithSubscription,
   pathwayAllowsCatAdaptiveStart,
 } from "@/lib/exam-pathways/pathway-entitlements";
+import { resolveStudySurfaceCatHref } from "@/lib/exam-pathways/pathway-cat-flow";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 import { LearnerStudyQuickLinksCard } from "@/components/student/learner-study-quick-links-card";
 import Link from "next/link";
@@ -67,6 +68,10 @@ export default async function PracticeTestsPage() {
     examFamily: p.examFamily,
   }));
   const catEligiblePathwayIds = compatiblePathways.filter(pathwayAllowsCatAdaptiveStart).map((p) => p.id);
+  const catHref = resolveStudySurfaceCatHref({
+    pathwayId: defaultPathwayId,
+    availablePathwayIds: catEligiblePathwayIds,
+  });
 
   return (
     <main className="space-y-6">
@@ -83,7 +88,7 @@ export default async function PracticeTestsPage() {
           — pass outlook trends across your completed adaptive sessions.
         </p>
       </div>
-      <LearnerStudyQuickLinksCard t={t} id="practice-tests-study-quick-links" />
+      <LearnerStudyQuickLinksCard t={t} id="practice-tests-study-quick-links" catHref={catHref} />
       <Suspense fallback={<p className="text-sm text-[var(--semantic-text-secondary)]">{t("learner.loading.section")}</p>}>
         <PracticeTestsHubClient
           pathwayOptions={pathwayOptions}

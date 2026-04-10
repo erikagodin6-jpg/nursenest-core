@@ -10,7 +10,7 @@ import {
 describe("remediation links", () => {
   it("generates topic drill link with encoded topic", () => {
     const href = remediationTopicDrillHref("Cardiac / CVS");
-    assert.equal(href, "/app/questions?preset=topic_drill&topic=Cardiac%20%2F%20CVS");
+    assert.equal(href, "/app/questions?preset=topic_drill&topic=Cardiac+%2F+CVS");
   });
 
   it("generates weak-mode link with optional topic", () => {
@@ -33,6 +33,10 @@ describe("remediation links", () => {
       remediationCatPracticeHref("Respiratory", "us-rn-nclex-rn"),
       "/app/practice-tests?cat=1&focus=weak&pathwayId=us-rn-nclex-rn&topic=Respiratory",
     );
+  });
+
+  it("keeps CAT-explicit weak-focus intent even when pathway context is missing", () => {
+    assert.equal(remediationCatPracticeHref("Respiratory"), "/app/practice-tests?cat=1&focus=weak&topic=Respiratory");
   });
 });
 

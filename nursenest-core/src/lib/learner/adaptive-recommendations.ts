@@ -23,6 +23,7 @@ import {
   weeksRemainingRounded,
   type ExamUrgency,
 } from "@/lib/learner/exam-timeline";
+import { resolveStudySurfaceCatHref } from "@/lib/exam-pathways/pathway-cat-flow";
 
 export type PaceStatus = "on_pace" | "slightly_behind" | "behind_weak_review" | "final_review";
 
@@ -229,6 +230,8 @@ export function buildAdaptiveRecommendations(args: {
   practiceSessionCount: number;
   /** Subscriber country (`US` | `CA`) — avoids US-exam-specific wording in Canada. */
   subscriberCountry?: string | null;
+  preferredPathwayId?: string | null;
+  availablePathwayIds?: Array<string | null | undefined>;
 }): AdaptiveLearnerRecommendations {
   const weakTopicsOrdered = dedupeWeakTopicsStable(args.weakTopics);
   const isCanadaSubscriber = args.subscriberCountry === "CA";
@@ -253,6 +256,10 @@ export function buildAdaptiveRecommendations(args: {
     matchedRec?.topic ?? weakTopicsOrdered[0]?.topic ?? (args.recommendedQuizTopic ? args.recommendedQuizTopic : null);
 
   const weakMixedBankHref = "/app/questions?studyMode=weak";
+  const catStartHref = resolveStudySurfaceCatHref({
+    pathwayId: args.preferredPathwayId,
+    availablePathwayIds: args.availablePathwayIds,
+  });
   const quizHref = topic
     ? `/app/questions?preset=topic_drill&topic=${encodeTopic(topic)}`
     : weakMixedBankHref;
@@ -409,7 +416,7 @@ export function buildAdaptiveRecommendations(args: {
   if (urgency === "near" || urgency === "final_stretch") {
     secondaryCandidates.push({
       title: isCanadaSubscriber ? "Adaptive practice test" : "Adaptive (CAT) practice test",
-      href: "/app/practice-tests/start",
+      href: catStartHref,
       reason: isCanadaSubscriber
         ? "Computer-adaptive practice adjusts difficulty—useful when your exam is close."
         : "CAT adjusts difficulty. Useful when the exam is close.",

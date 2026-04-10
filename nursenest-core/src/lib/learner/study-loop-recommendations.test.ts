@@ -4,7 +4,7 @@
  */
 import assert from "node:assert/strict";
 import test from "node:test";
-import { buildAppPracticeTestsHubHref, practiceTestsWeakFocusHref } from "./study-loop-recommendations";
+import { buildAppPracticeTestsHubHref, buildAppTopicDrillHref, practiceTestsWeakFocusHref } from "./study-loop-recommendations";
 
 test("buildAppPracticeTestsHubHref encodes pathwayId", () => {
   assert.equal(
@@ -20,4 +20,17 @@ test("practiceTestsWeakFocusHref keeps weak focus and pathwayId", () => {
     "/app/practice-tests?cat=1&focus=weak&pathwayId=ca-rpn-rex-pn",
   );
   assert.equal(practiceTestsWeakFocusHref(null), "/app/practice-tests?cat=1&focus=weak");
+});
+
+test("buildAppTopicDrillHref preserves pathway context for recommendations", () => {
+  const href = buildAppTopicDrillHref({
+    topic: "Respiratory",
+    topicCode: "respiratory-care",
+    pathwayId: "ca-rpn-rex-pn",
+  });
+  assert.equal(
+    href,
+    "/app/questions?preset=topic_drill&topic=Respiratory&topicCode=respiratory-care&pathwayId=ca-rpn-rex-pn",
+  );
+  assert.ok(!href.includes("us-lpn-nclex-pn"));
 });

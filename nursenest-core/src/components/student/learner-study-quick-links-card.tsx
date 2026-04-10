@@ -17,7 +17,7 @@ import type { LearnerMarketingT } from "@/lib/learner/learner-marketing-server";
  * Legacy parity: monolith dashboard `quick_links` + “jump into study tools” row.
  * Uses semantic multi-color accents (chart + info/success/warning) — not brand-only.
  */
-const STUDY_LINKS: {
+const DEFAULT_STUDY_LINKS: {
   href: string;
   labelKey: string;
   icon: typeof Crosshair;
@@ -37,11 +37,17 @@ const STUDY_LINKS: {
 export function LearnerStudyQuickLinksCard({
   t,
   id = "learner-study-quick-links",
+  catHref,
 }: {
   t: LearnerMarketingT;
   /** Optional anchor id for skip links / aria */
   id?: string;
+  catHref?: string;
 }) {
+  const studyLinks = DEFAULT_STUDY_LINKS.map((link) =>
+    link.accent === "cat" && catHref?.trim() ? { ...link, href: catHref.trim() } : link,
+  );
+
   return (
     <section
       className="nn-card nn-learner-quick-links-section nn-product-surface-accent relative overflow-hidden border-[var(--semantic-border-soft)] pt-7 shadow-[var(--semantic-shadow-soft)]"
@@ -57,7 +63,7 @@ export function LearnerStudyQuickLinksCard({
         </div>
       </div>
       <ul className="mt-5 grid list-none gap-3 px-6 pb-6 sm:grid-cols-2 lg:grid-cols-3">
-        {STUDY_LINKS.map(({ href, labelKey, icon: Icon, accent }) => (
+        {studyLinks.map(({ href, labelKey, icon: Icon, accent }) => (
           <li key={href}>
             <Link
               href={href}

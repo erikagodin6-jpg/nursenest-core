@@ -198,20 +198,28 @@ export function FnpLessonExplorer({ pathway, lessonsBasePath, explorerLessons, e
 
       {filtered.length === 0 ? (
         <div className="space-y-3">
+          {(() => {
+            const noResultsCopy = emptyStateCopy.noSearchResults({
+              query: textQ.trim() || undefined,
+              pathwayLine: pathway.shortName,
+            });
+            return (
           <PremiumEmptyState
             data-nn-empty="fnp-explorer-filters"
             tone="default"
             density="compact"
             visualLayout="stack"
             headline={emptyStateCopy.noFilterResults.headline}
-            body={emptyStateCopy.noFilterResults.body}
-            hint="Try clearing filters or widening your search."
+            body={textQ.trim().length >= 2 ? noResultsCopy.body : emptyStateCopy.noFilterResults.body}
+            hint="Try clearing filters, widening your search, or returning to the full lesson view for this pathway."
             primaryCta={{ label: "View all lessons on this page", href: lessonsBasePath, variant: "primary" }}
             secondaryCtas={[
               { label: "Practice questions", href: pathwayHubAppQuestionsHref(pathway), variant: "secondary" },
             ]}
             className="border-[var(--semantic-border-soft)]"
           />
+            );
+          })()}
           <div className="flex flex-wrap justify-center gap-2">
             <button
               type="button"

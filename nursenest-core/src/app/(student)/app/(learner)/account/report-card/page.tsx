@@ -10,6 +10,7 @@ import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { loadReportCardData } from "@/lib/learner/load-report-card-data";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
+import { resolveStudySurfaceCatHref } from "@/lib/exam-pathways/pathway-cat-flow";
 import { appAccountBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
@@ -89,6 +90,10 @@ export default async function AccountReportCardPage() {
     undefined;
   const preferredPathwayId =
     report.pathways.find((p) => p.lessonsTotal > 0)?.pathwayId ?? report.pathways[0]?.pathwayId ?? null;
+  const catHref = resolveStudySurfaceCatHref({
+    pathwayId: preferredPathwayId,
+    availablePathwayIds: report.pathways.map((p) => p.pathwayId),
+  });
 
   return (
     <main className="space-y-6">
@@ -98,7 +103,7 @@ export default async function AccountReportCardPage() {
         <p className="mt-2 max-w-2xl text-sm text-[var(--semantic-text-secondary)]">{t("learner.account.reportCard.intro")}</p>
       </div>
 
-      <LearnerStudyQuickLinksCard t={t} id="report-card-study-quick-links" />
+      <LearnerStudyQuickLinksCard t={t} id="report-card-study-quick-links" catHref={catHref} />
 
       <LearnerReportCardPremium data={report} t={t} localeTag={localeTag} />
 

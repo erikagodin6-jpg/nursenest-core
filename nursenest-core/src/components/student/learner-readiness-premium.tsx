@@ -4,7 +4,7 @@ import type { ReadinessBand, ReadinessFactor, ReadinessResult } from "@/lib/lear
 import type { ReadinessPagePayload } from "@/lib/learner/load-readiness-page-payload";
 import type { RecentMock } from "@/lib/learner/load-learner-dashboard";
 import type { WeakTopicRow } from "@/lib/learner/weak-topics-from-sessions";
-import { remediationCatPracticeHref, remediationTopicDrillHref } from "@/lib/learner/remediation-links";
+import { remediationCatPracticeHref, remediationLessonsTopicHref, remediationTopicDrillHref } from "@/lib/learner/remediation-links";
 import type { LearnerMarketingT } from "@/lib/learner/learner-marketing-server";
 
 function bandStatusLabel(band: ReadinessBand, t: LearnerMarketingT): string {
@@ -78,9 +78,17 @@ function MockRow({ m }: { m: RecentMock }) {
   );
 }
 
-function WeakTopicRowUi({ w, t }: { w: WeakTopicRow; t: LearnerMarketingT }) {
+function WeakTopicRowUi({
+  w,
+  t,
+  pathwayId,
+}: {
+  w: WeakTopicRow;
+  t: LearnerMarketingT;
+  pathwayId?: string | null;
+}) {
   const key = w.normalizedTopic?.trim() || w.topic;
-  const drill = remediationTopicDrillHref(key);
+  const drill = remediationTopicDrillHref(key, pathwayId);
   return (
     <li className="nn-semantic-inset--risk px-4 py-3">
       <div className="flex flex-wrap items-baseline justify-between gap-2">
@@ -101,7 +109,7 @@ function WeakTopicRowUi({ w, t }: { w: WeakTopicRow; t: LearnerMarketingT }) {
           {t("learner.readinessPage.weakCtaQuestions")}
         </Link>
         <Link
-          href="/app/lessons"
+          href={remediationLessonsTopicHref(w.topic, w.normalizedTopic ?? null, pathwayId)}
           className="inline-flex rounded-full border border-border px-3 py-1.5 text-xs font-semibold text-foreground hover:bg-muted/80"
         >
           {t("learner.readinessPage.weakCtaLessons")}
@@ -285,7 +293,7 @@ export function LearnerReadinessPremium({
         {weakDisplay.length > 0 ? (
           <ul className="space-y-3">
             {weakDisplay.map((w) => (
-              <WeakTopicRowUi key={w.normalizedTopic ?? w.topic} w={w} t={t} />
+                <WeakTopicRowUi key={w.normalizedTopic ?? w.topic} w={w} t={t} pathwayId={preferredPathwayId} />
             ))}
           </ul>
         ) : (

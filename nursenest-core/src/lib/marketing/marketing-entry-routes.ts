@@ -70,6 +70,8 @@ export const HUB = {
   examLessons: "/lessons",
   questionBank: "/question-bank",
   practiceExams: "/practice-exams",
+  /** Public flashcards index (pathway-specific decks under `/flashcards/[slug]`). */
+  flashcards: "/flashcards",
   tools: "/tools",
   pricing: "/pricing",
   signup: "/signup",

@@ -53,14 +53,20 @@ function pathwayLessonCardSummary(row: {
   return parts.length ? parts.join(" · ") : null;
 }
 
-type Props = { searchParams: Promise<{ page?: string; topic?: string; topicSlug?: string }> };
+type Props = { searchParams: Promise<{ page?: string; topic?: string; topicSlug?: string; pathwayId?: string }> };
 
-function appLessonsListQuery(page: number, topic: string | null, topicSlug: string | null): string {
+function appLessonsListQuery(
+  page: number,
+  topic: string | null,
+  topicSlug: string | null,
+  pathwayId: string | null,
+): string {
   const qs = new URLSearchParams();
   if (page > 1) qs.set("page", String(page));
   const ts = topicSlug?.trim().toLowerCase();
   if (ts) qs.set("topicSlug", ts);
   else if (topic?.trim()) qs.set("topic", topic.trim());
+  if (pathwayId?.trim()) qs.set("pathwayId", pathwayId.trim());
   const s = qs.toString();
   return s ? `?${s}` : "";
 }
@@ -120,6 +126,8 @@ export default async function LessonsPage({ searchParams }: Props) {
     typeof sp.topicSlug === "string" && sp.topicSlug.trim().length > 0 ? sp.topicSlug.trim().toLowerCase() : null;
   const topicFilter =
     !topicSlugFilter && typeof sp.topic === "string" && sp.topic.trim().length > 0 ? sp.topic.trim() : null;
+  const pathwayIdFilter =
+    typeof sp.pathwayId === "string" && sp.pathwayId.trim().length > 0 ? sp.pathwayId.trim() : null;
 
   const lessonsBlockFromDb = await withDatabaseFallback(async () => {
     const learnerPathRow = userId
@@ -157,6 +165,7 @@ export default async function LessonsPage({ searchParams }: Props) {
     const pathwayWhere = pathwayLessonsAppListWhereWithTopicFilter(entitlement, learnerPath, {
       topic: topicFilter,
       topicSlug: topicSlugFilter,
+      pathwayId: pathwayIdFilter,
     });
     const pathwayTotal = await prisma.pathwayLesson.count({ where: pathwayWhere });
 
@@ -232,7 +241,7 @@ export default async function LessonsPage({ searchParams }: Props) {
   }
 
   if (rawPage !== lessonsBlock.page) {
-    const q = appLessonsListQuery(lessonsBlock.page, topicFilter, topicSlugFilter);
+    const q = appLessonsListQuery(lessonsBlock.page, topicFilter, topicSlugFilter, pathwayIdFilter);
     redirect(q ? `/app/lessons${q}` : "/app/lessons");
   }
 

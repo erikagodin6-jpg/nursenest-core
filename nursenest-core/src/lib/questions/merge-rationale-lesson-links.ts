@@ -8,6 +8,7 @@ import type { RationaleLessonLinkClient } from "@/lib/questions/question-bank-cl
 export function mergeRationaleLessonLinksWithTopicFallback(
   api: RationaleLessonLinkClient[] | null | undefined,
   topic: string | null | undefined,
+  pathwayId?: string | null,
 ): RationaleLessonLinkClient[] {
   const fromApi = (api ?? []).filter((l) => Boolean(l.href?.trim() && l.ctaKey));
   if (fromApi.length > 0) return fromApi;
@@ -18,7 +19,7 @@ export function mergeRationaleLessonLinksWithTopicFallback(
       kind: "topic_lessons",
       slug: `topic-lessons-${topicTrim.slice(0, 40)}`,
       title: topicTrim,
-      href: remediationLessonsTopicHref(topicTrim),
+      href: remediationLessonsTopicHref(topicTrim, null, pathwayId),
       hrefSource: "app",
       ctaKey: "learner.qbank.rationaleLinks.openTopicLessons",
     },

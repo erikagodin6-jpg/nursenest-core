@@ -11,6 +11,7 @@ import { loadUnifiedTopicPerformance } from "@/lib/learner/topic-performance";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 import { appAccountBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
+import { emptyStateCopy } from "@/lib/ui/empty-state-copy";
 
 export async function generateMetadata(): Promise<Metadata> {
   return safeGenerateMetadata(
@@ -91,6 +92,7 @@ export default async function AccountQuestionBankPerformancePage() {
         <LearnerAccountEmptyState
           title={t("learner.account.questionBankPerf.emptyTitle")}
           body={t("learner.account.questionBankPerf.emptyBody")}
+          hint={emptyStateCopy.noProgressYet.body}
           ctaHref="/app/questions"
           ctaLabel={t("learner.account.questionBankPerf.emptyCta")}
           secondaryHref="/app/account/focus-areas"

@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, type LucideIcon } from "lucide-react";
+import type { ReactNode } from "react";
+import { sanitizeRelativeNavHrefOrFallback } from "@/lib/ui/safe-relative-href";
 
 export type PremiumEmptyCtaVariant = "primary" | "secondary" | "ghost";
 
@@ -50,12 +52,17 @@ export type PremiumEmptyStateProps = {
   badge?: string;
   /** Lucide icon — decorative */
   Icon?: LucideIcon;
+  /** Optional custom visual anchor (for example the branded leaf mark on 404). */
+  visual?: ReactNode;
   /** `split` = icon left + text (lesson hub style); `stack` = centered */
   visualLayout?: "stack" | "split";
   /** Tighter padding when nested in dashboard cards */
   density?: "comfortable" | "compact";
   /** Primary CTA trailing arrow (lesson hub pattern) */
   primaryShowArrow?: boolean;
+  headingLevel?: "h1" | "h2";
+  containerClassName?: string;
+  ctaLayout?: "wrap" | "stack";
   className?: string;
 };
 
@@ -73,22 +80,41 @@ export function PremiumEmptyState({
   secondaryCtas = [],
   badge,
   Icon,
+  visual,
   visualLayout = "stack",
   density = "comfortable",
   primaryShowArrow = false,
+  headingLevel = "h2",
+  containerClassName = "",
+  ctaLayout = "wrap",
   className = "",
 }: PremiumEmptyStateProps) {
   const pad = density === "compact" ? "p-5 sm:p-6" : "p-6 sm:p-8";
   const regionLabel = label ?? headline;
   const split = visualLayout === "split";
+  const primaryHref = sanitizeRelativeNavHrefOrFallback(primaryCta.href);
+  const safeSecondaries = secondaryCtas.map((cta) => ({
+    ...cta,
+    href: sanitizeRelativeNavHrefOrFallback(cta.href),
+  }));
+  const HeadingTag = headingLevel;
+  const ctaContainerClass =
+    ctaLayout === "stack"
+      ? split
+        ? "justify-start flex-col sm:flex-row"
+        : "justify-center sm:justify-start flex-col sm:flex-row"
+      : split
+        ? "justify-start"
+        : "justify-center sm:justify-start";
+  const ctaItemClass = ctaLayout === "stack" ? "w-full sm:w-auto" : "";
 
-  const iconEl = Icon ? (
+  const visualEl = visual ?? (Icon ? (
     <span
       className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[color-mix(in_srgb,var(--semantic-brand)_10%,var(--semantic-page-bg))] text-[var(--semantic-brand)] ${split ? "mt-0.5" : "mx-auto mb-4 sm:mx-0"}`}
     >
       <Icon className="h-5 w-5" strokeWidth={1.75} aria-hidden />
     </span>
-  ) : null;
+  ) : null);
 
   const textBlock = (
     <div className={`min-w-0 flex-1 ${split ? "" : "flex flex-col items-center text-center sm:items-start sm:text-left"}`}>
@@ -98,7 +124,7 @@ export function PremiumEmptyState({
           {badge}
         </span>
       ) : null}
-      <h2 className="text-base font-bold leading-snug text-[var(--theme-heading-text)]">{headline}</h2>
+      <HeadingTag className="text-base font-bold leading-snug text-[var(--theme-heading-text)]">{headline}</HeadingTag>
       <p
         className={`mt-2 max-w-2xl text-sm leading-relaxed text-[var(--theme-muted-text)] ${split ? "" : "mx-auto sm:mx-0"}`}
       >
@@ -113,37 +139,41 @@ export function PremiumEmptyState({
   );
 
   return (
-    <section
-      className={`nn-study-card nn-study-card--wash ${pad} ${toneCardClass(tone)} ${className}`.trim()}
-      data-nn-premium-empty={dataNnEmpty ?? true}
-      role="region"
-      aria-label={regionLabel}
-    >
-      {split ? (
-        <div className="flex items-start gap-4">
-          {iconEl}
-          {textBlock}
-        </div>
-      ) : (
-        <div className="flex flex-col items-center text-center sm:items-start sm:text-left">
-          {iconEl}
-          {textBlock}
-        </div>
-      )}
-
-      <div
-        className={`mt-6 flex flex-wrap gap-3 ${split ? "justify-start" : "justify-center sm:justify-start"}`}
+    <div className={containerClassName}>
+      <section
+        className={`nn-study-card nn-study-card--wash ${pad} ${toneCardClass(tone)} ${className}`.trim()}
+        data-nn-premium-empty={dataNnEmpty ?? true}
+        role="region"
+        aria-label={regionLabel}
       >
-        <Link href={primaryCta.href} className={ctaClass(primaryCta.variant ?? "primary")}>
-          {primaryCta.label}
-          {primaryShowArrow ? <ArrowRight className="h-4 w-4" aria-hidden /> : null}
-        </Link>
-        {secondaryCtas.map((cta) => (
-          <Link key={`${cta.href}-${cta.label}`} href={cta.href} className={ctaClass(cta.variant ?? "secondary")}>
-            {cta.label}
+        {split ? (
+          <div className="flex items-start gap-4">
+            {visualEl}
+            {textBlock}
+          </div>
+        ) : (
+          <div className="flex flex-col items-center text-center sm:items-start sm:text-left">
+            {visualEl}
+            {textBlock}
+          </div>
+        )}
+
+        <div className={`mt-6 flex flex-wrap gap-3 ${ctaContainerClass}`}>
+          <Link href={primaryHref} className={`${ctaClass(primaryCta.variant ?? "primary")} ${ctaItemClass}`.trim()}>
+            {primaryCta.label}
+            {primaryShowArrow ? <ArrowRight className="h-4 w-4" aria-hidden /> : null}
           </Link>
-        ))}
-      </div>
-    </section>
+          {safeSecondaries.map((cta) => (
+            <Link
+              key={`${cta.href}-${cta.label}`}
+              href={cta.href}
+              className={`${ctaClass(cta.variant ?? "secondary")} ${ctaItemClass}`.trim()}
+            >
+              {cta.label}
+            </Link>
+          ))}
+        </div>
+      </section>
+    </div>
   );
 }

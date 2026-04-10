@@ -2,7 +2,7 @@ import { expect, test } from "@playwright/test";
 import { publicMarketingCatHrefForOffering } from "../src/lib/exam-pathways/practice-exams-cat-start";
 import { MARKETING_REGION_COOKIE } from "../src/lib/region/marketing-region-cookie";
 
-const baseURL = process.env.BASE_URL ?? "http://127.0.0.1:3000";
+const baseURL = process.env.BASE_URL ?? "http://localhost:3000";
 
 test.describe("CAT entrypoint routing", () => {
   for (const region of ["US", "CA"] as const) {

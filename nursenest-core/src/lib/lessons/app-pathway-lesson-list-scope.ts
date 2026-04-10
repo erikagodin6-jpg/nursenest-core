@@ -68,23 +68,26 @@ export function pathwayLessonsAppListWhere(
 export function pathwayLessonsAppListWhereWithTopicFilter(
   scope: AccessScope,
   learnerPath: string | null | undefined,
-  filter: { topic?: string | null; topicSlug?: string | null },
+  filter: { topic?: string | null; topicSlug?: string | null; pathwayId?: string | null },
 ): Prisma.PathwayLessonWhereInput {
   const base = pathwayLessonsAppListWhere(scope, learnerPath);
   const slugTrim = filter.topicSlug?.trim().toLowerCase();
   const topicTrim = filter.topic?.trim();
+  const pathwayTrim = filter.pathwayId?.trim();
   const topicClause: Prisma.PathwayLessonWhereInput | null = slugTrim
     ? { topicSlug: slugTrim }
     : topicTrim
       ? { topic: { equals: topicTrim, mode: "insensitive" } }
       : null;
-  if (!topicClause) return base;
+  const pathwayClause: Prisma.PathwayLessonWhereInput | null = pathwayTrim ? { pathwayId: pathwayTrim } : null;
+  if (!topicClause && !pathwayClause) return base;
+  const clauses = [topicClause, pathwayClause].filter(Boolean) as Prisma.PathwayLessonWhereInput[];
 
   if ("AND" in base && Array.isArray((base as { AND: Prisma.PathwayLessonWhereInput[] }).AND)) {
     const b = base as { AND: Prisma.PathwayLessonWhereInput[] };
-    return { AND: [...b.AND, topicClause] };
+    return { AND: [...b.AND, ...clauses] };
   }
-  return { AND: [base, topicClause] };
+  return { AND: [base, ...clauses] };
 }
 
 /** Gate `/app/lessons/[id]` for a pathway_lessons row (subscriber or admin). */

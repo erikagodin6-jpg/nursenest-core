@@ -20,7 +20,9 @@ import {
 } from "@/lib/practice-tests/practice-tests-hub-cat-pathway";
 import { buildGlobalExamContext } from "@/lib/exam-context/exam-registry";
 import {
+  isWithinRecentWindow,
   isPriorityWinner,
+  resolvePracticeHistoryEmphasis,
   resolveInteractionPriority,
   resolvePriorityMessage,
 } from "@/lib/student/interaction-priority";
@@ -99,10 +101,7 @@ export function PracticeTestsHubClient({
     [defaultPathwayId, pathwayId],
   );
   const hasInProgressActivity = list.some((row) => row.status === "IN_PROGRESS");
-  const hasRecentCompletion = list.some((row) => {
-    if (row.status !== "COMPLETED" || !row.completedAt) return false;
-    return nowMs - new Date(row.completedAt).getTime() <= 72 * 60 * 60 * 1000;
-  });
+  const hasRecentCompletion = list.some((row) => row.status === "COMPLETED" && isWithinRecentWindow(row.completedAt, nowMs));
   const hasWeakFocus = selectionMode === "weak" || (selectionMode === "cat" && catSelectionBasis === "weak");
   const hubPriority = resolveInteractionPriority({
     hasResume: hasInProgressActivity,
@@ -721,23 +720,19 @@ export function PracticeTestsHubClient({
           <p className="mt-4 text-sm text-muted-foreground">No saved tests yet.</p>
         ) : (
           <ul className="mt-4 space-y-2.5">
-            {list.map((t) => (
-              <li
-                key={t.id}
-                className={`nn-card nn-student-card-lift flex flex-wrap items-center justify-between gap-3 p-4 text-sm transition-colors hover:bg-[var(--semantic-panel-muted)] ${
-                  t.status === "IN_PROGRESS"
-                    ? isPriorityWinner(hubPriority, "resume")
+            {list.map((t) => {
+              const emphasis = resolvePracticeHistoryEmphasis(hubPriority, t, nowMs);
+              return (
+                <li
+                  key={t.id}
+                  className={`nn-card nn-student-card-lift flex flex-wrap items-center justify-between gap-3 p-4 text-sm transition-colors hover:bg-[var(--semantic-panel-muted)] ${
+                    emphasis.rowEmphasis === "resume"
                       ? "border-[color-mix(in_srgb,var(--semantic-info)_28%,var(--semantic-border-soft))]"
-                      : ""
-                    : t.status === "COMPLETED" &&
-                        t.completedAt &&
-                        nowMs - new Date(t.completedAt).getTime() <= 72 * 60 * 60 * 1000
-                      ? isPriorityWinner(hubPriority, "review_recent")
+                      : emphasis.rowEmphasis === "review_recent"
                         ? "border-[color-mix(in_srgb,var(--semantic-success)_30%,var(--semantic-border-soft))]"
                         : ""
-                      : ""
-                }`}
-              >
+                  }`}
+                >
                 <div>
                   <p className="font-medium text-foreground">{t.title || "Practice test"}</p>
                   <p className="mt-1 text-xs text-muted-foreground">
@@ -765,7 +760,7 @@ export function PracticeTestsHubClient({
                     <Link
                       href={`/app/practice-tests/${t.id}`}
                       className={`nn-btn-primary px-4 py-2 text-xs font-semibold ${
-                        isPriorityWinner(hubPriority, "resume")
+                        emphasis.actionEmphasis === "resume"
                           ? "shadow-[0_6px_16px_color-mix(in_srgb,var(--semantic-info)_18%,transparent)]"
                           : ""
                       }`}
@@ -776,9 +771,7 @@ export function PracticeTestsHubClient({
                     <Link
                       href={`/app/practice-tests/${t.id}`}
                       className={`nn-premium-action-chip rounded-full border px-4 py-2 text-xs font-semibold hover:bg-muted ${
-                        t.completedAt &&
-                        nowMs - new Date(t.completedAt).getTime() <= 72 * 60 * 60 * 1000 &&
-                        isPriorityWinner(hubPriority, "review_recent")
+                        emphasis.actionEmphasis === "review_recent"
                           ? "border-[color-mix(in_srgb,var(--semantic-success)_30%,var(--semantic-border-soft))]"
                           : "border-border"
                       }`}
@@ -787,8 +780,9 @@ export function PracticeTestsHubClient({
                     </Link>
                   ) : null}
                 </div>
-              </li>
-            ))}
+                </li>
+              );
+            })}
           </ul>
         )}
       </section>

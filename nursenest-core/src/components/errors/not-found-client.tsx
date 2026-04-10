@@ -1,19 +1,19 @@
 "use client";
 
 import Link from "next/link";
-import { useTheme } from "next-themes";
 import { useMemo } from "react";
 import { usePathname } from "next/navigation";
 import { SiteBrandLogoMark } from "@/components/brand/site-brand-logo";
 import { BRAND_NAME } from "@/lib/branding/logo-config";
-import { THEME_OPTIONS } from "@/lib/theme/theme-registry";
 import { pickNotFoundCopy } from "@/lib/ui/not-found-copy";
-import { BROWSE_LESSONS_HREF, buildNotFoundRecoverySuggestions, type NotFoundRecoveryLink } from "@/lib/ui/not-found-recovery";
-
-function themeGroupForId(themeId: string | undefined): "light" | "dark" | undefined {
-  if (!themeId) return undefined;
-  return THEME_OPTIONS.find((o) => o.id === themeId)?.group;
-}
+import {
+  BROWSE_LESSONS_HREF,
+  buildNotFoundRecoverySuggestions,
+  mergeNotFoundRecoveryLinks,
+  NOT_FOUND_RECOVERY_CAP,
+  type NotFoundRecoveryLink,
+} from "@/lib/ui/not-found-recovery";
+import { isSafeRelativeNavHref, sanitizeRelativeNavHrefOrFallback } from "@/lib/ui/safe-relative-href";
 
 function secondaryButtonClass(): string {
   return "inline-flex min-h-[44px] items-center justify-center rounded-full border border-[color-mix(in_srgb,var(--semantic-brand)_26%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_05%,var(--semantic-surface))] px-5 py-2.5 text-sm font-semibold text-primary transition motion-safe:duration-200 hover:bg-[color-mix(in_srgb,var(--semantic-brand)_10%,var(--semantic-surface))] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_30%,transparent)]";
@@ -21,22 +21,6 @@ function secondaryButtonClass(): string {
 
 function recoveryButtonClass(): string {
   return "inline-flex min-h-[40px] w-full max-w-md items-center justify-center rounded-xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-info)_06%,var(--semantic-surface))] px-4 py-2.5 text-left text-sm font-semibold text-[var(--semantic-text-primary)] transition motion-safe:duration-200 hover:bg-[color-mix(in_srgb,var(--semantic-info)_10%,var(--semantic-surface))] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-info)_28%,transparent)] sm:w-auto";
-}
-
-function mergeRecovery(
-  base: NotFoundRecoveryLink[],
-  smart: NotFoundRecoveryLink[],
-  limit = 3,
-): NotFoundRecoveryLink[] {
-  const seen = new Set<string>();
-  const out: NotFoundRecoveryLink[] = [];
-  for (const x of [...smart, ...base]) {
-    if (seen.has(x.href)) continue;
-    seen.add(x.href);
-    out.push(x);
-    if (out.length >= limit) break;
-  }
-  return out;
 }
 
 export function NotFoundClient({
@@ -47,11 +31,8 @@ export function NotFoundClient({
   resumeStudying: { title: string; href: string } | null;
 }) {
   const pathname = usePathname() ?? "/";
-  const { resolvedTheme } = useTheme();
-  const copy = useMemo(
-    () => pickNotFoundCopy(pathname, resolvedTheme, themeGroupForId(resolvedTheme)),
-    [pathname, resolvedTheme],
-  );
+
+  const copy = useMemo(() => pickNotFoundCopy(pathname), [pathname]);
 
   const smart = useMemo(() => buildNotFoundRecoverySuggestions(pathname), [pathname]);
 
@@ -61,9 +42,12 @@ export function NotFoundClient({
       base.push({ label: "Go to Dashboard", href: "/app" });
     }
     if (resumeStudying) {
-      base.push({ label: "Resume studying", href: resumeStudying.href, hint: resumeStudying.title });
+      const href = sanitizeRelativeNavHrefOrFallback(resumeStudying.href);
+      if (isSafeRelativeNavHref(href)) {
+        base.push({ label: "Resume studying", href, hint: resumeStudying.title });
+      }
     }
-    return mergeRecovery(base, smart, 4);
+    return mergeNotFoundRecoveryLinks(smart, base, NOT_FOUND_RECOVERY_CAP);
   }, [isAuthenticated, resumeStudying, smart]);
 
   return (
@@ -78,10 +62,16 @@ export function NotFoundClient({
       />
 
       <div className="mx-auto flex w-full max-w-lg flex-col items-center text-center">
-        <div className="nn-not-found-logo-drift">
-          <Link href="/" className="inline-flex rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_35%,transparent)] focus-visible:ring-offset-4 focus-visible:ring-offset-[var(--semantic-page-bg)]" aria-label={`${BRAND_NAME} home`}>
-            <SiteBrandLogoMark variant="hero" />
-          </Link>
+        <div className="flex min-h-[5.25rem] w-full max-w-[18rem] flex-col items-center justify-center sm:min-h-[6rem]">
+          <div className="nn-not-found-logo-drift inline-flex">
+            <Link
+              href="/"
+              className="inline-flex rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_35%,transparent)] focus-visible:ring-offset-4 focus-visible:ring-offset-[var(--semantic-page-bg)]"
+              aria-label={`${BRAND_NAME} home`}
+            >
+              <SiteBrandLogoMark variant="hero" />
+            </Link>
+          </div>
         </div>
 
         <p className="mt-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-[var(--semantic-text-secondary)]">404</p>

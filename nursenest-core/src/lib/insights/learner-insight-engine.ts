@@ -120,6 +120,8 @@ export async function buildLearnerInsightSnapshot(
     mockCount,
     practiceSessionCount: dashboard.sessionGrading.sessionCount,
     subscriberCountry: entitlement.country,
+    preferredPathwayId: dashboard.pathways.find((p) => p.lessonsTotal > 0)?.pathwayId ?? dashboard.pathways[0]?.pathwayId ?? null,
+    availablePathwayIds: dashboard.pathways.map((p) => p.pathwayId),
   });
 
   const primary = explainNextAction(adaptive.primaryNext);

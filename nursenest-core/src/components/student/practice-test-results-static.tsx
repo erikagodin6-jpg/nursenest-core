@@ -1,12 +1,14 @@
 import Link from "next/link";
 import { BarChart3 } from "lucide-react";
-import { CatResultsCoachPanel } from "@/components/student/cat-results-coach-panel";
+import { CatResultsCoachSection } from "@/components/student/cat-results-coach-section";
 import type { PracticeTestConfigJson, PracticeTestResultsJson } from "@/lib/practice-tests/types";
 import {
   remediationLessonsTopicHref,
   remediationTopicDrillHref,
   remediationWeakModeTestHref,
+  remediationWeakModeTestHrefForPathway,
 } from "@/lib/learner/remediation-links";
+import { appPathwayCatSessionStartPath } from "@/lib/exam-pathways/pathway-cat-flow";
 import { semanticFillClassForAccuracyPct } from "@/lib/ui/semantic-progress-fill";
 
 export type PracticeTestWeakFollowUpCopy = {
@@ -118,7 +120,7 @@ export function PracticeTestResultsStatic({
       </div>
 
       {cat && results.catReport ? (
-        <CatResultsCoachPanel
+        <CatResultsCoachSection
           coach={results.catCoach}
           catExamFeedbackMode={results.catExamFeedbackMode ?? config?.catExamFeedbackMode ?? null}
           pathwayId={config?.pathwayId ?? null}
@@ -180,13 +182,13 @@ export function PracticeTestResultsStatic({
                 <p className="font-medium text-[var(--semantic-text-primary)]">{w}</p>
                 <div className="mt-2 flex flex-wrap gap-2">
                   <Link
-                    href={remediationLessonsTopicHref(w)}
+                    href={remediationLessonsTopicHref(w, null, config?.pathwayId ?? null)}
                     className="inline-flex rounded-full border border-[color-mix(in_srgb,var(--semantic-brand)_30%,var(--semantic-border-soft))] bg-[var(--semantic-panel-muted)] px-3 py-1.5 text-xs font-semibold text-[var(--semantic-brand)] hover:bg-[color-mix(in_srgb,var(--semantic-brand)_08%,var(--semantic-surface))]"
                   >
                     {weakFollowUpCopy.reviewLessons}
                   </Link>
                   <Link
-                    href={remediationTopicDrillHref(w)}
+                    href={remediationTopicDrillHref(w, config?.pathwayId ?? null)}
                     className="inline-flex rounded-full border border-[color-mix(in_srgb,var(--semantic-info)_30%,var(--semantic-border-soft))] bg-[var(--semantic-panel-cool)] px-3 py-1.5 text-xs font-semibold text-[var(--semantic-info)] hover:opacity-95"
                   >
                     {weakFollowUpCopy.topicDrill}
@@ -200,14 +202,14 @@ export function PracticeTestResultsStatic({
           </p>
           <div className="mt-2 flex flex-wrap gap-2">
             <Link
-              href={remediationWeakModeTestHref(results.weakAreas[0])}
+              href={remediationWeakModeTestHrefForPathway(results.weakAreas[0], config?.pathwayId ?? null)}
               className="inline-flex rounded-full bg-role-cta px-4 py-2 text-xs font-semibold text-role-cta-foreground shadow-sm hover:opacity-95"
             >
               {weakFollowUpCopy.retestWeak}
             </Link>
             {config?.pathwayId ? (
               <Link
-                href={`/app/practice-tests/start?pathwayId=${encodeURIComponent(config.pathwayId)}`}
+                href={appPathwayCatSessionStartPath(config.pathwayId)}
                 className="inline-flex rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-4 py-2 text-xs font-semibold text-[var(--semantic-text-primary)] hover:bg-[var(--semantic-panel-muted)]"
               >
                 {weakFollowUpCopy.adaptiveSamePathway}

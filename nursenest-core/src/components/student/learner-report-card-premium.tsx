@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
 import type { ReportCardData } from "@/lib/learner/load-report-card-data";
-import { appPathwayCatSessionStartPath } from "@/lib/exam-pathways/pathway-cat-flow";
+import { resolveStudySurfaceCatHref } from "@/lib/exam-pathways/pathway-cat-flow";
 import { remediationCatPracticeHref, remediationTopicDrillHref } from "@/lib/learner/remediation-links";
 import { readinessBandLabel, readinessBandProgressFillClass } from "@/lib/learner/readiness-score";
 import type { LearnerMarketingT } from "@/lib/learner/learner-marketing-server";
@@ -51,7 +51,10 @@ export function LearnerReportCardPremium({
   const primaryTopic = data.recommendedQuizTopic?.trim() || data.weakTopics[0]?.topic?.trim() || "";
   const preferredPathwayId =
     data.pathways.find((p) => p.lessonsTotal > 0)?.pathwayId ?? data.pathways[0]?.pathwayId ?? null;
-  const catStartHref = preferredPathwayId ? appPathwayCatSessionStartPath(preferredPathwayId) : "/app/practice-tests/start";
+  const catStartHref = resolveStudySurfaceCatHref({
+    pathwayId: preferredPathwayId,
+    availablePathwayIds: data.pathways.map((p) => p.pathwayId),
+  });
 
   return (
     <div className="space-y-8">
@@ -497,7 +500,7 @@ export function LearnerReportCardPremium({
             <p className="text-xs font-semibold uppercase tracking-wide text-primary">{t("learner.reportCard.next.questions")}</p>
             {primaryTopic ? (
               <Link
-                href={remediationTopicDrillHref(primaryTopic)}
+                href={remediationTopicDrillHref(primaryTopic, preferredPathwayId)}
                 className="mt-2 block text-sm font-medium text-foreground underline-offset-2 hover:underline"
               >
                 {t("learner.reportCard.next.questionsTopic", { topic: primaryTopic })}

@@ -53,10 +53,12 @@ export function DashboardWeakAreasCard({
   weakAreas,
   t,
   maxRows = 6,
+  pathwayId = null,
 }: {
   weakAreas: WeakAreaInsight[];
   t: LearnerMarketingT;
   maxRows?: number;
+  pathwayId?: string | null;
 }) {
   const rows = weakAreas.slice(0, maxRows);
 
@@ -94,13 +96,13 @@ export function DashboardWeakAreasCard({
                 <p className="mt-1 text-[11px] text-[var(--semantic-text-muted)]">{riskLabel(t, w.risk)}</p>
                 <div className="mt-2 flex flex-wrap gap-2">
                   <Link
-                    href={remediationLessonsTopicHref(w.topic, w.normalizedTopic ?? null)}
+                    href={remediationLessonsTopicHref(w.topic, w.normalizedTopic ?? null, pathwayId)}
                     className="inline-flex rounded-full border border-[color-mix(in_srgb,var(--semantic-brand)_28%,var(--semantic-border-soft))] bg-[var(--semantic-surface)] px-2.5 py-1 text-[11px] font-semibold text-[var(--semantic-brand)] hover:bg-[var(--semantic-panel-muted)]"
                   >
                     {t("learner.dashboard.insight.reviewLessonsCta")}
                   </Link>
                   <Link
-                    href={remediationTopicDrillHref(w.topic)}
+                    href={remediationTopicDrillHref(w.topic, pathwayId)}
                     className="inline-flex rounded-full border border-[color-mix(in_srgb,var(--semantic-info)_28%,var(--semantic-border-soft))] bg-[var(--semantic-panel-cool)] px-2.5 py-1 text-[11px] font-semibold text-[var(--semantic-info)] hover:opacity-95"
                   >
                     {t("learner.dashboard.insight.practiceQuestionsCta")}

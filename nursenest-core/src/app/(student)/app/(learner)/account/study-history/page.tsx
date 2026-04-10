@@ -10,6 +10,7 @@ import { loadLearnerProfileActivity } from "@/lib/learner/load-learner-profile-a
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 import { appAccountBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
+import { emptyStateCopy } from "@/lib/ui/empty-state-copy";
 
 export async function generateMetadata(): Promise<Metadata> {
   return safeGenerateMetadata(
@@ -80,14 +81,20 @@ export default async function AccountStudyHistoryPage() {
       </div>
 
       {total === 0 ? (
+        (() => {
+          const historyCopy = emptyStateCopy.noHistoryYet({ area: "study history" });
+          return (
         <LearnerAccountEmptyState
           title={t("learner.account.studyHistory.emptyTitle")}
           body={t("learner.account.studyHistory.emptyBody")}
+          hint={historyCopy.body}
           ctaHref="/app"
           ctaLabel={t("learner.account.studyHistory.emptyCtaDashboard")}
           secondaryHref="/app/lessons"
           secondaryLabel={t("learner.account.studyHistory.emptyCtaLessons")}
         />
+          );
+        })()
       ) : null}
 
       <div className="grid gap-6 lg:grid-cols-3">

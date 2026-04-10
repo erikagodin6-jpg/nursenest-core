@@ -10,6 +10,7 @@ import { loadLearnerCatHistory } from "@/lib/learner/load-learner-cat-history";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 import { appAccountBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
+import { emptyStateCopy } from "@/lib/ui/empty-state-copy";
 
 export async function generateMetadata(): Promise<Metadata> {
   return safeGenerateMetadata(
@@ -76,6 +77,7 @@ export default async function AccountCatHistoryPage() {
         <LearnerAccountEmptyState
           title={t("learner.account.catHistory.emptyTitle")}
           body={t("learner.account.catHistory.emptyBody")}
+          hint={emptyStateCopy.noExamHistory.body}
           ctaHref="/app/practice-tests"
           ctaLabel={t("learner.account.catHistory.emptyCta")}
           secondaryHref="/app/account/readiness"

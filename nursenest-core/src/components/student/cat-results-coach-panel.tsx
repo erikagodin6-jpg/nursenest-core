@@ -223,6 +223,7 @@ export function CatResultsCoachPanel({
                       trackClientEvent(PH.learnerCatLearningLinkClicked, {
                         surface: "cat_results_coach",
                         link_kind: l.kind,
+                        coach_reliability_level: coach.reliabilityLevel,
                         ...examContextProps,
                       })
                     }

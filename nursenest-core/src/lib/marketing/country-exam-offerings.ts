@@ -157,27 +157,62 @@ export function getExamPathwayHeroItems(region: MarketingRegionToggle): ExamPath
   return EXAM_PATHWAY_ORDER.map((id) => examPathwayHeroItemFor(region, id));
 }
 
-/** Hero tier pills (above-the-fold) — same hub paths as strip, `home.conversion.tierPill.*` label keys. */
-export type HomeHeroTierPillId = "rn" | "pn" | "np" | "allied" | "new-grad";
+/** Homepage hero primary tracks (RN, PN, NP, Allied) — hub paths + i18n keys for card copy. */
+export type HomeHeroPrimaryTrackId = "rn" | "pn" | "np" | "allied";
 
-export type HomeHeroTierPillLinkSpec = {
-  id: HomeHeroTierPillId;
+export type HomeHeroPrimaryTrackSpec = {
+  id: HomeHeroPrimaryTrackId;
   /** Path without locale prefix (wrap with `withMarketingLocale`). */
   path: string;
-  tierPillLabelKey: string;
+  titleKey: string;
+  metaKey: string;
+  whoKey: string;
+  nextKey: string;
+  ctaKey: string;
 };
 
 /**
- * Single source for homepage hero tier pills: RN, PN, NP, Allied, Pre-nursing.
- * Prevents drift between hrefs, `labelKey`, and region toggle (US LPN vs CA RPN).
+ * Single source for homepage hero track cards: RN, PN, NP, Allied.
+ * Aligns hrefs with {@link marketingExamHubPath} and country-aware PN/NP copy keys.
  */
-export function getHomeHeroTierPillLinkSpecs(region: MarketingRegionToggle): HomeHeroTierPillLinkSpec[] {
-  const pnKey = region === "CA" ? "home.conversion.tierPill.pnCA" : "home.conversion.tierPill.pnUS";
+export function getHomeHeroPrimaryTrackSpecs(region: MarketingRegionToggle): HomeHeroPrimaryTrackSpec[] {
+  const isUs = region === "US";
   return [
-    { id: "rn", path: marketingExamHubPath(region, "rn"), tierPillLabelKey: "home.conversion.tierPill.rn" },
-    { id: "pn", path: marketingExamHubPath(region, "pn"), tierPillLabelKey: pnKey },
-    { id: "np", path: marketingExamHubPath(region, "np"), tierPillLabelKey: "home.conversion.tierPill.np" },
-    { id: "allied", path: marketingExamHubPath(region, "allied"), tierPillLabelKey: "home.conversion.tierPill.allied" },
-    { id: "new-grad", path: "/pre-nursing", tierPillLabelKey: "home.conversion.tierPill.preNursing" },
+    {
+      id: "rn",
+      path: marketingExamHubPath(region, "rn"),
+      titleKey: "home.conversion.examCard.rnTitle",
+      metaKey: "home.conversion.examCard.metaRn",
+      whoKey: "home.conversion.heroTrack.rn.who",
+      nextKey: "home.conversion.heroTrack.rn.next",
+      ctaKey: "home.conversion.examCard.ctaRn",
+    },
+    {
+      id: "pn",
+      path: marketingExamHubPath(region, "pn"),
+      titleKey: isUs ? "home.conversion.examCard.pnTitleUS" : "home.conversion.examCard.pnTitleCA",
+      metaKey: isUs ? "home.conversion.examCard.metaPnUS" : "home.conversion.examCard.metaPnCA",
+      whoKey: isUs ? "home.conversion.heroTrack.pn.whoUS" : "home.conversion.heroTrack.pn.whoCA",
+      nextKey: isUs ? "home.conversion.heroTrack.pn.nextUS" : "home.conversion.heroTrack.pn.nextCA",
+      ctaKey: "home.conversion.examCard.ctaPn",
+    },
+    {
+      id: "np",
+      path: marketingExamHubPath(region, "np"),
+      titleKey: isUs ? "home.conversion.examCard.npTitleUS" : "home.conversion.examCard.npTitleCA",
+      metaKey: isUs ? "home.conversion.examCard.metaNpUS" : "home.conversion.examCard.metaNpCA",
+      whoKey: isUs ? "home.conversion.heroTrack.np.whoUS" : "home.conversion.heroTrack.np.whoCA",
+      nextKey: isUs ? "home.conversion.heroTrack.np.nextUS" : "home.conversion.heroTrack.np.nextCA",
+      ctaKey: "home.conversion.examCard.ctaNp",
+    },
+    {
+      id: "allied",
+      path: marketingExamHubPath(region, "allied"),
+      titleKey: "home.conversion.examCard.alliedTitle",
+      metaKey: "home.conversion.examCard.metaAllied",
+      whoKey: "home.conversion.heroTrack.allied.who",
+      nextKey: "home.conversion.heroTrack.allied.next",
+      ctaKey: "home.conversion.examCard.ctaAllied",
+    },
   ];
 }

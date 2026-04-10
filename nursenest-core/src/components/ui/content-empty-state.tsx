@@ -1,5 +1,6 @@
 import { BookOpen, ClipboardList, Activity, Sparkles } from "lucide-react";
 import { PremiumEmptyState } from "@/components/ui/premium-empty-state";
+import type { PremiumEmptyTone } from "@/components/ui/premium-empty-state";
 
 /**
  * Pathway / CAT / question empty catalog — delegates to {@link PremiumEmptyState}.
@@ -17,9 +18,11 @@ type ContentEmptyStateProps = {
   variant?: ContentVariant;
   headline?: string;
   body?: string;
+  hint?: string;
   primaryCta: CtaItem;
   secondaryCtas?: CtaItem[];
   showGrowthBadge?: boolean;
+  tone?: PremiumEmptyTone;
 };
 
 const VARIANT_DEFAULTS: Record<
@@ -56,9 +59,11 @@ export function ContentEmptyState({
   variant = "generic",
   headline,
   body,
+  hint,
   primaryCta,
   secondaryCtas = [],
   showGrowthBadge,
+  tone = "growth",
 }: ContentEmptyStateProps) {
   const defaults = VARIANT_DEFAULTS[variant];
   const displayHeadline = headline ?? defaults.headline;
@@ -69,13 +74,14 @@ export function ContentEmptyState({
   return (
     <PremiumEmptyState
       data-nn-empty={variant}
-      tone="growth"
+      tone={tone}
       className="mt-8"
       visualLayout="split"
       Icon={Icon}
       badge={displayBadge ? "Adding daily" : undefined}
       headline={displayHeadline}
       body={displayBody}
+      hint={hint}
       label={displayHeadline}
       primaryCta={{ ...primaryCta, variant: primaryCta.variant ?? "primary" }}
       secondaryCtas={secondaryCtas.map((c) => ({ ...c, variant: c.variant ?? "secondary" }))}

@@ -36,3 +36,30 @@ export function resolvePriorityTarget<T>(
   if (priority === "none") return null;
   return targets[priority] ?? null;
 }
+
+const DEFAULT_RECENT_WINDOW_MS = 72 * 60 * 60 * 1000;
+
+export function isWithinRecentWindow(
+  isoTimestamp: string | null | undefined,
+  nowMs: number,
+  windowMs = DEFAULT_RECENT_WINDOW_MS,
+): boolean {
+  if (!isoTimestamp) return false;
+  const ts = new Date(isoTimestamp).getTime();
+  if (!Number.isFinite(ts)) return false;
+  return nowMs - ts <= windowMs;
+}
+
+export function resolvePracticeHistoryEmphasis(
+  priority: InteractionPriority,
+  row: { status: string; completedAt: string | null },
+  nowMs: number,
+): { rowEmphasis: "resume" | "review_recent" | "none"; actionEmphasis: "resume" | "review_recent" | "none" } {
+  if (row.status === "IN_PROGRESS" && priority === "resume") {
+    return { rowEmphasis: "resume", actionEmphasis: "resume" };
+  }
+  if (row.status === "COMPLETED" && isWithinRecentWindow(row.completedAt, nowMs) && priority === "review_recent") {
+    return { rowEmphasis: "review_recent", actionEmphasis: "review_recent" };
+  }
+  return { rowEmphasis: "none", actionEmphasis: "none" };
+}

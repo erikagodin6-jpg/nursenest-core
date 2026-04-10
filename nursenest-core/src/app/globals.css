@@ -2433,3 +2433,9 @@ html[data-theme="multi-pastel"] {
     animation: nn-not-found-float 5s ease-in-out infinite;
   }
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .nn-not-found-logo-drift {
+    animation: none !important;
+  }
+}

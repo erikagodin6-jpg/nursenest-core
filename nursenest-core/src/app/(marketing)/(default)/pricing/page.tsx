@@ -40,7 +40,7 @@ export default async function PricingPage() {
     <>
       <WebPageJsonLd
         {...buildMarketingWebPageJsonLdProps({
-          locale,
+          locale: DEFAULT_MARKETING_LOCALE,
           enPath: "/pricing",
           title: m["pages.pricing.title"],
           description: m["pages.pricing.description"],

@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import { createRouteValidator } from "../../../scripts/audit-internal-links";
 import {
-  getHomeHeroTierPillLinkSpecs,
+  getHomeHeroPrimaryTrackSpecs,
   marketingExamHubPath,
 } from "@/lib/marketing/country-exam-offerings";
 import { resolveExamPathwaySafe } from "@/lib/exam-pathways/resolve-exam-pathway-safe";
@@ -51,7 +51,7 @@ describe("marketing route integrity", () => {
     }
   });
 
-  it("homepage hero tier pill paths and PN label keys match US/CA matrix (no mixed slugs)", () => {
+  it("homepage hero primary track paths match US/CA matrix (no mixed slugs)", () => {
     const expectedPaths = {
       US: {
         rn: "/us/rn/nclex-rn",
@@ -68,7 +68,7 @@ describe("marketing route integrity", () => {
     } as const;
 
     for (const region of ["US", "CA"] as const) {
-      const specs = getHomeHeroTierPillLinkSpecs(region);
+      const specs = getHomeHeroPrimaryTrackSpecs(region);
       const exp = expectedPaths[region];
       const byId = Object.fromEntries(specs.map((s) => [s.id, s])) as Record<string, (typeof specs)[number]>;
 
@@ -76,14 +76,11 @@ describe("marketing route integrity", () => {
       assert.equal(byId.pn.path, exp.pn);
       assert.equal(byId.np.path, exp.np);
       assert.equal(byId.allied.path, exp.allied);
-      assert.equal(byId["new-grad"].path, "/pre-nursing");
 
-      assert.equal(byId.pn.tierPillLabelKey, region === "US" ? "home.conversion.tierPill.pnUS" : "home.conversion.tierPill.pnCA");
       assert.equal(isWellFormedExamHubPath(byId.rn.path), true);
       assert.equal(isWellFormedExamHubPath(byId.pn.path), true);
       assert.equal(isWellFormedExamHubPath(byId.np.path), true);
       assert.equal(isWellFormedExamHubPath(byId.allied.path), true);
-      assert.equal(isValidPath(byId["new-grad"].path), true);
     }
   });
 

@@ -17,7 +17,7 @@ import type {
   PracticeTestResultsJson,
 } from "@/lib/practice-tests/types";
 import { CatLiveTransparencyStrip } from "@/components/student/cat-live-transparency-strip";
-import { CatResultsCoachPanel } from "@/components/student/cat-results-coach-panel";
+import { CatResultsCoachSection } from "@/components/student/cat-results-coach-section";
 import { CatStudyFeedbackPanel } from "@/components/student/cat-study-feedback-panel";
 import { ProtectedPremiumContent } from "@/components/student/protected-premium-content";
 import { StudyNotesPanel } from "@/components/student/study-notes-panel";
@@ -707,7 +707,7 @@ export function PracticeTestRunnerClient({
           </p>
           {results.catReport ? (
             <div className="mt-4">
-              <CatResultsCoachPanel
+              <CatResultsCoachSection
                 coach={results.catCoach}
                 catExamFeedbackMode={results.catExamFeedbackMode ?? testConfig?.catExamFeedbackMode ?? null}
                 pathwayId={testConfig?.pathwayId ?? null}

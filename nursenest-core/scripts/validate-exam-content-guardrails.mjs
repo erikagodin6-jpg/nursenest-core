@@ -132,9 +132,12 @@ function sliceBetweenMarkers(text, startMarker, endMarker) {
   return { segment: text.slice(start, end), segmentStart: start };
 }
 
-function main() {
-  const text = fs.readFileSync(catalogPath, "utf8");
-  const terminologyText = fs.readFileSync(terminologyPath, "utf8");
+export function runGuardrailValidation({
+  catalogText,
+  terminologySourceText,
+  catalogFilePath = catalogPath,
+  terminologyFilePath = terminologyPath,
+}) {
   const failures = [];
   const checkedRules = [];
 
@@ -143,7 +146,7 @@ function main() {
     let segment;
     let segmentStart;
     try {
-      const s = sliceCatalog(text, a, b);
+      const s = sliceCatalog(catalogText, a, b);
       segment = s.segment;
       segmentStart = s.segmentStart;
     } catch (e) {
@@ -151,11 +154,11 @@ function main() {
       continue;
     }
     for (const re of rule.forbidden) {
-      const hits = findMatchesWithLines(text, segmentStart, segment, re);
+      const hits = findMatchesWithLines(catalogText, segmentStart, segment, re);
       for (const h of hits) {
         if (isExcepted(rule.id, h.lineText)) continue;
         failures.push(
-          `${rule.name} (${rule.id}): matched ${JSON.stringify(h.match)} at ${path.relative(root, catalogPath)}:${h.line}:${h.col} — ${h.lineText}`,
+          `${rule.name} (${rule.id}): matched ${JSON.stringify(h.match)} at ${path.relative(root, catalogFilePath)}:${h.line}:${h.col} — ${h.lineText}`,
         );
       }
     }
@@ -166,7 +169,7 @@ function main() {
     let segment;
     let segmentStart;
     try {
-      const s = sliceBetweenMarkers(terminologyText, rule.start, rule.end);
+      const s = sliceBetweenMarkers(terminologySourceText, rule.start, rule.end);
       segment = s.segment;
       segmentStart = s.segmentStart;
     } catch (e) {
@@ -174,17 +177,24 @@ function main() {
       continue;
     }
     for (const re of rule.forbidden) {
-      const hits = findMatchesWithLines(terminologyText, segmentStart, segment, re);
+      const hits = findMatchesWithLines(terminologySourceText, segmentStart, segment, re);
       for (const h of hits) {
         if (isExcepted(rule.id, h.lineText)) continue;
         failures.push(
-          `${rule.name} (${rule.id}): matched ${JSON.stringify(h.match)} at ${path.relative(root, rule.file)}:${h.line}:${h.col} — ${h.lineText}`,
+          `${rule.name} (${rule.id}): matched ${JSON.stringify(h.match)} at ${path.relative(root, terminologyFilePath)}:${h.line}:${h.col} — ${h.lineText}`,
         );
       }
     }
     checkedRules.push(rule.id);
   }
 
+  return { failures, checkedRules };
+}
+
+function main() {
+  const catalogText = fs.readFileSync(catalogPath, "utf8");
+  const terminologySourceText = fs.readFileSync(terminologyPath, "utf8");
+  const { failures, checkedRules } = runGuardrailValidation({ catalogText, terminologySourceText });
   if (failures.length) {
     console.error("validate-exam-content-guardrails: FAILED");
     console.error(`Checked rule groups: ${checkedRules.join(", ")}`);
@@ -195,4 +205,6 @@ function main() {
   console.log(`validate-exam-content-guardrails: OK (${checkedRules.length} rule groups)`);
 }
 
-main();
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
+  main();
+}
