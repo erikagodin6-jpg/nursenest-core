@@ -214,7 +214,11 @@ export async function generatePathwayLesson(
       tags: topic.tags,
       exam: resolvedExam,
       country: resolvedCountry,
-      internalLinkHints: parsed.internalLinkHints,
+      internalLinkHints: parsed.internalLinkHints.map((h) => ({
+        label: h.label ?? "",
+        suggestedPath: h.suggestedPath ?? "",
+        rationale: h.rationale ?? "",
+      })),
     },
   };
 }

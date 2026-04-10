@@ -10,12 +10,13 @@ import { isCoreHostedNonDefaultLocale } from "@/lib/i18n/marketing-locale-policy
 import { localizeBreadcrumbResolution } from "@/lib/seo/breadcrumb-i18n";
 import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
 import { marketingHomeSurfaceBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
-import { marketingAlternatesSharedPage, marketingCanonicalPathForLocale } from "@/lib/seo/marketing-alternates";
+import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { resolveMarketingCopy } from "@/lib/marketing-i18n-core";
 import { getMarketingRegionFromCookies } from "@/lib/region/marketing-region-server";
 import { defaultHomeMetaDescription, defaultHomeMetaTitle } from "@/lib/marketing/nursing-tier-public-labels";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
+import { buildMarketingWebPageJsonLdProps } from "@/lib/seo/marketing-webpage-jsonld";
 
 export const revalidate = 600;
 
@@ -74,10 +75,12 @@ export default async function LocalizedHomePage({ params }: Props) {
   return (
     <>
       <WebPageJsonLd
-        title={title}
-        description={description}
-        path={marketingCanonicalPathForLocale(locale, "/")}
-        inLanguage={locale}
+        {...buildMarketingWebPageJsonLdProps({
+          locale,
+          enPath: "/",
+          title,
+          description,
+        })}
       />
       <BreadcrumbJsonLd items={schemaItems} />
       <FaqJsonLd items={MARKETING_HOME_FAQ_JSONLD} />

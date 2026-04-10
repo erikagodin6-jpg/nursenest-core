@@ -3,6 +3,9 @@ import { prisma } from "@/lib/db";
 import { stripToPlainText } from "@/lib/content-quality/plain-text";
 import { questionAccessWhere } from "@/lib/entitlements/content-access-scope";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
+import { buildGlobalExamContext } from "@/lib/exam-context/exam-registry";
+import { validateLearnerCopyForExamContext } from "@/lib/exam-context/content-guardrails";
+import { examQuestionPoolWhereForContext } from "@/lib/exam-context/query-scope";
 import { buildRationaleSectionsFromQuestion } from "@/lib/content-quality/rationale-display";
 import {
   answerMatches,
@@ -89,9 +92,20 @@ export async function buildCatStudyFeedback(
   pathwayId: string | null = null,
 ): Promise<CatStudyFeedbackPayload | null> {
   try {
+  const examContext = buildGlobalExamContext(pathwayId, "en");
+  if (pathwayId && !examContext) return null;
+  const scopedPool = examContext ? examQuestionPoolWhereForContext(examContext) : null;
   const base = questionAccessWhere(entitlement);
   const q = await prisma.examQuestion.findFirst({
-    where: { AND: [{ id: questionId }, base] },
+    where: {
+      AND: [
+        { id: questionId },
+        base,
+        ...(scopedPool
+          ? [{ exam: { in: scopedPool.examIn } }, { tier: { in: scopedPool.tierMatches } }]
+          : []),
+      ],
+    },
     select: {
       id: true,
       questionType: true,
@@ -182,10 +196,32 @@ export async function buildCatStudyFeedback(
     relatedLessons = SAFE_EMPTY_LESSON_LINKS;
   }
   const framing = getLearnerExamFraming(pathwayId);
-  const examFramingNote =
+  const examFramingNoteRaw =
     framing.region === "unknown"
       ? undefined
       : `This reflects ${framing.examShortLabel}-style prioritization and scope rules — compare distractors against ${framing.examIdentityLabel} expectations.`;
+  const examFramingViolations =
+    examContext && examFramingNoteRaw ? validateLearnerCopyForExamContext(examFramingNoteRaw, examContext) : [];
+  const examFramingNote = examFramingViolations.length > 0 ? undefined : examFramingNoteRaw;
+  if (examContext) {
+    const surfaces = [
+      { surface: "cat_rationale", text: level1Short },
+      { surface: "cat_rationale", text: level3 },
+      ...(examFramingNoteRaw ? [{ surface: "cat_rationale", text: examFramingNoteRaw }] : []),
+    ] as const;
+    for (const entry of surfaces) {
+      const violations = validateLearnerCopyForExamContext(entry.text, examContext);
+      if (violations.length === 0) continue;
+      safeServerLog("learner_copy", "learner_copy_context_mismatch", {
+        event: "learner_copy_context_mismatch",
+        pathway_id: examContext.pathwayId,
+        expected_exam: examContext.exam,
+        surface: entry.surface,
+        mismatch_label: violations.map((v) => v.detail).join(" | "),
+        snippet: entry.text.slice(0, 160),
+      });
+    }
+  }
 
   return {
     questionId: q.id,

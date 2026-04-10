@@ -21,6 +21,8 @@ import { PRACTICE_TEST_CAT_CREATE_CODE } from "@/lib/practice-tests/practice-tes
 import { resolveCatPathwayIdForCatPost } from "@/lib/practice-tests/resolve-cat-pathway-for-post";
 import { configFromInput, pickPracticeQuestionIds } from "@/lib/practice-tests/pick-question-ids";
 import { parsePracticeTestConfigAtBoundary } from "@/lib/practice-tests/practice-test-config-boundary";
+import { buildGlobalExamContext } from "@/lib/exam-context/exam-registry";
+import { examContextAnalyticsProps } from "@/lib/exam-context/global-exam-context";
 import { captureLearnerProductEvent } from "@/lib/observability/learner-product-analytics";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
@@ -335,6 +337,7 @@ export async function POST(req: Request) {
       cat_exam_feedback_mode: cat.config.catExamFeedbackMode ?? "test",
       question_cap: d.questionCount,
       timed: d.timedMode,
+      ...examContextAnalyticsProps(buildGlobalExamContext(pathwayIdForCat, "en")),
     });
 
     return NextResponse.json(
@@ -395,6 +398,7 @@ export async function POST(req: Request) {
     selection_mode: d.selectionMode,
     question_count: d.questionCount,
     timed: d.timedMode,
+    ...examContextAnalyticsProps(buildGlobalExamContext(d.pathwayId?.trim() || null, "en")),
   });
 
   return NextResponse.json({ id: row.id, questionCount: picked.ids.length, config }, { status: 201 });

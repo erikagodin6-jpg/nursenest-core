@@ -3,6 +3,8 @@ import { Crosshair, CheckCircle2 } from "lucide-react";
 import type { WeakAreaInsight, WeaknessTier } from "@/lib/insights/types";
 import type { LearnerMarketingT } from "@/lib/learner/learner-marketing-server";
 import { remediationLessonsTopicHref, remediationTopicDrillHref } from "@/lib/learner/remediation-links";
+import { PremiumEmptyState } from "@/components/ui/premium-empty-state";
+import { emptyStateCopy } from "@/lib/ui/empty-state-copy";
 
 function tierClass(tier: WeaknessTier): string {
   switch (tier) {
@@ -108,18 +110,19 @@ export function DashboardWeakAreasCard({
             ))}
           </ul>
         ) : (
-          <div className="mt-5 rounded-xl border border-dashed border-[color-mix(in_srgb,var(--semantic-success)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-success)_04%,var(--semantic-panel-muted))] px-5 py-8 text-center">
-            <CheckCircle2 className="mx-auto mb-3 h-8 w-8 text-[var(--semantic-success)] opacity-70" aria-hidden />
-            <p className="text-sm font-semibold text-[var(--semantic-text-primary)]">No focus areas identified yet</p>
-            <p className="mt-1 text-xs text-[var(--semantic-text-secondary)]">
-              {t("learner.dashboard.insight.weakEmpty")}
-            </p>
-            <Link
-              href="/app/questions"
-              className="mt-4 inline-flex items-center gap-1.5 rounded-full border border-[color-mix(in_srgb,var(--semantic-info)_32%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-info)_10%,var(--semantic-surface))] px-4 py-2 text-xs font-semibold text-[var(--semantic-info)] shadow-sm transition-colors hover:bg-[color-mix(in_srgb,var(--semantic-info)_16%,var(--semantic-surface))]"
-            >
-              {t("learner.dashboard.empty.startPracticeCta")}
-            </Link>
+          <div className="mt-5">
+            <PremiumEmptyState
+              data-nn-empty="dashboard-weak-areas"
+              tone="early"
+              density="compact"
+              visualLayout="split"
+              Icon={CheckCircle2}
+              headline="No focus areas identified yet"
+              body={t("learner.dashboard.insight.weakEmpty")}
+              hint={emptyStateCopy.noWeakAreasYet.body}
+              primaryCta={{ label: t("learner.dashboard.empty.startPracticeCta"), href: "/app/questions", variant: "primary" }}
+              className="border-[color-mix(in_srgb,var(--semantic-success)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-success)_05%,var(--semantic-surface))]"
+            />
           </div>
         )}
       </div>

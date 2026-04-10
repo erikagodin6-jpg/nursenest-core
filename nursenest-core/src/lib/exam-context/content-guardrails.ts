@@ -1,7 +1,14 @@
 import type { GlobalExamContext } from "@/lib/exam-context/global-exam-context";
 
 /** Strings that must not appear in Canadian PN (REx-PN) learner-facing content. */
-const CA_PN_FORBIDDEN = [/NCLEX-PN\b/i, /\bNCLEX_PN\b/i];
+const CA_PN_FORBIDDEN = [
+  /\bNCLEX-PN\b/i,
+  /\bNCLEX_PN\b/i,
+  /\bUAP\b/i,
+  /\bLVN\b/i,
+  /\bstate board\b/i,
+  /\bclient needs\b/i,
+];
 
 /** Strings that must not appear in US NCLEX-PN learner-facing content. */
 const US_PN_FORBIDDEN = [/\bREx-PN\b/i, /\bREX_PN\b/i, /Canadian Practical Nurse Exam/i];

@@ -12,6 +12,7 @@ import { fileURLToPath } from "node:url";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(__dirname, "..");
 const catalogPath = path.join(root, "src/content/pathway-lessons/catalog.json");
+const terminologyPath = path.join(root, "src/lib/exam-context/terminology.ts");
 
 /** @type {{ ruleId: string, lineIncludes: string }[]} */
 const DOCUMENTED_EXCEPTIONS = [
@@ -103,9 +104,39 @@ const rules = [
   },
 ];
 
+/** @type {{ id: string, name: string, file: string, start: string, end: string, forbidden: RegExp[] }[]} */
+const followUpRules = [
+  {
+    id: "terminology-ca-pn-us-terms",
+    name: "Terminology profile CANADA_PN must not carry US PN terms",
+    file: terminologyPath,
+    start: "CANADA_PN:",
+    end: "CANADA_RN:",
+    forbidden: [/\bNCLEX-PN\b/i, /\bNCLEX_PN\b/i, /\bUAP\b/i, /\bLVN\b/i, /\bstate board\b/i],
+  },
+  {
+    id: "terminology-us-pn-rex",
+    name: "Terminology profile US_PN must not carry REx-PN labels",
+    file: terminologyPath,
+    start: "US_PN:",
+    end: "US_RN:",
+    forbidden: [/\bREx-PN\b/i, /\bREX_PN\b/i],
+  },
+];
+
+function sliceBetweenMarkers(text, startMarker, endMarker) {
+  const start = text.indexOf(startMarker);
+  const end = text.indexOf(endMarker, start + 1);
+  if (start === -1) throw new Error(`Start marker ${startMarker} not found`);
+  if (end === -1) throw new Error(`End marker ${endMarker} not found after ${startMarker}`);
+  return { segment: text.slice(start, end), segmentStart: start };
+}
+
 function main() {
   const text = fs.readFileSync(catalogPath, "utf8");
+  const terminologyText = fs.readFileSync(terminologyPath, "utf8");
   const failures = [];
+  const checkedRules = [];
 
   for (const rule of rules) {
     const [a, b] = rule.slice;
@@ -128,13 +159,40 @@ function main() {
         );
       }
     }
+    checkedRules.push(rule.id);
+  }
+
+  for (const rule of followUpRules) {
+    let segment;
+    let segmentStart;
+    try {
+      const s = sliceBetweenMarkers(terminologyText, rule.start, rule.end);
+      segment = s.segment;
+      segmentStart = s.segmentStart;
+    } catch (e) {
+      failures.push(`${rule.name} (${rule.id}): ${e.message}`);
+      continue;
+    }
+    for (const re of rule.forbidden) {
+      const hits = findMatchesWithLines(terminologyText, segmentStart, segment, re);
+      for (const h of hits) {
+        if (isExcepted(rule.id, h.lineText)) continue;
+        failures.push(
+          `${rule.name} (${rule.id}): matched ${JSON.stringify(h.match)} at ${path.relative(root, rule.file)}:${h.line}:${h.col} — ${h.lineText}`,
+        );
+      }
+    }
+    checkedRules.push(rule.id);
   }
 
   if (failures.length) {
-    console.error("validate-exam-content-guardrails: FAILED\n", failures.join("\n"));
+    console.error("validate-exam-content-guardrails: FAILED");
+    console.error(`Checked rule groups: ${checkedRules.join(", ")}`);
+    console.error("");
+    console.error(failures.join("\n"));
     process.exit(1);
   }
-  console.log("validate-exam-content-guardrails: OK");
+  console.log(`validate-exam-content-guardrails: OK (${checkedRules.length} rule groups)`);
 }
 
 main();

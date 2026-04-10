@@ -7,7 +7,8 @@ import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
 import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
 import { marketingPricingBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
-import { marketingAlternatesSharedPage, marketingCanonicalPathForLocale } from "@/lib/seo/marketing-alternates";
+import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
+import { buildMarketingWebPageJsonLdProps } from "@/lib/seo/marketing-webpage-jsonld";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -38,10 +39,12 @@ export default async function PricingPage() {
   return (
     <>
       <WebPageJsonLd
-        title={m["pages.pricing.title"]}
-        description={m["pages.pricing.description"]}
-        path={marketingCanonicalPathForLocale(locale, "/pricing")}
-        inLanguage={locale}
+        {...buildMarketingWebPageJsonLdProps({
+          locale,
+          enPath: "/pricing",
+          title: m["pages.pricing.title"],
+          description: m["pages.pricing.description"],
+        })}
       />
       <BreadcrumbJsonLd items={schemaItems} />
       <div className="mx-auto max-w-6xl nn-marketing-x pb-[var(--nn-rhythm-tight-y)] pt-[var(--nn-rhythm-page-y)]">

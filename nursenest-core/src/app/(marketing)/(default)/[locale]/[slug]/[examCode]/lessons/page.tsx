@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { ExamFamily } from "@prisma/client";
 import { notFound, redirect } from "next/navigation";
 import { getOptionalPublicSession } from "@/lib/auth/optional-public-session";
@@ -15,7 +14,7 @@ import { MarketingStudyCrossLinks } from "@/components/seo/marketing-study-cross
 import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
 import { loadPathwayLessonsHubAggregates } from "@/lib/exam-pathways/marketing-hub-optional-data";
 import { resolveExamPathwaySafe } from "@/lib/exam-pathways/resolve-exam-pathway-safe";
-import { marketingExamHubBasePath, marketingPathwayLessonsIndexPath } from "@/lib/lessons/lesson-routes";
+import { marketingPathwayLessonsIndexPath } from "@/lib/lessons/lesson-routes";
 import { defaultPathwayLessonContentLocaleForExamHubRoute } from "@/lib/lessons/pathway-lesson-locale";
 import {
   PATHWAY_HUB_PAGE_SIZE_DEFAULT,
@@ -114,7 +113,6 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
   const pathway = resolveExamPathwaySafe(countrySlug, roleTrack, examCode, { pathname });
   if (!pathway) notFound();
 
-  const hubBase = marketingExamHubBasePath(pathway);
   const base = marketingPathwayLessonsIndexPath(pathway);
   const sp = await searchParams;
   const pageRequested = Math.max(1, Number(sp.page ?? "1") || 1);

@@ -22,6 +22,10 @@ import {
 } from "@/lib/learner/remediation-links";
 import { readinessBandLabel } from "@/lib/learner/readiness-score";
 import { loadUnifiedTopicPerformance } from "@/lib/learner/topic-performance";
+import {
+  resolveInteractionPriority,
+  resolvePriorityTarget,
+} from "@/lib/student/interaction-priority";
 import type { Metadata } from "next";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 import { appAccountBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
@@ -160,6 +164,16 @@ export default async function LearnerAccountOverviewPage() {
   const hasRecentCompletion = [...activity.mocks.map((m) => m.at), ...activity.practiceTests.map((pt) => pt.at)].some(
     (at) => Date.now() - new Date(at).getTime() <= 72 * 60 * 60 * 1000,
   );
+  const quickLinkPriority = resolveInteractionPriority({
+    hasResume: hasInProgressLesson,
+    hasWeakFocus: hasWeakAreasDetected,
+    hasRecentCompletion,
+  });
+  const quickLinkEmphasisTarget = resolvePriorityTarget(quickLinkPriority, {
+    resume: "lessons",
+    weak_focus: "questions",
+    review_recent: "cat",
+  });
 
   return (
     <main className="space-y-7">
@@ -488,7 +502,7 @@ export default async function LearnerAccountOverviewPage() {
             <Link
               href="/app/lessons"
               className={`nn-premium-action-chip rounded-full border bg-card px-4 py-2 text-sm font-semibold hover:bg-muted/80 ${
-                hasInProgressLesson
+                quickLinkEmphasisTarget === "lessons"
                   ? "border-[color-mix(in_srgb,var(--semantic-success)_34%,var(--semantic-border-soft))]"
                   : "border-border"
               }`}
@@ -498,7 +512,7 @@ export default async function LearnerAccountOverviewPage() {
             <Link
               href="/app/questions"
               className={`nn-premium-action-chip rounded-full border bg-card px-4 py-2 text-sm font-semibold hover:bg-muted/80 ${
-                hasWeakAreasDetected
+                quickLinkEmphasisTarget === "questions"
                   ? "border-[color-mix(in_srgb,var(--semantic-warning)_34%,var(--semantic-border-soft))]"
                   : "border-border"
               }`}
@@ -514,7 +528,7 @@ export default async function LearnerAccountOverviewPage() {
             <Link
               href={catStartHref}
               className={`nn-premium-action-chip rounded-full border bg-card px-4 py-2 text-sm font-semibold hover:bg-muted/80 ${
-                hasRecentCompletion
+                quickLinkEmphasisTarget === "cat"
                   ? "border-[color-mix(in_srgb,var(--semantic-brand)_34%,var(--semantic-border-soft))]"
                   : "border-border"
               }`}

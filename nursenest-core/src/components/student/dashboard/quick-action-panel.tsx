@@ -12,6 +12,7 @@ import {
   Zap,
 } from "lucide-react";
 import type { LearnerMarketingT } from "@/lib/learner/learner-marketing-server";
+import { isPriorityWinner, resolveInteractionPriority } from "@/lib/student/interaction-priority";
 
 export type QuickActionGuided = {
   continueLesson?: { title: string; href: string } | null;
@@ -64,10 +65,14 @@ export function QuickActionPanel({
   const hasInProgressLesson = Boolean(guided?.continueLesson?.href);
   const hasWeakAreas = Boolean(guided?.hasWeakAreas);
   const hasRecentCompletion = Boolean(guided?.hasRecentCompletion);
-  const emphasisPriority = hasInProgressLesson ? "resume" : hasWeakAreas ? "weak" : hasRecentCompletion ? "cat" : null;
-  const emphasizeResume = emphasisPriority === "resume";
-  const emphasizeWeak = emphasisPriority === "weak";
-  const emphasizeCat = emphasisPriority === "cat";
+  const emphasisPriority = resolveInteractionPriority({
+    hasResume: hasInProgressLesson,
+    hasWeakFocus: hasWeakAreas,
+    hasRecentCompletion,
+  });
+  const emphasizeResume = isPriorityWinner(emphasisPriority, "resume");
+  const emphasizeWeak = isPriorityWinner(emphasisPriority, "weak_focus");
+  const emphasizeCat = isPriorityWinner(emphasisPriority, "review_recent");
   const resumeHref = guided?.continueLesson?.href ?? "/app/lessons";
   const resumeTitle = guided?.continueLesson?.title ?? null;
   const weakHref = hasWeakAreas ? "#dashboard-weak-areas" : "/app/questions";

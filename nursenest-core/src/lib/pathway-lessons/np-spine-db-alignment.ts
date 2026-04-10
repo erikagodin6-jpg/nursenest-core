@@ -172,11 +172,11 @@ export interface ScoredLesson {
   signals: string[];
 }
 
-const STRONG_SCORE = 0.72;
-const WEAK_FLOOR = 0.38;
-const DUPLICATE_BAND = 0.12;
-const HIGH_TIER = 0.52;
-const DEPTH_OK = 0.42;
+export const STRONG_SCORE = 0.72;
+export const WEAK_FLOOR = 0.38;
+export const DUPLICATE_BAND = 0.12;
+export const HIGH_TIER = 0.52;
+export const DEPTH_OK = 0.42;
 
 function bodySystemMatches(lessonBs: string, systemId: string, systemName: string): boolean {
   const l = lessonBs.toLowerCase().trim();
@@ -242,6 +242,31 @@ export function scorePathwayLessonAgainstSpineTopic(
   return { lesson, score, depth, signals };
 }
 
+export function sortScoredLessonsDeterministically(scored: ScoredLesson[]): ScoredLesson[] {
+  return [...scored].sort((a, b) => {
+    if (b.score !== a.score) return b.score - a.score;
+    if (b.depth.depthScore !== a.depth.depthScore) return b.depth.depthScore - a.depth.depthScore;
+    if (b.signals.length !== a.signals.length) return b.signals.length - a.signals.length;
+    if (b.depth.sectionCount !== a.depth.sectionCount) return b.depth.sectionCount - a.depth.sectionCount;
+    if (b.depth.approxChars !== a.depth.approxChars) return b.depth.approxChars - a.depth.approxChars;
+    const slugCmp = a.lesson.slug.localeCompare(b.lesson.slug);
+    if (slugCmp !== 0) return slugCmp;
+    return a.lesson.id.localeCompare(b.lesson.id);
+  });
+}
+
+export function rankPathwayLessonCandidatesForSpineTopic(
+  pathwayId: string,
+  system: NpSpineSystem,
+  spineTopic: NpSpineTopic,
+  lessons: PathwayLessonMatchRow[],
+): ScoredLesson[] {
+  const pool = lessons.filter((l) => l.pathwayId === pathwayId);
+  return sortScoredLessonsDeterministically(
+    pool.map((l) => scorePathwayLessonAgainstSpineTopic(l, spineTopic, system)).filter((s) => s.score >= 0.22),
+  );
+}
+
 export function scoreContentItemAgainstTopic(item: ContentItemMatchRow, spineTopic: NpSpineTopic): number {
   let score = 0;
   const spineTokens = new Set([
@@ -257,6 +282,27 @@ export function scoreContentItemAgainstTopic(item: ContentItemMatchRow, spineTop
   const slugTok = tokenizeForMatch(item.slug.replace(/-/g, " "));
   score += jaccard(slugTok, spineTokens) * 0.15;
   return Math.min(1, score);
+}
+
+export function collectContentItemHintsForSpineTopic(
+  spineTopic: NpSpineTopic,
+  contentItems: ContentItemMatchRow[] | undefined,
+  minScore = 0.55,
+): { id: string; slug: string; score: number }[] {
+  if (!contentItems?.length) return [];
+  return contentItems
+    .map((ci) => ({
+      id: ci.id,
+      slug: ci.slug,
+      score: scoreContentItemAgainstTopic(ci, spineTopic),
+    }))
+    .filter((c) => c.score >= minScore)
+    .sort((a, b) => {
+      if (b.score !== a.score) return b.score - a.score;
+      const slugCmp = a.slug.localeCompare(b.slug);
+      if (slugCmp !== 0) return slugCmp;
+      return a.id.localeCompare(b.id);
+    });
 }
 
 export interface UpgradePrepFlags {
@@ -341,23 +387,13 @@ export function classifySpineTopicForPathway(
     notes.push(`Spine merge hint: consider consolidating with topic "${mergeHintTargetId}".`);
   }
 
-  const pool = lessons.filter((l) => l.pathwayId === pathwayId);
-  const scored = pool
-    .map((l) => scorePathwayLessonAgainstSpineTopic(l, spineTopic, system))
-    .filter((s) => s.score >= 0.22)
-    .sort((a, b) => b.score - a.score);
+  const scored = rankPathwayLessonCandidatesForSpineTopic(pathwayId, system, spineTopic, lessons);
 
   const best = scored[0];
   const second = scored[1];
 
   const contentItemHintMin = options?.contentItemHintMin ?? 0.55;
-  const contentItemHints =
-    options?.contentItems?.map((ci) => ({
-      id: ci.id,
-      slug: ci.slug,
-      score: scoreContentItemAgainstTopic(ci, spineTopic),
-    })) ?? [];
-  const strongCi = contentItemHints.filter((c) => c.score >= contentItemHintMin).sort((a, b) => b.score - a.score);
+  const strongCi = collectContentItemHintsForSpineTopic(spineTopic, options?.contentItems, contentItemHintMin);
 
   if (strongCi.length > 0) {
     notes.push(

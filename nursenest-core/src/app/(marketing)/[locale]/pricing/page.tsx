@@ -6,7 +6,8 @@ import { WebPageJsonLd } from "@/components/seo/seo-json-ld";
 import { localizeBreadcrumbResolution } from "@/lib/seo/breadcrumb-i18n";
 import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
 import { marketingPricingBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
-import { marketingAlternatesSharedPage, marketingCanonicalPathForLocale } from "@/lib/seo/marketing-alternates";
+import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
+import { buildMarketingWebPageJsonLdProps } from "@/lib/seo/marketing-webpage-jsonld";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
 type Props = { params: Promise<{ locale: string }> };
@@ -41,10 +42,12 @@ export default async function LocalizedPricingPage({ params }: Props) {
   return (
     <>
       <WebPageJsonLd
-        title={primary["pages.pricing.title"]}
-        description={primary["pages.pricing.description"]}
-        path={marketingCanonicalPathForLocale(locale, "/pricing")}
-        inLanguage={locale}
+        {...buildMarketingWebPageJsonLdProps({
+          locale,
+          enPath: "/pricing",
+          title: primary["pages.pricing.title"],
+          description: primary["pages.pricing.description"],
+        })}
       />
       <BreadcrumbJsonLd items={schemaItems} />
       <div className="mx-auto max-w-6xl px-4 pt-4 sm:px-6 lg:px-8">

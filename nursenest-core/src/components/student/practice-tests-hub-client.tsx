@@ -19,6 +19,11 @@ import {
   pathwayIdWhenLeavingCatMode,
 } from "@/lib/practice-tests/practice-tests-hub-cat-pathway";
 import { buildGlobalExamContext } from "@/lib/exam-context/exam-registry";
+import {
+  isPriorityWinner,
+  resolveInteractionPriority,
+  resolvePriorityMessage,
+} from "@/lib/student/interaction-priority";
 
 type TestListRow = {
   id: string;
@@ -74,6 +79,7 @@ export function PracticeTestsHubClient({
   const [pathwayId, setPathwayId] = useState(
     () => defaultPathwayId ?? pathwayOptions[0]?.id ?? "",
   );
+  const nowMs = Date.now();
 
   const catOptions = useMemo(
     () => catEligiblePathwayOptions(pathwayOptions, catEligiblePathwayIds),
@@ -95,9 +101,18 @@ export function PracticeTestsHubClient({
   const hasInProgressActivity = list.some((row) => row.status === "IN_PROGRESS");
   const hasRecentCompletion = list.some((row) => {
     if (row.status !== "COMPLETED" || !row.completedAt) return false;
-    return Date.now() - new Date(row.completedAt).getTime() <= 72 * 60 * 60 * 1000;
+    return nowMs - new Date(row.completedAt).getTime() <= 72 * 60 * 60 * 1000;
   });
   const hasWeakFocus = selectionMode === "weak" || (selectionMode === "cat" && catSelectionBasis === "weak");
+  const hubPriority = resolveInteractionPriority({
+    hasResume: hasInProgressActivity,
+    hasWeakFocus,
+    hasRecentCompletion,
+  });
+  const historyPriorityMessage = resolvePriorityMessage(hubPriority, {
+    resume: "You have an in-progress test ready to resume.",
+    review_recent: "Recent completions are highlighted for quick review.",
+  });
   const prevSelectionModeRef = useRef(selectionMode);
 
   useEffect(() => {
@@ -262,7 +277,7 @@ export function PracticeTestsHubClient({
     <div className="space-y-8">
       <section
         className={`nn-card nn-student-card-lift p-6 sm:p-7 ${
-          hasWeakFocus
+          isPriorityWinner(hubPriority, "weak_focus")
             ? "border-[color-mix(in_srgb,var(--semantic-warning)_28%,var(--semantic-border-soft))]"
             : "border-[var(--semantic-border-soft)]"
         }`}
@@ -273,7 +288,7 @@ export function PracticeTestsHubClient({
           <strong className="text-foreground">adaptive (CAT)</strong> that adjusts difficulty from your performance and
           weak-area history.
         </p>
-        {hasWeakFocus ? (
+        {isPriorityWinner(hubPriority, "weak_focus") ? (
           <p className="mt-2 text-xs font-medium text-[var(--semantic-warning-contrast)]">
             Weak-area focus is active so recommendations stay targeted.
           </p>
@@ -699,13 +714,7 @@ export function PracticeTestsHubClient({
       <section>
         <h2 className="text-lg font-bold tracking-tight text-[var(--theme-heading-text)]">Saved tests & history</h2>
         <p className="mt-1 text-sm text-muted-foreground">Resume in-progress sessions or review completed scores.</p>
-        {hasInProgressActivity || hasRecentCompletion ? (
-          <p className="mt-2 text-xs text-[var(--semantic-text-secondary)]">
-            {hasInProgressActivity ? "You have an in-progress test ready to resume." : null}
-            {hasInProgressActivity && hasRecentCompletion ? " " : null}
-            {hasRecentCompletion ? "Recent completions are highlighted for quick review." : null}
-          </p>
-        ) : null}
+        {historyPriorityMessage ? <p className="mt-2 text-xs text-[var(--semantic-text-secondary)]">{historyPriorityMessage}</p> : null}
         {loading ? (
           <p className="mt-4 text-sm text-muted-foreground">Loading…</p>
         ) : list.length === 0 ? (
@@ -717,11 +726,15 @@ export function PracticeTestsHubClient({
                 key={t.id}
                 className={`nn-card nn-student-card-lift flex flex-wrap items-center justify-between gap-3 p-4 text-sm transition-colors hover:bg-[var(--semantic-panel-muted)] ${
                   t.status === "IN_PROGRESS"
-                    ? "border-[color-mix(in_srgb,var(--semantic-info)_28%,var(--semantic-border-soft))]"
+                    ? isPriorityWinner(hubPriority, "resume")
+                      ? "border-[color-mix(in_srgb,var(--semantic-info)_28%,var(--semantic-border-soft))]"
+                      : ""
                     : t.status === "COMPLETED" &&
                         t.completedAt &&
-                        Date.now() - new Date(t.completedAt).getTime() <= 72 * 60 * 60 * 1000
-                      ? "border-[color-mix(in_srgb,var(--semantic-success)_30%,var(--semantic-border-soft))]"
+                        nowMs - new Date(t.completedAt).getTime() <= 72 * 60 * 60 * 1000
+                      ? isPriorityWinner(hubPriority, "review_recent")
+                        ? "border-[color-mix(in_srgb,var(--semantic-success)_30%,var(--semantic-border-soft))]"
+                        : ""
                       : ""
                 }`}
               >
@@ -751,7 +764,11 @@ export function PracticeTestsHubClient({
                   {t.status === "IN_PROGRESS" ? (
                     <Link
                       href={`/app/practice-tests/${t.id}`}
-                      className="nn-btn-primary px-4 py-2 text-xs font-semibold shadow-[0_6px_16px_color-mix(in_srgb,var(--semantic-info)_18%,transparent)]"
+                      className={`nn-btn-primary px-4 py-2 text-xs font-semibold ${
+                        isPriorityWinner(hubPriority, "resume")
+                          ? "shadow-[0_6px_16px_color-mix(in_srgb,var(--semantic-info)_18%,transparent)]"
+                          : ""
+                      }`}
                     >
                       Resume
                     </Link>
@@ -759,7 +776,9 @@ export function PracticeTestsHubClient({
                     <Link
                       href={`/app/practice-tests/${t.id}`}
                       className={`nn-premium-action-chip rounded-full border px-4 py-2 text-xs font-semibold hover:bg-muted ${
-                        t.completedAt && Date.now() - new Date(t.completedAt).getTime() <= 72 * 60 * 60 * 1000
+                        t.completedAt &&
+                        nowMs - new Date(t.completedAt).getTime() <= 72 * 60 * 60 * 1000 &&
+                        isPriorityWinner(hubPriority, "review_recent")
                           ? "border-[color-mix(in_srgb,var(--semantic-success)_30%,var(--semantic-border-soft))]"
                           : "border-border"
                       }`}

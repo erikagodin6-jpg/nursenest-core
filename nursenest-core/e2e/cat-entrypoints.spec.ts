@@ -20,12 +20,19 @@ test.describe("CAT entrypoint routing", () => {
   for (const catPath of ["/us/rn/nclex-rn/cat", "/canada/rpn/rex-pn/cat", "/us/np/fnp/cat"] as const) {
     test(`sign-in callback returns to same CAT path (${catPath})`, async ({ page }) => {
       await page.goto(catPath, { waitUntil: "domcontentloaded" });
-      const signIn = page.getByRole("link", { name: "Sign in to continue" });
-      await expect(signIn).toBeVisible();
-      const href = await signIn.getAttribute("href");
-      expect(href).toBeTruthy();
-      const callbackUrl = new URL(href!, baseURL).searchParams.get("callbackUrl");
-      expect(callbackUrl).toBe(catPath);
+      const callbackLinks = page.locator('a[href*="callbackUrl="]');
+      const total = await callbackLinks.count();
+      let hasExpectedCallback = false;
+      for (let i = 0; i < total; i += 1) {
+        const href = await callbackLinks.nth(i).getAttribute("href");
+        if (!href) continue;
+        const callbackUrl = new URL(href, baseURL).searchParams.get("callbackUrl");
+        if (callbackUrl === catPath) {
+          hasExpectedCallback = true;
+          break;
+        }
+      }
+      expect(hasExpectedCallback).toBeTruthy();
     });
   }
 

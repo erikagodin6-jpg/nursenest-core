@@ -6,6 +6,7 @@ import {
 } from "@/lib/exam-pathways/exam-product-registry";
 import { HUB } from "@/lib/marketing/marketing-entry-routes";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
+import { isSafeRelativeNavHref, sanitizeRelativeNavHrefOrFallback } from "@/lib/ui/safe-relative-href";
 
 export type NotFoundRecoveryLink = {
   label: string;
@@ -13,6 +14,11 @@ export type NotFoundRecoveryLink = {
   /** Shown as secondary line for “smart” suggestions */
   hint?: string;
 };
+
+/** Max smart + merged recovery links shown on the 404 page (enforced in {@link mergeNotFoundRecoveryLinks}). */
+export const NOT_FOUND_RECOVERY_CAP = 4;
+
+const KNOWN_COUNTRY_SLUGS = new Set(EXAM_PATHWAYS.map((p) => p.countrySlug.trim().toLowerCase()));
 
 function norm(s: string): string {
   return s.trim().toLowerCase();
@@ -38,89 +44,164 @@ function levenshtein(a: string, b: string): number {
   return dp[n]!;
 }
 
-function closestPathwayInFamily(countrySlug: string, roleTrack: string, wrongExam: string): ExamPathwayDefinition | undefined {
-  const w = norm(wrongExam);
-  const candidates = listPublicExamwaysForRoutePrefix(countrySlug, roleTrack);
-  let best: ExamPathwayDefinition | undefined;
-  let bestD = Infinity;
-  for (const p of candidates) {
-    const d = levenshtein(w, norm(p.examCode));
-    if (d < bestD && d <= 2) {
-      bestD = d;
-      best = p;
-    }
-  }
-  return bestD <= 2 ? best : undefined;
+function pushSafe(out: NotFoundRecoveryLink[], item: NotFoundRecoveryLink): void {
+  const href = sanitizeRelativeNavHrefOrFallback(item.href);
+  if (!isSafeRelativeNavHref(href)) return;
+  out.push({ ...item, href });
 }
 
-function listPublicExamwaysForRoutePrefix(countrySlug: string, roleTrack: string): ExamPathwayDefinition[] {
+/**
+ * Normalizes pathname for recovery parsing: strips query/hash, collapses to a single leading slash,
+ * and optionally drops a leading `en`/`fr` segment when the next segment is a known marketing country slug.
+ */
+export function normalizeNotFoundPathname(raw: string | null | undefined): string {
+  if (raw == null || typeof raw !== "string") return "/";
+  const noQuery = raw.split("?")[0]!.split("#")[0]!;
+  const segments = noQuery.split("/").filter((s) => s.length > 0);
+  if (segments.length >= 2) {
+    const a = norm(segments[0]!);
+    const b = norm(segments[1]!);
+    if ((a === "en" || a === "fr") && KNOWN_COUNTRY_SLUGS.has(b)) {
+      return segments.length > 2 ? `/${segments.slice(1).join("/")}` : `/${segments[1]}`;
+    }
+  }
+  return segments.length ? `/${segments.join("/")}` : "/";
+}
+
+function listPathwaysForRoutePrefix(countrySlug: string, roleTrack: string): ExamPathwayDefinition[] {
   const c = norm(countrySlug);
   const r = norm(roleTrack);
   return EXAM_PATHWAYS.filter((p) => norm(p.countrySlug) === c && norm(p.roleTrack) === r && p.status !== "hidden");
 }
 
 /**
- * Lightweight suggestions from the failed URL — no automatic redirects.
+ * Closest examCode by Levenshtein distance ≤ 2 within the same country + role only.
+ * Tie-break: lexicographic examCode for deterministic ordering.
+ */
+export function closestPathwayInFamily(countrySlug: string, roleTrack: string, wrongExam: string): ExamPathwayDefinition | undefined {
+  const w = norm(wrongExam);
+  if (!w) return undefined;
+  const candidates = listPathwaysForRoutePrefix(countrySlug, roleTrack);
+  const scored: { p: ExamPathwayDefinition; d: number }[] = [];
+  for (const p of candidates) {
+    const d = levenshtein(w, norm(p.examCode));
+    if (d <= 2) scored.push({ p, d });
+  }
+  if (scored.length === 0) return undefined;
+  scored.sort((a, b) => {
+    if (a.d !== b.d) return a.d - b.d;
+    return norm(a.p.examCode).localeCompare(norm(b.p.examCode));
+  });
+  return scored[0]!.p;
+}
+
+function pathwayHrefOrSkip(p: ExamPathwayDefinition, subpath?: string): string | null {
+  try {
+    const href = subpath ? buildExamPathwayPath(p, subpath) : buildExamPathwayPath(p);
+    return isSafeRelativeNavHref(href) ? href : null;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Smart suggestions from the failed URL — no automatic redirects. Emits only same-origin relative paths.
  */
 export function buildNotFoundRecoverySuggestions(pathname: string): NotFoundRecoveryLink[] {
   const out: NotFoundRecoveryLink[] = [];
-  const path = pathname.split("?")[0] ?? "";
-  const segments = path.split("/").filter(Boolean);
+  const normalized = normalizeNotFoundPathname(pathname);
+  const segments = normalized.split("/").filter(Boolean);
 
   // Marketing exam hubs: /{country}/{role}/{exam}/...
   if (segments.length >= 3) {
     const country = segments[0]!;
     const role = segments[1]!;
     const examSeg = segments[2]!;
-    const resolved =
-      getExamPathwayByRoute(country, role, examSeg) ??
-      resolveExamPathwayFromMarketingHubSegment(country, role, examSeg);
-
-    if (resolved) {
-      if (segments[3] === "lessons" && segments.length >= 5) {
-        const hub = buildExamPathwayPath(resolved, "lessons");
-        out.push({
-          label: `${resolved.shortName} lesson hub`,
-          href: hub,
-          hint: "That lesson link may have moved — browse the hub for the right module.",
-        });
-      } else if (segments.length >= 4) {
-        out.push({
-          label: `${resolved.shortName} study hub`,
-          href: buildExamPathwayPath(resolved),
-          hint: "This sub-page may not exist — the pathway hub is a safe starting point.",
-        });
-      }
+    if (!country || !role || !examSeg) {
+      // skip malformed
     } else {
-      const guess = closestPathwayInFamily(country, role, examSeg);
-      if (guess) {
-        out.push({
-          label: `Did you mean ${guess.shortName}?`,
-          href: buildExamPathwayPath(guess),
-          hint: "Closest matching exam hub for this region and role.",
-        });
+      const resolved =
+        getExamPathwayByRoute(country, role, examSeg) ??
+        resolveExamPathwayFromMarketingHubSegment(country, role, examSeg);
+
+      if (resolved) {
+        if (segments[3] === "lessons" && segments.length >= 5) {
+          const hub = pathwayHrefOrSkip(resolved, "lessons");
+          if (hub) {
+            pushSafe(out, {
+              label: `${resolved.shortName} lesson hub`,
+              href: hub,
+              hint: "That lesson link may have moved — browse the hub for the right module.",
+            });
+          }
+        } else if (segments.length >= 4) {
+          const hub = pathwayHrefOrSkip(resolved);
+          if (hub) {
+            pushSafe(out, {
+              label: `${resolved.shortName} study hub`,
+              href: hub,
+              hint: "This sub-page may not exist — the pathway hub is a safe starting point.",
+            });
+          }
+        }
+      } else {
+        const guess = closestPathwayInFamily(country, role, examSeg);
+        if (guess) {
+          const hub = pathwayHrefOrSkip(guess);
+          if (hub) {
+            pushSafe(out, {
+              label: `Did you mean ${guess.shortName}?`,
+              href: hub,
+              hint: "Closest matching exam hub for this region and role.",
+            });
+          }
+        }
       }
     }
   }
 
-  // App typos
-  if (segments[0] === "app") {
-    if (segments[1] === "lesson") {
-      out.push({ label: "Lessons (app)", href: "/app/lessons", hint: "Did you mean /app/lessons?" });
+  // App typos — fixed internal targets only (no pathway inference).
+  if (segments[0] === "app" && segments.length >= 2) {
+    const seg1 = segments[1]!;
+    if (seg1 === "lesson") {
+      pushSafe(out, { label: "Lessons (app)", href: "/app/lessons", hint: "Did you mean /app/lessons?" });
     }
-    if (segments[1] === "question" || segments[1] === "questions-bank") {
-      out.push({ label: "Question bank", href: "/app/questions", hint: "Practice questions live here." });
+    if (seg1 === "question" || seg1 === "questions-bank") {
+      pushSafe(out, { label: "Question bank", href: "/app/questions", hint: "Practice questions live here." });
     }
   }
 
-  // De-dupe by href
+  return dedupeRecoveryLinksStable(out);
+}
+
+/**
+ * First occurrence wins; href is the dedupe key (trimmed). Order preserved — deterministic for a given input array.
+ */
+export function dedupeRecoveryLinksStable(links: NotFoundRecoveryLink[]): NotFoundRecoveryLink[] {
   const seen = new Set<string>();
-  return out.filter((x) => {
-    if (seen.has(x.href)) return false;
-    seen.add(x.href);
-    return true;
-  });
+  const next: NotFoundRecoveryLink[] = [];
+  for (const x of links) {
+    const href = sanitizeRelativeNavHrefOrFallback(x.href);
+    if (!isSafeRelativeNavHref(href)) continue;
+    if (seen.has(href)) continue;
+    seen.add(href);
+    next.push({ ...x, href });
+  }
+  return next;
+}
+
+/**
+ * Merges smart pathway suggestions first, then authenticated recovery (dashboard / resume).
+ * Caps total length; dedupes by href with first occurrence winning (smart entries keep priority).
+ */
+export function mergeNotFoundRecoveryLinks(
+  smart: NotFoundRecoveryLink[],
+  base: NotFoundRecoveryLink[],
+  cap: number = NOT_FOUND_RECOVERY_CAP,
+): NotFoundRecoveryLink[] {
+  const merged = dedupeRecoveryLinksStable([...smart, ...base]);
+  return merged.slice(0, Math.max(0, cap));
 }
 
 /** Public lessons browse — stable marketing entry. */
-export const BROWSE_LESSONS_HREF = HUB.examLessons;
+export const BROWSE_LESSONS_HREF = sanitizeRelativeNavHrefOrFallback(HUB.examLessons, "/lessons");

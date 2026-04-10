@@ -6,9 +6,27 @@
 /** Default max-length cap for `catPresentationMode: "practice"` sessions started from pathway hubs. */
 export const PATHWAY_CAT_PRACTICE_DEFAULT_MAX_QUESTIONS = 25;
 
+export type ResolveStudySurfaceCatHrefArgs = {
+  pathwayId?: string | null;
+  availablePathwayIds?: Array<string | null | undefined>;
+  topic?: string | null;
+  preferWeakFocus?: boolean;
+};
+
 export function appPathwayCatSessionStartPath(pathwayId: string): string {
   const q = new URLSearchParams({ pathwayId: pathwayId.trim() });
   return `/app/practice-tests/start?${q.toString()}`;
+}
+
+export function resolvePreferredCatPathwayId(
+  preferredPathwayId?: string | null,
+  availablePathwayIds?: Array<string | null | undefined>,
+): string | null {
+  const preferred = preferredPathwayId?.trim() || null;
+  const available = [...new Set((availablePathwayIds ?? []).map((id) => id?.trim()).filter(Boolean))] as string[];
+  if (preferred && (available.length === 0 || available.includes(preferred))) return preferred;
+  if (available.length === 1) return available[0]!;
+  return null;
 }
 
 /**
@@ -26,4 +44,22 @@ export function appCatWeakFocusPath(pathwayId?: string | null, topic?: string | 
 
 export function appPathwayCatWeakFocusPath(pathwayId: string, topic?: string | null): string {
   return appCatWeakFocusPath(pathwayId, topic);
+}
+
+/**
+ * Shared study-surface resolver for CAT CTAs.
+ * Uses a pathway-scoped CAT URL whenever the pathway is known or unambiguous.
+ * Falls back to the explicit CAT start chooser when the learner still needs to pick a pathway.
+ */
+export function resolveStudySurfaceCatHref({
+  pathwayId,
+  availablePathwayIds,
+  topic,
+  preferWeakFocus = false,
+}: ResolveStudySurfaceCatHrefArgs): string {
+  const resolvedPathwayId = resolvePreferredCatPathwayId(pathwayId, availablePathwayIds);
+  if (preferWeakFocus) {
+    return appCatWeakFocusPath(resolvedPathwayId, topic);
+  }
+  return resolvedPathwayId ? appPathwayCatSessionStartPath(resolvedPathwayId) : "/app/practice-tests/start";
 }
