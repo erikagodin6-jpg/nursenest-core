@@ -41,4 +41,24 @@ describe("PremiumEmptyState", () => {
     assert.match(html, /href="\/fine"/);
     assert.match(html, /href="\/"/);
   });
+
+  it("supports custom heading, visual, and stacked CTA layout", () => {
+    const html = renderToStaticMarkup(
+      <PremiumEmptyState
+        headingLevel="h1"
+        headline="Heading"
+        body="Body"
+        visual={<div data-test-visual="leaf" />}
+        ctaLayout="stack"
+        containerClassName="outer-shell"
+        primaryCta={{ label: "Primary", href: "/primary" }}
+        secondaryCtas={[{ label: "Secondary", href: "/secondary" }]}
+      />,
+    );
+
+    assert.match(html, /<h1[^>]*>Heading<\/h1>/);
+    assert.match(html, /data-test-visual="leaf"/);
+    assert.match(html, /outer-shell/);
+    assert.match(html, /w-full sm:w-auto/);
+  });
 });

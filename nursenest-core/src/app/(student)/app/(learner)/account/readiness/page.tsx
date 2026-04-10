@@ -3,6 +3,7 @@ import { auth } from "@/lib/auth";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { LearnerAccountCrossLinks } from "@/components/student/learner-account-cross-links";
 import { LearnerReadinessPremium } from "@/components/student/learner-readiness-premium";
+import { LearnerSurfaceState } from "@/components/student/learner-surface-state";
 import { LearnerStudyQuickLinksCard } from "@/components/student/learner-study-quick-links-card";
 import { LockedStudyNextPreview } from "@/components/student/locked-study-next-preview";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
@@ -11,8 +12,10 @@ import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlemen
 import { resolveStudySurfaceCatHref } from "@/lib/exam-pathways/pathway-cat-flow";
 import { loadReadinessPagePayload } from "@/lib/learner/load-readiness-page-payload";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
+import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { appAccountBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
+import { emptyStateCopy } from "@/lib/ui/empty-state-copy";
 
 export async function generateMetadata(): Promise<Metadata> {
   return safeGenerateMetadata(
@@ -36,9 +39,15 @@ export default async function AccountReadinessPage() {
 
   if (!userId || !isDatabaseUrlConfigured()) {
     return (
-      <main className="space-y-4">
+      <main className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
-        <p className="text-sm text-muted-foreground">{t("learner.profile.signedOutHint")}</p>
+        <LearnerSurfaceState
+          headline={t("learner.account.readiness.title")}
+          body={t("learner.profile.signedOutHint")}
+          hint={t("learner.dashboard.signedOutHint")}
+          primaryCta={{ label: "Sign in", href: loginWithCallback("/app/account/readiness"), variant: "primary" }}
+          secondaryCtas={[{ label: "Browse lessons", href: "/lessons", variant: "secondary" }]}
+        />
       </main>
     );
   }
@@ -47,9 +56,16 @@ export default async function AccountReadinessPage() {
 
   if (entitlement === "error") {
     return (
-      <main className="space-y-4">
+      <main className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
-        <p className="text-sm text-muted-foreground">{t("learner.entitlement.verifyFailed")}</p>
+        <LearnerSurfaceState
+          headline="We couldn’t verify access right now"
+          body={t("learner.entitlement.verifyFailed")}
+          hint="Try your dashboard again in a moment, or open another study area while we reconnect."
+          tone="default"
+          primaryCta={{ label: "Open dashboard", href: "/app", variant: "primary" }}
+          secondaryCtas={[{ label: "Browse lessons", href: "/lessons", variant: "secondary" }]}
+        />
       </main>
     );
   }
@@ -58,10 +74,14 @@ export default async function AccountReadinessPage() {
     return (
       <main className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
-        <div className="nn-learner-page-hero">
-          <h1 className="text-2xl font-bold text-[var(--semantic-text-primary)]">{t("learner.account.readiness.title")}</h1>
-          <p className="mt-2 text-sm text-[var(--semantic-text-secondary)]">{t("learner.profile.performanceGate.body")}</p>
-        </div>
+        <LearnerSurfaceState
+          headline={t("learner.account.readiness.title")}
+          body={t("learner.profile.performanceGate.body")}
+          hint={emptyStateCopy.entitlementLocked.body}
+          tone="locked"
+          primaryCta={{ label: t("cta.continuePlan"), href: "/pricing", variant: "primary" }}
+          secondaryCtas={[{ label: "Open study hub", href: "/app", variant: "secondary" }]}
+        />
         <LockedStudyNextPreview className="nn-card space-y-2 p-6" />
         <SubscriptionPaywall context="dashboard" />
       </main>
@@ -74,10 +94,14 @@ export default async function AccountReadinessPage() {
     return (
       <main className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
-        <div className="nn-learner-page-hero">
-          <h1 className="text-2xl font-bold text-[var(--semantic-text-primary)]">{t("learner.account.readiness.title")}</h1>
-          <p className="mt-2 text-sm text-[var(--semantic-text-secondary)]">{t("learner.account.loadFailed")}</p>
-        </div>
+        <LearnerSurfaceState
+          headline={t("learner.account.readiness.title")}
+          body={t("learner.account.loadFailed")}
+          hint="Your study access is still intact. Try the dashboard or come back to readiness in a moment."
+          tone="default"
+          primaryCta={{ label: "Open dashboard", href: "/app", variant: "primary" }}
+          secondaryCtas={[{ label: "Account overview", href: "/app/account/overview", variant: "secondary" }]}
+        />
       </main>
     );
   }
