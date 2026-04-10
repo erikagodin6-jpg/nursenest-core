@@ -38,12 +38,13 @@ export function HomeLandingSections({ questionCount }: Props) {
 
   return (
     <>
-      <section className={`border-t border-[var(--border-subtle)] bg-[var(--nn-presentation-trust-band)] ${SECTION_Y}`} data-testid="section-why-nursenest">
+      {/* "Why" band — secondary-family tint (trust-surface) for visual contrast vs primary-tinted hero */}
+      <section className={`border-t border-[var(--trust-surface-border)] bg-[var(--trust-surface)] ${SECTION_Y}`} data-testid="section-why-nursenest">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
           <h2 className="nn-marketing-h2 mb-6">{t("home.landing.why.title")}</h2>
           <ul className="grid gap-4 sm:grid-cols-3">
             {whyKeys.map((key) => (
-              <li key={key} className="nn-marketing-card nn-marketing-card-pad">
+              <li key={key} className="nn-marketing-card nn-marketing-card-pad border-[var(--accent-surface-b-border)]">
                 <h3 className="nn-marketing-h3">{t(`home.landing.why.${key}Title`)}</h3>
                 <p className="nn-marketing-body-sm mt-2 text-[var(--theme-muted-text)]">{t(`home.landing.why.${key}Body`)}</p>
               </li>
@@ -52,6 +53,7 @@ export function HomeLandingSections({ questionCount }: Props) {
         </div>
       </section>
 
+      {/* Trust / stats — neutral page bg for breathing room between themed bands */}
       <section className={`border-t border-[var(--border-subtle)] bg-[var(--theme-page-bg)] ${SECTION_Y}`} data-testid="section-trust">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
           <h2 className="nn-marketing-h2 mb-3">{t("home.landing.trust.title")}</h2>
@@ -64,14 +66,15 @@ export function HomeLandingSections({ questionCount }: Props) {
         </div>
       </section>
 
-      <section className={`border-t border-[var(--border-subtle)] bg-[var(--nn-presentation-wash)] ${SECTION_Y}`} data-testid="section-home-faq">
+      {/* FAQ band — primary-family wash, FAQ items get accent-surface-a for distinction */}
+      <section className={`border-t border-[var(--accent-surface-c-border)] bg-[var(--accent-surface-c)] ${SECTION_Y}`} data-testid="section-home-faq">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
           <h2 className="nn-marketing-h2 mb-6">{t("home.landing.faq.title")}</h2>
           <div className="mx-auto max-w-3xl space-y-2">
             {faqKeys.map((n) => (
               <details
                 key={n}
-                className="group rounded-[var(--radius-lg)] border border-[var(--border-subtle)] bg-[var(--nn-presentation-ribbon)] px-4 py-3.5"
+                className="group rounded-[var(--radius-lg)] border border-[var(--surface-bubble-border)] bg-[var(--surface-bubble)] px-4 py-3.5"
               >
                 <summary className="nn-marketing-h3 flex cursor-pointer list-none items-center justify-between gap-3 marker:content-none [&::-webkit-details-marker]:hidden">
                   {t(`home.landing.faq.q${n}`)}

@@ -94,7 +94,7 @@ export function HomeConversionHero() {
 
   return (
     <section
-      className="relative overflow-hidden border-b border-[var(--border-subtle)] bg-[color-mix(in_srgb,var(--theme-primary)_5%,var(--theme-page-bg))]"
+      className="nn-hero-branded relative overflow-hidden border-b border-[var(--header-nav-border)]"
       data-testid="hero-section"
       aria-labelledby="home-conversion-hero-heading"
     >
@@ -102,7 +102,7 @@ export function HomeConversionHero() {
       <div className="relative mx-auto max-w-6xl px-4 py-12 sm:px-6 md:py-16 lg:px-8">
         <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,26rem)] lg:gap-12">
           <div className="min-w-0 space-y-6">
-            <p className="nn-marketing-caption mb-2 font-semibold uppercase tracking-[0.12em] text-[color-mix(in_srgb,var(--theme-primary)_82%,var(--theme-heading-text))]">
+            <p className="nn-marketing-caption mb-2 font-semibold uppercase tracking-[0.12em] text-[var(--accent-surface-a-text)]">
               {t("home.conversion.heroEyebrow")}
             </p>
             <h1
@@ -120,12 +120,12 @@ export function HomeConversionHero() {
               <MarketingTrustSignalsStrip variant="default" homeHeroTrust />
             </div>
 
-            {/* Quick-entry tier pills */}
+            {/* Quick-entry tier pills — accent-surface-b container gives secondary-hue variety */}
             <div
-              className="rounded-2xl border border-[var(--border-subtle)] bg-[var(--nn-presentation-wash)]/90 px-4 py-4"
+              className="nn-accent-surface-b rounded-2xl px-4 py-4"
               data-testid="hero-tier-quick-entry"
             >
-              <p className="nn-marketing-caption mb-3 font-medium text-[var(--theme-muted-text)]">
+              <p className="nn-marketing-caption mb-3 font-semibold text-[var(--accent-surface-b-text)]">
                 Jump straight into your exam:
               </p>
               <nav className="flex flex-wrap gap-2" aria-label="Choose your nursing exam pathway">
@@ -138,10 +138,10 @@ export function HomeConversionHero() {
                       href={tier.href(loc)}
                       event={PH.marketingHomeHeroPrimaryCta}
                       eventProps={{ region, destination: tier.id, surface: "hero_tier_pill" }}
-                      className="inline-flex items-center gap-1.5 rounded-full border border-[color-mix(in_srgb,var(--theme-primary)_30%,var(--border-subtle))] bg-[var(--theme-card-bg)] px-3.5 py-2 text-sm font-semibold text-[var(--theme-heading-text)] shadow-sm transition hover:border-[color-mix(in_srgb,var(--theme-primary)_60%,var(--border-subtle))] hover:bg-[color-mix(in_srgb,var(--theme-primary)_8%,var(--theme-card-bg))] hover:shadow focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--theme-primary)]"
+                      className="inline-flex items-center gap-1.5 rounded-full border border-[var(--accent-surface-a-border)] bg-[var(--accent-surface-a)] px-3.5 py-2 text-sm font-semibold text-[var(--theme-heading-text)] shadow-sm transition hover:bg-[var(--surface-bubble)] hover:border-[var(--surface-bubble-border)] hover:shadow focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--ring-accent)]"
                       data-testid={`button-hero-tier-${tier.id}`}
                     >
-                      <Icon className="h-3.5 w-3.5 shrink-0 text-[var(--theme-primary)]" aria-hidden />
+                      <Icon className="h-3.5 w-3.5 shrink-0 text-[var(--text-accent)]" aria-hidden />
                       {label}
                     </MarketingTrackedLink>
                   );
@@ -150,7 +150,7 @@ export function HomeConversionHero() {
 
               {/* Region toggle inline with the tier pills */}
               <div
-                className="mt-3 flex items-center gap-2 border-t border-[var(--border-subtle)] pt-3"
+                className="mt-3 flex items-center gap-2 border-t border-[var(--accent-surface-b-border)] pt-3"
                 data-testid="region-toggle-hero"
               >
                 <span className="nn-marketing-caption shrink-0 text-[var(--theme-muted-text)]">{t("nav.regionLabel")}:</span>

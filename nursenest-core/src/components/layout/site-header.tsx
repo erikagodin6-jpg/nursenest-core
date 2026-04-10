@@ -25,8 +25,8 @@ import { TierGatewayDropdown } from "@/components/layout/tier-gateway-dropdown";
 import { marketingExamHubPath } from "@/lib/marketing/country-exam-offerings";
 import { HUB } from "@/lib/marketing/marketing-entry-routes";
 
-const NAV_LINK_CLASS =
-  "nn-marketing-body-sm nn-marketing-nav-link font-medium tracking-tight text-[var(--theme-menu-text)]";
+/* nn-marketing-nav-link handles color, hover, and underline via CSS class */
+const NAV_LINK_CLASS = "nn-marketing-body-sm nn-marketing-nav-link font-semibold tracking-tight";
 
 export function SiteHeader() {
   const { t, locale } = useMarketingI18n();
@@ -64,7 +64,7 @@ export function SiteHeader() {
     <div className="sticky top-0 z-50">
       <MarketingHeaderUtilityStrip />
 
-      <header className="border-b border-[color-mix(in_srgb,var(--theme-nav-border)_55%,transparent)] bg-[color-mix(in_srgb,var(--theme-header-surface)_92%,transparent)] backdrop-blur-md supports-[backdrop-filter]:bg-[color-mix(in_srgb,var(--theme-header-surface)_88%,transparent)]">
+      <header className="nn-header-nav backdrop-blur-md supports-[backdrop-filter]:bg-[color-mix(in_srgb,var(--header-nav-surface)_88%,transparent)]">
         <div className="mx-auto flex h-14 max-w-7xl items-center justify-between gap-2 px-3 sm:gap-4 sm:px-5 lg:h-[3.75rem] lg:gap-6 lg:px-8">
           <Link
             href={localizeHref("/")}

@@ -142,6 +142,54 @@ body {
   --text-accent: var(--theme-primary);
   --ring-accent: color-mix(in srgb, var(--theme-primary) 48%, transparent);
 
+  /*
+   * Header layers — three visually distinct bands from top to bottom.
+   *   utility  → topbar-tinted, slightly darker than nav (preferences rail)
+   *   nav      → clean card surface, strong bottom border + shadow
+   *
+   * --header-utility-surface   preferences/region rail background
+   * --header-utility-border    bottom border of utility rail
+   * --header-utility-text      text/icon color on utility rail
+   * --header-nav-surface       main sticky nav background
+   * --header-nav-border        main nav bottom border (stronger than utility)
+   * --header-nav-shadow        nav drop shadow — separates it from hero below
+   */
+  --header-utility-surface: color-mix(in srgb, var(--theme-topbar-bg) 10%, var(--theme-page-bg));
+  --header-utility-border: color-mix(in srgb, var(--theme-topbar-bg) 25%, var(--theme-border));
+  --header-utility-text: color-mix(in srgb, var(--theme-heading-text) 62%, var(--theme-muted-text));
+  --header-nav-surface: var(--theme-card-bg);
+  --header-nav-border: color-mix(in srgb, var(--theme-primary) 22%, var(--border-subtle));
+  --header-nav-shadow:
+    0 1px 0 color-mix(in srgb, var(--theme-heading-text) 5%, transparent),
+    0 2px 10px color-mix(in srgb, var(--theme-primary) 9%, transparent);
+
+  /*
+   * Hero branded wash — used as hero section base background.
+   * Stronger than the neutral page bg so the top of every page
+   * has immediate visual identity when the theme is applied.
+   */
+  --hero-branded-wash: color-mix(in srgb, var(--theme-primary) 10%, var(--theme-page-bg));
+
+  /*
+   * Multi-role accent surfaces — structured palette for chips, callouts, trust panels,
+   * feature cards. Each role has its own background + border + text-on-surface.
+   *
+   *   A = primary-family accent (strongest, for active/featured surfaces)
+   *   B = secondary-family accent (complementary hue, for variety)
+   *   C = soft highlight (whisper tint for proof / trust panels)
+   */
+  --accent-surface-a: color-mix(in srgb, var(--theme-primary) 13%, var(--theme-card-bg));
+  --accent-surface-a-border: color-mix(in srgb, var(--theme-primary) 34%, var(--theme-border));
+  --accent-surface-a-text: var(--theme-primary);
+  --accent-surface-b: color-mix(in srgb, var(--theme-secondary) 35%, var(--theme-card-bg));
+  --accent-surface-b-border: color-mix(in srgb, var(--theme-secondary) 55%, var(--theme-border));
+  --accent-surface-b-text: var(--theme-secondary-foreground);
+  --accent-surface-c: color-mix(in srgb, var(--theme-primary) 5%, var(--theme-page-bg));
+  --accent-surface-c-border: color-mix(in srgb, var(--theme-primary) 14%, var(--theme-border));
+  /* Trust / proof surface (slightly warm relative to accent-a) */
+  --trust-surface: color-mix(in srgb, var(--theme-secondary) 20%, var(--theme-page-bg));
+  --trust-surface-border: color-mix(in srgb, var(--theme-secondary) 42%, var(--theme-border));
+
   /* Borders / dividers */
   --border-subtle: color-mix(in srgb, var(--theme-border) 52%, var(--theme-page-bg));
   --border-medium: color-mix(in srgb, var(--theme-border) 68%, var(--theme-page-bg));
@@ -257,6 +305,27 @@ html[data-theme="dark-mode"] {
   --bg-inset: color-mix(in srgb, var(--theme-body-text) 9%, var(--bg-card));
   --bg-elevated: color-mix(in srgb, var(--theme-card-bg) 76%, var(--theme-primary));
   --accent-soft: color-mix(in srgb, var(--theme-primary) 14%, var(--theme-card-bg));
+  /* Dark header layers — utility bar is slightly lighter (not darker) than nav in dark mode */
+  --header-utility-surface: color-mix(in srgb, var(--theme-primary) 7%, var(--theme-nav-bg));
+  --header-utility-border: color-mix(in srgb, var(--theme-primary) 20%, var(--theme-border));
+  --header-utility-text: var(--theme-muted-text);
+  --header-nav-surface: var(--theme-nav-bg);
+  --header-nav-border: color-mix(in srgb, var(--theme-primary) 28%, var(--theme-border));
+  --header-nav-shadow:
+    0 1px 0 color-mix(in srgb, var(--theme-primary) 12%, transparent),
+    0 3px 12px rgba(0, 0, 0, 0.28);
+  --hero-branded-wash: color-mix(in srgb, var(--theme-primary) 14%, var(--theme-page-bg));
+  /* Dark accent surfaces — stronger percentages for contrast on dark backgrounds */
+  --accent-surface-a: color-mix(in srgb, var(--theme-primary) 18%, var(--theme-card-bg));
+  --accent-surface-a-border: color-mix(in srgb, var(--theme-primary) 40%, var(--theme-border));
+  --accent-surface-a-text: color-mix(in srgb, var(--theme-primary) 85%, #ffffff);
+  --accent-surface-b: color-mix(in srgb, var(--theme-secondary) 28%, var(--theme-card-bg));
+  --accent-surface-b-border: color-mix(in srgb, var(--theme-secondary) 45%, var(--theme-border));
+  --accent-surface-b-text: var(--theme-secondary-foreground);
+  --accent-surface-c: color-mix(in srgb, var(--theme-primary) 8%, var(--theme-page-bg));
+  --accent-surface-c-border: color-mix(in srgb, var(--theme-primary) 20%, var(--theme-border));
+  --trust-surface: color-mix(in srgb, var(--theme-primary) 10%, var(--theme-card-bg));
+  --trust-surface-border: color-mix(in srgb, var(--theme-primary) 28%, var(--theme-border));
   /* Dark bubble/accent overrides — stronger so bubbles read against dark navy surfaces */
   --surface-bubble: color-mix(in srgb, var(--theme-primary) 20%, var(--theme-card-bg));
   --surface-bubble-border: color-mix(in srgb, var(--theme-primary) 38%, var(--theme-border));
@@ -360,6 +429,25 @@ html[data-theme="dark-mode"] {
   --color-role-premium-border: var(--role-premium-border);
   --color-role-premium-text: var(--role-premium-text);
   --color-role-heat-text: var(--role-heat-text);
+
+  /* Header layer surfaces */
+  --color-header-utility-surface: var(--header-utility-surface);
+  --color-header-utility-border: var(--header-utility-border);
+  --color-header-nav-surface: var(--header-nav-surface);
+  --color-header-nav-border: var(--header-nav-border);
+  /* Hero branded wash */
+  --color-hero-branded-wash: var(--hero-branded-wash);
+  /* Multi-role accent surfaces */
+  --color-accent-surface-a: var(--accent-surface-a);
+  --color-accent-surface-a-border: var(--accent-surface-a-border);
+  --color-accent-surface-a-text: var(--accent-surface-a-text);
+  --color-accent-surface-b: var(--accent-surface-b);
+  --color-accent-surface-b-border: var(--accent-surface-b-border);
+  --color-accent-surface-b-text: var(--accent-surface-b-text);
+  --color-accent-surface-c: var(--accent-surface-c);
+  --color-accent-surface-c-border: var(--accent-surface-c-border);
+  --color-trust-surface: var(--trust-surface);
+  --color-trust-surface-border: var(--trust-surface-border);
 
   /* Bubble / accent surfaces — opt-in localized theme color (see utility classes + tokens above) */
   --color-surface-bubble: var(--surface-bubble);
@@ -906,18 +994,58 @@ html[data-theme] .nn-marketing-surface {
   }
 }
 
-/* Marketing header: nav links — accent underline on hover (token-only) */
+/* Marketing header: nav links — accent underline on hover, stronger contrast */
 .nn-marketing-nav-link {
   border-bottom: 2px solid transparent;
   padding-bottom: 0.125rem;
+  color: var(--theme-heading-text);
   transition:
-    color 0.2s ease,
-    border-color 0.2s ease;
+    color 0.18s ease,
+    border-color 0.18s ease;
 }
 
 .nn-marketing-nav-link:hover {
-  color: var(--theme-primary);
-  border-bottom-color: color-mix(in srgb, var(--theme-primary) 72%, transparent);
+  color: var(--text-accent);
+  border-bottom-color: var(--accent-surface-a-border);
+}
+
+/* Header utility rail — preferences / region strip above the main nav */
+.nn-header-utility {
+  background: var(--header-utility-surface);
+  border-bottom: 1px solid var(--header-utility-border);
+  color: var(--header-utility-text);
+}
+
+/* Main sticky nav — elevated band with visible separation from hero below */
+.nn-header-nav {
+  background: var(--header-nav-surface);
+  border-bottom: 1px solid var(--header-nav-border);
+  box-shadow: var(--header-nav-shadow);
+}
+
+/* Hero branded surface — opt-in wash for above-fold sections */
+.nn-hero-branded {
+  background: var(--hero-branded-wash);
+}
+
+/* Accent surfaces — structured multi-role palette classes */
+.nn-accent-surface-a {
+  background: var(--accent-surface-a);
+  border: 1px solid var(--accent-surface-a-border);
+  color: var(--accent-surface-a-text);
+}
+.nn-accent-surface-b {
+  background: var(--accent-surface-b);
+  border: 1px solid var(--accent-surface-b-border);
+  color: var(--accent-surface-b-text);
+}
+.nn-accent-surface-c {
+  background: var(--accent-surface-c);
+  border: 1px solid var(--accent-surface-c-border);
+}
+.nn-trust-surface {
+  background: var(--trust-surface);
+  border: 1px solid var(--trust-surface-border);
 }
 
 /* Header logo: very subtle theme tint on raster marks — no muddy or neon results */

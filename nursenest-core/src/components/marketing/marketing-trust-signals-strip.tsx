@@ -26,8 +26,9 @@ export function MarketingTrustSignalsStrip({
   const gap = variant === "compact" ? "gap-2" : "gap-2.5";
 
   return (
+    {/* nn-trust-surface: secondary-family tint that clearly differs from primary-tinted surfaces */}
     <div
-      className={`rounded-xl border border-[var(--border-subtle)] bg-[color-mix(in_srgb,var(--theme-primary)_4%,var(--theme-card-bg))] ${pad}`}
+      className={`nn-trust-surface rounded-xl ${pad}`}
       data-testid="marketing-trust-signals-strip"
     >
       {examHub ? (
@@ -36,23 +37,23 @@ export function MarketingTrustSignalsStrip({
       {homeHeroTrust ? (
         <p className="nn-marketing-body-sm mb-3 text-pretty text-[var(--theme-body-text)]">{t("components.trustSignals.usageLine")}</p>
       ) : null}
-      <p className="nn-marketing-caption font-medium uppercase tracking-wide text-[var(--theme-muted-text)]">
+      <p className="nn-marketing-caption font-semibold uppercase tracking-wide text-[var(--accent-surface-b-text)]">
         {t("components.trustSignals.builtFor")}
       </p>
       <ul className={`mt-3 flex flex-wrap ${gap}`} aria-label={t("components.trustSignals.badgesAria")}>
-        <li className="inline-flex items-center gap-2 rounded-full border border-[var(--border-subtle)] bg-[var(--theme-card-bg)] px-3 py-1.5 text-sm text-[var(--theme-body-text)]">
-          <ClipboardCheck className="h-4 w-4 shrink-0 text-primary" aria-hidden />
-          {t("components.trustSignals.badgeExamAligned")}
+        <li className="nn-accent-surface-a inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-sm font-medium">
+          <ClipboardCheck className="h-4 w-4 shrink-0 text-[var(--text-accent)]" aria-hidden />
+          <span className="text-[var(--theme-heading-text)]">{t("components.trustSignals.badgeExamAligned")}</span>
         </li>
         {homeHeroTrust ? (
-          <li className="inline-flex items-center gap-2 rounded-full border border-[var(--border-subtle)] bg-[var(--theme-card-bg)] px-3 py-1.5 text-sm text-[var(--theme-body-text)]">
-            <Layers className="h-4 w-4 shrink-0 text-primary" aria-hidden />
-            {t("components.trustSignals.badgeAdaptiveExamStyle")}
+          <li className="nn-accent-surface-a inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-sm font-medium">
+            <Layers className="h-4 w-4 shrink-0 text-[var(--text-accent)]" aria-hidden />
+            <span className="text-[var(--theme-heading-text)]">{t("components.trustSignals.badgeAdaptiveExamStyle")}</span>
           </li>
         ) : null}
-        <li className="inline-flex items-center gap-2 rounded-full border border-[var(--border-subtle)] bg-[var(--theme-card-bg)] px-3 py-1.5 text-sm text-[var(--theme-body-text)]">
-          <BookOpenCheck className="h-4 w-4 shrink-0 text-primary" aria-hidden />
-          {t("components.trustSignals.badgeEvidenceBased")}
+        <li className="nn-accent-surface-a inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-sm font-medium">
+          <BookOpenCheck className="h-4 w-4 shrink-0 text-[var(--text-accent)]" aria-hidden />
+          <span className="text-[var(--theme-heading-text)]">{t("components.trustSignals.badgeEvidenceBased")}</span>
         </li>
       </ul>
     </div>

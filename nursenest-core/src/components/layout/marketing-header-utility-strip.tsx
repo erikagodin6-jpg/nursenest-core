@@ -35,10 +35,10 @@ export function MarketingHeaderUtilityStrip() {
   }, []);
 
   return (
-    <div className="hidden border-b border-[color-mix(in_srgb,var(--theme-nav-border)_35%,transparent)] bg-[color-mix(in_srgb,var(--theme-muted-text)_3.5%,var(--theme-page-bg))] md:block">
+    <div className="nn-header-utility hidden md:block">
       <div className="mx-auto flex h-7 max-w-7xl items-center justify-end gap-2 px-4 lg:gap-2.5 lg:px-8">
         <div className="flex items-center gap-1.5">
-          <span className="nn-marketing-caption shrink-0 leading-none text-[var(--theme-muted-text)]">{t("nav.regionLabel")}</span>
+          <span className="nn-marketing-caption shrink-0 leading-none text-[var(--header-utility-text)]">{t("nav.regionLabel")}</span>
           <div className={marketingRegionToggleShell("pill")} role="group" aria-label={t("nav.regionLabel")}>
             <button
               type="button"
@@ -61,7 +61,7 @@ export function MarketingHeaderUtilityStrip() {
           <button
             type="button"
             onClick={() => setLangOpen((o) => !o)}
-            className="flex items-center gap-0.5 rounded-full bg-transparent px-2 py-0.5 text-[11px] font-normal tracking-wide text-[var(--theme-muted-text)] transition-colors hover:text-[color-mix(in_srgb,var(--theme-body-text)_80%,var(--theme-muted-text))]"
+            className="flex items-center gap-0.5 rounded-full bg-transparent px-2 py-0.5 text-[11px] font-normal tracking-wide text-[var(--header-utility-text)] transition-colors hover:text-[var(--text-accent)] hover:bg-[var(--accent-surface-c)]"
             aria-expanded={langOpen}
           >
             {t("nav.language")}
@@ -89,7 +89,7 @@ export function MarketingHeaderUtilityStrip() {
           ) : null}
         </div>
 
-        <div className="text-[var(--theme-muted-text)] [&_button]:min-h-0 [&_button]:border-[color-mix(in_srgb,var(--theme-nav-border)_40%,transparent)] [&_button]:bg-transparent [&_button]:px-2 [&_button]:py-0.5 [&_button]:text-[11px] [&_button]:font-normal [&_button]:opacity-90 [&_button]:shadow-none [&_button]:hover:bg-[color-mix(in_srgb,var(--theme-muted-text)_8%,transparent)]">
+        <div className="text-[var(--header-utility-text)] [&_button]:min-h-0 [&_button]:border-[var(--header-utility-border)] [&_button]:bg-transparent [&_button]:px-2 [&_button]:py-0.5 [&_button]:text-[11px] [&_button]:font-normal [&_button]:shadow-none [&_button]:hover:bg-[var(--accent-surface-c)] [&_button]:hover:text-[var(--text-accent)]">
           <ThemePicker
             className="shrink-0"
             labels={{
