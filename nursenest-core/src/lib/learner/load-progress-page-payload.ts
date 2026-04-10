@@ -13,6 +13,7 @@ import { resolveLessonRefFromProgressId } from "@/lib/lessons/lesson-progress-re
 import { pathwayLessonsAppListWhere } from "@/lib/lessons/app-pathway-lesson-list-scope";
 import type { PracticeTestConfigJson, PracticeTestResultsJson } from "@/lib/practice-tests/types";
 import { loadSessionGradingAggregate } from "@/lib/learner/session-grading-aggregate";
+import { loadPathwayTopicCoverageBatch } from "@/lib/lessons/pathway-topic-coverage";
 
 const PRACTICE_RECENT_LIMIT = 6;
 const MOCK_RECENT_LIMIT = 5;
@@ -29,6 +30,8 @@ export type QuestionBankProgress = {
   /** Sum of graded attempts in topic ledger (question bank + graded flows that write stats). */
   ledgerAttempted: number;
   ledgerAccuracyPct: number | null;
+  /** Distinct topics this user has attempted at least one question in. */
+  topicsPracticed: number;
   /** Recent completed exam sessions, tier-scoped graded items. */
   recentGraded: {
     correct: number;
@@ -60,7 +63,14 @@ export type PathwayProgressCardModel = {
   lessonsCompleted: number;
   lessonsInProgress: number;
   notStarted: number;
+  /** Lesson-completion % (0–100). */
   pct: number;
+  /** Distinct topics with at least one completed lesson (0 if not yet computed). */
+  topicsCovered: number;
+  /** Total distinct published topics in this pathway (0 = unknown / catalog-only). */
+  topicsTotal: number;
+  /** topicsCovered / topicsTotal expressed as 0–100 integer. */
+  topicCoveragePct: number;
 };
 
 export type ProgressPagePayload = {
@@ -119,6 +129,7 @@ export async function loadProgressPagePayload(userId: string, entitlement: Acces
     lessonsCompleted,
     lessonsInProgressCount,
     topicSums,
+    questionTopicsPracticed,
     recentGraded,
     mocksRaw,
     practiceCompletedCount,
@@ -136,6 +147,7 @@ export async function loadProgressPagePayload(userId: string, entitlement: Acces
         _sum: { correctCount: true, wrongCount: true },
       })
       .catch(() => ({ _sum: { correctCount: null as number | null, wrongCount: null as number | null } })),
+    prisma.userTopicStat.count({ where: { userId } }).catch(() => 0),
     loadSessionGradingAggregate(userId, entitlement, 8),
     prisma.examAttempt.findMany({
       where: { userId },
@@ -216,10 +228,14 @@ export async function loadProgressPagePayload(userId: string, entitlement: Acces
     }
   }
 
+  const pathwayIdList = pathwayRows.map((p) => p.pathwayId);
+  const topicCoverageMap = await loadPathwayTopicCoverageBatch(userId, pathwayIdList);
+
   const pathways: PathwayProgressCardModel[] = pathwayRows.map((p) => {
     const def = getExamPathwayById(p.pathwayId);
     const notStarted = Math.max(0, p.lessonsTotal - p.lessonsCompleted - p.lessonsInProgress);
     const pct = p.lessonsTotal > 0 ? Math.round((p.lessonsCompleted / p.lessonsTotal) * 100) : 0;
+    const coverage = topicCoverageMap.get(p.pathwayId);
     return {
       pathwayId: p.pathwayId,
       shortLabel: p.shortLabel,
@@ -229,6 +245,9 @@ export async function loadProgressPagePayload(userId: string, entitlement: Acces
       lessonsInProgress: p.lessonsInProgress,
       notStarted,
       pct,
+      topicsCovered: coverage?.topicsCovered ?? 0,
+      topicsTotal: coverage?.topicsTotal ?? 0,
+      topicCoveragePct: coverage?.coveragePct ?? 0,
     };
   });
   pathways.sort(sortPathways);
@@ -244,6 +263,7 @@ export async function loadProgressPagePayload(userId: string, entitlement: Acces
     questionBank: {
       ledgerAttempted,
       ledgerAccuracyPct,
+      topicsPracticed: questionTopicsPracticed,
       recentGraded: {
         correct: recentGraded.correct,
         total: recentGraded.total,

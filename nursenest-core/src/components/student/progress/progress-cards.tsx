@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
 import type { LearnerMarketingT } from "@/lib/learner/learner-marketing-server";
+import { TopicCoverageIndicator } from "@/components/ui/topic-coverage-indicator";
 
 export function ProgressCardShell({
   title,
@@ -94,6 +95,8 @@ export function PathwayLessonCard({
   inProgress,
   notStarted,
   total,
+  topicsCovered = 0,
+  topicsTotal = 0,
   t,
 }: {
   title: string;
@@ -103,8 +106,13 @@ export function PathwayLessonCard({
   inProgress: number;
   notStarted: number;
   total: number;
+  topicsCovered?: number;
+  topicsTotal?: number;
   t: LearnerMarketingT;
 }) {
+  const hasTopicData = topicsTotal > 0;
+  const topicsUncovered = hasTopicData ? Math.max(0, topicsTotal - topicsCovered) : 0;
+
   return (
     <div className="flex flex-col rounded-xl border border-border/55 bg-muted/10 p-4">
       <div className="flex flex-wrap items-start justify-between gap-2">
@@ -118,11 +126,24 @@ export function PathwayLessonCard({
           {total > 0 ? `${pct}%` : t("learner.progressPage.pathwayNoLessons")}
         </span>
       </div>
+
+      {/* Lesson completion bar */}
       {total > 0 ? (
         <div className="mt-3">
+          <p className="mb-1 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
+            {t("learner.progressPage.lessonsCompleted")}
+          </p>
           <ProgressMeter value={pct} ariaLabel={title} />
         </div>
       ) : null}
+
+      {/* Topic coverage bar */}
+      {hasTopicData ? (
+        <div className="mt-3 border-t border-border/40 pt-3">
+          <TopicCoverageIndicator covered={topicsCovered} total={topicsTotal} noun="topics" />
+        </div>
+      ) : null}
+
       <dl className="mt-4 grid grid-cols-3 gap-2 text-center text-[11px] sm:text-xs">
         <div className="rounded-lg bg-[var(--bg-card)] py-2">
           <dt className="font-medium text-muted-foreground">{t("learner.progressPage.lessonsCompleted")}</dt>
@@ -132,10 +153,17 @@ export function PathwayLessonCard({
           <dt className="font-medium text-muted-foreground">{t("learner.progressPage.lessonsInProgress")}</dt>
           <dd className="mt-0.5 tabular-nums font-semibold text-foreground">{inProgress}</dd>
         </div>
-        <div className="rounded-lg bg-[var(--bg-card)] py-2">
-          <dt className="font-medium text-muted-foreground">{t("learner.progressPage.lessonsNotStarted")}</dt>
-          <dd className="mt-0.5 tabular-nums font-semibold text-foreground">{notStarted}</dd>
-        </div>
+        {hasTopicData ? (
+          <div className="rounded-lg bg-[var(--bg-card)] py-2">
+            <dt className="font-medium text-muted-foreground">Missing topics</dt>
+            <dd className="mt-0.5 tabular-nums font-semibold text-foreground">{topicsUncovered}</dd>
+          </div>
+        ) : (
+          <div className="rounded-lg bg-[var(--bg-card)] py-2">
+            <dt className="font-medium text-muted-foreground">{t("learner.progressPage.lessonsNotStarted")}</dt>
+            <dd className="mt-0.5 tabular-nums font-semibold text-foreground">{notStarted}</dd>
+          </div>
+        )}
       </dl>
     </div>
   );

@@ -111,6 +111,8 @@ export function LearnerProgressPageContent({
                 inProgress={p.lessonsInProgress}
                 notStarted={p.notStarted}
                 total={p.lessonsTotal}
+                topicsCovered={p.topicsCovered}
+                topicsTotal={p.topicsTotal}
                 t={t}
               />
             ))}
@@ -136,22 +138,28 @@ export function LearnerProgressPageContent({
             hint={t("learner.progressPage.questionsAccuracyHint")}
           />
           <StatBlock
-            label={t("learner.progressPage.recentSessionsLabel")}
-            value={questionBank.recentGraded.sessionCount}
-            hint={
-              questionBank.recentGraded.total > 0
-                ? t("learner.progressPage.recentSessionsHint", {
-                    correct: String(questionBank.recentGraded.correct),
-                    total: String(questionBank.recentGraded.total),
-                    pct:
-                      questionBank.recentGraded.accuracyPct != null
-                        ? String(questionBank.recentGraded.accuracyPct)
-                        : "—",
-                  })
-                : t("learner.progressPage.recentSessionsEmpty")
-            }
+            label="Topics practiced"
+            value={questionBank.topicsPracticed}
+            hint="Distinct topics with at least one graded question attempt"
           />
         </ResponsiveStatRow>
+        <div className="mt-4">
+          <p className="mb-1.5 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
+            Recent sessions
+          </p>
+          <p className="text-xs text-muted-foreground">
+            {questionBank.recentGraded.total > 0
+              ? t("learner.progressPage.recentSessionsHint", {
+                  correct: String(questionBank.recentGraded.correct),
+                  total: String(questionBank.recentGraded.total),
+                  pct:
+                    questionBank.recentGraded.accuracyPct != null
+                      ? String(questionBank.recentGraded.accuracyPct)
+                      : "—",
+                })
+              : t("learner.progressPage.recentSessionsEmpty")}
+          </p>
+        </div>
       </ProgressCardShell>
 
       <ProgressCardShell
