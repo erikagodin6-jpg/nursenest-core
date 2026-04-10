@@ -17,8 +17,8 @@ type ExamCard = {
   titleKey: string;
   descKey: string;
   ctaKey: string;
-  metaUs: string;
-  metaCa: string;
+  /** i18n key for the exam-label chip (US/CA where terminology differs). */
+  metaKey: string;
   href: string;
   featured?: boolean;
 };
@@ -40,8 +40,7 @@ export function HomeExamSelectionSection() {
       titleKey: "home.conversion.examCard.rnTitle",
       descKey: "home.conversion.examCard.rnDesc",
       ctaKey: "home.conversion.examCard.ctaRn",
-      metaUs: "NCLEX-RN",
-      metaCa: "NCLEX-RN",
+      metaKey: "home.conversion.examCard.metaRn",
       href: loc(marketingExamHubPath(region, "rn")),
       featured: true,
     },
@@ -52,8 +51,7 @@ export function HomeExamSelectionSection() {
       titleKey: region === "US" ? "home.conversion.examCard.pnTitleUS" : "home.conversion.examCard.pnTitleCA",
       descKey: region === "US" ? "home.conversion.examCard.pnDescUS" : "home.conversion.examCard.pnDescCA",
       ctaKey: "home.conversion.examCard.ctaPn",
-      metaUs: "NCLEX-PN",
-      metaCa: "REx-PN",
+      metaKey: region === "US" ? "home.conversion.examCard.metaPnUS" : "home.conversion.examCard.metaPnCA",
       href: loc(marketingExamHubPath(region, "pn")),
     },
     {
@@ -63,8 +61,7 @@ export function HomeExamSelectionSection() {
       titleKey: region === "US" ? "home.conversion.examCard.npTitleUS" : "home.conversion.examCard.npTitleCA",
       descKey: region === "US" ? "home.conversion.examCard.npDescUS" : "home.conversion.examCard.npDescCA",
       ctaKey: "home.conversion.examCard.ctaNp",
-      metaUs: "FNP / PMHNP / AGPCNP",
-      metaCa: "CNPLE",
+      metaKey: region === "US" ? "home.conversion.examCard.metaNpUS" : "home.conversion.examCard.metaNpCA",
       href: loc(marketingExamHubPath(region, "np")),
     },
     {
@@ -74,8 +71,7 @@ export function HomeExamSelectionSection() {
       titleKey: "home.conversion.examCard.alliedTitle",
       descKey: "home.conversion.examCard.alliedDesc",
       ctaKey: "home.conversion.examCard.ctaAllied",
-      metaUs: "Allied Health",
-      metaCa: "Allied Health",
+      metaKey: "home.conversion.examCard.metaAllied",
       href: loc(marketingExamHubPath(region, "allied")),
     },
     {
@@ -85,8 +81,7 @@ export function HomeExamSelectionSection() {
       titleKey: "home.conversion.examCard.newGradTitle",
       descKey: "home.conversion.examCard.newGradDesc",
       ctaKey: "home.conversion.examCard.ctaNewGrad",
-      metaUs: "Pre-Nursing",
-      metaCa: "Pre-Nursing",
+      metaKey: "home.conversion.examCard.metaPreNursing",
       href: loc("/pre-nursing"),
     },
   ];
@@ -114,7 +109,6 @@ export function HomeExamSelectionSection() {
         <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
           {cards.map((c) => {
             const Icon = c.icon;
-            const meta = region === "CA" ? c.metaCa : c.metaUs;
             return (
               <li key={c.id} className={c.featured ? "sm:col-span-2 lg:col-span-1" : undefined}>
                 <MarketingTrackedLink
@@ -139,7 +133,7 @@ export function HomeExamSelectionSection() {
 
                   {/* Exam label chip */}
                   <span className="nn-marketing-caption mb-1.5 font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">
-                    {meta}
+                    {t(c.metaKey)}
                   </span>
 
                   <span className="nn-marketing-h3 text-balance leading-snug">{t(c.titleKey)}</span>

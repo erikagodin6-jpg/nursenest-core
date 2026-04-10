@@ -73,7 +73,10 @@ export function NursingTierHubPage({
         />
       ) : null}
 
-      <section className="rounded-[1.75rem] border border-[var(--border-subtle)] bg-[var(--nn-presentation-wash)] p-6 shadow-[var(--shadow-card)] sm:p-8">
+      <section
+        className="rounded-[1.75rem] border border-[var(--border-subtle)] bg-[var(--nn-presentation-wash)] p-6 shadow-[var(--shadow-card)] sm:p-8"
+        data-nn-tier-hub="hero"
+      >
         <p className="nn-marketing-caption font-semibold uppercase tracking-[0.12em] text-[var(--text-accent)]">
           {content.audienceLabel} · {content.examLabel}
         </p>
@@ -95,7 +98,7 @@ export function NursingTierHubPage({
         />
       ) : null}
 
-      <section className="mt-10" aria-labelledby="tier-hub-actions-heading">
+      <section className="mt-10" aria-labelledby="tier-hub-actions-heading" data-nn-tier-hub="actions">
         <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <h2 id="tier-hub-actions-heading" className="nn-marketing-h2">

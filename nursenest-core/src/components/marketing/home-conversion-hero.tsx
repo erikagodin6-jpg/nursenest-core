@@ -20,7 +20,7 @@ import {
   MARKETING_PRIMARY_CTA_CLASS,
   MARKETING_SECONDARY_CTA_CLASS,
 } from "@/lib/theme/marketing-hero-pattern";
-import { marketingExamHubPath } from "@/lib/marketing/country-exam-offerings";
+import { marketingExamHubPath, type CountryExamOfferingId } from "@/lib/marketing/country-exam-offerings";
 import type { LucideIcon } from "lucide-react";
 
 /** Learner home, question UI, session reports — instant product comprehension. */
@@ -29,13 +29,13 @@ const PREVIEW_SLIDE_INDICES: readonly number[] = [9, 0, 11];
 type TierEntry = {
   id: string;
   icon: LucideIcon;
-  usLabel: string;
-  caLabel: string;
+  /** i18n key — PN uses US vs CA variants in `tierPillLabelKey`. */
+  tierPillLabelKey: string;
   href: (locale: (p: string) => string) => string;
 };
 
 /**
- * Above-the-fold hero: outcome headline, quick-entry tier pills (RN / LPN/RPN / NP / Allied / New Grad),
+ * Above-the-fold hero: outcome headline, quick-entry tier pills (RN / LPN·NCLEX-PN vs RPN·REx-PN / NP / Allied / Pre-nursing),
  * primary signup CTA, region toggle, and product screenshot carousel.
  */
 export function HomeConversionHero() {
@@ -54,43 +54,23 @@ export function HomeConversionHero() {
 
   const loc = (path: string) => withMarketingLocale(locale, path);
 
-  const TIERS: TierEntry[] = [
-    {
-      id: "rn",
-      icon: Stethoscope,
-      usLabel: "RN",
-      caLabel: "RN",
-      href: (l) => l(marketingExamHubPath(region, "rn")),
-    },
-    {
-      id: "pn",
-      icon: HeartPulse,
-      usLabel: "LPN",
-      caLabel: "RPN",
-      href: (l) => l(marketingExamHubPath(region, "pn")),
-    },
-    {
-      id: "np",
-      icon: Award,
-      usLabel: "NP",
-      caLabel: "NP",
-      href: (l) => l(marketingExamHubPath(region, "np")),
-    },
-    {
-      id: "allied",
-      icon: Dna,
-      usLabel: "Allied",
-      caLabel: "Allied",
-      href: (l) => l(marketingExamHubPath(region, "allied")),
-    },
-    {
-      id: "new-grad",
-      icon: BookOpen,
-      usLabel: "New Grad",
-      caLabel: "New Grad",
-      href: (l) => l("/pre-nursing"),
-    },
-  ];
+  const TIERS: TierEntry[] = useMemo((): TierEntry[] => {
+    const hub = (id: CountryExamOfferingId) => (l: (p: string) => string) => l(marketingExamHubPath(region, id));
+    const pnKey =
+      region === "CA" ? "home.conversion.tierPill.pnCA" : "home.conversion.tierPill.pnUS";
+    return [
+      { id: "rn", icon: Stethoscope, tierPillLabelKey: "home.conversion.tierPill.rn", href: hub("rn") },
+      { id: "pn", icon: HeartPulse, tierPillLabelKey: pnKey, href: hub("pn") },
+      { id: "np", icon: Award, tierPillLabelKey: "home.conversion.tierPill.np", href: hub("np") },
+      { id: "allied", icon: Dna, tierPillLabelKey: "home.conversion.tierPill.allied", href: hub("allied") },
+      {
+        id: "new-grad",
+        icon: BookOpen,
+        tierPillLabelKey: "home.conversion.tierPill.preNursing",
+        href: (l) => l("/pre-nursing"),
+      },
+    ];
+  }, [region]);
 
   return (
     <section
@@ -127,12 +107,11 @@ export function HomeConversionHero() {
               data-testid="hero-tier-quick-entry"
             >
               <p className="nn-marketing-caption mb-3 font-semibold text-[var(--theme-body-text)]">
-                Jump straight into your exam:
+                {t("home.conversion.heroTierIntro")}
               </p>
-              <nav className="flex flex-wrap gap-2" aria-label="Choose your nursing exam pathway">
+              <nav className="flex flex-wrap gap-2" aria-label={t("home.conversion.heroTierNavAria")}>
                 {TIERS.map((tier) => {
                   const Icon = tier.icon;
-                  const label = region === "CA" ? tier.caLabel : tier.usLabel;
                   return (
                     <MarketingTrackedLink
                       key={tier.id}
@@ -143,7 +122,7 @@ export function HomeConversionHero() {
                       data-testid={`button-hero-tier-${tier.id}`}
                     >
                       <Icon className="h-3.5 w-3.5 shrink-0 text-[var(--text-accent)]" aria-hidden />
-                      {label}
+                      {t(tier.tierPillLabelKey)}
                     </MarketingTrackedLink>
                   );
                 })}
@@ -154,7 +133,7 @@ export function HomeConversionHero() {
                 className="mt-3 flex items-center gap-2 border-t border-[var(--accent-surface-b-border)] pt-3"
                 data-testid="region-toggle-hero"
               >
-                <span className="nn-marketing-caption shrink-0 text-[var(--theme-muted-text)]">{t("nav.regionLabel")}:</span>
+                <span className="nn-marketing-caption shrink-0 text-[var(--theme-muted-text)]">{t("nav.regionLabel")}</span>
                 <div className={marketingRegionToggleShell("rounded")} role="group" aria-label={t("nav.regionLabel")}>
                   <button
                     type="button"
