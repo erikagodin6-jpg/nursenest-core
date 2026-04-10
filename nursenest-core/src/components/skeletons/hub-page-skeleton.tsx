@@ -1,5 +1,5 @@
 /**
- * Hub-page skeleton loaders for lessons, questions, and CAT intro pages.
+ * Hub-page skeleton loaders for lessons, questions, CAT intro, and pricing.
  * Uses `.nn-skeleton` (globals.css shimmer) so they stay visually aligned
  * with the actual content that replaces them.
  *
@@ -169,5 +169,51 @@ export function CatPageSkeleton() {
 
       <CatCtaRowSkeleton />
     </div>
+  );
+}
+
+/**
+ * Skeleton for `/pricing` — header + comparison strip + four plan columns.
+ * Uses `.nn-skeleton` bars so transitions match other marketing hubs.
+ */
+export function PricingPageSkeleton() {
+  return (
+    <main className="mx-auto w-full max-w-6xl nn-marketing-x pb-[var(--nn-rhythm-page-y)] pt-0" aria-busy="true" aria-label="Loading pricing…">
+      <div className="border-b border-[var(--border-subtle)] pb-10 pt-2">
+        <div className="mx-auto max-w-3xl space-y-4 text-center">
+          <Bar w="75%" h="2.25rem" className="mx-auto rounded-xl" />
+          <Bar w="90%" h="0.875rem" className="mx-auto" />
+          <Bar w="70%" h="0.875rem" className="mx-auto" />
+        </div>
+      </div>
+      <div className="mt-10 flex flex-wrap justify-center gap-2">
+        <Bar w="5rem" h="2.25rem" className="rounded-full" />
+        <Bar w="5rem" h="2.25rem" className="rounded-full" />
+      </div>
+      <div className="mt-10 space-y-3 rounded-2xl border border-[var(--theme-card-border)] bg-card p-4">
+        <Bar w="40%" h="1rem" />
+        {Array.from({ length: 5 }).map((_, i) => (
+          <div key={i} className="flex gap-4 border-b border-[var(--border-subtle)] py-3 last:border-0">
+            <Bar w="28%" h="0.75rem" />
+            <Bar w="32%" h="0.75rem" />
+            <Bar w="32%" h="0.75rem" />
+          </div>
+        ))}
+      </div>
+      <div className="mt-12 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        {Array.from({ length: 4 }).map((_, i) => (
+          <div key={i} className="flex min-h-[18rem] flex-col rounded-2xl border border-[var(--theme-card-border)] bg-card p-5 shadow-sm">
+            <Bar w="50%" h="1.25rem" />
+            <div className="mt-4 flex-1 space-y-2">
+              <Bar w="100%" h="0.75rem" />
+              <Bar w="95%" h="0.75rem" />
+              <Bar w="88%" h="0.75rem" />
+            </div>
+            <Bar w="40%" h="1.75rem" className="mt-6" />
+            <Bar w="100%" h="2.75rem" className="mt-4 rounded-xl" />
+          </div>
+        ))}
+      </div>
+    </main>
   );
 }

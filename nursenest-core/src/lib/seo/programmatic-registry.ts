@@ -6,7 +6,18 @@
  * Do not prerender a full slug×locale matrix at build time.
  *
  * **Sitemap:** `MAX_PROGRAMMATIC_SEO_SITEMAP_SLUGS` bounds bulk URL emission (see `sitemap-static-xml.ts`).
+ *
+ * **Scaling content (no thin/duplicate pages):**
+ * - Each entry must stand alone: distinct H1, meta description, and multiple substantive sections and/or FAQ.
+ * - Prefer **topic guides** and **study plans** with actionable structure; avoid near-duplicates of existing slugs.
+ * - AI-assisted drafts should be validated with `npm run validate:programmatic-seo` before merge.
+ * - Per-question marketing URLs at huge scale belong in a separate, data-backed system (exam items + allowlists),
+ *   not copy-pasted templates — see product architecture docs.
+ *
+ * **Public URLs:** `/{slug}` (rewritten to `/seo/[slug]`). Localized: `/{locale}/{slug}`. Canonical + hreflang via
+ * `buildProgrammaticMetadata`. JSON-LD: `ProgrammaticPageJsonLd` (LearningResource + optional FAQPage).
  */
+import type { SeoPageKind } from "@/lib/seo/programmatic-page-kind";
 
 /** Matches `revalidate` on `/seo/[slug]` and `/[locale]/[slug]` programmatic pages (24h ISR). */
 export const PROGRAMMATIC_SEO_ISR_REVALIDATE_SECONDS = 86_400;
@@ -35,6 +46,8 @@ export type SeoPageDefinition = {
   description: string;
   h1: string;
   cluster: SeoCluster;
+  /** Optional taxonomy for pipelines and quality gates (see `programmatic-page-kind.ts`). */
+  pageKind?: SeoPageKind;
   /** Primary keyword phrase for related linking */
   keywords: string[];
   sections: { heading: string; level: 2 | 3; body: string[] }[];
@@ -333,6 +346,7 @@ export const PROGRAMMATIC_SEO_PAGES: SeoPageDefinition[] = [
   },
   {
     slug: "np-exam-prep",
+    pageKind: "exam-intent",
     title: "NP Exam Prep Hub | Questions, Lessons, Review",
     description:
       "Plan NP exam prep with category-aware questions, clinical lessons, and performance tracking in one subscription.",
@@ -345,6 +359,7 @@ export const PROGRAMMATIC_SEO_PAGES: SeoPageDefinition[] = [
         level: 2,
         body: [
           "Increase case complexity week over week. Anchor each study sprint to two systems until accuracy holds, then rotate.",
+          "Pair each missed case with a short lesson on the same decision fork, then return to a fresh stem within a few days so you correct reasoning rather than memorizing answer position.",
         ],
       },
     ],
@@ -353,7 +368,7 @@ export const PROGRAMMATIC_SEO_PAGES: SeoPageDefinition[] = [
     slug: "canada-np-exam-prep",
     title: "Canadian NP Exam Prep | Clinical Decision Training",
     description:
-      "How to prepare for Canadian nurse practitioner exams with case-based questions, guideline-linked lessons, and readiness that tracks reasoning gaps, not recall-only drills.",
+      "How to prepare for Canadian NP exams with case-based questions, guideline-linked lessons, and readiness that tracks reasoning gaps—not recall drills.",
     h1: "Canadian NP exam prep for advanced clinical judgment",
     cluster: "exam-np",
     keywords: ["Canadian NP", "CNPLE", "exam prep", "nurse practitioner Canada"],
@@ -511,6 +526,7 @@ export const PROGRAMMATIC_SEO_PAGES: SeoPageDefinition[] = [
         level: 2,
         body: [
           "Paramedic exams emphasize ABCs, red-flag presentations, and protocol edges. Drill scenarios that force a single best first action.",
+          "After each miss, write one sentence on the rule you violated, then redo a similar stem the next day so pattern recognition does not substitute for protocol understanding.",
         ],
       },
     ],
@@ -529,6 +545,7 @@ export const PROGRAMMATIC_SEO_PAGES: SeoPageDefinition[] = [
         level: 2,
         body: [
           "Focus on delta checks, interference, critical values, and pre-analytical error sources, common exam themes that mirror bench accountability.",
+          "Alternate topic drills with mixed review so you cannot succeed by memorizing item banks without understanding why a flagged result changes management.",
         ],
       },
     ],
@@ -547,6 +564,7 @@ export const PROGRAMMATIC_SEO_PAGES: SeoPageDefinition[] = [
         level: 2,
         body: [
           "Expect questions on shielding, pediatric adjustments, contrast reactions, and protocol selection when anatomy is ambiguous.",
+          "Pair each positioning or exposure decision with the patient risk in the stem—exam writers often hide the decisive contraindication in comorbidity or pregnancy status.",
         ],
       },
     ],
@@ -584,6 +602,7 @@ export const PROGRAMMATIC_SEO_PAGES: SeoPageDefinition[] = [
         level: 2,
         body: [
           "Combine work of breathing, mental status, and perfusion with saturation trends. Exams love hidden fatigue despite acceptable numbers.",
+          "When escalation is an option, match oxygen delivery and monitoring intensity to the trend you would act on first in a real rapid response.",
         ],
       },
     ],
@@ -602,6 +621,7 @@ export const PROGRAMMATIC_SEO_PAGES: SeoPageDefinition[] = [
         level: 2,
         body: [
           "For each class, know the top three adverse effects, contraindications, and labs or vitals you recheck after initiation or dose changes.",
+          "When two answers look plausible, choose the option that matches monitoring or teaching obligations tied to that drug class.",
         ],
       },
     ],
@@ -620,6 +640,7 @@ export const PROGRAMMATIC_SEO_PAGES: SeoPageDefinition[] = [
         level: 2,
         body: [
           "Expect questions where caregiver report, non-verbal cues, and age-specific vitals change the best answer.",
+          "Immunization, growth, and developmental milestones appear as decision context—read what stage the patient is in before selecting an intervention.",
         ],
       },
     ],
@@ -638,6 +659,7 @@ export const PROGRAMMATIC_SEO_PAGES: SeoPageDefinition[] = [
         level: 2,
         body: [
           "Practice linking electrolyte shifts to ECG changes, post-op complications to timing, and pain control to respiratory risk.",
+          "When multiple body systems appear in one stem, identify the primary risk to life or limb first, then sequence nursing actions accordingly.",
         ],
       },
     ],
@@ -682,6 +704,7 @@ export const PROGRAMMATIC_SEO_PAGES: SeoPageDefinition[] = [
         level: 2,
         body: [
           "Write units through every multiplication and division. Exams punish silent conversions between mg, mcg, mL, and units per kg.",
+          "Double-check pump programming and rounding rules when IV rates or titration tables are embedded in the scenario stem.",
         ],
       },
     ],
@@ -700,6 +723,7 @@ export const PROGRAMMATIC_SEO_PAGES: SeoPageDefinition[] = [
         level: 2,
         body: [
           "Use summaries to cue recall, then verify with policy and provider orders. Pair each sheet topic with question practice to test application.",
+          "Keep one running list of facility-specific variances so you do not confuse textbook defaults with your unit’s protocols.",
         ],
       },
     ],
@@ -718,6 +742,7 @@ export const PROGRAMMATIC_SEO_PAGES: SeoPageDefinition[] = [
         level: 2,
         body: [
           "Short daily question blocks beat sporadic cramming. Tie each block to patients you saw when possible, context accelerates memory.",
+          "Protect consecutive days off before high-stakes exams; sleep debt shows up as careless errors on priority and calculation items.",
         ],
       },
     ],
@@ -736,6 +761,7 @@ export const PROGRAMMATIC_SEO_PAGES: SeoPageDefinition[] = [
         level: 2,
         body: [
           "Each allied pathway has distinct certification emphases. Align question practice to your registry blueprint and clinical rotation gaps.",
+          "When you change employers or states, re-check scope and documentation rules—exam items assume the standard of care for your credential track.",
         ],
       },
     ],
@@ -756,6 +782,114 @@ export const PROGRAMMATIC_SEO_PAGES: SeoPageDefinition[] = [
           "Memorize mechanisms with cards, then force application under question pressure the same week. Isolation creates false confidence.",
           `${SITE} routes flashcard-minded study into the question bank and lessons so recall meets context.`,
         ],
+      },
+    ],
+  },
+  {
+    slug: "nclex-two-week-prep-schedule",
+    pageKind: "study-plan",
+    title: "NCLEX Two-Week Prep Schedule | Daily Blocks & Review",
+    description:
+      "A focused two-week NCLEX prep schedule: daily question targets, rationale review rules, and when to insert a mock exam—without a generic calendar that ignores your weak categories.",
+    h1: "NCLEX two-week prep schedule built around weak-area feedback",
+    cluster: "study-guide",
+    keywords: ["NCLEX", "two week", "schedule", "intensive"],
+    linkPack: "nclex-rn",
+    breadcrumb: {
+      midLabel: "NCLEX prep guides",
+      midPath: "/nclex-study-plan",
+      currentLabel: "Two-week schedule",
+    },
+    sections: [
+      {
+        heading: "How to use this schedule without burning out",
+        level: 2,
+        body: [
+          "Two weeks is enough to sharpen judgment and pacing if you already completed a first pass of content. If fundamentals are still unstable, extend the timeline rather than stacking hours.",
+          "Anchor each day to one primary system or client-need bucket, then mix in a smaller second bucket so you do not overfit patterns.",
+        ],
+      },
+      {
+        heading: "Week one: stabilize accuracy before speed",
+        level: 2,
+        body: [
+          "Days 1–4: two timed mini-sets per day with immediate rationale review on misses only; cap total new items so review stays honest.",
+          "Days 5–7: add one short lesson block on your lowest category, then repeat mixed sets that force transfer, not recognition.",
+        ],
+      },
+      {
+        heading: "Week two: pacing, safety traps, and mock exam",
+        level: 2,
+        body: [
+          "Days 8–11: alternate full mixed sets with a single high-yield weakness drill per day; track recurring error types, not just topics.",
+          "Days 12–13: one full practice exam under realistic timing; day 14 is light review and sleep hygiene—no marathon cramming.",
+        ],
+      },
+    ],
+    faq: [
+      {
+        question: "Is two weeks enough to pass the NCLEX?",
+        answer:
+          "It can be enough to consolidate and test readiness if your baseline is strong. If multiple systems remain below your target accuracy, prioritize depth over the calendar.",
+      },
+      {
+        question: "Where should practice questions come from?",
+        answer:
+          "Use a single pathway-scoped bank so delegation language and scope stay consistent with your registration context, then layer mocks for stamina.",
+      },
+    ],
+  },
+  {
+    slug: "heart-failure-nclex-review",
+    pageKind: "topic-guide",
+    title: "Heart Failure Nursing Review for NCLEX | Meds, Fluids & Priorities",
+    description:
+      "Heart failure nursing review for NCLEX-style judgment: volume status clues, guideline-consistent medication priorities, and safety traps that show up in clinical scenarios.",
+    h1: "Heart failure nursing review: priorities that transfer to NCLEX items",
+    cluster: "category",
+    keywords: ["heart failure", "NCLEX", "HF", "cardiac"],
+    linkPack: "nclex-rn",
+    breadcrumb: {
+      midLabel: "NCLEX-RN prep",
+      midPath: "/nclex-rn-exam-prep",
+      currentLabel: "Heart failure review",
+    },
+    sections: [
+      {
+        heading: "Clinical picture before memorizing drug classes",
+        level: 2,
+        body: [
+          "NCLEX rewards matching interventions to the patient’s volume status and perfusion story, not reciting a textbook list.",
+          "Practice explaining why diuresis, afterload reduction, or rate control is indicated in the stem you are given—then compare to the rationale.",
+        ],
+      },
+      {
+        heading: "Safety traps that repeat on exams",
+        level: 2,
+        body: [
+          "Electrolyte shifts with therapy, hypotension after vasodilation, and infection signals when steroids or devices are in play are common distractor themes.",
+          "When two answers look partially true, choose the action that addresses immediate life threat or the clearest nursing priority in the stem.",
+        ],
+      },
+      {
+        heading: "Pair reading with questions in the same week",
+        level: 2,
+        body: [
+          "After a short review block, run a targeted question set on HF and related fluid/electrolyte items, then revisit only the misses with teaching depth.",
+          `${SITE} links lessons and questions within the same pathway so your scope language stays consistent with RN registration expectations.`,
+        ],
+      },
+    ],
+    faq: [
+      {
+        question: "Should I memorize every HF medication detail?",
+        answer:
+          "Memorize the decision rules you can defend in a scenario: what to hold, what to monitor, and what symptom should change your priority.",
+      },
+      {
+        question: "How is this different from doing random cardiac questions?",
+        answer:
+          "Random drills hide weak reasoning patterns. A focused HF pass plus mixed review tests whether you can transfer rules across presentations.",
       },
     ],
   },

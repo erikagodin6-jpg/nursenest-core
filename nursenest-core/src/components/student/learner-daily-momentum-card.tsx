@@ -1,12 +1,14 @@
 import Link from "next/link";
 import type { LearnerMarketingT } from "@/lib/learner/learner-marketing-server";
 import type { TodayGoalProgress } from "@/lib/learner/load-today-goal-progress";
+import type { DailyQuestionGoalProgress } from "@/lib/learner/load-daily-question-goal-progress";
 import { LearnerDailyGoalCelebrationClient } from "@/components/student/learner-daily-goal-celebration-client";
 
 export function LearnerDailyMomentumCard({
   t,
   streakDays,
   todayGoal,
+  questionGoal,
   resume,
   momentumLine,
   focusTopic,
@@ -14,19 +16,27 @@ export function LearnerDailyMomentumCard({
   personalNote,
   /** When the learner has a streak but has not yet earned a credit today (UTC). */
   showStreakProtectNudge,
+  /** Optional full sentence from improving topic trends. */
+  progressFeedbackLine,
 }: {
   t: LearnerMarketingT;
   streakDays: number;
   todayGoal: TodayGoalProgress;
+  questionGoal: DailyQuestionGoalProgress | null;
   resume: { title: string; href: string } | null;
   momentumLine: string | null;
   /** Optional weak-area label for a grounded “where to improve” line. */
   focusTopic?: string | null;
   personalNote?: string | null;
   showStreakProtectNudge?: boolean;
+  progressFeedbackLine?: string | null;
 }) {
   const pct = Math.min(100, Math.round((todayGoal.credits / todayGoal.target) * 100));
   const complete = todayGoal.credits >= todayGoal.target;
+  const qPct = questionGoal
+    ? Math.min(100, Math.round((questionGoal.gradedToday / Math.max(1, questionGoal.target)) * 100))
+    : 0;
+  const qComplete = questionGoal ? questionGoal.complete : false;
 
   return (
     <section
@@ -94,6 +104,54 @@ export function LearnerDailyMomentumCard({
               </li>
             </ul>
           </div>
+
+          {questionGoal ? (
+            <div className="border-t border-border/40 pt-4">
+              <div className="flex flex-wrap items-center justify-between gap-2 text-xs">
+                <span className="font-medium text-foreground">{t("learner.dailyGoal.questionsLabel")}</span>
+                <span className="tabular-nums text-muted-foreground">
+                  {t("learner.dailyGoal.questionsProgress", {
+                    n: questionGoal.gradedToday,
+                    target: questionGoal.target,
+                  })}
+                </span>
+              </div>
+              <div
+                className="nn-progress-track-semantic nn-progress-track-semantic--md mt-1.5"
+                role="progressbar"
+                aria-valuenow={questionGoal.gradedToday}
+                aria-valuemin={0}
+                aria-valuemax={questionGoal.target}
+              >
+                <div
+                  className="nn-progress-fill-semantic-brand transition-[width] duration-500"
+                  style={{ width: `${qPct}%` }}
+                />
+              </div>
+              {qComplete ? (
+                <p className="mt-2 text-xs leading-relaxed text-[var(--semantic-success-contrast)]">
+                  {t("learner.dailyGoal.questionsComplete")}
+                </p>
+              ) : (
+                <p className="mt-2 text-xs leading-relaxed text-muted-foreground">{t("learner.dailyGoal.questionsEncourage")}</p>
+              )}
+              <Link
+                href="/app/account/personal"
+                className="mt-2 inline-flex text-[11px] font-semibold text-muted-foreground underline-offset-2 hover:text-foreground hover:underline"
+              >
+                {t("learner.dailyGoal.setGoalLink")}
+              </Link>
+            </div>
+          ) : null}
+
+          <div className="rounded-lg border border-border/50 bg-muted/15 px-3 py-2.5">
+            <p className="text-[11px] leading-relaxed text-muted-foreground">{t("learner.retention.reminderContinue")}</p>
+            <p className="mt-1.5 text-[11px] leading-relaxed text-muted-foreground">{t("learner.retention.reminderWeak")}</p>
+          </div>
+
+          {progressFeedbackLine?.trim() ? (
+            <p className="text-xs leading-relaxed text-foreground/90">{progressFeedbackLine.trim()}</p>
+          ) : null}
 
           {showStreakProtectNudge && !complete ? (
             <p className="rounded-lg border border-[color-mix(in_srgb,var(--semantic-warning)_35%,var(--semantic-border-soft))] bg-[var(--semantic-warning-soft)] px-3 py-2 text-xs text-[var(--semantic-warning-contrast)]">

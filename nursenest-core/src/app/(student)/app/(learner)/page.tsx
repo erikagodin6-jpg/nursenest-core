@@ -17,6 +17,7 @@ import {
 } from "@/lib/learner/build-continue-learning-items";
 import { loadLearnerRetentionPreferences } from "@/lib/learner/load-learner-retention-preferences";
 import { loadTodayGoalProgress } from "@/lib/learner/load-today-goal-progress";
+import { loadDailyQuestionGoalProgress } from "@/lib/learner/load-daily-question-goal-progress";
 import { loadPremiumDashboardSnapshot } from "@/lib/learner/premium-dashboard-snapshot";
 import { loadRecentLearnerNotesSummary } from "@/lib/learner/load-recent-learner-notes-summary";
 import { LearnerAdaptiveFocusCard } from "@/components/student/learner-adaptive-focus-card";
@@ -95,16 +96,18 @@ export default async function LearnerDashboardPage() {
   let studySnap: Awaited<ReturnType<typeof buildLearnerStudySnapshot>> = null;
   let weakTopicTitles: string[] = [];
   try {
-    const [snap, nextSnap, notes, todayGoal, retentionPrefs] = await Promise.all([
+    const [snap, nextSnap, notes, todayGoal, questionBankGoal, retentionPrefs] = await Promise.all([
       loadPremiumDashboardSnapshot(userId, entitlement),
       buildLearnerStudySnapshot(userId, entitlement, undefined),
       loadRecentLearnerNotesSummary(userId),
       loadTodayGoalProgress(userId),
+      loadDailyQuestionGoalProgress(userId),
       loadLearnerRetentionPreferences(userId),
     ]);
     snapshot = snap;
     studySnap = nextSnap;
     weakTopicTitles = studySnap?.weakTopics.map((w) => w.topic) ?? [];
+    const progressFeedbackLine = studySnap?.topicTrends.find((r) => r.momentum === "improving")?.summary ?? null;
     if (snapshot) {
       const resume =
         snapshot.continueLesson ??
@@ -137,11 +140,13 @@ export default async function LearnerDashboardPage() {
               t={t}
               streakDays={snapshot.studyStreakDays}
               todayGoal={todayGoal}
+              questionGoal={questionBankGoal}
               resume={resume}
               momentumLine={momentumLine}
               focusTopic={weakTopicTitles[0] ?? null}
               personalNote={personalNote}
               showStreakProtectNudge={streakProtect}
+              progressFeedbackLine={progressFeedbackLine}
             />
           ) : null}
 

@@ -3,6 +3,7 @@ import "server-only";
 import { PracticeTestStatus } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
+import { startOfUtcDay } from "@/lib/time/utc-calendar";
 
 export const TODAY_GOAL_CREDIT_TARGET = 3;
 
@@ -22,10 +23,6 @@ export type TodayGoalProgress = {
   /** ISO date (UTC) for display + client dedupe keys. */
   utcDate: string;
 };
-
-function startOfUtcDay(d = new Date()): Date {
-  return new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate(), 0, 0, 0, 0));
-}
 
 /**
  * Soft "today's goal" = 3 lightweight study credits (UTC calendar day, same basis as streak signals):

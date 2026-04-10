@@ -459,34 +459,38 @@
   --theme-primary-foreground: #ffffff;
   --theme-topbar-bg: var(--theme-primary);
   --theme-topbar-text: #ffffff;
-  /* Pastel-tinted page background: each theme gets a whisper of its primary hue (no plain gray) */
-  --theme-page-bg: color-mix(in srgb, #ffffff 95%, var(--theme-primary));
-  /* Nav: slightly stronger tint so it reads as chrome, not blank paper */
-  --theme-nav-bg: color-mix(in srgb, #ffffff 96%, var(--theme-primary));
+  /*
+   * Neutral page background: 2% primary tint — nearly invisible, ensures the page reads
+   * as clinical/white regardless of theme. Theme color concentrates on bubble/accent surfaces.
+   * Previously 5% which caused visible full-page hue shifts between themes.
+   */
+  --theme-page-bg: color-mix(in srgb, #ffffff 98%, var(--theme-primary));
+  /* Nav: 2% tint — barely distinguishable from the page, theme shows in topbar + accents */
+  --theme-nav-bg: color-mix(in srgb, #ffffff 98%, var(--theme-primary));
   --theme-nav-text: #6b7280;
   --theme-nav-border: color-mix(in srgb, var(--theme-primary) 10%, transparent);
   --theme-menu-text: #374151;
   --theme-menu-hover-bg: color-mix(in srgb, var(--theme-primary) 8%, transparent);
   --theme-menu-hover-text: var(--theme-primary);
   --theme-menu-active-bg: color-mix(in srgb, var(--theme-primary) 12%, transparent);
-  /* Cards: warm white with a trace of primary - lifts off the tinted page */
-  --theme-card-bg: color-mix(in srgb, #ffffff 97%, var(--theme-primary));
+  /* Cards: pure white — theme appears on bubble/accent opt-in surfaces, not generic cards */
+  --theme-card-bg: #ffffff;
   --theme-card-border: color-mix(in srgb, var(--theme-border) 60%, transparent);
-  --theme-card-text: color-mix(in srgb, #374151 90%, var(--theme-primary));
+  --theme-card-text: #374151;
   --theme-input-bg: #ffffff;
   --theme-input-border: color-mix(in srgb, var(--theme-border) 70%, #e5e7eb);
   --theme-heading-text: #111827;
-  --theme-body-text: color-mix(in srgb, #4b5563 88%, var(--theme-primary));
-  /* gray-500 (#6b7280) base instead of gray-400 (#9ca3af) — raises muted contrast to ≥4:1 on pastel pages */
-  --theme-muted-text: color-mix(in srgb, #6b7280 82%, var(--theme-primary));
+  --theme-body-text: #4b5563;
+  /* gray-500 base: consistent muted text across all light themes */
+  --theme-muted-text: #6b7280;
   --theme-focus-ring: var(--theme-primary);
   --theme-separator: color-mix(in srgb, var(--theme-border) 30%, #f3f4f6);
-  --color-warmwhite: color-mix(in srgb, #ffffff 95%, var(--theme-primary));
-  --color-softgray: color-mix(in srgb, #4b5563 88%, var(--theme-primary));
-  --color-card-base: color-mix(in srgb, #ffffff 97%, var(--theme-primary));
-  --color-card-fg-base: color-mix(in srgb, #374151 90%, var(--theme-primary));
-  --color-popover-base: color-mix(in srgb, #ffffff 97%, var(--theme-primary));
-  --color-popover-fg-base: color-mix(in srgb, #374151 90%, var(--theme-primary));
+  --color-warmwhite: #fdfcfa;
+  --color-softgray: #4b5563;
+  --color-card-base: #ffffff;
+  --color-card-fg-base: #374151;
+  --color-popover-base: #ffffff;
+  --color-popover-fg-base: #374151;
 
   /*
    * Header surface + hero aesthetics — defined here (not in :where([data-theme]) in globals.css)

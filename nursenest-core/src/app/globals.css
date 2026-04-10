@@ -75,16 +75,34 @@ body {
  * Focus:    --focus-halo, --focus-halo-strong
  * Hero:     --hero-gradient-start, --hero-gradient-end
  * Text:     --text-on-accent, --text-muted-bg
+ *
+ * Bubble/accent (theme color concentrated here — page/section/card stays neutral):
+ *   --surface-bubble          incoming bubble / info callout (14% primary tint)
+ *   --surface-bubble-border   bubble border
+ *   --surface-bubble-strong   outgoing bubble / active badge (full primary fill)
+ *   --surface-accent-soft     badge / pill background (10% primary tint)
+ *   --surface-accent-strong   active tab / selected chip (80% primary blend)
+ *   --text-accent             themed inline text (links, accent labels)
+ *   --ring-accent             focus ring / input outline
+ *
  * Utilities: .nn-surface-section, .nn-surface-section-alt, .nn-surface-inset, .nn-chip, .nn-tab-pill*
+ *            .nn-surface-bubble, .nn-surface-bubble-strong, .nn-surface-accent-soft,
+ *            .nn-surface-accent-strong, .nn-text-accent, .nn-ring-accent, .nn-callout-accent
  */
 :where([data-theme]) {
-  /* Surfaces: one cohesive hue per theme, multiple depths */
+  /*
+   * Surfaces: neutral by default — theme color is concentrated on bubble/accent surfaces below.
+   * Page, sections, and cards use minimal tinting so the overall shell reads as clinical/neutral
+   * regardless of the active theme. Opt-in via --surface-bubble* / --surface-accent* or
+   * .nn-surface-bubble* utility classes for localized themed surfaces.
+   */
   --bg-page: var(--theme-page-bg);
-  /* 10% tint: visible section bands on pastel primaries (strawberry/blush barely showed at 8%) */
-  --bg-section: color-mix(in srgb, var(--theme-primary) 10%, var(--theme-page-bg));
-  /* 6% alternating strip — clear rhythm without competing with section */
-  --bg-section-alt: color-mix(in srgb, var(--theme-primary) 6%, var(--theme-page-bg));
-  --bg-card: color-mix(in srgb, var(--theme-primary) 3.25%, var(--theme-card-bg));
+  /* 3% tint: barely perceptible section rhythm, not a coloured band */
+  --bg-section: color-mix(in srgb, var(--theme-primary) 3%, var(--theme-page-bg));
+  /* 1.5% alternating strip — neutral rhythm line only */
+  --bg-section-alt: color-mix(in srgb, var(--theme-primary) 1.5%, var(--theme-page-bg));
+  /* Cards stay close to pure card-bg — theme shows up only in bubble/accent surfaces */
+  --bg-card: color-mix(in srgb, var(--theme-primary) 1.25%, var(--theme-card-bg));
   --bg-elevated: color-mix(in srgb, var(--theme-card-bg) 90%, var(--theme-heading-text));
   /* Slightly recessed / table header bands */
   --bg-inset: color-mix(in srgb, var(--theme-body-text) 5%, var(--bg-card));
@@ -102,6 +120,27 @@ body {
   --surface-input: color-mix(in srgb, var(--theme-primary) 2.5%, var(--theme-input-bg));
   --surface-chip: color-mix(in srgb, var(--theme-primary) 9%, var(--bg-card));
   --text-on-accent: var(--theme-primary-foreground);
+
+  /*
+   * Bubble / accent surfaces — the primary location where theme color appears.
+   * Use these for chat bubbles, callout panels, active pills, focused inputs, and small badges.
+   * Do NOT apply to full sections, page backgrounds, or generic cards.
+   *
+   * --surface-bubble        incoming / neutral message bubble (softly tinted)
+   * --surface-bubble-border border for bubble surfaces
+   * --surface-bubble-strong outgoing / strong bubble (full primary fill, white text)
+   * --surface-accent-soft   badge / pill background, highlight chip
+   * --surface-accent-strong active tab, selected option, strong chip
+   * --text-accent           themed inline text (links, labels, accent copy)
+   * --ring-accent           focus ring / input focus outline
+   */
+  --surface-bubble: color-mix(in srgb, var(--theme-primary) 14%, var(--theme-card-bg));
+  --surface-bubble-border: color-mix(in srgb, var(--theme-primary) 28%, var(--theme-border));
+  --surface-bubble-strong: var(--theme-primary);
+  --surface-accent-soft: color-mix(in srgb, var(--theme-primary) 10%, var(--theme-card-bg));
+  --surface-accent-strong: color-mix(in srgb, var(--theme-primary) 80%, var(--theme-card-bg));
+  --text-accent: var(--theme-primary);
+  --ring-accent: color-mix(in srgb, var(--theme-primary) 48%, transparent);
 
   /* Borders / dividers */
   --border-subtle: color-mix(in srgb, var(--theme-border) 52%, var(--theme-page-bg));
@@ -212,12 +251,20 @@ body {
 html[data-theme="dark-clinical"],
 html[data-theme="dark-academia"],
 html[data-theme="dark-mode"] {
-  --bg-section: color-mix(in srgb, var(--theme-primary) 12%, var(--theme-page-bg));
-  --bg-section-alt: color-mix(in srgb, var(--theme-primary) 7%, var(--theme-page-bg));
-  --bg-card: color-mix(in srgb, var(--theme-primary) 7%, var(--theme-card-bg));
+  --bg-section: color-mix(in srgb, var(--theme-primary) 6%, var(--theme-page-bg));
+  --bg-section-alt: color-mix(in srgb, var(--theme-primary) 3.5%, var(--theme-page-bg));
+  --bg-card: color-mix(in srgb, var(--theme-primary) 4%, var(--theme-card-bg));
   --bg-inset: color-mix(in srgb, var(--theme-body-text) 9%, var(--bg-card));
   --bg-elevated: color-mix(in srgb, var(--theme-card-bg) 76%, var(--theme-primary));
   --accent-soft: color-mix(in srgb, var(--theme-primary) 14%, var(--theme-card-bg));
+  /* Dark bubble/accent overrides — stronger so bubbles read against dark navy surfaces */
+  --surface-bubble: color-mix(in srgb, var(--theme-primary) 20%, var(--theme-card-bg));
+  --surface-bubble-border: color-mix(in srgb, var(--theme-primary) 38%, var(--theme-border));
+  --surface-bubble-strong: var(--theme-primary);
+  --surface-accent-soft: color-mix(in srgb, var(--theme-primary) 16%, var(--theme-card-bg));
+  --surface-accent-strong: color-mix(in srgb, var(--theme-primary) 82%, var(--theme-card-bg));
+  --text-accent: color-mix(in srgb, var(--theme-primary) 85%, #ffffff);
+  --ring-accent: color-mix(in srgb, var(--theme-primary) 55%, transparent);
   --accent-highlight: color-mix(in srgb, var(--theme-primary) 20%, var(--theme-card-bg));
   --accent-pressed: color-mix(in srgb, var(--theme-primary) 72%, var(--theme-heading-text));
   --surface-interactive-hover: color-mix(in srgb, var(--theme-primary) 11%, var(--bg-card));
@@ -313,6 +360,15 @@ html[data-theme="dark-mode"] {
   --color-role-premium-border: var(--role-premium-border);
   --color-role-premium-text: var(--role-premium-text);
   --color-role-heat-text: var(--role-heat-text);
+
+  /* Bubble / accent surfaces — opt-in localized theme color (see utility classes + tokens above) */
+  --color-surface-bubble: var(--surface-bubble);
+  --color-surface-bubble-border: var(--surface-bubble-border);
+  --color-surface-bubble-strong: var(--surface-bubble-strong);
+  --color-surface-accent-soft: var(--surface-accent-soft);
+  --color-surface-accent-strong: var(--surface-accent-strong);
+  --color-text-accent: var(--text-accent);
+  --color-ring-accent: var(--ring-accent);
 
   /* Design-system semantic aliases (progress, info callouts) — mirror `color-roles.css` */
   --color-semantic-progress-track: var(--semantic-progress-track);
@@ -724,6 +780,58 @@ html[data-theme] .nn-marketing-surface {
 /* Alternate band — use between major sections (pricing, hubs) for rhythm */
 .nn-surface-section-alt {
   background: var(--bg-section-alt);
+}
+
+/*
+ * Bubble / accent utility classes — opt-in themed surfaces.
+ * Apply to chat bubbles, callout panels, active selection indicators, badges, and pills.
+ * Do NOT apply to full-page sections, generic cards, or navigation shells.
+ */
+
+/* Incoming / neutral message bubble — softly tinted with theme hue */
+.nn-surface-bubble {
+  background: var(--surface-bubble);
+  border: 1px solid var(--surface-bubble-border);
+}
+
+/* Outgoing / strong message bubble — full primary fill, white-on-brand text */
+.nn-surface-bubble-strong {
+  background: var(--surface-bubble-strong);
+  color: var(--text-on-accent);
+  border: 1px solid transparent;
+}
+
+/* Badge / pill / highlight chip — lightest themed surface for small labels */
+.nn-surface-accent-soft {
+  background: var(--surface-accent-soft);
+  color: var(--text-accent);
+  border: 1px solid var(--surface-bubble-border);
+}
+
+/* Active tab, selected option — stronger themed chip */
+.nn-surface-accent-strong {
+  background: var(--surface-accent-strong);
+  color: var(--text-on-accent);
+  border: 1px solid transparent;
+}
+
+/* Themed inline text — links, labels, accent copy */
+.nn-text-accent {
+  color: var(--text-accent);
+}
+
+/* Focus ring / input focus outline */
+.nn-ring-accent {
+  outline: 2px solid var(--ring-accent);
+  outline-offset: 2px;
+}
+
+/* Callout panel — tinted inset for info/tip panels that opt into theme color */
+.nn-callout-accent {
+  background: var(--surface-bubble);
+  border-left: 3px solid var(--surface-bubble-strong);
+  padding: 0.875rem 1rem;
+  border-radius: 0 var(--radius) var(--radius) 0;
 }
 
 /* Pastel marketing layer — token-only; pairs with alternating clean sections */

@@ -44,6 +44,9 @@ export function LearnerPersonalInfoForm({
   const [tier, setTier] = useState<TierCode>(initial.tier);
   const [learnerPath, setLearnerPath] = useState(initial.learnerPath ?? "");
   const [studyGoal, setStudyGoal] = useState(initial.studyGoal ?? "");
+  const [dailyQuestionGoal, setDailyQuestionGoal] = useState(
+    initial.dailyQuestionGoal != null ? String(initial.dailyQuestionGoal) : "",
+  );
   const [examFocus, setExamFocus] = useState(initial.examFocus ?? "");
   const [pathwayOptions, setPathwayOptions] = useState(initial.pathwayOptions);
   const [lastServerRegion, setLastServerRegion] = useState<ServerRegionSnapshot>(() => ({
@@ -63,6 +66,7 @@ export function LearnerPersonalInfoForm({
     setTier(p.tier);
     setLearnerPath(p.learnerPath ?? "");
     setStudyGoal(p.studyGoal ?? "");
+    setDailyQuestionGoal(p.dailyQuestionGoal != null ? String(p.dailyQuestionGoal) : "");
     setExamFocus(p.examFocus ?? "");
     setPathwayOptions(p.pathwayOptions);
     setLastServerRegion({
@@ -115,6 +119,19 @@ export function LearnerPersonalInfoForm({
     setBusy(true);
     setError(null);
     setSaved(false);
+    const qGoalRaw = dailyQuestionGoal.trim();
+    let dailyQuestionGoalPayload: number | null;
+    if (!qGoalRaw) {
+      dailyQuestionGoalPayload = null;
+    } else {
+      const n = Number.parseInt(qGoalRaw, 10);
+      if (!Number.isFinite(n) || n < 5 || n > 120) {
+        setError(t("learner.personalPage.dailyQuestionGoalInvalid"));
+        setBusy(false);
+        return;
+      }
+      dailyQuestionGoalPayload = n;
+    }
     try {
       const res = await fetch("/api/learner/personal-profile", {
         method: "PATCH",
@@ -125,6 +142,7 @@ export function LearnerPersonalInfoForm({
           learnerPath: learnerPath.trim() ? learnerPath.trim() : null,
           studyGoal: studyGoal.trim() ? studyGoal.trim() : null,
           examFocus: examFocus.trim() ? examFocus.trim() : null,
+          dailyQuestionGoal: dailyQuestionGoalPayload,
         }),
       });
       const j = (await res.json()) as { ok?: boolean; error?: string; profile?: PersonalProfilePayload };
@@ -276,6 +294,24 @@ export function LearnerPersonalInfoForm({
                 onChange={(e) => setExamFocus(e.target.value)}
                 className="mt-1 w-full max-w-lg rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-2 text-sm"
               />
+            </div>
+            <div>
+              <label htmlFor="pi-daily-q" className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                {t("learner.personalPage.dailyQuestionGoal")}
+              </label>
+              <input
+                id="pi-daily-q"
+                name="dailyQuestionGoal"
+                type="number"
+                inputMode="numeric"
+                min={5}
+                max={120}
+                placeholder="20"
+                value={dailyQuestionGoal}
+                onChange={(e) => setDailyQuestionGoal(e.target.value)}
+                className="mt-1 w-full max-w-xs rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-2 text-sm tabular-nums"
+              />
+              <p className="mt-2 text-xs text-muted-foreground">{t("learner.personalPage.dailyQuestionGoalHint")}</p>
             </div>
             <div>
               <label htmlFor="pi-goal" className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">

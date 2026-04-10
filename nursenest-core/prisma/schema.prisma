@@ -138,6 +138,12 @@ model User {
   examFocus               String?
   studyGoal               String?
   dailyStudyMinutes       Int?
+  /** Target graded bank questions per UTC day; null uses product default (see load-daily-question-goal-progress). */
+  dailyQuestionGoal       Int?
+  /** UTC calendar day for which `bankQuestionsGradedCount` applies. */
+  bankQuestionsGradedUtcDay DateTime? @db.Date
+  /** Graded bank questions counted on `bankQuestionsGradedUtcDay`. */
+  bankQuestionsGradedCount  Int         @default(0)
   learnerPath             String?
   /** Calendar date the learner is targeting (UTC midnight stored). */
   examDate                DateTime?

@@ -28,6 +28,8 @@ export type PersonalProfilePayload = {
   examDatePlanType: string | null;
   targetExamPathwayId: string | null;
   studyCadencePreference: string | null;
+  /** Daily bank question target; null means product default. */
+  dailyQuestionGoal: number | null;
   regionTierLocked: boolean;
   lockReason: "subscription_plan" | null;
   pathwayOptions: PathwayPickOption[];
@@ -56,6 +58,7 @@ export async function loadPersonalProfilePayload(
         examDatePlanType: true,
         targetExamPathwayId: true,
         studyCadencePreference: true,
+        dailyQuestionGoal: true,
       },
     }),
     prisma.subscription.findFirst({
@@ -95,6 +98,7 @@ export async function loadPersonalProfilePayload(
     examDatePlanType: user.examDatePlanType ? user.examDatePlanType.toLowerCase() : null,
     targetExamPathwayId: user.targetExamPathwayId,
     studyCadencePreference: user.studyCadencePreference,
+    dailyQuestionGoal: user.dailyQuestionGoal,
     regionTierLocked,
     lockReason: regionTierLocked ? "subscription_plan" : null,
     pathwayOptions,

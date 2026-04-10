@@ -20,6 +20,7 @@ import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import { resolveRationaleLessonLinksForQuestion } from "@/lib/learner/rationale-lesson-link-resolve";
 import { analyticsDistinctId, captureServerEvent } from "@/lib/observability/posthog-server";
 import { PH } from "@/lib/observability/posthog-conversion-events";
+import { incrementBankQuestionsGradedToday } from "@/lib/learner/increment-bank-questions-graded-today";
 
 function topicRoutingConfidence(row: { subtopic?: string | null; topic?: string | null; bodySystem?: string | null }): RecommendationConfidence {
   if ((row.subtopic ?? "").trim().length > 1) return "high";
@@ -198,6 +199,8 @@ export async function POST(req: Request) {
         ? `/app/questions?${topicDrillQs.toString()}`
         : null;
     const topicDrillHref = topicDrillBase;
+
+    void incrementBankQuestionsGradedToday(gate.userId);
 
     /** ~5% sample for PostHog volume/accuracy trends — no question id, no stem content. */
     if (Math.random() < 0.05) {
