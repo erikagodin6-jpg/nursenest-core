@@ -40,7 +40,7 @@ export function HomeComparisonSection() {
           <p className="nn-marketing-caption mt-4 text-[var(--theme-muted-text)]">{t("home.comparison.disclaimer")}</p>
         </header>
 
-        <div className="hidden md:block overflow-x-auto rounded-2xl border border-[var(--border-subtle)] bg-[var(--theme-card-bg)] shadow-sm">
+        <div className="hidden md:block overflow-x-auto rounded-2xl border border-[var(--border-medium)] bg-[var(--theme-card-bg)] shadow-[var(--shadow-card)]">
           <table className="w-full min-w-[640px] border-collapse text-left text-sm">
             <thead>
               <tr className="border-b border-[var(--border-subtle)] bg-[var(--nn-presentation-wash)]">

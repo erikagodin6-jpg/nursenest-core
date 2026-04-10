@@ -1472,12 +1472,14 @@ async function listTopicClustersImpl(pathwayId: string, marketingLocale?: string
       return [];
     }
     const slugs = groups.map((g) => g.topicSlug);
+    // Safety cap: topic cardinality should be low (<100 per pathway) but guard against catalog explosions.
     const labelRows = await dbCall(
       () =>
         prisma.pathwayLesson.findMany({
           where: { pathwayId, status: ContentStatus.PUBLISHED, locale: effective, topicSlug: { in: slugs } },
           distinct: ["topicSlug"],
           select: { topicSlug: true, topic: true },
+          take: 200,
         }),
       [],
     );

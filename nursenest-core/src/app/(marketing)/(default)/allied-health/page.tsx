@@ -153,7 +153,7 @@ export default async function AlliedHealthHubPage() {
         </header>
 
         <section
-          className="rounded-2xl border border-[var(--trust-surface-border)] bg-[var(--trust-surface)] px-5 py-6 shadow-[var(--shadow-card)] sm:px-8 sm:py-8"
+          className="nn-card px-5 py-6 sm:px-8 sm:py-8"
           aria-labelledby="allied-who-heading"
         >
           <h2 id="allied-who-heading" className="nn-marketing-h3 text-[var(--theme-heading-text)]">

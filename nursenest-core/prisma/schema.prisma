@@ -934,6 +934,10 @@ model PathwayLesson {
   @@index([pathwayId, status, sortOrder])
   @@index([pathwayId, locale, status, sortOrder])
   @@index([pathwayId, topicSlug, locale, status])
+  /** Student app lesson list sorted by updatedAt (recently changed lessons appear first). */
+  @@index([pathwayId, status, locale, updatedAt(sort: Desc)])
+  /** Batch topic-coverage groupBy: group by pathwayId for all-pathway progress summaries. */
+  @@index([status, locale, pathwayId, topicSlug])
   @@map("pathway_lessons")
 }
 
@@ -1014,6 +1018,8 @@ model ExamQuestion {
   @@index([status, exam, tier, countryCode])
   /** Topic / category-scoped bank queries (e.g. filters, analytics) alongside exam + status. */
   @@index([status, exam, topic])
+  /** Marketing adaptive count queries: status + isAdaptiveEligible + tier (for pathway snapshots). */
+  @@index([status, isAdaptiveEligible, tier])
 }
 
 /**
@@ -1252,6 +1258,8 @@ model Progress {
 
   @@unique([userId, lessonId])
   @@index([userId, updatedAt])
+  /** Pathway progress summaries: prefix scan on lessonId after userId equality filter. */
+  @@index([userId, lessonId, completed])
 }
 
 model BackgroundJob {

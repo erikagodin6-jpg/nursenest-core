@@ -222,41 +222,47 @@ export async function loadPathwayStudySummaries(
   const learnerPath = user?.learnerPath ?? null;
 
   const pathways = listPathwaysCompatibleWithSubscription(entitlement);
+  if (pathways.length === 0) return [];
+
+  // `baseWhere` already includes `pathwayId: { in: [...] }` so the groupBy is pathway-scoped.
   const baseWhere = pathwayLessonsAppListWhere(entitlement, learnerPath);
 
-  const out: {
-    pathwayId: string;
-    label: string;
-    shortLabel: string;
-    lessonsTotal: number;
-    lessonsCompleted: number;
-    lessonsInProgress: number;
-  }[] = [];
+  // Two queries regardless of pathway count (was 3N sequential).
+  const [lessonCountGroups, allPathwayProgress] = await Promise.all([
+    // Batch: lesson counts per pathway in a single groupBy.
+    prisma.pathwayLesson.groupBy({
+      by: ["pathwayId"],
+      where: baseWhere,
+      _count: { _all: true },
+    }).catch(() => [] as { pathwayId: string; _count: { _all: number } }[]),
+    // Batch: all completed/in-progress pathway lessons for this user, aggregated in memory.
+    prisma.progress.findMany({
+      where: { userId, lessonId: { startsWith: "pathway:" } },
+      select: { lessonId: true, completed: true },
+    }).catch(() => [] as { lessonId: string; completed: boolean }[]),
+  ]);
 
-  for (const p of pathways) {
-    const lessonsTotal = await prisma.pathwayLesson.count({
-      where: {
-        AND: [baseWhere, { pathwayId: p.id }],
-      },
-    });
-    const prefix = `pathway:${p.id}:`;
-    const [lessonsCompleted, lessonsInProgress] = await Promise.all([
-      prisma.progress.count({
-        where: { userId, completed: true, lessonId: { startsWith: prefix } },
-      }),
-      prisma.progress.count({
-        where: { userId, completed: false, lessonId: { startsWith: prefix } },
-      }),
-    ]);
-    out.push({
-      pathwayId: p.id,
-      label: p.displayName,
-      shortLabel: p.shortName || p.displayName,
-      lessonsTotal,
-      lessonsCompleted,
-      lessonsInProgress,
-    });
+  const totalsByPathway = new Map(lessonCountGroups.map((g) => [g.pathwayId, g._count._all]));
+
+  // Parse "pathway:{pathwayId}:{slug}" and tally per pathwayId.
+  const progressByPathway = new Map<string, { completed: number; inProgress: number }>();
+  for (const r of allPathwayProgress) {
+    const rest = r.lessonId.slice("pathway:".length);
+    const colonIdx = rest.indexOf(":");
+    if (colonIdx < 0) continue;
+    const pid = rest.slice(0, colonIdx);
+    if (!progressByPathway.has(pid)) progressByPathway.set(pid, { completed: 0, inProgress: 0 });
+    const entry = progressByPathway.get(pid)!;
+    if (r.completed) entry.completed++;
+    else entry.inProgress++;
   }
 
-  return out;
+  return pathways.map((p) => ({
+    pathwayId: p.id,
+    label: p.displayName,
+    shortLabel: p.shortName || p.displayName,
+    lessonsTotal: totalsByPathway.get(p.id) ?? 0,
+    lessonsCompleted: progressByPathway.get(p.id)?.completed ?? 0,
+    lessonsInProgress: progressByPathway.get(p.id)?.inProgress ?? 0,
+  }));
 }

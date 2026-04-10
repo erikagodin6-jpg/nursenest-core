@@ -518,7 +518,7 @@ export function PricingPageClient({
       </section>
 
       {/* Compact: institutional + exam hubs */}
-      <section className="mt-10 rounded-xl border border-[var(--border-subtle)] bg-muted/15 px-4 py-4 text-sm text-muted-foreground">
+      <section className="mt-10 rounded-xl border border-[var(--trust-surface-border)] bg-[var(--trust-surface)] px-4 py-4 text-sm text-muted-foreground">
         <p>{t("pages.pricing.institutionalBanner")}</p>
         <Link href={institutionalHref} className="nn-link-quiet mt-2 inline-block font-semibold">
           {t("pages.pricing.institutionalLink")} →
