@@ -14,6 +14,7 @@ import {
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { isRuntimeSafeMode } from "@/lib/runtime/safe-mode";
+import { posthogHogqlTable, posthogProjectConfigured } from "@/lib/observability/posthog-hogql-query";
 
 export type TimeSeriesPoint = { label: string; value: number };
 
@@ -26,6 +27,16 @@ export type AdminAnalyticsDashboardData = {
   traffic: {
     siteTrafficAvailable: false;
     siteTrafficNote: string;
+    /** PostHog-sourced site traffic — populated when POSTHOG_PERSONAL_API_KEY + POSTHOG_PROJECT_ID are set. */
+    posthogTraffic: {
+      configured: boolean;
+      windowDays: number;
+      totalPageviews: number | null;
+      uniqueVisitors: number | null;
+      topPages: Array<{ url: string; pageviews: number; uniqueVisitors: number }>;
+      dailySeries: Array<{ day: string; pageviews: number; uniqueVisitors: number }>;
+      error?: string;
+    } | null;
     blogPerformance: Array<{
       slug: string;
       title: string;
@@ -112,14 +123,97 @@ export async function loadAdminAnalyticsDashboard(): Promise<AdminAnalyticsDashb
   const weekAgo = daysAgo(7);
   const chartSince = daysAgo(14);
 
-  const dataGaps = [
-    "Site-wide traffic (sessions, landing pages, referrer) is not stored in this database — use PostHog, Vercel Analytics, or your logging stack for acquisition and top pages.",
-    "Conversion funnels (visit → signup → checkout) require product analytics tooling unless you add server-side funnel tables.",
-  ];
+  const phConfigured = posthogProjectConfigured();
+  const dataGaps = phConfigured
+    ? [
+        "Conversion funnels (visit → signup → checkout): see Funnels tab for PostHog-backed step counts.",
+      ]
+    : [
+        "Site-wide traffic (sessions, landing pages, referrer) is not stored in this database — set POSTHOG_PERSONAL_API_KEY and POSTHOG_PROJECT_ID to pull live PostHog traffic data.",
+        "Conversion funnels (visit → signup → checkout) require product analytics tooling unless you add server-side funnel tables.",
+      ];
 
   const pushWarn = (e: unknown, label: string) => {
     warnings.push(`${label}: ${e instanceof Error ? e.message : String(e)}`.slice(0, 240));
   };
+
+  // PostHog site traffic — parallel fetch when configured.
+  const TRAFFIC_DAYS = 14;
+  const trafficFromDay = new Date(Date.now() - TRAFFIC_DAYS * 86400000).toISOString().slice(0, 10);
+
+  let posthogTraffic: AdminAnalyticsDashboardData["traffic"]["posthogTraffic"] = null;
+
+  if (phConfigured) {
+    try {
+      const [topPagesResult, dailyResult, totalsResult] = await Promise.all([
+        posthogHogqlTable(
+          `SELECT properties.$current_url, count() AS pageviews, uniqExact(distinct_id) AS unique_visitors
+           FROM events
+           WHERE event = '$pageview'
+             AND timestamp >= toDate('${trafficFromDay}')
+             AND properties.$host NOT LIKE '%localhost%'
+           GROUP BY properties.$current_url
+           ORDER BY pageviews DESC
+           LIMIT 15`,
+        ),
+        posthogHogqlTable(
+          `SELECT toDate(timestamp) AS day, count() AS pageviews, uniqExact(distinct_id) AS unique_visitors
+           FROM events
+           WHERE event = '$pageview'
+             AND timestamp >= toDate('${trafficFromDay}')
+             AND properties.$host NOT LIKE '%localhost%'
+           GROUP BY day
+           ORDER BY day ASC`,
+        ),
+        posthogHogqlTable(
+          `SELECT count() AS pageviews, uniqExact(distinct_id) AS unique_visitors
+           FROM events
+           WHERE event = '$pageview'
+             AND timestamp >= toDate('${trafficFromDay}')
+             AND properties.$host NOT LIKE '%localhost%'`,
+        ),
+      ]);
+
+      const topPages = topPagesResult.ok
+        ? topPagesResult.rows.map((r) => ({
+            url: String(r[0] ?? ""),
+            pageviews: Number(r[1] ?? 0),
+            uniqueVisitors: Number(r[2] ?? 0),
+          }))
+        : [];
+
+      const dailySeries = dailyResult.ok
+        ? dailyResult.rows.map((r) => ({
+            day: String(r[0] ?? ""),
+            pageviews: Number(r[1] ?? 0),
+            uniqueVisitors: Number(r[2] ?? 0),
+          }))
+        : [];
+
+      const totalsRow = totalsResult.ok && totalsResult.rows[0] ? totalsResult.rows[0] : null;
+
+      posthogTraffic = {
+        configured: true,
+        windowDays: TRAFFIC_DAYS,
+        totalPageviews: totalsRow ? Number(totalsRow[0] ?? 0) : null,
+        uniqueVisitors: totalsRow ? Number(totalsRow[1] ?? 0) : null,
+        topPages,
+        dailySeries,
+        error: topPagesResult.error ?? dailyResult.error ?? totalsResult.error,
+      };
+    } catch (e) {
+      posthogTraffic = {
+        configured: true,
+        windowDays: TRAFFIC_DAYS,
+        totalPageviews: null,
+        uniqueVisitors: null,
+        topPages: [],
+        dailySeries: [],
+        error: e instanceof Error ? e.message : String(e),
+      };
+      pushWarn(e, "posthogTraffic");
+    }
+  }
 
   let blogPerformance: AdminAnalyticsDashboardData["traffic"]["blogPerformance"] = [];
   try {
@@ -459,8 +553,10 @@ export async function loadAdminAnalyticsDashboard(): Promise<AdminAnalyticsDashb
     dataGaps,
     traffic: {
       siteTrafficAvailable: false,
-      siteTrafficNote:
-        "Page views and top landing URLs are not recorded in Postgres. Connect PostHog (already instrumented in app) or Vercel Analytics for traffic.",
+      siteTrafficNote: phConfigured
+        ? `PostHog connected — showing last ${TRAFFIC_DAYS} days of pageview data.`
+        : "Page views and top landing URLs are not recorded in Postgres. Set POSTHOG_PERSONAL_API_KEY and POSTHOG_PROJECT_ID to pull live traffic data.",
+      posthogTraffic,
       blogPerformance,
       blogPerformanceNote:
         blogPerformance.length === 0

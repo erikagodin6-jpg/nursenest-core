@@ -3,6 +3,7 @@ import { z } from "zod";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
 import { ContentStatus, QuestionType } from "@prisma/client";
 import { governExamQuestionPublish } from "@/lib/content/editorial-publish-policy";
+import { assertExamQuestionContextForPublish } from "@/lib/content-quality/exam-question-context-validation";
 import { prisma } from "@/lib/db";
 import { contentStatusToDb } from "@/lib/prisma/content-status";
 
@@ -51,10 +52,26 @@ export async function POST(req: Request) {
           correctAnswerExplanation: true,
           clinicalReasoning: true,
           keyTakeaway: true,
+          tier: true,
+          exam: true,
+          countryCode: true,
         },
       });
       const blocked: { id: string; reasons: string[] }[] = [];
       for (const row of rows) {
+        try {
+          assertExamQuestionContextForPublish({
+            tier: row.tier,
+            exam: row.exam,
+            countryCode: row.countryCode,
+          });
+        } catch (error) {
+          blocked.push({
+            id: row.id,
+            reasons: [error instanceof Error ? error.message : "Exam context required for publish"],
+          });
+          continue;
+        }
         const gov = governExamQuestionPublish(
           {
             stem: row.stem,

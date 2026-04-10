@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
+import { WebPageJsonLd } from "@/components/seo/seo-json-ld";
 import { questionBankIndexBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 import { MarketingPublicStudyLanding } from "@/components/marketing/marketing-public-study-landing";
 import {
@@ -18,7 +19,7 @@ import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-s
 import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
 import { formatMarketingMessage, resolveMarketingCopy } from "@/lib/marketing-i18n-core";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
-import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
+import { marketingAlternatesSharedPage, marketingCanonicalPathForLocale } from "@/lib/seo/marketing-alternates";
 import { getMarketingRegionFromCookies } from "@/lib/region/marketing-region-server";
 import {
   defaultQuestionBankMetaDescription,
@@ -130,9 +131,23 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function QuestionBankHubPage() {
   const locale = await getMarketingLocaleForDefaultRoute();
+  const marketingRegion = await getMarketingRegionFromCookies();
   const m = await loadMarketingMessages(locale);
   const en = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
   const t = (key: string, params?: Record<string, string | number>) => formatMarketingMessage(m, key, params, en);
+  const metaSfx = marketingRegion === "US" ? "US" : "CA";
+  const title = resolveMarketingCopy(
+    m,
+    `pages.publicQuestionBank.metaTitle${metaSfx}`,
+    en,
+    defaultQuestionBankMetaTitle(marketingRegion),
+  );
+  const description = resolveMarketingCopy(
+    m,
+    `pages.publicQuestionBank.metaDescription${metaSfx}`,
+    en,
+    defaultQuestionBankMetaDescription(marketingRegion),
+  );
 
   const appBank = loginWithCallback("/app/questions");
 
@@ -143,6 +158,12 @@ export default async function QuestionBankHubPage() {
 
   return (
     <>
+      <WebPageJsonLd
+        title={title}
+        description={description}
+        path={marketingCanonicalPathForLocale(locale, "/question-bank")}
+        inLanguage={locale}
+      />
       <BreadcrumbJsonLd items={schemaItems} />
       <div className="mx-auto max-w-7xl px-4 pt-2 sm:px-6 sm:pt-3 lg:px-8">
         <BreadcrumbTrail items={crumbs} navClassName="nn-marketing-caption" />

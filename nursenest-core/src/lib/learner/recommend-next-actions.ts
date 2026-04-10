@@ -1,3 +1,6 @@
+import { catPathwayShortCatLabel } from "@/lib/exam-pathways/cat-pathway-labels";
+import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
+import { appCatWeakFocusPath } from "@/lib/exam-pathways/pathway-cat-flow";
 import { normalizeTopicKey } from "@/lib/learner/topic-normalize";
 import { confidenceFromSignal, type RecommendationConfidence } from "@/lib/learner/topic-linking";
 import type { LearnerStudySnapshot } from "@/lib/learner/build-learner-study-snapshot";
@@ -98,13 +101,26 @@ function weakFlashcardsRec(w: WeakTopicRow): StudyNextRecommendation {
   };
 }
 
-function retestWeakPoolRec(): StudyNextRecommendation {
+function defaultPathwayIdForRecs(snapshot: LearnerStudySnapshot): string | null {
+  const fromLesson = snapshot.weakTopicPathwayLesson?.pathwayId?.trim();
+  if (fromLesson) return fromLesson;
+  const fromNext = snapshot.pathwayNext?.pathwayId?.trim();
+  return fromNext || null;
+}
+
+function retestWeakPoolRec(snapshot: LearnerStudySnapshot): StudyNextRecommendation {
+  const pid = defaultPathwayIdForRecs(snapshot);
+  const href = appCatWeakFocusPath(pid, undefined);
+  const pw = pid ? getExamPathwayById(pid) : undefined;
+  const title = pw ? `${catPathwayShortCatLabel(pw)} (weak focus)` : "Adaptive session (weak pool)";
   return {
     type: "retest_topic",
-    href: "/app/practice-tests?focus=weak",
-    title: "Practice test (weak pool)",
+    href,
+    title,
     reasonCode: "practice_retest_weak_pool",
-    reasonShort: "Builds a session biased to topics your ledger flags.",
+    reasonShort: pw
+      ? `CAT-style session biased to weak topics on ${catPathwayShortCatLabel(pw)}.`
+      : "Builds a session biased to topics your ledger flags.",
     confidence: "medium",
   };
 }
@@ -147,7 +163,7 @@ export function recommendNextActions(
   if (w && snapshot.hasWeakTopicFlashcards) {
     priority.push(weakFlashcardsRec(w));
   }
-  priority.push(retestWeakPoolRec());
+  priority.push(retestWeakPoolRec(snapshot));
   priority.push(mixedWeakBankRec());
 
   const flat = priority.filter((x): x is StudyNextRecommendation => x != null);

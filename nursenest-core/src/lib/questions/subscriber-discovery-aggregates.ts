@@ -3,6 +3,8 @@ import type { CountryCode, TierCode } from "@prisma/client";
 import { DB_PUBLISHED, examQuestionTiersForUserTier } from "@/lib/entitlements/content-access-scope";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { prisma } from "@/lib/db";
+import type { GlobalExamContext } from "@/lib/exam-context/global-exam-context";
+import { examQuestionPoolWhereForContext } from "@/lib/exam-context/query-scope";
 
 /** Match {@link DISCOVERY_TOPIC_BUCKET_CAP} in the route (SQL LIMIT — avoids unbounded groupBy in Node). */
 export const DISCOVERY_SQL_TOPIC_LIMIT = 250;
@@ -36,12 +38,26 @@ export function examQuestionsDiscoveryWhereSql(entitlement: AccessScope): Prisma
 export type DiscoveryAggregateRow = { topic: string; cnt: bigint };
 export type DiscoveryExamRow = { exam: string | null; cnt: bigint };
 
-export async function loadSubscriberDiscoveryAggregates(entitlement: AccessScope): Promise<{
+function discoveryExamContextScopeSql(ctx: GlobalExamContext | null): Prisma.Sql {
+  if (!ctx) return Prisma.empty;
+  const scoped = examQuestionPoolWhereForContext(ctx);
+  if (scoped.examIn.length === 0 || scoped.tierMatches.length === 0) return Prisma.sql` AND FALSE`;
+  return Prisma.sql`
+    AND exam IN (${Prisma.join(scoped.examIn)})
+    AND lower(coalesce(tier, '')) IN (${Prisma.join(scoped.tierMatches.map((tier) => tier.toLowerCase()))})
+  `;
+}
+
+export async function loadSubscriberDiscoveryAggregates(
+  entitlement: AccessScope,
+  examContext: GlobalExamContext | null = null,
+): Promise<{
   total: number;
   topicRows: DiscoveryAggregateRow[];
   examRows: DiscoveryExamRow[];
 }> {
   const w = examQuestionsDiscoveryWhereSql(entitlement);
+  const contextScope = discoveryExamContextScopeSql(examContext);
 
   return prisma.$transaction(
     async (tx) => {
@@ -50,11 +66,11 @@ export async function loadSubscriberDiscoveryAggregates(entitlement: AccessScope
       );
 
       const [totalRows, topicRows, examRows] = await Promise.all([
-        tx.$queryRaw<[{ n: bigint }]>`SELECT COUNT(*)::bigint AS n FROM exam_questions WHERE ${w}`,
+        tx.$queryRaw<[{ n: bigint }]>`SELECT COUNT(*)::bigint AS n FROM exam_questions WHERE ${w}${contextScope}`,
         tx.$queryRaw<DiscoveryAggregateRow[]>`
           SELECT topic, COUNT(*)::bigint AS cnt
           FROM exam_questions
-          WHERE topic IS NOT NULL AND ${w}
+          WHERE topic IS NOT NULL AND ${w}${contextScope}
           GROUP BY topic
           ORDER BY cnt DESC
           LIMIT ${DISCOVERY_SQL_TOPIC_LIMIT}
@@ -62,7 +78,7 @@ export async function loadSubscriberDiscoveryAggregates(entitlement: AccessScope
         tx.$queryRaw<DiscoveryExamRow[]>`
           SELECT exam, COUNT(*)::bigint AS cnt
           FROM exam_questions
-          WHERE ${w}
+          WHERE ${w}${contextScope}
           GROUP BY exam
           ORDER BY cnt DESC
           LIMIT ${DISCOVERY_SQL_EXAM_LIMIT}

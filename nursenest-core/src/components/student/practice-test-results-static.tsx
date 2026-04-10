@@ -121,6 +121,7 @@ export function PracticeTestResultsStatic({
         <CatResultsCoachPanel
           coach={results.catCoach}
           catExamFeedbackMode={results.catExamFeedbackMode ?? config?.catExamFeedbackMode ?? null}
+          pathwayId={config?.pathwayId ?? null}
         />
       ) : null}
 

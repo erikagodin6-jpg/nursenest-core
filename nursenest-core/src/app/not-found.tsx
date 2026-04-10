@@ -1,19 +1,18 @@
-import Link from "next/link";
-import { SiteBrandLogoMark } from "@/components/brand/site-brand-logo";
+import type { Metadata } from "next";
+import { auth } from "@/lib/auth";
+import { NotFoundClient } from "@/components/errors/not-found-client";
+import { loadResumeStudyingForNotFound } from "@/lib/ui/not-found-resume";
 
-export default function NotFound() {
-  return (
-    <main className="mx-auto mt-16 w-full max-w-xl px-6">
-      <div className="nn-card p-8">
-        <Link href="/" className="mb-6 inline-flex bg-transparent" aria-label="NurseNest home">
-          <SiteBrandLogoMark variant="auth" />
-        </Link>
-        <h1 className="text-2xl font-bold">Page not found</h1>
-        <p className="mt-3 text-muted">This route does not exist in NurseNest Core.</p>
-        <Link className="mt-5 inline-block rounded-xl bg-primary px-4 py-2 font-semibold" href="/">
-          Back to home
-        </Link>
-      </div>
-    </main>
-  );
+export const metadata: Metadata = {
+  title: "Page not found",
+  robots: { index: false, follow: true },
+};
+
+export default async function NotFound() {
+  const session = await auth();
+  const userId = (session?.user as { id?: string } | undefined)?.id ?? "";
+  const isAuthenticated = Boolean(userId);
+  const resumeStudying = isAuthenticated ? await loadResumeStudyingForNotFound() : null;
+
+  return <NotFoundClient isAuthenticated={isAuthenticated} resumeStudying={resumeStudying} />;
 }

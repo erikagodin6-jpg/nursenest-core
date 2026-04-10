@@ -3,6 +3,8 @@
  */
 import type { PrismaClient } from "@prisma/client";
 import { ContentStatus, CountryCode } from "@prisma/client";
+import { buildGlobalExamContext } from "@/lib/exam-context/exam-registry";
+import { pathwayLessonWhere } from "@/lib/exam-context/query-scope";
 import { buildExamPathwayPath, getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import {
   inferRationaleLessonSlugCandidates,
@@ -48,10 +50,13 @@ function ctaKeyForCandidate(
 async function resolveSlugHref(
   prisma: PrismaClient,
   pathwayId: string,
+  language: string,
   slug: string,
 ): Promise<{ href: string; title: string; hrefSource: "app" | "hub" } | null> {
+  const examContext = buildGlobalExamContext(pathwayId, language);
+  if (!examContext) return null;
   const row = await prisma.pathwayLesson.findFirst({
-    where: { pathwayId, slug, status: ContentStatus.PUBLISHED, locale: "en" },
+    where: { ...pathwayLessonWhere(examContext), slug, status: ContentStatus.PUBLISHED },
     select: { id: true, title: true },
   });
   const pathway = getExamPathwayById(pathwayId);
@@ -106,6 +111,8 @@ export async function resolveRationaleLessonLinksForQuestion(
 ): Promise<RationaleLessonLinkResolved[]> {
   const pathwayId = args.pathwayId;
   if (!pathwayId || !getExamPathwayById(pathwayId)) return [];
+  const examContext = buildGlobalExamContext(pathwayId, "en");
+  if (!examContext) return [];
 
   const topicCodeDerived = deriveTopicCode({
     topic: args.topic,
@@ -122,10 +129,9 @@ export async function resolveRationaleLessonLinksForQuestion(
   if (topicCodeDerived && pathwayCtx) {
     const rows = await prisma.pathwayLesson.findMany({
       where: {
-        pathwayId,
+        ...pathwayLessonWhere(examContext),
         topicSlug: topicCodeDerived,
         status: ContentStatus.PUBLISHED,
-        locale: "en",
       },
       select: {
         id: true,
@@ -196,7 +202,7 @@ export async function resolveRationaleLessonLinksForQuestion(
   for (const c of candidates) {
     if (out.length >= 3) break;
     if (seenSlug.has(c.slug)) continue;
-    const resolved = await resolveSlugHref(prisma, pathwayId, c.slug);
+    const resolved = await resolveSlugHref(prisma, pathwayId, examContext.language, c.slug);
     if (!resolved) continue;
     if (seenHref.has(resolved.href)) continue;
     seenSlug.add(c.slug);
@@ -227,7 +233,7 @@ export async function resolveRationaleLessonLinksForQuestion(
   });
   if (topicCode) {
     const legacy = await prisma.pathwayLesson.findFirst({
-      where: { pathwayId, topicSlug: topicCode, status: ContentStatus.PUBLISHED, locale: "en" },
+      where: { ...pathwayLessonWhere(examContext), topicSlug: topicCode, status: ContentStatus.PUBLISHED },
       orderBy: { sortOrder: "asc" },
       select: { id: true, title: true, slug: true },
     });

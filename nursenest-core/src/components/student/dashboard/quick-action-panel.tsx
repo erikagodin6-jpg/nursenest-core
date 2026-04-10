@@ -16,7 +16,14 @@ import type { LearnerMarketingT } from "@/lib/learner/learner-marketing-server";
 export type QuickActionGuided = {
   continueLesson?: { title: string; href: string } | null;
   hasWeakAreas?: boolean;
+  /** A completed mock/practice item in the recent window. */
+  hasRecentCompletion?: boolean;
+  /** Pathway-specific CAT start href (e.g. `/app/practice-tests/start?pathwayId=us-rn-nclex-rn`). Falls back to generic start page. */
   catStartHref?: string | null;
+  /** Exam code for scoped copy (e.g. "NCLEX-RN") — pair with catPathwayLine */
+  catPathwayLabel?: string | null;
+  /** Full pathway line (e.g. "US RN · NCLEX-RN") for subtitle when label is set */
+  catPathwayLine?: string | null;
 };
 
 /** Secondary navigation — direct links to key app areas. */
@@ -54,10 +61,18 @@ export function QuickActionPanel({
   id?: string;
   guided?: QuickActionGuided | null;
 }) {
+  const hasInProgressLesson = Boolean(guided?.continueLesson?.href);
+  const hasWeakAreas = Boolean(guided?.hasWeakAreas);
+  const hasRecentCompletion = Boolean(guided?.hasRecentCompletion);
+  const emphasisPriority = hasInProgressLesson ? "resume" : hasWeakAreas ? "weak" : hasRecentCompletion ? "cat" : null;
+  const emphasizeResume = emphasisPriority === "resume";
+  const emphasizeWeak = emphasisPriority === "weak";
+  const emphasizeCat = emphasisPriority === "cat";
   const resumeHref = guided?.continueLesson?.href ?? "/app/lessons";
   const resumeTitle = guided?.continueLesson?.title ?? null;
-  const weakHref = guided?.hasWeakAreas ? "#dashboard-weak-areas" : "/app/questions";
+  const weakHref = hasWeakAreas ? "#dashboard-weak-areas" : "/app/questions";
   const catStartHref = guided?.catStartHref?.trim() || "/app/practice-tests/start";
+  const catScoped = Boolean(guided?.catPathwayLabel?.trim() && guided?.catPathwayLine?.trim());
 
   return (
     <section className="nn-surface-bubble rounded-2xl p-4 shadow-[var(--shadow-card)] sm:p-6" aria-labelledby={`${id}-heading`}>
@@ -76,7 +91,13 @@ export function QuickActionPanel({
         {/* Card 1: Resume / Start Lessons */}
         <Link
           href={resumeHref}
-          className="group flex flex-col gap-1.5 rounded-xl border border-[color-mix(in_srgb,var(--semantic-success)_32%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-success)_10%,var(--semantic-surface))] px-4 py-3.5 transition-[transform,background-color,box-shadow] duration-200 hover:bg-[color-mix(in_srgb,var(--semantic-success)_15%,var(--semantic-surface))] hover:shadow-[var(--semantic-shadow-soft)] motion-safe:hover:-translate-y-0.5"
+          className={`group flex flex-col gap-1.5 rounded-xl border bg-[color-mix(in_srgb,var(--semantic-success)_10%,var(--semantic-surface))] px-4 py-3.5 transition-[transform,background-color,box-shadow,border-color] duration-200 hover:bg-[color-mix(in_srgb,var(--semantic-success)_15%,var(--semantic-surface))] hover:shadow-[var(--semantic-shadow-soft)] motion-safe:hover:-translate-y-0.5 ${
+            hasInProgressLesson
+              ? emphasizeResume
+                ? "border-[color-mix(in_srgb,var(--semantic-success)_46%,var(--semantic-border-soft))] shadow-[0_0_0_1px_color-mix(in_srgb,var(--semantic-success)_22%,transparent)]"
+                : "border-[color-mix(in_srgb,var(--semantic-success)_32%,var(--semantic-border-soft))]"
+              : "border-[color-mix(in_srgb,var(--semantic-success)_32%,var(--semantic-border-soft))]"
+          }`}
         >
           <div className="flex items-center gap-2">
             <PlayCircle
@@ -98,7 +119,14 @@ export function QuickActionPanel({
         {/* Card 2: Start CAT */}
         <Link
           href={catStartHref}
-          className="group flex flex-col gap-1.5 rounded-xl border border-[color-mix(in_srgb,var(--semantic-brand)_32%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_10%,var(--semantic-surface))] px-4 py-3.5 transition-[transform,background-color,box-shadow] duration-200 hover:bg-[color-mix(in_srgb,var(--semantic-brand)_16%,var(--semantic-surface))] hover:shadow-[var(--semantic-shadow-soft)] motion-safe:hover:-translate-y-0.5"
+          data-nn-qa-dashboard-cat-card={catScoped ? "scoped" : "generic"}
+          className={`group flex flex-col gap-1.5 rounded-xl border bg-[color-mix(in_srgb,var(--semantic-brand)_10%,var(--semantic-surface))] px-4 py-3.5 transition-[transform,background-color,box-shadow,border-color] duration-200 hover:bg-[color-mix(in_srgb,var(--semantic-brand)_16%,var(--semantic-surface))] hover:shadow-[var(--semantic-shadow-soft)] motion-safe:hover:-translate-y-0.5 ${
+            hasRecentCompletion
+              ? emphasizeCat
+                ? "border-[color-mix(in_srgb,var(--semantic-brand)_46%,var(--semantic-border-soft))] shadow-[0_0_0_1px_color-mix(in_srgb,var(--semantic-brand)_22%,transparent)]"
+                : "border-[color-mix(in_srgb,var(--semantic-brand)_32%,var(--semantic-border-soft))]"
+              : "border-[color-mix(in_srgb,var(--semantic-brand)_32%,var(--semantic-border-soft))]"
+          }`}
         >
           <div className="flex items-center gap-2">
             <GraduationCap
@@ -107,28 +135,36 @@ export function QuickActionPanel({
               aria-hidden
             />
             <span className="text-sm font-semibold text-[var(--semantic-brand)]">
-              {t("learner.dashboard.student.quick.cat")}
+              {catScoped
+                ? t("learner.dashboard.student.quick.catScoped", { exam: guided!.catPathwayLabel! })
+                : t("learner.dashboard.student.quick.cat")}
             </span>
           </div>
           <p className="text-[11px] leading-snug text-[var(--semantic-text-secondary)]">
-            {t("learner.dashboard.student.quick.catSub")}
+            {catScoped
+              ? t("learner.dashboard.student.quick.catSubScoped", { pathwayLine: guided!.catPathwayLine! })
+              : t("learner.dashboard.student.quick.catSub")}
           </p>
-          <p className="text-[10px] leading-snug text-[var(--semantic-text-secondary)]">
-            If you have more than one exam track, you’ll pick the pathway on the next screen.
-          </p>
+          {!catScoped ? (
+            <p className="text-[10px] leading-snug text-[var(--semantic-text-secondary)]">
+              If you have more than one exam track, you’ll pick the pathway on the next screen.
+            </p>
+          ) : null}
         </Link>
 
         {/* Card 3: Weak topics (when available) or Question bank */}
         <Link
           href={weakHref}
           className={`group flex flex-col gap-1.5 rounded-xl border px-4 py-3.5 transition-[transform,background-color,box-shadow] duration-200 hover:shadow-[var(--semantic-shadow-soft)] motion-safe:hover:-translate-y-0.5 ${
-            guided?.hasWeakAreas
-              ? "border-[color-mix(in_srgb,var(--semantic-warning)_35%,var(--semantic-border-soft))] bg-[var(--semantic-warning-soft)] hover:bg-[color-mix(in_srgb,var(--semantic-warning)_14%,var(--semantic-surface))]"
+            hasWeakAreas
+              ? emphasizeWeak
+                ? "border-[color-mix(in_srgb,var(--semantic-warning)_46%,var(--semantic-border-soft))] bg-[var(--semantic-warning-soft)] shadow-[0_0_0_1px_color-mix(in_srgb,var(--semantic-warning)_20%,transparent)] hover:bg-[color-mix(in_srgb,var(--semantic-warning)_14%,var(--semantic-surface))]"
+                : "border-[color-mix(in_srgb,var(--semantic-warning)_35%,var(--semantic-border-soft))] bg-[var(--semantic-warning-soft)] hover:bg-[color-mix(in_srgb,var(--semantic-warning)_14%,var(--semantic-surface))]"
               : "border-[color-mix(in_srgb,var(--semantic-info)_32%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-info)_10%,var(--semantic-surface))] hover:bg-[color-mix(in_srgb,var(--semantic-info)_15%,var(--semantic-surface))]"
           }`}
         >
           <div className="flex items-center gap-2">
-            {guided?.hasWeakAreas ? (
+            {hasWeakAreas ? (
               <Crosshair
                 className="h-4 w-4 shrink-0 text-[var(--semantic-warning-contrast)] transition-transform duration-200 group-hover:translate-x-0.5"
                 strokeWidth={2}
@@ -143,18 +179,18 @@ export function QuickActionPanel({
             )}
             <span
               className={`text-sm font-semibold ${
-                guided?.hasWeakAreas
+                hasWeakAreas
                   ? "text-[var(--semantic-warning-contrast)]"
                   : "text-[var(--semantic-info)]"
               }`}
             >
-              {guided?.hasWeakAreas
+              {hasWeakAreas
                 ? t("learner.dashboard.quickActions.reviewWeakAreas")
                 : t("learner.dashboard.student.quick.continueQuestions")}
             </span>
           </div>
           <p className="text-[11px] leading-snug text-[var(--semantic-text-secondary)]">
-            {guided?.hasWeakAreas
+            {hasWeakAreas
               ? t("learner.dashboard.insight.weakHint")
               : t("learner.dashboard.student.quick.continueQuestionsSub")}
           </p>

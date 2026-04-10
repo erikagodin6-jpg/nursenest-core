@@ -10,6 +10,7 @@ import {
   assessCatEligibilityForSubscriberAndPathway,
   assessMarketingCatSurfaceWithoutAuth,
 } from "@/lib/exam-pathways/cat-eligibility";
+import { catPathwayShortCatLabel } from "@/lib/exam-pathways/cat-pathway-labels";
 import {
   PATHWAY_CAT_PRACTICE_DEFAULT_MAX_QUESTIONS,
   appPathwayCatSessionStartPath,
@@ -116,6 +117,7 @@ export default async function PathwayCatEntryPage({ params }: Props) {
   }
 
   const countryLabel = pathway.countrySlug === "canada" ? "Canada" : "US";
+  const catShort = catPathwayShortCatLabel(pathway);
   const lessonsHref = buildExamPathwayPath(pathway, "lessons");
   const questionsHref = buildExamPathwayPath(pathway, "questions");
   const pricingHref = buildExamPathwayPath(pathway, "pricing");
@@ -133,7 +135,7 @@ export default async function PathwayCatEntryPage({ params }: Props) {
       <Link href={overviewHref} className="text-sm font-medium text-primary hover:underline">
         ← {pathway.shortName} overview
       </Link>
-      <h1 className="mt-4 text-3xl font-extrabold text-[var(--theme-heading-text)]">Adaptive (CAT) practice</h1>
+      <h1 className="mt-4 text-3xl font-extrabold text-[var(--theme-heading-text)]">{catShort}</h1>
       <p className="mt-3 text-[var(--theme-muted-text)]">
         One question at a time, difficulty adjusts from your answers. Pool is limited to{" "}
         <strong className="text-[var(--theme-heading-text)]">{pathway.shortName}</strong> items for {countryLabel} (
@@ -187,18 +189,18 @@ export default async function PathwayCatEntryPage({ params }: Props) {
             href={assessment.appCatStartPath}
             className="inline-flex min-h-[48px] items-center justify-center rounded-full bg-primary px-8 py-3 text-sm font-semibold text-primary-foreground shadow-sm"
           >
-            Start CAT session
+            Start {catShort}
           </Link>
         ) : assessment.marketingPrimaryCta === "sign_in_to_cat" ? (
           <Link
             href={signInReturnHref}
             className="inline-flex min-h-[48px] items-center justify-center rounded-full bg-primary px-8 py-3 text-sm font-semibold text-primary-foreground shadow-sm"
           >
-            Sign in to continue
+            Sign in for {catShort}
           </Link>
         ) : (
           <span className="inline-flex min-h-[48px] cursor-default items-center justify-center rounded-full border border-border bg-muted/50 px-8 py-3 text-sm font-semibold text-muted-foreground">
-            CAT start unavailable — use links below
+            {catShort} unavailable — use links below
           </span>
         )}
         <Link

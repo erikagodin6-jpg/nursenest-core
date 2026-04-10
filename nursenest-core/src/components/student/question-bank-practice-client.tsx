@@ -48,6 +48,8 @@ import { mergeRationaleLessonLinksWithTopicFallback } from "@/lib/questions/merg
 import { parseCommaSeparatedQuestionIds } from "@/lib/questions/question-id-list-param";
 import { resolveMeasurementSystemForLearnerPathway } from "@/lib/measurements/measurement-system";
 import { resolveMeasurementTokens } from "@/lib/measurements/measurement-tokens";
+import { buildGlobalExamContext } from "@/lib/exam-context/exam-registry";
+import { examContextAnalyticsProps } from "@/lib/exam-context/global-exam-context";
 
 export type { QuestionBankDifficultyBand, QuestionBankPreset, SavedQuestionBankPreset } from "@/lib/questions/question-bank-client-types";
 
@@ -211,6 +213,10 @@ export function QuestionBankPracticeClient({
   const [topic, setTopic] = useState<string | null>(null);
   const [topicCodeFilter, setTopicCodeFilter] = useState<string | null>(null);
   const [pathwayIdFilter, setPathwayIdFilter] = useState<string | null>(null);
+  const selectedExamContext = useMemo(
+    () => buildGlobalExamContext(pathwayIdFilter ?? defaultPathwayId ?? null, "en"),
+    [defaultPathwayId, pathwayIdFilter],
+  );
   const [preset, setPreset] = useState<QuestionBankPreset>("pathway_mixed");
   const seenIdsRef = useRef<string[]>([]);
   const [topics, setTopics] = useState<{ topic: string; count: number }[]>([]);
@@ -451,6 +457,7 @@ export function QuestionBankPracticeClient({
             preset,
             session_size: sessionSize,
             topic_set: Boolean(topicForApi),
+            ...examContextAnalyticsProps(selectedExamContext),
           });
         }
 
@@ -519,8 +526,9 @@ export function QuestionBankPracticeClient({
       pathway_id: pathwayIdFilter ?? undefined,
       preset,
       session_target: target,
+      ...examContextAnalyticsProps(selectedExamContext),
     });
-  }, [phase, questions.length, graded, sessionSize, pathwayIdFilter, preset]);
+  }, [phase, questions.length, graded, sessionSize, pathwayIdFilter, preset, selectedExamContext]);
 
   useEffect(() => {
     if (preset === "random_bank") return;
@@ -539,7 +547,13 @@ export function QuestionBankPracticeClient({
     let cancelled = false;
     (async () => {
       try {
-        const res = await fetch("/api/questions/discovery");
+        const qp = new URLSearchParams();
+        if (selectedExamContext?.pathwayId) {
+          qp.set("pathwayId", selectedExamContext.pathwayId);
+          qp.set("language", selectedExamContext.language);
+        }
+        const discoveryUrl = qp.size > 0 ? `/api/questions/discovery?${qp.toString()}` : "/api/questions/discovery";
+        const res = await fetch(discoveryUrl);
         if (!res.ok) {
           let code: string | undefined;
           try {
@@ -573,7 +587,7 @@ export function QuestionBankPracticeClient({
     return () => {
       cancelled = true;
     };
-  }, [t]);
+  }, [selectedExamContext, t]);
 
   useEffect(() => {
     if (!pathwayMixedReady) return;

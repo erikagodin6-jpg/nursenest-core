@@ -31,6 +31,9 @@ import { pathwayLessonHasRenderableHubSlug } from "@/lib/lessons/pathway-lesson-
 import { HUB } from "@/lib/marketing/marketing-entry-routes";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { ContentEmptyState } from "@/components/ui/content-empty-state";
+import { PremiumEmptyState } from "@/components/ui/premium-empty-state";
+import { emptyStateCopy } from "@/lib/ui/empty-state-copy";
+import { Search } from "lucide-react";
 import { pathwayLessonsHubBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 import { absoluteUrl } from "@/lib/seo/site-origin";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
@@ -180,10 +183,18 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
             initialQuery={qEffective}
             heroAccent={pathway.examFamily === ExamFamily.NP ? "np" : "default"}
           />
-          <p className="mt-6 text-[var(--theme-muted-text)]">
-            No lessons matched &ldquo;{qEffective}&rdquo; for {pathway.shortName}. Try a shorter term, browse by topic, or clear
-            the search.
-          </p>
+          <PremiumEmptyState
+            data-nn-empty="pathway-lessons-search"
+            className="mt-6"
+            visualLayout="split"
+            Icon={Search}
+            headline={emptyStateCopy.noSearchResults.headline}
+            body={`Nothing matched “${qEffective}” for ${pathway.shortName}. ${emptyStateCopy.noSearchResults.body}`}
+            primaryCta={{ label: "View all lessons", href: base, variant: "primary" }}
+            secondaryCtas={[
+              { label: "Pathway questions", href: buildExamPathwayPath(pathway, "questions"), variant: "secondary" },
+            ]}
+          />
           <PathwayLiveInventoryStrip
             pathway={pathway}
             questionSnapshot={questionSnapshot}
@@ -191,11 +202,6 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
             variant="lessons"
           />
           <PathwayLessonsNextStepCtas pathway={pathway} />
-          <div className="mt-6">
-            <Link href={base} className="text-sm font-semibold text-primary underline">
-              View all lessons (clear search)
-            </Link>
-          </div>
           <MarketingStudyCrossLinks className="mt-14" />
         </div>
       );

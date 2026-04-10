@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 import { trackClientEvent } from "@/lib/observability/posthog-client";
+import { buildGlobalExamContext } from "@/lib/exam-context/exam-registry";
+import { examContextAnalyticsProps } from "@/lib/exam-context/global-exam-context";
 import type { CatExamFeedbackMode } from "@/lib/practice-tests/types";
 import type { CatResultsCoachSnapshot } from "@/lib/practice-tests/cat-results-coach";
 import {
@@ -44,11 +46,14 @@ function difficultySparkline(series: number[], height = 40, width = 200) {
 export function CatResultsCoachPanel({
   coach: coachProp,
   catExamFeedbackMode,
+  pathwayId = null,
 }: {
   coach: CatResultsCoachSnapshot | null | undefined;
   catExamFeedbackMode?: CatExamFeedbackMode | null;
+  pathwayId?: string | null;
 }) {
   const coach = normalizeCatResultsCoachSnapshot(coachProp);
+  const examContextProps = examContextAnalyticsProps(buildGlobalExamContext(pathwayId, "en"));
   const modeLabel =
     catExamFeedbackMode === "study"
       ? "Study Mode"
@@ -218,6 +223,7 @@ export function CatResultsCoachPanel({
                       trackClientEvent(PH.learnerCatLearningLinkClicked, {
                         surface: "cat_results_coach",
                         link_kind: l.kind,
+                        ...examContextProps,
                       })
                     }
                   >

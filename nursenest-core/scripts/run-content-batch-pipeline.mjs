@@ -24,6 +24,56 @@ import { fileURLToPath } from "node:url";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, "..");
 
+// ─── canonical topic-slug mapping (inline for pure-JS pipeline) ───────────────
+// Source of truth lives in src/lib/content/topic-slug-canonical-map.ts
+// Keep these two in sync when adding new topic keys.
+const QUESTION_KEY_TO_CANONICAL_SLUG = {
+  // Respiratory
+  "copd-respiratory": "copd",
+  "abg-interpretation": "abg",
+  "acid-base-advanced": "acid-base",
+  // Cardiovascular
+  "myocardial-infarction": "acute-coronary",
+  // Renal / Fluids
+  "sodium-imbalance": "sodium",
+  "potassium-imbalance": "potassium",
+  "fluid-balance": "fluids-electrolytes",
+  // Endocrine
+  "insulin-hypoglycemia": "diabetes-meds",
+  // Pharmacology / Treatments
+  "anticoagulants": "anticoagulation",
+  "pain-management": "pain",
+  "wound-care": "wounds",
+  // Management / Safety
+  "prioritization-abcs": "prioritization",
+  // Catch-all bucket
+  "general-nursing-clinical": "clinical-judgment",
+};
+
+/** Resolve any slug — question-bank key or already canonical — to canonical form. */
+function canonicalTopicSlug(slug) {
+  return QUESTION_KEY_TO_CANONICAL_SLUG[slug] ?? slug;
+}
+
+/** Extract canonical topicSlug from a question's tags array. */
+function canonicalTopicSlugFromTags(tags, fallbackTopic) {
+  const topicTag = (tags ?? []).find((t) => t.startsWith("topic:"));
+  if (topicTag) return canonicalTopicSlug(topicTag.slice(6));
+  if (fallbackTopic) {
+    const slugified = fallbackTopic
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-|-$/g, "");
+    return canonicalTopicSlug(slugified);
+  }
+  return "general";
+}
+
+/** Returns true if the canonical slug is the catch-all bucket. */
+function isCatchAllTopic(canonicalSlug) {
+  return canonicalSlug === "clinical-judgment";
+}
+
 // ─── helpers ──────────────────────────────────────────────────────────────────
 
 function loadJson(relPath) {
@@ -48,7 +98,7 @@ function slugify(str) {
     .replace(/^-|-$/g, "");
 }
 
-const PIPELINE_VERSION = "2026-04-batch-v1";
+const PIPELINE_VERSION = "2026-04-batch-v2";
 const NOW = new Date().toISOString();
 
 // ─── program config ────────────────────────────────────────────────────────────
@@ -353,8 +403,8 @@ function step4_deduplicate(validated) {
 function step5_normalize(deduped, blueprint, cfg) {
   const normalizedQuestions = deduped.questions.items.map((q) => {
     const tags = Array.isArray(q.tags) ? q.tags : [];
-    const topicTag = tags.find((t) => t.startsWith("topic:"));
-    const topicSlug = topicTag ? topicTag.slice(6) : slugify(q.topic ?? "general");
+    // Use canonical mapping so question keys (copd-respiratory) resolve to lesson slugs (copd)
+    const topicSlug = canonicalTopicSlugFromTags(tags, q.topic);
     const categoryTag = tags.find((t) => t.startsWith("category:"));
     const categorySlug = categoryTag ? categoryTag.slice(9) : null;
 
@@ -461,6 +511,8 @@ function step6_link(normalized) {
   const topicsWithoutLesson = [...questionTopics].filter((t) => !lessonTopics.has(t));
   const topicsWithoutQuestions = [...lessonTopics].filter((t) => !questionTopics.has(t));
 
+  const catchAllQuestions = linkedQuestions.filter((q) => isCatchAllTopic(q.topicSlug));
+
   return {
     programId: normalized.programId,
     linkedAt: NOW,
@@ -477,6 +529,7 @@ function step6_link(normalized) {
       topicsWithLesson: [...questionTopics].filter((t) => lessonTopics.has(t)).length,
       topicsWithoutLesson,
       topicsWithoutQuestions,
+      catchAllQuestionCount: catchAllQuestions.length,
       averageQuestionsPerTopic:
         linkedLessons.length > 0
           ? Math.round(
@@ -567,35 +620,40 @@ function step8_coverageAudit(importReady, blueprint) {
   const { questions, lessons } = importReady;
 
   // Question coverage by domain (map blueprint domains to topic patterns)
+  // All topic slugs here are canonical (resolved via QUESTION_KEY_TO_CANONICAL_SLUG).
   const DOMAIN_TOPIC_MAP = {
     "Management of Care": [
-      "delegation", "prioritization-abcs", "fundamentals-patient-safety",
-      "emergency-triage-disaster",
+      "delegation", "prioritization", "fundamentals-patient-safety",
+      "emergency-triage-disaster", "clinical-judgment",
     ],
     "Safety and Infection Control": [
-      "infection-control", "wound-care", "fundamentals-patient-safety",
+      "infection-control", "wounds", "fundamentals-patient-safety",
     ],
     "Health Promotion and Maintenance": [
       "health-promotion", "maternal-newborn-care", "pediatrics-care",
+      "maternity", "pediatrics", "nutrition",
     ],
     "Psychosocial Integrity": [
-      "mental-health-crisis",
+      "mental-health-crisis", "mental-health",
     ],
     "Basic Care and Comfort": [
-      "pain-management", "fluid-balance", "fundamentals-patient-safety",
+      "pain", "fluids-electrolytes", "fundamentals-patient-safety",
     ],
     "Pharmacological Therapies": [
-      "anticoagulants", "antibiotics", "insulin-hypoglycemia", "pain-management",
+      "anticoagulation", "antibiotics", "diabetes-meds", "pain",
+      "pharmacology",
     ],
     "Reduction of Risk Potential": [
-      "sepsis", "shock", "abg-interpretation", "acid-base-advanced",
-      "potassium-imbalance", "sodium-imbalance", "neurological-acute-care",
+      "sepsis", "shock", "abg", "acid-base",
+      "potassium", "sodium", "neurological-acute-care", "neurological",
     ],
     "Physiological Adaptation": [
-      "heart-failure", "myocardial-infarction", "pulmonary-embolism", "angina",
+      "heart-failure", "acute-coronary", "pulmonary-embolism", "angina",
       "dysrhythmias", "hypertension", "asthma", "ards", "pneumonia",
-      "copd-respiratory", "gastrointestinal-acute-care", "renal-genitourinary-care",
+      "copd", "gastrointestinal-acute-care", "renal-genitourinary-care",
       "hematology-oncology-care", "musculoskeletal-care", "integumentary-burn-wound",
+      "cardiovascular", "respiratory", "gastrointestinal", "renal-gu",
+      "hematology", "musculoskeletal", "integumentary", "infectious",
     ],
   };
 

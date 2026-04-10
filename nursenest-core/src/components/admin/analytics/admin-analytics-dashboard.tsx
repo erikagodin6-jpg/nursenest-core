@@ -65,6 +65,69 @@ function SectionCard({
   );
 }
 
+function PostHogTrafficCard({
+  traffic,
+}: {
+  traffic: NonNullable<AdminAnalyticsDashboardData["traffic"]["posthogTraffic"]>;
+}) {
+  const maxPv = Math.max(1, ...traffic.topPages.map((p) => p.pageviews));
+  const seriesMax = Math.max(1, ...traffic.dailySeries.map((d) => d.pageviews));
+
+  return (
+    <SectionCard
+      title={`Site traffic (PostHog · ${traffic.windowDays}d)`}
+      subtitle={`${traffic.totalPageviews?.toLocaleString() ?? "—"} pageviews · ${traffic.uniqueVisitors?.toLocaleString() ?? "—"} unique visitors`}
+    >
+      {traffic.error ? (
+        <p className="text-xs text-amber-700 dark:text-amber-300">{traffic.error}</p>
+      ) : null}
+
+      {/* Mini daily series */}
+      {traffic.dailySeries.length > 0 ? (
+        <div className="mb-4 flex h-20 items-end gap-0.5" aria-label="Daily pageviews chart">
+          {traffic.dailySeries.map((pt) => (
+            <div
+              key={pt.day}
+              className="flex min-w-0 flex-1 flex-col items-center gap-1"
+              title={`${pt.day}: ${pt.pageviews} pageviews, ${pt.uniqueVisitors} unique`}
+            >
+              <div
+                className="w-full rounded-t bg-sky-500/70 transition hover:bg-sky-500"
+                style={{ height: `${Math.max(4, (pt.pageviews / seriesMax) * 100)}%` }}
+              />
+            </div>
+          ))}
+        </div>
+      ) : null}
+
+      {/* Top pages */}
+      {traffic.topPages.length > 0 ? (
+        <div className="space-y-2">
+          <p className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">Top pages</p>
+          {traffic.topPages.slice(0, 8).map((p) => (
+            <div key={p.url} className="space-y-0.5">
+              <div className="flex justify-between gap-2 text-xs">
+                <span className="min-w-0 truncate text-muted-foreground" title={p.url}>
+                  {p.url.replace(/^https?:\/\/[^/]+/, "") || "/"}
+                </span>
+                <span className="shrink-0 tabular-nums font-medium">{p.pageviews.toLocaleString()}</span>
+              </div>
+              <div className="h-1.5 overflow-hidden rounded-full bg-muted/60">
+                <div
+                  className="h-1.5 rounded-full bg-sky-500/70"
+                  style={{ width: `${Math.round((p.pageviews / maxPv) * 100)}%` }}
+                />
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <p className="text-xs text-muted-foreground">No pageview data in the selected window yet.</p>
+      )}
+    </SectionCard>
+  );
+}
+
 export function AdminAnalyticsDashboard({ initialData }: { initialData: AdminAnalyticsDashboardData | null }) {
   const router = useRouter();
   const [busy, setBusy] = useState(false);
@@ -142,7 +205,7 @@ export function AdminAnalyticsDashboard({ initialData }: { initialData: AdminAna
         </ul>
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6">
         <div className="rounded-2xl border border-border/80 bg-gradient-to-br from-primary/[0.07] to-transparent p-4">
           <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Active subscriptions</p>
           <p className="mt-1 text-3xl font-bold tabular-nums text-[var(--theme-heading-text)]">
@@ -169,6 +232,28 @@ export function AdminAnalyticsDashboard({ initialData }: { initialData: AdminAna
           <p className="mt-1 text-3xl font-bold tabular-nums">{signupsSum.toLocaleString()}</p>
           <p className="mt-2 text-[11px] text-muted-foreground">Subscriptions started: {subsSum.toLocaleString()}</p>
         </div>
+        {d.traffic.posthogTraffic?.configured ? (
+          <>
+            <div className="rounded-2xl border border-sky-500/25 bg-sky-500/[0.06] p-4">
+              <p className="text-[11px] font-semibold uppercase tracking-wide text-sky-700 dark:text-sky-300">
+                Pageviews ({d.traffic.posthogTraffic.windowDays}d)
+              </p>
+              <p className="mt-1 text-3xl font-bold tabular-nums">
+                {d.traffic.posthogTraffic.totalPageviews?.toLocaleString() ?? "—"}
+              </p>
+              <p className="mt-2 text-[11px] text-muted-foreground">PostHog · marketing site</p>
+            </div>
+            <div className="rounded-2xl border border-sky-500/25 bg-sky-500/[0.06] p-4">
+              <p className="text-[11px] font-semibold uppercase tracking-wide text-sky-700 dark:text-sky-300">
+                Unique visitors ({d.traffic.posthogTraffic.windowDays}d)
+              </p>
+              <p className="mt-1 text-3xl font-bold tabular-nums">
+                {d.traffic.posthogTraffic.uniqueVisitors?.toLocaleString() ?? "—"}
+              </p>
+              <p className="mt-2 text-[11px] text-muted-foreground">Distinct person IDs</p>
+            </div>
+          </>
+        ) : null}
       </div>
 
       <div className="grid gap-6 lg:grid-cols-2">
@@ -182,12 +267,17 @@ export function AdminAnalyticsDashboard({ initialData }: { initialData: AdminAna
           </div>
         </SectionCard>
 
-        <SectionCard title="Site traffic" subtitle="Honest gap — not in Postgres.">
-          <p className="text-sm text-muted-foreground">{d.traffic.siteTrafficNote}</p>
-          <p className="mt-3 text-xs text-muted-foreground">
-            Tip: use PostHog dashboards or Vercel Analytics for sessions, top pages, and referrers.
-          </p>
-        </SectionCard>
+        {d.traffic.posthogTraffic?.configured ? (
+          <PostHogTrafficCard traffic={d.traffic.posthogTraffic} />
+        ) : (
+          <SectionCard title="Site traffic" subtitle="PostHog not configured.">
+            <p className="text-sm text-muted-foreground">{d.traffic.siteTrafficNote}</p>
+            <p className="mt-3 text-xs text-muted-foreground">
+              Set <code className="rounded bg-muted px-1">POSTHOG_PERSONAL_API_KEY</code> and{" "}
+              <code className="rounded bg-muted px-1">POSTHOG_PROJECT_ID</code> to pull live pageview data here.
+            </p>
+          </SectionCard>
+        )}
       </div>
 
       <SectionCard title="Blog content performance" subtitle={d.traffic.blogPerformanceNote}>

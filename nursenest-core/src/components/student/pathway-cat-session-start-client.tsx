@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import type { PracticeTestPathwayOption } from "@/lib/practice-tests/types";
+import { catPathwayRegionalExamLine, catPathwayShortCatLabel } from "@/lib/exam-pathways/cat-pathway-labels";
 import { PATHWAY_CAT_PRACTICE_DEFAULT_MAX_QUESTIONS } from "@/lib/exam-pathways/pathway-cat-flow";
 import { buildExamPathwayPath, getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import type { CatPracticeReadinessResult } from "@/lib/practice-tests/cat-practice-readiness";
@@ -34,7 +35,9 @@ export function PathwayCatSessionStartClient({
   const [readiness, setReadiness] = useState<CatPracticeReadinessResult | null>(null);
 
   const pathwayMeta = useMemo(() => (pathwayId ? getExamPathwayById(pathwayId) : undefined), [pathwayId]);
-  const examTitle = pathwayMeta?.displayName ?? "Exam pathway";
+  const catShort = pathwayMeta ? catPathwayShortCatLabel(pathwayMeta) : null;
+  const catLine = pathwayMeta ? catPathwayRegionalExamLine(pathwayMeta) : null;
+  const examTitle = pathwayMeta ? catShort : "Exam pathway";
 
   useEffect(() => {
     if (!pathwayId.trim()) {
@@ -123,11 +126,21 @@ export function PathwayCatSessionStartClient({
   return (
     <div className="nn-card space-y-6 p-6">
       <div>
-        <p className="text-[10px] font-bold uppercase tracking-widest text-primary">CAT practice</p>
+        <p className="text-[10px] font-bold uppercase tracking-widest text-primary">{catLine ?? "CAT practice"}</p>
         <h2 className="mt-1 text-xl font-bold text-[var(--theme-heading-text)]">{examTitle}</h2>
         <p className="mt-2 text-sm text-muted-foreground">
-          Adaptive session: one question at a time, pool filtered to this pathway and your plan. Choose whether you want
-          explanations after each item (Study Mode) or only after the session (Test Mode).
+          {catLine ? (
+            <>
+              <span className="font-medium text-foreground">{catLine}</span> — adaptive session: one question at a time,
+              pool filtered to this exam and your plan. Choose Study Mode (rationales as you go) or Test Mode (rationales after
+              the run).
+            </>
+          ) : (
+            <>
+              Adaptive session: one question at a time, pool filtered to this pathway and your plan. Choose whether you want
+              explanations after each item (Study Mode) or only after the session (Test Mode).
+            </>
+          )}
         </p>
       </div>
 
@@ -227,11 +240,13 @@ export function PathwayCatSessionStartClient({
       </fieldset>
 
       {readinessLoading ? (
-        <p className="text-sm text-muted-foreground">Checking adaptive question pool for this pathway…</p>
+        <p className="text-sm text-muted-foreground">
+          Checking adaptive question pool{catShort ? ` for ${catShort}` : ""}…
+        </p>
       ) : null}
       {readiness && !readiness.ok ? (
         <aside className="rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-warning-soft)] p-4 text-sm text-[var(--semantic-text-primary)] shadow-sm">
-          <p className="font-semibold">CAT cannot start yet</p>
+          <p className="font-semibold">{catShort ? `${catShort} cannot start yet` : "CAT cannot start yet"}</p>
           <p className="mt-1 text-muted-foreground">{readiness.message}</p>
           <ul className="mt-3 list-inside list-disc space-y-1 text-muted-foreground">
             {readiness.code === PRACTICE_TEST_CAT_CREATE_CODE.cat_pool_invalid && pathwayMeta ? (
@@ -296,7 +311,7 @@ export function PathwayCatSessionStartClient({
           className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-primary px-6 py-2.5 text-sm font-semibold text-primary-foreground disabled:opacity-50"
           onClick={() => void start()}
         >
-          {creating ? "Starting…" : readinessLoading ? "Checking…" : "Start session"}
+          {creating ? "Starting…" : readinessLoading ? "Checking…" : catShort ? `Start ${catShort}` : "Start session"}
         </button>
         <Link
           href="/app/practice-tests"

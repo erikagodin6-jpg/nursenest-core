@@ -24,6 +24,8 @@ import type { PathwayLessonProgressStatus } from "@/lib/lessons/pathway-lesson-p
 import { PathwayLessonProgressBadge } from "@/components/lessons/pathway-lesson-progress-badge";
 import { LessonCardChip } from "@/components/student/product/lesson-card";
 import { PathwayLessonRecordChips } from "@/components/pathway-lessons/pathway-lesson-record-chips";
+import { PremiumEmptyState } from "@/components/ui/premium-empty-state";
+import { emptyStateCopy } from "@/lib/ui/empty-state-copy";
 
 function marketingQuestionsTopicHref(pathway: ExamPathwayDefinition, topic: string): string {
   const base = buildExamPathwayPath(pathway, "questions");
@@ -195,9 +197,35 @@ export function FnpLessonExplorer({ pathway, lessonsBasePath, explorerLessons, e
       </div>
 
       {filtered.length === 0 ? (
-        <p className="rounded-lg border border-dashed border-border bg-card p-4 text-sm text-[var(--theme-muted-text)]">
-          No lessons match this combination. Clear one filter or browse another population lane.
-        </p>
+        <div className="space-y-3">
+          <PremiumEmptyState
+            data-nn-empty="fnp-explorer-filters"
+            tone="default"
+            density="compact"
+            visualLayout="stack"
+            headline={emptyStateCopy.noFilterResults.headline}
+            body={emptyStateCopy.noFilterResults.body}
+            hint="Try clearing filters or widening your search."
+            primaryCta={{ label: "View all lessons on this page", href: lessonsBasePath, variant: "primary" }}
+            secondaryCtas={[
+              { label: "Practice questions", href: pathwayHubAppQuestionsHref(pathway), variant: "secondary" },
+            ]}
+            className="border-[var(--semantic-border-soft)]"
+          />
+          <div className="flex flex-wrap justify-center gap-2">
+            <button
+              type="button"
+              className="nn-chip px-3 py-1.5 text-sm font-medium text-foreground hover:border-primary/40"
+              onClick={() => startTransition(() => {
+                setLifespan("all");
+                setDomain("all");
+                setTextQ("");
+              })}
+            >
+              Clear filters
+            </button>
+          </div>
+        </div>
       ) : (
         <ul className="space-y-6">
           {filtered.map((e) => (

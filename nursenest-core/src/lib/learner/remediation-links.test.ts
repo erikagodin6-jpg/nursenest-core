@@ -17,7 +17,7 @@ describe("remediation links", () => {
     assert.equal(remediationWeakModeTestHref(), "/app/practice-tests?focus=weak");
     assert.equal(
       remediationWeakModeTestHref("Pharmacology & Dosing"),
-      "/app/practice-tests?focus=weak&topic=Pharmacology%20%26%20Dosing",
+      "/app/practice-tests?focus=weak&topic=Pharmacology+%26+Dosing",
     );
   });
 

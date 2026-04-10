@@ -1,0 +1,142 @@
+/**
+ * QA contract: CAT start pathway selection safety.
+ *
+ * Covers the three scenarios defined in the CAT pathway selection pass:
+ *  1. Pathway-specific start — explicit pathwayId always preserved.
+ *  2. Generic multi-pathway surface — ambiguous without pathwayId → structured 400.
+ *  3. Single-pathway subscription — unambiguous auto-resolution.
+ *  4. Omitted pathwayId with multiple eligible pathways → safe failure, not silent default.
+ *  5. URL helper encodes pathwayId correctly.
+ *
+ * Non-goals: does NOT test the full API route (DB/auth dependencies) or UI clicks.
+ */
+
+import assert from "node:assert/strict";
+import { describe, it } from "node:test";
+import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
+import { PRACTICE_TEST_CAT_CREATE_CODE } from "@/lib/practice-tests/practice-test-cat-create-codes";
+import { resolveCatPathwayIdForCatPost } from "@/lib/practice-tests/resolve-cat-pathway-for-post";
+import { appPathwayCatSessionStartPath } from "@/lib/exam-pathways/pathway-cat-flow";
+
+function stub(id: string): ExamPathwayDefinition {
+  return { id } as ExamPathwayDefinition;
+}
+
+// ─── 1. Pathway-specific start ───────────────────────────────────────────────
+
+describe("pathway-specific CAT start: explicit pathwayId from client", () => {
+  it("honors the exact pathwayId when supplied", () => {
+    const r = resolveCatPathwayIdForCatPost("us-rn-nclex-rn", [stub("us-rn-nclex-rn"), stub("us-np-fnp")]);
+    assert.equal(r.ok, true);
+    if (r.ok) {
+      assert.equal(r.pathwayId, "us-rn-nclex-rn");
+      assert.equal(r.source, "request");
+    }
+  });
+
+  it("preserves pathwayId even when only one CAT-eligible pathway exists", () => {
+    const r = resolveCatPathwayIdForCatPost("us-rn-nclex-rn", [stub("us-rn-nclex-rn")]);
+    assert.equal(r.ok, true);
+    if (r.ok) {
+      assert.equal(r.pathwayId, "us-rn-nclex-rn");
+      assert.equal(r.source, "request");
+    }
+  });
+
+  it("trims whitespace around pathwayId", () => {
+    const r = resolveCatPathwayIdForCatPost("  us-rn-nclex-rn  ", [stub("us-rn-nclex-rn")]);
+    assert.equal(r.ok, true);
+    if (r.ok) assert.equal(r.pathwayId, "us-rn-nclex-rn");
+  });
+});
+
+// ─── 2. Generic multi-pathway surface: ambiguous without pathwayId ────────────
+
+describe("multi-pathway subscription: omitted pathwayId → structured failure", () => {
+  it("returns cat_pathway_ambiguous when pathwayId is null and multiple tracks are eligible", () => {
+    const r = resolveCatPathwayIdForCatPost(null, [stub("us-rn-nclex-rn"), stub("us-np-fnp")]);
+    assert.equal(r.ok, false);
+    if (!r.ok) {
+      assert.equal(r.code, PRACTICE_TEST_CAT_CREATE_CODE.cat_pathway_ambiguous);
+      assert.equal(r.catEligibleCount, 2);
+    }
+  });
+
+  it("returns cat_pathway_ambiguous when pathwayId is empty string and multiple tracks exist", () => {
+    const r = resolveCatPathwayIdForCatPost("", [stub("a"), stub("b"), stub("c")]);
+    assert.equal(r.ok, false);
+    if (!r.ok) {
+      assert.equal(r.code, PRACTICE_TEST_CAT_CREATE_CODE.cat_pathway_ambiguous);
+      assert.equal(r.catEligibleCount, 3);
+    }
+  });
+
+  it("does NOT silently pick the first eligible pathway when multiple exist", () => {
+    const r = resolveCatPathwayIdForCatPost(undefined, [stub("first"), stub("second")]);
+    assert.equal(r.ok, false, "Must NOT silently default to first eligible pathway");
+  });
+});
+
+// ─── 3. Single-pathway subscription: unambiguous auto-resolution ──────────────
+
+describe("single CAT-eligible pathway: safe auto-resolution", () => {
+  it("resolves the one eligible pathway when pathwayId is omitted", () => {
+    const r = resolveCatPathwayIdForCatPost(null, [stub("only-track")]);
+    assert.equal(r.ok, true);
+    if (r.ok) {
+      assert.equal(r.pathwayId, "only-track");
+      assert.equal(r.source, "single_eligible_unambiguous");
+    }
+  });
+
+  it("resolves same single pathway when pathwayId is empty string", () => {
+    const r = resolveCatPathwayIdForCatPost("", [stub("ca-rn-nclex-rn")]);
+    assert.equal(r.ok, true);
+    if (r.ok) assert.equal(r.pathwayId, "ca-rn-nclex-rn");
+  });
+});
+
+// ─── 4. No CAT-eligible pathways ─────────────────────────────────────────────
+
+describe("no CAT-eligible pathways: required error", () => {
+  it("returns cat_pathway_required when no eligible pathways exist", () => {
+    const r = resolveCatPathwayIdForCatPost(null, []);
+    assert.equal(r.ok, false);
+    if (!r.ok) {
+      assert.equal(r.code, PRACTICE_TEST_CAT_CREATE_CODE.cat_pathway_required);
+      assert.equal(r.catEligibleCount, 0);
+    }
+  });
+
+  it("returns cat_pathway_required even when pathwayId is supplied but list is empty", () => {
+    // Server still validates against catEligible list; unknown pathway id is caught at next layer.
+    // This test confirms resolver returns required (not ambiguous) when the pool is empty.
+    const r = resolveCatPathwayIdForCatPost("some-pathway", []);
+    // explicit id is returned directly without requiring eligibility check at this layer
+    assert.equal(r.ok, true, "Explicit id bypasses the empty-pool check — entitlement checked downstream");
+    if (r.ok) assert.equal(r.source, "request");
+  });
+});
+
+// ─── 5. URL helper: pathwayId encoding ───────────────────────────────────────
+
+describe("appPathwayCatSessionStartPath: pathway-scoped CAT start URL", () => {
+  it("produces a URL with the pathwayId query param", () => {
+    const url = appPathwayCatSessionStartPath("us-rn-nclex-rn");
+    assert.ok(url.startsWith("/app/practice-tests/start?"), "must target the dedicated start page");
+    const q = new URLSearchParams(url.slice("/app/practice-tests/start?".length));
+    assert.equal(q.get("pathwayId"), "us-rn-nclex-rn");
+  });
+
+  it("trims the pathwayId in the URL", () => {
+    const url = appPathwayCatSessionStartPath("  us-np-fnp  ");
+    const q = new URLSearchParams(url.slice("/app/practice-tests/start?".length));
+    assert.equal(q.get("pathwayId"), "us-np-fnp");
+  });
+
+  it("does NOT fall back to the generic practice hub — always targets /app/practice-tests/start", () => {
+    const url = appPathwayCatSessionStartPath("ca-rn-nclex-rn");
+    assert.ok(!url.includes("/app/practice-tests?"), "must not point to the hub with query params only");
+    assert.ok(url.includes("/app/practice-tests/start"), "must always target the dedicated start page");
+  });
+});

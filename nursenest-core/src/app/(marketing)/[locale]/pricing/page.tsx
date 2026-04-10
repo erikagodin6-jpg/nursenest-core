@@ -2,10 +2,11 @@ import type { Metadata } from "next";
 import { MarketingPricingPage } from "@/components/marketing/marketing-pricing-page";
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
+import { WebPageJsonLd } from "@/components/seo/seo-json-ld";
 import { localizeBreadcrumbResolution } from "@/lib/seo/breadcrumb-i18n";
 import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
 import { marketingPricingBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
-import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
+import { marketingAlternatesSharedPage, marketingCanonicalPathForLocale } from "@/lib/seo/marketing-alternates";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
 type Props = { params: Promise<{ locale: string }> };
@@ -39,6 +40,12 @@ export default async function LocalizedPricingPage({ params }: Props) {
   const { crumbs, schemaItems } = localizeBreadcrumbResolution(raw, primary);
   return (
     <>
+      <WebPageJsonLd
+        title={primary["pages.pricing.title"]}
+        description={primary["pages.pricing.description"]}
+        path={marketingCanonicalPathForLocale(locale, "/pricing")}
+        inLanguage={locale}
+      />
       <BreadcrumbJsonLd items={schemaItems} />
       <div className="mx-auto max-w-6xl px-4 pt-4 sm:px-6 lg:px-8">
         <BreadcrumbTrail items={crumbs} />

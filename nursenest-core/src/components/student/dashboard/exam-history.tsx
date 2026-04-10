@@ -2,6 +2,8 @@ import Link from "next/link";
 import { GraduationCap } from "lucide-react";
 import type { RecentMock } from "@/lib/learner/load-learner-dashboard";
 import type { LearnerMarketingT } from "@/lib/learner/learner-marketing-server";
+import { emptyStateCopy } from "@/lib/ui/empty-state-copy";
+import { PremiumEmptyState } from "@/components/ui/premium-empty-state";
 
 export function ExamHistory({ mocks, t, maxRows = 6 }: { mocks: RecentMock[]; t: LearnerMarketingT; maxRows?: number }) {
   const rows = mocks.slice(0, maxRows);
@@ -79,11 +81,19 @@ export function ExamHistory({ mocks, t, maxRows = 6 }: { mocks: RecentMock[]; t:
           })}
         </ul>
       ) : (
-        <div className="mt-4 rounded-xl border border-dashed border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-4 py-6 text-sm text-[var(--semantic-text-secondary)]">
-          <p>{t("learner.dashboard.insight.recentEmpty")}</p>
-          <Link href="/app/exams" className="nn-dashboard-empty-cta">
-            {t("learner.dashboard.insight.openMocksCta")}
-          </Link>
+        <div className="mt-4">
+          <PremiumEmptyState
+            data-nn-empty="exam-history"
+            tone="early"
+            density="compact"
+            visualLayout="split"
+            Icon={GraduationCap}
+            headline={emptyStateCopy.noExamHistory.headline}
+            body={t("learner.dashboard.insight.recentEmpty")}
+            hint={emptyStateCopy.noExamHistory.body}
+            primaryCta={{ label: t("learner.dashboard.insight.openMocksCta"), href: "/app/exams", variant: "primary" }}
+            className="border-[color-mix(in_srgb,var(--semantic-chart-1)_12%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-chart-1)_04%,var(--semantic-surface))]"
+          />
         </div>
       )}
     </section>

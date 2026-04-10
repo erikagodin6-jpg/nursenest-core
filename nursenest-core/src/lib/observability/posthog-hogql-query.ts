@@ -30,6 +30,54 @@ export function posthogProjectConfigured(): boolean {
 }
 
 /**
+ * Runs a HogQL query and returns all rows and columns.
+ * Handles arbitrary SELECT shapes — use for top-pages, daily series, etc.
+ */
+export async function posthogHogqlTable(query: string): Promise<HogqlTableResult> {
+  const base = posthogApiBase();
+  const key = process.env.POSTHOG_PERSONAL_API_KEY?.trim();
+  const projectId = process.env.POSTHOG_PROJECT_ID?.trim();
+  if (!base || !key || !projectId) {
+    return { ok: false, columns: [], rows: [], error: "PostHog query API not configured" };
+  }
+
+  try {
+    const res = await fetch(`${base}/api/projects/${projectId}/query/`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${key}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        query: { kind: "HogQLQuery", query },
+      }),
+      cache: "no-store",
+    });
+
+    if (!res.ok) {
+      const text = await res.text().catch(() => "");
+      return { ok: false, columns: [], rows: [], error: `HTTP ${res.status} ${text.slice(0, 200)}` };
+    }
+
+    const json = (await res.json()) as {
+      results?: unknown[];
+      columns?: string[];
+    };
+
+    const columns = Array.isArray(json.columns)
+      ? (json.columns as string[])
+      : [];
+    const rows = Array.isArray(json.results)
+      ? (json.results as (string | number | null)[][])
+      : [];
+
+    return { ok: true, columns, rows };
+  } catch (e) {
+    return { ok: false, columns: [], rows: [], error: e instanceof Error ? e.message : String(e) };
+  }
+}
+
+/**
  * Runs a HogQL query that returns a single numeric aggregate (e.g. uniq(person_id)).
  */
 export async function posthogHogqlScalar(query: string): Promise<HogqlQueryResult> {

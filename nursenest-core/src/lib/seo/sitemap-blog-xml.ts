@@ -14,7 +14,7 @@ import {
  * Blog sitemap: `/blog` plus published post URLs when Prisma is available.
  * On any failure, returns a valid urlset with at least `/blog` (caller may also use minimal home).
  */
-export async function buildBlogSitemapXmlSafe(): Promise<string> {
+export async function listBlogSitemapUrlsSafe(): Promise<string[]> {
   const origin = normalizeOrigin(resolveSitemapOrigin());
   const urls: string[] = [`${origin}/blog`];
 
@@ -41,7 +41,15 @@ export async function buildBlogSitemapXmlSafe(): Promise<string> {
     });
   }
 
+  return urls;
+}
+
+/**
+ * Blog sitemap XML wrapper around `listBlogSitemapUrlsSafe`.
+ */
+export async function buildBlogSitemapXmlSafe(): Promise<string> {
   try {
+    const urls = await listBlogSitemapUrlsSafe();
     return buildSitemapUrlsetFromAbsoluteUrls(urls);
   } catch {
     return minimalUrlsetSingleHome();

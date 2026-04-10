@@ -5,6 +5,8 @@
 import type { CountryCode, TierCode } from "@prisma/client";
 import { Prisma } from "@prisma/client";
 import { DB_PUBLISHED, examQuestionTiersForUserTier } from "@/lib/entitlements/content-access-scope";
+import { buildGlobalExamContext } from "@/lib/exam-context/exam-registry";
+import { examQuestionPoolWhereForContext } from "@/lib/exam-context/query-scope";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 
@@ -32,9 +34,14 @@ export function examQuestionAccessWhereSql(entitlement: AccessScope): Prisma.Sql
 }
 
 export function pathwayExamKeysSql(pathway: ExamPathwayDefinition | null): Prisma.Sql {
-  if (!pathway || pathway.contentExamKeys.length === 0) return Prisma.empty;
-  const keys = [...new Set(pathway.contentExamKeys)];
-  return Prisma.sql` AND exam IN (${Prisma.join(keys)})`;
+  if (!pathway) return Prisma.empty;
+  const ctx = buildGlobalExamContext(pathway.id, "en");
+  if (!ctx) return Prisma.sql` AND FALSE`;
+  const scoped = examQuestionPoolWhereForContext(ctx);
+  const keys = [...new Set(scoped.examIn)];
+  const tiers = [...new Set(scoped.tierMatches.map((tier) => tier.toLowerCase()))];
+  if (keys.length === 0 || tiers.length === 0) return Prisma.sql` AND FALSE`;
+  return Prisma.sql` AND exam IN (${Prisma.join(keys)}) AND lower(coalesce(tier, '')) IN (${Prisma.join(tiers)})`;
 }
 
 export function topicEqualsSql(topic: string): Prisma.Sql {

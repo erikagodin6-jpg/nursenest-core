@@ -7,9 +7,11 @@ import { PreNursingLandingClient } from "@/components/pre-nursing/pre-nursing-la
 import { PreNursingMilestoneStrip } from "@/components/pre-nursing/pre-nursing-milestone-strip";
 import { PreNursingNextStepsBlock } from "@/components/pre-nursing/pre-nursing-next-steps-block";
 import { PreNursingSurfaceAnalytics } from "@/components/pre-nursing/pre-nursing-surface-analytics";
+import { WebPageJsonLd } from "@/components/seo/seo-json-ld";
 import strings from "@/content/pre-nursing/pre-nursing-strings-en.json";
+import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { preNursingHubBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
-import { absoluteUrl } from "@/lib/seo/site-origin";
+import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
 
 const dict = strings as Record<string, string>;
 
@@ -18,15 +20,16 @@ export const revalidate = 86400;
 const title = "Free Pre-Nursing foundations for nursing school | NurseNest";
 const description =
   "Free interactive Pre-Nursing modules: anatomy, chemistry, infection control, communication & more. No subscription required. Optional readiness target and a clear path to paid NCLEX/RPN/NP prep when you’re ready.";
+const alternates = marketingAlternatesSharedPage(DEFAULT_MARKETING_LOCALE, "/pre-nursing");
 
 export const metadata: Metadata = {
   title,
   description,
-  alternates: { canonical: absoluteUrl("/pre-nursing") },
+  alternates,
   openGraph: {
     title,
     description,
-    url: absoluteUrl("/pre-nursing"),
+    url: alternates.canonical,
     type: "website",
   },
   twitter: {
@@ -43,6 +46,12 @@ export default function PreNursingLandingPage() {
     <div className="nn-marketing-surface">
       <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
         <PreNursingSurfaceAnalytics surface="hub" />
+        <WebPageJsonLd
+          title={title}
+          description={description}
+          path="/pre-nursing"
+          inLanguage="en"
+        />
         <BreadcrumbJsonLd items={schemaItems} />
         <div className="mb-8">
           <BreadcrumbTrail items={crumbs} />

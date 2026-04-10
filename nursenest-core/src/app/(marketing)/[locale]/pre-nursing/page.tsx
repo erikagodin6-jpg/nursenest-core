@@ -3,7 +3,6 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { isCoreHostedNonDefaultLocale } from "@/lib/i18n/marketing-locale-policy";
 import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
-import { absoluteUrl } from "@/lib/seo/site-origin";
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { PreNursingAccountCapture } from "@/components/pre-nursing/pre-nursing-account-capture";
@@ -11,6 +10,7 @@ import { PreNursingLandingClient } from "@/components/pre-nursing/pre-nursing-la
 import { PreNursingMilestoneStrip } from "@/components/pre-nursing/pre-nursing-milestone-strip";
 import { PreNursingNextStepsBlock } from "@/components/pre-nursing/pre-nursing-next-steps-block";
 import { PreNursingSurfaceAnalytics } from "@/components/pre-nursing/pre-nursing-surface-analytics";
+import { WebPageJsonLd } from "@/components/seo/seo-json-ld";
 import strings from "@/content/pre-nursing/pre-nursing-strings-en.json";
 import { preNursingHubBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
@@ -33,7 +33,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         title,
         description,
         alternates: { canonical: alt.canonical, languages: alt.languages },
-        openGraph: { title, description, url: absoluteUrl("/pre-nursing"), type: "website" },
+        openGraph: { title, description, url: alt.canonical, type: "website" },
         twitter: { card: "summary_large_image", title, description },
       };
     },
@@ -52,6 +52,12 @@ export default async function LocalizedPreNursingPage({ params }: Props) {
     <div className="nn-marketing-surface">
       <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
         <PreNursingSurfaceAnalytics surface="hub" />
+        <WebPageJsonLd
+          title={title}
+          description={description}
+          path={`/${locale}/pre-nursing`}
+          inLanguage={locale}
+        />
         <BreadcrumbJsonLd items={schemaItems} />
         <div className="mb-8">
           <BreadcrumbTrail items={crumbs} />

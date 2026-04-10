@@ -252,6 +252,7 @@ export async function collectCoreUrls(origin: string): Promise<string[]> {
     add("/"),
     add("/question-bank"),
     add("/practice-exams"),
+    add("/lessons"),
     add("/pricing"),
     add("/for-institutions"),
     add("/blog"),
@@ -263,6 +264,10 @@ export async function collectCoreUrls(origin: string): Promise<string[]> {
     add("/disclaimer"),
     add("/contact"),
     add("/tools"),
+    add("/login"),
+    add("/signup"),
+    add("/forgot-password"),
+    add("/reset-password"),
     add("/case-studies"),
   ];
   const lessonUrls = await collectPathwayLessonSeoUrls(o);
@@ -297,6 +302,10 @@ export function collectLocaleMarketingUrls(origin: string, locale: string): stri
   const urls: string[] = [];
   urls.push(add(`/${locale}`));
   urls.push(add(`/${locale}/pricing`));
+  urls.push(add(`/${locale}/lessons`));
+  urls.push(add(`/${locale}/question-bank`));
+  urls.push(add(`/${locale}/practice-exams`));
+  urls.push(add(`/${locale}/pre-nursing`));
   urls.push(add(`/${locale}/for-institutions`));
   urls.push(add(`/${locale}/faq`));
   urls.push(add(`/${locale}/terms`));

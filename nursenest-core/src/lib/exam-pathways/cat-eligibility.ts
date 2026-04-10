@@ -10,6 +10,7 @@ import {
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import type { PathwayQuestionBankSnapshot } from "@/lib/exam-pathways/pathway-question-bank-snapshot";
 import { assessCatPracticeReadinessForPathway } from "@/lib/practice-tests/cat-practice-readiness";
+import { catPathwayRegionalExamLine, catPathwayShortCatLabel } from "@/lib/exam-pathways/cat-pathway-labels";
 import { appPathwayCatSessionStartPath } from "@/lib/exam-pathways/pathway-cat-flow";
 import { marketingCatPathForPathway } from "@/lib/exam-pathways/practice-exams-cat-start";
 
@@ -76,13 +77,13 @@ const MIN_ADAPTIVE_MARKETING_SNAPSHOT = 8;
 
 function pathwayWaitlistOrUpcomingBlock(pathway: ExamPathwayDefinition): CatEligibilityAssessment | null {
   if (pathway.acquisitionMode === "info_only") {
+    const cat = catPathwayShortCatLabel(pathway);
     return {
       eligible: false,
       reason: "pathway_info_only",
       nextAction: "browse_pathway_hub",
       marketingPrimaryCta: "none",
-      safeUserMessage:
-        "Adaptive CAT is not offered on this track yet. Use lessons and the question bank from the pathway hub.",
+      safeUserMessage: `${cat} is not offered on this track yet. Use lessons and the question bank from the pathway hub.`,
       pathway,
       pathwayId: pathway.id,
       marketingCatPath: marketingCatPathForPathway(pathway),
@@ -91,13 +92,13 @@ function pathwayWaitlistOrUpcomingBlock(pathway: ExamPathwayDefinition): CatElig
     };
   }
   if (pathway.status === "upcoming" && pathway.acquisitionMode === "waitlist") {
+    const cat = catPathwayShortCatLabel(pathway);
     return {
       eligible: false,
       reason: "pathway_waitlist",
       nextAction: "join_waitlist",
       marketingPrimaryCta: "none",
-      safeUserMessage:
-        "This pathway is on waitlist prep. You can still study lessons and the question bank; CAT opens when the track goes live.",
+      safeUserMessage: `${cat} is not ready yet — this pathway is on waitlist prep. You can still study lessons and the question bank; CAT opens when the track goes live.`,
       pathway,
       pathwayId: pathway.id,
       marketingCatPath: marketingCatPathForPathway(pathway),
@@ -106,13 +107,13 @@ function pathwayWaitlistOrUpcomingBlock(pathway: ExamPathwayDefinition): CatElig
     };
   }
   if (!pathwayAllowsCatAdaptiveStart(pathway)) {
+    const cat = catPathwayShortCatLabel(pathway);
     return {
       eligible: false,
       reason: "pathway_upcoming",
       nextAction: "browse_pathway_hub",
       marketingPrimaryCta: "none",
-      safeUserMessage:
-        "Adaptive CAT is not enabled for this track yet (for example, hidden or restricted rollout). Use lessons and the question bank on the pathway hub.",
+      safeUserMessage: `${cat} is not enabled for this track yet (for example, hidden or restricted rollout). Use lessons and the question bank on the pathway hub.`,
       pathway,
       pathwayId: pathway.id,
       marketingCatPath: marketingCatPathForPathway(pathway),
@@ -138,13 +139,13 @@ export function assessMarketingCatSurfaceWithoutAuth(
     questionSnapshot.status === "ok" && questionSnapshot.adaptiveEligibleCount >= MIN_ADAPTIVE_MARKETING_SNAPSHOT;
 
   if (!poolOk) {
+    const cat = catPathwayShortCatLabel(pathway);
     return {
       eligible: false,
       reason: "insufficient_cat_pool",
       nextAction: "use_question_bank",
       marketingPrimaryCta: "none",
-      safeUserMessage:
-        "The adaptive question pool for this pathway is still building. Use the question bank and lessons — CAT will unlock when enough items pass quality checks.",
+      safeUserMessage: `The adaptive question pool for ${cat} is still building. Use the question bank and lessons — sessions unlock when enough items pass quality checks.`,
       pathway,
       pathwayId: pathway.id,
       marketingCatPath,
@@ -153,12 +154,13 @@ export function assessMarketingCatSurfaceWithoutAuth(
     };
   }
 
+  const line = catPathwayRegionalExamLine(pathway);
   return {
     eligible: false,
     reason: "unauthenticated",
     nextAction: "login",
     marketingPrimaryCta: "sign_in_to_cat",
-    safeUserMessage: "Sign in with a plan that includes this pathway to start an adaptive session.",
+    safeUserMessage: `Sign in with a plan that includes ${line} to start this adaptive CAT session.`,
     pathway,
     pathwayId: pathway.id,
     marketingCatPath,
@@ -196,12 +198,13 @@ export async function assessCatEligibilityForSubscriberAndPathway(input: Subscri
   }
 
   if (!entitlement.hasAccess) {
+    const cat = catPathwayShortCatLabel(pathway);
     return {
       eligible: false,
       reason: "no_subscription",
       nextAction: "upgrade",
       marketingPrimaryCta: "none",
-      safeUserMessage: "An active subscription that covers this exam track is required for adaptive CAT sessions.",
+      safeUserMessage: `${cat} requires an active subscription that covers ${catPathwayRegionalExamLine(pathway)}.`,
       pathway,
       pathwayId: pathway.id,
       marketingCatPath,
@@ -214,13 +217,13 @@ export async function assessCatEligibilityForSubscriberAndPathway(input: Subscri
   if (block) return block;
 
   if (!subscriptionCoversPathwayBase(entitlement, pathway)) {
+    const line = catPathwayRegionalExamLine(pathway);
     return {
       eligible: false,
       reason: "wrong_subscription_tier",
       nextAction: "switch_pathway",
       marketingPrimaryCta: "none",
-      safeUserMessage:
-        "Your current plan does not include this pathway or region. Switch to a matching track under Account, or review Billing to upgrade.",
+      safeUserMessage: `Your subscription does not include ${line}. Switch to a matching track under Account, or review Billing to upgrade.`,
       pathway,
       pathwayId: pathway.id,
       marketingCatPath,
@@ -250,12 +253,13 @@ export async function assessCatEligibilityForSubscriberAndPathway(input: Subscri
     };
   }
 
+  const cat = catPathwayShortCatLabel(pathway);
   return {
     eligible: true,
     reason: "ok",
     nextAction: "start_cat_app",
     marketingPrimaryCta: "open_app_cat",
-    safeUserMessage: "You can start an adaptive CAT session in the app for this pathway.",
+    safeUserMessage: `You can start ${cat} in the app — the pool stays scoped to ${catPathwayRegionalExamLine(pathway)}.`,
     pathway,
     pathwayId: pathway.id,
     marketingCatPath,

@@ -2,6 +2,7 @@ import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { enforceDiscoveryProtection } from "@/lib/http/api-protection";
 import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-session";
+import { buildGlobalExamContext } from "@/lib/exam-context/exam-registry";
 import { diagnoseDiscoveryEmpty } from "@/lib/questions/discovery-empty-diagnostics";
 import {
   DISCOVERY_SQL_EXAM_LIMIT,
@@ -25,6 +26,9 @@ const DISCOVERY_EXAM_BUCKET_CAP = DISCOVERY_SQL_EXAM_LIMIT;
 export async function GET(req: NextRequest) {
   const gate = await requireSubscriberSession();
   if (!gate.ok) return gate.response;
+  const requestedPathwayId = req.nextUrl.searchParams.get("pathwayId");
+  const requestedLanguage = req.nextUrl.searchParams.get("language")?.trim() || "en";
+  const examContext = requestedPathwayId ? buildGlobalExamContext(requestedPathwayId, requestedLanguage) : null;
 
   const blocked = enforceDiscoveryProtection(req, gate.userId);
   if (blocked) return blocked;
@@ -32,9 +36,27 @@ export async function GET(req: NextRequest) {
   setSentryServerContext({ route: "/api/questions/discovery", feature: SERVER_FEATURE.question, userId: gate.userId });
 
   try {
+    if (requestedPathwayId && !examContext) {
+      safeServerLog("api_questions_discovery", "invalid_pathway_scope", { pathwayId: requestedPathwayId });
+      return NextResponse.json({
+        total: 0,
+        buckets: [],
+        examFamily: [],
+        limits: {
+          topicBucketCap: DISCOVERY_TOPIC_BUCKET_CAP,
+          examBucketCap: DISCOVERY_EXAM_BUCKET_CAP,
+          topicsTruncated: false,
+          examsTruncated: false,
+          topicsOmittedCount: 0,
+          examsOmittedCount: 0,
+          aggregateStrategy: "sql_top_n" as const,
+        },
+      });
+    }
+
     const t0 = performance.now();
     const { total, topicRows, examRows } = await withRetry(() =>
-      loadSubscriberDiscoveryAggregates(gate.entitlement),
+      loadSubscriberDiscoveryAggregates(gate.entitlement, examContext),
     );
     const durationMs = Math.round(performance.now() - t0);
     safeServerLog("api_questions_discovery", "aggregate_timing", {
@@ -42,6 +64,8 @@ export async function GET(req: NextRequest) {
       total,
       topicBucketRows: topicRows.length,
       examBucketRows: examRows.length,
+      pathwayId: examContext?.pathwayId,
+      examKey: examContext?.exam,
     });
     if (durationMs >= 2500) {
       safeServerLog("api_questions_discovery", "aggregate_slow_warn", { durationMs, total });

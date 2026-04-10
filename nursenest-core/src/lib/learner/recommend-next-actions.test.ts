@@ -73,6 +73,8 @@ describe("recommendNextActions", () => {
     const snap = baseSnapshot({});
     const r = recommendNextActions(snap, { maxTotal: 2 });
     assert.equal(r[0]?.type, "retest_topic");
+    assert.equal(r[0]?.href.includes("cat=1"), true);
+    assert.equal(r[0]?.href.includes("focus=weak"), true);
     assert.equal(r[1]?.type, "weak_topic_qbank");
     assert.equal(r[1]?.href.includes("studyMode=weak"), true);
   });

@@ -155,9 +155,14 @@ export default async function LearnerAccountOverviewPage() {
   const practiceNextHref = primaryWeakTopic ? remediationTopicDrillHref(primaryWeakTopic) : "/app/questions";
   const lessonsNextHref = premiumSnapshot?.continueLesson?.href?.trim() || "/app/lessons";
   const catNextHref = remediationCatPracticeHref(primaryWeakTopic || undefined, preferredPathwayId);
+  const hasInProgressLesson = Boolean(premiumSnapshot?.continueLesson?.href);
+  const hasWeakAreasDetected = weakTop3.length > 0;
+  const hasRecentCompletion = [...activity.mocks.map((m) => m.at), ...activity.practiceTests.map((pt) => pt.at)].some(
+    (at) => Date.now() - new Date(at).getTime() <= 72 * 60 * 60 * 1000,
+  );
 
   return (
-    <main className="space-y-6">
+    <main className="space-y-7">
       <BreadcrumbTrail items={crumbs} />
       <div>
         <p className="text-xs font-semibold uppercase tracking-wide text-primary">{t("learner.profile.kicker")}</p>
@@ -167,7 +172,7 @@ export default async function LearnerAccountOverviewPage() {
 
       {entitlement !== "error" && entitlement.hasAccess ? <LearnerAccountToolGrid t={t} /> : null}
 
-      <section className="nn-card p-6">
+      <section className="nn-card nn-student-card-lift p-6">
         <h2 className="text-lg font-bold text-[var(--theme-heading-text)]">{t("learner.profile.account.heading")}</h2>
         <p className="mt-1 text-sm text-muted-foreground">{t("learner.profile.account.subtitle")}</p>
         <dl className="mt-4 grid gap-3 text-sm sm:grid-cols-2">
@@ -189,7 +194,7 @@ export default async function LearnerAccountOverviewPage() {
         </div>
       </section>
 
-      <section className="nn-card p-6">
+      <section className="nn-card nn-student-card-lift p-6">
         <h2 className="text-lg font-bold text-[var(--theme-heading-text)]">{t("learner.profile.subscription.heading")}</h2>
         <p className="mt-1 text-sm text-muted-foreground">{t("learner.profile.subscription.subtitle")}</p>
         <dl className="mt-4 grid gap-3 text-sm sm:grid-cols-2">
@@ -250,14 +255,14 @@ export default async function LearnerAccountOverviewPage() {
         <div className="mt-4 flex flex-wrap gap-2">
           <Link
             href="/pricing"
-            className="inline-flex rounded-full border border-border px-4 py-2 text-sm font-semibold text-foreground hover:bg-muted/80"
+            className="nn-premium-action-chip inline-flex rounded-full border border-border px-4 py-2 text-sm font-semibold text-foreground hover:bg-muted/80"
           >
             {t("learner.profile.cta.plansPricing")}
           </Link>
           {entitlement !== "error" && entitlement.hasAccess ? (
             <Link
               href="/app/study-plan"
-              className="inline-flex rounded-full border border-role-cta/30 bg-role-cta-soft px-4 py-2 text-sm font-semibold text-role-cta-on-soft hover:bg-[color-mix(in_srgb,var(--role-cta)_14%,var(--bg-card))]"
+              className="nn-premium-action-chip inline-flex rounded-full border border-role-cta/30 bg-role-cta-soft px-4 py-2 text-sm font-semibold text-role-cta-on-soft hover:bg-[color-mix(in_srgb,var(--role-cta)_14%,var(--bg-card))]"
             >
               {t("learner.profile.cta.studyPlanner")}
             </Link>
@@ -268,7 +273,7 @@ export default async function LearnerAccountOverviewPage() {
       {entitlement !== "error" && entitlement.hasAccess ? <ExamPlanSettingsCard /> : null}
 
       {entitlement !== "error" && entitlement.hasAccess && premiumSnapshot ? (
-        <section className="nn-card p-6">
+        <section className="nn-card nn-student-card-lift p-6">
           <h2 className="text-lg font-bold text-[var(--theme-heading-text)]">{t("learner.profile.performance.heading")}</h2>
           <p className="mt-1 text-sm text-muted-foreground">{t("learner.profile.performance.subtitle")}</p>
           <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
@@ -359,19 +364,19 @@ export default async function LearnerAccountOverviewPage() {
                 <div className="mt-4 flex flex-wrap gap-2">
                   <Link
                     href={practiceNextHref}
-                    className="inline-flex rounded-full border border-role-cta/30 bg-role-cta-soft px-4 py-2 text-sm font-semibold text-role-cta-on-soft hover:bg-[color-mix(in_srgb,var(--role-cta)_14%,var(--bg-card))]"
+                    className="nn-premium-action-chip inline-flex rounded-full border border-role-cta/30 bg-role-cta-soft px-4 py-2 text-sm font-semibold text-role-cta-on-soft hover:bg-[color-mix(in_srgb,var(--role-cta)_14%,var(--bg-card))]"
                   >
                     {t("learner.profile.readiness.ctaPractice")}
                   </Link>
                   <Link
                     href={lessonsNextHref}
-                    className="inline-flex rounded-full border border-border px-4 py-2 text-sm font-semibold text-foreground hover:bg-muted/80"
+                    className="nn-premium-action-chip inline-flex rounded-full border border-border px-4 py-2 text-sm font-semibold text-foreground hover:bg-muted/80"
                   >
                     {t("learner.profile.readiness.ctaLessons")}
                   </Link>
                   <Link
                     href={catNextHref}
-                    className="inline-flex rounded-full border border-border px-4 py-2 text-sm font-semibold text-foreground hover:bg-muted/80"
+                    className="nn-premium-action-chip inline-flex rounded-full border border-border px-4 py-2 text-sm font-semibold text-foreground hover:bg-muted/80"
                   >
                     {t("learner.profile.readiness.ctaCat")}
                   </Link>
@@ -382,19 +387,19 @@ export default async function LearnerAccountOverviewPage() {
         </section>
       ) : entitlement !== "error" && !entitlement.hasAccess ? (
         <>
-          <section className="nn-card p-6">
+          <section className="nn-card nn-student-card-lift p-6">
             <h2 className="text-lg font-bold text-[var(--theme-heading-text)]">{t("learner.profile.performanceGate.heading")}</h2>
             <p className="mt-2 text-sm text-muted-foreground">{t("learner.profile.performanceGate.body")}</p>
             <div className="mt-4 flex flex-wrap gap-3">
               <Link
                 href="/pricing"
-                className="inline-flex items-center justify-center rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"
+                className="nn-btn-primary inline-flex items-center justify-center px-4 py-2 text-sm font-semibold"
               >
                 {t("cta.continuePlan")}
               </Link>
               <Link
                 href="/pricing"
-                className="inline-flex items-center justify-center rounded-full border border-border bg-card px-4 py-2 text-sm font-semibold hover:bg-muted/80"
+                className="nn-premium-action-chip inline-flex items-center justify-center rounded-full border border-border bg-card px-4 py-2 text-sm font-semibold hover:bg-muted/80"
               >
                 {t("cta.improveWeakAreas")}
               </Link>
@@ -405,7 +410,7 @@ export default async function LearnerAccountOverviewPage() {
       ) : null}
 
       {topicPerf && entitlement !== "error" && entitlement.hasAccess ? (
-        <section className="nn-card p-6">
+        <section className="nn-card nn-student-card-lift p-6">
           <h2 className="text-lg font-bold text-[var(--theme-heading-text)]">{t("learner.profile.topics.heading")}</h2>
           <p className="mt-1 text-sm text-muted-foreground">{t("learner.profile.topics.subtitle")}</p>
           <div className="mt-4 grid gap-6 lg:grid-cols-2">
@@ -476,34 +481,49 @@ export default async function LearnerAccountOverviewPage() {
       ) : null}
 
       {entitlement !== "error" && entitlement.hasAccess ? (
-        <section className="nn-card p-6">
+        <section className="nn-card nn-student-card-lift p-6">
           <h2 className="text-lg font-bold text-[var(--theme-heading-text)]">{t("learner.profile.quickLinks.heading")}</h2>
           <p className="mt-1 text-sm text-muted-foreground">{t("learner.profile.quickLinks.subtitle")}</p>
           <div className="mt-4 flex flex-wrap gap-2">
             <Link
               href="/app/lessons"
-              className="rounded-full border border-border bg-card px-4 py-2 text-sm font-semibold hover:bg-muted/80"
+              className={`nn-premium-action-chip rounded-full border bg-card px-4 py-2 text-sm font-semibold hover:bg-muted/80 ${
+                hasInProgressLesson
+                  ? "border-[color-mix(in_srgb,var(--semantic-success)_34%,var(--semantic-border-soft))]"
+                  : "border-border"
+              }`}
             >
               {t("learner.profile.quickLinks.lessons")}
             </Link>
             <Link
               href="/app/questions"
-              className="rounded-full border border-border bg-card px-4 py-2 text-sm font-semibold hover:bg-muted/80"
+              className={`nn-premium-action-chip rounded-full border bg-card px-4 py-2 text-sm font-semibold hover:bg-muted/80 ${
+                hasWeakAreasDetected
+                  ? "border-[color-mix(in_srgb,var(--semantic-warning)_34%,var(--semantic-border-soft))]"
+                  : "border-border"
+              }`}
             >
               {t("learner.profile.quickLinks.questionBank")}
             </Link>
             <Link
               href="/app/flashcards"
-              className="rounded-full border border-border bg-card px-4 py-2 text-sm font-semibold hover:bg-muted/80"
+              className="nn-premium-action-chip rounded-full border border-border bg-card px-4 py-2 text-sm font-semibold hover:bg-muted/80"
             >
               {t("learner.profile.quickLinks.flashcards")}
             </Link>
-            <Link href={catStartHref} className="rounded-full border border-border bg-card px-4 py-2 text-sm font-semibold hover:bg-muted/80">
+            <Link
+              href={catStartHref}
+              className={`nn-premium-action-chip rounded-full border bg-card px-4 py-2 text-sm font-semibold hover:bg-muted/80 ${
+                hasRecentCompletion
+                  ? "border-[color-mix(in_srgb,var(--semantic-brand)_34%,var(--semantic-border-soft))]"
+                  : "border-border"
+              }`}
+            >
               {t("learner.profile.quickLinks.catPractice")}
             </Link>
             <Link
               href="/app/study-plan"
-              className="rounded-full border border-role-cta/30 bg-role-cta-soft px-4 py-2 text-sm font-semibold text-role-cta-on-soft"
+              className="nn-premium-action-chip rounded-full border border-role-cta/30 bg-role-cta-soft px-4 py-2 text-sm font-semibold text-role-cta-on-soft"
             >
               {t("learner.profile.quickLinks.studyPlanner")}
             </Link>
@@ -512,7 +532,7 @@ export default async function LearnerAccountOverviewPage() {
       ) : null}
 
       {entitlement !== "error" && entitlement.hasAccess ? (
-        <section className="nn-card p-6">
+        <section className="nn-card nn-student-card-lift p-6">
           <h2 className="text-lg font-bold text-[var(--theme-heading-text)]">{t("learner.profile.activity.heading")}</h2>
           <p className="mt-1 text-sm text-muted-foreground">{t("learner.profile.activity.subtitle")}</p>
           <div className="mt-4 grid gap-6 lg:grid-cols-3">

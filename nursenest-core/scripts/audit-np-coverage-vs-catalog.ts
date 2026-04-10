@@ -4,9 +4,11 @@
  *
  * Run: npm run audit:np-coverage
  */
+import "../src/lib/db/env-bootstrap";
 import * as fs from "node:fs";
 import * as path from "node:path";
 import { fileURLToPath } from "node:url";
+import { ContentStatus, PrismaClient } from "@prisma/client";
 import catalog from "../src/content/pathway-lessons/catalog.json";
 import {
   evaluatePathwayLessonStructuralGate,
@@ -25,6 +27,7 @@ const NP_PATHWAY_IDS = [
   "us-np-agpcnp",
   "us-np-whnp",
   "us-np-pnp-pc",
+  "us-np-pmhnp",
 ] as const;
 
 type CoverageTopic = {
@@ -40,6 +43,8 @@ type CoverageFile = {
   systems: Array<{ id: string; name: string; topics: CoverageTopic[] }>;
   totals?: { mergeHints?: { id: string; mergeInto: string }[] };
 };
+type RequestedMode = "auto" | "db" | "static";
+type ResolvedMode = "db-backed" | "static-offline";
 
 const STOP = new Set([
   "the",
@@ -128,6 +133,7 @@ type AuditRow = {
   systemName: string;
   topicTitle: string;
   classification: Classification;
+  lessonSource?: "database" | "catalog";
   mergeTarget?: string;
   bestMatch?: { slug: string; pathwayId: string; score: number };
   premiumOk?: boolean;
@@ -157,18 +163,135 @@ function classifyLesson(l: CatalogLesson): {
   };
 }
 
-function main() {
+function toPathwayLessonRecord(row: {
+  slug: string;
+  title: string;
+  topic: string;
+  topicSlug: string;
+  bodySystem: string;
+  previewSectionCount: number;
+  seoTitle: string;
+  seoDescription: string;
+  sections: unknown;
+}): CatalogLesson {
+  return {
+    slug: row.slug,
+    title: row.title,
+    topic: row.topic,
+    topicSlug: row.topicSlug,
+    bodySystem: row.bodySystem,
+    previewSectionCount: row.previewSectionCount,
+    seoTitle: row.seoTitle,
+    seoDescription: row.seoDescription,
+    sections: Array.isArray(row.sections) ? (row.sections as CatalogLesson["sections"]) : [],
+  };
+}
+
+async function getAuthoritativeLessons(
+  prisma: PrismaClient | null,
+): Promise<{
+  lessonSource: "database" | "catalog";
+  pathwayLessons: Map<string, CatalogLesson[]>;
+}> {
+  const pathwayLessons = new Map<string, CatalogLesson[]>();
+  if (!prisma) {
+    for (const pid of NP_PATHWAY_IDS) {
+      pathwayLessons.set(pid, getMergedLessons(pid));
+    }
+    return { lessonSource: "catalog", pathwayLessons };
+  }
+
+  const rows = await prisma.pathwayLesson.findMany({
+    where: {
+      pathwayId: { in: [...NP_PATHWAY_IDS] },
+      status: ContentStatus.PUBLISHED,
+    },
+    orderBy: [{ pathwayId: "asc" }, { slug: "asc" }, { locale: "asc" }],
+    select: {
+      pathwayId: true,
+      slug: true,
+      title: true,
+      topic: true,
+      topicSlug: true,
+      bodySystem: true,
+      previewSectionCount: true,
+      seoTitle: true,
+      seoDescription: true,
+      sections: true,
+      locale: true,
+    },
+  });
+
+  for (const pid of NP_PATHWAY_IDS) {
+    const rowsForPathway = rows.filter((r) => r.pathwayId === pid);
+    const bySlug = new Map<string, (typeof rowsForPathway)[number]>();
+    for (const row of rowsForPathway) {
+      const cur = bySlug.get(row.slug);
+      if (!cur) {
+        bySlug.set(row.slug, row);
+        continue;
+      }
+      const rowIsEnglish = row.locale === "en";
+      const curIsEnglish = cur.locale === "en";
+      if (rowIsEnglish && !curIsEnglish) {
+        bySlug.set(row.slug, row);
+      }
+    }
+    pathwayLessons.set(
+      pid,
+      [...bySlug.values()]
+        .map((row) => toPathwayLessonRecord(row))
+        .sort((a, b) => a.slug.localeCompare(b.slug)),
+    );
+  }
+
+  return { lessonSource: "database", pathwayLessons };
+}
+
+function parseArgs(argv: string[]): { selectedMode: RequestedMode } {
+  let selectedMode: RequestedMode = "auto";
+  for (const arg of argv) {
+    if (!arg.startsWith("--mode=")) continue;
+    const raw = arg.slice("--mode=".length).trim();
+    if (raw === "auto" || raw === "db" || raw === "static") {
+      selectedMode = raw;
+      continue;
+    }
+    throw new Error(
+      `Invalid --mode value "${raw}". Expected one of: auto, db, static.\nExample: npm run audit:np-coverage -- --mode=db`,
+    );
+  }
+  return { selectedMode };
+}
+
+async function main() {
+  const { selectedMode } = parseArgs(process.argv.slice(2));
   const mapPath = path.join(ROOT, "data/reports/pathway-lessons/np-canonical-coverage-map.json");
   const coverage = JSON.parse(fs.readFileSync(mapPath, "utf8")) as CoverageFile;
 
-  const pathwayLessons = new Map<string, CatalogLesson[]>();
+  const hasDatabaseUrl = Boolean(process.env.DATABASE_URL?.trim());
+  if (selectedMode === "db" && !hasDatabaseUrl) {
+    throw new Error(
+      "Mode `db` requires DATABASE_URL, but it is missing or empty. Set DATABASE_URL or run with --mode=auto/--mode=static.",
+    );
+  }
+
+  const resolvedMode: ResolvedMode =
+    selectedMode === "static" ? "static-offline" : selectedMode === "db" || hasDatabaseUrl ? "db-backed" : "static-offline";
+  console.log(
+    `[np-coverage-audit] mode requested=${selectedMode} resolved=${resolvedMode} databaseUrlPresent=${hasDatabaseUrl}`,
+  );
+
+  const prisma = resolvedMode === "db-backed" ? new PrismaClient() : null;
+  const { lessonSource, pathwayLessons } = await getAuthoritativeLessons(prisma);
+  const fallbackPathwayLessons = new Map<string, CatalogLesson[]>(
+    NP_PATHWAY_IDS.map((id) => [id, getMergedLessons(id)]),
+  );
   const slugToPathways = new Map<string, string[]>();
   const allLessonsFlat: { pathwayId: string; lesson: CatalogLesson }[] = [];
 
   for (const pid of NP_PATHWAY_IDS) {
-    const list = getMergedLessons(pid);
-    pathwayLessons.set(pid, list);
-    for (const l of list) {
+    for (const l of pathwayLessons.get(pid) ?? []) {
       allLessonsFlat.push({ pathwayId: pid, lesson: l });
       const cur = slugToPathways.get(l.slug) ?? [];
       if (!cur.includes(pid)) cur.push(pid);
@@ -213,7 +336,10 @@ function main() {
           systemName: sys.name,
           topicTitle: topic.title,
           classification: "CREATE_NEW",
-          notes: "No merged-catalog lesson met token overlap threshold; verify DB before authoring.",
+          notes:
+            lessonSource === "database"
+              ? "No published DB lesson met token overlap threshold; likely net-new unless canonical merge hint applies."
+              : "No merged-catalog lesson met token overlap threshold; verify DB before authoring.",
         });
         continue;
       }
@@ -227,6 +353,7 @@ function main() {
         systemName: sys.name,
         topicTitle: topic.title,
         classification,
+        lessonSource,
         bestMatch: { slug: best.slug, pathwayId: best.pathwayId, score: best.score },
         premiumOk,
         usesPremiumStructure: usesPremium,
@@ -242,9 +369,19 @@ function main() {
 
   const summary = {
     generatedAt: new Date().toISOString(),
-    source: "np-canonical-coverage-map.json + catalog.json + scoped gold injection (no DB)",
+    source:
+      lessonSource === "database"
+        ? "np-canonical-coverage-map.json + published pathway_lessons rows (DATABASE_URL)"
+        : "np-canonical-coverage-map.json + catalog.json + scoped gold injection (no DB)",
+    selectedMode,
+    resolvedMode,
+    mode: resolvedMode,
+    databaseUrlPresent: hasDatabaseUrl,
     pathwayLessonCounts: Object.fromEntries(
       NP_PATHWAY_IDS.map((id) => [id, pathwayLessons.get(id)?.length ?? 0]),
+    ),
+    staticMergedCatalogPathwayLessonCounts: Object.fromEntries(
+      NP_PATHWAY_IDS.map((id) => [id, fallbackPathwayLessons.get(id)?.length ?? 0]),
     ),
     duplicateSlugsAcrossPathways: duplicateSlugs.map(([slug, pids]) => ({ slug, pathwayIds: pids })),
     classificationCounts: rows.reduce(
@@ -278,9 +415,19 @@ function main() {
     "",
     `Generated: ${summary.generatedAt}`,
     "",
-    "## Pathway lesson counts (merged catalog)",
+    `Mode selected: **${summary.selectedMode}**`,
+    "",
+    `Mode resolved: **${summary.resolvedMode}**`,
+    "",
+    `DATABASE_URL present: **${summary.databaseUrlPresent ? "yes" : "no"}**`,
+    "",
+    "## Pathway lesson counts (authoritative source)",
     "",
     ...NP_PATHWAY_IDS.map((id) => `- **${id}:** ${summary.pathwayLessonCounts[id]}`),
+    "",
+    "## Pathway lesson counts (static merged catalog baseline)",
+    "",
+    ...NP_PATHWAY_IDS.map((id) => `- **${id}:** ${summary.staticMergedCatalogPathwayLessonCounts[id]}`),
     "",
     "## Classification counts (topic rows)",
     "",
@@ -308,7 +455,13 @@ function main() {
 
   console.log("Wrote", outJson);
   console.log("Wrote", mdPath);
+  console.log("Mode:", summary.mode);
   console.log("Counts:", summary.classificationCounts);
+
+  await prisma?.$disconnect();
 }
 
-main();
+main().catch(async (error) => {
+  console.error(error);
+  process.exit(1);
+});

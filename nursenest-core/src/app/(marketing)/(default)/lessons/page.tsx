@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
+import { WebPageJsonLd } from "@/components/seo/seo-json-ld";
 import { examLessonsIndexBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 import { MarketingPublicStudyLanding } from "@/components/marketing/marketing-public-study-landing";
 import { PublicLessonsPathwaySections } from "@/components/marketing/public-lessons-pathway-sections";
@@ -12,7 +13,7 @@ import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-s
 import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
 import { formatMarketingMessage, resolveMarketingCopy } from "@/lib/marketing-i18n-core";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
-import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
+import { marketingAlternatesSharedPage, marketingCanonicalPathForLocale } from "@/lib/seo/marketing-alternates";
 import { getMarketingRegionFromCookies } from "@/lib/region/marketing-region-server";
 import {
   defaultPublicLessonsMetaDescription,
@@ -62,6 +63,19 @@ export default async function PublicLessonsLandingPage() {
   const t = (key: string, params?: Record<string, string | number>) => formatMarketingMessage(m, key, params, en);
   const h1Key = marketingRegion === "US" ? "pages.publicLessons.h1US" : "pages.publicLessons.h1CA";
   const introKey = marketingRegion === "US" ? "pages.publicLessons.introUS" : "pages.publicLessons.introCA";
+  const metaSfx = marketingRegion === "US" ? "US" : "CA";
+  const title = resolveMarketingCopy(
+    m,
+    `pages.publicLessons.metaTitle${metaSfx}`,
+    en,
+    defaultPublicLessonsMetaTitle(marketingRegion),
+  );
+  const description = resolveMarketingCopy(
+    m,
+    `pages.publicLessons.metaDescription${metaSfx}`,
+    en,
+    defaultPublicLessonsMetaDescription(marketingRegion),
+  );
 
   const signupLessons = `${withMarketingLocale(locale, "/signup")}?callbackUrl=${encodeURIComponent("/app/lessons")}`;
 
@@ -69,6 +83,12 @@ export default async function PublicLessonsLandingPage() {
 
   return (
     <>
+      <WebPageJsonLd
+        title={title}
+        description={description}
+        path={marketingCanonicalPathForLocale(locale, "/lessons")}
+        inLanguage={locale}
+      />
       <BreadcrumbJsonLd items={schemaItems} />
       <div className="mx-auto max-w-7xl px-4 pt-2 sm:px-6 sm:pt-3 lg:px-8">
         <BreadcrumbTrail items={crumbs} navClassName="nn-marketing-caption" />

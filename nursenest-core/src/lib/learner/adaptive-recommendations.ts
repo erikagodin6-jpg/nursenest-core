@@ -409,7 +409,7 @@ export function buildAdaptiveRecommendations(args: {
   if (urgency === "near" || urgency === "final_stretch") {
     secondaryCandidates.push({
       title: isCanadaSubscriber ? "Adaptive practice test" : "Adaptive (CAT) practice test",
-      href: "/app/practice-tests",
+      href: "/app/practice-tests/start",
       reason: isCanadaSubscriber
         ? "Computer-adaptive practice adjusts difficulty—useful when your exam is close."
         : "CAT adjusts difficulty. Useful when the exam is close.",

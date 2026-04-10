@@ -4,6 +4,7 @@ import { z } from "zod";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
 import type { NormalizedQuestionDraft } from "@/lib/content/ai-draft-validation";
 import { governExamQuestionPublish } from "@/lib/content/editorial-publish-policy";
+import { assertExamQuestionContextForPublish } from "@/lib/content-quality/exam-question-context-validation";
 import { stemHash } from "@/lib/content/stem-hash";
 import { prisma } from "@/lib/db";
 import { contentStatusToDb } from "@/lib/prisma/content-status";
@@ -86,6 +87,16 @@ export async function POST(req: Request, ctx: Props) {
 
   const hash = stemHash(n.stem);
   const topic = [cat.name, n.topicTag].filter(Boolean).join(" · ") || cat.slug;
+  try {
+    assertExamQuestionContextForPublish({
+      tier: tierCodeToExamDbTier(draft.tier),
+      exam: examFamilyToExamColumn(draft.examFamily),
+      countryCode: draft.country,
+    });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Exam context required for draft promotion";
+    return NextResponse.json({ error: message, code: "missing_exam_context" }, { status: 422 });
+  }
 
   const q = await prisma.examQuestion.create({
     data: {

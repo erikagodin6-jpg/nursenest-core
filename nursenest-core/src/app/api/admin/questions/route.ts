@@ -4,6 +4,7 @@ import { z } from "zod";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
 import { stemHash } from "@/lib/content/stem-hash";
 import { governExamQuestionPublish } from "@/lib/content/editorial-publish-policy";
+import { assertExamQuestionContextForPublish } from "@/lib/content-quality/exam-question-context-validation";
 import { prisma } from "@/lib/db";
 import { contentStatusToDb } from "@/lib/prisma/content-status";
 import {
@@ -95,6 +96,16 @@ export async function POST(req: Request) {
   const data = parsed.data;
   let publishGov: ReturnType<typeof governExamQuestionPublish> | null = null;
   if (data.status === ContentStatus.PUBLISHED) {
+    try {
+      assertExamQuestionContextForPublish({
+        tier: tierCodeToExamDbTier(data.tier),
+        exam: data.examFamily ? examFamilyToExamColumn(data.examFamily) : null,
+        countryCode: data.country,
+      });
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Exam context required for publish";
+      return NextResponse.json({ error: message, code: "missing_exam_context" }, { status: 422 });
+    }
     publishGov = governExamQuestionPublish(
       {
         stem: data.stem,

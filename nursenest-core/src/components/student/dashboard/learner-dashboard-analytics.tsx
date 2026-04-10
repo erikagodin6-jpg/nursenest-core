@@ -1,6 +1,8 @@
+import { catPathwayExamCodeLabel, catPathwayRegionalExamLine } from "@/lib/exam-pathways/cat-pathway-labels";
+import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
+import { appPathwayCatSessionStartPath } from "@/lib/exam-pathways/pathway-cat-flow";
 import type { PremiumDashboardSnapshot } from "@/lib/learner/premium-dashboard-snapshot";
 import type { LearnerMarketingT } from "@/lib/learner/learner-marketing-server";
-import { appPathwayCatSessionStartPath } from "@/lib/exam-pathways/pathway-cat-flow";
 import { MasteryLegend } from "@/components/student/product/mastery-legend";
 import { ReadinessScoreCard } from "@/components/student/dashboard/readiness-score-card";
 import { QuickActionPanel } from "@/components/student/dashboard/quick-action-panel";
@@ -12,6 +14,32 @@ import { ExamHistory } from "@/components/student/dashboard/exam-history";
 
 const MAX_TOPIC = 8;
 const MAX_WEAK = 6;
+
+function catQuickFromSnapshot(snapshot: PremiumDashboardSnapshot): {
+  catStartHref: string;
+  catPathwayLabel: string | null;
+  catPathwayLine: string | null;
+} {
+  const ids = snapshot.pathways.map((p) => p.pathwayId);
+  const preferred =
+    snapshot.learnerPath && ids.includes(snapshot.learnerPath)
+      ? snapshot.learnerPath
+      : ids.length === 1
+        ? ids[0]!
+        : null;
+  if (!preferred) {
+    return { catStartHref: "/app/practice-tests/start", catPathwayLabel: null, catPathwayLine: null };
+  }
+  const pw = getExamPathwayById(preferred);
+  if (!pw) {
+    return { catStartHref: "/app/practice-tests/start", catPathwayLabel: null, catPathwayLine: null };
+  }
+  return {
+    catStartHref: appPathwayCatSessionStartPath(preferred),
+    catPathwayLabel: catPathwayExamCodeLabel(pw),
+    catPathwayLine: catPathwayRegionalExamLine(pw),
+  };
+}
 
 /**
  * Dashboard analytics region — prioritised layout:
@@ -31,9 +59,8 @@ export function LearnerDashboardAnalytics({
   const topicTrends = snapshot.insights?.topicTrends ?? [];
   const weakAreas = snapshot.insights?.weakAreas.slice(0, MAX_WEAK) ?? [];
   const continueLesson = snapshot.continueLesson;
-  const preferredPathwayId = snapshot.pathways.find((p) => p.lessonsTotal > 0)?.pathwayId ?? snapshot.pathways[0]?.pathwayId ?? null;
-  const catStartHref = preferredPathwayId ? appPathwayCatSessionStartPath(preferredPathwayId) : "/app/practice-tests/start";
   const trend = snapshot.insights?.performance.trendSummary?.trim();
+  const hasRecentCompletion = snapshot.recentMocks.some((m) => Date.now() - new Date(m.at).getTime() <= 72 * 60 * 60 * 1000);
   const practiceLine =
     snapshot.practice.gradedTotal > 0
       ? t("learner.dashboard.recentPerformance.gradedLine", {
@@ -42,6 +69,8 @@ export function LearnerDashboardAnalytics({
           sessions: snapshot.practice.sessionCount,
         })
       : "";
+
+  const catQuick = catQuickFromSnapshot(snapshot);
 
   return (
     <div className="space-y-6" aria-label={t("learner.dashboard.insight.regionLabel")}>
@@ -52,7 +81,10 @@ export function LearnerDashboardAnalytics({
         guided={{
           continueLesson,
           hasWeakAreas: weakAreas.length > 0,
-          catStartHref,
+          hasRecentCompletion,
+          catStartHref: catQuick.catStartHref,
+          catPathwayLabel: catQuick.catPathwayLabel,
+          catPathwayLine: catQuick.catPathwayLine,
         }}
       />
 

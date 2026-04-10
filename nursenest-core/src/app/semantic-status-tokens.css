@@ -683,6 +683,43 @@ html[data-theme="dark-mode"] {
   background: color-mix(in srgb, var(--study-accent) 17%, var(--semantic-surface));
 }
 
+/* Reusable learner action chips: tiny hover-lift + crisp focus ring. */
+.nn-premium-action-chip {
+  transition:
+    background-color 0.18s ease,
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    transform 0.16s ease;
+}
+
+.nn-premium-action-chip:hover {
+  box-shadow: var(--semantic-shadow-soft);
+}
+
+.nn-premium-action-chip:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 2px var(--semantic-surface),
+    0 0 0 4px color-mix(in srgb, var(--semantic-brand) 30%, transparent);
+}
+
+.nn-premium-action-chip:active {
+  transform: translateY(0.5px) scale(0.985);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nn-premium-action-chip {
+    transition:
+      background-color 0.18s ease,
+      border-color 0.18s ease,
+      box-shadow 0.18s ease;
+  }
+
+  .nn-premium-action-chip:active {
+    transform: none;
+  }
+}
+
 /* Readiness “integrated study” callout — cool + calm, not primary-wash */
 .nn-learner-readiness-integrated-callout {
   border-radius: 0.75rem;

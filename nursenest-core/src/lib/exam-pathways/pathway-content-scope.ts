@@ -1,6 +1,8 @@
 import type { Prisma } from "@prisma/client";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { questionAccessWhere } from "@/lib/entitlements/content-access-scope";
+import { buildGlobalExamContext } from "@/lib/exam-context/exam-registry";
+import { examQuestionPoolWhereForContext } from "@/lib/exam-context/query-scope";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 
 /**
@@ -12,8 +14,14 @@ export function questionAccessWhereWithPathway(
   pathway: ExamPathwayDefinition | null,
 ): Prisma.ExamQuestionWhereInput {
   const base = questionAccessWhere(entitlement);
-  if (!pathway || pathway.contentExamKeys.length === 0) return base;
+  if (!pathway) return base;
+  const ctx = buildGlobalExamContext(pathway.id, "en");
+  if (!ctx) return { id: { in: [] } };
+  const scoped = examQuestionPoolWhereForContext(ctx);
+  if (scoped.examIn.length === 0 || scoped.tierMatches.length === 0) {
+    return { id: { in: [] } };
+  }
   return {
-    AND: [base, { exam: { in: pathway.contentExamKeys } }],
+    AND: [base, { exam: { in: scoped.examIn } }, { tier: { in: scoped.tierMatches } }],
   };
 }

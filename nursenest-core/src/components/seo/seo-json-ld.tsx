@@ -12,6 +12,7 @@ function JsonLd({ data }: { data: Record<string, unknown> }) {
 }
 
 const ORG_ID = `${absoluteUrl("/")}#organization`;
+const WEBSITE_ID = `${absoluteUrl("/")}#website`;
 
 export function OrganizationJsonLd() {
   return (
@@ -36,9 +37,43 @@ export function WebSiteJsonLd() {
       data={{
         "@context": "https://schema.org",
         "@type": "WebSite",
+        "@id": WEBSITE_ID,
         name: "NurseNest",
         url: absoluteUrl("/"),
         publisher: { "@id": ORG_ID },
+        potentialAction: {
+          "@type": "SearchAction",
+          target: `${absoluteUrl("/")}question-bank`,
+          "query-input": "required name=topic",
+        },
+      }}
+    />
+  );
+}
+
+export function WebPageJsonLd({
+  title,
+  description,
+  path,
+  inLanguage,
+}: {
+  title: string;
+  description: string;
+  path: string;
+  inLanguage?: string;
+}) {
+  const url = absoluteUrl(path);
+  return (
+    <JsonLd
+      data={{
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "@id": `${url}#webpage`,
+        url,
+        name: title,
+        description,
+        isPartOf: { "@id": WEBSITE_ID },
+        ...(inLanguage ? { inLanguage } : {}),
       }}
     />
   );

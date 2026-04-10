@@ -69,7 +69,14 @@ export const LEARNER_BRAND_LOGO_SLOT_CLASSNAME =
 export const LEARNER_BRAND_LOGO_IMG_CLASSNAME =
   "nn-brand-learner-logo block h-full w-auto max-h-full max-w-full shrink-0 bg-transparent object-contain object-left [image-rendering:auto]" as const;
 
-export type BrandLogoMarkVariant = "header" | "footer" | "auth" | "learner";
+/** 404 / branded empty states: larger mark than nav; same object-contain rules as footer. */
+export const HERO_BRAND_LOGO_SLOT_CLASSNAME =
+  "nn-brand-hero-logo-slot inline-flex flex-none shrink-0 items-center justify-center overflow-hidden bg-transparent h-16 max-h-16 w-auto max-w-[min(92vw,14rem)] sm:h-[5.25rem] sm:max-h-[5.25rem] sm:max-w-[17rem] md:h-24 md:max-h-24 md:max-w-[18rem]" as const;
+
+export const HERO_BRAND_LOGO_IMG_CLASSNAME =
+  "nn-brand-hero-logo block h-full w-auto max-h-full max-w-full shrink-0 bg-transparent object-contain object-center [image-rendering:auto]" as const;
+
+export type BrandLogoMarkVariant = "header" | "footer" | "auth" | "learner" | "hero";
 
 /** Single presentation contract for `<SiteBrandLogoMark />` (slot + img). Default `header` matches marketing nav. */
 export function brandLogoMarkPresentation(variant: BrandLogoMarkVariant = "header"): {
@@ -83,6 +90,8 @@ export function brandLogoMarkPresentation(variant: BrandLogoMarkVariant = "heade
       return { slotClassName: AUTH_BRAND_LOGO_SLOT_CLASSNAME, imgClassName: AUTH_BRAND_LOGO_IMG_CLASSNAME };
     case "learner":
       return { slotClassName: LEARNER_BRAND_LOGO_SLOT_CLASSNAME, imgClassName: LEARNER_BRAND_LOGO_IMG_CLASSNAME };
+    case "hero":
+      return { slotClassName: HERO_BRAND_LOGO_SLOT_CLASSNAME, imgClassName: HERO_BRAND_LOGO_IMG_CLASSNAME };
     default:
       return { slotClassName: HEADER_BRAND_LOGO_SLOT_CLASSNAME, imgClassName: HEADER_BRAND_LOGO_IMG_CLASSNAME };
   }

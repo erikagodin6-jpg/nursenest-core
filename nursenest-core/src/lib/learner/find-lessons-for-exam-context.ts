@@ -4,6 +4,8 @@
  */
 import type { PrismaClient } from "@prisma/client";
 import { ContentStatus } from "@prisma/client";
+import { buildGlobalExamContext } from "@/lib/exam-context/exam-registry";
+import { pathwayLessonWhere } from "@/lib/exam-context/query-scope";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import {
   RATIONALE_DB_EXACT_MIN_SCORE,
@@ -61,14 +63,17 @@ export async function findLessonsForExamContext(
   if (!getExamPathwayById(pathwayId)) {
     return { pathwayId, topicSlug, primary: null, related: [], suppressedReason: "invalid_pathway" };
   }
+  const examContext = buildGlobalExamContext(pathwayId, "en");
+  if (!examContext) {
+    return { pathwayId, topicSlug, primary: null, related: [], suppressedReason: "invalid_pathway" };
+  }
 
   const pathwayCtx = pathwayRationaleContextFromId(pathwayId);
   const rows = await prisma.pathwayLesson.findMany({
     where: {
-      pathwayId,
+      ...pathwayLessonWhere(examContext),
       topicSlug,
       status: ContentStatus.PUBLISHED,
-      locale: "en",
     },
     select: {
       id: true,

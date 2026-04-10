@@ -61,7 +61,7 @@ export default async function AccountReportCardPage() {
           <p className="mt-2 text-sm text-[var(--semantic-text-secondary)]">{t("learner.account.reportCard.lockedBody")}</p>
         </div>
         <SubscriptionPaywall context="exams" />
-        <Link href="/pricing" className="inline-flex text-sm font-semibold text-primary underline">
+        <Link href="/pricing" className="nn-premium-action-chip inline-flex rounded-full border border-border px-4 py-2 text-sm font-semibold text-primary">
           {t("learner.profile.cta.plansPricing")}
         </Link>
       </main>

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { BookOpen, ClipboardList, LineChart } from "lucide-react";
+import { catPathwayRegionalExamLine, catPathwayShortCatLabel } from "@/lib/exam-pathways/cat-pathway-labels";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import {
   lessonStudyLoopCatHrefs,
@@ -36,6 +37,8 @@ export function PathwayLessonStudyLoopCta({
   const practice = lessonStudyLoopPracticeHrefs(pathway, topicLabel, topicSlug);
   const relatedHub = lessonStudyLoopRelatedLessonsHubHref(lessonsBasePath, topicSlug);
   const cat = lessonStudyLoopCatHrefs(pathway);
+  const catLine = catPathwayRegionalExamLine(pathway);
+  const catShort = catPathwayShortCatLabel(pathway);
 
   const filtered = relatedLessons.filter((r) => r.slug !== currentSlug).slice(0, RELATED_PREVIEW);
 
@@ -139,27 +142,29 @@ export function PathwayLessonStudyLoopCta({
 
           {/* CAT */}
           <div className="nn-study-card nn-study-card--wash flex flex-col p-5 sm:p-6">
-            <div className="flex items-center gap-2 text-[var(--theme-heading-text)]">
+            <p className="nn-marketing-label nn-marketing-label--accent text-[11px] font-semibold uppercase tracking-wide text-primary">
+              {catLine}
+            </p>
+            <div className="mt-2 flex items-center gap-2 text-[var(--theme-heading-text)]">
               <LineChart className="h-5 w-5 shrink-0 text-primary" aria-hidden />
-              <h3 className="text-base font-semibold tracking-tight">Take a CAT exam</h3>
+              <h3 className="text-base font-semibold tracking-tight">{catShort}</h3>
             </div>
             <p className="nn-marketing-body-sm mt-3 text-[var(--theme-muted-text)]">
-              Adaptive difficulty matches this pathway. Use the public CAT landing to learn how sessions work, then sign in when
-              you are ready.
+              Open the public landing for {catShort} to see how sessions work, then sign in when you are ready.
             </p>
             <div className="mt-4 flex flex-col gap-2">
               <Link
                 href={cat.marketing}
                 className="inline-flex min-h-11 items-center justify-center rounded-full bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition hover:opacity-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/35 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--theme-page-bg)]"
               >
-                CAT prep · this pathway
+                View {catShort} landing
               </Link>
               {cat.showAdaptiveShortcut && cat.appSession ? (
                 <Link
                   href={cat.appSession}
                   className="nn-study-pill-secondary inline-flex min-h-11 items-center justify-center px-4 py-2.5"
                 >
-                  Sign in to start CAT
+                  Start {catShort}
                 </Link>
               ) : (
                 <p className="text-xs text-[var(--theme-muted-text)]">

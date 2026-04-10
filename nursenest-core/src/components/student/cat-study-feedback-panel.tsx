@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 import { trackClientEvent } from "@/lib/observability/posthog-client";
+import { buildGlobalExamContext } from "@/lib/exam-context/exam-registry";
+import { examContextAnalyticsProps } from "@/lib/exam-context/global-exam-context";
 import type { CatStudyFeedbackPayload } from "@/lib/practice-tests/types";
 import { isSafeInternalStudyLinkHref } from "@/lib/practice-tests/cat-practice-fallbacks";
 
@@ -14,11 +16,13 @@ export function CatStudyFeedbackPanel({
   continueLabel,
   onContinue,
   continueDisabled,
+  pathwayId = null,
 }: {
   feedback: CatStudyFeedbackPayload;
   continueLabel: string;
   onContinue: () => void;
   continueDisabled?: boolean;
+  pathwayId?: string | null;
 }) {
   const layers = feedback.layers;
   const level2 = layers?.level2Sections ?? [];
@@ -27,6 +31,7 @@ export function CatStudyFeedbackPanel({
     (l) => l && typeof l.href === "string" && isSafeInternalStudyLinkHref(l.href),
   );
   const level3 = layers?.level3Strategy?.trim() ?? "";
+  const examContextProps = examContextAnalyticsProps(buildGlobalExamContext(pathwayId, "en"));
 
   return (
     <div className="motion-reduce:transition-none space-y-4">
@@ -123,6 +128,7 @@ export function CatStudyFeedbackPanel({
                               surface: "cat_study_rationale",
                               link_index: i,
                               href_kind: "lesson",
+                              ...examContextProps,
                             })
                           }
                         >

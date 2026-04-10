@@ -10,12 +10,15 @@ import type {
   PracticeTestPathwayOption,
   PracticeTestSelectionMode,
 } from "@/lib/practice-tests/types";
+import { catPathwayExamCodeLabel } from "@/lib/exam-pathways/cat-pathway-labels";
+import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import {
   catEligiblePathwayOptions,
   hubCatStartBlocked,
   pathwayIdWhenEnteringCatMode,
   pathwayIdWhenLeavingCatMode,
 } from "@/lib/practice-tests/practice-tests-hub-cat-pathway";
+import { buildGlobalExamContext } from "@/lib/exam-context/exam-registry";
 
 type TestListRow = {
   id: string;
@@ -83,6 +86,18 @@ export function PracticeTestsHubClient({
   const selectedPathway =
     pathwayOptionsForSelect.find((p) => p.id === pathwayId) ?? pathwayOptions.find((p) => p.id === pathwayId);
   const isNpPathway = selectedPathway?.examFamily === "NP";
+  const selectedPathwayDef = pathwayId.trim() ? getExamPathwayById(pathwayId.trim()) : undefined;
+  const selectedExamLabel = selectedPathwayDef ? catPathwayExamCodeLabel(selectedPathwayDef) : null;
+  const selectedExamContext = useMemo(
+    () => buildGlobalExamContext(pathwayId.trim() || defaultPathwayId || null, "en"),
+    [defaultPathwayId, pathwayId],
+  );
+  const hasInProgressActivity = list.some((row) => row.status === "IN_PROGRESS");
+  const hasRecentCompletion = list.some((row) => {
+    if (row.status !== "COMPLETED" || !row.completedAt) return false;
+    return Date.now() - new Date(row.completedAt).getTime() <= 72 * 60 * 60 * 1000;
+  });
+  const hasWeakFocus = selectionMode === "weak" || (selectionMode === "cat" && catSelectionBasis === "weak");
   const prevSelectionModeRef = useRef(selectionMode);
 
   useEffect(() => {
@@ -153,7 +168,13 @@ export function PracticeTestsHubClient({
     let cancelled = false;
     (async () => {
       try {
-        const res = await fetch("/api/questions/discovery");
+        const qp = new URLSearchParams();
+        if (selectedExamContext?.pathwayId) {
+          qp.set("pathwayId", selectedExamContext.pathwayId);
+          qp.set("language", selectedExamContext.language);
+        }
+        const discoveryUrl = qp.size > 0 ? `/api/questions/discovery?${qp.toString()}` : "/api/questions/discovery";
+        const res = await fetch(discoveryUrl);
         if (!res.ok) return;
         const data = (await res.json()) as { buckets?: { topic: string; count: number }[] };
         if (!cancelled && data.buckets) setTopics(data.buckets);
@@ -164,7 +185,7 @@ export function PracticeTestsHubClient({
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [selectedExamContext]);
 
   function addTopicFromMenu(t: string) {
     if (!t || topicPicks.includes(t)) return;
@@ -239,13 +260,24 @@ export function PracticeTestsHubClient({
 
   return (
     <div className="space-y-8">
-      <section className="nn-card p-6">
-        <h2 className="text-lg font-bold text-[var(--theme-heading-text)]">Build a practice test</h2>
-        <p className="mt-1 text-sm text-muted-foreground">
+      <section
+        className={`nn-card nn-student-card-lift p-6 sm:p-7 ${
+          hasWeakFocus
+            ? "border-[color-mix(in_srgb,var(--semantic-warning)_28%,var(--semantic-border-soft))]"
+            : "border-[var(--semantic-border-soft)]"
+        }`}
+      >
+        <h2 className="text-xl font-bold tracking-tight text-[var(--theme-heading-text)]">Build a practice test</h2>
+        <p className="mt-1 max-w-3xl text-sm leading-relaxed text-muted-foreground">
           Questions are drawn only from your plan’s tier and region. Choose a linear test or{" "}
           <strong className="text-foreground">adaptive (CAT)</strong> that adjusts difficulty from your performance and
           weak-area history.
         </p>
+        {hasWeakFocus ? (
+          <p className="mt-2 text-xs font-medium text-[var(--semantic-warning-contrast)]">
+            Weak-area focus is active so recommendations stay targeted.
+          </p>
+        ) : null}
 
         {pathwayOptions.length > 0 ? (
           <div className="mt-4">
@@ -274,8 +306,11 @@ export function PracticeTestsHubClient({
               </select>
             </label>
             <p className="mt-1 text-xs text-muted-foreground">
-              NP tracks use the NP question bank and AANP-style blueprint when you run exam simulation. RN tracks use
-              the NCLEX-RN bank and NCLEX client-needs blueprint.
+              {isNpPathway
+                ? "NP tracks use the NP question bank and AANP-style blueprint when you run exam simulation."
+                : selectedExamLabel
+                  ? `${selectedExamLabel} uses the pathway-scoped bank and tagged blueprint when you run exam simulation.`
+                  : "Each exam track uses its own pathway-scoped bank and tagged blueprint when you run exam simulation."}
             </p>
             {selectionMode === "cat" && catOptions.length > 1 ? (
               <>
@@ -316,7 +351,7 @@ export function PracticeTestsHubClient({
                 ? catPresentationMode === "exam_simulation"
                   ? isNpPathway
                     ? "Maximum length (AANP-style NP sim: 75–150)"
-                    : "Maximum length (NCLEX-RN exam sim: 75–145)"
+                    : `Maximum length (${selectedExamLabel ?? "NCLEX-style"} exam sim: 75–145)`
                   : "Maximum questions (cap, 10–75)"
                 : "Number of questions (5–100)"}
             </span>
@@ -344,9 +379,8 @@ export function PracticeTestsHubClient({
                     key={n}
                     type="button"
                     onClick={() => setQuestionCount(n)}
-                    className={`rounded-full px-3 py-1 text-xs font-medium ${
-                      questionCount === n ? "bg-primary text-primary-foreground" : "border border-border hover:bg-muted"
-                    }`}
+                    data-selected={questionCount === n}
+                    className="nn-chip px-3 py-1 text-xs font-medium"
                   >
                     {n}
                   </button>
@@ -379,9 +413,8 @@ export function PracticeTestsHubClient({
                     setQuestionCount((q) => (q > 75 ? 75 : q));
                   }
                 }}
-                className={`rounded-full px-4 py-1.5 text-sm font-medium ${
-                  selectionMode === v ? "bg-primary text-primary-foreground" : "border border-border hover:bg-muted"
-                }`}
+                data-active={selectionMode === v}
+                className="nn-tab-pill px-4 py-1.5 text-sm font-medium"
               >
                 {label}
               </button>
@@ -396,7 +429,7 @@ export function PracticeTestsHubClient({
                   ? catPresentationMode === "exam_simulation"
                     ? isNpPathway
                       ? "AANP-style NP exam simulation: 75–150 items, four-domain blueprint when questions are tagged, adaptive readiness (theta + confidence stops). Not the live AANP format."
-                      : "NCLEX-RN exam simulation: 75–145 items, client-needs blueprint when tagged, adaptive stops. Not an official NCLEX result."
+                      : `${selectedExamLabel ?? "NCLEX-style"} exam simulation: length and blueprint follow your selected pathway when questions are tagged, with adaptive stops. Not an official licensure result.`
                     : "CAT starts near mid difficulty, then moves up or down; may stop early when the estimate stabilizes."
                   : "Optional topic filters narrow the pool; leave empty for a broad mix."}
           </p>
@@ -409,22 +442,16 @@ export function PracticeTestsHubClient({
               <button
                 type="button"
                 onClick={() => setLinearDeliveryMode("practice")}
-                className={`rounded-full px-4 py-1.5 text-sm font-medium ${
-                  linearDeliveryMode === "practice"
-                    ? "bg-[var(--semantic-info)] text-white shadow-sm"
-                    : "border border-[var(--semantic-border-soft)] hover:bg-[var(--semantic-panel-muted)]"
-                }`}
+                data-active={linearDeliveryMode === "practice"}
+                className="nn-tab-pill px-4 py-1.5 text-sm font-medium"
               >
                 Practice (per-item feedback)
               </button>
               <button
                 type="button"
                 onClick={() => setLinearDeliveryMode("exam")}
-                className={`rounded-full px-4 py-1.5 text-sm font-medium ${
-                  linearDeliveryMode === "exam"
-                    ? "bg-[var(--semantic-info)] text-white shadow-sm"
-                    : "border border-[var(--semantic-border-soft)] hover:bg-[var(--semantic-panel-muted)]"
-                }`}
+                data-active={linearDeliveryMode === "exam"}
+                className="nn-tab-pill px-4 py-1.5 text-sm font-medium"
               >
                 Exam (lock until end)
               </button>
@@ -446,11 +473,8 @@ export function PracticeTestsHubClient({
                   setCatPresentationMode("practice");
                   if (questionCount > 75) setQuestionCount(75);
                 }}
-                className={`rounded-full px-4 py-1.5 text-sm font-medium ${
-                  catPresentationMode === "practice"
-                    ? "bg-primary text-primary-foreground"
-                    : "border border-[var(--semantic-border-soft)] hover:bg-[var(--semantic-panel-muted)]"
-                }`}
+                data-active={catPresentationMode === "practice"}
+                className="nn-tab-pill px-4 py-1.5 text-sm font-medium"
               >
                 Practice CAT
               </button>
@@ -470,11 +494,8 @@ export function PracticeTestsHubClient({
                     setQuestionCount((q) => (q < 75 ? 145 : Math.min(145, Math.max(75, q))));
                   }
                 }}
-                className={`rounded-full px-4 py-1.5 text-sm font-medium ${
-                  catPresentationMode === "exam_simulation"
-                    ? "bg-primary text-primary-foreground"
-                    : "border border-[var(--semantic-border-soft)] hover:bg-[var(--semantic-panel-muted)]"
-                }`}
+                data-active={catPresentationMode === "exam_simulation"}
+                className="nn-tab-pill px-4 py-1.5 text-sm font-medium"
               >
                 Exam simulation
               </button>
@@ -483,13 +504,13 @@ export function PracticeTestsHubClient({
               Practice CAT keeps shorter runs and weak-area boosts. Exam simulation uses your selected pathway:{" "}
               {isNpPathway ? (
                 <>
-                  <strong className="text-foreground">NP</strong> — 75–150 items, default{" "}
+                  <strong className="text-foreground">{selectedExamLabel ?? "NP"}</strong> — 75–150 items, default{" "}
                   <strong className="text-foreground">3 hours</strong> timed, AANP-style four-domain blueprint.
                 </>
               ) : (
                 <>
-                  <strong className="text-foreground">NCLEX-RN</strong> — 75–145 items, default{" "}
-                  <strong className="text-foreground">5 hours</strong> timed, NCLEX client-needs blueprint.
+                  <strong className="text-foreground">{selectedExamLabel ?? "NCLEX-style"}</strong> — defaults follow your
+                  track in the builder (timed length and item cap), with blueprint coverage when items are tagged.
                 </>
               )}{" "}
               Enable with{" "}
@@ -514,11 +535,8 @@ export function PracticeTestsHubClient({
                   key={v}
                   type="button"
                   onClick={() => setCatSelectionBasis(v)}
-                  className={`rounded-full px-4 py-1.5 text-sm font-medium ${
-                    catSelectionBasis === v
-                      ? "bg-[var(--semantic-info)] text-white shadow-sm"
-                      : "border border-[var(--semantic-border-soft)] hover:bg-[var(--semantic-panel-muted)]"
-                  }`}
+                  data-active={catSelectionBasis === v}
+                  className="nn-tab-pill px-4 py-1.5 text-sm font-medium"
                 >
                   {label}
                 </button>
@@ -538,7 +556,7 @@ export function PracticeTestsHubClient({
                   onClick={() => setCatExamFeedbackMode("study")}
                   className={`rounded-2xl border p-3 text-left text-sm transition ${
                     catExamFeedbackMode === "study"
-                      ? "border-primary bg-primary/10 shadow-sm"
+                      ? "border-[color-mix(in_srgb,var(--semantic-info)_38%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-info)_10%,var(--semantic-surface))] shadow-[var(--semantic-shadow-soft)]"
                       : "border-[var(--semantic-border-soft)] hover:bg-[var(--semantic-panel-muted)]"
                   }`}
                 >
@@ -550,7 +568,7 @@ export function PracticeTestsHubClient({
                   onClick={() => setCatExamFeedbackMode("test")}
                   className={`rounded-2xl border p-3 text-left text-sm transition ${
                     catExamFeedbackMode === "test"
-                      ? "border-primary bg-primary/10 shadow-sm"
+                      ? "border-[color-mix(in_srgb,var(--semantic-brand)_36%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_10%,var(--semantic-surface))] shadow-[var(--semantic-shadow-soft)]"
                       : "border-[var(--semantic-border-soft)] hover:bg-[var(--semantic-panel-muted)]"
                   }`}
                 >
@@ -570,7 +588,8 @@ export function PracticeTestsHubClient({
                 <button
                   key={t}
                   type="button"
-                  className="rounded-full bg-primary/15 px-3 py-1 text-xs font-medium text-primary"
+                  className="nn-chip px-3 py-1 text-xs font-medium"
+                  data-selected="true"
                   onClick={() => removeTopic(t)}
                 >
                   {t} ✕
@@ -600,7 +619,7 @@ export function PracticeTestsHubClient({
                 onChange={(e) => setTopicInput(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), addCustomTopic())}
               />
-              <button type="button" className="rounded-lg border border-border px-3 py-1.5 text-sm" onClick={addCustomTopic}>
+              <button type="button" className="nn-premium-action-chip rounded-lg border border-border px-3 py-1.5 text-sm" onClick={addCustomTopic}>
                 Add
               </button>
             </div>
@@ -671,23 +690,41 @@ export function PracticeTestsHubClient({
             })
           }
           onClick={() => void createTest()}
-          className="mt-6 rounded-full bg-primary px-6 py-2.5 text-sm font-semibold text-primary-foreground disabled:opacity-50"
+          className="nn-btn-primary mt-6 px-6 py-2.5 text-sm font-semibold disabled:opacity-50"
         >
           {creating ? "Building…" : "Start test"}
         </button>
       </section>
 
       <section>
-        <h2 className="text-lg font-bold text-[var(--theme-heading-text)]">Saved tests & history</h2>
+        <h2 className="text-lg font-bold tracking-tight text-[var(--theme-heading-text)]">Saved tests & history</h2>
         <p className="mt-1 text-sm text-muted-foreground">Resume in-progress sessions or review completed scores.</p>
+        {hasInProgressActivity || hasRecentCompletion ? (
+          <p className="mt-2 text-xs text-[var(--semantic-text-secondary)]">
+            {hasInProgressActivity ? "You have an in-progress test ready to resume." : null}
+            {hasInProgressActivity && hasRecentCompletion ? " " : null}
+            {hasRecentCompletion ? "Recent completions are highlighted for quick review." : null}
+          </p>
+        ) : null}
         {loading ? (
           <p className="mt-4 text-sm text-muted-foreground">Loading…</p>
         ) : list.length === 0 ? (
           <p className="mt-4 text-sm text-muted-foreground">No saved tests yet.</p>
         ) : (
-          <ul className="mt-4 space-y-2">
+          <ul className="mt-4 space-y-2.5">
             {list.map((t) => (
-              <li key={t.id} className="nn-card flex flex-wrap items-center justify-between gap-3 p-4 text-sm">
+              <li
+                key={t.id}
+                className={`nn-card nn-student-card-lift flex flex-wrap items-center justify-between gap-3 p-4 text-sm transition-colors hover:bg-[var(--semantic-panel-muted)] ${
+                  t.status === "IN_PROGRESS"
+                    ? "border-[color-mix(in_srgb,var(--semantic-info)_28%,var(--semantic-border-soft))]"
+                    : t.status === "COMPLETED" &&
+                        t.completedAt &&
+                        Date.now() - new Date(t.completedAt).getTime() <= 72 * 60 * 60 * 1000
+                      ? "border-[color-mix(in_srgb,var(--semantic-success)_30%,var(--semantic-border-soft))]"
+                      : ""
+                }`}
+              >
                 <div>
                   <p className="font-medium text-foreground">{t.title || "Practice test"}</p>
                   <p className="mt-1 text-xs text-muted-foreground">
@@ -714,14 +751,18 @@ export function PracticeTestsHubClient({
                   {t.status === "IN_PROGRESS" ? (
                     <Link
                       href={`/app/practice-tests/${t.id}`}
-                      className="rounded-full bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground"
+                      className="nn-btn-primary px-4 py-2 text-xs font-semibold shadow-[0_6px_16px_color-mix(in_srgb,var(--semantic-info)_18%,transparent)]"
                     >
                       Resume
                     </Link>
                   ) : t.status === "COMPLETED" ? (
                     <Link
                       href={`/app/practice-tests/${t.id}`}
-                      className="rounded-full border border-border px-4 py-2 text-xs font-semibold hover:bg-muted"
+                      className={`nn-premium-action-chip rounded-full border px-4 py-2 text-xs font-semibold hover:bg-muted ${
+                        t.completedAt && Date.now() - new Date(t.completedAt).getTime() <= 72 * 60 * 60 * 1000
+                          ? "border-[color-mix(in_srgb,var(--semantic-success)_30%,var(--semantic-border-soft))]"
+                          : "border-border"
+                      }`}
                     >
                       Review
                     </Link>

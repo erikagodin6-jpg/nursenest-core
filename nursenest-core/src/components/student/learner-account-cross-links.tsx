@@ -90,17 +90,20 @@ export function LearnerAccountCrossLinks({
   }
 
   return (
-    <section className="nn-card border-dashed border-primary/20 bg-muted/5 p-5" aria-labelledby="account-cross-links-heading">
-      <h2 id="account-cross-links-heading" className="text-sm font-semibold text-[var(--theme-heading-text)]">
+    <section
+      className="nn-card nn-student-card-lift border-dashed border-[color-mix(in_srgb,var(--semantic-brand)_24%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_4%,var(--semantic-surface))] p-5 sm:p-6"
+      aria-labelledby="account-cross-links-heading"
+    >
+      <h2 id="account-cross-links-heading" className="text-sm font-semibold tracking-tight text-[var(--theme-heading-text)]">
         {t("learner.account.crossLinks.title")}
       </h2>
-      <p className="mt-1 text-xs text-muted-foreground">{t(`learner.account.crossLinks.${variant}.lead`)}</p>
-      <ul className="mt-4 flex flex-wrap gap-2">
+      <p className="mt-1 max-w-3xl text-xs leading-relaxed text-muted-foreground">{t(`learner.account.crossLinks.${variant}.lead`)}</p>
+      <ul className="mt-4 flex flex-wrap gap-2.5">
         {links.map((l) => (
           <li key={`${l.href}|${l.label}`}>
             <Link
               href={l.href}
-              className="inline-flex rounded-full border border-border bg-card px-3 py-2 text-sm font-semibold text-foreground hover:bg-muted/80"
+              className="nn-premium-action-chip inline-flex rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3.5 py-2 text-sm font-semibold text-foreground hover:bg-[var(--semantic-panel-muted)]"
             >
               {l.label}
             </Link>

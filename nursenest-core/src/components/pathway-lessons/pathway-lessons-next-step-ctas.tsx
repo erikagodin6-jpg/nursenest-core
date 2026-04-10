@@ -59,12 +59,15 @@ export function PathwayLessonsNextStepCtas({ pathway, emphasizeStudyLoop }: Prop
           <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[color-mix(in_srgb,var(--theme-primary)_12%,transparent)] text-primary">
             <LineChart className="h-5 w-5" aria-hidden />
           </span>
-          <span>
+            <span>
+            <span className="nn-marketing-label nn-marketing-label--accent mb-1 inline-block text-[11px] font-semibold uppercase tracking-wide text-primary">
+              {catLine}
+            </span>
             <span className="block text-sm font-semibold text-[var(--theme-heading-text)] group-hover:text-primary">
-              Take a CAT exam
+              {catShort}
             </span>
             <span className="mt-1 block text-sm text-[var(--theme-muted-text)]">
-              Adaptive difficulty—sign in to run a session matched to your plan when eligible.
+              Adaptive difficulty for this track—sign in to run a session matched to your plan when eligible.
             </span>
           </span>
         </SafePathwayHubLink>

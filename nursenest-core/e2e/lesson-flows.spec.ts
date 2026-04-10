@@ -101,6 +101,8 @@ for (const cfg of LESSON_FLOW_PATHWAY_QA) {
       await expect(catWeak).toBeVisible();
       const catHref = await catWeak.getAttribute("href");
       expect(catHref).toBeTruthy();
+      expect(catHref).toContain("cat=1");
+      expect(catHref).toContain("focus=weak");
       expect(catHref).toContain("pathwayId=");
       assertPathwayNav(new URL(catHref!, page.url()).href, cfg);
 

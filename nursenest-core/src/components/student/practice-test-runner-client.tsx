@@ -629,6 +629,7 @@ export function PracticeTestRunnerClient({
                 continueLabel="View results summary"
                 onContinue={() => setCatFinalStudyFeedback(null)}
                 continueDisabled={false}
+                pathwayId={testConfig?.pathwayId ?? null}
               />
             </div>
           </div>
@@ -709,6 +710,7 @@ export function PracticeTestRunnerClient({
               <CatResultsCoachPanel
                 coach={results.catCoach}
                 catExamFeedbackMode={results.catExamFeedbackMode ?? testConfig?.catExamFeedbackMode ?? null}
+                pathwayId={testConfig?.pathwayId ?? null}
               />
             </div>
           ) : null}
@@ -1161,6 +1163,7 @@ export function PracticeTestRunnerClient({
                 continueLabel="Next adaptive item"
                 onContinue={() => void catAdvance()}
                 continueDisabled={saving}
+                pathwayId={testConfig?.pathwayId ?? null}
               />
             ) : null}
 
