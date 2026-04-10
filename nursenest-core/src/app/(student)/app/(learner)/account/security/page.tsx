@@ -3,10 +3,12 @@ import { auth } from "@/lib/auth";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { LearnerAccountCrossLinks } from "@/components/student/learner-account-cross-links";
 import { LearnerSecurityHub } from "@/components/student/learner-security-hub";
+import { PremiumEmptyState } from "@/components/ui/premium-empty-state";
 import { JWT_SESSION_MAX_AGE_SEC } from "@/lib/auth/auth-session-constants";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { loadAccountHubBundle } from "@/lib/learner/load-account-hub-snapshot";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
+import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { appAccountBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
@@ -31,9 +33,17 @@ export default async function AccountSecurityPage() {
 
   if (!userId || !isDatabaseUrlConfigured()) {
     return (
-      <main className="space-y-4">
+      <main className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
-        <p className="text-sm text-muted-foreground">{t("learner.profile.signedOutHint")}</p>
+        <PremiumEmptyState
+          headline={t("learner.account.security.title")}
+          body={t("learner.profile.signedOutHint")}
+          hint={t("learner.dashboard.signedOutHint")}
+          primaryCta={{ label: t("learner.gate.signIn"), href: loginWithCallback("/app/account/security"), variant: "primary" }}
+          secondaryCtas={[{ label: t("nav.lessons"), href: "/lessons", variant: "secondary" }]}
+          visualLayout="stack"
+          ctaLayout="stack"
+        />
       </main>
     );
   }

@@ -10,9 +10,11 @@ import {
   Activity,
   Info,
 } from "lucide-react";
+import { PremiumEmptyState } from "@/components/ui/premium-empty-state";
 import type { LearnerDashboardModel } from "@/lib/learner/load-learner-dashboard";
 import { remediationTopicDrillHref, remediationWeakModeTestHref } from "@/lib/learner/remediation-links";
 import { readinessBandLabel } from "@/lib/learner/readiness-score";
+import { emptyStateCopy } from "@/lib/ui/empty-state-copy";
 import { readinessBandChipClass } from "@/lib/ui/learner-semantic-chips";
 
 function pctLine(current: number, total: number): string {
@@ -348,9 +350,18 @@ export function LearnerDashboardView({ data }: { data: LearnerDashboardModel }) 
               ))}
             </ul>
           ) : (
-            <p className="mt-4 text-sm text-muted-foreground">
-              No topic signals yet. Complete a practice exam to populate weak-area hints.
-            </p>
+            <div className="mt-4">
+              <PremiumEmptyState
+                data-nn-empty="learner-dashboard-weak-signals"
+                tone="early"
+                density="compact"
+                visualLayout="stack"
+                headline={emptyStateCopy.noWeakAreasYet.headline}
+                body="No topic signals yet. Complete a practice exam to populate weak-area hints."
+                hint={emptyStateCopy.noWeakAreasYet.body}
+                primaryCta={{ label: "Practice exams", href: "/app/exams", variant: "primary" }}
+              />
+            </div>
           )}
         </section>
 
@@ -372,7 +383,18 @@ export function LearnerDashboardView({ data }: { data: LearnerDashboardModel }) 
               ))}
             </ul>
           ) : (
-            <p className="mt-4 text-sm text-muted-foreground">No mock attempts yet. Start from Practice exams.</p>
+            <div className="mt-4">
+              <PremiumEmptyState
+                data-nn-empty="learner-dashboard-recent-mocks"
+                tone="early"
+                density="compact"
+                visualLayout="stack"
+                headline={emptyStateCopy.noExamHistory.headline}
+                body="No mock attempts yet. Start from Practice exams."
+                hint={emptyStateCopy.noExamHistory.body}
+                primaryCta={{ label: "Practice exams", href: "/app/exams", variant: "primary" }}
+              />
+            </div>
           )}
         </section>
       </div>

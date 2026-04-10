@@ -5,12 +5,15 @@ import { LearnerAccountCrossLinks } from "@/components/student/learner-account-c
 import { LearnerProgressPageContent } from "@/components/student/learner-progress-page-content";
 import { LockedStudyNextPreview } from "@/components/student/locked-study-next-preview";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
+import { PremiumEmptyState } from "@/components/ui/premium-empty-state";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { loadProgressPagePayload } from "@/lib/learner/load-progress-page-payload";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
+import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { appAccountBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
+import { emptyStateCopy } from "@/lib/ui/empty-state-copy";
 
 export async function generateMetadata(): Promise<Metadata> {
   return safeGenerateMetadata(
@@ -34,9 +37,17 @@ export default async function AccountProgressPage() {
 
   if (!userId || !isDatabaseUrlConfigured()) {
     return (
-      <main className="space-y-4">
+      <main className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
-        <p className="text-sm text-muted-foreground">{t("learner.profile.signedOutHint")}</p>
+        <PremiumEmptyState
+          headline={t("learner.account.progress.title")}
+          body={t("learner.profile.signedOutHint")}
+          hint={t("learner.dashboard.signedOutHint")}
+          primaryCta={{ label: t("learner.gate.signIn"), href: loginWithCallback("/app/account/progress"), variant: "primary" }}
+          secondaryCtas={[{ label: t("nav.lessons"), href: "/lessons", variant: "secondary" }]}
+          visualLayout="stack"
+          ctaLayout="stack"
+        />
       </main>
     );
   }
@@ -45,9 +56,17 @@ export default async function AccountProgressPage() {
 
   if (entitlement === "error") {
     return (
-      <main className="space-y-4">
+      <main className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
-        <p className="text-sm text-muted-foreground">{t("learner.entitlement.verifyFailed")}</p>
+        <PremiumEmptyState
+          headline={t("learner.account.progress.title")}
+          body={t("learner.entitlement.verifyFailed")}
+          tone="default"
+          primaryCta={{ label: t("paywall.cta.openStudyHub"), href: "/app", variant: "primary" }}
+          secondaryCtas={[{ label: t("nav.lessons"), href: "/lessons", variant: "secondary" }]}
+          visualLayout="stack"
+          ctaLayout="stack"
+        />
       </main>
     );
   }
@@ -56,10 +75,16 @@ export default async function AccountProgressPage() {
     return (
       <main className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
-        <div>
-          <h1 className="text-2xl font-bold text-[var(--theme-heading-text)]">{t("learner.account.progress.title")}</h1>
-          <p className="mt-2 text-sm text-muted-foreground">{t("learner.profile.performanceGate.body")}</p>
-        </div>
+        <PremiumEmptyState
+          headline={t("learner.account.progress.title")}
+          body={t("learner.profile.performanceGate.body")}
+          hint={emptyStateCopy.entitlementLocked.body}
+          tone="locked"
+          primaryCta={{ label: t("cta.continuePlan"), href: "/pricing", variant: "primary" }}
+          secondaryCtas={[{ label: t("paywall.cta.openStudyHub"), href: "/app", variant: "secondary" }]}
+          visualLayout="stack"
+          ctaLayout="stack"
+        />
         <LockedStudyNextPreview className="nn-card space-y-2 p-6" />
         <SubscriptionPaywall context="dashboard" />
       </main>
@@ -72,10 +97,15 @@ export default async function AccountProgressPage() {
     return (
       <main className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
-        <div>
-          <h1 className="text-2xl font-bold text-[var(--theme-heading-text)]">{t("learner.account.progress.title")}</h1>
-          <p className="mt-2 text-sm text-muted-foreground">{t("learner.account.loadFailed")}</p>
-        </div>
+        <PremiumEmptyState
+          headline={t("learner.account.progress.title")}
+          body={t("learner.account.loadFailed")}
+          tone="default"
+          primaryCta={{ label: t("paywall.cta.openStudyHub"), href: "/app", variant: "primary" }}
+          secondaryCtas={[{ label: t("learner.account.nav.overview"), href: "/app/account/overview", variant: "secondary" }]}
+          visualLayout="stack"
+          ctaLayout="stack"
+        />
       </main>
     );
   }

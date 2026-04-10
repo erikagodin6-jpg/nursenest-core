@@ -2,7 +2,6 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { auth } from "@/lib/auth";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
-import { LearnerSurfaceState } from "@/components/student/learner-surface-state";
 import { PremiumEmptyState } from "@/components/ui/premium-empty-state";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
@@ -39,12 +38,14 @@ export default async function AccountReviewQueuePage() {
     return (
       <main className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
-        <LearnerSurfaceState
+        <PremiumEmptyState
           headline={t("learner.account.reviewQueue.title")}
           body={t("learner.profile.signedOutHint")}
           hint={t("learner.dashboard.signedOutHint")}
-          primaryCta={{ label: "Sign in", href: loginWithCallback("/app/account/review-queue"), variant: "primary" }}
-          secondaryCtas={[{ label: "Browse lessons", href: "/lessons", variant: "secondary" }]}
+          primaryCta={{ label: t("learner.gate.signIn"), href: loginWithCallback("/app/account/review-queue"), variant: "primary" }}
+          secondaryCtas={[{ label: t("nav.lessons"), href: "/lessons", variant: "secondary" }]}
+          visualLayout="stack"
+          ctaLayout="stack"
         />
       </main>
     );
@@ -54,13 +55,14 @@ export default async function AccountReviewQueuePage() {
     return (
       <main className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
-        <LearnerSurfaceState
-          headline="We couldn’t verify access right now"
+        <PremiumEmptyState
+          headline={t("learner.account.reviewQueue.title")}
           body={t("learner.entitlement.verifyFailed")}
-          hint="Try your dashboard again in a moment, or open another study area while we reconnect."
           tone="default"
-          primaryCta={{ label: "Open dashboard", href: "/app", variant: "primary" }}
-          secondaryCtas={[{ label: "Browse lessons", href: "/lessons", variant: "secondary" }]}
+          primaryCta={{ label: t("paywall.cta.openStudyHub"), href: "/app", variant: "primary" }}
+          secondaryCtas={[{ label: t("nav.lessons"), href: "/lessons", variant: "secondary" }]}
+          visualLayout="stack"
+          ctaLayout="stack"
         />
       </main>
     );
@@ -70,13 +72,15 @@ export default async function AccountReviewQueuePage() {
     return (
       <main className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
-        <LearnerSurfaceState
+        <PremiumEmptyState
           headline={t("learner.account.reviewQueue.title")}
           body={t("learner.account.reviewQueue.lockedBody")}
           hint={emptyStateCopy.entitlementLocked.body}
           tone="locked"
           primaryCta={{ label: t("cta.continuePlan"), href: "/pricing", variant: "primary" }}
-          secondaryCtas={[{ label: "Open study hub", href: "/app", variant: "secondary" }]}
+          secondaryCtas={[{ label: t("paywall.cta.openStudyHub"), href: "/app", variant: "secondary" }]}
+          visualLayout="stack"
+          ctaLayout="stack"
         />
         <SubscriptionPaywall context="questions" />
       </main>

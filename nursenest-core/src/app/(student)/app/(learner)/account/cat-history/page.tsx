@@ -3,11 +3,13 @@ import type { Metadata } from "next";
 import { auth } from "@/lib/auth";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { LearnerAccountEmptyState } from "@/components/student/learner-account-empty-state";
+import { PremiumEmptyState } from "@/components/ui/premium-empty-state";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { loadLearnerCatHistory } from "@/lib/learner/load-learner-cat-history";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
+import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { appAccountBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { emptyStateCopy } from "@/lib/ui/empty-state-copy";
@@ -34,18 +36,34 @@ export default async function AccountCatHistoryPage() {
 
   if (!userId || !isDatabaseUrlConfigured()) {
     return (
-      <main className="space-y-4">
+      <main className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
-        <p className="text-sm text-muted-foreground">{t("learner.profile.signedOutHint")}</p>
+        <PremiumEmptyState
+          headline={t("learner.account.catHistory.title")}
+          body={t("learner.profile.signedOutHint")}
+          hint={t("learner.dashboard.signedOutHint")}
+          primaryCta={{ label: t("learner.gate.signIn"), href: loginWithCallback("/app/account/cat-history"), variant: "primary" }}
+          secondaryCtas={[{ label: t("nav.lessons"), href: "/lessons", variant: "secondary" }]}
+          visualLayout="stack"
+          ctaLayout="stack"
+        />
       </main>
     );
   }
 
   if (entitlement === "error") {
     return (
-      <main className="space-y-4">
+      <main className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
-        <p className="text-sm text-muted-foreground">{t("learner.entitlement.verifyFailed")}</p>
+        <PremiumEmptyState
+          headline={t("learner.account.catHistory.title")}
+          body={t("learner.entitlement.verifyFailed")}
+          tone="default"
+          primaryCta={{ label: t("paywall.cta.openStudyHub"), href: "/app", variant: "primary" }}
+          secondaryCtas={[{ label: t("nav.lessons"), href: "/lessons", variant: "secondary" }]}
+          visualLayout="stack"
+          ctaLayout="stack"
+        />
       </main>
     );
   }

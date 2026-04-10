@@ -3,10 +3,10 @@ import { auth } from "@/lib/auth";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { LearnerAccountCrossLinks } from "@/components/student/learner-account-cross-links";
 import { LearnerReadinessPremium } from "@/components/student/learner-readiness-premium";
-import { LearnerSurfaceState } from "@/components/student/learner-surface-state";
 import { LearnerStudyQuickLinksCard } from "@/components/student/learner-study-quick-links-card";
 import { LockedStudyNextPreview } from "@/components/student/locked-study-next-preview";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
+import { PremiumEmptyState } from "@/components/ui/premium-empty-state";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { resolveStudySurfaceCatHref } from "@/lib/exam-pathways/pathway-cat-flow";
@@ -41,12 +41,14 @@ export default async function AccountReadinessPage() {
     return (
       <main className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
-        <LearnerSurfaceState
+        <PremiumEmptyState
           headline={t("learner.account.readiness.title")}
           body={t("learner.profile.signedOutHint")}
           hint={t("learner.dashboard.signedOutHint")}
-          primaryCta={{ label: "Sign in", href: loginWithCallback("/app/account/readiness"), variant: "primary" }}
-          secondaryCtas={[{ label: "Browse lessons", href: "/lessons", variant: "secondary" }]}
+          primaryCta={{ label: t("learner.gate.signIn"), href: loginWithCallback("/app/account/readiness"), variant: "primary" }}
+          secondaryCtas={[{ label: t("nav.lessons"), href: "/lessons", variant: "secondary" }]}
+          visualLayout="stack"
+          ctaLayout="stack"
         />
       </main>
     );
@@ -58,13 +60,14 @@ export default async function AccountReadinessPage() {
     return (
       <main className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
-        <LearnerSurfaceState
-          headline="We couldn’t verify access right now"
+        <PremiumEmptyState
+          headline={t("learner.account.readiness.title")}
           body={t("learner.entitlement.verifyFailed")}
-          hint="Try your dashboard again in a moment, or open another study area while we reconnect."
           tone="default"
-          primaryCta={{ label: "Open dashboard", href: "/app", variant: "primary" }}
-          secondaryCtas={[{ label: "Browse lessons", href: "/lessons", variant: "secondary" }]}
+          primaryCta={{ label: t("paywall.cta.openStudyHub"), href: "/app", variant: "primary" }}
+          secondaryCtas={[{ label: t("nav.lessons"), href: "/lessons", variant: "secondary" }]}
+          visualLayout="stack"
+          ctaLayout="stack"
         />
       </main>
     );
@@ -74,13 +77,15 @@ export default async function AccountReadinessPage() {
     return (
       <main className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
-        <LearnerSurfaceState
+        <PremiumEmptyState
           headline={t("learner.account.readiness.title")}
           body={t("learner.profile.performanceGate.body")}
           hint={emptyStateCopy.entitlementLocked.body}
           tone="locked"
           primaryCta={{ label: t("cta.continuePlan"), href: "/pricing", variant: "primary" }}
-          secondaryCtas={[{ label: "Open study hub", href: "/app", variant: "secondary" }]}
+          secondaryCtas={[{ label: t("paywall.cta.openStudyHub"), href: "/app", variant: "secondary" }]}
+          visualLayout="stack"
+          ctaLayout="stack"
         />
         <LockedStudyNextPreview className="nn-card space-y-2 p-6" />
         <SubscriptionPaywall context="dashboard" />
@@ -94,13 +99,14 @@ export default async function AccountReadinessPage() {
     return (
       <main className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
-        <LearnerSurfaceState
+        <PremiumEmptyState
           headline={t("learner.account.readiness.title")}
           body={t("learner.account.loadFailed")}
-          hint="Your study access is still intact. Try the dashboard or come back to readiness in a moment."
           tone="default"
-          primaryCta={{ label: "Open dashboard", href: "/app", variant: "primary" }}
-          secondaryCtas={[{ label: "Account overview", href: "/app/account/overview", variant: "secondary" }]}
+          primaryCta={{ label: t("paywall.cta.openStudyHub"), href: "/app", variant: "primary" }}
+          secondaryCtas={[{ label: t("learner.account.nav.overview"), href: "/app/account/overview", variant: "secondary" }]}
+          visualLayout="stack"
+          ctaLayout="stack"
         />
       </main>
     );

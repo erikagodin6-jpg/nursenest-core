@@ -4,13 +4,16 @@ import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { LearnerAccountCrossLinks } from "@/components/student/learner-account-cross-links";
 import { LearnerStudySettingsHub } from "@/components/student/learner-study-settings-hub";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
+import { PremiumEmptyState } from "@/components/ui/premium-empty-state";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
+import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { appAccountBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
+import { emptyStateCopy } from "@/lib/ui/empty-state-copy";
 
 export async function generateMetadata(): Promise<Metadata> {
   return safeGenerateMetadata(
@@ -34,9 +37,17 @@ export default async function AccountStudyPreferencesPage() {
 
   if (!userId || !isDatabaseUrlConfigured()) {
     return (
-      <main className="space-y-4">
+      <main className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
-        <p className="text-sm text-muted-foreground">{t("learner.profile.signedOutHint")}</p>
+        <PremiumEmptyState
+          headline={t("learner.account.studyPreferences.title")}
+          body={t("learner.profile.signedOutHint")}
+          hint={t("learner.dashboard.signedOutHint")}
+          primaryCta={{ label: t("learner.gate.signIn"), href: loginWithCallback("/app/account/study-preferences"), variant: "primary" }}
+          secondaryCtas={[{ label: t("nav.lessons"), href: "/lessons", variant: "secondary" }]}
+          visualLayout="stack"
+          ctaLayout="stack"
+        />
       </main>
     );
   }
@@ -68,9 +79,16 @@ export default async function AccountStudyPreferencesPage() {
       </div>
 
       {verifyFailed ? (
-        <p className="rounded-xl border border-amber-500/25 bg-amber-500/10 px-4 py-3 text-sm text-amber-950 dark:text-amber-100">
-          {t("learner.entitlement.verifyFailed")}
-        </p>
+        <PremiumEmptyState
+          headline={t("learner.account.studyPreferences.title")}
+          body={t("learner.entitlement.verifyFailed")}
+          tone="default"
+          primaryCta={{ label: t("paywall.cta.openStudyHub"), href: "/app", variant: "primary" }}
+          secondaryCtas={[{ label: t("learner.account.nav.overview"), href: "/app/account/overview", variant: "secondary" }]}
+          visualLayout="stack"
+          ctaLayout="stack"
+          density="compact"
+        />
       ) : null}
 
       <LearnerStudySettingsHub
@@ -82,6 +100,18 @@ export default async function AccountStudyPreferencesPage() {
 
       {!showExamPlan && !verifyFailed ? (
         <div className="nn-card p-6">
+          <PremiumEmptyState
+            headline={t("learner.account.studyPreferences.title")}
+            body={t("learner.profile.performanceGate.body")}
+            hint={emptyStateCopy.entitlementLocked.body}
+            tone="locked"
+            primaryCta={{ label: t("cta.continuePlan"), href: "/pricing", variant: "primary" }}
+            secondaryCtas={[{ label: t("paywall.cta.openStudyHub"), href: "/app", variant: "secondary" }]}
+            visualLayout="stack"
+            ctaLayout="stack"
+            density="compact"
+            className="mb-4"
+          />
           <SubscriptionPaywall context="dashboard" />
         </div>
       ) : null}

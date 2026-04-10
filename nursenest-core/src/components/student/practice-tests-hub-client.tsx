@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { PremiumEmptyState } from "@/components/ui/premium-empty-state";
 import type {
   CatExamFeedbackMode,
   CatPresentationMode,
@@ -26,6 +27,7 @@ import {
   resolveInteractionPriority,
   resolvePriorityMessage,
 } from "@/lib/student/interaction-priority";
+import { emptyStateCopy } from "@/lib/ui/empty-state-copy";
 
 type TestListRow = {
   id: string;
@@ -717,7 +719,18 @@ export function PracticeTestsHubClient({
         {loading ? (
           <p className="mt-4 text-sm text-muted-foreground">Loading…</p>
         ) : list.length === 0 ? (
-          <p className="mt-4 text-sm text-muted-foreground">No saved tests yet.</p>
+          <div className="mt-4">
+            <PremiumEmptyState
+              data-nn-empty="practice-tests-history"
+              tone="early"
+              density="compact"
+              visualLayout="stack"
+              headline={emptyStateCopy.noHistoryYet({ area: "saved tests" }).headline}
+              body="You haven’t saved any practice tests yet. Start a new test and your in-progress sessions and recent scores will show up here."
+              hint={emptyStateCopy.noHistoryYet({ area: "saved tests" }).body}
+              primaryCta={{ label: "Start test", href: "/app/practice-tests/start", variant: "primary" }}
+            />
+          </div>
         ) : (
           <ul className="mt-4 space-y-2.5">
             {list.map((t) => {

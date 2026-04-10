@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ChevronDown } from "lucide-react";
 import { PathwayLessonProgressBadge } from "@/components/lessons/pathway-lesson-progress-badge";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { PremiumEmptyState } from "@/components/ui/premium-empty-state";
 import { StatusBadge } from "@/components/ui/study-card";
 import {
   buildPathwayLessonSystemSections,
@@ -13,6 +14,7 @@ import {
   type PathwayLessonRecord,
 } from "@/lib/lessons/pathway-lesson-types";
 import type { PathwayLessonProgressStatus } from "@/lib/lessons/pathway-lesson-progress";
+import { emptyStateCopy } from "@/lib/ui/empty-state-copy";
 
 type Props = {
   lessons: PathwayLessonRecord[];
@@ -135,10 +137,18 @@ export function PathwayLessonsCurriculumHub({
   const sections = buildPathwayLessonSystemSections(safeLessons);
 
   if (sections.length === 0) {
+    const thinInventoryCopy = emptyStateCopy.thinInventory();
     return (
-      <div className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-6">
-        <p className="text-sm text-[var(--theme-muted-text)]">No lessons are available in this pathway yet.</p>
-      </div>
+      <PremiumEmptyState
+        data-nn-empty="curriculum-hub-empty"
+        tone="growth"
+        density="compact"
+        visualLayout="stack"
+        headline={thinInventoryCopy.headline}
+        body="No lessons are available in this pathway yet. The curriculum hub will expand here as more indexed sections go live."
+        hint={thinInventoryCopy.hint}
+        primaryCta={{ label: "Browse lessons", href: lessonsBasePath, variant: "primary" }}
+      />
     );
   }
 

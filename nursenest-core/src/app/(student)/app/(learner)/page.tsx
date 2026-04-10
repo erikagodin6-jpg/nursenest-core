@@ -4,6 +4,7 @@ import { auth } from "@/lib/auth";
 import { LearnerDailyMomentumCard } from "@/components/student/learner-daily-momentum-card";
 import { LearnerDashboardAdvantageStrip } from "@/components/student/learner-dashboard-advantage-strip";
 import { LearnerDashboardCommandCenter } from "@/components/student/learner-dashboard-command-center";
+import { PremiumEmptyState } from "@/components/ui/premium-empty-state";
 import { PremiumLearnerHub } from "@/components/student/premium-learner-hub";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
@@ -25,8 +26,10 @@ import { LearnerContinueLearningCard } from "@/components/student/learner-contin
 import { LearnerDashboardInsightPanels } from "@/components/student/learner-dashboard-insight-panels";
 import type { LearnerMarketingT } from "@/lib/learner/learner-marketing-server";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
+import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { appShellBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
+import { emptyStateCopy } from "@/lib/ui/empty-state-copy";
 
 function retentionPersonalNote(t: LearnerMarketingT, prefs: Awaited<ReturnType<typeof loadLearnerRetentionPreferences>>): string | null {
   if (!prefs) return null;
@@ -61,19 +64,34 @@ export default async function LearnerDashboardPage() {
 
   if (!userId || !isDatabaseUrlConfigured()) {
     return (
-      <main className="space-y-4">
+      <main className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
-        <h1 className="text-3xl font-bold text-[var(--theme-heading-text)]">{t("learner.dashboard.signedOutTitle")}</h1>
-        <p className="text-sm text-muted-foreground">{t("learner.dashboard.signedOutHint")}</p>
+        <PremiumEmptyState
+          headline={t("learner.dashboard.signedOutTitle")}
+          body={t("learner.dashboard.signedOutHint")}
+          hint={t("learner.profile.signedOutHint")}
+          primaryCta={{ label: t("learner.gate.signIn"), href: loginWithCallback("/app"), variant: "primary" }}
+          secondaryCtas={[{ label: t("nav.lessons"), href: "/lessons", variant: "secondary" }]}
+          visualLayout="stack"
+          ctaLayout="stack"
+        />
       </main>
     );
   }
 
   if (entitlement === "error") {
     return (
-      <main className="space-y-4">
+      <main className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
-        <p className="text-sm text-muted-foreground">{t("learner.entitlement.verifyFailed")}</p>
+        <PremiumEmptyState
+          headline={t("learner.dashboard.title")}
+          body={t("learner.entitlement.verifyFailed")}
+          tone="default"
+          primaryCta={{ label: t("learner.dashboard.openAccountHub"), href: "/app/account/overview", variant: "primary" }}
+          secondaryCtas={[{ label: t("nav.lessons"), href: "/lessons", variant: "secondary" }]}
+          visualLayout="stack"
+          ctaLayout="stack"
+        />
       </main>
     );
   }
@@ -82,11 +100,16 @@ export default async function LearnerDashboardPage() {
     return (
       <main className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
-        <div>
-          <p className="text-xs font-semibold uppercase tracking-wide text-primary">{t("learner.dashboard.kicker")}</p>
-          <h1 className="mt-1 text-3xl font-bold tracking-tight text-[var(--theme-heading-text)]">{t("learner.dashboard.title")}</h1>
-          <p className="mt-2 max-w-2xl text-sm text-muted-foreground">{t("learner.dashboard.subtitle.locked")}</p>
-        </div>
+        <PremiumEmptyState
+          headline={t("learner.dashboard.title")}
+          body={t("learner.dashboard.subtitle.locked")}
+          hint={emptyStateCopy.entitlementLocked.body}
+          tone="locked"
+          primaryCta={{ label: t("cta.continuePlan"), href: "/pricing", variant: "primary" }}
+          secondaryCtas={[{ label: t("learner.dashboard.accountHubLink"), href: "/app/account/overview", variant: "secondary" }]}
+          visualLayout="stack"
+          ctaLayout="stack"
+        />
         <LockedStudyNextPreview className="nn-card space-y-2 p-6" />
         <SubscriptionPaywall context="dashboard" />
         <p className="text-center text-sm text-muted-foreground">
@@ -197,12 +220,17 @@ export default async function LearnerDashboardPage() {
   }
 
   return (
-    <main className="space-y-4">
+    <main className="space-y-6">
       <BreadcrumbTrail items={crumbs} />
-      <p className="text-sm text-muted-foreground">{t("learner.dashboard.loadFailed")}</p>
-      <Link href="/app/account/overview" className="text-sm font-semibold text-primary underline">
-        {t("learner.dashboard.openAccountHub")}
-      </Link>
+      <PremiumEmptyState
+        headline={t("learner.dashboard.title")}
+        body={t("learner.dashboard.loadFailed")}
+        tone="default"
+        primaryCta={{ label: t("learner.dashboard.openAccountHub"), href: "/app/account/overview", variant: "primary" }}
+        secondaryCtas={[{ label: t("nav.lessons"), href: "/lessons", variant: "secondary" }]}
+        visualLayout="stack"
+        ctaLayout="stack"
+      />
     </main>
   );
 }

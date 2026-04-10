@@ -8,6 +8,7 @@ import { LearnerAccountToolGrid } from "@/components/student/learner-account-too
 import { LearnerProfileAccountActions } from "@/components/student/learner-profile-account-actions";
 import { AdaptiveStudyOverview } from "@/components/student/adaptive-study-overview";
 import { LockedStudyNextPreview } from "@/components/student/locked-study-next-preview";
+import { PremiumEmptyState } from "@/components/ui/premium-empty-state";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
@@ -28,8 +29,10 @@ import {
 } from "@/lib/student/interaction-priority";
 import type { Metadata } from "next";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
+import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { appAccountBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
+import { emptyStateCopy } from "@/lib/ui/empty-state-copy";
 
 export async function generateMetadata(): Promise<Metadata> {
   return safeGenerateMetadata(
@@ -61,8 +64,15 @@ export default async function LearnerAccountOverviewPage() {
     return (
       <main className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
-        <h1 className="text-3xl font-bold text-[var(--theme-heading-text)]">{t("learner.profile.signedOutTitle")}</h1>
-        <p className="text-sm text-muted-foreground">{t("learner.profile.signedOutHint")}</p>
+        <PremiumEmptyState
+          headline={t("learner.profile.signedOutTitle")}
+          body={t("learner.profile.signedOutHint")}
+          hint={t("learner.dashboard.signedOutHint")}
+          primaryCta={{ label: t("learner.gate.signIn"), href: loginWithCallback("/app/account/overview"), variant: "primary" }}
+          secondaryCtas={[{ label: t("nav.lessons"), href: "/lessons", variant: "secondary" }]}
+          visualLayout="stack"
+          ctaLayout="stack"
+        />
       </main>
     );
   }
@@ -412,24 +422,16 @@ export default async function LearnerAccountOverviewPage() {
         </section>
       ) : entitlement !== "error" && !entitlement.hasAccess ? (
         <>
-          <section className="nn-card nn-student-card-lift p-6">
-            <h2 className="text-lg font-bold text-[var(--theme-heading-text)]">{t("learner.profile.performanceGate.heading")}</h2>
-            <p className="mt-2 text-sm text-muted-foreground">{t("learner.profile.performanceGate.body")}</p>
-            <div className="mt-4 flex flex-wrap gap-3">
-              <Link
-                href="/pricing"
-                className="nn-btn-primary inline-flex items-center justify-center px-4 py-2 text-sm font-semibold"
-              >
-                {t("cta.continuePlan")}
-              </Link>
-              <Link
-                href="/pricing"
-                className="nn-premium-action-chip inline-flex items-center justify-center rounded-full border border-border bg-card px-4 py-2 text-sm font-semibold hover:bg-muted/80"
-              >
-                {t("cta.improveWeakAreas")}
-              </Link>
-            </div>
-          </section>
+          <PremiumEmptyState
+            headline={t("learner.profile.performanceGate.heading")}
+            body={t("learner.profile.performanceGate.body")}
+            hint={emptyStateCopy.entitlementLocked.body}
+            tone="locked"
+            primaryCta={{ label: t("cta.continuePlan"), href: "/pricing", variant: "primary" }}
+            secondaryCtas={[{ label: t("cta.improveWeakAreas"), href: "/pricing", variant: "secondary" }]}
+            visualLayout="stack"
+            ctaLayout="stack"
+          />
           <LockedStudyNextPreview className="nn-card space-y-2 p-6" />
         </>
       ) : null}
