@@ -143,7 +143,7 @@ export function TierGatewayDropdown({
           onMouseEnter={openDropdown}
           onMouseLeave={scheduleClose}
         >
-          <p className="px-3 pb-2 pt-2 text-[11px] font-semibold uppercase tracking-widest text-[var(--theme-muted-text)]">
+          <p className="nn-marketing-label px-3 pb-2 pt-2 text-[var(--theme-muted-text)]">
             {t("nav.tierDrop.heading")}
           </p>
           <ul className="space-y-0.5">
@@ -170,10 +170,10 @@ export function TierGatewayDropdown({
                       <Icon className="h-4 w-4" strokeWidth={1.75} aria-hidden />
                     </span>
                     <span className="min-w-0">
-                      <span className="block text-[13px] font-semibold leading-tight tracking-tight text-[var(--theme-heading-text)]">
+                      <span className="nn-marketing-body-sm block font-semibold leading-tight tracking-tight text-[var(--theme-heading-text)]">
                         {t(item.titleKey as Parameters<typeof t>[0])}
                       </span>
-                      <span className="mt-0.5 block text-[12px] leading-snug text-[var(--theme-muted-text)]">
+                      <span className="nn-marketing-caption mt-0.5 block leading-snug text-[var(--theme-muted-text)]">
                         {t(item.descKey as Parameters<typeof t>[0])}
                       </span>
                     </span>

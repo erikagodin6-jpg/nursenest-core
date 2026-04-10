@@ -64,11 +64,11 @@ export function NnErrorCard({
           <SiteBrandLogoMark variant="auth" />
         </a>
 
-        <h1 className="text-xl font-bold text-[var(--theme-heading-text)]">{title}</h1>
-        <p className="mt-2 text-sm text-[var(--theme-muted-text)]">{description}</p>
+        <h1 className="nn-marketing-h3">{title}</h1>
+        <p className="nn-marketing-body-sm mt-2 text-[var(--theme-muted-text)]">{description}</p>
 
         {digest ? (
-          <p className="mt-3 text-xs text-[var(--theme-muted-text)]" suppressHydrationWarning>
+          <p className="nn-marketing-caption mt-3 text-[var(--theme-muted-text)]" suppressHydrationWarning>
             Reference: {digest}
           </p>
         ) : null}
@@ -77,7 +77,7 @@ export function NnErrorCard({
           {reset ? (
             <button
               type="button"
-              className="w-full rounded-full bg-[var(--theme-primary)] px-4 py-2.5 text-sm font-bold text-[var(--theme-primary-foreground)] transition-opacity hover:opacity-90"
+              className="nn-marketing-body-sm w-full rounded-full bg-[var(--theme-primary)] px-4 py-2.5 font-bold text-[var(--theme-primary-foreground)] transition-opacity hover:opacity-90"
               onClick={reset}
             >
               Try again
@@ -87,7 +87,7 @@ export function NnErrorCard({
           {secondaryAction ? (
             <a
               href={secondaryAction.href}
-              className="block w-full rounded-full border border-[var(--theme-separator)] px-4 py-2.5 text-sm font-medium text-[var(--theme-body-text)] transition-colors hover:bg-[var(--theme-menu-hover-bg)]"
+              className="nn-marketing-body-sm block w-full rounded-full border border-[var(--theme-separator)] px-4 py-2.5 font-medium text-[var(--theme-body-text)] transition-colors hover:bg-[var(--theme-menu-hover-bg)]"
             >
               {secondaryAction.label}
             </a>
@@ -95,7 +95,7 @@ export function NnErrorCard({
 
           <a
             href={primaryAction.href}
-            className="text-sm font-medium text-[var(--theme-primary)] underline underline-offset-2 hover:opacity-80"
+            className="nn-marketing-body-sm font-medium text-[var(--theme-primary)] underline underline-offset-2 hover:opacity-80"
           >
             {primaryAction.label}
           </a>
