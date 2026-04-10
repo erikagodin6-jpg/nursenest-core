@@ -1,3 +1,4 @@
+-- Depends on BlogPostTemplate, BlogPostIntent, BlogFunnelStage from 20260412120000; originally mis-ordered as 20260408210000.
 -- CreateEnum
 CREATE TYPE "BlogDraftGenerationBatchStatus" AS ENUM ('ACTIVE', 'COMPLETED', 'CANCELLED');
 

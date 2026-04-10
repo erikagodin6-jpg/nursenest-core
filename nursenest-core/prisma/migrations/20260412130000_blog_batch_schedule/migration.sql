@@ -1,3 +1,4 @@
+-- Depends on BlogPostTemplate (20260405120000) and BlogPostIntent (20260412120000); originally mis-ordered as 20260401194500.
 -- CreateEnum
 CREATE TYPE "BlogBatchScheduleStatus" AS ENUM ('ACTIVE', 'PAUSED', 'COMPLETED', 'CANCELLED');
 
