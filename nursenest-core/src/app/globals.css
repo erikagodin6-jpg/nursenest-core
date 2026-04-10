@@ -87,9 +87,10 @@ body {
 :where([data-theme]) {
   /* Surfaces: one cohesive hue per theme, multiple depths */
   --bg-page: var(--theme-page-bg);
-  --bg-section: color-mix(in srgb, var(--theme-primary) 6%, var(--theme-page-bg));
-  /* Lighter band for alternating strips (pricing rows, hub rhythm) — still same family */
-  --bg-section-alt: color-mix(in srgb, var(--theme-primary) 3.5%, var(--theme-page-bg));
+  /* Bumped to 8% so section bands read distinctly against the tinted page bg */
+  --bg-section: color-mix(in srgb, var(--theme-primary) 8%, var(--theme-page-bg));
+  /* Lighter alternating strip — halfway between page and section */
+  --bg-section-alt: color-mix(in srgb, var(--theme-primary) 4.5%, var(--theme-page-bg));
   --bg-card: color-mix(in srgb, var(--theme-primary) 3.25%, var(--theme-card-bg));
   --bg-elevated: color-mix(in srgb, var(--theme-card-bg) 90%, var(--theme-heading-text));
   /* Slightly recessed / table header bands */
@@ -811,23 +812,39 @@ html[data-theme] .nn-marketing-surface {
   border-bottom-color: color-mix(in srgb, var(--theme-primary) 72%, transparent);
 }
 
-/* Header logo: subtle theme tint on raster marks (per-theme; optional) */
+/* Header logo: very subtle theme tint on raster marks — no muddy or neon results */
+html[data-theme="ocean"] .nn-brand-header-logo-slot .nn-brand-header-logo,
+html[data-theme="clinical-light"] .nn-brand-header-logo-slot .nn-brand-header-logo {
+  filter: saturate(1.04) hue-rotate(-30deg);
+}
+
 html[data-theme="mint"] .nn-brand-header-logo-slot .nn-brand-header-logo,
-html[data-theme="pastel-mint"] .nn-brand-header-logo-slot .nn-brand-header-logo {
-  filter: saturate(1.08) hue-rotate(-12deg);
+html[data-theme="pastel-mint"] .nn-brand-header-logo-slot .nn-brand-header-logo,
+html[data-theme="teal"] .nn-brand-header-logo-slot .nn-brand-header-logo {
+  filter: saturate(1.06) hue-rotate(-14deg);
 }
 
-html[data-theme="blush"] .nn-brand-header-logo-slot .nn-brand-header-logo,
-html[data-theme="pastel-blush"] .nn-brand-header-logo-slot .nn-brand-header-logo {
-  filter: saturate(1.06) hue-rotate(18deg);
+html[data-theme="blush"] .nn-brand-header-logo-slot .nn-brand-header-logo {
+  filter: saturate(1.05) hue-rotate(22deg);
 }
 
-html[data-theme="ocean"] .nn-brand-header-logo-slot .nn-brand-header-logo {
-  filter: saturate(1.05) hue-rotate(-35deg);
+html[data-theme="pastel-blush"] .nn-brand-header-logo-slot .nn-brand-header-logo,
+html[data-theme="strawberry"] .nn-brand-header-logo-slot .nn-brand-header-logo {
+  filter: saturate(1.08) hue-rotate(16deg);
 }
 
-html[data-theme="forest"] .nn-brand-header-logo-slot .nn-brand-header-logo {
+html[data-theme="forest"] .nn-brand-header-logo-slot .nn-brand-header-logo,
+html[data-theme="soft-sage"] .nn-brand-header-logo-slot .nn-brand-header-logo {
   filter: saturate(1.06) hue-rotate(-95deg);
+}
+
+html[data-theme="multi-pastel"] .nn-brand-header-logo-slot .nn-brand-header-logo {
+  filter: saturate(1.03) hue-rotate(-18deg);
+}
+
+/* Dark themes: logo needs to lift off the dark background — brightness boost, no color shift */
+html[data-theme="dark-mode"] .nn-brand-header-logo-slot .nn-brand-header-logo {
+  filter: brightness(1.35) saturate(0.85);
 }
 
 /* Inset / muted panel inside a card */
@@ -1849,6 +1866,68 @@ html[data-theme="dark-mode"] .nn-question-rationale-card__verdict--miss {
   }
 }
 
+/* Completed — hub card: success-tinted border + softer gradient */
+.nn-exam-hub-study-card--completed {
+  border-color: color-mix(in srgb, var(--role-success) 34%, var(--border-subtle));
+  background: linear-gradient(
+    155deg,
+    color-mix(in srgb, var(--role-success) 8%, var(--theme-card-bg)) 0%,
+    color-mix(in srgb, var(--role-success) 3%, var(--theme-page-bg)) 50%,
+    var(--theme-card-bg) 100%
+  );
+}
+
+.nn-exam-hub-study-card--completed:hover {
+  border-color: color-mix(in srgb, var(--role-success) 48%, var(--border-subtle));
+}
+
+.nn-exam-hub-study-card--completed .nn-exam-hub-study-card__icon {
+  background: color-mix(in srgb, var(--role-success) 12%, var(--theme-card-bg));
+  border-color: color-mix(in srgb, var(--role-success) 26%, var(--border-subtle));
+  color: var(--role-success);
+}
+
+/* Locked — hub card: reduced opacity, grayscale wash, no pointer events */
+.nn-exam-hub-study-card--locked {
+  opacity: 0.58;
+  filter: grayscale(0.18);
+  border-color: var(--border-subtle);
+  background: linear-gradient(
+    155deg,
+    color-mix(in srgb, var(--theme-primary) 4%, var(--theme-card-bg)) 0%,
+    var(--theme-card-bg) 100%
+  );
+}
+
+.nn-exam-hub-study-card--locked:hover {
+  transform: none;
+  box-shadow: var(--shadow-card);
+  border-color: var(--border-medium);
+}
+
+/* Completed — list / lesson cards (nn-study-card--completed) */
+.nn-study-card--completed {
+  border-left: 3px solid var(--role-success);
+  background: color-mix(in srgb, var(--role-success) 3.5%, var(--bg-card));
+}
+
+/* Locked — list / lesson cards */
+.nn-study-card--locked {
+  opacity: 0.58;
+  filter: grayscale(0.18);
+}
+
+/* App-surface completed card (nn-card--completed) */
+.nn-card--completed {
+  border-left: 3px solid var(--role-success);
+}
+
+/* App-surface locked card */
+.nn-card--locked {
+  opacity: 0.58;
+  filter: grayscale(0.18);
+}
+
 /* Default CAT / timed session chrome: theme-native wash (not flat slate) */
 html[data-theme] .nn-exam-session {
   background: var(--nn-presentation-wash);
@@ -1913,11 +1992,13 @@ html[data-theme="pastel-blush"] {
 }
 
 html[data-theme="strawberry"] {
-  --nn-aesthetic-gradient-primary: linear-gradient(135deg, #fd9cb3, #fec4d1, #ffebf0);
+  /* Airy 3-stop: soft coral → blush → near-white pink */
+  --nn-aesthetic-gradient-primary: linear-gradient(135deg, #fdb0c2, #fed7e1, #fff5f8);
 }
 
 html[data-theme="multi-pastel"] {
-  --nn-aesthetic-gradient-primary: linear-gradient(135deg, #c8e6f7, #c8cef7, #f7c8ce, #c8f7f0);
+  /* 2-stop periwinkle-blue → soft lavender — curated, not rainbow */
+  --nn-aesthetic-gradient-primary: linear-gradient(135deg, #c8e6f7, #c8cef7);
 }
 
 /* --- Learner UX: rationale segments, skeletons, calm card lift --- */

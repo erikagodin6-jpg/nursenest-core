@@ -4,11 +4,13 @@ import Link from "next/link";
 import type { LucideIcon } from "lucide-react";
 import { Activity, BookOpen, ClipboardList } from "lucide-react";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
-import { MarketingTrackedLink } from "@/components/marketing/marketing-tracked-link";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { pathwayMarketingHubLinkContext } from "@/lib/marketing/np-seo-alias-analytics-props";
 import { PH } from "@/lib/observability/posthog-conversion-events";
+import { trackClientEvent } from "@/lib/observability/posthog-client";
+import { StudyCard } from "@/components/ui/study-card";
+import type { CardVariant } from "@/components/ui/study-card";
 
 export type HubLessonProgress = {
   /** Lessons the learner has marked complete for this pathway. */
@@ -60,15 +62,11 @@ function LessonProgressPip({
   );
 }
 
-const CTA_PRIMARY =
-  "mt-auto inline-flex w-full items-center justify-center rounded-full nn-btn-primary px-5 py-3 text-sm font-semibold shadow-none transition group-hover:brightness-[1.03]";
-
-const CTA_SECONDARY =
-  "mt-auto inline-flex w-full items-center justify-center rounded-full border border-border bg-[var(--accent-soft)] px-5 py-3 text-sm font-semibold text-[var(--theme-primary)] transition group-hover:bg-[var(--surface-interactive-hover)] group-hover:border-[var(--border-medium)]";
-
 /**
  * Premium exam-hub conversion block: three gradient cards (lessons, question bank, CAT).
  * Question bank is visually emphasized; lavender/sage/sand tones follow active `[data-theme]`.
+ *
+ * Each card is backed by `StudyCard` (surface="hub") for visual consistency and accessibility.
  */
 export function ExamPathwayHubPrimaryStudyCards({
   pathway,
@@ -88,55 +86,81 @@ export function ExamPathwayHubPrimaryStudyCards({
   const practiceLinkTarget = isSignedIn ? "app_pathway_cat_start" : "marketing_pathway_cat_intro";
   const signInContinueHref = loginWithCallback(catAppStartHref);
 
-  const cards: Array<{
-    variant: "lessons" | "featured" | "cat";
-    href: string;
+  type CardDef = {
+    key: string;
     icon: LucideIcon;
+    variant: CardVariant;
+    /** Extra class applied to the hub card root — maps `--lessons` / `--cat` CSS modifiers. */
+    extraClass?: string;
+    ctaVariant: "primary" | "secondary";
     surface: string;
     destination_type: string;
     link_target: string;
+    href: string;
     titleKey: string;
     bodyKey: string;
     ctaKey: string;
-    ctaClass: string;
-    showBadge?: boolean;
-  }> = [
+    footer?: React.ReactNode;
+  };
+
+  const lessonProgress =
+    hubProgress && hubProgress.completed > 0 ? (
+      <LessonProgressPip
+        completed={hubProgress.completed}
+        catalogueTotal={pathwayLessonCount ?? hubProgress.total}
+        t={t}
+      />
+    ) : null;
+
+  const questionsBadge = (
+    <span className="nn-marketing-label nn-marketing-label--accent mt-2 inline-block max-w-full">
+      {t("components.examPathwayHub.studyModes.questionsBadge")}
+    </span>
+  );
+
+  const cardDefs: CardDef[] = [
     {
-      variant: "lessons",
-      href: lessonsHref,
+      key: "lessons",
       icon: BookOpen,
+      variant: "default",
+      extraClass: "nn-exam-hub-study-card--lessons",
+      ctaVariant: "secondary",
       surface: "primary_card_lessons",
       destination_type: "marketing_lessons",
       link_target: "marketing_lessons_hub",
+      href: lessonsHref,
       titleKey: "components.examPathwayHub.studyModes.lessonsTitle",
       bodyKey: "components.examPathwayHub.studyModes.lessonsBody",
       ctaKey: "components.examPathwayHub.studyModes.lessonsCta",
-      ctaClass: CTA_SECONDARY,
+      footer: lessonProgress,
     },
     {
-      variant: "featured",
-      href: questionsHref,
+      key: "questions",
       icon: ClipboardList,
+      variant: "featured",
+      ctaVariant: "primary",
       surface: "primary_card_questions",
       destination_type: "marketing_questions",
       link_target: "marketing_questions_hub",
+      href: questionsHref,
       titleKey: "components.examPathwayHub.studyModes.questionsTitle",
       bodyKey: "components.examPathwayHub.studyModes.questionsBody",
       ctaKey: "components.examPathwayHub.studyModes.questionsCta",
-      ctaClass: CTA_PRIMARY,
-      showBadge: true,
+      footer: questionsBadge,
     },
     {
-      variant: "cat",
-      href: practiceHref,
+      key: "cat",
       icon: Activity,
+      variant: "default",
+      extraClass: "nn-exam-hub-study-card--cat",
+      ctaVariant: "secondary",
       surface: "primary_card_practice",
       destination_type: emphasizeCatPracticeTests ? "cat_practice_tests" : "pathway_cat_practice",
       link_target: practiceLinkTarget,
+      href: practiceHref,
       titleKey: "components.examPathwayHub.studyModes.practiceCatTitle",
       bodyKey: "components.examPathwayHub.studyModes.practiceCatBody",
       ctaKey: "components.examPathwayHub.studyModes.practiceCta",
-      ctaClass: CTA_SECONDARY,
     },
   ];
 
@@ -148,62 +172,47 @@ export function ExamPathwayHubPrimaryStudyCards({
       <p className="nn-marketing-body-sm mt-2 max-w-2xl text-[var(--theme-muted-text)]">
         {t("components.examPathwayHub.studyModes.subhead")}
       </p>
+
       <ul className="mt-8 grid list-none grid-cols-1 gap-5 p-0 md:grid-cols-3 md:gap-6">
-        {cards.map((card) => {
-          const Icon = card.icon;
-          const variantClass =
-            card.variant === "lessons"
-              ? "nn-exam-hub-study-card--lessons"
-              : card.variant === "featured"
-                ? "nn-exam-hub-study-card--featured"
-                : "nn-exam-hub-study-card--cat";
+        {cardDefs.map((card) => {
+          const trackEvent = () => {
+            const props = {
+              ...linkCtx,
+              surface: card.surface,
+              pathway_id: pathway.id,
+              destination_type: card.destination_type,
+              link_target: card.link_target,
+            };
+            trackClientEvent(PH.marketingPathwayHubCta, props);
+            trackClientEvent(PH.funnelExamHubStudyIntent, {
+              ...linkCtx,
+              pathway_id: pathway.id,
+              destination_type: card.destination_type,
+              link_target: card.link_target,
+            });
+          };
 
           return (
-            <li key={card.surface}>
-              <MarketingTrackedLink
+            <li key={card.key}>
+              <StudyCard
+                surface="hub"
+                variant={card.variant}
                 href={card.href}
-                event={PH.marketingPathwayHubCta}
-                eventProps={{
-                  ...linkCtx,
-                  surface: card.surface,
-                  pathway_id: pathway.id,
-                  destination_type: card.destination_type,
-                  link_target: card.link_target,
-                }}
-                secondaryCapture={{
-                  event: PH.funnelExamHubStudyIntent,
-                  eventProps: {
-                    ...linkCtx,
-                    pathway_id: pathway.id,
-                    destination_type: card.destination_type,
-                    link_target: card.link_target,
-                  },
-                }}
-                className={`group nn-exam-hub-study-card ${variantClass}`}
-              >
-                <div className="nn-exam-hub-study-card__icon" aria-hidden>
-                  <Icon className="h-5 w-5" strokeWidth={1.65} />
-                </div>
-                <span className="nn-marketing-h3 mt-4">{t(card.titleKey)}</span>
-                {card.showBadge ? (
-                  <span className="nn-marketing-label nn-marketing-label--accent mt-2 inline-block max-w-full">
-                    {t("components.examPathwayHub.studyModes.questionsBadge")}
-                  </span>
-                ) : null}
-                <span className="nn-marketing-body-sm mt-2 flex-1 text-[var(--theme-body-text)]">{t(card.bodyKey)}</span>
-                {card.variant === "lessons" && hubProgress && hubProgress.completed > 0 ? (
-                  <LessonProgressPip
-                    completed={hubProgress.completed}
-                    catalogueTotal={pathwayLessonCount ?? hubProgress.total}
-                    t={t}
-                  />
-                ) : null}
-                <span className={card.ctaClass}>{t(card.ctaKey)}</span>
-              </MarketingTrackedLink>
+                icon={card.icon}
+                title={t(card.titleKey)}
+                description={t(card.bodyKey)}
+                cta={t(card.ctaKey)}
+                ctaVariant={card.ctaVariant}
+                footer={card.footer}
+                onClick={trackEvent}
+                className={card.extraClass}
+                ariaLabel={`${t(card.titleKey)} — ${pathway.shortName}`}
+              />
             </li>
           );
         })}
       </ul>
+
       <p className="nn-marketing-caption mt-5">
         {t("components.examPathwayHub.studyModes.signInNote")}{" "}
         <Link href={signInContinueHref} className="font-medium text-primary underline-offset-4 hover:underline">

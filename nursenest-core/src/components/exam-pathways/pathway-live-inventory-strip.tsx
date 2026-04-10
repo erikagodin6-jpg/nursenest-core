@@ -8,6 +8,7 @@ import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry"
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { HUB } from "@/lib/marketing/marketing-entry-routes";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
+import { TopicCoverageIndicator } from "@/components/ui/topic-coverage-indicator";
 
 type Variant = "hub" | "lessons" | "questions" | "cat";
 
@@ -16,11 +17,17 @@ export function PathwayLiveInventoryStrip({
   questionSnapshot: questionSnapshotProp,
   lessonCount,
   variant = "hub",
+  topicCount,
+  topicTotal,
 }: {
   pathway: ExamPathwayDefinition;
   questionSnapshot?: PathwayQuestionBankSnapshot | null;
   lessonCount?: number;
   variant?: Variant;
+  /** Number of topics/sections that currently have at least one lesson. */
+  topicCount?: number;
+  /** Expected total topics for this pathway (for the coverage progress bar). */
+  topicTotal?: number;
 }) {
   const questionSnapshot = questionSnapshotProp ?? EMPTY_QUESTION_SNAPSHOT;
   const { t } = useMarketingI18n();
@@ -119,6 +126,9 @@ export function PathwayLiveInventoryStrip({
       </p>
       {variant === "questions" ? (
         <p className="mt-2 text-xs text-[var(--theme-muted-text)]">{t("components.pathwayInventory.questionsPageNote")}</p>
+      ) : null}
+      {typeof topicCount === "number" && topicCount > 0 && (variant === "hub" || variant === "lessons") ? (
+        <TopicCoverageIndicator covered={topicCount} total={topicTotal} noun="topics" />
       ) : null}
     </aside>
   );

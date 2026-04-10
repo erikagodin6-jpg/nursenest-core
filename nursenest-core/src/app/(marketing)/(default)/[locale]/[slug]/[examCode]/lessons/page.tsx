@@ -30,6 +30,7 @@ import { pathwayLessonHubMetaDescription, pathwayLessonHubMetaTitle } from "@/li
 import { pathwayLessonHasRenderableHubSlug } from "@/lib/lessons/pathway-lesson-types";
 import { HUB } from "@/lib/marketing/marketing-entry-routes";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
+import { ContentEmptyState } from "@/components/ui/content-empty-state";
 import { pathwayLessonsHubBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 import { absoluteUrl } from "@/lib/seo/site-origin";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
@@ -58,68 +59,27 @@ type Props = {
   searchParams: Promise<{ page?: string; pageSize?: string; q?: string }>;
 };
 
-/** When the catalog has no rows yet: still a complete “study hub” with bank, CAT, and account entry points. */
+/** When the catalog has no rows yet: still a complete "study hub" with bank, CAT, and account entry points. */
 function PathwayLessonsZeroCatalogPanel({ pathway }: { pathway: ExamPathwayDefinition }) {
   const questionsHref = buildExamPathwayPath(pathway, "questions");
   const catHref = buildExamPathwayPath(pathway, "cat");
-  const overviewHref = buildExamPathwayPath(pathway);
   const upcoming = pathway.status === "upcoming" || pathway.acquisitionMode === "waitlist";
 
   return (
-    <div className="nn-study-card nn-study-card--wash mt-10 p-6 sm:p-8" data-nn-hub-zero-lesson-catalog="true">
-      <h2 className="text-lg font-bold text-[var(--theme-heading-text)]">Lesson library · building for this pathway</h2>
-      <p className="mt-3 max-w-2xl text-sm leading-relaxed text-[var(--theme-muted-text)]">
-        {upcoming
-          ? "Structured lessons will appear here as this track ships. You can already study with pathway-scoped questions, adaptive CAT practice, and timed practice exams—the same scope you will see in lessons."
-          : "Published lesson pages are not in the index yet for this pathway. Start with the question bank and CAT sessions so your rationales and weak-area signals are exam-scoped; lessons will list here when live."}
-      </p>
-      <ul className="mt-5 space-y-2 text-sm text-[var(--theme-muted-text)]">
-        <li className="flex gap-2">
-          <span className="font-semibold text-[var(--theme-heading-text)]">1.</span>
-          Open the pathway question bank and run items with full rationales.
-        </li>
-        <li className="flex gap-2">
-          <span className="font-semibold text-[var(--theme-heading-text)]">2.</span>
-          Run a CAT session when you are signed in and eligible—difficulty adapts like the real exam.
-        </li>
-        <li className="flex gap-2">
-          <span className="font-semibold text-[var(--theme-heading-text)]">3.</span>
-          Create an account to sync progress across devices and unlock subscriber depth when your plan matches this track.
-        </li>
-      </ul>
-      <div className="mt-6 flex flex-wrap gap-3">
-        <Link
-          href={questionsHref}
-          className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground"
-        >
-          Open question bank hub
-        </Link>
-        <Link
-          href={catHref}
-          className="inline-flex min-h-[44px] items-center justify-center rounded-full border border-primary/35 bg-card px-5 py-2.5 text-sm font-semibold text-primary hover:bg-muted/40"
-        >
-          CAT practice landing
-        </Link>
-        <Link
-          href={HUB.practiceExams}
-          className="inline-flex min-h-[44px] items-center justify-center rounded-full border border-border px-5 py-2.5 text-sm font-semibold hover:bg-card"
-        >
-          Practice exams directory
-        </Link>
-        <Link
-          href="/signup"
-          className="inline-flex min-h-[44px] items-center justify-center rounded-full border border-primary/30 px-5 py-2.5 text-sm font-semibold text-primary hover:bg-primary/5"
-        >
-          Create account
-        </Link>
-        <Link
-          href={overviewHref}
-          className="inline-flex min-h-[44px] items-center justify-center rounded-full border border-border px-5 py-2.5 text-sm font-semibold hover:bg-card"
-        >
-          Exam overview
-        </Link>
-      </div>
-    </div>
+    <ContentEmptyState
+      variant="lessons"
+      body={
+        upcoming
+          ? `Structured lessons will appear here as this track ships. You can already study with pathway-scoped questions, adaptive CAT practice, and timed practice exams — the same scope you will see in lessons.`
+          : `Lessons for ${pathway.shortName} are being finalized. Start with the question bank and CAT sessions — your rationales and weak-area signals are exam-scoped and will align with lessons when they go live.`
+      }
+      primaryCta={{ label: "Start available topics", href: questionsHref }}
+      secondaryCtas={[
+        { label: "Try CAT exam", href: catHref },
+        { label: "Practice exams", href: HUB.practiceExams, variant: "ghost" },
+        { label: "Create account", href: "/signup", variant: "ghost" },
+      ]}
+    />
   );
 }
 
@@ -333,6 +293,7 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
         questionSnapshot={questionSnapshot}
         lessonCount={pathwayLessonTotal}
         variant="lessons"
+        topicCount={topics.length > 0 ? topics.length : undefined}
       />
 
       {pageResult.locale ? <PathwayLessonContentLocaleBanner listLocale={pageResult.locale} /> : null}

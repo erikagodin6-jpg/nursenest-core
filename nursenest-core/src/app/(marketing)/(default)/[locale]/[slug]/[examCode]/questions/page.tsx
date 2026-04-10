@@ -33,6 +33,7 @@ import { absoluteUrl } from "@/lib/seo/site-origin";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { recordRouteRenderFallback } from "@/lib/observability/route-fallback-tracker";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { ContentEmptyState } from "@/components/ui/content-empty-state";
 
 export const dynamicParams = true;
 export const revalidate = 86400;
@@ -210,6 +211,16 @@ export default async function ExamPathwayQuestionsHubPage({ params, searchParams
         lessonCount={pathwayLessonCount}
         variant="questions"
       />
+      {questionSnapshot?.status === "ok" && questionSnapshot.pathwayScopedCount === 0 ? (
+        <ContentEmptyState
+          variant="questions"
+          primaryCta={{ label: "Start available topics", href: lessonsHref }}
+          secondaryCtas={[
+            { label: "Try CAT exam", href: catHref },
+            { label: "Create account", href: "/signup", variant: "ghost" },
+          ]}
+        />
+      ) : null}
       {isTopicNarrowed ? (
         <>
           <aside className="nn-study-card nn-study-card--wash mt-6 p-4 sm:p-5">

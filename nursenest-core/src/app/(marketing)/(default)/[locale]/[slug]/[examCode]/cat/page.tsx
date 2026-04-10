@@ -21,6 +21,7 @@ import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { auth } from "@/lib/auth";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { ContentEmptyState } from "@/components/ui/content-empty-state";
 
 export const dynamicParams = true;
 export const revalidate = 86400;
@@ -156,51 +157,30 @@ export default async function PathwayCatEntryPage({ params }: Props) {
       </ul>
 
       {showExplainerAside ? (
-        <aside
-          className="nn-card mt-6 border border-[var(--semantic-border-soft)] bg-[var(--semantic-warning-soft)] p-4 text-sm text-[var(--theme-body-text)] shadow-sm"
-          role="status"
-        >
-          <p className="font-semibold text-[var(--theme-heading-text)]">CAT is not available yet for this visit</p>
-          <p className="mt-1 text-[var(--theme-muted-text)]">{assessment.safeUserMessage}</p>
-          <ul className="mt-3 list-inside list-disc space-y-1 text-[var(--theme-muted-text)]">
-            {assessment.nextAction === "upgrade" || assessment.nextAction === "switch_pathway" ? (
-              <li>
-                <Link className="font-medium text-primary underline" href="/app/account/billing">
-                  Account → Billing
-                </Link>{" "}
-                to review your plan or pathway.
-              </li>
-            ) : null}
-            {assessment.nextAction === "join_waitlist" ? (
-              <li>
-                <Link className="font-medium text-primary underline" href={overviewHref}>
-                  Open pathway hub
-                </Link>{" "}
-                for waitlist or status.
-              </li>
-            ) : null}
-            {(assessment.nextAction === "use_question_bank" || assessment.reason === "insufficient_cat_pool") && (
-              <li>
-                <Link className="font-medium text-primary underline" href={questionsHref}>
-                  Pathway question bank
-                </Link>{" "}
-                (practice without adaptive CAT)
-              </li>
-            )}
-            <li>
-              <Link className="font-medium text-primary underline" href={lessonsHref}>
-                Browse lessons
-              </Link>
-            </li>
-            {isSignedIn ? (
-              <li>
-                <Link className="font-medium text-primary underline" href={appBankHref}>
-                  App question bank
-                </Link>
-              </li>
-            ) : null}
-          </ul>
-        </aside>
+        <ContentEmptyState
+          variant="cat"
+          body={assessment.safeUserMessage}
+          showGrowthBadge={assessment.reason === "insufficient_cat_pool"}
+          primaryCta={{
+            label:
+              assessment.nextAction === "upgrade" || assessment.nextAction === "switch_pathway"
+                ? "Review your plan"
+                : "Study question bank",
+            href:
+              assessment.nextAction === "upgrade" || assessment.nextAction === "switch_pathway"
+                ? "/app/account/billing"
+                : questionsHref,
+          }}
+          secondaryCtas={[
+            { label: "Browse lessons", href: lessonsHref },
+            ...(assessment.nextAction === "join_waitlist"
+              ? [{ label: "Pathway hub", href: overviewHref, variant: "ghost" as const }]
+              : []),
+            ...(!isSignedIn
+              ? [{ label: "Create account", href: "/signup", variant: "ghost" as const }]
+              : [{ label: "App question bank", href: appBankHref, variant: "ghost" as const }]),
+          ]}
+        />
       ) : null}
 
       <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">

@@ -7,25 +7,26 @@
  *
  * First-paint `:root` mirrors lavender-friendly defaults; `[data-theme]` overrides.
  */
+/* First-paint defaults mirror the ocean/clinical-blue default theme. [data-theme] layers override all. */
 :root {
-  --semantic-bg-base: #fdfcfa;
-  --semantic-bg-soft: #f9fafb;
+  --semantic-bg-base: #f2fbfe;
+  --semantic-bg-soft: #e8f7fc;
   --semantic-surface: #ffffff;
   --semantic-surface-elevated: #ffffff;
-  --semantic-border-soft: #e5e7eb;
-  --semantic-shadow-soft: 0 10px 30px rgba(15, 23, 42, 0.05);
+  --semantic-border-soft: #bae6fd;
+  --semantic-shadow-soft: 0 10px 30px rgba(6, 66, 115, 0.06);
   --semantic-text-primary: #111827;
-  --semantic-text-secondary: #6b7280;
-  --semantic-text-muted: #9ca3af;
-  --semantic-brand: #9d82dd;
-  --semantic-brand-soft: #ede9fe;
+  --semantic-text-secondary: #4b6272;
+  --semantic-text-muted: #8fa8b8;
+  --semantic-brand: #1da2d8;
+  --semantic-brand-soft: #e8f7fc;
   --semantic-brand-contrast: #ffffff;
   --semantic-success: #16a34a;
   --semantic-success-soft: #ecfdf5;
   --semantic-success-contrast: #14532d;
-  --semantic-info: #0ea5e9;
-  --semantic-info-soft: #e0f2fe;
-  --semantic-info-contrast: #0c4a6e;
+  --semantic-info: #76b6c4;
+  --semantic-info-soft: #def3f6;
+  --semantic-info-contrast: #064273;
   --semantic-warning: #d97706;
   --semantic-warning-soft: #fffbeb;
   --semantic-warning-contrast: #78350f;
@@ -35,21 +36,19 @@
   --semantic-mastery-high: #16a34a;
   --semantic-mastery-mid: #d97706;
   --semantic-mastery-low: #e11d48;
-  --semantic-chart-1: #9d82dd;
-  --semantic-chart-2: #22c55e;
-  --semantic-chart-3: #0ea5e9;
+  --semantic-chart-1: #1da2d8;
+  --semantic-chart-2: #16a34a;
+  --semantic-chart-3: #76b6c4;
   --semantic-chart-4: #f59e0b;
-  --semantic-chart-5: #ec4899;
-  /* Soft multi-hue accents (first paint; `[data-theme]` layers below add panel + decorative) */
+  --semantic-chart-5: #f3b0c3;
   --decorative-1: color-mix(in srgb, var(--semantic-info) 42%, var(--semantic-brand));
   --decorative-2: color-mix(in srgb, var(--semantic-success) 38%, var(--semantic-warning));
   --semantic-panel-muted: color-mix(in srgb, var(--semantic-brand) 5%, var(--semantic-surface));
   --semantic-panel-warm: color-mix(in srgb, var(--semantic-warning) 7%, var(--semantic-surface));
   --semantic-panel-cool: color-mix(in srgb, var(--semantic-info) 7%, var(--semantic-surface));
   --semantic-panel-positive: color-mix(in srgb, var(--semantic-success) 8%, var(--semantic-surface));
-  /* Hero bands — multi-hue, theme-safe (used by `.nn-learner-page-hero` and marketing surfaces) */
-  --hero-gradient-start: color-mix(in srgb, var(--semantic-info) 10%, var(--semantic-surface));
-  --hero-gradient-mid: color-mix(in srgb, var(--semantic-brand) 8%, var(--semantic-surface));
+  --hero-gradient-start: color-mix(in srgb, var(--semantic-brand) 10%, var(--semantic-surface));
+  --hero-gradient-mid: color-mix(in srgb, var(--semantic-info) 8%, var(--semantic-surface));
   --hero-gradient-end: color-mix(in srgb, var(--semantic-success) 9%, var(--semantic-surface));
 }
 
@@ -215,21 +214,27 @@ html[data-theme="clinical-light"] {
   --semantic-chart-5: #f3b0c3;
 }
 
-/* Multi-pastel — balanced across all hues */
+/* Multi-pastel — balanced across all hues; chart colors are deeper than background accents */
 html[data-theme="multi-pastel"] {
   --semantic-success: #22c55e;
   --semantic-success-soft: color-mix(in srgb, #22c55e 11%, var(--bg-card));
-  --semantic-info: #90b4d4;
-  --semantic-info-soft: color-mix(in srgb, #90b4d4 10%, var(--bg-card));
-  --semantic-warning: #fbbf24;
-  --semantic-warning-soft: color-mix(in srgb, #fbbf24 12%, var(--bg-card));
-  --semantic-danger: #f97316;
-  --semantic-danger-soft: color-mix(in srgb, #f97316 10%, var(--bg-card));
+  --semantic-success-contrast: #14532d;
+  /* Info uses a deeper blue than the primary so it reads as a distinct role */
+  --semantic-info: #5b8db8;
+  --semantic-info-soft: color-mix(in srgb, #5b8db8 11%, var(--bg-card));
+  --semantic-info-contrast: #1e3a5f;
+  --semantic-warning: #d97706;
+  --semantic-warning-soft: color-mix(in srgb, #d97706 11%, var(--bg-card));
+  --semantic-warning-contrast: #78350f;
+  --semantic-danger: #e11d48;
+  --semantic-danger-soft: color-mix(in srgb, #e11d48 10%, var(--bg-card));
+  --semantic-danger-contrast: #9f1239;
+  /* Chart palette uses saturated mid-tone versions of the cozy pastel hues */
   --semantic-chart-1: #90b4d4;
-  --semantic-chart-2: #c8f7f0;
-  --semantic-chart-3: #c8cef7;
-  --semantic-chart-4: #f7c8ce;
-  --semantic-chart-5: #e6f7c8;
+  --semantic-chart-2: #5aaa8e;
+  --semantic-chart-3: #9585c8;
+  --semantic-chart-4: #c89050;
+  --semantic-chart-5: #c0809a;
 }
 
 html[data-theme="dark-clinical"],
@@ -253,7 +258,8 @@ html[data-theme="dark-mode"] {
   --semantic-chart-2: #34d399;
   --semantic-chart-3: #38bdf8;
   --semantic-chart-4: #fbbf24;
-  --semantic-chart-5: #c084fc;
+  /* Rose/coral — matches dark-pastel accent (#c4687a) instead of mismatched bright purple */
+  --semantic-chart-5: #c4687a;
   --semantic-panel-muted: color-mix(in srgb, var(--theme-primary) 10%, var(--bg-card));
   --semantic-panel-warm: color-mix(in srgb, var(--semantic-warning) 10%, var(--bg-card));
   --semantic-panel-cool: color-mix(in srgb, var(--semantic-info) 10%, var(--bg-card));

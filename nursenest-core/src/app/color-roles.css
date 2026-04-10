@@ -28,19 +28,19 @@
   --role-warning: #b45309;
   --role-warning-soft: color-mix(in srgb, #d97706 13%, #ffffff);
   --role-warning-text: #78350f;
-  --role-warning-border: color-mix(in srgb, #f59e0b 32%, #e9e2ff);
-  --role-premium-surface: color-mix(in srgb, #9d82dd 13%, #ffffff);
-  --role-premium-border: color-mix(in srgb, #9d82dd 42%, #e9e2ff);
-  --role-premium-text: color-mix(in srgb, #9d82dd 48%, #111827);
-  --role-premium-glow: color-mix(in srgb, #9d82dd 14%, transparent);
+  --role-warning-border: color-mix(in srgb, #f59e0b 32%, #e5e7eb);
+  --role-premium-surface: color-mix(in srgb, #1da2d8 13%, #ffffff);
+  --role-premium-border: color-mix(in srgb, #1da2d8 42%, #e0f4fc);
+  --role-premium-text: color-mix(in srgb, #1da2d8 48%, #111827);
+  --role-premium-glow: color-mix(in srgb, #1da2d8 14%, transparent);
   --role-heat-text: color-mix(in srgb, #c2410c 42%, #111827);
 
   /* Semantic UI (design system): first paint before `[data-theme]` hydrates */
-  --semantic-progress-track: #e8eaef;
+  --semantic-progress-track: #daeef9;
   --semantic-progress-fill: var(--role-success);
-  --semantic-progress-fill-accent: #9d82dd;
-  --semantic-info-bg: color-mix(in srgb, #9d82dd 8%, #ffffff);
-  --semantic-info-border: color-mix(in srgb, #9d82dd 22%, #e5e7eb);
+  --semantic-progress-fill-accent: #1da2d8;
+  --semantic-info-bg: color-mix(in srgb, #1da2d8 8%, #f2fbfe);
+  --semantic-info-border: color-mix(in srgb, #1da2d8 22%, #bae6fd);
   --semantic-info-text: #111827;
 }
 
@@ -87,6 +87,57 @@
   --semantic-info-bg: color-mix(in srgb, var(--theme-primary) 8%, var(--bg-card, var(--theme-card-bg)));
   --semantic-info-border: color-mix(in srgb, var(--theme-primary) 22%, var(--border-subtle));
   --semantic-info-text: var(--theme-heading-text);
+}
+
+/*
+ * Pink-theme CTA overrides — the generic warm-shift formula produces very light rose colors
+ * (contrast ~2.5:1 white-on-pink). Use a deep rose that passes WCAG AA (≥4.5:1) instead.
+ */
+html[data-theme="blush"],
+html[data-theme="pastel-blush"],
+html[data-theme="strawberry"] {
+  --role-cta: #b84063;
+  --role-cta-foreground: #ffffff;
+  --role-cta-hover: #a53558;
+  --role-cta-pressed: #91294c;
+  --role-cta-shadow: color-mix(in srgb, #b84063 38%, transparent);
+  --role-cta-soft: color-mix(in srgb, #b84063 11%, var(--bg-card, var(--theme-card-bg)));
+  --role-cta-on-soft: color-mix(in srgb, #b84063 78%, var(--theme-heading-text));
+}
+
+/* Ocean CTA: deeper clinical blue so white text passes AA (the auto-mix is medium teal, ~3.5:1) */
+html[data-theme="ocean"] {
+  --role-cta: #0d7aaa;
+  --role-cta-foreground: #ffffff;
+  --role-cta-hover: #0a6890;
+  --role-cta-pressed: #085776;
+  --role-cta-shadow: color-mix(in srgb, #0d7aaa 38%, transparent);
+  --role-cta-soft: color-mix(in srgb, #0d7aaa 11%, var(--bg-card, var(--theme-card-bg)));
+  --role-cta-on-soft: color-mix(in srgb, #0d7aaa 78%, var(--theme-heading-text));
+}
+
+/* Mint CTA: use the deep teal topbar tone — clean healthcare action color */
+html[data-theme="mint"],
+html[data-theme="pastel-mint"],
+html[data-theme="teal"] {
+  --role-cta: #008080;
+  --role-cta-foreground: #ffffff;
+  --role-cta-hover: #006e6e;
+  --role-cta-pressed: #005c5c;
+  --role-cta-shadow: color-mix(in srgb, #008080 38%, transparent);
+  --role-cta-soft: color-mix(in srgb, #008080 11%, var(--bg-card, var(--theme-card-bg)));
+  --role-cta-on-soft: color-mix(in srgb, #008080 78%, var(--theme-heading-text));
+}
+
+/* Multi-pastel CTA: auto-mix produces pale grayish purple (~2.6:1 contrast). Use deep periwinkle. */
+html[data-theme="multi-pastel"] {
+  --role-cta: #3a6e9e;
+  --role-cta-foreground: #ffffff;
+  --role-cta-hover: #315e88;
+  --role-cta-pressed: #274e72;
+  --role-cta-shadow: color-mix(in srgb, #3a6e9e 38%, transparent);
+  --role-cta-soft: color-mix(in srgb, #3a6e9e 11%, var(--bg-card, var(--theme-card-bg)));
+  --role-cta-on-soft: color-mix(in srgb, #3a6e9e 78%, var(--theme-heading-text));
 }
 
 html[data-theme="dark-clinical"],

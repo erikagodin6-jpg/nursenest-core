@@ -1,4 +1,4 @@
-/* Brand default: lavender (canonical). :root fallbacks live in globals.css */
+/* Lavender — retained as a core theme option. Default is now ocean (clinical blue). */
 [data-theme="lavender"] {
   --theme-primary: #9d82dd;
   --theme-primary-foreground: #ffffff;
@@ -478,6 +478,42 @@
   --color-popover-fg-base: color-mix(in srgb, #374151 90%, var(--theme-primary));
 }
 
-/* Per-theme topbar overrides with stronger brand identity than auto-primary */
+/*
+ * Per-theme topbar overrides — ensures sufficient contrast between topbar bg and white text.
+ * Pale/pastel primaries can't be used as topbar backgrounds with white text (WCAG failure).
+ */
 [data-theme="ocean"] { --theme-topbar-bg: #064273; }
-[data-theme="mint"] { --theme-topbar-bg: #008080; }
+[data-theme="mint"]  { --theme-topbar-bg: #008080; }
+
+/* Pink topbars: deep rose so white text passes WCAG AA (≥4.5:1) */
+[data-theme="blush"] {
+  --theme-topbar-bg: #c4607d;
+  --theme-topbar-text: #ffffff;
+}
+[data-theme="pastel-blush"] {
+  --theme-topbar-bg: #d4505c;
+  --theme-topbar-text: #ffffff;
+}
+[data-theme="strawberry"] {
+  --theme-topbar-bg: #b84063;
+  --theme-topbar-text: #ffffff;
+}
+
+/* Multi-pastel topbar: same deep blue as CTA */
+[data-theme="multi-pastel"] {
+  --theme-topbar-bg: #3a6e9e;
+  --theme-topbar-text: #ffffff;
+}
+
+/*
+ * Primary-foreground for high-luminance primaries — used on active tabs, chips, badges.
+ * Light pink / steel blue primaries can't support white text; use dark near-black instead.
+ */
+[data-theme="blush"],
+[data-theme="pastel-blush"],
+[data-theme="strawberry"] {
+  --theme-primary-foreground: #3d0a1a;
+}
+[data-theme="multi-pastel"] {
+  --theme-primary-foreground: #1e3a5f;
+}

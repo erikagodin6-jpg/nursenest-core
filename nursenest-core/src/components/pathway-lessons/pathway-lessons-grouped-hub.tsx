@@ -10,6 +10,8 @@ import {
   pathwayLessonMarketingDetailHref,
   type PathwayLessonRecord,
 } from "@/lib/lessons/pathway-lesson-types";
+import { StudyCard } from "@/components/ui/study-card";
+import type { CardVariant, CardStatus } from "@/components/ui/study-card";
 
 type Group = {
   topicSlug: string;
@@ -43,6 +45,18 @@ function buildTopicGroups(lessons: PathwayLessonRecord[], clusters: TopicCluster
   }
 
   return out;
+}
+
+function progressToCardVariant(status: PathwayLessonProgressStatus): CardVariant {
+  if (status === "completed") return "completed";
+  return "default";
+}
+
+function progressToCardStatus(status: PathwayLessonProgressStatus, showProgress: boolean): CardStatus | undefined {
+  if (!showProgress) return undefined;
+  if (status === "completed") return "completed";
+  if (status === "in_progress") return "in_progress";
+  return undefined;
 }
 
 function marketingQuestionsTopicHref(pathway: ExamPathwayDefinition, topic: string): string {
