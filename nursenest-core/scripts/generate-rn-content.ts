@@ -43,8 +43,10 @@ import { fileURLToPath } from "url";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const envPath = path.resolve(__dirname, "../.env.local");
 try {
-  const { config } = await import("dotenv");
-  config({ path: envPath });
+  // dotenv is an optional peer dep; load synchronously to avoid top-level await
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const dotenv = require("dotenv") as { config: (opts: object) => void };
+  dotenv.config({ path: envPath });
 } catch {
   // dotenv not installed or .env.local missing — continue with process.env
 }

@@ -11,6 +11,9 @@ import {
   type QuestionBankRowForRollup,
 } from "@/lib/learner/study-loop-recommendations";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
+import { PH } from "@/lib/observability/posthog-conversion-events";
+import { trackClientEvent } from "@/lib/observability/posthog-client";
+import { buildStudyLoopCatClickProps } from "@/lib/observability/study-loop-cat-analytics";
 
 type Props = {
   questions: QuestionBankRowForRollup[];
@@ -83,6 +86,16 @@ export function QuestionSessionStudyLoopPanel({ questions, graded, pathwayId, vi
         <Link
           href={practiceTestsWeakFocusHref(pathwayId)}
           className="inline-flex rounded-full border border-border px-3 py-1.5 text-xs font-semibold hover:bg-muted/80"
+          onClick={() =>
+            trackClientEvent(
+              PH.learnerStudyLoopCatCtaClicked,
+              buildStudyLoopCatClickProps({
+                href: practiceTestsWeakFocusHref(pathwayId),
+                sourceSurface: "question_bank_session_panel",
+                pathwayId,
+              }),
+            )
+          }
         >
           {t("learner.studyLoop.gotoCat")}
         </Link>

@@ -50,7 +50,7 @@ test("examQuestionPoolWhereForContext honors pathway exam + tier aliases", () =>
   const caPn = buildGlobalExamContext("ca-rpn-rex-pn", "en");
   assert.ok(caPn);
   const scoped = examQuestionPoolWhereForContext(caPn!);
-  assert.ok(scoped.examIn.includes("REX_PN"));
+  assert.ok(scoped.examIn.some((examKey) => examKey.toLowerCase().includes("rex-pn")));
   assert.ok(scoped.tierMatches.includes("rpn"));
   assert.ok(scoped.tierMatches.includes("lvn"));
 

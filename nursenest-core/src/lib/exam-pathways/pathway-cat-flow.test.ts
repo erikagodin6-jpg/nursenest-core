@@ -3,6 +3,7 @@ import test from "node:test";
 import {
   appCatWeakFocusPath,
   appPathwayCatSessionStartPath,
+  resolveStudySurfaceCatHref,
 } from "@/lib/exam-pathways/pathway-cat-flow";
 
 test("appPathwayCatSessionStartPath always encodes pathwayId for CAT start", () => {
@@ -20,4 +21,22 @@ test("appCatWeakFocusPath keeps cat mode and pathway context", () => {
   assert.equal(q.get("focus"), "weak");
   assert.equal(q.get("pathwayId"), "ca-rpn-rex-pn");
   assert.equal(q.get("topic"), "Pharmacology");
+});
+
+test("resolveStudySurfaceCatHref scopes CAT start when the pathway is unambiguous", () => {
+  assert.equal(
+    resolveStudySurfaceCatHref({
+      availablePathwayIds: ["us-rn-nclex-rn"],
+    }),
+    "/app/practice-tests/start?pathwayId=us-rn-nclex-rn",
+  );
+});
+
+test("resolveStudySurfaceCatHref keeps the explicit chooser when multiple pathways are available", () => {
+  assert.equal(
+    resolveStudySurfaceCatHref({
+      availablePathwayIds: ["us-rn-nclex-rn", "us-np-fnp"],
+    }),
+    "/app/practice-tests/start",
+  );
 });

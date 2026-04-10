@@ -1,6 +1,7 @@
 import { catPathwayExamCodeLabel, catPathwayRegionalExamLine } from "@/lib/exam-pathways/cat-pathway-labels";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
-import { resolveStudySurfaceCatHref, resolvePreferredCatPathwayId } from "@/lib/exam-pathways/pathway-cat-flow";
+import { resolvePreferredCatPathwayId } from "@/lib/exam-pathways/pathway-cat-flow";
+import { resolveStudyLoopCatDestination } from "@/lib/exam-pathways/study-loop-cat-routing";
 import type { PremiumDashboardSnapshot } from "@/lib/learner/premium-dashboard-snapshot";
 import type { LearnerMarketingT } from "@/lib/learner/learner-marketing-server";
 import { MasteryLegend } from "@/components/student/product/mastery-legend";
@@ -17,15 +18,22 @@ const MAX_WEAK = 6;
 
 function catQuickFromSnapshot(snapshot: PremiumDashboardSnapshot): {
   catStartHref: string;
+  catDestinationKind: "app_start" | "generic_chooser";
   catPathwayLabel: string | null;
   catPathwayLine: string | null;
 } {
   const ids = snapshot.pathways.map((p) => p.pathwayId);
-  const preferred =
-    resolvePreferredCatPathwayId(snapshot.learnerPath, ids);
+  const preferred = resolvePreferredCatPathwayId(snapshot.learnerPath, ids);
+  const destination = resolveStudyLoopCatDestination({
+    authState: "signed_in",
+    pathwayId: snapshot.learnerPath,
+    availablePathwayIds: ids,
+    intent: "start",
+  });
   if (!preferred) {
     return {
-      catStartHref: resolveStudySurfaceCatHref({ pathwayId: snapshot.learnerPath, availablePathwayIds: ids }),
+      catStartHref: destination.href,
+      catDestinationKind: destination.kind === "app_start" ? "app_start" : "generic_chooser",
       catPathwayLabel: null,
       catPathwayLine: null,
     };
@@ -33,13 +41,15 @@ function catQuickFromSnapshot(snapshot: PremiumDashboardSnapshot): {
   const pw = getExamPathwayById(preferred);
   if (!pw) {
     return {
-      catStartHref: resolveStudySurfaceCatHref({ pathwayId: preferred, availablePathwayIds: ids }),
+      catStartHref: destination.href,
+      catDestinationKind: destination.kind === "app_start" ? "app_start" : "generic_chooser",
       catPathwayLabel: null,
       catPathwayLine: null,
     };
   }
   return {
-    catStartHref: resolveStudySurfaceCatHref({ pathwayId: preferred, availablePathwayIds: ids }),
+    catStartHref: destination.href,
+    catDestinationKind: destination.kind === "app_start" ? "app_start" : "generic_chooser",
     catPathwayLabel: catPathwayExamCodeLabel(pw),
     catPathwayLine: catPathwayRegionalExamLine(pw),
   };
@@ -87,6 +97,7 @@ export function LearnerDashboardAnalytics({
           hasWeakAreas: weakAreas.length > 0,
           hasRecentCompletion,
           catStartHref: catQuick.catStartHref,
+          catDestinationKind: catQuick.catDestinationKind,
           catPathwayLabel: catQuick.catPathwayLabel,
           catPathwayLine: catQuick.catPathwayLine,
         }}

@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import {
   remediationCatPracticeHref,
+  remediationLessonsTopicHref,
   remediationTopicDrillHref,
   remediationWeakModeTestHref,
   remediationWeakModeTestHrefForPathway,
@@ -11,6 +12,17 @@ describe("remediation links", () => {
   it("generates topic drill link with encoded topic", () => {
     const href = remediationTopicDrillHref("Cardiac / CVS");
     assert.equal(href, "/app/questions?preset=topic_drill&topic=Cardiac+%2F+CVS");
+  });
+
+  it("preserves pathway context in topic drill and lessons links when available", () => {
+    assert.equal(
+      remediationTopicDrillHref("Cardiac / CVS", "us-rn-nclex-rn"),
+      "/app/questions?preset=topic_drill&topic=Cardiac+%2F+CVS&pathwayId=us-rn-nclex-rn",
+    );
+    assert.equal(
+      remediationLessonsTopicHref("Cardiac / CVS", "cardiac-cvs", "us-rn-nclex-rn"),
+      "/app/lessons?topicSlug=cardiac-cvs&pathwayId=us-rn-nclex-rn",
+    );
   });
 
   it("generates weak-mode link with optional topic", () => {

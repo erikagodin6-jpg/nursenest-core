@@ -43,6 +43,8 @@
     "qa:lesson-flows:all": "npm run qa:lesson-flows && npm run qa:lesson-flows:browser",
     "test:internal-links-audit": "tsx --test scripts/audit-internal-links.test.ts",
     "test:marketing-exam-hub-smoke": "tsx --test scripts/marketing-exam-hub-smoke.test.ts scripts/marketing-exam-hub-degraded-smoke.test.ts",
+    "generate:rn-content": "tsx scripts/generate-rn-content.ts",
+    "generate:rn-content:dry-run": "tsx scripts/generate-rn-content.ts --dry-run",
     "generate:marketing-assets": "node scripts/generate-marketing-assets.mjs",
     "generate:brand-logos": "node scripts/build-transparent-theme-logos.mjs",
     "generate:theme-logos": "npx tsx scripts/generate-theme-logos-from-registry.ts",

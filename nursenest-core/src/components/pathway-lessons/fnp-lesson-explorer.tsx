@@ -214,7 +214,7 @@ export function FnpLessonExplorer({ pathway, lessonsBasePath, explorerLessons, e
             hint="Try clearing filters, widening your search, or returning to the full lesson view for this pathway."
             primaryCta={{ label: "View all lessons on this page", href: lessonsBasePath, variant: "primary" }}
             secondaryCtas={[
-              { label: "Practice questions", href: pathwayHubAppQuestionsHref(pathway), variant: "secondary" },
+              { label: "Practice questions", href: pathwayHubAppQuestionsHref(pathway.id), variant: "secondary" },
             ]}
             className="border-[var(--semantic-border-soft)]"
           />

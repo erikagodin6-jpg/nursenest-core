@@ -10,9 +10,11 @@ import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlemen
 import { maxSafeOffsetPage } from "@/lib/api/api-pagination-limits";
 import { prisma } from "@/lib/db";
 import { withDatabaseFallback } from "@/lib/db/safe-database";
+import { resolveStudySurfaceCatHref } from "@/lib/exam-pathways/pathway-cat-flow";
 import {
   pathwayLessonsAppListWhere,
   pathwayLessonsAppListWhereWithTopicFilter,
+  visiblePathwayIdsForAppLessons,
 } from "@/lib/lessons/app-pathway-lesson-list-scope";
 import { paginateLegacyContentMapLessons } from "@/lib/lessons/legacy-content-map-lessons";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
@@ -128,13 +130,17 @@ export default async function LessonsPage({ searchParams }: Props) {
     !topicSlugFilter && typeof sp.topic === "string" && sp.topic.trim().length > 0 ? sp.topic.trim() : null;
   const pathwayIdFilter =
     typeof sp.pathwayId === "string" && sp.pathwayId.trim().length > 0 ? sp.pathwayId.trim() : null;
+  const learnerPathRow = await withDatabaseFallback(async () =>
+    userId ? prisma.user.findUnique({ where: { id: userId }, select: { learnerPath: true } }) : null,
+  );
+  const learnerPath = learnerPathRow?.learnerPath ?? null;
+  const visiblePathwayIds = visiblePathwayIdsForAppLessons(entitlement, learnerPath);
+  const catHref = resolveStudySurfaceCatHref({
+    pathwayId: pathwayIdFilter ?? learnerPath,
+    availablePathwayIds: visiblePathwayIds,
+  });
 
   const lessonsBlockFromDb = await withDatabaseFallback(async () => {
-    const learnerPathRow = userId
-      ? await prisma.user.findUnique({ where: { id: userId }, select: { learnerPath: true } })
-      : null;
-    const learnerPath = learnerPathRow?.learnerPath ?? null;
-
     const contentWhere = lessonAccessWhere(entitlement);
     const contentTotal = await prisma.contentItem.count({ where: contentWhere });
 
@@ -282,7 +288,7 @@ export default async function LessonsPage({ searchParams }: Props) {
           {t("learner.lessons.list.paginationEnd")}
         </p>
       </div>
-      <LearnerStudyQuickLinksCard t={t} id="lessons-study-quick-links" />
+      <LearnerStudyQuickLinksCard t={t} id="lessons-study-quick-links" catHref={catHref} />
       {(topicFilter || topicSlugFilter) && lessonsBlock.source === "pathway_lessons" ? (
         <div className="nn-card border-[color-mix(in_srgb,var(--semantic-info)_22%,var(--semantic-border-soft))] bg-[var(--semantic-panel-cool)] p-4 text-sm text-[var(--semantic-text-secondary)]">
           <p className="font-semibold text-[var(--semantic-text-primary)]">{t("learner.lessons.list.topicFilterTitle")}</p>

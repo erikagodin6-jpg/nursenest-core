@@ -64,7 +64,7 @@ export function SiteHeader() {
     <div className="sticky top-0 z-50">
       <MarketingHeaderUtilityStrip />
 
-      <header className="nn-header-nav backdrop-blur-md supports-[backdrop-filter]:bg-[color-mix(in_srgb,var(--header-nav-surface)_88%,transparent)]">
+      <header className="nn-header-nav">
         <div className="mx-auto flex h-14 max-w-7xl items-center justify-between gap-2 px-3 sm:gap-4 sm:px-5 lg:h-[3.75rem] lg:gap-6 lg:px-8">
           <Link
             href={localizeHref("/")}

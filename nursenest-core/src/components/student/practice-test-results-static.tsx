@@ -3,10 +3,9 @@ import { BarChart3 } from "lucide-react";
 import { CatResultsCoachSection } from "@/components/student/cat-results-coach-section";
 import type { PracticeTestConfigJson, PracticeTestResultsJson } from "@/lib/practice-tests/types";
 import {
+  remediationCatPracticeHref,
   remediationLessonsTopicHref,
   remediationTopicDrillHref,
-  remediationWeakModeTestHref,
-  remediationWeakModeTestHrefForPathway,
 } from "@/lib/learner/remediation-links";
 import { appPathwayCatSessionStartPath } from "@/lib/exam-pathways/pathway-cat-flow";
 import { semanticFillClassForAccuracyPct } from "@/lib/ui/semantic-progress-fill";
@@ -202,7 +201,7 @@ export function PracticeTestResultsStatic({
           </p>
           <div className="mt-2 flex flex-wrap gap-2">
             <Link
-              href={remediationWeakModeTestHrefForPathway(results.weakAreas[0], config?.pathwayId ?? null)}
+              href={remediationCatPracticeHref(results.weakAreas[0], config?.pathwayId ?? null)}
               className="inline-flex rounded-full bg-role-cta px-4 py-2 text-xs font-semibold text-role-cta-foreground shadow-sm hover:opacity-95"
             >
               {weakFollowUpCopy.retestWeak}
@@ -235,7 +234,7 @@ export function PracticeTestResultsStatic({
                       Topic:{" "}
                       <Link
                         className="font-medium text-[var(--semantic-brand)] underline underline-offset-2"
-                        href={remediationTopicDrillHref(item.topic)}
+                        href={remediationTopicDrillHref(item.topic, config?.pathwayId ?? null)}
                       >
                         {item.topic}
                       </Link>

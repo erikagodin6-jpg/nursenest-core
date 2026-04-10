@@ -14,7 +14,7 @@ import { loginWithCallback, rnQuestions } from "@/lib/marketing/marketing-entry-
 function FLink({
   href,
   children,
-  className = "break-words leading-snug transition-colors [overflow-wrap:anywhere] hover:text-primary",
+  className = "nn-footer-link break-words leading-snug [overflow-wrap:anywhere]",
 }: {
   href: string;
   children: React.ReactNode;
@@ -45,7 +45,7 @@ export function SiteFooter() {
   const learnerSignInHref = withMarketingLocale(locale, loginWithCallback("/app"));
 
   return (
-    <footer className="mt-auto border-t border-[var(--divider,var(--theme-nav-border))] bg-[var(--bg-section,var(--theme-card-bg))] py-[var(--nn-rhythm-footer-y)]">
+    <footer className="nn-footer-surface mt-auto py-[var(--nn-rhythm-footer-y)]">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mb-6 sm:mb-8">
           <EmailSignupBanner />
@@ -204,7 +204,7 @@ export function SiteFooter() {
                 <FLink href="/">{t("footer.linkEcosystemNursenest")}</FLink>
               </li>
               <li>
-                <a href="https://applynest.ca" target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-primary">
+                <a href="https://applynest.ca" target="_blank" rel="noopener noreferrer" className="nn-footer-link">
                   {t("footer.linkEcosystemApplynest")}
                 </a>
               </li>
@@ -221,8 +221,8 @@ export function SiteFooter() {
                   type="button"
                   disabled={disabled}
                   onClick={onSelect}
-                  className={`inline-flex items-center gap-1 text-xs hover:text-primary ${
-                    code === locale ? "font-semibold text-primary" : "text-[var(--theme-muted-text)]"
+                  className={`inline-flex items-center gap-1 text-xs transition-colors hover:text-[var(--theme-heading-text)] ${
+                    code === locale ? "font-semibold text-[var(--theme-heading-text)]" : "text-[var(--theme-muted-text)]"
                   }`}
                 >
                   <span>{flag}</span>
@@ -231,7 +231,7 @@ export function SiteFooter() {
               )}
             />
           </div>
-          <Link href={mapLegacyMarketingHref("/languages")} className="text-xs text-primary hover:underline">
+          <Link href={mapLegacyMarketingHref("/languages")} className="nn-footer-link text-xs">
             {t("footer.viewAllLanguages")}
           </Link>
         </div>

@@ -3,6 +3,9 @@ import { CheckCircle2, Circle, Compass, Flag, Heart, Target } from "lucide-react
 import type { AdaptiveLearnerRecommendations } from "@/lib/learner/adaptive-recommendations";
 import { retentionPromptHints } from "@/lib/learner/exam-plan-engine";
 import { AdaptiveRecommendationLoopPanel } from "@/components/student/adaptive-recommendation-loop-panel";
+import { PH } from "@/lib/observability/posthog-conversion-events";
+import { trackClientEvent } from "@/lib/observability/posthog-client";
+import { buildStudyLoopCatClickProps } from "@/lib/observability/study-loop-cat-analytics";
 
 function trajectoryLabel(t: AdaptiveLearnerRecommendations["trajectory"]): string {
   switch (t) {
@@ -204,6 +207,16 @@ export function AdaptiveStudyOverview({
           <Link
             href={primaryNext.href}
             className="mt-2 flex items-start gap-2 text-base font-semibold text-[var(--theme-heading-text)] hover:underline"
+            onClick={() => {
+              if (primaryNext.kind !== "cat") return;
+              trackClientEvent(
+                PH.learnerStudyLoopCatCtaClicked,
+                buildStudyLoopCatClickProps({
+                  href: primaryNext.href,
+                  sourceSurface: "adaptive_study_overview_primary",
+                }),
+              );
+            }}
           >
             <Target className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden />
             <span>{primaryNext.title}</span>
@@ -223,7 +236,20 @@ export function AdaptiveStudyOverview({
         <ul className="mt-4 space-y-2">
           {secondary.map((s) => (
             <li key={s.href + s.title}>
-              <Link href={s.href} className="text-sm font-medium text-primary hover:underline">
+              <Link
+                href={s.href}
+                className="text-sm font-medium text-primary hover:underline"
+                onClick={() => {
+                  if (s.kind !== "cat") return;
+                  trackClientEvent(
+                    PH.learnerStudyLoopCatCtaClicked,
+                    buildStudyLoopCatClickProps({
+                      href: s.href,
+                      sourceSurface: "adaptive_study_overview_secondary",
+                    }),
+                  );
+                }}
+              >
                 {s.title}
               </Link>
               <span className="text-sm text-muted-foreground"> · {s.reason}</span>

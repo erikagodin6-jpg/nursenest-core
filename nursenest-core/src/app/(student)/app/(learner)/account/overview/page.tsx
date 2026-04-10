@@ -11,7 +11,7 @@ import { LockedStudyNextPreview } from "@/components/student/locked-study-next-p
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
-import { resolveStudySurfaceCatHref } from "@/lib/exam-pathways/pathway-cat-flow";
+import { resolveStudyLoopCatHref } from "@/lib/exam-pathways/study-loop-cat-routing";
 import { buildAdaptiveRecommendations } from "@/lib/learner/adaptive-recommendations";
 import { loadLearnerProfileActivity } from "@/lib/learner/load-learner-profile-activity";
 import { loadPremiumDashboardSnapshot } from "@/lib/learner/premium-dashboard-snapshot";
@@ -159,11 +159,15 @@ export default async function LearnerAccountOverviewPage() {
     premiumSnapshot?.pathways.find((p) => p.lessonsTotal > 0)?.pathwayId ??
     premiumSnapshot?.pathways[0]?.pathwayId ??
     null;
-  const catStartHref = resolveStudySurfaceCatHref({
+  const catStartHref = resolveStudyLoopCatHref({
+    authState: "signed_in",
     pathwayId: preferredPathwayId,
     availablePathwayIds: premiumSnapshot?.pathways.map((p) => p.pathwayId),
+    intent: "start",
   });
-  const practiceNextHref = primaryWeakTopic ? remediationTopicDrillHref(primaryWeakTopic) : "/app/questions";
+  const practiceNextHref = primaryWeakTopic
+    ? remediationTopicDrillHref(primaryWeakTopic, preferredPathwayId)
+    : "/app/questions";
   const lessonsNextHref = premiumSnapshot?.continueLesson?.href?.trim() || "/app/lessons";
   const catNextHref = remediationCatPracticeHref(primaryWeakTopic || undefined, preferredPathwayId);
   const hasInProgressLesson = Boolean(premiumSnapshot?.continueLesson?.href);
@@ -457,7 +461,10 @@ export default async function LearnerAccountOverviewPage() {
                         {acc != null ? t("learner.profile.topics.accuracyLine", { pct: acc }) : t("learner.common.notAvailable")} · {missLabel}
                       </p>
                       <div className="mt-2 flex flex-wrap gap-3">
-                        <Link href={remediationTopicDrillHref(w.topic)} className="text-xs font-semibold text-primary underline">
+                        <Link
+                          href={remediationTopicDrillHref(w.topic, preferredPathwayId)}
+                          className="text-xs font-semibold text-primary underline"
+                        >
                           {t("learner.profile.topics.remediateQbank")}
                         </Link>
                         <Link href={remediationWeakModeTestHrefForPathway(w.topic, preferredPathwayId)} className="text-xs font-semibold text-primary underline">

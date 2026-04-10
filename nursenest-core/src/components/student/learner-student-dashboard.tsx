@@ -7,7 +7,7 @@ import { readinessBandLabel } from "@/lib/learner/readiness-score";
 import type { LearnerMarketingT } from "@/lib/learner/learner-marketing-server";
 import type { WeakAreaInsight, WeaknessTier } from "@/lib/insights/types";
 import type { RecentLearnerNoteSummary } from "@/components/student/premium-learner-hub";
-import { appPathwayCatSessionStartPath } from "@/lib/exam-pathways/pathway-cat-flow";
+import { resolveStudyLoopCatDestination } from "@/lib/exam-pathways/study-loop-cat-routing";
 
 function tierClass(tier: WeaknessTier): string {
   switch (tier) {
@@ -134,7 +134,12 @@ export function LearnerStudentDashboard({
 
   const lessonsHref = continueLesson?.href ?? "/app/lessons";
   const preferredPathwayId = snapshot.pathways.find((p) => p.lessonsTotal > 0)?.pathwayId ?? snapshot.pathways[0]?.pathwayId ?? null;
-  const catStartHref = preferredPathwayId ? appPathwayCatSessionStartPath(preferredPathwayId) : "/app/practice-tests/start";
+  const catStart = resolveStudyLoopCatDestination({
+    authState: "signed_in",
+    pathwayId: preferredPathwayId,
+    availablePathwayIds: snapshot.pathways.map((p) => p.pathwayId),
+    intent: "start",
+  });
 
   return (
     <div className="space-y-5">
@@ -316,15 +321,15 @@ export function LearnerStudentDashboard({
             </li>
             <li>
               <Link
-                href={catStartHref}
+                href={catStart.href}
                 className="group flex items-center justify-between gap-3 rounded-xl border border-border/60 bg-muted/5 px-3 py-3 transition-colors hover:bg-muted/20"
               >
                 <div className="min-w-0">
                   <p className="font-semibold text-foreground">{t("learner.dashboard.student.quick.cat")}</p>
                   <p className="text-xs text-muted-foreground">{t("learner.dashboard.student.quick.catSub")}</p>
-                  <p className="mt-1 text-[10px] text-muted-foreground">
-                    Multiple tracks? You’ll choose the pathway next.
-                  </p>
+                  {catStart.kind === "generic_chooser" ? (
+                    <p className="mt-1 text-[10px] text-muted-foreground">Multiple tracks? You’ll choose the pathway next.</p>
+                  ) : null}
                 </div>
                 <ArrowRight className="h-4 w-4 shrink-0 text-primary transition-transform group-hover:translate-x-0.5" aria-hidden />
               </Link>

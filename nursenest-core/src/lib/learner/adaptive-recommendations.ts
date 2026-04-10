@@ -24,7 +24,6 @@ import {
   weeksRemainingRounded,
   type ExamUrgency,
 } from "@/lib/learner/exam-timeline";
-import { resolveStudySurfaceCatHref } from "@/lib/exam-pathways/pathway-cat-flow";
 
 export type PaceStatus = "on_pace" | "slightly_behind" | "behind_weak_review" | "final_review";
 

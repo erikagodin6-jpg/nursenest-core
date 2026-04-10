@@ -13,6 +13,7 @@ describe("safe-relative-href", () => {
     assert.equal(isSafeRelativeNavHref("/a/../b"), false);
     assert.equal(isSafeRelativeNavHref("https://x.com/"), false);
     assert.equal(isSafeRelativeNavHref("javascript:alert(1)"), false);
+    assert.equal(isSafeRelativeNavHref("/x/http://injected"), false);
   });
 
   it("sanitizeRelativeNavHrefOrFallback returns fallback for unsafe", () => {

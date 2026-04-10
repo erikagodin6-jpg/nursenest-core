@@ -7,6 +7,8 @@ export function isSafeRelativeNavHref(href: string): boolean {
   const t = href.trim();
   if (t.length === 0 || t.length > 2048) return false;
   if (!t.startsWith("/") || t.startsWith("//")) return false;
+  // Reject absolute / scheme-bearing URLs (e.g. http:, javascript:) even if malformed.
+  if (t.includes("://")) return false;
   if (t.includes("..") || t.includes("\\")) return false;
   if (/[\u0000-\u001f\u007f]/.test(t)) return false;
   return true;
