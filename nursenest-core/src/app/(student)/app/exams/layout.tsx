@@ -10,9 +10,21 @@ import "./exam-shell.css";
 export const dynamic = "force-dynamic";
 
 export default async function ExamShellLayout({ children }: { children: React.ReactNode }) {
-  const session = await auth();
-  const userId = (session?.user as { id?: string })?.id ?? "";
-  const { t } = await getLearnerMarketingBundle();
+  let session = null;
+  let t: (key: string) => string = (key) => key;
+
+  try {
+    [session] = await Promise.all([auth()]);
+    const bundle = await getLearnerMarketingBundle();
+    t = bundle.t;
+  } catch (e) {
+    console.error("[exam-shell-layout] failed to load session or i18n bundle", {
+      error: e instanceof Error ? e.message : String(e),
+    });
+    // Fallback t() returns the key — exam shell renders with raw keys rather than crashing.
+  }
+
+  const userId = (session?.user as { id?: string } | null)?.id ?? "";
 
   if (!userId) {
     return (

@@ -10,6 +10,7 @@ import { buildMinimalCatStudyFeedbackPayload } from "@/lib/practice-tests/cat-pr
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { enforcePracticeTestDetailProtection } from "@/lib/http/api-protection";
 import { parsePracticeTestConfigAtBoundary } from "@/lib/practice-tests/practice-test-config-boundary";
+
 function asIdList(raw: unknown): string[] {
   if (!Array.isArray(raw)) return [];
   return raw.filter((x): x is string => typeof x === "string" && x.length > 4);
@@ -37,9 +38,23 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string 
     userId: gate.userId,
   });
 
-  const row = await prisma.practiceTest.findFirst({
-    where: { id, userId: gate.userId },
-  });
+  let row: Awaited<ReturnType<typeof prisma.practiceTest.findFirst>>;
+  try {
+    row = await prisma.practiceTest.findFirst({
+      where: { id, userId: gate.userId },
+    });
+  } catch (e) {
+    console.error("[api/practice-tests/cat-study-review] db query failed", {
+      id,
+      userId: gate.userId,
+      error: e instanceof Error ? e.message : String(e),
+    });
+    return NextResponse.json(
+      { error: "Unable to load study review at this time. Please try again." },
+      { status: 500 },
+    );
+  }
+
   if (!row || row.status !== PracticeTestStatus.IN_PROGRESS) {
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
@@ -83,7 +98,19 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string 
     return NextResponse.json({ studyFeedback: fallback, degraded: true });
   }
 
-  let feedback = await buildCatStudyFeedback(qid, userAns, gate.entitlement, cfg.pathwayId ?? null);
+  let feedback: Awaited<ReturnType<typeof buildCatStudyFeedback>>;
+  try {
+    feedback = await buildCatStudyFeedback(qid, userAns, gate.entitlement, cfg.pathwayId ?? null);
+  } catch (e) {
+    console.error("[api/practice-tests/cat-study-review] buildCatStudyFeedback failed", {
+      id,
+      qid,
+      userId: gate.userId,
+      error: e instanceof Error ? e.message : String(e),
+    });
+    feedback = null;
+  }
+
   if (!feedback) {
     safeServerLog("cat_runner", "cat_study_feedback_build_failed", {
       event: "cat_study_feedback_build_failed",

@@ -9,6 +9,7 @@ import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messa
 import { getMarketingRegionFromCookies } from "@/lib/region/marketing-region-server";
 import { MarketingMainErrorBoundary } from "@/components/marketing/marketing-main-error-boundary";
 import { NursenestRegionRoot } from "@/lib/region/use-nursenest-region";
+import type { MarketingRegionToggle } from "@/lib/marketing/marketing-entry-routes";
 
 export default async function MarketingLocaleLayout({
   children,
@@ -19,11 +20,26 @@ export default async function MarketingLocaleLayout({
 }) {
   const { locale } = await params;
   if (!isCoreHostedNonDefaultLocale(locale)) notFound();
-  /** Cookie sync: `cookies().set` is not allowed in RSC; {@link MarketingLocaleUrlSync} calls the server action. */
-  const serverRegion = await getMarketingRegionFromCookies();
-  const messages = await loadMarketingMessages(locale);
-  const fallbackMessages =
-    locale === DEFAULT_MARKETING_LOCALE ? undefined : await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
+
+  let serverRegion: MarketingRegionToggle = "US";
+  let messages: Record<string, string> = {};
+  let fallbackMessages: Record<string, string> | undefined = undefined;
+
+  try {
+    /** Cookie sync: `cookies().set` is not allowed in RSC; {@link MarketingLocaleUrlSync} calls the server action. */
+    serverRegion = (await getMarketingRegionFromCookies()) as MarketingRegionToggle;
+    messages = await loadMarketingMessages(locale);
+    if (locale !== DEFAULT_MARKETING_LOCALE) {
+      fallbackMessages = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
+    }
+  } catch (e) {
+    console.error("[marketing-locale-layout] failed to load locale/region data", {
+      error: e instanceof Error ? e.message : String(e),
+      locale,
+    });
+    // Continue with defaults — localized pages render in English without crashing.
+  }
+
   return (
     <MarketingI18nProvider key={locale} locale={locale} messages={messages} fallbackMessages={fallbackMessages}>
       <NursenestRegionRoot serverRegion={serverRegion}>

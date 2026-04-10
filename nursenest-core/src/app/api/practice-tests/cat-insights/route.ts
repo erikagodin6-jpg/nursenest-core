@@ -34,27 +34,40 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "Page out of range" }, { status: 400 });
   }
 
-  const rows = await prisma.practiceTest.findMany({
-    where: {
-      userId: gate.userId,
-      status: PracticeTestStatus.COMPLETED,
-      NOT: { completedAt: null },
-      config: {
-        path: ["selectionMode"],
-        equals: "cat",
+  let rows: { id: string; title: string | null; completedAt: Date | null; config: unknown; results: unknown }[];
+  try {
+    rows = await prisma.practiceTest.findMany({
+      where: {
+        userId: gate.userId,
+        status: PracticeTestStatus.COMPLETED,
+        NOT: { completedAt: null },
+        config: {
+          path: ["selectionMode"],
+          equals: "cat",
+        },
       },
-    },
-    orderBy: { completedAt: "desc" },
-    skip,
-    take: PAGE_SIZE + 1,
-    select: {
-      id: true,
-      title: true,
-      completedAt: true,
-      config: true,
-      results: true,
-    },
-  });
+      orderBy: { completedAt: "desc" },
+      skip,
+      take: PAGE_SIZE + 1,
+      select: {
+        id: true,
+        title: true,
+        completedAt: true,
+        config: true,
+        results: true,
+      },
+    });
+  } catch (e) {
+    console.error("[api/practice-tests/cat-insights] db query failed", {
+      userId: gate.userId,
+      page: pageNum,
+      error: e instanceof Error ? e.message : String(e),
+    });
+    return NextResponse.json(
+      { error: "Unable to load CAT insights at this time. Please try again." },
+      { status: 500 },
+    );
+  }
 
   const hasMore = rows.length > PAGE_SIZE;
   const slice = hasMore ? rows.slice(0, PAGE_SIZE) : rows;

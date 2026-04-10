@@ -8,13 +8,29 @@ import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
 import { getMarketingRegionFromCookies } from "@/lib/region/marketing-region-server";
 import { NursenestRegionRoot } from "@/lib/region/use-nursenest-region";
+import type { MarketingRegionToggle } from "@/lib/marketing/marketing-entry-routes";
 
 export default async function MarketingDefaultLocaleLayout({ children }: { children: React.ReactNode }) {
-  const resolvedLocale = await getMarketingLocaleForDefaultRoute();
-  const serverRegion = await getMarketingRegionFromCookies();
-  const messages = await loadMarketingMessages(resolvedLocale);
-  const fallbackMessages =
-    resolvedLocale === DEFAULT_MARKETING_LOCALE ? undefined : await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
+  let resolvedLocale: string = DEFAULT_MARKETING_LOCALE;
+  let serverRegion: MarketingRegionToggle = "US";
+  let messages: Record<string, string> = {};
+  let fallbackMessages: Record<string, string> | undefined = undefined;
+
+  try {
+    resolvedLocale = await getMarketingLocaleForDefaultRoute();
+    serverRegion = (await getMarketingRegionFromCookies()) as MarketingRegionToggle;
+    messages = await loadMarketingMessages(resolvedLocale);
+    if (resolvedLocale !== DEFAULT_MARKETING_LOCALE) {
+      fallbackMessages = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
+    }
+  } catch (e) {
+    console.error("[marketing-default-layout] failed to load locale/region data", {
+      error: e instanceof Error ? e.message : String(e),
+      locale: resolvedLocale,
+    });
+    // Continue with defaults — pages will render in English without crashing.
+  }
+
   return (
     <MarketingI18nProvider
       key={resolvedLocale}
