@@ -5,19 +5,7 @@ import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
-
-function safeCallbackPath(raw: string | null): string | null {
-  if (!raw?.trim()) return null;
-  try {
-    const origin = typeof window !== "undefined" ? window.location.origin : "http://localhost";
-    const u = new URL(raw, origin);
-    if (u.origin !== new URL(origin).origin) return null;
-    if (!u.pathname.startsWith("/")) return null;
-    return `${u.pathname}${u.search}${u.hash}`;
-  } catch {
-    return null;
-  }
-}
+import { safeCallbackPath } from "@/lib/auth/safe-callback-path";
 
 export function LoginForm({
   forgotPasswordHref = "/forgot-password",

@@ -2,7 +2,7 @@
 
 import { useCallback, useMemo, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { TurnstileSignup } from "@/components/auth/turnstile-signup";
 import {
   reconcileExamFocusForCountry,
@@ -12,6 +12,8 @@ import {
 import { trackClientEvent } from "@/lib/observability/posthog-client";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
+import { withMarketingLocale } from "@/lib/i18n/marketing-path";
+import { safeCallbackPath } from "@/lib/auth/safe-callback-path";
 
 export function SignupForm({
   termsHref = "/terms",
@@ -20,8 +22,13 @@ export function SignupForm({
   termsHref?: string;
   privacyHref?: string;
 } = {}) {
-  const { t } = useMarketingI18n();
+  const { t, locale } = useMarketingI18n();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const loginAfterSignupHref = useMemo(() => {
+    const target = safeCallbackPath(searchParams.get("callbackUrl")) ?? "/app";
+    return `${withMarketingLocale(locale, "/login")}?callbackUrl=${encodeURIComponent(target)}`;
+  }, [searchParams, locale]);
   const [error, setError] = useState<string | null>(null);
   const [captchaToken, setCaptchaToken] = useState<string | null>(null);
   const [country, setCountry] = useState<"CA" | "US">("CA");
@@ -68,7 +75,7 @@ export function SignupForm({
       exam_focus: examFocus,
       country,
     });
-    router.push("/login");
+    router.push(loginAfterSignupHref);
   }
 
   return (
@@ -189,6 +196,11 @@ export function SignupForm({
       <button className="nn-btn-primary w-full px-4 py-3 text-base font-semibold" type="submit">
         {t("pages.signup.createAccount")}
       </button>
+      <p className="text-center text-sm text-muted-foreground">
+        <Link href={loginAfterSignupHref} className="font-semibold text-primary underline-offset-2 hover:underline">
+          {t("pages.signup.alreadyHaveAccount")}
+        </Link>
+      </p>
     </form>
   );
 }
