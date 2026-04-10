@@ -54,7 +54,7 @@ export function PathwayLessonQuizzes({
   return (
     <div className="nn-study-card nn-study-card--wash mt-10 space-y-8 p-5 sm:p-6">
       {!fullAccess ? (
-        <aside className="nn-study-callout border-[color-mix(in_srgb,var(--theme-primary)_10%,var(--border-subtle))] p-4 text-sm text-[var(--theme-body-text)]">
+        <aside className="nn-study-callout p-4 text-sm text-[var(--theme-body-text)]">
           <span className="font-medium text-foreground">Preview mode: </span>
           Pre/post questions are shown without highlighted answers or rationales. Full lesson access unlocks scoring-style
           review aligned with your plan.

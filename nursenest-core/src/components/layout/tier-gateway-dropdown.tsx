@@ -155,7 +155,7 @@ export function TierGatewayDropdown({
                   <Link
                     href={href}
                     role="menuitem"
-                    className="group flex items-start gap-3 rounded-xl px-3 py-2.5 transition-colors hover:bg-[color-mix(in_srgb,var(--theme-primary)_8%,var(--theme-page-bg))]"
+                    className="group flex items-start gap-3 rounded-xl px-3 py-2.5 transition-colors hover:bg-[var(--surface-accent-soft)]"
                     onClick={() => {
                       setOpen(false);
                       trackClientEvent(PH.marketingNavClick, {
@@ -166,7 +166,7 @@ export function TierGatewayDropdown({
                       });
                     }}
                   >
-                    <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[color-mix(in_srgb,var(--theme-primary)_10%,var(--theme-page-bg))] text-[var(--theme-primary)] transition-colors group-hover:bg-[color-mix(in_srgb,var(--theme-primary)_16%,var(--theme-page-bg))]">
+                    <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[var(--surface-accent-soft)] text-[var(--text-accent)] transition-colors group-hover:bg-[var(--surface-bubble)]">
                       <Icon className="h-4 w-4" strokeWidth={1.75} aria-hidden />
                     </span>
                     <span className="min-w-0">
