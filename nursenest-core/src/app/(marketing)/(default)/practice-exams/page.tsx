@@ -10,34 +10,40 @@ import {
   defaultPracticeExamsMetaDescription,
   defaultPracticeExamsMetaTitle,
 } from "@/lib/marketing/nursing-tier-public-labels";
+import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
 export const revalidate = 600;
 
 export async function generateMetadata(): Promise<Metadata> {
-  const locale = await getMarketingLocaleForDefaultRoute();
-  const marketingRegion = await getMarketingRegionFromCookies();
-  const m = await loadMarketingMessages(locale);
-  const en = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
-  const metaSfx = marketingRegion === "US" ? "US" : "CA";
-  const title = resolveMarketingCopy(
-    m,
-    `pages.publicPracticeExams.metaTitle${metaSfx}`,
-    en,
-    defaultPracticeExamsMetaTitle(marketingRegion),
+  return safeGenerateMetadata(
+    async () => {
+      const locale = await getMarketingLocaleForDefaultRoute();
+      const marketingRegion = await getMarketingRegionFromCookies();
+      const m = await loadMarketingMessages(locale);
+      const en = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
+      const metaSfx = marketingRegion === "US" ? "US" : "CA";
+      const title = resolveMarketingCopy(
+        m,
+        `pages.publicPracticeExams.metaTitle${metaSfx}`,
+        en,
+        defaultPracticeExamsMetaTitle(marketingRegion),
+      );
+      const description = resolveMarketingCopy(
+        m,
+        `pages.publicPracticeExams.metaDescription${metaSfx}`,
+        en,
+        defaultPracticeExamsMetaDescription(marketingRegion),
+      );
+      const alt = marketingAlternatesSharedPage(locale, "/practice-exams");
+      return {
+        title,
+        description,
+        alternates: { canonical: alt.canonical, languages: alt.languages },
+        openGraph: { title, description, url: alt.canonical, type: "website" },
+      };
+    },
+    { pathname: "/practice-exams", routeGroup: "marketing.default.practice_exams" },
   );
-  const description = resolveMarketingCopy(
-    m,
-    `pages.publicPracticeExams.metaDescription${metaSfx}`,
-    en,
-    defaultPracticeExamsMetaDescription(marketingRegion),
-  );
-  const alt = marketingAlternatesSharedPage(locale, "/practice-exams");
-  return {
-    title,
-    description,
-    alternates: { canonical: alt.canonical, languages: alt.languages },
-    openGraph: { title, description, url: alt.canonical, type: "website" },
-  };
 }
 
 export default async function PracticeExamsHubPage() {

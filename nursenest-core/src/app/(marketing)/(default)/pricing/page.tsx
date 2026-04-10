@@ -7,21 +7,27 @@ import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-s
 import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
 import { marketingPricingBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
+import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const m = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
-  const alt = marketingAlternatesSharedPage(DEFAULT_MARKETING_LOCALE, "/pricing");
-  return {
-    title: m["pages.pricing.title"],
-    description: m["pages.pricing.description"],
-    alternates: { canonical: alt.canonical, languages: alt.languages },
-    openGraph: {
-      title: m["pages.pricing.title"],
-      description: m["pages.pricing.description"],
-      url: alt.canonical,
-      type: "website",
+  return safeGenerateMetadata(
+    async () => {
+      const m = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
+      const alt = marketingAlternatesSharedPage(DEFAULT_MARKETING_LOCALE, "/pricing");
+      return {
+        title: m["pages.pricing.title"],
+        description: m["pages.pricing.description"],
+        alternates: { canonical: alt.canonical, languages: alt.languages },
+        openGraph: {
+          title: m["pages.pricing.title"],
+          description: m["pages.pricing.description"],
+          url: alt.canonical,
+          type: "website",
+        },
+      };
     },
-  };
+    { pathname: "/pricing", locale: DEFAULT_MARKETING_LOCALE, routeGroup: "marketing.default.pricing" },
+  );
 }
 
 export default async function PricingPage() {

@@ -13,32 +13,38 @@ import {
   defaultFlashcardsMetaDescription,
   defaultFlashcardsMetaTitle,
 } from "@/lib/marketing/nursing-tier-public-labels";
+import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
 export const dynamic = "force-dynamic";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const locale = await getMarketingLocaleForDefaultRoute();
-  const marketingRegion = await getMarketingRegionFromCookies();
-  const m = await loadMarketingMessages(locale);
-  const en = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
-  const metaSfx = marketingRegion === "US" ? "US" : "CA";
-  const title = resolveMarketingCopy(
-    m,
-    `pages.publicFlashcardsHub.metaTitle${metaSfx}`,
-    en,
-    defaultFlashcardsMetaTitle(marketingRegion),
+  return safeGenerateMetadata(
+    async () => {
+      const locale = await getMarketingLocaleForDefaultRoute();
+      const marketingRegion = await getMarketingRegionFromCookies();
+      const m = await loadMarketingMessages(locale);
+      const en = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
+      const metaSfx = marketingRegion === "US" ? "US" : "CA";
+      const title = resolveMarketingCopy(
+        m,
+        `pages.publicFlashcardsHub.metaTitle${metaSfx}`,
+        en,
+        defaultFlashcardsMetaTitle(marketingRegion),
+      );
+      const description = resolveMarketingCopy(
+        m,
+        `pages.publicFlashcardsHub.metaDescription${metaSfx}`,
+        en,
+        defaultFlashcardsMetaDescription(marketingRegion),
+      );
+      return {
+        title,
+        description,
+        alternates: { canonical: absoluteUrl("/flashcards") },
+      };
+    },
+    { pathname: "/flashcards", routeGroup: "marketing.default.flashcards" },
   );
-  const description = resolveMarketingCopy(
-    m,
-    `pages.publicFlashcardsHub.metaDescription${metaSfx}`,
-    en,
-    defaultFlashcardsMetaDescription(marketingRegion),
-  );
-  return {
-    title,
-    description,
-    alternates: { canonical: absoluteUrl("/flashcards") },
-  };
 }
 
 export default async function PublicFlashcardsHubPage() {

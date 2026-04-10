@@ -6,6 +6,7 @@ import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
 import type { MarketingMessages } from "@/lib/marketing-i18n-core";
 import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
+import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -48,16 +49,22 @@ async function metaForSlug(
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const enMessages = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
-  const m = await metaForSlug(slug, enMessages);
-  if (!m) return {};
-  const alt = marketingAlternatesSharedPage(DEFAULT_MARKETING_LOCALE, `/tools/${slug}`);
-  return {
-    title: m.title,
-    description: m.description,
-    alternates: { canonical: alt.canonical, languages: alt.languages },
-    openGraph: { title: m.title, description: m.description, url: alt.canonical, type: "website" },
-  };
+  const pathname = `/tools/${slug}`;
+  return safeGenerateMetadata(
+    async () => {
+      const enMessages = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
+      const m = await metaForSlug(slug, enMessages);
+      if (!m) return {};
+      const alt = marketingAlternatesSharedPage(DEFAULT_MARKETING_LOCALE, `/tools/${slug}`);
+      return {
+        title: m.title,
+        description: m.description,
+        alternates: { canonical: alt.canonical, languages: alt.languages },
+        openGraph: { title: m.title, description: m.description, url: alt.canonical, type: "website" },
+      };
+    },
+    { pathname, locale: DEFAULT_MARKETING_LOCALE, routeGroup: "marketing.default.tools.slug" },
+  );
 }
 
 export default async function ToolPage({ params }: Props) {

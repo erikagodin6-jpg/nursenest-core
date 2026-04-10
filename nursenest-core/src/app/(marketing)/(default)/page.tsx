@@ -12,35 +12,41 @@ import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-s
 import { resolveMarketingCopy } from "@/lib/marketing-i18n-core";
 import { getMarketingRegionFromCookies } from "@/lib/region/marketing-region-server";
 import { defaultHomeMetaDescription, defaultHomeMetaTitle } from "@/lib/marketing/nursing-tier-public-labels";
+import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
 /** ISR: homepage shell (lesson teaser strip removed — routing-first layout). */
 export const revalidate = 600;
 
 export async function generateMetadata(): Promise<Metadata> {
-  const locale = await getMarketingLocaleForDefaultRoute();
-  const marketingRegion = await getMarketingRegionFromCookies();
-  const m = await loadMarketingMessages(locale);
-  const en = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
-  const metaSfx = marketingRegion === "US" ? "US" : "CA";
-  const title = resolveMarketingCopy(m, `pages.home.metaTitle${metaSfx}`, en, defaultHomeMetaTitle(marketingRegion));
-  const description = resolveMarketingCopy(
-    m,
-    `pages.home.metaDescription${metaSfx}`,
-    en,
-    defaultHomeMetaDescription(marketingRegion),
-  );
-  const alt = marketingAlternatesSharedPage(locale, "/");
-  return {
-    title,
-    description,
-    alternates: { canonical: alt.canonical, languages: alt.languages },
-    openGraph: {
-      title,
-      description,
-      url: alt.canonical,
-      type: "website",
+  return safeGenerateMetadata(
+    async () => {
+      const locale = await getMarketingLocaleForDefaultRoute();
+      const marketingRegion = await getMarketingRegionFromCookies();
+      const m = await loadMarketingMessages(locale);
+      const en = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
+      const metaSfx = marketingRegion === "US" ? "US" : "CA";
+      const title = resolveMarketingCopy(m, `pages.home.metaTitle${metaSfx}`, en, defaultHomeMetaTitle(marketingRegion));
+      const description = resolveMarketingCopy(
+        m,
+        `pages.home.metaDescription${metaSfx}`,
+        en,
+        defaultHomeMetaDescription(marketingRegion),
+      );
+      const alt = marketingAlternatesSharedPage(locale, "/");
+      return {
+        title,
+        description,
+        alternates: { canonical: alt.canonical, languages: alt.languages },
+        openGraph: {
+          title,
+          description,
+          url: alt.canonical,
+          type: "website",
+        },
+      };
     },
-  };
+    { pathname: "/", routeGroup: "marketing.default.home" },
+  );
 }
 
 export default async function HomePage() {

@@ -23,6 +23,7 @@ import {
 } from "@/lib/blog/blog-seo-automation";
 import { blogPostBreadcrumbsWithOptionalCategory } from "@/lib/seo/pathway-breadcrumbs";
 import type { BlogPost } from "@prisma/client";
+import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -31,26 +32,32 @@ export const revalidate = 120;
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const visible = await isBlogPostMetaVisible(slug);
-  if (!visible) return {};
-  const post = await getBlogPostMetaBySlug(slug);
-  if (!post) return {};
-  const seo = parseInternalLinkPlanJson(post.internalLinkPlan).seo;
-  const title = post.seoTitle?.trim() || post.title;
-  const description = (post.seoDescription?.trim() || post.excerpt).slice(0, 160);
-  const og = resolveOpenGraphCopy(seo, title, description);
-  const canonical = resolvePublicCanonicalUrl(slug, seo);
-  return {
-    title,
-    description,
-    alternates: { canonical },
-    openGraph: {
-      title: og.title,
-      description: og.description,
-      url: canonical,
-      type: "article",
+  const pathname = `/blog/${slug}`;
+  return safeGenerateMetadata(
+    async () => {
+      const visible = await isBlogPostMetaVisible(slug);
+      if (!visible) return {};
+      const post = await getBlogPostMetaBySlug(slug);
+      if (!post) return {};
+      const seo = parseInternalLinkPlanJson(post.internalLinkPlan).seo;
+      const title = post.seoTitle?.trim() || post.title;
+      const description = (post.seoDescription?.trim() || post.excerpt).slice(0, 160);
+      const og = resolveOpenGraphCopy(seo, title, description);
+      const canonical = resolvePublicCanonicalUrl(slug, seo);
+      return {
+        title,
+        description,
+        alternates: { canonical },
+        openGraph: {
+          title: og.title,
+          description: og.description,
+          url: canonical,
+          type: "article",
+        },
+      };
     },
-  };
+    { pathname, routeGroup: "marketing.default.blog.slug" },
+  );
 }
 
 function isDbPost(p: BlogPost | ReturnType<typeof staticRecordToBlogDisplay>): p is BlogPost {

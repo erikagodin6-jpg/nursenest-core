@@ -6,6 +6,7 @@ import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-s
 import { buildProgrammaticMetadata } from "@/lib/seo/programmatic-metadata";
 import { getMarketingRegionFromCookies } from "@/lib/region/marketing-region-server";
 import { resolveProgrammaticSeoForLocale } from "@/lib/seo/resolve-programmatic-seo";
+import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
 /** Build-time prerender disabled: full slug list inflates `.next` on disk-limited hosts; pages are ISR on demand. */
 export const dynamicParams = true;
@@ -22,10 +23,16 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const locale = await getMarketingLocaleForDefaultRoute();
-  const resolved = resolveProgrammaticSeoForLocale(slug, locale);
-  if (!resolved) return {};
-  return buildProgrammaticMetadata(resolved.page, DEFAULT_MARKETING_LOCALE);
+  const pathname = `/seo/${slug}`;
+  return safeGenerateMetadata(
+    async () => {
+      const locale = await getMarketingLocaleForDefaultRoute();
+      const resolved = resolveProgrammaticSeoForLocale(slug, locale);
+      if (!resolved) return {};
+      return buildProgrammaticMetadata(resolved.page, DEFAULT_MARKETING_LOCALE);
+    },
+    { pathname, routeGroup: "marketing.default.programmatic_seo" },
+  );
 }
 
 export default async function ProgrammaticSeoRewriteTarget({ params }: { params: Promise<{ slug: string }> }) {

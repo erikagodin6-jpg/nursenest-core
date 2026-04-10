@@ -18,34 +18,40 @@ import {
   defaultPublicLessonsMetaDescription,
   defaultPublicLessonsMetaTitle,
 } from "@/lib/marketing/nursing-tier-public-labels";
+import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
 export const revalidate = 600;
 
 export async function generateMetadata(): Promise<Metadata> {
-  const locale = await getMarketingLocaleForDefaultRoute();
-  const marketingRegion = await getMarketingRegionFromCookies();
-  const m = await loadMarketingMessages(locale);
-  const en = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
-  const metaSfx = marketingRegion === "US" ? "US" : "CA";
-  const title = resolveMarketingCopy(
-    m,
-    `pages.publicLessons.metaTitle${metaSfx}`,
-    en,
-    defaultPublicLessonsMetaTitle(marketingRegion),
+  return safeGenerateMetadata(
+    async () => {
+      const locale = await getMarketingLocaleForDefaultRoute();
+      const marketingRegion = await getMarketingRegionFromCookies();
+      const m = await loadMarketingMessages(locale);
+      const en = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
+      const metaSfx = marketingRegion === "US" ? "US" : "CA";
+      const title = resolveMarketingCopy(
+        m,
+        `pages.publicLessons.metaTitle${metaSfx}`,
+        en,
+        defaultPublicLessonsMetaTitle(marketingRegion),
+      );
+      const description = resolveMarketingCopy(
+        m,
+        `pages.publicLessons.metaDescription${metaSfx}`,
+        en,
+        defaultPublicLessonsMetaDescription(marketingRegion),
+      );
+      const alt = marketingAlternatesSharedPage(locale, "/lessons");
+      return {
+        title,
+        description,
+        alternates: { canonical: alt.canonical, languages: alt.languages },
+        openGraph: { title, description, url: alt.canonical, type: "website" },
+      };
+    },
+    { pathname: "/lessons", routeGroup: "marketing.default.lessons" },
   );
-  const description = resolveMarketingCopy(
-    m,
-    `pages.publicLessons.metaDescription${metaSfx}`,
-    en,
-    defaultPublicLessonsMetaDescription(marketingRegion),
-  );
-  const alt = marketingAlternatesSharedPage(locale, "/lessons");
-  return {
-    title,
-    description,
-    alternates: { canonical: alt.canonical, languages: alt.languages },
-    openGraph: { title, description, url: alt.canonical, type: "website" },
-  };
 }
 
 export default async function PublicLessonsLandingPage() {

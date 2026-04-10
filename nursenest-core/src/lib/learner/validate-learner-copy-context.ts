@@ -4,6 +4,7 @@ import { safeServerLog } from "@/lib/observability/safe-server-log";
 export type LearnerCopySurface =
   | "hub_hero"
   | "hub_trust"
+  | "lesson_header"
   | "cat_coach"
   | "cat_rationale"
   | "recommendation_card"

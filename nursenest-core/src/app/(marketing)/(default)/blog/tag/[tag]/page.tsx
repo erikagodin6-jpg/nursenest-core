@@ -11,6 +11,7 @@ import {
 import { MarketingStudyCrossLinks } from "@/components/seo/marketing-study-cross-links";
 import { blogTagBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 import { absoluteUrl } from "@/lib/seo/site-origin";
+import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
 type Props = { params: Promise<{ tag: string }>; searchParams: Promise<{ page?: string }> };
 
@@ -25,18 +26,23 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { tag } = await params;
   const decoded = decodeURIComponent(tag).trim();
-  const count = await countPublishedPostsWithTag(decoded);
-  const sp = await searchParams;
-  const raw = Number(sp.page ?? "1");
-  const page = Number.isFinite(raw) && raw >= 1 ? Math.floor(raw) : 1;
-  const path = `/blog/tag/${encodeURIComponent(decoded)}`;
-  const canonicalPath = page <= 1 ? path : `${path}?page=${page}`;
-  return {
-    title: `Posts tagged “${decoded}” | NurseNest blog`,
-    alternates: { canonical: absoluteUrl(canonicalPath) },
-    openGraph: { url: absoluteUrl(canonicalPath) },
-    ...(count === 0 ? { robots: { index: false, follow: true } } : {}),
-  };
+  return safeGenerateMetadata(
+    async () => {
+      const count = await countPublishedPostsWithTag(decoded);
+      const sp = await searchParams;
+      const raw = Number(sp.page ?? "1");
+      const page = Number.isFinite(raw) && raw >= 1 ? Math.floor(raw) : 1;
+      const path = `/blog/tag/${encodeURIComponent(decoded)}`;
+      const canonicalPath = page <= 1 ? path : `${path}?page=${page}`;
+      return {
+        title: `Posts tagged “${decoded}” | NurseNest blog`,
+        alternates: { canonical: absoluteUrl(canonicalPath) },
+        openGraph: { url: absoluteUrl(canonicalPath) },
+        ...(count === 0 ? { robots: { index: false, follow: true } } : {}),
+      };
+    },
+    { pathname: `/blog/tag/${encodeURIComponent(decoded)}`, routeGroup: "marketing.default.blog.tag" },
+  );
 }
 
 export default async function BlogTagPage({ params, searchParams }: Props) {

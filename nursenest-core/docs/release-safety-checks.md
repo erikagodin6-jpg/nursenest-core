@@ -13,16 +13,18 @@ This runs, in order:
 
 1. **`npm run typecheck`** — TypeScript compile without emit.
 2. **`npm run validate:content`** — Registry + marketing hub path + English `nav.examStrip.*` keys + duplicate pathway routes (see below).
-3. **`npm run test:release-safety`** — Route integrity (exam hubs, CAT entry links), hub fallback shapes, `PracticeTest.config` boundary parsing, production i18n missing-key fallback.
-4. **`npm run test:internal-links-audit`** — Validator unit tests for internal path rules.
+3. **`npm run validate:programmatic-seo`** — Programmatic SEO registry consistency.
+4. **`npm run validate:exam-guardrails`** — Pathway-scoped catalog slices vs cross-country terminology (see `scripts/validate-exam-content-guardrails.mjs`).
+5. **`npm run test:release-safety`** — Route integrity (exam hubs, CAT entry links), hub fallback shapes, `PracticeTest.config` boundary parsing, route fallback tracker smoke, production i18n missing-key fallback.
+6. **`npm run test:internal-links-audit`** — Validator unit tests for internal path rules.
 
 ## Individual scripts
 
 | Command | What it checks | Blocking? |
 |--------|----------------|------------|
 | `validate:content` | `EXAM_PATHWAYS` id uniqueness, duplicate `country/role/exam` routes, `buildExamPathwayPath` well-formed hubs, `marketingExamPrepHubs` + `publicMarketingCatHrefForOffering`, required English nav strip keys, forbidden `mock exam` phrasing under `nav.examStrip.*` | **Yes** — exits 1 on failure |
-| `validate:exam-guardrails` | Exam content guardrails (separate pipeline) | Per that script |
-| `test:marketing-exam-hub-smoke` | HTTP smoke against a **running** server (`MARKETING_HUB_SMOKE_BASE`) | Optional CI / manual |
+| `validate:exam-guardrails` | Pathway-scoped lesson catalog JSON vs forbidden cross-exam phrases | **Yes** — exits 1 on violation |
+| `test:marketing-exam-hub-smoke` | HTTP smoke + degraded markers against a **running** server (`MARKETING_HUB_SMOKE_BASE`) | Optional CI / manual |
 | `audit:internal-links` / `audit:lesson-links` | Broader link audits (may need DB or server) | Operational |
 
 ## Runtime protections (not re-run by `validate:release`)
@@ -31,7 +33,8 @@ This runs, in order:
 - **`loadMarketingExamHubOptionalBlocks` / `loadPathwayLessonsHubAggregates`** — Per-task timeouts (~14s) with `hub_data_load_timeout` / `hub_data_load_failed` logs; failures fall back to empty inventory / snapshots.
 - **`withDatabaseFallbackTimeout`** — Optional structured logs (`database_read_timeout` / `database_read_error`) when `logCtx` is passed (e.g. pathway lesson DB calls).
 - **`filterHubListItemsForSafeSlugs`** — Drops pathway lesson list rows that fail `pathwayLessonHasRenderableHubSlug`; logs `pathway_lesson_hub_slug_unsafe`.
-- **`safeExamHubMetadata`** — Wraps marketing exam hub `generateMetadata` so resolver errors return a generic title/description and log `exam_hub_metadata_failed`.
+- **`safeGenerateMetadata`** (`src/lib/seo/safe-marketing-metadata.ts`) — Wraps `generateMetadata` implementations so resolver errors return a generic title/description and log `metadata_generation_failed` (includes `route_group`). Exam hub routes use distinct `routeGroup` labels (e.g. `marketing.exam_hub.lessons`).
+- **`recordRouteRenderFallback`** — Per-request degraded render accounting; emits `route_render_fallback_used` and `route_render_heavily_degraded` when many fallbacks stack. See **`docs/fallback-monitoring.md`**.
 - **`formatMarketingMessage`** — In production, missing keys return a short humanized fallback and emit a structured JSON line to stderr for log drains; dev still shows `[missing:…]`.
 - **`trackClientEvent`** — No-ops on the server and when `NEXT_PUBLIC_POSTHOG_KEY` is unset.
 
@@ -52,5 +55,6 @@ This runs, in order:
 
 ## Related docs
 
+- `docs/fallback-monitoring.md` — Fallback and degradation log events, thresholds, debugging.
 - `docs/internal-link-audit.md` — Internal link audit philosophy.
 - `docs/i18n-architecture.md` — Marketing locale and bundle build.

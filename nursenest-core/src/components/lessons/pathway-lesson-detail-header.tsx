@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
+import { validateLearnerCopyForExamContext } from "@/lib/learner/validate-learner-copy-context";
 import { pathwayCountryLabel } from "@/lib/lessons/pathway-lesson-hub-seo";
 
 type Props = {
@@ -28,6 +29,7 @@ export function PathwayLessonDetailHeader({
   metaChips,
 }: Props) {
   const place = pathwayCountryLabel(pathway);
+  validateLearnerCopyForExamContext(pathway, lessonTitle, "lesson_header");
 
   return (
     <header

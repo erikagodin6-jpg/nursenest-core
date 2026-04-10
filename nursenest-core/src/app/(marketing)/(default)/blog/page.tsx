@@ -9,27 +9,33 @@ import {
 } from "@/lib/blog/safe-blog-queries";
 import { blogIndexBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 import { absoluteUrl } from "@/lib/seo/site-origin";
+import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
 export async function generateMetadata({
   searchParams,
 }: {
   searchParams: Promise<{ page?: string }>;
 }): Promise<Metadata> {
-  const sp = await searchParams;
-  const raw = Number(sp.page ?? "1");
-  const page = Number.isFinite(raw) && raw >= 1 ? Math.floor(raw) : 1;
-  const canonicalPath = page <= 1 ? "/blog" : `/blog?page=${page}`;
-  return {
-    title: "Clinical education blog | NurseNest",
-    description:
-      "Evidence-based nursing articles on clinical reasoning, pharmacology, lab interpretation, and exam preparation.",
-    alternates: { canonical: absoluteUrl(canonicalPath) },
-    openGraph: {
-      title: "Clinical education blog | NurseNest",
-      url: absoluteUrl(canonicalPath),
-      type: "website",
+  return safeGenerateMetadata(
+    async () => {
+      const sp = await searchParams;
+      const raw = Number(sp.page ?? "1");
+      const page = Number.isFinite(raw) && raw >= 1 ? Math.floor(raw) : 1;
+      const canonicalPath = page <= 1 ? "/blog" : `/blog?page=${page}`;
+      return {
+        title: "Clinical education blog | NurseNest",
+        description:
+          "Evidence-based nursing articles on clinical reasoning, pharmacology, lab interpretation, and exam preparation.",
+        alternates: { canonical: absoluteUrl(canonicalPath) },
+        openGraph: {
+          title: "Clinical education blog | NurseNest",
+          url: absoluteUrl(canonicalPath),
+          type: "website",
+        },
+      };
     },
-  };
+    { pathname: "/blog", routeGroup: "marketing.default.blog" },
+  );
 }
 
 /** ISR: list is bounded (page size); new posts visible within a few minutes without full dynamic SSR. */

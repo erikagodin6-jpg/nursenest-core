@@ -11,38 +11,45 @@ import { getMarketingRegionFromCookies } from "@/lib/region/marketing-region-ser
 import { rnQuestions } from "@/lib/marketing/marketing-entry-routes";
 import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
 import { formatMarketingMessage } from "@/lib/marketing-i18n-core";
+import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
 type Props = { params: Promise<{ slug: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const locale = await getMarketingLocaleForDefaultRoute();
-  const m = await loadMarketingMessages(locale);
-  const en = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
-  const t = (key: string, p?: Record<string, string | number>) => formatMarketingMessage(m, key, p, en);
+  const pathname = `/flashcards/${slug}`;
+  return safeGenerateMetadata(
+    async () => {
+      const locale = await getMarketingLocaleForDefaultRoute();
+      const m = await loadMarketingMessages(locale);
+      const en = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
+      const t = (key: string, p?: Record<string, string | number>) => formatMarketingMessage(m, key, p, en);
 
-  const data = await resolvePublicFlashcardLanding(slug);
-  if (!data) {
-    return { title: t("pages.publicFlashcardSlug.metaTitleFallback") };
-  }
-  if (data.kind === "deck") {
-    const title = t("pages.publicFlashcardSlug.metaDeckTitle", { title: data.title });
-    const desc =
-      (data.description && String(data.description).trim().slice(0, 155)) ||
-      t("pages.publicFlashcardSlug.metaDeckDescriptionFallback", { title: data.title, count: data.cardCount });
-    return {
-      title,
-      description: desc,
-      alternates: { canonical: absoluteUrl(`/flashcards/${slug}`) },
-    };
-  }
-  const title = t("pages.publicFlashcardSlug.metaTopicTitle", { name: data.name });
-  const desc = t("pages.publicFlashcardSlug.metaTopicDescription", { name: data.name });
-  return {
-    title,
-    description: desc,
-    alternates: { canonical: absoluteUrl(`/flashcards/${slug}`) },
-  };
+      const data = await resolvePublicFlashcardLanding(slug);
+      if (!data) {
+        return { title: t("pages.publicFlashcardSlug.metaTitleFallback") };
+      }
+      if (data.kind === "deck") {
+        const title = t("pages.publicFlashcardSlug.metaDeckTitle", { title: data.title });
+        const desc =
+          (data.description && String(data.description).trim().slice(0, 155)) ||
+          t("pages.publicFlashcardSlug.metaDeckDescriptionFallback", { title: data.title, count: data.cardCount });
+        return {
+          title,
+          description: desc,
+          alternates: { canonical: absoluteUrl(`/flashcards/${slug}`) },
+        };
+      }
+      const title = t("pages.publicFlashcardSlug.metaTopicTitle", { name: data.name });
+      const desc = t("pages.publicFlashcardSlug.metaTopicDescription", { name: data.name });
+      return {
+        title,
+        description: desc,
+        alternates: { canonical: absoluteUrl(`/flashcards/${slug}`) },
+      };
+    },
+    { pathname, routeGroup: "marketing.default.flashcards.slug" },
+  );
 }
 
 export default async function PublicFlashcardSlugPage({ params }: Props) {

@@ -24,6 +24,7 @@ import {
   defaultQuestionBankMetaDescription,
   defaultQuestionBankMetaTitle,
 } from "@/lib/marketing/nursing-tier-public-labels";
+import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
 export const revalidate = 600;
 
@@ -96,30 +97,35 @@ const CARDS: PathwayCard[] = [
 ];
 
 export async function generateMetadata(): Promise<Metadata> {
-  const locale = await getMarketingLocaleForDefaultRoute();
-  const marketingRegion = await getMarketingRegionFromCookies();
-  const m = await loadMarketingMessages(locale);
-  const en = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
-  const metaSfx = marketingRegion === "US" ? "US" : "CA";
-  const title = resolveMarketingCopy(
-    m,
-    `pages.publicQuestionBank.metaTitle${metaSfx}`,
-    en,
-    defaultQuestionBankMetaTitle(marketingRegion),
+  return safeGenerateMetadata(
+    async () => {
+      const locale = await getMarketingLocaleForDefaultRoute();
+      const marketingRegion = await getMarketingRegionFromCookies();
+      const m = await loadMarketingMessages(locale);
+      const en = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
+      const metaSfx = marketingRegion === "US" ? "US" : "CA";
+      const title = resolveMarketingCopy(
+        m,
+        `pages.publicQuestionBank.metaTitle${metaSfx}`,
+        en,
+        defaultQuestionBankMetaTitle(marketingRegion),
+      );
+      const description = resolveMarketingCopy(
+        m,
+        `pages.publicQuestionBank.metaDescription${metaSfx}`,
+        en,
+        defaultQuestionBankMetaDescription(marketingRegion),
+      );
+      const alt = marketingAlternatesSharedPage(locale, "/question-bank");
+      return {
+        title,
+        description,
+        alternates: { canonical: alt.canonical, languages: alt.languages },
+        openGraph: { title, description, url: alt.canonical, type: "website" },
+      };
+    },
+    { pathname: "/question-bank", routeGroup: "marketing.default.question_bank" },
   );
-  const description = resolveMarketingCopy(
-    m,
-    `pages.publicQuestionBank.metaDescription${metaSfx}`,
-    en,
-    defaultQuestionBankMetaDescription(marketingRegion),
-  );
-  const alt = marketingAlternatesSharedPage(locale, "/question-bank");
-  return {
-    title,
-    description,
-    alternates: { canonical: alt.canonical, languages: alt.languages },
-    openGraph: { title, description, url: alt.canonical, type: "website" },
-  };
 }
 
 export default async function QuestionBankHubPage() {
