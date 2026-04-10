@@ -13,6 +13,7 @@ import { PEDIATRIC_TRIAGE_EMERGENCIES_GOLD_SLUG } from "@/lib/lessons/scoped-les
 import { SEPSIS_GOLD_SLUG } from "@/lib/lessons/scoped-lessons/sepsis-early-recognition-gold-standard";
 import { SHOCK_GOLD_SLUG } from "@/lib/lessons/scoped-lessons/shock-gold-standard";
 import { STROKE_ICP_GOLD_SLUG } from "@/lib/lessons/scoped-lessons/stroke-increased-icp-gold-standard";
+import { NP_PRIMARY_CARE_FOUNDATIONS_GOLD_SLUG } from "@/lib/lessons/scoped-lessons/np-primary-care-foundations-gold-standard";
 
 /** Editorial bucket for chips / analytics (not persisted). */
 export type LaunchBundleDimension =
@@ -110,6 +111,7 @@ const FNP_SLUG = {
 
 /** US FNP / Canada NP: lifespan primary care + acute overlays + pharm safety (same slug list; NP pathway variants in catalog). */
 const NP_FNP_STYLE_LAUNCH: LaunchBundleEntry[] = [
+  { slug: NP_PRIMARY_CARE_FOUNDATIONS_GOLD_SLUG, dimension: "prioritization" },
   { slug: FNP_SLUG.differential, dimension: "disease_acute" },
   { slug: FNP_SLUG.prenatal, dimension: "maternity" },
   { slug: FNP_SLUG.pedsFever, dimension: "pediatrics" },

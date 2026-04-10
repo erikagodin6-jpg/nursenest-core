@@ -36031,25 +36031,25 @@
               "id": "intro",
               "heading": "Introduction",
               "kind": "intro",
-              "body": "FNP items emphasize **breadth** across ages with **depth** in safe prescribing, screening, and escalation. This lesson is **FNP-specific**—do not substitute PMHNP or AGPCNP hubs for specialty-scoped study."
+              "body": "FNP items emphasize **breadth** across ages with **depth** in safe prescribing, screening, and escalation. This lesson is **FNP-specific**—do not substitute PMHNP or AGPCNP hubs for specialty-scoped study. Pair it with the scoped hub lesson **`np-primary-care-foundations-gold`** for the NP **foundations** spine (diagnostic discipline, prevention/screening logic, referral thresholds, documentation, shared decision-making, and common-lab interpretation), then return here to practice **differential narrowing** in primary-care stems."
             },
             {
               "id": "core",
               "heading": "Core concepts",
               "kind": "core",
-              "body": "Build a **problem representation**, then test competing diagnoses with **targeted history**, **exam**, and **initial workup**—avoid premature closure."
+              "body": "Build a **problem representation** in one sentence (who, timeline, dominant symptom, risk context), then test competing diagnoses with **targeted history**, **exam**, and **initial workup**—avoid premature closure. Rank differentials by **pretest probability** and **cannot-miss** threat: pregnancy, anticoagulation, immunosuppression, extremes of age, and rapid trajectory change what you rule out first. For each leading alternative, name **one finding** that would **argue against** it and **one** that would **confirm** it—board vignettes reward this discipline over shotgun testing."
             },
             {
               "id": "clinical",
               "heading": "Clinical application",
               "kind": "clinical_application",
-              "body": "For chronic disease follow-up, align medication changes with **organ function**, **risk**, and **patient capacity**—document reasoning you could defend to a preceptor."
+              "body": "For chronic disease follow-up, align medication changes with **organ function**, **drug–drug interactions**, **frailty**, and **patient capacity**—then document **why** the plan is safe now and **what** you will recheck (labs, vitals, adherence, adverse effects). When symptoms do not match the working diagnosis, **widen** the differential before intensifying therapy: infection, ischemia, occult blood loss, endocrine mimics, and medication adverse effects are common shape-shifters in outpatient care. Close every plan with **specific follow-up** and **return precautions**."
             },
             {
               "id": "examtips",
               "heading": "exam tips",
               "kind": "exam_tips",
-              "body": "Cross-link to **NP-tier** bank items tagged for primary care and complete **longer case blocks** to mirror certification pacing."
+              "body": "Cross-link to **NP-tier** bank items tagged for primary care and complete **longer case blocks** to mirror certification pacing. On items with multiple plausible diagnoses, **eliminate** answers that **ignore red flags**, **skip monitoring**, or **test without changing management**. When two answers sound partly right, pick the one that **closes risk** with **parsimony**—the least testing burden that still rules in or out what matters for **site-of-care** and **time**."
             }
           ]
         },

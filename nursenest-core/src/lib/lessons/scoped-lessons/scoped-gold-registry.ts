@@ -95,6 +95,11 @@ import { LAUNCH_WAVE_1_BULK_PROVIDERS } from "@/lib/lessons/scoped-lessons/launc
 import { LAUNCH_WAVE_1A_PROVIDERS } from "@/lib/lessons/scoped-lessons/launch-wave-1a-high-yield-gold";
 import { CASE_STUDY_CASEBOOK_PROVIDERS } from "@/lib/lessons/scoped-lessons/case-study-casebook-specs";
 import { EXAM_COMPLETE_MED_SAFETY_PROVIDERS } from "@/lib/lessons/scoped-lessons/exam-complete-med-safety-specs";
+import {
+  getNpPrimaryCareFoundationsGoldLessonInput,
+  NP_PRIMARY_CARE_FOUNDATIONS_GOLD_SLUG,
+  npPrimaryCareFoundationsHubListInput,
+} from "@/lib/lessons/scoped-lessons/np-primary-care-foundations-gold-standard";
 
 /** Minimal lesson row shape for catalog merge (matches pathway-lesson-loader `LessonInput`). */
 export type ScopedGoldLessonInput = {
@@ -197,6 +202,12 @@ export const SCOPED_GOLD_PROVIDERS: ScopedGoldProvider[] = [
     topicSlug: "copd",
     getFullLesson: getCopdGoldStandardLessonInput,
     getHubListRow: copdGoldHubListInput,
+  },
+  {
+    slug: NP_PRIMARY_CARE_FOUNDATIONS_GOLD_SLUG,
+    topicSlug: "clinical-reasoning",
+    getFullLesson: getNpPrimaryCareFoundationsGoldLessonInput,
+    getHubListRow: npPrimaryCareFoundationsHubListInput,
   },
   ...LAUNCH_WAVE_1A_PROVIDERS,
   ...LAUNCH_WAVE_1_BULK_PROVIDERS,

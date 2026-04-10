@@ -61,6 +61,7 @@ function firstSentence(text: string, max = 220): string {
 
 /** Explicit primary lifespan by slug when titles overlap (e.g., “family” vs pediatric). */
 const SLUG_PRIMARY: Partial<Record<string, FnpLifespanGroup>> = {
+  "np-primary-care-foundations-gold": "lifespan_mixed",
   "fnp-differential-primary-care": "lifespan_mixed",
   "fnp-womens-prenatal-anemia-workup": "prenatal_womens",
   "fnp-pediatric-fever-urgency": "pediatric",

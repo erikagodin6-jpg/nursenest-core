@@ -10,7 +10,7 @@ import type {
   PathwayLessonSection,
 } from "@/lib/lessons/pathway-lesson-types";
 
-export type GoldTierGeo = "us_pn" | "ca_rpn" | "us_rn" | "ca_rn" | "us_np";
+export type GoldTierGeo = "us_pn" | "ca_rpn" | "us_rn" | "ca_rn" | "us_np" | "ca_np";
 
 /** Exam label for bridging prose in premium introductions. */
 export const PATHWAY_EXAM_LABEL: Record<string, string> = {
@@ -23,6 +23,7 @@ export const PATHWAY_EXAM_LABEL: Record<string, string> = {
   "us-np-pmhnp": "NP certification preparation (United States)",
   "us-np-whnp": "NP certification preparation (United States)",
   "us-np-pnp-pc": "NP certification preparation (United States)",
+  "ca-np-cnple": "Canadian NP practice / CNPLE-aligned preparation (Canada)",
 };
 
 export function pathwayIdToTierGeo(pathwayId: string): GoldTierGeo | null {
@@ -36,6 +37,7 @@ export function pathwayIdToTierGeo(pathwayId: string): GoldTierGeo | null {
     "us-np-pmhnp": "us_np",
     "us-np-whnp": "us_np",
     "us-np-pnp-pc": "us_np",
+    "ca-np-cnple": "ca_np",
   };
   return m[pathwayId] ?? null;
 }
@@ -113,6 +115,17 @@ If two answers are “nice,” pick the one that **closes risk fastest** with **
 
 **Documentation and medicolegal tone**  
 NP stems still reward **objective reasoning**: what you ruled out, what you monitored, and what you told the client to do if things worsen—examiners embed **silent deterioration** and **ambiguous consent** as distractors.`;
+    case "ca_np":
+      return `**Canadian NP items** pair **primary-care reasoning** with **provincial college standards**, **interprofessional collaboration**, and **metric labs** when the vignette is set in Canada.
+
+**Judgment spine**  
+You still win with **cannot-miss** recognition, **appropriate site-of-care**, **documentation that shows reasoning**, and **follow-up that is specific**—the same NP discipline as US items, with Canadian labels on roles and units.
+
+**Scope and collaboration**  
+When the stem names a physician, RN, or allied partner, choose answers that **respect who initiates what** under the scenario’s policy—avoid **silent prescribing** or **delayed escalation** when red flags appear.
+
+**Exam habit**  
+Translate unfamiliar facility titles into **risk**: who is unstable, what data are missing, and what you would not postpone.`;
     default:
       return "";
   }
@@ -130,6 +143,15 @@ Expect **RPN** language for practical nursing and **RN** for registered nursing;
 
 **Exam habit**  
 When units or titles look unfamiliar, translate them into **risk and scope**: who must be notified, what must be reassessed, and what cannot wait—Canadian stems use the same **prioritization spine** as US items with different labels on the vitals line.`;
+    case "ca_np":
+      return `**Canada — NP emphasis**  
+Items may reference **provincial NP standards**, **collaborative practice agreements**, and **SI units** (mmol/L, kPa) while testing the same **diagnostic discipline** as US NP preparation: clear **problem definition**, **differential that fits the data**, **plan with follow-up**, and **documentation** another clinician could follow.
+
+**Interprofessional cues**  
+When the vignette names **physician partners**, **pharmacists**, or **hospital transfer**, choose answers that **close the safety loop** without exceeding the **role line** described in the stem.
+
+**Metric comfort**  
+If a lab value looks different from US textbooks, convert mentally to **risk category** (e.g., glucose extremes, sodium disorders, anemia severity) before you eliminate options—writers often test whether you recognize **danger thresholds**, not whether you memorized one unit system.`;
     case "us_pn":
     case "us_rn":
     case "us_np":

@@ -15,6 +15,7 @@ import {
   pathwayIdToTierGeo,
   synthesizeGoldPremiumSections,
 } from "@/lib/lessons/scoped-lessons/gold-premium-synthesis";
+import { npExamLabel, npPrimaryCareTitleSuffix } from "@/lib/lessons/scoped-lessons/np-pathway-display";
 
 /** Stable slug — use in URLs and DB seeding; do not rename without redirects. */
 export const COPD_GOLD_STANDARD_SLUG = "copd-clinical-judgment-gold" as const;
@@ -27,6 +28,10 @@ const PATHWAY_VARIANT: Record<string, CopdVariant> = {
   "us-rn-nclex-rn": "us_rn_nclex_rn",
   "ca-rn-nclex-rn": "ca_rn_nclex_rn",
   "us-np-fnp": "us_np_fnp",
+  "us-np-agpcnp": "us_np_fnp",
+  "us-np-whnp": "us_np_fnp",
+  "us-np-pnp-pc": "us_np_fnp",
+  "ca-np-cnple": "us_np_fnp",
 };
 
 /** Reusable pathophysiology / monitoring scaffold (variant-specific framing wraps this). */
@@ -639,9 +644,29 @@ export function copdGoldHubListInput(pathwayId: string): Omit<LessonInputShape, 
 export function getCopdGoldStandardLessonInput(pathwayId: string): LessonInputShape | null {
   const variant = PATHWAY_VARIANT[pathwayId];
   if (!variant) return null;
-  const v = VARIANTS[variant];
+  const base = VARIANTS[variant];
   const geo = pathwayIdToTierGeo(pathwayId);
   if (!geo) return null;
+
+  const npPrimaryCarePathways = new Set([
+    "us-np-fnp",
+    "us-np-agpcnp",
+    "us-np-whnp",
+    "us-np-pnp-pc",
+    "ca-np-cnple",
+  ]);
+  const lab = npExamLabel(pathwayId);
+  const suf = npPrimaryCareTitleSuffix(pathwayId);
+  const v =
+    npPrimaryCarePathways.has(pathwayId) && variant === "us_np_fnp"
+      ? {
+          ...base,
+          title: `COPD: primary care judgment (${suf})`,
+          seoTitle: `COPD in primary care | ${lab} | NurseNest`,
+          seoDescription: `${lab} primary-care framing: GOLD-inspired staging concepts, exacerbation triage, differential cues vs CHF/PE, shared decision-making, and safe escalation.`,
+        }
+      : base;
+
   const syn = synthesizeGoldPremiumSections({
     sharedCore: SHARED_CORE_BODY,
     clinical_meaning: v.clinical_meaning,

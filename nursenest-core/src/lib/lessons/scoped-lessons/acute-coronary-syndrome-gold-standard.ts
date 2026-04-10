@@ -28,6 +28,9 @@ const PATHWAY_VARIANT: Record<string, AcsVariant> = {
   "us-np-fnp": "us_np",
   "us-np-agpcnp": "us_np",
   "us-np-pmhnp": "us_np",
+  "us-np-whnp": "us_np",
+  "us-np-pnp-pc": "us_np",
+  "ca-np-cnple": "us_np",
 };
 
 const SHARED_CORE_BODY = `**ACS as an exam construct**  
