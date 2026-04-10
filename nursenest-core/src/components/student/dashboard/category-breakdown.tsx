@@ -93,9 +93,14 @@ export function CategoryBreakdown({
             })}
           </ul>
         ) : (
-          <div className="mt-5 rounded-xl border border-dashed border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-4 py-6 text-sm text-[var(--semantic-text-secondary)]">
-            <p>{t("learner.dashboard.insight.categoryEmpty")}</p>
-            <Link href="/app/questions" className="nn-dashboard-empty-cta">
+          <div className="mt-5 rounded-xl border border-dashed border-[color-mix(in_srgb,var(--semantic-success)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-success)_04%,var(--semantic-panel-muted))] px-5 py-8 text-center">
+            <BarChart3 className="mx-auto mb-3 h-8 w-8 text-[var(--semantic-success)] opacity-60" aria-hidden />
+            <p className="text-sm font-medium text-[var(--semantic-text-primary)]">Your topic breakdown will appear here</p>
+            <p className="mt-1 text-xs text-[var(--semantic-text-secondary)]">Answer a few questions across different topics to see how you stack up in each area.</p>
+            <Link
+              href="/app/questions"
+              className="mt-4 inline-flex items-center gap-1.5 rounded-full border border-[color-mix(in_srgb,var(--semantic-success)_32%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-success)_10%,var(--semantic-surface))] px-4 py-2 text-xs font-semibold text-[var(--semantic-success)] shadow-sm transition-colors hover:bg-[color-mix(in_srgb,var(--semantic-success)_16%,var(--semantic-surface))]"
+            >
               {t("learner.dashboard.empty.startPracticeCta")}
             </Link>
           </div>

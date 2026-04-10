@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { auth } from "@/lib/auth";
 import { LearnerDailyMomentumCard } from "@/components/student/learner-daily-momentum-card";
 import { LearnerDashboardAdvantageStrip } from "@/components/student/learner-dashboard-advantage-strip";
+import { LearnerDashboardCommandCenter } from "@/components/student/learner-dashboard-command-center";
 import { PremiumLearnerHub } from "@/components/student/premium-learner-hub";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
@@ -119,11 +120,18 @@ export default async function LearnerDashboardPage() {
       return (
         <main className="space-y-6">
           <BreadcrumbTrail items={crumbs} />
+
+          {/* Page header */}
           <div className="nn-learner-page-hero">
             <p className="text-xs font-semibold uppercase tracking-wide text-[var(--semantic-brand)]">{t("learner.dashboard.kicker")}</p>
             <h1 className="mt-1 text-3xl font-bold tracking-tight text-[var(--semantic-text-primary)]">{t("learner.dashboard.title")}</h1>
             <p className="mt-2 max-w-2xl text-sm text-[var(--semantic-text-secondary)]">{t("learner.dashboard.subtitle.subscriber")}</p>
           </div>
+
+          {/* KPI snapshot: streak, bank accuracy, lessons, mocks — visible above the fold */}
+          <LearnerDashboardCommandCenter snapshot={snapshot} t={t} />
+
+          {/* Daily goal + streak protection nudge */}
           {todayGoal ? (
             <LearnerDailyMomentumCard
               t={t}
@@ -136,10 +144,17 @@ export default async function LearnerDashboardPage() {
               showStreakProtectNudge={streakProtect}
             />
           ) : null}
-          <LearnerContinueLearningCard t={t} links={continueLinks} />
-          <LearnerDashboardAdvantageStrip t={t} />
+
+          {/* Core analytics: readiness score, quick actions, progress, performance, weak areas */}
           <LearnerDashboardInsightPanels snapshot={snapshot} t={t} />
+
+          {/* Adaptive focus: deterministic next steps from the same study snapshot */}
           {studySnap ? <LearnerAdaptiveFocusCard snapshot={studySnap} /> : null}
+
+          {/* Continue learning — detail after the analytics, for students who want to pick back up */}
+          <LearnerContinueLearningCard t={t} links={continueLinks} />
+
+          {/* Full learner hub */}
           <PremiumLearnerHub
             snapshot={snapshot}
             weakTopicTitles={weakTopicTitles}
@@ -150,6 +165,10 @@ export default async function LearnerDashboardPage() {
             omitRecentMocks
             readinessDeferHint={t("learner.dashboard.hub.readinessDeferHint")}
           />
+
+          {/* Feature discovery — moved to bottom so it doesn't interrupt data flow */}
+          <LearnerDashboardAdvantageStrip t={t} />
+
           <section className="nn-card flex flex-col gap-3 p-5 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
             <p className="text-sm text-muted-foreground">{t("learner.dashboard.accountTeaser")}</p>
             <Link
