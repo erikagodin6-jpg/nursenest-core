@@ -293,6 +293,8 @@ function buildUpgradePrep(depth: LessonDepthMetrics, score: number, spineTopic: 
 
 export interface SpineTopicAlignmentRow {
   pathwayId: string;
+  /** Spine topic exam tags (e.g. FNP, PMHNP) — which boards this row applies to */
+  examTags: string[];
   spineSystemId: string;
   spineSystemName: string;
   topic: { id: string; title: string };
@@ -369,6 +371,7 @@ export function classifySpineTopicForPathway(
   if (!best || best.score < WEAK_FLOOR) {
     return {
       pathwayId,
+      examTags: [...spineTopic.exams],
       spineSystemId: system.id,
       spineSystemName: system.name,
       topic: { id: spineTopic.id, title: spineTopic.title },
@@ -393,6 +396,7 @@ export function classifySpineTopicForPathway(
     const others = high.filter((s) => s.lesson.slug !== canonical).map((s) => s.lesson.slug);
     return {
       pathwayId,
+      examTags: [...spineTopic.exams],
       spineSystemId: system.id,
       spineSystemName: system.name,
       topic: { id: spineTopic.id, title: spineTopic.title },
@@ -420,6 +424,7 @@ export function classifySpineTopicForPathway(
   if (strongSingle) {
     return {
       pathwayId,
+      examTags: [...spineTopic.exams],
       spineSystemId: system.id,
       spineSystemName: system.name,
       topic: { id: spineTopic.id, title: spineTopic.title },
@@ -440,6 +445,7 @@ export function classifySpineTopicForPathway(
 
   return {
     pathwayId,
+    examTags: [...spineTopic.exams],
     spineSystemId: system.id,
     spineSystemName: system.name,
     topic: { id: spineTopic.id, title: spineTopic.title },

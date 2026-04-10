@@ -6,6 +6,14 @@ type Params = Record<string, string | number | undefined>;
  * Resolves copy for a flat key. When `fallbackMessages` is provided, missing keys in the primary
  * bundle resolve from fallback before the explicit `[missing:…]` placeholder.
  */
+function humanizedKeyFallback(key: string): string {
+  const tail = key.includes(".") ? (key.split(".").pop() ?? key) : key;
+  const words = tail.replace(/([A-Z])/g, " $1").replace(/[-_]/g, " ").trim();
+  if (!words) return "NurseNest";
+  const t = words.charAt(0).toUpperCase() + words.slice(1);
+  return t.length > 80 ? `${t.slice(0, 77)}…` : t;
+}
+
 export function formatMarketingMessage(
   messages: MarketingMessages,
   key: string,
@@ -18,8 +26,17 @@ export function formatMarketingMessage(
     raw = fallbackMessages[key];
   }
   if (isEmpty(raw)) {
-    console.error(`[marketing-i18n] missing key: ${key} (locale bundle)`);
-    return `[missing:${key}]`;
+    const payload = JSON.stringify({
+      scope: "i18n",
+      event: "marketing_message_key_missing",
+      key: key.slice(0, 160),
+    });
+    if (process.env.NODE_ENV !== "production") {
+      console.error(`[marketing-i18n] missing key: ${key} (locale bundle)`);
+    } else {
+      console.error(`[nursenest-core] ${payload}`);
+    }
+    return process.env.NODE_ENV === "production" ? humanizedKeyFallback(key) : `[missing:${key}]`;
   }
   let s: string = raw;
   if (params) {

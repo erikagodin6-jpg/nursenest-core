@@ -1,4 +1,5 @@
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
+import { buildGlobalExamContext, examContextAnalyticsProps } from "@/lib/exam-context";
 import { captureLearnerProductEvent } from "@/lib/observability/learner-product-analytics";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 
@@ -24,6 +25,8 @@ export function captureLessonProgressAnalytics(
   },
 ): void {
   const lesson_key = lessonKeyForAnalytics(args.lessonId);
+  const examCtx = buildGlobalExamContext(args.pathwayId ?? null, "en");
+  const examProps = examCtx ? examContextAnalyticsProps(examCtx) : {};
 
   if (!args.hadExistingRow) {
     captureLearnerProductEvent(userId, entitlement, PH.learnerLessonStarted, {
@@ -31,6 +34,7 @@ export function captureLessonProgressAnalytics(
       pathway_id: args.pathwayId,
       lesson_slug: args.lessonSlug,
       lesson_key,
+      ...examProps,
     });
   }
 
@@ -40,6 +44,7 @@ export function captureLessonProgressAnalytics(
       pathway_id: args.pathwayId,
       lesson_slug: args.lessonSlug,
       lesson_key,
+      ...examProps,
     });
   }
 }

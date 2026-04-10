@@ -19,6 +19,7 @@ import {
 import { createCatPracticeTestPayload } from "@/lib/practice-tests/cat-session";
 import { PRACTICE_TEST_CAT_CREATE_CODE } from "@/lib/practice-tests/practice-test-cat-create-codes";
 import { configFromInput, pickPracticeQuestionIds } from "@/lib/practice-tests/pick-question-ids";
+import { parsePracticeTestConfigAtBoundary } from "@/lib/practice-tests/practice-test-config-boundary";
 import type { PracticeTestConfigJson } from "@/lib/practice-tests/types";
 import { captureLearnerProductEvent } from "@/lib/observability/learner-product-analytics";
 import { PH } from "@/lib/observability/posthog-conversion-events";
@@ -113,7 +114,8 @@ export async function GET(req: NextRequest) {
 
   const list = rows.map((r) => {
     const ids = Array.isArray(r.questionIds) ? r.questionIds.filter((x): x is string => typeof x === "string") : [];
-    const cfg = r.config as PracticeTestConfigJson | null;
+    const cfg =
+      r.config != null ? parsePracticeTestConfigAtBoundary(r.config, { practiceTestId: r.id, surface: "practice_tests_list" }) : null;
     const res = r.results as { accuracyPct?: number; scoreCorrect?: number; scoreTotal?: number } | null;
     const maxCap = cfg?.catMaxQuestions ?? cfg?.questionCount ?? ids.length;
     return {

@@ -9,6 +9,7 @@ import { buildCatStudyFeedback } from "@/lib/practice-tests/build-cat-study-feed
 import { buildMinimalCatStudyFeedbackPayload } from "@/lib/practice-tests/cat-practice-fallbacks";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { enforcePracticeTestDetailProtection } from "@/lib/http/api-protection";
+import { parsePracticeTestConfigAtBoundary } from "@/lib/practice-tests/practice-test-config-boundary";
 import type { PracticeTestConfigJson } from "@/lib/practice-tests/types";
 
 function asIdList(raw: unknown): string[] {
@@ -45,7 +46,7 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string 
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
 
-  const cfg = row.config as PracticeTestConfigJson;
+  const cfg = parsePracticeTestConfigAtBoundary(row.config, { practiceTestId: id, surface: "cat_study_review_get" });
   if (cfg.selectionMode !== "cat" || (cfg.catExamFeedbackMode ?? "test") !== "study") {
     return NextResponse.json({ error: "Not a CAT Study Mode session" }, { status: 400 });
   }

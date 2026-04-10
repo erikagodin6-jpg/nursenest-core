@@ -34,8 +34,9 @@ function logHubDataLoadFailed(
   err: unknown,
 ): void {
   const message = err instanceof Error ? err.message : String(err);
-  safeServerLog("exam_pathway_hub", "hub_data_load_failed", {
-    event: "hub_data_load_failed",
+  const isTimeout = message.includes("hub_optional_task_timeout");
+  safeServerLog("exam_pathway_hub", isTimeout ? "hub_data_load_timeout" : "hub_data_load_failed", {
+    event: isTimeout ? "hub_data_load_timeout" : "hub_data_load_failed",
     pathname: ctx.pathname,
     locale: ctx.locale,
     country: ctx.country,
@@ -45,6 +46,22 @@ function logHubDataLoadFailed(
     dependency_name: dependencyName,
     error_message: message.slice(0, 500),
   });
+}
+
+const HUB_OPTIONAL_TASK_TIMEOUT_MS = 14_000;
+
+async function runHubOptionalTask<T>(p: Promise<T>): Promise<T> {
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  try {
+    return await Promise.race([
+      p,
+      new Promise<T>((_, reject) => {
+        timer = setTimeout(() => reject(new Error("hub_optional_task_timeout")), HUB_OPTIONAL_TASK_TIMEOUT_MS);
+      }),
+    ]);
+  } finally {
+    if (timer) clearTimeout(timer);
+  }
 }
 
 export type MarketingExamHubOptionalBlocks = {
@@ -69,7 +86,7 @@ export async function loadMarketingExamHubOptionalBlocks(
     { name: "lesson_count", run: () => countPathwayLessons(pathway.id) },
   ];
 
-  const settled = await Promise.allSettled(tasks.map((t) => t.run()));
+  const settled = await Promise.allSettled(tasks.map((t) => runHubOptionalTask(t.run())));
 
   let npInventory: Awaited<ReturnType<typeof loadNpCanadaInventoryGate>> = null;
   let questionSnapshot: PathwayQuestionBankSnapshot = EMPTY_QUESTION_SNAPSHOT;
@@ -137,7 +154,7 @@ export async function loadPathwayLessonsHubAggregates(
     { name: "topic_clusters", run: () => listTopicClusters(pathway.id, lessonContentLocale) },
   ];
 
-  const settled = await Promise.allSettled(tasks.map((t) => t.run()));
+  const settled = await Promise.allSettled(tasks.map((t) => runHubOptionalTask(t.run())));
 
   let pageResult: PathwayLessonsPageResult = emptyPathwayLessonsPageResult(pageRequested, pageSizeRequested);
   let questionSnapshot: PathwayQuestionBankSnapshot = EMPTY_QUESTION_SNAPSHOT;

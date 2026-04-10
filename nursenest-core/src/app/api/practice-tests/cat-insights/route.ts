@@ -5,6 +5,7 @@ import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-
 import { prisma } from "@/lib/db";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 import { isSkipBeyondLimit, listSkipRows, parseListPage } from "@/lib/api/api-pagination-limits";
+import { parsePracticeTestConfigAtBoundary } from "@/lib/practice-tests/practice-test-config-boundary";
 import type { PracticeTestConfigJson, PracticeTestResultsJson } from "@/lib/practice-tests/types";
 
 const PAGE_SIZE = 12;
@@ -59,7 +60,7 @@ export async function GET(req: NextRequest) {
   const slice = hasMore ? rows.slice(0, PAGE_SIZE) : rows;
 
   const items: CatInsightRow[] = slice.map((r) => {
-    const cfg = r.config as PracticeTestConfigJson;
+    const cfg = parsePracticeTestConfigAtBoundary(r.config, { practiceTestId: r.id, surface: "cat_insights_list" });
     const res = r.results as PracticeTestResultsJson | null;
     const coach = res?.catCoach;
     const report = res?.catReport;

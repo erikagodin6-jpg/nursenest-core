@@ -47,6 +47,9 @@ next-env.d.ts
 # local import pipeline output (do not commit)
 nursing-import-quarantine.jsonl
 
+# NP spine↔DB alignment dry-run output (large; use --out to override)
+/data/reports/pathway-lessons/np-db-alignment-report.dry-run.json
+
 # Replit → Spaces pipeline (extract + upload manifests)
 .replit-export-staging/
 .replit-spaces-upload-manifest.json

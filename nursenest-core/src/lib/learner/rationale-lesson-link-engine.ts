@@ -1,7 +1,9 @@
 /**
  * Thin adapter: **question bank metadata** → ranked lesson slugs for rationale links.
  * @see `@/lib/learner/lesson-question-rationale` for the mapping model and registry.
+ * @see {@link findLessonsForExamContext} for pathway + topicSlug DB resolution with confidence floors.
  */
+export { findLessonsForExamContext } from "@/lib/learner/find-lessons-for-exam-context";
 import { pathwayRationaleContextFromId } from "@/lib/learner/lesson-question-rationale/pathway-context";
 import { rankRelatedLessonSlugsForQuestion } from "@/lib/learner/lesson-question-rationale/match";
 import type { RationaleLessonLinkKind } from "@/lib/learner/lesson-question-rationale/types";

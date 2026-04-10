@@ -384,6 +384,22 @@ function defaultBodyFor(kind: PathwayLessonSectionKind): string {
   }
 }
 
+/** Drops lesson rows that cannot build a safe public hub href; logs for admin follow-up. */
+function filterHubListItemsForSafeSlugs(items: PathwayLessonRecord[], pathwayId: string): PathwayLessonRecord[] {
+  const out: PathwayLessonRecord[] = [];
+  for (const it of items) {
+    if (pathwayLessonHasRenderableHubSlug(it)) {
+      out.push(it);
+      continue;
+    }
+    safeServerLog("content_quarantine", "pathway_lesson_hub_slug_unsafe", {
+      pathwayId,
+      slug_preview: String(it.slug ?? "").slice(0, 120),
+    });
+  }
+  return out;
+}
+
 /**
  * Hub / list / related-link rows: metadata only — no `sections` JSON loaded from DB.
  * Enrichment (FNP, NCLEX hubs) falls back to {@link PathwayLessonRecord.seoDescription} when bodies are absent.
@@ -582,7 +598,10 @@ function lessonLocaleMeta(
 }
 
 async function dbCall<T>(run: () => Promise<T>, fallback: T): Promise<T> {
-  return withDatabaseFallbackTimeout(run, fallback, PATHWAY_LESSON_DB_TIMEOUT_MS);
+  return withDatabaseFallbackTimeout(run, fallback, PATHWAY_LESSON_DB_TIMEOUT_MS, {
+    scope: "pathway_lessons",
+    label: "pathway_lesson_prisma",
+  });
 }
 
 async function scopedGoldSlugPublishedInDb(pathwayId: string, locale: string, slug: string): Promise<boolean> {
@@ -823,13 +842,16 @@ async function getPathwayLessonsPageImpl(
     });
     const meta = lessonLocaleMeta(marketingLocale, effective, requested !== effective, false);
     return {
-      items: raw.map((row) =>
-        applyLessonEducationalOverlay(
-          withLocaleMeta(normalizeLessonForHubList(row, pathwayId), meta),
-          marketingLocale,
-          pathwayId,
-          lessonDbOverlays,
+      items: filterHubListItemsForSafeSlugs(
+        raw.map((row) =>
+          applyLessonEducationalOverlay(
+            withLocaleMeta(normalizeLessonForHubList(row, pathwayId), meta),
+            marketingLocale,
+            pathwayId,
+            lessonDbOverlays,
+          ),
         ),
+        pathwayId,
       ),
       total,
       page: safePage,
@@ -861,13 +883,16 @@ async function getPathwayLessonsPageImpl(
   });
   const catMeta = lessonLocaleMeta(marketingLocale, "en", requested !== "en", true);
   return {
-    items: slice.map((row) =>
-      applyLessonEducationalOverlay(
-        withLocaleMeta(normalizeLessonForHubList(row, pathwayId), catMeta),
-        marketingLocale,
-        pathwayId,
-        lessonDbOverlays,
+    items: filterHubListItemsForSafeSlugs(
+      slice.map((row) =>
+        applyLessonEducationalOverlay(
+          withLocaleMeta(normalizeLessonForHubList(row, pathwayId), catMeta),
+          marketingLocale,
+          pathwayId,
+          lessonDbOverlays,
+        ),
       ),
+      pathwayId,
     ),
     total,
     page: safePage,

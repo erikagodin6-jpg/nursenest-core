@@ -13,6 +13,7 @@ import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { getFreemiumSnapshot } from "@/lib/entitlements/freemium";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
+import { parsePracticeTestConfigAtBoundary } from "@/lib/practice-tests/practice-test-config-boundary";
 import type { PracticeTestConfigJson, PracticeTestResultsJson } from "@/lib/practice-tests/types";
 import type { Metadata } from "next";
 
@@ -120,7 +121,10 @@ export default async function PracticeTestResultsPage({ params }: Props) {
     );
   }
 
-  const cfg = row.config as PracticeTestConfigJson | null;
+  const cfg: PracticeTestConfigJson | null =
+    row.config != null
+      ? parsePracticeTestConfigAtBoundary(row.config, { practiceTestId: id, surface: "practice_test_results_page" })
+      : null;
   const completedAtLabel =
     row.completedAt != null
       ? row.completedAt.toLocaleString(localeTag, { dateStyle: "medium", timeStyle: "short" })

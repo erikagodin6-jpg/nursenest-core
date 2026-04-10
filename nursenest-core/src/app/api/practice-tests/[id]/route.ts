@@ -18,6 +18,7 @@ import { buildLinearCommitFeedback } from "@/lib/practice-tests/build-linear-com
 import { getLinearCommittedQuestionIds, mergeLinearCommittedQuestionId } from "@/lib/practice-tests/practice-linear-engine";
 import { enrichPracticeTestResultsWithCatCoach } from "@/lib/practice-tests/enrich-cat-results-coach";
 import { computePracticeTestResults } from "@/lib/practice-tests/score-practice-test";
+import { parsePracticeTestConfigAtBoundary } from "@/lib/practice-tests/practice-test-config-boundary";
 import type { PracticeTestConfigJson, PracticeTestResultsJson } from "@/lib/practice-tests/types";
 
 function withCatSessionResultMeta(
@@ -89,7 +90,7 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string 
       ? (row.answers as Record<string, unknown>)
       : {};
 
-  const cfg = row.config as PracticeTestConfigJson;
+  const cfg = parsePracticeTestConfigAtBoundary(row.config, { practiceTestId: id, surface: "practice_test_api_get" });
 
   const teachingReviewRequested = req.nextUrl.searchParams.get("teachingReview") === "1";
   const hydrateFull = req.nextUrl.searchParams.get("hydrate") === "full";
@@ -237,7 +238,7 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
     parsed.data.answers != null ? { ...prevAnswers, ...parsed.data.answers } : prevAnswers;
   const cursorIndex = parsed.data.cursorIndex ?? row.cursorIndex;
   const elapsedMs = parsed.data.elapsedMs ?? row.elapsedMs ?? undefined;
-  const cfg = row.config as PracticeTestConfigJson;
+  const cfg = parsePracticeTestConfigAtBoundary(row.config, { practiceTestId: id, surface: "practice_test_api_patch" });
 
   if (parsed.data.action === "save") {
     await prisma.practiceTest.update({

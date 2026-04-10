@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
+import { parsePracticeTestConfigAtBoundary } from "@/lib/practice-tests/practice-test-config-boundary";
 import type { PracticeTestConfigJson, PracticeTestResultsJson } from "@/lib/practice-tests/types";
 
 export type LearnerCatHistoryRow = {
@@ -18,9 +19,8 @@ export type LearnerCatHistoryRow = {
 
 function parseConfig(raw: unknown): PracticeTestConfigJson | null {
   if (!raw || typeof raw !== "object") return null;
-  const o = raw as Record<string, unknown>;
-  if (o.selectionMode !== "cat") return null;
-  return raw as PracticeTestConfigJson;
+  const cfg = parsePracticeTestConfigAtBoundary(raw, { surface: "learner_cat_history" });
+  return cfg.selectionMode === "cat" ? cfg : null;
 }
 
 function parseResults(raw: unknown): PracticeTestResultsJson | null {

@@ -24,7 +24,8 @@ export function trackClientEvent(
   event: string,
   props?: Record<string, string | number | boolean | undefined>,
 ): void {
-  if (!initialized || !process.env.NEXT_PUBLIC_POSTHOG_KEY) return;
+  if (typeof window === "undefined") return;
+  if (!initialized || !process.env.NEXT_PUBLIC_POSTHOG_KEY?.trim()) return;
   try {
     posthog.capture(event, props);
   } catch {
