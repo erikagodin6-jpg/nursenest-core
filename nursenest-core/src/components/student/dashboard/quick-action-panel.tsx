@@ -60,17 +60,14 @@ export function QuickActionPanel({
   const catStartHref = guided?.catStartHref?.trim() || "/app/practice-tests/start";
 
   return (
-    <section
-      className="nn-surface-bubble rounded-2xl p-4 shadow-[var(--shadow-card)] sm:p-5"
-      aria-labelledby={`${id}-heading`}
-    >
+    <section className="nn-surface-bubble rounded-2xl p-4 shadow-[var(--shadow-card)] sm:p-6" aria-labelledby={`${id}-heading`}>
       <div className="flex flex-wrap items-center gap-2">
         <Zap className="h-4 w-4 shrink-0 text-[var(--semantic-chart-4)]" aria-hidden strokeWidth={2} />
         <h2 id={`${id}-heading`} className="text-sm font-semibold text-[var(--semantic-text-primary)]">
           {t("learner.dashboard.quickActions.title")}
         </h2>
       </div>
-      <p className="mt-1 text-xs text-[var(--semantic-text-secondary)]">
+      <p className="mt-1 text-xs leading-relaxed text-[var(--semantic-text-secondary)]">
         {t("learner.dashboard.quickActions.subtitle")}
       </p>
 
@@ -79,11 +76,11 @@ export function QuickActionPanel({
         {/* Card 1: Resume / Start Lessons */}
         <Link
           href={resumeHref}
-          className="flex flex-col gap-1.5 rounded-xl border border-[color-mix(in_srgb,var(--semantic-success)_32%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-success)_10%,var(--semantic-surface))] px-4 py-3.5 transition-colors hover:bg-[color-mix(in_srgb,var(--semantic-success)_15%,var(--semantic-surface))]"
+          className="group flex flex-col gap-1.5 rounded-xl border border-[color-mix(in_srgb,var(--semantic-success)_32%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-success)_10%,var(--semantic-surface))] px-4 py-3.5 transition-[transform,background-color,box-shadow] duration-200 hover:bg-[color-mix(in_srgb,var(--semantic-success)_15%,var(--semantic-surface))] hover:shadow-[var(--semantic-shadow-soft)] motion-safe:hover:-translate-y-0.5"
         >
           <div className="flex items-center gap-2">
             <PlayCircle
-              className="h-4 w-4 shrink-0 text-[var(--semantic-success)]"
+              className="h-4 w-4 shrink-0 text-[var(--semantic-success)] transition-transform duration-200 group-hover:translate-x-0.5"
               strokeWidth={2}
               aria-hidden
             />
@@ -101,11 +98,11 @@ export function QuickActionPanel({
         {/* Card 2: Start CAT */}
         <Link
           href={catStartHref}
-          className="flex flex-col gap-1.5 rounded-xl border border-[color-mix(in_srgb,var(--semantic-brand)_32%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_10%,var(--semantic-surface))] px-4 py-3.5 transition-colors hover:bg-[color-mix(in_srgb,var(--semantic-brand)_16%,var(--semantic-surface))]"
+          className="group flex flex-col gap-1.5 rounded-xl border border-[color-mix(in_srgb,var(--semantic-brand)_32%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_10%,var(--semantic-surface))] px-4 py-3.5 transition-[transform,background-color,box-shadow] duration-200 hover:bg-[color-mix(in_srgb,var(--semantic-brand)_16%,var(--semantic-surface))] hover:shadow-[var(--semantic-shadow-soft)] motion-safe:hover:-translate-y-0.5"
         >
           <div className="flex items-center gap-2">
             <GraduationCap
-              className="h-4 w-4 shrink-0 text-[var(--semantic-brand)]"
+              className="h-4 w-4 shrink-0 text-[var(--semantic-brand)] transition-transform duration-200 group-hover:translate-x-0.5"
               strokeWidth={2}
               aria-hidden
             />
@@ -124,7 +121,7 @@ export function QuickActionPanel({
         {/* Card 3: Weak topics (when available) or Question bank */}
         <Link
           href={weakHref}
-          className={`flex flex-col gap-1.5 rounded-xl border px-4 py-3.5 transition-colors ${
+          className={`group flex flex-col gap-1.5 rounded-xl border px-4 py-3.5 transition-[transform,background-color,box-shadow] duration-200 hover:shadow-[var(--semantic-shadow-soft)] motion-safe:hover:-translate-y-0.5 ${
             guided?.hasWeakAreas
               ? "border-[color-mix(in_srgb,var(--semantic-warning)_35%,var(--semantic-border-soft))] bg-[var(--semantic-warning-soft)] hover:bg-[color-mix(in_srgb,var(--semantic-warning)_14%,var(--semantic-surface))]"
               : "border-[color-mix(in_srgb,var(--semantic-info)_32%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-info)_10%,var(--semantic-surface))] hover:bg-[color-mix(in_srgb,var(--semantic-info)_15%,var(--semantic-surface))]"
@@ -133,13 +130,13 @@ export function QuickActionPanel({
           <div className="flex items-center gap-2">
             {guided?.hasWeakAreas ? (
               <Crosshair
-                className="h-4 w-4 shrink-0 text-[var(--semantic-warning-contrast)]"
+                className="h-4 w-4 shrink-0 text-[var(--semantic-warning-contrast)] transition-transform duration-200 group-hover:translate-x-0.5"
                 strokeWidth={2}
                 aria-hidden
               />
             ) : (
               <LayoutList
-                className="h-4 w-4 shrink-0 text-[var(--semantic-info)]"
+                className="h-4 w-4 shrink-0 text-[var(--semantic-info)] transition-transform duration-200 group-hover:translate-x-0.5"
                 strokeWidth={2}
                 aria-hidden
               />
@@ -165,14 +162,14 @@ export function QuickActionPanel({
       </div>
 
       {/* Secondary navigation pills */}
-      <ul className="mt-3 flex list-none flex-wrap gap-2 border-t border-[var(--semantic-border-soft)] pt-3">
+      <ul className="mt-4 flex list-none flex-wrap gap-2.5 border-t border-[var(--semantic-border-soft)] pt-3">
         {SECONDARY_ACTIONS.map(({ href, labelKey, icon: Icon, tone }) => (
           <li key={href}>
             <Link
               href={href}
-              className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-2 text-xs font-semibold shadow-sm transition-colors ${PILL_TONE[tone]}`}
+              className={`nn-premium-action-chip group inline-flex items-center gap-1.5 rounded-full border px-3 py-2 text-xs font-semibold ${PILL_TONE[tone]}`}
             >
-              <Icon className="h-3.5 w-3.5 shrink-0 opacity-90" strokeWidth={2} aria-hidden />
+              <Icon className="h-3.5 w-3.5 shrink-0 opacity-90 transition-transform duration-200 group-hover:translate-x-0.5" strokeWidth={2} aria-hidden />
               {t(labelKey)}
             </Link>
           </li>

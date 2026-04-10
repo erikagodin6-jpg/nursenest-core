@@ -1,5 +1,6 @@
 import { ClipboardList, LineChart } from "lucide-react";
 import { SafePathwayHubLink } from "@/components/marketing/safe-pathway-hub-link";
+import { catPathwayRegionalExamLine, catPathwayShortCatLabel } from "@/lib/exam-pathways/cat-pathway-labels";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
 
@@ -15,6 +16,8 @@ type Props = {
 export function PathwayLessonsNextStepCtas({ pathway, emphasizeStudyLoop }: Props) {
   const questionsHref = buildExamPathwayPath(pathway, "questions");
   const catHref = buildExamPathwayPath(pathway, "cat");
+  const catLine = catPathwayRegionalExamLine(pathway);
+  const catShort = catPathwayShortCatLabel(pathway);
 
   return (
     <section

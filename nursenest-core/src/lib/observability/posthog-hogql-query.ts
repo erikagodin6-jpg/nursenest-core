@@ -10,6 +10,15 @@ export type HogqlQueryResult = {
   error?: string;
 };
 
+export type HogqlTableResult = {
+  ok: boolean;
+  /** Ordered column names returned by PostHog. */
+  columns: string[];
+  /** Array of rows; each row is an array of primitives matching `columns`. */
+  rows: (string | number | null)[][];
+  error?: string;
+};
+
 function posthogApiBase(): string | null {
   const host = process.env.POSTHOG_HOST?.trim() || process.env.NEXT_PUBLIC_POSTHOG_HOST?.trim() || "https://us.i.posthog.com";
   if (!host) return null;
