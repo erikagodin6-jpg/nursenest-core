@@ -34,8 +34,18 @@ import { getMeasurementSystemForCountry } from "@/lib/measurements/measurement-s
 import { getLearnerExamFraming } from "@/lib/learner/learner-exam-framing";
 import { loadRelatedExamQuestionStemsForPathwayLesson } from "@/lib/lessons/lesson-question-cross-links";
 import { PathwayLessonRelatedQuestions } from "@/components/lessons/pathway-lesson-related-questions";
+import { PathwayLessonStudyLoopCta } from "@/components/lessons/pathway-lesson-study-loop-cta";
 import { buildAppQuestionBankTopicDrillHref } from "@/components/lessons/pathway-lesson-link-practice";
 import { buildAppPracticeTestsHubHref } from "@/lib/learner/study-loop-recommendations";
+import {
+  getRelatedPathwayLessons,
+  RELATED_PATHWAY_LESSONS_LIMIT,
+} from "@/lib/lessons/pathway-lesson-loader";
+import {
+  mergeRelatedLessonDisplayList,
+  pathwayLessonHasRenderableHubSlug,
+} from "@/lib/lessons/pathway-lesson-types";
+import { marketingPathwayLessonsIndexPath } from "@/lib/lessons/lesson-routes";
 
 function LessonBody({ content }: { content: unknown }) {
   if (Array.isArray(content)) {
@@ -283,9 +293,9 @@ export default async function LessonDetailPage({ params }: Props) {
     const pathwayId = resolvedLesson.pathwayId;
     const pathway = getExamPathwayById(pathwayId);
     const examFraming = getLearnerExamFraming(pathwayId);
-    const relatedQuestionStems =
+    const [relatedQuestionStems, relatedLessonsRaw] = await Promise.all([
       pathway != null
-        ? await loadRelatedExamQuestionStemsForPathwayLesson({
+        ? loadRelatedExamQuestionStemsForPathwayLesson({
             pathway,
             lessonSlug: record.slug,
             lessonTitle: record.title,
@@ -293,7 +303,16 @@ export default async function LessonDetailPage({ params }: Props) {
             lessonTopicSlug: record.topicSlug,
             bodySystem: record.bodySystem,
           })
-        : [];
+        : Promise.resolve([]),
+      pathway != null
+        ? getRelatedPathwayLessons(pathway.id, record.topicSlug, record.slug, RELATED_PATHWAY_LESSONS_LIMIT)
+        : Promise.resolve([]),
+    ]);
+    const relatedLessonsDisplay = mergeRelatedLessonDisplayList(
+      record.relatedLessonRefs,
+      relatedLessonsRaw.filter(pathwayLessonHasRenderableHubSlug),
+      RELATED_PATHWAY_LESSONS_LIMIT,
+    );
     const pathwayQuality = classifyPathwayLesson(record);
     const tier = entitlement.tier as TierCode | null;
     const lessonViewerTier =
@@ -362,6 +381,16 @@ export default async function LessonDetailPage({ params }: Props) {
             topicSlug={record.topicSlug}
             items={relatedQuestionStems}
             appLinksMode="direct"
+          />
+        ) : null}
+        {pathway ? (
+          <PathwayLessonStudyLoopCta
+            pathway={pathway}
+            lessonsBasePath={marketingPathwayLessonsIndexPath(pathway)}
+            topicLabel={record.topic}
+            topicSlug={record.topicSlug}
+            relatedLessons={relatedLessonsDisplay}
+            currentSlug={record.slug}
           />
         ) : null}
         <div className="mt-10 flex flex-wrap gap-2 border-t border-border pt-6">
