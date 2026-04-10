@@ -154,7 +154,7 @@
     },
     {
       "domain": "Differential Diagnosis & Diagnostic Reasoning",
-      "topicSlug": "adrenal-insufficiency-thyroid-storm-recognition",
+      "topicSlug": "endocrine-crisis-differentials-recognition",
       "tier": "C",
       "lessonCount": 3,
       "lessons": [
@@ -1687,7 +1687,7 @@
 
   "tierCTopics": [
     "red-eye-differential-conjunctivitis-glaucoma",
-    "adrenal-insufficiency-thyroid-storm-recognition",
+    "endocrine-crisis-differentials-recognition",
     "hypertension-red-flags-referral",
     "cancer-red-flags-primary-care",
     "pediatric-red-flags-dont-miss",

@@ -1,0 +1,466 @@
+{
+  "version": 1,
+  "label": "NP Question Bank Expansion — Sample Questions Demonstrating All 8 Question Types",
+  "generatedDate": "2026-04-10",
+  "description": "Demonstrates the full question type coverage for two topics: heart-failure-gdmt-primary-care (premium/32q) and uti-uncomplicated-complicated-stewardship (standard/25q). Each question type is represented. These serve as canonical examples for question writers generating the remaining ~3,100 new questions.",
+
+  "demonstrationTopics": [
+    {
+      "topicSlug": "heart-failure-gdmt-primary-care",
+      "domain": "Chronic Disease Management",
+      "bodySystem": "Cardiovascular",
+      "targetQuestions": 32,
+      "sampleCount": 8,
+      "sampleQuestions": [
+        {
+          "questionId": "demo-hf-001",
+          "questionType": "classic-presentation",
+          "difficulty": "hard",
+          "stemAnchor": "63yo-male-hfref-ef28-ACEi-BB-stable-visit",
+          "examRelevance": ["AANP-FNP", "ANCC-FNP", "ANCC-AGPCNP"],
+          "tags": {
+            "topicSlug": "heart-failure-gdmt-primary-care",
+            "domain": "Chronic Disease Management",
+            "bodySystem": "Cardiovascular",
+            "difficulty": "hard",
+            "questionType": "classic-presentation",
+            "examRelevance": ["AANP-FNP", "ANCC-FNP", "ANCC-AGPCNP"],
+            "phase": "2",
+            "scopeFenceCompliant": true
+          },
+          "stem": "A 63-year-old male with HFrEF (EF 28%) is stable on lisinopril 10 mg daily and carvedilol 12.5 mg twice daily. He has no hospitalizations in the past 6 months, BP is 118/72, HR 62, BMP and renal function are within normal limits. He tolerates his current medications without side effects. According to current ACC/AHA heart failure guidelines, which addition to his regimen would most reduce mortality?",
+          "options": {
+            "A": "Furosemide 40 mg daily",
+            "B": "Spironolactone 25 mg daily",
+            "C": "Digoxin 0.125 mg daily",
+            "D": "Hydralazine-isosorbide dinitrate"
+          },
+          "correctAnswer": "B",
+          "rationale": "For HFrEF patients already on ACEi and beta-blocker with EF ≤35% and persistent symptoms, mineralocorticoid receptor antagonists (MRAs) like spironolactone are a Class I recommendation with a mortality benefit demonstrated in RALES (NYHA II-IV) and EMPHASIS-HF (NYHA II). Furosemide manages volume but has no mortality benefit. Digoxin reduces hospitalization but not mortality (DIG trial). Hydralazine-isosorbide dinitrate is a Class I indication only for self-identified Black patients who remain symptomatic despite ACEi/ARB + BB + MRA, or as a substitute if ACEi/ARB are not tolerated."
+        },
+        {
+          "questionId": "demo-hf-002",
+          "questionType": "atypical-presentation",
+          "difficulty": "expert",
+          "stemAnchor": "78yo-female-hfpef-ef55-dyspnea-preserved-preserved-eGFR45",
+          "examRelevance": ["AANP-FNP", "ANCC-FNP", "ANCC-AGPCNP"],
+          "tags": {
+            "topicSlug": "heart-failure-gdmt-primary-care",
+            "domain": "Chronic Disease Management",
+            "bodySystem": "Cardiovascular",
+            "difficulty": "expert",
+            "questionType": "atypical-presentation",
+            "examRelevance": ["AANP-FNP", "ANCC-FNP", "ANCC-AGPCNP"],
+            "phase": "2",
+            "scopeFenceCompliant": true
+          },
+          "stem": "A 78-year-old female with hypertension, obesity (BMI 34), and atrial fibrillation presents with progressive exertional dyspnea. Echocardiogram shows EF 58%, impaired relaxation (grade I diastolic dysfunction), elevated filling pressures, and moderate left atrial enlargement. BNP 340 pg/mL. eGFR 45. She is currently on metoprolol succinate and apixaban. Which management addition has the strongest evidence for reducing HFpEF hospitalizations in this patient?",
+          "options": {
+            "A": "Sacubitril/valsartan (ARNI)",
+            "B": "Empagliflozin",
+            "C": "Spironolactone",
+            "D": "Ivabradine"
+          },
+          "correctAnswer": "B",
+          "rationale": "SGLT-2 inhibitors (empagliflozin, dapagliflozin) now have Class IIa evidence for reducing HFpEF hospitalizations following the EMPEROR-Preserved and DELIVER trials. Empagliflozin is safe at eGFR ≥20 for HF indication. ARNI (sacubitril/valsartan) showed neutral overall mortality in PARAGON-HF, with subgroup benefit in women and lower EF HFpEF; it is a Class IIb recommendation. Spironolactone (TOPCAT trial) had neutral results with significant geographic variability. Ivabradine reduces HR but is approved only for HFrEF with EF ≤35% in sinus rhythm. SGLT-2 inhibition is the most evidence-supported new addition in HFpEF."
+        },
+        {
+          "questionId": "demo-hf-003",
+          "questionType": "next-best-step",
+          "difficulty": "hard",
+          "stemAnchor": "58yo-male-hfref-new-dry-cough-lisinopril-current-therapy",
+          "examRelevance": ["AANP-FNP", "ANCC-FNP", "ANCC-AGPCNP"],
+          "tags": {
+            "topicSlug": "heart-failure-gdmt-primary-care",
+            "domain": "Chronic Disease Management",
+            "bodySystem": "Cardiovascular",
+            "difficulty": "hard",
+            "questionType": "next-best-step",
+            "examRelevance": ["AANP-FNP", "ANCC-FNP", "ANCC-AGPCNP"],
+            "phase": "2",
+            "scopeFenceCompliant": true
+          },
+          "stem": "A 58-year-old male with HFrEF (EF 30%) is on lisinopril 10 mg, carvedilol 25 mg BID, and spironolactone 25 mg. He has been stable for 9 months. Today he reports a persistent dry, non-productive cough for 6 weeks with no URI, no wheezing, normal CXR, and no signs of decompensation. Spirometry is normal. His BNP is unchanged from baseline. What is the most appropriate next step?",
+          "options": {
+            "A": "Add guaifenesin for symptomatic relief and continue lisinopril",
+            "B": "Switch lisinopril to losartan",
+            "C": "Switch lisinopril to sacubitril/valsartan with 36-hour washout",
+            "D": "Hold lisinopril temporarily and reassess in 4 weeks"
+          },
+          "correctAnswer": "C",
+          "rationale": "ACEi-induced cough (bradykinin-mediated) is a class effect occurring in 10-15% of patients (higher in Asian patients). The appropriate next step for HFrEF patients with ACEi intolerance due to cough is to upgrade to sacubitril/valsartan (ARNI), which is now a Class I recommendation for HFrEF (EF ≤40%) replacing ACEi/ARB to further reduce morbidity/mortality (PARADIGM-HF trial). A 36-hour washout period from ACEi is required before starting ARNI due to angioedema risk from elevated bradykinin levels. Simply switching to an ARB (option B) is guideline-appropriate if cost or access prevent ARNI, but not the superior choice when ARNI is available. Guaifenesin does not address the mechanism; holding the ACEi without a plan is not guideline-concordant."
+        },
+        {
+          "questionId": "demo-hf-004",
+          "questionType": "diagnostic-reasoning",
+          "difficulty": "expert",
+          "stemAnchor": "67yo-male-hfref-acute-weight-gain-3kg-orthopnea-PIRATES",
+          "examRelevance": ["AANP-FNP", "ANCC-FNP", "ANCC-AGPCNP"],
+          "tags": {
+            "topicSlug": "heart-failure-gdmt-primary-care",
+            "domain": "Chronic Disease Management",
+            "bodySystem": "Cardiovascular",
+            "difficulty": "expert",
+            "questionType": "diagnostic-reasoning",
+            "examRelevance": ["AANP-FNP", "ANCC-FNP", "ANCC-AGPCNP"],
+            "phase": "2",
+            "scopeFenceCompliant": true
+          },
+          "stem": "A 67-year-old male with established HFrEF (EF 32%) on optimal GDMT presents to clinic with 3 kg weight gain over 5 days, increased orthopnea (now 3-pillow), and worsening lower extremity edema. He denies fever, cough, or chest pain. BP 152/94 (home baseline 118/76), HR 92, RR 20, SpO2 94% on room air. BNP is 1,840 pg/mL (baseline 320). Which intervention is most likely to have triggered this decompensation?",
+          "options": {
+            "A": "Recent initiation of low-dose ASA 81 mg",
+            "B": "Starting ibuprofen 400 mg TID for knee pain 1 week ago",
+            "C": "Addition of metformin for newly diagnosed T2DM",
+            "D": "Dose reduction of carvedilol due to fatigue"
+          },
+          "correctAnswer": "B",
+          "rationale": "NSAIDs (ibuprofen) cause sodium and water retention by inhibiting prostaglandin-mediated renal vasodilation and aldosterone excretion. They blunt the efficacy of ACEi, ARBs, and diuretics, and can acutely precipitate HF decompensation — particularly dangerous in patients with pre-existing HF, hypertension, and CKD. This is the most common medication-triggered precipitant in primary care HF management and is part of the PIRATES mnemonic (Pulmonary embolism, Infection, diet/salt indiscretion, Renal failure, Arrhythmia, Too much/too little medications, Emia (anemia), Stenosis/structural). NSAIDs are a hard contraindication in HF. ASA 81 mg has no volume-expanding effect. Metformin does not cause fluid retention. Carvedilol dose reduction may worsen hemodynamics but would not cause 3 kg gain in 5 days."
+        },
+        {
+          "questionId": "demo-hf-005",
+          "questionType": "management-decision",
+          "difficulty": "hard",
+          "stemAnchor": "55yo-male-hfref-ef30-newly-optimized-GDMT-12months-icd-crt-criteria",
+          "examRelevance": ["AANP-FNP", "ANCC-FNP", "ANCC-AGPCNP"],
+          "tags": {
+            "topicSlug": "heart-failure-gdmt-primary-care",
+            "domain": "Chronic Disease Management",
+            "bodySystem": "Cardiovascular",
+            "difficulty": "hard",
+            "questionType": "management-decision",
+            "examRelevance": ["AANP-FNP", "ANCC-FNP", "ANCC-AGPCNP"],
+            "phase": "2",
+            "scopeFenceCompliant": true
+          },
+          "stem": "A 55-year-old male with ischemic cardiomyopathy (EF 28%) has been on maximally tolerated GDMT (ARNI + carvedilol 25 mg BID + spironolactone + empagliflozin) for 4 months. Repeat echocardiogram still shows EF 28%. He is in NYHA Class II. ECG shows LBBB with QRS duration 152 ms. He has never had a ventricular arrhythmia. Which device referral is most appropriate at this time?",
+          "options": {
+            "A": "Refer for ICD only (no CRT indicated yet)",
+            "B": "Refer for CRT-P (pacemaker with resynchronization)",
+            "C": "Refer for CRT-D (defibrillator with resynchronization)",
+            "D": "Continue optimizing GDMT for another 6 months before device referral"
+          },
+          "correctAnswer": "C",
+          "rationale": "CRT-D (cardiac resynchronization therapy with defibrillator) is a Class I indication for HFrEF patients who meet ALL of: (1) EF ≤35% despite optimal GDMT for ≥3 months, (2) NYHA Class II-III on optimal therapy, (3) LBBB morphology, (4) QRS ≥150 ms. This patient meets all four criteria. CRT corrects dyssynchrony (reduces LVEDV, improves EF) and the D component addresses sudden cardiac death risk in a patient with severe LV dysfunction (EF 28% carries independent SCD risk requiring ICD protection). Waiting another 6 months is not appropriate — he has been on optimal therapy for 4 months and EF has not improved. CRT-P alone lacks ICD protection. ICD alone ignores the resynchronization benefit in LBBB with wide QRS."
+        },
+        {
+          "questionId": "demo-hf-006",
+          "questionType": "complication-recognition",
+          "difficulty": "hard",
+          "stemAnchor": "70yo-female-hfref-spironolactone-new-K56-AKI-diuresis",
+          "examRelevance": ["AANP-FNP", "ANCC-FNP", "ANCC-AGPCNP"],
+          "tags": {
+            "topicSlug": "heart-failure-gdmt-primary-care",
+            "domain": "Chronic Disease Management",
+            "bodySystem": "Cardiovascular",
+            "difficulty": "hard",
+            "questionType": "complication-recognition",
+            "examRelevance": ["AANP-FNP", "ANCC-FNP", "ANCC-AGPCNP"],
+            "phase": "2",
+            "scopeFenceCompliant": true
+          },
+          "stem": "A 70-year-old female with HFrEF (EF 30%) is on sacubitril/valsartan, carvedilol, spironolactone 25 mg, and furosemide 40 mg daily. Her most recent labs: creatinine 1.6 mg/dL (baseline 1.2), potassium 5.6 mEq/L, BMP otherwise normal. She was recently started on trimethoprim-sulfamethoxazole for an uncomplicated UTI 5 days ago. She has no ECG changes. Which is the most likely cause of her hyperkalemia?",
+          "options": {
+            "A": "Acute decompensated heart failure worsening renal perfusion",
+            "B": "Trimethoprim blocking renal tubular potassium secretion",
+            "C": "Furosemide paradoxically retaining potassium",
+            "D": "Dietary nonadherence with high-potassium foods"
+          },
+          "correctAnswer": "B",
+          "rationale": "Trimethoprim (the TMP component of TMP-SMX) acts as a potassium-sparing diuretic by blocking the amiloride-sensitive sodium channel in the collecting duct, reducing potassium secretion — similar to the mechanism of spironolactone. When TMP is combined with an existing MRA (spironolactone) and an ACEi/ARNi, the risk of dangerous hyperkalemia is compounded. This triple combination (MRA + ACEi/ARNi + TMP) is a recognized pharmacokinetic interaction. Clinicians managing HF patients on spironolactone must use caution with TMP-SMX or choose an alternative antibiotic (e.g., nitrofurantoin) when treating UTI. The creatinine rise suggests mild AKI from potassium-mediated changes but the trigger is TMP-SMX, not HF decompensation."
+        },
+        {
+          "questionId": "demo-hf-007",
+          "questionType": "contraindication",
+          "difficulty": "hard",
+          "stemAnchor": "61yo-male-hfref-started-nsaid-contraindicated-scenario",
+          "examRelevance": ["AANP-FNP", "ANCC-FNP", "ANCC-AGPCNP"],
+          "tags": {
+            "topicSlug": "heart-failure-gdmt-primary-care",
+            "domain": "Chronic Disease Management",
+            "bodySystem": "Cardiovascular",
+            "difficulty": "hard",
+            "questionType": "contraindication",
+            "examRelevance": ["AANP-FNP", "ANCC-FNP", "ANCC-AGPCNP"],
+            "phase": "2",
+            "scopeFenceCompliant": true
+          },
+          "stem": "A 61-year-old male with HFrEF (EF 25%) and NYHA Class III symptoms is on sacubitril/valsartan 97/103 mg BID, carvedilol 25 mg BID, and spironolactone 50 mg. His cardiologist recommends starting digoxin for symptom management. His NP identifies which of the following as an absolute contraindication to digoxin initiation in this patient?",
+          "options": {
+            "A": "His current ARNI therapy",
+            "B": "His EF of 25%",
+            "C": "Presence of pre-excitation (WPW syndrome) on his ECG",
+            "D": "His NYHA Class III designation"
+          },
+          "correctAnswer": "C",
+          "rationale": "Wolff-Parkinson-White (WPW) syndrome with accessory pathway conduction is an absolute contraindication to digoxin. Digoxin slows conduction through the AV node but can paradoxically increase conduction through the accessory pathway, facilitating extremely rapid ventricular rates in atrial fibrillation or flutter — potentially leading to ventricular fibrillation and sudden death. ARNi therapy does not contraindicate digoxin. Low EF is precisely the indication for digoxin in HFrEF (reduces hospitalizations in the DIG trial). NYHA Class III is an indication, not a contraindication. When a patient with WPW and HFrEF needs rate control in AF, a rhythm control strategy is preferred over AV-nodal blocking agents."
+        },
+        {
+          "questionId": "demo-hf-008",
+          "questionType": "edge-case-expert",
+          "difficulty": "expert",
+          "stemAnchor": "54yo-female-hfref-pregnancy-GDMT-teratogenicity-conflict",
+          "examRelevance": ["AANP-FNP", "ANCC-FNP", "ANCC-AGPCNP"],
+          "tags": {
+            "topicSlug": "heart-failure-gdmt-primary-care",
+            "domain": "Chronic Disease Management",
+            "bodySystem": "Cardiovascular",
+            "difficulty": "expert",
+            "questionType": "edge-case-expert",
+            "examRelevance": ["AANP-FNP", "ANCC-FNP", "ANCC-AGPCNP"],
+            "phase": "2",
+            "scopeFenceCompliant": true
+          },
+          "stem": "A 31-year-old woman with peripartum cardiomyopathy (EF 28%, 3 months postpartum) is on lisinopril 10 mg, carvedilol 12.5 mg BID, spironolactone 25 mg, and furosemide 20 mg. She presents asking about the safety of her medications because she is considering breastfeeding. Which medication requires immediate substitution before she breastfeeds?",
+          "options": {
+            "A": "Carvedilol — excreted in breast milk causing neonatal bradycardia",
+            "B": "Lisinopril — transfers significantly into breast milk with neonatal ACEi effects",
+            "C": "Spironolactone — active metabolite canrenone concentrates in breast milk",
+            "D": "Furosemide — suppresses lactation by reducing breast tissue perfusion"
+          },
+          "correctAnswer": "C",
+          "rationale": "Spironolactone is contraindicated during breastfeeding because its active metabolite canrenone is secreted into breast milk in significant concentrations and may exert anti-androgenic effects on the breastfed infant. Lisinopril has very limited transfer into breast milk and is considered compatible with breastfeeding (American Academy of Pediatrics category 'use with caution'). Carvedilol has minimal milk transfer and is generally considered compatible, though monitoring neonatal HR is prudent. Furosemide does not suppress lactation — that is a misconception; it is considered compatible with breastfeeding at standard doses. In peripartum cardiomyopathy, spironolactone should be switched to hydralazine and isosorbide dinitrate for volume management in breastfeeding women."
+        }
+      ]
+    },
+    {
+      "topicSlug": "uti-uncomplicated-complicated-stewardship",
+      "domain": "Acute Primary Care Presentations",
+      "bodySystem": "Renal",
+      "targetQuestions": 25,
+      "sampleCount": 8,
+      "sampleQuestions": [
+        {
+          "questionId": "demo-uti-001",
+          "questionType": "classic-presentation",
+          "difficulty": "hard",
+          "stemAnchor": "24yo-female-dysuria-frequency-urinalysis-nitrites-no-CVA",
+          "examRelevance": ["AANP-FNP", "ANCC-FNP"],
+          "tags": {
+            "topicSlug": "uti-uncomplicated-complicated-stewardship",
+            "domain": "Acute Primary Care Presentations",
+            "bodySystem": "Renal",
+            "difficulty": "hard",
+            "questionType": "classic-presentation",
+            "examRelevance": ["AANP-FNP", "ANCC-FNP"],
+            "phase": "2",
+            "scopeFenceCompliant": true
+          },
+          "stem": "A 24-year-old sexually active female presents with 2-day history of dysuria, urinary frequency, and suprapubic discomfort. She has no fever, no CVA tenderness, and no vaginal discharge. Urinalysis: positive leukocyte esterase, positive nitrites, 25-50 WBCs/hpf, no bacteria on uncentrifuged specimen. She has no drug allergies and this is her first UTI in 12 months. Which is the most appropriate antibiotic choice?",
+          "options": {
+            "A": "Ciprofloxacin 250 mg BID for 3 days",
+            "B": "Nitrofurantoin monohydrate/macrocrystals 100 mg BID for 5 days",
+            "C": "Amoxicillin-clavulanate 875/125 mg BID for 7 days",
+            "D": "Cephalexin 500 mg QID for 7 days"
+          },
+          "correctAnswer": "B",
+          "rationale": "For uncomplicated acute bacterial cystitis in otherwise healthy non-pregnant women, IDSA guidelines recommend nitrofurantoin 100 mg BID for 5 days as a preferred first-line agent due to high efficacy (90-95% cure), minimal systemic side effects, low resistance rates for uropathogens, and limited impact on bowel flora (stewardship advantage). TMP-SMX is equally preferred when local resistance is <20%. Fluoroquinolones (ciprofloxacin) are explicitly recommended against as first-line for uncomplicated UTI per IDSA and FDA guidance due to resistance preservation needs and serious adverse effects (tendinopathy, peripheral neuropathy, QT prolongation). Amoxicillin-clavulanate and cephalosporins have lower cure rates and more collateral effects."
+        },
+        {
+          "questionId": "demo-uti-002",
+          "questionType": "atypical-presentation",
+          "difficulty": "expert",
+          "stemAnchor": "82yo-female-nursing-home-cloudy-urine-no-localizing-symptoms-confusion",
+          "examRelevance": ["AANP-FNP", "ANCC-FNP", "ANCC-AGPCNP"],
+          "tags": {
+            "topicSlug": "uti-uncomplicated-complicated-stewardship",
+            "domain": "Acute Primary Care Presentations",
+            "bodySystem": "Renal",
+            "difficulty": "expert",
+            "questionType": "atypical-presentation",
+            "examRelevance": ["AANP-FNP", "ANCC-FNP", "ANCC-AGPCNP"],
+            "phase": "2",
+            "scopeFenceCompliant": true
+          },
+          "stem": "An 82-year-old female nursing home resident is brought to the clinic by her care aide who reports 'cloudy, smelly urine' for the past 2 days. The patient has mild chronic dementia (baseline MMSE 18/30) and is at her usual level of function and alertness. She denies dysuria or frequency. Temperature 37.1°C. Urinalysis: positive nitrites, 10-25 WBCs/hpf, positive bacteria on culture (pending speciation). She is continent and has no urinary catheter. What is the most appropriate management?",
+          "options": {
+            "A": "Start nitrofurantoin empirically pending culture and sensitivity",
+            "B": "Start ciprofloxacin given high clinical suspicion for UTI in elderly",
+            "C": "Do not treat; this represents asymptomatic bacteriuria in an elderly woman",
+            "D": "Obtain blood cultures and transfer to the ED due to altered mental status"
+          },
+          "correctAnswer": "C",
+          "rationale": "This patient has asymptomatic bacteriuria (ASB): positive urine culture/UA without genitourinary symptoms. Per IDSA 2019 guidelines, ASB in non-pregnant women (including elderly) should NOT be treated with antibiotics. The harms of treatment (C. diff, adverse drug effects, antibiotic resistance development, drug interactions) outweigh any benefit. Cloudy or malodorous urine in the absence of localizing symptoms (dysuria, frequency, urgency, suprapubic pain, flank pain, fever, CVA tenderness, new confusion beyond baseline) does not constitute symptomatic UTI. Her dementia is at baseline, not acutely worsened. Treat-all-positive-UAs in elderly is a major stewardship violation. She should be monitored; treat only if localizing symptoms develop. If she had acute delirium beyond her baseline dementia, UTI would be higher on the differential and a workup warranted."
+        },
+        {
+          "questionId": "demo-uti-003",
+          "questionType": "next-best-step",
+          "difficulty": "hard",
+          "stemAnchor": "32yo-pregnant-woman-urine-culture-100k-ecoli-asymptomatic-12weeks",
+          "examRelevance": ["AANP-FNP", "ANCC-FNP"],
+          "tags": {
+            "topicSlug": "uti-uncomplicated-complicated-stewardship",
+            "domain": "Acute Primary Care Presentations",
+            "bodySystem": "Renal",
+            "difficulty": "hard",
+            "questionType": "next-best-step",
+            "examRelevance": ["AANP-FNP", "ANCC-FNP"],
+            "phase": "2",
+            "scopeFenceCompliant": true
+          },
+          "stem": "A 32-year-old woman at 12 weeks gestation presents for routine prenatal care. She has no urinary complaints. Her urine culture from last week shows >100,000 CFU/mL of E. coli, sensitive to amoxicillin, TMP-SMX, and nitrofurantoin. She has no drug allergies. What is the most appropriate next step?",
+          "options": {
+            "A": "Reassure her and repeat culture in 4 weeks; ASB in pregnancy rarely causes harm",
+            "B": "Treat with amoxicillin 500 mg TID for 3 days and obtain test-of-cure culture",
+            "C": "Treat with nitrofurantoin 100 mg BID for 5 days and obtain test-of-cure culture",
+            "D": "Treat with TMP-SMX DS BID for 7 days and obtain test-of-cure culture"
+          },
+          "correctAnswer": "C",
+          "rationale": "Asymptomatic bacteriuria (ASB) in pregnancy IS an indication for antibiotic treatment, unlike in non-pregnant adults. Untreated ASB in pregnancy carries a 20-40% risk of progressing to pyelonephritis (which causes preterm labor, low birth weight, and maternal sepsis). IDSA guidelines recommend treating ASB in pregnancy after the first urine culture at the initial prenatal visit. Nitrofurantoin for 5 days is an appropriate choice in the first and second trimester. It should be avoided at term (≥36 weeks) due to risk of neonatal hemolytic anemia. TMP-SMX is avoided in the first trimester (folate antagonist → NTD risk) and at term (neonatal hyperbilirubinemia). Amoxicillin has lower efficacy due to high E. coli resistance rates. A test-of-cure culture 1-2 weeks after treatment is standard of care in pregnancy. Amoxicillin is acceptable but not preferred."
+        },
+        {
+          "questionId": "demo-uti-004",
+          "questionType": "diagnostic-reasoning",
+          "difficulty": "hard",
+          "stemAnchor": "45yo-male-first-UTI-no-structural-risk-factors-full-workup",
+          "examRelevance": ["AANP-FNP", "ANCC-FNP"],
+          "tags": {
+            "topicSlug": "uti-uncomplicated-complicated-stewardship",
+            "domain": "Acute Primary Care Presentations",
+            "bodySystem": "Renal",
+            "difficulty": "hard",
+            "questionType": "diagnostic-reasoning",
+            "examRelevance": ["AANP-FNP", "ANCC-FNP"],
+            "phase": "2",
+            "scopeFenceCompliant": true
+          },
+          "stem": "A 45-year-old male presents with his first episode of dysuria and urinary frequency. He has no structural urological problems and is not immunocompromised. Urinalysis: positive leukocyte esterase, 10-25 WBCs/hpf, positive bacteria. No CVA tenderness, temperature 37.2°C. He is sexually active with multiple male partners. Which feature makes this a 'complicated' UTI requiring a longer antibiotic course than an uncomplicated female cystitis?",
+          "options": {
+            "A": "His older age (>40 years)",
+            "B": "His male sex",
+            "C": "His sexual behavior history",
+            "D": "Absence of CVA tenderness"
+          },
+          "correctAnswer": "B",
+          "rationale": "UTI in males is classified as complicated by definition, regardless of the absence of structural abnormalities or host risk factors. This classification exists because: (1) UTI in males under 50 is uncommon and raises concern for underlying structural, neurological, or immunological risk factors; (2) the prostate gland acts as a reservoir for bacteria, increasing the risk of treatment failure and relapse; (3) penetration into prostatic tissue requires longer antibiotic duration (7-14 days) and often fluoroquinolones or TMP-SMX. Male sex alone necessitates 7-14 day courses rather than the 3-5 day courses used in uncomplicated female cystitis. Age over 40 is not a standalone complicating factor. Sexual behavior should prompt STI testing (gonorrhea, chlamydia) but does not change the complicated UTI classification."
+        },
+        {
+          "questionId": "demo-uti-005",
+          "questionType": "management-decision",
+          "difficulty": "hard",
+          "stemAnchor": "68yo-female-recurrent-UTI-3-in-12months-postmenopausal-no-catheter",
+          "examRelevance": ["AANP-FNP", "ANCC-FNP", "ANCC-AGPCNP"],
+          "tags": {
+            "topicSlug": "uti-uncomplicated-complicated-stewardship",
+            "domain": "Acute Primary Care Presentations",
+            "bodySystem": "Renal",
+            "difficulty": "hard",
+            "questionType": "management-decision",
+            "examRelevance": ["AANP-FNP", "ANCC-FNP", "ANCC-AGPCNP"],
+            "phase": "2",
+            "scopeFenceCompliant": true
+          },
+          "stem": "A 68-year-old postmenopausal woman has had 3 culture-confirmed UTIs in the past 12 months, each caused by E. coli sensitive to TMP-SMX. She has no urinary catheter and post-void residual is 30 mL (normal). She describes vaginal dryness, dyspareunia, and increased urinary urgency. Pelvic exam shows a pale, atrophic vaginal mucosa with loss of rugae. She does not want systemic hormone therapy. Which is the most appropriate intervention to prevent recurrence?",
+          "options": {
+            "A": "Continuous low-dose TMP-SMX daily prophylaxis indefinitely",
+            "B": "Intravaginal estradiol cream or ring",
+            "C": "Cranberry extract supplements",
+            "D": "Increase fluid intake and encourage post-coital voiding"
+          },
+          "correctAnswer": "B",
+          "rationale": "This patient has genitourinary syndrome of menopause (GSM) — the unifying term for atrophic vaginitis and related urinary changes driven by estrogen deficiency — which is a major predisposing factor for recurrent UTIs in postmenopausal women. Restoration of vaginal estrogen flora (Lactobacillus) via local intravaginal estrogen (cream, ring, or tablet) reduces recurrent UTI risk by approximately 50% (Raz, 1993; multiple subsequent studies). Crucially, intravaginal/local estrogen does not significantly increase systemic estrogen levels and does not carry the thromboembolism or breast cancer risks of systemic HT — it is safe even in women with a history of breast cancer per many guidelines. Continuous antibiotic prophylaxis is effective but carries resistance and C. diff risk; it is second-line when behavioral and hormonal strategies fail. Cranberry extract has weak and inconsistent evidence. Behavioral modifications are first-line adjuncts but insufficient alone when GSM is the underlying driver."
+        },
+        {
+          "questionId": "demo-uti-006",
+          "questionType": "complication-recognition",
+          "difficulty": "expert",
+          "stemAnchor": "T2DM-67yo-male-treated-UTI-fever-worsening-bacteremia-urosepsis",
+          "examRelevance": ["AANP-FNP", "ANCC-FNP", "ANCC-AGPCNP"],
+          "tags": {
+            "topicSlug": "uti-uncomplicated-complicated-stewardship",
+            "domain": "Acute Primary Care Presentations",
+            "bodySystem": "Renal",
+            "difficulty": "expert",
+            "questionType": "complication-recognition",
+            "examRelevance": ["AANP-FNP", "ANCC-FNP", "ANCC-AGPCNP"],
+            "phase": "2",
+            "scopeFenceCompliant": true
+          },
+          "stem": "A 67-year-old male with T2DM and CKD (eGFR 38) was started on TMP-SMX for complicated UTI 3 days ago. He now returns with worsening flank pain, temperature 39.2°C, HR 118, BP 96/62, and altered mentation. He has not improved on antibiotics. Which diagnosis should be highest priority?",
+          "options": {
+            "A": "TMP-SMX hypersensitivity reaction",
+            "B": "Urosepsis with possible obstructing calculus or emphysematous pyelonephritis",
+            "C": "Antibiotic-associated C. difficile colitis",
+            "D": "Metformin-induced lactic acidosis from worsening renal function"
+          },
+          "correctAnswer": "B",
+          "rationale": "This patient presents with urosepsis (sepsis from urinary source: fever, tachycardia, hypotension, altered mentation = qSOFA ≥2 with urinary source). Two specific complications must be urgently considered in a diabetic male who fails outpatient UTI antibiotics: (1) Obstructive uropathy — infected calculus causing obstruction requires emergency urology intervention (drainage), as antibiotics cannot resolve infection in an obstructed system; (2) Emphysematous pyelonephritis — gas-forming infection predominantly in diabetics that is life-threatening and requires immediate CT imaging and often emergency nephrectomy. Both require emergent ED transfer for CT KUB without contrast, blood cultures ×2 before IV antibiotics, IV fluids, and urology consultation. TMP-SMX hypersensitivity would present with rash and eosinophilia. C. diff requires antibiotic exposure for >48-72 hours with GI predominant symptoms. Metformin lactic acidosis is possible but this presentation is driven by sepsis."
+        },
+        {
+          "questionId": "demo-uti-007",
+          "questionType": "contraindication",
+          "difficulty": "hard",
+          "stemAnchor": "28yo-female-complicated-UTI-eGFR25-nitrofurantoin-renal-CI",
+          "examRelevance": ["AANP-FNP", "ANCC-FNP"],
+          "tags": {
+            "topicSlug": "uti-uncomplicated-complicated-stewardship",
+            "domain": "Acute Primary Care Presentations",
+            "bodySystem": "Renal",
+            "difficulty": "hard",
+            "questionType": "contraindication",
+            "examRelevance": ["AANP-FNP", "ANCC-FNP"],
+            "phase": "2",
+            "scopeFenceCompliant": true
+          },
+          "stem": "A 28-year-old female with lupus nephritis and CKD presents with dysuria and urinary frequency. Urinalysis is positive for leukocyte esterase and nitrites, culture pending. Her current eGFR is 25 mL/min/1.73m². She has no drug allergies. Which antibiotic choice is contraindicated in this patient?",
+          "options": {
+            "A": "TMP-SMX DS for 7 days",
+            "B": "Cephalexin 500 mg QID for 7 days",
+            "C": "Nitrofurantoin 100 mg BID for 5 days",
+            "D": "Amoxicillin-clavulanate 875 mg BID for 7 days"
+          },
+          "correctAnswer": "C",
+          "rationale": "Nitrofurantoin is contraindicated when eGFR <30 mL/min. The drug relies on urinary concentration to exert its antibacterial effect — in patients with significant renal impairment, urinary drug levels are insufficient to inhibit bacterial growth, making treatment ineffective. Additionally, the drug accumulates systemically at low eGFR, increasing the risk of systemic toxicity including peripheral neuropathy and pulmonary toxicity. TMP-SMX requires dose monitoring in CKD (can elevate serum creatinine by inhibiting tubular creatinine secretion without true GFR change) but is not contraindicated at eGFR 25. Cephalexin and amoxicillin-clavulanate require dose adjustment at low eGFR but are not absolutely contraindicated. The alternative first-line choice at this eGFR is TMP-SMX or a beta-lactam (cephalexin, amoxicillin-clavulanate) with culture guidance."
+        },
+        {
+          "questionId": "demo-uti-008",
+          "questionType": "edge-case-expert",
+          "difficulty": "expert",
+          "stemAnchor": "cauti-foley-catheter-30days-bacteriuria-asymptomatic-decision",
+          "examRelevance": ["AANP-FNP", "ANCC-FNP", "ANCC-AGPCNP"],
+          "tags": {
+            "topicSlug": "uti-uncomplicated-complicated-stewardship",
+            "domain": "Acute Primary Care Presentations",
+            "bodySystem": "Renal",
+            "difficulty": "expert",
+            "questionType": "edge-case-expert",
+            "examRelevance": ["AANP-FNP", "ANCC-FNP", "ANCC-AGPCNP"],
+            "phase": "2",
+            "scopeFenceCompliant": true
+          },
+          "stem": "A 74-year-old male with a long-term urinary catheter (in place 6 weeks for urinary retention secondary to BPH) is seen in clinic for a routine visit. He has no fever, no chills, no suprapubic pain, and no altered mental status. His urine appears cloudy and malodorous. Urinalysis: pyuria present, positive bacteria. He is alert and oriented at his baseline. His nurse calls asking whether to send a urine culture and start antibiotics. What is the most appropriate response?",
+          "options": {
+            "A": "Send urine culture and start empiric nitrofurantoin pending culture results",
+            "B": "Send urine culture only; treat if >100,000 CFU/mL identified",
+            "C": "No culture or antibiotics needed; change the catheter and reassess in 24 hours",
+            "D": "No culture or antibiotics; cloudy malodorous urine in catheterized patients is expected and should not trigger treatment"
+          },
+          "correctAnswer": "D",
+          "rationale": "Catheter-associated asymptomatic bacteriuria (CA-ASB) should NOT be treated with antibiotics in patients without symptoms, regardless of pyuria or urine appearance. This is one of the most over-treated conditions in healthcare, contributing significantly to antibiotic resistance and C. diff. Per IDSA CAUTI guidelines: virtually all catheterized patients develop bacteriuria within 30 days; pyuria is present in most catheterized patients and does not distinguish infection from colonization; cloudy/malodorous urine is expected with chronic catheterization and is NOT a criterion for treatment. Indications for treating catheter-associated UTI: fever >38°C, new suprapubic pain, CVA tenderness, rigors, new altered mental status attributable to UTI source (not baseline dementia). The appropriate management here is: if the catheter can be removed (e.g., trial of voiding after BPH treatment), remove it — this is the most effective CA-UTI prevention. If it must remain, catheter change may reduce biofilm burden but does not require antibiotics unless symptoms develop."
+        }
+      ]
+    }
+  ],
+
+  "questionWriterGuidance": {
+    "stemConstructionRules": [
+      "Open every stem with patient demographics (age, sex) + relevant comorbidities",
+      "Include vital signs and objective data (labs, imaging findings) proportional to question type",
+      "End every stem with a single, unambiguous clinical question",
+      "Never include the answer in the stem (avoid leading language like 'the most common cause of X' when X is the answer)",
+      "Avoid doubles: each stem tests ONE decision point — do not embed two separate clinical decisions"
+    ],
+    "distractorRules": [
+      "Option A should not always be the correct answer — randomize correct answer position",
+      "All distractors must be plausible — avoid obviously wrong options",
+      "For pharmacology questions: include at least one distractor that represents a common clinical error",
+      "For stewardship questions: include at least one distractor that is an overuse option (e.g., a fluoroquinolone for uncomplicated UTI)",
+      "Avoid 'all of the above' and 'none of the above' options"
+    ],
+    "rationaleRules": [
+      "Explain WHY the correct answer is correct using the clinical mechanism or guideline basis",
+      "Explain WHY each WRONG answer is wrong — do not just say 'incorrect'",
+      "Keep rationale under 200 words per question",
+      "Cite the guideline, trial, or scoring system that supports the correct answer when applicable"
+    ]
+  }
+}

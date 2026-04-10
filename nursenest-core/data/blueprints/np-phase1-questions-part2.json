@@ -10,7 +10,7 @@
     "red-eye-differential-urgent-vs-benign",
     "hemoptysis-differential-magnitude-workup",
     "lymphadenopathy-differential-benign-malignant",
-    "endocrine-crisis-recognition-dka-hhs-adrenal"
+    "endocrine-crisis-differentials-recognition"
   ],
   "scopeFenceRef": "np-scope-fences.json",
   "generationRules": "All questions test recognition or differential reasoning only. No management, prescribing, or dosing content beyond recognition of urgency. Stem anchors are unique and do not overlap with np-phase1-questions-part1.json.",
@@ -728,7 +728,7 @@
 
     {
       "questionId": "np-p1-127",
-      "topicSlug": "endocrine-crisis-recognition-dka-hhs-adrenal",
+      "topicSlug": "endocrine-crisis-differentials-recognition",
       "lessonPart": "1",
       "difficulty": "hard",
       "stemAnchor": "22yo-T1DM-fruity-breath-vomiting-kussmaul-pH-71-DKA",
@@ -744,7 +744,7 @@
     },
     {
       "questionId": "np-p1-128",
-      "topicSlug": "endocrine-crisis-recognition-dka-hhs-adrenal",
+      "topicSlug": "endocrine-crisis-differentials-recognition",
       "lessonPart": "1",
       "difficulty": "expert",
       "stemAnchor": "72yo-T2DM-HHS-glucose-1100-no-ketones-obtunded",
@@ -760,7 +760,7 @@
     },
     {
       "questionId": "np-p1-129",
-      "topicSlug": "endocrine-crisis-recognition-dka-hhs-adrenal",
+      "topicSlug": "endocrine-crisis-differentials-recognition",
       "lessonPart": "1",
       "difficulty": "hard",
       "stemAnchor": "35yo-female-DKA-euglycemic-SGLT2-empagliflozin-normal-glucose",
@@ -776,7 +776,7 @@
     },
     {
       "questionId": "np-p1-130",
-      "topicSlug": "endocrine-crisis-recognition-dka-hhs-adrenal",
+      "topicSlug": "endocrine-crisis-differentials-recognition",
       "lessonPart": "1",
       "difficulty": "expert",
       "stemAnchor": "35yo-female-adrenal-crisis-hypotension-hyperpigmentation-sudden-shock",
@@ -792,7 +792,7 @@
     },
     {
       "questionId": "np-p1-131",
-      "topicSlug": "endocrine-crisis-recognition-dka-hhs-adrenal",
+      "topicSlug": "endocrine-crisis-differentials-recognition",
       "lessonPart": "1",
       "difficulty": "expert",
       "stemAnchor": "58yo-male-thyroid-storm-AF-hyperthermia-altered-precipitated-surgery",
@@ -808,7 +808,7 @@
     },
     {
       "questionId": "np-p1-132",
-      "topicSlug": "endocrine-crisis-recognition-dka-hhs-adrenal",
+      "topicSlug": "endocrine-crisis-differentials-recognition",
       "lessonPart": "1",
       "difficulty": "hard",
       "stemAnchor": "28yo-female-myxedema-coma-cold-confusion-bradycardia-hypothermia",
@@ -824,7 +824,7 @@
     },
     {
       "questionId": "np-p1-133",
-      "topicSlug": "endocrine-crisis-recognition-dka-hhs-adrenal",
+      "topicSlug": "endocrine-crisis-differentials-recognition",
       "lessonPart": "1",
       "difficulty": "expert",
       "stemAnchor": "48yo-male-pheochromocytoma-paroxysmal-HTN-headache-diaphoresis-palpitations",

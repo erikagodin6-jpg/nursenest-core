@@ -23,7 +23,7 @@
       { "topicSlug": "red-eye-differential-urgent-vs-benign", "questionCount": 7, "lessonParts": ["1"] },
       { "topicSlug": "hemoptysis-differential-magnitude-workup", "questionCount": 7, "lessonParts": ["1"] },
       { "topicSlug": "lymphadenopathy-differential-benign-malignant", "questionCount": 7, "lessonParts": ["1"] },
-      { "topicSlug": "endocrine-crisis-recognition-dka-hhs-adrenal", "questionCount": 7, "lessonParts": ["1"] }
+      { "topicSlug": "endocrine-crisis-differentials-recognition", "questionCount": 7, "lessonParts": ["1"] }
     ],
     "totalQuestionsPhase1": 132,
     "targetQuestions": 131,

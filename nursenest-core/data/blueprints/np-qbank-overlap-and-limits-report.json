@@ -13,7 +13,7 @@
       "recommendation": "Cap at 18. Do not pad with repeat scenarios."
     },
     {
-      "topicSlug": "adrenal-insufficiency-thyroid-storm-recognition",
+      "topicSlug": "endocrine-crisis-differentials-recognition",
       "realisticMax": 18,
       "reason": "Recognition-and-refer topic covering 7 distinct clinical crises. Detailed management is split across adrenal-insufficiency-stress-dosing-management and thyroid-disease-diagnosis-management by scope fence. Expanding beyond 18 would duplicate content already assigned to those topics.",
       "recommendation": "Cap at 18. Cross-reference for management questions."
@@ -177,7 +177,7 @@
     {
       "topicSlug": "dka-hhs-recognition-outpatient-stabilize",
       "realisticMax": 18,
-      "reason": "Outpatient recognition and initial stabilization only. Inpatient management belongs to endocrine-crisis-recognition-dka-hhs-adrenal topic. Expanding beyond 18 causes SF-01 scope fence violations.",
+      "reason": "Outpatient recognition and initial stabilization only. Inpatient management belongs to endocrine-crisis-differentials-recognition topic. Expanding beyond 18 causes SF-01 scope fence violations.",
       "recommendation": "Cap at 18."
     },
     {
@@ -320,11 +320,11 @@
     },
     {
       "pairId": "OVR-12",
-      "topicA": "adrenal-insufficiency-thyroid-storm-recognition",
+      "topicA": "endocrine-crisis-differentials-recognition",
       "topicB": "adrenal-insufficiency-stress-dosing-management",
       "overlapRisk": "HIGH",
       "overlapZone": "Adrenal crisis recognition and management",
-      "resolution": "adrenal-insufficiency-thyroid-storm-recognition: recognition in the office setting, differential from other causes, ordering cosyntropin stimulation test. adrenal-insufficiency-stress-dosing-management: outpatient management, stress dosing rules, sick day counseling, replacement therapy monitoring. Crisis recognition → recognition topic. Sick day rules and dose titration → management topic.",
+      "resolution": "endocrine-crisis-differentials-recognition: recognition in the office setting, differential from other causes, ordering cosyntropin stimulation test. adrenal-insufficiency-stress-dosing-management: outpatient management, stress dosing rules, sick day counseling, replacement therapy monitoring. Crisis recognition → recognition topic. Sick day rules and dose titration → management topic.",
       "stemAnchorGuard": "Recognition topic stems: which lab confirms, what distinguishes primary vs secondary, which findings indicate crisis. Management stems: established diagnosis, how to dose replacement, what to do when sick."
     },
     {
@@ -403,7 +403,7 @@
       "rash-differential-primary-care": 25,
       "flank-pain-differential-uti-stones-pyelo": 25,
       "red-eye-differential-conjunctivitis-glaucoma": 18,
-      "adrenal-insufficiency-thyroid-storm-recognition": 18,
+      "endocrine-crisis-differentials-recognition": 18,
       "lymphadenopathy-reactive-malignant-workup": 25,
       "syncope-differential-vasovagal-cardiac-neuro": 30,
       "hemoptysis-differential-risk-workup": 25,
