@@ -1,4 +1,6 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import path from "node:path";
 import { describe, it } from "node:test";
 import {
   EMPTY_QUESTION_SNAPSHOT,
@@ -36,5 +38,20 @@ describe("formatMarketingMessage missing keys", () => {
     } finally {
       Object.assign(process.env, { NODE_ENV: prev });
     }
+  });
+
+  it("falls back to English for required marketing nav labels", () => {
+    const i18nDir = path.join(process.cwd(), "public", "i18n");
+    const english = JSON.parse(readFileSync(path.join(i18nDir, "en.json"), "utf8")) as Record<string, string>;
+    const french = JSON.parse(readFileSync(path.join(i18nDir, "fr.json"), "utf8")) as Record<string, string>;
+
+    assert.equal(
+      formatMarketingMessage(french, "nav.getStarted", undefined, english),
+      "Get Started",
+    );
+    assert.equal(
+      formatMarketingMessage(french, "nav.pathwayHubsAria", undefined, english),
+      "Pathway hub navigation",
+    );
   });
 });

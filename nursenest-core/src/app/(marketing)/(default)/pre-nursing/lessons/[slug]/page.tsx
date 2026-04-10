@@ -14,6 +14,7 @@ import { getPreNursingModuleComponent } from "@/content/pre-nursing/pre-nursing-
 import strings from "@/content/pre-nursing/pre-nursing-strings-en.json";
 import { preNursingModuleBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { absoluteUrl } from "@/lib/seo/site-origin";
+import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
 const dict = strings as Record<string, string>;
 
@@ -28,22 +29,27 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const meta = PRE_NURSING_MODULE_REGISTRY.find((m) => m.slug === slug);
-  if (!meta || !getPreNursingModuleComponent(slug)) return { title: "Not found" };
-  const title = dict[meta.titleKey] ?? slug;
-  const rawDesc = (dict[meta.subtitleKey] ?? "").trim();
-  const description =
-    rawDesc ||
-    `Free Pre-Nursing module: ${title}. Interactive foundations before nursing school, part of NurseNest’s free catalog.`;
-  const metaTitle = `${title} | Free Pre-Nursing | NurseNest`;
-  const path = `/pre-nursing/lessons/${slug}`;
-  return {
-    title: metaTitle,
-    description,
-    alternates: { canonical: absoluteUrl(path) },
-    openGraph: { title: metaTitle, description, url: absoluteUrl(path), type: "article" },
-    twitter: { card: "summary_large_image", title: metaTitle, description },
-  };
+  return safeGenerateMetadata(
+    async () => {
+      const meta = PRE_NURSING_MODULE_REGISTRY.find((m) => m.slug === slug);
+      if (!meta || !getPreNursingModuleComponent(slug)) return { title: "Not found" };
+      const title = dict[meta.titleKey] ?? slug;
+      const rawDesc = (dict[meta.subtitleKey] ?? "").trim();
+      const description =
+        rawDesc ||
+        `Free Pre-Nursing module: ${title}. Interactive foundations before nursing school, part of NurseNest’s free catalog.`;
+      const metaTitle = `${title} | Free Pre-Nursing | NurseNest`;
+      const path = `/pre-nursing/lessons/${slug}`;
+      return {
+        title: metaTitle,
+        description,
+        alternates: { canonical: absoluteUrl(path) },
+        openGraph: { title: metaTitle, description, url: absoluteUrl(path), type: "article" },
+        twitter: { card: "summary_large_image", title: metaTitle, description },
+      };
+    },
+    { pathname: `/pre-nursing/lessons/${slug}`, routeGroup: "marketing.default.pre_nursing.module" },
+  );
 }
 
 export default async function PreNursingLessonModulePage({ params }: Props) {

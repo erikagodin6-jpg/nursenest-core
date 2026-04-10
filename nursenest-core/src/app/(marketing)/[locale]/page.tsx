@@ -14,6 +14,7 @@ import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { resolveMarketingCopy } from "@/lib/marketing-i18n-core";
 import { getMarketingRegionFromCookies } from "@/lib/region/marketing-region-server";
 import { defaultHomeMetaDescription, defaultHomeMetaTitle } from "@/lib/marketing/nursing-tier-public-labels";
+import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
 export const revalidate = 600;
 
@@ -24,29 +25,34 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!isCoreHostedNonDefaultLocale(locale)) {
     notFound();
   }
-  const marketingRegion = await getMarketingRegionFromCookies();
-  const m = await loadMarketingMessages(locale);
-  const en = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
-  const metaSfx = marketingRegion === "US" ? "US" : "CA";
-  const title = resolveMarketingCopy(m, `pages.home.metaTitle${metaSfx}`, en, defaultHomeMetaTitle(marketingRegion));
-  const description = resolveMarketingCopy(
-    m,
-    `pages.home.metaDescription${metaSfx}`,
-    en,
-    defaultHomeMetaDescription(marketingRegion),
-  );
-  const alt = marketingAlternatesSharedPage(locale, "/");
-  return {
-    title,
-    description,
-    alternates: { canonical: alt.canonical, languages: alt.languages },
-    openGraph: {
-      title,
-      description,
-      url: alt.canonical,
-      type: "website",
+  return safeGenerateMetadata(
+    async () => {
+      const marketingRegion = await getMarketingRegionFromCookies();
+      const m = await loadMarketingMessages(locale);
+      const en = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
+      const metaSfx = marketingRegion === "US" ? "US" : "CA";
+      const title = resolveMarketingCopy(m, `pages.home.metaTitle${metaSfx}`, en, defaultHomeMetaTitle(marketingRegion));
+      const description = resolveMarketingCopy(
+        m,
+        `pages.home.metaDescription${metaSfx}`,
+        en,
+        defaultHomeMetaDescription(marketingRegion),
+      );
+      const alt = marketingAlternatesSharedPage(locale, "/");
+      return {
+        title,
+        description,
+        alternates: { canonical: alt.canonical, languages: alt.languages },
+        openGraph: {
+          title,
+          description,
+          url: alt.canonical,
+          type: "website",
+        },
+      };
     },
-  };
+    { pathname: `/${locale}`, locale, routeGroup: "marketing.locale.home" },
+  );
 }
 
 export default async function LocalizedHomePage({ params }: Props) {

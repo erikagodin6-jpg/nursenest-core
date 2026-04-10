@@ -18,26 +18,31 @@ import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messa
 import { formatMarketingMessage } from "@/lib/marketing-i18n-core";
 import { alliedHubBreadcrumbs } from "@/lib/seo/allied-breadcrumbs";
 import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
-import { absoluteUrl } from "@/lib/seo/site-origin";
+import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
 export const revalidate = 86400;
 
 const BASE = "/allied-health";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const locale = await getMarketingLocaleForDefaultRoute();
-  const m = await loadMarketingMessages(locale);
-  const en = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
-  const t = (key: string, params?: Record<string, string | number>) => formatMarketingMessage(m, key, params, en);
-  const title = t("pages.alliedHealthHub.metaTitle");
-  const description = t("pages.alliedHealthHub.metaDescription");
-  const alt = marketingAlternatesSharedPage(locale, BASE);
-  return {
-    title,
-    description,
-    alternates: { canonical: alt.canonical, languages: alt.languages },
-    openGraph: { title, description, url: alt.canonical, type: "website" },
-  };
+  return safeGenerateMetadata(
+    async () => {
+      const locale = await getMarketingLocaleForDefaultRoute();
+      const m = await loadMarketingMessages(locale);
+      const en = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
+      const t = (key: string, params?: Record<string, string | number>) => formatMarketingMessage(m, key, params, en);
+      const title = t("pages.alliedHealthHub.metaTitle");
+      const description = t("pages.alliedHealthHub.metaDescription");
+      const alt = marketingAlternatesSharedPage(locale, BASE);
+      return {
+        title,
+        description,
+        alternates: { canonical: alt.canonical, languages: alt.languages },
+        openGraph: { title, description, url: alt.canonical, type: "website" },
+      };
+    },
+    { pathname: BASE, routeGroup: "marketing.default.allied_health" },
+  );
 }
 
 function buildHubCopy(t: (key: string) => string): AlliedHealthHubCopy {

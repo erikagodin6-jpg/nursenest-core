@@ -13,6 +13,7 @@ import { PreNursingNextStepsBlock } from "@/components/pre-nursing/pre-nursing-n
 import { PreNursingSurfaceAnalytics } from "@/components/pre-nursing/pre-nursing-surface-analytics";
 import strings from "@/content/pre-nursing/pre-nursing-strings-en.json";
 import { preNursingHubBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
+import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
 export const revalidate = 86400;
 
@@ -25,14 +26,19 @@ const description =
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   if (!isCoreHostedNonDefaultLocale(locale)) notFound();
-  const alt = marketingAlternatesSharedPage(locale, "/pre-nursing");
-  return {
-    title,
-    description,
-    alternates: { canonical: alt.canonical, languages: alt.languages },
-    openGraph: { title, description, url: absoluteUrl("/pre-nursing"), type: "website" },
-    twitter: { card: "summary_large_image", title, description },
-  };
+  return safeGenerateMetadata(
+    async () => {
+      const alt = marketingAlternatesSharedPage(locale, "/pre-nursing");
+      return {
+        title,
+        description,
+        alternates: { canonical: alt.canonical, languages: alt.languages },
+        openGraph: { title, description, url: absoluteUrl("/pre-nursing"), type: "website" },
+        twitter: { card: "summary_large_image", title, description },
+      };
+    },
+    { pathname: `/${locale}/pre-nursing`, locale, routeGroup: "marketing.locale.pre_nursing" },
+  );
 }
 
 export default async function LocalizedPreNursingPage({ params }: Props) {

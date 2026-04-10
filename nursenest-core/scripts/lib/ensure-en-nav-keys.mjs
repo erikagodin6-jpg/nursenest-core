@@ -12,6 +12,7 @@ const EN_PATH = path.join(ROOT, "public", "i18n", "en.json");
 
 export const REQUIRED_EN_NAV_STRINGS = {
   "nav.getStarted": "Get Started",
+  "nav.pathwayHubsAria": "Pathway hub navigation",
   "nav.chooseYourExam": "Choose your exam",
   "nav.topicAdaptiveTests": "Adaptive topic tests",
   "nav.studyPlanShort": "Study plan",

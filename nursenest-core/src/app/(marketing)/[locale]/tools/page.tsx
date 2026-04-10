@@ -2,24 +2,30 @@ import type { Metadata } from "next";
 import { ToolsHubClient } from "@/components/tools/tools-hub-client";
 import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
 import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
+import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
 type Props = { params: Promise<{ locale: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
-  const m = await loadMarketingMessages(locale);
-  const alt = marketingAlternatesSharedPage(locale, "/tools");
-  return {
-    title: m["tools.hub.metaTitle"],
-    description: m["tools.hub.metaDescription"],
-    alternates: { canonical: alt.canonical, languages: alt.languages },
-    openGraph: {
-      title: m["tools.hub.metaTitle"],
-      description: m["tools.hub.metaDescription"],
-      url: alt.canonical,
-      type: "website",
+  return safeGenerateMetadata(
+    async () => {
+      const m = await loadMarketingMessages(locale);
+      const alt = marketingAlternatesSharedPage(locale, "/tools");
+      return {
+        title: m["tools.hub.metaTitle"],
+        description: m["tools.hub.metaDescription"],
+        alternates: { canonical: alt.canonical, languages: alt.languages },
+        openGraph: {
+          title: m["tools.hub.metaTitle"],
+          description: m["tools.hub.metaDescription"],
+          url: alt.canonical,
+          type: "website",
+        },
+      };
     },
-  };
+    { pathname: `/${locale}/tools`, locale, routeGroup: "marketing.locale.tools" },
+  );
 }
 
 export default function LocalizedToolsHubPage() {

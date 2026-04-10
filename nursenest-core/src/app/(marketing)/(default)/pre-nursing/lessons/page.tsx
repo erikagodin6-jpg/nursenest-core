@@ -12,6 +12,7 @@ import strings from "@/content/pre-nursing/pre-nursing-strings-en.json";
 import { PRE_NURSING_LESSON_HUB_PAGE_SIZE } from "@/lib/pre-nursing/pre-nursing-constants";
 import { preNursingLessonsHubBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { absoluteUrl } from "@/lib/seo/site-origin";
+import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
 const dict = strings as Record<string, string>;
 
@@ -20,23 +21,28 @@ export const revalidate = 86400;
 type Props = { searchParams: Promise<{ page?: string }> };
 
 export async function generateMetadata({ searchParams }: Props): Promise<Metadata> {
-  const sp = await searchParams;
-  const page = Math.max(1, Number(sp.page ?? "1") || 1);
-  const title =
-    page > 1
-      ? `Pre-Nursing lessons (page ${page}) | NurseNest`
-      : "Free Pre-Nursing lessons & modules | NurseNest";
-  const description =
-    "Free interactive Pre-Nursing modules: sciences, terminology, communication, and clinical reasoning, paginated for fast loads. No subscription required.";
-  const path = page > 1 ? `/pre-nursing/lessons?page=${page}` : "/pre-nursing/lessons";
-  return {
-    title,
-    description,
-    alternates: { canonical: absoluteUrl(path) },
-    openGraph: { title, description, url: absoluteUrl(path), type: "website" },
-    twitter: { card: "summary_large_image", title, description },
-    ...(page > 1 ? { robots: { index: false, follow: true } } : {}),
-  };
+  return safeGenerateMetadata(
+    async () => {
+      const sp = await searchParams;
+      const page = Math.max(1, Number(sp.page ?? "1") || 1);
+      const title =
+        page > 1
+          ? `Pre-Nursing lessons (page ${page}) | NurseNest`
+          : "Free Pre-Nursing lessons & modules | NurseNest";
+      const description =
+        "Free interactive Pre-Nursing modules: sciences, terminology, communication, and clinical reasoning, paginated for fast loads. No subscription required.";
+      const path = page > 1 ? `/pre-nursing/lessons?page=${page}` : "/pre-nursing/lessons";
+      return {
+        title,
+        description,
+        alternates: { canonical: absoluteUrl(path) },
+        openGraph: { title, description, url: absoluteUrl(path), type: "website" },
+        twitter: { card: "summary_large_image", title, description },
+        ...(page > 1 ? { robots: { index: false, follow: true } } : {}),
+      };
+    },
+    { pathname: "/pre-nursing/lessons", routeGroup: "marketing.default.pre_nursing.lessons" },
+  );
 }
 
 export default async function PreNursingLessonsHubPage({ searchParams }: Props) {

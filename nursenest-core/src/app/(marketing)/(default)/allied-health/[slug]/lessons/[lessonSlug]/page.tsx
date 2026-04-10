@@ -61,6 +61,7 @@ import { loadRelatedExamQuestionStemsForPathwayLesson } from "@/lib/lessons/less
 import { PathwayLessonRelatedQuestions } from "@/components/lessons/pathway-lesson-related-questions";
 import { PathwayLessonStudyLoopCta } from "@/components/lessons/pathway-lesson-study-loop-cta";
 import { getMeasurementSystemForCountry } from "@/lib/measurements/measurement-system";
+import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
 export const revalidate = 86400;
 export const dynamicParams = true;
@@ -82,29 +83,34 @@ function resolveProfession(slug: string) {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug, lessonSlug } = await params;
-  const resolved = resolveProfession(slug);
-  const prof = resolved?.prof;
-  const pathway = prof ? getPathwayOrThrow(prof.pathwayId) : undefined;
-  const lessonContentLocale = defaultPathwayLessonContentLocaleForExamHubRoute();
-  const lesson = pathway ? await getPathwayLesson(pathway.id, lessonSlug, lessonContentLocale) : undefined;
-  if (!prof || !pathway || !lesson) return {};
-  if (!alliedLessonMatchesProfessionFilter(lesson, prof.topicSlugsIn)) return {};
-  const path = alliedHealthLessonDetailPath(prof.professionKey, lesson.slug);
-  const canonical = absoluteUrl(path);
-  const strictPublic = process.env.PATHWAY_LESSON_STRICT_PUBLIC_QUALITY === "1";
-  const gate = lesson.structuralQuality;
-  const incomplete = Boolean(gate && !gate.publicComplete);
-  const robots =
-    incomplete && (strictPublic || gate?.structureMode === "premium")
-      ? ({ index: false, follow: true } as const)
-      : ({ index: true, follow: true } as const);
-  return {
-    title: lesson.seoTitle,
-    description: lesson.seoDescription,
-    alternates: { canonical },
-    openGraph: { title: lesson.seoTitle, description: lesson.seoDescription, url: canonical, type: "article" },
-    robots,
-  };
+  return safeGenerateMetadata(
+    async () => {
+      const resolved = resolveProfession(slug);
+      const prof = resolved?.prof;
+      const pathway = prof ? getPathwayOrThrow(prof.pathwayId) : undefined;
+      const lessonContentLocale = defaultPathwayLessonContentLocaleForExamHubRoute();
+      const lesson = pathway ? await getPathwayLesson(pathway.id, lessonSlug, lessonContentLocale) : undefined;
+      if (!prof || !pathway || !lesson) return {};
+      if (!alliedLessonMatchesProfessionFilter(lesson, prof.topicSlugsIn)) return {};
+      const path = alliedHealthLessonDetailPath(prof.professionKey, lesson.slug);
+      const canonical = absoluteUrl(path);
+      const strictPublic = process.env.PATHWAY_LESSON_STRICT_PUBLIC_QUALITY === "1";
+      const gate = lesson.structuralQuality;
+      const incomplete = Boolean(gate && !gate.publicComplete);
+      const robots =
+        incomplete && (strictPublic || gate?.structureMode === "premium")
+          ? ({ index: false, follow: true } as const)
+          : ({ index: true, follow: true } as const);
+      return {
+        title: lesson.seoTitle,
+        description: lesson.seoDescription,
+        alternates: { canonical },
+        openGraph: { title: lesson.seoTitle, description: lesson.seoDescription, url: canonical, type: "article" },
+        robots,
+      };
+    },
+    { pathname: `/allied-health/${slug}/lessons/${lessonSlug}`, routeGroup: "marketing.default.allied_health.lesson" },
+  );
 }
 
 export default async function AlliedHealthSlugLessonDetailPage({ params }: Props) {

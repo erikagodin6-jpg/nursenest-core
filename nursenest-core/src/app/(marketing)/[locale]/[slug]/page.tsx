@@ -4,6 +4,7 @@ import { ProgrammaticSeoPage } from "@/components/seo/programmatic-seo-page";
 import { buildProgrammaticMetadata } from "@/lib/seo/programmatic-metadata";
 import { getMarketingRegionFromCookies } from "@/lib/region/marketing-region-server";
 import { resolveProgrammaticSeoForLocale } from "@/lib/seo/resolve-programmatic-seo";
+import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
 /**
  * Canonical English programmatic pages live under `/seo/[slug]`; localized URLs use this route.
@@ -24,9 +25,14 @@ export async function generateMetadata({
   params: Promise<{ locale: string; slug: string }>;
 }): Promise<Metadata> {
   const { locale, slug } = await params;
-  const resolved = resolveProgrammaticSeoForLocale(slug, locale);
-  if (!resolved) return {};
-  return buildProgrammaticMetadata(resolved.page, locale);
+  return safeGenerateMetadata(
+    async () => {
+      const resolved = resolveProgrammaticSeoForLocale(slug, locale);
+      if (!resolved) return {};
+      return buildProgrammaticMetadata(resolved.page, locale);
+    },
+    { pathname: `/${locale}/${slug}`, locale, routeGroup: "marketing.locale.programmatic_seo" },
+  );
 }
 
 export default async function ProgrammaticSeoLocaleRoute({

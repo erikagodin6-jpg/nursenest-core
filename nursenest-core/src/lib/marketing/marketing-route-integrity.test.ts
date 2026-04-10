@@ -5,6 +5,7 @@ import {
   getHomeHeroTierPillLinkSpecs,
   marketingExamHubPath,
 } from "@/lib/marketing/country-exam-offerings";
+import { resolveExamPathwaySafe } from "@/lib/exam-pathways/resolve-exam-pathway-safe";
 import {
   marketingExamPrepHubs,
   publicMarketingCatHrefForOffering,
@@ -84,5 +85,18 @@ describe("marketing route integrity", () => {
       assert.equal(isWellFormedExamHubPath(byId.allied.path), true);
       assert.equal(isValidPath(byId["new-grad"].path), true);
     }
+  });
+
+  it("resolveExamPathwaySafe rejects unsupported triples while keeping canonical hubs resolvable", () => {
+    assert.equal(
+      resolveExamPathwaySafe("us", "rpn", "rex-pn", { pathname: "/us/rpn/rex-pn" }),
+      null,
+    );
+
+    const canadaPn = resolveExamPathwaySafe("canada", "rpn", "rex-pn", {
+      pathname: "/canada/rpn/rex-pn",
+    });
+    assert.ok(canadaPn);
+    assert.equal(canadaPn.id, "ca-rpn-rex-pn");
   });
 });

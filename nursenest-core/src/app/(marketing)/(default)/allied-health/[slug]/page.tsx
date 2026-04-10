@@ -13,6 +13,7 @@ import { alliedHealthLessonsIndexPath, alliedHealthSegmentPath } from "@/lib/les
 import { alliedProfessionBreadcrumbs } from "@/lib/seo/allied-breadcrumbs";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
 import { absoluteUrl } from "@/lib/seo/site-origin";
+import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 
@@ -27,16 +28,21 @@ type Props = { params: Promise<{ slug: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const prof =
-    getAlliedProfessionByHeroSegment(slug) ?? getAlliedProfessionByProfessionKey(slug);
-  if (!prof) return { title: "Not found" };
-  const path = alliedHealthSegmentPath(prof.segment);
-  return {
-    title: prof.title,
-    description: prof.description,
-    alternates: { canonical: absoluteUrl(path) },
-    openGraph: { title: prof.title, description: prof.description, url: absoluteUrl(path), type: "website" },
-  };
+  return safeGenerateMetadata(
+    async () => {
+      const prof =
+        getAlliedProfessionByHeroSegment(slug) ?? getAlliedProfessionByProfessionKey(slug);
+      if (!prof) return { title: "Not found" };
+      const path = alliedHealthSegmentPath(prof.segment);
+      return {
+        title: prof.title,
+        description: prof.description,
+        alternates: { canonical: absoluteUrl(path) },
+        openGraph: { title: prof.title, description: prof.description, url: absoluteUrl(path), type: "website" },
+      };
+    },
+    { pathname: `/allied-health/${slug}`, routeGroup: "marketing.default.allied_health.slug" },
+  );
 }
 
 export default async function AlliedHealthSlugPage({ params }: Props) {

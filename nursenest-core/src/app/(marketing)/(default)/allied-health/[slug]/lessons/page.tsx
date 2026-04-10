@@ -27,6 +27,7 @@ import {
 import { alliedHealthLessonsIndexPath, alliedHealthSegmentPath } from "@/lib/lessons/lesson-routes";
 import { alliedLessonsHubBreadcrumbs } from "@/lib/seo/allied-breadcrumbs";
 import { absoluteUrl } from "@/lib/seo/site-origin";
+import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
 export const revalidate = 86400;
 export const dynamicParams = true;
@@ -51,38 +52,43 @@ function resolveProfession(slug: string) {
 
 export async function generateMetadata({ params, searchParams }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const resolved = resolveProfession(slug);
-  const sp = await searchParams;
-  const page = Math.max(1, Number(sp.page ?? "1") || 1);
-  if (!resolved) return { title: "Not found" };
-  const { prof } = resolved;
-  const pathway = getPathwayOrThrow(prof.pathwayId);
-  if (!pathway) return { title: "Not found" };
-  const loc = defaultPathwayLessonContentLocaleForExamHubRoute();
-  const lessonTotal =
-    pathway != null
-      ? await countPublishedPathwayLessonsForAlliedMarketing(
-          pathway.id,
-          loc,
-          prof.topicSlugsIn,
-        )
-      : null;
-  const emptyHub = lessonTotal === 0;
-  const basePath = alliedHealthLessonsIndexPath(prof.professionKey);
-  const canonical = page > 1 ? `${basePath}?page=${page}` : basePath;
-  const place = pathwayCountryLabel(pathway);
-  const title =
-    page > 1
-      ? `${prof.h1} exam prep lessons (page ${page}) · ${place} | NurseNest`
-      : `${prof.h1} allied exam prep lessons · ${place} | NurseNest`;
-  const description = `Clinical lessons for ${prof.h1} (${pathway.shortName}, ${place}): previews are public here; pair with pathway-matched questions in the app. Paginated for fast loads.`;
-  return {
-    title,
-    description,
-    alternates: { canonical: absoluteUrl(canonical) },
-    openGraph: { title, description, url: absoluteUrl(canonical), type: "website" },
-    ...(page > 1 || emptyHub ? { robots: { index: false, follow: true } } : {}),
-  };
+  return safeGenerateMetadata(
+    async () => {
+      const resolved = resolveProfession(slug);
+      const sp = await searchParams;
+      const page = Math.max(1, Number(sp.page ?? "1") || 1);
+      if (!resolved) return { title: "Not found" };
+      const { prof } = resolved;
+      const pathway = getPathwayOrThrow(prof.pathwayId);
+      if (!pathway) return { title: "Not found" };
+      const loc = defaultPathwayLessonContentLocaleForExamHubRoute();
+      const lessonTotal =
+        pathway != null
+          ? await countPublishedPathwayLessonsForAlliedMarketing(
+              pathway.id,
+              loc,
+              prof.topicSlugsIn,
+            )
+          : null;
+      const emptyHub = lessonTotal === 0;
+      const basePath = alliedHealthLessonsIndexPath(prof.professionKey);
+      const canonical = page > 1 ? `${basePath}?page=${page}` : basePath;
+      const place = pathwayCountryLabel(pathway);
+      const title =
+        page > 1
+          ? `${prof.h1} exam prep lessons (page ${page}) · ${place} | NurseNest`
+          : `${prof.h1} allied exam prep lessons · ${place} | NurseNest`;
+      const description = `Clinical lessons for ${prof.h1} (${pathway.shortName}, ${place}): previews are public here; pair with pathway-matched questions in the app. Paginated for fast loads.`;
+      return {
+        title,
+        description,
+        alternates: { canonical: absoluteUrl(canonical) },
+        openGraph: { title, description, url: absoluteUrl(canonical), type: "website" },
+        ...(page > 1 || emptyHub ? { robots: { index: false, follow: true } } : {}),
+      };
+    },
+    { pathname: `/allied-health/${slug}/lessons`, routeGroup: "marketing.default.allied_health.lessons" },
+  );
 }
 
 export default async function AlliedHealthSlugLessonsPage({ params, searchParams }: Props) {
