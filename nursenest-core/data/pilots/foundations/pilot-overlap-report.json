@@ -1,0 +1,173 @@
+{
+  "reportId": "foundations-pilot-overlap-v1",
+  "generatedAt": "2026-04-10",
+  "pilotScope": {
+    "batchCount": 3,
+    "topicCount": 10,
+    "topicSlugs": [
+      "prefixes-suffixes-root-words",
+      "body-direction-and-positional-terms",
+      "cardiovascular-respiratory-terminology",
+      "gi-urinary-terminology",
+      "musculoskeletal-neuro-terminology",
+      "cell-structure-and-function",
+      "cell-transport-mechanisms",
+      "cell-division-mitosis-meiosis",
+      "four-tissue-types",
+      "skin-structure-and-functions"
+    ]
+  },
+  "overlapAnalysis": {
+    "summary": "The 10 pilot topics span two domains (Medical Terminology and Anatomy & Physiology) with no accidental domain cross-contamination. Within each domain, adjacent topics deliberately share certain bridge concepts — this is intentional prerequisite reinforcement, not problematic duplication. No question stem or answer rationale was found to be identical across topics.",
+    "intentionalBridgeConcepts": [
+      {
+        "concept": "Cardiovascular root words (cardi/o, hem/o, arteri/o, thromb/o)",
+        "appearsIn": [
+          "prefixes-suffixes-root-words",
+          "cardiovascular-respiratory-terminology"
+        ],
+        "assessment": "INTENTIONAL — prefixes-suffixes-root-words introduces these roots at the word-part level; cardiovascular-respiratory-terminology applies them in clinical context. The depth and application level differ. No duplication concern.",
+        "action": "None. Downstream topic correctly extends upstream vocabulary."
+      },
+      {
+        "concept": "Suffix -itis (inflammation), -ectomy (removal), -ostomy (opening)",
+        "appearsIn": [
+          "prefixes-suffixes-root-words",
+          "gi-urinary-terminology",
+          "musculoskeletal-neuro-terminology",
+          "cardiovascular-respiratory-terminology"
+        ],
+        "assessment": "INTENTIONAL — suffixes are introduced once in prefixes-suffixes-root-words, then applied in system-specific topics. Applied questions are distinct from definitional questions. Spaced repetition of core suffixes is pedagogically appropriate.",
+        "action": "None. Applied questions should emphasize system-specific context rather than re-testing bare definitions."
+      },
+      {
+        "concept": "Brady-/tachy- prefix pair",
+        "appearsIn": [
+          "prefixes-suffixes-root-words",
+          "cardiovascular-respiratory-terminology"
+        ],
+        "assessment": "INTENTIONAL — introduced abstractly in batch-01, applied in clinical context in batch-02. Question content is different (batch-01: define brady-; batch-02: clinical implication of bradycardia/bradypnea). No duplication concern.",
+        "action": "None."
+      },
+      {
+        "concept": "Myocardial infarction (MI) as clinical example",
+        "appearsIn": [
+          "cell-structure-and-function",
+          "cell-transport-mechanisms"
+        ],
+        "assessment": "INTENTIONAL — MI is used in cell-structure-and-function to illustrate apoptosis vs necrosis/troponin release; MI is used in cell-transport-mechanisms to illustrate Na+/K+ pump failure from ATP depletion. These are distinct mechanistic explanations using the same disease anchor. The teaching purpose is different in each lesson.",
+        "action": "Add brief cross-reference note in lesson teaching notes to acknowledge the connection and avoid student confusion (e.g., 'This builds on the MI mechanism introduced in cell-structure-and-function.')."
+      },
+      {
+        "concept": "Nephritis and kidney-related terminology",
+        "appearsIn": [
+          "gi-urinary-terminology",
+          "prefixes-suffixes-root-words"
+        ],
+        "assessment": "INTENTIONAL — nephr/o introduced as a root word example in batch-01; gi-urinary-terminology applies it to renal conditions (nephritis, pyelonephritis, nephrolithiasis). Application level and clinical context differ. No duplication concern.",
+        "action": "None."
+      },
+      {
+        "concept": "GLUT transporters and insulin/Type 2 diabetes",
+        "appearsIn": [
+          "cell-structure-and-function",
+          "cell-transport-mechanisms"
+        ],
+        "assessment": "MINOR OVERLAP — cell-structure-and-function mentions GLUT4 and insulin resistance in the membrane receptor section (Q22). cell-transport-mechanisms covers GLUT4/insulin in greater mechanistic depth (facilitated diffusion, SGLT2 inhibitors). The cell-structure-and-function treatment is introductory; the transport treatment is the primary home for this concept.",
+        "action": "RECOMMENDED: In cell-structure-and-function Q22, add a forward-reference hint ('explored in depth in cell-transport-mechanisms') in the teaching note. Ensure question difficulty remains focused on membrane receptors rather than transport mechanisms in that topic."
+      },
+      {
+        "concept": "Neuron structure and neurological root words (neur/o, encephal/o)",
+        "appearsIn": [
+          "musculoskeletal-neuro-terminology",
+          "four-tissue-types"
+        ],
+        "assessment": "MINOR OVERLAP — musculoskeletal-neuro-terminology introduces neurological root words and decoding; four-tissue-types covers nervous tissue biology (neurons, neuroglia) at the tissue level. These are distinct lenses (vocabulary vs biology), so the content is complementary, not duplicative.",
+        "action": "None. Flag in teaching notes that students may connect word-part knowledge from the earlier topic."
+      },
+      {
+        "concept": "Myelin and multiple sclerosis",
+        "appearsIn": [
+          "four-tissue-types"
+        ],
+        "assessment": "CONTAINED — MS appears only in the four-tissue-types topic as an application of oligodendrocyte/myelin function. No duplication.",
+        "action": "None."
+      },
+      {
+        "concept": "Cell membrane (plasma membrane)",
+        "appearsIn": [
+          "cell-structure-and-function",
+          "cell-transport-mechanisms"
+        ],
+        "assessment": "INTENTIONAL PREREQUISITE — cell-structure-and-function introduces the plasma membrane concept (phospholipid bilayer, proteins, selective permeability). cell-transport-mechanisms builds directly on this by covering how substances cross that membrane. This is a designed prerequisite relationship, not duplication.",
+        "action": "None. This is the correct sequence."
+      }
+    ],
+    "duplicateQuestionsFound": [],
+    "nearDuplicateQuestions": [
+      {
+        "topicA": "prefixes-suffixes-root-words",
+        "questionIdA": "prefixes-suffixes-root-words-Q07",
+        "topicB": "cardiovascular-respiratory-terminology",
+        "questionIdB": "cardiovascular-respiratory-terminology-Q10",
+        "description": "Both questions test suffix -penia (deficiency). Q07 uses thrombocytopenia; Q10 also uses thrombocytopenia.",
+        "severity": "LOW",
+        "action": "RECOMMENDED: Change cardiovascular-respiratory-terminology-Q10 answer options to use a different example condition (e.g., neutropenia or leukopenia) to avoid redundant test-taking logic. The clinical context and correct answer remain the same."
+      }
+    ]
+  },
+  "toneConsistencyReview": {
+    "overall": "PASS",
+    "findings": [
+      {
+        "topic": "all",
+        "finding": "No NCLEX-brand language, exam-coaching phrasing, or pathway-specific nursing exam language detected across any of the 10 pilot topics.",
+        "status": "PASS"
+      },
+      {
+        "topic": "all",
+        "finding": "All questions use foundational framing consistent with pre-nursing level learners. Questions test concept understanding and clinical application, not recall of exam-specific mnemonics.",
+        "status": "PASS"
+      },
+      {
+        "topic": "cell-transport-mechanisms",
+        "finding": "Three questions involve pharmacology (SGLT2 inhibitors, digoxin, calcium channel blockers). Tone is appropriate — these are used as clinical applications of transport mechanisms, not as pharmacology questions. However, some Q stems assume familiarity with drug names that pre-nursing students may not yet have.",
+        "status": "ADVISORY",
+        "recommendation": "Consider adding brief drug name context in the question stem (e.g., 'empagliflozin, a class of medication called SGLT2 inhibitors') to scaffold for pre-nursing learners unfamiliar with these drug names."
+      },
+      {
+        "topic": "four-tissue-types",
+        "finding": "Marfan syndrome and Ehlers-Danlos syndrome are referenced as connective tissue disorder examples. These are accurate and at appropriate depth for foundational learners.",
+        "status": "PASS"
+      }
+    ]
+  },
+  "difficultyDistributionReview": {
+    "overall": "BALANCED",
+    "byTopic": [
+      { "topicSlug": "prefixes-suffixes-root-words", "foundational": 30, "applied": 18, "total": 48, "appliedPct": 37.5 },
+      { "topicSlug": "body-direction-and-positional-terms", "foundational": 18, "applied": 14, "total": 32, "appliedPct": 43.8 },
+      { "topicSlug": "cardiovascular-respiratory-terminology", "foundational": 12, "applied": 10, "total": 22, "appliedPct": 45.5 },
+      { "topicSlug": "gi-urinary-terminology", "foundational": 14, "applied": 8, "total": 22, "appliedPct": 36.4 },
+      { "topicSlug": "musculoskeletal-neuro-terminology", "foundational": 15, "applied": 7, "total": 22, "appliedPct": 31.8 },
+      { "topicSlug": "cell-structure-and-function", "foundational": 12, "applied": 10, "total": 22, "appliedPct": 45.5 },
+      { "topicSlug": "cell-transport-mechanisms", "foundational": 9, "applied": 13, "total": 22, "appliedPct": 59.1 },
+      { "topicSlug": "cell-division-mitosis-meiosis", "foundational": 6, "applied": 6, "total": 12, "appliedPct": 50.0 },
+      { "topicSlug": "four-tissue-types", "foundational": 8, "applied": 14, "total": 22, "appliedPct": 63.6 },
+      { "topicSlug": "skin-structure-and-functions", "foundational": 5, "applied": 7, "total": 12, "appliedPct": 58.3 }
+    ],
+    "findings": [
+      "cell-transport-mechanisms and four-tissue-types have a higher proportion of applied questions (59% and 64%). This is appropriate given their direct clinical relevance, but a few additional foundational-recall questions may be warranted to serve learners who need vocabulary scaffolding.",
+      "musculoskeletal-neuro-terminology has the lowest applied proportion (32%). Consider adding 2-3 more clinically situated questions in a future revision.",
+      "Overall pilot applied percentage: 43% — well within acceptable range for foundational pre-nursing content (target 35–50% applied)."
+    ]
+  },
+  "slugToArtifactMappingAudit": {
+    "status": "PASS",
+    "findings": [
+      "All 10 topic slugs match exactly between the blueprint JSON, batch report, and pilot artifact filenames.",
+      "No slug collision or case inconsistency detected.",
+      "All pilot artifact files are located in the correct batch subdirectory matching their batchId field."
+    ]
+  }
+}
