@@ -21,12 +21,12 @@ export function ChemistryModule() {
   return (
     <div className="space-y-10" data-testid="module-chemistry">
       <div>
-        <EditableModuleText sectionKey="chem-title" defaultText="Basic Chemistry for Health Sciences" as="h2" className="text-2xl font-bold text-gray-900 mb-2" />
-        <EditableModuleText sectionKey="chem-desc" defaultText="Understand the chemical principles that govern biological processes, from atomic structure and bonding to pH, solutions, and the chemistry of life." as="p" className="text-gray-600" multiline />
+        <EditableModuleText sectionKey="chem-title" defaultText="Basic Chemistry for Health Sciences" as="h2" className="text-2xl font-bold text-heading mb-2" />
+        <EditableModuleText sectionKey="chem-desc" defaultText="Understand the chemical principles that govern biological processes, from atomic structure and bonding to pH, solutions, and the chemistry of life." as="p" className="text-foreground" multiline />
       </div>
 
       <MicroLesson title="Atomic Structure & Chemical Bonds" subtitle="Building blocks of all matter" icon={<Atom className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="chem-atomic-content" defaultText="All matter consists of atoms, and the way atoms interact determines the properties of every substance in the body. Three types of chemical bonds are essential to understand:" as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="chem-atomic-content" defaultText="All matter consists of atoms, and the way atoms interact determines the properties of every substance in the body. Three types of chemical bonds are essential to understand:" as="p" className="text-sm text-foreground leading-relaxed" multiline />
         <ProgressiveReveal
           title={t("data.pre_nursing_chemistry.typesOfChemicalBonds")}
           cards={[
@@ -58,7 +58,7 @@ export function ChemistryModule() {
       </MicroLesson>
 
       <MicroLesson title="Ions, Electrolytes & Water" subtitle="The chemistry of body fluids" icon={<Droplets className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="chem-ions-content" defaultText="When ionic compounds dissolve in water, they dissociate into charged particles. These electrolytes are responsible for nerve impulse transmission, muscle contraction, fluid balance, and pH regulation." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="chem-ions-content" defaultText="When ionic compounds dissolve in water, they dissociate into charged particles. These electrolytes are responsible for nerve impulse transmission, muscle contraction, fluid balance, and pH regulation." as="p" className="text-sm text-foreground leading-relaxed" multiline />
         <div className="grid sm:grid-cols-2 gap-3 mt-3">
           <div className="p-4 bg-blue-50/60 rounded-xl border border-blue-100">
             <p className="text-xs font-semibold text-blue-700 mb-1">Key Cations (+)</p>
@@ -77,16 +77,16 @@ export function ChemistryModule() {
       </MicroLesson>
 
       <MicroLesson title="Acids, Bases & pH" subtitle="The hydrogen ion concentration scale" icon={<Beaker className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="chem-ph-content" defaultText="The pH scale is fundamental to understanding how the body maintains the narrow range (7.35–7.45) required for normal enzyme function and cellular processes." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="chem-ph-content" defaultText="The pH scale is fundamental to understanding how the body maintains the narrow range (7.35–7.45) required for normal enzyme function and cellular processes." as="p" className="text-sm text-foreground leading-relaxed" multiline />
         <div className="mt-3 p-4 bg-gradient-to-r from-red-50 via-yellow-50 to-blue-50 rounded-xl border">
-          <p className="text-xs font-semibold text-gray-700 mb-2">The pH Scale</p>
-          <div className="flex justify-between text-xs text-gray-600 mb-1">
+          <p className="text-xs font-semibold text-foreground mb-2">The pH Scale</p>
+          <div className="flex justify-between text-xs text-foreground mb-1">
             <span>0 (Strong Acid)</span>
             <span>7 (Neutral)</span>
             <span>14 (Strong Base)</span>
           </div>
           <div className="h-3 rounded-full bg-gradient-to-r from-red-400 via-yellow-300 to-blue-400" />
-          <div className="flex justify-between text-xs mt-1 text-gray-500">
+          <div className="flex justify-between text-xs mt-1 text-muted-foreground">
             <span>{t("data.pre_nursing_chemistry.hclGastricAcid2")}</span>
             <span>{t("data.pre_nursing_chemistry.blood735745")}</span>
             <span>{t("data.pre_nursing_chemistry.naohBleach13")}</span>
@@ -110,9 +110,9 @@ export function ChemistryModule() {
       </MicroLesson>
 
       <MicroLesson title="Solutions & Concentrations" subtitle="How substances are measured in clinical practice" icon={<FlaskConical className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="chem-solutions-content" defaultText="In healthcare, solutions are described by their concentration. Understanding concentrations is critical for medication preparation, IV fluid therapy, and lab value interpretation." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="chem-solutions-content" defaultText="In healthcare, solutions are described by their concentration. Understanding concentrations is critical for medication preparation, IV fluid therapy, and lab value interpretation." as="p" className="text-sm text-foreground leading-relaxed" multiline />
         <div className="space-y-3 mt-3">
-          <div className="p-4 bg-purple-50/60 rounded-xl border border-purple-100">
+          <div className="p-4 nn-semantic-inset">
             <p className="text-xs font-semibold text-purple-700 mb-1">Concentration Units</p>
             <p className="text-xs text-purple-600"><strong>mg/mL</strong>, milligrams of drug per milliliter of solution (most common in medication dosing). <strong>%</strong>, grams of solute per 100 mL of solution (0.9% NaCl = 0.9 g NaCl per 100 mL = 9 g/L). <strong>mEq/L</strong>, milliequivalents per liter (used for electrolytes, accounts for ionic charge). <strong>mmol/L</strong>, millimoles per liter (used for lab values like glucose in some countries).</p>
           </div>

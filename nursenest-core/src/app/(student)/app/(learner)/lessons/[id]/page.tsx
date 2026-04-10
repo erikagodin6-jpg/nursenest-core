@@ -268,7 +268,7 @@ export default async function LessonDetailPage({ params }: Props) {
           </Link>
           <Link
             href="/app/exams"
-            className="rounded-full border border-border px-4 py-2 text-sm font-semibold hover:bg-gray-50"
+            className="rounded-full border border-border px-4 py-2 text-sm font-semibold hover:bg-muted"
           >
             {t("learner.lessons.detail.ctaTimedExam")}
           </Link>
@@ -377,7 +377,7 @@ export default async function LessonDetailPage({ params }: Props) {
           </Link>
           <Link
             href={buildAppPracticeTestsHubHref(pathwayId)}
-            className="rounded-full border border-border px-4 py-2 text-sm font-semibold hover:bg-gray-50"
+            className="rounded-full border border-border px-4 py-2 text-sm font-semibold hover:bg-muted"
           >
             {t("learner.lessons.detail.ctaPathwayPracticeTests")}
           </Link>
@@ -431,7 +431,7 @@ export default async function LessonDetailPage({ params }: Props) {
         >
           {t("learner.lessons.detail.ctaQuestionBank")}
         </Link>
-        <Link href="/app/exams" className="rounded-full border border-border px-4 py-2 text-sm font-semibold hover:bg-gray-50">
+        <Link href="/app/exams" className="rounded-full border border-border px-4 py-2 text-sm font-semibold hover:bg-muted">
           {t("learner.lessons.detail.ctaTimedExam")}
         </Link>
       </div>

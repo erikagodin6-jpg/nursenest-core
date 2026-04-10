@@ -447,20 +447,20 @@ export function CellBiologyModule() {
   return (
     <div className="space-y-8" data-testid="module-cell-biology">
       <div>
-        <EditableModuleText sectionKey="cell-bio-title" defaultText="Cell Biology" as="h2" className="text-2xl font-bold text-slate-800 mb-2" />
-        <EditableModuleText sectionKey="cell-bio-desc" defaultText="Explore the building blocks of the human body through interactive diagrams and concept checks." as="p" className="text-slate-500" multiline />
+        <EditableModuleText sectionKey="cell-bio-title" defaultText="Cell Biology" as="h2" className="text-2xl font-bold text-card-foreground mb-2" />
+        <EditableModuleText sectionKey="cell-bio-desc" defaultText="Explore the building blocks of the human body through interactive diagrams and concept checks." as="p" className="text-muted-foreground" multiline />
       </div>
 
       <MicroLesson title={rs("cell-bio-human-cell-title", "The Human Cell")} subtitle={rs("cell-bio-human-cell-subtitle", "Identify key organelles and their functions")} icon={<Dna className="w-5 h-5" />}>
         {isEditing ? (
           <>
             <div className="flex gap-2 mb-2">
-              <input value={sections["cell-bio-human-cell-title"]?.content || "The Human Cell"} onChange={(e) => updateSection("cell-bio-human-cell-title", { content: e.target.value })} className="flex-1 bg-white/80 border border-purple-200 rounded-lg px-3 py-1.5 text-xs focus:ring-2 focus:ring-purple-300 focus:outline-none" placeholder={t("pages.preNursing.sectionTitle")} />
-              <input value={sections["cell-bio-human-cell-subtitle"]?.content || "Identify key organelles and their functions"} onChange={(e) => updateSection("cell-bio-human-cell-subtitle", { content: e.target.value })} className="flex-1 bg-white/80 border border-purple-200 rounded-lg px-3 py-1.5 text-xs focus:ring-2 focus:ring-purple-300 focus:outline-none" placeholder={t("pages.preNursing.subtitle")} />
+              <input value={sections["cell-bio-human-cell-title"]?.content || "The Human Cell"} onChange={(e) => updateSection("cell-bio-human-cell-title", { content: e.target.value })} className="flex-1 bg-card/80 border border-border rounded-lg px-3 py-1.5 text-xs focus:ring-2 focus:ring-primary/30 focus:outline-none" placeholder={t("pages.preNursing.sectionTitle")} />
+              <input value={sections["cell-bio-human-cell-subtitle"]?.content || "Identify key organelles and their functions"} onChange={(e) => updateSection("cell-bio-human-cell-subtitle", { content: e.target.value })} className="flex-1 bg-card/80 border border-border rounded-lg px-3 py-1.5 text-xs focus:ring-2 focus:ring-primary/30 focus:outline-none" placeholder={t("pages.preNursing.subtitle")} />
             </div>
           </>
         ) : null}
-        <EditableModuleText sectionKey="cell-bio-human-cell-content" defaultText="Every cell contains specialized structures called organelles that work together to maintain life. Understanding cell structure is the foundation for understanding how diseases affect the body at the cellular level." as="p" className="text-sm text-slate-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="cell-bio-human-cell-content" defaultText="Every cell contains specialized structures called organelles that work together to maintain life. Understanding cell structure is the foundation for understanding how diseases affect the body at the cellular level." as="p" className="text-sm text-foreground leading-relaxed" multiline />
         <CognitiveCard
           type="concept"
           title={rs("whyMattersNursing", "Why This Matters for Nursing")}
@@ -480,9 +480,9 @@ export function CellBiologyModule() {
         height={450}
       />
 
-      <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm" data-testid="organelle-gallery">
-        <h3 className="text-lg font-bold text-slate-800 mb-1">{t("prenursing.organelleDeepDive")}</h3>
-        <p className="text-sm text-slate-500 mb-5">{t("prenursing.organelleExplore")}</p>
+      <div className="bg-card rounded-2xl border border-border p-6 shadow-sm" data-testid="organelle-gallery">
+        <h3 className="text-lg font-bold text-card-foreground mb-1">{t("prenursing.organelleDeepDive")}</h3>
+        <p className="text-sm text-muted-foreground mb-5">{t("prenursing.organelleExplore")}</p>
         <div className="grid sm:grid-cols-2 gap-5">
           {[
             { img: organelleCellMembrane, name: "Cell Membrane", color: "teal", desc: "The phospholipid bilayer forms a selectively permeable barrier with embedded integral proteins, channel proteins, and cholesterol. It controls ion and molecule transport through passive diffusion, facilitated diffusion, and active transport (Na⁺/K⁺ ATPase). Glycoprotein receptors on the surface mediate cell signaling and immune recognition.", clinical: "Defects in membrane transport proteins cause cystic fibrosis (CFTR channel) and familial hypercholesterolemia (LDL receptor)." },
@@ -494,7 +494,7 @@ export function CellBiologyModule() {
           ].map((organelle, idx) => {
             const colorMap: Record<string, { bg: string; border: string; title: string; badge: string }> = {
               teal: { bg: "bg-teal-50/60", border: "border-teal-200", title: "text-teal-800", badge: "bg-teal-100 text-teal-700" },
-              purple: { bg: "bg-purple-50/60", border: "border-purple-200", title: "text-purple-800", badge: "bg-purple-100 text-purple-700" },
+              purple: { bg: "bg-purple-50/60", border: "border-border", title: "text-purple-800", badge: "bg-purple-100 text-purple-700" },
               green: { bg: "bg-green-50/60", border: "border-green-200", title: "text-green-800", badge: "bg-green-100 text-green-700" },
               blue: { bg: "bg-blue-50/60", border: "border-blue-200", title: "text-blue-800", badge: "bg-blue-100 text-blue-700" },
               amber: { bg: "bg-amber-50/60", border: "border-amber-200", title: "text-amber-800", badge: "bg-amber-100 text-amber-700" },
@@ -507,7 +507,7 @@ export function CellBiologyModule() {
                   <img src={organelle.img} alt={`${organelle.name} cell organelle illustration - NurseNest pre-nursing education`} title={organelle.name} className="w-40 h-40 object-contain rounded-lg" loading="lazy" />
                 </div>
                 <h4 className={`font-semibold text-sm ${c.title} mb-1`}>{organelle.name}</h4>
-                <p className="text-xs text-slate-600 leading-relaxed mb-2">{organelle.desc}</p>
+                <p className="text-xs text-foreground leading-relaxed mb-2">{organelle.desc}</p>
                 <div className={`text-xs ${c.badge} rounded-lg px-2.5 py-1.5 inline-block`}>
                   <span className="font-semibold">{t("pages.preNursing.clinical")}</span> {organelle.clinical}
                 </div>
@@ -537,8 +537,8 @@ export function CellBiologyModule() {
       <MicroLesson title={rs("cell-bio-transport-title", "Membrane Transport")} subtitle={rs("cell-bio-transport-subtitle", "How substances move in and out of cells")} icon={<Layers className="w-5 h-5" />}>
         {isEditing ? (
           <div className="flex gap-2 mb-2">
-            <input value={sections["cell-bio-transport-title"]?.content || "Membrane Transport"} onChange={(e) => updateSection("cell-bio-transport-title", { content: e.target.value })} className="flex-1 bg-white/80 border border-purple-200 rounded-lg px-3 py-1.5 text-xs focus:ring-2 focus:ring-purple-300 focus:outline-none" placeholder={t("pages.preNursing.sectionTitle2")} />
-            <input value={sections["cell-bio-transport-subtitle"]?.content || "How substances move in and out of cells"} onChange={(e) => updateSection("cell-bio-transport-subtitle", { content: e.target.value })} className="flex-1 bg-white/80 border border-purple-200 rounded-lg px-3 py-1.5 text-xs focus:ring-2 focus:ring-purple-300 focus:outline-none" placeholder={t("pages.preNursing.subtitle2")} />
+            <input value={sections["cell-bio-transport-title"]?.content || "Membrane Transport"} onChange={(e) => updateSection("cell-bio-transport-title", { content: e.target.value })} className="flex-1 bg-card/80 border border-border rounded-lg px-3 py-1.5 text-xs focus:ring-2 focus:ring-primary/30 focus:outline-none" placeholder={t("pages.preNursing.sectionTitle2")} />
+            <input value={sections["cell-bio-transport-subtitle"]?.content || "How substances move in and out of cells"} onChange={(e) => updateSection("cell-bio-transport-subtitle", { content: e.target.value })} className="flex-1 bg-card/80 border border-border rounded-lg px-3 py-1.5 text-xs focus:ring-2 focus:ring-primary/30 focus:outline-none" placeholder={t("pages.preNursing.subtitle2")} />
           </div>
         ) : null}
         <CognitiveCard
@@ -584,20 +584,20 @@ export function PhysiologyModule() {
   return (
     <div className="space-y-8" data-testid="module-physiology">
       <div>
-        <EditableModuleText sectionKey="phys-title" defaultText="Physiology Principles" as="h2" className="text-2xl font-bold text-slate-800 mb-2" />
-        <EditableModuleText sectionKey="phys-desc" defaultText="Understand how the body maintains balance through feedback loops, fluid management, and acid-base regulation." as="p" className="text-slate-500" multiline />
+        <EditableModuleText sectionKey="phys-title" defaultText="Physiology Principles" as="h2" className="text-2xl font-bold text-card-foreground mb-2" />
+        <EditableModuleText sectionKey="phys-desc" defaultText="Understand how the body maintains balance through feedback loops, fluid management, and acid-base regulation." as="p" className="text-muted-foreground" multiline />
       </div>
 
       <MicroLesson title={rs("phys-feedback-title", "Negative Feedback Loops")} subtitle={rs("phys-feedback-subtitle", "The body's primary regulatory mechanism")} icon={<Activity className="w-5 h-5" />}>
         {isEditing && (
           <div className="flex gap-2 mb-2">
-            <input value={sections["phys-feedback-title"]?.content || "Negative Feedback Loops"} onChange={(e) => updateSection("phys-feedback-title", { content: e.target.value })} className="flex-1 bg-white/80 border border-purple-200 rounded-lg px-3 py-1.5 text-xs focus:ring-2 focus:ring-purple-300 focus:outline-none" placeholder={t("pages.preNursing.sectionTitle3")} />
-            <input value={sections["phys-feedback-subtitle"]?.content || "The body's primary regulatory mechanism"} onChange={(e) => updateSection("phys-feedback-subtitle", { content: e.target.value })} className="flex-1 bg-white/80 border border-purple-200 rounded-lg px-3 py-1.5 text-xs focus:ring-2 focus:ring-purple-300 focus:outline-none" placeholder={t("pages.preNursing.subtitle3")} />
+            <input value={sections["phys-feedback-title"]?.content || "Negative Feedback Loops"} onChange={(e) => updateSection("phys-feedback-title", { content: e.target.value })} className="flex-1 bg-card/80 border border-border rounded-lg px-3 py-1.5 text-xs focus:ring-2 focus:ring-primary/30 focus:outline-none" placeholder={t("pages.preNursing.sectionTitle3")} />
+            <input value={sections["phys-feedback-subtitle"]?.content || "The body's primary regulatory mechanism"} onChange={(e) => updateSection("phys-feedback-subtitle", { content: e.target.value })} className="flex-1 bg-card/80 border border-border rounded-lg px-3 py-1.5 text-xs focus:ring-2 focus:ring-primary/30 focus:outline-none" placeholder={t("pages.preNursing.subtitle3")} />
           </div>
         )}
-        <EditableModuleText sectionKey="phys-feedback-content" defaultText="Most physiological regulation uses negative feedback. The body detects a change, activates a response, and reverses the change to restore balance." as="p" className="text-sm text-slate-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="phys-feedback-content" defaultText="Most physiological regulation uses negative feedback. The body detects a change, activates a response, and reverses the change to restore balance." as="p" className="text-sm text-foreground leading-relaxed" multiline />
         <div className="flex justify-center my-4">
-          <img src={feedbackLoopImage} alt={t("pages.preNursing.negativeFeedbackLoopForThermoregulation")} className="w-full max-w-sm h-auto rounded-xl border border-slate-200 shadow-sm" loading="lazy" data-testid="img-feedback-loop" />
+          <img src={feedbackLoopImage} alt={t("pages.preNursing.negativeFeedbackLoopForThermoregulation")} className="w-full max-w-sm h-auto rounded-xl border border-border shadow-sm" loading="lazy" data-testid="img-feedback-loop" />
         </div>
         <CognitiveCard
           type="concept"
@@ -618,12 +618,12 @@ export function PhysiologyModule() {
       <MicroLesson title={rs("phys-fluid-title", "Fluid Compartments")} subtitle={rs("phys-fluid-subtitle", "Where body water is distributed")} icon={<Droplets className="w-5 h-5" />}>
         {isEditing && (
           <div className="flex gap-2 mb-2">
-            <input value={sections["phys-fluid-title"]?.content || "Fluid Compartments"} onChange={(e) => updateSection("phys-fluid-title", { content: e.target.value })} className="flex-1 bg-white/80 border border-purple-200 rounded-lg px-3 py-1.5 text-xs focus:ring-2 focus:ring-purple-300 focus:outline-none" placeholder={t("pages.preNursing.sectionTitle4")} />
-            <input value={sections["phys-fluid-subtitle"]?.content || "Where body water is distributed"} onChange={(e) => updateSection("phys-fluid-subtitle", { content: e.target.value })} className="flex-1 bg-white/80 border border-purple-200 rounded-lg px-3 py-1.5 text-xs focus:ring-2 focus:ring-purple-300 focus:outline-none" placeholder={t("pages.preNursing.subtitle4")} />
+            <input value={sections["phys-fluid-title"]?.content || "Fluid Compartments"} onChange={(e) => updateSection("phys-fluid-title", { content: e.target.value })} className="flex-1 bg-card/80 border border-border rounded-lg px-3 py-1.5 text-xs focus:ring-2 focus:ring-primary/30 focus:outline-none" placeholder={t("pages.preNursing.sectionTitle4")} />
+            <input value={sections["phys-fluid-subtitle"]?.content || "Where body water is distributed"} onChange={(e) => updateSection("phys-fluid-subtitle", { content: e.target.value })} className="flex-1 bg-card/80 border border-border rounded-lg px-3 py-1.5 text-xs focus:ring-2 focus:ring-primary/30 focus:outline-none" placeholder={t("pages.preNursing.subtitle4")} />
           </div>
         )}
         <div className="flex justify-center my-4">
-          <img src={fluidCompartmentsImage} alt={t("pages.preNursing.bodyFluidCompartmentsShowingIntracellular")} className="w-full max-w-sm h-auto rounded-xl border border-slate-200 shadow-sm" loading="lazy" data-testid="img-fluid-compartments" />
+          <img src={fluidCompartmentsImage} alt={t("pages.preNursing.bodyFluidCompartmentsShowingIntracellular")} className="w-full max-w-sm h-auto rounded-xl border border-border shadow-sm" loading="lazy" data-testid="img-fluid-compartments" />
         </div>
         <div className="space-y-3">
           <div className="p-4 bg-blue-50/60 rounded-xl border border-blue-100">
@@ -687,30 +687,30 @@ export function TerminologyModule() {
   return (
     <div className="space-y-8" data-testid="module-terminology">
       <div>
-        <EditableModuleText sectionKey="term-title" defaultText="Medical Terminology" as="h2" className="text-2xl font-bold text-slate-800 mb-2" />
-        <EditableModuleText sectionKey="term-desc" defaultText="Decode clinical language by mastering the building blocks: prefixes, suffixes, and root words." as="p" className="text-slate-500" multiline />
+        <EditableModuleText sectionKey="term-title" defaultText="Medical Terminology" as="h2" className="text-2xl font-bold text-card-foreground mb-2" />
+        <EditableModuleText sectionKey="term-desc" defaultText="Decode clinical language by mastering the building blocks: prefixes, suffixes, and root words." as="p" className="text-muted-foreground" multiline />
       </div>
 
       <MicroLesson title={rs("term-how-title", "How Medical Terms Work")} subtitle={rs("term-how-subtitle", "Breaking down clinical vocabulary")} icon={<BookOpen className="w-5 h-5" />}>
         {isEditing && (
           <div className="flex gap-2 mb-2">
-            <input value={sections["term-how-title"]?.content || "How Medical Terms Work"} onChange={(e) => updateSection("term-how-title", { content: e.target.value })} className="flex-1 bg-white/80 border border-purple-200 rounded-lg px-3 py-1.5 text-xs focus:ring-2 focus:ring-purple-300 focus:outline-none" placeholder={t("pages.preNursing.sectionTitle5")} />
-            <input value={sections["term-how-subtitle"]?.content || "Breaking down clinical vocabulary"} onChange={(e) => updateSection("term-how-subtitle", { content: e.target.value })} className="flex-1 bg-white/80 border border-purple-200 rounded-lg px-3 py-1.5 text-xs focus:ring-2 focus:ring-purple-300 focus:outline-none" placeholder={t("pages.preNursing.subtitle5")} />
+            <input value={sections["term-how-title"]?.content || "How Medical Terms Work"} onChange={(e) => updateSection("term-how-title", { content: e.target.value })} className="flex-1 bg-card/80 border border-border rounded-lg px-3 py-1.5 text-xs focus:ring-2 focus:ring-primary/30 focus:outline-none" placeholder={t("pages.preNursing.sectionTitle5")} />
+            <input value={sections["term-how-subtitle"]?.content || "Breaking down clinical vocabulary"} onChange={(e) => updateSection("term-how-subtitle", { content: e.target.value })} className="flex-1 bg-card/80 border border-border rounded-lg px-3 py-1.5 text-xs focus:ring-2 focus:ring-primary/30 focus:outline-none" placeholder={t("pages.preNursing.subtitle5")} />
           </div>
         )}
-        <EditableModuleText sectionKey="term-how-content" defaultText="Most medical terms are combinations of prefixes (word parts added to the beginning), root words (the core identifying the body part), and suffixes (word endings indicating a condition or procedure)." as="p" className="text-sm text-slate-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="term-how-content" defaultText="Most medical terms are combinations of prefixes (word parts added to the beginning), root words (the core identifying the body part), and suffixes (word endings indicating a condition or procedure)." as="p" className="text-sm text-foreground leading-relaxed" multiline />
         <div className="p-4 bg-primary/5 rounded-xl border border-primary/10 mt-3">
-          <p className="text-sm font-semibold text-gray-800 mb-2">{t("pages.preNursing.exampleBreakdown")}</p>
+          <p className="text-sm font-semibold text-card-foreground mb-2">{t("pages.preNursing.exampleBreakdown")}</p>
           <div className="flex flex-wrap items-center gap-2 text-sm">
             <span className="bg-purple-100 text-purple-700 px-3 py-1 rounded-full font-medium">{t("pages.preNursing.tachy")}</span>
-            <span className="text-gray-400">+</span>
+            <span className="text-muted-foreground">+</span>
             <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full font-medium">{t("pages.preNursing.card")}</span>
-            <span className="text-gray-400">+</span>
+            <span className="text-muted-foreground">+</span>
             <span className="bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full font-medium">{t("pages.preNursing.ia")}</span>
-            <span className="text-gray-400">=</span>
-            <span className="bg-gray-100 text-gray-800 px-3 py-1 rounded-full font-semibold">{t("pages.preNursing.tachycardia")}</span>
+            <span className="text-muted-foreground">=</span>
+            <span className="bg-muted text-card-foreground px-3 py-1 rounded-full font-semibold">{t("pages.preNursing.tachycardia")}</span>
           </div>
-          <p className="text-xs text-gray-500 mt-2">{t("pages.preNursing.fastHeartConditionRapidHeart")}</p>
+          <p className="text-xs text-muted-foreground mt-2">{t("pages.preNursing.fastHeartConditionRapidHeart")}</p>
         </div>
       </MicroLesson>
 
@@ -773,18 +773,18 @@ export function PharmacologyModule() {
   return (
     <div className="space-y-8" data-testid="module-pharmacology">
       <div>
-        <EditableModuleText sectionKey="pharm-title" defaultText="Intro Pharmacology" as="h2" className="text-2xl font-bold text-slate-800 mb-2" />
-        <EditableModuleText sectionKey="pharm-desc" defaultText="Understand how drugs interact with the body at the receptor level: the foundation for medication safety." as="p" className="text-slate-500" multiline />
+        <EditableModuleText sectionKey="pharm-title" defaultText="Intro Pharmacology" as="h2" className="text-2xl font-bold text-card-foreground mb-2" />
+        <EditableModuleText sectionKey="pharm-desc" defaultText="Understand how drugs interact with the body at the receptor level: the foundation for medication safety." as="p" className="text-muted-foreground" multiline />
       </div>
 
       <MicroLesson title={rs("pharm-receptor-title", "Drug-Receptor Basics")} subtitle={rs("pharm-receptor-subtitle", "How medications produce their effects")} icon={<Pill className="w-5 h-5" />}>
         {isEditing && (
           <div className="flex gap-2 mb-2">
-            <input value={sections["pharm-receptor-title"]?.content || "Drug-Receptor Basics"} onChange={(e) => updateSection("pharm-receptor-title", { content: e.target.value })} className="flex-1 bg-white/80 border border-purple-200 rounded-lg px-3 py-1.5 text-xs focus:ring-2 focus:ring-purple-300 focus:outline-none" placeholder={t("pages.preNursing.sectionTitle6")} />
-            <input value={sections["pharm-receptor-subtitle"]?.content || "How medications produce their effects"} onChange={(e) => updateSection("pharm-receptor-subtitle", { content: e.target.value })} className="flex-1 bg-white/80 border border-purple-200 rounded-lg px-3 py-1.5 text-xs focus:ring-2 focus:ring-purple-300 focus:outline-none" placeholder={t("pages.preNursing.subtitle6")} />
+            <input value={sections["pharm-receptor-title"]?.content || "Drug-Receptor Basics"} onChange={(e) => updateSection("pharm-receptor-title", { content: e.target.value })} className="flex-1 bg-card/80 border border-border rounded-lg px-3 py-1.5 text-xs focus:ring-2 focus:ring-primary/30 focus:outline-none" placeholder={t("pages.preNursing.sectionTitle6")} />
+            <input value={sections["pharm-receptor-subtitle"]?.content || "How medications produce their effects"} onChange={(e) => updateSection("pharm-receptor-subtitle", { content: e.target.value })} className="flex-1 bg-card/80 border border-border rounded-lg px-3 py-1.5 text-xs focus:ring-2 focus:ring-primary/30 focus:outline-none" placeholder={t("pages.preNursing.subtitle6")} />
           </div>
         )}
-        <EditableModuleText sectionKey="pharm-receptor-content" defaultText="Most drugs work by binding to receptors on cells. The drug-receptor interaction determines whether the drug activates or blocks a cellular response." as="p" className="text-sm text-slate-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="pharm-receptor-content" defaultText="Most drugs work by binding to receptors on cells. The drug-receptor interaction determines whether the drug activates or blocks a cellular response." as="p" className="text-sm text-foreground leading-relaxed" multiline />
         <div className="grid sm:grid-cols-2 gap-3 mt-3">
           <div className="p-4 bg-emerald-50/60 rounded-xl border border-emerald-100">
             <p className="text-sm font-semibold text-emerald-700 mb-1">{t("pages.preNursing.agonist")}</p>
@@ -805,9 +805,9 @@ export function PharmacologyModule() {
         )}
       </MicroLesson>
 
-      <div className="my-6 rounded-xl overflow-hidden border border-gray-100 shadow-sm bg-gray-50">
+      <div className="my-6 rounded-xl overflow-hidden border border-border shadow-sm bg-muted">
         <img src={imgPharmAbsorption} alt={t("pages.preNursing.drugAbsorptionRoutesOralIntravenous")} className="w-full h-auto object-contain p-2 md:p-4 max-h-[400px]" loading="lazy" data-testid="img-pharm-absorption" />
-        <p className="text-xs text-gray-500 text-center pb-3 px-4 italic">{t("pages.preNursing.drugAbsorptionRoutesShowingHow")}</p>
+        <p className="text-xs text-muted-foreground text-center pb-3 px-4 italic">{t("pages.preNursing.drugAbsorptionRoutesShowingHow")}</p>
       </div>
 
       <MicroLesson title={rs("pharmacokineticsTitle", "Pharmacokinetics Overview")} subtitle={rs("pharmacokineticsSubtitle", "What the body does to the drug")} icon={<FlaskConical className="w-5 h-5" />}>
@@ -822,9 +822,9 @@ export function PharmacologyModule() {
         />
       </MicroLesson>
 
-      <div className="my-6 rounded-xl overflow-hidden border border-gray-100 shadow-sm bg-gray-50">
+      <div className="my-6 rounded-xl overflow-hidden border border-border shadow-sm bg-muted">
         <img src={imgPharmPK} alt={t("pages.preNursing.pharmacokineticsPathwayDrugJourneyThrough")} className="w-full h-auto object-contain p-2 md:p-4 max-h-[400px]" loading="lazy" data-testid="img-pharm-pk" />
-        <p className="text-xs text-gray-500 text-center pb-3 px-4 italic">{t("pages.preNursing.pharmacokineticsTheFourstepJourneyOf")}</p>
+        <p className="text-xs text-muted-foreground text-center pb-3 px-4 italic">{t("pages.preNursing.pharmacokineticsTheFourstepJourneyOf")}</p>
       </div>
 
       <SelfCheckQuiz title={t("pages.preNursing.pharmacologyCheck")} questions={pharmQuiz} />
@@ -844,31 +844,31 @@ export function PathophysiologyModule() {
   return (
     <div className="space-y-8" data-testid="module-pathophysiology">
       <div>
-        <EditableModuleText sectionKey="patho-title" defaultText="Intro Pathophysiology" as="h2" className="text-2xl font-bold text-slate-800 mb-2" />
-        <EditableModuleText sectionKey="patho-desc" defaultText="Learn to think like a clinician: trace disease mechanisms, recognize compensation, and differentiate early from late signs." as="p" className="text-slate-500" multiline />
+        <EditableModuleText sectionKey="patho-title" defaultText="Intro Pathophysiology" as="h2" className="text-2xl font-bold text-card-foreground mb-2" />
+        <EditableModuleText sectionKey="patho-desc" defaultText="Learn to think like a clinician: trace disease mechanisms, recognize compensation, and differentiate early from late signs." as="p" className="text-muted-foreground" multiline />
       </div>
 
       <MicroLesson title={rs("patho-disease-title", "Disease = Disrupted Homeostasis")} subtitle={rs("patho-disease-subtitle", "Understanding why symptoms happen")} icon={<Stethoscope className="w-5 h-5" />}>
         {isEditing && (
           <div className="flex gap-2 mb-2">
-            <input value={sections["patho-disease-title"]?.content || "Disease = Disrupted Homeostasis"} onChange={(e) => updateSection("patho-disease-title", { content: e.target.value })} className="flex-1 bg-white/80 border border-purple-200 rounded-lg px-3 py-1.5 text-xs focus:ring-2 focus:ring-purple-300 focus:outline-none" placeholder={t("pages.preNursing.sectionTitle7")} />
-            <input value={sections["patho-disease-subtitle"]?.content || "Understanding why symptoms happen"} onChange={(e) => updateSection("patho-disease-subtitle", { content: e.target.value })} className="flex-1 bg-white/80 border border-purple-200 rounded-lg px-3 py-1.5 text-xs focus:ring-2 focus:ring-purple-300 focus:outline-none" placeholder={t("pages.preNursing.subtitle7")} />
+            <input value={sections["patho-disease-title"]?.content || "Disease = Disrupted Homeostasis"} onChange={(e) => updateSection("patho-disease-title", { content: e.target.value })} className="flex-1 bg-card/80 border border-border rounded-lg px-3 py-1.5 text-xs focus:ring-2 focus:ring-primary/30 focus:outline-none" placeholder={t("pages.preNursing.sectionTitle7")} />
+            <input value={sections["patho-disease-subtitle"]?.content || "Understanding why symptoms happen"} onChange={(e) => updateSection("patho-disease-subtitle", { content: e.target.value })} className="flex-1 bg-card/80 border border-border rounded-lg px-3 py-1.5 text-xs focus:ring-2 focus:ring-primary/30 focus:outline-none" placeholder={t("pages.preNursing.subtitle7")} />
           </div>
         )}
-        <EditableModuleText sectionKey="patho-disease-content" defaultText="Every disease is a story of homeostasis being disrupted. The body compensates to maintain function, but eventually those mechanisms fail. Understanding this progression is the key to clinical reasoning." as="p" className="text-sm text-slate-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="patho-disease-content" defaultText="Every disease is a story of homeostasis being disrupted. The body compensates to maintain function, but eventually those mechanisms fail. Understanding this progression is the key to clinical reasoning." as="p" className="text-sm text-foreground leading-relaxed" multiline />
         <div className="flex flex-col sm:flex-row gap-3 mt-3">
           <div className="flex-1 p-4 bg-emerald-50/60 rounded-xl border border-emerald-100 text-center">
             <p className="text-xs font-bold text-emerald-700 mb-1">{t("pages.preNursing.earlySigns")}</p>
             <p className="text-xs text-emerald-600">{t("pages.preNursing.compensatoryResponses")}</p>
             <p className="text-[10px] text-emerald-500 mt-1">{t("pages.preNursing.tachycardiaMildAnxietySlightBp")}</p>
           </div>
-          <div className="flex items-center justify-center text-gray-300">→</div>
+          <div className="flex items-center justify-center text-muted-foreground">→</div>
           <div className="flex-1 p-4 bg-amber-50/60 rounded-xl border border-amber-100 text-center">
             <p className="text-xs font-bold text-amber-700 mb-1">{t("pages.preNursing.progressive")}</p>
             <p className="text-xs text-amber-600">{t("pages.preNursing.compensationStraining")}</p>
             <p className="text-[10px] text-amber-500 mt-1">{t("pages.preNursing.wideningPulsePressureConfusionOliguria")}</p>
           </div>
-          <div className="flex items-center justify-center text-gray-300">→</div>
+          <div className="flex items-center justify-center text-muted-foreground">→</div>
           <div className="flex-1 p-4 bg-red-50/60 rounded-xl border border-red-100 text-center">
             <p className="text-xs font-bold text-red-700 mb-1">{t("pages.preNursing.lateDecompensation")}</p>
             <p className="text-xs text-red-600">{t("pages.preNursing.mechanismsFailing")}</p>
@@ -902,19 +902,19 @@ export function PathophysiologyModule() {
 
       <MicroLesson title={rs("compensationTitle", "Compensation Mechanisms")} subtitle={rs("compensationSubtitle", "How the body buys time")} icon={<Lightbulb className="w-5 h-5" />}>
         <div className="grid sm:grid-cols-2 gap-4 mb-4">
-          <div className="bg-purple-50/60 rounded-xl border border-purple-200 p-4">
+          <div className="p-4 nn-semantic-inset">
             <div className="flex justify-center mb-3">
               <img src={brainAnatomyImage} alt={t("pages.preNursing.brainSagittalCrosssectionShowingCerebrum")} className="w-full max-w-[200px] h-auto rounded-lg" loading="lazy" data-testid="img-brain-anatomy" />
             </div>
-            <h4 className="font-semibold text-sm text-purple-800 mb-1">{t("pages.preNursing.brainMedullaOblongata")}</h4>
-            <p className="text-xs text-slate-600">{t("pages.preNursing.theBrainstemControlsAutonomicCardiovascular")}</p>
+            <h4 className="font-semibold text-sm text-heading mb-1">{t("pages.preNursing.brainMedullaOblongata")}</h4>
+            <p className="text-xs text-muted-foreground">{t("pages.preNursing.theBrainstemControlsAutonomicCardiovascular")}</p>
           </div>
           <div className="bg-amber-50/60 rounded-xl border border-amber-200 p-4">
             <div className="flex justify-center mb-3">
               <img src={kidneyAnatomyImage} alt={t("pages.preNursing.kidneyCrosssectionShowingCortexMedulla")} className="w-full max-w-[200px] h-auto rounded-lg" loading="lazy" data-testid="img-kidney-anatomy" />
             </div>
             <h4 className="font-semibold text-sm text-amber-800 mb-1">{t("pages.preNursing.kidney")}</h4>
-            <p className="text-xs text-slate-600">{t("pages.preNursing.theKidneysRegulateFluidBalance")}</p>
+            <p className="text-xs text-foreground">{t("pages.preNursing.theKidneysRegulateFluidBalance")}</p>
           </div>
         </div>
         <ProgressiveReveal

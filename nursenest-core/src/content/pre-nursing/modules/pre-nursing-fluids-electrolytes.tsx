@@ -21,12 +21,12 @@ export function FluidsElectrolytesModule() {
   return (
     <div className="space-y-10" data-testid="module-fluids-electrolytes">
       <div>
-        <EditableModuleText sectionKey="fluids-title" defaultText="Fluids & Electrolytes Foundations" as="h2" className="text-2xl font-bold text-gray-900 mb-2" />
-        <EditableModuleText sectionKey="fluids-desc" defaultText="Understand body fluid compartments, osmotic principles, electrolyte roles in normal physiology, fluid shifts, and acid-base foundations, all at the conceptual level without disease states." as="p" className="text-gray-600" multiline />
+        <EditableModuleText sectionKey="fluids-title" defaultText="Fluids & Electrolytes Foundations" as="h2" className="text-2xl font-bold text-heading mb-2" />
+        <EditableModuleText sectionKey="fluids-desc" defaultText="Understand body fluid compartments, osmotic principles, electrolyte roles in normal physiology, fluid shifts, and acid-base foundations, all at the conceptual level without disease states." as="p" className="text-foreground" multiline />
       </div>
 
       <MicroLesson title="Body Fluid Compartments" subtitle="Where the body's water lives" icon={<Droplets className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="fluids-compartments-content" defaultText="Approximately 60% of adult body weight is water, distributed between two main fluid compartments. Intracellular fluid (ICF) is inside cells (~40% body weight, ~2/3 of total body water). Extracellular fluid (ECF) is outside cells (~20% body weight, ~1/3 of total body water). ECF is further divided into intravascular (plasma, ~5%) and interstitial (between cells, ~15%). The distribution matters because each compartment has different electrolyte compositions that must be maintained for normal function." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="fluids-compartments-content" defaultText="Approximately 60% of adult body weight is water, distributed between two main fluid compartments. Intracellular fluid (ICF) is inside cells (~40% body weight, ~2/3 of total body water). Extracellular fluid (ECF) is outside cells (~20% body weight, ~1/3 of total body water). ECF is further divided into intravascular (plasma, ~5%) and interstitial (between cells, ~15%). The distribution matters because each compartment has different electrolyte compositions that must be maintained for normal function." as="p" className="text-sm text-foreground leading-relaxed" multiline />
         <div className="grid sm:grid-cols-3 gap-3 mt-3">
           <div className="p-4 bg-blue-50/60 rounded-xl border border-blue-100">
             <p className="text-xs font-semibold text-blue-700 mb-1">Intracellular (ICF)</p>
@@ -36,7 +36,7 @@ export function FluidsElectrolytesModule() {
             <p className="text-xs font-semibold text-emerald-700 mb-1">Interstitial</p>
             <p className="text-xs text-emerald-600">Fluid between cells (~15% body weight). Similar electrolyte composition to plasma but with very little protein. Bathes cells and allows nutrient/waste exchange. Excess accumulation = edema.</p>
           </div>
-          <div className="p-4 bg-purple-50/60 rounded-xl border border-purple-100">
+          <div className="p-4 nn-semantic-inset">
             <p className="text-xs font-semibold text-purple-700 mb-1">Intravascular (Plasma)</p>
             <p className="text-xs text-purple-600">Fluid within blood vessels (~5% body weight). Primary cation: Na⁺. Contains plasma proteins (albumin) that create oncotic pressure. This is the only compartment directly accessible for IV fluid administration.</p>
           </div>
@@ -49,7 +49,7 @@ export function FluidsElectrolytesModule() {
       </MicroLesson>
 
       <MicroLesson title="Osmosis & Tonicity" subtitle="How water moves between compartments" icon={<Waves className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="fluids-osmosis-content" defaultText="Water moves by osmosis, the net movement of water across a semipermeable membrane from an area of lower solute concentration to an area of higher solute concentration. Water follows solute. This is a passive process requiring no energy. It always moves toward higher solute concentration. This principle governs fluid distribution between compartments and is the basis for understanding IV fluid therapy." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="fluids-osmosis-content" defaultText="Water moves by osmosis, the net movement of water across a semipermeable membrane from an area of lower solute concentration to an area of higher solute concentration. Water follows solute. This is a passive process requiring no energy. It always moves toward higher solute concentration. This principle governs fluid distribution between compartments and is the basis for understanding IV fluid therapy." as="p" className="text-sm text-foreground leading-relaxed" multiline />
         <ProgressiveReveal
           title={t("data.pre_nursing_fluids_electrolytes.tonicityOfSolutions")}
           cards={[
@@ -81,7 +81,7 @@ export function FluidsElectrolytesModule() {
       </MicroLesson>
 
       <MicroLesson title="Electrolyte Roles in Normal Function" subtitle="What each major electrolyte does" icon={<Activity className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="fluids-electrolyte-roles-content" defaultText="Each electrolyte has specific physiological roles. Understanding their normal functions helps you appreciate why imbalances cause predictable symptoms." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="fluids-electrolyte-roles-content" defaultText="Each electrolyte has specific physiological roles. Understanding their normal functions helps you appreciate why imbalances cause predictable symptoms." as="p" className="text-sm text-foreground leading-relaxed" multiline />
         <div className="space-y-3 mt-3">
           <div className="p-4 bg-blue-50/60 rounded-xl border border-blue-100">
             <p className="text-xs font-semibold text-blue-700 mb-1">Sodium (Na⁺), Normal: 135–145 mEq/L</p>
@@ -95,7 +95,7 @@ export function FluidsElectrolytesModule() {
             <p className="text-xs font-semibold text-amber-700 mb-1">Calcium (Ca²⁺), Normal: 8.5–10.5 mg/dL</p>
             <p className="text-xs text-amber-600">Muscle contraction (including cardiac), bone structure (99% stored in bone), blood clotting cascade, nerve impulse transmission, enzyme activation. Only the ionized (free) fraction is physiologically active. Albumin level affects total calcium measurement.</p>
           </div>
-          <div className="p-4 bg-purple-50/60 rounded-xl border border-purple-100">
+          <div className="p-4 nn-semantic-inset">
             <p className="text-xs font-semibold text-purple-700 mb-1">Magnesium (Mg²⁺), Normal: 1.5–2.5 mEq/L</p>
             <p className="text-xs text-purple-600">Cofactor for over 300 enzyme systems. Involved in energy production (ATP requires Mg²⁺), protein synthesis, neuromuscular function, and cardiac rhythm stability. Works in tandem with calcium and potassium, deficiency of one often accompanies deficiency of others.</p>
           </div>
@@ -103,7 +103,7 @@ export function FluidsElectrolytesModule() {
       </MicroLesson>
 
       <MicroLesson title="Acid-Base Foundations" subtitle="pH regulation at the conceptual level" icon={<Beaker className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="fluids-acidbase-content" defaultText="The body maintains blood pH between 7.35 and 7.45. This narrow range is essential for enzyme function, protein structure, and cellular processes. pH below 7.35 = acidosis (excess H⁺). pH above 7.45 = alkalosis (deficit of H⁺). The body uses three systems to maintain this range: buffer systems (immediate), respiratory system (minutes), and renal system (hours to days). Three regulatory systems work together to maintain this balance." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="fluids-acidbase-content" defaultText="The body maintains blood pH between 7.35 and 7.45. This narrow range is essential for enzyme function, protein structure, and cellular processes. pH below 7.35 = acidosis (excess H⁺). pH above 7.45 = alkalosis (deficit of H⁺). The body uses three systems to maintain this range: buffer systems (immediate), respiratory system (minutes), and renal system (hours to days). Three regulatory systems work together to maintain this balance." as="p" className="text-sm text-foreground leading-relaxed" multiline />
         <div className="grid sm:grid-cols-3 gap-3 mt-3">
           <div className="p-4 bg-orange-50/60 rounded-xl border border-orange-100">
             <p className="text-xs font-semibold text-orange-700 mb-1">Buffer Systems</p>

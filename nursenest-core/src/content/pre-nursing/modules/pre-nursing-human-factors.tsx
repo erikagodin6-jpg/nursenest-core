@@ -21,12 +21,12 @@ export function HumanFactorsModule() {
   return (
     <div className="space-y-10" data-testid="module-human-factors">
       <div>
-        <EditableModuleText sectionKey="hf-title" defaultText="Human Factors & Patient Safety" as="h2" className="text-2xl font-bold text-gray-900 mb-2" />
-        <EditableModuleText sectionKey="hf-desc" defaultText="Understand how system design, cognitive biases, fatigue, and communication failures contribute to healthcare errors. Learn frameworks for building safer healthcare systems and a culture of safety." as="p" className="text-gray-600" multiline />
+        <EditableModuleText sectionKey="hf-title" defaultText="Human Factors & Patient Safety" as="h2" className="text-2xl font-bold text-heading mb-2" />
+        <EditableModuleText sectionKey="hf-desc" defaultText="Understand how system design, cognitive biases, fatigue, and communication failures contribute to healthcare errors. Learn frameworks for building safer healthcare systems and a culture of safety." as="p" className="text-foreground" multiline />
       </div>
 
       <MicroLesson title="The Swiss Cheese Model of Errors" subtitle="Understanding system-level failure" icon={<ShieldAlert className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="hf-swiss-intro" defaultText="Most healthcare errors are not caused by incompetent individuals, they result from system failures. Understanding error theory helps nurses recognize vulnerabilities and advocate for system improvements that protect patients." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="hf-swiss-intro" defaultText="Most healthcare errors are not caused by incompetent individuals, they result from system failures. Understanding error theory helps nurses recognize vulnerabilities and advocate for system improvements that protect patients." as="p" className="text-sm text-foreground leading-relaxed" multiline />
         <div className="grid sm:grid-cols-2 gap-3 mt-3">
           <div className="p-4 bg-red-50/60 rounded-xl border border-red-100">
             <p className="text-xs font-semibold text-red-700 mb-1">Active Errors</p>
@@ -49,7 +49,7 @@ export function HumanFactorsModule() {
       </MicroLesson>
 
       <MicroLesson title="Cognitive Biases in Healthcare" subtitle="How thinking shortcuts lead to errors" icon={<Brain className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="hf-bias-intro" defaultText="Cognitive biases are mental shortcuts (heuristics) that normally help us make quick decisions but can lead to systematic errors in clinical reasoning. Recognizing these biases in yourself and colleagues is a critical patient safety skill." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="hf-bias-intro" defaultText="Cognitive biases are mental shortcuts (heuristics) that normally help us make quick decisions but can lead to systematic errors in clinical reasoning. Recognizing these biases in yourself and colleagues is a critical patient safety skill." as="p" className="text-sm text-foreground leading-relaxed" multiline />
         <ProgressiveReveal
           title={t("data.pre_nursing_human_factors.commonCognitiveBiasesInClinical")}
           cards={[
@@ -82,13 +82,13 @@ export function HumanFactorsModule() {
       </MicroLesson>
 
       <MicroLesson title="Fatigue & Performance Degradation" subtitle="The science of human limitations" icon={<AlertTriangle className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="hf-fatigue-content" defaultText="Healthcare providers are human, subject to fatigue, circadian rhythm disruption, and cognitive overload. Understanding these limitations is essential for designing safe work systems and recognizing when performance is compromised." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="hf-fatigue-content" defaultText="Healthcare providers are human, subject to fatigue, circadian rhythm disruption, and cognitive overload. Understanding these limitations is essential for designing safe work systems and recognizing when performance is compromised." as="p" className="text-sm text-foreground leading-relaxed" multiline />
         <div className="space-y-3 mt-3">
           <div className="p-4 bg-amber-50/60 rounded-xl border border-amber-100">
             <p className="text-xs font-semibold text-amber-700 mb-1">Fatigue Science</p>
             <p className="text-xs text-amber-600">After 17 hours of wakefulness, cognitive performance equals a blood alcohol level of 0.05%. After 24 hours, it equals 0.10%, above the legal driving limit. Night shift nurses experience the combined effects of sleep deprivation and circadian misalignment. Studies show error rates increase significantly after 12.5 hours on shift, with the highest risk between 3-5 AM when circadian alertness is lowest.</p>
           </div>
-          <div className="p-4 bg-purple-50/60 rounded-xl border border-purple-100">
+          <div className="p-4 nn-semantic-inset">
             <p className="text-xs font-semibold text-purple-700 mb-1">Interruptions & Cognitive Load</p>
             <p className="text-xs text-purple-600">Nurses are interrupted an average of every 6-8 minutes during medication administration. Each interruption increases error risk by 12.7%. Cognitive load theory explains that working memory has limited capacity, when it's overwhelmed by interruptions, multitasking, and environmental noise, critical information is lost. Strategies: Wear 'Do Not Disturb' vests during med passes, use checklists to prevent omissions, and minimize environmental distractions.</p>
           </div>
@@ -100,7 +100,7 @@ export function HumanFactorsModule() {
       </MicroLesson>
 
       <MicroLesson title="Handoff Communication & Safety Culture" subtitle="SBAR, I-PASS, and just culture" icon={<MessageSquare className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="hf-communication-content" defaultText="Communication failures are the leading root cause of sentinel events in healthcare. Structured communication tools standardize information transfer, reducing the risk of critical details being lost during handoffs, escalations, and team communication." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="hf-communication-content" defaultText="Communication failures are the leading root cause of sentinel events in healthcare. Structured communication tools standardize information transfer, reducing the risk of critical details being lost during handoffs, escalations, and team communication." as="p" className="text-sm text-foreground leading-relaxed" multiline />
         <div className="grid sm:grid-cols-2 gap-3 mt-3">
           <div className="p-4 bg-blue-50/60 rounded-xl border border-blue-100">
             <p className="text-xs font-semibold text-blue-700 mb-2">SBAR Framework</p>

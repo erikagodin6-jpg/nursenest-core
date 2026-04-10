@@ -92,7 +92,7 @@ export function EditableModuleText({
           type="text"
           value={displayText}
           onChange={(e) => updateSection(sectionKey, { ...override, content: e.target.value })}
-          className={`w-full rounded-lg border border-purple-200 bg-white/80 px-3 py-1.5 text-sm focus:border-purple-400 focus:outline-none focus:ring-2 focus:ring-purple-300 ${className}`}
+          className={`w-full rounded-lg border border-border bg-card/80 px-3 py-1.5 text-sm focus:border-primary/60 focus:outline-none focus:ring-2 focus:ring-primary/30 ${className}`}
           data-testid={`editable-text-${sectionKey}`}
         />
       )}

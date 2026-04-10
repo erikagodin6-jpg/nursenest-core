@@ -21,12 +21,12 @@ export function InflammationModule() {
   return (
     <div className="space-y-10" data-testid="module-inflammation">
       <div>
-        <EditableModuleText sectionKey="infl-title" defaultText="Inflammation & Wound Healing" as="h2" className="text-2xl font-bold text-gray-900 mb-2" />
-        <EditableModuleText sectionKey="infl-desc" defaultText="Understand the inflammatory response from cellular mechanisms to clinical signs, differentiate acute from chronic inflammation, master inflammatory mediators and their pharmacologic targets, and learn the phases of wound healing." as="p" className="text-gray-600" multiline />
+        <EditableModuleText sectionKey="infl-title" defaultText="Inflammation & Wound Healing" as="h2" className="text-2xl font-bold text-heading mb-2" />
+        <EditableModuleText sectionKey="infl-desc" defaultText="Understand the inflammatory response from cellular mechanisms to clinical signs, differentiate acute from chronic inflammation, master inflammatory mediators and their pharmacologic targets, and learn the phases of wound healing." as="p" className="text-foreground" multiline />
       </div>
 
       <MicroLesson title="Acute vs. Chronic Inflammation" subtitle="Protective response vs. pathological process" icon={<Flame className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="infl-acute-chronic-intro" defaultText="Inflammation is a fundamental protective response to tissue injury or infection. Acute inflammation is rapid, self-limiting, and beneficial, it eliminates the threat and initiates repair. Chronic inflammation persists for weeks to years, causes ongoing tissue damage, and underlies many chronic diseases including atherosclerosis, rheumatoid arthritis, and cancer." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="infl-acute-chronic-intro" defaultText="Inflammation is a fundamental protective response to tissue injury or infection. Acute inflammation is rapid, self-limiting, and beneficial, it eliminates the threat and initiates repair. Chronic inflammation persists for weeks to years, causes ongoing tissue damage, and underlies many chronic diseases including atherosclerosis, rheumatoid arthritis, and cancer." as="p" className="text-sm text-foreground leading-relaxed" multiline />
         <div className="grid sm:grid-cols-2 gap-3 mt-3">
           <div className="p-4 bg-orange-50/60 rounded-xl border border-orange-100">
             <p className="text-xs font-semibold text-orange-700 mb-1">Acute Inflammation</p>
@@ -45,7 +45,7 @@ export function InflammationModule() {
       </MicroLesson>
 
       <MicroLesson title="Inflammatory Mediators & Pharmacologic Targets" subtitle="Chemical signals that drive the inflammatory cascade" icon={<Shield className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="infl-mediators-intro" defaultText="Understanding inflammatory mediators is essential because most anti-inflammatory medications work by targeting specific mediators or their pathways. Every NSAID, corticosteroid, antihistamine, and biologic drug connects back to these chemical signals." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="infl-mediators-intro" defaultText="Understanding inflammatory mediators is essential because most anti-inflammatory medications work by targeting specific mediators or their pathways. Every NSAID, corticosteroid, antihistamine, and biologic drug connects back to these chemical signals." as="p" className="text-sm text-foreground leading-relaxed" multiline />
         <ProgressiveReveal
           title={t("data.pre_nursing_inflammation.keyInflammatoryMediators")}
           cards={[
@@ -83,7 +83,7 @@ export function InflammationModule() {
       </MicroLesson>
 
       <MicroLesson title="Fever Physiology & Immune Regulation" subtitle="Understanding fever as a regulated immune response" icon={<Activity className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="infl-fever-intro" defaultText="Fever is not a malfunction, it is a deliberate upward resetting of the hypothalamic thermostat in response to pyrogens. It enhances immune function but can become dangerous at extreme levels. Understanding fever physiology helps nurses make evidence-based decisions about when to treat fever and when to let it serve its protective role." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="infl-fever-intro" defaultText="Fever is not a malfunction, it is a deliberate upward resetting of the hypothalamic thermostat in response to pyrogens. It enhances immune function but can become dangerous at extreme levels. Understanding fever physiology helps nurses make evidence-based decisions about when to treat fever and when to let it serve its protective role." as="p" className="text-sm text-foreground leading-relaxed" multiline />
         <div className="grid sm:grid-cols-2 gap-3 mt-3">
           <div className="p-4 bg-amber-50/60 rounded-xl border border-amber-100">
             <p className="text-xs font-semibold text-amber-700 mb-1">Fever Mechanism</p>
@@ -97,7 +97,7 @@ export function InflammationModule() {
       </MicroLesson>
 
       <MicroLesson title="Wound Healing Phases" subtitle="From hemostasis through remodeling" icon={<Heart className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="infl-wound-intro" defaultText="Wound healing is a complex, overlapping process that depends on adequate nutrition (especially protein and vitamin C), oxygenation, moisture balance, and absence of infection. Nurses play a critical role in optimizing healing conditions and recognizing signs of impaired healing." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="infl-wound-intro" defaultText="Wound healing is a complex, overlapping process that depends on adequate nutrition (especially protein and vitamin C), oxygenation, moisture balance, and absence of infection. Nurses play a critical role in optimizing healing conditions and recognizing signs of impaired healing." as="p" className="text-sm text-foreground leading-relaxed" multiline />
         <ProgressiveReveal
           title={t("data.pre_nursing_inflammation.fourPhasesOfWoundHealing")}
           cards={[

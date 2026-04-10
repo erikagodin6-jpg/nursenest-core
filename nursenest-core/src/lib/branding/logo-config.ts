@@ -92,17 +92,30 @@ export function brandLogoMarkPresentation(variant: BrandLogoMarkVariant = "heade
 export const DEFAULT_BRAND_LOGO_MARK_CLASSNAME = "" as const;
 
 /**
- * Bounded CSS filter for generated raster wordmarks: dark theme groups get a slight dark lift on headers;
- * very light registry primaries get a hairline edge so tints do not disappear on light nav.
- * Does not replace registry-driven assets — presentation only.
+ * CSS filter for brand mark images — adapts the logo mark to theme context.
+ *
+ * ## Dark themes
+ * The SVG fallback (`nursenest-mark.svg`) is a dark-colored mark. On dark nav backgrounds
+ * it would be invisible. `brightness(0) invert(1)` converts any mark to opaque white —
+ * safe for both the SVG fallback and correctly-produced light-on-transparent dark-theme PNGs
+ * (white → brightness(0) → black → invert → white = no-op; dark → brightness(0) → black → invert → white).
+ * A subtle drop-shadow restores depth.
+ *
+ * ## High-luminance light themes
+ * Very pale primaries (pastels) on a near-white header need a hairline edge to stay visible.
+ *
+ * ## Standard light themes
+ * No filter — dark mark on a light-tinted nav reads clearly.
  */
 export function brandLogoRasterContrastClass(themeId: string): string {
   const opt = THEME_OPTIONS.find((o) => o.id === themeId);
   if (!opt) return "";
   if (opt.group === "dark") {
-    return "[filter:drop-shadow(0_1px_2px_rgba(0,0,0,0.5))]";
+    // Convert dark logo to white silhouette for dark nav backgrounds.
+    return "[filter:brightness(0)_invert(1)_drop-shadow(0_1px_3px_rgba(0,0,0,0.4))]";
   }
-  if (relativeLuminanceFromHex(opt.color) >= 0.88) {
+  if (relativeLuminanceFromHex(opt.color) >= 0.55) {
+    // Very light primary: add a hairline edge so the mark doesn't vanish on light chrome.
     return "[filter:drop-shadow(0_0_1px_rgba(15,23,42,0.28))]";
   }
   return "";

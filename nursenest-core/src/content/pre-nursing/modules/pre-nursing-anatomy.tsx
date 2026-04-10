@@ -361,8 +361,8 @@ export function AnatomyPhysiologyModule() {
   return (
     <div className="space-y-10" data-testid="module-anatomy-physiology">
       <div>
-        <EditableModuleText sectionKey="preanat-title" defaultText="Anatomy & Physiology" as="h2" className="text-2xl font-bold text-gray-900 mb-2" />
-        <EditableModuleText sectionKey="preanat-desc" defaultText="Master the structure and function of the human body, from cells and tissues to organ systems, building the foundation for clinical nursing practice." as="p" className="text-gray-600" multiline />
+        <EditableModuleText sectionKey="preanat-title" defaultText="Anatomy & Physiology" as="h2" className="text-2xl font-bold text-heading mb-2" />
+        <EditableModuleText sectionKey="preanat-desc" defaultText="Master the structure and function of the human body, from cells and tissues to organ systems, building the foundation for clinical nursing practice." as="p" className="text-foreground" multiline />
       </div>
 
       <section className="space-y-6">
@@ -370,7 +370,7 @@ export function AnatomyPhysiologyModule() {
           <div className="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center">
             <Layers className="w-5 h-5 text-indigo-600" />
           </div>
-          <h3 className="text-xl font-semibold text-gray-900">Structural Organization</h3>
+          <h3 className="text-xl font-semibold text-heading">Structural Organization</h3>
         </div>
 
         <MicroLesson
@@ -378,33 +378,33 @@ export function AnatomyPhysiologyModule() {
           subtitle={t("data.pre_nursing_anatomy.fromAtomsToTheComplete")}
           icon={<Layers className="w-5 h-5" />}
         >
-          <EditableModuleText sectionKey="preanat-levels-content" defaultText="The human body is organized in a hierarchy of increasing complexity. Each level of organization builds upon the previous, with emergent properties at each stage that cannot be predicted from the level below alone." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+          <EditableModuleText sectionKey="preanat-levels-content" defaultText="The human body is organized in a hierarchy of increasing complexity. Each level of organization builds upon the previous, with emergent properties at each stage that cannot be predicted from the level below alone." as="p" className="text-sm text-foreground leading-relaxed" multiline />
           <div className="flex flex-col sm:flex-row gap-2 mt-3">
             <div className="flex-1 p-3 bg-blue-50/60 rounded-xl border border-blue-100 text-center">
               <p className="text-[10px] font-bold text-blue-700">Chemical</p>
               <p className="text-[10px] text-blue-600">Atoms & molecules</p>
             </div>
-            <div className="flex items-center justify-center text-gray-300">→</div>
+            <div className="flex items-center justify-center text-muted-foreground">→</div>
             <div className="flex-1 p-3 bg-indigo-50/60 rounded-xl border border-indigo-100 text-center">
               <p className="text-[10px] font-bold text-indigo-700">Cellular</p>
               <p className="text-[10px] text-indigo-600">Basic unit of life</p>
             </div>
-            <div className="flex items-center justify-center text-gray-300">→</div>
+            <div className="flex items-center justify-center text-muted-foreground">→</div>
             <div className="flex-1 p-3 bg-violet-50/60 rounded-xl border border-violet-100 text-center">
               <p className="text-[10px] font-bold text-violet-700">Tissue</p>
               <p className="text-[10px] text-violet-600">Groups of cells</p>
             </div>
-            <div className="flex items-center justify-center text-gray-300">→</div>
-            <div className="flex-1 p-3 bg-purple-50/60 rounded-xl border border-purple-100 text-center">
+            <div className="flex items-center justify-center text-muted-foreground">→</div>
+            <div className="flex-1 p-3 nn-semantic-inset text-center">
               <p className="text-[10px] font-bold text-purple-700">Organ</p>
               <p className="text-[10px] text-purple-600">Multiple tissues</p>
             </div>
-            <div className="flex items-center justify-center text-gray-300">→</div>
+            <div className="flex items-center justify-center text-muted-foreground">→</div>
             <div className="flex-1 p-3 bg-fuchsia-50/60 rounded-xl border border-fuchsia-100 text-center">
               <p className="text-[10px] font-bold text-fuchsia-700">System</p>
               <p className="text-[10px] text-fuchsia-600">Organs working together</p>
             </div>
-            <div className="flex items-center justify-center text-gray-300">→</div>
+            <div className="flex items-center justify-center text-muted-foreground">→</div>
             <div className="flex-1 p-3 bg-pink-50/60 rounded-xl border border-pink-100 text-center">
               <p className="text-[10px] font-bold text-pink-700">Organism</p>
               <p className="text-[10px] text-pink-600">Complete human</p>
@@ -422,7 +422,7 @@ export function AnatomyPhysiologyModule() {
           subtitle={t("data.pre_nursing_anatomy.theUniversalLanguageOfAnatomy")}
           icon={<Sparkles className="w-5 h-5" />}
         >
-          <EditableModuleText sectionKey="preanat-directional-content" defaultText="All anatomical descriptions reference the anatomical position. Using standardized directional terms ensures clear communication among healthcare providers." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+          <EditableModuleText sectionKey="preanat-directional-content" defaultText="All anatomical descriptions reference the anatomical position. Using standardized directional terms ensures clear communication among healthcare providers." as="p" className="text-sm text-foreground leading-relaxed" multiline />
           <div className="grid sm:grid-cols-2 gap-3 mt-3">
             <div className="p-4 bg-blue-50/60 rounded-xl border border-blue-100">
               <p className="text-xs font-semibold text-blue-700 mb-1">Paired Directional Terms</p>
@@ -445,7 +445,7 @@ export function AnatomyPhysiologyModule() {
           subtitle={t("data.pre_nursing_anatomy.howTheBodyMaintainsInternal")}
           icon={<Activity className="w-5 h-5" />}
         >
-          <EditableModuleText sectionKey="preanat-homeostasis-content" defaultText="Homeostasis is the central organizing principle of physiology. Nearly every disease can be understood as a failure of homeostatic mechanisms." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+          <EditableModuleText sectionKey="preanat-homeostasis-content" defaultText="Homeostasis is the central organizing principle of physiology. Nearly every disease can be understood as a failure of homeostatic mechanisms." as="p" className="text-sm text-foreground leading-relaxed" multiline />
           <div className="grid sm:grid-cols-2 gap-3 mt-3">
             <div className="p-4 bg-teal-50/60 rounded-xl border border-teal-100">
               <p className="text-xs font-semibold text-teal-700 mb-1">Negative Feedback (Most Common)</p>
@@ -468,7 +468,7 @@ export function AnatomyPhysiologyModule() {
           subtitle={t("data.pre_nursing_anatomy.howAnatomyDictatesPhysiology")}
           icon={<Network className="w-5 h-5" />}
         >
-          <EditableModuleText sectionKey="preanat-structure-function-content" defaultText="The principle of complementarity of structure and function is fundamental, you can predict a structure's function by examining its anatomy, and vice versa." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+          <EditableModuleText sectionKey="preanat-structure-function-content" defaultText="The principle of complementarity of structure and function is fundamental, you can predict a structure's function by examining its anatomy, and vice versa." as="p" className="text-sm text-foreground leading-relaxed" multiline />
           <ProgressiveReveal
             title={t("data.pre_nursing_anatomy.11OrganSystemsOverview")}
             cards={[
@@ -532,7 +532,7 @@ export function AnatomyPhysiologyModule() {
           <div className="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center">
             <CircleDot className="w-5 h-5 text-emerald-600" />
           </div>
-          <h3 className="text-xl font-semibold text-gray-900">Cell & Tissue Biology</h3>
+          <h3 className="text-xl font-semibold text-heading">Cell & Tissue Biology</h3>
         </div>
 
         <MicroLesson
@@ -540,13 +540,13 @@ export function AnatomyPhysiologyModule() {
           subtitle={t("data.pre_nursing_anatomy.thePhospholipidBilayerAndMembrane")}
           icon={<CircleDot className="w-5 h-5" />}
         >
-          <EditableModuleText sectionKey="preanat-cell-membrane-content" defaultText="The cell membrane (plasma membrane) is the gatekeeper of every cell, controlling substance movement and enabling cellular communication." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+          <EditableModuleText sectionKey="preanat-cell-membrane-content" defaultText="The cell membrane (plasma membrane) is the gatekeeper of every cell, controlling substance movement and enabling cellular communication." as="p" className="text-sm text-foreground leading-relaxed" multiline />
           <div className="space-y-3 mt-3">
             <div className="p-4 bg-blue-50/60 rounded-xl border border-blue-100">
               <p className="text-xs font-semibold text-blue-700 mb-1">Phospholipid Bilayer</p>
               <p className="text-xs text-blue-600">Hydrophilic heads face outward (toward water); hydrophobic tails face inward. This arrangement creates a selectively permeable barrier. Small nonpolar molecules (O2, CO2) pass freely; charged ions and large molecules cannot.</p>
             </div>
-            <div className="p-4 bg-purple-50/60 rounded-xl border border-purple-100">
+            <div className="p-4 nn-semantic-inset">
               <p className="text-xs font-semibold text-purple-700 mb-1">Membrane Proteins</p>
               <p className="text-xs text-purple-600">Channel proteins (allow specific ions through), carrier proteins (transport molecules via conformational change), receptor proteins (receive chemical signals), and enzymes. These proteins make the membrane functional.</p>
             </div>
@@ -562,7 +562,7 @@ export function AnatomyPhysiologyModule() {
           subtitle={t("data.pre_nursing_anatomy.passiveVsActiveTransportAcross")}
           icon={<Droplets className="w-5 h-5" />}
         >
-          <EditableModuleText sectionKey="preanat-membrane-transport-content" defaultText="Understanding membrane transport is critical for understanding IV fluid therapy, medication absorption, renal function, and electrolyte balance." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+          <EditableModuleText sectionKey="preanat-membrane-transport-content" defaultText="Understanding membrane transport is critical for understanding IV fluid therapy, medication absorption, renal function, and electrolyte balance." as="p" className="text-sm text-foreground leading-relaxed" multiline />
           <ProgressiveReveal
             title={t("data.pre_nursing_anatomy.transportMechanisms")}
             cards={[
@@ -610,7 +610,7 @@ export function AnatomyPhysiologyModule() {
           subtitle={t("data.pre_nursing_anatomy.howCellsReceiveAndRespond")}
           icon={<Network className="w-5 h-5" />}
         >
-          <EditableModuleText sectionKey="preanat-cell-signaling-content" defaultText="Cell signaling underlies pharmacology, drugs work by mimicking or blocking natural signaling molecules." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+          <EditableModuleText sectionKey="preanat-cell-signaling-content" defaultText="Cell signaling underlies pharmacology, drugs work by mimicking or blocking natural signaling molecules." as="p" className="text-sm text-foreground leading-relaxed" multiline />
           <div className="grid sm:grid-cols-2 gap-3 mt-3">
             <div className="p-4 bg-indigo-50/60 rounded-xl border border-indigo-100">
               <p className="text-xs font-semibold text-indigo-700 mb-1">Receptor Types</p>
@@ -690,7 +690,7 @@ export function AnatomyPhysiologyModule() {
           <div className="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center">
             <Shield className="w-5 h-5 text-amber-600" />
           </div>
-          <h3 className="text-xl font-semibold text-gray-900">Integumentary System</h3>
+          <h3 className="text-xl font-semibold text-heading">Integumentary System</h3>
         </div>
 
         <MicroLesson
@@ -698,7 +698,7 @@ export function AnatomyPhysiologyModule() {
           subtitle={t("data.pre_nursing_anatomy.theBodysLargestOrganAnd")}
           icon={<Shield className="w-5 h-5" />}
         >
-          <EditableModuleText sectionKey="preanat-skin-structure-content" defaultText="The skin is the body's largest organ, comprising about 16% of body weight. It has three primary layers: epidermis, dermis, and the hypodermis." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+          <EditableModuleText sectionKey="preanat-skin-structure-content" defaultText="The skin is the body's largest organ, comprising about 16% of body weight. It has three primary layers: epidermis, dermis, and the hypodermis." as="p" className="text-sm text-foreground leading-relaxed" multiline />
           <div className="grid sm:grid-cols-3 gap-3 mt-3">
             <div className="p-4 bg-amber-50/60 rounded-xl border border-amber-100">
               <p className="text-xs font-semibold text-amber-700 mb-1">Protection</p>
@@ -720,7 +720,7 @@ export function AnatomyPhysiologyModule() {
           subtitle={t("data.pre_nursing_anatomy.maintainingTheBodysProtectiveBarrier")}
           icon={<Droplets className="w-5 h-5" />}
         >
-          <EditableModuleText sectionKey="preanat-skin-integrity-content" defaultText="Skin integrity is a critical nursing assessment. Factors that compromise the skin barrier include age (thinner epidermis, less collagen), nutrition (protein/vitamin C deficiency impairs healing), moisture (incontinence-associated dermatitis), pressure (decubitus ulcers), and disease (diabetes impairs microcirculation)." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+          <EditableModuleText sectionKey="preanat-skin-integrity-content" defaultText="Skin integrity is a critical nursing assessment. Factors that compromise the skin barrier include age (thinner epidermis, less collagen), nutrition (protein/vitamin C deficiency impairs healing), moisture (incontinence-associated dermatitis), pressure (decubitus ulcers), and disease (diabetes impairs microcirculation)." as="p" className="text-sm text-foreground leading-relaxed" multiline />
           <ProgressiveReveal
             title={t("data.pre_nursing_anatomy.woundHealingPhases")}
             cards={[
@@ -765,7 +765,7 @@ export function AnatomyPhysiologyModule() {
           <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center">
             <Bone className="w-5 h-5 text-blue-600" />
           </div>
-          <h3 className="text-xl font-semibold text-gray-900">Skeletal System</h3>
+          <h3 className="text-xl font-semibold text-heading">Skeletal System</h3>
         </div>
 
         <MicroLesson
@@ -773,7 +773,7 @@ export function AnatomyPhysiologyModule() {
           subtitle={t("data.pre_nursing_anatomy.livingTissueThatSupportsProtects")}
           icon={<Bone className="w-5 h-5" />}
         >
-          <EditableModuleText sectionKey="preanat-bone-structure-content" defaultText="Bones are dynamic living tissue, not static structures. They are continuously remodeled throughout life, responding to mechanical stress, hormonal signals, and nutritional status." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+          <EditableModuleText sectionKey="preanat-bone-structure-content" defaultText="Bones are dynamic living tissue, not static structures. They are continuously remodeled throughout life, responding to mechanical stress, hormonal signals, and nutritional status." as="p" className="text-sm text-foreground leading-relaxed" multiline />
           <div className="space-y-3 mt-3">
             <div className="p-4 bg-blue-50/60 rounded-xl border border-blue-100">
               <p className="text-xs font-semibold text-blue-700 mb-1">Bone Cells</p>
@@ -795,7 +795,7 @@ export function AnatomyPhysiologyModule() {
           subtitle={t("data.pre_nursing_anatomy.hormonalRegulationAndSkeletalClassificat")}
           icon={<Activity className="w-5 h-5" />}
         >
-          <EditableModuleText sectionKey="preanat-calcium-content" defaultText="Calcium homeostasis involves a delicate balance between PTH and calcitonin, with bones serving as the body's calcium reservoir." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+          <EditableModuleText sectionKey="preanat-calcium-content" defaultText="Calcium homeostasis involves a delicate balance between PTH and calcitonin, with bones serving as the body's calcium reservoir." as="p" className="text-sm text-foreground leading-relaxed" multiline />
           <div className="grid sm:grid-cols-2 gap-3 mt-3">
             <div className="p-4 bg-emerald-50/60 rounded-xl border border-emerald-100">
               <p className="text-xs font-semibold text-emerald-700 mb-1">PTH (Raises Calcium)</p>
@@ -856,7 +856,7 @@ export function AnatomyPhysiologyModule() {
           <div className="w-10 h-10 rounded-xl bg-rose-50 flex items-center justify-center">
             <Dumbbell className="w-5 h-5 text-rose-600" />
           </div>
-          <h3 className="text-xl font-semibold text-gray-900">Muscular System</h3>
+          <h3 className="text-xl font-semibold text-heading">Muscular System</h3>
         </div>
 
         <MicroLesson
@@ -864,7 +864,7 @@ export function AnatomyPhysiologyModule() {
           subtitle={t("data.pre_nursing_anatomy.threeTypesOfMuscleAnd")}
           icon={<Dumbbell className="w-5 h-5" />}
         >
-          <EditableModuleText sectionKey="preanat-muscle-tissue-content" defaultText="All muscle tissue shares four key properties: excitability, contractility, extensibility, and elasticity. However, the three muscle types differ significantly in structure, control, and location." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+          <EditableModuleText sectionKey="preanat-muscle-tissue-content" defaultText="All muscle tissue shares four key properties: excitability, contractility, extensibility, and elasticity. However, the three muscle types differ significantly in structure, control, and location." as="p" className="text-sm text-foreground leading-relaxed" multiline />
           <div className="grid sm:grid-cols-3 gap-3 mt-3">
             <div className="p-4 bg-rose-50/60 rounded-xl border border-rose-100">
               <p className="text-xs font-semibold text-rose-700 mb-1">Skeletal Muscle</p>
@@ -886,7 +886,7 @@ export function AnatomyPhysiologyModule() {
           subtitle={t("data.pre_nursing_anatomy.howMusclesContractAtThe")}
           icon={<Zap className="w-5 h-5" />}
         >
-          <EditableModuleText sectionKey="preanat-sliding-filament-content" defaultText="Muscle contraction follows the sliding filament theory, which begins with a signal at the neuromuscular junction." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+          <EditableModuleText sectionKey="preanat-sliding-filament-content" defaultText="Muscle contraction follows the sliding filament theory, which begins with a signal at the neuromuscular junction." as="p" className="text-sm text-foreground leading-relaxed" multiline />
           <div className="space-y-3 mt-3">
             <div className="p-4 bg-violet-50/60 rounded-xl border border-violet-100">
               <p className="text-xs font-semibold text-violet-700 mb-1">Neuromuscular Junction (NMJ)</p>
@@ -912,7 +912,7 @@ export function AnatomyPhysiologyModule() {
           <div className="w-10 h-10 rounded-xl bg-purple-50 flex items-center justify-center">
             <Brain className="w-5 h-5 text-purple-600" />
           </div>
-          <h3 className="text-xl font-semibold text-gray-900">Nervous System</h3>
+          <h3 className="text-xl font-semibold text-heading">Nervous System</h3>
         </div>
 
         <MicroLesson
@@ -920,9 +920,9 @@ export function AnatomyPhysiologyModule() {
           subtitle={t("data.pre_nursing_anatomy.howNerveCellsGenerateAnd")}
           icon={<Brain className="w-5 h-5" />}
         >
-          <EditableModuleText sectionKey="preanat-neuron-content" defaultText="Neurons are the functional units of the nervous system, specialized for rapid electrochemical communication." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+          <EditableModuleText sectionKey="preanat-neuron-content" defaultText="Neurons are the functional units of the nervous system, specialized for rapid electrochemical communication." as="p" className="text-sm text-foreground leading-relaxed" multiline />
           <div className="space-y-3 mt-3">
-            <div className="p-4 bg-purple-50/60 rounded-xl border border-purple-100">
+            <div className="p-4 nn-semantic-inset">
               <p className="text-xs font-semibold text-purple-700 mb-1">Neuron Anatomy</p>
               <p className="text-xs text-purple-600">Cell body (soma): contains nucleus and organelles. Dendrites: receive incoming signals (input). Axon: conducts action potentials away from soma (output). Myelin sheath: insulating lipid layer that speeds conduction (saltatory conduction between nodes of Ranvier).</p>
             </div>
@@ -1027,7 +1027,7 @@ export function AnatomyPhysiologyModule() {
           <div className="w-10 h-10 rounded-xl bg-teal-50 flex items-center justify-center">
             <Heart className="w-5 h-5 text-teal-600" />
           </div>
-          <h3 className="text-xl font-semibold text-gray-900">Endocrine System</h3>
+          <h3 className="text-xl font-semibold text-heading">Endocrine System</h3>
         </div>
 
         <MicroLesson
@@ -1035,7 +1035,7 @@ export function AnatomyPhysiologyModule() {
           subtitle={t("data.pre_nursing_anatomy.chemicalMessengersAndHowThe")}
           icon={<Heart className="w-5 h-5" />}
         >
-          <EditableModuleText sectionKey="preanat-hormone-signaling-content" defaultText="The endocrine system uses hormones for slower but longer-lasting communication compared to the nervous system." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+          <EditableModuleText sectionKey="preanat-hormone-signaling-content" defaultText="The endocrine system uses hormones for slower but longer-lasting communication compared to the nervous system." as="p" className="text-sm text-foreground leading-relaxed" multiline />
           <div className="grid sm:grid-cols-2 gap-3 mt-3">
             <div className="p-4 bg-teal-50/60 rounded-xl border border-teal-100">
               <p className="text-xs font-semibold text-teal-700 mb-1">Water-Soluble Hormones</p>
@@ -1058,7 +1058,7 @@ export function AnatomyPhysiologyModule() {
           subtitle={t("data.pre_nursing_anatomy.theMasterGlandControllingOther")}
           icon={<Sparkles className="w-5 h-5" />}
         >
-          <EditableModuleText sectionKey="preanat-pituitary-content" defaultText="The pituitary gland is controlled by the hypothalamus and regulates thyroid, adrenals, gonads, growth, and more." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+          <EditableModuleText sectionKey="preanat-pituitary-content" defaultText="The pituitary gland is controlled by the hypothalamus and regulates thyroid, adrenals, gonads, growth, and more." as="p" className="text-sm text-foreground leading-relaxed" multiline />
           <div className="grid sm:grid-cols-2 gap-3 mt-3">
             <div className="p-4 bg-indigo-50/60 rounded-xl border border-indigo-100">
               <p className="text-xs font-semibold text-indigo-700 mb-1">Anterior Pituitary Hormones</p>
@@ -1114,7 +1114,7 @@ export function AnatomyPhysiologyModule() {
           <div className="w-10 h-10 rounded-xl bg-red-50 flex items-center justify-center">
             <Heart className="w-5 h-5 text-red-600" />
           </div>
-          <h3 className="text-xl font-semibold text-gray-900">Cardiovascular System</h3>
+          <h3 className="text-xl font-semibold text-heading">Cardiovascular System</h3>
         </div>
 
         <MicroLesson
@@ -1122,7 +1122,7 @@ export function AnatomyPhysiologyModule() {
           subtitle={t("data.pre_nursing_anatomy.fourChambersFourValvesTwo")}
           icon={<Heart className="w-5 h-5" />}
         >
-          <EditableModuleText sectionKey="preanat-heart-content" defaultText="The heart is a muscular pump approximately the size of a fist, located in the mediastinum of the thoracic cavity. It has four chambers that work in coordinated pairs to maintain two distinct circulatory loops." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+          <EditableModuleText sectionKey="preanat-heart-content" defaultText="The heart is a muscular pump approximately the size of a fist, located in the mediastinum of the thoracic cavity. It has four chambers that work in coordinated pairs to maintain two distinct circulatory loops." as="p" className="text-sm text-foreground leading-relaxed" multiline />
           <div className="grid sm:grid-cols-2 gap-3 mt-3">
             <div className="p-4 bg-blue-50/60 rounded-xl border border-blue-100">
               <p className="text-xs font-semibold text-blue-700 mb-1">Right Side (Pulmonary Circuit)</p>
@@ -1154,7 +1154,7 @@ export function AnatomyPhysiologyModule() {
           subtitle={t("data.pre_nursing_anatomy.systoleDiastoleAndTheVascular")}
           icon={<Activity className="w-5 h-5" />}
         >
-          <EditableModuleText sectionKey="preanat-cardiac-cycle-content" defaultText="The cardiac cycle includes all events from one heartbeat to the next. The heart's intrinsic conduction system coordinates the rhythmic contractions without requiring external neural input." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+          <EditableModuleText sectionKey="preanat-cardiac-cycle-content" defaultText="The cardiac cycle includes all events from one heartbeat to the next. The heart's intrinsic conduction system coordinates the rhythmic contractions without requiring external neural input." as="p" className="text-sm text-foreground leading-relaxed" multiline />
           <div className="grid sm:grid-cols-3 gap-3 mt-3">
             <div className="p-4 bg-rose-50/60 rounded-xl border border-rose-100">
               <p className="text-xs font-semibold text-rose-700 mb-1">Systole (Contraction)</p>
@@ -1164,7 +1164,7 @@ export function AnatomyPhysiologyModule() {
               <p className="text-xs font-semibold text-sky-700 mb-1">Diastole (Relaxation)</p>
               <p className="text-xs text-sky-600">Ventricles relax, semilunar valves close (S2 &ldquo;dub&rdquo;), AV valves open. Passive ventricular filling occurs (~70% of filling). The heart spends more time in diastole than systole. Coronary perfusion occurs primarily during diastole.</p>
             </div>
-            <div className="p-4 bg-purple-50/60 rounded-xl border border-purple-100">
+            <div className="p-4 nn-semantic-inset">
               <p className="text-xs font-semibold text-purple-700 mb-1">Conduction System</p>
               <p className="text-xs text-purple-600">SA node (pacemaker, 60-100 bpm) → AV node (delay) → Bundle of His → right and left bundle branches → Purkinje fibers → ventricular contraction. This intrinsic system allows the heart to beat independently.</p>
             </div>
@@ -1196,7 +1196,7 @@ export function AnatomyPhysiologyModule() {
           <div className="w-10 h-10 rounded-xl bg-cyan-50 flex items-center justify-center">
             <Wind className="w-5 h-5 text-cyan-600" />
           </div>
-          <h3 className="text-xl font-semibold text-gray-900">Respiratory System</h3>
+          <h3 className="text-xl font-semibold text-heading">Respiratory System</h3>
         </div>
 
         <MicroLesson
@@ -1204,7 +1204,7 @@ export function AnatomyPhysiologyModule() {
           subtitle={t("data.pre_nursing_anatomy.fromNasalCavityToAlveolar")}
           icon={<Wind className="w-5 h-5" />}
         >
-          <EditableModuleText sectionKey="preanat-airways-content" defaultText="The respiratory system is divided into the upper respiratory tract and the lower respiratory tract." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+          <EditableModuleText sectionKey="preanat-airways-content" defaultText="The respiratory system is divided into the upper respiratory tract and the lower respiratory tract." as="p" className="text-sm text-foreground leading-relaxed" multiline />
           <ProgressiveReveal
             title={t("data.pre_nursing_anatomy.airwayBranchingConductingZoneRespiratory")}
             cards={[
@@ -1242,7 +1242,7 @@ export function AnatomyPhysiologyModule() {
           <div className="w-10 h-10 rounded-xl bg-orange-50 flex items-center justify-center">
             <Utensils className="w-5 h-5 text-orange-600" />
           </div>
-          <h3 className="text-xl font-semibold text-gray-900">Digestive System</h3>
+          <h3 className="text-xl font-semibold text-heading">Digestive System</h3>
         </div>
 
         <MicroLesson
@@ -1250,7 +1250,7 @@ export function AnatomyPhysiologyModule() {
           subtitle={t("data.pre_nursing_anatomy.fromMouthToAnusMechanical")}
           icon={<Utensils className="w-5 h-5" />}
         >
-          <EditableModuleText sectionKey="preanat-gi-tract-content" defaultText="The gastrointestinal (GI) tract is a continuous muscular tube approximately 9 meters long, extending from the mouth to the anus. The wall of the GI tract has four basic layers: mucosa, submucosa, muscularis externa (smooth muscle for peristalsis), and serosa (outermost protective layer)." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+          <EditableModuleText sectionKey="preanat-gi-tract-content" defaultText="The gastrointestinal (GI) tract is a continuous muscular tube approximately 9 meters long, extending from the mouth to the anus. The wall of the GI tract has four basic layers: mucosa, submucosa, muscularis externa (smooth muscle for peristalsis), and serosa (outermost protective layer)." as="p" className="text-sm text-foreground leading-relaxed" multiline />
           <ProgressiveReveal
             title={t("data.pre_nursing_anatomy.giTractOrgansInSequence")}
             cards={[
@@ -1288,7 +1288,7 @@ export function AnatomyPhysiologyModule() {
           <div className="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center">
             <Droplet className="w-5 h-5 text-amber-600" />
           </div>
-          <h3 className="text-xl font-semibold text-gray-900">Urinary System</h3>
+          <h3 className="text-xl font-semibold text-heading">Urinary System</h3>
         </div>
 
         <MicroLesson
@@ -1296,7 +1296,7 @@ export function AnatomyPhysiologyModule() {
           subtitle={t("data.pre_nursing_anatomy.nephronPhysiologyFiltrationReabsorptionS")}
           icon={<Droplet className="w-5 h-5" />}
         >
-          <EditableModuleText sectionKey="preanat-kidney-content" defaultText="The urinary system consists of two kidneys, two ureters, the urinary bladder, and the urethra. The kidneys are retroperitoneal organs located against the posterior abdominal wall. Each kidney has an outer renal cortex and an inner renal medulla." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+          <EditableModuleText sectionKey="preanat-kidney-content" defaultText="The urinary system consists of two kidneys, two ureters, the urinary bladder, and the urethra. The kidneys are retroperitoneal organs located against the posterior abdominal wall. Each kidney has an outer renal cortex and an inner renal medulla." as="p" className="text-sm text-foreground leading-relaxed" multiline />
           <ProgressiveReveal
             title={t("data.pre_nursing_anatomy.threeProcessesOfUrineFormation")}
             cards={[
@@ -1328,7 +1328,7 @@ export function AnatomyPhysiologyModule() {
           <div className="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center">
             <Activity className="w-5 h-5 text-emerald-600" />
           </div>
-          <h3 className="text-xl font-semibold text-gray-900">Body Systems Review</h3>
+          <h3 className="text-xl font-semibold text-heading">Body Systems Review</h3>
         </div>
 
         <SelfCheckQuiz title={t("data.pre_nursing_anatomy.cardiovascularRespiratoryDigestiveUrinar")} questions={bodySystemsQuiz} />

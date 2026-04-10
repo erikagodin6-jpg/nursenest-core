@@ -21,12 +21,12 @@ export function CulturalCompetencyModule() {
   return (
     <div className="space-y-10" data-testid="module-cultural-competency">
       <div>
-        <EditableModuleText sectionKey="cc-title" defaultText="Cultural Competency & Social Determinants of Health" as="h2" className="text-2xl font-bold text-gray-900 mb-2" />
-        <EditableModuleText sectionKey="cc-desc" defaultText="Develop cultural humility, recognize implicit bias, understand social determinants of health, and apply trauma-informed care principles to deliver equitable, patient-centered nursing care." as="p" className="text-gray-600" multiline />
+        <EditableModuleText sectionKey="cc-title" defaultText="Cultural Competency & Social Determinants of Health" as="h2" className="text-2xl font-bold text-heading mb-2" />
+        <EditableModuleText sectionKey="cc-desc" defaultText="Develop cultural humility, recognize implicit bias, understand social determinants of health, and apply trauma-informed care principles to deliver equitable, patient-centered nursing care." as="p" className="text-foreground" multiline />
       </div>
 
       <MicroLesson title="Social Determinants of Health (SDOH)" subtitle="The non-medical factors that drive health outcomes" icon={<Globe className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="cc-sdoh-intro" defaultText="Health outcomes are shaped far more by where people live, work, and grow than by the clinical care they receive. Understanding SDOH is essential for nurses who want to address root causes of health disparities, not just symptoms." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="cc-sdoh-intro" defaultText="Health outcomes are shaped far more by where people live, work, and grow than by the clinical care they receive. Understanding SDOH is essential for nurses who want to address root causes of health disparities, not just symptoms." as="p" className="text-sm text-foreground leading-relaxed" multiline />
         <div className="grid sm:grid-cols-2 gap-3 mt-3">
           <div className="p-4 bg-blue-50/60 rounded-xl border border-blue-100">
             <p className="text-xs font-semibold text-blue-700 mb-1">Five Key SDOH Domains (Healthy People 2030)</p>
@@ -45,7 +45,7 @@ export function CulturalCompetencyModule() {
       </MicroLesson>
 
       <MicroLesson title="Cultural Humility vs. Cultural Competence" subtitle="Moving from knowledge to lifelong self-reflection" icon={<Heart className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="cc-humility-intro" defaultText="Cultural competence implies a finite endpoint, mastering knowledge about specific cultures. Cultural humility, by contrast, is a lifelong commitment to self-reflection, recognizing power imbalances, and developing mutually respectful partnerships. Modern nursing education increasingly emphasizes humility over competence because no one can master all cultures." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="cc-humility-intro" defaultText="Cultural competence implies a finite endpoint, mastering knowledge about specific cultures. Cultural humility, by contrast, is a lifelong commitment to self-reflection, recognizing power imbalances, and developing mutually respectful partnerships. Modern nursing education increasingly emphasizes humility over competence because no one can master all cultures." as="p" className="text-sm text-foreground leading-relaxed" multiline />
         <div className="grid sm:grid-cols-2 gap-3 mt-3">
           <div className="p-4 bg-amber-50/60 rounded-xl border border-amber-100">
             <p className="text-xs font-semibold text-amber-700 mb-1">Cultural Competence (Traditional Model)</p>
@@ -56,14 +56,14 @@ export function CulturalCompetencyModule() {
             <p className="text-xs text-teal-600">Lifelong process of self-reflection and self-critique. Acknowledges power imbalances in the provider-patient relationship. Treats the patient as the expert on their own experience. Asks open-ended questions: 'What is important to you about your care?' 'How does your family make health decisions?' 'Are there cultural or spiritual practices I should know about?' Avoids assumptions about any individual based on group membership.</p>
           </div>
         </div>
-        <div className="p-4 bg-purple-50/60 rounded-xl border border-purple-100 mt-3">
+        <div className="p-4 nn-semantic-inset mt-3">
           <p className="text-xs font-semibold text-purple-700 mb-1">Culturally Responsive Communication</p>
           <p className="text-xs text-purple-600"><strong>Use professional interpreters</strong>, never family members (especially children) for medical interpretation. Family members may filter, omit, or add information, and using them creates confidentiality and consent issues. <strong>Health literacy:</strong> Use plain language, teach-back method, visual aids. Approximately 36% of U.S. adults have basic or below-basic health literacy. <strong>Nonverbal awareness:</strong> Eye contact, personal space, and touch norms vary across cultures. <strong>Ask, don't assume:</strong> Every patient is an individual within their cultural context.</p>
         </div>
       </MicroLesson>
 
       <MicroLesson title="Implicit Bias & Health Disparities" subtitle="Recognizing unconscious influences on clinical decisions" icon={<Shield className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="cc-bias-intro" defaultText="Health disparities are preventable differences in health outcomes between population groups. They persist even when controlling for insurance status, income, and education, suggesting that bias within the healthcare system itself plays a role. Nurses spend more time with patients than any other provider and thus have enormous influence on equitable care delivery." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="cc-bias-intro" defaultText="Health disparities are preventable differences in health outcomes between population groups. They persist even when controlling for insurance status, income, and education, suggesting that bias within the healthcare system itself plays a role. Nurses spend more time with patients than any other provider and thus have enormous influence on equitable care delivery." as="p" className="text-sm text-foreground leading-relaxed" multiline />
         <ProgressiveReveal
           title={t("data.pre_nursing_cultural_competency.typesOfBiasInHealthcare")}
           cards={[
@@ -101,7 +101,7 @@ export function CulturalCompetencyModule() {
       </MicroLesson>
 
       <MicroLesson title="Trauma-Informed Care & Health Literacy" subtitle="Creating safe, empowering healthcare encounters" icon={<Users className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="cc-tic-intro" defaultText="Trauma is pervasive, the ACE (Adverse Childhood Experiences) study found that nearly two-thirds of adults have experienced at least one adverse childhood experience. Healthcare settings can trigger re-traumatization through power imbalances, loss of control, invasive procedures, and institutional environments. Nurses practicing trauma-informed care create safety and trust that improve outcomes." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="cc-tic-intro" defaultText="Trauma is pervasive, the ACE (Adverse Childhood Experiences) study found that nearly two-thirds of adults have experienced at least one adverse childhood experience. Healthcare settings can trigger re-traumatization through power imbalances, loss of control, invasive procedures, and institutional environments. Nurses practicing trauma-informed care create safety and trust that improve outcomes." as="p" className="text-sm text-foreground leading-relaxed" multiline />
         <div className="grid sm:grid-cols-2 gap-3 mt-3">
           <div className="p-4 bg-rose-50/60 rounded-xl border border-rose-100">
             <p className="text-xs font-semibold text-rose-700 mb-1">Five Principles of Trauma-Informed Care</p>

@@ -21,18 +21,18 @@ export function DiagnosticsModule() {
   return (
     <div className="space-y-10" data-testid="module-diagnostics">
       <div>
-        <EditableModuleText sectionKey="diag-title" defaultText="Diagnostic Testing & Imaging Foundations" as="h2" className="text-2xl font-bold text-gray-900 mb-2" />
-        <EditableModuleText sectionKey="diag-desc" defaultText="Understand the principles behind common diagnostic tests, imaging modalities, ECG basics, laboratory values, and how sensitivity and specificity guide clinical decision-making." as="p" className="text-gray-600" multiline />
+        <EditableModuleText sectionKey="diag-title" defaultText="Diagnostic Testing & Imaging Foundations" as="h2" className="text-2xl font-bold text-heading mb-2" />
+        <EditableModuleText sectionKey="diag-desc" defaultText="Understand the principles behind common diagnostic tests, imaging modalities, ECG basics, laboratory values, and how sensitivity and specificity guide clinical decision-making." as="p" className="text-foreground" multiline />
       </div>
 
       <MicroLesson title="Imaging Modalities: X-ray, CT, MRI, and Ultrasound" subtitle="When and why each is used" icon={<Scan className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="diag-imaging-intro" defaultText="Diagnostic imaging allows visualization of internal structures without invasive procedures. Each modality has distinct principles, advantages, and appropriate clinical applications. Understanding when to use each type is essential for nurses who prepare patients, explain procedures, and monitor for complications." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="diag-imaging-intro" defaultText="Diagnostic imaging allows visualization of internal structures without invasive procedures. Each modality has distinct principles, advantages, and appropriate clinical applications. Understanding when to use each type is essential for nurses who prepare patients, explain procedures, and monitor for complications." as="p" className="text-sm text-foreground leading-relaxed" multiline />
         <div className="grid sm:grid-cols-2 gap-3 mt-3">
           <div className="p-4 bg-blue-50/60 rounded-xl border border-blue-100">
             <p className="text-xs font-semibold text-blue-700 mb-1">X-ray (Radiography)</p>
             <p className="text-xs text-blue-600">Uses ionizing radiation to produce 2D images. Best for: bones (fractures), chest (pneumonia, heart size, pneumothorax), abdomen (bowel obstruction, foreign bodies). Fast, inexpensive, widely available. Limitations: 2D only, limited soft tissue detail, radiation exposure. Pregnancy precaution: shield abdomen or avoid if possible.</p>
           </div>
-          <div className="p-4 bg-purple-50/60 rounded-xl border border-purple-100">
+          <div className="p-4 nn-semantic-inset">
             <p className="text-xs font-semibold text-purple-700 mb-1">CT Scan (Computed Tomography)</p>
             <p className="text-xs text-purple-600">Uses X-rays from multiple angles to create cross-sectional images. Best for: trauma assessment, stroke (hemorrhagic vs ischemic), pulmonary embolism, abdominal emergencies, cancer staging. Fast (minutes), excellent detail. Higher radiation dose than X-ray. Often uses iodinated contrast, check allergies and renal function. CT is the gold standard for acute stroke evaluation.</p>
           </div>
@@ -53,7 +53,7 @@ export function DiagnosticsModule() {
       </MicroLesson>
 
       <MicroLesson title="ECG Basic Concepts" subtitle="Understanding the cardiac electrical tracing" icon={<Activity className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="diag-ecg-intro" defaultText="An electrocardiogram (ECG/EKG) records the electrical activity of the heart through electrodes placed on the skin. A standard 12-lead ECG provides a comprehensive view of cardiac electrical activity from 12 different angles. Understanding the basic waveforms is essential for recognizing normal rhythm and detecting life-threatening arrhythmias." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="diag-ecg-intro" defaultText="An electrocardiogram (ECG/EKG) records the electrical activity of the heart through electrodes placed on the skin. A standard 12-lead ECG provides a comprehensive view of cardiac electrical activity from 12 different angles. Understanding the basic waveforms is essential for recognizing normal rhythm and detecting life-threatening arrhythmias." as="p" className="text-sm text-foreground leading-relaxed" multiline />
         <div className="space-y-3 mt-3">
           <div className="p-4 bg-indigo-50/60 rounded-xl border border-indigo-100">
             <p className="text-xs font-semibold text-indigo-700 mb-2">ECG Waveform Components</p>
@@ -88,7 +88,7 @@ export function DiagnosticsModule() {
       </MicroLesson>
 
       <MicroLesson title="Sensitivity vs Specificity" subtitle="Understanding diagnostic test accuracy" icon={<Microscope className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="diag-sens-spec-intro" defaultText="No diagnostic test is perfect. Understanding how tests perform, their ability to correctly identify disease (sensitivity) and correctly identify absence of disease (specificity), is critical for interpreting results and making clinical decisions. These concepts apply to every test from blood work to imaging." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="diag-sens-spec-intro" defaultText="No diagnostic test is perfect. Understanding how tests perform, their ability to correctly identify disease (sensitivity) and correctly identify absence of disease (specificity), is critical for interpreting results and making clinical decisions. These concepts apply to every test from blood work to imaging." as="p" className="text-sm text-foreground leading-relaxed" multiline />
         <div className="grid sm:grid-cols-2 gap-3 mt-3">
           <div className="p-4 bg-emerald-50/60 rounded-xl border border-emerald-100">
             <p className="text-xs font-semibold text-emerald-700 mb-1">High Sensitivity Tests (Screening)</p>
@@ -107,7 +107,7 @@ export function DiagnosticsModule() {
       </MicroLesson>
 
       <MicroLesson title="Common Laboratory Values" subtitle="CBC, BMP, CMP, and coagulation studies" icon={<FlaskConical className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="diag-lab-intro" defaultText="Laboratory tests provide objective data about a patient's physiological status. Nurses must understand normal ranges, clinical significance of abnormal values, and how results guide nursing interventions. Critical values require immediate notification of the healthcare provider." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="diag-lab-intro" defaultText="Laboratory tests provide objective data about a patient's physiological status. Nurses must understand normal ranges, clinical significance of abnormal values, and how results guide nursing interventions. Critical values require immediate notification of the healthcare provider." as="p" className="text-sm text-foreground leading-relaxed" multiline />
         <div className="space-y-3 mt-3">
           <div className="p-4 bg-blue-50/60 rounded-xl border border-blue-100">
             <p className="text-xs font-semibold text-blue-700 mb-2">Complete Blood Count (CBC)</p>
@@ -117,7 +117,7 @@ export function DiagnosticsModule() {
             <p className="text-xs font-semibold text-green-700 mb-2">Basic Metabolic Panel (BMP)</p>
             <p className="text-xs text-green-600">Sodium (135-145 mEq/L): Fluid balance indicator. Potassium (3.5-5.0 mEq/L): Critical for cardiac function, both hypo and hyperkalemia are dangerous. Glucose (70-100 mg/dL fasting): Diabetes management. BUN (7-20 mg/dL) and Creatinine (0.6-1.2 mg/dL): Renal function markers. Calcium (8.5-10.5 mg/dL): Neuromuscular function. CO2/Bicarbonate (22-26 mEq/L): Acid-base balance.</p>
           </div>
-          <div className="p-4 bg-purple-50/60 rounded-xl border border-purple-100">
+          <div className="p-4 nn-semantic-inset">
             <p className="text-xs font-semibold text-purple-700 mb-2">Coagulation Studies</p>
             <p className="text-xs text-purple-600">PT (11-13.5 seconds): Monitors warfarin therapy (extrinsic pathway). INR (0.8-1.1 normal; 2.0-3.0 therapeutic on warfarin): Standardized PT ratio. aPTT (25-35 seconds): Monitors heparin therapy (intrinsic pathway). Elevated values mean longer clotting time, increased bleeding risk. Critical to check before surgery or invasive procedures.</p>
           </div>

@@ -20,12 +20,12 @@ export function InfectionControlModule() {
   return (
     <div className="space-y-10" data-testid="module-infection-control">
       <div>
-        <EditableModuleText sectionKey="infctrl-title" defaultText="Infection Control Foundations" as="h2" className="text-2xl font-bold text-gray-900 mb-2" />
-        <EditableModuleText sectionKey="infctrl-desc" defaultText="Master the chain of infection, standard precautions, hand hygiene, PPE selection, and aseptic technique, the core competencies that prevent healthcare-associated infections." as="p" className="text-gray-600" multiline />
+        <EditableModuleText sectionKey="infctrl-title" defaultText="Infection Control Foundations" as="h2" className="text-2xl font-bold text-heading mb-2" />
+        <EditableModuleText sectionKey="infctrl-desc" defaultText="Master the chain of infection, standard precautions, hand hygiene, PPE selection, and aseptic technique, the core competencies that prevent healthcare-associated infections." as="p" className="text-foreground" multiline />
       </div>
 
       <MicroLesson title="The Chain of Infection" subtitle="Six links that must all be present for infection to occur" icon={<Layers className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="infctrl-chain-content" defaultText={`Infection requires an unbroken chain of infection (A conceptual model with six links: (1) infectious agent, (2) reservoir, (3) portal of exit, (4) mode of transmission, (5) portal of entry, (6) susceptible host. Breaking ANY link prevents infection.). Infection prevention strategies work by targeting the weakest links in this chain.`} as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="infctrl-chain-content" defaultText={`Infection requires an unbroken chain of infection (A conceptual model with six links: (1) infectious agent, (2) reservoir, (3) portal of exit, (4) mode of transmission, (5) portal of entry, (6) susceptible host. Breaking ANY link prevents infection.). Infection prevention strategies work by targeting the weakest links in this chain.`} as="p" className="text-sm text-foreground leading-relaxed" multiline />
         <ProgressiveReveal
           title={t("data.pre_nursing_infection_control.theSixLinks")}
           cards={[
@@ -70,7 +70,7 @@ export function InfectionControlModule() {
       </MicroLesson>
 
       <MicroLesson title="Hand Hygiene" subtitle="The single most effective infection prevention measure" icon={<Hand className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="infctrl-hygiene-content" defaultText="Hand hygiene prevents transmission by breaking the mode of transmission (The fourth link in the chain of infection. Contact transmission (direct and indirect via contaminated hands) is the most common mode in healthcare. Hand hygiene directly interrupts this transmission path.) link. Two methods are available, and the choice depends on the clinical situation." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="infctrl-hygiene-content" defaultText="Hand hygiene prevents transmission by breaking the mode of transmission (The fourth link in the chain of infection. Contact transmission (direct and indirect via contaminated hands) is the most common mode in healthcare. Hand hygiene directly interrupts this transmission path.) link. Two methods are available, and the choice depends on the clinical situation." as="p" className="text-sm text-foreground leading-relaxed" multiline />
         <div className="grid sm:grid-cols-2 gap-3 mt-3">
           <div className="p-4 bg-blue-50/60 rounded-xl border border-blue-100">
             <p className="text-xs font-semibold text-blue-700 mb-1">Alcohol-Based Hand Rub (ABHR)</p>
@@ -89,13 +89,13 @@ export function InfectionControlModule() {
       </MicroLesson>
 
       <MicroLesson title="Personal Protective Equipment (PPE)" subtitle="Barrier protection matched to risk" icon={<Shield className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="infctrl-ppe-content" defaultText="PPE creates a barrier between the healthcare worker and infectious material. The critical principle is risk-based selection (PPE is selected based on the anticipated exposure: what body fluids might be encountered, what transmission route is involved, and what procedures will be performed. Using too little PPE creates risk; using too much wastes resources and creates a false sense of security.)." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="infctrl-ppe-content" defaultText="PPE creates a barrier between the healthcare worker and infectious material. The critical principle is risk-based selection (PPE is selected based on the anticipated exposure: what body fluids might be encountered, what transmission route is involved, and what procedures will be performed. Using too little PPE creates risk; using too much wastes resources and creates a false sense of security.)." as="p" className="text-sm text-foreground leading-relaxed" multiline />
         <div className="space-y-3 mt-3">
           <div className="p-4 bg-blue-50/60 rounded-xl border border-blue-100">
             <p className="text-xs font-semibold text-blue-700 mb-1">Gloves</p>
             <p className="text-xs text-blue-600">Used when touching blood, body fluids, mucous membranes, non-intact skin, or contaminated items. Change between patients and between dirty and clean tasks on the same patient. Gloves do NOT replace hand hygiene, hands must be cleaned before donning and after removing gloves.</p>
           </div>
-          <div className="p-4 bg-purple-50/60 rounded-xl border border-purple-100">
+          <div className="p-4 nn-semantic-inset">
             <p className="text-xs font-semibold text-purple-700 mb-1">Gown</p>
             <p className="text-xs text-purple-600">Protects skin and clothing. Required when anticipating contact with blood/body fluids that could soil clothing, or during contact precautions. Remove before leaving the patient's environment to prevent carrying organisms on clothing.</p>
           </div>
@@ -112,7 +112,7 @@ export function InfectionControlModule() {
       </MicroLesson>
 
       <MicroLesson title="Standard & Transmission-Based Precautions" subtitle="The two tiers of isolation precautions" icon={<AlertTriangle className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="infctrl-precautions-content" defaultText="Infection prevention uses a two-tier system (Tier 1: Standard Precautions, applied to ALL patients regardless of diagnosis. Tier 2: Transmission-Based Precautions, added on top of standard precautions for patients with known or suspected infections transmitted by specific routes.)." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="infctrl-precautions-content" defaultText="Infection prevention uses a two-tier system (Tier 1: Standard Precautions, applied to ALL patients regardless of diagnosis. Tier 2: Transmission-Based Precautions, added on top of standard precautions for patients with known or suspected infections transmitted by specific routes.)." as="p" className="text-sm text-foreground leading-relaxed" multiline />
         <div className="space-y-3 mt-3">
           <div className="p-4 bg-green-50/60 rounded-xl border border-green-100">
             <p className="text-xs font-semibold text-green-700 mb-1">Standard Precautions (ALL Patients)</p>
@@ -122,7 +122,7 @@ export function InfectionControlModule() {
             <p className="text-xs font-semibold text-blue-700 mb-1">Contact Precautions</p>
             <p className="text-xs text-blue-600">For infections spread by direct or indirect contact (MRSA, VRE, C. difficile, scabies). Requires: private room or cohorting, gloves and gown for all interactions with patient or environment, dedicated equipment.</p>
           </div>
-          <div className="p-4 bg-purple-50/60 rounded-xl border border-purple-100">
+          <div className="p-4 nn-semantic-inset">
             <p className="text-xs font-semibold text-purple-700 mb-1">Droplet Precautions</p>
             <p className="text-xs text-purple-600">For infections spread by large respiratory droplets (influenza, pertussis, meningococcal disease). Requires: private room, surgical mask within 1 meter, patient wears mask during transport.</p>
           </div>

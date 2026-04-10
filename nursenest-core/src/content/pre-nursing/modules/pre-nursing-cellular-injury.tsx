@@ -21,12 +21,12 @@ export function CellularInjuryModule() {
   return (
     <div className="space-y-10" data-testid="module-cellular-injury">
       <div>
-        <EditableModuleText sectionKey="ci-title" defaultText="Cellular Injury & Adaptation" as="h2" className="text-2xl font-bold text-gray-900 mb-2" />
-        <EditableModuleText sectionKey="ci-desc" defaultText="Understand the mechanisms of cellular injury, the distinction between apoptosis and necrosis, cellular adaptive responses, oxidative stress, and the critical difference between reversible and irreversible injury." as="p" className="text-gray-600" multiline />
+        <EditableModuleText sectionKey="ci-title" defaultText="Cellular Injury & Adaptation" as="h2" className="text-2xl font-bold text-heading mb-2" />
+        <EditableModuleText sectionKey="ci-desc" defaultText="Understand the mechanisms of cellular injury, the distinction between apoptosis and necrosis, cellular adaptive responses, oxidative stress, and the critical difference between reversible and irreversible injury." as="p" className="text-foreground" multiline />
       </div>
 
       <MicroLesson title="Causes of Cellular Injury" subtitle="Why cells become damaged" icon={<AlertTriangle className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="ci-causes-content" defaultText="Cellular injury occurs when stressors exceed the cell's ability to adapt. Understanding the major categories of cellular injury is essential for recognizing pathological processes and anticipating clinical consequences." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="ci-causes-content" defaultText="Cellular injury occurs when stressors exceed the cell's ability to adapt. Understanding the major categories of cellular injury is essential for recognizing pathological processes and anticipating clinical consequences." as="p" className="text-sm text-foreground leading-relaxed" multiline />
         <div className="grid sm:grid-cols-2 gap-3 mt-3">
           <div className="p-4 bg-red-50/60 rounded-xl border border-red-100">
             <p className="text-xs font-semibold text-red-700 mb-1">Hypoxia (Most Common Cause)</p>
@@ -36,7 +36,7 @@ export function CellularInjuryModule() {
             <p className="text-xs font-semibold text-orange-700 mb-1">Toxins & Chemical Agents</p>
             <p className="text-xs text-orange-600">Includes drugs (acetaminophen hepatotoxicity, chemotherapy), environmental toxins (lead, mercury, carbon tetrachloride), alcohol (direct hepatocyte damage), and endogenous toxins (urea in renal failure, bilirubin in liver failure). Toxins injure cells by directly damaging membranes, inhibiting enzymes, generating free radicals, or interfering with DNA replication.</p>
           </div>
-          <div className="p-4 bg-purple-50/60 rounded-xl border border-purple-100">
+          <div className="p-4 nn-semantic-inset">
             <p className="text-xs font-semibold text-purple-700 mb-1">Infectious Agents</p>
             <p className="text-xs text-purple-600">Bacteria damage cells through direct invasion, exotoxin release, or triggering inflammatory responses. Viruses hijack cellular machinery for replication, killing the host cell or transforming it (oncogenic viruses). Fungi, parasites, and prions each have unique mechanisms of cellular damage. The immune response to infection can itself cause significant collateral tissue injury.</p>
           </div>
@@ -58,7 +58,7 @@ export function CellularInjuryModule() {
       </MicroLesson>
 
       <MicroLesson title="Free Radicals & Oxidative Stress" subtitle="Reactive oxygen species and cellular damage" icon={<Activity className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="ci-oxidative-content" defaultText="Oxidative stress is a critical mechanism of cellular injury that underlies many disease processes. Understanding free radical biology helps explain why antioxidants matter and how reperfusion injury occurs after restoring blood flow to ischemic tissue." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="ci-oxidative-content" defaultText="Oxidative stress is a critical mechanism of cellular injury that underlies many disease processes. Understanding free radical biology helps explain why antioxidants matter and how reperfusion injury occurs after restoring blood flow to ischemic tissue." as="p" className="text-sm text-foreground leading-relaxed" multiline />
         <div className="space-y-3 mt-3">
           <div className="p-4 bg-red-50/60 rounded-xl border border-red-100">
             <p className="text-xs font-semibold text-red-700 mb-2">Sources of Free Radicals</p>
@@ -77,7 +77,7 @@ export function CellularInjuryModule() {
       </MicroLesson>
 
       <MicroLesson title="Apoptosis vs Necrosis" subtitle="Programmed death vs uncontrolled death" icon={<Skull className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="ci-death-content" defaultText="Cell death occurs through two fundamentally different mechanisms: apoptosis (programmed, controlled, energy-requiring) and necrosis (uncontrolled, passive, inflammatory). Understanding the distinction is crucial because they have different causes, mechanisms, and clinical consequences." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="ci-death-content" defaultText="Cell death occurs through two fundamentally different mechanisms: apoptosis (programmed, controlled, energy-requiring) and necrosis (uncontrolled, passive, inflammatory). Understanding the distinction is crucial because they have different causes, mechanisms, and clinical consequences." as="p" className="text-sm text-foreground leading-relaxed" multiline />
         <div className="grid sm:grid-cols-2 gap-3 mt-3">
           <div className="p-4 bg-blue-50/60 rounded-xl border border-blue-100">
             <p className="text-xs font-semibold text-blue-700 mb-1">Apoptosis (Programmed Cell Death)</p>
@@ -120,7 +120,7 @@ export function CellularInjuryModule() {
       </MicroLesson>
 
       <MicroLesson title="Cellular Adaptations" subtitle="How cells respond to stress" icon={<RefreshCw className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="ci-adaptations-content" defaultText="When cells face persistent sublethal stress, they adapt to survive. These adaptations are reversible if the stimulus is removed but can progress to injury if the stress continues or exceeds the cell's adaptive capacity. Understanding adaptations helps nurses recognize pathological changes and anticipate disease progression." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="ci-adaptations-content" defaultText="When cells face persistent sublethal stress, they adapt to survive. These adaptations are reversible if the stimulus is removed but can progress to injury if the stress continues or exceeds the cell's adaptive capacity. Understanding adaptations helps nurses recognize pathological changes and anticipate disease progression." as="p" className="text-sm text-foreground leading-relaxed" multiline />
         <div className="space-y-3 mt-3">
           <div className="p-4 bg-indigo-50/60 rounded-xl border border-indigo-100">
             <p className="text-xs font-semibold text-indigo-700 mb-2">Hypertrophy, Increase in Cell SIZE</p>
@@ -146,7 +146,7 @@ export function CellularInjuryModule() {
       </MicroLesson>
 
       <MicroLesson title="Reversible vs Irreversible Injury" subtitle="The point of no return" icon={<Shield className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="ci-reversible-intro" defaultText="The distinction between reversible and irreversible cellular injury is clinically critical, it determines whether tissue can recover or will die. Understanding injury markers helps nurses interpret lab values and anticipate patient outcomes." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="ci-reversible-intro" defaultText="The distinction between reversible and irreversible cellular injury is clinically critical, it determines whether tissue can recover or will die. Understanding injury markers helps nurses interpret lab values and anticipate patient outcomes." as="p" className="text-sm text-foreground leading-relaxed" multiline />
         <div className="grid sm:grid-cols-2 gap-3 mt-3">
           <div className="p-4 bg-yellow-50/60 rounded-xl border border-yellow-100">
             <p className="text-xs font-semibold text-yellow-700 mb-1">Reversible Injury (Cell Can Recover)</p>

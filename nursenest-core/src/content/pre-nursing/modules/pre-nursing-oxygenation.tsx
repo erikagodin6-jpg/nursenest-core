@@ -21,12 +21,12 @@ export function OxygenationModule() {
   return (
     <div className="space-y-10" data-testid="module-oxygenation">
       <div>
-        <EditableModuleText sectionKey="oxy-title" defaultText="Oxygenation & Oxygen Delivery" as="h2" className="text-2xl font-bold text-gray-900 mb-2" />
-        <EditableModuleText sectionKey="oxy-desc" defaultText="Master the principles of oxygen transport, hemoglobin binding, the oxyhemoglobin dissociation curve, cardiac output, tissue perfusion, and ABG interpretation, foundational concepts for all nursing practice." as="p" className="text-gray-600" multiline />
+        <EditableModuleText sectionKey="oxy-title" defaultText="Oxygenation & Oxygen Delivery" as="h2" className="text-2xl font-bold text-heading mb-2" />
+        <EditableModuleText sectionKey="oxy-desc" defaultText="Master the principles of oxygen transport, hemoglobin binding, the oxyhemoglobin dissociation curve, cardiac output, tissue perfusion, and ABG interpretation, foundational concepts for all nursing practice." as="p" className="text-foreground" multiline />
       </div>
 
       <MicroLesson title="Hemoglobin & Oxygen Binding" subtitle="How oxygen travels in the blood" icon={<Heart className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="oxy-hgb-content" defaultText="Oxygen is transported in the blood in two forms: dissolved in plasma (measured as PaO2, only about 1.5% of total oxygen) and bound to hemoglobin (measured as SaO2/SpO2, about 98.5% of total oxygen). Each hemoglobin molecule can carry up to 4 oxygen molecules. Understanding this distinction is critical because pulse oximetry measures oxygen saturation (how much hemoglobin is loaded), not the total oxygen content of the blood." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="oxy-hgb-content" defaultText="Oxygen is transported in the blood in two forms: dissolved in plasma (measured as PaO2, only about 1.5% of total oxygen) and bound to hemoglobin (measured as SaO2/SpO2, about 98.5% of total oxygen). Each hemoglobin molecule can carry up to 4 oxygen molecules. Understanding this distinction is critical because pulse oximetry measures oxygen saturation (how much hemoglobin is loaded), not the total oxygen content of the blood." as="p" className="text-sm text-foreground leading-relaxed" multiline />
         <div className="grid sm:grid-cols-2 gap-3 mt-3">
           <div className="p-4 bg-red-50/60 rounded-xl border border-red-100">
             <p className="text-xs font-semibold text-red-700 mb-1">Hemoglobin Structure & Function</p>
@@ -44,7 +44,7 @@ export function OxygenationModule() {
       </MicroLesson>
 
       <MicroLesson title="Oxyhemoglobin Dissociation Curve" subtitle="Right and left shifts explained" icon={<Activity className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="oxy-curve-content" defaultText="The oxyhemoglobin dissociation curve is an S-shaped curve that shows the relationship between PaO2 (x-axis) and hemoglobin saturation (y-axis). The curve's position can shift right or left depending on physiologic conditions, affecting how readily hemoglobin binds and releases oxygen." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="oxy-curve-content" defaultText="The oxyhemoglobin dissociation curve is an S-shaped curve that shows the relationship between PaO2 (x-axis) and hemoglobin saturation (y-axis). The curve's position can shift right or left depending on physiologic conditions, affecting how readily hemoglobin binds and releases oxygen." as="p" className="text-sm text-foreground leading-relaxed" multiline />
         <div className="grid sm:grid-cols-2 gap-3 mt-3">
           <div className="p-4 bg-orange-50/60 rounded-xl border border-orange-100">
             <p className="text-xs font-semibold text-orange-700 mb-2">RIGHT Shift, O2 Released to Tissues</p>
@@ -63,9 +63,9 @@ export function OxygenationModule() {
       </MicroLesson>
 
       <MicroLesson title="Cardiac Output & O2 Delivery" subtitle="CO = HR × SV and the O2 delivery equation" icon={<Gauge className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="oxy-co-content" defaultText="Oxygen delivery to tissues depends on two factors: the oxygen content of the blood (CaO2) and the cardiac output (CO). Even if blood is well-oxygenated, tissues will become hypoxic if cardiac output is insufficient to deliver it. The oxygen delivery equation integrates both components: DO2 = CO × CaO2 × 10." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="oxy-co-content" defaultText="Oxygen delivery to tissues depends on two factors: the oxygen content of the blood (CaO2) and the cardiac output (CO). Even if blood is well-oxygenated, tissues will become hypoxic if cardiac output is insufficient to deliver it. The oxygen delivery equation integrates both components: DO2 = CO × CaO2 × 10." as="p" className="text-sm text-foreground leading-relaxed" multiline />
         <div className="space-y-3 mt-3">
-          <div className="p-4 bg-purple-50/60 rounded-xl border border-purple-100">
+          <div className="p-4 nn-semantic-inset">
             <p className="text-xs font-semibold text-purple-700 mb-2">Cardiac Output Components</p>
             <p className="text-xs text-purple-600"><strong>Heart Rate (HR):</strong> Normal 60-100 bpm. Too fast (tachycardia) reduces ventricular filling time → decreased stroke volume. Too slow (bradycardia) may not provide adequate output. <strong>Stroke Volume (SV):</strong> Volume ejected per beat, normally ~70 mL. Determined by: <strong>Preload</strong> (venous return/end-diastolic volume, Frank-Starling: more stretch = more force up to a point), <strong>Afterload</strong> (resistance to ejection, primarily SVR; high afterload = decreased SV), <strong>Contractility</strong> (intrinsic muscle force independent of preload/afterload).</p>
           </div>
@@ -82,7 +82,7 @@ export function OxygenationModule() {
       </MicroLesson>
 
       <MicroLesson title="Perfusion vs Oxygenation & Organ Hypoxia" subtitle="Why tissues fail without adequate oxygen" icon={<Brain className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="oxy-perfusion-content" defaultText="Oxygenation and perfusion are related but distinct concepts. A patient can have excellent oxygenation (high SpO2) but poor perfusion (low cardiac output, shock). Conversely, a patient can have adequate perfusion but poor oxygenation (respiratory failure). Both must be adequate for tissue survival." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="oxy-perfusion-content" defaultText="Oxygenation and perfusion are related but distinct concepts. A patient can have excellent oxygenation (high SpO2) but poor perfusion (low cardiac output, shock). Conversely, a patient can have adequate perfusion but poor oxygenation (respiratory failure). Both must be adequate for tissue survival." as="p" className="text-sm text-foreground leading-relaxed" multiline />
         <div className="grid sm:grid-cols-2 gap-3 mt-3">
           <div className="p-4 bg-blue-50/60 rounded-xl border border-blue-100">
             <p className="text-xs font-semibold text-blue-700 mb-1">Oxygenation</p>
@@ -125,7 +125,7 @@ export function OxygenationModule() {
       </MicroLesson>
 
       <MicroLesson title="Pulse Oximetry & ABG Basics" subtitle="Monitoring oxygenation at the bedside" icon={<Wind className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="oxy-monitoring-content" defaultText="Pulse oximetry and arterial blood gases are the two primary tools for assessing oxygenation. Understanding their principles, normal values, and limitations is essential for safe nursing practice." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="oxy-monitoring-content" defaultText="Pulse oximetry and arterial blood gases are the two primary tools for assessing oxygenation. Understanding their principles, normal values, and limitations is essential for safe nursing practice." as="p" className="text-sm text-foreground leading-relaxed" multiline />
         <div className="space-y-3 mt-3">
           <div className="p-4 bg-green-50/60 rounded-xl border border-green-100">
             <p className="text-xs font-semibold text-green-700 mb-2">Pulse Oximetry (SpO2)</p>
@@ -152,7 +152,7 @@ export function OxygenationModule() {
               </div>
             </div>
           </div>
-          <div className="p-4 bg-purple-50/60 rounded-xl border border-purple-100">
+          <div className="p-4 nn-semantic-inset">
             <p className="text-xs font-semibold text-purple-700 mb-2">ABG Interpretation Steps (ROME Method)</p>
             <p className="text-xs text-purple-600"><strong>R</strong>espiratory = <strong>O</strong>pposite: When pH and PaCO2 move in opposite directions, the primary disorder is respiratory. <strong>M</strong>etabolic = <strong>E</strong>qual: When pH and HCO3 move in the same direction, the primary disorder is metabolic. <strong>Example:</strong> pH 7.30 (acidosis), PaCO2 55 (high = acidic) → pH down, CO2 up = opposite directions → Respiratory acidosis. <strong>Example:</strong> pH 7.50 (alkalosis), HCO3 32 (high = alkaline) → pH up, HCO3 up = same direction → Metabolic alkalosis.</p>
           </div>

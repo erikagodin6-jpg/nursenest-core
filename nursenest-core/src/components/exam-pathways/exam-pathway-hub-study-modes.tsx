@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import type React from "react";
 import type { LucideIcon } from "lucide-react";
 import { Activity, BookOpen, ClipboardList } from "lucide-react";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";

@@ -1,6 +1,6 @@
 "use client";
 
-import { Check, Shield } from "lucide-react";
+import { Check, Shield, Users, BookOpen, Brain } from "lucide-react";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 
 type Props = {
@@ -12,8 +12,32 @@ function formatQ(n: number, locale: string): string {
   return n.toLocaleString(locale.replace(/_/g, "-"));
 }
 
+const STATS = [
+  {
+    icon: Brain,
+    iconColor: "text-[var(--semantic-info)]",
+    number: "3,500+",
+    label: "Practice questions",
+    sub: "NGN-style included",
+  },
+  {
+    icon: BookOpen,
+    iconColor: "text-[var(--semantic-brand)]",
+    number: "150+",
+    label: "Guided lessons",
+    sub: "Across all nursing tiers",
+  },
+  {
+    icon: Users,
+    iconColor: "text-[var(--semantic-success)]",
+    number: "12+",
+    label: "Exam pathways",
+    sub: "RN, LPN/RPN, NP & Allied",
+  },
+] as const;
+
 /**
- * Trust band: scope-aligned stats, honest proof line, vs-generic comparison, then testimonials follow in page order.
+ * Trust band: stat grid, scope-aligned proof line, vs-generic differentiators.
  */
 export function HomeTrustProofSection({ questionCount }: Props) {
   const { t, locale } = useMarketingI18n();
@@ -37,10 +61,35 @@ export function HomeTrustProofSection({ questionCount }: Props) {
           </p>
         </header>
 
+        {/* Stat grid */}
+        <ul className="mx-auto mb-10 grid max-w-4xl gap-4 sm:grid-cols-3">
+          {STATS.map((s) => {
+            const Icon = s.icon;
+            const displayNumber = s.label.toLowerCase().includes("question") && q ? q : s.number;
+            return (
+              <li
+                key={s.label}
+                className="flex flex-col items-center rounded-2xl border border-[var(--border-subtle)] bg-[var(--theme-card-bg)] px-5 py-6 text-center shadow-sm"
+              >
+                <span
+                  className="mb-3 inline-flex h-11 w-11 items-center justify-center rounded-xl bg-[color-mix(in_srgb,currentColor_10%,var(--theme-card-bg))]"
+                  aria-hidden
+                >
+                  <Icon className={`h-5 w-5 ${s.iconColor}`} />
+                </span>
+                <span className="nn-marketing-h2 tabular-nums text-[var(--theme-heading-text)]">{displayNumber}</span>
+                <span className="nn-marketing-body-sm mt-1 font-semibold text-[var(--theme-body-text)]">{s.label}</span>
+                <span className="nn-marketing-caption mt-0.5 text-[var(--theme-muted-text)]">{s.sub}</span>
+              </li>
+            );
+          })}
+        </ul>
+
+        {/* Honest proof line */}
         <div className="mx-auto mb-10 max-w-3xl rounded-2xl border border-[var(--border-subtle)] bg-[var(--nn-presentation-ribbon)] px-5 py-5 sm:px-8 sm:py-6">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between sm:gap-8">
-            <div>
-              <p className="nn-marketing-h3 tabular-nums text-[var(--theme-heading-text)]">{q || "—"}</p>
+            <div className="shrink-0">
+              <p className="nn-marketing-h3 tabular-nums text-[var(--theme-heading-text)]">{q || "3,500+"}</p>
               <p className="nn-marketing-caption mt-1 text-[var(--theme-muted-text)]">{t("home.conversion.proof.statQuestionsLabel")}</p>
             </div>
             <p className="nn-marketing-body-sm max-w-md flex-1 text-pretty text-[var(--theme-body-text)]">
@@ -53,7 +102,8 @@ export function HomeTrustProofSection({ questionCount }: Props) {
           </p>
         </div>
 
-        <div className="mb-10">
+        {/* Differentiators */}
+        <div className="mb-4">
           <h3 className="nn-marketing-h3 mb-4 text-center text-[var(--theme-heading-text)]">{t("home.conversion.proof.compareTitle")}</h3>
           <ul className="mx-auto grid max-w-3xl gap-3">
             {compareKeys.map((k) => (

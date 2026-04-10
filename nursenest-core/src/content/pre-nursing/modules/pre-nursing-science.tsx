@@ -43,12 +43,12 @@ export function ScienceFoundationsModule() {
   return (
     <div className="space-y-10" data-testid="module-science-foundations">
       <div>
-        <EditableModuleText sectionKey="science-title" defaultText="Science Foundations" as="h2" className="text-2xl font-bold text-gray-900 mb-2" />
-        <EditableModuleText sectionKey="science-desc" defaultText="Build the essential science knowledge that underpins every nursing concept, from biomolecules to microbiology, chemistry to scientific reasoning." as="p" className="text-gray-600" multiline />
+        <EditableModuleText sectionKey="science-title" defaultText="Science Foundations" as="h2" className="text-2xl font-bold text-heading mb-2" />
+        <EditableModuleText sectionKey="science-desc" defaultText="Build the essential science knowledge that underpins every nursing concept, from biomolecules to microbiology, chemistry to scientific reasoning." as="p" className="text-foreground" multiline />
       </div>
 
       <MicroLesson title="Biological Systems" subtitle="Characteristics of life and levels of organization" icon={<Sparkles className="w-5 h-5" />}>
-        <p className="text-sm text-gray-600 leading-relaxed">
+        <p className="text-sm text-foreground leading-relaxed">
           All living organisms share fundamental{" "}
           <HoverReveal term="characteristics of life" definition="Organization, metabolism, responsiveness, growth, reproduction, and homeostasis, the six hallmarks that distinguish living systems from non-living matter." />.
           Understanding these properties helps nurses recognize when physiological systems deviate from normal.
@@ -71,7 +71,7 @@ export function ScienceFoundationsModule() {
       </MicroLesson>
 
       <MicroLesson title="Biomolecules & Metabolism" subtitle="Proteins, lipids, carbs, nucleic acids, and energy" icon={<Beaker className="w-5 h-5" />}>
-        <p className="text-sm text-gray-600 leading-relaxed">
+        <p className="text-sm text-foreground leading-relaxed">
           The four major{" "}
           <HoverReveal term="biomolecules" definition="Large organic molecules essential for life: proteins (structure/enzymes), lipids (membranes/energy storage), carbohydrates (energy), and nucleic acids (genetic information)." />{" "}
           are the building blocks of all cellular structures and functions. Each plays a distinct role in maintaining health.
@@ -154,7 +154,7 @@ export function ScienceFoundationsModule() {
       />
 
       <MicroLesson title="DNA, Genes & Protein Synthesis" subtitle="Genetic information flow: from DNA to functional proteins" icon={<Dna className="w-5 h-5" />}>
-        <p className="text-sm text-gray-600 leading-relaxed">
+        <p className="text-sm text-foreground leading-relaxed">
           The{" "}
           <HoverReveal term="central dogma" definition="The fundamental principle of molecular biology: DNA → RNA → Protein. Genetic information flows from DNA through transcription to mRNA, then through translation to protein." />{" "}
           describes how genetic information flows from DNA to functional proteins that run every process in the body.
@@ -165,14 +165,14 @@ export function ScienceFoundationsModule() {
             <p className="text-xs text-indigo-600">DNA → mRNA</p>
             <p className="text-[10px] text-indigo-500 mt-1">Occurs in the nucleus</p>
           </div>
-          <div className="flex items-center justify-center text-gray-300">→</div>
+          <div className="flex items-center justify-center text-muted-foreground">→</div>
           <div className="flex-1 p-4 bg-violet-50/60 rounded-xl border border-violet-100 text-center">
             <p className="text-xs font-bold text-violet-700 mb-1">Translation</p>
             <p className="text-xs text-violet-600">mRNA → Protein</p>
             <p className="text-[10px] text-violet-500 mt-1">Occurs at ribosomes</p>
           </div>
-          <div className="flex items-center justify-center text-gray-300">→</div>
-          <div className="flex-1 p-4 bg-purple-50/60 rounded-xl border border-purple-100 text-center">
+          <div className="flex items-center justify-center text-muted-foreground">→</div>
+          <div className="flex-1 p-4 nn-semantic-inset text-center">
             <p className="text-xs font-bold text-purple-700 mb-1">Protein Function</p>
             <p className="text-xs text-purple-600">Enzymes, receptors, structures</p>
             <p className="text-[10px] text-purple-500 mt-1">Determines cell behavior</p>
@@ -234,7 +234,7 @@ export function ScienceFoundationsModule() {
       />
 
       <MicroLesson title="Microbiology Essentials" subtitle="Pathogens, host interactions, and antimicrobial resistance" icon={<Microscope className="w-5 h-5" />}>
-        <p className="text-sm text-gray-600 leading-relaxed">
+        <p className="text-sm text-foreground leading-relaxed">
           Understanding{" "}
           <HoverReveal term="pathogens" definition="Microorganisms capable of causing disease: bacteria, viruses, fungi, parasites, and prions. Each type requires different treatment approaches." />{" "}
           is essential for infection control, one of the most critical competencies in nursing practice.
@@ -329,13 +329,13 @@ export function ScienceFoundationsModule() {
       />
 
       <MicroLesson title="Chemistry for Nursing" subtitle="Atoms, bonds, solutions, pH, and electrolytes" icon={<Atom className="w-5 h-5" />}>
-        <p className="text-sm text-gray-600 leading-relaxed">
+        <p className="text-sm text-foreground leading-relaxed">
           Chemistry concepts directly apply to clinical nursing. Understanding{" "}
           <HoverReveal term="pH" definition="A measure of hydrogen ion concentration on a scale of 0-14. Normal blood pH is 7.35-7.45. Below 7.35 = acidosis; above 7.45 = alkalosis. Even small deviations can be life-threatening." />,{" "}
           <HoverReveal term="electrolytes" definition="Charged particles (ions) in body fluids that conduct electrical impulses. Key electrolytes: Na+, K+, Ca2+, Mg2+, Cl⁻, HCO3⁻, PO4³⁻. Essential for nerve conduction, muscle contraction, and fluid balance." />, and solution chemistry is essential for safe medication administration and patient assessment.
         </p>
         <div className="space-y-3 mt-3">
-          <div className="p-4 bg-purple-50/60 rounded-xl border border-purple-100">
+          <div className="p-4 nn-semantic-inset">
             <p className="text-xs font-semibold text-purple-700 mb-1">Atomic Structure & Chemical Bonds</p>
             <p className="text-xs text-purple-600">Atoms consist of protons, neutrons, and electrons. Ionic bonds (electron transfer) create electrolytes. Covalent bonds (electron sharing) form organic molecules. Hydrogen bonds give water its unique properties.</p>
           </div>
@@ -397,7 +397,7 @@ export function ScienceFoundationsModule() {
       />
 
       <MicroLesson title="Math Skills for Science" subtitle="Scientific notation, ratios, proportions, and unit conversions" icon={<Calculator className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="science-math-content" defaultText="Quantitative reasoning is essential in nursing. From calculating medication dosages to interpreting lab values, math skills directly affect patient safety." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="science-math-content" defaultText="Quantitative reasoning is essential in nursing. From calculating medication dosages to interpreting lab values, math skills directly affect patient safety." as="p" className="text-sm text-foreground leading-relaxed" multiline />
         <ProgressiveReveal
           title={t("data.pre_nursing_science.essentialMathConcepts")}
           cards={[
@@ -450,7 +450,7 @@ export function ScienceFoundationsModule() {
       />
 
       <MicroLesson title="Scientific Literacy" subtitle="Terminology, evidence-based thinking, and critical reasoning" icon={<BookOpen className="w-5 h-5" />}>
-        <p className="text-sm text-gray-600 leading-relaxed">
+        <p className="text-sm text-foreground leading-relaxed">
           Nurses must evaluate evidence, think critically, and communicate using precise scientific terminology. These skills form the foundation of{" "}
           <HoverReveal term="evidence-based practice" definition="The integration of best available research evidence with clinical expertise and patient values/preferences to guide clinical decision-making. It ensures care is grounded in science, not tradition alone." />.
         </p>
@@ -505,7 +505,7 @@ export function ScienceFoundationsModule() {
       />
 
       <MicroLesson title="Cell Structure & Organelles" subtitle="The functional compartments within every human cell" icon={<Microscope className="w-5 h-5" />}>
-        <p className="text-sm text-gray-600 leading-relaxed">
+        <p className="text-sm text-foreground leading-relaxed">
           Every human cell is a miniature factory with specialized compartments called{" "}
           <HoverReveal term="organelles" definition="Membrane-bound or non-membrane structures within a cell that perform specific functions. Each organelle contributes to cell survival, just as each organ contributes to body function." />.
           Understanding organelle function explains why certain toxins, drugs, and diseases affect cells the way they do.
@@ -593,7 +593,7 @@ export function ScienceFoundationsModule() {
       />
 
       <MicroLesson title="Water & Its Unique Properties" subtitle="Why water is the foundation of all biological systems" icon={<Beaker className="w-5 h-5" />}>
-        <p className="text-sm text-gray-600 leading-relaxed">
+        <p className="text-sm text-foreground leading-relaxed">
           Water comprises approximately 60% of adult body weight and is the{" "}
           <HoverReveal term="universal solvent" definition="Water dissolves more substances than any other liquid due to its polar nature. This property is essential for nutrient transport, waste removal, and metabolic reactions in the body." />{" "}
           of biology. Its unique molecular properties make life possible.
@@ -626,7 +626,7 @@ export function ScienceFoundationsModule() {
       </MicroLesson>
 
       <MicroLesson title="Cellular Energy Metabolism" subtitle="Glycolysis, Krebs cycle, electron transport chain" icon={<Sparkles className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="science-metabolism-content" defaultText="Cells extract energy from nutrients through a series of metabolic pathways. Understanding these pathways explains why oxygen deprivation is so dangerous and how metabolic diseases affect the body." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="science-metabolism-content" defaultText="Cells extract energy from nutrients through a series of metabolic pathways. Understanding these pathways explains why oxygen deprivation is so dangerous and how metabolic diseases affect the body." as="p" className="text-sm text-foreground leading-relaxed" multiline />
         <ProgressiveReveal
           title={t("data.pre_nursing_science.theThreeStagesOfAerobic")}
           cards={[
@@ -697,7 +697,7 @@ export function ScienceFoundationsModule() {
       />
 
       <MicroLesson title="Homeostasis & Feedback Loops" subtitle="How the body maintains internal stability through self-regulation" icon={<Activity className="w-5 h-5" />}>
-        <p className="text-sm text-gray-600 leading-relaxed">
+        <p className="text-sm text-foreground leading-relaxed">
           <HoverReveal term="Homeostasis" definition="The maintenance of a relatively stable internal environment despite changes in external conditions. It is the single most important concept in physiology, virtually all disease can be understood as a failure of homeostasis." />{" "}
           is the body's ability to maintain stable internal conditions. Every organ system participates in homeostatic regulation through feedback mechanisms.
         </p>
@@ -721,7 +721,7 @@ export function ScienceFoundationsModule() {
       </MicroLesson>
 
       <MicroLesson title="Organic Chemistry Basics" subtitle="Functional groups, isomers, and biological molecules" icon={<FlaskConical className="w-5 h-5" />}>
-        <p className="text-sm text-gray-600 leading-relaxed">
+        <p className="text-sm text-foreground leading-relaxed">
           Organic chemistry is the study of carbon-containing compounds. Carbon's ability to form four covalent bonds with diverse atoms creates the molecular complexity needed for life. Key{" "}
           <HoverReveal term="functional groups" definition="Specific groupings of atoms within molecules that determine the molecule's chemical behavior and properties. Examples: hydroxyl (-OH), carboxyl (-COOH), amino (-NH₂), phosphate (-PO₄)." />{" "}
           determine how biological molecules interact.

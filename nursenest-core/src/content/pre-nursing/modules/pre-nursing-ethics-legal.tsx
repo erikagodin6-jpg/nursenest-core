@@ -20,12 +20,12 @@ export function EthicsLegalModule() {
   return (
     <div className="space-y-10" data-testid="module-ethics-legal">
       <div>
-        <EditableModuleText sectionKey="ethics-title" defaultText="Ethical & Legal Foundations" as="h2" className="text-2xl font-bold text-gray-900 mb-2" />
-        <EditableModuleText sectionKey="ethics-desc" defaultText="Understand the bioethics principles, legal concepts, patient rights, and professional standards that govern healthcare practice, foundational knowledge for safe, ethical nursing." as="p" className="text-gray-600" multiline />
+        <EditableModuleText sectionKey="ethics-title" defaultText="Ethical & Legal Foundations" as="h2" className="text-2xl font-bold text-heading mb-2" />
+        <EditableModuleText sectionKey="ethics-desc" defaultText="Understand the bioethics principles, legal concepts, patient rights, and professional standards that govern healthcare practice, foundational knowledge for safe, ethical nursing." as="p" className="text-foreground" multiline />
       </div>
 
       <MicroLesson title="Bioethics Principles" subtitle="The four pillars of healthcare ethics" icon={<Heart className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="ethics-bioethics-content" defaultText="Healthcare ethics is built on four core bioethics principles, Autonomy (patient self-determination), Beneficence (doing good), Nonmaleficence (do no harm), and Justice (fairness in resource allocation), established by Beauchamp and Childress. When these principles conflict, and they frequently do, ethical reasoning requires balancing them thoughtfully." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="ethics-bioethics-content" defaultText="Healthcare ethics is built on four core bioethics principles, Autonomy (patient self-determination), Beneficence (doing good), Nonmaleficence (do no harm), and Justice (fairness in resource allocation), established by Beauchamp and Childress. When these principles conflict, and they frequently do, ethical reasoning requires balancing them thoughtfully." as="p" className="text-sm text-foreground leading-relaxed" multiline />
         <ProgressiveReveal
           title={t("data.pre_nursing_ethics_legal.theFourPrinciples")}
           cards={[
@@ -63,7 +63,7 @@ export function EthicsLegalModule() {
       </MicroLesson>
 
       <MicroLesson title="Informed Consent" subtitle="More than a signature" icon={<BookOpen className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="ethics-consent-content" defaultText="Informed consent is a process, not a form. The signed form is documentation that the process occurred. The actual consent process involves a conversation where the provider explains the procedure, its risks, benefits, alternatives, and the right to refuse, and the patient demonstrates understanding before agreeing. It is the practical application of the autonomy principle." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="ethics-consent-content" defaultText="Informed consent is a process, not a form. The signed form is documentation that the process occurred. The actual consent process involves a conversation where the provider explains the procedure, its risks, benefits, alternatives, and the right to refuse, and the patient demonstrates understanding before agreeing. It is the practical application of the autonomy principle." as="p" className="text-sm text-foreground leading-relaxed" multiline />
         <div className="space-y-3 mt-3">
           <div className="p-4 bg-blue-50/60 rounded-xl border border-blue-100">
             <p className="text-xs font-semibold text-blue-700 mb-1">Required Elements</p>
@@ -81,13 +81,13 @@ export function EthicsLegalModule() {
       </MicroLesson>
 
       <MicroLesson title="Patient Rights & Confidentiality" subtitle="HIPAA, privacy, and patient advocacy" icon={<Shield className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="ethics-rights-content" defaultText="Patient rights are legally protected. Understanding these rights and the duty of confidentiality, the legal and ethical obligation to protect patient health information (PHI), codified in privacy legislation (e.g., HIPAA in the US, PIPEDA in Canada), is non-negotiable for all healthcare providers. Violations can result in fines, license sanctions, and criminal charges." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="ethics-rights-content" defaultText="Patient rights are legally protected. Understanding these rights and the duty of confidentiality, the legal and ethical obligation to protect patient health information (PHI), codified in privacy legislation (e.g., HIPAA in the US, PIPEDA in Canada), is non-negotiable for all healthcare providers. Violations can result in fines, license sanctions, and criminal charges." as="p" className="text-sm text-foreground leading-relaxed" multiline />
         <div className="grid sm:grid-cols-2 gap-3 mt-3">
           <div className="p-4 bg-green-50/60 rounded-xl border border-green-100">
             <p className="text-xs font-semibold text-green-700 mb-1">Core Patient Rights</p>
             <p className="text-xs text-green-600">Right to informed consent. Right to refuse treatment. Right to privacy and confidentiality. Right to access their own medical records. Right to be treated with dignity. Right to a second opinion. Right to know the names and roles of their care providers.</p>
           </div>
-          <div className="p-4 bg-purple-50/60 rounded-xl border border-purple-100">
+          <div className="p-4 nn-semantic-inset">
             <p className="text-xs font-semibold text-purple-700 mb-1">Confidentiality Rules</p>
             <p className="text-xs text-purple-600"><strong>Minimum necessary:</strong> Only access/share the minimum information needed for your role. <strong>Need to know:</strong> Don't discuss patients with colleagues who are not involved in their care. <strong>Social media:</strong> Never post identifiable patient information, even without names, details can be identifying. <strong>Elevator rule:</strong> Don't discuss patients in public spaces.</p>
           </div>
@@ -100,7 +100,7 @@ export function EthicsLegalModule() {
       </MicroLesson>
 
       <MicroLesson title="Scope of Practice & Professional Standards" subtitle="Practicing within legal boundaries" icon={<Scale className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="ethics-scope-content" defaultText="Every regulated healthcare professional has a defined scope of practice, the range of activities, procedures, and processes that a regulated healthcare professional is legally authorized to perform based on their education, competency, and registration/licensure. Practicing outside scope of practice is illegal and creates liability." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="ethics-scope-content" defaultText="Every regulated healthcare professional has a defined scope of practice, the range of activities, procedures, and processes that a regulated healthcare professional is legally authorized to perform based on their education, competency, and registration/licensure. Practicing outside scope of practice is illegal and creates liability." as="p" className="text-sm text-foreground leading-relaxed" multiline />
         <div className="space-y-3 mt-3">
           <div className="p-4 bg-teal-50/60 rounded-xl border border-teal-100">
             <p className="text-xs font-semibold text-teal-700 mb-1">Key Legal Concepts</p>

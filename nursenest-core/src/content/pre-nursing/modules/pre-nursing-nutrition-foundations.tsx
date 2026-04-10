@@ -21,12 +21,12 @@ export function NutritionFoundationsModule() {
   return (
     <div className="space-y-10" data-testid="module-nutrition-foundations">
       <div>
-        <EditableModuleText sectionKey="nf-title" defaultText="Nutrition Foundations for Nursing" as="h2" className="text-2xl font-bold text-gray-900 mb-2" />
-        <EditableModuleText sectionKey="nf-desc" defaultText="Understand macronutrients and their caloric values, micronutrients and their roles, fluid requirements, dietary electrolytes, therapeutic diets for common conditions, nutrition label interpretation, and BMI/malnutrition screening in clinical practice." as="p" className="text-gray-600" multiline />
+        <EditableModuleText sectionKey="nf-title" defaultText="Nutrition Foundations for Nursing" as="h2" className="text-2xl font-bold text-heading mb-2" />
+        <EditableModuleText sectionKey="nf-desc" defaultText="Understand macronutrients and their caloric values, micronutrients and their roles, fluid requirements, dietary electrolytes, therapeutic diets for common conditions, nutrition label interpretation, and BMI/malnutrition screening in clinical practice." as="p" className="text-foreground" multiline />
       </div>
 
       <MicroLesson title="Macronutrients: Carbohydrates, Proteins, and Fats" subtitle="Energy sources and their roles in the body" icon={<Apple className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="nf-macro-intro" defaultText="The three macronutrients, carbohydrates, proteins, and fats, serve distinct roles in human physiology. Understanding their caloric density and functions is fundamental to nursing nutrition assessment and patient education." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="nf-macro-intro" defaultText="The three macronutrients, carbohydrates, proteins, and fats, serve distinct roles in human physiology. Understanding their caloric density and functions is fundamental to nursing nutrition assessment and patient education." as="p" className="text-sm text-foreground leading-relaxed" multiline />
         <div className="grid sm:grid-cols-3 gap-3 mt-3">
           <div className="p-4 bg-amber-50/60 rounded-xl border border-amber-100">
             <p className="text-xs font-semibold text-amber-700 mb-1">Carbohydrates, 4 kcal/g</p>
@@ -49,7 +49,7 @@ export function NutritionFoundationsModule() {
       </MicroLesson>
 
       <MicroLesson title="Micronutrients and Fluid Requirements" subtitle="Vitamins, minerals, and hydration" icon={<Droplets className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="nf-micro-intro" defaultText="Micronutrients, vitamins and minerals, are required in small amounts but are essential for metabolic processes, immune function, and disease prevention. Adequate fluid intake is equally critical for cellular function, thermoregulation, and waste elimination." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="nf-micro-intro" defaultText="Micronutrients, vitamins and minerals, are required in small amounts but are essential for metabolic processes, immune function, and disease prevention. Adequate fluid intake is equally critical for cellular function, thermoregulation, and waste elimination." as="p" className="text-sm text-foreground leading-relaxed" multiline />
         <div className="space-y-3 mt-3">
           <div className="p-4 bg-blue-50/60 rounded-xl border border-blue-100">
             <p className="text-xs font-semibold text-blue-700 mb-2">Fat-Soluble Vitamins (A, D, E, K), stored in body fat</p>
@@ -60,7 +60,7 @@ export function NutritionFoundationsModule() {
               <p><strong>{t("data.pre_nursing_nutrition_foundations.vitaminK")}</strong>{t("data.pre_nursing_nutrition_foundations.bloodClottingSynthesizesClottingFactors")}</p>
             </div>
           </div>
-          <div className="p-4 bg-purple-50/60 rounded-xl border border-purple-100">
+          <div className="p-4 nn-semantic-inset">
             <p className="text-xs font-semibold text-purple-700 mb-2">Water-Soluble Vitamins (B-complex, C), not stored, need daily intake</p>
             <div className="space-y-1 text-xs text-purple-600">
               <p><strong>{t("data.pre_nursing_nutrition_foundations.b1Thiamine")}</strong>{t("data.pre_nursing_nutrition_foundations.energyMetabolismDeficiencyWernickekorsak")}</p>
@@ -82,7 +82,7 @@ export function NutritionFoundationsModule() {
       </MicroLesson>
 
       <MicroLesson title="Therapeutic Diets" subtitle="Medical nutrition therapy for common conditions" icon={<UtensilsCrossed className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="nf-therapeutic-intro" defaultText="Therapeutic diets are prescribed as part of the treatment plan for specific medical conditions. Nurses must understand diet modifications to provide accurate patient education, monitor compliance, and recognize when dietary intake may worsen a condition." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="nf-therapeutic-intro" defaultText="Therapeutic diets are prescribed as part of the treatment plan for specific medical conditions. Nurses must understand diet modifications to provide accurate patient education, monitor compliance, and recognize when dietary intake may worsen a condition." as="p" className="text-sm text-foreground leading-relaxed" multiline />
         <ProgressiveReveal
           title={t("data.pre_nursing_nutrition_foundations.commonTherapeuticDiets")}
           cards={[
@@ -115,7 +115,7 @@ export function NutritionFoundationsModule() {
       </MicroLesson>
 
       <MicroLesson title="Nutrition Labels and Screening" subtitle="Assessment tools and food label literacy" icon={<Scale className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="nf-labels-intro" defaultText="Nurses must be able to interpret nutrition labels for patient education and understand BMI classification and malnutrition screening tools to identify patients at nutritional risk." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="nf-labels-intro" defaultText="Nurses must be able to interpret nutrition labels for patient education and understand BMI classification and malnutrition screening tools to identify patients at nutritional risk." as="p" className="text-sm text-foreground leading-relaxed" multiline />
         <div className="p-4 bg-orange-50/60 rounded-xl border border-orange-100 mt-3">
           <p className="text-xs font-semibold text-orange-700 mb-2">Reading a Nutrition Label</p>
           <div className="space-y-1 text-xs text-orange-600">

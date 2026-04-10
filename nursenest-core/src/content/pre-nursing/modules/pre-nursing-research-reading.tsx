@@ -21,12 +21,12 @@ export function ResearchReadingModule() {
   return (
     <div className="space-y-10" data-testid="module-research-reading">
       <div>
-        <EditableModuleText sectionKey="rr-title" defaultText="Research Literacy & Evidence-Based Practice" as="h2" className="text-2xl font-bold text-gray-900 mb-2" />
-        <EditableModuleText sectionKey="rr-desc" defaultText="Learn to read, interpret, and critically appraise nursing research. Understand the evidence-based practice process, statistical concepts, and levels of evidence that guide clinical decision-making." as="p" className="text-gray-600" multiline />
+        <EditableModuleText sectionKey="rr-title" defaultText="Research Literacy & Evidence-Based Practice" as="h2" className="text-2xl font-bold text-heading mb-2" />
+        <EditableModuleText sectionKey="rr-desc" defaultText="Learn to read, interpret, and critically appraise nursing research. Understand the evidence-based practice process, statistical concepts, and levels of evidence that guide clinical decision-making." as="p" className="text-foreground" multiline />
       </div>
 
       <MicroLesson title="Anatomy of a Research Article" subtitle="Understanding each section's purpose" icon={<FileText className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="rr-article-anatomy-content" defaultText="Research articles follow a standardized structure called IMRAD: Introduction, Methods, Results, and Discussion. Understanding what each section contains helps you efficiently extract the information you need without reading every word." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="rr-article-anatomy-content" defaultText="Research articles follow a standardized structure called IMRAD: Introduction, Methods, Results, and Discussion. Understanding what each section contains helps you efficiently extract the information you need without reading every word." as="p" className="text-sm text-foreground leading-relaxed" multiline />
         <ProgressiveReveal
           title={t("data.pre_nursing_research_reading.sectionsOfAResearchArticle")}
           cards={[
@@ -65,7 +65,7 @@ export function ResearchReadingModule() {
       </MicroLesson>
 
       <MicroLesson title="Identifying Bias in Research" subtitle="Recognizing threats to validity" icon={<Search className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="rr-bias-intro" defaultText="Every study has potential biases. Critical appraisal means identifying these biases and determining whether they are significant enough to invalidate the conclusions. No study is perfect, the question is whether the biases are adequately controlled." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="rr-bias-intro" defaultText="Every study has potential biases. Critical appraisal means identifying these biases and determining whether they are significant enough to invalidate the conclusions. No study is perfect, the question is whether the biases are adequately controlled." as="p" className="text-sm text-foreground leading-relaxed" multiline />
         <div className="grid sm:grid-cols-2 gap-3 mt-3">
           <div className="p-4 bg-red-50/60 rounded-xl border border-red-100">
             <p className="text-xs font-semibold text-red-700 mb-1">Selection Bias</p>
@@ -75,7 +75,7 @@ export function ResearchReadingModule() {
             <p className="text-xs font-semibold text-orange-700 mb-1">Measurement Bias</p>
             <p className="text-xs text-orange-600">Occurs when outcomes are measured inconsistently or when the assessor knows which group a participant belongs to. Example: If the nurse assessing wound healing knows which patients received the new dressing, their assessment may be unconsciously influenced. Blinding (masking) prevents this bias.</p>
           </div>
-          <div className="p-4 bg-purple-50/60 rounded-xl border border-purple-100">
+          <div className="p-4 nn-semantic-inset">
             <p className="text-xs font-semibold text-purple-700 mb-1">Publication Bias</p>
             <p className="text-xs text-purple-600">Studies with positive or statistically significant results are more likely to be published. This creates a distorted evidence base where interventions appear more effective than they truly are. Systematic reviews that search for unpublished studies and trial registries help counteract this bias.</p>
           </div>
@@ -92,7 +92,7 @@ export function ResearchReadingModule() {
       </MicroLesson>
 
       <MicroLesson title="Statistical Concepts for Nurses" subtitle="P-values, confidence intervals, and risk measures" icon={<BarChart3 className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="rr-stats-content" defaultText="You do not need to be a statistician to read research, but you need to understand a few key concepts to determine whether findings are meaningful and applicable to your patients." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="rr-stats-content" defaultText="You do not need to be a statistician to read research, but you need to understand a few key concepts to determine whether findings are meaningful and applicable to your patients." as="p" className="text-sm text-foreground leading-relaxed" multiline />
         <div className="space-y-3 mt-3">
           <div className="p-4 bg-blue-50/60 rounded-xl border border-blue-100">
             <p className="text-xs font-semibold text-blue-700 mb-1">P-Value (Probability Value)</p>
@@ -115,7 +115,7 @@ export function ResearchReadingModule() {
       </MicroLesson>
 
       <MicroLesson title="Levels of Evidence & EBP Process" subtitle="Hierarchy of evidence and the PICO framework" icon={<BookOpen className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="rr-evidence-content" defaultText="Not all evidence is created equal. The evidence pyramid ranks study types by their ability to minimize bias and establish causation. Higher levels of evidence generally provide more reliable conclusions for clinical decision-making." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="rr-evidence-content" defaultText="Not all evidence is created equal. The evidence pyramid ranks study types by their ability to minimize bias and establish causation. Higher levels of evidence generally provide more reliable conclusions for clinical decision-making." as="p" className="text-sm text-foreground leading-relaxed" multiline />
         <div className="p-4 bg-indigo-50/60 rounded-xl border border-indigo-100 mt-3">
           <p className="text-xs font-semibold text-indigo-700 mb-2">Evidence Pyramid (Highest to Lowest)</p>
           <div className="space-y-1.5">

@@ -20,12 +20,12 @@ export function MedicalTerminologyModule() {
   return (
     <div className="space-y-10" data-testid="module-medical-terminology">
       <div>
-        <EditableModuleText sectionKey="medterm-title" defaultText="Medical Terminology Mastery" as="h2" className="text-2xl font-bold text-gray-900 mb-2" />
-        <EditableModuleText sectionKey="medterm-desc" defaultText="Decode medical language logically through word roots, prefixes, and suffixes rather than rote memorization. Build a framework for understanding any medical term you encounter." as="p" className="text-gray-600" multiline />
+        <EditableModuleText sectionKey="medterm-title" defaultText="Medical Terminology Mastery" as="h2" className="text-2xl font-bold text-heading mb-2" />
+        <EditableModuleText sectionKey="medterm-desc" defaultText="Decode medical language logically through word roots, prefixes, and suffixes rather than rote memorization. Build a framework for understanding any medical term you encounter." as="p" className="text-foreground" multiline />
       </div>
 
       <MicroLesson title="How Medical Language Works" subtitle="A systematic approach to decoding medical terms" icon={<BookOpen className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="medterm-how-language-content" defaultText={`Medical terminology follows a logical construction system. Every medical term is assembled from building blocks: a root (the core meaning, usually an organ or structure), a prefix (modifies meaning, location, number, time), and a suffix (indicates procedure, condition, or function).`} as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="medterm-how-language-content" defaultText={`Medical terminology follows a logical construction system. Every medical term is assembled from building blocks: a root (the core meaning, usually an organ or structure), a prefix (modifies meaning, location, number, time), and a suffix (indicates procedure, condition, or function).`} as="p" className="text-sm text-foreground leading-relaxed" multiline />
         <div className="grid sm:grid-cols-3 gap-3 mt-3">
           <div className="p-4 bg-blue-50/60 rounded-xl border border-blue-100">
             <p className="text-xs font-semibold text-blue-700 mb-1">Root / Combining Form</p>
@@ -35,7 +35,7 @@ export function MedicalTerminologyModule() {
             <p className="text-xs font-semibold text-emerald-700 mb-1">Prefix</p>
             <p className="text-xs text-emerald-600">Appears at the beginning. <em>Hyper-</em> = excessive, <em>hypo-</em> = below/deficient, <em>tachy-</em> = fast, <em>brady-</em> = slow, <em>peri-</em> = around.</p>
           </div>
-          <div className="p-4 bg-purple-50/60 rounded-xl border border-purple-100">
+          <div className="p-4 nn-semantic-inset">
             <p className="text-xs font-semibold text-purple-700 mb-1">Suffix</p>
             <p className="text-xs text-purple-600"><em>-itis</em> = inflammation, <em>-ectomy</em> = surgical removal, <em>-ology</em> = study of, <em>-scopy</em> = visual examination, <em>-pathy</em> = disease.</p>
           </div>
@@ -48,7 +48,7 @@ export function MedicalTerminologyModule() {
       </MicroLesson>
 
       <MicroLesson title="Body System Roots" subtitle="Core word roots organized by organ system" icon={<Layers className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="medterm-body-roots-content" defaultText="Each body system has characteristic word roots that appear repeatedly in clinical vocabulary. Learning these roots gives you a foundation for interpreting terms across all of healthcare." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="medterm-body-roots-content" defaultText="Each body system has characteristic word roots that appear repeatedly in clinical vocabulary. Learning these roots gives you a foundation for interpreting terms across all of healthcare." as="p" className="text-sm text-foreground leading-relaxed" multiline />
         <ProgressiveReveal
           title={t("data.pre_nursing_terminology.systembysystemRootWords")}
           cards={[
@@ -93,7 +93,7 @@ export function MedicalTerminologyModule() {
       </MicroLesson>
 
       <MicroLesson title="Critical Prefixes & Suffixes" subtitle="The modifiers that change meaning" icon={<Brain className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="medterm-prefixes-suffixes-content" defaultText="Prefixes and suffixes modify the root to create specific clinical meanings. Learning the most common ones allows you to decode unfamiliar terms by breaking them into recognizable parts." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="medterm-prefixes-suffixes-content" defaultText="Prefixes and suffixes modify the root to create specific clinical meanings. Learning the most common ones allows you to decode unfamiliar terms by breaking them into recognizable parts." as="p" className="text-sm text-foreground leading-relaxed" multiline />
         <div className="space-y-4 mt-3">
           <div className="p-4 bg-amber-50/60 rounded-xl border border-amber-100">
             <p className="text-xs font-semibold text-amber-700 mb-2">Location & Direction Prefixes</p>
@@ -143,7 +143,7 @@ export function MedicalTerminologyModule() {
       </MicroLesson>
 
       <MicroLesson title="Abbreviations & Safety" subtitle="Common abbreviations and dangerous look-alikes" icon={<FileText className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="medterm-abbreviations-content" defaultText="Healthcare abbreviations save time but create risk. The ISMP Do Not Use List exists because abbreviation misinterpretation causes real patient harm. Understanding which abbreviations are safe and which are dangerous is a foundational competency." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="medterm-abbreviations-content" defaultText="Healthcare abbreviations save time but create risk. The ISMP Do Not Use List exists because abbreviation misinterpretation causes real patient harm. Understanding which abbreviations are safe and which are dangerous is a foundational competency." as="p" className="text-sm text-foreground leading-relaxed" multiline />
         <div className="grid sm:grid-cols-2 gap-3 mt-3">
           <div className="p-4 bg-green-50/60 rounded-xl border border-green-100">
             <p className="text-xs font-semibold text-green-700 mb-1">Safe & Common</p>
@@ -187,7 +187,7 @@ export function MedicalTerminologyModule() {
       </MicroLesson>
 
       <MicroLesson title="Clinical Application of Terminology" subtitle="Using medical language in nursing practice" icon={<BookOpen className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="medterm-clinical-application" defaultText="Understanding medical terminology in isolation is not enough. You must be able to apply it in clinical documentation, verbal reports, and patient communication. Clinical application of medical terminology involves translating complex terms for patients, using correct terms in charting, and interpreting orders accurately. When a physician writes an order for a patient with dysphagia to receive a modified diet, you need to immediately understand that the patient has difficulty swallowing and requires food texture modifications to prevent aspiration." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="medterm-clinical-application" defaultText="Understanding medical terminology in isolation is not enough. You must be able to apply it in clinical documentation, verbal reports, and patient communication. Clinical application of medical terminology involves translating complex terms for patients, using correct terms in charting, and interpreting orders accurately. When a physician writes an order for a patient with dysphagia to receive a modified diet, you need to immediately understand that the patient has difficulty swallowing and requires food texture modifications to prevent aspiration." as="p" className="text-sm text-foreground leading-relaxed" multiline />
         <div className="space-y-3 mt-3">
           <div className="p-4 bg-violet-50/60 rounded-xl border border-violet-100">
             <p className="text-xs font-semibold text-violet-700 mb-2">SBAR Communication Using Medical Terms</p>
@@ -205,7 +205,7 @@ export function MedicalTerminologyModule() {
       </MicroLesson>
 
       <MicroLesson title="Directional & Positional Terms" subtitle="Anatomical language for body orientation" icon={<Layers className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="medterm-directional-terms" defaultText="Anatomical directional terms provide a universal language for describing body positions, locations, and movements. These terms are always referenced from the anatomical position: standing upright, facing forward, arms at sides with palms facing forward. Mastery of directional terminology is essential for accurate documentation of assessment findings, wound locations, surgical sites, and patient positioning." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="medterm-directional-terms" defaultText="Anatomical directional terms provide a universal language for describing body positions, locations, and movements. These terms are always referenced from the anatomical position: standing upright, facing forward, arms at sides with palms facing forward. Mastery of directional terminology is essential for accurate documentation of assessment findings, wound locations, surgical sites, and patient positioning." as="p" className="text-sm text-foreground leading-relaxed" multiline />
         <div className="space-y-3 mt-3">
           <div className="p-4 bg-sky-50/60 rounded-xl border border-sky-100">
             <p className="text-xs font-semibold text-sky-700 mb-2">Position Pairs</p>

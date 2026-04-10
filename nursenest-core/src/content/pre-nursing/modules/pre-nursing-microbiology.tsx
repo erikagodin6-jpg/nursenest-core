@@ -20,12 +20,12 @@ export function MicrobiologyModule() {
   return (
     <div className="space-y-10" data-testid="module-microbiology">
       <div>
-        <EditableModuleText sectionKey="micro-title" defaultText="Microbiology Foundations" as="h2" className="text-2xl font-bold text-gray-900 mb-2" />
-        <EditableModuleText sectionKey="micro-desc" defaultText="Understand the microorganisms relevant to healthcare, their structures, reproduction, transmission, and the principles of controlling microbial spread." as="p" className="text-gray-600" multiline />
+        <EditableModuleText sectionKey="micro-title" defaultText="Microbiology Foundations" as="h2" className="text-2xl font-bold text-heading mb-2" />
+        <EditableModuleText sectionKey="micro-desc" defaultText="Understand the microorganisms relevant to healthcare, their structures, reproduction, transmission, and the principles of controlling microbial spread." as="p" className="text-foreground" multiline />
       </div>
 
       <MicroLesson title="Types of Microorganisms" subtitle="Bacteria, viruses, fungi, parasites, and prions" icon={<Bug className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="micro-types-content" defaultText="Microorganisms are classified by their cellular structure and reproduction. Bacteria are prokaryotic (no nucleus). Viruses are acellular (not truly alive, require a host cell to replicate). Fungi are eukaryotic (have a nucleus). These structural differences determine how each type is targeted by antimicrobial agents. Understanding these distinctions is essential because treatment strategies differ fundamentally between organism types." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="micro-types-content" defaultText="Microorganisms are classified by their cellular structure and reproduction. Bacteria are prokaryotic (no nucleus). Viruses are acellular (not truly alive, require a host cell to replicate). Fungi are eukaryotic (have a nucleus). These structural differences determine how each type is targeted by antimicrobial agents. Understanding these distinctions is essential because treatment strategies differ fundamentally between organism types." as="p" className="text-sm text-foreground leading-relaxed" multiline />
         <ProgressiveReveal
           title={t("data.pre_nursing_microbiology.theFiveCategoriesOfMicroorganisms")}
           cards={[
@@ -64,7 +64,7 @@ export function MicrobiologyModule() {
       </MicroLesson>
 
       <MicroLesson title="Normal Flora & Colonization" subtitle="The body's resident microbial communities" icon={<Microscope className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="micro-flora-content" defaultText="The human body hosts trillions of microorganisms collectively called the normal flora (microbiome). Resident microorganisms colonize body surfaces (skin, gut, respiratory tract, urogenital tract) without causing disease under normal conditions. They provide protective functions including competitive exclusion of pathogens, vitamin synthesis, and immune system development. These organisms are not contaminants, they are essential partners in health." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="micro-flora-content" defaultText="The human body hosts trillions of microorganisms collectively called the normal flora (microbiome). Resident microorganisms colonize body surfaces (skin, gut, respiratory tract, urogenital tract) without causing disease under normal conditions. They provide protective functions including competitive exclusion of pathogens, vitamin synthesis, and immune system development. These organisms are not contaminants, they are essential partners in health." as="p" className="text-sm text-foreground leading-relaxed" multiline />
         <div className="grid sm:grid-cols-2 gap-3 mt-3">
           <div className="p-4 bg-green-50/60 rounded-xl border border-green-100">
             <p className="text-xs font-semibold text-green-700 mb-1">Protective Functions</p>
@@ -83,13 +83,13 @@ export function MicrobiologyModule() {
       </MicroLesson>
 
       <MicroLesson title="Microbial Transmission" subtitle="How microorganisms spread between hosts" icon={<AlertTriangle className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="micro-transmission-content" defaultText="Understanding transmission routes is the foundation of infection prevention. Strategies to interrupt the chain of infection target the weakest links: hand hygiene (breaking the mode of transmission), PPE (protecting the portal of entry), and isolation precautions (containing the reservoir). Each route requires different prevention strategies." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="micro-transmission-content" defaultText="Understanding transmission routes is the foundation of infection prevention. Strategies to interrupt the chain of infection target the weakest links: hand hygiene (breaking the mode of transmission), PPE (protecting the portal of entry), and isolation precautions (containing the reservoir). Each route requires different prevention strategies." as="p" className="text-sm text-foreground leading-relaxed" multiline />
         <div className="space-y-3 mt-3">
           <div className="p-4 bg-blue-50/60 rounded-xl border border-blue-100">
             <p className="text-xs font-semibold text-blue-700 mb-1">Contact Transmission</p>
             <p className="text-xs text-blue-600"><strong>Direct contact:</strong> Person-to-person physical transfer (touching, bodily fluids). <strong>Indirect contact:</strong> Transfer via contaminated objects (fomites), doorknobs, stethoscopes, bed rails. This is the most common transmission route in healthcare settings. Prevention: Hand hygiene is the single most effective measure.</p>
           </div>
-          <div className="p-4 bg-purple-50/60 rounded-xl border border-purple-100">
+          <div className="p-4 nn-semantic-inset">
             <p className="text-xs font-semibold text-purple-700 mb-1">Droplet Transmission</p>
             <p className="text-xs text-purple-600">Large respiratory droplets (&gt;5 μm) generated by coughing, sneezing, or talking. They travel short distances (typically &lt;1 meter) and fall quickly due to gravity. Examples: influenza, pertussis. Prevention: Surgical mask within close proximity.</p>
           </div>
@@ -101,7 +101,7 @@ export function MicrobiologyModule() {
       </MicroLesson>
 
       <MicroLesson title="Sterilization, Disinfection & Asepsis" subtitle="Levels of microbial control" icon={<Shield className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="micro-sterilization-content" defaultText="Microbial control exists on a spectrum from sterilization (the complete destruction or removal of ALL forms of microbial life, including bacterial endospores, achieved through autoclaving, ethylene oxide gas, or ionizing radiation) to basic cleaning. Understanding this hierarchy prevents both under-treatment (infection risk) and over-treatment (unnecessary cost/damage)." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="micro-sterilization-content" defaultText="Microbial control exists on a spectrum from sterilization (the complete destruction or removal of ALL forms of microbial life, including bacterial endospores, achieved through autoclaving, ethylene oxide gas, or ionizing radiation) to basic cleaning. Understanding this hierarchy prevents both under-treatment (infection risk) and over-treatment (unnecessary cost/damage)." as="p" className="text-sm text-foreground leading-relaxed" multiline />
         <div className="space-y-3 mt-3">
           <div className="p-4 bg-red-50/60 rounded-xl border border-red-100">
             <p className="text-xs font-semibold text-red-700 mb-1">Sterilization (Highest Level)</p>

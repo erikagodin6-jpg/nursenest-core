@@ -21,12 +21,12 @@ export function ATPPathwayModule() {
   return (
     <div className="space-y-10" data-testid="module-atp-pathway">
       <div>
-        <EditableModuleText sectionKey="atp-title" defaultText="ATP & Cellular Energy Pathways" as="h2" className="text-2xl font-bold text-gray-900 mb-2" />
-        <EditableModuleText sectionKey="atp-desc" defaultText="Understand how cells produce energy through glycolysis, the Krebs cycle, and the electron transport chain. Learn why oxygen is critical for ATP production, what happens during anaerobic metabolism, and how metabolic disruptions like DKA connect to acid-base imbalances." as="p" className="text-gray-600" multiline />
+        <EditableModuleText sectionKey="atp-title" defaultText="ATP & Cellular Energy Pathways" as="h2" className="text-2xl font-bold text-heading mb-2" />
+        <EditableModuleText sectionKey="atp-desc" defaultText="Understand how cells produce energy through glycolysis, the Krebs cycle, and the electron transport chain. Learn why oxygen is critical for ATP production, what happens during anaerobic metabolism, and how metabolic disruptions like DKA connect to acid-base imbalances." as="p" className="text-foreground" multiline />
       </div>
 
       <MicroLesson title="ATP: The Energy Currency of Life" subtitle="Why every cell depends on adenosine triphosphate" icon={<Zap className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="atp-intro-content" defaultText="ATP (adenosine triphosphate) consists of an adenine base, a ribose sugar, and three phosphate groups. The bond between the second and third phosphate group is a high-energy bond. When this bond is broken by hydrolysis, energy is released for cellular work, and ATP becomes ADP (adenosine diphosphate). Cells must continuously regenerate ATP from ADP to sustain life." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="atp-intro-content" defaultText="ATP (adenosine triphosphate) consists of an adenine base, a ribose sugar, and three phosphate groups. The bond between the second and third phosphate group is a high-energy bond. When this bond is broken by hydrolysis, energy is released for cellular work, and ATP becomes ADP (adenosine diphosphate). Cells must continuously regenerate ATP from ADP to sustain life." as="p" className="text-sm text-foreground leading-relaxed" multiline />
         <div className="grid sm:grid-cols-2 gap-3 mt-3">
           <div className="p-4 bg-yellow-50/60 rounded-xl border border-yellow-100">
             <p className="text-xs font-semibold text-yellow-700 mb-1">ATP Structure</p>
@@ -45,7 +45,7 @@ export function ATPPathwayModule() {
       </MicroLesson>
 
       <MicroLesson title="Glycolysis: The First Step" subtitle="Glucose splitting in the cytoplasm" icon={<Beaker className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="atp-glycolysis-content" defaultText="Glycolysis is the first stage of cellular respiration and occurs in the cytoplasm of every cell, it does not require mitochondria or oxygen. One 6-carbon glucose molecule is split into two 3-carbon pyruvate molecules. The process uses 2 ATP to get started (energy investment phase) but produces 4 ATP total, yielding a net gain of 2 ATP per glucose molecule. Glycolysis also produces 2 NADH electron carriers that will be used later in the electron transport chain if oxygen is available." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="atp-glycolysis-content" defaultText="Glycolysis is the first stage of cellular respiration and occurs in the cytoplasm of every cell, it does not require mitochondria or oxygen. One 6-carbon glucose molecule is split into two 3-carbon pyruvate molecules. The process uses 2 ATP to get started (energy investment phase) but produces 4 ATP total, yielding a net gain of 2 ATP per glucose molecule. Glycolysis also produces 2 NADH electron carriers that will be used later in the electron transport chain if oxygen is available." as="p" className="text-sm text-foreground leading-relaxed" multiline />
         <ProgressiveReveal
           title={t("data.pre_nursing_atp_pathway.glycolysisStepByStep")}
           cards={[
@@ -82,7 +82,7 @@ export function ATPPathwayModule() {
       </MicroLesson>
 
       <MicroLesson title="Aerobic vs Anaerobic Metabolism" subtitle="The critical role of oxygen in energy production" icon={<Wind className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="atp-aerobic-anaerobic-content" defaultText="The presence or absence of oxygen determines which metabolic pathway cells use after glycolysis. Aerobic metabolism (with oxygen) produces approximately 36-38 ATP per glucose molecule through the Krebs cycle and electron transport chain in the mitochondria. Anaerobic metabolism (without oxygen) produces only 2 ATP per glucose through glycolysis alone and converts pyruvate to lactate." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="atp-aerobic-anaerobic-content" defaultText="The presence or absence of oxygen determines which metabolic pathway cells use after glycolysis. Aerobic metabolism (with oxygen) produces approximately 36-38 ATP per glucose molecule through the Krebs cycle and electron transport chain in the mitochondria. Anaerobic metabolism (without oxygen) produces only 2 ATP per glucose through glycolysis alone and converts pyruvate to lactate." as="p" className="text-sm text-foreground leading-relaxed" multiline />
         <div className="grid sm:grid-cols-2 gap-3 mt-3">
           <div className="p-4 bg-green-50/60 rounded-xl border border-green-100">
             <p className="text-xs font-semibold text-green-700 mb-1">Aerobic Metabolism (With O₂)</p>
@@ -101,9 +101,9 @@ export function ATPPathwayModule() {
       </MicroLesson>
 
       <MicroLesson title="Krebs Cycle & Electron Transport Chain" subtitle="The powerhouse reactions inside mitochondria" icon={<Flame className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="atp-krebs-etc-content" defaultText="The Krebs cycle (also called the citric acid cycle or TCA cycle) and the electron transport chain (ETC) are the two final stages of aerobic cellular respiration. Together, they occur inside the mitochondria and produce the vast majority of ATP, approximately 34 of the 36-38 total ATP molecules generated from one glucose molecule." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="atp-krebs-etc-content" defaultText="The Krebs cycle (also called the citric acid cycle or TCA cycle) and the electron transport chain (ETC) are the two final stages of aerobic cellular respiration. Together, they occur inside the mitochondria and produce the vast majority of ATP, approximately 34 of the 36-38 total ATP molecules generated from one glucose molecule." as="p" className="text-sm text-foreground leading-relaxed" multiline />
         <div className="space-y-3 mt-3">
-          <div className="p-4 bg-purple-50/60 rounded-xl border border-purple-100">
+          <div className="p-4 nn-semantic-inset">
             <p className="text-xs font-semibold text-purple-700 mb-1">Krebs Cycle (Citric Acid Cycle)</p>
             <p className="text-xs text-purple-600"><strong>Location:</strong> Mitochondrial matrix. <strong>Input:</strong> Acetyl-CoA (2-carbon) combines with oxaloacetate (4-carbon) to form citrate (6-carbon). <strong>Process:</strong> Through a series of 8 reactions, citrate is progressively oxidized back to oxaloacetate, releasing 2 CO₂ molecules per turn. <strong>Output per turn:</strong> 3 NADH + 1 FADH₂ + 1 GTP (equivalent to 1 ATP). <strong>The cycle turns twice per glucose</strong> (because one glucose produces 2 acetyl-CoA). Total per glucose: 6 NADH + 2 FADH₂ + 2 ATP.</p>
           </div>
@@ -119,7 +119,7 @@ export function ATPPathwayModule() {
       </MicroLesson>
 
       <MicroLesson title="Lactic Acid, DKA & Acid-Base Connections" subtitle="When energy pathways go wrong" icon={<AlertTriangle className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="atp-clinical-content" defaultText="Understanding cellular energy pathways is directly relevant to clinical nursing. Lactic acidosis occurs when tissues are forced into anaerobic metabolism, and diabetic ketoacidosis (DKA) occurs when cells cannot access glucose and switch to fat metabolism. Both conditions produce metabolic acidosis, a decrease in blood pH caused by accumulation of metabolic acids." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="atp-clinical-content" defaultText="Understanding cellular energy pathways is directly relevant to clinical nursing. Lactic acidosis occurs when tissues are forced into anaerobic metabolism, and diabetic ketoacidosis (DKA) occurs when cells cannot access glucose and switch to fat metabolism. Both conditions produce metabolic acidosis, a decrease in blood pH caused by accumulation of metabolic acids." as="p" className="text-sm text-foreground leading-relaxed" multiline />
         <div className="space-y-3 mt-3">
           <div className="p-4 bg-red-50/60 rounded-xl border border-red-100">
             <p className="text-xs font-semibold text-red-700 mb-1">Lactic Acidosis</p>

@@ -21,12 +21,12 @@ export function StudyStrategiesModule() {
   return (
     <div className="space-y-10" data-testid="module-study-strategies">
       <div>
-        <EditableModuleText sectionKey="study-title" defaultText="Study & Cognitive Strategies for Nursing School" as="h2" className="text-2xl font-bold text-gray-900 mb-2" />
-        <EditableModuleText sectionKey="study-desc" defaultText="Master evidence-based study techniques, cognitive load management, active learning strategies, and exam reasoning skills that predict success in nursing education." as="p" className="text-gray-600" multiline />
+        <EditableModuleText sectionKey="study-title" defaultText="Study & Cognitive Strategies for Nursing School" as="h2" className="text-2xl font-bold text-heading mb-2" />
+        <EditableModuleText sectionKey="study-desc" defaultText="Master evidence-based study techniques, cognitive load management, active learning strategies, and exam reasoning skills that predict success in nursing education." as="p" className="text-foreground" multiline />
       </div>
 
       <MicroLesson title="Active Recall vs Passive Study" subtitle="Why re-reading doesn't work" icon={<Brain className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="study-active-recall-content" defaultText="The most common study mistake is passive review: re-reading notes, highlighting text, and watching lectures without actively testing yourself. Active recall (forcing yourself to retrieve information from memory without looking at your notes) is 2-3 times more effective than re-reading." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="study-active-recall-content" defaultText="The most common study mistake is passive review: re-reading notes, highlighting text, and watching lectures without actively testing yourself. Active recall (forcing yourself to retrieve information from memory without looking at your notes) is 2-3 times more effective than re-reading." as="p" className="text-sm text-foreground leading-relaxed" multiline />
         <div className="grid sm:grid-cols-2 gap-3 mt-3">
           <div className="p-4 bg-red-50/60 rounded-xl border border-red-100">
             <p className="text-xs font-semibold text-red-700 mb-1">Passive Methods (Low Retention)</p>
@@ -45,7 +45,7 @@ export function StudyStrategiesModule() {
       </MicroLesson>
 
       <MicroLesson title="Spaced Repetition" subtitle="Timing your reviews for maximum retention" icon={<Clock className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="study-spaced-repetition-content" defaultText="The spacing effect, where memory is stronger when study sessions are distributed over time, is one of the most robust findings in learning science. Information reviewed at increasing intervals is retained for months or years, while crammed information fades within days." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="study-spaced-repetition-content" defaultText="The spacing effect, where memory is stronger when study sessions are distributed over time, is one of the most robust findings in learning science. Information reviewed at increasing intervals is retained for months or years, while crammed information fades within days." as="p" className="text-sm text-foreground leading-relaxed" multiline />
         <div className="p-4 bg-blue-50/60 rounded-xl border border-blue-100 mt-3">
           <p className="text-xs font-semibold text-blue-700 mb-2">The Forgetting Curve & How to Beat It</p>
           <div className="space-y-2">
@@ -80,9 +80,9 @@ export function StudyStrategiesModule() {
       </MicroLesson>
 
       <MicroLesson title="Concept Mapping & Clinical Reasoning" subtitle="Connecting ideas instead of memorizing lists" icon={<Target className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="study-concept-mapping-content" defaultText="Nursing exams test clinical reasoning: the ability to think through a clinical situation using knowledge of pathophysiology, pharmacology, and nursing care to prioritize actions and predict outcomes, not recall of isolated facts. Concept mapping builds the connections between ideas that clinical reasoning requires." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="study-concept-mapping-content" defaultText="Nursing exams test clinical reasoning: the ability to think through a clinical situation using knowledge of pathophysiology, pharmacology, and nursing care to prioritize actions and predict outcomes, not recall of isolated facts. Concept mapping builds the connections between ideas that clinical reasoning requires." as="p" className="text-sm text-foreground leading-relaxed" multiline />
         <div className="space-y-3 mt-3">
-          <div className="p-4 bg-purple-50/60 rounded-xl border border-purple-100">
+          <div className="p-4 nn-semantic-inset">
             <p className="text-xs font-semibold text-purple-700 mb-1">How to Build a Concept Map</p>
             <p className="text-xs text-purple-600"><strong>1.</strong> Start with a central concept (e.g., 'Heart Failure'). <strong>2.</strong> Branch out to related concepts (pathophysiology, risk factors, assessment findings). <strong>3.</strong> Draw connections between branches with linking phrases ('leads to,' 'caused by,' 'treated with'). <strong>4.</strong> Identify cross-links: these are the insights that show deep understanding. The process of creating the map is more valuable than the finished product.</p>
           </div>
@@ -94,7 +94,7 @@ export function StudyStrategiesModule() {
       </MicroLesson>
 
       <MicroLesson title="Exam Reasoning Strategies" subtitle="Approaching NCLEX-style questions" icon={<Lightbulb className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="study-exam-reasoning-content" defaultText="Nursing exam questions test application and analysis, not memorization. Developing a systematic approach to questions is as important as knowing the content." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="study-exam-reasoning-content" defaultText="Nursing exam questions test application and analysis, not memorization. Developing a systematic approach to questions is as important as knowing the content." as="p" className="text-sm text-foreground leading-relaxed" multiline />
         <ProgressiveReveal
           title={t("data.pre_nursing_study_strategies.questionAttackStrategy")}
           cards={[

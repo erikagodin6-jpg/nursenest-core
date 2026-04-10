@@ -21,12 +21,12 @@ export function HealthcareStructureModule() {
   return (
     <div className="space-y-10" data-testid="module-healthcare-structure">
       <div>
-        <EditableModuleText sectionKey="hcs-title" defaultText="Healthcare System Structure & Organization" as="h2" className="text-2xl font-bold text-gray-900 mb-2" />
-        <EditableModuleText sectionKey="hcs-desc" defaultText="Understand how healthcare is organized, including levels of care, unit types, scope of practice for healthcare team members, interprofessional roles, healthcare delivery models, and patient rights." as="p" className="text-gray-600" multiline />
+        <EditableModuleText sectionKey="hcs-title" defaultText="Healthcare System Structure & Organization" as="h2" className="text-2xl font-bold text-heading mb-2" />
+        <EditableModuleText sectionKey="hcs-desc" defaultText="Understand how healthcare is organized, including levels of care, unit types, scope of practice for healthcare team members, interprofessional roles, healthcare delivery models, and patient rights." as="p" className="text-foreground" multiline />
       </div>
 
       <MicroLesson title="Levels of Healthcare" subtitle="Primary through quaternary care" icon={<Building className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="hcs-levels-intro" defaultText="Healthcare is organized into levels based on the complexity of care provided. Understanding these levels helps nurses appreciate where their role fits within the broader system and how patients move through the continuum of care." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="hcs-levels-intro" defaultText="Healthcare is organized into levels based on the complexity of care provided. Understanding these levels helps nurses appreciate where their role fits within the broader system and how patients move through the continuum of care." as="p" className="text-sm text-foreground leading-relaxed" multiline />
         <ProgressiveReveal
           title={t("data.pre_nursing_healthcare_structure.levelsOfCare")}
           cards={[
@@ -59,7 +59,7 @@ export function HealthcareStructureModule() {
       </MicroLesson>
 
       <MicroLesson title="Hospital Units & Care Settings" subtitle="ICU, med-surg, step-down, and beyond" icon={<HeartPulse className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="hcs-units-intro" defaultText="Different hospital units serve patients with varying acuity levels. Understanding unit types helps nurses prepare for the type of patients they will encounter, the nurse-to-patient ratios, the monitoring capabilities, and the pace of care delivery in each setting." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="hcs-units-intro" defaultText="Different hospital units serve patients with varying acuity levels. Understanding unit types helps nurses prepare for the type of patients they will encounter, the nurse-to-patient ratios, the monitoring capabilities, and the pace of care delivery in each setting." as="p" className="text-sm text-foreground leading-relaxed" multiline />
         <div className="space-y-3 mt-3">
           <div className="p-4 bg-red-50/60 rounded-xl border border-red-100">
             <p className="text-xs font-semibold text-red-700 mb-1">Intensive Care Unit (ICU/CCU)</p>
@@ -81,7 +81,7 @@ export function HealthcareStructureModule() {
       </MicroLesson>
 
       <MicroLesson title="Scope of Practice & Interprofessional Team" subtitle="Who does what, and why it matters" icon={<Users className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="hcs-team-intro" defaultText="Modern healthcare is delivered by interprofessional teams. Each member brings unique expertise, and effective collaboration improves patient outcomes. Understanding roles prevents scope-of-practice violations and optimizes delegation. The nurse is often the coordinator of the care team at the bedside." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="hcs-team-intro" defaultText="Modern healthcare is delivered by interprofessional teams. Each member brings unique expertise, and effective collaboration improves patient outcomes. Understanding roles prevents scope-of-practice violations and optimizes delegation. The nurse is often the coordinator of the care team at the bedside." as="p" className="text-sm text-foreground leading-relaxed" multiline />
         <div className="grid sm:grid-cols-2 gap-3 mt-3">
           <div className="p-4 bg-indigo-50/60 rounded-xl border border-indigo-100">
             <p className="text-xs font-semibold text-indigo-700 mb-1">Nursing Roles</p>
@@ -100,9 +100,9 @@ export function HealthcareStructureModule() {
       </MicroLesson>
 
       <MicroLesson title="Healthcare Delivery Models & Patient Rights" subtitle="How care is organized and what patients are entitled to" icon={<Shield className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="hcs-delivery-intro" defaultText="Healthcare delivery models shape how care is financed, accessed, and coordinated. Understanding these models helps nurses navigate the system and advocate for patients. Equally important, patient rights form the ethical and legal foundation of all nursing care, nurses serve as the primary advocates for these rights." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="hcs-delivery-intro" defaultText="Healthcare delivery models shape how care is financed, accessed, and coordinated. Understanding these models helps nurses navigate the system and advocate for patients. Equally important, patient rights form the ethical and legal foundation of all nursing care, nurses serve as the primary advocates for these rights." as="p" className="text-sm text-foreground leading-relaxed" multiline />
         <div className="grid sm:grid-cols-2 gap-3 mt-3">
-          <div className="p-4 bg-purple-50/60 rounded-xl border border-purple-100">
+          <div className="p-4 nn-semantic-inset">
             <p className="text-xs font-semibold text-purple-700 mb-1">Chain of Command</p>
             <p className="text-xs text-purple-600">The chain of command provides a structured process for escalating patient safety concerns. If a nurse identifies a safety issue: first notify the charge nurse, then the nursing supervisor, then the nurse manager, then the medical director/chief nursing officer. The chain exists to protect patients, nurses have an ethical and legal obligation to escalate concerns even when met with resistance. Document all communication and responses.</p>
           </div>

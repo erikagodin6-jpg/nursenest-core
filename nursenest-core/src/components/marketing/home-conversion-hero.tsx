@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Stethoscope, HeartPulse, Award, Dna, BookOpen } from "lucide-react";
 import { MarketingHeroCarousel } from "@/components/marketing/marketing-hero-carousel";
 import { buildHomepageHeroSlidesAtIndices } from "@/config/home-hero-carousel";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
@@ -19,15 +19,24 @@ import { PH } from "@/lib/observability/posthog-conversion-events";
 import {
   MARKETING_PRIMARY_CTA_CLASS,
   MARKETING_SECONDARY_CTA_CLASS,
-  MARKETING_TERTIARY_LINK_CLASS,
 } from "@/lib/theme/marketing-hero-pattern";
+import { marketingExamHubPath } from "@/lib/marketing/country-exam-offerings";
+import type { LucideIcon } from "lucide-react";
 
 /** Learner home, question UI, session reports — instant product comprehension. */
 const PREVIEW_SLIDE_INDICES: readonly number[] = [9, 0, 11];
 
+type TierEntry = {
+  id: string;
+  icon: LucideIcon;
+  usLabel: string;
+  caLabel: string;
+  href: (locale: (p: string) => string) => string;
+};
+
 /**
- * Above-the-fold hero: outcome headline, benefit subhead, primary signup CTA, secondary lessons + bank links,
- * region toggle, soft gradient, and product screenshot carousel.
+ * Above-the-fold hero: outcome headline, quick-entry tier pills (RN / LPN/RPN / NP / Allied / New Grad),
+ * primary signup CTA, region toggle, and product screenshot carousel.
  */
 export function HomeConversionHero() {
   const { t, locale } = useMarketingI18n();
@@ -44,6 +53,44 @@ export function HomeConversionHero() {
   );
 
   const loc = (path: string) => withMarketingLocale(locale, path);
+
+  const TIERS: TierEntry[] = [
+    {
+      id: "rn",
+      icon: Stethoscope,
+      usLabel: "RN",
+      caLabel: "RN",
+      href: (l) => l(marketingExamHubPath(region, "rn")),
+    },
+    {
+      id: "pn",
+      icon: HeartPulse,
+      usLabel: "LPN",
+      caLabel: "RPN",
+      href: (l) => l(marketingExamHubPath(region, "pn")),
+    },
+    {
+      id: "np",
+      icon: Award,
+      usLabel: "NP",
+      caLabel: "NP",
+      href: (l) => l(marketingExamHubPath(region, "np")),
+    },
+    {
+      id: "allied",
+      icon: Dna,
+      usLabel: "Allied",
+      caLabel: "Allied",
+      href: (l) => l(marketingExamHubPath(region, "allied")),
+    },
+    {
+      id: "new-grad",
+      icon: BookOpen,
+      usLabel: "New Grad",
+      caLabel: "New Grad",
+      href: (l) => l("/pre-nursing"),
+    },
+  ];
 
   return (
     <section
@@ -73,31 +120,63 @@ export function HomeConversionHero() {
               <MarketingTrustSignalsStrip variant="default" homeHeroTrust />
             </div>
 
+            {/* Quick-entry tier pills */}
             <div
-              className="flex flex-col gap-2 rounded-xl border border-[var(--border-subtle)] bg-[var(--nn-presentation-wash)]/90 px-3 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-4"
-              data-testid="region-toggle-hero"
+              className="rounded-2xl border border-[var(--border-subtle)] bg-[var(--nn-presentation-wash)]/90 px-4 py-4"
+              data-testid="hero-tier-quick-entry"
             >
-              <span className="nn-marketing-caption text-[var(--theme-muted-text)]">{t("nav.regionLabel")}</span>
-              <div className={marketingRegionToggleShell("rounded")} role="group" aria-label={t("nav.regionLabel")}>
-                <button
-                  type="button"
-                  onClick={() => setRegionAndRefresh("US")}
-                  className={marketingRegionToggleSegment(region === "US", "default")}
-                  data-testid="button-region-us"
-                >
-                  {t("home.region.us")}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setRegionAndRefresh("CA")}
-                  className={marketingRegionToggleSegment(region === "CA", "default")}
-                  data-testid="button-region-ca"
-                >
-                  {t("home.region.ca")}
-                </button>
+              <p className="nn-marketing-caption mb-3 font-medium text-[var(--theme-muted-text)]">
+                Jump straight into your exam:
+              </p>
+              <div className="flex flex-wrap gap-2" role="list" aria-label="Choose your nursing exam pathway">
+                {TIERS.map((tier) => {
+                  const Icon = tier.icon;
+                  const label = region === "CA" ? tier.caLabel : tier.usLabel;
+                  return (
+                    <MarketingTrackedLink
+                      key={tier.id}
+                      href={tier.href(loc)}
+                      event={PH.marketingHomeHeroPrimaryCta}
+                      eventProps={{ region, destination: tier.id, surface: "hero_tier_pill" }}
+                      role="listitem"
+                      className="inline-flex items-center gap-1.5 rounded-full border border-[color-mix(in_srgb,var(--theme-primary)_30%,var(--border-subtle))] bg-[var(--theme-card-bg)] px-3.5 py-2 text-sm font-semibold text-[var(--theme-heading-text)] shadow-sm transition hover:border-[color-mix(in_srgb,var(--theme-primary)_60%,var(--border-subtle))] hover:bg-[color-mix(in_srgb,var(--theme-primary)_8%,var(--theme-card-bg))] hover:shadow focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--theme-primary)]"
+                      data-testid={`button-hero-tier-${tier.id}`}
+                    >
+                      <Icon className="h-3.5 w-3.5 shrink-0 text-[var(--theme-primary)]" aria-hidden />
+                      {label}
+                    </MarketingTrackedLink>
+                  );
+                })}
+              </div>
+
+              {/* Region toggle inline with the tier pills */}
+              <div
+                className="mt-3 flex items-center gap-2 border-t border-[var(--border-subtle)] pt-3"
+                data-testid="region-toggle-hero"
+              >
+                <span className="nn-marketing-caption shrink-0 text-[var(--theme-muted-text)]">{t("nav.regionLabel")}:</span>
+                <div className={marketingRegionToggleShell("rounded")} role="group" aria-label={t("nav.regionLabel")}>
+                  <button
+                    type="button"
+                    onClick={() => setRegionAndRefresh("US")}
+                    className={marketingRegionToggleSegment(region === "US", "default")}
+                    data-testid="button-region-us"
+                  >
+                    {t("home.region.us")}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setRegionAndRefresh("CA")}
+                    className={marketingRegionToggleSegment(region === "CA", "default")}
+                    data-testid="button-region-ca"
+                  >
+                    {t("home.region.ca")}
+                  </button>
+                </div>
               </div>
             </div>
 
+            {/* Primary + secondary CTAs */}
             <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
               <MarketingTrackedLink
                 href={loc(HUB.signup)}
@@ -117,27 +196,6 @@ export function HomeConversionHero() {
                 data-testid="button-hero-try-free-questions"
               >
                 {t("home.conversion.ctaTryFreeBank")}
-              </MarketingTrackedLink>
-            </div>
-
-            <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center">
-              <MarketingTrackedLink
-                href={loc(HUB.examLessons)}
-                event={PH.marketingHomeHeroSecondaryCta}
-                eventProps={{ region, destination: "lessons", surface: "hero_explore_lessons" }}
-                className={`${MARKETING_SECONDARY_CTA_CLASS} rounded-xl`}
-                data-testid="button-hero-explore-lessons"
-              >
-                {t("home.conversion.ctaExploreLessons")}
-              </MarketingTrackedLink>
-              <MarketingTrackedLink
-                href="#home-platform-preview"
-                event={PH.marketingHomeHeroSecondaryCta}
-                eventProps={{ region, destination: "platform_preview", surface: "hero_scroll" }}
-                className={`${MARKETING_TERTIARY_LINK_CLASS} text-[var(--theme-muted-text)] hover:text-[var(--theme-heading-text)]`}
-                data-testid="button-hero-see-how-it-works"
-              >
-                {t("home.conversion.ctaSeeHow")}
               </MarketingTrackedLink>
             </div>
 

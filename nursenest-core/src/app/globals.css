@@ -51,25 +51,18 @@ body {
   --leading-marketing-body: 1.55;
   --leading-marketing-snug: 1.35;
 
-  /* Until `[data-theme]` hydrates, header still needs a stable tint (ocean default) */
-  --theme-header-surface: color-mix(in srgb, #ffffff 94%, #1da2d8);
-  /* Hero layers for first paint (ocean/clinical-blue); replaced by [data-theme] tokens when hydrated */
-  --nn-aesthetic-hero-glow: radial-gradient(
-    ellipse 88% 68% at 50% -8%,
-    color-mix(in srgb, #1da2d8 22%, transparent),
-    transparent 58%
-  );
-  --nn-aesthetic-hero-mesh: radial-gradient(
-    circle at 78% 18%,
-    color-mix(in srgb, #1da2d8 11%, transparent),
-    transparent 42%
-  );
-  --nn-aesthetic-frame-shine: linear-gradient(
-    135deg,
-    color-mix(in srgb, #1da2d8 22%, transparent),
-    transparent 42%,
-    color-mix(in srgb, #def3f6 35%, transparent)
-  );
+  /*
+   * First-paint neutral header surface. Theme-specific values live in theme-palettes.css
+   * inside the :is([data-theme="…"], …) block which has [0,1,0,0] attribute specificity —
+   * higher than :root's [0,0,0,1] — so they correctly override once [data-theme] is applied.
+   * ⚠ DO NOT put theme-specific colors here; they would override [data-theme] for light themes
+   * because :root specificity beats :where([data-theme]) specificity.
+   */
+  --theme-header-surface: #ffffff;
+  /* Hero gradient first-paint: neutral transparent so no ocean flash before hydration. */
+  --nn-aesthetic-hero-glow: none;
+  --nn-aesthetic-hero-mesh: none;
+  --nn-aesthetic-frame-shine: none;
 }
 
 /*
@@ -150,7 +143,12 @@ body {
   --nn-presentation-ribbon: color-mix(in srgb, var(--theme-primary) 4.5%, var(--theme-card-bg));
   --nn-presentation-divider: color-mix(in srgb, var(--theme-primary) 12%, var(--theme-border));
 
-  /* Sticky header: nav surface subtly tinted by theme primary (logo + chrome read as one system) */
+  /*
+   * Sticky header: nav surface subtly tinted by theme primary.
+   * NOTE: :where([data-theme]) has 0 specificity and is overridden by :root's [0,0,0,1] for light themes.
+   * The authoritative definition lives in theme-palettes.css :is([data-theme="…"], …) which has [0,1,0,0].
+   * This entry is kept as documentation only — dark themes use html[data-theme="dark-*"] blocks below.
+   */
   --theme-header-surface: color-mix(in srgb, var(--theme-nav-bg) 94%, var(--theme-primary));
 
   --color-card-base: var(--bg-card);
@@ -272,6 +270,8 @@ html[data-theme="dark-mode"] {
   /* Page surface follows layered tokens when `[data-theme]` is set */
   --color-background: var(--bg-page, var(--theme-page-bg));
   --color-foreground: var(--theme-body-text);
+  /* Heading tone — darker than body; use text-heading instead of text-gray-900 */
+  --color-heading: var(--theme-heading-text);
   /* Single chain: Tailwind semantic tokens track tonal layers so surfaces separate cleanly */
   --color-card: var(--bg-card, var(--theme-card-bg));
   --color-card-foreground: var(--theme-card-text);

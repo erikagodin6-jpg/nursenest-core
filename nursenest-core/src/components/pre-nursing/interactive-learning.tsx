@@ -74,15 +74,15 @@ export function AnatomyLabeling({
   };
 
   return (
-    <Card className="border border-primary/10 shadow-md overflow-hidden bg-white" data-testid="anatomy-labeling">
+    <Card className="border border-primary/10 shadow-md overflow-hidden bg-card" data-testid="anatomy-labeling">
       <div className="bg-gradient-to-r from-primary/5 to-primary/10 px-6 py-4 border-b border-primary/10">
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="font-semibold text-gray-900 text-lg">{title}</h3>
-            {description && <p className="text-sm text-gray-500 mt-1">{description}</p>}
+            <h3 className="font-semibold text-heading text-lg">{title}</h3>
+            {description && <p className="text-sm text-muted-foreground mt-1">{description}</p>}
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-xs text-gray-400 bg-white/60 px-3 py-1 rounded-full">
+            <span className="text-xs text-muted-foreground bg-card/80 px-3 py-1 rounded-full">
               {revealed.size}/{labels.length} identified
             </span>
           </div>
@@ -199,7 +199,7 @@ export function AnatomyLabeling({
         {allRevealed && (
           <div className="mt-4 p-3 bg-primary/5 rounded-xl text-center">
             <Sparkles className="w-4 h-4 text-primary mx-auto mb-1" />
-            <p className="text-sm text-gray-700 font-medium">{t("components.interactiveLearning.allStructuresIdentified")}</p>
+            <p className="text-sm text-foreground font-medium">{t("components.interactiveLearning.allStructuresIdentified")}</p>
           </div>
         )}
       </CardContent>
@@ -269,14 +269,14 @@ export function MatchingExercise({
   const allMatched = matched.size === pairsWithIds.length;
 
   return (
-    <Card className="border border-primary/10 shadow-md overflow-hidden bg-white" data-testid="matching-exercise">
+    <Card className="border border-primary/10 shadow-md overflow-hidden bg-card" data-testid="matching-exercise">
       <div className="bg-gradient-to-r from-primary/5 to-primary/10 px-6 py-4 border-b border-primary/10">
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="font-semibold text-gray-900 text-lg">{title}</h3>
-            {description && <p className="text-sm text-gray-500 mt-1">{description}</p>}
+            <h3 className="font-semibold text-heading text-lg">{title}</h3>
+            {description && <p className="text-sm text-muted-foreground mt-1">{description}</p>}
           </div>
-          <span className="text-xs text-gray-400 bg-white/60 px-3 py-1 rounded-full">
+          <span className="text-xs text-muted-foreground bg-card/80 px-3 py-1 rounded-full">
             {matched.size}/{pairsWithIds.length} matched
           </span>
         </div>
@@ -284,7 +284,7 @@ export function MatchingExercise({
       <CardContent className="p-6">
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-2">
-            <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">{t("components.interactiveLearning.terms")}</p>
+            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">{t("components.interactiveLearning.terms")}</p>
             {pairsWithIds.map((pair) => (
               <button
                 key={pair.id}
@@ -296,7 +296,7 @@ export function MatchingExercise({
                     ? "bg-primary/10 border-primary/30 text-primary line-through opacity-60"
                     : selectedTerm === pair.id
                     ? "bg-primary/15 border-primary shadow-sm text-primary"
-                    : "bg-white border-gray-200 hover:border-primary/40 hover:bg-primary/5 text-gray-800"
+                    : "bg-card border-border hover:border-primary/40 hover:bg-primary/5 text-card-foreground"
                 )}
                 data-testid={`match-term-${pair.id}`}
               >
@@ -305,7 +305,7 @@ export function MatchingExercise({
             ))}
           </div>
           <div className="space-y-2">
-            <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">{t("components.interactiveLearning.definitions")}</p>
+            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">{t("components.interactiveLearning.definitions")}</p>
             {shuffledDefs.map((pair) => (
               <button
                 key={pair.id}
@@ -317,7 +317,7 @@ export function MatchingExercise({
                     ? "bg-primary/10 border-primary/30 text-primary opacity-60"
                     : incorrect === pair.id
                     ? "bg-red-50 border-red-300 text-red-700 animate-shake"
-                    : "bg-white border-gray-200 hover:border-primary/40 hover:bg-primary/5 text-gray-600"
+                    : "bg-card border-border hover:border-primary/40 hover:bg-primary/5 text-foreground"
                 )}
                 data-testid={`match-def-${pair.id}`}
               >
@@ -329,7 +329,7 @@ export function MatchingExercise({
         {allMatched && (
           <div className="mt-4 p-4 bg-primary/5 rounded-xl text-center">
             <CheckCircle2 className="w-5 h-5 text-primary mx-auto mb-1" />
-            <p className="text-sm text-gray-700 font-medium">{t("components.interactiveLearning.allPairsMatchedCorrectly")}</p>
+            <p className="text-sm text-foreground font-medium">{t("components.interactiveLearning.allPairsMatchedCorrectly")}</p>
           </div>
         )}
         <div className="flex justify-center mt-4">
@@ -400,7 +400,7 @@ export function SelfCheckQuiz({
   if (completed) {
     const percentage = Math.round((score / questions.length) * 100);
     return (
-      <Card className="border border-primary/10 shadow-md overflow-hidden bg-white" data-testid="quiz-complete">
+      <Card className="border border-primary/10 shadow-md overflow-hidden bg-card" data-testid="quiz-complete">
         <CardContent className="p-8 text-center">
           <div className={cn(
             "w-20 h-20 rounded-full mx-auto mb-4 flex items-center justify-center",
@@ -413,11 +413,11 @@ export function SelfCheckQuiz({
               {percentage}%
             </span>
           </div>
-          <h3 className="text-xl font-bold text-gray-900 mb-2">{title}: Complete</h3>
-          <p className="text-gray-600 mb-1">
+          <h3 className="text-xl font-bold text-heading mb-2">{title}: Complete</h3>
+          <p className="text-foreground mb-1">
             {score}/{questions.length} correct
           </p>
-          <p className="text-sm text-gray-400 mb-6">
+          <p className="text-sm text-muted-foreground mb-6">
             {percentage >= 80 ? "Excellent understanding!" : percentage >= 60 ? "Good foundation: review the topics you missed." : "Keep studying: revisit the concepts and try again."}
           </p>
           <Button onClick={reset} className="rounded-full" data-testid="button-retry-quiz">
@@ -429,15 +429,15 @@ export function SelfCheckQuiz({
   }
 
   return (
-    <Card className="border border-primary/10 shadow-md overflow-hidden bg-white" data-testid="self-check-quiz">
+    <Card className="border border-primary/10 shadow-md overflow-hidden bg-card" data-testid="self-check-quiz">
       <div className="bg-gradient-to-r from-primary/5 to-primary/10 px-6 py-4 border-b border-primary/10">
         <div className="flex items-center justify-between">
-          <h3 className="font-semibold text-gray-900">{title}</h3>
-          <span className="text-xs text-gray-400 bg-white/60 px-3 py-1 rounded-full">
+          <h3 className="font-semibold text-heading">{title}</h3>
+          <span className="text-xs text-muted-foreground bg-card/80 px-3 py-1 rounded-full">
             {currentIndex + 1}/{questions.length}
           </span>
         </div>
-        <div className="mt-2 h-1.5 bg-gray-200/60 rounded-full overflow-hidden">
+        <div className="mt-2 h-1.5 bg-muted/60 rounded-full overflow-hidden">
           <div
             className="h-full bg-primary/60 rounded-full transition-all duration-500"
             style={{ width: `${((currentIndex + 1) / questions.length) * 100}%` }}
@@ -445,7 +445,7 @@ export function SelfCheckQuiz({
         </div>
       </div>
       <CardContent className="p-6">
-        <p className="text-gray-800 font-medium mb-4 leading-relaxed">{current.question}</p>
+        <p className="text-card-foreground font-medium mb-4 leading-relaxed">{current.question}</p>
         <div className="space-y-2">
           {current.options.map((option, i) => (
             <button
@@ -455,24 +455,24 @@ export function SelfCheckQuiz({
               className={cn(
                 "w-full text-left px-4 py-3 rounded-xl text-sm transition-all duration-200 border flex items-center gap-3",
                 selectedAnswer === null
-                  ? "bg-white border-gray-200 hover:border-primary/40 hover:bg-primary/5 text-gray-700"
+                  ? "bg-card border-border hover:border-primary/40 hover:bg-primary/5 text-foreground"
                   : i === current.correctIndex
                   ? "bg-emerald-50 border-emerald-300 text-emerald-800"
                   : selectedAnswer === i
                   ? "bg-red-50 border-red-300 text-red-700"
-                  : "bg-gray-50 border-gray-100 text-gray-400"
+                  : "bg-muted border-border text-muted-foreground"
               )}
               data-testid={`quiz-option-${i}`}
             >
               <span className={cn(
                 "w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold shrink-0 border",
                 selectedAnswer === null
-                  ? "bg-gray-50 text-gray-500 border-gray-200"
+                  ? "bg-muted text-muted-foreground border-border"
                   : i === current.correctIndex
                   ? "bg-emerald-100 text-emerald-700 border-emerald-300"
                   : selectedAnswer === i
                   ? "bg-red-100 text-red-700 border-red-300"
-                  : "bg-gray-50 text-gray-300 border-gray-100"
+                  : "bg-muted text-muted-foreground border-border"
               )}>
                 {String.fromCharCode(65 + i)}
               </span>
@@ -509,7 +509,7 @@ export function SelfCheckQuiz({
               <Lightbulb className="w-4 h-4 text-primary shrink-0 mt-0.5" />
               <div>
                 <p className="text-xs font-semibold text-primary mb-1">{t("components.interactiveLearning.clinicalRationale")}</p>
-                <p className="text-sm text-gray-700 leading-relaxed">{current.rationale}</p>
+                <p className="text-sm text-foreground leading-relaxed">{current.rationale}</p>
               </div>
             </div>
           </div>
@@ -576,13 +576,13 @@ export function StepSequencing({
   };
 
   return (
-    <Card className="border border-primary/10 shadow-md overflow-hidden bg-white" data-testid="step-sequencing">
+    <Card className="border border-primary/10 shadow-md overflow-hidden bg-card" data-testid="step-sequencing">
       <div className="bg-gradient-to-r from-primary/5 to-primary/10 px-6 py-4 border-b border-primary/10">
-        <h3 className="font-semibold text-gray-900 text-lg">{title}</h3>
-        {description && <p className="text-sm text-gray-500 mt-1">{description}</p>}
+        <h3 className="font-semibold text-heading text-lg">{title}</h3>
+        {description && <p className="text-sm text-muted-foreground mt-1">{description}</p>}
       </div>
       <CardContent className="p-6">
-        <p className="text-sm text-gray-500 mb-4">{t("components.interactiveLearning.arrangeTheStepsInThe")}</p>
+        <p className="text-sm text-muted-foreground mb-4">{t("components.interactiveLearning.arrangeTheStepsInThe")}</p>
         <div className="space-y-2">
           {userOrder.map((step, i) => (
             <div
@@ -593,7 +593,7 @@ export function StepSequencing({
                   ? "bg-emerald-50 border-emerald-200"
                   : checked && step.order !== i + 1
                   ? "bg-red-50 border-red-200"
-                  : "bg-white border-gray-200 hover:border-primary/30"
+                  : "bg-card border-border hover:border-primary/30"
               )}
               data-testid={`sequence-step-${step.id}`}
             >
@@ -607,13 +607,13 @@ export function StepSequencing({
               )}>
                 {i + 1}
               </span>
-              <span className="text-sm text-gray-700 flex-1">{step.text}</span>
+              <span className="text-sm text-foreground flex-1">{step.text}</span>
               {!checked && (
                 <div className="flex flex-col gap-0.5 shrink-0">
                   <button
                     onClick={() => moveUp(i)}
                     disabled={i === 0}
-                    className="p-0.5 text-gray-400 hover:text-primary disabled:opacity-30"
+                    className="p-0.5 text-muted-foreground hover:text-primary disabled:opacity-30"
                     data-testid={`button-move-up-${step.id}`}
                   >
                     <ChevronUp className="w-4 h-4" />
@@ -621,7 +621,7 @@ export function StepSequencing({
                   <button
                     onClick={() => moveDown(i)}
                     disabled={i === userOrder.length - 1}
-                    className="p-0.5 text-gray-400 hover:text-primary disabled:opacity-30"
+                    className="p-0.5 text-muted-foreground hover:text-primary disabled:opacity-30"
                     data-testid={`button-move-down-${step.id}`}
                   >
                     <ChevronDown className="w-4 h-4" />
@@ -647,7 +647,7 @@ export function StepSequencing({
         {checked && isCorrect && (
           <div className="mt-4 p-3 bg-primary/5 rounded-xl text-center">
             <Sparkles className="w-4 h-4 text-primary mx-auto mb-1" />
-            <p className="text-sm text-gray-700 font-medium">{t("components.interactiveLearning.correctSequence")}</p>
+            <p className="text-sm text-foreground font-medium">{t("components.interactiveLearning.correctSequence")}</p>
           </div>
         )}
         {checked && !isCorrect && (
@@ -689,13 +689,13 @@ export function ProgressiveReveal({
   return (
     <div data-testid="progressive-reveal">
       {title && (
-        <h3 className="font-semibold text-gray-900 text-lg mb-4">{title}</h3>
+        <h3 className="font-semibold text-heading text-lg mb-4">{title}</h3>
       )}
       <div className="space-y-3">
         {cards.map((card) => (
           <div
             key={card.id}
-            className="border border-primary/10 rounded-xl overflow-hidden bg-white shadow-sm hover:shadow-md transition-all"
+            className="border border-primary/10 rounded-xl overflow-hidden bg-card shadow-sm hover:shadow-md transition-all"
           >
             <button
               onClick={() => toggle(card.id)}
@@ -709,22 +709,22 @@ export function ProgressiveReveal({
                   </div>
                 )}
                 <div>
-                  <p className="font-medium text-gray-900 text-sm">{card.title}</p>
+                  <p className="font-medium text-heading text-sm">{card.title}</p>
                   {!expanded.has(card.id) && (
-                    <p className="text-xs text-gray-500 mt-0.5">{card.summary}</p>
+                    <p className="text-xs text-muted-foreground mt-0.5">{card.summary}</p>
                   )}
                 </div>
               </div>
               <ChevronDown
                 className={cn(
-                  "w-4 h-4 text-gray-400 transition-transform duration-300",
+                  "w-4 h-4 text-muted-foreground transition-transform duration-300",
                   expanded.has(card.id) && "rotate-180"
                 )}
               />
             </button>
             {expanded.has(card.id) && (
               <div className="px-5 pb-4 pt-0 border-t border-primary/5">
-                <p className="text-sm text-gray-600 leading-relaxed">{card.detail}</p>
+                <p className="text-sm text-foreground leading-relaxed">{card.detail}</p>
               </div>
             )}
           </div>
@@ -773,14 +773,14 @@ export function SpotAbnormality({
   };
 
   return (
-    <Card className="border border-primary/10 shadow-md overflow-hidden bg-white" data-testid="spot-abnormality">
+    <Card className="border border-primary/10 shadow-md overflow-hidden bg-card" data-testid="spot-abnormality">
       <div className="bg-gradient-to-r from-primary/5 to-primary/10 px-6 py-4 border-b border-primary/10">
-        <h3 className="font-semibold text-gray-900 text-lg">{title}</h3>
-        <p className="text-sm text-gray-500 mt-1">{t("components.interactiveLearning.selectAllFindingsThatAre")}</p>
+        <h3 className="font-semibold text-heading text-lg">{title}</h3>
+        <p className="text-sm text-muted-foreground mt-1">{t("components.interactiveLearning.selectAllFindingsThatAre")}</p>
       </div>
       <CardContent className="p-6">
-        <div className="p-4 bg-gray-50 rounded-xl mb-4 border border-gray-100">
-          <p className="text-sm text-gray-700 leading-relaxed">{scenario}</p>
+        <div className="p-4 bg-muted rounded-xl mb-4 border border-border">
+          <p className="text-sm text-foreground leading-relaxed">{scenario}</p>
         </div>
         <div className="grid sm:grid-cols-2 gap-2">
           {findings.map((finding) => (
@@ -796,10 +796,10 @@ export function SpotAbnormality({
                   : checked && !finding.isAbnormal && selected.has(finding.id)
                   ? "bg-red-50 border-red-300 text-red-700"
                   : checked && !finding.isAbnormal
-                  ? "bg-gray-50 border-gray-100 text-gray-400"
+                  ? "bg-muted border-border text-muted-foreground"
                   : selected.has(finding.id)
                   ? "bg-primary/10 border-primary/40 text-primary"
-                  : "bg-white border-gray-200 hover:border-primary/30 text-gray-700"
+                  : "bg-card border-border hover:border-primary/30 text-foreground"
               )}
               data-testid={`finding-${finding.id}`}
             >
@@ -818,7 +818,7 @@ export function SpotAbnormality({
             {findings.filter(f => f.isAbnormal).map(f => (
               <div key={f.id} className="p-3 bg-primary/5 rounded-xl border border-primary/10">
                 <p className="text-xs font-semibold text-primary">{f.text}</p>
-                <p className="text-xs text-gray-600 mt-1">{f.explanation}</p>
+                <p className="text-xs text-foreground mt-1">{f.explanation}</p>
               </div>
             ))}
           </div>
@@ -854,17 +854,17 @@ export function MicroLesson({
   children: React.ReactNode;
 }) {
   return (
-    <Card className="border border-primary/10 shadow-md overflow-hidden bg-white" data-testid="micro-lesson">
+    <Card className="border border-primary/10 shadow-md overflow-hidden bg-card" data-testid="micro-lesson">
       <div className="bg-gradient-to-r from-primary/5 to-primary/10 px-6 py-4 border-b border-primary/10">
         <div className="flex items-center gap-3">
           {icon && (
-            <div className="w-10 h-10 bg-white/80 rounded-xl flex items-center justify-center text-primary shadow-sm">
+            <div className="w-10 h-10 bg-card/80 rounded-xl flex items-center justify-center text-primary shadow-sm">
               {icon}
             </div>
           )}
           <div>
-            <h3 className="font-semibold text-gray-900 text-lg">{title}</h3>
-            {subtitle && <p className="text-sm text-gray-500">{subtitle}</p>}
+            <h3 className="font-semibold text-heading text-lg">{title}</h3>
+            {subtitle && <p className="text-sm text-muted-foreground">{subtitle}</p>}
           </div>
         </div>
       </div>
@@ -943,9 +943,9 @@ export function HoverReveal({
         {term}
       </span>
       {show && (
-        <span className="absolute z-50 bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-2 bg-gray-900 text-white text-xs rounded-lg shadow-lg max-w-[240px] text-center whitespace-normal leading-relaxed">
+        <span className="absolute z-50 bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-2 bg-[var(--theme-topbar-bg)] text-[var(--theme-topbar-text)] text-xs rounded-lg shadow-lg max-w-[240px] text-center whitespace-normal leading-relaxed">
           {definition}
-          <span className="absolute top-full left-1/2 -translate-x-1/2 w-2 h-2 bg-gray-900 rotate-45 -mt-1" />
+          <span className="absolute top-full left-1/2 -translate-x-1/2 w-2 h-2 bg-[var(--theme-topbar-bg)] rotate-45 -mt-1" />
         </span>
       )}
     </span>

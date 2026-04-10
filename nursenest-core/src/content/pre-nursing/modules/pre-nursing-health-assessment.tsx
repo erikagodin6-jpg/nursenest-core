@@ -21,12 +21,12 @@ export function HealthAssessmentModule() {
   return (
     <div className="space-y-10" data-testid="module-health-assessment">
       <div>
-        <EditableModuleText sectionKey="ha-title" defaultText="Health Assessment Foundations" as="h2" className="text-2xl font-bold text-gray-900 mb-2" />
-        <EditableModuleText sectionKey="ha-desc" defaultText="Master the foundations of patient assessment including subjective vs objective data collection, IPPA techniques, systematic head-to-toe assessment, vital signs interpretation, documentation methods, and recognition of critical red flags." as="p" className="text-gray-600" multiline />
+        <EditableModuleText sectionKey="ha-title" defaultText="Health Assessment Foundations" as="h2" className="text-2xl font-bold text-heading mb-2" />
+        <EditableModuleText sectionKey="ha-desc" defaultText="Master the foundations of patient assessment including subjective vs objective data collection, IPPA techniques, systematic head-to-toe assessment, vital signs interpretation, documentation methods, and recognition of critical red flags." as="p" className="text-foreground" multiline />
       </div>
 
       <MicroLesson title="Subjective vs Objective Data" subtitle="Understanding the two pillars of assessment" icon={<ClipboardList className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="ha-data-types-intro" defaultText="Every nursing assessment collects two fundamental types of data. Distinguishing between them is essential for accurate documentation, clinical reasoning, and communication with the healthcare team." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="ha-data-types-intro" defaultText="Every nursing assessment collects two fundamental types of data. Distinguishing between them is essential for accurate documentation, clinical reasoning, and communication with the healthcare team." as="p" className="text-sm text-foreground leading-relaxed" multiline />
         <div className="grid sm:grid-cols-2 gap-3 mt-3">
           <div className="p-4 bg-blue-50/60 rounded-xl border border-blue-100">
             <p className="text-xs font-semibold text-blue-700 mb-1">Subjective Data (Symptoms)</p>
@@ -45,7 +45,7 @@ export function HealthAssessmentModule() {
       </MicroLesson>
 
       <MicroLesson title="IPPA Techniques" subtitle="Inspection, Palpation, Percussion, Auscultation" icon={<Stethoscope className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="ha-ippa-intro" defaultText="IPPA represents the four systematic techniques used in physical examination, always performed in this specific order (except for the abdomen, where auscultation precedes palpation and percussion to avoid altering bowel sounds)." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="ha-ippa-intro" defaultText="IPPA represents the four systematic techniques used in physical examination, always performed in this specific order (except for the abdomen, where auscultation precedes palpation and percussion to avoid altering bowel sounds)." as="p" className="text-sm text-foreground leading-relaxed" multiline />
         <ProgressiveReveal
           title={t("data.pre_nursing_health_assessment.theFourAssessmentTechniques")}
           cards={[
@@ -82,9 +82,9 @@ export function HealthAssessmentModule() {
       </MicroLesson>
 
       <MicroLesson title="Vital Signs Interpretation" subtitle="The foundation of every patient assessment" icon={<Activity className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="ha-vitals-intro" defaultText="Vital signs, temperature, pulse, respirations, blood pressure, and oxygen saturation (the 'fifth vital sign'), provide baseline data and indicate physiological status. Trends in vital signs are more clinically significant than single readings." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="ha-vitals-intro" defaultText="Vital signs, temperature, pulse, respirations, blood pressure, and oxygen saturation (the 'fifth vital sign'), provide baseline data and indicate physiological status. Trends in vital signs are more clinically significant than single readings." as="p" className="text-sm text-foreground leading-relaxed" multiline />
         <div className="space-y-3 mt-3">
-          <div className="p-4 bg-purple-50/60 rounded-xl border border-purple-100">
+          <div className="p-4 nn-semantic-inset">
             <p className="text-xs font-semibold text-purple-700 mb-2">Normal Adult Vital Sign Ranges</p>
             <div className="grid grid-cols-2 gap-2 text-xs text-purple-600">
               <div><strong>{t("data.pre_nursing_health_assessment.temperature")}</strong> 36.1–37.2°C (97.0–99.0°F)</div>
@@ -103,7 +103,7 @@ export function HealthAssessmentModule() {
       </MicroLesson>
 
       <MicroLesson title="Head-to-Toe Assessment & Documentation" subtitle="Systematic approach and accurate recording" icon={<Eye className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="ha-headtotoe-intro" defaultText="A systematic head-to-toe assessment ensures no body system is missed. The standard approach moves cephalocaudal (head to toe) and proximal to distal. Document findings accurately using standardized terminology and approved abbreviations." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="ha-headtotoe-intro" defaultText="A systematic head-to-toe assessment ensures no body system is missed. The standard approach moves cephalocaudal (head to toe) and proximal to distal. Document findings accurately using standardized terminology and approved abbreviations." as="p" className="text-sm text-foreground leading-relaxed" multiline />
         <div className="p-4 bg-indigo-50/60 rounded-xl border border-indigo-100 mt-3">
           <p className="text-xs font-semibold text-indigo-700 mb-2">Head-to-Toe Assessment Order</p>
           <div className="space-y-1 text-xs text-indigo-600">

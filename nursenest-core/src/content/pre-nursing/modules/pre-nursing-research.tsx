@@ -364,8 +364,8 @@ export function ResearchStatisticsModule() {
   return (
     <div className="space-y-10" data-testid="module-research-statistics">
       <div>
-        <EditableModuleText sectionKey="research-title" defaultText="Nursing Research & Statistics" as="h2" className="text-2xl font-bold text-gray-900 mb-2" />
-        <EditableModuleText sectionKey="research-desc" defaultText="Build the critical thinking skills to read, interpret, and apply research evidence in clinical nursing practice." as="p" className="text-gray-600" multiline />
+        <EditableModuleText sectionKey="research-title" defaultText="Nursing Research & Statistics" as="h2" className="text-2xl font-bold text-heading mb-2" />
+        <EditableModuleText sectionKey="research-desc" defaultText="Build the critical thinking skills to read, interpret, and apply research evidence in clinical nursing practice." as="p" className="text-foreground" multiline />
       </div>
 
       <section className="space-y-6">
@@ -373,7 +373,7 @@ export function ResearchStatisticsModule() {
           <div className="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center">
             <BookOpen className="w-5 h-5 text-indigo-600" />
           </div>
-          <h3 className="text-xl font-semibold text-gray-900">Foundations of Nursing Research</h3>
+          <h3 className="text-xl font-semibold text-heading">Foundations of Nursing Research</h3>
         </div>
 
         <MicroLesson
@@ -381,7 +381,7 @@ export function ResearchStatisticsModule() {
           subtitle={t("data.pre_nursing_research.understandingThePurposeAndScope")}
           icon={<BookOpen className="w-5 h-5" />}
         >
-          <p className="text-sm text-gray-600 leading-relaxed">
+          <p className="text-sm text-foreground leading-relaxed">
             Nursing research is the{" "}
             <HoverReveal
               term="systematic investigation"
@@ -416,7 +416,7 @@ export function ResearchStatisticsModule() {
           icon={<Search className="w-5 h-5" />}
         >
           <div className="space-y-3">
-            <div className="p-4 bg-purple-50/60 rounded-xl border border-purple-100">
+            <div className="p-4 nn-semantic-inset">
               <p className="text-xs font-semibold text-purple-700 mb-1">Independent Variable (IV)</p>
               <p className="text-xs text-purple-600">What the researcher manipulates or studies. The presumed cause. Example: a new pain medication.</p>
             </div>
@@ -505,7 +505,7 @@ export function ResearchStatisticsModule() {
           <div className="w-10 h-10 rounded-xl bg-teal-50 flex items-center justify-center">
             <BarChart3 className="w-5 h-5 text-teal-600" />
           </div>
-          <h3 className="text-xl font-semibold text-gray-900">Core Statistics for Nurses</h3>
+          <h3 className="text-xl font-semibold text-heading">Core Statistics for Nurses</h3>
         </div>
 
         <MicroLesson
@@ -513,7 +513,7 @@ export function ResearchStatisticsModule() {
           subtitle={t("data.pre_nursing_research.twoFundamentalApproachesToAnalyzing")}
           icon={<BarChart3 className="w-5 h-5" />}
         >
-          <p className="text-sm text-gray-600 leading-relaxed">
+          <p className="text-sm text-foreground leading-relaxed">
             <HoverReveal
               term="Descriptive statistics"
               definition="Summarize and describe characteristics of a dataset (mean, median, mode, standard deviation, range). They tell you what the data looks like."
@@ -551,7 +551,7 @@ export function ResearchStatisticsModule() {
               <p className="text-xs font-semibold text-emerald-700 mb-1">Median (Middle Value)</p>
               <p className="text-xs text-emerald-600">The 50th percentile. Not affected by extreme values. Best for skewed data (like hospital LOS).</p>
             </div>
-            <div className="p-4 bg-purple-50/60 rounded-xl border border-purple-100">
+            <div className="p-4 nn-semantic-inset">
               <p className="text-xs font-semibold text-purple-700 mb-1">Mode (Most Frequent)</p>
               <p className="text-xs text-purple-600">The most commonly occurring value. Useful for categorical data (e.g., most common diagnosis).</p>
             </div>
@@ -616,7 +616,7 @@ export function ResearchStatisticsModule() {
           <div className="w-10 h-10 rounded-xl bg-violet-50 flex items-center justify-center">
             <FlaskConical className="w-5 h-5 text-violet-600" />
           </div>
-          <h3 className="text-xl font-semibold text-gray-900">Research Design & Methodology</h3>
+          <h3 className="text-xl font-semibold text-heading">Research Design & Methodology</h3>
         </div>
 
         <MicroLesson
@@ -715,7 +715,7 @@ export function ResearchStatisticsModule() {
           <div className="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center">
             <Lightbulb className="w-5 h-5 text-emerald-600" />
           </div>
-          <h3 className="text-xl font-semibold text-gray-900">Evidence-Based Practice</h3>
+          <h3 className="text-xl font-semibold text-heading">Evidence-Based Practice</h3>
         </div>
 
         <MicroLesson
@@ -770,7 +770,7 @@ export function ResearchStatisticsModule() {
           <div className="w-10 h-10 rounded-xl bg-orange-50 flex items-center justify-center">
             <Search className="w-5 h-5 text-orange-600" />
           </div>
-          <h3 className="text-xl font-semibold text-gray-900">Critical Appraisal of Research</h3>
+          <h3 className="text-xl font-semibold text-heading">Critical Appraisal of Research</h3>
         </div>
 
         <MicroLesson
@@ -778,7 +778,7 @@ export function ResearchStatisticsModule() {
           subtitle={t("data.pre_nursing_research.aSystematicApproachForBusy")}
           icon={<BookOpen className="w-5 h-5" />}
         >
-          <p className="text-sm text-gray-600 mb-4">
+          <p className="text-sm text-foreground mb-4">
             {t("data.pre_nursing_research.followThisSequenceWhenEvaluating")}
           </p>
           <ProgressiveReveal
@@ -848,7 +848,7 @@ export function ResearchStatisticsModule() {
               <p className="text-xs font-semibold text-yellow-700 mb-1">Relative Risk Without Context</p>
               <p className="text-xs text-yellow-600">"Doubles your risk!" sounds alarming, but if baseline risk is 1 in a million, doubled is still 2 in a million. Always ask for absolute numbers.</p>
             </div>
-            <div className="p-4 bg-purple-50/60 rounded-xl border border-purple-100">
+            <div className="p-4 nn-semantic-inset">
               <p className="text-xs font-semibold text-purple-700 mb-1">Confusing Correlation with Causation</p>
               <p className="text-xs text-purple-600">Ice cream sales and drowning rates both rise in summer, not because ice cream causes drowning, but because of the shared confounder (warm weather).</p>
             </div>
@@ -863,7 +863,7 @@ export function ResearchStatisticsModule() {
           <div className="w-10 h-10 rounded-xl bg-cyan-50 flex items-center justify-center">
             <TrendingUp className="w-5 h-5 text-cyan-600" />
           </div>
-          <h3 className="text-xl font-semibold text-gray-900">Applied Clinical Interpretation</h3>
+          <h3 className="text-xl font-semibold text-heading">Applied Clinical Interpretation</h3>
         </div>
 
         <MicroLesson
@@ -941,7 +941,7 @@ export function ResearchStatisticsModule() {
           <div className="w-10 h-10 rounded-xl bg-sky-50 flex items-center justify-center">
             <Users className="w-5 h-5 text-sky-600" />
           </div>
-          <h3 className="text-xl font-semibold text-gray-900">Sampling, Ethics, Visualization & Synthesis</h3>
+          <h3 className="text-xl font-semibold text-heading">Sampling, Ethics, Visualization & Synthesis</h3>
         </div>
 
         <MicroLesson
@@ -949,7 +949,7 @@ export function ResearchStatisticsModule() {
           subtitle={t("data.pre_nursing_research.howParticipantsAreSelectedShapes")}
           icon={<Users className="w-5 h-5" />}
         >
-          <p className="text-sm text-gray-600 leading-relaxed">
+          <p className="text-sm text-foreground leading-relaxed">
             The way a researcher selects participants from a{" "}
             <HoverReveal
               term="population"
@@ -971,7 +971,7 @@ export function ResearchStatisticsModule() {
               <p className="text-xs font-semibold text-amber-700 mb-1">Convenience Sampling</p>
               <p className="text-xs text-amber-600">Participants are selected based on easy availability (e.g., patients in your unit today). Most common in nursing research but highest risk of sampling bias. Results may not generalize beyond the immediate group.</p>
             </div>
-            <div className="p-4 bg-purple-50/60 rounded-xl border border-purple-100">
+            <div className="p-4 nn-semantic-inset">
               <p className="text-xs font-semibold text-purple-700 mb-1">Purposive (Purposeful) Sampling</p>
               <p className="text-xs text-purple-600">Participants are deliberately chosen because they have specific characteristics or experiences relevant to the study. Common in qualitative research. Example: selecting only nurses who have experienced moral distress.</p>
             </div>
@@ -994,7 +994,7 @@ export function ResearchStatisticsModule() {
           subtitle={t("data.pre_nursing_research.protectingParticipantsIsANonnegotiable")}
           icon={<Shield className="w-5 h-5" />}
         >
-          <p className="text-sm text-gray-600 leading-relaxed">
+          <p className="text-sm text-foreground leading-relaxed">
             Research ethics exist because of historical abuses, the Nazi experiments, the{" "}
             <HoverReveal
               term="Tuskegee Syphilis Study"
@@ -1058,7 +1058,7 @@ export function ResearchStatisticsModule() {
               <p className="text-xs font-semibold text-emerald-700 mb-1">Histograms</p>
               <p className="text-xs text-emerald-600">Display the distribution of continuous numerical data. Bars are adjacent (no gaps) because the X-axis represents a continuous scale divided into intervals (bins). Reveals shape of distribution: normal, skewed left, skewed right, bimodal. Example: distribution of patient ages in a study.</p>
             </div>
-            <div className="p-4 bg-purple-50/60 rounded-xl border border-purple-100">
+            <div className="p-4 nn-semantic-inset">
               <p className="text-xs font-semibold text-purple-700 mb-1">Scatter Plots</p>
               <p className="text-xs text-purple-600">Show the relationship between two continuous variables using individual data points plotted on X-Y axes. Reveal correlations (positive, negative, none), outliers, and the strength of relationships. A trend line may be added. Example: plotting hours studied vs exam scores.</p>
             </div>
@@ -1091,7 +1091,7 @@ export function ResearchStatisticsModule() {
           subtitle={t("data.pre_nursing_research.thePinnacleOfTheEvidence")}
           icon={<Layers className="w-5 h-5" />}
         >
-          <p className="text-sm text-gray-600 leading-relaxed">
+          <p className="text-sm text-foreground leading-relaxed">
             A{" "}
             <HoverReveal
               term="systematic review"

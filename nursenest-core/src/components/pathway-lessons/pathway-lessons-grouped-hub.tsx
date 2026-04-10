@@ -204,46 +204,48 @@ export function PathwayLessonsGroupedHub({
                 const ps = progressMap[l.slug] ?? "not_started";
                 const related = isNp ? relatedLessonsForCard(group.lessons, l, lessonsBasePath, 3) : [];
                 return (
-                  <li key={l.slug}>
-                    <div
-                      className={`nn-study-card flex h-full flex-col p-4 sm:p-5${isNp ? " nn-lesson-list-card" : ""}`}
-                    >
-                      <div className="flex flex-wrap items-start justify-between gap-2">
-                        <p className="nn-marketing-caption font-semibold text-[var(--theme-muted-text)]">
-                          Item {idx + 1} · {l.topic}
-                        </p>
-                        {showProgress ? <PathwayLessonProgressBadge status={ps} /> : null}
-                      </div>
-                      <Link
-                        href={href}
-                        data-nn-qa-primary-lesson={gi === 0 && idx === 0 ? "true" : undefined}
-                        className="nn-marketing-h4 mt-2 text-[var(--theme-heading-text)] underline-offset-4 transition hover:text-primary hover:underline"
-                      >
-                        {l.title}
-                      </Link>
-                      <p className="nn-marketing-body-sm mt-2 line-clamp-3 flex-1 text-[var(--theme-muted-text)]">
-                        {l.seoDescription}
-                      </p>
-                      {isNp && related.length > 0 ? (
-                        <div className="mt-4 border-t border-border/50 pt-4">
-                          <p className="nn-marketing-caption font-semibold text-[var(--theme-heading-text)]">
-                            More in this topic
+                  <li
+                    key={l.slug}
+                    data-nn-qa-primary-lesson={gi === 0 && idx === 0 ? "true" : undefined}
+                  >
+                    {isNp ? (
+                      /* NP pathway: richer card with related lessons and practice tiles */
+                      <div className="nn-study-card nn-lesson-list-card flex h-full flex-col p-4 sm:p-5">
+                        <div className="flex flex-wrap items-start justify-between gap-2">
+                          <p className="nn-marketing-caption font-semibold text-[var(--theme-muted-text)]">
+                            Item {idx + 1} · {l.topic}
                           </p>
-                          <ul className="mt-2 grid list-none gap-2 p-0 sm:grid-cols-2">
-                            {related.map((r) => (
-                              <li key={r.href}>
-                                <Link
-                                  href={r.href}
-                                  className="nn-surface-inset block rounded-xl px-3 py-2.5 text-sm font-semibold text-primary transition-colors hover:border-primary/35"
-                                >
-                                  {r.title}
-                                </Link>
-                              </li>
-                            ))}
-                          </ul>
+                          {showProgress ? <PathwayLessonProgressBadge status={ps} /> : null}
                         </div>
-                      ) : null}
-                      {isNp ? (
+                        <Link
+                          href={href}
+                          data-nn-qa-primary-lesson={gi === 0 && idx === 0 ? "true" : undefined}
+                          className="nn-marketing-h4 mt-2 text-[var(--theme-heading-text)] underline-offset-4 transition hover:text-primary hover:underline"
+                        >
+                          {l.title}
+                        </Link>
+                        <p className="nn-marketing-body-sm mt-2 line-clamp-3 flex-1 text-[var(--theme-muted-text)]">
+                          {l.seoDescription}
+                        </p>
+                        {related.length > 0 ? (
+                          <div className="mt-4 border-t border-border/50 pt-4">
+                            <p className="nn-marketing-caption font-semibold text-[var(--theme-heading-text)]">
+                              More in this topic
+                            </p>
+                            <ul className="mt-2 grid list-none gap-2 p-0 sm:grid-cols-2">
+                              {related.map((r) => (
+                                <li key={r.href}>
+                                  <Link
+                                    href={r.href}
+                                    className="nn-surface-inset block rounded-xl px-3 py-2.5 text-sm font-semibold text-primary transition-colors hover:border-primary/35"
+                                  >
+                                    {r.title}
+                                  </Link>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        ) : null}
                         <div className="mt-4 grid gap-2 sm:grid-cols-2">
                           <Link
                             href={marketingQuestionsTopicHref(pathway, l.topic ?? group.label)}
@@ -264,24 +266,38 @@ export function PathwayLessonsGroupedHub({
                             </p>
                           </Link>
                         </div>
-                      ) : null}
-                      <div className="mt-4 flex flex-wrap gap-2 border-t border-border/60 pt-4">
-                        <Link
-                          href={href}
-                          className="inline-flex min-h-10 items-center rounded-full nn-btn-primary px-4 py-2 text-sm font-semibold shadow-none"
-                        >
-                          Read lesson
-                        </Link>
-                        {!isNp ? (
+                        <div className="mt-4 flex flex-wrap gap-2 border-t border-border/60 pt-4">
+                          <Link
+                            href={href}
+                            className="inline-flex min-h-10 items-center rounded-full nn-btn-primary px-4 py-2 text-sm font-semibold shadow-none"
+                          >
+                            Read lesson
+                          </Link>
+                        </div>
+                      </div>
+                    ) : (
+                      /* Standard pathways: StudyCard for visual consistency */
+                      <StudyCard
+                        surface="list"
+                        variant={progressToCardVariant(ps)}
+                        status={progressToCardStatus(ps, showProgress)}
+                        title={l.title}
+                        href={href}
+                        description={l.seoDescription}
+                        meta={[{ label: `Item ${idx + 1}` }, { label: l.topic ?? group.label }]}
+                        cta="Read lesson"
+                        ctaVariant="primary"
+                        footer={
                           <Link
                             href={appPracticeTopicHref(pathway, l.topic)}
-                            className="inline-flex min-h-10 items-center rounded-full nn-btn-secondary px-4 py-2 text-sm font-semibold"
+                            className="mt-3 inline-flex min-h-10 items-center rounded-full nn-btn-secondary px-4 py-2 text-sm font-semibold"
                           >
                             Drill this topic
                           </Link>
-                        ) : null}
-                      </div>
-                    </div>
+                        }
+                        ariaLabel={l.title}
+                      />
+                    )}
                   </li>
                 );
               })}

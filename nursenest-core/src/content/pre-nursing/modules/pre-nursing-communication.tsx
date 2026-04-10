@@ -21,12 +21,12 @@ export function CommunicationModule() {
   return (
     <div className="space-y-10" data-testid="module-communication">
       <div>
-        <EditableModuleText sectionKey="comm-title" defaultText="Healthcare Communication Fundamentals" as="h2" className="text-2xl font-bold text-gray-900 mb-2" />
-        <EditableModuleText sectionKey="comm-desc" defaultText="Master professional communication, therapeutic techniques, structured handoff methods, documentation principles, and interprofessional collaboration, foundational skills for safe, effective healthcare." as="p" className="text-gray-600" multiline />
+        <EditableModuleText sectionKey="comm-title" defaultText="Healthcare Communication Fundamentals" as="h2" className="text-2xl font-bold text-heading mb-2" />
+        <EditableModuleText sectionKey="comm-desc" defaultText="Master professional communication, therapeutic techniques, structured handoff methods, documentation principles, and interprofessional collaboration, foundational skills for safe, effective healthcare." as="p" className="text-foreground" multiline />
       </div>
 
       <MicroLesson title="Therapeutic Communication" subtitle="Purposeful communication that promotes healing" icon={<MessageSquare className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="comm-therapeutic-content" defaultText={'Therapeutic communication is <span data-hover-term="goal-directed">goal-directed</span> interaction that prioritizes the patient\'s needs. It requires active listening, empathy, and intentional use of verbal and nonverbal techniques.'} as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="comm-therapeutic-content" defaultText={'Therapeutic communication is <span data-hover-term="goal-directed">goal-directed</span> interaction that prioritizes the patient\'s needs. It requires active listening, empathy, and intentional use of verbal and nonverbal techniques.'} as="p" className="text-sm text-foreground leading-relaxed" multiline />
         <ProgressiveReveal
           title={t("data.pre_nursing_communication.therapeuticTechniques")}
           cards={[
@@ -64,7 +64,7 @@ export function CommunicationModule() {
       </MicroLesson>
 
       <MicroLesson title="SBAR Communication" subtitle="Structured handoff for patient safety" icon={<Users className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="comm-sbar-content" defaultText={'SBAR is a <span data-hover-term="standardized communication framework">standardized communication framework</span> designed to prevent critical information loss during handoffs, phone calls to providers, and escalation of concerns.'} as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="comm-sbar-content" defaultText={'SBAR is a <span data-hover-term="standardized communication framework">standardized communication framework</span> designed to prevent critical information loss during handoffs, phone calls to providers, and escalation of concerns.'} as="p" className="text-sm text-foreground leading-relaxed" multiline />
         <div className="space-y-3 mt-3">
           <div className="p-4 bg-red-50/60 rounded-xl border border-red-100">
             <p className="text-xs font-semibold text-red-700 mb-1">S: Situation</p>
@@ -91,7 +91,7 @@ export function CommunicationModule() {
       </MicroLesson>
 
       <MicroLesson title="Documentation Principles" subtitle="If it wasn't documented, it wasn't done" icon={<FileText className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="comm-documentation-content" defaultText={'Healthcare documentation is a <span data-hover-term="legal record">legal record</span> that serves multiple critical functions: continuity of care, legal protection, communication between providers, quality improvement, and reimbursement.'} as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="comm-documentation-content" defaultText={'Healthcare documentation is a <span data-hover-term="legal record">legal record</span> that serves multiple critical functions: continuity of care, legal protection, communication between providers, quality improvement, and reimbursement.'} as="p" className="text-sm text-foreground leading-relaxed" multiline />
         <div className="grid sm:grid-cols-2 gap-3 mt-3">
           <div className="p-4 bg-green-50/60 rounded-xl border border-green-100">
             <p className="text-xs font-semibold text-green-700 mb-1">Documentation Best Practices</p>
@@ -105,13 +105,13 @@ export function CommunicationModule() {
       </MicroLesson>
 
       <MicroLesson title="Error Prevention & Situational Awareness" subtitle="Communication strategies that prevent harm" icon={<Shield className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="comm-error-prevention-content" defaultText={'Most healthcare errors involve <span data-hover-term="communication failures">communication failures</span>. A culture of safety requires specific communication strategies.'} as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="comm-error-prevention-content" defaultText={'Most healthcare errors involve <span data-hover-term="communication failures">communication failures</span>. A culture of safety requires specific communication strategies.'} as="p" className="text-sm text-foreground leading-relaxed" multiline />
         <div className="space-y-3 mt-3">
           <div className="p-4 bg-blue-50/60 rounded-xl border border-blue-100">
             <p className="text-xs font-semibold text-blue-700 mb-1">Read-Back / Repeat-Back</p>
             <p className="text-xs text-blue-600">When receiving verbal orders or critical test results, repeat the information back to the sender for verification. 'I'm reading back: Give Metoprolol 25 mg by mouth now. Is that correct?' This catches mishearing or miscommunication before it reaches the patient.</p>
           </div>
-          <div className="p-4 bg-purple-50/60 rounded-xl border border-purple-100">
+          <div className="p-4 nn-semantic-inset">
             <p className="text-xs font-semibold text-purple-700 mb-1">CUS Framework: Escalating Concerns</p>
             <p className="text-xs text-purple-600"><strong>C</strong>: 'I am <em>Concerned</em>' (first level). <strong>U</strong>: 'I am <em>Uncomfortable</em>' (second level). <strong>S</strong>: 'This is a <em>Safety issue</em>' (highest level: stops the action). This graduated framework gives team members language to escalate concerns assertively.</p>
           </div>
