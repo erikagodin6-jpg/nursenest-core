@@ -12,14 +12,12 @@ echo "== Risky concurrent processes =="
 ps -eo pid,ppid,%mem,%cpu,cmd --sort=-%mem | awk '
   $0 !~ /awk/ &&
   $0 !~ /check-build-memory\.sh/ &&
-  (
-    /next dev/ ||
-    /next-server/ ||
-    /\.next\/dev\/build\/postcss\.js/ ||
-    /npm run typecheck/ ||
-    /npm exec tsc --noEmit/ ||
-    /node .*tsc --noEmit/
-  ) {
+  ($0 ~ /next dev/ ||
+   $0 ~ /next-server/ ||
+   $0 ~ /\.next\/dev\/build\/postcss\.js/ ||
+   $0 ~ /npm run typecheck/ ||
+   $0 ~ /npm exec tsc --noEmit/ ||
+   $0 ~ /node .*tsc --noEmit/) {
     print
     found=1
   }
