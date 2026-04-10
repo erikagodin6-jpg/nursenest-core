@@ -1,6 +1,9 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { isExamHubMarketingPath } from "@/lib/i18n/exam-hub-path";
+import {
+  canonicalExamHubPathFromPossiblyLocalizedPath,
+  isExamHubMarketingPath,
+} from "@/lib/i18n/exam-hub-path";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 
 test("withMarketingLocale prefixes non-English marketing paths", () => {
@@ -24,4 +27,16 @@ test("isExamHubMarketingPath detects hubs after a non-English locale prefix", ()
   assert.equal(isExamHubMarketingPath("/fr/us/rn/nclex-rn"), true);
   assert.equal(isExamHubMarketingPath("/es/canada/np/cnple"), true);
   assert.equal(isExamHubMarketingPath("/fr/pricing"), false);
+});
+
+test("canonicalExamHubPathFromPossiblyLocalizedPath strips non-English locale prefixes from exam hubs", () => {
+  assert.deepEqual(canonicalExamHubPathFromPossiblyLocalizedPath("/fr/canada/rpn/rex-pn"), {
+    locale: "fr",
+    canonicalPath: "/canada/rpn/rex-pn",
+  });
+  assert.deepEqual(canonicalExamHubPathFromPossiblyLocalizedPath("/es/us/rn/nclex-rn/questions"), {
+    locale: "es",
+    canonicalPath: "/us/rn/nclex-rn/questions",
+  });
+  assert.equal(canonicalExamHubPathFromPossiblyLocalizedPath("/fr/pricing"), null);
 });

@@ -10,6 +10,8 @@ import type { NextFetchEvent, NextMiddleware } from "next/server";
 import { NextRequest, NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt";
 import { middlewareAuth } from "@/lib/auth-middleware";
+import { canonicalExamHubPathFromPossiblyLocalizedPath } from "@/lib/i18n/exam-hub-path";
+import { MARKETING_LOCALE_COOKIE, MARKETING_LOCALE_COOKIE_MAX_AGE } from "@/lib/i18n/marketing-locale-cookie";
 
 /** NextAuth `auth` middleware typing does not always align with App Router `NextRequest` + `NextFetchEvent`. */
 const runAuthMiddleware = middlewareAuth as unknown as NextMiddleware;
@@ -41,6 +43,20 @@ function withPathnameHeader(request: NextRequest): NextRequest {
 }
 
 export async function proxy(request: NextRequest, event: NextFetchEvent) {
+  const canonicalExamHub = canonicalExamHubPathFromPossiblyLocalizedPath(request.nextUrl.pathname);
+  if (canonicalExamHub) {
+    const url = request.nextUrl.clone();
+    url.pathname = canonicalExamHub.canonicalPath;
+    const response = NextResponse.redirect(url);
+    response.cookies.set(MARKETING_LOCALE_COOKIE, canonicalExamHub.locale, {
+      path: "/",
+      maxAge: MARKETING_LOCALE_COOKIE_MAX_AGE,
+      sameSite: "lax",
+      httpOnly: true,
+    });
+    return response;
+  }
+
   if (request.nextUrl.pathname === "/app/lessons") {
     const secret = process.env.AUTH_SECRET ?? process.env.NEXTAUTH_SECRET;
     const token = secret ? await getToken({ req: request, secret }) : null;
@@ -54,6 +70,8 @@ export async function proxy(request: NextRequest, event: NextFetchEvent) {
 /**
  * Include bare `/app` and `/admin` — `/app/:path*` alone can miss the dashboard root on some matchers.
  * `/us/*` and `/canada/*` run proxy so `x-nn-pathname` reaches `(default)/layout` for cookie-backed i18n on exam hubs.
+ * Locale-prefixed legacy forms (`/fr/canada/...`) also pass through here so we can strip the locale prefix,
+ * persist `nn_marketing_locale`, and redirect to the canonical country-first hub URL.
  */
 export const config = {
   matcher: [
@@ -67,5 +85,9 @@ export const config = {
     "/us/:path*",
     "/canada",
     "/canada/:path*",
+    "/:locale/us",
+    "/:locale/us/:path*",
+    "/:locale/canada",
+    "/:locale/canada/:path*",
   ],
 };

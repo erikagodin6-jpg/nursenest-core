@@ -17,6 +17,9 @@ import {
   EXAM_PATHWAY_ORDER,
   getExamNavStripItems,
   getExamPathwayHeroItems,
+  getHomeHeroTierPillLinkSpecs,
+  type HomeHeroTierPillId,
+  type HomeHeroTierPillLinkSpec,
 } from "@/lib/marketing/country-exam-offerings";
 
 export {
@@ -24,6 +27,9 @@ export {
   EXAM_PATHWAY_ORDER,
   getExamNavStripItems,
   getExamPathwayHeroItems,
+  getHomeHeroTierPillLinkSpecs,
+  type HomeHeroTierPillId,
+  type HomeHeroTierPillLinkSpec,
   type CountryExamOfferingId,
   defaultPathwayIdForMarketingOffering,
   publicMarketingCatHrefForOffering,

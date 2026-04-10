@@ -74,7 +74,7 @@ export function NursingTierHubPage({
       ) : null}
 
       <section
-        className="rounded-[1.75rem] border border-[var(--border-subtle)] bg-[var(--nn-presentation-wash)] p-6 shadow-[var(--shadow-card)] sm:p-8"
+        className="rounded-[1.75rem] border border-[var(--accent-surface-b-border)] bg-[var(--accent-surface-b)] p-6 shadow-[var(--shadow-card)] sm:p-8"
         data-nn-tier-hub="hero"
       >
         <p className="nn-marketing-caption font-semibold uppercase tracking-[0.12em] text-[var(--text-accent)]">

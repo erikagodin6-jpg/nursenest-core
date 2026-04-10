@@ -55,7 +55,7 @@ export async function MarketingForInstitutionsPage({ locale }: { locale: string 
         </section>
       </div>
 
-      <section className="mt-10 nn-card bg-gradient-to-br from-primary/10 to-primary/5 p-8">
+      <section className="mt-10 rounded-2xl border border-[var(--accent-surface-b-border)] bg-[var(--accent-surface-b)] p-8">
         <h2 className="nn-marketing-h2">{m["pages.forInstitutions.sectionNext"]}</h2>
         <p className="mt-3 max-w-3xl text-muted">{m["pages.forInstitutions.nextBody"]}</p>
         <div className="mt-6 flex flex-wrap gap-3">

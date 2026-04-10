@@ -32,7 +32,7 @@ export function MarketingPublicStudyLanding({
 }: MarketingPublicStudyLandingProps) {
   return (
     <div className="mx-auto flex max-w-3xl flex-col gap-[var(--nn-rhythm-section-y)] nn-marketing-x nn-rhythm-page pb-16">
-      <div className="rounded-2xl border border-[var(--border-subtle)] bg-[var(--nn-presentation-wash)] p-5 sm:p-6">
+      <div className="rounded-2xl border border-[var(--accent-surface-b-border)] bg-[var(--accent-surface-b)] p-5 sm:p-6">
         <div className="nn-stack-hero-heading">
           <h1 className="nn-marketing-h1 text-balance">{h1}</h1>
           <p className="nn-marketing-body text-pretty text-[var(--theme-muted-text)] sm:text-base">{intro}</p>

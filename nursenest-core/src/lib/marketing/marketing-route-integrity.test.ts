@@ -1,7 +1,10 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import { createRouteValidator } from "../../../scripts/audit-internal-links";
-import { marketingExamHubPath } from "@/lib/marketing/country-exam-offerings";
+import {
+  getHomeHeroTierPillLinkSpecs,
+  marketingExamHubPath,
+} from "@/lib/marketing/country-exam-offerings";
 import {
   marketingExamPrepHubs,
   publicMarketingCatHrefForOffering,
@@ -44,6 +47,42 @@ describe("marketing route integrity", () => {
         assert.equal(isWellFormedExamHubPath(href), true);
         assert.equal(isValidPath(href), true);
       }
+    }
+  });
+
+  it("homepage hero tier pill paths and PN label keys match US/CA matrix (no mixed slugs)", () => {
+    const expectedPaths = {
+      US: {
+        rn: "/us/rn/nclex-rn",
+        pn: "/us/lpn/nclex-pn",
+        np: "/us/np/fnp",
+        allied: "/us/allied/allied-health",
+      },
+      CA: {
+        rn: "/canada/rn/nclex-rn",
+        pn: "/canada/rpn/rex-pn",
+        np: "/canada/np/cnple",
+        allied: "/canada/allied/allied-health",
+      },
+    } as const;
+
+    for (const region of ["US", "CA"] as const) {
+      const specs = getHomeHeroTierPillLinkSpecs(region);
+      const exp = expectedPaths[region];
+      const byId = Object.fromEntries(specs.map((s) => [s.id, s])) as Record<string, (typeof specs)[number]>;
+
+      assert.equal(byId.rn.path, exp.rn);
+      assert.equal(byId.pn.path, exp.pn);
+      assert.equal(byId.np.path, exp.np);
+      assert.equal(byId.allied.path, exp.allied);
+      assert.equal(byId["new-grad"].path, "/pre-nursing");
+
+      assert.equal(byId.pn.tierPillLabelKey, region === "US" ? "home.conversion.tierPill.pnUS" : "home.conversion.tierPill.pnCA");
+      assert.equal(isWellFormedExamHubPath(byId.rn.path), true);
+      assert.equal(isWellFormedExamHubPath(byId.pn.path), true);
+      assert.equal(isWellFormedExamHubPath(byId.np.path), true);
+      assert.equal(isWellFormedExamHubPath(byId.allied.path), true);
+      assert.equal(isValidPath(byId["new-grad"].path), true);
     }
   });
 });

@@ -23,3 +23,26 @@ export function isExamHubMarketingPath(pathname: string): boolean {
   const country = parts[idx];
   return country ? isExamPathwayCountrySlug(country) : false;
 }
+
+export function canonicalExamHubPathFromPossiblyLocalizedPath(
+  pathname: string,
+): { locale: string; canonicalPath: string } | null {
+  const p = pathname.startsWith("/") ? pathname : `/${pathname}`;
+  const parts = p.split("/").filter(Boolean);
+  if (parts.length < 2) return null;
+
+  const maybeLocale = parts[0]!;
+  if (!isMarketingLocaleCode(maybeLocale) || maybeLocale === DEFAULT_MARKETING_LOCALE) {
+    return null;
+  }
+
+  const country = parts[1];
+  if (!country || !isExamPathwayCountrySlug(country)) {
+    return null;
+  }
+
+  return {
+    locale: maybeLocale,
+    canonicalPath: `/${parts.slice(1).join("/")}`,
+  };
+}

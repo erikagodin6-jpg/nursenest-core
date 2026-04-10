@@ -17,6 +17,8 @@ test("proxy matcher includes /app, /admin, and exam hub roots; auth-middleware u
   assert.match(proxySrc, /\/admin",/);
   assert.match(proxySrc, /\/us",/);
   assert.match(proxySrc, /\/canada",/);
+  assert.match(proxySrc, /\/:locale\/us",/);
+  assert.match(proxySrc, /\/:locale\/canada",/);
   assert.match(proxySrc, /matcher/);
 
   const am = readFileSync(join(dir, "lib", "auth-middleware.ts"), "utf8");

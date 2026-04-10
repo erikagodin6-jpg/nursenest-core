@@ -156,3 +156,28 @@ export function getExamNavStripItems(region: MarketingRegionToggle): ExamNavStri
 export function getExamPathwayHeroItems(region: MarketingRegionToggle): ExamPathwayHeroItem[] {
   return EXAM_PATHWAY_ORDER.map((id) => examPathwayHeroItemFor(region, id));
 }
+
+/** Hero tier pills (above-the-fold) — same hub paths as strip, `home.conversion.tierPill.*` label keys. */
+export type HomeHeroTierPillId = "rn" | "pn" | "np" | "allied" | "new-grad";
+
+export type HomeHeroTierPillLinkSpec = {
+  id: HomeHeroTierPillId;
+  /** Path without locale prefix (wrap with `withMarketingLocale`). */
+  path: string;
+  tierPillLabelKey: string;
+};
+
+/**
+ * Single source for homepage hero tier pills: RN, PN, NP, Allied, Pre-nursing.
+ * Prevents drift between hrefs, `labelKey`, and region toggle (US LPN vs CA RPN).
+ */
+export function getHomeHeroTierPillLinkSpecs(region: MarketingRegionToggle): HomeHeroTierPillLinkSpec[] {
+  const pnKey = region === "CA" ? "home.conversion.tierPill.pnCA" : "home.conversion.tierPill.pnUS";
+  return [
+    { id: "rn", path: marketingExamHubPath(region, "rn"), tierPillLabelKey: "home.conversion.tierPill.rn" },
+    { id: "pn", path: marketingExamHubPath(region, "pn"), tierPillLabelKey: pnKey },
+    { id: "np", path: marketingExamHubPath(region, "np"), tierPillLabelKey: "home.conversion.tierPill.np" },
+    { id: "allied", path: marketingExamHubPath(region, "allied"), tierPillLabelKey: "home.conversion.tierPill.allied" },
+    { id: "new-grad", path: "/pre-nursing", tierPillLabelKey: "home.conversion.tierPill.preNursing" },
+  ];
+}

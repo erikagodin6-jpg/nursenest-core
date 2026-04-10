@@ -20,14 +20,25 @@ import {
   MARKETING_PRIMARY_CTA_CLASS,
   MARKETING_SECONDARY_CTA_CLASS,
 } from "@/lib/theme/marketing-hero-pattern";
-import { marketingExamHubPath, type CountryExamOfferingId } from "@/lib/marketing/country-exam-offerings";
+import {
+  getHomeHeroTierPillLinkSpecs,
+  type HomeHeroTierPillId,
+} from "@/lib/marketing/country-exam-offerings";
 import type { LucideIcon } from "lucide-react";
 
 /** Learner home, question UI, session reports — instant product comprehension. */
 const PREVIEW_SLIDE_INDICES: readonly number[] = [9, 0, 11];
 
+const HOME_HERO_TIER_ICONS: Record<HomeHeroTierPillId, LucideIcon> = {
+  rn: Stethoscope,
+  pn: HeartPulse,
+  np: Award,
+  allied: Dna,
+  "new-grad": BookOpen,
+};
+
 type TierEntry = {
-  id: string;
+  id: HomeHeroTierPillId;
   icon: LucideIcon;
   /** i18n key — PN uses US vs CA variants in `tierPillLabelKey`. */
   tierPillLabelKey: string;
@@ -55,21 +66,12 @@ export function HomeConversionHero() {
   const loc = (path: string) => withMarketingLocale(locale, path);
 
   const TIERS: TierEntry[] = useMemo((): TierEntry[] => {
-    const hub = (id: CountryExamOfferingId) => (l: (p: string) => string) => l(marketingExamHubPath(region, id));
-    const pnKey =
-      region === "CA" ? "home.conversion.tierPill.pnCA" : "home.conversion.tierPill.pnUS";
-    return [
-      { id: "rn", icon: Stethoscope, tierPillLabelKey: "home.conversion.tierPill.rn", href: hub("rn") },
-      { id: "pn", icon: HeartPulse, tierPillLabelKey: pnKey, href: hub("pn") },
-      { id: "np", icon: Award, tierPillLabelKey: "home.conversion.tierPill.np", href: hub("np") },
-      { id: "allied", icon: Dna, tierPillLabelKey: "home.conversion.tierPill.allied", href: hub("allied") },
-      {
-        id: "new-grad",
-        icon: BookOpen,
-        tierPillLabelKey: "home.conversion.tierPill.preNursing",
-        href: (l) => l("/pre-nursing"),
-      },
-    ];
+    return getHomeHeroTierPillLinkSpecs(region).map((spec) => ({
+      id: spec.id,
+      icon: HOME_HERO_TIER_ICONS[spec.id],
+      tierPillLabelKey: spec.tierPillLabelKey,
+      href: (l: (p: string) => string) => l(spec.path),
+    }));
   }, [region]);
 
   return (

@@ -469,7 +469,7 @@ export function PricingPageClient({
           <p className="mt-2 rounded-md border border-border/80 bg-muted/40 px-3 py-2 font-mono text-xs text-muted-foreground">{checkoutOpsHint}</p>
         ) : null}
 
-        <div className="mt-6 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-section-alt)] p-4 text-sm">
+        <div className="mt-6 rounded-xl border border-[var(--accent-surface-b-border)] bg-[var(--accent-surface-b)] p-4 text-sm">
           <label className="flex cursor-pointer gap-3">
             <input
               type="checkbox"

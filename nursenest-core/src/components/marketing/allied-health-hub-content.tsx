@@ -91,7 +91,7 @@ export function AlliedHealthRegionStrip({
 }) {
   return (
     <section
-      className="mt-16 rounded-[1.75rem] border border-[var(--border-subtle)] bg-[var(--bg-section)] p-6 shadow-[var(--shadow-card)] sm:p-10"
+      className="mt-16 rounded-[1.75rem] border border-[var(--trust-surface-border)] bg-[var(--trust-surface)] p-6 shadow-[var(--shadow-card)] sm:p-10"
       aria-labelledby="allied-region-heading"
     >
       <div className="flex flex-wrap items-end justify-between gap-4">

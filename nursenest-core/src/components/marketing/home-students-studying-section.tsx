@@ -20,7 +20,7 @@ export function HomeStudentsStudyingSection() {
 
   return (
     <section
-      className="border-t border-[var(--border-subtle)] bg-[var(--nn-presentation-wash)] pt-7 pb-10 md:pt-9 md:pb-12"
+      className="border-t border-[var(--trust-surface-border)] bg-[var(--trust-surface)] pt-7 pb-10 md:pt-9 md:pb-12"
       aria-labelledby="home-students-studying-heading"
       data-testid="section-home-students-studying"
     >

@@ -105,7 +105,7 @@ export default async function AlliedHealthHubPage() {
           <BreadcrumbTrail items={crumbs} />
         </div>
 
-        <header className="relative overflow-hidden rounded-[1.75rem] border border-[var(--border-strong)] bg-gradient-to-br from-[var(--accent-soft)] via-[var(--theme-card-bg)] to-[var(--bg-section-alt)] px-6 py-[var(--space-hero-bottom)] shadow-[var(--shadow-elevated)] sm:px-11 sm:py-[clamp(2.5rem,5vw,3.5rem)]">
+        <header className="relative overflow-hidden rounded-[1.75rem] border border-[var(--border-strong)] bg-[var(--hero-branded-wash)] px-6 py-[var(--space-hero-bottom)] shadow-[var(--shadow-elevated)] sm:px-11 sm:py-[clamp(2.5rem,5vw,3.5rem)]">
           <div
             className="pointer-events-none absolute -right-24 -top-24 h-64 w-64 rounded-full bg-primary/15 blur-3xl"
             aria-hidden
@@ -153,7 +153,7 @@ export default async function AlliedHealthHubPage() {
         </header>
 
         <section
-          className="rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-section)] px-5 py-6 shadow-[var(--shadow-card)] sm:px-8 sm:py-8"
+          className="rounded-2xl border border-[var(--trust-surface-border)] bg-[var(--trust-surface)] px-5 py-6 shadow-[var(--shadow-card)] sm:px-8 sm:py-8"
           aria-labelledby="allied-who-heading"
         >
           <h2 id="allied-who-heading" className="nn-marketing-h3 text-[var(--theme-heading-text)]">
