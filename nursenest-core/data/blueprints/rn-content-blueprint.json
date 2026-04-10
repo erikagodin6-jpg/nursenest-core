@@ -458,7 +458,7 @@
       "topicSlug": "diuretics",
       "bodySystem": "Renal",
       "priorityWeight": 4,
-      "lessonTargetCount": 1,
+      "lessonTargetCount": 2,
       "questionTargetCount": 30,
       "recommendedQuestionTypes": [
         "MCQ",
@@ -559,7 +559,7 @@
       "topicSlug": "digoxin-monitoring",
       "bodySystem": "Cardiovascular",
       "priorityWeight": 5,
-      "lessonTargetCount": 1,
+      "lessonTargetCount": 2,
       "questionTargetCount": 30,
       "recommendedQuestionTypes": [
         "MCQ",
@@ -1195,7 +1195,7 @@
       "topicSlug": "croup-vs-epiglottitis",
       "bodySystem": "Respiratory",
       "priorityWeight": 5,
-      "lessonTargetCount": 1,
+      "lessonTargetCount": 2,
       "questionTargetCount": 30,
       "recommendedQuestionTypes": [
         "MCQ",
@@ -1799,7 +1799,7 @@
       "bodySystem": "Immune",
       "priorityWeight": 5,
       "lessonTargetCount": 1,
-      "questionTargetCount": 30,
+      "questionTargetCount": 20,
       "recommendedQuestionTypes": [
         "MCQ",
         "SATA",
@@ -2120,7 +2120,7 @@
       "bodySystem": "Respiratory",
       "priorityWeight": 5,
       "lessonTargetCount": 1,
-      "questionTargetCount": 30,
+      "questionTargetCount": 20,
       "recommendedQuestionTypes": [
         "MCQ",
         "SATA",
@@ -2145,7 +2145,7 @@
       "bodySystem": "Cardiovascular",
       "priorityWeight": 5,
       "lessonTargetCount": 1,
-      "questionTargetCount": 30,
+      "questionTargetCount": 20,
       "recommendedQuestionTypes": [
         "MCQ",
         "SATA",
@@ -2579,7 +2579,7 @@
       "bodySystem": "Multisystem",
       "priorityWeight": 5,
       "lessonTargetCount": 1,
-      "questionTargetCount": 30,
+      "questionTargetCount": 20,
       "recommendedQuestionTypes": [
         "MCQ",
         "Priority",
@@ -2602,7 +2602,7 @@
       "topicSlug": "anaphylaxis-management",
       "bodySystem": "Immune",
       "priorityWeight": 5,
-      "lessonTargetCount": 1,
+      "lessonTargetCount": 2,
       "questionTargetCount": 30,
       "recommendedQuestionTypes": [
         "MCQ",
@@ -2701,7 +2701,7 @@
       "bodySystem": "Multisystem",
       "priorityWeight": 5,
       "lessonTargetCount": 1,
-      "questionTargetCount": 30,
+      "questionTargetCount": 20,
       "recommendedQuestionTypes": [
         "MCQ",
         "SATA",
@@ -2746,7 +2746,7 @@
     {
       "domain": "Emergency / Critical Care",
       "subdomain": "Cardiac Emergencies",
-      "topic": "Acute Myocardial Infarction: STEMI Recognition and MONA Protocol",
+      "topic": "Acute Myocardial Infarction: First 60-Minute Emergency Recognition and MONA/PCI Workflow",
       "topicSlug": "acute-mi-emergency",
       "bodySystem": "Cardiovascular",
       "priorityWeight": 5,
@@ -2766,7 +2766,9 @@
         "MONA",
         "PCI",
         "us-rn",
-        "canadian-rn"
+        "canadian-rn",
+        "scope-emergency-first-60-min",
+        "scope-mi-acute-only"
       ]
     },
     {
@@ -2826,7 +2828,7 @@
       "topicSlug": "iv-fluid-types",
       "bodySystem": "Renal",
       "priorityWeight": 5,
-      "lessonTargetCount": 1,
+      "lessonTargetCount": 2,
       "questionTargetCount": 30,
       "recommendedQuestionTypes": [
         "MCQ",
@@ -2852,7 +2854,7 @@
       "topicSlug": "sodium-imbalances",
       "bodySystem": "Renal",
       "priorityWeight": 5,
-      "lessonTargetCount": 1,
+      "lessonTargetCount": 2,
       "questionTargetCount": 30,
       "recommendedQuestionTypes": [
         "MCQ",
@@ -2877,7 +2879,7 @@
       "topicSlug": "potassium-imbalances",
       "bodySystem": "Renal",
       "priorityWeight": 5,
-      "lessonTargetCount": 1,
+      "lessonTargetCount": 2,
       "questionTargetCount": 35,
       "recommendedQuestionTypes": [
         "MCQ",
@@ -3098,7 +3100,7 @@
       "bodySystem": "Endocrine",
       "priorityWeight": 5,
       "lessonTargetCount": 1,
-      "questionTargetCount": 30,
+      "questionTargetCount": 20,
       "recommendedQuestionTypes": [
         "MCQ",
         "SATA",
@@ -3171,7 +3173,7 @@
       "topicSlug": "hyperthyroidism-thyroid-storm",
       "bodySystem": "Endocrine",
       "priorityWeight": 5,
-      "lessonTargetCount": 1,
+      "lessonTargetCount": 2,
       "questionTargetCount": 30,
       "recommendedQuestionTypes": [
         "MCQ",
@@ -3291,7 +3293,7 @@
     {
       "domain": "Cardiac",
       "subdomain": "Myocardial Infarction",
-      "topic": "Myocardial Infarction: STEMI vs NSTEMI and Post-MI Nursing Care",
+      "topic": "Myocardial Infarction: STEMI vs NSTEMI and Post-MI Ongoing Nursing Care",
       "topicSlug": "myocardial-infarction",
       "bodySystem": "Cardiovascular",
       "priorityWeight": 5,
@@ -3311,7 +3313,9 @@
         "troponin",
         "PCI",
         "us-rn",
-        "canadian-rn"
+        "canadian-rn",
+        "scope-post-mi-ongoing-care",
+        "scope-mi-non-emergent-continuation"
       ]
     },
     {
@@ -3461,8 +3465,8 @@
     {
       "domain": "Cardiac",
       "subdomain": "Thromboembolism",
-      "topic": "DVT and Pulmonary Embolism: Prevention, Diagnosis, and Management",
-      "topicSlug": "dvt-pulmonary-embolism",
+      "topic": "Deep Vein Thrombosis (DVT): Prevention, Diagnosis, and Anticoagulation Management",
+      "topicSlug": "deep-vein-thrombosis-management",
       "bodySystem": "Cardiovascular",
       "priorityWeight": 5,
       "lessonTargetCount": 2,
@@ -3475,12 +3479,13 @@
       ],
       "tags": [
         "DVT",
-        "PE",
         "Virchow-triad",
         "anticoagulation",
         "CTPA",
         "us-rn",
-        "canadian-rn"
+        "canadian-rn",
+        "scope-dvt-only",
+        "no-acute-pe-hemodynamics"
       ]
     },
     {
@@ -3590,7 +3595,7 @@
       "topicSlug": "pleural-effusion-pneumothorax",
       "bodySystem": "Respiratory",
       "priorityWeight": 5,
-      "lessonTargetCount": 1,
+      "lessonTargetCount": 2,
       "questionTargetCount": 30,
       "recommendedQuestionTypes": [
         "MCQ",
@@ -3660,7 +3665,7 @@
     {
       "domain": "Respiratory",
       "subdomain": "Vascular",
-      "topic": "Pulmonary Embolism: Risk Factors, Diagnosis, and Emergency Management",
+      "topic": "Pulmonary Embolism: Acute Hemodynamic Instability Recognition and Emergency Management",
       "topicSlug": "pulmonary-embolism",
       "bodySystem": "Respiratory",
       "priorityWeight": 5,
@@ -3679,7 +3684,10 @@
         "anticoagulation",
         "hemodynamic-compromise",
         "us-rn",
-        "canadian-rn"
+        "canadian-rn",
+        "scope-acute-pe-only",
+        "hemodynamic-instability",
+        "no-dvt-prophylaxis-core"
       ]
     },
     {
@@ -3981,7 +3989,7 @@
       "topicSlug": "seizure-disorders",
       "bodySystem": "Neurological",
       "priorityWeight": 5,
-      "lessonTargetCount": 1,
+      "lessonTargetCount": 2,
       "questionTargetCount": 30,
       "recommendedQuestionTypes": [
         "MCQ",
@@ -4321,7 +4329,7 @@
       "bodySystem": "Gastrointestinal",
       "priorityWeight": 5,
       "lessonTargetCount": 1,
-      "questionTargetCount": 30,
+      "questionTargetCount": 20,
       "recommendedQuestionTypes": [
         "MCQ",
         "SATA",
@@ -4490,7 +4498,7 @@
       "bodySystem": "Hematologic",
       "priorityWeight": 5,
       "lessonTargetCount": 1,
-      "questionTargetCount": 30,
+      "questionTargetCount": 20,
       "recommendedQuestionTypes": [
         "MCQ",
         "SATA",
@@ -4564,7 +4572,7 @@
       "bodySystem": "Hematologic",
       "priorityWeight": 5,
       "lessonTargetCount": 1,
-      "questionTargetCount": 30,
+      "questionTargetCount": 20,
       "recommendedQuestionTypes": [
         "MCQ",
         "SATA",

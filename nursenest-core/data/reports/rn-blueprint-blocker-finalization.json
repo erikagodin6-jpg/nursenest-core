@@ -1,0 +1,31 @@
+{
+  "updatedTopics": [
+    "acute-mi-emergency",
+    "myocardial-infarction",
+    "dvt-pulmonary-embolism=>deep-vein-thrombosis-management",
+    "pulmonary-embolism"
+  ],
+  "lessonIncreases": [
+    "diuretics",
+    "digoxin-monitoring",
+    "croup-vs-epiglottitis",
+    "anaphylaxis-management",
+    "iv-fluid-types",
+    "sodium-imbalances",
+    "potassium-imbalances",
+    "hyperthyroidism-thyroid-storm",
+    "pleural-effusion-pneumothorax",
+    "seizure-disorders"
+  ],
+  "questionReductionsTo20": [
+    "standard-precautions-ppe",
+    "respiratory-assessment",
+    "cardiovascular-assessment",
+    "primary-survey-abcde",
+    "overdose-toxicology",
+    "hypoglycemia",
+    "gi-bleeding",
+    "dic-coagulation",
+    "transfusion-reactions"
+  ]
+}
