@@ -436,6 +436,328 @@
       "rationale": "Membrane receptor proteins are the binding sites (lock-and-key model) for hormones (e.g., insulin binds to insulin receptors), drugs (e.g., beta-blockers bind to beta-adrenergic receptors), and neurotransmitters (e.g., acetylcholine binds to cholinergic receptors). This is the molecular basis for pharmacology — drugs work by activating or blocking specific receptors.",
       "difficultyLevel": "applied",
       "keyConceptTested": "membrane receptors — basis of pharmacology"
+    },
+    {
+      "questionId": "cell-structure-and-function-Q23",
+      "stem": "The cytoskeleton of a cell provides all of the following EXCEPT:",
+      "options": {
+        "A": "Structural support and shape maintenance",
+        "B": "Intracellular transport tracks for vesicles and organelles",
+        "C": "Generation of ATP through cellular respiration",
+        "D": "Enables cell movement and division via spindle fibers"
+      },
+      "correctAnswer": "C",
+      "rationale": "The cytoskeleton (microtubules, microfilaments, and intermediate filaments) provides structural support, intracellular transport tracks (microtubules for vesicles/organelles), and enables cell division (mitotic spindle) and movement (actin-based). ATP generation is the function of mitochondria via cellular respiration — the cytoskeleton does not produce energy.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "cytoskeleton functions"
+    },
+    {
+      "questionId": "cell-structure-and-function-Q24",
+      "stem": "Microtubules are a component of the cytoskeleton. They are critical for cell division because they:",
+      "options": {
+        "A": "Produce ATP needed to pull chromosomes apart",
+        "B": "Form the mitotic spindle that physically separates chromosomes during cell division",
+        "C": "Replicate DNA in the nucleus during S phase",
+        "D": "Provide the structural backbone of the nuclear envelope"
+      },
+      "correctAnswer": "B",
+      "rationale": "Microtubules form the mitotic spindle — a structure of dynamic protein polymers that attaches to chromosomes at kinetochores and physically pulls sister chromatids to opposite poles of the cell during anaphase. Taxane drugs (e.g., paclitaxel) stabilize microtubules abnormally, preventing spindle disassembly and blocking cell division.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "microtubules — mitotic spindle; taxane mechanism"
+    },
+    {
+      "questionId": "cell-structure-and-function-Q25",
+      "stem": "Cilia on the surface of respiratory epithelial cells differ from the flagellum of a sperm cell in that:",
+      "options": {
+        "A": "Cilia use ATP while flagella do not require energy",
+        "B": "Cilia are numerous and short, beating rhythmically; flagella are single and long, propelling the cell",
+        "C": "Cilia propel the cell; flagella move substances across the cell surface",
+        "D": "Cilia are found only in non-dividing cells; flagella in dividing cells"
+      },
+      "correctAnswer": "B",
+      "rationale": "Cilia are multiple, short, hair-like projections that beat in coordinated waves to move substances across a cell surface (e.g., mucus in airways). Flagella are typically single, long whip-like structures that propel the cell itself (e.g., sperm motility). Both use ATP through dynein motor proteins and have the same 9+2 microtubule arrangement.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "cilia vs flagella — structure and function"
+    },
+    {
+      "questionId": "cell-structure-and-function-Q26",
+      "stem": "Peroxisomes in the liver are important for drug detoxification because they:",
+      "options": {
+        "A": "Package detoxified drugs in vesicles for exocytosis",
+        "B": "Break down harmful hydrogen peroxide and oxidize toxic substances using catalase and oxidases",
+        "C": "Synthesize the enzymes used by lysosomes to break down cellular waste",
+        "D": "Transport drugs across the plasma membrane using ATP-driven pumps"
+      },
+      "correctAnswer": "B",
+      "rationale": "Peroxisomes contain oxidative enzymes (oxidases) that generate hydrogen peroxide (H₂O₂) while breaking down fatty acids and detoxifying harmful substances. Catalase within the peroxisome immediately breaks down H₂O₂ into water and O₂, preventing oxidative damage. This is especially active in liver cells (hepatocytes) that process drugs and alcohol.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "peroxisomes — oxidative detoxification; catalase"
+    },
+    {
+      "questionId": "cell-structure-and-function-Q27",
+      "stem": "In muscle cells, the smooth ER is called the sarcoplasmic reticulum. Its specialized function is to:",
+      "options": {
+        "A": "Produce the myosin proteins used in muscle contraction",
+        "B": "Store and release calcium ions that trigger muscle contraction",
+        "C": "Generate ATP for the energy-intensive process of contraction",
+        "D": "Remove waste products of contraction from the cytoplasm"
+      },
+      "correctAnswer": "B",
+      "rationale": "The sarcoplasmic reticulum (SR) is the specialized smooth ER of muscle cells. Its primary function is to store and release Ca²⁺ ions. A nerve signal triggers Ca²⁺ release from the SR → Ca²⁺ binds troponin → actin-myosin crossbridges form → contraction. After contraction, Ca²⁺ is pumped back into the SR. Calcium channel blockers can affect this process.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "sarcoplasmic reticulum — Ca²⁺ storage for muscle contraction"
+    },
+    {
+      "questionId": "cell-structure-and-function-Q28",
+      "stem": "Cholesterol is an important component of the plasma membrane because it:",
+      "options": {
+        "A": "Acts as a receptor for hormones and drugs",
+        "B": "Provides the phospholipid bilayer's hydrophilic outer surface",
+        "C": "Stabilizes membrane fluidity, preventing it from becoming too rigid in cold or too fluid in heat",
+        "D": "Generates ATP to maintain the membrane potential"
+      },
+      "correctAnswer": "C",
+      "rationale": "Cholesterol molecules are interspersed between phospholipids in the bilayer. They act as fluidity buffers: at low temperatures, cholesterol prevents phospholipids from packing too tightly (preventing rigidity); at high temperatures, cholesterol dampens excessive membrane fluidity. This is why membrane function is temperature-sensitive and why cells maintain precise internal temperature.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "cholesterol — membrane fluidity buffer"
+    },
+    {
+      "questionId": "cell-structure-and-function-Q29",
+      "stem": "The glycocalyx is a carbohydrate-rich coat on the outer surface of the plasma membrane. It functions primarily in:",
+      "options": {
+        "A": "Energy production through glycolysis",
+        "B": "Cell recognition, cell-to-cell communication, and immune identity",
+        "C": "Protein synthesis on the outer membrane surface",
+        "D": "Transporting lipids from the cell to the bloodstream"
+      },
+      "correctAnswer": "B",
+      "rationale": "The glycocalyx is formed by carbohydrates linked to membrane proteins (glycoproteins) and lipids (glycolipids). It serves as a molecular 'name tag' for cell recognition — enabling immune cells to identify 'self' vs 'foreign,' facilitating cell-to-cell adhesion, and allowing receptor-ligand binding. ABO blood typing is based on glycocalyx antigens on RBCs.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "glycocalyx — cell recognition and identity; ABO blood types"
+    },
+    {
+      "questionId": "cell-structure-and-function-Q30",
+      "stem": "The proteasome is a cellular structure responsible for:",
+      "options": {
+        "A": "Synthesizing proteins from mRNA templates",
+        "B": "Breaking down misfolded or damaged proteins marked with ubiquitin",
+        "C": "Transporting newly made proteins from the rough ER to the Golgi",
+        "D": "Storing proteins until they are needed for secretion"
+      },
+      "correctAnswer": "B",
+      "rationale": "The proteasome is a large protein complex that degrades ubiquitin-tagged proteins — typically misfolded, damaged, or regulatory proteins that must be removed. This 'quality control' system prevents accumulation of defective proteins. Proteasome dysfunction is implicated in neurodegenerative diseases (Parkinson's, Alzheimer's). Proteasome inhibitors (e.g., bortezomib) are used in multiple myeloma.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "proteasome — ubiquitin-proteasome protein degradation"
+    },
+    {
+      "questionId": "cell-structure-and-function-Q31",
+      "stem": "Autophagy is a cellular process in which:",
+      "options": {
+        "A": "The cell generates energy by oxidizing fatty acids in peroxisomes",
+        "B": "The cell engulfs and destroys its own damaged organelles by routing them to lysosomes",
+        "C": "A cell self-destructs in a programmed, orderly manner (apoptosis)",
+        "D": "Cells divide to replace neighboring cells that have died"
+      },
+      "correctAnswer": "B",
+      "rationale": "Auto- = self; -phagy = eating. Autophagy = 'self-eating' — a process in which the cell wraps damaged organelles in an autophagosome membrane and delivers them to lysosomes for enzymatic degradation and recycling. This is essential for cellular housekeeping, particularly during starvation (recycling nutrients) and in clearing damaged organelles. Defective autophagy is linked to neurodegeneration.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "autophagy — self-digestion of organelles via lysosomes"
+    },
+    {
+      "questionId": "cell-structure-and-function-Q32",
+      "stem": "Reactive oxygen species (ROS) are produced as a byproduct of mitochondrial respiration. They are clinically relevant because they:",
+      "options": {
+        "A": "Provide additional ATP when oxygen supply is adequate",
+        "B": "Can damage DNA, proteins, and membrane lipids, contributing to aging and cancer",
+        "C": "Signal the nucleus to increase protein synthesis during exercise",
+        "D": "Stimulate red blood cell production in bone marrow"
+      },
+      "correctAnswer": "B",
+      "rationale": "ROS (superoxide, hydrogen peroxide, hydroxyl radicals) are produced during mitochondrial electron transport. They are highly reactive and can oxidatively damage DNA, proteins, and lipid membranes — a process called oxidative stress. Antioxidants (vitamin C, E, glutathione) neutralize ROS. Excessive ROS damage contributes to aging, atherosclerosis, neurodegenerative disease, and cancer.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "reactive oxygen species — oxidative stress; clinical implications"
+    },
+    {
+      "questionId": "cell-structure-and-function-Q33",
+      "stem": "Stem cells are clinically valuable because they are capable of:",
+      "options": {
+        "A": "Producing large amounts of ATP without requiring oxygen",
+        "B": "Indefinite self-renewal and differentiation into multiple specialized cell types",
+        "C": "Repairing DNA mutations in fully differentiated neighboring cells",
+        "D": "Secreting growth factors that suppress cancer cell division"
+      },
+      "correctAnswer": "B",
+      "rationale": "Stem cells are defined by two key properties: (1) self-renewal — the ability to divide and produce more stem cells, and (2) differentiation potential — the ability to give rise to specialized cell types. This makes them candidates for regenerative therapies (bone marrow transplants are the established example). Pluripotent stem cells can form any cell type; multipotent stem cells are more restricted (e.g., hematopoietic stem cells produce only blood cells).",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "stem cells — self-renewal and differentiation"
+    },
+    {
+      "questionId": "cell-structure-and-function-Q34",
+      "stem": "Which cellular structure anchors the mitotic spindle and organizes microtubule assembly during cell division?",
+      "options": {
+        "A": "Nucleolus",
+        "B": "Centrosome (containing centrioles)",
+        "C": "Rough endoplasmic reticulum",
+        "D": "Golgi apparatus"
+      },
+      "correctAnswer": "B",
+      "rationale": "The centrosome, which contains a pair of centrioles, is the main microtubule-organizing center of the cell. During mitosis, the centrosome duplicates and each moves to an opposite pole, organizing the mitotic spindle. Microtubules grow from the centrosomes to attach to chromosomes. The nucleolus makes rRNA. Rough ER synthesizes secretory proteins.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "centrosome — microtubule organizing center; mitotic spindle"
+    },
+    {
+      "questionId": "cell-structure-and-function-Q35",
+      "stem": "During an ischemic event, cellular injury begins with failure of the Na⁺/K⁺ ATPase pump. In which cellular region does this pump reside?",
+      "options": {
+        "A": "Nuclear envelope",
+        "B": "Plasma membrane",
+        "C": "Golgi apparatus membrane",
+        "D": "Mitochondrial inner membrane"
+      },
+      "correctAnswer": "B",
+      "rationale": "The Na⁺/K⁺ ATPase pump is an integral protein embedded in the plasma membrane (cell membrane). It uses ATP to pump Na⁺ out of and K⁺ into the cell. When ischemia depletes ATP, this pump fails — Na⁺ accumulates intracellularly, water follows osmotically, and the cell swells. This is one of the earliest events in ischemic cell injury.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "Na⁺/K⁺ pump location — plasma membrane; ischemia sequence"
+    },
+    {
+      "questionId": "cell-structure-and-function-Q36",
+      "stem": "The process by which a cell engulfs extracellular material by folding the plasma membrane around it to form an intracellular vesicle is called:",
+      "options": {
+        "A": "Exocytosis",
+        "B": "Endocytosis",
+        "C": "Autophagy",
+        "D": "Apoptosis"
+      },
+      "correctAnswer": "B",
+      "rationale": "Endocytosis = the cell membrane folds inward around extracellular material, pinching off to form an intracellular vesicle (endosome). Forms include phagocytosis (large particles), pinocytosis (fluid), and receptor-mediated endocytosis (specific molecules). Exocytosis = vesicles fuse with membrane to release contents out. Autophagy = digestion of own organelles. Apoptosis = programmed cell death.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "endocytosis definition"
+    },
+    {
+      "questionId": "cell-structure-and-function-Q37",
+      "stem": "Karyotyping is a laboratory technique that examines a cell's chromosomes. It is performed on cells during which phase of mitosis, when chromosomes are most condensed and visible?",
+      "options": {
+        "A": "Interphase (G1)",
+        "B": "S phase",
+        "C": "Metaphase",
+        "D": "Telophase"
+      },
+      "correctAnswer": "C",
+      "rationale": "Chromosomes are maximally condensed and individually distinguishable during metaphase, when they are also aligned at the metaphase plate. Karyotyping arrests cells in metaphase (using colchicine, a microtubule inhibitor) to photograph and arrange chromosomes for analysis. This technique detects numerical abnormalities (trisomy 21) and structural rearrangements.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "karyotyping — metaphase; chromosomes condensed"
+    },
+    {
+      "questionId": "cell-structure-and-function-Q38",
+      "stem": "A cell in the G0 phase of the cell cycle is:",
+      "options": {
+        "A": "Actively replicating its DNA",
+        "B": "Preparing to enter mitosis",
+        "C": "In a quiescent, non-dividing state",
+        "D": "Undergoing apoptosis"
+      },
+      "correctAnswer": "C",
+      "rationale": "G0 (Gap zero) is a non-dividing, quiescent state. Cells exit the active cell cycle and enter G0 when they are terminally differentiated (neurons, cardiac muscle) or when growth signals are absent. G0 cells can re-enter the cycle if stimulated (e.g., wound repair). This is distinct from apoptosis (programmed death) or active cell cycle phases.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "G0 phase — quiescent non-dividing state"
+    },
+    {
+      "questionId": "cell-structure-and-function-Q39",
+      "stem": "A research team develops a drug that blocks nuclear pores. What cellular process would be most directly impaired?",
+      "options": {
+        "A": "Lipid synthesis in the smooth ER",
+        "B": "Transport of mRNA from the nucleus to the cytoplasm for translation",
+        "C": "Protein packaging in the Golgi apparatus",
+        "D": "ATP production in mitochondria"
+      },
+      "correctAnswer": "B",
+      "rationale": "Nuclear pores regulate the bidirectional transport of molecules between the nucleus and cytoplasm. Blocking them would prevent mRNA (transcribed in the nucleus) from exiting to ribosomes in the cytoplasm — halting protein synthesis. It would also block proteins needed by the nucleus (DNA polymerases, histones) from entering. Smooth ER, Golgi, and mitochondria operate outside the nuclear envelope.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "nuclear pores — mRNA export; protein import"
+    },
+    {
+      "questionId": "cell-structure-and-function-Q40",
+      "stem": "Which of the following best describes the concept of 'cell senescence'?",
+      "options": {
+        "A": "The process by which cells divide more rapidly with age",
+        "B": "A state in which cells permanently stop dividing but remain metabolically active and secrete inflammatory factors",
+        "C": "Programmed death of cells following completion of their functional lifespan",
+        "D": "The loss of cell membrane integrity in aging tissues"
+      },
+      "correctAnswer": "B",
+      "rationale": "Cellular senescence is a stress response in which cells permanently arrest their cell cycle (stop dividing) but do not die. Senescent cells remain alive and secrete pro-inflammatory cytokines and proteases (the senescence-associated secretory phenotype, SASP). Accumulation of senescent cells contributes to aging and age-related diseases. This is distinct from apoptosis (cell death) or normal cell cycle arrest.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "cell senescence — permanent cell cycle arrest; aging"
+    },
+    {
+      "questionId": "cell-structure-and-function-Q41",
+      "stem": "Microfilaments (actin filaments) in the cytoskeleton are responsible for:",
+      "options": {
+        "A": "Forming the mitotic spindle during cell division",
+        "B": "Cell motility, shape changes, and muscle contraction at the molecular level",
+        "C": "Providing a structural scaffold for the nuclear envelope",
+        "D": "Transporting vesicles between the ER and Golgi apparatus"
+      },
+      "correctAnswer": "B",
+      "rationale": "Microfilaments are made of actin polymers and are responsible for cell motility (lamellipodia, filopodia), shape changes during cytokinesis (cleavage furrow), and are the basis of muscle contraction (actin-myosin interaction in sarcomeres). Microtubules form the mitotic spindle. Intermediate filaments reinforce the nuclear lamina. Microtubules also serve as vesicle transport tracks.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "microfilaments (actin) — cell motility and muscle contraction"
+    },
+    {
+      "questionId": "cell-structure-and-function-Q42",
+      "stem": "Which of the following is a correct statement about DNA and chromosomes?",
+      "options": {
+        "A": "Each chromosome contains a single gene",
+        "B": "Humans have 46 chromosomes arranged in 23 pairs in somatic (body) cells",
+        "C": "Chromosomes are only visible as distinct structures during interphase",
+        "D": "Each chromosome contains DNA from both parents simultaneously"
+      },
+      "correctAnswer": "B",
+      "rationale": "Human somatic (non-sex) cells contain 46 chromosomes in 23 homologous pairs (diploid). Each chromosome contains thousands of genes. Chromosomes become visible as distinct condensed structures during mitosis (M phase), not interphase (where they exist as diffuse chromatin). Each chromosome within a pair comes from one parent (one maternal, one paternal).",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "human chromosome number — 46 chromosomes; 23 pairs"
+    },
+    {
+      "questionId": "cell-structure-and-function-Q43",
+      "stem": "A patient with Wilson's disease accumulates toxic levels of copper in liver cells because the transport protein that normally exports copper is absent. This disease best illustrates the importance of:",
+      "options": {
+        "A": "Lysosomes for heavy metal storage",
+        "B": "Plasma membrane transport proteins for regulating intracellular ion concentrations",
+        "C": "Peroxisomes for oxidizing heavy metals",
+        "D": "Golgi apparatus for tagging metals with sorting signals"
+      },
+      "correctAnswer": "B",
+      "rationale": "Wilson's disease is caused by a mutation in the ATP7B gene, which encodes a copper-transporting ATPase (an active transporter in the plasma membrane). Without this transporter, copper accumulates in liver, brain, and other organs causing toxicity. This directly illustrates the role of membrane transport proteins in maintaining safe intracellular ion concentrations — an application of active transport biology.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "membrane transport proteins — Wilson's disease; ion homeostasis"
+    },
+    {
+      "questionId": "cell-structure-and-function-Q44",
+      "stem": "What distinguishes the two layers of the phospholipid bilayer in terms of their molecular orientation?",
+      "options": {
+        "A": "Hydrophilic phosphate heads face inward; hydrophobic fatty acid tails face outward toward the aqueous environments",
+        "B": "Hydrophilic phosphate heads face outward toward aqueous environments; hydrophobic tails face each other inward",
+        "C": "Both layers have hydrophobic heads on the outside and hydrophilic tails inside",
+        "D": "The two layers are chemically identical and face the same direction"
+      },
+      "correctAnswer": "B",
+      "rationale": "Each phospholipid has a hydrophilic (water-loving) head (phosphate group) and two hydrophobic (water-fearing) fatty acid tails. In the bilayer, hydrophilic heads face outward toward the aqueous extracellular fluid and cytoplasm, while hydrophobic tails face inward away from water. This arrangement is thermodynamically stable and creates the barrier properties of the membrane.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "phospholipid bilayer — hydrophilic heads out; hydrophobic tails in"
+    },
+    {
+      "questionId": "cell-structure-and-function-Q45",
+      "stem": "A chemotherapy drug inhibits topoisomerase II, an enzyme that relieves DNA strand tension during replication. Which cell cycle phase is most directly targeted?",
+      "options": {
+        "A": "G1 — cell growth and preparation",
+        "B": "S phase — DNA replication",
+        "C": "G2 — post-replication quality check",
+        "D": "M phase — chromosome segregation"
+      },
+      "correctAnswer": "B",
+      "rationale": "Topoisomerase II is essential during S phase, when DNA is being replicated. As the double helix unwinds for copying, it creates torsional stress ahead of the replication fork. Topoisomerase II cuts and re-joins DNA strands to relieve this tension. Inhibiting it (e.g., with etoposide, doxorubicin) causes DNA breaks that halt replication and trigger apoptosis — targeting rapidly dividing cancer cells in S phase.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "topoisomerase II — S phase; chemotherapy mechanism"
     }
   ]
 }

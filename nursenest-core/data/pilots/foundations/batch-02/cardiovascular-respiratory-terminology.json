@@ -245,17 +245,17 @@
     },
     {
       "questionId": "cardiovascular-respiratory-terminology-Q10",
-      "stem": "Thrombocytopenia is characterized by a:",
+      "stem": "Which condition correctly demonstrates use of the suffix \"-penia\" (meaning deficiency)?",
       "options": {
-        "A": "High white blood cell count",
-        "B": "Low red blood cell count",
-        "C": "Deficiency of platelets",
-        "D": "Excess of plasma proteins"
+        "A": "Leukocytosis — elevated white blood cell count",
+        "B": "Neutropenia — deficiency of neutrophils, increasing infection risk",
+        "C": "Polycythemia — excess red blood cells in circulation",
+        "D": "Erythropoiesis — production of red blood cells"
       },
-      "correctAnswer": "C",
-      "rationale": "Thromb/o = clot; cyt/o = cell; -penia = deficiency. Thrombocytes are platelets. Thrombocytopenia = abnormally low platelet count, increasing bleeding risk. Leukocytosis = high WBC count. Anemia = low RBC count or hemoglobin. Hyperproteinemia would be excess plasma proteins.",
+      "correctAnswer": "B",
+      "rationale": "Neutropenia contains the suffix -penia (deficiency): neutr/o = neutrophils (a type of white blood cell); -penia = deficiency. Neutropenia is defined as an absolute neutrophil count < 1500/μL and significantly increases infection susceptibility. This contrasts with leukocytosis (-osis = abnormal increase in WBCs) and polycythemia (poly- = many; excess RBCs). Erythropoiesis = -poiesis (production/formation), a different suffix.",
       "difficultyLevel": "foundational",
-      "keyConceptTested": "root thromb/o; suffix -penia; thrombocytes = platelets"
+      "keyConceptTested": "suffix -penia = deficiency; neutropenia example (distinct from thrombocytopenia)"
     },
     {
       "questionId": "cardiovascular-respiratory-terminology-Q11",
@@ -424,6 +424,328 @@
       "rationale": "Pulmonary = pertaining to the lungs; embolism = obstruction by an embolus (traveling clot or other material). A PE occurs when a clot (usually from a DVT) breaks free and lodges in a pulmonary artery, blocking blood flow to part of the lung. Pneumothorax = air in pleural space. Pneumonia = bacterial infection. Asthma = airway narrowing.",
       "difficultyLevel": "applied",
       "keyConceptTested": "pulmonary embolism — embolus definition"
+    },
+    {
+      "questionId": "cardiovascular-respiratory-terminology-Q23",
+      "stem": "The term 'pericarditis' refers to inflammation of the:",
+      "options": {
+        "A": "Heart muscle (myocardium)",
+        "B": "Inner lining of the heart chambers (endocardium)",
+        "C": "Outer fibrous sac surrounding the heart (pericardium)",
+        "D": "Heart valves"
+      },
+      "correctAnswer": "C",
+      "rationale": "Peri- = around; card/o = heart; -itis = inflammation. The pericardium is the double-walled fibrous sac surrounding the heart. Pericarditis causes sharp chest pain that worsens with lying flat and improves when leaning forward. Myocarditis = heart muscle. Endocarditis = inner lining. Valvulitis = valve inflammation.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "pericarditis — prefix peri-"
+    },
+    {
+      "questionId": "cardiovascular-respiratory-terminology-Q24",
+      "stem": "A patient's echocardiogram report notes 'cardiomegaly.' This finding indicates:",
+      "options": {
+        "A": "A thickened pericardial sac",
+        "B": "Enlargement of the heart",
+        "C": "Abnormal heart rhythm",
+        "D": "Decreased cardiac output"
+      },
+      "correctAnswer": "B",
+      "rationale": "Cardi/o = heart; -megaly = enlargement. Cardiomegaly = abnormal enlargement of the heart, seen on chest X-ray or echocardiogram. It is associated with chronic conditions such as heart failure, hypertension, or cardiomyopathy where the heart muscle remodels under chronic stress.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "cardiomegaly — suffix -megaly"
+    },
+    {
+      "questionId": "cardiovascular-respiratory-terminology-Q25",
+      "stem": "The term 'mitral regurgitation' means that the mitral valve is:",
+      "options": {
+        "A": "Narrowed and impedes blood flow from the left atrium to the left ventricle",
+        "B": "Incompetent and allows blood to flow backward from the left ventricle to the left atrium",
+        "C": "Infected and inflamed, reducing valve mobility",
+        "D": "Calcified and fused, requiring surgical replacement"
+      },
+      "correctAnswer": "B",
+      "rationale": "Regurgitation = backward flow. Mitral regurgitation means the mitral valve does not close properly, allowing blood to flow backward (regurgitate) from the left ventricle into the left atrium during ventricular contraction. Mitral stenosis = narrowing of the valve. Endocarditis can cause valve infection. Calcification can cause stenosis.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "regurgitation — backward flow through incompetent valve"
+    },
+    {
+      "questionId": "cardiovascular-respiratory-terminology-Q26",
+      "stem": "The abbreviation 'ECG' or 'EKG' stands for electrocardiogram. The root 'cardio' and suffix '-gram' in this term mean:",
+      "options": {
+        "A": "Study of heart electricity; a specialist who interprets it",
+        "B": "The heart; a recorded tracing or image",
+        "C": "Treatment of the heart; a type of medication",
+        "D": "The heart valves; a surgical procedure"
+      },
+      "correctAnswer": "B",
+      "rationale": "Electro- = electricity; cardi/o = heart; -gram = recorded tracing or image. An electrocardiogram is a recording (tracing) of the heart's electrical activity over time. -Graphy is the process; -gram is the result (the recording itself). Compare: echocardiography (process of recording heart images with sound) vs echocardiogram (the resulting image).",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "suffix -gram = recorded tracing; ECG/EKG word parts"
+    },
+    {
+      "questionId": "cardiovascular-respiratory-terminology-Q27",
+      "stem": "The coronary arteries supply blood to the:",
+      "options": {
+        "A": "Lungs and pulmonary circulation",
+        "B": "Heart muscle (myocardium) itself",
+        "C": "Great vessels including the aorta",
+        "D": "Inner lining of the heart (endocardium) only"
+      },
+      "correctAnswer": "B",
+      "rationale": "Coronary = crown-shaped; the coronary arteries encircle the heart like a crown and supply oxygenated blood to the myocardium (heart muscle) itself. Obstruction of a coronary artery causes myocardial ischemia and infarction. Pulmonary arteries supply the lungs. The endocardium is too thin to require its own dedicated vessels.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "coronary arteries — supply to myocardium"
+    },
+    {
+      "questionId": "cardiovascular-respiratory-terminology-Q28",
+      "stem": "A patient is coughing up blood-tinged sputum. The medical term for this symptom is:",
+      "options": {
+        "A": "Hematemesis",
+        "B": "Hematuria",
+        "C": "Hemoptysis",
+        "D": "Epistaxis"
+      },
+      "correctAnswer": "C",
+      "rationale": "Hem/o = blood; -ptysis = spitting. Hemoptysis = coughing up blood or blood-tinged secretions from the respiratory tract. Hematemesis = vomiting blood (-emesis = vomiting). Hematuria = blood in the urine. Epistaxis = nosebleed (from the nasal vessels, not the lower respiratory tract).",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "hemoptysis — hem/o + -ptysis"
+    },
+    {
+      "questionId": "cardiovascular-respiratory-terminology-Q29",
+      "stem": "Epistaxis is the medical term for:",
+      "options": {
+        "A": "Coughing up blood",
+        "B": "Nosebleed",
+        "C": "Blood in the sputum",
+        "D": "Vomiting blood"
+      },
+      "correctAnswer": "B",
+      "rationale": "Epistaxis = nosebleed; it refers to bleeding from the nasal mucosa. Anterior epistaxis (from Kiesselbach's plexus) is most common and usually self-limited. Hemoptysis = blood from the respiratory tract (coughing). Hematemesis = vomiting blood. Hemoptysis vs. epistaxis is clinically important — one is pulmonary, the other is nasal.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "epistaxis = nosebleed"
+    },
+    {
+      "questionId": "cardiovascular-respiratory-terminology-Q30",
+      "stem": "The term 'diaphoresis' in a nursing assessment refers to:",
+      "options": {
+        "A": "Difficulty breathing when lying flat",
+        "B": "Profuse sweating, often associated with pain or shock",
+        "C": "Bluish discoloration of the skin from low oxygen",
+        "D": "Crackling sounds heard in the lung bases"
+      },
+      "correctAnswer": "B",
+      "rationale": "Diaphoresis = profuse, often drenching sweating. It is a classic symptom accompanying myocardial infarction ('cold, clammy, diaphoretic'), severe pain, sepsis, or hypoglycemia. Orthopnea = difficulty breathing supine. Cyanosis = blue discoloration from hypoxia. Crackles (rales) are auscultated lung sounds.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "diaphoresis = profuse sweating"
+    },
+    {
+      "questionId": "cardiovascular-respiratory-terminology-Q31",
+      "stem": "Peripheral edema in a patient with heart failure is best explained at the terminology level as:",
+      "options": {
+        "A": "Hemothorax — blood pooling in the thoracic cavity",
+        "B": "Fluid accumulation in the interstitial spaces of the extremities due to elevated venous pressure",
+        "C": "Vasoconstriction reducing blood flow to the limbs",
+        "D": "Lymphangitis blocking return of lymphatic fluid"
+      },
+      "correctAnswer": "B",
+      "rationale": "Edema = swelling from fluid accumulation in tissue spaces. In right heart failure, elevated venous pressure forces fluid into the interstitial spaces of dependent areas (ankles, legs). Edema is distinct from hemothorax (blood in chest), vasoconstriction (reduced flow), or lymphangitis (lymphatic inflammation). Correctly distinguishing these terms prevents documentation errors.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "edema — definition; HF clinical context"
+    },
+    {
+      "questionId": "cardiovascular-respiratory-terminology-Q32",
+      "stem": "The suffix '-sclerosis' in the term 'arteriosclerosis' means:",
+      "options": {
+        "A": "Inflammation",
+        "B": "Hardening",
+        "C": "Narrowing",
+        "D": "Rupture"
+      },
+      "correctAnswer": "B",
+      "rationale": "Sclero- = hard; -sis = condition of. Arteriosclerosis = hardening of the arteries, a general term for loss of arterial elasticity with age or disease. Atherosclerosis is a specific type involving plaque. -Itis = inflammation. -Stenosis = narrowing (can occur as a consequence). -Rrhexis = rupture.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "suffix -sclerosis = hardening"
+    },
+    {
+      "questionId": "cardiovascular-respiratory-terminology-Q33",
+      "stem": "Phlebitis is correctly defined as:",
+      "options": {
+        "A": "A blood clot within a vein",
+        "B": "Inflammation of a vein",
+        "C": "Surgical removal of a vein",
+        "D": "Varicose enlargement of a vein"
+      },
+      "correctAnswer": "B",
+      "rationale": "Phleb/o = vein; -itis = inflammation. Phlebitis = inflammation of a vein, often at a peripheral IV site or from catheter irritation. Thrombophlebitis = phlebitis with an associated thrombus. Phlebectomy (-ectomy) = surgical removal. Varicose veins are dilated, tortuous veins — not primarily an inflammatory condition.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "phlebitis — phleb/o + -itis"
+    },
+    {
+      "questionId": "cardiovascular-respiratory-terminology-Q34",
+      "stem": "The term 'septicemia' refers to:",
+      "options": {
+        "A": "Local infection of a skin wound",
+        "B": "Bacterial or other organisms present in the bloodstream",
+        "C": "Inflammation of the peritoneum from abdominal infection",
+        "D": "Viral infection of the upper respiratory tract"
+      },
+      "correctAnswer": "B",
+      "rationale": "Septic/o = infected; -emia = blood condition. Septicemia = presence of pathogenic organisms (typically bacteria) in the bloodstream, capable of spreading infection throughout the body. It can lead to sepsis and septic shock. Cellulitis = local skin infection. Peritonitis = peritoneum inflammation. URI = upper respiratory infection.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "septicemia — septic/o + -emia"
+    },
+    {
+      "questionId": "cardiovascular-respiratory-terminology-Q35",
+      "stem": "Hypercapnia refers to an abnormally elevated level of which gas in the blood?",
+      "options": {
+        "A": "Oxygen (O₂)",
+        "B": "Nitrogen (N₂)",
+        "C": "Carbon dioxide (CO₂)",
+        "D": "Carbon monoxide (CO)"
+      },
+      "correctAnswer": "C",
+      "rationale": "Hyper- = elevated; capn/o = carbon dioxide; -ia = condition. Hypercapnia = elevated PaCO₂ in arterial blood, typically > 45 mmHg. It results from hypoventilation (inadequate CO₂ removal) and is a sign of respiratory failure. Hypoxemia = low O₂. Hypocarbia = low CO₂ (from hyperventilation).",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "hypercapnia — root capn/o = CO₂"
+    },
+    {
+      "questionId": "cardiovascular-respiratory-terminology-Q36",
+      "stem": "The term 'pleuritis' (pleurisy) refers to inflammation of the:",
+      "options": {
+        "A": "Lung parenchyma (air-exchanging tissue)",
+        "B": "Bronchial walls",
+        "C": "Pleural membranes lining the lung and thoracic wall",
+        "D": "Alveolar sacs"
+      },
+      "correctAnswer": "C",
+      "rationale": "Pleur/o = pleura; -itis = inflammation. Pleuritis = inflammation of the pleural membranes (visceral and parietal pleura). It causes sharp, stabbing chest pain that worsens with breathing (pleuritic chest pain) because the inflamed surfaces rub against each other. Pneumonia = parenchymal infection. Bronchitis = bronchial inflammation. Alveolitis = alveolar inflammation.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "pleuritis — pleur/o + -itis"
+    },
+    {
+      "questionId": "cardiovascular-respiratory-terminology-Q37",
+      "stem": "A nurse uses pulse oximetry (SpO₂) to assess peripheral oxygen saturation. The root 'ox-' in 'oximetry' and 'oxygen' relates to:",
+      "options": {
+        "A": "Acid-base balance",
+        "B": "Oxygen content",
+        "C": "Cardiac output measurement",
+        "D": "Respiratory rate monitoring"
+      },
+      "correctAnswer": "B",
+      "rationale": "The root ox- derives from the Greek 'oxys' meaning sharp/acid and by extension refers to oxygen in medical and scientific terminology. Oximetry = measurement of oxygen saturation. Oxyhemoglobin = hemoglobin bound to oxygen. Hypoxia = tissue oxygen deficiency. Pulse oximetry measures the percentage of hemoglobin saturated with oxygen non-invasively.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "root ox- = oxygen; pulse oximetry terminology"
+    },
+    {
+      "questionId": "cardiovascular-respiratory-terminology-Q38",
+      "stem": "The term 'hemothorax' refers to:",
+      "options": {
+        "A": "Air accumulation in the pleural space",
+        "B": "Blood accumulation in the pleural space",
+        "C": "Fluid accumulation in the pericardial sac",
+        "D": "Infection of the thoracic cavity"
+      },
+      "correctAnswer": "B",
+      "rationale": "Hem/o = blood; thorax = chest. Hemothorax = blood in the pleural (thoracic) space, often from trauma (rib fractures lacerating intercostal vessels or lung) or aortic injury. Pneumothorax = air in pleural space. Pericardial effusion/tamponade = fluid around the heart. Empyema = pus in the pleural space.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "hemothorax — hem/o + thorax"
+    },
+    {
+      "questionId": "cardiovascular-respiratory-terminology-Q39",
+      "stem": "The medical term for coughing up blood from the lower respiratory tract is hemoptysis. What term describes vomiting blood from the GI tract?",
+      "options": {
+        "A": "Epistaxis",
+        "B": "Hematochezia",
+        "C": "Hematemesis",
+        "D": "Melena"
+      },
+      "correctAnswer": "C",
+      "rationale": "Hem/o = blood; -emesis = vomiting. Hematemesis = vomiting blood from the upper GI tract (esophagus, stomach, duodenum). Epistaxis = nosebleed. Hematochezia = bright red blood from the rectum (lower GI bleed). Melena = dark, tarry stool from digested blood (upper GI bleed). Distinguishing these sources directs appropriate clinical intervention.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "hematemesis — -emesis; contrast with hemoptysis"
+    },
+    {
+      "questionId": "cardiovascular-respiratory-terminology-Q40",
+      "stem": "In cardiac terminology, the prefix 'brady-' appears in 'bradycardia.' In the autonomic nervous system context, which drug classification would INCREASE heart rate by opposing bradycardia?",
+      "options": {
+        "A": "Beta-blockers (e.g., metoprolol)",
+        "B": "Anticholinergics (e.g., atropine)",
+        "C": "Calcium channel blockers (e.g., diltiazem)",
+        "D": "Antiarrhythmics (e.g., amiodarone)"
+      },
+      "correctAnswer": "B",
+      "rationale": "Anticholinergics (e.g., atropine) block the parasympathetic (vagal) slowing of the heart, allowing heart rate to increase — used to treat symptomatic bradycardia. Beta-blockers slow heart rate (treat tachycardia). Calcium channel blockers (non-dihydropyridines) slow conduction. Amiodarone is used for various arrhythmias but is not the primary treatment for bradycardia.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "bradycardia treatment — clinical application of brady- prefix"
+    },
+    {
+      "questionId": "cardiovascular-respiratory-terminology-Q41",
+      "stem": "Cyanosis is a clinical sign characterized by a bluish discoloration of the skin and mucous membranes. It results from:",
+      "options": {
+        "A": "Excessive melanin production triggered by hypoxia",
+        "B": "High levels of deoxygenated hemoglobin in peripheral blood vessels",
+        "C": "Reduced red blood cell count causing pale, blue-tinted skin",
+        "D": "Vasoconstriction redirecting blood away from the skin"
+      },
+      "correctAnswer": "B",
+      "rationale": "Cyan/o = blue. Cyanosis occurs when deoxygenated hemoglobin (which is darker/blue-red) is present in sufficient concentration in peripheral capillaries (> ~5 g/dL of deoxyhemoglobin). This imparts a blue hue visible in the lips, nail beds, and mucous membranes. Anemia can actually mask cyanosis because there is less total hemoglobin. Vasoconstriction causes pallor, not cyanosis.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "cyanosis — cyan/o = blue; deoxygenated hemoglobin"
+    },
+    {
+      "questionId": "cardiovascular-respiratory-terminology-Q42",
+      "stem": "The combining form 'aort/o' in the term 'aortic stenosis' refers to the:",
+      "options": {
+        "A": "Pulmonary artery",
+        "B": "Coronary arteries",
+        "C": "Aorta — the largest artery in the body",
+        "D": "Atrioventricular valves"
+      },
+      "correctAnswer": "C",
+      "rationale": "Aort/o = aorta. The aorta is the largest artery in the body, arising from the left ventricle and distributing oxygenated blood to the systemic circulation. Aortic stenosis = narrowing of the aortic valve opening. Pulmonary artery = carries deoxygenated blood to the lungs. Coronary arteries branch from the aortic root.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "root aort/o = aorta"
+    },
+    {
+      "questionId": "cardiovascular-respiratory-terminology-Q43",
+      "stem": "Which term describes a condition of abnormally low oxygen in body tissues (not just in the blood)?",
+      "options": {
+        "A": "Hypoxemia",
+        "B": "Hypercapnia",
+        "C": "Hypoxia",
+        "D": "Anemia"
+      },
+      "correctAnswer": "C",
+      "rationale": "Hypoxia = insufficient oxygen delivery to or use by body tissues. Hypoxemia (hypox- + -emia = blood condition) specifically means low oxygen in the arterial blood. Hypoxia is the broader tissue-level state — a patient can have tissue hypoxia from anemia, poor cardiac output, or poisoning even with a normal SpO₂. Hypercapnia = elevated CO₂. Anemia = low RBC/hemoglobin.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "hypoxia vs hypoxemia distinction"
+    },
+    {
+      "questionId": "cardiovascular-respiratory-terminology-Q44",
+      "stem": "The suffix '-graphy' appears in 'echocardiography' and '-gram' appears in 'echocardiogram.' Which correctly distinguishes these two terms?",
+      "options": {
+        "A": "Echocardiography is the resulting image; echocardiogram is the process",
+        "B": "Echocardiography is the process of recording; echocardiogram is the resulting recorded image",
+        "C": "Both terms are interchangeable with no clinical distinction",
+        "D": "Echocardiography is performed by a nurse; echocardiogram is read by a cardiologist"
+      },
+      "correctAnswer": "B",
+      "rationale": "-Graphy = the process or technique of recording. -Gram = the result of that process (the recorded image, tracing, or data). Echocardiography = the process (using ultrasound to image the heart). Echocardiogram = the resulting recording. The same applies to: electroencephalography/-gram (EEG), mammography/-gram, radiography/-gram.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "-graphy (process) vs -gram (result)"
+    },
+    {
+      "questionId": "cardiovascular-respiratory-terminology-Q45",
+      "stem": "Angioplasty of a coronary artery is performed to:",
+      "options": {
+        "A": "Remove and replace the diseased artery with a graft",
+        "B": "Visualize the inside of the artery using a camera scope",
+        "C": "Open and widen a narrowed vessel, often with a balloon and stent",
+        "D": "Surgically ligate the vessel to prevent hemorrhage"
+      },
+      "correctAnswer": "C",
+      "rationale": "Angi/o = vessel; -plasty = surgical repair/reconstruction. Angioplasty (percutaneous coronary intervention, PCI) uses a catheter-mounted balloon to open a narrowed coronary artery, often followed by stent placement to keep it open. Bypass grafting = replacement with another vessel. Angioscopy = camera visualization. Ligation = tying off a vessel.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "angioplasty — angi/o + -plasty; coronary intervention"
     }
   ]
 }

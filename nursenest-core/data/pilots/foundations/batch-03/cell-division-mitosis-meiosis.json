@@ -230,6 +230,118 @@
       "rationale": "Meiosis = 2 consecutive divisions → 4 haploid (23 chromosome) daughter cells that are genetically unique (crossing over). Mitosis = 1 division → 2 diploid (46 chromosome) daughter cells genetically identical to the parent. Mitosis occurs throughout the body; meiosis occurs only in gonads.",
       "difficultyLevel": "foundational",
       "keyConceptTested": "mitosis vs meiosis — complete comparison"
+    },
+    {
+      "questionId": "cell-division-mitosis-meiosis-Q13",
+      "stem": "During prophase of mitosis, which two visible changes occur in the cell?",
+      "options": {
+        "A": "Chromosomes align at the metaphase plate; spindle fibers attach",
+        "B": "Chromosomes condense into visible structures; the mitotic spindle begins to form",
+        "C": "Sister chromatids separate and move to opposite poles",
+        "D": "Nuclear envelopes re-form around each set of chromosomes"
+      },
+      "correctAnswer": "B",
+      "rationale": "In prophase: (1) chromatin condenses into distinct visible chromosomes (each already a pair of sister chromatids joined at the centromere), and (2) the mitotic spindle begins assembling from microtubules radiating from the centrosomes. The nuclear envelope breaks down late in prophase (prometaphase). Chromosome alignment = metaphase. Chromatid separation = anaphase. Nuclear envelope re-formation = telophase.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "prophase — chromosome condensation + spindle formation"
+    },
+    {
+      "questionId": "cell-division-mitosis-meiosis-Q14",
+      "stem": "During anaphase of mitosis, spindle fibers shorten and pull sister chromatids to opposite poles. What does each pole of the dividing cell receive?",
+      "options": {
+        "A": "A complete set of 92 chromatids (double the normal)",
+        "B": "A complete set of 46 chromosomes (now single-stranded, as sisters have separated)",
+        "C": "23 chromosomes (the haploid number for gamete production)",
+        "D": "Random assortments of chromosomes with no guaranteed complete set"
+      },
+      "correctAnswer": "B",
+      "rationale": "In anaphase, cohesins holding sister chromatids together are cleaved by separase. Spindle fibers shorten, pulling one chromatid from each pair to each pole. Each pole receives one copy of every chromosome — a full complement of 46 single chromatids (now called chromosomes). This ensures each daughter cell receives a genetically identical diploid set. The 23-chromosome haploid number occurs in meiosis only.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "anaphase — sister chromatid separation; each pole receives 46"
+    },
+    {
+      "questionId": "cell-division-mitosis-meiosis-Q15",
+      "stem": "Telophase and cytokinesis complete cell division. What is the final outcome of these two processes?",
+      "options": {
+        "A": "Two cells, each with 92 chromosomes (one copy of each chromosome pair)",
+        "B": "Four haploid cells genetically identical to the parent",
+        "C": "Two genetically identical diploid cells, each with a distinct nucleus and separated cytoplasm",
+        "D": "One cell with a double nucleus awaiting the next round of division"
+      },
+      "correctAnswer": "C",
+      "rationale": "In telophase, nuclear envelopes re-form around each set of chromosomes at the poles, and chromosomes begin to decondense. Cytokinesis (cleavage furrow in animal cells) then pinches the cytoplasm into two separate cells. The result is two genetically identical daughter cells, each diploid (46 chromosomes), ready to enter G1 of a new cell cycle.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "telophase + cytokinesis — two identical diploid daughter cells"
+    },
+    {
+      "questionId": "cell-division-mitosis-meiosis-Q16",
+      "stem": "Klinefelter syndrome (47, XXY) most commonly results from:",
+      "options": {
+        "A": "A mutation in a gene controlling male sexual development on the Y chromosome",
+        "B": "Nondisjunction of sex chromosomes during meiosis, producing a gamete with both X and Y",
+        "C": "Deletion of part of the X chromosome",
+        "D": "Trisomy of chromosome 21 rather than sex chromosomes"
+      },
+      "correctAnswer": "B",
+      "rationale": "Klinefelter syndrome (47, XXY) occurs when nondisjunction produces a gamete containing both X and Y chromosomes (from the father — XY sperm) or two X chromosomes (from the mother — XX egg). Fertilization then results in a 47, XXY zygote. Features include tall stature, small testes, infertility, and gynecomastia. It is the most common sex chromosome aneuploidy in males (1 in 500–1000).",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "Klinefelter syndrome — 47,XXY; nondisjunction"
+    },
+    {
+      "questionId": "cell-division-mitosis-meiosis-Q17",
+      "stem": "Proto-oncogenes are normal genes that regulate cell growth and division. They become dangerous when they mutate into oncogenes because:",
+      "options": {
+        "A": "They produce tumor suppressor proteins that prevent normal DNA repair",
+        "B": "Mutated oncogenes drive continuous, unregulated cell division even without growth signals",
+        "C": "They cause cells to enter G0 permanently, preventing normal tissue renewal",
+        "D": "Oncogenes suppress the immune system, allowing cancer cells to evade detection"
+      },
+      "correctAnswer": "B",
+      "rationale": "Proto-oncogenes encode proteins that normally promote controlled cell cycle progression (growth factors, receptors, signaling molecules). A gain-of-function mutation converts them into oncogenes — which produce continuously active (always 'on') growth signals, driving uncontrolled cell proliferation. RAS is a classic example: mutant RAS (KRAS) continuously signals cell division, found in ~30% of human cancers.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "oncogenes — gain-of-function; continuous growth signaling"
+    },
+    {
+      "questionId": "cell-division-mitosis-meiosis-Q18",
+      "stem": "The G1 checkpoint in the cell cycle evaluates which of the following before allowing the cell to proceed to S phase?",
+      "options": {
+        "A": "Whether the mitotic spindle is properly assembled",
+        "B": "Whether all chromosomes are attached to spindle fibers",
+        "C": "Whether the cell is large enough and its DNA is undamaged, and whether growth signals are present",
+        "D": "Whether DNA replication has been completed accurately"
+      },
+      "correctAnswer": "C",
+      "rationale": "The G1 checkpoint (restriction point) evaluates: (1) cell size and nutrient availability, (2) DNA integrity (absence of double-strand breaks), and (3) presence of mitogenic (growth-promoting) signals. If these conditions are met, the cell proceeds to S phase. If DNA is damaged, p53 halts the cycle here. This is the major decision point for whether a cell will divide. The G2 checkpoint checks DNA replication accuracy; the spindle checkpoint verifies chromosome attachment.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "G1 checkpoint — cell size, DNA integrity, growth signals"
+    },
+    {
+      "questionId": "cell-division-mitosis-meiosis-Q19",
+      "stem": "The key difference between Meiosis I and Meiosis II is that:",
+      "options": {
+        "A": "Meiosis I separates sister chromatids; Meiosis II separates homologous chromosome pairs",
+        "B": "Meiosis I separates homologous chromosome pairs (reducing chromosome number); Meiosis II separates sister chromatids",
+        "C": "Both divisions separate the same structures, but Meiosis II is the first to produce haploid cells",
+        "D": "Meiosis I only occurs in females; Meiosis II only in males"
+      },
+      "correctAnswer": "B",
+      "rationale": "Meiosis I is the reductional division: homologous chromosome pairs (each consisting of two sister chromatids) separate → daughter cells receive 23 chromosomes (each still as two chromatids). This is where genetic recombination (crossing over) also occurs. Meiosis II is the equational division: sister chromatids separate (like mitosis), producing 4 haploid cells total with 23 single chromosomes each.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "meiosis I vs II — reductional vs equational division"
+    },
+    {
+      "questionId": "cell-division-mitosis-meiosis-Q20",
+      "stem": "Colchicine, derived from the autumn crocus plant, arrests cells in metaphase by disrupting microtubule polymerization. This drug has been used clinically to:",
+      "options": {
+        "A": "Treat bacterial infections by targeting prokaryotic cell division",
+        "B": "Treat gout by preventing neutrophil migration (also microtubule-dependent) and reduce inflammation",
+        "C": "Stimulate bone marrow cell division to treat anemia",
+        "D": "Block meiosis in reproductive cells to prevent genetic disease"
+      },
+      "correctAnswer": "B",
+      "rationale": "Colchicine is used clinically to treat acute gout attacks. It disrupts microtubule polymerization, which impairs neutrophil motility and activation — reducing the inflammatory response in gouty joints. It is also used in laboratory karyotyping to arrest cells in metaphase for chromosome analysis. Colchicine does not have antibiotic, hematopoietic, or reproductive applications.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "colchicine — microtubule disruption; gout treatment; karyotyping"
     }
   ]
 }

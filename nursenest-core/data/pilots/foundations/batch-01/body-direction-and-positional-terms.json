@@ -568,6 +568,188 @@
       "rationale": "The inferior vena cava carries deoxygenated blood from the lower body (below the diaphragm) to the right atrium of the heart. The superior vena cava carries blood from the upper body and head. The pulmonary artery carries blood from the heart to the lungs. The pulmonary veins return oxygenated blood from the lungs to the left side of the heart.",
       "difficultyLevel": "applied",
       "keyConceptTested": "directional term: inferior — vascular anatomy"
+    },
+    {
+      "questionId": "body-direction-and-positional-terms-Q33",
+      "stem": "A nurse elevates the head of a patient's bed to 45 degrees after surgery. This position is called:",
+      "options": {
+        "A": "Trendelenburg position",
+        "B": "Fowler's position",
+        "C": "Sims' position",
+        "D": "Lithotomy position"
+      },
+      "correctAnswer": "B",
+      "rationale": "Fowler's position places the head of the bed at 45–60 degrees (semi-Fowler's = 30–45°). It improves respiratory expansion and is used postoperatively, for patients with heart failure, and during nasogastric tube feedings. Trendelenburg = legs elevated above the head. Sims' = lateral recumbent with upper knee flexed.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "positional term: Fowler's position"
+    },
+    {
+      "questionId": "body-direction-and-positional-terms-Q34",
+      "stem": "In Trendelenburg position, the patient is placed:",
+      "options": {
+        "A": "Sitting upright at 90 degrees",
+        "B": "Supine with the legs elevated above the level of the head",
+        "C": "On the left side with the upper knee flexed",
+        "D": "Prone with the head turned to one side"
+      },
+      "correctAnswer": "B",
+      "rationale": "Trendelenburg position places the patient supine with the lower body (legs) elevated above the head on a tilted table or bed. Historically used in shock to improve venous return, though evidence is mixed. It is also used for some surgical procedures. Fowler's = sitting up. Sims' = lateral with knee flexed.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "positional term: Trendelenburg"
+    },
+    {
+      "questionId": "body-direction-and-positional-terms-Q35",
+      "stem": "The inguinal region of the body refers to the:",
+      "options": {
+        "A": "Buttocks",
+        "B": "Inner groin area where the thigh meets the abdomen",
+        "C": "Lower back between the ribs and pelvis",
+        "D": "Outer lateral thigh"
+      },
+      "correctAnswer": "B",
+      "rationale": "The inguinal region (groin) is the junction between the abdomen and the upper thigh. It contains the inguinal ligament, inguinal lymph nodes, and is the site of inguinal hernias. The gluteal region = buttocks. The lumbar region = lower back. The femoral region = anterior thigh.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "regional term: inguinal"
+    },
+    {
+      "questionId": "body-direction-and-positional-terms-Q36",
+      "stem": "The axillary region of the body is located:",
+      "options": {
+        "A": "On the back of the upper arm",
+        "B": "In the armpit, where the arm meets the shoulder and chest",
+        "C": "On the lateral chest wall at the level of the nipple",
+        "D": "Below the clavicle on the anterior chest"
+      },
+      "correctAnswer": "B",
+      "rationale": "The axillary region is the armpit — the hollow area where the arm joins the shoulder and chest. It contains axillary lymph nodes (assessed in breast cancer staging), the axillary artery and vein, and the brachial plexus nerves. Axillary temperature measurement is taken in this region.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "regional term: axillary"
+    },
+    {
+      "questionId": "body-direction-and-positional-terms-Q37",
+      "stem": "The femoral region refers to the:",
+      "options": {
+        "A": "Lower leg (shin area)",
+        "B": "Upper thigh (anterior surface)",
+        "C": "Back of the knee",
+        "D": "Top surface of the foot"
+      },
+      "correctAnswer": "B",
+      "rationale": "The femoral region refers to the thigh — the area of the lower limb between the hip and the knee. The femoral artery and vein are located in the upper femoral region (femoral triangle). The patellar region = knee. The popliteal region = back of the knee. The dorsal region = top of the foot.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "regional term: femoral"
+    },
+    {
+      "questionId": "body-direction-and-positional-terms-Q38",
+      "stem": "The mediastinum is a subdivision of the thoracic cavity. It contains:",
+      "options": {
+        "A": "The lungs and their pleural coverings",
+        "B": "The heart, great vessels, esophagus, trachea, and thymus",
+        "C": "Only the heart and pericardium",
+        "D": "The diaphragm and its associated nerves"
+      },
+      "correctAnswer": "B",
+      "rationale": "The mediastinum is the central compartment of the thoracic cavity between the two lungs. It contains the heart (in the pericardial sac), great vessels (aorta, vena cavae, pulmonary vessels), trachea, esophagus, thymus, and associated lymph nodes and nerves. The lungs are lateral in the pleural cavities, not in the mediastinum.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "mediastinum contents"
+    },
+    {
+      "questionId": "body-direction-and-positional-terms-Q39",
+      "stem": "In the nine-region abdominal system, the epigastric region is located:",
+      "options": {
+        "A": "In the lower central abdomen, below the umbilicus",
+        "B": "In the upper central abdomen, between the right and left hypochondriac regions",
+        "C": "On the right side lateral to the umbilicus",
+        "D": "In the pelvic region below the inguinal ligaments"
+      },
+      "correctAnswer": "B",
+      "rationale": "In the nine-region system, the epigastric region is in the upper central abdomen, flanked by the right and left hypochondriac regions. It overlies the stomach and part of the liver. The hypogastric (pubic) region is the lower central area. The right/left lateral = flank regions (lumbar). Iliac/inguinal regions are lower lateral.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "nine-region system: epigastric region"
+    },
+    {
+      "questionId": "body-direction-and-positional-terms-Q40",
+      "stem": "A surgical wound is described as 'midline, inferior to the umbilicus, extending to the pubic symphysis.' Using directional and regional terms, where is this incision?",
+      "options": {
+        "A": "A horizontal incision across the upper abdomen at the level of the liver",
+        "B": "A vertical incision down the center of the lower abdomen from the navel toward the pelvis",
+        "C": "An oblique incision in the right lower quadrant near the appendix",
+        "D": "A lateral incision across the left flank region"
+      },
+      "correctAnswer": "B",
+      "rationale": "Midline = along the midsagittal plane (center). Inferior to the umbilicus = below the navel. Extending to the pubic symphysis = downward to the pelvic bony landmark. This describes a vertical lower midline abdominal incision — common for Cesarean sections, hysterectomies, and colon surgery.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "combined directional terms in surgical description"
+    },
+    {
+      "questionId": "body-direction-and-positional-terms-Q41",
+      "stem": "A nurse documents 'right lateral decubitus position.' This means the patient is:",
+      "options": {
+        "A": "Lying on the back with the right side elevated",
+        "B": "Lying on the right side",
+        "C": "Lying face down on the right side of the bed",
+        "D": "Sitting at 45 degrees with the right arm elevated"
+      },
+      "correctAnswer": "B",
+      "rationale": "Lateral decubitus means lying on one's side. Right lateral decubitus = lying on the right side. This position is used for certain procedures (e.g., chest X-ray to detect small pleural effusions that layer out by gravity) and for patient comfort. Left lateral decubitus is used for sigmoidoscopy and enemas.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "positional term: lateral decubitus"
+    },
+    {
+      "questionId": "body-direction-and-positional-terms-Q42",
+      "stem": "The umbilical region of the abdomen surrounds:",
+      "options": {
+        "A": "The pubic bone and bladder",
+        "B": "The navel (belly button) and the surrounding central abdominal area",
+        "C": "The upper central area above the stomach",
+        "D": "The flanks on both sides of the spine"
+      },
+      "correctAnswer": "B",
+      "rationale": "The umbilical region surrounds the navel (umbilicus) in the central abdomen. In the nine-region system it is flanked by the right and left lumbar (flank) regions laterally, the epigastric above, and the hypogastric below. It overlies parts of the small intestine and transverse colon.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "regional term: umbilical"
+    },
+    {
+      "questionId": "body-direction-and-positional-terms-Q43",
+      "stem": "Which imaging plane does an MRI use when producing a 'coronal' reconstruction of the brain?",
+      "options": {
+        "A": "Transverse plane — top-to-bottom cross-sections",
+        "B": "Sagittal plane — left/right division",
+        "C": "Frontal (coronal) plane — anterior/posterior division",
+        "D": "Oblique plane — diagonal cut through the body"
+      },
+      "correctAnswer": "C",
+      "rationale": "A coronal (frontal plane) MRI image divides the body or brain into anterior and posterior sections. Coronal brain images show structures from front to back. Transverse = horizontal cross-sections (the standard CT orientation). Sagittal = left-right division. MRI can reconstruct images in any plane from the raw data.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "coronal plane in MRI imaging"
+    },
+    {
+      "questionId": "body-direction-and-positional-terms-Q44",
+      "stem": "A patient's chart notes 'hepatomegaly with inferior border of the liver palpable 4 cm below the right costal margin.' The costal margin is the:",
+      "options": {
+        "A": "Lower edge of the rib cage",
+        "B": "Junction between the sternum and clavicle",
+        "C": "Posterior iliac crest",
+        "D": "Upper border of the pubic symphysis"
+      },
+      "correctAnswer": "A",
+      "rationale": "The costal margin is the lower edge of the rib cage (formed by the costal cartilages of ribs 7–10). The liver normally lies superior to this margin and cannot be palpated below it in healthy adults. Palpating the liver's inferior edge 4 cm below the right costal margin indicates hepatomegaly (liver enlargement).",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "costal margin; directional term inferior; regional anatomy"
+    },
+    {
+      "questionId": "body-direction-and-positional-terms-Q45",
+      "stem": "During a thoracentesis, the needle is inserted into the posterior thorax just superior to the upper border of a rib (rather than inferior to it) to avoid injuring the:",
+      "options": {
+        "A": "Intercostal lymph nodes",
+        "B": "Neurovascular bundle running just inferior to each rib",
+        "C": "Pleural membrane on the superior surface of each rib",
+        "D": "Diaphragmatic attachments at the inferior rib"
+      },
+      "correctAnswer": "B",
+      "rationale": "A neurovascular bundle (intercostal nerve, artery, and vein) runs in the costal groove along the inferior surface of each rib. Inserting the needle just above (superior to) the upper border of the rib below the target space avoids lacerating these structures. This is a direct application of anatomical positional knowledge to procedural safety.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "superior border insertion — neurovascular bundle anatomy; clinical safety"
     }
   ]
 }

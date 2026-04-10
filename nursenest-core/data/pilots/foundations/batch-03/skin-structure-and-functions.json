@@ -238,6 +238,118 @@
       "rationale": "The epidermis is avascular — it has no blood vessels. The dermis contains an extensive network of blood vessels that supplies the epidermis via diffusion through the basement membrane. The dermis also contains lymphatics, sensory receptors, hair follicles, and glands. The epidermis provides the barrier and keratinization functions; the dermis provides the vascular and connective tissue support.",
       "difficultyLevel": "foundational",
       "keyConceptTested": "dermis — vascular supply to avascular epidermis"
+    },
+    {
+      "questionId": "skin-structure-and-functions-Q13",
+      "stem": "Sebaceous glands are associated with hair follicles and secrete sebum. Acne vulgaris results from:",
+      "options": {
+        "A": "Overactivity of eccrine sweat glands causing excess moisture",
+        "B": "Blockage of sebaceous gland ducts by excess sebum and dead cells, with subsequent bacterial colonization causing inflammation",
+        "C": "Viral infection of the stratum basale disrupting keratinocyte division",
+        "D": "Allergic reaction of Langerhans cells to normal skin flora"
+      },
+      "correctAnswer": "B",
+      "rationale": "Sebaceous glands secrete sebum (oily lipid mixture) through a duct opening at the hair follicle. Acne vulgaris develops when excess sebum and desquamated cells block the follicular duct (comedone formation) → Cutibacterium acnes (skin bacterium) colonizes → inflammatory response → papules, pustules, and cysts. Androgens increase sebaceous gland activity, explaining acne prevalence during puberty.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "sebaceous glands → acne mechanism"
+    },
+    {
+      "questionId": "skin-structure-and-functions-Q14",
+      "stem": "Pacinian corpuscles in the dermis and hypodermis respond to which sensory stimulus?",
+      "options": {
+        "A": "Light touch and fine texture discrimination",
+        "B": "Deep pressure and high-frequency vibration",
+        "C": "Temperature changes in the skin",
+        "D": "Pain (nociception) from tissue damage"
+      },
+      "correctAnswer": "B",
+      "rationale": "Pacinian corpuscles are rapidly adapting mechanoreceptors sensitive to deep pressure and high-frequency vibration. They are large, encapsulated receptors found in the dermis, hypodermis, and periosteum. Meissner's corpuscles (superficial dermis, especially fingertips) detect fine touch and light texture. Thermoreceptors = temperature. Nociceptors = pain (free nerve endings).",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "Pacinian corpuscles — deep pressure and vibration"
+    },
+    {
+      "questionId": "skin-structure-and-functions-Q15",
+      "stem": "Meissner's corpuscles are concentrated in the fingertips, lips, and eyelids. They are specialized for:",
+      "options": {
+        "A": "Detecting deep tissue vibration",
+        "B": "Fine touch discrimination and detecting light stroking or textures",
+        "C": "Thermal sensation including cold temperatures",
+        "D": "Detecting sustained pressure over time"
+      },
+      "correctAnswer": "B",
+      "rationale": "Meissner's corpuscles (tactile corpuscles) are rapidly adapting mechanoreceptors in the superficial dermis of highly sensitive areas (fingertips, lips). They are specialized for fine touch, light stroke, and two-point discrimination — the ability to distinguish two nearby touch points as separate. Their concentration in fingertips enables manual dexterity and Braille reading. Pacinian = deep vibration. Ruffini endings = sustained pressure.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "Meissner's corpuscles — fine touch; fingertip two-point discrimination"
+    },
+    {
+      "questionId": "skin-structure-and-functions-Q16",
+      "stem": "The arrector pili muscle is a smooth muscle attached to each hair follicle. When it contracts, it produces:",
+      "options": {
+        "A": "Increased sebum secretion to lubricate the hair shaft",
+        "B": "Piloerection ('goosebumps'), standing the hair upright and compressing the sebaceous gland",
+        "C": "Increased blood flow to the follicle to support hair growth",
+        "D": "Desquamation (shedding) of the overlying stratum corneum"
+      },
+      "correctAnswer": "B",
+      "rationale": "The arrector pili is a small smooth muscle that runs from the hair follicle to the papillary dermis. Contraction (triggered by cold or emotional stress via sympathetic stimulation) pulls the follicle to an upright position, producing piloerection ('goosebumps'). It also briefly compresses the associated sebaceous gland, releasing sebum. In animals with fur, this response traps insulating air; in humans it serves primarily as an autonomic response vestige.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "arrector pili — piloerection; smooth muscle"
+    },
+    {
+      "questionId": "skin-structure-and-functions-Q17",
+      "stem": "A hospitalized patient develops a Stage 3 pressure injury over the sacrum. A Stage 3 pressure injury is characterized by:",
+      "options": {
+        "A": "Non-blanchable erythema of intact skin only",
+        "B": "Partial-thickness loss involving the epidermis and possibly the upper dermis, with a moist wound bed",
+        "C": "Full-thickness tissue loss exposing subcutaneous fat, without exposed bone, tendon, or muscle",
+        "D": "Full-thickness tissue loss with exposed bone, tendon, or muscle"
+      },
+      "correctAnswer": "C",
+      "rationale": "Pressure injury staging: Stage 1 = intact skin, non-blanchable erythema. Stage 2 = partial-thickness skin loss (epidermis ± superficial dermis), moist wound base. Stage 3 = full-thickness tissue loss exposing subcutaneous fat; may have slough but no exposed bone/tendon/muscle. Stage 4 = full-thickness with exposed bone, tendon, or muscle. Unstageable = obscured by slough/eschar.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "pressure injury staging — Stage 3 characteristics"
+    },
+    {
+      "questionId": "skin-structure-and-functions-Q18",
+      "stem": "The stratum lucidum is a layer of the epidermis found only in thick skin (palms of hands and soles of feet). It is absent in thin skin because:",
+      "options": {
+        "A": "Thin skin lacks melanocytes and therefore cannot form this translucent layer",
+        "B": "It is an additional translucent layer of dead cells providing extra protection where mechanical stress is greatest",
+        "C": "Thin skin is too moist for keratinized cell accumulation to form this layer",
+        "D": "The stratum granulosum is absent in thin skin, preventing lucidum formation"
+      },
+      "correctAnswer": "B",
+      "rationale": "The stratum lucidum ('clear layer') is an extra layer of dead, flattened, homogenous cells found only in thick skin — the palms and soles, which experience intense mechanical wear and friction. It provides additional protection in these high-stress areas. Thin skin (most of the body) lacks this layer but still has all other epidermal strata.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "stratum lucidum — thick skin only; palms/soles"
+    },
+    {
+      "questionId": "skin-structure-and-functions-Q19",
+      "stem": "The nail bed has a pink color in well-perfused individuals. This pink color results from:",
+      "options": {
+        "A": "Melanin deposits in the nail plate",
+        "B": "Oxygenated hemoglobin in the dermal capillaries visible through the translucent nail plate",
+        "C": "Keratin pigments in the thick stratum corneum of the nail",
+        "D": "Sebum from adjacent sebaceous glands coloring the nail bed"
+      },
+      "correctAnswer": "B",
+      "rationale": "The nail plate is translucent keratinized epithelium. The pink color of a normal nail bed comes from oxygenated hemoglobin in the dense capillary bed of the underlying dermis (nail bed). Cyanosis (low oxygen) turns nail beds blue; anemia (low hemoglobin) makes them pale. Capillary refill time (pressing on the nail until blanching, then releasing) tests peripheral perfusion using this principle.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "nail bed color — dermal capillaries visible through nail plate; perfusion assessment"
+    },
+    {
+      "questionId": "skin-structure-and-functions-Q20",
+      "stem": "Transepidermal water loss (TEWL) is clinically significant in patients with extensive burns because:",
+      "options": {
+        "A": "Burns increase melanin production, blocking UV protection and causing water to evaporate faster",
+        "B": "Destruction of the stratum corneum eliminates the waterproofing barrier, causing massive fluid and electrolyte loss through the wound surface",
+        "C": "Burns stimulate excessive eccrine sweat gland activity, dramatically increasing fluid loss",
+        "D": "Damaged Langerhans cells release inflammatory cytokines that increase capillary permeability and fluid loss"
+      },
+      "correctAnswer": "B",
+      "rationale": "The stratum corneum with its lipid-filled keratinized cells provides the primary barrier against TEWL. Burns destroy this layer. Extensive full-thickness burns expose the dermis and underlying tissues — removing the waterproof barrier completely. Burns covering >20% of body surface area require aggressive IV fluid resuscitation (Parkland formula) to replace fluid lost through the wound, which can amount to liters per day.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "TEWL — stratum corneum barrier; burn fluid resuscitation"
     }
   ]
 }

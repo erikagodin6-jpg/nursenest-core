@@ -385,7 +385,7 @@
         "B": "Cartilage is avascular, so repair cells and nutrients cannot easily reach the site of damage",
         "C": "Cartilage contains too many elastic fibers, which prevent new collagen deposition",
         "D": "Cartilage is protected by periosteum, which blocks inflammatory cells from reaching it"
-        },
+      },
       "correctAnswer": "B",
       "rationale": "Cartilage is avascular — it has no blood supply. Nutrients and repair cells (fibroblasts, progenitor cells) that normally reach injury sites via blood vessels cannot easily access cartilage. Repair depends on diffusion from surrounding tissues or synovial fluid (for articular cartilage). This avascular nature explains the notoriously slow and often incomplete healing of cartilage injuries (e.g., meniscus tears, articular cartilage defects).",
       "difficultyLevel": "applied",
@@ -432,6 +432,328 @@
       "rationale": "Smoking paralyzes and eventually destroys cilia in the pseudostratified ciliated columnar epithelium of the airways. Without functioning cilia, mucus (loaded with inhaled particles and bacteria) cannot be cleared — it accumulates, causing chronic productive cough (chronic bronchitis) and creating an environment favorable for respiratory infections. The cough reflex partially compensates but is inefficient compared to intact mucociliary clearance.",
       "difficultyLevel": "applied",
       "keyConceptTested": "smoking destroys cilia → mucociliary escalator failure → chronic bronchitis"
+    },
+    {
+      "questionId": "four-tissue-types-Q23",
+      "stem": "Goblet cells are found throughout the GI and respiratory tracts. They are classified as which type of glandular cell?",
+      "options": {
+        "A": "Endocrine — secreting hormones into the bloodstream",
+        "B": "Exocrine — secreting mucus onto an epithelial surface",
+        "C": "Paracrine — secreting signals only to neighboring cells",
+        "D": "Autocrine — secreting signals that act on the cell itself"
+      },
+      "correctAnswer": "B",
+      "rationale": "Goblet cells are unicellular exocrine glands — they secrete mucus directly onto an epithelial surface (lumen or outer surface) rather than into the bloodstream. In the airway, goblet cell mucus traps inhaled particles for the mucociliary escalator. In the GI tract, mucus lubricates and protects the epithelial lining. Endocrine glands secrete hormones into the blood.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "goblet cells — unicellular exocrine glands; mucus secretion"
+    },
+    {
+      "questionId": "four-tissue-types-Q24",
+      "stem": "Tight junctions between intestinal epithelial cells are clinically important because they:",
+      "options": {
+        "A": "Allow rapid electrical communication between adjacent intestinal cells",
+        "B": "Seal the space between cells to prevent harmful substances from leaking between cells into the bloodstream",
+        "C": "Provide flexible mechanical attachment that absorbs physical stress on the epithelium",
+        "D": "Anchor the epithelium to the basement membrane below"
+      },
+      "correctAnswer": "B",
+      "rationale": "Tight junctions (zonula occludens) are protein complexes that seal the intercellular space, forming a near-impermeable barrier between epithelial cells. In the intestine, this prevents microbes and toxins from passing between cells into the bloodstream ('leaky gut' when tight junctions are disrupted). The blood-brain barrier is also maintained by tight junctions. Gap junctions = electrical communication. Desmosomes = mechanical adhesion.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "tight junctions — paracellular barrier; 'leaky gut'"
+    },
+    {
+      "questionId": "four-tissue-types-Q25",
+      "stem": "Desmosomes connect adjacent cells by interlocking with which intracellular cytoskeletal element?",
+      "options": {
+        "A": "Microtubules",
+        "B": "Microfilaments (actin)",
+        "C": "Intermediate filaments (e.g., keratin, desmin)",
+        "D": "Centrosomal fibers"
+      },
+      "correctAnswer": "C",
+      "rationale": "Desmosomes are mechanical cell junctions that anchor to intermediate filaments (keratin in epithelial cells, desmin in cardiac/muscle cells). This creates a tissue-wide network that distributes mechanical stress. In the heart, desmosomes in intercalated discs prevent cardiac cells from pulling apart during contraction. Genetic defects in desmosomal proteins cause arrhythmogenic cardiomyopathy (desmoplakin mutations).",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "desmosomes — mechanical junctions anchored to intermediate filaments"
+    },
+    {
+      "questionId": "four-tissue-types-Q26",
+      "stem": "Reticular fibers provide a fine supportive meshwork in which organs?",
+      "options": {
+        "A": "Tendons and ligaments, providing tensile strength",
+        "B": "Large arteries, providing elastic recoil",
+        "C": "Lymph nodes, spleen, and bone marrow, forming a structural framework for immune and blood-forming cells",
+        "D": "Intervertebral discs, providing compression resistance"
+      },
+      "correctAnswer": "C",
+      "rationale": "Reticular fibers are thin type III collagen fibers organized into a delicate meshwork (stroma) in lymphoid organs (lymph nodes, spleen), bone marrow, and liver. This lattice provides structural support for immune cells and hematopoietic (blood-forming) cells. Tendons = dense regular collagen. Arteries = elastic fibers. Intervertebral discs = fibrocartilage.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "reticular fibers — lymphoid organ stroma"
+    },
+    {
+      "questionId": "four-tissue-types-Q27",
+      "stem": "Osteoclasts and osteoblasts are both found in bone (a connective tissue). They differ in that:",
+      "options": {
+        "A": "Osteoblasts break down bone matrix; osteoclasts build new bone",
+        "B": "Osteoblasts synthesize and deposit bone matrix; osteoclasts resorb (dissolve) bone matrix",
+        "C": "Osteoclasts produce collagen for bone strength; osteoblasts store mineral salts",
+        "D": "Both cell types perform identical functions but in different bone regions"
+      },
+      "correctAnswer": "B",
+      "rationale": "Osteoblasts (osteo + blast = immature forming cell) build bone by synthesizing and mineralizing bone matrix (osteoid). Osteoclasts (osteo + clast = breaking cell) resorb (break down) bone by secreting acids and enzymes. Bone remodeling requires both in balance. Bisphosphonates (e.g., alendronate) inhibit osteoclasts, used in osteoporosis. PTH stimulates osteoclasts to release calcium.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "osteoblasts vs osteoclasts — bone formation vs resorption"
+    },
+    {
+      "questionId": "four-tissue-types-Q28",
+      "stem": "Hyaline cartilage is found in which of the following locations?",
+      "options": {
+        "A": "Intervertebral discs and pubic symphysis",
+        "B": "Articular surfaces of joints, costal cartilages of ribs, and tracheal rings",
+        "C": "External ear (pinna) and epiglottis",
+        "D": "Ligamentum nuchae and aortic wall"
+      },
+      "correctAnswer": "B",
+      "rationale": "Hyaline cartilage is the most common type. Its locations: articular surfaces of synovial joints (covering bone ends), costal cartilages (connecting ribs to sternum), tracheal and bronchial rings (keeping airways open), and fetal skeleton. Fibrocartilage = intervertebral discs and pubic symphysis (tension + compression). Elastic cartilage = ear pinna and epiglottis. Ligamentum nuchae contains elastin.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "hyaline cartilage locations"
+    },
+    {
+      "questionId": "four-tissue-types-Q29",
+      "stem": "Fibrocartilage is uniquely suited for the intervertebral discs because it:",
+      "options": {
+        "A": "Is highly vascular, allowing rapid regeneration after disc herniation",
+        "B": "Combines high tensile strength (from collagen bundles) with resistance to compression, accommodating vertebral loads",
+        "C": "Is flexible and elastic, returning to shape after repeated bending of the spine",
+        "D": "Contains a high proportion of elastic fibers for flexibility, similar to the ear cartilage"
+      },
+      "correctAnswer": "B",
+      "rationale": "Fibrocartilage contains abundant dense collagen fiber bundles, giving it greater tensile strength than hyaline cartilage while retaining some compressibility. This makes it ideal for structures under both tension and compression: intervertebral discs, the pubic symphysis, and menisci of the knee. It is avascular like other cartilage types, which is why disc herniation heals poorly.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "fibrocartilage — tensile strength + compression resistance; intervertebral discs"
+    },
+    {
+      "questionId": "four-tissue-types-Q30",
+      "stem": "Red bone marrow is a form of connective tissue found primarily in flat bones (sternum, ilium, ribs) in adults. Its primary function is:",
+      "options": {
+        "A": "Storing yellow lipid-rich marrow as an energy reserve",
+        "B": "Hematopoiesis — production of all formed blood elements (RBCs, WBCs, platelets)",
+        "C": "Synthesizing calcium and phosphate for bone mineralization",
+        "D": "Providing tensile strength through collagen fiber production"
+      },
+      "correctAnswer": "B",
+      "rationale": "Red bone marrow contains hematopoietic stem cells that produce all blood cell types (erythropoiesis for RBCs, myelopoiesis for granulocytes/monocytes, thrombopoiesis for platelets, lymphopoiesis for lymphocytes). Bone marrow biopsy evaluates marrow cellularity, blast cell percentage (leukemia diagnosis), and hematopoietic function. Yellow marrow = fat storage in long bone diaphyses.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "red bone marrow — hematopoiesis; connective tissue"
+    },
+    {
+      "questionId": "four-tissue-types-Q31",
+      "stem": "The sinoatrial (SA) node generates the heart's intrinsic rhythm. These pacemaker cells are specialized:",
+      "options": {
+        "A": "Connective tissue cells embedded between cardiac muscle fibers",
+        "B": "Modified cardiac muscle cells capable of spontaneous depolarization",
+        "C": "Peripheral nervous system neurons that fire rhythmically",
+        "D": "Purkinje fibers that distribute electrical signals to the ventricles"
+      },
+      "correctAnswer": "B",
+      "rationale": "SA node cells are specialized cardiac muscle cells with modified ion channels that allow spontaneous, rhythmic depolarization (automaticity) without an external nerve signal. They are cardiac muscle tissue — not neurons or connective tissue. The SA node fires at 60–100 bpm, making it the dominant pacemaker. Purkinje fibers are also modified cardiac cells but serve conduction (delivery) rather than pacemaker (initiation) functions.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "SA node — specialized cardiac muscle; automaticity"
+    },
+    {
+      "questionId": "four-tissue-types-Q32",
+      "stem": "Inflammation is the first phase of wound healing. At the tissue level, which cells are primarily responsible for initial microbial defense and debris clearance in this phase?",
+      "options": {
+        "A": "Fibroblasts, which immediately synthesize collagen to close the wound",
+        "B": "Neutrophils (arriving within hours) and macrophages (arriving days later) phagocytosing bacteria and debris",
+        "C": "Smooth muscle cells contracting to close blood vessels and stop bleeding",
+        "D": "Epithelial cells migrating from wound edges to resurface the wound"
+      },
+      "correctAnswer": "B",
+      "rationale": "In wound healing, inflammation (days 1–4) involves: vasodilation → neutrophils arrive first (within hours) to phagocytose bacteria and debris → macrophages arrive (1–2 days) to continue phagocytosis and secrete growth factors driving the next healing phase. Re-epithelialization begins in the proliferative phase. Fibroblasts produce collagen in the proliferative phase (days 4–21).",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "wound healing inflammation phase — neutrophils and macrophages"
+    },
+    {
+      "questionId": "four-tissue-types-Q33",
+      "stem": "A keloid is an abnormal scar response that extends beyond the original wound boundaries. At the tissue level, this results from:",
+      "options": {
+        "A": "Insufficient collagen production by fibroblasts during wound healing",
+        "B": "Excessive collagen deposition by overactive fibroblasts during the remodeling phase",
+        "C": "Infection preventing normal epithelialization across the wound surface",
+        "D": "Destruction of the basement membrane preventing wound closure"
+      },
+      "correctAnswer": "B",
+      "rationale": "Keloids form when fibroblasts in the wound produce excess collagen during remodeling, creating dense fibrous tissue that extends beyond the original wound margins. They are most common on the ears, chest, and shoulders, and in people with darker skin tones. Hypertrophic scars remain within the wound margins. Both result from excess collagen — the difference is spatial extent.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "keloid — excess collagen deposition by fibroblasts"
+    },
+    {
+      "questionId": "four-tissue-types-Q34",
+      "stem": "Ependymal cells line the ventricles of the brain and the central canal of the spinal cord. Their primary function is:",
+      "options": {
+        "A": "Producing myelin sheaths for neurons within the CNS",
+        "B": "Producing and circulating cerebrospinal fluid (CSF)",
+        "C": "Phagocytosing pathogens that enter the CSF",
+        "D": "Forming the blood-brain barrier at the capillary level"
+      },
+      "correctAnswer": "B",
+      "rationale": "Ependymal cells are neuroglia that line the ventricles and central canal. Specialized ependymal cells (choroid plexus epithelium) produce CSF by filtering blood plasma. Their cilia beat to circulate CSF through the ventricular system. Oligodendrocytes = CNS myelin. Microglia = CNS phagocytes. Astrocytes + endothelial cells = blood-brain barrier.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "ependymal cells — CSF production and circulation"
+    },
+    {
+      "questionId": "four-tissue-types-Q35",
+      "stem": "Serous membranes line body cavities and cover organs. The serous membrane covering the lung is called the visceral pleura. Its counterpart lining the thoracic wall is the:",
+      "options": {
+        "A": "Visceral pericardium",
+        "B": "Parietal pleura",
+        "C": "Peritoneum",
+        "D": "Mesentery"
+      },
+      "correctAnswer": "B",
+      "rationale": "Serous membranes have two layers: the visceral layer covers the organ, and the parietal layer lines the body cavity wall. In the thorax: visceral pleura covers the lung; parietal pleura lines the chest wall. Between them is a thin film of serous fluid that allows the layers to slide frictionlessly. Fluid accumulation between these layers = pleural effusion. Visceral pericardium covers the heart; parietal pericardium = outer sac.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "serous membranes — visceral vs parietal pleura"
+    },
+    {
+      "questionId": "four-tissue-types-Q36",
+      "stem": "Satellite cells in the peripheral nervous system differ from Schwann cells in that they:",
+      "options": {
+        "A": "Produce myelin sheaths around large-diameter peripheral axons",
+        "B": "Surround and support neuron cell bodies in dorsal root and autonomic ganglia",
+        "C": "Generate action potentials in response to nociceptive stimuli",
+        "D": "Form the perineurium (connective tissue sheath) around peripheral nerves"
+      },
+      "correctAnswer": "B",
+      "rationale": "Satellite cells are PNS glial cells that surround and support neuron cell bodies within ganglia (clusters of neuronal cell bodies outside the CNS), including dorsal root ganglia (sensory) and autonomic ganglia. They regulate the microenvironment of ganglionic neurons. Schwann cells myelinate large axons and ensheath unmyelinated axons in the PNS.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "satellite cells — surround neuron cell bodies in PNS ganglia"
+    },
+    {
+      "questionId": "four-tissue-types-Q37",
+      "stem": "Denervation atrophy differs from disuse atrophy in that denervation atrophy:",
+      "options": {
+        "A": "Is fully reversible with physical therapy exercises",
+        "B": "Occurs more slowly than disuse atrophy over months to years",
+        "C": "Is caused by loss of motor nerve supply to muscle rather than reduced use, and produces more severe, rapid muscle wasting",
+        "D": "Only affects slow-twitch (type I) muscle fibers"
+      },
+      "correctAnswer": "C",
+      "rationale": "Disuse atrophy = muscle shrinkage from inactivity (e.g., limb casting, bedrest) — slow, partially reversible. Denervation atrophy = muscle wasting from loss of the motor nerve supply (e.g., spinal cord injury, polio, amyotrophic lateral sclerosis) — more rapid and severe because muscle cells require ongoing neural trophic signals. Without reinnervation, denervated muscle eventually undergoes fibrosis and complete replacement by fibrous connective tissue.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "denervation vs disuse atrophy — mechanism and severity"
+    },
+    {
+      "questionId": "four-tissue-types-Q38",
+      "stem": "Which type of epithelial cell junction allows direct electrical coupling between adjacent cardiac muscle cells?",
+      "options": {
+        "A": "Tight junctions",
+        "B": "Desmosomes",
+        "C": "Gap junctions",
+        "D": "Hemidesmosomes"
+      },
+      "correctAnswer": "C",
+      "rationale": "Gap junctions are protein channels (connexins) that directly connect the cytoplasm of adjacent cells, allowing ions and small molecules to pass — enabling electrical coupling. In cardiac intercalated discs, gap junctions allow action potentials to spread rapidly from cell to cell, synchronizing contraction. Tight junctions = seal extracellular space. Desmosomes = mechanical adhesion. Hemidesmosomes = anchor epithelium to basement membrane.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "gap junctions — electrical coupling; cardiac synchronization"
+    },
+    {
+      "questionId": "four-tissue-types-Q39",
+      "stem": "Which connective tissue cell type is primarily responsible for synthesizing the collagen and elastic fibers of the extracellular matrix?",
+      "options": {
+        "A": "Macrophages",
+        "B": "Mast cells",
+        "C": "Fibroblasts",
+        "D": "Plasma cells"
+      },
+      "correctAnswer": "C",
+      "rationale": "Fibroblasts are the primary cell type responsible for synthesizing and secreting collagen, elastic fibers, and ground substance components of the extracellular matrix. They are essential for wound healing (forming granulation tissue and scar). Macrophages = phagocytes. Mast cells = release histamine/heparin (inflammation, allergy). Plasma cells = antibody-secreting B lymphocytes.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "fibroblasts — ECM synthesis; collagen and elastic fibers"
+    },
+    {
+      "questionId": "four-tissue-types-Q40",
+      "stem": "In the proliferative phase of wound healing (days 4–21), granulation tissue fills the wound. What does granulation tissue consist of?",
+      "options": {
+        "A": "Mature scar tissue composed entirely of dense collagen",
+        "B": "New capillaries (angiogenesis), fibroblasts depositing collagen, and inflammatory cells in a loose connective tissue matrix",
+        "C": "A layer of newly divided keratinocytes resurfacing the wound",
+        "D": "Lymphocytes and plasma cells producing antibodies against wound pathogens"
+      },
+      "correctAnswer": "B",
+      "rationale": "Granulation tissue is vascularized, provisional connective tissue formed in the proliferative wound healing phase. It contains: new capillaries (angiogenesis — providing O₂ and nutrients), fibroblasts (producing collagen to strengthen the wound), myofibroblasts (contracting the wound margins), and macrophages. It appears red and granular at the wound base. Re-epithelialization occurs across this tissue.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "granulation tissue composition — angiogenesis + fibroblasts"
+    },
+    {
+      "questionId": "four-tissue-types-Q41",
+      "stem": "Which of the following best describes the periosteum?",
+      "options": {
+        "A": "The inner lining of the medullary cavity of long bones",
+        "B": "The fibrous connective tissue membrane covering the outer surface of bone",
+        "C": "The cartilage covering the articular surface of bones at joints",
+        "D": "The vascular network supplying the bone marrow"
+      },
+      "correctAnswer": "B",
+      "rationale": "The periosteum is a dense fibrous connective tissue membrane covering the outer surface of bone (except at articular surfaces). It contains osteoprogenitor cells (bone stem cells) and is essential for bone repair after fracture — providing cells that become osteoblasts. It is also richly innervated, which is why periosteal stripping (as in fractures) is extremely painful. The endosteum lines the medullary cavity.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "periosteum — outer bone membrane; fracture repair"
+    },
+    {
+      "questionId": "four-tissue-types-Q42",
+      "stem": "White adipose tissue serves as more than energy storage. Which function of white adipose makes it clinically relevant to cardiovascular risk?",
+      "options": {
+        "A": "Thermogenesis — generating heat to maintain core body temperature",
+        "B": "Secretion of adipokines (e.g., leptin, adiponectin, inflammatory cytokines) that influence metabolism, appetite, and inflammation",
+        "C": "Hematopoiesis — producing white blood cells when bone marrow is insufficient",
+        "D": "Myelin synthesis — supporting nerve insulation in peripheral neurons"
+      },
+      "correctAnswer": "B",
+      "rationale": "White adipose is an active endocrine organ secreting adipokines: leptin (appetite regulation), adiponectin (improves insulin sensitivity), and pro-inflammatory cytokines (IL-6, TNF-α) in obesity. Excess visceral adipose tissue promotes chronic low-grade inflammation → insulin resistance → cardiovascular risk. Brown adipose tissue (not white) performs thermogenesis via uncoupled mitochondria.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "white adipose — endocrine function; adipokines; cardiovascular risk"
+    },
+    {
+      "questionId": "four-tissue-types-Q43",
+      "stem": "The Purkinje fibers of the cardiac conduction system are:",
+      "options": {
+        "A": "Autonomic nerve fibers that directly stimulate ventricular muscle",
+        "B": "Specialized cardiac muscle cells that rapidly conduct action potentials to the ventricular muscle mass",
+        "C": "Smooth muscle cells that regulate atrioventricular valve closure",
+        "D": "Connective tissue fibers anchoring the AV node to the ventricular septum"
+      },
+      "correctAnswer": "B",
+      "rationale": "Purkinje fibers are large, specialized cardiac muscle cells with few myofibrils but abundant gap junctions, adapted for rapid electrical conduction. They transmit action potentials from the bundle of His rapidly throughout the ventricular walls, ensuring near-simultaneous ventricular contraction from apex to base. They are cardiac muscle tissue — not neurons or smooth muscle. Bundle branch blocks occur when Purkinje fiber conduction is interrupted.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "Purkinje fibers — specialized cardiac muscle for rapid conduction"
+    },
+    {
+      "questionId": "four-tissue-types-Q44",
+      "stem": "A patient with a herniated intervertebral disc complains of radiating leg pain (sciatica). The disc herniation damages which tissue structures?",
+      "options": {
+        "A": "Articular hyaline cartilage covering the vertebral body ends",
+        "B": "Fibrocartilage nucleus pulposus and annulus fibrosus compressing adjacent nerve roots",
+        "C": "Elastic cartilage of the ligamentum flavum stretching the neural canal",
+        "D": "Dense regular connective tissue tendons attached to the vertebrae"
+      },
+      "correctAnswer": "B",
+      "rationale": "Intervertebral discs consist of a fibrocartilaginous outer ring (annulus fibrosus) surrounding a gel-like nucleus pulposus. Herniation occurs when the nucleus pulposus breaches the annulus fibrosus and compresses adjacent spinal nerve roots. The sciatic nerve (formed from L4–S3 roots) is commonly compressed by L4/L5 or L5/S1 disc herniation → sciatica. The slow healing of fibrocartilage (avascular) makes disc injuries slow to recover.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "disc herniation — fibrocartilage; nucleus pulposus; nerve root compression"
+    },
+    {
+      "questionId": "four-tissue-types-Q45",
+      "stem": "Hemidesmosomes differ from desmosomes in that they:",
+      "options": {
+        "A": "Connect two adjacent epithelial cells to each other",
+        "B": "Anchor the basal surface of epithelial cells to the basement membrane below",
+        "C": "Allow ions to pass between epithelial cells for electrical signaling",
+        "D": "Seal the space between epithelial cells to prevent leakage"
+      },
+      "correctAnswer": "B",
+      "rationale": "Hemidesmosomes anchor the basal surface of epithelial cells to the underlying basement membrane using integrins on the epithelial side and laminin in the basement membrane. They are 'half desmosomes' — only one cell involved, attaching to the ECM below rather than to an adjacent cell. In epidermolysis bullosa, hemidesmosomes are defective → skin layers separate with minor trauma (blistering disease).",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "hemidesmosomes — basal cell-to-basement membrane anchoring"
     }
   ]
 }
