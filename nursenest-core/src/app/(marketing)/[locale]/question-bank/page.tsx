@@ -6,10 +6,10 @@ import { resolveMarketingCopy } from "@/lib/marketing-i18n-core";
 import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
 import { getMarketingRegionFromCookies } from "@/lib/region/marketing-region-server";
 import {
-  defaultPublicLessonsMetaDescription,
-  defaultPublicLessonsMetaTitle,
+  defaultQuestionBankMetaDescription,
+  defaultQuestionBankMetaTitle,
 } from "@/lib/marketing/nursing-tier-public-labels";
-import { PublicLessonsHubView } from "@/components/marketing/public-lessons-hub-view";
+import { PublicQuestionBankHubView } from "@/components/marketing/public-question-bank-hub-view";
 import type { MarketingRegionToggle } from "@/lib/marketing/marketing-entry-routes";
 
 export const revalidate = 600;
@@ -25,17 +25,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const metaSfx = marketingRegion === "US" ? "US" : "CA";
   const title = resolveMarketingCopy(
     m,
-    `pages.publicLessons.metaTitle${metaSfx}`,
+    `pages.publicQuestionBank.metaTitle${metaSfx}`,
     en,
-    defaultPublicLessonsMetaTitle(marketingRegion),
+    defaultQuestionBankMetaTitle(marketingRegion),
   );
   const description = resolveMarketingCopy(
     m,
-    `pages.publicLessons.metaDescription${metaSfx}`,
+    `pages.publicQuestionBank.metaDescription${metaSfx}`,
     en,
-    defaultPublicLessonsMetaDescription(marketingRegion),
+    defaultQuestionBankMetaDescription(marketingRegion),
   );
-  const alt = marketingAlternatesSharedPage(locale, "/lessons");
+  const alt = marketingAlternatesSharedPage(locale, "/question-bank");
   return {
     title,
     description,
@@ -44,8 +44,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default async function LocalizedLessonsPage({ params }: Props) {
+export default async function LocalizedQuestionBankPage({ params }: Props) {
   const { locale } = await params;
   if (!isCoreHostedNonDefaultLocale(locale)) notFound();
-  return <PublicLessonsHubView locale={locale} />;
+  return <PublicQuestionBankHubView locale={locale} />;
 }

@@ -22,6 +22,8 @@ import {
 import { trackClientEvent } from "@/lib/observability/posthog-client";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 import { TierGatewayDropdown } from "@/components/layout/tier-gateway-dropdown";
+import { marketingExamHubPath } from "@/lib/marketing/country-exam-offerings";
+import { HUB } from "@/lib/marketing/marketing-entry-routes";
 
 const NAV_LINK_CLASS =
   "nn-marketing-body-sm nn-marketing-nav-link font-medium tracking-tight text-[var(--theme-menu-text)]";
@@ -137,6 +139,40 @@ export function SiteHeader() {
               <div className="mb-3 flex flex-col gap-1">
                 <p className="mb-1 px-3 text-[11px] font-semibold uppercase tracking-widest text-[var(--theme-muted-text)]">
                   {t("nav.tierDrop.heading")}
+                </p>
+                {[
+                  { key: "rn", href: marketingExamHubPath(region, "rn"), labelKey: "nav.tierDrop.rnTitle" as const },
+                  {
+                    key: "pn",
+                    href: marketingExamHubPath(region, "pn"),
+                    labelKey: (region === "CA" ? "nav.tierDrop.rpnTitle" : "nav.tierDrop.lpnTitle") as Parameters<typeof t>[0],
+                  },
+                  { key: "np", href: marketingExamHubPath(region, "np"), labelKey: "nav.tierDrop.npTitle" as const },
+                  { key: "allied", href: marketingExamHubPath(region, "allied"), labelKey: "nav.tierDrop.alliedTitle" as const },
+                  { key: "pre-nursing", href: "/pre-nursing", labelKey: "nav.tierDrop.preNursingTitle" as const },
+                  { key: "tools", href: HUB.tools, labelKey: "nav.tierDrop.toolsTitle" as const },
+                ].map((tier) => (
+                  <Link
+                    key={tier.key}
+                    href={localizeHref(tier.href)}
+                    className={`${NAV_LINK_CLASS} rounded-xl px-3 py-2.5`}
+                    onClick={() => {
+                      trackClientEvent(PH.marketingNavClick, {
+                        actor: "anonymous",
+                        nav_id: `tier_drop_${tier.key}`,
+                        surface: "site_header_mobile_drawer",
+                        marketing_region: region,
+                      });
+                      setMobileOpen(false);
+                    }}
+                  >
+                    {t(tier.labelKey)}
+                  </Link>
+                ))}
+              </div>
+              <div className="mb-3 flex flex-col gap-1">
+                <p className="mb-1 px-3 text-[11px] font-semibold uppercase tracking-widest text-[var(--theme-muted-text)]">
+                  {t("nav.more")}
                 </p>
                 {marketingNav.map((item) => (
                   <Link
