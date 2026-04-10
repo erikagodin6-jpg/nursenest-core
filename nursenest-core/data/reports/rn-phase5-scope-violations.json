@@ -1,0 +1,14 @@
+{
+  "totalTopics": 11,
+  "scopeViolationCount": 0,
+  "scopeViolations": [],
+  "ratioViolations": [],
+  "carryForwardChecks": {
+    "miScopeStillBounded": true,
+    "peSplitStillBounded": true,
+    "acuteMiTitleFirst60Only": true,
+    "postMiTitlePostAcute": true,
+    "dvtOnlyTopicInCardiac": true,
+    "peAcuteTopicInRespiratory": true
+  }
+}

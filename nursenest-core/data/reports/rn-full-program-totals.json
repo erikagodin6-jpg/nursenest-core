@@ -1,0 +1,35 @@
+{
+  "phases": {
+    "Phase 1 pilot": {
+      "topics": 27,
+      "lessons": 30,
+      "questions": 620
+    },
+    "Phase 2": {
+      "topics": 37,
+      "lessons": 60,
+      "questions": 1150
+    },
+    "Phase 3": {
+      "topics": 78,
+      "lessons": 116,
+      "questions": 2195
+    },
+    "Phase 4": {
+      "topics": 34,
+      "lessons": 50,
+      "questions": 935
+    },
+    "Phase 5": {
+      "topics": 11,
+      "lessons": 18,
+      "questions": 335
+    }
+  },
+  "fullProgram": {
+    "totalTopics": 187,
+    "totalLessons": 274,
+    "totalQuestions": 5235,
+    "uniqueTopicSlugs": 187
+  }
+}

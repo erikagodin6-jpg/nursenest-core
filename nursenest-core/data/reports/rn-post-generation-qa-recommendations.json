@@ -1,0 +1,9 @@
+{
+  "recommendations": [
+    "Run a final cross-phase duplicate stem hash audit across all five phase artifacts before import.",
+    "Run a pre-import referential integrity check: each question.topicSlug must exist in at least one lesson.topicSlug in same phase.",
+    "Run one dry-run importer pass into staging and verify phase-level counts match rn-full-program-totals.json exactly.",
+    "Spot-review 20 random NGN items (Bowtie/Matrix/Trend/SATA/Priority) for format quality before production import.",
+    "Lock MI/PE boundary assertions as automated checks in the generation QA script for future reruns."
+  ]
+}

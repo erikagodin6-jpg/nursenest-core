@@ -1,0 +1,842 @@
+{
+  "version": 1,
+  "phase": 1,
+  "part": 2,
+  "label": "Phase 1 Question Sets — Topics 8 through 14",
+  "topicsIncluded": [
+    "flank-pain-urinary-differential",
+    "knee-pain-differential-acute-chronic",
+    "rash-differential-primary-secondary-urgent",
+    "red-eye-differential-urgent-vs-benign",
+    "hemoptysis-differential-magnitude-workup",
+    "lymphadenopathy-differential-benign-malignant",
+    "endocrine-crisis-recognition-dka-hhs-adrenal"
+  ],
+  "scopeFenceRef": "np-scope-fences.json",
+  "generationRules": "All questions test recognition or differential reasoning only. No management, prescribing, or dosing content beyond recognition of urgency. Stem anchors are unique and do not overlap with np-phase1-questions-part1.json.",
+  "questions": [
+
+    {
+      "questionId": "np-p1-083",
+      "topicSlug": "flank-pain-urinary-differential",
+      "lessonPart": "1",
+      "difficulty": "hard",
+      "stemAnchor": "35yo-male-acute-colicky-flank-pain-hematuria-CVA-no-fever",
+      "stem": "A 35-year-old male presents with sudden-onset severe colicky right flank pain that radiates to his right groin and scrotum. He is writhing on the exam table and cannot find a comfortable position. He has nausea without vomiting and gross hematuria. Temperature 37.1°C, HR 106, BP 148/92. CVA tenderness is present on the right. Urinalysis: 50–100 RBCs/hpf, no WBCs, no bacteria. What is the most likely diagnosis?",
+      "options": {
+        "A": "Pyelonephritis with hematuria",
+        "B": "Ureteral calculus (nephrolithiasis)",
+        "C": "Ruptured abdominal aortic aneurysm",
+        "D": "Acute epididymo-orchitis"
+      },
+      "correctAnswer": "B",
+      "rationale": "Nephrolithiasis classically presents with acute colicky flank-to-groin pain (following the ureteral path), gross hematuria, and an inability to remain still — unlike peritoneal irritation where patients lie motionless. Afebrile presentation without pyuria distinguishes uncomplicated stones from infected obstructive uropathy. CT abdomen/pelvis without contrast is the gold standard imaging; ultrasound is appropriate for radiation-sensitive patients (children, pregnant women)."
+    },
+    {
+      "questionId": "np-p1-084",
+      "topicSlug": "flank-pain-urinary-differential",
+      "lessonPart": "1",
+      "difficulty": "hard",
+      "stemAnchor": "50yo-male-flank-pain-fever-rigors-CVA-tender-WBC-elevated-pyuria",
+      "stem": "A 50-year-old male with a history of recurrent UTIs presents with 2 days of right flank pain, fever of 39.2°C with rigors, nausea, and dysuria. On exam: CVA tenderness is present on the right. UA: >100 WBCs/hpf, bacteria present, nitrites positive, positive leukocyte esterase. WBC 16,800 with left shift. He is nauseous but able to take oral fluids. BP 118/78. What distinguishes this from uncomplicated cystitis and guides his management?",
+      "options": {
+        "A": "The presence of dysuria makes this complicated cystitis; 3 days of oral antibiotics is appropriate",
+        "B": "Systemic signs (fever, rigors, CVA tenderness) indicate upper urinary tract infection (pyelonephritis), requiring a full treatment course with monitoring",
+        "C": "Recurrent UTI history alone requires hospitalization regardless of clinical status",
+        "D": "WBC count above 15,000 automatically mandates IV antibiotics"
+      },
+      "correctAnswer": "B",
+      "rationale": "Pyelonephritis is diagnosed by the combination of lower urinary tract symptoms with upper tract signs: fever, rigors, CVA tenderness, systemic illness, and UA showing pyuria/bacteriuria. This patient is hemodynamically stable and tolerating oral intake, supporting outpatient treatment with 7–14 days of oral antibiotics (fluoroquinolone if local resistance rates allow; trimethoprim-sulfamethoxazole or beta-lactam alternatives). Hospitalization is warranted for inability to tolerate oral medications, immunocompromise, pregnancy, or hemodynamic instability."
+    },
+    {
+      "questionId": "np-p1-085",
+      "topicSlug": "flank-pain-urinary-differential",
+      "lessonPart": "1",
+      "difficulty": "expert",
+      "stemAnchor": "55yo-male-obstructive-stone-infected-urosepsis-fever-flank",
+      "stem": "A 55-year-old male presents with right flank pain and fever of 39.8°C. CT scan confirms a 12 mm obstructing right ureteral stone with moderate hydronephrosis. UA shows pyuria. HR 118, BP 98/62. He appears toxic and has rigors. Creatinine is 2.4 (baseline 1.0). Which single finding in this scenario makes this a urological emergency requiring immediate intervention beyond antibiotics alone?",
+      "options": {
+        "A": "Stone size >10 mm suggesting low likelihood of spontaneous passage",
+        "B": "Obstructing stone with infected urine proximal to the obstruction causing urosepsis (infected hydronephrosis)",
+        "C": "Elevated creatinine indicating AKI from dehydration",
+        "D": "Fever above 39°C in the setting of nephrolithiasis"
+      },
+      "correctAnswer": "B",
+      "rationale": "An obstructing ureteral calculus with infected hydronephrosis (pus under pressure) cannot be managed with antibiotics alone — bacteria cannot be cleared from infected urine that cannot drain. This constitutes a urological emergency requiring emergent decompression via ureteral stent or nephrostomy tube in addition to IV antibiotics and hemodynamic resuscitation. Failure to drain will result in septic shock and potential renal loss."
+    },
+    {
+      "questionId": "np-p1-086",
+      "topicSlug": "flank-pain-urinary-differential",
+      "lessonPart": "1",
+      "difficulty": "expert",
+      "stemAnchor": "62yo-male-flank-pain-weight-loss-hematuria-no-UTI-symptoms-RCC",
+      "stem": "A 62-year-old male with a 40 pack-year smoking history and hypertension presents with a 3-month history of left flank pain and painless gross hematuria. He has lost 14 pounds without trying. He denies dysuria, frequency, or urgency. On exam: a non-tender mass is palpable in the left flank. UA: >50 RBCs/hpf, no pyuria, no bacteria. Creatinine is normal. What is the most critical diagnosis to exclude?",
+      "options": {
+        "A": "Urinary tract infection with hematuria",
+        "B": "Left-sided nephrolithiasis with flank hematuria",
+        "C": "Renal cell carcinoma",
+        "D": "IgA nephropathy causing recurrent hematuria"
+      },
+      "correctAnswer": "C",
+      "rationale": "The classic triad of RCC — flank pain, gross hematuria, and a palpable flank mass — though present in <10% of cases, is present here. Combined with unintentional weight loss and a 62-year-old male smoker (strongest RCC risk factor), this requires urgent CT abdomen/pelvis with and without contrast for renal mass protocol imaging. Painless hematuria without signs of infection in an older adult is cancer until proven otherwise."
+    },
+    {
+      "questionId": "np-p1-087",
+      "topicSlug": "flank-pain-urinary-differential",
+      "lessonPart": "1",
+      "difficulty": "hard",
+      "stemAnchor": "28yo-male-sudden-testicular-pain-nausea-high-riding-testicle",
+      "stem": "A 28-year-old male presents with sudden-onset severe left scrotal pain that woke him from sleep. He has nausea and vomited once. On exam: the left testicle is exquisitely tender, high-riding, and the cremasteric reflex is absent on the left. Prehn's sign is negative. There is no fever. Urinalysis is normal. What is the most appropriate next step?",
+      "options": {
+        "A": "Prescribe antibiotics for epididymo-orchitis and follow up in 48 hours",
+        "B": "Order Doppler ultrasound to confirm absent blood flow before surgical referral",
+        "C": "Immediately activate urology consultation for suspected testicular torsion — time is testicle",
+        "D": "Prescribe NSAIDs and scrotal support; reassess if pain worsens"
+      },
+      "correctAnswer": "C",
+      "rationale": "Testicular torsion is a urological emergency with a 6-hour window to salvage the testis (98% salvage rate <6 hours; <10% after 24 hours). The absence of cremasteric reflex is the most sensitive physical exam finding (90%+). Negative Prehn's sign (elevation does not relieve pain) and high-riding testicle confirm the diagnosis. Clinical diagnosis is sufficient to go directly to surgery — Doppler ultrasound should not delay surgical exploration when clinical suspicion is high."
+    },
+    {
+      "questionId": "np-p1-088",
+      "topicSlug": "flank-pain-urinary-differential",
+      "lessonPart": "1",
+      "difficulty": "hard",
+      "stemAnchor": "78yo-female-flank-pain-hematuria-new-AF-anticoagulation-perinephric",
+      "stem": "A 78-year-old female on anticoagulation (rivaroxaban) for atrial fibrillation presents with acute onset left flank pain and gross hematuria. No fever. UA: 3+ blood, no WBCs. Hemoglobin has dropped from 12.4 to 9.8 g/dL. CT scan shows a left perinephric hematoma with active bleeding. INR equivalent on anti-Xa level is supratherapeutic. What is the most likely explanation for her presentation?",
+      "options": {
+        "A": "Nephrolithiasis complicated by anticoagulation",
+        "B": "Anticoagulant-associated spontaneous perinephric (subcapsular) hematoma",
+        "C": "Renal cell carcinoma with spontaneous hemorrhage",
+        "D": "Pyelonephritis with hemorrhagic urine"
+      },
+      "correctAnswer": "B",
+      "rationale": "Spontaneous perinephric hematoma from over-anticoagulation is a recognized complication of anticoagulant therapy — supratherapeutic levels can cause bleeding into the perinephric space without underlying structural pathology. The combination of flank pain, gross hematuria, dropping hemoglobin, and CT-confirmed perinephric hematoma with supratherapeutic anti-Xa level confirms this diagnosis. Anticoagulation reversal and emergent urology/interventional radiology consultation are priorities."
+    },
+    {
+      "questionId": "np-p1-089",
+      "topicSlug": "flank-pain-urinary-differential",
+      "lessonPart": "1",
+      "difficulty": "hard",
+      "stemAnchor": "40yo-female-recurrent-UTIs-3x-year-reflux-vesicoureteral-anatomic",
+      "stem": "A 40-year-old female presents with her third UTI in 6 months, each confirmed with culture. Her cultures have grown E. coli twice and Klebsiella once, each appropriately treated. She has no anatomical symptoms (no incontinence, no pelvic prolapse). She is postmenopausal and sexually active. Renal function is normal. Urinalysis between episodes is normal. Which evaluation should be considered for recurrent UTIs in a postmenopausal woman?",
+      "options": {
+        "A": "Immediate urodynamic testing to evaluate bladder function",
+        "B": "Pelvic ultrasound and post-void residual urine volume to identify structural risk factors",
+        "C": "CT urography to rule out urothelial carcinoma as a contributing factor",
+        "D": "Cystoscopy as the first evaluation for all cases of recurrent UTI"
+      },
+      "correctAnswer": "B",
+      "rationale": "In postmenopausal women with recurrent UTIs (≥3 in 12 months or ≥2 in 6 months), contributing structural factors include elevated post-void residual (incomplete bladder emptying from atrophic changes or pelvic floor relaxation) and pelvic prolapse. Ultrasound with PVR measurement is a non-invasive initial evaluation. Cystoscopy and CT urography are reserved for cases with risk factors for malignancy (painless hematuria, risk factors). Genitourinary syndrome of menopause (atrophic vaginitis) is the most common modifiable risk factor."
+    },
+    {
+      "questionId": "np-p1-090",
+      "topicSlug": "flank-pain-urinary-differential",
+      "lessonPart": "1",
+      "difficulty": "expert",
+      "stemAnchor": "35yo-female-flank-pain-10-weeks-pregnant-pyuria-pyelonephritis",
+      "stem": "A 35-year-old female at 10 weeks gestation presents with right flank pain, fever of 38.8°C, nausea, and vomiting. CVA tenderness is present on the right. UA: large leukocyte esterase, positive nitrites, >50 WBCs/hpf, bacteria present. She cannot tolerate oral intake due to nausea. WBC 14,200. Which aspect of this presentation mandates hospitalization rather than outpatient management?",
+      "options": {
+        "A": "Fever alone mandates hospitalization in all pregnant patients with UTI",
+        "B": "Inability to tolerate oral antibiotics, pregnancy (increased risk of preterm labor and sepsis), and fever with systemic illness require inpatient IV antibiotic management",
+        "C": "A 10-week gestation is too early for UTI to affect the fetus",
+        "D": "WBC >14,000 automatically requires hospitalization in pregnancy"
+      },
+      "correctAnswer": "B",
+      "rationale": "Pyelonephritis in pregnancy is associated with significant complications including preterm labor, septic shock, respiratory distress syndrome (from endotoxin-induced capillary injury), and maternal mortality — making all pregnant patients with pyelonephritis candidates for hospitalization for IV antibiotics. Additionally, this patient cannot tolerate oral medications. Safe antibiotic choices in pregnancy (first trimester) include cephalosporins and ampicillin; fluoroquinolones and trimethoprim are generally avoided."
+    },
+
+    {
+      "questionId": "np-p1-091",
+      "topicSlug": "knee-pain-differential-acute-chronic",
+      "lessonPart": "1",
+      "difficulty": "hard",
+      "stemAnchor": "22yo-female-basketball-pivot-knee-effusion-positive-Lachman-ACL",
+      "stem": "A 22-year-old female basketball player presents after a non-contact deceleration and pivot injury to her right knee during practice. She reports hearing a 'pop' and immediate knee swelling that developed within 2 hours. She was unable to continue playing. On exam: significant effusion, positive Lachman test (anterior translation of tibia with a soft endpoint), positive anterior drawer test, and negative McMurray's test. X-ray shows no fracture. What is the most likely diagnosis?",
+      "options": {
+        "A": "Medial collateral ligament sprain",
+        "B": "Anterior cruciate ligament (ACL) rupture",
+        "C": "Posterior cruciate ligament rupture",
+        "D": "Lateral meniscus tear"
+      },
+      "correctAnswer": "B",
+      "rationale": "ACL rupture is the most common serious ligamentous knee injury in young female athletes, often occurring with the classic non-contact deceleration/pivot mechanism. The audible 'pop' followed by immediate hemarthrosis (effusion within 2 hours) is characteristic. A positive Lachman test (most sensitive test at 87%) with a soft endpoint indicates ACL deficiency. Posterior drawer test would be positive for PCL injury; McMurray's is for meniscal pathology."
+    },
+    {
+      "questionId": "np-p1-092",
+      "topicSlug": "knee-pain-differential-acute-chronic",
+      "lessonPart": "1",
+      "difficulty": "hard",
+      "stemAnchor": "55yo-male-knee-effusion-hot-erythematous-cant-walk-acute-gout",
+      "stem": "A 55-year-old male with obesity and hypertension presents with a 2-day history of severe right knee pain, swelling, warmth, and erythema. He cannot bear weight. He had a similar episode affecting his great toe 2 years ago that resolved with 'anti-inflammatory pills.' No trauma. Temperature 37.8°C. On exam: warm, erythematous, tense effusion of the right knee. Uric acid is 9.2 mg/dL. WBC 12,400. What is the gold standard to distinguish the most likely diagnosis from septic arthritis?",
+      "options": {
+        "A": "Serum uric acid level; uric acid >9.0 confirms gout",
+        "B": "Arthrocentesis with synovial fluid analysis (crystal identification + Gram stain + culture)",
+        "C": "X-ray showing 'rat bite' erosions confirming gout",
+        "D": "Serum CRP and ESR to distinguish inflammatory from infectious arthritis"
+      },
+      "correctAnswer": "B",
+      "rationale": "Arthrocentesis is mandatory when septic arthritis cannot be excluded on clinical grounds — septic arthritis is a joint-destructive emergency requiring emergent drainage and IV antibiotics. Synovial fluid in gout shows negatively birefringent needle-shaped urate crystals under polarized microscopy; septic arthritis shows >50,000 WBCs/mm3, positive Gram stain, or positive culture. Serum uric acid can be normal during an acute gout attack and cannot distinguish gout from infection."
+    },
+    {
+      "questionId": "np-p1-093",
+      "topicSlug": "knee-pain-differential-acute-chronic",
+      "lessonPart": "1",
+      "difficulty": "expert",
+      "stemAnchor": "45yo-male-prosthetic-knee-fever-erythema-swollen-PJI",
+      "stem": "A 45-year-old male presents 8 weeks after a right total knee arthroplasty with worsening knee pain, swelling, warmth, and erythema around the surgical site. He has a low-grade fever of 38.1°C. His inflammatory markers are elevated: ESR 68, CRP 18 mg/L. The wound is intact with no drainage. What is the most critical diagnosis to exclude and how is it confirmed?",
+      "options": {
+        "A": "Normal post-operative inflammation; reassure and continue physical therapy",
+        "B": "Periprosthetic joint infection (PJI); confirmed by arthrocentesis of the prosthetic joint for synovial WBC count, culture, and inflammatory markers",
+        "C": "DVT causing knee swelling post-operatively; Doppler ultrasound is the priority",
+        "D": "Component loosening; weight-bearing X-ray is the diagnostic test"
+      },
+      "correctAnswer": "B",
+      "rationale": "Periprosthetic joint infection (PJI) occurring within 3 months of arthroplasty is considered early infection (often hematogenous seeding or intraoperative contamination) and is a limb-threatening orthopedic emergency. Arthrocentesis of the prosthetic joint (not the native joint) with synovial WBC count (>3,000 cells/mm3 highly suggestive), alpha-defensin, and culture are required for diagnosis. Orthopedic surgery must be involved urgently — surgical debridement and component exchange or explantation are the primary treatments."
+    },
+    {
+      "questionId": "np-p1-094",
+      "topicSlug": "knee-pain-differential-acute-chronic",
+      "lessonPart": "1",
+      "difficulty": "hard",
+      "stemAnchor": "68yo-female-medial-knee-pain-stiffness-bony-enlargement-crepitus-OA",
+      "stem": "A 68-year-old female presents with bilateral medial knee pain that is worse with activity and improves with rest. She reports morning stiffness lasting less than 30 minutes. On exam: bilateral crepitus, mild joint line tenderness, bony joint enlargement, and minimal effusion. BMI is 34. X-ray shows medial joint space narrowing, osteophytes, and subchondral sclerosis bilaterally. Which diagnosis is most consistent?",
+      "options": {
+        "A": "Rheumatoid arthritis with symmetric joint involvement",
+        "B": "Osteoarthritis with medial compartment predominance",
+        "C": "Septic arthritis with bilateral joint involvement",
+        "D": "Pseudogout (calcium pyrophosphate deposition) presenting chronically"
+      },
+      "correctAnswer": "B",
+      "rationale": "Knee OA presents in older, overweight patients with activity-related pain, brief morning stiffness (<30 minutes — distinguishing from RA's >60 minutes), bony enlargement (osteophytes), crepitus, and X-ray findings of joint space narrowing with osteophytes and sclerosis. Medial compartment predominance reflects the varus alignment common in OA. RA is symmetric, affects smaller joints first, and has prolonged morning stiffness; septic arthritis is monoarticular and acute."
+    },
+    {
+      "questionId": "np-p1-095",
+      "topicSlug": "knee-pain-differential-acute-chronic",
+      "lessonPart": "1",
+      "difficulty": "hard",
+      "stemAnchor": "32yo-male-medial-knee-pain-McMurray-positive-twisting-injury",
+      "stem": "A 32-year-old male presents with right medial knee pain after twisting his knee while skiing 3 days ago. He reports medial joint line pain, a sense of 'something catching' in his knee, and difficulty fully extending the knee without discomfort. He has a moderate effusion. McMurray's test elicits pain and a palpable click with knee flexion and external rotation. Lachman and valgus stress tests are negative. What is the most likely diagnosis?",
+      "options": {
+        "A": "Medial collateral ligament sprain",
+        "B": "Medial meniscus tear",
+        "C": "Anterior cruciate ligament rupture",
+        "D": "Patellofemoral pain syndrome"
+      },
+      "correctAnswer": "B",
+      "rationale": "The combination of a twisting mechanism, medial joint line pain, mechanical symptoms (catching, locking), effusion, and a positive McMurray's test (pain/click with flexion + external rotation for medial meniscus) is classic for a medial meniscus tear. The negative Lachman test excludes ACL injury. MRI is the imaging of choice to confirm meniscal tear location and pattern (bucket-handle, horizontal, radial) — critical for surgical planning."
+    },
+    {
+      "questionId": "np-p1-096",
+      "topicSlug": "knee-pain-differential-acute-chronic",
+      "lessonPart": "1",
+      "difficulty": "hard",
+      "stemAnchor": "16yo-male-tibial-tuberosity-pain-activity-related-open-growth-plate",
+      "stem": "A 16-year-old male soccer player presents with anterior knee pain localized to the tibial tuberosity (below the patella) for 3 months. Pain is worse with running, jumping, and kneeling. The tibial tuberosity is enlarged and tender on palpation. X-ray shows fragmentation and irregularity of the tibial tuberosity apophysis. He is in the middle of a growth spurt. What is the most likely diagnosis?",
+      "options": {
+        "A": "Patellar tendinopathy (jumper's knee)",
+        "B": "Osgood-Schlatter disease (tibial tuberosity apophysitis)",
+        "C": "Sinding-Larsen-Johansson syndrome",
+        "D": "Stress fracture of the proximal tibia"
+      },
+      "correctAnswer": "B",
+      "rationale": "Osgood-Schlatter disease is an apophysitis of the tibial tuberosity caused by repetitive traction stress from the patellar tendon at its insertion during rapid skeletal growth — hence its prevalence in active adolescent males during growth spurts. The localized tibial tuberosity tenderness and enlargement with X-ray fragmentation are diagnostic. Patellar tendinopathy affects the patellar tendon at the inferior patellar pole; Sinding-Larsen-Johansson involves the inferior patellar pole apophysis."
+    },
+    {
+      "questionId": "np-p1-097",
+      "topicSlug": "knee-pain-differential-acute-chronic",
+      "lessonPart": "1",
+      "difficulty": "expert",
+      "stemAnchor": "50yo-male-posterior-knee-swelling-Baker-cyst-RA",
+      "stem": "A 50-year-old male with known rheumatoid arthritis presents with a posterior knee bulge that has gradually enlarged over 3 months. It is non-tender, cystic, and transilluminates. He has full range of motion. Ultrasound shows a fluid-filled structure in the popliteal fossa communicating with the joint space. He suddenly reports acute calf pain after walking. What complication has most likely occurred?",
+      "options": {
+        "A": "DVT from compression of the popliteal vein by the cyst",
+        "B": "Rupture of the Baker's (popliteal) cyst with fluid dissection into the calf (pseudothrombophlebitis)",
+        "C": "Compartment syndrome from knee effusion tracking distally",
+        "D": "Septic arthritis extending into the posterior knee bursa"
+      },
+      "correctAnswer": "B",
+      "rationale": "Baker's cyst (popliteal cyst) is a fluid-filled herniation of the synovial membrane into the popliteal fossa, commonly associated with knee joint pathology (OA, RA, meniscal tears). Sudden calf pain following a known Baker's cyst suggests cyst rupture with fluid dissection into the calf — clinically mimicking DVT (hence 'pseudothrombophlebitis'). Ultrasound is key to distinguishing cyst rupture from DVT; the presence of a crescentic fluid collection extending inferiorly below the calf muscles is characteristic of rupture."
+    },
+
+    {
+      "questionId": "np-p1-098",
+      "topicSlug": "rash-differential-primary-secondary-urgent",
+      "lessonPart": "1",
+      "difficulty": "expert",
+      "stemAnchor": "28yo-female-SJS-lamotrigine-mucocutaneous-target-lesions-fever",
+      "stem": "A 28-year-old female started lamotrigine for bipolar disorder 5 weeks ago. She now presents with fever, painful erosions of the lips and oral mucosa, and a rash covering 15% of her body surface area with characteristic 'target' lesions — central dark necrotic areas surrounded by erythematous rings. Several lesions show epidermal sloughing. She reports significant eye pain. What is the most appropriate immediate action?",
+      "options": {
+        "A": "Prescribe topical triamcinolone for the oral lesions and oral antihistamines for the rash",
+        "B": "Discontinue lamotrigine and transfer emergently — suspected Stevens-Johnson Syndrome",
+        "C": "Continue lamotrigine; this is an expected drug rash that resolves with antihistamines",
+        "D": "Prescribe oral doxycycline for suspected tick-borne illness with target lesions"
+      },
+      "correctAnswer": "B",
+      "rationale": "Stevens-Johnson Syndrome (SJS) — defined by mucocutaneous involvement with epidermal detachment <10% BSA — is a life-threatening drug hypersensitivity emergency. Lamotrigine is a well-known SJS trigger (incidence 1:100 in adults with rapid titration). Fever + painful mucosal erosions (at least 2 mucosal surfaces) + targetoid epidermal necrosis with sloughing is diagnostic. The drug must be stopped immediately; emergent transfer to a burn unit or ICU is required. Delayed recognition significantly increases mortality."
+    },
+    {
+      "questionId": "np-p1-099",
+      "topicSlug": "rash-differential-primary-secondary-urgent",
+      "lessonPart": "1",
+      "difficulty": "expert",
+      "stemAnchor": "12yo-male-meningococcemia-petechiae-purpura-fulminans-fever",
+      "stem": "A 12-year-old male presents to your urgent care with fever of 40.1°C, severe headache, and a rapidly spreading non-blanching petechial rash over his trunk and extremities. Several lesions have coalesced into purpuric plaques. He appears ill and is difficult to arouse. Vital signs: HR 132, BP 86/54, RR 28. What is the most appropriate immediate action?",
+      "options": {
+        "A": "Order a CBC and blood cultures; wait for results before starting antibiotics",
+        "B": "Administer IV/IM ceftriaxone immediately and call 911 — suspected meningococcemia with purpura fulminans",
+        "C": "Apply topical corticosteroids to reduce rash progression",
+        "D": "Reassure that viral petechiae are common in children and observe for 2 hours"
+      },
+      "correctAnswer": "B",
+      "rationale": "Non-blanching petechial/purpuric rash with fever, hemodynamic instability, and altered mental status in a child is meningococcemia (N. meningitidis) with septic shock and purpura fulminans — a rapidly fatal condition if untreated. Antibiotics (ceftriaxone 100 mg/kg IV/IM) must be given IMMEDIATELY before or concurrent with transfer; do not wait for cultures. Every 1-hour delay increases mortality by approximately 7%. This is the defining NP 'do not miss' emergency for rash."
+    },
+    {
+      "questionId": "np-p1-100",
+      "topicSlug": "rash-differential-primary-secondary-urgent",
+      "lessonPart": "1",
+      "difficulty": "hard",
+      "stemAnchor": "35yo-male-tick-bite-bull-eye-rash-EM-Lyme",
+      "stem": "A 35-year-old male presents with a gradually expanding oval-shaped erythematous rash on his upper thigh that now measures 12 cm in diameter. He noticed it 5 days ago. He has been hiking in a wooded area in Connecticut. He has mild fatigue and low-grade fever. There is a central clearing giving it a 'bull's-eye' appearance. He removed a tick about 10 days ago. What is the most likely diagnosis and the most appropriate diagnostic approach?",
+      "options": {
+        "A": "Cellulitis; order a wound culture and start antibiotics pending results",
+        "B": "Erythema migrans (EM) of early Lyme disease; clinical diagnosis — serological testing is not required for diagnosis of early localized EM",
+        "C": "RMSF; order RMSF serology and start doxycycline empirically",
+        "D": "Spider bite reaction; serological testing for Lyme is required to confirm"
+      },
+      "correctAnswer": "B",
+      "rationale": "Erythema migrans is a clinical diagnosis based on the characteristic expanding lesion (>5 cm) appearing at the tick bite site 3–30 days after exposure, in a patient with tick exposure in an endemic area. Serological testing (ELISA + Western blot two-tier testing) is NOT recommended for early localized EM because: (1) sensitivity is only 40–60% in early infection before immune response develops, and (2) the clinical diagnosis is sufficient to initiate treatment. A positive EM in an endemic area = treat."
+    },
+    {
+      "questionId": "np-p1-101",
+      "topicSlug": "rash-differential-primary-secondary-urgent",
+      "lessonPart": "1",
+      "difficulty": "hard",
+      "stemAnchor": "28yo-male-syphilis-rash-palms-soles-condyloma-lata-secondary",
+      "stem": "A 28-year-old male presents with a diffuse non-pruritic maculopapular rash involving his palms and soles. He also has low-grade fever, malaise, and generalized lymphadenopathy. On exam, moist, gray, wartlike plaques are noted in the perianal region. He recalls a painless genital ulcer about 8 weeks ago that resolved on its own. He is HIV-negative. Which diagnosis is most consistent?",
+      "options": {
+        "A": "Secondary HIV seroconversion rash",
+        "B": "Secondary syphilis",
+        "C": "Drug reaction with palmar involvement",
+        "D": "Rocky Mountain spotted fever"
+      },
+      "correctAnswer": "B",
+      "rationale": "Secondary syphilis is characterized by a non-pruritic maculopapular rash involving the palms and soles (a pathognomonic distribution), constitutional symptoms, lymphadenopathy, and condylomata lata (moist flat warty lesions in moist areas). The antecedent history of a painless genital ulcer (primary chancre) that healed spontaneously is the historical anchor. RMSF begins peripherally but is typically vesicular, fever-first, and associated with tick bite; HIV rash does not involve palms/soles in the same pattern."
+    },
+    {
+      "questionId": "np-p1-102",
+      "topicSlug": "rash-differential-primary-secondary-urgent",
+      "lessonPart": "1",
+      "difficulty": "hard",
+      "stemAnchor": "45yo-female-psoriasis-salmon-colored-plaques-elbows-knees-scalp",
+      "stem": "A 45-year-old female presents with a 2-year history of recurrent thick, silvery-scaled plaques on well-demarcated erythematous salmon-colored bases over her elbows, knees, and scalp. The plaques are mildly pruritic. Removing a scale causes pinpoint bleeding (Auspitz sign). Nails show pitting and onycholysis. She has no joint pain. Which diagnosis does this presentation most accurately describe?",
+      "options": {
+        "A": "Seborrheic dermatitis",
+        "B": "Plaque psoriasis",
+        "C": "Tinea corporis",
+        "D": "Lichen planus"
+      },
+      "correctAnswer": "B",
+      "rationale": "Plaque psoriasis presents with well-demarcated salmon-pink plaques with silvery scales in a symmetric distribution on extensor surfaces (elbows, knees), scalp, and umbilicus. The Auspitz sign (pinpoint bleeding with scale removal) and nail changes (pitting, onycholysis, oil spots) are specific to psoriasis. Seborrheic dermatitis affects sebaceous-gland-rich areas (scalp, face, central chest) with greasy yellow scales; tinea corporis has central clearing and dermatophyte hyphae on KOH prep."
+    },
+    {
+      "questionId": "np-p1-103",
+      "topicSlug": "rash-differential-primary-secondary-urgent",
+      "lessonPart": "1",
+      "difficulty": "hard",
+      "stemAnchor": "8yo-male-vesicular-rash-crops-linear-poison-ivy-contact",
+      "stem": "An 8-year-old male presents with intensely pruritic linear vesicular rash on his arms and legs after playing in the woods 2 days ago. The rash appears in streaks following the path of contact. New vesicles continue to appear. He has no fever and is systemically well. His parents are worried the rash is spreading through the fluid in the vesicles. Which statement is most accurate about this presentation?",
+      "options": {
+        "A": "Vesicular fluid is contagious and can spread the rash to others",
+        "B": "This is allergic contact dermatitis (likely poison ivy); vesicular fluid is not contagious — new lesions appear due to varying absorption of urushiol at time of exposure",
+        "C": "This is varicella zoster — start valacyclovir immediately and isolate from school",
+        "D": "The linear distribution suggests impetigo from scratching; treat with topical mupirocin"
+      },
+      "correctAnswer": "B",
+      "rationale": "Poison ivy (Toxicodendron) causes a type IV (delayed-type) hypersensitivity reaction to urushiol. The linear distribution follows skin contact paths. Vesicular fluid is NOT contagious — the impression that new lesions are 'spreading' reflects delayed immune response activation in areas that received less urushiol exposure at the time of contact. Varicella presents with centripetal distribution in crops of different stages; impetigo causes honey-crusted non-vesicular lesions, not linear patterns."
+    },
+    {
+      "questionId": "np-p1-104",
+      "topicSlug": "rash-differential-primary-secondary-urgent",
+      "lessonPart": "1",
+      "difficulty": "expert",
+      "stemAnchor": "55yo-male-RMSF-tick-bite-fever-wrists-ankles-centripetal-doxycycline",
+      "stem": "A 55-year-old male presents with 4 days of fever to 39.6°C, severe headache, myalgias, and a rash that began on his wrists and ankles and is now spreading centrally to the trunk. He removed a tick from his scalp 10 days ago while camping in North Carolina. The rash is now petechial. Platelet count is 68,000. Which management approach is correct?",
+      "options": {
+        "A": "Wait for RMSF serological confirmation before starting antibiotics",
+        "B": "Start doxycycline immediately without waiting for serological results — delay increases mortality significantly",
+        "C": "Start azithromycin as the preferred antibiotic for tick-borne illness in adults",
+        "D": "The petechial rash confirms a viral etiology; supportive care is appropriate"
+      },
+      "correctAnswer": "B",
+      "rationale": "Rocky Mountain spotted fever (RMSF) — caused by Rickettsia rickettsii — requires immediate empiric doxycycline treatment based on clinical suspicion; serological confirmation is retrospective and should never delay treatment. Mortality increases dramatically with treatment delays beyond 5 days of illness. Doxycycline is the drug of choice for all ages including children (risk of dental staining is outweighed by severity of disease). The centripetal spread (wrists/ankles to trunk) and tick exposure in an endemic area with thrombocytopenia is diagnostic pending labs."
+    },
+    {
+      "questionId": "np-p1-105",
+      "topicSlug": "rash-differential-primary-secondary-urgent",
+      "lessonPart": "1",
+      "difficulty": "expert",
+      "stemAnchor": "68yo-female-impetigo-herpetiformis-bullous-flexural-elderly",
+      "stem": "A 68-year-old female presents with a 3-week history of intensely pruritic urticarial lesions that have evolved into large tense bullae predominantly in flexural areas (axillae, inner thighs, groin). She has no mucosal involvement. Labs show peripheral eosinophilia. Skin biopsy shows subepidermal bullae with IgG and C3 deposition at the dermal-epidermal junction on direct immunofluorescence. What is the most likely diagnosis?",
+      "options": {
+        "A": "Pemphigus vulgaris with flexural predominance",
+        "B": "Bullous pemphigoid",
+        "C": "SJS from a new medication",
+        "D": "Bullous impetigo from S. aureus"
+      },
+      "correctAnswer": "B",
+      "rationale": "Bullous pemphigoid is the most common autoimmune blistering disorder, occurring predominantly in the elderly. It presents with tense bullae (subepidermal — harder to rupture than the flaccid bullae of pemphigus) in flexural areas, with prodromal urticaria and intense pruritus. Crucially, mucosal involvement is rare (unlike pemphigus vulgaris). IgG anti-basement membrane zone antibodies on direct immunofluorescence confirm the diagnosis. Pemphigus vulgaris has intraepidermal bullae with prominent mucosal erosions."
+    },
+
+    {
+      "questionId": "np-p1-106",
+      "topicSlug": "red-eye-differential-urgent-vs-benign",
+      "lessonPart": "1",
+      "difficulty": "expert",
+      "stemAnchor": "60yo-male-acute-angle-closure-glaucoma-hazy-cornea-halos-vomiting",
+      "stem": "A 60-year-old male presents with acute-onset severe right eye pain, headache, nausea, and vomiting. He noticed halos around lights earlier in the evening. On exam: the right eye is red with a hazy, steamy-appearing cornea, and the pupil is mid-dilated and non-reactive. Visual acuity is markedly reduced in the right eye. IOP measured by tonometry is 58 mmHg (normal <21 mmHg). What is the most appropriate immediate action?",
+      "options": {
+        "A": "Prescribe topical antibiotic drops for presumed bacterial conjunctivitis",
+        "B": "Immediate ophthalmology referral for acute angle-closure glaucoma — vision-threatening emergency",
+        "C": "Apply a warm compress and prescribe oral analgesics for assumed cluster headache with ocular involvement",
+        "D": "Order a CT head to rule out subarachnoid hemorrhage before ophthalmology evaluation"
+      },
+      "correctAnswer": "B",
+      "rationale": "Acute angle-closure glaucoma presents with severe unilateral eye pain, headache, nausea/vomiting, halos around lights (from corneal edema), fixed mid-dilated pupil, and markedly elevated IOP (>30 mmHg). The hazy cornea represents epithelial edema from the extremely high IOP. This is an ophthalmological emergency — irreversible vision loss can occur within hours without IOP reduction. Immediate ophthalmology referral for laser peripheral iridotomy is required."
+    },
+    {
+      "questionId": "np-p1-107",
+      "topicSlug": "red-eye-differential-urgent-vs-benign",
+      "lessonPart": "1",
+      "difficulty": "hard",
+      "stemAnchor": "25yo-male-bacterial-conjunctivitis-copious-purulent-discharge-contact",
+      "stem": "A 25-year-old sexually active male presents with a 3-day history of bilateral red eyes with copious thick purulent discharge that reaccumulates within minutes of being wiped away. He has mild eyelid swelling. Vision is not affected. Gram stain of the discharge shows gram-negative intracellular diplococci. What is the most likely causative organism and the key urgency?",
+      "options": {
+        "A": "Staphylococcus aureus; treat with topical erythromycin",
+        "B": "Neisseria gonorrhoeae; requires systemic antibiotics and emergent ophthalmology referral due to risk of corneal perforation",
+        "C": "Chlamydia trachomatis; treat with topical azithromycin",
+        "D": "Haemophilus influenzae; topical fluoroquinolone drops are sufficient"
+      },
+      "correctAnswer": "B",
+      "rationale": "Gonococcal conjunctivitis (hyperacute bacterial conjunctivitis) presents with copious purulent discharge that reaccumulates rapidly, differentiating it from other bacterial conjunctivitis. Gram-negative intracellular diplococci confirm N. gonorrhoeae. This requires systemic antibiotics (ceftriaxone IM/IV) rather than topical drops alone, as topical therapy cannot achieve adequate tissue levels to prevent corneal ulceration and perforation. STI screening and partner treatment are mandatory."
+    },
+    {
+      "questionId": "np-p1-108",
+      "topicSlug": "red-eye-differential-urgent-vs-benign",
+      "lessonPart": "1",
+      "difficulty": "hard",
+      "stemAnchor": "35yo-female-anterior-uveitis-RA-photophobia-perilimbal-flush",
+      "stem": "A 35-year-old female with rheumatoid arthritis presents with a 4-day history of left eye pain, photophobia, and decreased vision. On exam: left eye shows circumferential perilimbal (ciliary) injection — redness greatest around the corneal margin. There is no discharge. The pupil is irregularly shaped and sluggishly reactive. Slit lamp examination shows white cells in the anterior chamber (flare and cells). IOP is normal. What is the most likely diagnosis?",
+      "options": {
+        "A": "Bacterial conjunctivitis from RA-associated dry eye",
+        "B": "Anterior uveitis (iritis)",
+        "C": "Acute angle-closure glaucoma",
+        "D": "Viral conjunctivitis from immunosuppression"
+      },
+      "correctAnswer": "B",
+      "rationale": "Anterior uveitis presents with deep aching eye pain, photophobia, decreased vision, ciliary (perilimbal) injection, irregular pupil (posterior synechiae from iris adhesion to the lens), and anterior chamber cells and flare on slit lamp — the classic triad differentiating it from conjunctivitis (which has diffuse injection and discharge without cells). Autoimmune diseases (RA, ankylosing spondylitis, IBD, sarcoidosis) are common associations. Urgent ophthalmology referral is required."
+    },
+    {
+      "questionId": "np-p1-109",
+      "topicSlug": "red-eye-differential-urgent-vs-benign",
+      "lessonPart": "1",
+      "difficulty": "hard",
+      "stemAnchor": "42yo-male-viral-conjunctivitis-watery-discharge-URI-bilateral-follicular",
+      "stem": "A 42-year-old male presents with bilateral red eyes with watery discharge for 3 days. He had an upper respiratory illness with sore throat and cervical lymphadenopathy preceding the eye symptoms by 2 days. Exam: bilateral conjunctival injection, follicular reaction on the palpebral conjunctiva, preauricular lymphadenopathy, no corneal involvement, and no purulent discharge. What is the most likely diagnosis and appropriate counseling?",
+      "options": {
+        "A": "Bacterial conjunctivitis requiring topical antibiotic drops",
+        "B": "Viral conjunctivitis (adenoviral); highly contagious — hand hygiene, no sharing of towels, stay home from work or school for 7–10 days until discharge resolves",
+        "C": "Allergic conjunctivitis from seasonal allergens",
+        "D": "Chlamydial conjunctivitis from spread from genitourinary infection"
+      },
+      "correctAnswer": "B",
+      "rationale": "Adenoviral conjunctivitis (the most common form of infectious conjunctivitis) is characterized by watery discharge, follicular conjunctival reaction, preauricular lymphadenopathy, and often a preceding URI — the 'pharyngoconjunctival fever' triad. It is HIGHLY contagious via direct contact; antibiotic drops provide no benefit. Key counseling points: strict hand hygiene, avoid touching eyes, no sharing towels/pillowcases, consider staying home from work/school during the active discharge phase (approximately 7–10 days)."
+    },
+    {
+      "questionId": "np-p1-110",
+      "topicSlug": "red-eye-differential-urgent-vs-benign",
+      "lessonPart": "1",
+      "difficulty": "hard",
+      "stemAnchor": "55yo-male-scleritis-severe-eye-pain-red-scleral-nodule-RA",
+      "stem": "A 55-year-old male with long-standing rheumatoid arthritis presents with severe boring eye pain that woke him from sleep. He rates it 9/10. On exam: deep violaceous (purple-red) injection of the sclera with a nodular elevation of the scleral tissue. Palpation of the globe through closed eyelids causes exquisite tenderness. Vision is minimally affected. IOP is normal. What is the most important diagnosis to confirm urgently?",
+      "options": {
+        "A": "Episcleritis — a benign condition requiring only topical NSAIDs",
+        "B": "Scleritis — a potentially sight-threatening condition requiring systemic treatment and urgent ophthalmology",
+        "C": "Cluster headache with ocular autonomic involvement",
+        "D": "Acute angle-closure glaucoma presenting with diffuse scleral redness"
+      },
+      "correctAnswer": "B",
+      "rationale": "Scleritis must be distinguished from the benign, superficial episcleritis. Key differences: scleritis has deep violaceous injection (vs bright red in episcleritis), severe boring/nocturnal pain (vs mild discomfort in episcleritis), globe tenderness, and scleral nodule or edema involving full scleral thickness. Blanching with phenylephrine drops helps distinguish: episcleritis blanches (superficial vessels constrict), scleritis does not (deep scleral inflammation). Scleritis in RA is associated with rheumatoid vasculitis and can cause scleral thinning and perforation ('scleromalacia perforans') without treatment."
+    },
+    {
+      "questionId": "np-p1-111",
+      "topicSlug": "red-eye-differential-urgent-vs-benign",
+      "lessonPart": "1",
+      "difficulty": "expert",
+      "stemAnchor": "68yo-male-central-retinal-artery-occlusion-painless-sudden-vision-loss",
+      "stem": "A 68-year-old male with atrial fibrillation (not anticoagulated) presents with sudden, painless, complete loss of vision in his right eye that has persisted for 2 hours. He reports his vision went 'black like a curtain' very suddenly. The eye is white (not red). On fundoscopy: the disc appears pale, the retina is milky white with a cherry-red spot at the macula. What is the most likely diagnosis?",
+      "options": {
+        "A": "Anterior ischemic optic neuropathy from GCA",
+        "B": "Central retinal artery occlusion (CRAO) — an ophthalmic stroke",
+        "C": "Vitreous hemorrhage from proliferative diabetic retinopathy",
+        "D": "Acute angle-closure glaucoma with sudden vision loss"
+      },
+      "correctAnswer": "B",
+      "rationale": "Central retinal artery occlusion is the ocular equivalent of an ischemic stroke. The classic fundoscopic triad of diffuse pale retinal edema (ischemia) + cherry-red spot at the macula (where the thin fovea reveals the choroidal circulation beneath) + white retina confirms CRAO. Painless, sudden, complete monocular vision loss in a patient with AF (cardioembolic source) is the classic presentation. This is a neurological emergency requiring immediate systemic workup (echocardiogram, carotid imaging) and same-day ophthalmology evaluation — within hours, retinal ganglion cell death becomes irreversible."
+    },
+    {
+      "questionId": "np-p1-112",
+      "topicSlug": "red-eye-differential-urgent-vs-benign",
+      "lessonPart": "1",
+      "difficulty": "hard",
+      "stemAnchor": "35yo-contact-lens-wearer-corneal-ulcer-pseudomonas-hypopyon",
+      "stem": "A 35-year-old female who wears extended-wear soft contact lenses presents with severe left eye pain, photophobia, and decreased vision after sleeping in her contacts for 3 consecutive nights. On exam: left eye is diffusely red with a large white opacity on the cornea and a white layering of cells (hypopyon) in the anterior chamber. What is the most likely diagnosis?",
+      "options": {
+        "A": "Viral keratitis (HSV) from contact lens irritation",
+        "B": "Bacterial keratitis (corneal ulcer), most likely Pseudomonas aeruginosa — ophthalmological emergency",
+        "C": "Contact lens overwear syndrome requiring removal and lubricant drops",
+        "D": "Peripheral corneal infiltrate from lens solution allergy"
+      },
+      "correctAnswer": "B",
+      "rationale": "Extended-wear contact lens use dramatically increases the risk of bacterial keratitis — Pseudomonas aeruginosa is the most common pathogen in contact lens-associated corneal ulcers due to its ability to produce enzymes that rapidly destroy corneal stroma. The combination of severe pain, corneal opacity (ulcer), and hypopyon (immune cells accumulating in the anterior chamber from severe anterior chamber inflammation) constitutes an ophthalmological emergency. Immediate contact lens removal and urgent ophthalmology referral for corneal culture and intensive topical fluoroquinolone therapy are required."
+    },
+
+    {
+      "questionId": "np-p1-113",
+      "topicSlug": "hemoptysis-differential-magnitude-workup",
+      "lessonPart": "1",
+      "difficulty": "hard",
+      "stemAnchor": "45yo-male-smoker-blood-tinged-sputum-centrally-located-mass-CXR",
+      "stem": "A 45-year-old male with a 30 pack-year smoking history presents with a 6-week history of blood-tinged sputum (scant, approximately 1–2 teaspoons per day), a 10-pound weight loss, and a new hoarse voice. He has no fever. CXR shows a central 3 cm mass in the right hilum with post-obstructive atelectasis. Which is the most critical next step?",
+      "options": {
+        "A": "Prescribe antibiotics for presumed pneumonia with post-obstructive process",
+        "B": "Urgent CT chest with contrast and pulmonology referral for bronchoscopy — suspected lung cancer",
+        "C": "Order sputum Gram stain and culture to guide antibiotic selection",
+        "D": "Prescribe antitussives and schedule repeat CXR in 3 months"
+      },
+      "correctAnswer": "B",
+      "rationale": "Scant hemoptysis in a heavy smoker >40 years with a central hilar mass on CXR, weight loss, and hoarseness (suggesting left recurrent laryngeal nerve involvement from mediastinal lymphadenopathy or tumor extension) is lung cancer until proven otherwise. CT chest with contrast characterizes the mass, hilar/mediastinal involvement, and guides bronchoscopy planning. Treating as pneumonia delays a potentially curative diagnosis. Any hemoptysis in a smoker >40 with a lung mass is a red flag requiring urgent evaluation."
+    },
+    {
+      "questionId": "np-p1-114",
+      "topicSlug": "hemoptysis-differential-magnitude-workup",
+      "lessonPart": "1",
+      "difficulty": "expert",
+      "stemAnchor": "massive-hemoptysis-600mL-ICU-bronchiectasis-airway-protection",
+      "stem": "A 55-year-old female with a known history of bronchiectasis presents to your clinic actively coughing up bright red blood. She reports coughing up approximately 200–300 mL of blood in the past hour (total estimated 600 mL over the past 4 hours). She is tachycardic at 118, O2 sat 88% on room air, and visibly anxious. What is the single most appropriate immediate action?",
+      "options": {
+        "A": "Order an urgent CT chest angiography to identify the bleeding source before any intervention",
+        "B": "Activate EMS immediately for emergent transfer — massive hemoptysis is a life-threatening emergency requiring airway management and bronchial artery embolization",
+        "C": "Administer a nebulized vasoconstrictive agent (tranexamic acid inhaled) and reassess in 30 minutes",
+        "D": "Position patient sitting upright and begin broad-spectrum antibiotics empirically"
+      },
+      "correctAnswer": "B",
+      "rationale": "Massive hemoptysis (>600 mL/24 hours by traditional definition; some define as any quantity causing hemodynamic instability or respiratory compromise) carries 50–80% mortality without immediate intervention. Death in hemoptysis is from asphyxiation — blood flooding the alveoli — not exsanguination. Immediate airway management (intubation) and bronchial artery embolization (primary treatment) or emergent bronchoscopy are required in an ICU/interventional setting. Primary care clinic is not equipped for this; emergent transfer with 911 is the only appropriate action."
+    },
+    {
+      "questionId": "np-p1-115",
+      "topicSlug": "hemoptysis-differential-magnitude-workup",
+      "lessonPart": "1",
+      "difficulty": "hard",
+      "stemAnchor": "28yo-female-hemoptysis-fever-night-sweats-weight-loss-upper-lobe",
+      "stem": "A 28-year-old female born in the Philippines presents with a 2-month history of productive cough with blood-streaked sputum, night sweats, and a 15-pound weight loss. She has low-grade daily fever. CXR shows a cavitary lesion in the right upper lobe with surrounding infiltrate. Sputum AFB smear is pending. What is the most likely diagnosis and next critical step?",
+      "options": {
+        "A": "Community-acquired pneumonia; start azithromycin and recheck CXR in 6 weeks",
+        "B": "Pulmonary tuberculosis; initiate airborne precautions and arrange DTBE notification",
+        "C": "Aspergilloma in a prior cavitary lesion; no isolation required",
+        "D": "Lung abscess from anaerobic aspiration; prone positioning and antibiotics"
+      },
+      "correctAnswer": "B",
+      "rationale": "The combination of upper lobe cavitary infiltrate, hemoptysis, constitutional symptoms (night sweats, weight loss), and immigration from a high-prevalence country is TB until proven otherwise. Immediate airborne isolation (negative pressure room, N95 respirators for healthcare workers) must be initiated before the AFB smear result. Mandatory public health reporting (department of public health/TB division notification) is required. The AFB smear and sputum culture (liquid media with susceptibility testing) are diagnostic priorities. Treatment should not begin in a primary care setting without specialist coordination."
+    },
+    {
+      "questionId": "np-p1-116",
+      "topicSlug": "hemoptysis-differential-magnitude-workup",
+      "lessonPart": "1",
+      "difficulty": "hard",
+      "stemAnchor": "55yo-male-anticoagulated-hemoptysis-supratherapeutic-INR",
+      "stem": "A 55-year-old male anticoagulated with warfarin for mechanical mitral valve (INR target 2.5–3.5) presents with 3 days of blood-streaked sputum. Today's INR is 5.8. He has no fever, no weight loss, and his CXR is normal. He is hemodynamically stable and O2 sat is 97%. Which statement best guides management?",
+      "options": {
+        "A": "Supratherapeutic INR alone fully explains his hemoptysis; no further workup is needed once INR normalizes",
+        "B": "Anticoagulant coagulopathy may amplify bleeding from an underlying lesion; hemoptysis requires further workup with CT chest once INR is therapeutic regardless of CXR result",
+        "C": "A normal CXR definitively excludes malignancy and TB; anticoagulant adjustment is the only management",
+        "D": "Anticoagulation should be permanently stopped given the hemoptysis"
+      },
+      "correctAnswer": "B",
+      "rationale": "Anticoagulant over-dosage can precipitate or amplify hemoptysis from an underlying lesion (endobronchial carcinoma, AVM, or bronchiectasis) that would otherwise bleed subclinically. A normal CXR does not exclude early central carcinoma or AVM. Once INR is corrected to therapeutic range, CT chest is warranted to exclude a structural source — particularly in a smoker or at-risk patient. Permanently stopping anticoagulation in a patient with a mechanical valve risks catastrophic valve thrombosis."
+    },
+    {
+      "questionId": "np-p1-117",
+      "topicSlug": "hemoptysis-differential-magnitude-workup",
+      "lessonPart": "1",
+      "difficulty": "hard",
+      "stemAnchor": "42yo-female-hemoptysis-mitral-stenosis-rheumatic-heart-disease-exertional",
+      "stem": "A 42-year-old female with a known history of rheumatic heart disease presents with a 2-month history of exertional dyspnea and recurrent small-volume hemoptysis (blood-streaked sputum). On exam: an opening snap followed by a low-pitched diastolic rumble is heard at the apex. CXR shows a 'double density' shadow at the right heart border and prominent pulmonary vessels. Which cardiac diagnosis best explains her hemoptysis?",
+      "options": {
+        "A": "Aortic stenosis with secondary pulmonary hypertension",
+        "B": "Mitral stenosis with elevated left atrial pressure causing pulmonary venous hypertension and bronchial vein rupture",
+        "C": "Mitral regurgitation with volume overload and pulmonary edema",
+        "D": "Tricuspid stenosis with right atrial enlargement"
+      },
+      "correctAnswer": "B",
+      "rationale": "Mitral stenosis (MS), classically from rheumatic heart disease, causes hemoptysis through two mechanisms: (1) rupture of small bronchial veins dilated from pulmonary venous hypertension (Virchow's hemoptysis) and (2) pink frothy sputum from acute pulmonary edema. The opening snap + diastolic rumble at the apex + left atrial enlargement (double density on CXR) confirms MS. Elevated left atrial pressure transmits backward to pulmonary veins, causing the pulmonary vascular changes."
+    },
+    {
+      "questionId": "np-p1-118",
+      "topicSlug": "hemoptysis-differential-magnitude-workup",
+      "lessonPart": "1",
+      "difficulty": "hard",
+      "stemAnchor": "62yo-male-hemoptysis-recurrent-bronchiectasis-childhood-TB-sputum",
+      "stem": "A 62-year-old male with a history of childhood TB (treated 40 years ago) presents with recurrent episodes of moderate hemoptysis occurring 3–4 times per year over the past 5 years. His most recent episode produced approximately 100 mL of bright red blood. CT chest shows bilateral lower lobe bronchiectasis and a residual right upper lobe apical scar from prior TB. He is afebrile with a productive purulent cough at baseline. What is the most common source of hemoptysis in this type of structural lung disease?",
+      "options": {
+        "A": "Pulmonary artery rupture from pulmonary hypertension",
+        "B": "Hypertrophied bronchial arteries supplying the area of chronic inflammation or bronchiectasis",
+        "C": "Venous bleeding from pulmonary varices in the area of scarring",
+        "D": "Capillary bleeding from chronic alveolar inflammation in bronchiectasis"
+      },
+      "correctAnswer": "B",
+      "rationale": "In structural lung disease (bronchiectasis, post-TB changes, lung abscess), hemoptysis arises predominantly from hypertrophied, tortuous bronchial arteries that develop in response to chronic inflammation to provide systemic blood supply to the area — operating at higher pressures than pulmonary capillaries. This is why bronchial artery embolization (BAE) is the primary treatment for recurrent hemoptysis in structural lung disease. The pulmonary circulation is not the primary bleeding source in most non-malignant hemoptysis."
+    },
+    {
+      "questionId": "np-p1-119",
+      "topicSlug": "hemoptysis-differential-magnitude-workup",
+      "lessonPart": "1",
+      "difficulty": "expert",
+      "stemAnchor": "32yo-male-goodpasture-diffuse-alveolar-hemorrhage-hematuria-anti-GBM",
+      "stem": "A 32-year-old male presents with a 2-week history of hemoptysis and simultaneous gross hematuria. He is a non-smoker. On exam: BP 158/96, HR 102, pallor. CBC: Hgb 8.2 g/dL. Creatinine 3.8 (baseline unknown, likely normal). Urinalysis: 3+ blood, RBC casts present. CXR shows bilateral diffuse alveolar infiltrates. What is the most likely diagnosis linking the pulmonary and renal findings?",
+      "options": {
+        "A": "Wegener's granulomatosis (GPA) with pulmonary-renal syndrome",
+        "B": "Anti-GBM disease (Goodpasture syndrome) causing pulmonary-renal syndrome",
+        "C": "Systemic lupus erythematosus with diffuse alveolar hemorrhage and lupus nephritis",
+        "D": "Bilateral pneumonia with acute kidney injury from sepsis"
+      },
+      "correctAnswer": "B",
+      "rationale": "Goodpasture syndrome (anti-GBM disease) causes a pulmonary-renal syndrome from autoantibodies against the alpha-3 chain of type IV collagen present in both the glomerular basement membrane (causing rapidly progressive glomerulonephritis with RBC casts) and alveolar basement membrane (causing diffuse alveolar hemorrhage). A young male smoker with simultaneous hemoptysis + hematuria + RBC casts + anemia = anti-GBM antibody testing + urgent nephrology/rheumatology referral. GPA (Wegener's) is also in the differential but classically has upper respiratory involvement (sinusitis, saddle nose deformity) and c-ANCA."
+    },
+
+    {
+      "questionId": "np-p1-120",
+      "topicSlug": "lymphadenopathy-differential-benign-malignant",
+      "lessonPart": "1",
+      "difficulty": "hard",
+      "stemAnchor": "28yo-female-posterior-cervical-LAD-rubbery-nontender-hodgkin-young",
+      "stem": "A 28-year-old female presents with a 3-month history of gradually enlarging, non-painful posterior cervical lymph node. She reports drenching night sweats and a 10-pound weight loss over 2 months. She has no fever currently. On exam: a 2.5 cm firm, rubbery, non-tender lymph node in the left posterior cervical triangle. No other lymphadenopathy. CBC shows a normal differential. ESR is 68, LDH 410. CXR shows a mediastinal widening. Which diagnosis requires urgent workup?",
+      "options": {
+        "A": "Cervical lymphadenitis from dental infection",
+        "B": "Hodgkin lymphoma",
+        "C": "Toxoplasmosis cervical lymphadenopathy",
+        "D": "Infectious mononucleosis in a 28-year-old"
+      },
+      "correctAnswer": "B",
+      "rationale": "Hodgkin lymphoma classically presents in young adults (bimodal peak: 20s and >55) with painless rubbery cervical or mediastinal lymphadenopathy, B symptoms (fever, night sweats, weight loss), elevated ESR/LDH, and mediastinal widening on CXR — the 'mediastinal mass in a young adult' is a classic Hodgkin's teaching case. The combination of posterior cervical location + mediastinal widening + B symptoms + elevated LDH mandates urgent oncology referral and excisional biopsy for Reed-Sternberg cell confirmation."
+    },
+    {
+      "questionId": "np-p1-121",
+      "topicSlug": "lymphadenopathy-differential-benign-malignant",
+      "lessonPart": "1",
+      "difficulty": "hard",
+      "stemAnchor": "55yo-female-left-supraclavicular-hard-LAD-Virchow-GI-cancer",
+      "stem": "A 55-year-old female presents with a 6-week history of progressively enlarging, hard, non-tender left supraclavicular lymph node discovered incidentally. She has had gradually worsening epigastric pain and early satiety for 3 months. She has lost 18 pounds. No fever. On exam: the left supraclavicular node is 2 cm, hard, non-tender, and fixed. Abdomen shows epigastric tenderness without a mass. What is the significance of this finding?",
+      "options": {
+        "A": "A supraclavicular node in an older adult with GI symptoms represents reactive lymphadenopathy from gastritis",
+        "B": "Left supraclavicular lymphadenopathy (Virchow's node) in an older adult with GI symptoms signals metastatic intra-abdominal malignancy until proven otherwise",
+        "C": "Hard supraclavicular nodes are typically infectious and respond to antibiotics",
+        "D": "Weight loss with a hard supraclavicular node suggests TB adenopathy requiring AFB culture"
+      },
+      "correctAnswer": "B",
+      "rationale": "Virchow's node — a palpable left supraclavicular lymph node — is an ominous sign of metastatic malignancy from the abdomen or pelvis, draining via the thoracic duct. The combination of left supraclavicular adenopathy + GI symptoms (epigastric pain, early satiety) + significant weight loss in a 55-year-old raises highest concern for gastric carcinoma (most common), pancreatic cancer, or another GI malignancy. Upper GI endoscopy and CT abdomen/pelvis are urgent priorities."
+    },
+    {
+      "questionId": "np-p1-122",
+      "topicSlug": "lymphadenopathy-differential-benign-malignant",
+      "lessonPart": "1",
+      "difficulty": "expert",
+      "stemAnchor": "32yo-female-bilateral-hilar-LAD-CXR-asymptomatic-sarcoidosis",
+      "stem": "A 32-year-old African American female is referred for evaluation of an incidental finding on CXR obtained for a pre-employment physical: bilateral symmetric hilar adenopathy. She has no respiratory symptoms, no fever, and no weight loss. Physical exam is completely normal. Pulmonary function tests are normal. Serum ACE level is elevated at 112 U/L (normal <40). Calcium is 10.8 mg/dL. What is the most likely diagnosis?",
+      "options": {
+        "A": "Hodgkin lymphoma with bilateral hilar involvement",
+        "B": "Sarcoidosis (Stage I — bilateral hilar adenopathy without pulmonary infiltrates)",
+        "C": "Primary tuberculosis with bilateral hilar adenopathy",
+        "D": "Reactive mediastinal lymphadenopathy from a recent respiratory infection"
+      },
+      "correctAnswer": "B",
+      "rationale": "Sarcoidosis commonly presents in young African American and Scandinavian women, with bilateral symmetric hilar adenopathy, elevated ACE (reflects granuloma burden), and hypercalcemia (granuloma-produced 1,25-OH vitamin D). Stage I sarcoidosis has bilateral hilar adenopathy without pulmonary infiltrates — Stage II adds infiltrates and Stage III shows infiltrates alone. Löfgren syndrome (bilateral hilar adenopathy + erythema nodosum + arthritis) is a good prognostic variant. Tissue biopsy is required for definitive diagnosis — non-caseating granulomas without another explanation."
+    },
+    {
+      "questionId": "np-p1-123",
+      "topicSlug": "lymphadenopathy-differential-benign-malignant",
+      "lessonPart": "1",
+      "difficulty": "hard",
+      "stemAnchor": "45yo-male-HIV-bilateral-axillary-inguinal-LAD-PGL",
+      "stem": "A 45-year-old male who has known HIV infection (CD4 count 280, on ART with undetectable viral load) presents with bilateral axillary and inguinal lymphadenopathy that has been present for 6 months without change. Nodes are 1–1.5 cm, soft, and non-tender. He is afebrile. No weight loss. No night sweats. CBC is stable. What is the most likely explanation for his lymphadenopathy?",
+      "options": {
+        "A": "HIV-associated lymphoma requiring urgent biopsy",
+        "B": "Persistent generalized lymphadenopathy (PGL) — a common benign finding in treated HIV disease",
+        "C": "Mycobacterium avium complex (MAC) lymphadenitis from immunosuppression",
+        "D": "Drug reaction from antiretroviral therapy"
+      },
+      "correctAnswer": "B",
+      "rationale": "Persistent generalized lymphadenopathy (PGL) — defined as 2+ extra-inguinal sites of LAD persisting >3 months without other explanation — is a benign and common finding in HIV infection reflecting chronic immune activation. In a stable patient on effective ART with unchanged PGL over months, observation is appropriate. Urgent biopsy is indicated if nodes change in character (rapid growth, becoming hard or fixed, associated B symptoms), CD4 drops precipitously, or viral load rebounds — which may indicate lymphoma transformation or OI."
+    },
+    {
+      "questionId": "np-p1-124",
+      "topicSlug": "lymphadenopathy-differential-benign-malignant",
+      "lessonPart": "1",
+      "difficulty": "expert",
+      "stemAnchor": "65yo-male-CLL-lymphocytosis-rubbery-widespread-LAD-smudge-cells",
+      "stem": "A 65-year-old male presents for evaluation of fatigue and bilateral, soft, rubbery lymphadenopathy involving cervical, axillary, and inguinal chains. He has mild splenomegaly. CBC: WBC 68,000 with 85% lymphocytes (absolute lymphocyte count 57,800), Hgb 11.2, platelets 122,000. Peripheral smear shows numerous small, mature lymphocytes with many 'smudge cells.' Flow cytometry is pending. What is the most likely diagnosis?",
+      "options": {
+        "A": "Infectious mononucleosis with extreme lymphocytosis",
+        "B": "Chronic lymphocytic leukemia (CLL)",
+        "C": "Reactive lymphocytosis from CMV infection",
+        "D": "Non-Hodgkin lymphoma with leukemic phase"
+      },
+      "correctAnswer": "B",
+      "rationale": "CLL is the most common leukemia in adults in Western countries, characteristically presenting in older adults with generalized lymphadenopathy, splenomegaly, and a peripheral blood picture of extreme lymphocytosis with small mature-appearing lymphocytes and smudge cells (lymphocytes disrupted during blood smear preparation, pathognomonic of CLL). Flow cytometry showing CD19+/CD5+/CD23+ coexpression confirms the diagnosis. The Rai staging system guides prognosis and treatment initiation."
+    },
+    {
+      "questionId": "np-p1-125",
+      "topicSlug": "lymphadenopathy-differential-benign-malignant",
+      "lessonPart": "1",
+      "difficulty": "hard",
+      "stemAnchor": "10yo-male-anterior-cervical-tender-LAD-post-strep-warm",
+      "stem": "A 10-year-old male presents with 4 days of fever, sore throat, and a 3 cm tender, warm, anterior cervical lymph node. Rapid strep test is positive. After completing 7 days of amoxicillin, the lymph node has not regressed and now appears fluctuant with overlying skin erythema. Fever has returned. What complication has most likely developed?",
+      "options": {
+        "A": "Lymphoma triggered by streptococcal infection",
+        "B": "Cervical lymph node abscess (suppurative cervical lymphadenitis) requiring incision and drainage",
+        "C": "Normal post-streptococcal reactive lymphadenopathy that requires 4–6 weeks to fully resolve",
+        "D": "Lymphadenopathy from antibiotic allergy to amoxicillin"
+      },
+      "correctAnswer": "B",
+      "rationale": "Suppurative cervical lymphadenitis — abscess formation within a lymph node — is a complication of bacterial lymphadenitis. Key signs: fluctuance (palpable fluid collection), overlying skin erythema, return of fever despite antibiotics, and failure to regress with antibiotic therapy. Ultrasound with Doppler confirms the abscess (anechoic center with surrounding hyperemia). Management is surgical incision and drainage (I&D) combined with antibiotics — antibiotics alone will not resolve an abscess once liquefaction occurs."
+    },
+    {
+      "questionId": "np-p1-126",
+      "topicSlug": "lymphadenopathy-differential-benign-malignant",
+      "lessonPart": "1",
+      "difficulty": "hard",
+      "stemAnchor": "35yo-female-right-axillary-LAD-breast-pain-no-mass-cat-scratch",
+      "stem": "A 35-year-old female presents with 3 weeks of tender right axillary lymphadenopathy. She has no breast mass. She has two cats at home. The enlarged node is soft and mildly tender. She recalls a scratch on her right hand from her kitten about 4 weeks ago, which developed a small papule that has since healed. No fever. CRP is mildly elevated. Which diagnosis is most likely and what confirms it?",
+      "options": {
+        "A": "Breast cancer metastases to axillary nodes; bilateral mammogram is the priority",
+        "B": "Cat scratch disease (Bartonella henselae); regional lymphadenopathy proximal to the inoculation site, confirmed by Bartonella serology",
+        "C": "Lymphoma presenting with tender axillary nodes; excisional biopsy is required",
+        "D": "Staphylococcal abscess formation from the cat scratch; I&D is first-line treatment"
+      },
+      "correctAnswer": "B",
+      "rationale": "Cat scratch disease (Bartonella henselae) presents 1–3 weeks after cat scratch/bite with regional lymphadenopathy proximal to the inoculation site. The triad of inoculation papule at the scratch site, regional tender LAD, and cat contact history is diagnostic. Bartonella henselae IgG/IgM serology confirms the diagnosis. Management is conservative (self-limiting in most immunocompetent patients over 2–4 months); azithromycin can shorten the course. Breast cancer is the priority differential for axillary LAD in women but the cat scratch history and tender node character make this unlikely."
+    },
+
+    {
+      "questionId": "np-p1-127",
+      "topicSlug": "endocrine-crisis-recognition-dka-hhs-adrenal",
+      "lessonPart": "1",
+      "difficulty": "hard",
+      "stemAnchor": "22yo-T1DM-fruity-breath-vomiting-kussmaul-pH-71-DKA",
+      "stem": "A 22-year-old female with T1DM presents with a 2-day history of nausea, vomiting, and abdominal pain. She has not been able to take her insulin for 24 hours. On exam: she is ill-appearing, tachypneic with deep, labored respirations, and her breath has a fruity/acetone odor. Vital signs: HR 118, BP 104/70, RR 28. Labs: glucose 488 mg/dL, pH 7.11, bicarbonate 8 mEq/L, sodium 131, anion gap 28, urinalysis shows large ketones and glucose. What is the diagnosis and what is the most dangerous immediate complication to monitor for during treatment?",
+      "options": {
+        "A": "HHS; monitor for hypoglycemia during insulin infusion",
+        "B": "DKA; monitor for cerebral edema, particularly during correction in young patients",
+        "C": "Severe sepsis with metabolic acidosis; blood cultures are the priority",
+        "D": "Lactic acidosis from metformin use; stop metformin immediately"
+      },
+      "correctAnswer": "B",
+      "rationale": "DKA is defined by the triad: hyperglycemia (typically >250 mg/dL), high anion gap metabolic acidosis (AG >12), and ketonemia/ketonuria. Kussmaul respirations (deep labored breathing compensating for metabolic acidosis) and fruity breath (acetone from ketone metabolism) are characteristic. Cerebral edema is the most feared complication during DKA treatment, particularly in children and young adults, from rapid osmotic shifts during fluid and insulin administration — presenting as deteriorating mental status during treatment. HHS has minimal or no ketosis and occurs predominantly in older T2DM patients."
+    },
+    {
+      "questionId": "np-p1-128",
+      "topicSlug": "endocrine-crisis-recognition-dka-hhs-adrenal",
+      "lessonPart": "1",
+      "difficulty": "expert",
+      "stemAnchor": "72yo-T2DM-HHS-glucose-1100-no-ketones-obtunded",
+      "stem": "A 72-year-old male with T2DM, inadequately treated, presents with a 5-day history of progressive confusion, weakness, and polyuria. His family reports he has been drinking large amounts of fluid. On exam: markedly obtunded, dry mucous membranes, skin tenting, HR 128, BP 94/58. Labs: glucose 1,108 mg/dL, serum osmolality 388 mOsm/kg (normal 275–295), pH 7.34, bicarbonate 22, anion gap 12, urinalysis shows glucosuria without significant ketonuria. What is the diagnosis and the key feature distinguishing it from DKA?",
+      "options": {
+        "A": "DKA in T2DM; the distinction from HHS is not clinically meaningful",
+        "B": "Hyperosmolar hyperglycemic state (HHS); distinguished by extreme hyperglycemia with profound dehydration but WITHOUT significant ketoacidosis",
+        "C": "Severe lactic acidosis from metformin in a dehydrated patient",
+        "D": "Sodium-glucose cotransporter complication causing euglycemic ketoacidosis"
+      },
+      "correctAnswer": "B",
+      "rationale": "HHS (formerly HONK/NKHHC) is characterized by extreme hyperglycemia (typically >600 mg/dL, often >1000), profound dehydration, hyperosmolality (>320 mOsm/kg), and altered mental status WITHOUT significant ketoacidosis (minimal ketonuria, near-normal pH and bicarbonate). In T2DM, residual insulin production suppresses lipolysis and ketogenesis — explaining the absence of ketones despite severe hyperglycemia. Mortality in HHS (20–25%) is significantly higher than DKA (1–5%) due to older age, higher serum osmolality, and associated precipitating illness. Fluid resuscitation is the priority (often 10–12 L deficit)."
+    },
+    {
+      "questionId": "np-p1-129",
+      "topicSlug": "endocrine-crisis-recognition-dka-hhs-adrenal",
+      "lessonPart": "1",
+      "difficulty": "hard",
+      "stemAnchor": "35yo-female-DKA-euglycemic-SGLT2-empagliflozin-normal-glucose",
+      "stem": "A 35-year-old female with T1DM on insulin glargine, insulin lispro, and empagliflozin (SGLT-2 inhibitor, prescribed off-label) presents with nausea, vomiting, and malaise after a 3-day fast due to gastroenteritis. Blood glucose is 168 mg/dL. She reduced her insulin doses due to low oral intake. Labs: pH 7.18, bicarbonate 10, anion gap 26, beta-hydroxybutyrate markedly elevated, urinalysis shows ketones. What is the most likely diagnosis?",
+      "options": {
+        "A": "HHS in a thin T1DM patient; glucose is too low for DKA",
+        "B": "Euglycemic DKA (eu-DKA) — a recognized complication of SGLT-2 inhibitor use",
+        "C": "Starvation ketosis from gastroenteritis-induced fasting",
+        "D": "Lactic acidosis from dehydration and reduced renal perfusion"
+      },
+      "correctAnswer": "B",
+      "rationale": "Euglycemic DKA (eu-DKA) — glucose <250 mg/dL in the setting of DKA — is a well-recognized complication of SGLT-2 inhibitors. The mechanism: SGLT-2 inhibitors increase urinary glucose excretion (maintaining relatively normal serum glucose), while simultaneously triggering glucagon release and reducing insulin secretion, driving ketogenesis. Triggers include fasting, alcohol, surgery, and reduced insulin doses. The diagnostic error is falsely reassuring glucose levels leading to missed diagnosis. The pH and anion gap establish the acidosis, not the glucose level."
+    },
+    {
+      "questionId": "np-p1-130",
+      "topicSlug": "endocrine-crisis-recognition-dka-hhs-adrenal",
+      "lessonPart": "1",
+      "difficulty": "expert",
+      "stemAnchor": "35yo-female-adrenal-crisis-hypotension-hyperpigmentation-sudden-shock",
+      "stem": "A 35-year-old female with known Addison's disease (primary adrenal insufficiency) presents with sudden-onset weakness, severe hypotension (BP 78/48), nausea, vomiting, and diffuse abdominal pain. She ran out of her hydrocortisone 5 days ago and has had a respiratory infection for 3 days. Labs: sodium 128, potassium 5.9, glucose 58, creatinine 2.4. She is increasingly confused. What is the immediate priority?",
+      "options": {
+        "A": "Fluid resuscitation only; steroids can be added after BP stabilizes",
+        "B": "Draw cortisol and ACTH; start treatment only after lab confirmation to avoid falsely treating",
+        "C": "Administer IV hydrocortisone 100 mg STAT and aggressive IV fluid resuscitation — adrenal crisis is a life-threatening emergency",
+        "D": "Transfer to ED for further evaluation before initiating any specific treatment in the office setting"
+      },
+      "correctAnswer": "C",
+      "rationale": "Adrenal crisis (acute adrenal insufficiency) presenting with hemodynamic shock in a patient with known Addison's disease who missed doses during intercurrent illness is a life-threatening emergency requiring immediate IV hydrocortisone 100 mg (initial dose) and aggressive normal saline IV resuscitation — do not wait for lab confirmation. The hyponatremia (mineralocorticoid deficiency), hyperkalemia, hypoglycemia, and hypovolemia reflect glucocorticoid + mineralocorticoid deficiency. Sick day rules (stress dosing with 2–3× usual dose during illness) should be reviewed with the patient afterward to prevent recurrence."
+    },
+    {
+      "questionId": "np-p1-131",
+      "topicSlug": "endocrine-crisis-recognition-dka-hhs-adrenal",
+      "lessonPart": "1",
+      "difficulty": "expert",
+      "stemAnchor": "58yo-male-thyroid-storm-AF-hyperthermia-altered-precipitated-surgery",
+      "stem": "A 58-year-old male with poorly controlled hyperthyroidism (missed medications) underwent emergent cholecystectomy 12 hours ago. He now presents with HR 168 (atrial fibrillation), temperature 40.4°C, agitation, tremulousness, and profuse diaphoresis. BP 168/88. He has a palpably enlarged thyroid and exophthalmos. TSH is undetectable. Free T4 is markedly elevated. Burch-Wartofsky score is calculated at 75. What is the most likely diagnosis?",
+      "options": {
+        "A": "Postoperative delirium from general anesthesia",
+        "B": "Thyroid storm — life-threatening thyrotoxic crisis",
+        "C": "Malignant hyperthermia from intraoperative halogenated anesthetic exposure",
+        "D": "Septic shock from post-operative infection with secondary hyperthermia"
+      },
+      "correctAnswer": "B",
+      "rationale": "Thyroid storm is the extreme end of thyrotoxicosis — defined by Burch-Wartofsky score >45 (incorporates temperature, CNS effects, cardiovascular findings, GI symptoms). Precipitants include surgery, infection, iodine load, or radioactive iodine in an inadequately prepared patient. Clinical features: hyperpyrexia, tachyarrhythmia (AF very common), CNS dysfunction (agitation, psychosis, coma), and GI symptoms. Burch-Wartofsky ≥45 indicates thyroid storm; ≥25 suggests impending storm. Mortality is 10–30% without aggressive treatment. Requires ICU-level care with antithyroid drugs, beta-blockers, iodine (Wolff-Chaikoff), and glucocorticoids."
+    },
+    {
+      "questionId": "np-p1-132",
+      "topicSlug": "endocrine-crisis-recognition-dka-hhs-adrenal",
+      "lessonPart": "1",
+      "difficulty": "hard",
+      "stemAnchor": "28yo-female-myxedema-coma-cold-confusion-bradycardia-hypothermia",
+      "stem": "A 28-year-old female with untreated hypothyroidism (refused medications) is brought to your clinic in January by her family after they found her confused and difficult to arouse. She has been wearing multiple layers of clothing at 70°F, has profound fatigue, and has not had a bowel movement in 2 weeks. Vital signs: temperature 34.8°C (94.6°F), HR 44, BP 86/54, RR 8. Exam: periorbital edema, dry doughy skin, absent deep tendon reflexes. TSH is reported as '>150' (markedly elevated). What is the diagnosis?",
+      "options": {
+        "A": "Severe hypothyroidism with cold intolerance; oral levothyroxine and outpatient follow-up",
+        "B": "Myxedema coma — a life-threatening hypothyroid emergency requiring immediate transfer",
+        "C": "Septic shock with incidental hypothyroidism",
+        "D": "Medication side effect from over-the-counter sleep aids causing altered mental status"
+      },
+      "correctAnswer": "B",
+      "rationale": "Myxedema coma is severe decompensated hypothyroidism characterized by hypothermia, altered consciousness, bradycardia, hypotension, and hypoventilation — mortality approaches 20–40% even with treatment. Precipitants include cold exposure, infection, sedating medications, or surgery. The diagnosis is clinical — markedly elevated TSH confirms severe primary hypothyroidism. Immediate transfer for IV levothyroxine (or liothyronine), supportive care (passive rewarming, vasopressors, mechanical ventilation), and IV glucocorticoids (rule out concurrent adrenal insufficiency) are required in ICU."
+    },
+    {
+      "questionId": "np-p1-133",
+      "topicSlug": "endocrine-crisis-recognition-dka-hhs-adrenal",
+      "lessonPart": "1",
+      "difficulty": "expert",
+      "stemAnchor": "48yo-male-pheochromocytoma-paroxysmal-HTN-headache-diaphoresis-palpitations",
+      "stem": "A 48-year-old male presents with episodic severe headaches, palpitations, diaphoresis, and anxiety occurring 2–3 times per week, each lasting 15–20 minutes. During an episode in the office: BP 218/124, HR 136, pallor. Between episodes: BP and HR are normal. He is not on any stimulant medications. Which test most specifically confirms the suspected diagnosis?",
+      "options": {
+        "A": "Serum cortisol during an episode to confirm adrenal hypersecretion",
+        "B": "24-hour urine fractionated metanephrines and catecholamines, or plasma fractionated metanephrines",
+        "C": "Cardiac Holter monitor to document the paroxysmal tachycardia",
+        "D": "Head CT to evaluate for migraine generator"
+      },
+      "correctAnswer": "B",
+      "rationale": "Pheochromocytoma presents classically with paroxysmal hypertension + the '5 Ps': Pressure (headache), Palpitations, Perspiration, Pallor, and anxiety (Panic). The episodic nature with complete normalization between attacks is pathognomonic. The biochemical diagnostic test of choice is plasma fractionated metanephrines (highest sensitivity, ~98%) or 24-hour urine fractionated metanephrines and catecholamines. CT/MRI adrenal imaging follows biochemical confirmation. Unrecognized pheochromocytoma during surgery or anesthesia can cause hypertensive crisis and death."
+    }
+  ]
+}
