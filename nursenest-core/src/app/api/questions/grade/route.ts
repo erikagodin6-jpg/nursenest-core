@@ -18,6 +18,8 @@ import { mergeQuestionOverlayForGradeResponse } from "@/lib/i18n/educational-con
 import { resolveMergedQuestionOverlayBundle } from "@/lib/i18n/educational-translation-db";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import { resolveRationaleLessonLinksForQuestion } from "@/lib/learner/rationale-lesson-link-resolve";
+import { analyticsDistinctId, captureServerEvent } from "@/lib/observability/posthog-server";
+import { PH } from "@/lib/observability/posthog-conversion-events";
 
 function topicRoutingConfidence(row: { subtopic?: string | null; topic?: string | null; bodySystem?: string | null }): RecommendationConfidence {
   if ((row.subtopic ?? "").trim().length > 1) return "high";
@@ -196,6 +198,13 @@ export async function POST(req: Request) {
         ? `/app/questions?${topicDrillQs.toString()}`
         : null;
     const topicDrillHref = topicDrillBase;
+
+    /** ~5% sample for PostHog volume/accuracy trends — no question id, no stem content. */
+    if (Math.random() < 0.05) {
+      void captureServerEvent(analyticsDistinctId(gate.userId), PH.learnerQuestionGradedSample, {
+        is_correct: correct,
+      });
+    }
 
     return NextResponse.json({
       correct,

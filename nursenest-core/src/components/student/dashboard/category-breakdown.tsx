@@ -2,6 +2,7 @@ import Link from "next/link";
 import { BarChart3 } from "lucide-react";
 import type { TopicAccuracyRow } from "@/lib/insights/types";
 import type { LearnerMarketingT } from "@/lib/learner/learner-marketing-server";
+import type { TopicTrendRow } from "@/lib/learner/topic-performance";
 import { semanticFillClassForAccuracyPct } from "@/lib/ui/semantic-progress-fill";
 
 function bandPillClass(acc: number | null): string {
@@ -28,16 +29,26 @@ function numericAccuracy(row: TopicAccuracyRow): number | null {
   return null;
 }
 
+function momentumShortLabel(t: LearnerMarketingT, tr: TopicTrendRow): string {
+  if (tr.momentum === "improving") return t("learner.dashboard.categoryBreakdown.momentumImproving");
+  if (tr.momentum === "declining") return t("learner.dashboard.categoryBreakdown.momentumDeclining");
+  return t("learner.dashboard.categoryBreakdown.momentumStable");
+}
+
 export function CategoryBreakdown({
   rows,
   t,
   maxRows = 8,
+  topicTrends = [],
 }: {
   rows: TopicAccuracyRow[];
   t: LearnerMarketingT;
   maxRows?: number;
+  /** Optional topic momentum from the insight engine (matched by topic name). */
+  topicTrends?: TopicTrendRow[];
 }) {
   const slice = rows.slice(0, maxRows);
+  const trendByTopic = new Map(topicTrends.map((x) => [x.topic, x]));
 
   return (
     <section className="nn-card nn-product-surface-accent nn-student-card-lift relative overflow-hidden border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] pt-7 shadow-[var(--semantic-shadow-soft)]">
@@ -57,6 +68,7 @@ export function CategoryBreakdown({
             {slice.map((row) => {
               const acc = numericAccuracy(row);
               const pct = acc != null ? Math.min(100, Math.max(0, acc)) : 0;
+              const tr = trendByTopic.get(row.topic);
               const display =
                 row.accuracyPct != null
                   ? `${row.accuracyPct}%`
@@ -68,7 +80,17 @@ export function CategoryBreakdown({
               return (
                 <li key={row.topic}>
                   <div className="flex flex-wrap items-center justify-between gap-2">
-                    <span className="min-w-0 font-medium text-[var(--semantic-text-primary)]">{row.topic}</span>
+                    <span className="min-w-0 font-medium text-[var(--semantic-text-primary)]">
+                      {row.topic}
+                      {tr ? (
+                        <span
+                          className="ml-2 inline-block rounded-md border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-info)_08%,var(--semantic-panel-muted))] px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-[var(--semantic-text-secondary)]"
+                          title={tr.summary}
+                        >
+                          {momentumShortLabel(t, tr)}
+                        </span>
+                      ) : null}
+                    </span>
                     <div className="flex shrink-0 flex-wrap items-center gap-2">
                       <span className={`inline-flex rounded-full border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${bandPillClass(acc)}`}>
                         {bandLabel(t, acc)}

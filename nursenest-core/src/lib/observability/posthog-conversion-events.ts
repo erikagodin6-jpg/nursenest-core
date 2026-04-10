@@ -87,6 +87,11 @@ export const PH = {
   learnerLessonCompleted: "learner_lesson_completed",
   /** Learner: user graded enough questions to finish the configured session batch. */
   learnerQuestionBankSessionCompleted: "learner_question_bank_session_completed",
+  /**
+   * Server-side sample (~5%) of `/api/questions/grade` successes — volume signal without per-question IDs.
+   * Use for grading throughput / accuracy trends in PostHog.
+   */
+  learnerQuestionGradedSample: "learner_question_graded_sample",
   /** Paywall block shown in app (once per mount; context distinguishes placement). */
   paywallEncounter: "paywall_encounter",
   /** Learner saved target exam pathway on exam plan settings. */

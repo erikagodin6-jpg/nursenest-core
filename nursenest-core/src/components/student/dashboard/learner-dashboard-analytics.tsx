@@ -27,6 +27,7 @@ export function LearnerDashboardAnalytics({
   t: LearnerMarketingT;
 }) {
   const byTopic = snapshot.insights?.performance.byTopic.slice(0, MAX_TOPIC) ?? [];
+  const topicTrends = snapshot.insights?.topicTrends ?? [];
   const weakAreas = snapshot.insights?.weakAreas.slice(0, MAX_WEAK) ?? [];
   const continueLesson = snapshot.continueLesson;
   const trend = snapshot.insights?.performance.trendSummary?.trim();
@@ -68,7 +69,7 @@ export function LearnerDashboardAnalytics({
 
       {/* ── 3. Topic breakdown + weak areas (with mastery key inline) ── */}
       <div className="grid gap-4 lg:grid-cols-2">
-        <CategoryBreakdown rows={byTopic} t={t} maxRows={MAX_TOPIC} />
+        <CategoryBreakdown rows={byTopic} t={t} maxRows={MAX_TOPIC} topicTrends={topicTrends} />
         <div className="space-y-4">
           <DashboardWeakAreasCard weakAreas={weakAreas} t={t} maxRows={MAX_WEAK} />
           <div className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-4 py-3 shadow-sm">

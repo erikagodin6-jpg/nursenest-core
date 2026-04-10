@@ -49,6 +49,15 @@ export type AdminStudyPerformanceData = {
     readinessByWeek: Array<{ weekStart: string; label: string | null; sessions: number }>;
     note: string;
   };
+  /** Distinct learners per UTC day + coarse session/lesson drop-off proxies (Postgres-only). */
+  engagement: {
+    dailyActiveUsers: Array<{ day: string; users: number }>;
+    /** Share of lesson progress rows in window that never reached engage threshold (bounce proxy). */
+    lessonDropOffRatePct: number | null;
+    /** Mean duration of completed practice tests with elapsed time, in minutes. */
+    avgPracticeTestMinutes: number | null;
+    note: string;
+  };
 };
 
 const MS_DAY = 86400000;
@@ -103,6 +112,7 @@ export async function loadAdminStudyPerformanceAnalytics(
   };
 
   const dataNotes = [
+    "Daily active learners = distinct `userId` per UTC calendar day across `Progress.updatedAt`, `practice_tests.startedAt`, and `ExamSession.updatedAt` in the window (union, deduped per day).",
     "Lesson metrics use `Progress` rows in the window (`updatedAt`). Completion rate = completed rows ÷ all rows for that lesson key.",
     "“Never engaged” = progress row exists but `engagedAt` is null — proxy for drop-off before read-depth; not scroll-mapped.",
     "Question topics use aggregated `UserTopicStat` (correct/wrong counts) — not per-attempt rows.",
@@ -122,6 +132,10 @@ export async function loadAdminStudyPerformanceAnalytics(
   let examSessCatDone = 0;
   let catPathDist: AdminStudyPerformanceData["cat"]["pathwayDistribution"] = [];
   let readinessByWeek: AdminStudyPerformanceData["cat"]["readinessByWeek"] = [];
+
+  let dailyActiveUsers: AdminStudyPerformanceData["engagement"]["dailyActiveUsers"] = [];
+  let lessonDropOffRatePct: number | null = null;
+  let avgPracticeTestMinutes: number | null = null;
 
   try {
     const lessonAgg = await prisma.$queryRaw<
@@ -348,6 +362,57 @@ export async function loadAdminStudyPerformanceAnalytics(
     pushWarn(e, "cat");
   }
 
+  try {
+    const dauRows = await prisma.$queryRaw<Array<{ day: Date; users: bigint }>>`
+      SELECT u.day, COUNT(DISTINCT u.user_id)::bigint AS users
+      FROM (
+        SELECT (p."updatedAt" AT TIME ZONE 'UTC')::date AS day, p."userId" AS user_id
+        FROM "Progress" p
+        WHERE p."updatedAt" >= ${q.from} AND p."updatedAt" <= ${q.to}
+        UNION ALL
+        SELECT (pt."startedAt" AT TIME ZONE 'UTC')::date, pt."userId"
+        FROM "practice_tests" pt
+        WHERE pt."startedAt" >= ${q.from} AND pt."startedAt" <= ${q.to}
+        UNION ALL
+        SELECT (es."updatedAt" AT TIME ZONE 'UTC')::date, es."userId"
+        FROM "ExamSession" es
+        WHERE es."updatedAt" >= ${q.from} AND es."updatedAt" <= ${q.to}
+      ) u
+      GROUP BY u.day
+      ORDER BY u.day ASC
+    `;
+    dailyActiveUsers = dauRows.map((r) => ({
+      day: r.day.toISOString().slice(0, 10),
+      users: Number(r.users),
+    }));
+
+    const [dropRow] = await prisma.$queryRaw<Array<{ rows: bigint; never_engaged: bigint }>>`
+      SELECT
+        COUNT(*)::bigint AS rows,
+        COUNT(*) FILTER (WHERE p.completed = false AND p."engagedAt" IS NULL)::bigint AS never_engaged
+      FROM "Progress" p
+      WHERE p."updatedAt" >= ${q.from} AND p."updatedAt" <= ${q.to}
+    `;
+    const dr = Number(dropRow?.rows ?? 0);
+    const ne = Number(dropRow?.never_engaged ?? 0);
+    lessonDropOffRatePct = dr > 0 ? Math.round((ne / dr) * 1000) / 10 : null;
+
+    const [avgRow] = await prisma.$queryRaw<Array<{ avg_ms: number | null }>>`
+      SELECT AVG("elapsedMs")::double precision AS avg_ms
+      FROM "practice_tests"
+      WHERE status = 'COMPLETED'
+        AND "elapsedMs" IS NOT NULL
+        AND "elapsedMs" > 0
+        AND "updatedAt" >= ${q.from}
+        AND "updatedAt" <= ${q.to}
+    `;
+    if (avgRow?.avg_ms != null && Number.isFinite(avgRow.avg_ms)) {
+      avgPracticeTestMinutes = Math.round((avgRow.avg_ms / 60000) * 10) / 10;
+    }
+  } catch (e) {
+    pushWarn(e, "engagement");
+  }
+
   return {
     generatedAt,
     query: q,
@@ -374,6 +439,12 @@ export async function loadAdminStudyPerformanceAnalytics(
       pathwayDistribution: catPathDist,
       readinessByWeek,
       note: "Readiness breakdown uses `results.readinessLabel` on completed CAT practice tests. `ExamSession` counts are in-app sessions with adaptive state (may overlap practice tests).",
+    },
+    engagement: {
+      dailyActiveUsers,
+      lessonDropOffRatePct,
+      avgPracticeTestMinutes,
+      note: "Drop-off rate uses lesson rows updated in-window (not cohort funnel). Practice-test duration is mean `elapsedMs` on completed rows only.",
     },
   };
 }

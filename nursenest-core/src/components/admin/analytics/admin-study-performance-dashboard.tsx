@@ -102,6 +102,8 @@ export function AdminStudyPerformanceDashboard({
   const maxTopicAtt = Math.max(1, ...d.questions.topTopicsByAttempts.map((x) => x.attempts));
   const maxCatPath = Math.max(1, ...d.cat.pathwayDistribution.map((x) => x.sessions));
   const maxPathLesson = Math.max(1, ...d.lessons.pathwayDistribution.map((x) => x.progressRows));
+  const dauSeries = d.engagement.dailyActiveUsers;
+  const maxDau = Math.max(1, ...dauSeries.map((x) => x.users));
 
   return (
     <div className="space-y-6">
@@ -167,6 +169,36 @@ export function AdminStudyPerformanceDashboard({
             <li key={i}>{n}</li>
           ))}
         </ul>
+      </Section>
+
+      <Section title="Engagement &amp; retention" subtitle={d.engagement.note}>
+        <div className="mb-6 grid gap-3 sm:grid-cols-2">
+          <div className="rounded-xl bg-muted/30 p-4">
+            <p className="text-xs text-muted-foreground">Lesson drop-off (never engaged ÷ progress rows in window)</p>
+            <p className="text-2xl font-bold tabular-nums">
+              {d.engagement.lessonDropOffRatePct != null ? `${d.engagement.lessonDropOffRatePct}%` : "—"}
+            </p>
+          </div>
+          <div className="rounded-xl bg-muted/30 p-4">
+            <p className="text-xs text-muted-foreground">Avg practice test length (completed, with timer)</p>
+            <p className="text-2xl font-bold tabular-nums">
+              {d.engagement.avgPracticeTestMinutes != null ? `${d.engagement.avgPracticeTestMinutes} min` : "—"}
+            </p>
+          </div>
+        </div>
+        <h3 className="text-sm font-semibold text-foreground">Daily active learners (distinct users / UTC day)</h3>
+        <p className="mt-1 text-xs text-muted-foreground">
+          Union of lesson progress updates, practice test starts, and exam session activity. Sparse days are normal.
+        </p>
+        <div className="mt-3 max-h-[420px] space-y-2 overflow-y-auto pr-1">
+          {dauSeries.length === 0 ? (
+            <p className="text-sm text-muted-foreground">No activity in window.</p>
+          ) : (
+            dauSeries.slice(-42).map((row) => (
+              <HBar key={row.day} label={row.day} value={row.users} max={maxDau} suffix=" learners" />
+            ))
+          )}
+        </div>
       </Section>
 
       <Section title="Lessons" subtitle={d.lessons.note}>
