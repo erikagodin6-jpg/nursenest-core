@@ -86,6 +86,7 @@ export async function POST(req: Request) {
     const draft = await prisma.generatedLessonDraft.create({
       data: {
         tool: ADMIN_AI_LESSON_GENERATOR_TOOL,
+        lessonBatchTopicKey: batchTopicKey,
         payloadJson: {
           topic: d.topic,
           pathway: d.pathway,

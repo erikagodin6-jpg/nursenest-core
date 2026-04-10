@@ -7,18 +7,14 @@ export type OverallSystemStatus = "healthy" | "degraded" | "failed";
 
 export type CheckStatus = "healthy" | "degraded" | "failed";
 
+/** v1 — six subsystem cards only */
 export type SystemCheckId =
   | "appLiveness"
   | "appReadiness"
   | "database"
-  | "auth"
-  | "openai"
-  | "stripe"
-  | "spaces"
   | "queueHealth"
   | "contentHealth"
-  | "deployInfo"
-  | "envSanity";
+  | "configSanity";
 
 export type SystemCheckResult = {
   id: SystemCheckId;
@@ -32,6 +28,19 @@ export type SystemCheckResult = {
   responseTimeMs: number;
 };
 
+/** Denormalized from probe cards for a compact admin header row — no additional DB work. */
+export type SystemStatusOperationalSummary = {
+  /** PENDING + RUNNING `AiGenerationJob` rows; null if queue metrics skipped */
+  activeAiJobs: number | null;
+  /** Lesson batch queue items stuck in GENERATING past the stale threshold */
+  stuckAiJobs: number | null;
+  failedAiJobs: number | null;
+  lessonDraftsPendingReview: number | null;
+  questionDraftsPendingReview: number | null;
+  /** DB `SELECT 1` latency from the database card; null if unavailable */
+  databaseLatencyMs: number | null;
+};
+
 export type SystemStatusPayload = {
   ok: true;
   overall: OverallSystemStatus;
@@ -40,6 +49,8 @@ export type SystemStatusPayload = {
   /** Wall-clock time to collect all checks (approximate) */
   totalResponseTimeMs: number;
   checks: SystemCheckResult[];
+  /** Operational KPIs for the summary strip */
+  summary: SystemStatusOperationalSummary;
 };
 
 export type SystemStatusErrorPayload = {

@@ -1,8 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useState } from "react";
-import type { LessonBatchItem, LessonBatchResultSummaryV1 } from "@/lib/lessons/admin-ai-lesson-batch";
+import { useCallback, useMemo, useState } from "react";
+import type {
+  AdminLessonBatchJobSnapshot,
+  LessonBatchDerivedSummary,
+  LessonBatchItem,
+  LessonBatchResultSummaryV1,
+} from "@/lib/lessons/admin-ai-lesson-batch";
 
 type CategoryOpt = { id: string; name: string; slug: string };
 
@@ -33,9 +38,18 @@ function statusBadge(status: LessonBatchItem["status"]) {
       return `${base} bg-red-500/15 text-red-800 dark:text-red-200`;
     case "skipped_duplicate":
       return `${base} bg-amber-500/15 text-amber-900 dark:text-amber-100`;
+    case "canceled":
+      return `${base} bg-slate-500/15 text-slate-800 dark:text-slate-200`;
     default:
       return base;
   }
+}
+
+function isRunDisabled(job: AdminLessonBatchJobSnapshot | null, derived: LessonBatchDerivedSummary | null): boolean {
+  if (derived?.allTerminal) return true;
+  if (!job) return false;
+  if (job.status === "CANCELLED" || job.status === "COMPLETED" || job.status === "FAILED") return true;
+  return false;
 }
 
 export function AdminLessonBatchGeneratorClient() {
@@ -53,7 +67,9 @@ export function AdminLessonBatchGeneratorClient() {
   const [categoriesLoaded, setCategoriesLoaded] = useState(false);
   const [err, setErr] = useState<string | null>(null);
   const [jobId, setJobId] = useState<string | null>(null);
+  const [job, setJob] = useState<AdminLessonBatchJobSnapshot | null>(null);
   const [summary, setSummary] = useState<LessonBatchResultSummaryV1 | null>(null);
+  const [derived, setDerived] = useState<LessonBatchDerivedSummary | null>(null);
   const [running, setRunning] = useState(false);
   const [lastMessage, setLastMessage] = useState<string | null>(null);
 
@@ -67,12 +83,19 @@ export function AdminLessonBatchGeneratorClient() {
 
   const refreshJob = useCallback(async (id: string) => {
     const res = await fetch(`/api/admin/lessons/ai-generate-batch/${id}`);
-    const j = (await res.json()) as { error?: string; summary?: LessonBatchResultSummaryV1 };
+    const j = (await res.json()) as {
+      error?: string;
+      summary?: LessonBatchResultSummaryV1;
+      derived?: LessonBatchDerivedSummary;
+      job?: AdminLessonBatchJobSnapshot;
+    };
     if (!res.ok) {
       setErr(j.error ?? String(res.status));
       return;
     }
     if (j.summary) setSummary(j.summary);
+    if (j.derived !== undefined) setDerived(j.derived);
+    if (j.job) setJob(j.job);
   }, []);
 
   async function createBatch(e: React.FormEvent) {
@@ -105,7 +128,10 @@ export function AdminLessonBatchGeneratorClient() {
         setErr(typeof j.error === "string" ? j.error : "Create failed");
         return;
       }
-      if (j.jobId) setJobId(j.jobId);
+      if (j.jobId) {
+        setJobId(j.jobId);
+        await refreshJob(j.jobId);
+      }
       if (j.summary) setSummary(j.summary);
     } catch {
       setErr("Network error");
@@ -119,6 +145,30 @@ export function AdminLessonBatchGeneratorClient() {
     setErr(null);
     setJobId(id);
     await refreshJob(id);
+  }
+
+  async function cancelBatch() {
+    if (!jobId) return;
+    setErr(null);
+    try {
+      const res = await fetch(`/api/admin/lessons/ai-generate-batch/${jobId}/cancel`, { method: "POST" });
+      const j = (await res.json()) as { error?: string; summary?: LessonBatchResultSummaryV1; derived?: LessonBatchDerivedSummary };
+      if (!res.ok) {
+        setErr(j.error ?? "Cancel failed");
+        return;
+      }
+      if (j.summary) setSummary(j.summary);
+      if (j.derived) setDerived(j.derived);
+      await refreshJob(jobId);
+      setLastMessage("Batch canceled — no new items will be claimed. In-flight generation may still finish.");
+    } catch {
+      setErr("Network error");
+    }
+  }
+
+  function exportCsv() {
+    if (!jobId) return;
+    window.open(`/api/admin/lessons/ai-generate-batch/${jobId}/export`, "_blank", "noopener,noreferrer");
   }
 
   async function runSteps() {
@@ -135,13 +185,24 @@ export function AdminLessonBatchGeneratorClient() {
           done?: boolean;
           message?: string;
           summary?: LessonBatchResultSummaryV1;
+          derived?: LessonBatchDerivedSummary;
+          stopped?: boolean;
+          reason?: string;
         };
         if (!res.ok) {
           setErr(j.error ?? `Step failed (${res.status})`);
           if (j.summary) setSummary(j.summary);
+          if (j.derived) setDerived(j.derived);
           break;
         }
         if (j.summary) setSummary(j.summary);
+        if (j.derived !== undefined) setDerived(j.derived);
+        await refreshJob(jobId);
+        if (j.stopped && j.reason === "canceled") {
+          setLastMessage("Batch was canceled — stopping.");
+          done = true;
+          break;
+        }
         if (j.done) {
           done = true;
           setLastMessage(j.message ?? "Batch finished");
@@ -160,15 +221,17 @@ export function AdminLessonBatchGeneratorClient() {
     setCategoryIds((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id].slice(0, 12)));
   };
 
-  const counts = summary
-    ? summary.items.reduce(
-        (acc, it) => {
-          acc[it.status] = (acc[it.status] ?? 0) + 1;
-          return acc;
-        },
-        {} as Record<string, number>,
-      )
-    : {};
+  const runDisabled = useMemo(() => isRunDisabled(job, derived), [job, derived]);
+
+  const cancelDisabled = useMemo(() => {
+    if (running) return true;
+    if (!job) return true;
+    return job.status !== "RUNNING" && job.status !== "PENDING";
+  }, [running, job]);
+
+  const summaryLine = derived
+    ? `Total ${derived.total} · Remaining ${derived.remaining} · Pending ${derived.pending} · Generating ${derived.generating} · Completed ${derived.completed} · Failed ${derived.failed} · Skipped (duplicate) ${derived.skipped_duplicate} · Canceled ${derived.canceled}`
+    : null;
 
   return (
     <div className="space-y-10">
@@ -184,7 +247,8 @@ export function AdminLessonBatchGeneratorClient() {
           <span className={statusBadge("generating")}>generating</span>{" "}
           <span className={statusBadge("completed")}>completed</span>{" "}
           <span className={statusBadge("failed")}>failed</span>{" "}
-          <span className={statusBadge("skipped_duplicate")}>skipped_duplicate</span>
+          <span className={statusBadge("skipped_duplicate")}>skipped_duplicate</span>{" "}
+          <span className={statusBadge("canceled")}>canceled</span>
         </p>
       </div>
 
@@ -326,13 +390,33 @@ export function AdminLessonBatchGeneratorClient() {
             <div>
               <h2 className="text-lg font-semibold text-[var(--theme-heading-text)]">2. Queue</h2>
               <p className="font-mono text-xs text-muted-foreground">Job {jobId}</p>
+              {job ? (
+                <p className="mt-1 text-xs text-muted-foreground">
+                  Job status: <span className="font-semibold text-foreground">{job.status}</span>
+                  {" · "}
+                  Last updated: {new Date(job.updatedAt).toLocaleString()}
+                  {job.lessonBatchCanceledAt ? (
+                    <>
+                      {" · "}
+                      Canceled at: {new Date(job.lessonBatchCanceledAt).toLocaleString()}
+                    </>
+                  ) : null}
+                  {job.tokensUsed != null ? (
+                    <>
+                      {" · "}
+                      Tokens: {job.tokensUsed}
+                    </>
+                  ) : null}
+                </p>
+              ) : null}
             </div>
             <div className="flex flex-wrap gap-2">
               <button
                 type="button"
-                disabled={running}
+                disabled={running || runDisabled}
                 className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground disabled:opacity-50"
                 onClick={() => void runSteps()}
+                title={runDisabled ? "Batch is finished or canceled" : undefined}
               >
                 {running ? "Running…" : "Run / continue batch"}
               </button>
@@ -344,25 +428,52 @@ export function AdminLessonBatchGeneratorClient() {
               >
                 Refresh
               </button>
+              <button
+                type="button"
+                disabled={cancelDisabled}
+                className="rounded-lg border border-destructive/50 px-4 py-2 text-sm font-semibold text-destructive disabled:opacity-50"
+                onClick={() => void cancelBatch()}
+                title={cancelDisabled && !running ? "Only active batches can be canceled" : undefined}
+              >
+                Cancel batch
+              </button>
+              <button
+                type="button"
+                disabled={!summary}
+                className="rounded-lg border border-border px-4 py-2 text-sm font-semibold disabled:opacity-50"
+                onClick={() => exportCsv()}
+              >
+                Export CSV
+              </button>
             </div>
           </div>
 
+          {summaryLine ? (
+            <div className="rounded-lg border border-border/60 bg-muted/30 px-3 py-2 text-sm text-muted-foreground">
+              {summaryLine}
+            </div>
+          ) : null}
+
           {summary ? (
             <>
-              <p className="text-sm text-muted-foreground">
-                {Object.entries(counts)
-                  .map(([k, v]) => `${k}: ${v}`)
-                  .join(" · ")}
-              </p>
               <ul className="divide-y divide-border/60 rounded-lg border border-border/60">
                 {summary.items.map((it) => (
-                  <li key={it.itemId} className="flex flex-col gap-1 py-3 sm:flex-row sm:items-center sm:justify-between">
-                    <div>
+                  <li key={it.itemId} className="flex flex-col gap-1 py-3 sm:flex-row sm:items-start sm:justify-between">
+                    <div className="min-w-0 flex-1">
                       <p className="text-sm font-medium">{it.topic}</p>
-                      {it.error ? <p className="text-xs text-red-600">{it.error}</p> : null}
+                      <p className="mt-0.5 font-mono text-[10px] text-muted-foreground/80">
+                        #{it.position} · key {it.batchTopicKey} · {it.normalizedTopic}
+                      </p>
+                      {(it.lastError ?? it.error) && (it.status === "failed" || it.lastError) ? (
+                        <p className="mt-1 text-xs text-red-600">{it.lastError ?? it.error}</p>
+                      ) : null}
                     </div>
-                    <div className="flex flex-wrap items-center gap-2">
+                    <div className="flex flex-shrink-0 flex-wrap items-center gap-2 sm:justify-end">
                       <span className={statusBadge(it.status)}>{it.status}</span>
+                      <span className="text-xs text-muted-foreground">attempts {it.attemptCount}</span>
+                      {it.canceledAt ? (
+                        <span className="text-xs text-muted-foreground">canceled {new Date(it.canceledAt).toLocaleString()}</span>
+                      ) : null}
                       {it.draftId ? (
                         <Link
                           className="text-xs font-semibold text-primary underline"
@@ -376,7 +487,7 @@ export function AdminLessonBatchGeneratorClient() {
                           className="text-xs font-semibold text-amber-800 underline dark:text-amber-200"
                           href={`/admin/lessons/generate?draft=${it.existingDraftId}`}
                         >
-                          Existing draft
+                          Open existing draft
                         </Link>
                       ) : null}
                     </div>

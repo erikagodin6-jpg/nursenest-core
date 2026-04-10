@@ -8,7 +8,9 @@ import { assertOpenAiKeyConfigured, getOpenAiChatModel } from "@/lib/ai/openai-e
 import {
   ADMIN_LESSON_BATCH_TOOL,
   lessonBatchTopicKey,
+  normalizeBatchTopic,
   parseTopicList,
+  queueRowToLessonBatchItem,
   type LessonBatchResultSummaryV1,
 } from "@/lib/lessons/admin-ai-lesson-batch";
 import {
@@ -65,57 +67,83 @@ export async function POST(req: Request) {
   }
 
   const model = getOpenAiChatModel();
-  const summary: LessonBatchResultSummaryV1 = {
-    version: 1,
-    allowDuplicates: d.allowDuplicates,
-    settings: {
-      pathway: d.pathway,
-      country: d.country,
-      topicDomain: d.topicDomain,
-      lessonType: d.lessonType,
-      difficulty: d.difficulty,
-      relatedCategoryIds: d.relatedCategoryIds ?? [],
-    },
-    items: topics.map((topic) => ({
-      itemId: randomUUID(),
-      topic,
-      batchTopicKey: lessonBatchTopicKey(topic, d.pathway, d.country, d.lessonType),
-      status: "pending" as const,
-    })),
-  };
 
-  const job = await prisma.aiGenerationJob.create({
-    data: {
-      tool: ADMIN_LESSON_BATCH_TOOL,
-      status: JobStatus.RUNNING,
-      model,
-      sourcePrompt: `Batch lesson generation: ${topics.length} topics (${d.pathway}, ${d.country}, ${d.lessonType})`,
-      inputPayload: {
-        topics,
+  const { jobId, summary } = await prisma.$transaction(async (tx) => {
+    const job = await tx.aiGenerationJob.create({
+      data: {
+        tool: ADMIN_LESSON_BATCH_TOOL,
+        status: JobStatus.RUNNING,
+        model,
+        sourcePrompt: `Batch lesson generation: ${topics.length} topics (${d.pathway}, ${d.country}, ${d.lessonType})`,
+        inputPayload: {
+          topics,
+          pathway: d.pathway,
+          country: d.country,
+          topicDomain: d.topicDomain,
+          lessonType: d.lessonType,
+          difficulty: d.difficulty ?? null,
+          relatedCategoryIds: d.relatedCategoryIds ?? [],
+          allowDuplicates: d.allowDuplicates,
+        } as object,
+        resultSummary: {} as object,
+        createdById: gate.admin.userId,
+      },
+    });
+
+    const rows = topics.map((topic, position) => {
+      const publicItemId = randomUUID();
+      const normalizedTopic = normalizeBatchTopic(topic);
+      const batchTopicKey = lessonBatchTopicKey(topic, d.pathway, d.country, d.lessonType);
+      return {
+        jobId: job.id,
+        position,
+        publicItemId,
+        topic,
+        normalizedTopic,
+        batchTopicKey,
+      };
+    });
+
+    await tx.lessonBatchQueueItem.createMany({ data: rows });
+
+    const created = await tx.lessonBatchQueueItem.findMany({
+      where: { jobId: job.id },
+      orderBy: { position: "asc" },
+    });
+
+    const built: LessonBatchResultSummaryV1 = {
+      version: 1,
+      allowDuplicates: d.allowDuplicates,
+      settings: {
         pathway: d.pathway,
         country: d.country,
         topicDomain: d.topicDomain,
         lessonType: d.lessonType,
-        difficulty: d.difficulty ?? null,
+        difficulty: d.difficulty,
         relatedCategoryIds: d.relatedCategoryIds ?? [],
-        allowDuplicates: d.allowDuplicates,
-      } as object,
-      resultSummary: summary as object,
-      createdById: gate.admin.userId,
-    },
-  });
+      },
+      items: created.map(queueRowToLessonBatchItem),
+    };
 
-  await prisma.aiGenerationLog.create({
-    data: {
-      jobId: job.id,
-      step: "batch_created",
-      detail: { topicCount: topics.length },
-    },
+    await tx.aiGenerationJob.update({
+      where: { id: job.id },
+      data: { resultSummary: built as object },
+    });
+
+    await tx.aiGenerationLog.create({
+      data: {
+        jobId: job.id,
+        step: "batch_created",
+        detail: { topicCount: topics.length, queue: "db" },
+      },
+    });
+
+    return { jobId: job.id, summary: built };
   });
 
   return NextResponse.json({
     ok: true,
-    jobId: job.id,
+    jobId,
     summary,
   });
 }

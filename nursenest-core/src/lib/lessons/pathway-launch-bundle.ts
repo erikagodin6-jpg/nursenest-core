@@ -14,6 +14,21 @@ import { SEPSIS_GOLD_SLUG } from "@/lib/lessons/scoped-lessons/sepsis-early-reco
 import { SHOCK_GOLD_SLUG } from "@/lib/lessons/scoped-lessons/shock-gold-standard";
 import { STROKE_ICP_GOLD_SLUG } from "@/lib/lessons/scoped-lessons/stroke-increased-icp-gold-standard";
 import { NP_PRIMARY_CARE_FOUNDATIONS_GOLD_SLUG } from "@/lib/lessons/scoped-lessons/np-primary-care-foundations-gold-standard";
+import { NP_GERIATRICS_POLYPHARMACY_DEPRESCRIBING_GOLD_SLUG } from "@/lib/lessons/scoped-lessons/np-geriatrics-polypharmacy-deprescribing-gold-standard";
+import { NP_HEART_FAILURE_PRIMARY_CARE_GOLD_SLUG } from "@/lib/lessons/scoped-lessons/np-heart-failure-primary-care-gold-standard";
+import { NP_ASTHMA_OUTPATIENT_GOLD_SLUG } from "@/lib/lessons/scoped-lessons/np-asthma-outpatient-gold-standard";
+import { NP_PNEUMONIA_CAP_OUTPATIENT_GOLD_SLUG } from "@/lib/lessons/scoped-lessons/np-pneumonia-cap-outpatient-gold-standard";
+import { NP_TYPE2_DIABETES_OUTPATIENT_GOLD_SLUG } from "@/lib/lessons/scoped-lessons/np-type2-diabetes-outpatient-gold-standard";
+import { NP_THYROID_PRIMARY_CARE_GOLD_SLUG } from "@/lib/lessons/scoped-lessons/np-thyroid-primary-care-gold-standard";
+import { NP_OBESITY_METABOLIC_MANAGEMENT_GOLD_SLUG } from "@/lib/lessons/scoped-lessons/np-obesity-metabolic-management-gold-standard";
+import { NP_CONTRACEPTION_COUNSELING_SELECTION_GOLD_SLUG } from "@/lib/lessons/scoped-lessons/np-contraception-counseling-selection-gold-standard";
+import { NP_REPRODUCTIVE_SCREENING_PREVENTION_GOLD_SLUG } from "@/lib/lessons/scoped-lessons/np-reproductive-screening-prevention-gold-standard";
+import { NP_AMBULATORY_GYNEC_COMMON_PRESENTATIONS_GOLD_SLUG } from "@/lib/lessons/scoped-lessons/np-ambulatory-gynec-common-presentations-gold-standard";
+import { NP_PEDIATRIC_WELL_CHILD_PREVENTION_GOLD_SLUG } from "@/lib/lessons/scoped-lessons/np-pediatric-well-child-prevention-gold-standard";
+import { NP_IMMUNIZATION_VACCINES_PRIMARY_CARE_GOLD_SLUG } from "@/lib/lessons/scoped-lessons/np-immunization-vaccines-primary-care-gold-standard";
+import { NP_TRAVEL_MEDICINE_PRETRAVEL_GOLD_SLUG } from "@/lib/lessons/scoped-lessons/np-travel-medicine-pretravel-gold-standard";
+import { NP_MSK_RHEUMATOLOGY_OUTPATIENT_GOLD_SLUG } from "@/lib/lessons/scoped-lessons/np-msk-rheumatology-outpatient-gold-standard";
+import { NP_ANTIINFECTIVES_STEWARDSHIP_OUTPATIENT_GOLD_SLUG } from "@/lib/lessons/scoped-lessons/np-antiinfectives-stewardship-outpatient-gold-standard";
 
 /** Editorial bucket for chips / analytics (not persisted). */
 export type LaunchBundleDimension =
@@ -46,6 +61,7 @@ const INFECTION_CTRL = "safety-family-infection-control-gold" as const;
 const DELEGATION_SUP = "safety-family-delegation-supervision-gold" as const;
 const ESCALATION = "safety-family-escalation-notification-gold" as const;
 const DKA_HHS = "dka-hhs-hyperglycemic-emergencies-gold" as const;
+const MED_INSULIN_DIABETES = "med-family-insulin-diabetes-gold" as const;
 
 const CASE_SEPSIS = "clinical-casebook-sepsis-rapid-response-gold" as const;
 const CASE_MH = "clinical-casebook-mental-health-safety-gold" as const;
@@ -114,13 +130,31 @@ const NP_FNP_STYLE_LAUNCH: LaunchBundleEntry[] = [
   { slug: NP_PRIMARY_CARE_FOUNDATIONS_GOLD_SLUG, dimension: "prioritization" },
   { slug: FNP_SLUG.differential, dimension: "disease_acute" },
   { slug: FNP_SLUG.prenatal, dimension: "maternity" },
+  { slug: NP_CONTRACEPTION_COUNSELING_SELECTION_GOLD_SLUG, dimension: "maternity" },
+  { slug: NP_REPRODUCTIVE_SCREENING_PREVENTION_GOLD_SLUG, dimension: "maternity" },
+  { slug: NP_AMBULATORY_GYNEC_COMMON_PRESENTATIONS_GOLD_SLUG, dimension: "maternity" },
+  { slug: NP_PEDIATRIC_WELL_CHILD_PREVENTION_GOLD_SLUG, dimension: "pediatrics" },
+  { slug: NP_IMMUNIZATION_VACCINES_PRIMARY_CARE_GOLD_SLUG, dimension: "safety_infection" },
+  { slug: NP_TRAVEL_MEDICINE_PRETRAVEL_GOLD_SLUG, dimension: "safety_infection" },
   { slug: FNP_SLUG.pedsFever, dimension: "pediatrics" },
   { slug: FNP_SLUG.adolescentMh, dimension: "mental_health" },
   { slug: FNP_SLUG.htn, dimension: "disease_acute" },
   { slug: FNP_SLUG.geriatricFalls, dimension: "emergency" },
+  { slug: NP_GERIATRICS_POLYPHARMACY_DEPRESCRIBING_GOLD_SLUG, dimension: "pharmacology" },
   { slug: FNP_SLUG.overlayShock, dimension: "emergency" },
   { slug: FNP_SLUG.overlaySepsis, dimension: "emergency" },
   { slug: DKA_HHS, dimension: "disease_acute" },
+  { slug: NP_TYPE2_DIABETES_OUTPATIENT_GOLD_SLUG, dimension: "disease_acute" },
+  { slug: NP_OBESITY_METABOLIC_MANAGEMENT_GOLD_SLUG, dimension: "disease_acute" },
+  { slug: NP_THYROID_PRIMARY_CARE_GOLD_SLUG, dimension: "disease_acute" },
+  { slug: MED_INSULIN_DIABETES, dimension: "pharmacology" },
+  { slug: ACS_GOLD_SLUG, dimension: "disease_acute" },
+  { slug: COPD_GOLD_STANDARD_SLUG, dimension: "disease_acute" },
+  { slug: NP_HEART_FAILURE_PRIMARY_CARE_GOLD_SLUG, dimension: "disease_acute" },
+  { slug: NP_ASTHMA_OUTPATIENT_GOLD_SLUG, dimension: "disease_acute" },
+  { slug: NP_PNEUMONIA_CAP_OUTPATIENT_GOLD_SLUG, dimension: "disease_acute" },
+  { slug: NP_MSK_RHEUMATOLOGY_OUTPATIENT_GOLD_SLUG, dimension: "disease_acute" },
+  { slug: NP_ANTIINFECTIVES_STEWARDSHIP_OUTPATIENT_GOLD_SLUG, dimension: "pharmacology" },
   { slug: HIGH_ALERT_MEDS_GOLD_SLUG, dimension: "pharmacology" },
   { slug: CLINICAL_JUDGMENT_GOLD_SLUG, dimension: "prioritization" },
 ];
@@ -166,6 +200,27 @@ export const PATHWAY_LAUNCH_BUNDLES: PathwayLaunchBundleSpec[] = [
     headline: "Launch essentials — Canadian NP",
     subhead:
       "Primary-care NP spine (lifespan + acute overlays) aligned to the CNPLE track as content lands. Resolved lessons appear here automatically; the full catalog remains browsable below.",
+    entries: NP_FNP_STYLE_LAUNCH,
+  },
+  {
+    pathwayId: "us-np-agpcnp",
+    headline: "Launch essentials — Adult-Gerontology Primary Care NP",
+    subhead:
+      "Same primary-care spine as Family NP: differentials, women’s health, pediatrics, adolescent mental health, adult chronic care, geriatrics, and acute overlays—plus metabolic/pharm safety.",
+    entries: NP_FNP_STYLE_LAUNCH,
+  },
+  {
+    pathwayId: "us-np-whnp",
+    headline: "Launch essentials — Women’s Health NP",
+    subhead:
+      "Primary-care NP bundle with women’s-health anchors; full library includes lifespan topics and acute overlays below.",
+    entries: NP_FNP_STYLE_LAUNCH,
+  },
+  {
+    pathwayId: "us-np-pnp-pc",
+    headline: "Launch essentials — Pediatric Primary Care NP",
+    subhead:
+      "Primary-care NP bundle with pediatric anchors; full library includes lifespan topics and acute overlays below.",
     entries: NP_FNP_STYLE_LAUNCH,
   },
 ];

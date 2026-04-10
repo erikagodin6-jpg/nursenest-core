@@ -1,12 +1,11 @@
 import Link from "next/link";
-import { requireAdmin } from "@/lib/auth/guards";
 import { runSystemStatusProbes } from "@/lib/admin/system-status";
 import { SystemStatusDashboard } from "@/components/admin/system-status-dashboard";
 
 export const dynamic = "force-dynamic";
 
+/** Parent `admin/layout` runs `requireAdmin` — avoids duplicate auth/session work on this page. */
 export default async function AdminSystemStatusPage() {
-  await requireAdmin();
   const initial = await runSystemStatusProbes();
 
   return (

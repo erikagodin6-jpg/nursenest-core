@@ -31,6 +31,24 @@ import { EXAM_COMPLETE_MED_SAFETY_PROVIDERS, EXAM_COMPLETE_MED_SAFETY_SLUGS } fr
 import { BULK_ROWS } from "./launch-wave-1-bulk-rows";
 import { LAUNCH_WAVE_1A_SPECS } from "./launch-wave-1a-high-yield-gold";
 import { NP_PRIMARY_CARE_FOUNDATIONS_GOLD_SLUG } from "./np-primary-care-foundations-gold-standard";
+import { NP_GERIATRICS_POLYPHARMACY_DEPRESCRIBING_GOLD_SLUG } from "./np-geriatrics-polypharmacy-deprescribing-gold-standard";
+import { NP_MSK_RHEUMATOLOGY_OUTPATIENT_GOLD_SLUG } from "./np-msk-rheumatology-outpatient-gold-standard";
+import { NP_ANTIINFECTIVES_STEWARDSHIP_OUTPATIENT_GOLD_SLUG } from "./np-antiinfectives-stewardship-outpatient-gold-standard";
+import { NP_HEART_FAILURE_PRIMARY_CARE_GOLD_SLUG } from "./np-heart-failure-primary-care-gold-standard";
+import { NP_ASTHMA_OUTPATIENT_GOLD_SLUG } from "./np-asthma-outpatient-gold-standard";
+import { NP_PNEUMONIA_CAP_OUTPATIENT_GOLD_SLUG } from "./np-pneumonia-cap-outpatient-gold-standard";
+import { NP_TYPE2_DIABETES_OUTPATIENT_GOLD_SLUG } from "./np-type2-diabetes-outpatient-gold-standard";
+import { NP_THYROID_PRIMARY_CARE_GOLD_SLUG } from "./np-thyroid-primary-care-gold-standard";
+import { NP_OBESITY_METABOLIC_MANAGEMENT_GOLD_SLUG } from "./np-obesity-metabolic-management-gold-standard";
+import { NP_NEUROLOGY_OUTPATIENT_PRIMARY_CARE_GOLD_SLUG } from "./np-neurology-outpatient-primary-care-gold-standard";
+import { NP_MENTAL_HEALTH_ANXIETY_DEPRESSION_PTSD_GOLD_SLUG } from "./np-mental-health-anxiety-depression-ptsd-gold-standard";
+import { NP_SLEEP_INSOMNIA_OSA_PRIMARY_CARE_GOLD_SLUG } from "./np-sleep-insomnia-osa-primary-care-gold-standard";
+import { NP_CONTRACEPTION_COUNSELING_SELECTION_GOLD_SLUG } from "./np-contraception-counseling-selection-gold-standard";
+import { NP_REPRODUCTIVE_SCREENING_PREVENTION_GOLD_SLUG } from "./np-reproductive-screening-prevention-gold-standard";
+import { NP_AMBULATORY_GYNEC_COMMON_PRESENTATIONS_GOLD_SLUG } from "./np-ambulatory-gynec-common-presentations-gold-standard";
+import { NP_PEDIATRIC_WELL_CHILD_PREVENTION_GOLD_SLUG } from "./np-pediatric-well-child-prevention-gold-standard";
+import { NP_IMMUNIZATION_VACCINES_PRIMARY_CARE_GOLD_SLUG } from "./np-immunization-vaccines-primary-care-gold-standard";
+import { NP_TRAVEL_MEDICINE_PRETRAVEL_GOLD_SLUG } from "./np-travel-medicine-pretravel-gold-standard";
 
 const CORE_NURSING_PATHWAYS = [
   "us-lpn-nclex-pn",
@@ -70,6 +88,24 @@ describe("scoped gold registry", () => {
         RENAL_DIALYSIS_ACUTE_COMPLICATIONS_GOLD_SLUG,
         "copd-clinical-judgment-gold",
         NP_PRIMARY_CARE_FOUNDATIONS_GOLD_SLUG,
+        NP_GERIATRICS_POLYPHARMACY_DEPRESCRIBING_GOLD_SLUG,
+        NP_HEART_FAILURE_PRIMARY_CARE_GOLD_SLUG,
+        NP_ASTHMA_OUTPATIENT_GOLD_SLUG,
+        NP_PNEUMONIA_CAP_OUTPATIENT_GOLD_SLUG,
+        NP_TYPE2_DIABETES_OUTPATIENT_GOLD_SLUG,
+        NP_THYROID_PRIMARY_CARE_GOLD_SLUG,
+        NP_OBESITY_METABOLIC_MANAGEMENT_GOLD_SLUG,
+        NP_NEUROLOGY_OUTPATIENT_PRIMARY_CARE_GOLD_SLUG,
+        NP_MENTAL_HEALTH_ANXIETY_DEPRESSION_PTSD_GOLD_SLUG,
+        NP_SLEEP_INSOMNIA_OSA_PRIMARY_CARE_GOLD_SLUG,
+        NP_CONTRACEPTION_COUNSELING_SELECTION_GOLD_SLUG,
+        NP_REPRODUCTIVE_SCREENING_PREVENTION_GOLD_SLUG,
+        NP_AMBULATORY_GYNEC_COMMON_PRESENTATIONS_GOLD_SLUG,
+        NP_PEDIATRIC_WELL_CHILD_PREVENTION_GOLD_SLUG,
+        NP_IMMUNIZATION_VACCINES_PRIMARY_CARE_GOLD_SLUG,
+        NP_TRAVEL_MEDICINE_PRETRAVEL_GOLD_SLUG,
+        NP_MSK_RHEUMATOLOGY_OUTPATIENT_GOLD_SLUG,
+        NP_ANTIINFECTIVES_STEWARDSHIP_OUTPATIENT_GOLD_SLUG,
         ...LAUNCH_WAVE_1A_SPECS.map((s) => s.slug),
         ...BULK_ROWS.map((r) => r.slug),
         ...CASE_STUDY_CASEBOOK_SLUGS,

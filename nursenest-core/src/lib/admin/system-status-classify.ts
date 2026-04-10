@@ -1,17 +1,18 @@
 import type { CheckStatus, OverallSystemStatus, SystemCheckResult } from "@/lib/admin/system-status-types";
 
-/** Jobs stuck in RUNNING longer than this are flagged (minutes). */
-export const STUCK_RUNNING_THRESHOLD_MINUTES = 30;
-
 /**
  * Derive overall platform status from individual checks.
  *
- * Rules:
- * - **failed**: a **critical** check (`appReadiness`, `database`, `auth`) is `failed` — platform down / unsafe.
- * - **degraded**: no critical failure, but any check is `degraded` or **non-critical** `failed` (e.g. Stripe, OpenAI policy).
+ * Rules (v1):
+ * - **failed**: any **critical** check is `failed` — `appReadiness`, `database`, `configSanity`.
+ * - **degraded**: no critical `failed`, but any check is `degraded` or `failed` on a non-critical card
+ *   (e.g. `queueHealth`, `contentHealth`, `appLiveness` — currently only queue/content use degraded/failed).
  * - **healthy**: all checks `healthy`.
+ *
+ * Note: a **critical** check in `degraded` (e.g. DB connected but migration table unreadable) yields **degraded** overall,
+ * not failed — only `status === "failed"` on critical ids triggers Down.
  */
-const CRITICAL_IDS = new Set<SystemCheckResult["id"]>(["appReadiness", "database", "auth"]);
+const CRITICAL_IDS = new Set<SystemCheckResult["id"]>(["appReadiness", "database", "configSanity"]);
 
 export function classifyOverallStatus(checks: SystemCheckResult[]): OverallSystemStatus {
   if (checks.some((c) => CRITICAL_IDS.has(c.id) && c.status === "failed")) {

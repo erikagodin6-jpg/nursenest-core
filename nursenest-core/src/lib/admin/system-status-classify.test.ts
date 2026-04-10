@@ -20,59 +20,95 @@ function mk(
   };
 }
 
+const sixHealthy = (): SystemCheckResult[] => [
+  mk("appLiveness", "healthy"),
+  mk("appReadiness", "healthy"),
+  mk("database", "healthy"),
+  mk("queueHealth", "healthy"),
+  mk("contentHealth", "healthy"),
+  mk("configSanity", "healthy"),
+];
+
 describe("classifyOverallStatus", () => {
   it("returns healthy when all checks healthy", () => {
-    const checks: SystemCheckResult[] = [
-      mk("appLiveness", "healthy"),
-      mk("appReadiness", "healthy"),
-      mk("database", "healthy"),
-      mk("auth", "healthy"),
-      mk("openai", "healthy"),
-      mk("stripe", "healthy"),
-    ];
-    assert.equal(classifyOverallStatus(checks), "healthy");
+    assert.equal(classifyOverallStatus(sixHealthy()), "healthy");
   });
 
   it("returns failed when appReadiness fails", () => {
-    const checks = [mk("appReadiness", "failed"), mk("database", "healthy"), mk("auth", "healthy")];
+    const checks = [
+      mk("appLiveness", "healthy"),
+      mk("appReadiness", "failed"),
+      mk("database", "healthy"),
+      mk("queueHealth", "healthy"),
+      mk("contentHealth", "healthy"),
+      mk("configSanity", "healthy"),
+    ];
     assert.equal(classifyOverallStatus(checks), "failed");
   });
 
   it("returns failed when database fails", () => {
-    const checks = [mk("appReadiness", "healthy"), mk("database", "failed"), mk("auth", "healthy")];
-    assert.equal(classifyOverallStatus(checks), "failed");
-  });
-
-  it("returns failed when auth fails", () => {
-    const checks = [mk("appReadiness", "healthy"), mk("database", "healthy"), mk("auth", "failed")];
-    assert.equal(classifyOverallStatus(checks), "failed");
-  });
-
-  it("returns degraded when non-critical check fails (e.g. openai) but critical ok", () => {
     const checks = [
+      mk("appLiveness", "healthy"),
+      mk("appReadiness", "healthy"),
+      mk("database", "failed"),
+      mk("queueHealth", "healthy"),
+      mk("contentHealth", "healthy"),
+      mk("configSanity", "healthy"),
+    ];
+    assert.equal(classifyOverallStatus(checks), "failed");
+  });
+
+  it("returns failed when configSanity fails", () => {
+    const checks = [
+      mk("appLiveness", "healthy"),
       mk("appReadiness", "healthy"),
       mk("database", "healthy"),
-      mk("auth", "healthy"),
-      mk("openai", "failed"),
+      mk("queueHealth", "healthy"),
+      mk("contentHealth", "healthy"),
+      mk("configSanity", "failed"),
+    ];
+    assert.equal(classifyOverallStatus(checks), "failed");
+  });
+
+  it("returns degraded when queueHealth degraded but critical checks healthy", () => {
+    const checks = [
+      mk("appLiveness", "healthy"),
+      mk("appReadiness", "healthy"),
+      mk("database", "healthy"),
+      mk("queueHealth", "degraded"),
+      mk("contentHealth", "healthy"),
+      mk("configSanity", "healthy"),
     ];
     assert.equal(classifyOverallStatus(checks), "degraded");
   });
 
-  it("returns degraded when any check is degraded", () => {
+  it("returns degraded when any non-critical check fails", () => {
     const checks = [
+      mk("appLiveness", "healthy"),
       mk("appReadiness", "healthy"),
       mk("database", "healthy"),
-      mk("auth", "healthy"),
-      mk("stripe", "degraded"),
+      mk("queueHealth", "failed"),
+      mk("contentHealth", "healthy"),
+      mk("configSanity", "healthy"),
     ];
+    assert.equal(classifyOverallStatus(checks), "degraded");
+  });
+
+  it("returns degraded when contentHealth degraded", () => {
+    const checks = [...sixHealthy().map((c) => (c.id === "contentHealth" ? mk("contentHealth", "degraded") : c))];
+    assert.equal(classifyOverallStatus(checks), "degraded");
+  });
+
+  it("returns degraded when database is degraded (critical but not failed)", () => {
+    const checks = [...sixHealthy().map((c) => (c.id === "database" ? mk("database", "degraded") : c))];
     assert.equal(classifyOverallStatus(checks), "degraded");
   });
 });
 
 describe("checksToStatusMap", () => {
   it("maps ids to statuses", () => {
-    const m = checksToStatusMap([mk("auth", "failed"), mk("stripe", "healthy")]);
-    assert.equal(m.auth, "failed");
-    assert.equal(m.stripe, "healthy");
+    const m = checksToStatusMap([mk("configSanity", "failed"), mk("database", "healthy")]);
+    assert.equal(m.configSanity, "failed");
+    assert.equal(m.database, "healthy");
   });
 });

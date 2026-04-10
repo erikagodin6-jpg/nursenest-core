@@ -100,6 +100,96 @@ import {
   NP_PRIMARY_CARE_FOUNDATIONS_GOLD_SLUG,
   npPrimaryCareFoundationsHubListInput,
 } from "@/lib/lessons/scoped-lessons/np-primary-care-foundations-gold-standard";
+import {
+  getNpGeriatricsPolypharmacyDeprescribingGoldLessonInput,
+  NP_GERIATRICS_POLYPHARMACY_DEPRESCRIBING_GOLD_SLUG,
+  npGeriatricsPolypharmacyDeprescribingHubListInput,
+} from "@/lib/lessons/scoped-lessons/np-geriatrics-polypharmacy-deprescribing-gold-standard";
+import {
+  getNpHeartFailurePrimaryCareGoldLessonInput,
+  NP_HEART_FAILURE_PRIMARY_CARE_GOLD_SLUG,
+  npHeartFailurePrimaryCareHubListInput,
+} from "@/lib/lessons/scoped-lessons/np-heart-failure-primary-care-gold-standard";
+import {
+  getNpAsthmaOutpatientGoldLessonInput,
+  NP_ASTHMA_OUTPATIENT_GOLD_SLUG,
+  npAsthmaOutpatientHubListInput,
+} from "@/lib/lessons/scoped-lessons/np-asthma-outpatient-gold-standard";
+import {
+  getNpPneumoniaCapOutpatientGoldLessonInput,
+  NP_PNEUMONIA_CAP_OUTPATIENT_GOLD_SLUG,
+  npPneumoniaCapOutpatientHubListInput,
+} from "@/lib/lessons/scoped-lessons/np-pneumonia-cap-outpatient-gold-standard";
+import {
+  getNpType2DiabetesOutpatientGoldLessonInput,
+  NP_TYPE2_DIABETES_OUTPATIENT_GOLD_SLUG,
+  npType2DiabetesOutpatientHubListInput,
+} from "@/lib/lessons/scoped-lessons/np-type2-diabetes-outpatient-gold-standard";
+import {
+  getNpThyroidPrimaryCareGoldLessonInput,
+  NP_THYROID_PRIMARY_CARE_GOLD_SLUG,
+  npThyroidPrimaryCareHubListInput,
+} from "@/lib/lessons/scoped-lessons/np-thyroid-primary-care-gold-standard";
+import {
+  getNpObesityMetabolicManagementGoldLessonInput,
+  NP_OBESITY_METABOLIC_MANAGEMENT_GOLD_SLUG,
+  npObesityMetabolicManagementHubListInput,
+} from "@/lib/lessons/scoped-lessons/np-obesity-metabolic-management-gold-standard";
+import {
+  getNpNeurologyOutpatientPrimaryCareGoldLessonInput,
+  NP_NEUROLOGY_OUTPATIENT_PRIMARY_CARE_GOLD_SLUG,
+  npNeurologyOutpatientPrimaryCareHubListInput,
+} from "@/lib/lessons/scoped-lessons/np-neurology-outpatient-primary-care-gold-standard";
+import {
+  getNpMentalHealthAnxietyDepressionPtsdGoldLessonInput,
+  NP_MENTAL_HEALTH_ANXIETY_DEPRESSION_PTSD_GOLD_SLUG,
+  npMentalHealthAnxietyDepressionPtsdHubListInput,
+} from "@/lib/lessons/scoped-lessons/np-mental-health-anxiety-depression-ptsd-gold-standard";
+import {
+  getNpSleepInsomniaOsaPrimaryCareGoldLessonInput,
+  NP_SLEEP_INSOMNIA_OSA_PRIMARY_CARE_GOLD_SLUG,
+  npSleepInsomniaOsaPrimaryCareHubListInput,
+} from "@/lib/lessons/scoped-lessons/np-sleep-insomnia-osa-primary-care-gold-standard";
+import {
+  getNpContraceptionCounselingSelectionGoldLessonInput,
+  NP_CONTRACEPTION_COUNSELING_SELECTION_GOLD_SLUG,
+  npContraceptionCounselingSelectionHubListInput,
+} from "@/lib/lessons/scoped-lessons/np-contraception-counseling-selection-gold-standard";
+import {
+  getNpReproductiveScreeningPreventionGoldLessonInput,
+  NP_REPRODUCTIVE_SCREENING_PREVENTION_GOLD_SLUG,
+  npReproductiveScreeningPreventionHubListInput,
+} from "@/lib/lessons/scoped-lessons/np-reproductive-screening-prevention-gold-standard";
+import {
+  getNpAmbulatoryGynecCommonPresentationsGoldLessonInput,
+  NP_AMBULATORY_GYNEC_COMMON_PRESENTATIONS_GOLD_SLUG,
+  npAmbulatoryGynecCommonPresentationsHubListInput,
+} from "@/lib/lessons/scoped-lessons/np-ambulatory-gynec-common-presentations-gold-standard";
+import {
+  getNpPediatricWellChildPreventionGoldLessonInput,
+  NP_PEDIATRIC_WELL_CHILD_PREVENTION_GOLD_SLUG,
+  npPediatricWellChildPreventionHubListInput,
+} from "@/lib/lessons/scoped-lessons/np-pediatric-well-child-prevention-gold-standard";
+import {
+  getNpImmunizationVaccinesPrimaryCareGoldLessonInput,
+  NP_IMMUNIZATION_VACCINES_PRIMARY_CARE_GOLD_SLUG,
+  npImmunizationVaccinesPrimaryCareHubListInput,
+} from "@/lib/lessons/scoped-lessons/np-immunization-vaccines-primary-care-gold-standard";
+import {
+  getNpTravelMedicinePretravelGoldLessonInput,
+  NP_TRAVEL_MEDICINE_PRETRAVEL_GOLD_SLUG,
+  npTravelMedicinePretravelHubListInput,
+} from "@/lib/lessons/scoped-lessons/np-travel-medicine-pretravel-gold-standard";
+import {
+  getNpMskRheumatologyOutpatientGoldLessonInput,
+  NP_MSK_RHEUMATOLOGY_OUTPATIENT_GOLD_SLUG,
+  npMskRheumatologyOutpatientHubListInput,
+} from "@/lib/lessons/scoped-lessons/np-msk-rheumatology-outpatient-gold-standard";
+import {
+  getNpAntiinfectivesStewardshipOutpatientGoldLessonInput,
+  NP_ANTIINFECTIVES_STEWARDSHIP_OUTPATIENT_GOLD_SLUG,
+  npAntiinfectivesStewardshipOutpatientHubListInput,
+} from "@/lib/lessons/scoped-lessons/np-antiinfectives-stewardship-outpatient-gold-standard";
 
 /** Minimal lesson row shape for catalog merge (matches pathway-lesson-loader `LessonInput`). */
 export type ScopedGoldLessonInput = {
@@ -208,6 +298,114 @@ export const SCOPED_GOLD_PROVIDERS: ScopedGoldProvider[] = [
     topicSlug: "clinical-reasoning",
     getFullLesson: getNpPrimaryCareFoundationsGoldLessonInput,
     getHubListRow: npPrimaryCareFoundationsHubListInput,
+  },
+  {
+    slug: NP_GERIATRICS_POLYPHARMACY_DEPRESCRIBING_GOLD_SLUG,
+    topicSlug: "geriatrics",
+    getFullLesson: getNpGeriatricsPolypharmacyDeprescribingGoldLessonInput,
+    getHubListRow: npGeriatricsPolypharmacyDeprescribingHubListInput,
+  },
+  {
+    slug: NP_HEART_FAILURE_PRIMARY_CARE_GOLD_SLUG,
+    topicSlug: "cardiovascular",
+    getFullLesson: getNpHeartFailurePrimaryCareGoldLessonInput,
+    getHubListRow: npHeartFailurePrimaryCareHubListInput,
+  },
+  {
+    slug: NP_ASTHMA_OUTPATIENT_GOLD_SLUG,
+    topicSlug: "respiratory",
+    getFullLesson: getNpAsthmaOutpatientGoldLessonInput,
+    getHubListRow: npAsthmaOutpatientHubListInput,
+  },
+  {
+    slug: NP_PNEUMONIA_CAP_OUTPATIENT_GOLD_SLUG,
+    topicSlug: "respiratory-acute",
+    getFullLesson: getNpPneumoniaCapOutpatientGoldLessonInput,
+    getHubListRow: npPneumoniaCapOutpatientHubListInput,
+  },
+  {
+    slug: NP_TYPE2_DIABETES_OUTPATIENT_GOLD_SLUG,
+    topicSlug: "diabetes-metabolic",
+    getFullLesson: getNpType2DiabetesOutpatientGoldLessonInput,
+    getHubListRow: npType2DiabetesOutpatientHubListInput,
+  },
+  {
+    slug: NP_THYROID_PRIMARY_CARE_GOLD_SLUG,
+    topicSlug: "endocrine",
+    getFullLesson: getNpThyroidPrimaryCareGoldLessonInput,
+    getHubListRow: npThyroidPrimaryCareHubListInput,
+  },
+  {
+    slug: NP_OBESITY_METABOLIC_MANAGEMENT_GOLD_SLUG,
+    topicSlug: "diabetes-metabolic",
+    getFullLesson: getNpObesityMetabolicManagementGoldLessonInput,
+    getHubListRow: npObesityMetabolicManagementHubListInput,
+  },
+  {
+    slug: NP_NEUROLOGY_OUTPATIENT_PRIMARY_CARE_GOLD_SLUG,
+    topicSlug: "neurological",
+    getFullLesson: getNpNeurologyOutpatientPrimaryCareGoldLessonInput,
+    getHubListRow: npNeurologyOutpatientPrimaryCareHubListInput,
+  },
+  {
+    slug: NP_MENTAL_HEALTH_ANXIETY_DEPRESSION_PTSD_GOLD_SLUG,
+    topicSlug: "mental-health",
+    getFullLesson: getNpMentalHealthAnxietyDepressionPtsdGoldLessonInput,
+    getHubListRow: npMentalHealthAnxietyDepressionPtsdHubListInput,
+  },
+  {
+    slug: NP_SLEEP_INSOMNIA_OSA_PRIMARY_CARE_GOLD_SLUG,
+    topicSlug: "sleep-medicine",
+    getFullLesson: getNpSleepInsomniaOsaPrimaryCareGoldLessonInput,
+    getHubListRow: npSleepInsomniaOsaPrimaryCareHubListInput,
+  },
+  {
+    slug: NP_CONTRACEPTION_COUNSELING_SELECTION_GOLD_SLUG,
+    topicSlug: "womens-health",
+    getFullLesson: getNpContraceptionCounselingSelectionGoldLessonInput,
+    getHubListRow: npContraceptionCounselingSelectionHubListInput,
+  },
+  {
+    slug: NP_REPRODUCTIVE_SCREENING_PREVENTION_GOLD_SLUG,
+    topicSlug: "womens-health",
+    getFullLesson: getNpReproductiveScreeningPreventionGoldLessonInput,
+    getHubListRow: npReproductiveScreeningPreventionHubListInput,
+  },
+  {
+    slug: NP_AMBULATORY_GYNEC_COMMON_PRESENTATIONS_GOLD_SLUG,
+    topicSlug: "womens-health",
+    getFullLesson: getNpAmbulatoryGynecCommonPresentationsGoldLessonInput,
+    getHubListRow: npAmbulatoryGynecCommonPresentationsHubListInput,
+  },
+  {
+    slug: NP_PEDIATRIC_WELL_CHILD_PREVENTION_GOLD_SLUG,
+    topicSlug: "pediatrics",
+    getFullLesson: getNpPediatricWellChildPreventionGoldLessonInput,
+    getHubListRow: npPediatricWellChildPreventionHubListInput,
+  },
+  {
+    slug: NP_IMMUNIZATION_VACCINES_PRIMARY_CARE_GOLD_SLUG,
+    topicSlug: "pediatrics",
+    getFullLesson: getNpImmunizationVaccinesPrimaryCareGoldLessonInput,
+    getHubListRow: npImmunizationVaccinesPrimaryCareHubListInput,
+  },
+  {
+    slug: NP_TRAVEL_MEDICINE_PRETRAVEL_GOLD_SLUG,
+    topicSlug: "clinical-reasoning",
+    getFullLesson: getNpTravelMedicinePretravelGoldLessonInput,
+    getHubListRow: npTravelMedicinePretravelHubListInput,
+  },
+  {
+    slug: NP_MSK_RHEUMATOLOGY_OUTPATIENT_GOLD_SLUG,
+    topicSlug: "musculoskeletal",
+    getFullLesson: getNpMskRheumatologyOutpatientGoldLessonInput,
+    getHubListRow: npMskRheumatologyOutpatientHubListInput,
+  },
+  {
+    slug: NP_ANTIINFECTIVES_STEWARDSHIP_OUTPATIENT_GOLD_SLUG,
+    topicSlug: "infectious-disease",
+    getFullLesson: getNpAntiinfectivesStewardshipOutpatientGoldLessonInput,
+    getHubListRow: npAntiinfectivesStewardshipOutpatientHubListInput,
   },
   ...LAUNCH_WAVE_1A_PROVIDERS,
   ...LAUNCH_WAVE_1_BULK_PROVIDERS,

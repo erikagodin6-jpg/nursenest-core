@@ -4,8 +4,14 @@ import { requireAdmin } from "@/lib/admin/ensure-admin";
 import {
   ADMIN_LESSON_BATCH_TOOL,
   isTerminalBatchStatus,
+  loadLessonBatchSummaryWithHydration,
   parseBatchSummary,
+  resolveLessonBatchDerived,
   reviveStaleGeneratingItems,
+  reviveStaleLessonBatchQueueItems,
+  reconcileGeneratingItemsWithDrafts,
+  syncJobResultSummaryJson,
+  toAdminLessonBatchJobSnapshot,
 } from "@/lib/lessons/admin-ai-lesson-batch";
 import { prisma } from "@/lib/db";
 
@@ -25,36 +31,48 @@ export async function GET(_req: Request, ctx: Props) {
     return NextResponse.json({ error: "Not a lesson batch job" }, { status: 400 });
   }
 
-  let summary = parseBatchSummary(job.resultSummary);
-  if (summary) {
-    const { summary: revived, mutated } = reviveStaleGeneratingItems(summary);
-    if (mutated) {
-      const allDone = revived.items.every((i) => isTerminalBatchStatus(i.status));
-      await prisma.aiGenerationJob.update({
-        where: { id: jobId },
-        data: {
-          resultSummary: revived as object,
-          status: allDone ? JobStatus.COMPLETED : JobStatus.RUNNING,
-        },
-      });
-      job = (await prisma.aiGenerationJob.findUnique({ where: { id: jobId } })) ?? job;
-      summary = parseBatchSummary(job.resultSummary) ?? revived;
-    } else {
-      summary = revived;
+  const hasQueue = await prisma.lessonBatchQueueItem.count({ where: { jobId } });
+  if (hasQueue > 0) {
+    await reviveStaleLessonBatchQueueItems(prisma, jobId);
+    const reconciled = await reconcileGeneratingItemsWithDrafts(prisma, jobId);
+    if (reconciled) {
+      await syncJobResultSummaryJson(prisma, jobId);
+    }
+    job = (await prisma.aiGenerationJob.findUnique({ where: { id: jobId } })) ?? job;
+  } else {
+    let summary = parseBatchSummary(job.resultSummary);
+    if (summary) {
+      const { summary: revived, mutated } = reviveStaleGeneratingItems(summary);
+      if (mutated) {
+        const allDone = revived.items.every((i) => isTerminalBatchStatus(i.status));
+        const preserveTerminalJob =
+          job.status === JobStatus.CANCELLED || job.status === JobStatus.FAILED;
+        let nextJobStatus: JobStatus = job.status;
+        if (!preserveTerminalJob) {
+          nextJobStatus = allDone ? JobStatus.COMPLETED : JobStatus.RUNNING;
+        }
+        await prisma.aiGenerationJob.update({
+          where: { id: jobId },
+          data: {
+            resultSummary: revived as object,
+            status: nextJobStatus,
+          },
+        });
+        job = (await prisma.aiGenerationJob.findUnique({ where: { id: jobId } })) ?? job;
+      }
     }
   }
 
+  const summary = await loadLessonBatchSummaryWithHydration(prisma, jobId);
+  const derived = summary ? resolveLessonBatchDerived(summary) : null;
+
+  const latest = await prisma.aiGenerationJob.findUnique({ where: { id: jobId } });
+  if (!latest) return NextResponse.json({ error: "Not found" }, { status: 404 });
+
   return NextResponse.json({
-    job: {
-      id: job.id,
-      status: job.status,
-      model: job.model,
-      error: job.error,
-      tokensUsed: job.tokensUsed,
-      createdAt: job.createdAt,
-      updatedAt: job.updatedAt,
-    },
+    job: toAdminLessonBatchJobSnapshot(latest),
     summary,
-    inputPayload: job.inputPayload,
+    derived,
+    inputPayload: latest.inputPayload,
   });
 }

@@ -555,7 +555,7 @@ function npTitles(pathwayId: string, v: (typeof VARIANTS)["us_np"]) {
   return {
     ...v,
     title: `Chest pain triage in primary care (${suf})`,
-    seoTitle: `Chest pain triage | ${lab} US | NurseNest`,
+    seoTitle: `Chest pain triage | ${lab} | NurseNest`,
     seoDescription: `NP chest pain triage for ${lab}: ED or EMS when red flags appear, serial ECG and troponin concepts, ACS versus pulmonary embolism and dissection differentials, risk stratification, and safety netting.`,
   };
 }

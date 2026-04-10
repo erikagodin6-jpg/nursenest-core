@@ -1,17 +1,19 @@
 import { DraftReviewStatus, JobStatus } from "@prisma/client";
 import { NextResponse } from "next/server";
+import { randomUUID } from "node:crypto";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
 import { isAdminAiGenerationEnabled } from "@/lib/ai/admin-ai-policy";
 import { checkAdminAiGenerateLimit } from "@/lib/ai/admin-rate-limit";
 import { assertOpenAiKeyConfigured, getOpenAiChatModel } from "@/lib/ai/openai-env";
 import {
   ADMIN_LESSON_BATCH_TOOL,
+  loadLessonBatchSummaryWithHydration,
+  claimNextLessonBatchItem,
+  resolveLessonBatchDerived,
   findLessonDraftDuplicate,
-  isTerminalBatchStatus,
   lessonBatchTopicKey,
-  parseBatchSummary,
-  reviveStaleGeneratingItems,
-  type LessonBatchItem,
+  sanitizeLessonBatchError,
+  syncJobResultSummaryJson,
   type LessonBatchResultSummaryV1,
 } from "@/lib/lessons/admin-ai-lesson-batch";
 import type { AdminAiLessonGenerateInput } from "@/lib/lessons/admin-ai-lesson-pipeline";
@@ -26,34 +28,6 @@ export const runtime = "nodejs";
 export const maxDuration = 180;
 
 type Props = { params: Promise<{ jobId: string }> };
-
-const MAX_LOCK_ATTEMPTS = 5;
-
-async function persistItemPatch(
-  jobId: string,
-  itemId: string,
-  patch: Partial<LessonBatchItem>,
-  tokenDelta?: number,
-): Promise<LessonBatchResultSummaryV1 | null> {
-  const fresh = await prisma.aiGenerationJob.findUnique({ where: { id: jobId } });
-  const s = parseBatchSummary(fresh?.resultSummary);
-  if (!s) return null;
-  const idx = s.items.findIndex((x) => x.itemId === itemId);
-  if (idx < 0) return null;
-  const mergedItems = [...s.items];
-  mergedItems[idx] = { ...mergedItems[idx]!, ...patch };
-  const allTerminal = mergedItems.every((i) => isTerminalBatchStatus(i.status));
-  await prisma.aiGenerationJob.update({
-    where: { id: jobId },
-    data: {
-      resultSummary: { ...s, items: mergedItems } as object,
-      status: allTerminal ? JobStatus.COMPLETED : JobStatus.RUNNING,
-      ...(tokenDelta != null ? { tokensUsed: (fresh?.tokensUsed ?? 0) + tokenDelta } : {}),
-    },
-  });
-  const after = await prisma.aiGenerationJob.findUnique({ where: { id: jobId } });
-  return parseBatchSummary(after?.resultSummary);
-}
 
 export async function POST(_req: Request, ctx: Props) {
   const gate = await requireAdmin();
@@ -74,134 +48,138 @@ export async function POST(_req: Request, ctx: Props) {
   }
 
   const { jobId } = await ctx.params;
+  const requestId = randomUUID();
 
-  for (let attempt = 0; attempt < MAX_LOCK_ATTEMPTS; attempt++) {
-    let job = await prisma.aiGenerationJob.findUnique({ where: { id: jobId } });
-    if (!job) return NextResponse.json({ error: "Not found" }, { status: 404 });
-    if (job.createdById !== gate.admin.userId) {
-      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
-    }
-    if (job.tool !== ADMIN_LESSON_BATCH_TOOL) {
-      return NextResponse.json({ error: "Not a lesson batch job" }, { status: 400 });
-    }
+  const jobCheck = await prisma.aiGenerationJob.findUnique({ where: { id: jobId } });
+  if (!jobCheck) return NextResponse.json({ error: "Not found" }, { status: 404 });
+  if (jobCheck.createdById !== gate.admin.userId) {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  }
+  if (jobCheck.tool !== ADMIN_LESSON_BATCH_TOOL) {
+    return NextResponse.json({ error: "Not a lesson batch job" }, { status: 400 });
+  }
 
-    let summary = parseBatchSummary(job.resultSummary);
-    if (!summary) {
-      return NextResponse.json({ error: "Invalid batch state" }, { status: 500 });
-    }
+  const claim = await claimNextLessonBatchItem(prisma, jobId, requestId);
 
-    const { summary: revived, mutated } = reviveStaleGeneratingItems(summary);
-    if (mutated) {
-      await prisma.aiGenerationJob.update({
-        where: { id: jobId },
-        data: { resultSummary: revived as object },
-      });
-      job = await prisma.aiGenerationJob.findUnique({ where: { id: jobId } });
-      if (!job) return NextResponse.json({ error: "Not found" }, { status: 404 });
-      summary = parseBatchSummary(job.resultSummary) ?? revived;
-    } else {
-      summary = revived;
-    }
-
-    if (!job) return NextResponse.json({ error: "Not found" }, { status: 404 });
-
-    const pendingIdx = summary.items.findIndex((i) => i.status === "pending");
-    if (pendingIdx === -1) {
-      const allDone = summary.items.every((i) => isTerminalBatchStatus(i.status));
-      if (allDone && job.status !== JobStatus.COMPLETED) {
-        await prisma.aiGenerationJob.update({
-          where: { id: jobId },
-          data: { status: JobStatus.COMPLETED, error: null },
-        });
-      }
-      return NextResponse.json({
-        done: true,
-        summary,
-        message: "No pending items",
-      });
-    }
-
-    const item = summary.items[pendingIdx]!;
-    const startedAt = new Date().toISOString();
-    const nextSummary: LessonBatchResultSummaryV1 = {
-      ...summary,
-      items: summary.items.map((it, i) =>
-        i === pendingIdx ? { ...it, status: "generating" as const, startedAt } : it,
-      ),
-    };
-
-    const lock = await prisma.aiGenerationJob.updateMany({
-      where: { id: jobId, updatedAt: job.updatedAt },
-      data: {
-        resultSummary: nextSummary as object,
-        status: JobStatus.RUNNING,
-      },
+  if (claim.kind === "job_not_runnable") {
+    await syncJobResultSummaryJson(prisma, jobId);
+    const summary = await loadLessonBatchSummaryWithHydration(prisma, jobId);
+    const derived = summary ? resolveLessonBatchDerived(summary) : null;
+    const j = await prisma.aiGenerationJob.findUnique({ where: { id: jobId } });
+    return NextResponse.json({
+      done: true,
+      stopped: true,
+      reason: j?.status === JobStatus.CANCELLED ? "canceled" : "job_not_running",
+      summary,
+      derived,
     });
+  }
 
-    if (lock.count === 0) {
-      continue;
-    }
+  if (claim.kind === "idle") {
+    await syncJobResultSummaryJson(prisma, jobId);
+    const summary = await loadLessonBatchSummaryWithHydration(prisma, jobId);
+    const derived = summary ? resolveLessonBatchDerived(summary) : null;
+    const done = derived?.allTerminal ?? true;
+    return NextResponse.json({
+      done,
+      idle: true,
+      message: done ? "Batch finished" : "No claimable pending items",
+      summary,
+      derived,
+    });
+  }
 
-    const settings = summary.settings;
-    let relatedCategoryLabels: string[] = [];
-    if (settings.relatedCategoryIds.length > 0) {
-      const cats = await prisma.category.findMany({
-        where: { id: { in: settings.relatedCategoryIds } },
-        select: { name: true, slug: true },
+  const row = claim.row;
+  const job = await prisma.aiGenerationJob.findUnique({ where: { id: jobId } });
+  if (!job) return NextResponse.json({ error: "Not found" }, { status: 404 });
+
+  const inputPayload = job.inputPayload as Record<string, unknown>;
+  const settings = {
+    pathway: inputPayload.pathway as LessonBatchResultSummaryV1["settings"]["pathway"],
+    country: inputPayload.country as "CA" | "US",
+    topicDomain: String(inputPayload.topicDomain ?? ""),
+    lessonType: inputPayload.lessonType as LessonBatchResultSummaryV1["settings"]["lessonType"],
+    difficulty: inputPayload.difficulty as LessonBatchResultSummaryV1["settings"]["difficulty"] | undefined,
+    relatedCategoryIds: Array.isArray(inputPayload.relatedCategoryIds)
+      ? (inputPayload.relatedCategoryIds as string[])
+      : [],
+  };
+  const allowDuplicates = Boolean(inputPayload.allowDuplicates);
+
+  let relatedCategoryLabels: string[] = [];
+  if (settings.relatedCategoryIds.length > 0) {
+    const cats = await prisma.category.findMany({
+      where: { id: { in: settings.relatedCategoryIds } },
+      select: { name: true, slug: true },
+    });
+    relatedCategoryLabels = cats.map((c) => c.name || c.slug);
+  }
+
+  const genInput: AdminAiLessonGenerateInput = {
+    topic: row.topic,
+    pathway: settings.pathway,
+    country: settings.country,
+    topicDomain: settings.topicDomain,
+    lessonType: settings.lessonType,
+    difficulty: settings.difficulty,
+    relatedCategoryLabels,
+  };
+
+  const key = lessonBatchTopicKey(row.topic, settings.pathway, settings.country, settings.lessonType);
+
+  try {
+    if (!allowDuplicates) {
+      const dup = await findLessonDraftDuplicate(prisma, key, {
+        topic: row.topic,
+        pathway: settings.pathway,
+        country: settings.country,
+        lessonType: settings.lessonType,
       });
-      relatedCategoryLabels = cats.map((c) => c.name || c.slug);
+      if (dup) {
+        const now = new Date();
+        await prisma.lessonBatchQueueItem.update({
+          where: { id: row.id },
+          data: {
+            status: "SKIPPED_DUPLICATE",
+            existingDraftId: dup.id,
+            skippedAt: now,
+            startedAt: null,
+            claimedByRequestId: null,
+            generatedDraftTitle: dup.titlePreview,
+          },
+        });
+        await syncJobResultSummaryJson(prisma, jobId);
+        await prisma.aiGenerationLog.create({
+          data: {
+            jobId,
+            step: "batch_item_skipped_duplicate",
+            detail: { itemId: row.publicItemId, existingDraftId: dup.id },
+          },
+        });
+        const summary = await loadLessonBatchSummaryWithHydration(prisma, jobId);
+        const derived = summary ? resolveLessonBatchDerived(summary) : null;
+        const item = summary?.items.find((i) => i.itemId === row.publicItemId);
+        return NextResponse.json({
+          done: derived?.allTerminal ?? false,
+          item,
+          summary,
+          derived,
+        });
+      }
     }
 
-    const genInput: AdminAiLessonGenerateInput = {
-      topic: item.topic,
-      pathway: settings.pathway,
-      country: settings.country,
-      topicDomain: settings.topicDomain,
-      lessonType: settings.lessonType,
-      difficulty: settings.difficulty,
-      relatedCategoryLabels,
-    };
+    const { lesson, rawTokens } = await generateAdminAiLesson(genInput);
+    const normalized = buildDraftNormalized(genInput, lesson);
+    const model = getOpenAiChatModel();
 
-    try {
-      if (!summary.allowDuplicates) {
-        const dup = await findLessonDraftDuplicate(prisma, item.batchTopicKey, {
-          topic: item.topic,
-          pathway: settings.pathway,
-          country: settings.country,
-          lessonType: settings.lessonType,
-        });
-        if (dup) {
-          const afterSum = await persistItemPatch(jobId, item.itemId, {
-            status: "skipped_duplicate",
-            existingDraftId: dup.id,
-            startedAt: null,
-          });
-          await prisma.aiGenerationLog.create({
-            data: {
-              jobId,
-              step: "batch_item_skipped_duplicate",
-              detail: { itemId: item.itemId, existingDraftId: dup.id },
-            },
-          });
-          return NextResponse.json({
-            done: false,
-            item: { ...item, status: "skipped_duplicate" as const, existingDraftId: dup.id },
-            summary: afterSum,
-          });
-        }
-      }
-
-      const { lesson, rawTokens } = await generateAdminAiLesson(genInput);
-      const normalized = buildDraftNormalized(genInput, lesson);
-      const model = getOpenAiChatModel();
-      const key = lessonBatchTopicKey(item.topic, settings.pathway, settings.country, settings.lessonType);
-
-      const draft = await prisma.generatedLessonDraft.create({
+    const createdDraftId = await prisma.$transaction(async (tx) => {
+      const draft = await tx.generatedLessonDraft.create({
         data: {
           jobId,
           tool: ADMIN_AI_LESSON_GENERATOR_TOOL,
+          lessonBatchTopicKey: key,
           payloadJson: {
-            topic: item.topic,
+            topic: row.topic,
             pathway: settings.pathway,
             country: settings.country,
             topicDomain: settings.topicDomain,
@@ -209,7 +187,7 @@ export async function POST(_req: Request, ctx: Props) {
             difficulty: settings.difficulty ?? null,
             relatedCategoryIds: settings.relatedCategoryIds,
             batchTopicKey: key,
-            batchItemId: item.itemId,
+            batchItemId: row.publicItemId,
             batchJobId: jobId,
           },
           normalizedJson: normalized as object,
@@ -218,64 +196,94 @@ export async function POST(_req: Request, ctx: Props) {
             model,
             totalTokens: rawTokens ?? null,
             batchJobId: jobId,
-            batchItemId: item.itemId,
+            batchItemId: row.publicItemId,
           },
           reviewStatus: DraftReviewStatus.PENDING_REVIEW,
           titlePreview: lesson.title.slice(0, 500),
-          sourcePrompt: `topic=${item.topic}; pathway=${settings.pathway}; country=${settings.country}; type=${settings.lessonType}; batch=${jobId}`,
+          sourcePrompt: `topic=${row.topic}; pathway=${settings.pathway}; country=${settings.country}; type=${settings.lessonType}; batch=${jobId}`,
           model,
           createdById: gate.admin.userId,
         },
         select: { id: true },
       });
 
-      const afterSum = await persistItemPatch(
-        jobId,
-        item.itemId,
-        {
-          status: "completed",
-          draftId: draft.id,
+      await tx.lessonBatchQueueItem.update({
+        where: { id: row.id },
+        data: {
+          status: "COMPLETED",
+          generatedDraftId: draft.id,
+          generatedDraftTitle: lesson.title.slice(0, 500),
+          completedAt: new Date(),
           startedAt: null,
+          claimedByRequestId: null,
+          lastError: null,
         },
-        rawTokens ?? 0,
-      );
+      });
 
-      await prisma.aiGenerationLog.create({
+      await tx.aiGenerationJob.update({
+        where: { id: jobId },
         data: {
-          jobId,
-          step: "batch_item_completed",
-          detail: { itemId: item.itemId, draftId: draft.id },
+          tokensUsed: { increment: rawTokens ?? 0 },
         },
       });
 
-      return NextResponse.json({
-        done: false,
-        item: { ...item, status: "completed" as const, draftId: draft.id },
-        summary: afterSum,
-      });
-    } catch (e) {
-      const message = e instanceof Error ? e.message : String(e);
-      const afterSum = await persistItemPatch(jobId, item.itemId, {
-        status: "failed",
-        error: message.slice(0, 2000),
+      return draft.id;
+    });
+
+    await syncJobResultSummaryJson(prisma, jobId);
+
+    await prisma.aiGenerationLog.create({
+      data: {
+        jobId,
+        step: "batch_item_completed",
+        detail: { itemId: row.publicItemId, draftId: createdDraftId },
+      },
+    });
+
+    const summary = await loadLessonBatchSummaryWithHydration(prisma, jobId);
+    const derived = summary ? resolveLessonBatchDerived(summary) : null;
+    const item = summary?.items.find((i) => i.itemId === row.publicItemId);
+
+    return NextResponse.json({
+      done: derived?.allTerminal ?? false,
+      item,
+      summary,
+      derived,
+    });
+  } catch (e) {
+    const raw = e instanceof Error ? e.message : String(e);
+    const message = sanitizeLessonBatchError(raw);
+    const now = new Date();
+    await prisma.lessonBatchQueueItem.update({
+      where: { id: row.id },
+      data: {
+        status: "FAILED",
+        lastError: message,
         startedAt: null,
-      });
+        claimedByRequestId: null,
+        completedAt: null,
+        lastAttemptAt: now,
+      },
+    });
+    await syncJobResultSummaryJson(prisma, jobId);
 
-      await prisma.aiGenerationLog.create({
-        data: {
-          jobId,
-          step: "batch_item_failed",
-          detail: { itemId: item.itemId, error: message.slice(0, 500) },
-        },
-      });
+    await prisma.aiGenerationLog.create({
+      data: {
+        jobId,
+        step: "batch_item_failed",
+        detail: { itemId: row.publicItemId, error: message.slice(0, 500) },
+      },
+    });
 
-      return NextResponse.json({
-        done: false,
-        item: { ...item, status: "failed" as const, error: message },
-        summary: afterSum,
-      });
-    }
+    const summary = await loadLessonBatchSummaryWithHydration(prisma, jobId);
+    const derived = summary ? resolveLessonBatchDerived(summary) : null;
+    const item = summary?.items.find((i) => i.itemId === row.publicItemId);
+
+    return NextResponse.json({
+      done: false,
+      item,
+      summary,
+      derived,
+    });
   }
-
-  return NextResponse.json({ error: "Could not claim batch item (try again)" }, { status: 409 });
 }

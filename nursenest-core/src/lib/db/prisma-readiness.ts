@@ -7,13 +7,12 @@ export type ReadinessResult =
   | { ok: false; error: string };
 
 /**
- * Lightweight DB probe for readiness probes (not for liveness — use `/healthz`).
- * Uses Promise.race so a wedged pool does not hang the request forever.
+ * Single bounded `SELECT 1` — shared by readiness (`/api/health/ready`), admin system status DB card, etc.
+ * Caller must ensure `isDatabaseUrlConfigured()` before invoking (readiness skips when unset).
  */
-export async function checkDatabaseReadiness(timeoutMs = 3000): Promise<ReadinessResult> {
-  if (!isDatabaseUrlConfigured()) {
-    return { ok: true, skipped: true };
-  }
+export async function boundedSelectOne(
+  timeoutMs: number,
+): Promise<{ ok: true; latencyMs: number } | { ok: false; error: string }> {
   const started = Date.now();
   try {
     await Promise.race([
@@ -27,4 +26,17 @@ export async function checkDatabaseReadiness(timeoutMs = 3000): Promise<Readines
     const msg = e instanceof Error ? e.message : String(e);
     return { ok: false, error: msg.slice(0, 240) };
   }
+}
+
+/**
+ * Lightweight DB probe for readiness probes (not for liveness — use `/healthz`).
+ * Uses Promise.race so a wedged pool does not hang the request forever.
+ */
+export async function checkDatabaseReadiness(timeoutMs = 3000): Promise<ReadinessResult> {
+  if (!isDatabaseUrlConfigured()) {
+    return { ok: true, skipped: true };
+  }
+  const r = await boundedSelectOne(timeoutMs);
+  if (!r.ok) return { ok: false, error: r.error };
+  return { ok: true, latencyMs: r.latencyMs };
 }

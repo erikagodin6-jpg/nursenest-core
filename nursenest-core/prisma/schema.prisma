@@ -84,6 +84,16 @@ enum JobStatus {
   CANCELLED
 }
 
+/** Admin lesson batch queue — one row per topic; statuses drive atomic claim + recovery. */
+enum LessonBatchQueueItemStatus {
+  PENDING
+  GENERATING
+  COMPLETED
+  FAILED
+  SKIPPED_DUPLICATE
+  CANCELLED
+}
+
 enum ExamSessionStatus {
   IN_PROGRESS
   COMPLETED
@@ -1271,6 +1281,8 @@ model AiGenerationJob {
   resultSummary  Json?
   error          String?   @db.Text
   tokensUsed     Int?
+  /** Set when a lesson batch job is canceled via admin API (tool = ADMIN_LESSON_BATCH). */
+  lessonBatchCanceledAt DateTime? @map("lesson_batch_canceled_at")
   createdById    String
   createdBy      User      @relation("AiJobCreatedBy", fields: [createdById], references: [id])
   createdAt      DateTime  @default(now())
@@ -1279,9 +1291,46 @@ model AiGenerationJob {
   questionDrafts GeneratedQuestionDraft[]
   flashcardDrafts GeneratedFlashcardDraft[]
   lessonDrafts   GeneratedLessonDraft[]
+  lessonBatchQueueItems LessonBatchQueueItem[]
 
   @@index([tool, createdAt])
   @@index([createdById])
+}
+
+/** DB-backed queue for `/api/admin/lessons/ai-generate-batch` — enables atomic claim and item-level metrics. */
+model LessonBatchQueueItem {
+  id                  String                    @id @default(cuid())
+  jobId               String
+  job                 AiGenerationJob           @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  /** Stable ordering within the batch (0-based). */
+  position            Int
+  /** Client-visible id (matches legacy JSON `itemId` / payload `batchItemId`). */
+  publicItemId        String                    @unique
+  topic               String                    @db.Text
+  normalizedTopic     String                    @db.Text
+  batchTopicKey       String                    @db.VarChar(40)
+  status              LessonBatchQueueItemStatus @default(PENDING)
+  attemptCount        Int                       @default(0)
+  lastError           String?                   @db.Text
+  lastAttemptAt       DateTime?
+  completedAt         DateTime?
+  skippedAt           DateTime?
+  /** When the row was moved to CANCELLED (batch canceled or stale revive on a canceled job). */
+  canceledAt          DateTime?
+  startedAt           DateTime?
+  claimedByRequestId  String?                   @db.VarChar(128)
+  revivedAt           DateTime?
+  revivalCount        Int                       @default(0)
+  generatedDraftId    String?
+  generatedDraft      GeneratedLessonDraft?     @relation("LessonBatchGeneratedDraft", fields: [generatedDraftId], references: [id], onDelete: SetNull)
+  /** When status is SKIPPED_DUPLICATE — link to an existing draft with the same fingerprint. */
+  existingDraftId     String?
+  generatedDraftTitle String?                   @db.Text
+
+  @@index([jobId, status, position])
+  @@index([jobId, position])
+  @@index([batchTopicKey])
+  @@map("lesson_batch_queue_item")
 }
 
 /** Audit trail for AI steps (granular events under a job). */
@@ -1376,6 +1425,8 @@ model GeneratedLessonDraft {
   jobId            String?
   job              AiGenerationJob? @relation(fields: [jobId], references: [id], onDelete: SetNull)
   tool             String
+  /** Fingerprint for duplicate detection (same as payload `batchTopicKey`); indexed for exact lookups. */
+  lessonBatchTopicKey String? @db.VarChar(40)
   payloadJson      Json
   normalizedJson   Json?
   validationJson   Json
@@ -1395,9 +1446,11 @@ model GeneratedLessonDraft {
   createdBy        User     @relation("LessonDraftCreatedBy", fields: [createdById], references: [id])
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
+  lessonBatchQueueItems LessonBatchQueueItem[] @relation("LessonBatchGeneratedDraft")
 
   @@index([reviewStatus, createdAt])
   @@index([jobId])
+  @@index([lessonBatchTopicKey])
 }
 
 /**

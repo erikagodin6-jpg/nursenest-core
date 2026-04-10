@@ -36445,43 +36445,43 @@
         },
         {
           "slug": "fnp-overlay-diabetes-metabolic",
-          "title": "Diabetes & complications — NP overlay (FNP)",
-          "topic": "Diabetes & complications",
+          "title": "Diabetes & metabolic complications — NP overlay (FNP)",
+          "topic": "Diabetes & metabolic",
           "topicSlug": "diabetes-metabolic",
           "bodySystem": "General",
           "previewSectionCount": 1,
-          "seoTitle": "Diabetes & complications — NP overlay (FNP) | NurseNest",
-          "seoDescription": "FNP NP overlay paired with RN lesson slug us-rn-insulin-hypoglycemia; APRN diagnosis, management, prescribing, and follow-up.",
+          "seoTitle": "Diabetes & metabolic — NP overlay (FNP) | NurseNest",
+          "seoDescription": "FNP-level T2DM diagnosis, glycemic and cardiorenal targets, comorbidity-driven therapy (GLP-1 RA, SGLT2i, insulin), hypoglycemia, and complications surveillance for US board prep.",
           "sections": [
             {
               "id": "intro",
               "heading": "Introduction",
               "kind": "intro",
-              "body": "This is an **NP overlay** for **Diabetes & complications**—not a repeat of the full RN lesson. Pair with the RN depth lesson `us-rn-insulin-hypoglycemia` in your pathway catalog for pathophys and NCLEX-style drills, then use this block for **APRN-level** decisions."
+              "body": "This **NP overlay** targets **type 2 diabetes** and **metabolic complications** in **outpatient primary care**—how US boards frame **diagnosis**, **individualized glycemic goals**, **cardiorenal risk reduction**, and **safe prescribing**. For deep dives use [Type 2 diabetes — outpatient NP gold](LESSON:np-type2-diabetes-outpatient-gold), [Obesity & metabolic management](LESSON:np-obesity-metabolic-management-gold), [DKA & HHS](LESSON:dka-hhs-hyperglycemic-emergencies-gold) when acute hyperglycemia threatens stability, and [Insulin & diabetes pharmacology](LESSON:med-family-insulin-diabetes-gold). Pair with pathway lesson `us-rn-insulin-hypoglycemia` for RN-level insulin and hypoglycemia mechanics."
             },
             {
               "id": "diagnosis_np",
-              "heading": "Diagnosis considerations",
+              "heading": "Diagnosis & screening",
               "kind": "clinical_meaning",
-              "body": "Frame **problem representation**, **red flags**, and **must-not-miss** diagnoses. Boards favor **next diagnostic step** vs **premature treatment**—tie history, exam, and targeted testing to pre-test probability."
+              "body": "**Diagnostic criteria (high yield):** **A1c ≥6.5%**, **fasting glucose ≥126 mg/dL**, **2h OGTT ≥200 mg/dL**, or **random ≥200** with classic symptoms—confirm abnormal results unless hyperglycemia is unequivocal with acute symptoms.\n\n**Prediabetes:** A1c **5.7–6.4%**, fasting **100–125**, 2h OGTT **140–199**—identify for **intensive lifestyle** and earlier progression monitoring.\n\n**Board traps:** distinguish **type 1 / LADA** (lean, rapid onset, ketosis-prone, autoantibodies when stem allows) from **T2DM**; know **secondary hyperglycemia** (steroids, atypical antipsychotics, pancreatitis, hemoglobinopathies affecting A1c). Choose the **next best test** (repeat A1c vs fasting vs OGTT) from the stem’s setting and prior labs."
             },
             {
               "id": "management_np",
-              "heading": "Management plans",
+              "heading": "Glycemic & cardiorenal management",
               "kind": "core_concept",
-              "body": "Outline **initial stabilization** (when implied), **guideline-concordant** therapy where the stem allows, **consult triggers**, and **when to defer** to specialty or ED. Prefer the option that matches **severity** and **comorbid constraints**."
+              "body": "**Targets:** individualize **A1c** (often **<7%** if safe; relax with hypoglycemia risk, limited life expectancy, or severe comorbidity); pair with **blood pressure**, **lipid**, and **renal** goals because boards love **ASCVD**, **HF**, and **CKD**-driven therapy selection.\n\n**Lifestyle** remains foundation: **nutrition pattern**, **activity**, **weight** when applicable, **sleep apnea** screen when obesity or resistant hypertension.\n\n**Pharmacologic sequence (conceptual):** **metformin** first-line for most T2DM without contraindication; add agents based on **comorbidities**—**GLP-1 receptor agonists** or **SGLT2 inhibitors** when **ASCVD**, **HF**, **CKD**, or **weight** dominate; **basal insulin** when A1c is far above goal or symptomatic hyperglycemia; intensify thoughtfully with **hypoglycemia** and **renal dose** checks.\n\n**Consult / escalate:** **persistent severe hyperglycemia**, **recurrent DKA**, **pregnancy**, **unclear type**, **rapidly progressive complications**—match the stem’s urgency."
             },
             {
               "id": "meds_np",
-              "heading": "Medication adjustments",
+              "heading": "Medication pearls & safety",
               "kind": "exam_relevance",
-              "body": "Expect **dose adjustment** for renal/hepatic function, **interaction** and **contraindication** traps, **deprescribing** when appropriate, and **monitoring** after a change (labs, vitals, toxicity screens)."
+              "body": "**SGLT2 inhibitors:** **volume** and **UTI/genital mycotic infection** counseling; **eGFR thresholds** and **hold** around sick-day / procedure contexts per guideline-style stems; **cardiorenal** benefits beyond glucose.\n\n**GLP-1 RAs:** **GI** tolerance, **pancreatitis** history caution, **thyroid medullary carcinoma** / **MEN2** contraindications for some agents when tested; **weight** and **glycemic** dual benefit.\n\n**Insulin:** **basal** vs **prandial** roles, **hypoglycemia** with sulfonylureas and insulin, **renal adjustment** for certain agents, **U-500** in severe insulin resistance when vignette fits.\n\n**Deprescribing:** if hypoglycemia or frailty dominates, favor **higher glycemic targets** and **simplify** regimens—boards reward **harm reduction** over chasing numbers."
             },
             {
               "id": "followup_np",
-              "heading": "Follow-up & monitoring",
+              "heading": "Complications, follow-up & education",
               "kind": "clinical_scenario",
-              "body": "Choose **follow-up interval**, **patient education**, **safety netting**, and **reassessment targets** (symptoms, labs, adherence). NP items often test whether you **close the loop** on risk—not only the first visit action."
+              "body": "**Microvascular surveillance:** **retinopathy** eye exam interval, **nephropathy** with **UACR** and **eGFR**, **neuropathy** foot exam and monofilament when appropriate to stem.\n\n**Acute risks:** teach **sick-day rules**, **when to seek care** for vomiting or persistent hyperglycemia, and **hypoglycemia** rescue with **glucose / glucagon** access when on secretagogues or insulin.\n\n**Psychosocial / SDOH:** cost and access barriers to **CGM**, **GLP-1**, or **SGLT2**—choose answers that **shared-decision** and **practical monitoring** (SMBP, labs, adherence checks).\n\n**Return intervals:** tie follow-up to **A1c** trajectory, **new therapy** titration, and **comorbidity** monitoring—not a generic “3 months” unless the stem supports it."
             }
           ]
         },
@@ -36948,48 +36948,6 @@
           ]
         },
         {
-          "slug": "bp26-usnp-pad-002-pharmacological_therapies-neurological",
-          "title": "Integrated review: Neurological (medication) #3 — FNP certification preparation (United States)",
-          "topic": "Neurological",
-          "topicSlug": "neurological",
-          "bodySystem": "Neurological",
-          "previewSectionCount": 2,
-          "seoTitle": "Integrated review: Neurological (medication) #3 | NurseNest",
-          "seoDescription": "Clinical focus: Extended practice: pharmacological_therapies × medication × neurological. Pathway-scoped practice for FNP certification preparation (United States) with exam-style prioritization and safety framing—distinct teaching goal, not a duplicate lesson.",
-          "sections": [
-            {
-              "id": "clinical_meaning",
-              "heading": "Clinical meaning",
-              "kind": "clinical_meaning",
-              "body": "**Integrated review: Neurological (medication) #3** anchors this lesson to the planning domain **pharmacological therapies** with teaching focus: *Extended practice: pharmacological_therapies × medication × neurological*.\n\nFor **FNP certification preparation (United States)**, practice translating assessment data into the **safest next nursing action** when the stem mixes routine tasks with abnormal findings. Exams reward recognizing **trend**, **scope**, and **escalation timing**—not the longest teaching paragraph.\n\nConnect **Neurological** concepts to monitoring, reporting, and ordered interventions appropriate to your license level. When the vignette names a policy, protocol, or provider order, choose answers that **respect that frame** while protecting the client.\n\nUse this page as a **structured rehearsal**: read once for meaning, then run a **pathway-scoped question block** filtered to related topics so rationales reinforce the same judgment pattern."
-            },
-            {
-              "id": "exam_relevance",
-              "heading": "Exam relevance",
-              "kind": "exam_relevance",
-              "body": "Expect items that pair **Neurological** content with **prioritization**, **infection control**, **medication safety**, or **communication**—often in the same stem.\n\n**FNP certification preparation (United States)** may use country-specific units, titles, or care settings; the judgment rule is still: **stabilize first**, **verify scope**, **escalate when thresholds are crossed**.\n\nEliminate options that **delay assessment**, **skip monitoring**, or **expand nursing scope** beyond what the item describes."
-            },
-            {
-              "id": "core_concept",
-              "heading": "Core concept",
-              "kind": "core_concept",
-              "body": "**Core idea:** Extended practice: pharmacological_therapies × medication × neurological — keep the clinical mechanism tied to **nursing assessment and surveillance**, not independent medical diagnosis.\n\nTranslate symptoms and labs into **what changes first**, **what you report**, and **what you prepare for** (oxygen, access, frequency of vitals, isolation, safer medication administration).\n\nWhen teaching appears, ensure it matches **readiness** and **cognition**; when delegation appears, match **task** to **authorized role** in the stem."
-            },
-            {
-              "id": "clinical_scenario",
-              "heading": "Clinical scenario",
-              "kind": "clinical_scenario",
-              "body": "You receive report on a client whose data suggest **Neurological** risk is rising. Competing tasks include routine hygiene, scheduled meds, and a stable roommate—choose the action that **reduces imminent harm** for the deteriorating client.\n\nIf the stem adds **two clients**, prioritize by **instability** and **reversibility**, not task length. **FNP certification preparation (United States)** items often hide the urgent client behind polite requests or “routine” wording.\n\nDocument and communicate using **objective data**; avoid choosing answers that **assume** orders you do not have or **minimize** abnormal trends."
-            },
-            {
-              "id": "takeaways",
-              "heading": "Takeaways",
-              "kind": "takeaways",
-              "body": "- **Study plan:** medication · pharmacological therapies · Extended practice: pharmacological_therapies × medication × neurological\n\n- **Study loop:** pair this lesson with timed questions tagged around **neurological**, then review rationales for **wrong-option traps** (scope, delay, teaching too early).\n\n- **Related lessons:** [Prioritization gold review](LESSON:clinical-judgment-prioritization-gold) · [Sepsis recognition spine](LESSON:sepsis-early-recognition-gold) · [High-alert medications](LESSON:high-alert-medications-gold)\n\n- **Bank drill:** filter your pathway question bank to the same topic cluster and complete a short block before revisiting this page."
-            }
-          ]
-        },
-        {
           "slug": "bp26-usnp-pad-003-physiological_adaptation-renal-gu",
           "title": "Integrated review: Renal (safety) #4 — FNP certification preparation (United States)",
           "topic": "Renal",
@@ -37364,48 +37322,6 @@
               "heading": "Takeaways",
               "kind": "takeaways",
               "body": "- **Study plan:** labs · physiological adaptation · Extended practice: physiological_adaptation × labs × respiratory\n\n- **Study loop:** pair this lesson with timed questions tagged around **respiratory**, then review rationales for **wrong-option traps** (scope, delay, teaching too early).\n\n- **Related lessons:** [Prioritization gold review](LESSON:clinical-judgment-prioritization-gold) · [Sepsis recognition spine](LESSON:sepsis-early-recognition-gold) · [High-alert medications](LESSON:high-alert-medications-gold)\n\n- **Bank drill:** filter your pathway question bank to the same topic cluster and complete a short block before revisiting this page."
-            }
-          ]
-        },
-        {
-          "slug": "bp26-usnp-pad-012-psychosocial_integrity-neurological",
-          "title": "Integrated review: Neurological (medication) #13 — FNP certification preparation (United States)",
-          "topic": "Neurological",
-          "topicSlug": "neurological",
-          "bodySystem": "Neurological",
-          "previewSectionCount": 2,
-          "seoTitle": "Integrated review: Neurological (medication) #13 | NurseNest",
-          "seoDescription": "Clinical focus: Extended practice: psychosocial_integrity × medication × neurological. Pathway-scoped practice for FNP certification preparation (United States) with exam-style prioritization and safety framing—distinct teaching goal, not a duplicate lesson.",
-          "sections": [
-            {
-              "id": "clinical_meaning",
-              "heading": "Clinical meaning",
-              "kind": "clinical_meaning",
-              "body": "**Integrated review: Neurological (medication) #13** anchors this lesson to the planning domain **psychosocial integrity** with teaching focus: *Extended practice: psychosocial_integrity × medication × neurological*.\n\nFor **FNP certification preparation (United States)**, practice translating assessment data into the **safest next nursing action** when the stem mixes routine tasks with abnormal findings. Exams reward recognizing **trend**, **scope**, and **escalation timing**—not the longest teaching paragraph.\n\nConnect **Neurological** concepts to monitoring, reporting, and ordered interventions appropriate to your license level. When the vignette names a policy, protocol, or provider order, choose answers that **respect that frame** while protecting the client.\n\nUse this page as a **structured rehearsal**: read once for meaning, then run a **pathway-scoped question block** filtered to related topics so rationales reinforce the same judgment pattern."
-            },
-            {
-              "id": "exam_relevance",
-              "heading": "Exam relevance",
-              "kind": "exam_relevance",
-              "body": "Expect items that pair **Neurological** content with **prioritization**, **infection control**, **medication safety**, or **communication**—often in the same stem.\n\n**FNP certification preparation (United States)** may use country-specific units, titles, or care settings; the judgment rule is still: **stabilize first**, **verify scope**, **escalate when thresholds are crossed**.\n\nEliminate options that **delay assessment**, **skip monitoring**, or **expand nursing scope** beyond what the item describes."
-            },
-            {
-              "id": "core_concept",
-              "heading": "Core concept",
-              "kind": "core_concept",
-              "body": "**Core idea:** Extended practice: psychosocial_integrity × medication × neurological — keep the clinical mechanism tied to **nursing assessment and surveillance**, not independent medical diagnosis.\n\nTranslate symptoms and labs into **what changes first**, **what you report**, and **what you prepare for** (oxygen, access, frequency of vitals, isolation, safer medication administration).\n\nWhen teaching appears, ensure it matches **readiness** and **cognition**; when delegation appears, match **task** to **authorized role** in the stem."
-            },
-            {
-              "id": "clinical_scenario",
-              "heading": "Clinical scenario",
-              "kind": "clinical_scenario",
-              "body": "You receive report on a client whose data suggest **Neurological** risk is rising. Competing tasks include routine hygiene, scheduled meds, and a stable roommate—choose the action that **reduces imminent harm** for the deteriorating client.\n\nIf the stem adds **two clients**, prioritize by **instability** and **reversibility**, not task length. **FNP certification preparation (United States)** items often hide the urgent client behind polite requests or “routine” wording.\n\nDocument and communicate using **objective data**; avoid choosing answers that **assume** orders you do not have or **minimize** abnormal trends."
-            },
-            {
-              "id": "takeaways",
-              "heading": "Takeaways",
-              "kind": "takeaways",
-              "body": "- **Study plan:** medication · psychosocial integrity · Extended practice: psychosocial_integrity × medication × neurological\n\n- **Study loop:** pair this lesson with timed questions tagged around **neurological**, then review rationales for **wrong-option traps** (scope, delay, teaching too early).\n\n- **Related lessons:** [Prioritization gold review](LESSON:clinical-judgment-prioritization-gold) · [Sepsis recognition spine](LESSON:sepsis-early-recognition-gold) · [High-alert medications](LESSON:high-alert-medications-gold)\n\n- **Bank drill:** filter your pathway question bank to the same topic cluster and complete a short block before revisiting this page."
             }
           ]
         },
@@ -37788,48 +37704,6 @@
           ]
         },
         {
-          "slug": "bp26-usnp-pad-022-health_promotion_maintenance-neurological",
-          "title": "Integrated review: Neurological (medication) #23 — FNP certification preparation (United States)",
-          "topic": "Neurological",
-          "topicSlug": "neurological",
-          "bodySystem": "Neurological",
-          "previewSectionCount": 2,
-          "seoTitle": "Integrated review: Neurological (medication) #23 | NurseNest",
-          "seoDescription": "Clinical focus: Extended practice: health_promotion_maintenance × medication × neurological. Pathway-scoped practice for FNP certification preparation (United States) with exam-style prioritization and safety framing—distinct teaching goal, not a duplicate lesson.",
-          "sections": [
-            {
-              "id": "clinical_meaning",
-              "heading": "Clinical meaning",
-              "kind": "clinical_meaning",
-              "body": "**Integrated review: Neurological (medication) #23** anchors this lesson to the planning domain **health promotion maintenance** with teaching focus: *Extended practice: health_promotion_maintenance × medication × neurological*.\n\nFor **FNP certification preparation (United States)**, practice translating assessment data into the **safest next nursing action** when the stem mixes routine tasks with abnormal findings. Exams reward recognizing **trend**, **scope**, and **escalation timing**—not the longest teaching paragraph.\n\nConnect **Neurological** concepts to monitoring, reporting, and ordered interventions appropriate to your license level. When the vignette names a policy, protocol, or provider order, choose answers that **respect that frame** while protecting the client.\n\nUse this page as a **structured rehearsal**: read once for meaning, then run a **pathway-scoped question block** filtered to related topics so rationales reinforce the same judgment pattern."
-            },
-            {
-              "id": "exam_relevance",
-              "heading": "Exam relevance",
-              "kind": "exam_relevance",
-              "body": "Expect items that pair **Neurological** content with **prioritization**, **infection control**, **medication safety**, or **communication**—often in the same stem.\n\n**FNP certification preparation (United States)** may use country-specific units, titles, or care settings; the judgment rule is still: **stabilize first**, **verify scope**, **escalate when thresholds are crossed**.\n\nEliminate options that **delay assessment**, **skip monitoring**, or **expand nursing scope** beyond what the item describes."
-            },
-            {
-              "id": "core_concept",
-              "heading": "Core concept",
-              "kind": "core_concept",
-              "body": "**Core idea:** Extended practice: health_promotion_maintenance × medication × neurological — keep the clinical mechanism tied to **nursing assessment and surveillance**, not independent medical diagnosis.\n\nTranslate symptoms and labs into **what changes first**, **what you report**, and **what you prepare for** (oxygen, access, frequency of vitals, isolation, safer medication administration).\n\nWhen teaching appears, ensure it matches **readiness** and **cognition**; when delegation appears, match **task** to **authorized role** in the stem."
-            },
-            {
-              "id": "clinical_scenario",
-              "heading": "Clinical scenario",
-              "kind": "clinical_scenario",
-              "body": "You receive report on a client whose data suggest **Neurological** risk is rising. Competing tasks include routine hygiene, scheduled meds, and a stable roommate—choose the action that **reduces imminent harm** for the deteriorating client.\n\nIf the stem adds **two clients**, prioritize by **instability** and **reversibility**, not task length. **FNP certification preparation (United States)** items often hide the urgent client behind polite requests or “routine” wording.\n\nDocument and communicate using **objective data**; avoid choosing answers that **assume** orders you do not have or **minimize** abnormal trends."
-            },
-            {
-              "id": "takeaways",
-              "heading": "Takeaways",
-              "kind": "takeaways",
-              "body": "- **Study plan:** medication · health promotion maintenance · Extended practice: health_promotion_maintenance × medication × neurological\n\n- **Study loop:** pair this lesson with timed questions tagged around **neurological**, then review rationales for **wrong-option traps** (scope, delay, teaching too early).\n\n- **Related lessons:** [Prioritization gold review](LESSON:clinical-judgment-prioritization-gold) · [Sepsis recognition spine](LESSON:sepsis-early-recognition-gold) · [High-alert medications](LESSON:high-alert-medications-gold)\n\n- **Bank drill:** filter your pathway question bank to the same topic cluster and complete a short block before revisiting this page."
-            }
-          ]
-        },
-        {
           "slug": "bp26-usnp-pad-023-basic_care_comfort-renal-gu",
           "title": "Integrated review: Renal (safety) #24 — FNP certification preparation (United States)",
           "topic": "Renal",
@@ -38204,48 +38078,6 @@
               "heading": "Takeaways",
               "kind": "takeaways",
               "body": "- **Study plan:** labs · basic care comfort · Extended practice: basic_care_comfort × labs × respiratory\n\n- **Study loop:** pair this lesson with timed questions tagged around **respiratory**, then review rationales for **wrong-option traps** (scope, delay, teaching too early).\n\n- **Related lessons:** [Prioritization gold review](LESSON:clinical-judgment-prioritization-gold) · [Sepsis recognition spine](LESSON:sepsis-early-recognition-gold) · [High-alert medications](LESSON:high-alert-medications-gold)\n\n- **Bank drill:** filter your pathway question bank to the same topic cluster and complete a short block before revisiting this page."
-            }
-          ]
-        },
-        {
-          "slug": "bp26-usnp-pad-032-safety_and_infection-neurological",
-          "title": "Integrated review: Neurological (medication) #33 — FNP certification preparation (United States)",
-          "topic": "Neurological",
-          "topicSlug": "neurological",
-          "bodySystem": "Neurological",
-          "previewSectionCount": 2,
-          "seoTitle": "Integrated review: Neurological (medication) #33 | NurseNest",
-          "seoDescription": "Clinical focus: Extended practice: safety_and_infection × medication × neurological. Pathway-scoped practice for FNP certification preparation (United States) with exam-style prioritization and safety framing—distinct teaching goal, not a duplicate lesson.",
-          "sections": [
-            {
-              "id": "clinical_meaning",
-              "heading": "Clinical meaning",
-              "kind": "clinical_meaning",
-              "body": "**Integrated review: Neurological (medication) #33** anchors this lesson to the planning domain **safety and infection** with teaching focus: *Extended practice: safety_and_infection × medication × neurological*.\n\nFor **FNP certification preparation (United States)**, practice translating assessment data into the **safest next nursing action** when the stem mixes routine tasks with abnormal findings. Exams reward recognizing **trend**, **scope**, and **escalation timing**—not the longest teaching paragraph.\n\nConnect **Neurological** concepts to monitoring, reporting, and ordered interventions appropriate to your license level. When the vignette names a policy, protocol, or provider order, choose answers that **respect that frame** while protecting the client.\n\nUse this page as a **structured rehearsal**: read once for meaning, then run a **pathway-scoped question block** filtered to related topics so rationales reinforce the same judgment pattern."
-            },
-            {
-              "id": "exam_relevance",
-              "heading": "Exam relevance",
-              "kind": "exam_relevance",
-              "body": "Expect items that pair **Neurological** content with **prioritization**, **infection control**, **medication safety**, or **communication**—often in the same stem.\n\n**FNP certification preparation (United States)** may use country-specific units, titles, or care settings; the judgment rule is still: **stabilize first**, **verify scope**, **escalate when thresholds are crossed**.\n\nEliminate options that **delay assessment**, **skip monitoring**, or **expand nursing scope** beyond what the item describes."
-            },
-            {
-              "id": "core_concept",
-              "heading": "Core concept",
-              "kind": "core_concept",
-              "body": "**Core idea:** Extended practice: safety_and_infection × medication × neurological — keep the clinical mechanism tied to **nursing assessment and surveillance**, not independent medical diagnosis.\n\nTranslate symptoms and labs into **what changes first**, **what you report**, and **what you prepare for** (oxygen, access, frequency of vitals, isolation, safer medication administration).\n\nWhen teaching appears, ensure it matches **readiness** and **cognition**; when delegation appears, match **task** to **authorized role** in the stem."
-            },
-            {
-              "id": "clinical_scenario",
-              "heading": "Clinical scenario",
-              "kind": "clinical_scenario",
-              "body": "You receive report on a client whose data suggest **Neurological** risk is rising. Competing tasks include routine hygiene, scheduled meds, and a stable roommate—choose the action that **reduces imminent harm** for the deteriorating client.\n\nIf the stem adds **two clients**, prioritize by **instability** and **reversibility**, not task length. **FNP certification preparation (United States)** items often hide the urgent client behind polite requests or “routine” wording.\n\nDocument and communicate using **objective data**; avoid choosing answers that **assume** orders you do not have or **minimize** abnormal trends."
-            },
-            {
-              "id": "takeaways",
-              "heading": "Takeaways",
-              "kind": "takeaways",
-              "body": "- **Study plan:** medication · safety and infection · Extended practice: safety_and_infection × medication × neurological\n\n- **Study loop:** pair this lesson with timed questions tagged around **neurological**, then review rationales for **wrong-option traps** (scope, delay, teaching too early).\n\n- **Related lessons:** [Prioritization gold review](LESSON:clinical-judgment-prioritization-gold) · [Sepsis recognition spine](LESSON:sepsis-early-recognition-gold) · [High-alert medications](LESSON:high-alert-medications-gold)\n\n- **Bank drill:** filter your pathway question bank to the same topic cluster and complete a short block before revisiting this page."
             }
           ]
         },
@@ -38628,48 +38460,6 @@
           ]
         },
         {
-          "slug": "bp26-usnp-pad-042-pharmacological_therapies-neurological",
-          "title": "Integrated review: Neurological (medication) #43 — FNP certification preparation (United States)",
-          "topic": "Neurological",
-          "topicSlug": "neurological",
-          "bodySystem": "Neurological",
-          "previewSectionCount": 2,
-          "seoTitle": "Integrated review: Neurological (medication) #43 | NurseNest",
-          "seoDescription": "Clinical focus: Extended practice: pharmacological_therapies × medication × neurological. Pathway-scoped practice for FNP certification preparation (United States) with exam-style prioritization and safety framing—distinct teaching goal, not a duplicate lesson.",
-          "sections": [
-            {
-              "id": "clinical_meaning",
-              "heading": "Clinical meaning",
-              "kind": "clinical_meaning",
-              "body": "**Integrated review: Neurological (medication) #43** anchors this lesson to the planning domain **pharmacological therapies** with teaching focus: *Extended practice: pharmacological_therapies × medication × neurological*.\n\nFor **FNP certification preparation (United States)**, practice translating assessment data into the **safest next nursing action** when the stem mixes routine tasks with abnormal findings. Exams reward recognizing **trend**, **scope**, and **escalation timing**—not the longest teaching paragraph.\n\nConnect **Neurological** concepts to monitoring, reporting, and ordered interventions appropriate to your license level. When the vignette names a policy, protocol, or provider order, choose answers that **respect that frame** while protecting the client.\n\nUse this page as a **structured rehearsal**: read once for meaning, then run a **pathway-scoped question block** filtered to related topics so rationales reinforce the same judgment pattern."
-            },
-            {
-              "id": "exam_relevance",
-              "heading": "Exam relevance",
-              "kind": "exam_relevance",
-              "body": "Expect items that pair **Neurological** content with **prioritization**, **infection control**, **medication safety**, or **communication**—often in the same stem.\n\n**FNP certification preparation (United States)** may use country-specific units, titles, or care settings; the judgment rule is still: **stabilize first**, **verify scope**, **escalate when thresholds are crossed**.\n\nEliminate options that **delay assessment**, **skip monitoring**, or **expand nursing scope** beyond what the item describes."
-            },
-            {
-              "id": "core_concept",
-              "heading": "Core concept",
-              "kind": "core_concept",
-              "body": "**Core idea:** Extended practice: pharmacological_therapies × medication × neurological — keep the clinical mechanism tied to **nursing assessment and surveillance**, not independent medical diagnosis.\n\nTranslate symptoms and labs into **what changes first**, **what you report**, and **what you prepare for** (oxygen, access, frequency of vitals, isolation, safer medication administration).\n\nWhen teaching appears, ensure it matches **readiness** and **cognition**; when delegation appears, match **task** to **authorized role** in the stem."
-            },
-            {
-              "id": "clinical_scenario",
-              "heading": "Clinical scenario",
-              "kind": "clinical_scenario",
-              "body": "You receive report on a client whose data suggest **Neurological** risk is rising. Competing tasks include routine hygiene, scheduled meds, and a stable roommate—choose the action that **reduces imminent harm** for the deteriorating client.\n\nIf the stem adds **two clients**, prioritize by **instability** and **reversibility**, not task length. **FNP certification preparation (United States)** items often hide the urgent client behind polite requests or “routine” wording.\n\nDocument and communicate using **objective data**; avoid choosing answers that **assume** orders you do not have or **minimize** abnormal trends."
-            },
-            {
-              "id": "takeaways",
-              "heading": "Takeaways",
-              "kind": "takeaways",
-              "body": "- **Study plan:** medication · pharmacological therapies · Extended practice: pharmacological_therapies × medication × neurological\n\n- **Study loop:** pair this lesson with timed questions tagged around **neurological**, then review rationales for **wrong-option traps** (scope, delay, teaching too early).\n\n- **Related lessons:** [Prioritization gold review](LESSON:clinical-judgment-prioritization-gold) · [Sepsis recognition spine](LESSON:sepsis-early-recognition-gold) · [High-alert medications](LESSON:high-alert-medications-gold)\n\n- **Bank drill:** filter your pathway question bank to the same topic cluster and complete a short block before revisiting this page."
-            }
-          ]
-        },
-        {
           "slug": "bp26-usnp-pad-043-physiological_adaptation-renal-gu",
           "title": "Integrated review: Renal (safety) #44 — FNP certification preparation (United States)",
           "topic": "Renal",
@@ -39044,48 +38834,6 @@
               "heading": "Takeaways",
               "kind": "takeaways",
               "body": "- **Study plan:** labs · physiological adaptation · Extended practice: physiological_adaptation × labs × respiratory\n\n- **Study loop:** pair this lesson with timed questions tagged around **respiratory**, then review rationales for **wrong-option traps** (scope, delay, teaching too early).\n\n- **Related lessons:** [Prioritization gold review](LESSON:clinical-judgment-prioritization-gold) · [Sepsis recognition spine](LESSON:sepsis-early-recognition-gold) · [High-alert medications](LESSON:high-alert-medications-gold)\n\n- **Bank drill:** filter your pathway question bank to the same topic cluster and complete a short block before revisiting this page."
-            }
-          ]
-        },
-        {
-          "slug": "bp26-usnp-pad-052-psychosocial_integrity-neurological",
-          "title": "Integrated review: Neurological (medication) #53 — FNP certification preparation (United States)",
-          "topic": "Neurological",
-          "topicSlug": "neurological",
-          "bodySystem": "Neurological",
-          "previewSectionCount": 2,
-          "seoTitle": "Integrated review: Neurological (medication) #53 | NurseNest",
-          "seoDescription": "Clinical focus: Extended practice: psychosocial_integrity × medication × neurological. Pathway-scoped practice for FNP certification preparation (United States) with exam-style prioritization and safety framing—distinct teaching goal, not a duplicate lesson.",
-          "sections": [
-            {
-              "id": "clinical_meaning",
-              "heading": "Clinical meaning",
-              "kind": "clinical_meaning",
-              "body": "**Integrated review: Neurological (medication) #53** anchors this lesson to the planning domain **psychosocial integrity** with teaching focus: *Extended practice: psychosocial_integrity × medication × neurological*.\n\nFor **FNP certification preparation (United States)**, practice translating assessment data into the **safest next nursing action** when the stem mixes routine tasks with abnormal findings. Exams reward recognizing **trend**, **scope**, and **escalation timing**—not the longest teaching paragraph.\n\nConnect **Neurological** concepts to monitoring, reporting, and ordered interventions appropriate to your license level. When the vignette names a policy, protocol, or provider order, choose answers that **respect that frame** while protecting the client.\n\nUse this page as a **structured rehearsal**: read once for meaning, then run a **pathway-scoped question block** filtered to related topics so rationales reinforce the same judgment pattern."
-            },
-            {
-              "id": "exam_relevance",
-              "heading": "Exam relevance",
-              "kind": "exam_relevance",
-              "body": "Expect items that pair **Neurological** content with **prioritization**, **infection control**, **medication safety**, or **communication**—often in the same stem.\n\n**FNP certification preparation (United States)** may use country-specific units, titles, or care settings; the judgment rule is still: **stabilize first**, **verify scope**, **escalate when thresholds are crossed**.\n\nEliminate options that **delay assessment**, **skip monitoring**, or **expand nursing scope** beyond what the item describes."
-            },
-            {
-              "id": "core_concept",
-              "heading": "Core concept",
-              "kind": "core_concept",
-              "body": "**Core idea:** Extended practice: psychosocial_integrity × medication × neurological — keep the clinical mechanism tied to **nursing assessment and surveillance**, not independent medical diagnosis.\n\nTranslate symptoms and labs into **what changes first**, **what you report**, and **what you prepare for** (oxygen, access, frequency of vitals, isolation, safer medication administration).\n\nWhen teaching appears, ensure it matches **readiness** and **cognition**; when delegation appears, match **task** to **authorized role** in the stem."
-            },
-            {
-              "id": "clinical_scenario",
-              "heading": "Clinical scenario",
-              "kind": "clinical_scenario",
-              "body": "You receive report on a client whose data suggest **Neurological** risk is rising. Competing tasks include routine hygiene, scheduled meds, and a stable roommate—choose the action that **reduces imminent harm** for the deteriorating client.\n\nIf the stem adds **two clients**, prioritize by **instability** and **reversibility**, not task length. **FNP certification preparation (United States)** items often hide the urgent client behind polite requests or “routine” wording.\n\nDocument and communicate using **objective data**; avoid choosing answers that **assume** orders you do not have or **minimize** abnormal trends."
-            },
-            {
-              "id": "takeaways",
-              "heading": "Takeaways",
-              "kind": "takeaways",
-              "body": "- **Study plan:** medication · psychosocial integrity · Extended practice: psychosocial_integrity × medication × neurological\n\n- **Study loop:** pair this lesson with timed questions tagged around **neurological**, then review rationales for **wrong-option traps** (scope, delay, teaching too early).\n\n- **Related lessons:** [Prioritization gold review](LESSON:clinical-judgment-prioritization-gold) · [Sepsis recognition spine](LESSON:sepsis-early-recognition-gold) · [High-alert medications](LESSON:high-alert-medications-gold)\n\n- **Bank drill:** filter your pathway question bank to the same topic cluster and complete a short block before revisiting this page."
             }
           ]
         },
@@ -39468,48 +39216,6 @@
           ]
         },
         {
-          "slug": "bp26-usnp-pad-062-health_promotion_maintenance-neurological",
-          "title": "Integrated review: Neurological (medication) #63 — FNP certification preparation (United States)",
-          "topic": "Neurological",
-          "topicSlug": "neurological",
-          "bodySystem": "Neurological",
-          "previewSectionCount": 2,
-          "seoTitle": "Integrated review: Neurological (medication) #63 | NurseNest",
-          "seoDescription": "Clinical focus: Extended practice: health_promotion_maintenance × medication × neurological. Pathway-scoped practice for FNP certification preparation (United States) with exam-style prioritization and safety framing—distinct teaching goal, not a duplicate lesson.",
-          "sections": [
-            {
-              "id": "clinical_meaning",
-              "heading": "Clinical meaning",
-              "kind": "clinical_meaning",
-              "body": "**Integrated review: Neurological (medication) #63** anchors this lesson to the planning domain **health promotion maintenance** with teaching focus: *Extended practice: health_promotion_maintenance × medication × neurological*.\n\nFor **FNP certification preparation (United States)**, practice translating assessment data into the **safest next nursing action** when the stem mixes routine tasks with abnormal findings. Exams reward recognizing **trend**, **scope**, and **escalation timing**—not the longest teaching paragraph.\n\nConnect **Neurological** concepts to monitoring, reporting, and ordered interventions appropriate to your license level. When the vignette names a policy, protocol, or provider order, choose answers that **respect that frame** while protecting the client.\n\nUse this page as a **structured rehearsal**: read once for meaning, then run a **pathway-scoped question block** filtered to related topics so rationales reinforce the same judgment pattern."
-            },
-            {
-              "id": "exam_relevance",
-              "heading": "Exam relevance",
-              "kind": "exam_relevance",
-              "body": "Expect items that pair **Neurological** content with **prioritization**, **infection control**, **medication safety**, or **communication**—often in the same stem.\n\n**FNP certification preparation (United States)** may use country-specific units, titles, or care settings; the judgment rule is still: **stabilize first**, **verify scope**, **escalate when thresholds are crossed**.\n\nEliminate options that **delay assessment**, **skip monitoring**, or **expand nursing scope** beyond what the item describes."
-            },
-            {
-              "id": "core_concept",
-              "heading": "Core concept",
-              "kind": "core_concept",
-              "body": "**Core idea:** Extended practice: health_promotion_maintenance × medication × neurological — keep the clinical mechanism tied to **nursing assessment and surveillance**, not independent medical diagnosis.\n\nTranslate symptoms and labs into **what changes first**, **what you report**, and **what you prepare for** (oxygen, access, frequency of vitals, isolation, safer medication administration).\n\nWhen teaching appears, ensure it matches **readiness** and **cognition**; when delegation appears, match **task** to **authorized role** in the stem."
-            },
-            {
-              "id": "clinical_scenario",
-              "heading": "Clinical scenario",
-              "kind": "clinical_scenario",
-              "body": "You receive report on a client whose data suggest **Neurological** risk is rising. Competing tasks include routine hygiene, scheduled meds, and a stable roommate—choose the action that **reduces imminent harm** for the deteriorating client.\n\nIf the stem adds **two clients**, prioritize by **instability** and **reversibility**, not task length. **FNP certification preparation (United States)** items often hide the urgent client behind polite requests or “routine” wording.\n\nDocument and communicate using **objective data**; avoid choosing answers that **assume** orders you do not have or **minimize** abnormal trends."
-            },
-            {
-              "id": "takeaways",
-              "heading": "Takeaways",
-              "kind": "takeaways",
-              "body": "- **Study plan:** medication · health promotion maintenance · Extended practice: health_promotion_maintenance × medication × neurological\n\n- **Study loop:** pair this lesson with timed questions tagged around **neurological**, then review rationales for **wrong-option traps** (scope, delay, teaching too early).\n\n- **Related lessons:** [Prioritization gold review](LESSON:clinical-judgment-prioritization-gold) · [Sepsis recognition spine](LESSON:sepsis-early-recognition-gold) · [High-alert medications](LESSON:high-alert-medications-gold)\n\n- **Bank drill:** filter your pathway question bank to the same topic cluster and complete a short block before revisiting this page."
-            }
-          ]
-        },
-        {
           "slug": "bp26-usnp-pad-063-basic_care_comfort-renal-gu",
           "title": "Integrated review: Renal (safety) #64 — FNP certification preparation (United States)",
           "topic": "Renal",
@@ -39884,48 +39590,6 @@
               "heading": "Takeaways",
               "kind": "takeaways",
               "body": "- **Study plan:** labs · basic care comfort · Extended practice: basic_care_comfort × labs × respiratory\n\n- **Study loop:** pair this lesson with timed questions tagged around **respiratory**, then review rationales for **wrong-option traps** (scope, delay, teaching too early).\n\n- **Related lessons:** [Prioritization gold review](LESSON:clinical-judgment-prioritization-gold) · [Sepsis recognition spine](LESSON:sepsis-early-recognition-gold) · [High-alert medications](LESSON:high-alert-medications-gold)\n\n- **Bank drill:** filter your pathway question bank to the same topic cluster and complete a short block before revisiting this page."
-            }
-          ]
-        },
-        {
-          "slug": "bp26-usnp-pad-072-safety_and_infection-neurological",
-          "title": "Integrated review: Neurological (medication) #73 — FNP certification preparation (United States)",
-          "topic": "Neurological",
-          "topicSlug": "neurological",
-          "bodySystem": "Neurological",
-          "previewSectionCount": 2,
-          "seoTitle": "Integrated review: Neurological (medication) #73 | NurseNest",
-          "seoDescription": "Clinical focus: Extended practice: safety_and_infection × medication × neurological. Pathway-scoped practice for FNP certification preparation (United States) with exam-style prioritization and safety framing—distinct teaching goal, not a duplicate lesson.",
-          "sections": [
-            {
-              "id": "clinical_meaning",
-              "heading": "Clinical meaning",
-              "kind": "clinical_meaning",
-              "body": "**Integrated review: Neurological (medication) #73** anchors this lesson to the planning domain **safety and infection** with teaching focus: *Extended practice: safety_and_infection × medication × neurological*.\n\nFor **FNP certification preparation (United States)**, practice translating assessment data into the **safest next nursing action** when the stem mixes routine tasks with abnormal findings. Exams reward recognizing **trend**, **scope**, and **escalation timing**—not the longest teaching paragraph.\n\nConnect **Neurological** concepts to monitoring, reporting, and ordered interventions appropriate to your license level. When the vignette names a policy, protocol, or provider order, choose answers that **respect that frame** while protecting the client.\n\nUse this page as a **structured rehearsal**: read once for meaning, then run a **pathway-scoped question block** filtered to related topics so rationales reinforce the same judgment pattern."
-            },
-            {
-              "id": "exam_relevance",
-              "heading": "Exam relevance",
-              "kind": "exam_relevance",
-              "body": "Expect items that pair **Neurological** content with **prioritization**, **infection control**, **medication safety**, or **communication**—often in the same stem.\n\n**FNP certification preparation (United States)** may use country-specific units, titles, or care settings; the judgment rule is still: **stabilize first**, **verify scope**, **escalate when thresholds are crossed**.\n\nEliminate options that **delay assessment**, **skip monitoring**, or **expand nursing scope** beyond what the item describes."
-            },
-            {
-              "id": "core_concept",
-              "heading": "Core concept",
-              "kind": "core_concept",
-              "body": "**Core idea:** Extended practice: safety_and_infection × medication × neurological — keep the clinical mechanism tied to **nursing assessment and surveillance**, not independent medical diagnosis.\n\nTranslate symptoms and labs into **what changes first**, **what you report**, and **what you prepare for** (oxygen, access, frequency of vitals, isolation, safer medication administration).\n\nWhen teaching appears, ensure it matches **readiness** and **cognition**; when delegation appears, match **task** to **authorized role** in the stem."
-            },
-            {
-              "id": "clinical_scenario",
-              "heading": "Clinical scenario",
-              "kind": "clinical_scenario",
-              "body": "You receive report on a client whose data suggest **Neurological** risk is rising. Competing tasks include routine hygiene, scheduled meds, and a stable roommate—choose the action that **reduces imminent harm** for the deteriorating client.\n\nIf the stem adds **two clients**, prioritize by **instability** and **reversibility**, not task length. **FNP certification preparation (United States)** items often hide the urgent client behind polite requests or “routine” wording.\n\nDocument and communicate using **objective data**; avoid choosing answers that **assume** orders you do not have or **minimize** abnormal trends."
-            },
-            {
-              "id": "takeaways",
-              "heading": "Takeaways",
-              "kind": "takeaways",
-              "body": "- **Study plan:** medication · safety and infection · Extended practice: safety_and_infection × medication × neurological\n\n- **Study loop:** pair this lesson with timed questions tagged around **neurological**, then review rationales for **wrong-option traps** (scope, delay, teaching too early).\n\n- **Related lessons:** [Prioritization gold review](LESSON:clinical-judgment-prioritization-gold) · [Sepsis recognition spine](LESSON:sepsis-early-recognition-gold) · [High-alert medications](LESSON:high-alert-medications-gold)\n\n- **Bank drill:** filter your pathway question bank to the same topic cluster and complete a short block before revisiting this page."
             }
           ]
         },

@@ -2,7 +2,12 @@
 
 import { useCallback, useState } from "react";
 import Link from "next/link";
-import type { OverallSystemStatus, SystemCheckResult, SystemStatusPayload } from "@/lib/admin/system-status-types";
+import type {
+  OverallSystemStatus,
+  SystemCheckResult,
+  SystemStatusOperationalSummary,
+  SystemStatusPayload,
+} from "@/lib/admin/system-status-types";
 
 function overallBannerClass(overall: OverallSystemStatus): string {
   if (overall === "healthy") return "border-emerald-500/40 bg-emerald-500/[0.08] text-emerald-950 dark:text-emerald-50";
@@ -22,17 +27,68 @@ function overallDisplayLabel(overall: OverallSystemStatus): string {
   return overall.charAt(0).toUpperCase() + overall.slice(1);
 }
 
+type QueueHealthDetails = {
+  lessonBatchStuckGenerating?: number;
+  oldestPendingJobAgeMinutes?: number | null;
+};
+
+function fmtStat(n: number | null): string {
+  if (n === null) return "—";
+  return n.toLocaleString();
+}
+
+function fmtMs(n: number | null): string {
+  if (n === null) return "—";
+  return `${n} ms`;
+}
+
+function SummaryStat({ label, value, title }: { label: string; value: string; title?: string }) {
+  return (
+    <div
+      className="min-w-0 rounded-lg border border-border/60 bg-[var(--theme-card-bg)] px-3 py-2 shadow-sm"
+      title={title}
+    >
+      <p className="truncate text-[11px] font-medium uppercase tracking-wide text-muted-foreground">{label}</p>
+      <p className="mt-0.5 tabular-nums text-lg font-semibold text-[var(--theme-heading-text)]">{value}</p>
+    </div>
+  );
+}
+
+function OperationalSummaryRow({
+  summary,
+  checkedAt,
+}: {
+  summary: SystemStatusOperationalSummary;
+  checkedAt: string;
+}) {
+  return (
+    <div className="rounded-xl border border-border/70 bg-muted/15 p-3 sm:p-4">
+      <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-muted-foreground">Operational snapshot</p>
+      <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7">
+        <SummaryStat label="Active AI jobs" value={fmtStat(summary.activeAiJobs)} />
+        <SummaryStat
+          label="Stuck AI jobs"
+          value={fmtStat(summary.stuckAiJobs)}
+          title="Lesson batch queue items stuck in GENERATING past the stale threshold"
+        />
+        <SummaryStat label="Failed AI jobs" value={fmtStat(summary.failedAiJobs)} />
+        <SummaryStat label="Lesson drafts (review)" value={fmtStat(summary.lessonDraftsPendingReview)} />
+        <SummaryStat label="Question drafts (review)" value={fmtStat(summary.questionDraftsPendingReview)} />
+        <SummaryStat label="DB latency" value={fmtMs(summary.databaseLatencyMs)} />
+        <SummaryStat label="Last checked" value={new Date(checkedAt).toLocaleString()} />
+      </div>
+    </div>
+  );
+}
+
 function CheckCard({ check }: { check: SystemCheckResult }) {
   const [open, setOpen] = useState(false);
-  const qd = check.details as {
-    stuckRunningOlderThan30Min?: number;
-    oldestPendingAgeMinutes?: number | null;
-  };
+  const qd = check.details as QueueHealthDetails;
   const warnQueue =
     check.id === "queueHealth" &&
     check.status !== "healthy" &&
-    ((qd.stuckRunningOlderThan30Min ?? 0) > 0 ||
-      (qd.oldestPendingAgeMinutes != null && qd.oldestPendingAgeMinutes > 120));
+    ((qd.lessonBatchStuckGenerating ?? 0) > 0 ||
+      (qd.oldestPendingJobAgeMinutes != null && qd.oldestPendingJobAgeMinutes > 120));
 
   return (
     <article
@@ -79,7 +135,7 @@ export function SystemStatusDashboard({ initial }: { initial: SystemStatusPayloa
     try {
       const res = await fetch("/api/admin/system-status", { credentials: "include", cache: "no-store" });
       const json = (await res.json()) as SystemStatusPayload | { ok?: boolean; error?: string };
-      if (!res.ok || !("checks" in json) || !json.checks) {
+      if (!res.ok || !("checks" in json) || !json.checks || !("summary" in json) || !json.summary) {
         setError("error" in json && json.error ? json.error : `HTTP ${res.status}`);
         return;
       }
@@ -91,16 +147,11 @@ export function SystemStatusDashboard({ initial }: { initial: SystemStatusPayloa
     }
   }, []);
 
-  const queueDetails = data.checks.find((c) => c.id === "queueHealth")?.details as
-    | {
-        stuckRunningOlderThan30Min?: number;
-        oldestPendingAgeMinutes?: number | null;
-      }
-    | undefined;
-  const stuckRun = queueDetails?.stuckRunningOlderThan30Min ?? 0;
-  const oldPending = queueDetails?.oldestPendingAgeMinutes;
+  const queueDetails = data.checks.find((c) => c.id === "queueHealth")?.details as QueueHealthDetails | undefined;
+  const stuckLessonBatch = queueDetails?.lessonBatchStuckGenerating ?? 0;
+  const oldPending = queueDetails?.oldestPendingJobAgeMinutes;
   const showQueueBanner =
-    stuckRun > 0 || (oldPending != null && oldPending > 120);
+    stuckLessonBatch > 0 || (oldPending != null && oldPending > 120);
 
   return (
     <div className="space-y-8">
@@ -112,13 +163,13 @@ export function SystemStatusDashboard({ initial }: { initial: SystemStatusPayloa
         </p>
         {showQueueBanner ? (
           <p className="mt-2 text-sm font-semibold text-amber-900 dark:text-amber-100">
-            {stuckRun > 0 ? (
+            {stuckLessonBatch > 0 ? (
               <>
-                Warning: {stuckRun} AI job(s) stuck in RUNNING (&gt;30 minutes).{" "}
+                Warning: {stuckLessonBatch} lesson batch item(s) stuck in GENERATING past the stale threshold.{" "}
               </>
             ) : null}
             {oldPending != null && oldPending > 120 ? (
-              <>Oldest PENDING job is ~{oldPending} minutes old. </>
+              <>Oldest PENDING AI job is ~{oldPending} minutes old. </>
             ) : null}
             See the queue card and{" "}
             <Link href="/admin/automation-logs" className="underline">
@@ -128,6 +179,8 @@ export function SystemStatusDashboard({ initial }: { initial: SystemStatusPayloa
           </p>
         ) : null}
       </div>
+
+      <OperationalSummaryRow summary={data.summary} checkedAt={data.checkedAt} />
 
       <div className="flex flex-wrap items-center gap-3">
         <button
