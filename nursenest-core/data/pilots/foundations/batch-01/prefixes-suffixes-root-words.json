@@ -1,0 +1,813 @@
+{
+  "topicSlug": "prefixes-suffixes-root-words",
+  "topicName": "Prefixes, Suffixes, and Root Words",
+  "domain": "Medical Terminology",
+  "contentWeight": "heavy",
+  "batchId": "foundations-batch-01",
+  "generatedAt": "2026-04-10",
+  "status": "pilot-draft",
+  "lessons": [
+    {
+      "lessonId": "prefixes-suffixes-root-words-L01",
+      "title": "Introduction to Medical Word Parts",
+      "sequenceOrder": 1,
+      "estimatedMinutes": 20,
+      "objectives": [
+        "Explain why medical language is built from Greek and Latin word parts",
+        "Identify the three main components of a medical term: prefix, root, suffix",
+        "Demonstrate how combining forms connect root words to other word parts",
+        "Decode a simple two-part medical term using the word-part method"
+      ],
+      "conceptBlocks": [
+        {
+          "heading": "Why Medical Language Uses Word Parts",
+          "body": "Most medical terms are built from Greek and Latin roots. Because these languages are no longer in everyday use, their meanings remain stable across countries and centuries — a cardiologist in Brazil and one in Japan both understand 'cardio-' refers to the heart. Learning word parts is more efficient than memorizing thousands of isolated words: master roughly 200 word parts and you can decode tens of thousands of terms."
+        },
+        {
+          "heading": "The Three Building Blocks",
+          "body": "A medical term has up to three components:\n\n• **Prefix** — placed before the root; modifies meaning (e.g., brady- = slow)\n• **Root word** — the core meaning (e.g., cardi = heart)\n• **Suffix** — placed after the root; often indicates a condition, procedure, or specialty (e.g., -itis = inflammation)\n\nNot every term uses all three. Some terms are root + suffix; others add a prefix."
+        },
+        {
+          "heading": "Combining Forms",
+          "body": "When a root word must connect to another word part beginning with a consonant, a vowel — usually 'o' — is inserted. This is called a combining vowel, and the root + vowel is called a combining form.\n\nExample: cardi/o + logy = cardiology (study of the heart)\n\nThe combining vowel is dropped when the suffix starts with a vowel: gastr + itis = gastritis (not gastr/o/itis)."
+        },
+        {
+          "heading": "Decoding Strategy",
+          "body": "Work right to left when decoding:\n1. Identify and define the suffix\n2. Identify and define the prefix (if present)\n3. Define the root or combining form\n4. Combine the definitions into a working meaning\n\nExample: pericarditis\n→ suffix: -itis (inflammation)\n→ prefix: peri- (around, surrounding)\n→ root: card (heart)\n→ Working meaning: inflammation surrounding the heart"
+        }
+      ],
+      "teachingNotes": "Introduce with a familiar word such as 'appendicitis' and walk students through the decode-right-to-left method before presenting new vocabulary. Emphasize that word parts are tools, not memorization exercises."
+    },
+    {
+      "lessonId": "prefixes-suffixes-root-words-L02",
+      "title": "Common Prefixes in Healthcare",
+      "sequenceOrder": 2,
+      "estimatedMinutes": 25,
+      "objectives": [
+        "Recall at least 20 high-frequency medical prefixes and their meanings",
+        "Distinguish prefixes that indicate number, direction, time, size, or negation",
+        "Apply prefixes correctly to construct or decode clinical terms",
+        "Identify look-alike prefix pairs that are commonly confused (e.g., hyper- vs hypo-)"
+      ],
+      "conceptBlocks": [
+        {
+          "heading": "Prefixes of Quantity and Size",
+          "body": "mono- / uni- = one (monocyte, unilateral)\nbi- / di- = two (bilateral, diplopia)\ntri- = three (trimester)\npoly- / multi- = many (polyuria, multifocal)\nmicro- = small (microscope)\nmacro- / mega- = large (macrocyte, megacolon)\nnull- = none (nullipara)"
+        },
+        {
+          "heading": "Prefixes of Position and Direction",
+          "body": "sub- = below, under (subcutaneous, sublingual)\nsupra- / super- = above (suprapubic, superior)\ninter- = between (intercostal)\nintra- = within (intravenous)\nextra- = outside (extracellular)\nperi- = around (pericardium)\ntrans- = across, through (transdermal)"
+        },
+        {
+          "heading": "Prefixes of Negation and Opposition",
+          "body": "a- / an- = without, absence of (apnea, anemia)\nnon- = not (noncompliant)\nanti- / contra- = against (antibiotic, contraindicated)\nde- = removal, reversal (dehydration)"
+        },
+        {
+          "heading": "Critical Look-Alike Pair: Hyper- vs Hypo-",
+          "body": "hyper- = excessive, above normal (hypertension = high blood pressure; hyperglycemia = high blood sugar)\nhypo- = deficient, below normal (hypotension = low blood pressure; hypoglycemia = low blood sugar)\n\nConfusing these prefixes in clinical documentation can be a safety error. Always verify which prefix a term carries before acting on it."
+        },
+        {
+          "heading": "Prefixes of Time",
+          "body": "pre- / ante- = before (prenatal, antepartum)\npost- = after (postoperative)\nneo- = new (neonatal)"
+        }
+      ],
+      "teachingNotes": "The hyper-/hypo- pair causes consistent student confusion and real-world clinical errors. Spend extra time here. Use mnemonics: hyPER = excessive (like a hyper child), hyPO = below (like a hippo low to the ground)."
+    },
+    {
+      "lessonId": "prefixes-suffixes-root-words-L03",
+      "title": "Common Suffixes and Their Meanings",
+      "sequenceOrder": 3,
+      "estimatedMinutes": 25,
+      "objectives": [
+        "Recall at least 20 high-frequency suffixes and their meanings",
+        "Distinguish suffixes that indicate conditions, procedures, specialists, or instruments",
+        "Recognize how the same root paired with different suffixes produces related but distinct terms",
+        "Use suffix knowledge to infer the category of an unfamiliar medical term"
+      ],
+      "conceptBlocks": [
+        {
+          "heading": "Suffixes Indicating Conditions and Diseases",
+          "body": "-itis = inflammation (appendicitis, colitis)\n-osis = abnormal condition, disease process (cyanosis, nephrosis)\n-emia = blood condition (anemia, leukemia, septicemia)\n-algia / -dynia = pain (neuralgia, pleurodynia)\n-pathy = disease (cardiomyopathy, neuropathy)\n-stenosis = narrowing (aortic stenosis)\n-plegia = paralysis (paraplegia, hemiplegia)\n-rrhea = flow, discharge (diarrhea, rhinorrhea)"
+        },
+        {
+          "heading": "Suffixes Indicating Procedures",
+          "body": "-ectomy = surgical removal (appendectomy, cholecystectomy)\n-otomy / -tomy = cutting into (laparotomy, tracheotomy)\n-ostomy = creating a new opening (colostomy, tracheostomy)\n-plasty = surgical repair (rhinoplasty, arthroplasty)\n-scopy = visual examination (colonoscopy, bronchoscopy)\n-graphy = process of recording (radiography, echocardiography)\n-centesis = surgical puncture to remove fluid (amniocentesis, thoracentesis)"
+        },
+        {
+          "heading": "Suffixes Indicating Specialists and Sciences",
+          "body": "-ology = study of; -ologist = specialist in the study of\ncardiology / cardiologist\nneurology / neurologist\noncology / oncologist\n\n-iatry = medical specialty; -iatrist = specialist\npsychiatry / psychiatrist\npodiatry / podiatrist"
+        },
+        {
+          "heading": "Suffixes Indicating Physical Characteristics",
+          "body": "-megaly = enlargement (hepatomegaly, cardiomegaly)\n-ptosis = drooping, prolapse (blepharoptosis, nephroptosis)\n-rrhage / -rrhagia = bursting forth, excessive flow (hemorrhage, menorrhagia)\n-trophy = development, nourishment (atrophy, hypertrophy)\n-penia = deficiency (thrombocytopenia, neutropenia)"
+        }
+      ],
+      "teachingNotes": "-ectomy vs -ostomy vs -otomy is a frequent test point. Emphasize: ectomy = out (removed), ostomy = new opening (bag), otomy = cut in (temporary). Use appendix-based examples: appendectomy = remove it; tracheotomy = cut in for airway."
+    },
+    {
+      "lessonId": "prefixes-suffixes-root-words-L04",
+      "title": "Root Words by Body System",
+      "sequenceOrder": 4,
+      "estimatedMinutes": 30,
+      "objectives": [
+        "Recall the most common root words for each major body system",
+        "Match a root word to its body system of origin",
+        "Combine root words with prefixes and suffixes to form accurate medical terms",
+        "Recognize root words in context when reading clinical documentation"
+      ],
+      "conceptBlocks": [
+        {
+          "heading": "Cardiovascular and Hematological Roots",
+          "body": "cardi/o = heart (cardiomegaly, cardiology)\nangi/o / vas/o = vessel (angioplasty, vasoconstriction)\naort/o = aorta (aortic)\nphleb/o / ven/o = vein (phlebitis, venous)\narteri/o = artery (arteriosclerosis)\nhem/o / hemat/o = blood (hemoglobin, hematology)\nthromb/o = clot (thrombosis)\nleuk/o = white (leukocyte)"
+        },
+        {
+          "heading": "Respiratory Roots",
+          "body": "pneum/o / pulmon/o = lung (pneumonia, pulmonary)\nbronch/o = bronchus (bronchitis, bronchoscopy)\nrhin/o = nose (rhinorrhea, rhinitis)\nphar/yngo = pharynx (pharyngitis)\nlaryngo = larynx (laryngoscopy)\ntracheo = trachea (tracheostomy)\npleur/o = pleura (pleuritis)"
+        },
+        {
+          "heading": "Gastrointestinal Roots",
+          "body": "gastr/o = stomach (gastritis, gastroscopy)\nenter/o = small intestine (enteritis)\ncol/o / colon/o = large intestine (colitis, colonoscopy)\nhepar / hepat/o = liver (hepatitis, hepatomegaly)\ncholecyst/o = gallbladder (cholecystectomy)\npancreat/o = pancreas (pancreatitis)"
+        },
+        {
+          "heading": "Urinary, Neurological, and Musculoskeletal Roots",
+          "body": "nephr/o / ren/o = kidney (nephritis, renal)\nureter/o = ureter | cyst/o = bladder (cystitis)\nneur/o = nerve (neurology, neuropathy)\nencephal/o = brain (encephalitis)\nmyel/o = spinal cord / bone marrow (myelopathy)\noste/o = bone (osteoporosis)\nmyo / muscul/o = muscle (myopathy, muscular)\narth/r/o = joint (arthritis, arthroplasty)\nderm/o / dermat/o = skin (dermatitis, dermatology)"
+        }
+      ],
+      "teachingNotes": "Organize root words by system so students build a mental map. Encourage students to create a personal reference card grouped by system. Emphasize that cyt/o (cell) and hist/o (tissue) are foundational roots that cross all systems."
+    }
+  ],
+  "questions": [
+    {
+      "questionId": "prefixes-suffixes-root-words-Q01",
+      "stem": "A nursing student encounters the term 'bradycardia' in a patient chart. Using word-part analysis, what does this term mean?",
+      "options": {
+        "A": "Rapid heart rate",
+        "B": "Slow heart rate",
+        "C": "Absence of a heartbeat",
+        "D": "Irregular heart rhythm"
+      },
+      "correctAnswer": "B",
+      "rationale": "Brady- means slow, and cardi- refers to the heart. Bradycardia = slow heart rate. Tachy- means fast (tachycardia), while a- means absence (asystole). Arrhythmia refers to irregular rhythm.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "prefix brady-"
+    },
+    {
+      "questionId": "prefixes-suffixes-root-words-Q02",
+      "stem": "Which suffix indicates the surgical removal of an organ or structure?",
+      "options": {
+        "A": "-ostomy",
+        "B": "-otomy",
+        "C": "-ectomy",
+        "D": "-plasty"
+      },
+      "correctAnswer": "C",
+      "rationale": "-Ectomy means surgical removal (e.g., appendectomy = removal of the appendix). -Ostomy means creation of a new artificial opening. -Otomy means cutting into without full removal. -Plasty means surgical repair or reconstruction.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "suffix -ectomy vs -ostomy vs -otomy"
+    },
+    {
+      "questionId": "prefixes-suffixes-root-words-Q03",
+      "stem": "A patient is described as having 'hyperglycemia.' What does this term indicate?",
+      "options": {
+        "A": "Abnormally low blood glucose",
+        "B": "Abnormally high blood glucose",
+        "C": "Absence of glucose in the urine",
+        "D": "Normal blood glucose with irregular fluctuations"
+      },
+      "correctAnswer": "B",
+      "rationale": "Hyper- means excessive or above normal; -glyc- refers to sugar/glucose; -emia means a blood condition. Hyperglycemia = high blood glucose. Hypoglycemia (hypo- = below normal) would be low blood glucose.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "prefix hyper- vs hypo-"
+    },
+    {
+      "questionId": "prefixes-suffixes-root-words-Q04",
+      "stem": "The combining vowel 'o' is inserted into a medical term primarily to:",
+      "options": {
+        "A": "Change the meaning of the root word",
+        "B": "Indicate that a procedure is involved",
+        "C": "Make the term easier to pronounce when joining word parts",
+        "D": "Signal that the suffix is related to a disease condition"
+      },
+      "correctAnswer": "C",
+      "rationale": "The combining vowel (usually 'o') is added between a root word and another word part beginning with a consonant to ease pronunciation. It does not change the meaning of the root. It is dropped when the suffix begins with a vowel.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "combining vowel function"
+    },
+    {
+      "questionId": "prefixes-suffixes-root-words-Q05",
+      "stem": "Which of the following terms means 'inflammation of the liver'?",
+      "options": {
+        "A": "Hepatomegaly",
+        "B": "Hepatitis",
+        "C": "Hepatectomy",
+        "D": "Hepatology"
+      },
+      "correctAnswer": "B",
+      "rationale": "Hepat/o = liver; -itis = inflammation. Hepatitis = inflammation of the liver. Hepatomegaly = liver enlargement (-megaly). Hepatectomy = surgical removal of part of the liver (-ectomy). Hepatology = the study of the liver (-logy).",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "suffix -itis; root hepat/o"
+    },
+    {
+      "questionId": "prefixes-suffixes-root-words-Q06",
+      "stem": "A prefix that means 'below' or 'under' is:",
+      "options": {
+        "A": "supra-",
+        "B": "hyper-",
+        "C": "sub-",
+        "D": "trans-"
+      },
+      "correctAnswer": "C",
+      "rationale": "Sub- means below or under (e.g., subcutaneous = under the skin). Supra- means above. Hyper- means above normal or excessive. Trans- means across or through.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "prefix sub- vs supra-"
+    },
+    {
+      "questionId": "prefixes-suffixes-root-words-Q07",
+      "stem": "The suffix '-penia' found in the term 'thrombocytopenia' means:",
+      "options": {
+        "A": "Excess",
+        "B": "Deficiency",
+        "C": "Disease process",
+        "D": "Bursting forth"
+      },
+      "correctAnswer": "B",
+      "rationale": "-Penia means deficiency or decrease. Thrombocytopenia = deficiency of thrombocytes (platelets). -Osis means abnormal condition or disease process. -Rrhage/-rrhagia means bursting forth or excessive bleeding.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "suffix -penia"
+    },
+    {
+      "questionId": "prefixes-suffixes-root-words-Q08",
+      "stem": "Which term describes a procedure in which a new artificial opening is surgically created?",
+      "options": {
+        "A": "Colectomy",
+        "B": "Colostomy",
+        "C": "Colonoscopy",
+        "D": "Colotomy"
+      },
+      "correctAnswer": "B",
+      "rationale": "-Ostomy = creation of a new opening. A colostomy creates an opening from the colon through the abdominal wall. Colectomy = removal of the colon (-ectomy). Colonoscopy = visual examination of the colon (-scopy). Colotomy = cutting into the colon (-otomy).",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "suffix -ostomy"
+    },
+    {
+      "questionId": "prefixes-suffixes-root-words-Q09",
+      "stem": "The prefix 'peri-' in the term 'pericardium' means:",
+      "options": {
+        "A": "Inside",
+        "B": "Below",
+        "C": "Around",
+        "D": "Between"
+      },
+      "correctAnswer": "C",
+      "rationale": "Peri- means around or surrounding. The pericardium is the membrane surrounding the heart. Intra- means within or inside. Sub- means below. Inter- means between.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "prefix peri-"
+    },
+    {
+      "questionId": "prefixes-suffixes-root-words-Q10",
+      "stem": "A student reads the term 'dyspnea' in a patient's chart. Using word-part analysis, dyspnea most accurately means:",
+      "options": {
+        "A": "Absence of breathing",
+        "B": "Painful or difficult breathing",
+        "C": "Rapid breathing",
+        "D": "Excessive breathing leading to low CO2"
+      },
+      "correctAnswer": "B",
+      "rationale": "Dys- = painful, difficult, or abnormal; -pnea = breathing. Dyspnea = difficult or painful breathing. Apnea (a- = without) = absence of breathing. Tachypnea = rapid breathing. Hyperventilation = excessive breathing with CO2 loss.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "prefix dys-; suffix -pnea"
+    },
+    {
+      "questionId": "prefixes-suffixes-root-words-Q11",
+      "stem": "Which root word refers specifically to the kidney?",
+      "options": {
+        "A": "hepat/o",
+        "B": "nephr/o",
+        "C": "cyst/o",
+        "D": "enter/o"
+      },
+      "correctAnswer": "B",
+      "rationale": "Nephr/o (and ren/o) refer to the kidney. Hepat/o refers to the liver. Cyst/o refers to the bladder (or a cyst/sac). Enter/o refers to the small intestine.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "root nephr/o = kidney"
+    },
+    {
+      "questionId": "prefixes-suffixes-root-words-Q12",
+      "stem": "The term 'hemiplegia' is correctly decoded as:",
+      "options": {
+        "A": "Partial weakness on both sides of the body",
+        "B": "Complete paralysis of all four limbs",
+        "C": "Paralysis of one side of the body",
+        "D": "Paralysis of the lower body only"
+      },
+      "correctAnswer": "C",
+      "rationale": "Hemi- = half (one side); -plegia = paralysis. Hemiplegia = paralysis of one side of the body. Paraplegia (para- = beside/both) = lower body paralysis. Quadriplegia = all four limbs. Paresis refers to weakness, not complete paralysis.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "prefix hemi-; suffix -plegia"
+    },
+    {
+      "questionId": "prefixes-suffixes-root-words-Q13",
+      "stem": "A procedure in which a surgeon cuts into the trachea to establish an airway is called a:",
+      "options": {
+        "A": "Tracheostomy",
+        "B": "Tracheotomy",
+        "C": "Tracheectomy",
+        "D": "Tracheoplasty"
+      },
+      "correctAnswer": "B",
+      "rationale": "Tracheo = trachea; -otomy = cutting into. A tracheotomy is an incision into the trachea. A tracheostomy creates a permanent or semi-permanent opening with an external stoma. Tracheectomy would mean removal. Tracheoplasty = surgical repair.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "-otomy vs -ostomy distinction"
+    },
+    {
+      "questionId": "prefixes-suffixes-root-words-Q14",
+      "stem": "The suffix '-ology' means:",
+      "options": {
+        "A": "Specialist who treats",
+        "B": "Surgical procedure on",
+        "C": "Study of",
+        "D": "Condition involving"
+      },
+      "correctAnswer": "C",
+      "rationale": "-Ology means the study of a subject. A cardiologist is the specialist (-ologist); cardiology is the study (-ology). -Iatry refers to a medical treatment specialty. -Itis refers to inflammation (a condition).",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "suffix -ology"
+    },
+    {
+      "questionId": "prefixes-suffixes-root-words-Q15",
+      "stem": "Which prefix means 'within' or 'inside,' as in a medication given directly into a vein?",
+      "options": {
+        "A": "extra-",
+        "B": "inter-",
+        "C": "trans-",
+        "D": "intra-"
+      },
+      "correctAnswer": "D",
+      "rationale": "Intra- means within or inside (intravenous = within the vein). Extra- means outside. Inter- means between structures. Trans- means across or through.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "prefix intra-"
+    },
+    {
+      "questionId": "prefixes-suffixes-root-words-Q16",
+      "stem": "The medical term for an abnormally low white blood cell count is:",
+      "options": {
+        "A": "Leukocytosis",
+        "B": "Leukopenia",
+        "C": "Leukopoiesis",
+        "D": "Leukorrhea"
+      },
+      "correctAnswer": "B",
+      "rationale": "Leuk/o = white; cyt/o = cell; -penia = deficiency. Leukopenia = deficiency of white blood cells. Leukocytosis (-osis = abnormal increase) = elevated white cell count. Leukopoiesis = production of white cells. Leukorrhea = white discharge.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "suffix -penia vs -osis; root leuk/o"
+    },
+    {
+      "questionId": "prefixes-suffixes-root-words-Q17",
+      "stem": "A patient's chart states she is 'nulliparous.' Using word-part analysis, this means the patient:",
+      "options": {
+        "A": "Has given birth to one child",
+        "B": "Has given birth to multiple children",
+        "C": "Has never given birth",
+        "D": "Is currently pregnant for the first time"
+      },
+      "correctAnswer": "C",
+      "rationale": "Nulli- = none; -para = to bear (give birth). Nulliparous = never having given birth. Primipara = first birth (primi- = first). Multipara = multiple births. Primigravida = pregnant for the first time (gravida = pregnant).",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "prefix nulli-; suffix -para"
+    },
+    {
+      "questionId": "prefixes-suffixes-root-words-Q18",
+      "stem": "When decoding a medical term, what is the correct order of steps?",
+      "options": {
+        "A": "Define the prefix, then the root, then the suffix",
+        "B": "Define the suffix first, then the prefix, then the root",
+        "C": "Define the root first, then work outward to prefix and suffix",
+        "D": "Read the entire term and match it to a memorized definition"
+      },
+      "correctAnswer": "B",
+      "rationale": "The standard medical terminology decoding method is: (1) define the suffix, (2) define the prefix if present, (3) define the root/combining form, then combine meanings. Starting with the suffix gives the category of term (condition, procedure, specialist, etc.) before refining with the root.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "decoding strategy"
+    },
+    {
+      "questionId": "prefixes-suffixes-root-words-Q19",
+      "stem": "Which of the following terms contains a suffix indicating a disease condition or abnormal state?",
+      "options": {
+        "A": "Appendectomy",
+        "B": "Dermatology",
+        "C": "Cyanosis",
+        "D": "Arthroscopy"
+      },
+      "correctAnswer": "C",
+      "rationale": "Cyanosis contains the suffix -osis, which means an abnormal condition or disease process (cyan/o = blue; cyanosis = bluish discoloration). Appendectomy (-ectomy = removal) is a procedure. Dermatology (-logy = study of) is a specialty. Arthroscopy (-scopy = visual examination) is a procedure.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "suffix -osis"
+    },
+    {
+      "questionId": "prefixes-suffixes-root-words-Q20",
+      "stem": "The prefix 'anti-' in the term 'antibiotic' means:",
+      "options": {
+        "A": "For or promoting",
+        "B": "Against or opposing",
+        "C": "Within or inside",
+        "D": "Before or prior to"
+      },
+      "correctAnswer": "B",
+      "rationale": "Anti- means against or opposing. An antibiotic works against bacteria. Pro- or 'for' would indicate promotion. Intra- means within. Pre- / ante- means before.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "prefix anti-"
+    },
+    {
+      "questionId": "prefixes-suffixes-root-words-Q21",
+      "stem": "A physician orders an echocardiography for a patient. The suffix '-graphy' in this term refers to:",
+      "options": {
+        "A": "Surgical repair of the heart",
+        "B": "Visual examination of the heart using a scope",
+        "C": "The process of recording an image of the heart",
+        "D": "Removal of part of the heart wall"
+      },
+      "correctAnswer": "C",
+      "rationale": "-Graphy refers to the process of recording or producing an image. Echocardiography uses sound waves to record images of the heart. -Plasty = surgical repair. -Scopy = visual examination via scope. -Ectomy = removal.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "suffix -graphy"
+    },
+    {
+      "questionId": "prefixes-suffixes-root-words-Q22",
+      "stem": "The prefix 'poly-' in the term 'polyuria' means:",
+      "options": {
+        "A": "Painful",
+        "B": "Many or excessive",
+        "C": "Absent",
+        "D": "Slow"
+      },
+      "correctAnswer": "B",
+      "rationale": "Poly- means many or excessive. Polyuria = excessive urination (ur = urine; -ia = condition). An-, a- = absent. Dys- = painful or difficult. Brady- = slow.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "prefix poly-"
+    },
+    {
+      "questionId": "prefixes-suffixes-root-words-Q23",
+      "stem": "Which suffix indicates enlargement of a structure?",
+      "options": {
+        "A": "-ptosis",
+        "B": "-trophy",
+        "C": "-megaly",
+        "D": "-rrhea"
+      },
+      "correctAnswer": "C",
+      "rationale": "-Megaly means enlargement. Hepatomegaly = enlargement of the liver; cardiomegaly = enlarged heart. -Ptosis = drooping or prolapse. -Trophy = development or nourishment (atrophy = wasting, hypertrophy = overgrowth). -Rrhea = discharge or flow.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "suffix -megaly"
+    },
+    {
+      "questionId": "prefixes-suffixes-root-words-Q24",
+      "stem": "What is the difference between the terms 'nephritis' and 'nephrosis'?",
+      "options": {
+        "A": "Nephritis is a procedure; nephrosis is a study",
+        "B": "Nephritis indicates inflammation; nephrosis indicates an abnormal disease condition",
+        "C": "Nephritis means kidney removal; nephrosis means kidney drainage",
+        "D": "Nephritis affects the left kidney only; nephrosis affects both kidneys"
+      },
+      "correctAnswer": "B",
+      "rationale": "Both terms share the root nephr/o (kidney). -Itis = inflammation (nephritis = kidney inflammation). -Osis = abnormal condition or disease process (nephrosis = degenerative kidney disease without inflammation as the primary feature). Understanding suffixes distinguishes between different categories of conditions.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "-itis vs -osis distinction"
+    },
+    {
+      "questionId": "prefixes-suffixes-root-words-Q25",
+      "stem": "A patient's chart notes a diagnosis of 'arthralgia.' This term means:",
+      "options": {
+        "A": "Inflammation of a joint",
+        "B": "Surgical fusion of a joint",
+        "C": "Pain in a joint",
+        "D": "Degenerative disease of a joint"
+      },
+      "correctAnswer": "C",
+      "rationale": "Arthr/o = joint; -algia = pain. Arthralgia = pain in a joint. Arthritis (arth/o + -itis) = inflammation of a joint. Arthrodesis = surgical fusion. Arthropathy = disease of a joint (-pathy).",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "suffix -algia; root arthr/o"
+    },
+    {
+      "questionId": "prefixes-suffixes-root-words-Q26",
+      "stem": "The prefix 'tachy-' is correctly used in which of the following terms?",
+      "options": {
+        "A": "Tachycardia — slow heart rate",
+        "B": "Tachypnea — rapid breathing",
+        "C": "Tachycardia — irregular heart rate",
+        "D": "Tachypnea — absence of breathing"
+      },
+      "correctAnswer": "B",
+      "rationale": "Tachy- means rapid or fast. Tachypnea = rapid breathing (-pnea = breathing). Tachycardia = rapid heart rate, not slow. Brady- means slow. Apnea = absence of breathing (a- = without).",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "prefix tachy-"
+    },
+    {
+      "questionId": "prefixes-suffixes-root-words-Q27",
+      "stem": "A nurse sees the term 'subcutaneous' in a medication order. This route of administration means:",
+      "options": {
+        "A": "Into a vein",
+        "B": "Under the skin",
+        "C": "Into a muscle",
+        "D": "Through the mucous membranes"
+      },
+      "correctAnswer": "B",
+      "rationale": "Sub- = under, below; cutane/o = skin; -ous = pertaining to. Subcutaneous = under the skin. Intravenous = into a vein (intra- = within; ven/o = vein). Intramuscular = into muscle. Transmucosal = through mucous membranes.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "prefix sub-; root cutane/o"
+    },
+    {
+      "questionId": "prefixes-suffixes-root-words-Q28",
+      "stem": "Which of the following is an example of a medical term that uses a combining vowel?",
+      "options": {
+        "A": "Gastritis",
+        "B": "Gastrology",
+        "C": "Gastroenterology",
+        "D": "Appendicitis"
+      },
+      "correctAnswer": "C",
+      "rationale": "Gastroenterology uses the combining form gastr/o (with combining vowel 'o') before another consonant-starting root (enter/o = intestine). Gastritis drops the combining vowel because -itis starts with a vowel. Gastrology = gastr + -ology (vowel dropped). Appendicitis = appendic + -itis (vowel dropped).",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "combining vowel rule"
+    },
+    {
+      "questionId": "prefixes-suffixes-root-words-Q29",
+      "stem": "Which word part in 'osteosarcoma' refers to bone?",
+      "options": {
+        "A": "-sarcoma",
+        "B": "osteo-",
+        "C": "-oma",
+        "D": "sarc/o"
+      },
+      "correctAnswer": "B",
+      "rationale": "Oste/o = bone. Osteo- is the combining form of the root 'oste' meaning bone. Sarc/o = flesh or connective tissue. -Oma = tumor. -Sarcoma = malignant tumor of connective tissue. Osteosarcoma = malignant tumor arising from bone.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "root oste/o = bone"
+    },
+    {
+      "questionId": "prefixes-suffixes-root-words-Q30",
+      "stem": "The suffix '-centesis' in the term 'thoracentesis' means:",
+      "options": {
+        "A": "Visual examination",
+        "B": "Surgical puncture to remove fluid",
+        "C": "Process of recording an image",
+        "D": "Creation of a new opening"
+      },
+      "correctAnswer": "B",
+      "rationale": "-Centesis = surgical puncture to remove fluid. Thoracentesis = puncture of the thoracic cavity (pleural space) to drain fluid. -Scopy = visual examination. -Graphy = recording/imaging. -Ostomy = creating a new opening.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "suffix -centesis"
+    },
+    {
+      "questionId": "prefixes-suffixes-root-words-Q31",
+      "stem": "The prefix 'neo-' in the term 'neonatal' means:",
+      "options": {
+        "A": "After birth",
+        "B": "Before birth",
+        "C": "New or recent",
+        "D": "Multiple or many"
+      },
+      "correctAnswer": "C",
+      "rationale": "Neo- = new or recent. Neonatal = pertaining to the newborn (new birth) period. Post- = after. Pre- / ante- = before. Poly- / multi- = many.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "prefix neo-"
+    },
+    {
+      "questionId": "prefixes-suffixes-root-words-Q32",
+      "stem": "Which term means 'abnormal condition of bluish skin discoloration'?",
+      "options": {
+        "A": "Cyanoderma",
+        "B": "Cyanosis",
+        "C": "Cyanopathy",
+        "D": "Cyanotomy"
+      },
+      "correctAnswer": "B",
+      "rationale": "Cyan/o = blue; -osis = abnormal condition. Cyanosis = an abnormal condition of bluish skin discoloration due to poor oxygenation. -Derma = skin (cyanoderma would be 'blue skin'). -Pathy = disease. -Tomy = incision.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "suffix -osis; root cyan/o"
+    },
+    {
+      "questionId": "prefixes-suffixes-root-words-Q33",
+      "stem": "A patient is described as 'postoperative.' The prefix 'post-' indicates:",
+      "options": {
+        "A": "Before the surgery",
+        "B": "During the surgery",
+        "C": "After the surgery",
+        "D": "Alongside the surgery team"
+      },
+      "correctAnswer": "C",
+      "rationale": "Post- means after. Postoperative refers to the period after a surgical operation. Pre- / ante- means before (preoperative = before surgery). Intra- means during or within (intraoperative).",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "prefix post-"
+    },
+    {
+      "questionId": "prefixes-suffixes-root-words-Q34",
+      "stem": "The root word 'hem/o' or 'hemat/o' refers to:",
+      "options": {
+        "A": "Heart",
+        "B": "Liver",
+        "C": "Blood",
+        "D": "Lung"
+      },
+      "correctAnswer": "C",
+      "rationale": "Hem/o and hemat/o both refer to blood. Hemoglobin = blood protein carrying oxygen. Hematology = study of blood disorders. Cardi/o = heart. Hepat/o = liver. Pneum/o or pulmon/o = lung.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "root hem/o / hemat/o = blood"
+    },
+    {
+      "questionId": "prefixes-suffixes-root-words-Q35",
+      "stem": "Which suffix means 'pertaining to' and is commonly added to root words to create adjectives?",
+      "options": {
+        "A": "-emia",
+        "B": "-ous / -al / -ic",
+        "C": "-osis",
+        "D": "-ectomy"
+      },
+      "correctAnswer": "B",
+      "rationale": "The suffixes -ous, -al, and -ic all mean 'pertaining to' or 'relating to,' forming adjectives from root words (e.g., cardiac = pertaining to the heart; renal = pertaining to the kidney; cutaneous = pertaining to the skin). -Emia = blood condition. -Osis = abnormal condition. -Ectomy = surgical removal.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "adjective-forming suffixes -al, -ic, -ous"
+    },
+    {
+      "questionId": "prefixes-suffixes-root-words-Q36",
+      "stem": "Which of the following terms contains the root for 'nerve'?",
+      "options": {
+        "A": "Nephrology",
+        "B": "Neuralgia",
+        "C": "Dermatitis",
+        "D": "Myocardium"
+      },
+      "correctAnswer": "B",
+      "rationale": "Neur/o = nerve. Neuralgia = nerve pain (-algia = pain). Nephr/o = kidney (nephrology). Dermat/o = skin (dermatitis). My/o = muscle; cardi/o = heart (myocardium = heart muscle).",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "root neur/o = nerve"
+    },
+    {
+      "questionId": "prefixes-suffixes-root-words-Q37",
+      "stem": "A nurse reads 'bilateral' in a patient's care plan. Using word-part analysis, bilateral means:",
+      "options": {
+        "A": "Pertaining to one side of the body",
+        "B": "Pertaining to both sides of the body",
+        "C": "Pertaining to three equal parts",
+        "D": "Pertaining to the area between two structures"
+      },
+      "correctAnswer": "B",
+      "rationale": "Bi- = two; later/o = side; -al = pertaining to. Bilateral = pertaining to both (two) sides. Unilateral (uni- = one) = one side. Tri- = three. Inter- = between.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "prefix bi-; root later/o"
+    },
+    {
+      "questionId": "prefixes-suffixes-root-words-Q38",
+      "stem": "The suffix '-rrhage' or '-rrhagia' is correctly defined as:",
+      "options": {
+        "A": "Abnormal narrowing",
+        "B": "Excessive flow or bursting forth",
+        "C": "Surgical suturing",
+        "D": "Deficiency of flow"
+      },
+      "correctAnswer": "B",
+      "rationale": "-Rrhage and -rrhagia mean bursting forth or excessive flow/bleeding. Hemorrhage = excessive bleeding (hem/o = blood). -Rrhea = flow or discharge (less severe). -Rrhaphy = surgical suturing. -Stenosis = narrowing.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "suffix -rrhage"
+    },
+    {
+      "questionId": "prefixes-suffixes-root-words-Q39",
+      "stem": "Which term correctly describes the study of the skin and its disorders?",
+      "options": {
+        "A": "Dermatitis",
+        "B": "Dermatomy",
+        "C": "Dermatology",
+        "D": "Dermatosis"
+      },
+      "correctAnswer": "C",
+      "rationale": "Dermat/o = skin; -logy = study of. Dermatology = the study of the skin. Dermatitis (-itis) = inflammation of the skin. Dermatomy = not a standard term. Dermatosis (-osis) = an abnormal skin condition.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "suffix -logy; root dermat/o"
+    },
+    {
+      "questionId": "prefixes-suffixes-root-words-Q40",
+      "stem": "A nurse receives an order to administer a medication 'sublingually.' This means the medication should be given:",
+      "options": {
+        "A": "Under the skin with a needle",
+        "B": "Under the tongue",
+        "C": "Into the stomach via a tube",
+        "D": "Through the outer layer of the skin"
+      },
+      "correctAnswer": "B",
+      "rationale": "Sub- = under; lingu/o = tongue; -al = pertaining to. Sublingual = under the tongue. Subcutaneous = under the skin. Nasogastric (via tube to stomach) uses a different root. Transdermal = through the skin.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "prefix sub-; root lingu/o = tongue"
+    },
+    {
+      "questionId": "prefixes-suffixes-root-words-Q41",
+      "stem": "Which prefix means 'against' and is commonly used in drug names?",
+      "options": {
+        "A": "pro-",
+        "B": "anti-",
+        "C": "auto-",
+        "D": "iso-"
+      },
+      "correctAnswer": "B",
+      "rationale": "Anti- means against. Anticoagulants work against coagulation; antiemetics work against nausea/vomiting. Pro- means before or in favor of. Auto- means self. Iso- means equal or same.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "prefix anti-"
+    },
+    {
+      "questionId": "prefixes-suffixes-root-words-Q42",
+      "stem": "The root word 'thromb/o' refers to:",
+      "options": {
+        "A": "Vessel",
+        "B": "Blood clot",
+        "C": "Platelet production",
+        "D": "Inflammation"
+      },
+      "correctAnswer": "B",
+      "rationale": "Thromb/o refers specifically to a blood clot or thrombus. Thrombosis = formation of a blood clot within a vessel. Angi/o / vas/o = vessel. Thrombopoiesis refers to platelet production but the root 'thromb/o' itself means clot. -Itis = inflammation.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "root thromb/o = clot"
+    },
+    {
+      "questionId": "prefixes-suffixes-root-words-Q43",
+      "stem": "The term 'dysuria' is best defined as:",
+      "options": {
+        "A": "Absence of urine production",
+        "B": "Painful or difficult urination",
+        "C": "Excessive urination at night",
+        "D": "Blood in the urine"
+      },
+      "correctAnswer": "B",
+      "rationale": "Dys- = painful, difficult; ur/o = urine; -ia = condition. Dysuria = painful or difficult urination. Anuria (an- = without) = absence of urine. Nocturia = nighttime urination. Hematuria = blood in the urine (hemat/o = blood).",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "prefix dys-; root ur/o"
+    },
+    {
+      "questionId": "prefixes-suffixes-root-words-Q44",
+      "stem": "Which suffix means 'surgical suturing or repair of a wound'?",
+      "options": {
+        "A": "-centesis",
+        "B": "-rrhaphy",
+        "C": "-plasty",
+        "D": "-ectomy"
+      },
+      "correctAnswer": "B",
+      "rationale": "-Rrhaphy means surgical suturing or repair by stitching. Herniorrhaphy = surgical repair of a hernia. -Centesis = surgical puncture to remove fluid. -Plasty = surgical reshaping or reconstruction. -Ectomy = surgical removal.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "suffix -rrhaphy"
+    },
+    {
+      "questionId": "prefixes-suffixes-root-words-Q45",
+      "stem": "A nursing student reads the word 'atrophy' in a patient's chart. This term is best defined as:",
+      "options": {
+        "A": "Excessive growth or enlargement of a tissue",
+        "B": "Wasting or decrease in the size of a tissue or organ",
+        "C": "Abnormal new growth of tissue",
+        "D": "Surgical removal of tissue"
+      },
+      "correctAnswer": "B",
+      "rationale": "A- = without; -trophy = development or nourishment. Atrophy = wasting away or decrease in size due to lack of use or nourishment. Hypertrophy (hyper- = excessive) = enlargement. Neoplasia = new abnormal growth. -Ectomy = surgical removal.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "prefix a-; suffix -trophy"
+    },
+    {
+      "questionId": "prefixes-suffixes-root-words-Q46",
+      "stem": "The root word 'my/o' or 'muscul/o' refers to:",
+      "options": {
+        "A": "Bone",
+        "B": "Nerve",
+        "C": "Muscle",
+        "D": "Mucous membrane"
+      },
+      "correctAnswer": "C",
+      "rationale": "My/o and muscul/o both refer to muscle. Myocardium = heart muscle (cardi/o = heart). Myopathy = muscle disease. Oste/o = bone. Neur/o = nerve. Muc/o = mucus; muco/sa refers to mucous membranes.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "root my/o = muscle"
+    },
+    {
+      "questionId": "prefixes-suffixes-root-words-Q47",
+      "stem": "Which of the following prefixes means 'across' or 'through'?",
+      "options": {
+        "A": "peri-",
+        "B": "trans-",
+        "C": "inter-",
+        "D": "infra-"
+      },
+      "correctAnswer": "B",
+      "rationale": "Trans- means across or through. Transdermal = through the skin. Transfusion = passing (blood) across/through. Peri- = around. Inter- = between. Infra- = below or beneath.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "prefix trans-"
+    },
+    {
+      "questionId": "prefixes-suffixes-root-words-Q48",
+      "stem": "Which of the following correctly distinguishes between 'microscopic' and 'macroscopic'?",
+      "options": {
+        "A": "Microscopic = visible to the naked eye; macroscopic = requires magnification",
+        "B": "Microscopic = requires magnification to see; macroscopic = visible to the naked eye",
+        "C": "Both terms describe the same level of visibility",
+        "D": "Microscopic refers to tissue samples; macroscopic refers to whole organs only"
+      },
+      "correctAnswer": "B",
+      "rationale": "Micro- = small; macro- = large. Microscopic = so small it requires a microscope to see. Macroscopic = large enough to see without magnification (with the naked eye). These prefixes are fundamental in pathology and anatomy.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "prefix micro- vs macro-"
+    }
+  ]
+}

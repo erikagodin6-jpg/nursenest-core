@@ -1,0 +1,573 @@
+{
+  "topicSlug": "body-direction-and-positional-terms",
+  "topicName": "Body Direction and Positional Terms",
+  "domain": "Medical Terminology",
+  "contentWeight": "heavy",
+  "batchId": "foundations-batch-01",
+  "generatedAt": "2026-04-10",
+  "status": "pilot-draft",
+  "lessons": [
+    {
+      "lessonId": "body-direction-and-positional-terms-L01",
+      "title": "Anatomical Position: The Universal Reference Point",
+      "sequenceOrder": 1,
+      "estimatedMinutes": 20,
+      "objectives": [
+        "Define the standard anatomical position and explain why it is used",
+        "Identify the three anatomical body planes: sagittal, frontal (coronal), and transverse",
+        "Describe the sections produced by each body plane",
+        "Recognize how anatomical position is used as a reference in clinical descriptions"
+      ],
+      "conceptBlocks": [
+        {
+          "heading": "Why a Standard Position Matters",
+          "body": "All anatomical directional terms are defined relative to a single reference point: the standard anatomical position. Without this shared reference, describing where a wound, tumor, or incision is located would be ambiguous. Anatomical position eliminates that ambiguity universally.\n\nStandard anatomical position:\n• Body is standing erect\n• Face forward, eyes looking ahead\n• Arms at the sides with palms facing forward (anteriorly)\n• Feet together, toes pointing forward\n\nAll directional terms apply regardless of whether the person is actually standing, lying, or in any other posture."
+        },
+        {
+          "heading": "The Three Body Planes",
+          "body": "A body plane is an imaginary flat surface that divides the body for descriptive reference.\n\n**Sagittal plane** — divides the body into left and right portions\n• Midsagittal (median) plane: exactly equal left and right halves\n• Parasagittal plane: unequal left and right sections\n\n**Frontal (Coronal) plane** — divides the body into anterior (front) and posterior (back) portions\n\n**Transverse (Horizontal) plane** — divides the body into superior (upper) and inferior (lower) portions\n• Also called a cross-section; produces CT scan 'slices'"
+        },
+        {
+          "heading": "Clinical Application of Planes",
+          "body": "Imaging reports describe findings using plane references:\n• CT scans produce transverse-plane images\n• MRI sequences can reconstruct all three planes\n• Surgical incisions are often described relative to planes (e.g., midline sagittal incision)\n\nUnderstanding planes helps interpret radiology reports and surgical notes accurately."
+        }
+      ],
+      "teachingNotes": "Use a simple line drawing or mannequin to physically mark the three planes. Ask students to identify which plane a CT scan uses before introducing the definitions. This anchors the abstract concept to familiar clinical tools."
+    },
+    {
+      "lessonId": "body-direction-and-positional-terms-L02",
+      "title": "Directional Terms I: Superior, Inferior, Anterior, Posterior",
+      "sequenceOrder": 2,
+      "estimatedMinutes": 22,
+      "objectives": [
+        "Define and correctly apply superior, inferior, anterior, and posterior",
+        "Contrast the terms anterior and ventral; posterior and dorsal",
+        "Apply these four directional terms to locate structures described in clinical documentation",
+        "Recognize common errors when applying directional terms to non-standard positions"
+      ],
+      "conceptBlocks": [
+        {
+          "heading": "Superior and Inferior",
+          "body": "**Superior** — toward the head or upper part of the body\n• The heart is superior to the diaphragm\n• The nose is superior to the mouth\n• Synonym: cranial (toward the cranium/skull)\n\n**Inferior** — toward the lower part of the body or feet\n• The stomach is inferior to the heart\n• The feet are inferior to the knees\n• Synonym: caudal (toward the tail/coccyx)"
+        },
+        {
+          "heading": "Anterior and Posterior",
+          "body": "**Anterior** — toward the front of the body (in anatomical position)\n• The sternum is anterior to the heart\n• The patella (kneecap) is on the anterior surface of the knee\n• Synonym: ventral (toward the belly side)\n\n**Posterior** — toward the back of the body\n• The spine is posterior to the sternum\n• The calcaneus (heel bone) is on the posterior aspect of the foot\n• Synonym: dorsal (toward the back/dorsal surface)\n\n**Clinical note:** Ventral and dorsal are more commonly used when referring to quadruped anatomy or embryology, but appear in some clinical texts."
+        },
+        {
+          "heading": "Applying These Terms in Context",
+          "body": "Example: 'The patient has an anterior tibial wound.'\n→ Anterior = front; tibia = shin bone → the wound is on the front of the lower leg.\n\nExample: 'Posterior cervical lymphadenopathy noted.'\n→ Posterior = back; cervical = neck → enlarged lymph nodes in the back of the neck."
+        }
+      ],
+      "teachingNotes": "Common error: students confuse superior/inferior with proximal/distal when describing limbs. Clarify that superior/inferior refer to position relative to the head/feet of the whole body, while proximal/distal refer to distance from the origin point of a limb."
+    },
+    {
+      "lessonId": "body-direction-and-positional-terms-L03",
+      "title": "Directional Terms II: Medial, Lateral, Proximal, Distal, Superficial, Deep",
+      "sequenceOrder": 3,
+      "estimatedMinutes": 25,
+      "objectives": [
+        "Define medial, lateral, proximal, distal, superficial, and deep",
+        "Correctly use proximal and distal when describing limb anatomy",
+        "Distinguish superficial from deep structures in the context of wounds and anatomy",
+        "Apply all six terms in combined clinical descriptions"
+      ],
+      "conceptBlocks": [
+        {
+          "heading": "Medial and Lateral",
+          "body": "**Medial** — toward the midline of the body\n• The heart is medial to the lungs\n• The great toe is on the medial side of the foot\n\n**Lateral** — away from the midline, toward the side\n• The ears are lateral to the nose\n• The little toe is on the lateral side of the foot\n\nThese terms can also describe the sides of a limb: the medial aspect of the knee faces the other knee; the lateral aspect faces outward."
+        },
+        {
+          "heading": "Proximal and Distal",
+          "body": "Used primarily for limbs and vessels — always measured relative to the point of origin or attachment:\n\n**Proximal** — closer to the origin, point of attachment, or center of the body\n• The shoulder is proximal to the elbow\n• The femur is proximal to the fibula\n\n**Distal** — farther from the origin or center\n• The fingers are distal to the wrist\n• The foot is distal to the knee\n\nFor vessels and nerves: proximal means closer to where the structure arises from a main trunk."
+        },
+        {
+          "heading": "Superficial and Deep",
+          "body": "**Superficial** — closer to the body surface\n• Skin and subcutaneous fat are superficial structures\n• A superficial wound involves only the epidermis or dermis\n\n**Deep** — farther from the surface, toward the interior\n• Muscle is deep to subcutaneous fat\n• A deep vein thrombosis (DVT) involves veins deep to the fascia\n\nThese terms are critical for wound staging and assessment documentation."
+        },
+        {
+          "heading": "Combining Directional Terms",
+          "body": "Clinical descriptions often combine multiple directional terms:\n\n'Medial distal femur' = toward the midline side, near the knee end of the femur\n\n'Anterior superficial wound of the right lateral ankle' = front-facing, near the surface, on the outer side of the ankle\n\nPractice parsing combined descriptions using each term individually."
+        }
+      ],
+      "teachingNotes": "Proximal/distal is the pair students most frequently misapply. Remind them it always requires a reference point — proximal to what? Distal to what? Always state the reference. Use shoulder–elbow–wrist–finger chains as the primary practice sequence."
+    },
+    {
+      "lessonId": "body-direction-and-positional-terms-L04",
+      "title": "Regional Terms, Body Cavities, and Clinical Application",
+      "sequenceOrder": 4,
+      "estimatedMinutes": 25,
+      "objectives": [
+        "Identify the major body regions using correct anatomical regional terms",
+        "Describe the dorsal and ventral body cavities and their subdivisions",
+        "Apply the four abdominal quadrants and nine abdominal regions in clinical descriptions",
+        "Demonstrate use of directional and regional terms together in patient documentation"
+      ],
+      "conceptBlocks": [
+        {
+          "heading": "Major Regional Terms",
+          "body": "Regional terms name specific areas of the body and appear routinely in documentation:\n\nHead and neck: cranial (skull), cervical (neck), facial (face), oral (mouth), nasal (nose), ocular (eye)\nTrunk: thoracic (chest), pectoral (chest/breast), abdominal (abdomen), umbilical (navel), lumbar (lower back), sacral (tailbone area), gluteal (buttocks)\nUpper limb: acromial (shoulder tip), brachial (upper arm), antecubital (front of elbow), carpal (wrist), palmar (palm), digital (fingers)\nLower limb: femoral (thigh), patellar (knee front), popliteal (back of knee), crural (leg/shin), calcaneal (heel), plantar (sole), digital (toes)"
+        },
+        {
+          "heading": "The Four Abdominal Quadrants",
+          "body": "The abdomen is divided by a vertical (sagittal) and horizontal (transverse) line crossing at the umbilicus:\n\n• Right Upper Quadrant (RUQ): liver, gallbladder, part of colon\n• Left Upper Quadrant (LUQ): stomach, spleen, pancreas tail\n• Right Lower Quadrant (RLQ): appendix, cecum, right ovary/tube\n• Left Lower Quadrant (LLQ): sigmoid colon, left ovary/tube\n\nWhen a patient reports pain, documenting the quadrant localizes it for clinical assessment. Appendicitis classically begins peri-umbilically and migrates to the RLQ."
+        },
+        {
+          "heading": "Dorsal and Ventral Body Cavities",
+          "body": "**Dorsal cavity** (posterior): contains the CNS\n• Cranial cavity — houses the brain\n• Spinal (vertebral) cavity — houses the spinal cord\n\n**Ventral cavity** (anterior): contains visceral organs; subdivided by the diaphragm\n• Thoracic cavity: mediastinum (heart, great vessels), pleural cavities (lungs)\n• Abdominopelvic cavity: abdominal + pelvic regions"
+        }
+      ],
+      "teachingNotes": "The four-quadrant system is the clinical standard; the nine-region system appears in anatomy courses. Focus on quadrants for clinical practice. Abdominal pain localization exercises — describing a pain location using quadrant + directional terms — are high-yield for both documentation and assessment skills."
+    }
+  ],
+  "questions": [
+    {
+      "questionId": "body-direction-and-positional-terms-Q01",
+      "stem": "A patient is in the standard anatomical position. Which of the following correctly describes this position?",
+      "options": {
+        "A": "Standing erect, facing forward, arms at sides with palms facing posteriorly",
+        "B": "Standing erect, facing forward, arms at sides with palms facing anteriorly",
+        "C": "Lying flat on the back with arms extended above the head",
+        "D": "Standing with the body in a relaxed, natural posture"
+      },
+      "correctAnswer": "B",
+      "rationale": "In anatomical position, the body stands erect, faces forward, arms hang at the sides, and the palms face anteriorly (forward). This is the universal reference for all directional terms. Palms facing posteriorly is the opposite. Lying flat describes a supine position, not anatomical position.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "definition of anatomical position"
+    },
+    {
+      "questionId": "body-direction-and-positional-terms-Q02",
+      "stem": "Which body plane divides the body into superior and inferior portions?",
+      "options": {
+        "A": "Sagittal plane",
+        "B": "Frontal (coronal) plane",
+        "C": "Transverse (horizontal) plane",
+        "D": "Midsagittal plane"
+      },
+      "correctAnswer": "C",
+      "rationale": "The transverse (horizontal) plane divides the body into superior (upper) and inferior (lower) portions. CT scan images are produced in this plane. The sagittal plane divides into left and right. The frontal (coronal) plane divides into anterior and posterior.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "transverse body plane"
+    },
+    {
+      "questionId": "body-direction-and-positional-terms-Q03",
+      "stem": "A clinical note states that the patient has 'an anterior wound on the lower left leg.' Where is this wound located?",
+      "options": {
+        "A": "On the back of the lower left leg",
+        "B": "On the front of the lower left leg",
+        "C": "On the inner (medial) aspect of the left foot",
+        "D": "On the outer (lateral) aspect of the left knee"
+      },
+      "correctAnswer": "B",
+      "rationale": "Anterior means toward the front of the body. A wound described as anterior on the lower leg is on the front (shin) surface. Posterior would indicate the back surface (calf). Medial and lateral indicate side-to-side position, not front-to-back.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "directional term: anterior"
+    },
+    {
+      "questionId": "body-direction-and-positional-terms-Q04",
+      "stem": "The heart is described as being _______ to the sternum.",
+      "options": {
+        "A": "Anterior",
+        "B": "Lateral",
+        "C": "Posterior",
+        "D": "Superior"
+      },
+      "correctAnswer": "C",
+      "rationale": "The heart lies posterior (behind) the sternum (breastbone). The sternum is on the anterior chest wall, and the heart is positioned behind it. This is a classic anatomical relationship used in cardiopulmonary resuscitation — compressions on the sternum transfer force posteriorly to the heart.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "directional term: posterior"
+    },
+    {
+      "questionId": "body-direction-and-positional-terms-Q05",
+      "stem": "In anatomy, the term 'medial' refers to:",
+      "options": {
+        "A": "Closer to the body surface",
+        "B": "Farther from the origin of a limb",
+        "C": "Toward the midline of the body",
+        "D": "Toward the head"
+      },
+      "correctAnswer": "C",
+      "rationale": "Medial means toward the midline of the body. The nose is medial to the ears. The great toe is on the medial side of the foot. Superficial = closer to the surface. Distal = farther from origin. Superior = toward the head.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "directional term: medial"
+    },
+    {
+      "questionId": "body-direction-and-positional-terms-Q06",
+      "stem": "When documenting a wound on the outer side of the right ankle, a nurse should use which directional term?",
+      "options": {
+        "A": "Medial",
+        "B": "Proximal",
+        "C": "Lateral",
+        "D": "Superior"
+      },
+      "correctAnswer": "C",
+      "rationale": "Lateral means away from the midline, toward the side of the body. The outer aspect of the ankle faces away from the midline and is therefore the lateral aspect. Medial = inner side (toward the other ankle). Proximal = closer to the origin of the limb. Superior = toward the head.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "directional term: lateral"
+    },
+    {
+      "questionId": "body-direction-and-positional-terms-Q07",
+      "stem": "A nurse notes 'proximal femur fracture' in a patient's record. Which part of the femur (thigh bone) is fractured?",
+      "options": {
+        "A": "The end nearest the knee",
+        "B": "The middle section of the femur",
+        "C": "The end closest to the hip",
+        "D": "The lateral surface of the femur shaft"
+      },
+      "correctAnswer": "C",
+      "rationale": "Proximal means closer to the point of origin or attachment. For the femur, the proximal end is the end nearest the hip joint (origin of the limb). The distal end is nearest the knee. A proximal femur fracture (often called a hip fracture) occurs near the hip.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "directional term: proximal"
+    },
+    {
+      "questionId": "body-direction-and-positional-terms-Q08",
+      "stem": "Which term describes a structure that is farther from the body surface and closer to internal organs?",
+      "options": {
+        "A": "Superficial",
+        "B": "Distal",
+        "C": "Deep",
+        "D": "Inferior"
+      },
+      "correctAnswer": "C",
+      "rationale": "Deep means farther from the body surface, toward the interior. Deep veins lie beneath the fascia, closer to the bone. Superficial = closer to the surface. Distal = farther from the origin of a limb. Inferior = toward the feet.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "directional term: deep"
+    },
+    {
+      "questionId": "body-direction-and-positional-terms-Q09",
+      "stem": "A patient reports right lower quadrant (RLQ) abdominal pain. Which organ is most associated with this region?",
+      "options": {
+        "A": "Stomach",
+        "B": "Liver",
+        "C": "Appendix",
+        "D": "Spleen"
+      },
+      "correctAnswer": "C",
+      "rationale": "The appendix and cecum are located in the right lower quadrant. Appendicitis classically causes RLQ pain at McBurney's point. The stomach and spleen are in the left upper quadrant (LUQ). The liver and gallbladder are in the right upper quadrant (RUQ).",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "abdominal quadrant RLQ"
+    },
+    {
+      "questionId": "body-direction-and-positional-terms-Q10",
+      "stem": "A nurse reads 'the patient has posterior cervical lymphadenopathy.' This finding is located:",
+      "options": {
+        "A": "In the front of the neck",
+        "B": "In the back of the neck",
+        "C": "Below the collarbone",
+        "D": "In front of the ears"
+      },
+      "correctAnswer": "B",
+      "rationale": "Posterior = toward the back; cervical = pertaining to the neck. Posterior cervical lymphadenopathy refers to enlarged lymph nodes located in the back of the neck. Anterior cervical nodes would be in the front. Infraclavicular = below the collarbone. Preauricular = in front of the ear.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "posterior + regional term cervical"
+    },
+    {
+      "questionId": "body-direction-and-positional-terms-Q11",
+      "stem": "Which body plane divides the body into equal left and right halves?",
+      "options": {
+        "A": "Parasagittal plane",
+        "B": "Midsagittal (median) plane",
+        "C": "Frontal plane",
+        "D": "Transverse plane"
+      },
+      "correctAnswer": "B",
+      "rationale": "The midsagittal (median) plane passes directly through the midline and divides the body into equal left and right halves. The parasagittal plane is a sagittal plane that does not pass through the midline, creating unequal halves. The frontal plane separates front from back; the transverse plane separates top from bottom.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "midsagittal plane"
+    },
+    {
+      "questionId": "body-direction-and-positional-terms-Q12",
+      "stem": "The term 'superior' when used in anatomical description means:",
+      "options": {
+        "A": "Toward the feet",
+        "B": "Toward the front of the body",
+        "C": "Toward the head or upper part of the body",
+        "D": "Toward the midline"
+      },
+      "correctAnswer": "C",
+      "rationale": "Superior means toward the head or upper part of the body. The cranial synonym reinforces this — cranial = toward the cranium (skull). Inferior = toward the feet (caudal). Anterior = toward the front. Medial = toward the midline.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "directional term: superior"
+    },
+    {
+      "questionId": "body-direction-and-positional-terms-Q13",
+      "stem": "A superficial wound is best described as:",
+      "options": {
+        "A": "A wound extending into the muscle",
+        "B": "A wound located near the body surface involving only skin layers",
+        "C": "A wound below the fascia",
+        "D": "A wound near the center of the body"
+      },
+      "correctAnswer": "B",
+      "rationale": "Superficial means closer to the body surface. A superficial wound involves only the outermost layers of skin (epidermis and/or dermis). Wounds extending into muscle or below fascia are considered deep wounds. Proximity to the body's center refers to medial, not depth.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "directional term: superficial"
+    },
+    {
+      "questionId": "body-direction-and-positional-terms-Q14",
+      "stem": "A patient's elbow is described as being _______ to the shoulder and _______ to the wrist.",
+      "options": {
+        "A": "Proximal; proximal",
+        "B": "Distal; proximal",
+        "C": "Proximal; distal",
+        "D": "Distal; distal"
+      },
+      "correctAnswer": "B",
+      "rationale": "The elbow is distal to the shoulder (farther from the origin of the limb at the shoulder girdle) and proximal to the wrist (closer to the origin compared to the wrist). Directional terms are always relative — the same structure can be proximal to one thing and distal to another.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "proximal vs distal — relative nature"
+    },
+    {
+      "questionId": "body-direction-and-positional-terms-Q15",
+      "stem": "Which of the following correctly describes the location of the liver using anatomical terminology?",
+      "options": {
+        "A": "Left upper quadrant, posterior to the stomach",
+        "B": "Right upper quadrant, inferior to the diaphragm",
+        "C": "Right lower quadrant, superior to the umbilicus",
+        "D": "Left lower quadrant, anterior to the spine"
+      },
+      "correctAnswer": "B",
+      "rationale": "The liver is located in the right upper quadrant (RUQ) and lies just inferior to (below) the diaphragm. It is not in the left upper quadrant (that is the stomach and spleen). The right lower quadrant contains the appendix. Describing the liver as 'anterior to the spine' is true but incomplete and not the standard primary description.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "RUQ; directional terms inferior + combined"
+    },
+    {
+      "questionId": "body-direction-and-positional-terms-Q16",
+      "stem": "The term 'popliteal' refers to which body region?",
+      "options": {
+        "A": "Front of the knee",
+        "B": "Back of the knee",
+        "C": "Top of the foot",
+        "D": "Back of the ankle"
+      },
+      "correctAnswer": "B",
+      "rationale": "The popliteal region refers to the back of the knee (posterior surface). The popliteal artery and vein run through this region. The anterior knee is the patellar region (patella = kneecap). The dorsum is the top of the foot. The posterior ankle region is the calcaneal/Achilles area.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "regional term: popliteal"
+    },
+    {
+      "questionId": "body-direction-and-positional-terms-Q17",
+      "stem": "Which body cavity houses the brain?",
+      "options": {
+        "A": "Spinal cavity",
+        "B": "Pleural cavity",
+        "C": "Cranial cavity",
+        "D": "Abdominal cavity"
+      },
+      "correctAnswer": "C",
+      "rationale": "The cranial cavity, part of the dorsal body cavity, contains the brain. The spinal (vertebral) cavity contains the spinal cord, also part of the dorsal cavity. The pleural cavities (ventral, thoracic subdivision) contain the lungs. The abdominal cavity (ventral, abdominopelvic subdivision) contains digestive organs.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "body cavities — cranial"
+    },
+    {
+      "questionId": "body-direction-and-positional-terms-Q18",
+      "stem": "A patient has pain in the left upper quadrant. Which structure is most likely involved?",
+      "options": {
+        "A": "Appendix",
+        "B": "Gallbladder",
+        "C": "Spleen",
+        "D": "Sigmoid colon"
+      },
+      "correctAnswer": "C",
+      "rationale": "The spleen (along with the stomach and the tail of the pancreas) is located in the left upper quadrant. The appendix is in the RLQ. The gallbladder is in the RUQ. The sigmoid colon is in the LLQ.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "abdominal quadrant LUQ"
+    },
+    {
+      "questionId": "body-direction-and-positional-terms-Q19",
+      "stem": "The antecubital region is located:",
+      "options": {
+        "A": "On the back of the elbow",
+        "B": "On the front of the elbow (inner elbow crease)",
+        "C": "On the back of the wrist",
+        "D": "On the outer surface of the upper arm"
+      },
+      "correctAnswer": "B",
+      "rationale": "The antecubital region (ante- = before, in front of; cubital = elbow) is the anterior surface of the elbow, the inner elbow crease. This is the site most commonly used for venipuncture. The posterior elbow is the olecranon region. The wrist's back surface is the dorsal carpal region.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "regional term: antecubital"
+    },
+    {
+      "questionId": "body-direction-and-positional-terms-Q20",
+      "stem": "In a patient lying on their back, which positional term describes this posture?",
+      "options": {
+        "A": "Prone",
+        "B": "Supine",
+        "C": "Lateral recumbent",
+        "D": "Fowler's position"
+      },
+      "correctAnswer": "B",
+      "rationale": "Supine = lying on the back, face upward (anterior surface faces up). Prone = lying face down (posterior surface faces up). Lateral recumbent = lying on the side. Fowler's position = semi-sitting with the head of the bed elevated 45–90 degrees.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "positional term: supine"
+    },
+    {
+      "questionId": "body-direction-and-positional-terms-Q21",
+      "stem": "The plantar surface of the foot refers to the:",
+      "options": {
+        "A": "Top of the foot (dorsum)",
+        "B": "Outer edge of the foot",
+        "C": "Bottom (sole) of the foot",
+        "D": "Heel of the foot"
+      },
+      "correctAnswer": "C",
+      "rationale": "Plantar refers to the sole (bottom) of the foot. Plantar fasciitis affects the sole/arch. The dorsal (dorsum) surface is the top of the foot. The calcaneal region is the heel. Lateral refers to the outer edge.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "regional term: plantar"
+    },
+    {
+      "questionId": "body-direction-and-positional-terms-Q22",
+      "stem": "A deep vein thrombosis (DVT) forms in the deep veins of the leg. In anatomical terms, 'deep' in this context means the veins are located:",
+      "options": {
+        "A": "Closer to the skin surface, visible under the skin",
+        "B": "Beneath the fascia, farther from the body surface",
+        "C": "In the medial compartment only",
+        "D": "In the proximal portion of the leg nearest the hip"
+      },
+      "correctAnswer": "B",
+      "rationale": "Deep veins lie beneath the muscular fascia, farther from the skin surface. This distinguishes them from superficial veins (e.g., great saphenous vein) which run just beneath the skin. DVTs in deep veins are dangerous because thrombi can dislodge and cause pulmonary embolism.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "directional term: deep — clinical context"
+    },
+    {
+      "questionId": "body-direction-and-positional-terms-Q23",
+      "stem": "The brachial region refers to the:",
+      "options": {
+        "A": "Forearm",
+        "B": "Upper arm",
+        "C": "Wrist",
+        "D": "Shoulder"
+      },
+      "correctAnswer": "B",
+      "rationale": "Brachial refers to the upper arm (between the shoulder and elbow). The brachial artery is palpated in the upper arm for blood pressure measurement. The forearm is the antebrachial or antecubital-to-wrist region. The wrist is the carpal region. The shoulder tip is the acromial region.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "regional term: brachial"
+    },
+    {
+      "questionId": "body-direction-and-positional-terms-Q24",
+      "stem": "A nurse is positioning a patient prone. In this position, the patient is:",
+      "options": {
+        "A": "Lying on their back",
+        "B": "Lying on their side",
+        "C": "Lying face down",
+        "D": "Sitting at a 45-degree angle"
+      },
+      "correctAnswer": "C",
+      "rationale": "Prone = lying face down with the posterior surface facing upward. This position is used for certain procedures (e.g., spinal), posterior wound care, and prone ventilation in ARDS. Supine = lying on the back. Lateral recumbent = on the side. Semi-Fowler's or Fowler's = semi-sitting.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "positional term: prone"
+    },
+    {
+      "questionId": "body-direction-and-positional-terms-Q25",
+      "stem": "The thoracic cavity is separated from the abdominopelvic cavity by the:",
+      "options": {
+        "A": "Peritoneum",
+        "B": "Pleura",
+        "C": "Diaphragm",
+        "D": "Mediastinum"
+      },
+      "correctAnswer": "C",
+      "rationale": "The diaphragm is the dome-shaped muscle separating the thoracic cavity (above) from the abdominopelvic cavity (below). The peritoneum lines the abdominal cavity. The pleura lines the lungs and thoracic wall. The mediastinum is the central compartment of the thorax between the lungs.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "body cavities — diaphragm as separator"
+    },
+    {
+      "questionId": "body-direction-and-positional-terms-Q26",
+      "stem": "In a clinical note, 'distal phalanges' refers to which part of the fingers or toes?",
+      "options": {
+        "A": "The bones nearest the knuckles (closest to the hand/foot)",
+        "B": "The bones at the tips of the fingers or toes",
+        "C": "The bones in the palm of the hand",
+        "D": "The bones of the wrist"
+      },
+      "correctAnswer": "B",
+      "rationale": "Distal means farther from the origin or point of attachment. The distal phalanges are at the very tips of the fingers or toes — the farthest from the hand or foot. The proximal phalanges are closest to the metacarpals (knuckle region). Metacarpals form the palm.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "directional term: distal — phalanges"
+    },
+    {
+      "questionId": "body-direction-and-positional-terms-Q27",
+      "stem": "Which directional term is synonymous with 'ventral' when describing the human body in anatomical position?",
+      "options": {
+        "A": "Superior",
+        "B": "Posterior",
+        "C": "Anterior",
+        "D": "Medial"
+      },
+      "correctAnswer": "C",
+      "rationale": "Ventral and anterior are synonymous in human anatomy — both refer to the front (belly) side of the body. Dorsal and posterior are synonymous, both referring to the back. Superior = toward the head. Medial = toward the midline.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "anterior = ventral synonyms"
+    },
+    {
+      "questionId": "body-direction-and-positional-terms-Q28",
+      "stem": "The lumbar region of the body refers to:",
+      "options": {
+        "A": "The upper back between the shoulder blades",
+        "B": "The lower back between the thoracic vertebrae and sacrum",
+        "C": "The buttocks region",
+        "D": "The neck region"
+      },
+      "correctAnswer": "B",
+      "rationale": "Lumbar refers to the lower back region between the rib cage (thoracic area) and the sacrum/pelvic region. The five lumbar vertebrae (L1–L5) are in this region. The upper back is thoracic. The buttocks are the gluteal region. The neck is the cervical region.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "regional term: lumbar"
+    },
+    {
+      "questionId": "body-direction-and-positional-terms-Q29",
+      "stem": "CT scan images of the abdomen are produced in which body plane?",
+      "options": {
+        "A": "Sagittal plane",
+        "B": "Frontal (coronal) plane",
+        "C": "Transverse (horizontal) plane",
+        "D": "Oblique plane"
+      },
+      "correctAnswer": "C",
+      "rationale": "Standard CT scan 'slices' are cross-sectional images taken in the transverse plane, dividing the body into superior and inferior portions. Modern CT scanners can reconstruct images in any plane, but the native image acquisition is transverse. MRI can acquire in any plane.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "transverse plane — CT imaging"
+    },
+    {
+      "questionId": "body-direction-and-positional-terms-Q30",
+      "stem": "A nurse is assessing a wound located on the 'medial aspect of the right knee.' Where exactly is this wound?",
+      "options": {
+        "A": "On the front of the right knee",
+        "B": "On the inner side of the right knee, facing the left leg",
+        "C": "On the outer side of the right knee",
+        "D": "On the back of the right knee"
+      },
+      "correctAnswer": "B",
+      "rationale": "Medial = toward the midline. The medial aspect of the right knee faces toward the midline, which means it faces toward the left leg. The lateral aspect of the right knee faces outward (away from the left leg). Anterior = front (patella). Posterior = back (popliteal).",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "directional term: medial — clinical application"
+    },
+    {
+      "questionId": "body-direction-and-positional-terms-Q31",
+      "stem": "Which of the following correctly uses directional terms to describe the anatomical position of the kidneys relative to the intestines?",
+      "options": {
+        "A": "The kidneys are anterior to the intestines",
+        "B": "The kidneys are superior to the intestines",
+        "C": "The kidneys are posterior to the intestines (retroperitoneal)",
+        "D": "The kidneys are lateral to the intestines"
+      },
+      "correctAnswer": "C",
+      "rationale": "The kidneys are retroperitoneal — located posterior to (behind) the peritoneum and the intestines. This explains why a punch or trauma to the posterior flank can injure the kidneys. Anterior would mean in front of the intestines, which is the reverse of the actual anatomy.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "posterior — retroperitoneal kidney position"
+    },
+    {
+      "questionId": "body-direction-and-positional-terms-Q32",
+      "stem": "A patient's chart states 'inferior vena cava.' Using directional terminology, the inferior vena cava carries blood from the:",
+      "options": {
+        "A": "Upper body and head to the heart",
+        "B": "Lower body (below the diaphragm) to the heart",
+        "C": "Heart to the lungs",
+        "D": "Lungs back to the left side of the heart"
+      },
+      "correctAnswer": "B",
+      "rationale": "The inferior vena cava carries deoxygenated blood from the lower body (below the diaphragm) to the right atrium of the heart. The superior vena cava carries blood from the upper body and head. The pulmonary artery carries blood from the heart to the lungs. The pulmonary veins return oxygenated blood from the lungs to the left side of the heart.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "directional term: inferior — vascular anatomy"
+    }
+  ]
+}
