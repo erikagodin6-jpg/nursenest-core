@@ -26,6 +26,7 @@
  */
 
 import { useMemo } from "react";
+import type { ReactNode } from "react";
 import { MarketingChainScreenshot } from "@/components/marketing/marketing-screenshot-stack";
 import {
   SCREENSHOT_REGISTRY,
@@ -37,13 +38,13 @@ import {
 
 // ── Shared token helpers (CSS custom properties, no hardcoded colors) ─────────
 
-const SURFACE_ELEVATED = "color-mix(in srgb, var(--theme-primary) 4%, var(--theme-card-bg))";
-const SOFT_A = "color-mix(in srgb, var(--theme-primary) 6%, var(--theme-card-bg))";
+const SURFACE_ELEVATED = "color-mix(in srgb, var(--palette-primary) 4%, var(--palette-surface))";
+const SOFT_A = "color-mix(in srgb, var(--palette-primary) 6%, var(--palette-surface))";
 const BORDER = "var(--border-subtle)";
-const TEXT_PRIMARY = "var(--theme-heading-text)";
-const TEXT_SECONDARY = "var(--theme-body-text)";
-const TEXT_MUTED = "var(--theme-muted-text)";
-const ACCENT = "var(--theme-primary)";
+const TEXT_PRIMARY = "var(--palette-heading)";
+const TEXT_SECONDARY = "var(--palette-text)";
+const TEXT_MUTED = "var(--palette-text-muted)";
+const ACCENT = "var(--palette-primary)";
 
 // ── ScreenshotTile ────────────────────────────────────────────────────────────
 
@@ -259,7 +260,7 @@ export function ScreenshotFeatureBlock({
               <span
                 className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[10px] font-bold"
                 style={{
-                  background: `color-mix(in srgb, ${accentColor} 14%, var(--theme-card-bg))`,
+                  background: `color-mix(in srgb, ${accentColor} 14%, var(--palette-surface))`,
                   color: accentColor,
                 }}
                 aria-hidden
@@ -366,7 +367,7 @@ export function ScreenshotProductCard({
   className = "",
 }: {
   screenshotId: ScreenshotId;
-  icon?: string;
+  icon?: ReactNode;
   title: string;
   description: string;
   detail?: string;
@@ -379,7 +380,7 @@ export function ScreenshotProductCard({
 
   return (
     <div
-      className={`flex flex-col gap-0 overflow-hidden rounded-2xl ${className}`}
+      className={`nn-elevation-panel nn-motion-standard flex flex-col gap-0 overflow-hidden rounded-2xl ${className}`}
       style={{ border: `1px solid ${BORDER}`, background: SURFACE_ELEVATED }}
     >
       {/* Screenshot — top of card, fills edge-to-edge */}
@@ -406,7 +407,7 @@ export function ScreenshotProductCard({
       {/* Text content */}
       <div className="flex flex-1 flex-col gap-3 p-5">
         {icon ? (
-          <span className="text-2xl" aria-hidden>
+          <span className="inline-flex items-center justify-center rounded-lg bg-[var(--surface-accent-soft)] p-2 text-[var(--text-accent)]" aria-hidden>
             {icon}
           </span>
         ) : null}

@@ -372,12 +372,12 @@ export function PricingPageClient({
             return (
               <article
                 key={duration}
-                className={`nn-card-interactive relative flex flex-col rounded-2xl border p-5 shadow-[var(--elevation-rest)] ${
+                className={`nn-card-interactive nn-elevation-panel nn-motion-standard relative flex flex-col rounded-2xl p-5 ${
                   isBest
-                    ? "border-primary ring-2 ring-primary/25 bg-[color-mix(in_srgb,var(--theme-primary)_3%,var(--color-card))]"
+                    ? "border-primary ring-2 ring-primary/25 bg-[color-mix(in_srgb,var(--palette-primary)_3%,var(--color-card))]"
                     : isPop
                       ? "border-[var(--semantic-info)] ring-1 ring-[var(--semantic-info)]/20 bg-card"
-                      : "border-[var(--theme-card-border)] bg-card"
+                      : "border-[var(--palette-border)] bg-card"
                 }`}
               >
                 {isBest ? (
@@ -501,7 +501,7 @@ export function PricingPageClient({
               checked={policiesAccepted}
               onChange={(e) => setPoliciesAccepted(e.target.checked)}
             />
-            <span className="text-[var(--theme-body-text)]">
+            <span className="text-[var(--palette-text)]">
               {t("pages.pricing.checkout.policyAckStart")}
               <Link href={termsHref} className="nn-link-quiet font-semibold">
                 {t("pages.pricing.checkout.policyTermsLabel")}
@@ -521,7 +521,7 @@ export function PricingPageClient({
       </section>
 
       {/* Guarantee */}
-      <section className="mt-12 rounded-2xl border border-[var(--theme-card-border)] bg-card p-6 shadow-[var(--elevation-rest)]">
+      <section className="nn-elevation-panel nn-motion-standard mt-12 rounded-2xl border-[var(--palette-border)] p-6">
         <h2 className="nn-marketing-h3">{t("pages.pricing.trust.guaranteeTitle")}</h2>
         <p className="mt-2 text-sm text-muted-foreground">{t("pages.pricing.trust.guaranteeBody")}</p>
         <ul className="mt-4 space-y-2 text-sm text-[var(--palette-text)]">
@@ -577,7 +577,7 @@ export function PricingPageClient({
             <Link
               key={item.labelKey}
               href={item.href}
-              className="rounded-xl border border-[var(--theme-card-border)] bg-card p-4 shadow-[var(--elevation-rest)] transition-[border-color,box-shadow,transform] duration-150 ease-out hover:-translate-y-px hover:border-[var(--border-medium)] hover:shadow-[var(--elevation-hover)]"
+              className="nn-elevation-panel nn-motion-standard rounded-xl border-[var(--palette-border)] p-4 hover:border-[var(--border-medium)]"
             >
               <p className="nn-marketing-h4">{t(item.labelKey)}</p>
             </Link>

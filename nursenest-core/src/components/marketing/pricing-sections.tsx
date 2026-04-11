@@ -20,6 +20,7 @@
  */
 
 import Link from "next/link";
+import type { ComponentType } from "react";
 import { BarChart3, BookOpen, Check, Lock, ShieldCheck, Sparkles, Target } from "lucide-react";
 import {
   MARKETING_PRIMARY_CTA_CLASS,
@@ -100,7 +101,7 @@ const COMPARISON_ROWS: {
 
 export function FeatureComparisonTable() {
   return (
-    <section className="mt-16" aria-labelledby="real-compare-heading">
+    <section className="nn-section-enter mt-16" aria-labelledby="real-compare-heading">
       <FadeUp className="mb-6 text-center">
         <h2 id="real-compare-heading" className="nn-marketing-h2">
           What changes when you unlock Premium
@@ -111,7 +112,7 @@ export function FeatureComparisonTable() {
       </FadeUp>
 
       <div
-        className="overflow-x-auto rounded-2xl shadow-sm"
+        className="nn-elevation-panel overflow-x-auto rounded-2xl"
         style={{
           border: `1px solid ${BORDER}`,
           background: SURFACE,
@@ -134,7 +135,7 @@ export function FeatureComparisonTable() {
               <th
                 scope="col"
                 className="px-4 py-3.5 font-semibold"
-                style={{ color: "var(--theme-primary)" }}
+                style={{ color: "var(--palette-primary)" }}
               >
                 Premium
               </th>
@@ -215,7 +216,7 @@ export function UnlockFeatureBlock({
 }) {
   return (
     <div
-      className="flex flex-col gap-0 overflow-hidden rounded-2xl shadow-sm lg:flex-row"
+      className="nn-elevation-panel nn-motion-standard flex flex-col gap-0 overflow-hidden rounded-2xl lg:flex-row"
       style={{ border: `1px solid ${BORDER}` }}
     >
       {/* Left: text content */}
@@ -279,7 +280,7 @@ function StudyPlanPreview() {
           <span
             className="inline-flex h-6 w-6 items-center justify-center rounded-full text-xs font-bold"
             style={{
-              background: "color-mix(in srgb, var(--theme-primary) 15%, var(--semantic-surface))",
+              background: "color-mix(in srgb, var(--palette-primary) 15%, var(--semantic-surface))",
               color: TEXT_PRIMARY,
             }}
           >
@@ -290,7 +291,7 @@ function StudyPlanPreview() {
           </span>
         </div>
         <div className="space-y-1.5 pl-8">
-          {["📖 Study lesson", "✏️ 10 targeted questions", "🔍 Review incorrect answers"].map((b) => (
+          {["Study lesson", "10 targeted questions", "Review incorrect answers"].map((b) => (
             <p key={b} className="text-xs" style={{ color: TEXT_SECONDARY }}>
               {b}
             </p>
@@ -323,8 +324,8 @@ function StudyPlanPreview() {
       <div
         className="rounded-xl px-3 py-2 text-center text-xs font-semibold"
         style={{
-          background: "color-mix(in srgb, var(--theme-primary) 8%, var(--semantic-surface))",
-          border: `1px solid color-mix(in srgb, var(--theme-primary) 20%, ${BORDER})`,
+          background: "color-mix(in srgb, var(--palette-primary) 8%, var(--semantic-surface))",
+          border: `1px solid color-mix(in srgb, var(--palette-primary) 20%, ${BORDER})`,
           color: TEXT_SECONDARY,
         }}
       >
@@ -386,8 +387,8 @@ function ConfidenceAnalyticsPreview() {
       <div
         className="rounded-lg px-3 py-2 text-center text-xs font-semibold"
         style={{
-          background: "color-mix(in srgb, var(--theme-primary) 8%, var(--semantic-surface))",
-          border: `1px solid color-mix(in srgb, var(--theme-primary) 20%, ${BORDER})`,
+          background: "color-mix(in srgb, var(--palette-primary) 8%, var(--semantic-surface))",
+          border: `1px solid color-mix(in srgb, var(--palette-primary) 20%, ${BORDER})`,
           color: TEXT_SECONDARY,
         }}
       >
@@ -461,7 +462,7 @@ function CatExamPreview() {
             className="h-full rounded-full"
             style={{
               width: "68%",
-              background: "var(--theme-primary, var(--semantic-info))",
+              background: "var(--palette-primary, var(--semantic-info))",
             }}
           />
         </div>
@@ -500,7 +501,7 @@ const UNLOCK_BLOCKS = [
       "Direct links to every lesson and question, no searching",
       "Retest strategy so you know when to take the exam",
     ],
-    accentColor: "var(--theme-primary)",
+    accentColor: "var(--palette-primary)",
     preview: <StudyPlanPreview />,
   },
   {
@@ -547,7 +548,7 @@ const UNLOCK_BLOCKS = [
  */
 export function PricingUnlockSection() {
   return (
-    <section className="mt-20" aria-labelledby="what-you-unlock-heading">
+    <section className="nn-section-enter mt-20" aria-labelledby="what-you-unlock-heading">
       <FadeUp className="mb-10 text-center">
         <h2 id="what-you-unlock-heading" className="nn-marketing-h2">
           Everything You Need to Pass, in One System
@@ -579,7 +580,7 @@ import type { ScreenshotId } from "@/lib/marketing/screenshot-registry";
  */
 const PRODUCT_AREAS: {
   screenshotId: ScreenshotId;
-  icon: React.ComponentType<{ className?: string }>;
+  icon: ComponentType<{ className?: string }>;
   title: string;
   desc: string;
   detail: string;
@@ -609,7 +610,7 @@ const PRODUCT_AREAS: {
 
 export function ProductPreviewGrid() {
   return (
-    <section className="mt-20" aria-labelledby="product-preview-heading">
+    <section className="nn-section-enter mt-20" aria-labelledby="product-preview-heading">
       <FadeUp className="mb-8 text-center">
         <h2 id="product-preview-heading" className="nn-marketing-h2">
           Practice, Test, and Review: All Connected
@@ -623,7 +624,7 @@ export function ProductPreviewGrid() {
           <ScreenshotProductCard
             key={area.title}
             screenshotId={area.screenshotId}
-            icon={area.icon}
+            icon={<area.icon className="nn-icon-md" />}
             title={area.title}
             description={area.desc}
             detail={area.detail}
@@ -660,7 +661,7 @@ const TRUST_POINTS = [
 
 export function PricingTrustReassurance() {
   return (
-    <section className="mt-20" aria-labelledby="trust-heading">
+    <section className="nn-section-enter mt-20" aria-labelledby="trust-heading">
       <FadeUp className="mb-8 text-center">
         <h2 id="trust-heading" className="nn-marketing-h2">
           Built for students who want to pass
@@ -673,7 +674,7 @@ export function PricingTrustReassurance() {
         {TRUST_POINTS.map((p) => (
           <div
             key={p.headline}
-            className="rounded-2xl p-6"
+            className="nn-elevation-panel nn-motion-standard rounded-2xl p-6"
             style={{ background: SURFACE_ELEVATED, border: `1px solid ${BORDER}` }}
           >
             <p.icon className="nn-icon-lg mb-3 text-[var(--semantic-info)]" aria-hidden />
@@ -698,10 +699,10 @@ export function PricingTrustReassurance() {
 export function PricingCTA({ plansHref }: { plansHref: string }) {
   return (
     <section
-      className="mt-20 rounded-2xl p-10 text-center shadow-sm"
+      className="nn-section-enter mt-20 rounded-2xl p-10 text-center shadow-[var(--elevation-rest)]"
       style={{
-        background: "color-mix(in srgb, var(--theme-primary) 7%, var(--semantic-surface))",
-        border: `1px solid color-mix(in srgb, var(--theme-primary) 20%, ${BORDER})`,
+        background: "color-mix(in srgb, var(--palette-primary) 7%, var(--semantic-surface))",
+        border: `1px solid color-mix(in srgb, var(--palette-primary) 20%, ${BORDER})`,
       }}
     >
       <FadeUp>

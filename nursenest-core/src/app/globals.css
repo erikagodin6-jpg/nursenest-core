@@ -1013,6 +1013,32 @@ html[data-theme="deep-twilight"] .nn-ui-btn--destructive {
   background-color: color-mix(in srgb, var(--accent-soft, transparent) 55%, var(--bg-card, var(--theme-card-bg)));
 }
 
+/* Premium interaction primitives shared across marketing/lessons/auth/dashboard surfaces. */
+.nn-elevation-panel {
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-card);
+  box-shadow: var(--elevation-rest);
+}
+.nn-elevation-panel:hover {
+  box-shadow: var(--elevation-hover);
+}
+.nn-motion-standard {
+  transition:
+    transform var(--motion-base) var(--motion-ease),
+    box-shadow var(--motion-base) var(--motion-ease),
+    border-color var(--motion-base) var(--motion-ease),
+    background-color var(--motion-base) var(--motion-ease),
+    color var(--motion-base) var(--motion-ease),
+    opacity var(--motion-fast) var(--motion-ease);
+}
+.nn-motion-standard:hover {
+  transform: translateY(var(--lift-hover-y));
+}
+.nn-motion-standard:active {
+  transform: translateY(var(--lift-press-y));
+  box-shadow: var(--elevation-active);
+}
+
 /* Marketing shell: flat page + one soft top wash (no stacked band gradients) */
 html[data-theme] .nn-marketing-surface {
   background-color: var(--bg-page);

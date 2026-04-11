@@ -312,9 +312,9 @@ export function ProbabilityUpliftCard({ uplift }: ProbabilityUpliftCardProps) {
             style={{
               padding: "7px 14px",
               borderRadius: "0.5rem",
-              border: "none",
+              border: `1px solid color-mix(in srgb, var(--accent-primary) 22%, var(--border-subtle))`,
               background: "var(--accent-primary)",
-              color: "#fff",
+              color: "var(--text-on-accent)",
               fontSize: "0.8125rem",
               fontWeight: 700,
               textDecoration: "none",
