@@ -275,51 +275,68 @@ function normDifficulty(raw: unknown): number {
 /** NP batch-01 shape: flat named fields under raw.lesson */
 function sectionsFromNpBatch01(lessonData: Record<string, unknown>): LessonSection[] {
   const sections: LessonSection[] = [];
-  function add(heading: string, body: unknown, kind = "text") {
+  function add(heading: string, body: unknown, kind: string) {
     if (!body) return;
     const text = typeof body === "string" ? body : JSON.stringify(body, null, 2);
     if (!text.trim()) return;
     sections.push({ id: kebab(heading), heading, kind, body: text });
   }
-  add("Clinical Framing", lessonData.clinicalFraming);
-  add("Core Concepts & Differential", lessonData.coreConceptsAndDifferential, "json");
-  add("Management Approach", lessonData.managementApproach, "json");
-  add("Red Flags & Escalation", lessonData.redFlagsEscalation, "json");
-  add("Population Considerations", lessonData.populationConsiderations, "json");
-  add("Follow-Up & Monitoring", lessonData.followUpAndMonitoring, "json");
+  // Map to canonical PathwayLessonSectionKind so the render pipeline resolves content correctly.
+  // exam_tips takes priority over exam_relevance in the exam slot, so Red Flags renders there.
+  // exam_relevance (Population Considerations) is stored in DB for future premium migration.
+  add("Clinical Framing", lessonData.clinicalFraming, "clinical_meaning");
+  add("Core Concepts & Differential", lessonData.coreConceptsAndDifferential, "core_concept");
+  add("Management Approach", lessonData.managementApproach, "clinical_scenario");
+  add("Red Flags & Escalation", lessonData.redFlagsEscalation, "exam_tips");
+  add("Population Considerations", lessonData.populationConsiderations, "exam_relevance");
+  add("Follow-Up & Monitoring", lessonData.followUpAndMonitoring, "takeaways");
   return sections;
 }
 
 /** NP batch-02 shape: conceptBlocks array */
 function sectionsFromNpBatch02(lessonData: Record<string, unknown>): LessonSection[] {
+  // Assign canonical PathwayLessonSectionKind by position so the render pipeline resolves content.
+  // Slot order: clinical_meaning (0), core_concept (1), clinical_scenario (2), exam_tips (3),
+  // exam_relevance (4+, stored but not rendered in standard 5-slot layout), takeaways (teaching notes).
+  const CONCEPT_BLOCK_KINDS: string[] = [
+    "clinical_meaning",
+    "core_concept",
+    "clinical_scenario",
+    "exam_tips",
+    "exam_relevance",
+  ];
   const sections: LessonSection[] = [];
   if (lessonData.objectives) {
+    // Objectives serve as the intro/clinical framing block
     sections.push({
       id: "learning-objectives",
       heading: "Learning Objectives",
-      kind: "json",
+      kind: "clinical_meaning",
       body: typeof lessonData.objectives === "string"
         ? lessonData.objectives
         : JSON.stringify(lessonData.objectives, null, 2),
     });
   }
+  let blockIndex = lessonData.objectives ? 1 : 0;
   for (const block of (lessonData.conceptBlocks ?? []) as Array<{ blockTitle?: string; keyPoints?: unknown }>) {
     if (!block) continue;
     const heading = block.blockTitle ?? "Concept";
     const body = block.keyPoints;
     if (!body) continue;
+    const kind = CONCEPT_BLOCK_KINDS[blockIndex] ?? "exam_relevance";
     sections.push({
       id: kebab(heading),
       heading,
-      kind: "json",
+      kind,
       body: typeof body === "string" ? body : JSON.stringify(body, null, 2),
     });
+    blockIndex += 1;
   }
   if (lessonData.teachingNotes) {
     sections.push({
       id: "teaching-notes",
       heading: "Teaching Notes",
-      kind: "json",
+      kind: "takeaways",
       body: typeof lessonData.teachingNotes === "string"
         ? lessonData.teachingNotes
         : JSON.stringify(lessonData.teachingNotes, null, 2),
@@ -331,38 +348,53 @@ function sectionsFromNpBatch02(lessonData: Record<string, unknown>): LessonSecti
 /** Foundations generated shape: structuredContent fields */
 function sectionsFromFoundationsGenerated(sc: Record<string, unknown>): LessonSection[] {
   const sections: LessonSection[] = [];
-  function add(id: string, heading: string, body: unknown, kind = "text") {
+  // Map to canonical PathwayLessonSectionKind. The 5 primary slots:
+  //   clinical_meaning (Overview), core_concept (Mental Model), clinical_scenario (Step by Step),
+  //   exam_tips (Common Mistakes — exam_tips > exam_relevance, so this slot renders), takeaways (Worked Example).
+  // Remaining fields stored in DB with secondary kinds for future premium migration.
+  function add(id: string, heading: string, body: unknown, kind: string) {
     if (!body) return;
     const text = typeof body === "string" ? body : JSON.stringify(body, null, 2);
     if (!text.trim()) return;
     sections.push({ id, heading, kind, body: text });
   }
-  add("overview", "Overview", sc.overview);
-  add("mental-model", "Mental Model", sc.mentalModel);
-  add("step-by-step", "Step by Step", sc.stepByStep, "json");
-  add("common-mistakes", "Common Mistakes", sc.commonMistakes, "json");
-  add("clinical-relevance", "Clinical Relevance", sc.clinicalRelevanceLight ?? sc.clinicalRelevance);
-  add("worked-example", "Worked Example", sc.workedExample);
-  add("why-it-matters", "Why It Matters", sc.whyItMatters);
-  add("nursing-connection", "Nursing Connection", sc.nursingConnection);
-  add("exam-ready-summary", "Exam-Ready Summary", sc.examReadySummary, "json");
-  add("practice-tip", "Practice Tip", sc.practiceTip);
+  add("overview", "Overview", sc.overview, "clinical_meaning");
+  add("mental-model", "Mental Model", sc.mentalModel, "core_concept");
+  add("step-by-step", "Step by Step", sc.stepByStep, "clinical_scenario");
+  add("common-mistakes", "Common Mistakes", sc.commonMistakes, "exam_tips");
+  add("clinical-relevance", "Clinical Relevance", sc.clinicalRelevanceLight ?? sc.clinicalRelevance, "exam_relevance");
+  add("worked-example", "Worked Example", sc.workedExample, "takeaways");
+  add("why-it-matters", "Why It Matters", sc.whyItMatters, "intro");
+  add("nursing-connection", "Nursing Connection", sc.nursingConnection, "clinical_application");
+  add("exam-ready-summary", "Exam-Ready Summary", sc.examReadySummary, "core");
+  add("practice-tip", "Practice Tip", sc.practiceTip, "exam_focus");
   return sections;
 }
 
 /** Pilot format (batch-01, batch-02, batch-03): conceptBlocks with heading+body */
 function sectionsFromPilot(lesson: Record<string, unknown>): LessonSection[] {
+  // Assign canonical kinds by position so the 5-slot render pipeline resolves content.
+  const PILOT_BLOCK_KINDS: string[] = [
+    "clinical_meaning",
+    "core_concept",
+    "clinical_scenario",
+    "exam_tips",
+    "exam_relevance",
+  ];
   const sections: LessonSection[] = [];
+  let idx = 0;
   for (const block of (lesson.conceptBlocks ?? []) as Array<{ heading?: string; body?: string }>) {
     if (!block?.body) continue;
     const heading = block.heading ?? "Concept";
-    sections.push({ id: kebab(heading), heading, kind: "text", body: block.body });
+    const kind = PILOT_BLOCK_KINDS[idx] ?? "exam_relevance";
+    sections.push({ id: kebab(heading), heading, kind, body: block.body });
+    idx += 1;
   }
   if (lesson.teachingNotes) {
     sections.push({
       id: "teaching-notes",
       heading: "Teaching Notes",
-      kind: "text",
+      kind: "takeaways",
       body: lesson.teachingNotes as string,
     });
   }
@@ -550,7 +582,7 @@ function transformFoundationsLesson(
     sections.unshift({
       id: "learning-objectives",
       heading: "Learning Objectives",
-      kind: "json",
+      kind: "clinical_meaning",
       body: Array.isArray(lesson.objectives)
         ? JSON.stringify(lesson.objectives, null, 2)
         : String(lesson.objectives),
@@ -838,7 +870,7 @@ function processStandaloneLessonFile(
   }
 
   if (sections.length === 0 && raw.content) {
-    sections = [{ id: "content", heading: "Content", kind: "text", body: String(raw.content) }];
+    sections = [{ id: "content", heading: "Content", kind: "clinical_meaning", body: String(raw.content) }];
   }
 
   if (sections.length > 0) {
