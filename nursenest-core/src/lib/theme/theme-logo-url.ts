@@ -27,6 +27,7 @@ import {
   PRIMARY_LOGO_CDN_URL,
   PRIMARY_LOGO_URL,
 } from "@/lib/branding/logo-config";
+import { getThemeLogoPath } from "@/lib/theme/theme-logo-config";
 import { getThemeLogoObjectKeyFromNormalizedId, getThemeLogoUrl } from "@/lib/branding/theme-brand-logo-cdn";
 import {
   marketingImageUsesProxy,
@@ -65,10 +66,16 @@ export { getThemeLogo, getThemeLogoUrl } from "@/lib/branding/theme-brand-logo-c
 
 /**
  * Ordered URLs for `<img src>`: theme-specific asset, then default-theme fallback, with optional proxy variants.
+ *
+ * Priority: per-theme SVG (outlined, pre-colored) → committed PNG → CDN → proxy → default theme fallbacks.
  */
 export function getThemeLogoLoadChain(themeId?: string | null): string[] {
   const id = normalizeThemeIdForLogo(themeId ?? NURSENEST_DEFAULT_THEME);
   const defId = NURSENEST_DEFAULT_THEME;
+
+  const svgPath = getThemeLogoPath(id);
+  const svgFb = id !== defId ? getThemeLogoPath(defId) : null;
+
   const key = getThemeLogoObjectKeyFromNormalizedId(id);
   const defKey = getThemeLogoObjectKeyFromNormalizedId(defId);
   const local = `${COMMITTED_THEME_LOGO_PUBLIC_PREFIX}${key}`;
@@ -78,9 +85,12 @@ export function getThemeLogoLoadChain(themeId?: string | null): string[] {
   const proxy = marketingProxyPathForKey(key);
   const proxyFb = marketingProxyPathForKey(defKey);
 
-  // 1–3 for active theme, then same for default theme. SVG/legacy/tinted stems are only in
-  // `getHeaderBrandLogoLoadChain`.
-  return uniqueStrings([local, pub, proxy, localFb, pubFb, proxyFb]);
+  return uniqueStrings([
+    ...(svgPath ? [svgPath] : []),
+    local, pub, proxy,
+    ...(svgFb ? [svgFb] : []),
+    localFb, pubFb, proxyFb,
+  ]);
 }
 
 const PRIMARY_BRAND_MARK_EXTENSIONS = [".svg", ".png", ".webp", ".jpg"] as const;

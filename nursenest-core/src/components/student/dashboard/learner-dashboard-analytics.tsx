@@ -6,6 +6,7 @@ import type { PremiumDashboardSnapshot } from "@/lib/learner/premium-dashboard-s
 import type { LearnerMarketingT } from "@/lib/learner/learner-marketing-server";
 import { MasteryLegend } from "@/components/student/product/mastery-legend";
 import { ReadinessScoreCard } from "@/components/student/dashboard/readiness-score-card";
+import { ReadinessViewTracker } from "@/components/student/dashboard/readiness-view-tracker";
 import { QuickActionPanel } from "@/components/student/dashboard/quick-action-panel";
 import { ProgressSummary } from "@/components/student/dashboard/progress-summary";
 import { RecentPerformance } from "@/components/student/dashboard/recent-performance";
@@ -104,7 +105,9 @@ export function LearnerDashboardAnalytics({
 
       {/* ── 2. Readiness KPI + progress metrics grid ── */}
       <div className="grid gap-4 lg:grid-cols-[1fr_1fr]">
-        <ReadinessScoreCard readiness={snapshot.readiness} t={t} />
+        <ReadinessViewTracker score={snapshot.readiness.score} band={snapshot.readiness.band} trend={snapshot.readiness.trend}>
+          <ReadinessScoreCard readiness={snapshot.readiness} t={t} />
+        </ReadinessViewTracker>
         <div className="flex flex-col gap-4">
           <ProgressSummary snapshot={snapshot} t={t} />
           <RecentPerformance

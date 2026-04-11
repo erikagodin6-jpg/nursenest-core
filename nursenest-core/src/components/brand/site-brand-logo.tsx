@@ -86,6 +86,9 @@ export function SiteBrandLogoMark({
     );
   }
 
+  const isSvg = src.endsWith(".svg");
+  const contrastClass = isSvg ? "" : brandLogoRasterContrastClass(themeId);
+
   return (
     <span className={`${slotClassName} ${className}`.trim()}>
       <img
@@ -94,7 +97,7 @@ export function SiteBrandLogoMark({
         alt={BRAND_NAME}
         loading="eager"
         decoding="async"
-        className={`${imgClassName} ${brandLogoRasterContrastClass(themeId)}`.trim()}
+        className={`${imgClassName} ${contrastClass}`.trim()}
         onLoad={handleLoad}
         onError={handleError}
       />

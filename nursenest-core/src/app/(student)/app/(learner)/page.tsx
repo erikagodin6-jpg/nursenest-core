@@ -16,6 +16,7 @@ import { PrimaryActionCard } from "@/components/student/dashboard/primary-action
 import { ExamCountdownCard } from "@/components/student/dashboard/exam-countdown-card";
 import { WeaknessHeatmap, type HeatmapTopic } from "@/components/student/dashboard/weakness-heatmap";
 import { SmartActionsBar } from "@/components/student/dashboard/smart-actions-bar";
+import { ReadinessLockedCard } from "@/components/student/dashboard/readiness-score-card";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { buildLearnerStudySnapshot } from "@/lib/learner/build-learner-study-snapshot";
@@ -138,6 +139,11 @@ export default async function LearnerDashboardPage() {
               Your study system is ready. Unlock it to get started.
             </p>
           </div>
+        </section>
+
+        {/* Locked readiness preview */}
+        <section className="nn-dash-section">
+          <ReadinessLockedCard />
         </section>
 
         {/* Blurred preview of adaptive study recommendations */}

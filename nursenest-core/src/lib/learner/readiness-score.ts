@@ -18,11 +18,15 @@ export type ReadinessFactor = {
   detail: string;
 };
 
+export type ReadinessTrend = "improving" | "stable" | "declining";
+
 export type ReadinessResult = {
   /** Integer 0–100, or null when we refuse to infer a number. */
   score: number | null;
   band: ReadinessBand;
   confidence: ReadinessConfidence;
+  /** Performance trajectory based on recent vs prior signals. */
+  trend: ReadinessTrend | null;
   /** Why the score exists or does not. */
   summary: string;
   factors: ReadinessFactor[];
@@ -32,6 +36,8 @@ export type ReadinessResult = {
   nextActions: string[];
   /** Lowest-scoring factors (plain labels): what is limiting readiness most. */
   holdingBack: string[];
+  /** Top 3 weak topic names for quick display. */
+  topWeakAreas: string[];
   /** True when this score is intentionally conservative due to cohort/signal limits. */
   calibratedPreview?: boolean;
 };
@@ -42,7 +48,7 @@ const MIN_PRACTICE_ITEMS = 15;
 /** Minimum mock attempts to use mock trend as a medium+ signal. */
 const MIN_MOCK_ATTEMPTS = 1;
 
-/** Minimum questions in a single mock to count that attempt toward “recent performance”. */
+/** Minimum questions in a single mock to count that attempt toward "recent performance". */
 const MIN_QUESTIONS_PER_MOCK = 5;
 
 type ReadinessSignalProfile = {
@@ -81,9 +87,9 @@ function clamp01(n: number): number {
 }
 
 function bandFromScore(score: number): Exclude<ReadinessBand, "insufficient_data"> {
-  if (score < 40) return "not_ready";
-  if (score < 60) return "improving";
-  if (score < 80) return "near_ready";
+  if (score < 50) return "not_ready";
+  if (score < 70) return "improving";
+  if (score < 85) return "near_ready";
   return "ready";
 }
 
@@ -93,7 +99,7 @@ function confidenceLevel(practiceTotal: number, mockCount: number, profile: Read
   return "low";
 }
 
-/** Std dev of mock % when 2+ usable mocks — high spread lowers confidence in a single “score”. */
+/** Std dev of mock % when 2+ usable mocks — high spread lowers confidence in a single "score". */
 function mockPercentStdDev(mocks: ReadinessMockInput[]): number | null {
   const usable = mocks.filter((m) => m.total >= MIN_QUESTIONS_PER_MOCK);
   if (usable.length < 2) return null;
@@ -150,20 +156,22 @@ export function computeReadiness(args: {
       score: null,
       band: "insufficient_data",
       confidence: "low",
+      trend: null,
       summary:
         calibratedPreview
-          ? `Readiness is withheld until stronger evidence: complete about ${signalProfile.minPracticeItems}+ graded items in timed sessions or at least ${signalProfile.minMockAttempts} mock(s) with 5+ questions each.`
-          : "We need more scored practice (about 15+ graded items in timed sessions) or at least one mock with 5+ questions before a readiness number is meaningful.",
+          ? `Complete about ${signalProfile.minPracticeItems}+ graded items or at least ${signalProfile.minMockAttempts} mock(s) with 5+ questions each before we can estimate readiness.`
+          : "Complete about 15+ graded items in practice sessions or at least one mock with 5+ questions so we can estimate readiness.",
       factors: [],
       whatToImprove: [
-        "Complete a timed practice session or full practice exam so we can measure accuracy and topics.",
-        "Finish lessons in your plan to raise completion toward your exam date.",
+        "Complete a timed practice session or full practice exam.",
+        "Work through lessons in your plan to build topic coverage.",
       ],
       nextActions: [
         "Run a block in the question bank or a practice exam, then return here.",
-        "Open Lessons and complete at least one module in your tier.",
+        "Open Lessons and complete at least one module in your pathway.",
       ],
       holdingBack: [],
+      topWeakAreas: [],
       calibratedPreview,
     };
   }
@@ -290,44 +298,55 @@ export function computeReadiness(args: {
     confidence = "medium";
   }
 
+  // Trend: derived from mock progression when 2+ mocks exist
+  let trend: ReadinessTrend | null = null;
+  if (usableMocks.length >= 2) {
+    const latestPct = usableMocks[0]!.total > 0 ? (usableMocks[0]!.score / usableMocks[0]!.total) * 100 : 0;
+    const priorPct = usableMocks[1]!.total > 0 ? (usableMocks[1]!.score / usableMocks[1]!.total) * 100 : 0;
+    const delta = latestPct - priorPct;
+    if (delta > 4) trend = "improving";
+    else if (delta < -4) trend = "declining";
+    else trend = "stable";
+  }
+
   let summary =
     confidence === "high"
-      ? "Readiness blends recent session accuracy, mock scores, topic misses, and lesson completion. It is indicative, not a pass guarantee."
+      ? "Based on recent practice accuracy, mock scores, topic performance, and lesson completion. This is an estimate, not a pass guarantee."
       : confidence === "medium"
-        ? "Readiness is preliminary: add more timed practice and mocks to tighten this estimate."
-        : "Readiness is early: numbers will move as you complete more full sessions.";
+        ? "Preliminary estimate. More timed practice and mocks will improve accuracy."
+        : "Early estimate. Numbers will shift as you complete more sessions.";
   if (calibratedPreview) {
-    summary += " For this exam track, thresholds are intentionally stricter to avoid overstating readiness.";
+    summary += " Thresholds for this exam track are intentionally stricter.";
   }
 
   const whatToImprove: string[] = [];
   if (practiceTotal >= MIN_PRACTICE_ITEMS && practiceCorrect / practiceTotal < 0.65) {
-    whatToImprove.push("Raise session accuracy: review rationales on misses before adding volume.");
+    whatToImprove.push("Review rationales on missed questions before adding volume.");
   }
   if (usableMocks.length && usableMocks.reduce((s, m) => s + m.score / m.total, 0) / usableMocks.length < 0.65) {
-    whatToImprove.push("Bring mock scores up with smaller topic-focused blocks before long mocks.");
+    whatToImprove.push("Try shorter topic-focused blocks before long mocks.");
   }
   if (weakTopics.length) {
     whatToImprove.push(
-      `Drill weak topics: ${weakTopics
+      `Focus on weak topics: ${weakTopics
         .slice(0, 3)
         .map((w) => w.topic)
         .join(", ")}.`,
     );
   }
   if (lessonsAvailable > 0 && lessonsCompleted / lessonsAvailable < 0.3) {
-    whatToImprove.push("Advance lesson completion in your plan pool to align content with practice.");
+    whatToImprove.push("Work through more lessons to build topic coverage.");
   }
   if (whatToImprove.length === 0) {
-    whatToImprove.push("Keep mixing lessons, topic drills, and full mocks week over week.");
+    whatToImprove.push("Keep mixing lessons, topic drills, and full mocks each week.");
   }
 
   const nextActions: string[] = [];
   if (weakTopics[0]) {
-    nextActions.push(`Practice topic “${weakTopics[0].topic}” in the question bank.`);
+    nextActions.push(`Practice ${weakTopics[0].topic} in the question bank.`);
   }
-  nextActions.push("Schedule one full mock this week and review every miss.");
-  nextActions.push("Complete the next lesson in your pathway, then repeat a short quiz on the same topic.");
+  nextActions.push("Run a full mock this week and review every miss.");
+  nextActions.push("Complete the next lesson in your pathway.");
 
   const holdingBack: string[] = [];
   for (const f of factors) {
@@ -336,15 +355,19 @@ export function computeReadiness(args: {
     if (ratio < 0.42) holdingBack.push(f.label);
   }
 
+  const topWeakAreas = weakTopics.slice(0, 3).map((w) => w.topic);
+
   return {
     score,
     band,
     confidence,
+    trend,
     summary,
     factors,
     whatToImprove: whatToImprove.slice(0, 5),
     nextActions: nextActions.slice(0, 4),
     holdingBack: holdingBack.slice(0, 3),
+    topWeakAreas,
     calibratedPreview,
   };
 }
@@ -352,17 +375,34 @@ export function computeReadiness(args: {
 export function readinessBandLabel(band: ReadinessBand): string {
   switch (band) {
     case "insufficient_data":
-      return "Building profile";
+      return "Building Profile";
     case "not_ready":
-      return "Not ready";
+      return "Needs Focus";
     case "improving":
-      return "Improving";
+      return "Developing";
     case "near_ready":
-      return "Near ready";
+      return "Near Ready";
     case "ready":
       return "Ready";
     default:
       return band;
+  }
+}
+
+export function readinessBandGuidance(band: ReadinessBand): string {
+  switch (band) {
+    case "insufficient_data":
+      return "Complete more practice sessions so we can estimate your readiness accurately.";
+    case "not_ready":
+      return "Focus on your weakest topics and work through lessons before attempting more mocks.";
+    case "improving":
+      return "You are building a foundation. Keep drilling weak areas and reviewing rationales.";
+    case "near_ready":
+      return "You are close. Tighten up remaining weak topics and run a full mock to confirm.";
+    case "ready":
+      return "Your signals look strong. Maintain with spaced review and rest before exam day.";
+    default:
+      return "";
   }
 }
 
