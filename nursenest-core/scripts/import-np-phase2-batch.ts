@@ -93,7 +93,7 @@ function lessonToSections(lessonData: Record<string, unknown>): LessonBlock[] {
   function addSection(heading: string, body: unknown, kind = "text") {
     if (!body) return;
     const text = typeof body === "string" ? body : JSON.stringify(body, null, 2);
-    if (!text.trim()) return;
+    if (!text.trim() || text === "null") return;
     sections.push({
       id: heading.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
       heading,
@@ -102,14 +102,42 @@ function lessonToSections(lessonData: Record<string, unknown>): LessonBlock[] {
     });
   }
 
-  addSection("Clinical Framing", lessonData.clinicalFraming);
-  addSection("Core Concepts & Differential", lessonData.coreConceptsAndDifferential, "json");
-  addSection("Management Approach", lessonData.managementApproach, "json");
-  addSection("Red Flags & Escalation", lessonData.redFlagsEscalation, "json");
-  addSection("Population Considerations", lessonData.populationConsiderations, "json");
-  addSection("Follow-Up & Monitoring", lessonData.followUpAndMonitoring, "json");
+  // Batch01 shape: flat named sections
+  if (lessonData.clinicalFraming || lessonData.managementApproach) {
+    addSection("Clinical Framing", lessonData.clinicalFraming);
+    addSection("Core Concepts & Differential", lessonData.coreConceptsAndDifferential, "json");
+    addSection("Management Approach", lessonData.managementApproach, "json");
+    addSection("Red Flags & Escalation", lessonData.redFlagsEscalation, "json");
+    addSection("Population Considerations", lessonData.populationConsiderations, "json");
+    addSection("Follow-Up & Monitoring", lessonData.followUpAndMonitoring, "json");
+    return sections;
+  }
 
-  return sections.filter((s) => s.body && s.body !== "null");
+  // Batch02 shape: conceptBlocks array
+  if (Array.isArray(lessonData.conceptBlocks)) {
+    if (lessonData.objectives) {
+      addSection("Learning Objectives", lessonData.objectives, "json");
+    }
+    for (const block of lessonData.conceptBlocks as Array<{ blockTitle?: string; keyPoints?: unknown }>) {
+      if (!block) continue;
+      const heading = block.blockTitle ?? "Concept";
+      const body = block.keyPoints;
+      if (body) {
+        sections.push({
+          id: heading.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
+          heading,
+          kind: "json",
+          body: typeof body === "string" ? body : JSON.stringify(body, null, 2),
+        });
+      }
+    }
+    if (lessonData.teachingNotes) {
+      addSection("Teaching Notes", lessonData.teachingNotes, "json");
+    }
+    return sections;
+  }
+
+  return sections;
 }
 
 // ─── Topic → bodySystem heuristic ─────────────────────────────────────────────
@@ -259,13 +287,23 @@ function normalizeQuestion(
 
 interface RawLesson {
   topicSlug: string;
-  topicName: string;
+  topicName?: string;
+  // batch01 shape
   caseAxis?: string;
   clinicalPriority?: string;
   careComplexity?: string;
   populationTags?: string[];
   domain?: string;
-  lesson: Record<string, unknown>;
+  lesson?: Record<string, unknown>;
+  // batch02 shape (topics[].lessons[])
+  lessonSlug?: string;
+  lessonTitle?: string;
+  objectives?: unknown;
+  conceptBlocks?: Array<{ blockTitle?: string; keyPoints?: unknown }>;
+  teachingNotes?: unknown;
+  // batch02 topic wrapper fields (merged in from parent)
+  _complexity?: string;
+  _axisTags?: string[];
 }
 
 function normalizeLesson(
@@ -274,13 +312,24 @@ function normalizeLesson(
   batchId: string,
   sortOrderBase: number,
 ) {
-  const slug = `${raw.topicSlug}--${batchId}`;
-  const sections = lessonToSections(raw.lesson);
+  // Resolve lesson identity — batch01 uses topicSlug, batch02 uses lessonSlug
+  const effectiveSlug = raw.lessonSlug ?? raw.topicSlug;
+  const slug = `${effectiveSlug}--${batchId}`;
+
+  // Build the lesson data object for section extraction (handles both shapes)
+  const lessonData: Record<string, unknown> = raw.lesson ?? {
+    objectives: raw.objectives,
+    conceptBlocks: raw.conceptBlocks,
+    teachingNotes: raw.teachingNotes,
+  };
+  const sections = lessonToSections(lessonData);
   const bodySystem = topicToBodySystem(raw.topicSlug);
 
-  const seoTitle = `${raw.topicName} | NP Clinical Review`;
-  const seoDescription = `Advanced NP clinical review: ${raw.topicName}. ${
-    raw.careComplexity === "advanced"
+  const title = raw.lessonTitle ?? raw.topicName ?? raw.topicSlug;
+  const seoTitle = `${title} | NP Clinical Review`;
+  const complexity = raw.careComplexity ?? raw._complexity ?? "";
+  const seoDescription = `Advanced NP clinical review: ${title}. ${
+    complexity === "advanced"
       ? "Advanced prescribing, management, and decision-making for NP boards."
       : "Clinical reasoning and management for NP primary care practice."
   }`.slice(0, 160);
@@ -288,7 +337,7 @@ function normalizeLesson(
   return {
     pathwayId,
     slug,
-    title: raw.topicName,
+    title,
     topic: raw.topicSlug.replace(/-+/g, " "),
     topicSlug: raw.topicSlug,
     bodySystem,
@@ -529,7 +578,31 @@ NP Phase2 Batch Import
   for (const filePath of lessonFiles) {
     const raw = JSON.parse(fs.readFileSync(filePath, "utf8"));
     const batchId: string = raw.batchId ?? path.basename(filePath, ".json");
-    const rawLessons: RawLesson[] = raw.lessons ?? [];
+
+    // Support both batch01 (root.lessons[]) and batch02 (root.topics[].lessons[]) shapes
+    let rawLessons: RawLesson[] = [];
+    if (Array.isArray(raw.lessons)) {
+      rawLessons = raw.lessons as RawLesson[];
+    } else if (Array.isArray(raw.topics)) {
+      // Flatten topics[].lessons[] → individual lesson rows with parent topic fields merged
+      for (const topic of raw.topics as Array<{
+        topicSlug: string;
+        topicTitle?: string;
+        complexity?: string;
+        axisTags?: string[];
+        lessons?: RawLesson[];
+      }>) {
+        for (const lesson of topic.lessons ?? []) {
+          rawLessons.push({
+            ...lesson,
+            topicSlug: topic.topicSlug,
+            topicName: topic.topicTitle ?? topic.topicSlug,
+            _complexity: topic.complexity,
+            _axisTags: topic.axisTags,
+          });
+        }
+      }
+    }
 
     console.error(`\n[lessons] ${path.basename(filePath)}: ${rawLessons.length} lessons (batchId=${batchId})`);
 
