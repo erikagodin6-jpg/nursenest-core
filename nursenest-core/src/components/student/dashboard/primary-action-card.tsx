@@ -25,7 +25,7 @@ export function PrimaryActionCard({ action }: { action: NextBestAction }) {
       href={action.href}
       className="nn-primary-action-card group"
     >
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-4 sm:gap-5">
         <div className="nn-primary-action-card__icon">
           {KIND_ICONS[action.kind] ?? <Play className="h-6 w-6" />}
         </div>

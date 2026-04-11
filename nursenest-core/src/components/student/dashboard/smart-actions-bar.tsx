@@ -40,34 +40,36 @@ const ACTIONS = [
  */
 export function SmartActionsBar() {
   return (
-    <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-      {ACTIONS.map((action) => (
-        <Link
-          key={action.id}
-          href={action.href}
-          onClick={() =>
-            trackClientEvent("smart_action_clicked", { action_id: action.id })
-          }
-          className="nn-smart-action group"
-        >
-          <div
-            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg"
-            style={{
-              background: `color-mix(in srgb, ${action.color} 12%, var(--semantic-surface))`,
-              color: action.color,
-            }}
+    <div className="nn-smart-actions-section">
+      <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-4">
+        {ACTIONS.map((action) => (
+          <Link
+            key={action.id}
+            href={action.href}
+            onClick={() =>
+              trackClientEvent("smart_action_clicked", { action_id: action.id })
+            }
+            className="nn-smart-action group"
           >
-            {action.icon}
-          </div>
-          <span className="text-xs font-semibold" style={{ color: "var(--semantic-text-primary)" }}>
-            {action.label}
-          </span>
-          <ArrowRight
-            className="ml-auto h-3.5 w-3.5 opacity-0 transition group-hover:opacity-100"
-            style={{ color: "var(--semantic-text-muted)" }}
-          />
-        </Link>
-      ))}
+            <div
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl"
+              style={{
+                background: `color-mix(in srgb, ${action.color} 12%, var(--semantic-surface))`,
+                color: action.color,
+              }}
+            >
+              {action.icon}
+            </div>
+            <span className="text-[0.8125rem] font-semibold" style={{ color: "var(--semantic-text-primary)" }}>
+              {action.label}
+            </span>
+            <ArrowRight
+              className="ml-auto h-3.5 w-3.5 opacity-0 transition-opacity group-hover:opacity-70"
+              style={{ color: "var(--semantic-text-muted)" }}
+            />
+          </Link>
+        ))}
+      </div>
     </div>
   );
 }

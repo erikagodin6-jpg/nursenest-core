@@ -39,19 +39,19 @@ export function WeaknessHeatmap({
   const visible = topics.slice(0, maxTopics);
 
   return (
-    <div className="nn-metric-tile rounded-2xl p-5">
-      <div className="flex items-center justify-between">
-        <h3 className="text-sm font-bold" style={{ color: "var(--semantic-text-primary)" }}>
+    <div className="nn-heatmap-card">
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <h3 className="text-[0.9375rem] font-bold" style={{ color: "var(--semantic-text-primary)" }}>
           Topic Strength Map
         </h3>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
           {HEAT_COLORS.map((h) => (
-            <div key={h.label} className="flex items-center gap-1">
+            <div key={h.label} className="flex items-center gap-1.5">
               <div
-                className="h-2.5 w-2.5 rounded-sm"
+                className="h-2.5 w-2.5 rounded-full"
                 style={{ background: h.bg }}
               />
-              <span className="text-[10px]" style={{ color: "var(--semantic-text-muted)" }}>
+              <span className="text-[0.6875rem] font-medium" style={{ color: "var(--semantic-text-muted)" }}>
                 {h.label}
               </span>
             </div>
@@ -59,7 +59,7 @@ export function WeaknessHeatmap({
         </div>
       </div>
 
-      <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4">
+      <div className="mt-5 grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-4">
         {visible.map((t) => {
           const color = heatColor(t.missRate);
           const pct = Math.round((1 - t.missRate) * 100);
@@ -82,18 +82,18 @@ export function WeaknessHeatmap({
                 className="nn-heatmap-cell__bar"
                 style={{
                   width: `${Math.max(8, pct)}%`,
-                  background: `color-mix(in srgb, ${color} 20%, transparent)`,
+                  background: `color-mix(in srgb, ${color} 15%, transparent)`,
                 }}
               />
               <div className="relative z-10">
                 <p
-                  className="text-xs font-semibold leading-tight"
+                  className="text-[0.8125rem] font-semibold leading-snug"
                   style={{ color: "var(--semantic-text-primary)" }}
                 >
                   {t.topic}
                 </p>
-                <p className="mt-0.5 text-[10px]" style={{ color }}>
-                  {pct}% · {t.attempted} Q
+                <p className="mt-1 text-[0.6875rem] font-medium" style={{ color }}>
+                  {pct}% accuracy · {t.attempted} Q
                 </p>
               </div>
             </Link>

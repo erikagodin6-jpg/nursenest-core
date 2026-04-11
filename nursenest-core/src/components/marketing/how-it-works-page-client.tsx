@@ -1,15 +1,15 @@
 "use client";
 
 /**
- * HowItWorksPageClient — high-conversion marketing page.
+ * HowItWorksPageClient: high-conversion marketing page.
  *
  * 6 sections:
- *   1. Hero — headline + subheadline + CTA
- *   2. 3-Step System — baseline → plan → improve
- *   3. Intelligent System — adaptive plan, smart review, readiness, spaced rep
- *   4. Product Preview — visual cards showing the dashboard, review, and analytics
- *   5. Outcome — single powerful statement
- *   6. Final CTA — closing conversion block
+ *   1. Hero: headline + subheadline + CTA
+ *   2. 3-Step System: baseline → plan → improve
+ *   3. Intelligent System: adaptive plan, smart review, readiness, spaced rep
+ *   4. Product Preview: visual cards showing the dashboard, review, and analytics
+ *   5. Outcome: single powerful statement
+ *   6. Final CTA: closing conversion block
  *
  * Design: premium, colorful, soft palette, theme-aware, mobile-first.
  */
@@ -88,7 +88,7 @@ function HeroSection() {
             Start Free Trial
           </Link>
           <Link href="#how-it-works-steps" className={MARKETING_SECONDARY_CTA_CLASS}>
-            See how it works
+            See How It Works
           </Link>
         </div>
 
@@ -113,7 +113,7 @@ const STEPS = [
   {
     number: "02",
     title: "Get a Personalised Study Plan",
-    description: "Your plan adapts daily based on performance — focusing time where it matters most.",
+    description: "Your plan adapts daily based on performance, focusing time where it matters most.",
     icon: <Route className="h-6 w-6" />,
     color: "var(--semantic-success)",
   },

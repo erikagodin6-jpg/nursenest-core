@@ -2,7 +2,7 @@ import Link from "next/link";
 import { MARKETING_PRIMARY_CTA_CLASS, MARKETING_SECONDARY_CTA_CLASS } from "@/lib/theme/marketing-hero-pattern";
 
 /**
- * PricingHero — conversion-focused top of the pricing page.
+ * PricingHero: conversion-focused top of the pricing page.
  *
  * Headline leads with the outcome (passing), not the product.
  * Subheadline describes the system and builds confidence.
@@ -53,7 +53,7 @@ export function PricingHero({
 
         <p className="nn-marketing-body mt-4 text-pretty text-muted-foreground">
           NurseNest tells you exactly what to study, tracks your weaknesses,
-          and helps you know when you're ready — so you can pass with confidence.
+          and helps you know when you're ready, so you can pass with confidence.
         </p>
 
         <p className="mt-3 text-sm font-medium text-muted-foreground">
@@ -65,7 +65,7 @@ export function PricingHero({
             {ctaLabel}
           </Link>
           <Link href={studySystemHref} className={MARKETING_SECONDARY_CTA_CLASS}>
-            See how it works
+            See How It Works
           </Link>
         </div>
 

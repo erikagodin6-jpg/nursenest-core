@@ -5,6 +5,7 @@ import { auth } from "@/lib/auth";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
+import type { BreadcrumbCrumb } from "@/lib/seo/breadcrumb-types";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { appShellBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { loadReviewQueueInitialData } from "@/lib/study/review-queue-data";
@@ -35,9 +36,9 @@ export default async function ReviewQueuePage() {
     redirect("/login?callbackUrl=/app/review");
   }
 
-  const crumbs = [
+  const crumbs: BreadcrumbCrumb[] = [
     ...appShellBreadcrumbs("dashboard"),
-    { label: "Review Queue", href: "/app/review" },
+    { name: "Review Queue", href: "/app/review" },
   ];
 
   // Gate: check entitlement

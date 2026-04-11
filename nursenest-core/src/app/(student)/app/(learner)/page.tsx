@@ -9,9 +9,13 @@ import { EngagementNudgeStrip } from "@/components/student/engagement-nudge-stri
 import { SpacedReviewReminder } from "@/components/student/spaced-review-reminder";
 import { PremiumEmptyState } from "@/components/ui/premium-empty-state";
 import { PremiumLearnerHub } from "@/components/student/premium-learner-hub";
-import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { LockedStudyNextPreview } from "@/components/student/locked-study-next-preview";
+import { LockedDashboardOverlay } from "@/components/student/dashboard/locked-dashboard-overlay";
+import { PrimaryActionCard } from "@/components/student/dashboard/primary-action-card";
+import { ExamCountdownCard } from "@/components/student/dashboard/exam-countdown-card";
+import { WeaknessHeatmap, type HeatmapTopic } from "@/components/student/dashboard/weakness-heatmap";
+import { SmartActionsBar } from "@/components/student/dashboard/smart-actions-bar";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { buildLearnerStudySnapshot } from "@/lib/learner/build-learner-study-snapshot";
@@ -34,6 +38,8 @@ import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { appShellBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { emptyStateCopy } from "@/lib/ui/empty-state-copy";
+import { buildDashboardModel } from "@/lib/learner/next-best-action";
+import { buildCountdownCopy, daysUntilExamUtc } from "@/lib/learner/exam-timeline";
 
 function retentionPersonalNote(t: LearnerMarketingT, prefs: Awaited<ReturnType<typeof loadLearnerRetentionPreferences>>): string | null {
   if (!prefs) return null;
@@ -93,7 +99,7 @@ export default async function LearnerDashboardPage() {
       redirect("/app/onboarding");
     }
   } catch (e) {
-    // redirect() throws a NEXT_REDIRECT error — re-throw it
+    // redirect() throws a NEXT_REDIRECT error; re-throw it
     if (e && typeof e === "object" && "digest" in e) throw e;
     // DB errors: continue to dashboard rather than blocking
   }
@@ -117,20 +123,25 @@ export default async function LearnerDashboardPage() {
 
   if (!entitlement.hasAccess) {
     return (
-      <main className="space-y-6">
+      <main className="nn-dash">
         <BreadcrumbTrail items={crumbs} />
-        <PremiumEmptyState
-          headline={t("learner.dashboard.title")}
-          body={t("learner.dashboard.subtitle.locked")}
-          hint={emptyStateCopy.entitlementLocked.body}
-          tone="locked"
-          primaryCta={{ label: t("cta.continuePlan"), href: "/pricing", variant: "primary" }}
-          secondaryCtas={[{ label: t("learner.dashboard.accountHubLink"), href: "/app/account/overview", variant: "secondary" }]}
-          visualLayout="stack"
-          ctaLayout="stack"
-        />
+
+        {/* Page header */}
+        <section className="nn-dash-section">
+          <div className="nn-learner-page-hero">
+            <p className="text-[0.6875rem] font-bold uppercase tracking-[0.1em] text-[var(--semantic-brand)]">{t("learner.dashboard.kicker")}</p>
+            <h1 className="mt-1.5 text-2xl font-extrabold tracking-tight text-[var(--semantic-text-primary)] sm:text-3xl">{t("learner.dashboard.title")}</h1>
+            <p className="mt-2.5 max-w-2xl text-[0.9375rem] leading-relaxed text-[var(--semantic-text-secondary)]">
+              Your study system is ready. Unlock it to get started.
+            </p>
+          </div>
+        </section>
+
+        {/* Blurred preview of adaptive study recommendations */}
         <LockedStudyNextPreview className="nn-card space-y-2 p-6" />
-        <SubscriptionPaywall context="dashboard" />
+
+        {/* Full locked dashboard with feature grid + conversion CTAs */}
+        <LockedDashboardOverlay />
       </main>
     );
   }
@@ -139,13 +150,17 @@ export default async function LearnerDashboardPage() {
   let studySnap: Awaited<ReturnType<typeof buildLearnerStudySnapshot>> = null;
   let weakTopicTitles: string[] = [];
   try {
-    const [snap, nextSnap, notes, todayGoal, questionBankGoal, retentionPrefs] = await Promise.all([
+    const [snap, nextSnap, notes, todayGoal, questionBankGoal, retentionPrefs, examUser] = await Promise.all([
       loadPremiumDashboardSnapshot(userId, entitlement),
       buildLearnerStudySnapshot(userId, entitlement, undefined),
       loadRecentLearnerNotesSummary(userId),
       loadTodayGoalProgress(userId),
       loadDailyQuestionGoalProgress(userId),
       loadLearnerRetentionPreferences(userId),
+      prisma.user.findUnique({
+        where: { id: userId },
+        select: { examDate: true, examDatePlanType: true },
+      }),
     ]);
     snapshot = snap;
     studySnap = nextSnap;
@@ -163,74 +178,115 @@ export default async function LearnerDashboardPage() {
       const streakProtect =
         todayGoal != null && snapshot.studyStreakDays > 0 && todayGoal.credits < todayGoal.target;
 
+      const dashModel = buildDashboardModel(snapshot, studySnap, todayGoal);
+
+      const countdown = buildCountdownCopy({
+        examDatePlanType: examUser?.examDatePlanType ?? null,
+        examDate: examUser?.examDate ?? null,
+      });
+
+      const daysLeft = daysUntilExamUtc(examUser?.examDate ?? null);
+      const questionsPerDay =
+        daysLeft != null && daysLeft > 0
+          ? Math.max(5, Math.ceil(200 / daysLeft))
+          : null;
+
+      const heatmapTopics: HeatmapTopic[] = (studySnap?.weakTopics ?? [])
+        .concat(studySnap?.strongTopicsHighlight ?? [])
+        .map((w) => ({
+          topic: w.topic,
+          missRate: w.missRate,
+          attempted: w.attempted,
+        }));
+
       return (
-        <main className="space-y-6">
+        <main className="nn-dash">
           <BreadcrumbTrail items={crumbs} />
 
-          {/* Page header */}
-          <div className="nn-learner-page-hero">
-            <p className="text-xs font-semibold uppercase tracking-wide text-[var(--semantic-brand)]">{t("learner.dashboard.kicker")}</p>
-            <h1 className="mt-1 text-3xl font-bold tracking-tight text-[var(--semantic-text-primary)]">{t("learner.dashboard.title")}</h1>
-            <p className="mt-2 max-w-2xl text-sm text-[var(--semantic-text-secondary)]">{t("learner.dashboard.subtitle.subscriber")}</p>
-          </div>
+          {/* ── Hero + Primary CTA ────────────────────────────────── */}
+          <section className="nn-dash-section">
+            <div className="nn-learner-page-hero">
+              <p className="text-[0.6875rem] font-bold uppercase tracking-[0.1em] text-[var(--semantic-brand)]">{t("learner.dashboard.kicker")}</p>
+              <h1 className="mt-1.5 text-2xl font-extrabold tracking-tight text-[var(--semantic-text-primary)] sm:text-3xl">{t("learner.dashboard.title")}</h1>
+              <p className="mt-2.5 max-w-2xl text-[0.9375rem] leading-relaxed text-[var(--semantic-text-secondary)]">{t("learner.dashboard.subtitle.subscriber")}</p>
+            </div>
+            <PrimaryActionCard action={dashModel.nextAction} />
+          </section>
 
-          {/* KPI snapshot: streak, bank accuracy, lessons, mocks — visible above the fold */}
-          <LearnerDashboardCommandCenter snapshot={snapshot} t={t} />
+          {/* ── KPI Snapshot + Exam Countdown ─────────────────────── */}
+          <section className="nn-dash-section">
+            <p className="nn-dash-section-label">Your Progress</p>
+            <LearnerDashboardCommandCenter snapshot={snapshot} t={t} />
+            <ExamCountdownCard countdown={countdown} questionsPerDay={questionsPerDay} />
+          </section>
 
-          {/* Daily goal + streak protection nudge */}
-          {todayGoal ? (
-            <LearnerDailyMomentumCard
-              t={t}
-              streakDays={snapshot.studyStreakDays}
-              todayGoal={todayGoal}
-              questionGoal={questionBankGoal}
-              resume={resume}
-              momentumLine={momentumLine}
-              focusTopic={weakTopicTitles[0] ?? null}
-              personalNote={personalNote}
-              showStreakProtectNudge={streakProtect}
-              progressFeedbackLine={progressFeedbackLine}
+          <div className="nn-dash-divider" />
+
+          {/* ── Today's Focus ─────────────────────────────────────── */}
+          <section className="nn-dash-section">
+            <p className="nn-dash-section-label">Today&apos;s Focus</p>
+            {todayGoal ? (
+              <LearnerDailyMomentumCard
+                t={t}
+                streakDays={snapshot.studyStreakDays}
+                todayGoal={todayGoal}
+                questionGoal={questionBankGoal}
+                resume={resume}
+                momentumLine={momentumLine}
+                focusTopic={weakTopicTitles[0] ?? null}
+                personalNote={personalNote}
+                showStreakProtectNudge={streakProtect}
+                progressFeedbackLine={progressFeedbackLine}
+              />
+            ) : null}
+            <EngagementNudgeStrip maxItems={3} />
+            <SpacedReviewReminder />
+          </section>
+
+          <div className="nn-dash-divider" />
+
+          {/* ── Analytics + Weakness Map ───────────────────────────── */}
+          <section className="nn-dash-section">
+            <p className="nn-dash-section-label">Performance &amp; Gaps</p>
+            <LearnerDashboardInsightPanels snapshot={snapshot} t={t} />
+            {heatmapTopics.length > 0 && <WeaknessHeatmap topics={heatmapTopics} />}
+          </section>
+
+          <div className="nn-dash-divider" />
+
+          {/* ── Continue Learning + Focus ──────────────────────────── */}
+          <section className="nn-dash-section">
+            <p className="nn-dash-section-label">Study Plan</p>
+            {studySnap ? <LearnerAdaptiveFocusCard snapshot={studySnap} /> : null}
+            <LearnerContinueLearningCard t={t} links={continueLinks} />
+            <PremiumLearnerHub
+              snapshot={snapshot}
+              weakTopicTitles={weakTopicTitles}
+              recentNotes={notes}
+              suppressFlashcardWeakLine={weakTopicTitles.length > 0}
+              compactIntro
+              omitReadinessBreakdown
+              omitRecentMocks
+              readinessDeferHint={t("learner.dashboard.hub.readinessDeferHint")}
             />
-          ) : null}
+          </section>
 
-          {/* Smart engagement nudges (inactive, streak, weak area, improvement, near exam) */}
-          <EngagementNudgeStrip maxItems={3} />
+          <div className="nn-dash-divider" />
 
-          {/* Spaced repetition flashcard reminder */}
-          <SpacedReviewReminder />
-
-          {/* Core analytics: readiness score, quick actions, progress, performance, weak areas */}
-          <LearnerDashboardInsightPanels snapshot={snapshot} t={t} />
-
-          {/* Adaptive focus: deterministic next steps from the same study snapshot */}
-          {studySnap ? <LearnerAdaptiveFocusCard snapshot={studySnap} /> : null}
-
-          {/* Continue learning — detail after the analytics, for students who want to pick back up */}
-          <LearnerContinueLearningCard t={t} links={continueLinks} />
-
-          {/* Full learner hub */}
-          <PremiumLearnerHub
-            snapshot={snapshot}
-            weakTopicTitles={weakTopicTitles}
-            recentNotes={notes}
-            suppressFlashcardWeakLine={weakTopicTitles.length > 0}
-            compactIntro
-            omitReadinessBreakdown
-            omitRecentMocks
-            readinessDeferHint={t("learner.dashboard.hub.readinessDeferHint")}
-          />
-
-          {/* Feature discovery — moved to bottom so it doesn't interrupt data flow */}
-          <LearnerDashboardAdvantageStrip t={t} />
-
-          <section className="nn-card flex flex-col gap-3 p-5 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
-            <p className="text-sm text-muted-foreground">{t("learner.dashboard.accountTeaser")}</p>
-            <Link
-              href="/app/account/overview"
-              className="inline-flex w-full shrink-0 justify-center rounded-full border border-role-cta/30 bg-role-cta-soft px-4 py-2.5 text-sm font-semibold text-role-cta-on-soft sm:w-auto"
-            >
-              {t("learner.dashboard.openAccountHub")}
-            </Link>
+          {/* ── Quick Launch + Account ─────────────────────────────── */}
+          <section className="nn-dash-section">
+            <p className="nn-dash-section-label">Quick Actions</p>
+            <SmartActionsBar />
+            <LearnerDashboardAdvantageStrip t={t} />
+            <section className="nn-card flex flex-col gap-3 p-5 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
+              <p className="text-sm text-muted-foreground">{t("learner.dashboard.accountTeaser")}</p>
+              <Link
+                href="/app/account/overview"
+                className="inline-flex w-full shrink-0 justify-center rounded-full border border-role-cta/30 bg-role-cta-soft px-4 py-2.5 text-sm font-semibold text-role-cta-on-soft sm:w-auto"
+              >
+                {t("learner.dashboard.openAccountHub")}
+              </Link>
+            </section>
           </section>
         </main>
       );
