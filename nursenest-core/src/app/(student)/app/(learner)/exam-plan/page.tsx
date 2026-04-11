@@ -48,6 +48,11 @@ import { BenchmarkPercentileCard } from "@/components/study/benchmark-percentile
 import { ExamDateEditor } from "@/components/study/exam-date-editor";
 import { PlanRegenerateControl } from "@/components/study/plan-regenerate-control";
 import { PremiumExamPlanUpgradeCard } from "@/components/study/premium-exam-plan-upgrade-card";
+// ── New countdown + recovery system ───────────────────────────────────────────
+import { ExamCountdownHero } from "@/components/study/exam-countdown-hero";
+import { WeeklyPacingPanel } from "@/components/study/weekly-pacing-panel";
+import { RecoveryPlanCard } from "@/components/study/recovery-plan-card";
+import { buildRecoveryPlan } from "@/lib/learner/recovery-planner";
 
 // ── Lazy client ───────────────────────────────────────────────────────────────
 import { ExamPlanLazyClient } from "./exam-plan-lazy-client";

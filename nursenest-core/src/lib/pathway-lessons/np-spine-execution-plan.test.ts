@@ -48,7 +48,6 @@ function candidate(
     topicSlug: overrides.lesson?.topicSlug ?? "cv-heart-failure",
   });
   return {
-    lesson: baseLesson,
     score,
     depth: {
       sectionCount: 5,
