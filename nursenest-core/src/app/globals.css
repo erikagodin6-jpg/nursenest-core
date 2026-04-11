@@ -4723,3 +4723,493 @@ html[data-theme="dark-mode"] .nn-cat-opt--incorrect {
   color: var(--semantic-text-primary);
   margin-bottom: 12px;
 }
+
+/* ============================================================
+   SMART REVIEW SCREEN
+   4-group correctness × confidence organizer
+   Multi-surface palette — no hardcoded colors
+   ============================================================ */
+
+/* ── Outer wrapper ─────────────────────────────────────────── */
+
+.nn-smart-review {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ── Summary Strip ─────────────────────────────────────────── */
+
+.nn-smart-review-strip {
+  border-radius: 1rem;
+  padding: 20px 24px;
+  background: var(--surface-emphasis,
+    color-mix(in srgb, var(--semantic-brand) 8%, var(--semantic-surface)));
+  border: 1px solid
+    color-mix(in srgb, var(--theme-primary) 20%, var(--semantic-border-soft));
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.nn-smart-review-strip__heading {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--semantic-text-primary);
+}
+
+.nn-smart-review-strip__body {
+  font-size: 0.875rem;
+  color: var(--semantic-text-secondary);
+  line-height: 1.6;
+}
+
+/* ── Filter Controls ───────────────────────────────────────── */
+
+.nn-review-filters {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 0.75rem;
+  background: var(--surface-soft-a,
+    color-mix(in srgb, var(--theme-primary) 4%, var(--semantic-surface)));
+  border: 1px solid var(--semantic-border-soft);
+}
+
+.nn-review-filter-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 99px;
+  border: 1px solid var(--semantic-border-soft);
+  background: var(--semantic-surface);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--semantic-text-secondary);
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+  white-space: nowrap;
+}
+
+.nn-review-filter-toggle:hover {
+  background: var(--surface-soft-b,
+    color-mix(in srgb, var(--theme-primary) 7%, var(--semantic-surface)));
+}
+
+.nn-review-filter-toggle--active {
+  background: var(--surface-emphasis,
+    color-mix(in srgb, var(--semantic-brand) 10%, var(--semantic-surface)));
+  border-color: color-mix(in srgb, var(--theme-primary) 40%, var(--semantic-border-soft));
+  color: var(--semantic-text-primary);
+}
+
+.nn-review-filter-select {
+  padding: 6px 10px;
+  border-radius: 0.5rem;
+  border: 1px solid var(--semantic-border-soft);
+  background: var(--semantic-surface);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--semantic-text-secondary);
+  cursor: pointer;
+}
+
+.nn-review-filter-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--semantic-text-muted);
+}
+
+/* ── Group Sections ────────────────────────────────────────── */
+
+.nn-review-group {
+  border-radius: 1rem;
+  overflow: hidden;
+  border: 1px solid var(--semantic-border-soft);
+}
+
+/* Group 1 — High Priority Fixes: soft warning amber */
+.nn-review-group--priority {
+  border-color: color-mix(in srgb, var(--semantic-warning) 22%, var(--semantic-border-soft));
+}
+
+.nn-review-group--priority .nn-review-group__header {
+  background: var(--semantic-warning-soft,
+    color-mix(in srgb, var(--semantic-warning) 8%, var(--semantic-surface)));
+}
+
+/* Group 2 — Needs Review: soft neutral */
+.nn-review-group--needs-review {
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 100%, transparent);
+}
+
+.nn-review-group--needs-review .nn-review-group__header {
+  background: var(--semantic-panel-muted,
+    color-mix(in srgb, var(--semantic-border-soft) 45%, var(--semantic-surface)));
+}
+
+/* Group 3 — Uncertain Knowledge: soft info */
+.nn-review-group--uncertain {
+  border-color: color-mix(in srgb, var(--semantic-info) 22%, var(--semantic-border-soft));
+}
+
+.nn-review-group--uncertain .nn-review-group__header {
+  background: var(--semantic-info-soft,
+    color-mix(in srgb, var(--semantic-info) 8%, var(--semantic-surface)));
+}
+
+/* Group 4 — Strong Areas: soft success */
+.nn-review-group--strong {
+  border-color: color-mix(
+    in srgb,
+    var(--role-success, var(--semantic-success)) 22%,
+    var(--semantic-border-soft)
+  );
+}
+
+.nn-review-group--strong .nn-review-group__header {
+  background: var(--role-success-soft,
+    color-mix(
+      in srgb,
+      var(--role-success, var(--semantic-success)) 8%,
+      var(--semantic-surface)
+    ));
+}
+
+/* Group header — clickable collapse trigger */
+.nn-review-group__header {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px 20px;
+  cursor: pointer;
+  user-select: none;
+  transition: filter 0.15s ease;
+}
+
+.nn-review-group__header:hover {
+  filter: brightness(0.97);
+}
+
+.nn-review-group__header-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.nn-review-group__title-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.nn-review-group__title {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: var(--semantic-text-primary);
+}
+
+.nn-review-group__count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.625rem;
+  height: 1.625rem;
+  padding: 0 6px;
+  border-radius: 99px;
+  background: color-mix(in srgb, var(--semantic-text-muted) 18%, var(--semantic-surface));
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--semantic-text-muted);
+}
+
+.nn-review-group__desc {
+  font-size: 0.8125rem;
+  color: var(--semantic-text-muted);
+  margin-top: 3px;
+  line-height: 1.5;
+}
+
+.nn-review-group__chevron {
+  flex-shrink: 0;
+  width: 1.125rem;
+  height: 1.125rem;
+  color: var(--semantic-text-muted);
+  transition: transform 0.2s ease;
+  margin-top: 2px;
+}
+
+.nn-review-group__chevron--open {
+  transform: rotate(180deg);
+}
+
+/* Group body — the question list */
+.nn-review-group__body {
+  border-top: 1px solid var(--semantic-border-soft);
+  background: var(--semantic-surface);
+}
+
+/* Empty state */
+.nn-review-group__empty {
+  padding: 16px 20px;
+  font-size: 0.8125rem;
+  color: var(--semantic-text-muted);
+  font-style: italic;
+}
+
+/* ── Question Rows ─────────────────────────────────────────── */
+
+.nn-review-q-rows {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nn-review-q-row {
+  border-bottom: 1px solid var(--semantic-border-soft);
+}
+
+.nn-review-q-row:last-child {
+  border-bottom: none;
+}
+
+.nn-review-q-row__main {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 20px;
+  transition: background-color 0.13s ease;
+}
+
+.nn-review-q-row__main:hover {
+  background: var(--surface-soft-a,
+    color-mix(in srgb, var(--theme-primary) 3%, var(--semantic-surface)));
+}
+
+.nn-review-q-row__num {
+  flex-shrink: 0;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--semantic-text-muted);
+  min-width: 2.25rem;
+  padding-top: 1px;
+}
+
+.nn-review-q-row__body {
+  flex: 1;
+  min-width: 0;
+}
+
+.nn-review-q-row__text {
+  font-size: 0.875rem;
+  line-height: 1.55;
+  color: var(--semantic-text-primary);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.nn-review-q-row__topic {
+  margin-top: 4px;
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: var(--semantic-text-muted);
+  background: var(--surface-soft-a,
+    color-mix(in srgb, var(--theme-primary) 4%, var(--semantic-surface)));
+  border: 1px solid var(--semantic-border-soft);
+  border-radius: 99px;
+  padding: 2px 8px;
+}
+
+.nn-review-q-row__meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.nn-review-q-row__chips {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.nn-review-q-row__actions {
+  display: flex;
+  gap: 6px;
+}
+
+/* ── Meta Chips ────────────────────────────────────────────── */
+
+.nn-review-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 8px;
+  border-radius: 99px;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  white-space: nowrap;
+  border: 1px solid transparent;
+}
+
+.nn-review-chip--correct {
+  background: var(--role-success-soft,
+    color-mix(in srgb, var(--role-success, var(--semantic-success)) 10%, var(--semantic-surface)));
+  border-color: color-mix(
+    in srgb,
+    var(--role-success, var(--semantic-success)) 25%,
+    var(--semantic-border-soft)
+  );
+  color: var(--semantic-text-primary);
+}
+
+.nn-review-chip--incorrect {
+  background: color-mix(in srgb, var(--semantic-danger) 8%, var(--semantic-surface));
+  border-color: color-mix(in srgb, var(--semantic-danger) 22%, var(--semantic-border-soft));
+  color: var(--semantic-text-primary);
+}
+
+.nn-review-chip--high {
+  background: var(--role-success-soft,
+    color-mix(in srgb, var(--role-success, var(--semantic-success)) 8%, var(--semantic-surface)));
+  border-color: color-mix(
+    in srgb,
+    var(--role-success, var(--semantic-success)) 22%,
+    var(--semantic-border-soft)
+  );
+  color: var(--semantic-text-secondary);
+}
+
+.nn-review-chip--medium {
+  background: var(--semantic-info-soft,
+    color-mix(in srgb, var(--semantic-info) 8%, var(--semantic-surface)));
+  border-color: color-mix(in srgb, var(--semantic-info) 22%, var(--semantic-border-soft));
+  color: var(--semantic-text-secondary);
+}
+
+.nn-review-chip--low {
+  background: var(--semantic-warning-soft,
+    color-mix(in srgb, var(--semantic-warning) 8%, var(--semantic-surface)));
+  border-color: color-mix(in srgb, var(--semantic-warning) 22%, var(--semantic-border-soft));
+  color: var(--semantic-text-secondary);
+}
+
+/* ── Inline Rationale Expansion ────────────────────────────── */
+
+.nn-review-q-rationale {
+  padding: 14px 20px 18px 20px;
+  border-top: 1px solid var(--semantic-border-soft);
+  background: var(--surface-soft-a,
+    color-mix(in srgb, var(--theme-primary) 3%, var(--semantic-surface)));
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.nn-review-q-rationale__stem {
+  font-size: 0.875rem;
+  line-height: 1.62;
+  color: var(--semantic-text-primary);
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--semantic-border-soft);
+}
+
+.nn-review-q-rationale__label {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--semantic-text-muted);
+}
+
+.nn-review-q-rationale__text {
+  font-size: 0.875rem;
+  line-height: 1.62;
+  color: var(--semantic-text-secondary);
+}
+
+.nn-review-q-rationale__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding-top: 6px;
+}
+
+/* Inline action buttons (Review / Lesson) */
+.nn-review-action-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 10px;
+  border-radius: 0.5rem;
+  border: 1px solid var(--semantic-border-soft);
+  background: var(--semantic-surface);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--semantic-text-secondary);
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color 0.13s ease, border-color 0.13s ease;
+  white-space: nowrap;
+}
+
+.nn-review-action-btn:hover {
+  background: var(--surface-soft-b,
+    color-mix(in srgb, var(--theme-primary) 6%, var(--semantic-surface)));
+  border-color: color-mix(in srgb, var(--theme-primary) 25%, var(--semantic-border-soft));
+}
+
+.nn-review-action-btn--active {
+  background: var(--surface-emphasis,
+    color-mix(in srgb, var(--semantic-brand) 10%, var(--semantic-surface)));
+  border-color: color-mix(in srgb, var(--theme-primary) 35%, var(--semantic-border-soft));
+  color: var(--semantic-text-primary);
+}
+
+.nn-review-action-link {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 10px;
+  border-radius: 0.5rem;
+  border: 1px solid var(--semantic-border-soft);
+  background: transparent;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--theme-primary, var(--semantic-text-secondary));
+  text-decoration: none;
+  transition: background-color 0.13s ease;
+}
+
+.nn-review-action-link:hover {
+  background: color-mix(in srgb, var(--theme-primary) 5%, var(--semantic-surface));
+}
+
+/* ── Mobile ────────────────────────────────────────────────── */
+
+@media (max-width: 639px) {
+  .nn-review-q-row__main {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .nn-review-q-row__num {
+    min-width: unset;
+  }
+
+  .nn-review-q-row__meta {
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+}

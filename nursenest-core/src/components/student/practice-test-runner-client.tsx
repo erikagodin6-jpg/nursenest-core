@@ -39,6 +39,16 @@ import {
 } from "@/components/study/practice-question-card";
 import type { PracticeOptionState } from "@/components/study/practice-question-card";
 import { PracticeRationaleFullPanel } from "@/components/study/practice-rationale-full-panel";
+import {
+  ConfidenceSelector,
+  ConfidenceChip,
+  type ConfidenceLevel,
+} from "@/components/study/confidence-selector";
+import { ConfidenceAnalyticsBlock } from "@/components/study/confidence-analytics";
+import {
+  SmartReviewLayout,
+  type SmartReviewItem,
+} from "@/components/study/smart-review-screen";
 import { CatSessionLayout, CatTopBar, CatContentGrid } from "@/components/study/cat-session-layout";
 import { QuestionCard, AnswerOptionRow } from "@/components/study/cat-question-card";
 import type { AnswerOptionState } from "@/components/study/cat-question-card";
@@ -122,6 +132,8 @@ export function PracticeTestRunnerClient({
   const [catStudyFeedback, setCatStudyFeedback] = useState<CatStudyFeedbackPayload | null>(null);
   /** CAT Study Mode: last item explanation before switching to the results layout. */
   const [catFinalStudyFeedback, setCatFinalStudyFeedback] = useState<CatStudyFeedbackPayload | null>(null);
+  /** Confidence ratings per question: Map<questionId, ConfidenceLevel>. Client-only, not persisted. */
+  const [confidence, setConfidence] = useState<Record<string, ConfidenceLevel>>({});
   const autoSubmitRef = useRef(false);
   const answersRef = useRef<Record<string, unknown>>({});
   const idxRef = useRef(0);
@@ -190,6 +202,7 @@ export function PracticeTestRunnerClient({
       setAdaptiveDifficultyHistory(dhParsed);
       setLinearCommittedIds(getLinearCommittedQuestionIds(ast));
       setLinearPracticeFeedback({});
+      setConfidence({});
       setCatFinalStudyFeedback(null);
       const catStudyAwaiting =
         Boolean(data.catMode) &&
@@ -368,6 +381,10 @@ export function PracticeTestRunnerClient({
     if (Array.isArray(v)) return v.length > 0;
     return true;
   };
+
+  function setConfidenceForQuestion(qid: string, level: ConfidenceLevel) {
+    setConfidence((c) => ({ ...c, [qid]: level }));
+  }
 
   function linearPracticeMcqClasses(canonical: string): string {
     const selected = raw === canonical;
@@ -676,7 +693,24 @@ export function PracticeTestRunnerClient({
       );
     }
 
-    // Main results page — ResultsSummary + coach section + teaching review
+    // Main results page — ResultsSummary + confidence analytics + coach + teaching review
+    // Build correctness map from linearPracticeFeedback (linear practice mode)
+    const correctnessMap: Record<string, boolean> = {};
+    for (const [qid, fb] of Object.entries(linearPracticeFeedback)) {
+      correctnessMap[qid] = fb.isCorrect;
+    }
+    // Build question metadata map (index + topic) for review priority groups
+    const questionMetaMap: Record<string, { index: number; topic?: string | null }> = {};
+    for (let i = 0; i < questionIds.length; i++) {
+      const qid = questionIds[i];
+      if (qid) {
+        questionMetaMap[qid] = {
+          index: i,
+          topic: questionCache[qid]?.topic ?? null,
+        };
+      }
+    }
+
     return (
       <div>
         {/* ── Spec §7 structured results ─────────────────────────── */}
@@ -686,6 +720,56 @@ export function PracticeTestRunnerClient({
           elapsedMs={savedElapsedMs}
           pathwayId={testConfig?.pathwayId ?? null}
         />
+
+        {/* ── Confidence analytics (shown when rated questions exist) ── */}
+        {Object.keys(confidence).length > 0 ? (
+          <div className="mx-auto max-w-[900px] px-6 pb-8">
+            <div className="nn-cat-question-card">
+              <h3 className="mb-5 font-semibold text-[var(--semantic-text-primary)]">
+                Confidence Analysis
+              </h3>
+              <ConfidenceAnalyticsBlock
+                confidence={confidence}
+                correctness={correctnessMap}
+                questionMeta={questionMetaMap}
+              />
+            </div>
+          </div>
+        ) : null}
+
+        {/* ── Smart Review Screen (linear practice: always shown when feedback exists) ── */}
+        {Object.keys(linearPracticeFeedback).length > 0 ? (() => {
+          const smartReviewItems: SmartReviewItem[] = [];
+          for (let i = 0; i < questionIds.length; i++) {
+            const qid = questionIds[i];
+            if (!qid) continue;
+            const fb = linearPracticeFeedback[qid];
+            if (!fb) continue;
+            const q = questionCache[qid];
+            smartReviewItems.push({
+              id: qid,
+              index: i,
+              stem: q?.stem ?? "Question not available",
+              topic: q?.topic ?? null,
+              subtopic: q?.subtopic ?? null,
+              isCorrect: fb.isCorrect,
+              confidence: (confidence[qid] as (typeof confidence)[string] | undefined) ?? null,
+              rationale: fb.rationale,
+              correctAnswerExplanation: fb.correctAnswerExplanation ?? null,
+              relatedLessons: fb.relatedLessons ?? [],
+            });
+          }
+          return (
+            <div className="mx-auto max-w-[900px] px-6 pb-8">
+              <div className="nn-cat-question-card">
+                <h3 className="mb-5 font-semibold text-[var(--semantic-text-primary)]">
+                  Smart Review
+                </h3>
+                <SmartReviewLayout items={smartReviewItems} />
+              </div>
+            </div>
+          );
+        })() : null}
 
         {/* ── Coach card (CAT-specific, premium) ──────────────────── */}
         {results.catReport ? (
@@ -1084,6 +1168,18 @@ export function PracticeTestRunnerClient({
                 {/* Answer options */}
                 {catOptions}
 
+                {/* Confidence selector — CAT mode: forced neutral palette (spec §12) */}
+                {hasMeaningfulAnswer(current.id) ? (
+                  <div className="mt-4">
+                    <ConfidenceSelector
+                      questionId={current.id}
+                      value={confidence[current.id] ?? null}
+                      neutral
+                      onChange={setConfidenceForQuestion}
+                    />
+                  </div>
+                ) : null}
+
                 {/* CAT study feedback (inline, after options) */}
                 {rationalePanelMode === "feedback" && catStudyFeedback ? (
                   <div className="mt-6 border-t border-[var(--semantic-border-soft)] pt-5">
@@ -1304,6 +1400,14 @@ export function PracticeTestRunnerClient({
                 </div>
               ) : null}
               {practiceOptionRows}
+
+              {/* Confidence selector — practice mode: full semantic palette */}
+              <ConfidenceSelector
+                questionId={current.id}
+                value={confidence[current.id] ?? null}
+                onChange={setConfidenceForQuestion}
+              />
+
               <div className="nn-practice-q-nav">
                 <button
                   type="button"
@@ -1381,6 +1485,7 @@ export function PracticeTestRunnerClient({
               distractorRationalesMap={linearFeedback?.distractorRationalesMap}
               keyTakeaway={linearFeedback?.keyTakeaway}
               relatedLessons={linearFeedback?.relatedLessons ?? []}
+              confidenceLevel={confidence[current.id] ?? null}
             />
           </div>
         </PracticeSessionGrid>

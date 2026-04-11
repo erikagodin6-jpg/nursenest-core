@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { BookOpen } from "lucide-react";
 import type { ReactNode } from "react";
+import { ConfidenceChip, type ConfidenceLevel } from "./confidence-selector";
 
 // ── PracticeRationaleSection ───────────────────────────────────────────────
 
@@ -129,6 +130,8 @@ export interface PracticeRationaleFullPanelProps {
   keyTakeaway?: string | null;
   /** Resolved lesson links (0–4). */
   relatedLessons?: { title: string; href: string }[];
+  /** Confidence rating selected for this question — shown as a chip (spec §10). */
+  confidenceLevel?: ConfidenceLevel | null;
 }
 
 /**
@@ -154,6 +157,7 @@ export function PracticeRationaleFullPanel({
   distractorRationalesMap,
   keyTakeaway,
   relatedLessons = [],
+  confidenceLevel,
 }: PracticeRationaleFullPanelProps) {
   // ── Waiting / not-yet-submitted ──────────────────────────────────────────
   if (status === "waiting" || status === null) {
@@ -205,6 +209,13 @@ export function PracticeRationaleFullPanel({
 
   return (
     <div className="nn-practice-rationale-full">
+      {/* Confidence chip — shown when user rated their confidence */}
+      {confidenceLevel ? (
+        <div className="flex items-center gap-2">
+          <ConfidenceChip level={confidenceLevel} />
+        </div>
+      ) : null}
+
       {/* 1 ─ Correct Answer ──────────────────────────────────────────────── */}
       <PracticeRationaleSection
         variant={status === "correct" ? "success" : "info"}
