@@ -37,7 +37,7 @@ export const BRAND_NAME = "NurseNest" as const;
  * The img uses {@link HEADER_BRAND_LOGO_IMG_CLASSNAME} (`h-full`, `object-contain`) inside this slot.
  */
 export const HEADER_BRAND_LOGO_SLOT_CLASSNAME =
-  "nn-brand-header-logo-slot inline-flex flex-none shrink-0 items-center justify-start overflow-hidden self-center bg-transparent h-5 max-h-5 w-auto max-w-[min(92vw,10rem)] sm:h-6 sm:max-h-6 sm:max-w-[12rem] lg:h-7 lg:max-h-7 lg:max-w-[14rem]" as const;
+  "nn-brand-header-logo-slot inline-flex flex-none shrink-0 items-center justify-start overflow-hidden self-center bg-transparent h-8 max-h-8 w-auto max-w-[min(92vw,10rem)] sm:h-9 sm:max-h-9 sm:max-w-[12rem] lg:h-10 lg:max-h-10 lg:max-w-[14rem]" as const;
 
 /** @deprecated Homepage no longer enlarges the mark; kept as empty merge for older call sites. */
 export const HOME_BRAND_LOGO_MARK_CLASSNAME = "" as const;
@@ -57,14 +57,14 @@ export const FOOTER_BRAND_LOGO_IMG_CLASSNAME =
 
 /** Auth / narrow forms: same height scale as marketing header (compact, consistent). */
 export const AUTH_BRAND_LOGO_SLOT_CLASSNAME =
-  "nn-brand-auth-logo-slot inline-flex flex-none shrink-0 items-center justify-center overflow-hidden bg-transparent h-5 max-h-5 w-auto max-w-[min(90vw,10rem)] sm:h-6 sm:max-h-6 sm:max-w-[12rem] lg:h-7 lg:max-h-7 lg:max-w-[14rem]" as const;
+  "nn-brand-auth-logo-slot inline-flex flex-none shrink-0 items-center justify-center overflow-hidden bg-transparent h-8 max-h-8 w-auto max-w-[min(90vw,10rem)] sm:h-9 sm:max-h-9 sm:max-w-[12rem] lg:h-10 lg:max-h-10 lg:max-w-[14rem]" as const;
 
 export const AUTH_BRAND_LOGO_IMG_CLASSNAME =
   "nn-brand-auth-logo block h-full w-auto max-h-full max-w-full shrink-0 bg-transparent object-contain object-center [image-rendering:auto]" as const;
 
 /** Learner app shell top bar: matches marketing header logo scale. */
 export const LEARNER_BRAND_LOGO_SLOT_CLASSNAME =
-  "nn-brand-learner-logo-slot inline-flex flex-none shrink-0 items-center justify-start overflow-hidden bg-transparent h-5 max-h-5 w-auto max-w-[min(92vw,10rem)] sm:h-6 sm:max-h-6 sm:max-w-[12rem] lg:h-7 lg:max-h-7 lg:max-w-[14rem]" as const;
+  "nn-brand-learner-logo-slot inline-flex flex-none shrink-0 items-center justify-start overflow-hidden bg-transparent h-8 max-h-8 w-auto max-w-[min(92vw,10rem)] sm:h-9 sm:max-h-9 sm:max-w-[12rem] lg:h-10 lg:max-h-10 lg:max-w-[14rem]" as const;
 
 export const LEARNER_BRAND_LOGO_IMG_CLASSNAME =
   "nn-brand-learner-logo block h-full w-auto max-h-full max-w-full shrink-0 bg-transparent object-contain object-left [image-rendering:auto]" as const;

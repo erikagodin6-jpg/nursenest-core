@@ -7,10 +7,8 @@
  * 3. Optional same-origin proxy path when `marketingImageUsesProxy` / `marketingProxyFallbackEnabled` apply
  * 4. Repeat 1–3 for the **default theme** (`NURSENEST_DEFAULT_THEME`) so a broken single-theme file still falls back to the canonical brand mark
  *
- * **Header pipeline (`getHeaderBrandLogoLoadChain`)** extends the raster chain with:
- * - Legacy remote GIF + local SVG (`LOGO_LEGACY_FALLBACK_URL`, `FALLBACK_LOGO_PATH`)
- * - If the catalog enables **tinted** header marks: `getBlueBrandMarkLoadChain()` (legacy name: mask/stem variants)
- * - Final raster safety net: `PRIMARY_LOGO_URL` then `PRIMARY_LOGO_CDN_URL` (default-theme transparent PNG)
+ * **Header pipeline (`getHeaderBrandLogoLoadChain`)** uses strict NurseNest brand assets only.
+ * No generic logo placeholders are included in the chain.
  *
  * Re-exports `getThemeLogo` / `getThemeLogoUrl` from `@/lib/branding/theme-brand-logo-cdn`.
  */
@@ -18,16 +16,14 @@ import {
   getPrimaryBrandMarkObjectKey,
   getSpacesBlueBrandLogoObjectKey,
   headerUsesThemeTintedBrandMark,
-  LOGO_LEGACY_FALLBACK_URL,
   nursenestImagesSpaceObjectUrl,
 } from "@/config/marketing-cdn.catalog";
 import {
   COMMITTED_THEME_LOGO_PUBLIC_PREFIX,
-  FALLBACK_LOGO_PATH,
   PRIMARY_LOGO_CDN_URL,
   PRIMARY_LOGO_URL,
 } from "@/lib/branding/logo-config";
-import { getThemeLogoPath } from "@/lib/theme/theme-logo-config";
+import { getThemeLogoPathForThemeId } from "@/lib/branding/theme-logo-map";
 import { getThemeLogoObjectKeyFromNormalizedId, getThemeLogoUrl } from "@/lib/branding/theme-brand-logo-cdn";
 import {
   marketingImageUsesProxy,
@@ -37,8 +33,8 @@ import {
 import { NURSENEST_DEFAULT_THEME } from "@/lib/theme/theme-registry";
 import { normalizeThemeIdForLogo } from "@/lib/theme/theme-logo-resolve";
 
-/** @deprecated Use `FALLBACK_LOGO_PATH` from `@/lib/branding/logo-config`. */
-export const CANONICAL_BRAND_LOGO_LOCAL_PATH = FALLBACK_LOGO_PATH;
+/** @deprecated Compatibility alias; use `getThemeLogoPathForThemeId` directly. */
+export const CANONICAL_BRAND_LOGO_LOCAL_PATH = getThemeLogoPathForThemeId(NURSENEST_DEFAULT_THEME);
 
 function uniqueStrings(urls: string[]): string[] {
   const seen = new Set<string>();
@@ -73,8 +69,8 @@ export function getThemeLogoLoadChain(themeId?: string | null): string[] {
   const id = normalizeThemeIdForLogo(themeId ?? NURSENEST_DEFAULT_THEME);
   const defId = NURSENEST_DEFAULT_THEME;
 
-  const svgPath = getThemeLogoPath(id);
-  const svgFb = id !== defId ? getThemeLogoPath(defId) : null;
+  const svgPath = getThemeLogoPathForThemeId(id);
+  const svgFb = id !== defId ? getThemeLogoPathForThemeId(defId) : null;
 
   const key = getThemeLogoObjectKeyFromNormalizedId(id);
   const defKey = getThemeLogoObjectKeyFromNormalizedId(defId);
@@ -136,11 +132,10 @@ export function getBlueBrandMarkLoadChain(): string[] {
 export function getHeaderBrandLogoLoadChain(themeId?: string | null): string[] {
   const id = normalizeThemeIdForLogo(themeId ?? NURSENEST_DEFAULT_THEME);
   const themeRasterChain = getThemeLogoLoadChain(id);
-  const legacyAndLocal = uniqueStrings([LOGO_LEGACY_FALLBACK_URL, FALLBACK_LOGO_PATH]);
   if (headerUsesThemeTintedBrandMark()) {
     const blue = getBlueBrandMarkLoadChain();
-    return uniqueStrings([...themeRasterChain, ...legacyAndLocal, ...blue, PRIMARY_LOGO_URL, PRIMARY_LOGO_CDN_URL]);
+    return uniqueStrings([...themeRasterChain, ...blue, PRIMARY_LOGO_URL, PRIMARY_LOGO_CDN_URL]);
   }
-  return uniqueStrings([...themeRasterChain, ...legacyAndLocal, PRIMARY_LOGO_URL, PRIMARY_LOGO_CDN_URL]);
+  return uniqueStrings([...themeRasterChain, PRIMARY_LOGO_URL, PRIMARY_LOGO_CDN_URL]);
 }
 

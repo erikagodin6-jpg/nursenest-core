@@ -10,7 +10,7 @@ import {
   NURSENEST_IMAGES_SPACE_PUBLIC_BASE_URL,
   nursenestImagesSpaceObjectUrl,
 } from "@/config/marketing-cdn.catalog";
-import { LOCAL_BRAND_MARK_PATH } from "@/lib/branding/logo-config";
+import { getThemeLogoPathForThemeId } from "@/lib/branding/theme-logo-map";
 import { NURSENEST_DEFAULT_THEME, THEME_OPTIONS } from "@/lib/theme/theme-registry";
 import { normalizeThemeIdForLogo } from "@/lib/theme/theme-logo-resolve";
 
@@ -57,5 +57,5 @@ export function getThemeLogoObjectKeyFromNormalizedId(themeId: string): string {
 
 /** Same-origin path for `<img src>` — committed SVG, all themes. */
 export function getThemeLogoPublicPath(_theme: string | undefined): string {
-  return LOCAL_BRAND_MARK_PATH;
+  return getThemeLogoPathForThemeId(_theme);
 }

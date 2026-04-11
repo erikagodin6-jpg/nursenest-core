@@ -9,6 +9,8 @@ import {
 } from "@/lib/learner/remediation-links";
 import { appPathwayCatSessionStartPath } from "@/lib/exam-pathways/pathway-cat-flow";
 import { semanticFillClassForAccuracyPct } from "@/lib/ui/semantic-progress-fill";
+import type { BenchmarkServiceResult } from "@/lib/study/benchmarking/benchmark-service";
+import { PracticeBenchmarkBlock } from "@/components/study/practice-benchmark-block";
 
 export type PracticeTestWeakFollowUpCopy = {
   weakTitle: string;
@@ -40,6 +42,7 @@ export function PracticeTestResultsStatic({
   sessionInsightStruggle = null,
   sessionInsightFocus = null,
   weakFollowUpCopy = null,
+  benchmarkResult = null,
 }: {
   testId: string;
   title: string | null;
@@ -52,6 +55,8 @@ export function PracticeTestResultsStatic({
   sessionInsightFocus?: string | null;
   /** Labels for weak-topic remediation links (from `t()` on the results page). */
   weakFollowUpCopy?: PracticeTestWeakFollowUpCopy | null;
+  /** Pathway-aware benchmark result. Null when not enough cohort data yet. */
+  benchmarkResult?: BenchmarkServiceResult | null;
 }) {
   const cat = config?.selectionMode === "cat";
   const incorrect = Math.max(0, results.scoreTotal - results.scoreCorrect);
@@ -260,6 +265,13 @@ export function PracticeTestResultsStatic({
             Open full review on test page
           </Link>
         </div>
+      ) : null}
+
+      {benchmarkResult != null ? (
+        <PracticeBenchmarkBlock
+          benchmark={benchmarkResult}
+          mode={cat ? "cat" : "practice"}
+        />
       ) : null}
 
       <div className="flex flex-wrap gap-3">

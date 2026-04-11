@@ -17,6 +17,8 @@ import { parsePracticeTestConfigAtBoundary } from "@/lib/practice-tests/practice
 import type { PracticeTestConfigJson, PracticeTestResultsJson } from "@/lib/practice-tests/types";
 import type { Metadata } from "next";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
+import { loadBenchmarkForReport } from "@/lib/study/benchmarking/benchmark-service";
+import type { BenchmarkServiceResult } from "@/lib/study/benchmarking/benchmark-service";
 
 type Props = { params: Promise<{ id: string }> };
 
@@ -178,6 +180,18 @@ export default async function PracticeTestResultsPage({ params }: Props) {
         }
       : null;
 
+  // Load pathway-aware benchmark — server-side aggregate, no user arrays to browser.
+  let benchmarkResult: BenchmarkServiceResult | null = null;
+  try {
+    benchmarkResult = await loadBenchmarkForReport({
+      userId,
+      pathwayId: cfg?.pathwayId ?? null,
+      userAccuracyPct: results.accuracyPct ?? null,
+    });
+  } catch {
+    benchmarkResult = null;
+  }
+
   return (
     <main>
       <div className="mb-4">
@@ -204,6 +218,7 @@ export default async function PracticeTestResultsPage({ params }: Props) {
           sessionInsightStruggle={sessionInsightStruggle}
           sessionInsightFocus={sessionInsightFocus}
           weakFollowUpCopy={weakFollowUpCopy}
+          benchmarkResult={benchmarkResult}
         />
       </div>
     </main>

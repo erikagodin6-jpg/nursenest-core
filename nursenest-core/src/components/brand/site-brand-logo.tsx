@@ -4,18 +4,18 @@ import { useCallback, useEffect, useState } from "react";
 import {
   BRAND_NAME,
   DEFAULT_BRAND_LOGO_MARK_CLASSNAME,
-  LOCAL_BRAND_MARK_PATH,
   brandLogoMarkPresentation,
   brandLogoRasterContrastClass,
   type BrandLogoMarkVariant,
 } from "@/lib/branding/logo-config";
+import { getThemeLogoPathForThemeId } from "@/lib/branding/theme-logo-map";
 import { logBrandLogoLoadFailure } from "@/lib/observability/brand-logo-client-log";
 import { useThemeLogo } from "@/lib/theme/use-theme-logo";
 
 export type BrandMarkLoadState = "loading" | "ready" | "error";
 
 /**
- * Theme-aware brand mark: `useThemeLogo` → `getHeaderBrandLogoLoadChain` (local PNG → CDN → proxy → SVG/legacy).
+ * Theme-aware brand mark: `useThemeLogo` → `getHeaderBrandLogoLoadChain` (theme brand assets only).
  * Presentation: {@link brandLogoMarkPresentation}; optional `className` merges onto the slot (legacy homepage override is deprecated).
  */
 export function SiteBrandLogoMark({
@@ -39,7 +39,7 @@ export function SiteBrandLogoMark({
   }, [themeId, loadChain]);
 
   const safeIndex = Math.min(candidateIndex, Math.max(0, loadChain.length - 1));
-  const chainSrc = loadChain[safeIndex] ?? loadChain[0] ?? LOCAL_BRAND_MARK_PATH;
+  const chainSrc = loadChain[safeIndex] ?? loadChain[0] ?? getThemeLogoPathForThemeId(themeId);
   const src = chainSrc;
 
   useEffect(() => {

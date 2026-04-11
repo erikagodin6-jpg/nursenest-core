@@ -2,7 +2,7 @@
 
 import { useMemo, useSyncExternalStore } from "react";
 import { getThemeLogoObjectKeyFromNormalizedId } from "@/lib/branding/theme-brand-logo-cdn";
-import { LOCAL_BRAND_MARK_PATH } from "@/lib/branding/logo-config";
+import { getThemeLogoPathForThemeId } from "@/lib/branding/theme-logo-map";
 import { getHeaderBrandLogoLoadChain } from "@/lib/theme/theme-logo-url";
 import { normalizeThemeIdForLogo } from "@/lib/theme/theme-logo-resolve";
 import { NURSENEST_DEFAULT_THEME, THEME_STORAGE_KEY } from "@/lib/theme/theme-registry";
@@ -59,7 +59,7 @@ export function useThemeLogo(): {
   const mappedSpaceKey = useMemo(() => getThemeLogoObjectKeyFromNormalizedId(activeId), [activeId]);
   const loadChain = useMemo(() => {
     const chain = getHeaderBrandLogoLoadChain(activeId);
-    return chain.length > 0 ? chain : [LOCAL_BRAND_MARK_PATH];
+    return chain.length > 0 ? chain : [getThemeLogoPathForThemeId(activeId)];
   }, [activeId]);
 
   return {

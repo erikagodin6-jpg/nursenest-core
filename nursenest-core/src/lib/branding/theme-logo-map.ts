@@ -1,13 +1,37 @@
 /**
- * Local same-origin mark used when remote theme rasters fail.
- * CDN URLs are built from `theme-brand-logo-space-keys.ts` via `getThemeLogoUrl` in `theme-brand-logo-cdn.ts`.
+ * Canonical local brand logo assets used across header/auth/dashboard shells.
+ * These are the NurseNest-approved files in `/public/logos`.
  */
-import { LOCAL_BRAND_MARK_PATH } from "@/lib/branding/logo-config";
+import { NURSENEST_DEFAULT_THEME, getThemeLogoVariant, THEME_OPTIONS } from "@/lib/theme/theme-registry";
+import { normalizeThemeIdForLogo } from "@/lib/theme/theme-logo-resolve";
 
-/** @deprecated All variants resolve to the committed local SVG; kept for older imports. */
-export const THEME_LOGO_MAP: Record<string, string> = {
-  default: LOCAL_BRAND_MARK_PATH,
-  blue: LOCAL_BRAND_MARK_PATH,
-  berry: LOCAL_BRAND_MARK_PATH,
-  dark: LOCAL_BRAND_MARK_PATH,
+export const CORE_THEME_LOGO_PATHS = {
+  lavender: "/logos/lavender-brandlogo.svg",
+  forest: "/logos/forest-brandlogo.svg",
+  sand: "/logos/neutral-sand-brandlogo.svg",
+  blue: "/logos/clinical-light-brandlogo.svg",
+} as const;
+
+type CoreThemeLogoKey = keyof typeof CORE_THEME_LOGO_PATHS;
+
+const VARIANT_TO_CORE_LOGO: Record<string, CoreThemeLogoKey> = {
+  blue: "blue",
+  mint: "forest",
+  neutral: "sand",
+  blush: "lavender",
+  rose: "lavender",
+  strawberry: "lavender",
+  multi: "lavender",
+  dark: "blue",
 };
+
+export function getThemeLogoPathForThemeId(themeId?: string | null): string {
+  const canonicalThemeId = normalizeThemeIdForLogo(themeId ?? NURSENEST_DEFAULT_THEME);
+  const variant = getThemeLogoVariant(canonicalThemeId);
+  const logoKey = VARIANT_TO_CORE_LOGO[variant] ?? "blue";
+  return CORE_THEME_LOGO_PATHS[logoKey];
+}
+
+export const THEME_LOGO_MAP: Record<string, string> = Object.fromEntries(
+  THEME_OPTIONS.map((theme) => [theme.id, getThemeLogoPathForThemeId(theme.id)]),
+);
