@@ -5567,31 +5567,37 @@
         {
           "id": "clinical-framing",
           "heading": "Clinical Framing",
-          "kind": "text",
+          "kind": "clinical_meaning",
           "body": "Headache is one of the most common NP presentations — yet missing a subarachnoid hemorrhage (SAH), meningitis, or hypertensive emergency is catastrophic. The primary care NP's job is not to diagnose every secondary headache type but to reliably identify who is safe to manage outpatient and who requires immediate escalation. The SNOOP4 framework is essential and must become reflex."
+        },
+        {
+          "id": "core-concepts-differential",
+          "heading": "Core Concepts & Differential",
+          "kind": "core_concept",
+          "body": "{\n  \"primary_vs_secondary\": {\n    \"primary\": \"No underlying structural or systemic pathology. Includes tension-type (most common overall), migraine (most disabling), and cluster. Diagnosis requires pattern recognition and exclusion of red flags.\",\n    \"secondary\": \"Caused by an underlying condition. Always consider when headache is new, different from prior pattern, or accompanied by systemic/neurologic signs. Life-threatening causes must be excluded first.\"\n  },\n  \"snoop4_framework\": {\n    \"S\": \"Systemic symptoms (fever, weight loss, immunosuppression, malignancy)\",\n    \"N\": \"Neurologic symptoms or signs (confusion, focal deficit, papilledema)\",\n    \"O\": \"Onset sudden (thunderclap — worst headache of life; SAH until proven otherwise)\",\n    \"O2\": \"Onset after age 50 (new headache; must exclude mass, GCA, subdural)\",\n    \"P\": \"Pattern change (progressive worsening, new type, awakens from sleep)\",\n    \"P2\": \"Positional (worse lying flat suggests elevated ICP; worse upright suggests CSF leak)\",\n    \"P3\": \"Precipitated by exertion, cough, or sexual activity (valsalva-related — SAH risk)\",\n    \"P4\": \"Pregnancy or postpartum (venous sinus thrombosis, pre-eclampsia, RCVS)\"\n  },\n  \"primary_headache_classification\": {\n    \"tension_type\": \"Bilateral, pressing/tightening, mild-moderate, no nausea/vomiting, not aggravated by activity. Most common type (up to 80% lifetime prevalence).\",\n    \"migraine\": \"Unilateral, pulsating, moderate-severe, nausea/photophobia/phonophobia, worse with activity. With aura in ~30%. POUND mnemonic (Pulsating, duration 4-72 hours, Unilateral, Nausea, Disabling).\",\n    \"cluster\": \"Strictly unilateral periorbital/temporal, excruciating, 15-180 min, ipsilateral autonomic features (tearing, rhinorrhea, ptosis). Occurs in clusters (weeks-months) with remission periods. Predominantly male.\"\n  },\n  \"key_differentiators\": [\n    \"Thunderclap = SAH until CT + LP rule out (even if CT negative within 6h — LP for xanthochromia)\",\n    \"Fever + meningismus = bacterial meningitis — antibiotics before LP if papilledema or focal deficit\",\n    \"New headache >50 + ESR elevation = GCA — steroids SAME DAY to prevent vision loss\",\n    \"Progressive headache + positional component + papilledema = elevated ICP — urgent CT\"\n  ]\n}"
         },
         {
           "id": "management-approach",
           "heading": "Management Approach",
-          "kind": "json",
+          "kind": "clinical_scenario",
           "body": "{\n  \"assessment_flow\": [\n    \"Step 1: Screen for SNOOP4 red flags — if ANY present → imaging and/or ED\",\n    \"Step 2: If no red flags → characterize the headache (onset, location, quality, duration, associated symptoms, triggers)\",\n    \"Step 3: Match to primary headache diagnosis\",\n    \"Step 4: Treat acute attack; assess need for prophylaxis\",\n    \"Step 5: Neuroimaging in primary care: NOT routinely indicated for classic migraine/tension; indicated for: atypical features, progressive pattern, new headache in >50, focal neuro signs, immunocompromise, malignancy history\"\n  ]\n}"
         },
         {
           "id": "red-flags-escalation",
           "heading": "Red Flags & Escalation",
-          "kind": "json",
+          "kind": "exam_tips",
           "body": "[\n  \"Thunderclap → ED immediately → CT head + LP if CT negative\",\n  \"Fever + headache + stiff neck → meningitis → ED, blood cultures, empiric antibiotics without delay\",\n  \"Age >50 + new unilateral temporal headache → GCA → start steroids SAME DAY before vision lost\",\n  \"Headache + progressive neuro symptoms → mass/ICP → urgent CT head\",\n  \"Headache + rash (especially petechial) → meningococcemia → 911 / ED immediately\",\n  \"Postcoital, exertional, or cough-related thunderclap → SAH until proven otherwise\"\n]"
         },
         {
           "id": "population-considerations",
           "heading": "Population Considerations",
-          "kind": "json",
+          "kind": "exam_relevance",
           "body": "{\n  \"urgent_care\": \"All red flag headaches should be dispositioned to ED from urgent care, not managed and discharged. Document that red flags were screened.\",\n  \"adult\": \"In reproductive-age women: consider hormonal triggers for migraine; avoid topiramate and valproate if pregnancy possible (teratogenic). Estrogen-containing OCP may worsen migraine with aura (increased stroke risk).\",\n  \"older_adult\": \"New headache >50 requires imaging to exclude mass, subdural, or vasculitis; GCA must be ruled out\"\n}"
         },
         {
           "id": "follow-up-monitoring",
           "heading": "Follow-Up & Monitoring",
-          "kind": "json",
+          "kind": "takeaways",
           "body": "{\n  \"primary_headache\": \"1-2 month follow-up after initiating prophylaxis; headache diary review; functional status assessment (MIDAS)\",\n  \"prophylaxis_trial\": \"Minimum 8-12 week trial at therapeutic dose before declaring failure\",\n  \"neurology_referral\": \"Failure of ≥2 prophylactic agents; status migrainosus (>72h continuous migraine); diagnostic uncertainty; suspected secondary headache\"\n}"
         }
       ]
