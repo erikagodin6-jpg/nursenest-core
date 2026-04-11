@@ -4,11 +4,26 @@
     "totalTopics": 50,
     "totalQuestions": 200,
     "questionPerTopic": 4,
-    "countrySplit": { "US": 27, "CA": 23 },
+    "countrySplit": {
+      "US": 27,
+      "CA": 23
+    },
     "difficultyDistribution": {
-      "easy": { "topics": 9, "questions": 36, "targetPct": "20%" },
-      "medium": { "topics": 21, "questions": 84, "targetPct": "40%" },
-      "hard": { "topics": 20, "questions": 80, "targetPct": "40%" }
+      "easy": {
+        "topics": 9,
+        "questions": 36,
+        "targetPct": "20%"
+      },
+      "medium": {
+        "topics": 21,
+        "questions": 84,
+        "targetPct": "40%"
+      },
+      "hard": {
+        "topics": 20,
+        "questions": 80,
+        "targetPct": "40%"
+      }
     },
     "categoryBreakdown": {
       "med-surg": 25,
@@ -26,7 +41,12 @@
       "topicSlug": "myocardial-infarction",
       "topicLabel": "Myocardial Infarction (STEMI / NSTEMI)",
       "bodySystem": "cardiovascular",
-      "tags": ["cardiac", "emergency", "priority-setting", "pharmacology"],
+      "tags": [
+        "cardiac",
+        "emergency",
+        "priority-setting",
+        "pharmacology"
+      ],
       "difficulty": "hard",
       "country": "US",
       "questionCount": 4,
@@ -37,7 +57,12 @@
       "topicSlug": "ischemic-stroke",
       "topicLabel": "Ischemic Stroke and tPA Administration",
       "bodySystem": "neurological",
-      "tags": ["neuro", "emergency", "time-sensitive", "thrombolytics"],
+      "tags": [
+        "neuro",
+        "emergency",
+        "time-sensitive",
+        "thrombolytics"
+      ],
       "difficulty": "hard",
       "country": "US",
       "questionCount": 4,
@@ -48,7 +73,11 @@
       "topicSlug": "hypertensive-crisis",
       "topicLabel": "Hypertensive Crisis and Emergency",
       "bodySystem": "cardiovascular",
-      "tags": ["cardiac", "emergency", "priority-setting"],
+      "tags": [
+        "cardiac",
+        "emergency",
+        "priority-setting"
+      ],
       "difficulty": "hard",
       "country": "CA",
       "questionCount": 4,
@@ -59,7 +88,12 @@
       "topicSlug": "pulmonary-embolism",
       "topicLabel": "Deep Vein Thrombosis and Pulmonary Embolism",
       "bodySystem": "respiratory",
-      "tags": ["respiratory", "emergency", "anticoagulation", "clots"],
+      "tags": [
+        "respiratory",
+        "emergency",
+        "anticoagulation",
+        "clots"
+      ],
       "difficulty": "hard",
       "country": "US",
       "questionCount": 4,
@@ -70,7 +104,12 @@
       "topicSlug": "acute-respiratory-distress-syndrome",
       "topicLabel": "Acute Respiratory Distress Syndrome (ARDS)",
       "bodySystem": "respiratory",
-      "tags": ["respiratory", "ICU", "ventilator", "emergency"],
+      "tags": [
+        "respiratory",
+        "ICU",
+        "ventilator",
+        "emergency"
+      ],
       "difficulty": "hard",
       "country": "US",
       "questionCount": 4,
@@ -81,7 +120,12 @@
       "topicSlug": "diabetic-ketoacidosis",
       "topicLabel": "Diabetic Ketoacidosis (DKA)",
       "bodySystem": "endocrine",
-      "tags": ["endocrine", "emergency", "fluids-electrolytes", "insulin"],
+      "tags": [
+        "endocrine",
+        "emergency",
+        "fluids-electrolytes",
+        "insulin"
+      ],
       "difficulty": "hard",
       "country": "CA",
       "questionCount": 4,
@@ -92,7 +136,12 @@
       "topicSlug": "hyperosmolar-hyperglycemic-state",
       "topicLabel": "Hyperosmolar Hyperglycemic State (HHS)",
       "bodySystem": "endocrine",
-      "tags": ["endocrine", "emergency", "fluids-electrolytes", "type2-diabetes"],
+      "tags": [
+        "endocrine",
+        "emergency",
+        "fluids-electrolytes",
+        "type2-diabetes"
+      ],
       "difficulty": "hard",
       "country": "US",
       "questionCount": 4,
@@ -103,7 +152,12 @@
       "topicSlug": "acute-kidney-injury",
       "topicLabel": "Acute Kidney Injury (AKI)",
       "bodySystem": "renal",
-      "tags": ["renal", "fluids-electrolytes", "monitoring", "pharmacology"],
+      "tags": [
+        "renal",
+        "fluids-electrolytes",
+        "monitoring",
+        "pharmacology"
+      ],
       "difficulty": "hard",
       "country": "CA",
       "questionCount": 4,
@@ -114,7 +168,12 @@
       "topicSlug": "liver-cirrhosis-hepatic-encephalopathy",
       "topicLabel": "Liver Cirrhosis and Hepatic Encephalopathy",
       "bodySystem": "gastrointestinal",
-      "tags": ["GI", "liver", "neuro", "fluids-electrolytes"],
+      "tags": [
+        "GI",
+        "liver",
+        "neuro",
+        "fluids-electrolytes"
+      ],
       "difficulty": "hard",
       "country": "US",
       "questionCount": 4,
@@ -125,7 +184,12 @@
       "topicSlug": "gastrointestinal-bleeding",
       "topicLabel": "Upper and Lower Gastrointestinal Bleeding",
       "bodySystem": "gastrointestinal",
-      "tags": ["GI", "emergency", "blood-loss", "priority-setting"],
+      "tags": [
+        "GI",
+        "emergency",
+        "blood-loss",
+        "priority-setting"
+      ],
       "difficulty": "hard",
       "country": "US",
       "questionCount": 4,
@@ -136,7 +200,12 @@
       "topicSlug": "heart-failure",
       "topicLabel": "Heart Failure (Systolic and Diastolic)",
       "bodySystem": "cardiovascular",
-      "tags": ["cardiac", "fluids-electrolytes", "pharmacology", "monitoring"],
+      "tags": [
+        "cardiac",
+        "fluids-electrolytes",
+        "pharmacology",
+        "monitoring"
+      ],
       "difficulty": "medium",
       "country": "CA",
       "questionCount": 4,
@@ -147,7 +216,12 @@
       "topicSlug": "atrial-fibrillation",
       "topicLabel": "Atrial Fibrillation and Rhythm Management",
       "bodySystem": "cardiovascular",
-      "tags": ["cardiac", "ECG", "anticoagulation", "pharmacology"],
+      "tags": [
+        "cardiac",
+        "ECG",
+        "anticoagulation",
+        "pharmacology"
+      ],
       "difficulty": "medium",
       "country": "US",
       "questionCount": 4,
@@ -158,7 +232,12 @@
       "topicSlug": "pneumonia",
       "topicLabel": "Community-Acquired and Hospital-Acquired Pneumonia",
       "bodySystem": "respiratory",
-      "tags": ["respiratory", "infection", "antibiotics", "oxygenation"],
+      "tags": [
+        "respiratory",
+        "infection",
+        "antibiotics",
+        "oxygenation"
+      ],
       "difficulty": "medium",
       "country": "CA",
       "questionCount": 4,
@@ -169,7 +248,12 @@
       "topicSlug": "chronic-obstructive-pulmonary-disease",
       "topicLabel": "Chronic Obstructive Pulmonary Disease (COPD) Exacerbation",
       "bodySystem": "respiratory",
-      "tags": ["respiratory", "oxygen-therapy", "pharmacology", "monitoring"],
+      "tags": [
+        "respiratory",
+        "oxygen-therapy",
+        "pharmacology",
+        "monitoring"
+      ],
       "difficulty": "medium",
       "country": "CA",
       "questionCount": 4,
@@ -180,7 +264,12 @@
       "topicSlug": "asthma-acute-exacerbation",
       "topicLabel": "Asthma: Acute Exacerbation and Status Asthmaticus",
       "bodySystem": "respiratory",
-      "tags": ["respiratory", "emergency", "bronchodilators", "inhaler-therapy"],
+      "tags": [
+        "respiratory",
+        "emergency",
+        "bronchodilators",
+        "inhaler-therapy"
+      ],
       "difficulty": "medium",
       "country": "US",
       "questionCount": 4,
@@ -191,7 +280,12 @@
       "topicSlug": "chronic-kidney-disease",
       "topicLabel": "Chronic Kidney Disease and Renal Replacement Therapy",
       "bodySystem": "renal",
-      "tags": ["renal", "dialysis", "fluids-electrolytes", "pharmacology"],
+      "tags": [
+        "renal",
+        "dialysis",
+        "fluids-electrolytes",
+        "pharmacology"
+      ],
       "difficulty": "medium",
       "country": "CA",
       "questionCount": 4,
@@ -202,7 +296,12 @@
       "topicSlug": "acute-pancreatitis",
       "topicLabel": "Acute Pancreatitis",
       "bodySystem": "gastrointestinal",
-      "tags": ["GI", "pain", "fluids", "nutrition"],
+      "tags": [
+        "GI",
+        "pain",
+        "fluids",
+        "nutrition"
+      ],
       "difficulty": "medium",
       "country": "US",
       "questionCount": 4,
@@ -213,7 +312,12 @@
       "topicSlug": "inflammatory-bowel-disease",
       "topicLabel": "Inflammatory Bowel Disease: Crohn's and Ulcerative Colitis",
       "bodySystem": "gastrointestinal",
-      "tags": ["GI", "chronic-illness", "pharmacology", "nutrition"],
+      "tags": [
+        "GI",
+        "chronic-illness",
+        "pharmacology",
+        "nutrition"
+      ],
       "difficulty": "medium",
       "country": "CA",
       "questionCount": 4,
@@ -224,7 +328,12 @@
       "topicSlug": "fractures-and-orthopedic-care",
       "topicLabel": "Fractures and Orthopedic Nursing Care",
       "bodySystem": "musculoskeletal",
-      "tags": ["ortho", "safety", "pain", "mobility"],
+      "tags": [
+        "ortho",
+        "safety",
+        "pain",
+        "mobility"
+      ],
       "difficulty": "easy",
       "country": "US",
       "questionCount": 4,
@@ -235,7 +344,13 @@
       "topicSlug": "hip-replacement-post-op",
       "topicLabel": "Total Hip Replacement: Post-operative Nursing Care",
       "bodySystem": "musculoskeletal",
-      "tags": ["ortho", "post-op", "safety", "mobility", "DVT-prevention"],
+      "tags": [
+        "ortho",
+        "post-op",
+        "safety",
+        "mobility",
+        "DVT-prevention"
+      ],
       "difficulty": "easy",
       "country": "CA",
       "questionCount": 4,
@@ -246,7 +361,12 @@
       "topicSlug": "wound-care-pressure-injuries",
       "topicLabel": "Wound Care and Pressure Injury Prevention",
       "bodySystem": "integumentary",
-      "tags": ["skin", "wound-care", "safety", "documentation"],
+      "tags": [
+        "skin",
+        "wound-care",
+        "safety",
+        "documentation"
+      ],
       "difficulty": "easy",
       "country": "CA",
       "questionCount": 4,
@@ -257,7 +377,12 @@
       "topicSlug": "urinary-tract-infection",
       "topicLabel": "Urinary Tract Infection and Catheter-Associated UTI",
       "bodySystem": "renal",
-      "tags": ["renal", "infection", "catheter-care", "antibiotics"],
+      "tags": [
+        "renal",
+        "infection",
+        "catheter-care",
+        "antibiotics"
+      ],
       "difficulty": "easy",
       "country": "US",
       "questionCount": 4,
@@ -268,7 +393,12 @@
       "topicSlug": "appendicitis-and-peritonitis",
       "topicLabel": "Appendicitis and Peritonitis",
       "bodySystem": "gastrointestinal",
-      "tags": ["GI", "surgical", "emergency", "pre-op-post-op"],
+      "tags": [
+        "GI",
+        "surgical",
+        "emergency",
+        "pre-op-post-op"
+      ],
       "difficulty": "medium",
       "country": "US",
       "questionCount": 4,
@@ -279,7 +409,12 @@
       "topicSlug": "burns-thermal-injury",
       "topicLabel": "Burns: Thermal Injury Assessment and Care",
       "bodySystem": "integumentary",
-      "tags": ["skin", "emergency", "fluids", "wound-care"],
+      "tags": [
+        "skin",
+        "emergency",
+        "fluids",
+        "wound-care"
+      ],
       "difficulty": "hard",
       "country": "US",
       "questionCount": 4,
@@ -290,7 +425,13 @@
       "topicSlug": "sepsis-and-septic-shock",
       "topicLabel": "Sepsis and Septic Shock (Sepsis-3 Bundle)",
       "bodySystem": "immunological",
-      "tags": ["emergency", "infection", "shock", "antibiotics", "lactate"],
+      "tags": [
+        "emergency",
+        "infection",
+        "shock",
+        "antibiotics",
+        "lactate"
+      ],
       "difficulty": "hard",
       "country": "CA",
       "questionCount": 4,
@@ -301,7 +442,14 @@
       "topicSlug": "anticoagulation-therapy",
       "topicLabel": "Anticoagulation: Heparin, Warfarin, and DOACs",
       "bodySystem": "hematological",
-      "tags": ["pharmacology", "bleeding-risk", "lab-monitoring", "safety"],
+      "tags": [
+        "pharmacology",
+        "bleeding-risk",
+        "lab-monitoring",
+        "safety",
+        "anticoagulation",
+        "thrombosis"
+      ],
       "difficulty": "hard",
       "country": "US",
       "questionCount": 4,
@@ -312,7 +460,12 @@
       "topicSlug": "insulin-management",
       "topicLabel": "Insulin Types, Administration, and Hypoglycemia Management",
       "bodySystem": "endocrine",
-      "tags": ["pharmacology", "insulin", "blood-glucose", "safety"],
+      "tags": [
+        "pharmacology",
+        "insulin",
+        "blood-glucose",
+        "safety"
+      ],
       "difficulty": "medium",
       "country": "CA",
       "questionCount": 4,
@@ -323,7 +476,12 @@
       "topicSlug": "diuretic-therapy",
       "topicLabel": "Diuretic Therapy: Loop, Thiazide, and Potassium-Sparing",
       "bodySystem": "renal",
-      "tags": ["pharmacology", "fluids-electrolytes", "monitoring", "cardiac"],
+      "tags": [
+        "pharmacology",
+        "fluids-electrolytes",
+        "monitoring",
+        "cardiac"
+      ],
       "difficulty": "medium",
       "country": "US",
       "questionCount": 4,
@@ -334,7 +492,12 @@
       "topicSlug": "opioid-analgesics",
       "topicLabel": "Opioid Analgesics: Pain Management and Monitoring",
       "bodySystem": "neurological",
-      "tags": ["pharmacology", "pain", "safety", "respiratory-depression"],
+      "tags": [
+        "pharmacology",
+        "pain",
+        "safety",
+        "respiratory-depression"
+      ],
       "difficulty": "medium",
       "country": "CA",
       "questionCount": 4,
@@ -345,7 +508,12 @@
       "topicSlug": "antihypertensive-medications",
       "topicLabel": "Antihypertensive Drug Classes and Nursing Considerations",
       "bodySystem": "cardiovascular",
-      "tags": ["pharmacology", "cardiac", "safety", "monitoring"],
+      "tags": [
+        "pharmacology",
+        "cardiac",
+        "safety",
+        "monitoring"
+      ],
       "difficulty": "easy",
       "country": "US",
       "questionCount": 4,
@@ -356,7 +524,12 @@
       "topicSlug": "antibiotic-selection-and-safety",
       "topicLabel": "Antibiotic Selection, Safety, and Allergy Management",
       "bodySystem": "immunological",
-      "tags": ["pharmacology", "infection", "allergy", "culture-sensitivity"],
+      "tags": [
+        "pharmacology",
+        "infection",
+        "allergy",
+        "culture-sensitivity"
+      ],
       "difficulty": "medium",
       "country": "CA",
       "questionCount": 4,
@@ -367,7 +540,12 @@
       "topicSlug": "corticosteroid-therapy",
       "topicLabel": "Corticosteroid Therapy: Uses, Risks, and Nursing Care",
       "bodySystem": "endocrine",
-      "tags": ["pharmacology", "immunosuppression", "side-effects", "safety"],
+      "tags": [
+        "pharmacology",
+        "immunosuppression",
+        "side-effects",
+        "safety"
+      ],
       "difficulty": "medium",
       "country": "US",
       "questionCount": 4,
@@ -378,7 +556,12 @@
       "topicSlug": "digoxin-cardiac-glycosides",
       "topicLabel": "Digoxin and Cardiac Glycosides: Safety and Toxicity",
       "bodySystem": "cardiovascular",
-      "tags": ["pharmacology", "cardiac", "toxicity", "narrow-therapeutic-index"],
+      "tags": [
+        "pharmacology",
+        "cardiac",
+        "toxicity",
+        "narrow-therapeutic-index"
+      ],
       "difficulty": "hard",
       "country": "CA",
       "questionCount": 4,
@@ -389,7 +572,12 @@
       "topicSlug": "anticonvulsant-medications",
       "topicLabel": "Anticonvulsant Medications and Seizure Management",
       "bodySystem": "neurological",
-      "tags": ["pharmacology", "neuro", "safety", "therapeutic-monitoring"],
+      "tags": [
+        "pharmacology",
+        "neuro",
+        "safety",
+        "therapeutic-monitoring"
+      ],
       "difficulty": "medium",
       "country": "US",
       "questionCount": 4,
@@ -400,7 +588,13 @@
       "topicSlug": "antipsychotic-medications",
       "topicLabel": "Antipsychotic Medications: Typical, Atypical, and EPS",
       "bodySystem": "neurological",
-      "tags": ["pharmacology", "psych", "EPS", "metabolic-syndrome", "safety"],
+      "tags": [
+        "pharmacology",
+        "psych",
+        "EPS",
+        "metabolic-syndrome",
+        "safety"
+      ],
       "difficulty": "medium",
       "country": "CA",
       "questionCount": 4,
@@ -411,7 +605,12 @@
       "topicSlug": "emergency-triage-principles",
       "topicLabel": "Emergency Department Triage: START / CTAS Principles",
       "bodySystem": "multi-system",
-      "tags": ["triage", "emergency", "priority-setting", "SATA"],
+      "tags": [
+        "triage",
+        "emergency",
+        "priority-setting",
+        "SATA"
+      ],
       "difficulty": "hard",
       "country": "US",
       "questionCount": 4,
@@ -422,7 +621,12 @@
       "topicSlug": "post-operative-complications",
       "topicLabel": "Post-operative Complications: Recognition and Priority Response",
       "bodySystem": "multi-system",
-      "tags": ["post-op", "priority-setting", "complications", "safety"],
+      "tags": [
+        "post-op",
+        "priority-setting",
+        "complications",
+        "safety"
+      ],
       "difficulty": "hard",
       "country": "CA",
       "questionCount": 4,
@@ -433,7 +637,12 @@
       "topicSlug": "deteriorating-patient-rapid-response",
       "topicLabel": "Identifying the Deteriorating Patient and Rapid Response",
       "bodySystem": "multi-system",
-      "tags": ["emergency", "RRT", "early-warning", "priority-setting"],
+      "tags": [
+        "emergency",
+        "RRT",
+        "early-warning",
+        "priority-setting"
+      ],
       "difficulty": "hard",
       "country": "US",
       "questionCount": 4,
@@ -444,7 +653,12 @@
       "topicSlug": "multiple-patient-assignment",
       "topicLabel": "Multiple Patient Assignment: Prioritization and Workload",
       "bodySystem": "multi-system",
-      "tags": ["priority-setting", "delegation", "time-management", "safety"],
+      "tags": [
+        "priority-setting",
+        "delegation",
+        "time-management",
+        "safety"
+      ],
       "difficulty": "hard",
       "country": "CA",
       "questionCount": 4,
@@ -455,7 +669,12 @@
       "topicSlug": "airway-management-priority",
       "topicLabel": "Airway Management and Priority Interventions",
       "bodySystem": "respiratory",
-      "tags": ["emergency", "airway", "priority-setting", "oxygenation"],
+      "tags": [
+        "emergency",
+        "airway",
+        "priority-setting",
+        "oxygenation"
+      ],
       "difficulty": "hard",
       "country": "US",
       "questionCount": 4,
@@ -466,7 +685,12 @@
       "topicSlug": "shock-recognition-and-response",
       "topicLabel": "Shock: Recognition, Types, and Priority Response",
       "bodySystem": "cardiovascular",
-      "tags": ["emergency", "shock", "priority-setting", "hemodynamics"],
+      "tags": [
+        "emergency",
+        "shock",
+        "priority-setting",
+        "hemodynamics"
+      ],
       "difficulty": "hard",
       "country": "US",
       "questionCount": 4,
@@ -477,7 +701,12 @@
       "topicSlug": "fluid-and-electrolyte-imbalances",
       "topicLabel": "Fluid and Electrolyte Imbalances: Assessment and Intervention",
       "bodySystem": "renal",
-      "tags": ["fluids-electrolytes", "monitoring", "pharmacology", "labs"],
+      "tags": [
+        "fluids-electrolytes",
+        "monitoring",
+        "pharmacology",
+        "labs"
+      ],
       "difficulty": "medium",
       "country": "CA",
       "questionCount": 4,
@@ -488,7 +717,12 @@
       "topicSlug": "pain-assessment-and-management",
       "topicLabel": "Pain Assessment, Scales, and Nursing Management",
       "bodySystem": "neurological",
-      "tags": ["pain", "assessment", "pharmacology", "non-pharmacological"],
+      "tags": [
+        "pain",
+        "assessment",
+        "pharmacology",
+        "non-pharmacological"
+      ],
       "difficulty": "easy",
       "country": "US",
       "questionCount": 4,
@@ -499,7 +733,12 @@
       "topicSlug": "fall-prevention-and-safety",
       "topicLabel": "Fall Prevention: Risk Assessment and Safety Interventions",
       "bodySystem": "multi-system",
-      "tags": ["safety", "fall-risk", "environment", "patient-education"],
+      "tags": [
+        "safety",
+        "fall-risk",
+        "environment",
+        "patient-education"
+      ],
       "difficulty": "easy",
       "country": "CA",
       "questionCount": 4,
@@ -510,7 +749,12 @@
       "topicSlug": "medication-administration-safety",
       "topicLabel": "Medication Administration Safety: Rights, Errors, and Reporting",
       "bodySystem": "multi-system",
-      "tags": ["safety", "medication-errors", "rights-of-medication", "reporting"],
+      "tags": [
+        "safety",
+        "medication-errors",
+        "rights-of-medication",
+        "reporting"
+      ],
       "difficulty": "easy",
       "country": "US",
       "questionCount": 4,
@@ -521,7 +765,12 @@
       "topicSlug": "infection-control-and-precautions",
       "topicLabel": "Infection Control: Standard and Transmission-Based Precautions",
       "bodySystem": "immunological",
-      "tags": ["infection-control", "PPE", "hand-hygiene", "isolation"],
+      "tags": [
+        "infection-control",
+        "PPE",
+        "hand-hygiene",
+        "isolation"
+      ],
       "difficulty": "easy",
       "country": "CA",
       "questionCount": 4,
@@ -532,7 +781,12 @@
       "topicSlug": "surgical-site-infection-prevention",
       "topicLabel": "Surgical Site Infection Prevention and Wound Assessment",
       "bodySystem": "integumentary",
-      "tags": ["surgical", "infection-control", "wound-care", "safety"],
+      "tags": [
+        "surgical",
+        "infection-control",
+        "wound-care",
+        "safety"
+      ],
       "difficulty": "medium",
       "country": "US",
       "questionCount": 4,
@@ -543,7 +797,12 @@
       "topicSlug": "delegation-to-uap",
       "topicLabel": "Delegation to Unlicensed Assistive Personnel (UAP/PSW)",
       "bodySystem": "multi-system",
-      "tags": ["delegation", "scope-of-practice", "safety", "supervision"],
+      "tags": [
+        "delegation",
+        "scope-of-practice",
+        "safety",
+        "supervision"
+      ],
       "difficulty": "medium",
       "country": "US",
       "questionCount": 4,
@@ -554,7 +813,12 @@
       "topicSlug": "lpn-rpn-scope-of-practice",
       "topicLabel": "LPN/RPN Scope of Practice and RN Collaboration",
       "bodySystem": "multi-system",
-      "tags": ["delegation", "scope-of-practice", "collaboration", "safety"],
+      "tags": [
+        "delegation",
+        "scope-of-practice",
+        "collaboration",
+        "safety"
+      ],
       "difficulty": "medium",
       "country": "CA",
       "questionCount": 4,
@@ -565,7 +829,13 @@
       "topicSlug": "interprofessional-collaboration-sbar",
       "topicLabel": "Interprofessional Collaboration and SBAR Communication",
       "bodySystem": "multi-system",
-      "tags": ["delegation", "communication", "SBAR", "teamwork", "safety"],
+      "tags": [
+        "delegation",
+        "communication",
+        "SBAR",
+        "teamwork",
+        "safety"
+      ],
       "difficulty": "medium",
       "country": "CA",
       "questionCount": 4,

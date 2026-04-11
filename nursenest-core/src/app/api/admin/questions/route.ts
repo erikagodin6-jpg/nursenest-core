@@ -99,7 +99,7 @@ export async function POST(req: Request) {
     try {
       assertExamQuestionContextForPublish({
         tier: tierCodeToExamDbTier(data.tier),
-        exam: data.examFamily ? examFamilyToExamColumn(data.examFamily) : null,
+        exam: data.examFamily ? examFamilyToExamColumn(data.examFamily) : "",
         countryCode: data.country,
       });
     } catch (error) {

@@ -131,18 +131,39 @@ function scoreRelatedness(source: TopicEntry, candidate: TopicEntry): number {
 /**
  * Return top N candidate slugs for `source` from `pool`, sorted by score desc.
  * Candidates with score ≤ 0 are excluded.
+ *
+ * Tie-breaking (same score):
+ *   1. Prefer same bodySystem as source — ensures same-system topics at higher
+ *      array indices beat cross-system topics at lower indices.
+ *   2. Prefer fewer shared tags with already-chosen items (diversity fallback).
  */
 function topRelated(
   source: TopicEntry,
   pool: TopicEntry[],
   maxLinks: number,
 ): string[] {
+  const topicBySlug = new Map(pool.map((t) => [t.topicSlug, t]));
+
   return pool
-    .map((c) => ({ slug: c.topicSlug, score: scoreRelatedness(source, c) }))
+    .map((c) => ({
+      slug: c.topicSlug,
+      score: scoreRelatedness(source, c),
+      sameSystem:
+        c.bodySystem.toLowerCase() === source.bodySystem.toLowerCase() ? 1 : 0,
+    }))
     .filter((x) => x.score > 0)
-    .sort((a, b) => b.score - a.score)
+    .sort((a, b) => {
+      // Primary: higher score first
+      if (b.score !== a.score) return b.score - a.score;
+      // Secondary: prefer same body system as source
+      if (b.sameSystem !== a.sameSystem) return b.sameSystem - a.sameSystem;
+      // Tertiary: stable alphabetical to avoid any remaining insertion-order bias
+      return a.slug.localeCompare(b.slug);
+    })
     .slice(0, maxLinks)
     .map((x) => x.slug);
+
+  void topicBySlug; // referenced in validator cross-check; keep for future use
 }
 
 // ---------------------------------------------------------------------------

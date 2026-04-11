@@ -97,7 +97,6 @@ export function LearnerDashboardAnalytics({
           hasWeakAreas: weakAreas.length > 0,
           hasRecentCompletion,
           catStartHref: catQuick.catStartHref,
-          catDestinationKind: catQuick.catDestinationKind,
           catPathwayLabel: catQuick.catPathwayLabel,
           catPathwayLine: catQuick.catPathwayLine,
         }}

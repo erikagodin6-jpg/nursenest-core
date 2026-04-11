@@ -344,7 +344,7 @@ const TOPICS: TopicSpec[] = [
     topicSlug: "anticoagulation-therapy",
     topicLabel: "Anticoagulation: Heparin, Warfarin, and DOACs",
     bodySystem: "hematological",
-    tags: ["pharmacology", "bleeding-risk", "lab-monitoring", "safety"],
+    tags: ["pharmacology", "bleeding-risk", "lab-monitoring", "safety", "anticoagulation", "thrombosis"],
     difficulty: "hard",
     country: "US",
     questionCount: 4,
