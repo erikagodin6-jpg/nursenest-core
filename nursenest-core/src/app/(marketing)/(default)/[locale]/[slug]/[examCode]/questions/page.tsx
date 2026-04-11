@@ -6,7 +6,7 @@ import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
 import { loadMarketingExamHubOptionalBlocks } from "@/lib/exam-pathways/marketing-hub-optional-data";
 import { resolveExamPathwaySafe } from "@/lib/exam-pathways/resolve-exam-pathway-safe";
-import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
+import { HUB, loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { getNpPracticeTestLandingCopy } from "@/lib/exam-pathways/np-practice-test-segments";
 import { pathwayMarketingHubLinkContext } from "@/lib/marketing/np-seo-alias-analytics-props";
 import {

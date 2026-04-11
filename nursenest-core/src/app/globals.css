@@ -3697,6 +3697,15 @@ html[data-theme="deep-twilight"] .nn-cat-opt--incorrect {
   border: 1px solid var(--semantic-border-soft);
   background: var(--semantic-surface-elevated, var(--semantic-surface));
   padding: 24px;
+  animation: nn-success-reveal 0.28s cubic-bezier(0.25, 0.1, 0.25, 1) both;
+}
+.nn-cat-perf-card:nth-child(2) { animation-delay: 0.06s; }
+.nn-cat-perf-card:nth-child(3) { animation-delay: 0.12s; }
+.nn-cat-perf-card:nth-child(4) { animation-delay: 0.18s; }
+@media (prefers-reduced-motion: reduce) {
+  .nn-cat-perf-card {
+    animation: none;
+  }
 }
 
 .nn-cat-perf-card__label {
