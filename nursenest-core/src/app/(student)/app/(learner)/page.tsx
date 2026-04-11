@@ -268,6 +268,13 @@ export default async function LearnerDashboardPage() {
           <section className="nn-dash-section">
             <p className="nn-dash-section-label">Study Plan</p>
             {studySnap ? <LearnerAdaptiveFocusCard snapshot={studySnap} /> : null}
+            {isStudyCoachEnabled() && (
+              <DashboardCoachCard
+                weakTopics={weakTopicTitles}
+                examTarget={undefined}
+                daysUntilExam={daysLeft}
+              />
+            )}
             <LearnerContinueLearningCard t={t} links={continueLinks} />
             <PremiumLearnerHub
               snapshot={snapshot}

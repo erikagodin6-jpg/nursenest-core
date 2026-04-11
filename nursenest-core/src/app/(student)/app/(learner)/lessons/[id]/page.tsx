@@ -46,6 +46,8 @@ import {
   pathwayLessonHasRenderableHubSlug,
 } from "@/lib/lessons/pathway-lesson-types";
 import { marketingPathwayLessonsIndexPath } from "@/lib/lessons/lesson-routes";
+import { CoachLessonHelper } from "@/components/study/coach-lesson-helper";
+import { isStudyCoachEnabled } from "@/lib/ai/learner-ai-policy";
 
 function LessonBody({ content }: { content: unknown }) {
   if (Array.isArray(content)) {
@@ -268,6 +270,9 @@ export default async function LessonDetailPage({ params }: Props) {
         >
           <LegacyMonolithLessonBody lesson={resolvedLesson.lesson} />
         </PremiumLessonShell>
+        {isStudyCoachEnabled() && (
+          <CoachLessonHelper lessonTitle={title} topic={title} />
+        )}
         <LessonContinueStudyNextBlock bundle={legacyContinue} />
         <div className="mt-10 flex flex-wrap gap-2 border-t border-border pt-6">
           <Link
@@ -373,6 +378,12 @@ export default async function LessonDetailPage({ params }: Props) {
             </article>
           </PremiumLessonShell>
         </div>
+        {isStudyCoachEnabled() && (
+          <CoachLessonHelper
+            lessonTitle={record.title}
+            topic={record.topic}
+          />
+        )}
         <LessonContinueStudyNextBlock bundle={pathwayContinue} />
         {pathway ? (
           <PathwayLessonRelatedQuestions
@@ -453,6 +464,12 @@ export default async function LessonDetailPage({ params }: Props) {
       >
         <LessonBody content={row.content as unknown} />
       </PremiumLessonShell>
+      {isStudyCoachEnabled() && (
+        <CoachLessonHelper
+          lessonTitle={row.title}
+          topic={row.bodySystem?.trim() || undefined}
+        />
+      )}
       <LessonContinueStudyNextBlock bundle={contentContinue} />
       <div className="mt-10 flex flex-wrap gap-2 border-t border-border pt-6">
         <Link
