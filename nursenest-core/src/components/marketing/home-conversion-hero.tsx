@@ -108,6 +108,7 @@ export function HomeConversionHero() {
               </div>
             </StaggerItem>
 
+            <StaggerItem>
             <div
               className="nn-accent-surface-b rounded-2xl px-4 py-4"
               data-testid="hero-tier-quick-entry"
@@ -266,15 +267,24 @@ export function HomeConversionHero() {
                 </MarketingTrackedLink>
               </nav>
             </div>
+            </StaggerItem>
 
-            <p className="nn-marketing-caption max-w-xl text-pretty text-[var(--theme-muted-text)]">{t("home.conversion.heroDisclaimer")}</p>
-            <p className="nn-marketing-body-sm max-w-lg text-pretty text-[var(--theme-body-text)]">{t("home.conversion.heroFreeLine")}</p>
-            <p className="nn-marketing-caption max-w-lg text-pretty text-[var(--theme-muted-text)]">{t("home.conversion.heroTrustMicro")}</p>
-          </div>
+            <StaggerItem>
+              <p className="nn-marketing-caption max-w-xl text-pretty text-[var(--theme-muted-text)]">{t("home.conversion.heroDisclaimer")}</p>
+            </StaggerItem>
+            <StaggerItem>
+              <p className="nn-marketing-body-sm max-w-lg text-pretty text-[var(--theme-body-text)]">{t("home.conversion.heroFreeLine")}</p>
+            </StaggerItem>
+            <StaggerItem>
+              <p className="nn-marketing-caption max-w-lg text-pretty text-[var(--theme-muted-text)]">{t("home.conversion.heroTrustMicro")}</p>
+            </StaggerItem>
+          </StaggerGroup>
 
-          <div
+          <ScaleIn
             className="relative mx-auto w-full max-w-md rounded-2xl border border-[var(--border-subtle)] bg-[var(--theme-card-bg)]/85 p-2 shadow-[var(--shadow-elevated)] backdrop-blur-sm lg:mx-0 lg:max-w-none"
             data-testid="home-hero-platform-preview"
+            whenInView
+            once
           >
             <div
               className="pointer-events-none absolute -inset-px rounded-2xl opacity-90 [background-image:var(--nn-aesthetic-frame-shine)]"
@@ -289,7 +299,7 @@ export function HomeConversionHero() {
                 captionOverlay
               />
             </div>
-          </div>
+          </ScaleIn>
         </div>
       </div>
     </section>

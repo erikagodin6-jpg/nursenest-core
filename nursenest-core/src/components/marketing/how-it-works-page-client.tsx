@@ -34,6 +34,7 @@ import {
   MARKETING_PRIMARY_CTA_CLASS,
   MARKETING_SECONDARY_CTA_CLASS,
 } from "@/lib/theme/marketing-hero-pattern";
+import { FadeUp, StaggerGroup, StaggerItem } from "@/lib/motion";
 import { trackClientEvent } from "@/lib/observability/posthog-client";
 
 // ── Section 1: Hero ──────────────────────────────────────────────────────────
@@ -57,45 +58,55 @@ function HeroSection() {
         }}
       />
 
-      <div className="relative mx-auto max-w-2xl">
-        <p
-          className="mb-4 inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wider"
-          style={{
-            background: "color-mix(in srgb, var(--theme-primary) 10%, var(--semantic-surface))",
-            border: "1px solid color-mix(in srgb, var(--theme-primary) 22%, var(--semantic-border-soft))",
-            color: "var(--semantic-text-muted)",
-          }}
-        >
-          <Sparkles className="h-3.5 w-3.5" />
-          Adaptive exam prep
-        </p>
-
-        <h1 className="nn-marketing-h1 text-balance">
-          A Smarter Way to Prepare for Your Exam
-        </h1>
-
-        <p className="nn-marketing-body mt-5 text-pretty text-muted-foreground">
-          NurseNest guides you through what to study, tracks your progress,
-          and helps you know when you're ready to pass.
-        </p>
-
-        <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-          <Link
-            href="/pricing"
-            className={MARKETING_PRIMARY_CTA_CLASS}
-            onClick={() => trackClientEvent("hiw_hero_cta_clicked", { cta: "primary" })}
+      <StaggerGroup className="relative mx-auto max-w-2xl" staggerMs={70} whenInView once>
+        <StaggerItem>
+          <p
+            className="mb-4 inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wider"
+            style={{
+              background: "color-mix(in srgb, var(--theme-primary) 10%, var(--semantic-surface))",
+              border: "1px solid color-mix(in srgb, var(--theme-primary) 22%, var(--semantic-border-soft))",
+              color: "var(--semantic-text-muted)",
+            }}
           >
-            Start Free Trial
-          </Link>
-          <Link href="#how-it-works-steps" className={MARKETING_SECONDARY_CTA_CLASS}>
-            See How It Works
-          </Link>
-        </div>
+            <Sparkles className="h-3.5 w-3.5" />
+            Adaptive exam prep
+          </p>
+        </StaggerItem>
 
-        <p className="mt-3 text-xs text-muted-foreground">
-          No charge today. Cancel anytime before your trial ends.
-        </p>
-      </div>
+        <StaggerItem>
+          <h1 className="nn-marketing-h1 text-balance">
+            A Smarter Way to Prepare for Your Exam
+          </h1>
+        </StaggerItem>
+
+        <StaggerItem>
+          <p className="nn-marketing-body mt-5 text-pretty text-muted-foreground">
+            NurseNest guides you through what to study, tracks your progress,
+            and helps you know when you're ready to pass.
+          </p>
+        </StaggerItem>
+
+        <StaggerItem>
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+            <Link
+              href="/pricing"
+              className={MARKETING_PRIMARY_CTA_CLASS}
+              onClick={() => trackClientEvent("hiw_hero_cta_clicked", { cta: "primary" })}
+            >
+              Start Free Trial
+            </Link>
+            <Link href="#how-it-works-steps" className={MARKETING_SECONDARY_CTA_CLASS}>
+              See How It Works
+            </Link>
+          </div>
+        </StaggerItem>
+
+        <StaggerItem>
+          <p className="mt-3 text-xs text-muted-foreground">
+            No charge today. Cancel anytime before your trial ends.
+          </p>
+        </StaggerItem>
+      </StaggerGroup>
     </section>
   );
 }
@@ -129,21 +140,23 @@ const STEPS = [
 function ThreeStepSection() {
   return (
     <section id="how-it-works-steps" className="nn-hiw-section scroll-mt-8">
-      <div className="mx-auto max-w-4xl text-center">
-        <p className="nn-marketing-eyebrow" style={{ color: "var(--semantic-brand)" }}>
-          Simple by design
-        </p>
-        <h2 className="nn-marketing-h2 mt-2 text-balance">
-          Three Steps to Exam Readiness
-        </h2>
-        <p className="nn-marketing-body-sm mx-auto mt-3 max-w-xl text-muted-foreground">
-          No guesswork. No wasted time. Just a clear path from where you are to where you need to be.
-        </p>
-      </div>
+      <FadeUp>
+        <div className="mx-auto max-w-4xl text-center">
+          <p className="nn-marketing-eyebrow" style={{ color: "var(--semantic-brand)" }}>
+            Simple by design
+          </p>
+          <h2 className="nn-marketing-h2 mt-2 text-balance">
+            Three Steps to Exam Readiness
+          </h2>
+          <p className="nn-marketing-body-sm mx-auto mt-3 max-w-xl text-muted-foreground">
+            No guesswork. No wasted time. Just a clear path from where you are to where you need to be.
+          </p>
+        </div>
+      </FadeUp>
 
-      <div className="mt-12 grid gap-6 sm:grid-cols-3">
+      <StaggerGroup className="mt-12 grid gap-6 sm:grid-cols-3" staggerMs={80} whenInView once>
         {STEPS.map((step) => (
-          <div key={step.number} className="nn-hiw-step-card group">
+          <StaggerItem key={step.number} className="nn-hiw-step-card group">
             <div className="flex items-start gap-4">
               <div
                 className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl"
@@ -172,9 +185,9 @@ function ThreeStepSection() {
             <p className="mt-3 text-sm leading-relaxed" style={{ color: "var(--semantic-text-muted)" }}>
               {step.description}
             </p>
-          </div>
+          </StaggerItem>
         ))}
-      </div>
+      </StaggerGroup>
     </section>
   );
 }
@@ -211,21 +224,23 @@ const SYSTEM_FEATURES = [
 function IntelligentSystemSection() {
   return (
     <section className="nn-hiw-section nn-hiw-section--alt">
-      <div className="mx-auto max-w-4xl text-center">
-        <p className="nn-marketing-eyebrow" style={{ color: "var(--semantic-brand)" }}>
-          Built different
-        </p>
-        <h2 className="nn-marketing-h2 mt-2 text-balance">
-          An Intelligent System That Adapts to You
-        </h2>
-        <p className="nn-marketing-body-sm mx-auto mt-3 max-w-xl text-muted-foreground">
-          NurseNest doesn't just give you content. It learns what you need and guides you there.
-        </p>
-      </div>
+      <FadeUp>
+        <div className="mx-auto max-w-4xl text-center">
+          <p className="nn-marketing-eyebrow" style={{ color: "var(--semantic-brand)" }}>
+            Built different
+          </p>
+          <h2 className="nn-marketing-h2 mt-2 text-balance">
+            An Intelligent System That Adapts to You
+          </h2>
+          <p className="nn-marketing-body-sm mx-auto mt-3 max-w-xl text-muted-foreground">
+            NurseNest doesn't just give you content. It learns what you need and guides you there.
+          </p>
+        </div>
+      </FadeUp>
 
-      <div className="mt-12 grid gap-6 sm:grid-cols-2">
+      <StaggerGroup className="mt-12 grid gap-6 sm:grid-cols-2" staggerMs={80} whenInView once>
         {SYSTEM_FEATURES.map((feat) => (
-          <div key={feat.title} className="nn-hiw-feature-card group">
+          <StaggerItem key={feat.title} className="nn-hiw-feature-card group">
             <div
               className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl"
               style={{
@@ -244,9 +259,9 @@ function IntelligentSystemSection() {
             <p className="mt-2 text-sm leading-relaxed" style={{ color: "var(--semantic-text-muted)" }}>
               {feat.description}
             </p>
-          </div>
+          </StaggerItem>
         ))}
-      </div>
+      </StaggerGroup>
     </section>
   );
 }
@@ -280,21 +295,23 @@ const PREVIEW_CARDS = [
 function ProductPreviewSection() {
   return (
     <section className="nn-hiw-section">
-      <div className="mx-auto max-w-4xl text-center">
-        <p className="nn-marketing-eyebrow" style={{ color: "var(--semantic-brand)" }}>
-          See it in action
-        </p>
-        <h2 className="nn-marketing-h2 mt-2 text-balance">
-          Built for How Students Actually Study
-        </h2>
-        <p className="nn-marketing-body-sm mx-auto mt-3 max-w-xl text-muted-foreground">
-          Every surface is designed to save time and surface what matters most.
-        </p>
-      </div>
+      <FadeUp>
+        <div className="mx-auto max-w-4xl text-center">
+          <p className="nn-marketing-eyebrow" style={{ color: "var(--semantic-brand)" }}>
+            See it in action
+          </p>
+          <h2 className="nn-marketing-h2 mt-2 text-balance">
+            Built for How Students Actually Study
+          </h2>
+          <p className="nn-marketing-body-sm mx-auto mt-3 max-w-xl text-muted-foreground">
+            Every surface is designed to save time and surface what matters most.
+          </p>
+        </div>
+      </FadeUp>
 
-      <div className="mt-12 grid gap-6 lg:grid-cols-3">
+      <StaggerGroup className="mt-12 grid gap-6 lg:grid-cols-3" staggerMs={80} whenInView once>
         {PREVIEW_CARDS.map((card) => (
-          <div key={card.title} className="nn-hiw-preview-card">
+          <StaggerItem key={card.title} className="nn-hiw-preview-card">
             <div
               className="flex h-12 w-12 items-center justify-center rounded-2xl"
               style={{
@@ -324,9 +341,9 @@ function ProductPreviewSection() {
                 </li>
               ))}
             </ul>
-          </div>
+          </StaggerItem>
         ))}
-      </div>
+      </StaggerGroup>
     </section>
   );
 }
@@ -336,7 +353,7 @@ function ProductPreviewSection() {
 function OutcomeSection() {
   return (
     <section className="nn-hiw-section nn-hiw-section--alt">
-      <div className="mx-auto max-w-3xl text-center">
+      <FadeUp className="mx-auto max-w-3xl text-center">
         <h2 className="nn-marketing-h1 text-balance">
           Know What to Study.<br />
           Know When You're Ready.
@@ -372,7 +389,7 @@ function OutcomeSection() {
             </div>
           ))}
         </div>
-      </div>
+      </FadeUp>
     </section>
   );
 }
@@ -389,7 +406,7 @@ function FinalCtaSection() {
         border: "1px solid var(--semantic-border-soft)",
       }}
     >
-      <div className="mx-auto max-w-xl">
+      <FadeUp className="mx-auto max-w-xl">
         <h2 className="nn-marketing-h2 text-balance">
           Start Studying Smarter Today
         </h2>
@@ -415,7 +432,7 @@ function FinalCtaSection() {
         <p className="mt-3 text-xs text-muted-foreground">
           No charge today. Cancel anytime before your trial ends.
         </p>
-      </div>
+      </FadeUp>
     </section>
   );
 }

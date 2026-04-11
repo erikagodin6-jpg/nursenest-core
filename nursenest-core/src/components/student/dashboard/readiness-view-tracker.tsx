@@ -25,9 +25,9 @@ export function ReadinessViewTracker({
     if (tracked.current) return;
     tracked.current = true;
     trackClientEvent("readiness_viewed", {
-      score,
+      score: score ?? undefined,
       band,
-      trend,
+      trend: trend ?? undefined,
     });
   }, [score, band, trend]);
 
