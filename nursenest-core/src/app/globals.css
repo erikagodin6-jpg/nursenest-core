@@ -4420,3 +4420,306 @@ html[data-theme="dark-mode"] .nn-cat-opt--incorrect {
   line-height: 1.62;
   color: var(--semantic-text-muted);
 }
+
+/* ============================================================
+   CONFIDENCE RATING SYSTEM
+   Multi-surface coordinated palette across Practice, CAT, Results
+   ============================================================ */
+
+/* ── CONFIDENCE SELECTOR container ────────────────────────── */
+
+.nn-confidence-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px 16px;
+  border-radius: 0.875rem;
+  background: var(--surface-soft-a,
+    color-mix(in srgb, var(--theme-primary) 4%, var(--semantic-surface)));
+  border: 1px solid var(--semantic-border-soft);
+}
+
+/* CAT override: force neutral palette (spec §12) */
+.nn-confidence-selector--neutral {
+  background: var(--semantic-panel-muted,
+    color-mix(in srgb, var(--semantic-border-soft) 35%, var(--semantic-surface)));
+  border-color: var(--semantic-border-soft);
+}
+
+.nn-confidence-selector__label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--semantic-text-muted);
+}
+
+/* ── CONFIDENCE PILLS ──────────────────────────────────────── */
+
+.nn-confidence-pills {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.nn-confidence-pill {
+  flex: 1;
+  min-width: 80px;
+  padding: 10px 14px;
+  border-radius: 99px;
+  border: 1px solid var(--semantic-border-soft);
+  background: var(--semantic-surface);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  text-align: center;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
+  color: var(--semantic-text-secondary);
+}
+
+.nn-confidence-pill:hover:not(:disabled) {
+  background: var(--surface-soft-b,
+    color-mix(in srgb, var(--theme-primary) 7%, var(--semantic-surface)));
+  border-color: color-mix(in srgb, var(--theme-primary) 28%, var(--semantic-border-soft));
+}
+
+.nn-confidence-pill:focus-visible {
+  outline: 2px solid var(--theme-primary);
+  outline-offset: 2px;
+}
+
+/* Low — soft warm tint (not red, not alarming) */
+.nn-confidence-pill--selected-low {
+  background: color-mix(in srgb, var(--semantic-warning) 10%, var(--semantic-surface));
+  border-color: color-mix(in srgb, var(--semantic-warning) 35%, var(--semantic-border-soft));
+  color: var(--semantic-text-primary);
+  font-weight: 700;
+}
+
+/* Medium — soft info tint */
+.nn-confidence-pill--selected-medium {
+  background: var(--semantic-info-soft,
+    color-mix(in srgb, var(--semantic-info) 10%, var(--semantic-surface)));
+  border-color: color-mix(in srgb, var(--semantic-info) 35%, var(--semantic-border-soft));
+  color: var(--semantic-text-primary);
+  font-weight: 700;
+}
+
+/* High — soft success tint */
+.nn-confidence-pill--selected-high {
+  background: var(--role-success-soft,
+    color-mix(in srgb, var(--role-success, var(--semantic-success)) 10%, var(--semantic-surface)));
+  border-color: color-mix(
+    in srgb,
+    var(--role-success, var(--semantic-success)) 35%,
+    var(--semantic-border-soft)
+  );
+  color: var(--semantic-text-primary);
+  font-weight: 700;
+}
+
+/* Neutral selected — for CAT mode */
+.nn-confidence-pill--selected-neutral {
+  background: var(--surface-emphasis,
+    color-mix(in srgb, var(--semantic-brand) 10%, var(--semantic-surface)));
+  border-color: color-mix(in srgb, var(--theme-primary) 40%, var(--semantic-border-soft));
+  color: var(--semantic-text-primary);
+  font-weight: 700;
+}
+
+/* ── CONFIDENCE CHIP (small inline label) ──────────────────── */
+
+.nn-confidence-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 9px;
+  border-radius: 99px;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  border: 1px solid var(--semantic-border-soft);
+  background: var(--surface-soft-b,
+    color-mix(in srgb, var(--semantic-brand) 6%, var(--semantic-surface)));
+  color: var(--semantic-text-muted);
+}
+
+/* ── CONFIDENCE SUMMARY STRIP ──────────────────────────────── */
+
+.nn-confidence-strip {
+  border-radius: 0.875rem;
+  padding: 14px 20px;
+  background: var(--surface-emphasis,
+    color-mix(in srgb, var(--semantic-brand) 8%, var(--semantic-surface)));
+  border: 1px solid
+    color-mix(in srgb, var(--theme-primary) 20%, var(--semantic-border-soft));
+  text-align: center;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--semantic-text-primary);
+  line-height: 1.5;
+}
+
+.nn-confidence-strip strong {
+  font-weight: 800;
+  color: var(--theme-primary, var(--semantic-text-primary));
+}
+
+/* ── CONFIDENCE PATTERN CARDS ──────────────────────────────── */
+
+.nn-confidence-pattern-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+}
+
+@media (min-width: 640px) {
+  .nn-confidence-pattern-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.nn-confidence-pattern-card {
+  border-radius: 1rem;
+  padding: 20px 20px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Card 1 — Overconfident Errors: soft warning surface */
+.nn-confidence-pattern-card--warning {
+  background: var(--semantic-warning-soft,
+    color-mix(in srgb, var(--semantic-warning) 8%, var(--semantic-surface)));
+  border: 1px solid
+    color-mix(in srgb, var(--semantic-warning) 22%, var(--semantic-border-soft));
+}
+
+/* Card 2 — Uncertain Correct: soft info surface */
+.nn-confidence-pattern-card--info {
+  background: var(--semantic-info-soft,
+    color-mix(in srgb, var(--semantic-info) 8%, var(--semantic-surface)));
+  border: 1px solid
+    color-mix(in srgb, var(--semantic-info) 22%, var(--semantic-border-soft));
+}
+
+/* Card 3 — Strong Knowledge: soft success surface */
+.nn-confidence-pattern-card--success {
+  background: var(--role-success-soft,
+    color-mix(in srgb, var(--role-success, var(--semantic-success)) 8%, var(--semantic-surface)));
+  border: 1px solid
+    color-mix(
+      in srgb,
+      var(--role-success, var(--semantic-success)) 22%,
+      var(--semantic-border-soft)
+    );
+}
+
+.nn-confidence-pattern-card__label {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--semantic-text-muted);
+}
+
+.nn-confidence-pattern-card__value {
+  font-size: 2.25rem;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--semantic-text-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+.nn-confidence-pattern-card__desc {
+  font-size: 0.8125rem;
+  line-height: 1.55;
+  color: var(--semantic-text-secondary);
+  margin-top: 4px;
+}
+
+/* ── REVIEW PRIORITY GROUPS ────────────────────────────────── */
+
+.nn-review-priority-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.nn-review-priority-group {
+  border-radius: 0.875rem;
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* Group 1 — Highest Priority: incorrect + high confidence (soft danger) */
+.nn-review-priority-group--high {
+  background: color-mix(in srgb, var(--semantic-danger) 6%, var(--semantic-surface));
+  border: 1px solid
+    color-mix(in srgb, var(--semantic-danger) 18%, var(--semantic-border-soft));
+}
+
+/* Group 2 — Needs Review: warm soft surface */
+.nn-review-priority-group--medium {
+  background: var(--semantic-warning-soft,
+    color-mix(in srgb, var(--semantic-warning) 6%, var(--semantic-surface)));
+  border: 1px solid
+    color-mix(in srgb, var(--semantic-warning) 20%, var(--semantic-border-soft));
+}
+
+/* Group 3 — Stable Areas: soft success */
+.nn-review-priority-group--stable {
+  background: var(--role-success-soft,
+    color-mix(in srgb, var(--role-success, var(--semantic-success)) 6%, var(--semantic-surface)));
+  border: 1px solid
+    color-mix(
+      in srgb,
+      var(--role-success, var(--semantic-success)) 18%,
+      var(--semantic-border-soft)
+    );
+}
+
+.nn-review-priority-group__label {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--semantic-text-muted);
+}
+
+.nn-review-priority-group__title {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: var(--semantic-text-primary);
+  margin-bottom: 4px;
+}
+
+.nn-review-priority-group__items {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.nn-review-priority-group__item {
+  font-size: 0.8125rem;
+  color: var(--semantic-text-secondary);
+  line-height: 1.5;
+}
+
+.nn-review-priority-group__empty {
+  font-size: 0.8125rem;
+  color: var(--semantic-text-muted);
+  font-style: italic;
+}
+
+/* Section title for confidence analytics blocks */
+.nn-confidence-section-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--semantic-text-primary);
+  margin-bottom: 12px;
+}
