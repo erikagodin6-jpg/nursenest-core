@@ -289,23 +289,23 @@ export function PricingPageClient({
       />
 
       {/* Trust strip + legal anchors below hero */}
-      <div className="mt-6 flex flex-col items-center gap-3">
+      <div className="nn-section-enter mt-6 flex flex-col items-center gap-3">
         <MarketingTrustSignalsStrip variant="compact" />
         <p className="nn-marketing-caption text-muted-foreground">{t("pages.pricing.conversion.checkoutTrust")}</p>
       </div>
 
       {/* Country + tier */}
-      <section className="mt-10 space-y-6">
+      <section className="nn-section-enter mt-10 space-y-6">
         <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
           <span className="text-sm font-medium text-muted-foreground">{t("pages.pricing.conversion.billingRegion")}</span>
           <div className="flex gap-2" role="group" aria-label={t("pages.pricing.conversion.billingRegion")}>
             <button
               type="button"
               onClick={() => setCountry("CA")}
-              className={`rounded-full px-4 py-2 text-sm font-semibold transition ${
+              className={`rounded-full px-4 py-2 text-sm font-semibold transition-[background-color,color,box-shadow,transform] duration-150 ease-out ${
                 country === "CA"
-                  ? "bg-primary text-primary-foreground shadow-sm"
-                  : "border border-border bg-card text-[var(--theme-body-text)] hover:bg-muted/50"
+                  ? "bg-primary text-primary-foreground shadow-[var(--elevation-rest)]"
+                  : "border border-border bg-card text-[var(--palette-text)] hover:-translate-y-px hover:bg-[var(--surface-interactive-hover)] hover:shadow-[var(--elevation-hover)]"
               }`}
             >
               {t("pages.pricing.country.ca")}
@@ -313,10 +313,10 @@ export function PricingPageClient({
             <button
               type="button"
               onClick={() => setCountry("US")}
-              className={`rounded-full px-4 py-2 text-sm font-semibold transition ${
+              className={`rounded-full px-4 py-2 text-sm font-semibold transition-[background-color,color,box-shadow,transform] duration-150 ease-out ${
                 country === "US"
-                  ? "bg-primary text-primary-foreground shadow-sm"
-                  : "border border-border bg-card text-[var(--theme-body-text)] hover:bg-muted/50"
+                  ? "bg-primary text-primary-foreground shadow-[var(--elevation-rest)]"
+                  : "border border-border bg-card text-[var(--palette-text)] hover:-translate-y-px hover:bg-[var(--surface-interactive-hover)] hover:shadow-[var(--elevation-hover)]"
               }`}
             >
               {t("pages.pricing.country.us")}
@@ -332,10 +332,10 @@ export function PricingPageClient({
                 key={id}
                 type="button"
                 onClick={() => setSegment(id)}
-                className={`rounded-full px-4 py-2.5 text-sm font-semibold transition ${
+                className={`rounded-full px-4 py-2.5 text-sm font-semibold transition-[background-color,color,box-shadow,transform,border-color] duration-150 ease-out ${
                   segment === id
                     ? "bg-role-cta text-role-cta-foreground shadow-[0_4px_14px_var(--role-cta-shadow)]"
-                    : "border border-[var(--border-medium)] bg-card text-[var(--theme-body-text)] hover:bg-[var(--surface-interactive-hover)]"
+                    : "border border-[var(--border-medium)] bg-card text-[var(--palette-text)] hover:-translate-y-px hover:bg-[var(--surface-interactive-hover)] hover:shadow-[var(--elevation-hover)]"
                 }`}
               >
                 {t(labelKey)}
@@ -372,7 +372,7 @@ export function PricingPageClient({
             return (
               <article
                 key={duration}
-                className={`relative flex flex-col rounded-2xl border p-5 shadow-sm transition-shadow hover:shadow-md ${
+                className={`nn-card-interactive relative flex flex-col rounded-2xl border p-5 shadow-[var(--elevation-rest)] ${
                   isBest
                     ? "border-primary ring-2 ring-primary/25 bg-[color-mix(in_srgb,var(--theme-primary)_3%,var(--color-card))]"
                     : isPop
@@ -381,11 +381,11 @@ export function PricingPageClient({
                 }`}
               >
                 {isBest ? (
-                  <span className="absolute -top-2.5 left-1/2 -translate-x-1/2 rounded-full bg-primary px-3 py-0.5 text-[11px] font-bold uppercase tracking-wide text-primary-foreground shadow-sm">
+                  <span className="absolute -top-2.5 left-1/2 -translate-x-1/2 rounded-full bg-primary px-3 py-0.5 text-[11px] font-bold uppercase tracking-wide text-primary-foreground shadow-[var(--elevation-rest)]">
                     {t("pages.pricing.conversion.badgeBestValue")}
                   </span>
                 ) : isPop ? (
-                  <span className="absolute -top-2.5 left-1/2 -translate-x-1/2 rounded-full bg-[var(--semantic-info)] px-3 py-0.5 text-[11px] font-bold uppercase tracking-wide text-white shadow-sm">
+                  <span className="absolute -top-2.5 left-1/2 -translate-x-1/2 rounded-full bg-[var(--semantic-info)] px-3 py-0.5 text-[11px] font-bold uppercase tracking-wide text-white shadow-[var(--elevation-rest)]">
                     {t("pages.pricing.conversion.badgePopular")}
                   </span>
                 ) : null}
@@ -403,10 +403,10 @@ export function PricingPageClient({
                   </p>
                 )}
 
-                <ul className="mt-4 flex-1 space-y-2 text-sm text-[var(--theme-body-text)]">
+                <ul className="mt-4 flex-1 space-y-2 text-sm text-[var(--palette-text)]">
                   {includeKeys.map((k) => (
                     <li key={k} className="flex gap-2">
-                      <Check className="mt-0.5 h-4 w-4 shrink-0 text-[var(--semantic-success)]" aria-hidden />
+                      <Check className="nn-icon-md mt-0.5 shrink-0 text-[var(--semantic-success)]" aria-hidden />
                       <span>{t(`pages.pricing.conversion.includes.${k}`)}</span>
                     </li>
                   ))}
@@ -420,7 +420,7 @@ export function PricingPageClient({
                           {row.anchorPriceLabel}
                         </p>
                       )}
-                      <p className="nn-marketing-h3 tabular-nums text-[var(--theme-heading-text)]">{row.totalLabel}</p>
+                      <p className="nn-marketing-h3 tabular-nums text-[var(--palette-heading)]">{row.totalLabel}</p>
                     </div>
                     <p className="text-sm text-muted-foreground">
                       {row.monthlyEquivalentLabel} {t("pages.pricing.plan.avgSuffix")}
@@ -459,8 +459,8 @@ export function PricingPageClient({
         </div>
 
         {trialDays > 0 && (
-          <div className="mx-auto mt-8 max-w-xl rounded-xl border border-[var(--semantic-success)]/20 bg-[color-mix(in_srgb,var(--semantic-success)_5%,var(--color-card))] px-5 py-4 text-center">
-            <p className="text-base font-semibold text-[var(--theme-heading-text)]">
+          <div className="mx-auto mt-8 max-w-xl rounded-xl border border-[var(--semantic-success)]/20 bg-[color-mix(in_srgb,var(--semantic-success)_5%,var(--color-card))] px-5 py-4 text-center shadow-[var(--elevation-rest)]">
+            <p className="text-base font-semibold text-[var(--palette-heading)]">
               Try everything free for {trialDays} days
             </p>
             <p className="mt-2 text-sm text-muted-foreground">
@@ -473,8 +473,8 @@ export function PricingPageClient({
           </div>
         )}
 
-        <div className="mx-auto mt-4 max-w-xl rounded-xl border border-dashed border-border bg-muted/20 px-5 py-4 text-center">
-          <p className="text-base font-semibold text-[var(--theme-heading-text)]">{t("pages.pricing.conversion.freeTeaserTitle")}</p>
+        <div className="mx-auto mt-4 max-w-xl rounded-xl border border-dashed border-border bg-muted/20 px-5 py-4 text-center shadow-[var(--elevation-rest)]">
+          <p className="text-base font-semibold text-[var(--palette-heading)]">{t("pages.pricing.conversion.freeTeaserTitle")}</p>
           <p className="mt-2 text-sm text-muted-foreground">{t("pages.pricing.conversion.freeTeaserBody")}</p>
           <p className="mt-1 text-xs text-muted-foreground">{t("pages.pricing.conversion.freeTeaser")}</p>
           <Link href={tryQuestionsHref} className={`${MARKETING_SECONDARY_CTA_CLASS} mt-4 inline-flex justify-center`}>
@@ -521,26 +521,26 @@ export function PricingPageClient({
       </section>
 
       {/* Guarantee */}
-      <section className="mt-12 rounded-2xl border border-[var(--theme-card-border)] bg-card p-6 shadow-sm">
+      <section className="mt-12 rounded-2xl border border-[var(--theme-card-border)] bg-card p-6 shadow-[var(--elevation-rest)]">
         <h2 className="nn-marketing-h3">{t("pages.pricing.trust.guaranteeTitle")}</h2>
         <p className="mt-2 text-sm text-muted-foreground">{t("pages.pricing.trust.guaranteeBody")}</p>
-        <ul className="mt-4 space-y-2 text-sm text-[var(--theme-body-text)]">
+        <ul className="mt-4 space-y-2 text-sm text-[var(--palette-text)]">
           {trialDays > 0 && (
             <li className="flex gap-2">
-              <Check className="mt-0.5 h-4 w-4 shrink-0 text-[var(--semantic-success)]" aria-hidden />
+              <Check className="nn-icon-md mt-0.5 shrink-0 text-[var(--semantic-success)]" aria-hidden />
               {trialDays}-day free trial, no charge until it ends
             </li>
           )}
           <li className="flex gap-2">
-            <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden />
+            <Check className="nn-icon-md mt-0.5 shrink-0 text-primary" aria-hidden />
             Cancel anytime from your account
           </li>
           <li className="flex gap-2">
-            <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden />
+            <Check className="nn-icon-md mt-0.5 shrink-0 text-primary" aria-hidden />
             {t("pages.pricing.trust.bullet1")}
           </li>
           <li className="flex gap-2">
-            <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden />
+            <Check className="nn-icon-md mt-0.5 shrink-0 text-primary" aria-hidden />
             {t("pages.pricing.trust.bullet2")}
           </li>
         </ul>
@@ -577,7 +577,7 @@ export function PricingPageClient({
             <Link
               key={item.labelKey}
               href={item.href}
-              className="rounded-xl border border-[var(--theme-card-border)] bg-card p-4 transition hover:border-[var(--border-medium)]"
+              className="rounded-xl border border-[var(--theme-card-border)] bg-card p-4 shadow-[var(--elevation-rest)] transition-[border-color,box-shadow,transform] duration-150 ease-out hover:-translate-y-px hover:border-[var(--border-medium)] hover:shadow-[var(--elevation-hover)]"
             >
               <p className="nn-marketing-h4">{t(item.labelKey)}</p>
             </Link>

@@ -20,7 +20,7 @@
  */
 
 import Link from "next/link";
-import { Check, Lock, Sparkles } from "lucide-react";
+import { BarChart3, BookOpen, Check, Lock, ShieldCheck, Sparkles, Target } from "lucide-react";
 import {
   MARKETING_PRIMARY_CTA_CLASS,
   MARKETING_SECONDARY_CTA_CLASS,
@@ -30,9 +30,9 @@ import { FadeUp } from "@/lib/motion";
 // ── Shared token aliases (CSS custom properties) ──────────────────────────────
 
 const SURFACE = "var(--semantic-surface)";
-const SURFACE_ELEVATED = "color-mix(in srgb, var(--theme-primary) 4%, var(--semantic-surface))";
-const SOFT_A = "color-mix(in srgb, var(--theme-primary) 6%, var(--semantic-surface))";
-const SOFT_B = "color-mix(in srgb, var(--theme-primary) 10%, var(--semantic-surface))";
+const SURFACE_ELEVATED = "color-mix(in srgb, var(--palette-primary) 4%, var(--semantic-surface))";
+const SOFT_A = "color-mix(in srgb, var(--palette-primary) 6%, var(--semantic-surface))";
+const SOFT_B = "color-mix(in srgb, var(--palette-primary) 10%, var(--semantic-surface))";
 const WARNING_SOFT = "color-mix(in srgb, var(--semantic-warning) 8%, var(--semantic-surface))";
 const INFO_SOFT = "color-mix(in srgb, var(--semantic-info) 8%, var(--semantic-surface))";
 const SUCCESS_SOFT = "color-mix(in srgb, var(--role-success, var(--semantic-success)) 8%, var(--semantic-surface))";
@@ -579,28 +579,28 @@ import type { ScreenshotId } from "@/lib/marketing/screenshot-registry";
  */
 const PRODUCT_AREAS: {
   screenshotId: ScreenshotId;
-  icon: string;
+  icon: React.ComponentType<{ className?: string }>;
   title: string;
   desc: string;
   detail: string;
 }[] = [
   {
     screenshotId: 1,
-    icon: "✏️",
+    icon: BookOpen,
     title: "Practice interface",
     desc: "Question stem, answer options, and full rationale, all visible at once. No scrolling to see why you were wrong.",
     detail: "Correct answer · Why this is correct · Why other options are wrong · Key Takeaway · Related Lessons",
   },
   {
     screenshotId: 6,
-    icon: "🎯",
+    icon: Target,
     title: "CAT exam mode",
     desc: "An adaptive exam that adjusts difficulty item-by-item, scoring your readiness on a 0–100 scale.",
     detail: "Adaptive difficulty · Readiness scoring · Category breakdown · Historical trend",
   },
   {
     screenshotId: 7,
-    icon: "📊",
+    icon: BarChart3,
     title: "Results + remediation",
     desc: "Structured results with weak areas, strengths, confidence patterns, and a personalized study plan generated from your data.",
     detail: "Smart review · Study plan · Confidence analytics · Retest strategy",
@@ -642,17 +642,17 @@ export function ProductPreviewGrid() {
  */
 const TRUST_POINTS = [
   {
-    icon: "🎯",
+    icon: Target,
     headline: "Designed to help you pass on your first attempt",
     body: "Structured around real exam blueprints: NCLEX, REx-PN, and specialty exams. Not generic nursing content.",
   },
   {
-    icon: "📐",
+    icon: ShieldCheck,
     headline: "Your study is structured, not random",
     body: "Every session connects to your weak areas and confidence data. You always know what to study next.",
   },
   {
-    icon: "📈",
+    icon: BarChart3,
     headline: "You'll know when you're ready",
     body: "Readiness scoring, weak area tracking, and confidence analytics show your progress clearly, so you can walk into the exam feeling prepared.",
   },
@@ -676,9 +676,7 @@ export function PricingTrustReassurance() {
             className="rounded-2xl p-6"
             style={{ background: SURFACE_ELEVATED, border: `1px solid ${BORDER}` }}
           >
-            <span className="mb-3 block text-2xl" aria-hidden>
-              {p.icon}
-            </span>
+            <p.icon className="nn-icon-lg mb-3 text-[var(--semantic-info)]" aria-hidden />
             <h3 className="nn-marketing-h4 mb-2">{p.headline}</h3>
             <p className="text-sm leading-relaxed" style={{ color: TEXT_SECONDARY }}>
               {p.body}

@@ -18,7 +18,7 @@ function StarRow({ count = 5 }: { count?: number }) {
       {Array.from({ length: 5 }).map((_, i) => (
         <Star
           key={i}
-          className={`h-3.5 w-3.5 ${i < count ? "fill-[var(--semantic-warning)] text-[var(--semantic-warning)]" : "text-[var(--border-subtle)]"}`}
+          className={`nn-icon-md ${i < count ? "fill-[var(--semantic-warning)] text-[var(--semantic-warning)]" : "text-[var(--border-subtle)]"}`}
           aria-hidden
         />
       ))}
@@ -35,7 +35,7 @@ export function HomeReviewsSection() {
 
   return (
     <section
-      className="border-t border-[var(--border-subtle)] bg-[var(--theme-page-bg)] pt-7 pb-10 md:pt-9 md:pb-12"
+      className="nn-section-block nn-section-enter border-t border-[var(--border-subtle)] bg-[var(--bg-page)]"
       aria-labelledby="home-reviews-heading"
       data-testid="section-home-reviews"
     >
@@ -46,20 +46,20 @@ export function HomeReviewsSection() {
             {Array.from({ length: 5 }).map((_, i) => (
               <Star
                 key={i}
-                className="h-5 w-5 fill-[var(--semantic-warning)] text-[var(--semantic-warning)]"
+                className="nn-icon-lg fill-[var(--semantic-warning)] text-[var(--semantic-warning)]"
                 aria-hidden
               />
             ))}
-            <span className="nn-marketing-body-sm ml-1.5 font-semibold tabular-nums text-[var(--theme-body-text)]">
+            <span className="nn-marketing-body-sm ml-1.5 font-semibold tabular-nums text-[var(--palette-text)]">
               4.8 / 5
             </span>
-            <span className="nn-marketing-caption text-[var(--theme-muted-text)]">from nursing students</span>
+            <span className="nn-marketing-caption text-[var(--palette-text-muted)]">from nursing students</span>
           </div>
 
           <h2 id="home-reviews-heading" className="nn-marketing-h2 text-balance">
             {t("home.landing.reviews.title")}
           </h2>
-          <p className="nn-marketing-body mx-auto mt-2 max-w-2xl text-pretty text-[var(--theme-muted-text)]">
+          <p className="nn-marketing-body mx-auto mt-2 max-w-2xl text-pretty text-[var(--palette-text-muted)]">
             {t("home.landing.reviews.sub")}
           </p>
         </header>
@@ -68,17 +68,17 @@ export function HomeReviewsSection() {
           {CARD_KEYS.map((c) => (
             <li
               key={c.quote}
-              className="nn-card-soft nn-marketing-card-pad flex flex-col border-t-2 border-t-[color-mix(in_srgb,var(--theme-primary)_45%,transparent)]"
+              className="nn-card-soft nn-marketing-card-pad nn-card-interactive flex flex-col border-t-2 border-t-[color-mix(in_srgb,var(--palette-primary)_45%,transparent)]"
             >
               <StarRow />
-              <blockquote className="nn-marketing-body-sm flex-1 text-pretty text-[var(--theme-body-text)]">
+              <blockquote className="nn-marketing-body-sm flex-1 text-pretty text-[var(--palette-text)]">
                 &ldquo;{t(c.quote)}&rdquo;
               </blockquote>
-              <p className="nn-marketing-caption mt-3 text-[var(--theme-muted-text)]">{t(c.meta)}</p>
+              <p className="nn-marketing-caption mt-3 text-[var(--palette-text-muted)]">{t(c.meta)}</p>
             </li>
           ))}
         </ul>
-        <p className="nn-marketing-caption mx-auto mt-8 max-w-2xl text-center text-[var(--theme-muted-text)]">
+        <p className="nn-marketing-caption mx-auto mt-8 max-w-2xl text-center text-[var(--palette-text-muted)]">
           {t("home.landing.reviews.disclaimer")}
         </p>
       </div>

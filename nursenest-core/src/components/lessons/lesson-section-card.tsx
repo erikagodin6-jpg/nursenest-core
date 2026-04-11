@@ -1,4 +1,17 @@
 import type { ReactNode } from "react";
+import {
+  Activity,
+  AlertTriangle,
+  BookOpen,
+  BriefcaseMedical,
+  FlaskConical,
+  GraduationCap,
+  HeartPulse,
+  Lightbulb,
+  NotebookPen,
+  ShieldAlert,
+  Stethoscope,
+} from "lucide-react";
 import type { PathwayLessonSectionKind } from "@/lib/lessons/pathway-lesson-types";
 import { getLessonSectionTheme } from "@/lib/ui/lesson-section-theme";
 
@@ -25,8 +38,22 @@ export function LessonSectionCard({
   chipLabel?: string;
   children: ReactNode;
 }) {
-  const { chipLabel: derivedChipLabel, dataRole } = getLessonSectionTheme(kind);
+  const { chipLabel: derivedChipLabel, dataRole, role } = getLessonSectionTheme(kind);
   const chipLabel = chipLabelOverride ?? derivedChipLabel;
+  const ROLE_ICON = {
+    info: Lightbulb,
+    warning: AlertTriangle,
+    concept: BookOpen,
+    action: Stethoscope,
+    diagnostic: FlaskConical,
+    danger: ShieldAlert,
+    success: HeartPulse,
+    education: GraduationCap,
+    application: BriefcaseMedical,
+    review: Activity,
+    cta: NotebookPen,
+  } as const;
+  const ChipIcon = ROLE_ICON[role];
 
   return (
     <section
@@ -35,7 +62,8 @@ export function LessonSectionCard({
       data-lsc-role={dataRole}
       aria-label={heading?.trim() || "Lesson section"}
     >
-      <span className="nn-lesson-section-chip" aria-hidden="true">
+      <span className="nn-lesson-section-chip inline-flex items-center gap-1.5" aria-hidden="true">
+        <ChipIcon className="nn-icon-sm" />
         {chipLabel}
       </span>
       <h2 className="nn-marketing-h3 mt-3 text-[var(--palette-heading)]">

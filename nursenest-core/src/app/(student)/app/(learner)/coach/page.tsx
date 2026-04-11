@@ -234,10 +234,10 @@ export default async function CoachPage() {
           Study tools:
         </p>
         {[
+          { label: "Adaptive Engine", href: "/app/study-coach" },
           { label: "Study Plan", href: "/app/study-plan" },
           { label: "Review Queue", href: "/app/review" },
           { label: "Analytics", href: "/app/account/analytics" },
-          { label: "Progress", href: "/app/account/motivation" },
           { label: "Flashcards", href: "/app/flashcards" },
         ].map(({ label, href }) => (
           <a
