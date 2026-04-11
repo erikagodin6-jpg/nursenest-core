@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "stage": "prisma_import",
-  "runId": "48f66fbd-e0b8-45f3-9810-b05e722cb2e3",
-  "generatedAt": "2026-04-11T03:27:31.408Z",
+  "runId": "960a12a7-b820-4528-91d7-d03d74753771",
+  "generatedAt": "2026-04-11T03:30:21.691Z",
   "programs": [
     "pre-nursing"
   ],
@@ -25,7 +25,7 @@
   ],
   "pathwayLessonUpserts": [
     {
-      "pipelineId": "98d57193-84d4-4a78-8b93-74ce7459e1a5",
+      "pipelineId": "f93a87d3-ef0c-45b0-a8bf-f291b100c7cb",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "basic-math-fractions-decimals-percentages-fractions-and-ratios-what-they-mean-for---batch-1-anatomy-dosage",
@@ -85,11 +85,11 @@
         "status": "PUBLISHED",
         "sortOrder": 100,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:27:31.408Z"
+        "generatedAt": "2026-04-11T03:30:21.691Z"
       }
     },
     {
-      "pipelineId": "7710023e-1ca4-489c-a277-b78479cef885",
+      "pipelineId": "b6cb776b-5939-450d-9c6c-bbd3e4962ab9",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "basic-math-fractions-decimals-percentages-decimals-rounding-and-measurement-precis--batch-1-anatomy-dosage",
@@ -149,11 +149,11 @@
         "status": "PUBLISHED",
         "sortOrder": 101,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:27:31.408Z"
+        "generatedAt": "2026-04-11T03:30:21.691Z"
       }
     },
     {
-      "pipelineId": "908cfe55-3d61-4557-9034-091504334bfd",
+      "pipelineId": "ab32042a-7579-46ef-8209-7d71070671ce",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "basic-math-fractions-decimals-percentages-percentages-and-proportions--batch-1-anatomy-dosage",
@@ -213,11 +213,11 @@
         "status": "PUBLISHED",
         "sortOrder": 102,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:27:31.408Z"
+        "generatedAt": "2026-04-11T03:30:21.691Z"
       }
     },
     {
-      "pipelineId": "82da770f-babb-4afd-bc8c-31b782aaebf3",
+      "pipelineId": "22d6cfab-1139-47de-a47b-a4a07ae04514",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "systems-of-measurement-metric-base-units-and-prefixes-used-in-n--batch-1-anatomy-dosage",
@@ -259,11 +259,11 @@
         "status": "PUBLISHED",
         "sortOrder": 103,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:27:31.408Z"
+        "generatedAt": "2026-04-11T03:30:21.691Z"
       }
     },
     {
-      "pipelineId": "1ce7bffb-de7c-49a9-99a8-e656be8bdd53",
+      "pipelineId": "6dfdd647-8bb6-497d-83c0-4a75f58a58a3",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "systems-of-measurement-household-measures-and-legacy-notation--batch-1-anatomy-dosage",
@@ -305,11 +305,11 @@
         "status": "PUBLISHED",
         "sortOrder": 104,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:27:31.408Z"
+        "generatedAt": "2026-04-11T03:30:21.691Z"
       }
     },
     {
-      "pipelineId": "86af71bc-3a13-4c2b-87f0-7aa3217b59db",
+      "pipelineId": "809841e0-d21c-4079-89dd-7e5deea27c0e",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "organization-of-the-human-body-orientation-position-directions-planes-c--batch-1-anatomy-dosage",
@@ -357,11 +357,11 @@
         "status": "PUBLISHED",
         "sortOrder": 105,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:27:31.408Z"
+        "generatedAt": "2026-04-11T03:30:21.691Z"
       }
     },
     {
-      "pipelineId": "a2352b8b-357f-40a2-ab25-5c72deb3c5ba",
+      "pipelineId": "81dde8ab-52f1-4833-8da7-162ddc8f9f9f",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "organization-of-the-human-body-organ-systems-survey-names-and-one-line---batch-1-anatomy-dosage",
@@ -403,11 +403,11 @@
         "status": "PUBLISHED",
         "sortOrder": 106,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:27:31.408Z"
+        "generatedAt": "2026-04-11T03:30:21.691Z"
       }
     },
     {
-      "pipelineId": "514dc82d-e263-4b9a-9d38-15310ba35d04",
+      "pipelineId": "c686ac75-1bde-4a4b-902d-6457aa3026fd",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "word-roots-prefixes-and-suffixes-how-medical-terms-are-built-word-root-pr--batch-2-medical-terminology",
@@ -449,11 +449,11 @@
         "status": "PUBLISHED",
         "sortOrder": 107,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:27:31.408Z"
+        "generatedAt": "2026-04-11T03:30:21.691Z"
       }
     },
     {
-      "pipelineId": "9faaae26-3243-4fe5-ba46-68284300c667",
+      "pipelineId": "2e912cf2-891f-4286-90e2-76153785543a",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "word-roots-prefixes-and-suffixes-high-yield-prefixes-for-speed-and-safety--batch-2-medical-terminology",
@@ -495,11 +495,11 @@
         "status": "PUBLISHED",
         "sortOrder": 108,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:27:31.408Z"
+        "generatedAt": "2026-04-11T03:30:21.691Z"
       }
     },
     {
-      "pipelineId": "92e6ff0c-4c4d-4648-a5bf-720f215608e1",
+      "pipelineId": "2191784b-255d-4f2d-8561-f7383365537d",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "word-roots-prefixes-and-suffixes-high-yield-suffixes-and-noun-endings--batch-2-medical-terminology",
@@ -541,11 +541,11 @@
         "status": "PUBLISHED",
         "sortOrder": 109,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:27:31.408Z"
+        "generatedAt": "2026-04-11T03:30:21.691Z"
       }
     },
     {
-      "pipelineId": "bb760dba-b0f9-4b3d-82c4-1e8a330ec913",
+      "pipelineId": "2ad305d5-3c1f-48ab-8e98-9aa445014b65",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "body-directions-and-planes-anatomical-position-and-paired-direction--batch-2-medical-terminology",
@@ -587,11 +587,11 @@
         "status": "PUBLISHED",
         "sortOrder": 110,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:27:31.408Z"
+        "generatedAt": "2026-04-11T03:30:21.691Z"
       }
     },
     {
-      "pipelineId": "1473334b-8a90-4064-9b8f-658a0e218d95",
+      "pipelineId": "40e586b2-0121-43dd-934c-a0a0ace5d698",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "body-directions-and-planes-planes-of-the-body--batch-2-medical-terminology",
@@ -633,11 +633,11 @@
         "status": "PUBLISHED",
         "sortOrder": 111,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:27:31.408Z"
+        "generatedAt": "2026-04-11T03:30:21.691Z"
       }
     },
     {
-      "pipelineId": "2353ef87-6f0e-4a9e-9324-cca4fc9891f9",
+      "pipelineId": "57fa5e55-77a2-4115-b775-6e191279de9e",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "body-cavities-and-regions-dorsal-and-ventral-cavities-survey--batch-2-medical-terminology",
@@ -679,11 +679,11 @@
         "status": "PUBLISHED",
         "sortOrder": 112,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:27:31.408Z"
+        "generatedAt": "2026-04-11T03:30:21.691Z"
       }
     },
     {
-      "pipelineId": "d9116c8d-13af-4283-91f5-e65c05843452",
+      "pipelineId": "a39438dd-e85b-4a34-973d-8abd2647ea86",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "body-cavities-and-regions-abdominopelvic-quadrants-and-regions-ori--batch-2-medical-terminology",
@@ -725,11 +725,11 @@
         "status": "PUBLISHED",
         "sortOrder": 113,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:27:31.408Z"
+        "generatedAt": "2026-04-11T03:30:21.691Z"
       }
     },
     {
-      "pipelineId": "b996e0f8-7596-4b09-bf7a-5f378819fdc0",
+      "pipelineId": "42e37c20-a294-4969-8751-554272b6d0e4",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "cardiorespiratory-terminology-heart-and-vessel-vocabulary-pre-nursing---batch-2-medical-terminology",
@@ -771,11 +771,11 @@
         "status": "PUBLISHED",
         "sortOrder": 114,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:27:31.408Z"
+        "generatedAt": "2026-04-11T03:30:21.691Z"
       }
     },
     {
-      "pipelineId": "b21b11ea-93d9-4d8c-a8a9-47b9edb1b198",
+      "pipelineId": "adbef234-3b89-4f9c-abd7-9a159076ab13",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "cardiorespiratory-terminology-breathing-and-lung-related-vocabulary--batch-2-medical-terminology",
@@ -817,11 +817,11 @@
         "status": "PUBLISHED",
         "sortOrder": 115,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:27:31.408Z"
+        "generatedAt": "2026-04-11T03:30:21.691Z"
       }
     },
     {
-      "pipelineId": "b7ec1375-b5cc-4202-ac92-3343367575d1",
+      "pipelineId": "d712ebdd-b62e-4e70-8502-7b6c78002a7b",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "gi-urinary-terminology-gi-terminology-digestion-through-elimina--batch-2-medical-terminology",
@@ -863,11 +863,11 @@
         "status": "PUBLISHED",
         "sortOrder": 116,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:27:31.408Z"
+        "generatedAt": "2026-04-11T03:30:21.691Z"
       }
     },
     {
-      "pipelineId": "c07f3cd2-cd8c-49cb-b4e1-77943ee7d1eb",
+      "pipelineId": "5cbc8a76-52f2-414f-bb0a-764c6eb67a87",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "gi-urinary-terminology-urinary-terminology-filtration-to-voidin--batch-2-medical-terminology",
@@ -909,11 +909,11 @@
         "status": "PUBLISHED",
         "sortOrder": 117,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:27:31.408Z"
+        "generatedAt": "2026-04-11T03:30:21.691Z"
       }
     },
     {
-      "pipelineId": "38d166f3-bb80-4301-a756-68b8627249ad",
+      "pipelineId": "e73e2046-8abb-4f9e-8b7d-5b00ce5ade5f",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "neurological-musculoskeletal-terminology-neuro-terminology-nerves-brain-and-funct--batch-2-medical-terminology",
@@ -955,11 +955,11 @@
         "status": "PUBLISHED",
         "sortOrder": 118,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:27:31.408Z"
+        "generatedAt": "2026-04-11T03:30:21.691Z"
       }
     },
     {
-      "pipelineId": "e2a2e5c2-1f31-4ec9-8018-57ce93c06666",
+      "pipelineId": "446c21eb-0bb7-4fcf-b4bf-b2eaa1c8861a",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "neurological-musculoskeletal-terminology-musculoskeletal-terminology-bone-muscle---batch-2-medical-terminology",
@@ -1001,11 +1001,11 @@
         "status": "PUBLISHED",
         "sortOrder": 119,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:27:31.408Z"
+        "generatedAt": "2026-04-11T03:30:21.691Z"
       }
     },
     {
-      "pipelineId": "ec4fd6d7-277f-408d-bcf3-7dd4ebfe0d66",
+      "pipelineId": "93ff3d27-a038-4d1e-afef-9eea516a99b6",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "organic-molecules-macromolecules-bonds-and-building-blocks-that-make-macr--batch-3-organic-cell-pharm-oral",
@@ -1053,11 +1053,11 @@
         "status": "PUBLISHED",
         "sortOrder": 120,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:27:31.408Z"
+        "generatedAt": "2026-04-11T03:30:21.691Z"
       }
     },
     {
-      "pipelineId": "1f43f26d-42bb-4a6c-834a-1084133d0322",
+      "pipelineId": "aec2eb13-a6a8-4db3-8beb-33e313397f8e",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "organic-molecules-macromolecules-carbohydrates-and-lipids-quick-energy-vs--batch-3-organic-cell-pharm-oral",
@@ -1099,11 +1099,11 @@
         "status": "PUBLISHED",
         "sortOrder": 121,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:27:31.408Z"
+        "generatedAt": "2026-04-11T03:30:21.691Z"
       }
     },
     {
-      "pipelineId": "1fd951e8-38cb-4f4a-9153-006a2d318945",
+      "pipelineId": "8aae634a-acb9-4314-83b4-cefef62fced2",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "organic-molecules-macromolecules-proteins-and-nucleic-acids-workers-and-i--batch-3-organic-cell-pharm-oral",
@@ -1145,11 +1145,11 @@
         "status": "PUBLISHED",
         "sortOrder": 122,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:27:31.408Z"
+        "generatedAt": "2026-04-11T03:30:21.691Z"
       }
     },
     {
-      "pipelineId": "2871a1a7-ee08-4fdb-8120-8040aea88fb1",
+      "pipelineId": "0c73bb03-b056-4ca5-a404-51c538d23ec0",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "cell-structure-and-function-plasma-membrane-gatekeeper-and-communica--batch-3-organic-cell-pharm-oral",
@@ -1191,11 +1191,11 @@
         "status": "PUBLISHED",
         "sortOrder": 123,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:27:31.408Z"
+        "generatedAt": "2026-04-11T03:30:21.691Z"
       }
     },
     {
-      "pipelineId": "d1fab567-87b3-4040-b4cd-df4745d38b87",
+      "pipelineId": "faa57b3f-9577-463a-97d3-167afb85381b",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "cell-structure-and-function-organelles-division-of-labor-inside-the---batch-3-organic-cell-pharm-oral",
@@ -1237,11 +1237,11 @@
         "status": "PUBLISHED",
         "sortOrder": 124,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:27:31.408Z"
+        "generatedAt": "2026-04-11T03:30:21.691Z"
       }
     },
     {
-      "pipelineId": "9d7904d2-8642-46f0-84bb-0d8a0e420ad2",
+      "pipelineId": "ad145ba2-669f-48f5-83bf-d852ef6fe4ed",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "cell-structure-and-function-from-glucose-to-atp-cellular-respiration--batch-3-organic-cell-pharm-oral",
@@ -1289,11 +1289,11 @@
         "status": "PUBLISHED",
         "sortOrder": 125,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:27:31.408Z"
+        "generatedAt": "2026-04-11T03:30:21.691Z"
       }
     },
     {
-      "pipelineId": "0a5eefd5-add1-431b-9722-75aec9021f22",
+      "pipelineId": "8b7e0556-a8a0-45b4-8461-caa077a241aa",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "routes-of-drug-administration-why-route-changes-drug-behavior-adme-bri--batch-3-organic-cell-pharm-oral",
@@ -1329,11 +1329,11 @@
         "status": "PUBLISHED",
         "sortOrder": 126,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:27:31.408Z"
+        "generatedAt": "2026-04-11T03:30:21.691Z"
       }
     },
     {
-      "pipelineId": "863b958d-713d-4b7c-ac05-43ceb9d5ec36",
+      "pipelineId": "a287e266-0a8c-4339-8548-521560632050",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "routes-of-drug-administration-enteral-and-parenteral-routes-pre-nursin--batch-3-organic-cell-pharm-oral",
@@ -1375,11 +1375,11 @@
         "status": "PUBLISHED",
         "sortOrder": 127,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:27:31.408Z"
+        "generatedAt": "2026-04-11T03:30:21.691Z"
       }
     },
     {
-      "pipelineId": "a67fcd3b-c93c-42b9-ba2a-89b3fdafe68c",
+      "pipelineId": "b4558c35-e612-4a00-b22b-c85f42c70a78",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "routes-of-drug-administration-route-selection-speed-swallowing-gi-func--batch-3-organic-cell-pharm-oral",
@@ -1421,11 +1421,11 @@
         "status": "PUBLISHED",
         "sortOrder": 128,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:27:31.408Z"
+        "generatedAt": "2026-04-11T03:30:21.691Z"
       }
     },
     {
-      "pipelineId": "2c8dca08-2179-4e23-bfef-4336fe24badd",
+      "pipelineId": "7b749b30-28e7-4bd5-a2ec-17443b110413",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "pharmacology-adverse-effects-how-drugs-exert-effects-pharmacodynamics--batch-3-organic-cell-pharm-oral",
@@ -1461,11 +1461,11 @@
         "status": "PUBLISHED",
         "sortOrder": 129,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:27:31.408Z"
+        "generatedAt": "2026-04-11T03:30:21.691Z"
       }
     },
     {
-      "pipelineId": "2ab79699-3d32-4d4e-909c-cb4d7ca979f3",
+      "pipelineId": "92b1469a-0bd9-4213-af49-22145639ca38",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "pharmacology-adverse-effects-side-effect-vs-adverse-drug-reaction-adr--batch-3-organic-cell-pharm-oral",
@@ -1507,11 +1507,11 @@
         "status": "PUBLISHED",
         "sortOrder": 130,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:27:31.408Z"
+        "generatedAt": "2026-04-11T03:30:21.691Z"
       }
     },
     {
-      "pipelineId": "15e7c091-e62c-456d-9b3e-0d822c8b0693",
+      "pipelineId": "183ebd3c-bbdb-4e27-af6d-4e212de3f781",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "pharmacology-adverse-effects-interactions-allergies-toxicity-and-repo--batch-3-organic-cell-pharm-oral",
@@ -1553,11 +1553,11 @@
         "status": "PUBLISHED",
         "sortOrder": 131,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:27:31.408Z"
+        "generatedAt": "2026-04-11T03:30:21.691Z"
       }
     },
     {
-      "pipelineId": "776a3629-fff4-44f4-a2d2-9172faaf5dbe",
+      "pipelineId": "7c642e70-3469-4094-9f2f-013291253da2",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "rights-of-medication-administration-classic-rights-patient-drug-dose-route-t--batch-3-organic-cell-pharm-oral",
@@ -1599,11 +1599,11 @@
         "status": "PUBLISHED",
         "sortOrder": 132,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:27:31.408Z"
+        "generatedAt": "2026-04-11T03:30:21.691Z"
       }
     },
     {
-      "pipelineId": "58832789-1f21-461c-89fd-c911d59b9826",
+      "pipelineId": "69a8f15f-faab-4be6-ba2d-8617c332fffe",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "rights-of-medication-administration-expanded-rights-documentation-reason-res--batch-3-organic-cell-pharm-oral",
@@ -1645,11 +1645,11 @@
         "status": "PUBLISHED",
         "sortOrder": 133,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:27:31.408Z"
+        "generatedAt": "2026-04-11T03:30:21.691Z"
       }
     },
     {
-      "pipelineId": "7c87249c-08fc-422f-9d96-c932f893df4f",
+      "pipelineId": "610e7ab3-e9f4-4ec2-935c-dd881e84edd0",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "oral-medication-dosage-calculations-dose-on-hand-and-dose-desired-the-core-p--batch-3-organic-cell-pharm-oral",
@@ -1697,11 +1697,11 @@
         "status": "PUBLISHED",
         "sortOrder": 134,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:27:31.408Z"
+        "generatedAt": "2026-04-11T03:30:21.691Z"
       }
     },
     {
-      "pipelineId": "f551d7d9-3f4a-4a70-8f68-61a9cec5ef8b",
+      "pipelineId": "0fc4dcc8-34d4-4f51-870a-8842fbf05293",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "oral-medication-dosage-calculations-dimensional-analysis-for-oral-liquids-an--batch-3-organic-cell-pharm-oral",
@@ -1749,11 +1749,11 @@
         "status": "PUBLISHED",
         "sortOrder": 135,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:27:31.408Z"
+        "generatedAt": "2026-04-11T03:30:21.691Z"
       }
     },
     {
-      "pipelineId": "1e3b45bb-04f7-47d9-bebf-d73733c198f7",
+      "pipelineId": "d70c3ada-67a1-4698-a73f-16cdd429529f",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "oral-medication-dosage-calculations-split-tablets-liquid-cups-and-safety-che--batch-3-organic-cell-pharm-oral",
@@ -1795,11 +1795,11 @@
         "status": "PUBLISHED",
         "sortOrder": 136,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:27:31.408Z"
+        "generatedAt": "2026-04-11T03:30:21.691Z"
       }
     },
     {
-      "pipelineId": "74a197ed-922c-46e0-a632-4552ae6821d0",
+      "pipelineId": "633f73a0-3663-4213-ae22-b5b0d196b8bd",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "intro-microbiology-classification-major-microorganism-groups-nurses-encoun--batch-4-micro-pharm-pk-pd-iv",
@@ -1841,11 +1841,11 @@
         "status": "PUBLISHED",
         "sortOrder": 137,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:27:31.408Z"
+        "generatedAt": "2026-04-11T03:30:21.691Z"
       }
     },
     {
-      "pipelineId": "4aca55d7-457a-4fce-b9ba-ad2988ecf8a2",
+      "pipelineId": "bbf67fed-53e6-4923-8173-c88e35a0457b",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "intro-microbiology-classification-prokaryote-vs-eukaryote-and-why-it-matte--batch-4-micro-pharm-pk-pd-iv",
@@ -1887,11 +1887,11 @@
         "status": "PUBLISHED",
         "sortOrder": 138,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:27:31.408Z"
+        "generatedAt": "2026-04-11T03:30:21.691Z"
       }
     },
     {
-      "pipelineId": "0a853ed9-e6b6-4437-82e6-48fa0a69f257",
+      "pipelineId": "7f43dcd5-0441-474b-9820-27bf5d558172",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "bacterial-structure-and-reproduction-bacterial-cell-envelope-and-gram-stain-l--batch-4-micro-pharm-pk-pd-iv",
@@ -1933,11 +1933,11 @@
         "status": "PUBLISHED",
         "sortOrder": 139,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:27:31.408Z"
+        "generatedAt": "2026-04-11T03:30:21.691Z"
       }
     },
     {
-      "pipelineId": "2fe259a5-716a-4d2e-8c6a-6451331f603b",
+      "pipelineId": "72a3c458-a43e-48e8-8ac5-ca760e374227",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "bacterial-structure-and-reproduction-bacterial-growth-and-resistance-preview--batch-4-micro-pharm-pk-pd-iv",
@@ -1973,11 +1973,11 @@
         "status": "PUBLISHED",
         "sortOrder": 140,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:27:31.408Z"
+        "generatedAt": "2026-04-11T03:30:21.691Z"
       }
     },
     {
-      "pipelineId": "9b174f81-a947-43cf-a3b5-15c53f3d1af7",
+      "pipelineId": "38a16cd9-32df-4ee7-9f63-7ef64796c13a",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "viral-structure-and-pathogenesis-viral-structure-minimal-infectious-parti--batch-4-micro-pharm-pk-pd-iv",
@@ -2013,11 +2013,11 @@
         "status": "PUBLISHED",
         "sortOrder": 141,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:27:31.408Z"
+        "generatedAt": "2026-04-11T03:30:21.691Z"
       }
     },
     {
-      "pipelineId": "5c313e23-0d15-4541-b5f0-de336553d02d",
+      "pipelineId": "bfbb8360-75ab-4e4f-826d-1e76518c7914",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "viral-structure-and-pathogenesis-viral-replication-cycle-survey-map--batch-4-micro-pharm-pk-pd-iv",
@@ -2059,11 +2059,11 @@
         "status": "PUBLISHED",
         "sortOrder": 142,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:27:31.408Z"
+        "generatedAt": "2026-04-11T03:30:21.691Z"
       }
     },
     {
-      "pipelineId": "44e6ba0d-3073-477b-95eb-a3b8122c1d9d",
+      "pipelineId": "45c65c41-18d1-4ba2-973d-46a0e6fa49f6",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "antimicrobials-overview-antibacterial-classes-and-spectrum-overv--batch-4-micro-pharm-pk-pd-iv",
@@ -2099,11 +2099,11 @@
         "status": "PUBLISHED",
         "sortOrder": 143,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:27:31.408Z"
+        "generatedAt": "2026-04-11T03:30:21.691Z"
       }
     },
     {
-      "pipelineId": "a9400485-8276-42d0-8819-a9a0b9c13cc6",
+      "pipelineId": "1d3fb5a6-9fec-46e3-b6a3-7fb12b240369",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "antimicrobials-overview-antivirals-and-antifungals-different-tar--batch-4-micro-pharm-pk-pd-iv",
@@ -2145,11 +2145,11 @@
         "status": "PUBLISHED",
         "sortOrder": 144,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:27:31.408Z"
+        "generatedAt": "2026-04-11T03:30:21.691Z"
       }
     },
     {
-      "pipelineId": "37559efa-78b6-4412-991c-fd3f6b1277c7",
+      "pipelineId": "5a87aafb-07b8-4bef-9740-dff3e5141089",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "antimicrobials-overview-resistance-adherence-and-safety-basics--batch-4-micro-pharm-pk-pd-iv",
@@ -2185,11 +2185,11 @@
         "status": "PUBLISHED",
         "sortOrder": 145,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:27:31.408Z"
+        "generatedAt": "2026-04-11T03:30:21.691Z"
       }
     },
     {
-      "pipelineId": "e3d7c0ab-65fe-4776-90f8-7aa879b37fc1",
+      "pipelineId": "cca347bb-085f-485d-995a-277b381309db",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "pharmacology-intro-drug-classifications-generic-brand-and-why-both-names-appear--batch-4-micro-pharm-pk-pd-iv",
@@ -2225,11 +2225,11 @@
         "status": "PUBLISHED",
         "sortOrder": 146,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:27:31.408Z"
+        "generatedAt": "2026-04-11T03:30:21.691Z"
       }
     },
     {
-      "pipelineId": "7982103a-fdeb-4ec3-b985-9bf1565189b5",
+      "pipelineId": "51cea7b7-5a43-4e4d-8496-51ccf7f6bc0c",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "pharmacology-intro-drug-classifications-drug-classes-and-prototypes--batch-4-micro-pharm-pk-pd-iv",
@@ -2265,11 +2265,11 @@
         "status": "PUBLISHED",
         "sortOrder": 147,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:27:31.408Z"
+        "generatedAt": "2026-04-11T03:30:21.691Z"
       }
     },
     {
-      "pipelineId": "b22e5fb5-d66d-4685-91ce-eba30ec15b41",
+      "pipelineId": "1df0eff7-ec92-49e4-94f0-a76cdad2f7f2",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "pharmacology-intro-drug-classifications-controlled-substance-schedules-us-framew--batch-4-micro-pharm-pk-pd-iv",
@@ -2305,11 +2305,11 @@
         "status": "PUBLISHED",
         "sortOrder": 148,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:27:31.408Z"
+        "generatedAt": "2026-04-11T03:30:21.691Z"
       }
     },
     {
-      "pipelineId": "86ab0165-0941-4492-a0b9-7b2f7f575670",
+      "pipelineId": "3fe124fd-e576-4520-9edd-0e13692cc973",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "pharmacokinetics-adme-absorption-from-site-into-circulation--batch-4-micro-pharm-pk-pd-iv",
@@ -2345,11 +2345,11 @@
         "status": "PUBLISHED",
         "sortOrder": 149,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:27:31.408Z"
+        "generatedAt": "2026-04-11T03:30:21.691Z"
       }
     },
     {
-      "pipelineId": "cfa49f54-94a2-429c-a370-26762c281508",
+      "pipelineId": "fcab40a0-c095-47d4-b524-e8f6d121a501",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "pharmacokinetics-adme-distribution-from-blood-to-tissues--batch-4-micro-pharm-pk-pd-iv",
@@ -2385,11 +2385,11 @@
         "status": "PUBLISHED",
         "sortOrder": 150,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:27:31.408Z"
+        "generatedAt": "2026-04-11T03:30:21.691Z"
       }
     },
     {
-      "pipelineId": "8d1e781b-be6d-4111-859c-a885968d989e",
+      "pipelineId": "e6eba46d-3eca-4744-8fea-5e2a073d277a",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "pharmacokinetics-adme-metabolism-biotransformation-often-in-li--batch-4-micro-pharm-pk-pd-iv",
@@ -2425,11 +2425,11 @@
         "status": "PUBLISHED",
         "sortOrder": 151,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:27:31.408Z"
+        "generatedAt": "2026-04-11T03:30:21.691Z"
       }
     },
     {
-      "pipelineId": "85e1640a-e3b5-4a95-b67b-710fa79407e0",
+      "pipelineId": "11447075-ac5c-4ad0-b0ab-1915d42f473f",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "pharmacokinetics-adme-excretion-mainly-renal-half-life-and-ste--batch-4-micro-pharm-pk-pd-iv",
@@ -2465,11 +2465,11 @@
         "status": "PUBLISHED",
         "sortOrder": 152,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:27:31.408Z"
+        "generatedAt": "2026-04-11T03:30:21.691Z"
       }
     },
     {
-      "pipelineId": "bf44926a-c457-4566-9baa-524cac8a037d",
+      "pipelineId": "e0acb97a-4e9b-4033-9ea5-09af5fcce26d",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "pharmacodynamics-drug-actions-receptors-affinity-efficacy-and-dose-res--batch-4-micro-pharm-pk-pd-iv",
@@ -2505,11 +2505,11 @@
         "status": "PUBLISHED",
         "sortOrder": 153,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:27:31.408Z"
+        "generatedAt": "2026-04-11T03:30:21.691Z"
       }
     },
     {
-      "pipelineId": "369c78d9-f3a6-4930-bc5f-a8c3b2fdf8f8",
+      "pipelineId": "7e6feee1-d13c-4e9a-b62e-8751d5491b29",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "pharmacodynamics-drug-actions-therapeutic-index-and-selectivity--batch-4-micro-pharm-pk-pd-iv",
@@ -2545,11 +2545,11 @@
         "status": "PUBLISHED",
         "sortOrder": 154,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:27:31.408Z"
+        "generatedAt": "2026-04-11T03:30:21.691Z"
       }
     },
     {
-      "pipelineId": "fbaf0ef8-a16b-4975-bfb2-e4ebfad0ecc0",
+      "pipelineId": "a56da80d-d384-4ea8-89f1-e923d0fff204",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "pharmacodynamics-drug-actions-tolerance-dependence-and-rebound-preview--batch-4-micro-pharm-pk-pd-iv",
@@ -2585,11 +2585,11 @@
         "status": "PUBLISHED",
         "sortOrder": 155,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:27:31.408Z"
+        "generatedAt": "2026-04-11T03:30:21.691Z"
       }
     },
     {
-      "pipelineId": "df092d93-6eb8-41b8-81c2-8dc79e27306d",
+      "pipelineId": "cc13c7a3-ef44-4889-9f4b-2c484e5d85b0",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "iv-flow-rate-calculations-ml-hr-volume-over-time--batch-4-micro-pharm-pk-pd-iv",
@@ -2619,11 +2619,11 @@
         "status": "PUBLISHED",
         "sortOrder": 156,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:27:31.408Z"
+        "generatedAt": "2026-04-11T03:30:21.691Z"
       }
     },
     {
-      "pipelineId": "442c1eda-12ef-446a-a721-3484d881a713",
+      "pipelineId": "f0d63734-d09c-4b7f-ab98-34094cf56e6d",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "iv-flow-rate-calculations-drip-rate-gtt-min-from-ml-hr--batch-4-micro-pharm-pk-pd-iv",
@@ -2653,11 +2653,11 @@
         "status": "PUBLISHED",
         "sortOrder": 157,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:27:31.408Z"
+        "generatedAt": "2026-04-11T03:30:21.691Z"
       }
     },
     {
-      "pipelineId": "8810a285-2766-4b90-9b58-2075cccc3843",
+      "pipelineId": "0359df07-9a53-4dbb-8bd3-cf78858caa1f",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "iv-flow-rate-calculations-infusion-time-and-pump-safety--batch-4-micro-pharm-pk-pd-iv",
@@ -2693,11 +2693,11 @@
         "status": "PUBLISHED",
         "sortOrder": 158,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:27:31.408Z"
+        "generatedAt": "2026-04-11T03:30:21.691Z"
       }
     },
     {
-      "pipelineId": "9f1bab8f-5677-45e6-9a8c-5f25cce9498e",
+      "pipelineId": "0150bf86-3436-405b-9fa3-0b80f92e9d97",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "body-direction-and-positional-terms-l01--foundations-batch-01",
@@ -2751,11 +2751,11 @@
         "status": "PUBLISHED",
         "sortOrder": 159,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:27:31.408Z"
+        "generatedAt": "2026-04-11T03:30:21.691Z"
       }
     },
     {
-      "pipelineId": "0dea55e3-63fa-4efc-9b36-f42b236c91f8",
+      "pipelineId": "a6974250-4621-4f7e-b1dd-e7d9110b5241",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "body-direction-and-positional-terms-l02--foundations-batch-01",
@@ -2809,11 +2809,11 @@
         "status": "PUBLISHED",
         "sortOrder": 160,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:27:31.408Z"
+        "generatedAt": "2026-04-11T03:30:21.691Z"
       }
     },
     {
-      "pipelineId": "da1b20e6-bd20-45fa-8ad9-e44b68310c81",
+      "pipelineId": "32aafa3b-6acc-4f9c-8a35-f2f42df4d50b",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "body-direction-and-positional-terms-l03--foundations-batch-01",
@@ -2873,11 +2873,11 @@
         "status": "PUBLISHED",
         "sortOrder": 161,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:27:31.408Z"
+        "generatedAt": "2026-04-11T03:30:21.691Z"
       }
     },
     {
-      "pipelineId": "bc7c4f5e-5a37-4720-81aa-5b7e9ff98998",
+      "pipelineId": "a49d15a1-be6b-46cf-8846-13614fb2a71a",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "body-direction-and-positional-terms-l04--foundations-batch-01",
@@ -2931,11 +2931,11 @@
         "status": "PUBLISHED",
         "sortOrder": 162,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:27:31.408Z"
+        "generatedAt": "2026-04-11T03:30:21.691Z"
       }
     },
     {
-      "pipelineId": "e01b3532-6c6d-4bd2-95d9-6dc3dcab72c1",
+      "pipelineId": "189130cc-6ad8-45a2-924b-cd0b6b917741",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "prefixes-suffixes-root-words-l01--foundations-batch-01",
@@ -2995,11 +2995,11 @@
         "status": "PUBLISHED",
         "sortOrder": 163,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:27:31.408Z"
+        "generatedAt": "2026-04-11T03:30:21.691Z"
       }
     },
     {
-      "pipelineId": "209ede52-7fdf-49aa-8f32-207b3c70edea",
+      "pipelineId": "3c8c542f-e98c-4de6-80c5-9222140fcfc0",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "prefixes-suffixes-root-words-l02--foundations-batch-01",
@@ -3065,11 +3065,11 @@
         "status": "PUBLISHED",
         "sortOrder": 164,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:27:31.408Z"
+        "generatedAt": "2026-04-11T03:30:21.691Z"
       }
     },
     {
-      "pipelineId": "978e8c00-f76c-43ce-89d1-1a18a8bf19d1",
+      "pipelineId": "8a906c94-58c6-4923-840d-c39b7e69357b",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "prefixes-suffixes-root-words-l03--foundations-batch-01",
@@ -3129,11 +3129,11 @@
         "status": "PUBLISHED",
         "sortOrder": 165,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:27:31.408Z"
+        "generatedAt": "2026-04-11T03:30:21.691Z"
       }
     },
     {
-      "pipelineId": "60f41eaa-1716-45c6-996b-4a4c516c394d",
+      "pipelineId": "51dd463b-4c66-4cb2-99e6-14697ae7ff75",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "prefixes-suffixes-root-words-l04--foundations-batch-01",
@@ -3193,11 +3193,11 @@
         "status": "PUBLISHED",
         "sortOrder": 166,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:27:31.408Z"
+        "generatedAt": "2026-04-11T03:30:21.691Z"
       }
     },
     {
-      "pipelineId": "e7a7afe5-7b10-4cf8-be57-26a67921bd73",
+      "pipelineId": "ad577d04-c139-4648-b421-c69448f74454",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "cardiovascular-respiratory-terminology-l01--foundations-batch-02",
@@ -3251,11 +3251,11 @@
         "status": "PUBLISHED",
         "sortOrder": 167,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:27:31.408Z"
+        "generatedAt": "2026-04-11T03:30:21.691Z"
       }
     },
     {
-      "pipelineId": "65b1007b-457a-425f-9cb2-8de5bcb1584c",
+      "pipelineId": "40f87d7e-3d76-45ad-b7af-aaa8242fd7d0",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "cardiovascular-respiratory-terminology-l02--foundations-batch-02",
@@ -3309,11 +3309,11 @@
         "status": "PUBLISHED",
         "sortOrder": 168,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:27:31.408Z"
+        "generatedAt": "2026-04-11T03:30:21.691Z"
       }
     },
     {
-      "pipelineId": "4437f615-96f3-403c-9f2c-c8abfaf976f4",
+      "pipelineId": "c15e02ab-830d-4249-b265-16b9c88c83fb",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "cardiovascular-respiratory-terminology-l03--foundations-batch-02",
@@ -3367,11 +3367,11 @@
         "status": "PUBLISHED",
         "sortOrder": 169,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:27:31.408Z"
+        "generatedAt": "2026-04-11T03:30:21.691Z"
       }
     },
     {
-      "pipelineId": "761ebedf-0ba9-4711-99a3-5c18c84d6c66",
+      "pipelineId": "e52c9bac-29dc-4c43-9aab-b2f3cea165bb",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "cardiovascular-respiratory-terminology-l04--foundations-batch-02",
@@ -3425,11 +3425,11 @@
         "status": "PUBLISHED",
         "sortOrder": 170,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:27:31.408Z"
+        "generatedAt": "2026-04-11T03:30:21.691Z"
       }
     },
     {
-      "pipelineId": "8a57b8a0-ae30-49ab-9707-1958d2b67e1c",
+      "pipelineId": "26db8a41-7d2d-4a43-8dbd-e48d1ceae595",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "cell-structure-and-function-l01--foundations-batch-02",
@@ -3489,11 +3489,11 @@
         "status": "PUBLISHED",
         "sortOrder": 171,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:27:31.408Z"
+        "generatedAt": "2026-04-11T03:30:21.691Z"
       }
     },
     {
-      "pipelineId": "7cc5eb3d-9781-4db7-b4e8-f163a32aae92",
+      "pipelineId": "4fa3d244-7c43-4c4b-b71f-9471ba1b0475",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "cell-structure-and-function-l02--foundations-batch-02",
@@ -3553,11 +3553,11 @@
         "status": "PUBLISHED",
         "sortOrder": 172,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:27:31.408Z"
+        "generatedAt": "2026-04-11T03:30:21.691Z"
       }
     },
     {
-      "pipelineId": "49515ace-71c6-4196-9422-bd7d8ac9e3f8",
+      "pipelineId": "b777614e-c9ab-4be9-8a25-6b9f2cdbb1d6",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "cell-structure-and-function-l03--foundations-batch-02",
@@ -3617,11 +3617,11 @@
         "status": "PUBLISHED",
         "sortOrder": 173,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:27:31.408Z"
+        "generatedAt": "2026-04-11T03:30:21.691Z"
       }
     },
     {
-      "pipelineId": "d35091d4-f0cf-456f-bda9-a8bc0b97cdc8",
+      "pipelineId": "a40abfc7-9fff-482d-8e6a-5773f3f5c056",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "cell-structure-and-function-l04--foundations-batch-02",
@@ -3675,11 +3675,11 @@
         "status": "PUBLISHED",
         "sortOrder": 174,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:27:31.408Z"
+        "generatedAt": "2026-04-11T03:30:21.691Z"
       }
     },
     {
-      "pipelineId": "b2a6b312-4f78-45b5-9d38-898cd796596a",
+      "pipelineId": "bbde2784-a2c5-4649-a573-92613c05f010",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "gi-urinary-terminology-l01--foundations-batch-02",
@@ -3733,11 +3733,11 @@
         "status": "PUBLISHED",
         "sortOrder": 175,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:27:31.408Z"
+        "generatedAt": "2026-04-11T03:30:21.691Z"
       }
     },
     {
-      "pipelineId": "739588aa-96f6-4f9c-b587-81f3582e7ed2",
+      "pipelineId": "7486d4bc-481d-4d09-825d-a622d9e48b29",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "gi-urinary-terminology-l02--foundations-batch-02",
@@ -3791,11 +3791,11 @@
         "status": "PUBLISHED",
         "sortOrder": 176,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:27:31.408Z"
+        "generatedAt": "2026-04-11T03:30:21.691Z"
       }
     },
     {
-      "pipelineId": "8707dade-2b00-42e5-9a94-596cf937f5c5",
+      "pipelineId": "3aa504d1-5ac6-468a-bc3c-531bd0ded0fc",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "musculoskeletal-neuro-terminology-l01--foundations-batch-02",
@@ -3849,11 +3849,11 @@
         "status": "PUBLISHED",
         "sortOrder": 177,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:27:31.408Z"
+        "generatedAt": "2026-04-11T03:30:21.691Z"
       }
     },
     {
-      "pipelineId": "82587a1e-1a2b-4965-8574-bb055c5bfb80",
+      "pipelineId": "a6709b56-9b2b-486a-98b3-71a3998ba23a",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "musculoskeletal-neuro-terminology-l02--foundations-batch-02",
@@ -3907,11 +3907,11 @@
         "status": "PUBLISHED",
         "sortOrder": 178,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:27:31.408Z"
+        "generatedAt": "2026-04-11T03:30:21.691Z"
       }
     },
     {
-      "pipelineId": "21db86b7-b07b-434d-87f8-273093a58bef",
+      "pipelineId": "e4f22f45-edf9-45e5-9cf0-2d4fdbab2c44",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "cell-division-mitosis-meiosis-l01--foundations-batch-03",
@@ -3965,11 +3965,11 @@
         "status": "PUBLISHED",
         "sortOrder": 179,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:27:31.408Z"
+        "generatedAt": "2026-04-11T03:30:21.691Z"
       }
     },
     {
-      "pipelineId": "f2c8b160-7905-4500-ad47-072791183530",
+      "pipelineId": "705fb013-cdb6-42b2-92f3-737597cc1dda",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "cell-division-mitosis-meiosis-l02--foundations-batch-03",
@@ -4023,11 +4023,11 @@
         "status": "PUBLISHED",
         "sortOrder": 180,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:27:31.408Z"
+        "generatedAt": "2026-04-11T03:30:21.691Z"
       }
     },
     {
-      "pipelineId": "9a223fcd-146a-4ff6-a671-8abfeef5fc1d",
+      "pipelineId": "5be9a720-a5ba-47b3-b89b-0566da81ac67",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "cell-transport-mechanisms-l01--foundations-batch-03",
@@ -4087,11 +4087,11 @@
         "status": "PUBLISHED",
         "sortOrder": 181,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:27:31.408Z"
+        "generatedAt": "2026-04-11T03:30:21.691Z"
       }
     },
     {
-      "pipelineId": "0196fcff-b835-4a09-b8c6-9bb462133255",
+      "pipelineId": "1f6c9c0e-6574-4ec5-8882-4d81815c4e79",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "cell-transport-mechanisms-l02--foundations-batch-03",
@@ -4145,11 +4145,11 @@
         "status": "PUBLISHED",
         "sortOrder": 182,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:27:31.408Z"
+        "generatedAt": "2026-04-11T03:30:21.691Z"
       }
     },
     {
-      "pipelineId": "cbf557de-d23a-4129-970a-3cf67cdc9c05",
+      "pipelineId": "90f602d3-8daf-43ee-b9a3-58f9f19149fa",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "cell-transport-mechanisms-l03--foundations-batch-03",
@@ -4209,11 +4209,11 @@
         "status": "PUBLISHED",
         "sortOrder": 183,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:27:31.408Z"
+        "generatedAt": "2026-04-11T03:30:21.691Z"
       }
     },
     {
-      "pipelineId": "30ecfc33-b372-4f25-b59d-ea30be605ab1",
+      "pipelineId": "7b7fed7b-2b71-4494-ba44-4835a9b68a30",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "cell-transport-mechanisms-l04--foundations-batch-03",
@@ -4267,11 +4267,11 @@
         "status": "PUBLISHED",
         "sortOrder": 184,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:27:31.408Z"
+        "generatedAt": "2026-04-11T03:30:21.691Z"
       }
     },
     {
-      "pipelineId": "40243389-75fd-4d76-98dd-5c9378430ff0",
+      "pipelineId": "1941dda3-84e5-4e05-abbf-750dec7e6d8e",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "four-tissue-types-l01--foundations-batch-03",
@@ -4331,11 +4331,11 @@
         "status": "PUBLISHED",
         "sortOrder": 185,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:27:31.408Z"
+        "generatedAt": "2026-04-11T03:30:21.691Z"
       }
     },
     {
-      "pipelineId": "a704cd5a-84ed-43b2-a7db-2cd9616c094d",
+      "pipelineId": "5f893de4-9e68-45dc-8d67-f0371bb762b2",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "four-tissue-types-l02--foundations-batch-03",
@@ -4395,11 +4395,11 @@
         "status": "PUBLISHED",
         "sortOrder": 186,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:27:31.408Z"
+        "generatedAt": "2026-04-11T03:30:21.691Z"
       }
     },
     {
-      "pipelineId": "26a00158-3384-4d2d-937e-5a2678c1c88f",
+      "pipelineId": "1c0f80e6-bce1-4f5b-a265-c0ce9b1c11a2",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "four-tissue-types-l03--foundations-batch-03",
@@ -4453,11 +4453,11 @@
         "status": "PUBLISHED",
         "sortOrder": 187,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:27:31.408Z"
+        "generatedAt": "2026-04-11T03:30:21.691Z"
       }
     },
     {
-      "pipelineId": "9630362a-8e51-4c0e-84fe-bf54c30a49fd",
+      "pipelineId": "857846ef-e8f5-4e9e-bf5d-b9997009d2f6",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "four-tissue-types-l04--foundations-batch-03",
@@ -4511,11 +4511,11 @@
         "status": "PUBLISHED",
         "sortOrder": 188,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:27:31.408Z"
+        "generatedAt": "2026-04-11T03:30:21.691Z"
       }
     },
     {
-      "pipelineId": "b3f105db-06f3-4cd0-9231-3d17ac9a9962",
+      "pipelineId": "780b8161-7daa-4ea7-b09f-a7510b414f8c",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "skin-structure-and-functions-l01--foundations-batch-03",
@@ -4575,11 +4575,11 @@
         "status": "PUBLISHED",
         "sortOrder": 189,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:27:31.408Z"
+        "generatedAt": "2026-04-11T03:30:21.691Z"
       }
     },
     {
-      "pipelineId": "0a72f701-6b46-422a-904a-fc8bff57061e",
+      "pipelineId": "8c08f737-002d-4f34-a179-47e5344efd10",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "skin-structure-and-functions-l02--foundations-batch-03",
@@ -4639,7 +4639,7 @@
         "status": "PUBLISHED",
         "sortOrder": 190,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:27:31.408Z"
+        "generatedAt": "2026-04-11T03:30:21.691Z"
       }
     }
   ],

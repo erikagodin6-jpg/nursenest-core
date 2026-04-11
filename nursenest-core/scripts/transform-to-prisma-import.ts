@@ -33,6 +33,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { createHash, randomUUID } from "node:crypto";
 import { normalizeImportedQuestionShape } from "./stage-prisma-import-normalize";
+import { STAGE_PRISMA_IMPORT_PROGRAM_MAP as PROGRAM_MAP } from "./stage-prisma-import-program-map";
 
 // ─── Types (Stage I schema) ───────────────────────────────────────────────────
 
@@ -136,7 +137,7 @@ const PROGRAM_MAP: Record<
   { pathwayId: string; exam: string; tierCode: "RPN" | "LVN_LPN" | "RN" | "NP" | "ALLIED" | null; questionTier: string; countryCode: null | "US" | "CA"; programs: string[] }
 > = {
   "np": {
-    pathwayId: "aanp-fnp",
+    pathwayId: "us-np-fnp",
     exam: "AANP-FNP",
     tierCode: "NP",
     questionTier: "premium",
