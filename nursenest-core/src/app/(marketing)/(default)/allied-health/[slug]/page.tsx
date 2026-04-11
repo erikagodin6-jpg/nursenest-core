@@ -17,6 +17,7 @@ import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 
+export const dynamic = "force-dynamic";
 export const revalidate = 86400;
 export const dynamicParams = true;
 
