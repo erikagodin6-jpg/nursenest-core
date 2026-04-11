@@ -104,3 +104,47 @@ export {
 export { analyseSession } from "./session-analyzer";
 
 export type { SessionAnalyzerInput } from "./session-analyzer";
+
+// ─── DB Adapter ───────────────────────────────────────────────────────────────
+
+export {
+  CAT_QUESTION_SELECT,
+  dbRowToCatQuestion,
+  dbRowsToCatQuestions,
+  inferCognitiveLayer,
+  inferDispositionTag,
+  inferPopulationTags,
+  inferRiskLevel,
+  normaliseSystemTag,
+} from "./db-adapter";
+
+export type {
+  CatQuestionSelectResult,
+  DbQuestionRow,
+} from "./db-adapter";
+
+// ─── Session Persistence ──────────────────────────────────────────────────────
+
+export {
+  completeNpCatSession,
+  createNpCatSession,
+  listNpCatSessions,
+  loadNpCatAnalysis,
+  loadNpCatSession,
+  saveNpCatSession,
+} from "./session-persistence";
+
+export type {
+  NpCatAdaptiveState,
+  NpCatSessionConfig,
+} from "./session-persistence";
+
+// ─── Answer History ───────────────────────────────────────────────────────────
+
+export {
+  loadAnswerHistory,
+  loadNpCatEngagementSummary,
+  loadSessionAnswers,
+  mergeAnswerHistory,
+  recentlyAnsweredIds,
+} from "./answer-history";
