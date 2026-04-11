@@ -38,19 +38,21 @@ test("normalizes lesson system values into fixed universal system keys", () => {
 
 test("buildPathwayLessonSystemSections preserves fixed system sequence", () => {
   const sections = buildPathwayLessonSystemSections([
-    lesson({ slug: "neuro-1", title: "Stroke", system: "neurological" }),
+    lesson({ slug: "maternal-1", title: "Postpartum hemorrhage", system: "maternal" }),
     lesson({ slug: "fund-1", title: "Hand hygiene", system: "fundamentals" }),
-    lesson({ slug: "resp-1", title: "Asthma", system: "respiratory" }),
     lesson({ slug: "cardio-1", title: "Heart failure", system: "cardiovascular" }),
+    lesson({ slug: "resp-1", title: "Asthma", system: "respiratory" }),
+    lesson({ slug: "neuro-1", title: "Stroke", system: "neurological" }),
+    lesson({ slug: "med-1", title: "Insulin safety", system: "medication safety" }),
   ]);
 
   assert.deepEqual(
     sections.map((section) => section.label),
-    ["Cardiovascular", "Respiratory", "Neurological", "Fundamentals"],
+    ["Cardiac", "Respiratory", "Neurological", "Medications & Pharmacology", "Maternal & Newborn", "Fundamentals"],
   );
   assert.deepEqual(
     sections.flatMap((section) => section.lessons.map((entry) => entry.slug)),
-    ["cardio-1", "resp-1", "neuro-1", "fund-1"],
+    ["cardio-1", "resp-1", "neuro-1", "med-1", "maternal-1", "fund-1"],
   );
 });
 
@@ -58,13 +60,34 @@ test("universal order exposes the required system sequence", () => {
   assert.deepEqual(PATHWAY_LESSON_SYSTEM_ORDER, [
     "cardiovascular",
     "respiratory",
-    "vital-signs",
     "neurological",
+    "vital-signs",
     "clinical-deterioration",
-    "infection-immunity",
     "pharmacology",
+    "infection-immunity",
+    "maternal-newborn",
+    "pediatrics",
+    "mental-health",
     "special-populations",
-    "communication-safety",
+    "communication",
+    "safety",
     "fundamentals",
   ]);
+});
+
+test("classifies maternal, pediatric, and mental health lessons into separate learner-facing sections", () => {
+  const sections = buildPathwayLessonSystemSections([
+    lesson({ slug: "postpartum-care", title: "Postpartum care", bodySystem: "Maternal and newborn" }),
+    lesson({ slug: "peds-fever", title: "Pediatric fever", bodySystem: "Pediatrics" }),
+    lesson({ slug: "therapeutic-communication-anxiety", title: "Therapeutic communication for anxiety", bodySystem: "Mental health" }),
+  ]);
+
+  assert.deepEqual(
+    sections.map((section) => [section.id, section.label]),
+    [
+      ["maternal-newborn", "Maternal & Newborn"],
+      ["pediatrics", "Pediatrics"],
+      ["mental-health", "Mental Health"],
+    ],
+  );
 });

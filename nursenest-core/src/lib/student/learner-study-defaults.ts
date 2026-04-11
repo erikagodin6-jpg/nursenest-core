@@ -17,6 +17,10 @@ export type LearnerStudyDefaultsV1 = {
     /** Surface timed mode first on the practice exam picker when true. */
     timedPreferred: boolean;
   };
+  lessonAssessments: {
+    /** When false, lesson pages open directly into content without pre/post assessments. */
+    enabled: boolean;
+  };
 };
 
 export const ALLOWED_QBANK_SESSION_SIZES = [10, 15, 20, 25, 30] as const;
@@ -30,6 +34,7 @@ export function defaultLearnerStudyDefaults(): LearnerStudyDefaultsV1 {
     v: 1,
     questionBank: { sessionSize: 20, examShell: false },
     practiceExam: { timedPreferred: false },
+    lessonAssessments: { enabled: true },
   };
 }
 
@@ -54,6 +59,9 @@ export function readLearnerStudyDefaults(userId: string): LearnerStudyDefaultsV1
       },
       practiceExam: {
         timedPreferred: Boolean(j.practiceExam?.timedPreferred),
+      },
+      lessonAssessments: {
+        enabled: j.lessonAssessments?.enabled !== false,
       },
     };
   } catch {

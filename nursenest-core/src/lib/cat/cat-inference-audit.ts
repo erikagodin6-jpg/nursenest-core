@@ -151,8 +151,8 @@ export async function runCatInferenceAudit(
 
   const NP_EXAM_KEYS = ["np-aanp", "np-aanpcnp", "np-canp", "np-fnp", "np-agpcnp", "np-pmhnp"];
 
-  // Build bounded where clause — no full-table scans
-  const where: Parameters<typeof prisma.examQuestion.findMany>[0]["where"] = {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const where: any = {
     exam: filter.exam ? filter.exam : { in: NP_EXAM_KEYS },
     status: "published",
     ...(filter.topic ? { topic: { contains: filter.topic, mode: "insensitive" } } : {}),

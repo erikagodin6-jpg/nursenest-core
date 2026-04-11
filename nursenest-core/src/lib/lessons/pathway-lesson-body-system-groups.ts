@@ -3,13 +3,17 @@ import type { PathwayLessonRecord } from "@/lib/lessons/pathway-lesson-types";
 export const PATHWAY_LESSON_SYSTEM_ORDER = [
   "cardiovascular",
   "respiratory",
-  "vital-signs",
   "neurological",
+  "vital-signs",
   "clinical-deterioration",
-  "infection-immunity",
   "pharmacology",
+  "infection-immunity",
+  "maternal-newborn",
+  "pediatrics",
+  "mental-health",
   "special-populations",
-  "communication-safety",
+  "communication",
+  "safety",
   "fundamentals",
 ] as const;
 
@@ -25,15 +29,19 @@ export type PathwayLessonSystemSection = {
 };
 
 export const PATHWAY_LESSON_SYSTEM_DESCRIPTIONS: Record<PathwayLessonSystemLabel, string> = {
-  cardiovascular: "Heart, circulation, and vascular conditions — monitoring, chronic management, and safe care.",
+  cardiovascular: "Cardiac anatomy, perfusion, rhythm changes, hemodynamics, and heart-focused nursing care.",
   respiratory: "Airway, oxygen therapy, breathing support, and respiratory condition management.",
-  "vital-signs": "Measuring, documenting, and recognizing abnormalities in temperature, pulse, respirations, blood pressure, and SpO₂.",
   neurological: "Neurological assessment, cognition, stroke care, seizure management, and CNS conditions.",
+  "vital-signs": "Assessment basics, vital sign trends, focused monitoring, and recognizing early abnormalities.",
   "clinical-deterioration": "Recognizing change in patient status, escalating early, and responding safely within scope.",
-  "infection-immunity": "Infection prevention, transmission-based precautions, hand hygiene, PPE, and anti-infective therapy.",
   pharmacology: "Medication rights, dosage calculations, drug classes, administration routes, and high-alert medication safety.",
-  "special-populations": "Population-specific care: pediatric, maternal, newborn, geriatric, and mental health contexts.",
-  "communication-safety": "Therapeutic communication, SBAR, documentation, delegation, scope of practice, and patient safety.",
+  "infection-immunity": "Infection control, precautions, hand hygiene, PPE, sterile technique, and transmission safety.",
+  "maternal-newborn": "Pregnancy, labor, postpartum, newborn transition, and maternal-child nursing priorities.",
+  pediatrics: "Growth and development, pediatric assessment, family teaching, and common childhood care patterns.",
+  "mental-health": "Therapeutic communication, safety planning, psych emergencies, and common mental health presentations.",
+  "special-populations": "Population-specific considerations including older adults, chronic complexity, and unique care contexts.",
+  communication: "Documentation, handoff, delegation, collaboration, and patient/family communication.",
+  safety: "Falls, restraints, identification, scope-safe actions, and core patient safety routines.",
   fundamentals: "Foundational clinical skills — skin care, wound care, elimination, hygiene, mobility, nutrition, and comfort.",
 };
 
@@ -70,26 +78,38 @@ export function normalizePathwayLessonSystemLabel(
   if (hasKeyword(normalizedSystem, ["respiratory", "pulmonary", "airway", "ventilation", "oxygenation"])) {
     return "respiratory";
   }
-  if (hasKeyword(normalizedSystem, ["vital signs", "vitals", "blood pressure", "temperature", "pulse", "spo2", "oxygen saturation"])) {
-    return "vital-signs";
-  }
   if (hasKeyword(normalizedSystem, ["neurological", "neurologic", "neuro", "stroke", "seizure", "cns"])) {
     return "neurological";
+  }
+  if (hasKeyword(normalizedSystem, ["vital signs", "vitals", "blood pressure", "temperature", "pulse", "spo2", "oxygen saturation", "assessment"])) {
+    return "vital-signs";
   }
   if (hasKeyword(normalizedSystem, ["clinical deterioration", "deterioration", "critical care", "rapid response", "shock", "unstable"])) {
     return "clinical-deterioration";
   }
-  if (hasKeyword(normalizedSystem, ["infection", "infectious", "immunity", "immune", "sepsis", "isolation"])) {
-    return "infection-immunity";
-  }
   if (hasKeyword(normalizedSystem, ["pharmacology", "medication", "med safety", "drug", "pharm"])) {
     return "pharmacology";
   }
-  if (hasKeyword(normalizedSystem, ["special populations", "population-specific", "pediatric", "geriatric", "obstetric", "maternal", "newborn", "pregnancy", "maternity", "mental health", "psychosocial", "psych"])) {
+  if (hasKeyword(normalizedSystem, ["infection", "infectious", "immunity", "immune", "sepsis", "isolation", "ppe", "sterile"])) {
+    return "infection-immunity";
+  }
+  if (hasKeyword(normalizedSystem, ["maternal", "newborn", "obstetric", "pregnancy", "maternity", "postpartum", "labor", "neonatal"])) {
+    return "maternal-newborn";
+  }
+  if (hasKeyword(normalizedSystem, ["pediatric", "paediatric", "child", "children", "adolescent", "infant", "growth and development"])) {
+    return "pediatrics";
+  }
+  if (hasKeyword(normalizedSystem, ["mental health", "psychiatric", "behavioral health", "psych", "anxiety", "depression", "suicide", "substance use"])) {
+    return "mental-health";
+  }
+  if (hasKeyword(normalizedSystem, ["special populations", "population-specific", "geriatric", "older adult", "aging", "lifespan"])) {
     return "special-populations";
   }
-  if (hasKeyword(normalizedSystem, ["communication", "handoff", "delegation", "documentation", "team communication", "safety"])) {
-    return "communication-safety";
+  if (hasKeyword(normalizedSystem, ["communication", "handoff", "delegation", "documentation", "team communication", "sbar", "therapeutic communication"])) {
+    return "communication";
+  }
+  if (hasKeyword(normalizedSystem, ["safety", "falls", "restraint", "incident", "two identifiers", "patient identification", "safe care"])) {
+    return "safety";
   }
   return "fundamentals";
 }
@@ -128,15 +148,19 @@ export function classifyLessonForHub(lesson: PathwayLessonRecord): PathwayLesson
   // 3. Title / topic / slug keyword fallback — catches "General" and other broad categories
   const h = `${lesson.title} ${lesson.topic} ${lesson.topicSlug} ${lesson.seoDescription}`.toLowerCase();
 
-  if (/vital.?sign|escalat|early.?warn|temperature|spo2|oxygen.?sat/.test(h)) return "vital-signs";
   if (/cardiovascular|cardiac|heart|hypertension|blood.?pressure|afib|atrial/.test(h)) return "cardiovascular";
   if (/respiratory|copd|asthma|oxygen|airway|breath|inhaler|nebulizer/.test(h)) return "respiratory";
   if (/neuro|stroke|seizure|cva|dementia|delirium|cogniti|alzheimer|parkinson/.test(h)) return "neurological";
+  if (/vital.?sign|focused.?assessment|head.?to.?toe|temperature|spo2|oxygen.?sat|pulse.?ox/.test(h)) return "vital-signs";
   if (/deteriorat|unstable|clinical.?judgment|abcs|rapid.?response|case:.?choosing/.test(h)) return "clinical-deterioration";
-  if (/infection|ppe|isolation|hand.?hygiene|precaution|mrsa|c.?diff|antibiotic|sterile/.test(h)) return "infection-immunity";
   if (/pharm|medic|drug|insulin|injection|dosage|calculation|high.?alert|anticoagul|antihypertensive|diuretic/.test(h)) return "pharmacology";
-  if (/postpartum|newborn|matern|obstetric|prenatal|breastfeed|neonatal|contraception|pediatric|child|growth.?chart|immunization|mental.?health|psycho|depress|anxiety|dementia|suicid|substance.?use|de.?escalat/.test(h)) return "special-populations";
-  if (/scope|delegat|document|sbar|handoff|shift.?report|communication|ethical|care.?coord|interprofession|restraint|falls?.?risk|incident|two.?identifier|patient.?id|report.?to.?rn|safety|prioritiz/.test(h)) return "communication-safety";
+  if (/infection|ppe|isolation|hand.?hygiene|precaution|mrsa|c.?diff|antibiotic|sterile/.test(h)) return "infection-immunity";
+  if (/postpartum|newborn|matern|obstetric|prenatal|breastfeed|neonatal|pregnan|labor|delivery/.test(h)) return "maternal-newborn";
+  if (/pediatric|paediatric|child|infant|adolescent|growth.?chart|immunization|well.?child/.test(h)) return "pediatrics";
+  if (/mental.?health|psycho|depress|anxiety|suicid|substance.?use|de.?escalat|psychiat/.test(h)) return "mental-health";
+  if (/geriatric|older.?adult|frailty|aging|lifespan/.test(h)) return "special-populations";
+  if (/scope|delegat|document|sbar|handoff|shift.?report|communication|ethical|care.?coord|interprofession|therapeutic.?communication/.test(h)) return "communication";
+  if (/restraint|falls?.?risk|incident|two.?identifier|patient.?id|report.?to.?rn|safety|prioritiz/.test(h)) return "safety";
 
   return "fundamentals";
 }
@@ -178,23 +202,31 @@ export function buildPathwayLessonSystemSections(lessons: PathwayLessonRecord[])
 function lessonSystemLabel(key: PathwayLessonSystemLabel): string {
   switch (key) {
     case "cardiovascular":
-      return "Cardiovascular";
+      return "Cardiac";
     case "respiratory":
       return "Respiratory";
-    case "vital-signs":
-      return "Vital Signs";
     case "neurological":
       return "Neurological";
+    case "vital-signs":
+      return "Vital Signs & Assessment";
     case "clinical-deterioration":
       return "Clinical Deterioration";
-    case "infection-immunity":
-      return "Infection & Immunity";
     case "pharmacology":
-      return "Pharmacology";
+      return "Medications & Pharmacology";
+    case "infection-immunity":
+      return "Infection Control";
+    case "maternal-newborn":
+      return "Maternal & Newborn";
+    case "pediatrics":
+      return "Pediatrics";
+    case "mental-health":
+      return "Mental Health";
     case "special-populations":
       return "Special Populations";
-    case "communication-safety":
-      return "Communication & Safety";
+    case "communication":
+      return "Communication";
+    case "safety":
+      return "Safety";
     default:
       return "Fundamentals";
   }
