@@ -2642,6 +2642,222 @@ html[data-theme="multi-pastel"] {
 }
 
 /* ============================================================
+   CAT exam session — clinical, single-column, minimal
+   Goal: "I am taking an exam" — not "I am browsing a study app"
+   ============================================================ */
+
+/**
+ * Applied to ExamSessionShell when catMode && !catFeedbackStudy.
+ * Overrides branded surface tints with neutral white/card surface.
+ * Specificity matches the existing `nn-exam-session--neutral` selector.
+ */
+html[data-theme] .nn-exam-session.nn-cat-exam-session {
+  background: var(--semantic-surface);
+  border-color: var(--semantic-border-soft);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.03);
+}
+
+/* Dark themes: keep surface slightly elevated above pure black */
+html[data-theme="dark-clinical"] .nn-exam-session.nn-cat-exam-session,
+html[data-theme="dark-academia"] .nn-exam-session.nn-cat-exam-session,
+html[data-theme="dark-mode"] .nn-exam-session.nn-cat-exam-session {
+  background: var(--bg-card);
+  border-color: var(--border-medium);
+}
+
+/* Exam session header — minimal: question counter left, timer right */
+.nn-cat-exam-header {
+  border-bottom: 1px solid var(--semantic-border-soft);
+  background: var(--semantic-surface);
+  padding: 0.625rem 1.5rem 0;
+}
+
+@media (min-width: 640px) {
+  .nn-cat-exam-header {
+    padding: 0.75rem 2rem 0;
+  }
+}
+
+.nn-cat-exam-header__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 0.625rem;
+}
+
+/* Ultra-thin progress bar — theme primary only, nothing decorative */
+.nn-cat-exam-progress {
+  height: 3px;
+  width: 100%;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--semantic-border-soft) 80%, transparent);
+}
+
+.nn-cat-exam-progress-fill {
+  height: 100%;
+  background: var(--theme-primary, var(--semantic-brand));
+  transition: width 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nn-cat-exam-progress-fill {
+    transition: none;
+  }
+}
+
+/* Main body — centered, max 760px, generous padding */
+.nn-cat-exam-body {
+  max-width: 47.5rem;
+  margin: 0 auto;
+  padding: 2rem 1.25rem 2.75rem;
+}
+
+@media (min-width: 640px) {
+  .nn-cat-exam-body {
+    padding: 2.5rem 2rem 3.25rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .nn-cat-exam-body {
+    padding: 3rem 2.5rem 4rem;
+  }
+}
+
+/* Topic / metadata row — plain text, no colored background */
+.nn-cat-exam-topic-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.375rem;
+  padding-bottom: 1.125rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid var(--semantic-border-soft);
+  font-size: 0.75rem;
+  line-height: 1.4;
+  color: var(--semantic-text-muted);
+  letter-spacing: 0.015em;
+}
+
+.nn-cat-exam-topic-meta__topic {
+  font-weight: 600;
+  color: var(--semantic-text-secondary);
+}
+
+/* Question stem — larger, exam-booklet feel */
+.nn-cat-exam-stem {
+  font-size: 1.125rem;
+  line-height: 1.72;
+  font-weight: 400;
+  letter-spacing: -0.014em;
+  color: var(--semantic-text-primary);
+  margin-bottom: 2rem;
+}
+
+@media (min-width: 768px) {
+  .nn-cat-exam-stem {
+    font-size: 1.25rem;
+    line-height: 1.66;
+    margin-bottom: 2.25rem;
+  }
+}
+
+/* Options label above the list */
+.nn-cat-exam-options-label {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--semantic-text-muted);
+  margin-bottom: 0.875rem;
+}
+
+/*
+ * In exam mode, suppress the brand tint from option borders / backgrounds.
+ * The hover/selected/correct/incorrect states from nn-qopt-surface-* remain intact —
+ * only the default (resting) state gets neutralised.
+ */
+.nn-cat-exam-session .nn-qopt-surface {
+  border-color: var(--border-subtle, var(--semantic-border-soft));
+  background: var(--bg-card, var(--semantic-surface));
+  box-shadow: none;
+}
+
+.nn-cat-exam-session .nn-qopt-surface--interactive:hover:not(:disabled) {
+  border-color: color-mix(in srgb, var(--semantic-text-muted) 28%, var(--border-subtle));
+  background: color-mix(in srgb, var(--semantic-text-primary) 3%, var(--bg-card));
+  box-shadow: none;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .nn-cat-exam-session .nn-qopt-surface--interactive:active:not(:disabled) {
+    transform: none;
+  }
+}
+
+/* Suppress brand tint on the letter badge in resting state */
+.nn-cat-exam-session .nn-qopt-letter {
+  border-color: var(--border-subtle, var(--semantic-border-soft));
+  background: transparent;
+}
+
+/* Option list spacing in exam mode */
+.nn-cat-exam-session .nn-qopt-list {
+  gap: 0.625rem;
+}
+
+@media (min-width: 640px) {
+  .nn-cat-exam-session .nn-qopt-list {
+    gap: 0.75rem;
+  }
+}
+
+/* Nav bar — right-aligned, clean separation from content */
+.nn-cat-exam-nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  padding-top: 1.5rem;
+  margin-top: 1.5rem;
+  border-top: 1px solid var(--semantic-border-soft);
+}
+
+/* Mark-for-review: far left, low-prominence */
+.nn-cat-exam-nav__flag {
+  margin-right: auto;
+}
+
+/* Timed warning in exam mode — uses semantic-warning tokens instead of hard amber */
+.nn-cat-exam-timing-alert {
+  border-radius: 0.5rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-warning) 28%, var(--semantic-border-soft));
+  background: var(--semantic-warning-soft);
+  padding: 0.625rem 1rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--semantic-warning-contrast);
+  margin-bottom: 1.5rem;
+}
+
+/* CAT study mode — right panel for rationale (more neutral than practice mode) */
+.nn-cat-study-rationale-col {
+  border-top: 1px solid var(--semantic-border-soft);
+  background: var(--semantic-surface);
+}
+
+@media (min-width: 1024px) {
+  .nn-cat-study-rationale-col {
+    border-top: none;
+    border-left: 1px solid var(--semantic-border-soft);
+    background: color-mix(in srgb, var(--semantic-text-primary) 1.5%, var(--semantic-surface));
+  }
+}
+
+/* ============================================================
    Practice session — 2-column premium layout
    ============================================================ */
 
@@ -2868,4 +3084,556 @@ html[data-theme="multi-pastel"] {
   .nn-practice-session-progress-fill {
     transition: width 0.55s cubic-bezier(0.22, 1, 0.36, 1);
   }
+}
+
+/* ============================================================
+   CAT SESSION LAYOUT — Spec-driven, exam-like, minimal
+   max-width 1200px | 65/35 grid | neutral surfaces only
+   ============================================================ */
+
+/* Outer container — centers content, controls max-width */
+.nn-cat-session {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ── TOP BAR ───────────────────────────────────────────────── */
+
+.nn-cat-top-bar {
+  padding: 14px 0 0;
+  border-bottom: 1px solid var(--semantic-border-soft);
+}
+
+.nn-cat-top-bar__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding-bottom: 14px;
+  min-height: 0;
+}
+
+.nn-cat-top-bar__counter {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--semantic-text-primary);
+  letter-spacing: -0.01em;
+}
+
+.nn-cat-top-bar__meta {
+  font-size: 0.8125rem;
+  color: var(--semantic-text-muted);
+}
+
+.nn-cat-top-bar__right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-shrink: 0;
+}
+
+.nn-cat-top-bar__pct {
+  font-size: 0.8125rem;
+  color: var(--semantic-text-muted);
+  white-space: nowrap;
+}
+
+/* 6px progress bar — theme-primary fill only */
+.nn-cat-top-bar__progress {
+  height: 6px;
+  background: var(--semantic-border-soft);
+  overflow: hidden;
+  margin: 0 -24px; /* bleed to container edges */
+}
+
+.nn-cat-top-bar__progress-fill {
+  height: 100%;
+  background: var(--theme-primary, var(--semantic-brand));
+  transition: width 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nn-cat-top-bar__progress-fill {
+    transition: none;
+  }
+}
+
+/* ── CONTENT GRID ──────────────────────────────────────────── */
+
+.nn-cat-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+  padding: 24px 0 40px;
+}
+
+@media (min-width: 1024px) {
+  .nn-cat-grid {
+    /* 65% question / 35% rationale */
+    grid-template-columns: 65fr 35fr;
+  }
+}
+
+/* ── QUESTION CARD (left) ──────────────────────────────────── */
+
+.nn-cat-question-card {
+  border-radius: 1.25rem;
+  border: 1px solid var(--semantic-border-soft);
+  background: var(--semantic-surface-elevated, var(--semantic-surface));
+  padding: 32px;
+}
+
+@media (max-width: 639px) {
+  .nn-cat-question-card {
+    padding: 20px;
+  }
+}
+
+/* Topic / metadata row — plain text, no colored background */
+.nn-cat-topic-meta {
+  font-size: 0.75rem;
+  color: var(--semantic-text-muted);
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--semantic-border-soft);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.nn-cat-topic-meta__name {
+  font-weight: 600;
+  color: var(--semantic-text-secondary);
+}
+
+/* Question stem — larger, relaxed, max readable width */
+.nn-cat-question-stem {
+  font-size: 1.1875rem;
+  line-height: 1.72;
+  font-weight: 400;
+  letter-spacing: -0.014em;
+  color: var(--semantic-text-primary);
+  max-width: 72ch;
+  margin-bottom: 28px;
+}
+
+@media (max-width: 639px) {
+  .nn-cat-question-stem {
+    font-size: 1.0625rem;
+    margin-bottom: 20px;
+  }
+}
+
+/* "Select best answer" / "Select all that apply" label */
+.nn-cat-options-label {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--semantic-text-muted);
+  margin-bottom: 12px;
+}
+
+/* ── ANSWER OPTIONS ────────────────────────────────────────── */
+
+/* Option list — 12px gap between rows */
+.nn-cat-opt-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Option row — 16px padding, horizontal flex */
+.nn-cat-opt {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px;
+  width: 100%;
+  text-align: left;
+  border-radius: 0.75rem;
+  border: 1px solid var(--semantic-border-soft);
+  background: var(--bg-card, var(--semantic-surface));
+  color: var(--semantic-text-primary);
+  transition:
+    border-color 0.18s ease,
+    background-color 0.18s ease,
+    box-shadow 0.18s ease;
+  cursor: pointer;
+}
+
+.nn-cat-opt:disabled {
+  cursor: not-allowed;
+}
+
+/* Interactive (default unlocked) hover state — no heavy color */
+.nn-cat-opt--interactive:hover:not(:disabled) {
+  border-color: color-mix(in srgb, var(--semantic-text-muted) 24%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-text-primary) 3%, var(--bg-card));
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* Selected (before submit) — theme primary border only */
+.nn-cat-opt--selected {
+  border-color: color-mix(in srgb, var(--theme-primary) 48%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--theme-primary) 5%, var(--bg-card));
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--theme-primary) 16%, transparent);
+}
+
+/* Correct — soft success surface */
+.nn-cat-opt--correct {
+  border-color: color-mix(in srgb, var(--role-success) 28%, var(--semantic-border-soft));
+  background: var(--role-success-soft);
+}
+
+/* Incorrect (selected wrong answer) — soft error surface */
+.nn-cat-opt--incorrect {
+  border-color: color-mix(in srgb, var(--semantic-danger) 30%, var(--semantic-border-soft));
+  background: var(--semantic-danger-soft);
+}
+
+html[data-theme="dark-clinical"] .nn-cat-opt--incorrect,
+html[data-theme="dark-academia"] .nn-cat-opt--incorrect,
+html[data-theme="dark-mode"] .nn-cat-opt--incorrect {
+  border-color: color-mix(in srgb, var(--semantic-danger) 36%, var(--semantic-border-soft));
+}
+
+/* Dim — non-selected wrong options after submit */
+.nn-cat-opt--dim {
+  opacity: 0.65;
+}
+
+/* Circular letter badge — the key structural diff from lesson-style square badges */
+.nn-cat-opt__letter {
+  display: inline-flex;
+  width: 1.875rem;
+  height: 1.875rem;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 1px solid var(--semantic-border-soft);
+  background: transparent;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--semantic-text-muted);
+  margin-top: 0.0625rem;
+  transition:
+    border-color 0.18s ease,
+    background-color 0.18s ease,
+    color 0.18s ease;
+}
+
+.nn-cat-opt--selected .nn-cat-opt__letter {
+  border-color: color-mix(in srgb, var(--theme-primary) 32%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--theme-primary) 12%, var(--bg-card));
+  color: var(--semantic-text-primary);
+}
+
+.nn-cat-opt--correct .nn-cat-opt__letter {
+  border-color: color-mix(in srgb, var(--role-success) 36%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--role-success) 14%, var(--bg-card));
+  color: var(--role-success-text);
+}
+
+.nn-cat-opt--incorrect .nn-cat-opt__letter {
+  border-color: color-mix(in srgb, var(--semantic-danger) 34%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-danger) 14%, var(--bg-card));
+  color: var(--semantic-danger-contrast);
+}
+
+/* Option text */
+.nn-cat-opt__text {
+  flex: 1;
+  min-width: 0;
+  font-size: 0.9375rem;
+  line-height: 1.56;
+  color: var(--semantic-text-primary);
+}
+
+/* Focus ring */
+.nn-cat-opt--interactive:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 2px var(--bg-card),
+    0 0 0 4px color-mix(in srgb, var(--theme-primary) 36%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nn-cat-opt,
+  .nn-cat-opt__letter {
+    transition: none;
+  }
+}
+
+/* ── RATIONALE PANEL (right column) ───────────────────────── */
+
+.nn-cat-rationale-card {
+  border-radius: 1.25rem;
+  border: 1px solid var(--semantic-border-soft);
+  background: var(--semantic-surface-elevated, var(--semantic-surface));
+  padding: 24px;
+  /* sticky on desktop so it scrolls with the question */
+  position: sticky;
+  top: 80px;
+  /* max height + scroll for very long rationales */
+  max-height: calc(100vh - 120px);
+  overflow-y: auto;
+}
+
+@media (max-width: 1023px) {
+  .nn-cat-rationale-card {
+    position: static;
+    max-height: none;
+    overflow-y: visible;
+  }
+}
+
+/* Each rationale section is separated by a divider (16–20px spacing) */
+.nn-cat-rationale-section {
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--semantic-border-soft);
+}
+
+.nn-cat-rationale-section:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
+
+.nn-cat-rationale-section__label {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--semantic-text-muted);
+  margin-bottom: 8px;
+}
+
+.nn-cat-rationale-section__body {
+  font-size: 0.9375rem;
+  line-height: 1.62;
+  color: var(--semantic-text-primary);
+}
+
+/* Key Takeaway — subtle surface variation (surface-soft-a) */
+.nn-cat-rationale-section--takeaway {
+  border-radius: 0.625rem;
+  padding: 14px 16px;
+  background: var(--surface-soft-a, var(--semantic-panel-muted));
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 14px;
+}
+
+/* Waiting / locked placeholder */
+.nn-cat-rationale-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 40px 24px;
+  gap: 8px;
+  color: var(--semantic-text-muted);
+}
+
+.nn-cat-rationale-placeholder__icon {
+  font-size: 1.5rem;
+  line-height: 1;
+  opacity: 0.4;
+  margin-bottom: 4px;
+}
+
+.nn-cat-rationale-placeholder__title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--semantic-text-secondary);
+}
+
+.nn-cat-rationale-placeholder__body {
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  max-width: 22ch;
+}
+
+/* Nav bar inside the question card */
+.nn-cat-question-nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  padding-top: 24px;
+  margin-top: 20px;
+  border-top: 1px solid var(--semantic-border-soft);
+}
+
+.nn-cat-question-nav__flag {
+  margin-right: auto;
+}
+
+/* ── RESULTS SUMMARY PAGE ──────────────────────────────────── */
+
+.nn-cat-results {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 40px 24px 64px;
+}
+
+@media (max-width: 639px) {
+  .nn-cat-results {
+    padding: 24px 16px 48px;
+  }
+}
+
+/* Large score display at top */
+.nn-cat-results__score-block {
+  text-align: center;
+  padding: 40px 24px 32px;
+  border-radius: 1.25rem;
+  border: 1px solid var(--semantic-border-soft);
+  background: var(--semantic-surface-elevated, var(--semantic-surface));
+}
+
+.nn-cat-results__score-value {
+  font-size: 4rem;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: var(--semantic-text-primary);
+}
+
+.nn-cat-results__score-label {
+  font-size: 0.9375rem;
+  color: var(--semantic-text-muted);
+  margin-top: 8px;
+}
+
+/* 3-card stat row */
+.nn-cat-results__cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 20px;
+}
+
+@media (max-width: 639px) {
+  .nn-cat-results__cards {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+}
+
+@media (min-width: 640px) and (max-width: 767px) {
+  .nn-cat-results__cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Performance stat card */
+.nn-cat-perf-card {
+  border-radius: 1rem;
+  border: 1px solid var(--semantic-border-soft);
+  background: var(--semantic-surface-elevated, var(--semantic-surface));
+  padding: 24px;
+}
+
+.nn-cat-perf-card__label {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--semantic-text-muted);
+}
+
+.nn-cat-perf-card__value {
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.15;
+  color: var(--semantic-text-primary);
+  margin-top: 10px;
+  tabular-nums: true;
+}
+
+.nn-cat-perf-card__sub {
+  font-size: 0.8125rem;
+  color: var(--semantic-text-muted);
+  margin-top: 6px;
+}
+
+/* Results sections — "Weak Areas", "Strengths", "Next Steps" */
+.nn-cat-results__section {
+  margin-top: 40px;
+}
+
+.nn-cat-results__section-title {
+  font-size: 1.0625rem;
+  font-weight: 700;
+  color: var(--semantic-text-primary);
+  margin-bottom: 16px;
+}
+
+/* Topic bar row */
+.nn-cat-topic-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--semantic-border-soft);
+}
+
+.nn-cat-topic-row:last-child {
+  border-bottom: none;
+}
+
+.nn-cat-topic-row__name {
+  flex: 1;
+  min-width: 0;
+  font-size: 0.9375rem;
+  color: var(--semantic-text-primary);
+  truncate: true;
+}
+
+.nn-cat-topic-row__track {
+  width: 100px;
+  height: 6px;
+  background: var(--semantic-border-soft);
+  border-radius: 99px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.nn-cat-topic-row__fill {
+  height: 100%;
+  background: var(--theme-primary, var(--semantic-brand));
+  border-radius: 99px;
+  transition: width 0.4s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nn-cat-topic-row__fill {
+    transition: none;
+  }
+}
+
+.nn-cat-topic-row__pct {
+  font-size: 0.8125rem;
+  color: var(--semantic-text-muted);
+  width: 36px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+/* Next Steps button row */
+.nn-cat-results__next-steps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 16px;
 }

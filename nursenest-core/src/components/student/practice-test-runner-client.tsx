@@ -971,257 +971,416 @@ export function PracticeTestRunnerClient({
     );
   }
 
+  // Derived layout / display values
+  const modeLabel = isLinearEngine
+    ? linearDelivery === "exam"
+      ? "Linear exam"
+      : "Linear practice"
+    : catMode
+      ? examSimulation
+        ? aanpNpExamSim
+          ? "NP simulation · AANP-style"
+          : "NCLEX simulation · CAT"
+        : catFeedbackStudy
+          ? "CAT · Study Mode"
+          : "CAT · Test Mode"
+      : "Practice test";
+
+  const sessionPct = total > 0 ? Math.min(100, Math.max(0, ((idx + 1) / total) * 100)) : 0;
+
+  const rationalePanelStatus: RationalePanelStatus =
+    isLinearEngine && linearDelivery === "practice" && currentCommitted && linearFeedback
+      ? linearFeedback.isCorrect
+        ? "correct"
+        : "incorrect"
+      : isLinearEngine && linearDelivery === "exam" && currentCommitted
+        ? "exam_locked"
+        : "waiting";
+
+  const optionDisplayMap = Object.fromEntries(
+    optsCanonical.map((k, i) => [k, optsDisplay[i] ?? k]),
+  );
+
+  // CAT test/exam mode — no rationale during session, use single-column clinical layout
+  const isExamStyle = catMode && !catFeedbackStudy;
+
+  // CAT study mode — rationale shows after each answer, use 2-col layout
+  const catStudyFeedbackActive =
+    catMode && !examSimulation && catFeedbackStudy && catStudyFeedback && idx === total - 1;
+
+  // ── Shared: option rows (same logic for both layouts) ────────────────────
+  const optionRows =
+    optsCanonical.length === 0 ? (
+      <p className="rounded-md border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-4 py-3 text-sm text-[var(--semantic-text-muted)]">
+        No answer choices were returned for this item. Use Retry, reload the test, or contact
+        support if this persists.
+      </p>
+    ) : isSata ? (
+      <ul className="nn-qopt-list" role="group" aria-label="Answer choices (select all that apply)">
+        {optsCanonical.map((canonical, i) => {
+          const label = optsDisplay[i] ?? canonical;
+          const selected = Array.isArray(raw) ? raw.includes(canonical) : false;
+          const locked = (isLinearEngine && currentCommitted) || catStudyLocked;
+          return (
+            <li key={canonical}>
+              <label className={linearPracticeSataClasses(canonical, selected)}>
+                <input
+                  type="checkbox"
+                  disabled={locked}
+                  checked={selected}
+                  onChange={(e) => {
+                    const prev = Array.isArray(raw) ? [...raw] : [];
+                    const next = e.target.checked
+                      ? [...prev, canonical]
+                      : prev.filter((x) => x !== canonical);
+                    setAnswerForCurrent(next);
+                  }}
+                  className="mt-1 size-[1.125rem] shrink-0 rounded border-border text-primary focus-visible:ring-2 focus-visible:ring-primary/30 disabled:opacity-50 sm:size-4"
+                />
+                <QuestionChoiceLetter index={i} />
+                <span className="min-w-0 flex-1 text-[var(--theme-body-text)]">{label}</span>
+              </label>
+            </li>
+          );
+        })}
+      </ul>
+    ) : (
+      <ul className="nn-qopt-list" role="radiogroup" aria-label="Answer choices">
+        {optsCanonical.map((canonical, i) => {
+          const label = optsDisplay[i] ?? canonical;
+          const locked = (isLinearEngine && currentCommitted) || catStudyLocked;
+          return (
+            <li key={canonical}>
+              <button
+                type="button"
+                disabled={locked}
+                onClick={() => setAnswerForCurrent(canonical)}
+                className={linearPracticeMcqClasses(canonical)}
+              >
+                <QuestionChoiceLetter index={i} />
+                <span className="min-w-0 flex-1">{label}</span>
+              </button>
+            </li>
+          );
+        })}
+      </ul>
+    );
+
+  // ══════════════════════════════════════════════════════════════════════════
+  // CAT EXAM MODE — single-column, clinical, minimal
+  // "I am taking an exam" — neutral surfaces, no decorative color
+  // ══════════════════════════════════════════════════════════════════════════
+  if (isExamStyle) {
+    return (
+      <div>
+        <ProtectedPremiumContent
+          userLabel={userLabel}
+          flags={protectionFlags}
+          telemetrySurface="practice_test"
+        >
+          <ExamSessionShell neutralPalette className="nn-cat-exam-session">
+            {/* ── Exam header: question counter + timer + 3px progress ─── */}
+            <div className="nn-cat-exam-header">
+              <div className="nn-cat-exam-header__row">
+                <div className="min-w-0">
+                  <p className="text-[10px] font-semibold uppercase tracking-widest text-[var(--semantic-text-muted)]">
+                    {modeLabel}
+                    {saving ? (
+                      <span className="ml-2 font-normal normal-case">· Saving…</span>
+                    ) : null}
+                  </p>
+                  <p className="mt-0.5 text-base font-semibold tabular-nums text-[var(--semantic-text-primary)]">
+                    Question {idx + 1}{" "}
+                    <span className="font-normal text-[var(--semantic-text-muted)]">
+                      of {total}
+                    </span>
+                    {catMode ? (
+                      <span className="ml-2 text-xs font-normal text-[var(--semantic-text-muted)]">
+                        · up to {catMaxCap}
+                      </span>
+                    ) : null}
+                  </p>
+                </div>
+                <ExamTimerReadout remainingSec={timedMode ? remainingSec : null} />
+              </div>
+              {/* 3px primary-fill progress bar — the only color accent in exam mode */}
+              <div
+                className="nn-cat-exam-progress"
+                role="progressbar"
+                aria-valuemin={0}
+                aria-valuemax={100}
+                aria-valuenow={Math.round(sessionPct)}
+                aria-label={`Exam progress: question ${idx + 1} of ${total}`}
+              >
+                <div
+                  className="nn-cat-exam-progress-fill"
+                  style={{ width: `${sessionPct}%` }}
+                />
+              </div>
+            </div>
+
+            {/* ── Exam body: centered, max 760px ───────────────────────── */}
+            <div className="nn-cat-exam-body">
+              {/* Timed warning — only visible for timed CAT */}
+              {timedMode && timeLimitSec != null ? (
+                <div className="nn-cat-exam-timing-alert" role="alert">
+                  Timed session — the exam may end automatically when time expires. Pace
+                  accordingly.
+                </div>
+              ) : null}
+
+              {/* CAT live transparency strip (optional, user-toggled) */}
+              {catMode ? (
+                <div className="mb-5">
+                  <CatLiveTransparencyStrip
+                    difficultyTail={adaptiveDifficultyHistory}
+                    theta={adaptiveTheta}
+                    se={adaptiveSe}
+                    show={catLiveTransparency}
+                    onToggle={setCatLiveTransparency}
+                  />
+                </div>
+              ) : null}
+
+              {/* Topic / difficulty metadata — plain text, no colored panel */}
+              {(current.topic ?? current.subtopic ?? current.difficulty) != null ? (
+                <div className="nn-cat-exam-topic-meta">
+                  {current.topic ? (
+                    <span className="nn-cat-exam-topic-meta__topic">{current.topic}</span>
+                  ) : null}
+                  {current.subtopic ? (
+                    <span>· {current.subtopic}</span>
+                  ) : null}
+                  {current.difficulty != null ? (
+                    <span>· {difficultyBandLabel(current.difficulty)}</span>
+                  ) : null}
+                </div>
+              ) : null}
+
+              {/* Question stem — large, exam-booklet typography */}
+              <p className="nn-cat-exam-stem">
+                {typeof current.stem === "string" && current.stem.trim().length > 0
+                  ? current.stem
+                  : "Question text is unavailable. Try reloading this item."}
+              </p>
+
+              {/* Options label */}
+              {isSata ? (
+                <p className="nn-cat-exam-options-label">Select all that apply</p>
+              ) : (
+                <p className="nn-cat-exam-options-label">Select the best answer</p>
+              )}
+
+              {/* Answer options */}
+              {optionRows}
+
+              {/* Nav bar — flag left, action right */}
+              <div className="nn-cat-exam-nav">
+                <button
+                  type="button"
+                  aria-pressed={Boolean(flagged[current.id])}
+                  className={`nn-cat-exam-nav__flag inline-flex items-center rounded border px-3 py-1.5 text-xs font-semibold transition ${
+                    flagged[current.id]
+                      ? "border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] text-[var(--semantic-text-primary)]"
+                      : "border-[var(--semantic-border-soft)] text-[var(--semantic-text-muted)] hover:border-[color-mix(in_srgb,var(--semantic-text-muted)_30%,var(--semantic-border-soft))] hover:bg-[color-mix(in_srgb,var(--semantic-text-primary)_3%,var(--semantic-surface))]"
+                  }`}
+                  onClick={() => setFlagged((f) => ({ ...f, [current.id]: !f[current.id] }))}
+                >
+                  {flagged[current.id] ? "★ Flagged" : "☆ Flag"}
+                </button>
+
+                {/* End session — tertiary, quiet */}
+                <button
+                  type="button"
+                  disabled={saving}
+                  className="text-xs font-medium text-[var(--semantic-text-muted)] underline-offset-2 hover:text-[var(--semantic-text-secondary)] hover:underline"
+                  onClick={() => void abandon()}
+                >
+                  End session
+                </button>
+
+                {/* Primary action */}
+                {idx < total - 1 ? (
+                  <button
+                    type="button"
+                    disabled={saving || !hasMeaningfulAnswer(current.id)}
+                    className="nn-btn-primary min-h-[2.75rem] rounded-lg px-6 text-sm font-semibold shadow-none disabled:opacity-40"
+                    onClick={() => void catAdvance()}
+                  >
+                    {saving ? "Working…" : "Next question"}
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    disabled={saving || !hasMeaningfulAnswer(current.id)}
+                    className="nn-btn-primary min-h-[2.75rem] rounded-lg px-6 text-sm font-semibold shadow-none disabled:opacity-40"
+                    onClick={() => void catAdvance()}
+                  >
+                    {saving ? "Working…" : "Submit & finish"}
+                  </button>
+                )}
+              </div>
+            </div>
+          </ExamSessionShell>
+        </ProtectedPremiumContent>
+      </div>
+    );
+  }
+
+  // ══════════════════════════════════════════════════════════════════════════
+  // PRACTICE / STUDY MODE — 2-column layout with rationale panel
+  // Used for: linear practice, linear exam, CAT study mode
+  // ══════════════════════════════════════════════════════════════════════════
   return (
     <div className="space-y-4">
       <ProtectedPremiumContent userLabel={userLabel} flags={protectionFlags} telemetrySurface="practice_test">
         <ExamSessionShell neutralPalette>
-          <ExamSessionTopBar
-            left={
-              <div>
-                <p className="nn-marketing-caption font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">
-                  {catMode ? "Adaptive item" : "Item"} {idx + 1} of {total}
+          {/* ── Slim session header ────────────────────────────────────── */}
+          <div className="nn-practice-session-header">
+            <div className="nn-practice-session-header__row">
+              <div className="min-w-0">
+                <p className="text-xs font-bold uppercase tracking-widest text-[var(--semantic-text-muted)]">
+                  {modeLabel}
+                </p>
+                <p className="mt-0.5 text-sm font-semibold text-[var(--semantic-text-primary)]">
+                  {catMode ? "Adaptive item" : "Question"}{" "}
+                  <span className="tabular-nums">{idx + 1}</span>
+                  {" of "}
+                  <span className="tabular-nums">{total}</span>
                   {isLinearEngine ? (
-                    <span className="mt-1 block normal-case nn-marketing-caption font-normal text-[var(--theme-muted-text)]">
-                      {committedAnsweredPct}% submitted · {committedCount}/{total} answered
+                    <span className="ml-2 text-xs font-normal text-[var(--semantic-text-muted)]">
+                      · {committedCount}/{total} submitted
                     </span>
                   ) : null}
-                  {catMode ? (
-                    <span className="mt-1 block normal-case nn-marketing-caption font-normal text-[var(--theme-muted-text)]">
-                      Up to {catMaxCap} scored (variable stop)
+                  {saving ? (
+                    <span className="ml-2 text-xs font-normal text-[var(--semantic-text-muted)]">
+                      · Saving…
                     </span>
                   ) : null}
                 </p>
-                {saving ? <p className="mt-1 nn-marketing-caption text-[var(--theme-muted-text)]">Saving…</p> : null}
               </div>
-            }
-            center={
-              <span className="line-clamp-2 normal-case">
+              <ExamTimerReadout remainingSec={timedMode ? remainingSec : null} />
+            </div>
+            <div
+              className="nn-practice-session-progress-bar"
+              role="progressbar"
+              aria-valuemin={0}
+              aria-valuemax={100}
+              aria-valuenow={Math.round(sessionPct)}
+              aria-label={`Session progress ${idx + 1} of ${total}`}
+            >
+              <div className="nn-practice-session-progress-fill" style={{ width: `${sessionPct}%` }} />
+            </div>
+          </div>
+
+          {/* ── 2-column content grid ──────────────────────────────────── */}
+          <div className="nn-practice-content-grid">
+            {/* ── LEFT: question panel ───────────────────────────────── */}
+            <div className="nn-practice-question-col space-y-5">
+              {/* Mode description */}
+              <p className="nn-marketing-body-sm leading-relaxed text-[var(--semantic-text-muted)]">
                 {isLinearEngine
                   ? linearDelivery === "exam"
-                    ? "Linear exam"
-                    : "Linear practice"
-                  : catMode
-                    ? examSimulation
-                      ? aanpNpExamSim
-                        ? "NP exam simulation (AANP-style CAT)"
-                        : "NCLEX-RN exam simulation (CAT)"
-                      : catFeedbackStudy
-                        ? "CAT — Study Mode"
-                        : "CAT — Test Mode"
-                    : "Practice test"}
-              </span>
-            }
-            right={<ExamTimerReadout remainingSec={timedMode ? remainingSec : null} />}
-          />
-          <ExamProgressBar current={idx + 1} total={total} />
-          <div className="nn-question-session space-y-6">
-            <p className="nn-marketing-body-sm leading-relaxed text-[var(--theme-muted-text)]">
-              {isLinearEngine
-                ? linearDelivery === "exam"
-                  ? "Exam delivery: submit each answer to lock it in. Rationales and correct keys stay hidden until you finish the whole test."
-                  : "Practice delivery: submit each answer to see whether you were right, the rationale, and the correct option(s) before you continue."
-                : catMode
-                  ? examSimulation
-                    ? aanpNpExamSim
-                      ? "AANP-style NP band (75–150) with adaptive stop rules on this server. The live AANP exam is not CAT. Rationales unlock after completion."
-                      : "NCLEX-style length band (75–145) and stop rules on this server. Not the live NCLEX. Rationales unlock after completion."
-                    : catFeedbackStudy
-                      ? "Study Mode — see rationales as you go after each answer. CAT still adapts from your responses; scoring and item selection rules are the same as Test Mode."
-                      : "Test Mode — no rationales until the end. Same adaptive engine and scoring as Study Mode; only on-screen feedback differs."
-                  : "Pacing practice only. Not a copy of any official exam interface."}
-            </p>
-            {catMode && timedMode && timeLimitSec != null ? (
-              <p className="rounded-lg border border-amber-500/25 bg-amber-500/10 px-3 py-2 text-xs font-medium text-amber-950 dark:text-amber-100">
-                Strict timing is on — when the timer reaches zero, this session can end automatically. Pace each item
-                accordingly.
+                    ? "Exam delivery — submit each answer to lock it in. Rationales stay hidden until you finish."
+                    : "Practice delivery — submit each answer to see whether you were right before continuing."
+                  : catFeedbackStudy
+                    ? "Study Mode — rationales reveal after each answer."
+                    : "Pacing practice only. Not a copy of any official exam interface."}
               </p>
-            ) : null}
-            {catMode ? (
-              <CatLiveTransparencyStrip
-                difficultyTail={adaptiveDifficultyHistory}
-                theta={adaptiveTheta}
-                se={adaptiveSe}
-                show={catLiveTransparency}
-                onToggle={setCatLiveTransparency}
-              />
-            ) : null}
 
-            <div className="overflow-hidden rounded-2xl border border-border/80 bg-card shadow-sm">
-              <div className="border-b border-border/70 px-4 py-2.5 nn-marketing-caption text-[var(--theme-muted-text)] sm:px-5">
-                {current.topic ? (
-                  <span className="font-semibold text-[var(--theme-heading-text)]">{current.topic}</span>
-                ) : null}
-                {current.subtopic ? <span className="ml-2">· {current.subtopic}</span> : null}
-                {current.difficulty != null ? (
-                  <span className="ml-2">· {difficultyBandLabel(current.difficulty)}</span>
-                ) : null}
-              </div>
-              <div className="space-y-5 px-4 py-5 sm:px-6 sm:py-6">
-                <div className="nn-question-stem-wrap min-h-0">
-                  <p className="nn-question-stem">
-                    {typeof current.stem === "string" && current.stem.trim().length > 0
-                      ? current.stem
-                      : "Question text is unavailable. Try reloading this item."}
-                  </p>
-                </div>
-                {optsCanonical.length === 0 ? (
-                  <p className="rounded-lg border border-border/60 bg-muted/30 px-4 py-3 text-sm text-muted-foreground">
-                    No answer choices were returned for this item. Use Retry, reload the test, or contact support if this
-                    persists.
-                  </p>
-                ) : isSata ? (
-                  <ul className="nn-qopt-list" role="group" aria-label="Answer choices">
-                    {optsCanonical.map((canonical, i) => {
-                      const label = optsDisplay[i] ?? canonical;
-                      const selected = Array.isArray(raw) ? raw.includes(canonical) : false;
-                      const locked = (isLinearEngine && currentCommitted) || catStudyLocked;
-                      return (
-                        <li key={canonical}>
-                          <label className={linearPracticeSataClasses(canonical, selected)}>
-                            <input
-                              type="checkbox"
-                              disabled={locked}
-                              checked={selected}
-                              onChange={(e) => {
-                                const prev = Array.isArray(raw) ? [...raw] : [];
-                                const next = e.target.checked ? [...prev, canonical] : prev.filter((x) => x !== canonical);
-                                setAnswerForCurrent(next);
-                              }}
-                              className="mt-1 size-[1.125rem] shrink-0 rounded border-border text-primary focus-visible:ring-2 focus-visible:ring-primary/30 disabled:opacity-50 sm:size-4"
-                            />
-                            <QuestionChoiceLetter index={i} />
-                            <span className="min-w-0 flex-1 text-[var(--theme-body-text)]">{label}</span>
-                          </label>
-                        </li>
-                      );
-                    })}
-                  </ul>
-                ) : (
-                  <ul className="nn-qopt-list" role="radiogroup" aria-label="Answer choices">
-                    {optsCanonical.map((canonical, i) => {
-                      const label = optsDisplay[i] ?? canonical;
-                      const locked = (isLinearEngine && currentCommitted) || catStudyLocked;
-                      return (
-                        <li key={canonical}>
-                          <button
-                            type="button"
-                            disabled={locked}
-                            onClick={() => setAnswerForCurrent(canonical)}
-                            className={linearPracticeMcqClasses(canonical)}
-                          >
-                            <QuestionChoiceLetter index={i} />
-                            <span className="min-w-0 flex-1">{label}</span>
-                          </button>
-                        </li>
-                      );
-                    })}
-                  </ul>
-                )}
-              </div>
-            </div>
+              {catMode && timedMode && timeLimitSec != null ? (
+                <p className="rounded-lg border border-[color-mix(in_srgb,var(--semantic-warning)_28%,var(--semantic-border-soft))] bg-[var(--semantic-warning-soft)] px-3 py-2 text-xs font-medium text-[var(--semantic-warning-contrast)]">
+                  Strict timing is on — when the timer reaches zero, this session can end
+                  automatically. Pace each item accordingly.
+                </p>
+              ) : null}
 
-            {isLinearEngine && linearDelivery === "practice" && currentCommitted && linearFeedback ? (
-              <details className="nn-question-rationale-card group" open={!linearFeedback.isCorrect}>
-                <summary
-                  className={`nn-question-rationale-card__verdict flex cursor-pointer list-none items-center justify-between gap-3 outline-none marker:hidden [&::-webkit-details-marker]:hidden ${
-                    linearFeedback.isCorrect
-                      ? "nn-question-rationale-card__verdict--ok"
-                      : "nn-question-rationale-card__verdict--miss"
-                  }`}
-                >
-                  <span
-                    className={`text-sm font-semibold sm:text-base ${
-                      linearFeedback.isCorrect ? "text-[var(--role-success-text)]" : "text-[var(--theme-heading-text)]"
-                    }`}
-                  >
-                    {linearFeedback.isCorrect ? "Correct" : "Incorrect"}
-                  </span>
-                  <span className="shrink-0 text-xs font-normal text-[var(--theme-muted-text)] group-open:hidden">
-                    Show rationale
-                  </span>
-                  <span className="hidden shrink-0 text-xs font-normal text-[var(--theme-muted-text)] group-open:inline">
-                    Hide rationale
-                  </span>
-                </summary>
-                <div className="nn-question-rationale-card__body nn-rationale-prose nn-marketing-body-sm px-4 py-4 sm:px-6 sm:py-5">
-                  {linearFeedback.rationale ? (
-                    <p className="leading-relaxed text-[var(--theme-body-text)]">{linearFeedback.rationale}</p>
-                  ) : (
-                    <p className="text-[var(--theme-muted-text)]">No rationale on file for this item.</p>
-                  )}
-                </div>
-              </details>
-            ) : null}
-            {isLinearEngine && linearDelivery === "exam" && currentCommitted ? (
-              <p className="rounded-xl border border-border/80 bg-[color-mix(in_srgb,var(--theme-primary)_4%,var(--theme-card-bg))] px-4 py-3 nn-marketing-body-sm text-[var(--theme-muted-text)]">
-                Answer submitted and locked. Use <span className="font-medium text-[var(--theme-heading-text)]">Next</span>{" "}
-                to continue.
-              </p>
-            ) : null}
-
-            {catMode && !examSimulation && catFeedbackStudy && catStudyFeedback && idx === total - 1 ? (
-              <CatStudyFeedbackPanel
-                feedback={catStudyFeedback}
-                continueLabel="Next adaptive item"
-                onContinue={() => void catAdvance()}
-                continueDisabled={saving}
-                pathwayId={testConfig?.pathwayId ?? null}
-              />
-            ) : null}
-
-            <div className="nn-question-nav-actions">
-              <button
-                type="button"
-                aria-pressed={Boolean(flagged[current.id])}
-                className={`inline-flex min-h-[2.75rem] shrink-0 items-center rounded-full border px-4 py-2 text-xs font-semibold uppercase tracking-wide transition ${
-                  flagged[current.id]
-                    ? "border-[color-mix(in_srgb,var(--semantic-brand)_26%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_8%,var(--semantic-surface))] text-[var(--semantic-text-primary)]"
-                    : "border-[var(--semantic-border-soft)] text-[var(--semantic-text-muted)] hover:bg-[var(--semantic-panel-muted)]"
-                }`}
-                onClick={() => setFlagged((f) => ({ ...f, [current.id]: !f[current.id] }))}
-              >
-                {flagged[current.id] ? "Marked for review" : "Mark for review"}
-              </button>
-              <button
-                type="button"
-                disabled={idx === 0 || catMode || isLinearEngine}
-                className="nn-btn-secondary min-h-[3rem] rounded-full px-5 text-sm font-semibold disabled:opacity-40"
-                onClick={() => void goPrev()}
-              >
-                Previous
-              </button>
               {catMode ? (
-                idx < total - 1 ? (
-                  <button
-                    type="button"
-                    className="nn-btn-primary nn-question-nav-actions__next rounded-full px-6 text-sm font-semibold shadow-none"
-                    onClick={() => void goNext()}
-                  >
-                    Next
-                  </button>
-                ) : catFeedbackStudy && catStudyLocked ? (
-                  <button
-                    type="button"
-                    disabled={saving}
-                    className="nn-btn-secondary min-h-[3rem] rounded-full px-5 text-sm font-semibold"
-                    onClick={() => void submitTest()}
-                  >
-                    End session
-                  </button>
-                ) : (
-                  <>
+                <CatLiveTransparencyStrip
+                  difficultyTail={adaptiveDifficultyHistory}
+                  theta={adaptiveTheta}
+                  se={adaptiveSe}
+                  show={catLiveTransparency}
+                  onToggle={setCatLiveTransparency}
+                />
+              ) : null}
+
+              {/* Question card */}
+              <div className="overflow-hidden rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] shadow-[var(--semantic-shadow-soft)]">
+                {(current.topic ?? current.subtopic ?? current.difficulty) != null ? (
+                  <div className="border-b border-[var(--semantic-border-soft)] bg-[var(--surface-soft-a,var(--semantic-panel-muted))] px-4 py-2.5 sm:px-5">
+                    <div className="flex flex-wrap items-center gap-2">
+                      {current.topic ? (
+                        <span className="nn-practice-topic-chip">{current.topic}</span>
+                      ) : null}
+                      {current.subtopic ? (
+                        <span className="text-xs text-[var(--semantic-text-muted)]">
+                          · {current.subtopic}
+                        </span>
+                      ) : null}
+                      {current.difficulty != null ? (
+                        <span className="text-xs text-[var(--semantic-text-muted)]">
+                          · {difficultyBandLabel(current.difficulty)}
+                        </span>
+                      ) : null}
+                    </div>
+                  </div>
+                ) : null}
+                <div className="space-y-5 px-4 py-5 sm:px-6 sm:py-6">
+                  <div className="nn-question-stem-wrap min-h-0">
+                    <p className="nn-question-stem">
+                      {typeof current.stem === "string" && current.stem.trim().length > 0
+                        ? current.stem
+                        : "Question text is unavailable. Try reloading this item."}
+                    </p>
+                  </div>
+                  {optionRows}
+                </div>
+              </div>
+
+              {/* CAT study feedback — below the question in the left column */}
+              {catStudyFeedbackActive ? (
+                <CatStudyFeedbackPanel
+                  feedback={catStudyFeedback!}
+                  continueLabel="Next adaptive item"
+                  onContinue={() => void catAdvance()}
+                  continueDisabled={saving}
+                  pathwayId={testConfig?.pathwayId ?? null}
+                />
+              ) : null}
+
+              {/* Nav actions */}
+              <div className="nn-question-nav-actions">
+                <button
+                  type="button"
+                  aria-pressed={Boolean(flagged[current.id])}
+                  className={`inline-flex min-h-[2.75rem] shrink-0 items-center rounded-full border px-4 py-2 text-xs font-semibold uppercase tracking-wide transition ${
+                    flagged[current.id]
+                      ? "border-[color-mix(in_srgb,var(--semantic-brand)_26%,var(--semantic-border-soft))] bg-[var(--surface-emphasis,color-mix(in_srgb,var(--semantic-brand)_8%,var(--semantic-surface)))] text-[var(--semantic-text-primary)]"
+                      : "border-[var(--semantic-border-soft)] text-[var(--semantic-text-muted)] hover:bg-[var(--surface-soft-a,var(--semantic-panel-muted))]"
+                  }`}
+                  onClick={() => setFlagged((f) => ({ ...f, [current.id]: !f[current.id] }))}
+                >
+                  {flagged[current.id] ? "Marked for review" : "Mark for review"}
+                </button>
+                <button
+                  type="button"
+                  disabled={idx === 0 || catMode || isLinearEngine}
+                  className="nn-btn-secondary min-h-[3rem] rounded-full px-5 text-sm font-semibold disabled:opacity-40"
+                  onClick={() => void goPrev()}
+                >
+                  Previous
+                </button>
+                {catMode ? (
+                  idx < total - 1 ? (
                     <button
                       type="button"
-                      disabled={saving || !hasMeaningfulAnswer(current.id)}
                       className="nn-btn-primary nn-question-nav-actions__next rounded-full px-6 text-sm font-semibold shadow-none"
-                      onClick={() => void catAdvance()}
+                      onClick={() => void goNext()}
                     >
-                      {saving
-                        ? "Working…"
-                        : catFeedbackStudy
-                          ? "See explanation"
-                          : "Next question"}
+                      Next
                     </button>
+                  ) : catFeedbackStudy && catStudyLocked ? (
                     <button
                       type="button"
                       disabled={saving}
@@ -1230,48 +1389,82 @@ export function PracticeTestRunnerClient({
                     >
                       End session
                     </button>
-                  </>
-                )
-              ) : (
-                <>
-                  {isLinearEngine && !currentCommitted ? (
-                    <button
-                      type="button"
-                      disabled={saving || !hasMeaningfulAnswer(current.id)}
-                      className="nn-btn-primary min-h-[3rem] rounded-full px-6 text-sm font-semibold shadow-none disabled:opacity-40"
-                      onClick={() => void submitLinearCommit()}
-                    >
-                      {saving ? "Submitting…" : "Submit answer"}
-                    </button>
-                  ) : null}
-                  {idx < total - 1 ? (
-                    <button
-                      type="button"
-                      disabled={isLinearEngine && !currentCommitted}
-                      className="nn-btn-primary nn-question-nav-actions__next rounded-full px-6 text-sm font-semibold shadow-none disabled:opacity-40"
-                      onClick={() => void goNext()}
-                    >
-                      Next
-                    </button>
                   ) : (
-                    <button
-                      type="button"
-                      disabled={saving || (isLinearEngine && !currentCommitted)}
-                      className="nn-btn-primary nn-question-nav-actions__next rounded-full px-6 text-sm font-semibold shadow-none disabled:opacity-40"
-                      onClick={() => void submitTest()}
-                    >
-                      {saving ? "Submitting…" : "Submit test"}
-                    </button>
-                  )}
-                </>
+                    <>
+                      <button
+                        type="button"
+                        disabled={saving || !hasMeaningfulAnswer(current.id)}
+                        className="nn-btn-primary nn-question-nav-actions__next rounded-full px-6 text-sm font-semibold shadow-none"
+                        onClick={() => void catAdvance()}
+                      >
+                        {saving ? "Working…" : catFeedbackStudy ? "See explanation" : "Next question"}
+                      </button>
+                      <button
+                        type="button"
+                        disabled={saving}
+                        className="nn-btn-secondary min-h-[3rem] rounded-full px-5 text-sm font-semibold"
+                        onClick={() => void submitTest()}
+                      >
+                        End session
+                      </button>
+                    </>
+                  )
+                ) : (
+                  <>
+                    {isLinearEngine && !currentCommitted ? (
+                      <button
+                        type="button"
+                        disabled={saving || !hasMeaningfulAnswer(current.id)}
+                        className="nn-btn-primary min-h-[3rem] rounded-full px-6 text-sm font-semibold shadow-none disabled:opacity-40"
+                        onClick={() => void submitLinearCommit()}
+                      >
+                        {saving ? "Submitting…" : "Submit answer"}
+                      </button>
+                    ) : null}
+                    {idx < total - 1 ? (
+                      <button
+                        type="button"
+                        disabled={isLinearEngine && !currentCommitted}
+                        className="nn-btn-primary nn-question-nav-actions__next rounded-full px-6 text-sm font-semibold shadow-none disabled:opacity-40"
+                        onClick={() => void goNext()}
+                      >
+                        Next
+                      </button>
+                    ) : (
+                      <button
+                        type="button"
+                        disabled={saving || (isLinearEngine && !currentCommitted)}
+                        className="nn-btn-primary nn-question-nav-actions__next rounded-full px-6 text-sm font-semibold shadow-none disabled:opacity-40"
+                        onClick={() => void submitTest()}
+                      >
+                        {saving ? "Submitting…" : "Submit test"}
+                      </button>
+                    )}
+                  </>
+                )}
+                <button
+                  type="button"
+                  className="nn-btn-secondary min-h-[3rem] rounded-full px-5 text-sm font-medium text-[var(--semantic-text-muted)]"
+                  onClick={() => void abandon()}
+                >
+                  Abandon
+                </button>
+              </div>
+            </div>
+
+            {/* ── RIGHT: rationale / review panel ──────────────────────── */}
+            <div className="nn-practice-rationale-col">
+              {catStudyFeedbackActive ? (
+                <PracticeRationalePanel status="waiting" modeLabel={modeLabel} />
+              ) : (
+                <PracticeRationalePanel
+                  status={rationalePanelStatus}
+                  rationale={linearFeedback?.rationale ?? null}
+                  correctKeys={linearFeedback?.correctKeys}
+                  optionDisplayMap={optionDisplayMap}
+                  modeLabel={modeLabel}
+                />
               )}
-              <button
-                type="button"
-                className="nn-btn-secondary min-h-[3rem] rounded-full px-5 text-sm font-medium text-[var(--theme-muted-text)]"
-                onClick={() => void abandon()}
-              >
-                Abandon
-              </button>
             </div>
           </div>
         </ExamSessionShell>
