@@ -30,7 +30,10 @@ import { absoluteUrl } from "@/lib/seo/site-origin";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { recordRouteRenderFallback } from "@/lib/observability/route-fallback-tracker";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
-import { PathwayQuestionsHubView } from "@/components/exam-pathways/pathway-questions-hub-view";
+import { ContentEmptyState } from "@/components/ui/content-empty-state";
+import { NpQuestionsHubBoardLinks } from "@/components/exam-pathways/np-questions-hub-board-links";
+import { PathwayLiveInventoryStrip } from "@/components/exam-pathways/pathway-live-inventory-strip";
+import { PathwayQuestionHubRelatedLessons } from "@/components/pathway-lessons/pathway-question-hub-related-lessons";
 
 export const dynamicParams = true;
 
