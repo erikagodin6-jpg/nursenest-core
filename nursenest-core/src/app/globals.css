@@ -1617,6 +1617,119 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-exam-chrome-dim {
   color: var(--theme-heading-text);
 }
 
+/* ==========================================================================
+ * Lesson section semantic cards — coordinated multi-hue study palette
+ * Color is driven by data-lsc-role; tokens are in semantic-status-tokens.css.
+ * Usage: <section class="nn-lesson-section-card" data-lsc-role="concept">
+ * ========================================================================== */
+
+.nn-lesson-section-card {
+  /* Default role: info (blue) — overridden per data-lsc-role below */
+  --lsc-color: var(--semantic-info);
+  --lsc-soft: var(--semantic-info-soft);
+  --lsc-contrast: var(--semantic-info-contrast);
+
+  border-radius: 1.25rem;
+  border: 1px solid color-mix(in srgb, var(--lsc-color) 22%, var(--semantic-border-soft));
+  background: var(--lsc-soft);
+  padding: 1.5rem 1.375rem 1.875rem;
+  box-shadow: var(--semantic-shadow-soft);
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+  scroll-margin-top: 5.5rem;
+}
+
+@media (min-width: 640px) {
+  .nn-lesson-section-card {
+    padding: 2.125rem 2rem 2.5rem;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .nn-lesson-section-card:hover {
+    box-shadow: 0 6px 28px color-mix(in srgb, var(--lsc-color) 11%, transparent),
+      var(--semantic-shadow-soft);
+    border-color: color-mix(in srgb, var(--lsc-color) 30%, var(--semantic-border-soft));
+  }
+}
+
+/* Role variants: each sets --lsc-* custom properties inherited by the chip inside */
+.nn-lesson-section-card[data-lsc-role="info"] {
+  --lsc-color: var(--semantic-info);
+  --lsc-soft: var(--semantic-info-soft);
+  --lsc-contrast: var(--semantic-info-contrast);
+}
+.nn-lesson-section-card[data-lsc-role="warning"] {
+  --lsc-color: var(--semantic-warning);
+  --lsc-soft: var(--semantic-warning-soft);
+  --lsc-contrast: var(--semantic-warning-contrast);
+}
+.nn-lesson-section-card[data-lsc-role="danger"] {
+  --lsc-color: var(--semantic-danger);
+  --lsc-soft: var(--semantic-danger-soft);
+  --lsc-contrast: var(--semantic-danger-contrast);
+}
+.nn-lesson-section-card[data-lsc-role="success"] {
+  --lsc-color: var(--semantic-success);
+  --lsc-soft: var(--semantic-success-soft);
+  --lsc-contrast: var(--semantic-success-contrast);
+}
+.nn-lesson-section-card[data-lsc-role="education"] {
+  --lsc-color: var(--semantic-success);
+  --lsc-soft: color-mix(in srgb, var(--semantic-success) 8%, var(--bg-card));
+  --lsc-contrast: var(--semantic-success-contrast);
+}
+.nn-lesson-section-card[data-lsc-role="concept"] {
+  --lsc-color: var(--semantic-violet);
+  --lsc-soft: var(--semantic-violet-soft);
+  --lsc-contrast: var(--semantic-violet-contrast);
+}
+.nn-lesson-section-card[data-lsc-role="action"] {
+  --lsc-color: var(--semantic-teal);
+  --lsc-soft: var(--semantic-teal-soft);
+  --lsc-contrast: var(--semantic-teal-contrast);
+}
+.nn-lesson-section-card[data-lsc-role="diagnostic"] {
+  --lsc-color: var(--semantic-cyan);
+  --lsc-soft: var(--semantic-cyan-soft);
+  --lsc-contrast: var(--semantic-cyan-contrast);
+}
+.nn-lesson-section-card[data-lsc-role="application"] {
+  --lsc-color: var(--semantic-chart-5);
+  --lsc-soft: color-mix(in srgb, var(--semantic-chart-5) 10%, var(--bg-card));
+  --lsc-contrast: color-mix(in srgb, var(--semantic-chart-5) 65%, var(--semantic-text-primary));
+}
+.nn-lesson-section-card[data-lsc-role="review"] {
+  --lsc-color: var(--semantic-brand);
+  --lsc-soft: var(--semantic-brand-soft);
+  --lsc-contrast: color-mix(in srgb, var(--semantic-brand) 72%, var(--semantic-text-primary));
+}
+.nn-lesson-section-card[data-lsc-role="cta"] {
+  --lsc-color: var(--semantic-text-muted);
+  --lsc-soft: var(--semantic-panel-muted);
+  --lsc-contrast: var(--semantic-text-secondary);
+}
+
+/*
+ * Section label chip — inherits --lsc-* from the parent card.
+ * Renders as a small colored eyebrow/pill above the section heading.
+ */
+.nn-lesson-section-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3125rem;
+  border-radius: 0.5rem;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.625rem;
+  line-height: 1.4;
+  white-space: nowrap;
+  color: var(--lsc-contrast);
+  background: color-mix(in srgb, var(--lsc-color) 13%, var(--semantic-surface));
+  border: 1px solid color-mix(in srgb, var(--lsc-color) 26%, var(--semantic-border-soft));
+}
+
 /*
  * End-of-lesson study loop: slightly stronger frame than a wash card so the block reads as “what’s next”
  * without loud chrome (hierarchy fix: guided loop vs body copy).
@@ -1680,6 +1793,73 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-exam-chrome-dim {
  * Learner question surfaces (bank, practice tests, exam widget): calm clinical testing — not gamified.
  * Uses theme + role tokens; correct/incorrect are muted tints, not neon.
  */
+/* ============================================================
+   Multi-surface card variants — visual depth without flat UI
+   ============================================================ */
+
+/**
+ * .nn-card-secondary  → soft primary brand tint (secondary info sections)
+ * .nn-card-cool       → cool info tint (clinical context, informational)
+ * .nn-card-positive   → success-green tint (correct answers, completion)
+ * .nn-card-emphasis   → stronger brand tint (key facts, highlighted blocks)
+ * .nn-card-warm       → warning/amber tint (caution, weak area callouts)
+ *
+ * All inherit the theme via CSS custom properties — no hardcoded colors.
+ * Pair with padding utilities: `p-5` (sm), `p-6` (md), `p-7` (lg).
+ */
+
+.nn-card-secondary {
+  border-radius: 1rem;
+  border: 1px solid var(--semantic-border-soft);
+  background: var(--surface-soft-a, var(--semantic-panel-muted));
+  box-shadow: var(--semantic-shadow-soft);
+}
+
+.nn-card-cool {
+  border-radius: 1rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-info) 18%, var(--semantic-border-soft));
+  background: var(--surface-soft-c, var(--semantic-panel-cool));
+  box-shadow: var(--semantic-shadow-soft);
+}
+
+.nn-card-positive {
+  border-radius: 1rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-success) 18%, var(--semantic-border-soft));
+  background: var(--surface-soft-b, var(--semantic-panel-positive));
+  box-shadow: var(--semantic-shadow-soft);
+}
+
+.nn-card-emphasis {
+  border-radius: 1rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-brand) 22%, var(--semantic-border-soft));
+  background: var(--surface-emphasis, color-mix(in srgb, var(--semantic-brand) 8%, var(--semantic-surface)));
+  box-shadow: var(--semantic-shadow-soft);
+}
+
+.nn-card-warm {
+  border-radius: 1rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-warning) 22%, var(--semantic-border-soft));
+  background: var(--semantic-panel-warm);
+  box-shadow: var(--semantic-shadow-soft);
+}
+
+/* Alternating section backgrounds — prevents visual fatigue on long pages */
+.nn-alt-section-base {
+  background: var(--surface-base, var(--semantic-bg-base));
+}
+
+.nn-alt-section-a {
+  background: var(--surface-soft-a, var(--semantic-panel-muted));
+}
+
+.nn-alt-section-b {
+  background: var(--surface-soft-b, var(--semantic-panel-positive));
+}
+
+.nn-alt-section-cool {
+  background: var(--surface-soft-c, var(--semantic-panel-cool));
+}
+
 .nn-question-session {
   margin-left: auto;
   margin-right: auto;
@@ -1720,7 +1900,7 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-exam-chrome-dim {
   padding: 1.25rem 1.25rem 1.35rem;
   border-radius: 1rem;
   border: 1px solid color-mix(in srgb, var(--theme-primary) 11%, var(--border-subtle));
-  background: color-mix(in srgb, var(--theme-primary) 2.8%, var(--theme-card-bg));
+  background: var(--surface-emphasis, color-mix(in srgb, var(--theme-primary) 2.8%, var(--theme-card-bg)));
   box-shadow: var(--shadow-card);
 }
 
@@ -1996,7 +2176,7 @@ html[data-theme="dark-mode"] .nn-question-rationale-card__verdict--miss {
 
 .nn-question-rationale-card__body {
   border-top: 1px solid color-mix(in srgb, var(--theme-primary) 6%, var(--border-subtle));
-  background: color-mix(in srgb, var(--theme-primary) 4%, var(--theme-card-bg));
+  background: var(--surface-soft-a, color-mix(in srgb, var(--theme-primary) 4%, var(--theme-card-bg)));
 }
 
 /* Long rationales: scroll inside the card instead of pushing nav away */
@@ -2458,5 +2638,234 @@ html[data-theme="multi-pastel"] {
 @media (prefers-reduced-motion: reduce) {
   .nn-not-found-logo-drift {
     animation: none !important;
+  }
+}
+
+/* ============================================================
+   Practice session — 2-column premium layout
+   ============================================================ */
+
+/* Slim progress header — replaces the bulky ExamSessionTopBar for practice */
+.nn-practice-session-header {
+  border-bottom: 1px solid var(--semantic-border-soft);
+  background: color-mix(in srgb, var(--semantic-brand) 4%, var(--semantic-surface));
+  padding: 0.625rem 1.25rem 0;
+}
+
+@media (min-width: 640px) {
+  .nn-practice-session-header {
+    padding: 0.75rem 1.5rem 0;
+  }
+}
+
+.nn-practice-session-header__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding-bottom: 0.625rem;
+}
+
+@media (min-width: 640px) {
+  .nn-practice-session-header__row {
+    padding-bottom: 0.75rem;
+  }
+}
+
+.nn-practice-session-progress-bar {
+  height: 0.25rem;
+  width: 100%;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--semantic-brand) 12%, var(--semantic-surface));
+}
+
+.nn-practice-session-progress-fill {
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    var(--semantic-brand),
+    color-mix(in srgb, var(--semantic-brand) 75%, var(--semantic-success))
+  );
+  transition: width 0.5s ease-out;
+}
+
+/* 2-column question/rationale grid */
+.nn-practice-content-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 1024px) {
+  .nn-practice-content-grid {
+    grid-template-columns: minmax(0, 1.22fr) minmax(0, 0.78fr);
+  }
+}
+
+/* Left column: question + nav */
+.nn-practice-question-col {
+  padding: 1.5rem 1rem 2rem;
+}
+
+@media (min-width: 640px) {
+  .nn-practice-question-col {
+    padding: 1.75rem 1.5rem 2.25rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .nn-practice-question-col {
+    padding: 2rem 2rem 2.5rem;
+  }
+}
+
+/* Right column: rationale / review — uses surface-soft-a for gentle visual separation */
+.nn-practice-rationale-col {
+  border-top: 1px solid var(--semantic-border-soft);
+  background: var(--surface-soft-a, color-mix(in srgb, var(--semantic-brand) 3%, var(--semantic-surface)));
+}
+
+@media (min-width: 1024px) {
+  .nn-practice-rationale-col {
+    border-top: none;
+    border-left: 1px solid var(--semantic-border-soft);
+  }
+}
+
+/* Rationale panel inner scroll container */
+.nn-practice-rationale-panel {
+  padding: 1.25rem 1rem 1.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+}
+
+@media (min-width: 640px) {
+  .nn-practice-rationale-panel {
+    padding: 1.5rem 1.25rem 2rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .nn-practice-rationale-panel {
+    padding: 1.75rem 1.5rem 2.25rem;
+    max-height: min(82vh, 60rem);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+}
+
+/* Verdict banner (correct / incorrect) */
+.nn-practice-verdict-banner {
+  border-radius: 0.875rem;
+  padding: 0.875rem 1rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.nn-practice-verdict-banner--correct {
+  background: var(--semantic-success-soft);
+  border: 1px solid color-mix(in srgb, var(--semantic-success) 26%, var(--semantic-border-soft));
+}
+
+.nn-practice-verdict-banner--incorrect {
+  background: var(--semantic-danger-soft);
+  border: 1px solid color-mix(in srgb, var(--semantic-danger) 26%, var(--semantic-border-soft));
+}
+
+/* Individual rationale section cards */
+.nn-practice-rationale-section {
+  border-radius: 0.875rem;
+  border: 1px solid var(--semantic-border-soft);
+  background: var(--semantic-surface);
+  padding: 0.9rem 1.125rem 1rem;
+  overflow: hidden;
+}
+
+.nn-practice-rationale-section--success {
+  border-color: color-mix(in srgb, var(--semantic-success) 20%, var(--semantic-border-soft));
+  background: var(--semantic-success-soft);
+}
+
+.nn-practice-rationale-section--info {
+  border-color: color-mix(in srgb, var(--semantic-info) 20%, var(--semantic-border-soft));
+  background: var(--semantic-info-soft);
+}
+
+.nn-practice-rationale-section--warning {
+  border-color: color-mix(in srgb, var(--semantic-warning) 20%, var(--semantic-border-soft));
+  background: var(--semantic-warning-soft);
+}
+
+.nn-practice-rationale-section--brand {
+  border-color: color-mix(in srgb, var(--semantic-brand) 20%, var(--semantic-border-soft));
+  background: var(--semantic-brand-soft);
+}
+
+.nn-practice-rationale-section--muted {
+  background: var(--semantic-panel-muted);
+}
+
+.nn-practice-rationale-section__label {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.075em;
+  text-transform: uppercase;
+  color: var(--semantic-text-muted);
+}
+
+.nn-practice-rationale-section--success .nn-practice-rationale-section__label {
+  color: var(--semantic-success-contrast);
+}
+
+.nn-practice-rationale-section--info .nn-practice-rationale-section__label {
+  color: var(--semantic-info-contrast);
+}
+
+.nn-practice-rationale-section--warning .nn-practice-rationale-section__label {
+  color: var(--semantic-warning-contrast);
+}
+
+.nn-practice-rationale-section--brand .nn-practice-rationale-section__label {
+  color: color-mix(in srgb, var(--semantic-brand) 85%, var(--semantic-text-primary));
+}
+
+.nn-practice-rationale-section__body {
+  font-size: 0.9375rem;
+  line-height: 1.62;
+  color: var(--semantic-text-primary);
+  letter-spacing: -0.01em;
+}
+
+/* Placeholder state — waiting for answer submission */
+.nn-practice-rationale-placeholder {
+  border-radius: 0.875rem;
+  border: 1px dashed color-mix(in srgb, var(--semantic-brand) 20%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-brand) 3%, var(--semantic-surface));
+  padding: 2rem 1.25rem;
+  text-align: center;
+}
+
+/* Topic chip in question header */
+.nn-practice-topic-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  border-radius: 9999px;
+  border: 1px solid color-mix(in srgb, var(--semantic-brand) 18%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-brand) 7%, var(--semantic-surface));
+  padding: 0.25rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--semantic-text-secondary);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .nn-practice-session-progress-fill {
+    transition: width 0.55s cubic-bezier(0.22, 1, 0.36, 1);
   }
 }

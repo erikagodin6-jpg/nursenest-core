@@ -1,17 +1,14 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { NpQuestionsHubBoardLinks } from "@/components/exam-pathways/np-questions-hub-board-links";
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
 import { loadMarketingExamHubOptionalBlocks } from "@/lib/exam-pathways/marketing-hub-optional-data";
 import { resolveExamPathwaySafe } from "@/lib/exam-pathways/resolve-exam-pathway-safe";
-import { HUB, loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
+import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { getNpPracticeTestLandingCopy } from "@/lib/exam-pathways/np-practice-test-segments";
 import { pathwayMarketingHubLinkContext } from "@/lib/marketing/np-seo-alias-analytics-props";
-import { PathwayLiveInventoryStrip } from "@/components/exam-pathways/pathway-live-inventory-strip";
-import { PathwayQuestionHubRelatedLessons } from "@/components/pathway-lessons/pathway-question-hub-related-lessons";
 import {
   humanizeTopicSlug,
   pathwayAppQuestionBankTopicHref,
@@ -33,7 +30,7 @@ import { absoluteUrl } from "@/lib/seo/site-origin";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { recordRouteRenderFallback } from "@/lib/observability/route-fallback-tracker";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
-import { ContentEmptyState } from "@/components/ui/content-empty-state";
+import { PathwayQuestionsHubView } from "@/components/exam-pathways/pathway-questions-hub-view";
 
 export const dynamicParams = true;
 

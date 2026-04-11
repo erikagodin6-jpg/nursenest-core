@@ -5,6 +5,7 @@ import { Suspense } from "react";
 import { ExamFamily, type TierCode } from "@prisma/client";
 import { auth } from "@/lib/auth";
 import { PathwayLessonSectionContent } from "@/components/lessons/pathway-lesson-body";
+import { LessonSectionCard } from "@/components/lessons/lesson-section-card";
 import { contentTierForPathwayLessonRender } from "@/lib/lessons/global-lesson-architecture";
 import { getMeasurementSystemForCountry } from "@/lib/measurements/measurement-system";
 import { PremiumLessonPublishNotice } from "@/components/lessons/premium-lesson-publish-notice";
@@ -286,7 +287,7 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
         ) : null}
 
         {matchedLessonImage.url ? (
-          <aside className="nn-study-card nn-study-card--wash mx-auto mt-8 max-w-[42rem] overflow-hidden p-4 sm:p-5">
+          <aside className="nn-study-card nn-study-card--wash mx-auto mt-8 max-w-[44rem] overflow-hidden p-4 sm:p-5">
             <p className="nn-marketing-label">Concept illustration</p>
             <div className="mt-3">
               <PathwayLessonFigures
@@ -313,32 +314,29 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
           postTest={fullAccess ? lesson.postTest : undefined}
           fullAccess={fullAccess}
         >
-          <main className="mt-10">
-            <article className="mx-auto max-w-[42rem] space-y-9">
-              {visible.map((section, idx) => (
-                <section
+          <main className="mt-8">
+            <article className="mx-auto max-w-[44rem] space-y-5">
+              {visible.map((section) => (
+                <LessonSectionCard
                   key={section.id}
-                  className={`nn-lesson-article-section scroll-mt-24 ${idx % 2 === 1 ? "nn-lesson-article-section--alt" : ""}`}
+                  id={section.id}
+                  heading={section.heading}
+                  kind={section.kind}
                 >
-                  <h2 className="nn-marketing-h3 border-b border-[color-mix(in_srgb,var(--border-subtle)_78%,var(--theme-primary))] pb-3.5 text-[var(--theme-heading-text)]">
-                    {section.heading?.trim() || "Section"}
-                  </h2>
-                  <div className="mt-6">
-                    <PathwayLessonSectionContent
-                      text={typeof section.body === "string" ? section.body : ""}
-                      figures={section.figures}
-                      lessonWikiBasePath={base}
-                      viewerTier={lessonContentTier}
-                      measurementSystem={lessonMeasurementSystem}
-                    />
-                  </div>
-                </section>
+                  <PathwayLessonSectionContent
+                    text={typeof section.body === "string" ? section.body : ""}
+                    figures={section.figures}
+                    lessonWikiBasePath={base}
+                    viewerTier={lessonContentTier}
+                    measurementSystem={lessonMeasurementSystem}
+                  />
+                </LessonSectionCard>
               ))}
             </article>
           </main>
 
           {lockedSections.length > 0 ? (
-            <div className="mx-auto mt-8 max-w-[42rem]">
+            <div className="mx-auto mt-6 max-w-[44rem]">
               <PathwayLessonLockedSectionsPreview sections={lockedSections} />
             </div>
           ) : null}

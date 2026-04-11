@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 import { PathwayLessonBody } from "@/components/lessons/pathway-lesson-body";
+import { LessonSectionCard } from "@/components/lessons/lesson-section-card";
 import { PathwayLessonLockedSectionsPreview } from "@/components/lessons/pathway-lesson-locked-sections-preview";
 import { PathwayLessonActions } from "@/components/lessons/pathway-lesson-actions";
 import { PathwayLessonPreviewBanner } from "@/components/lessons/pathway-lesson-preview-banner";
@@ -286,20 +287,20 @@ export default async function AlliedHealthSlugLessonDetailPage({ params }: Props
         postTest={lesson.postTest}
         fullAccess={fullAccess}
       >
-        <article className="mt-8 space-y-8">
+        <article className="mt-8 space-y-5">
           {visible.map((section) => (
-            <section key={section.id} className="border-b border-[var(--theme-separator)] pb-8 last:border-0">
-              <h2 className="text-xl font-semibold text-[var(--theme-heading-text)]">
-                {section.heading?.trim() || "Section"}
-              </h2>
-              <div className="mt-3">
-                <PathwayLessonBody
-                  text={typeof section.body === "string" ? section.body : ""}
-                  lessonWikiBasePath={base}
-                  measurementSystem={lessonMeasurementSystem}
-                />
-              </div>
-            </section>
+            <LessonSectionCard
+              key={section.id}
+              id={section.id}
+              heading={section.heading}
+              kind={section.kind}
+            >
+              <PathwayLessonBody
+                text={typeof section.body === "string" ? section.body : ""}
+                lessonWikiBasePath={base}
+                measurementSystem={lessonMeasurementSystem}
+              />
+            </LessonSectionCard>
           ))}
         </article>
 

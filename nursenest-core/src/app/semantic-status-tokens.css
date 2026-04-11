@@ -92,6 +92,23 @@
   --semantic-panel-cool: color-mix(in srgb, var(--semantic-info) 6%, var(--bg-card));
   --semantic-panel-positive: color-mix(in srgb, var(--semantic-success) 7%, var(--bg-card));
 
+  /* -----------------------------------------------------------------------
+   * Multi-surface layering system — visual depth without harsh contrast
+   *
+   * surface-base     → page background (most neutral)
+   * surface-elevated → floating cards above base
+   * surface-soft-a   → gentle primary brand tint (sections, alternating strips)
+   * surface-soft-b   → gentle success tint (positive / completion blocks)
+   * surface-soft-c   → gentle info/cool tint (clinical pearls, info insets)
+   * surface-emphasis → stronger brand tint (highlighted callouts, key facts)
+   * ----------------------------------------------------------------------- */
+  --surface-base: var(--bg-page);
+  --surface-elevated: var(--bg-elevated);
+  --surface-soft-a: color-mix(in srgb, var(--theme-primary) 3.5%, var(--bg-page));
+  --surface-soft-b: color-mix(in srgb, var(--semantic-success) 5%, var(--bg-card));
+  --surface-soft-c: color-mix(in srgb, var(--semantic-info) 5%, var(--bg-card));
+  --surface-emphasis: color-mix(in srgb, var(--semantic-brand) 8%, var(--bg-card));
+
   /* Short alias names (design-spec parity — all resolve to semantic tokens above) */
   --bg-base: var(--semantic-bg-base);
   --bg-soft: var(--semantic-bg-soft);
@@ -240,6 +257,12 @@ html[data-theme="multi-pastel"] {
 html[data-theme="dark-clinical"],
 html[data-theme="dark-academia"],
 html[data-theme="dark-mode"] {
+  /* Multi-surface: higher % so tints are perceptible on dark backgrounds */
+  --surface-soft-a: color-mix(in srgb, var(--theme-primary) 9%, var(--bg-page));
+  --surface-soft-b: color-mix(in srgb, var(--semantic-success) 11%, var(--bg-card));
+  --surface-soft-c: color-mix(in srgb, var(--semantic-info) 11%, var(--bg-card));
+  --surface-emphasis: color-mix(in srgb, var(--semantic-brand) 15%, var(--bg-card));
+
   --semantic-success: #34d399;
   --semantic-success-soft: color-mix(in srgb, #34d399 14%, var(--bg-card));
   --semantic-success-contrast: #a7f3d0;
@@ -264,6 +287,57 @@ html[data-theme="dark-mode"] {
   --semantic-panel-warm: color-mix(in srgb, var(--semantic-warning) 10%, var(--bg-card));
   --semantic-panel-cool: color-mix(in srgb, var(--semantic-info) 10%, var(--bg-card));
   --semantic-panel-positive: color-mix(in srgb, var(--semantic-success) 10%, var(--bg-card));
+}
+
+/* -------------------------------------------------------------------------- */
+/* Extended palette — lesson section card colors (teal, cyan, violet)        */
+/* -------------------------------------------------------------------------- */
+/*
+ * These extend the base semantic system for study card variety.
+ * Guardrail: each token here must resolve from existing `--bg-card` / `--semantic-surface`
+ * so soft tints stay theme-aware. Hard values are stable mid-tones chosen to read
+ * clearly in both light and dark defaults; per-theme overrides follow below.
+ */
+:where([data-theme]) {
+  --semantic-violet: #7c3aed;
+  --semantic-violet-soft: color-mix(in srgb, #7c3aed 10%, var(--bg-card));
+  --semantic-violet-contrast: #4c1d95;
+  --semantic-teal: #0d9488;
+  --semantic-teal-soft: color-mix(in srgb, #0d9488 10%, var(--bg-card));
+  --semantic-teal-contrast: #134e4a;
+  --semantic-cyan: #0891b2;
+  --semantic-cyan-soft: color-mix(in srgb, #0891b2 10%, var(--bg-card));
+  --semantic-cyan-contrast: #164e63;
+}
+
+/* Lavender / pastel: lighter, more vibrant variants */
+html[data-theme="lavender"],
+html[data-theme="pastel-lavender"],
+html[data-theme="lavender-dream"] {
+  --semantic-violet: #8b5cf6;
+  --semantic-violet-soft: color-mix(in srgb, #8b5cf6 11%, var(--bg-card));
+  --semantic-violet-contrast: #3730a3;
+  --semantic-teal: #0d9488;
+  --semantic-teal-soft: color-mix(in srgb, #0d9488 10%, var(--bg-card));
+  --semantic-teal-contrast: #134e4a;
+  --semantic-cyan: #0e7490;
+  --semantic-cyan-soft: color-mix(in srgb, #0e7490 10%, var(--bg-card));
+  --semantic-cyan-contrast: #164e63;
+}
+
+/* Dark themes: brighter, lighter mid-tones for legibility on dark surfaces */
+html[data-theme="dark-clinical"],
+html[data-theme="dark-academia"],
+html[data-theme="dark-mode"] {
+  --semantic-violet: #a78bfa;
+  --semantic-violet-soft: color-mix(in srgb, #a78bfa 14%, var(--bg-card));
+  --semantic-violet-contrast: #ddd6fe;
+  --semantic-teal: #2dd4bf;
+  --semantic-teal-soft: color-mix(in srgb, #2dd4bf 14%, var(--bg-card));
+  --semantic-teal-contrast: #ccfbf1;
+  --semantic-cyan: #22d3ee;
+  --semantic-cyan-soft: color-mix(in srgb, #22d3ee 14%, var(--bg-card));
+  --semantic-cyan-contrast: #a5f3fc;
 }
 
 /* -------------------------------------------------------------------------- */

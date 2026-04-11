@@ -26,6 +26,8 @@ import { PracticeTestTeachingReviewPanel } from "@/components/student/practice-t
 import { PracticeTestStudyLoopNext } from "@/components/student/practice-test-study-loop-next";
 import type { PracticeTestTeachingItem } from "@/lib/practice-tests/build-teaching-review";
 import { getLinearCommittedQuestionIds } from "@/lib/practice-tests/practice-linear-engine";
+import { PracticeRationalePanel } from "@/components/study/practice-rationale-panel";
+import type { RationalePanelStatus } from "@/components/study/practice-rationale-panel";
 
 type QRow = {
   id: string;
