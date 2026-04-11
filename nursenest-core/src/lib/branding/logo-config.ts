@@ -33,7 +33,7 @@ export const BRAND_NAME = "NurseNest" as const;
 
 /**
  * Fixed header slot: height + max-width are the single authority for rendered logo size.
- * Marketing header: h-5 · sm:h-6 · lg:h-7 — compact wordmark, no stretch.
+ * Marketing header: h-8 · sm:h-9 · lg:h-10 — compact wordmark, no stretch.
  * The img uses {@link HEADER_BRAND_LOGO_IMG_CLASSNAME} (`h-full`, `object-contain`) inside this slot.
  */
 export const HEADER_BRAND_LOGO_SLOT_CLASSNAME =
