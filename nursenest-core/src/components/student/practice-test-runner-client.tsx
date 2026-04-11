@@ -684,7 +684,7 @@ export function PracticeTestRunnerClient({
         <div className="mx-auto max-w-2xl space-y-6 px-4 py-8">
           <div className="nn-cat-question-card">
             <p className="text-[10px] font-bold uppercase tracking-widest text-[var(--semantic-text-muted)]">
-              Session complete — final item
+              Session complete: final item
             </p>
             <h2 className="mt-1 text-lg font-bold text-[var(--semantic-text-primary)]">
               Review before your summary
@@ -1121,7 +1121,7 @@ export function PracticeTestRunnerClient({
           No answer choices returned. Try reloading or contact support.
         </p>
       ) : isSata ? (
-        <ul className="nn-cat-opt-list" role="group" aria-label="Answer choices — select all that apply">
+        <ul className="nn-cat-opt-list" role="group" aria-label="Answer choices (select all that apply)">
           {optsCanonical.map((canonical, i) => {
             const selected = Array.isArray(raw) ? raw.includes(canonical) : false;
             const optState = catOptState(canonical);
@@ -1204,7 +1204,7 @@ export function PracticeTestRunnerClient({
                   {/* Timed warning */}
                   {timedMode && timeLimitSec != null ? (
                     <div className="nn-cat-exam-timing-alert mb-5" role="alert">
-                      Timed session — the exam may end automatically when time expires.
+                      Timed session: the exam may end automatically when time expires.
                     </div>
                   ) : null}
 
@@ -1299,7 +1299,7 @@ export function PracticeTestRunnerClient({
                   {/* Timed warning */}
                   {timedMode && timeLimitSec != null ? (
                     <div className="nn-cat-exam-timing-alert mb-5" role="alert">
-                      Timed session — the exam may end automatically when time expires.
+                      Timed session: the exam may end automatically when time expires.
                     </div>
                   ) : null}
 
@@ -1450,7 +1450,7 @@ export function PracticeTestRunnerClient({
       <ul
         className="nn-practice-opt-list"
         role="group"
-        aria-label="Answer choices — select all that apply"
+        aria-label="Answer choices (select all that apply)"
       >
         {optsCanonical.map((canonical, i) => {
           const selected = Array.isArray(raw) ? raw.includes(canonical) : false;
@@ -1544,7 +1544,7 @@ export function PracticeTestRunnerClient({
             >
               {timedMode && timeLimitSec != null ? (
                 <p className="rounded-lg border border-[color-mix(in_srgb,var(--semantic-warning)_28%,var(--semantic-border-soft))] bg-[var(--semantic-warning-soft)] px-3 py-2 text-xs font-medium text-[var(--semantic-warning-contrast)]">
-                  Timed session — the exam may end automatically when time expires.
+                  Timed session: the exam may end automatically when time expires.
                 </p>
               ) : null}
               {timedMode ? (

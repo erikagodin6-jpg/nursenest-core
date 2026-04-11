@@ -132,7 +132,7 @@ export function CatStudyFeedbackPanel({
                             })
                           }
                         >
-                          {i === 0 ? "Review this lesson — " : "Related — "}
+                          {i === 0 ? "Review this lesson: " : "Related: "}
                           {typeof l.title === "string" && l.title.trim() ? l.title : "Lesson"}
                         </Link>
                       </li>

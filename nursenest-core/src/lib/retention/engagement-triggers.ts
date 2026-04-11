@@ -50,7 +50,7 @@ function buildInactiveNudge(hoursSinceActivity: number): EngagementNudge | null 
       kind: "inactive_48h",
       priority: 1,
       headline: "You're falling behind",
-      body: "Continue your study plan today — even 5 minutes keeps you on track.",
+      body: "Continue your study plan today. Even 5 minutes keeps you on track.",
       href: "/app",
       ctaLabel: "Continue Studying",
       tone: "warning",
@@ -124,7 +124,7 @@ function buildImprovementNudge(
   return {
     kind: "improvement",
     priority: 7,
-    headline: "You're improving — keep going",
+    headline: "You're improving, keep going",
     body: `Your accuracy in ${improvingTopic} is trending up. A few more sessions will lock it in.`,
     href: "/app/questions",
     ctaLabel: "Keep Practicing",

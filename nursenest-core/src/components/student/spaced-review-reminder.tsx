@@ -72,7 +72,7 @@ export function SpacedReviewReminder() {
         </p>
         <p className="nn-engagement-nudge__body">
           {isOverdue
-            ? `${data.overdue} overdue — review now to keep your memory strong.`
+            ? `${data.overdue} overdue. Review now to keep your memory sharp.`
             : "Spaced repetition works best when you review on schedule."}
         </p>
         <Link

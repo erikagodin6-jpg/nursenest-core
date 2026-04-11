@@ -129,7 +129,7 @@ export function CatResultsCoachPanel({
               ))}
             </ul>
           ) : (
-            <p className="mt-2 text-sm text-muted-foreground">No weak domain cluster this run — still review mistakes below.</p>
+            <p className="mt-2 text-sm text-muted-foreground">No weak domain cluster this run. Still review mistakes below.</p>
           )}
         </div>
       </div>
@@ -243,7 +243,7 @@ export function CatResultsCoachPanel({
         <summary className="cursor-pointer font-medium text-foreground">How NurseNest CAT works</summary>
         <p className="mt-2 leading-relaxed text-muted-foreground">
           Questions adapt to your answers: the pool stays aligned to your pathway, and difficulty shifts based on how you
-          perform. The pass outlook uses the same estimate the engine already computed — we only translate it into plain
+          perform. The pass outlook uses the same estimate the engine already computed. We translate it into plain
           language and next steps. We never change how items are scored or selected on the server.
         </p>
       </details>

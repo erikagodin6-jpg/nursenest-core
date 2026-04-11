@@ -123,7 +123,7 @@ export function ConfidencePatternCards({ stats }: { stats: ConfidenceStats }) {
         <p className="nn-confidence-pattern-card__label">Overconfident Errors</p>
         <p className="nn-confidence-pattern-card__value">{stats.overconfidentErrors}</p>
         <p className="nn-confidence-pattern-card__desc">
-          Answered incorrectly despite high confidence — review these first to
+          Answered incorrectly despite high confidence. Review these first to
           correct faulty assumptions.
         </p>
       </div>
@@ -131,7 +131,7 @@ export function ConfidencePatternCards({ stats }: { stats: ConfidenceStats }) {
         <p className="nn-confidence-pattern-card__label">Uncertain Correct</p>
         <p className="nn-confidence-pattern-card__value">{stats.uncertainCorrect}</p>
         <p className="nn-confidence-pattern-card__desc">
-          Got it right but weren't sure — reinforce these areas to convert
+          Correct but with low confidence. Reinforce these areas to convert
           guesses into reliable recall.
         </p>
       </div>
@@ -139,7 +139,7 @@ export function ConfidencePatternCards({ stats }: { stats: ConfidenceStats }) {
         <p className="nn-confidence-pattern-card__label">Strong Knowledge</p>
         <p className="nn-confidence-pattern-card__value">{stats.strongKnowledge}</p>
         <p className="nn-confidence-pattern-card__desc">
-          Correct with high confidence — these areas are stable and ready for
+          Correct with high confidence. These areas are stable and ready for
           exam conditions.
         </p>
       </div>
@@ -209,7 +209,7 @@ export function ReviewPriorityGroups({ items }: { items: ReviewItem[] }) {
         </p>
         <ReviewItemList
           items={highPriority}
-          emptyMessage="No overconfident errors — excellent calibration."
+          emptyMessage="No overconfident errors. Strong calibration."
         />
       </div>
 
@@ -305,7 +305,7 @@ export function ConfidenceAnalyticsBlock({
           bullets={[
             "Catch overconfident errors before the exam",
             "Identify uncertain knowledge to reinforce",
-            "Prioritised review recommendations",
+            "Prioritized review recommendations",
           ]}
           secondaryHref="/pricing"
           secondaryLabel="View Plans"

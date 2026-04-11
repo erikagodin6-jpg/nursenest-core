@@ -71,7 +71,7 @@ export function CatLiveTransparencyStrip({
               ) : null}
             </p>
             <p className="mt-0.5 max-w-[14rem] text-[10px] leading-snug">
-              Same engine as results — this is optional context while you test.
+              Same engine as results. This is optional context while you test.
             </p>
           </div>
         </div>
