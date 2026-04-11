@@ -6734,3 +6734,83 @@ html[data-theme="deep-twilight"] .nn-cat-opt--incorrect {
 .nn-coach-weak-summary {
   margin-top: 0.75rem;
 }
+
+/* ── Session Feedback Strip ────────────────────────────────────────── */
+
+.nn-session-feedback {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.875rem 1rem;
+  border-radius: 0.75rem;
+  border: 1.5px solid var(--semantic-border-soft);
+  background: var(--semantic-surface);
+  box-shadow: 0 1px 3px -1px color-mix(in srgb, var(--semantic-success) 4%, transparent);
+}
+.nn-session-feedback--positive {
+  border-color: color-mix(in srgb, var(--semantic-success) 20%, var(--semantic-border-soft));
+  background: linear-gradient(
+    170deg,
+    color-mix(in srgb, var(--semantic-success) 4%, var(--semantic-surface)) 0%,
+    var(--semantic-surface) 100%
+  );
+}
+.nn-session-feedback--guidance {
+  border-color: color-mix(in srgb, var(--semantic-brand) 18%, var(--semantic-border-soft));
+  background: linear-gradient(
+    170deg,
+    color-mix(in srgb, var(--semantic-brand) 4%, var(--semantic-surface)) 0%,
+    var(--semantic-surface) 100%
+  );
+}
+.nn-session-feedback--neutral {
+  border-color: color-mix(in srgb, var(--semantic-info) 14%, var(--semantic-border-soft));
+}
+.nn-session-feedback__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 0.5rem;
+  flex-shrink: 0;
+}
+.nn-session-feedback__text {
+  min-width: 0;
+}
+.nn-session-feedback__primary {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--semantic-text-primary);
+  line-height: 1.35;
+}
+.nn-session-feedback__secondary {
+  margin-top: 0.1875rem;
+  font-size: 0.8125rem;
+  color: var(--semantic-text-secondary);
+  line-height: 1.4;
+}
+
+/* ── Session Feedback List ─────────────────────────────────────────── */
+
+.nn-session-feedback-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
+  border: 1.5px solid color-mix(in srgb, var(--semantic-success) 14%, var(--semantic-border-soft));
+  background: linear-gradient(
+    170deg,
+    color-mix(in srgb, var(--semantic-success) 3%, var(--semantic-surface)) 0%,
+    var(--semantic-surface) 100%
+  );
+}
+.nn-session-feedback-list__item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  font-size: 0.8125rem;
+  color: var(--semantic-text-secondary);
+  line-height: 1.4;
+}
