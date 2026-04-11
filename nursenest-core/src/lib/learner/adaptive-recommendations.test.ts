@@ -13,11 +13,13 @@ const readiness: ReadinessResult = {
   score: 45,
   band: "not_ready",
   confidence: "low",
+  trend: null,
   summary: "Test readiness summary",
   factors: [],
   whatToImprove: [],
   nextActions: [],
   holdingBack: [],
+  topWeakAreas: [],
 };
 
 function row(partial: Partial<WeakTopicRow> & Pick<WeakTopicRow, "topic">): WeakTopicRow {
