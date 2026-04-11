@@ -33,7 +33,7 @@ import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-
 import {
   CAT_QUESTION_SELECT,
   dbRowsToCatQuestions,
-  type CatQuestionSelectResult,
+  type DbQuestionRow,
 } from "@/lib/cat/db-adapter";
 import { loadAnswerHistory, mergeAnswerHistory } from "@/lib/cat/answer-history";
 import {
@@ -102,7 +102,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     select: CAT_QUESTION_SELECT,
   });
 
-  const pool = dbRowsToCatQuestions(rows as unknown as CatQuestionSelectResult[]);
+  const pool = dbRowsToCatQuestions(rows as unknown as DbQuestionRow[]);
 
   // Find the question being answered
   const question = pool.find((q) => q.id === questionId);

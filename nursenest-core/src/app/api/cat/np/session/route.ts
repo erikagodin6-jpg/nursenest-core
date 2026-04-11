@@ -22,7 +22,7 @@ import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-
 import {
   CAT_QUESTION_SELECT,
   dbRowsToCatQuestions,
-  type CatQuestionSelectResult,
+  type DbQuestionRow,
 } from "@/lib/cat/db-adapter";
 import {
   loadAnswerHistory,
@@ -87,7 +87,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     );
   }
 
-  const pool = dbRowsToCatQuestions(rows as unknown as CatQuestionSelectResult[]);
+  const pool = dbRowsToCatQuestions(rows as unknown as DbQuestionRow[]);
 
   // ── Load historical answer history ───────────────────────────────────────
 

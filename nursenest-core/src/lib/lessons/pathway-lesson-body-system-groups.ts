@@ -132,11 +132,11 @@ export function classifyLessonForHub(lesson: PathwayLessonRecord): PathwayLesson
   if (/cardiovascular|cardiac|heart|hypertension|blood.?pressure|afib|atrial/.test(h)) return "cardiovascular";
   if (/respiratory|copd|asthma|oxygen|airway|breath|inhaler|nebulizer/.test(h)) return "respiratory";
   if (/neuro|stroke|seizure|cva|dementia|delirium|cogniti|alzheimer|parkinson/.test(h)) return "neurological";
-  if (/deteriorat|unstable|clinical.?judgment|prioritiz|abcs|rapid.?response|case:.?choosing/.test(h)) return "clinical-deterioration";
+  if (/deteriorat|unstable|clinical.?judgment|abcs|rapid.?response|case:.?choosing/.test(h)) return "clinical-deterioration";
   if (/infection|ppe|isolation|hand.?hygiene|precaution|mrsa|c.?diff|antibiotic|sterile/.test(h)) return "infection-immunity";
   if (/pharm|medic|drug|insulin|injection|dosage|calculation|high.?alert|anticoagul|antihypertensive|diuretic/.test(h)) return "pharmacology";
   if (/postpartum|newborn|matern|obstetric|prenatal|breastfeed|neonatal|contraception|pediatric|child|growth.?chart|immunization|mental.?health|psycho|depress|anxiety|dementia|suicid|substance.?use|de.?escalat/.test(h)) return "special-populations";
-  if (/scope|delegat|document|sbar|handoff|shift.?report|communication|ethical|care.?coord|interprofession|restraint|falls?.?risk|incident|two.?identifier|patient.?id|report.?to.?rn|safety/.test(h)) return "communication-safety";
+  if (/scope|delegat|document|sbar|handoff|shift.?report|communication|ethical|care.?coord|interprofession|restraint|falls?.?risk|incident|two.?identifier|patient.?id|report.?to.?rn|safety|prioritiz/.test(h)) return "communication-safety";
 
   return "fundamentals";
 }

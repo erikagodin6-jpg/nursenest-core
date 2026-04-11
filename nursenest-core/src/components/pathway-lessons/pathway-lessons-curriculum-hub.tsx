@@ -19,7 +19,6 @@ import { PremiumEmptyState } from "@/components/ui/premium-empty-state";
 import { StatusBadge } from "@/components/ui/study-card";
 import {
   buildPathwayLessonSystemSections,
-  PATHWAY_LESSON_SYSTEM_ORDER,
   type PathwayLessonSystemSection,
   type PathwayLessonSystemLabel,
 } from "@/lib/lessons/pathway-lesson-body-system-groups";
@@ -57,16 +56,10 @@ const SYSTEM_VISUALS: Record<PathwayLessonSystemLabel, SystemVisual> = {
   fundamentals: { icon: Activity, accentVar: "--semantic-chart-1" },
 };
 
-const SYSTEM_SORT_ORDER = new Map<PathwayLessonSystemLabel, number>(
-  PATHWAY_LESSON_SYSTEM_ORDER.map((label, index) => [label, index]),
-);
-const DEFAULT_VISIBLE_LESSON_COUNT = 8;
-
 function lessonSubtitle(lesson: PathwayLessonRecord): string | null {
   const text = lesson.seoDescription?.trim();
   if (!text) return null;
-  const snippet = text.length > 110 ? `${text.slice(0, 107)}…` : text;
-  return snippet;
+  return text.length > 110 ? `${text.slice(0, 107)}…` : text;
 }
 
 function LessonSection({
@@ -86,35 +79,41 @@ function LessonSection({
 }) {
   const visual = SYSTEM_VISUALS[section.systemLabel] ?? { icon: Activity, accentVar: "--semantic-brand" };
   const Icon = visual.icon;
-  const systemStyle = {
-    "--nn-system-accent": `var(${visual.accentVar})`,
-  } as CSSProperties;
-  const primaryLessons = section.lessons.slice(0, DEFAULT_VISIBLE_LESSON_COUNT);
-  const overflowLessons = section.lessons.slice(DEFAULT_VISIBLE_LESSON_COUNT);
+  const systemStyle = { "--nn-system-accent": `var(${visual.accentVar})` } as CSSProperties;
+
   return (
     <section
       id={section.id}
       style={systemStyle}
-      className="rounded-3xl border border-[color-mix(in_srgb,var(--nn-system-accent)_22%,var(--semantic-border-soft))] bg-[var(--semantic-surface)] p-5 shadow-[var(--semantic-shadow-soft)] sm:p-6"
+      className="flex flex-col rounded-3xl border border-[color-mix(in_srgb,var(--nn-system-accent)_18%,var(--semantic-border-soft))] bg-[var(--semantic-surface)] shadow-[var(--semantic-shadow-soft)]"
       aria-labelledby={`section-heading-${section.id}`}
     >
-      <header className="flex items-start justify-between gap-4">
-        <span className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-[color-mix(in_srgb,var(--nn-system-accent)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--nn-system-accent)_10%,var(--semantic-panel-muted))] text-[var(--nn-system-accent)]">
-          <Icon className="h-5 w-5" aria-hidden />
+      {/* Section header */}
+      <header className="flex items-start gap-3.5 border-b border-[color-mix(in_srgb,var(--nn-system-accent)_12%,var(--semantic-border-soft))] px-5 py-4 sm:px-6">
+        <span className="mt-0.5 inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-[color-mix(in_srgb,var(--nn-system-accent)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--nn-system-accent)_8%,var(--semantic-panel-muted))] text-[var(--nn-system-accent)]">
+          <Icon className="h-[18px] w-[18px]" aria-hidden />
         </span>
-        <div className="min-w-0">
-          <h2 id={`section-heading-${section.id}`} className="text-base font-semibold tracking-tight text-[var(--theme-heading-text)] sm:text-lg">
-            {section.label}
-          </h2>
-          <p className="mt-1 text-sm leading-relaxed text-[var(--theme-muted-text)]">{section.description}</p>
-          <p className="mt-2 inline-flex min-h-7 items-center rounded-full border border-[color-mix(in_srgb,var(--nn-system-accent)_25%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--nn-system-accent)_10%,var(--semantic-panel-muted))] px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide text-[var(--semantic-text-secondary)]">
-            {section.count} lesson{section.count === 1 ? "" : "s"}
+        <div className="min-w-0 flex-1">
+          <div className="flex flex-wrap items-baseline gap-x-2.5 gap-y-0.5">
+            <h2
+              id={`section-heading-${section.id}`}
+              className="text-[0.95rem] font-semibold tracking-tight text-[var(--theme-heading-text)]"
+            >
+              {section.label}
+            </h2>
+            <span className="text-[11px] font-semibold uppercase tracking-wide text-[var(--semantic-text-tertiary)]">
+              {section.count} lesson{section.count === 1 ? "" : "s"}
+            </span>
+          </div>
+          <p className="mt-0.5 text-[0.8rem] leading-snug text-[var(--theme-muted-text)]">
+            {section.description}
           </p>
         </div>
       </header>
 
-      <ul className="mt-5 grid list-none gap-2.5 p-0">
-        {primaryLessons.map((lesson, lessonIndex) => {
+      {/* Flat lesson list — all lessons, no collapse */}
+      <ul className="flex list-none flex-col divide-y divide-[var(--semantic-border-soft)] p-0">
+        {section.lessons.map((lesson, lessonIndex) => {
           const href = pathwayLessonMarketingDetailHref(lessonsBasePath, lesson.slug);
           if (!href) return null;
           const progressStatus = progressMap[lesson.slug] ?? "not_started";
@@ -127,63 +126,32 @@ function LessonSection({
             >
               <Link
                 href={href}
-                className="group flex items-start justify-between gap-3 rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--theme-page-bg)] px-3.5 py-3 transition hover:border-[color-mix(in_srgb,var(--nn-system-accent)_28%,var(--semantic-border-soft))] hover:bg-[var(--semantic-panel-muted)] sm:px-4"
+                className="group flex items-center justify-between gap-3 px-5 py-3 transition hover:bg-[color-mix(in_srgb,var(--nn-system-accent)_4%,var(--semantic-panel-muted))] sm:px-6"
               >
                 <div className="min-w-0">
-                  <p className="text-sm font-semibold text-[var(--theme-heading-text)] sm:text-[0.95rem]">
+                  <p className="text-[0.875rem] font-medium leading-snug text-[var(--theme-heading-text)] group-hover:text-[var(--nn-system-accent)]">
                     {lesson.title}
                   </p>
-                  {subtitle ? <p className="mt-1 line-clamp-1 text-xs text-[var(--theme-muted-text)]">{subtitle}</p> : null}
+                  {subtitle ? (
+                    <p className="mt-0.5 line-clamp-1 text-[0.75rem] text-[var(--theme-muted-text)]">
+                      {subtitle}
+                    </p>
+                  ) : null}
                   {showLockedState ? (
-                    <div className="mt-2">
+                    <div className="mt-1.5">
                       <StatusBadge status="locked" size="xs" />
                     </div>
                   ) : null}
                 </div>
                 <div className="flex shrink-0 items-center gap-1.5">
                   {showProgress ? <PathwayLessonProgressBadge status={progressStatus} /> : null}
-                  <ChevronRight className="h-4 w-4 text-[var(--semantic-text-tertiary)] transition-transform group-hover:translate-x-0.5 group-hover:text-[var(--nn-system-accent)]" />
+                  <ChevronRight className="h-3.5 w-3.5 text-[var(--semantic-text-tertiary)] transition-transform group-hover:translate-x-0.5 group-hover:text-[var(--nn-system-accent)]" />
                 </div>
               </Link>
             </li>
           );
         })}
       </ul>
-
-      {overflowLessons.length > 0 ? (
-        <details className="mt-4 rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--theme-page-bg)] p-4">
-          <summary className="cursor-pointer text-sm font-semibold text-[var(--nn-system-accent)]">
-            View all ({overflowLessons.length} more)
-          </summary>
-          <ul className="mt-3 grid list-none gap-2 p-0">
-            {overflowLessons.map((lesson) => {
-              const href = pathwayLessonMarketingDetailHref(lessonsBasePath, lesson.slug);
-              if (!href) return null;
-              const progressStatus = progressMap[lesson.slug] ?? "not_started";
-              const subtitle = lessonSubtitle(lesson);
-              return (
-                <li key={lesson.slug}>
-                  <Link
-                    href={href}
-                    className="group flex items-start justify-between gap-3 rounded-xl border border-[var(--semantic-border-soft)] px-3 py-2.5 transition hover:border-[color-mix(in_srgb,var(--nn-system-accent)_28%,var(--semantic-border-soft))] hover:bg-[var(--semantic-panel-muted)]"
-                  >
-                    <div className="min-w-0">
-                      <p className="text-sm font-semibold text-[var(--theme-heading-text)]">
-                        {lesson.title}
-                      </p>
-                      {subtitle ? <p className="mt-1 line-clamp-1 text-xs text-[var(--theme-muted-text)]">{subtitle}</p> : null}
-                    </div>
-                    <div className="flex shrink-0 items-center gap-1.5">
-                      {showProgress ? <PathwayLessonProgressBadge status={progressStatus} /> : null}
-                      <ChevronRight className="h-4 w-4 text-[var(--semantic-text-tertiary)] transition-transform group-hover:translate-x-0.5 group-hover:text-[var(--nn-system-accent)]" />
-                    </div>
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-        </details>
-      ) : null}
     </section>
   );
 }
@@ -197,12 +165,6 @@ export function PathwayLessonsCurriculumHub({
 }: Props) {
   const safeLessons = lessons.filter(pathwayLessonHasRenderableHubSlug);
   const sections = buildPathwayLessonSystemSections(safeLessons);
-  const orderedSections = [...sections].sort((a, b) => {
-    const aRank = SYSTEM_SORT_ORDER.get(a.systemLabel) ?? Number.MAX_SAFE_INTEGER;
-    const bRank = SYSTEM_SORT_ORDER.get(b.systemLabel) ?? Number.MAX_SAFE_INTEGER;
-    if (aRank !== bRank) return aRank - bRank;
-    return a.label.localeCompare(b.label);
-  });
 
   if (sections.length === 0) {
     const thinInventoryCopy = emptyStateCopy.thinInventory();
@@ -221,8 +183,8 @@ export function PathwayLessonsCurriculumHub({
   }
 
   return (
-    <div className="grid gap-5 md:grid-cols-2 xl:gap-6">
-      {orderedSections.map((section, sectionIndex) => (
+    <div className="grid gap-4 md:grid-cols-2 xl:gap-5">
+      {sections.map((section, sectionIndex) => (
         <LessonSection
           key={section.id}
           section={section}
