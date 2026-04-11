@@ -30,6 +30,11 @@
  *   performance-tracker.ts — Per-dimension accuracy tracking and weak-area detection
  *   cat-engine.ts          — Adaptive question selection and session management
  *   session-analyzer.ts    — Post-session analysis, lesson recs, follow-up sets
+ *   cat-inference-maps.ts  — Canonical inference maps (single source of truth)
+ *   db-adapter.ts          — Prisma ExamQuestion → CatQuestion adapter
+ *   session-persistence.ts — DB CRUD, completion snapshot, idempotent finalization
+ *   answer-history.ts      — Cross-session AnswerRecord aggregation (capped)
+ *   cat-inference-audit.ts — Dev-only bounded inference audit utility
  */
 
 // ─── Types (re-export everything consumers need) ──────────────────────────────
@@ -148,3 +153,32 @@ export {
   mergeAnswerHistory,
   recentlyAnsweredIds,
 } from "./answer-history";
+
+// ─── Session Persistence extras ───────────────────────────────────────────────
+
+export {
+  buildCompletionSnapshot,
+  extractSnapshotFromAdaptiveState,
+  loadNpCatSnapshot,
+} from "./session-persistence";
+
+export type {
+  NpCatCompletionSnapshot,
+} from "./session-persistence";
+
+// ─── Canonical Inference Maps (public API for consumers) ─────────────────────
+
+export {
+  canonicalSystemTag,
+  canonicalTopicSlug,
+  clampDifficulty,
+  cognitiveLayerFromFormat,
+  cognitiveLayerFromLevel,
+  cognitiveLayerFromStem,
+  COGNITIVE_LAYER_DEFAULT,
+  inferDispositionTagFromText,
+  inferPopulationTagsFromText,
+  inferRiskLevelFromSignals,
+  RISK_LEVEL_DEFAULT,
+  SYSTEM_TAG_DEFAULT,
+} from "./cat-inference-maps";
