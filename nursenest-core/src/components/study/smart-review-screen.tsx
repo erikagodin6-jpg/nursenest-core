@@ -84,7 +84,7 @@ function buildGroups(items: SmartReviewItem[]): ReviewGroup[] {
       id: "priority",
       title: "High Priority Fixes",
       description:
-        "Answered incorrectly despite high confidence — these need the most immediate attention.",
+        "Answered incorrectly despite high confidence. These need the most attention.",
       variantClass: "nn-review-group--priority",
       defaultExpanded: true,
       items: buckets.priority,
@@ -93,7 +93,7 @@ function buildGroups(items: SmartReviewItem[]): ReviewGroup[] {
       id: "needs-review",
       title: "Needs Review",
       description:
-        "Answered incorrectly with low or medium confidence — review the explanation and related lessons.",
+        "Answered incorrectly with low or medium confidence. Review the explanation and related lessons.",
       variantClass: "nn-review-group--needs-review",
       defaultExpanded: true,
       items: buckets["needs-review"],
@@ -102,7 +102,7 @@ function buildGroups(items: SmartReviewItem[]): ReviewGroup[] {
       id: "uncertain",
       title: "Uncertain Knowledge",
       description:
-        "Got it right but weren't sure — reinforce these to build reliable recall under exam pressure.",
+        "Correct but with low confidence. Reinforce these to build reliable recall under exam pressure.",
       variantClass: "nn-review-group--uncertain",
       defaultExpanded: false,
       items: buckets.uncertain,
@@ -111,7 +111,7 @@ function buildGroups(items: SmartReviewItem[]): ReviewGroup[] {
       id: "strong",
       title: "Strong Areas",
       description:
-        "Correct with high confidence — these areas are stable and ready for exam conditions.",
+        "Correct with high confidence. These areas are stable and ready for exam conditions.",
       variantClass: "nn-review-group--strong",
       defaultExpanded: false,
       items: buckets.strong,
@@ -347,13 +347,13 @@ export function ReviewGroupSection({
 function emptyMessage(groupId: GroupId): string {
   switch (groupId) {
     case "priority":
-      return "No high-confidence mistakes in this session — excellent calibration.";
+      return "No high-confidence mistakes in this session. Strong calibration.";
     case "needs-review":
-      return "No incorrect answers in this group. Keep it up!";
+      return "No incorrect answers in this group.";
     case "uncertain":
-      return "No uncertain correct answers — your confidence is well-calibrated.";
+      return "No uncertain correct answers. Your confidence is well calibrated.";
     case "strong":
-      return "No high-confidence correct answers yet — keep practicing to reach this stage.";
+      return "No high-confidence correct answers yet. More practice will fill this group.";
   }
 }
 
@@ -446,16 +446,16 @@ export function ReviewSummaryStrip({
 
   function buildSummary(): string {
     if (priorityCount > 0 && uncertainCount > 0) {
-      return `You had ${priorityCount} high-confidence mistake${priorityCount !== 1 ? "s" : ""} and ${uncertainCount} uncertain correct answer${uncertainCount !== 1 ? "s" : ""} — focus on the top groups first.`;
+      return `You had ${priorityCount} high-confidence mistake${priorityCount !== 1 ? "s" : ""} and ${uncertainCount} uncertain correct answer${uncertainCount !== 1 ? "s" : ""}. Focus on the top groups first.`;
     }
     if (priorityCount > 0) {
-      return `You had ${priorityCount} high-confidence mistake${priorityCount !== 1 ? "s" : ""} — these are your highest priority to review.`;
+      return `You had ${priorityCount} high-confidence mistake${priorityCount !== 1 ? "s" : ""}. These are your highest priority to review.`;
     }
     if (uncertainCount > 0) {
-      return `Good accuracy overall, but ${uncertainCount} answer${uncertainCount !== 1 ? "s were" : " was"} correct with low confidence — reinforce those areas.`;
+      return `Good accuracy overall, but ${uncertainCount} answer${uncertainCount !== 1 ? "s were" : " was"} correct with low confidence. Reinforce those areas.`;
     }
     if (strongCount === totalItems && totalItems > 0) {
-      return "Outstanding — every answer was correct with high confidence. Your knowledge is well-calibrated.";
+      return "Strong session: every answer was correct with high confidence.";
     }
     return "Review your session below, organized by correctness and confidence.";
   }
@@ -554,7 +554,7 @@ export function SmartReviewLayout({ items, isEntitled = true }: SmartReviewScree
           description="See exactly what you're getting wrong and how to fix it."
           bullets={[
             "Questions grouped by urgency and confidence",
-            "Prioritised review queue — fix the most important mistakes first",
+            "Prioritized review queue: fix the most important mistakes first",
             "Direct lesson links for every question",
           ]}
           secondaryHref="/pricing"
