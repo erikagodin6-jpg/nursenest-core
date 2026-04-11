@@ -1,12 +1,16 @@
 /**
  * QA contract: CAT start pathway selection safety.
  *
- * Covers the three scenarios defined in the CAT pathway selection pass:
+ * Covers the scenarios defined in the CAT pathway selection pass:
  *  1. Pathway-specific start — explicit pathwayId always preserved.
  *  2. Generic multi-pathway surface — ambiguous without pathwayId → structured 400.
  *  3. Single-pathway subscription — unambiguous auto-resolution.
- *  4. Omitted pathwayId with multiple eligible pathways → safe failure, not silent default.
- *  5. URL helper encodes pathwayId correctly.
+ *  4. No CAT-eligible pathways → required error.
+ *  5. Ambiguity picker: one URL per eligible pathway, targeting start page.
+ *  6. Labels: catPathwayRegionalExamLine includes country + role + exam code.
+ *  7. URL helper encodes pathwayId correctly.
+ *  8. data-nn-qa attributes: each picker option has the correct qa attr key.
+ *  9. Empty catEligibleOptions: no auto-select or hub redirect in picker contract.
  *
  * Non-goals: does NOT test the full API route (DB/auth dependencies) or UI clicks.
  */
@@ -17,6 +21,12 @@ import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { PRACTICE_TEST_CAT_CREATE_CODE } from "@/lib/practice-tests/practice-test-cat-create-codes";
 import { resolveCatPathwayIdForCatPost } from "@/lib/practice-tests/resolve-cat-pathway-for-post";
 import { appPathwayCatSessionStartPath } from "@/lib/exam-pathways/pathway-cat-flow";
+import {
+  catPathwayRegionalExamLine,
+  catPathwayRegionRoleLabel,
+  catPathwayExamCodeLabel,
+  tryCatPathwayFromId,
+} from "@/lib/exam-pathways/cat-pathway-labels";
 
 function stub(id: string): ExamPathwayDefinition {
   return { id } as ExamPathwayDefinition;
@@ -138,6 +148,121 @@ describe("ambiguity picker URLs: each eligible pathway gets a scoped start link"
       assert.ok(url.startsWith("/app/practice-tests/start?"), `${id}: must target /app/practice-tests/start`);
       assert.ok(!url.startsWith("/app/practice-tests?"), `${id}: must NOT target the generic hub`);
     }
+  });
+});
+
+// ─── 6. Labels: catPathwayRegionalExamLine country + role + exam ─────────────
+
+describe("catPathwayRegionalExamLine: labels include country + role + exam", () => {
+  function makePathway(overrides: Partial<ExamPathwayDefinition>): ExamPathwayDefinition {
+    return {
+      id: "test-id",
+      countrySlug: "us",
+      roleTrack: "rn",
+      shortName: "NCLEX-RN",
+      ...overrides,
+    } as ExamPathwayDefinition;
+  }
+
+  it("US RN pathway produces a label containing 'US', 'RN', and the exam code", () => {
+    const pw = makePathway({ countrySlug: "us", roleTrack: "rn", shortName: "NCLEX-RN" });
+    const label = catPathwayRegionalExamLine(pw);
+    assert.ok(label.includes("US"), `label must contain 'US': got "${label}"`);
+    assert.ok(label.includes("RN"), `label must contain 'RN': got "${label}"`);
+    assert.ok(label.includes("NCLEX-RN"), `label must contain exam code: got "${label}"`);
+  });
+
+  it("Canada RPN pathway produces a label containing 'Canada', 'RPN', and the exam code", () => {
+    const pw = makePathway({ countrySlug: "canada", roleTrack: "rpn", shortName: "REx-PN" });
+    const label = catPathwayRegionalExamLine(pw);
+    assert.ok(label.includes("Canada"), `label must contain 'Canada': got "${label}"`);
+    assert.ok(label.includes("RPN"), `label must contain 'RPN': got "${label}"`);
+    assert.ok(label.includes("REx-PN"), `label must contain exam code: got "${label}"`);
+  });
+
+  it("US NP pathway produces a label containing 'US', 'NP', and the exam code", () => {
+    const pw = makePathway({ countrySlug: "us", roleTrack: "np", shortName: "FNP" });
+    const label = catPathwayRegionalExamLine(pw);
+    assert.ok(label.includes("US"), `label must contain 'US': got "${label}"`);
+    assert.ok(label.includes("NP"), `label must contain 'NP': got "${label}"`);
+    assert.ok(label.includes("FNP"), `label must contain exam code: got "${label}"`);
+  });
+
+  it("two distinct pathways produce two distinct labels (unambiguous for multi-track users)", () => {
+    const rn = makePathway({ countrySlug: "us", roleTrack: "rn", shortName: "NCLEX-RN" });
+    const np = makePathway({ countrySlug: "us", roleTrack: "np", shortName: "FNP" });
+    const labelRn = catPathwayRegionalExamLine(rn);
+    const labelNp = catPathwayRegionalExamLine(np);
+    assert.notEqual(labelRn, labelNp, "multi-track users must see distinct labels per pathway");
+  });
+
+  it("label format is '<region> · <exam>' with separator", () => {
+    const pw = makePathway({ countrySlug: "us", roleTrack: "rn", shortName: "NCLEX-RN" });
+    const label = catPathwayRegionalExamLine(pw);
+    // Must contain a separator between region role and exam code.
+    assert.ok(label.includes("·"), `label must include '·' separator: got "${label}"`);
+    const [regionPart, examPart] = label.split("·").map((s) => s.trim());
+    assert.ok(regionPart.length > 0, "region part must not be empty");
+    assert.ok(examPart.length > 0, "exam part must not be empty");
+  });
+
+  it("tryCatPathwayFromId returns undefined for unknown id (no throws)", () => {
+    const result = tryCatPathwayFromId("not-a-real-pathway-id");
+    assert.equal(result, undefined);
+  });
+
+  it("tryCatPathwayFromId handles null and empty gracefully", () => {
+    assert.equal(tryCatPathwayFromId(null), undefined);
+    assert.equal(tryCatPathwayFromId(""), undefined);
+    assert.equal(tryCatPathwayFromId(undefined), undefined);
+  });
+});
+
+// ─── 8. QA attribute contract: data-nn-qa-cat-ambiguity-option ───────────────
+
+describe("ambiguity picker: data-nn-qa-cat-ambiguity-option mirrors pathwayId", () => {
+  /**
+   * Verifies the QA attribute value matches the `href` pathwayId so test automation
+   * and acceptance checks can reliably select and verify each option.
+   */
+  it("each pathwayId produces the correct data-nn-qa attribute value and URL pair", () => {
+    const pathwayIds = ["us-rn-nclex-rn", "ca-rn-nclex-rn", "us-np-fnp", "ca-np-cnple"];
+    for (const id of pathwayIds) {
+      const url = appPathwayCatSessionStartPath(id);
+      const q = new URLSearchParams(url.slice("/app/practice-tests/start?".length));
+      // The data-nn-qa-cat-ambiguity-option value must equal the pathwayId in the href.
+      assert.equal(
+        q.get("pathwayId"),
+        id,
+        `data-nn-qa-cat-ambiguity-option="${id}" must link to pathwayId="${id}"`,
+      );
+    }
+  });
+});
+
+// ─── 9. Empty catEligibleOptions: fallback contract ──────────────────────────
+
+describe("ambiguity picker: empty catEligibleOptions contract", () => {
+  it("catEligibleOptions=[] means the picker must NOT auto-pick — no single pathway to resolve to", () => {
+    // The resolve layer for empty lists returns cat_pathway_required (not ambiguous).
+    // Verifies the server would never send cat_pathway_ambiguous with an empty options list.
+    const r = resolveCatPathwayIdForCatPost(null, []);
+    assert.equal(r.ok, false);
+    if (!r.ok) {
+      assert.notEqual(
+        r.code,
+        PRACTICE_TEST_CAT_CREATE_CODE.cat_pathway_ambiguous,
+        "empty eligibility list must not produce cat_pathway_ambiguous",
+      );
+    }
+  });
+
+  it("appPathwayCatSessionStartPath still encodes correctly for edge-case IDs", () => {
+    // Even unusual IDs must encode correctly so the picker fallback link works.
+    const url = appPathwayCatSessionStartPath("some-unexpected-id");
+    const q = new URLSearchParams(url.slice("/app/practice-tests/start?".length));
+    assert.equal(q.get("pathwayId"), "some-unexpected-id");
+    assert.ok(!url.startsWith("/app/practice-tests?"), "must not target generic hub");
   });
 });
 

@@ -702,8 +702,8 @@ export function PracticeTestsHubClient({
         {error ? (
           <div className="mt-4">
             <p className="text-sm text-[var(--semantic-warning-contrast)]">{error}</p>
-            {errorCode === PRACTICE_TEST_CAT_CREATE_CODE.cat_pathway_ambiguous && catOptions.length > 1 ? (
-              <CatAmbiguityPathwayPicker catEligibleOptions={catOptions} className="mt-3" />
+            {errorCode === PRACTICE_TEST_CAT_CREATE_CODE.cat_pathway_ambiguous ? (
+              <CatAmbiguityPathwayPicker catEligibleOptions={catOptions} surface="practice_hub" className="mt-3" />
             ) : null}
           </div>
         ) : null}

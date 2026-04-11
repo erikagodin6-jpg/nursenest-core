@@ -288,12 +288,8 @@ export function PathwayCatSessionStartClient({
         <div className="rounded-lg border border-destructive/30 bg-destructive/5 p-4 text-sm">
           <p className="font-semibold text-destructive">Something went wrong</p>
           <p className="mt-1 text-foreground">{error}</p>
-          {errorCode === PRACTICE_TEST_CAT_CREATE_CODE.cat_pathway_ambiguous && pathwayOptions.length > 1 ? (
-            <CatAmbiguityPathwayPicker catEligibleOptions={pathwayOptions} className="mt-3" />
-          ) : errorCode === PRACTICE_TEST_CAT_CREATE_CODE.cat_pathway_ambiguous ? (
-            <p className="mt-2 text-muted-foreground">
-              Select a pathway from the dropdown above and try again.
-            </p>
+          {errorCode === PRACTICE_TEST_CAT_CREATE_CODE.cat_pathway_ambiguous ? (
+            <CatAmbiguityPathwayPicker catEligibleOptions={pathwayOptions} surface="start_page" className="mt-3" />
           ) : null}
           {errorCode === PRACTICE_TEST_CAT_CREATE_CODE.cat_weak_areas_empty ? (
             <p className="mt-2 text-muted-foreground">

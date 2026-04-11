@@ -124,6 +124,17 @@ export const PH = {
   learnerExamMockSessionCompleted: "learner_exam_mock_session_completed",
   /** Stripe: first active subscription for user after checkout (free/trial → paid proxy). */
   learnerConversionSubscribed: "learner_conversion_subscribed",
+  /**
+   * CAT pathway ambiguity picker shown — subscription has 2+ eligible CAT tracks and
+   * no `pathwayId` was supplied to the API. Use to measure how often this disambiguation
+   * surface appears vs single-pathway users (should be low).
+   */
+  learnerCatAmbiguityShown: "learner_cat_ambiguity_shown",
+  /**
+   * User selected a specific pathway from the CAT ambiguity picker (link click).
+   * `pathway_id` dimension lets you see which track users choose when given a choice.
+   */
+  learnerCatAmbiguityOptionSelected: "learner_cat_ambiguity_option_selected",
 } as const;
 
 export type AppSection =
