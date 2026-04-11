@@ -130,8 +130,9 @@ export default async function LessonsPage({ searchParams }: Props) {
     !topicSlugFilter && typeof sp.topic === "string" && sp.topic.trim().length > 0 ? sp.topic.trim() : null;
   const pathwayIdFilter =
     typeof sp.pathwayId === "string" && sp.pathwayId.trim().length > 0 ? sp.pathwayId.trim() : null;
-  const learnerPathRow = await withDatabaseFallback(async () =>
-    userId ? prisma.user.findUnique({ where: { id: userId }, select: { learnerPath: true } }) : null,
+  const learnerPathRow = await withDatabaseFallback(
+    async () => (userId ? prisma.user.findUnique({ where: { id: userId }, select: { learnerPath: true } }) : null),
+    null,
   );
   const learnerPath = learnerPathRow?.learnerPath ?? null;
   const visiblePathwayIds = visiblePathwayIdsForAppLessons(entitlement, learnerPath);
