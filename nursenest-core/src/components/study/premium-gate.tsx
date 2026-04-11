@@ -1,30 +1,33 @@
 "use client";
 
 /**
- * Premium Gate System
+ * Premium Gate System — high-conversion paywall components
  *
  * All locked states use theme-aware CSS custom properties — no hardcoded hex.
- * Gating philosophy (spec §4, §11, §16):
- *   - Always show at least one usable free feature
- *   - Show partial previews, not blank walls
- *   - Copy is calm, specific, respectful — never fear-based
- *   - One primary CTA per locked section
+ * Gating philosophy:
+ *   - Always show structure (titles, sections) — never hide content entirely
+ *   - Show partial previews with soft blur / gradient fade
+ *   - Copy guides the user, not blocks them
+ *   - "Start Free Trial" is the consistent primary CTA everywhere
+ *   - "View Plans" is the consistent secondary action everywhere
+ *   - Locked UI feels premium and calm, not aggressive or error-like
  *
  * Components:
  *   PremiumLockCard      — standalone locked card (complete section gate)
  *   LockedPreviewCard    — faded preview + lock overlay below it
- *   UpgradePromptCard    — end-of-page conversion block (spec §9)
+ *   UpgradePromptCard    — end-of-page conversion block
  *   EntitledSection      — renders children or fallback based on isEntitled
  *   PreviewDivider       — separator between free preview and locked content
  *   LockedMetricCard     — blurred metric with visible heading (analytics)
+ *   ContextualPaywallCard — adaptive paywall with context-aware messaging
  *
- * Analytics (spec §18):
+ * Analytics:
  *   usePremiumGateImpression — fires one event per surface mount via
  *   window.posthog if available. One impression per surface load, not per render.
  */
 
 import Link from "next/link";
-import { Lock } from "lucide-react";
+import { Lock, CheckCircle2 } from "lucide-react";
 import { useEffect, useRef } from "react";
 
 // ── Analytics ────────────────────────────────────────────────────────────────
@@ -59,35 +62,52 @@ export function usePremiumGateImpression(
   }, [isEntitled, eventName]);
 }
 
+function trackPaywallCta(surface: string, action: string) {
+  try {
+    window.posthog?.capture("paywall_cta_clicked", { surface, action });
+  } catch {
+    // silent
+  }
+}
+
 // ── Shared upgrade href ───────────────────────────────────────────────────────
 
 const UPGRADE_HREF = "/pricing";
 const CONTINUE_HREF = "/app/lessons";
+const DEFAULT_CTA_LABEL = "Start Free Trial";
+const DEFAULT_LOCK_EXPLANATION = "Start your free trial to unlock full access.";
 
 // ── PremiumLockCard ───────────────────────────────────────────────────────────
 
 /**
- * PremiumLockCard — a polished locked section card (spec §10).
+ * PremiumLockCard — a polished locked section card.
  *
- * Same shape as rest of system. Subtle background. Lock icon in header.
- * Short explanatory description. Single "View plans" CTA (spec §12).
+ * Subtle background. Lock icon in header. Optional bullet points.
+ * Consistent "Start Free Trial" CTA with optional secondary link.
  *
  * Use when the entire section is locked with no free preview.
  */
 export function PremiumLockCard({
   title,
   description,
+  bullets,
   ctaHref = UPGRADE_HREF,
-  ctaLabel = "View plans",
+  ctaLabel = DEFAULT_CTA_LABEL,
   secondaryHref,
   secondaryLabel,
+  tierLabel,
+  surface,
 }: {
   title: string;
   description: string;
+  bullets?: string[];
   ctaHref?: string;
   ctaLabel?: string;
   secondaryHref?: string;
   secondaryLabel?: string;
+  tierLabel?: string;
+  /** Analytics surface identifier for CTA tracking */
+  surface?: string;
 }) {
   return (
     <div className="nn-premium-lock-card">
@@ -101,9 +121,25 @@ export function PremiumLockCard({
       </div>
       <div className="nn-premium-lock-card__body">
         <p className="nn-premium-lock-card__description">{description}</p>
+        {bullets && bullets.length > 0 && (
+          <ul className="nn-premium-lock-card__bullets">
+            {bullets.map((b) => (
+              <li key={b} className="nn-premium-lock-card__bullet">
+                <CheckCircle2 className="mt-0.5 h-3.5 w-3.5 shrink-0" style={{ color: "var(--semantic-success)" }} aria-hidden />
+                {b}
+              </li>
+            ))}
+          </ul>
+        )}
+        {tierLabel && (
+          <p className="nn-premium-lock-card__tier-hint">
+            Part of the {tierLabel} plan
+          </p>
+        )}
         <div className="nn-premium-lock-card__actions">
           <Link
             href={ctaHref}
+            onClick={() => surface && trackPaywallCta(surface, "primary")}
             className="nn-btn-primary inline-flex min-h-[2.25rem] items-center rounded-lg px-4 text-sm font-semibold shadow-none"
           >
             {ctaLabel}
@@ -111,12 +147,16 @@ export function PremiumLockCard({
           {secondaryHref && secondaryLabel ? (
             <Link
               href={secondaryHref}
+              onClick={() => surface && trackPaywallCta(surface, "secondary")}
               className="nn-btn-secondary inline-flex min-h-[2.25rem] items-center rounded-lg px-4 text-sm font-semibold"
             >
               {secondaryLabel}
             </Link>
           ) : null}
         </div>
+        <p className="mt-2 text-center text-[11px] text-muted-foreground">
+          No charge today · Cancel anytime
+        </p>
       </div>
     </div>
   );
@@ -136,13 +176,16 @@ export function LockedPreviewCard({
   overlayTitle,
   overlayDescription,
   ctaHref = UPGRADE_HREF,
-  ctaLabel = "View plans",
+  ctaLabel = DEFAULT_CTA_LABEL,
+  surface,
 }: {
   children: React.ReactNode;
   overlayTitle: string;
   overlayDescription: string;
   ctaHref?: string;
   ctaLabel?: string;
+  /** Analytics surface identifier for CTA tracking */
+  surface?: string;
 }) {
   return (
     <div className="nn-locked-preview">
@@ -161,17 +204,22 @@ export function LockedPreviewCard({
         <div className="flex flex-wrap gap-2">
           <Link
             href={ctaHref}
+            onClick={() => surface && trackPaywallCta(surface, "primary")}
             className="nn-btn-primary inline-flex min-h-[2rem] items-center rounded-lg px-3.5 text-sm font-semibold shadow-none"
           >
             {ctaLabel}
           </Link>
           <Link
-            href={CONTINUE_HREF}
+            href={UPGRADE_HREF}
+            onClick={() => surface && trackPaywallCta(surface, "secondary")}
             className="nn-btn-secondary inline-flex min-h-[2rem] items-center rounded-lg px-3.5 text-sm font-semibold"
           >
-            Continue free study
+            View Plans
           </Link>
         </div>
+        <p className="mt-2 text-[11px] text-muted-foreground">
+          No charge today · Cancel anytime
+        </p>
       </div>
     </div>
   );
@@ -200,46 +248,38 @@ export function UpgradePromptCard({
         Unlock your full readiness system
       </p>
       <p className="nn-upgrade-prompt-card__body">
-        Get full study plans, smart review grouping, deeper analytics, and more
-        adaptive exam practice.
+        NurseNest tells you exactly what to study, tracks your weaknesses,
+        and helps you know when you're ready to pass.
       </p>
       <ul className="nn-upgrade-prompt-card__bullets">
         <li className="nn-upgrade-prompt-card__bullet">
-          Full adaptive 3–5 day study plan
+          Understand key concepts faster with structured lessons
         </li>
         <li className="nn-upgrade-prompt-card__bullet">
-          Smart review by weak areas and confidence
+          Fix your weak areas with Smart Review
         </li>
         <li className="nn-upgrade-prompt-card__bullet">
-          Deeper readiness analytics
-        </li>
-        <li className="nn-upgrade-prompt-card__bullet">
-          More CAT practice and retest guidance
+          Know when you're ready to pass with readiness scoring
         </li>
       </ul>
       <div className="nn-upgrade-prompt-card__actions">
         <Link
           href={UPGRADE_HREF}
-          onClick={() => {
-            try {
-              window.posthog?.capture("premiumUpgradeClicked", {
-                source: "upgrade_prompt_card",
-              });
-            } catch {
-              // silent
-            }
-          }}
+          onClick={() => trackPaywallCta("upgrade_prompt_card", "primary")}
           className="nn-btn-primary inline-flex min-h-[2.5rem] items-center rounded-lg px-4 text-sm font-semibold shadow-none"
         >
-          View plans
+          Start Free Trial
         </Link>
         <Link
-          href={CONTINUE_HREF}
+          href={UPGRADE_HREF}
           className="nn-btn-secondary inline-flex min-h-[2.5rem] items-center rounded-lg px-4 text-sm font-semibold"
         >
-          Not now
+          View Plans
         </Link>
       </div>
+      <p className="mt-3 text-center text-[11px] text-muted-foreground">
+        No charge today · Cancel anytime before your trial ends
+      </p>
     </div>
   );
 }
@@ -311,7 +351,7 @@ export function LockedMetricCard({
       </div>
       <div className="nn-locked-metric-card__lock">
         <Lock className="h-3 w-3" aria-hidden />
-        <span>Unlocks with Premium</span>
+        <span>Unlocks with free trial</span>
       </div>
     </div>
   );
@@ -320,7 +360,7 @@ export function LockedMetricCard({
 // ── LockedDayShell ────────────────────────────────────────────────────────────
 
 /**
- * LockedDayShell — placeholder card shown for locked study days (spec §5).
+ * LockedDayShell — placeholder card shown for locked study days.
  *
  * Dashed border. Muted badge. Lock icon. Does not reveal content.
  * Shows the day number and a generic locked title so users know
@@ -343,5 +383,129 @@ export function LockedDayShell({
         <Lock className="nn-study-day-shell__lock h-4 w-4" aria-hidden />
       </div>
     </div>
+  );
+}
+
+// ── Contextual Paywall Messaging ──────────────────────────────────────────────
+
+export type PaywallContext =
+  | "weak_topic"
+  | "post_questions"
+  | "near_exam"
+  | "lesson"
+  | "practice_test"
+  | "smart_review"
+  | "confidence_analytics"
+  | "generic";
+
+const PAYWALL_PRESETS: Record<
+  PaywallContext,
+  { title: string; description: string; bullets: string[] }
+> = {
+  weak_topic: {
+    title: "Unlock This Lesson",
+    description: "You're struggling with this area — unlock to improve faster.",
+    bullets: [
+      "Understand key concepts faster",
+      "Fix your weak areas with Smart Review",
+      "Know when you're ready to pass",
+    ],
+  },
+  post_questions: {
+    title: "Unlock Smart Review",
+    description: "Review your mistakes and improve your score.",
+    bullets: [
+      "See exactly what you got wrong and why",
+      "Grouped by confidence and priority",
+      "Direct lesson links for every mistake",
+    ],
+  },
+  near_exam: {
+    title: "Get Exam-Ready",
+    description: "Get exam-ready with full access to practice exams, study plans, and analytics.",
+    bullets: [
+      "Adaptive CAT exams that mirror the real test",
+      "Readiness scoring so you know when to sit",
+      "Full study plan personalised to your weak areas",
+    ],
+  },
+  lesson: {
+    title: "Unlock This Lesson",
+    description: "This lesson is part of your personalised study system.",
+    bullets: [
+      "Understand key concepts faster",
+      "Fix your weak areas with Smart Review",
+      "Know when you're ready to pass",
+    ],
+  },
+  practice_test: {
+    title: "Unlock Full Practice Exams",
+    description: "Simulate the real exam and track your readiness.",
+    bullets: [
+      "Adaptive CAT exams",
+      "Detailed performance analysis",
+      "Real exam-style questions",
+    ],
+  },
+  smart_review: {
+    title: "Unlock Smart Review",
+    description: "See exactly what you're getting wrong and how to fix it.",
+    bullets: [
+      "Questions grouped by urgency and confidence",
+      "Prioritised review queue",
+      "Direct lesson links for every question",
+    ],
+  },
+  confidence_analytics: {
+    title: "Unlock Confidence Analytics",
+    description: "See exactly where you stand and what to focus on next.",
+    bullets: [
+      "Overconfidence detection",
+      "Uncertain knowledge tracking",
+      "Prioritised review recommendations",
+    ],
+  },
+  generic: {
+    title: "Unlock Full Access",
+    description: "Start your free trial to access all lessons, exams, and analytics.",
+    bullets: [
+      "Understand key concepts faster",
+      "Fix your weak areas with Smart Review",
+      "Know when you're ready to pass",
+    ],
+  },
+};
+
+/**
+ * ContextualPaywallCard — adaptive paywall that changes copy based on context.
+ *
+ * Uses the PAYWALL_PRESETS mapping to show context-appropriate messaging.
+ * All CTAs are consistent: "Start Free Trial" primary, "View Plans" secondary.
+ */
+export function ContextualPaywallCard({
+  context = "generic",
+  customTitle,
+  customDescription,
+}: {
+  context?: PaywallContext;
+  customTitle?: string;
+  customDescription?: string;
+}) {
+  const preset = PAYWALL_PRESETS[context];
+  const title = customTitle ?? preset.title;
+  const description = customDescription ?? preset.description;
+  const surface = `contextual_paywall_${context}`;
+
+  usePremiumGateImpression(`paywall_viewed_${context}`, false);
+
+  return (
+    <PremiumLockCard
+      title={title}
+      description={description}
+      bullets={preset.bullets}
+      secondaryHref={UPGRADE_HREF}
+      secondaryLabel="View Plans"
+      surface={surface}
+    />
   );
 }

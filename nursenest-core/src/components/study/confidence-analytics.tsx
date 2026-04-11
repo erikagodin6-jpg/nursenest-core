@@ -300,9 +300,10 @@ export function ConfidenceAnalyticsBlock({
 
         {/* Review priority — fully locked */}
         <PremiumLockCard
-          title="Where to Focus Next"
-          description="Access deeper readiness reporting: overconfidence patterns, uncertain knowledge areas, and a prioritised review queue grouped by question confidence."
-          ctaLabel="View plans"
+          title="Unlock Confidence Analytics"
+          description="See exactly where you stand — overconfidence patterns, uncertain knowledge areas, and a prioritised review queue so you know what to fix next."
+          secondaryHref="/pricing"
+          secondaryLabel="View Plans"
         />
       </div>
     );

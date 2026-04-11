@@ -40,7 +40,7 @@ import { LessonQualityNotice } from "@/components/lessons/lesson-quality-notice"
 import { PathwayLessonQuickReview } from "@/components/lessons/pathway-lesson-quick-review";
 import { classifyPathwayLesson } from "@/lib/content-quality/classify-lesson";
 import { buildQuickReviewBullets } from "@/lib/lessons/pathway-lesson-quick-review";
-import { matchConceptImage } from "@/lib/education-images/match-concept-image";
+import { resolveLessonImage } from "@/lib/content/resolve-lesson-image";
 import { PathwayLessonFigures } from "@/components/lessons/pathway-lesson-figures";
 import { pathwayLessonPublicDetailPath } from "@/lib/lessons/pathway-lesson-types";
 import {
@@ -186,11 +186,10 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
       : [];
   const { crumbs, schemaItems } = pathwayLessonDetailBreadcrumbs(pathway, lesson.slug, lesson.title);
   const lessonQuality = classifyPathwayLesson(lesson);
-  const matchedLessonImage = matchConceptImage({
-    title: lesson.title,
+  const matchedLessonImage = resolveLessonImage({
     slug: lesson.slug,
-    topic: lesson.topic,
-    bodySystem: lesson.bodySystem,
+    title: lesson.title,
+    topicSlug: lesson.topicSlug,
   });
   const requestedNorm = normalizePathwayLessonLocale(lessonContentLocale);
   const showLocaleFallbackNotice = Boolean(
@@ -288,7 +287,11 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
 
         {matchedLessonImage.url ? (
           <aside className="nn-study-card nn-study-card--wash mx-auto mt-8 max-w-[44rem] overflow-hidden p-4 sm:p-5">
-            <p className="nn-marketing-label">Concept illustration</p>
+            <p className="nn-marketing-label">
+              {matchedLessonImage.source === "topic_slug"
+                ? "Topic illustration"
+                : "Lesson illustration"}
+            </p>
             <div className="mt-3">
               <PathwayLessonFigures
                 figures={[
@@ -296,7 +299,6 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
                     id: "lesson-matched-media",
                     url: matchedLessonImage.url,
                     alt: matchedLessonImage.alt,
-                    caption: "Matched from NurseNest media library using lesson title and topic.",
                     kind: "clinical_reference",
                   },
                 ]}

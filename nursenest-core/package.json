@@ -86,6 +86,8 @@
     "ops:learning-loop-audit": "tsx scripts/audit-learning-loop-sample.ts",
     "db:ensure-admin": "tsx scripts/ensure-admin-user.ts",
     "db:bootstrap-if-empty": "tsx scripts/bootstrap-admin-if-empty.ts",
+    "screenshots:seed-demo": "tsx scripts/seed-screenshot-demo-user.ts",
+    "screenshots:capture": "node scripts/capture-screenshots.mjs",
     "db:sanity": "tsx scripts/db-sanity-check.ts",
     "db:verify-indexes": "tsx scripts/verify-required-db-indexes.ts",
     "admin:promote": "tsx scripts/ensure-admin-user.ts",

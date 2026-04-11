@@ -7,7 +7,7 @@ import { LEGAL_POLICY_BUNDLE_VERSION } from "@/lib/legal/legal-config";
 import { analyticsDistinctId, captureServerEvent } from "@/lib/observability/posthog-server";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 import { safeServerLogCritical } from "@/lib/observability/safe-server-log";
-import { stripePriceEnvKey } from "@/lib/pricing/display-catalog";
+import { stripePriceEnvKey, STRIPE_TRIAL_DAYS } from "@/lib/pricing/display-catalog";
 import {
   CHECKOUT_INVALID_PAYLOAD_CODE,
   CHECKOUT_POLICY_VERSION_MISMATCH_CODE,
@@ -120,9 +120,14 @@ export async function POST(req: Request) {
       },
     });
 
+    const trialDays = STRIPE_TRIAL_DAYS;
     const checkoutSession = await stripe.checkout.sessions.create({
       mode: "subscription",
       line_items: [{ price: price.priceId, quantity: 1 }],
+      ...(trialDays > 0 ? {
+        subscription_data: { trial_period_days: trialDays },
+        payment_method_collection: "always",
+      } : {}),
       success_url: `${appUrl}/app?checkout=success`,
       cancel_url: `${appUrl}/pricing?checkout=cancelled`,
       client_reference_id: userId,
@@ -131,6 +136,7 @@ export async function POST(req: Request) {
         country,
         tier,
         duration,
+        trialDays: String(trialDays),
         app: "nursenest-core",
         legalPolicyVersion: policyVersion,
         legalPoliciesAcceptedAt: acceptedAt.toISOString(),

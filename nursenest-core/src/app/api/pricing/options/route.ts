@@ -8,6 +8,8 @@ import {
   formatCurrencyLabel,
   formatPerMonthLabel,
   getDisplayTotalMajorUnits,
+  getAnchorPriceMajorUnits,
+  STRIPE_TRIAL_DAYS,
 } from "@/lib/pricing/display-catalog";
 import { findPriceEntry, logStripePricingConfigurationGaps } from "@/lib/stripe/pricing-map";
 
@@ -31,6 +33,7 @@ export async function GET() {
     savingsVsMonthlyPercent: number;
     isBestValue: boolean;
     isMostPopular: boolean;
+    anchorPriceLabel: string | null;
   }> = [];
 
   for (const { country, tier, duration } of eachPricedCombination()) {
@@ -50,6 +53,8 @@ export async function GET() {
     const isBestValue = duration === "yearly" || (!hasYearly && duration === "6-month");
     const isMostPopular = duration === "3-month";
 
+    const anchorPrice = getAnchorPriceMajorUnits(country, tier, duration);
+
     plans.push({
       tier,
       country,
@@ -60,6 +65,7 @@ export async function GET() {
       savingsVsMonthlyPercent: savingsVsMonthly,
       isBestValue: Boolean(isBestValue && months > 1),
       isMostPopular,
+      anchorPriceLabel: anchorPrice ? formatCurrencyLabel(anchorPrice, country) : null,
     });
   }
 
@@ -67,5 +73,6 @@ export async function GET() {
     durations: BILLING_DURATION_ORDER,
     tiers,
     plans,
+    trialDays: STRIPE_TRIAL_DAYS,
   });
 }

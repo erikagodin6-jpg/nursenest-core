@@ -5724,6 +5724,28 @@ html[data-theme="deep-twilight"] .nn-cat-opt--incorrect {
   line-height: 1.65;
   color: var(--semantic-text-muted);
 }
+.nn-premium-lock-card__bullets {
+  margin-top: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  list-style: none;
+  padding: 0;
+}
+.nn-premium-lock-card__bullet {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--semantic-text-secondary);
+}
+.nn-premium-lock-card__tier-hint {
+  margin-top: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--semantic-info);
+}
 
 .nn-premium-lock-card__actions {
   display: flex;

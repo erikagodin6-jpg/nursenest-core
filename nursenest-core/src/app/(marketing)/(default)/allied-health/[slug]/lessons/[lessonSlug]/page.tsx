@@ -63,6 +63,8 @@ import { PathwayLessonRelatedQuestions } from "@/components/lessons/pathway-less
 import { PathwayLessonStudyLoopCta } from "@/components/lessons/pathway-lesson-study-loop-cta";
 import { getMeasurementSystemForCountry } from "@/lib/measurements/measurement-system";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
+import { resolveLessonImage } from "@/lib/content/resolve-lesson-image";
+import { PathwayLessonFigures } from "@/components/lessons/pathway-lesson-figures";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 86400;
@@ -196,6 +198,11 @@ export default async function AlliedHealthSlugLessonDetailPage({ params }: Props
     lessonPath,
   );
   const lessonQuality = classifyPathwayLesson(lesson);
+  const matchedLessonImage = resolveLessonImage({
+    slug: lesson.slug,
+    title: lesson.title,
+    topicSlug: lesson.topicSlug,
+  });
   const requestedNorm = normalizePathwayLessonLocale(lessonContentLocale);
   const showLocaleFallbackNotice = Boolean(
     lesson.localeMeta &&
@@ -276,6 +283,28 @@ export default async function AlliedHealthSlugLessonDetailPage({ params }: Props
             pathwayCountryLabel={pathway.countryCode === "CA" ? "Canada" : "United States"}
           />
         )
+      ) : null}
+
+      {matchedLessonImage.url ? (
+        <aside className="nn-study-card nn-study-card--wash mx-auto mt-8 overflow-hidden p-4 sm:p-5">
+          <p className="nn-marketing-label">
+            {matchedLessonImage.source === "topic_slug"
+              ? "Topic illustration"
+              : "Lesson illustration"}
+          </p>
+          <div className="mt-3">
+            <PathwayLessonFigures
+              figures={[
+                {
+                  id: "lesson-matched-media",
+                  url: matchedLessonImage.url,
+                  alt: matchedLessonImage.alt,
+                  kind: "clinical_reference",
+                },
+              ]}
+            />
+          </div>
+        </aside>
       ) : null}
 
       <PathwayLessonAssessmentExperience

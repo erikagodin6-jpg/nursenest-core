@@ -2,11 +2,11 @@ import Link from "next/link";
 import { MARKETING_PRIMARY_CTA_CLASS, MARKETING_SECONDARY_CTA_CLASS } from "@/lib/theme/marketing-hero-pattern";
 
 /**
- * PricingHero — top of the pricing page (spec §3).
+ * PricingHero — conversion-focused top of the pricing page.
  *
- * Title, one-line subtitle, two CTAs.
- * Surface: theme-aware emphasis gradient — uses CSS custom properties.
- * No paragraphs. No filler copy.
+ * Headline leads with the outcome (passing), not the product.
+ * Subheadline describes the system and builds confidence.
+ * Two CTAs: primary scrolls to plans, secondary lets them explore.
  */
 export function PricingHero({ studySystemHref }: { studySystemHref: string }) {
   return (
@@ -18,7 +18,6 @@ export function PricingHero({ studySystemHref }: { studySystemHref: string }) {
         borderBottom: "1px solid var(--semantic-border-soft)",
       }}
     >
-      {/* Decorative radial glow — purely presentational */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 opacity-40"
@@ -37,25 +36,34 @@ export function PricingHero({ studySystemHref }: { studySystemHref: string }) {
             color: "var(--semantic-text-muted)",
           }}
         >
-          NurseNest Premium
+          Used by nursing students preparing for NCLEX and REx-PN
         </p>
 
         <h1 className="nn-marketing-h1 text-balance">
-          Get Fully Exam-Ready with NurseNest
+          Pass Your Exam With a Smarter Study System
         </h1>
 
         <p className="nn-marketing-body mt-4 text-pretty text-muted-foreground">
-          Adaptive study plans, smart review, and exam-level testing built for real results.
+          NurseNest tells you exactly what to study, tracks your weaknesses,
+          and helps you know when you're ready — so you can pass with confidence.
+        </p>
+
+        <p className="mt-3 text-sm font-medium text-muted-foreground">
+          Designed to help you pass on your first attempt.
         </p>
 
         <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
           <Link href="#pricing-plans-heading" className={MARKETING_PRIMARY_CTA_CLASS}>
-            Start your plan
+            Start Free Trial
           </Link>
           <Link href={studySystemHref} className={MARKETING_SECONDARY_CTA_CLASS}>
-            View study system
+            See how it works
           </Link>
         </div>
+
+        <p className="mt-3 text-xs text-muted-foreground">
+          No charge today. Cancel anytime before your trial ends.
+        </p>
       </div>
     </section>
   );

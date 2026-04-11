@@ -19,6 +19,9 @@ export default async function AdminMediaLibraryPage() {
         <Link href="/admin/lessons" className="text-muted-foreground underline">
           Lessons
         </Link>
+        <Link href="/admin/media/screenshots" className="text-muted-foreground underline">
+          Screenshots
+        </Link>
       </div>
 
       <div className="mb-8">

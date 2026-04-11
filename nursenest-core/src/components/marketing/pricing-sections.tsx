@@ -102,10 +102,10 @@ export function FeatureComparisonTable() {
     <section className="mt-16" aria-labelledby="real-compare-heading">
       <div className="mb-6 text-center">
         <h2 id="real-compare-heading" className="nn-marketing-h2">
-          Free vs Premium — exactly what changes
+          What changes when you unlock Premium
         </h2>
         <p className="nn-marketing-body-sm mx-auto mt-2 max-w-2xl text-muted-foreground">
-          Every feature below is real and already built into the platform. No vague claims.
+          Every feature below is built into the platform. See exactly what you get with full access.
         </p>
       </div>
 
@@ -492,48 +492,48 @@ function CatExamPreview() {
 const UNLOCK_BLOCKS = [
   {
     label: "Adaptive Study Plan",
-    title: "Your personalized study plan",
+    title: "Know exactly what to study every day",
     bullets: [
-      "3–5 day structured plan based on your readiness score",
-      "Daily tasks: lessons, targeted practice, review sessions",
-      "Direct lesson and question links — no searching required",
-      "Retest strategy with exact timing recommendations",
+      "3–5 day plan built from your readiness score and weak areas",
+      "Daily tasks: lessons, targeted practice, and review sessions",
+      "Direct links to every lesson and question — no searching",
+      "Retest strategy so you know when to take the exam",
     ],
     accentColor: "var(--theme-primary)",
     preview: <StudyPlanPreview />,
   },
   {
     label: "Smart Review",
-    title: "Know exactly what to fix",
+    title: "Fix your weak areas faster",
     bullets: [
-      "Questions grouped into High Priority Fixes, Needs Review, Uncertain Knowledge, and Strong Areas",
-      "Correctness + confidence combined to rank what matters most",
-      "Filter by topic, confidence level, or correctness",
-      "Direct lesson links from every question row",
+      "Questions grouped by urgency: High Priority, Needs Review, Uncertain, and Strong",
+      "See which mistakes matter most and fix them first",
+      "Filter by topic, confidence, or correctness to focus your time",
+      "Direct lesson links from every question — study what you got wrong",
     ],
     accentColor: "var(--semantic-warning)",
     preview: <SmartReviewPreview />,
   },
   {
     label: "Confidence Analytics",
-    title: "Understand how you think",
+    title: "See exactly where you stand",
     bullets: [
-      "Detects overconfident errors — answers you got wrong but thought you knew",
-      "Surfaces uncertain correct answers to reinforce guessed knowledge",
-      "Tracks strong mastery — reliable correct + high confidence",
+      "Catch overconfident errors — answers you got wrong but thought you knew",
+      "Identify uncertain correct answers so you can reinforce guessed knowledge",
+      "Track strong mastery — what you truly know under exam conditions",
       "Prioritised review queue: Where to Focus Next",
     ],
     accentColor: "var(--semantic-info)",
     preview: <ConfidenceAnalyticsPreview />,
   },
   {
-    label: "CAT Exam Simulation",
-    title: "Train like the real exam",
+    label: "Full Practice Exams",
+    title: "Simulate the real exam and track your readiness",
     bullets: [
-      "Adaptive difficulty that adjusts to your ability in real time",
-      "0–100 readiness score with band label (Not Ready → Exam Ready)",
-      "Category-level breakdown: which systems are weak or strong",
-      "Retest tracking to measure score improvement over time",
+      "Adaptive CAT exams that adjust difficulty to your level in real time",
+      "Readiness score (0–100) with a clear band: Not Ready → Exam Ready",
+      "Detailed performance analysis by topic and category",
+      "Real exam-style questions with full rationales",
     ],
     accentColor: "var(--semantic-success)",
     preview: <CatExamPreview />,
@@ -549,10 +549,10 @@ export function PricingUnlockSection() {
     <section className="mt-20" aria-labelledby="what-you-unlock-heading">
       <div className="mb-10 text-center">
         <h2 id="what-you-unlock-heading" className="nn-marketing-h2">
-          What you unlock with Premium
+          Everything you need to pass — in one system
         </h2>
         <p className="nn-marketing-body-sm mx-auto mt-2 max-w-2xl text-muted-foreground">
-          Every feature below is available the moment you subscribe — no setup, no delay.
+          Start your free trial and get instant access to all of these — no setup, no delay.
         </p>
       </div>
       <div className="space-y-6">
@@ -611,10 +611,10 @@ export function ProductPreviewGrid() {
     <section className="mt-20" aria-labelledby="product-preview-heading">
       <div className="mb-8 text-center">
         <h2 id="product-preview-heading" className="nn-marketing-h2">
-          The full study experience
+          Practice, test, and review — all connected
         </h2>
         <p className="nn-marketing-body-sm mx-auto mt-2 max-w-2xl text-muted-foreground">
-          Practice, test, and review — all connected into one structured readiness system.
+          One system that shows you exactly what to study, tests your readiness, and helps you fix weak areas.
         </p>
       </div>
       <div className="grid gap-4 sm:grid-cols-3">
@@ -642,18 +642,18 @@ export function ProductPreviewGrid() {
 const TRUST_POINTS = [
   {
     icon: "🎯",
-    headline: "Built for real exam readiness",
-    body: "Structured around the NCLEX and specialty exam blueprints, not generic nursing content.",
+    headline: "Designed to help you pass on your first attempt",
+    body: "Structured around real exam blueprints — NCLEX, REx-PN, and specialty exams. Not generic nursing content.",
   },
   {
     icon: "📐",
-    headline: "Structured, not random practice",
-    body: "Every session connects to weak areas, confidence data, and your current readiness band.",
+    headline: "Your study is structured, not random",
+    body: "Every session connects to your weak areas and confidence data. You always know what to study next.",
   },
   {
     icon: "📈",
-    headline: "Focused on weak areas and improvement",
-    body: "The platform tracks what you get wrong and how confident you are, then directs study where it matters most.",
+    headline: "You'll know when you're ready",
+    body: "Readiness scoring, weak area tracking, and confidence analytics show your progress clearly — so you can walk into the exam feeling prepared.",
   },
 ];
 
@@ -662,8 +662,11 @@ export function PricingTrustReassurance() {
     <section className="mt-20" aria-labelledby="trust-heading">
       <div className="mb-8 text-center">
         <h2 id="trust-heading" className="nn-marketing-h2">
-          Designed for real results
+          Built for students who want to pass
         </h2>
+        <p className="nn-marketing-body-sm mx-auto mt-2 max-w-lg text-muted-foreground">
+          Used by nursing students preparing for NCLEX and REx-PN across Canada and the US.
+        </p>
       </div>
       <div className="grid gap-4 sm:grid-cols-3">
         {TRUST_POINTS.map((p) => (
@@ -702,16 +705,16 @@ export function PricingCTA({ plansHref }: { plansHref: string }) {
         border: `1px solid color-mix(in srgb, var(--theme-primary) 20%, ${BORDER})`,
       }}
     >
-      <h2 className="nn-marketing-h2 mb-3">Start building your readiness today</h2>
+      <h2 className="nn-marketing-h2 mb-3">Start studying smarter today</h2>
       <p className="nn-marketing-body-sm mx-auto mb-8 max-w-lg text-muted-foreground">
-        Choose your exam track and billing term. Your plan starts immediately after checkout.
+        Try everything free. No charge today — cancel anytime before your trial ends.
       </p>
       <div className="flex flex-wrap items-center justify-center gap-3">
         <Link href={plansHref} className={MARKETING_PRIMARY_CTA_CLASS}>
-          Start your plan
+          Start Free Trial
         </Link>
         <Link href="#pricing-plans-heading" className={MARKETING_SECONDARY_CTA_CLASS}>
-          View pricing options
+          View Plans
         </Link>
       </div>
     </section>

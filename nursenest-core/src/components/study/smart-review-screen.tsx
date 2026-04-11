@@ -528,8 +528,8 @@ export function SmartReviewLayout({ items, isEntitled = true }: SmartReviewScree
         {/* Locked preview of Group 2 */}
         {needsReviewGroup.items.length > 0 ? (
           <LockedPreviewCard
-            overlayTitle="Unlock full smart review"
-            overlayDescription="See every question grouped by confidence and review priority — overconfidence patterns, uncertain knowledge, and strongest areas in one place."
+            overlayTitle="Unlock Smart Review"
+            overlayDescription="See exactly what you're getting wrong and how to fix it. Every question grouped by confidence and review priority."
           >
             <ReviewGroupSection
               group={needsReviewGroup}
@@ -540,11 +540,10 @@ export function SmartReviewLayout({ items, isEntitled = true }: SmartReviewScree
 
         {/* Groups 3-4 fully locked */}
         <PremiumLockCard
-          title="Uncertain Knowledge + Strong Areas"
-          description="Unlock the full review to see where you guessed correctly, where you are genuinely strong, and get advanced filtering by topic and confidence level."
-          ctaLabel="View plans"
-          secondaryHref="/app/lessons"
-          secondaryLabel="Continue free study"
+          title="Unlock Smart Review"
+          description="See exactly what you're getting wrong and how to fix it — overconfidence patterns, uncertain knowledge, and a prioritised review queue."
+          secondaryHref="/pricing"
+          secondaryLabel="View Plans"
         />
       </div>
     );

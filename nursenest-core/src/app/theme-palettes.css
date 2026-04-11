@@ -345,21 +345,21 @@
 
   --lesson-summary: #EFE7F7;
   --lesson-key-concepts: #E6DBF2;
-  --lesson-signs-symptoms: #FFE3E3;
+  --lesson-signs-symptoms: #FBE6E4;
   --lesson-assessment: #E6F4F1;
-  --lesson-diagnostics: #F0EBFA;
+  --lesson-diagnostics: #E4E6F6;
   --lesson-interventions: #E8F7F0;
   --lesson-medications: #F7EFE5;
-  --lesson-patient-teaching: #F4F1F9;
+  --lesson-patient-teaching: #E6EEE2;
   --lesson-exam-tips: #FFF6E6;
-  --lesson-red-flags: #FFD6D6;
+  --lesson-red-flags: #F8D4D4;
   --lesson-clinical-pearls: #F3EEFF;
-  --lesson-notes: #F5F3F9;
+  --lesson-notes: #F0EFF2;
 
   --state-success: #E8F7F0;
   --state-warning: #FFF6E6;
-  --state-info: #F0EBFA;
-  --state-danger-soft: #FFD6D6;
+  --state-info: #E4E6F6;
+  --state-danger-soft: #F8D4D4;
 
   --logo-primary: #9B8EC7;
   --logo-accent: #F2EAE0;
@@ -470,22 +470,22 @@
   --theme-topbar-text: #ffffff;
 
   --lesson-summary: #E7ECFF;
-  --lesson-key-concepts: #DCE4FF;
-  --lesson-signs-symptoms: #FFE3E3;
-  --lesson-assessment: #E6F4F1;
-  --lesson-diagnostics: #EAF0FF;
+  --lesson-key-concepts: #E2DEF6;
+  --lesson-signs-symptoms: #FBE6E4;
+  --lesson-assessment: #E0F2EE;
+  --lesson-diagnostics: #E0ECF8;
   --lesson-interventions: #DFF3EB;
   --lesson-medications: #FFF1E6;
-  --lesson-patient-teaching: #E8F7F0;
+  --lesson-patient-teaching: #E4EFE0;
   --lesson-exam-tips: #FFF6E6;
-  --lesson-red-flags: #FFD6D6;
-  --lesson-clinical-pearls: #F3EEFF;
-  --lesson-notes: #F1F3F9;
+  --lesson-red-flags: #F8D2D2;
+  --lesson-clinical-pearls: #EDE8F6;
+  --lesson-notes: #F0F1F5;
 
   --state-success: #DFF3EB;
   --state-warning: #FFF1E6;
-  --state-info: #EAF0FF;
-  --state-danger-soft: #FFE3E3;
+  --state-info: #E0ECF8;
+  --state-danger-soft: #FBE6E4;
 
   --logo-primary: #3852B4;
   --logo-accent: #F3BE7A;
@@ -495,10 +495,10 @@
 [data-theme="strawberry-cream"] {
   --theme-primary: #EA7B7B;
   --theme-primary-foreground: #ffffff;
-  --theme-secondary: #D25353;
+  --theme-secondary: #C86B6B;
   --theme-secondary-foreground: #5A2A2A;
   --theme-accent: #FFEAD3;
-  --theme-accent-foreground: #D25353;
+  --theme-accent-foreground: #C86B6B;
   --theme-border: #FFD1D1;
   --theme-ring: #EA7B7B;
   --theme-page-bg: #FFF6F6;
@@ -509,23 +509,23 @@
   --theme-topbar-bg: #B84063;
   --theme-topbar-text: #ffffff;
 
-  --lesson-summary: #FFE3E3;
-  --lesson-key-concepts: #FFD6D6;
-  --lesson-signs-symptoms: #FFCACA;
-  --lesson-assessment: #E6F4F1;
-  --lesson-diagnostics: #FCE8EC;
-  --lesson-interventions: #E8F7F0;
-  --lesson-medications: #FFF1E6;
-  --lesson-patient-teaching: #F7EFE5;
-  --lesson-exam-tips: #FFF5E6;
-  --lesson-red-flags: #FFCACA;
-  --lesson-clinical-pearls: #F9E8F0;
+  --lesson-summary: #FDE9E8;
+  --lesson-key-concepts: #F2DEE6;
+  --lesson-signs-symptoms: #FBDAD4;
+  --lesson-assessment: #E0F2EE;
+  --lesson-diagnostics: #EBE6F4;
+  --lesson-interventions: #E2F2E8;
+  --lesson-medications: #FEF0E6;
+  --lesson-patient-teaching: #E4ECE2;
+  --lesson-exam-tips: #FEF4E2;
+  --lesson-red-flags: #F4CAC6;
+  --lesson-clinical-pearls: #EAE2F0;
   --lesson-notes: #F4F1F1;
 
-  --state-success: #E8F7F0;
-  --state-warning: #FFF5E6;
-  --state-info: #FCE8EC;
-  --state-danger-soft: #FFCACA;
+  --state-success: #E2F2E8;
+  --state-warning: #FEF0E6;
+  --state-info: #EBE6F4;
+  --state-danger-soft: #FBDAD4;
 
   --logo-primary: #EA7B7B;
   --logo-accent: #FFEAD3;
@@ -552,19 +552,19 @@
   --lesson-summary: #E6F2F3;
   --lesson-key-concepts: #D9EBEE;
   --lesson-signs-symptoms: #FCE8EC;
-  --lesson-assessment: #E0F2F1;
-  --lesson-diagnostics: #EAF3F5;
+  --lesson-assessment: #D8F0EE;
+  --lesson-diagnostics: #E0E8F4;
   --lesson-interventions: #DFF3EB;
   --lesson-medications: #F1FAF9;
   --lesson-patient-teaching: #E8F7F0;
   --lesson-exam-tips: #FFF6E6;
   --lesson-red-flags: #FAD4D4;
-  --lesson-clinical-pearls: #EAF7F5;
-  --lesson-notes: #F1F5F6;
+  --lesson-clinical-pearls: #E4E8F2;
+  --lesson-notes: #EFF0F2;
 
   --state-success: #DFF3EB;
   --state-warning: #FFF6E6;
-  --state-info: #EAF3F5;
+  --state-info: #E0E8F4;
   --state-danger-soft: #FAD4D4;
 
   --logo-primary: #1D546D;
@@ -591,21 +591,21 @@
   --theme-topbar-text: #ffffff;
 
   --lesson-summary: #E2F5F0;
-  --lesson-key-concepts: #D4EDE5;
+  --lesson-key-concepts: #DCE8E0;
   --lesson-signs-symptoms: #FDE8E8;
-  --lesson-assessment: #DFF0EE;
-  --lesson-diagnostics: #E4F2F5;
+  --lesson-assessment: #DAF0F0;
+  --lesson-diagnostics: #E0EAF4;
   --lesson-interventions: #D8F2E4;
   --lesson-medications: #FFF2E8;
-  --lesson-patient-teaching: #E0F5E9;
+  --lesson-patient-teaching: #E8F0DE;
   --lesson-exam-tips: #FEF6E0;
   --lesson-red-flags: #FDD8D8;
-  --lesson-clinical-pearls: #E8F0F5;
-  --lesson-notes: #EEF4F2;
+  --lesson-clinical-pearls: #E6E4F2;
+  --lesson-notes: #F0F0EE;
 
   --state-success: #D8F2E4;
   --state-warning: #FFF2E8;
-  --state-info: #E4F2F5;
+  --state-info: #E0EAF4;
   --state-danger-soft: #FDE8E8;
 
   --logo-primary: #3A9E8F;
@@ -635,18 +635,18 @@
   --lesson-key-concepts: #EED9DF;
   --lesson-signs-symptoms: #FDDADA;
   --lesson-assessment: #E4F0ED;
-  --lesson-diagnostics: #F2E8F0;
+  --lesson-diagnostics: #E4E6F2;
   --lesson-interventions: #E2F2E8;
   --lesson-medications: #FFF0E4;
-  --lesson-patient-teaching: #E8F2EC;
+  --lesson-patient-teaching: #E2ECE0;
   --lesson-exam-tips: #FEF5E2;
-  --lesson-red-flags: #FDD0D0;
-  --lesson-clinical-pearls: #F2E8F4;
-  --lesson-notes: #F5F0F2;
+  --lesson-red-flags: #F6D0CE;
+  --lesson-clinical-pearls: #EAE4F4;
+  --lesson-notes: #F0EFF0;
 
   --state-success: #E2F2E8;
   --state-warning: #FFF0E4;
-  --state-info: #F2E8F0;
+  --state-info: #E4E6F2;
   --state-danger-soft: #FDDADA;
 
   --logo-primary: #C4788A;
@@ -673,21 +673,21 @@
   --theme-topbar-text: #ffffff;
 
   --lesson-summary: #F5EDDA;
-  --lesson-key-concepts: #F0E5CC;
+  --lesson-key-concepts: #EDE2D8;
   --lesson-signs-symptoms: #FDE4E0;
-  --lesson-assessment: #E4F0E8;
-  --lesson-diagnostics: #F0EEDC;
+  --lesson-assessment: #DEF0EC;
+  --lesson-diagnostics: #E4E6EE;
   --lesson-interventions: #E0F0E4;
   --lesson-medications: #FFF4E4;
   --lesson-patient-teaching: #E8F0E6;
   --lesson-exam-tips: #FEF2D0;
   --lesson-red-flags: #FDD8D4;
-  --lesson-clinical-pearls: #F4EEE0;
-  --lesson-notes: #F4F2EC;
+  --lesson-clinical-pearls: #ECE6F0;
+  --lesson-notes: #F0F0EE;
 
   --state-success: #E0F0E4;
   --state-warning: #FFF4E4;
-  --state-info: #F0EEDC;
+  --state-info: #E4E6EE;
   --state-danger-soft: #FDE4E0;
 
   --logo-primary: #B8860B;
@@ -714,21 +714,21 @@
   --theme-topbar-text: #ffffff;
 
   --lesson-summary: #E6EEE4;
-  --lesson-key-concepts: #DCE6D8;
+  --lesson-key-concepts: #E0E4D6;
   --lesson-signs-symptoms: #FCE6E4;
-  --lesson-assessment: #DEF0EA;
-  --lesson-diagnostics: #E4ECE8;
+  --lesson-assessment: #DAF0EE;
+  --lesson-diagnostics: #E0E6F0;
   --lesson-interventions: #D8ECE0;
   --lesson-medications: #F8F0E4;
-  --lesson-patient-teaching: #E0EEE4;
+  --lesson-patient-teaching: #E4EAD8;
   --lesson-exam-tips: #FCF4DE;
   --lesson-red-flags: #F8D8D4;
-  --lesson-clinical-pearls: #E8EEE8;
-  --lesson-notes: #EFF2EE;
+  --lesson-clinical-pearls: #E4E2EE;
+  --lesson-notes: #EEEEEC;
 
   --state-success: #D8ECE0;
   --state-warning: #F8F0E4;
-  --state-info: #E4ECE8;
+  --state-info: #E0E6F0;
   --state-danger-soft: #FCE6E4;
 
   --logo-primary: #6B8E6B;
@@ -755,22 +755,22 @@
   --theme-topbar-text: #ffffff;
 
   --lesson-summary: #FDE8E2;
-  --lesson-key-concepts: #FADDD4;
-  --lesson-signs-symptoms: #FCD4CC;
+  --lesson-key-concepts: #F2DDE0;
+  --lesson-signs-symptoms: #F8DCD6;
   --lesson-assessment: #E2F2EE;
-  --lesson-diagnostics: #F8E8E4;
+  --lesson-diagnostics: #E6E4F0;
   --lesson-interventions: #E0F0E6;
   --lesson-medications: #FFF2E2;
   --lesson-patient-teaching: #E6F0E8;
   --lesson-exam-tips: #FCF0D8;
-  --lesson-red-flags: #FCC8C0;
-  --lesson-clinical-pearls: #F4E8E0;
-  --lesson-notes: #F6F0EE;
+  --lesson-red-flags: #F2CCC8;
+  --lesson-clinical-pearls: #EAE4F0;
+  --lesson-notes: #F0EEEC;
 
   --state-success: #E0F0E6;
   --state-warning: #FFF2E2;
-  --state-info: #F8E8E4;
-  --state-danger-soft: #FCD4CC;
+  --state-info: #E6E4F0;
+  --state-danger-soft: #F8DCD6;
 
   --logo-primary: #E07050;
   --logo-accent: #FCE4B8;
@@ -796,21 +796,21 @@
   --theme-topbar-text: #ffffff;
 
   --lesson-summary: #E4F0F6;
-  --lesson-key-concepts: #D8E8F0;
+  --lesson-key-concepts: #DEE4EE;
   --lesson-signs-symptoms: #F8E2E4;
-  --lesson-assessment: #E0EEF0;
-  --lesson-diagnostics: #DEE8F4;
+  --lesson-assessment: #DAF0F0;
+  --lesson-diagnostics: #E0E4F6;
   --lesson-interventions: #DCF0E6;
-  --lesson-medications: #F4F0E4;
-  --lesson-patient-teaching: #E2F0EA;
+  --lesson-medications: #F6F0E2;
+  --lesson-patient-teaching: #E4EEE0;
   --lesson-exam-tips: #F8F2DE;
   --lesson-red-flags: #F4D6D8;
-  --lesson-clinical-pearls: #E4ECF4;
-  --lesson-notes: #EEF2F6;
+  --lesson-clinical-pearls: #E6E2F2;
+  --lesson-notes: #EEEFF2;
 
   --state-success: #DCF0E6;
-  --state-warning: #F4F0E4;
-  --state-info: #DEE8F4;
+  --state-warning: #F6F0E2;
+  --state-info: #E0E4F6;
   --state-danger-soft: #F8E2E4;
 
   --logo-primary: #4A7A9B;
@@ -837,21 +837,21 @@
   --theme-topbar-text: #ffffff;
 
   --lesson-summary: #F0E6F4;
-  --lesson-key-concepts: #E8DCEE;
+  --lesson-key-concepts: #E6DEE8;
   --lesson-signs-symptoms: #FCE0E4;
   --lesson-assessment: #E2F0EC;
-  --lesson-diagnostics: #ECE4F4;
+  --lesson-diagnostics: #E2E6F4;
   --lesson-interventions: #E0EEE6;
   --lesson-medications: #F8EEE4;
-  --lesson-patient-teaching: #E8EEF0;
+  --lesson-patient-teaching: #E4ECE0;
   --lesson-exam-tips: #FAF2DE;
   --lesson-red-flags: #F8D4D8;
   --lesson-clinical-pearls: #EDE4F2;
-  --lesson-notes: #F2EEF4;
+  --lesson-notes: #EEEEF0;
 
   --state-success: #E0EEE6;
   --state-warning: #F8EEE4;
-  --state-info: #ECE4F4;
+  --state-info: #E2E6F4;
   --state-danger-soft: #FCE0E4;
 
   --logo-primary: #7A4A8A;
@@ -878,21 +878,21 @@
   --theme-topbar-text: #ffffff;
 
   --lesson-summary: #F4ECE0;
-  --lesson-key-concepts: #EEE4D4;
+  --lesson-key-concepts: #ECE2DA;
   --lesson-signs-symptoms: #FAE0DC;
-  --lesson-assessment: #E2EEEA;
-  --lesson-diagnostics: #F0E8DE;
+  --lesson-assessment: #DCEEEC;
+  --lesson-diagnostics: #E2E4EE;
   --lesson-interventions: #DEF0E4;
   --lesson-medications: #FFF4E0;
-  --lesson-patient-teaching: #E6EEE6;
+  --lesson-patient-teaching: #E2EAD8;
   --lesson-exam-tips: #FCF0D4;
   --lesson-red-flags: #F6D4D0;
-  --lesson-clinical-pearls: #F0E8E0;
-  --lesson-notes: #F4F0EA;
+  --lesson-clinical-pearls: #E8E4F0;
+  --lesson-notes: #EEEEEC;
 
   --state-success: #DEF0E4;
   --state-warning: #FFF4E0;
-  --state-info: #F0E8DE;
+  --state-info: #E2E4EE;
   --state-danger-soft: #FAE0DC;
 
   --logo-primary: #A07840;
@@ -919,21 +919,21 @@
   --theme-topbar-text: #ffffff;
 
   --lesson-summary: #F2E4E4;
-  --lesson-key-concepts: #ECDAD8;
+  --lesson-key-concepts: #EADEE4;
   --lesson-signs-symptoms: #F8D4D4;
-  --lesson-assessment: #E2EEEA;
-  --lesson-diagnostics: #F0E4E8;
+  --lesson-assessment: #DAEEEC;
+  --lesson-diagnostics: #E2E4F0;
   --lesson-interventions: #DEF0E6;
   --lesson-medications: #FCF0E4;
-  --lesson-patient-teaching: #E8EEE8;
+  --lesson-patient-teaching: #E2EAD8;
   --lesson-exam-tips: #FAF0DC;
   --lesson-red-flags: #F4CACA;
-  --lesson-clinical-pearls: #EEE4E8;
-  --lesson-notes: #F2EEEE;
+  --lesson-clinical-pearls: #E8E2F0;
+  --lesson-notes: #EEEEEE;
 
   --state-success: #DEF0E6;
   --state-warning: #FCF0E4;
-  --state-info: #F0E4E8;
+  --state-info: #E2E4F0;
   --state-danger-soft: #F8D4D4;
 
   --logo-primary: #B07080;
@@ -986,22 +986,22 @@
   --theme-separator: #2E2650;
   --theme-header-surface: #1E1838;
 
-  --lesson-summary: #1E1838;
-  --lesson-key-concepts: #262050;
+  --lesson-summary: #201A3A;
+  --lesson-key-concepts: #2C1E42;
   --lesson-signs-symptoms: #3A1828;
   --lesson-assessment: #1A3830;
-  --lesson-diagnostics: #222040;
+  --lesson-diagnostics: #1E2840;
   --lesson-interventions: #1E4238;
-  --lesson-medications: #382820;
-  --lesson-patient-teaching: #243838;
-  --lesson-exam-tips: #38301A;
+  --lesson-medications: #362820;
+  --lesson-patient-teaching: #243830;
+  --lesson-exam-tips: #38301E;
   --lesson-red-flags: #441A24;
-  --lesson-clinical-pearls: #282244;
-  --lesson-notes: #1C1830;
+  --lesson-clinical-pearls: #2C224A;
+  --lesson-notes: #1E1C28;
 
   --state-success: #1E4238;
-  --state-warning: #38301A;
-  --state-info: #222040;
+  --state-warning: #38301E;
+  --state-info: #1E2840;
   --state-danger-soft: #441A24;
 
   --logo-primary: #E8A060;
@@ -1053,22 +1053,22 @@
   --theme-separator: #1E2D66;
   --theme-header-surface: #14204F;
 
-  --lesson-summary: #14204F;
-  --lesson-key-concepts: #1C2A66;
+  --lesson-summary: #16224A;
+  --lesson-key-concepts: #221E50;
   --lesson-signs-symptoms: #3A1F2E;
   --lesson-assessment: #183D3F;
-  --lesson-diagnostics: #1E2D66;
+  --lesson-diagnostics: #182840;
   --lesson-interventions: #1F4D45;
-  --lesson-medications: #3D2A2A;
-  --lesson-patient-teaching: #2A3F3F;
-  --lesson-exam-tips: #3A3520;
+  --lesson-medications: #382A1E;
+  --lesson-patient-teaching: #243C2E;
+  --lesson-exam-tips: #38321E;
   --lesson-red-flags: #4A1F2A;
-  --lesson-clinical-pearls: #2A2A4F;
-  --lesson-notes: #1A1F35;
+  --lesson-clinical-pearls: #2C2250;
+  --lesson-notes: #1C1E2E;
 
   --state-success: #1F4D45;
-  --state-warning: #3A3520;
-  --state-info: #1E2D66;
+  --state-warning: #38321E;
+  --state-info: #182840;
   --state-danger-soft: #4A1F2A;
 
   --logo-primary: #FF85BB;

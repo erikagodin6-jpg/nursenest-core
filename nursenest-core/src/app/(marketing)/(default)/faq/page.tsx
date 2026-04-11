@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { FaqLegalMarketingView } from "@/components/legal/faq-legal-marketing-view";
+import { FaqProductScreenshotsSection } from "@/components/marketing/faq-product-screenshots-section";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
@@ -26,5 +27,13 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function FaqPage() {
-  return <FaqLegalMarketingView path="/faq" />;
+  return (
+    <>
+      {/* Legal / billing FAQ (existing markdown-driven content) */}
+      <FaqLegalMarketingView path="/faq" />
+
+      {/* Visual product FAQ — what does the platform actually look like? */}
+      <FaqProductScreenshotsSection />
+    </>
+  );
 }

@@ -54,6 +54,7 @@ type PlanRow = {
   savingsVsMonthlyPercent: number;
   isBestValue: boolean;
   isMostPopular: boolean;
+  anchorPriceLabel: string | null;
 };
 
 /** RN, combined PN (RPN CA / LPN US), NP, Allied — matches public tier SKUs. */
@@ -110,6 +111,7 @@ export function PricingPageClient({
   const [segment, setSegment] = useState<Segment>("rn");
   const [country, setCountry] = useState<"CA" | "US">("US");
   const [plans, setPlans] = useState<PlanRow[]>([]);
+  const [trialDays, setTrialDays] = useState(3);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [checkoutError, setCheckoutError] = useState<string | null>(null);
   const [checkoutOpsHint, setCheckoutOpsHint] = useState<string | null>(null);
@@ -123,6 +125,13 @@ export function PricingPageClient({
     setCountry(region === "US" ? "US" : "CA");
   }, [region]);
 
+  useEffect(() => {
+    trackClientEvent("pricing_page_viewed", {
+      actor: "anonymous",
+      funnel_step: "pricing_page_view",
+    });
+  }, []);
+
   const localize = useCallback((href: string) => withMarketingLocale(locale, href), [locale]);
   const comparisonSectionHref = `${localize("/")}#home-comparison-heading`;
 
@@ -133,7 +142,10 @@ export function PricingPageClient({
         const res = await fetch("/api/pricing/options");
         const data = await res.json();
         if (!res.ok) throw new Error("load_failed");
-        if (!cancelled) setPlans(data.plans ?? []);
+        if (!cancelled) {
+          setPlans(data.plans ?? []);
+          if (typeof data.trialDays === "number") setTrialDays(data.trialDays);
+        }
       } catch {
         if (!cancelled) setLoadError(t("pages.pricing.error.loadPlans"));
       }
@@ -200,6 +212,8 @@ export function PricingPageClient({
         country: effectiveCountry,
         tier: String(tier),
         duration: String(duration),
+        has_trial: trialDays > 0,
+        trial_days: trialDays,
       });
       try {
         const res = await fetch("/api/subscriptions/checkout", {
@@ -236,7 +250,7 @@ export function PricingPageClient({
         setCheckoutLoading(false);
       }
     },
-    [effectiveCountry, policiesAccepted, tier, t],
+    [effectiveCountry, policiesAccepted, tier, trialDays, t],
   );
 
   const includeKeys = ["lessons", "bank", "cat", "analytics"] as const;
@@ -333,26 +347,36 @@ export function PricingPageClient({
             const row = rowByDuration.get(duration);
             const isBest = row?.isBestValue ?? duration === "yearly";
             const isPop = row?.isMostPopular ?? false;
+            const isHighlighted = isBest || isPop;
             return (
               <article
                 key={duration}
-                className={`relative flex flex-col rounded-2xl border bg-card p-5 shadow-sm ${
+                className={`relative flex flex-col rounded-2xl border p-5 shadow-sm transition-shadow hover:shadow-md ${
                   isBest
-                    ? "border-primary ring-2 ring-primary/25"
-                    : "border-[var(--theme-card-border)]"
+                    ? "border-primary ring-2 ring-primary/25 bg-[color-mix(in_srgb,var(--theme-primary)_3%,var(--color-card))]"
+                    : isPop
+                      ? "border-[var(--semantic-info)] ring-1 ring-[var(--semantic-info)]/20 bg-card"
+                      : "border-[var(--theme-card-border)] bg-card"
                 }`}
               >
                 {isBest ? (
-                  <span className="absolute -top-2.5 left-1/2 -translate-x-1/2 rounded-full bg-primary px-3 py-0.5 text-[11px] font-bold uppercase tracking-wide text-primary-foreground">
+                  <span className="absolute -top-2.5 left-1/2 -translate-x-1/2 rounded-full bg-primary px-3 py-0.5 text-[11px] font-bold uppercase tracking-wide text-primary-foreground shadow-sm">
                     {t("pages.pricing.conversion.badgeBestValue")}
                   </span>
                 ) : isPop ? (
-                  <span className="absolute -top-2.5 left-1/2 -translate-x-1/2 rounded-full bg-muted px-3 py-0.5 text-[11px] font-bold uppercase tracking-wide text-foreground">
+                  <span className="absolute -top-2.5 left-1/2 -translate-x-1/2 rounded-full bg-[var(--semantic-info)] px-3 py-0.5 text-[11px] font-bold uppercase tracking-wide text-white shadow-sm">
                     {t("pages.pricing.conversion.badgePopular")}
                   </span>
                 ) : null}
 
                 <h3 className="nn-marketing-h3 mt-1">{t(DURATION_LABEL_KEYS[duration])}</h3>
+
+                {duration !== "monthly" && (
+                  <p className="mt-1 inline-flex items-center gap-1.5 text-[11px] font-semibold tracking-wide text-[var(--semantic-success)]">
+                    <span className="inline-block h-1.5 w-1.5 rounded-full bg-[var(--semantic-success)]" aria-hidden />
+                    Founding pricing
+                  </p>
+                )}
 
                 <ul className="mt-4 flex-1 space-y-2 text-sm text-[var(--theme-body-text)]">
                   {includeKeys.map((k) => (
@@ -365,12 +389,19 @@ export function PricingPageClient({
 
                 {row ? (
                   <>
-                    <p className="mt-6 nn-marketing-h3 tabular-nums text-[var(--theme-heading-text)]">{row.totalLabel}</p>
+                    <div className="mt-6">
+                      {row.anchorPriceLabel && (
+                        <p className="text-sm text-muted-foreground line-through decoration-muted-foreground/50">
+                          {row.anchorPriceLabel}
+                        </p>
+                      )}
+                      <p className="nn-marketing-h3 tabular-nums text-[var(--theme-heading-text)]">{row.totalLabel}</p>
+                    </div>
                     <p className="text-sm text-muted-foreground">
                       {row.monthlyEquivalentLabel} {t("pages.pricing.plan.avgSuffix")}
                     </p>
                     {row.savingsVsMonthlyPercent > 0 ? (
-                      <p className="mt-1 text-xs font-semibold text-emerald-700 dark:text-emerald-400">
+                      <p className="mt-1 text-xs font-semibold text-[var(--semantic-success)]">
                         {t("pages.pricing.plan.saveVsMonthly", { pct: row.savingsVsMonthlyPercent })}
                       </p>
                     ) : null}
@@ -378,11 +409,17 @@ export function PricingPageClient({
                       type="button"
                       disabled={checkoutLoading || !policiesAccepted || !row.checkoutAvailable}
                       onClick={() => startCheckout(duration)}
-                      className={`${MARKETING_PRIMARY_CTA_CLASS} mt-4 w-full justify-center disabled:pointer-events-none disabled:opacity-50`}
+                      className={`${isHighlighted ? MARKETING_PRIMARY_CTA_CLASS : MARKETING_SECONDARY_CTA_CLASS} mt-4 w-full justify-center disabled:pointer-events-none disabled:opacity-50`}
                     >
-                      {row.checkoutAvailable ? t("pages.pricing.conversion.ctaSubscribe") : t("pages.pricing.conversion.ctaUnavailable")}
+                      {row.checkoutAvailable
+                        ? (trialDays > 0 ? `Start ${trialDays}-Day Free Trial` : t("pages.pricing.conversion.ctaSubscribe"))
+                        : t("pages.pricing.conversion.ctaUnavailable")}
                     </button>
-                    {!row.checkoutAvailable ? (
+                    {row.checkoutAvailable && trialDays > 0 ? (
+                      <p className="mt-2 text-center text-[11px] leading-snug text-muted-foreground">
+                        No charge for {trialDays} days · Cancel anytime
+                      </p>
+                    ) : !row.checkoutAvailable ? (
                       <p className="mt-2 text-center text-[11px] leading-snug text-muted-foreground">{t("pages.pricing.conversion.checkoutHintAlt")}</p>
                     ) : null}
                   </>
@@ -396,7 +433,22 @@ export function PricingPageClient({
           })}
         </div>
 
-        <div className="mx-auto mt-8 max-w-xl rounded-xl border border-dashed border-border bg-muted/20 px-5 py-4 text-center">
+        {trialDays > 0 && (
+          <div className="mx-auto mt-8 max-w-xl rounded-xl border border-[var(--semantic-success)]/20 bg-[color-mix(in_srgb,var(--semantic-success)_5%,var(--color-card))] px-5 py-4 text-center">
+            <p className="text-base font-semibold text-[var(--theme-heading-text)]">
+              Try everything free for {trialDays} days
+            </p>
+            <p className="mt-2 text-sm text-muted-foreground">
+              Full access to all lessons, practice tests, CAT exams, flashcards, and analytics.
+              No charge until your trial ends — cancel anytime with one click.
+            </p>
+            <p className="mt-1 text-xs text-muted-foreground">
+              Payment method required to prevent abuse. You won't be charged during your trial.
+            </p>
+          </div>
+        )}
+
+        <div className="mx-auto mt-4 max-w-xl rounded-xl border border-dashed border-border bg-muted/20 px-5 py-4 text-center">
           <p className="text-base font-semibold text-[var(--theme-heading-text)]">{t("pages.pricing.conversion.freeTeaserTitle")}</p>
           <p className="mt-2 text-sm text-muted-foreground">{t("pages.pricing.conversion.freeTeaserBody")}</p>
           <p className="mt-1 text-xs text-muted-foreground">{t("pages.pricing.conversion.freeTeaser")}</p>
@@ -448,9 +500,15 @@ export function PricingPageClient({
         <h2 className="nn-marketing-h3">{t("pages.pricing.trust.guaranteeTitle")}</h2>
         <p className="mt-2 text-sm text-muted-foreground">{t("pages.pricing.trust.guaranteeBody")}</p>
         <ul className="mt-4 space-y-2 text-sm text-[var(--theme-body-text)]">
+          {trialDays > 0 && (
+            <li className="flex gap-2">
+              <Check className="mt-0.5 h-4 w-4 shrink-0 text-[var(--semantic-success)]" aria-hidden />
+              {trialDays}-day free trial — no charge until it ends
+            </li>
+          )}
           <li className="flex gap-2">
             <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden />
-            {t("pages.pricing.trust.bullet0")}
+            Cancel anytime — no questions asked
           </li>
           <li className="flex gap-2">
             <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden />
@@ -543,11 +601,11 @@ export function PricingPageClient({
       </section>
 
       <div className="mt-10 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
-        <Link href={tryQuestionsHref} className={MARKETING_PRIMARY_CTA_CLASS}>
-          {t("pages.pricing.cta.startPractice")}
+        <Link href="#pricing-plans-heading" className={MARKETING_PRIMARY_CTA_CLASS}>
+          {trialDays > 0 ? `Start ${trialDays}-Day Free Trial` : t("pages.pricing.cta.startPractice")}
         </Link>
-        <Link href={localize(HUB.signup)} className={MARKETING_TERTIARY_LINK_CLASS}>
-          {t("pages.pricing.conversion.ctaCreateAccount")}
+        <Link href={tryQuestionsHref} className={MARKETING_TERTIARY_LINK_CLASS}>
+          Or try free questions first
         </Link>
       </div>
 
