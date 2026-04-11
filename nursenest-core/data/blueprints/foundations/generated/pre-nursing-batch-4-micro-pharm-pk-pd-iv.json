@@ -1,0 +1,5460 @@
+{
+  "batchMeta": {
+    "blueprintFile": "data/blueprints/foundations/pre-nursing-foundational-blueprint.json",
+    "generatedDate": "2026-04-11",
+    "batchTitle": "Microbiology chain, pharm intro, PK/PD, IV calculations",
+    "sequenceInThisFile": [
+      "intro-microbiology-classification",
+      "bacterial-structure-and-reproduction",
+      "viral-structure-and-pathogenesis",
+      "antimicrobials-overview",
+      "pharmacology-intro-drug-classifications",
+      "pharmacokinetics-adme",
+      "pharmacodynamics-drug-actions",
+      "iv-flow-rate-calculations"
+    ],
+    "curriculumNotes": [
+      "Assumes cell-structure-and-function (batch 3), organic molecules (batch 3), and oral dosage (batch 3) already in learner path.",
+      "Pharmacokinetics includes digestive/urinary bridge; full anatomy topics still recommended.",
+      "Pharmacodynamics follows PK per blueprint ordering in this file."
+    ]
+  },
+  "topics": [
+    {
+      "domain": "Microbiology Basics",
+      "topicSlug": "intro-microbiology-classification",
+      "topicName": "Introduction to Microbiology: Microorganism Classification",
+      "readinessWeight": "high",
+      "cognitiveLevel": "foundational-recall",
+      "targetQuestionCountMin": 35,
+      "questionsGeneratedThisBatch": 35,
+      "prerequisiteTopicSlugs": [
+        "cell-structure-and-function"
+      ],
+      "lessons": [
+        {
+          "title": "Major microorganism groups nurses encounter",
+          "structuredContent": {
+            "overview": "Bacteria, viruses, fungi, and parasites differ in structure, treatment targets, and infection control implications.",
+            "groups": [
+              "Bacteria: prokaryotic cells; treated with antibiotics when appropriate.",
+              "Viruses: obligate intracellular parasites; need host cell machinery; antivirals target specific steps.",
+              "Fungi: eukaryotes; include yeasts and molds; antifungals for serious fungal disease.",
+              "Parasites: protozoa and helminths (worm) categories at survey level."
+            ],
+            "commonMistakes": [
+              "Calling viral illness 'bacterial' and expecting antibiotics",
+              "Thinking all microbes are bacteria"
+            ],
+            "clinicalRelevanceLight": "Antibiotic stewardship starts with recognizing when bacteria are not the cause."
+          }
+        },
+        {
+          "title": "Prokaryote vs eukaryote and why it matters for drugs",
+          "structuredContent": {
+            "overview": "Bacteria are prokaryotes without a nucleus; human cells are eukaryotic. Many antibiotics exploit differences in bacterial structures (e.g., cell wall) or machinery.",
+            "mentalModel": "Target the pathogen without destroying human cells—selective toxicity is the goal of many antimicrobials.",
+            "clinicalRelevanceLight": "Side effects still happen when human biology overlaps with drug targets (preview)."
+          }
+        }
+      ],
+      "questions": [
+        {
+          "stem": "Which group is prokaryotic?",
+          "options": {
+            "A": "bacteria",
+            "B": "human cells",
+            "C": "fungi",
+            "D": "helminths"
+          },
+          "correctAnswer": "A",
+          "rationale": "Classification recall at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect group.",
+            "C": "Incorrect group.",
+            "D": "Incorrect group."
+          }
+        },
+        {
+          "stem": "Which microorganism requires a host cell to replicate?",
+          "options": {
+            "A": "virus",
+            "B": "bacterium alone in broth always same as human cell",
+            "C": "plant chloroplast",
+            "D": "erythrocyte without nucleus as model for all"
+          },
+          "correctAnswer": "A",
+          "rationale": "Classification recall at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect group.",
+            "C": "Incorrect group.",
+            "D": "Incorrect group."
+          }
+        },
+        {
+          "stem": "Antibiotics primarily target:",
+          "options": {
+            "A": "bacteria",
+            "B": "all viruses automatically",
+            "C": "prions only",
+            "D": "vitamin deficiency"
+          },
+          "correctAnswer": "A",
+          "rationale": "Classification recall at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect group.",
+            "C": "Incorrect group.",
+            "D": "Incorrect group."
+          }
+        },
+        {
+          "stem": "Antivirals primarily target:",
+          "options": {
+            "A": "viral processes",
+            "B": "bacterial cell wall always",
+            "C": "fungal ergosterol always",
+            "D": "parasitic worms always"
+          },
+          "correctAnswer": "A",
+          "rationale": "Classification recall at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect group.",
+            "C": "Incorrect group.",
+            "D": "Incorrect group."
+          }
+        },
+        {
+          "stem": "Antifungals primarily target:",
+          "options": {
+            "A": "fungi",
+            "B": "bacteria always",
+            "C": "viruses always",
+            "D": "waterborne minerals"
+          },
+          "correctAnswer": "A",
+          "rationale": "Classification recall at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect group.",
+            "C": "Incorrect group.",
+            "D": "Incorrect group."
+          }
+        },
+        {
+          "stem": "A helminth is best categorized as:",
+          "options": {
+            "A": "parasitic worm (survey)",
+            "B": "virus",
+            "C": "bacterium",
+            "D": "prion"
+          },
+          "correctAnswer": "A",
+          "rationale": "Classification recall at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect group.",
+            "C": "Incorrect group.",
+            "D": "Incorrect group."
+          }
+        },
+        {
+          "stem": "Protozoa are:",
+          "options": {
+            "A": "unicellular eukaryotic parasites (survey)",
+            "B": "prokaryotes",
+            "C": "nonliving chemicals",
+            "D": "plants"
+          },
+          "correctAnswer": "A",
+          "rationale": "Classification recall at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect group.",
+            "C": "Incorrect group.",
+            "D": "Incorrect group."
+          }
+        },
+        {
+          "stem": "Which is a fungus example at survey level?",
+          "options": {
+            "A": "Candida yeast",
+            "B": "Streptococcus",
+            "C": "Influenza virus",
+            "D": "Plasmodium only as bacterium"
+          },
+          "correctAnswer": "A",
+          "rationale": "Classification recall at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect group.",
+            "C": "Incorrect group.",
+            "D": "Incorrect group."
+          }
+        },
+        {
+          "stem": "Normal flora refers to:",
+          "options": {
+            "A": "microorganisms colonizing body without causing disease usually",
+            "B": "only pathogens",
+            "C": "only viruses",
+            "D": "sterile blood always"
+          },
+          "correctAnswer": "A",
+          "rationale": "Classification recall at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect group.",
+            "C": "Incorrect group.",
+            "D": "Incorrect group."
+          }
+        },
+        {
+          "stem": "Opportunistic pathogens:",
+          "options": {
+            "A": "cause disease when host defenses or balance change",
+            "B": "never harm humans",
+            "C": "only infect plants",
+            "D": "only gram-positive"
+          },
+          "correctAnswer": "A",
+          "rationale": "Classification recall at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect group.",
+            "C": "Incorrect group.",
+            "D": "Incorrect group."
+          }
+        },
+        {
+          "stem": "Which is smallest typical particle listed?",
+          "options": {
+            "A": "virus",
+            "B": "bacterium",
+            "C": "fungal hypha",
+            "D": "protozoan"
+          },
+          "correctAnswer": "A",
+          "rationale": "Classification recall at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect group.",
+            "C": "Incorrect group.",
+            "D": "Incorrect group."
+          }
+        },
+        {
+          "stem": "Gram stain is most relevant to:",
+          "options": {
+            "A": "bacteria",
+            "B": "viruses directly always",
+            "C": "all fungi always",
+            "D": "helminth eggs only"
+          },
+          "correctAnswer": "A",
+          "rationale": "Classification recall at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect group.",
+            "C": "Incorrect group.",
+            "D": "Incorrect group."
+          }
+        },
+        {
+          "stem": "Spore formation is notably associated with some:",
+          "options": {
+            "A": "bacteria (e.g., Bacillus, Clostridium survey)",
+            "B": "all viruses",
+            "C": "human ova",
+            "D": "red blood cells"
+          },
+          "correctAnswer": "A",
+          "rationale": "Classification recall at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect group.",
+            "C": "Incorrect group.",
+            "D": "Incorrect group."
+          }
+        },
+        {
+          "stem": "Which environment favors many pathogens?",
+          "options": {
+            "A": "warm, moist surfaces and appropriate nutrients",
+            "B": "dry sterile steel always impossible",
+            "C": "pure ice always",
+            "D": "only pH 14"
+          },
+          "correctAnswer": "A",
+          "rationale": "Classification recall at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect group.",
+            "C": "Incorrect group.",
+            "D": "Incorrect group."
+          }
+        },
+        {
+          "stem": "Colonization means:",
+          "options": {
+            "A": "organism present without disease",
+            "B": "always fever",
+            "C": "always bacteremia",
+            "D": "always antibiotics"
+          },
+          "correctAnswer": "A",
+          "rationale": "Classification recall at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect group.",
+            "C": "Incorrect group.",
+            "D": "Incorrect group."
+          }
+        },
+        {
+          "stem": "Infection means:",
+          "options": {
+            "A": "colonization with host response/damage (student-level)",
+            "B": "always sterile urine",
+            "C": "only surgical",
+            "D": "only viral"
+          },
+          "correctAnswer": "A",
+          "rationale": "Classification recall at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect group.",
+            "C": "Incorrect group.",
+            "D": "Incorrect group."
+          }
+        },
+        {
+          "stem": "Which is a DNA virus family example at recognition?",
+          "options": {
+            "A": "herpesviruses (survey)",
+            "B": "all RNA viruses",
+            "C": "prions",
+            "D": "gram-negative only"
+          },
+          "correctAnswer": "A",
+          "rationale": "Classification recall at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect group.",
+            "C": "Incorrect group.",
+            "D": "Incorrect group."
+          }
+        },
+        {
+          "stem": "RNA viruses include:",
+          "options": {
+            "A": "influenza (survey)",
+            "B": "all herpes",
+            "C": "all gram-positive cocci",
+            "D": "only fungi"
+          },
+          "correctAnswer": "A",
+          "rationale": "Classification recall at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect group.",
+            "C": "Incorrect group.",
+            "D": "Incorrect group."
+          }
+        },
+        {
+          "stem": "Mycosis means:",
+          "options": {
+            "A": "fungal disease",
+            "B": "bacterial toxin",
+            "C": "viral latency only",
+            "D": "worm only"
+          },
+          "correctAnswer": "A",
+          "rationale": "Classification recall at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect group.",
+            "C": "Incorrect group.",
+            "D": "Incorrect group."
+          }
+        },
+        {
+          "stem": "Endemic vs epidemic is:",
+          "options": {
+            "A": "disease geography/occurrence pattern (preview)",
+            "B": "same as gram stain",
+            "C": "only lab value",
+            "D": "only drug half-life"
+          },
+          "correctAnswer": "A",
+          "rationale": "Classification recall at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect group.",
+            "C": "Incorrect group.",
+            "D": "Incorrect group."
+          }
+        },
+        {
+          "stem": "A fomite is:",
+          "options": {
+            "A": "contaminated object transmitting organisms (survey)",
+            "B": "hand soap",
+            "C": "sterile glove",
+            "D": "only IV fluid"
+          },
+          "correctAnswer": "A",
+          "rationale": "Classification recall at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect group.",
+            "C": "Incorrect group.",
+            "D": "Incorrect group."
+          }
+        },
+        {
+          "stem": "Vector-borne disease involves:",
+          "options": {
+            "A": "living transmitter like mosquito/tick (survey)",
+            "B": "only coughing",
+            "C": "only water",
+            "D": "only food"
+          },
+          "correctAnswer": "A",
+          "rationale": "Classification recall at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect group.",
+            "C": "Incorrect group.",
+            "D": "Incorrect group."
+          }
+        },
+        {
+          "stem": "Which statement is accurate?",
+          "options": {
+            "A": "viruses are not treated with typical antibacterial antibiotics",
+            "B": "amoxicillin cures all viruses",
+            "C": "fungi lack nuclei",
+            "D": "bacteria have nuclei like human cells"
+          },
+          "correctAnswer": "A",
+          "rationale": "Classification recall at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect group.",
+            "C": "Incorrect group.",
+            "D": "Incorrect group."
+          }
+        },
+        {
+          "stem": "Yeast is a:",
+          "options": {
+            "A": "fungus",
+            "B": "bacterium",
+            "C": "virus",
+            "D": "helminth"
+          },
+          "correctAnswer": "A",
+          "rationale": "Classification recall at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect group.",
+            "C": "Incorrect group.",
+            "D": "Incorrect group."
+          }
+        },
+        {
+          "stem": "Mold is a:",
+          "options": {
+            "A": "filamentous fungus growth form (survey)",
+            "B": "virus",
+            "C": "bacterium always cocci",
+            "D": "protozoan"
+          },
+          "correctAnswer": "A",
+          "rationale": "Classification recall at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect group.",
+            "C": "Incorrect group.",
+            "D": "Incorrect group."
+          }
+        },
+        {
+          "stem": "Binary fission describes:",
+          "options": {
+            "A": "bacterial reproduction",
+            "B": "meiosis in humans",
+            "C": "viral assembly only",
+            "D": "fungal spore only always"
+          },
+          "correctAnswer": "A",
+          "rationale": "Classification recall at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect group.",
+            "C": "Incorrect group.",
+            "D": "Incorrect group."
+          }
+        },
+        {
+          "stem": "Which is eukaryotic?",
+          "options": {
+            "A": "fungal cell",
+            "B": "typical bacterium",
+            "C": "archaea survey same as human cell question focus",
+            "D": "none"
+          },
+          "correctAnswer": "A",
+          "rationale": "Classification recall at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect group.",
+            "C": "Incorrect group.",
+            "D": "Incorrect group."
+          }
+        },
+        {
+          "stem": "Prions are:",
+          "options": {
+            "A": "infectious proteins (recognition)",
+            "B": "bacteria",
+            "C": "typical viruses with capsid always",
+            "D": "fungi"
+          },
+          "correctAnswer": "A",
+          "rationale": "Classification recall at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect group.",
+            "C": "Incorrect group.",
+            "D": "Incorrect group."
+          }
+        },
+        {
+          "stem": "Which is a reason viruses are not 'alive' in many textbooks?",
+          "options": {
+            "A": "lack independent metabolism/replication outside host",
+            "B": "have cell walls like plants always",
+            "C": "divide by binary fission",
+            "D": "have gram-positive wall"
+          },
+          "correctAnswer": "A",
+          "rationale": "Classification recall at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect group.",
+            "C": "Incorrect group.",
+            "D": "Incorrect group."
+          }
+        },
+        {
+          "stem": "Aerobic bacteria need:",
+          "options": {
+            "A": "oxygen",
+            "B": "no oxygen always",
+            "C": "only ice",
+            "D": "only blood agar color"
+          },
+          "correctAnswer": "A",
+          "rationale": "Classification recall at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect group.",
+            "C": "Incorrect group.",
+            "D": "Incorrect group."
+          }
+        },
+        {
+          "stem": "Anaerobic bacteria grow:",
+          "options": {
+            "A": "without oxygen or low oxygen environments",
+            "B": "only on skin surface always",
+            "C": "only in lungs always",
+            "D": "only in vaccines"
+          },
+          "correctAnswer": "A",
+          "rationale": "Classification recall at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect group.",
+            "C": "Incorrect group.",
+            "D": "Incorrect group."
+          }
+        },
+        {
+          "stem": "Which specimen type is often sterile in health?",
+          "options": {
+            "A": "blood in deep vessels (concept)",
+            "B": "throat always sterile",
+            "C": "colon always sterile",
+            "D": "skin always sterile"
+          },
+          "correctAnswer": "A",
+          "rationale": "Classification recall at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect group.",
+            "C": "Incorrect group.",
+            "D": "Incorrect group."
+          }
+        },
+        {
+          "stem": "Culture in microbiology means:",
+          "options": {
+            "A": "growing organisms to identify (survey)",
+            "B": "only PCR always",
+            "C": "only imaging",
+            "D": "only antibiogram without growth"
+          },
+          "correctAnswer": "A",
+          "rationale": "Classification recall at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect group.",
+            "C": "Incorrect group.",
+            "D": "Incorrect group."
+          }
+        },
+        {
+          "stem": "Colonization of skin:",
+          "options": {
+            "A": "common with Staph species among normal flora (survey)",
+            "B": "impossible",
+            "C": "always MRSA",
+            "D": "only after surgery"
+          },
+          "correctAnswer": "A",
+          "rationale": "Classification recall at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect group.",
+            "C": "Incorrect group.",
+            "D": "Incorrect group."
+          }
+        },
+        {
+          "stem": "Zoonosis means:",
+          "options": {
+            "A": "disease spread between animals and humans (survey)",
+            "B": "only plant disease",
+            "C": "only fungal allergy",
+            "D": "only water mold"
+          },
+          "correctAnswer": "A",
+          "rationale": "Classification recall at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect group.",
+            "C": "Incorrect group.",
+            "D": "Incorrect group."
+          }
+        }
+      ]
+    },
+    {
+      "domain": "Microbiology Basics",
+      "topicSlug": "bacterial-structure-and-reproduction",
+      "topicName": "Bacterial Structure and Reproduction",
+      "readinessWeight": "medium",
+      "cognitiveLevel": "conceptual-understanding",
+      "targetQuestionCountMin": 30,
+      "questionsGeneratedThisBatch": 30,
+      "prerequisiteTopicSlugs": [
+        "intro-microbiology-classification"
+      ],
+      "lessons": [
+        {
+          "title": "Bacterial cell envelope and Gram stain logic",
+          "structuredContent": {
+            "overview": "Gram-positive bacteria retain crystal violet due to thick peptidoglycan; gram-negative have thinner peptidoglycan and outer membrane with endotoxin (LPS) implications.",
+            "concepts": [
+              "Peptidoglycan cell wall",
+              "Capsule, flagella, pili (survey)",
+              "Gram stain: crystal violet, iodine, decolorizer, safranin"
+            ],
+            "commonMistakes": [
+              "Thinking Gram reaction predicts antibiotic choice alone—it informs, labs guide"
+            ],
+            "clinicalRelevanceLight": "Gram stain is rapid clue; cultures refine therapy."
+          }
+        },
+        {
+          "title": "Bacterial growth and resistance preview",
+          "structuredContent": {
+            "overview": "Binary fission doubles population when conditions allow. Resistance emerges via selection pressure and genetic change.",
+            "concepts": [
+              "Generation time",
+              "Plasmids can carry resistance genes",
+              "MRSA: methicillin-resistant Staph aureus (recognition)"
+            ],
+            "clinicalRelevanceLight": "Finish prescribed courses when ordered; stewardship reduces resistance spread."
+          }
+        }
+      ],
+      "questions": [
+        {
+          "stem": "Bacteria typically reproduce by:",
+          "options": {
+            "A": "binary fission",
+            "B": "mitosis identical to humans",
+            "C": "meiosis",
+            "D": "budding only always fungi"
+          },
+          "correctAnswer": "A",
+          "rationale": "Bacterial structure and behavior at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Peptidoglycan is a key component of:",
+          "options": {
+            "A": "many bacterial cell walls",
+            "B": "human cholesterol bilayer",
+            "C": "viral capsid protein only",
+            "D": "fungal chitin always inner"
+          },
+          "correctAnswer": "A",
+          "rationale": "Bacterial structure and behavior at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Gram-positive bacteria appear:",
+          "options": {
+            "A": "purple after Gram stain (student description)",
+            "B": "pink after complete stain",
+            "C": "always unstained",
+            "D": "green only"
+          },
+          "correctAnswer": "A",
+          "rationale": "Bacterial structure and behavior at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Gram-negative bacteria after counterstain often appear:",
+          "options": {
+            "A": "pink/red",
+            "B": "purple",
+            "C": "colorless always",
+            "D": "black only"
+          },
+          "correctAnswer": "A",
+          "rationale": "Bacterial structure and behavior at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "The outer membrane of gram-negative bacteria contains:",
+          "options": {
+            "A": "lipopolysaccharide (endotoxin) (survey)",
+            "B": "thick peptidoglycan only",
+            "C": "no lipids",
+            "D": "human DNA"
+          },
+          "correctAnswer": "A",
+          "rationale": "Bacterial structure and behavior at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Flagella function in bacteria:",
+          "options": {
+            "A": "motility",
+            "B": "DNA storage",
+            "C": "photosynthesis in all bacteria",
+            "D": "spore core only"
+          },
+          "correctAnswer": "A",
+          "rationale": "Bacterial structure and behavior at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Capsule can:",
+          "options": {
+            "A": "increase virulence by resisting phagocytosis (survey)",
+            "B": "always prevent all infection",
+            "C": "only found in viruses",
+            "D": "only in human cells"
+          },
+          "correctAnswer": "A",
+          "rationale": "Bacterial structure and behavior at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Pili can aid in:",
+          "options": {
+            "A": "attachment and conjugation (survey)",
+            "B": "photosynthesis",
+            "C": "oxygen transport",
+            "D": "none"
+          },
+          "correctAnswer": "A",
+          "rationale": "Bacterial structure and behavior at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "A spore is:",
+          "options": {
+            "A": "dormant resistant form for some bacteria",
+            "B": "reproductive structure of all viruses",
+            "C": "human ovum",
+            "D": "fungal yeast only"
+          },
+          "correctAnswer": "A",
+          "rationale": "Bacterial structure and behavior at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Binary fission produces:",
+          "options": {
+            "A": "two daughter cells",
+            "B": "four gametes",
+            "C": "viral particles directly",
+            "D": "hyphae"
+          },
+          "correctAnswer": "A",
+          "rationale": "Bacterial structure and behavior at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Antibiotic target cell wall synthesis would affect:",
+          "options": {
+            "A": "bacteria with peptidoglycan",
+            "B": "human cells primarily same way",
+            "C": "prions",
+            "D": "all viruses equally"
+          },
+          "correctAnswer": "A",
+          "rationale": "Bacterial structure and behavior at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "MRSA refers to:",
+          "options": {
+            "A": "methicillin-resistant Staphylococcus aureus",
+            "B": "methicillin-sensitive only",
+            "C": "a virus",
+            "D": "fungus"
+          },
+          "correctAnswer": "A",
+          "rationale": "Bacterial structure and behavior at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Plasmids can carry:",
+          "options": {
+            "A": "resistance genes",
+            "B": "human chromosomes",
+            "C": "mitochondria",
+            "D": "ribosomes only eukaryotic"
+          },
+          "correctAnswer": "A",
+          "rationale": "Bacterial structure and behavior at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Selective media in lab:",
+          "options": {
+            "A": "favors growth of certain organisms (survey)",
+            "B": "kills all bacteria",
+            "C": "only viral growth",
+            "D": "only urine"
+          },
+          "correctAnswer": "A",
+          "rationale": "Bacterial structure and behavior at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Aerobic respiration in bacteria uses:",
+          "options": {
+            "A": "oxygen as terminal electron acceptor (survey)",
+            "B": "always photosynthesis",
+            "C": "never electron transport",
+            "D": "only human hemoglobin"
+          },
+          "correctAnswer": "A",
+          "rationale": "Bacterial structure and behavior at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Obligate anaerobes:",
+          "options": {
+            "A": "cannot tolerate normal oxygen levels",
+            "B": "always need oxygen",
+            "C": "only on skin",
+            "D": "only viruses"
+          },
+          "correctAnswer": "A",
+          "rationale": "Bacterial structure and behavior at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Exotoxin is:",
+          "options": {
+            "A": "secreted bacterial protein toxin (survey)",
+            "B": "LPS outer membrane component",
+            "C": "human antibody",
+            "D": "only viral"
+          },
+          "correctAnswer": "A",
+          "rationale": "Bacterial structure and behavior at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Endotoxin associated with:",
+          "options": {
+            "A": "gram-negative LPS (survey)",
+            "B": "gram-positive thick wall only protein",
+            "C": "only fungi",
+            "D": "only parasites"
+          },
+          "correctAnswer": "A",
+          "rationale": "Bacterial structure and behavior at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Biofilm can:",
+          "options": {
+            "A": "protect bacteria from antibiotics and immunity (survey)",
+            "B": "always sterile",
+            "C": "only viral",
+            "D": "impossible in healthcare"
+          },
+          "correctAnswer": "A",
+          "rationale": "Bacterial structure and behavior at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Cocci are:",
+          "options": {
+            "A": "spherical bacteria",
+            "B": "rod only",
+            "C": "spiral only",
+            "D": "fungal"
+          },
+          "correctAnswer": "A",
+          "rationale": "Bacterial structure and behavior at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Bacilli are:",
+          "options": {
+            "A": "rod-shaped bacteria",
+            "B": "spherical only",
+            "C": "viral",
+            "D": "worm"
+          },
+          "correctAnswer": "A",
+          "rationale": "Bacterial structure and behavior at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Spirilla/spirochetes are:",
+          "options": {
+            "A": "spiral/twisted bacteria (survey)",
+            "B": "cocci only",
+            "C": "yeast",
+            "D": "helminth"
+          },
+          "correctAnswer": "A",
+          "rationale": "Bacterial structure and behavior at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Acid-fast stain highlights:",
+          "options": {
+            "A": "mycobacteria like TB (recognition)",
+            "B": "all gram-negatives",
+            "C": "all viruses",
+            "D": "all fungi"
+          },
+          "correctAnswer": "A",
+          "rationale": "Bacterial structure and behavior at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Beta-lactam antibiotics classically affect:",
+          "options": {
+            "A": "cell wall synthesis (survey)",
+            "B": "viral reverse transcriptase always",
+            "C": "fungal ergosterol always",
+            "D": "DNA gyrase always"
+          },
+          "correctAnswer": "A",
+          "rationale": "Bacterial structure and behavior at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Conjugation transfers:",
+          "options": {
+            "A": "genetic material between bacteria",
+            "B": "human genes to virus",
+            "C": "oxygen to blood",
+            "D": "nutrients to fungi only"
+          },
+          "correctAnswer": "A",
+          "rationale": "Bacterial structure and behavior at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Transformation in bacteria:",
+          "options": {
+            "A": "uptake of naked DNA from environment (survey)",
+            "B": "human IVF",
+            "C": "viral budding",
+            "D": "meiosis"
+          },
+          "correctAnswer": "A",
+          "rationale": "Bacterial structure and behavior at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Transduction transfers DNA via:",
+          "options": {
+            "A": "bacteriophage (survey)",
+            "B": "flagella",
+            "C": "human RNA",
+            "D": "osmosis"
+          },
+          "correctAnswer": "A",
+          "rationale": "Bacterial structure and behavior at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Bacteriophage is:",
+          "options": {
+            "A": "virus infecting bacteria",
+            "B": "bacterium infecting human",
+            "C": "fungus",
+            "D": "protozoan"
+          },
+          "correctAnswer": "A",
+          "rationale": "Bacterial structure and behavior at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Normal flora Staph on skin:",
+          "options": {
+            "A": "common",
+            "B": "impossible",
+            "C": "always pathogenic",
+            "D": "only gram-negative"
+          },
+          "correctAnswer": "A",
+          "rationale": "Bacterial structure and behavior at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Clostridium species are often:",
+          "options": {
+            "A": "anaerobic, spore-forming (survey)",
+            "B": "obligate aerobes always",
+            "C": "viruses",
+            "D": "fungi"
+          },
+          "correctAnswer": "A",
+          "rationale": "Bacterial structure and behavior at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        }
+      ]
+    },
+    {
+      "domain": "Microbiology Basics",
+      "topicSlug": "viral-structure-and-pathogenesis",
+      "topicName": "Viral Structure and Pathogenesis",
+      "readinessWeight": "medium",
+      "cognitiveLevel": "conceptual-understanding",
+      "targetQuestionCountMin": 30,
+      "questionsGeneratedThisBatch": 30,
+      "prerequisiteTopicSlugs": [
+        "intro-microbiology-classification"
+      ],
+      "lessons": [
+        {
+          "title": "Viral structure: minimal infectious particle",
+          "structuredContent": {
+            "overview": "Viruses contain genetic material (DNA or RNA) inside a capsid; some have an envelope derived from host membrane.",
+            "concepts": [
+              "Capsid",
+              "Envelope + spikes",
+              "Cannot metabolize or divide independently"
+            ],
+            "clinicalRelevanceLight": "Hand hygiene and vaccines target transmission and immunity, not 'antibiotics'."
+          }
+        },
+        {
+          "title": "Viral replication cycle (survey map)",
+          "structuredContent": {
+            "overview": "Attachment, entry, replication of genome, assembly, release—details vary by virus.",
+            "concepts": [
+              "Lytic vs lysogenic in bacteriophage teaching",
+              "Antivirals may block entry, replication, or release steps"
+            ],
+            "commonMistakes": [
+              "Treating influenza with antibiotics routinely"
+            ],
+            "clinicalRelevanceLight": "Exposure protocols and isolation depend on transmission route (contact, droplet, airborne)."
+          }
+        }
+      ],
+      "questions": [
+        {
+          "stem": "A virus contains:",
+          "options": {
+            "A": "genetic material and capsid proteins",
+            "B": "peptidoglycan always",
+            "C": "mitochondria",
+            "D": "nucleus always"
+          },
+          "correctAnswer": "A",
+          "rationale": "Viral biology at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Viral envelope comes from:",
+          "options": {
+            "A": "host cell membrane modified (survey)",
+            "B": "bacterial wall always",
+            "C": "plant cellulose always",
+            "D": "none"
+          },
+          "correctAnswer": "A",
+          "rationale": "Viral biology at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Reverse transcriptase is associated with:",
+          "options": {
+            "A": "retroviruses like HIV (recognition)",
+            "B": "all DNA viruses",
+            "C": "gram-positive cocci",
+            "D": "fungal chitin"
+          },
+          "correctAnswer": "A",
+          "rationale": "Viral biology at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Antiviral targets often include:",
+          "options": {
+            "A": "viral enzymes or entry proteins",
+            "B": "bacterial ribosome 70S always as sole target",
+            "C": "human DNA polymerase always primary",
+            "D": "peptidoglycan always"
+          },
+          "correctAnswer": "A",
+          "rationale": "Viral biology at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Latent viral infection means:",
+          "options": {
+            "A": "genome persists with periodic reactivation possible (survey)",
+            "B": "always active lysis",
+            "C": "always bacterial",
+            "D": "only fungal"
+          },
+          "correctAnswer": "A",
+          "rationale": "Viral biology at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Lytic cycle ends with:",
+          "options": {
+            "A": "host cell lysis releasing new virions (survey)",
+            "B": "integration only always",
+            "C": "binary fission",
+            "D": "spore formation"
+          },
+          "correctAnswer": "A",
+          "rationale": "Viral biology at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Lysogeny involves:",
+          "options": {
+            "A": "phage DNA integrated into bacterial chromosome (survey)",
+            "B": "human meiosis",
+            "C": "fungal budding only",
+            "D": "helminth egg"
+          },
+          "correctAnswer": "A",
+          "rationale": "Viral biology at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "RNA virus examples include:",
+          "options": {
+            "A": "influenza (survey)",
+            "B": "smallpox virus as DNA example contrast",
+            "C": "herpes as DNA virus contrast",
+            "D": "adenovirus DNA contrast"
+          },
+          "correctAnswer": "A",
+          "rationale": "Viral biology at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "DNA virus examples include:",
+          "options": {
+            "A": "herpesviruses (survey)",
+            "B": "influenza RNA contrast",
+            "C": "HCV RNA contrast",
+            "D": "all are RNA"
+          },
+          "correctAnswer": "A",
+          "rationale": "Viral biology at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Vaccination for viruses:",
+          "options": {
+            "A": "stimulates immunity to prevent or lessen disease",
+            "B": "replaces antibiotics for bacteria always",
+            "C": "kills fungi always",
+            "D": "only treats active TB always"
+          },
+          "correctAnswer": "A",
+          "rationale": "Viral biology at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Droplet transmission is:",
+          "options": {
+            "A": "respiratory droplets over short distances (survey)",
+            "B": "only vector",
+            "C": "only spore",
+            "D": "only blood always"
+          },
+          "correctAnswer": "A",
+          "rationale": "Viral biology at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Airborne precautions relate to:",
+          "options": {
+            "A": "tiny particles that remain suspended (survey examples later)",
+            "B": "only contact",
+            "C": "only droplet always same",
+            "D": "food only"
+          },
+          "correctAnswer": "A",
+          "rationale": "Viral biology at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Viral mutation can:",
+          "options": {
+            "A": "change antigenicity complicating vaccines (preview)",
+            "B": "never occur",
+            "C": "only in bacteria",
+            "D": "only in plants"
+          },
+          "correctAnswer": "A",
+          "rationale": "Viral biology at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Hepatitis B is:",
+          "options": {
+            "A": "DNA virus (recognition)",
+            "B": "RNA virus always",
+            "C": "bacterium",
+            "D": "fungus"
+          },
+          "correctAnswer": "A",
+          "rationale": "Viral biology at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Hepatitis C is:",
+          "options": {
+            "A": "RNA virus (recognition)",
+            "B": "DNA virus",
+            "C": "gram-negative rod",
+            "D": "yeast"
+          },
+          "correctAnswer": "A",
+          "rationale": "Viral biology at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Influenza is:",
+          "options": {
+            "A": "RNA virus with segmented genome (survey)",
+            "B": "DNA herpes",
+            "C": "bacterium",
+            "D": "helminth"
+          },
+          "correctAnswer": "A",
+          "rationale": "Viral biology at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Measles virus is:",
+          "options": {
+            "A": "RNA paramyxovirus (recognition level)",
+            "B": "DNA pox",
+            "C": "bacterium",
+            "D": "fungus"
+          },
+          "correctAnswer": "A",
+          "rationale": "Viral biology at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Varicella-zoster is:",
+          "options": {
+            "A": "DNA herpesvirus (recognition)",
+            "B": "RNA coronavirus always",
+            "C": "bacterium",
+            "D": "protozoan"
+          },
+          "correctAnswer": "A",
+          "rationale": "Viral biology at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Norovirus is:",
+          "options": {
+            "A": "RNA virus gastroenteritis (recognition)",
+            "B": "gram-positive coccus",
+            "C": "helminth",
+            "D": "fungus"
+          },
+          "correctAnswer": "A",
+          "rationale": "Viral biology at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Rhinovirus common cold is:",
+          "options": {
+            "A": "RNA picornavirus (survey)",
+            "B": "DNA pox",
+            "C": "bacterium always",
+            "D": "fungus always"
+          },
+          "correctAnswer": "A",
+          "rationale": "Viral biology at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "HPV is:",
+          "options": {
+            "A": "DNA virus (recognition)",
+            "B": "RNA retrovirus",
+            "C": "bacterium",
+            "D": "prion"
+          },
+          "correctAnswer": "A",
+          "rationale": "Viral biology at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "EBV is:",
+          "options": {
+            "A": "DNA herpesvirus (recognition)",
+            "B": "RNA flu",
+            "C": "gram-negative",
+            "D": "yeast"
+          },
+          "correctAnswer": "A",
+          "rationale": "Viral biology at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "CMV is:",
+          "options": {
+            "A": "DNA herpesvirus (recognition)",
+            "B": "RNA measles",
+            "C": "bacterium",
+            "D": "helminth"
+          },
+          "correctAnswer": "A",
+          "rationale": "Viral biology at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "COVID-19 is caused by:",
+          "options": {
+            "A": "SARS-CoV-2 RNA virus (recognition)",
+            "B": "DNA herpes",
+            "C": "Staph only",
+            "D": "Candida only"
+          },
+          "correctAnswer": "A",
+          "rationale": "Viral biology at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Viral load measures:",
+          "options": {
+            "A": "amount of virus in blood/fluid (survey)",
+            "B": "bacterial colony count only",
+            "C": "fungal spore only",
+            "D": "helminth length only"
+          },
+          "correctAnswer": "A",
+          "rationale": "Viral biology at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Cytopathic effect in cell culture:",
+          "options": {
+            "A": "virus injures cells visibly (survey)",
+            "B": "bacterial gram stain",
+            "C": "fungal KOH",
+            "D": "O&P only"
+          },
+          "correctAnswer": "A",
+          "rationale": "Viral biology at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Prophylactic antiviral means:",
+          "options": {
+            "A": "given to prevent infection/outbreak in defined contexts",
+            "B": "always replaces vaccine",
+            "C": "only antibacterial",
+            "D": "only antifungal"
+          },
+          "correctAnswer": "A",
+          "rationale": "Viral biology at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Post-exposure prophylaxis may use:",
+          "options": {
+            "A": "antivirals or vaccines per protocol (survey)",
+            "B": "always antibiotics for virus",
+            "C": "nothing ever",
+            "D": "only surgery"
+          },
+          "correctAnswer": "A",
+          "rationale": "Viral biology at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Zoster reactivation involves:",
+          "options": {
+            "A": "varicella-zoster virus (survey)",
+            "B": "E. coli",
+            "C": "Candida only",
+            "D": "tapeworm only"
+          },
+          "correctAnswer": "A",
+          "rationale": "Viral biology at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Herpes simplex establishes:",
+          "options": {
+            "A": "latency in sensory ganglia (survey)",
+            "B": "only bacterial spore",
+            "C": "only fungal yeast",
+            "D": "only helminth cyst"
+          },
+          "correctAnswer": "A",
+          "rationale": "Viral biology at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        }
+      ]
+    },
+    {
+      "domain": "Microbiology Basics",
+      "topicSlug": "antimicrobials-overview",
+      "topicName": "Antimicrobials: Antibiotics, Antivirals, and Antifungals",
+      "readinessWeight": "high",
+      "cognitiveLevel": "conceptual-understanding",
+      "targetQuestionCountMin": 40,
+      "questionsGeneratedThisBatch": 40,
+      "prerequisiteTopicSlugs": [
+        "bacterial-structure-and-reproduction",
+        "viral-structure-and-pathogenesis"
+      ],
+      "lessons": [
+        {
+          "title": "Antibacterial classes and spectrum (overview)",
+          "structuredContent": {
+            "overview": "Narrow-spectrum drugs hit fewer organism types; broad-spectrum hit more but disturb flora and resistance risk more.",
+            "examples": [
+              "Beta-lactams",
+              "Macrolides",
+              "Fluoroquinolones",
+              "Aminoglycosides—names come later; concepts now"
+            ],
+            "clinicalRelevanceLight": "Culture and sensitivity guide narrowing therapy when possible."
+          }
+        },
+        {
+          "title": "Antivirals and antifungals: different targets",
+          "structuredContent": {
+            "overview": "Antivirals block specific viral steps; antifungals often target ergosterol-rich membranes or cell wall (echinocandins) at advanced levels.",
+            "commonMistakes": [
+              "Using antifungal for viral illness"
+            ],
+            "clinicalRelevanceLight": "Drug choice follows diagnosis, not convenience."
+          }
+        },
+        {
+          "title": "Resistance, adherence, and safety basics",
+          "structuredContent": {
+            "overview": "Finish courses when prescribed; do not share antibiotics; report allergies accurately.",
+            "concepts": [
+              "MRSA, VRE, ESBL as acronyms to recognize—not memorize full mechanisms yet"
+            ],
+            "clinicalRelevanceLight": "Infection control plus appropriate prescribing slows resistance."
+          }
+        }
+      ],
+      "questions": [
+        {
+          "stem": "Antibiotic resistance means:",
+          "options": {
+            "A": "drug no longer effectively kills or inhibits the bacterium",
+            "B": "patient immune only",
+            "C": "virus only",
+            "D": "always allergy"
+          },
+          "correctAnswer": "A",
+          "rationale": "Antimicrobial concepts at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Broad-spectrum antibiotics:",
+          "options": {
+            "A": "affect many bacterial types",
+            "B": "only one species always",
+            "C": "treat viruses",
+            "D": "only fungi"
+          },
+          "correctAnswer": "A",
+          "rationale": "Antimicrobial concepts at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Narrow-spectrum antibiotics:",
+          "options": {
+            "A": "target fewer types when possible",
+            "B": "always safer in every case without thought",
+            "C": "treat all viruses",
+            "D": "only topical"
+          },
+          "correctAnswer": "A",
+          "rationale": "Antimicrobial concepts at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Antiviral drug example class (recognition):",
+          "options": {
+            "A": "oseltamivir for influenza (contextual)",
+            "B": "penicillin for flu",
+            "C": "metronidazole for flu",
+            "D": "amphotericin for flu"
+          },
+          "correctAnswer": "A",
+          "rationale": "Antimicrobial concepts at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Antifungal example class (recognition):",
+          "options": {
+            "A": "azoles like fluconazole (contextual)",
+            "B": "penicillin for thrush always",
+            "C": "acyclovir for Candida always",
+            "D": "cefazolin for mold always"
+          },
+          "correctAnswer": "A",
+          "rationale": "Antimicrobial concepts at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "MRSA implies resistance to:",
+          "options": {
+            "A": "beta-lactam antibiotics like methicillin classically",
+            "B": "all drugs always",
+            "C": "only antivirals",
+            "D": "only antiparasitics"
+          },
+          "correctAnswer": "A",
+          "rationale": "Antimicrobial concepts at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Superinfection can occur when:",
+          "options": {
+            "A": "normal flora suppressed allowing opportunists (survey)",
+            "B": "never on antibiotics",
+            "C": "only viral",
+            "D": "only vaccines"
+          },
+          "correctAnswer": "A",
+          "rationale": "Antimicrobial concepts at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "C. difficile risk increases with:",
+          "options": {
+            "A": "broad antibiotic exposure disrupting colon flora (survey)",
+            "B": "only antivirals",
+            "C": "only vitamins",
+            "D": "hand washing"
+          },
+          "correctAnswer": "A",
+          "rationale": "Antimicrobial concepts at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Bactericidal vs bacteriostatic at student level:",
+          "options": {
+            "A": "kills vs inhibits growth (survey)",
+            "B": "identical",
+            "C": "only viral terms",
+            "D": "only fungal"
+          },
+          "correctAnswer": "A",
+          "rationale": "Antimicrobial concepts at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Sensitivity report 'S' means:",
+          "options": {
+            "A": "susceptible",
+            "B": "resistant",
+            "C": "intermediate always means give double always",
+            "D": "not tested"
+          },
+          "correctAnswer": "A",
+          "rationale": "Antimicrobial concepts at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Sensitivity 'R' means:",
+          "options": {
+            "A": "resistant",
+            "B": "susceptible",
+            "C": "pan-sensitive always",
+            "D": "only viral"
+          },
+          "correctAnswer": "A",
+          "rationale": "Antimicrobial concepts at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Prophylactic antibiotic means:",
+          "options": {
+            "A": "prevent infection in specific situations per protocol",
+            "B": "treat all colds",
+            "C": "always post-op without indication",
+            "D": "only antiviral"
+          },
+          "correctAnswer": "A",
+          "rationale": "Antimicrobial concepts at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Empiric therapy means:",
+          "options": {
+            "A": "treat before culture results using likely coverage",
+            "B": "only after sensitivity always",
+            "C": "never used",
+            "D": "only fungal"
+          },
+          "correctAnswer": "A",
+          "rationale": "Antimicrobial concepts at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Definitive therapy means:",
+          "options": {
+            "A": "targeted to identified organism/sensitivity",
+            "B": "guess always",
+            "C": "only OTC",
+            "D": "only topical"
+          },
+          "correctAnswer": "A",
+          "rationale": "Antimicrobial concepts at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Antibiotic stewardship aims to:",
+          "options": {
+            "A": "optimize use and reduce resistance",
+            "B": "use broad always",
+            "C": "stop cultures",
+            "D": "never de-escalate"
+          },
+          "correctAnswer": "A",
+          "rationale": "Antimicrobial concepts at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Penicillin allergy documentation should be:",
+          "options": {
+            "A": "accurate; many labeled are not true IgE allergy",
+            "B": "ignored",
+            "C": "always genetic",
+            "D": "only pharmacist problem"
+          },
+          "correctAnswer": "A",
+          "rationale": "Antimicrobial concepts at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Drug interaction with warfarin and antibiotics can affect:",
+          "options": {
+            "A": "bleeding risk (preview)",
+            "B": "never INR",
+            "C": "only hair",
+            "D": "only hearing"
+          },
+          "correctAnswer": "A",
+          "rationale": "Antimicrobial concepts at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Aminoglycosides are noted for:",
+          "options": {
+            "A": "nephrotoxicity and ototoxicity risk (recognition)",
+            "B": "zero toxicity",
+            "C": "only antiviral",
+            "D": "only oral always"
+          },
+          "correctAnswer": "A",
+          "rationale": "Antimicrobial concepts at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Fluoroquinolones carry:",
+          "options": {
+            "A": "tendon and QT risk flags (recognition)",
+            "B": "zero risk",
+            "C": "only pediatric blessing",
+            "D": "only in vitamins"
+          },
+          "correctAnswer": "A",
+          "rationale": "Antimicrobial concepts at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Macrolides can:",
+          "options": {
+            "A": "affect QT and interact with other drugs (recognition)",
+            "B": "never interact",
+            "C": "only treat viruses",
+            "D": "only topical"
+          },
+          "correctAnswer": "A",
+          "rationale": "Antimicrobial concepts at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Trimethoprim-sulfamethoxazole can affect:",
+          "options": {
+            "A": "renal function and potassium in some patients (recognition)",
+            "B": "only liver always",
+            "C": "never monitoring",
+            "D": "only antiviral"
+          },
+          "correctAnswer": "A",
+          "rationale": "Antimicrobial concepts at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Linezolid considerations include:",
+          "options": {
+            "A": "serotonin interaction risk with certain meds (recognition)",
+            "B": "zero interactions",
+            "C": "only fungal",
+            "D": "only vaccine"
+          },
+          "correctAnswer": "A",
+          "rationale": "Antimicrobial concepts at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Vancomycin requires:",
+          "options": {
+            "A": "therapeutic monitoring often (recognition)",
+            "B": "never levels",
+            "C": "only PO for all infections same",
+            "D": "only antiviral"
+          },
+          "correctAnswer": "A",
+          "rationale": "Antimicrobial concepts at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Antifungal amphotericin B historically:",
+          "options": {
+            "A": "nephrotoxicity concern (recognition)",
+            "B": "zero risk",
+            "C": "oral only always",
+            "D": "treats bacteria"
+          },
+          "correctAnswer": "A",
+          "rationale": "Antimicrobial concepts at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Azole antifungals affect:",
+          "options": {
+            "A": "CYP enzymes; drug interactions possible (preview)",
+            "B": "never interactions",
+            "C": "only bacteria",
+            "D": "only viruses"
+          },
+          "correctAnswer": "A",
+          "rationale": "Antimicrobial concepts at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Acyclovir targets:",
+          "options": {
+            "A": "herpesviruses (survey)",
+            "B": "influenza always",
+            "C": "MRSA always",
+            "D": "Candida always"
+          },
+          "correctAnswer": "A",
+          "rationale": "Antimicrobial concepts at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Oseltamivir targets:",
+          "options": {
+            "A": "influenza neuraminidase (survey)",
+            "B": "herpes DNA pol always",
+            "C": "bacterial wall",
+            "D": "fungal ergosterol"
+          },
+          "correctAnswer": "A",
+          "rationale": "Antimicrobial concepts at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Nucleoside analog antivirals generally:",
+          "options": {
+            "A": "interfere with viral nucleic acid synthesis (survey)",
+            "B": "strengthen bacterial wall",
+            "C": "kill all fungi",
+            "D": "only vaccine"
+          },
+          "correctAnswer": "A",
+          "rationale": "Antimicrobial concepts at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Pneumocystis treatment context often involves:",
+          "options": {
+            "A": "specific antimicrobial regimens in immunocompromised (recognition)",
+            "B": "only antiviral oseltamivir",
+            "C": "only metronidazole dental",
+            "D": "only NSAIDs"
+          },
+          "correctAnswer": "A",
+          "rationale": "Antimicrobial concepts at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "TB treatment is:",
+          "options": {
+            "A": "multi-drug long course (recognition)",
+            "B": "single dose penicillin",
+            "C": "only antiviral",
+            "D": "only topical"
+          },
+          "correctAnswer": "A",
+          "rationale": "Antimicrobial concepts at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Antibiotic-associated diarrhea prompts:",
+          "options": {
+            "A": "clinical evaluation; C. diff consideration (survey)",
+            "B": "ignore",
+            "C": "always probiotics only cure",
+            "D": "only increase dose"
+          },
+          "correctAnswer": "A",
+          "rationale": "Antimicrobial concepts at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "VRE stands for:",
+          "options": {
+            "A": "vancomycin-resistant enterococci (recognition)",
+            "B": "virus",
+            "C": "fungus",
+            "D": "parasite"
+          },
+          "correctAnswer": "A",
+          "rationale": "Antimicrobial concepts at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "ESBL hints at:",
+          "options": {
+            "A": "extended-spectrum beta-lactamase resistance pattern (recognition)",
+            "B": "viral load",
+            "C": "fungal spore",
+            "D": "helminth"
+          },
+          "correctAnswer": "A",
+          "rationale": "Antimicrobial concepts at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Antiseptic vs antibiotic:",
+          "options": {
+            "A": "antiseptic on living tissue surfaces reduce microbes; systemic antibiotics internal",
+            "B": "identical",
+            "C": "only oral",
+            "D": "only viral"
+          },
+          "correctAnswer": "A",
+          "rationale": "Antimicrobial concepts at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Disinfectant vs antiseptic:",
+          "options": {
+            "A": "disinfectant on objects; antiseptic on skin (survey)",
+            "B": "same always",
+            "C": "only IV",
+            "D": "only hand gel illegal"
+          },
+          "correctAnswer": "A",
+          "rationale": "Antimicrobial concepts at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Selective toxicity means:",
+          "options": {
+            "A": "harm pathogen more than host at therapeutic doses (goal)",
+            "B": "harm host only",
+            "C": "no difference",
+            "D": "only placebo"
+          },
+          "correctAnswer": "A",
+          "rationale": "Antimicrobial concepts at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Synergistic combo example recognition:",
+          "options": {
+            "A": "certain beta-lactam + aminoglycoside pairings in specific infections (preview)",
+            "B": "always any two drugs",
+            "C": "never real",
+            "D": "only vitamins"
+          },
+          "correctAnswer": "A",
+          "rationale": "Antimicrobial concepts at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Antiparasitic drugs differ from antibacterials:",
+          "options": {
+            "A": "different targets and spectra",
+            "B": "identical",
+            "C": "only topical",
+            "D": "never exist"
+          },
+          "correctAnswer": "A",
+          "rationale": "Antimicrobial concepts at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Metronidazole is notably:",
+          "options": {
+            "A": "anaerobic bacterial and certain protozoal coverage (recognition)",
+            "B": "only antiviral",
+            "C": "only antifungal azole",
+            "D": "only helminth"
+          },
+          "correctAnswer": "A",
+          "rationale": "Antimicrobial concepts at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Ivermectin context includes:",
+          "options": {
+            "A": "certain parasitic infections per guidelines (recognition)",
+            "B": "routine antiviral for all",
+            "C": "only MRSA",
+            "D": "only vaccine"
+          },
+          "correctAnswer": "A",
+          "rationale": "Antimicrobial concepts at pre-nursing depth.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        }
+      ]
+    },
+    {
+      "domain": "Pharmacology Foundations",
+      "topicSlug": "pharmacology-intro-drug-classifications",
+      "topicName": "Introduction to Pharmacology: Drug Names and Classifications",
+      "readinessWeight": "high",
+      "cognitiveLevel": "foundational-recall",
+      "targetQuestionCountMin": 40,
+      "questionsGeneratedThisBatch": 40,
+      "prerequisiteTopicSlugs": [
+        "organic-molecules-macromolecules",
+        "antimicrobials-overview"
+      ],
+      "lessons": [
+        {
+          "title": "Generic, brand, and why both names appear",
+          "structuredContent": {
+            "overview": "Generic is the nonproprietary name; brand is marketed by a company. Orders should be clear; double-check look-alike/sound-alike pairs.",
+            "clinicalRelevanceLight": "Barcode systems often key off generic plus strength/form."
+          }
+        },
+        {
+          "title": "Drug classes and prototypes",
+          "structuredContent": {
+            "overview": "A class shares mechanism or use; a prototype drug is the classic teaching example (e.g., propranolol for beta blockers at survey).",
+            "clinicalRelevanceLight": "Class effects predict side effects (e.g., beta blockers and heart rate)."
+          }
+        },
+        {
+          "title": "Controlled substance schedules (US framework, recognition)",
+          "structuredContent": {
+            "overview": "Schedule I–V reflect abuse potential and regulation increasing toward Schedule I (non-medical use in schedule I classic teaching).",
+            "note": "Canada and other countries differ; follow your jurisdiction.",
+            "clinicalRelevanceLight": "Counts, wasting, and witness rules apply to controlled meds."
+          }
+        }
+      ],
+      "questions": [
+        {
+          "stem": "Generic name is:",
+          "options": {
+            "A": "nonproprietary name of drug",
+            "B": "only the company logo",
+            "C": "only color of tablet",
+            "D": "only barcode number"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacology intro recall.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Brand/trade name is:",
+          "options": {
+            "A": "marketed product name",
+            "B": "always identical to generic spelling",
+            "C": "only chemical formula spoken",
+            "D": "only schedule"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacology intro recall.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "OTC means:",
+          "options": {
+            "A": "over-the-counter without prescription in many contexts",
+            "B": "only IV",
+            "C": "only chemotherapy",
+            "D": "only research"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacology intro recall.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Prescription drug requires:",
+          "options": {
+            "A": "authorized prescriber order",
+            "B": "only patient choice",
+            "C": "only pharmacist guess",
+            "D": "only nurse protocol always"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacology intro recall.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Therapeutic class groups drugs by:",
+          "options": {
+            "A": "clinical use or mechanism (survey)",
+            "B": "only color",
+            "C": "only manufacturer city",
+            "D": "only price"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacology intro recall.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Pharmacologic class groups by:",
+          "options": {
+            "A": "mechanism/receptor target (survey)",
+            "B": "only indication only always same",
+            "C": "only tablet shape",
+            "D": "only insurance"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacology intro recall.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Prototype drug is:",
+          "options": {
+            "A": "classic teaching example for a class",
+            "B": "always newest drug",
+            "C": "only generic letter",
+            "D": "only biologic"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacology intro recall.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "DEA schedule I at classic US teaching:",
+          "options": {
+            "A": "high abuse potential; no accepted medical use in US teaching",
+            "B": "safest lowest control",
+            "C": "only vitamins",
+            "D": "only antibiotics"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacology intro recall.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Schedule II drugs have:",
+          "options": {
+            "A": "high abuse potential; tight prescribing rules (survey)",
+            "B": "no restrictions",
+            "C": "only topical",
+            "D": "only OTC"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacology intro recall.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Look-alike/sound-alike pairs require:",
+          "options": {
+            "A": "extra verification per policy",
+            "B": "no caution",
+            "C": "only night shift",
+            "D": "only pediatric"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacology intro recall.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Tall man lettering aims to:",
+          "options": {
+            "A": "highlight differences in similar names",
+            "B": "make fonts pretty",
+            "C": "replace generic",
+            "D": "remove brand"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacology intro recall.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Bioequivalence generic to brand implies:",
+          "options": {
+            "A": "similar expected effect at same dose (regulatory standard)",
+            "B": "always different dose",
+            "C": "never tested",
+            "D": "only IV"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacology intro recall.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Formulation differences include:",
+          "options": {
+            "A": "tablet vs liquid vs extended-release",
+            "B": "only color",
+            "C": "only physician preference unrelated",
+            "D": "none"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacology intro recall.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Combination product contains:",
+          "options": {
+            "A": "more than one active ingredient",
+            "B": "always placebo",
+            "C": "only water",
+            "D": "only vaccine"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacology intro recall.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Indication means:",
+          "options": {
+            "A": "approved or prescribed reason for use",
+            "B": "only side effect",
+            "C": "only allergy",
+            "D": "only lot number"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacology intro recall.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Contraindication means:",
+          "options": {
+            "A": "situation where drug should not be used",
+            "B": "always green light",
+            "C": "only pediatric",
+            "D": "only generic"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacology intro recall.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Black box warning is:",
+          "options": {
+            "A": "FDA serious risk highlight",
+            "B": "marketing sticker",
+            "C": "only OTC",
+            "D": "only cosmetic"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacology intro recall.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Off-label use means:",
+          "options": {
+            "A": "use not in official labeling though may be evidence-based",
+            "B": "illegal always",
+            "C": "only supplements",
+            "D": "only antibiotics"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacology intro recall.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Biologic vs small molecule at survey:",
+          "options": {
+            "A": "large complex molecules vs traditional pills often",
+            "B": "identical",
+            "C": "only vitamins",
+            "D": "only water"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacology intro recall.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Biosimilar relates to:",
+          "options": {
+            "A": "similar biologic to reference product (regulatory)",
+            "B": "generic small molecule identical always",
+            "C": "only vaccine",
+            "D": "only herbal"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacology intro recall.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Herbal product can:",
+          "options": {
+            "A": "interact with prescriptions",
+            "B": "never interact",
+            "C": "replace all prescriptions safely",
+            "D": "only placebo always"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacology intro recall.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Dietary supplement is:",
+          "options": {
+            "A": "regulated differently than drugs in US (recognition)",
+            "B": "identical evidence standard always",
+            "C": "only IV",
+            "D": "only prescription"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacology intro recall.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Unapproved use documentation should:",
+          "options": {
+            "A": "follow policy and evidence",
+            "B": "never chart",
+            "C": "only verbal",
+            "D": "only social media"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacology intro recall.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "High-alert medication:",
+          "options": {
+            "A": "increased harm if error (ISMP list concept)",
+            "B": "safest meds",
+            "C": "only vitamins",
+            "D": "only topical"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacology intro recall.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "LASA list refers to:",
+          "options": {
+            "A": "look-alike sound-alike drug names",
+            "B": "labs only",
+            "C": "only IV pumps",
+            "D": "only schedules only"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacology intro recall.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Chemotherapy at student level is:",
+          "options": {
+            "A": "often high-risk drug class needing safeguards",
+            "B": "same risk as multivitamin always",
+            "C": "only oral",
+            "D": "only OTC"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacology intro recall.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Insulin is:",
+          "options": {
+            "A": "high-alert medication in many institutions",
+            "B": "low risk always",
+            "C": "never injectable",
+            "D": "only pill"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacology intro recall.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Anticoagulants are:",
+          "options": {
+            "A": "high bleed risk class needing vigilance",
+            "B": "never interact",
+            "C": "only topical",
+            "D": "only pediatric"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacology intro recall.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Opioids are:",
+          "options": {
+            "A": "controlled with abuse and respiratory risk",
+            "B": "risk-free sleep aids always",
+            "C": "only NSAIDs",
+            "D": "only local anesthetic"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacology intro recall.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Sedative-hypnotics can cause:",
+          "options": {
+            "A": "oversedation and falls especially in elderly",
+            "B": "never CNS effects",
+            "C": "only GI bleed",
+            "D": "only rash"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacology intro recall.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Potassium supplements can be:",
+          "options": {
+            "A": "high risk if wrong dose/route",
+            "B": "always harmless",
+            "C": "only cosmetic",
+            "D": "only liquid"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacology intro recall.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Digoxin is:",
+          "options": {
+            "A": "narrow therapeutic index classic example (recognition)",
+            "B": "impossible toxicity",
+            "C": "only OTC",
+            "D": "only antibiotic"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacology intro recall.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Lithium is:",
+          "options": {
+            "A": "narrow index mood stabilizer (recognition)",
+            "B": "vitamin",
+            "C": "only antihypertensive class beta blocker",
+            "D": "only antiviral"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacology intro recall.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Theophylline historically:",
+          "options": {
+            "A": "narrow index drug (recognition)",
+            "B": "only supplement",
+            "C": "only topical steroid",
+            "D": "only antacid"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacology intro recall.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Warfarin requires:",
+          "options": {
+            "A": "monitoring and interaction vigilance",
+            "B": "never labs",
+            "C": "only loading dose once",
+            "D": "only pediatric"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacology intro recall.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Antiseizure meds often need:",
+          "options": {
+            "A": "consistent adherence and monitoring",
+            "B": "never levels sometimes",
+            "C": "only PRN always",
+            "D": "only herbal"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacology intro recall.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Immunosuppressants post-transplant need:",
+          "options": {
+            "A": "strict adherence and monitoring",
+            "B": "occasional skip ok always",
+            "C": "only OTC",
+            "D": "only vitamins"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacology intro recall.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Chemo vesicant means:",
+          "options": {
+            "A": "tissue injury if extravasates (recognition)",
+            "B": "safe if fast push always",
+            "C": "only oral",
+            "D": "only NSAID"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacology intro recall.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "A patient asks why generic looks different; best student response framework:",
+          "options": {
+            "A": "same active ingredient; excipients/color may differ per policy teaching",
+            "B": "say it is a different drug always",
+            "C": "refuse to answer",
+            "D": "guarantee identical tablet always"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacology intro recall.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "NDC number identifies:",
+          "options": {
+            "A": "drug product labeling in US (recognition)",
+            "B": "patient room",
+            "C": "only nurse",
+            "D": "only diagnosis"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacology intro recall.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        }
+      ]
+    },
+    {
+      "domain": "Pharmacology Foundations",
+      "topicSlug": "pharmacokinetics-adme",
+      "topicName": "Pharmacokinetics: Absorption, Distribution, Metabolism, and Excretion",
+      "readinessWeight": "critical",
+      "cognitiveLevel": "conceptual-understanding",
+      "targetQuestionCountMin": 50,
+      "questionsGeneratedThisBatch": 50,
+      "prerequisiteTopicSlugs": [
+        "pharmacology-intro-drug-classifications",
+        "digestive-system-anatomy",
+        "urinary-system-anatomy"
+      ],
+      "prerequisiteBridgingNote": "Lesson 1 embeds GI and renal context for absorption/excretion; complete full A&P digestive/urinary topics in curriculum.",
+      "lessons": [
+        {
+          "title": "Absorption: from site into circulation",
+          "structuredContent": {
+            "overview": "Absorption depends on route, blood flow, solubility, and barriers.",
+            "prerequisiteBridgeDigestiveUrinary": {
+              "GItract": "Oral drugs traverse GI mucosa; stomach acid, food, motility, and first-pass metabolism alter bioavailability.",
+              "KidneyRoleExcretion": "Many drugs and metabolites exit via renal filtration and secretion; hydration and kidney function matter."
+            },
+            "concepts": [
+              "Bioavailability",
+              "First-pass effect reduces oral bioavailability for some drugs",
+              "Peak concentration and onset"
+            ],
+            "clinicalRelevanceLight": "NPO status, vomiting, and tube feeds can change absorption."
+          }
+        },
+        {
+          "title": "Distribution: from blood to tissues",
+          "structuredContent": {
+            "overview": "Drug distributes by blood flow, tissue affinity, and protein binding (especially albumin).",
+            "concepts": [
+              "Volume of distribution (preview)",
+              "Unbound drug is often considered active at simple teaching level"
+            ],
+            "clinicalRelevanceLight": "Low albumin can change free drug for highly bound agents (preview)."
+          }
+        },
+        {
+          "title": "Metabolism: biotransformation, often in liver",
+          "structuredContent": {
+            "overview": "Liver enzymes (notably cytochrome P450 family) chemically modify drugs to often more water-soluble metabolites.",
+            "concepts": [
+              "Prodrug activated by metabolism",
+              "Enzyme inducers/inhibitors change other drug levels (preview)"
+            ],
+            "clinicalRelevanceLight": "Grapefruit and some antibiotics alter metabolism of certain drugs."
+          }
+        },
+        {
+          "title": "Excretion: mainly renal; half-life and steady state",
+          "structuredContent": {
+            "overview": "Kidneys excrete many drugs; half-life is time for amount to fall by half (student definition). Steady state approaches after ~4–5 half-lives of regular dosing.",
+            "concepts": [
+              "CrCl relevance preview",
+              "Dose adjustments in renal impairment for some drugs"
+            ],
+            "clinicalRelevanceLight": "Creatinine clearance guides dosing for renally cleared drugs in practice."
+          }
+        }
+      ],
+      "questions": [
+        {
+          "stem": "Absorption is:",
+          "options": {
+            "A": "movement from administration site into circulation",
+            "B": "only kidney filtration",
+            "C": "only liver metabolism",
+            "D": "only excretion"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacokinetics conceptual understanding.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "First-pass effect primarily involves:",
+          "options": {
+            "A": "liver metabolism before systemic circulation for oral drugs",
+            "B": "IV bolus always",
+            "C": "skin only",
+            "D": "only IM"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacokinetics conceptual understanding.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Bioavailability is:",
+          "options": {
+            "A": "fraction reaching systemic circulation",
+            "B": "drug color",
+            "C": "tablet weight only",
+            "D": "only protein"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacokinetics conceptual understanding.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "IV bolus bioavailability is considered:",
+          "options": {
+            "A": "complete for the delivered dose into vein",
+            "B": "zero always",
+            "C": "always50%",
+            "D": "only oral"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacokinetics conceptual understanding.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Distribution includes:",
+          "options": {
+            "A": "movement from blood to tissues",
+            "B": "only absorption",
+            "C": "only excretion only",
+            "D": "only metabolism only"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacokinetics conceptual understanding.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Protein binding can:",
+          "options": {
+            "A": "limit free drug available to tissues (concept)",
+            "B": "never matter",
+            "C": "only for vitamins",
+            "D": "only for water"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacokinetics conceptual understanding.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Metabolism often makes drugs:",
+          "options": {
+            "A": "more water-soluble for excretion",
+            "B": "always more active",
+            "C": "always permanent",
+            "D": "only larger always"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacokinetics conceptual understanding.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Cytochrome P450 system is:",
+          "options": {
+            "A": "major drug-metabolizing enzyme family in liver (survey)",
+            "B": "only kidney",
+            "C": "only RBC",
+            "D": "only DNA polymerase"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacokinetics conceptual understanding.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Enzyme inhibitor tends to:",
+          "options": {
+            "A": "increase levels of substrates of that enzyme",
+            "B": "decrease levels always",
+            "C": "only affect food",
+            "D": "only vaccines"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacokinetics conceptual understanding.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Enzyme inducer tends to:",
+          "options": {
+            "A": "decrease levels of substrates over time",
+            "B": "increase levels always",
+            "C": "only IV fluids",
+            "D": "only calcium"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacokinetics conceptual understanding.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Excretion commonly occurs via:",
+          "options": {
+            "A": "kidneys",
+            "B": "only sweat for all drugs",
+            "C": "only tears",
+            "D": "only bile only never kidney"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacokinetics conceptual understanding.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Half-life is:",
+          "options": {
+            "A": "time for drug amount to decrease by half (student definition)",
+            "B": "always 24 h",
+            "C": "only absorption metric",
+            "D": "only legal term"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacokinetics conceptual understanding.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Steady state with repeated dosing approaches after:",
+          "options": {
+            "A": "about 4–5 half-lives (rule of thumb)",
+            "B": "one dose always",
+            "C": "never",
+            "D": "only IV"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacokinetics conceptual understanding.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Loading dose may be used to:",
+          "options": {
+            "A": "reach therapeutic effect faster for some drugs",
+            "B": "replace maintenance always",
+            "C": "only oral",
+            "D": "never real"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacokinetics conceptual understanding.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Maintenance dose replaces:",
+          "options": {
+            "A": "amount eliminated per dosing interval at steady state (concept)",
+            "B": "absorption only",
+            "C": "first pass only",
+            "D": "only protein"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacokinetics conceptual understanding.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Renal clearance depends on:",
+          "options": {
+            "A": "filtration, secretion, reabsorption (survey)",
+            "B": "only liver",
+            "C": "only skin",
+            "D": "only lung only"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacokinetics conceptual understanding.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "CrCl estimates:",
+          "options": {
+            "A": "kidney filtration capacity surrogate (survey)",
+            "B": "liver function always",
+            "C": "only weight",
+            "D": "only age alone"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacokinetics conceptual understanding.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Drug in bile may undergo:",
+          "options": {
+            "A": "enterohepatic recirculation (recognition)",
+            "B": "only IV metabolism",
+            "C": "only pulmonary excretion only",
+            "D": "none"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacokinetics conceptual understanding.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Lipophilic drugs tend to:",
+          "options": {
+            "A": "distribute into fat tissues (concept)",
+            "B": "never leave blood",
+            "C": "only water soluble always",
+            "D": "only ionized always"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacokinetics conceptual understanding.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Ionization can affect:",
+          "options": {
+            "A": "membrane crossing (concept)",
+            "B": "nothing",
+            "C": "only tablet color",
+            "D": "only schedule"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacokinetics conceptual understanding.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Young pediatric patients may:",
+          "options": {
+            "A": "metabolize/excrete differently vs adults (general)",
+            "B": "always identical dosing",
+            "C": "never need adjustment",
+            "D": "only by height"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacokinetics conceptual understanding.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Elderly may have:",
+          "options": {
+            "A": "reduced renal function and body composition changes",
+            "B": "identical PK always",
+            "C": "faster metabolism always",
+            "D": "only pediatric rules"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacokinetics conceptual understanding.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Pregnancy can alter:",
+          "options": {
+            "A": "drug distribution and metabolism (general)",
+            "B": "never any change",
+            "C": "only topical drugs",
+            "D": "only vitamins"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacokinetics conceptual understanding.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Breast milk transfer depends on:",
+          "options": {
+            "A": "drug properties and maternal factors (survey)",
+            "B": "never happens",
+            "C": "all drugs equal",
+            "D": "only pH of baby"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacokinetics conceptual understanding.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Dialysis can remove:",
+          "options": {
+            "A": "some drugs depending on properties",
+            "B": "all drugs equally",
+            "C": "no drugs ever",
+            "D": "only vitamins"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacokinetics conceptual understanding.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "TDM means:",
+          "options": {
+            "A": "therapeutic drug monitoring for narrow-index drugs (recognition)",
+            "B": "only allergy test",
+            "C": "only genetic test always",
+            "D": "only imaging"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacokinetics conceptual understanding.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Peak and trough levels help:",
+          "options": {
+            "A": "assess toxicity and subtherapeutic risk for some drugs",
+            "B": "only diagnosis infection always",
+            "C": "only CBC",
+            "D": "only UA"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacokinetics conceptual understanding.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Subcutaneous absorption is generally:",
+          "options": {
+            "A": "slower than IV",
+            "B": "faster than IV always",
+            "C": "identical to IV",
+            "D": "impossible"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacokinetics conceptual understanding.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "IM absorption is:",
+          "options": {
+            "A": "faster than SC for many drugs (general)",
+            "B": "always slower than SC",
+            "C": "identical always",
+            "D": "only oral"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacokinetics conceptual understanding.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Sublingual avoids:",
+          "options": {
+            "A": "some first-pass for certain drugs",
+            "B": "all metabolism",
+            "C": "only kidney",
+            "D": "only liver entirely always"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacokinetics conceptual understanding.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Transdermal provides:",
+          "options": {
+            "A": "slow sustained absorption",
+            "B": "immediate peak like IV push",
+            "C": "zero absorption",
+            "D": "only oral"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacokinetics conceptual understanding.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Food can:",
+          "options": {
+            "A": "increase or decrease absorption depending on drug",
+            "B": "never matter",
+            "C": "always increase",
+            "D": "always decrease"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacokinetics conceptual understanding.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Gastric pH affects:",
+          "options": {
+            "A": "ionization and dissolution of some drugs",
+            "B": "only IM drugs",
+            "C": "only eye drops",
+            "D": "never any drug"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacokinetics conceptual understanding.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Small intestine is major site for:",
+          "options": {
+            "A": "many oral drug absorptions",
+            "B": "only stomach always all drugs",
+            "C": "only colon always",
+            "D": "only mouth"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacokinetics conceptual understanding.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "P-glycoprotein can:",
+          "options": {
+            "A": "affect drug transport at barriers (preview)",
+            "B": "only digest food",
+            "C": "only insulin only",
+            "D": "only vaccine"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacokinetics conceptual understanding.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Unbound drug concept at simple teaching:",
+          "options": {
+            "A": "often correlates with effect for highly bound drugs discussion",
+            "B": "never taught",
+            "C": "only bound drug active always wrong simplification noted",
+            "D": "only total always"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacokinetics conceptual understanding.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Hepatic clearance can be:",
+          "options": {
+            "A": "blood flow limited or enzyme limited (preview)",
+            "B": "only renal",
+            "C": "constant all drugs",
+            "D": "only zero"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacokinetics conceptual understanding.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Zero-order elimination at recognition:",
+          "options": {
+            "A": "fixed amount per time at high concentrations (alcohol classic preview)",
+            "B": "always first order",
+            "C": "only vitamins",
+            "D": "only protein"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacokinetics conceptual understanding.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "First-order elimination means:",
+          "options": {
+            "A": "fraction eliminated per time (common)",
+            "B": "fixed mg per time always",
+            "C": "no elimination",
+            "D": "only absorption"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacokinetics conceptual understanding.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Volume of distribution at survey:",
+          "options": {
+            "A": "relates drug amount in body to plasma concentration (concept)",
+            "B": "always5 L only",
+            "C": "only oral",
+            "D": "only legal"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacokinetics conceptual understanding.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Enteric coating aims to:",
+          "options": {
+            "A": "protect drug from gastric acid or protect stomach (survey)",
+            "B": "speed IV absorption",
+            "C": "only cosmetic",
+            "D": "only liquid"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacokinetics conceptual understanding.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Extended-release formulation aims to:",
+          "options": {
+            "A": "smooth plasma levels / reduce dosing frequency",
+            "B": "always higher peak than IR",
+            "C": "only IV",
+            "D": "only placebo"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacokinetics conceptual understanding.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Pediatric weight-based dosing relates to:",
+          "options": {
+            "A": "distribution and clearance differences (general)",
+            "B": "never used",
+            "C": "only adult mg",
+            "D": "only BSA always never weight"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacokinetics conceptual understanding.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Obesity may alter:",
+          "options": {
+            "A": "distribution volume for lipophilic drugs (general)",
+            "B": "never PK",
+            "C": "only absorption",
+            "D": "only legal"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacokinetics conceptual understanding.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Hypoalbuminemia may increase:",
+          "options": {
+            "A": "free fraction of highly protein-bound drugs (concept)",
+            "B": "never effect",
+            "C": "only bound fraction",
+            "D": "only oral drugs never"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacokinetics conceptual understanding.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Biliary excretion important for:",
+          "options": {
+            "A": "some drugs and conjugates (survey)",
+            "B": "all drugs equally",
+            "C": "no drugs",
+            "D": "only water"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacokinetics conceptual understanding.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Fecal excretion can occur for:",
+          "options": {
+            "A": "unabsorbed oral drug or biliary route (concept)",
+            "B": "IV drugs always majority",
+            "C": "only vitamins",
+            "D": "only inhalation"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacokinetics conceptual understanding.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Pharmacokinetics answers:",
+          "options": {
+            "A": "what the body does to the drug",
+            "B": "what drug does to body",
+            "C": "only legal schedule",
+            "D": "only brand"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacokinetics conceptual understanding.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Pharmacodynamics will address:",
+          "options": {
+            "A": "what drug does to body (preview)",
+            "B": "absorption",
+            "C": "excretion only",
+            "D": "only metabolism"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacokinetics conceptual understanding.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Bioavailability can be reduced by:",
+          "options": {
+            "A": "first-pass metabolism",
+            "B": "IV route",
+            "C": "never oral",
+            "D": "only IM always increases"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacokinetics conceptual understanding.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        }
+      ]
+    },
+    {
+      "domain": "Pharmacology Foundations",
+      "topicSlug": "pharmacodynamics-drug-actions",
+      "topicName": "Pharmacodynamics: Drug Actions and Effects",
+      "readinessWeight": "critical",
+      "cognitiveLevel": "conceptual-understanding",
+      "targetQuestionCountMin": 40,
+      "questionsGeneratedThisBatch": 40,
+      "prerequisiteTopicSlugs": [
+        "pharmacokinetics-adme"
+      ],
+      "lessons": [
+        {
+          "title": "Receptors, affinity, efficacy, and dose-response",
+          "structuredContent": {
+            "overview": "Drugs bind targets; affinity is tightness of binding; efficacy is ability to activate effect. Dose-response curves show increasing effect with dose until plateau.",
+            "concepts": [
+              "Agonist",
+              "Antagonist",
+              "Partial agonist",
+              "Inverse agonist (preview)"
+            ],
+            "clinicalRelevanceLight": "Explains why more drug is not always more effect past ceiling."
+          }
+        },
+        {
+          "title": "Therapeutic index and selectivity",
+          "structuredContent": {
+            "overview": "Therapeutic index compares toxic dose to effective dose in classic teaching (TD50/ED50 style). Narrow index means smaller margin.",
+            "clinicalRelevanceLight": "Digoxin, lithium, theophylline classic examples requiring vigilance."
+          }
+        },
+        {
+          "title": "Tolerance, dependence, and rebound (preview)",
+          "structuredContent": {
+            "overview": "Repeated exposure can reduce response (tolerance); stopping some drugs causes rebound; opioids have dependence risk with public health impact.",
+            "clinicalRelevanceLight": "Teach patients not to stop beta blockers abruptly without prescriber guidance (example class)."
+          }
+        }
+      ],
+      "questions": [
+        {
+          "stem": "Pharmacodynamics studies:",
+          "options": {
+            "A": "what the drug does to the body",
+            "B": "absorption",
+            "C": "excretion only",
+            "D": "first pass only"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacodynamics conceptual understanding.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "An agonist:",
+          "options": {
+            "A": "activates receptor",
+            "B": "blocks without activating",
+            "C": "destroys receptor always",
+            "D": "only enzyme substrate"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacodynamics conceptual understanding.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "A competitive antagonist:",
+          "options": {
+            "A": "competes at receptor binding site",
+            "B": "activates fully",
+            "C": "increases agonist always",
+            "D": "only ion channel opener always"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacodynamics conceptual understanding.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Noncompetitive antagonist at survey:",
+          "options": {
+            "A": "binds elsewhere changing receptor function",
+            "B": "same as competitive always",
+            "C": "only vitamin",
+            "D": "only antibiotic"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacodynamics conceptual understanding.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Partial agonist:",
+          "options": {
+            "A": "activates but submaximal effect vs full agonist",
+            "B": "identical to antagonist",
+            "C": "only blocks",
+            "D": "only enzyme"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacodynamics conceptual understanding.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Spare receptors concept at preview:",
+          "options": {
+            "A": "maximal effect without occupying all receptors",
+            "B": "impossible",
+            "C": "only in plants",
+            "D": "only toxins"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacodynamics conceptual understanding.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Efficacy is:",
+          "options": {
+            "A": "maximal effect capability",
+            "B": "binding tightness",
+            "C": "absorption speed",
+            "D": "half-life"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacodynamics conceptual understanding.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Affinity is:",
+          "options": {
+            "A": "binding strength tendency",
+            "B": "maximal effect",
+            "C": "renal clearance",
+            "D": "tablet size"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacodynamics conceptual understanding.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Potency at survey:",
+          "options": {
+            "A": "dose needed for defined effect; more potent needs lower dose",
+            "B": "same as efficacy always",
+            "C": "only toxicity",
+            "D": "only legal"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacodynamics conceptual understanding.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Therapeutic index conceptually:",
+          "options": {
+            "A": "margin between helpful and harmful doses",
+            "B": "always infinite",
+            "C": "only absorption",
+            "D": "only brand"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacodynamics conceptual understanding.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Selective drug:",
+          "options": {
+            "A": "affects intended target more than others at therapeutic doses (goal)",
+            "B": "affects all tissues equally always",
+            "C": "only placebo",
+            "D": "only vitamin"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacodynamics conceptual understanding.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Side effect arises because:",
+          "options": {
+            "A": "drug hits additional targets",
+            "B": "only allergy always",
+            "C": "only overdose always",
+            "D": "impossible"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacodynamics conceptual understanding.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Synergism:",
+          "options": {
+            "A": "combined effect greater than sum",
+            "B": "always zero",
+            "C": "only antagonism",
+            "D": "only absorption"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacodynamics conceptual understanding.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Antagonism:",
+          "options": {
+            "A": "combined effect less than expected",
+            "B": "always synergy",
+            "C": "only agonist",
+            "D": "only PK"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacodynamics conceptual understanding.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Physiologic antagonism at preview:",
+          "options": {
+            "A": "two agents oppose physiologic effects",
+            "B": "same receptor always",
+            "C": "only one drug",
+            "D": "only placebo"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacodynamics conceptual understanding.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Chemical antagonism at preview:",
+          "options": {
+            "A": "direct chemical neutralization",
+            "B": "receptor only",
+            "C": "only absorption",
+            "D": "only legal"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacodynamics conceptual understanding.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Pharmacologic antagonism:",
+          "options": {
+            "A": "receptor/blockade style opposition",
+            "B": "chemical neutralization same always",
+            "C": "only food",
+            "D": "only schedule"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacodynamics conceptual understanding.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Desensitization/downregulation:",
+          "options": {
+            "A": "reduced response with prolonged agonist exposure",
+            "B": "increased response always",
+            "C": "only first dose",
+            "D": "only antibiotics"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacodynamics conceptual understanding.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Supersensitivity after chronic antagonist:",
+          "options": {
+            "A": "upregulation possible when blocker removed (preview)",
+            "B": "never occurs",
+            "C": "only PK",
+            "D": "only in bacteria"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacodynamics conceptual understanding.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Idiosyncratic reaction:",
+          "options": {
+            "A": "unusual unpredictable response",
+            "B": "expected in everyone",
+            "C": "only placebo",
+            "D": "only allergy only"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacodynamics conceptual understanding.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Placebo response:",
+          "options": {
+            "A": "psychologic/context effects on perceived outcome",
+            "B": "only drug chemistry",
+            "C": "only IV",
+            "D": "illegal"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacodynamics conceptual understanding.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Dose-response curve plateau indicates:",
+          "options": {
+            "A": "maximal effect reached",
+            "B": "no effect ever",
+            "C": "only toxicity",
+            "D": "only absorption"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacodynamics conceptual understanding.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "ED50 concept at survey:",
+          "options": {
+            "A": "dose producing 50% of maximal effect in model",
+            "B": "toxic dose always",
+            "C": "lethal always",
+            "D": "absorption half"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacodynamics conceptual understanding.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "LD50 in animal studies historically:",
+          "options": {
+            "A": "lethal dose for 50% animals (recognition)",
+            "B": "effective dose",
+            "C": "absorption",
+            "D": "schedule"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacodynamics conceptual understanding.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Therapeutic window is:",
+          "options": {
+            "A": "range between subtherapeutic and toxic for many drugs",
+            "B": "only one dose",
+            "C": "only IV",
+            "D": "only pediatric"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacodynamics conceptual understanding.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Receptor antagonist overdose of agonist might be:",
+          "options": {
+            "A": "partially surmountable if competitive (concept)",
+            "B": "never change",
+            "C": "only PK",
+            "D": "only legal"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacodynamics conceptual understanding.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Inverse agonist at preview:",
+          "options": {
+            "A": "reduces constitutive receptor activity",
+            "B": "same as full agonist",
+            "C": "only antibiotic",
+            "D": "only vitamin"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacodynamics conceptual understanding.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Allosteric modulator:",
+          "options": {
+            "A": "binds non-active site changing receptor behavior (preview)",
+            "B": "only competitive active site",
+            "C": "only enzyme substrate",
+            "D": "only food"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacodynamics conceptual understanding.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "G-protein coupled receptors are:",
+          "options": {
+            "A": "major drug target family (recognition)",
+            "B": "only enzymes",
+            "C": "only DNA",
+            "D": "only ribosomes"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacodynamics conceptual understanding.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Ion channel drugs can:",
+          "options": {
+            "A": "alter membrane potentials (survey)",
+            "B": "only bind DNA",
+            "C": "only peptidoglycan",
+            "D": "only helminth"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacodynamics conceptual understanding.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Enzyme inhibition can be:",
+          "options": {
+            "A": "competitive or noncompetitive (survey)",
+            "B": "only viral",
+            "C": "only renal",
+            "D": "only legal"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacodynamics conceptual understanding.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Pharmacologic stress test concept:",
+          "options": {
+            "A": "drug used to provoke response for diagnosis (recognition)",
+            "B": "only antibiotic",
+            "C": "only vitamin",
+            "D": "only schedule"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacodynamics conceptual understanding.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Tachyphylaxis:",
+          "options": {
+            "A": "rapidly diminishing response after repeated doses (recognition)",
+            "B": "never real",
+            "C": "only infection",
+            "D": "only legal"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacodynamics conceptual understanding.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Refractory state:",
+          "options": {
+            "A": "lack of response despite adequate dose (contextual)",
+            "B": "always first dose",
+            "C": "only pediatric",
+            "D": "only topical"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacodynamics conceptual understanding.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Drug-receptor binding is often:",
+          "options": {
+            "A": "reversible at student level for many drugs",
+            "B": "always irreversible all drugs",
+            "C": "only covalent all",
+            "D": "only IV"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacodynamics conceptual understanding.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Intrinsic activity of agonist relates to:",
+          "options": {
+            "A": "efficacy",
+            "B": "affinity only",
+            "C": "absorption",
+            "D": "excretion"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacodynamics conceptual understanding.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Competitive antagonist shifts agonist curve:",
+          "options": {
+            "A": "right (higher doses needed)",
+            "B": "left always",
+            "C": "no change",
+            "D": "only toxicity"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacodynamics conceptual understanding.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Irreversible antagonist may:",
+          "options": {
+            "A": "reduce maximal response (concept)",
+            "B": "only shift right with same max",
+            "C": "only increase max",
+            "D": "only PK"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacodynamics conceptual understanding.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Functional antagonism at preview:",
+          "options": {
+            "A": "two drugs oppose via different mechanisms",
+            "B": "same receptor always",
+            "C": "impossible",
+            "D": "only placebo"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacodynamics conceptual understanding.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Signal transduction continues after:",
+          "options": {
+            "A": "receptor activation in many pathways (survey)",
+            "B": "never",
+            "C": "only DNA replication",
+            "D": "only absorption"
+          },
+          "correctAnswer": "A",
+          "rationale": "Pharmacodynamics conceptual understanding.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        }
+      ]
+    },
+    {
+      "domain": "Dosage Math",
+      "topicSlug": "iv-flow-rate-calculations",
+      "topicName": "IV Flow Rate and Drip Rate Calculations",
+      "readinessWeight": "critical",
+      "cognitiveLevel": "early-application",
+      "targetQuestionCountMin": 50,
+      "questionsGeneratedThisBatch": 50,
+      "prerequisiteTopicSlugs": [
+        "oral-medication-dosage-calculations"
+      ],
+      "lessons": [
+        {
+          "title": "mL/hr: volume over time",
+          "structuredContent": {
+            "formula": "Total volume (mL) / Total hours = mL/hr",
+            "example": "1000 mL over 8 hr = 125 mL/hr",
+            "commonMistakes": [
+              "Dividing hours by volume"
+            ]
+          }
+        },
+        {
+          "title": "Drip rate (gtt/min) from mL/hr",
+          "structuredContent": {
+            "formula": "gtt/min = (mL/hr × drop factor gtt/mL) / 60",
+            "alternate": "gtt/min = (mL/min) × drop factor; mL/min = mL/hr / 60",
+            "example": "125 mL/hr with 20 gtt/mL: (125 * 20) / 60 = 41.7 gtt/min",
+            "commonMistakes": [
+              "Forgetting to convert hour to minute",
+              "Inverting drop factor"
+            ]
+          }
+        },
+        {
+          "title": "Infusion time and pump safety",
+          "structuredContent": {
+            "overview": "Time = total volume / rate. Verify pump programming; double-check high-risk meds.",
+            "clinicalRelevanceLight": "Rate errors with IV can cause rapid harm; use protocols."
+          }
+        }
+      ],
+      "questions": [
+        {
+          "stem": "1000 mL over 10 hours. Pump rate mL/hr?",
+          "options": {
+            "A": "100 mL/hr",
+            "B": "10 mL/hr",
+            "C": "1000 mL/hr",
+            "D": "110 mL/hr"
+          },
+          "correctAnswer": "A",
+          "rationale": "Apply mL/hr = volume/time; gtt/min = (mL/hr×DF)/60; invert for time.",
+          "whyIncorrect": {
+            "B": "Arithmetic/setup error.",
+            "C": "Arithmetic/setup error.",
+            "D": "Arithmetic/setup error."
+          }
+        },
+        {
+          "stem": "500 mL over 4 hours. mL/hr?",
+          "options": {
+            "A": "125 mL/hr",
+            "B": "100 mL/hr",
+            "C": "150 mL/hr",
+            "D": "200 mL/hr"
+          },
+          "correctAnswer": "A",
+          "rationale": "Apply mL/hr = volume/time; gtt/min = (mL/hr×DF)/60; invert for time.",
+          "whyIncorrect": {
+            "B": "Arithmetic/setup error.",
+            "C": "Arithmetic/setup error.",
+            "D": "Arithmetic/setup error."
+          }
+        },
+        {
+          "stem": "250 mL over 5 hours. mL/hr?",
+          "options": {
+            "A": "50 mL/hr",
+            "B": "25 mL/hr",
+            "C": "100 mL/hr",
+            "D": "125 mL/hr"
+          },
+          "correctAnswer": "A",
+          "rationale": "Apply mL/hr = volume/time; gtt/min = (mL/hr×DF)/60; invert for time.",
+          "whyIncorrect": {
+            "B": "Arithmetic/setup error.",
+            "C": "Arithmetic/setup error.",
+            "D": "Arithmetic/setup error."
+          }
+        },
+        {
+          "stem": "100 mL over 2 hours. mL/hr?",
+          "options": {
+            "A": "50 mL/hr",
+            "B": "25 mL/hr",
+            "C": "100 mL/hr",
+            "D": "200 mL/hr"
+          },
+          "correctAnswer": "A",
+          "rationale": "Apply mL/hr = volume/time; gtt/min = (mL/hr×DF)/60; invert for time.",
+          "whyIncorrect": {
+            "B": "Arithmetic/setup error.",
+            "C": "Arithmetic/setup error.",
+            "D": "Arithmetic/setup error."
+          }
+        },
+        {
+          "stem": "750 mL over 6 hours. mL/hr?",
+          "options": {
+            "A": "125 mL/hr",
+            "B": "100 mL/hr",
+            "C": "150 mL/hr",
+            "D": "200 mL/hr"
+          },
+          "correctAnswer": "A",
+          "rationale": "Apply mL/hr = volume/time; gtt/min = (mL/hr×DF)/60; invert for time.",
+          "whyIncorrect": {
+            "B": "Arithmetic/setup error.",
+            "C": "Arithmetic/setup error.",
+            "D": "Arithmetic/setup error."
+          }
+        },
+        {
+          "stem": "480 mL over 8 hours. mL/hr?",
+          "options": {
+            "A": "60 mL/hr",
+            "B": "48 mL/hr",
+            "C": "80 mL/hr",
+            "D": "100 mL/hr"
+          },
+          "correctAnswer": "A",
+          "rationale": "Apply mL/hr = volume/time; gtt/min = (mL/hr×DF)/60; invert for time.",
+          "whyIncorrect": {
+            "B": "Arithmetic/setup error.",
+            "C": "Arithmetic/setup error.",
+            "D": "Arithmetic/setup error."
+          }
+        },
+        {
+          "stem": "At 100 mL/hr, how long for 300 mL?",
+          "options": {
+            "A": "3 hours",
+            "B": "2 hours",
+            "C": "4 hours",
+            "D": "5 hours"
+          },
+          "correctAnswer": "A",
+          "rationale": "Apply mL/hr = volume/time; gtt/min = (mL/hr×DF)/60; invert for time.",
+          "whyIncorrect": {
+            "B": "Arithmetic/setup error.",
+            "C": "Arithmetic/setup error.",
+            "D": "Arithmetic/setup error."
+          }
+        },
+        {
+          "stem": "At 80 mL/hr, time for 200 mL?",
+          "options": {
+            "A": "2.5 hours",
+            "B": "2 hours",
+            "C": "3 hours",
+            "D": "4 hours"
+          },
+          "correctAnswer": "A",
+          "rationale": "Apply mL/hr = volume/time; gtt/min = (mL/hr×DF)/60; invert for time.",
+          "whyIncorrect": {
+            "B": "Arithmetic/setup error.",
+            "C": "Arithmetic/setup error.",
+            "D": "Arithmetic/setup error."
+          }
+        },
+        {
+          "stem": "At 50 mL/hr, time for 150 mL?",
+          "options": {
+            "A": "3 hours",
+            "B": "2 hours",
+            "C": "4 hours",
+            "D": "1 hour"
+          },
+          "correctAnswer": "A",
+          "rationale": "Apply mL/hr = volume/time; gtt/min = (mL/hr×DF)/60; invert for time.",
+          "whyIncorrect": {
+            "B": "Arithmetic/setup error.",
+            "C": "Arithmetic/setup error.",
+            "D": "Arithmetic/setup error."
+          }
+        },
+        {
+          "stem": "125 mL/hr. Drop factor 20 gtt/mL. gtt/min (nearest tenth)?",
+          "options": {
+            "A": "41.7 gtt/min",
+            "B": "25 gtt/min",
+            "C": "50 gtt/min",
+            "D": "125 gtt/min"
+          },
+          "correctAnswer": "A",
+          "rationale": "Apply mL/hr = volume/time; gtt/min = (mL/hr×DF)/60; invert for time.",
+          "whyIncorrect": {
+            "B": "Arithmetic/setup error.",
+            "C": "Arithmetic/setup error.",
+            "D": "Arithmetic/setup error."
+          }
+        },
+        {
+          "stem": "100 mL/hr. Drop factor 15 gtt/mL. gtt/min?",
+          "options": {
+            "A": "25 gtt/min",
+            "B": "15 gtt/min",
+            "C": "40 gtt/min",
+            "D": "100 gtt/min"
+          },
+          "correctAnswer": "A",
+          "rationale": "Apply mL/hr = volume/time; gtt/min = (mL/hr×DF)/60; invert for time.",
+          "whyIncorrect": {
+            "B": "Arithmetic/setup error.",
+            "C": "Arithmetic/setup error.",
+            "D": "Arithmetic/setup error."
+          }
+        },
+        {
+          "stem": "75 mL/hr. Drop factor 10 gtt/mL. gtt/min?",
+          "options": {
+            "A": "12.5 gtt/min",
+            "B": "7.5 gtt/min",
+            "C": "15 gtt/min",
+            "D": "25 gtt/min"
+          },
+          "correctAnswer": "A",
+          "rationale": "Apply mL/hr = volume/time; gtt/min = (mL/hr×DF)/60; invert for time.",
+          "whyIncorrect": {
+            "B": "Arithmetic/setup error.",
+            "C": "Arithmetic/setup error.",
+            "D": "Arithmetic/setup error."
+          }
+        },
+        {
+          "stem": "150 mL/hr. Drop factor 20 gtt/mL. gtt/min?",
+          "options": {
+            "A": "50 gtt/min",
+            "B": "30 gtt/min",
+            "C": "60 gtt/min",
+            "D": "75 gtt/min"
+          },
+          "correctAnswer": "A",
+          "rationale": "Apply mL/hr = volume/time; gtt/min = (mL/hr×DF)/60; invert for time.",
+          "whyIncorrect": {
+            "B": "Arithmetic/setup error.",
+            "C": "Arithmetic/setup error.",
+            "D": "Arithmetic/setup error."
+          }
+        },
+        {
+          "stem": "200 mL/hr. Drop factor 15 gtt/mL. gtt/min?",
+          "options": {
+            "A": "50 gtt/min",
+            "B": "40 gtt/min",
+            "C": "60 gtt/min",
+            "D": "75 gtt/min"
+          },
+          "correctAnswer": "A",
+          "rationale": "Apply mL/hr = volume/time; gtt/min = (mL/hr×DF)/60; invert for time.",
+          "whyIncorrect": {
+            "B": "Arithmetic/setup error.",
+            "C": "Arithmetic/setup error.",
+            "D": "Arithmetic/setup error."
+          }
+        },
+        {
+          "stem": "50 mL/hr. Drop factor 60 (microdrip). gtt/min?",
+          "options": {
+            "A": "50 gtt/min",
+            "B": "30 gtt/min",
+            "C": "60 gtt/min",
+            "D": "100 gtt/min"
+          },
+          "correctAnswer": "A",
+          "rationale": "Apply mL/hr = volume/time; gtt/min = (mL/hr×DF)/60; invert for time.",
+          "whyIncorrect": {
+            "B": "Arithmetic/setup error.",
+            "C": "Arithmetic/setup error.",
+            "D": "Arithmetic/setup error."
+          }
+        },
+        {
+          "stem": "Order: 500 mL NS over 5 hr. mL/hr?",
+          "options": {
+            "A": "100 mL/hr",
+            "B": "50 mL/hr",
+            "C": "125 mL/hr",
+            "D": "250 mL/hr"
+          },
+          "correctAnswer": "A",
+          "rationale": "Apply mL/hr = volume/time; gtt/min = (mL/hr×DF)/60; invert for time.",
+          "whyIncorrect": {
+            "B": "Arithmetic/setup error.",
+            "C": "Arithmetic/setup error.",
+            "D": "Arithmetic/setup error."
+          }
+        },
+        {
+          "stem": "Order: 1000 mL LR over 12 hr. mL/hr?",
+          "options": {
+            "A": "83.3 mL/hr",
+            "B": "80 mL/hr",
+            "C": "100 mL/hr",
+            "D": "125 mL/hr"
+          },
+          "correctAnswer": "A",
+          "rationale": "Apply mL/hr = volume/time; gtt/min = (mL/hr×DF)/60; invert for time.",
+          "whyIncorrect": {
+            "B": "Arithmetic/setup error.",
+            "C": "Arithmetic/setup error.",
+            "D": "Arithmetic/setup error."
+          }
+        },
+        {
+          "stem": "Pump set 125 mL/hr. After 2 hours, mL infused?",
+          "options": {
+            "A": "250 mL",
+            "B": "125 mL",
+            "C": "200 mL",
+            "D": "500 mL"
+          },
+          "correctAnswer": "A",
+          "rationale": "Apply mL/hr = volume/time; gtt/min = (mL/hr×DF)/60; invert for time.",
+          "whyIncorrect": {
+            "B": "Arithmetic/setup error.",
+            "C": "Arithmetic/setup error.",
+            "D": "Arithmetic/setup error."
+          }
+        },
+        {
+          "stem": "Pump 40 mL/hr for 3 hr. Total mL?",
+          "options": {
+            "A": "120 mL",
+            "B": "80 mL",
+            "C": "100 mL",
+            "D": "150 mL"
+          },
+          "correctAnswer": "A",
+          "rationale": "Apply mL/hr = volume/time; gtt/min = (mL/hr×DF)/60; invert for time.",
+          "whyIncorrect": {
+            "B": "Arithmetic/setup error.",
+            "C": "Arithmetic/setup error.",
+            "D": "Arithmetic/setup error."
+          }
+        },
+        {
+          "stem": "Need 180 mL over 3 hr. mL/hr?",
+          "options": {
+            "A": "60 mL/hr",
+            "B": "50 mL/hr",
+            "C": "90 mL/hr",
+            "D": "100 mL/hr"
+          },
+          "correctAnswer": "A",
+          "rationale": "Apply mL/hr = volume/time; gtt/min = (mL/hr×DF)/60; invert for time.",
+          "whyIncorrect": {
+            "B": "Arithmetic/setup error.",
+            "C": "Arithmetic/setup error.",
+            "D": "Arithmetic/setup error."
+          }
+        },
+        {
+          "stem": "90 mL/hr × 4 hr = mL?",
+          "options": {
+            "A": "360 mL",
+            "B": "320 mL",
+            "C": "400 mL",
+            "D": "340 mL"
+          },
+          "correctAnswer": "A",
+          "rationale": "Apply mL/hr = volume/time; gtt/min = (mL/hr×DF)/60; invert for time.",
+          "whyIncorrect": {
+            "B": "Arithmetic/setup error.",
+            "C": "Arithmetic/setup error.",
+            "D": "Arithmetic/setup error."
+          }
+        },
+        {
+          "stem": "gtt/min = (mL/hr × DF)/60. If mL/hr=60, DF=15?",
+          "options": {
+            "A": "15 gtt/min",
+            "B": "10 gtt/min",
+            "C": "20 gtt/min",
+            "D": "25 gtt/min"
+          },
+          "correctAnswer": "A",
+          "rationale": "Apply mL/hr = volume/time; gtt/min = (mL/hr×DF)/60; invert for time.",
+          "whyIncorrect": {
+            "B": "Arithmetic/setup error.",
+            "C": "Arithmetic/setup error.",
+            "D": "Arithmetic/setup error."
+          }
+        },
+        {
+          "stem": "mL/hr=30, DF=20. gtt/min?",
+          "options": {
+            "A": "10 gtt/min",
+            "B": "6 gtt/min",
+            "C": "12 gtt/min",
+            "D": "15 gtt/min"
+          },
+          "correctAnswer": "A",
+          "rationale": "Apply mL/hr = volume/time; gtt/min = (mL/hr×DF)/60; invert for time.",
+          "whyIncorrect": {
+            "B": "Arithmetic/setup error.",
+            "C": "Arithmetic/setup error.",
+            "D": "Arithmetic/setup error."
+          }
+        },
+        {
+          "stem": "mL/hr=180, DF=10. gtt/min?",
+          "options": {
+            "A": "30 gtt/min",
+            "B": "25 gtt/min",
+            "C": "35 gtt/min",
+            "D": "40 gtt/min"
+          },
+          "correctAnswer": "A",
+          "rationale": "Apply mL/hr = volume/time; gtt/min = (mL/hr×DF)/60; invert for time.",
+          "whyIncorrect": {
+            "B": "Arithmetic/setup error.",
+            "C": "Arithmetic/setup error.",
+            "D": "Arithmetic/setup error."
+          }
+        },
+        {
+          "stem": "250 mL to run in 2 hr. mL/hr?",
+          "options": {
+            "A": "125 mL/hr",
+            "B": "100 mL/hr",
+            "C": "150 mL/hr",
+            "D": "200 mL/hr"
+          },
+          "correctAnswer": "A",
+          "rationale": "Apply mL/hr = volume/time; gtt/min = (mL/hr×DF)/60; invert for time.",
+          "whyIncorrect": {
+            "B": "Arithmetic/setup error.",
+            "C": "Arithmetic/setup error.",
+            "D": "Arithmetic/setup error."
+          }
+        },
+        {
+          "stem": "600 mL over 5 hr. mL/hr?",
+          "options": {
+            "A": "120 mL/hr",
+            "B": "100 mL/hr",
+            "C": "125 mL/hr",
+            "D": "150 mL/hr"
+          },
+          "correctAnswer": "A",
+          "rationale": "Apply mL/hr = volume/time; gtt/min = (mL/hr×DF)/60; invert for time.",
+          "whyIncorrect": {
+            "B": "Arithmetic/setup error.",
+            "C": "Arithmetic/setup error.",
+            "D": "Arithmetic/setup error."
+          }
+        },
+        {
+          "stem": "If 400 mL left and rate 80 mL/hr, hours to finish?",
+          "options": {
+            "A": "5 hours",
+            "B": "4 hours",
+            "C": "6 hours",
+            "D": "8 hours"
+          },
+          "correctAnswer": "A",
+          "rationale": "Apply mL/hr = volume/time; gtt/min = (mL/hr×DF)/60; invert for time.",
+          "whyIncorrect": {
+            "B": "Arithmetic/setup error.",
+            "C": "Arithmetic/setup error.",
+            "D": "Arithmetic/setup error."
+          }
+        },
+        {
+          "stem": "Rate 100 mL/hr. How many hours for 450 mL?",
+          "options": {
+            "A": "4.5 hours",
+            "B": "4 hours",
+            "C": "5 hours",
+            "D": "3.5 hours"
+          },
+          "correctAnswer": "A",
+          "rationale": "Apply mL/hr = volume/time; gtt/min = (mL/hr×DF)/60; invert for time.",
+          "whyIncorrect": {
+            "B": "Arithmetic/setup error.",
+            "C": "Arithmetic/setup error.",
+            "D": "Arithmetic/setup error."
+          }
+        },
+        {
+          "stem": "DF20. Observed 125 mL/hr. gtt/min rounded whole?",
+          "options": {
+            "A": "42 gtt/min",
+            "B": "41 gtt/min",
+            "C": "40 gtt/min",
+            "D": "45 gtt/min"
+          },
+          "correctAnswer": "A",
+          "rationale": "Apply mL/hr = volume/time; gtt/min = (mL/hr×DF)/60; invert for time.",
+          "whyIncorrect": {
+            "B": "Arithmetic/setup error.",
+            "C": "Arithmetic/setup error.",
+            "D": "Arithmetic/setup error."
+          }
+        },
+        {
+          "stem": "Microdrip 60 gtt/mL at 30 mL/hr gives:",
+          "options": {
+            "A": "30 gtt/min",
+            "B": "20 gtt/min",
+            "C": "40 gtt/min",
+            "D": "60 gtt/min"
+          },
+          "correctAnswer": "A",
+          "rationale": "Apply mL/hr = volume/time; gtt/min = (mL/hr×DF)/60; invert for time.",
+          "whyIncorrect": {
+            "B": "Arithmetic/setup error.",
+            "C": "Arithmetic/setup error.",
+            "D": "Arithmetic/setup error."
+          }
+        },
+        {
+          "stem": "Order 250 mL over 90 minutes. mL/hr?",
+          "options": {
+            "A": "167 mL/hr",
+            "B": "150 mL/hr",
+            "C": "175 mL/hr",
+            "D": "200 mL/hr"
+          },
+          "correctAnswer": "A",
+          "rationale": "Apply mL/hr = volume/time; gtt/min = (mL/hr×DF)/60; invert for time.",
+          "whyIncorrect": {
+            "B": "Arithmetic/setup error.",
+            "C": "Arithmetic/setup error.",
+            "D": "Arithmetic/setup error."
+          }
+        },
+        {
+          "stem": "100 mL over 30 min. mL/hr?",
+          "options": {
+            "A": "200 mL/hr",
+            "B": "100 mL/hr",
+            "C": "150 mL/hr",
+            "D": "300 mL/hr"
+          },
+          "correctAnswer": "A",
+          "rationale": "Apply mL/hr = volume/time; gtt/min = (mL/hr×DF)/60; invert for time.",
+          "whyIncorrect": {
+            "B": "Arithmetic/setup error.",
+            "C": "Arithmetic/setup error.",
+            "D": "Arithmetic/setup error."
+          }
+        },
+        {
+          "stem": "50 mL/hr for 6 hr. mL total?",
+          "options": {
+            "A": "300 mL",
+            "B": "250 mL",
+            "C": "350 mL",
+            "D": "200 mL"
+          },
+          "correctAnswer": "A",
+          "rationale": "Apply mL/hr = volume/time; gtt/min = (mL/hr×DF)/60; invert for time.",
+          "whyIncorrect": {
+            "B": "Arithmetic/setup error.",
+            "C": "Arithmetic/setup error.",
+            "D": "Arithmetic/setup error."
+          }
+        },
+        {
+          "stem": "gtt/min 20. DF20. mL/min?",
+          "options": {
+            "A": "1 mL/min",
+            "B": "0.5 mL/min",
+            "C": "2 mL/min",
+            "D": "20 mL/min"
+          },
+          "correctAnswer": "A",
+          "rationale": "Apply mL/hr = volume/time; gtt/min = (mL/hr×DF)/60; invert for time.",
+          "whyIncorrect": {
+            "B": "Arithmetic/setup error.",
+            "C": "Arithmetic/setup error.",
+            "D": "Arithmetic/setup error."
+          }
+        },
+        {
+          "stem": "If mL/min = 2 and DF=15, gtt/min?",
+          "options": {
+            "A": "30 gtt/min",
+            "B": "15 gtt/min",
+            "C": "20 gtt/min",
+            "D": "25 gtt/min"
+          },
+          "correctAnswer": "A",
+          "rationale": "Apply mL/hr = volume/time; gtt/min = (mL/hr×DF)/60; invert for time.",
+          "whyIncorrect": {
+            "B": "Arithmetic/setup error.",
+            "C": "Arithmetic/setup error.",
+            "D": "Arithmetic/setup error."
+          }
+        },
+        {
+          "stem": "800 mL over 10 hr. mL/hr?",
+          "options": {
+            "A": "80 mL/hr",
+            "B": "75 mL/hr",
+            "C": "100 mL/hr",
+            "D": "90 mL/hr"
+          },
+          "correctAnswer": "A",
+          "rationale": "Apply mL/hr = volume/time; gtt/min = (mL/hr×DF)/60; invert for time.",
+          "whyIncorrect": {
+            "B": "Arithmetic/setup error.",
+            "C": "Arithmetic/setup error.",
+            "D": "Arithmetic/setup error."
+          }
+        },
+        {
+          "stem": "mL/hr 60, DF 10. gtt/min?",
+          "options": {
+            "A": "10 gtt/min",
+            "B": "6 gtt/min",
+            "C": "12 gtt/min",
+            "D": "15 gtt/min"
+          },
+          "correctAnswer": "A",
+          "rationale": "Apply mL/hr = volume/time; gtt/min = (mL/hr×DF)/60; invert for time.",
+          "whyIncorrect": {
+            "B": "Arithmetic/setup error.",
+            "C": "Arithmetic/setup error.",
+            "D": "Arithmetic/setup error."
+          }
+        },
+        {
+          "stem": "1500 mL over 24 hr. mL/hr?",
+          "options": {
+            "A": "62.5 mL/hr",
+            "B": "60 mL/hr",
+            "C": "65 mL/hr",
+            "D": "70 mL/hr"
+          },
+          "correctAnswer": "A",
+          "rationale": "Apply mL/hr = volume/time; gtt/min = (mL/hr×DF)/60; invert for time.",
+          "whyIncorrect": {
+            "B": "Arithmetic/setup error.",
+            "C": "Arithmetic/setup error.",
+            "D": "Arithmetic/setup error."
+          }
+        },
+        {
+          "stem": "Rate 83 mL/hr (rounded). 6 hr infusion mL?",
+          "options": {
+            "A": "498 mL",
+            "B": "500 mL",
+            "C": "480 mL",
+            "D": "450 mL"
+          },
+          "correctAnswer": "A",
+          "rationale": "Apply mL/hr = volume/time; gtt/min = (mL/hr×DF)/60; invert for time.",
+          "whyIncorrect": {
+            "B": "Arithmetic/setup error.",
+            "C": "Arithmetic/setup error.",
+            "D": "Arithmetic/setup error."
+          }
+        },
+        {
+          "stem": "300 mL over 4 hr; DF 15. gtt/min?",
+          "options": {
+            "A": "18.75 gtt/min",
+            "B": "15 gtt/min",
+            "C": "20 gtt/min",
+            "D": "25 gtt/min"
+          },
+          "correctAnswer": "A",
+          "rationale": "Apply mL/hr = volume/time; gtt/min = (mL/hr×DF)/60; invert for time.",
+          "whyIncorrect": {
+            "B": "Arithmetic/setup error.",
+            "C": "Arithmetic/setup error.",
+            "D": "Arithmetic/setup error."
+          }
+        },
+        {
+          "stem": "100 mL/hr for 8 hr. mL?",
+          "options": {
+            "A": "800 mL",
+            "B": "750 mL",
+            "C": "850 mL",
+            "D": "900 mL"
+          },
+          "correctAnswer": "A",
+          "rationale": "Apply mL/hr = volume/time; gtt/min = (mL/hr×DF)/60; invert for time.",
+          "whyIncorrect": {
+            "B": "Arithmetic/setup error.",
+            "C": "Arithmetic/setup error.",
+            "D": "Arithmetic/setup error."
+          }
+        },
+        {
+          "stem": "gtt/min 15, DF 15. mL/hr?",
+          "options": {
+            "A": "60 mL/hr",
+            "B": "45 mL/hr",
+            "C": "75 mL/hr",
+            "D": "90 mL/hr"
+          },
+          "correctAnswer": "A",
+          "rationale": "Apply mL/hr = volume/time; gtt/min = (mL/hr×DF)/60; invert for time.",
+          "whyIncorrect": {
+            "B": "Arithmetic/setup error.",
+            "C": "Arithmetic/setup error.",
+            "D": "Arithmetic/setup error."
+          }
+        },
+        {
+          "stem": "450 mL over 6 hr. mL/hr?",
+          "options": {
+            "A": "75 mL/hr",
+            "B": "70 mL/hr",
+            "C": "80 mL/hr",
+            "D": "90 mL/hr"
+          },
+          "correctAnswer": "A",
+          "rationale": "Apply mL/hr = volume/time; gtt/min = (mL/hr×DF)/60; invert for time.",
+          "whyIncorrect": {
+            "B": "Arithmetic/setup error.",
+            "C": "Arithmetic/setup error.",
+            "D": "Arithmetic/setup error."
+          }
+        },
+        {
+          "stem": "mL/hr 110, DF 20. gtt/min nearest tenth?",
+          "options": {
+            "A": "36.7 gtt/min",
+            "B": "35 gtt/min",
+            "C": "38 gtt/min",
+            "D": "40 gtt/min"
+          },
+          "correctAnswer": "A",
+          "rationale": "Apply mL/hr = volume/time; gtt/min = (mL/hr×DF)/60; invert for time.",
+          "whyIncorrect": {
+            "B": "Arithmetic/setup error.",
+            "C": "Arithmetic/setup error.",
+            "D": "Arithmetic/setup error."
+          }
+        },
+        {
+          "stem": "200 mL over 5 hr; DF 60. gtt/min?",
+          "options": {
+            "A": "40 gtt/min",
+            "B": "30 gtt/min",
+            "C": "50 gtt/min",
+            "D": "60 gtt/min"
+          },
+          "correctAnswer": "A",
+          "rationale": "Apply mL/hr = volume/time; gtt/min = (mL/hr×DF)/60; invert for time.",
+          "whyIncorrect": {
+            "B": "Arithmetic/setup error.",
+            "C": "Arithmetic/setup error.",
+            "D": "Arithmetic/setup error."
+          }
+        },
+        {
+          "stem": "720 mL over 12 hr. mL/hr?",
+          "options": {
+            "A": "60 mL/hr",
+            "B": "50 mL/hr",
+            "C": "70 mL/hr",
+            "D": "80 mL/hr"
+          },
+          "correctAnswer": "A",
+          "rationale": "Apply mL/hr = volume/time; gtt/min = (mL/hr×DF)/60; invert for time.",
+          "whyIncorrect": {
+            "B": "Arithmetic/setup error.",
+            "C": "Arithmetic/setup error.",
+            "D": "Arithmetic/setup error."
+          }
+        },
+        {
+          "stem": "If bag 1000 mL and 6 hr left at 100 mL/hr, already infused?",
+          "options": {
+            "A": "400 mL",
+            "B": "300 mL",
+            "C": "500 mL",
+            "D": "600 mL"
+          },
+          "correctAnswer": "A",
+          "rationale": "Apply mL/hr = volume/time; gtt/min = (mL/hr×DF)/60; invert for time.",
+          "whyIncorrect": {
+            "B": "Arithmetic/setup error.",
+            "C": "Arithmetic/setup error.",
+            "D": "Arithmetic/setup error."
+          }
+        },
+        {
+          "stem": "25 mL/hr × 8 hr = ?",
+          "options": {
+            "A": "200 mL",
+            "B": "150 mL",
+            "C": "250 mL",
+            "D": "300 mL"
+          },
+          "correctAnswer": "A",
+          "rationale": "Apply mL/hr = volume/time; gtt/min = (mL/hr×DF)/60; invert for time.",
+          "whyIncorrect": {
+            "B": "Arithmetic/setup error.",
+            "C": "Arithmetic/setup error.",
+            "D": "Arithmetic/setup error."
+          }
+        },
+        {
+          "stem": "DF 20, rate 50 mL/hr. gtt/min?",
+          "options": {
+            "A": "16.7 gtt/min",
+            "B": "15 gtt/min",
+            "C": "18 gtt/min",
+            "D": "20 gtt/min"
+          },
+          "correctAnswer": "A",
+          "rationale": "Apply mL/hr = volume/time; gtt/min = (mL/hr×DF)/60; invert for time.",
+          "whyIncorrect": {
+            "B": "Arithmetic/setup error.",
+            "C": "Arithmetic/setup error.",
+            "D": "Arithmetic/setup error."
+          }
+        },
+        {
+          "stem": "180 mL over 3 hr; DF 15. gtt/min?",
+          "options": {
+            "A": "15 gtt/min",
+            "B": "12 gtt/min",
+            "C": "18 gtt/min",
+            "D": "20 gtt/min"
+          },
+          "correctAnswer": "A",
+          "rationale": "Apply mL/hr = volume/time; gtt/min = (mL/hr×DF)/60; invert for time.",
+          "whyIncorrect": {
+            "B": "Arithmetic/setup error.",
+            "C": "Arithmetic/setup error.",
+            "D": "Arithmetic/setup error."
+          }
+        }
+      ]
+    }
+  ],
+  "finalReport": {
+    "topicsProcessed": 8,
+    "lessonsTotal": 22,
+    "questionsTotal": 315,
+    "lessonsPerTopic": {
+      "intro-microbiology-classification": 2,
+      "bacterial-structure-and-reproduction": 2,
+      "viral-structure-and-pathogenesis": 2,
+      "antimicrobials-overview": 3,
+      "pharmacology-intro-drug-classifications": 3,
+      "pharmacokinetics-adme": 4,
+      "pharmacodynamics-drug-actions": 3,
+      "iv-flow-rate-calculations": 3
+    },
+    "questionsPerTopic": {
+      "intro-microbiology-classification": 35,
+      "bacterial-structure-and-reproduction": 30,
+      "viral-structure-and-pathogenesis": 30,
+      "antimicrobials-overview": 40,
+      "pharmacology-intro-drug-classifications": 40,
+      "pharmacokinetics-adme": 50,
+      "pharmacodynamics-drug-actions": 40,
+      "iv-flow-rate-calculations": 50
+    }
+  }
+}

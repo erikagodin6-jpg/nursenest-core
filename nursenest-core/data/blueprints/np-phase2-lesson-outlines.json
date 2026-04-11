@@ -1,0 +1,1132 @@
+{
+  "version": 1,
+  "phase": 2,
+  "label": "Phase 2 — Red Flags & Safety + Core Chronic Disease Management: Lesson Outlines",
+  "generatedDate": "2026-04-11",
+  "scopeFenceRef": "np-scope-fences.json",
+  "phase1ContractRef": "np-phase1-finalization.json",
+  "generationRule": "Phase 2 lessons cover (A) RED FLAGS & SAFETY: recognition, risk stratification, and referral/disposition — NO prescribing protocols; and (B) CORE CHRONIC DISEASE MANAGEMENT: guideline-based drug selection, titration thresholds, monitoring, and follow-up. Scope fences SF-01 through SF-06 are fully active. NP-level hard/expert content only. Recognition vs management separation is preserved at the lessonPart boundary within multi-part topics.",
+  "lessons": [
+
+    {
+      "domain": "Red Flags & Safety",
+      "topicSlug": "hypertension-red-flags-referral",
+      "lessonPart": "2",
+      "lessonId": "np-p2-htn-rf-2",
+      "title": "Red Flags in Hypertension: Urgency vs Emergency vs Secondary HTN",
+      "targetQuestions": 10,
+      "scopeFenceActive": "SF-05 slugA",
+      "learningObjectives": [
+        "Distinguish hypertensive urgency (BP ≥180/120 without end-organ damage) from hypertensive emergency (BP ≥180/120 WITH end-organ damage)",
+        "Identify end-organ damage features that mandate ED transfer: encephalopathy, papilledema, AKI, NSTEMI, aortic dissection, pulmonary edema",
+        "Recognize secondary hypertension red flags: resistant HTN in young patient, hypokalemia with HTN (hyperaldosteronism), paroxysmal BP spikes (pheochromocytoma), abrupt worsening in older adult (renal artery stenosis)",
+        "Apply ACC/AHA BP classification and determine the appropriate clinical response by stage",
+        "Determine when ambulatory blood pressure monitoring (ABPM) is indicated versus routine BP follow-up"
+      ],
+      "sections": [
+        {
+          "sectionTitle": "Hypertensive Urgency vs Emergency: The Critical Distinction",
+          "keyPoints": [
+            "Urgency: BP ≥180/120 mmHg without signs or symptoms of acute end-organ damage — patient often asymptomatic or has non-specific headache",
+            "Emergency: BP ≥180/120 mmHg WITH evidence of acute end-organ damage — neurological, cardiac, renal, ophthalmic, or vascular",
+            "Urgency: appropriate to manage outpatient with oral medication adjustment and 24-hour recheck — do NOT send to ED reflexively for high number alone",
+            "Emergency: call 911, IV antihypertensive (nitroprusside, nicardipine, labetalol IV) — oral therapy is inadequate for emergency"
+          ]
+        },
+        {
+          "sectionTitle": "End-Organ Damage Recognition",
+          "keyPoints": [
+            "Neurological: hypertensive encephalopathy (altered mental status, severe headache, visual changes, seizure), posterior reversible encephalopathy syndrome (PRES), ischemic stroke, hemorrhagic stroke",
+            "Cardiac: NSTEMI (chest pain + troponin elevation), acute HF (pulmonary edema, orthopnea, elevated BNP), aortic dissection (sudden tearing chest/back pain + unequal BP in arms)",
+            "Renal: rapidly rising creatinine, proteinuria, hematuria — hypertensive nephrosclerosis acutely accelerated",
+            "Ophthalmic: papilledema (blurred disc margins), flame hemorrhages, cotton-wool spots — fundoscopic exam should be part of hypertensive emergency assessment",
+            "Eclampsia/pre-eclampsia: BP ≥160/110 in pregnant patient + proteinuria + headache + visual changes → obstetric emergency"
+          ]
+        },
+        {
+          "sectionTitle": "Secondary Hypertension Red Flags",
+          "keyPoints": [
+            "Primary aldosteronism: resistant HTN + spontaneous hypokalemia (K⁺ <3.5 without diuretic) + adrenal mass; screen with aldosterone-to-renin ratio (ARR >20:1 is suspicious)",
+            "Pheochromocytoma: paroxysmal headache-palpitations-diaphoresis triad; episodic severe hypertension; screen with plasma free metanephrines or 24-hour urine catecholamines",
+            "Renal artery stenosis: new severe HTN in older adult (atherosclerotic) or young woman (fibromuscular dysplasia), abdominal bruit, AKI after starting ACEi/ARB, asymmetric kidney size on imaging",
+            "Cushing syndrome: proximal muscle weakness + moon facies + central obesity + purple striae + hypokalemia + HTN; screen with 24-hour urine free cortisol or 1-mg overnight DST",
+            "Obstructive sleep apnea: resistant HTN + obesity + loud snoring + witnessed apneas + morning headache — CPAP compliance often improves BP"
+          ]
+        },
+        {
+          "sectionTitle": "White Coat and Masked Hypertension",
+          "keyPoints": [
+            "White coat HTN: elevated in-office BP with normal out-of-office readings — ABPM diagnostic; lower ASCVD risk than sustained HTN but not entirely benign",
+            "Masked HTN: normal in-office BP with elevated out-of-office readings — ABPM essential; ASCVD risk approaches that of sustained HTN",
+            "ABPM indications: suspected white coat, masked HTN, borderline Stage 1, resistant HTN evaluation, autonomic dysfunction, nocturnal dipping assessment"
+          ]
+        }
+      ],
+      "stemDistinctionNote": "SF-05 slugA enforced: questions may test recognition of urgency vs emergency, end-organ damage identification, secondary HTN red flags, and ABPM indication. Questions may NOT test drug class selection, step therapy, or antihypertensive prescribing. Those belong to hypertension-step-therapy-guideline (SF-05 slugB)."
+    },
+
+    {
+      "domain": "Red Flags & Safety",
+      "topicSlug": "neurological-red-flags-emergency",
+      "lessonPart": "2A",
+      "lessonId": "np-p2-neuro-rf-2a",
+      "title": "Neurological Red Flags: Stroke, TIA, and Spinal Emergencies",
+      "targetQuestions": 6,
+      "learningObjectives": [
+        "Apply the FAST-BE mnemonic to recognize stroke and TIA requiring emergent evaluation",
+        "Distinguish ischemic stroke from hemorrhagic stroke and TIA by clinical features and imaging strategy",
+        "Identify spinal cord compression red flags (cauda equina syndrome) requiring emergent MRI and surgical consultation",
+        "Recognize posterior circulation stroke features that are frequently missed in primary care",
+        "Determine appropriate 911 activation criteria for neurological emergencies from the office setting"
+      ],
+      "sections": [
+        {
+          "sectionTitle": "Stroke Recognition and TIA",
+          "keyPoints": [
+            "FAST-BE: Face drooping, Arm weakness, Speech difficulty, Time to call 911, Balance problems, Eye problems (sudden monocular vision loss, diplopia, hemianopia)",
+            "TIA: same focal neurological deficit as stroke but resolves completely within 24 hours (usually minutes); ABCD2 score for 48-hour stroke risk: Age ≥60, BP ≥140/90, Clinical (1 = speech impairment, 2 = unilateral weakness), Duration, Diabetes",
+            "TIA with ABCD2 ≥4 or any dual antiplatelet opportunity: urgent neurology same-day or ED evaluation — do NOT discharge and schedule routine follow-up",
+            "Ischemic vs hemorrhagic: CT noncontrast head first (rules out hemorrhage); ischemic stroke = thrombolysis decision (tPA if within 4.5h, NIHSS eligible, no contraindications) — requires ED",
+            "Posterior circulation stroke: vertigo + ataxia + diplopia + dysphagia + Horner's (PICA infarct = Wallenberg syndrome); often misdiagnosed as 'labyrinthitis' — missing a posterior stroke"
+          ]
+        },
+        {
+          "sectionTitle": "Cauda Equina Syndrome and Spinal Cord Compression",
+          "keyPoints": [
+            "Cauda equina syndrome (CES): low back pain + bilateral leg weakness + saddle anesthesia (perianal/perineal) + bowel/bladder dysfunction (urinary retention > incontinence initially)",
+            "CES is a surgical emergency: MRI lumbar spine immediately — delay causes irreversible neurological deficit",
+            "Spinal cord compression (from metastasis, abscess, hematoma): progressive bilateral leg weakness + sensory level + bowel/bladder dysfunction; history of cancer or fever + IV drug use (epidural abscess)",
+            "Red flag back pain requiring urgent MRI: new bowel/bladder change, saddle anesthesia, bilateral leg weakness, steroid use + fever (epidural abscess), cancer history (metastatic disease)"
+          ]
+        }
+      ],
+      "stemDistinctionNote": "2A covers stroke/TIA and spinal cord emergencies — recognition and emergent disposition only. Stroke management (tPA eligibility, dual antiplatelet selection) belongs to Phase 3-4. Questions must anchor on RECOGNITION and WHEN TO CALL 911."
+    },
+
+    {
+      "domain": "Red Flags & Safety",
+      "topicSlug": "neurological-red-flags-emergency",
+      "lessonPart": "2B",
+      "lessonId": "np-p2-neuro-rf-2b",
+      "title": "Neurological Red Flags: First Seizure, CNS Infection, and Raised ICP",
+      "targetQuestions": 6,
+      "learningObjectives": [
+        "Identify first-seizure red flags requiring urgent neurological evaluation versus low-risk provoked seizures",
+        "Recognize features of CNS infection (bacterial meningitis, viral encephalitis) requiring immediate action",
+        "Apply raised ICP recognition criteria and pre-lumbar puncture imaging decision rules",
+        "Distinguish new-onset altered mental status causes that require emergent evaluation versus observation",
+        "Recognize Guillain-Barré syndrome early features that mandate hospital admission"
+      ],
+      "sections": [
+        {
+          "sectionTitle": "First Seizure Evaluation",
+          "keyPoints": [
+            "Provoked seizure (hypoglycemia, hyponatremia, alcohol withdrawal, medication) vs unprovoked first seizure: provoked requires treatment of cause, not necessarily AED",
+            "First unprovoked seizure: EEG + brain MRI + metabolic workup; refer neurology for AED decision — NP decision is workup + referral, not starting AED",
+            "High-risk first seizure features (admit): prolonged post-ictal state (>30 min), status epilepticus (seizure >5 min or two without full recovery), focal onset, abnormal neuro exam, new structural lesion",
+            "Status epilepticus: call 911 + benzo (diazepam, lorazepam) as first-line in office if available; do not delay for IV access"
+          ]
+        },
+        {
+          "sectionTitle": "CNS Infection Recognition",
+          "keyPoints": [
+            "Bacterial meningitis: fever + headache + neck stiffness (classic triad in only 44%) — treat first, image later if herniation risk; LP: CSF WBC >1000 (PMN predominant), elevated protein, low glucose, positive Gram stain/culture",
+            "Viral encephalitis (HSV): fever + behavioral change + seizures + temporal lobe focus; MRI temporal lobe abnormality; start IV acyclovir empirically before confirmation",
+            "Do NOT delay antibiotics for LP: petechial rash + fever + meningismus = meningococcemia — ceftriaxone 2g IV immediately, then transfer",
+            "Raised ICP before LP: papilledema, focal deficit, altered consciousness, new mass lesion → CT head before LP to rule out herniation risk"
+          ]
+        },
+        {
+          "sectionTitle": "Guillain-Barré Syndrome",
+          "keyPoints": [
+            "GBS: ascending bilateral flaccid weakness + areflexia + preceding GI or respiratory infection (Campylobacter most common)",
+            "Respiratory compromise risk: FVC <20 mL/kg, NIF <−30 cmH₂O, rapid progression = ICU admission",
+            "Autonomic instability: BP lability, cardiac arrhythmias — continuous monitoring required",
+            "NP role: recognize ascending weakness pattern + areflexia + recent infection → immediate ED transfer, do NOT manage outpatient"
+          ]
+        }
+      ],
+      "stemDistinctionNote": "2B focuses on seizure workup triggers, CNS infection recognition, and GBS. No antibiotic dosing or AED selection — those belong to prescribing domain. Stem anchor must differ from Phase 1 headache-differential-red-flags questions (which covered meningitis, SAH, and GCA)."
+    },
+
+    {
+      "domain": "Red Flags & Safety",
+      "topicSlug": "cancer-red-flags-primary-care",
+      "lessonPart": "2A",
+      "lessonId": "np-p2-cancer-rf-2a",
+      "title": "Cancer Red Flags: GI, Pulmonary, and Hematological Malignancy",
+      "targetQuestions": 6,
+      "learningObjectives": [
+        "Apply NICE 2-week rule criteria for expedited cancer workup referral",
+        "Identify colorectal cancer red flags warranting immediate colonoscopy referral",
+        "Recognize lung cancer presentation patterns that require urgent CT chest",
+        "Distinguish lymphoma B-symptoms and leukemia presentation features from benign causes",
+        "Apply iron-deficiency anemia in an older male as a colorectal cancer red flag until proven otherwise"
+      ],
+      "sections": [
+        {
+          "sectionTitle": "GI Cancer Red Flags",
+          "keyPoints": [
+            "Colorectal cancer: unexplained rectal bleeding in adult >40 (especially right-sided colon → frank occult blood vs left-sided → frank blood), change in bowel habit >4 weeks, unexplained iron-deficiency anemia in male or postmenopausal female (occult GI blood loss), palpable abdominal mass",
+            "Gastric cancer: persistent dyspepsia with alarm features in adult >55: weight loss, dysphagia, vomiting, epigastric mass, progressive despite PPI → urgent upper endoscopy",
+            "Esophageal cancer: progressive dysphagia (solids before liquids), odynophagia, weight loss — Barrett's esophagus is a precursor in GERD patients",
+            "Pancreatic cancer: painless jaundice + weight loss + new-onset DM in adult >50; Courvoisier sign (palpable non-tender gallbladder) — CT pancreas protocol"
+          ]
+        },
+        {
+          "sectionTitle": "Pulmonary and Hematological Malignancy",
+          "keyPoints": [
+            "Lung cancer: smoker (≥40 pack-year) with new cough, hemoptysis, weight loss, or CXR mass → low-dose CT chest screening + urgent referral if symptomatic",
+            "Pancoast tumor: shoulder pain + Horner syndrome (ptosis, miosis, anhidrosis) + arm weakness from superior sulcus",
+            "Superior vena cava (SVC) syndrome: facial/neck/arm swelling + distended neck veins + headache worse when leaning forward — mediastinal mass (lung cancer or lymphoma) — emergent oncology",
+            "Lymphoma: B symptoms (fever >38°C + drenching night sweats + ≥10% weight loss in 6 months) + non-tender rubbery lymphadenopathy + mediastinal mass on CXR → urgent CT staging + hematology referral",
+            "Leukemia: fatigue + pallor + petechiae/bruising + recurrent infections + bone pain; CBC: elevated WBC (CML/CLL) or pancytopenia with blasts (AML) → urgent hematology"
+          ]
+        }
+      ],
+      "stemDistinctionNote": "2A covers GI, pulmonary, and hematological cancer red flags — recognition and referral urgency. Questions must specify the alarm feature in the stem. No overlap with lymphadenopathy Phase 1 questions (np-p1-119–125) — those tested reactive vs malignant node features; 2A tests the ALARM SYMPTOM prompting the workup decision."
+    },
+
+    {
+      "domain": "Red Flags & Safety",
+      "topicSlug": "cancer-red-flags-primary-care",
+      "lessonPart": "2B",
+      "lessonId": "np-p2-cancer-rf-2b",
+      "title": "Cancer Red Flags: Genitourinary, Breast, Neurological, and Bone",
+      "targetQuestions": 6,
+      "learningObjectives": [
+        "Identify prostate, bladder, testicular, and cervical cancer red flags requiring urgent referral",
+        "Recognize breast cancer presentation features beyond the palpable mass",
+        "Apply bone metastasis pain pattern recognition and differentiate from benign musculoskeletal pain",
+        "Identify spinal cord compression from cancer metastasis as a neurological emergency",
+        "Distinguish malignant from benign causes of weight loss in primary care patients"
+      ],
+      "sections": [
+        {
+          "sectionTitle": "GU and Breast Cancer Red Flags",
+          "keyPoints": [
+            "Bladder cancer: painless gross hematuria in adult (most common presentation) → cystoscopy; risk factors: smoking, aniline dye exposure, schistosomiasis",
+            "Prostate cancer: elevated PSA trend + lower urinary tract symptoms + bone pain (lytic/blastic lesions in axial skeleton) — but PSA alone is not diagnostic; digital rectal exam + urology referral",
+            "Testicular cancer: painless testicular mass in young male (15–35) — assume malignant until proven otherwise; scrotal ultrasound, AFP, beta-hCG, LDH tumor markers",
+            "Breast cancer beyond the mass: nipple discharge (bloody, unilateral), nipple inversion (new onset), skin changes (peau d'orange = inflammatory breast cancer — red, swollen breast without fever), axillary lymphadenopathy without breast mass"
+          ]
+        },
+        {
+          "sectionTitle": "Bone Metastasis and Spinal Cord Compression",
+          "keyPoints": [
+            "Bone metastasis pain: constant, progressive, worse at night, not relieved by rest (vs mechanical pain which is activity-related); axial skeleton predominance (spine, pelvis, proximal femur, skull)",
+            "Common primary cancers that metastasize to bone: breast, prostate, lung, kidney, thyroid (mnemonic: 'Breast Promenades Long Kidney Trails')",
+            "Pathological fracture risk: lytic lesion >2.5 cm in femur or >50% cortical destruction → orthopedic surgery referral to prevent fracture",
+            "Malignant spinal cord compression: progressive back pain + bilateral leg weakness + bladder/bowel change in patient with known cancer → MRI spine emergently + dexamethasone + radiation oncology"
+          ]
+        },
+        {
+          "sectionTitle": "Unexplained Weight Loss Alarm Features",
+          "keyPoints": [
+            "Definition: ≥5% body weight loss in 6–12 months without intentional effort",
+            "Cancer workup threshold: age >50, weight loss >10% body weight, or associated alarm symptoms (dysphagia, rectal bleeding, hemoptysis, lymphadenopathy)",
+            "Initial screen: CBC, CMP, TSH, UA, CXR, age/sex-appropriate cancer screening — targeted by alarm symptom cluster",
+            "If initial screen negative in high-risk patient: CT chest/abdomen/pelvis; PET scan for occult malignancy"
+          ]
+        }
+      ],
+      "stemDistinctionNote": "2B focuses on GU, breast, bone, and systemic cancer red flags. No treatment content — referral urgency and workup are the terminal clinical actions tested."
+    },
+
+    {
+      "domain": "Red Flags & Safety",
+      "topicSlug": "pediatric-red-flags-dont-miss",
+      "lessonPart": "2A",
+      "lessonId": "np-p2-peds-rf-2a",
+      "title": "Pediatric Red Flags: Neonatal and Infant Don't-Miss Diagnoses",
+      "targetQuestions": 7,
+      "learningObjectives": [
+        "Identify neonatal red flags requiring immediate transfer: bilious vomiting, cyanosis with feeding, temperature instability, petechiae",
+        "Recognize febrile infant (<90 days) risk stratification and criteria for septic workup vs outpatient management",
+        "Apply the Pediatric Assessment Triangle (PAT) for rapid triage of the ill-appearing infant",
+        "Identify congenital heart disease presentations that are missed after NICU discharge",
+        "Recognize non-accidental trauma (NAT) pattern injuries and mandatory reporting obligation"
+      ],
+      "sections": [
+        {
+          "sectionTitle": "Neonatal Emergencies",
+          "keyPoints": [
+            "Bilious (green) vomiting in any neonate = malrotation with midgut volvulus until proven otherwise → emergent surgical evaluation; do NOT wait for contrast study before calling surgery",
+            "Cyanosis with feeding that improves with crying: ductus-dependent congenital heart lesion (e.g., critical pulmonic stenosis, transposition of great arteries) — hyperoxia test (FiO2 1.0 → if PaO2 <150, cardiac shunt suspected)",
+            "Hyperbilirubinemia in first 24 hours: pathological (hemolytic disease) — needs immediate phototherapy and workup",
+            "Temperature instability in newborn: sepsis until proven otherwise — group B Strep, Listeria, HSV in first weeks of life"
+          ]
+        },
+        {
+          "sectionTitle": "Febrile Infant Risk Stratification",
+          "keyPoints": [
+            "<28 days with any fever ≥38°C: full septic workup (CBC, CMP, UA/culture, blood culture, CSF, RSV/flu if applicable) + admission + empiric antibiotics — no exceptions",
+            "29–60 days with fever: step-down protocol (Philadelphia, Boston, Rochester criteria); if all low-risk criteria met and reliable follow-up → outpatient with 24h recheck; otherwise admit",
+            "61–90 days: well-appearing without source and reassuring labs → outpatient is acceptable for some; must have reliable caregiver and follow-up within 24 hours",
+            "Ill-appearing at any age with fever = admit regardless of lab values"
+          ]
+        },
+        {
+          "sectionTitle": "Non-Accidental Trauma",
+          "keyPoints": [
+            "NAT pattern injuries: (1) posterior rib fractures in infants (pathognomonic — from squeezing), (2) metaphyseal 'bucket-handle' or 'corner' fractures, (3) retinal hemorrhages (shaken baby syndrome), (4) bruising in non-mobile infants (any bruise in infant not yet cruising is suspicious)",
+            "Classic mismatch: severity of injury inconsistent with developmental age or stated mechanism",
+            "Mandatory reporting: NP has a legal obligation to report suspected NAT to child protective services — report on suspicion, not confirmed diagnosis",
+            "Workup: full skeletal survey, retinal exam, head CT or MRI (non-contrast), labs to exclude coagulopathy"
+          ]
+        }
+      ],
+      "stemDistinctionNote": "2A covers neonatal/infant red flags. Must not duplicate abdominal pain Phase 1 topics (which covered ectopic, intussusception, volvulus at the diagnostic level — 2A tests the critical action trigger: when to call 911 or transfer vs the differential reasoning). Specify infant age clearly in all stems."
+    },
+
+    {
+      "domain": "Red Flags & Safety",
+      "topicSlug": "pediatric-red-flags-dont-miss",
+      "lessonPart": "2B",
+      "lessonId": "np-p2-peds-rf-2b",
+      "title": "Pediatric Red Flags: Toddler, School Age, and Adolescent Emergencies",
+      "targetQuestions": 7,
+      "learningObjectives": [
+        "Recognize Kawasaki disease and its diagnostic criteria and cardiac complication risk",
+        "Identify meningococcal disease and other pediatric infectious emergencies requiring 911 activation",
+        "Apply PECARN pediatric head CT decision rules for low-risk versus high-risk head trauma",
+        "Recognize epiglottitis, croup, and foreign body aspiration by clinical features and appropriate disposition",
+        "Identify acute rheumatic fever Jones criteria and the consequence of missed streptococcal pharyngitis"
+      ],
+      "sections": [
+        {
+          "sectionTitle": "Kawasaki Disease",
+          "keyPoints": [
+            "Classic Kawasaki: fever ≥5 days + 4 of 5 CRASH criteria: Conjunctivitis (bilateral non-purulent), Rash (polymorphous), Adenopathy (cervical, unilateral >1.5 cm), Strawberry tongue/lip cracking/oral mucosal changes, Hand/foot changes (erythema → periungual desquamation in convalescent phase)",
+            "Incomplete Kawasaki: fever ≥5 days + fewer than 4 criteria but elevated CRP/ESR + echo changes — IVIG decision requires pediatric cardiology",
+            "Cardiac complication: coronary artery aneurysm (CAA) — the reason treatment matters; echocardiogram at diagnosis",
+            "Treatment decision (IVIG + aspirin) belongs to pediatrics/cardiology; NP role is early recognition and pediatric referral"
+          ]
+        },
+        {
+          "sectionTitle": "Upper Airway Emergencies",
+          "keyPoints": [
+            "Epiglottitis: drooling + dysphagia + muffled 'hot potato' voice + high fever + tripod positioning; do NOT examine throat (laryngospasm risk) — immediate ENT/anesthesia + ICU; 'thumbprint sign' on lateral neck XR",
+            "Croup: viral (parainfluenza), barky seal-like cough, inspiratory stridor, nocturnal, typically <3 years, low-grade fever; Steeple sign on AP neck XR; mild = humidified air + dexamethasone; moderate/severe = racemic epinephrine",
+            "Foreign body aspiration: toddler with sudden cough + wheeze + air-trapping (unilateral hyperinflation on expiratory CXR) → bronchoscopy; do NOT perform abdominal thrusts if still breathing"
+          ]
+        },
+        {
+          "sectionTitle": "Acute Rheumatic Fever and Pediatric Cardiac Red Flags",
+          "keyPoints": [
+            "ARF Jones criteria (major): carditis, polyarthritis (migratory), Sydenham's chorea, erythema marginatum, subcutaneous nodules — 2 major OR 1 major + 2 minor (elevated ESR/CRP, prolonged PR, fever, elevated WBC) + evidence of recent GAS infection",
+            "Consequence: mitral stenosis from recurrent ARF — prevent with penicillin prophylaxis (secondary prevention)",
+            "New murmur in child with recent pharyngitis + fever + migratory arthritis → ECG + echo + cardiology",
+            "PECARN head CT rule: low-risk if: GCS 15, no LOC (or brief <5 sec), no vomiting, no severe headache, no scalp hematoma (temporal/parietal/occipital), normal behavior → observation instead of CT"
+          ]
+        }
+      ],
+      "stemDistinctionNote": "2B focuses on older pediatric emergencies. Kawasaki questions must include the fever duration (≥5 days) as a key stem element. Epiglottitis vs croup must be distinguishable by age, fever severity, and drooling. No overlap with Phase 1 fever-without-source topics (which covered febrile infant workup at the differential level — 2B tests the red flag action)."
+    },
+
+    {
+      "domain": "Red Flags & Safety",
+      "topicSlug": "psychiatric-red-flags-safety",
+      "lessonPart": "2A",
+      "lessonId": "np-p2-psych-rf-2a",
+      "title": "Psychiatric Red Flags: Suicidality and Lethal Self-Harm Risk",
+      "targetQuestions": 7,
+      "scopeFenceNote": "SF-04 slugA boundary: MDD diagnosis and suicidality risk stratification are already scoped to mdd-diagnosis-risk-initial-management. 2A extends that into the HIGH-RISK action domain — what the NP does when risk is established, not how to diagnose or select antidepressants.",
+      "learningObjectives": [
+        "Apply the Columbia Suicide Severity Rating Scale (C-SSRS) to stratify suicidal ideation from passive to active with plan and means",
+        "Differentiate low, moderate, and high suicide risk and the corresponding NP clinical actions",
+        "Recognize protective and exacerbating factors that modify suicide risk estimate",
+        "Implement a safety plan and determine when involuntary psychiatric hold (5150/Baker Act) is legally indicated",
+        "Identify patient populations with disproportionately elevated suicide risk: older white males, LGBTQ+ youth, Native American communities"
+      ],
+      "sections": [
+        {
+          "sectionTitle": "C-SSRS Stratification and Clinical Actions",
+          "keyPoints": [
+            "Passive ideation only ('I wish I were dead') + no history of attempts + strong protective factors → outpatient safety plan + increased follow-up frequency",
+            "Active ideation WITHOUT plan or intent → assess intent and plan; consider same-day psychiatry consult vs outpatient safety plan with follow-up within 48–72 hours",
+            "Active ideation WITH plan AND available means → involuntary hold (5150/Baker Act) or direct to ED with safety companion; do NOT allow patient to leave unescorted",
+            "Recent attempt (within 90 days) + current ideation → psychiatric inpatient evaluation required regardless of stated intent"
+          ]
+        },
+        {
+          "sectionTitle": "Protective Factors and Risk Modifiers",
+          "keyPoints": [
+            "Protective: religious objection to suicide, strong social support, responsibility for children, reasons for living, treatment engagement, no substance use, no prior attempts",
+            "High-risk markers: prior attempt (strongest predictor), male sex, white or Native American race, age >65 or adolescent male, LGBTQ+ identity without affirmative support, recent loss (job, relationship, legal problem), access to firearms",
+            "Means restriction counseling: if firearms in home → ask patient AND family/partner to store separately or remove from access; reduces suicide completion by 30–90%",
+            "Medications lethality: tricyclics, lithium, opioids — only prescribe small quantities in suicidal patients; consider guardian-controlled dispensing"
+          ]
+        },
+        {
+          "sectionTitle": "Safety Planning and Mandatory Duty",
+          "keyPoints": [
+            "Safety plan components (Stanley-Brown model): warning signs → coping strategies → social contacts → professional contacts → means restriction → emergency services",
+            "Duty to warn (Tarasoff): if patient expresses specific threat to identifiable third party → NP must notify potential victim AND law enforcement; document",
+            "Involuntary hold criteria: danger to self OR others OR gravely disabled (unable to provide food/shelter/clothing due to mental disorder)",
+            "Documentation: document C-SSRS score, clinical reasoning, patient response to safety plan, and plan for follow-up — medicolegally critical"
+          ]
+        }
+      ],
+      "stemDistinctionNote": "SF-04 boundary respected: 2A tests what to DO when suicide risk is HIGH — not how to diagnose MDD or which antidepressant to select. No antidepressant selection questions appear here. Do not duplicate MDD recognition questions from Phase 1 (np-p1-056)."
+    },
+
+    {
+      "domain": "Red Flags & Safety",
+      "topicSlug": "psychiatric-red-flags-safety",
+      "lessonPart": "2B",
+      "lessonId": "np-p2-psych-rf-2b",
+      "title": "Psychiatric Red Flags: New-Onset Psychosis and Acute Agitation",
+      "targetQuestions": 7,
+      "learningObjectives": [
+        "Generate a medical differential for new-onset psychosis to exclude organic causes before psychiatric diagnosis",
+        "Recognize first-episode psychosis features requiring emergent psychiatric evaluation",
+        "Apply delirium vs dementia vs psychosis clinical distinctions",
+        "Identify violence risk markers and safe management of the acutely agitated patient in primary care",
+        "Determine when involuntary psychiatric hospitalization is indicated for psychosis"
+      ],
+      "sections": [
+        {
+          "sectionTitle": "Medical Workup for New-Onset Psychosis",
+          "keyPoints": [
+            "Must-exclude organic causes of acute psychosis: hypoglycemia, hyponatremia, hypoxia, sepsis (especially in elderly), thyroid storm, Addisonian crisis, hepatic encephalopathy, B12 deficiency, syphilis, HIV encephalitis, CNS tumors or vasculitis, steroid psychosis, anticholinergic toxidrome",
+            "First-episode psychosis workup: CBC, CMP, TSH, B12, RPR/VDRL, HIV, UA, urine drug screen, LFTs; brain MRI if focal findings or concern for structural cause",
+            "Delirium vs psychosis: delirium = acute fluctuating consciousness + inattention + disorganized thinking + usually identifiable medical cause; psychosis = clear consciousness + fixed delusions/hallucinations without clouding",
+            "Wernicke encephalopathy: classic triad (confusion + ophthalmoplegia + ataxia) in alcoholic or malnourished patient — thiamine 500 mg IV before glucose"
+          ]
+        },
+        {
+          "sectionTitle": "Acute Agitation Safety in Primary Care",
+          "keyPoints": [
+            "De-escalation first: low stimulus environment, calm voice, non-threatening posture, offer options not ultimatums — most effective and least restrictive",
+            "If de-escalation fails and patient is danger to self/others: call 911 for restraint assistance; do NOT attempt physical restraint without security/law enforcement",
+            "Excited delirium syndrome: extreme agitation + hyperthermia + superhuman strength + tachycardia + diaphoresis — in-custody risk of sudden death; emergent medical care required",
+            "Involuntary hold: if patient is gravely disabled or danger to self/others due to psychiatric condition → initiate involuntary hold procedures per state law; clearly document clinical basis"
+          ]
+        }
+      ],
+      "stemDistinctionNote": "2B covers first-episode psychosis organic workup and acute agitation — no antipsychotic drug selection (that belongs to prescribing domain Phase 3). Delirium vs psychosis distinction must not replicate altered mental status content from headache (ICP) or syncope Phase 1 questions."
+    },
+
+    {
+      "domain": "Chronic Disease Management",
+      "topicSlug": "heart-failure-gdmt-primary-care",
+      "lessonPart": "2A",
+      "lessonId": "np-p2-hf-2a",
+      "title": "Heart Failure Phenotype Classification and Monitoring",
+      "targetQuestions": 7,
+      "scopeFenceActive": "SF-06 lessonPart 2A boundary",
+      "learningObjectives": [
+        "Classify heart failure by ejection fraction: HFrEF (EF <40%), HFmrEF (EF 41–49%), HFpEF (EF ≥50%)",
+        "Apply NYHA functional classification to guide treatment intensity and prognosis communication",
+        "Interpret BNP and NT-proBNP for HF diagnosis, monitoring treatment response, and identifying decompensation",
+        "Distinguish HFrEF from HFpEF by clinical features and echocardiographic findings",
+        "Identify triggers for acute decompensated HF and appropriate NP response"
+      ],
+      "sections": [
+        {
+          "sectionTitle": "EF-Based HF Classification",
+          "keyPoints": [
+            "HFrEF (reduced EF <40%): systolic dysfunction; dilated cardiomyopathy pattern; responds to GDMT with mortality benefit (ACEi/ARNi, BB, MRA, SGLT-2)",
+            "HFpEF (preserved EF ≥50%): diastolic dysfunction; typical patient is elderly, hypertensive, female, obese with DM; preserved heart size but elevated filling pressures; fewer mortality-reducing therapies",
+            "HFmrEF (mildly reduced EF 41–49%): intermediate; similar GDMT benefit as HFrEF for some agents",
+            "Key clinical features distinguishing HFrEF from HFpEF: HFrEF = S3 gallop + displaced PMI + dilated cardiomegaly; HFpEF = no S3 + preserved heart size + diastolic parameters on echo (elevated E/e' ratio, impaired relaxation)"
+          ]
+        },
+        {
+          "sectionTitle": "BNP/NT-proBNP Clinical Use",
+          "keyPoints": [
+            "Diagnostic: BNP >400 pg/mL strongly suggests HF; BNP <100 pg/mL argues against HF in acute dyspnea; NT-proBNP thresholds are 3–4× higher than BNP",
+            "Monitoring: rising BNP on stable GDMT = suboptimal decongestion or worsening; falling BNP = favorable response to therapy",
+            "BNP is elevated in obesity (misleadingly low false negative), renal failure (falsely elevated), and AF (moderately elevated baseline)",
+            "At HF clinic visit: check BNP + weight + fluid status (JVD, edema, rales) to guide diuretic adjustment — not just symptoms"
+          ]
+        },
+        {
+          "sectionTitle": "NYHA Classification and Decompensation Triggers",
+          "keyPoints": [
+            "NYHA I: no symptoms; NYHA II: symptoms with moderate exertion; NYHA III: symptoms with minimal exertion; NYHA IV: symptoms at rest",
+            "Decompensation triggers: dietary sodium excess (most common), medication non-adherence (diuretics, ACEi, BB), new AF with rapid ventricular rate, myocardial ischemia, infection, NSAID use, addition of negative inotrope",
+            "Decompensation recognition: weight gain >2 lb in 24h or >5 lb in 1 week, orthopnea, PND, increasing edema, worsening dyspnea → action: increase diuretic dose AND schedule urgent follow-up within 48–72 hours or direct to ED if unstable"
+          ]
+        }
+      ],
+      "stemDistinctionNote": "SF-06 2A boundary: this lesson owns EF classification, BNP interpretation, NYHA staging, phenotype recognition, and decompensation trigger identification. It may NOT include GDMT drug selection, ARNi advantages over ACEi, beta-blocker class preference, or SGLT-2 indication for HF — those belong to lesson 2B."
+    },
+
+    {
+      "domain": "Chronic Disease Management",
+      "topicSlug": "heart-failure-gdmt-primary-care",
+      "lessonPart": "2B",
+      "lessonId": "np-p2-hf-2b",
+      "title": "Heart Failure GDMT: Four-Pillar Pharmacotherapy and Monitoring",
+      "targetQuestions": 7,
+      "scopeFenceActive": "SF-06 lessonPart 2B boundary",
+      "learningObjectives": [
+        "Apply the four-pillar GDMT framework for HFrEF: ACEi/ARNi, evidence-based beta-blocker, MRA, SGLT-2 inhibitor",
+        "Distinguish sacubitril/valsartan (ARNi) from ACE inhibitors: mechanism, PARADIGM-HF trial superiority, and mandatory 36-hour washout",
+        "Select evidence-based beta-blockers for HFrEF and exclude non-approved agents",
+        "Identify MRA indications, monitoring parameters (potassium, creatinine), and contraindications",
+        "Apply DAPA-HF/EMPEROR-Reduced data: SGLT-2 inhibitor benefit for HFrEF independent of diabetes status"
+      ],
+      "sections": [
+        {
+          "sectionTitle": "Four-Pillar GDMT Framework for HFrEF",
+          "keyPoints": [
+            "Pillar 1 — ACEi or ARNi: initiate ACEi (lisinopril) if tolerated; upgrade to ARNi (sacubitril/valsartan) for ambulatory HFrEF patients who can tolerate — 36-hour ACEi washout before starting ARNi to prevent angioedema risk; ARNi cannot be combined with ACEi",
+            "Pillar 2 — Evidence-based BB: ONLY carvedilol (non-selective alpha/BB), metoprolol succinate (selective BB), or bisoprolol are HF-approved; do NOT use atenolol, propranolol, or metoprolol tartrate — titrate slowly starting at low dose; avoid initiation during decompensation",
+            "Pillar 3 — MRA (spironolactone or eplerenone): for EF ≤35% + NYHA Class II–IV despite ACEi/BB; monitor K⁺ and Cr at 1 week + 4 weeks; hold if K⁺ >5.0 or eGFR <30; eplerenone preferred in males (less gynecomastia)",
+            "Pillar 4 — SGLT-2 inhibitor (dapagliflozin or empagliflozin): proven HF mortality benefit in HFrEF regardless of T2DM status; benefits driven by hemodynamic/decongestion mechanisms, not glucose lowering"
+          ]
+        },
+        {
+          "sectionTitle": "ARNi: Sacubitril/Valsartan Details",
+          "keyPoints": [
+            "Mechanism: neprilysin inhibitor (sacubitril) + ARB (valsartan) — increases natriuretic peptides + blocks RAAS",
+            "PARADIGM-HF trial: ARNi reduced CV death or HF hospitalization by 20% vs enalapril in EF ≤40%; NNT ≈16 over 27 months",
+            "Starting conditions: stable outpatient HFrEF on ACEi for ≥4 weeks (or ARB), SBP ≥100, eGFR ≥30, K⁺ ≤5.0",
+            "Critical safety: 36-hour washout after LAST dose of ACEi before FIRST dose of ARNi; otherwise risk of angioedema — this is a frequently tested NP-level prescribing decision"
+          ]
+        },
+        {
+          "sectionTitle": "HFpEF Management",
+          "keyPoints": [
+            "No proven mortality-reducing GDMT for HFpEF (unlike HFrEF)",
+            "EMPEROR-Preserved trial: empagliflozin reduced HF hospitalization in HFpEF — now recommended",
+            "Control comorbidities driving HFpEF: HTN (BP target <130/80), AF rate control, DM optimization, obesity/sleep apnea treatment",
+            "Diuretics: loop diuretics (furosemide, torsemide) for congestion management; electrolyte and renal monitoring required"
+          ]
+        }
+      ],
+      "stemDistinctionNote": "SF-06 2B boundary: This lesson owns GDMT drug selection and initiation decisions. Cross-topic fence: ace-arb-arni-indications-monitoring owns drug-specific AE management, pharmacokinetics, and monitoring schedules per individual agent. Questions in 2B test WHICH class to add and WHEN — not specific AE management for an individual drug."
+    },
+
+    {
+      "domain": "Chronic Disease Management",
+      "topicSlug": "hypertension-step-therapy-guideline",
+      "lessonPart": "2A",
+      "lessonId": "np-p2-htn-step-2a",
+      "title": "Hypertension: First-Line Drug Selection and Compelling Indications",
+      "targetQuestions": 7,
+      "scopeFenceActive": "SF-05 slugB",
+      "learningObjectives": [
+        "Apply compelling indication framework to select antihypertensive class by comorbidity",
+        "Distinguish first-line agents by race, age, and end-organ comorbidity per JNC/AHA 2017 guidelines",
+        "Identify contraindicated antihypertensive agents by comorbidity (ACEi/ARB in pregnancy, beta-blockers in COPD with bronchospasm)",
+        "Select optimal initial therapy for isolated systolic hypertension in the elderly",
+        "Apply the principle of combination therapy to maximize BP reduction with minimal adverse effects"
+      ],
+      "sections": [
+        {
+          "sectionTitle": "Compelling Indication Framework",
+          "keyPoints": [
+            "DM or CKD with proteinuria: ACEi or ARB first-line (renoprotective via RAAS blockade) — preferred regardless of race",
+            "HFrEF: ACEi/ARNi + evidence-based BB + MRA — thiazides and CCBs are not first-line for HF",
+            "Post-MI/stable angina: beta-blocker (cardioprotective) + ACEi/ARB",
+            "Black patients without DM/CKD: thiazide diuretic (chlorthalidone preferred over HCTZ) or CCB (amlodipine) — ACEi/ARB LESS effective as monotherapy in Black patients (lower renin activity on average)",
+            "Isolated systolic HTN in elderly (ALLHAT trial): thiazide and CCB equally effective; avoid beta-blocker as first-line in elderly (less BP lowering benefit, fall risk from bradycardia)"
+          ]
+        },
+        {
+          "sectionTitle": "First-Line Antihypertensive Classes",
+          "keyPoints": [
+            "Thiazide diuretics: chlorthalidone (preferred over HCTZ — longer acting, lower CV risk in ALLHAT); adverse effects: hyponatremia, hypokalemia, hyperuricemia (gout caution), hyperglycemia",
+            "ACE inhibitors (lisinopril, enalapril, ramipril): first-line with DM/CKD/HF; adverse effect: dry cough (10–15% — switch to ARB); angioedema (rare but life-threatening — absolute switch to ARB, NOT re-challenge)",
+            "ARBs (losartan, valsartan, olmesartan): same indication as ACEi without cough; both ACEi and ARB are CONTRAINDICATED in pregnancy (teratogenic) and should not be combined",
+            "Calcium channel blockers (amlodipine): effective in Black patients and elderly; adverse effect: peripheral edema (dose-related), constipation, gingival hyperplasia (with diltiazem/verapamil); non-dihydropyridines (diltiazem, verapamil) — avoid in HFrEF (negative inotropes)",
+            "Beta-blockers: reserved for compelling indications (post-MI, HF, angina, rate control in AF) — not first-line for uncomplicated HTN per JNC guidelines"
+          ]
+        },
+        {
+          "sectionTitle": "Combination Therapy Principles",
+          "keyPoints": [
+            "Preferred combination: ACEi (or ARB) + CCB (amlodipine) — synergistic, less AE overlap; CCB edema mitigated by ACEi/ARB (vasodilation offset effect)",
+            "Avoid: ACEi + ARB combined (ONTARGET trial: increased AKI and hyperkalemia without added benefit); avoid ACEi + ARB + aldosterone antagonist triple RAAS block",
+            "If 2 drugs insufficient: add chlorthalidone (or HCTZ if not already on diuretic) → 3-drug regimen",
+            "Resistant HTN (uncontrolled on ≥3 drugs including diuretic): add spironolactone (PATHWAY-2 trial: most effective add-on); evaluate for secondary HTN"
+          ]
+        }
+      ],
+      "stemDistinctionNote": "SF-05 slugB enforced: questions focus on drug class selection and compelling indications. May NOT test urgency vs emergency distinction, secondary HTN recognition, or BP staging criteria — those belong to hypertension-red-flags-referral (SF-05 slugA). No overlap with cardiovascular Phase 1 diagnostic content."
+    },
+
+    {
+      "domain": "Chronic Disease Management",
+      "topicSlug": "hypertension-step-therapy-guideline",
+      "lessonPart": "2B",
+      "lessonId": "np-p2-htn-step-2b",
+      "title": "Hypertension: Step Therapy, Resistant HTN, and Special Populations",
+      "targetQuestions": 7,
+      "scopeFenceActive": "SF-05 slugB",
+      "learningObjectives": [
+        "Apply step therapy escalation for uncontrolled hypertension on monotherapy",
+        "Identify medication-related causes of resistant hypertension (NSAIDs, decongestants, OCPs, stimulants)",
+        "Manage hypertension in chronic kidney disease and diabetes with kidney protection in mind",
+        "Apply BP targets by comorbidity: DM, CKD, elderly patients, stroke prevention",
+        "Recognize the renal dosing requirement for RAAS inhibitors and monitor for hyperkalemia and AKI"
+      ],
+      "sections": [
+        {
+          "sectionTitle": "Step Therapy Escalation",
+          "keyPoints": [
+            "Step 1: 1 drug (ACEi or ARB, CCB, or thiazide — based on compelling indication); titrate to maximum tolerated dose before adding second agent",
+            "Step 2: 2-drug combination: preferred = ACEi/ARB + CCB; alternative = ACEi/ARB + thiazide; if CCB + thiazide first, add ACEi/ARB",
+            "Step 3: 3-drug combination: ACEi/ARB + CCB + thiazide — most patients will reach goal on 3 drugs",
+            "Step 4 (resistant): add spironolactone 25–50 mg daily — greatest evidence for resistant HTN; also bisoprolol, doxazosin, or amiloride as alternatives"
+          ]
+        },
+        {
+          "sectionTitle": "Medication-Induced HTN and Drug Interactions",
+          "keyPoints": [
+            "NSAIDs: blunt antihypertensive efficacy of ACEi/ARB and diuretics (prostaglandin-mediated sodium retention) — most common cause of medication-induced resistant HTN",
+            "Combined oral contraceptives: estrogen component causes sodium retention and RAAS activation; BP should be monitored 3 months after OCP initiation",
+            "Stimulants: decongestants (pseudoephedrine), amphetamines, cocaine — sympathomimetic BP elevation",
+            "Others: corticosteroids, cyclosporine, tacrolimus, erythropoietin — each mechanistically elevates BP"
+          ]
+        },
+        {
+          "sectionTitle": "Special Populations and BP Targets",
+          "keyPoints": [
+            "DM: target <130/80 (ADA 2024); ACEi or ARB first-line regardless of race — reduces microalbuminuria progression",
+            "CKD with proteinuria: target <130/80; ACEi or ARB first-line — SGLT-2 inhibitor add-on for proteinuria reduction (CREDENCE/DAPA-CKD)",
+            "Elderly (SPRINT-eligible): target <130/80 systolic reduces CV events — but caution with orthostatic hypotension, fall risk; check orthostatics at each visit",
+            "Post-stroke/TIA: ACEi or ARB + thiazide combination most evidence-based for secondary prevention; target <130/80",
+            "RAAS monitoring after initiation: check BMP (K⁺, creatinine) at 2–4 weeks after starting ACEi/ARB; a rise in creatinine ≤30% from baseline is acceptable and expected; >30% rise → hold and evaluate for bilateral renal artery stenosis"
+          ]
+        }
+      ],
+      "stemDistinctionNote": "2B extends step therapy and special populations — same slug as 2A. Questions must not duplicate 2A first-line selection stems. Each 2B stem must be anchored to either step escalation, medication-induced HTN, or a specific comorbid population (CKD/DM/elderly)."
+    },
+
+    {
+      "domain": "Chronic Disease Management",
+      "topicSlug": "afib-rate-rhythm-stroke-risk",
+      "lessonPart": "2A",
+      "lessonId": "np-p2-afib-2a",
+      "title": "Atrial Fibrillation: Stroke Risk Stratification and Anticoagulation",
+      "targetQuestions": 7,
+      "learningObjectives": [
+        "Apply CHA₂DS₂-VASc score to stratify stroke risk and determine anticoagulation indication",
+        "Select appropriate DOAC versus warfarin for AF anticoagulation based on patient profile",
+        "Apply HAS-BLED score to assess bleeding risk and identify modifiable bleeding risk factors",
+        "Recognize AF types: paroxysmal, persistent, long-standing persistent, and permanent",
+        "Manage anticoagulation around cardioversion: 3-week before + 4-week after rule or TEE-guided strategy"
+      ],
+      "sections": [
+        {
+          "sectionTitle": "CHA₂DS₂-VASc and Anticoagulation Decision",
+          "keyPoints": [
+            "CHA₂DS₂-VASc: Congestive HF (1), Hypertension (1), Age ≥75 (2), Diabetes (1), Stroke/TIA/thromboembolism prior (2), Vascular disease (1), Age 65–74 (1), Sex category female (1)",
+            "Anticoagulation threshold: men ≥2, women ≥3 → anticoagulate; men = 1, women = 2 → consider; men = 0, women = 0–1 → no anticoagulation",
+            "DOAC vs warfarin: DOACs (apixaban, rivaroxaban, dabigatran, edoxaban) preferred over warfarin for non-valvular AF — lower intracranial bleed risk, no INR monitoring, comparable or superior stroke prevention",
+            "Warfarin still preferred: mechanical heart valves, moderate-severe mitral stenosis — DOACs are contraindicated in these settings"
+          ]
+        },
+        {
+          "sectionTitle": "DOAC Selection for AF",
+          "keyPoints": [
+            "Apixaban (Eliquis): most commonly prescribed; twice-daily dosing; dose-reduce if ≥2 of: age ≥80, weight ≤60 kg, creatinine ≥1.5 mg/dL; lowest GI bleed risk among DOACs",
+            "Rivaroxaban (Xarelto): once-daily with evening meal; avoid if eGFR <15; higher GI bleed risk than apixaban",
+            "Dabigatran (Pradaxa): avoid if eGFR <30; highest GI bleed risk; dyspepsia common adverse effect; only DOAC with FDA-approved reversal agent (idarucizumab)",
+            "Reversal agents: andexanet alfa (apixaban, rivaroxaban); idarucizumab (dabigatran); 4-factor PCC for all DOACs in life-threatening bleed if specific agent unavailable"
+          ]
+        },
+        {
+          "sectionTitle": "Cardioversion Anticoagulation Rules",
+          "keyPoints": [
+            "AF duration ≥48 hours OR unknown duration before cardioversion: anticoagulate ≥3 weeks before cardioversion AND ≥4 weeks after — risk of thrombus formation during post-cardioversion atrial stunning",
+            "TEE-guided strategy: if urgent cardioversion needed → transesophageal echocardiogram to exclude left atrial appendage (LAA) thrombus; if no thrombus → cardiovert then anticoagulate ≥4 weeks",
+            "AF duration <48 hours in low-risk patient: cardioversion may proceed without 3-week pre-treatment if anticoagulation started immediately; post-cardioversion anticoagulation still required ≥4 weeks",
+            "Do NOT stop long-term anticoagulation after successful cardioversion if CHA₂DS₂-VASc ≥2 — paroxysmal AF is still present"
+          ]
+        }
+      ],
+      "stemDistinctionNote": "2A covers stroke risk stratification and anticoagulation selection. Questions must be specific to DOAC selection, CHA₂DS₂-VASc calculation, or cardioversion anticoagulation protocol. No rate/rhythm control drug selection — that belongs to 2B."
+    },
+
+    {
+      "domain": "Chronic Disease Management",
+      "topicSlug": "afib-rate-rhythm-stroke-risk",
+      "lessonPart": "2B",
+      "lessonId": "np-p2-afib-2b",
+      "title": "Atrial Fibrillation: Rate Control vs Rhythm Control Strategy",
+      "targetQuestions": 7,
+      "learningObjectives": [
+        "Apply rate control goals and select appropriate rate control agents by HF status",
+        "Distinguish rate control from rhythm control and identify when rhythm control is preferred",
+        "Select appropriate antiarrhythmic agents for AF rhythm control and their contraindications",
+        "Recognize AF with RVR as a clinical emergency requiring immediate rate management",
+        "Apply the EAST-AFNET 4 trial evidence for early rhythm control"
+      ],
+      "sections": [
+        {
+          "sectionTitle": "Rate Control Agents and Goals",
+          "keyPoints": [
+            "Rate control goal: resting HR <80 bpm in symptomatic patients; <110 bpm is acceptable in asymptomatic patients with preserved EF (RACE II trial)",
+            "Beta-blockers (metoprolol, carvedilol): first-line for rate control; preferred in HFrEF because they improve HF outcomes AND control rate",
+            "Non-dihydropyridine CCBs (diltiazem, verapamil): effective rate control; CONTRAINDICATED in HFrEF (negative inotropes — worsen LV function); safe in HFpEF",
+            "Digoxin: rate control at rest only (does not control rate with exercise); adjunct therapy; narrow therapeutic window; check levels in elderly and CKD; toxicity: nausea, bradycardia, visual changes, arrhythmia",
+            "AF with RVR + hemodynamic instability (hypotension, pulmonary edema, ACS): electrical cardioversion immediately — not pharmacological rate control"
+          ]
+        },
+        {
+          "sectionTitle": "Rhythm Control Strategy",
+          "keyPoints": [
+            "EAST-AFNET 4 trial: early rhythm control in AF patients with ≥1 risk factor for stroke reduced CV events vs usual care — rhythm control now preferred early",
+            "Antiarrhythmic agents for AF rhythm control: flecainide/propafenone (no structural heart disease only), amiodarone (most effective, safe with HF and LV dysfunction — but extensive SE profile), sotalol (requires QTc monitoring — avoid if QTc >500 ms)",
+            "Dofetilide: hospital-only initiation due to QTc prolongation monitoring requirement",
+            "Catheter ablation: pulmonary vein isolation — preferred in patients who fail or cannot tolerate antiarrhythmic drugs; increasingly used as first-line rhythm control in young/active patients",
+            "Pill-in-pocket approach: flecainide or propafenone taken at onset of AF episode in patients with rare episodes and no structural heart disease"
+          ]
+        }
+      ],
+      "stemDistinctionNote": "2B covers rate vs rhythm control. No anticoagulation/CHA₂DS₂-VASc content (that is 2A). Questions on amiodarone, flecainide, or digoxin must specify the cardiac structural status in the stem — this is the key clinical differentiator."
+    },
+
+    {
+      "domain": "Chronic Disease Management",
+      "topicSlug": "t2dm-intensification-beyond-metformin",
+      "lessonPart": "2A",
+      "lessonId": "np-p2-t2dm-2a",
+      "title": "T2DM Intensification: Agent Classes, A1c Targets, and Hypoglycemia Risk",
+      "targetQuestions": 7,
+      "scopeFenceActive": "SF-01 slugA",
+      "learningObjectives": [
+        "Select A1c targets by patient profile: standard (<7%), relaxed (<8%), very relaxed (<8.5%) — individualized by age, comorbidity, life expectancy, and hypoglycemia risk",
+        "Compare second-line agent classes for T2DM: SU, DPP-4i, TZD, GLP-1 RA, SGLT-2i at the map level (which class for which patient type without cardiorenal indications)",
+        "Stratify hypoglycemia risk across T2DM medications: sulfonylureas and insulin (high); DPP-4i, GLP-1 RA, SGLT-2i (low independent risk)",
+        "Apply insulin initiation decision criteria: when to start basal insulin in T2DM, typical starting dose",
+        "Distinguish sulfonylurea comparative selection (glipizide vs glimepiride vs glyburide) by renal safety"
+      ],
+      "sections": [
+        {
+          "sectionTitle": "A1c Target Selection by Patient Profile",
+          "keyPoints": [
+            "Standard target <7.0%: most non-pregnant adults with T2DM, low hypoglycemia risk, motivated patient with good self-management",
+            "Relaxed target <8.0%: older adults (>70) with moderate hypoglycemia risk, limited life expectancy, established cardiovascular disease, fall risk, cognitive impairment",
+            "Very relaxed <8.5%: elderly with multiple comorbidities, frailty, end-organ failure, where tight control risks more than it benefits",
+            "Tight vs relaxed: ACCORD trial showed intensive control (<6.0%) increased mortality in high CV-risk T2DM patients — the lesson: individualize, not maximize control"
+          ]
+        },
+        {
+          "sectionTitle": "Agent Class Map for T2DM Intensification",
+          "keyPoints": [
+            "Sulfonylureas (glipizide, glimepiride, glyburide): effective, inexpensive; HIGH hypoglycemia risk; avoid glyburide in elderly or CKD (active metabolite accumulation); glimepiride preferred if CKD eGFR 30–45",
+            "DPP-4 inhibitors (sitagliptin, saxagliptin, linagliptin): low hypoglycemia risk, weight neutral, well-tolerated; note: saxagliptin may increase HF hospitalizations (SAVOR-TIMI) — avoid in HF",
+            "Thiazolidinediones/TZD (pioglitazone): improve insulin sensitivity; useful in NAFLD; contraindicated in HF (fluid retention); associated with bladder cancer and fracture risk",
+            "GLP-1 RA and SGLT-2i: agent-level differences and cardiorenal trial data owned by SF-01 slugB (glp1-sglt2-comorbidity-selection) — in THIS lesson, only map-level use: GLP-1 RA when weight loss is a priority, SGLT-2i when established ASCVD/HF/CKD is present"
+          ]
+        },
+        {
+          "sectionTitle": "Insulin Initiation in T2DM",
+          "keyPoints": [
+            "Indications to start insulin: A1c >10–12% at diagnosis or not meeting target on ≥3 oral agents, symptomatic hyperglycemia (polyuria, weight loss), hospital admission requiring insulin, DKA (then T1DM reassessment needed)",
+            "Starting basal insulin: begin with 10 units/day (or 0.1–0.2 units/kg/day) of long-acting insulin (glargine or detemir); titrate by 2 units every 3 days until fasting BG 80–130 mg/dL",
+            "Continuing metformin with insulin: recommended — reduces insulin requirement and weight gain; hold if eGFR <30 or contrast exposure",
+            "Hypoglycemia teaching at insulin initiation: patient must know glucagon use, recognition of <70 mg/dL symptoms, and 15-15 rule for correction"
+          ]
+        }
+      ],
+      "stemDistinctionNote": "SF-01 slugA enforced: questions may NOT include cardiorenal trial data, GLP-1 mechanism/AE profile, or SGLT-2 mechanism/AE profile. Those belong to glp1-sglt2-comorbidity-selection. No overlap with Phase 1 DKA/HHS recognition questions (np-p1-127–129 covered acute recognition only). Stems must anchor to intensification scenarios (A1c not at goal, need to add agent) — not diagnosis or acute management."
+    },
+
+    {
+      "domain": "Chronic Disease Management",
+      "topicSlug": "t2dm-intensification-beyond-metformin",
+      "lessonPart": "2B",
+      "lessonId": "np-p2-t2dm-2b",
+      "title": "T2DM Follow-Up Management: Monitoring, Complications Screening, and Patient Barriers",
+      "targetQuestions": 7,
+      "scopeFenceActive": "SF-01 slugA",
+      "learningObjectives": [
+        "Apply the T2DM monitoring schedule: A1c frequency, fasting lipids, UACR, eGFR, dilated eye exam, foot exam, dental care",
+        "Recognize early microvascular complication findings: diabetic nephropathy (microalbuminuria), retinopathy, neuropathy",
+        "Identify and address barriers to T2DM medication adherence: cost, hypoglycemia fear, injection hesitancy, health literacy",
+        "Adjust T2DM medications at follow-up for eGFR decline: metformin hold, SU renal caution, GLP-1 RA and SGLT-2i CKD thresholds",
+        "Apply motivational interviewing principles to improve patient engagement in T2DM self-management"
+      ],
+      "sections": [
+        {
+          "sectionTitle": "T2DM Monitoring Schedule",
+          "keyPoints": [
+            "A1c: every 3 months if not at goal or medication change; every 6 months if stable at goal",
+            "UACR (urine albumin-to-creatinine ratio): annually; microalbuminuria = 30–299 mg/g (initiate or intensify ACEi/ARB); macroalbuminuria = ≥300 mg/g",
+            "eGFR: annually; guides metformin safety (hold if eGFR <30, caution 30–45), SGLT-2i threshold (most require eGFR ≥20–30 for HF indication, ≥30–45 for glycemic indication)",
+            "Dilated fundus exam: annually if any retinopathy; every 1–2 years if no retinopathy",
+            "Foot exam: at every visit for high-risk feet (neuropathy, PVD, prior ulcer); at least annually for all patients",
+            "Fasting lipids: annually; statin therapy in T2DM 40–75 without established ASCVD (moderate-intensity statin)"
+          ]
+        },
+        {
+          "sectionTitle": "Microvascular Complication Recognition",
+          "keyPoints": [
+            "Diabetic nephropathy: microalbuminuria is the earliest marker (precedes creatinine rise by years); initiate ACEi or ARB even in normotensive patient with microalbuminuria",
+            "Diabetic retinopathy: non-proliferative (microaneurysms, hemorrhages, exudates) → proliferative (neovascularization, risk of vitreous hemorrhage and retinal detachment) — refer to ophthalmology at each stage",
+            "Diabetic neuropathy: distal symmetric polyneuropathy (DPN): stocking-glove pattern + loss of vibration sense + absent ankle reflexes; screen with 10g monofilament + tuning fork; treat neuropathic pain with duloxetine, pregabalin, or TCAs"
+          ]
+        }
+      ],
+      "stemDistinctionNote": "2B covers monitoring, complication screening, and follow-up adjustment. Must not include GLP-1/SGLT-2 mechanism or cardiorenal trial data (SF-01 slugA). Stems must be anchored to existing patient on therapy — follow-up visit scenario, not initial prescribing."
+    },
+
+    {
+      "domain": "Chronic Disease Management",
+      "topicSlug": "thyroid-disease-diagnosis-management",
+      "lessonPart": "2A",
+      "lessonId": "np-p2-thyroid-2a",
+      "title": "Thyroid Disease: Diagnosis, Staging, and Treatment Initiation Decision",
+      "targetQuestions": 6,
+      "scopeFenceActive": "SF-02 slugA",
+      "learningObjectives": [
+        "Interpret TSH, free T4, and free T3 to classify thyroid status: primary vs central, overt vs subclinical",
+        "Apply treatment initiation thresholds for subclinical hypothyroidism by TSH level and patient profile",
+        "Distinguish Graves disease from Hashimoto thyroiditis and thyroid nodule workup overview",
+        "Identify referral criteria to endocrinology: refractory thyroid disease, pregnancy, suspected thyroid malignancy",
+        "Recognize Graves disease as the most common cause of hyperthyroidism and its clinical features"
+      ],
+      "sections": [
+        {
+          "sectionTitle": "TSH Interpretation and Classification",
+          "keyPoints": [
+            "Primary hypothyroidism: elevated TSH + low free T4 — thyroid gland failure (Hashimoto most common cause in iodine-sufficient areas)",
+            "Subclinical hypothyroidism: elevated TSH + NORMAL free T4 — treat if TSH >10 mIU/L (regardless of symptoms); consider treating if TSH 5–10 with symptoms, pregnancy desire, or anti-TPO antibody positive",
+            "Central hypothyroidism (secondary/tertiary): low TSH + low free T4 — pituitary or hypothalamic dysfunction; TSH is unreliable, use free T4 to gauge severity",
+            "Primary hyperthyroidism: suppressed TSH + elevated free T4 (and/or T3) — most common cause is Graves disease; subclinical hyperthyroidism: suppressed TSH + normal free T4/T3"
+          ]
+        },
+        {
+          "sectionTitle": "Graves vs Hashimoto vs Nodule",
+          "keyPoints": [
+            "Graves disease: diffuse goiter + exophthalmos (proptosis) + pretibial myxedema + thyroid bruit; TSI (thyroid-stimulating immunoglobulin) antibodies are pathognomonic; most common cause of hyperthyroidism",
+            "Hashimoto thyroiditis: most common cause of hypothyroidism in developed countries; anti-TPO antibody elevated; diffuse firm goiter; progressive lymphocytic destruction; may have transient hyperthyroid phase (Hashitoxicosis)",
+            "Thyroid nodule workup: palpable or incidental; TSH first — if suppressed → hyperfunctioning nodule (benign); if normal/elevated → ultrasound for characterization → FNAB if suspicious features (hypoechogenic, irregular margins, microcalcifications, >1 cm with high-risk features)",
+            "Malignancy risk: cold nodule on scintigraphy is more concerning; papillary carcinoma most common thyroid cancer"
+          ]
+        },
+        {
+          "sectionTitle": "Treatment Decision and Referral",
+          "keyPoints": [
+            "Initiate levothyroxine when: overt hypothyroidism (elevated TSH + low fT4), subclinical with TSH >10, pregnancy (start immediately even if subclinical), symptoms + TSH 5–10 + positive anti-TPO",
+            "Hyperthyroidism treatment decision: refer to endocrinology for Graves (radioactive iodine, antithyroid drug, thyroidectomy options); NP may start beta-blocker for symptom control while awaiting endocrinology",
+            "Referral to endocrinology: pregnancy + thyroid disease, refractory to initial therapy, nodule with suspicious features, pediatric thyroid disease, secondary hypothyroidism",
+            "Treatment goal: target TSH within normal range (0.5–4.5 mIU/L) for most adults; suppress to 0.1–0.5 for thyroid cancer post-thyroidectomy"
+          ]
+        }
+      ],
+      "stemDistinctionNote": "SF-02 slugA enforced: questions cover TSH interpretation, Graves vs Hashimoto distinction, subclinical treatment thresholds, and referral decisions. May NOT include levothyroxine starting dose, weight-based dosing, administration timing, drug interactions, or titration — those belong to levothyroxine-dosing-monitoring-interactions (SF-02 slugB). No overlap with Phase 1 thyroid recognition questions (np-p1-051, np-p1-052 covered symptom pattern recognition only — 2A extends to laboratory classification and treatment initiation decision)."
+    },
+
+    {
+      "domain": "Chronic Disease Management",
+      "topicSlug": "thyroid-disease-diagnosis-management",
+      "lessonPart": "2B",
+      "lessonId": "np-p2-thyroid-2b",
+      "title": "Thyroid Disease: Levothyroxine Dosing, Titration, and Monitoring",
+      "targetQuestions": 6,
+      "scopeFenceActive": "SF-02 slugB",
+      "learningObjectives": [
+        "Calculate levothyroxine starting dose using weight-based formula (1.6 mcg/kg/day) with elderly/cardiac modifications",
+        "Apply TSH monitoring interval after levothyroxine initiation or dose change (6–8 weeks)",
+        "Identify absorption interactions that require timing separation: calcium, iron, PPIs, sucralfate, cholestyramine",
+        "Recognize drug interactions that alter levothyroxine requirements: rifampin, phenytoin, carbamazepine",
+        "Apply dose titration increments (12.5–25 mcg steps) and target TSH by age group"
+      ],
+      "sections": [
+        {
+          "sectionTitle": "Levothyroxine Dosing",
+          "keyPoints": [
+            "Full replacement dose: 1.6 mcg/kg/day (ideal body weight) for otherwise healthy adults with primary hypothyroidism",
+            "Elderly or cardiac patients: start low, go slow — 25–50 mcg daily; titrate gradually over months to avoid precipitating angina or arrhythmia from increased metabolic demand",
+            "Titration: increase in 12.5–25 mcg increments; recheck TSH 6–8 weeks after EACH dose change (T4 half-life ≈7 days; steady-state requires ≥4–6 weeks)",
+            "Pregnancy: thyroid requirements increase ≈30–50% in the first trimester; increase dose by 30% immediately on confirmed pregnancy in known hypothyroid patient"
+          ]
+        },
+        {
+          "sectionTitle": "Absorption Interactions",
+          "keyPoints": [
+            "Levothyroxine is best absorbed on an empty stomach (30–60 min before breakfast) — food, especially high-fiber, reduces absorption",
+            "Medications that REDUCE levothyroxine absorption (must be taken 4 hours apart): calcium carbonate, ferrous sulfate, PPIs (reduce gastric acid needed for some absorption), sucralfate, cholestyramine, colestipol",
+            "Drug interactions that INCREASE levothyroxine metabolism (require dose increase): rifampin (strong CYP induction), phenytoin, carbamazepine — these accelerate T4 clearance",
+            "Brand vs generic: switching between brand (Synthroid) and generic or between generic manufacturers requires TSH recheck — bioequivalence differs slightly between manufacturers"
+          ]
+        },
+        {
+          "sectionTitle": "Monitoring Schedule",
+          "keyPoints": [
+            "After initiation: TSH at 6–8 weeks; adjust dose; repeat at 6–8 weeks after each adjustment",
+            "Stable patient: annual TSH check",
+            "Pregnancy: TSH every 4 weeks in first trimester, then every trimester; adjust dose immediately to keep TSH <2.5 mIU/L in first trimester",
+            "Overtreatment signs (TSH suppressed below normal): atrial fibrillation risk, osteoporosis (especially postmenopausal women), anxiety — do not suppress TSH below normal range except in thyroid cancer management"
+          ]
+        }
+      ],
+      "stemDistinctionNote": "SF-02 slugB enforced: this lesson exclusively covers dosing, titration, absorption, and monitoring. May NOT include TSH interpretation for diagnosis, Graves vs Hashimoto distinction, treatment initiation decision — those belong to thyroid-disease-diagnosis-management (SF-02 slugA). All questions must anchor on an existing patient already on levothyroxine (follow-up or adjustment scenario) or on absorption/interaction clinical decision."
+    },
+
+    {
+      "domain": "Chronic Disease Management",
+      "topicSlug": "ckd-progression-monitoring-medication",
+      "lessonPart": "2A",
+      "lessonId": "np-p2-ckd-2a",
+      "title": "CKD Management: Slowing Progression and Monitoring",
+      "targetQuestions": 6,
+      "scopeFenceActive": "SF-03 slugA",
+      "learningObjectives": [
+        "Apply KDIGO CKD staging by eGFR (G1–G5) and albuminuria (A1–A3) to determine monitoring frequency and prognosis",
+        "Select renoprotective agents: RAAS inhibitors for albuminuria reduction, SGLT-2 inhibitors for CKD progression",
+        "Apply blood pressure target in CKD with proteinuria (<130/80) and the preferred antihypertensive class",
+        "Identify dietary restrictions for CKD progression: sodium, potassium, phosphate, and protein thresholds",
+        "Determine referral criteria to nephrology: eGFR <30, rapidly declining eGFR, refractory hyperkalemia"
+      ],
+      "sections": [
+        {
+          "sectionTitle": "KDIGO Staging and Monitoring Frequency",
+          "keyPoints": [
+            "CKD staging: G1 (eGFR ≥90 + structural/lab abnormality), G2 (60–89), G3a (45–59), G3b (30–44), G4 (15–29), G5 (<15 or dialysis)",
+            "Albuminuria staging: A1 (<30 mg/g), A2 (30–299 mg/g = microalbuminuria), A3 (≥300 mg/g = macroalbuminuria/proteinuria)",
+            "Monitoring frequency by risk: low risk (G1–G2/A1) = annual; moderate (G3a/A1 or G1/A2) = biannual; high/very high risk = every 3–4 months",
+            "Labs at each CKD visit: eGFR, serum potassium, bicarbonate, albumin; annually: PTH, phosphate, calcium, 25-OH Vitamin D, CBC (anemia of CKD)"
+          ]
+        },
+        {
+          "sectionTitle": "Renoprotective Strategy",
+          "keyPoints": [
+            "RAAS inhibition (ACEi or ARB): first-line for CKD with ANY degree of albuminuria (A2 or A3); reduces intraglomerular pressure and proteinuria; do NOT combine ACEi + ARB",
+            "SGLT-2 inhibitors (canagliflozin, dapagliflozin, empagliflozin): proven to slow CKD progression independently of diabetes (CREDENCE, DAPA-CKD, EMPA-KIDNEY trials) — now recommended for CKD with UACR ≥200 mg/g or eGFR 20–45",
+            "BP control: target <130/80 in CKD with proteinuria — most important modifiable CKD progression factor after RAAS blockade",
+            "Smoking cessation: doubles rate of CKD progression in smokers — NP must counsel and facilitate cessation"
+          ]
+        },
+        {
+          "sectionTitle": "Dietary Management and Referral",
+          "keyPoints": [
+            "Sodium: <2g/day (reduces proteinuria and BP) — most important dietary modification in CKD",
+            "Potassium: restrict in G3b–G5 or if hyperkalemia (K⁺ >5.0); avoid high-potassium foods (bananas, oranges, tomatoes, potatoes) when K⁺ elevated",
+            "Protein: modest restriction 0.6–0.8 g/kg/day in G3–G5 not on dialysis (higher protein accelerates progression)",
+            "Phosphate: restrict in G4–G5 (hyperphosphatemia drives secondary hyperparathyroidism and vascular calcification)",
+            "Nephrology referral criteria: eGFR <30 (G4–G5), rapidly declining eGFR (>5 mL/min/year loss), refractory hyperkalemia, nephrotic-range proteinuria, unexplained hematuria with proteinuria, suspected GN"
+          ]
+        }
+      ],
+      "stemDistinctionNote": "SF-03 slugA enforced: May NOT include Cockcroft-Gault formula, specific drug-to-avoid lists (metformin, NSAIDs, nitrofurantoin below eGFR thresholds), antibiotic dose adjustments, or DOAC dosing — those belong to medication-dose-adjustment-ckd (SF-03 slugB). No overlap with Phase 1 CKD anemia question (np-p1-058 covered EPO deficiency recognition only)."
+    },
+
+    {
+      "domain": "Chronic Disease Management",
+      "topicSlug": "ckd-progression-monitoring-medication",
+      "lessonPart": "2B",
+      "lessonId": "np-p2-ckd-2b",
+      "title": "CKD: Complication Management — Anemia, Acidosis, MBD, and Medication Safety",
+      "targetQuestions": 6,
+      "scopeFenceActive": "SF-03 slugA",
+      "learningObjectives": [
+        "Recognize and manage anemia of CKD: EPO deficiency mechanism, iron status assessment, ESA initiation threshold",
+        "Apply metabolic acidosis management in CKD: sodium bicarbonate threshold and benefit",
+        "Identify CKD-mineral bone disease (CKD-MBD): PTH, phosphate, calcium, and Vitamin D monitoring and treatment sequence",
+        "Manage secondary hyperparathyroidism: calcitriol vs active Vitamin D analogs and phosphate binders",
+        "Apply medication safety rules in CKD at the SF-03 slugA boundary: RAAS monitoring, MRA caution, hyperkalemia management"
+      ],
+      "sections": [
+        {
+          "sectionTitle": "Anemia of CKD",
+          "keyPoints": [
+            "Mechanism: EPO deficiency (decreased renal EPO production); also iron deficiency (often concurrent), shortened RBC survival",
+            "Workup: CBC + reticulocyte count + serum iron/TIBC/ferritin + transferrin saturation (TSAT); exclude other causes if Hgb <10 g/dL in G3",
+            "Iron optimization before ESA: TSAT <20% or ferritin <200 ng/mL → give iron first (oral or IV); IV iron preferred in G4–G5 (GI intolerance + poor absorption with oral)",
+            "ESA initiation threshold: Hgb <10 g/dL after iron optimization; target Hgb 10–12 g/dL (do NOT target Hgb >13 — increased CV events in CHOIR/TREAT trials)",
+            "Darbepoetin or epoetin alfa dosing belongs to nephrology/managed protocol — NP role: recognize indication, initiate nephrology co-management"
+          ]
+        },
+        {
+          "sectionTitle": "Metabolic Acidosis and MBD",
+          "keyPoints": [
+            "Metabolic acidosis in CKD (G3b+): bicarbonate <22 mEq/L → start sodium bicarbonate supplementation; target serum bicarbonate ≥22 mEq/L — reduces CKD progression rate and protein catabolism",
+            "CKD-MBD sequence: declining eGFR → phosphate retention → hyperphosphatemia → reduced 1,25 Vit D → hypocalcemia → elevated PTH (secondary hyperparathyroidism)",
+            "Monitoring: check PTH, phosphate, calcium at G3 annually; more frequently at G4–G5",
+            "Phosphate management: dietary restriction + phosphate binders (calcium carbonate, sevelamer, lanthanum — do NOT use aluminum-based in non-dialysis CKD)",
+            "Vitamin D: Vitamin D3 (cholecalciferol) for simple deficiency; calcitriol (active 1,25 Vit D) for secondary hyperparathyroidism in G4–G5"
+          ]
+        }
+      ],
+      "stemDistinctionNote": "SF-03 slugA boundary applies: 2B covers CKD-specific complication management at the monitoring/initiation threshold level. Drug dose adjustment tables (antibiotic dosing, DOAC adjustments) belong to medication-dose-adjustment-ckd (SF-03 slugB) and are excluded from 2B."
+    },
+
+    {
+      "domain": "Chronic Disease Management",
+      "topicSlug": "copd-gold-staging-inhaler-selection",
+      "lessonPart": "2A",
+      "lessonId": "np-p2-copd-2a",
+      "title": "COPD: GOLD Staging and Pharmacological Management",
+      "targetQuestions": 7,
+      "learningObjectives": [
+        "Apply GOLD 2023 staging by spirometry (FEV1/FVC <0.7 + severity) and symptom burden (mMRC, CAT score)",
+        "Select inhaler therapy by GOLD group (A, B, E): SABA, LAMA, LABA, ICS combinations",
+        "Distinguish SABA (rescue) from LAMA/LABA (maintenance) mechanism and appropriate use",
+        "Identify ICS indication in COPD: frequent exacerbations or eosinophilia — and risk of ICS in COPD (pneumonia)",
+        "Apply smoking cessation as the most effective intervention to slow COPD progression"
+      ],
+      "sections": [
+        {
+          "sectionTitle": "GOLD Staging Framework",
+          "keyPoints": [
+            "Spirometry requirement: FEV1/FVC <0.7 post-bronchodilator is required for diagnosis; GOLD 1 (FEV1 ≥80%), GOLD 2 (50–79%), GOLD 3 (30–49%), GOLD 4 (<30%)",
+            "Symptom burden: mMRC dyspnea scale (0–4) and CAT score (0–40); CAT ≥10 or mMRC ≥2 = significant symptoms",
+            "GOLD groups: Group A (low risk, low symptoms), Group B (low risk, high symptoms), Group E (high risk with ≥2 exacerbations/year or ≥1 hospitalization)",
+            "Exacerbation history is the key distinction between Group B and E — NOT spirometry severity alone"
+          ]
+        },
+        {
+          "sectionTitle": "Inhaler Therapy by GOLD Group",
+          "keyPoints": [
+            "Group A: offer bronchodilator (SABA or SAMA PRN) — no maintenance therapy required if symptoms are minimal and no exacerbations",
+            "Group B: LAMA or LABA (long-acting bronchodilator monotherapy); combined LAMA+LABA for persistent symptoms (IMPACT trial supports dual bronchodilation)",
+            "Group E: LAMA + LABA as baseline; add ICS (triple therapy) if eosinophil count ≥300 cells/μL OR ≥2 moderate exacerbations/year despite dual bronchodilation",
+            "ICS caution: increases pneumonia risk in COPD (unlike asthma) — do NOT use ICS as monotherapy in COPD; only as part of triple therapy when indicated",
+            "Roflumilast (PDE4 inhibitor): add-on for GOLD Group E with chronic bronchitis (productive cough) and frequent exacerbations; used in non-smoking patients with FEV1 <50%"
+          ]
+        },
+        {
+          "sectionTitle": "Non-Pharmacological and Preventive",
+          "keyPoints": [
+            "Smoking cessation: single most effective intervention — reduces FEV1 decline from ≈50 mL/year (smoker) to ≈25 mL/year (non-smoker normal aging rate)",
+            "Pulmonary rehabilitation: improves exercise tolerance and quality of life; indicated in Group B and E with persistent dyspnea",
+            "Vaccinations: annual influenza, COVID-19, and pneumococcal vaccines (PCV20 or PCV15 + PPSV23) in all COPD patients",
+            "Supplemental oxygen: indicated if resting PaO2 ≤55 mmHg or SpO2 ≤88% — reduces pulmonary hypertension and improves survival"
+          ]
+        }
+      ],
+      "stemDistinctionNote": "2A owns GOLD staging, inhaler class selection, and ICS indication. Questions must specify GOLD group or exacerbation history to anchor the therapeutic decision. Do not test COPD exacerbation treatment (antibiotics, steroids) — that belongs to Phase 3 or acute care domain. No overlap with Phase 1 dyspnea-differential-cardiac-pulmonary COPD recognition content (which covered diagnosis and spirometry interpretation at the differential level)."
+    },
+
+    {
+      "domain": "Chronic Disease Management",
+      "topicSlug": "copd-gold-staging-inhaler-selection",
+      "lessonPart": "2B",
+      "lessonId": "np-p2-copd-2b",
+      "title": "COPD Exacerbation Recognition, Management, and Hospitalization Criteria",
+      "targetQuestions": 7,
+      "learningObjectives": [
+        "Classify COPD exacerbation severity: mild (outpatient), moderate (oral steroids + antibiotics outpatient), severe (hospitalization)",
+        "Apply antibiotic selection for COPD exacerbation with purulent sputum: first-line agents",
+        "Identify hospitalization criteria for COPD exacerbation: DECAF score, hypercapnia, altered mental status",
+        "Recognize post-exacerbation management: oral corticosteroid taper duration, reassessment, inhaler escalation",
+        "Identify complications of COPD: cor pulmonale, polycythemia, spontaneous pneumothorax risk"
+      ],
+      "sections": [
+        {
+          "sectionTitle": "COPD Exacerbation Classification and Treatment",
+          "keyPoints": [
+            "Mild exacerbation: increased dyspnea, sputum, but manageable at home with bronchodilator increase; no systemic symptoms",
+            "Moderate exacerbation (most common NP decision): increased dyspnea + purulent sputum + ≥2 of 3 Anthonisen criteria (dyspnea, sputum volume, sputum purulence) → oral prednisone 40 mg/day × 5 days + antibiotic",
+            "Antibiotic selection: amoxicillin-clavulanate or doxycycline (uncomplicated); azithromycin or levofloxacin (if high risk: ≥2 exac/year, FEV1 <50%, prior Pseudomonas, comorbidities)",
+            "Oral corticosteroid course: 5 days (not prolonged taper) — REDUCE trial: 5-day course equivalent to 14-day course"
+          ]
+        },
+        {
+          "sectionTitle": "Hospitalization Criteria and Post-Exacerbation Care",
+          "keyPoints": [
+            "Hospital admission: severe dyspnea despite initial bronchodilators, SpO2 <90%, altered mental status, failure to improve at home, inadequate social support, hypercapnia (pCO2 >45 with acidosis)",
+            "NIV (BiPAP) indication: acute hypercapnic respiratory failure (pH 7.25–7.35, pCO2 >45) — reduces intubation and mortality",
+            "Post-exacerbation follow-up: within 30 days of discharge (high readmission risk); reassess inhaler technique, escalate therapy if ≥2 exacerbations/year, pulmonary rehabilitation referral",
+            "Cor pulmonale: RV hypertrophy from chronic hypoxic pulmonary vasoconstriction — presents as peripheral edema + elevated JVP + RV heave; supplemental oxygen is the primary treatment"
+          ]
+        }
+      ],
+      "stemDistinctionNote": "2B covers exacerbation management and hospitalization decision. Stems must specify severity anchor (purulent sputum, SpO2, prior exacerbation count). Antibiotic selection questions must specify risk stratification. No duplication with Phase 1 dyspnea differentiation content."
+    },
+
+    {
+      "domain": "Chronic Disease Management",
+      "topicSlug": "hyperlipidemia-risk-statin-therapy",
+      "lessonPart": "2",
+      "lessonId": "np-p2-lipid-2",
+      "title": "Hyperlipidemia: ASCVD Risk Stratification and Statin Selection",
+      "targetQuestions": 10,
+      "learningObjectives": [
+        "Apply ACC/AHA pooled cohort equation to calculate 10-year ASCVD risk and select statin intensity",
+        "Distinguish statin intensity: low (rosuvastatin 5 mg, atorvastatin 10 mg), moderate, high (atorvastatin 40–80 mg, rosuvastatin 20–40 mg)",
+        "Identify four primary statin benefit groups per 2018 ACC/AHA guidelines",
+        "Manage statin intolerance: myopathy recognition, CK monitoring, switching or dose reduction",
+        "Apply add-on lipid therapy: ezetimibe (first add-on), PCSK9 inhibitors (refractory high-risk)"
+      ],
+      "sections": [
+        {
+          "sectionTitle": "Risk Stratification and Statin Selection",
+          "keyPoints": [
+            "Four primary statin benefit groups: (1) clinical ASCVD — high-intensity statin; (2) T2DM age 40–75 — moderate-intensity statin; (3) LDL ≥190 mg/dL — high-intensity statin; (4) primary prevention 40–75 with 10-year ASCVD risk ≥7.5% — moderate-intensity statin (consider high-intensity if ≥20%)",
+            "High-intensity statins: atorvastatin 40–80 mg/day, rosuvastatin 20–40 mg/day (reduces LDL ≥50%)",
+            "Moderate-intensity: atorvastatin 10–20 mg, rosuvastatin 5–10 mg, simvastatin 20–40 mg (reduces LDL 30–50%)",
+            "LDL targets: ASCVD → LDL <70 mg/dL; very high risk ASCVD → LDL <55 mg/dL; T2DM + statin → LDL <70 mg/dL"
+          ]
+        },
+        {
+          "sectionTitle": "Statin Safety and Add-On Therapy",
+          "keyPoints": [
+            "Myopathy spectrum: myalgia (muscle pain, CK normal — very common, often not statin-related), myositis (muscle pain + CK >10× ULN), rhabdomyolysis (CK >10,000 + myoglobinuria + AKI — rare)",
+            "Statin intolerance management: switch to alternate statin (rosuvastatin every other day, pitavastatin), lower dose, or add ezetimibe to lower required statin dose",
+            "Drug interactions elevating statin levels (rhabdomyolysis risk): CYP3A4 inhibitors with simvastatin/lovastatin — avoid simvastatin with amiodarone, verapamil, diltiazem; switch to rosuvastatin or pravastatin (not CYP3A4 metabolized)",
+            "Ezetimibe: blocks intestinal cholesterol absorption; reduces LDL additional 15–20%; add when statin alone insufficient (IMPROVE-IT trial: ezetimibe + statin reduced CV events post-ACS)",
+            "PCSK9 inhibitors (evolocumab, alirocumab): injectable, high cost; for very high-risk ASCVD with LDL still ≥70 mg/dL on max tolerated statin + ezetimibe"
+          ]
+        },
+        {
+          "sectionTitle": "Special Populations",
+          "keyPoints": [
+            "Pregnancy: all statins are CONTRAINDICATED in pregnancy (teratogenic — category X); discontinue when pregnancy is confirmed or planning",
+            "Elderly (>75): moderate-intensity statin preferred; high-intensity may have more adverse effects without additional benefit in primary prevention",
+            "Hypertriglyceridemia: fasting TG >500 mg/dL → treat to prevent pancreatitis; omega-3 fatty acids (icosapent ethyl/Vascepa — REDUCE-IT trial: reduced CV events in statin-treated T2DM/ASCVD patients with TG 135–499)",
+            "Familial hypercholesterolemia: LDL ≥190 mg/dL at any age → high-intensity statin regardless of 10-year risk score; refer to preventive cardiologist if not at goal"
+          ]
+        }
+      ],
+      "stemDistinctionNote": "Lipid questions must specify the 10-year ASCVD risk, comorbidity context, or current statin intensity when testing escalation or safety decisions. Statin-drug interaction questions must name the interacting drug and require the learner to identify the unsafe combination. No overlap with afib anticoagulation (which uses statins as a secondary question topic in some cases)."
+    },
+
+    {
+      "domain": "Chronic Disease Management",
+      "topicSlug": "anemia-workup-treatment-types",
+      "lessonPart": "2",
+      "lessonId": "np-p2-anemia-2",
+      "title": "Anemia Workup and Treatment: Iron-Deficiency, B12/Folate, and Hemolytic Causes",
+      "targetQuestions": 10,
+      "learningObjectives": [
+        "Apply a CBC-based framework to classify anemia: microcytic, normocytic, macrocytic — and generate targeted differentials for each",
+        "Select iron replacement route and dose for IDA based on severity and GI tolerability",
+        "Distinguish B12 from folate deficiency by subacute combined degeneration risk (B12 only)",
+        "Manage hemolytic anemia: distinguish intrinsic (G6PD, hereditary spherocytosis, sickle cell) from extrinsic (AIHA, TTP/HUS, microangiopathic)",
+        "Identify indications for transfusion vs oral supplementation in anemia management"
+      ],
+      "sections": [
+        {
+          "sectionTitle": "CBC-Based Classification and Targeted Differential",
+          "keyPoints": [
+            "Microcytic (MCV <80): IDA (low ferritin, low serum iron, high TIBC), thalassemia (normal-low ferritin, target cells, elevated RBC count), anemia of chronic disease (ACD — ferritin elevated, low serum iron, low TIBC)",
+            "Normocytic (MCV 80–100): ACD (most common normocytic anemia), hemolytic anemias, aplastic anemia, renal anemia, early IDA or B12 deficiency",
+            "Macrocytic (MCV >100): B12 deficiency, folate deficiency, alcohol use (direct marrow toxicity), hypothyroidism, medications (methotrexate, hydroxyurea, azathioprine, trimethoprim)",
+            "Reticulocyte count: low → poor production (IDA, B12, aplastic); elevated → peripheral destruction or blood loss (hemolysis, acute hemorrhage)"
+          ]
+        },
+        {
+          "sectionTitle": "IDA: Diagnosis and Treatment",
+          "keyPoints": [
+            "Diagnosis: low ferritin (<12 ng/mL is diagnostic; <30 ng/mL is low-normal and should prompt investigation); low serum iron; elevated TIBC; microcytic hypochromic anemia on smear",
+            "Oral iron: ferrous sulfate 325 mg (65 mg elemental iron) TID between meals for maximal absorption; GI side effects (constipation, nausea) dose-limiting; take with Vitamin C (orange juice) to enhance absorption",
+            "Alternate-day dosing (Moretti trial): ferrous sulfate every other day achieves similar or better absorption as daily with fewer GI side effects — due to hepcidin suppression pattern",
+            "IV iron indications: GI intolerance to oral iron, malabsorption (celiac, post-bariatric), ongoing blood loss faster than oral can replete, CKD, inflammatory bowel disease",
+            "Response monitoring: reticulocytosis in 7–10 days; Hgb rise 1–2 g/dL in 4 weeks; continue 3 months after Hgb normalizes to replete stores"
+          ]
+        },
+        {
+          "sectionTitle": "B12, Folate, and Hemolytic Anemia",
+          "keyPoints": [
+            "B12 deficiency: macrocytic anemia + subacute combined degeneration (posterior and lateral column — paresthesias, ataxia, Lhermitte sign); pernicious anemia (anti-intrinsic factor antibodies), strict vegan diet, gastric bypass; B12 IM injection (if absorption impaired) or high-dose oral 1000 mcg/day (adequate even in pernicious anemia if high enough dose)",
+            "Folate deficiency: macrocytic WITHOUT neurological complications; alcoholism, pregnancy, methotrexate, phenytoin; treat with folic acid 1 mg/day; ALWAYS rule out B12 deficiency first before folate (folate treats anemia but unmasks/accelerates B12 neuropathy)",
+            "G6PD deficiency: X-linked; hemolytic crisis triggered by oxidative stress (infections, primaquine, dapsone, nitrofurantoin, fava beans); Heinz bodies on smear; manage trigger avoidance + supportive care",
+            "AIHA (warm-type): positive direct Coombs test; associated with lupus, CLL, drugs; treat with prednisone; TTP: MAHA (schistocytes on smear) + thrombocytopenia + fever + AKI + neuro changes (pentad) → plasma exchange emergency"
+          ]
+        }
+      ],
+      "stemDistinctionNote": "Anemia questions must specify the CBC indices (MCV, reticulocyte count, ferritin or key lab) in the stem — the clinical vignette must provide the necessary data to classify the anemia. TTP recognition question must include pentad features. No overlap with Phase 1 fatigue-differential anemia recognition questions (np-p1-053, np-p1-054 covered initial recognition and basic lab patterns — Phase 2 questions cover treatment decisions and advanced workup)."
+    }
+  ]
+}
