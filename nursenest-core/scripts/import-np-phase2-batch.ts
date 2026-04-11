@@ -37,6 +37,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { createHash } from "node:crypto";
 import { PrismaClient } from "@prisma/client";
+import { STAGE_PRISMA_IMPORT_PROGRAM_MAP } from "./stage-prisma-import-program-map";
 
 const prisma = new PrismaClient();
 
@@ -45,7 +46,7 @@ const prisma = new PrismaClient();
 const DEFAULT_EXAM = "AANP-FNP";
 const DEFAULT_TIER = "premium";
 const DEFAULT_QUESTION_TYPE = "mcq";
-const DEFAULT_PATHWAY = "aanp-fnp";
+const DEFAULT_PATHWAY = STAGE_PRISMA_IMPORT_PROGRAM_MAP["np"].pathwayId;
 const DEFAULT_LOCALE = "en";
 const DEFAULT_COUNTRY_CODE = null; // NP is "both" US + CA
 const DEFAULT_BODY_SYSTEM = "general";

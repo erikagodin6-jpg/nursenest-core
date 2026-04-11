@@ -239,7 +239,7 @@
     "rn":          ["nclex-rn"],
     "rpn":         ["rex-pn"],
     "lpn":         ["nclex-pn"],
-    "np":          ["aanp-fnp", "ancc-fnp", "cnple-np"],
+    "np":          ["us-np-fnp", "ca-np-cnple"],
     "allied":      ["allied-rt", "allied-pt", "allied-ot", "allied-mlt", "allied-emt", "allied-paramedic"],
     "pre-nursing": ["pre-nursing"],
     "new-grad":    ["new-grad"]
