@@ -80,14 +80,14 @@ export function HomeConversionHero() {
             <StaggerItem>
               <h1
                 id="home-conversion-hero-heading"
-                className="nn-marketing-h1 text-balance text-[var(--theme-heading-text)]"
+                className="nn-marketing-h1 text-balance text-[var(--palette-heading)]"
                 data-testid="text-hero-heading"
               >
                 {t("home.conversion.heroTitle")}
               </h1>
             </StaggerItem>
             <StaggerItem>
-              <p className="nn-marketing-body max-w-xl text-pretty text-[var(--theme-muted-text)]" data-testid="text-hero-subheading">
+              <p className="nn-marketing-body max-w-xl text-pretty text-[var(--palette-text-muted)]" data-testid="text-hero-subheading">
                 {t("home.conversion.heroSub")}
               </p>
             </StaggerItem>
@@ -105,15 +105,15 @@ export function HomeConversionHero() {
             >
               <div className="mb-3 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                 <div className="min-w-0 space-y-1">
-                  <p className="nn-marketing-caption font-semibold text-[var(--theme-body-text)]">
+                  <p className="nn-marketing-caption font-semibold text-[var(--palette-text)]">
                     {t("home.conversion.heroTracksIntro")}
                   </p>
-                  <p className="nn-marketing-body-sm text-pretty text-[var(--theme-muted-text)]">
+                  <p className="nn-marketing-body-sm text-pretty text-[var(--palette-text-muted)]">
                     {t("home.conversion.heroTracksSub")}
                   </p>
                 </div>
                 <div className="flex shrink-0 items-center gap-2" data-testid="region-toggle-hero">
-                  <span className="nn-marketing-caption shrink-0 text-[var(--theme-muted-text)]">{t("nav.regionLabel")}</span>
+                  <span className="nn-marketing-caption shrink-0 text-[var(--palette-text-muted)]">{t("nav.regionLabel")}</span>
                   <div className={marketingRegionToggleShell("rounded")} role="group" aria-label={t("nav.regionLabel")}>
                     <button
                       type="button"
@@ -152,26 +152,26 @@ export function HomeConversionHero() {
                         event: PH.funnelHomeToExamHub,
                         eventProps: { placement: "hero_track_grid", pathway: track.id, region },
                       }}
-                      className={`group flex min-h-0 flex-col rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-bubble)] p-3 text-left shadow-sm transition hover:border-[color-mix(in_srgb,var(--palette-accent,var(--theme-accent))_36%,var(--border-subtle))] hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--ring-accent)] ${
+                      className={`group flex min-h-0 flex-col rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-bubble)] p-3 text-left shadow-sm transition hover:border-[color-mix(in_srgb,var(--palette-accent)_36%,var(--border-subtle))] hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--ring-accent)] ${
                         featured
-                          ? "ring-1 ring-[color-mix(in_srgb,var(--palette-accent,var(--theme-accent))_42%,var(--border-subtle))]"
+                          ? "ring-1 ring-[color-mix(in_srgb,var(--palette-accent)_42%,var(--border-subtle))]"
                           : ""
                       }`}
                       data-testid={`button-hero-track-${track.id}`}
                     >
-                      <span className="mb-2 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[color-mix(in_srgb,var(--text-accent)_12%,var(--theme-card-bg))]">
+                      <span className="mb-2 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[color-mix(in_srgb,var(--text-accent)_12%,var(--palette-surface))]">
                         <Icon className="h-4 w-4 text-[var(--text-accent)]" aria-hidden />
                       </span>
-                      <span className="nn-marketing-caption font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">
+                      <span className="nn-marketing-caption font-semibold uppercase tracking-wide text-[var(--palette-text-muted)]">
                         {t(track.metaKey)}
                       </span>
-                      <span className="nn-marketing-h3 mt-0.5 text-balance leading-snug text-[var(--theme-heading-text)]">
+                      <span className="nn-marketing-h3 mt-0.5 text-balance leading-snug text-[var(--palette-heading)]">
                         {t(track.titleKey)}
                       </span>
-                      <span className="nn-marketing-body-sm mt-1.5 text-pretty text-[var(--theme-body-text)]">
+                      <span className="nn-marketing-body-sm mt-1.5 text-pretty text-[var(--palette-text)]">
                         {t(track.whoKey)}
                       </span>
-                      <span className="nn-marketing-body-sm mt-1 text-pretty text-[var(--theme-muted-text)]">
+                      <span className="nn-marketing-body-sm mt-1 text-pretty text-[var(--palette-text-muted)]">
                         {t(track.nextKey)}
                       </span>
                       <span className="mt-3 inline-flex items-center text-sm font-semibold text-[var(--nn-aesthetic-accent)]">
@@ -206,7 +206,7 @@ export function HomeConversionHero() {
               </div>
 
               <div className="mt-4 border-t border-[var(--accent-surface-b-border)] pt-4">
-                <p className="nn-marketing-caption mb-2 font-medium text-[var(--theme-muted-text)]">
+                <p className="nn-marketing-caption mb-2 font-medium text-[var(--palette-text-muted)]">
                   {t("home.conversion.heroStudyModesIntro")}
                 </p>
                 <ul
@@ -223,7 +223,7 @@ export function HomeConversionHero() {
                           surface: "hero_study_mode",
                           kind: sm.kind,
                         }}
-                        className="nn-marketing-body-sm text-[var(--theme-muted-text)] underline decoration-[color-mix(in_srgb,var(--theme-muted-text)_45%,transparent)] underline-offset-2 transition hover:text-[var(--theme-body-text)]"
+                        className="nn-marketing-body-sm text-[var(--palette-text-muted)] underline decoration-[color-mix(in_srgb,var(--palette-text-muted)_45%,transparent)] underline-offset-2 transition hover:text-[var(--palette-text)]"
                         data-testid={`link-hero-study-${sm.kind}`}
                       >
                         {t(sm.labelKey)}
@@ -241,7 +241,7 @@ export function HomeConversionHero() {
                   href={loc(HUB.tools)}
                   event={PH.marketingHomeSampleContentClick}
                   eventProps={{ region, surface: "hero_tertiary", kind: "tools" }}
-                  className="nn-marketing-caption text-[var(--theme-muted-text)] underline decoration-transparent underline-offset-2 transition hover:text-[var(--theme-body-text)] hover:decoration-[color-mix(in_srgb,var(--theme-muted-text)_45%,transparent)]"
+                  className="nn-marketing-caption text-[var(--palette-text-muted)] underline decoration-transparent underline-offset-2 transition hover:text-[var(--palette-text)] hover:decoration-[color-mix(in_srgb,var(--palette-text-muted)_45%,transparent)]"
                   data-testid="link-hero-tools"
                 >
                   {t("home.conversion.heroTertiary.tools")}
@@ -250,7 +250,7 @@ export function HomeConversionHero() {
                   href={loc("/pre-nursing")}
                   event={PH.marketingHomeSampleContentClick}
                   eventProps={{ region, surface: "hero_tertiary", kind: "pre_nursing" }}
-                  className="nn-marketing-caption text-[var(--theme-muted-text)] underline decoration-transparent underline-offset-2 transition hover:text-[var(--theme-body-text)] hover:decoration-[color-mix(in_srgb,var(--theme-muted-text)_45%,transparent)]"
+                  className="nn-marketing-caption text-[var(--palette-text-muted)] underline decoration-transparent underline-offset-2 transition hover:text-[var(--palette-text)] hover:decoration-[color-mix(in_srgb,var(--palette-text-muted)_45%,transparent)]"
                   data-testid="link-hero-pre-nursing"
                 >
                   {t("home.conversion.heroTertiary.preNursing")}
@@ -260,13 +260,13 @@ export function HomeConversionHero() {
             </StaggerItem>
 
             <StaggerItem>
-              <p className="nn-marketing-caption max-w-xl text-pretty text-[var(--theme-muted-text)]">{t("home.conversion.heroDisclaimer")}</p>
+              <p className="nn-marketing-caption max-w-xl text-pretty text-[var(--palette-text-muted)]">{t("home.conversion.heroDisclaimer")}</p>
             </StaggerItem>
             <StaggerItem>
-              <p className="nn-marketing-body-sm max-w-lg text-pretty text-[var(--theme-body-text)]">{t("home.conversion.heroFreeLine")}</p>
+              <p className="nn-marketing-body-sm max-w-lg text-pretty text-[var(--palette-text)]">{t("home.conversion.heroFreeLine")}</p>
             </StaggerItem>
             <StaggerItem>
-              <p className="nn-marketing-caption max-w-lg text-pretty text-[var(--theme-muted-text)]">{t("home.conversion.heroTrustMicro")}</p>
+              <p className="nn-marketing-caption max-w-lg text-pretty text-[var(--palette-text-muted)]">{t("home.conversion.heroTrustMicro")}</p>
             </StaggerItem>
           </StaggerGroup>
         </div>

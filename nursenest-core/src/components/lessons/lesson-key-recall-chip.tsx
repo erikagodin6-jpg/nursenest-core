@@ -39,7 +39,7 @@ function FactChip({ fact }: { fact: KeyRecallFact }) {
         background:
           "var(--surface-emphasis, color-mix(in srgb, var(--semantic-brand) 8%, var(--bg-card)))",
         border:
-          "1px solid color-mix(in srgb, var(--theme-primary) 18%, var(--border-subtle, var(--theme-border)))",
+          "1px solid color-mix(in srgb, var(--palette-primary) 18%, var(--border-subtle, var(--palette-border)))",
       }}
     >
       {/* Label row */}
@@ -47,14 +47,14 @@ function FactChip({ fact }: { fact: KeyRecallFact }) {
         {fact.label ? (
           <span
             className="text-[10px] font-bold uppercase tracking-[0.1em] leading-none"
-            style={{ color: "var(--theme-muted-text, var(--muted-foreground))" }}
+            style={{ color: "var(--palette-text-muted, var(--muted-foreground))" }}
           >
             {fact.label}
           </span>
         ) : (
           <span
             className="text-[10px] font-bold uppercase tracking-[0.1em] leading-none"
-            style={{ color: "var(--theme-muted-text, var(--muted-foreground))" }}
+            style={{ color: "var(--palette-text-muted, var(--muted-foreground))" }}
           >
             Key fact
           </span>
@@ -62,7 +62,7 @@ function FactChip({ fact }: { fact: KeyRecallFact }) {
         <span
           className="shrink-0 text-[10px] font-medium transition-opacity duration-150"
           style={{
-            color: "var(--theme-primary)",
+            color: "var(--palette-primary)",
             opacity: revealed ? 0 : 0.75,
           }}
           aria-hidden="true"
@@ -75,7 +75,7 @@ function FactChip({ fact }: { fact: KeyRecallFact }) {
       <p
         className="text-xs leading-snug sm:text-sm"
         style={{
-          color: "var(--theme-text, var(--foreground))",
+          color: "var(--palette-text, var(--foreground))",
           filter: revealed ? "blur(0px)" : "blur(4.5px)",
           transition: "filter 0.22s ease",
           userSelect: revealed ? "text" : "none",
@@ -100,7 +100,7 @@ export function LessonKeyRecallChip({ facts }: LessonKeyRecallChipProps) {
     <div className="mt-5" role="region" aria-label="Key recall facts">
       <p
         className="mb-2.5 text-[10px] font-bold uppercase tracking-[0.12em] leading-none"
-        style={{ color: "var(--theme-muted-text, var(--muted-foreground))" }}
+        style={{ color: "var(--palette-text-muted, var(--muted-foreground))" }}
         aria-hidden="true"
       >
         Key recall

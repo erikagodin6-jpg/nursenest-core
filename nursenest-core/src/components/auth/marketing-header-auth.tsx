@@ -10,10 +10,10 @@ import { mapLegacyMarketingHref } from "@/lib/legacy-marketing-routes";
 import { isStaffRole } from "@/lib/auth/staff-roles";
 
 const SIGN_IN_CLASS =
-  "nn-marketing-body-sm font-medium tracking-normal text-[var(--theme-menu-text)] transition-colors duration-150 hover:text-primary inline-flex items-center rounded-full px-2 py-1.5 sm:px-3 sm:py-2";
+  "nn-marketing-body-sm font-medium tracking-normal text-[var(--palette-nav-text)] transition-colors duration-150 hover:text-[var(--palette-accent)] inline-flex items-center rounded-full px-2 py-1.5 sm:px-3 sm:py-2";
 
 const GET_STARTED_CLASS =
-  "nn-button-primary px-4 py-2 rounded-xl inline-flex min-h-0 items-center justify-center text-sm font-medium text-[var(--role-cta-foreground,#ffffff)]";
+  "nn-button-primary px-4 py-2 rounded-xl inline-flex min-h-0 items-center justify-center text-sm font-medium text-[var(--role-cta-foreground)]";
 
 function useLocalizeHref() {
   const { locale } = useMarketingI18n();
@@ -75,7 +75,7 @@ export function MarketingHeaderAuthDesktop() {
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
-        className="flex max-w-[min(100%,12rem)] items-center gap-1 rounded-full border border-[var(--theme-nav-border)] px-2 py-1.5 nn-marketing-body-sm font-medium tracking-normal text-[var(--theme-menu-text)] hover:bg-[var(--theme-menu-hover-bg)] sm:max-w-[14rem] sm:px-3 sm:py-2"
+        className="flex max-w-[min(100%,12rem)] items-center gap-1 rounded-full border border-[var(--palette-nav-border)] px-2 py-1.5 nn-marketing-body-sm font-medium tracking-normal text-[var(--palette-nav-text)] hover:bg-[var(--palette-nav-hover)] sm:max-w-[14rem] sm:px-3 sm:py-2"
         aria-expanded={open}
         aria-haspopup="menu"
       >
@@ -86,9 +86,9 @@ export function MarketingHeaderAuthDesktop() {
       {open ? (
         <div
           role="menu"
-          className="absolute end-0 z-[100] mt-1 min-w-[13rem] rounded-xl border border-[var(--theme-card-border)] bg-[var(--theme-card-bg)] py-1 shadow-lg"
+          className="absolute end-0 z-[100] mt-1 min-w-[13rem] rounded-xl border border-[var(--border-medium)] bg-[var(--palette-surface)] py-1 shadow-lg"
         >
-          <div className="border-b border-[var(--theme-separator)] px-3 py-2 text-xs text-[var(--theme-muted-text)]">
+          <div className="border-b border-[var(--header-nav-border)] px-3 py-2 text-xs text-[var(--palette-text-muted)]">
             <div className="font-mono text-[11px] text-foreground/80" title={user.id}>
               {t("account.idPrefix")} {user.id?.slice(0, 8)}…
             </div>
@@ -100,7 +100,7 @@ export function MarketingHeaderAuthDesktop() {
           </div>
           <Link
             href="/app"
-            className="block break-words px-3 py-2 text-start nn-marketing-body-sm font-medium tracking-normal text-[var(--theme-menu-text)] [overflow-wrap:anywhere] hover:bg-[var(--theme-menu-hover-bg)]"
+            className="block break-words px-3 py-2 text-start nn-marketing-body-sm font-medium tracking-normal text-[var(--palette-nav-text)] [overflow-wrap:anywhere] hover:bg-[var(--palette-nav-hover)]"
             role="menuitem"
             onClick={() => setOpen(false)}
           >
@@ -109,7 +109,7 @@ export function MarketingHeaderAuthDesktop() {
           {admin ? (
             <Link
               href="/admin"
-              className="block break-words px-3 py-2 text-start nn-marketing-body-sm font-medium tracking-normal text-[var(--theme-menu-text)] [overflow-wrap:anywhere] hover:bg-[var(--theme-menu-hover-bg)]"
+              className="block break-words px-3 py-2 text-start nn-marketing-body-sm font-medium tracking-normal text-[var(--palette-nav-text)] [overflow-wrap:anywhere] hover:bg-[var(--palette-nav-hover)]"
               role="menuitem"
               onClick={() => setOpen(false)}
             >
@@ -118,7 +118,7 @@ export function MarketingHeaderAuthDesktop() {
           ) : null}
           <button
             type="button"
-            className="block w-full border-t border-[var(--theme-separator)] px-3 py-2 text-start nn-marketing-body-sm font-medium tracking-normal text-[var(--theme-menu-text)] hover:bg-[var(--theme-menu-hover-bg)]"
+            className="block w-full border-t border-[var(--header-nav-border)] px-3 py-2 text-start nn-marketing-body-sm font-medium tracking-normal text-[var(--palette-nav-text)] hover:bg-[var(--palette-nav-hover)]"
             role="menuitem"
             onClick={() => void signOut({ callbackUrl: "/" })}
           >
@@ -147,7 +147,7 @@ export function MarketingHeaderAuthMobile({ onNavigate }: { onNavigate: () => vo
     const signupToApp = localizeHref(`/signup?callbackUrl=${encodeURIComponent("/app")}`);
     return (
       <div className="mt-4 flex gap-2">
-        <Link href={loginToApp} className={`${SIGN_IN_CLASS} flex-1 justify-center border border-[var(--theme-nav-border)] py-2`} onClick={onNavigate}>
+        <Link href={loginToApp} className={`${SIGN_IN_CLASS} flex-1 justify-center border border-[var(--palette-nav-border)] py-2`} onClick={onNavigate}>
           {t("nav.logIn")}
         </Link>
         <Link href={signupToApp} className={`${GET_STARTED_CLASS} flex-1`} onClick={onNavigate}>
@@ -162,15 +162,15 @@ export function MarketingHeaderAuthMobile({ onNavigate }: { onNavigate: () => vo
   const admin = isStaffRole(user.role);
 
   return (
-    <div className="mt-4 space-y-2 border-t border-[var(--theme-separator)] pt-4">
-      <p className="break-words nn-marketing-body-sm font-medium tracking-normal text-[var(--theme-muted-text)] [overflow-wrap:anywhere]">{label}</p>
-      <p className="font-mono text-xs text-[var(--theme-muted-text)]">
+    <div className="mt-4 space-y-2 border-t border-[var(--header-nav-border)] pt-4">
+      <p className="break-words nn-marketing-body-sm font-medium tracking-normal text-[var(--palette-text-muted)] [overflow-wrap:anywhere]">{label}</p>
+      <p className="font-mono text-xs text-[var(--palette-text-muted)]">
         {t("account.idPrefix")} {user.id}
       </p>
       {admin ? <p className="text-xs font-semibold text-primary">{t("account.role.administrator")}</p> : null}
       <Link
         href="/app"
-        className="block rounded-xl border border-[var(--theme-card-border)] px-3 py-2.5 nn-marketing-body-sm font-medium tracking-normal text-[var(--theme-menu-text)] hover:bg-[var(--theme-menu-hover-bg)]"
+        className="block rounded-xl border border-[var(--border-medium)] px-3 py-2.5 nn-marketing-body-sm font-medium tracking-normal text-[var(--palette-nav-text)] hover:bg-[var(--palette-nav-hover)]"
         onClick={onNavigate}
       >
         {t("nav.learnerApp")}
@@ -186,7 +186,7 @@ export function MarketingHeaderAuthMobile({ onNavigate }: { onNavigate: () => vo
       ) : null}
       <button
         type="button"
-        className="w-full rounded-xl border border-[var(--theme-nav-border)] px-3 py-2.5 nn-marketing-body-sm font-medium tracking-normal text-[var(--theme-menu-text)] hover:bg-[var(--theme-menu-hover-bg)]"
+        className="w-full rounded-xl border border-[var(--palette-nav-border)] px-3 py-2.5 nn-marketing-body-sm font-medium tracking-normal text-[var(--palette-nav-text)] hover:bg-[var(--palette-nav-hover)]"
         onClick={() => void signOut({ callbackUrl: "/" })}
       >
         {t("nav.signout")}

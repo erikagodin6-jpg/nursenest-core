@@ -62,7 +62,6 @@ body {
   --theme-header-surface: #ffffff;
   /* Centralized palette roles (seeded before ThemeStateHydration applies per-theme values). */
   --palette-primary: #1da2d8;
-  --palette-secondary: #4f93d8;
   --palette-accent: #2563eb;
   --palette-background: #f7faff;
   --palette-surface: #ffffff;
@@ -133,9 +132,9 @@ body {
   --theme-primary-foreground: var(--palette-button-primary-text);
   --bg-page: var(--theme-page-bg);
   /* 3% tint: barely perceptible section rhythm, not a coloured band */
-  --bg-section: color-mix(in srgb, var(--palette-secondary, var(--theme-secondary)) 8%, var(--bg-page));
+  --bg-section: color-mix(in srgb, var(--palette-primary-deep, var(--theme-secondary, var(--palette-primary))) 8%, var(--bg-page));
   /* 1.5% alternating strip — neutral rhythm line only */
-  --bg-section-alt: color-mix(in srgb, var(--palette-surface-alt, var(--theme-secondary)) 55%, var(--bg-page));
+  --bg-section-alt: color-mix(in srgb, var(--palette-surface-alt, var(--theme-secondary, var(--palette-primary-deep))) 55%, var(--bg-page));
   /* Cards stay close to pure card-bg — theme shows up only in bubble/accent surfaces */
   --bg-card: var(--palette-surface, var(--theme-card-bg));
   --bg-elevated: color-mix(in srgb, var(--theme-card-bg) 90%, var(--theme-heading-text));
@@ -146,13 +145,13 @@ body {
   --accent-primary: var(--palette-primary, var(--theme-primary));
   --accent-hover: color-mix(in srgb, var(--palette-button-primary, var(--theme-primary)) 92%, #0f172a);
   --accent-pressed: color-mix(in srgb, var(--palette-button-primary, var(--theme-primary)) 82%, #0f172a);
-  --accent-soft: color-mix(in srgb, var(--palette-secondary, var(--theme-secondary)) 16%, var(--bg-card));
+  --accent-soft: color-mix(in srgb, var(--palette-primary-deep, var(--theme-secondary, var(--palette-primary))) 16%, var(--bg-card));
   --accent-highlight: color-mix(in srgb, var(--palette-accent, var(--theme-accent)) 18%, var(--bg-card));
 
   /* Interactive list / tab / chip surfaces */
-  --surface-interactive-hover: color-mix(in srgb, var(--palette-secondary, var(--theme-secondary)) 15%, var(--bg-card));
+  --surface-interactive-hover: color-mix(in srgb, var(--palette-primary-deep, var(--theme-secondary, var(--palette-primary))) 15%, var(--bg-card));
   --surface-selected: color-mix(in srgb, var(--palette-accent, var(--theme-accent)) 16%, var(--bg-card));
-  --surface-input: color-mix(in srgb, var(--palette-secondary, var(--theme-secondary)) 8%, var(--theme-input-bg));
+  --surface-input: color-mix(in srgb, var(--palette-primary-deep, var(--theme-secondary, var(--palette-primary))) 8%, var(--theme-input-bg));
   --surface-chip: color-mix(in srgb, var(--palette-badge, var(--theme-accent)) 75%, var(--bg-card));
   --text-on-accent: var(--palette-button-primary-text, var(--theme-primary-foreground));
 
@@ -169,8 +168,8 @@ body {
    * --text-accent           themed inline text (links, labels, accent copy)
    * --ring-accent           focus ring / input focus outline
    */
-  --surface-bubble: color-mix(in srgb, var(--palette-secondary, var(--theme-secondary)) 18%, var(--bg-card));
-  --surface-bubble-border: color-mix(in srgb, var(--palette-secondary, var(--theme-secondary)) 38%, var(--palette-border, var(--theme-border)));
+  --surface-bubble: color-mix(in srgb, var(--palette-primary-deep, var(--theme-secondary, var(--palette-primary))) 18%, var(--bg-card));
+  --surface-bubble-border: color-mix(in srgb, var(--palette-primary-deep, var(--theme-secondary, var(--palette-primary))) 38%, var(--palette-border, var(--theme-border)));
   --surface-bubble-strong: var(--palette-accent, var(--theme-primary));
   --surface-accent-soft: color-mix(in srgb, var(--palette-badge, var(--theme-accent)) 72%, var(--bg-card));
   --surface-accent-strong: color-mix(in srgb, var(--palette-accent, var(--theme-accent)) 82%, var(--bg-card));
@@ -204,7 +203,7 @@ body {
    * Stronger than the neutral page bg so the top of every page
    * has immediate visual identity when the theme is applied.
    */
-  --hero-branded-wash: color-mix(in srgb, var(--palette-secondary, var(--theme-secondary)) 14%, var(--bg-page));
+  --hero-branded-wash: color-mix(in srgb, var(--palette-primary-deep, var(--theme-secondary, var(--palette-primary))) 14%, var(--bg-page));
 
   /*
    * Multi-role accent surfaces — structured palette for chips, callouts, trust panels,
@@ -214,8 +213,8 @@ body {
    *   B = secondary-family accent (complementary hue, for variety)
    *   C = soft highlight (whisper tint for proof / trust panels)
    */
-  --accent-surface-a: color-mix(in srgb, var(--palette-secondary, var(--theme-secondary)) 20%, var(--bg-card));
-  --accent-surface-a-border: color-mix(in srgb, var(--palette-secondary, var(--theme-secondary)) 42%, var(--palette-border, var(--theme-border)));
+  --accent-surface-a: color-mix(in srgb, var(--palette-primary-deep, var(--theme-secondary, var(--palette-primary))) 20%, var(--bg-card));
+  --accent-surface-a-border: color-mix(in srgb, var(--palette-primary-deep, var(--theme-secondary, var(--palette-primary))) 42%, var(--palette-border, var(--theme-border)));
   --accent-surface-a-text: var(--palette-heading, var(--theme-heading-text));
   /*
    * accent-surface-b: uses --theme-border at 28% — the saturated hue axis of each light theme
@@ -227,14 +226,14 @@ body {
   --accent-surface-b: color-mix(in srgb, var(--palette-accent, var(--theme-accent)) 14%, var(--bg-card));
   --accent-surface-b-border: color-mix(in srgb, var(--palette-accent, var(--theme-accent)) 28%, var(--palette-border, var(--theme-border)));
   --accent-surface-b-text: color-mix(in srgb, var(--palette-accent, var(--theme-accent)) 80%, var(--palette-heading, var(--theme-heading-text)));
-  --accent-surface-c: color-mix(in srgb, var(--palette-secondary, var(--theme-secondary)) 10%, var(--bg-page));
-  --accent-surface-c-border: color-mix(in srgb, var(--palette-secondary, var(--theme-secondary)) 24%, var(--palette-border, var(--theme-border)));
+  --accent-surface-c: color-mix(in srgb, var(--palette-primary-deep, var(--theme-secondary, var(--palette-primary))) 10%, var(--bg-page));
+  --accent-surface-c-border: color-mix(in srgb, var(--palette-primary-deep, var(--theme-secondary, var(--palette-primary))) 24%, var(--palette-border, var(--theme-border)));
   /*
    * trust-surface: border-derived at 18%, mixed into page-bg (not card-bg) for a lighter base.
    * Softer than accent-b (18% vs 28%, and page-bg vs card-bg base) — for whole-section backgrounds.
    * The distinction: accent-b is a denser chip/panel surface; trust is a broad, airy section wash.
    */
-  --trust-surface: color-mix(in srgb, var(--palette-surface-alt, var(--theme-secondary)) 45%, var(--bg-page));
+  --trust-surface: color-mix(in srgb, var(--palette-surface-alt, var(--theme-secondary, var(--palette-primary-deep))) 45%, var(--bg-page));
   --trust-surface-border: color-mix(in srgb, var(--palette-border, var(--theme-border)) 55%, transparent);
 
   /* Borders / dividers */
@@ -249,11 +248,11 @@ body {
   --focus-halo-strong: color-mix(in srgb, var(--palette-ring, var(--theme-ring)) 52%, transparent);
 
   /* Hero / large marketing panels — same hue, soft glow */
-  --hero-gradient-start: color-mix(in srgb, var(--palette-secondary, var(--theme-secondary)) 12%, transparent);
+  --hero-gradient-start: color-mix(in srgb, var(--palette-primary-deep, var(--theme-secondary, var(--palette-primary))) 12%, transparent);
   --hero-gradient-end: transparent;
 
   /* Stripes / panels that sit on the page canvas */
-  --theme-muted-surface: color-mix(in srgb, var(--palette-surface-alt, var(--theme-secondary)) 42%, var(--bg-page));
+  --theme-muted-surface: color-mix(in srgb, var(--palette-surface-alt, var(--theme-secondary, var(--palette-primary-deep))) 42%, var(--bg-page));
 
   /*
    * Vertical rhythm: owns padding/margins between sections (not max-width).
@@ -283,15 +282,15 @@ body {
    */
   --lesson-summary: var(--semantic-info-soft, color-mix(in srgb, var(--theme-primary) 8%, var(--theme-card-bg)));
   --lesson-key-concepts: var(--semantic-info-soft, color-mix(in srgb, var(--theme-primary) 10%, var(--theme-card-bg)));
-  --lesson-signs-symptoms: color-mix(in srgb, #ef4444 8%, var(--theme-card-bg));
-  --lesson-assessment: color-mix(in srgb, #14b8a6 8%, var(--theme-card-bg));
-  --lesson-diagnostics: color-mix(in srgb, #06b6d4 8%, var(--theme-card-bg));
-  --lesson-interventions: color-mix(in srgb, #10b981 8%, var(--theme-card-bg));
-  --lesson-medications: color-mix(in srgb, #f59e0b 8%, var(--theme-card-bg));
-  --lesson-patient-teaching: color-mix(in srgb, #10b981 6%, var(--theme-card-bg));
-  --lesson-exam-tips: color-mix(in srgb, #f59e0b 6%, var(--theme-card-bg));
-  --lesson-red-flags: color-mix(in srgb, #ef4444 10%, var(--theme-card-bg));
-  --lesson-clinical-pearls: color-mix(in srgb, #8b5cf6 8%, var(--theme-card-bg));
+  --lesson-signs-symptoms: var(--semantic-danger-soft, color-mix(in srgb, var(--semantic-danger) 8%, var(--theme-card-bg)));
+  --lesson-assessment: var(--semantic-teal-soft, color-mix(in srgb, var(--semantic-teal) 8%, var(--theme-card-bg)));
+  --lesson-diagnostics: var(--semantic-cyan-soft, color-mix(in srgb, var(--semantic-cyan) 8%, var(--theme-card-bg)));
+  --lesson-interventions: var(--semantic-success-soft, color-mix(in srgb, var(--semantic-success) 8%, var(--theme-card-bg)));
+  --lesson-medications: var(--semantic-warning-soft, color-mix(in srgb, var(--semantic-warning) 8%, var(--theme-card-bg)));
+  --lesson-patient-teaching: var(--semantic-success-soft, color-mix(in srgb, var(--semantic-success) 6%, var(--theme-card-bg)));
+  --lesson-exam-tips: var(--semantic-warning-soft, color-mix(in srgb, var(--semantic-warning) 6%, var(--theme-card-bg)));
+  --lesson-red-flags: var(--semantic-danger-soft, color-mix(in srgb, var(--semantic-danger) 10%, var(--theme-card-bg)));
+  --lesson-clinical-pearls: var(--semantic-violet-soft, color-mix(in srgb, var(--semantic-violet) 8%, var(--theme-card-bg)));
   --lesson-notes: color-mix(in srgb, var(--theme-body-text) 4%, var(--theme-card-bg));
 
   /*
@@ -1154,18 +1153,18 @@ html[data-theme] .nn-marketing-surface {
 }
 
 .nn-footer-link {
-  color: var(--theme-body-text);
+  color: var(--palette-text);
   transition:
     color 0.18s ease,
     text-decoration-color 0.18s ease;
   text-decoration: underline;
   text-underline-offset: 0.16em;
-  text-decoration-color: color-mix(in srgb, var(--theme-muted-text) 38%, transparent);
+  text-decoration-color: color-mix(in srgb, var(--palette-text-muted) 38%, transparent);
 }
 
 .nn-footer-link:hover {
-  color: var(--theme-heading-text);
-  text-decoration-color: color-mix(in srgb, var(--theme-heading-text) 38%, transparent);
+  color: var(--palette-heading);
+  text-decoration-color: color-mix(in srgb, var(--palette-heading) 38%, transparent);
 }
 
 /* Hero branded surface — opt-in wash for above-fold sections */
@@ -1646,11 +1645,11 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-exam-chrome-dim {
   border-color: color-mix(
     in srgb,
     var(--theme-primary) 7%,
-    color-mix(in srgb, var(--theme-secondary) 11%, var(--border-subtle))
+    color-mix(in srgb, var(--palette-primary-deep, var(--theme-secondary)) 11%, var(--border-subtle))
   );
   background: linear-gradient(
     180deg,
-    color-mix(in srgb, var(--theme-secondary) 2.8%, var(--bg-card)) 0%,
+    color-mix(in srgb, var(--palette-primary-deep, var(--theme-secondary)) 2.8%, var(--bg-card)) 0%,
     var(--bg-card) 52%
   );
   box-shadow: var(--shadow-card);
@@ -1666,10 +1665,10 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-exam-chrome-dim {
 /* Marketing pathway lesson detail: themed top-band fades to neutral for long-form reading */
 .nn-lesson-page-shell {
   border-radius: 1.75rem;
-  border: 1px solid var(--surface-bubble-border);
+  border: 1px solid color-mix(in srgb, var(--surface-bubble-border) 82%, var(--border-subtle));
   background: linear-gradient(
     180deg,
-    var(--surface-bubble) 0%,
+    color-mix(in srgb, var(--surface-bubble) 68%, var(--bg-section)) 0%,
     var(--bg-card) 28%,
     var(--bg-page) 100%
   );
@@ -1681,13 +1680,13 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-exam-chrome-dim {
   border-color: color-mix(
     in srgb,
     var(--theme-primary) 7%,
-    color-mix(in srgb, var(--theme-secondary) 14%, var(--border-subtle))
+    color-mix(in srgb, var(--palette-primary-deep, var(--theme-secondary)) 14%, var(--border-subtle))
   );
   background: linear-gradient(
     135deg,
-    color-mix(in srgb, var(--theme-primary) 3.2%, var(--theme-page-bg)) 0%,
-    var(--theme-page-bg) 42%,
-    color-mix(in srgb, var(--theme-secondary) 5%, var(--bg-section)) 100%
+    color-mix(in srgb, var(--theme-primary) 3.2%, var(--bg-page)) 0%,
+    var(--bg-page) 42%,
+    color-mix(in srgb, var(--palette-primary-deep, var(--theme-secondary)) 5%, var(--bg-section)) 100%
   );
 }
 
@@ -1697,10 +1696,10 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-exam-chrome-dim {
   padding: clamp(0.5rem, 1.5vw, 1.25rem);
   background: linear-gradient(
     180deg,
-    color-mix(in srgb, var(--theme-secondary) 4%, var(--theme-page-bg)) 0%,
+    color-mix(in srgb, var(--palette-primary-deep, var(--theme-secondary)) 4%, var(--bg-page)) 0%,
     transparent 42%
   );
-  border: 1px solid color-mix(in srgb, var(--theme-secondary) 12%, var(--border-subtle));
+  border: 1px solid color-mix(in srgb, var(--palette-primary-deep, var(--theme-secondary)) 12%, var(--border-subtle));
   box-shadow: var(--shadow-card);
 }
 
@@ -1714,7 +1713,7 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-exam-chrome-dim {
 .nn-lessons-hero--np {
   border-color: color-mix(
     in srgb,
-    var(--theme-secondary) 10%,
+    var(--palette-primary-deep, var(--theme-secondary)) 10%,
     color-mix(in srgb, var(--theme-primary) 10%, var(--border-subtle))
   );
 }
@@ -1788,8 +1787,8 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-exam-chrome-dim {
   --lsc-contrast: var(--semantic-info-contrast);
 
   border-radius: 1.25rem;
-  border: 1px solid color-mix(in srgb, var(--lsc-color) 22%, var(--semantic-border-soft));
-  background: var(--lsc-soft);
+  border: 1px solid color-mix(in srgb, var(--lsc-color) 30%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--lsc-soft) 88%, var(--bg-card));
   padding: 1.5rem 1.375rem 1.875rem;
   box-shadow: var(--semantic-shadow-soft);
   transition: box-shadow 0.2s ease, border-color 0.2s ease;

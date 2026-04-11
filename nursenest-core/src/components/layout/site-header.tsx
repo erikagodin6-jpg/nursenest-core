@@ -107,7 +107,7 @@ export function SiteHeader() {
             <Button
               type="button"
               variant="ghost"
-              className="h-9 w-9 shrink-0 p-0 text-[var(--theme-menu-text)] md:hidden"
+              className="h-9 w-9 shrink-0 p-0 text-[var(--palette-nav-text)] md:hidden"
               aria-label={t("nav.openMenu")}
               onClick={() => setMobileOpen(true)}
             >
@@ -122,8 +122,8 @@ export function SiteHeader() {
       {mobileOpen ? (
         <div className="fixed inset-0 z-[200] md:hidden animate-[nn-overlay-enter_0.24s_ease_both]">
           <button type="button" className="absolute inset-0 bg-black/40" aria-label={t("nav.closeMenu")} onClick={() => setMobileOpen(false)} />
-          <div className="absolute end-0 top-0 flex h-[100dvh] max-h-[100dvh] w-[min(100%,20rem)] flex-col border-s border-[var(--theme-separator)] bg-[var(--theme-card-bg)] shadow-[var(--shadow-elevated)] animate-[nn-drawer-slide-in_0.28s_cubic-bezier(0.25,0.1,0.25,1)_both]">
-            <div className="flex h-14 shrink-0 items-center justify-between border-b border-[var(--theme-separator)] px-4 pt-[max(0.5rem,env(safe-area-inset-top))]">
+          <div className="absolute end-0 top-0 flex h-[100dvh] max-h-[100dvh] w-[min(100%,20rem)] flex-col border-s border-[var(--header-nav-border)] bg-[var(--header-nav-surface)] shadow-[var(--shadow-elevated)] animate-[nn-drawer-slide-in_0.28s_cubic-bezier(0.25,0.1,0.25,1)_both]">
+            <div className="flex h-14 shrink-0 items-center justify-between border-b border-[var(--header-nav-border)] px-4 pt-[max(0.5rem,env(safe-area-inset-top))]">
               <Link
                 href={localizeHref("/")}
                 className="flex min-w-0 shrink-0 items-center overflow-hidden bg-transparent"
@@ -138,7 +138,7 @@ export function SiteHeader() {
             </div>
             <div className="min-h-0 flex-1 space-y-1 overflow-y-auto overscroll-y-contain px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-3">
               <div className="mb-3 flex flex-col gap-1">
-                <p className="mb-1 px-3 text-[11px] font-semibold uppercase tracking-widest text-[var(--theme-muted-text)]">
+                <p className="mb-1 px-3 text-[11px] font-semibold uppercase tracking-widest text-[var(--palette-text-muted)]">
                   {t("nav.tierDrop.heading")}
                 </p>
                 {[
@@ -172,7 +172,7 @@ export function SiteHeader() {
                 ))}
               </div>
               <div className="mb-3 flex flex-col gap-1">
-                <p className="mb-1 px-3 text-[11px] font-semibold uppercase tracking-widest text-[var(--theme-muted-text)]">
+                <p className="mb-1 px-3 text-[11px] font-semibold uppercase tracking-widest text-[var(--palette-text-muted)]">
                   {t("nav.more")}
                 </p>
                 {marketingNav.map((item) => (
@@ -195,7 +195,7 @@ export function SiteHeader() {
                 ))}
               </div>
 
-              <p className="mb-2 nn-marketing-caption text-[var(--theme-muted-text)]">{t("nav.regionLabel")}</p>
+              <p className="mb-2 nn-marketing-caption text-[var(--palette-text-muted)]">{t("nav.regionLabel")}</p>
               <div className={`mb-3 ${marketingRegionToggleShellMobileRow()}`} role="group" aria-label={t("nav.regionLabel")}>
                 <button type="button" onClick={() => setRegionAndRefresh("US")} className={marketingRegionToggleSegment(region === "US", "mobile")}>
                   {t("home.region.us")}
@@ -204,23 +204,23 @@ export function SiteHeader() {
                   {t("home.region.ca")}
                 </button>
               </div>
-              <p className="mb-3 flex items-start gap-2 nn-marketing-body-sm font-medium tracking-normal text-[var(--theme-muted-text)]">
+              <p className="mb-3 flex items-start gap-2 nn-marketing-body-sm font-medium tracking-normal text-[var(--palette-text-muted)]">
                 <MapPin className="mt-0.5 h-3.5 w-3.5 shrink-0" />
                 {region === "US" ? t("home.region.usDesc") : t("home.region.caDesc")}
               </p>
-              <hr className="my-3 border-[var(--theme-separator)]" />
-              <p className="mb-2 nn-marketing-body-sm font-medium tracking-normal text-[var(--theme-muted-text)]">{t("nav.language")}</p>
+              <hr className="my-3 border-[var(--header-nav-border)]" />
+              <p className="mb-2 nn-marketing-body-sm font-medium tracking-normal text-[var(--palette-text-muted)]">{t("nav.language")}</p>
               <div className="relative mb-3" ref={langRef}>
                 <button
                   type="button"
                   onClick={() => setLangOpen((o) => !o)}
-                  className="flex w-full items-center justify-between gap-2 rounded-xl border border-[var(--theme-card-border)] px-3 py-2 nn-marketing-body-sm font-medium tracking-normal text-[var(--theme-body-text)]"
+                  className="flex w-full items-center justify-between gap-2 rounded-xl border border-[var(--border-medium)] px-3 py-2 nn-marketing-body-sm font-medium tracking-normal text-[var(--palette-text)]"
                 >
                   {t("nav.language")}
                   <ChevronDown className={`h-4 w-4 shrink-0 transition-transform ${langOpen ? "rotate-180" : ""}`} />
                 </button>
                 {langOpen ? (
-                  <div className="mt-1 max-h-48 overflow-y-auto rounded-xl border border-[var(--theme-card-border)] bg-[var(--theme-page-bg)] p-1">
+                  <div className="mt-1 max-h-48 overflow-y-auto rounded-xl border border-[var(--border-medium)] bg-[var(--bg-page)] p-1">
                     <MarketingLanguagePreferenceList
                       onDone={() => setLangOpen(false)}
                       renderItem={({ code, name, flag, disabled, onSelect }) => (
@@ -228,8 +228,8 @@ export function SiteHeader() {
                           type="button"
                           disabled={disabled}
                           onClick={onSelect}
-                          className={`flex w-full items-center gap-2 rounded-lg px-2 py-2 text-left nn-marketing-body-sm font-medium tracking-normal text-[var(--theme-body-text)] hover:bg-[var(--theme-menu-hover-bg)] ${
-                            code === locale ? "bg-[var(--theme-menu-hover-bg)]/60" : ""
+                          className={`flex w-full items-center gap-2 rounded-lg px-2 py-2 text-left nn-marketing-body-sm font-medium tracking-normal text-[var(--palette-text)] hover:bg-[var(--palette-nav-hover)] ${
+                            code === locale ? "bg-[var(--palette-nav-hover)]/60" : ""
                           }`}
                         >
                           <span>{flag}</span>

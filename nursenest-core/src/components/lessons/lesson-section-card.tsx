@@ -38,7 +38,7 @@ export function LessonSectionCard({
       <span className="nn-lesson-section-chip" aria-hidden="true">
         {chipLabel}
       </span>
-      <h2 className="nn-marketing-h3 mt-3 text-[var(--theme-heading-text)]">
+      <h2 className="nn-marketing-h3 mt-3 text-[var(--palette-heading)]">
         {heading?.trim() || "Section"}
       </h2>
       <div className="mt-5">{children}</div>
