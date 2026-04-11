@@ -32,6 +32,8 @@ export function ThemeStateHydration() {
     for (const key of PALETTE_ROLE_KEYS) {
       root.style.setProperty(toCssVar(key), palette[key]);
     }
+    // Back-compat alias for selectors that still reference --palette-secondary.
+    root.style.setProperty("--palette-secondary", palette.primaryDeep);
 
     const isHex = (value: string) => /^#(?:[0-9a-fA-F]{3}){1,2}$/.test(value.trim());
     const setIfHex = (name: string, value: string) => {

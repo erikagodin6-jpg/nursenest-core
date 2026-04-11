@@ -1,6 +1,6 @@
 /**
  * Canonical local brand logo assets used across header/auth/dashboard shells.
- * These are the NurseNest-approved files in `/public/logos`.
+ * These are the NurseNest-approved files in `/public/logos/themes`.
  */
 import { NURSENEST_DEFAULT_THEME, THEME_OPTIONS } from "@/lib/theme/theme-registry";
 import { normalizeThemeIdForLogo } from "@/lib/theme/theme-logo-resolve";
@@ -12,7 +12,7 @@ export function getThemeLogoPathForThemeId(themeId?: string | null): string {
   const resolvedThemeId = AVAILABLE_THEME_IDS.has(canonicalThemeId)
     ? canonicalThemeId
     : NURSENEST_DEFAULT_THEME;
-  return `/logos/${resolvedThemeId}-brandlogo.png`;
+  return `/logos/themes/nursenest-logo-${resolvedThemeId}.png`;
 }
 
 export const THEME_LOGO_MAP: Record<string, string> = Object.fromEntries(

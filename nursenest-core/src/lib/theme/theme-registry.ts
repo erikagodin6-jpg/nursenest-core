@@ -1,6 +1,6 @@
 /**
  * **Source of truth for theme ids** used across the app: CSS `[data-theme="…"]` palettes, the theme picker,
- * and **per-theme brand logo filenames** (`{id}brandlogo_transparent.png` from `THEME_OPTIONS[].id`).
+ * and per-theme logo file resolution via `getThemeLogoPathForThemeId`.
  * Favicon generation tints to the default theme primary; wordmark PNGs are produced
  * by `scripts/generate-theme-logos-from-registry.ts`. Legacy shared logo filenames are not used for theme marks.
  *
@@ -61,6 +61,10 @@ export const THEME_OPTIONS: ThemeOption[] = [
   { id: "clinical-light", label: "Clinical Light", color: "#3b82f6", group: "light", logoVariant: "blue" },
 
   /* ── Pink family ── */
+  { id: "petal-pop", label: "Petal Pop", color: "#F48FB1", group: "light", logoVariant: "rose", named: true },
+  { id: "cotton-candy", label: "Cotton Candy", color: "#F59AB5", group: "light", logoVariant: "rose", named: true },
+  { id: "pink-skies", label: "Pink Skies", color: "#F38AA8", group: "light", logoVariant: "rose", named: true },
+  { id: "berry-bonbon", label: "Berry Bonbon", color: "#D96AC2", group: "light", logoVariant: "rose", named: true },
   { id: "blush", label: "Soft Blush", color: "#e899b0", group: "light", logoVariant: "blush" },
   { id: "pastel-blush", label: "Rose", color: "#f5838e", group: "light", logoVariant: "rose" },
   { id: "strawberry", label: "Strawberry", color: "#fd9cb3", group: "light", logoVariant: "strawberry" },
@@ -73,11 +77,19 @@ export const THEME_OPTIONS: ThemeOption[] = [
   { id: "teal", label: "Teal", color: "#14b8a6", group: "light", logoVariant: "mint" },
   { id: "forest", label: "Forest", color: "#10b981", group: "light", logoVariant: "mint" },
   { id: "soft-sage", label: "Soft Sage", color: "#7da87d", group: "light", logoVariant: "mint" },
+  { id: "evergreen-steel", label: "Evergreen Steel", color: "#3E6B68", group: "dark", logoVariant: "dark", named: true },
 
   /* ── Multi-pastel ── */
+  { id: "pastel-party", label: "Pastel Party", color: "#9FC5E8", group: "light", logoVariant: "multi", named: true },
+  { id: "rainbow-sherbet", label: "Rainbow Sherbet", color: "#8EC5FF", group: "light", logoVariant: "multi", named: true },
   { id: "multi-pastel", label: "Multi-Pastel", color: "#90b4d4", group: "light", logoVariant: "multi" },
 
   /* ── Lavender / Purple family ── */
+  { id: "sunny-lilac", label: "Sunny Lilac", color: "#B59AF5", group: "light", logoVariant: "neutral", named: true },
+  { id: "sky-kiss", label: "Sky Kiss", color: "#8ECDF7", group: "light", logoVariant: "blue", named: true },
+  { id: "bluebird", label: "Bluebird", color: "#7DB7F0", group: "light", logoVariant: "blue", named: true },
+  { id: "violet-night", label: "Violet Night", color: "#7B61C9", group: "light", logoVariant: "neutral", named: true },
+  { id: "plum-mist", label: "Plum Mist", color: "#8C6BCB", group: "light", logoVariant: "neutral", named: true },
   { id: "lavender", label: "Lavender", color: "#9d82dd", group: "light", logoVariant: "neutral" },
   { id: "pastel-lavender", label: "Pastel Lavender", color: "#a78bda", group: "light", logoVariant: "neutral" },
   { id: "pastel-lilac", label: "Pastel Lilac", color: "#b48ed2", group: "light", logoVariant: "neutral" },
@@ -85,12 +97,16 @@ export const THEME_OPTIONS: ThemeOption[] = [
   { id: "indigo", label: "Indigo", color: "#6366f1", group: "light", logoVariant: "blue" },
 
   /* ── Neutral ── */
+  { id: "graphite-blue", label: "Graphite Blue", color: "#4A607A", group: "light", logoVariant: "neutral", named: true },
+  { id: "north-sea", label: "North Sea", color: "#2E5D7B", group: "light", logoVariant: "neutral", named: true },
   { id: "slate", label: "Slate", color: "#64748b", group: "light", logoVariant: "neutral" },
   { id: "midnight", label: "Midnight", color: "#1e293b", group: "light", logoVariant: "neutral" },
   { id: "neutral-sand", label: "Sand", color: "#a08060", group: "light", logoVariant: "neutral" },
   { id: "neutral-slate", label: "Cool Slate", color: "#708090", group: "light", logoVariant: "neutral" },
 
   /* ── Dark ── */
+  { id: "midnight-ink", label: "Midnight Ink", color: "#2C4263", group: "dark", logoVariant: "dark", named: true },
+  { id: "storm-slate", label: "Storm Slate", color: "#51657D", group: "dark", logoVariant: "dark", named: true },
   { id: "dark-mode", label: "Dark Pastel", color: "#4a6fa5", group: "dark", logoVariant: "dark" },
   { id: "dark-clinical", label: "Dark Clinical", color: "#06b6d4", group: "dark", logoVariant: "dark" },
   { id: "dark-academia", label: "Dark Academia", color: "#8b7355", group: "dark", logoVariant: "dark" },
