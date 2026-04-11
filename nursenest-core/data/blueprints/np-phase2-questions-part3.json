@@ -1,0 +1,1041 @@
+{
+  "version": 1,
+  "phase": 2,
+  "part": 3,
+  "label": "Phase 2 Questions — Core Chronic Disease Management, Part B (np-p2-119 through np-p2-178)",
+  "generatedDate": "2026-04-11",
+  "scopeFenceRef": "np-scope-fences.json",
+  "difficultyPolicy": "hard or expert only — no medium",
+  "topics": [
+    "thyroid-disease-diagnosis-management 2A (np-p2-119 to np-p2-124)",
+    "thyroid-disease-diagnosis-management 2B (np-p2-125 to np-p2-130)",
+    "ckd-progression-monitoring-medication 2A (np-p2-131 to np-p2-136)",
+    "ckd-progression-monitoring-medication 2B (np-p2-137 to np-p2-142)",
+    "copd-gold-staging-inhaler-selection 2A (np-p2-143 to np-p2-149)",
+    "copd-gold-staging-inhaler-selection 2B (np-p2-150 to np-p2-156)",
+    "hyperlipidemia-risk-statin-therapy 2 (np-p2-157 to np-p2-166)",
+    "anemia-workup-treatment-types 2 (np-p2-167 to np-p2-178)"
+  ],
+  "questions": [
+
+    {
+      "questionId": "np-p2-119",
+      "topicSlug": "thyroid-disease-diagnosis-management",
+      "lessonPart": "2A",
+      "difficulty": "hard",
+      "stemAnchor": "45-year-old + TSH 12.4 + free T4 normal + asymptomatic — subclinical hypothyroidism treatment threshold",
+      "stem": "A 45-year-old woman presents for an annual well visit. She reports no symptoms. TSH is 12.4 mIU/L (elevated). Free T4 is 1.0 ng/dL (normal). Anti-TPO antibodies are positive at 240 IU/mL. She has no personal or family history of thyroid disease. She is currently trying to conceive. Which of the following is the most appropriate management?",
+      "options": {
+        "A": "No treatment — TSH <20 mIU/L in an asymptomatic patient does not require levothyroxine",
+        "B": "Initiate levothyroxine — TSH >10 mIU/L plus positive anti-TPO antibodies and desire for pregnancy are all independent indications for treatment of subclinical hypothyroidism",
+        "C": "Repeat TSH in 6 months — subclinical hypothyroidism always resolves spontaneously",
+        "D": "Start methimazole — anti-TPO antibodies indicate Graves disease requiring antithyroid treatment"
+      },
+      "correctAnswer": "B",
+      "rationale": "Subclinical hypothyroidism (SCH) treatment thresholds: (1) TSH >10 mIU/L in any patient = treat (regardless of symptoms — higher TSH levels carry increased CV risk and symptom risk); (2) TSH 5–10 + symptoms = consider treating; (3) TSH 5–10 + positive anti-TPO antibodies = consider treating (higher risk of progression to overt hypothyroidism); (4) Pregnancy intent or pregnancy = treat even with lower TSH elevations (target TSH <2.5 mIU/L in first trimester). This patient meets multiple criteria: TSH 12.4 (>10), positive anti-TPO, and attempting to conceive. Treatment is clearly indicated. Anti-TPO antibodies (option D) indicate Hashimoto thyroiditis (the most common cause of primary hypothyroidism in iodine-sufficient countries) — not Graves disease (which causes hyperthyroidism via TSI antibodies). SF-02 slugA scope is maintained: this question covers the decision to treat, not dosing specifics."
+    },
+
+    {
+      "questionId": "np-p2-120",
+      "topicSlug": "thyroid-disease-diagnosis-management",
+      "lessonPart": "2A",
+      "difficulty": "hard",
+      "stemAnchor": "Suppressed TSH 0.04 + elevated free T4 + exophthalmos + diffuse goiter — Graves disease vs toxic adenoma",
+      "stem": "A 34-year-old woman presents with 3-month history of weight loss (12 lbs), heat intolerance, tremor, palpitations, and anxiety. She also reports her eyes have been 'bulging.' On exam: diffuse thyroid enlargement (smooth, non-nodular), exophthalmos bilaterally, fine tremor, warm moist skin. TSH <0.01 mIU/L, free T4 4.2 ng/dL (elevated), total T3 340 ng/dL (elevated). Which of the following diagnostic distinction is most important and what is the most likely diagnosis?",
+      "options": {
+        "A": "Hashimoto thyroiditis with transient thyrotoxicosis (Hashitoxicosis) — this resolves spontaneously without treatment",
+        "B": "Graves disease — the combination of diffuse goiter + exophthalmos + thyroid stimulating immunoglobulin (TSI) antibodies distinguishes it from toxic nodular goiter",
+        "C": "Toxic multinodular goiter — the diffuse enlargement is characteristic of toxic nodular disease",
+        "D": "Pituitary TSH-secreting adenoma — TSH would be elevated, not suppressed, in this condition"
+      },
+      "correctAnswer": "B",
+      "rationale": "Graves disease is the most common cause of hyperthyroidism. Pathognomonic features: (1) diffuse smooth goiter (not nodular), (2) Graves ophthalmopathy (exophthalmos/proptosis — unique to Graves, caused by autoimmune retroorbital inflammation), (3) Graves dermopathy (pretibial myxedema — rare but pathognomonic if present). TSI (thyroid-stimulating immunoglobulin) antibodies are diagnostic. Hashitoxicosis (option A) occurs in early Hashimoto — is a transient destructive thyroiditis phase, typically mild and without exophthalmos. Toxic multinodular goiter (option C) has a nodular goiter, not diffuse, and no ophthalmopathy. TSH-secreting pituitary adenoma (option D) would cause ELEVATED TSH with elevated T4 — not suppressed TSH. Treatment (radioactive iodine, antithyroid drugs, or thyroidectomy) belongs to endocrinology referral."
+    },
+
+    {
+      "questionId": "np-p2-121",
+      "topicSlug": "thyroid-disease-diagnosis-management",
+      "lessonPart": "2A",
+      "difficulty": "expert",
+      "stemAnchor": "Thyroid nodule 1.8 cm + TSH normal + ultrasound hypoechoic + microcalcifications — FNAB indication and cancer workup",
+      "stem": "A 52-year-old woman presents after her internist palpated a right thyroid nodule during a routine exam. Ultrasound reveals: right thyroid nodule 1.8 cm, hypoechoic, irregular margins, 3 microcalcifications, taller-than-wide shape. TSH is 1.8 mIU/L (normal). She is asymptomatic. Which of the following is the most appropriate next step?",
+      "options": {
+        "A": "Repeat ultrasound in 12 months — most thyroid nodules are benign",
+        "B": "Order thyroid scintigraphy (radioactive iodine scan) — a hot nodule rules out malignancy",
+        "C": "Refer for fine-needle aspiration biopsy (FNAB) — this nodule has high-risk sonographic features that meet the threshold for tissue diagnosis",
+        "D": "Start levothyroxine to suppress TSH and shrink the nodule"
+      },
+      "correctAnswer": "C",
+      "rationale": "High-risk sonographic features (per ATA/ACR TI-RADS guidelines) that indicate FNAB for nodules ≥1 cm: hypoechogenicity, irregular margins, microcalcifications, taller-than-wide shape, and extrathyroidal extension — this nodule has FOUR high-risk features (hypoechoic, irregular margins, microcalcifications, taller-than-wide). FNAB is clearly indicated. Papillary thyroid carcinoma (most common thyroid cancer) characteristically shows these ultrasound features. Thyroid scintigraphy (option B) is indicated when TSH is SUPPRESSED (to evaluate a hot autonomous nodule, which is virtually always benign) — TSH is normal here. TSH suppression with levothyroxine (option D) to shrink nodules is no longer recommended — it has minimal efficacy and exposes patients to exogenous hyperthyroidism risk. Observation alone (option A) is inappropriate for high-risk sonographic features."
+    },
+
+    {
+      "questionId": "np-p2-122",
+      "topicSlug": "thyroid-disease-diagnosis-management",
+      "lessonPart": "2A",
+      "difficulty": "hard",
+      "stemAnchor": "55-year-old + secondary hypothyroidism + TSH low + free T4 low + pituitary MRI — central hypothyroidism diagnosis",
+      "stem": "A 55-year-old man presents with fatigue, weight gain, and cold intolerance over 6 months. He had transphenoidal resection of a pituitary macroadenoma 18 months ago. Lab results: TSH 0.8 mIU/L (low-normal), free T4 0.4 ng/dL (low — reference 0.8–1.8 ng/dL). Which of the following best explains this pattern and most appropriate next step?",
+      "options": {
+        "A": "Primary hypothyroidism — elevated TSH is the hallmark; the TSH of 0.8 rules out hypothyroidism",
+        "B": "Central (secondary) hypothyroidism — pituitary dysfunction causes inappropriately low/normal TSH with low free T4; initiate levothyroxine titrated to free T4 (not TSH target)",
+        "C": "Euthyroid sick syndrome — the TSH of 0.8 with low T4 is a normal finding post-surgery",
+        "D": "Pituitary tumor recurrence — repeat MRI is the only appropriate next step; do not treat until diagnosis confirmed"
+      },
+      "correctAnswer": "B",
+      "rationale": "Central (secondary or tertiary) hypothyroidism: caused by pituitary (secondary) or hypothalamic (tertiary) disease — the TSH is inappropriately low or normal-low despite low free T4. This is the opposite of primary hypothyroidism where TSH is ELEVATED. In primary hypothyroidism: elevated TSH + low free T4. In central hypothyroidism: TSH inappropriately low/normal + low free T4. Key point: TSH is NOT a reliable monitoring parameter in central hypothyroidism — use free T4 to guide levothyroxine dosing (target mid-normal range for free T4). This patient had pituitary surgery — the most common cause of central hypothyroidism in adults. TSH alone (option A) would have missed this diagnosis. MRI can assess for recurrence (option D) but should not delay thyroid replacement."
+    },
+
+    {
+      "questionId": "np-p2-123",
+      "topicSlug": "thyroid-disease-diagnosis-management",
+      "lessonPart": "2A",
+      "difficulty": "hard",
+      "stemAnchor": "58-year-old + TSH elevated + new atrial fibrillation + levothyroxine recently started — overtreatment iatrogenic hyperthyroidism",
+      "stem": "A 58-year-old woman was started on levothyroxine 150 mcg daily 3 months ago for primary hypothyroidism (baseline TSH 18.4). At her 3-month follow-up, TSH is now 0.08 mIU/L (suppressed). She presents with new palpitations and is found to have atrial fibrillation on ECG. She reports intermittent heat intolerance and anxiety over the past month. Which of the following is the most likely explanation and appropriate action?",
+      "options": {
+        "A": "Her levothyroxine dose is correct — TSH suppression is the therapeutic target in hypothyroidism",
+        "B": "The dose of 150 mcg is excessive — iatrogenic hyperthyroidism (suppressed TSH) can precipitate AF, osteoporosis, and cardiac arrhythmias; reduce the levothyroxine dose and recheck TSH in 6 weeks",
+        "C": "The AF is unrelated to levothyroxine — start beta-blocker and continue current levothyroxine dose",
+        "D": "Add methimazole to counteract levothyroxine-induced hyperthyroidism"
+      },
+      "correctAnswer": "B",
+      "rationale": "Levothyroxine overtreatment (iatrogenic hyperthyroidism): suppressed TSH (<0.1 mIU/L) from excessive levothyroxine is associated with atrial fibrillation, osteoporosis/fractures, cardiac hypertrophy, and anxiety. The new AF is directly attributable to the suppressed TSH in this context. Treatment goal for hypothyroidism: TSH within the NORMAL range (0.5–4.5 mIU/L for most adults; 0.5–2.0 for younger adults; up to 6.0 acceptable in elderly ≥70). TSH suppression is the target ONLY in thyroid cancer post-thyroidectomy — not in routine hypothyroidism. Action: reduce levothyroxine dose (e.g., from 150 to 112 mcg or 125 mcg), rate-control the AF (beta-blocker), and recheck TSH + fT4 at 6–8 weeks. Adding methimazole (option D) would create antagonism and is not the approach — simply reduce the exogenous source."
+    },
+
+    {
+      "questionId": "np-p2-124",
+      "topicSlug": "thyroid-disease-diagnosis-management",
+      "lessonPart": "2A",
+      "difficulty": "expert",
+      "stemAnchor": "Hypothyroid patient + new depression + inadequate response to antidepressant — check TSH before escalating psychiatric treatment",
+      "stem": "A 44-year-old woman with major depressive disorder has been on sertraline 200 mg daily for 4 months with only partial response (PHQ-9 improved from 22 to 14). Her psychiatrist asks you to add an augmentation agent. She has gained 15 pounds over the past year, feels cold all the time, and reports significant fatigue beyond what she attributes to depression. On review, no thyroid function tests have been ordered in 2 years. Which of the following is the most appropriate next step before escalating psychiatric medication?",
+      "options": {
+        "A": "Add aripiprazole 5 mg as augmentation — this is the evidence-based next step for partial response to sertraline",
+        "B": "Switch from sertraline to duloxetine — SNRIs are more effective than SSRIs for treatment-resistant depression",
+        "C": "Order TSH — undiagnosed or undertreated hypothyroidism can mimic and worsen depression and may be responsible for the partial antidepressant response",
+        "D": "Add bupropion — it will both augment antidepressant response and help with the weight gain"
+      },
+      "correctAnswer": "C",
+      "rationale": "Before escalating psychiatric treatment for partial antidepressant response, it is essential to exclude treatable medical causes of depression and fatigue. This patient has multiple hypothyroid symptoms (cold intolerance, weight gain, fatigue, cognitive slowing) in addition to her depression. Undiagnosed hypothyroidism can cause depression that is completely treatment-resistant to antidepressants until the thyroid is treated. Additionally, undertreated hypothyroidism (normal TSH 2 years ago but now potentially elevated) is a common and easily correctable cause of antidepressant non-response. The correct action is TSH before adding a second psychiatric medication. If hypothyroidism is found and treated, the depression may improve significantly without psychiatric medication escalation. This is a classic NP integrative medicine/primary care decision point — the intersection of SF-04 (MDD) and SF-02 (thyroid) scope fences."
+    },
+
+    {
+      "questionId": "np-p2-125",
+      "topicSlug": "thyroid-disease-diagnosis-management",
+      "lessonPart": "2B",
+      "difficulty": "hard",
+      "stemAnchor": "Hypothyroid patient + calcium supplement co-administration + TSH rising despite good dose — absorption interaction identification",
+      "stem": "A 62-year-old woman with primary hypothyroidism has been stable on levothyroxine 100 mcg daily for 2 years with TSH consistently around 1.8 mIU/L. At today's visit, TSH is 6.4 mIU/L and she is feeling more fatigued. She has not changed her levothyroxine dose. Medication review reveals she started calcium carbonate 1500 mg daily 3 months ago (for osteoporosis prevention) at the recommendation of her orthopedist. She takes both medications at the same time each morning. Which of the following best explains the TSH rise?",
+      "options": {
+        "A": "Calcium carbonate is directly suppressing TSH production in the pituitary",
+        "B": "Calcium carbonate reduces levothyroxine absorption when taken simultaneously — counsel to take levothyroxine 4 hours before or after calcium",
+        "C": "Her hypothyroidism has progressed and requires a dose increase regardless of timing",
+        "D": "Calcium carbonate and levothyroxine have no clinically meaningful drug interaction"
+      },
+      "correctAnswer": "B",
+      "rationale": "Calcium carbonate (and calcium citrate) significantly reduces levothyroxine absorption when taken simultaneously — calcium binds to thyroxine in the GI tract and reduces bioavailability by up to 20–40%. This is a well-documented, clinically significant absorption interaction. The TSH rise (1.8 → 6.4) over 3 months precisely coincides with starting the calcium supplement co-administration. Correction: counsel the patient to take levothyroxine 4 hours apart from calcium supplements. After correcting the timing, recheck TSH in 6–8 weeks — the TSH should return to baseline without any dose change. Other absorption inhibitors (all require 4-hour separation): iron supplements, PPIs, sucralfate, cholestyramine. This is a high-yield SF-02 slugB topic: absorption interactions with levothyroxine."
+    },
+
+    {
+      "questionId": "np-p2-126",
+      "topicSlug": "thyroid-disease-diagnosis-management",
+      "lessonPart": "2B",
+      "difficulty": "hard",
+      "stemAnchor": "75-year-old + hypothyroid + angina history + levothyroxine starting dose — cardiac-sparing low-dose initiation",
+      "stem": "A 75-year-old man with stable angina and newly diagnosed overt primary hypothyroidism (TSH 22 mIU/L, fT4 0.3 ng/dL) asks about starting levothyroxine. He has had a 30-year history of ischemic heart disease and has had stable angina for 3 years. Which of the following represents the most appropriate levothyroxine starting strategy?",
+      "options": {
+        "A": "Calculate full replacement dose (1.6 mcg/kg/day) and start immediately",
+        "B": "Start at 25 mcg daily and titrate by 12.5–25 mcg increments every 6–8 weeks, monitoring for angina exacerbation",
+        "C": "Delay levothyroxine treatment until coronary artery bypass is performed — thyroid hormone is contraindicated with active coronary disease",
+        "D": "Start at 200 mcg daily to rapidly correct the severe hypothyroidism and prevent myxedema coma"
+      },
+      "correctAnswer": "B",
+      "rationale": "In elderly patients and those with established ischemic heart disease or cardiac risk, levothyroxine must be started at a LOW dose (25–50 mcg daily) with SLOW titration (12.5–25 mcg increments every 6–8 weeks). Rationale: even mild increases in metabolic rate and heart rate from thyroid hormone can increase myocardial oxygen demand, precipitating or worsening angina, arrhythmia, or MI in patients with ischemic heart disease. Full replacement (1.6 mcg/kg/day) is appropriate for healthy adults without cardiac disease. Starting at 200 mcg (option D) would rapidly precipitate angina or ACS. Delaying treatment (option C) is inappropriate — severe hypothyroidism (TSH 22, low fT4) impairs cardiac function and increases CV risk; treatment with careful titration is safer than delay. Recheck TSH at 6–8 weeks after EACH dose adjustment."
+    },
+
+    {
+      "questionId": "np-p2-127",
+      "topicSlug": "thyroid-disease-diagnosis-management",
+      "lessonPart": "2B",
+      "difficulty": "expert",
+      "stemAnchor": "Patient on levothyroxine + rifampin started for TB — dose adjustment required",
+      "stem": "A 48-year-old woman with primary hypothyroidism (well-controlled on levothyroxine 125 mcg daily, TSH 2.1 mIU/L) is diagnosed with active pulmonary tuberculosis and started on RIPE therapy (rifampin, isoniazid, pyrazinamide, ethambutol). At her 8-week follow-up, TSH is now 8.9 mIU/L and she reports return of fatigue and cold intolerance. She has been taking both medications as prescribed. Which of the following best explains the TSH rise and appropriate management?",
+      "options": {
+        "A": "TB medications always cause hypothyroidism; add another thyroid medication",
+        "B": "Rifampin induces CYP enzymes that increase levothyroxine hepatic metabolism and clearance, requiring a levothyroxine dose increase; recheck TSH after dose adjustment",
+        "C": "Isoniazid directly blocks thyroid hormone synthesis; discontinue isoniazid",
+        "D": "The TSH rise represents the immune reconstitution inflammatory syndrome; no thyroid adjustment is needed"
+      },
+      "correctAnswer": "B",
+      "rationale": "Rifampin is a potent inducer of CYP450 enzymes (particularly CYP1A2, CYP2C9, CYP3A4) — it dramatically increases the hepatic metabolism and clearance of many drugs including levothyroxine. The result: levothyroxine is metabolized faster → lower plasma T4 levels → pituitary senses low T4 → increases TSH production. Management: increase levothyroxine dose (often requires 25–50% increase) while on rifampin; recheck TSH at 6–8 weeks after adjustment. This drug interaction must be anticipated whenever rifampin is initiated in a hypothyroid patient. Other CYP-inducing drugs requiring levothyroxine dose increase: phenytoin, carbamazepine. Isoniazid (option C) has not been shown to block thyroid synthesis directly. This is a high-yield SF-02 slugB drug interaction question."
+    },
+
+    {
+      "questionId": "np-p2-128",
+      "topicSlug": "thyroid-disease-diagnosis-management",
+      "lessonPart": "2B",
+      "difficulty": "hard",
+      "stemAnchor": "Hypothyroid woman + pregnancy confirmed + levothyroxine dose increase timing — 30% dose increase immediately",
+      "stem": "A 32-year-old woman with known primary hypothyroidism (TSH 1.9 mIU/L on levothyroxine 88 mcg daily) presents excited to report a positive home pregnancy test. She is approximately 5 weeks pregnant by her last menstrual period. Which of the following is the most appropriate immediate action regarding her thyroid management?",
+      "options": {
+        "A": "Continue current levothyroxine dose — TSH 1.9 is within normal range and no change is needed until the second trimester",
+        "B": "Increase the levothyroxine dose by approximately 30% immediately — thyroid hormone requirements increase significantly in the first trimester; target TSH <2.5 mIU/L",
+        "C": "Discontinue levothyroxine — thyroid hormone supplementation is contraindicated in pregnancy",
+        "D": "Double the current dose to 176 mcg immediately — maternal hypothyroidism in the first trimester causes irreversible fetal neurological damage"
+      },
+      "correctAnswer": "B",
+      "rationale": "Pregnancy significantly increases levothyroxine requirements — typically by 30–50% starting in weeks 4–6 of the first trimester. Mechanism: increased TBG (thyroid-binding globulin) production from estrogen, increased placental type 3 deiodinase activity metabolizing T4, and fetal demand for maternal T4 (fetal thyroid not functional until weeks 10–12). TSH target in pregnancy: <2.5 mIU/L in first trimester, <3.0 mIU/L in second and third trimesters. The dose increase should occur IMMEDIATELY on confirmed pregnancy — not delayed to second trimester. A practical approach: add 2 additional levothyroxine doses per week (converts 7 doses/week to 9 doses/week = ~29% increase). Doubling the dose (option D) is excessive and risks iatrogenic hyperthyroidism. Discontinuing (option C) is never appropriate — untreated maternal hypothyroidism causes miscarriage and fetal neurodevelopmental impairment."
+    },
+
+    {
+      "questionId": "np-p2-129",
+      "topicSlug": "thyroid-disease-diagnosis-management",
+      "lessonPart": "2B",
+      "difficulty": "hard",
+      "stemAnchor": "Stable hypothyroid + switching from brand Synthroid to generic — TSH monitoring after switch",
+      "stem": "A 55-year-old woman with hypothyroidism has been stable on Synthroid (brand levothyroxine) 100 mcg daily for 5 years, with TSH consistently 1.5–2.0 mIU/L. Her insurance company has changed its formulary to require generic levothyroxine. She is switched to a generic manufacturer's product at the same dose. Which of the following is the most appropriate next step?",
+      "options": {
+        "A": "No monitoring is needed — FDA standards ensure all generics are bioequivalent",
+        "B": "Check TSH in 6–8 weeks after the switch — bioavailability differences between manufacturers can cause clinically meaningful TSH changes",
+        "C": "Immediately increase the generic dose by 25 mcg — generics always provide less thyroid hormone than brand",
+        "D": "Refuse the generic substitution — generic levothyroxine should never be used in hypothyroid patients"
+      },
+      "correctAnswer": "B",
+      "rationale": "Levothyroxine has a narrow therapeutic index — small differences in bioavailability between manufacturers can result in clinically meaningful changes in TSH. While all generics meet FDA bioequivalence standards (within 80–125% of reference), the variation within that range can affect sensitive patients (particularly those with autoimmune thyroid disease or tight TSH targets). ATA/AACE recommendations: recheck TSH 6–8 weeks after any product change (brand to generic, generic to brand, or between generic manufacturers). This allows dose adjustment if needed before symptoms develop. Option A is incorrect — clinically meaningful TSH changes after switching have been documented. Option C (automatic dose increase) is inappropriate without data. Option D is overly restrictive — generics are acceptable with monitoring."
+    },
+
+    {
+      "questionId": "np-p2-130",
+      "topicSlug": "thyroid-disease-diagnosis-management",
+      "lessonPart": "2B",
+      "difficulty": "expert",
+      "stemAnchor": "PPI use + hypothyroid + TSH rising without dose change — PPI as absorption inhibitor mechanism",
+      "stem": "A 50-year-old woman with primary hypothyroidism (stable TSH 2.2 mIU/L on levothyroxine 112 mcg) was started on omeprazole 20 mg daily 4 months ago for GERD. Today's TSH is 5.8 mIU/L. She has not changed her levothyroxine dose, takes it at the same time (30 minutes before breakfast), and is not taking any other new medications. Which of the following best explains the TSH rise?",
+      "options": {
+        "A": "Omeprazole stimulates TSH secretion from the pituitary, unrelated to levothyroxine absorption",
+        "B": "Omeprazole reduces gastric acid, which is necessary for the dissolution and absorption of levothyroxine tablets — this reduces levothyroxine bioavailability and requires dose adjustment or formulation change",
+        "C": "Omeprazole is causing autoimmune thyroiditis that is worsening underlying Hashimoto disease",
+        "D": "This TSH elevation is artifactual — PPIs interfere with TSH immunoassay results"
+      },
+      "correctAnswer": "B",
+      "rationale": "Proton pump inhibitors (PPIs) reduce gastric acid production. Levothyroxine tablets require an acidic gastric environment for optimal dissolution and absorption. With reduced gastric acid (from PPI use), levothyroxine absorption decreases, leading to lower serum T4 levels and compensatory TSH elevation. The TSH rise 4 months after PPI initiation is classic. Solutions: (1) Increase levothyroxine dose by 25 mcg and recheck TSH at 6–8 weeks, OR (2) Switch to a liquid levothyroxine formulation (Tirosint) which does not depend on gastric pH for absorption. PPIs do not affect TSH assays (option D) or cause autoimmune thyroiditis (option C). This is a high-yield absorption interaction in SF-02 slugB scope."
+    },
+
+    {
+      "questionId": "np-p2-131",
+      "topicSlug": "ckd-progression-monitoring-medication",
+      "lessonPart": "2A",
+      "difficulty": "hard",
+      "stemAnchor": "CKD G3b + UACR 380 + BP 148/88 + on ACEi — SGLT-2 inhibitor add-on for CKD progression CREDENCE/DAPA-CKD",
+      "stem": "A 58-year-old man with CKD (eGFR 38 mL/min, UACR 380 mg/g) and T2DM is on lisinopril 20 mg daily and metformin 500 mg twice daily. His BP is 148/88 mmHg and A1c is 7.8%. Despite lisinopril, his UACR has not significantly decreased over 6 months. Which of the following additional medication is most supported by current evidence to further slow CKD progression?",
+      "options": {
+        "A": "Add an ARB to the lisinopril for dual RAAS blockade to further reduce proteinuria",
+        "B": "Add an SGLT-2 inhibitor (canagliflozin or dapagliflozin) — CREDENCE and DAPA-CKD trials demonstrated CKD progression reduction with SGLT-2 inhibitors in T2DM + CKD with proteinuria",
+        "C": "Add spironolactone to reduce proteinuria — aldosterone antagonists have proven renal benefit in CKD",
+        "D": "Increase lisinopril to 40 mg and recheck in 3 months"
+      },
+      "correctAnswer": "B",
+      "rationale": "SGLT-2 inhibitors have robust evidence for CKD progression reduction in patients with T2DM and CKD with proteinuria: CREDENCE trial (canagliflozin, eGFR 30–90, UACR >300) and DAPA-CKD trial (dapagliflozin, eGFR 25–75, UACR ≥200 — REGARDLESS of diabetes status) both showed significant reduction in CKD progression events. Current guideline recommendation: add SGLT-2 inhibitor when UACR ≥200 mg/g and eGFR ≥20–30. This patient (UACR 380, eGFR 38) clearly meets criteria. Option A (dual RAAS blockade ACEi + ARB) is contraindicated — ONTARGET trial showed increased AKI and hyperkalemia without added benefit. Spironolactone (option C) adds hyperkalemia risk in CKD without the proven CKD progression benefit seen with SGLT-2 inhibitors. Increasing lisinopril to maximum dose alone (option D) is reasonable but less impactful than adding SGLT-2i."
+    },
+
+    {
+      "questionId": "np-p2-132",
+      "topicSlug": "ckd-progression-monitoring-medication",
+      "lessonPart": "2A",
+      "difficulty": "hard",
+      "stemAnchor": "CKD G4 + eGFR 22 + rapidly declining + no referral yet — nephrology referral criteria",
+      "stem": "A 66-year-old woman with CKD has had the following eGFR trajectory: 42 (18 months ago), 34 (12 months ago), 26 (6 months ago), 22 today. She has UACR 620 mg/g and BP 134/82 on lisinopril 40 mg and amlodipine 10 mg. She has never been referred to nephrology. Which of the following correctly identifies the referral indication and most appropriate action?",
+      "options": {
+        "A": "Nephrology referral is only required at eGFR <15 or when dialysis is imminent",
+        "B": "Refer to nephrology urgently — eGFR <30 (G4), rapid GFR decline (>5 mL/min/year), and macroalbuminuria all meet referral criteria that should have occurred earlier",
+        "C": "Continue current management — eGFR 22 is G4 and can be managed in primary care until dialysis is needed",
+        "D": "Add furosemide for fluid management and recheck eGFR in 6 months before deciding on referral"
+      },
+      "correctAnswer": "B",
+      "rationale": "KDIGO and ADA CKD nephrology referral criteria include: (1) eGFR <30 mL/min (G4 or worse), (2) rapidly declining eGFR >5 mL/min/year — this patient has declined from 42 to 22 over 18 months = ~13 mL/min/year decline, well above threshold, (3) nephrotic-range proteinuria or UACR ≥300 persistently, (4) refractory hyperkalemia, (5) uncontrolled hypertension despite ≥3 agents. This patient meets at least THREE referral criteria simultaneously and has NEVER seen nephrology — this is a significant care gap. Early nephrology involvement: optimizes CKD-MBD management, prepares for renal replacement therapy (modality education, fistula creation planning for HD, PD training), and manages complex complications. Option A sets an inappropriately late referral threshold."
+    },
+
+    {
+      "questionId": "np-p2-133",
+      "topicSlug": "ckd-progression-monitoring-medication",
+      "lessonPart": "2A",
+      "difficulty": "expert",
+      "stemAnchor": "CKD G3a + hyperkalemia K 5.7 on ACEi + spironolactone — management hyperkalemia without losing renoprotection",
+      "stem": "A 62-year-old man with CKD (eGFR 44 mL/min, UACR 210 mg/g), HFrEF (EF 35%), and hypertension is on lisinopril 20 mg, spironolactone 25 mg, carvedilol 12.5 mg BID, and furosemide 40 mg. Today's BMP: Na 140, K 5.7, CO2 21, Cr 1.5. BP 128/78. He has no symptoms. Which of the following is the most appropriate management of his hyperkalemia?",
+      "options": {
+        "A": "Hold both lisinopril AND spironolactone immediately — K 5.7 requires removal of all potassium-retaining medications",
+        "B": "Hold spironolactone (highest K risk in this combination), assess dietary potassium intake, consider sodium bicarbonate for metabolic acidosis (CO2 21), and optimize furosemide dosing; recheck BMP in 1–2 weeks",
+        "C": "Increase furosemide to 80 mg daily only — diuresis will lower the potassium without removing renally protective medications",
+        "D": "Add patiromer (potassium binder) immediately to continue all four GDMT medications unchanged"
+      },
+      "correctAnswer": "B",
+      "rationale": "K+ 5.7 is moderate hyperkalemia — not immediately life-threatening but requires action. In CKD + HFrEF, the goal is to address hyperkalemia while preserving renoprotective and cardioprotective therapy as much as possible. Hierarchy of interventions: (1) Hold the most dispensable potassium-retaining agent: spironolactone (MRA adds the least unique organ protection when ACEi is already present, vs lisinopril which is critical for both HF and CKD); (2) Address metabolic acidosis (CO2 21 = bicarbonate 21, below 22 threshold) with sodium bicarbonate — acidosis shifts K+ extracellularly; (3) Dietary potassium restriction counseling; (4) Optimize furosemide to improve tubular K+ excretion. Recheck BMP in 1–2 weeks. Patiromer (option D) can be used but is not the first step — dietary and medication optimization should precede potassium binder introduction. Holding both lisinopril and spironolactone (option A) is overly aggressive for K+ 5.7 without symptoms."
+    },
+
+    {
+      "questionId": "np-p2-134",
+      "topicSlug": "ckd-progression-monitoring-medication",
+      "lessonPart": "2A",
+      "difficulty": "hard",
+      "stemAnchor": "CKD + dietary sodium 3.8g per day + persistent HTN + proteinuria — dietary sodium reduction renoprotective",
+      "stem": "A 54-year-old woman with CKD G3a (eGFR 48 mL/min, UACR 320 mg/g) and hypertension (BP 144/90 on lisinopril 20 mg + amlodipine 10 mg) is struggling with BP control. A 24-hour dietary recall estimates her sodium intake at approximately 3,800 mg/day. She denies NSAID use or medication non-adherence. Which of the following intervention is most appropriate as the next step before adding a third antihypertensive?",
+      "options": {
+        "A": "Dietary sodium restriction to <2g/day — reducing sodium intake reduces BP and independently reduces proteinuria in CKD",
+        "B": "Sodium restriction is not recommended in CKD — patients need adequate sodium for blood volume maintenance",
+        "C": "Add spironolactone as the third agent without addressing dietary factors",
+        "D": "Switch from amlodipine to chlorthalidone — thiazide diuretics increase sodium excretion and are more effective"
+      },
+      "correctAnswer": "A",
+      "rationale": "Dietary sodium restriction (<2g = <5g NaCl/day) is one of the most important non-pharmacological interventions for CKD: (1) reduces BP through volume reduction, (2) DIRECTLY reduces proteinuria (high sodium diet stimulates RAAS → glomerular hyperfiltration → increased proteinuria), (3) enhances the efficacy of RAAS inhibitors (high sodium intake blunts the antiproteinuric effect of ACEi/ARBs). This patient is consuming nearly double the recommended amount (3,800 mg vs <2,000 mg target). Sodium reduction should be the next intervention before adding a third antihypertensive — it may provide the additional BP/proteinuria reduction needed. Option B is incorrect — sodium restriction is safe and recommended in CKD; it is potassium restriction that is sometimes needed in advanced CKD. Chlorthalidone (option D) is a reasonable add-on but addressing the modifiable dietary factor first is more cost-effective."
+    },
+
+    {
+      "questionId": "np-p2-135",
+      "topicSlug": "ckd-progression-monitoring-medication",
+      "lessonPart": "2A",
+      "difficulty": "hard",
+      "stemAnchor": "CKD G3b + metabolic acidosis bicarb 18 — sodium bicarbonate indication and CKD progression",
+      "stem": "A 60-year-old man with CKD G3b (eGFR 36 mL/min) has the following BMP: Na 140, K 4.6, Cl 108, CO2 18, BUN 28, Cr 1.9. He has no dyspnea and is not hyperventilating. His diet is unrestricted. Which of the following best represents the appropriate management of his metabolic findings?",
+      "options": {
+        "A": "No treatment needed — bicarbonate of 18 is a lab value and patients only require treatment for symptoms",
+        "B": "Initiate sodium bicarbonate supplementation — serum bicarbonate <22 mEq/L in CKD is associated with accelerated CKD progression; the BICARBONATE study supports treatment to maintain bicarbonate ≥22 mEq/L",
+        "C": "Initiate IV sodium bicarbonate for acute metabolic acidosis management",
+        "D": "Start acetazolamide to improve renal acid excretion"
+      },
+      "correctAnswer": "B",
+      "rationale": "Metabolic acidosis in CKD (bicarbonate <22 mEq/L) is a nephrotoxic complication: (1) activates complement and tubular injury pathways that directly accelerate CKD progression, (2) increases protein catabolism → uremia, (3) impairs bone buffering → worsens renal osteodystrophy. Multiple observational studies and the BICARBONATE trial support: treating CKD acidosis with oral sodium bicarbonate (650 mg to 1.3g two to three times daily) to maintain serum bicarbonate ≥22 mEq/L slows eGFR decline. This is now recommended in KDIGO 2024 guidelines. Option A (treat only if symptomatic) misses the opportunity to slow CKD progression. IV bicarbonate (option C) is for severe acute acidosis (pH <7.1) — not for chronic CKD acidosis management. Acetazolamide (option D) WORSENS metabolic acidosis — it is a carbonic anhydrase inhibitor that reduces bicarbonate reabsorption."
+    },
+
+    {
+      "questionId": "np-p2-136",
+      "topicSlug": "ckd-progression-monitoring-medication",
+      "lessonPart": "2A",
+      "difficulty": "expert",
+      "stemAnchor": "CKD G4 + smoking 25 pack-year + eGFR declining — smoking cessation as CKD modifier",
+      "stem": "A 60-year-old man with CKD G4 (eGFR 24 mL/min) and T2DM has a 30-pack-year smoking history and currently smokes 1 ppd. His BP is well-controlled on 3 antihypertensives. His nephrologist's note states his eGFR has declined more rapidly than expected for his comorbidities and questions modifiable factors. Which of the following intervention should be identified and prioritized at this visit?",
+      "options": {
+        "A": "Add a fourth antihypertensive — BP control is the only modifiable factor",
+        "B": "Initiate smoking cessation counseling and pharmacotherapy — smoking independently accelerates CKD progression by 40–60% and is the most important unaddressed modifiable factor",
+        "C": "Smoking cessation has no proven benefit in CKD — focus only on BP control and glycemic management",
+        "D": "Refer to physical therapy for exercise training — exercise alone can reverse CKD progression"
+      },
+      "correctAnswer": "B",
+      "rationale": "Smoking accelerates CKD progression through multiple mechanisms: (1) renal vasoconstriction reducing GFR, (2) endothelial dysfunction and glomerular hyperfiltration, (3) worsening of diabetic nephropathy and hypertensive nephrosclerosis, (4) increased oxidative stress and inflammation. Studies demonstrate that smokers with CKD have approximately 40–60% faster eGFR decline compared to non-smokers. Smoking cessation slows this excess decline. In a patient already on optimal medical therapy with unexplained rapid decline, smoking is the key unaddressed modifiable risk factor. Counseling + pharmacotherapy (varenicline first-line for most patients; bupropion if varenicline not tolerated; NRT) should be initiated. Option C is incorrect — smoking cessation is strongly supported as a CKD modifier. Exercise (option D) improves CV health and is beneficial but does not directly reverse CKD progression."
+    },
+
+    {
+      "questionId": "np-p2-137",
+      "topicSlug": "ckd-progression-monitoring-medication",
+      "lessonPart": "2B",
+      "difficulty": "hard",
+      "stemAnchor": "CKD G4 + Hgb 10.1 + TSAT 16% + ferritin 85 — anemia of CKD iron-first approach",
+      "stem": "A 68-year-old woman with CKD G4 (eGFR 22 mL/min) has a hemoglobin of 10.1 g/dL. Iron studies show: serum iron 54 mcg/dL, TIBC 280, ferritin 85 ng/mL, transferrin saturation (TSAT) 16%. She is not on dialysis. She is fatigued but does not require transfusion. Which of the following is the most appropriate next step?",
+      "options": {
+        "A": "Initiate erythropoiesis-stimulating agent (ESA) immediately — anemia of CKD is from EPO deficiency",
+        "B": "Treat iron deficiency first — TSAT <20% and ferritin <200 ng/mL indicate iron-deficient erythropoiesis; oral iron is first-line but IV iron preferred in G4 due to poor GI absorption",
+        "C": "Transfuse 2 units of packed red blood cells for symptomatic anemia",
+        "D": "Order reticulocyte count and B12/folate before treating — anemia of CKD must be a diagnosis of exclusion"
+      },
+      "correctAnswer": "B",
+      "rationale": "Anemia management in CKD: IRON FIRST before ESA. TSAT <20% OR ferritin <200 ng/mL (in non-dialysis CKD) indicates iron-deficient erythropoiesis — iron supplementation should be given before or alongside ESA. If ESA is started without adequate iron stores, it will not stimulate effective erythropoiesis. In G4 CKD (eGFR 22): oral iron has poor GI absorption and side effects; IV iron (ferric gluconate, iron sucrose, ferumoxytol) is preferred for faster and more reliable iron repletion. After iron optimization (TSAT ≥20%, ferritin ≥200 ng/mL): if Hgb remains <10 g/dL, consider ESA referral through nephrology. Transfusion (option C) sensitizes patients to HLA antigens (affects transplant candidacy) and should be avoided unless symptomatic anemia with Hgb <8 or hemodynamic compromise. Reticulocyte count (option D) is part of the workup but is not needed before treating obvious iron deficiency."
+    },
+
+    {
+      "questionId": "np-p2-138",
+      "topicSlug": "ckd-progression-monitoring-medication",
+      "lessonPart": "2B",
+      "difficulty": "hard",
+      "stemAnchor": "CKD + PTH 280 + phosphate 5.8 + calcium normal — secondary hyperparathyroidism management sequence",
+      "stem": "A 65-year-old man with CKD G4 (eGFR 24 mL/min) has the following labs at his quarterly visit: calcium 9.1 mg/dL (normal), phosphate 5.8 mg/dL (elevated), PTH 280 pg/mL (elevated), 25-OH Vitamin D 18 ng/mL (deficient). He is not on any mineral metabolism medications. Which of the following represents the most appropriate initial management of his CKD-MBD?",
+      "options": {
+        "A": "Start calcitriol (active Vitamin D) immediately to suppress PTH — active Vitamin D is first-line for elevated PTH in CKD",
+        "B": "Address phosphate and Vitamin D deficiency first: dietary phosphate restriction + phosphate binder + Vitamin D3 repletion; recheck labs before adding active Vitamin D",
+        "C": "Start cinacalcet (calcimimetic) to lower PTH — most potent PTH suppressor available",
+        "D": "Refer immediately for parathyroidectomy — PTH 280 requires surgical management"
+      },
+      "correctAnswer": "B",
+      "rationale": "CKD-mineral bone disease (CKD-MBD) management sequence: (1) Control hyperphosphatemia FIRST — dietary phosphate restriction + phosphate binder (calcium carbonate or sevelamer); (2) Correct Vitamin D deficiency (25-OH D 18 = deficient) with Vitamin D3 (cholecalciferol) — this partially suppresses PTH by improving calcium absorption; (3) Reassess PTH after phosphate control and Vitamin D repletion; (4) If PTH remains elevated despite optimization, THEN add calcitriol (active 1,25 Vit D) for secondary hyperparathyroidism; (5) Cinacalcet is used when calcitriol is insufficient or hypercalcemia prevents calcitriol use. Skipping steps 1–2 and immediately using calcitriol (option A) or cinacalcet (option C) adds complexity without addressing underlying hyperphosphatemia. PTH 280 is elevated but manageable with conservative measures — parathyroidectomy (option D) is reserved for refractory tertiary hyperparathyroidism (usually in dialysis patients with PTH >800 pg/mL)."
+    },
+
+    {
+      "questionId": "np-p2-139",
+      "topicSlug": "ckd-progression-monitoring-medication",
+      "lessonPart": "2B",
+      "difficulty": "expert",
+      "stemAnchor": "CKD G4 + K 6.2 + ECG peaked T waves — hyperkalemia emergency management sequence",
+      "stem": "A 70-year-old man with CKD G4 (eGFR 19 mL/min) and HFrEF presents with fatigue and muscle weakness. He is on lisinopril, carvedilol, furosemide 80 mg, and spironolactone 25 mg. BMP: K+ 6.2 mEq/L. ECG shows peaked T waves in V2-V4. BP 136/84. He is alert. Which of the following is the most appropriate immediate management sequence?",
+      "options": {
+        "A": "Increase furosemide to 160 mg to rapidly excrete potassium",
+        "B": "Call 911 — peaked T waves indicate cardiac toxicity; transfer to ED for IV calcium gluconate, insulin + dextrose, and sodium bicarbonate, with emergent nephrology",
+        "C": "Administer oral sodium polystyrene sulfonate (Kayexalate) and recheck K+ in 6 hours",
+        "D": "Reduce lisinopril dose and hold spironolactone; repeat BMP tomorrow"
+      },
+      "correctAnswer": "B",
+      "rationale": "K+ 6.2 WITH ECG changes (peaked T waves = earliest cardiac manifestation of hyperkalemia) is a medical emergency requiring immediate transfer. Peaked T waves signal the myocardium is already affected — the next ECG progression is PR prolongation → wide QRS → sine wave → VF → asystole. Emergency management sequence in the ED: (1) IV calcium gluconate 10 mL 10% solution over 10 minutes — membrane stabilization (buys time, does NOT lower K+ level); (2) Insulin 10 units IV + dextrose 50% — shifts K+ into cells (onset 15–30 min); (3) Sodium bicarbonate — shifts K+ into cells, especially with concurrent acidosis; (4) Albuterol nebulized — shifts K+ into cells; (5) Definitive removal: furosemide IV, kayexalate, or dialysis (preferred in dialysis-dependent or severe refractory hyperkalemia). Oral kayexalate (option C) in an emergency with ECG changes is dangerously slow — onset 2–4 hours. Holding medications alone (option D) is inappropriate for K+ 6.2 with ECG changes."
+    },
+
+    {
+      "questionId": "np-p2-140",
+      "topicSlug": "ckd-progression-monitoring-medication",
+      "lessonPart": "2B",
+      "difficulty": "hard",
+      "stemAnchor": "CKD + protein restriction 0.8g/kg vs higher protein diet debate — KDIGO recommendation",
+      "stem": "A 57-year-old man with CKD G3b (eGFR 36 mL/min) asks about dietary protein intake. He currently consumes approximately 1.4 g/kg/day of protein (primarily red meat). His nephrologist has mentioned protein restriction. Which of the following most accurately reflects current KDIGO guideline recommendations on protein intake in CKD?",
+      "options": {
+        "A": "High protein intake (>1.3 g/kg/day) has no effect on CKD progression — diet is irrelevant",
+        "B": "Moderate protein restriction (0.6–0.8 g/kg/day) is recommended in CKD G3b–G5 not on dialysis — reduces urea generation, glomerular hyperfiltration, and may slow CKD progression",
+        "C": "All patients with CKD should consume >1.2 g/kg/day to prevent malnutrition",
+        "D": "Protein restriction below 0.3 g/kg/day is required in all stages of CKD"
+      },
+      "correctAnswer": "B",
+      "rationale": "KDIGO 2024 CKD guidelines recommend: for CKD G3b–G5 not on dialysis, moderate protein intake of 0.6–0.8 g/kg/day (versus the population average of ~1.2 g/kg/day). Mechanism: high protein intake increases glomerular filtration and intraglomerular pressure, worsening proteinuria and accelerating CKD progression. This patient consumes 1.4 g/kg/day — significantly above the recommended range. Additional guidance: high-quality protein sources (plant-based preferred) reduce urea load less than animal protein. Important caveat: excessive protein restriction (<0.6 g/kg/day) risks malnutrition in already catabolic CKD patients — this is why the recommendation is 0.6–0.8, not lower. On dialysis, requirements are HIGHER (1.0–1.2 g/kg/day) due to dialysate amino acid losses."
+    },
+
+    {
+      "questionId": "np-p2-141",
+      "topicSlug": "ckd-progression-monitoring-medication",
+      "lessonPart": "2B",
+      "difficulty": "expert",
+      "stemAnchor": "CKD + vitamin D3 deficiency vs calcitriol — when to use each in CKD stages",
+      "stem": "A 62-year-old woman with CKD G3a (eGFR 48 mL/min) has a 25-OH Vitamin D level of 16 ng/mL (deficient). PTH is 82 pg/mL (mildly elevated). Calcium and phosphorus are normal. Which of the following correctly describes the appropriate Vitamin D supplementation strategy?",
+      "options": {
+        "A": "Start calcitriol (1,25-OH Vitamin D) 0.25 mcg daily — active Vitamin D is always the correct form in CKD",
+        "B": "Supplement with cholecalciferol (Vitamin D3) 2000–4000 IU daily to correct 25-OH D deficiency — reserve calcitriol for more advanced CKD (G4–G5) with significant secondary hyperparathyroidism",
+        "C": "No supplementation needed — Vitamin D supplementation is only indicated in dialysis patients",
+        "D": "Calcitriol is contraindicated in CKD because it causes hypercalcemia in all patients"
+      },
+      "correctAnswer": "B",
+      "rationale": "In CKD G3, the kidney still converts 25-OH D to calcitriol (1,25-OH D) — deficiency in 25-OH D is common and should be corrected with Vitamin D3 (cholecalciferol) or Vitamin D2. In early to moderate CKD, the primary issue is substrate deficiency — insufficient 25-OH D available for renal 1-alpha-hydroxylation. Calcitriol (active Vitamin D) is reserved for G4–G5 or when significant secondary hyperparathyroidism persists despite adequate 25-OH D levels and phosphate control — because by G4–G5, the kidney can no longer activate 25-OH D effectively. Using calcitriol prematurely in G3 without hyperphosphatemia can cause hypercalcemia and suppress PTH to dangerously low levels (adynamic bone disease). This patient (G3a, mild PTH elevation, normal calcium/phosphorus) should receive cholecalciferol to correct substrate deficiency — not calcitriol."
+    },
+
+    {
+      "questionId": "np-p2-142",
+      "topicSlug": "ckd-progression-monitoring-medication",
+      "lessonPart": "2B",
+      "difficulty": "hard",
+      "stemAnchor": "CKD G4 + uremic symptoms — fatigue nausea decreased appetite + target for RRT discussion",
+      "stem": "A 67-year-old woman with CKD G4 (eGFR 18 mL/min) presents with worsening fatigue, decreased appetite, nausea, and difficulty concentrating over 2 months. Her nephrologist has mentioned she is 'approaching the need for dialysis.' Which of the following is the most appropriate NP action at this visit?",
+      "options": {
+        "A": "Increase diuretic therapy — uremic symptoms are caused by fluid overload",
+        "B": "Discuss renal replacement therapy (RRT) modalities, confirm nephrology is engaged, and ensure timely arteriovenous (AV) fistula creation referral if hemodialysis is the selected modality",
+        "C": "Begin ESA therapy to treat the fatigue — erythropoietin will resolve all uremic symptoms",
+        "D": "Order CT abdomen to evaluate for other causes of nausea before attributing to CKD"
+      },
+      "correctAnswer": "B",
+      "rationale": "Uremia symptoms (fatigue, anorexia, nausea, cognitive changes) at G4/G5 indicate the patient is approaching the need for renal replacement therapy (RRT). Key NP role at this stage: (1) Ensure nephrology is actively co-managing the patient, (2) Discuss RRT modality options: hemodialysis (HD — requires AV fistula or graft creation at least 6 months before RRT initiation), peritoneal dialysis (PD — catheter placement), kidney transplant (listing), or conservative management; (3) Facilitate timely referral to vascular surgery for AV fistula creation if HD is selected — fistulas require 3–6 months to mature and are preferred over tunneled catheters. Delaying fistula creation until the patient is on dialysis forces catheter use with higher infection risk. ESA (option C) may address anemia but does not correct uremia. Uremia symptoms with eGFR 18 are expected — CT scan for other causes is low yield in this context."
+    },
+
+    {
+      "questionId": "np-p2-143",
+      "topicSlug": "copd-gold-staging-inhaler-selection",
+      "lessonPart": "2A",
+      "difficulty": "hard",
+      "stemAnchor": "62-year-old smoker + FEV1 52% + CAT 15 + 1 exacerbation year — GOLD 2B inhaler therapy",
+      "stem": "A 62-year-old man with a 40-pack-year smoking history presents with progressive dyspnea on exertion. Spirometry shows: FEV1/FVC 0.58 (post-bronchodilator), FEV1 52% predicted. He has 1 moderate COPD exacerbation in the past year (treated with prednisone + antibiotic outpatient). CAT score 15, mMRC 2. He is on SABA (albuterol) PRN only. Which of the following GOLD classification and most appropriate pharmacotherapy represents the current standard?",
+      "options": {
+        "A": "GOLD 2, Group A — continue SABA PRN only; add LAMA if symptoms worsen",
+        "B": "GOLD 2, Group B — initiate LAMA (tiotropium) or LABA as the first-line maintenance bronchodilator; consider LAMA + LABA if symptoms persist",
+        "C": "GOLD 2, Group E — initiate triple therapy (LAMA + LABA + ICS) for high exacerbation risk",
+        "D": "GOLD 3, Group E — initiate ICS alone (fluticasone) to reduce exacerbation frequency"
+      },
+      "correctAnswer": "B",
+      "rationale": "GOLD classification: FEV1 52% predicted = GOLD 2 (50–79%). Exacerbation risk: 1 moderate exacerbation (outpatient treatment = moderate, not hospitalized) = Group B (1 moderate exacerbation, not ≥2 moderate or ≥1 leading to hospitalization which would be Group E). CAT 15 and mMRC 2 confirm significant symptom burden. Group B management: start LAMA (tiotropium, umeclidinium, glycopyrrolate) OR LABA as maintenance monotherapy; if persistent symptoms → LAMA + LABA dual bronchodilation. ICS is NOT indicated for Group B without eosinophilia or ≥2 exacerbations. Group E (option C) requires ≥2 moderate exacerbations OR ≥1 hospitalization — this patient had only 1 moderate exacerbation. ICS monotherapy (option D) is NEVER used in COPD — it is only used as part of triple therapy in Group E. GOLD 3 requires FEV1 <50%."
+    },
+
+    {
+      "questionId": "np-p2-144",
+      "topicSlug": "copd-gold-staging-inhaler-selection",
+      "lessonPart": "2A",
+      "difficulty": "expert",
+      "stemAnchor": "COPD + eosinophil count 380 + 3 exacerbations last year on LAMA + LABA — ICS addition for high eosinophil and exacerbation history",
+      "stem": "A 68-year-old woman with COPD has had 3 moderate exacerbations in the past year despite being on tiotropium (LAMA) + formoterol (LABA). Blood eosinophil count is 380 cells/μL. FEV1 38% predicted (GOLD 3). CAT score 22. Which of the following represents the most appropriate next step?",
+      "options": {
+        "A": "Add ICS (fluticasone) — eosinophil count ≥300 cells/μL + ≥2 exacerbations on LAMA+LABA is a strong indication for triple therapy",
+        "B": "Switch to SABA + SAMA only — simplify the regimen as it is not working",
+        "C": "Add azithromycin 250 mg daily without ICS — antibiotics are more effective than ICS in preventing exacerbations",
+        "D": "Refer to pulmonology for lung volume reduction surgery (LVRS)"
+      },
+      "correctAnswer": "A",
+      "rationale": "Triple therapy (LAMA + LABA + ICS) is indicated in COPD Group E (≥2 exacerbations/year or ≥1 hospitalization) when eosinophil count ≥300 cells/μL — the TRIBUTE and IMPACT trials showed triple therapy reduced exacerbations more than dual bronchodilation in this subgroup. This patient: GOLD 3, Group E (3 exacerbations), eosinophil 380 (≥300) — meets both criteria for ICS addition. Key caveat: ICS in COPD carries a ~3% absolute increased risk of pneumonia vs LAMA+LABA — this risk-benefit must be weighed. The GOLD 2023 recommendation: ICS should be considered when eosinophils ≥300 cells/μL OR when eosinophils 100–300 + ≥2 exacerbations. Azithromycin prophylaxis (option C) is an evidence-based add-on for frequent exacerbators (AZALEA, Albert trials) but comes after triple therapy is maximized. LVRS (option D) is for severe emphysema with specific spirometric criteria — not the next step here."
+    },
+
+    {
+      "questionId": "np-p2-145",
+      "topicSlug": "copd-gold-staging-inhaler-selection",
+      "lessonPart": "2A",
+      "difficulty": "hard",
+      "stemAnchor": "COPD patient + inhaler technique poor — device-specific education before stepping up therapy",
+      "stem": "A 70-year-old man with COPD (GOLD 2, Group B) has been on tiotropium HandiHaler (dry powder inhaler) for 6 months with poor symptomatic control (CAT score 18, mMRC 2). You observe him using his inhaler in clinic and note significant errors: he does not breathe in forcefully through the device, tilts his head forward, and fails to hold his breath after inhalation. He does not use a spacer. Which of the following represents the most appropriate initial response before changing or adding medications?",
+      "options": {
+        "A": "Add a LABA (salmeterol) to the tiotropium immediately — poor symptom control indicates LAMA alone is insufficient",
+        "B": "Switch to a soft mist inhaler (Respimat) or reassess inhaler technique with education and re-demonstration — correct technique before escalating therapy",
+        "C": "Add an ICS (fluticasone) for additional anti-inflammatory effect",
+        "D": "Refer to pulmonary rehabilitation — poor inhaler technique is irrelevant to outcomes"
+      },
+      "correctAnswer": "B",
+      "rationale": "Incorrect inhaler technique is extremely common (studies show >75% of COPD patients use inhalers incorrectly) and is a major cause of apparent treatment failure. Before stepping up therapy, the NP must: (1) Assess technique at each visit, (2) Correct errors with demonstration and repeat demonstration (teach-back), (3) Consider switching to a device better suited to the patient's ability — soft mist inhalers (Respimat) require less inspiratory effort than dry powder inhalers (DPIs) and may be better tolerated in elderly or low peak inspiratory flow patients. Adding a second drug (options A and C) before confirming adequate drug delivery from the first device will compound the problem and incur additional cost. Pulmonary rehabilitation improves exercise tolerance but does not address inhaler delivery."
+    },
+
+    {
+      "questionId": "np-p2-146",
+      "topicSlug": "copd-gold-staging-inhaler-selection",
+      "lessonPart": "2A",
+      "difficulty": "hard",
+      "stemAnchor": "COPD + home oxygen indication — SpO2 88% at rest on room air eGFR lung criteria",
+      "stem": "A 72-year-old woman with COPD (GOLD 4, Group E) presents for a follow-up visit. SpO2 at rest on room air is 87%. Arterial blood gas shows PaO2 54 mmHg, PaCO2 52 mmHg. She walks slowly with moderate dyspnea at rest. FEV1 is 28% predicted. Which of the following represents the most appropriate intervention for her supplemental oxygen status?",
+      "options": {
+        "A": "Do not prescribe supplemental oxygen — the MRC study only showed benefit in continuous use, which patients rarely adhere to",
+        "B": "Prescribe supplemental oxygen for nighttime use only — daytime oxygen is not beneficial",
+        "C": "Prescribe long-term supplemental oxygen (LTOT) for continuous use ≥15 hours/day — resting PaO2 ≤55 mmHg (SpO2 ≤88%) meets the Medicare/guideline criteria; LTOT reduces pulmonary hypertension and improves survival",
+        "D": "Prescribe oxygen only during exercise — resting hypoxemia does not benefit from supplemental oxygen"
+      },
+      "correctAnswer": "C",
+      "rationale": "Long-term supplemental oxygen therapy (LTOT) indications: resting PaO2 ≤55 mmHg OR SpO2 ≤88% on room air — this patient meets both (PaO2 54, SpO2 87%). LTOT indications: (1) PaO2 ≤55 mmHg or SpO2 ≤88%; (2) PaO2 56–59 mmHg with cor pulmonale, polycythemia (Hct >55%), or significant desaturation during sleep. Benefits of LTOT (≥15 hours/day): (1) reduces progression of pulmonary hypertension, (2) reduces right heart failure (cor pulmonale), (3) improves survival in severe COPD (MRC trial, NOTT trial). Nighttime-only oxygen (option B) is insufficient — at least 15 hours/day is required. Option D is incorrect — exercise-only oxygen has a different indication criterion (desaturation on exertion)."
+    },
+
+    {
+      "questionId": "np-p2-147",
+      "topicSlug": "copd-gold-staging-inhaler-selection",
+      "lessonPart": "2A",
+      "difficulty": "expert",
+      "stemAnchor": "COPD + roflumilast indication — chronic bronchitis + FEV1 <50% + frequent exacerbator Group E",
+      "stem": "A 65-year-old male smoker (former) with COPD (FEV1 38%, Group E — 3 exacerbations last year) is on triple therapy (LAMA + LABA + ICS) and still having frequent exacerbations. He has a chronic productive cough with daily mucus production (chronic bronchitis). Which of the following additional pharmacological intervention is most appropriate?",
+      "options": {
+        "A": "Add roflumilast 500 mcg daily — a PDE4 inhibitor indicated for COPD with chronic bronchitis + FEV1 <50% + frequent exacerbations on triple therapy",
+        "B": "Add montelukast — leukotriene receptor antagonists are approved for COPD exacerbation prevention",
+        "C": "Add inhaled N-acetylcysteine — mucolytic therapy reduces exacerbation frequency in all COPD patients",
+        "D": "Add a long-acting muscarinic antagonist (LAMA) — adding a second LAMA increases bronchodilation"
+      },
+      "correctAnswer": "A",
+      "rationale": "Roflumilast (Daliresp) is a phosphodiesterase-4 (PDE4) inhibitor approved specifically for: COPD with chronic bronchitis (daily productive cough), FEV1 <50% predicted, and ≥2 exacerbations per year despite maximal bronchodilator therapy. It reduces exacerbation frequency by approximately 15–20% in this specific subgroup. It is an ORAL anti-inflammatory agent (not a bronchodilator). Main adverse effects: nausea, diarrhea, weight loss (significant in some patients — monitor weight monthly), psychiatric effects (depression, suicidal ideation — boxed warning). Contraindicated in patients with depression or BMI <18.5. Montelukast (option B) is not approved for COPD. N-acetylcysteine (option C) has limited evidence in COPD. Adding a second LAMA (option D) is not indicated — this patient already has LAMA in triple therapy."
+    },
+
+    {
+      "questionId": "np-p2-148",
+      "topicSlug": "copd-gold-staging-inhaler-selection",
+      "lessonPart": "2A",
+      "difficulty": "hard",
+      "stemAnchor": "COPD + smoking cessation + varenicline option — most effective intervention for COPD progression",
+      "stem": "A 58-year-old man with newly diagnosed COPD (GOLD 1, Group A) currently smokes 1 ppd (35 pack-years). He is started on albuterol PRN. He asks: 'Is there anything I can do to stop my lungs from getting worse?' Which of the following single intervention has the most evidence for slowing COPD progression in this patient?",
+      "options": {
+        "A": "Start tiotropium LAMA — daily maintenance bronchodilator prevents lung function decline",
+        "B": "Smoking cessation — the only intervention proven to reduce the annual rate of FEV1 decline in COPD; varenicline is the most effective pharmacotherapy",
+        "C": "Pulmonary rehabilitation — exercise training prevents emphysema progression",
+        "D": "Supplemental oxygen during sleep — nighttime hypoxemia drives COPD progression"
+      },
+      "correctAnswer": "B",
+      "rationale": "Smoking cessation is the single most effective intervention to slow COPD progression. Evidence: the Lung Health Study demonstrated that sustained smoking cessation reduces annual FEV1 decline from approximately 50 mL/year (continuing smokers) to 25 mL/year (quitters = normal aging rate). No COPD medication (including bronchodilators, ICS, or PDE4 inhibitors) has demonstrated the same magnitude of disease modification as smoking cessation. Pharmacotherapy for cessation: varenicline (Chantix) has the highest 12-month abstinence rates (approximately 22–26%) compared to bupropion (18%) and NRT (15%). COPD Group A management (FEV1 ≥80%, low symptoms, no exacerbations) focuses primarily on smoking cessation + SABA PRN — not yet initiating maintenance bronchodilators unless symptomatic."
+    },
+
+    {
+      "questionId": "np-p2-149",
+      "topicSlug": "copd-gold-staging-inhaler-selection",
+      "lessonPart": "2A",
+      "difficulty": "expert",
+      "stemAnchor": "ACO patient — asthma features + COPD features — management approach for asthma-COPD overlap",
+      "stem": "A 54-year-old woman has both significant smoking history (30 pack-years) and a childhood history of asthma. Spirometry shows: FEV1/FVC 0.65 (below 0.7), FEV1 64%, with a bronchodilator response of 320 mL and 15% improvement after SABA (meets asthma reversibility criteria). She has frequent nocturnal symptoms, elevated blood eosinophils (520 cells/μL), and a FENO (fractional exhaled nitric oxide) of 38 ppb. Which of the following management approach is most appropriate for asthma-COPD overlap (ACO)?",
+      "options": {
+        "A": "Treat as pure COPD: start LAMA + LABA, avoid ICS",
+        "B": "Treat as pure asthma: start ICS + LABA only, avoid LAMA",
+        "C": "Treat as ACO: ICS + LABA is the foundational therapy (given asthma features); a LAMA may be added for persistent airflow obstruction; specialist referral recommended",
+        "D": "Recommend SABA-only therapy until the diagnosis of asthma vs COPD is definitively confirmed"
+      },
+      "correctAnswer": "C",
+      "rationale": "Asthma-COPD Overlap (ACO): features of BOTH asthma (significant bronchodilator reversibility ≥12% and ≥200 mL, eosinophilia, elevated FENO, nocturnal symptoms, atopic features) AND COPD (smoking history >10 pack-years, persistent airflow obstruction post-bronchodilator). Management principle: ICS is essential in ACO because of the asthmatic features (eosinophilic airway inflammation) — avoiding ICS (as in GOLD pure COPD option A) risks severe asthma exacerbations. LABA is added to ICS for bronchodilation. LAMA may be added for persistent obstruction. Specialist referral is recommended because ACO management is complex and inhaler titration decisions require further evaluation. SABA-only (option D) is inadequate for established ACO with persistent symptoms."
+    },
+
+    {
+      "questionId": "np-p2-150",
+      "topicSlug": "copd-gold-staging-inhaler-selection",
+      "lessonPart": "2B",
+      "difficulty": "hard",
+      "stemAnchor": "COPD moderate exacerbation + purulent sputum + antibiotic selection + 5-day steroids — Anthonisen criteria",
+      "stem": "A 66-year-old man with COPD (GOLD 2, Group E on LAMA + LABA) presents with a 3-day history of increased dyspnea, increased sputum production that has become yellow-green, and worsening cough. He has no fever. SpO2 89% on room air (usual 92%). Chest auscultation reveals mild expiratory wheezing bilaterally. He has no pneumonia on CXR. He can manage at home with support. Which of the following represents the most appropriate outpatient exacerbation management?",
+      "options": {
+        "A": "Albuterol PRN only — mild exacerbations do not require antibiotics or corticosteroids",
+        "B": "Prednisone 40 mg/day × 5 days + amoxicillin-clavulanate OR azithromycin + increase short-acting bronchodilator use; daily check-in by phone",
+        "C": "Doxycycline 100 mg twice daily alone — antibiotics without steroids are adequate for COPD exacerbations",
+        "D": "IV methylprednisolone 125 mg every 6 hours — all exacerbations require high-dose IV steroids"
+      },
+      "correctAnswer": "B",
+      "rationale": "This COPD exacerbation meets 3 Anthonisen criteria (all three): increased dyspnea + increased sputum volume + purulent sputum = Type 1 exacerbation — antibiotics AND systemic steroids are indicated. Management: (1) Oral prednisone 40 mg daily × 5 days (REDUCE trial: 5-day course equivalent to 14-day, less side effects), (2) Antibiotic: uncomplicated exacerbation → amoxicillin-clavulanate or doxycycline or azithromycin; risk factors (FEV1 <50%, ≥2 exac/year, prior Pseudomonas) → ciprofloxacin or levofloxacin, (3) Increase SABA frequency (albuterol every 4–6 hours), (4) Phone monitoring at 24–48 hours. IV methylprednisolone (option D) is for inpatient management or inability to take oral therapy. This patient does not meet hospitalization criteria (no hemodynamic instability, no severe respiratory failure, manageable at home)."
+    },
+
+    {
+      "questionId": "np-p2-151",
+      "topicSlug": "copd-gold-staging-inhaler-selection",
+      "lessonPart": "2B",
+      "difficulty": "expert",
+      "stemAnchor": "COPD exacerbation hospitalization criteria — pH 7.28 pCO2 58 + confusion + hypoxemia",
+      "stem": "A 74-year-old woman with COPD (GOLD 3, Group E) presents with worsening dyspnea over 24 hours. She appears confused and is using accessory muscles. Vitals: SpO2 82% on room air, RR 28, HR 112, BP 104/68. ABG: pH 7.28, PaO2 48 mmHg, PaCO2 58 mmHg. She has been on her nebulizers every 2 hours at home without improvement. Which of the following best represents the most appropriate disposition?",
+      "options": {
+        "A": "Start oral prednisone 40 mg and azithromycin; have her return in 24 hours",
+        "B": "Give albuterol/ipratropium nebulizers in clinic and observe for 2 hours before deciding on admission",
+        "C": "Call 911 for immediate hospital transfer — this exacerbation meets criteria for hospitalization: acute hypercapnic respiratory failure (pH 7.28), SpO2 82%, confusion, hemodynamic instability",
+        "D": "Start BiPAP at home via a rented machine — non-invasive ventilation avoids hospitalization"
+      },
+      "correctAnswer": "C",
+      "rationale": "COPD exacerbation hospitalization criteria (any one of): severe dyspnea with inadequate response to initial therapy, altered mental status (present — confusion), hypoxemia (SpO2 <88% or PaO2 <55 mmHg — present), acute hypercapnic respiratory failure with acidosis (pH <7.35 and pCO2 >45 — present: pH 7.28), hemodynamic instability, or inability to manage at home. This patient meets multiple criteria simultaneously. She requires: (1) Hospital admission, (2) Controlled oxygen to SpO2 88–92% (avoid supranormal O2 in CO2 retainers), (3) NIV/BiPAP for acute hypercapnic RF (pH 7.25–7.35 is the range with strongest BiPAP evidence — this patient at 7.28 is in the ideal range), (4) IV methylprednisolone, (5) IV/nebulized bronchodilators. Home BiPAP (option D) is not standard of care and is unsafe without monitoring in a confused patient with hemodynamic instability."
+    },
+
+    {
+      "questionId": "np-p2-152",
+      "topicSlug": "copd-gold-staging-inhaler-selection",
+      "lessonPart": "2B",
+      "difficulty": "hard",
+      "stemAnchor": "Post-COPD hospitalization — 30-day readmission prevention follow-up within 30 days",
+      "stem": "A 69-year-old woman was discharged from the hospital 8 days ago after a severe COPD exacerbation (her second hospitalization in 12 months). She is now on triple therapy (umeclidinium/vilanterol/fluticasone inhaler), tiotropium was changed to the combination, and she received a 10-day prednisone taper. She presents for a post-discharge follow-up. Which of the following interventions is most critical for reducing her 30-day COPD readmission risk?",
+      "options": {
+        "A": "Increase her steroid dose — she is at high risk of another exacerbation",
+        "B": "Review inhaler technique, medication adherence, and action plan; refer to pulmonary rehabilitation; smoking cessation if applicable; schedule follow-up within 4 weeks",
+        "C": "Hospitalize for observation — patients with two hospitalizations in 12 months should be admitted prophylactically",
+        "D": "Switch to home BiPAP — all COPD patients after hospitalization benefit from nocturnal non-invasive ventilation"
+      },
+      "correctAnswer": "B",
+      "rationale": "Post-COPD hospitalization care bundle to reduce 30-day readmission: (1) Inhaler technique review and correction — the most commonly missed step; (2) Confirm understanding of and adherence to new medications; (3) Provide a written COPD action plan (when to call the provider, when to go to ED); (4) Pulmonary rehabilitation referral — REACT trial showed early pulmonary rehabilitation after hospitalization reduces readmissions; (5) Smoking cessation if applicable; (6) Follow-up within 4 weeks of discharge (early follow-up significantly reduces 30-day readmission); (7) Influenza + pneumococcal vaccination status check. 30-day COPD readmission rates are a quality measure — this bundle of interventions is evidence-based. Prophylactic hospitalization (option C) is not a standard practice."
+    },
+
+    {
+      "questionId": "np-p2-153",
+      "topicSlug": "copd-gold-staging-inhaler-selection",
+      "lessonPart": "2B",
+      "difficulty": "expert",
+      "stemAnchor": "COPD + cor pulmonale + pedal edema + JVP elevation — supplemental oxygen as treatment, not diuresis alone",
+      "stem": "A 74-year-old man with severe COPD (GOLD 4, Group E) presents with progressive bilateral lower extremity edema over 3 weeks. JVD is present. HR 96, BP 114/72, SpO2 86% on room air. ECG shows right axis deviation and P pulmonale. BNP is 182 pg/mL. Echocardiogram shows RV dilation and estimated RVSP 58 mmHg. Which of the following best represents the primary treatment target for his cor pulmonale?",
+      "options": {
+        "A": "Start furosemide 40 mg daily as the primary treatment — volume overload is the primary problem",
+        "B": "Supplemental oxygen (LTOT) is the primary treatment — chronic hypoxemia drives hypoxic pulmonary vasoconstriction; oxygen reduces pulmonary arterial pressures and improves RV function",
+        "C": "Start sildenafil (PDE5 inhibitor) — pulmonary arterial hypertension medications are indicated for cor pulmonale from COPD",
+        "D": "Start digoxin for RV failure — RV failure in COPD responds to positive inotropic agents"
+      },
+      "correctAnswer": "B",
+      "rationale": "Cor pulmonale (RV hypertrophy and failure secondary to pulmonary hypertension from lung disease) in COPD: the primary driver is chronic hypoxic pulmonary vasoconstriction (SpO2 86% — meets LTOT criteria). The PRIMARY treatment is supplemental oxygen — it reverses hypoxic vasoconstriction, reduces pulmonary artery pressure, and improves RV function and survival. Diuresis (option A) treats volume overload (edema) symptomatically but does not address the underlying pulmonary hypertension — it is adjunctive, not primary. Sildenafil (option C) is used in idiopathic pulmonary arterial hypertension (PAH), NOT for pulmonary hypertension secondary to COPD — current evidence shows no benefit and possible harm in COPD-related PH. Digoxin (option D) is not a proven therapy for RV failure in COPD and carries significant toxicity risk."
+    },
+
+    {
+      "questionId": "np-p2-154",
+      "topicSlug": "copd-gold-staging-inhaler-selection",
+      "lessonPart": "2B",
+      "difficulty": "hard",
+      "stemAnchor": "COPD + ICS + recurrent pneumonia — reassess ICS need based on eosinophil count and exacerbation type",
+      "stem": "A 70-year-old man with COPD (GOLD 3, Group E) on umeclidinium/vilanterol/fluticasone triple therapy has had 2 pneumonias in the past 12 months (confirmed on CXR). His blood eosinophil count is 85 cells/μL. He has had 2 COPD exacerbations (treated with antibiotics + prednisone) in the same period. Which of the following represents the most appropriate medication adjustment?",
+      "options": {
+        "A": "Continue triple therapy — ICS is essential for all Group E COPD patients regardless of complications",
+        "B": "Discontinue the ICS component — eosinophil count <100 cells/μL suggests ICS-responsive inflammation is unlikely; pneumonia risk may outweigh benefit in this patient",
+        "C": "Add another ICS (beclomethasone) for additional anti-inflammatory coverage to prevent further exacerbations",
+        "D": "Switch to SABA + SAMA only — all inhaled medications carry pneumonia risk in COPD"
+      },
+      "correctAnswer": "B",
+      "rationale": "ICS in COPD increases pneumonia risk by approximately 3% absolute (NNH approximately 33). The ICS benefit in COPD is most evident in patients with blood eosinophils ≥300 cells/μL — these patients have an eosinophilic/asthmatic component that is ICS-responsive. This patient has eosinophils of only 85 cells/μL — at this low level, ICS benefit is uncertain while the pneumonia risk is real (2 pneumonias in 12 months). GOLD 2023 guidance: consider ICS discontinuation if eosinophils <100 cells/μL, especially if recurrent pneumonia is occurring. Step-down: switch to LAMA + LABA (dual bronchodilation without ICS). Monitor exacerbation frequency after ICS withdrawal — if exacerbations worsen, may need to add ICS back. Adding a second ICS (option C) is never appropriate. SABA + SAMA only (option D) would massively undertreat this severe patient."
+    },
+
+    {
+      "questionId": "np-p2-155",
+      "topicSlug": "copd-gold-staging-inhaler-selection",
+      "lessonPart": "2B",
+      "difficulty": "hard",
+      "stemAnchor": "COPD + 5-day prednisone course evidence — REDUCE trial duration",
+      "stem": "A 65-year-old woman with COPD (GOLD 2, Group E) has her third outpatient exacerbation this year. You are prescribing a short course of oral corticosteroids. She asks why you are only prescribing 5 days of prednisone when she previously received 10-day courses from an urgent care. Which of the following correctly explains the current evidence-based duration?",
+      "options": {
+        "A": "10-day courses are still required — shorter courses fail to adequately reduce airway inflammation",
+        "B": "5-day prednisone 40 mg/day is equivalent to 14-day courses for COPD exacerbations — REDUCE trial (2013); shorter courses reduce total steroid exposure without worse outcomes",
+        "C": "A single-dose injection of methylprednisolone is sufficient for COPD exacerbations",
+        "D": "Prednisone for more than 3 days causes adrenal suppression and must be tapered regardless of duration"
+      },
+      "correctAnswer": "B",
+      "rationale": "The REDUCE trial (2013, New England Journal of Medicine): in hospitalized COPD exacerbation patients, a 5-day course of prednisone 40 mg daily was non-inferior to a 14-day course for time to next exacerbation, spirometry recovery, and clinical outcomes — with significantly less cumulative steroid exposure. This has been extrapolated to outpatient exacerbations: standard of care is now prednisone 40 mg × 5 days. Benefits of shorter course: less hyperglycemia, fewer steroid myopathy events, reduced adrenal suppression risk. Option D (taper requirement): a 5-day course at 40 mg does not typically require tapering in patients without prior adrenal suppression. However, frequent short courses (≥3/year) may warrant consideration of inhaled steroid optimization to reduce systemic steroid use."
+    },
+
+    {
+      "questionId": "np-p2-156",
+      "topicSlug": "copd-gold-staging-inhaler-selection",
+      "lessonPart": "2B",
+      "difficulty": "expert",
+      "stemAnchor": "COPD + palliative care discussion — goals of care advanced COPD dyspnea management",
+      "stem": "A 79-year-old man with GOLD 4 COPD (FEV1 22%, 4 hospitalizations in 18 months, SpO2 85% at rest on 3L O2) has declining function — now bedbound with severe dyspnea at minimal activity. He has indicated he does not want intubation or ICU care. His son asks you to 'do everything possible.' Which of the following best represents the most appropriate approach?",
+      "options": {
+        "A": "Admit to ICU immediately and initiate mechanical ventilation as the standard of care",
+        "B": "Engage in goals-of-care conversation with patient and family; optimize comfort measures: low-dose oral morphine (reduces dyspnea), supplemental oxygen, palliative care/hospice referral if goals shift to comfort focus",
+        "C": "Do not discuss goals of care — it will frighten the patient and family",
+        "D": "Continue to maximize COPD medical therapy including adding azithromycin and roflumilast; avoid palliative care referral as it signals giving up"
+      },
+      "correctAnswer": "B",
+      "rationale": "Advanced COPD with severe dyspnea despite maximal therapy, frequent hospitalizations, and the patient's expressed wish not to be intubated: this patient meets criteria for goals-of-care discussion and palliative care integration. Evidence-based dyspnea management in advanced COPD: low-dose oral opioids (morphine immediate release 2.5–5 mg every 4 hours) reduce dyspnea perception significantly without consistently causing respiratory depression at appropriate doses. Palliative care does NOT mean stopping treatment — it means addressing comfort alongside disease management. The NP's role: facilitate the conversation, clarify values (quality vs length of life), document advance directives, and refer to palliative care or hospice when appropriate. Continuing to maximize pharmacological COPD therapy (option D) is appropriate but without addressing goals of care and comfort management, the patient's quality of life remains unaddressed."
+    },
+
+    {
+      "questionId": "np-p2-157",
+      "topicSlug": "hyperlipidemia-risk-statin-therapy",
+      "lessonPart": "2",
+      "difficulty": "hard",
+      "stemAnchor": "64-year-old + 10-year ASCVD risk 12% + LDL 142 + no established ASCVD — statin intensity selection primary prevention",
+      "stem": "A 64-year-old man has a 10-year ASCVD risk of 12% (calculated using the pooled cohort equation). LDL is 142 mg/dL, HDL 38 mg/dL. He has no established ASCVD, no DM, and no FH (LDL <190). He is a former smoker (quit 3 years ago) and has hypertension on amlodipine. Which of the following most accurately represents the 2018 ACC/AHA statin recommendation for this patient?",
+      "options": {
+        "A": "High-intensity statin — ASCVD risk >10% always requires high-intensity statin",
+        "B": "Moderate-intensity statin — 10-year ASCVD risk 7.5–20% in adults 40–75 years = moderate-intensity statin (consider high-intensity if risk >20%)",
+        "C": "No statin indicated — lifestyle modification only is recommended for ASCVD risk <15%",
+        "D": "Low-intensity statin — minimizes side effects while providing cardiovascular protection"
+      },
+      "correctAnswer": "B",
+      "rationale": "2018 ACC/AHA Cholesterol guidelines: For primary prevention in adults 40–75 without established ASCVD, T2DM, or FH: (1) If 10-year ASCVD risk ≥7.5% → moderate-intensity statin; (2) If risk ≥20% → high-intensity statin or moderate + risk discussion for high-intensity. This patient has a 12% risk — moderate-intensity statin is indicated (e.g., atorvastatin 10–20 mg, rosuvastatin 5–10 mg, simvastatin 20–40 mg). The guidelines also recommend discussing additional risk factors (risk-enhancing factors) such as: LDL ≥160, family history, high-sensitivity CRP ≥2 mg/L, CAC score, ABI ≤0.9. If the risk-benefit conversation still leaves uncertainty, a CAC score can guide the decision. Option A incorrectly mandates high-intensity for >10% risk."
+    },
+
+    {
+      "questionId": "np-p2-158",
+      "topicSlug": "hyperlipidemia-risk-statin-therapy",
+      "lessonPart": "2",
+      "difficulty": "hard",
+      "stemAnchor": "Patient on simvastatin + amiodarone + AV dilation — statin-drug interaction CYP3A4",
+      "stem": "A 68-year-old man with AF and dyslipidemia has been on simvastatin 40 mg daily for 3 years. His cardiologist started amiodarone 200 mg daily 4 months ago. He now presents with bilateral thigh and calf muscle pain and weakness. CK is 8,200 U/L (normal <200). Creatinine is 1.6 mg/dL (was 1.1). Which of the following best explains this presentation and most appropriate action?",
+      "options": {
+        "A": "Amiodarone-induced peripheral neuropathy — continue both medications and add gabapentin",
+        "B": "Simvastatin-amiodarone drug interaction: amiodarone inhibits CYP3A4, causing simvastatin accumulation and myotoxicity; hold simvastatin immediately and hydrate; switch to a non-CYP3A4 metabolized statin (rosuvastatin or pravastatin)",
+        "C": "Hypokalemia from amiodarone — check electrolytes and supplement potassium",
+        "D": "Statin myopathy unrelated to amiodarone — switch to atorvastatin which is safer"
+      },
+      "correctAnswer": "B",
+      "rationale": "Simvastatin is primarily metabolized by CYP3A4. Amiodarone is a moderate-to-strong CYP3A4 inhibitor — it significantly reduces simvastatin metabolism, causing drug accumulation and myotoxicity. FDA black-box warning: simvastatin 80 mg is prohibited with amiodarone; simvastatin at any dose combined with strong CYP3A4 inhibitors carries myopathy/rhabdomyolysis risk. CK 8,200 U/L = myositis (>10× ULN = 2,000) — approaching rhabdomyolysis. Rising creatinine suggests myoglobinuria-related AKI. Immediate actions: (1) Hold simvastatin, (2) Aggressive IV/oral hydration, (3) Monitor urine output, CK, creatinine, and electrolytes, (4) Switch to rosuvastatin or pravastatin (not CYP3A4-metabolized — safer with amiodarone). Atorvastatin (option D) is also CYP3A4-metabolized and carries the same interaction risk with amiodarone."
+    },
+
+    {
+      "questionId": "np-p2-159",
+      "topicSlug": "hyperlipidemia-risk-statin-therapy",
+      "lessonPart": "2",
+      "difficulty": "expert",
+      "stemAnchor": "LDL 218 mg/dL in 32-year-old + no ASCVD + father had MI at 46 — familial hypercholesterolemia recognition",
+      "stem": "A 32-year-old woman presents for a new patient visit. Her LDL is 218 mg/dL; HDL 52 mg/dL; TG 112 mg/dL. She is not on any medications. BMI is 23 and she does not smoke. She reports her father had a myocardial infarction at age 46 and her paternal grandfather had a stroke at 50. She has no tendon xanthomas. Her 10-year ASCVD risk is only 2.5% (young age). Which of the following best characterizes her lipid disorder and appropriate management?",
+      "options": {
+        "A": "No treatment needed — 10-year ASCVD risk of 2.5% is low; lifestyle modification only",
+        "B": "Familial hypercholesterolemia (FH) — LDL ≥190 at any age + family history of premature ASCVD is a compelling indication for high-intensity statin regardless of calculated 10-year risk",
+        "C": "Start low-intensity statin (rosuvastatin 5 mg) — she is young and low-risk",
+        "D": "Order lipoprotein (a) — this is the only test needed before starting any therapy"
+      },
+      "correctAnswer": "B",
+      "rationale": "Familial Hypercholesterolemia (FH): LDL ≥190 mg/dL in an adult + family history of premature ASCVD (father MI at 46 = premature — <55 in men) is the clinical diagnosis. FH is an autosomal dominant condition causing lifelong LDL elevation and dramatically accelerated ASCVD risk — the calculated 10-year risk grossly UNDERESTIMATES lifetime risk. Management: HIGH-INTENSITY statin (atorvastatin 40–80 mg or rosuvastatin 20–40 mg) regardless of calculated short-term risk. Additional considerations: genetic testing, cascade screening of first-degree relatives, LDL target <70 mg/dL (or >50% reduction from baseline). If max statin insufficient: add ezetimibe; if still not at goal: PCSK9 inhibitor. A 10-year risk calculation (option A) is inappropriate as the primary decision-making tool in FH — lifetime risk perspective is required. Rosuvastatin 5 mg (low-intensity, option C) is inadequate for LDL 218 with FH."
+    },
+
+    {
+      "questionId": "np-p2-160",
+      "topicSlug": "hyperlipidemia-risk-statin-therapy",
+      "lessonPart": "2",
+      "difficulty": "hard",
+      "stemAnchor": "Patient with statin myalgia + normal CK — statin-attributed myalgia vs confirmation with drug rechallenge",
+      "stem": "A 58-year-old woman was started on atorvastatin 40 mg for primary prevention (10-year ASCVD risk 9%). After 6 weeks, she reports bilateral leg muscle aching that is interfering with her daily walks. CK is 145 U/L (normal). She has no objective weakness. She asks to stop the statin. Which of the following best represents the most appropriate management?",
+      "options": {
+        "A": "Confirm statin-attributed myopathy and permanently discontinue all statins — CK elevation is required for a statin myopathy diagnosis",
+        "B": "Hold atorvastatin for 4–6 weeks; if symptoms resolve, rechallenge with atorvastatin 20 mg or try rosuvastatin or pravastatin (different statin); statin-associated muscle symptoms (SAMS) with normal CK are common and often manageable",
+        "C": "Continue atorvastatin — muscle aching with normal CK is not statin-related",
+        "D": "Add CoQ10 (ubiquinone) 200 mg daily — CoQ10 deficiency from statin use is the proven cause of statin myalgia"
+      },
+      "correctAnswer": "B",
+      "rationale": "Statin-associated muscle symptoms (SAMS): myalgia with normal CK occurs in approximately 5–10% of statin users. CK elevation is NOT required for a diagnosis of SAMS — myalgia with normal CK still may be statin-related. The statin causality rule: symptoms resolve within 4–6 weeks of discontinuation and return with rechallenge → confirms statin attribution. Management of SAMS: (1) Temporary discontinuation + re-challenge (confirms attribution), (2) Dose reduction, (3) Switching to a different statin (rosuvastatin and pravastatin are associated with lower myalgia rates — less lipophilic), (4) Alternate-day dosing for long-half-life statins (rosuvastatin). CoQ10 supplementation (option D) has not shown consistent benefit in clinical trials for SAMS — some observational data suggests partial benefit, but it is not evidence-based as a recommendation. Permanently stopping statins without rechallenge (option A) deprives the patient of significant ASCVD benefit."
+    },
+
+    {
+      "questionId": "np-p2-161",
+      "topicSlug": "hyperlipidemia-risk-statin-therapy",
+      "lessonPart": "2",
+      "difficulty": "expert",
+      "stemAnchor": "High-risk ASCVD + LDL 88 on max statin — add ezetimibe IMPROVE-IT evidence",
+      "stem": "A 65-year-old man with established ASCVD (MI 2 years ago) is on atorvastatin 80 mg daily. His LDL is 88 mg/dL. Per 2018 ACC/AHA guidelines, his LDL target is <70 mg/dL (and <55 mg/dL as a 'very high risk' optional target). He asks about additional options to further reduce his LDL. Which of the following is the appropriate next step?",
+      "options": {
+        "A": "No additional therapy — LDL 88 mg/dL on high-intensity statin is optimal",
+        "B": "Add ezetimibe 10 mg — the IMPROVE-IT trial demonstrated that ezetimibe + statin reduced CV events in post-ACS patients; adds 15–20% additional LDL reduction",
+        "C": "Switch to a moderate-intensity statin (rosuvastatin 10 mg) — high-intensity statin is excessive for this LDL level",
+        "D": "Add niacin extended-release for additional LDL lowering — HPS2-THRIVE evidence"
+      },
+      "correctAnswer": "B",
+      "rationale": "Ezetimibe is the appropriate add-on when LDL remains above target on maximum tolerated statin. IMPROVE-IT trial: in post-ACS patients on simvastatin 40 mg, adding ezetimibe 10 mg reduced LDL an additional 15–20% (from ~69 to ~54 mg/dL) and reduced the composite CV outcome by 6.4% relative risk reduction over 7 years. This patient's LDL is 88 mg/dL on atorvastatin 80 mg — above the <70 mg/dL target (and above <55 mg/dL very high risk optional target). Adding ezetimibe is the guideline-recommended second step before PCSK9 inhibitors. Switching to a moderate-intensity statin (option C) would INCREASE LDL, not decrease it. Niacin (option D): HPS2-THRIVE and AIM-HIGH trials showed no additional CV benefit from niacin added to effective statin therapy — niacin is no longer recommended for secondary prevention in statin-treated patients."
+    },
+
+    {
+      "questionId": "np-p2-162",
+      "topicSlug": "hyperlipidemia-risk-statin-therapy",
+      "lessonPart": "2",
+      "difficulty": "hard",
+      "stemAnchor": "34-year-old woman + statin prescription + wants to get pregnant — statin contraindication in pregnancy",
+      "stem": "A 34-year-old woman with familial hypercholesterolemia (LDL 242 mg/dL) is being counseled about statin therapy. She is currently trying to conceive (she and her partner have been trying for 3 months). Which of the following correctly describes the management of her statin therapy in this context?",
+      "options": {
+        "A": "Start atorvastatin 40 mg immediately — the benefit of LDL reduction outweighs risks",
+        "B": "Delay all LDL-lowering therapy until she is no longer trying to conceive or is done breastfeeding — all statins are contraindicated in pregnancy and breastfeeding; ezetimibe is also not recommended in pregnancy",
+        "C": "Start ezetimibe only — ezetimibe is the only lipid-lowering agent safe in pregnancy",
+        "D": "Start bile acid sequestrant (cholestyramine) — this is the only pregnancy-safe class of lipid-lowering medications"
+      },
+      "correctAnswer": "B",
+      "rationale": "All statins are Category X in pregnancy — associated with teratogenicity (skeletal and CNS malformations in animal studies). They must be discontinued before pregnancy attempts. Ezetimibe (option C) has not been studied in human pregnancy and is not recommended. Bile acid sequestrants (option D) are considered relatively safer in pregnancy (do not cross the placenta), but their benefit in FH is modest and they are not routinely recommended for primary lipid management in this context. In practice: for patients with FH who are planning pregnancy, the approach is to stop statins, optimize lifestyle, and use bile acid sequestrants if treatment is deemed necessary during pregnancy — but since this patient is trying to conceive, statins should be stopped NOW and not restarted until after breastfeeding is complete. PCSK9 inhibitors also lack pregnancy safety data."
+    },
+
+    {
+      "questionId": "np-p2-163",
+      "topicSlug": "hyperlipidemia-risk-statin-therapy",
+      "lessonPart": "2",
+      "difficulty": "expert",
+      "stemAnchor": "Fasting TG 720 mg/dL + pancreatitis risk — omega-3 icosapent ethyl Vascepa vs fibrate",
+      "stem": "A 52-year-old man with T2DM and ASCVD has a fasting triglyceride of 720 mg/dL. He is on atorvastatin 40 mg, metformin, and empagliflozin. LDL is 68 mg/dL. He has no prior pancreatitis. Which of the following is the most appropriate additional medication for his severe hypertriglyceridemia?",
+      "options": {
+        "A": "Add fenofibrate — fibrates are the most evidence-based therapy for severe hypertriglyceridemia to prevent pancreatitis",
+        "B": "Add icosapent ethyl (Vascepa) 4g daily — REDUCE-IT trial demonstrated CV benefit in statin-treated patients with TG ≥135 mg/dL; also effective for TG reduction",
+        "C": "Add niacin — best tolerated lipid-lowering agent for hypertriglyceridemia",
+        "D": "Stop atorvastatin — statins raise triglycerides"
+      },
+      "correctAnswer": "B",
+      "rationale": "For severe hypertriglyceridemia (≥500 mg/dL), pancreatitis prevention is the priority. However, this patient has ASCVD, and icosapent ethyl (IPE/Vascepa) addresses BOTH goals: REDUCE-IT trial demonstrated significant CV event reduction (25% relative risk reduction) in patients with TG ≥135 mg/dL on statin therapy with established ASCVD or DM + risk factors. This patient's profile (T2DM + ASCVD + TG 720 + on statin with LDL at goal) is the ideal REDUCE-IT candidate. Fenofibrate (option A) is effective for TG reduction but has not demonstrated CV benefit in statin-treated patients (ACCORD-Lipid, FIELD trials). It is appropriate if IPE is unavailable or contraindicated, but IPE is preferred for CV benefit. Niacin (option C) is no longer recommended. Statins (option D) generally reduce TG by 10–30% — they should be continued."
+    },
+
+    {
+      "questionId": "np-p2-164",
+      "topicSlug": "hyperlipidemia-risk-statin-therapy",
+      "lessonPart": "2",
+      "difficulty": "hard",
+      "stemAnchor": "PCSK9 inhibitor indication — refractory FH not at goal on max statin + ezetimibe",
+      "stem": "A 55-year-old man with FH and established ASCVD (prior MI) is on atorvastatin 80 mg + ezetimibe 10 mg. LDL remains 112 mg/dL. His LDL goal is <70 mg/dL (ideally <55 mg/dL for very high risk). He asks about 'the shots' he's read about online. Which of the following correctly identifies the therapy and its mechanism?",
+      "options": {
+        "A": "These are PCSK9 inhibitors (evolocumab/alirocumab) — monoclonal antibodies that inhibit PCSK9, increasing LDL receptor recycling on hepatocytes; reduce LDL by 50–60% on top of statin + ezetimibe",
+        "B": "These are GLP-1 receptor agonists — they reduce cardiovascular events and lower LDL as a secondary effect",
+        "C": "These are SGLT-2 inhibitors — they improve cardiovascular outcomes and lower LDL",
+        "D": "These are anti-inflammatory biologics — inflammation reduction lowers LDL levels in statin-resistant patients"
+      },
+      "correctAnswer": "A",
+      "rationale": "PCSK9 inhibitors (evolocumab — Repatha, alirocumab — Praluent): subcutaneous injections every 2 weeks or monthly. Mechanism: PCSK9 (proprotein convertase subtilisin/kexin type 9) normally degrades LDL receptors on hepatocytes — inhibiting PCSK9 increases LDL receptor recycling → more LDL removed from circulation. Effect: reduces LDL by 50–60% on top of maximally tolerated statin + ezetimibe. Indications: FH (especially heterozygous FH), established ASCVD with LDL not at goal on maximally tolerated statin + ezetimibe. FDA-approved; demonstrated CV benefit in FOURIER (evolocumab) and ODYSSEY OUTCOMES (alirocumab) trials. Limitation: very high cost (~$4,000–6,000/year); insurance authorization often required. This patient meets criteria: FH + established ASCVD + LDL not at goal despite max statin + ezetimibe."
+    },
+
+    {
+      "questionId": "np-p2-165",
+      "topicSlug": "hyperlipidemia-risk-statin-therapy",
+      "lessonPart": "2",
+      "difficulty": "hard",
+      "stemAnchor": "48-year-old with new statin + new DM diagnosis — statin-induced hyperglycemia monitoring",
+      "stem": "A 48-year-old woman with no prior diabetes history (fasting glucose 98 mg/dL at baseline) was started on atorvastatin 40 mg 6 months ago for primary prevention (10-year risk 8%). At her 6-month follow-up, fasting glucose is 118 mg/dL and HbA1c is 6.1%. She is not taking any other medications and has not changed her diet. She asks if her statin 'gave her diabetes.' Which of the following is the most accurate and appropriate response?",
+      "options": {
+        "A": "Discontinue atorvastatin — statins cause diabetes and should not be used in pre-diabetic patients",
+        "B": "Statins have a small but real association with increased incident T2DM, especially in patients with risk factors (pre-diabetes); the CV benefit of statins significantly outweighs this modest risk; continue statin, counsel on lifestyle modification, and monitor glucose",
+        "C": "The glucose elevation is unrelated to statin therapy — statins are metabolically neutral",
+        "D": "Switch to pravastatin — it has no diabetogenic effect unlike atorvastatin"
+      },
+      "correctAnswer": "B",
+      "rationale": "Statin and diabetes: class effect — all statins are associated with a modest increase in incident T2DM (approximately 10–12% relative risk increase; approximately 1 additional diabetes case per 100 patients over 4 years at high-dose statin). Risk is highest with: high-intensity statins, pre-existing impaired fasting glucose (this patient's baseline glucose 98 was already pre-diabetic range). The WOSCOPS, JUPITER, and meta-analyses confirm this association. The key teaching point: the CV benefit of statins (preventing MIs and strokes) vastly outweighs the modest diabetes risk — statins should NOT be discontinued. The correct approach: (1) Continue statin, (2) Counsel on lifestyle (diet, exercise, weight management) to prevent progression to T2DM, (3) Monitor glucose annually, (4) If T2DM develops, manage appropriately. Pravastatin (option D) has slightly less diabetogenic effect but the difference is clinically marginal."
+    },
+
+    {
+      "questionId": "np-p2-166",
+      "topicSlug": "hyperlipidemia-risk-statin-therapy",
+      "lessonPart": "2",
+      "difficulty": "expert",
+      "stemAnchor": "CAC score 0 in 62-year-old borderline risk — statin deferral based on CAC",
+      "stem": "A 62-year-old man with hypertension has a 10-year ASCVD risk of 9.8% (borderline intermediate risk). He has no established ASCVD. LDL is 128 mg/dL. He is uncertain about starting a statin. A coronary artery calcium (CAC) score is obtained as a risk discussion aid. His CAC score is 0. Which of the following correctly describes how the CAC score should influence the statin decision?",
+      "options": {
+        "A": "CAC 0 strongly argues against initiating statin therapy in this borderline-risk patient — it indicates minimal calcified plaque burden; statin initiation can be reasonably deferred",
+        "B": "CAC 0 does not change the recommendation — intermediate-risk patients always require a statin",
+        "C": "CAC 0 means the patient has no ASCVD risk and statin therapy is contraindicated",
+        "D": "CAC 0 indicates soft plaque is predominant and statin therapy should be started immediately"
+      },
+      "correctAnswer": "A",
+      "rationale": "Coronary artery calcium (CAC) scoring is a risk-discussion aid endorsed by the 2018 ACC/AHA Cholesterol guidelines. In borderline risk (7.5–20%) patients where statin decision is uncertain, CAC = 0 provides strong evidence to DEFER statin therapy: patients with CAC 0 have a 10-year ASCVD event rate approaching that of the general population without intervention. Meta-analyses show CAC 0 is associated with a negative predictive value >99% for cardiac events over 10 years. The recommendation: 'If the patient is in the statin-uncertain zone and CAC = 0, it is reasonable to withhold statin therapy and reassess in 5 years.' Re-scan CAC in 5 years. Caveat: CAC 0 does NOT guarantee no risk — patients with very high LDL (e.g., FH with LDL ≥190) or strong family history should still be treated regardless of CAC score. This patient's LDL 128 does not trigger that exception."
+    },
+
+    {
+      "questionId": "np-p2-167",
+      "topicSlug": "anemia-workup-treatment-types",
+      "lessonPart": "2",
+      "difficulty": "hard",
+      "stemAnchor": "IDA + oral iron + GI side effects + poor adherence — alternate-day dosing strategy Moretti trial",
+      "stem": "A 38-year-old woman with heavy menstrual bleeding has iron-deficiency anemia (Hgb 9.8 g/dL, MCV 72 fL, ferritin 6 ng/mL). She was started on ferrous sulfate 325 mg three times daily but returns 4 weeks later with minimal improvement — Hgb 10.1 g/dL. She reports she has been taking only 1 tablet daily instead of 3 because of nausea and constipation. Which of the following is the most evidence-based recommendation to improve iron absorption with better tolerability?",
+      "options": {
+        "A": "Continue three times daily dosing and add a proton pump inhibitor to reduce GI side effects",
+        "B": "Switch to alternate-day ferrous sulfate dosing — the Moretti trial demonstrated that every-other-day iron dosing achieves equivalent or superior total iron absorption as daily dosing with fewer GI side effects (by avoiding hepcidin upregulation)",
+        "C": "Stop oral iron and immediately switch to IV iron (iron sucrose) since oral iron is ineffective in IDA",
+        "D": "Add folic acid 1 mg daily — IDA is often accompanied by folate deficiency that reduces absorption"
+      },
+      "correctAnswer": "B",
+      "rationale": "The Moretti trial (2015, Blood) demonstrated a counterintuitive finding: alternate-day oral iron dosing achieves EQUAL or SUPERIOR total fractional iron absorption compared to consecutive daily dosing. Mechanism: oral iron intake stimulates hepcidin production within 24 hours — hepcidin blocks ferroportin (the intestinal iron transporter), reducing absorption of the next dose. By dosing every other day, the hepcidin peak has cleared, allowing the next dose to be absorbed more efficiently. Clinical benefit: equivalent efficacy with FEWER GI side effects (nausea, constipation) — improving adherence. This is now a recommended option for IDA. IV iron (option C) is reserved for: malabsorption, GI intolerance despite alternate-day dosing, ongoing blood loss exceeding oral supplementation, or eGFR <30. PPI (option A) does not meaningfully reduce iron side effects."
+    },
+
+    {
+      "questionId": "np-p2-168",
+      "topicSlug": "anemia-workup-treatment-types",
+      "lessonPart": "2",
+      "difficulty": "hard",
+      "stemAnchor": "Macrocytic anemia + B12 deficiency + strict vegan + paresthesias — subacute combined degeneration treatment urgency",
+      "stem": "A 42-year-old strict vegan woman presents with fatigue, difficulty walking, and bilateral hand tingling for 3 months. CBC shows: Hgb 9.4 g/dL, MCV 112 fL. Peripheral smear: hypersegmented neutrophils. B12 level is 88 pg/mL (low; normal >200). Folate is normal. Neurological exam: impaired vibration sense in both feet and positive Romberg test. She has no intrinsic factor antibodies. Which of the following is the most appropriate treatment?",
+      "options": {
+        "A": "Folic acid 1 mg daily — macrocytic anemia in a vegan is most likely folate deficiency",
+        "B": "High-dose oral cyanocobalamin 1000 mcg daily OR intramuscular B12 injections — neurological B12 deficiency requires urgent repletion; high-dose oral B12 can be effective even without intrinsic factor via passive absorption",
+        "C": "Dietary counseling only — switching to a B12-fortified diet will resolve the deficiency within 2 weeks",
+        "D": "Wait 8 weeks for intramuscular B12 to work — neurological symptoms will resolve slowly regardless of route"
+      },
+      "correctAnswer": "B",
+      "rationale": "B12 deficiency with neurological involvement (subacute combined degeneration — posterior column: vibration/proprioception loss, lateral column: Romberg positive) is a neurological emergency requiring prompt repletion. Key distinction: impaired vibration sense and ataxia can become irreversible if untreated. Treatment: (1) Intramuscular B12 (cyanocobalamin 1000 mcg IM) is traditionally used for malabsorption (pernicious anemia with absent intrinsic factor — this patient has no IF antibodies, suggesting dietary deficiency not PA); (2) High-dose oral B12 (1000 mcg/day) is effective even in pernicious anemia via passive diffusion (1% of ingested B12 is absorbed passively without intrinsic factor) — multiple studies confirm oral high-dose is equivalent to IM for PA; (3) For a vegan, dietary supplementation correction is too slow for neurological deficits — medical repletion is required. Option A (folic acid): CRITICAL — never give folic acid alone without first replenishing B12 in a patient with neurological deficits. Folic acid treats the anemia but unmasks/accelerates B12 neuropathy."
+    },
+
+    {
+      "questionId": "np-p2-169",
+      "topicSlug": "anemia-workup-treatment-types",
+      "lessonPart": "2",
+      "difficulty": "expert",
+      "stemAnchor": "62-year-old + macrocytic anemia + alcohol use disorder + liver disease — alcohol vs B12 vs folate vs hypothyroid differential",
+      "stem": "A 62-year-old man with alcohol use disorder (2–3 pints of vodka daily for 20 years) presents with fatigue. CBC: Hgb 9.6 g/dL, MCV 108 fL, WBC 4.2, platelets 98,000. Liver enzymes: AST 124, ALT 58, alkaline phosphatase 186, GGT 340. B12 is 420 pg/mL (normal). Folate is 3.4 ng/mL (low). Peripheral smear shows macroovalocytes and hypersegmented neutrophils. TSH is normal. Which of the following is the correct diagnosis and management?",
+      "options": {
+        "A": "B12 deficiency — the elevated MCV requires B12 supplementation",
+        "B": "Alcohol-induced macrocytosis — alcohol directly toxifies erythrocyte precursors; no specific treatment beyond alcohol cessation",
+        "C": "Folate deficiency from alcohol use disorder (poor intake + alcohol-folate interaction) — treat with folic acid 1 mg daily; address alcohol use; check B12 before starting folic acid",
+        "D": "Aplastic anemia from alcohol toxicity — platelet count suggests bone marrow suppression requiring colony-stimulating factor"
+      },
+      "correctAnswer": "C",
+      "rationale": "This presentation shows: macrocytic anemia + low folate + elevated GGT (alcohol-specific) + B12 normal + hypersegmented neutrophils (folate deficiency morphology). Alcohol causes folate deficiency through: (1) poor dietary intake, (2) impaired intestinal folate absorption, (3) increased folate excretion. The folate level 3.4 ng/mL is low (normal >5.4). Hypersegmented neutrophils are a classic morphological finding in folate (and B12) deficiency. Management: (1) Confirm B12 is adequate (done — normal) before starting folic acid; (2) Folic acid 1 mg daily; (3) Alcohol cessation counseling and treatment. The pancytopenia (low platelets) is from hypersplenism (portal hypertension from cirrhosis) and bone marrow suppression from alcohol — not aplastic anemia. Alcohol itself also causes macrocytosis independently of folate (MCV normalizes with cessation), but the hypersegmented neutrophils specifically indicate nutrient deficiency."
+    },
+
+    {
+      "questionId": "np-p2-170",
+      "topicSlug": "anemia-workup-treatment-types",
+      "lessonPart": "2",
+      "difficulty": "hard",
+      "stemAnchor": "G6PD deficiency + primaquine triggered hemolysis — X-linked, Heinz bodies, oxidant avoidance",
+      "stem": "A 28-year-old man of West African descent was started on primaquine for malaria prophylaxis prior to travel. 5 days later he develops dark urine, jaundice, and fatigue. CBC: Hgb 7.2 g/dL (was 13.8), MCV 90, reticulocyte count 8.2% (elevated). LDH 680 U/L (elevated). Peripheral smear: bite cells (degmacytes) and Heinz bodies on crystal violet stain. Which of the following correctly identifies the diagnosis and management?",
+      "options": {
+        "A": "Autoimmune hemolytic anemia (AIHA) — positive direct Coombs test confirms; start prednisone",
+        "B": "G6PD deficiency — X-linked enzymatic deficiency; hemolytic crisis triggered by oxidant drug (primaquine); discontinue primaquine; provide supportive care; test family members",
+        "C": "Sickle cell crisis precipitated by malaria — start IV fluids and opioids",
+        "D": "Hereditary spherocytosis — osmotic fragility test confirms; splenectomy is curative"
+      },
+      "correctAnswer": "B",
+      "rationale": "G6PD deficiency: X-linked (predominantly males), prevalent in malaria-endemic regions (West Africa, Mediterranean, Southeast Asia). G6PD protects RBCs from oxidant stress — deficient RBCs cannot maintain glutathione, leading to hemoglobin oxidation. Classic precipitants: primaquine, dapsone, nitrofurantoin, sulfonamides, rasburicase, fava beans, and infections. Presentation: acute intravascular hemolysis — dark urine (hemoglobinuria), jaundice, rapid Hgb drop, elevated LDH and reticulocytes. Characteristic smear: Heinz bodies (denatured Hgb precipitates — seen on crystal violet stain) + bite cells (splenic macrophages have 'bitten' out the Heinz bodies). Management: discontinue the oxidant drug, supportive care, transfuse if Hgb <7 with symptoms. Screen family members. AIHA (option A) shows positive direct Coombs test and does not involve Heinz bodies. Spherocytosis (option D) shows spherocytes on smear, not bite cells."
+    },
+
+    {
+      "questionId": "np-p2-171",
+      "topicSlug": "anemia-workup-treatment-types",
+      "lessonPart": "2",
+      "difficulty": "expert",
+      "stemAnchor": "TTP pentad — MAHA + thrombocytopenia + fever + AKI + neuro changes — plasma exchange emergency",
+      "stem": "A 32-year-old woman presents with confusion and fever for 2 days. Labs: Hgb 7.8 g/dL, platelets 28,000/mm³, creatinine 2.4 mg/dL (was 0.9 last year). Peripheral smear shows fragmented RBCs (schistocytes). LDH is 1,280 U/L. She has no history of lupus. Coagulation studies (PT, PTT) are normal. Direct Coombs test is negative. Which of the following is the most appropriate immediate action?",
+      "options": {
+        "A": "Administer platelet transfusion immediately — thrombocytopenia with bleeding risk requires platelet replacement",
+        "B": "Start broad-spectrum antibiotics — this presentation is consistent with bacterial sepsis with DIC",
+        "C": "Call hematology/oncology urgently — thrombotic thrombocytopenic purpura (TTP) diagnosis requires emergent plasma exchange (PEX), which is life-saving; avoid platelet transfusion",
+        "D": "Start high-dose prednisone and rituximab for immune thrombocytopenic purpura (ITP)"
+      },
+      "correctAnswer": "C",
+      "rationale": "Thrombotic Thrombocytopenic Purpura (TTP): the classic pentad (not all need to be present) — Microangiopathic Hemolytic Anemia (MAHA: schistocytes + elevated LDH + low Hgb + negative Coombs) + Thrombocytopenia + Fever + Acute Kidney Injury + Neurological symptoms (confusion). Mechanism: ADAMTS13 protease deficiency → ultra-large vWF multimers → platelet thrombi in microvasculature. CRITICAL: Platelet transfusion is CONTRAINDICATED in TTP — it 'fuels the fire,' providing more substrate for thrombosis and worsening outcomes. Emergency treatment: plasma exchange (PEX) with fresh frozen plasma is life-saving (removes auto-antibodies, replaces ADAMTS13). DIC (option B) would show abnormal PT/PTT — normal here. ITP (option D) causes isolated thrombocytopenia without MAHA. The NP must immediately transfer this patient to a tertiary center with apheresis capability."
+    },
+
+    {
+      "questionId": "np-p2-172",
+      "topicSlug": "anemia-workup-treatment-types",
+      "lessonPart": "2",
+      "difficulty": "hard",
+      "stemAnchor": "Anemia of chronic disease vs IDA — differentiation using ferritin and serum iron",
+      "stem": "A 62-year-old woman with rheumatoid arthritis (on methotrexate) and CKD G3a presents with fatigue and pallor. CBC: Hgb 9.6 g/dL, MCV 82 fL. Iron studies: serum iron 48 mcg/dL (low), TIBC 195 (low-normal), ferritin 210 ng/mL (elevated), TSAT 19%. Which of the following most accurately describes this anemia type and appropriate initial management?",
+      "options": {
+        "A": "Iron-deficiency anemia — low serum iron confirms iron deficiency; start ferrous sulfate 325 mg daily",
+        "B": "Anemia of chronic disease (ACD) — pattern: low serum iron + low-normal TIBC + elevated ferritin (stored iron is high, but trapped in RES macrophages by hepcidin); the primary treatment is addressing the underlying chronic disease",
+        "C": "B12 deficiency from methotrexate — macrocytic anemia expected; recheck MCV and B12 level",
+        "D": "Aplastic anemia from methotrexate — CBC shows only mild anemia, ruling this out"
+      },
+      "correctAnswer": "B",
+      "rationale": "Anemia of Chronic Disease (ACD) pattern: (1) Low serum iron (iron trapped in macrophages by hepcidin), (2) Low to normal TIBC (inflammation suppresses transferrin synthesis), (3) Elevated ferritin (acute phase reactant — elevated in inflammation even when true iron stores are adequate), (4) MCV normal or mildly low. This is the OPPOSITE of IDA: IDA = low ferritin + high TIBC. The key distinguishing feature: ferritin >100 + low serum iron = ACD (or iron deficiency CONCURRENT with ACD — 'functional iron deficiency'). In this patient with RA and CKD, ACD is the primary mechanism. Treatment: manage the underlying disease (RA flare control with methotrexate/biologics); if ferritin <30 or TSAT <20% despite elevated ferritin, consider IV iron (particularly in CKD). ESA (erythropoiesis-stimulating agents) may be considered if Hgb <10 in CKD. Ferrous sulfate (option A) is not effective in ACD with adequate stores."
+    },
+
+    {
+      "questionId": "np-p2-173",
+      "topicSlug": "anemia-workup-treatment-types",
+      "lessonPart": "2",
+      "difficulty": "hard",
+      "stemAnchor": "Warm AIHA + positive direct Coombs + lupus — first-line prednisone treatment",
+      "stem": "A 38-year-old woman with SLE presents with progressive fatigue and jaundice over 3 weeks. CBC: Hgb 7.4 g/dL, MCV 96, reticulocyte count 6.8% (elevated). LDH 520 U/L. Direct Coombs test (DAT): positive (IgG). Peripheral smear shows spherocytes. Haptoglobin is undetectable (<10 mg/dL). Which of the following correctly identifies the diagnosis and first-line treatment?",
+      "options": {
+        "A": "Cold agglutinin disease — IgM-mediated; treat with rituximab",
+        "B": "Warm autoimmune hemolytic anemia (AIHA) — IgG-mediated, positive DAT (IgG), extravascular hemolysis; first-line treatment is corticosteroids (prednisone 1–2 mg/kg/day)",
+        "C": "TTP — positive DAT with schistocytes; emergent plasma exchange required",
+        "D": "G6PD deficiency — Heinz bodies on smear; stop offending medications"
+      },
+      "correctAnswer": "B",
+      "rationale": "Warm AIHA: IgG autoantibodies bind RBCs at body temperature → extravascular hemolysis by splenic macrophages → spherocytes on smear (macrophages remove portions of RBC membrane) + positive direct Coombs for IgG. Associated with SLE (most common autoimmune association), CLL, lymphoma, and certain drugs (methyldopa, penicillin, cephalosporins). First-line treatment: prednisone 1–2 mg/kg/day until Hgb >10 g/dL and reticulocytes respond → taper over 2–3 months. Second-line if steroid-refractory: rituximab, splenectomy, other immunosuppressants. Cold agglutinin disease (option A) is IgM-mediated, positive DAT for complement (C3d), worsens with cold exposure — different clinical context. TTP (option C): spherocytes are NOT the typical schistocyte pattern of TTP, and positive DAT would not be present. G6PD (option D): Heinz bodies with negative DAT."
+    },
+
+    {
+      "questionId": "np-p2-174",
+      "topicSlug": "anemia-workup-treatment-types",
+      "lessonPart": "2",
+      "difficulty": "expert",
+      "stemAnchor": "Sickle cell anemia + acute chest syndrome — recognition as emergency requiring transfusion",
+      "stem": "A 24-year-old man with known sickle cell disease (HbSS) presents with fever (38.9°C), chest pain, and worsening hypoxia (SpO2 88% on room air). CXR shows a new bilateral infiltrate in the lower lobes. His Hgb is 6.2 g/dL (his baseline Hgb is 8.5 g/dL). He has been hospitalized twice in 2 years for vaso-occlusive crises. Which of the following represents the most appropriate management?",
+      "options": {
+        "A": "Outpatient antibiotics for community-acquired pneumonia and return precautions",
+        "B": "Call 911 immediately — acute chest syndrome (ACS) requires hospital admission for oxygen supplementation, exchange transfusion or simple transfusion, antibiotics (atypical coverage), and aggressive pain management",
+        "C": "Administer high-dose hydroxyurea — this prevents acute chest syndrome in the chronic setting",
+        "D": "Arrange elective outpatient hematology referral within 2 weeks"
+      },
+      "correctAnswer": "B",
+      "rationale": "Acute Chest Syndrome (ACS) in sickle cell disease: NEW pulmonary infiltrate + one or more of: fever, respiratory symptoms (chest pain, cough, dyspnea), new hypoxia. ACS is the leading cause of death in sickle cell disease. This patient has the full picture: fever + chest pain + new bilateral infiltrate + hypoxia + Hgb drop below baseline. Management (hospital, often ICU): (1) Supplemental oxygen to maintain SpO2 ≥95%; (2) Exchange transfusion or simple transfusion to reduce HbS% (<30% with exchange transfusion) — reduces vascular occlusion; (3) Antibiotics covering typical and atypical organisms (ceftriaxone + azithromycin — atypical coverage critical as Mycoplasma and Chlamydophila are common triggers); (4) Aggressive IV hydration; (5) Pain management. Hydroxyurea (option C) is chronic preventive therapy — it PREVENTS future ACS but has no role in acute management."
+    },
+
+    {
+      "questionId": "np-p2-175",
+      "topicSlug": "anemia-workup-treatment-types",
+      "lessonPart": "2",
+      "difficulty": "hard",
+      "stemAnchor": "Normocytic anemia + hypothyroidism + CKD — differentiating mixed anemia causes",
+      "stem": "A 68-year-old woman with known hypothyroidism (on levothyroxine 88 mcg, TSH 6.8 — undertreated), CKD G3a (eGFR 48 mL/min), and osteoarthritis presents with fatigue. CBC: Hgb 10.1 g/dL, MCV 87 fL (normocytic), reticulocyte count 1.2% (normal-low). Ferritin 180 ng/mL (normal), TIBC normal, B12 420 pg/mL (normal), folate normal. EPO level is 8.4 mU/mL (inappropriately low for this Hgb). TSH 6.8 mIU/L. Which of the following best characterizes the primary contributing causes of her anemia?",
+      "options": {
+        "A": "Iron-deficiency anemia — start oral ferrous sulfate",
+        "B": "Normocytic anemia from BOTH undertreated hypothyroidism (thyroid hormone required for erythropoiesis) and renal anemia (inadequate EPO response) — optimize levothyroxine dose; monitor Hgb response before initiating ESA",
+        "C": "Anemia of chronic disease from osteoarthritis — NSAIDs are causing GI blood loss",
+        "D": "B12 deficiency — MCV 87 rules out B12 deficiency as a contributor"
+      },
+      "correctAnswer": "B",
+      "rationale": "This patient has normocytic anemia from at least two concurrent causes: (1) Hypothyroidism — thyroid hormones are required for erythropoiesis; TSH 6.8 = undertreated hypothyroidism contributing to anemia via reduced erythroid progenitor stimulation; correcting TSH to normal range will improve Hgb; (2) CKD G3a anemia — EPO level 8.4 is inappropriately low for a Hgb of 10.1 (normal EPO response to anemia should be much higher). Priority: first optimize levothyroxine (increase dose to achieve TSH 0.5–2.0 mIU/L) and recheck Hgb in 8–12 weeks. If Hgb remains <10 after TSH correction and other causes excluded, then consider ESA discussion with nephrology. IDA (option A): ferritin 180 is not consistent with IDA — typically ferritin <12 is diagnostic of IDA. Osteoarthritis and NSAIDs (option C): she doesn't take NSAIDs and there's no GI blood loss marker."
+    },
+
+    {
+      "questionId": "np-p2-176",
+      "topicSlug": "anemia-workup-treatment-types",
+      "lessonPart": "2",
+      "difficulty": "hard",
+      "stemAnchor": "Post-gastrectomy patient + B12 deficiency intrinsic factor — mechanism and treatment route",
+      "stem": "A 58-year-old man who underwent total gastrectomy for gastric cancer 3 years ago presents with fatigue, peripheral neuropathy, and cognitive slowing. B12 level is 98 pg/mL. His surgery removed the entire stomach including the fundus (where parietal cells produce intrinsic factor). He is not taking B12 supplements. Which of the following best describes why his B12 level is low and the most appropriate treatment route?",
+      "options": {
+        "A": "He cannot absorb oral B12 because intrinsic factor is absent post-gastrectomy — intramuscular B12 injections (1000 mcg IM) are required monthly",
+        "B": "Oral B12 at standard dose (2.4 mcg/day) is sufficient — intrinsic factor is produced in the liver, not the stomach",
+        "C": "Oral high-dose cyanocobalamin 1000–2000 mcg daily is effective — 1% of oral B12 is absorbed by passive diffusion regardless of intrinsic factor",
+        "D": "IV B12 is required for neurological deficits — IM and oral routes are ineffective"
+      },
+      "correctAnswer": "A",
+      "rationale": "Post-total gastrectomy: parietal cells in the gastric fundus produce intrinsic factor (IF). Total gastrectomy removes all parietal cells → complete IF deficiency → no IF-mediated B12 absorption (the normal high-affinity mechanism). For IF deficiency: (1) Intramuscular cyanocobalamin 1000 mcg IM monthly is the traditional treatment and avoids GI absorption dependency; (2) High-dose oral B12 (1000–2000 mcg daily) via passive diffusion (1% passive absorption × 1000 mcg = 10 mcg/day — exceeds the daily requirement of 2–3 mcg) is actually an evidence-based alternative even in pernicious anemia/IF deficiency. However, given active neurological symptoms (peripheral neuropathy, cognitive slowing), the most reliable and appropriate approach is IM injections to ensure rapid repletion. Option C (high-dose oral) is theoretically valid and evidence-based but option A (IM) is more immediately reliable in a symptomatic patient with active neuropathy. The MOST appropriate answer for a symptomatic post-gastrectomy patient is IM injections."
+    },
+
+    {
+      "questionId": "np-p2-177",
+      "topicSlug": "anemia-workup-treatment-types",
+      "lessonPart": "2",
+      "difficulty": "expert",
+      "stemAnchor": "Sideroblastic anemia + ringed sideroblasts + lead exposure + microcytic — lead poisoning recognition in adult",
+      "stem": "A 45-year-old male sheet metal worker presents with abdominal colic, constipation, fatigue, and wrist drop for 6 weeks. CBC: Hgb 9.8 g/dL, MCV 74 fL. Peripheral smear shows basophilic stippling. Bone marrow biopsy (done after initial workup was inconclusive) reveals ringed sideroblasts. He has a history of working with leaded paint and soldering materials without respiratory protection. Which of the following is the most important diagnostic test and management?",
+      "options": {
+        "A": "Measure serum B12 — basophilic stippling indicates megaloblastic process",
+        "B": "Measure whole blood lead level — this presentation is consistent with lead poisoning (sideroblastic anemia + basophilic stippling + peripheral neuropathy + abdominal colic in an industrial worker)",
+        "C": "Start iron replacement — microcytic anemia is IDA until proven otherwise",
+        "D": "Order hemoglobin electrophoresis — thalassemia is the most common microcytic anemia"
+      },
+      "correctAnswer": "B",
+      "rationale": "Lead poisoning in adults: classic triad — (1) Microcytic anemia with basophilic stippling (lead inhibits ferrochelatase and ALA dehydratase → disrupts heme synthesis → iron accumulates in mitochondria around nucleus = ringed sideroblasts), (2) Abdominal colic (lead line on gingiva — Burton line, constipation, colicky pain), (3) Peripheral neuropathy (wrist drop = extensor compartment involvement — classic lead neuropathy). Occupational exposure (sheet metal work, soldering, leaded paint removal) confirms the exposure history. Diagnostic: WHOLE BLOOD lead level (NOT serum — lead distributes into RBCs). Management: remove from exposure; chelation therapy (succimer/DMSA for blood levels >45 mcg/dL in adults with symptoms, or dimercaprol + EDTA for severe toxicity). IDA (option C) would have low ferritin, not ringed sideroblasts. Thalassemia (option D) shows target cells and elevated HbA2, not basophilic stippling or neuropathy."
+    },
+
+    {
+      "questionId": "np-p2-178",
+      "topicSlug": "anemia-workup-treatment-types",
+      "lessonPart": "2",
+      "difficulty": "hard",
+      "stemAnchor": "Anemia + phenytoin use + macrocytic — anticonvulsant folate deficiency mechanism",
+      "stem": "A 55-year-old man with epilepsy managed on phenytoin 300 mg daily for 15 years presents with fatigue and macrocytic anemia. CBC: Hgb 10.4 g/dL, MCV 102 fL. B12 level is 490 pg/mL (normal). Folate is 2.8 ng/mL (low). He eats a normal diet with vegetables and fortified foods. Which of the following best explains his folate deficiency?",
+      "options": {
+        "A": "Phenytoin causes direct bone marrow suppression and aplastic anemia",
+        "B": "Phenytoin induces CYP450 enzymes that increase folate metabolism and also impairs intestinal folate absorption — this is a medication-induced folate deficiency; treat with folic acid 1 mg daily",
+        "C": "Phenytoin causes macrocytosis through direct cell membrane effects unrelated to folate",
+        "D": "Long-term phenytoin causes B12 deficiency despite a normal B12 level here"
+      },
+      "correctAnswer": "B",
+      "rationale": "Phenytoin-induced folate deficiency: (1) Phenytoin is a potent CYP450 inducer → accelerates folate metabolism and conversion; (2) Phenytoin impairs intestinal conjugase activity → reduces conversion of dietary polyglutamate folate to absorbable monoglutamate form. Together these mechanisms deplete folate despite adequate dietary intake. Other anticonvulsants that cause folate deficiency: carbamazepine, phenobarbital, primidone. Treatment: folic acid 1 mg daily. Caution: folic acid supplementation in epilepsy patients may reduce phenytoin levels (by competing for protein binding) and may theoretically lower seizure threshold — but the neurological risk of folate deficiency (neural tube defects if pregnancy, neuropathy) outweighs this concern. Always check B12 before treating macrocytic anemia with folate alone. Additional phenytoin-induced deficiency: Vitamin D (reduces absorption and accelerates metabolism → osteoporosis risk after years of use)."
+    }
+  ]
+}

@@ -23,9 +23,32 @@ export type PathwayLessonSystemLabel = (typeof PATHWAY_LESSON_SYSTEM_ORDER)[numb
 
 export type PathwayLessonSystemSection = {
   id: string;
-  label: PathwayLessonSystemLabel;
+  label: string;
+  systemLabel: PathwayLessonSystemLabel;
+  description: string;
   lessons: PathwayLessonRecord[];
   count: number;
+};
+
+const MAX_LESSONS_PER_SECTION = 8;
+
+export const PATHWAY_LESSON_SYSTEM_DESCRIPTIONS: Record<PathwayLessonSystemLabel, string> = {
+  Fundamentals: "Core safety, assessment, and foundational care decisions.",
+  Pharmacology: "Medication principles, dosing, and adverse-effect priorities.",
+  Cardiovascular: "Hemodynamics, perfusion, rhythm, and cardiac emergencies.",
+  Respiratory: "Airway, oxygenation, ventilation, and pulmonary disease care.",
+  Neurological: "Neuro assessment, stroke, seizures, and CNS care priorities.",
+  Gastrointestinal: "GI function, liver and pancreas disorders, and nutrition-linked care.",
+  Renal: "Kidney function, fluids/electrolytes, and renal replacement concepts.",
+  Endocrine: "Hormonal regulation, diabetes, thyroid, and metabolic control.",
+  Musculoskeletal: "Bone, joint, mobility, and musculoskeletal injury management.",
+  "Hematologic / Immune": "Blood disorders, clotting risks, and immune-mediated conditions.",
+  Integumentary: "Skin integrity, wounds, burns, and pressure injury prevention.",
+  Reproductive: "Gynecologic and reproductive health assessment and management.",
+  "Maternity / Newborn": "Pregnancy, labor, postpartum, and newborn stabilization.",
+  Pediatrics: "Infant, child, and adolescent-focused clinical care concepts.",
+  "Mental Health": "Psychiatric assessment, crisis response, and therapeutic communication.",
+  "Leadership / Community": "Delegation, prioritization, ethics, and community-level care.",
 };
 
 function normalizeText(value: string | null | undefined): string {
@@ -159,13 +182,89 @@ export function buildPathwayLessonSystemSections(lessons: PathwayLessonRecord[])
   return PATHWAY_LESSON_SYSTEM_ORDER.flatMap((label) => {
     const sectionLessons = grouped.get(label);
     if (!sectionLessons?.length) return [];
-    return [
-      {
-        id: label.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""),
-        label,
-        lessons: sectionLessons,
-        count: sectionLessons.length,
-      },
-    ];
+    return splitSystemSections(label, sectionLessons);
   });
+}
+
+function splitSystemSections(
+  systemLabel: PathwayLessonSystemLabel,
+  lessons: PathwayLessonRecord[],
+): PathwayLessonSystemSection[] {
+  const topicGroups = new Map<string, { topicLabel: string; lessons: PathwayLessonRecord[]; firstIndex: number }>();
+
+  for (const [index, lesson] of lessons.entries()) {
+    const topicLabel =
+      lesson.topic?.trim() ||
+      lesson.bodySystem?.trim() ||
+      systemLabel;
+    const topicKey = normalizeText(topicLabel) || normalizeText(systemLabel);
+    if (!topicGroups.has(topicKey)) {
+      topicGroups.set(topicKey, { topicLabel, lessons: [], firstIndex: index });
+    }
+    topicGroups.get(topicKey)!.lessons.push(lesson);
+  }
+
+  const orderedTopicGroups = [...topicGroups.values()].sort((a, b) => a.firstIndex - b.firstIndex);
+  const chunks: PathwayLessonRecord[][] = [];
+  let currentChunk: PathwayLessonRecord[] = [];
+
+  for (const group of orderedTopicGroups) {
+    let cursor = 0;
+    while (cursor < group.lessons.length) {
+      const room = MAX_LESSONS_PER_SECTION - currentChunk.length;
+      if (room === 0) {
+        chunks.push(currentChunk);
+        currentChunk = [];
+        continue;
+      }
+
+      const slice = group.lessons.slice(cursor, cursor + room);
+      currentChunk = [...currentChunk, ...slice];
+      cursor += slice.length;
+
+      if (currentChunk.length === MAX_LESSONS_PER_SECTION) {
+        chunks.push(currentChunk);
+        currentChunk = [];
+      }
+    }
+  }
+
+  if (currentChunk.length > 0) chunks.push(currentChunk);
+
+  const slugBase = systemLabel.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+  const usedLabels = new Map<string, number>();
+
+  return chunks.map((chunk, index) => {
+    const label = sectionLabelForSplit(systemLabel, chunk);
+    const collisionCount = (usedLabels.get(label) ?? 0) + 1;
+    usedLabels.set(label, collisionCount);
+    const uniqueLabel = collisionCount > 1 ? `${label} (${collisionCount})` : label;
+
+    return {
+      id: chunks.length === 1 ? slugBase : `${slugBase}-${index + 1}`,
+      label: uniqueLabel,
+      systemLabel,
+      description: PATHWAY_LESSON_SYSTEM_DESCRIPTIONS[systemLabel],
+      lessons: chunk,
+      count: chunk.length,
+    };
+  });
+}
+
+function sectionLabelForSplit(systemLabel: PathwayLessonSystemLabel, chunk: PathwayLessonRecord[]): string {
+  const topicCounts = new Map<string, number>();
+  for (const lesson of chunk) {
+    const topic = lesson.topic?.trim();
+    if (!topic) continue;
+    if (normalizeText(topic) === normalizeText(systemLabel)) continue;
+    topicCounts.set(topic, (topicCounts.get(topic) ?? 0) + 1);
+  }
+
+  const bestTopic = [...topicCounts.entries()].sort((a, b) => {
+    if (b[1] !== a[1]) return b[1] - a[1];
+    return a[0].localeCompare(b[0]);
+  })[0]?.[0];
+
+  if (!bestTopic) return systemLabel;
+  return `${systemLabel} — ${bestTopic}`;
 }
