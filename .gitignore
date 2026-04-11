@@ -39,6 +39,7 @@ coverage/
 .idea/
 *.swp
 *.swo
+.worktrees/
 
 # Keys and local auth artifacts (never commit secrets)
 *.pem

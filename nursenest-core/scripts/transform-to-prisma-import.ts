@@ -12,8 +12,8 @@
  * Guarantees:
  *   - PathwayLesson.status  = "PUBLISHED"    (pipeline-config: status_pathway_lesson default_PUBLISHED)
  *   - ExamQuestion.status   = "published"    (publishable = true per user requirement)
- *   - NP content: countryCode = null (both US + CA), tierCode = "PREMIUM"
- *   - Pre-nursing content: countryCode = null, tierCode = "BASIC"
+ *   - NP content: countryCode = null (both US + CA), PathwayLesson.tierCode = "NP" (TierCode enum), ExamQuestion.tier = "premium"
+ *   - Pre-nursing content: countryCode = null, PathwayLesson.tierCode = null (no enum value), ExamQuestion.tier = "basic"
  *   - regionScope = "BOTH" for all content that spans both countries
  *   - stemHash computed before every question insert
  *   - Batch size ≤ 100 rows per chunk (pipeline safeguard)
@@ -32,6 +32,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { createHash, randomUUID } from "node:crypto";
+import { normalizeImportedQuestionShape } from "./stage-prisma-import-normalize";
 
 // ─── Types (Stage I schema) ───────────────────────────────────────────────────
 
@@ -132,12 +133,13 @@ const DEFAULT_LOCALE = "en";
 // tierCode maps to Prisma TierCode enum: RPN | LVN_LPN | RN | NP | ALLIED | null
 const PROGRAM_MAP: Record<
   string,
-  { pathwayId: string; exam: string; tierCode: "RPN" | "LVN_LPN" | "RN" | "NP" | "ALLIED" | null; countryCode: null | "US" | "CA"; programs: string[] }
+  { pathwayId: string; exam: string; tierCode: "RPN" | "LVN_LPN" | "RN" | "NP" | "ALLIED" | null; questionTier: string; countryCode: null | "US" | "CA"; programs: string[] }
 > = {
   "np": {
     pathwayId: "aanp-fnp",
     exam: "AANP-FNP",
     tierCode: "NP",
+    questionTier: "premium",
     countryCode: null,
     programs: ["np"],
   },
@@ -145,6 +147,7 @@ const PROGRAM_MAP: Record<
     pathwayId: "pre-nursing",
     exam: "",
     tierCode: null,
+    questionTier: "basic",
     countryCode: null,
     programs: ["pre-nursing"],
   },
@@ -152,6 +155,7 @@ const PROGRAM_MAP: Record<
     pathwayId: "pre-nursing",
     exam: "",
     tierCode: null,
+    questionTier: "basic",
     countryCode: null,
     programs: ["pre-nursing"],
   },
@@ -610,6 +614,7 @@ function transformQuestion(
 ): ExamQuestionUpsert {
   const stem = raw.stem.trim();
   const stemHash = computeStemHash(stem);
+  const normalizedQuestion = normalizeImportedQuestionShape(raw.options, raw.correctAnswer);
 
   const tags: string[] = [
     ...(raw.tags ?? []),
@@ -649,8 +654,8 @@ function transformQuestion(
       questionType: "mcq",
       status: "published",
       stem,
-      options: raw.options,
-      correctAnswer: raw.correctAnswer,
+      options: normalizedQuestion.options,
+      correctAnswer: normalizedQuestion.correctAnswer,
       rationale: raw.rationale?.trim() ?? "",
       difficulty: normDifficulty(raw.difficulty),
       tags,
@@ -740,7 +745,7 @@ function processNpPhase2QbankFile(
   const batchId: string = raw.batchId ?? path.basename(filePath, ".json");
   const rawQuestions: RawQuestion[] = raw.questions ?? [];
   return rawQuestions.map((q) =>
-    transformQuestion(q, programConfig.exam, programConfig.tierCode.toLowerCase(), batchId, programConfig.countryCode),
+    transformQuestion(q, programConfig.exam, programConfig.questionTier, batchId, programConfig.countryCode),
   );
 }
 
