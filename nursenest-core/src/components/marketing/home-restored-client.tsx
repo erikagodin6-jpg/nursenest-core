@@ -5,11 +5,10 @@ import Link from "next/link";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { mapLegacyMarketingHref } from "@/lib/legacy-marketing-routes";
 import { HomeConversionHero } from "@/components/marketing/home-conversion-hero";
-import { HomeConversionFreeAccessBand } from "@/components/marketing/home-conversion-free-access-band";
 import { HomeExamSelectionSection } from "@/components/marketing/home-exam-selection-section";
 import { HomeProductPillarsSection } from "@/components/marketing/home-product-pillars-section";
 import { HomeHowItWorksSection } from "@/components/marketing/home-how-it-works-section";
-import { HomeComparisonSection } from "@/components/marketing/home-comparison-section";
+import { HomeFeatureDeepDivesSection } from "@/components/marketing/home-feature-deep-dives-section";
 import { HomePlatformPreviewSection } from "@/components/marketing/home-platform-preview-section";
 import { HomeTrustProofSection } from "@/components/marketing/home-trust-proof-section";
 import { HomeReviewsSection } from "@/components/marketing/home-reviews-section";
@@ -55,15 +54,22 @@ export default function HomeRestoredClient() {
     <div className="font-sans md:animate-page-enter flex min-h-screen flex-col overflow-x-hidden bg-[var(--theme-page-bg)]">
       <FunnelHomepageViewBeacon marketingRegion={marketingRegion} />
       <div className="flex-grow overflow-x-hidden">
+        {/* §1 – Conversion Hero: headline, primary CTAs, region toggle */}
         <HomeConversionHero />
-        <HomeConversionFreeAccessBand />
+        {/* §2 – Pathway Selection: RN / RPN / NP / Allied cards */}
         <HomeExamSelectionSection />
+        {/* §3 – Study Mode Entry: Lessons / Practice / CAT */}
         <HomeProductPillarsSection />
-        <HomePlatformPreviewSection />
-        <HomeComparisonSection />
+        {/* §4 – System Explanation: 4 steps (Learn → Practice → CAT → Improve) */}
         <HomeHowItWorksSection />
+        {/* §5 – Feature Deep Dives: Adaptive Plan / Smart Review / CAT */}
+        <HomeFeatureDeepDivesSection />
+        {/* §6 – Platform Preview: practice, CAT, results UI */}
+        <HomePlatformPreviewSection />
+        {/* §7 – Trust + social proof: differentiation + reviews */}
         <HomeTrustProofSection questionCount={questionCount} />
         <HomeReviewsSection />
+        {/* §8 – Final CTA */}
         <HomeFinalStudyCta />
 
         <div className="mx-auto max-w-6xl px-4 py-8 text-center sm:px-6 lg:px-8">

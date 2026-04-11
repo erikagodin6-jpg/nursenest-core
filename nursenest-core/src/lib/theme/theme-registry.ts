@@ -33,10 +33,19 @@ export type ThemeOption = {
   group: ThemeGroup;
   /** Logo variant for this theme — used to select branded logo asset. */
   logoVariant: ThemeLogoVariant;
+  /** True for the 5 named production themes (blueberry-sherbet, strawberry-cream, ocean-mist, lavender-dream, midnight-indigo). */
+  named?: boolean;
 };
 
-/** Theme list — clinical blue (ocean) is the default, pink themes are grouped for discoverability. */
+/** Theme list — named themes listed first, then legacy themes grouped by family. */
 export const THEME_OPTIONS: ThemeOption[] = [
+  /* ── Named production themes ── */
+  { id: "blueberry-sherbet", label: "Blueberry Sherbet", color: "#3852B4", group: "light", logoVariant: "blue", named: true },
+  { id: "strawberry-cream", label: "Strawberry Cream", color: "#EA7B7B", group: "light", logoVariant: "rose", named: true },
+  { id: "ocean-mist", label: "Ocean Mist", color: "#1D546D", group: "light", logoVariant: "blue", named: true },
+  { id: "lavender-dream", label: "Lavender Dream", color: "#BDA6CE", group: "light", logoVariant: "neutral", named: true },
+  { id: "midnight-indigo", label: "Midnight Indigo", color: "#021A54", group: "dark", logoVariant: "dark", named: true },
+
   /* ── Clinical / Default ── */
   { id: "ocean", label: "Clinical Blue", color: "#1da2d8", group: "light", logoVariant: "blue" },
   { id: "clinical-light", label: "Clinical Light", color: "#3b82f6", group: "light", logoVariant: "blue" },
@@ -62,7 +71,6 @@ export const THEME_OPTIONS: ThemeOption[] = [
   { id: "lavender", label: "Lavender", color: "#9d82dd", group: "light", logoVariant: "neutral" },
   { id: "pastel-lavender", label: "Pastel Lavender", color: "#a78bda", group: "light", logoVariant: "neutral" },
   { id: "pastel-lilac", label: "Pastel Lilac", color: "#b48ed2", group: "light", logoVariant: "neutral" },
-  { id: "lavender-dream", label: "Lavender Dream", color: "#8e7cc3", group: "light", logoVariant: "neutral" },
   { id: "berry", label: "Berry", color: "#a855f7", group: "light", logoVariant: "neutral" },
   { id: "indigo", label: "Indigo", color: "#6366f1", group: "light", logoVariant: "blue" },
 

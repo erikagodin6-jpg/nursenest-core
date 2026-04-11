@@ -142,7 +142,8 @@ html[data-theme="multi-pastel"] {
 
 html[data-theme="dark-clinical"],
 html[data-theme="dark-academia"],
-html[data-theme="dark-mode"] {
+html[data-theme="dark-mode"],
+html[data-theme="midnight-indigo"] {
   --role-cta: color-mix(in srgb, var(--theme-primary) 88%, #fb923c);
   --role-cta-hover: color-mix(in srgb, var(--role-cta) 87%, var(--theme-heading-text));
   --role-cta-pressed: color-mix(in srgb, var(--role-cta) 74%, var(--theme-heading-text));

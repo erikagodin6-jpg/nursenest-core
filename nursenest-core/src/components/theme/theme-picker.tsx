@@ -75,12 +75,42 @@ export function ThemePicker({ className = "", labels }: { className?: string; la
           className="absolute end-0 z-[100] mt-1 max-h-[min(70vh,22rem)] w-56 overflow-y-auto rounded-xl border border-[var(--border-subtle,var(--theme-card-border))] bg-[var(--bg-elevated,var(--theme-card-bg))] py-1 shadow-[var(--shadow-elevated)]"
           role="listbox"
         >
+          {/* Named / featured themes */}
+          {(() => {
+            const named = THEME_OPTIONS.filter((o) => o.named);
+            return named.length > 0 ? (
+              <div>
+                <p className="px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-[var(--theme-muted-text)]">
+                  Featured
+                </p>
+                {named.map((opt) => (
+                  <button
+                    key={opt.id}
+                    type="button"
+                    role="option"
+                    aria-selected={opt.id === current}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setTheme(opt.id);
+                      setOpen(false);
+                    }}
+                    className={`flex w-full items-center gap-2 px-3 py-2 text-left text-sm hover:bg-[var(--theme-menu-hover-bg)] ${
+                      opt.id === current ? "font-semibold text-primary" : "text-[var(--theme-menu-text)]"
+                    }`}
+                  >
+                    <span className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ background: opt.color }} />
+                    {opt.label}
+                  </button>
+                ))}
+              </div>
+            ) : null;
+          })()}
           {(["light", "dark"] as const).map((group) => (
             <div key={group}>
               <p className="px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-[var(--theme-muted-text)]">
                 {group === "light" ? L.themeGroupLight : L.themeGroupDark}
               </p>
-              {THEME_OPTIONS.filter((o) => o.group === group).map((opt) => (
+              {THEME_OPTIONS.filter((o) => o.group === group && !o.named).map((opt) => (
                 <button
                   key={opt.id}
                   type="button"
