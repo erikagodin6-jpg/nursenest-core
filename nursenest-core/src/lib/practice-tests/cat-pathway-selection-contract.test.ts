@@ -118,7 +118,30 @@ describe("no CAT-eligible pathways: required error", () => {
   });
 });
 
-// ─── 5. URL helper: pathwayId encoding ───────────────────────────────────────
+// ─── 5. Ambiguity picker: one URL per eligible pathway ───────────────────────
+
+describe("ambiguity picker URLs: each eligible pathway gets a scoped start link", () => {
+  it("produces distinct start URLs for RN and NP pathways", () => {
+    const rn = appPathwayCatSessionStartPath("us-rn-nclex-rn");
+    const np = appPathwayCatSessionStartPath("us-np-fnp");
+    assert.notEqual(rn, np, "each pathway must produce a distinct URL");
+    const qRn = new URLSearchParams(rn.slice("/app/practice-tests/start?".length));
+    const qNp = new URLSearchParams(np.slice("/app/practice-tests/start?".length));
+    assert.equal(qRn.get("pathwayId"), "us-rn-nclex-rn");
+    assert.equal(qNp.get("pathwayId"), "us-np-fnp");
+  });
+
+  it("each pathway URL targets /app/practice-tests/start, not the generic hub", () => {
+    const ids = ["us-rn-nclex-rn", "ca-rn-nclex-rn", "us-np-fnp", "ca-np-cnple"];
+    for (const id of ids) {
+      const url = appPathwayCatSessionStartPath(id);
+      assert.ok(url.startsWith("/app/practice-tests/start?"), `${id}: must target /app/practice-tests/start`);
+      assert.ok(!url.startsWith("/app/practice-tests?"), `${id}: must NOT target the generic hub`);
+    }
+  });
+});
+
+// ─── 7. URL helper: pathwayId encoding (edge cases) ──────────────────────────
 
 describe("appPathwayCatSessionStartPath: pathway-scoped CAT start URL", () => {
   it("produces a URL with the pathwayId query param", () => {

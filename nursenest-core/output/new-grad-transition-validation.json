@@ -1,0 +1,829 @@
+{
+  "_meta": {
+    "description": "Educational and clinical quality validation of new-grad-transition lessons and questions",
+    "validatedAt": "2026-04-10",
+    "validator": "NurseNest content QA pipeline",
+    "questionsReviewed": 65,
+    "questionsReviewedDepth": "all — full clinical and educational audit",
+    "lessonsReviewedDepth": 22,
+    "lessonsTotal": 84,
+    "lessonsNote": "Lessons 1-22 reviewed in full (all Prioritization + Delegation domain lessons). Lessons 23-84 sampled by domain representative and exam-tip audit. All 84 flagged individually with status."
+  },
+
+  "questionsReviewed": [
+    {
+      "id": "Q01",
+      "stem_short": "Four patients — post-op BP 94/58, stable COPD, warm blanket, glucose 6.4. Who first?",
+      "topicSlug": "prioritizing-multiple-patients-who-first",
+      "status": "PASS",
+      "issue": null,
+      "proposedCorrection": null,
+      "notes": "ABCDE framework applied correctly. Post-op haemodynamic instability correctly prioritised. Distractors are plausible and incorrect rationales are instructional."
+    },
+    {
+      "id": "Q02",
+      "stem_short": "Maslow hierarchy — patient with RR 26 increasing oxygen vs reassurance, pain 8/10, meal choice",
+      "topicSlug": "maslow-hierarchy-nursing-priority-same-shift",
+      "status": "PASS",
+      "issue": null,
+      "proposedCorrection": null,
+      "notes": "Maslow applied correctly. Correct answer (respiratory distress) is appropriately prioritised. Distractor rationales correctly identify level assignments."
+    },
+    {
+      "id": "Q03",
+      "stem_short": "Critical potassium 2.4 mEq/L on furosemide — correct sequence of actions",
+      "topicSlug": "critical-lab-values-recognizing-acting-documenting",
+      "status": "REVISE",
+      "issue": "Minor inconsistency with lesson content: the critical lab values lesson defines critical potassium as <2.5 mEq/L, which aligns with 2.4. However, a later question (Q12) uses 2.8 as a 'critical potassium,' creating an inconsistency since 2.8 is above the lesson's stated threshold. The lesson should note that institutional thresholds vary (many labs flag <3.0 as critical). The sequence of actions (assess → notify → document) is clinically accurate and educationally sound.",
+      "proposedCorrection": "No change to Q03 itself. Revise the lesson 'critical-lab-values-recognizing-acting-documenting' to add the sentence: 'Critical value thresholds vary by institution — many laboratories flag potassium below 3.0 mEq/L as critical or alert; confirm your institutional policy.' Also revise Q12 to use a potassium value of 2.4 instead of 2.8 for internal consistency."
+    },
+    {
+      "id": "Q04",
+      "stem_short": "Five medications due at 09:00 — which to give first: amlodipine, metformin, pip-tazo in sepsis, atorvastatin",
+      "topicSlug": "medication-priority-which-meds-cannot-be-late",
+      "status": "PASS",
+      "issue": null,
+      "proposedCorrection": null,
+      "notes": "Surviving Sepsis Campaign first-dose antibiotic guidance cited accurately. Time-sensitivity rationale for chronic medications is clinically sound. Note: the rationale mentions 'furosemide' in the body when describing amlodipine — this is a minor copy error (amlodipine, not furosemide, is choice A). Low clinical impact but worth fixing.",
+      "minorFix": "In the incorrectRationale for A, remove the phrase 'The furosemide, metformin, and atorvastatin are all important medications' — the incorrect rationale for A should not reference furosemide, which does not appear in the question choices."
+    },
+    {
+      "id": "Q05",
+      "stem_short": "Patient alert at 08:00, now drowsy/responding only to voice at 10:30 — SATA correct actions",
+      "topicSlug": "recognizing-patient-who-cannot-wait",
+      "status": "REVISE",
+      "issue": "Factual error in rationale and incorrect rationale: the question states this represents 'a 3-point decrease on the AVPU scale.' AVPU is a four-level categorical scale (Alert → Voice → Pain → Unresponsive), not a numeric scale. A drop from Alert to Voice is a one-level change, not a 3-point decrease. The confusion likely arises from NEWS2 scoring, where any non-Alert consciousness level contributes 3 NEWS2 score points — but this is a NEWS2 score contribution, not an AVPU point decrease. The incorrect rationale for option C then refers to 'A 3-step drop in AVPU (Alert to Voice)' which repeats the same error. This terminology will confuse learners studying AVPU and NEWS2.",
+      "proposedCorrection": "Replace 'represents a 3-point decrease on the AVPU scale' with 'represents a one-level change on the AVPU scale (Alert → Voice) and contributes 3 points to a NEWS2 score, triggering urgent clinical review.' In the incorrect rationale for C, replace 'A 3-step drop in AVPU (Alert to Voice) is a NEWS2 score trigger' with 'Any deterioration from Alert on the AVPU scale — including a drop to Voice — contributes 3 NEWS2 consciousness points and triggers urgent clinical review, regardless of other parameters.'"
+    },
+    {
+      "id": "Q06",
+      "stem_short": "Five simultaneous events — saturated post-op dressing, pain request, discharge teaching, TV. Order?",
+      "topicSlug": "when-everything-urgent-triage-thinking-medical-floor",
+      "status": "PASS",
+      "issue": null,
+      "proposedCorrection": null,
+      "notes": "Correct prioritisation sequence. Saturated post-op dressing correctly identified as Tier 1 (potential haemorrhage). Rationale is clear and clinically sound. Distractors are instructional."
+    },
+    {
+      "id": "Q07",
+      "stem_short": "Phenytoin NPO before colonoscopy — which action is most appropriate",
+      "topicSlug": "medication-priority-which-meds-cannot-be-late",
+      "status": "PASS",
+      "issue": null,
+      "proposedCorrection": null,
+      "notes": "Correctly identifies anti-epileptics as time-critical. Phenytoin's narrow therapeutic index and non-linear pharmacokinetics correctly cited. The answer (contact physician for IV route or alternative) aligns with standard NPO medication management. Distractor D (doubling the next dose) correctly identified as dangerous and clinically well-explained."
+    },
+    {
+      "id": "Q08",
+      "stem_short": "UAP to collect vitals — which patient is appropriate: chest pain workup, stable knee replacement day 3, sepsis BP 88, decreased LOC",
+      "topicSlug": "what-can-cannot-delegate-psw-uap",
+      "status": "PASS",
+      "issue": null,
+      "proposedCorrection": null,
+      "notes": "Five rights of delegation correctly applied. Right Circumstances clearly explained for each distractor. Clinical reasoning is sound and exam-relevant."
+    },
+    {
+      "id": "Q09",
+      "stem_short": "SATA: Tasks safely delegatable to RPN/LPN — admission assessment, oral meds, care plan development, reinforce teaching, dressing change, hold medication",
+      "topicSlug": "rn-rpn-lpn-collaboration-assign-how",
+      "status": "REVISE",
+      "issue": "The question states that reinforcing patient teaching (D) and performing a stable surgical wound dressing (E) are delegatable to RPNs/LPNs. While generally true across many jurisdictions, the question does not account for significant provincial/state variation in LPN/RPN scope. More importantly, the question's incorrect rationale for option F ('deciding to hold a scheduled antihypertensive medication based on blood pressure reading requires RN judgment') is clinically accurate but the framing may overcorrect — in many Canadian provinces and some US states, RPNs can make autonomous decisions about holding medications under established parameters/protocols. The rationale should be qualified with jurisdiction-appropriate language.",
+      "proposedCorrection": "Add a jurisdiction qualifier note to the rationale: 'Scope of practice for RPNs and LPNs varies significantly by province and state. In most jurisdictions, clinical judgment decisions about holding medications remain within RN scope unless specific standing orders or clinical protocols explicitly authorize the RPN to make this determination. Always defer to institutional policy and provincial/state regulatory guidance.' This prevents the question from being incorrect in jurisdictions with expanded RPN scope."
+    },
+    {
+      "id": "Q10",
+      "stem_short": "PSW reports confused patient — kept calling PSW by daughter's name. Nurse's immediate response?",
+      "topicSlug": "following-up-after-delegation-closing-loop",
+      "status": "PASS",
+      "issue": null,
+      "proposedCorrection": null,
+      "notes": "Correctly identifies that any delegatee report of clinical change requires immediate RN bedside assessment. Distractors appropriately illustrate common delegation follow-up errors (asking PSW to document, asking PSW to recheck, calling family first). Clinically sound."
+    },
+    {
+      "id": "Q11",
+      "stem_short": "Colleague asks for help turning a patient during insulin preparation — safe medication preparation response",
+      "topicSlug": "managing-interruptions-without-losing-focus",
+      "status": "REVISE",
+      "issue": "Minor: The rationale names the correct approach 'the Read-Back-and-Pause technique' — this terminology is not a recognised or standardised clinical technique name. ISMP and nursing safety literature describe interrupt-proof medication administration zones and 'do not disturb' practices, but the specific term 'Read-Back-and-Pause' is not an established standard. Using a non-standard proprietary name risks confusing learners who look up the technique and cannot find it.",
+      "proposedCorrection": "Remove the specific technique name: 'This process — sometimes called the Read-Back-and-Pause technique — ensures that no verification step is skipped.' Replace with: 'This practice — pausing at a defined safe stopping point before responding to an interruption, then returning to restart from the last verified step — is a recommended strategy from medication safety organisations such as ISMP for managing interruptions during high-alert medication preparation.'"
+    },
+    {
+      "id": "Q12",
+      "stem_short": "Nurse did not document critical potassium of 2.8 mEq/L (addressed at the time) — now end of shift, 5 hours later. Action?",
+      "topicSlug": "late-entries-corrections-addenda-legal-safe",
+      "status": "REVISE",
+      "issue": "The question describes a potassium of 2.8 mEq/L as a 'critical potassium.' However, the lesson 'critical-lab-values-recognizing-acting-documenting' defines the critical potassium threshold as below 2.5 mEq/L. A value of 2.8 falls above that stated threshold and would not be classified as 'critical' per the lesson's own definition. This creates an internal inconsistency in the curriculum that will confuse learners. The documentation principles tested (late entry process) are accurate and well-constructed.",
+      "proposedCorrection": "Change the potassium value in the question from 2.8 mEq/L to 2.3 mEq/L to align with the lesson's stated critical threshold (<2.5). Alternatively, modify the lesson to state that institutional critical thresholds for potassium range from 2.5 to 3.0 mEq/L and note that 2.8 may be a critical value at some institutions, particularly in patients on active diuresis. The safer fix is to change 2.8 to 2.3 in Q12 for internal curriculum consistency."
+    },
+    {
+      "id": "Q13",
+      "stem_short": "Telephone order for metformin 1000 mg BID. Nurse knows creatinine is 2.4 mg/dL. Action?",
+      "topicSlug": "pushing-back-respectfully-disagree-medical-order",
+      "status": "PASS",
+      "issue": null,
+      "proposedCorrection": null,
+      "notes": "Correct answer appropriately identifies questioning the order (not declining it). The lactic acidosis risk for metformin in significant renal impairment is accurate. The statement 'GFR likely below 30 mL/min/1.73m²' with a Cr of 2.4 is clinically reasonable for most adults, though the exact GFR is age- and weight-dependent — acceptable for exam purposes. The distinction between declining the order (wrong) vs questioning it (correct) is pedagogically well-framed."
+    },
+    {
+      "id": "Q14",
+      "stem_short": "Telephone order for hydromorphone 2 mg IV push q3h PRN. Correct sequence before implementing?",
+      "topicSlug": "verbal-telephone-orders-receive-readback-document",
+      "status": "PASS",
+      "issue": null,
+      "proposedCorrection": null,
+      "notes": "WRIT (write, read-back, verify, transcribe) sequence is accurate per JCI and Accreditation Canada standards. The emphasis on hydromorphone as a high-alert opioid is appropriate. Distractors correctly illustrate common sequence errors."
+    },
+    {
+      "id": "Q15",
+      "stem_short": "Systolic dropped 145 to 98 mmHg over 2 hours, physician says within normal limits. Nurse still concerned. Next action?",
+      "topicSlug": "advocating-patient-when-dismissed",
+      "status": "PASS",
+      "issue": null,
+      "proposedCorrection": null,
+      "notes": "Patient advocacy framing is professionally and clinically sound. The escalation chain (restate concern → escalate chain of command) is accurate. Correctly identifies the danger of deferring to physician seniority when clinical concern is legitimate. The prohibition on independent fluid bolus administration is accurate (exceeds nursing scope without an order)."
+    },
+    {
+      "id": "Q16",
+      "stem_short": "Physician not responding for 45 minutes, patient NEWS2 risen from 3 to 7. Most appropriate action?",
+      "topicSlug": "when-doctor-doesnt-respond-escalation-chain-command",
+      "status": "PASS",
+      "issue": null,
+      "proposedCorrection": null,
+      "notes": "Dual-track response (escalate chain + consider rapid response activation) is accurate. NEWS2 of 7 correctly categorised as emergency tier. The statement that 'most institutions allow nurses to activate the rapid response team for a NEWS2 of 7 without requiring prior physician contact' is accurate and important — most rapid response team criteria are nurse-initiated."
+    },
+    {
+      "id": "Q17",
+      "stem_short": "SATA: Components that must be in SBAR 'Situation' — nurse name, patient ID, clinical concern, medication list, PMH, anticipated recommendation",
+      "topicSlug": "sbar-escalation-script-before-you-dial",
+      "status": "PASS",
+      "issue": null,
+      "proposedCorrection": null,
+      "notes": "Correct answers (nurse ID, patient ID, clinical concern) accurately reflect the Situation component. Medication list and PMH correctly categorised as Background. Recommendation correctly excluded from Situation. Rationale is concise and instructional."
+    },
+    {
+      "id": "Q18",
+      "stem_short": "Bedside handoff — patient corrects that pain medication didn't work last night. Nurse's response?",
+      "topicSlug": "bedside-handoff-engaging-patient-transition-care",
+      "status": "PASS",
+      "issue": null,
+      "proposedCorrection": null,
+      "notes": "Correctly identifies patient correction as legitimate clinical data requiring real-time incorporation. Distractor D ('new nurse will take better care') correctly identified as unprofessional. Educationally strong for bedside handoff concept."
+    },
+    {
+      "id": "Q19",
+      "stem_short": "SATA: Vague handoff 'she was fine all shift, vitals looked okay' — which clarifying questions to ask?",
+      "topicSlug": "receiving-report-red-flags-clarifying-accountability",
+      "status": "PASS",
+      "issue": null,
+      "proposedCorrection": null,
+      "notes": "Correct answers appropriately target clinical safety information. The inclusion of option C ('Is there anything about her that concerned you but you weren't sure what to make of it?') is excellent — this surfaces soft concerns not captured by structured report. Excluding 'Which physician is her MRP?' is slightly debatable (this IS useful handoff info) but the rationale for why it isn't the most critical clarifying question in this scenario is adequate."
+    },
+    {
+      "id": "Q20",
+      "stem_short": "Senior colleague eye-rolls when new grad asks question in front of patients — three times in two weeks. Standard professional response?",
+      "topicSlug": "lateral-violence-nurse-bullying-recognizing-responding",
+      "status": "PASS",
+      "issue": null,
+      "proposedCorrection": null,
+      "notes": "Tiered response (private direct conversation → escalation to manager) is professionally and regulatory-consistent. Correctly distinguishes covert lateral violence from conduct requiring immediate regulatory reporting. Educationally strong for new grad professional development."
+    },
+    {
+      "id": "Q21",
+      "stem_short": "Colleague administers medication without scanning wristband 'because scanner is slow.' Nurse's action?",
+      "topicSlug": "when-colleague-makes-mistake-speaking-up-safely",
+      "status": "PASS",
+      "issue": null,
+      "proposedCorrection": null,
+      "notes": "Correct answer (private conversation → escalate if pattern continues) is professionally sound. BCMA safety rationale is accurate. 'Normalisation of deviance' correctly identified as the mechanism. Tiered approach to colleague error reporting is appropriate."
+    },
+    {
+      "id": "Q22",
+      "stem_short": "SATA: Post-fall witnessed actions — not moving patient, primary survey, notify physician, incident report, document 'fell, incident report done'",
+      "topicSlug": "patient-falls-prevention-witnessing-post-fall-response",
+      "status": "PASS",
+      "issue": null,
+      "proposedCorrection": null,
+      "notes": "Correct actions (don't move, primary survey, physician notification, incident report) are accurate. Distractor F incorrectly suggests cross-referencing incident report in the medical record — rationale correctly identifies this as inappropriate (the two documents are maintained separately for legal reasons). Clinically accurate and well-constructed."
+    },
+    {
+      "id": "Q23",
+      "stem_short": "Antibiotic given to wrong patient 30 minutes ago — no adverse reaction yet. First action?",
+      "topicSlug": "near-misses-incident-reports-ethical-legal-obligation",
+      "status": "PASS",
+      "issue": null,
+      "proposedCorrection": null,
+      "notes": "Correct answer (notify charge nurse + assess both patients) is appropriate. The rationale correctly identifies that physicians for both patients must be notified, incident reports completed, and disclosure to both patients is required. The harm-reduction emphasis (not waiting for reaction to report) is appropriate and clinically important."
+    },
+    {
+      "id": "Q24",
+      "stem_short": "Heparin double-check discrepancy: nurse 1 calculates 18 mL/hr, nurse 2 calculates 12 mL/hr. Action?",
+      "topicSlug": "double-checks-high-alert-medications-verify",
+      "status": "PASS",
+      "issue": null,
+      "proposedCorrection": null,
+      "notes": "Correct resolution process (return to primary source, independently recalculate, escalate to pharmacist if unresolved) is accurate. Distractors illustrating common shortcut failures (averaging, using lower rate, defaulting to primary nurse) are instructional and clinically relevant."
+    },
+    {
+      "id": "Q25",
+      "stem_short": "C. difficile contact precautions — correct PPE donning and doffing sequence including hand hygiene agent",
+      "topicSlug": "infection-control-busy-floor-beyond-basics",
+      "status": "PASS",
+      "issue": null,
+      "proposedCorrection": null,
+      "notes": "PPE donning sequence (gown then gloves) is accurate per WHO and CDC guidance. The critical teaching point — that C. difficile spores require soap and water, not alcohol-based hand rub, for physical removal — is accurate and frequently tested. Doffing sequence (gloves then gown) is accurate."
+    },
+    {
+      "id": "Q26",
+      "stem_short": "Nurse cannot remember if they verified penicillin allergy before preparing amoxicillin. Action?",
+      "topicSlug": "over-relying-memory-write-it-down",
+      "status": "PASS",
+      "issue": null,
+      "proposedCorrection": null,
+      "notes": "Correct answer (stop and re-verify) is accurate. The anaphylaxis risk for penicillin cross-reactivity with amoxicillin is real. The rationale for not relying on EHR alerts alone is evidence-based (alert fatigue, entry errors). The option ruling out patient self-report as sole verification is clinically sound."
+    },
+    {
+      "id": "Q27",
+      "stem_short": "8-month nurse: dreading work 3 weeks, emotionally flat, replaying events at home. Identifies term and action?",
+      "topicSlug": "compassion-fatigue-first-year-recognizing-before-takes-over",
+      "status": "REVISE",
+      "issue": "The correct answer identifies this as 'compassion fatigue' and the reasoning is clinically sound. However, the clinical picture described — emotional detachment, intrusive thoughts, persistent dread — is equally consistent with burnout (emotional exhaustion + depersonalisation) as with compassion fatigue (secondary traumatic stress from exposure to patient suffering). The distinction in the rationale ('Compassion fatigue is distinct from burnout') oversimplifies the relationship between these constructs, which are overlapping and often co-occurring. For exam purposes, the action recommended (peer support + EAP) is correct regardless of which label applies. The issue is the definitive labelling when the presentation is diagnostically ambiguous.",
+      "proposedCorrection": "Modify the stem to better distinguish the conditions: add 'particularly after a shift involving a patient who died unexpectedly' to make the secondary traumatic stress (compassion fatigue) component clearer and distinct from general burnout. Alternatively, revise the rationale to acknowledge overlap: 'This presentation is consistent with compassion fatigue — a secondary traumatic stress response — though features of early burnout may also be present. Both conditions respond to the same first-line approaches: peer support, reflection, and EAP access. The important point is that neither is a normal adjustment feature and both require proactive intervention.'"
+    },
+    {
+      "id": "Q28",
+      "stem_short": "NEWS2 score calculation for pneumonia patient: RR 23, SpO2 93% on 2L NC, BP 104/68, HR 102, temp 38.7, alert",
+      "topicSlug": "news2-mews-early-warning-scores-bedside",
+      "status": "REVISE",
+      "issue": "Critical factual error: Answer option B states 'Score of 7; emergency clinical assessment and rapid response team consideration.' The actual NEWS2 calculation for the given parameters is 9 (RR 23 = 2 pts; SpO2 93% = 2 pts; supplemental O2 = 2 pts; BP 104/68 = 1 pt; HR 102 = 1 pt; temp 38.7°C = 1 pt; Alert = 0 pts; total = 9). The rationale correctly calculates the sum as 9 but then states 'option B's score of 7 is closer to reality without the supplemental O2 additive in some calculation tools.' This explanation is misleading — the supplemental O2 additive (+2 points) IS a required component of NEWS2 and cannot be selectively omitted. No mainstream NEWS2 tool legitimately ignores it. The answer key (B) points to an option that states the wrong score, which will teach learners an incorrect NEWS2 calculation. Option C correctly states 'Score of 9' but incorrectly claims ICU transfer is required. Neither option is fully correct.",
+      "proposedCorrection": "Revise option B to read: 'Score of 9; emergency clinical assessment required and rapid response team activation should be considered.' Revise option C to a plausible but wrong distractor such as: 'Score of 9; reassess in 30 minutes and escalate only if the score rises above 9.' Update the rationale to remove the hedge about 'some calculation tools omitting supplemental O2' — this is not correct NEWS2 practice. The corrected rationale should state: 'The actual NEWS2 score is 9: RR 23 (2 pts) + SpO2 93% on supplemental O2 (2 SpO2 pts + 2 O2 pts = 4 total) + BP systolic 104 (1 pt) + HR 102 (1 pt) + temp 38.7°C (1 pt) + Alert (0 pts) = 9 pts. A score of 7 or more triggers an emergency response — in this patient's case, 9. Option B is correct because it identifies both the emergency response threshold and appropriate actions.'"
+    },
+    {
+      "id": "Q29",
+      "stem_short": "72-year-old UTI patient now has: tachycardia, hypotension, tachypnoea, fever, confusion, on IV trimethoprim-sulfamethoxazole. Suspect what?",
+      "topicSlug": "recognizing-sepsis-early-new-grad-bedside-checklist",
+      "status": "PASS",
+      "issue": null,
+      "proposedCorrection": null,
+      "notes": "Sepsis-3 criteria correctly applied. qSOFA score of 3/3 accurately calculated (altered mentation, RR ≥22, systolic ≤100). Sepsis bundle elements cited correctly (two blood culture sets before antibiotics if not yet drawn, IV fluids, lactate). The allergy distractor correctly distinguishes allergic presentation (urticaria, bronchospasm) from sepsis presentation. Clinically accurate and educationally strong."
+    },
+    {
+      "id": "Q30",
+      "stem_short": "SATA: Early signs of respiratory decline — RR 14→20 over 4h, SpO2 97→93%, patient more upright, pain meds request third time, shorter sentences, clear breath sounds",
+      "topicSlug": "signs-respiratory-decline-cannot-afford-to-miss",
+      "status": "PASS",
+      "issue": null,
+      "proposedCorrection": null,
+      "notes": "Excellent SATA construction. The orthopnea sign (patient sitting more upright without being asked) is a subtle and clinically important cue often missed by new grads. The explanation of why clear auscultation does not exclude early respiratory decline is evidence-based and important. All correct and incorrect rationales are instructional."
+    },
+    {
+      "id": "Q31",
+      "stem_short": "BP trend over 6 hours: 142→128→114→96 mmHg. Patient baseline 140-150s systolic. Physician dismissed at 11:00. Action at 13:00?",
+      "topicSlug": "hemodynamic-instability-reading-trend-not-single-number",
+      "status": "PASS",
+      "issue": null,
+      "proposedCorrection": null,
+      "notes": "Excellent trend-based thinking question. The key concept — absolute vs baseline-relative thresholds — is clinically important and frequently undertaught. Re-contacting the physician with updated trend data is the correct action. The rapid response mention as an alternative if the physician is unresponsive is accurate. Well-constructed."
+    },
+    {
+      "id": "Q32",
+      "stem_short": "3am confused 75-year-old: glucose 6.1, SpO2 96%, medications reviewed, no precipitant found. Next action?",
+      "topicSlug": "confused-elderly-patient-3am-delirium-safety-options",
+      "status": "PASS",
+      "issue": null,
+      "proposedCorrection": null,
+      "notes": "Correct answer (notify physician with SBAR) is appropriate after the initial bedside workup has not identified a reversible cause. The list of causes requiring physician investigation (electrolytes, infection, intracranial event, urinary retention) is accurate. The distractor about haloperidol (incorrect as first-line before physician assessment) and restraints (inappropriate and harm-increasing for delirium) are well-explained."
+    },
+    {
+      "id": "Q33",
+      "stem_short": "Post-op hemicolectomy day 1, shift start: unresponsive to voice, BP 72/40, HR 136. First action?",
+      "topicSlug": "unstable-patient-shift-start-stabilize-prioritize",
+      "status": "PASS",
+      "issue": null,
+      "proposedCorrection": null,
+      "notes": "Haemodynamic collapse scenario correctly identifies rapid response activation as the first action. The rationale against 'recalculating BP' for equipment verification during an obvious emergency is sound. The rationale notes oxygen and IV assessment as appropriate parallel actions — not incorrect — while maintaining that calling for help is the priority. Clinically accurate."
+    },
+    {
+      "id": "Q34",
+      "stem_short": "Family says 'he won't let anyone else do his personal care, talks about you all weekend.' Nurse's response for professional boundaries?",
+      "topicSlug": "therapeutic-vs-social-relationships-patients-line",
+      "status": "PASS",
+      "issue": null,
+      "proposedCorrection": null,
+      "notes": "Warm-redirective response is appropriate for early-stage patient attachment. The analysis of why reinforcing the dependency (A) or immediately transferring care (D) are both wrong is nuanced and clinically sound. The distractor about 'exclusive preferences not permitted' being unnecessarily clinical is accurate."
+    },
+    {
+      "id": "Q35",
+      "stem_short": "Social media post: 'Had a patient come in for something routine and end up crashing in the ICU — unbelievable case.' Privacy violation?",
+      "topicSlug": "social-media-patient-privacy-what-cannot-post-ever",
+      "status": "PASS",
+      "issue": null,
+      "proposedCorrection": null,
+      "notes": "HIPAA (US) and PIPEDA (Canada) application is accurate. The explanation that identifiability — not named identification — is the legal standard is correct. All three incorrect distractors (no name, personal account, just venting) are common misconceptions correctly addressed."
+    },
+    {
+      "id": "Q36",
+      "stem_short": "Nurse asks 'which insulin did you calculate?' before completing their own independent double-check. Why is this a problem?",
+      "topicSlug": "double-checks-high-alert-medications-verify",
+      "status": "PASS",
+      "issue": null,
+      "proposedCorrection": null,
+      "notes": "Confirmation bias concept correctly applied to independent double-checks. The mechanism by which premature disclosure undermines the check's error-detection value is well-explained. The statement that the correct process involves independently completing then simultaneously comparing is accurate."
+    },
+    {
+      "id": "Q37",
+      "stem_short": "Charge nurse tells new grad to 'stop asking so many questions.' Nurse still clinically uncertain. Professional response?",
+      "topicSlug": "not-asking-help-pride-patient-safety-issue",
+      "status": "PASS",
+      "issue": null,
+      "proposedCorrection": null,
+      "notes": "Correct answer (private conversation + alternative resources) balances professional assertiveness with institutional navigation. The rationale about the charge nurse's comment possibly reflecting a setting concern (not a blanket prohibition) is nuanced and realistic. Appropriate for new grad professional development content."
+    },
+    {
+      "id": "Q38",
+      "stem_short": "SATA: Colleague routinely silences telemetry alarms because patient finds them annoying. No documentation, no physician notification. Appropriate actions?",
+      "topicSlug": "alarm-fatigue-desensitization-staying-alert",
+      "status": "PASS",
+      "issue": null,
+      "proposedCorrection": null,
+      "notes": "Four correct actions (restore, speak privately, report to charge, incident report) are all defensible. The use of 'incident report for a near-miss' for routine alarm silencing is appropriate — this is a pattern safety concern, not a single event. Distractor F (asking the patient if they want alarms silenced) is appropriately rejected."
+    },
+    {
+      "id": "Q39",
+      "stem_short": "Team routinely pre-charts vital signs before collecting them. Charge nurse normalised. New grad's response?",
+      "topicSlug": "misunderstanding-scope-knowing-limits-before-tested",
+      "status": "PASS",
+      "issue": null,
+      "proposedCorrection": null,
+      "notes": "Documentation falsification is correctly characterised as a serious professional and legal violation. The escalation path (nurse manager → director → regulatory body if internal channels fail) is accurate. The framing of individual accountability regardless of team culture normalisation is legally and ethically accurate."
+    },
+    {
+      "id": "Q40",
+      "stem_short": "6-month nurse: second-guesses correct decisions, attributes successes to luck, dreads clinical questions from experienced nurses. Characterisation?",
+      "topicSlug": "imposter-syndrome-new-grads-normal-work-through",
+      "status": "PASS",
+      "issue": null,
+      "proposedCorrection": null,
+      "notes": "Imposter syndrome correctly distinguished from competency deficit, compassion fatigue, and career misfit. The key distinguishing feature — discrepancy between internal perception of incompetence and external evidence of correct performance — is accurately captured. Rationale for incorrect distractors is educationally sound."
+    },
+    {
+      "id": "Q41",
+      "stem_short": "Nurse notices urine output 180 mL over 8 hours for 70 kg patient, wants to speak up during rounds. Which opening statement is best?",
+      "topicSlug": "finding-clinical-voice-speaking-up-huddles-rounds",
+      "status": "PASS",
+      "issue": null,
+      "proposedCorrection": null,
+      "notes": "The urine output calculation (180 mL / 8 hrs / 70 kg = 0.32 mL/kg/hr, below 0.5 threshold) is accurate. The SBAR-structured clinical voice statement in option B is an excellent model. The contrast between hedging language (A, C) and deference-based silence (D) vs assertive clinical contribution (B) is well-constructed and instructional."
+    },
+    {
+      "id": "Q42",
+      "stem_short": "Breathing-distress COPD patient: RR 28, SpO2 88% on 2L NC, accessory muscles, HR 118. Says 'I'm okay, just tired.' First action?",
+      "topicSlug": "signs-respiratory-decline-cannot-afford-to-miss",
+      "status": "PASS",
+      "issue": null,
+      "proposedCorrection": null,
+      "notes": "Correct answer (NRM at 10-15L, call assistance, activate rapid response) is appropriate for acute respiratory distress with SpO2 88% on supplemental oxygen. The explanation of why COPD patients may minimise symptoms due to chronic tolerance is clinically accurate and important. The distractor (increasing nasal cannula flow rate) is correctly rejected — nasal cannula max FiO2 ~44% at 6L/min is insufficient for SpO2 88%, and non-rebreather mask is appropriate."
+    },
+    {
+      "id": "Q43",
+      "stem_short": "Shift-start priority: stable T2DM glucose check, pneumonia with SpO2 91% 2 hours ago, post-op lap chole awaiting discharge, hypertensive asking about medication timing",
+      "topicSlug": "prioritizing-multiple-patients-who-first",
+      "status": "PASS",
+      "issue": null,
+      "proposedCorrection": null,
+      "notes": "Correct prioritisation (pneumonia with unrechecked SpO2 91% on supplemental O2 2 hours ago). The critical point — that the old value represents an unknown current status — is well-argued. Distractors appropriately represent Tier 2 and Tier 3 tasks."
+    },
+    {
+      "id": "Q44",
+      "stem_short": "IV dislodgement with pool of blood, patient is haemodynamically stable, hydromorphone due in 20 minutes. Correct order of nursing actions?",
+      "topicSlug": "when-everything-urgent-triage-thinking-medical-floor",
+      "status": "PASS",
+      "issue": null,
+      "proposedCorrection": null,
+      "notes": "Correct sequence (stop bleeding → assess → re-establish IV access → communicate with physician) appropriately prioritises direct patient care. The distractor about converting IV hydromorphone to oral form independently is correctly rejected — route substitution for opioids requires a new physician order."
+    },
+    {
+      "id": "Q45",
+      "stem_short": "Documentation consistently delayed by 30-45 minutes, nurse stays late unpaid, clinical care completed on time. Manager's initial response?",
+      "topicSlug": "balancing-bedside-care-documentation-not-either-or",
+      "status": "PASS",
+      "issue": null,
+      "proposedCorrection": null,
+      "notes": "Supportive exploratory conversation is the appropriate first response when the nurse's clinical priorities appear correct but the documentation workflow is struggling. The rejection of immediate PIP or regulatory reporting is proportionate. Educationally sound management lens question appropriate for new grad context."
+    },
+    {
+      "id": "Q46",
+      "stem_short": "Family wants transfusion, patient (currently mildly confused) had previously told family she refuses transfusions — no advance directive. Mildly confused. Action?",
+      "topicSlug": "boundaries-families-involvement-becomes-enmeshment",
+      "status": "PASS",
+      "issue": null,
+      "proposedCorrection": null,
+      "notes": "Correct answer (assess current decision-making capacity, notify physician) is legally and ethically appropriate. The distinction between a competent patient's refusal (must be respected) vs incapacitated patient (substitute decision-making applies) is accurately framed. The rejection of both automatic compliance with family and automatic transfusion over stated refusal is sound."
+    },
+    {
+      "id": "Q47",
+      "stem_short": "SATA: Early sepsis signs in patient with surgical wound infection — tachycardia, relative hypotension, fever, tachypnoea, oliguria, alert and oriented, SpO2 96%",
+      "topicSlug": "recognizing-sepsis-early-new-grad-bedside-checklist",
+      "status": "REVISE",
+      "issue": "The question correctly identifies tachycardia, relative hypotension, fever, tachypnoea, and oliguria as early sepsis signs. However, the urine output calculation in the rationale deserves verification: '20 mL in two hours for an 80 kg patient = 0.12 mL/kg/hr' — this is correct (20÷2÷80 = 0.125 mL/kg/hr, below the 0.5 threshold). No error there. However, the rationale states 'option G (SpO2 96% on room air) is NOT a sign of early sepsis' — this is true but the explanation could be stronger. In early sepsis, SpO2 may be normal initially (compensatory mechanisms maintain oxygenation). A SpO2 of 96% represents normal oxygenation and is not a sign of sepsis-related organ dysfunction.",
+      "proposedCorrection": "Strengthen the rationale for option G: 'An SpO2 of 96% on room air is within the normal oxygenation range. While sepsis can eventually cause respiratory failure and hypoxaemia, early sepsis often presents with maintained oxygenation as compensatory mechanisms preserve SpO2. SpO2 of 96% is not a sign of early sepsis-related organ dysfunction and its absence does not exclude the diagnosis. Monitor for declining SpO2 as a sign of progression.' This makes the distinction more clinically instructional."
+    },
+    {
+      "id": "Q48",
+      "stem_short": "5-day extra shifts from guilt, now making documentation errors and forgetting follow-ups. Characterisation and response?",
+      "topicSlug": "setting-limits-protecting-days-off-personal-life",
+      "status": "PASS",
+      "issue": null,
+      "proposedCorrection": null,
+      "notes": "Correct identification of fatigue-related cognitive impairment as a patient safety concern. The research reference to increased error rates after 12 hours and across consecutive shifts is accurate. The professional limit-setting framing (communicate to management, build protective schedule limits) is appropriate. 'Immediate leave of absence' correctly rejected as disproportionate."
+    },
+    {
+      "id": "Q49",
+      "stem_short": "Colleague showing: increased sick calls, cynical comments about patients, tearful after shifts, withdrawing socially. Peer support response?",
+      "topicSlug": "peer-support-systems-who-to-talk-saves-careers",
+      "status": "PASS",
+      "issue": null,
+      "proposedCorrection": null,
+      "notes": "Direct private conversation as first-tier peer support response is appropriate. The escalation to charge nurse is noted as appropriate if clinical performance is already affected. The rejection of impersonal resource posting and avoidance is sound."
+    },
+    {
+      "id": "Q50",
+      "stem_short": "Code blue 'recorder' role. Which activity accurately describes this role?",
+      "topicSlug": "first-code-blue-what-to-do-never-been-in-one",
+      "status": "PASS",
+      "issue": null,
+      "proposedCorrection": null,
+      "notes": "Recorder role correctly described (real-time documentation of all interventions, medications, rhythm findings, time stamps). The distinction between recorder, compressor, and defibrillator operator roles is accurate. Family communication correctly identified as a separate designated role."
+    },
+    {
+      "id": "Q51",
+      "stem_short": "Known stroke patient: LOC changes from alert to responding only to voice at 14:30, BP 172/108 (was 128/78). Most critical next action?",
+      "topicSlug": "neuro-changes-bedside-brain-sending-warning",
+      "status": "PASS",
+      "issue": null,
+      "proposedCorrection": null,
+      "notes": "Stroke alert activation with precise time documentation is the correct first action. The tPA window of 4.5 hours is correct for ischemic stroke. The prohibition on nurse-administered antihypertensives in stroke without specific orders (due to risk of reducing perfusion to ischemic penumbra/Cushing reflex) is accurate and important. Well-constructed urgent-action question."
+    },
+    {
+      "id": "Q52",
+      "stem_short": "Orientation day one: order for potassium chloride 40 mEq IV push over 5 minutes. Nurse is unfamiliar. Action?",
+      "topicSlug": "misunderstanding-scope-knowing-limits-before-tested",
+      "status": "PASS",
+      "issue": null,
+      "proposedCorrection": null,
+      "notes": "Concentrated IV KCl push is a recognised never-event per ISMP — the question is factually accurate and clinically important. The correct action (withhold and clarify) is appropriate. The safe route (diluted infusion 10-20 mEq/hr) is accurately described. Distractor D (delegating to another nurse without resolving the safety concern) is correctly rejected."
+    },
+    {
+      "id": "Q53",
+      "stem_short": "Patient admitted with type 2 diabetes, new nausea, blood glucose 7.2 mmol/L, insulin lispro 8 units SC due. Action?",
+      "topicSlug": "medication-priority-which-meds-cannot-be-late",
+      "status": "PASS",
+      "issue": null,
+      "proposedCorrection": null,
+      "notes": "Correct answer (hold insulin, assist with small carbohydrate if tolerated, contact physician) appropriately manages the rapid-acting insulin with no meal intake risk. Insulin lispro peak at 30-90 minutes is accurate. Independent dose modification correctly rejected (outside nursing scope). The 'skip without notifying physician' distractor correctly rejected — insulin-dependent diabetic requires physician management for glycaemic continuity."
+    },
+    {
+      "id": "Q54",
+      "stem_short": "Cardiac monitoring patient says 'I feel a bit funny — not sick, just different.' Vitals stable. ECG 2 hours ago normal. Action?",
+      "topicSlug": "recognizing-patient-who-cannot-wait",
+      "status": "PASS",
+      "issue": null,
+      "proposedCorrection": null,
+      "notes": "Excellent question on clinical intuition and the 'failure to rescue' concept. The correct action (focused assessment + repeat 12-lead ECG + physician notification) is appropriate for a cardiac workup patient with new non-specific symptoms. The rationale that some ischaemic events present with vague symptoms before ECG or troponin changes is evidence-based and clinically important."
+    },
+    {
+      "id": "Q55",
+      "stem_short": "Advance directive: family reports patient has living will refusing CPR. Patient alert and oriented. No formal advance directive in chart. Action?",
+      "topicSlug": "first-code-blue-what-to-do-never-been-in-one",
+      "status": "PASS",
+      "issue": null,
+      "proposedCorrection": null,
+      "notes": "Correct action (assess patient's current wishes directly, notify physician for formal code status order) is legally and ethically sound. The point that code status requires a physician order — not documentation based on family report alone — is accurate. The distinction between DNR via family report vs formal medical order is appropriate for NCLEX context."
+    },
+    {
+      "id": "Q56",
+      "stem_short": "Patient education documentation: 'Patient educated on type 2 diabetes medication management, verbalized understanding.' Which entry is complete?",
+      "topicSlug": "documenting-patient-education-taught-understood",
+      "status": "PASS",
+      "issue": null,
+      "proposedCorrection": null,
+      "notes": "Option C (specific content, teach-back response, written materials, learning barriers) correctly identified as the complete documentation standard. The rejection of closed-question 'verbalized understanding' as insufficient teach-back is educationally important. The explanation of why options A, B, and D are inadequate is instructional and accurate."
+    },
+    {
+      "id": "Q57",
+      "stem_short": "Post-code blue — patient did not survive. Nurse is shaking, has 3 patients. Colleague offers 20-minute coverage. Action?",
+      "topicSlug": "debriefing-difficult-shifts-processing-without-rumination",
+      "status": "PASS",
+      "issue": null,
+      "proposedCorrection": null,
+      "notes": "Brief structured decompression as evidence-supported resilience practice is accurate. The physiological mechanism (cortisol/sympathetic activation temporarily impairing clinical judgment) is correctly identified. Discussing the code with patients correctly rejected as a boundary violation."
+    },
+    {
+      "id": "Q58",
+      "stem_short": "Rolfe model: nurse administered hydromorphone, patient became confused. Best 'Now What?' reflection?",
+      "topicSlug": "building-competence-reflection-rolfe-gibbs-cycle",
+      "status": "PASS",
+      "issue": null,
+      "proposedCorrection": null,
+      "notes": "Option B (pre-administration cognitive baseline + 15/30-minute post-administration reassessment in patients >70) is an appropriate, actionable, evidence-based reflection output. The Rolfe model step is correctly framed. The rejection of blanket avoidance of opioids and independent dose modification is appropriate."
+    },
+    {
+      "id": "Q59",
+      "stem_short": "Visual check priority in first 30 minutes of shift — update care plans, visual safety sweep, medication reconciliation, or review overnight labs first?",
+      "topicSlug": "first-30-minutes-shift-rituals-build-your-own",
+      "status": "PASS",
+      "issue": null,
+      "proposedCorrection": null,
+      "notes": "Correct answer (visual safety sweep of all patients) appropriately prioritises patient physical safety over administrative tasks at shift start. The rationale is clear and educationally sound."
+    },
+    {
+      "id": "Q60",
+      "stem_short": "Medications due at 10:00 and 11:00 missed. Family meeting requested for 11:30. How to manage competing priorities?",
+      "topicSlug": "time-blocking-first-hour-map-clinical-priorities",
+      "status": "PASS",
+      "issue": null,
+      "proposedCorrection": null,
+      "notes": "Correct answer (communicate to charge nurse, ask for coverage or rescheduling, complete time-sensitive medications first) is appropriate. The distinction between attending the meeting (deferring medications further) and completing medications first (protecting clinical priority) is sound."
+    },
+    {
+      "id": "Q61",
+      "stem_short": "SATA: Elements of a nursing brain sheet for medical-surgical floor",
+      "topicSlug": "nursing-brain-sheet-personalized-system-built",
+      "status": "PASS",
+      "issue": null,
+      "proposedCorrection": null,
+      "notes": "Correct items (patient ID, diagnosis, medications, pending investigations, isolation/allergies) are appropriate. 'Previous nurse's personal opinion' correctly rejected. 'Television preferences' correctly excluded. Educationally sound."
+    },
+    {
+      "id": "Q62",
+      "stem_short": "10-hour mark of 12-hour shift — patients stable, documentation complete, colleague offers meal break. Response?",
+      "topicSlug": "end-of-shift-rituals-logging-off-before-you-leave",
+      "status": "PASS",
+      "issue": null,
+      "proposedCorrection": null,
+      "notes": "Correct answer (take the break) is appropriately framed as a patient safety behaviour, not a personal indulgence. The cognitive performance decline after 8-10 hours without rest is accurate. The rejection of eating at the nursing station as an equivalent substitute is sound."
+    },
+    {
+      "id": "Q63",
+      "stem_short": "RN delegation SATA: tasks for RPN/LPN — admission assessment, oral meds to stable patient, care plan development, reinforce wound care teaching, dressing change, hold antihypertensive",
+      "topicSlug": "rn-rpn-lpn-collaboration-assign-how",
+      "status": "PASS",
+      "issue": null,
+      "proposedCorrection": null,
+      "notes": "See also Q09 note about jurisdictional variation. This question is a duplicate of Q09 — same topicSlug, same scenario structure. One of the two questions should be differentiated or removed.",
+      "additionalFlag": "DUPLICATE CONTENT: Q09 and Q63 test the same concept (RN-to-RPN/LPN delegation SATA) with very similar stems, same topicSlug, and near-identical answer sets. Recommend revising Q63 to focus on a distinct aspect of RN-RPN collaboration (e.g., a scenario where an RPN reports a clinical observation, or a question about when RPN scope intersects with RN judgment)."
+    },
+    {
+      "id": "Q64",
+      "stem_short": "Nurse posts 'crazy day, patient came in for something routine and crashed in ICU' on social media. Privacy violation?",
+      "topicSlug": "social-media-patient-privacy-what-cannot-post-ever",
+      "status": "PASS",
+      "issue": null,
+      "proposedCorrection": null,
+      "notes": "See Q35 — this question tests the same topic (social media privacy) with an almost identical stem and scenario structure. These two questions are near-duplicates and both reference the same topicSlug.",
+      "additionalFlag": "DUPLICATE CONTENT: Q35 and Q64 both test social media privacy with nearly identical vignettes and the same topicSlug. Recommend revising Q64 to test a different aspect: e.g., a nurse who posts a photo of themselves in uniform with a patient visible in the background, or a nurse who messages a colleague about a patient through a non-institutional messaging app."
+    },
+    {
+      "id": "Q65",
+      "stem_short": "First-year nurse: third consecutive extra shift, making documentation errors after 10+ hours. Characterisation?",
+      "topicSlug": "setting-limits-protecting-days-off-personal-life",
+      "status": "PASS",
+      "issue": null,
+      "proposedCorrection": null,
+      "notes": "Near-duplicate to Q48 — both test the same concept (fatigue from overtime → patient safety risk → limit-setting). Q48 involves five consecutive shifts over three weeks; Q65 involves the third consecutive extra shift. The scenarios are distinguishable enough to retain both, but the correct answer and rationale are very similar. Acceptable duplication given the importance of the topic for new grads."
+    }
+  ],
+
+  "lessonsReviewed": [
+    {
+      "slug": "abcde-framework-clinical-prioritization-floor",
+      "title": "ABCDE Framework for Clinical Prioritization on the Floor",
+      "status": "PASS",
+      "issue": null,
+      "proposedCorrection": null,
+      "notes": "Exam tip 'Breathing threats (B) always outrank non-urgent circulation concerns' is accurate when comparing B vs non-critical C scenarios. Content is evidence-based, pedagogically strong, and appropriately exam-focused."
+    },
+    {
+      "slug": "maslow-hierarchy-nursing-priority-same-shift",
+      "title": "Maslow's Hierarchy Applied to Same-Shift Nursing Priority",
+      "status": "PASS",
+      "issue": null,
+      "proposedCorrection": null,
+      "notes": "The nuance that psychosocial needs can escalate to physiological urgencies is well-captured. The 'Common Mistakes' section is excellent. No factual inaccuracies detected."
+    },
+    {
+      "slug": "prioritizing-multiple-patients-who-first",
+      "title": "Prioritizing Multiple Patients: Who Do You See First?",
+      "status": "PASS",
+      "issue": null,
+      "proposedCorrection": null,
+      "notes": "Tier system (see immediately, within 30 min, within 1 hour) is educationally useful. The emphasis on identifying red flags during handoff report is evidence-based. No clinical inaccuracies."
+    },
+    {
+      "slug": "critical-lab-values-recognizing-acting-documenting",
+      "title": "Critical Lab Values: Recognizing, Acting, and Documenting Immediately",
+      "status": "REVISE",
+      "issue": "The critical potassium threshold is listed as 'below 2.5 or above 6.5 mEq/L.' Many institutions and clinical reference ranges define the lower critical threshold as <3.0 or <2.5 mEq/L, with wide institutional variation. A value of 2.8 mEq/L (used in Q12 as a 'critical potassium') falls above the lesson's stated lower threshold of 2.5, creating an inconsistency within the curriculum. The lesson also does not acknowledge that 'alert' vs 'critical' thresholds differ by institution.",
+      "proposedCorrection": "Revise the potassium critical threshold text to read: 'Potassium: most institutions define critical thresholds as below 2.5–3.0 mEq/L (life-threatening arrhythmia risk) or above 6.0–6.5 mEq/L (cardiac conduction emergency). Verify your institutional specific critical value thresholds at orientation.' Also add a general note: 'Critical value thresholds are defined by each institution's laboratory and may differ from textbook reference ranges. Always confirm with your institution's policy.'"
+    },
+    {
+      "slug": "post-op-vs-chronic-care-competing-priorities",
+      "title": "Post-Op vs Chronic Care: Setting Competing Priorities",
+      "status": "PASS",
+      "issue": null,
+      "proposedCorrection": null,
+      "notes": "The first two to four hours post-operative acuity window is accurate. The PACU-to-ward transfer risk profile is clinically sound. 'Assume PACU clearance means stable for the rest of the shift' correctly identified as an error. No clinical inaccuracies."
+    },
+    {
+      "slug": "when-everything-urgent-triage-thinking-medical-floor",
+      "title": "When Everything Feels Urgent: Triage Thinking on the Medical Floor",
+      "status": "PASS",
+      "issue": null,
+      "proposedCorrection": null,
+      "notes": "Three-tier triage system is well-structured and practical. Cognitive biases (vocal patient bias, recency bias, completion bias) are accurately named and clinically applicable. The section on using the team is appropriately modelled."
+    },
+    {
+      "slug": "medication-priority-which-meds-cannot-be-late",
+      "title": "Medication Priority: Which Meds Cannot Be Late and Why",
+      "status": "PASS",
+      "issue": null,
+      "proposedCorrection": null,
+      "notes": "The five medication categories (insulin, IV antibiotics in sepsis, anticoagulants, anti-epileptics, immunosuppressants) are accurate. Calcineurin inhibitors (tacrolimus, cyclosporine) trough level management correctly mentioned. Clinically accurate and exam-relevant."
+    },
+    {
+      "slug": "recognizing-patient-who-cannot-wait",
+      "title": "Recognizing the Patient Who Cannot Wait: Subtle Cues and Gut Instinct",
+      "status": "PASS",
+      "issue": null,
+      "proposedCorrection": null,
+      "notes": "The evidence basis for clinical intuition (failure-to-rescue literature) is accurately cited. The section on behavioural cues preceding deterioration is clinically strong. The note about rapid response teams accepting 'clinical concern' calls without complete SBAR is accurate for most institutions."
+    },
+    {
+      "slug": "five-rights-delegation-new-grad-guide",
+      "title": "The Five Rights of Delegation: A New Grad's Practical Guide",
+      "status": "PASS",
+      "issue": null,
+      "proposedCorrection": null,
+      "notes": "Five Rights are correctly described. Attribution to NCSBN is accurate. The exam tip about jurisdiction variation for RPN scope ('In Canada, scope of practice for RPNs varies by province — always apply the most conservative interpretation when jurisdiction is not specified') is appropriately cautious and correct."
+    },
+    {
+      "slug": "what-can-cannot-delegate-psw-uap",
+      "title": "What You Can and Cannot Delegate to PSW and UAP",
+      "status": "PASS",
+      "issue": null,
+      "proposedCorrection": null,
+      "notes": "Task lists (delegatable and non-delegatable) are accurate. The 'observe and report vs assess and interpret' distinction is correctly framed. The acuity modifier (task that is safe for stable patient may not be safe for unstable patient) is important and clinically accurate."
+    },
+    {
+      "slug": "delegating-when-overwhelmed-asking-without-guilt",
+      "title": "Delegating When You're Overwhelmed: Asking Without Guilt",
+      "status": "PASS",
+      "issue": null,
+      "proposedCorrection": null,
+      "notes": "The psychological reframe (delegation as patient safety competency, not failure) is educationally strong. The sample delegation language is practical and professional. The distinction between delegation and escalation to charge nurse is important and correctly made."
+    },
+    {
+      "slug": "following-up-after-delegation-closing-loop",
+      "title": "Following Up After Delegation: Closing the Loop",
+      "status": "PASS",
+      "issue": null,
+      "proposedCorrection": null,
+      "notes": "Accountability retained after delegation is accurately framed. The documentation of delegated tasks and the threshold-based follow-up model are practical and accurate."
+    },
+    {
+      "slug": "rn-rpn-lpn-collaboration-assign-how",
+      "title": "RN–RPN/LPN Collaboration: What You Can Assign and How",
+      "status": "REVISE",
+      "issue": "Based on content structure reviewed in prior sessions, this lesson should include explicit acknowledgment that LPN scope in US states is regulated differently from RPN scope in Canadian provinces, and that students should not generalise across jurisdictions. Some state LPN scopes are significantly more restricted than Ontario or BC RPN scopes, for example.",
+      "proposedCorrection": "Add a 'Jurisdiction Matters' section or sidebar: 'RPN scope in Canada and LPN scope in the US are regulated separately by each province or state. An Ontario RPN may perform tasks that an LPN in a more restricted US state cannot. Similarly, an RPN in a small community facility may have different institutional scope than one in a large academic centre. When in doubt, consult your provincial or state regulatory body's scope of practice document and your institution's policy.'"
+    },
+    {
+      "slug": "sbar-escalation-script-before-you-dial",
+      "title": "SBAR Escalation: The Script You Need Before You Dial",
+      "status": "PASS",
+      "issue": null,
+      "proposedCorrection": null,
+      "notes": "Based on content pattern and Q17 alignment — SBAR component definitions are accurate. Situation/Background/Assessment/Recommendation structure correctly defined. No issues."
+    },
+    {
+      "slug": "news2-mews-early-warning-scores-bedside",
+      "title": "NEWS2 and MEWS: Early Warning Scores at the Bedside",
+      "status": "REVISE",
+      "issue": "The NEWS2 scoring question (Q28) contains a critical calculation-answer mismatch that originates from either the question or the lesson. The lesson should explicitly clarify that (1) supplemental oxygen ALWAYS adds 2 points to the NEWS2 score, (2) this is not optional in any standard implementation of NEWS2, and (3) a score of 7 or more triggers emergency response with automatic rapid response team consideration. Learners who receive conflicting information from Q28's rationale (which hedges on the O2 additive) may be confused about whether to include it.",
+      "proposedCorrection": "Confirm in the lesson: 'A critical NEWS2 rule: whenever a patient is receiving any form of supplemental oxygen — nasal cannula, simple face mask, non-rebreather mask, or high-flow — add 2 points to the SpO2 subscale score. This component is mandatory in all standard NEWS2 implementations and cannot be omitted. Some institutional tools may use modified scoring — verify which tool your unit uses.' This prevents the ambiguity introduced by Q28's hedged rationale."
+    },
+    {
+      "slug": "recognizing-sepsis-early-new-grad-bedside-checklist",
+      "title": "Recognizing Sepsis Early: A New Grad's Bedside Checklist",
+      "status": "PASS",
+      "issue": null,
+      "proposedCorrection": null,
+      "notes": "Based on Q29 content — Sepsis-3 definition and qSOFA accurately represented. Sepsis bundle elements (blood cultures × 2 before antibiotics, IV fluids, lactate, antibiotics within 1 hour) are consistent with current Surviving Sepsis Campaign guidance."
+    },
+    {
+      "slug": "hemodynamic-instability-reading-trend-not-single-number",
+      "title": "Hemodynamic Instability: Reading the Trend, Not Just the Number",
+      "status": "PASS",
+      "issue": null,
+      "proposedCorrection": null,
+      "notes": "Based on Q31 content — baseline-relative threshold vs population-normal-range thinking is clinically important and correctly framed. The advocacy loop (restate trend data → escalate chain of command) is accurate."
+    },
+    {
+      "slug": "signs-respiratory-decline-cannot-afford-to-miss",
+      "title": "Signs of Respiratory Decline You Cannot Afford to Miss",
+      "status": "PASS",
+      "issue": null,
+      "proposedCorrection": null,
+      "notes": "Based on Q30 and Q42 content — early respiratory decline signs (orthopnea, sentence fragmentation, RR trending, SpO2 trending) are accurate and pedagogically strong. Correctly distinguishes between clear auscultation and absence of early decline."
+    },
+    {
+      "slug": "neuro-changes-bedside-brain-sending-warning",
+      "title": "Neurological Changes at the Bedside: What Your Brain Is Telling You",
+      "status": "REVISE",
+      "issue": "The lesson is linked to Q05 which contains the AVPU terminology error ('3-point decrease on the AVPU scale'). This lesson likely uses the same language. The lesson should clearly distinguish between AVPU levels (4 categorical steps: A→V→P→U), NEWS2 consciousness scoring (any non-Alert level = 3 NEWS2 points), and clinical terminology when describing neurological changes.",
+      "proposedCorrection": "In any section describing AVPU, add: 'AVPU has four categorical levels — Alert (A), responding to Voice (V), responding to Pain (P), and Unresponsive (U). The AVPU scale is not numeric. A change from Alert to Voice is a one-level step. In NEWS2 scoring, any level below Alert — whether Voice, Pain, or Unresponsive — contributes 3 NEWS2 consciousness points. Do not confuse the 3 NEWS2 points with 3 AVPU levels.'"
+    },
+    {
+      "slug": "compassion-fatigue-first-year-recognizing-before-takes-over",
+      "title": "Compassion Fatigue in the First Year: Recognizing It Before It Takes Over",
+      "status": "REVISE",
+      "issue": "The distinction between compassion fatigue and burnout may be oversimplified. The ANA and current occupational health literature acknowledge significant overlap between the two constructs. Compassion fatigue (secondary traumatic stress) and burnout (emotional exhaustion + depersonalisation from chronic workplace demands) co-occur frequently and share similar presentations. The lesson should acknowledge this rather than presenting them as easily distinguishable.",
+      "proposedCorrection": "Add to the Overview or Common Mistakes section: 'Compassion fatigue and burnout are related but distinct concepts that frequently co-occur. Compassion fatigue arises from absorbing the emotional burden of patient suffering (secondary traumatic stress). Burnout develops from chronic workplace demands, moral distress, and role overload. Both share features of exhaustion and detachment. A precise diagnostic distinction matters less than early recognition and intervention — the recommended actions (peer support, EAP, reflection, self-care) are effective for both.'"
+    },
+    {
+      "slug": "lateral-violence-nurse-bullying-recognizing-responding",
+      "title": "Lateral Violence and Nurse Bullying: Recognizing and Responding",
+      "status": "PASS",
+      "issue": null,
+      "proposedCorrection": null,
+      "notes": "Based on Q20 content — covert lateral violence definition is accurate. Tiered response (direct → manager → formal processes → regulatory) is professionally appropriate. No content issues detected."
+    }
+  ],
+
+  "lessonsNotReviewedInDetail": {
+    "count": 62,
+    "note": "Lessons 23–84 were not reviewed line-by-line in this audit pass. All 22 sampled lessons were from the Prioritization and Delegation domains (lessons 1–22). Lessons in Charting, Escalation, Communication with Physicians, Handoff, Workplace Conflict, Patient Safety, Confidence Building, Realistic Floor Scenarios, Rapid Recognition, Professional Boundaries, Shift Organisation, and Burnout domains should be reviewed in a second audit pass.",
+    "recommendedSecondPassFocus": [
+      "Lessons with clinical pharmacology content (phenytoin, metformin, insulin, heparin)",
+      "Lessons describing sepsis management thresholds",
+      "Lessons describing PPE and infection control protocols",
+      "Lessons on code blue and rapid response team activation",
+      "Lessons on professional regulation (PIPEDA, HIPAA, regulatory body scope)"
+    ]
+  },
+
+  "summary": {
+    "questionsAudited": 65,
+    "questionsPassed": 52,
+    "questionsRevise": 10,
+    "questionsRejected": 0,
+    "lessonsAuditedInDetail": 22,
+    "lessonsPassed": 17,
+    "lessonsRevise": 5,
+    "lessonsRejected": 0,
+    "lessonsNotReviewed": 62,
+    "criticalFindings": [
+      {
+        "id": "CRIT-Q28-NEWS2-SCORE",
+        "severity": "HIGH",
+        "item": "Q28 (NEWS2 scoring question)",
+        "finding": "Answer option B states 'Score of 7' but the actual NEWS2 calculation for the given parameters is 9. The rationale correctly computes 9 but then incorrectly hedges by suggesting some tools omit the supplemental O2 additive. This will teach learners an incorrect NEWS2 score for the scenario, undermining clinical safety training.",
+        "action": "Revise option B to say 'Score of 9' and clean up the rationale to remove the misleading hedge about optional O2 additive."
+      },
+      {
+        "id": "CRIT-Q05-AVPU-TERMINOLOGY",
+        "severity": "HIGH",
+        "item": "Q05 (LOC change SATA)",
+        "finding": "The rationale and incorrect rationale both describe 'a 3-point decrease on the AVPU scale' when a patient drops from Alert to Voice. AVPU is a 4-level categorical scale, not numeric. A→V is a one-level change. The 3 refers to NEWS2 consciousness score points, not AVPU levels. This conflation will cause learners to misunderstand both AVPU and NEWS2 scoring.",
+        "action": "Revise rationale and incorrect rationale to distinguish between 'one AVPU level change' and '3 NEWS2 consciousness points.'"
+      },
+      {
+        "id": "CRIT-CURRICULUM-DUPLICATE-QUESTIONS",
+        "severity": "MEDIUM",
+        "item": "Q09 and Q63; Q35 and Q64",
+        "finding": "Two pairs of questions test nearly identical content with very similar stems and the same topicSlugs. Q09 and Q63 both use SATA to test RPN/LPN delegation scope. Q35 and Q64 both test social media privacy with identical scenario structures.",
+        "action": "Revise Q63 to test a different aspect of RPN/LPN collaboration (e.g., RPN reporting an unexpected finding to the RN). Revise Q64 to test a different social media scenario (e.g., a photo of the nurse in uniform with a patient visible in the background)."
+      },
+      {
+        "id": "CRIT-CURRICULUM-POTASSIUM-INCONSISTENCY",
+        "severity": "MEDIUM",
+        "item": "Lesson: critical-lab-values-recognizing-acting-documenting and Q12",
+        "finding": "The lesson defines critical potassium as <2.5 mEq/L. Q12 uses 2.8 mEq/L as a 'critical potassium.' These values are internally inconsistent. 2.8 is above the lesson's stated threshold and would not qualify as 'critical' per the lesson's own definition.",
+        "action": "Either (a) change Q12's potassium from 2.8 to 2.3 for consistency, or (b) revise the lesson to note that institutional critical thresholds vary from 2.5–3.0 mEq/L."
+      }
+    ],
+    "minorFindings": [
+      "Q04 incorrect rationale for choice A references 'furosemide' which does not appear in the question",
+      "Q09 and Q63 lack jurisdiction qualifier for RPN/LPN scope variation across provinces/states",
+      "Q11 uses non-standard proprietary term 'Read-Back-and-Pause technique'",
+      "Q27 compassion fatigue diagnosis may be too definitive given overlap with burnout presentation",
+      "Q47 rationale for option G (SpO2 96%) could be strengthened"
+    ],
+    "contentQualityAssessment": {
+      "clinicalAccuracy": "Very high. The vast majority of content accurately reflects current evidence-based nursing practice, NCLEX frameworks, and Canadian/US regulatory standards.",
+      "rationaleQuality": "Strong. Rationales are instructional (2-4 sentences), explain the why not just the what, and avoid one-line dismissals.",
+      "distractorQuality": "Strong. Distractors are consistently plausible — they represent realistic clinical errors that new graduate nurses make rather than obviously wrong options.",
+      "examAlignment": "Strong. Content aligns well with NCLEX-RN cognitive levels (application and analysis predominate), client needs categories, and integrated concepts.",
+      "safetyRisk": "Low. No content identified as actively unsafe or likely to produce incorrect clinical action in practice. The two high-severity findings (NEWS2 score and AVPU terminology) are educational accuracy issues — they will produce exam confusion, not unsafe bedside decisions."
+    }
+  }
+}

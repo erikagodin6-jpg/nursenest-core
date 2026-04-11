@@ -12,6 +12,8 @@ import type {
   PracticeTestSelectionMode,
 } from "@/lib/practice-tests/types";
 import { catPathwayExamCodeLabel } from "@/lib/exam-pathways/cat-pathway-labels";
+import { PRACTICE_TEST_CAT_CREATE_CODE } from "@/lib/practice-tests/practice-test-cat-create-codes";
+import { CatAmbiguityPathwayPicker } from "@/components/student/cat-ambiguity-pathway-picker";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import {
   catEligiblePathwayOptions,
@@ -65,6 +67,7 @@ export function PracticeTestsHubClient({
   const [loading, setLoading] = useState(true);
   const [list, setList] = useState<TestListRow[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [errorCode, setErrorCode] = useState<string | null>(null);
   const [creating, setCreating] = useState(false);
 
   const [title, setTitle] = useState("");
@@ -222,6 +225,7 @@ export function PracticeTestsHubClient({
   async function createTest() {
     setCreating(true);
     setError(null);
+    setErrorCode(null);
     try {
       if (selectionMode === "cat") {
         if (catOptions.length === 0) {
@@ -254,8 +258,11 @@ export function PracticeTestsHubClient({
           timeLimitSec: timedMode ? Math.round(timeLimitMin * 60) : null,
         }),
       });
-      const data = (await res.json()) as { id?: string; error?: string };
-      if (!res.ok) throw new Error(data.error ?? "Could not create test.");
+      const data = (await res.json()) as { id?: string; error?: string; code?: string };
+      if (!res.ok) {
+        setErrorCode(typeof data.code === "string" ? data.code : null);
+        throw new Error(data.error ?? "Could not create test.");
+      }
       if (data.id) {
         window.location.href = `/app/practice-tests/${data.id}`;
       }
@@ -692,7 +699,14 @@ export function PracticeTestsHubClient({
           )}
         </div>
 
-        {error ? <p className="mt-4 text-sm text-[var(--semantic-warning-contrast)]">{error}</p> : null}
+        {error ? (
+          <div className="mt-4">
+            <p className="text-sm text-[var(--semantic-warning-contrast)]">{error}</p>
+            {errorCode === PRACTICE_TEST_CAT_CREATE_CODE.cat_pathway_ambiguous && catOptions.length > 1 ? (
+              <CatAmbiguityPathwayPicker catEligibleOptions={catOptions} className="mt-3" />
+            ) : null}
+          </div>
+        ) : null}
 
         <button
           type="button"

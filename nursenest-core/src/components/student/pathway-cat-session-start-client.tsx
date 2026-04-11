@@ -8,6 +8,7 @@ import { PATHWAY_CAT_PRACTICE_DEFAULT_MAX_QUESTIONS } from "@/lib/exam-pathways/
 import { buildExamPathwayPath, getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import type { CatPracticeReadinessResult } from "@/lib/practice-tests/cat-practice-readiness";
 import { PRACTICE_TEST_CAT_CREATE_CODE } from "@/lib/practice-tests/practice-test-cat-create-codes";
+import { CatAmbiguityPathwayPicker } from "@/components/student/cat-ambiguity-pathway-picker";
 
 const MIN_CAT = 10;
 const MAX_CAT_PRACTICE = 75;
@@ -287,9 +288,11 @@ export function PathwayCatSessionStartClient({
         <div className="rounded-lg border border-destructive/30 bg-destructive/5 p-4 text-sm">
           <p className="font-semibold text-destructive">Something went wrong</p>
           <p className="mt-1 text-foreground">{error}</p>
-          {errorCode === PRACTICE_TEST_CAT_CREATE_CODE.cat_pathway_ambiguous ? (
+          {errorCode === PRACTICE_TEST_CAT_CREATE_CODE.cat_pathway_ambiguous && pathwayOptions.length > 1 ? (
+            <CatAmbiguityPathwayPicker catEligibleOptions={pathwayOptions} className="mt-3" />
+          ) : errorCode === PRACTICE_TEST_CAT_CREATE_CODE.cat_pathway_ambiguous ? (
             <p className="mt-2 text-muted-foreground">
-              Open this page with a pathway in the URL, or select a pathway above and try again.
+              Select a pathway from the dropdown above and try again.
             </p>
           ) : null}
           {errorCode === PRACTICE_TEST_CAT_CREATE_CODE.cat_weak_areas_empty ? (

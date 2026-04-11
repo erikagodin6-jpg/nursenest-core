@@ -97,11 +97,15 @@ export async function POST(req: Request) {
   let publishGov: ReturnType<typeof governExamQuestionPublish> | null = null;
   if (data.status === ContentStatus.PUBLISHED) {
     try {
-      assertExamQuestionContextForPublish({
+      const publishContext = {
         tier: tierCodeToExamDbTier(data.tier),
-        exam: data.examFamily ? examFamilyToExamColumn(data.examFamily) : "",
         countryCode: data.country,
-      });
+        ...(data.examFamily
+          ? { exam: examFamilyToExamColumn(data.examFamily) }
+          : {}),
+      };
+
+      assertExamQuestionContextForPublish(publishContext);
     } catch (error) {
       const message = error instanceof Error ? error.message : "Exam context required for publish";
       return NextResponse.json({ error: message, code: "missing_exam_context" }, { status: 422 });
