@@ -225,3 +225,60 @@ describe("theme registry ↔ CSS coverage", () => {
     );
   });
 });
+
+// ── 3. :is() catch-all membership ↔ ordering expectations ─────────────────
+
+describe(":is() catch-all membership synchronization", () => {
+  /**
+   * Parse the theme IDs actually listed inside the :is(...) selector text
+   * (everything before the opening `{` of the catch-all block).
+   */
+  const selectorText = lines.slice(catchAllStart, catchAllEnd + 1).join("\n").split("{")[0];
+  const catchAllMembers = new Set<string>();
+  const memberRe = /\[data-theme="([^"]+)"\]/g;
+  let match: RegExpExecArray | null;
+  while ((match = memberRe.exec(selectorText)) !== null) {
+    catchAllMembers.add(match[1]);
+  }
+
+  it("parsed at least one member from the :is() catch-all selector", () => {
+    assert.ok(
+      catchAllMembers.size > 0,
+      "Failed to parse any [data-theme] selectors from the :is() catch-all. " +
+        "The selector format may have changed — update the parser.",
+    );
+  });
+
+  it("every complete named light theme is listed in the :is() catch-all", () => {
+    const missingFromCatchAll = EXPECTED_COMPLETE_LIGHT_THEMES.filter(
+      (id) => !catchAllMembers.has(id),
+    );
+    assert.deepStrictEqual(
+      missingFromCatchAll,
+      [],
+      `Complete named light theme(s) missing from the :is() catch-all selector: ` +
+        `${missingFromCatchAll.join(", ")}. They must appear in the catch-all to ` +
+        `receive generic UI chrome defaults, then override them via their complete ` +
+        `block appearing later in source order.`,
+    );
+  });
+
+  it("no catch-all member with a complete block is missing from ordering expectations", () => {
+    const untracked: string[] = [];
+    for (const id of catchAllMembers) {
+      if (
+        findCompleteBlock(id) >= 0 &&
+        !EXPECTED_COMPLETE_LIGHT_THEMES.includes(id)
+      ) {
+        untracked.push(id);
+      }
+    }
+    assert.deepStrictEqual(
+      untracked,
+      [],
+      `Theme(s) in the :is() catch-all have complete blocks but are NOT tracked ` +
+        `in EXPECTED_COMPLETE_LIGHT_THEMES: ${untracked.join(", ")}. Add them so ` +
+        `their source-order position is verified against the catch-all.`,
+    );
+  });
+});
