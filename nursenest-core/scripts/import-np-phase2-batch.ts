@@ -42,11 +42,12 @@ const prisma = new PrismaClient();
 
 // ─── Defaults ─────────────────────────────────────────────────────────────────
 
-const DEFAULT_EXAM = "np-aanp";
+const DEFAULT_EXAM = "AANP-FNP";
 const DEFAULT_TIER = "premium";
 const DEFAULT_QUESTION_TYPE = "mcq";
-const DEFAULT_PATHWAY = "us-np-fnp";
+const DEFAULT_PATHWAY = "aanp-fnp";
 const DEFAULT_LOCALE = "en";
+const DEFAULT_COUNTRY_CODE = null; // NP is "both" US + CA
 const DEFAULT_BODY_SYSTEM = "general";
 const BATCH_SIZE = 50;
 
@@ -63,10 +64,37 @@ const DIFFICULTY_MAP: Record<string, number> = {
   advanced: 4,
 };
 
+const DIFFICULTY_LABEL: Record<number, string> = {
+  1: "foundation",
+  2: "easy",
+  3: "medium",
+  4: "hard",
+  5: "very_hard",
+};
+
 function normalizeDifficulty(raw: unknown): number {
   if (typeof raw === "number") return Math.min(5, Math.max(1, Math.round(raw)));
   if (typeof raw === "string") return DIFFICULTY_MAP[raw.toLowerCase().trim()] ?? 3;
   return 3;
+}
+
+function difficultyLabel(n: number): string {
+  return DIFFICULTY_LABEL[n] ?? "medium";
+}
+
+// ─── Slug / tag normalization ─────────────────────────────────────────────────
+
+function normalizeTopicSlug(raw: string | undefined | null): string | null {
+  if (!raw) return null;
+  return raw
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+function normalizeTags(tags: string[]): string[] {
+  return [...new Set(tags.map((t) => t.toLowerCase().trim()).filter(Boolean))].sort();
 }
 
 // ─── Stem hash ────────────────────────────────────────────────────────────────
@@ -76,6 +104,26 @@ function computeStemHash(stem: string): string {
     .update(stem.trim().toLowerCase().replace(/\s+/g, " "))
     .digest("hex")
     .slice(0, 32);
+}
+
+// ─── Near-duplicate detection (Jaccard on meaningful word tokens) ──────────────
+
+function stemTokens(text: string): Set<string> {
+  const STOP = new Set(["the", "a", "an", "and", "or", "of", "in", "is", "to", "for", "with", "that", "this", "are", "was", "were", "has", "have", "had", "his", "her", "she", "he", "they", "who", "what", "which", "when", "not", "most", "more"]);
+  return new Set(
+    text
+      .toLowerCase()
+      .replace(/[^a-z0-9\s]/g, " ")
+      .split(/\s+/)
+      .filter((w) => w.length > 3 && !STOP.has(w)),
+  );
+}
+
+function jaccardSimilarity(a: Set<string>, b: Set<string>): number {
+  if (a.size === 0 && b.size === 0) return 1;
+  let intersect = 0;
+  for (const w of a) if (b.has(w)) intersect++;
+  return intersect / (a.size + b.size - intersect);
 }
 
 // ─── Lesson sections builder ──────────────────────────────────────────────────
@@ -227,6 +275,7 @@ function normalizeQuestion(
   correctAnswer: string;
   rationale: string | null;
   difficulty: number;
+  difficultyLabel: string;
   tags: string[];
   bodySystem: string;
   topic: string | null;
@@ -238,7 +287,7 @@ function normalizeQuestion(
 } {
   const id = raw.id ?? raw.questionId ?? `${batchId}-${computeStemHash(raw.stem).slice(0, 8)}`;
 
-  const tags: string[] = [
+  const rawTags: string[] = [
     ...(raw.tags ?? []),
     ...(raw.clinicalPriority ? [raw.clinicalPriority] : []),
     ...(raw.careComplexity ? [raw.careComplexity] : []),
@@ -247,6 +296,7 @@ function normalizeQuestion(
     ...(raw.cognitiveLayer ? [raw.cognitiveLayer] : []),
     batchId,
   ].filter(Boolean);
+  const tags = normalizeTags(rawTags);
 
   const cognitiveLevel = raw.cognitiveLayer
     ? (LAYER_TO_BLOOM[raw.cognitiveLayer] ?? null)
@@ -261,6 +311,9 @@ function normalizeQuestion(
   };
   const nclexClientNeedsCategory = raw.clinicalPriority ? (nclexMap[raw.clinicalPriority] ?? null) : null;
 
+  const topicSlug = normalizeTopicSlug(raw.topicSlug);
+  const difficulty = normalizeDifficulty(raw.difficulty);
+
   return {
     id,
     tier: DEFAULT_TIER,
@@ -271,10 +324,11 @@ function normalizeQuestion(
     options: raw.options,
     correctAnswer: raw.correctAnswer,
     rationale: raw.rationale?.trim() ?? null,
-    difficulty: normalizeDifficulty(raw.difficulty),
-    tags: [...new Set(tags)],
-    bodySystem: topicToBodySystem(raw.topicSlug),
-    topic: raw.topicSlug ?? null,
+    difficulty,
+    difficultyLabel: difficultyLabel(difficulty),
+    tags,
+    bodySystem: topicToBodySystem(topicSlug),
+    topic: topicSlug,
     subtopic: null,
     cognitiveLevel,
     stemHash: computeStemHash(raw.stem),
@@ -313,7 +367,8 @@ function normalizeLesson(
   sortOrderBase: number,
 ) {
   // Resolve lesson identity — batch01 uses topicSlug, batch02 uses lessonSlug
-  const effectiveSlug = raw.lessonSlug ?? raw.topicSlug;
+  const canonicalTopicSlug = normalizeTopicSlug(raw.topicSlug) ?? raw.topicSlug;
+  const effectiveSlug = normalizeTopicSlug(raw.lessonSlug ?? raw.topicSlug) ?? raw.topicSlug;
   const slug = `${effectiveSlug}--${batchId}`;
 
   // Build the lesson data object for section extraction (handles both shapes)
@@ -323,7 +378,7 @@ function normalizeLesson(
     teachingNotes: raw.teachingNotes,
   };
   const sections = lessonToSections(lessonData);
-  const bodySystem = topicToBodySystem(raw.topicSlug);
+  const bodySystem = topicToBodySystem(canonicalTopicSlug);
 
   const title = raw.lessonTitle ?? raw.topicName ?? raw.topicSlug;
   const seoTitle = `${title} | NP Clinical Review`;
@@ -338,16 +393,130 @@ function normalizeLesson(
     pathwayId,
     slug,
     title,
-    topic: raw.topicSlug.replace(/-+/g, " "),
-    topicSlug: raw.topicSlug,
+    topic: canonicalTopicSlug.replace(/-+/g, " "),
+    topicSlug: canonicalTopicSlug,
     bodySystem,
     seoTitle,
     seoDescription,
     sections,
     locale: DEFAULT_LOCALE,
-    status: "DRAFT" as const,
+    status: "PUBLISHED" as const,
     sortOrder: sortOrderBase,
     tierCode: "PREMIUM" as const,
+    countryCode: DEFAULT_COUNTRY_CODE,
+  };
+}
+
+// ─── Deduplication ────────────────────────────────────────────────────────────
+
+type NormalizedQuestion = ReturnType<typeof normalizeQuestion>;
+type NormalizedLesson = ReturnType<typeof normalizeLesson>;
+
+interface DedupReport {
+  questions: {
+    total: number;
+    kept: number;
+    droppedExact: number;
+    droppedNear: number;
+    nearDuplicates: Array<{ kept: string; dropped: string; similarity: number; topic: string | null }>;
+  };
+  lessons: {
+    total: number;
+    kept: number;
+    droppedExact: number;
+  };
+}
+
+function deduplicateQuestions(
+  questions: NormalizedQuestion[],
+  nearThreshold = 0.80,
+): { kept: NormalizedQuestion[]; report: DedupReport["questions"] } {
+  // 1. Exact dedup by stemHash — keep first occurrence
+  const seenHashes = new Map<string, NormalizedQuestion>();
+  const exactDropped: NormalizedQuestion[] = [];
+
+  for (const q of questions) {
+    if (seenHashes.has(q.stemHash)) {
+      exactDropped.push(q);
+    } else {
+      seenHashes.set(q.stemHash, q);
+    }
+  }
+
+  const afterExact = [...seenHashes.values()];
+
+  // 2. Near-duplicate detection within same topicSlug using Jaccard similarity
+  // Group by topic to limit O(n²) comparisons
+  const byTopic = new Map<string, NormalizedQuestion[]>();
+  for (const q of afterExact) {
+    const key = q.topic ?? "__no-topic__";
+    const group = byTopic.get(key) ?? [];
+    group.push(q);
+    byTopic.set(key, group);
+  }
+
+  const nearDuplicates: DedupReport["questions"]["nearDuplicates"] = [];
+  const droppedNearIds = new Set<string>();
+
+  for (const group of byTopic.values()) {
+    if (group.length < 2) continue;
+
+    const tokenSets = group.map((q) => stemTokens(q.stem));
+
+    for (let i = 0; i < group.length; i++) {
+      if (droppedNearIds.has(group[i].stemHash)) continue;
+      for (let j = i + 1; j < group.length; j++) {
+        if (droppedNearIds.has(group[j].stemHash)) continue;
+        const sim = jaccardSimilarity(tokenSets[i], tokenSets[j]);
+        if (sim >= nearThreshold) {
+          // Drop j (keep i — first encountered, higher quality assumed)
+          droppedNearIds.add(group[j].stemHash);
+          nearDuplicates.push({
+            kept: group[i].stemHash,
+            dropped: group[j].stemHash,
+            similarity: Math.round(sim * 1000) / 1000,
+            topic: group[i].topic,
+          });
+        }
+      }
+    }
+  }
+
+  const kept = afterExact.filter((q) => !droppedNearIds.has(q.stemHash));
+
+  return {
+    kept,
+    report: {
+      total: questions.length,
+      kept: kept.length,
+      droppedExact: exactDropped.length,
+      droppedNear: droppedNearIds.size,
+      nearDuplicates,
+    },
+  };
+}
+
+function deduplicateLessons(
+  lessons: NormalizedLesson[],
+): { kept: NormalizedLesson[]; report: DedupReport["lessons"] } {
+  // Exact dedup by (pathwayId, slug, locale)
+  const seen = new Set<string>();
+  const kept: NormalizedLesson[] = [];
+  let droppedExact = 0;
+
+  for (const l of lessons) {
+    const key = `${l.pathwayId}::${l.slug}::${l.locale}`;
+    if (seen.has(key)) {
+      droppedExact++;
+    } else {
+      seen.add(key);
+      kept.push(l);
+    }
+  }
+
+  return {
+    kept,
+    report: { total: lessons.length, kept: kept.length, droppedExact },
   };
 }
 
@@ -402,7 +571,7 @@ async function upsertQuestionBatch(
         tier: q.tier,
         exam: q.exam,
         questionType: q.questionType,
-        status: q.status,
+        status: "published",
         stem: q.stem,
         options: q.options,
         correctAnswer: q.correctAnswer,
@@ -416,8 +585,17 @@ async function upsertQuestionBatch(
         stemHash: q.stemHash,
         incorrectAnswerRationale: q.incorrectAnswerRationale ?? undefined,
         nclexClientNeedsCategory: q.nclexClientNeedsCategory,
+        countryCode: null, // NP = both US + CA
+        regionScope: "BOTH",
+        languageCode: "en",
+        careerType: "nursing",
         isAdaptiveEligible: true,
         isMockExamEligible: true,
+        isFlashcardSource: false,
+        isStudyGuideLinked: false,
+        isTutorReady: false,
+        isScenario: false,
+        publishedAt: new Date(),
       })),
       skipDuplicates: true,
     });
@@ -475,6 +653,7 @@ async function upsertLessonBatch(
             status: lesson.status,
             sortOrder: lesson.sortOrder,
             tierCode: lesson.tierCode,
+            countryCode: lesson.countryCode,
           },
         });
         inserted++;
@@ -502,7 +681,9 @@ async function main() {
     return hit ? hit.slice(pref.length) : undefined;
   };
 
-  const dryRun = !argv.includes("--apply");
+  const cleanMode = argv.includes("--clean");
+  const dryRun = cleanMode || !argv.includes("--apply");
+  const nearThreshold = parseFloat(get("near-threshold") ?? "0.80");
   const dirArg = get("dir");
   const qbankArg = get("qbank");
   const lessonsArg = get("lessons");
@@ -511,12 +692,13 @@ async function main() {
 
   console.error(`
 NP Phase2 Batch Import
-  dry-run : ${dryRun} (pass --apply to write)
+  mode    : ${cleanMode ? "CLEAN (normalize+deduplicate, output JSON)" : dryRun ? "DRY-RUN" : "APPLY"}
   exam    : ${examArg}
   pathway : ${pathwayArg}
   dir     : ${dirArg ?? "(not set)"}
   qbank   : ${qbankArg ?? "(not set)"}
   lessons : ${lessonsArg ?? "(not set)"}
+  near-threshold : ${nearThreshold}
 `);
 
   let qbankFiles: string[] = [];
@@ -536,19 +718,9 @@ NP Phase2 Batch Import
     process.exit(1);
   }
 
-  const report: Record<string, unknown> = {
-    dryRun,
-    exam: examArg,
-    pathway: pathwayArg,
-    qbankFiles: qbankFiles.map((f) => path.basename(f)),
-    lessonFiles: lessonFiles.map((f) => path.basename(f)),
-    questions: { total: 0, inserted: 0, skipped: 0 },
-    lessons: { total: 0, inserted: 0, skipped: 0 },
-  };
+  // ── Load and normalize questions ────────────────────────────────────────────
 
-  // ── Import questions ────────────────────────────────────────────────────────
-
-  let allQuestions: ReturnType<typeof normalizeQuestion>[] = [];
+  let allQuestions: NormalizedQuestion[] = [];
 
   for (const filePath of qbankFiles) {
     const raw = JSON.parse(fs.readFileSync(filePath, "utf8"));
@@ -561,19 +733,25 @@ NP Phase2 Batch Import
     allQuestions = allQuestions.concat(normalized);
   }
 
-  if (allQuestions.length > 0) {
-    const q = report.questions as { total: number; inserted: number; skipped: number };
-    q.total = allQuestions.length;
-    const result = await upsertQuestionBatch(allQuestions, dryRun);
-    q.inserted = result.inserted;
-    q.skipped = result.skipped;
-    console.error(`\n[questions] total=${q.total} inserted=${q.inserted} skipped=${q.skipped}`);
+  // ── Deduplicate questions ───────────────────────────────────────────────────
+
+  const qDedup = deduplicateQuestions(allQuestions, nearThreshold);
+  const dedupedQuestions = qDedup.kept;
+
+  console.error(
+    `\n[dedup:questions] total=${qDedup.report.total} kept=${qDedup.report.kept}` +
+    ` droppedExact=${qDedup.report.droppedExact} droppedNear=${qDedup.report.droppedNear}`,
+  );
+  if (qDedup.report.nearDuplicates.length > 0) {
+    for (const nd of qDedup.report.nearDuplicates) {
+      console.error(`  [near-dup] topic=${nd.topic} sim=${nd.similarity} kept=${nd.kept} dropped=${nd.dropped}`);
+    }
   }
 
-  // ── Import lessons ──────────────────────────────────────────────────────────
+  // ── Load and normalize lessons ──────────────────────────────────────────────
 
-  let allLessons: ReturnType<typeof normalizeLesson>[] = [];
-  let sortOrderBase = 1000; // start high to not conflict with existing lessons
+  let allLessons: NormalizedLesson[] = [];
+  let sortOrderBase = 1000;
 
   for (const filePath of lessonFiles) {
     const raw = JSON.parse(fs.readFileSync(filePath, "utf8"));
@@ -584,7 +762,6 @@ NP Phase2 Batch Import
     if (Array.isArray(raw.lessons)) {
       rawLessons = raw.lessons as RawLesson[];
     } else if (Array.isArray(raw.topics)) {
-      // Flatten topics[].lessons[] → individual lesson rows with parent topic fields merged
       for (const topic of raw.topics as Array<{
         topicSlug: string;
         topicTitle?: string;
@@ -613,16 +790,102 @@ NP Phase2 Batch Import
     sortOrderBase += rawLessons.length;
   }
 
-  if (allLessons.length > 0) {
+  // ── Deduplicate lessons ─────────────────────────────────────────────────────
+
+  const lDedup = deduplicateLessons(allLessons);
+  const dedupedLessons = lDedup.kept;
+
+  console.error(
+    `\n[dedup:lessons] total=${lDedup.report.total} kept=${lDedup.report.kept}` +
+    ` droppedExact=${lDedup.report.droppedExact}`,
+  );
+
+  // ── Clean mode: output normalized + deduplicated JSON, no DB writes ─────────
+
+  if (cleanMode) {
+    const cleanOutput = {
+      generatedDate: new Date().toISOString().slice(0, 10),
+      exam: examArg,
+      pathway: pathwayArg,
+      deduplication: {
+        questions: qDedup.report,
+        lessons: lDedup.report,
+      },
+      questions: dedupedQuestions.map((q) => ({
+        id: q.id,
+        topicSlug: q.topic,
+        bodySystem: q.bodySystem,
+        difficulty: q.difficulty,
+        difficultyLabel: q.difficultyLabel,
+        cognitiveLevel: q.cognitiveLevel,
+        tags: q.tags,
+        stem: q.stem,
+        options: q.options,
+        correctAnswer: q.correctAnswer,
+        rationale: q.rationale,
+        incorrectAnswerRationale: q.incorrectAnswerRationale,
+        nclexClientNeedsCategory: q.nclexClientNeedsCategory,
+        stemHash: q.stemHash,
+        tier: q.tier,
+        exam: q.exam,
+        questionType: q.questionType,
+        status: q.status,
+      })),
+      lessons: dedupedLessons.map((l) => ({
+        pathwayId: l.pathwayId,
+        slug: l.slug,
+        topicSlug: l.topicSlug,
+        bodySystem: l.bodySystem,
+        title: l.title,
+        topic: l.topic,
+        seoTitle: l.seoTitle,
+        seoDescription: l.seoDescription,
+        locale: l.locale,
+        status: l.status,
+        sortOrder: l.sortOrder,
+        tierCode: l.tierCode,
+        countryCode: l.countryCode,
+        sections: l.sections,
+      })),
+    };
+
+    console.log(JSON.stringify(cleanOutput, null, 2));
+    return;
+  }
+
+  // ── DB import (dry-run or apply) ────────────────────────────────────────────
+
+  const report: Record<string, unknown> = {
+    dryRun,
+    exam: examArg,
+    pathway: pathwayArg,
+    qbankFiles: qbankFiles.map((f) => path.basename(f)),
+    lessonFiles: lessonFiles.map((f) => path.basename(f)),
+    deduplication: {
+      questions: qDedup.report,
+      lessons: lDedup.report,
+    },
+    questions: { total: 0, inserted: 0, skipped: 0 },
+    lessons: { total: 0, inserted: 0, skipped: 0 },
+  };
+
+  if (dedupedQuestions.length > 0) {
+    const q = report.questions as { total: number; inserted: number; skipped: number };
+    q.total = dedupedQuestions.length;
+    const result = await upsertQuestionBatch(dedupedQuestions, dryRun);
+    q.inserted = result.inserted;
+    q.skipped = result.skipped;
+    console.error(`\n[questions] total=${q.total} inserted=${q.inserted} skipped=${q.skipped}`);
+  }
+
+  if (dedupedLessons.length > 0) {
     const l = report.lessons as { total: number; inserted: number; skipped: number };
-    l.total = allLessons.length;
-    const result = await upsertLessonBatch(allLessons, dryRun);
+    l.total = dedupedLessons.length;
+    const result = await upsertLessonBatch(dedupedLessons, dryRun);
     l.inserted = result.inserted;
     l.skipped = result.skipped;
     console.error(`\n[lessons] total=${l.total} inserted=${l.inserted} skipped=${l.skipped}`);
   }
-
-  // ── Final report (stdout) ───────────────────────────────────────────────────
 
   console.log(JSON.stringify(report, null, 2));
   await prisma.$disconnect();

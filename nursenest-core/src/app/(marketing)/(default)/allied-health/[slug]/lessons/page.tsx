@@ -4,9 +4,7 @@ import { notFound, redirect } from "next/navigation";
 import { PathwayLessonPagination } from "@/components/pathway-lessons/pathway-lesson-pagination";
 import { PathwayLessonsCurriculumHub } from "@/components/pathway-lessons/pathway-lessons-curriculum-hub";
 import { LessonsHomeHeader } from "@/components/pathway-lessons/lessons-home-header";
-import { PathwayLessonContentLocaleBanner } from "@/components/lessons/pathway-lesson-content-locale-banner";
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
-import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { ALLIED_LESSON_HUB_PAGE_SIZE } from "@/lib/allied/allied-marketing-constants";
 import { countPublishedPathwayLessonsForAlliedMarketing } from "@/lib/allied/count-allied-pathway-lessons";
 import {
@@ -146,13 +144,10 @@ export default async function AlliedHealthSlugLessonsPage({ params, searchParams
     if (pageRequested > 1) {
       redirect(base);
     }
-    const { crumbs, schemaItems } = alliedLessonsHubBreadcrumbs(prof.h1, professionHeroPath, base, 1);
+    const { schemaItems } = alliedLessonsHubBreadcrumbs(prof.h1, professionHeroPath, base, 1);
     return (
       <div className="nn-marketing-surface mx-auto max-w-3xl px-4 py-12">
         <BreadcrumbJsonLd items={schemaItems} />
-        <div className="mb-6">
-          <BreadcrumbTrail items={crumbs} />
-        </div>
         <Link href={professionHeroPath} className="text-sm font-medium text-primary hover:underline">
           ← {prof.h1}
         </Link>
@@ -179,19 +174,17 @@ export default async function AlliedHealthSlugLessonsPage({ params, searchParams
   }
 
   const lessons = pageResult.items.filter(pathwayLessonHasRenderableHubSlug);
-  const { crumbs, schemaItems } = alliedLessonsHubBreadcrumbs(prof.h1, professionHeroPath, base, pageResult.page);
+  const { schemaItems } = alliedLessonsHubBreadcrumbs(prof.h1, professionHeroPath, base, pageResult.page);
+  const headerDescription = `Browse ${prof.h1} lessons grouped by clinical area.`;
 
   return (
     <div className="nn-marketing-surface">
-      <div className="mx-auto max-w-6xl px-4 py-12">
+      <div className="mx-auto max-w-6xl px-4 py-8">
         <BreadcrumbJsonLd items={schemaItems} />
-        <div className="mb-6">
-          <BreadcrumbTrail items={crumbs} />
-        </div>
         <LessonsHomeHeader
           eyebrow={`${pathway.shortName} · ${pathwayCountryLabel(pathway)}`}
           title={`${prof.h1} lessons`}
-          description={`A premium study hub for ${prof.h1}, organized by system so the same calm layout works across every NurseNest pathway.`}
+          description={headerDescription}
           searchBasePath={base}
           initialQuery={qEffective ?? undefined}
           countryOptions={[
@@ -208,15 +201,7 @@ export default async function AlliedHealthSlugLessonsPage({ params, searchParams
               active: pathway.countrySlug === "us",
             },
           ]}
-          stats={[
-            { label: `${pageResult.total} total lessons` },
-            { label: `Page ${pageResult.page} of ${pageResult.pageCount}`, tone: "cool" },
-          ]}
-          backHref={professionHeroPath}
-          backLabel={`← ${prof.h1}`}
         />
-
-        {pageResult.locale ? <PathwayLessonContentLocaleBanner listLocale={pageResult.locale} /> : null}
 
         <section className="mt-8" id="allied-lesson-library">
           <PathwayLessonsCurriculumHub lessons={lessons} lessonsBasePath={base} />
@@ -230,16 +215,6 @@ export default async function AlliedHealthSlugLessonsPage({ params, searchParams
           pageSize={pageResult.pageSize}
           hubSearch={qEffective}
         />
-
-        <section className="mt-10 rounded-xl border border-border bg-[var(--theme-muted-surface)] p-4 text-sm text-muted">
-          <p className="font-semibold text-foreground">Official pathway</p>
-          <p className="mt-1">
-            <Link className="text-primary hover:underline" href={`/us/allied/allied-health/lessons`}>
-              Open the canonical US allied lessons hub
-            </Link>{" "}
-            for the same underlying catalog with full routing.
-          </p>
-        </section>
       </div>
     </div>
   );

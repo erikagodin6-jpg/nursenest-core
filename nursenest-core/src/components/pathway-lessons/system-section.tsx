@@ -73,29 +73,21 @@ export function SystemSection({
       className="rounded-[1.9rem] border border-[color-mix(in_srgb,var(--nn-system-accent)_18%,var(--semantic-border-soft))] bg-[var(--semantic-surface)] p-5 shadow-[var(--semantic-shadow-soft)] sm:p-6"
       aria-labelledby={`section-heading-${section.id}`}
     >
-      <header className="flex flex-wrap items-start justify-between gap-4">
-        <div className="flex min-w-0 items-start gap-3.5">
+      <header className="flex min-w-0 items-start gap-3.5">
           <span className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-[color-mix(in_srgb,var(--nn-system-accent)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--nn-system-accent)_9%,var(--semantic-panel-muted))] text-[var(--nn-system-accent)]">
             <Icon className="h-[18px] w-[18px]" aria-hidden />
           </span>
           <div className="min-w-0">
-            <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1">
-              <h2
-                id={`section-heading-${section.id}`}
-                className="text-xl font-semibold tracking-tight text-[var(--theme-heading-text)]"
-              >
-                {section.label}
-              </h2>
-              <span className="inline-flex min-h-7 items-center rounded-full border border-[color-mix(in_srgb,var(--nn-system-accent)_16%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--nn-system-accent)_7%,var(--semantic-panel-muted))] px-3 text-[11px] font-semibold uppercase tracking-[0.16em] text-[var(--semantic-text-secondary)]">
-                {section.count} lesson{section.count === 1 ? "" : "s"}
-              </span>
-            </div>
-            <p className="mt-1 max-w-3xl text-sm leading-6 text-[var(--theme-muted-text)]">{section.description}</p>
+            <h2
+              id={`section-heading-${section.id}`}
+              className="text-xl font-semibold tracking-tight text-[var(--theme-heading-text)]"
+            >
+              {section.label}
+            </h2>
           </div>
-        </div>
       </header>
 
-      <ul className="mt-5 grid list-none gap-3 p-0 sm:grid-cols-2 xl:grid-cols-3">
+      <ul className="mt-4 grid list-none gap-3 p-0 sm:grid-cols-2 xl:grid-cols-3">
         {section.lessons.map((lesson, lessonIndex) => {
           const href = pathwayLessonMarketingDetailHref(lessonsBasePath, lesson.slug);
           if (!href) return null;

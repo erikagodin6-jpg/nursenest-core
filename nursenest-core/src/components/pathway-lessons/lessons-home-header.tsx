@@ -26,6 +26,8 @@ export function LessonsHomeHeader({
   initialQuery,
   countryOptions,
   stats = [],
+  showStats = false,
+  showSearchHelperCopy = false,
   backHref,
   backLabel,
 }: {
@@ -36,13 +38,16 @@ export function LessonsHomeHeader({
   initialQuery?: string;
   countryOptions?: CountrySwitcherOption[];
   stats?: HeaderStat[];
+  showStats?: boolean;
+  showSearchHelperCopy?: boolean;
   backHref?: string;
   backLabel?: string;
 }) {
   return (
-    <header className="overflow-hidden rounded-[2rem] border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-6 shadow-[var(--semantic-shadow-soft)] sm:p-8">
-      <div className="grid gap-6 lg:grid-cols-[minmax(0,1.55fr)_minmax(18rem,0.9fr)] lg:items-start">
-        <div>
+    <header className="rounded-[1.75rem] border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5 shadow-[var(--semantic-shadow-soft)] sm:p-6">
+      <div className="flex flex-col gap-5">
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+          <div className="min-w-0">
           {backHref && backLabel ? (
             <Link
               href={backHref}
@@ -51,17 +56,22 @@ export function LessonsHomeHeader({
               {backLabel}
             </Link>
           ) : null}
-          <p className={`${backHref ? "mt-5" : ""} text-sm font-semibold uppercase tracking-[0.18em] text-[var(--semantic-text-secondary)]`}>
-            {eyebrow}
-          </p>
-          <h1 className="mt-3 text-3xl font-semibold tracking-tight text-[var(--theme-heading-text)] sm:text-5xl">
-            {title}
-          </h1>
-          <p className="mt-4 max-w-3xl text-sm leading-7 text-[var(--theme-muted-text)] sm:text-[0.96rem]">
-            {description}
-          </p>
-          {stats.length > 0 ? (
-            <div className="mt-5 flex flex-wrap gap-2.5">
+            <p className={`${backHref ? "mt-4" : ""} text-xs font-semibold uppercase tracking-[0.18em] text-[var(--semantic-text-secondary)]`}>
+              {eyebrow}
+            </p>
+            <h1 className="mt-2 text-2xl font-semibold tracking-tight text-[var(--theme-heading-text)] sm:text-4xl">
+              {title}
+            </h1>
+            <p className="mt-2 max-w-3xl text-sm leading-6 text-[var(--theme-muted-text)]">{description}</p>
+          </div>
+          {countryOptions ? (
+            <div className="shrink-0">
+              <CountrySwitcher options={countryOptions} />
+            </div>
+          ) : null}
+        </div>
+        {showStats && stats.length > 0 ? (
+          <div className="flex flex-wrap gap-2.5">
               {stats.map((stat) => (
                 <span
                   key={stat.label}
@@ -70,22 +80,15 @@ export function LessonsHomeHeader({
                   {stat.label}
                 </span>
               ))}
-            </div>
-          ) : null}
+          </div>
+        ) : null}
+        <div className="border-t border-[color-mix(in_srgb,var(--semantic-brand)_10%,var(--semantic-border-soft))] pt-5">
+          <PathwayLessonsHubSearch
+            basePath={searchBasePath}
+            initialQuery={initialQuery}
+            showHelperCopy={showSearchHelperCopy}
+          />
         </div>
-
-        <aside className="rounded-[1.6rem] border border-[color-mix(in_srgb,var(--semantic-brand)_12%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_5%,var(--semantic-surface))] p-4 sm:p-5">
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--semantic-text-secondary)]">Country</p>
-          <h2 className="mt-2 text-lg font-semibold text-[var(--theme-heading-text)]">Match the lesson catalog to your exam context</h2>
-          <p className="mt-2 text-sm leading-6 text-[var(--theme-muted-text)]">
-            Keep the same clean layout while switching the pathway scope between Canada and the United States.
-          </p>
-          {countryOptions ? <div className="mt-4"><CountrySwitcher options={countryOptions} /></div> : null}
-        </aside>
-      </div>
-
-      <div className="mt-6 border-t border-[color-mix(in_srgb,var(--semantic-brand)_10%,var(--semantic-border-soft))] pt-6">
-        <PathwayLessonsHubSearch basePath={searchBasePath} initialQuery={initialQuery} />
       </div>
     </header>
   );

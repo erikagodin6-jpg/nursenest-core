@@ -1,11 +1,9 @@
 import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
 import { getOptionalPublicSession } from "@/lib/auth/optional-public-session";
-import { PathwayLessonContentLocaleBanner } from "@/components/lessons/pathway-lesson-content-locale-banner";
 import { PathwayLessonPagination } from "@/components/pathway-lessons/pathway-lesson-pagination";
 import { LessonsHomeHeader } from "@/components/pathway-lessons/lessons-home-header";
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
-import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { loadPathwayLessonsHubAggregates } from "@/lib/exam-pathways/marketing-hub-optional-data";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
 import { resolveExamPathwaySafe } from "@/lib/exam-pathways/resolve-exam-pathway-safe";
@@ -18,7 +16,6 @@ import {
 import { PathwayLessonsCurriculumHub } from "@/components/pathway-lessons/pathway-lessons-curriculum-hub";
 import { pathwayLessonHubMetaDescription, pathwayLessonHubMetaTitle } from "@/lib/lessons/pathway-lesson-hub-seo";
 import { pathwayLessonHasRenderableHubSlug } from "@/lib/lessons/pathway-lesson-types";
-import { pathwayLessonsHubLead } from "@/lib/lessons/pathway-lessons-hub-intro";
 import { pathwayLessonsHubBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 import { absoluteUrl } from "@/lib/seo/site-origin";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
@@ -114,7 +111,8 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
   }
 
   const lessons = pageResult.items.filter(pathwayLessonHasRenderableHubSlug);
-  const { crumbs, schemaItems } = pathwayLessonsHubBreadcrumbs(pathway);
+  const { schemaItems } = pathwayLessonsHubBreadcrumbs(pathway);
+  const headerDescription = `Browse ${pathway.shortName} lessons grouped by clinical area.`;
 
   if (pageResult.total === 0) {
     const querySuffix = qEffective ? `?q=${encodeURIComponent(qEffective)}` : "";
@@ -128,15 +126,12 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
         : `${equivalentExamHubUrlAfterRegionToggle(base, "US") ?? base}${querySuffix}`;
 
     return (
-      <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
         <BreadcrumbJsonLd items={schemaItems} />
-        <div className="mb-6">
-          <BreadcrumbTrail items={crumbs} />
-        </div>
         <LessonsHomeHeader
           eyebrow={pathway.displayName}
           title={`${pathway.shortName} lessons`}
-          description={pathwayLessonsHubLead(pathway)}
+          description={headerDescription}
           searchBasePath={base}
           initialQuery={qEffective ?? undefined}
           countryOptions={[
@@ -144,8 +139,7 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
             { label: "US", href: usHref, active: pathway.countrySlug === "us" },
           ]}
         />
-        {pageResult.locale ? <PathwayLessonContentLocaleBanner listLocale={pageResult.locale} /> : null}
-        <div className="mt-6 rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-6">
+        <div className="mt-6 rounded-[1.75rem] border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5">
           <p className="text-sm font-medium text-[var(--theme-heading-text)]">
             {qEffective ? `No lessons match "${qEffective}".` : `No lessons are published for ${pathway.shortName} yet.`}
           </p>
@@ -196,9 +190,6 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
     progressMap = map;
   }
 
-  const progressStatuses = canShowProgressMap ? Object.values(progressMap) : [];
-  const completedCount = progressStatuses.filter((status) => status === "completed").length;
-  const inProgressCount = progressStatuses.filter((status) => status === "in_progress").length;
   const querySuffix = qEffective ? `?q=${encodeURIComponent(qEffective)}` : "";
   const canadaHref =
     pathway.countrySlug === "canada"
@@ -210,30 +201,19 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
       : `${equivalentExamHubUrlAfterRegionToggle(base, "US") ?? base}${querySuffix}`;
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8">
+    <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
       <BreadcrumbJsonLd items={schemaItems} />
-      <div className="mb-6">
-        <BreadcrumbTrail items={crumbs} />
-      </div>
       <LessonsHomeHeader
         eyebrow={pathway.displayName}
         title={`${pathway.shortName} lessons`}
-        description={pathwayLessonsHubLead(pathway)}
+        description={headerDescription}
         searchBasePath={base}
         initialQuery={qEffective ?? undefined}
         countryOptions={[
           { label: "Canada", href: canadaHref, active: pathway.countrySlug === "canada" },
           { label: "US", href: usHref, active: pathway.countrySlug === "us" },
         ]}
-        stats={[
-          { label: `${pageResult.total} total lessons` },
-          { label: `Page ${pageResult.page} of ${pageResult.pageCount}`, tone: "cool" },
-          ...(canShowProgressMap
-            ? [{ label: `${completedCount} completed · ${inProgressCount} in progress`, tone: "positive" as const }]
-            : []),
-        ]}
       />
-      {pageResult.locale ? <PathwayLessonContentLocaleBanner listLocale={pageResult.locale} /> : null}
 
       <div id="pathway-lesson-library" className="mt-8 scroll-mt-24">
         <PathwayLessonsCurriculumHub
