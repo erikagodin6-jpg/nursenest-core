@@ -169,7 +169,6 @@ function UpliftRow({ opp, rank }: { opp: UpliftOpportunity; rank: number }) {
           alignItems: "center",
           padding: "5px 12px",
           borderRadius: "0.5rem",
-          border: "none",
           background: `color-mix(in srgb, var(--accent-primary) 12%, var(--bg-card))`,
           border: `1px solid color-mix(in srgb, var(--accent-primary) 22%, var(--border-subtle))`,
           color: "var(--accent-primary)",

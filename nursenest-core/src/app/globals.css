@@ -38,6 +38,17 @@ body {
   --shadow-card-hover: 0 8px 30px -8px rgba(0, 0, 0, 0.08), 0 4px 12px -4px rgba(0, 0, 0, 0.04);
   --shadow-nav: 0 1px 3px rgba(0, 0, 0, 0.06), 0 4px 16px -4px rgba(0, 0, 0, 0.08);
   --shadow-elevated: 0 12px 40px -12px rgba(0, 0, 0, 0.12), 0 4px 16px -4px rgba(0, 0, 0, 0.06);
+  --elevation-rest: var(--shadow-card);
+  --elevation-hover: var(--shadow-card-hover);
+  --elevation-active: 0 2px 10px -6px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.08);
+  --elevation-overlay: var(--shadow-elevated);
+  --lift-hover-y: -1px;
+  --lift-card-hover-y: -2px;
+  --lift-press-y: 0;
+  --motion-fast: 120ms;
+  --motion-base: 160ms;
+  --motion-slow: 180ms;
+  --motion-ease: cubic-bezier(0.22, 0.61, 0.36, 1);
 
   /* Marketing / exam-prep: one card recipe (padding, radius, shadow) */
   --nn-marketing-card-padding: 1.25rem;
@@ -45,12 +56,12 @@ body {
 
   /* Marketing typography scale — exam-prep (UWorld-like: calm hierarchy, long reading) */
   --text-marketing-h3: clamp(1.15rem, 2.1vw, 1.4rem);
-  --text-marketing-h4: 1.0625rem;
+  --text-marketing-h4: 1.02rem;
   --text-marketing-body: 1rem;
   --text-marketing-body-sm: 0.875rem;
   --text-marketing-caption: 0.8125rem;
-  --leading-marketing-body: 1.55;
-  --leading-marketing-snug: 1.35;
+  --leading-marketing-body: 1.62;
+  --leading-marketing-snug: 1.28;
 
   /*
    * First-paint neutral header surface. Theme-specific values live in theme-palettes.css
@@ -353,6 +364,12 @@ body {
     0 1px 2px color-mix(in srgb, var(--theme-heading-text) 6%, transparent),
     0 4px 16px -4px color-mix(in srgb, var(--theme-heading-text) 8%, transparent),
     0 12px 28px -12px color-mix(in srgb, var(--theme-primary) 10%, transparent);
+  --elevation-rest: var(--shadow-card);
+  --elevation-hover: var(--shadow-card-hover);
+  --elevation-active:
+    0 2px 10px -7px color-mix(in srgb, var(--theme-heading-text) 13%, transparent),
+    0 1px 3px color-mix(in srgb, var(--theme-heading-text) 10%, transparent);
+  --elevation-overlay: var(--shadow-elevated);
 
   /*
    * Pastel aesthetic layer — semantic aliases + gradients (no raw colors in TSX).
@@ -846,7 +863,17 @@ html[data-theme="deep-twilight"] .nn-ui-btn--destructive {
   border-radius: var(--radius-xl);
   border: 1px solid var(--border-subtle, var(--theme-card-border));
   background: var(--bg-card, var(--theme-card-bg));
-  box-shadow: var(--shadow-card);
+  box-shadow: var(--elevation-rest);
+  transition:
+    transform var(--motion-base) var(--motion-ease),
+    box-shadow var(--motion-base) var(--motion-ease),
+    border-color var(--motion-base) var(--motion-ease);
+}
+
+.nn-marketing-card:hover {
+  transform: translateY(var(--lift-hover-y));
+  box-shadow: var(--elevation-hover);
+  border-color: var(--border-strong);
 }
 
 .nn-marketing-card-pad {
@@ -859,21 +886,40 @@ html[data-theme="deep-twilight"] .nn-ui-btn--destructive {
   }
 }
 
+/* Cross-surface rhythm helper: section spacing stays consistent page to page. */
+.nn-section-block {
+  padding-top: var(--nn-rhythm-section-y);
+  padding-bottom: var(--nn-rhythm-section-y);
+}
+
+/* Subtle entry motion for section wrappers (cheap, no JS dependency). */
+.nn-section-enter {
+  animation: nn-section-fade-up var(--motion-slow) var(--motion-ease) both;
+}
+
+/* Icon standardization: one size ladder + semantic color inheritance. */
+.nn-icon-sm { width: 0.875rem; height: 0.875rem; stroke-width: 1.9; }
+.nn-icon-md { width: 1rem; height: 1rem; stroke-width: 1.9; }
+.nn-icon-lg { width: 1.25rem; height: 1.25rem; stroke-width: 1.8; }
+.nn-icon-accent { color: var(--text-accent); }
+.nn-icon-muted { color: var(--palette-text-muted); }
+.nn-icon-trust { color: var(--semantic-success); }
+
 /* Section titles: consistent hierarchy (H1 hero → H2 section → H3 subblock) */
 .nn-marketing-h1 {
   font-size: var(--text-hero);
-  font-weight: 700;
+  font-weight: 750;
   letter-spacing: -0.03em;
-  line-height: 1.06;
-  color: var(--theme-heading-text);
+  line-height: 1.02;
+  color: var(--palette-heading);
 }
 
 .nn-marketing-h2 {
   font-size: var(--text-section);
   font-weight: 700;
   letter-spacing: -0.02em;
-  line-height: 1.15;
-  color: var(--theme-heading-text);
+  line-height: 1.1;
+  color: var(--palette-heading);
 }
 
 .nn-marketing-h3 {
@@ -881,32 +927,32 @@ html[data-theme="deep-twilight"] .nn-ui-btn--destructive {
   font-weight: 600;
   letter-spacing: -0.02em;
   line-height: var(--leading-marketing-snug);
-  color: var(--theme-heading-text);
+  color: var(--palette-heading);
 }
 
 .nn-marketing-h4 {
   font-size: var(--text-marketing-h4);
   font-weight: 600;
   line-height: var(--leading-marketing-snug);
-  color: var(--theme-heading-text);
+  color: var(--palette-heading);
 }
 
 .nn-marketing-body {
   font-size: var(--text-marketing-body);
   line-height: var(--leading-marketing-body);
-  color: var(--theme-body-text);
+  color: var(--palette-text);
 }
 
 .nn-marketing-body-sm {
   font-size: var(--text-marketing-body-sm);
   line-height: var(--leading-marketing-body);
-  color: var(--theme-body-text);
+  color: var(--palette-text);
 }
 
 .nn-marketing-caption {
   font-size: var(--text-marketing-caption);
   line-height: 1.45;
-  color: var(--theme-muted-text);
+  color: var(--palette-text-muted);
 }
 
 .nn-marketing-lead {
@@ -933,7 +979,7 @@ html[data-theme="deep-twilight"] .nn-ui-btn--destructive {
 }
 
 .nn-marketing-label--accent {
-  color: var(--theme-primary);
+  color: var(--palette-primary);
 }
 
 /** Centered conversion row: one primary (filled) + one secondary (outline); tertiary = `.nn-link-quiet` only */
@@ -953,12 +999,16 @@ html[data-theme="deep-twilight"] .nn-ui-btn--destructive {
 }
 
 .nn-card-interactive {
-  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+  transition:
+    transform var(--motion-base) var(--motion-ease),
+    box-shadow var(--motion-base) var(--motion-ease),
+    border-color var(--motion-base) var(--motion-ease),
+    background-color var(--motion-base) var(--motion-ease);
 }
 
 .nn-card-interactive:hover {
-  transform: translateY(-1px);
-  box-shadow: var(--shadow-card-hover);
+  transform: translateY(var(--lift-hover-y));
+  box-shadow: var(--elevation-hover);
   border-color: var(--border-strong, color-mix(in srgb, var(--theme-primary) 32%, transparent));
   background-color: color-mix(in srgb, var(--accent-soft, transparent) 55%, var(--bg-card, var(--theme-card-bg)));
 }
@@ -1045,16 +1095,17 @@ html[data-theme] .nn-marketing-surface {
   background: var(--nn-aesthetic-card-bg);
   border: 1px solid var(--nn-aesthetic-border-soft);
   border-radius: 1.25rem;
-  box-shadow: var(--nn-aesthetic-shadow-soft);
+  box-shadow: var(--elevation-rest);
   transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease,
-    border-color 0.2s ease;
+    transform var(--motion-base) var(--motion-ease),
+    box-shadow var(--motion-base) var(--motion-ease),
+    border-color var(--motion-base) var(--motion-ease),
+    background-color var(--motion-base) var(--motion-ease);
 }
 
 .nn-card-soft:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--nn-aesthetic-shadow-soft-hover);
+  transform: translateY(var(--lift-card-hover-y));
+  box-shadow: var(--elevation-hover);
   border-color: var(--border-strong);
 }
 
@@ -1114,21 +1165,26 @@ html[data-theme] .nn-marketing-surface {
   .nn-dash-section {
     animation: none;
   }
+  .nn-section-enter {
+    animation: none;
+  }
 }
 
 /* Marketing header: nav links — accent underline on hover, stronger contrast */
 .nn-marketing-nav-link {
   border-bottom: 2px solid transparent;
   padding-bottom: 0.125rem;
-  color: var(--theme-heading-text);
+  color: var(--palette-heading);
   transition:
-    color 0.18s ease,
-    border-color 0.18s ease;
+    color var(--motion-base) var(--motion-ease),
+    border-color var(--motion-base) var(--motion-ease),
+    transform var(--motion-fast) var(--motion-ease);
 }
 
 .nn-marketing-nav-link:hover {
   color: var(--text-accent);
   border-bottom-color: var(--accent-surface-a-border);
+  transform: translateY(-1px);
 }
 
 /* Header utility rail — preferences / region strip above the main nav */
@@ -1142,9 +1198,10 @@ html[data-theme] .nn-marketing-surface {
 .nn-header-nav {
   background: var(--header-nav-surface);
   border-bottom: 1px solid var(--header-nav-border);
-  box-shadow: var(--header-nav-shadow);
+  box-shadow: var(--elevation-overlay);
   -webkit-backdrop-filter: blur(12px);
   backdrop-filter: blur(12px);
+  transition: box-shadow var(--motion-base) var(--motion-ease);
 }
 
 .nn-footer-surface {
@@ -1370,16 +1427,24 @@ html[data-theme="deep-twilight"] .nn-brand-header-logo-slot .nn-brand-header-log
   font-weight: 500;
   background: var(--role-cta, var(--theme-primary));
   color: var(--role-cta-foreground, #ffffff);
-  box-shadow: 0 4px 14px var(--role-cta-shadow, color-mix(in srgb, var(--theme-primary) 28%, transparent));
-  transition: filter 0.15s ease, background-color 0.15s ease;
+  box-shadow: var(--elevation-rest);
+  transition:
+    filter var(--motion-fast) var(--motion-ease),
+    background-color var(--motion-fast) var(--motion-ease),
+    transform var(--motion-fast) var(--motion-ease),
+    box-shadow var(--motion-base) var(--motion-ease);
 }
 .nn-button-primary:hover:not(:disabled):not([aria-disabled="true"]) {
   background: var(--role-cta-hover, var(--accent-hover));
   filter: brightness(1.03);
+  transform: translateY(var(--lift-hover-y));
+  box-shadow: var(--elevation-hover);
 }
 .nn-button-primary:active:not(:disabled):not([aria-disabled="true"]) {
   background: var(--role-cta-pressed, var(--accent-pressed));
   filter: brightness(1);
+  transform: translateY(var(--lift-press-y));
+  box-shadow: var(--elevation-active);
 }
 .nn-button-primary:disabled,
 .nn-button-primary[aria-disabled="true"] {
@@ -1421,12 +1486,21 @@ html[data-theme="deep-twilight"] .nn-brand-header-logo-slot .nn-brand-header-log
   border: 1px solid var(--role-secondary-action-border, var(--border-subtle, var(--theme-input-border)));
   color: var(--role-secondary-action-text, var(--theme-menu-text));
   border-radius: 9999px;
+  box-shadow: var(--elevation-rest);
+  transition:
+    transform var(--motion-fast) var(--motion-ease),
+    box-shadow var(--motion-base) var(--motion-ease),
+    border-color var(--motion-base) var(--motion-ease),
+    background-color var(--motion-base) var(--motion-ease),
+    color var(--motion-base) var(--motion-ease);
 }
 
 .nn-btn-secondary:hover:not(:disabled):not([aria-disabled="true"]) {
   background: var(--role-secondary-action-hover-bg, var(--accent-soft));
   border-color: var(--border-medium, var(--theme-input-border));
   color: var(--theme-heading-text);
+  transform: translateY(var(--lift-hover-y));
+  box-shadow: var(--elevation-hover);
 }
 
 /* Trust marks (checks, shields): stable green family — not competing with CTA purple/warm */
@@ -1482,6 +1556,17 @@ html[data-theme="deep-twilight"] .nn-trust-mark {
   from {
     opacity: 0;
     transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes nn-section-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
   }
   to {
     opacity: 1;
@@ -1700,7 +1785,7 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-exam-chrome-dim {
     transparent 42%
   );
   border: 1px solid color-mix(in srgb, var(--palette-primary-deep, var(--theme-secondary)) 12%, var(--border-subtle));
-  box-shadow: var(--shadow-card);
+  box-shadow: var(--elevation-rest);
 }
 
 @media (min-width: 640px) {
@@ -1724,7 +1809,7 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-exam-chrome-dim {
   border: 1px solid color-mix(in srgb, var(--theme-primary) 8%, var(--border-subtle));
   background: color-mix(in srgb, var(--theme-primary) 3.5%, var(--bg-card));
   padding: 1.35rem 1.15rem 1.5rem;
-  box-shadow: var(--shadow-card);
+  box-shadow: var(--elevation-rest);
 }
 
 @media (min-width: 640px) {
@@ -1740,15 +1825,16 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-exam-chrome-dim {
 
 .nn-lesson-prose {
   font-size: 1.0625rem;
-  line-height: 1.72;
+  line-height: 1.78;
   letter-spacing: -0.01em;
-  color: var(--theme-body-text);
+  color: var(--palette-text);
+  max-width: 72ch;
 }
 
 @media (min-width: 768px) {
   .nn-lesson-prose {
     font-size: 1.075rem;
-    line-height: 1.74;
+    line-height: 1.82;
   }
 }
 
@@ -1771,7 +1857,7 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-exam-chrome-dim {
 }
 .nn-lesson-prose strong {
   font-weight: 600;
-  color: var(--theme-heading-text);
+  color: var(--palette-heading);
 }
 
 /* ==========================================================================
@@ -1790,8 +1876,11 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-exam-chrome-dim {
   border: 1px solid color-mix(in srgb, var(--lsc-color) 30%, var(--semantic-border-soft));
   background: color-mix(in srgb, var(--lsc-soft) 88%, var(--bg-card));
   padding: 1.5rem 1.375rem 1.875rem;
-  box-shadow: var(--semantic-shadow-soft);
-  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+  box-shadow: var(--elevation-rest);
+  transition:
+    transform var(--motion-base) var(--motion-ease),
+    box-shadow var(--motion-base) var(--motion-ease),
+    border-color var(--motion-base) var(--motion-ease);
   scroll-margin-top: 5.5rem;
 }
 
@@ -1803,8 +1892,8 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-exam-chrome-dim {
 
 @media (prefers-reduced-motion: no-preference) {
   .nn-lesson-section-card:hover {
-    box-shadow: 0 6px 28px color-mix(in srgb, var(--lsc-color) 11%, transparent),
-      var(--semantic-shadow-soft);
+    transform: translateY(var(--lift-hover-y));
+    box-shadow: 0 6px 24px color-mix(in srgb, var(--lsc-color) 12%, transparent), var(--elevation-hover);
     border-color: color-mix(in srgb, var(--lsc-color) 30%, var(--semantic-border-soft));
   }
 }

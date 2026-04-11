@@ -43,10 +43,10 @@ export function ThemePicker({ className = "", labels }: { className?: string; la
         <button
           type="button"
           disabled
-          className="flex items-center gap-1.5 rounded-full border border-[var(--theme-nav-border)] bg-[var(--theme-nav-bg)] px-2.5 py-1.5 text-xs font-semibold text-[var(--theme-menu-text)] opacity-80"
+          className="flex items-center gap-1.5 rounded-full border border-[var(--palette-nav-border)] bg-[var(--palette-nav-background)] px-2.5 py-1.5 text-xs font-semibold text-[var(--palette-nav-text)] opacity-80"
           aria-label={L.navTheme}
         >
-          <span className="h-2.5 w-2.5 shrink-0 rounded-full bg-[var(--theme-primary)]" />
+          <span className="h-2.5 w-2.5 shrink-0 rounded-full bg-[var(--palette-primary)]" />
           <span className="max-w-[min(100%,11rem)] text-start leading-tight break-words [overflow-wrap:anywhere]">{L.navTheme}</span>
           <span className="text-[10px] opacity-70">▾</span>
         </button>
@@ -62,17 +62,17 @@ export function ThemePicker({ className = "", labels }: { className?: string; la
           e.stopPropagation();
           setOpen((o) => !o);
         }}
-        className="flex items-center gap-1.5 rounded-full border border-[var(--theme-nav-border)] bg-[var(--theme-nav-bg)] px-2.5 py-1.5 text-xs font-semibold text-[var(--theme-menu-text)] hover:bg-[var(--theme-menu-hover-bg)] hover:text-[var(--theme-menu-hover-text)]"
+        className="flex items-center gap-1.5 rounded-full border border-[var(--palette-nav-border)] bg-[var(--palette-nav-background)] px-2.5 py-1.5 text-xs font-semibold text-[var(--palette-nav-text)] shadow-[var(--elevation-rest)] transition-[background-color,color,transform,box-shadow] duration-150 ease-out hover:-translate-y-px hover:bg-[var(--palette-nav-hover)] hover:text-[var(--palette-heading)] hover:shadow-[var(--elevation-hover)]"
         aria-expanded={open}
         aria-haspopup="listbox"
       >
-        <span className="h-2.5 w-2.5 shrink-0 rounded-full bg-[var(--theme-primary)]" />
+        <span className="h-2.5 w-2.5 shrink-0 rounded-full bg-[var(--palette-primary)]" />
         <span className="max-w-[min(100%,11rem)] text-start leading-tight break-words [overflow-wrap:anywhere]">{L.navTheme}</span>
         <span className="text-[10px] opacity-70">▾</span>
       </button>
       {open && (
         <div
-          className="absolute end-0 z-[100] mt-1 max-h-[min(70vh,22rem)] w-56 overflow-y-auto rounded-xl border border-[var(--border-subtle,var(--theme-card-border))] bg-[var(--bg-elevated,var(--theme-card-bg))] py-1 shadow-[var(--shadow-elevated)]"
+          className="absolute end-0 z-[100] mt-1 max-h-[min(70vh,22rem)] w-56 overflow-y-auto rounded-xl border border-[var(--border-subtle,var(--palette-border))] bg-[var(--bg-elevated,var(--palette-surface))] py-1 shadow-[var(--elevation-overlay)]"
           role="listbox"
         >
           {/* Named / featured themes */}
@@ -80,7 +80,7 @@ export function ThemePicker({ className = "", labels }: { className?: string; la
             const named = THEME_OPTIONS.filter((o) => o.named);
             return named.length > 0 ? (
               <div>
-                <p className="px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-[var(--theme-muted-text)]">
+                <p className="px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-[var(--palette-text-muted)]">
                   Featured
                 </p>
                 {named.map((opt) => (
@@ -94,8 +94,8 @@ export function ThemePicker({ className = "", labels }: { className?: string; la
                       setTheme(opt.id);
                       setOpen(false);
                     }}
-                    className={`flex w-full items-center gap-2 px-3 py-2 text-left text-sm hover:bg-[var(--theme-menu-hover-bg)] ${
-                      opt.id === current ? "font-semibold text-primary" : "text-[var(--theme-menu-text)]"
+                    className={`flex w-full items-center gap-2 px-3 py-2 text-left text-sm transition-[background-color,color] duration-150 ease-out hover:bg-[var(--palette-nav-hover)] ${
+                      opt.id === current ? "font-semibold text-[var(--palette-accent)]" : "text-[var(--palette-nav-text)]"
                     }`}
                   >
                     <span className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ background: opt.color }} />
@@ -107,7 +107,7 @@ export function ThemePicker({ className = "", labels }: { className?: string; la
           })()}
           {(["light", "dark"] as const).map((group) => (
             <div key={group}>
-              <p className="px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-[var(--theme-muted-text)]">
+              <p className="px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-[var(--palette-text-muted)]">
                 {group === "light" ? L.themeGroupLight : L.themeGroupDark}
               </p>
               {THEME_OPTIONS.filter((o) => o.group === group && !o.named).map((opt) => (
@@ -121,8 +121,8 @@ export function ThemePicker({ className = "", labels }: { className?: string; la
                     setTheme(opt.id);
                     setOpen(false);
                   }}
-                  className={`flex w-full items-center gap-2 px-3 py-2 text-left text-sm hover:bg-[var(--theme-menu-hover-bg)] ${
-                    opt.id === current ? "font-semibold text-primary" : "text-[var(--theme-menu-text)]"
+                  className={`flex w-full items-center gap-2 px-3 py-2 text-left text-sm transition-[background-color,color] duration-150 ease-out hover:bg-[var(--palette-nav-hover)] ${
+                    opt.id === current ? "font-semibold text-[var(--palette-accent)]" : "text-[var(--palette-nav-text)]"
                   }`}
                 >
                   <span className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ background: opt.color }} />
@@ -131,7 +131,7 @@ export function ThemePicker({ className = "", labels }: { className?: string; la
               ))}
             </div>
           ))}
-          <p className="border-t border-[var(--theme-separator)] px-3 py-1.5 text-[10px] text-[var(--theme-muted-text)]">{currentLabel}</p>
+          <p className="border-t border-[var(--header-nav-border)] px-3 py-1.5 text-[10px] text-[var(--palette-text-muted)]">{currentLabel}</p>
         </div>
       )}
     </div>
