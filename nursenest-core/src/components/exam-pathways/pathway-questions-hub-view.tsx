@@ -121,7 +121,7 @@ function StudyModeCard({
         className="flex h-10 w-10 items-center justify-center rounded-xl"
         style={{ background: `color-mix(in srgb, ${accentColor} 14%, var(--semantic-surface))` }}
       >
-        <Icon className="h-5 w-5" style={{ color: accentColor }} />
+        <span style={{ color: accentColor }}><Icon className="h-5 w-5" /></span>
       </div>
       <div className="flex flex-col gap-1">
         <p className="text-sm font-bold text-[var(--semantic-text-primary)]">{title}</p>
