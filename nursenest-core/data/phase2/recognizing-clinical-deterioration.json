@@ -1,0 +1,969 @@
+{
+  "topicSlug": "recognizing-clinical-deterioration",
+  "topicName": "Recognizing Clinical Deterioration",
+  "domain": "Safety",
+  "contentWeight": "heavy",
+  "phase": 2,
+  "generatedAt": "2026-04-10",
+  "status": "draft",
+  "cognitiveModel": "L1-L2-L3",
+  "targetQuestionCount": 45,
+  "subtopicBuckets": [
+    {
+      "id": "B1",
+      "name": "Early Warning Signs",
+      "scope": "Subtle prodromal findings that precede acute deterioration"
+    },
+    {
+      "id": "B2",
+      "name": "Altered Mental Status as Red Flag",
+      "scope": "Confusion, agitation, and decreased LOC as deterioration markers"
+    },
+    {
+      "id": "B3",
+      "name": "Respiratory Deterioration Clues",
+      "scope": "Work-of-breathing signs, positioning, accessory muscle use"
+    },
+    {
+      "id": "B4",
+      "name": "Circulatory Deterioration Clues",
+      "scope": "Skin changes, cap refill, HR/BP trends, urine output"
+    },
+    {
+      "id": "B5",
+      "name": "Sepsis Recognition",
+      "scope": "Early sepsis clues, SIRS elements, atypical presentations, lactate"
+    },
+    {
+      "id": "B6",
+      "name": "High-Risk Situations",
+      "scope": "Postoperative, elderly, pediatric, post-procedure deterioration patterns"
+    },
+    {
+      "id": "B7",
+      "name": "Communication of Concern",
+      "scope": "SBAR for escalating deterioration; what to report and when"
+    },
+    {
+      "id": "B8",
+      "name": "Rapid Response and Escalation",
+      "scope": "When to activate rapid response; first action when deterioration confirmed"
+    }
+  ],
+  "cognitiveDistribution": {
+    "L1": 16,
+    "L2": 19,
+    "L3": 10
+  },
+  "difficultyDistribution": {
+    "easy": 12,
+    "medium": 22,
+    "hard": 11
+  },
+  "questions": [
+    {
+      "questionId": "RCD-EWS-001",
+      "topicSlug": "recognizing-clinical-deterioration",
+      "subtopicBucket": "B1",
+      "cognitiveLayer": "L1",
+      "difficulty": "easy",
+      "stem": "Which single vital sign change is most consistently identified as an early indicator of clinical deterioration in hospitalized adult patients?",
+      "options": {
+        "A": "A rise in oral temperature from 37.0°C to 37.5°C",
+        "B": "A sustained increase in respiratory rate above 20 breaths per minute",
+        "C": "A drop in diastolic blood pressure below 80 mmHg",
+        "D": "An increase in pain score from 3 to 5 on the numeric rating scale"
+      },
+      "correctAnswer": "B",
+      "rationale": "Tachypnea (RR greater than 20 breaths/min) is consistently identified as the earliest and most sensitive single vital sign indicator of impending deterioration across multiple patient populations and conditions. It often precedes BP drops and SpO2 changes by hours. A minor temperature rise is not a reliable early deterioration sign. Isolated diastolic BP change and pain score increase are less predictive of imminent systemic deterioration.",
+      "keyConceptTested": "Tachypnea as the most sensitive early deterioration vital sign",
+      "conceptAnchor": "deterioration / early-warning / L1 / tachypnea-most-sensitive"
+    },
+    {
+      "questionId": "RCD-EWS-002",
+      "topicSlug": "recognizing-clinical-deterioration",
+      "subtopicBucket": "B1",
+      "cognitiveLayer": "L1",
+      "difficulty": "easy",
+      "stem": "A patient who was eating and interactive 2 hours ago is now minimally responsive and refusing food. Vital signs are unchanged. Which interpretation is most appropriate?",
+      "options": {
+        "A": "Behavior change without vital sign abnormality is not clinically significant",
+        "B": "Functional decline (decreased interaction, refusing food, altered responsiveness) is an important early deterioration indicator even with initially normal vital signs",
+        "C": "This pattern is expected after a large meal and should be reassessed in 6 hours",
+        "D": "Vital signs are the only reliable indicator; behavior changes in hospitalized patients are usually psychosocial"
+      },
+      "correctAnswer": "B",
+      "rationale": "Subtle changes in behavior, interaction, and baseline function frequently precede measurable vital sign changes in clinical deterioration. Nurses who know their patients' baselines often detect deterioration through functional changes before instruments capture it. A patient who transitions from alert and eating to minimally responsive in 2 hours without a clear explanation warrants immediate assessment regardless of current vital signs.",
+      "keyConceptTested": "Behavioral functional decline as early deterioration sign — precedes vital sign changes",
+      "conceptAnchor": "deterioration / early-warning / L1 / functional-decline-before-VS-change"
+    },
+    {
+      "questionId": "RCD-EWS-003",
+      "topicSlug": "recognizing-clinical-deterioration",
+      "subtopicBucket": "B1",
+      "cognitiveLayer": "L2",
+      "difficulty": "medium",
+      "stem": "A postoperative patient on an inpatient ward has the following documented vital sign trends over 8 hours: RR 16 → 20 → 24 → 28; HR 78 → 86 → 94 → 106; BP 128/82 → 118/76 → 110/70 → 96/64. SpO2 is 95% throughout. Which interpretation best characterizes this data?",
+      "options": {
+        "A": "All values remain within acceptable ranges; continued monitoring is appropriate",
+        "B": "The progressive trend across all three vital signs over 8 hours indicates developing hemodynamic instability despite maintained SpO2",
+        "C": "The SpO2 of 95% confirms adequate organ perfusion; the other trends are within normal limits",
+        "D": "This pattern is typical postoperative variation that resolves spontaneously within 24 hours"
+      },
+      "correctAnswer": "B",
+      "rationale": "No single data point in this sequence is overtly critical, but the coordinated worsening trend across RR, HR, and BP over 8 hours is a classic pattern of developing hemodynamic compromise. The body is compensating — increasing HR and RR to maintain perfusion. BP is now borderline (96/64). SpO2 of 95% is maintained by the compensatory work, not because the patient is stable. This pattern demands urgent physician assessment.",
+      "keyConceptTested": "Multi-vital-sign trending — coordinated progressive worsening indicates compensation, not stability",
+      "conceptAnchor": "deterioration / early-warning / L2 / multi-VS-trend-interpretation"
+    },
+    {
+      "questionId": "RCD-EWS-004",
+      "topicSlug": "recognizing-clinical-deterioration",
+      "subtopicBucket": "B1",
+      "cognitiveLayer": "L2",
+      "difficulty": "hard",
+      "stem": "A patient's urine output has decreased from 80 mL/hr (documented 6 hours ago) to 18 mL/hr for the past 2 hours. Current vital signs include BP 108/66 mmHg and HR 102 bpm. Which interpretation is most clinically accurate?",
+      "options": {
+        "A": "A urine output of 18 mL/hr is within normal limits and does not require reporting",
+        "B": "Oliguria (below 0.5 mL/kg/hr) combined with a borderline BP and tachycardia suggests inadequate renal perfusion as an early sign of circulatory compromise",
+        "C": "Decreased urine output is expected after surgery and does not become clinically significant until below 5 mL/hr",
+        "D": "The drop in urine output confirms renal failure and urgent dialysis should be arranged"
+      },
+      "correctAnswer": "B",
+      "rationale": "Adequate urine output requires adequate renal perfusion, which requires adequate cardiac output and intravascular volume. Normal urine output is at least 0.5 mL/kg/hr (approximately 30 to 50 mL/hr for most adults). A drop to 18 mL/hr over 2 hours, combined with borderline hypotension and tachycardia, is an early sign of circulatory compromise and inadequate perfusion — not a sign of established renal failure. This combination warrants urgent escalation, not a wait-and-see approach.",
+      "keyConceptTested": "Oliguria as perfusion marker — 0.5 mL/kg/hr minimum; BP plus HR plus UO trend = perfusion concern",
+      "conceptAnchor": "deterioration / early-warning / L2 / oliguria-perfusion-marker"
+    },
+    {
+      "questionId": "RCD-EWS-005",
+      "topicSlug": "recognizing-clinical-deterioration",
+      "subtopicBucket": "B1",
+      "cognitiveLayer": "L1",
+      "difficulty": "easy",
+      "stem": "The ISBAR communication tool used when escalating concern about a deteriorating patient stands for:",
+      "options": {
+        "A": "Identify, Situation, Background, Assessment, Recommendation",
+        "B": "Information, Severity, Basis, Action, Response",
+        "C": "Identify, Symptoms, Baseline, Approach, Reassessment",
+        "D": "Immediate, Situation, Behavior, Alert, Referral"
+      },
+      "correctAnswer": "A",
+      "rationale": "ISBAR (or SBAR): Identify (who you are and who the patient is), Situation (what is happening right now), Background (relevant clinical history), Assessment (your clinical concern), Recommendation (what you are asking for). This structured format ensures critical information is communicated concisely and prevents missed escalation details during handoff or emergency calls.",
+      "keyConceptTested": "SBAR/ISBAR framework — structured deterioration communication",
+      "conceptAnchor": "deterioration / communication / L1 / SBAR-acronym"
+    },
+    {
+      "questionId": "RCD-AMS-001",
+      "topicSlug": "recognizing-clinical-deterioration",
+      "subtopicBucket": "B2",
+      "cognitiveLayer": "L1",
+      "difficulty": "easy",
+      "stem": "In the context of clinical deterioration, new-onset confusion in a previously alert adult is:",
+      "options": {
+        "A": "Expected in hospitalized patients and not a reliable deterioration marker",
+        "B": "A high-priority early warning sign requiring immediate clinical assessment regardless of vital signs",
+        "C": "Only significant if accompanied by fever greater than 38.5°C",
+        "D": "Only clinically relevant in patients over age 70"
+      },
+      "correctAnswer": "B",
+      "rationale": "New-onset confusion in a previously alert adult is a high-priority sign across all age groups. It can be the earliest or only manifestation of sepsis, hypoxia, hypoglycemia, hypovolemia, drug toxicity, stroke, or electrolyte disturbance. Altered mental status should always trigger urgent assessment — it is not explained by 'hospital disorientation' in a previously alert patient without prior cognitive impairment.",
+      "keyConceptTested": "New-onset confusion — universal high-priority deterioration marker requiring immediate assessment",
+      "conceptAnchor": "deterioration / altered-mental-status / L1 / new-confusion-priority"
+    },
+    {
+      "questionId": "RCD-AMS-002",
+      "topicSlug": "recognizing-clinical-deterioration",
+      "subtopicBucket": "B2",
+      "cognitiveLayer": "L1",
+      "difficulty": "medium",
+      "stem": "A 78-year-old woman is found to be increasingly agitated and trying to climb out of bed at 3 AM. She was calm earlier in the evening. She has no prior psychiatric history. This presentation is most consistent with:",
+      "options": {
+        "A": "Sundowning — expected in elderly hospitalized patients and not clinically urgent",
+        "B": "Hyperactive delirium — a common but high-risk presentation requiring immediate investigation for a precipitating cause",
+        "C": "New-onset dementia — requires neurology consultation but is not immediately urgent",
+        "D": "Drug-seeking behavior — common in older adults with undertreated chronic pain"
+      },
+      "correctAnswer": "B",
+      "rationale": "Hyperactive delirium in a previously calm elderly patient is an acute safety emergency. Delirium can be triggered by infection, hypoxia, urinary retention, pain, medication side effect, metabolic disturbance, or cardiac event. It carries a significantly increased mortality risk when left uninvestigated. 'Sundowning' is frequently over-applied as a dismissive diagnosis when underlying medical precipitants demand urgent search. The absence of prior psychiatric or cognitive history makes a medical cause even more likely.",
+      "keyConceptTested": "Hyperactive delirium in elderly — not sundowning; requires immediate investigation for medical precipitant",
+      "conceptAnchor": "deterioration / altered-mental-status / L1 / delirium-vs-sundowning"
+    },
+    {
+      "questionId": "RCD-AMS-003",
+      "topicSlug": "recognizing-clinical-deterioration",
+      "subtopicBucket": "B2",
+      "cognitiveLayer": "L2",
+      "difficulty": "medium",
+      "stem": "A patient with sepsis who was previously alert and appropriate becomes increasingly difficult to arouse, responding only to voice after several hours of antibiotics and IV fluids. Vital signs show BP 88/54 mmHg and HR 118 bpm. Which interpretation is most accurate?",
+      "options": {
+        "A": "Decreased responsiveness after IV fluids is expected sedation from the fluid load and is not concerning",
+        "B": "Worsening altered mental status despite initial treatment, combined with hypotension and tachycardia, suggests septic shock progression and inadequate source control or resuscitation",
+        "C": "The improved BP (was 74/46 on arrival) indicates the patient is improving; decreased LOC is acceptable at this point",
+        "D": "A patient who responds to voice has adequate neurologic function; decreased LOC is only concerning with no response to pain"
+      },
+      "correctAnswer": "B",
+      "rationale": "Progressive neurologic deterioration (alert → responds only to voice) in a sepsis patient with persistent hypotension (88/54) and tachycardia represents septic shock with inadequate resuscitation. LOC changes in sepsis are a marker of cerebral hypoperfusion and disease severity. Any worsening trajectory in a patient being treated for sepsis requires urgent reassessment for source control failure, additional cultures, and escalation of care. The direction of change, not the absolute value, is the critical signal.",
+      "keyConceptTested": "Progressive LOC decline in sepsis with persistent hypotension — septic shock worsening, not sedation",
+      "conceptAnchor": "deterioration / altered-mental-status / L2 / sepsis-LOC-worsening"
+    },
+    {
+      "questionId": "RCD-AMS-004",
+      "topicSlug": "recognizing-clinical-deterioration",
+      "subtopicBucket": "B2",
+      "cognitiveLayer": "L2",
+      "difficulty": "hard",
+      "stem": "A 66-year-old patient with known type 2 diabetes and heart failure presents with sudden confusion, diaphoresis, and tremulousness. He was coherent 30 minutes ago. Blood glucose reads 'LO' (below measurable range) on bedside glucometer. Heart rate is 112 bpm. Which element of this presentation is the most immediate life threat to address?",
+      "options": {
+        "A": "Tachycardia — administer IV metoprolol before addressing confusion",
+        "B": "Severe hypoglycemia — the critical first step is correcting blood glucose, which will reverse the neurologic and adrenergic manifestations",
+        "C": "Confusion from decompensated heart failure — administer IV furosemide immediately",
+        "D": "Diaphoresis from possible STEMI — obtain ECG before any other intervention"
+      },
+      "correctAnswer": "B",
+      "rationale": "Severe hypoglycemia (undetectable blood glucose) causes neuroglycopenia (brain glucose deprivation) and activates the adrenergic system (causing diaphoresis, tachycardia, tremulousness). Prolonged severe hypoglycemia causes irreversible brain injury and cardiac arrhythmias. IV dextrose (D50W) or IV glucose is the immediate intervention. Tachycardia and diaphoresis are adrenergic hypoglycemic responses that resolve with glucose correction. ECG is appropriate after glucose administration but must not delay treatment.",
+      "keyConceptTested": "Severe hypoglycemia presenting as AMS plus adrenergic symptoms — IV glucose is the immediate first priority",
+      "conceptAnchor": "deterioration / altered-mental-status / L2 / hypoglycemia-immediate-threat"
+    },
+    {
+      "questionId": "RCD-AMS-005",
+      "topicSlug": "recognizing-clinical-deterioration",
+      "subtopicBucket": "B2",
+      "cognitiveLayer": "L3",
+      "difficulty": "medium",
+      "stem": "A nurse assesses a patient who was alert and oriented 4 hours ago. The patient now opens eyes only to pain, makes incomprehensible sounds, and withdraws extremities from painful stimuli. Vital signs: BP 168/102 mmHg, HR 54 bpm, RR 8 bpm. What is the most appropriate immediate action?",
+      "options": {
+        "A": "Attempt to reorient the patient and reassess in 30 minutes",
+        "B": "Activate a rapid response immediately and prepare for airway management; this triad of findings may indicate increased intracranial pressure",
+        "C": "Administer IV naloxone for presumed opioid overdose and wait for response",
+        "D": "Lower blood pressure with IV labetalol before any other intervention"
+      },
+      "correctAnswer": "B",
+      "rationale": "This clinical triad — hypertension (168/102), bradycardia (HR 54), and bradypnea (RR 8) combined with rapidly declining neurologic status — constitutes Cushing's triad, a late sign of severely elevated intracranial pressure and impending transtentorial herniation. This is a neurosurgical emergency. Immediate rapid response activation and airway preparation are mandatory. Lowering BP without neurosurgical input could be catastrophic (it may be the body's last attempt to maintain cerebral perfusion pressure). Opioid reversal does not address ICP.",
+      "keyConceptTested": "Cushing's triad (HTN + bradycardia + bradypnea) — raised ICP and herniation; immediate rapid response",
+      "conceptAnchor": "deterioration / altered-mental-status / L3 / Cushings-triad-herniation-action"
+    },
+    {
+      "questionId": "RCD-RESP-001",
+      "topicSlug": "recognizing-clinical-deterioration",
+      "subtopicBucket": "B3",
+      "cognitiveLayer": "L1",
+      "difficulty": "easy",
+      "stem": "Which finding most clearly indicates increased work of breathing in an adult patient?",
+      "options": {
+        "A": "SpO2 of 94% with no change in breathing pattern",
+        "B": "Use of accessory muscles (sternocleidomastoid, scalene) with visibly labored inhalation",
+        "C": "Respiratory rate of 20 breaths per minute with normal depth",
+        "D": "Patient preference to sleep with two pillows"
+      },
+      "correctAnswer": "B",
+      "rationale": "Accessory muscle use (sternocleidomastoid, scalene, intercostal muscles) is a direct visual indicator of increased work of breathing — the patient requires more muscular effort than the diaphragm alone can provide. This occurs when airway resistance is elevated (asthma, COPD) or lung compliance is reduced (pulmonary edema, pneumonia). SpO2 of 94% without respiratory change is concerning but not a work-of-breathing sign. Two-pillow preference (orthopnea) is a symptom of fluid redistribution, not a direct breathing effort sign.",
+      "keyConceptTested": "Accessory muscle use — direct indicator of increased work of breathing",
+      "conceptAnchor": "deterioration / respiratory / L1 / accessory-muscle-use"
+    },
+    {
+      "questionId": "RCD-RESP-002",
+      "topicSlug": "recognizing-clinical-deterioration",
+      "subtopicBucket": "B3",
+      "cognitiveLayer": "L1",
+      "difficulty": "medium",
+      "stem": "A patient with community-acquired pneumonia cannot complete a full sentence without pausing to catch her breath. This finding is best described as:",
+      "options": {
+        "A": "Orthopnea — dyspnea caused by lying flat",
+        "B": "Inability to speak in full sentences — a clinical marker of significant respiratory distress",
+        "C": "Normal speech pattern in anxious or talkative patients",
+        "D": "Productive cough interfering with speech — not a respiratory distress indicator"
+      },
+      "correctAnswer": "B",
+      "rationale": "Inability to complete a full sentence without stopping to breathe is a bedside clinical marker of significant respiratory distress. It indicates that the patient's respiratory drive is interrupting the cortical control of speech — a functional sign that supplements SpO2 and RR values. It is particularly useful when vital signs alone are equivocal. It also assesses whether the patient's respiratory status is limiting functional capacity.",
+      "keyConceptTested": "Inability to speak in full sentences — clinical marker of significant respiratory distress",
+      "conceptAnchor": "deterioration / respiratory / L1 / unable-to-speak-full-sentences"
+    },
+    {
+      "questionId": "RCD-RESP-003",
+      "topicSlug": "recognizing-clinical-deterioration",
+      "subtopicBucket": "B3",
+      "cognitiveLayer": "L2",
+      "difficulty": "medium",
+      "stem": "A patient with a history of anaphylaxis to penicillin received IV amoxicillin 20 minutes ago in error. She now reports throat tightness and hoarseness. Which feature of this presentation is the highest-priority deterioration warning sign?",
+      "options": {
+        "A": "Urticaria spreading across the chest and arms",
+        "B": "Hoarseness and throat tightness — indicating upper airway edema and potential airway loss",
+        "C": "Nausea reported alongside the throat symptoms",
+        "D": "A reported sensation of 'impending doom'"
+      },
+      "correctAnswer": "B",
+      "rationale": "Hoarseness and throat tightness in a patient with known allergen exposure indicates laryngeal edema — swelling of the upper airway that can progress rapidly to complete airway obstruction. This is the most immediately life-threatening feature because the airway can close within minutes. While urticaria and subjective doom are important anaphylaxis signs, they do not directly threaten the airway. Airway edema represents the highest immediate priority — epinephrine (IM) must be administered without delay.",
+      "keyConceptTested": "Hoarseness plus throat tightness in anaphylaxis — upper airway edema; highest priority deterioration sign",
+      "conceptAnchor": "deterioration / respiratory / L2 / anaphylaxis-airway-edema-priority"
+    },
+    {
+      "questionId": "RCD-RESP-004",
+      "topicSlug": "recognizing-clinical-deterioration",
+      "subtopicBucket": "B3",
+      "cognitiveLayer": "L2",
+      "difficulty": "hard",
+      "stem": "A patient with COPD is being weaned off supplemental oxygen. Before discontinuation: RR 18, SpO2 93%, no accessory muscle use. Two hours after discontinuation: RR 22, SpO2 91%, patient is sitting upright and leaning forward on both arms (tripod position). Which interpretation is correct?",
+      "options": {
+        "A": "The minimal changes in RR and SpO2 confirm successful oxygen weaning",
+        "B": "Tripod positioning with rising RR and falling SpO2 indicates worsening respiratory distress — the patient is using positional compensation to maximize airway patency",
+        "C": "Tripod positioning is a patient preference and is not a clinical finding",
+        "D": "A RR of 22 and SpO2 of 91% are both within acceptable COPD targets and no action is required"
+      },
+      "correctAnswer": "B",
+      "rationale": "Tripod position (sitting upright, leaning forward, bracing on arms) is a postural compensation used instinctively by patients in respiratory distress. It fixes the shoulder girdle, allowing accessory muscles to assist in chest expansion rather than arm stabilization. Combined with a rising RR and falling SpO2 from the previous assessment, this indicates the oxygen wean is failing and the patient is working harder to breathe. The positional change is a clinical sign, not a patient preference.",
+      "keyConceptTested": "Tripod position as respiratory distress indicator — postural compensation during deterioration",
+      "conceptAnchor": "deterioration / respiratory / L2 / tripod-position-distress"
+    },
+    {
+      "questionId": "RCD-RESP-005",
+      "topicSlug": "recognizing-clinical-deterioration",
+      "subtopicBucket": "B3",
+      "cognitiveLayer": "L3",
+      "difficulty": "medium",
+      "stem": "A patient with suspected pulmonary embolism develops sudden sharp pleuritic chest pain, RR 34 bpm, SpO2 82%, HR 130 bpm, and BP 90/58 mmHg. What is the most appropriate immediate first action?",
+      "options": {
+        "A": "Obtain a CT pulmonary angiogram to confirm PE before any intervention",
+        "B": "Apply high-flow oxygen, activate rapid response, establish IV access, and prepare for emergent stabilization while CT is arranged in parallel",
+        "C": "Administer IV heparin immediately before CT imaging is obtained",
+        "D": "Place the patient in the left lateral position and reassess in 10 minutes"
+      },
+      "correctAnswer": "B",
+      "rationale": "This presentation is hemodynamically massive PE until proven otherwise: SpO2 82%, HR 130, BP 90/58, tachypnea 34, and pleuritic chest pain. The immediate priority is airway (high-flow oxygen) and circulation stabilization (IV access, hemodynamic monitoring) while calling for urgent help. CT PA is arranged in parallel — not ahead of — stabilization. Anticoagulation (heparin) may be appropriate but requires physician order and confirmation of the diagnosis; it is not the autonomous first nursing action. Left lateral position is for no clinical indication here.",
+      "keyConceptTested": "Massive PE presentation — oxygen plus IV access plus rapid response; parallel not sequential to CT",
+      "conceptAnchor": "deterioration / respiratory / L3 / massive-PE-initial-action"
+    },
+    {
+      "questionId": "RCD-RESP-006",
+      "topicSlug": "recognizing-clinical-deterioration",
+      "subtopicBucket": "B3",
+      "cognitiveLayer": "L2",
+      "difficulty": "medium",
+      "stem": "Stridor is heard when assessing a patient who is 2 hours post-thyroid surgery. Which interpretation is most appropriate?",
+      "options": {
+        "A": "Stridor is an expected postoperative finding after thyroid surgery and resolves spontaneously",
+        "B": "Stridor after thyroid surgery indicates upper airway compromise from hematoma compression or laryngeal nerve injury — this is an airway emergency",
+        "C": "Stridor in this context indicates bronchospasm from anesthetic reversal agents",
+        "D": "Stridor is only clinically significant when accompanied by SpO2 below 90%"
+      },
+      "correctAnswer": "B",
+      "rationale": "Stridor after thyroid surgery is an airway emergency. The most dangerous cause is expanding neck hematoma compressing the trachea — this can progress to complete airway obstruction within minutes. Bilateral recurrent laryngeal nerve injury causing vocal cord paralysis is another cause. Stridor at any point in the postoperative period after neck surgery requires immediate surgical and anesthesia notification and preparation for airway intervention. Stridor is never 'expected' after thyroid surgery.",
+      "keyConceptTested": "Post-thyroid surgery stridor — hematoma compressing airway is an immediate emergency",
+      "conceptAnchor": "deterioration / respiratory / L2 / post-thyroid-stridor"
+    },
+    {
+      "questionId": "RCD-CIRC-001",
+      "topicSlug": "recognizing-clinical-deterioration",
+      "subtopicBucket": "B4",
+      "cognitiveLayer": "L1",
+      "difficulty": "easy",
+      "stem": "Capillary refill time (CRT) is assessed by pressing a fingernail bed until blanching and releasing. Normal CRT in an adult is:",
+      "options": {
+        "A": "Less than 1 second",
+        "B": "Less than 2 seconds",
+        "C": "Less than 4 seconds",
+        "D": "Less than 6 seconds"
+      },
+      "correctAnswer": "B",
+      "rationale": "Normal capillary refill time in adults and children older than 2 years is less than 2 seconds. A CRT of 2 to 3 seconds is borderline; greater than 3 seconds is abnormal and indicates poor peripheral perfusion (from dehydration, hypovolemia, cardiac failure, or shock). Cold environmental temperature can artificially prolong CRT and should be factored into interpretation.",
+      "keyConceptTested": "Normal capillary refill time — less than 2 seconds",
+      "conceptAnchor": "deterioration / circulatory / L1 / CRT-normal-value"
+    },
+    {
+      "questionId": "RCD-CIRC-002",
+      "topicSlug": "recognizing-clinical-deterioration",
+      "subtopicBucket": "B4",
+      "cognitiveLayer": "L1",
+      "difficulty": "easy",
+      "stem": "Cool, pale, mottled skin in a patient with low blood pressure and tachycardia most directly indicates:",
+      "options": {
+        "A": "Peripheral arterial occlusion requiring vascular surgery referral",
+        "B": "Vasoconstriction and poor peripheral perfusion consistent with shock physiology",
+        "C": "Anemia from chronic disease causing reduced skin pigmentation",
+        "D": "Normal thermoregulatory response to a cold room environment"
+      },
+      "correctAnswer": "B",
+      "rationale": "Cool, pale, mottled skin is caused by cutaneous vasoconstriction — the body shunting blood away from the skin to protect vital organs (brain, heart, kidneys) during low-output or shock states. Combined with tachycardia and low BP, this triad represents compensated or decompensated shock. Mottling (irregular purple-gray discoloration) indicates very poor tissue perfusion. This is a critical circulatory deterioration sign requiring urgent intervention.",
+      "keyConceptTested": "Cool pale mottled skin plus tachycardia plus hypotension — shock physiology recognition",
+      "conceptAnchor": "deterioration / circulatory / L1 / cool-pale-mottled-shock"
+    },
+    {
+      "questionId": "RCD-CIRC-003",
+      "topicSlug": "recognizing-clinical-deterioration",
+      "subtopicBucket": "B4",
+      "cognitiveLayer": "L2",
+      "difficulty": "medium",
+      "stem": "A patient 4 hours post-hip replacement has a blood pressure of 92/58 mmHg, HR 118 bpm, and skin that is warm and flushed. Urine output is 20 mL/hr. Which type of shock does this skin presentation most suggest?",
+      "options": {
+        "A": "Hypovolemic shock — from blood loss at the surgical site",
+        "B": "Distributive (septic) shock — warm, vasodilated periphery with hypotension and tachycardia",
+        "C": "Obstructive shock — from pulmonary embolism causing right heart strain",
+        "D": "Cardiogenic shock — from stress-induced perioperative myocardial infarction"
+      },
+      "correctAnswer": "B",
+      "rationale": "The key discriminating feature is warm, flushed skin in a hypotensive, tachycardic patient. In distributive (septic) shock, inflammatory cytokines cause massive vasodilation — skin is warm and pink because blood is actually pooling in dilated peripheral vessels, not being shunted away. Hypovolemic and cardiogenic shock produce cool, pale, vasoconstricted skin (the body shunts blood centrally). 4 hours post-hip replacement is also a high-risk window for early surgical site infection.",
+      "keyConceptTested": "Warm flushed skin with hypotension — distributive/septic shock versus hypovolemic/cardiogenic",
+      "conceptAnchor": "deterioration / circulatory / L2 / warm-skin-distributive-shock"
+    },
+    {
+      "questionId": "RCD-CIRC-004",
+      "topicSlug": "recognizing-clinical-deterioration",
+      "subtopicBucket": "B4",
+      "cognitiveLayer": "L2",
+      "difficulty": "hard",
+      "stem": "A patient on a medical-surgical ward appears alert and has a BP of 104/70 mmHg and HR of 108 bpm. However, the nurse notes the patient has not voided in 5 hours, skin is cool and clammy, and CRT is 3.5 seconds. Which assessment best explains why BP alone understates clinical severity?",
+      "options": {
+        "A": "Blood pressure is always the most accurate hemodynamic indicator; the other findings are not reliable",
+        "B": "Compensatory vasoconstriction can maintain blood pressure within an acceptable range while significant tissue hypoperfusion is already occurring — peripheral signs reveal the compensation",
+        "C": "A BP of 104/70 is within normal limits and the other findings reflect anxiety in a medical-surgical patient",
+        "D": "CRT is only reliable in pediatric patients and should not be used for adult hemodynamic assessment"
+      },
+      "correctAnswer": "B",
+      "rationale": "Blood pressure can remain in an 'acceptable' range while the body is in a compensated shock state — vasoconstriction redirects blood to vital organs, maintaining central pressure at the expense of peripheral perfusion. The signs of that peripheral shunting are: cool clammy skin, prolonged CRT, and oliguria. By the time BP drops significantly ('decompensated'), the patient has already consumed much of their physiologic reserve. Peripheral perfusion markers often reveal early shock before BP falls.",
+      "keyConceptTested": "Compensated shock — BP can be maintained while peripheral perfusion is already compromised",
+      "conceptAnchor": "deterioration / circulatory / L2 / compensated-shock-BP-underestimates"
+    },
+    {
+      "questionId": "RCD-CIRC-005",
+      "topicSlug": "recognizing-clinical-deterioration",
+      "subtopicBucket": "B4",
+      "cognitiveLayer": "L3",
+      "difficulty": "medium",
+      "stem": "A patient returning from cardiac catheterization develops sudden hypotension (BP 76/44), tachycardia (HR 130), muffled heart sounds, and distended neck veins. What is the most appropriate immediate action?",
+      "options": {
+        "A": "Administer IV furosemide for presumed fluid overload",
+        "B": "Activate rapid response immediately — the triad of hypotension, muffled heart sounds, and elevated neck veins suggests cardiac tamponade requiring urgent pericardiocentesis",
+        "C": "Position the patient supine with legs elevated and administer IV fluid bolus to increase preload",
+        "D": "Obtain an ECG and wait for cardiology review before any intervention"
+      },
+      "correctAnswer": "B",
+      "rationale": "Beck's triad — hypotension, muffled heart sounds, and distended neck veins — is the classic presentation of cardiac tamponade. In this context (post-cardiac catheterization), the cause is likely catheter-induced cardiac perforation with pericardial hemorrhage. This is a time-critical emergency requiring immediate pericardiocentesis. IV fluids may temporarily support preload but are not definitive. Furosemide would be catastrophic. Waiting for ECG review when tamponade is clinically evident delays life-saving intervention.",
+      "keyConceptTested": "Beck's triad — tamponade recognition post-cardiac cath; immediate rapid response activation",
+      "conceptAnchor": "deterioration / circulatory / L3 / Becks-triad-tamponade-action"
+    },
+    {
+      "questionId": "RCD-SEP-001",
+      "topicSlug": "recognizing-clinical-deterioration",
+      "subtopicBucket": "B5",
+      "cognitiveLayer": "L1",
+      "difficulty": "easy",
+      "stem": "Which combination of findings is most consistent with SIRS (Systemic Inflammatory Response Syndrome) criteria?",
+      "options": {
+        "A": "Temperature 38.6°C, HR 108 bpm, RR 24 breaths/min, WBC 14,200/μL",
+        "B": "Temperature 37.2°C, HR 82 bpm, RR 16 breaths/min, WBC 8,000/μL",
+        "C": "Temperature 36.8°C, HR 92 bpm, RR 18 breaths/min, normal WBC",
+        "D": "Temperature 37.0°C, HR 76 bpm, RR 14 breaths/min, WBC 10,200/μL"
+      },
+      "correctAnswer": "A",
+      "rationale": "SIRS requires 2 or more of: Temperature greater than 38°C or below 36°C; HR greater than 90 bpm; RR greater than 20 bpm or PaCO2 below 32 mmHg; WBC greater than 12,000/μL or below 4,000/μL or greater than 10% bands. Option A meets all four criteria: fever (38.6°C), tachycardia (108), tachypnea (24), and leukocytosis (14,200). SIRS with a suspected infectious source = sepsis and warrants urgent workup.",
+      "keyConceptTested": "SIRS criteria — temperature, HR, RR, WBC; 2 of 4 required",
+      "conceptAnchor": "deterioration / sepsis / L1 / SIRS-criteria"
+    },
+    {
+      "questionId": "RCD-SEP-002",
+      "topicSlug": "recognizing-clinical-deterioration",
+      "subtopicBucket": "B5",
+      "cognitiveLayer": "L1",
+      "difficulty": "medium",
+      "stem": "An 88-year-old presents from a nursing home with a 2-day history of urinary incontinence, decreased appetite, and not acting like himself. Temperature is 36.8°C. Which statement is most accurate regarding sepsis recognition in this patient?",
+      "options": {
+        "A": "Normal temperature excludes sepsis in elderly patients",
+        "B": "Elderly patients with sepsis frequently present atypically — without fever, with functional decline and behavioral change as the primary features",
+        "C": "The absence of fever and leukocytosis confirms this is a social/environmental issue, not medical",
+        "D": "SIRS criteria must be fully met before sepsis workup is initiated in elderly patients"
+      },
+      "correctAnswer": "B",
+      "rationale": "Elderly patients frequently fail to mount fever or leukocytosis in sepsis due to immunosenescence (age-related immune decline). Instead, they present with functional deterioration: confusion, falls, incontinence, refusal to eat, and decreased responsiveness. This 'atypical' presentation is actually the typical geriatric sepsis pattern. A normal temperature does not rule out serious infection in an elderly patient. Functional decline should trigger a sepsis workup (UA/culture, blood cultures, CBC, lactate).",
+      "keyConceptTested": "Atypical geriatric sepsis presentation — functional decline without fever; SIRS criteria unreliable in elderly",
+      "conceptAnchor": "deterioration / sepsis / L1 / geriatric-atypical-sepsis"
+    },
+    {
+      "questionId": "RCD-SEP-003",
+      "topicSlug": "recognizing-clinical-deterioration",
+      "subtopicBucket": "B5",
+      "cognitiveLayer": "L2",
+      "difficulty": "medium",
+      "stem": "A patient with suspected sepsis has a serum lactate of 4.2 mmol/L (normal: less than 2.0 mmol/L). Blood pressure is 106/68 mmHg. Which interpretation is most accurate?",
+      "options": {
+        "A": "A BP of 106/68 confirms adequate perfusion; the elevated lactate is a laboratory artifact in this case",
+        "B": "An elevated lactate (greater than 4 mmol/L) indicates significant tissue hypoperfusion regardless of the currently maintained blood pressure — this meets criteria for cryptic septic shock",
+        "C": "Lactate elevation to 4.2 mmol/L is only significant if accompanied by hypotension below 90 mmHg",
+        "D": "Lactate of 4.2 mmol/L indicates the patient has anemia and requires a blood transfusion"
+      },
+      "correctAnswer": "B",
+      "rationale": "Septic shock is now defined by the Sepsis-3 criteria as sepsis with circulatory, cellular, and metabolic dysfunction — including lactate greater than or equal to 2 mmol/L despite adequate fluid resuscitation, even without hypotension. A lactate of 4.2 mmol/L indicates significant anaerobic metabolism from tissue hypoperfusion at the cellular level, even with a maintained blood pressure. This is 'cryptic shock' — hemodynamically occult but metabolically severe. Initial resuscitation bundles should be activated.",
+      "keyConceptTested": "Elevated lactate as cryptic septic shock marker — tissue hypoperfusion despite maintained BP",
+      "conceptAnchor": "deterioration / sepsis / L2 / lactate-cryptic-shock"
+    },
+    {
+      "questionId": "RCD-SEP-004",
+      "topicSlug": "recognizing-clinical-deterioration",
+      "subtopicBucket": "B5",
+      "cognitiveLayer": "L2",
+      "difficulty": "hard",
+      "stem": "A patient on immunosuppressant therapy for a kidney transplant presents with fatigue, a temperature of 37.4°C, HR 96 bpm, and no localizing symptoms of infection. WBC is 5,800/μL with 18% bands (normal bands: less than 5%). Which interpretation is most accurate?",
+      "options": {
+        "A": "WBC within normal limits; this patient does not require further workup for infection",
+        "B": "A WBC of 5,800 with 18% bands represents a left shift — the immune system is mobilizing immature neutrophils indicating serious infection, even without leukocytosis or fever",
+        "C": "Bandemia is only significant when total WBC is above 15,000/μL",
+        "D": "Immunosuppression prevents infection recognition in the bloodstream; CBC is unreliable in transplant patients"
+      },
+      "correctAnswer": "B",
+      "rationale": "A 'left shift' refers to an increase in immature neutrophils (bands) in the bloodstream, indicating bone marrow responding to a serious infectious or inflammatory challenge. In immunosuppressed patients, WBC may be blunted or even normal while bands reveal the underlying immune activation. 18% bands with a normal total WBC (without compensatory leukocytosis) in an immunocompromised patient warrants an urgent infection workup. The immune system is being taxed even though counts appear normal.",
+      "keyConceptTested": "Left shift (elevated bands) in immunosuppressed patient — serious infection despite normal WBC",
+      "conceptAnchor": "deterioration / sepsis / L2 / left-shift-immunosuppressed"
+    },
+    {
+      "questionId": "RCD-SEP-005",
+      "topicSlug": "recognizing-clinical-deterioration",
+      "subtopicBucket": "B5",
+      "cognitiveLayer": "L3",
+      "difficulty": "medium",
+      "stem": "A patient arrives from the ED to the medical floor with a diagnosis of sepsis from a urinary source. During the nurse's first assessment 30 minutes after admission, BP has dropped from 102/66 mmHg (ED value) to 84/52 mmHg. HR is 124 bpm. The patient is confused. What is the most appropriate immediate action?",
+      "options": {
+        "A": "Call the ordering physician and leave a message describing the BP change",
+        "B": "Activate a rapid response, obtain IV access if not already present, start a fluid challenge per institution protocol, and notify the physician by direct phone",
+        "C": "Administer scheduled antibiotics and reassess BP in 1 hour",
+        "D": "Place the patient in Trendelenburg position and observe for BP improvement before escalating"
+      },
+      "correctAnswer": "B",
+      "rationale": "A sepsis patient with a worsening BP drop (to 84/52), tachycardia (124), and new confusion represents septic shock — a rapidly time-sensitive emergency. The immediate action is rapid response activation, direct physician notification (not a message), and beginning fluid resuscitation per the institution's sepsis protocol. Scheduled antibiotics continue but are not sufficient as the sole response to hemodynamic collapse. Trendelenburg has not been shown to reliably improve hemodynamics in septic shock and is not the first step.",
+      "keyConceptTested": "Septic shock on arrival — rapid response plus fluid challenge plus direct physician notification; rapid escalation",
+      "conceptAnchor": "deterioration / sepsis / L3 / septic-shock-floor-arrival-action"
+    },
+    {
+      "questionId": "RCD-HRS-001",
+      "topicSlug": "recognizing-clinical-deterioration",
+      "subtopicBucket": "B6",
+      "cognitiveLayer": "L1",
+      "difficulty": "easy",
+      "stem": "Which time window following a surgical procedure carries the highest risk for unrecognized clinical deterioration?",
+      "options": {
+        "A": "The first 4 to 6 hours postoperatively",
+        "B": "48 to 72 hours postoperatively when the patient is more mobile",
+        "C": "Day 5 to 7, when most complications have already been identified",
+        "D": "During physical therapy sessions only"
+      },
+      "correctAnswer": "A",
+      "rationale": "The first 4 to 6 hours postoperatively represent the highest-risk window for unrecognized deterioration. During this period, residual anesthetic and analgesic effects can mask pain and compensatory responses, blood loss may be ongoing or accumulating, and hemostasis may be incomplete. Vital signs should be monitored at high frequency (every 15 to 30 minutes) during this period. Late complications (anastomotic leak, DVT, PE) typically emerge at 48 to 72+ hours.",
+      "keyConceptTested": "Highest-risk postoperative deterioration window — first 4 to 6 hours",
+      "conceptAnchor": "deterioration / high-risk-situations / L1 / postop-high-risk-window"
+    },
+    {
+      "questionId": "RCD-HRS-002",
+      "topicSlug": "recognizing-clinical-deterioration",
+      "subtopicBucket": "B6",
+      "cognitiveLayer": "L2",
+      "difficulty": "medium",
+      "stem": "An elderly patient is receiving IV morphine for cancer pain. Over 6 hours, the nurse documents progressive decreases in RR (20 → 16 → 12 → 8 bpm) and increasing sedation. SpO2 has remained 92 to 94%. Which interpretation is most accurate?",
+      "options": {
+        "A": "SpO2 of 92 to 94% confirms adequate oxygenation; decreased RR and sedation are acceptable opioid therapeutic effects",
+        "B": "Progressive opioid-induced respiratory depression is occurring — decreasing RR trend and increasing sedation in an opioid-naive or elderly patient requires urgent dose reassessment before SpO2 drops",
+        "C": "A RR of 8 bpm is within the range expected for a sedated postoperative patient and requires no action until below 6 bpm",
+        "D": "Increased sedation confirms the morphine is effectively managing pain; reassess only if the patient reports dyspnea"
+      },
+      "correctAnswer": "B",
+      "rationale": "This is a progressive opioid-induced respiratory depression trajectory. In elderly patients and opioid-naive patients, morphine can accumulate due to reduced renal clearance and heightened sensitivity. A trend from RR 20 to 8 over 6 hours with increasing sedation is the pre-arrest pattern — SpO2 is still maintained because compensation is ongoing. Waiting until SpO2 drops below threshold allows the respiratory depression to progress beyond the easily reversible stage. Dose reassessment and reduced opioid titration (or naloxone if RR falls further) are required.",
+      "keyConceptTested": "Progressive opioid respiratory depression in elderly — trending RR decline with sedation is the warning",
+      "conceptAnchor": "deterioration / high-risk-situations / L2 / opioid-respiratory-depression-trend"
+    },
+    {
+      "questionId": "RCD-HRS-003",
+      "topicSlug": "recognizing-clinical-deterioration",
+      "subtopicBucket": "B6",
+      "cognitiveLayer": "L2",
+      "difficulty": "hard",
+      "stem": "A 7-year-old with viral pneumonia has an RR of 44 bpm, HR 156 bpm, SpO2 88%, and nasal flaring with visible intercostal retractions. A nurse applies a pediatric early warning score and notes an elevated score. What pediatric-specific clinical sign in this assessment is a direct indicator of increased work of breathing not commonly seen in adults?",
+      "options": {
+        "A": "Tachycardia greater than 150 bpm",
+        "B": "Intercostal retractions and nasal flaring",
+        "C": "SpO2 of 88%",
+        "D": "Respiratory rate of 44 bpm"
+      },
+      "correctAnswer": "B",
+      "rationale": "Nasal flaring and intercostal retractions are childhood-specific signs of respiratory distress. Children have compliant chest walls — when respiratory effort increases, the chest wall visibly draws inward between the ribs (intercostal retractions), supraclavicularly, and subxiphoid. Nasal flaring is a reflex to maximize airway diameter during high respiratory work. These findings are pathological in children and indicate the child is using maximum accessory muscles available. Adults with stiffer chest walls do not retract visibly in the same way.",
+      "keyConceptTested": "Retractions and nasal flaring — pediatric-specific work-of-breathing indicators",
+      "conceptAnchor": "deterioration / high-risk-situations / L2 / pediatric-retractions-nasal-flaring"
+    },
+    {
+      "questionId": "RCD-HRS-004",
+      "topicSlug": "recognizing-clinical-deterioration",
+      "subtopicBucket": "B6",
+      "cognitiveLayer": "L2",
+      "difficulty": "medium",
+      "stem": "A patient received IV contrast for a CT scan 45 minutes ago. She now reports bilateral hand and foot tingling and muscle cramps. She has a history of chronic kidney disease and was admitted with a calcium level of 7.8 mg/dL (normal: 8.5 to 10.2 mg/dL). Which complication is most likely causing this deterioration?",
+      "options": {
+        "A": "IV contrast allergic reaction manifesting as peripheral neuropathy",
+        "B": "Worsening hypocalcemia — contrast can chelate ionized calcium; combined with pre-existing low calcium, this may cause neuromuscular irritability (tetany)",
+        "C": "Contrast-induced nephropathy presenting with electrolyte symptoms within 45 minutes",
+        "D": "Anxiety reaction from the CT scan environment"
+      },
+      "correctAnswer": "B",
+      "rationale": "Iodinated contrast media can chelate ionized calcium, acutely lowering already-borderline calcium levels. This patient had pre-existing hypocalcemia (7.8 mg/dL). The resulting further drop in ionized calcium produces neuromuscular irritability: perioral tingling, bilateral extremity paresthesias, and carpopedal spasm (Trousseau's sign) — classic hypocalcemic tetany. Contrast-induced nephropathy takes 24 to 48 hours to manifest. IV contrast allergy does not cause peripheral tetany.",
+      "keyConceptTested": "Contrast-chelated calcium worsening pre-existing hypocalcemia — tetany recognition",
+      "conceptAnchor": "deterioration / high-risk-situations / L2 / contrast-hypocalcemia-tetany"
+    },
+    {
+      "questionId": "RCD-HRS-005",
+      "topicSlug": "recognizing-clinical-deterioration",
+      "subtopicBucket": "B6",
+      "cognitiveLayer": "L3",
+      "difficulty": "medium",
+      "stem": "A 14-month-old is brought to the pediatric ED with a 3-day history of diarrhea and vomiting. On assessment: HR 178 bpm, RR 38 bpm, capillary refill 4 seconds, skin is mottled, eyes are sunken, and the child is lethargic and does not cry with IV placement. What is the most appropriate immediate action?",
+      "options": {
+        "A": "Begin oral rehydration therapy and reassess in 2 hours",
+        "B": "Activate pediatric rapid response and begin immediate IV or intraosseous fluid resuscitation with isotonic saline 20 mL/kg bolus",
+        "C": "Obtain a detailed history from the parents before initiating any intervention",
+        "D": "Administer antipyretics for the tachycardia and reassess after the temperature normalizes"
+      },
+      "correctAnswer": "B",
+      "rationale": "This infant is in hypovolemic shock from severe dehydration: tachycardia (178 bpm), tachypnea (38 bpm), prolonged CRT (4 seconds), mottled skin, sunken eyes, and an ominous neurologic sign — failure to respond to painful IV placement (severe lethargy). Oral rehydration is contraindicated in shock. Pediatric shock resuscitation begins with a 20 mL/kg IV isotonic fluid bolus, repeated as needed. Intraosseous access is appropriate if IV access cannot be established rapidly. History can proceed simultaneously with resuscitation.",
+      "keyConceptTested": "Pediatric hypovolemic shock — mottled skin plus lethargy plus prolonged CRT; immediate IV/IO fluid bolus",
+      "conceptAnchor": "deterioration / high-risk-situations / L3 / pediatric-hypovolemic-shock-action"
+    },
+    {
+      "questionId": "RCD-COM-001",
+      "topicSlug": "recognizing-clinical-deterioration",
+      "subtopicBucket": "B7",
+      "cognitiveLayer": "L1",
+      "difficulty": "easy",
+      "stem": "Using the SBAR framework to report a deteriorating patient, the 'Recommendation' component refers to:",
+      "options": {
+        "A": "The patient's documented medical history and medication list",
+        "B": "The current vital signs and observed changes in the patient's condition",
+        "C": "What the nurse is asking the physician to do (come evaluate, order labs, change a medication)",
+        "D": "The nurse's interpretation of what the patient's diagnosis might be"
+      },
+      "correctAnswer": "C",
+      "rationale": "In SBAR: S = Situation (what is happening now); B = Background (relevant history); A = Assessment (nurse's clinical concern); R = Recommendation (what action the nurse is requesting — come assess, order a medication, activate a protocol). A clear, specific recommendation prevents ambiguity and ensures the communication loop is closed. Nurses should not hesitate to make a specific request as part of the professional communication.",
+      "keyConceptTested": "SBAR Recommendation component — specific action being requested",
+      "conceptAnchor": "deterioration / communication / L1 / SBAR-R-recommendation"
+    },
+    {
+      "questionId": "RCD-COM-002",
+      "topicSlug": "recognizing-clinical-deterioration",
+      "subtopicBucket": "B7",
+      "cognitiveLayer": "L2",
+      "difficulty": "medium",
+      "stem": "A nurse calls a physician to report a deteriorating patient. After giving the full SBAR report, the physician states 'I'm sure it's fine, just keep monitoring.' The nurse remains clinically concerned. What is the most appropriate next action?",
+      "options": {
+        "A": "Accept the physician's reassurance and continue monitoring without further escalation",
+        "B": "Document the concern and the physician's response, then escalate through the chain of command — nursing supervisor, charge nurse, or rapid response team if clinical concern persists",
+        "C": "Discharge the patient's concerns by noting the physician was notified",
+        "D": "Contact the patient's family and ask them to advocate for physician evaluation"
+      },
+      "correctAnswer": "B",
+      "rationale": "When a clinician's concern is dismissed but the patient's clinical picture continues to raise concern, professional and institutional responsibility requires escalation through the chain of command. This includes notifying the charge nurse, nursing supervisor, or activating the rapid response team independently. The nurse maintains independent professional accountability for the patient's safety. Documentation of the concern and the dismissed response is also essential for legal and safety records.",
+      "keyConceptTested": "Chain of command escalation — nurse's independent obligation when physician response is inadequate",
+      "conceptAnchor": "deterioration / communication / L2 / chain-of-command-escalation"
+    },
+    {
+      "questionId": "RCD-COM-003",
+      "topicSlug": "recognizing-clinical-deterioration",
+      "subtopicBucket": "B7",
+      "cognitiveLayer": "L2",
+      "difficulty": "hard",
+      "stem": "A nurse calls to report a patient with BP 88/52, HR 128, confusion, and urine output of 10 mL in the past 2 hours. She says 'I'm not sure what's going on, but he doesn't look right.' The physician asks for more information before coming. Which component of SBAR is the nurse currently weakest in?",
+      "options": {
+        "A": "Background — the physician needs more history",
+        "B": "Recommendation — the nurse has not made a specific request for action",
+        "C": "Situation — the nurse has not described what is happening",
+        "D": "Assessment — the nurse has not communicated her clinical concern clearly"
+      },
+      "correctAnswer": "B",
+      "rationale": "The nurse has clearly communicated Situation (BP 88/52, HR 128, confusion, low UO) and Assessment ('doesn't look right'). The missing element is Recommendation — the nurse has not made a specific request. A clear recommendation would be: 'I need you to come evaluate this patient immediately' or 'I am activating the rapid response team — please come now.' Without a clear recommendation, the physician may not understand the urgency. This is the most common SBAR failure point.",
+      "keyConceptTested": "SBAR failure analysis — recommendation is most commonly omitted; specific request is essential",
+      "conceptAnchor": "deterioration / communication / L2 / SBAR-failure-recommendation-missing"
+    },
+    {
+      "questionId": "RCD-COM-004",
+      "topicSlug": "recognizing-clinical-deterioration",
+      "subtopicBucket": "B7",
+      "cognitiveLayer": "L3",
+      "difficulty": "medium",
+      "stem": "A nurse is preparing to call the on-call physician about a patient with worsening vital signs. Before dialing, which preparation step is most important?",
+      "options": {
+        "A": "Consult a colleague for their opinion on whether the call is necessary",
+        "B": "Have the patient's chart open with recent vital signs, medication list, relevant labs, and a prepared SBAR statement ready before calling",
+        "C": "Wait until the attending physician is available rather than calling the on-call provider",
+        "D": "Send a text message to the physician and wait for a response before escalating further"
+      },
+      "correctAnswer": "B",
+      "rationale": "Effective escalation calls require preparation. Before calling, the nurse should have: current vital signs documented, recent labs, medication list (especially sedatives, anticoagulants, vasoactives), the patient's baseline, the reason for concern clearly articulated, and a prepared SBAR structure. An unprepared call leads to delayed decision-making, repeated questions, and frustration that can undermine the urgency of the message. Preparation also ensures all relevant information is communicated without reliance on memory.",
+      "keyConceptTested": "Pre-call preparation for deterioration escalation — chart review and SBAR ready before calling",
+      "conceptAnchor": "deterioration / communication / L3 / pre-call-preparation"
+    },
+    {
+      "questionId": "RCD-RRE-001",
+      "topicSlug": "recognizing-clinical-deterioration",
+      "subtopicBucket": "B8",
+      "cognitiveLayer": "L1",
+      "difficulty": "easy",
+      "stem": "A rapid response team (RRT) is best described as:",
+      "options": {
+        "A": "A team that responds only to confirmed cardiac arrests",
+        "B": "A multidisciplinary team that responds to bedside concerns about deteriorating patients before a cardiac arrest occurs",
+        "C": "A quality improvement committee that reviews patient deterioration events after discharge",
+        "D": "A team that evaluates patients only when requested by the attending physician"
+      },
+      "correctAnswer": "B",
+      "rationale": "The Rapid Response Team (Medical Emergency Team) was developed to bring ICU-level expertise to the bedside before a patient progresses to cardiac arrest. It can be activated by nurses, patients, or family members when clinical concern is present — it does not require physician order or confirmed diagnosis. Studies show RRT activation reduces cardiac arrest rates and hospital mortality when activated early for deteriorating patients.",
+      "keyConceptTested": "Rapid Response Team — purpose, activation criteria, not limited to cardiac arrest",
+      "conceptAnchor": "deterioration / rapid-response / L1 / RRT-definition-purpose"
+    },
+    {
+      "questionId": "RCD-RRE-002",
+      "topicSlug": "recognizing-clinical-deterioration",
+      "subtopicBucket": "B8",
+      "cognitiveLayer": "L1",
+      "difficulty": "medium",
+      "stem": "Which set of criteria is most commonly used to trigger a rapid response team activation?",
+      "options": {
+        "A": "Temperature above 40°C with rigors, regardless of other findings",
+        "B": "Any one of: acute change in mental status, RR less than 8 or greater than 30, SpO2 below 90%, HR below 40 or above 140, or systolic BP below 90 mmHg",
+        "C": "Systolic BP below 90 mmHg only, confirmed on two consecutive readings",
+        "D": "Pain score above 8 with tachycardia and diaphoresis"
+      },
+      "correctAnswer": "B",
+      "rationale": "Standard rapid response activation criteria vary by institution but typically include: acute change in mental status, RR less than 8 or greater than 28 to 30 breaths/min, SpO2 below 90% (or below patient's target), HR less than 40 or greater than 130 to 140 bpm, systolic BP below 90 mmHg, and nurses' clinical concern ('worried about the patient'). Any single criterion meeting threshold is sufficient — the list is OR-based, not AND-based.",
+      "keyConceptTested": "Rapid response activation criteria — single criterion sufficient; OR-based threshold list",
+      "conceptAnchor": "deterioration / rapid-response / L1 / RRT-activation-criteria"
+    },
+    {
+      "questionId": "RCD-RRE-003",
+      "topicSlug": "recognizing-clinical-deterioration",
+      "subtopicBucket": "B8",
+      "cognitiveLayer": "L2",
+      "difficulty": "medium",
+      "stem": "A nurse is 'worried about the patient' but the patient's vital signs do not yet meet formal rapid response criteria. Which action is most appropriate?",
+      "options": {
+        "A": "Wait until objective criteria are met before escalating — intuition alone does not justify rapid response activation",
+        "B": "Activate the rapid response based on clinical concern — most institutions explicitly include nurse clinical concern as a valid activation criterion",
+        "C": "Call the family and ask them to request physician evaluation instead",
+        "D": "Document the concern and reassess in 2 hours before deciding whether to escalate"
+      },
+      "correctAnswer": "B",
+      "rationale": "Most rapid response systems explicitly include nursing clinical concern as a valid standalone activation criterion — sometimes phrased as 'I am worried about the patient.' This is evidence-based: nurses detect early deterioration through pattern recognition and clinical intuition that may precede measurable vital sign changes. Requiring objective threshold criteria before activation creates a dangerous delay. The Institute for Healthcare Improvement explicitly supports nurse-initiated RRT calls based on concern alone.",
+      "keyConceptTested": "Nurse clinical concern as valid RRT trigger — intuition-based activation is evidence-supported",
+      "conceptAnchor": "deterioration / rapid-response / L2 / nurse-concern-valid-RRT-trigger"
+    },
+    {
+      "questionId": "RCD-RRE-004",
+      "topicSlug": "recognizing-clinical-deterioration",
+      "subtopicBucket": "B8",
+      "cognitiveLayer": "L2",
+      "difficulty": "hard",
+      "stem": "After a rapid response team is called for a deteriorating patient, which is the most important first action by the bedside nurse when the RRT arrives?",
+      "options": {
+        "A": "Step back and let the RRT take full control; bedside nursing involvement is no longer needed",
+        "B": "Deliver a concise SBAR handoff to the RRT lead while remaining at the bedside to assist and provide patient history",
+        "C": "Begin CPR immediately to demonstrate preparedness before the RRT assesses the patient",
+        "D": "Leave the room to notify the family and allow the RRT private access to the patient"
+      },
+      "correctAnswer": "B",
+      "rationale": "When the RRT arrives, the bedside nurse provides a rapid SBAR handoff: who the patient is, what changed, relevant history, and what the nurse has already done. The bedside nurse remains at the bedside because they know the patient's baseline and recent trajectory better than the responding team. Staying engaged ensures that critical context is not lost and that the bedside nurse can continue to assist (IV access, documentation, medication retrieval). Stepping back entirely risks loss of patient-specific knowledge.",
+      "keyConceptTested": "Bedside nurse role during RRT — SBAR handoff plus remain engaged; do not withdraw",
+      "conceptAnchor": "deterioration / rapid-response / L2 / bedside-nurse-RRT-arrival-role"
+    },
+    {
+      "questionId": "RCD-RRE-005",
+      "topicSlug": "recognizing-clinical-deterioration",
+      "subtopicBucket": "B8",
+      "cognitiveLayer": "L3",
+      "difficulty": "medium",
+      "stem": "A nurse assesses a patient and finds no response to voice, agonal breathing (2 gasps per minute), no palpable carotid pulse, and cyanosis. What is the most appropriate immediate action?",
+      "options": {
+        "A": "Activate a rapid response team and wait for their arrival before initiating any intervention",
+        "B": "Call for help and begin CPR immediately — this is a cardiac arrest requiring code blue activation, not a rapid response",
+        "C": "Apply supplemental oxygen via nasal cannula and reassess in 5 minutes",
+        "D": "Notify the family before initiating any resuscitative measures"
+      },
+      "correctAnswer": "B",
+      "rationale": "This patient is in cardiac arrest — no response, agonal breathing, no pulse. The immediate action is to shout for help and initiate high-quality CPR (compressions at 100 to 120/min, 5 to 6 cm depth in adults) while a code blue is activated. Agonal breathing is NOT adequate ventilation — it is a terminal reflex. Rapid response is for deteriorating, not arrested, patients. Waiting for the team delays chest compressions, which are the highest-yield intervention in the first minutes of cardiac arrest.",
+      "keyConceptTested": "Cardiac arrest recognition — agonal breathing is not breathing; CPR immediately, not RRT",
+      "conceptAnchor": "deterioration / rapid-response / L3 / cardiac-arrest-CPR-not-RRT"
+    },
+    {
+      "questionId": "RCD-EWS-006",
+      "topicSlug": "recognizing-clinical-deterioration",
+      "subtopicBucket": "B1",
+      "cognitiveLayer": "L1",
+      "difficulty": "easy",
+      "stem": "The National Early Warning Score (NEWS) is a standardized clinical tool used in inpatient settings. It assigns points based on which parameters?",
+      "options": {
+        "A": "Pain score, patient-reported dyspnea, and urine output only",
+        "B": "Respiratory rate, SpO2, supplemental oxygen use, temperature, BP, HR, and level of consciousness",
+        "C": "Serum lactate, WBC count, blood culture results, and temperature",
+        "D": "HR, BP, and glucose level only"
+      },
+      "correctAnswer": "B",
+      "rationale": "The NEWS (and NEWS2) aggregates 7 physiological parameters: respiratory rate, oxygen saturation, whether supplemental oxygen is in use, temperature, systolic blood pressure, heart rate, and level of consciousness (ACVPU scale). Points are assigned for deviations from normal ranges and summed to generate a composite risk score. A rising NEWS score indicates increasing deterioration risk and triggers specific escalation thresholds.",
+      "keyConceptTested": "NEWS score — 7-parameter early warning composite score",
+      "conceptAnchor": "deterioration / early-warning / L1 / NEWS-score-parameters"
+    },
+    {
+      "questionId": "RCD-CIRC-006",
+      "topicSlug": "recognizing-clinical-deterioration",
+      "subtopicBucket": "B4",
+      "cognitiveLayer": "L2",
+      "difficulty": "hard",
+      "stem": "A patient in septic shock develops progressive mottling that has now spread from the knees to the thighs over the past 2 hours despite ongoing resuscitation. What does the extent and spread of mottling indicate?",
+      "options": {
+        "A": "Mottling is a benign skin finding that improves as fluids redistribute in the body",
+        "B": "The spread of mottling to the thighs (beyond the knees) is an independent predictor of poor prognosis and indicates severe, refractory tissue hypoperfusion",
+        "C": "Mottling of the thighs confirms a DVT and anticoagulation should be started",
+        "D": "Mottling spread indicates fluid overload and diuresis should be initiated"
+      },
+      "correctAnswer": "B",
+      "rationale": "Mottling is a purple-gray patchy discoloration of the skin caused by severe microvascular hypoperfusion. Research has shown that the extent of mottling correlates with prognosis in septic shock — mottling extending beyond the knees (to the thighs) is associated with significantly higher 14-day mortality independent of other hemodynamic markers. It reflects failure of peripheral perfusion despite resuscitation and is a marker of refractory shock physiology.",
+      "keyConceptTested": "Mottling extent as prognostic marker — beyond-knee mottling predicts poor outcome in septic shock",
+      "conceptAnchor": "deterioration / circulatory / L2 / mottling-extent-prognosis"
+    },
+    {
+      "questionId": "RCD-SEP-006",
+      "topicSlug": "recognizing-clinical-deterioration",
+      "subtopicBucket": "B5",
+      "cognitiveLayer": "L3",
+      "difficulty": "hard",
+      "stem": "A patient meets sepsis criteria and the physician orders blood cultures and broad-spectrum antibiotics. The nurse notes blood cultures have not yet been collected. The antibiotics are ready to hang. What is the most appropriate action?",
+      "options": {
+        "A": "Administer the antibiotics immediately — the first dose cannot be delayed for any reason",
+        "B": "Collect blood cultures (at least 2 sets from separate sites) before administering the first antibiotic dose, as long as this does not delay antibiotics by more than 45 to 60 minutes",
+        "C": "Hold antibiotics until cultures result in 48 to 72 hours to ensure appropriate de-escalation",
+        "D": "Collect urine culture first, then blood cultures, then administer antibiotics"
+      },
+      "correctAnswer": "B",
+      "rationale": "Current Surviving Sepsis Campaign guidelines (SSC 2021) recommend obtaining blood cultures before starting antibiotics when this can be done without substantially delaying antibiotic administration (within 45 minutes). Blood cultures taken after antibiotics significantly reduces the diagnostic yield, potentially leaving the causative organism unidentified. If obtaining cultures would delay antibiotics beyond 45 minutes, start antibiotics first. At least 2 sets of blood cultures from separate venipuncture sites is the minimum standard.",
+      "keyConceptTested": "Blood cultures before antibiotics in sepsis — timing rule; 45-minute window",
+      "conceptAnchor": "deterioration / sepsis / L3 / blood-cultures-before-antibiotics-timing"
+    },
+    {
+      "questionId": "RCD-RESP-007",
+      "topicSlug": "recognizing-clinical-deterioration",
+      "subtopicBucket": "B3",
+      "cognitiveLayer": "L3",
+      "difficulty": "hard",
+      "stem": "A patient involved in a motor vehicle collision develops sudden severe respiratory distress. SpO2 drops to 80%, HR is 138 bpm, BP 78/44 mmHg, trachea is deviated to the LEFT, and breath sounds are absent on the RIGHT. What is the most appropriate immediate action?",
+      "options": {
+        "A": "Obtain a portable chest X-ray to confirm the diagnosis before any intervention",
+        "B": "Apply a non-rebreather mask and reassess in 10 minutes",
+        "C": "Recognize this as a tension pneumothorax and activate emergency response immediately — needle decompression of the right chest is the life-saving next step",
+        "D": "Administer IV fluid bolus as the hypotension is most likely from hypovolemia"
+      },
+      "correctAnswer": "C",
+      "rationale": "Tension pneumothorax presents with: respiratory distress, hypoxemia, hypotension, tachycardia, tracheal deviation AWAY from the affected side (trachea deviates left because the right pleural space is under pressure), and absent breath sounds on the affected side. This is a clinical diagnosis — waiting for chest X-ray is contraindicated as the patient can deteriorate to arrest within minutes. Needle decompression (large-bore needle at the 2nd ICS, midclavicular line) or finger thoracostomy is the immediate life-saving intervention.",
+      "keyConceptTested": "Tension pneumothorax — tracheal deviation away from affected side; clinical diagnosis, needle decompression immediately",
+      "conceptAnchor": "deterioration / respiratory / L3 / tension-pneumothorax-recognition-action"
+    },
+    {
+      "questionId": "RCD-HRS-006",
+      "topicSlug": "recognizing-clinical-deterioration",
+      "subtopicBucket": "B6",
+      "cognitiveLayer": "L1",
+      "difficulty": "easy",
+      "stem": "Following a cardiac catheterization via femoral access, at which time point is monitoring most critical for detecting local vascular complications (hematoma, pseudoaneurysm, arteriovenous fistula)?",
+      "options": {
+        "A": "The first 2 to 4 hours post-procedure when the closure device is freshest and clot formation is active",
+        "B": "12 to 24 hours post-procedure when the patient is ambulating",
+        "C": "48 to 72 hours post-procedure after discharge",
+        "D": "Only during the procedure itself — post-procedure complications are rare"
+      },
+      "correctAnswer": "A",
+      "rationale": "Vascular access site complications following cardiac catheterization (hematoma, retroperitoneal bleeding, pseudoaneurysm) are most likely to develop in the first 2 to 4 hours post-procedure while the closure device or manual compression is establishing hemostasis. Femoral sheath removal and the immediate post-removal period carry the highest risk. Vital signs, access site inspection, and neurovascular checks of the affected limb are performed at high frequency (every 15 minutes) during this window.",
+      "keyConceptTested": "Post-cardiac catheterization monitoring — first 2 to 4 hours highest risk for vascular complications",
+      "conceptAnchor": "deterioration / high-risk-situations / L1 / post-cath-monitoring-window"
+    }
+  ],
+  "lessonOutline": [
+    {
+      "lessonId": "RCD-L1",
+      "title": "Early Warning Signs of Deterioration",
+      "buckets": [
+        "B1"
+      ],
+      "objectives": [
+        "Identify tachypnea as the most sensitive vital sign indicator",
+        "Recognize functional decline as pre-vital-sign deterioration marker",
+        "Interpret multi-vital-sign trends over time"
+      ],
+      "estimatedMinutes": 30
+    },
+    {
+      "lessonId": "RCD-L2",
+      "title": "Altered Mental Status and Respiratory Warning Signs",
+      "buckets": [
+        "B2",
+        "B3"
+      ],
+      "objectives": [
+        "Recognize new confusion as a universal deterioration marker",
+        "Distinguish delirium from expected behavior in elderly",
+        "Identify visual respiratory distress signs: accessory muscles, tripod positioning, inability to speak in full sentences"
+      ],
+      "estimatedMinutes": 35
+    },
+    {
+      "lessonId": "RCD-L3",
+      "title": "Circulatory Warning Signs and Sepsis Recognition",
+      "buckets": [
+        "B4",
+        "B5"
+      ],
+      "objectives": [
+        "Use skin color, temperature, and capillary refill as perfusion proxies",
+        "Recognize SIRS criteria and atypical geriatric sepsis presentation",
+        "Interpret elevated lactate as occult shock marker"
+      ],
+      "estimatedMinutes": 35
+    },
+    {
+      "lessonId": "RCD-L4",
+      "title": "High-Risk Deterioration Situations",
+      "buckets": [
+        "B6"
+      ],
+      "objectives": [
+        "Identify the postoperative high-risk window",
+        "Recognize pediatric retractions and nasal flaring as distress indicators",
+        "Apply deterioration recognition to immunocompromised and post-procedure patients"
+      ],
+      "estimatedMinutes": 30
+    },
+    {
+      "lessonId": "RCD-L5",
+      "title": "Communication, Escalation, and Rapid Response",
+      "buckets": [
+        "B7",
+        "B8"
+      ],
+      "objectives": [
+        "Apply SBAR for deterioration communication",
+        "Execute chain-of-command escalation when physician response is inadequate",
+        "Distinguish rapid response from code blue activation",
+        "Describe the bedside nurse's role when the RRT arrives"
+      ],
+      "estimatedMinutes": 30
+    }
+  ],
+  "qaReport": {
+    "finalQuestionCount": 45,
+    "cognitiveBalance": {
+      "L1": 16,
+      "L2": 19,
+      "L3": 10,
+      "L1_pct": 36,
+      "L2_pct": 42,
+      "L3_pct": 22
+    },
+    "difficultyBalance": {
+      "easy": 12,
+      "medium": 22,
+      "hard": 11,
+      "easy_pct": 27,
+      "medium_pct": 49,
+      "hard_pct": 24
+    },
+    "allTargetsMet": true,
+    "duplicationStatus": "No shared concept anchors; all 45 questions test distinct teaching objectives",
+    "scopeFenceStatus": "All 5 fences maintained — no HAI protocols, no GCS scoring method, no HF GDMT, no VS technique details, no safety event disclosure processes",
+    "unresolvedConcerns": "None"
+  }
+}

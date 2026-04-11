@@ -1,0 +1,924 @@
+{
+  "topicSlug": "vital-signs-measurement-interpretation",
+  "topicName": "Vital Signs Measurement and Interpretation",
+  "domain": "Intro to Health Assessment",
+  "contentWeight": "heavy",
+  "phase": 2,
+  "generatedAt": "2026-04-10",
+  "status": "draft",
+  "cognitiveModel": "L1-L2-L3",
+  "targetQuestionCount": 45,
+  "subtopicBuckets": [
+    { "id": "B1", "name": "Temperature", "scope": "Normal ranges, measurement sites, fever vs hyperthermia, hypothermia" },
+    { "id": "B2", "name": "Heart Rate and Pulse", "scope": "Rate thresholds, rhythm, character, apical assessment, pulse deficit" },
+    { "id": "B3", "name": "Blood Pressure", "scope": "Measurement technique, classification, pulse pressure, hypotension" },
+    { "id": "B4", "name": "Respirations", "scope": "Normal rate, abnormal patterns, critical thresholds" },
+    { "id": "B5", "name": "Oxygen Saturation", "scope": "SpO2 norms, hypoxemia severity, pulse ox limitations" },
+    { "id": "B6", "name": "Orthostatic Vital Signs", "scope": "Criteria, volume vs autonomic interpretation, at-risk populations" },
+    { "id": "B7", "name": "Pain Assessment", "scope": "Scale classification, behavioral indicators, sudden-change red flags" },
+    { "id": "B8", "name": "Pediatric Norms", "scope": "Age-adjusted HR, RR, and BP ranges" }
+  ],
+  "cognitiveDistribution": { "L1": 15, "L2": 20, "L3": 10 },
+  "difficultyDistribution": { "easy": 12, "medium": 21, "hard": 12 },
+  "questions": [
+    {
+      "questionId": "VS-TEMP-001",
+      "topicSlug": "vital-signs-measurement-interpretation",
+      "subtopicBucket": "B1",
+      "cognitiveLayer": "L1",
+      "difficulty": "easy",
+      "stem": "The normal oral temperature range for a healthy adult is:",
+      "options": {
+        "A": "35.5 to 36.0°C (95.9 to 96.8°F)",
+        "B": "36.1 to 37.2°C (97.0 to 99.0°F)",
+        "C": "37.5 to 38.0°C (99.5 to 100.4°F)",
+        "D": "38.0 to 38.5°C (100.4 to 101.3°F)"
+      },
+      "correctAnswer": "B",
+      "rationale": "Normal adult oral temperature is 36.1 to 37.2°C. Values above 38.0°C (100.4°F) are classified as fever. Rectal temperatures run approximately 0.5°C higher than oral; axillary temperatures run approximately 0.5°C lower.",
+      "keyConceptTested": "Normal adult oral temperature range",
+      "conceptAnchor": "vital-signs / temperature / L1 / normal-range"
+    },
+    {
+      "questionId": "VS-TEMP-002",
+      "topicSlug": "vital-signs-measurement-interpretation",
+      "subtopicBucket": "B1",
+      "cognitiveLayer": "L1",
+      "difficulty": "easy",
+      "stem": "Which temperature measurement site is considered most accurate for estimating core body temperature?",
+      "options": {
+        "A": "Axillary",
+        "B": "Oral (sublingual)",
+        "C": "Tympanic",
+        "D": "Rectal"
+      },
+      "correctAnswer": "D",
+      "rationale": "Rectal temperature most closely approximates core body temperature and is not influenced by breathing patterns or oral intake. Tympanic readings depend on proper technique and can be inaccurate with cerumen buildup. Axillary is the least reliable — consistently 0.5°C below oral.",
+      "keyConceptTested": "Temperature measurement site accuracy hierarchy",
+      "conceptAnchor": "vital-signs / temperature / L1 / measurement-site"
+    },
+    {
+      "questionId": "VS-TEMP-003",
+      "topicSlug": "vital-signs-measurement-interpretation",
+      "subtopicBucket": "B1",
+      "cognitiveLayer": "L2",
+      "difficulty": "medium",
+      "stem": "An 83-year-old nursing home resident develops new confusion, decreased appetite, and a tympanic temperature of 37.9°C. Which statement best describes the clinical significance of this temperature?",
+      "options": {
+        "A": "37.9°C is entirely normal; infection is not supported by this temperature",
+        "B": "Elderly patients frequently mount a blunted febrile response; 37.9°C combined with new confusion may represent significant infection",
+        "C": "The tympanic reading must be repeated rectally before any clinical interpretation is valid",
+        "D": "37.9°C represents low-grade hyperthermia requiring immediate cooling measures"
+      },
+      "correctAnswer": "B",
+      "rationale": "Older adults have diminished thermoregulatory capacity and often fail to mount a robust fever even during serious infection. A temperature of 37.9°C with new altered mental status and functional decline in an elderly patient warrants infection workup regardless of how mild the temperature elevation appears. Option C is a reasonable practice point but does not address the clinical significance asked. Option D misclassifies fever as hyperthermia.",
+      "keyConceptTested": "Blunted febrile response in elderly; altered mental status as infection marker",
+      "conceptAnchor": "vital-signs / temperature / L2 / elderly-blunted-response"
+    },
+    {
+      "questionId": "VS-TEMP-004",
+      "topicSlug": "vital-signs-measurement-interpretation",
+      "subtopicBucket": "B1",
+      "cognitiveLayer": "L2",
+      "difficulty": "hard",
+      "stem": "A hiker collapses after 4 hours in extreme heat. Temperature is 41.4°C rectally, BP 96/58 mmHg, HR 130 bpm. He is confused and not sweating despite the ambient temperature of 39°C. Which feature most reliably distinguishes this presentation from classic infectious fever?",
+      "options": {
+        "A": "Temperature above 41°C",
+        "B": "Associated tachycardia and hypotension",
+        "C": "Anhidrosis with a clear environmental trigger and absence of a pyrogenic cause",
+        "D": "Confusion in the setting of high ambient heat"
+      },
+      "correctAnswer": "C",
+      "rationale": "Heat stroke (hyperthermia) is failure of thermoregulatory heat dissipation without a hypothalamic set-point reset. Classic hallmarks include anhidrosis (the body cannot cool itself) and no pyrogenic cause (no infection, no immune-mediated process). Fever is pyrogen-driven and preserves the sweating mechanism. Antipyretics are ineffective for hyperthermia because there is no set-point elevation to lower. Tachycardia and confusion occur in both conditions.",
+      "keyConceptTested": "Fever vs hyperthermia — anhidrosis and mechanism distinguish heat stroke",
+      "conceptAnchor": "vital-signs / temperature / L2 / fever-vs-hyperthermia"
+    },
+    {
+      "questionId": "VS-TEMP-005",
+      "topicSlug": "vital-signs-measurement-interpretation",
+      "subtopicBucket": "B1",
+      "cognitiveLayer": "L3",
+      "difficulty": "medium",
+      "stem": "A 26-year-old presents with an oral temperature of 40.6°C, rigors, and a 2-day productive cough. She appears flushed and diaphoretic. Blood pressure and heart rate are within normal limits. What is the most appropriate immediate first action?",
+      "options": {
+        "A": "Order a chest X-ray and withhold treatment until imaging is complete",
+        "B": "Obtain blood cultures and begin empiric antipyretic therapy while initiating the diagnostic workup in parallel",
+        "C": "Activate a sepsis protocol and immediately begin IV broad-spectrum antibiotics without further assessment",
+        "D": "Administer IV corticosteroids to suppress the febrile inflammatory response"
+      },
+      "correctAnswer": "B",
+      "rationale": "In a febrile patient with preserved hemodynamics and no sepsis criteria, the immediate first step combines antipyresis (acetaminophen or ibuprofen for comfort and safety) with simultaneous diagnostic workup. Blood cultures should be drawn before antibiotics if empiric treatment is planned. This patient does not yet meet sepsis criteria (no hemodynamic compromise, no end-organ signs), so mandatory ICU-level sepsis protocol is premature. Corticosteroids are not first-line for fever management.",
+      "keyConceptTested": "High fever management — antipyresis plus parallel workup; sepsis criteria not yet met",
+      "conceptAnchor": "vital-signs / temperature / L3 / high-fever-first-action"
+    },
+    {
+      "questionId": "VS-HR-001",
+      "topicSlug": "vital-signs-measurement-interpretation",
+      "subtopicBucket": "B2",
+      "cognitiveLayer": "L1",
+      "difficulty": "easy",
+      "stem": "The normal resting heart rate range for a healthy adult is:",
+      "options": {
+        "A": "40 to 60 bpm",
+        "B": "60 to 100 bpm",
+        "C": "80 to 120 bpm",
+        "D": "100 to 140 bpm"
+      },
+      "correctAnswer": "B",
+      "rationale": "The normal adult resting heart rate is 60 to 100 bpm. Bradycardia is defined as fewer than 60 bpm; tachycardia as greater than 100 bpm. Well-trained athletes may have resting rates of 40 to 55 bpm as a normal physiologic adaptation.",
+      "keyConceptTested": "Normal adult heart rate range; bradycardia and tachycardia thresholds",
+      "conceptAnchor": "vital-signs / heart-rate / L1 / normal-range"
+    },
+    {
+      "questionId": "VS-HR-002",
+      "topicSlug": "vital-signs-measurement-interpretation",
+      "subtopicBucket": "B2",
+      "cognitiveLayer": "L1",
+      "difficulty": "easy",
+      "stem": "When auscultating the apical pulse, the stethoscope is placed at the:",
+      "options": {
+        "A": "Second intercostal space at the right sternal border",
+        "B": "Fifth intercostal space at the midclavicular line",
+        "C": "Third intercostal space at the left sternal border",
+        "D": "Subxiphoid area below the sternum"
+      },
+      "correctAnswer": "B",
+      "rationale": "The apical pulse (point of maximal impulse, PMI) is auscultated at the fifth intercostal space at the left midclavicular line in most adults. This corresponds to the cardiac apex. The right sternal border second ICS is the aortic area. Apical auscultation is more accurate than radial palpation when dysrhythmias are suspected.",
+      "keyConceptTested": "Apical pulse location — 5th ICS midclavicular line",
+      "conceptAnchor": "vital-signs / heart-rate / L1 / apical-location"
+    },
+    {
+      "questionId": "VS-HR-003",
+      "topicSlug": "vital-signs-measurement-interpretation",
+      "subtopicBucket": "B2",
+      "cognitiveLayer": "L1",
+      "difficulty": "medium",
+      "stem": "A nurse simultaneously auscultates the apical rate (92 bpm) and palpates the radial rate (68 bpm). This discrepancy is called a:",
+      "options": {
+        "A": "Compensatory pause",
+        "B": "Pulsus paradoxus",
+        "C": "Pulse deficit",
+        "D": "Orthostatic response"
+      },
+      "correctAnswer": "C",
+      "rationale": "A pulse deficit is the difference between the apical heart rate and the radial pulse rate. It occurs when some cardiac contractions produce insufficient stroke volume to generate a palpable peripheral pulse wave. A deficit of 24 (92 minus 68) indicates 24 beats per minute are centrally generated but peripherally imperceptible — a hallmark of atrial fibrillation or frequent ectopic beats.",
+      "keyConceptTested": "Pulse deficit — apical vs radial rate discrepancy definition",
+      "conceptAnchor": "vital-signs / heart-rate / L1 / pulse-deficit-definition"
+    },
+    {
+      "questionId": "VS-HR-004",
+      "topicSlug": "vital-signs-measurement-interpretation",
+      "subtopicBucket": "B2",
+      "cognitiveLayer": "L2",
+      "difficulty": "medium",
+      "stem": "A patient with a fever of 39.6°C has a heart rate of 114 bpm. Which statement most accurately interprets this finding?",
+      "options": {
+        "A": "A heart rate above 100 bpm always indicates primary cardiac pathology and requires cardiology evaluation",
+        "B": "Sinus tachycardia is an expected physiological response to fever; each 1°C rise in temperature produces approximately 10 to 15 additional beats per minute",
+        "C": "Tachycardia in a febrile patient confirms sepsis and should immediately activate a sepsis protocol",
+        "D": "The tachycardia confirms the fever is from a bacterial source and antibiotics must be started"
+      },
+      "correctAnswer": "B",
+      "rationale": "Sinus tachycardia is a predictable physiologic response to fever. For each 1°C elevation above normal, HR rises approximately 10 to 15 bpm. A 2.4°C elevation (39.6 minus 37.2) accounts for a rate of 110 to 124 bpm. This does not diagnose sepsis or bacterial etiology. Sepsis requires hemodynamic instability or end-organ dysfunction in addition to suspected infection.",
+      "keyConceptTested": "Physiologic tachycardia with fever — secondary cause, not primary cardiac",
+      "conceptAnchor": "vital-signs / heart-rate / L2 / fever-tachycardia-secondary"
+    },
+    {
+      "questionId": "VS-HR-005",
+      "topicSlug": "vital-signs-measurement-interpretation",
+      "subtopicBucket": "B2",
+      "cognitiveLayer": "L2",
+      "difficulty": "medium",
+      "stem": "A patient in atrial fibrillation has an apical rate of 96 bpm and a radial rate of 68 bpm. What does a pulse deficit of 28 bpm indicate?",
+      "options": {
+        "A": "The ventricles are contracting efficiently and the peripheral reading underestimates cardiac output",
+        "B": "Many ventricular contractions are occurring with inadequate filling time, producing strokes too small to generate a palpable peripheral pulse",
+        "C": "The radial reading is falsely elevated by arterial stiffness in this patient",
+        "D": "The patient is in third-degree heart block requiring immediate pacemaker placement"
+      },
+      "correctAnswer": "B",
+      "rationale": "In atrial fibrillation, chaotic atrial impulses cause variable ventricular filling times. Short R-R intervals produce contractions before the ventricle fills adequately, generating a stroke volume too small to create a palpable wrist pulse. A large deficit signals frequent ineffective contractions — the patient's cardiac workload is higher than the radial rate suggests, and hemodynamic status may be worse than it appears.",
+      "keyConceptTested": "Pulse deficit interpretation in AF — inadequate ventricular filling",
+      "conceptAnchor": "vital-signs / heart-rate / L2 / pulse-deficit-AF-interpretation"
+    },
+    {
+      "questionId": "VS-HR-006",
+      "topicSlug": "vital-signs-measurement-interpretation",
+      "subtopicBucket": "B2",
+      "cognitiveLayer": "L2",
+      "difficulty": "hard",
+      "stem": "A patient's radial pulse has a bounding, rapidly collapsing quality. Blood pressure is 158/38 mmHg. Which condition is most consistent with this pulse character and pulse pressure?",
+      "options": {
+        "A": "Cardiac tamponade",
+        "B": "Severe hypovolemic shock",
+        "C": "Severe aortic regurgitation",
+        "D": "Aortic stenosis with reduced stroke volume"
+      },
+      "correctAnswer": "C",
+      "rationale": "A water-hammer (Corrigan's) pulse — bounding and rapidly collapsing — results from a wide pulse pressure. Here the pulse pressure is 120 mmHg (158 minus 38), far above the normal 40 to 60 mmHg. The wide gap reflects a large stroke volume (elevated systolic) combined with blood leaking back through an incompetent aortic valve during diastole (very low diastolic). Tamponade and hypovolemia produce a weak, thready, narrowed-pressure pulse. Aortic stenosis reduces stroke volume and narrows pulse pressure.",
+      "keyConceptTested": "Water-hammer pulse and wide pulse pressure — aortic regurgitation",
+      "conceptAnchor": "vital-signs / heart-rate / L2 / pulse-character-AR"
+    },
+    {
+      "questionId": "VS-HR-007",
+      "topicSlug": "vital-signs-measurement-interpretation",
+      "subtopicBucket": "B2",
+      "cognitiveLayer": "L3",
+      "difficulty": "medium",
+      "stem": "A 70-year-old man reports near-syncope and dizziness. His apical rate is 36 bpm and rhythm is regular. Blood pressure is 84/54 mmHg. What is the most appropriate immediate action?",
+      "options": {
+        "A": "Obtain an echocardiogram to identify structural heart disease before intervening",
+        "B": "Obtain a 12-lead ECG and apply continuous cardiac monitoring immediately",
+        "C": "Administer IV metoprolol to optimize conduction and allow a lower but more efficient rate",
+        "D": "Reassure the patient that a heart rate of 36 bpm can be a normal athletic variant"
+      },
+      "correctAnswer": "B",
+      "rationale": "A symptomatic bradycardia of 36 bpm with hypotension and near-syncope is a hemodynamic emergency. The immediate first step is ECG acquisition and continuous cardiac monitoring to identify the specific rhythm (complete heart block, sinus node dysfunction, etc.) and guide the appropriate intervention. Metoprolol would worsen bradycardia. Echocardiogram is not the urgent priority. A rate of 36 with hypotension and symptoms in an elderly patient is never a normal variant.",
+      "keyConceptTested": "Symptomatic bradycardia — ECG plus continuous monitoring is the immediate first step",
+      "conceptAnchor": "vital-signs / heart-rate / L3 / symptomatic-bradycardia-action"
+    },
+    {
+      "questionId": "VS-HR-008",
+      "topicSlug": "vital-signs-measurement-interpretation",
+      "subtopicBucket": "B2",
+      "cognitiveLayer": "L3",
+      "difficulty": "hard",
+      "stem": "A patient who underwent abdominal surgery 5 hours ago develops a heart rate of 132 bpm, blood pressure 90/56 mmHg, and reports feeling faint. Skin is cool and clammy. What is the most appropriate immediate action?",
+      "options": {
+        "A": "Administer IV metoprolol to reduce the tachycardia and improve diastolic filling",
+        "B": "Activate rapid response, inspect the surgical site for hemorrhage, establish large-bore IV access, and prepare for volume resuscitation",
+        "C": "Provide oral fluids and reassess in 30 minutes as this may reflect postoperative pain",
+        "D": "Obtain an ECG to rule out atrial flutter as the etiology of the tachycardia"
+      },
+      "correctAnswer": "B",
+      "rationale": "Tachycardia, hypotension, and cool diaphoretic skin in a postoperative patient represents hemorrhagic shock until proven otherwise. This is a Class II to III hemodynamic picture. The immediate action is rapid response activation, visual inspection of the surgical site and dressings, establishing venous access, and initiating resuscitation. Slowing tachycardia in a compensating shock state with beta-blockade would be dangerous. Oral fluids are inappropriate in a hemodynamically unstable postoperative patient.",
+      "keyConceptTested": "Postoperative tachycardia plus hypotension — hemorrhagic shock recognition and rapid response",
+      "conceptAnchor": "vital-signs / heart-rate / L3 / postop-shock-recognition"
+    },
+    {
+      "questionId": "VS-BP-001",
+      "topicSlug": "vital-signs-measurement-interpretation",
+      "subtopicBucket": "B3",
+      "cognitiveLayer": "L1",
+      "difficulty": "easy",
+      "stem": "According to 2017 ACC/AHA guidelines, normal blood pressure in an adult is defined as:",
+      "options": {
+        "A": "Less than 130/80 mmHg",
+        "B": "Less than 120/80 mmHg",
+        "C": "120 to 129/80 to 84 mmHg",
+        "D": "130 to 139/80 to 89 mmHg"
+      },
+      "correctAnswer": "B",
+      "rationale": "The 2017 ACC/AHA guidelines define normal BP as less than 120/80 mmHg. Elevated BP (not yet hypertension) is 120 to 129 with diastolic less than 80. Stage 1 hypertension is 130 to 139/80 to 89 mmHg. Stage 2 hypertension is 140/90 mmHg or greater.",
+      "keyConceptTested": "ACC/AHA 2017 BP classification — normal is less than 120/80 mmHg",
+      "conceptAnchor": "vital-signs / blood-pressure / L1 / normal-BP-range"
+    },
+    {
+      "questionId": "VS-BP-002",
+      "topicSlug": "vital-signs-measurement-interpretation",
+      "subtopicBucket": "B3",
+      "cognitiveLayer": "L1",
+      "difficulty": "easy",
+      "stem": "Which blood pressure reading meets the ACC/AHA 2017 criteria for Stage 1 hypertension?",
+      "options": {
+        "A": "116/74 mmHg",
+        "B": "124/76 mmHg",
+        "C": "136/86 mmHg",
+        "D": "148/92 mmHg"
+      },
+      "correctAnswer": "C",
+      "rationale": "Stage 1 hypertension is defined as systolic 130 to 139 mmHg OR diastolic 80 to 89 mmHg. 136/86 falls within this range. 148/92 meets Stage 2 criteria (greater than or equal to 140/90). 124/76 represents elevated BP (120-129/less than 80). 116/74 is normal.",
+      "keyConceptTested": "Stage 1 HTN criteria — systolic 130-139 or diastolic 80-89 mmHg",
+      "conceptAnchor": "vital-signs / blood-pressure / L1 / HTN-stage1-criteria"
+    },
+    {
+      "questionId": "VS-BP-003",
+      "topicSlug": "vital-signs-measurement-interpretation",
+      "subtopicBucket": "B3",
+      "cognitiveLayer": "L1",
+      "difficulty": "medium",
+      "stem": "Which technique error most commonly produces a falsely elevated blood pressure reading?",
+      "options": {
+        "A": "Using a BP cuff that is too large for the arm",
+        "B": "Positioning the patient's arm above the level of the heart",
+        "C": "Using a BP cuff that is too small for the arm circumference",
+        "D": "Measuring BP immediately after a patient lies down from standing"
+      },
+      "correctAnswer": "C",
+      "rationale": "An undersized cuff bladder does not adequately encircle the arm. Greater external pressure is required to compress the brachial artery, producing a falsely high reading. An oversized cuff produces a falsely low reading. Arm above heart level gives a falsely low reading. Arm below heart level gives a falsely high reading. Measuring immediately after position change affects orthostatic assessment, not baseline accuracy.",
+      "keyConceptTested": "BP technique error — small cuff produces falsely elevated reading",
+      "conceptAnchor": "vital-signs / blood-pressure / L1 / cuff-technique-error"
+    },
+    {
+      "questionId": "VS-BP-004",
+      "topicSlug": "vital-signs-measurement-interpretation",
+      "subtopicBucket": "B3",
+      "cognitiveLayer": "L2",
+      "difficulty": "medium",
+      "stem": "A 58-year-old presents with BP 196/118 mmHg, severe occipital headache, and a serum creatinine that has risen from 1.0 to 2.4 mg/dL over 5 days. Which classification best describes this situation?",
+      "options": {
+        "A": "Stage 2 hypertension requiring outpatient medication adjustment",
+        "B": "Hypertensive urgency — severely elevated BP without end-organ damage",
+        "C": "Hypertensive emergency — severely elevated BP with evidence of acute kidney injury",
+        "D": "White coat hypertension — isolated clinic elevation without true organ involvement"
+      },
+      "correctAnswer": "C",
+      "rationale": "Hypertensive emergency is defined as severely elevated BP (typically greater than 180/120) with evidence of acute end-organ damage. A rising creatinine from 1.0 to 2.4 mg/dL indicates hypertensive nephropathy (acute kidney involvement) — this is end-organ damage. Hypertensive urgency involves extreme BP without end-organ involvement. This patient requires hospital admission and IV antihypertensive therapy to prevent further organ damage.",
+      "keyConceptTested": "Hypertensive emergency vs urgency — rising creatinine = end-organ damage",
+      "conceptAnchor": "vital-signs / blood-pressure / L2 / HTN-emergency-classification"
+    },
+    {
+      "questionId": "VS-BP-005",
+      "topicSlug": "vital-signs-measurement-interpretation",
+      "subtopicBucket": "B3",
+      "cognitiveLayer": "L2",
+      "difficulty": "hard",
+      "stem": "During blood pressure measurement, the systolic reading drops 14 mmHg during the patient's normal inspiration. Which condition is this finding most strongly associated with?",
+      "options": {
+        "A": "Essential hypertension",
+        "B": "Cardiac tamponade or severe obstructive lung disease",
+        "C": "Chronic aortic stenosis",
+        "D": "Tricuspid regurgitation with right heart dilation"
+      },
+      "correctAnswer": "B",
+      "rationale": "Pulsus paradoxus is an exaggerated inspiratory drop in systolic BP exceeding 10 mmHg. Normally, inspiration drops systolic BP by fewer than 10 mmHg. An exaggerated drop occurs when pericardial pressure restricts ventricular filling (tamponade) or when hyperinflation impairs cardiac filling (severe asthma, COPD exacerbation). A drop of 14 mmHg is clinically significant and warrants urgent evaluation.",
+      "keyConceptTested": "Pulsus paradoxus — greater than 10 mmHg inspiratory drop; tamponade and severe obstructive disease",
+      "conceptAnchor": "vital-signs / blood-pressure / L2 / pulsus-paradoxus"
+    },
+    {
+      "questionId": "VS-BP-006",
+      "topicSlug": "vital-signs-measurement-interpretation",
+      "subtopicBucket": "B3",
+      "cognitiveLayer": "L2",
+      "difficulty": "medium",
+      "stem": "A patient's blood pressure is 164/42 mmHg (pulse pressure = 122 mmHg). Which clinical interpretation is most appropriate for this wide pulse pressure?",
+      "options": {
+        "A": "The narrow diastolic value indicates severe dehydration",
+        "B": "Wide pulse pressure reflects increased stroke volume or decreased aortic compliance; aortic regurgitation is a leading cause",
+        "C": "Narrow pulse pressure reflects poor cardiac output from tamponade",
+        "D": "A pulse pressure of 122 mmHg is a normal finding in elderly patients due to arterial calcification alone"
+      },
+      "correctAnswer": "B",
+      "rationale": "Normal pulse pressure is 40 to 60 mmHg. A wide pulse pressure (greater than 60 mmHg) indicates high stroke volume (aortic regurgitation, hyperthyroidism, severe anemia, fever) or reduced aortic compliance (atherosclerosis in elderly). A 122 mmHg pulse pressure in a younger adult strongly suggests aortic regurgitation. Narrow pulse pressure (less than 25 mmHg) indicates reduced stroke volume (tamponade, severe aortic stenosis, hypovolemia).",
+      "keyConceptTested": "Wide pulse pressure — high stroke volume state; aortic regurgitation as primary cause",
+      "conceptAnchor": "vital-signs / blood-pressure / L2 / wide-pulse-pressure"
+    },
+    {
+      "questionId": "VS-BP-007",
+      "topicSlug": "vital-signs-measurement-interpretation",
+      "subtopicBucket": "B3",
+      "cognitiveLayer": "L2",
+      "difficulty": "medium",
+      "stem": "A 48-year-old woman with no prior medical history is found to have a BP of 188/110 mmHg at a routine visit. She is asymptomatic and reports recent work stress and three cups of coffee this morning. What is the most appropriate interpretation?",
+      "options": {
+        "A": "This single reading confirms chronic hypertension requiring immediate antihypertensive therapy",
+        "B": "A single elevated BP may reflect situational factors; hypertension diagnosis requires at least two elevated readings on separate occasions or validated ambulatory confirmation",
+        "C": "A BP above 180/110 represents hypertensive urgency and must be lowered pharmacologically today",
+        "D": "Stress cannot produce BP elevation of this magnitude; further cardiac workup is required"
+      },
+      "correctAnswer": "B",
+      "rationale": "Hypertension diagnosis requires elevated BP on at least two separate office visits (or confirmation via ambulatory/home BP monitoring). A single reading can be influenced by white coat effect, pain, caffeine, anxiety, or recent exertion. A BP of 188/110 on one occasion in an asymptomatic patient with plausible situational factors warrants timely re-evaluation, not immediate drug initiation. Hypertensive urgency requires a pattern of extreme elevation without situational explanation.",
+      "keyConceptTested": "Single elevated BP reading — does not alone diagnose hypertension; situational factors",
+      "conceptAnchor": "vital-signs / blood-pressure / L2 / single-reading-interpretation"
+    },
+    {
+      "questionId": "VS-BP-008",
+      "topicSlug": "vital-signs-measurement-interpretation",
+      "subtopicBucket": "B3",
+      "cognitiveLayer": "L3",
+      "difficulty": "medium",
+      "stem": "A patient is found unresponsive with a blood pressure of 66/40 mmHg and a heart rate of 136 bpm. What is the most appropriate immediate action?",
+      "options": {
+        "A": "Obtain a chest X-ray to identify the cause before initiating any intervention",
+        "B": "Activate a rapid response, establish large-bore IV access, apply continuous monitoring, and prepare for hemodynamic support",
+        "C": "Administer an oral antihypertensive as the BP may be falsely low due to positioning",
+        "D": "Reposition the patient and recheck the BP in 15 minutes"
+      },
+      "correctAnswer": "B",
+      "rationale": "A BP of 66/40 with tachycardia 136 in an unresponsive patient represents a shock state (cardiogenic, distributive, obstructive, or hypovolemic). The immediate response is emergency activation, IV access, continuous monitoring, and hemodynamic support preparation. Oral medications are ineffective and inappropriate. Chest X-ray is secondary to stabilization. Repositioning is not appropriate for an unresponsive patient with critical hemodynamics.",
+      "keyConceptTested": "Critical hypotension plus tachycardia — immediate emergency activation; do not delay for diagnostics",
+      "conceptAnchor": "vital-signs / blood-pressure / L3 / critical-hypotension-action"
+    },
+    {
+      "questionId": "VS-BP-009",
+      "topicSlug": "vital-signs-measurement-interpretation",
+      "subtopicBucket": "B3",
+      "cognitiveLayer": "L3",
+      "difficulty": "hard",
+      "stem": "A 62-year-old man presents with tearing chest pain radiating to the back. BP right arm: 162/96 mmHg; BP left arm: 104/60 mmHg. Inter-arm difference is 58 mmHg systolic. What is the most critical immediate action?",
+      "options": {
+        "A": "Repeat both arm BPs in 30 minutes to verify the differential",
+        "B": "Treat the right arm as the true BP reading and administer IV labetalol for hypertension",
+        "C": "Initiate immediate evaluation for aortic dissection — the inter-arm differential plus tearing pain is a time-critical emergency",
+        "D": "Reassure the patient that inter-arm BP differences are a common normal variant"
+      },
+      "correctAnswer": "C",
+      "rationale": "An inter-arm systolic BP differential greater than 15 to 20 mmHg combined with tearing chest or back pain is a classic presentation of aortic dissection. The dissection flap may occlude the left subclavian artery, producing a lower left arm pressure. This is a time-sensitive surgical emergency requiring urgent CT angiography. Delaying for repeat measurements or treating only the BP without considering dissection could be fatal. A difference of 58 mmHg is highly significant.",
+      "keyConceptTested": "Inter-arm BP differential plus tearing pain — aortic dissection red flag requiring immediate workup",
+      "conceptAnchor": "vital-signs / blood-pressure / L3 / inter-arm-differential-dissection"
+    },
+    {
+      "questionId": "VS-RR-001",
+      "topicSlug": "vital-signs-measurement-interpretation",
+      "subtopicBucket": "B4",
+      "cognitiveLayer": "L1",
+      "difficulty": "easy",
+      "stem": "The normal respiratory rate range for a healthy adult at rest is:",
+      "options": {
+        "A": "6 to 10 breaths per minute",
+        "B": "12 to 20 breaths per minute",
+        "C": "22 to 28 breaths per minute",
+        "D": "28 to 35 breaths per minute"
+      },
+      "correctAnswer": "B",
+      "rationale": "Normal adult resting respiratory rate is 12 to 20 breaths per minute. Tachypnea is a rate above 20; bradypnea is a rate below 12. Accurate measurement requires counting over a full 60 seconds without alerting the patient, as patients tend to voluntarily modify their breathing when aware of being observed.",
+      "keyConceptTested": "Normal adult RR range — 12 to 20 breaths per minute",
+      "conceptAnchor": "vital-signs / respirations / L1 / normal-RR-range"
+    },
+    {
+      "questionId": "VS-RR-002",
+      "topicSlug": "vital-signs-measurement-interpretation",
+      "subtopicBucket": "B4",
+      "cognitiveLayer": "L1",
+      "difficulty": "easy",
+      "stem": "Kussmaul breathing is characterized by:",
+      "options": {
+        "A": "Irregular clusters of rapid breaths followed by periods of apnea",
+        "B": "Deep, rapid, and labored-appearing breathing associated with severe metabolic acidosis",
+        "C": "Shallow, slow, irregular respirations with prolonged inter-breath pauses",
+        "D": "Paradoxical inward chest movement during inspiration"
+      },
+      "correctAnswer": "B",
+      "rationale": "Kussmaul breathing is a compensatory respiratory pattern in severe metabolic acidosis, classically seen in diabetic ketoacidosis. The body increases minute ventilation to blow off CO2, partially compensating for the metabolic acidosis. Patients often do not report dyspnea despite the dramatic respiratory effort. Cheyne-Stokes (option A) is crescendo-decrescendo with apnea. Paradoxical movement (option D) suggests flail chest.",
+      "keyConceptTested": "Kussmaul breathing — deep rapid breathing compensating for metabolic acidosis; DKA classic",
+      "conceptAnchor": "vital-signs / respirations / L1 / Kussmaul-pattern"
+    },
+    {
+      "questionId": "VS-RR-003",
+      "topicSlug": "vital-signs-measurement-interpretation",
+      "subtopicBucket": "B4",
+      "cognitiveLayer": "L2",
+      "difficulty": "medium",
+      "stem": "A 74-year-old woman with chronic heart failure has a respiratory rate of 28 bpm, visible accessory muscle use, SpO2 88%, and bilateral basal crackles. How should a RR of 28 bpm be interpreted in this clinical context?",
+      "options": {
+        "A": "RR of 28 is within the acceptable range for a patient with chronic lung disease",
+        "B": "Tachypnea at 28 combined with accessory muscle use, hypoxemia, and crackles signals acute decompensation requiring urgent intervention",
+        "C": "The elevated RR is most likely anxiety-related and will resolve with reassurance",
+        "D": "RR of 28 specifically indicates a pneumonia superimposed on heart failure"
+      },
+      "correctAnswer": "B",
+      "rationale": "RR of 28 (40% above normal) combined with accessory muscle use (increased work of breathing), SpO2 88% (hypoxemia), and bilateral basal crackles in a heart failure patient defines acute decompensated HF. RR alone has many causes, but the composite clinical picture defines severity and urgency. Respiratory rate is frequently the most sensitive early indicator of impending deterioration, preceding SpO2 decline.",
+      "keyConceptTested": "Tachypnea interpretation in context — combined accessory muscle use and SpO2 indicate decompensation",
+      "conceptAnchor": "vital-signs / respirations / L2 / tachypnea-in-HF-context"
+    },
+    {
+      "questionId": "VS-RR-004",
+      "topicSlug": "vital-signs-measurement-interpretation",
+      "subtopicBucket": "B4",
+      "cognitiveLayer": "L2",
+      "difficulty": "hard",
+      "stem": "A patient's respiratory rate is documented as follows: 0800: 16, 1000: 20, 1200: 24, 1400: 28. SpO2 has remained 93 to 95% throughout. Which statement best interprets this trending data?",
+      "options": {
+        "A": "SpO2 above 90% confirms adequate oxygenation; rising RR requires no action at this time",
+        "B": "A progressive RR trend rising from 16 to 28 over 6 hours is a significant early warning sign of deterioration even with a maintained SpO2",
+        "C": "RR measurement is unreliable; this variability is expected over the course of a shift",
+        "D": "A RR of 28 in the afternoon likely reflects increased activity and will resolve with rest"
+      },
+      "correctAnswer": "B",
+      "rationale": "A consistent progressive rise in respiratory rate is one of the most sensitive indicators of impending respiratory failure. SpO2 may remain relatively preserved for an extended period while the patient's respiratory muscles work increasingly hard to compensate. A RR trend from 16 to 28 over 6 hours represents a 75% increase and warrants urgent physician notification and reassessment regardless of maintained SpO2. SpO2 drop is often a late sign.",
+      "keyConceptTested": "Trending RR as early deterioration signal — rising RR predates SpO2 decline",
+      "conceptAnchor": "vital-signs / respirations / L2 / RR-trend-early-warning"
+    },
+    {
+      "questionId": "VS-RR-005",
+      "topicSlug": "vital-signs-measurement-interpretation",
+      "subtopicBucket": "B4",
+      "cognitiveLayer": "L2",
+      "difficulty": "medium",
+      "stem": "Cheyne-Stokes respiration is best described as:",
+      "options": {
+        "A": "Uniformly deep and rapid breathing without pauses",
+        "B": "Progressively deeper and faster breaths followed by progressively slower and shallower breaths, then a period of apnea, repeating cyclically",
+        "C": "Shallow, rapid breathing associated with anxiety or panic",
+        "D": "Single deep gasping breaths separated by long pauses (agonal pattern)"
+      },
+      "correctAnswer": "B",
+      "rationale": "Cheyne-Stokes respiration follows a crescendo-decrescendo cycle: breathing becomes progressively deeper and faster, then progressively shallower and slower, then stops briefly (apnea), and the cycle repeats. It is associated with increased circulation time to the respiratory center (heart failure), CNS injury (stroke, brain herniation), and high altitude. It is clinically significant and must be documented and reported.",
+      "keyConceptTested": "Cheyne-Stokes pattern — crescendo-decrescendo cycling with apneic intervals",
+      "conceptAnchor": "vital-signs / respirations / L2 / Cheyne-Stokes-pattern"
+    },
+    {
+      "questionId": "VS-RR-006",
+      "topicSlug": "vital-signs-measurement-interpretation",
+      "subtopicBucket": "B4",
+      "cognitiveLayer": "L3",
+      "difficulty": "medium",
+      "stem": "A patient receiving IV opioids for postoperative pain is assessed. Respiratory rate is 6 bpm, breaths are very shallow, and the patient responds only to sternal rub. SpO2 is 84%. What is the most appropriate immediate action?",
+      "options": {
+        "A": "Reduce the opioid infusion rate and reassess in 30 minutes",
+        "B": "Stimulate the patient, apply supplemental oxygen, prepare to assist ventilation, and administer IV naloxone",
+        "C": "Place the patient in the lateral recovery position and call for assistance without administering medications",
+        "D": "Increase the opioid infusion to sedate the patient and prevent agitation from respiratory distress"
+      },
+      "correctAnswer": "B",
+      "rationale": "This is opioid-induced respiratory depression: bradypnea (6 bpm), shallow breathing, decreased consciousness, and hypoxemia (SpO2 84%). The immediate response is stimulation, supplemental oxygen, preparation for bag-mask ventilation if needed, and IV or IM naloxone (opioid reversal). Reducing the infusion rate is too slow a response for acute respiratory compromise. The lateral position alone does not reverse opioid toxicity. Increasing opioids in this context would be catastrophic.",
+      "keyConceptTested": "Opioid respiratory depression — naloxone plus oxygen is the immediate first step",
+      "conceptAnchor": "vital-signs / respirations / L3 / opioid-respiratory-depression-action"
+    },
+    {
+      "questionId": "VS-RR-007",
+      "topicSlug": "vital-signs-measurement-interpretation",
+      "subtopicBucket": "B4",
+      "cognitiveLayer": "L3",
+      "difficulty": "hard",
+      "stem": "A patient with a severe acute asthma exacerbation had a RR of 34 bpm one hour ago and appeared very distressed. He now has a RR of 14 bpm but looks exhausted, speaks only in single words, and has markedly diminished air movement on auscultation. Which interpretation is correct?",
+      "options": {
+        "A": "The RR normalized to 14 bpm; treatment is working and the patient is improving",
+        "B": "A decreasing RR in an exhausted asthma patient with diminished air entry signals respiratory muscle fatigue and impending respiratory arrest",
+        "C": "A normal-range RR confirms the patient can be safely downgraded from high-acuity monitoring",
+        "D": "Diminished air movement after bronchodilator therapy is expected and reassuring"
+      },
+      "correctAnswer": "B",
+      "rationale": "In severe status asthmaticus, a 'normalizing' respiratory rate combined with exhaustion and markedly reduced air movement is a pre-arrest pattern. As respiratory muscles fatigue, the patient can no longer sustain the compensatory tachypnea — the rate falls not because of improvement but because of impending failure. Diminished air entry means worsening airflow obstruction, not bronchodilation. This requires immediate critical care escalation and preparation for intubation.",
+      "keyConceptTested": "Apparent RR normalization in severe asthma = respiratory fatigue, not improvement; impending arrest",
+      "conceptAnchor": "vital-signs / respirations / L3 / asthma-fatigue-false-improvement"
+    },
+    {
+      "questionId": "VS-SPO2-001",
+      "topicSlug": "vital-signs-measurement-interpretation",
+      "subtopicBucket": "B5",
+      "cognitiveLayer": "L1",
+      "difficulty": "easy",
+      "stem": "The normal oxygen saturation (SpO2) range for a healthy adult breathing room air is:",
+      "options": {
+        "A": "85 to 90%",
+        "B": "90 to 94%",
+        "C": "95 to 100%",
+        "D": "100% only"
+      },
+      "correctAnswer": "C",
+      "rationale": "Normal SpO2 on room air for a healthy adult is 95 to 100%. Values of 91 to 94% indicate mild hypoxemia; 86 to 90% indicate moderate hypoxemia; below 86% indicates severe hypoxemia. A consistent reading above 95% without supplemental oxygen indicates normal gas exchange.",
+      "keyConceptTested": "Normal adult SpO2 range — 95 to 100%",
+      "conceptAnchor": "vital-signs / oxygen-saturation / L1 / normal-SpO2"
+    },
+    {
+      "questionId": "VS-SPO2-002",
+      "topicSlug": "vital-signs-measurement-interpretation",
+      "subtopicBucket": "B5",
+      "cognitiveLayer": "L1",
+      "difficulty": "easy",
+      "stem": "A patient's pulse oximeter reads 92%. This value falls into which hypoxemia category?",
+      "options": {
+        "A": "Normal — no clinical concern",
+        "B": "Mild hypoxemia",
+        "C": "Moderate hypoxemia",
+        "D": "Severe hypoxemia"
+      },
+      "correctAnswer": "B",
+      "rationale": "SpO2 classification: Normal = 95 to 100%. Mild hypoxemia = 91 to 94%. Moderate = 86 to 90%. Severe = below 86%. At 92%, the patient has mild hypoxemia. Clinical context matters — a chronic COPD patient at their baseline 92% differs from a previously normal patient acutely dropping to 92%. Any value below 95% warrants clinical reassessment.",
+      "keyConceptTested": "Hypoxemia severity classification by SpO2 — mild 91-94%",
+      "conceptAnchor": "vital-signs / oxygen-saturation / L1 / hypoxemia-classification"
+    },
+    {
+      "questionId": "VS-SPO2-003",
+      "topicSlug": "vital-signs-measurement-interpretation",
+      "subtopicBucket": "B5",
+      "cognitiveLayer": "L2",
+      "difficulty": "medium",
+      "stem": "A patient with severe COPD and known chronic CO2 retention presents with an acute exacerbation. His SpO2 is 87%, which is near his documented baseline. Which oxygen approach is most appropriate?",
+      "options": {
+        "A": "Apply a non-rebreather mask at 15 L/min to target SpO2 above 95%",
+        "B": "Withhold all supplemental oxygen as it invariably causes fatal CO2 retention in COPD",
+        "C": "Titrate supplemental oxygen to target SpO2 of 88 to 92%, avoiding suppression of hypoxic respiratory drive",
+        "D": "Discontinue SpO2 monitoring and rely exclusively on arterial blood gases"
+      },
+      "correctAnswer": "C",
+      "rationale": "In chronic CO2 retainers with COPD, the target SpO2 is 88 to 92%. High-flow oxygen targeting higher saturation can suppress hypoxic respiratory drive (the Haldane effect) and worsen hypercapnia. Option A risks respiratory depression. Option B overstates the risk — oxygen is not withheld; it is carefully titrated. ABGs supplement but do not replace monitoring in clinical practice.",
+      "keyConceptTested": "COPD oxygen target — 88 to 92% SpO2 to avoid hypoxic drive suppression",
+      "conceptAnchor": "vital-signs / oxygen-saturation / L2 / COPD-O2-target"
+    },
+    {
+      "questionId": "VS-SPO2-004",
+      "topicSlug": "vital-signs-measurement-interpretation",
+      "subtopicBucket": "B5",
+      "cognitiveLayer": "L2",
+      "difficulty": "hard",
+      "stem": "A patient with suspected carbon monoxide poisoning has a pulse oximeter reading of 98%. Which statement best explains the reliability of this value?",
+      "options": {
+        "A": "SpO2 of 98% excludes significant CO poisoning",
+        "B": "Standard pulse oximetry cannot distinguish oxyhemoglobin from carboxyhemoglobin; a normal SpO2 is falsely reassuring in CO poisoning and co-oximetry is required",
+        "C": "SpO2 above 95% is reliable in all clinical settings, including CO poisoning",
+        "D": "SpO2 of 98% means most hemoglobin is unbound and the patient can be observed without intervention"
+      },
+      "correctAnswer": "B",
+      "rationale": "Standard pulse oximeters use two wavelengths and cannot differentiate oxyhemoglobin from carboxyhemoglobin (COHb), which absorbs light similarly at one wavelength. COHb reads as 'saturated,' producing a falsely normal SpO2 even when a large fraction of hemoglobin is bound to CO and cannot carry oxygen. A co-oximeter (4+ wavelengths) directly measures COHb. A 98% SpO2 in suspected CO poisoning must never be reassuring.",
+      "keyConceptTested": "Pulse oximetry limitation — COHb reads as oxyhemoglobin; false-normal SpO2 in CO poisoning",
+      "conceptAnchor": "vital-signs / oxygen-saturation / L2 / CO-poisoning-pulse-ox-limitation"
+    },
+    {
+      "questionId": "VS-SPO2-005",
+      "topicSlug": "vital-signs-measurement-interpretation",
+      "subtopicBucket": "B5",
+      "cognitiveLayer": "L2",
+      "difficulty": "medium",
+      "stem": "A nurse attempts pulse oximetry on a patient with severe peripheral arterial disease. The waveform is weak and intermittent, with readings ranging from 80 to 96% over 2 minutes. What is the most accurate interpretation?",
+      "options": {
+        "A": "The variable readings confirm alternating hypoxemia and normoxia",
+        "B": "Poor peripheral perfusion makes the reading unreliable; move to an alternative site or obtain arterial blood gas",
+        "C": "A reading of 80% confirms severe hypoxemia and supplemental oxygen must be started immediately on this data alone",
+        "D": "SpO2 variability over 2 minutes is expected and the average (88%) should be documented"
+      },
+      "correctAnswer": "B",
+      "rationale": "Pulse oximetry requires adequate pulsatile perfusion to detect a reliable signal. Peripheral arterial disease, vasoconstriction, and cold extremities all impair waveform quality. A weak or intermittent waveform signals that the reading is not trustworthy. The appropriate response is to move to a better-perfused site (earlobe, forehead, nasal bridge) or obtain ABG. Treating solely on an unreliable reading risks inappropriate intervention.",
+      "keyConceptTested": "Pulse oximetry limitation — poor peripheral perfusion; weak waveform invalidates reading",
+      "conceptAnchor": "vital-signs / oxygen-saturation / L2 / perfusion-pulse-ox-limitation"
+    },
+    {
+      "questionId": "VS-SPO2-006",
+      "topicSlug": "vital-signs-measurement-interpretation",
+      "subtopicBucket": "B5",
+      "cognitiveLayer": "L3",
+      "difficulty": "medium",
+      "stem": "A patient develops sudden shortness of breath and SpO2 drops from 98% to 82% over 8 minutes. What is the most appropriate immediate action?",
+      "options": {
+        "A": "Order arterial blood gases and withhold oxygen until the cause of desaturation is confirmed",
+        "B": "Apply supplemental oxygen, reposition the patient, assess airway and breathing, and call for urgent assistance simultaneously",
+        "C": "Document the value and recheck in 15 minutes to determine if the decline is sustained",
+        "D": "Administer IV furosemide immediately as pulmonary edema is the most likely cause"
+      },
+      "correctAnswer": "B",
+      "rationale": "A rapid SpO2 drop from 98% to 82% over 8 minutes is a respiratory emergency. The immediate first step is oxygen application, airway positioning (elevate head of bed), and assessment of breathing while simultaneously calling for help. ABG can follow but must never delay oxygen administration. The cause of desaturation must be identified through assessment — not assumed. Furosemide requires a confirmed diagnosis before administration.",
+      "keyConceptTested": "Acute SpO2 drop — apply oxygen immediately; assess while calling for help; do not delay for diagnosis",
+      "conceptAnchor": "vital-signs / oxygen-saturation / L3 / acute-desaturation-action"
+    },
+    {
+      "questionId": "VS-SPO2-007",
+      "topicSlug": "vital-signs-measurement-interpretation",
+      "subtopicBucket": "B5",
+      "cognitiveLayer": "L2",
+      "difficulty": "hard",
+      "stem": "A patient with COVID-19 pneumonia walks to the bathroom without distress and reports no dyspnea, yet SpO2 is 84% on room air. This clinical discordance is referred to as:",
+      "options": {
+        "A": "Compensatory hypoxemia with preserved drive-to-breathe",
+        "B": "Silent hypoxemia (happy hypoxia) — critically low SpO2 without the expected sensation of breathlessness",
+        "C": "Pseudo-hypoxemia caused by dark skin pigmentation interfering with oximetry",
+        "D": "Physiologic acclimatization to chronic hypoxemia seen in all viral pneumonias after day 3"
+      },
+      "correctAnswer": "B",
+      "rationale": "Silent hypoxemia (colloquially 'happy hypoxia') was widely recognized during the COVID-19 pandemic. Patients maintained surprisingly normal levels of activity and reported minimal dyspnea despite SpO2 values that would typically cause severe distress. The mechanism is not fully understood but involves preserved lung mechanics early in the disease course. This phenomenon highlights that clinical appearance alone cannot reliably detect hypoxemia — objective SpO2 monitoring is essential.",
+      "keyConceptTested": "Silent hypoxemia — SpO2 monitoring essential when clinical appearance is misleading",
+      "conceptAnchor": "vital-signs / oxygen-saturation / L2 / silent-hypoxemia-COVID"
+    },
+    {
+      "questionId": "VS-OVS-001",
+      "topicSlug": "vital-signs-measurement-interpretation",
+      "subtopicBucket": "B6",
+      "cognitiveLayer": "L1",
+      "difficulty": "easy",
+      "stem": "Orthostatic hypotension is defined as a blood pressure drop of:",
+      "options": {
+        "A": "5 mmHg systolic or 3 mmHg diastolic within 3 minutes of standing",
+        "B": "20 mmHg systolic or 10 mmHg diastolic within 3 minutes of standing",
+        "C": "30 mmHg systolic or 15 mmHg diastolic within 5 minutes of standing",
+        "D": "Any BP drop upon standing accompanied by lightheadedness"
+      },
+      "correctAnswer": "B",
+      "rationale": "Orthostatic hypotension (OH) is a drop of at least 20 mmHg systolic or 10 mmHg diastolic within 3 minutes of transitioning from supine to upright. It is associated with increased fall and syncope risk. A compensatory heart rate rise greater than 15 to 30 bpm suggests volume depletion; a blunted HR rise suggests autonomic failure.",
+      "keyConceptTested": "Orthostatic hypotension criteria — 20 mmHg systolic or 10 mmHg diastolic within 3 minutes",
+      "conceptAnchor": "vital-signs / orthostatic-VS / L1 / OH-criteria"
+    },
+    {
+      "questionId": "VS-OVS-002",
+      "topicSlug": "vital-signs-measurement-interpretation",
+      "subtopicBucket": "B6",
+      "cognitiveLayer": "L2",
+      "difficulty": "medium",
+      "stem": "Orthostatic vital signs: supine BP 130/84, HR 74; standing BP 100/62, HR 116. What does this pattern indicate?",
+      "options": {
+        "A": "Normal orthostatic response with no clinical concern",
+        "B": "Volume depletion — the 30 mmHg systolic drop with reflex tachycardia (HR rise of 42 bpm) indicates hypovolemia",
+        "C": "Autonomic failure — a large BP drop with significant tachycardia suggests autonomic neuropathy",
+        "D": "Isolated systolic hypotension likely from antihypertensive over-treatment"
+      },
+      "correctAnswer": "B",
+      "rationale": "A systolic drop of 30 mmHg on standing (exceeds the 20 mmHg threshold) with a reflex HR rise of 42 bpm (exceeds the 15 to 30 bpm range indicating compensation) indicates the baroreceptors are functioning and responding to the BP drop — pointing to volume depletion as the cause. In autonomic failure, the BP drops without a compensatory HR rise. A 42 bpm reflex tachycardia is the key distinguishing feature.",
+      "keyConceptTested": "Orthostatic hypotension with reflex tachycardia — volume depletion pattern",
+      "conceptAnchor": "vital-signs / orthostatic-VS / L2 / OH-volume-depletion-pattern"
+    },
+    {
+      "questionId": "VS-OVS-003",
+      "topicSlug": "vital-signs-measurement-interpretation",
+      "subtopicBucket": "B6",
+      "cognitiveLayer": "L2",
+      "difficulty": "hard",
+      "stem": "A patient with type 2 diabetes and Parkinson's disease has orthostatic vital signs: supine BP 146/88, HR 78; standing BP 112/68, HR 82. What does the minimal heart rate response indicate?",
+      "options": {
+        "A": "Volume depletion — the large systolic drop is the primary finding",
+        "B": "Autonomic neuropathy — the blunted HR rise (4 bpm) despite a significant BP drop indicates failure of the reflex baroreceptor response",
+        "C": "A 4 bpm rise confirms the patient is well-compensated and the drop is not clinically significant",
+        "D": "Parkinson's disease tremor creates artifact that makes HR measurement unreliable"
+      },
+      "correctAnswer": "B",
+      "rationale": "When the BP drops significantly on standing, baroreceptors should trigger compensatory tachycardia. A rise of only 4 bpm despite a 34 mmHg systolic drop indicates the autonomic nervous system is not responding appropriately — neurogenic orthostatic hypotension. Both diabetic autonomic neuropathy and Parkinson's (Lewy body autonomic dysfunction) impair this reflex. Management of neurogenic OH differs from volume-depletion OH and does not rely on fluid resuscitation alone.",
+      "keyConceptTested": "Neurogenic orthostatic hypotension — blunted HR response distinguishes from hypovolemic OH",
+      "conceptAnchor": "vital-signs / orthostatic-VS / L2 / neurogenic-OH-autonomic-failure"
+    },
+    {
+      "questionId": "VS-OVS-004",
+      "topicSlug": "vital-signs-measurement-interpretation",
+      "subtopicBucket": "B6",
+      "cognitiveLayer": "L2",
+      "difficulty": "medium",
+      "stem": "Which patient is at highest risk for clinically significant orthostatic hypotension causing falls?",
+      "options": {
+        "A": "A 28-year-old marathon runner with resting bradycardia",
+        "B": "An 80-year-old on lisinopril, hydrochlorothiazide, and amitriptyline",
+        "C": "A healthy 35-year-old woman in her first trimester of pregnancy",
+        "D": "A 50-year-old with well-controlled type 2 diabetes on metformin only"
+      },
+      "correctAnswer": "B",
+      "rationale": "Elderly patients have reduced baroreceptor sensitivity, decreased vascular compliance, and lower baseline intravascular volume. Polypharmacy adds further risk: ACE inhibitors and diuretics cause volume depletion; tricyclic antidepressants (amitriptyline) impair the autonomic reflex. The combination of age-related vascular changes and multiple causative medications creates the highest cumulative fall risk.",
+      "keyConceptTested": "Orthostatic hypotension risk factors — elderly plus antihypertensives, diuretics, TCAs",
+      "conceptAnchor": "vital-signs / orthostatic-VS / L2 / OH-high-risk-population"
+    },
+    {
+      "questionId": "VS-OVS-005",
+      "topicSlug": "vital-signs-measurement-interpretation",
+      "subtopicBucket": "B6",
+      "cognitiveLayer": "L3",
+      "difficulty": "medium",
+      "stem": "An elderly patient with a recent GI bleed reports dizziness on standing. Orthostatic measurements show a systolic BP drop of 32 mmHg with a HR rise of 40 bpm on standing. What is the most appropriate immediate action?",
+      "options": {
+        "A": "Schedule an outpatient colonoscopy and discharge with oral hydration instructions",
+        "B": "Keep the patient supine, establish IV access, initiate volume resuscitation, and notify the primary provider urgently",
+        "C": "Administer an antihypertensive to lower the supine BP and minimize the positional drop",
+        "D": "Encourage sitting position for 15 minutes and recheck vital signs before making any decisions"
+      },
+      "correctAnswer": "B",
+      "rationale": "This patient has symptomatic orthostatic hypotension with a reflex tachycardia pattern (32 mmHg systolic drop, 40 bpm HR rise) consistent with significant volume depletion from GI bleeding. The immediate priority is supine positioning to prevent syncope and falls, large-bore IV access, and volume resuscitation while urgently notifying the provider. Outpatient colonoscopy is inappropriate for hemodynamic instability. Antihypertensives would worsen the low standing BP.",
+      "keyConceptTested": "GI bleed plus OH with reflex tachycardia — volume depletion emergency; immediate IV resuscitation",
+      "conceptAnchor": "vital-signs / orthostatic-VS / L3 / GI-bleed-OH-action"
+    },
+    {
+      "questionId": "VS-PAIN-001",
+      "topicSlug": "vital-signs-measurement-interpretation",
+      "subtopicBucket": "B7",
+      "cognitiveLayer": "L1",
+      "difficulty": "easy",
+      "stem": "On the 0 to 10 numeric rating scale (NRS), a pain score of 5 is classified as:",
+      "options": {
+        "A": "Mild pain (1 to 3)",
+        "B": "Moderate pain (4 to 6)",
+        "C": "Severe pain (7 to 10)",
+        "D": "No pain"
+      },
+      "correctAnswer": "B",
+      "rationale": "NRS classification: 0 = no pain; 1 to 3 = mild pain; 4 to 6 = moderate pain; 7 to 10 = severe pain. A score of 5 falls in the moderate range. Pain is documented as the fifth or sixth vital sign and should be assessed and re-evaluated consistently. Non-verbal patients and children require alternative tools (FLACC, Wong-Baker FACES, PAINAD).",
+      "keyConceptTested": "NRS pain classification — 0-3 mild, 4-6 moderate, 7-10 severe",
+      "conceptAnchor": "vital-signs / pain-assessment / L1 / NRS-classification"
+    },
+    {
+      "questionId": "VS-PAIN-002",
+      "topicSlug": "vital-signs-measurement-interpretation",
+      "subtopicBucket": "B7",
+      "cognitiveLayer": "L2",
+      "difficulty": "medium",
+      "stem": "An 84-year-old man with dementia reports his pain as 2/10 verbally. However, he is grimacing, guarding his abdomen, and refusing to move for 3 hours. What is the most appropriate interpretation?",
+      "options": {
+        "A": "Self-reported 2/10 is reliable; no further pain assessment is indicated unless the score increases",
+        "B": "Behavioral indicators (grimacing, guarding, immobility) may reflect true pain intensity more accurately than verbal report in stoic or cognitively impaired patients; treat based on the clinical picture",
+        "C": "The discrepancy confirms the patient is exaggerating via behavior while under-reporting verbally; use the lower score",
+        "D": "Abdominal guarding is a normal postoperative finding and does not indicate pain"
+      },
+      "correctAnswer": "B",
+      "rationale": "Pain assessment should integrate both self-report and behavioral indicators. Stoic patients and those with cognitive impairment frequently under-report pain verbally. Grimacing, guarding, and restricted movement are objective behavioral pain indicators with validated significance. The PAINAD (Pain Assessment in Advanced Dementia) scale and Abbey Pain Scale capture these behaviors for non-verbal assessment. Discordance between behavioral signs and verbal report in a cognitively impaired patient should favor behavioral observation.",
+      "keyConceptTested": "Behavioral pain indicators versus verbal report — stoic or demented patients may under-report",
+      "conceptAnchor": "vital-signs / pain-assessment / L2 / behavioral-vs-verbal-pain"
+    },
+    {
+      "questionId": "VS-PAIN-003",
+      "topicSlug": "vital-signs-measurement-interpretation",
+      "subtopicBucket": "B7",
+      "cognitiveLayer": "L3",
+      "difficulty": "hard",
+      "stem": "A 64-year-old man with known peptic ulcer disease presents with sudden-onset 10/10 epigastric pain that 'feels completely different' from his usual ulcer pain, radiating to his right shoulder and associated with diaphoresis. What is the most appropriate immediate action?",
+      "options": {
+        "A": "Administer IV opioids for the pain score and reassess after 30 minutes",
+        "B": "Reassure the patient that shoulder referral pain is common in peptic ulcer disease and schedule an outpatient EGD",
+        "C": "Treat this as a possible acute abdomen (perforated ulcer) or acute MI — obtain ECG, urgent surgical evaluation, and upright abdominal X-ray or CT",
+        "D": "Document as chronic pain exacerbation and continue the existing analgesic regimen"
+      },
+      "correctAnswer": "C",
+      "rationale": "Sudden-onset pain that 'feels different' from baseline in a known ulcer patient, combined with right shoulder referral (from diaphragmatic irritation by free peritoneal air or blood) and diaphoresis, raises immediate concern for perforated peptic ulcer. Diaphoresis and epigastric location also require ruling out acute MI. Both are time-critical emergencies. An ECG (to identify STEMI), upright chest or abdominal X-ray (free air under the diaphragm suggests perforation), and urgent evaluation are the immediate first steps.",
+      "keyConceptTested": "Change in pain character in known ulcer patient — red flag for perforation or acute MI; urgent evaluation first",
+      "conceptAnchor": "vital-signs / pain-assessment / L3 / sudden-pain-change-perforation-AMI"
+    },
+    {
+      "questionId": "VS-PED-001",
+      "topicSlug": "vital-signs-measurement-interpretation",
+      "subtopicBucket": "B8",
+      "cognitiveLayer": "L1",
+      "difficulty": "easy",
+      "stem": "Which set of vital signs is most consistent with normal values for a 3-year-old child?",
+      "options": {
+        "A": "HR 60 bpm, RR 12 breaths/min, BP 120/80 mmHg",
+        "B": "HR 110 bpm, RR 26 breaths/min, BP 90/55 mmHg",
+        "C": "HR 155 bpm, RR 40 breaths/min, BP 68/40 mmHg",
+        "D": "HR 80 bpm, RR 16 breaths/min, BP 118/76 mmHg"
+      },
+      "correctAnswer": "B",
+      "rationale": "Normal vital sign ranges for a 3-year-old: HR 80 to 130 bpm; RR 22 to 30 breaths/min; BP approximately 85 to 100/50 to 65 mmHg. Option B (HR 110, RR 26, BP 90/55) falls within all three normal ranges. Option A shows adult values — too slow/low for a toddler. Option C shows tachycardia and hypotension, which could indicate shock. Option D shows values more appropriate for a school-age child with HR on the low end.",
+      "keyConceptTested": "Pediatric vital signs at age 3 — HR 80-130, RR 22-30, BP approximately 90/55 mmHg",
+      "conceptAnchor": "vital-signs / pediatric-norms / L1 / age-3-normal-VS"
+    },
+    {
+      "questionId": "VS-PED-002",
+      "topicSlug": "vital-signs-measurement-interpretation",
+      "subtopicBucket": "B8",
+      "cognitiveLayer": "L2",
+      "difficulty": "medium",
+      "stem": "A febrile 18-month-old is assessed with a heart rate of 182 bpm and RR of 36 breaths/min. The child is alert, consolable, and well-perfused. How should these values be interpreted?",
+      "options": {
+        "A": "HR 182 and RR 36 are within normal limits for an 18-month-old and require no additional assessment",
+        "B": "Both values exceed age-appropriate upper limits; evaluation for serious bacterial infection is appropriate in a febrile infant with this heart rate elevation",
+        "C": "HR 182 confirms supraventricular tachycardia requiring adenosine",
+        "D": "RR of 36 in a toddler is hyperpnea and confirms metabolic acidosis"
+      },
+      "correctAnswer": "B",
+      "rationale": "Normal HR for an 18-month-old is approximately 80 to 140 bpm; normal RR is approximately 22 to 30 breaths/min. At 182 bpm HR and 36 RR, both values exceed age-appropriate norms, even accounting for fever. While fever alone can elevate both, values this high warrant evaluation for serious bacterial infection (sepsis, pneumonia, meningitis). The child's alert, consolable appearance is somewhat reassuring but does not eliminate the need for further assessment.",
+      "keyConceptTested": "Pediatric vital signs in febrile infant — elevated HR and RR above age norms warrant infection workup",
+      "conceptAnchor": "vital-signs / pediatric-norms / L2 / febrile-infant-HR-RR-interpretation"
+    },
+    {
+      "questionId": "VS-PED-003",
+      "topicSlug": "vital-signs-measurement-interpretation",
+      "subtopicBucket": "B8",
+      "cognitiveLayer": "L2",
+      "difficulty": "hard",
+      "stem": "A 6-year-old presents with BP 106/68 mmHg. A medical student comments that this seems low. Which statement is most accurate?",
+      "options": {
+        "A": "This confirms hypotension in a 6-year-old and requires immediate IV fluid bolus",
+        "B": "A systolic BP of 106 mmHg is at or within the normal range for a 6-year-old; pediatric hypotension is defined using age-based formulas, not adult thresholds",
+        "C": "The adult threshold of 90 mmHg systolic applies universally from age 5 onward",
+        "D": "BP of 106/68 confirms pre-hypertension in a 6-year-old requiring lifestyle counseling"
+      },
+      "correctAnswer": "B",
+      "rationale": "Pediatric BP norms are age-dependent and significantly lower than adult values. The simplified formula for minimum normal systolic BP in children is 70 plus (2 times the child's age in years). For a 6-year-old: 70 plus 12 equals 82 mmHg. A systolic of 106 is well above this threshold. A 6-year-old's expected BP is approximately 100 to 112/62 to 72 mmHg. Applying adult hypotension thresholds to children leads to under-recognition of appropriate pediatric values.",
+      "keyConceptTested": "Pediatric BP interpretation — age-adjusted formula, not adult threshold; 6-year-old norms",
+      "conceptAnchor": "vital-signs / pediatric-norms / L2 / pediatric-BP-age-formula"
+    }
+  ],
+  "lessonOutline": [
+    {
+      "lessonId": "VS-L1",
+      "title": "Temperature: Measurement and Interpretation",
+      "buckets": ["B1"],
+      "objectives": ["Differentiate measurement sites by accuracy", "Classify fever vs hyperthermia mechanistically", "Recognize blunted febrile response in elderly"],
+      "estimatedMinutes": 25
+    },
+    {
+      "lessonId": "VS-L2",
+      "title": "Heart Rate and Pulse Assessment",
+      "buckets": ["B2"],
+      "objectives": ["Identify bradycardia and tachycardia thresholds", "Explain pulse deficit and its significance", "Recognize dangerous pulse characters (water-hammer, thready)"],
+      "estimatedMinutes": 30
+    },
+    {
+      "lessonId": "VS-L3",
+      "title": "Blood Pressure Fundamentals",
+      "buckets": ["B3"],
+      "objectives": ["Classify BP using 2017 ACC/AHA criteria", "Identify measurement technique errors", "Distinguish hypertensive urgency from emergency", "Interpret pulse pressure abnormalities"],
+      "estimatedMinutes": 35
+    },
+    {
+      "lessonId": "VS-L4",
+      "title": "Respirations and Oxygen Saturation",
+      "buckets": ["B4", "B5"],
+      "objectives": ["Count respirations accurately", "Recognize Kussmaul and Cheyne-Stokes patterns", "Apply SpO2 classification and COPD O2 targeting", "Identify pulse oximetry limitations"],
+      "estimatedMinutes": 40
+    },
+    {
+      "lessonId": "VS-L5",
+      "title": "Orthostatic Vital Signs",
+      "buckets": ["B6"],
+      "objectives": ["Apply orthostatic hypotension criteria", "Distinguish volume depletion from autonomic failure using HR response", "Identify high-risk populations"],
+      "estimatedMinutes": 25
+    },
+    {
+      "lessonId": "VS-L6",
+      "title": "Pain Assessment and Pediatric Norms",
+      "buckets": ["B7", "B8"],
+      "objectives": ["Classify pain using NRS", "Integrate behavioral indicators with verbal report", "Apply age-adjusted pediatric vital sign ranges"],
+      "estimatedMinutes": 25
+    }
+  ],
+  "qaReport": {
+    "finalQuestionCount": 45,
+    "cognitiveBalance": { "L1": 15, "L2": 20, "L3": 10, "L1_pct": 33, "L2_pct": 44, "L3_pct": 22 },
+    "difficultyBalance": { "easy": 12, "medium": 21, "hard": 12, "easy_pct": 27, "medium_pct": 47, "hard_pct": 27 },
+    "allTargetsMet": true,
+    "duplicationStatus": "No shared concept anchors detected",
+    "scopeFenceStatus": "All 5 fences maintained — no HTN pharmacology, no auscultation findings, no composite EWS, no pain management protocols",
+    "unresolvedConcerns": "None"
+  }
+}
