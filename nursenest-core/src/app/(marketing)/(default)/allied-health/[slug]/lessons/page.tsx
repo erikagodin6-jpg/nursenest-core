@@ -6,6 +6,7 @@ import { PathwayLessonsCurriculumHub } from "@/components/pathway-lessons/pathwa
 import { PathwayLessonContentLocaleBanner } from "@/components/lessons/pathway-lesson-content-locale-banner";
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
+import { Search } from "lucide-react";
 import { ALLIED_LESSON_HUB_PAGE_SIZE } from "@/lib/allied/allied-marketing-constants";
 import { countPublishedPathwayLessonsForAlliedMarketing } from "@/lib/allied/count-allied-pathway-lessons";
 import {
@@ -190,14 +191,48 @@ export default async function AlliedHealthSlugLessonsPage({ params, searchParams
         <Link href={professionHeroPath} className="text-sm font-medium text-primary hover:underline">
           ← {prof.h1}
         </Link>
-        <h1 className="mt-4 text-3xl font-extrabold text-[var(--theme-heading-text)]">
-          {prof.h1} exam prep lessons · {pathwayCountryLabel(pathway)}
-        </h1>
-        <p className="mt-3 text-sm text-muted">
-          Pathway <span className="font-medium text-foreground">{pathway.shortName}</span>. This page lists{" "}
-          {lessons.length} lesson{lessons.length === 1 ? "" : "s"}; use pagination to scan the full catalog without loading
-          everything at once.
-        </p>
+        <header className="mt-4 rounded-3xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-6 shadow-[var(--semantic-shadow-soft)] sm:p-7">
+          <h1 className="text-3xl font-semibold tracking-tight text-[var(--theme-heading-text)] sm:text-4xl">
+            {prof.h1} lessons · {pathwayCountryLabel(pathway)}
+          </h1>
+          <p className="mt-2 max-w-3xl text-sm leading-relaxed text-[var(--theme-muted-text)]">
+            The same premium system-based catalog used across NurseNest pathways, tuned for {prof.h1} exam prep.
+          </p>
+          <div className="mt-4 flex flex-wrap gap-2">
+            <span className="inline-flex min-h-8 items-center rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-3 text-xs font-semibold text-[var(--semantic-text-secondary)]">
+              {pageResult.total} total lessons
+            </span>
+            <span className="inline-flex min-h-8 items-center rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-cool)] px-3 text-xs font-semibold text-[var(--semantic-text-secondary)]">
+              Page {pageResult.page} of {pageResult.pageCount}
+            </span>
+          </div>
+          <form action={base} method="get" className="mt-5 flex flex-col gap-3 sm:flex-row">
+            <label htmlFor="allied-lessons-search" className="sr-only">
+              Search lessons
+            </label>
+            <div className="relative max-w-xl flex-1">
+              <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--theme-muted-text)]" />
+              <input
+                id="allied-lessons-search"
+                name="q"
+                defaultValue={qEffective ?? ""}
+                placeholder="Search lessons"
+                className="min-h-11 w-full rounded-full border border-[var(--semantic-border-soft)] bg-[var(--theme-page-bg)] py-2.5 pl-10 pr-4 text-sm text-[var(--theme-heading-text)] outline-none transition focus:border-[var(--semantic-brand)] focus:ring-2 focus:ring-[color-mix(in_srgb,var(--semantic-brand)_16%,transparent)]"
+              />
+            </div>
+            <button type="submit" className="inline-flex min-h-11 items-center justify-center rounded-full nn-btn-secondary px-4 py-2 text-sm font-semibold">
+              Search
+            </button>
+            {qEffective ? (
+              <Link
+                href={base}
+                className="inline-flex min-h-11 items-center justify-center rounded-full border border-[var(--semantic-border-soft)] px-4 py-2 text-sm font-semibold text-[var(--theme-heading-text)] transition hover:bg-[var(--semantic-panel-muted)]"
+              >
+                Clear
+              </Link>
+            ) : null}
+          </form>
+        </header>
 
         {pageResult.locale ? <PathwayLessonContentLocaleBanner listLocale={pageResult.locale} /> : null}
 

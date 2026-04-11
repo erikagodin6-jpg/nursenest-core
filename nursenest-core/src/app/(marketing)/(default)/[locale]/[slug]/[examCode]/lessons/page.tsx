@@ -121,11 +121,13 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
         <div className="mb-6">
           <BreadcrumbTrail items={crumbs} />
         </div>
-        <header className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-6">
+        <header className="rounded-3xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-6 shadow-[var(--semantic-shadow-soft)] sm:p-7">
           <p className="text-sm font-medium text-[var(--theme-muted-text)]">{pathway.displayName}</p>
-          <h1 className="mt-1 text-3xl font-semibold tracking-tight text-[var(--theme-heading-text)]">Lessons</h1>
-          <p className="mt-2 text-sm text-[var(--theme-muted-text)]">Browse {pathway.shortName} lessons by clinical system.</p>
-          <form action={base} method="get" className="mt-4 flex flex-col gap-3 sm:flex-row">
+          <h1 className="mt-1 text-3xl font-semibold tracking-tight text-[var(--theme-heading-text)] sm:text-4xl">Lessons</h1>
+          <p className="mt-2 max-w-3xl text-sm leading-relaxed text-[var(--theme-muted-text)]">
+            A calm, system-based lesson catalog for {pathway.shortName}: one concept per lesson, arranged for fast scanning.
+          </p>
+          <form action={base} method="get" className="mt-5 flex flex-col gap-3 sm:flex-row">
             <label htmlFor="pathway-lessons-search" className="sr-only">
               Search lessons
             </label>
@@ -196,17 +198,36 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
     progressMap = map;
   }
 
+  const progressStatuses = canShowProgressMap ? Object.values(progressMap) : [];
+  const completedCount = progressStatuses.filter((status) => status === "completed").length;
+  const inProgressCount = progressStatuses.filter((status) => status === "in_progress").length;
+
   return (
     <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8">
       <BreadcrumbJsonLd items={schemaItems} />
       <div className="mb-6">
         <BreadcrumbTrail items={crumbs} />
       </div>
-      <header className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-6">
+      <header className="rounded-3xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-6 shadow-[var(--semantic-shadow-soft)] sm:p-7">
         <p className="text-sm font-medium text-[var(--theme-muted-text)]">{pathway.displayName}</p>
-        <h1 className="mt-1 text-3xl font-semibold tracking-tight text-[var(--theme-heading-text)]">Lessons</h1>
-        <p className="mt-2 text-sm text-[var(--theme-muted-text)]">Browse {pathway.shortName} lessons by clinical system.</p>
-        <form action={base} method="get" className="mt-4 flex flex-col gap-3 sm:flex-row">
+        <h1 className="mt-1 text-3xl font-semibold tracking-tight text-[var(--theme-heading-text)] sm:text-4xl">Lessons</h1>
+        <p className="mt-2 max-w-3xl text-sm leading-relaxed text-[var(--theme-muted-text)]">
+          A calm, system-based lesson catalog for {pathway.shortName}: one concept per lesson, arranged for fast scanning.
+        </p>
+        <div className="mt-4 flex flex-wrap gap-2">
+          <span className="inline-flex min-h-8 items-center rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-3 text-xs font-semibold text-[var(--semantic-text-secondary)]">
+            {pageResult.total} total lessons
+          </span>
+          <span className="inline-flex min-h-8 items-center rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-cool)] px-3 text-xs font-semibold text-[var(--semantic-text-secondary)]">
+            Page {pageResult.page} of {pageResult.pageCount}
+          </span>
+          {canShowProgressMap ? (
+            <span className="inline-flex min-h-8 items-center rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-positive)] px-3 text-xs font-semibold text-[var(--semantic-text-secondary)]">
+              {completedCount} completed · {inProgressCount} in progress
+            </span>
+          ) : null}
+        </div>
+        <form action={base} method="get" className="mt-5 flex flex-col gap-3 sm:flex-row">
           <label htmlFor="pathway-lessons-search" className="sr-only">
             Search lessons
           </label>
