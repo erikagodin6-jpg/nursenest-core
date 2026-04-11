@@ -6,10 +6,10 @@ import { NURSENEST_DEFAULT_THEME, getThemeLogoVariant, THEME_OPTIONS } from "@/l
 import { normalizeThemeIdForLogo } from "@/lib/theme/theme-logo-resolve";
 
 export const CORE_THEME_LOGO_PATHS = {
-  lavender: "/logos/lavender-brandlogo.svg",
-  forest: "/logos/forest-brandlogo.svg",
-  sand: "/logos/neutral-sand-brandlogo.svg",
-  blue: "/logos/clinical-light-brandlogo.svg",
+  lavender: "/logos/lavender-brandlogo.png",
+  forest: "/logos/forest-brandlogo.png",
+  sand: "/logos/neutral-sand-brandlogo.png",
+  blue: "/logos/clinical-light-brandlogo.png",
 } as const;
 
 type CoreThemeLogoKey = keyof typeof CORE_THEME_LOGO_PATHS;
