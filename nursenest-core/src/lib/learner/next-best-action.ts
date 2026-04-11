@@ -45,7 +45,7 @@ export function getNextBestAction(
   // 2. Continue last lesson
   if (snapshot?.continueLesson) {
     return {
-      title: "Continue My Study Plan",
+      title: "Continue Your Lesson",
       subtitle: `Pick up where you left off: ${snapshot.continueLesson.title}`,
       href: snapshot.continueLesson.href,
       kind: "continue",
@@ -57,11 +57,11 @@ export function getNextBestAction(
   const topWeak = studySnap?.topWeak;
   if (topWeak) {
     return {
-      title: "Continue My Study Plan",
-      subtitle: `Strengthen ${topWeak.topic}`,
+      title: `Strengthen ${topWeak.topic}`,
+      subtitle: "Practice questions on your weakest topic",
       href: "/app/questions",
       kind: "quiz",
-      reasoning: `Your accuracy in ${topWeak.topic} needs improvement`,
+      reasoning: `Your accuracy in ${topWeak.topic} needs work`,
     };
   }
 
@@ -73,21 +73,21 @@ export function getNextBestAction(
     if (!todayGoal.breakdown.hasPracticeCompleted) missing.push("a practice session");
     const hint = missing.length > 0 ? `Try ${missing[0]} to earn a credit` : "Complete a study activity";
     return {
-      title: "Continue My Study Plan",
+      title: "Finish Today's Goal",
       subtitle: hint,
       href: "/app/questions",
       kind: "quiz",
-      reasoning: `${todayGoal.credits}/${todayGoal.target} daily credits earned`,
+      reasoning: `${todayGoal.credits}/${todayGoal.target} daily credits so far`,
     };
   }
 
   // 5. Fallback
   return {
-    title: "Start a Study Session",
+    title: "Start a Session",
     subtitle: "Practice questions or review a lesson",
     href: "/app/questions",
     kind: "fallback",
-    reasoning: "Keep your momentum going",
+    reasoning: "A good time to practice",
   };
 }
 

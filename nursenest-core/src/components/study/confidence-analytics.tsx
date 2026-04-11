@@ -218,7 +218,7 @@ export function ReviewPriorityGroups({ items }: { items: ReviewItem[] }) {
         </p>
         <ReviewItemList
           items={needsReview}
-          emptyMessage="No items requiring focused review."
+          emptyMessage="Nothing flagged for review this session."
         />
       </div>
 
@@ -229,7 +229,7 @@ export function ReviewPriorityGroups({ items }: { items: ReviewItem[] }) {
         </p>
         <ReviewItemList
           items={stable}
-          emptyMessage="Keep practicing to reach high-confidence mastery."
+          emptyMessage="No high-confidence correct answers yet. More practice will fill this group."
         />
       </div>
     </div>
@@ -298,11 +298,11 @@ export function ConfidenceAnalyticsBlock({
 
         {/* Review priority — fully locked */}
         <PremiumLockCard
-          title="Unlock Confidence Analytics"
-          description="See exactly where you stand and what to focus on next."
+          title="Confidence Analytics"
+          description="See where your confidence matches your accuracy, and where it does not."
           bullets={[
-            "Catch overconfident errors before the exam",
-            "Identify uncertain knowledge to reinforce",
+            "Overconfident error detection",
+            "Uncertain knowledge patterns",
             "Prioritized review recommendations",
           ]}
           secondaryHref="/pricing"

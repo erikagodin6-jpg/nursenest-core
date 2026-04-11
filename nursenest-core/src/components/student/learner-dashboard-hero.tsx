@@ -46,7 +46,7 @@ export function LearnerDashboardHero({
   const primaryHref = continueLesson?.href ?? primaryNext.href;
   const primaryTitle = continueLesson ? `Continue: ${continueLesson.title}` : primaryNext.title;
   const primaryReason = continueLesson
-    ? "Resume your pathway where you stopped. Structured content before drills keeps gaps from stacking up."
+    ? "Resume your pathway where you left off. Working through lessons before practice keeps gaps from building up."
     : primaryNext.reason;
 
   return (
@@ -57,7 +57,7 @@ export function LearnerDashboardHero({
           <div className="flex flex-wrap items-center gap-2">
             <span className="inline-flex items-center gap-1.5 rounded-full border border-primary/25 bg-primary/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-primary">
               <Sparkles className="h-3.5 w-3.5" aria-hidden />
-              Your next best step
+              Recommended next
             </span>
           </div>
           <div>
@@ -77,7 +77,7 @@ export function LearnerDashboardHero({
               </p>
             ) : !countdown.secondary ? (
               <p className="mt-2 text-sm text-muted-foreground">
-                Add a target exam date in settings for time-aware pacing. We will still nudge you on mastery until then.
+                Set an exam date in settings to see your countdown and pacing suggestions.
               </p>
             ) : null}
           </div>
@@ -122,7 +122,7 @@ export function LearnerDashboardHero({
             </div>
           ) : (
             <p className="text-sm text-muted-foreground">
-              Answer more graded questions. Your topic ledger will highlight where to drill.
+              Answer more graded questions and your weak topics will appear here.
             </p>
           )}
 
@@ -165,31 +165,31 @@ export function LearnerDashboardHero({
             {overallLessons.total > 0 ? `${overallLessons.pct}%` : "N/A"}
           </p>
           <p className="text-[11px] text-muted-foreground">
-            {overallLessons.total > 0 ? `${overallLessons.completed} / ${overallLessons.total}` : "Pool loading"}
+            {overallLessons.total > 0 ? `${overallLessons.completed} / ${overallLessons.total}` : "Loading..."}
           </p>
         </div>
         <div className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-4 py-3 shadow-sm">
-          <p className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">Scored items</p>
+              <p className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">Practice</p>
           <p className="mt-1 text-lg font-bold tabular-nums text-foreground">
             {practice.gradedTotal > 0 ? `${practice.accuracyPct ?? 0}%` : "N/A"}
           </p>
           <p className="text-[11px] text-muted-foreground">
             {practice.gradedTotal > 0
-              ? `${practice.gradedTotal} graded · ${practice.sessionCount} session(s)`
-              : "Finish a session to chart"}
+              ? `${practice.gradedTotal} graded · ${practice.sessionCount} session${practice.sessionCount === 1 ? "" : "s"}`
+              : "Complete a session to see stats"}
           </p>
         </div>
         <div className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-4 py-3 shadow-sm">
           <p className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">Streak</p>
           <p className="mt-1 text-lg font-bold tabular-nums text-foreground">{streakDays > 0 ? streakDays : "N/A"}</p>
-          <p className="text-[11px] text-muted-foreground">Days with activity</p>
+          <p className="text-[11px] text-muted-foreground">Days active</p>
         </div>
         <div className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-4 py-3 shadow-sm">
           <p className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">Flashcards</p>
           <p className="mt-1 text-lg font-bold tabular-nums text-foreground">
             {flashcardReviews != null ? flashcardReviews : "N/A"}
           </p>
-          <p className="text-[11px] text-muted-foreground">Reviews logged</p>
+          <p className="text-[11px] text-muted-foreground">Cards reviewed</p>
         </div>
       </div>
     </section>
