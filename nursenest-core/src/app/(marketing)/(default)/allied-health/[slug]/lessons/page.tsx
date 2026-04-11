@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { PathwayLessonPagination } from "@/components/pathway-lessons/pathway-lesson-pagination";
+import { PathwayLessonsCurriculumHub } from "@/components/pathway-lessons/pathway-lessons-curriculum-hub";
 import { PathwayLessonContentLocaleBanner } from "@/components/lessons/pathway-lesson-content-locale-banner";
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
@@ -22,7 +23,6 @@ import {
 } from "@/lib/lessons/pathway-lesson-loader";
 import {
   pathwayLessonHasRenderableHubSlug,
-  pathwayLessonMarketingDetailHref,
 } from "@/lib/lessons/pathway-lesson-types";
 import { alliedHealthLessonsIndexPath, alliedHealthSegmentPath } from "@/lib/lessons/lesson-routes";
 import { alliedLessonsHubBreadcrumbs } from "@/lib/seo/allied-breadcrumbs";
@@ -182,7 +182,7 @@ export default async function AlliedHealthSlugLessonsPage({ params, searchParams
 
   return (
     <div className="nn-marketing-surface">
-      <div className="mx-auto max-w-3xl px-4 py-12">
+      <div className="mx-auto max-w-6xl px-4 py-12">
         <BreadcrumbJsonLd items={schemaItems} />
         <div className="mb-6">
           <BreadcrumbTrail items={crumbs} />
@@ -201,28 +201,13 @@ export default async function AlliedHealthSlugLessonsPage({ params, searchParams
 
         {pageResult.locale ? <PathwayLessonContentLocaleBanner listLocale={pageResult.locale} /> : null}
 
-        <section className="mt-10">
+        <section className="mt-10" id="allied-lesson-library">
           <h2 className="text-lg font-semibold text-[var(--theme-heading-text)]">
             All {prof.h1} lessons · {pathway.shortName}
           </h2>
-          <ul className="mt-4 space-y-4">
-            {lessons.map((l) => {
-              const href = pathwayLessonMarketingDetailHref(base, l.slug);
-              if (!href) return null;
-              return (
-              <li key={l.slug} className="nn-card p-4">
-                <p className="text-xs font-medium uppercase text-muted">{l.topic}</p>
-                <Link
-                  href={href}
-                  className="mt-1 block text-lg font-semibold text-primary hover:underline"
-                >
-                  {l.title}
-                </Link>
-                <p className="mt-2 line-clamp-3 text-sm text-muted">{l.seoDescription}</p>
-              </li>
-              );
-            })}
-          </ul>
+          <div className="mt-4">
+            <PathwayLessonsCurriculumHub lessons={lessons} lessonsBasePath={base} />
+          </div>
         </section>
 
         <PathwayLessonPagination

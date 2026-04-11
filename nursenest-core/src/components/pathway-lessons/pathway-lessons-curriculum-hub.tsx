@@ -2,12 +2,12 @@ import Link from "next/link";
 import type { LucideIcon } from "lucide-react";
 import {
   Activity,
+  AlertTriangle,
   Baby,
   Brain,
   BriefcaseMedical,
   HeartPulse,
   Pill,
-  Siren,
   Sparkles,
   Timer,
   Wind,
@@ -42,7 +42,7 @@ const SYSTEM_ICONS: Record<PathwayLessonSystemLabel, LucideIcon> = {
   respiratory: Wind,
   "vital-signs": Timer,
   neurological: Brain,
-  "clinical-deterioration": Siren,
+  "clinical-deterioration": AlertTriangle,
   "infection-immunity": Sparkles,
   pharmacology: Pill,
   "special-populations": Baby,

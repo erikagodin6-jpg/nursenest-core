@@ -6,6 +6,7 @@ import { PathwayLessonPagination } from "@/components/pathway-lessons/pathway-le
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { loadPathwayLessonsHubAggregates } from "@/lib/exam-pathways/marketing-hub-optional-data";
+import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
 import { resolveExamPathwaySafe } from "@/lib/exam-pathways/resolve-exam-pathway-safe";
 import { marketingPathwayLessonsIndexPath } from "@/lib/lessons/lesson-routes";
 import { defaultPathwayLessonContentLocaleForExamHubRoute } from "@/lib/lessons/pathway-lesson-locale";
@@ -128,7 +129,7 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
         <header className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-6">
           <p className="text-sm font-medium text-[var(--theme-muted-text)]">{pathway.displayName}</p>
           <h1 className="mt-1 text-3xl font-semibold tracking-tight text-[var(--theme-heading-text)]">Lessons</h1>
-          <p className="mt-2 text-sm text-[var(--theme-muted-text)]">Browse {pathway.shortName} lessons by body system.</p>
+          <p className="mt-2 text-sm text-[var(--theme-muted-text)]">Browse {pathway.shortName} lessons by clinical system.</p>
           <form action={base} method="get" className="mt-4 flex flex-col gap-3 sm:flex-row">
             <label htmlFor="pathway-lessons-search" className="sr-only">
               Search lessons
@@ -209,7 +210,7 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
       <header className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-6">
         <p className="text-sm font-medium text-[var(--theme-muted-text)]">{pathway.displayName}</p>
         <h1 className="mt-1 text-3xl font-semibold tracking-tight text-[var(--theme-heading-text)]">Lessons</h1>
-        <p className="mt-2 text-sm text-[var(--theme-muted-text)]">Browse {pathway.shortName} lessons by body system.</p>
+        <p className="mt-2 text-sm text-[var(--theme-muted-text)]">Browse {pathway.shortName} lessons by clinical system.</p>
         <form action={base} method="get" className="mt-4 flex flex-col gap-3 sm:flex-row">
           <label htmlFor="pathway-lessons-search" className="sr-only">
             Search lessons

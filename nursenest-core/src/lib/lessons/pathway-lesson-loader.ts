@@ -64,6 +64,7 @@ type CatalogShape = {
         title: string;
         topic: string;
         topicSlug: string;
+        system?: string;
         bodySystem: string;
         previewSectionCount: number;
         seoTitle: string;
@@ -412,12 +413,15 @@ function normalizeLessonForHubList(raw: LessonInput, pathwayId?: string): Pathwa
   const previewCandidate =
     typeof rawPc === "number" && Number.isFinite(rawPc) && rawPc > 0 ? Math.floor(rawPc) : 1;
   const previewSectionCount = Math.max(1, Math.min(previewCandidate, 5));
+  const system = typeof raw.system === "string" && raw.system.trim().length > 0 ? raw.system.trim() : "";
+  const bodySystem = typeof raw.bodySystem === "string" ? raw.bodySystem : "";
   return {
     slug: raw.slug,
     title,
     topic: typeof raw.topic === "string" ? raw.topic : "",
     topicSlug: typeof raw.topicSlug === "string" ? raw.topicSlug : "",
-    bodySystem: typeof raw.bodySystem === "string" ? raw.bodySystem : "",
+    system: system || bodySystem,
+    bodySystem,
     previewSectionCount,
     seoTitle,
     seoDescription,
@@ -459,12 +463,15 @@ function normalizeLesson(raw: LessonInput, pathwayId?: string): PathwayLessonRec
   const premiumOmitted = raw.premiumOmittedSections;
   const relatedLessonRefs = raw.relatedLessonRefs;
 
+  const system = typeof raw.system === "string" && raw.system.trim().length > 0 ? raw.system.trim() : "";
+  const bodySystem = typeof raw.bodySystem === "string" ? raw.bodySystem : "";
   const base: PathwayLessonRecord = {
     slug: raw.slug,
     title,
     topic: typeof raw.topic === "string" ? raw.topic : "",
     topicSlug: typeof raw.topicSlug === "string" ? raw.topicSlug : "",
-    bodySystem: typeof raw.bodySystem === "string" ? raw.bodySystem : "",
+    system: system || bodySystem,
+    bodySystem,
     previewSectionCount: Math.max(1, Math.min(previewCandidate, usePremium ? 11 : 5)),
     seoTitle,
     seoDescription,

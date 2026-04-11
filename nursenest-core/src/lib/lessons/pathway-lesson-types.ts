@@ -153,6 +153,8 @@ export type PathwayLessonRecord = {
   title: string;
   topic: string;
   topicSlug: string;
+  /** Canonical lesson system key used for universal hub grouping. */
+  system?: string;
   bodySystem: string;
   previewSectionCount: number;
   seoTitle: string;
