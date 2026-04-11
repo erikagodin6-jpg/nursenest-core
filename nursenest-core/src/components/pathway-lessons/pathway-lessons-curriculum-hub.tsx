@@ -1,12 +1,29 @@
 import Link from "next/link";
-import { ChevronDown } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
+import {
+  Activity,
+  Baby,
+  Bandage,
+  Bone,
+  Brain,
+  BriefcaseMedical,
+  Droplets,
+  HeartPulse,
+  Leaf,
+  Pill,
+  ShieldCheck,
+  Sparkles,
+  Stethoscope,
+  Wind,
+} from "lucide-react";
 import { PathwayLessonProgressBadge } from "@/components/lessons/pathway-lesson-progress-badge";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { PremiumEmptyState } from "@/components/ui/premium-empty-state";
 import { StatusBadge } from "@/components/ui/study-card";
 import {
   buildPathwayLessonSystemSections,
+  PATHWAY_LESSON_SYSTEM_ORDER,
   type PathwayLessonSystemSection,
+  type PathwayLessonSystemLabel,
 } from "@/lib/lessons/pathway-lesson-body-system-groups";
 import {
   pathwayLessonHasRenderableHubSlug,
@@ -24,29 +41,28 @@ type Props = {
   showLockedState?: boolean;
 };
 
-function examRelevanceLabel(value: PathwayLessonRecord["examRelevance"]): string | null {
-  switch (value) {
-    case "high_yield":
-      return "High yield";
-    case "core":
-      return "Core";
-    case "specialty":
-      return "Specialty";
-    default:
-      return null;
-  }
-}
+const SYSTEM_ICONS: Record<PathwayLessonSystemLabel, LucideIcon> = {
+  Fundamentals: ShieldCheck,
+  Pharmacology: Pill,
+  Cardiovascular: HeartPulse,
+  Respiratory: Wind,
+  Neurological: Brain,
+  Gastrointestinal: Stethoscope,
+  Renal: Droplets,
+  Endocrine: Activity,
+  Musculoskeletal: Bone,
+  "Hematologic / Immune": Sparkles,
+  Integumentary: Bandage,
+  Reproductive: Leaf,
+  "Maternity / Newborn": Baby,
+  Pediatrics: Baby,
+  "Mental Health": Brain,
+  "Leadership / Community": BriefcaseMedical,
+};
 
-function cardActionLabel(status: PathwayLessonProgressStatus): string {
-  return status === "in_progress" ? "Resume" : "Start";
-}
-
-function descriptorForLesson(lesson: PathwayLessonRecord): string {
-  const text = lesson.seoDescription?.trim();
-  if (text) return text;
-  const fallback = [lesson.topic?.trim(), lesson.bodySystem?.trim()].filter(Boolean).join(" · ");
-  return fallback || "Open this lesson to continue the pathway curriculum.";
-}
+const SYSTEM_SORT_ORDER = new Map<PathwayLessonSystemLabel, number>(
+  PATHWAY_LESSON_SYSTEM_ORDER.map((label, index) => [label, index]),
+);
 
 function LessonSection({
   section,
@@ -63,66 +79,59 @@ function LessonSection({
   showLockedState: boolean;
   sectionIndex: number;
 }) {
+  const Icon = SYSTEM_ICONS[section.systemLabel] ?? ShieldCheck;
   return (
-    <AccordionItem
-      value={section.id}
-      className="overflow-hidden rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)]"
+    <section
+      id={section.id}
+      className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5 sm:p-6"
+      aria-labelledby={`section-heading-${section.id}`}
     >
-      <AccordionTrigger className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left transition hover:bg-[var(--semantic-panel-muted)]">
-        <div>
-          <h2 className="text-base font-semibold text-[var(--theme-heading-text)] sm:text-lg">{section.label}</h2>
-          <p className="mt-1 text-sm text-[var(--theme-muted-text)]">
+      <header className="flex items-start gap-3">
+        <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] text-[var(--semantic-info)]">
+          <Icon className="h-5 w-5" aria-hidden />
+        </span>
+        <div className="min-w-0">
+          <h2 id={`section-heading-${section.id}`} className="text-base font-semibold text-[var(--theme-heading-text)] sm:text-lg">
+            {section.label}
+          </h2>
+          <p className="mt-1 text-sm text-[var(--theme-muted-text)]">{section.description}</p>
+          <p className="mt-1 text-xs font-medium uppercase tracking-wide text-[var(--semantic-text-tertiary)]">
             {section.count} lesson{section.count === 1 ? "" : "s"}
           </p>
         </div>
-        <ChevronDown className="h-5 w-5 shrink-0 text-[var(--theme-muted-text)] transition-transform data-[state=open]:rotate-180" />
-      </AccordionTrigger>
-      <AccordionContent className="border-t border-[var(--semantic-border-soft)] px-5 pb-5 pt-4">
-        <ul className="grid list-none gap-3 p-0">
-          {section.lessons.map((lesson, lessonIndex) => {
-            const href = pathwayLessonMarketingDetailHref(lessonsBasePath, lesson.slug);
-            if (!href) return null;
-            const progressStatus = progressMap[lesson.slug] ?? "not_started";
-            const examRelevance = examRelevanceLabel(lesson.examRelevance);
+      </header>
 
-            return (
-              <li
-                key={lesson.slug}
-                data-nn-qa-primary-lesson={sectionIndex === 0 && lessonIndex === 0 ? "true" : undefined}
-                className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--theme-page-bg)] p-4"
-              >
-                <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-                  <div className="min-w-0 flex-1">
-                    <Link
-                      href={href}
-                      className="text-base font-semibold text-[var(--theme-heading-text)] underline-offset-4 transition hover:text-primary hover:underline"
-                    >
-                      {lesson.title}
-                    </Link>
-                    <p className="mt-2 line-clamp-1 text-sm text-[var(--theme-muted-text)]">{descriptorForLesson(lesson)}</p>
-                    <div className="mt-3 flex flex-wrap gap-2">
-                      {showProgress ? <PathwayLessonProgressBadge status={progressStatus} /> : null}
-                      {showLockedState ? <StatusBadge status="locked" size="xs" /> : null}
-                      {examRelevance ? (
-                        <span className="inline-flex min-h-[1.5rem] items-center rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-2 py-0.5 text-[11px] font-medium text-[var(--semantic-text-secondary)]">
-                          {examRelevance}
-                        </span>
-                      ) : null}
-                    </div>
-                  </div>
+      <ul className="mt-5 list-none divide-y divide-[var(--semantic-border-soft)] rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--theme-page-bg)] p-0">
+        {section.lessons.map((lesson, lessonIndex) => {
+          const href = pathwayLessonMarketingDetailHref(lessonsBasePath, lesson.slug);
+          if (!href) return null;
+          const progressStatus = progressMap[lesson.slug] ?? "not_started";
+
+          return (
+            <li
+              key={lesson.slug}
+              data-nn-qa-primary-lesson={sectionIndex === 0 && lessonIndex === 0 ? "true" : undefined}
+              className="p-4 sm:px-5"
+            >
+              <div className="flex items-start justify-between gap-3">
+                <div className="min-w-0">
                   <Link
                     href={href}
-                    className="inline-flex min-h-10 shrink-0 items-center justify-center rounded-full nn-btn-primary px-4 py-2 text-sm font-semibold shadow-none"
+                    className="text-sm font-semibold text-[var(--theme-heading-text)] underline-offset-4 transition hover:text-primary hover:underline sm:text-base"
                   >
-                    {cardActionLabel(progressStatus)}
+                    {lesson.title}
                   </Link>
+                  {showLockedState ? <div className="mt-2"><StatusBadge status="locked" size="xs" /></div> : null}
                 </div>
-              </li>
-            );
-          })}
-        </ul>
-      </AccordionContent>
-    </AccordionItem>
+                <div className="flex shrink-0 items-center gap-2">
+                  {showProgress ? <PathwayLessonProgressBadge status={progressStatus} /> : null}
+                </div>
+              </div>
+            </li>
+          );
+        })}
+      </ul>
+    </section>
   );
 }
 
@@ -135,6 +144,12 @@ export function PathwayLessonsCurriculumHub({
 }: Props) {
   const safeLessons = lessons.filter(pathwayLessonHasRenderableHubSlug);
   const sections = buildPathwayLessonSystemSections(safeLessons);
+  const orderedSections = [...sections].sort((a, b) => {
+    const aRank = SYSTEM_SORT_ORDER.get(a.systemLabel) ?? Number.MAX_SAFE_INTEGER;
+    const bRank = SYSTEM_SORT_ORDER.get(b.systemLabel) ?? Number.MAX_SAFE_INTEGER;
+    if (aRank !== bRank) return aRank - bRank;
+    return a.label.localeCompare(b.label);
+  });
 
   if (sections.length === 0) {
     const thinInventoryCopy = emptyStateCopy.thinInventory();
@@ -153,8 +168,8 @@ export function PathwayLessonsCurriculumHub({
   }
 
   return (
-    <Accordion type="multiple" defaultValue={sections.map((section) => section.id)} className="space-y-4">
-      {sections.map((section, sectionIndex) => (
+    <div className="space-y-6">
+      {orderedSections.map((section, sectionIndex) => (
         <LessonSection
           key={section.id}
           section={section}
@@ -165,6 +180,6 @@ export function PathwayLessonsCurriculumHub({
           sectionIndex={sectionIndex}
         />
       ))}
-    </Accordion>
+    </div>
   );
 }
