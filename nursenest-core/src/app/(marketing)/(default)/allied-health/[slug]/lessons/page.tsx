@@ -3,8 +3,7 @@ import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { PathwayLessonPagination } from "@/components/pathway-lessons/pathway-lesson-pagination";
 import { PathwayLessonsCurriculumHub } from "@/components/pathway-lessons/pathway-lessons-curriculum-hub";
-import { LessonsHomeHeader } from "@/components/pathway-lessons/lessons-home-header";
-import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
+import { LessonsPageShell } from "@/components/pathway-lessons/lessons-page-shell";
 import { ALLIED_LESSON_HUB_PAGE_SIZE } from "@/lib/allied/allied-marketing-constants";
 import { countPublishedPathwayLessonsForAlliedMarketing } from "@/lib/allied/count-allied-pathway-lessons";
 import {
@@ -146,22 +145,43 @@ export default async function AlliedHealthSlugLessonsPage({ params, searchParams
     }
     const { schemaItems } = alliedLessonsHubBreadcrumbs(prof.h1, professionHeroPath, base, 1);
     return (
-      <div className="nn-marketing-surface mx-auto max-w-3xl px-4 py-12">
-        <BreadcrumbJsonLd items={schemaItems} />
-        <Link href={professionHeroPath} className="text-sm font-medium text-primary hover:underline">
-          ← {prof.h1}
-        </Link>
-        <h1 className="mt-4 text-3xl font-bold text-[var(--theme-heading-text)]">Lessons · {prof.h1}</h1>
-        <p className="mt-3 text-muted">
-          No published lessons for this filter yet. Check back after import, or browse the full pathway hub.
-        </p>
-        <Link href={professionHeroPath} className="mt-4 inline-block font-semibold text-primary hover:underline">
-          Back to overview
-        </Link>
-        <p className="mt-4 text-xs text-muted">
-          This page is not indexed for search until content exists.
-        </p>
-      </div>
+      <LessonsPageShell
+        schemaItems={schemaItems}
+        eyebrow={`${pathway.shortName} · ${pathwayCountryLabel(pathway)}`}
+        title={`${prof.h1} lessons`}
+        description="Browse the current lesson board for this allied profession."
+        searchBasePath={base}
+        initialQuery={qEffective ?? undefined}
+        countryOptions={[
+          {
+            label: "Canada",
+            href: qEffective
+              ? `/canada/allied/allied-health/lessons?q=${encodeURIComponent(qEffective)}`
+              : "/canada/allied/allied-health/lessons",
+            active: pathway.countrySlug === "canada",
+          },
+          {
+            label: "US",
+            href: qEffective ? `/us/allied/allied-health/lessons?q=${encodeURIComponent(qEffective)}` : "/us/allied/allied-health/lessons",
+            active: pathway.countrySlug === "us",
+          },
+        ]}
+        boardId="allied-lesson-library"
+        backHref={professionHeroPath}
+        backLabel={prof.h1}
+      >
+        <div className="rounded-[1.5rem] border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5">
+          <p className="text-sm font-medium text-[var(--theme-heading-text)]">
+            No published lessons for this filter yet.
+          </p>
+          <p className="mt-2 text-sm text-[var(--theme-muted-text)]">
+            Check back after import, or browse the full pathway hub.
+          </p>
+          <p className="mt-4 text-xs text-[var(--theme-muted-text)]">
+            This page is not indexed for search until content exists.
+          </p>
+        </div>
+      </LessonsPageShell>
     );
   }
 
@@ -179,43 +199,45 @@ export default async function AlliedHealthSlugLessonsPage({ params, searchParams
 
   return (
     <div className="nn-marketing-surface">
-      <div className="mx-auto max-w-6xl px-4 py-8">
-        <BreadcrumbJsonLd items={schemaItems} />
-        <LessonsHomeHeader
-          eyebrow={`${pathway.shortName} · ${pathwayCountryLabel(pathway)}`}
-          title={`${prof.h1} lessons`}
-          description={headerDescription}
-          searchBasePath={base}
-          initialQuery={qEffective ?? undefined}
-          countryOptions={[
-            {
-              label: "Canada",
-              href: qEffective
-                ? `/canada/allied/allied-health/lessons?q=${encodeURIComponent(qEffective)}`
-                : "/canada/allied/allied-health/lessons",
-              active: pathway.countrySlug === "canada",
-            },
-            {
-              label: "US",
-              href: qEffective ? `/us/allied/allied-health/lessons?q=${encodeURIComponent(qEffective)}` : "/us/allied/allied-health/lessons",
-              active: pathway.countrySlug === "us",
-            },
-          ]}
-        />
-
-        <section className="mt-8" id="allied-lesson-library">
-          <PathwayLessonsCurriculumHub lessons={lessons} lessonsBasePath={base} />
-        </section>
-
-        <PathwayLessonPagination
-          basePath={base}
-          page={pageResult.page}
-          pageCount={pageResult.pageCount}
-          total={pageResult.total}
-          pageSize={pageResult.pageSize}
-          hubSearch={qEffective}
-        />
-      </div>
+      <LessonsPageShell
+        schemaItems={schemaItems}
+        eyebrow={`${pathway.shortName} · ${pathwayCountryLabel(pathway)}`}
+        title={`${prof.h1} lessons`}
+        description={headerDescription}
+        searchBasePath={base}
+        initialQuery={qEffective ?? undefined}
+        countryOptions={[
+          {
+            label: "Canada",
+            href: qEffective
+              ? `/canada/allied/allied-health/lessons?q=${encodeURIComponent(qEffective)}`
+              : "/canada/allied/allied-health/lessons",
+            active: pathway.countrySlug === "canada",
+          },
+          {
+            label: "US",
+            href: qEffective ? `/us/allied/allied-health/lessons?q=${encodeURIComponent(qEffective)}` : "/us/allied/allied-health/lessons",
+            active: pathway.countrySlug === "us",
+          },
+        ]}
+        boardId="allied-lesson-library"
+        backHref={professionHeroPath}
+        backLabel={prof.h1}
+        pagination={
+          <PathwayLessonPagination
+            basePath={base}
+            page={pageResult.page}
+            pageCount={pageResult.pageCount}
+            total={pageResult.total}
+            pageSize={pageResult.pageSize}
+            hubSearch={qEffective}
+          />
+        }
+      >
+        <div className="rounded-[1.5rem] border border-[color-mix(in_srgb,var(--semantic-brand)_10%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-muted)_45%,var(--semantic-surface))] p-1.5">
+          <PathwayLessonsCurriculumHub pathway={pathway} lessons={lessons} lessonsBasePath={base} />
+        </div>
+      </LessonsPageShell>
     </div>
   );
 }

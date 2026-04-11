@@ -1,8 +1,7 @@
-import { SystemSection } from "@/components/pathway-lessons/system-section";
+import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
+import { LessonSystemCard } from "@/components/pathway-lessons/lesson-system-card";
 import { PremiumEmptyState } from "@/components/ui/premium-empty-state";
-import {
-  buildPathwayLessonSystemSections,
-} from "@/lib/lessons/pathway-lesson-body-system-groups";
+import { buildPathwayLessonBoard } from "@/lib/lessons/pathway-lesson-board";
 import {
   pathwayLessonHasRenderableHubSlug,
   type PathwayLessonRecord,
@@ -11,6 +10,7 @@ import type { PathwayLessonProgressStatus } from "@/lib/lessons/pathway-lesson-p
 import { emptyStateCopy } from "@/lib/ui/empty-state-copy";
 
 type Props = {
+  pathway: Pick<ExamPathwayDefinition, "roleTrack">;
   lessons: PathwayLessonRecord[];
   lessonsBasePath: string;
   progressMap?: Record<string, PathwayLessonProgressStatus>;
@@ -19,6 +19,7 @@ type Props = {
 };
 
 export function PathwayLessonsCurriculumHub({
+  pathway,
   lessons,
   lessonsBasePath,
   progressMap = {},
@@ -26,7 +27,11 @@ export function PathwayLessonsCurriculumHub({
   showLockedState = false,
 }: Props) {
   const safeLessons = lessons.filter(pathwayLessonHasRenderableHubSlug);
-  const sections = buildPathwayLessonSystemSections(safeLessons);
+  const { sections } = buildPathwayLessonBoard({
+    pathway,
+    lessons: safeLessons,
+    progressMap: canShowProgressMap ? progressMap : {},
+  });
 
   if (sections.length === 0) {
     const thinInventoryCopy = emptyStateCopy.thinInventory();
@@ -45,14 +50,12 @@ export function PathwayLessonsCurriculumHub({
   }
 
   return (
-    <div className="space-y-5">
+    <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
       {sections.map((section, sectionIndex) => (
-        <SystemSection
+        <LessonSystemCard
           key={section.id}
           section={section}
           lessonsBasePath={lessonsBasePath}
-          progressMap={progressMap}
-          showProgress={canShowProgressMap}
           showLockedState={showLockedState}
           sectionIndex={sectionIndex}
         />

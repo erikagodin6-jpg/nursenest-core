@@ -2,8 +2,7 @@ import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
 import { getOptionalPublicSession } from "@/lib/auth/optional-public-session";
 import { PathwayLessonPagination } from "@/components/pathway-lessons/pathway-lesson-pagination";
-import { LessonsHomeHeader } from "@/components/pathway-lessons/lessons-home-header";
-import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
+import { LessonsPageShell } from "@/components/pathway-lessons/lessons-page-shell";
 import { loadPathwayLessonsHubAggregates } from "@/lib/exam-pathways/marketing-hub-optional-data";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
 import { resolveExamPathwaySafe } from "@/lib/exam-pathways/resolve-exam-pathway-safe";
@@ -126,20 +125,20 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
         : `${equivalentExamHubUrlAfterRegionToggle(base, "US") ?? base}${querySuffix}`;
 
     return (
-      <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
-        <BreadcrumbJsonLd items={schemaItems} />
-        <LessonsHomeHeader
-          eyebrow={pathway.displayName}
-          title={`${pathway.shortName} lessons`}
-          description={headerDescription}
-          searchBasePath={base}
-          initialQuery={qEffective ?? undefined}
-          countryOptions={[
-            { label: "Canada", href: canadaHref, active: pathway.countrySlug === "canada" },
-            { label: "US", href: usHref, active: pathway.countrySlug === "us" },
-          ]}
-        />
-        <div className="mt-6 rounded-[1.75rem] border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5">
+      <LessonsPageShell
+        schemaItems={schemaItems}
+        eyebrow={pathway.displayName}
+        title={`${pathway.shortName} lessons`}
+        description={headerDescription}
+        searchBasePath={base}
+        initialQuery={qEffective ?? undefined}
+        countryOptions={[
+          { label: "Canada", href: canadaHref, active: pathway.countrySlug === "canada" },
+          { label: "US", href: usHref, active: pathway.countrySlug === "us" },
+        ]}
+        boardId="pathway-lesson-library"
+      >
+        <div className="rounded-[1.5rem] border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5">
           <p className="text-sm font-medium text-[var(--theme-heading-text)]">
             {qEffective ? `No lessons match "${qEffective}".` : `No lessons are published for ${pathway.shortName} yet.`}
           </p>
@@ -147,7 +146,7 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
             {qEffective ? "Try a broader search or clear the search to view the full lesson library." : "Check back here for structured lessons as this pathway library grows."}
           </p>
         </div>
-      </div>
+      </LessonsPageShell>
     );
   }
 
@@ -201,22 +200,32 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
       : `${equivalentExamHubUrlAfterRegionToggle(base, "US") ?? base}${querySuffix}`;
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
-      <BreadcrumbJsonLd items={schemaItems} />
-      <LessonsHomeHeader
-        eyebrow={pathway.displayName}
-        title={`${pathway.shortName} lessons`}
-        description={headerDescription}
-        searchBasePath={base}
-        initialQuery={qEffective ?? undefined}
-        countryOptions={[
-          { label: "Canada", href: canadaHref, active: pathway.countrySlug === "canada" },
-          { label: "US", href: usHref, active: pathway.countrySlug === "us" },
-        ]}
-      />
-
-      <div id="pathway-lesson-library" className="mt-8 scroll-mt-24">
+    <LessonsPageShell
+      schemaItems={schemaItems}
+      eyebrow={pathway.displayName}
+      title={`${pathway.shortName} lessons`}
+      description={headerDescription}
+      searchBasePath={base}
+      initialQuery={qEffective ?? undefined}
+      countryOptions={[
+        { label: "Canada", href: canadaHref, active: pathway.countrySlug === "canada" },
+        { label: "US", href: usHref, active: pathway.countrySlug === "us" },
+      ]}
+      boardId="pathway-lesson-library"
+      pagination={
+        <PathwayLessonPagination
+          basePath={base}
+          page={pageResult.page}
+          pageCount={pageResult.pageCount}
+          total={pageResult.total}
+          pageSize={pageResult.pageSize}
+          hubSearch={qEffective}
+        />
+      }
+    >
+      <div className="rounded-[1.5rem] border border-[color-mix(in_srgb,var(--semantic-brand)_10%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-muted)_45%,var(--semantic-surface))] p-1.5">
         <PathwayLessonsCurriculumHub
+          pathway={pathway}
           lessons={lessons}
           lessonsBasePath={base}
           progressMap={progressMap}
@@ -224,15 +233,6 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
           showLockedState={!canShowResume}
         />
       </div>
-
-      <PathwayLessonPagination
-        basePath={base}
-        page={pageResult.page}
-        pageCount={pageResult.pageCount}
-        total={pageResult.total}
-        pageSize={pageResult.pageSize}
-        hubSearch={qEffective}
-      />
-    </div>
+    </LessonsPageShell>
   );
 }
