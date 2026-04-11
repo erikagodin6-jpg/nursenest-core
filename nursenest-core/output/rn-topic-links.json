@@ -1,7 +1,7 @@
 {
   "_meta": {
     "description": "Internal link metadata overlay for the RN topic manifest",
-    "generatedAt": "2026-04-11T04:39:31.963Z",
+    "generatedAt": "2026-04-11T04:45:57.768Z",
     "maxLinks": 6,
     "algorithm": "bodySystem(+3) + sharedTags(+2ea) + sameCategory(+1)",
     "totalTopics": 50
@@ -11,19 +11,19 @@
       "topicSlug": "myocardial-infarction",
       "relatedTopicSlugs": [
         "hypertensive-crisis",
+        "anticoagulation-therapy",
         "atrial-fibrillation",
         "heart-failure",
         "antihypertensive-medications",
-        "digoxin-cardiac-glycosides",
-        "shock-recognition-and-response"
+        "digoxin-cardiac-glycosides"
       ],
       "suggestedQuestionTopics": [
         "hypertensive-crisis",
+        "anticoagulation-therapy",
         "atrial-fibrillation",
         "heart-failure",
         "antihypertensive-medications",
-        "digoxin-cardiac-glycosides",
-        "shock-recognition-and-response"
+        "digoxin-cardiac-glycosides"
       ]
     },
     {
@@ -67,20 +67,20 @@
     {
       "topicSlug": "pulmonary-embolism",
       "relatedTopicSlugs": [
+        "atrial-fibrillation",
+        "anticoagulation-therapy",
         "acute-respiratory-distress-syndrome",
         "asthma-acute-exacerbation",
         "chronic-obstructive-pulmonary-disease",
-        "pneumonia",
-        "airway-management-priority",
-        "appendicitis-and-peritonitis"
+        "pneumonia"
       ],
       "suggestedQuestionTopics": [
+        "atrial-fibrillation",
+        "anticoagulation-therapy",
         "acute-respiratory-distress-syndrome",
         "asthma-acute-exacerbation",
         "chronic-obstructive-pulmonary-disease",
-        "pneumonia",
-        "airway-management-priority",
-        "appendicitis-and-peritonitis"
+        "pneumonia"
       ]
     },
     {
@@ -162,20 +162,20 @@
     {
       "topicSlug": "liver-cirrhosis-hepatic-encephalopathy",
       "relatedTopicSlugs": [
+        "diuretic-therapy",
         "acute-pancreatitis",
         "appendicitis-and-peritonitis",
         "gastrointestinal-bleeding",
         "inflammatory-bowel-disease",
-        "acute-kidney-injury",
-        "chronic-kidney-disease"
+        "acute-kidney-injury"
       ],
       "suggestedQuestionTopics": [
+        "diuretic-therapy",
         "acute-pancreatitis",
         "appendicitis-and-peritonitis",
         "gastrointestinal-bleeding",
         "inflammatory-bowel-disease",
-        "acute-kidney-injury",
-        "chronic-kidney-disease"
+        "acute-kidney-injury"
       ]
     },
     {
@@ -219,20 +219,20 @@
     {
       "topicSlug": "atrial-fibrillation",
       "relatedTopicSlugs": [
+        "anticoagulation-therapy",
+        "pulmonary-embolism",
         "heart-failure",
         "myocardial-infarction",
         "antihypertensive-medications",
-        "digoxin-cardiac-glycosides",
-        "hypertensive-crisis",
-        "anticoagulation-therapy"
+        "digoxin-cardiac-glycosides"
       ],
       "suggestedQuestionTopics": [
+        "anticoagulation-therapy",
+        "pulmonary-embolism",
         "heart-failure",
         "myocardial-infarction",
         "antihypertensive-medications",
-        "digoxin-cardiac-glycosides",
-        "hypertensive-crisis",
-        "anticoagulation-therapy"
+        "digoxin-cardiac-glycosides"
       ]
     },
     {
@@ -485,20 +485,20 @@
     {
       "topicSlug": "anticoagulation-therapy",
       "relatedTopicSlugs": [
+        "atrial-fibrillation",
+        "myocardial-infarction",
+        "pulmonary-embolism",
         "anticonvulsant-medications",
         "antihypertensive-medications",
-        "antipsychotic-medications",
-        "corticosteroid-therapy",
-        "insulin-management",
-        "opioid-analgesics"
+        "antipsychotic-medications"
       ],
       "suggestedQuestionTopics": [
+        "atrial-fibrillation",
+        "myocardial-infarction",
+        "pulmonary-embolism",
         "anticonvulsant-medications",
         "antihypertensive-medications",
-        "antipsychotic-medications",
-        "corticosteroid-therapy",
-        "insulin-management",
-        "opioid-analgesics"
+        "antipsychotic-medications"
       ]
     },
     {
@@ -523,20 +523,20 @@
     {
       "topicSlug": "diuretic-therapy",
       "relatedTopicSlugs": [
+        "liver-cirrhosis-hepatic-encephalopathy",
         "acute-kidney-injury",
         "fluid-and-electrolyte-imbalances",
         "heart-failure",
         "chronic-kidney-disease",
-        "antihypertensive-medications",
-        "digoxin-cardiac-glycosides"
+        "antihypertensive-medications"
       ],
       "suggestedQuestionTopics": [
+        "liver-cirrhosis-hepatic-encephalopathy",
         "acute-kidney-injury",
         "fluid-and-electrolyte-imbalances",
         "heart-failure",
         "chronic-kidney-disease",
-        "antihypertensive-medications",
-        "digoxin-cardiac-glycosides"
+        "antihypertensive-medications"
       ]
     },
     {

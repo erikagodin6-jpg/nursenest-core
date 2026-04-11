@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
-import { notFound, redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 import { getOptionalPublicSession } from "@/lib/auth/optional-public-session";
-import { PathwayLessonPagination } from "@/components/pathway-lessons/pathway-lesson-pagination";
 import { LessonsPageShell } from "@/components/pathway-lessons/lessons-page-shell";
 import { LessonsToolbar } from "@/components/pathway-lessons/lessons-toolbar";
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
@@ -11,7 +10,7 @@ import { resolveExamPathwaySafe } from "@/lib/exam-pathways/resolve-exam-pathway
 import { marketingPathwayLessonsIndexPath } from "@/lib/lessons/lesson-routes";
 import { defaultPathwayLessonContentLocaleForExamHubRoute } from "@/lib/lessons/pathway-lesson-locale";
 import {
-  PATHWAY_HUB_PAGE_SIZE_DEFAULT,
+  PATHWAY_HUB_PAGE_SIZE_MAX,
   normalizePathwayHubSearchQuery,
 } from "@/lib/lessons/pathway-lesson-loader";
 import { PathwayLessonsCurriculumHub } from "@/components/pathway-lessons/pathway-lessons-curriculum-hub";
@@ -72,20 +71,19 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
 
   const base = marketingPathwayLessonsIndexPath(pathway);
   const sp = await searchParams;
-  const pageRequested = Math.max(1, Number(sp.page ?? "1") || 1);
-  const pageSizeRequested = Number(sp.pageSize ?? String(PATHWAY_HUB_PAGE_SIZE_DEFAULT)) || PATHWAY_HUB_PAGE_SIZE_DEFAULT;
+  // Single-page mode: always load page 1 at the architecture ceiling — no hub-level pagination.
   const qEffective = normalizePathwayHubSearchQuery(sp.q);
   const listOpts = typeof sp.q === "string" && sp.q.trim().length > 0 ? { q: sp.q } : undefined;
 
   const { pageResult } = await loadPathwayLessonsHubAggregates(
     pathway,
     {
-      pageRequested,
-      pageSizeRequested,
+      pageRequested: 1,
+      pageSizeRequested: PATHWAY_HUB_PAGE_SIZE_MAX,
       lessonContentLocale,
       listOpts,
       qEffective: qEffective ?? "",
-      skipLaunchBundle: pageRequested !== 1 || Boolean(qEffective),
+      skipLaunchBundle: Boolean(qEffective),
     },
     {
       pathname: `${pathname}/lessons`,
@@ -96,20 +94,6 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
       roleTrack,
     },
   );
-
-  const hubQuerySuffix = (page: number) => {
-    const qs = new URLSearchParams();
-    if (page > 1) qs.set("page", String(page));
-    if (qEffective) qs.set("q", qEffective);
-    const s = qs.toString();
-    return s ? `?${s}` : "";
-  };
-
-  if (pageResult.total === 0) {
-    if (pageRequested > 1) redirect(`${base}${hubQuerySuffix(1)}`);
-  } else if (pageRequested !== pageResult.page) {
-    redirect(`${base}${hubQuerySuffix(pageResult.page)}`);
-  }
 
   const lessons = pageResult.items.filter(pathwayLessonHasRenderableHubSlug);
   const { schemaItems } = pathwayLessonsHubBreadcrumbs(pathway);
@@ -221,23 +205,23 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
     >
       <BreadcrumbJsonLd items={schemaItems} />
       <div id="pathway-lesson-library" className="mt-8 scroll-mt-24">
-        <PathwayLessonsCurriculumHub
-          lessons={lessons}
-          lessonsBasePath={base}
-          progressMap={progressMap}
-          canShowProgressMap={canShowProgressMap}
-          showLockedState={!canShowResume}
-        />
+        <details open className="group/lesson-library">
+          <summary className="mb-4 flex cursor-pointer list-none items-center justify-between gap-3 rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-4 py-3 text-sm font-medium text-[var(--semantic-brand)] shadow-[var(--semantic-shadow-soft)] hover:bg-[color-mix(in_srgb,var(--semantic-brand)_5%,var(--semantic-surface))] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_24%,transparent)]">
+            <span className="text-[var(--theme-muted-text)]">
+              {pageResult.total} {pageResult.total === 1 ? "lesson" : "lessons"}
+            </span>
+            <span className="group-open/lesson-library:hidden">Show full lesson list</span>
+            <span className="hidden group-open/lesson-library:inline">Hide full lesson list</span>
+          </summary>
+          <PathwayLessonsCurriculumHub
+            lessons={lessons}
+            lessonsBasePath={base}
+            progressMap={progressMap}
+            canShowProgressMap={canShowProgressMap}
+            showLockedState={!canShowResume}
+          />
+        </details>
       </div>
-
-      <PathwayLessonPagination
-        basePath={base}
-        page={pageResult.page}
-        pageCount={pageResult.pageCount}
-        total={pageResult.total}
-        pageSize={pageResult.pageSize}
-        hubSearch={qEffective}
-      />
     </LessonsPageShell>
   );
 }

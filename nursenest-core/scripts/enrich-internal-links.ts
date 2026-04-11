@@ -84,17 +84,46 @@ type BatchFile = {
 };
 
 // ---------------------------------------------------------------------------
+// Clinical bridge map
+//
+// Explicit cross-system pairs whose clinical relationship cannot be inferred
+// from tags alone. Each entry adds BRIDGE_BONUS to guarantee the pair ranks
+// above zero-overlap candidates. Keep this list minimal and documented.
+// ---------------------------------------------------------------------------
+
+const BRIDGE_BONUS = 8; // beats same-category clusters capped at score 5
+
+const CLINICAL_BRIDGES: Array<{ a: string; b: string }> = [
+  { a: 'anticoagulation-therapy', b: 'pulmonary-embolism' },      // DVT/PE is primary anticoag indication
+  { a: 'anticoagulation-therapy', b: 'atrial-fibrillation' },     // AF stroke-prevention = primary indication
+  { a: 'anticoagulation-therapy', b: 'myocardial-infarction' },   // Heparin used in ACS management
+  { a: 'pulmonary-embolism',      b: 'atrial-fibrillation' },     // Both thromboembolic; share anticoag Rx
+  { a: 'liver-cirrhosis-hepatic-encephalopathy', b: 'diuretic-therapy' }, // Diuretics for ascites
+];
+
+const BRIDGE_SET = new Set<string>();
+for (const { a, b } of CLINICAL_BRIDGES) {
+  BRIDGE_SET.add(a + '::' + b);
+  BRIDGE_SET.add(b + '::' + a);
+}
+
+// ---------------------------------------------------------------------------
 // Scoring
 // ---------------------------------------------------------------------------
 
 /**
  * Score how related `candidate` is to `source`.
- * Higher = more related. Returns 0 for self (slug equality).
+ * Higher = more related. Returns -1 for self (excluded). Clinical bridges add BRIDGE_BONUS.
  */
 function scoreRelatedness(source: TopicEntry, candidate: TopicEntry): number {
   if (source.topicSlug === candidate.topicSlug) return -1;
 
   let score = 0;
+
+  // Clinical bridge: guaranteed high rank for cross-system mandatory pairs
+  if (BRIDGE_SET.has(source.topicSlug + '::' + candidate.topicSlug)) {
+    score += BRIDGE_BONUS;
+  }
 
   if (
     source.bodySystem &&

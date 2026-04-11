@@ -10,15 +10,24 @@
  * - Exam **domain** tagging for editorial planning: `lib/lessons/lesson-exam-domain.ts` (`inferLessonExamDomains`).
  *   Rationale→lesson matching uses `topicSlug` + ranking in `rationale-lesson-link-resolve`.
  */
-/** Default rows per marketing pathway hub page (tunable; keep ≤ max for predictable memory). */
-export const PATHWAY_HUB_PAGE_SIZE_DEFAULT = 48;
-/** Upper bound for a single hub request — larger lists should paginate, not raise this arbitrarily. */
-export const PATHWAY_HUB_PAGE_SIZE_MAX = 96;
-/** Subscriber app `/app/lessons` list — small pages + indexed skip/take. */
-export const LEARNER_APP_LESSONS_PAGE_SIZE = 24;
-/** Content plan: minimum published-effective lessons per country/tier pathway before “scale-ready”. */
+
+/** Content plan: minimum published-effective lessons per country/tier pathway before "scale-ready". */
 export const MIN_PATHWAY_LESSONS_SCALE_TARGET = 150;
 /** Upper planning horizon — architecture (pagination + bounded selects) supports this without loading full sets. */
 export const PATHWAY_LESSONS_SCALE_CEILING = 500;
+
+/** Default rows per marketing pathway hub page (tunable; keep ≤ max for predictable memory). */
+export const PATHWAY_HUB_PAGE_SIZE_DEFAULT = 48;
+/**
+ * Upper bound for a single hub request — raised to match the architecture scale ceiling so the
+ * lessons hub can render all hub-metadata rows in a single page (no full lesson bodies are loaded).
+ * Hub-list rows are metadata-only (no section bodies); loading up to 500 is safe.
+ * Deep pagination is still supported when a pathway eventually exceeds this count.
+ */
+export const PATHWAY_HUB_PAGE_SIZE_MAX = PATHWAY_LESSONS_SCALE_CEILING; // 500
+
+/** Subscriber app `/app/lessons` list — small pages + indexed skip/take. */
+export const LEARNER_APP_LESSONS_PAGE_SIZE = 24;
+
 /** When hub has more pages than this, show First/Last links (see pathway-lesson-pagination). */
 export const PATHWAY_HUB_PAGINATION_SHOW_ENDLINKS_MIN_PAGES = 3;

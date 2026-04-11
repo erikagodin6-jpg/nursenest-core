@@ -101,35 +101,42 @@ export default async function PublicFlashcardsHubPage() {
         </ul>
       </section>
 
-      <section className="mt-12">
-        <h2 className="nn-marketing-h3">{t("pages.publicFlashcardsHub.sectionFeaturedTitle")}</h2>
-        <p className="mt-1 nn-marketing-body-sm text-[var(--theme-muted-text)]">{t("pages.publicFlashcardsHub.featuredSubtitle")}</p>
-        <ul className="mt-6 space-y-6">
-          {featuredDecks.length === 0 ? (
-            <li className="text-sm text-[var(--theme-muted-text)]">{t("pages.publicFlashcardsHub.featuredEmpty")}</li>
-          ) : (
-            featuredDecks.map((d) => (
-              <li key={d.slug} className="nn-card p-5">
-                <Link
-                  href={withMarketingLocale(locale, `/flashcards/${d.slug}`)}
-                  className="nn-marketing-h3 text-primary hover:underline"
-                >
-                  {d.title}
-                </Link>
-                {d.description ? <p className="mt-2 text-sm text-[var(--theme-muted-text)]">{d.description}</p> : null}
-                <p className="mt-2 text-xs text-[var(--theme-muted-text)]">
-                  {t("pages.publicFlashcardsHub.deckCardLine", { count: d.cardCount })}
-                </p>
-                {d.sampleFront ? (
-                  <blockquote className="mt-4 rounded-lg border border-border bg-muted/30 p-4 text-sm text-[var(--theme-heading-text)]">
-                    <span className="text-xs font-semibold uppercase text-primary">{t("pages.publicFlashcardsHub.sampleCardBadge")}</span>
-                    <p className="mt-2 whitespace-pre-wrap">{d.sampleFront}</p>
-                  </blockquote>
-                ) : null}
-              </li>
-            ))
-          )}
-        </ul>
+      <section className="mt-12" id="flashcard-deck-library">
+        <details open className="group/flashcard-decks">
+          <summary className="mb-4 flex cursor-pointer list-none items-center justify-between gap-3 rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-4 py-3 text-sm font-medium text-[var(--semantic-brand)] shadow-[var(--semantic-shadow-soft)] hover:bg-[color-mix(in_srgb,var(--semantic-brand)_5%,var(--semantic-surface))] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_24%,transparent)]">
+            <span className="text-[var(--theme-muted-text)]">
+              {featuredDecks.length} {featuredDecks.length === 1 ? "deck" : "decks"}
+            </span>
+            <span className="group-open/flashcard-decks:hidden">Show featured decks</span>
+            <span className="hidden group-open/flashcard-decks:inline">Hide featured decks</span>
+          </summary>
+          <ul className="space-y-6">
+            {featuredDecks.length === 0 ? (
+              <li className="text-sm text-[var(--theme-muted-text)]">{t("pages.publicFlashcardsHub.featuredEmpty")}</li>
+            ) : (
+              featuredDecks.map((d) => (
+                <li key={d.slug} className="nn-card p-5">
+                  <Link
+                    href={withMarketingLocale(locale, `/flashcards/${d.slug}`)}
+                    className="nn-marketing-h3 text-primary hover:underline"
+                  >
+                    {d.title}
+                  </Link>
+                  {d.description ? <p className="mt-2 text-sm text-[var(--theme-muted-text)]">{d.description}</p> : null}
+                  <p className="mt-2 text-xs text-[var(--theme-muted-text)]">
+                    {t("pages.publicFlashcardsHub.deckCardLine", { count: d.cardCount })}
+                  </p>
+                  {d.sampleFront ? (
+                    <blockquote className="mt-4 rounded-lg border border-border bg-muted/30 p-4 text-sm text-[var(--theme-heading-text)]">
+                      <span className="text-xs font-semibold uppercase text-primary">{t("pages.publicFlashcardsHub.sampleCardBadge")}</span>
+                      <p className="mt-2 whitespace-pre-wrap">{d.sampleFront}</p>
+                    </blockquote>
+                  ) : null}
+                </li>
+              ))
+            )}
+          </ul>
+        </details>
       </section>
 
       <div className="mt-12 flex flex-wrap gap-3">

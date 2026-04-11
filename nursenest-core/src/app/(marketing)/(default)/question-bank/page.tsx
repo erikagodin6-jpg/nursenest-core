@@ -180,29 +180,36 @@ export default async function QuestionBankHubPage() {
           label: t("pages.publicQuestionBank.ctaBrowseLessons"),
         }}
       >
-        <ul className="flex flex-col gap-3 sm:gap-[var(--nn-rhythm-card-grid-gap)]">
-          {CARDS.map((c) => {
-            const p = `pages.publicQuestionBank.${c.cardKey}`;
-            return (
-              <li key={c.cardKey} className="nn-card p-4">
-                <p className="nn-marketing-label nn-marketing-label--accent">
-                  {regionLabel(c.region)} · {t(`${p}.examLabel`)}
-                </p>
-                <h2 className="mt-1 nn-marketing-h3">{t(`${p}.title`)}</h2>
-                <p className="mt-2 nn-marketing-body-sm text-muted">{t(`${p}.who`)}</p>
-                <p className="mt-2 nn-marketing-body-sm text-[var(--theme-muted-text)]">{t(`${p}.includes`)}</p>
-                <div className="mt-4 flex flex-wrap gap-3">
-                  <Link href={c.publicQuestionsHref} className="nn-marketing-body-sm font-semibold text-primary hover:underline">
-                    {t("pages.publicQuestionBank.linkPublicQuestionsLanding")}
-                  </Link>
-                  <Link href={c.hubHref} className="nn-marketing-body-sm font-semibold text-primary hover:underline">
-                    {t("pages.publicQuestionBank.linkPathwayHub")}
-                  </Link>
-                </div>
-              </li>
-            );
-          })}
-        </ul>
+        <details open className="group/qbank-list" id="question-bank-pathways">
+          <summary className="mb-4 flex cursor-pointer list-none items-center justify-between gap-3 rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-4 py-3 text-sm font-medium text-[var(--semantic-brand)] shadow-[var(--semantic-shadow-soft)] hover:bg-[color-mix(in_srgb,var(--semantic-brand)_5%,var(--semantic-surface))] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_24%,transparent)]">
+            <span className="text-[var(--theme-muted-text)]">{CARDS.length} exam pathways</span>
+            <span className="group-open/qbank-list:hidden">Show all pathways</span>
+            <span className="hidden group-open/qbank-list:inline">Hide full list</span>
+          </summary>
+          <ul className="flex flex-col gap-3 sm:gap-[var(--nn-rhythm-card-grid-gap)]">
+            {CARDS.map((c) => {
+              const p = `pages.publicQuestionBank.${c.cardKey}`;
+              return (
+                <li key={c.cardKey} className="nn-card p-4">
+                  <p className="nn-marketing-label nn-marketing-label--accent">
+                    {regionLabel(c.region)} · {t(`${p}.examLabel`)}
+                  </p>
+                  <h2 className="mt-1 nn-marketing-h3">{t(`${p}.title`)}</h2>
+                  <p className="mt-2 nn-marketing-body-sm text-muted">{t(`${p}.who`)}</p>
+                  <p className="mt-2 nn-marketing-body-sm text-[var(--theme-muted-text)]">{t(`${p}.includes`)}</p>
+                  <div className="mt-4 flex flex-wrap gap-3">
+                    <Link href={c.publicQuestionsHref} className="nn-marketing-body-sm font-semibold text-primary hover:underline">
+                      {t("pages.publicQuestionBank.linkPublicQuestionsLanding")}
+                    </Link>
+                    <Link href={c.hubHref} className="nn-marketing-body-sm font-semibold text-primary hover:underline">
+                      {t("pages.publicQuestionBank.linkPathwayHub")}
+                    </Link>
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
+        </details>
 
         <p className="nn-marketing-body-sm text-[var(--theme-muted-text)]">
           {t("pages.publicQuestionBank.footerTimedSetsP1")}
