@@ -15,7 +15,7 @@ import { PathwayLessonProgressTracker } from "@/components/lessons/pathway-lesso
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
 import { resolveExamPathwaySafe } from "@/lib/exam-pathways/resolve-exam-pathway-safe";
-import { marketingExamHubBasePath, marketingPathwayLessonsIndexPath } from "@/lib/lessons/lesson-routes";
+import { marketingPathwayLessonsIndexPath } from "@/lib/lessons/lesson-routes";
 import { PathwayLessonPreviewBanner } from "@/components/lessons/pathway-lesson-preview-banner";
 import {
   canViewFullPathwayLesson,
@@ -170,7 +170,6 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
   );
   const lessonMeasurementSystem = getMeasurementSystemForCountry(pathway.countryCode);
 
-  const hubBase = marketingExamHubBasePath(pathway);
   const base = marketingPathwayLessonsIndexPath(pathway);
 
   const lessonProgress =
@@ -178,8 +177,12 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
       ? await loadPathwayLessonProgressForSlug(userId, pathway.id, lesson.slug)
       : ("not_started" satisfies PathwayLessonProgressStatus);
 
+  // Strip body before passing locked sections to any downstream component — only headings are needed for the
+  // teaser. This prevents accidental body serialization if the preview component ever becomes a Client Component.
   const lockedSections =
-    !fullAccess && lesson.sections.length > visible.length ? lesson.sections.slice(visible.length) : [];
+    !fullAccess && lesson.sections.length > visible.length
+      ? lesson.sections.slice(visible.length).map(({ id, heading }) => ({ id, heading }))
+      : [];
   const { crumbs, schemaItems } = pathwayLessonDetailBreadcrumbs(pathway, lesson.slug, lesson.title);
   const lessonQuality = classifyPathwayLesson(lesson);
   const matchedLessonImage = matchConceptImage({
@@ -306,8 +309,8 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
           pathwayId={pathway.id}
           lessonSlug={lesson.slug}
           initialProgress={lessonProgress}
-          preTest={lesson.preTest}
-          postTest={lesson.postTest}
+          preTest={fullAccess ? lesson.preTest : undefined}
+          postTest={fullAccess ? lesson.postTest : undefined}
           fullAccess={fullAccess}
         >
           <main className="mt-10">

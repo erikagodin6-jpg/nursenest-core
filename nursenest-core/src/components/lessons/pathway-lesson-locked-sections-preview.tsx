@@ -4,6 +4,7 @@ type Section = { id: string; heading?: string | null };
 
 /**
  * Marketing / preview pathway lessons: tease locked sections without exposing full body (blur headings only).
+ * Receives only { id, heading } — body is stripped server-side before passing here.
  */
 export function PathwayLessonLockedSectionsPreview({ sections }: { sections: Section[] }) {
   if (sections.length === 0) return null;
@@ -29,12 +30,20 @@ export function PathwayLessonLockedSectionsPreview({ sections }: { sections: Sec
         <p className="mt-2 max-w-md nn-marketing-caption">
           {sections.length} more section{sections.length === 1 ? "" : "s"} with scenarios, priorities, and review drills.
         </p>
-        <Link
-          href="/pricing"
-          className="mt-4 inline-flex min-h-[44px] items-center justify-center rounded-full bg-primary px-6 py-2 text-sm font-semibold text-primary-foreground shadow-sm"
-        >
-          View plans
-        </Link>
+        <div className="mt-4 flex flex-wrap justify-center gap-2">
+          <Link
+            href="/pricing"
+            className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-primary px-6 py-2 text-sm font-semibold text-primary-foreground shadow-sm"
+          >
+            Start free trial
+          </Link>
+          <Link
+            href={`/login?callbackUrl=${encodeURIComponent("/app")}`}
+            className="inline-flex min-h-[44px] items-center justify-center rounded-full border border-[color-mix(in_srgb,var(--semantic-border-soft)_80%,var(--semantic-brand))] bg-[var(--semantic-surface)] px-6 py-2 text-sm font-semibold text-[var(--theme-heading-text)]"
+          >
+            Sign in
+          </Link>
+        </div>
       </div>
     </div>
   );
