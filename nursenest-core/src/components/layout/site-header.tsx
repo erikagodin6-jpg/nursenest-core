@@ -62,7 +62,7 @@ export function SiteHeader() {
   ];
 
   return (
-    <div className="sticky top-0 z-50">
+    <div className="sticky top-0 z-50 nn-header-animate-in">
       <MarketingHeaderUtilityStrip />
 
       <header className="nn-header-nav">

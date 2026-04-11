@@ -353,7 +353,7 @@ export async function loadGuidedStudyPayload(userId: string): Promise<GuidedStud
         wrongStreak: true,
         lastWrongAt: true,
       },
-    }).catch(() => [] as typeof []),
+    }).catch(() => []),
     prisma.user.findUnique({
       where: { id: userId },
       select: { examFocus: true, studyGoal: true, dailyStudyMinutes: true },

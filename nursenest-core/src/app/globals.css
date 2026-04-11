@@ -655,7 +655,11 @@ a {
     border-color 0.15s ease,
     color 0.15s ease,
     box-shadow 0.15s ease,
-    filter 0.15s ease;
+    filter 0.15s ease,
+    transform 0.12s ease;
+}
+.nn-ui-btn:active:not(:disabled):not([aria-disabled="true"]) {
+  transform: scale(0.975);
 }
 .nn-ui-btn:focus-visible {
   outline: 2px solid var(--focus-halo-strong, var(--focus-halo));
@@ -1066,7 +1070,12 @@ html[data-theme] .nn-marketing-surface {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .nn-card-soft:hover {
+  .nn-card-soft:hover,
+  .nn-card-interactive:hover,
+  .nn-primary-action-card:hover {
+    transform: none;
+  }
+  .nn-ui-btn:active:not(:disabled):not([aria-disabled="true"]) {
     transform: none;
   }
 }
@@ -1441,6 +1450,25 @@ html[data-theme="deep-twilight"] .nn-trust-mark {
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes nn-header-enter {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.nn-header-animate-in {
+  animation: nn-header-enter 0.36s cubic-bezier(0.25, 0.1, 0.25, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nn-header-animate-in {
+    animation: none;
   }
 }
 
