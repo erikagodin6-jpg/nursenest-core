@@ -17,7 +17,6 @@ import {
 import { PathwayLessonsCurriculumHub } from "@/components/pathway-lessons/pathway-lessons-curriculum-hub";
 import { pathwayLessonHubMetaDescription, pathwayLessonHubMetaTitle } from "@/lib/lessons/pathway-lesson-hub-seo";
 import { pathwayLessonHasRenderableHubSlug } from "@/lib/lessons/pathway-lesson-types";
-import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { Search } from "lucide-react";
 import { pathwayLessonsHubBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 import { absoluteUrl } from "@/lib/seo/site-origin";
@@ -25,11 +24,7 @@ import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { canViewFullPathwayLesson } from "@/lib/lessons/pathway-lesson-access";
 import type { PathwayLessonProgressStatus } from "@/lib/lessons/pathway-lesson-progress";
-import {
-  loadPathwayHubSubscriberData,
-  pathwayHubResumeHasContent,
-  type PathwayHubResumePayload,
-} from "@/lib/learner/pathway-lesson-continuation";
+import { loadPathwayHubSubscriberData } from "@/lib/learner/pathway-lesson-continuation";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 

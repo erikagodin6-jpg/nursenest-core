@@ -13,6 +13,7 @@ function lesson(overrides: Partial<PathwayLessonRecord>): PathwayLessonRecord {
     title: overrides.title ?? "Foundations of care",
     topic: overrides.topic ?? "Fundamentals",
     topicSlug: overrides.topicSlug ?? "fundamentals",
+    system: overrides.system ?? "fundamentals",
     bodySystem: overrides.bodySystem ?? "General",
     previewSectionCount: overrides.previewSectionCount ?? 3,
     seoTitle: overrides.seoTitle ?? "Foundations of care",
@@ -22,51 +23,48 @@ function lesson(overrides: Partial<PathwayLessonRecord>): PathwayLessonRecord {
   };
 }
 
-test("normalizes catalog body-system variants into curriculum labels", () => {
-  assert.equal(normalizePathwayLessonSystemLabel("General", "Nursing fundamentals"), "Fundamentals");
-  assert.equal(normalizePathwayLessonSystemLabel("Neurologic", "Stroke priorities"), "Neurological");
-  assert.equal(normalizePathwayLessonSystemLabel("Immune", "Autoimmune review"), "Hematologic / Immune");
-  assert.equal(normalizePathwayLessonSystemLabel("Infection control", "Isolation precautions"), "Fundamentals");
-  assert.equal(normalizePathwayLessonSystemLabel("General", "Postpartum hemorrhage"), "Maternity / Newborn");
-  assert.equal(normalizePathwayLessonSystemLabel("General", "Pediatric dehydration"), "Pediatrics");
-  assert.equal(normalizePathwayLessonSystemLabel("General", "Delegation and prioritization"), "Leadership / Community");
+test("normalizes lesson system values into fixed universal system keys", () => {
+  assert.equal(normalizePathwayLessonSystemLabel("Cardiovascular"), "cardiovascular");
+  assert.equal(normalizePathwayLessonSystemLabel("Pulmonary / Airway"), "respiratory");
+  assert.equal(normalizePathwayLessonSystemLabel("Vital signs"), "vital-signs");
+  assert.equal(normalizePathwayLessonSystemLabel("Neuro"), "neurological");
+  assert.equal(normalizePathwayLessonSystemLabel("Rapid response / unstable"), "clinical-deterioration");
+  assert.equal(normalizePathwayLessonSystemLabel("Infection control"), "infection-immunity");
+  assert.equal(normalizePathwayLessonSystemLabel("Medication safety"), "pharmacology");
+  assert.equal(normalizePathwayLessonSystemLabel("Pediatric"), "special-populations");
+  assert.equal(normalizePathwayLessonSystemLabel("Handoff communication"), "communication-safety");
+  assert.equal(normalizePathwayLessonSystemLabel(""), "fundamentals");
 });
 
-test("buildPathwayLessonSystemSections orders grouped lessons by curriculum sequence", () => {
+test("buildPathwayLessonSystemSections preserves fixed system sequence", () => {
   const sections = buildPathwayLessonSystemSections([
-    lesson({ slug: "renal-1", title: "AKI", topic: "Renal", bodySystem: "Renal" }),
-    lesson({ slug: "general-1", title: "Foundations", topic: "Fundamentals", bodySystem: "General" }),
-    lesson({ slug: "psych-1", title: "Depression care", topic: "Mental Health", bodySystem: "Mental Health" }),
-    lesson({ slug: "cardio-1", title: "Heart failure", topic: "Cardiovascular", bodySystem: "Cardiovascular" }),
+    lesson({ slug: "neuro-1", title: "Stroke", system: "neurological" }),
+    lesson({ slug: "fund-1", title: "Hand hygiene", system: "fundamentals" }),
+    lesson({ slug: "resp-1", title: "Asthma", system: "respiratory" }),
+    lesson({ slug: "cardio-1", title: "Heart failure", system: "cardiovascular" }),
   ]);
 
   assert.deepEqual(
     sections.map((section) => section.label),
-    ["Fundamentals", "Cardiovascular", "Renal", "Mental Health"],
+    ["Cardiovascular", "Respiratory", "Neurological", "Fundamentals"],
   );
   assert.deepEqual(
     sections.flatMap((section) => section.lessons.map((entry) => entry.slug)),
-    ["general-1", "cardio-1", "renal-1", "psych-1"],
+    ["cardio-1", "resp-1", "neuro-1", "fund-1"],
   );
 });
 
-test("curriculum order exposes the required system sequence", () => {
+test("universal order exposes the required system sequence", () => {
   assert.deepEqual(PATHWAY_LESSON_SYSTEM_ORDER, [
-    "Fundamentals",
-    "Pharmacology",
-    "Cardiovascular",
-    "Respiratory",
-    "Neurological",
-    "Gastrointestinal",
-    "Renal",
-    "Endocrine",
-    "Musculoskeletal",
-    "Hematologic / Immune",
-    "Integumentary",
-    "Reproductive",
-    "Maternity / Newborn",
-    "Pediatrics",
-    "Mental Health",
-    "Leadership / Community",
+    "cardiovascular",
+    "respiratory",
+    "vital-signs",
+    "neurological",
+    "clinical-deterioration",
+    "infection-immunity",
+    "pharmacology",
+    "special-populations",
+    "communication-safety",
+    "fundamentals",
   ]);
 });
