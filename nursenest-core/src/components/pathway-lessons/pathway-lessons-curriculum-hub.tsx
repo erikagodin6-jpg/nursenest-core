@@ -3,17 +3,13 @@ import type { LucideIcon } from "lucide-react";
 import {
   Activity,
   Baby,
-  Bandage,
-  Bone,
   Brain,
   BriefcaseMedical,
-  Droplets,
   HeartPulse,
-  Leaf,
   Pill,
-  ShieldCheck,
+  Siren,
   Sparkles,
-  Stethoscope,
+  Timer,
   Wind,
 } from "lucide-react";
 import { PathwayLessonProgressBadge } from "@/components/lessons/pathway-lesson-progress-badge";
@@ -42,27 +38,22 @@ type Props = {
 };
 
 const SYSTEM_ICONS: Record<PathwayLessonSystemLabel, LucideIcon> = {
-  Fundamentals: ShieldCheck,
-  Pharmacology: Pill,
-  Cardiovascular: HeartPulse,
-  Respiratory: Wind,
-  Neurological: Brain,
-  Gastrointestinal: Stethoscope,
-  Renal: Droplets,
-  Endocrine: Activity,
-  Musculoskeletal: Bone,
-  "Hematologic / Immune": Sparkles,
-  Integumentary: Bandage,
-  Reproductive: Leaf,
-  "Maternity / Newborn": Baby,
-  Pediatrics: Baby,
-  "Mental Health": Brain,
-  "Leadership / Community": BriefcaseMedical,
+  cardiovascular: HeartPulse,
+  respiratory: Wind,
+  "vital-signs": Timer,
+  neurological: Brain,
+  "clinical-deterioration": Siren,
+  "infection-immunity": Sparkles,
+  pharmacology: Pill,
+  "special-populations": Baby,
+  "communication-safety": BriefcaseMedical,
+  fundamentals: Activity,
 };
 
 const SYSTEM_SORT_ORDER = new Map<PathwayLessonSystemLabel, number>(
   PATHWAY_LESSON_SYSTEM_ORDER.map((label, index) => [label, index]),
 );
+const DEFAULT_VISIBLE_LESSON_COUNT = 8;
 
 function LessonSection({
   section,
@@ -79,7 +70,9 @@ function LessonSection({
   showLockedState: boolean;
   sectionIndex: number;
 }) {
-  const Icon = SYSTEM_ICONS[section.systemLabel] ?? ShieldCheck;
+  const Icon = SYSTEM_ICONS[section.systemLabel] ?? Activity;
+  const primaryLessons = section.lessons.slice(0, DEFAULT_VISIBLE_LESSON_COUNT);
+  const overflowLessons = section.lessons.slice(DEFAULT_VISIBLE_LESSON_COUNT);
   return (
     <section
       id={section.id}
@@ -102,7 +95,7 @@ function LessonSection({
       </header>
 
       <ul className="mt-5 list-none divide-y divide-[var(--semantic-border-soft)] rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--theme-page-bg)] p-0">
-        {section.lessons.map((lesson, lessonIndex) => {
+        {primaryLessons.map((lesson, lessonIndex) => {
           const href = pathwayLessonMarketingDetailHref(lessonsBasePath, lesson.slug);
           if (!href) return null;
           const progressStatus = progressMap[lesson.slug] ?? "not_started";
@@ -131,6 +124,34 @@ function LessonSection({
           );
         })}
       </ul>
+
+      {overflowLessons.length > 0 ? (
+        <details className="mt-4 rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--theme-page-bg)] p-4">
+          <summary className="cursor-pointer text-sm font-semibold text-[var(--semantic-brand)]">
+            View all ({overflowLessons.length} more)
+          </summary>
+          <ul className="mt-3 list-none divide-y divide-[var(--semantic-border-soft)] rounded-lg border border-[var(--semantic-border-soft)] p-0">
+            {overflowLessons.map((lesson) => {
+              const href = pathwayLessonMarketingDetailHref(lessonsBasePath, lesson.slug);
+              if (!href) return null;
+              const progressStatus = progressMap[lesson.slug] ?? "not_started";
+              return (
+                <li key={lesson.slug} className="p-3 sm:px-4">
+                  <div className="flex items-start justify-between gap-3">
+                    <Link
+                      href={href}
+                      className="text-sm font-semibold text-[var(--theme-heading-text)] underline-offset-4 transition hover:text-primary hover:underline"
+                    >
+                      {lesson.title}
+                    </Link>
+                    {showProgress ? <PathwayLessonProgressBadge status={progressStatus} /> : null}
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
+        </details>
+      ) : null}
     </section>
   );
 }
