@@ -1,0 +1,285 @@
+{
+  "$schema": "https://nursenest.io/schemas/pipeline-config/v1",
+  "schemaVersion": 1,
+  "_comment": "NurseNest Content Pipeline — default run config. Override per-run via CLI flags or environment variables. See src/lib/content/pipeline-schema.ts:PipelineRunConfig.",
+
+  "runId": "__REPLACE_WITH_UUIDV4__",
+  "programs": ["rn", "rpn", "lpn", "np", "allied", "pre-nursing", "new-grad"],
+  "country": "both",
+
+  "blueprintPaths": {
+    "rn":          "nursenest-core/data/blueprints/rn-content-blueprint.json",
+    "rpn":         "nursenest-core/data/blueprints/pn-content-blueprint.json",
+    "lpn":         "nursenest-core/data/blueprints/pn-content-blueprint.json",
+    "np":          "nursenest-core/data/blueprints/advanced-practice/np-advanced-practice-blueprint.json",
+    "allied":      "nursenest-core/data/blueprints/allied-health-blueprint.json",
+    "pre-nursing": "nursenest-core/data/blueprints/pre-nursing-foundational-blueprint.json",
+    "new-grad":    "nursenest-core/data/blueprints/foundational-topics-blueprint.json"
+  },
+
+  "outputDir": "nursenest-core/data/pipeline/runs",
+
+  "batchSize": 10,
+  "forceRegenerate": false,
+
+  "stageOrder": [
+    "blueprint_design",
+    "topic_list",
+    "lesson_generation",
+    "question_generation",
+    "validation",
+    "deduplication",
+    "normalization",
+    "internal_linking",
+    "prisma_import",
+    "coverage_report"
+  ],
+
+  "skipStages": [],
+
+  "generationModel": "gpt-4o",
+  "generationConcurrency": 3,
+
+  "lessonSimilarityThreshold": 0.85,
+  "questionSimilarityThreshold": 0.80,
+
+  "defaultConflictStrategy": "skip",
+
+  "failureMode": "continue",
+
+  "runNote": "Default config — override before running.",
+
+  "_stageExecutionOrder": {
+    "_comment": "Sequential execution with C+D parallelizable. A must precede B. B must precede C and D. C,D must precede E. E → F → G → H → I. J runs last (or standalone for status checks).",
+    "A": { "stage": "blueprint_design",    "dependsOn": [],             "parallelWith": [] },
+    "B": { "stage": "topic_list",          "dependsOn": ["A"],          "parallelWith": [] },
+    "C": { "stage": "lesson_generation",   "dependsOn": ["B"],          "parallelWith": ["D"] },
+    "D": { "stage": "question_generation", "dependsOn": ["B"],          "parallelWith": ["C"] },
+    "E": { "stage": "validation",          "dependsOn": ["C", "D"],     "parallelWith": [] },
+    "F": { "stage": "deduplication",       "dependsOn": ["E"],          "parallelWith": [] },
+    "G": { "stage": "normalization",       "dependsOn": ["F"],          "parallelWith": [] },
+    "H": { "stage": "internal_linking",    "dependsOn": ["G"],          "parallelWith": [] },
+    "I": { "stage": "prisma_import",       "dependsOn": ["H"],          "parallelWith": [] },
+    "J": { "stage": "coverage_report",     "dependsOn": ["I"],          "parallelWith": [] }
+  },
+
+  "_failureSafeguards": {
+    "CHECKPOINT_BEFORE_WRITE": {
+      "description": "Each stage writes <runId>-<stage>-checkpoint.json before mutating DB or output files. Crashed runs resume from last checkpoint.",
+      "enforcement": "hard"
+    },
+    "DRY_RUN_MODE": {
+      "description": "Pass --dry-run to validate output without writing. Produces full stage JSON but skips all Prisma imports.",
+      "enforcement": "flag"
+    },
+    "BLUEPRINT_LOCK": {
+      "description": "blueprint_design output is immutable once published. Overwrite requires --allow-blueprint-overwrite; prior version is auto-archived to data/blueprints/archive/.",
+      "enforcement": "hard"
+    },
+    "TOPIC_SLUG_STABILITY": {
+      "description": "TopicWorkItem.topicSlug must match an active BlueprintDocument entry. Unmatched slug → hard error; generation does not proceed.",
+      "enforcement": "hard"
+    },
+    "STEM_HASH_BEFORE_INSERT": {
+      "description": "ExamQuestion stemHash must be computed (SHA-256 of normalized stem) and checked for uniqueness before any insert. Duplicate → drop + record in dedup report.",
+      "enforcement": "hard"
+    },
+    "CLINICAL_SAFETY_FLAG": {
+      "description": "PathwayLesson.clinicalSafetyReview is always false on AI-generated imports. Human reviewer must explicitly set to true before publish.",
+      "enforcement": "hard"
+    },
+    "PAYWALL_PRESERVATION": {
+      "description": "tierCode and countryCode must be set from the blueprint topic. Never default tierCode to FREE without explicit blueprint instruction.",
+      "enforcement": "hard"
+    },
+    "BATCH_SIZE_LIMIT": {
+      "description": "No single Prisma transaction exceeds 100 rows. Use batchSize from config for chunked inserts.",
+      "enforcement": "hard",
+      "maxRowsPerTransaction": 100
+    },
+    "NO_N_PLUS_ONE_HYDRATION": {
+      "description": "Stage J (coverage_report) must use COUNT/GROUP BY aggregation queries. Per-row lesson hydration is forbidden.",
+      "enforcement": "hard"
+    },
+    "RPN_LPN_REGION_GUARD": {
+      "description": "rpn lessons: countryCode=CA, exam must include REx-PN. lpn lessons: countryCode=US, exam must include NCLEX-PN. Violation → REGION_SCOPE_MISMATCH validation error; import is blocked.",
+      "enforcement": "hard",
+      "rules": {
+        "rpn": { "countryCode": "CA", "requiredExam": "REx-PN" },
+        "lpn": { "countryCode": "US", "requiredExam": "NCLEX-PN" }
+      }
+    }
+  },
+
+  "_validationRules": {
+    "lessons": {
+      "slug": {
+        "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+        "maxLength": 120,
+        "uniqueWithin": ["pathwayId", "locale"]
+      },
+      "title": { "minLength": 8, "maxLength": 220 },
+      "seoTitle": { "maxLength": 70 },
+      "seoDescription": { "maxLength": 160 },
+      "sections": {
+        "minCount": 3,
+        "maxCount": 14,
+        "bodyMinLength": 40,
+        "bodyMaxLength": 50000
+      },
+      "previewSectionCount": { "min": 1 },
+      "topicSlug": { "mustExistInBlueprint": true },
+      "bodySystem": { "mustBeCanonicalValue": true },
+      "clinicalSafetyReview": { "mustBeFalseOnAiGenerated": true },
+      "countryCode": {
+        "rpn": "CA",
+        "lpn": "US",
+        "rn": "either",
+        "np": "either"
+      }
+    },
+    "questions": {
+      "stem": { "minLength": 20 },
+      "options": {
+        "MCQ": { "exactCount": 4 },
+        "SATA": { "minCount": 4, "maxCount": 6 },
+        "default": { "minCount": 2 }
+      },
+      "correctAnswer": { "mustReferenceValidOption": true },
+      "rationale": { "minLength": 40 },
+      "difficulty": { "min": 1, "max": 5 },
+      "stemHash": { "required": true, "mustBeUniqueAcrossAllExamQuestions": true },
+      "nclexClientNeedsCategory": {
+        "requiredWhenExamFamilyIncludes": ["NCLEX-RN", "NCLEX-PN"],
+        "maxLength": 64
+      },
+      "nclexClientNeedsSubcategory": { "maxLength": 128 },
+      "topicSlug": { "mustExistInBlueprint": true },
+      "bodySystem": { "mustBeCanonicalValue": true }
+    },
+    "shared": {
+      "tags": { "minCount": 2, "eachMaxLength": 80, "normalize": "lowercase" },
+      "difficultyMixSum": { "mustEqual": 100 },
+      "contentGeneric": {
+        "prohibited": [
+          "as a nursing student",
+          "in conclusion",
+          "it is important to note",
+          "this lesson will cover",
+          "nursing is a rewarding career"
+        ]
+      }
+    }
+  },
+
+  "_deduplicationConfig": {
+    "lessons": {
+      "exactMatchKey": ["slug", "pathwayId", "locale"],
+      "contentHashAlgorithm": "sha256",
+      "contentHashFields": ["slug", "topicSlug", "pathwayId"],
+      "nearDuplicateAlgorithm": "cosine-tfidf",
+      "nearDuplicateFields": ["title", "topic"],
+      "similarityThreshold": 0.85,
+      "resolutionStrategy": {
+        "exact": "keep_first_drop_rest",
+        "near": "flag_for_review"
+      }
+    },
+    "questions": {
+      "exactMatchKey": ["stemHash"],
+      "stemNormalization": "lowercase_strip_punctuation_collapse_whitespace",
+      "nearDuplicateAlgorithm": "cosine-tfidf",
+      "nearDuplicateFields": ["stem"],
+      "similarityThreshold": 0.80,
+      "resolutionStrategy": {
+        "exact": "keep_highest_quality_score",
+        "near": "flag_for_review"
+      }
+    }
+  },
+
+  "_normalizationRules": {
+    "allStrings": "trim",
+    "bodySystem": "map_via_BODY_SYSTEM_ALIASES",
+    "slug": "enforce_kebab_case_strip_double_hyphens",
+    "seoTitle": "truncate_70_ellipsis",
+    "seoDescription": "truncate_160_ellipsis",
+    "tags": ["lowercase", "deduplicate", "sort"],
+    "regionScope": "uppercase_US_CA_BOTH",
+    "countryCode": "uppercase_US_CA_null",
+    "tierCode": "uppercase_FREE_BASIC_PREMIUM_PRO",
+    "difficulty": "clamp_1_5",
+    "stemHash": "recompute_if_absent",
+    "contentHash": "sha256_of_slug_topicSlug_pathwayId",
+    "isMockExamEligible": "default_true",
+    "isAdaptiveEligible": "default_true",
+    "isFlashcardSource": "default_false",
+    "isStudyGuideLinked": "default_false",
+    "isTutorReady": "default_false",
+    "isScenario": "default_false",
+    "locale": "default_en",
+    "languageCode": "default_en",
+    "sourceVersion": "default_1",
+    "status_pathway_lesson": "default_PUBLISHED",
+    "status_exam_question": "default_draft"
+  },
+
+  "_coverageReportConfig": {
+    "weightedScoreFormula": "sum(min(actual/target,1) * priorityWeight) / sum(priorityWeight) * 100",
+    "criticalGapThreshold": {
+      "priorityWeight": 4,
+      "coverageBelow": 0.5
+    },
+    "outputFormats": ["json", "markdown"],
+    "aggregationQuery": "COUNT + GROUP BY — no per-row hydration"
+  },
+
+  "_programPathwayIdMap": {
+    "_comment": "Maps PipelineProgram to PathwayLesson.pathwayId values used in DB.",
+    "rn":          ["nclex-rn"],
+    "rpn":         ["rex-pn"],
+    "lpn":         ["nclex-pn"],
+    "np":          ["aanp-fnp", "ancc-fnp", "cnple-np"],
+    "allied":      ["allied-rt", "allied-pt", "allied-ot", "allied-mlt", "allied-emt", "allied-paramedic"],
+    "pre-nursing": ["pre-nursing"],
+    "new-grad":    ["new-grad"]
+  },
+
+  "_regionAwareContentRules": {
+    "rpn": {
+      "country": "ca",
+      "examCodes": ["REx-PN"],
+      "regionNote": "Canadian RPN scope; use Canadian drug names and provincial nursing scope where applicable."
+    },
+    "lpn": {
+      "country": "us",
+      "examCodes": ["NCLEX-PN"],
+      "regionNote": "US LPN scope; supervised practice, delegation within LPN scope of practice."
+    },
+    "rn": {
+      "country": "both",
+      "examCodes": ["NCLEX-RN", "Canadian-RN"],
+      "regionNote": "Generate US version; add country_specific_notes section for Canadian CRNE/NCLEX-RN differences where material."
+    },
+    "np": {
+      "country": "both",
+      "examCodes": ["AANP-FNP", "ANCC-FNP", "ANCC-AGPCNP", "ANCC-PMHNP", "CNPLE-NP"],
+      "regionNote": "Full prescriptive authority scope. US NPs: include DEA/prescribing notes. Canadian NPs: provincial scope variances."
+    },
+    "allied": {
+      "country": "both",
+      "examCodes": ["NBRC-TMC", "NPTE-PT", "NBCOT-OT", "ASCP-MLT", "NREMT-EMT", "NREMT-P"],
+      "regionNote": "Generate for US exam unless careerType specifies Canadian equivalent."
+    },
+    "pre-nursing": {
+      "country": "both",
+      "examCodes": [],
+      "regionNote": "Foundational content; no single licensure exam. Region differences in terminology should be noted inline."
+    },
+    "new-grad": {
+      "country": "both",
+      "examCodes": [],
+      "regionNote": "Transition-to-practice; reflect both US and Canadian new-grad realities (preceptorship, orientation, scope)."
+    }
+  }
+}

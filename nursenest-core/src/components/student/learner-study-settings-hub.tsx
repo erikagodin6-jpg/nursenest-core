@@ -40,10 +40,12 @@ export function LearnerStudySettingsHub({
     setDeviceBusy(true);
     setDeviceSaved(false);
     try {
+      const current = readLearnerStudyDefaults(userId);
       const next: LearnerStudyDefaultsV1 = {
         v: 1,
         questionBank: bank,
         practiceExam: examPref,
+        lessonAssessments: current.lessonAssessments,
       };
       writeLearnerStudyDefaults(userId, next);
       setDeviceSaved(true);

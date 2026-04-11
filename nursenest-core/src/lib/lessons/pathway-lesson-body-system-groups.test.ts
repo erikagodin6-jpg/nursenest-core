@@ -31,15 +31,16 @@ test("normalizes lesson system values into fixed universal system keys", () => {
   assert.equal(normalizePathwayLessonSystemLabel("Rapid response / unstable"), "clinical-deterioration");
   assert.equal(normalizePathwayLessonSystemLabel("Infection control"), "infection-immunity");
   assert.equal(normalizePathwayLessonSystemLabel("Medication safety"), "pharmacology");
-  assert.equal(normalizePathwayLessonSystemLabel("Pediatric"), "special-populations");
-  assert.equal(normalizePathwayLessonSystemLabel("Handoff communication"), "communication-safety");
+  assert.equal(normalizePathwayLessonSystemLabel("Pediatric"), "pediatrics");
+  assert.equal(normalizePathwayLessonSystemLabel("Handoff communication"), "communication");
   assert.equal(normalizePathwayLessonSystemLabel(""), "fundamentals");
 });
 
 test("buildPathwayLessonSystemSections preserves fixed system sequence", () => {
   const sections = buildPathwayLessonSystemSections([
     lesson({ slug: "maternal-1", title: "Postpartum hemorrhage", system: "maternal" }),
-    lesson({ slug: "fund-1", title: "Hand hygiene", system: "fundamentals" }),
+    lesson({ slug: "fund-1", title: "Pressure injury prevention", system: "fundamentals" }),
+    lesson({ slug: "infect-1", title: "Hand hygiene", system: "fundamentals" }),
     lesson({ slug: "cardio-1", title: "Heart failure", system: "cardiovascular" }),
     lesson({ slug: "resp-1", title: "Asthma", system: "respiratory" }),
     lesson({ slug: "neuro-1", title: "Stroke", system: "neurological" }),
@@ -48,11 +49,11 @@ test("buildPathwayLessonSystemSections preserves fixed system sequence", () => {
 
   assert.deepEqual(
     sections.map((section) => section.label),
-    ["Cardiac", "Respiratory", "Neurological", "Medications & Pharmacology", "Maternal & Newborn", "Fundamentals"],
+    ["Cardiac", "Respiratory", "Neurological", "Medications & Pharmacology", "Infection Control", "Maternal & Newborn", "Fundamentals"],
   );
   assert.deepEqual(
     sections.flatMap((section) => section.lessons.map((entry) => entry.slug)),
-    ["cardio-1", "resp-1", "neuro-1", "med-1", "maternal-1", "fund-1"],
+    ["cardio-1", "resp-1", "neuro-1", "med-1", "infect-1", "maternal-1", "fund-1"],
   );
 });
 
