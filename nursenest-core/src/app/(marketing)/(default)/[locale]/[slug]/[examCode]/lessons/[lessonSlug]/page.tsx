@@ -41,7 +41,7 @@ import { PathwayLessonQuickReview } from "@/components/lessons/pathway-lesson-qu
 import { classifyPathwayLesson } from "@/lib/content-quality/classify-lesson";
 import { buildQuickReviewBullets } from "@/lib/lessons/pathway-lesson-quick-review";
 import { resolveLessonImage } from "@/lib/content/resolve-lesson-image";
-import { PathwayLessonFigures } from "@/components/lessons/pathway-lesson-figures";
+import { LessonClinicalImageCard } from "@/components/lessons/lesson-clinical-image-card";
 import { pathwayLessonPublicDetailPath } from "@/lib/lessons/pathway-lesson-types";
 import {
   loadPathwayLessonProgressForSlug,
@@ -286,25 +286,12 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
         ) : null}
 
         {matchedLessonImage.url ? (
-          <aside className="nn-study-card nn-study-card--wash mx-auto mt-8 max-w-[44rem] overflow-hidden p-4 sm:p-5">
-            <p className="nn-marketing-label">
-              {matchedLessonImage.source === "topic_slug"
-                ? "Topic illustration"
-                : "Lesson illustration"}
-            </p>
-            <div className="mt-3">
-              <PathwayLessonFigures
-                figures={[
-                  {
-                    id: "lesson-matched-media",
-                    url: matchedLessonImage.url,
-                    alt: matchedLessonImage.alt,
-                    kind: "clinical_reference",
-                  },
-                ]}
-              />
-            </div>
-          </aside>
+          <LessonClinicalImageCard
+            url={matchedLessonImage.url}
+            alt={matchedLessonImage.alt}
+            source={matchedLessonImage.source}
+            lessonTitle={lesson.title}
+          />
         ) : null}
 
         <PathwayLessonAssessmentExperience

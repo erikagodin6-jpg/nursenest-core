@@ -393,9 +393,11 @@ export type PaywallContext =
   | "post_questions"
   | "near_exam"
   | "lesson"
+  | "lesson_highyield"
   | "practice_test"
   | "smart_review"
   | "confidence_analytics"
+  | "dashboard"
   | "generic";
 
 const PAYWALL_PRESETS: Record<
@@ -413,7 +415,7 @@ const PAYWALL_PRESETS: Record<
   },
   post_questions: {
     title: "Unlock Smart Review",
-    description: "Review your mistakes and improve your score.",
+    description: "Review your mistakes and boost your score.",
     bullets: [
       "See exactly what you got wrong and why",
       "Grouped by confidence and priority",
@@ -422,7 +424,7 @@ const PAYWALL_PRESETS: Record<
   },
   near_exam: {
     title: "Get Exam-Ready",
-    description: "Get exam-ready with full access to practice exams, study plans, and analytics.",
+    description: "You're close to your exam — get full access to be ready.",
     bullets: [
       "Adaptive CAT exams that mirror the real test",
       "Readiness scoring so you know when to sit",
@@ -432,6 +434,15 @@ const PAYWALL_PRESETS: Record<
   lesson: {
     title: "Unlock This Lesson",
     description: "This lesson is part of your personalised study system.",
+    bullets: [
+      "Understand key concepts faster",
+      "Fix your weak areas with Smart Review",
+      "Know when you're ready to pass",
+    ],
+  },
+  lesson_highyield: {
+    title: "Unlock This Lesson",
+    description: "You're about to learn a high-yield topic — unlock full access to continue.",
     bullets: [
       "Understand key concepts faster",
       "Fix your weak areas with Smart Review",
@@ -465,6 +476,15 @@ const PAYWALL_PRESETS: Record<
       "Prioritised review recommendations",
     ],
   },
+  dashboard: {
+    title: "Unlock Your Full Study System",
+    description: "Start your free trial to access your personalised study plan, smart review, and full exam practice.",
+    bullets: [
+      "Personalised study plan built from your weak areas",
+      "Smart review that shows you exactly what to fix",
+      "Readiness scoring so you know when to take the exam",
+    ],
+  },
   generic: {
     title: "Unlock Full Access",
     description: "Start your free trial to access all lessons, exams, and analytics.",
@@ -481,19 +501,33 @@ const PAYWALL_PRESETS: Record<
  *
  * Uses the PAYWALL_PRESETS mapping to show context-appropriate messaging.
  * All CTAs are consistent: "Start Free Trial" primary, "View Plans" secondary.
+ *
+ * Pass `topicName` to personalise the description for topic-specific locks.
  */
 export function ContextualPaywallCard({
   context = "generic",
   customTitle,
   customDescription,
+  topicName,
 }: {
   context?: PaywallContext;
   customTitle?: string;
   customDescription?: string;
+  /** If provided, replaces "this area" / "this topic" in the description */
+  topicName?: string;
 }) {
   const preset = PAYWALL_PRESETS[context];
-  const title = customTitle ?? preset.title;
-  const description = customDescription ?? preset.description;
+  let title = customTitle ?? preset.title;
+  let description = customDescription ?? preset.description;
+
+  if (topicName) {
+    if (context === "weak_topic") {
+      description = `You're struggling with ${topicName} — unlock to improve faster.`;
+    } else if (context === "lesson" || context === "lesson_highyield") {
+      title = `Unlock: ${topicName}`;
+    }
+  }
+
   const surface = `contextual_paywall_${context}`;
 
   usePremiumGateImpression(`paywall_viewed_${context}`, false);

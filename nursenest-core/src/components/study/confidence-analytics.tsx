@@ -301,9 +301,15 @@ export function ConfidenceAnalyticsBlock({
         {/* Review priority — fully locked */}
         <PremiumLockCard
           title="Unlock Confidence Analytics"
-          description="See exactly where you stand — overconfidence patterns, uncertain knowledge areas, and a prioritised review queue so you know what to fix next."
+          description="See exactly where you stand and what to focus on next."
+          bullets={[
+            "Catch overconfident errors before the exam",
+            "Identify uncertain knowledge to reinforce",
+            "Prioritised review recommendations",
+          ]}
           secondaryHref="/pricing"
           secondaryLabel="View Plans"
+          surface="confidence_analytics"
         />
       </div>
     );

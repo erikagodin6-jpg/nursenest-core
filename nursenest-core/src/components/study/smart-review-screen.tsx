@@ -541,9 +541,15 @@ export function SmartReviewLayout({ items, isEntitled = true }: SmartReviewScree
         {/* Groups 3-4 fully locked */}
         <PremiumLockCard
           title="Unlock Smart Review"
-          description="See exactly what you're getting wrong and how to fix it — overconfidence patterns, uncertain knowledge, and a prioritised review queue."
+          description="See exactly what you're getting wrong and how to fix it."
+          bullets={[
+            "Questions grouped by urgency and confidence",
+            "Prioritised review queue — fix the most important mistakes first",
+            "Direct lesson links for every question",
+          ]}
           secondaryHref="/pricing"
           secondaryLabel="View Plans"
+          surface="smart_review"
         />
       </div>
     );

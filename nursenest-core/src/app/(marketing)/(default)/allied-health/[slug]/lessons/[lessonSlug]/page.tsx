@@ -64,7 +64,7 @@ import { PathwayLessonStudyLoopCta } from "@/components/lessons/pathway-lesson-s
 import { getMeasurementSystemForCountry } from "@/lib/measurements/measurement-system";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { resolveLessonImage } from "@/lib/content/resolve-lesson-image";
-import { PathwayLessonFigures } from "@/components/lessons/pathway-lesson-figures";
+import { LessonClinicalImageCard } from "@/components/lessons/lesson-clinical-image-card";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 86400;
@@ -286,25 +286,12 @@ export default async function AlliedHealthSlugLessonDetailPage({ params }: Props
       ) : null}
 
       {matchedLessonImage.url ? (
-        <aside className="nn-study-card nn-study-card--wash mx-auto mt-8 overflow-hidden p-4 sm:p-5">
-          <p className="nn-marketing-label">
-            {matchedLessonImage.source === "topic_slug"
-              ? "Topic illustration"
-              : "Lesson illustration"}
-          </p>
-          <div className="mt-3">
-            <PathwayLessonFigures
-              figures={[
-                {
-                  id: "lesson-matched-media",
-                  url: matchedLessonImage.url,
-                  alt: matchedLessonImage.alt,
-                  kind: "clinical_reference",
-                },
-              ]}
-            />
-          </div>
-        </aside>
+        <LessonClinicalImageCard
+          url={matchedLessonImage.url}
+          alt={matchedLessonImage.alt}
+          source={matchedLessonImage.source}
+          lessonTitle={lesson.title}
+        />
       ) : null}
 
       <PathwayLessonAssessmentExperience

@@ -259,6 +259,25 @@ body {
   --lesson-clinical-pearls: color-mix(in srgb, #8b5cf6 8%, var(--theme-card-bg));
   --lesson-notes: color-mix(in srgb, var(--theme-body-text) 4%, var(--theme-card-bg));
 
+  /*
+   * Lesson clinical media card — surfaces for the LessonClinicalImageCard component.
+   *
+   * Designed for eye comfort during long study sessions:
+   *   outer card → very subtle primary tint over page background (not flat white, not harsh)
+   *   inner frame → neutral card surface (image sits on clean base)
+   *   caption      → marginally softer than inner frame
+   *   border        → uses the standard subtle border token
+   *
+   * Per-theme overrides can be added in theme-palettes.css for fine control.
+   * Fallbacks compose from existing surface + border tokens so all themes work.
+   */
+  --lesson-media-surface: color-mix(in srgb, var(--theme-primary) 3.5%, var(--bg-page, var(--theme-page-bg)));
+  --lesson-media-frame: var(--bg-card, var(--theme-card-bg));
+  --lesson-media-caption-surface: color-mix(in srgb, var(--theme-primary) 2%, var(--bg-card, var(--theme-card-bg)));
+  --lesson-media-border: var(--border-subtle, var(--theme-border));
+  --lesson-media-label-text: var(--theme-muted-text);
+  --lesson-media-caption-text: var(--theme-muted-text);
+
   /* Logo color tokens — per-theme overrides in theme-palettes.css */
   --logo-primary: var(--theme-primary);
   --logo-accent: var(--theme-accent, var(--theme-secondary));
@@ -5992,4 +6011,57 @@ html[data-theme="deep-twilight"] .nn-cat-opt--incorrect {
 .nn-study-day-shell__lock {
   color: var(--semantic-text-muted);
   flex-shrink: 0;
+}
+
+/* ── Onboarding Flow ──────────────────────────────────────────────────── */
+
+.nn-onboarding-step__title {
+  font-size: 1.5rem;
+  font-weight: 800;
+  line-height: 1.25;
+  letter-spacing: -0.015em;
+  color: var(--semantic-text-primary);
+}
+.nn-onboarding-step__subtitle {
+  margin-top: 0.5rem;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: var(--semantic-text-muted);
+}
+.nn-onboarding-option {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 1rem 1.25rem;
+  border-radius: 0.875rem;
+  border: 1.5px solid var(--semantic-border-soft);
+  background: var(--semantic-surface);
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s, box-shadow 0.15s;
+  text-align: left;
+}
+.nn-onboarding-option:hover {
+  border-color: color-mix(in srgb, var(--theme-primary) 30%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--theme-primary) 3%, var(--semantic-surface));
+}
+.nn-onboarding-option--selected {
+  border-color: var(--theme-primary);
+  background: color-mix(in srgb, var(--theme-primary) 5%, var(--semantic-surface));
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--theme-primary) 12%, transparent);
+}
+.nn-onboarding-date-input {
+  margin-top: 0.375rem;
+  width: 100%;
+  padding: 0.625rem 0.875rem;
+  border-radius: 0.625rem;
+  border: 1.5px solid var(--semantic-border-soft);
+  background: var(--semantic-surface);
+  font-size: 0.875rem;
+  color: var(--semantic-text-primary);
+  transition: border-color 0.15s;
+}
+.nn-onboarding-date-input:focus {
+  outline: none;
+  border-color: var(--theme-primary);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--theme-primary) 12%, transparent);
 }

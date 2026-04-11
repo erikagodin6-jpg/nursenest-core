@@ -135,6 +135,27 @@ export const PH = {
    * `pathway_id` dimension lets you see which track users choose when given a choice.
    */
   learnerCatAmbiguityOptionSelected: "learner_cat_ambiguity_option_selected",
+
+  // ── Onboarding funnel ────────────────────────────────────────────────────
+  onboardingStarted: "onboarding_started",
+  onboardingStepCompleted: "onboarding_step_completed",
+  onboardingCompleted: "onboarding_completed",
+  onboardingSkipped: "onboarding_skipped_to_explore",
+
+  // ── Paywall funnel ───────────────────────────────────────────────────────
+  paywallViewed: "paywall_viewed",
+  paywallCtaClicked: "paywall_cta_clicked",
+
+  // ── Trial funnel ─────────────────────────────────────────────────────────
+  trialStarted: "trial_started",
+  trialConverted: "trial_converted",
+
+  // ── Dashboard engagement ─────────────────────────────────────────────────
+  continueStudyClicked: "continue_study_clicked",
+  dashboardPremiumCtaClicked: "dashboard_premium_cta_clicked",
+
+  // ── Experiments ──────────────────────────────────────────────────────────
+  experimentStarted: "$experiment_started",
 } as const;
 
 export type AppSection =

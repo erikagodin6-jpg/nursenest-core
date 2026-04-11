@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 import { LearnerDailyMomentumCard } from "@/components/student/learner-daily-momentum-card";
 import { LearnerDashboardAdvantageStrip } from "@/components/student/learner-dashboard-advantage-strip";
@@ -12,6 +13,7 @@ import { LockedStudyNextPreview } from "@/components/student/locked-study-next-p
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { buildLearnerStudySnapshot } from "@/lib/learner/build-learner-study-snapshot";
+import { prisma } from "@/lib/db/prisma";
 import {
   buildContinueLearningItems,
   continueLearningItemsToLinks,
@@ -77,6 +79,21 @@ export default async function LearnerDashboardPage() {
         />
       </main>
     );
+  }
+
+  // Redirect to onboarding if user hasn't completed it yet
+  try {
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { onboardingCompletedAt: true },
+    });
+    if (user && !user.onboardingCompletedAt) {
+      redirect("/app/onboarding");
+    }
+  } catch (e) {
+    // redirect() throws a NEXT_REDIRECT error — re-throw it
+    if (e && typeof e === "object" && "digest" in e) throw e;
+    // DB errors: continue to dashboard rather than blocking
   }
 
   if (entitlement === "error") {

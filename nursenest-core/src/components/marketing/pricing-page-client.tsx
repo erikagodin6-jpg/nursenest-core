@@ -43,6 +43,11 @@ import {
   PricingTrustReassurance,
   PricingCTA,
 } from "@/components/marketing/pricing-sections";
+import { useExperiment } from "@/lib/experiments/use-experiment";
+import {
+  HERO_CTA_COPY,
+  TRIAL_MESSAGING_COPY,
+} from "@/lib/experiments/experiment-engine";
 
 type PlanRow = {
   tier: TierCode;
@@ -120,6 +125,11 @@ export function PricingPageClient({
   const { locale, t } = useMarketingI18n();
   const { region } = useNursenestRegion();
   const institutionalHref = withMarketingLocale(locale, "/for-institutions");
+
+  const heroCtaVariant = useExperiment("hero_cta");
+  const trialMsgVariant = useExperiment("trial_messaging");
+  const heroCtaLabel = HERO_CTA_COPY[heroCtaVariant] ?? "Start Free Trial";
+  const trialSubtext = TRIAL_MESSAGING_COPY[trialMsgVariant] ?? "No charge today. Cancel anytime before your trial ends.";
 
   useEffect(() => {
     setCountry(region === "US" ? "US" : "CA");
@@ -255,6 +265,13 @@ export function PricingPageClient({
 
   const includeKeys = ["lessons", "bank", "cat", "analytics"] as const;
 
+  const DURATION_MICROCOPY: Record<BillingDuration, string> = {
+    monthly: "Full access to all lessons, questions, and exams",
+    "3-month": "Everything you need to pass — most students choose this",
+    "6-month": "More time to build confidence at your own pace",
+    yearly: "Best value for long-term prep — save the most",
+  };
+
   const tierTabs: { id: Segment; labelKey: string }[] = [
     { id: "rn", labelKey: "pages.pricing.segment.rn" },
     { id: "pn", labelKey: "pages.pricing.segment.pnCombined" },
@@ -264,8 +281,12 @@ export function PricingPageClient({
 
   return (
     <main className="mx-auto w-full max-w-6xl nn-marketing-x pb-[var(--nn-rhythm-page-y)] pt-0">
-      {/* 1. Hero (spec §3) */}
-      <PricingHero studySystemHref={tryQuestionsHref} />
+      {/* 1. Hero */}
+      <PricingHero
+        studySystemHref={tryQuestionsHref}
+        ctaLabel={heroCtaLabel}
+        trialSubtext={trialSubtext}
+      />
 
       {/* Trust strip + legal anchors below hero */}
       <div className="mt-6 flex flex-col items-center gap-3">
@@ -371,6 +392,10 @@ export function PricingPageClient({
 
                 <h3 className="nn-marketing-h3 mt-1">{t(DURATION_LABEL_KEYS[duration])}</h3>
 
+                <p className="mt-1.5 text-[13px] leading-snug text-muted-foreground">
+                  {DURATION_MICROCOPY[duration]}
+                </p>
+
                 {duration !== "monthly" && (
                   <p className="mt-1 inline-flex items-center gap-1.5 text-[11px] font-semibold tracking-wide text-[var(--semantic-success)]">
                     <span className="inline-block h-1.5 w-1.5 rounded-full bg-[var(--semantic-success)]" aria-hidden />
@@ -412,16 +437,16 @@ export function PricingPageClient({
                       className={`${isHighlighted ? MARKETING_PRIMARY_CTA_CLASS : MARKETING_SECONDARY_CTA_CLASS} mt-4 w-full justify-center disabled:pointer-events-none disabled:opacity-50`}
                     >
                       {row.checkoutAvailable
-                        ? (trialDays > 0 ? `Start ${trialDays}-Day Free Trial` : t("pages.pricing.conversion.ctaSubscribe"))
+                        ? heroCtaLabel
                         : t("pages.pricing.conversion.ctaUnavailable")}
                     </button>
-                    {row.checkoutAvailable && trialDays > 0 ? (
+                    {row.checkoutAvailable ? (
                       <p className="mt-2 text-center text-[11px] leading-snug text-muted-foreground">
-                        No charge for {trialDays} days · Cancel anytime
+                        {trialSubtext}
                       </p>
-                    ) : !row.checkoutAvailable ? (
+                    ) : (
                       <p className="mt-2 text-center text-[11px] leading-snug text-muted-foreground">{t("pages.pricing.conversion.checkoutHintAlt")}</p>
-                    ) : null}
+                    )}
                   </>
                 ) : (
                   <div className="mt-6 flex flex-1 flex-col justify-end">
@@ -602,7 +627,7 @@ export function PricingPageClient({
 
       <div className="mt-10 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
         <Link href="#pricing-plans-heading" className={MARKETING_PRIMARY_CTA_CLASS}>
-          {trialDays > 0 ? `Start ${trialDays}-Day Free Trial` : t("pages.pricing.cta.startPractice")}
+          {heroCtaLabel}
         </Link>
         <Link href={tryQuestionsHref} className={MARKETING_TERTIARY_LINK_CLASS}>
           Or try free questions first

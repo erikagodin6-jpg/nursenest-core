@@ -8,7 +8,15 @@ import { MARKETING_PRIMARY_CTA_CLASS, MARKETING_SECONDARY_CTA_CLASS } from "@/li
  * Subheadline describes the system and builds confidence.
  * Two CTAs: primary scrolls to plans, secondary lets them explore.
  */
-export function PricingHero({ studySystemHref }: { studySystemHref: string }) {
+export function PricingHero({
+  studySystemHref,
+  ctaLabel = "Start Free Trial",
+  trialSubtext = "No charge today. Cancel anytime before your trial ends.",
+}: {
+  studySystemHref: string;
+  ctaLabel?: string;
+  trialSubtext?: string;
+}) {
   return (
     <section
       className="relative overflow-hidden rounded-2xl px-6 py-14 text-center sm:px-12 sm:py-20"
@@ -54,7 +62,7 @@ export function PricingHero({ studySystemHref }: { studySystemHref: string }) {
 
         <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
           <Link href="#pricing-plans-heading" className={MARKETING_PRIMARY_CTA_CLASS}>
-            Start Free Trial
+            {ctaLabel}
           </Link>
           <Link href={studySystemHref} className={MARKETING_SECONDARY_CTA_CLASS}>
             See how it works
@@ -62,7 +70,7 @@ export function PricingHero({ studySystemHref }: { studySystemHref: string }) {
         </div>
 
         <p className="mt-3 text-xs text-muted-foreground">
-          No charge today. Cancel anytime before your trial ends.
+          {trialSubtext}
         </p>
       </div>
     </section>
