@@ -42,6 +42,8 @@ import { classifyPathwayLesson } from "@/lib/content-quality/classify-lesson";
 import { buildQuickReviewBullets } from "@/lib/lessons/pathway-lesson-quick-review";
 import { resolveLessonImage } from "@/lib/content/resolve-lesson-image";
 import { LessonClinicalImageCard } from "@/components/lessons/lesson-clinical-image-card";
+import { LessonAudioCard } from "@/components/lessons/lesson-audio-card";
+import { LessonSectionAudioButton } from "@/components/lessons/lesson-section-audio-button";
 import { pathwayLessonPublicDetailPath } from "@/lib/lessons/pathway-lesson-types";
 import dynamic from "next/dynamic";
 import { LessonRecallProvider } from "@/components/lessons/lesson-recall-context";
@@ -304,6 +306,10 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
           />
         ) : null}
 
+        {lesson.audioUrl ? (
+          <LessonAudioCard audioUrl={lesson.audioUrl} lessonTitle={lesson.title} />
+        ) : null}
+
         <PathwayLessonAssessmentExperience
           userId={userId}
           pathwayId={pathway.id}
@@ -326,6 +332,13 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
                     heading={section.heading}
                     kind={section.kind}
                   >
+                    {section.audioUrl ? (
+                      <LessonSectionAudioButton
+                        audioUrl={section.audioUrl}
+                        sectionId={section.id}
+                        sectionHeading={section.heading}
+                      />
+                    ) : null}
                     <PathwayLessonSectionContent
                       text={typeof section.body === "string" ? section.body : ""}
                       figures={section.figures}

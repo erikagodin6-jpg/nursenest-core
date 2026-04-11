@@ -82,9 +82,9 @@ function buildGroups(items: SmartReviewItem[]): ReviewGroup[] {
   return [
     {
       id: "priority",
-      title: "High Priority Fixes",
+      title: "Fix These First",
       description:
-        "Answered incorrectly despite high confidence. These need the most attention.",
+        "Wrong answers where you felt confident. These gaps are the most important to close.",
       variantClass: "nn-review-group--priority",
       defaultExpanded: true,
       items: buckets.priority,
@@ -93,7 +93,7 @@ function buildGroups(items: SmartReviewItem[]): ReviewGroup[] {
       id: "needs-review",
       title: "Needs Review",
       description:
-        "Answered incorrectly with low or medium confidence. Review the explanation and related lessons.",
+        "Incorrect, but you were less sure. Read through the explanations and try the linked lessons.",
       variantClass: "nn-review-group--needs-review",
       defaultExpanded: true,
       items: buckets["needs-review"],
@@ -102,7 +102,7 @@ function buildGroups(items: SmartReviewItem[]): ReviewGroup[] {
       id: "uncertain",
       title: "Uncertain Knowledge",
       description:
-        "Correct but with low confidence. Reinforce these to build reliable recall under exam pressure.",
+        "You got these right but were not sure why. Reinforcing them now turns guesses into reliable recall.",
       variantClass: "nn-review-group--uncertain",
       defaultExpanded: false,
       items: buckets.uncertain,
@@ -111,7 +111,7 @@ function buildGroups(items: SmartReviewItem[]): ReviewGroup[] {
       id: "strong",
       title: "Strong Areas",
       description:
-        "Correct with high confidence. These areas are stable and ready for exam conditions.",
+        "Right answer, high confidence. These topics are solid for now.",
       variantClass: "nn-review-group--strong",
       defaultExpanded: false,
       items: buckets.strong,
@@ -240,13 +240,13 @@ export function ReviewQuestionRow({ item }: { item: SmartReviewItem }) {
           {rationaleText ? (
             <>
               <p className="nn-review-q-rationale__label">
-                {item.isCorrect ? "Why This Is Correct" : "Explanation"}
+                {item.isCorrect ? "Why This Is Correct" : "Why This Is Wrong"}
               </p>
               <p className="nn-review-q-rationale__text">{rationaleText}</p>
             </>
           ) : (
             <p className="nn-review-q-rationale__text italic text-[var(--semantic-text-muted)]">
-              No detailed explanation available for this question.
+              No detailed explanation for this question yet.
             </p>
           )}
 
@@ -446,18 +446,18 @@ export function ReviewSummaryStrip({
 
   function buildSummary(): string {
     if (priorityCount > 0 && uncertainCount > 0) {
-      return `You had ${priorityCount} high-confidence mistake${priorityCount !== 1 ? "s" : ""} and ${uncertainCount} uncertain correct answer${uncertainCount !== 1 ? "s" : ""}. Focus on the top groups first.`;
+      return `${priorityCount} overconfident miss${priorityCount !== 1 ? "es" : ""} and ${uncertainCount} uncertain correct. Start with the top group.`;
     }
     if (priorityCount > 0) {
-      return `You had ${priorityCount} high-confidence mistake${priorityCount !== 1 ? "s" : ""}. These are your highest priority to review.`;
+      return `${priorityCount} question${priorityCount !== 1 ? "s" : ""} where you felt confident but got it wrong. Worth reviewing first.`;
     }
     if (uncertainCount > 0) {
-      return `Good accuracy overall, but ${uncertainCount} answer${uncertainCount !== 1 ? "s were" : " was"} correct with low confidence. Reinforce those areas.`;
+      return `Good accuracy, but ${uncertainCount} answer${uncertainCount !== 1 ? "s" : ""} relied on guessing. Reinforcing those topics will help.`;
     }
     if (strongCount === totalItems && totalItems > 0) {
-      return "Strong session: every answer was correct with high confidence.";
+      return "Clean session. Every answer was correct with high confidence.";
     }
-    return "Review your session below, organized by correctness and confidence.";
+    return "Your session, organized by correctness and confidence.";
   }
 
   return (
@@ -538,8 +538,8 @@ export function SmartReviewLayout({ items, isEntitled = true }: SmartReviewScree
         {/* Locked preview of Group 2 */}
         {needsReviewGroup.items.length > 0 ? (
           <LockedPreviewCard
-            overlayTitle="Unlock Smart Review"
-            overlayDescription="See exactly what you're getting wrong and how to fix it. Every question grouped by confidence and review priority."
+            overlayTitle="Smart Review"
+            overlayDescription="Your mistakes, organized by what to fix first. Every question grouped by confidence and review priority."
           >
             <ReviewGroupSection
               group={needsReviewGroup}
@@ -550,12 +550,12 @@ export function SmartReviewLayout({ items, isEntitled = true }: SmartReviewScree
 
         {/* Groups 3-4 fully locked */}
         <PremiumLockCard
-          title="Unlock Smart Review"
-          description="See exactly what you're getting wrong and how to fix it."
+          title="Smart Review"
+          description="Your mistakes, organized by what to fix first."
           bullets={[
             "Questions grouped by urgency and confidence",
-            "Prioritized review queue: fix the most important mistakes first",
-            "Direct lesson links for every question",
+            "Prioritized review queue for high-impact fixes",
+            "Lesson links for every question you missed",
           ]}
           secondaryHref="/pricing"
           secondaryLabel="View Plans"

@@ -517,10 +517,17 @@
 /*
  * Shared light-UI surfaces — every non-dark theme gets consistent chrome.
  *
- * SPECIFICITY NOTE: This :is() block has [0,1,0,0] (attribute selector) which WINS over
- * :root's [0,0,0,1] for any custom property defined here. This is intentional — it allows
- * [data-theme] to fully override :root first-paint values like --theme-header-surface.
- * DO NOT replace this with :where([data-theme]) which has 0 specificity and loses to :root.
+ * SPECIFICITY vs :root — This :is() block has [0,1,0] specificity (attribute selector),
+ * which WINS over :root's [0,0,0,1]. This is intentional — it lets [data-theme] override
+ * :root first-paint values like --theme-header-surface.
+ * DO NOT replace with :where([data-theme]) — that has 0 specificity and loses to :root.
+ *
+ * SPECIFICITY vs individual [data-theme="…"] — This :is() catch-all has the SAME
+ * specificity [0,1,0] as standalone [data-theme="X"] selectors. When two rules share
+ * specificity, the one appearing LATER in source order wins. Complete named light-theme
+ * blocks (those defining --theme-page-bg, --theme-heading-text, etc.) MUST therefore
+ * appear AFTER this catch-all, or their explicit values get silently overridden.
+ * Regression test: `tsx --test src/lib/theme/theme-palettes-order.test.ts`
  */
 :is(
   [data-theme="lavender"],
@@ -619,12 +626,17 @@
   );
 }
 
-/*
- * Complete/named theme blocks — placed AFTER the :is() catch-all so their
- * explicit token values (--theme-page-bg, --theme-heading-text, etc.)
- * override the catch-all's generic computed defaults by source order.
- * Both selectors have [0,1,0] specificity; the later one wins.
- */
+/* ──────────────────────────────────────────────────────────────────────────
+ * ⚠️  DO NOT MOVE THESE BLOCKS ABOVE THE :is() CATCH-ALL.
+ *
+ * Complete named light-theme blocks MUST remain AFTER the :is() catch-all.
+ * Both selectors have identical specificity [0,1,0], so CSS source order
+ * decides the winner. If a complete block appears before the catch-all,
+ * its explicit --theme-page-bg / --theme-heading-text / etc. are silently
+ * overridden by the catch-all's generic computed values.
+ *
+ * Enforced by: `tsx --test src/lib/theme/theme-palettes-order.test.ts`
+ * ────────────────────────────────────────────────────────────────────────── */
 
 /* Lavender — retained as a core theme option. Default is now ocean (clinical blue). */
 [data-theme="lavender"] {

@@ -102,7 +102,7 @@ export function ConfidenceSummaryStrip({
   const pct = Math.round(highConfidenceAccuracy * 100);
   return (
     <div className="nn-confidence-strip">
-      High-confidence answers were correct <strong>{pct}%</strong> of the time
+      When you felt confident, you were right <strong>{pct}%</strong> of the time
     </div>
   );
 }
@@ -123,24 +123,22 @@ export function ConfidencePatternCards({ stats }: { stats: ConfidenceStats }) {
         <p className="nn-confidence-pattern-card__label">Overconfident Errors</p>
         <p className="nn-confidence-pattern-card__value">{stats.overconfidentErrors}</p>
         <p className="nn-confidence-pattern-card__desc">
-          Answered incorrectly despite high confidence. Review these first to
-          correct faulty assumptions.
+          You felt sure but got it wrong. These are worth reviewing first.
         </p>
       </div>
       <div className="nn-confidence-pattern-card nn-confidence-pattern-card--info">
         <p className="nn-confidence-pattern-card__label">Uncertain Correct</p>
         <p className="nn-confidence-pattern-card__value">{stats.uncertainCorrect}</p>
         <p className="nn-confidence-pattern-card__desc">
-          Correct but with low confidence. Reinforce these areas to convert
-          guesses into reliable recall.
+          Right answer, but you were not sure. Revisiting these turns guesses
+          into reliable knowledge.
         </p>
       </div>
       <div className="nn-confidence-pattern-card nn-confidence-pattern-card--success">
         <p className="nn-confidence-pattern-card__label">Strong Knowledge</p>
         <p className="nn-confidence-pattern-card__value">{stats.strongKnowledge}</p>
         <p className="nn-confidence-pattern-card__desc">
-          Correct with high confidence. These areas are stable and ready for
-          exam conditions.
+          Right answer, high confidence. These topics are solid.
         </p>
       </div>
     </div>
@@ -209,7 +207,7 @@ export function ReviewPriorityGroups({ items }: { items: ReviewItem[] }) {
         </p>
         <ReviewItemList
           items={highPriority}
-          emptyMessage="No overconfident errors. Strong calibration."
+          emptyMessage="No overconfident errors this session."
         />
       </div>
 

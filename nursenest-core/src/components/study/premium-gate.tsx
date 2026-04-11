@@ -245,21 +245,21 @@ export function UpgradePromptCard({
   return (
     <div className="nn-upgrade-prompt-card">
       <p className="nn-upgrade-prompt-card__title">
-        Unlock your full readiness system
+        Your Full Study System
       </p>
       <p className="nn-upgrade-prompt-card__body">
-        NurseNest tells you exactly what to study, tracks your weaknesses,
-        and helps you know when you're ready to pass.
+        Lessons, Smart Review, readiness scoring, and adaptive practice exams,
+        all connected to your weak areas.
       </p>
       <ul className="nn-upgrade-prompt-card__bullets">
         <li className="nn-upgrade-prompt-card__bullet">
-          Understand key concepts faster with structured lessons
+          Lessons and review linked to what you actually missed
         </li>
         <li className="nn-upgrade-prompt-card__bullet">
-          Fix your weak areas with Smart Review
+          Readiness score that tracks when you are exam-ready
         </li>
         <li className="nn-upgrade-prompt-card__bullet">
-          Know when you're ready to pass with readiness scoring
+          Adaptive CAT exams that mirror the real test format
         </li>
       </ul>
       <div className="nn-upgrade-prompt-card__actions">
@@ -314,7 +314,7 @@ export function EntitledSection({
  *
  * Shows a horizontal rule with a centered "Premium" pill label.
  */
-export function PreviewDivider({ label = "Unlocks with Premium" }: { label?: string }) {
+export function PreviewDivider({ label = "Included with Premium" }: { label?: string }) {
   return (
     <div className="nn-preview-divider" role="separator" aria-label={label}>
       <div className="nn-preview-divider__line" aria-hidden />
@@ -351,7 +351,7 @@ export function LockedMetricCard({
       </div>
       <div className="nn-locked-metric-card__lock">
         <Lock className="h-3 w-3" aria-hidden />
-        <span>Unlocks with free trial</span>
+        <span>Included with trial</span>
       </div>
     </div>
   );
@@ -405,93 +405,93 @@ const PAYWALL_PRESETS: Record<
   { title: string; description: string; bullets: string[] }
 > = {
   weak_topic: {
-    title: "Unlock This Lesson",
-    description: "You're struggling with this area. Unlock to improve faster.",
+    title: "Continue This Lesson",
+    description: "This topic showed up in your weak areas. Full access lets you work through it properly.",
     bullets: [
-      "Understand key concepts faster",
-      "Fix your weak areas with Smart Review",
-      "Know when you're ready to pass",
+      "Structured lesson with key concepts explained",
+      "Practice questions linked to this topic",
+      "Smart Review tracks your improvement",
     ],
   },
   post_questions: {
-    title: "Unlock Smart Review",
-    description: "Review your mistakes and boost your score.",
+    title: "Review Your Mistakes",
+    description: "See what you got wrong and why, grouped by what matters most.",
     bullets: [
-      "See exactly what you got wrong and why",
-      "Grouped by confidence and priority",
-      "Direct lesson links for every mistake",
+      "Every mistake grouped by confidence and urgency",
+      "Lesson links for each question you missed",
+      "Overconfidence detection for false positives",
     ],
   },
   near_exam: {
     title: "Get Exam-Ready",
-    description: "You're close to your exam. Get full access to be ready.",
+    description: "Your exam is coming up. Full access gives you the tools to prepare properly.",
     bullets: [
       "Adaptive CAT exams that mirror the real test",
-      "Readiness scoring so you know when to sit",
-      "Full study plan personalized to your weak areas",
+      "Readiness score so you know when to sit",
+      "Study plan built from your weakest areas",
     ],
   },
   lesson: {
-    title: "Unlock This Lesson",
-    description: "This lesson is part of your personalized study system.",
+    title: "Continue This Lesson",
+    description: "This lesson is part of your study pathway. Start a trial to continue.",
     bullets: [
-      "Understand key concepts faster",
-      "Fix your weak areas with Smart Review",
-      "Know when you're ready to pass",
+      "Full lesson content with key concepts",
+      "Practice questions tied to this topic",
+      "Progress tracked across your study plan",
     ],
   },
   lesson_highyield: {
-    title: "Unlock This Lesson",
-    description: "You're about to learn a high-yield topic. Unlock full access to continue.",
+    title: "Continue This Lesson",
+    description: "This is a high-yield topic. It comes up often on the exam.",
     bullets: [
-      "Understand key concepts faster",
-      "Fix your weak areas with Smart Review",
-      "Know when you're ready to pass",
+      "Full lesson content with clinical focus",
+      "Practice questions tied to this topic",
+      "Smart Review flags when you need to revisit it",
     ],
   },
   practice_test: {
-    title: "Unlock Full Practice Exams",
-    description: "Simulate the real exam and track your readiness.",
+    title: "Full Practice Exams",
+    description: "Timed, adaptive exams that match the format you will see on test day.",
     bullets: [
-      "Adaptive CAT exams",
-      "Detailed performance analysis",
-      "Real exam-style questions",
+      "Adaptive CAT with real-time difficulty adjustment",
+      "Performance breakdown by topic and confidence",
+      "Readiness score after every test",
     ],
   },
   smart_review: {
-    title: "Unlock Smart Review",
-    description: "See exactly what you're getting wrong and how to fix it.",
+    title: "Smart Review",
+    description: "Your mistakes, organized by what to fix first.",
     bullets: [
       "Questions grouped by urgency and confidence",
-      "Prioritized review queue",
-      "Direct lesson links for every question",
+      "Prioritized review queue for high-impact fixes",
+      "Lesson links for every question you missed",
     ],
   },
   confidence_analytics: {
-    title: "Unlock Confidence Analytics",
-    description: "See exactly where you stand and what to focus on next.",
+    title: "Confidence Analytics",
+    description: "See where your confidence matches your accuracy, and where it does not.",
     bullets: [
-      "Overconfidence detection",
-      "Uncertain knowledge tracking",
+      "Overconfident error detection",
+      "Uncertain knowledge patterns",
       "Prioritized review recommendations",
     ],
   },
   dashboard: {
-    title: "Unlock Your Full Study System",
-    description: "Start your free trial to access your personalized study plan, smart review, and full exam practice.",
+    title: "Your Full Study System",
+    description: "Lessons, Smart Review, readiness scoring, and adaptive CAT exams, all connected.",
     bullets: [
-      "Personalized study plan built from your weak areas",
-      "Smart review that shows you exactly what to fix",
-      "Readiness scoring so you know when to take the exam",
+      "Study plan built from your actual weak areas",
+      "Smart Review that prioritizes what to fix first",
+      "Readiness score that tells you when you are ready",
     ],
   },
   generic: {
-    title: "Unlock Full Access",
-    description: "Start your free trial to access all lessons, exams, and analytics.",
+    title: "Full Access",
+    description: "All lessons, practice exams, Smart Review, and analytics.",
     bullets: [
-      "Understand key concepts faster",
-      "Fix your weak areas with Smart Review",
-      "Know when you're ready to pass",
+      "Structured lessons across your pathway",
+      "Adaptive CAT exams and practice tests",
+      "Readiness scoring and confidence analytics",
     ],
   },
 };
@@ -502,7 +502,7 @@ const PAYWALL_PRESETS: Record<
  * Uses the PAYWALL_PRESETS mapping to show context-appropriate messaging.
  * All CTAs are consistent: "Start Free Trial" primary, "View Plans" secondary.
  *
- * Pass `topicName` to personalise the description for topic-specific locks.
+ * Pass `topicName` to personalize the description for topic-specific locks.
  */
 export function ContextualPaywallCard({
   context = "generic",
@@ -522,7 +522,7 @@ export function ContextualPaywallCard({
 
   if (topicName) {
     if (context === "weak_topic") {
-      description = `You're struggling with ${topicName}. Unlock to improve faster.`;
+      description = `${topicName} showed up in your weak areas. Full access lets you work through it properly.`;
     } else if (context === "lesson" || context === "lesson_highyield") {
       title = `Unlock: ${topicName}`;
     }

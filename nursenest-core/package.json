@@ -123,6 +123,8 @@
     "blueprint:lesson-quality-report": "tsx scripts/report-lesson-expansion-quality.ts",
     "storage:check": "node scripts/storage-guardrails.mjs",
     "verify:theme-logos": "node scripts/verify-theme-logos.mjs",
+    "verify:theme-palettes": "tsx scripts/verify-theme-palettes.ts",
+    "test:theme-palettes": "tsx --test src/lib/theme/theme-palettes-order.test.ts",
     "storage:check:strict": "node scripts/storage-guardrails.mjs --strict",
     "ops:storage-report": "tsx scripts/storage-report.ts",
     "ops:cleanup-spaces-orphans": "tsx scripts/cleanup-spaces-orphans.ts",

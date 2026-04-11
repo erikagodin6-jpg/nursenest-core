@@ -65,6 +65,8 @@ import { getMeasurementSystemForCountry } from "@/lib/measurements/measurement-s
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { resolveLessonImage } from "@/lib/content/resolve-lesson-image";
 import { LessonClinicalImageCard } from "@/components/lessons/lesson-clinical-image-card";
+import { LessonAudioCard } from "@/components/lessons/lesson-audio-card";
+import { LessonSectionAudioButton } from "@/components/lessons/lesson-section-audio-button";
 import nextDynamic from "next/dynamic";
 import { LessonRecallProvider } from "@/components/lessons/lesson-recall-context";
 import { LessonRecallToggle } from "@/components/lessons/lesson-recall-toggle";
@@ -304,6 +306,10 @@ export default async function AlliedHealthSlugLessonDetailPage({ params }: Props
         />
       ) : null}
 
+      {lesson.audioUrl ? (
+        <LessonAudioCard audioUrl={lesson.audioUrl} lessonTitle={lesson.title} />
+      ) : null}
+
       <PathwayLessonAssessmentExperience
         userId={userId}
         pathwayId={pathway.id}
@@ -325,6 +331,13 @@ export default async function AlliedHealthSlugLessonDetailPage({ params }: Props
                 heading={section.heading}
                 kind={section.kind}
               >
+                {section.audioUrl ? (
+                  <LessonSectionAudioButton
+                    audioUrl={section.audioUrl}
+                    sectionId={section.id}
+                    sectionHeading={section.heading}
+                  />
+                ) : null}
                 <PathwayLessonBody
                   text={typeof section.body === "string" ? section.body : ""}
                   lessonWikiBasePath={base}
