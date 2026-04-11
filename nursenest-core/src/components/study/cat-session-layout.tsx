@@ -64,8 +64,22 @@ export function CatTopBar({
 
 /**
  * CatContentGrid — the 65/35 two-column grid.
+ * Used in CAT STUDY mode (catFeedbackStudy=true): question left, rationale right.
  * Stacks vertically on mobile, side-by-side at ≥1024px.
  */
 export function CatContentGrid({ children }: { children: ReactNode }) {
   return <div className="nn-cat-grid">{children}</div>;
+}
+
+/**
+ * CatExamCol — single-column centered wrapper for CAT EXAM mode.
+ *
+ * Used when `isExamStyle = catMode && !catFeedbackStudy`.
+ * The question card takes up the full centered width (max 780px).
+ * No right-side rationale panel — matches real NCLEX exam experience.
+ *
+ * Spec §1: "CAT exam mode = minimal, exam-like, single-column"
+ */
+export function CatExamCol({ children }: { children: ReactNode }) {
+  return <div className="nn-cat-exam-col">{children}</div>;
 }

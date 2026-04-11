@@ -31,6 +31,11 @@ import {
   MARKETING_PRIMARY_CTA_CLASS,
   MARKETING_SECONDARY_CTA_CLASS,
 } from "@/lib/theme/marketing-hero-pattern";
+import { MarketingChainScreenshot } from "@/components/marketing/marketing-screenshot-stack";
+import {
+  SCREENSHOT_REGISTRY,
+  type ScreenshotId,
+} from "@/lib/marketing/screenshot-registry";
 
 // ── Shared token helpers ───────────────────────────────────────────────────────
 
@@ -47,9 +52,32 @@ const TEXT_PRIMARY = "var(--theme-heading-text)";
 const TEXT_SECONDARY = "var(--theme-body-text)";
 const TEXT_MUTED = "var(--theme-muted-text)";
 
-// ── Visual previews ────────────────────────────────────────────────────────────
+// ── Feature screenshot component ──────────────────────────────────────────────
 
-/** Adaptive Study Plan mini-preview: Day 1 card + 2 locked shells */
+/**
+ * Renders a real CDN screenshot from the registry.
+ * Replaces JSX-only mock previews with actual product screenshots (spec §2, §6).
+ * Falls back to null (renders nothing) if the ID is not in the registry.
+ */
+function FeatureScreenshot({ id }: { id: ScreenshotId }) {
+  const record = SCREENSHOT_REGISTRY.find((s) => s.id === id);
+  if (!record) return null;
+  return (
+    <MarketingChainScreenshot
+      objectKey={record.objectKey}
+      publicUrl={record.publicUrl}
+      alt={record.alt ?? record.label}
+      aspectRatio="16 / 10"
+      fit="contain"
+      rounded="rounded-xl"
+      imgClassName="object-top"
+    />
+  );
+}
+
+// ── Visual previews (legacy JSX mockups — kept for reference, no longer rendered) ─
+
+/** @deprecated Use <FeatureScreenshot id={8} /> instead. */
 function StudyPlanPreview() {
   return (
     <div className="space-y-2 text-sm">
@@ -420,7 +448,7 @@ export function HomeFeatureDeepDivesSection() {
       secondaryCta: "Try practice first",
       secondaryHref: questionsHref,
       accentColor: "var(--theme-primary)",
-      preview: <StudyPlanPreview />,
+      preview: <FeatureScreenshot id={8} />,
       flip: false,
       testId: "feature-block-study-plan",
     },
@@ -438,7 +466,7 @@ export function HomeFeatureDeepDivesSection() {
       secondaryCta: "Start practicing",
       secondaryHref: questionsHref,
       accentColor: "var(--semantic-warning, #f59e0b)",
-      preview: <SmartReviewPreview />,
+      preview: <FeatureScreenshot id={9} />,
       flip: true,
       testId: "feature-block-smart-review",
     },
@@ -456,7 +484,7 @@ export function HomeFeatureDeepDivesSection() {
       secondaryCta: "View plans",
       secondaryHref: pricingHref,
       accentColor: "var(--semantic-success, #22c55e)",
-      preview: <CatExamPreview />,
+      preview: <FeatureScreenshot id={6} />,
       flip: false,
       testId: "feature-block-cat",
     },

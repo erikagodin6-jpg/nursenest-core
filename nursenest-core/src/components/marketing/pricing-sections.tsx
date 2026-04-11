@@ -566,33 +566,43 @@ export function PricingUnlockSection() {
 
 // ── ProductPreviewGrid ────────────────────────────────────────────────────────
 
+import { ScreenshotProductCard } from "@/components/marketing/screenshot-feature-grid";
+import type { ScreenshotId } from "@/lib/marketing/screenshot-registry";
+
 /**
  * ProductPreviewGrid — 3-card visual overview of the product surfaces (spec §7).
  *
- * Reinforces "this is what you get" without screenshots.
- * Each card describes one product experience area.
+ * Each card shows a real CDN screenshot from the registry plus a short title,
+ * description, and detail line. The screenshot IDs are sourced from
+ * SCREENSHOT_GROUPS.pricingPreview (screenshot1, screenshot6, screenshot7).
  */
-const PRODUCT_AREAS = [
+const PRODUCT_AREAS: {
+  screenshotId: ScreenshotId;
+  icon: string;
+  title: string;
+  desc: string;
+  detail: string;
+}[] = [
   {
+    screenshotId: 1,
     icon: "✏️",
     title: "Practice interface",
     desc: "Question stem, answer options, and full rationale — all visible at once. No scrolling to see why you were wrong.",
     detail: "Correct answer · Why this is correct · Why other options are wrong · Key Takeaway · Related Lessons",
-    bg: SOFT_A,
   },
   {
+    screenshotId: 6,
     icon: "🎯",
     title: "CAT exam mode",
     desc: "An adaptive exam that adjusts difficulty item-by-item, scoring your readiness on a 0–100 scale.",
     detail: "Adaptive difficulty · Readiness scoring · Category breakdown · Historical trend",
-    bg: SOFT_B,
   },
   {
+    screenshotId: 7,
     icon: "📊",
     title: "Results + remediation",
     desc: "Structured results with weak areas, strengths, confidence patterns, and a personalised study plan generated from your data.",
     detail: "Smart review · Study plan · Confidence analytics · Retest strategy",
-    bg: SOFT_A,
   },
 ];
 
@@ -609,31 +619,14 @@ export function ProductPreviewGrid() {
       </div>
       <div className="grid gap-4 sm:grid-cols-3">
         {PRODUCT_AREAS.map((area) => (
-          <div
+          <ScreenshotProductCard
             key={area.title}
-            className="flex flex-col gap-4 rounded-2xl p-6"
-            style={{ background: area.bg, border: `1px solid ${BORDER}` }}
-          >
-            <span className="text-3xl" aria-hidden>
-              {area.icon}
-            </span>
-            <div>
-              <h3 className="nn-marketing-h4 mb-2">{area.title}</h3>
-              <p className="text-sm leading-relaxed" style={{ color: TEXT_SECONDARY }}>
-                {area.desc}
-              </p>
-            </div>
-            <p
-              className="mt-auto rounded-lg p-3 text-[11px] font-medium leading-relaxed"
-              style={{
-                background: SURFACE,
-                border: `1px solid ${BORDER}`,
-                color: TEXT_MUTED,
-              }}
-            >
-              {area.detail}
-            </p>
-          </div>
+            screenshotId={area.screenshotId}
+            icon={area.icon}
+            title={area.title}
+            description={area.desc}
+            detail={area.detail}
+          />
         ))}
       </div>
     </section>

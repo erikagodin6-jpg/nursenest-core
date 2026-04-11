@@ -3,63 +3,63 @@
  * learner and exam routes are not affected by aggressive !important overrides.
  * Imported from root `layout.tsx` with `globals.css` so it shares one layout stylesheet.
  */
-html:is([data-theme="dark-clinical"], [data-theme="dark-academia"], [data-theme="dark-mode"]) .nn-marketing-surface .bg-white {
+html:is([data-theme="dark-clinical"], [data-theme="dark-academia"], [data-theme="dark-mode"], [data-theme="midnight-indigo"], [data-theme="deep-twilight"]) .nn-marketing-surface .bg-white {
   background-color: var(--theme-card-bg) !important;
 }
 
-html:is([data-theme="dark-clinical"], [data-theme="dark-academia"], [data-theme="dark-mode"]) .nn-marketing-surface .bg-warmwhite {
+html:is([data-theme="dark-clinical"], [data-theme="dark-academia"], [data-theme="dark-mode"], [data-theme="midnight-indigo"], [data-theme="deep-twilight"]) .nn-marketing-surface .bg-warmwhite {
   background-color: var(--theme-page-bg) !important;
 }
 
-html:is([data-theme="dark-clinical"], [data-theme="dark-academia"], [data-theme="dark-mode"])
+html:is([data-theme="dark-clinical"], [data-theme="dark-academia"], [data-theme="dark-mode"], [data-theme="midnight-indigo"], [data-theme="deep-twilight"])
   .nn-marketing-surface
   :is(.text-gray-900, .text-gray-800, .text-gray-700, .text-slate-900, .text-slate-800, .text-slate-700) {
   color: var(--theme-heading-text) !important;
 }
 
-html:is([data-theme="dark-clinical"], [data-theme="dark-academia"], [data-theme="dark-mode"])
+html:is([data-theme="dark-clinical"], [data-theme="dark-academia"], [data-theme="dark-mode"], [data-theme="midnight-indigo"], [data-theme="deep-twilight"])
   .nn-marketing-surface
   :is(.text-gray-600, .text-gray-500, .text-gray-400, .text-slate-600, .text-slate-500, .text-slate-400) {
   color: var(--theme-body-text) !important;
 }
 
-html:is([data-theme="dark-clinical"], [data-theme="dark-academia"], [data-theme="dark-mode"])
+html:is([data-theme="dark-clinical"], [data-theme="dark-academia"], [data-theme="dark-mode"], [data-theme="midnight-indigo"], [data-theme="deep-twilight"])
   .nn-marketing-surface
   :is(.text-gray-300, .text-slate-300) {
   color: var(--theme-muted-text) !important;
 }
 
-html:is([data-theme="dark-clinical"], [data-theme="dark-academia"], [data-theme="dark-mode"])
+html:is([data-theme="dark-clinical"], [data-theme="dark-academia"], [data-theme="dark-mode"], [data-theme="midnight-indigo"], [data-theme="deep-twilight"])
   .nn-marketing-surface
   :is(.border-gray-100, .border-gray-200, .border-gray-300, .border-slate-100, .border-slate-200, .border-slate-300) {
   border-color: var(--theme-card-border) !important;
 }
 
-html:is([data-theme="dark-clinical"], [data-theme="dark-academia"], [data-theme="dark-mode"])
+html:is([data-theme="dark-clinical"], [data-theme="dark-academia"], [data-theme="dark-mode"], [data-theme="midnight-indigo"], [data-theme="deep-twilight"])
   .nn-marketing-surface
   :is(.bg-gray-50, .bg-gray-100, .bg-slate-50, .bg-slate-100) {
   background-color: var(--theme-card-bg) !important;
 }
 
-html:is([data-theme="dark-clinical"], [data-theme="dark-academia"], [data-theme="dark-mode"])
+html:is([data-theme="dark-clinical"], [data-theme="dark-academia"], [data-theme="dark-mode"], [data-theme="midnight-indigo"], [data-theme="deep-twilight"])
   .nn-marketing-surface
   :is(.bg-white\/90, .bg-white\/80, .bg-white\/95) {
   background-color: var(--theme-card-bg) !important;
 }
 
-html:is([data-theme="dark-clinical"], [data-theme="dark-academia"], [data-theme="dark-mode"])
+html:is([data-theme="dark-clinical"], [data-theme="dark-academia"], [data-theme="dark-mode"], [data-theme="midnight-indigo"], [data-theme="deep-twilight"])
   .nn-marketing-surface
   :is(.shadow-sm, .shadow-md, .shadow-lg, .shadow-xl, .shadow-2xl) {
   --tw-shadow-color: rgba(0, 0, 0, 0.3);
 }
 
-html:is([data-theme="dark-clinical"], [data-theme="dark-academia"], [data-theme="dark-mode"])
+html:is([data-theme="dark-clinical"], [data-theme="dark-academia"], [data-theme="dark-mode"], [data-theme="midnight-indigo"], [data-theme="deep-twilight"])
   .nn-marketing-surface
   :is(.bg-emerald-50, .bg-rose-50, .bg-cyan-50, .bg-violet-50, .bg-indigo-50, .bg-yellow-50, .bg-blue-50, .bg-red-50, .bg-orange-50, .bg-green-50, .bg-pink-50, .bg-amber-50, .bg-purple-50, .bg-teal-50) {
   background-color: var(--theme-card-bg) !important;
 }
 
-html:is([data-theme="dark-clinical"], [data-theme="dark-academia"], [data-theme="dark-mode"])
+html:is([data-theme="dark-clinical"], [data-theme="dark-academia"], [data-theme="dark-mode"], [data-theme="midnight-indigo"], [data-theme="deep-twilight"])
   .nn-marketing-surface
   :is(
     [class*="bg-emerald-50\/"],
@@ -78,7 +78,7 @@ html:is([data-theme="dark-clinical"], [data-theme="dark-academia"], [data-theme=
   background-color: var(--theme-card-bg) !important;
 }
 
-html:is([data-theme="dark-clinical"], [data-theme="dark-academia"], [data-theme="dark-mode"])
+html:is([data-theme="dark-clinical"], [data-theme="dark-academia"], [data-theme="dark-mode"], [data-theme="midnight-indigo"], [data-theme="deep-twilight"])
   .nn-marketing-surface
   :is(
     .text-emerald-800,
@@ -108,7 +108,7 @@ html:is([data-theme="dark-clinical"], [data-theme="dark-academia"], [data-theme=
   color: var(--theme-heading-text) !important;
 }
 
-html:is([data-theme="dark-clinical"], [data-theme="dark-academia"], [data-theme="dark-mode"])
+html:is([data-theme="dark-clinical"], [data-theme="dark-academia"], [data-theme="dark-mode"], [data-theme="midnight-indigo"], [data-theme="deep-twilight"])
   .nn-marketing-surface
   :is(
     .text-emerald-600,

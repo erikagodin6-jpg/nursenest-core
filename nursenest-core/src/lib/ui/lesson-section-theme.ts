@@ -32,6 +32,25 @@ export type LessonSectionRole =
   | "review"
   | "cta";
 
+/**
+ * Maps each role to its `--lesson-*` CSS custom property name.
+ * These tokens are defined per-theme in `theme-palettes.css` with exact colors,
+ * and have derived fallbacks in `globals.css` `:where([data-theme])` for legacy themes.
+ */
+export const ROLE_LESSON_TOKEN: Record<LessonSectionRole, string> = {
+  info: "--lesson-summary",
+  warning: "--lesson-signs-symptoms",
+  concept: "--lesson-key-concepts",
+  action: "--lesson-interventions",
+  diagnostic: "--lesson-diagnostics",
+  danger: "--lesson-red-flags",
+  success: "--lesson-medications",
+  education: "--lesson-patient-teaching",
+  application: "--lesson-clinical-pearls",
+  review: "--lesson-exam-tips",
+  cta: "--lesson-notes",
+};
+
 const KIND_TO_ROLE: Record<PathwayLessonSectionKind, LessonSectionRole> = {
   // Premium spine sections
   introduction: "info",
@@ -83,6 +102,8 @@ export type LessonSectionTheme = {
   chipLabel: string;
   /** Value for `data-lsc-role` attribute on `.nn-lesson-section-card`. */
   dataRole: LessonSectionRole;
+  /** CSS custom property name for the lesson section background (e.g. `--lesson-summary`). */
+  lessonToken: string;
 };
 
 /**
@@ -98,5 +119,6 @@ export function getLessonSectionTheme(
     role,
     chipLabel: ROLE_CHIP_LABELS[role],
     dataRole: role,
+    lessonToken: ROLE_LESSON_TOKEN[role],
   };
 }

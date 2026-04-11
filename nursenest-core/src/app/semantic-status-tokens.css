@@ -256,7 +256,9 @@ html[data-theme="multi-pastel"] {
 
 html[data-theme="dark-clinical"],
 html[data-theme="dark-academia"],
-html[data-theme="dark-mode"] {
+html[data-theme="dark-mode"],
+html[data-theme="midnight-indigo"],
+html[data-theme="deep-twilight"] {
   /* Multi-surface: higher % so tints are perceptible on dark backgrounds */
   --surface-soft-a: color-mix(in srgb, var(--theme-primary) 9%, var(--bg-page));
   --surface-soft-b: color-mix(in srgb, var(--semantic-success) 11%, var(--bg-card));
@@ -328,7 +330,9 @@ html[data-theme="lavender-dream"] {
 /* Dark themes: brighter, lighter mid-tones for legibility on dark surfaces */
 html[data-theme="dark-clinical"],
 html[data-theme="dark-academia"],
-html[data-theme="dark-mode"] {
+html[data-theme="dark-mode"],
+html[data-theme="midnight-indigo"],
+html[data-theme="deep-twilight"] {
   --semantic-violet: #a78bfa;
   --semantic-violet-soft: color-mix(in srgb, #a78bfa 14%, var(--bg-card));
   --semantic-violet-contrast: #ddd6fe;

@@ -264,6 +264,12 @@ body {
   --logo-accent: var(--theme-accent, var(--theme-secondary));
   --logo-text: var(--theme-heading-text);
 
+  /* State color tokens — per-theme overrides in theme-palettes.css */
+  --state-success: var(--semantic-success-soft, #DFF3EB);
+  --state-warning: var(--semantic-warning-soft, #FFF1E6);
+  --state-info: var(--semantic-info-soft, #EAF0FF);
+  --state-danger-soft: var(--semantic-danger-soft, #FFE3E3);
+
   /*
    * Sticky header: nav surface subtly tinted by theme primary.
    * NOTE: :where([data-theme]) has 0 specificity and is overridden by :root's [0,0,0,1] for light themes.
@@ -333,7 +339,8 @@ body {
 html[data-theme="dark-clinical"],
 html[data-theme="dark-academia"],
 html[data-theme="dark-mode"],
-html[data-theme="midnight-indigo"] {
+html[data-theme="midnight-indigo"],
+html[data-theme="deep-twilight"] {
   --bg-section: color-mix(in srgb, var(--theme-primary) 6%, var(--theme-page-bg));
   --bg-section-alt: color-mix(in srgb, var(--theme-primary) 3.5%, var(--theme-page-bg));
   --bg-card: color-mix(in srgb, var(--theme-primary) 4%, var(--theme-card-bg));
@@ -700,7 +707,9 @@ a {
 }
 html[data-theme="dark-clinical"] .nn-ui-btn--destructive,
 html[data-theme="dark-academia"] .nn-ui-btn--destructive,
-html[data-theme="dark-mode"] .nn-ui-btn--destructive {
+html[data-theme="dark-mode"] .nn-ui-btn--destructive,
+html[data-theme="midnight-indigo"] .nn-ui-btn--destructive,
+html[data-theme="deep-twilight"] .nn-ui-btn--destructive {
   color: #fca5a5;
   border-color: color-mix(in srgb, #f87171 35%, var(--border-subtle));
   background: color-mix(in srgb, #f87171 10%, var(--bg-card, var(--theme-card-bg)));
@@ -1143,7 +1152,9 @@ html[data-theme="multi-pastel"] .nn-brand-header-logo-slot .nn-brand-header-logo
 }
 
 /* Dark themes: logo needs to lift off the dark background — brightness boost, no color shift */
-html[data-theme="dark-mode"] .nn-brand-header-logo-slot .nn-brand-header-logo {
+html[data-theme="dark-mode"] .nn-brand-header-logo-slot .nn-brand-header-logo,
+html[data-theme="midnight-indigo"] .nn-brand-header-logo-slot .nn-brand-header-logo,
+html[data-theme="deep-twilight"] .nn-brand-header-logo-slot .nn-brand-header-logo {
   filter: brightness(1.35) saturate(0.85);
 }
 
@@ -1354,7 +1365,9 @@ html[data-theme="dark-mode"] .nn-brand-header-logo-slot .nn-brand-header-logo {
 
 html[data-theme="dark-clinical"] .nn-trust-mark,
 html[data-theme="dark-academia"] .nn-trust-mark,
-html[data-theme="dark-mode"] .nn-trust-mark {
+html[data-theme="dark-mode"] .nn-trust-mark,
+html[data-theme="midnight-indigo"] .nn-trust-mark,
+html[data-theme="deep-twilight"] .nn-trust-mark {
   color: var(--role-success, #34d399);
 }
 
@@ -1675,60 +1688,64 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-exam-chrome-dim {
   }
 }
 
-/* Role variants: each sets --lsc-* custom properties inherited by the chip inside */
+/*
+ * Role variants: each sets --lsc-* custom properties inherited by the chip inside.
+ * Background (--lsc-soft) pulls from the per-theme --lesson-* tokens defined in
+ * theme-palettes.css, falling back to semantic tokens for legacy themes.
+ */
 .nn-lesson-section-card[data-lsc-role="info"] {
   --lsc-color: var(--semantic-info);
-  --lsc-soft: var(--semantic-info-soft);
+  --lsc-soft: var(--lesson-summary, var(--semantic-info-soft));
   --lsc-contrast: var(--semantic-info-contrast);
 }
 .nn-lesson-section-card[data-lsc-role="warning"] {
   --lsc-color: var(--semantic-warning);
-  --lsc-soft: var(--semantic-warning-soft);
+  --lsc-soft: var(--lesson-signs-symptoms, var(--semantic-warning-soft));
   --lsc-contrast: var(--semantic-warning-contrast);
 }
 .nn-lesson-section-card[data-lsc-role="danger"] {
   --lsc-color: var(--semantic-danger);
-  --lsc-soft: var(--semantic-danger-soft);
+  --lsc-soft: var(--lesson-red-flags, var(--semantic-danger-soft));
   --lsc-contrast: var(--semantic-danger-contrast);
 }
 .nn-lesson-section-card[data-lsc-role="success"] {
   --lsc-color: var(--semantic-success);
-  --lsc-soft: var(--semantic-success-soft);
+  --lsc-soft: var(--lesson-medications, var(--semantic-success-soft));
   --lsc-contrast: var(--semantic-success-contrast);
 }
 .nn-lesson-section-card[data-lsc-role="education"] {
   --lsc-color: var(--semantic-success);
-  --lsc-soft: color-mix(in srgb, var(--semantic-success) 8%, var(--bg-card));
+  --lsc-soft: var(--lesson-patient-teaching, color-mix(in srgb, var(--semantic-success) 8%, var(--bg-card)));
   --lsc-contrast: var(--semantic-success-contrast);
 }
 .nn-lesson-section-card[data-lsc-role="concept"] {
   --lsc-color: var(--semantic-violet);
-  --lsc-soft: var(--semantic-violet-soft);
+  --lsc-soft: var(--lesson-key-concepts, var(--semantic-violet-soft));
   --lsc-contrast: var(--semantic-violet-contrast);
 }
 .nn-lesson-section-card[data-lsc-role="action"] {
   --lsc-color: var(--semantic-teal);
-  --lsc-soft: var(--semantic-teal-soft);
+  --lsc-soft: var(--lesson-interventions, var(--semantic-teal-soft));
   --lsc-contrast: var(--semantic-teal-contrast);
 }
 .nn-lesson-section-card[data-lsc-role="diagnostic"] {
   --lsc-color: var(--semantic-cyan);
-  --lsc-soft: var(--semantic-cyan-soft);
+  --lsc-soft: var(--lesson-diagnostics, var(--semantic-cyan-soft));
   --lsc-contrast: var(--semantic-cyan-contrast);
 }
 .nn-lesson-section-card[data-lsc-role="application"] {
   --lsc-color: var(--semantic-chart-5);
-  --lsc-soft: color-mix(in srgb, var(--semantic-chart-5) 10%, var(--bg-card));
+  --lsc-soft: var(--lesson-clinical-pearls, color-mix(in srgb, var(--semantic-chart-5) 10%, var(--bg-card)));
   --lsc-contrast: color-mix(in srgb, var(--semantic-chart-5) 65%, var(--semantic-text-primary));
 }
 .nn-lesson-section-card[data-lsc-role="review"] {
   --lsc-color: var(--semantic-brand);
-  --lsc-soft: var(--semantic-brand-soft);
+  --lsc-soft: var(--lesson-exam-tips, var(--semantic-brand-soft));
   --lsc-contrast: color-mix(in srgb, var(--semantic-brand) 72%, var(--semantic-text-primary));
 }
 .nn-lesson-section-card[data-lsc-role="cta"] {
   --lsc-color: var(--semantic-text-muted);
-  --lsc-soft: var(--semantic-panel-muted);
+  --lsc-soft: var(--lesson-notes, var(--semantic-panel-muted));
   --lsc-contrast: var(--semantic-text-secondary);
 }
 
@@ -2063,7 +2080,9 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-exam-chrome-dim {
 
 html[data-theme="dark-clinical"] .nn-qopt-surface--incorrect,
 html[data-theme="dark-academia"] .nn-qopt-surface--incorrect,
-html[data-theme="dark-mode"] .nn-qopt-surface--incorrect {
+html[data-theme="dark-mode"] .nn-qopt-surface--incorrect,
+html[data-theme="midnight-indigo"] .nn-qopt-surface--incorrect,
+html[data-theme="deep-twilight"] .nn-qopt-surface--incorrect {
   border-color: color-mix(in srgb, var(--semantic-danger) 32%, var(--border-subtle));
   background: var(--semantic-danger-soft);
 }
@@ -2114,7 +2133,9 @@ html[data-theme="dark-mode"] .nn-qopt-surface--incorrect {
 
 html[data-theme="dark-clinical"] .nn-qopt-surface--incorrect .nn-qopt-letter,
 html[data-theme="dark-academia"] .nn-qopt-surface--incorrect .nn-qopt-letter,
-html[data-theme="dark-mode"] .nn-qopt-surface--incorrect .nn-qopt-letter {
+html[data-theme="dark-mode"] .nn-qopt-surface--incorrect .nn-qopt-letter,
+html[data-theme="midnight-indigo"] .nn-qopt-surface--incorrect .nn-qopt-letter,
+html[data-theme="deep-twilight"] .nn-qopt-surface--incorrect .nn-qopt-letter {
   border-color: color-mix(in srgb, var(--semantic-danger) 36%, var(--border-subtle));
   background: color-mix(in srgb, var(--semantic-danger) 14%, var(--theme-card-bg));
   color: var(--semantic-danger-contrast);
@@ -2193,7 +2214,9 @@ html[data-theme="dark-mode"] .nn-qopt-surface--incorrect .nn-qopt-letter {
 
 html[data-theme="dark-clinical"] .nn-question-rationale-card__verdict--miss,
 html[data-theme="dark-academia"] .nn-question-rationale-card__verdict--miss,
-html[data-theme="dark-mode"] .nn-question-rationale-card__verdict--miss {
+html[data-theme="dark-mode"] .nn-question-rationale-card__verdict--miss,
+html[data-theme="midnight-indigo"] .nn-question-rationale-card__verdict--miss,
+html[data-theme="deep-twilight"] .nn-question-rationale-card__verdict--miss {
   background: var(--semantic-danger-soft);
 }
 
@@ -2474,7 +2497,9 @@ html[data-theme] .nn-exam-session.nn-exam-session--neutral {
 
 html[data-theme="dark-clinical"] .nn-exam-session:not(.nn-exam-session--neutral),
 html[data-theme="dark-academia"] .nn-exam-session:not(.nn-exam-session--neutral),
-html[data-theme="dark-mode"] .nn-exam-session:not(.nn-exam-session--neutral) {
+html[data-theme="dark-mode"] .nn-exam-session:not(.nn-exam-session--neutral),
+html[data-theme="midnight-indigo"] .nn-exam-session:not(.nn-exam-session--neutral),
+html[data-theme="deep-twilight"] .nn-exam-session:not(.nn-exam-session--neutral) {
   background: var(--bg-section-alt);
   border-color: var(--border-medium);
 }
@@ -2683,7 +2708,9 @@ html[data-theme] .nn-exam-session.nn-cat-exam-session {
 /* Dark themes: keep surface slightly elevated above pure black */
 html[data-theme="dark-clinical"] .nn-exam-session.nn-cat-exam-session,
 html[data-theme="dark-academia"] .nn-exam-session.nn-cat-exam-session,
-html[data-theme="dark-mode"] .nn-exam-session.nn-cat-exam-session {
+html[data-theme="dark-mode"] .nn-exam-session.nn-cat-exam-session,
+html[data-theme="midnight-indigo"] .nn-exam-session.nn-cat-exam-session,
+html[data-theme="deep-twilight"] .nn-exam-session.nn-cat-exam-session {
   background: var(--bg-card);
   border-color: var(--border-medium);
 }
@@ -3200,6 +3227,21 @@ html[data-theme="dark-mode"] .nn-exam-session.nn-cat-exam-session {
 
 /* ── QUESTION CARD (left) ──────────────────────────────────── */
 
+/*
+ * nn-cat-exam-col — single-column centered wrapper for CAT EXAM mode.
+ *
+ * Used when isExamStyle = catMode && !catFeedbackStudy.
+ * No right rationale panel — the question takes the full centered width.
+ * Matches real NCLEX exam experience: one question, nothing else visible.
+ *
+ * Spec §1: "CAT exam mode = minimal, exam-like, single-column"
+ */
+.nn-cat-exam-col {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 24px 0 40px;
+}
+
 .nn-cat-question-card {
   border-radius: 1.25rem;
   border: 1px solid var(--semantic-border-soft);
@@ -3321,7 +3363,9 @@ html[data-theme="dark-mode"] .nn-exam-session.nn-cat-exam-session {
 
 html[data-theme="dark-clinical"] .nn-cat-opt--incorrect,
 html[data-theme="dark-academia"] .nn-cat-opt--incorrect,
-html[data-theme="dark-mode"] .nn-cat-opt--incorrect {
+html[data-theme="dark-mode"] .nn-cat-opt--incorrect,
+html[data-theme="midnight-indigo"] .nn-cat-opt--incorrect,
+html[data-theme="deep-twilight"] .nn-cat-opt--incorrect {
   border-color: color-mix(in srgb, var(--semantic-danger) 36%, var(--semantic-border-soft));
 }
 
@@ -4614,24 +4658,24 @@ html[data-theme="dark-mode"] .nn-cat-opt--incorrect {
 
 /* Card 1 — Overconfident Errors: soft warning surface */
 .nn-confidence-pattern-card--warning {
-  background: var(--semantic-warning-soft,
-    color-mix(in srgb, var(--semantic-warning) 8%, var(--semantic-surface)));
+  background: var(--state-warning, var(--semantic-warning-soft,
+    color-mix(in srgb, var(--semantic-warning) 8%, var(--semantic-surface))));
   border: 1px solid
     color-mix(in srgb, var(--semantic-warning) 22%, var(--semantic-border-soft));
 }
 
 /* Card 2 — Uncertain Correct: soft info surface */
 .nn-confidence-pattern-card--info {
-  background: var(--semantic-info-soft,
-    color-mix(in srgb, var(--semantic-info) 8%, var(--semantic-surface)));
+  background: var(--state-info, var(--semantic-info-soft,
+    color-mix(in srgb, var(--semantic-info) 8%, var(--semantic-surface))));
   border: 1px solid
     color-mix(in srgb, var(--semantic-info) 22%, var(--semantic-border-soft));
 }
 
 /* Card 3 — Strong Knowledge: soft success surface */
 .nn-confidence-pattern-card--success {
-  background: var(--role-success-soft,
-    color-mix(in srgb, var(--role-success, var(--semantic-success)) 8%, var(--semantic-surface)));
+  background: var(--state-success, var(--role-success-soft,
+    color-mix(in srgb, var(--role-success, var(--semantic-success)) 8%, var(--semantic-surface))));
   border: 1px solid
     color-mix(
       in srgb,
@@ -4681,23 +4725,23 @@ html[data-theme="dark-mode"] .nn-cat-opt--incorrect {
 
 /* Group 1 — Highest Priority: incorrect + high confidence (soft danger) */
 .nn-review-priority-group--high {
-  background: color-mix(in srgb, var(--semantic-danger) 6%, var(--semantic-surface));
+  background: var(--state-danger-soft, color-mix(in srgb, var(--semantic-danger) 6%, var(--semantic-surface)));
   border: 1px solid
     color-mix(in srgb, var(--semantic-danger) 18%, var(--semantic-border-soft));
 }
 
 /* Group 2 — Needs Review: warm soft surface */
 .nn-review-priority-group--medium {
-  background: var(--semantic-warning-soft,
-    color-mix(in srgb, var(--semantic-warning) 6%, var(--semantic-surface)));
+  background: var(--state-warning, var(--semantic-warning-soft,
+    color-mix(in srgb, var(--semantic-warning) 6%, var(--semantic-surface))));
   border: 1px solid
     color-mix(in srgb, var(--semantic-warning) 20%, var(--semantic-border-soft));
 }
 
 /* Group 3 — Stable Areas: soft success */
 .nn-review-priority-group--stable {
-  background: var(--role-success-soft,
-    color-mix(in srgb, var(--role-success, var(--semantic-success)) 6%, var(--semantic-surface)));
+  background: var(--state-success, var(--role-success-soft,
+    color-mix(in srgb, var(--role-success, var(--semantic-success)) 6%, var(--semantic-surface))));
   border: 1px solid
     color-mix(
       in srgb,
@@ -4863,8 +4907,8 @@ html[data-theme="dark-mode"] .nn-cat-opt--incorrect {
 }
 
 .nn-review-group--priority .nn-review-group__header {
-  background: var(--semantic-warning-soft,
-    color-mix(in srgb, var(--semantic-warning) 8%, var(--semantic-surface)));
+  background: var(--state-danger-soft, var(--semantic-warning-soft,
+    color-mix(in srgb, var(--semantic-warning) 8%, var(--semantic-surface))));
 }
 
 /* Group 2 — Needs Review: soft neutral */
@@ -4883,8 +4927,8 @@ html[data-theme="dark-mode"] .nn-cat-opt--incorrect {
 }
 
 .nn-review-group--uncertain .nn-review-group__header {
-  background: var(--semantic-info-soft,
-    color-mix(in srgb, var(--semantic-info) 8%, var(--semantic-surface)));
+  background: var(--state-info, var(--semantic-info-soft,
+    color-mix(in srgb, var(--semantic-info) 8%, var(--semantic-surface))));
 }
 
 /* Group 4 — Strong Areas: soft success */

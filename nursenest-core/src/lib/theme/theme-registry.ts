@@ -33,18 +33,28 @@ export type ThemeOption = {
   group: ThemeGroup;
   /** Logo variant for this theme — used to select branded logo asset. */
   logoVariant: ThemeLogoVariant;
-  /** True for the 5 named production themes (blueberry-sherbet, strawberry-cream, ocean-mist, lavender-dream, midnight-indigo). */
+  /** True for fully-specified named production themes with explicit lesson, state, and logo tokens. */
   named?: boolean;
 };
 
-/** Theme list — named themes listed first, then legacy themes grouped by family. */
+/** Theme list — 15 named themes listed first, then legacy themes grouped by family. */
 export const THEME_OPTIONS: ThemeOption[] = [
-  /* ── Named production themes ── */
+  /* ── Named production themes (15) ── */
   { id: "blueberry-sherbet", label: "Blueberry Sherbet", color: "#3852B4", group: "light", logoVariant: "blue", named: true },
   { id: "strawberry-cream", label: "Strawberry Cream", color: "#EA7B7B", group: "light", logoVariant: "rose", named: true },
   { id: "ocean-mist", label: "Ocean Mist", color: "#1D546D", group: "light", logoVariant: "blue", named: true },
   { id: "lavender-dream", label: "Lavender Dream", color: "#BDA6CE", group: "light", logoVariant: "neutral", named: true },
+  { id: "mint-breeze", label: "Mint Breeze", color: "#3A9E8F", group: "light", logoVariant: "mint", named: true },
+  { id: "rose-quartz", label: "Rose Quartz", color: "#C4788A", group: "light", logoVariant: "rose", named: true },
+  { id: "golden-hour", label: "Golden Hour", color: "#B8860B", group: "light", logoVariant: "neutral", named: true },
+  { id: "sage-garden", label: "Sage Garden", color: "#6B8E6B", group: "light", logoVariant: "mint", named: true },
+  { id: "coral-sunset", label: "Coral Sunset", color: "#E07050", group: "light", logoVariant: "rose", named: true },
+  { id: "arctic-frost", label: "Arctic Frost", color: "#4A7A9B", group: "light", logoVariant: "blue", named: true },
+  { id: "plum-velvet", label: "Plum Velvet", color: "#7A4A8A", group: "light", logoVariant: "neutral", named: true },
+  { id: "honey-cream", label: "Honey Cream", color: "#A07840", group: "light", logoVariant: "neutral", named: true },
+  { id: "dusty-rose", label: "Dusty Rose", color: "#B07080", group: "light", logoVariant: "rose", named: true },
   { id: "midnight-indigo", label: "Midnight Indigo", color: "#021A54", group: "dark", logoVariant: "dark", named: true },
+  { id: "deep-twilight", label: "Deep Twilight", color: "#2A1E4A", group: "dark", logoVariant: "dark", named: true },
 
   /* ── Clinical / Default ── */
   { id: "ocean", label: "Clinical Blue", color: "#1da2d8", group: "light", logoVariant: "blue" },

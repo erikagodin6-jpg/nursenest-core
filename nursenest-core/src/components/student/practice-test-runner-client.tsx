@@ -50,7 +50,7 @@ import {
   type SmartReviewItem,
 } from "@/components/study/smart-review-screen";
 import { StudyPlanFromResults } from "@/components/study/study-plan";
-import { CatSessionLayout, CatTopBar, CatContentGrid } from "@/components/study/cat-session-layout";
+import { CatSessionLayout, CatTopBar, CatContentGrid, CatExamCol } from "@/components/study/cat-session-layout";
 import { QuestionCard, AnswerOptionRow } from "@/components/study/cat-question-card";
 import type { AnswerOptionState } from "@/components/study/cat-question-card";
 import { RationalePanel } from "@/components/study/cat-rationale-panel";
@@ -356,6 +356,10 @@ export function PracticeTestRunnerClient({
   const total = questionIds.length;
   const examSimulation = testConfig?.catPresentationMode === "exam_simulation";
   const catFeedbackStudy = Boolean(catMode && (testConfig?.catExamFeedbackMode ?? "test") === "study");
+  // isExamStyle — single-column minimal layout for CAT test mode (spec §1, §14).
+  // Mirrors real NCLEX: one question at a time, no visible rationale panel.
+  // CAT study mode (catFeedbackStudy=true) stays on the 2-column layout.
+  const isExamStyle = catMode && !catFeedbackStudy;
   const catStudyLocked =
     catFeedbackStudy &&
     Boolean(catStudyFeedback && current && catStudyFeedback.questionId === current.id && idx === total - 1);
@@ -823,7 +827,7 @@ export function PracticeTestRunnerClient({
 
         {/* ── Coach card (CAT-specific, premium) ──────────────────── */}
         {results.catReport ? (
-          <div className="mx-auto max-w-900px px-6 pb-8">
+          <div className="mx-auto max-w-[900px] px-6 pb-8">
             <CatResultsCoachSection
               coach={results.catCoach}
               catExamFeedbackMode={results.catExamFeedbackMode ?? testConfig?.catExamFeedbackMode ?? null}
@@ -1181,128 +1185,227 @@ export function PracticeTestRunnerClient({
               timerSlot={<ExamTimerReadout remainingSec={timedMode ? remainingSec : null} />}
             />
 
-            {/* ── 2-column grid: 65% question / 35% rationale ────────── */}
-            <CatContentGrid>
-              {/* LEFT — question card */}
-              <QuestionCard
-                stem={current.stem ?? ""}
-                topic={current.topic}
-                subtopic={current.subtopic}
-                difficultyLabel={current.difficulty != null ? difficultyBandLabel(current.difficulty) : null}
-              >
-                {/* Timed warning */}
-                {timedMode && timeLimitSec != null ? (
-                  <div className="nn-cat-exam-timing-alert mb-5" role="alert">
-                    Timed session — the exam may end automatically when time expires.
-                  </div>
-                ) : null}
+            {/*
+             * Layout switch (spec §1, §14):
+             *   isExamStyle (catMode && !catFeedbackStudy)
+             *     → single-column CatExamCol — minimal, clinical, no visible rationale
+             *   CAT study mode (catFeedbackStudy)
+             *     → 2-column CatContentGrid — question left, rationale right
+             */}
+            {isExamStyle ? (
+              /* ── EXAM MODE: single-column centered (spec §1) ─────────── */
+              <CatExamCol>
+                <QuestionCard
+                  stem={current.stem ?? ""}
+                  topic={current.topic}
+                  subtopic={current.subtopic}
+                  difficultyLabel={current.difficulty != null ? difficultyBandLabel(current.difficulty) : null}
+                >
+                  {/* Timed warning */}
+                  {timedMode && timeLimitSec != null ? (
+                    <div className="nn-cat-exam-timing-alert mb-5" role="alert">
+                      Timed session — the exam may end automatically when time expires.
+                    </div>
+                  ) : null}
 
-                {/* CAT live transparency (optional) */}
-                {catLiveTransparency || adaptiveDifficultyHistory.length > 0 ? (
-                  <div className="mb-5">
-                    <CatLiveTransparencyStrip
-                      difficultyTail={adaptiveDifficultyHistory}
-                      theta={adaptiveTheta}
-                      se={adaptiveSe}
-                      show={catLiveTransparency}
-                      onToggle={setCatLiveTransparency}
-                    />
-                  </div>
-                ) : null}
+                  {/* CAT live transparency (optional) */}
+                  {catLiveTransparency || adaptiveDifficultyHistory.length > 0 ? (
+                    <div className="mb-5">
+                      <CatLiveTransparencyStrip
+                        difficultyTail={adaptiveDifficultyHistory}
+                        theta={adaptiveTheta}
+                        se={adaptiveSe}
+                        show={catLiveTransparency}
+                        onToggle={setCatLiveTransparency}
+                      />
+                    </div>
+                  ) : null}
 
-                {/* Options label */}
-                <p className="nn-cat-options-label">
-                  {isSata ? "Select all that apply" : "Select the best answer"}
-                </p>
+                  {/* Options label */}
+                  <p className="nn-cat-options-label">
+                    {isSata ? "Select all that apply" : "Select the best answer"}
+                  </p>
 
-                {/* Answer options */}
-                {catOptions}
+                  {/* Answer options */}
+                  {catOptions}
 
-                {/* Confidence selector — CAT mode: forced neutral palette (spec §12) */}
-                {hasMeaningfulAnswer(current.id) ? (
-                  <div className="mt-4">
-                    <ConfidenceSelector
-                      questionId={current.id}
-                      value={confidence[current.id] ?? null}
-                      neutral
-                      onChange={setConfidenceForQuestion}
-                    />
-                  </div>
-                ) : null}
+                  {/* Confidence selector — exam mode: forced neutral (spec §7, §12) */}
+                  {hasMeaningfulAnswer(current.id) ? (
+                    <div className="mt-4">
+                      <ConfidenceSelector
+                        questionId={current.id}
+                        value={confidence[current.id] ?? null}
+                        neutral
+                        onChange={setConfidenceForQuestion}
+                      />
+                    </div>
+                  ) : null}
 
-                {/* CAT study feedback (inline, after options) */}
-                {rationalePanelMode === "feedback" && catStudyFeedback ? (
-                  <div className="mt-6 border-t border-[var(--semantic-border-soft)] pt-5">
-                    <CatStudyFeedbackPanel
-                      feedback={catStudyFeedback}
-                      continueLabel={idx < total - 1 ? "Next adaptive item" : "View results"}
-                      onContinue={() => void catAdvance()}
-                      continueDisabled={saving}
-                      pathwayId={testConfig?.pathwayId ?? null}
-                    />
-                  </div>
-                ) : null}
-
-                {/* Nav bar */}
-                <div className="nn-cat-question-nav">
-                  {/* Flag — left-anchored */}
-                  <button
-                    type="button"
-                    aria-pressed={Boolean(flagged[current.id])}
-                    className={`nn-cat-question-nav__flag inline-flex items-center gap-1.5 rounded border px-3 py-1.5 text-xs font-semibold transition ${
-                      flagged[current.id]
-                        ? "border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] text-[var(--semantic-text-primary)]"
-                        : "border-[var(--semantic-border-soft)] text-[var(--semantic-text-muted)] hover:bg-[var(--semantic-panel-muted)]"
-                    }`}
-                    onClick={() => setFlagged((f) => ({ ...f, [current.id]: !f[current.id] }))}
-                  >
-                    <span aria-hidden="true">{flagged[current.id] ? "★" : "☆"}</span>
-                    {flagged[current.id] ? "Flagged" : "Flag"}
-                  </button>
-
-                  {/* End session — quiet */}
-                  <button
-                    type="button"
-                    disabled={saving}
-                    className="text-xs font-medium text-[var(--semantic-text-muted)] underline-offset-2 hover:text-[var(--semantic-text-secondary)] hover:underline"
-                    onClick={() => void abandon()}
-                  >
-                    End session
-                  </button>
-
-                  {/* Primary action — hidden when study feedback is showing */}
-                  {rationalePanelMode === "feedback" ? null : idx < total - 1 ? (
+                  {/* Nav bar */}
+                  <div className="nn-cat-question-nav">
                     <button
                       type="button"
-                      disabled={saving || !hasMeaningfulAnswer(current.id)}
-                      className="nn-btn-primary min-h-[2.75rem] rounded-lg px-6 text-sm font-semibold shadow-none disabled:opacity-40"
-                      onClick={() => void catAdvance()}
+                      aria-pressed={Boolean(flagged[current.id])}
+                      className={`nn-cat-question-nav__flag inline-flex items-center gap-1.5 rounded border px-3 py-1.5 text-xs font-semibold transition ${
+                        flagged[current.id]
+                          ? "border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] text-[var(--semantic-text-primary)]"
+                          : "border-[var(--semantic-border-soft)] text-[var(--semantic-text-muted)] hover:bg-[var(--semantic-panel-muted)]"
+                      }`}
+                      onClick={() => setFlagged((f) => ({ ...f, [current.id]: !f[current.id] }))}
                     >
-                      {saving ? "Working…" : catFeedbackStudy ? "See explanation" : "Next question"}
+                      <span aria-hidden="true">{flagged[current.id] ? "★" : "☆"}</span>
+                      {flagged[current.id] ? "Flagged" : "Flag"}
                     </button>
-                  ) : (
                     <button
                       type="button"
-                      disabled={saving || !hasMeaningfulAnswer(current.id)}
-                      className="nn-btn-primary min-h-[2.75rem] rounded-lg px-6 text-sm font-semibold shadow-none disabled:opacity-40"
-                      onClick={() => void catAdvance()}
+                      disabled={saving}
+                      className="text-xs font-medium text-[var(--semantic-text-muted)] underline-offset-2 hover:text-[var(--semantic-text-secondary)] hover:underline"
+                      onClick={() => void abandon()}
                     >
-                      {saving ? "Working…" : catFeedbackStudy ? "See explanation" : "Submit & finish"}
+                      End session
                     </button>
-                  )}
-                </div>
-              </QuestionCard>
+                    {idx < total - 1 ? (
+                      <button
+                        type="button"
+                        disabled={saving || !hasMeaningfulAnswer(current.id)}
+                        className="nn-btn-primary min-h-[2.75rem] rounded-lg px-6 text-sm font-semibold shadow-none disabled:opacity-40"
+                        onClick={() => void catAdvance()}
+                      >
+                        {saving ? "Working…" : "Next question"}
+                      </button>
+                    ) : (
+                      <button
+                        type="button"
+                        disabled={saving || !hasMeaningfulAnswer(current.id)}
+                        className="nn-btn-primary min-h-[2.75rem] rounded-lg px-6 text-sm font-semibold shadow-none disabled:opacity-40"
+                        onClick={() => void catAdvance()}
+                      >
+                        {saving ? "Working…" : "Submit & finish"}
+                      </button>
+                    )}
+                  </div>
+                </QuestionCard>
+              </CatExamCol>
+            ) : (
+              /* ── STUDY MODE: 2-column grid — 65% question / 35% rationale ── */
+              <CatContentGrid>
+                {/* LEFT — question card */}
+                <QuestionCard
+                  stem={current.stem ?? ""}
+                  topic={current.topic}
+                  subtopic={current.subtopic}
+                  difficultyLabel={current.difficulty != null ? difficultyBandLabel(current.difficulty) : null}
+                >
+                  {/* Timed warning */}
+                  {timedMode && timeLimitSec != null ? (
+                    <div className="nn-cat-exam-timing-alert mb-5" role="alert">
+                      Timed session — the exam may end automatically when time expires.
+                    </div>
+                  ) : null}
 
-              {/* RIGHT — rationale panel */}
-              <RationalePanel
-                mode={rationalePanelMode}
-                feedback={
-                  rationalePanelMode === "feedback" ? catStudyFeedback ?? undefined : undefined
-                }
-                optionKeys={optsCanonical}
-                optionTexts={optsDisplay}
-              />
-            </CatContentGrid>
+                  {/* CAT live transparency (optional) */}
+                  {catLiveTransparency || adaptiveDifficultyHistory.length > 0 ? (
+                    <div className="mb-5">
+                      <CatLiveTransparencyStrip
+                        difficultyTail={adaptiveDifficultyHistory}
+                        theta={adaptiveTheta}
+                        se={adaptiveSe}
+                        show={catLiveTransparency}
+                        onToggle={setCatLiveTransparency}
+                      />
+                    </div>
+                  ) : null}
+
+                  {/* Options label */}
+                  <p className="nn-cat-options-label">
+                    {isSata ? "Select all that apply" : "Select the best answer"}
+                  </p>
+
+                  {/* Answer options */}
+                  {catOptions}
+
+                  {/* Confidence selector — study mode: forced neutral palette (spec §7, §12) */}
+                  {hasMeaningfulAnswer(current.id) ? (
+                    <div className="mt-4">
+                      <ConfidenceSelector
+                        questionId={current.id}
+                        value={confidence[current.id] ?? null}
+                        neutral
+                        onChange={setConfidenceForQuestion}
+                      />
+                    </div>
+                  ) : null}
+
+                  {/* CAT study feedback (inline, after options) */}
+                  {rationalePanelMode === "feedback" && catStudyFeedback ? (
+                    <div className="mt-6 border-t border-[var(--semantic-border-soft)] pt-5">
+                      <CatStudyFeedbackPanel
+                        feedback={catStudyFeedback}
+                        continueLabel={idx < total - 1 ? "Next adaptive item" : "View results"}
+                        onContinue={() => void catAdvance()}
+                        continueDisabled={saving}
+                        pathwayId={testConfig?.pathwayId ?? null}
+                      />
+                    </div>
+                  ) : null}
+
+                  {/* Nav bar */}
+                  <div className="nn-cat-question-nav">
+                    <button
+                      type="button"
+                      aria-pressed={Boolean(flagged[current.id])}
+                      className={`nn-cat-question-nav__flag inline-flex items-center gap-1.5 rounded border px-3 py-1.5 text-xs font-semibold transition ${
+                        flagged[current.id]
+                          ? "border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] text-[var(--semantic-text-primary)]"
+                          : "border-[var(--semantic-border-soft)] text-[var(--semantic-text-muted)] hover:bg-[var(--semantic-panel-muted)]"
+                      }`}
+                      onClick={() => setFlagged((f) => ({ ...f, [current.id]: !f[current.id] }))}
+                    >
+                      <span aria-hidden="true">{flagged[current.id] ? "★" : "☆"}</span>
+                      {flagged[current.id] ? "Flagged" : "Flag"}
+                    </button>
+                    <button
+                      type="button"
+                      disabled={saving}
+                      className="text-xs font-medium text-[var(--semantic-text-muted)] underline-offset-2 hover:text-[var(--semantic-text-secondary)] hover:underline"
+                      onClick={() => void abandon()}
+                    >
+                      End session
+                    </button>
+                    {/* Primary action — hidden when study feedback is showing */}
+                    {rationalePanelMode === "feedback" ? null : idx < total - 1 ? (
+                      <button
+                        type="button"
+                        disabled={saving || !hasMeaningfulAnswer(current.id)}
+                        className="nn-btn-primary min-h-[2.75rem] rounded-lg px-6 text-sm font-semibold shadow-none disabled:opacity-40"
+                        onClick={() => void catAdvance()}
+                      >
+                        {saving ? "Working…" : "See explanation"}
+                      </button>
+                    ) : (
+                      <button
+                        type="button"
+                        disabled={saving || !hasMeaningfulAnswer(current.id)}
+                        className="nn-btn-primary min-h-[2.75rem] rounded-lg px-6 text-sm font-semibold shadow-none disabled:opacity-40"
+                        onClick={() => void catAdvance()}
+                      >
+                        {saving ? "Working…" : "See explanation"}
+                      </button>
+                    )}
+                  </div>
+                </QuestionCard>
+
+                {/* RIGHT — rationale panel */}
+                <RationalePanel
+                  mode={rationalePanelMode}
+                  feedback={
+                    rationalePanelMode === "feedback" ? catStudyFeedback ?? undefined : undefined
+                  }
+                  optionKeys={optsCanonical}
+                  optionTexts={optsDisplay}
+                />
+              </CatContentGrid>
+            )}
           </CatSessionLayout>
         </ProtectedPremiumContent>
       </div>

@@ -95,7 +95,8 @@
  */
 html[data-theme="blush"],
 html[data-theme="pastel-blush"],
-html[data-theme="strawberry"] {
+html[data-theme="strawberry"],
+html[data-theme="strawberry-cream"] {
   --role-cta: #b84063;
   --role-cta-foreground: #ffffff;
   --role-cta-hover: #a53558;
@@ -143,7 +144,8 @@ html[data-theme="multi-pastel"] {
 html[data-theme="dark-clinical"],
 html[data-theme="dark-academia"],
 html[data-theme="dark-mode"],
-html[data-theme="midnight-indigo"] {
+html[data-theme="midnight-indigo"],
+html[data-theme="deep-twilight"] {
   --role-cta: color-mix(in srgb, var(--theme-primary) 88%, #fb923c);
   --role-cta-hover: color-mix(in srgb, var(--role-cta) 87%, var(--theme-heading-text));
   --role-cta-pressed: color-mix(in srgb, var(--role-cta) 74%, var(--theme-heading-text));
