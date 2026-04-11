@@ -8,6 +8,7 @@ import type { LearnerMarketingT } from "@/lib/learner/learner-marketing-server";
 import type { WeakAreaInsight, WeaknessTier } from "@/lib/insights/types";
 import type { RecentLearnerNoteSummary } from "@/components/student/premium-learner-hub";
 import { resolveStudyLoopCatDestination } from "@/lib/exam-pathways/study-loop-cat-routing";
+import { SessionFeedbackList } from "@/components/student/session-feedback-strip";
 
 function tierClass(tier: WeaknessTier): string {
   switch (tier) {
@@ -218,8 +219,8 @@ export function LearnerStudentDashboard({
         </div>
       </section>
 
-      {momentumMessages[0] ? (
-        <p className="rounded-xl border border-border/60 bg-muted/10 px-4 py-3 text-sm text-foreground/90">{momentumMessages[0]}</p>
+      {momentumMessages.length > 0 ? (
+        <SessionFeedbackList lines={momentumMessages} />
       ) : null}
 
       <div className="grid gap-4 lg:grid-cols-3">

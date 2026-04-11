@@ -158,8 +158,8 @@ export function HighlightsList({
 
   const emptyText =
     variant === "bookmarks"
-      ? "No bookmarked sections yet. Use the "Mark section" button inside any lesson."
-      : "No saved rationales yet. After answering a question, click "Save this rationale" to save it here.";
+      ? 'No bookmarked sections yet. Use the "Mark section" button inside any lesson.'
+      : 'No saved rationales yet. After answering a question, click "Save this rationale" to save it here.';
 
   if (items.length === 0) {
     return (

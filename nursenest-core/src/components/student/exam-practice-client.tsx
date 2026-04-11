@@ -529,9 +529,16 @@ export function ExamPracticeClient({
 
   if (done) {
     const r = done.review;
+    const sessionFeedback = generateClientSessionFeedback({
+      score: done.score,
+      total: done.total,
+      accuracyPct: r?.accuracyPct ?? null,
+      byTopic: r?.byTopic ?? null,
+    });
     return (
       <div className="nn-card mt-4 space-y-4 p-6">
         <p className="font-semibold">{t("examAttempt.recorded")}</p>
+        <SessionFeedbackStrip feedback={sessionFeedback} />
         <p className="text-sm text-muted">
           {r?.accuracyPct != null
             ? t("examAttempt.scoreWithPct", { score: done.score, total: done.total, pct: r.accuracyPct })
