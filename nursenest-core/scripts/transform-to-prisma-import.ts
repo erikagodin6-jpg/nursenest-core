@@ -58,7 +58,7 @@ interface PathwayLessonUpsert {
     sections: LessonSection[];
     previewSectionCount: number;
     countryCode: "US" | "CA" | null;
-    tierCode: "FREE" | "BASIC" | "PREMIUM" | "PRO" | null;
+    tierCode: "RPN" | "LVN_LPN" | "RN" | "NP" | "ALLIED" | null;
     status: "PUBLISHED" | "DRAFT" | "ARCHIVED";
     sortOrder: number;
     locale: string;
@@ -129,28 +129,29 @@ const GENERATED_AT = new Date().toISOString();
 const DEFAULT_LOCALE = "en";
 
 // Program → pathway/tier/country mapping
+// tierCode maps to Prisma TierCode enum: RPN | LVN_LPN | RN | NP | ALLIED | null
 const PROGRAM_MAP: Record<
   string,
-  { pathwayId: string; exam: string; tierCode: "FREE" | "BASIC" | "PREMIUM"; countryCode: null | "US" | "CA"; programs: string[] }
+  { pathwayId: string; exam: string; tierCode: "RPN" | "LVN_LPN" | "RN" | "NP" | "ALLIED" | null; countryCode: null | "US" | "CA"; programs: string[] }
 > = {
   "np": {
     pathwayId: "aanp-fnp",
     exam: "AANP-FNP",
-    tierCode: "PREMIUM",
+    tierCode: "NP",
     countryCode: null,
     programs: ["np"],
   },
   "pre-nursing": {
     pathwayId: "pre-nursing",
     exam: "",
-    tierCode: "BASIC",
+    tierCode: null,
     countryCode: null,
     programs: ["pre-nursing"],
   },
   "foundations-pilot": {
     pathwayId: "pre-nursing",
     exam: "",
-    tierCode: "BASIC",
+    tierCode: null,
     countryCode: null,
     programs: ["pre-nursing"],
   },
@@ -382,7 +383,7 @@ function transformNpBatch01Lesson(
   pathwayId: string,
   batchId: string,
   sortOrder: number,
-  tierCode: "FREE" | "BASIC" | "PREMIUM",
+  tierCode: "RPN" | "LVN_LPN" | "RN" | "NP" | "ALLIED" | null,
   countryCode: null | "US" | "CA",
 ): PathwayLessonUpsert {
   const lessonData = raw.lesson ?? {};
@@ -444,7 +445,7 @@ function transformNpBatch02Lesson(
   pathwayId: string,
   batchId: string,
   sortOrder: number,
-  tierCode: "FREE" | "BASIC" | "PREMIUM",
+  tierCode: "RPN" | "LVN_LPN" | "RN" | "NP" | "ALLIED" | null,
   countryCode: null | "US" | "CA",
 ): PathwayLessonUpsert {
   const lessonData: Record<string, unknown> = {
@@ -517,7 +518,7 @@ function transformFoundationsLesson(
   pathwayId: string,
   batchId: string,
   sortOrder: number,
-  tierCode: "FREE" | "BASIC" | "PREMIUM",
+  tierCode: "RPN" | "LVN_LPN" | "RN" | "NP" | "ALLIED" | null,
   countryCode: null | "US" | "CA",
 ): PathwayLessonUpsert {
   const lessonSlug = lesson.lessonId

@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "stage": "prisma_import",
-  "runId": "dd61c7f0-c39a-4370-b768-6956f17396a3",
-  "generatedAt": "2026-04-11T02:52:38.383Z",
+  "runId": "a5b35506-7596-49f2-9537-7eb1c8e0bc23",
+  "generatedAt": "2026-04-11T03:05:01.993Z",
   "programs": [
     "np"
   ],
@@ -10,6 +10,7 @@
   "sourceFiles": [
     "data/phase2/np-advanced-batch-01-lessons.json",
     "data/phase2/np-advanced-batch-02-lessons.json",
+    "data/phase2/np-phase2-cleaned.json",
     "data/phase2/recognizing-clinical-deterioration.json",
     "data/phase2/vital-signs-measurement-interpretation.json",
     "data/phase2/np-advanced-batch-01-qbank.json",
@@ -17,7 +18,7 @@
   ],
   "pathwayLessonUpserts": [
     {
-      "pipelineId": "1f281d58-7db9-4125-a241-ecdf777484f6",
+      "pipelineId": "afa5ad1d-5c2e-45e7-97f5-cdee66eb2e03",
       "upsertKey": {
         "pathwayId": "aanp-fnp",
         "slug": "knee-pain-differential--np-advanced-batch-01",
@@ -73,15 +74,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "PREMIUM",
+        "tierCode": "NP",
         "status": "PUBLISHED",
         "sortOrder": 1000,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "524600c1-bcf6-417e-82b8-4e3e28e39904",
+      "pipelineId": "94847fa5-b38b-457d-a57c-ec4d0fc6738b",
       "upsertKey": {
         "pathwayId": "aanp-fnp",
         "slug": "uti-uncomplicated-complicated-stewardship--np-advanced-batch-01",
@@ -137,15 +138,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "PREMIUM",
+        "tierCode": "NP",
         "status": "PUBLISHED",
         "sortOrder": 1001,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "93ce70c5-0b6c-4230-ab47-787b2c54a9a5",
+      "pipelineId": "4a9eaaa8-cae8-4ead-8f79-6150f89036b9",
       "upsertKey": {
         "pathwayId": "aanp-fnp",
         "slug": "t2dm-intensification-beyond-metformin--np-advanced-batch-01",
@@ -201,15 +202,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "PREMIUM",
+        "tierCode": "NP",
         "status": "PUBLISHED",
         "sortOrder": 1002,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "21a2a53c-a297-4c60-8264-53da0efab71b",
+      "pipelineId": "bdc73b4a-8b0e-4abc-a975-ec929e2c5ad5",
       "upsertKey": {
         "pathwayId": "aanp-fnp",
         "slug": "copd-gold-staging-inhaler-selection--np-advanced-batch-01",
@@ -265,15 +266,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "PREMIUM",
+        "tierCode": "NP",
         "status": "PUBLISHED",
         "sortOrder": 1003,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "ef488bd1-9be2-442f-b0e3-ee3e2e92bca6",
+      "pipelineId": "3d6a0960-bd4a-48e1-b8a8-08db795b9c08",
       "upsertKey": {
         "pathwayId": "aanp-fnp",
         "slug": "headache-differential-red-flags--np-advanced-batch-01",
@@ -323,15 +324,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "PREMIUM",
+        "tierCode": "NP",
         "status": "PUBLISHED",
         "sortOrder": 1004,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "ae502cde-b135-411d-95b9-120b4ceb1f2a",
+      "pipelineId": "2288e6ee-af7f-4a91-9d77-bc0e23774676",
       "upsertKey": {
         "pathwayId": "aanp-fnp",
         "slug": "syncope-differential-vasovagal-cardiac-neuro--np-advanced-batch-01",
@@ -387,15 +388,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "PREMIUM",
+        "tierCode": "NP",
         "status": "PUBLISHED",
         "sortOrder": 1005,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "048c7bc6-1032-4104-a411-ca15b13c9cc7",
+      "pipelineId": "823d0601-3673-4a00-8493-46ae02e945f4",
       "upsertKey": {
         "pathwayId": "aanp-fnp",
         "slug": "hypertension-red-flags-referral--np-advanced-batch-01",
@@ -451,15 +452,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "PREMIUM",
+        "tierCode": "NP",
         "status": "PUBLISHED",
         "sortOrder": 1006,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "dfd5be2d-29e4-434c-8339-036be5f14c75",
+      "pipelineId": "39fde552-fcd7-42bd-a7b5-842842db142e",
       "upsertKey": {
         "pathwayId": "aanp-fnp",
         "slug": "cancer-red-flags-primary-care--np-advanced-batch-01",
@@ -515,15 +516,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "PREMIUM",
+        "tierCode": "NP",
         "status": "PUBLISHED",
         "sortOrder": 1007,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "bf74c042-0910-458d-9dff-afc1550ece8e",
+      "pipelineId": "2479af9c-f60d-4499-bfb3-00dab6cf0169",
       "upsertKey": {
         "pathwayId": "aanp-fnp",
         "slug": "prep-hiv-prevention-prescribing-monitoring--np-advanced-batch-01",
@@ -579,15 +580,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "PREMIUM",
+        "tierCode": "NP",
         "status": "PUBLISHED",
         "sortOrder": 1008,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "591ffc22-74b3-4f6e-bd3a-7482de590dbb",
+      "pipelineId": "cc30f8b2-db85-47b2-add9-976914d75287",
       "upsertKey": {
         "pathwayId": "aanp-fnp",
         "slug": "geriatric-assessment-falls-polypharmacy-frailty--np-advanced-batch-01",
@@ -643,15 +644,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "PREMIUM",
+        "tierCode": "NP",
         "status": "PUBLISHED",
         "sortOrder": 1009,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "38b9cea7-7946-407c-b33d-42c27a0f3cfc",
+      "pipelineId": "ea9fa75f-d048-46c4-a79f-8a5e2f583978",
       "upsertKey": {
         "pathwayId": "aanp-fnp",
         "slug": "deprescribing-beers-criteria-older-adults--np-advanced-batch-01",
@@ -707,15 +708,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "PREMIUM",
+        "tierCode": "NP",
         "status": "PUBLISHED",
         "sortOrder": 1010,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "c32b6cd0-449d-4793-9ddf-7eb0f75ad692",
+      "pipelineId": "ad4be7f3-3292-40fa-ae15-641fceb7f0fb",
       "upsertKey": {
         "pathwayId": "aanp-fnp",
         "slug": "psoriasis-atopic-dermatitis-stepwise-biologic--np-advanced-batch-01",
@@ -771,15 +772,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "PREMIUM",
+        "tierCode": "NP",
         "status": "PUBLISHED",
         "sortOrder": 1011,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "d8085993-5fcd-49d6-be39-9bafe5b1e0ca",
+      "pipelineId": "79c8b9d1-0f04-4d25-b9fb-3cbed7304799",
       "upsertKey": {
         "pathwayId": "aanp-fnp",
         "slug": "smoking-cessation-pharmacotherapy-counseling--np-advanced-batch-01",
@@ -835,15 +836,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "PREMIUM",
+        "tierCode": "NP",
         "status": "PUBLISHED",
         "sortOrder": 1012,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "6b85b2ec-c572-40a0-9be0-1714d51418b1",
+      "pipelineId": "0ee47f5c-41a3-43f9-8cab-0c254056f22a",
       "upsertKey": {
         "pathwayId": "aanp-fnp",
         "slug": "knee-pain-differential-lesson-01--np-advanced-batch-02",
@@ -905,15 +906,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "PREMIUM",
+        "tierCode": "NP",
         "status": "PUBLISHED",
         "sortOrder": 1013,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "19e0db30-ad5c-41a2-bb8a-e774bb080b01",
+      "pipelineId": "bd0acc3e-c5fa-467d-97af-1337e09e60b8",
       "upsertKey": {
         "pathwayId": "aanp-fnp",
         "slug": "uti-uncomplicated-complicated-stewardship-lesson-01--np-advanced-batch-02",
@@ -975,15 +976,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "PREMIUM",
+        "tierCode": "NP",
         "status": "PUBLISHED",
         "sortOrder": 1014,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "868ef8d5-e7a7-4941-bb2b-4351e6b4f39a",
+      "pipelineId": "5d1464a6-f63a-449d-b69e-8915f317ec1a",
       "upsertKey": {
         "pathwayId": "aanp-fnp",
         "slug": "t2dm-intensification-beyond-metformin-lesson-01--np-advanced-batch-02",
@@ -1045,15 +1046,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "PREMIUM",
+        "tierCode": "NP",
         "status": "PUBLISHED",
         "sortOrder": 1015,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "608b5dc4-9b61-41f3-af90-7a85873ee899",
+      "pipelineId": "2958535a-6807-49bc-919b-1ffd270261f3",
       "upsertKey": {
         "pathwayId": "aanp-fnp",
         "slug": "copd-gold-staging-inhaler-selection-lesson-01--np-advanced-batch-02",
@@ -1115,15 +1116,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "PREMIUM",
+        "tierCode": "NP",
         "status": "PUBLISHED",
         "sortOrder": 1016,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "607b5ff3-39ea-4218-912e-8f03ebe95918",
+      "pipelineId": "7248143b-f19f-4718-bc7a-4d6d26ea2cd1",
       "upsertKey": {
         "pathwayId": "aanp-fnp",
         "slug": "headache-differential-red-flags-lesson-01--np-advanced-batch-02",
@@ -1179,15 +1180,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "PREMIUM",
+        "tierCode": "NP",
         "status": "PUBLISHED",
         "sortOrder": 1017,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "29ad3b21-71a1-4225-946f-4056fc140b97",
+      "pipelineId": "347eb437-7ca1-47f3-960b-f9ed599f1f54",
       "upsertKey": {
         "pathwayId": "aanp-fnp",
         "slug": "syncope-differential-vasovagal-cardiac-neuro-lesson-01--np-advanced-batch-02",
@@ -1249,15 +1250,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "PREMIUM",
+        "tierCode": "NP",
         "status": "PUBLISHED",
         "sortOrder": 1018,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "f386c3b3-76f5-453b-a3d8-5efcb7590593",
+      "pipelineId": "5666b464-f3a5-45d3-b9fc-ea6277542a86",
       "upsertKey": {
         "pathwayId": "aanp-fnp",
         "slug": "hypertension-red-flags-referral-lesson-01--np-advanced-batch-02",
@@ -1319,15 +1320,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "PREMIUM",
+        "tierCode": "NP",
         "status": "PUBLISHED",
         "sortOrder": 1019,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "93836e9a-41ba-4fe2-92f4-943e6cee27bc",
+      "pipelineId": "b16f5ee6-c2f7-41db-b94e-db8632f485c8",
       "upsertKey": {
         "pathwayId": "aanp-fnp",
         "slug": "cancer-red-flags-primary-care-lesson-01--np-advanced-batch-02",
@@ -1383,15 +1384,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "PREMIUM",
+        "tierCode": "NP",
         "status": "PUBLISHED",
         "sortOrder": 1020,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "3b0e88e2-d4a4-4680-8941-35a53ae5cc65",
+      "pipelineId": "85e10e2e-e86b-4175-ad94-05f85a5e52db",
       "upsertKey": {
         "pathwayId": "aanp-fnp",
         "slug": "prep-hiv-prevention-prescribing-monitoring-lesson-01--np-advanced-batch-02",
@@ -1453,15 +1454,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "PREMIUM",
+        "tierCode": "NP",
         "status": "PUBLISHED",
         "sortOrder": 1021,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "2b487972-2688-48cb-bba6-6d7e1629ee2b",
+      "pipelineId": "616358b9-4558-4d72-a029-817912ec0c7a",
       "upsertKey": {
         "pathwayId": "aanp-fnp",
         "slug": "geriatric-assessment-falls-polypharmacy-frailty-lesson-01--np-advanced-batch-02",
@@ -1523,15 +1524,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "PREMIUM",
+        "tierCode": "NP",
         "status": "PUBLISHED",
         "sortOrder": 1022,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "4ac181a9-9651-4c69-8c91-bb5f6bf6a63e",
+      "pipelineId": "c449594a-cb41-46ef-934b-5c417a9c0394",
       "upsertKey": {
         "pathwayId": "aanp-fnp",
         "slug": "deprescribing-beers-criteria-older-adults-lesson-01--np-advanced-batch-02",
@@ -1587,15 +1588,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "PREMIUM",
+        "tierCode": "NP",
         "status": "PUBLISHED",
         "sortOrder": 1023,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "7c6f56de-e537-48bf-a004-9fdc10ceb981",
+      "pipelineId": "eb9e1c80-c2dd-4f08-a102-7528c3e23fea",
       "upsertKey": {
         "pathwayId": "aanp-fnp",
         "slug": "psoriasis-atopic-dermatitis-stepwise-biologic-lesson-01--np-advanced-batch-02",
@@ -1645,15 +1646,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "PREMIUM",
+        "tierCode": "NP",
         "status": "PUBLISHED",
         "sortOrder": 1024,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "c40b65d2-6e2c-496a-89f9-0d5f29f8d47d",
+      "pipelineId": "e685fd50-f19a-4095-a5da-404cfeb14da5",
       "upsertKey": {
         "pathwayId": "aanp-fnp",
         "slug": "smoking-cessation-pharmacotherapy-counseling-lesson-01--np-advanced-batch-02",
@@ -1709,23 +1710,23 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "PREMIUM",
+        "tierCode": "NP",
         "status": "PUBLISHED",
         "sortOrder": 1025,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     }
   ],
   "examQuestionUpserts": [
     {
-      "pipelineId": "b7909ab7-db14-46f9-966c-6c4900fec026",
+      "pipelineId": "a7b8c5d4-f477-462c-bad7-2158e90237ef",
       "upsertKey": {
         "stemHash": "2e233c003276bab1a66c4bb5914bab3b"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -1766,19 +1767,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "e85abdca-27ce-44a2-a415-f7476ec1d56b",
+      "pipelineId": "848a18a9-4fb1-498c-83a0-322a32789fd4",
       "upsertKey": {
         "stemHash": "364ac318321b470b75e6a4d1cb68b5eb"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -1819,19 +1820,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "5ffa5a65-689c-4f38-8119-6905bcad0322",
+      "pipelineId": "2a9979e5-fdd0-4c59-a0c5-43ff8dbfd6e3",
       "upsertKey": {
         "stemHash": "180abff0024a72e4403b0bbe573ca369"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -1872,19 +1873,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "7d900b1c-dc06-4e3f-9193-1a251d4853e5",
+      "pipelineId": "3122ea84-dd09-4832-8696-cb346d6f8978",
       "upsertKey": {
         "stemHash": "429ebfdb413ac1c07b4c7e03306ecaa2"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -1925,19 +1926,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "2929108f-774a-4f71-9d2b-c68d6072b08d",
+      "pipelineId": "1795bc58-0efe-44ac-800e-c24090bd64bc",
       "upsertKey": {
         "stemHash": "b7d251466cf8ed9f4b4066e6364a1bc9"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -1978,19 +1979,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "56fb3341-81e9-4265-8357-52329c3d5b1e",
+      "pipelineId": "0d8800ac-a942-4b96-891c-e7487a81cdfb",
       "upsertKey": {
         "stemHash": "1d2108851f6f23cf6e82f673ec557890"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -2031,19 +2032,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "5be49ef8-81bb-412f-b976-0aa8aff83f18",
+      "pipelineId": "55cb2dc9-6e54-4322-bf88-ac5b4b51ba29",
       "upsertKey": {
         "stemHash": "9a2400c57cebdb1b3462a1206330591c"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -2084,19 +2085,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "417c96f5-cf4e-4ff6-ba32-7704c6106fc1",
+      "pipelineId": "0162f2f4-f51d-4fe4-8c79-e1aeae2dd340",
       "upsertKey": {
         "stemHash": "6ed11e2e0ae799cd5d38c04bb49a4e73"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -2137,19 +2138,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "1cc927f5-283a-4555-a0cf-9096cf7bf560",
+      "pipelineId": "4469c472-64fd-469e-8181-fc6094219516",
       "upsertKey": {
         "stemHash": "588e1e666ed0c5d2a3d492bdcb996c88"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -2190,19 +2191,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "1b69e7b1-bb23-4273-9bc0-d554884b494b",
+      "pipelineId": "97ecc781-d0ac-4acc-83f4-9b0b5c70a2d5",
       "upsertKey": {
         "stemHash": "a37dc89a87ef0066d974ee53a2b04711"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -2243,19 +2244,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "a0deec56-d491-4dd6-9471-ca929bac30d4",
+      "pipelineId": "c518654b-c8ba-443a-8b1c-f2fa993a6517",
       "upsertKey": {
         "stemHash": "9aa10d9bd96e6077b1d5bf6737aeb52f"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -2296,19 +2297,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "f55db7be-1c37-403d-bebe-7ca686c60e74",
+      "pipelineId": "c6ff46b4-1a29-4eb8-a9e9-fb0843ee0e1f",
       "upsertKey": {
         "stemHash": "b2c786e154ece67043def93fe62e43fc"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -2349,19 +2350,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "2d8a4866-3aa0-4068-a4ea-a4a33dcd4039",
+      "pipelineId": "91417a24-1be1-49ba-a3a8-86a4d7db7a56",
       "upsertKey": {
         "stemHash": "5f729eb1fd4dbf22ccf76c7a40275be2"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -2402,19 +2403,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "a89c3246-41b6-40af-b779-c480166d99f0",
+      "pipelineId": "e8776578-7136-4383-9c66-fe843873f5f2",
       "upsertKey": {
         "stemHash": "42fce35b08f45dc9a2bc07dad82bcc6d"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -2455,19 +2456,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "063c8d85-0ac9-4a50-ab26-95850e35f064",
+      "pipelineId": "895f8552-d7ac-4b18-8d9f-031caadaed8e",
       "upsertKey": {
         "stemHash": "e79251ef41eacc0f921ef7cfdc753899"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -2508,19 +2509,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "6abefc98-dd74-4c5e-a653-49e9f7d7c552",
+      "pipelineId": "79dc7c64-6408-4f3e-9c67-4f91ffb70d57",
       "upsertKey": {
         "stemHash": "1947b5b64641e772315d07bdad33b88e"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -2561,19 +2562,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "ab6512c8-7f88-4a63-9908-8d1b097be271",
+      "pipelineId": "401c2bbf-3f34-417f-84eb-18f37af9ebb6",
       "upsertKey": {
         "stemHash": "805e40639eae309faed9209410482a58"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -2614,19 +2615,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "7645e3cd-054f-4803-a09f-d4abc2603001",
+      "pipelineId": "367a8437-00b7-4fd5-a9cb-6f8a3673cb19",
       "upsertKey": {
         "stemHash": "527b286d307a0f0ab548a6471d57f969"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -2667,19 +2668,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "77237550-a96a-49e8-a422-ad4cf00f009f",
+      "pipelineId": "1d0a4e87-837c-431c-95bb-d841000ed5a3",
       "upsertKey": {
         "stemHash": "9fe63d1fe9af29eea3d5b83567f69e79"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -2720,19 +2721,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "73719e2f-1666-4552-a582-5e17d2853432",
+      "pipelineId": "76cde662-a9af-461d-8f47-ebbd7ebbd79a",
       "upsertKey": {
         "stemHash": "69a1596a0b7a8ce766c3df4bd60351c0"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -2773,19 +2774,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "63b99792-55c7-428e-917f-a0e8444748fc",
+      "pipelineId": "a6620c88-4f69-44a7-bf0c-993de0c10345",
       "upsertKey": {
         "stemHash": "89690f73a3e4062787747d6f4750feef"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -2826,19 +2827,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "6d282d98-c9cd-4476-ae04-b5fdb13017de",
+      "pipelineId": "12e5e11f-1968-4353-b667-c0cab285393a",
       "upsertKey": {
         "stemHash": "9d2143b6e62b9b12b2683355fd4d0493"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -2879,19 +2880,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "97cf95aa-f631-4860-abe3-4aa240e21e7f",
+      "pipelineId": "a8e8559a-9937-4fd3-814c-803617cdd022",
       "upsertKey": {
         "stemHash": "e60036276275a23880c363335a4369f7"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -2932,19 +2933,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "4dd12b31-0306-45ce-998a-2e27b3011429",
+      "pipelineId": "c91c9803-b7b0-40f6-abca-5b03023a9797",
       "upsertKey": {
         "stemHash": "8193ee3da21ef9146318b1faa37747a8"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -2985,19 +2986,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "a7479d0d-f81b-42d5-8712-4d168deb3c60",
+      "pipelineId": "37bc7b6c-20df-4a0d-bfe2-8bcf72e8eee2",
       "upsertKey": {
         "stemHash": "4ad451bf9176faba8d965595190c9672"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -3038,19 +3039,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "ae030728-297b-41c2-9643-b1b1b55898b8",
+      "pipelineId": "384d1fec-8042-4b9a-a74e-975e97a08fcf",
       "upsertKey": {
         "stemHash": "17c5ce7f316145dc805c66ddc26a983e"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -3091,19 +3092,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "148730e3-846d-416c-a19d-63ec662c34a2",
+      "pipelineId": "edaa37da-bdd3-47a5-943a-cb22edbbe68b",
       "upsertKey": {
         "stemHash": "27f1b7a96c0769ba4aa90dbfad7a9394"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -3144,19 +3145,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "543fd297-680f-48e9-a015-e771b8923e95",
+      "pipelineId": "75432800-0711-4802-acdc-c730640cd134",
       "upsertKey": {
         "stemHash": "c2cfaaa07fdfadd8f3351de2ba665e9e"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -3197,19 +3198,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "1137a04e-580b-4b1b-84ae-57e33226c977",
+      "pipelineId": "1153ed81-dae2-4185-924f-2156203a4b36",
       "upsertKey": {
         "stemHash": "ec5fbed012557b901629ca041524851d"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -3250,19 +3251,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "20088872-e63c-4ea7-8980-5729340b8925",
+      "pipelineId": "bbc0b7b6-1df3-44ee-aa5d-d1bd3a57d9f3",
       "upsertKey": {
         "stemHash": "0ac6b34253ad04e92ad6a00462fb4cbe"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -3303,19 +3304,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "c7b4b2ec-858b-4285-b5cf-940a3024bad3",
+      "pipelineId": "287546b0-aab2-44fa-ba0f-bea4e5934301",
       "upsertKey": {
         "stemHash": "f3d529913cf3350c7fcb06c23f342edf"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -3356,19 +3357,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "a4b4ef43-2bf8-41a9-b906-bd089f4760f5",
+      "pipelineId": "b62c1287-b176-45fb-81c3-89c545b8391d",
       "upsertKey": {
         "stemHash": "1bc8b79abbac608abe79a64b73469844"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -3409,19 +3410,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "dacd21e7-5d99-462f-8fc3-f5518219db6e",
+      "pipelineId": "b519a4b3-7169-42a3-b7e2-a101dd48c138",
       "upsertKey": {
         "stemHash": "c0c5b952176aa8a5b75bb375d83c19aa"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -3463,19 +3464,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "8be8a560-4cc8-46aa-8216-0388008d3d05",
+      "pipelineId": "0f1cf43c-c258-408c-be3d-fcfb27ded1bf",
       "upsertKey": {
         "stemHash": "2214ccaf5d38c7ffb7f0fb382b1df44c"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -3516,19 +3517,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "2dbd3e7b-6642-4319-ab85-1e8df5cf1e1c",
+      "pipelineId": "4ecf32d0-3cc3-4844-8b7a-0f4a004b5d4b",
       "upsertKey": {
         "stemHash": "b00c6dc4e73bae8c8de2c204eed0a2e3"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -3569,19 +3570,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "00e8cf59-76d0-44bf-8c0b-4e50c34d2be3",
+      "pipelineId": "f49282d1-54dc-487a-a122-a6ece507dd34",
       "upsertKey": {
         "stemHash": "4d75befbc3fdc8a9493ff3f8f550add6"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -3622,19 +3623,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "50f429c2-51ff-47fd-bf9a-94f18f107421",
+      "pipelineId": "c97713fa-b913-4af7-8191-cded59e52f15",
       "upsertKey": {
         "stemHash": "802d4891af9a62c1aebd08539a020e59"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -3675,19 +3676,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "975ec634-fa45-4253-8182-4c72f94106d4",
+      "pipelineId": "850bf829-2ce2-42c2-ba57-9a16d362be82",
       "upsertKey": {
         "stemHash": "75887cac724ff2394eb558c21e6fcc8d"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -3728,19 +3729,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "48acc0aa-4378-4af8-8e8b-5a9a81c1a039",
+      "pipelineId": "b54ac405-92ed-49aa-affa-b72470657ae5",
       "upsertKey": {
         "stemHash": "2ac9a71b4349f2a1bc1cc737ac0b559d"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -3781,19 +3782,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "33ed6dc8-2eaf-4f27-bd5c-70b231bfcc38",
+      "pipelineId": "48ce7043-3b02-4848-b8e2-a9eba9135610",
       "upsertKey": {
         "stemHash": "0b65c35e3e8015cfa95e9d36631ada03"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -3834,19 +3835,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "712015c8-0716-4bc7-83af-aeeeac287e98",
+      "pipelineId": "524ea1a7-9f19-42c0-a3ab-96d5b0bb0317",
       "upsertKey": {
         "stemHash": "89e42d29fa2fb11c2a1ae1c3f314877f"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -3887,19 +3888,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "0c35d854-9c30-441d-b4f3-0c208e94eda2",
+      "pipelineId": "fe7e4cd8-783d-438a-af94-f9fdf5a79434",
       "upsertKey": {
         "stemHash": "b4495502d2845a842f10c99d32286a4b"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -3940,19 +3941,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "00048295-84d8-412c-8dc0-69a65219236f",
+      "pipelineId": "09df4405-4b83-453a-918b-8ba43eab8636",
       "upsertKey": {
         "stemHash": "fbf7de0a2d440ae818d5fa4569028ed1"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -3993,19 +3994,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "a67be35b-2e2a-42dc-9a67-1ce1dbd16352",
+      "pipelineId": "3636569e-396d-4fcf-a48b-88332400aac5",
       "upsertKey": {
         "stemHash": "2c2c1f395b45c74a9afb3baabd78315a"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -4046,19 +4047,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "d4f7fb6b-3985-4bc2-8e1d-e7149f7723f6",
+      "pipelineId": "a6a78507-a3af-4f41-8f6e-9e309bb96041",
       "upsertKey": {
         "stemHash": "08a193a22f6de15258f3293292da5ca7"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -4099,19 +4100,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "3174040e-177e-4a08-83b6-3c4fcff43124",
+      "pipelineId": "c02f034f-7d3f-4168-9e3e-b0a60f5f5801",
       "upsertKey": {
         "stemHash": "7f4c03b3c25c3e36c948e3c8cc54ee1a"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -4152,19 +4153,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "f2ca87e6-0781-457c-8057-2b5dfcf2d573",
+      "pipelineId": "6bb30865-3bff-4d4f-af23-920cc6c8d1e5",
       "upsertKey": {
         "stemHash": "e6d7dabea7e70b079061926b76558151"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -4205,19 +4206,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "07ffb0e7-89eb-402c-b574-8bcfeafb338f",
+      "pipelineId": "ea9be39f-ae8a-493e-a62c-c4fbd3b7c9be",
       "upsertKey": {
         "stemHash": "a969d0c217223f0162934916f785fe97"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -4258,19 +4259,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "0a247085-d576-47a0-bb07-a591631d316c",
+      "pipelineId": "b61d7152-08b5-4417-9517-3e08edeb5768",
       "upsertKey": {
         "stemHash": "45d6f6ce44a2c4230de331fd395b9ddc"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -4311,19 +4312,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "8b220335-d85d-40e5-aad7-08c7bbe33a78",
+      "pipelineId": "c9e13585-f09c-4d87-b5fb-e80ceb2242a9",
       "upsertKey": {
         "stemHash": "99406c8e7037c4b2c51e776547eb6a11"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -4364,19 +4365,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "3d88d057-4267-4a02-921f-2c0a382d3dd9",
+      "pipelineId": "76df65d8-196d-4c95-94dd-b346fa64caa3",
       "upsertKey": {
         "stemHash": "9cb2b54b9f4c9e7b0cdc1417c8f31943"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -4417,19 +4418,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "e88ba22e-f87f-4812-a738-552260666758",
+      "pipelineId": "e9ee93da-7d00-48d9-936c-aa3ee560a99a",
       "upsertKey": {
         "stemHash": "66583336798ecd8aba7ae56add0d412d"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -4470,19 +4471,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "f8043720-08f5-425b-b991-2ca0cc87ee81",
+      "pipelineId": "29c1d542-6bec-4124-b727-f013fd9648fa",
       "upsertKey": {
         "stemHash": "66e7c3d40443e8ab39583ad85cde363f"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -4523,19 +4524,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "0270ab1d-d414-4373-809c-f134144352e2",
+      "pipelineId": "f54edda3-b12b-4c62-9fd0-c5b1b9c522f1",
       "upsertKey": {
         "stemHash": "e72de72dbf967a10bb340725b415c548"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -4576,19 +4577,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "594c5317-8c53-43ce-8043-1e56bbfdbc2d",
+      "pipelineId": "37b4906f-2dcd-486e-81ac-2ae45c06f6cf",
       "upsertKey": {
         "stemHash": "785a8dae73ca28784ff9a85a8dd48ddc"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -4629,19 +4630,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "f5af9cc7-5f68-41cf-a6ae-10be0084cc55",
+      "pipelineId": "3c19dab6-db0b-401a-b585-bda43dfcc507",
       "upsertKey": {
         "stemHash": "9f5a5c0af8b4077a9231a3b69d5d53b4"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -4682,19 +4683,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "73d5d793-a2f7-43cf-96ed-6be5b564e1bc",
+      "pipelineId": "bef130da-3cf6-46a2-9588-ffa5e922cb46",
       "upsertKey": {
         "stemHash": "d56a97edf158b77ab4b0e9df6061d002"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -4735,19 +4736,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "80ee7c03-1b26-461d-8c2e-a073d1db72bc",
+      "pipelineId": "979f2b55-be58-4ea0-a0a8-2e56ecfc2bf5",
       "upsertKey": {
         "stemHash": "1ac8539104564c2aa2d4ecc7acf241e3"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -4788,19 +4789,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "c705d206-ff1e-4b4d-97c0-6d94f365fcb5",
+      "pipelineId": "044917a7-c338-4da6-a0a8-71560d969c8b",
       "upsertKey": {
         "stemHash": "b4b042d4cfdf2c30be6cd0e771cdfdc4"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -4841,19 +4842,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "ab367c3f-3924-4d69-9062-6bfe1c487a8f",
+      "pipelineId": "5c1d95ac-8235-44d1-b0d0-fa8feea7aee8",
       "upsertKey": {
         "stemHash": "a89efd3092f5957f06ff87abe8462796"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -4894,19 +4895,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "321b6929-0a54-43c5-82eb-9319e08c9b09",
+      "pipelineId": "4510381b-3528-4543-935c-18158ed66592",
       "upsertKey": {
         "stemHash": "f59c16873af554d57cdf135532ae2207"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -4947,19 +4948,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "35b0083e-fdb9-4812-a40b-19d667185f53",
+      "pipelineId": "7760e8c8-e94b-4c9f-9a62-dd9ae0dea617",
       "upsertKey": {
         "stemHash": "b80e8152314d747de072c7f1d2982f9f"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -5000,19 +5001,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "06504e6d-6eea-4d81-a650-a75ed336998d",
+      "pipelineId": "43699179-ad4c-42cf-8759-dc9b7d213b9d",
       "upsertKey": {
         "stemHash": "4c824f456d15bf70d16a301deedfcb34"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -5053,19 +5054,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "8ae6ffdc-74b5-4b3a-9f99-8a663c860336",
+      "pipelineId": "ec8eb5a2-4f8d-4ef7-9c00-6e9c2c73cb9a",
       "upsertKey": {
         "stemHash": "f67cfe6c122bc74eb755d19842a06e4d"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -5106,19 +5107,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "26e906c8-1c2a-49bd-bffd-8fae88e4b030",
+      "pipelineId": "8b661703-1b97-4ced-82bc-c4b367410855",
       "upsertKey": {
         "stemHash": "ffb34f30859574c67c06e11295ac23a8"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -5159,19 +5160,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "484fac87-87f4-4bb6-8aee-29e5fa761ef2",
+      "pipelineId": "21f555be-14ab-4540-af40-4b2efa9d101d",
       "upsertKey": {
         "stemHash": "36874a1e8e4140bb4d2cc4145371e7f1"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -5212,19 +5213,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "8714cdc2-6820-4e12-a981-fee91f50402d",
+      "pipelineId": "986dcbfb-44a2-4ee2-a3a9-0f7a2c622934",
       "upsertKey": {
         "stemHash": "32d98c19166f2b956bbf8a02fb7cde21"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -5265,19 +5266,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "b479da4c-130b-436d-be6f-176046afae57",
+      "pipelineId": "bc0f2c02-1a32-4f9a-9484-b8e2b7ab7b7c",
       "upsertKey": {
         "stemHash": "184720d497221bfea8269a68c0fa342c"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -5318,19 +5319,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "d449a019-1611-4fba-a336-cfae6f00b390",
+      "pipelineId": "060bb45c-56d7-4cf5-918f-0c3bf16f3a96",
       "upsertKey": {
         "stemHash": "803c81d6f3f20a3c527bd4e06c46a2ef"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -5371,19 +5372,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "4ec6eb83-6f3b-4bba-bfca-466d0c036021",
+      "pipelineId": "919e9f32-3b38-4272-beb8-5555e50f7a80",
       "upsertKey": {
         "stemHash": "b110641b874ef634b12d5b38f67b9d09"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -5424,19 +5425,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "4d3bc475-b34b-4eca-85df-b43da63e1788",
+      "pipelineId": "5e089c10-1e31-4f55-bc29-11732a38c315",
       "upsertKey": {
         "stemHash": "5d371adb02351ceeb5e244dbc768d013"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -5477,19 +5478,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "25181abe-807d-4a86-8165-5025cc96bf9e",
+      "pipelineId": "3350366a-4ec0-4171-972e-9157f06f1676",
       "upsertKey": {
         "stemHash": "4c45176f818cf92962aa328b78927e0e"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -5530,19 +5531,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "76af4252-c543-418b-97cc-e8f14e9222d3",
+      "pipelineId": "696f41c7-5d81-40f6-9663-1e1e2d094ab1",
       "upsertKey": {
         "stemHash": "47423eba2db6fd1fef000d38ea8bb9b9"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -5583,19 +5584,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "f4695763-ba00-4d95-b721-b550ea7e01d3",
+      "pipelineId": "aaba1176-e3df-49c3-8c77-9e4bc4247ba1",
       "upsertKey": {
         "stemHash": "8057aa2d9330c1e767705444895bc7c6"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -5636,19 +5637,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "a9157f86-00ac-4a52-99c0-7393d35eb10d",
+      "pipelineId": "a6bcbc02-8cfa-444e-b42b-9f4f971a5ab6",
       "upsertKey": {
         "stemHash": "faefbfbf466feea7b8566f0b52cee8fb"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -5689,19 +5690,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "40332fbc-4685-4442-8637-38ca1dfab632",
+      "pipelineId": "dc8b82c7-78bb-4e24-a934-198f69303a40",
       "upsertKey": {
         "stemHash": "481fb40a04800a0768164419a5d5dd18"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -5742,19 +5743,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "15396b12-0f73-4bb6-aea9-0e77e2eac49a",
+      "pipelineId": "8fb135f7-5134-40e2-8036-0257df067ccd",
       "upsertKey": {
         "stemHash": "01ca22cbd058abf3a2be06d51ffb0026"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -5795,19 +5796,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "9c04dd31-6069-4125-a798-5d30e2487233",
+      "pipelineId": "9d29b7bd-84a4-4462-901e-dc0477b375ef",
       "upsertKey": {
         "stemHash": "9c761f5a1eeafd9d482faa8fcb45725d"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -5848,19 +5849,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "e1f266e9-8684-4cb7-9053-729e6cc870f2",
+      "pipelineId": "75ff2f1f-2c88-4087-bcd7-07f94814a3fd",
       "upsertKey": {
         "stemHash": "4839f6f56452e7475fb4c9d8769342a2"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -5901,19 +5902,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "30ba1e55-9392-4884-9705-4299e42594a4",
+      "pipelineId": "3337ccd6-317b-4ad3-ad7d-e30802d0a18d",
       "upsertKey": {
         "stemHash": "b70d3b3def8c1b174df5545705324c2f"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -5954,19 +5955,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "65ef712a-209d-4a5e-b84b-b47674b1a249",
+      "pipelineId": "f8ac9944-f379-4e78-ab26-f7c1b584e029",
       "upsertKey": {
         "stemHash": "545d393cf2e53cecbcbc8f19d683fc97"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -6006,19 +6007,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "20a5b24e-c400-4657-8316-1fe305804cd5",
+      "pipelineId": "e5fc3099-292f-43fa-a7e4-c018d691a32d",
       "upsertKey": {
         "stemHash": "6c0e36269b2c49f76ac72ab0493fa38e"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -6058,19 +6059,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "81562b63-aedf-4602-aa6a-bb0396436145",
+      "pipelineId": "d65be523-0358-4e96-acc4-b66b9db51b34",
       "upsertKey": {
         "stemHash": "f51d31c895e54fa3f83d5a27b2782a9e"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -6112,19 +6113,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "44e60366-f388-45b5-84f1-3612f7516824",
+      "pipelineId": "8a6166df-3d26-4516-860f-1c32eddcbf72",
       "upsertKey": {
         "stemHash": "c8f28e90036e1ac845f797aa0ae5d02c"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -6165,19 +6166,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "e2b6aacf-c772-4c62-a055-2893168357ce",
+      "pipelineId": "f1d9e546-76ff-424d-ba30-19633d21c934",
       "upsertKey": {
         "stemHash": "b98293aef4941532b07898e03e294e90"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -6218,19 +6219,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "b69a2361-31ea-4fba-bc60-e48deb1c8ed6",
+      "pipelineId": "c0b4a262-cf26-4b0f-9aaa-c9539a7cc251",
       "upsertKey": {
         "stemHash": "f90d39bf827a18d7c0b403f75adb246c"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -6271,19 +6272,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "7ad073b4-b321-4005-aafc-21a220f53fcb",
+      "pipelineId": "8f559b43-722f-407f-a39f-cc5fcf2d74d6",
       "upsertKey": {
         "stemHash": "6b756a1ecf9fe1455c9dd9e07d695d01"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -6323,19 +6324,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "d38737bb-de73-4a0e-89c5-97c3eba0d6f1",
+      "pipelineId": "6b0e9cc8-3c86-4faf-b8e5-8bac9ec6eeed",
       "upsertKey": {
         "stemHash": "12f85c02843cd48479b0262a26be4b07"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -6375,19 +6376,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "d225ed85-181c-448d-a335-b453156bc256",
+      "pipelineId": "712dc420-f17b-4310-aaaf-5ef530e07f94",
       "upsertKey": {
         "stemHash": "af26218408b02cf8df1b22ea78c74098"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -6429,19 +6430,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "74e979b4-96a7-41be-a737-3e62a2eca87f",
+      "pipelineId": "ebedb4da-b28e-41be-a72b-fa61bc010eea",
       "upsertKey": {
         "stemHash": "cd3cd599b83488a9fc2498662c70a70c"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -6483,19 +6484,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "0b87fead-c166-45ed-ae59-e3eb96cf5987",
+      "pipelineId": "46c7eab1-9d06-4904-9380-3b2177bb1980",
       "upsertKey": {
         "stemHash": "900d7cadae84a9dce9a78bb2b79c49ff"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -6536,19 +6537,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "0fb4ec1f-7b6a-41c5-aac3-8c9563766458",
+      "pipelineId": "5fd18656-e6a9-41a7-8d9a-b73650131018",
       "upsertKey": {
         "stemHash": "d7f875d2aa98174a77969dedda3c51e8"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -6590,19 +6591,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "60ef03ea-1abb-4b9f-b6f9-08ea09dbdbf4",
+      "pipelineId": "58cccc85-d342-4f3c-bb74-7a800f1608b8",
       "upsertKey": {
         "stemHash": "7597ccda50397ba35edf47fcb765b45f"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -6642,19 +6643,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "511341fb-ab52-44a0-8ad9-51e856ab5db2",
+      "pipelineId": "0d26f343-7b50-4531-b701-21a8d85bf116",
       "upsertKey": {
         "stemHash": "fb841133226206f3b345ad6b38eb564e"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -6696,19 +6697,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "c803b6bd-2bb0-4bb3-9fd8-15e4cf7c1e44",
+      "pipelineId": "0f843ff8-ff4c-4ea1-9298-e3b1b89c0084",
       "upsertKey": {
         "stemHash": "a5d428d62a182f50b33dc6344c83306f"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -6751,19 +6752,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "66d04885-07a9-4b30-8eab-253fe3e1660b",
+      "pipelineId": "2fde0464-392d-444b-9ab4-05f7c8c7a0c4",
       "upsertKey": {
         "stemHash": "cb9633f46ed49bfc8c34f78ab85d039f"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -6804,19 +6805,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "97a26c4a-c81f-49ba-8975-1079a6e0a99a",
+      "pipelineId": "7800edbd-ea96-487a-b2ea-7214c02a1a8b",
       "upsertKey": {
         "stemHash": "6ac842b1e7b2ff731acaea81b126f635"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -6859,19 +6860,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "7f509951-5920-4c6b-873d-7b66fdd740e3",
+      "pipelineId": "704ba223-0c8c-4d2b-9236-1c9b1f0482a1",
       "upsertKey": {
         "stemHash": "5b0e03b07e33eb712064f2f9ca782705"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -6912,19 +6913,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "0b0cd6f5-de82-41a0-894f-9f37e626e2ac",
+      "pipelineId": "5ab3fcc7-e7e0-45bd-9c7e-d00d598aee7e",
       "upsertKey": {
         "stemHash": "d925a35b8c9e0c462da71ee95802538e"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -6966,19 +6967,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "f1e9b7f7-892c-4982-b0e8-980e200c92e9",
+      "pipelineId": "2076cd86-c4a1-47e6-8d5e-5d368711973e",
       "upsertKey": {
         "stemHash": "095503d51c489670991f7628ae2acb6d"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -7018,19 +7019,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "bbb59876-4f8e-4e1b-bfe4-fc78d1a1c31a",
+      "pipelineId": "d143b54c-9f48-4e8b-9fe8-a2c02c421f61",
       "upsertKey": {
         "stemHash": "4ca61b61a55f9e8aff4ed0d0f65b70ad"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -7070,19 +7071,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "124f0b9c-06f8-44fb-99d9-c909d1b53d33",
+      "pipelineId": "9b533346-d461-4af7-8baf-34e2217825d7",
       "upsertKey": {
         "stemHash": "f44cc006a1748263f2024b7ebcbc10fe"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -7123,19 +7124,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "f833efdb-88fb-4ff1-947f-ba2044ed38de",
+      "pipelineId": "21be064e-122f-44a7-80b5-b52b3507e5f9",
       "upsertKey": {
         "stemHash": "6855a29653dfa506ae396a517d80c84d"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -7176,19 +7177,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "2cf0ac9e-8588-4eda-8d42-8315db2406a6",
+      "pipelineId": "78fd3ca6-0d35-404b-8097-65654857197e",
       "upsertKey": {
         "stemHash": "1031ca1d553d2edb2b89f88e39fbcbc7"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -7229,19 +7230,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "41ed9a39-07db-4a06-b931-da6d930974d7",
+      "pipelineId": "018fc7cb-3c7e-41fd-964a-f3f3240e7be9",
       "upsertKey": {
         "stemHash": "4adf589e61abf5c43954587fc32f320d"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -7282,19 +7283,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "54b2620d-87c1-411e-874b-5a7b4997c253",
+      "pipelineId": "39b6e9b8-734c-4dcc-a8ba-495e839bae15",
       "upsertKey": {
         "stemHash": "8727021b25f8559931581a8503988d6e"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -7335,19 +7336,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "a65f0302-a301-4a4f-9417-71ed4aa93db1",
+      "pipelineId": "b595ee64-92c7-4723-aadc-7f5c092b2b10",
       "upsertKey": {
         "stemHash": "0809ddccf93c722aba660dab3b538cfa"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -7388,19 +7389,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "73577876-08ce-4be5-b7c9-e6e0951c12b3",
+      "pipelineId": "8dba41ed-f420-4e97-aa53-69aa74c10e5f",
       "upsertKey": {
         "stemHash": "39c5fe1e5d9b8e82fd0815a5b0da3a68"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -7442,19 +7443,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "4d295f82-03ac-43bc-85f4-5f824deac565",
+      "pipelineId": "69f8ad6c-c5ff-46be-8d2d-20280272e273",
       "upsertKey": {
         "stemHash": "aeb95895e8fb83e5da528412d7fa20b7"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -7496,19 +7497,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "ac040a80-a57b-4e34-8ce1-ae9cc74bff4c",
+      "pipelineId": "c9137086-5163-4047-b1ae-690ce694aa79",
       "upsertKey": {
         "stemHash": "424fb7306aef3d7163c470b65896fbc2"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -7549,19 +7550,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "6c268a8b-ebc9-41fc-b72e-0a7e5f560cc3",
+      "pipelineId": "d312e123-ed9f-4266-aa58-5ffc37c40bcc",
       "upsertKey": {
         "stemHash": "1777a0b8dc6cedb30e3f462c7987ce38"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -7603,19 +7604,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "b5af3c0c-7073-4d0f-95a3-bc77e248608c",
+      "pipelineId": "53ea6ca5-2bb2-45b0-ae7d-c83c98c983f8",
       "upsertKey": {
         "stemHash": "cb23cd6a986c6e7b5a4d7743679e935f"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -7657,19 +7658,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "bc1aeb45-9ae4-43c9-8026-b61675b65fb2",
+      "pipelineId": "9bcb333f-b0e5-4433-86b1-131fad8ee47a",
       "upsertKey": {
         "stemHash": "4bf8f9eb994b27dc3ece4c944ca6bc55"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -7711,19 +7712,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "5b170e54-c8bf-41ef-83aa-76cbe8a96031",
+      "pipelineId": "ee37493a-344a-45f6-bb1f-9af7c4a1b6d4",
       "upsertKey": {
         "stemHash": "2170f320b594d5a45d0d341c63dc967c"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -7765,19 +7766,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "1b3391b6-0ce8-4c29-ab79-6932b56994d3",
+      "pipelineId": "30aaadf7-6e16-43fa-9ddb-c5928cc45925",
       "upsertKey": {
         "stemHash": "e0d5680a2f908eb3b741b78ef0c7a68a"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -7818,19 +7819,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "e27a46d6-b8c2-407a-b6dc-76fc2478f1f1",
+      "pipelineId": "6f5958f4-44e7-43d1-aa54-a697cb20d33c",
       "upsertKey": {
         "stemHash": "83f08b5adedc5a3b658e18b0234d5e48"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -7872,19 +7873,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "608814a6-6a51-443d-a4d2-78f4d6a1140d",
+      "pipelineId": "caed4db4-e48a-416a-bd45-8be25fcd127c",
       "upsertKey": {
         "stemHash": "7f72f35981ace82e55100b74c24533a8"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -7925,19 +7926,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "6a8d7efa-38dc-4d3e-8996-c0137c33cf8c",
+      "pipelineId": "376afa5c-c44c-41c2-97bc-471a4c9d9307",
       "upsertKey": {
         "stemHash": "f1bf1a3bf5c269915514bdf1c73e460a"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -7979,19 +7980,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "e59edd5f-679d-43ed-ad86-53b9d78517a9",
+      "pipelineId": "5fa01980-5a25-47af-ada6-624ce9d0fe0a",
       "upsertKey": {
         "stemHash": "3ae7559b826dc0c352e7a53993ba13dd"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -8034,19 +8035,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "296d4d2f-d042-4ced-af98-64c7b94d0173",
+      "pipelineId": "ccb2dd58-f965-43ed-8c71-b06077727ae5",
       "upsertKey": {
         "stemHash": "e786b43aa3577de35790efe9f9bba0bc"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -8087,19 +8088,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "d93f23df-dfb0-4dbc-9404-16461c832495",
+      "pipelineId": "884427bc-5945-4e2a-ab9e-45996ddd2405",
       "upsertKey": {
         "stemHash": "9f05a22c6fd9b1f50de330d6dfd0f40b"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -8140,19 +8141,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "e82b8b08-3ca2-404a-9c29-cd34c40f1b31",
+      "pipelineId": "f52c72ae-177f-4e06-9ccd-72b163f532e5",
       "upsertKey": {
         "stemHash": "8be542fcc822d36a34a9c193429ce376"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -8194,19 +8195,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "84c9f702-b804-4972-ba69-4465a08b15ea",
+      "pipelineId": "9b06343c-890a-4711-9c70-e10c0b7ac771",
       "upsertKey": {
         "stemHash": "37b2ed951af745942f275cbbc5b9a66f"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -8248,19 +8249,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "9978976b-ad4f-4945-8cf7-2aa62d20c6db",
+      "pipelineId": "09ff7b87-ee40-4988-a949-97e7f038ad12",
       "upsertKey": {
         "stemHash": "16dcc267817f8496887a9f3cfdda933e"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -8301,19 +8302,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "3c1ba8df-01a0-4251-ab6b-66334511b210",
+      "pipelineId": "d673a9d6-dd77-41a7-89f4-850f565b6675",
       "upsertKey": {
         "stemHash": "ddf250f50a2d9941fdc1b3847743d3e1"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -8355,19 +8356,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "42c3e74c-9985-4aa0-89da-f02e11be0c5f",
+      "pipelineId": "c24cb32b-fa0b-409c-90eb-883046c86664",
       "upsertKey": {
         "stemHash": "45f5961a53d0b69198d3b9e90dfb91cb"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -8408,19 +8409,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "6d06deb8-b5c4-46e0-8eec-5c4fd4704d65",
+      "pipelineId": "fc381ab3-b046-4f11-bc57-ef69835f53c1",
       "upsertKey": {
         "stemHash": "700e068cce189c651bf09fccf4f60f8e"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -8461,19 +8462,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "469e4049-da22-4b76-9306-324cdd5e4f94",
+      "pipelineId": "02fdd521-c390-4a4c-b7f8-aad978589cf7",
       "upsertKey": {
         "stemHash": "4feaa812cf5e5083fb124700d2bc089f"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -8515,19 +8516,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "3785d02a-6e97-43c4-a8b5-ce0ebfdd01b9",
+      "pipelineId": "9e7e6732-7260-4e15-8876-70fda41481cd",
       "upsertKey": {
         "stemHash": "07c719325de216fc1f4cf0998b3d74cc"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -8568,19 +8569,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "c05caad9-1a5f-4d37-a0f9-a2779a9b7043",
+      "pipelineId": "c6ab0b04-2a0d-400b-b49e-36491d3d1d98",
       "upsertKey": {
         "stemHash": "f47873371c541be2d86d09e05bac5926"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -8621,19 +8622,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "b5282bea-4277-41a1-a557-9b846211a555",
+      "pipelineId": "6b6e5b61-5857-4693-a075-c2c61325cf29",
       "upsertKey": {
         "stemHash": "4abaa649f2ae699179782dab93a19ae8"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -8674,19 +8675,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "b722acc6-01e1-4d89-bd81-0b5a75464d6e",
+      "pipelineId": "04edc1b1-885f-449c-b30e-90c34e193e11",
       "upsertKey": {
         "stemHash": "a6a8e4de726bb28def4e583f20f6ee3e"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -8728,19 +8729,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "db738b28-5ee0-4eb9-8731-84237ac1f8ff",
+      "pipelineId": "639b0da5-4b2c-4fcb-9f7f-bd3f9b6c9655",
       "upsertKey": {
         "stemHash": "b20e47375399d7b16f48b411ea2df041"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -8783,19 +8784,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "a145f153-b558-46e9-9599-ad43a7709b77",
+      "pipelineId": "bda33425-7787-4722-a3ff-1a58c32ac58f",
       "upsertKey": {
         "stemHash": "5321c9ae0cd0a2b5d9d409a311c79486"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -8838,19 +8839,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "fe48f1b2-409e-4d38-961a-a4c029cb47ee",
+      "pipelineId": "a796281a-7130-46ad-ba56-3d5f9492db1b",
       "upsertKey": {
         "stemHash": "4e3ee45e1184e6faa89acd95d25c63ee"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -8891,19 +8892,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "8ced9646-938a-4b56-8290-937a3dfebf50",
+      "pipelineId": "01f78387-940a-4f6a-aa37-ec5cde4d51db",
       "upsertKey": {
         "stemHash": "0ae3a3fb7720b2142b27291429016630"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -8944,19 +8945,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "1bafc2b8-092d-4e3a-8aa4-267909d5c037",
+      "pipelineId": "120f6343-deae-4585-a2a5-dae456ea2fec",
       "upsertKey": {
         "stemHash": "d93bf2de99d504d4cd4f14be28513643"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -8998,19 +8999,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "061e74d5-9ae9-41e1-a03a-0d5e189745f0",
+      "pipelineId": "0dc32085-fbdf-44f9-a08e-b89d26e3635d",
       "upsertKey": {
         "stemHash": "72479ca4135987be4c1bee948b1f7ebb"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -9051,19 +9052,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "43c9baaa-56cd-436c-9d28-2ba9a0eb0279",
+      "pipelineId": "77d5b226-1eb9-405e-9577-dd6a3169a7ed",
       "upsertKey": {
         "stemHash": "3dafef40b4c2e411423c803bc892d657"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -9104,19 +9105,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "cc988c0a-5523-4875-bc2e-f0df0049f3d9",
+      "pipelineId": "5870cb2e-fa0c-499b-b24b-8b7970b07508",
       "upsertKey": {
         "stemHash": "33c700815e6903a102d9db2ab765524c"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -9159,19 +9160,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "eb6ae821-ec77-497b-9646-3a7a719e36da",
+      "pipelineId": "53cc6f54-e3ec-433c-b861-3d27ab92e4ee",
       "upsertKey": {
         "stemHash": "52102eda499166a95d614132cae0d143"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -9214,19 +9215,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "f5ba9744-cf69-48b3-9df3-e0b981ea3ec8",
+      "pipelineId": "b0dbbf5f-1df9-4ae1-8437-5cd2bee7dfe4",
       "upsertKey": {
         "stemHash": "1ae30e43cc03dd8e4e439291eef525a5"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -9269,19 +9270,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "efca2031-1f86-4248-8175-b1c479109ec7",
+      "pipelineId": "c4e170f6-b52f-4993-b4ff-491d56b478bf",
       "upsertKey": {
         "stemHash": "48db9d308b293840ca552b668cb38488"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -9323,19 +9324,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "3b9c28c6-90c0-4202-8e33-0e3895165c1e",
+      "pipelineId": "b43e2909-c4a6-4858-a0c8-d7c28e47312e",
       "upsertKey": {
         "stemHash": "7d9a520f372f8494aa5bc1b98b9ab08a"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -9378,19 +9379,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "fb9b081d-c0fd-420d-8e93-ed52b2b35901",
+      "pipelineId": "2aaee710-11cf-4847-982c-a025fe55847a",
       "upsertKey": {
         "stemHash": "c2efa309a8e36f700bb28b71521d35d0"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -9432,19 +9433,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "808c0f9f-91e1-4e9c-a0a9-7f72073b0d67",
+      "pipelineId": "0494138e-045c-4768-bc74-da160dd02acc",
       "upsertKey": {
         "stemHash": "8aacf7c0a84df0af6b72890d91c26600"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -9485,19 +9486,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "7949f9e4-42a5-41e3-8175-e8c8b4a411d4",
+      "pipelineId": "4384baa3-efc1-436f-a3da-505e3aad7c8f",
       "upsertKey": {
         "stemHash": "c32f7c21d2902852cfca834d62abb8d8"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -9538,19 +9539,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "b01e4732-2946-4de9-ab1d-d36c84121a6d",
+      "pipelineId": "d3875096-4f6f-4f3c-af0e-08c743be1a5b",
       "upsertKey": {
         "stemHash": "de26d6d4b907d6563c4eed00d583d4e4"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -9591,19 +9592,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "8e1feff5-1814-467a-881a-45de0977c4c8",
+      "pipelineId": "b5603f9c-9fe5-450b-8481-dc8906332303",
       "upsertKey": {
         "stemHash": "15128fd9e6113a4b7a04ab124d3780a2"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -9645,19 +9646,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "a8c0154d-facd-4397-8ce9-4dbc80a4afe6",
+      "pipelineId": "3c4f18dd-865c-494e-92b6-b36908e9c9c9",
       "upsertKey": {
         "stemHash": "d63da0fc646b5a3f21cddccdb54b774f"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -9700,19 +9701,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "dc4ae377-45be-4b25-9625-56dedd8b6de1",
+      "pipelineId": "dc37754d-e7ed-4487-8316-678b5f9bd4d5",
       "upsertKey": {
         "stemHash": "810502916180b870d5e079a4af1ec732"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -9753,19 +9754,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "6687c193-c77f-4cb4-95bd-d52063fa76bd",
+      "pipelineId": "a87154c0-91c1-4f77-806a-b51bd60099a5",
       "upsertKey": {
         "stemHash": "0754ba989d361157908833a3c61f573a"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -9806,19 +9807,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "c1c9d58b-b332-4b1c-b783-6b3a53d2b343",
+      "pipelineId": "d3b67020-729f-4933-92e2-4350d2dc652d",
       "upsertKey": {
         "stemHash": "b3692bc46097e69abcdb25723743886d"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -9859,19 +9860,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "87b8f129-8d8c-4960-a15c-69346028d6fb",
+      "pipelineId": "20984fa5-afbb-44df-98a2-e23849a4fbdf",
       "upsertKey": {
         "stemHash": "93d908fd8b37e8f20f2ba7bfb3c23b13"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -9913,19 +9914,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "02425a5c-eec5-45b3-b043-e587cb001049",
+      "pipelineId": "b23d1944-5d9d-4c78-9b79-6d284a16926f",
       "upsertKey": {
         "stemHash": "066e56575f79a52118706e0703e7ddc1"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -9966,19 +9967,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "aa0840d0-189a-48c0-b546-e8d0d8e05f84",
+      "pipelineId": "2f44fb46-c3ad-40b4-8849-da27c4261b84",
       "upsertKey": {
         "stemHash": "234b0a92bfc8b01b11e23169637ea151"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -10018,19 +10019,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "76b6b096-b1c3-458b-8a66-2f3ac90c1714",
+      "pipelineId": "71d8db65-c84e-4118-9337-93ccfd196e04",
       "upsertKey": {
         "stemHash": "b58e042e020c159864ed320e8afe36d2"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -10071,19 +10072,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "35fb9278-bf08-44a5-9282-8aa9bba45884",
+      "pipelineId": "0f1d4544-6cc7-4bdb-b684-8680a4997ff8",
       "upsertKey": {
         "stemHash": "2f7e69bc5254670f89e1aa61b60e90d8"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -10124,19 +10125,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "0a4388c9-48c4-4bab-8c95-1aaf5b51a4da",
+      "pipelineId": "b12881ff-a5f1-4b4a-9e43-3aece31173d1",
       "upsertKey": {
         "stemHash": "0d058c66c17f6f81566bef0b258169d9"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -10177,19 +10178,19 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "524889ae-fda1-4eb6-a289-c79be9276d85",
+      "pipelineId": "4fb01fee-1a7b-4a5a-9b0f-5b85b8878447",
       "upsertKey": {
         "stemHash": "de0bf1b7af27a0ee858361b9f281695f"
       },
       "conflictStrategy": "skip",
       "data": {
-        "tier": "premium",
+        "tier": "np",
         "exam": "AANP-FNP",
         "questionType": "mcq",
         "status": "published",
@@ -10231,9 +10232,9 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T02:52:38.383Z",
+        "publishedAt": "2026-04-11T03:05:01.993Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     }
   ],

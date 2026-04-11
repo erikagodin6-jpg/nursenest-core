@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "stage": "prisma_import",
-  "runId": "2943e9f2-a555-4768-bc84-04a9fd044ff9",
-  "generatedAt": "2026-04-11T02:52:38.383Z",
+  "runId": "b8d24730-7c62-4c99-bb97-3beb9439cfe6",
+  "generatedAt": "2026-04-11T03:05:01.993Z",
   "programs": [
     "pre-nursing"
   ],
@@ -25,7 +25,7 @@
   ],
   "pathwayLessonUpserts": [
     {
-      "pipelineId": "e0c03452-3965-4285-8f14-1a225c70c850",
+      "pipelineId": "a5bd1060-ba45-4909-ab8a-ce320a365611",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "basic-math-fractions-decimals-percentages-fractions-and-ratios-what-they-mean-for---batch-1-anatomy-dosage",
@@ -81,15 +81,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "BASIC",
+        "tierCode": null,
         "status": "PUBLISHED",
         "sortOrder": 100,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "a958da78-b100-4961-ad0e-e31b0e8ccbc4",
+      "pipelineId": "34b86c96-f954-4a2f-8241-9457f1854503",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "basic-math-fractions-decimals-percentages-decimals-rounding-and-measurement-precis--batch-1-anatomy-dosage",
@@ -145,15 +145,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "BASIC",
+        "tierCode": null,
         "status": "PUBLISHED",
         "sortOrder": 101,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "690457c2-1afa-4638-84ca-a46c63e482f0",
+      "pipelineId": "4fcf4eea-47bd-4dcc-967b-0386ba1f8b91",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "basic-math-fractions-decimals-percentages-percentages-and-proportions--batch-1-anatomy-dosage",
@@ -209,15 +209,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "BASIC",
+        "tierCode": null,
         "status": "PUBLISHED",
         "sortOrder": 102,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "505dea62-38da-4c8f-838c-13f6a3bbf172",
+      "pipelineId": "abbbda98-9e47-48db-9193-9cee50c951e3",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "systems-of-measurement-metric-base-units-and-prefixes-used-in-n--batch-1-anatomy-dosage",
@@ -255,15 +255,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "BASIC",
+        "tierCode": null,
         "status": "PUBLISHED",
         "sortOrder": 103,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "bcbec8cb-2004-490e-a616-0c086d99a35c",
+      "pipelineId": "3ca0c181-f96d-47d4-954f-b53f2e961c29",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "systems-of-measurement-household-measures-and-legacy-notation--batch-1-anatomy-dosage",
@@ -301,15 +301,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "BASIC",
+        "tierCode": null,
         "status": "PUBLISHED",
         "sortOrder": 104,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "9bbd7b53-7878-4c7c-b330-1233cdbe1657",
+      "pipelineId": "0d44cd57-caf8-450d-8fbf-d51ea4e2a7bc",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "organization-of-the-human-body-orientation-position-directions-planes-c--batch-1-anatomy-dosage",
@@ -353,15 +353,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "BASIC",
+        "tierCode": null,
         "status": "PUBLISHED",
         "sortOrder": 105,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "611f0f57-e5af-483a-8125-4ab7f52b77d7",
+      "pipelineId": "a2d0b021-5bb5-449c-ab3b-98a48cde2f56",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "organization-of-the-human-body-organ-systems-survey-names-and-one-line---batch-1-anatomy-dosage",
@@ -399,15 +399,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "BASIC",
+        "tierCode": null,
         "status": "PUBLISHED",
         "sortOrder": 106,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "ad8af76a-a5cf-48be-a416-78a1ad8c02bd",
+      "pipelineId": "fd30b757-67b5-4db9-9b07-3010aa2b2938",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "word-roots-prefixes-and-suffixes-how-medical-terms-are-built-word-root-pr--batch-2-medical-terminology",
@@ -445,15 +445,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "BASIC",
+        "tierCode": null,
         "status": "PUBLISHED",
         "sortOrder": 107,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "efaaabd9-69e8-47be-b2ce-d4945ee409c0",
+      "pipelineId": "b7debe97-bf22-48e5-a051-f2311b6b4364",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "word-roots-prefixes-and-suffixes-high-yield-prefixes-for-speed-and-safety--batch-2-medical-terminology",
@@ -491,15 +491,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "BASIC",
+        "tierCode": null,
         "status": "PUBLISHED",
         "sortOrder": 108,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "45ecf568-8f20-401c-a60f-b2b56ae5b4ba",
+      "pipelineId": "aac7931d-23a9-4daf-8d41-2089945d4866",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "word-roots-prefixes-and-suffixes-high-yield-suffixes-and-noun-endings--batch-2-medical-terminology",
@@ -537,15 +537,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "BASIC",
+        "tierCode": null,
         "status": "PUBLISHED",
         "sortOrder": 109,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "2e8eec6a-7429-4479-adcf-23ce179a026a",
+      "pipelineId": "e5d272d4-7f2c-4e89-a6f2-8e3bc5abb53c",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "body-directions-and-planes-anatomical-position-and-paired-direction--batch-2-medical-terminology",
@@ -583,15 +583,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "BASIC",
+        "tierCode": null,
         "status": "PUBLISHED",
         "sortOrder": 110,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "d602d89f-5cfd-40af-b6ca-49d479d331d1",
+      "pipelineId": "be8b0774-881c-49d8-be3d-9f22d31524d3",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "body-directions-and-planes-planes-of-the-body--batch-2-medical-terminology",
@@ -629,15 +629,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "BASIC",
+        "tierCode": null,
         "status": "PUBLISHED",
         "sortOrder": 111,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "56503bc5-7c86-44e5-af66-7e03d076a77b",
+      "pipelineId": "38e662da-97d5-44b7-9618-e6ca7cf19394",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "body-cavities-and-regions-dorsal-and-ventral-cavities-survey--batch-2-medical-terminology",
@@ -675,15 +675,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "BASIC",
+        "tierCode": null,
         "status": "PUBLISHED",
         "sortOrder": 112,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "41359cab-d640-4ccf-a77e-d263ec4d9811",
+      "pipelineId": "277868c3-b59a-493f-8f1f-933c324dba83",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "body-cavities-and-regions-abdominopelvic-quadrants-and-regions-ori--batch-2-medical-terminology",
@@ -721,15 +721,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "BASIC",
+        "tierCode": null,
         "status": "PUBLISHED",
         "sortOrder": 113,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "e624b5be-dda4-4319-919a-bce5c7f1fe96",
+      "pipelineId": "64af6b5d-8675-4a9a-bd58-7ca74613dd76",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "cardiorespiratory-terminology-heart-and-vessel-vocabulary-pre-nursing---batch-2-medical-terminology",
@@ -767,15 +767,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "BASIC",
+        "tierCode": null,
         "status": "PUBLISHED",
         "sortOrder": 114,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "8834830c-d0f4-467f-be5f-eb16964c45a8",
+      "pipelineId": "7411a945-9e77-4d9c-92f4-81fc8e76b16b",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "cardiorespiratory-terminology-breathing-and-lung-related-vocabulary--batch-2-medical-terminology",
@@ -813,15 +813,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "BASIC",
+        "tierCode": null,
         "status": "PUBLISHED",
         "sortOrder": 115,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "beae56aa-854e-476a-bd5f-e2d20b274d55",
+      "pipelineId": "0690e78c-126e-40e3-8afc-4d4abb104e67",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "gi-urinary-terminology-gi-terminology-digestion-through-elimina--batch-2-medical-terminology",
@@ -859,15 +859,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "BASIC",
+        "tierCode": null,
         "status": "PUBLISHED",
         "sortOrder": 116,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "e9b634bf-f230-43da-8294-dd6fc199128a",
+      "pipelineId": "af304fcb-7fc8-4b76-b831-7cf9476eae8d",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "gi-urinary-terminology-urinary-terminology-filtration-to-voidin--batch-2-medical-terminology",
@@ -905,15 +905,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "BASIC",
+        "tierCode": null,
         "status": "PUBLISHED",
         "sortOrder": 117,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "131db7d6-f7e9-4986-a90e-ac28055f2b43",
+      "pipelineId": "44a4d346-92b3-4d7e-b21c-5968e3b2b30e",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "neurological-musculoskeletal-terminology-neuro-terminology-nerves-brain-and-funct--batch-2-medical-terminology",
@@ -951,15 +951,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "BASIC",
+        "tierCode": null,
         "status": "PUBLISHED",
         "sortOrder": 118,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "f35ac39c-9b33-4545-a39a-e8a7d25f6260",
+      "pipelineId": "a549896e-9e02-4e86-848b-cf6f4c5ed0d0",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "neurological-musculoskeletal-terminology-musculoskeletal-terminology-bone-muscle---batch-2-medical-terminology",
@@ -997,15 +997,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "BASIC",
+        "tierCode": null,
         "status": "PUBLISHED",
         "sortOrder": 119,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "62c3f089-837a-4730-8dd5-3dec8cef7755",
+      "pipelineId": "583d8cc3-4fc9-4c4a-aad4-b36859f416cb",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "organic-molecules-macromolecules-bonds-and-building-blocks-that-make-macr--batch-3-organic-cell-pharm-oral",
@@ -1049,15 +1049,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "BASIC",
+        "tierCode": null,
         "status": "PUBLISHED",
         "sortOrder": 120,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "1010d5c4-0cb4-42e9-a535-50a2a1eb2d53",
+      "pipelineId": "42b234b1-d9d3-4cf9-907b-4abb017030e4",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "organic-molecules-macromolecules-carbohydrates-and-lipids-quick-energy-vs--batch-3-organic-cell-pharm-oral",
@@ -1095,15 +1095,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "BASIC",
+        "tierCode": null,
         "status": "PUBLISHED",
         "sortOrder": 121,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "a70b4abb-a21c-4fb4-856f-f7cf9b937590",
+      "pipelineId": "d6157b5a-3d27-4537-ac58-c3296db3682b",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "organic-molecules-macromolecules-proteins-and-nucleic-acids-workers-and-i--batch-3-organic-cell-pharm-oral",
@@ -1141,15 +1141,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "BASIC",
+        "tierCode": null,
         "status": "PUBLISHED",
         "sortOrder": 122,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "9b213d7d-72d6-4621-aa73-15e472953d4e",
+      "pipelineId": "9071d62a-5577-42f6-bbca-0d2df5f01fca",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "cell-structure-and-function-plasma-membrane-gatekeeper-and-communica--batch-3-organic-cell-pharm-oral",
@@ -1187,15 +1187,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "BASIC",
+        "tierCode": null,
         "status": "PUBLISHED",
         "sortOrder": 123,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "2e8feda4-31c9-45a9-9ca0-263a7ed6c9bc",
+      "pipelineId": "54473bc4-c4d7-40a6-b513-ab4611055fbd",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "cell-structure-and-function-organelles-division-of-labor-inside-the---batch-3-organic-cell-pharm-oral",
@@ -1233,15 +1233,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "BASIC",
+        "tierCode": null,
         "status": "PUBLISHED",
         "sortOrder": 124,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "88f058de-952d-4bb5-95e0-6c27b106b3b5",
+      "pipelineId": "e3a06690-b65f-4f71-a167-f8a92a48f4a7",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "cell-structure-and-function-from-glucose-to-atp-cellular-respiration--batch-3-organic-cell-pharm-oral",
@@ -1285,15 +1285,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "BASIC",
+        "tierCode": null,
         "status": "PUBLISHED",
         "sortOrder": 125,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "6f01e977-e53e-4208-8eb5-cea6bacf4f27",
+      "pipelineId": "3cbe283d-0629-4da6-bcbf-aa7846b9ff83",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "routes-of-drug-administration-why-route-changes-drug-behavior-adme-bri--batch-3-organic-cell-pharm-oral",
@@ -1325,15 +1325,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "BASIC",
+        "tierCode": null,
         "status": "PUBLISHED",
         "sortOrder": 126,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "87ebb345-8d1b-4618-b723-95e95bc16f5b",
+      "pipelineId": "0dd2933d-35d5-49bd-8ebc-70f26cdd0ff7",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "routes-of-drug-administration-enteral-and-parenteral-routes-pre-nursin--batch-3-organic-cell-pharm-oral",
@@ -1371,15 +1371,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "BASIC",
+        "tierCode": null,
         "status": "PUBLISHED",
         "sortOrder": 127,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "8e0cb6b9-9f92-4f77-b9dc-35fb977d7ce0",
+      "pipelineId": "c9b0d4aa-8677-4086-965b-5f2930177216",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "routes-of-drug-administration-route-selection-speed-swallowing-gi-func--batch-3-organic-cell-pharm-oral",
@@ -1417,15 +1417,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "BASIC",
+        "tierCode": null,
         "status": "PUBLISHED",
         "sortOrder": 128,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "c291d7e8-81b3-4d89-8014-f0e447359d96",
+      "pipelineId": "c9c51601-cdc3-4936-b3c3-252af004a522",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "pharmacology-adverse-effects-how-drugs-exert-effects-pharmacodynamics--batch-3-organic-cell-pharm-oral",
@@ -1457,15 +1457,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "BASIC",
+        "tierCode": null,
         "status": "PUBLISHED",
         "sortOrder": 129,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "31ace394-fe8c-44e8-90f5-285d13b744c5",
+      "pipelineId": "c14a6954-4862-4d11-b69f-3a7cddd95d8e",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "pharmacology-adverse-effects-side-effect-vs-adverse-drug-reaction-adr--batch-3-organic-cell-pharm-oral",
@@ -1503,15 +1503,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "BASIC",
+        "tierCode": null,
         "status": "PUBLISHED",
         "sortOrder": 130,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "63f92b9f-557e-437e-b82a-6de9fe679aa5",
+      "pipelineId": "450bfc85-00fb-44bc-b8af-a58988d2d88c",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "pharmacology-adverse-effects-interactions-allergies-toxicity-and-repo--batch-3-organic-cell-pharm-oral",
@@ -1549,15 +1549,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "BASIC",
+        "tierCode": null,
         "status": "PUBLISHED",
         "sortOrder": 131,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "ea317699-12f1-4133-b780-cd8d636e848f",
+      "pipelineId": "6dc9e00b-b219-40f1-b89c-7dd4e40a89b5",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "rights-of-medication-administration-classic-rights-patient-drug-dose-route-t--batch-3-organic-cell-pharm-oral",
@@ -1595,15 +1595,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "BASIC",
+        "tierCode": null,
         "status": "PUBLISHED",
         "sortOrder": 132,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "2a83ff5e-0e2d-4075-ab8e-56018b9e65db",
+      "pipelineId": "ab97b2a1-b9ec-41b3-833b-f7a992764841",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "rights-of-medication-administration-expanded-rights-documentation-reason-res--batch-3-organic-cell-pharm-oral",
@@ -1641,15 +1641,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "BASIC",
+        "tierCode": null,
         "status": "PUBLISHED",
         "sortOrder": 133,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "78568792-de17-4d44-b088-f5f92509f411",
+      "pipelineId": "dfc48bd9-4e4b-415a-81fd-aa106fde274e",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "oral-medication-dosage-calculations-dose-on-hand-and-dose-desired-the-core-p--batch-3-organic-cell-pharm-oral",
@@ -1693,15 +1693,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "BASIC",
+        "tierCode": null,
         "status": "PUBLISHED",
         "sortOrder": 134,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "f8da8f7f-cfca-45bf-8174-f5975e1822b4",
+      "pipelineId": "62022992-370d-4d9a-9b8d-fd18b9c1aaba",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "oral-medication-dosage-calculations-dimensional-analysis-for-oral-liquids-an--batch-3-organic-cell-pharm-oral",
@@ -1745,15 +1745,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "BASIC",
+        "tierCode": null,
         "status": "PUBLISHED",
         "sortOrder": 135,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "e692d5c6-f53f-4184-be98-903b5331b61a",
+      "pipelineId": "803eff2f-9963-436d-ba09-5b8382b72b98",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "oral-medication-dosage-calculations-split-tablets-liquid-cups-and-safety-che--batch-3-organic-cell-pharm-oral",
@@ -1791,15 +1791,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "BASIC",
+        "tierCode": null,
         "status": "PUBLISHED",
         "sortOrder": 136,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "e1d4ef08-e550-441d-b67f-87abde3f229c",
+      "pipelineId": "3cbfa956-a5fe-4e2c-ac3d-fe760659a79f",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "intro-microbiology-classification-major-microorganism-groups-nurses-encoun--batch-4-micro-pharm-pk-pd-iv",
@@ -1837,15 +1837,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "BASIC",
+        "tierCode": null,
         "status": "PUBLISHED",
         "sortOrder": 137,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "fee37d04-e2a1-464b-b0bc-51b6c4e3c6e4",
+      "pipelineId": "4630ada7-eb3a-442a-afc3-cc6861928e3e",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "intro-microbiology-classification-prokaryote-vs-eukaryote-and-why-it-matte--batch-4-micro-pharm-pk-pd-iv",
@@ -1883,15 +1883,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "BASIC",
+        "tierCode": null,
         "status": "PUBLISHED",
         "sortOrder": 138,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "a15ce5f6-9a5c-4c12-81b1-8d13ea58371c",
+      "pipelineId": "5c80fe7b-0a8e-4f43-a825-9cc1cb497a12",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "bacterial-structure-and-reproduction-bacterial-cell-envelope-and-gram-stain-l--batch-4-micro-pharm-pk-pd-iv",
@@ -1929,15 +1929,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "BASIC",
+        "tierCode": null,
         "status": "PUBLISHED",
         "sortOrder": 139,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "276252ac-4803-4acd-9c3a-5f979aa90891",
+      "pipelineId": "762a8c1f-97ad-4e4e-9450-ef7e4c6d424e",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "bacterial-structure-and-reproduction-bacterial-growth-and-resistance-preview--batch-4-micro-pharm-pk-pd-iv",
@@ -1969,15 +1969,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "BASIC",
+        "tierCode": null,
         "status": "PUBLISHED",
         "sortOrder": 140,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "b650c4ab-7e7e-4778-afd0-3a5107e470cb",
+      "pipelineId": "48eb6dc0-7577-45c9-96c3-2bc206237069",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "viral-structure-and-pathogenesis-viral-structure-minimal-infectious-parti--batch-4-micro-pharm-pk-pd-iv",
@@ -2009,15 +2009,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "BASIC",
+        "tierCode": null,
         "status": "PUBLISHED",
         "sortOrder": 141,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "48647a8e-0325-4c7d-a22e-21f9f9a7358a",
+      "pipelineId": "bccc83fc-0d96-4a74-a255-4e3f3734b064",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "viral-structure-and-pathogenesis-viral-replication-cycle-survey-map--batch-4-micro-pharm-pk-pd-iv",
@@ -2055,15 +2055,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "BASIC",
+        "tierCode": null,
         "status": "PUBLISHED",
         "sortOrder": 142,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "6ed26bf7-d265-4c06-a356-3c1983facdac",
+      "pipelineId": "9ed26ae3-0c24-4d56-bdee-481676be2168",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "antimicrobials-overview-antibacterial-classes-and-spectrum-overv--batch-4-micro-pharm-pk-pd-iv",
@@ -2095,15 +2095,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "BASIC",
+        "tierCode": null,
         "status": "PUBLISHED",
         "sortOrder": 143,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "1aeafc65-66fa-4e31-8a5a-3cf9296d4c49",
+      "pipelineId": "f720c204-d22a-4326-a158-ce389efaa030",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "antimicrobials-overview-antivirals-and-antifungals-different-tar--batch-4-micro-pharm-pk-pd-iv",
@@ -2141,15 +2141,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "BASIC",
+        "tierCode": null,
         "status": "PUBLISHED",
         "sortOrder": 144,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "303dbdc8-3fb5-4123-bec0-cc8e59c20ad9",
+      "pipelineId": "7457c3b4-8b80-4dfb-860b-b92d09a4e179",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "antimicrobials-overview-resistance-adherence-and-safety-basics--batch-4-micro-pharm-pk-pd-iv",
@@ -2181,15 +2181,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "BASIC",
+        "tierCode": null,
         "status": "PUBLISHED",
         "sortOrder": 145,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "5ce852dc-246d-4fdf-91aa-13688610764e",
+      "pipelineId": "68be63da-efa3-4e8f-8384-9f8f8381f6f1",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "pharmacology-intro-drug-classifications-generic-brand-and-why-both-names-appear--batch-4-micro-pharm-pk-pd-iv",
@@ -2221,15 +2221,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "BASIC",
+        "tierCode": null,
         "status": "PUBLISHED",
         "sortOrder": 146,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "66454d34-cfc5-4a18-9f8e-bb332d254e00",
+      "pipelineId": "0df72995-3776-4fb2-b098-f9fb29d30e5b",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "pharmacology-intro-drug-classifications-drug-classes-and-prototypes--batch-4-micro-pharm-pk-pd-iv",
@@ -2261,15 +2261,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "BASIC",
+        "tierCode": null,
         "status": "PUBLISHED",
         "sortOrder": 147,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "9fa6d67a-f697-488f-a81c-65ca4aa6d102",
+      "pipelineId": "48a369d4-baea-4835-8e46-24eb368cee86",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "pharmacology-intro-drug-classifications-controlled-substance-schedules-us-framew--batch-4-micro-pharm-pk-pd-iv",
@@ -2301,15 +2301,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "BASIC",
+        "tierCode": null,
         "status": "PUBLISHED",
         "sortOrder": 148,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "7787a36f-3394-424e-b4de-4c3c61cd333b",
+      "pipelineId": "201a6630-a894-497e-9f63-e3d38adcae8e",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "pharmacokinetics-adme-absorption-from-site-into-circulation--batch-4-micro-pharm-pk-pd-iv",
@@ -2341,15 +2341,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "BASIC",
+        "tierCode": null,
         "status": "PUBLISHED",
         "sortOrder": 149,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "f3c3cdde-b217-47de-b025-e27c80af91c2",
+      "pipelineId": "dbfcf87b-a34d-41a7-b7ed-e4c064c70e35",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "pharmacokinetics-adme-distribution-from-blood-to-tissues--batch-4-micro-pharm-pk-pd-iv",
@@ -2381,15 +2381,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "BASIC",
+        "tierCode": null,
         "status": "PUBLISHED",
         "sortOrder": 150,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "ef3ba8b9-a868-43e4-bbae-b64f65a76d2d",
+      "pipelineId": "351c565a-4b0b-46dc-b33b-441e2f7f3465",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "pharmacokinetics-adme-metabolism-biotransformation-often-in-li--batch-4-micro-pharm-pk-pd-iv",
@@ -2421,15 +2421,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "BASIC",
+        "tierCode": null,
         "status": "PUBLISHED",
         "sortOrder": 151,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "58bfa369-f113-44d6-8d59-5f1e627f6daa",
+      "pipelineId": "71afaa9f-1dd6-4291-9d6a-e2dc896f2f3a",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "pharmacokinetics-adme-excretion-mainly-renal-half-life-and-ste--batch-4-micro-pharm-pk-pd-iv",
@@ -2461,15 +2461,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "BASIC",
+        "tierCode": null,
         "status": "PUBLISHED",
         "sortOrder": 152,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "ee597472-698e-4007-985f-f57ef8c5b227",
+      "pipelineId": "d6f822e0-45a8-46e2-bff4-9d69e54299ae",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "pharmacodynamics-drug-actions-receptors-affinity-efficacy-and-dose-res--batch-4-micro-pharm-pk-pd-iv",
@@ -2501,15 +2501,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "BASIC",
+        "tierCode": null,
         "status": "PUBLISHED",
         "sortOrder": 153,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "67db28db-d8d8-43d6-bd06-353dbbaef36c",
+      "pipelineId": "b6b202cc-3f27-4976-b2b2-44ea8f202ff0",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "pharmacodynamics-drug-actions-therapeutic-index-and-selectivity--batch-4-micro-pharm-pk-pd-iv",
@@ -2541,15 +2541,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "BASIC",
+        "tierCode": null,
         "status": "PUBLISHED",
         "sortOrder": 154,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "abe3406a-fb57-4aa3-b205-2a148daa325c",
+      "pipelineId": "896d5048-d125-4421-909f-4b482ba958f1",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "pharmacodynamics-drug-actions-tolerance-dependence-and-rebound-preview--batch-4-micro-pharm-pk-pd-iv",
@@ -2581,15 +2581,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "BASIC",
+        "tierCode": null,
         "status": "PUBLISHED",
         "sortOrder": 155,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "8fd3c908-ec9b-4204-aed6-13e85f314d7d",
+      "pipelineId": "3fe70836-22bd-4ff8-bece-9c9dcb664b82",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "iv-flow-rate-calculations-ml-hr-volume-over-time--batch-4-micro-pharm-pk-pd-iv",
@@ -2615,15 +2615,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "BASIC",
+        "tierCode": null,
         "status": "PUBLISHED",
         "sortOrder": 156,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "415f66fc-c0ad-4aba-b904-d442269cdbb1",
+      "pipelineId": "14607fe9-3885-4237-846c-0964856186c4",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "iv-flow-rate-calculations-drip-rate-gtt-min-from-ml-hr--batch-4-micro-pharm-pk-pd-iv",
@@ -2649,15 +2649,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "BASIC",
+        "tierCode": null,
         "status": "PUBLISHED",
         "sortOrder": 157,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "6cd14f1f-e8d7-4b27-a3dc-b9a76cae3afe",
+      "pipelineId": "0cc53437-ad3e-43e3-9d8b-0b867c154c62",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "iv-flow-rate-calculations-infusion-time-and-pump-safety--batch-4-micro-pharm-pk-pd-iv",
@@ -2689,15 +2689,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "BASIC",
+        "tierCode": null,
         "status": "PUBLISHED",
         "sortOrder": 158,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "a4ac313e-c095-469c-a603-941841773145",
+      "pipelineId": "8dfdb9a0-1d4d-4c04-81b2-699ffb825a3c",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "body-direction-and-positional-terms-l01--foundations-batch-01",
@@ -2747,15 +2747,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "BASIC",
+        "tierCode": null,
         "status": "PUBLISHED",
         "sortOrder": 159,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "5db8491c-8ffe-4bf7-9cd7-1fb4a62c3b81",
+      "pipelineId": "860bb8a1-4fc3-4db3-a78d-61e6779b1307",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "body-direction-and-positional-terms-l02--foundations-batch-01",
@@ -2805,15 +2805,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "BASIC",
+        "tierCode": null,
         "status": "PUBLISHED",
         "sortOrder": 160,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "140c7beb-3bd8-4841-98a5-448c72820469",
+      "pipelineId": "0c26466d-3f70-448c-be8a-27aaace4e2d7",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "body-direction-and-positional-terms-l03--foundations-batch-01",
@@ -2869,15 +2869,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "BASIC",
+        "tierCode": null,
         "status": "PUBLISHED",
         "sortOrder": 161,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "00e4e36c-9a67-4e03-9b1a-ce1026dddf0e",
+      "pipelineId": "f4d4289c-9f64-46e0-8edf-809e3a25edbc",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "body-direction-and-positional-terms-l04--foundations-batch-01",
@@ -2927,15 +2927,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "BASIC",
+        "tierCode": null,
         "status": "PUBLISHED",
         "sortOrder": 162,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "f50d9e26-1a59-429c-a3e9-815c3fded1cd",
+      "pipelineId": "269c97db-95b0-4a8c-86da-bd7bdc712927",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "prefixes-suffixes-root-words-l01--foundations-batch-01",
@@ -2991,15 +2991,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "BASIC",
+        "tierCode": null,
         "status": "PUBLISHED",
         "sortOrder": 163,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "30ca0214-14ca-40a7-bbd9-4b44cd118a2a",
+      "pipelineId": "37da9277-3355-4723-8892-8ffa9fc3a61e",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "prefixes-suffixes-root-words-l02--foundations-batch-01",
@@ -3061,15 +3061,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "BASIC",
+        "tierCode": null,
         "status": "PUBLISHED",
         "sortOrder": 164,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "0e28b4d5-d6db-440e-a40d-6dcfbb70a054",
+      "pipelineId": "23a6276d-f4d2-4846-a902-c4c05321b87e",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "prefixes-suffixes-root-words-l03--foundations-batch-01",
@@ -3125,15 +3125,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "BASIC",
+        "tierCode": null,
         "status": "PUBLISHED",
         "sortOrder": 165,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "aee247ed-05f4-4fed-9a79-d86c448cb18f",
+      "pipelineId": "8e3098de-d525-455b-8cfd-3870afa86ea6",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "prefixes-suffixes-root-words-l04--foundations-batch-01",
@@ -3189,15 +3189,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "BASIC",
+        "tierCode": null,
         "status": "PUBLISHED",
         "sortOrder": 166,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "476004cd-343b-498a-8bde-7bca7eb8dc9c",
+      "pipelineId": "03fd5133-4ba5-4c7b-96e3-879e9e22ab0b",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "cardiovascular-respiratory-terminology-l01--foundations-batch-02",
@@ -3247,15 +3247,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "BASIC",
+        "tierCode": null,
         "status": "PUBLISHED",
         "sortOrder": 167,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "59a894f7-e6a3-4701-8af7-988d6edd44b0",
+      "pipelineId": "9320c1b5-6b0c-4484-b0e5-1ebc640713f0",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "cardiovascular-respiratory-terminology-l02--foundations-batch-02",
@@ -3305,15 +3305,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "BASIC",
+        "tierCode": null,
         "status": "PUBLISHED",
         "sortOrder": 168,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "a386ef3f-0e54-4085-a15d-b16eb55560b4",
+      "pipelineId": "fa642f25-0503-40d0-a0ba-7b890b00df30",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "cardiovascular-respiratory-terminology-l03--foundations-batch-02",
@@ -3363,15 +3363,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "BASIC",
+        "tierCode": null,
         "status": "PUBLISHED",
         "sortOrder": 169,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "0de52e0b-ae5f-4ee0-ad1c-29038e982ba4",
+      "pipelineId": "c7b67a94-c815-441f-8f04-4a027488bd80",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "cardiovascular-respiratory-terminology-l04--foundations-batch-02",
@@ -3421,15 +3421,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "BASIC",
+        "tierCode": null,
         "status": "PUBLISHED",
         "sortOrder": 170,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "f08fe605-3764-4522-b1e0-0bfd7c371f9c",
+      "pipelineId": "19cc5b30-5540-4b81-bbeb-8f009dd67c4c",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "cell-structure-and-function-l01--foundations-batch-02",
@@ -3485,15 +3485,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "BASIC",
+        "tierCode": null,
         "status": "PUBLISHED",
         "sortOrder": 171,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "3975a85b-96b6-4f92-b7d6-0f1ea787b6fe",
+      "pipelineId": "7f6eecf2-c7ba-415d-933f-c891f322c3dd",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "cell-structure-and-function-l02--foundations-batch-02",
@@ -3549,15 +3549,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "BASIC",
+        "tierCode": null,
         "status": "PUBLISHED",
         "sortOrder": 172,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "baa7eef1-d732-484c-976f-d2feebfbc5ab",
+      "pipelineId": "e252a295-3b3f-478a-86e1-f6c7dd0dcd79",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "cell-structure-and-function-l03--foundations-batch-02",
@@ -3613,15 +3613,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "BASIC",
+        "tierCode": null,
         "status": "PUBLISHED",
         "sortOrder": 173,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "31adef50-41fd-497b-95a2-c77f78db5482",
+      "pipelineId": "7f5d0892-285a-4fc8-99d7-298db3dee10b",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "cell-structure-and-function-l04--foundations-batch-02",
@@ -3671,15 +3671,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "BASIC",
+        "tierCode": null,
         "status": "PUBLISHED",
         "sortOrder": 174,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "30b69605-9c7d-48e6-a264-8ef0afeaea6d",
+      "pipelineId": "8686e208-77c7-4962-a8d6-eee09e0e3c6b",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "gi-urinary-terminology-l01--foundations-batch-02",
@@ -3729,15 +3729,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "BASIC",
+        "tierCode": null,
         "status": "PUBLISHED",
         "sortOrder": 175,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "2c3b6276-ca3d-47ab-88b1-8862d015b5f6",
+      "pipelineId": "046a78c9-356e-4f53-afec-0038ae52633c",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "gi-urinary-terminology-l02--foundations-batch-02",
@@ -3787,15 +3787,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "BASIC",
+        "tierCode": null,
         "status": "PUBLISHED",
         "sortOrder": 176,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "a417923b-30b8-4b7d-a7c9-89a545522515",
+      "pipelineId": "1003a0a8-bf29-4a63-961d-369184bfa9aa",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "musculoskeletal-neuro-terminology-l01--foundations-batch-02",
@@ -3845,15 +3845,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "BASIC",
+        "tierCode": null,
         "status": "PUBLISHED",
         "sortOrder": 177,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "4767ac51-5663-482f-ab4b-865c1b33d323",
+      "pipelineId": "39a70173-5674-41f0-a55c-56df357c7b59",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "musculoskeletal-neuro-terminology-l02--foundations-batch-02",
@@ -3903,15 +3903,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "BASIC",
+        "tierCode": null,
         "status": "PUBLISHED",
         "sortOrder": 178,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "ef34342e-feb7-45a0-a9a1-e0e838c2a639",
+      "pipelineId": "076467e1-e1ba-418d-8f5a-1b55f44456fe",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "cell-division-mitosis-meiosis-l01--foundations-batch-03",
@@ -3961,15 +3961,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "BASIC",
+        "tierCode": null,
         "status": "PUBLISHED",
         "sortOrder": 179,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "ba67a279-9711-451b-80e3-9bdc6ba19445",
+      "pipelineId": "42a4045f-dc28-4bf3-b277-000909904137",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "cell-division-mitosis-meiosis-l02--foundations-batch-03",
@@ -4019,15 +4019,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "BASIC",
+        "tierCode": null,
         "status": "PUBLISHED",
         "sortOrder": 180,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "2ad0f544-5d23-482c-bc46-187930ef8b4e",
+      "pipelineId": "f655e45e-776d-45d7-a7a4-8ac5f1214344",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "cell-transport-mechanisms-l01--foundations-batch-03",
@@ -4083,15 +4083,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "BASIC",
+        "tierCode": null,
         "status": "PUBLISHED",
         "sortOrder": 181,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "a59f4ecb-dd6e-46c0-ae9b-aed57c9e4cd0",
+      "pipelineId": "5ed5f7d4-6af2-4f34-ada7-9d1469b33afa",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "cell-transport-mechanisms-l02--foundations-batch-03",
@@ -4141,15 +4141,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "BASIC",
+        "tierCode": null,
         "status": "PUBLISHED",
         "sortOrder": 182,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "a9389251-fa92-467f-8787-309894b4f1fb",
+      "pipelineId": "e6d918a9-324f-49d9-abc9-0654a9578784",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "cell-transport-mechanisms-l03--foundations-batch-03",
@@ -4205,15 +4205,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "BASIC",
+        "tierCode": null,
         "status": "PUBLISHED",
         "sortOrder": 183,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "9550955e-e6bb-4e6f-ad06-5268656c1bbd",
+      "pipelineId": "906ea61c-2582-42d7-bc62-6ce3710d02cc",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "cell-transport-mechanisms-l04--foundations-batch-03",
@@ -4263,15 +4263,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "BASIC",
+        "tierCode": null,
         "status": "PUBLISHED",
         "sortOrder": 184,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "e9b3df09-2cf8-44dc-8261-39581d25beef",
+      "pipelineId": "8bdea0a0-ac21-43f2-b551-ef35abf36dfd",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "four-tissue-types-l01--foundations-batch-03",
@@ -4327,15 +4327,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "BASIC",
+        "tierCode": null,
         "status": "PUBLISHED",
         "sortOrder": 185,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "3a73932f-b370-44b5-9036-a82b2a133b49",
+      "pipelineId": "5b530be7-dcb0-4ec1-9ce6-8998dbcbc224",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "four-tissue-types-l02--foundations-batch-03",
@@ -4391,15 +4391,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "BASIC",
+        "tierCode": null,
         "status": "PUBLISHED",
         "sortOrder": 186,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "cef83344-4056-4133-8433-4ed53bbcaf9b",
+      "pipelineId": "aa7c66e8-8c00-40d1-8e87-f34e845d9f11",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "four-tissue-types-l03--foundations-batch-03",
@@ -4449,15 +4449,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "BASIC",
+        "tierCode": null,
         "status": "PUBLISHED",
         "sortOrder": 187,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "61f8eaf6-6660-4cc2-ba20-5cc7cf20d585",
+      "pipelineId": "51978553-f7ce-4065-8713-4377d2444e16",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "four-tissue-types-l04--foundations-batch-03",
@@ -4507,15 +4507,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "BASIC",
+        "tierCode": null,
         "status": "PUBLISHED",
         "sortOrder": 188,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "6d9a413f-0ac5-49f9-97eb-4fdf18b2381a",
+      "pipelineId": "102bedb3-4312-4b8a-ac79-982d622fcf56",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "skin-structure-and-functions-l01--foundations-batch-03",
@@ -4571,15 +4571,15 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "BASIC",
+        "tierCode": null,
         "status": "PUBLISHED",
         "sortOrder": 189,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     },
     {
-      "pipelineId": "59909955-f82f-4ffe-a154-538da4c781df",
+      "pipelineId": "5bbcb672-8845-4d00-88d6-c1c455cfcc8f",
       "upsertKey": {
         "pathwayId": "pre-nursing",
         "slug": "skin-structure-and-functions-l02--foundations-batch-03",
@@ -4635,11 +4635,11 @@
         ],
         "previewSectionCount": 1,
         "countryCode": null,
-        "tierCode": "BASIC",
+        "tierCode": null,
         "status": "PUBLISHED",
         "sortOrder": 190,
         "locale": "en",
-        "generatedAt": "2026-04-11T02:52:38.383Z"
+        "generatedAt": "2026-04-11T03:05:01.993Z"
       }
     }
   ],
