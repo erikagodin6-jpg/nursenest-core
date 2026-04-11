@@ -26,6 +26,7 @@
 
 import {
   applyAnswerToProfile,
+  buildPerformanceProfile,
   emptyPerformanceProfile,
   weakestLayer,
   weakestRiskLevel,
@@ -92,7 +93,6 @@ export function createCatSession(config: CatSessionConfig): CatSessionState {
   const now = Date.now();
 
   // Build initial performance profile from history
-  const { buildPerformanceProfile } = require("./performance-tracker") as typeof import("./performance-tracker");
   const historicalProfile = buildPerformanceProfile(config.historicalAnswers, now);
 
   // Derive starting ability from historical weighted accuracy

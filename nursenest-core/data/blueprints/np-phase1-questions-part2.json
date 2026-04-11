@@ -6,7 +6,7 @@
   "topicsIncluded": [
     "flank-pain-urinary-differential",
     "knee-pain-differential-acute-chronic",
-    "rash-differential-primary-secondary-urgent",
+    "rash-differential-primary-care",
     "red-eye-differential-urgent-vs-benign",
     "hemoptysis-differential-magnitude-workup",
     "lymphadenopathy-differential-benign-malignant",
@@ -260,7 +260,7 @@
 
     {
       "questionId": "np-p1-098",
-      "topicSlug": "rash-differential-primary-secondary-urgent",
+      "topicSlug": "rash-differential-primary-care",
       "lessonPart": "1",
       "difficulty": "expert",
       "stemAnchor": "28yo-female-SJS-lamotrigine-mucocutaneous-target-lesions-fever",
@@ -276,7 +276,7 @@
     },
     {
       "questionId": "np-p1-099",
-      "topicSlug": "rash-differential-primary-secondary-urgent",
+      "topicSlug": "rash-differential-primary-care",
       "lessonPart": "1",
       "difficulty": "expert",
       "stemAnchor": "12yo-male-meningococcemia-petechiae-purpura-fulminans-fever",
@@ -292,7 +292,7 @@
     },
     {
       "questionId": "np-p1-100",
-      "topicSlug": "rash-differential-primary-secondary-urgent",
+      "topicSlug": "rash-differential-primary-care",
       "lessonPart": "1",
       "difficulty": "hard",
       "stemAnchor": "35yo-male-tick-bite-bull-eye-rash-EM-Lyme",
@@ -308,7 +308,7 @@
     },
     {
       "questionId": "np-p1-101",
-      "topicSlug": "rash-differential-primary-secondary-urgent",
+      "topicSlug": "rash-differential-primary-care",
       "lessonPart": "1",
       "difficulty": "hard",
       "stemAnchor": "28yo-male-syphilis-rash-palms-soles-condyloma-lata-secondary",
@@ -324,7 +324,7 @@
     },
     {
       "questionId": "np-p1-102",
-      "topicSlug": "rash-differential-primary-secondary-urgent",
+      "topicSlug": "rash-differential-primary-care",
       "lessonPart": "1",
       "difficulty": "hard",
       "stemAnchor": "45yo-female-psoriasis-salmon-colored-plaques-elbows-knees-scalp",
@@ -340,7 +340,7 @@
     },
     {
       "questionId": "np-p1-103",
-      "topicSlug": "rash-differential-primary-secondary-urgent",
+      "topicSlug": "rash-differential-primary-care",
       "lessonPart": "1",
       "difficulty": "hard",
       "stemAnchor": "8yo-male-vesicular-rash-crops-linear-poison-ivy-contact",
@@ -356,7 +356,7 @@
     },
     {
       "questionId": "np-p1-104",
-      "topicSlug": "rash-differential-primary-secondary-urgent",
+      "topicSlug": "rash-differential-primary-care",
       "lessonPart": "1",
       "difficulty": "expert",
       "stemAnchor": "55yo-male-RMSF-tick-bite-fever-wrists-ankles-centripetal-doxycycline",
@@ -372,7 +372,7 @@
     },
     {
       "questionId": "np-p1-105",
-      "topicSlug": "rash-differential-primary-secondary-urgent",
+      "topicSlug": "rash-differential-primary-care",
       "lessonPart": "1",
       "difficulty": "expert",
       "stemAnchor": "68yo-female-impetigo-herpetiformis-bullous-flexural-elderly",
