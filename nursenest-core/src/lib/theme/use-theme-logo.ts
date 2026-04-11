@@ -44,12 +44,12 @@ function getServerSnapshot(): string {
 /**
  * Active theme logo follows `data-theme` (and the same localStorage key as the boot script), not
  * next-themes React state alone. That keeps the raster aligned with CSS variables and avoids a
- * brief lavender logo when the DOM is already `ocean` (or similar) after `beforeInteractive` boot.
+ * brief wrong-theme logo when the DOM is already set after `beforeInteractive` boot.
  */
 export function useThemeLogo(): {
   /** Canonical theme id used for logo mapping. */
   themeId: string;
-  /** Spaces object key for the active theme mark (e.g. `lavenderbrandlogo_transparent.png`). */
+  /** Spaces object key for the active theme mark (e.g. `oceanbrandlogo_transparent.png`). */
   mappedSpaceKey: string;
   /** Ordered URLs: same-origin proxy first, then public CDN, then fallbacks. */
   loadChain: string[];

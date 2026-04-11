@@ -40,6 +40,9 @@ import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { emptyStateCopy } from "@/lib/ui/empty-state-copy";
 import { buildDashboardModel } from "@/lib/learner/next-best-action";
 import { buildCountdownCopy, daysUntilExamUtc } from "@/lib/learner/exam-timeline";
+import { DashboardCoachCard } from "@/components/student/dashboard/coach-card";
+import { CoachWeakSummary } from "@/components/study/coach-weak-summary";
+import { isStudyCoachEnabled } from "@/lib/ai/learner-ai-policy";
 
 function retentionPersonalNote(t: LearnerMarketingT, prefs: Awaited<ReturnType<typeof loadLearnerRetentionPreferences>>): string | null {
   if (!prefs) return null;
@@ -250,6 +253,13 @@ export default async function LearnerDashboardPage() {
             <p className="nn-dash-section-label">Performance &amp; Gaps</p>
             <LearnerDashboardInsightPanels snapshot={snapshot} t={t} />
             {heatmapTopics.length > 0 && <WeaknessHeatmap topics={heatmapTopics} />}
+            {isStudyCoachEnabled() && weakTopicTitles.length > 0 && (
+              <CoachWeakSummary
+                weakTopics={weakTopicTitles}
+                examTarget={undefined}
+                daysUntilExam={daysLeft}
+              />
+            )}
           </section>
 
           <div className="nn-dash-divider" />

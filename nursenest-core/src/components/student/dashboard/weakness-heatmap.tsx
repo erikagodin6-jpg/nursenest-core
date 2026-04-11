@@ -12,7 +12,7 @@ export type HeatmapTopic = {
 const HEAT_COLORS = [
   { max: 0.2, bg: "var(--semantic-success)", label: "Strong" },
   { max: 0.35, bg: "var(--semantic-info)", label: "Moderate" },
-  { max: 0.5, bg: "var(--semantic-warning)", label: "Needs work" },
+  { max: 0.5, bg: "var(--semantic-warning)", label: "Needs Work" },
   { max: 1.0, bg: "var(--semantic-danger)", label: "Weak" },
 ];
 

@@ -338,7 +338,7 @@ export function PreviewDivider({ label = "Unlocks with Premium" }: { label?: str
  */
 export function LockedMetricCard({
   heading,
-  placeholderValue = "—",
+  placeholderValue = "--",
 }: {
   heading: string;
   placeholderValue?: string;
@@ -406,7 +406,7 @@ const PAYWALL_PRESETS: Record<
 > = {
   weak_topic: {
     title: "Unlock This Lesson",
-    description: "You're struggling with this area — unlock to improve faster.",
+    description: "You're struggling with this area. Unlock to improve faster.",
     bullets: [
       "Understand key concepts faster",
       "Fix your weak areas with Smart Review",
@@ -424,7 +424,7 @@ const PAYWALL_PRESETS: Record<
   },
   near_exam: {
     title: "Get Exam-Ready",
-    description: "You're close to your exam — get full access to be ready.",
+    description: "You're close to your exam. Get full access to be ready.",
     bullets: [
       "Adaptive CAT exams that mirror the real test",
       "Readiness scoring so you know when to sit",
@@ -442,7 +442,7 @@ const PAYWALL_PRESETS: Record<
   },
   lesson_highyield: {
     title: "Unlock This Lesson",
-    description: "You're about to learn a high-yield topic — unlock full access to continue.",
+    description: "You're about to learn a high-yield topic. Unlock full access to continue.",
     bullets: [
       "Understand key concepts faster",
       "Fix your weak areas with Smart Review",
@@ -522,7 +522,7 @@ export function ContextualPaywallCard({
 
   if (topicName) {
     if (context === "weak_topic") {
-      description = `You're struggling with ${topicName} — unlock to improve faster.`;
+      description = `You're struggling with ${topicName}. Unlock to improve faster.`;
     } else if (context === "lesson" || context === "lesson_highyield") {
       title = `Unlock: ${topicName}`;
     }

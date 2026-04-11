@@ -1,6 +1,6 @@
 import { NURSENEST_IMAGES_SPACE_PUBLIC_BASE_URL } from "@/config/marketing-cdn.catalog";
 import { relativeLuminanceFromHex } from "@/lib/color/hex-luminance";
-import { THEME_OPTIONS } from "@/lib/theme/theme-registry";
+import { NURSENEST_DEFAULT_THEME, THEME_OPTIONS } from "@/lib/theme/theme-registry";
 
 /** Same-origin transparent theme marks (see `scripts/generate-theme-logos-from-registry.ts`). */
 export const COMMITTED_THEME_LOGO_PUBLIC_PREFIX = "/branding/theme-logos/" as const;
@@ -10,10 +10,10 @@ export const COMMITTED_THEME_LOGO_PUBLIC_PREFIX = "/branding/theme-logos/" as co
  * committed transparent PNG first, then CDN/proxy, then `PRIMARY_LOGO_URL`, then local SVG).
  * Default brand theme is ocean/clinical-blue (`NURSENEST_DEFAULT_THEME`).
  */
-export const PRIMARY_LOGO_URL = `${COMMITTED_THEME_LOGO_PUBLIC_PREFIX}lavenderbrandlogo_transparent.png` as const;
+export const PRIMARY_LOGO_URL = `${COMMITTED_THEME_LOGO_PUBLIC_PREFIX}${NURSENEST_DEFAULT_THEME}brandlogo_transparent.png` as const;
 
-/** CDN URL for default lavender wordmark (last resort when same-origin assets are unavailable). */
-export const PRIMARY_LOGO_CDN_URL = `${NURSENEST_IMAGES_SPACE_PUBLIC_BASE_URL.replace(/\/$/, "")}/lavenderbrandlogo_transparent.png` as const;
+/** CDN URL for default wordmark (last resort when same-origin assets are unavailable). */
+export const PRIMARY_LOGO_CDN_URL = `${NURSENEST_IMAGES_SPACE_PUBLIC_BASE_URL.replace(/\/$/, "")}/${NURSENEST_DEFAULT_THEME}brandlogo_transparent.png` as const;
 
 /**
  * Committed same-origin wordmark — always available when CDN/proxy/theme objects fail.

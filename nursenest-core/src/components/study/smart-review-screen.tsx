@@ -10,6 +10,7 @@ import {
   UpgradePromptCard,
   usePremiumGateImpression,
 } from "./premium-gate";
+import { CoachReviewHelper } from "./coach-review-helper";
 
 // ── Data Types ──────────────────────────────────────────────────────────────
 
@@ -266,6 +267,15 @@ export function ReviewQuestionRow({ item }: { item: SmartReviewItem }) {
               ))}
             </div>
           ) : null}
+
+          {/* Study Coach guidance actions */}
+          <CoachReviewHelper
+            stem={item.stem}
+            topic={item.topic}
+            subtopic={item.subtopic}
+            rationale={rationaleText}
+            wasCorrect={item.isCorrect}
+          />
         </div>
       ) : null}
     </li>

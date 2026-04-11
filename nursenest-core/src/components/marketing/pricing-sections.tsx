@@ -285,7 +285,7 @@ function StudyPlanPreview() {
             1
           </span>
           <span className="text-xs font-bold" style={{ color: TEXT_PRIMARY }}>
-            Day 1 — Core Weak Area Repair
+            Day 1: Core Weak Area Repair
           </span>
         </div>
         <div className="space-y-1.5 pl-8">
@@ -297,7 +297,7 @@ function StudyPlanPreview() {
         </div>
       </div>
       {/* Locked shells */}
-      {["Day 2 — Second Focus Area", "Day 3 — Timed Practice"].map((title, i) => (
+      {["Day 2: Second Focus Area", "Day 3: Timed Practice"].map((title, i) => (
         <div
           key={i}
           className="flex items-center gap-2.5 rounded-xl px-3 py-2.5"
@@ -496,7 +496,7 @@ const UNLOCK_BLOCKS = [
     bullets: [
       "3–5 day plan built from your readiness score and weak areas",
       "Daily tasks: lessons, targeted practice, and review sessions",
-      "Direct links to every lesson and question — no searching",
+      "Direct links to every lesson and question, no searching",
       "Retest strategy so you know when to take the exam",
     ],
     accentColor: "var(--theme-primary)",
@@ -509,7 +509,7 @@ const UNLOCK_BLOCKS = [
       "Questions grouped by urgency: High Priority, Needs Review, Uncertain, and Strong",
       "See which mistakes matter most and fix them first",
       "Filter by topic, confidence, or correctness to focus your time",
-      "Direct lesson links from every question — study what you got wrong",
+      "Direct lesson links from every question. Study what you got wrong.",
     ],
     accentColor: "var(--semantic-warning)",
     preview: <SmartReviewPreview />,
@@ -518,9 +518,9 @@ const UNLOCK_BLOCKS = [
     label: "Confidence Analytics",
     title: "See exactly where you stand",
     bullets: [
-      "Catch overconfident errors — answers you got wrong but thought you knew",
+      "Catch overconfident errors: answers you got wrong but thought you knew",
       "Identify uncertain correct answers so you can reinforce guessed knowledge",
-      "Track strong mastery — what you truly know under exam conditions",
+      "Track strong mastery: what you truly know under exam conditions",
       "Prioritised review queue: Where to Focus Next",
     ],
     accentColor: "var(--semantic-info)",
@@ -549,10 +549,10 @@ export function PricingUnlockSection() {
     <section className="mt-20" aria-labelledby="what-you-unlock-heading">
       <div className="mb-10 text-center">
         <h2 id="what-you-unlock-heading" className="nn-marketing-h2">
-          Everything you need to pass — in one system
+          Everything You Need to Pass, in One System
         </h2>
         <p className="nn-marketing-body-sm mx-auto mt-2 max-w-2xl text-muted-foreground">
-          Start your free trial and get instant access to all of these — no setup, no delay.
+          Start your free trial and get instant access to all of these. No setup, no delay.
         </p>
       </div>
       <div className="space-y-6">
@@ -587,7 +587,7 @@ const PRODUCT_AREAS: {
     screenshotId: 1,
     icon: "✏️",
     title: "Practice interface",
-    desc: "Question stem, answer options, and full rationale — all visible at once. No scrolling to see why you were wrong.",
+    desc: "Question stem, answer options, and full rationale, all visible at once. No scrolling to see why you were wrong.",
     detail: "Correct answer · Why this is correct · Why other options are wrong · Key Takeaway · Related Lessons",
   },
   {
@@ -611,7 +611,7 @@ export function ProductPreviewGrid() {
     <section className="mt-20" aria-labelledby="product-preview-heading">
       <div className="mb-8 text-center">
         <h2 id="product-preview-heading" className="nn-marketing-h2">
-          Practice, test, and review — all connected
+          Practice, Test, and Review: All Connected
         </h2>
         <p className="nn-marketing-body-sm mx-auto mt-2 max-w-2xl text-muted-foreground">
           One system that shows you exactly what to study, tests your readiness, and helps you fix weak areas.
@@ -643,7 +643,7 @@ const TRUST_POINTS = [
   {
     icon: "🎯",
     headline: "Designed to help you pass on your first attempt",
-    body: "Structured around real exam blueprints — NCLEX, REx-PN, and specialty exams. Not generic nursing content.",
+    body: "Structured around real exam blueprints: NCLEX, REx-PN, and specialty exams. Not generic nursing content.",
   },
   {
     icon: "📐",
@@ -653,7 +653,7 @@ const TRUST_POINTS = [
   {
     icon: "📈",
     headline: "You'll know when you're ready",
-    body: "Readiness scoring, weak area tracking, and confidence analytics show your progress clearly — so you can walk into the exam feeling prepared.",
+    body: "Readiness scoring, weak area tracking, and confidence analytics show your progress clearly, so you can walk into the exam feeling prepared.",
   },
 ];
 
@@ -707,7 +707,7 @@ export function PricingCTA({ plansHref }: { plansHref: string }) {
     >
       <h2 className="nn-marketing-h2 mb-3">Start studying smarter today</h2>
       <p className="nn-marketing-body-sm mx-auto mb-8 max-w-lg text-muted-foreground">
-        Try everything free. No charge today — cancel anytime before your trial ends.
+        Try everything free. No charge today. Cancel anytime before your trial ends.
       </p>
       <div className="flex flex-wrap items-center justify-center gap-3">
         <Link href={plansHref} className={MARKETING_PRIMARY_CTA_CLASS}>

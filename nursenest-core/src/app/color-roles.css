@@ -6,7 +6,7 @@
  * - --role-success*: progress, readiness, positive.
  * - --role-warning*: attention, weak areas (amber, not alarm red).
  * - --role-premium*: premium panels, value-implying surfaces.
- * :root mirrors lavender for first paint before data-theme hydrates.
+ * :root mirrors ocean/clinical-blue for first paint before data-theme hydrates.
  */
 :root {
   /* First-paint defaults (ocean/clinical-blue) — replaced once [data-theme] hydrates */

@@ -6496,3 +6496,234 @@ html[data-theme="deep-twilight"] .nn-cat-opt--incorrect {
   box-shadow: 0 6px 16px -6px rgba(0, 0, 0, 0.08);
   transform: translateY(-1px);
 }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   Study Coach: guidance layer components
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Coach Action Buttons (shared) ───────────────────────────────────── */
+
+.nn-coach-action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.4375rem 0.875rem;
+  border-radius: 9999px;
+  border: 1.5px solid color-mix(in srgb, var(--semantic-brand) 18%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-brand) 4%, var(--semantic-surface));
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--semantic-text-primary);
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s, box-shadow 0.2s, transform 0.15s;
+  white-space: nowrap;
+}
+.nn-coach-action-btn:hover {
+  border-color: color-mix(in srgb, var(--semantic-brand) 35%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-brand) 8%, var(--semantic-surface));
+  box-shadow: 0 2px 8px -2px color-mix(in srgb, var(--semantic-brand) 12%, transparent);
+  transform: translateY(-0.5px);
+}
+.nn-coach-action-btn:active {
+  transform: translateY(0);
+}
+.nn-coach-action-btn--wide {
+  width: 100%;
+  justify-content: center;
+  padding: 0.625rem 1rem;
+}
+
+/* ── Coach Follow-Up Buttons ─────────────────────────────────────────── */
+
+.nn-coach-follow-up-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.3125rem 0.75rem;
+  border-radius: 9999px;
+  border: 1px solid var(--semantic-border-soft);
+  background: var(--semantic-surface);
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--semantic-text-secondary);
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.15s;
+}
+.nn-coach-follow-up-btn:hover {
+  border-color: color-mix(in srgb, var(--semantic-brand) 25%, var(--semantic-border-soft));
+  color: var(--semantic-text-primary);
+}
+
+/* ── Coach Response Panel ────────────────────────────────────────────── */
+
+.nn-coach-panel {
+  border-radius: 0.875rem;
+  border: 1.5px solid color-mix(in srgb, var(--semantic-brand) 12%, var(--semantic-border-soft));
+  background: linear-gradient(
+    170deg,
+    color-mix(in srgb, var(--semantic-brand) 3%, var(--semantic-surface)) 0%,
+    var(--semantic-surface) 100%
+  );
+  overflow: hidden;
+}
+.nn-coach-panel__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid color-mix(in srgb, var(--semantic-brand) 6%, var(--semantic-border-soft));
+}
+.nn-coach-panel__title {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--semantic-text-primary);
+  letter-spacing: -0.005em;
+}
+.nn-coach-panel__close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 0.375rem;
+  border: none;
+  background: transparent;
+  color: var(--semantic-text-muted);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+.nn-coach-panel__close:hover {
+  background: color-mix(in srgb, var(--semantic-text-muted) 10%, transparent);
+  color: var(--semantic-text-primary);
+}
+.nn-coach-panel__body {
+  padding: 0.875rem 1rem 1rem;
+}
+.nn-coach-panel__loading {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.5rem 0;
+}
+.nn-coach-panel__error {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 0.5rem 0;
+}
+.nn-coach-panel__content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.nn-coach-panel__line {
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: var(--semantic-text-primary);
+}
+.nn-coach-panel__follow-ups {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+  margin-top: 0.875rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--semantic-border-soft);
+}
+
+/* ── Coach Inline (Review Screen) ────────────────────────────────────── */
+
+.nn-coach-inline {
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px dashed color-mix(in srgb, var(--semantic-brand) 12%, var(--semantic-border-soft));
+}
+.nn-coach-inline__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.nn-coach-inline__label {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--semantic-text-muted);
+}
+.nn-coach-inline__buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+}
+
+/* ── Coach Dashboard Card ────────────────────────────────────────────── */
+
+.nn-coach-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+  padding: 1.25rem 1.5rem;
+  border-radius: 1rem;
+  border: 1.5px solid color-mix(in srgb, var(--semantic-brand) 14%, var(--semantic-border-soft));
+  background: linear-gradient(
+    165deg,
+    color-mix(in srgb, var(--semantic-brand) 5%, var(--semantic-surface)) 0%,
+    color-mix(in srgb, var(--semantic-info) 3%, var(--semantic-surface)) 100%
+  );
+  box-shadow:
+    0 1px 3px -1px color-mix(in srgb, var(--semantic-brand) 5%, transparent),
+    0 4px 12px -6px color-mix(in srgb, var(--semantic-brand) 6%, transparent);
+}
+.nn-coach-card__header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.nn-coach-card__title {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--semantic-text-primary);
+  letter-spacing: -0.01em;
+}
+.nn-coach-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+}
+
+/* ── Coach Lesson Strip ──────────────────────────────────────────────── */
+
+.nn-coach-lesson-strip {
+  margin-top: 1.5rem;
+  padding: 1.125rem 1.25rem;
+  border-radius: 0.875rem;
+  border: 1.5px solid color-mix(in srgb, var(--semantic-brand) 12%, var(--semantic-border-soft));
+  background: linear-gradient(
+    170deg,
+    color-mix(in srgb, var(--semantic-brand) 4%, var(--semantic-surface)) 0%,
+    var(--semantic-surface) 100%
+  );
+  box-shadow: 0 1px 3px -1px color-mix(in srgb, var(--semantic-brand) 4%, transparent);
+}
+.nn-coach-lesson-strip__header {
+  display: flex;
+  align-items: center;
+  gap: 0.4375rem;
+  margin-bottom: 0.75rem;
+}
+.nn-coach-lesson-strip__title {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--semantic-text-primary);
+  letter-spacing: -0.005em;
+}
+.nn-coach-lesson-strip__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+}
+
+/* ── Coach Weak Summary ──────────────────────────────────────────────── */
+
+.nn-coach-weak-summary {
+  margin-top: 0.75rem;
+}

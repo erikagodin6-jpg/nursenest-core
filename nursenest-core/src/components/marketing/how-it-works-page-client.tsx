@@ -197,7 +197,7 @@ const SYSTEM_FEATURES = [
   {
     icon: <BarChart3 className="h-6 w-6" />,
     title: "Readiness Tracking",
-    description: "A readiness score tells you how close you are to exam-ready — based on accuracy, coverage, and trends.",
+    description: "A readiness score shows how close you are to exam-ready, based on accuracy, coverage, and trends.",
     color: "var(--semantic-chart-3)",
   },
   {
@@ -257,7 +257,7 @@ const PREVIEW_CARDS = [
   {
     icon: <LayoutDashboard className="h-6 w-6" />,
     title: "Your Dashboard",
-    description: "See your streak, daily goals, readiness score, and what to study next — all in one place.",
+    description: "Your streak, daily goals, readiness score, and what to study next. All in one place.",
     color: "var(--semantic-info)",
     features: ["Study streak tracking", "Daily goal progress", "Continue where you left off"],
   },
@@ -395,7 +395,7 @@ function FinalCtaSection() {
         </h2>
         <p className="nn-marketing-body-sm mt-3 text-muted-foreground">
           Join nursing students who use NurseNest to prepare with confidence.
-          Start your free trial — no credit card required.
+          Start your free trial. No credit card required.
         </p>
 
         <div className="mt-8 flex flex-wrap items-center justify-center gap-3">

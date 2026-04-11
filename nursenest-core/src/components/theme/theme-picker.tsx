@@ -2,7 +2,7 @@
 
 import { useTheme } from "next-themes";
 import { useEffect, useRef, useState } from "react";
-import { THEME_OPTIONS } from "@/lib/theme/theme-registry";
+import { NURSENEST_DEFAULT_THEME, THEME_OPTIONS } from "@/lib/theme/theme-registry";
 
 const DEFAULT_THEME_LABELS = {
   navTheme: "Theme",
@@ -33,7 +33,7 @@ export function ThemePicker({ className = "", labels }: { className?: string; la
     return () => document.removeEventListener("pointerdown", onDown, false);
   }, [open]);
 
-  const current = mounted ? (resolvedTheme ?? theme ?? "lavender") : "lavender";
+  const current = mounted ? (resolvedTheme ?? theme ?? NURSENEST_DEFAULT_THEME) : NURSENEST_DEFAULT_THEME;
   const currentLabel = THEME_OPTIONS.find((o) => o.id === current)?.label ?? current;
   const L = { ...DEFAULT_THEME_LABELS, ...labels };
 

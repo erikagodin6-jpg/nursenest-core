@@ -5,12 +5,12 @@
  * 1. Same-origin committed PNG: `/branding/theme-logos/{themeId}brandlogo_transparent.png`
  * 2. Public CDN URL for that Spaces object key (`getThemeLogoUrl` / `THEME_BRAND_LOGO_SPACE_KEYS`)
  * 3. Optional same-origin proxy path when `marketingImageUsesProxy` / `marketingProxyFallbackEnabled` apply
- * 4. Repeat 1–3 for the **default theme** (lavender) so a broken single-theme file still falls back to the canonical brand mark
+ * 4. Repeat 1–3 for the **default theme** (`NURSENEST_DEFAULT_THEME`) so a broken single-theme file still falls back to the canonical brand mark
  *
  * **Header pipeline (`getHeaderBrandLogoLoadChain`)** extends the raster chain with:
  * - Legacy remote GIF + local SVG (`LOGO_LEGACY_FALLBACK_URL`, `FALLBACK_LOGO_PATH`)
- * - If the catalog enables **tinted** header marks: `getBlueBrandMarkLoadChain()` (legacy name: mask/stem variants, often primary lavender)
- * - Final raster safety net: `PRIMARY_LOGO_URL` then `PRIMARY_LOGO_CDN_URL` (lavender transparent PNG, not a generic “blue” logo)
+ * - If the catalog enables **tinted** header marks: `getBlueBrandMarkLoadChain()` (legacy name: mask/stem variants)
+ * - Final raster safety net: `PRIMARY_LOGO_URL` then `PRIMARY_LOGO_CDN_URL` (default-theme transparent PNG)
  *
  * Re-exports `getThemeLogo` / `getThemeLogoUrl` from `@/lib/branding/theme-brand-logo-cdn`.
  */
@@ -64,7 +64,7 @@ export function getThemeLogoPublicUrl(themeId: string): string {
 export { getThemeLogo, getThemeLogoUrl } from "@/lib/branding/theme-brand-logo-cdn";
 
 /**
- * Ordered URLs for `<img src>`: theme-specific asset, then lavender fallback, with optional proxy variants.
+ * Ordered URLs for `<img src>`: theme-specific asset, then default-theme fallback, with optional proxy variants.
  */
 export function getThemeLogoLoadChain(themeId?: string | null): string[] {
   const id = normalizeThemeIdForLogo(themeId ?? NURSENEST_DEFAULT_THEME);
@@ -78,7 +78,7 @@ export function getThemeLogoLoadChain(themeId?: string | null): string[] {
   const proxy = marketingProxyPathForKey(key);
   const proxyFb = marketingProxyPathForKey(defKey);
 
-  // 1–3 for active theme, then same for default (lavender). SVG/legacy/tinted stems are only in
+  // 1–3 for active theme, then same for default theme. SVG/legacy/tinted stems are only in
   // `getHeaderBrandLogoLoadChain`.
   return uniqueStrings([local, pub, proxy, localFb, pubFb, proxyFb]);
 }
@@ -103,7 +103,7 @@ function pushKeyVariants(out: string[], objectKey: string) {
 
 /**
  * Tinted / mask-style header mark (catalog “primary” stem). Name retains “Blue” for history; assets are
- * typically lavender-aligned transparent rasters from `marketing-cdn.catalog`, not arbitrary theme colors.
+ * transparent rasters from `marketing-cdn.catalog`, not arbitrary theme colors.
  */
 export function getBlueBrandMarkLoadChain(): string[] {
   const key = getPrimaryBrandMarkObjectKey();

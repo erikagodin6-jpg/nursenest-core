@@ -5,7 +5,7 @@
  * - Foundation aliases map to globals tonal layers when `[data-theme]` is active.
  * - Guardrails: `.cursor/rules/semantic-color-guardrails.mdc` — avoid monochrome / brand-only data UI.
  *
- * First-paint `:root` mirrors lavender-friendly defaults; `[data-theme]` overrides.
+ * First-paint `:root` mirrors ocean/clinical-blue defaults; `[data-theme]` overrides.
  */
 /* First-paint defaults mirror the ocean/clinical-blue default theme. [data-theme] layers override all. */
 :root {

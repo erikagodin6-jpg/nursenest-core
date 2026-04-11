@@ -11,7 +11,7 @@ import { ThemeStateHydration } from "@/components/theme/theme-state-hydration";
 
 /**
  * Single root for NurseNest theming (do not nest a second ThemeProvider).
- * Default is lavender (brand baseline).
+ * Default is ocean/clinical-blue (`NURSENEST_DEFAULT_THEME`).
  * Persistence: localStorage via next-themes; first-visit preference is seeded in root layout script.
  */
 export function AppThemeProvider({ children }: { children: ReactNode }) {
