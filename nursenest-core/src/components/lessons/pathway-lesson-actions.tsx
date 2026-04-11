@@ -9,6 +9,7 @@ import {
   type PathwayLessonProgressEventDetail,
 } from "@/lib/lessons/pathway-lesson-progress-events";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
+import { SuccessLeaf } from "@/components/ui/success-leaf";
 import {
   buildAppPracticeTestsHubHref,
   practiceTestsWeakFocusHref,
@@ -157,6 +158,7 @@ export function PathwayLessonActions({
               onClick={() => void markUncomplete()}
               className="nn-study-pill-secondary min-h-11 px-4 disabled:opacity-60"
             >
+              <SuccessLeaf show size={18} />
               {pending === "uncomplete" ? t("learner.studyLoop.markStudiedUndoSaving") : t("learner.studyLoop.markStudiedUndo")}
             </button>
           ) : (

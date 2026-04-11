@@ -45,16 +45,11 @@ import { LessonClinicalImageCard } from "@/components/lessons/lesson-clinical-im
 import { LessonAudioCard } from "@/components/lessons/lesson-audio-card";
 import { LessonSectionAudioButton } from "@/components/lessons/lesson-section-audio-button";
 import { pathwayLessonPublicDetailPath } from "@/lib/lessons/pathway-lesson-types";
-import dynamic from "next/dynamic";
+import { LessonCheckpointCard } from "@/components/lessons/lesson-checkpoint-card";
 import { LessonRecallProvider } from "@/components/lessons/lesson-recall-context";
 import { LessonRecallToggle } from "@/components/lessons/lesson-recall-toggle";
 import { LessonRecallBlock } from "@/components/lessons/lesson-recall-block";
 import { LessonKeyRecallChip } from "@/components/lessons/lesson-key-recall-chip";
-
-const LessonCheckpointCardDynamic = dynamic(
-  () => import("@/components/lessons/lesson-checkpoint-card").then((m) => m.LessonCheckpointCard),
-  { ssr: false, loading: () => null },
-);
 import {
   loadPathwayLessonProgressForSlug,
   type PathwayLessonProgressStatus,
@@ -353,7 +348,7 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
                       <LessonRecallBlock prompts={section.recallPrompts} />
                     ) : null}
                     {section.checkpointQuestions?.length ? (
-                      <LessonCheckpointCardDynamic questions={section.checkpointQuestions} />
+                      <LessonCheckpointCard questions={section.checkpointQuestions} />
                     ) : null}
                   </LessonSectionCard>
                 ))}

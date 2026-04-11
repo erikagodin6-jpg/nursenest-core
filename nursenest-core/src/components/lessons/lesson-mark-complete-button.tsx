@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { SuccessLeaf } from "@/components/ui/success-leaf";
 
 export function LessonMarkCompleteButton({ lessonId }: { lessonId: string }) {
   const [status, setStatus] = useState<"idle" | "saving" | "done" | "error">("idle");
@@ -29,9 +30,10 @@ export function LessonMarkCompleteButton({ lessonId }: { lessonId: string }) {
         type="button"
         disabled={status === "saving" || status === "done"}
         onClick={() => void save()}
-        className="rounded-full border border-border px-4 py-2 text-sm font-semibold hover:bg-muted disabled:opacity-60"
+        className="nn-ui-btn nn-ui-btn--outline nn-ui-btn--md"
       >
-        {status === "done" ? "Marked complete" : status === "saving" ? "Saving…" : "Mark lesson complete"}
+        <SuccessLeaf show={status === "done"} size={20} />
+        {status === "done" ? "Marked complete" : status === "saving" ? "Saving\u2026" : "Mark lesson complete"}
       </button>
       {status === "error" ? <span className="text-xs text-amber-800">Could not save. Try again.</span> : null}
     </div>

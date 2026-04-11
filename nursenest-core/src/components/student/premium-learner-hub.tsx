@@ -361,7 +361,7 @@ export function PremiumLearnerHub({
               <div className="mt-4 space-y-4">
                 {readiness.holdingBack.length > 0 ? (
                   <p className="text-sm text-foreground">
-                    <span className="font-medium">Limiting factors: </span>
+                    <span className="font-medium">Holding you back: </span>
                     {readiness.holdingBack.join(" · ")}
                   </p>
                 ) : null}

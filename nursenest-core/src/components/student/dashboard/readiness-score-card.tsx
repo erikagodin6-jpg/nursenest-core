@@ -1,12 +1,14 @@
 import Link from "next/link";
-import { AlertCircle, ArrowDown, ArrowRight, ArrowUp, Lock, Minus, Target } from "lucide-react";
+import { ArrowDown, ArrowRight, ArrowUp, ChevronDown, Lock, Minus, Target } from "lucide-react";
 import type { ReadinessBand, ReadinessResult, ReadinessTrend } from "@/lib/learner/readiness-score";
 import { readinessBandLabel, readinessBandProgressFillClass, readinessBandGuidance } from "@/lib/learner/readiness-score";
 import type { LearnerMarketingT } from "@/lib/learner/learner-marketing-server";
 import { ProgressBarSemantic } from "@/components/student/product/progress-bar-semantic";
 
-const RING_SIZE = 108;
-const RING_STROKE = 9;
+/* ── Ring constants ─────────────────────────────────────────────────── */
+
+const RING_SIZE = 120;
+const RING_STROKE = 10;
 const RING_R = (RING_SIZE - RING_STROKE) / 2;
 const RING_CIRC = 2 * Math.PI * RING_R;
 
@@ -27,63 +29,59 @@ function ringColorForBand(band: ReadinessBand): string {
 }
 
 function ReadinessRing({ pct, band }: { pct: number | null; band: ReadinessBand }) {
-  const offset = pct != null ? RING_CIRC - (Math.min(100, Math.max(0, pct)) / 100) * RING_CIRC : RING_CIRC;
+  const clamped = pct != null ? Math.min(100, Math.max(0, pct)) : null;
+  const offset = clamped != null ? RING_CIRC - (clamped / 100) * RING_CIRC : RING_CIRC;
   const color = ringColorForBand(band);
   const cx = RING_SIZE / 2;
   const cy = RING_SIZE / 2;
 
   return (
     <div className="relative shrink-0" style={{ width: RING_SIZE, height: RING_SIZE }}>
-      <svg
-        width={RING_SIZE}
-        height={RING_SIZE}
-        className="-rotate-90"
-        aria-hidden
-      >
-        <circle
-          cx={cx}
-          cy={cy}
-          r={RING_R}
-          fill="none"
-          stroke="var(--semantic-border-soft)"
-          strokeWidth={RING_STROKE}
-          opacity={0.4}
-        />
-        {pct != null && (
+      <svg width={RING_SIZE} height={RING_SIZE} className="-rotate-90" aria-hidden>
+        <circle cx={cx} cy={cy} r={RING_R} fill="none" stroke="var(--semantic-border-soft)" strokeWidth={RING_STROKE} opacity={0.3} />
+        {clamped != null && (
           <circle
-            cx={cx}
-            cy={cy}
-            r={RING_R}
-            fill="none"
-            stroke={color}
-            strokeWidth={RING_STROKE}
-            strokeDasharray={RING_CIRC}
-            strokeDashoffset={offset}
+            cx={cx} cy={cy} r={RING_R} fill="none"
+            stroke={color} strokeWidth={RING_STROKE}
+            strokeDasharray={RING_CIRC} strokeDashoffset={offset}
             strokeLinecap="round"
             style={{ transition: "stroke-dashoffset 0.8s cubic-bezier(0.4,0,0.2,1)" }}
           />
         )}
       </svg>
       <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
-        {pct != null ? (
+        {clamped != null ? (
           <>
-            <span
-              className="text-2xl font-bold tabular-nums leading-none"
-              style={{ color }}
-            >
-              {pct}
-            </span>
-            <span className="mt-0.5 text-[10px] font-semibold uppercase tracking-wide text-[var(--semantic-text-muted)]">
-              / 100
-            </span>
+            <span className="text-[1.75rem] font-bold tabular-nums leading-none" style={{ color }}>{clamped}</span>
+            <span className="mt-0.5 text-[10px] font-semibold uppercase tracking-widest text-[var(--semantic-text-muted)]">/ 100</span>
           </>
         ) : (
-          <Target className="h-6 w-6 text-[var(--semantic-text-muted)]" aria-hidden />
+          <Target className="h-7 w-7 text-[var(--semantic-text-muted)]" aria-hidden />
         )}
       </div>
     </div>
   );
 }
+
+/* ── Trend pill ─────────────────────────────────────────────────────── */
+
+function TrendPill({ trend }: { trend: ReadinessTrend }) {
+  const cfg = {
+    improving: { label: "Improving", Icon: ArrowUp, cls: "nn-readiness-trend--up" },
+    stable:    { label: "Holding Steady", Icon: Minus, cls: "nn-readiness-trend--flat" },
+    declining: { label: "Needs Attention", Icon: ArrowDown, cls: "nn-readiness-trend--down" },
+  } as const;
+  const { label, Icon, cls } = cfg[trend];
+
+  return (
+    <span className={`nn-readiness-trend ${cls}`}>
+      <Icon className="h-3 w-3" aria-hidden />
+      {label}
+    </span>
+  );
+}
+
+/* ── Top border color per band ──────────────────────────────────────── */
 
 function readinessBandTopBorderClass(band: ReadinessBand): string {
   switch (band) {
@@ -101,61 +99,14 @@ function readinessBandTopBorderClass(band: ReadinessBand): string {
   }
 }
 
-function TrendBadge({ trend }: { trend: ReadinessTrend }) {
-  const config = {
-    improving: {
-      label: "Improving",
-      icon: ArrowUp,
-      color: "var(--semantic-success)",
-      bg: "color-mix(in srgb, var(--semantic-success) 10%, var(--semantic-surface))",
-      border: "color-mix(in srgb, var(--semantic-success) 25%, var(--semantic-border-soft))",
-    },
-    stable: {
-      label: "Stable",
-      icon: Minus,
-      color: "var(--semantic-info)",
-      bg: "color-mix(in srgb, var(--semantic-info) 8%, var(--semantic-surface))",
-      border: "color-mix(in srgb, var(--semantic-info) 20%, var(--semantic-border-soft))",
-    },
-    declining: {
-      label: "Needs Attention",
-      icon: ArrowDown,
-      color: "var(--semantic-warning)",
-      bg: "color-mix(in srgb, var(--semantic-warning) 10%, var(--semantic-surface))",
-      border: "color-mix(in srgb, var(--semantic-warning) 25%, var(--semantic-border-soft))",
-    },
-  } as const;
+/* ── Factor row (inside collapsible) ────────────────────────────────── */
 
-  const c = config[trend];
-  const Icon = c.icon;
-
-  return (
-    <span
-      className="inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-semibold"
-      style={{ color: c.color, background: c.bg, border: `1px solid ${c.border}` }}
-    >
-      <Icon className="h-3 w-3" aria-hidden />
-      {c.label}
-    </span>
-  );
-}
-
-function InsightFactorBar({
-  label,
-  points,
-  maxPoints,
-  detail,
-}: {
-  label: string;
-  points: number;
-  maxPoints: number;
-  detail: string;
-}) {
+function FactorRow({ label, points, maxPoints, detail }: { label: string; points: number; maxPoints: number; detail: string }) {
   if (maxPoints <= 0) {
     return (
-      <div className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-3 py-2">
-        <p className="text-xs font-medium text-[var(--semantic-text-primary)]">{label}</p>
-        <p className="mt-1 text-xs text-[var(--semantic-text-secondary)]">{detail}</p>
+      <div className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-4 py-3">
+        <p className="text-[13px] font-medium text-[var(--semantic-text-primary)]">{label}</p>
+        <p className="mt-1 text-xs leading-relaxed text-[var(--semantic-text-secondary)]">{detail}</p>
       </div>
     );
   }
@@ -167,14 +118,15 @@ function InsightFactorBar({
       size="sm"
       label={label}
       hint={`${points}/${maxPoints}`}
-      footer={<p className="text-[11px] leading-snug text-[var(--semantic-text-secondary)]">{detail}</p>}
+      footer={<p className="text-[11px] leading-relaxed text-[var(--semantic-text-secondary)]">{detail}</p>}
     />
   );
 }
 
-/**
- * Primary readiness KPI card with score ring, band, trend, weak areas, and next actions.
- */
+/* ═══════════════════════════════════════════════════════════════════════
+   ReadinessScoreCard (subscriber view)
+   ═══════════════════════════════════════════════════════════════════════ */
+
 export function ReadinessScoreCard({
   readiness,
   t,
@@ -186,104 +138,69 @@ export function ReadinessScoreCard({
 }) {
   const scorePct = readiness.score != null ? Math.min(100, Math.max(0, readiness.score)) : null;
   const factors = readiness.factors.slice(0, maxFactors);
-  const meterFill = readinessBandProgressFillClass(readiness.band);
   const topAccent = readinessBandTopBorderClass(readiness.band);
+  const hasWeakAreas = readiness.topWeakAreas.length > 0;
+  const hasActions = readiness.nextActions.length > 0;
 
   return (
     <article
-      className={`nn-card nn-student-card-lift relative overflow-hidden rounded-2xl border border-[color-mix(in_srgb,var(--semantic-brand)_26%,var(--semantic-border-soft))] border-t-4 ${topAccent} bg-gradient-to-br from-[color-mix(in_srgb,var(--semantic-brand)_10%,var(--semantic-surface))] via-[var(--semantic-surface)] to-[color-mix(in_srgb,var(--semantic-info)_7%,var(--semantic-surface))] p-5 shadow-[var(--semantic-shadow-soft)] sm:p-6`}
-      aria-labelledby="readiness-card-heading"
+      className={`nn-readiness-card relative overflow-hidden rounded-2xl border border-[color-mix(in_srgb,var(--semantic-brand)_22%,var(--semantic-border-soft))] border-t-4 ${topAccent} bg-gradient-to-br from-[color-mix(in_srgb,var(--semantic-brand)_8%,var(--semantic-surface))] via-[var(--semantic-surface)] to-[color-mix(in_srgb,var(--semantic-info)_5%,var(--semantic-surface))] shadow-[var(--semantic-shadow-soft)]`}
+      aria-labelledby="readiness-heading"
     >
-      <div className="pointer-events-none absolute -right-20 -top-20 h-56 w-56 rounded-full bg-[radial-gradient(circle_at_center,color-mix(in_srgb,var(--semantic-brand)_16%,transparent),transparent_62%)] blur-2xl" aria-hidden />
+      {/* Ambient glow */}
+      <div className="pointer-events-none absolute -right-24 -top-24 h-64 w-64 rounded-full bg-[radial-gradient(circle_at_center,color-mix(in_srgb,var(--semantic-brand)_12%,transparent),transparent_60%)] blur-3xl" aria-hidden />
 
-      {/* Header row: ring + copy */}
-      <div className="relative flex flex-col gap-5 sm:flex-row sm:items-start sm:gap-6">
-        <div className="flex flex-col items-center gap-2 sm:shrink-0">
+      {/* ── Hero: score ring + assessment ── */}
+      <div className="relative flex flex-col items-center gap-5 px-6 pb-6 pt-7 text-center sm:flex-row sm:items-start sm:gap-7 sm:px-7 sm:text-left">
+        <div className="flex flex-col items-center gap-2.5">
           <ReadinessRing pct={scorePct} band={readiness.band} />
-          <span className="inline-flex rounded-full border border-[color-mix(in_srgb,var(--semantic-brand)_35%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_12%,var(--semantic-surface))] px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide text-[var(--semantic-brand)]">
-            {readinessBandLabel(readiness.band)}
-          </span>
-          {readiness.calibratedPreview ? (
-            <span className="nn-badge-semantic-warning px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide">{t("learner.dashboard.insight.calibrated")}</span>
-          ) : null}
+          <span className="nn-readiness-band-badge">{readinessBandLabel(readiness.band)}</span>
         </div>
 
-        <div className="min-w-0 flex-1 space-y-1.5">
-          <div className="flex items-center gap-2.5">
-            <h2 id="readiness-card-heading" className="text-xl font-semibold tracking-tight text-[var(--semantic-text-primary)]">
+        <div className="min-w-0 flex-1 space-y-2">
+          <div className="flex flex-wrap items-center justify-center gap-2.5 sm:justify-start">
+            <h2 id="readiness-heading" className="text-[1.3rem] font-semibold tracking-tight text-[var(--semantic-text-primary)]">
               Exam Readiness
             </h2>
-            {readiness.trend ? <TrendBadge trend={readiness.trend} /> : null}
+            {readiness.trend ? <TrendPill trend={readiness.trend} /> : null}
           </div>
 
-          <p className="text-sm leading-relaxed text-[var(--semantic-text-secondary)]">
+          <p className="max-w-prose text-[0.9375rem] leading-relaxed text-[var(--semantic-text-secondary)]">
             {readinessBandGuidance(readiness.band)}
           </p>
 
+          {readiness.calibratedPreview ? (
+            <span className="nn-badge-semantic-warning mt-1 inline-flex px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide">{t("learner.dashboard.insight.calibrated")}</span>
+          ) : null}
+
           {scorePct == null ? (
-            <p className="mt-3 text-sm text-[var(--semantic-text-secondary)]">{t("learner.dashboard.insight.scorePending")}</p>
+            <p className="mt-2 text-sm text-[var(--semantic-text-muted)]">{t("learner.dashboard.insight.scorePending")}</p>
           ) : null}
         </div>
       </div>
 
-      {/* Linear bar meter */}
-      <div className="relative mt-5 space-y-2">
-        <div className="flex items-baseline justify-between gap-2 text-xs text-[var(--semantic-text-secondary)]">
-          <span className="font-medium">Readiness Score</span>
-          {scorePct != null ? <span className="tabular-nums font-semibold text-[var(--semantic-text-primary)]">{scorePct}%</span> : null}
-        </div>
-        <div
-          className="nn-progress-track-semantic nn-progress-track-semantic--lg"
-          role="progressbar"
-          aria-valuenow={scorePct ?? 0}
-          aria-valuemin={0}
-          aria-valuemax={100}
-          aria-label="Exam Readiness"
-        >
-          <div
-            className={`h-full rounded-full ${meterFill} nn-progress-fill-reveal transition-[width] duration-700 ease-out`}
-            style={{ width: `${scorePct ?? 0}%` }}
-          />
-        </div>
-      </div>
-
-      {/* What is limiting readiness */}
-      {readiness.holdingBack.length > 0 ? (
-        <p className="relative mt-4 rounded-xl border border-[color-mix(in_srgb,var(--semantic-warning)_28%,var(--semantic-border-soft))] bg-[var(--semantic-warning-soft)] px-4 py-3 text-sm text-[var(--semantic-warning-contrast)]">
-          <span className="font-semibold">Limiting factors: </span>
-          {readiness.holdingBack.join(", ")}
-        </p>
-      ) : null}
-
-      {/* Weak areas + next actions */}
-      {(readiness.topWeakAreas.length > 0 || readiness.nextActions.length > 0) ? (
-        <div className="relative mt-5 grid gap-4 sm:grid-cols-2">
-          {readiness.topWeakAreas.length > 0 ? (
-            <div className="rounded-xl border border-[color-mix(in_srgb,var(--semantic-danger)_16%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-danger)_3%,var(--semantic-surface))] px-4 py-3">
-              <p className="text-[11px] font-semibold uppercase tracking-wide text-[var(--semantic-danger)]">
-                Weak Areas
-              </p>
-              <ul className="mt-2 space-y-1">
+      {/* ── Focus Areas (weak topics + next steps) ── */}
+      {(hasWeakAreas || hasActions) ? (
+        <div className="nn-readiness-actions-strip">
+          {hasWeakAreas ? (
+            <div className="min-w-0 flex-1">
+              <p className="nn-readiness-section-label text-[var(--semantic-danger)]">Topics to Review</p>
+              <ul className="mt-2 space-y-1.5">
                 {readiness.topWeakAreas.map((topic) => (
-                  <li key={topic} className="flex items-center gap-2 text-sm text-[var(--semantic-text-secondary)]">
-                    <AlertCircle className="h-3.5 w-3.5 shrink-0 text-[var(--semantic-danger)]" aria-hidden />
-                    {topic}
-                  </li>
+                  <li key={topic} className="text-[0.8125rem] text-[var(--semantic-text-secondary)]">{topic}</li>
                 ))}
               </ul>
             </div>
           ) : null}
 
-          {readiness.nextActions.length > 0 ? (
-            <div className="rounded-xl border border-[color-mix(in_srgb,var(--semantic-brand)_16%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_3%,var(--semantic-surface))] px-4 py-3">
-              <p className="text-[11px] font-semibold uppercase tracking-wide text-[var(--semantic-brand)]">
-                Suggested Next Steps
-              </p>
-              <ul className="mt-2 space-y-1">
+          {hasActions ? (
+            <div className="min-w-0 flex-1">
+              <p className="nn-readiness-section-label text-[var(--semantic-brand)]">What to Do Next</p>
+              <ul className="mt-2 space-y-1.5">
                 {readiness.nextActions.slice(0, 3).map((action) => (
-                  <li key={action.slice(0, 40)} className="flex items-start gap-2 text-sm text-[var(--semantic-text-secondary)]">
+                  <li key={action.slice(0, 40)} className="flex items-start gap-2 text-[0.8125rem] text-[var(--semantic-text-secondary)]">
                     <ArrowRight className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[var(--semantic-brand)]" aria-hidden />
-                    {action}
+                    <span>{action}</span>
                   </li>
                 ))}
               </ul>
@@ -292,18 +209,29 @@ export function ReadinessScoreCard({
         </div>
       ) : null}
 
-      <p className="relative mt-4 text-sm leading-relaxed text-[var(--semantic-text-secondary)]">{readiness.summary}</p>
+      {/* ── Summary + confidence disclaimer ── */}
+      <div className="px-6 pb-5 sm:px-7">
+        <p className="text-xs leading-relaxed text-[var(--semantic-text-muted)]">{readiness.summary}</p>
+      </div>
 
-      {/* Contributing factors (collapsed by default for cleaner view) */}
+      {/* ── Score Breakdown (opt-in) ── */}
       {factors.length > 0 ? (
-        <details className="relative mt-6 border-t border-[color-mix(in_srgb,var(--semantic-border-soft)_85%,transparent)] pt-5">
-          <summary className="cursor-pointer text-xs font-semibold uppercase tracking-wide text-[var(--semantic-info)] hover:text-[var(--semantic-brand)]">
-            Contributing Factors
+        <details className="nn-readiness-details group">
+          <summary className="nn-readiness-details-trigger">
+            <span>Score Breakdown</span>
+            <ChevronDown className="h-3.5 w-3.5 transition-transform group-open:rotate-180" aria-hidden />
           </summary>
-          <div className="mt-4 space-y-4">
+          <div className="space-y-4 px-6 pb-6 pt-4 sm:px-7">
             {factors.map((f) => (
-              <InsightFactorBar key={f.id} label={f.label} points={f.points} maxPoints={f.maxPoints} detail={f.detail} />
+              <FactorRow key={f.id} label={f.label} points={f.points} maxPoints={f.maxPoints} detail={f.detail} />
             ))}
+
+            {readiness.holdingBack.length > 0 ? (
+              <p className="rounded-xl border border-[color-mix(in_srgb,var(--semantic-warning)_20%,var(--semantic-border-soft))] bg-[var(--semantic-warning-soft)] px-4 py-3 text-[0.8125rem] text-[var(--semantic-warning-contrast)]">
+                <span className="font-semibold">Holding you back: </span>
+                {readiness.holdingBack.join(", ")}
+              </p>
+            ) : null}
           </div>
         </details>
       ) : null}
@@ -311,48 +239,44 @@ export function ReadinessScoreCard({
   );
 }
 
-/**
- * Locked readiness card for trial/free users. Shows limited info with upgrade CTA.
- * Client component for analytics tracking on CTA click.
- */
+/* ═══════════════════════════════════════════════════════════════════════
+   ReadinessLockedCard (trial / free users)
+   ═══════════════════════════════════════════════════════════════════════ */
+
 export function ReadinessLockedCard() {
   return (
-    <article className="nn-card relative overflow-hidden rounded-2xl border border-[color-mix(in_srgb,var(--semantic-brand)_20%,var(--semantic-border-soft))] border-t-4 border-t-[var(--semantic-border-soft)] bg-gradient-to-br from-[color-mix(in_srgb,var(--semantic-brand)_6%,var(--semantic-surface))] via-[var(--semantic-surface)] to-[color-mix(in_srgb,var(--semantic-info)_4%,var(--semantic-surface))] p-5 shadow-[var(--semantic-shadow-soft)] sm:p-6">
-      <div className="pointer-events-none absolute -right-20 -top-20 h-56 w-56 rounded-full bg-[radial-gradient(circle_at_center,color-mix(in_srgb,var(--semantic-brand)_10%,transparent),transparent_62%)] blur-2xl" aria-hidden />
+    <article className="nn-readiness-card relative overflow-hidden rounded-2xl border border-[color-mix(in_srgb,var(--semantic-brand)_16%,var(--semantic-border-soft))] border-t-4 border-t-[var(--semantic-border-soft)] bg-gradient-to-br from-[color-mix(in_srgb,var(--semantic-brand)_5%,var(--semantic-surface))] via-[var(--semantic-surface)] to-[color-mix(in_srgb,var(--semantic-info)_3%,var(--semantic-surface))] shadow-[var(--semantic-shadow-soft)]">
+      <div className="pointer-events-none absolute -right-24 -top-24 h-64 w-64 rounded-full bg-[radial-gradient(circle_at_center,color-mix(in_srgb,var(--semantic-brand)_8%,transparent),transparent_60%)] blur-3xl" aria-hidden />
 
-      <div className="relative flex flex-col gap-5 sm:flex-row sm:items-start sm:gap-6">
+      <div className="relative flex flex-col items-center gap-6 px-6 py-7 text-center sm:flex-row sm:items-start sm:gap-7 sm:px-7 sm:text-left">
         {/* Blurred placeholder ring */}
-        <div className="flex flex-col items-center gap-2 sm:shrink-0 blur-[6px] select-none" aria-hidden>
+        <div className="shrink-0 select-none blur-[6px]" aria-hidden>
           <div className="relative" style={{ width: RING_SIZE, height: RING_SIZE }}>
             <svg width={RING_SIZE} height={RING_SIZE} className="-rotate-90">
-              <circle cx={RING_SIZE / 2} cy={RING_SIZE / 2} r={RING_R} fill="none" stroke="var(--semantic-border-soft)" strokeWidth={RING_STROKE} opacity={0.4} />
+              <circle cx={RING_SIZE / 2} cy={RING_SIZE / 2} r={RING_R} fill="none" stroke="var(--semantic-border-soft)" strokeWidth={RING_STROKE} opacity={0.3} />
               <circle cx={RING_SIZE / 2} cy={RING_SIZE / 2} r={RING_R} fill="none" stroke="var(--semantic-brand)" strokeWidth={RING_STROKE} strokeDasharray={RING_CIRC} strokeDashoffset={RING_CIRC * 0.4} strokeLinecap="round" />
             </svg>
-            <div className="absolute inset-0 flex flex-col items-center justify-center">
-              <span className="text-2xl font-bold tabular-nums leading-none text-[var(--semantic-brand)]">--</span>
+            <div className="absolute inset-0 flex items-center justify-center">
+              <span className="text-[1.75rem] font-bold tabular-nums leading-none text-[var(--semantic-brand)]">--</span>
             </div>
           </div>
         </div>
 
-        <div className="relative min-w-0 flex-1 space-y-2">
-          <div className="flex items-center gap-2">
+        <div className="min-w-0 flex-1 space-y-3">
+          <div className="flex items-center justify-center gap-2 sm:justify-start">
             <Lock className="h-4 w-4 text-[var(--semantic-text-muted)]" aria-hidden />
-            <h2 className="text-xl font-semibold tracking-tight text-[var(--semantic-text-primary)]">
+            <h2 className="text-[1.3rem] font-semibold tracking-tight text-[var(--semantic-text-primary)]">
               Exam Readiness
             </h2>
           </div>
 
-          <p className="text-sm text-[var(--semantic-text-secondary)]">
-            Limited insight available. Full readiness tracking shows your score, trend, weak areas, and what to focus on next.
-          </p>
-
-          <p className="text-sm text-[var(--semantic-text-secondary)]">
-            See your full readiness and know when you are ready to pass.
+          <p className="max-w-md text-[0.9375rem] leading-relaxed text-[var(--semantic-text-secondary)]">
+            Unlock your readiness score to see where you stand, which topics need work, and what to focus on next.
           </p>
 
           <Link
             href="/pricing"
-            className="mt-3 inline-flex rounded-full bg-[var(--semantic-brand)] px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-shadow hover:shadow-md"
+            className="mt-1 inline-flex rounded-full bg-[var(--semantic-brand)] px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-all hover:shadow-md hover:brightness-105"
           >
             Start Free Trial
           </Link>

@@ -67,16 +67,11 @@ import { resolveLessonImage } from "@/lib/content/resolve-lesson-image";
 import { LessonClinicalImageCard } from "@/components/lessons/lesson-clinical-image-card";
 import { LessonAudioCard } from "@/components/lessons/lesson-audio-card";
 import { LessonSectionAudioButton } from "@/components/lessons/lesson-section-audio-button";
-import nextDynamic from "next/dynamic";
+import { LessonCheckpointCard } from "@/components/lessons/lesson-checkpoint-card";
 import { LessonRecallProvider } from "@/components/lessons/lesson-recall-context";
 import { LessonRecallToggle } from "@/components/lessons/lesson-recall-toggle";
 import { LessonRecallBlock } from "@/components/lessons/lesson-recall-block";
 import { LessonKeyRecallChip } from "@/components/lessons/lesson-key-recall-chip";
-
-const LessonCheckpointCardDynamic = nextDynamic(
-  () => import("@/components/lessons/lesson-checkpoint-card").then((m) => m.LessonCheckpointCard),
-  { ssr: false, loading: () => null },
-);
 
 export const dynamic = "force-dynamic";
 export const revalidate = 86400;
@@ -350,7 +345,7 @@ export default async function AlliedHealthSlugLessonDetailPage({ params }: Props
                   <LessonRecallBlock prompts={section.recallPrompts} />
                 ) : null}
                 {section.checkpointQuestions?.length ? (
-                  <LessonCheckpointCardDynamic questions={section.checkpointQuestions} />
+                  <LessonCheckpointCard questions={section.checkpointQuestions} />
                 ) : null}
               </LessonSectionCard>
             ))}

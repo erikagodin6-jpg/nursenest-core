@@ -11,8 +11,8 @@ export const TIMING = {
   slow: 0.42,
 } as const;
 
-export const EASE_SOFT: number[] = [0.25, 0.1, 0.25, 1.0];
-export const EASE_OUT: number[] = [0.0, 0.0, 0.2, 1.0];
+export const EASE_SOFT = [0.25, 0.1, 0.25, 1.0] as [number, number, number, number];
+export const EASE_OUT = [0.0, 0.0, 0.2, 1.0] as [number, number, number, number];
 
 export const transitionEntrance: Transition = {
   duration: TIMING.entrance,

@@ -1078,6 +1078,9 @@ html[data-theme] .nn-marketing-surface {
   .nn-ui-btn:active:not(:disabled):not([aria-disabled="true"]) {
     transform: none;
   }
+  .nn-dash-section {
+    animation: none;
+  }
 }
 
 /* Marketing header: nav links — accent underline on hover, stronger contrast */
@@ -1472,6 +1475,17 @@ html[data-theme="deep-twilight"] .nn-trust-mark {
   }
   to {
     opacity: 1;
+  }
+}
+
+@keyframes nn-success-reveal {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
   }
 }
 
@@ -3808,6 +3822,12 @@ html[data-theme="deep-twilight"] .nn-cat-opt--incorrect {
   letter-spacing: -0.04em;
   color: var(--semantic-text-primary);
   margin-bottom: 4px;
+  animation: nn-success-reveal 0.32s cubic-bezier(0.25, 0.1, 0.25, 1) both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .nn-cat-readiness-hero__score {
+    animation: none;
+  }
 }
 
 .nn-cat-readiness-hero__score-label {
@@ -6279,11 +6299,12 @@ html[data-theme="deep-twilight"] .nn-cat-opt--incorrect {
   border-radius: 1rem;
   border: 1.5px solid var(--semantic-border-soft);
   background: var(--semantic-surface);
-  transition: border-color 0.15s, box-shadow 0.15s;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
 }
 .nn-hiw-step-card:hover {
   border-color: color-mix(in srgb, var(--theme-primary) 20%, var(--semantic-border-soft));
   box-shadow: 0 4px 16px -4px rgba(0, 0, 0, 0.06);
+  transform: translateY(-1px);
 }
 .nn-hiw-feature-card {
   padding: 1.75rem;
@@ -6302,11 +6323,12 @@ html[data-theme="deep-twilight"] .nn-cat-opt--incorrect {
   border-radius: 1rem;
   border: 1.5px solid var(--semantic-border-soft);
   background: var(--semantic-surface);
-  transition: border-color 0.15s, box-shadow 0.15s;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
 }
 .nn-hiw-preview-card:hover {
   border-color: color-mix(in srgb, var(--theme-primary) 20%, var(--semantic-border-soft));
   box-shadow: 0 4px 16px -4px rgba(0, 0, 0, 0.06);
+  transform: translateY(-1px);
 }
 
 /* ── Dashboard: Layout & Section Rhythm ────────────────────────────────── */
@@ -6326,7 +6348,13 @@ html[data-theme="deep-twilight"] .nn-cat-opt--incorrect {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  animation: pageEnter 0.36s cubic-bezier(0.25, 0.1, 0.25, 1) both;
 }
+.nn-dash-section:nth-child(2) { animation-delay: 0.06s; }
+.nn-dash-section:nth-child(3) { animation-delay: 0.12s; }
+.nn-dash-section:nth-child(4) { animation-delay: 0.18s; }
+.nn-dash-section:nth-child(5) { animation-delay: 0.24s; }
+.nn-dash-section:nth-child(n+6) { animation-delay: 0.30s; }
 
 .nn-dash-section-label {
   font-size: 0.6875rem;
@@ -6861,4 +6889,125 @@ html[data-theme="deep-twilight"] .nn-cat-opt--incorrect {
   font-size: 0.8125rem;
   color: var(--semantic-text-secondary);
   line-height: 1.4;
+}
+
+/* ── Readiness Card ─────────────────────────────────────────────────── */
+
+.nn-readiness-card {
+  container-type: inline-size;
+}
+
+.nn-readiness-band-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  border-radius: 9999px;
+  border: 1px solid color-mix(in srgb, var(--semantic-brand) 30%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-brand) 10%, var(--semantic-surface));
+  padding: 0.25rem 0.625rem;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--semantic-brand);
+}
+
+.nn-readiness-trend {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  border-radius: 9999px;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.6875rem;
+  font-weight: 600;
+}
+
+.nn-readiness-trend--up {
+  color: var(--semantic-success);
+  background: color-mix(in srgb, var(--semantic-success) 8%, var(--semantic-surface));
+  border: 1px solid color-mix(in srgb, var(--semantic-success) 20%, var(--semantic-border-soft));
+}
+.nn-readiness-trend--flat {
+  color: var(--semantic-info);
+  background: color-mix(in srgb, var(--semantic-info) 6%, var(--semantic-surface));
+  border: 1px solid color-mix(in srgb, var(--semantic-info) 16%, var(--semantic-border-soft));
+}
+.nn-readiness-trend--down {
+  color: var(--semantic-warning);
+  background: color-mix(in srgb, var(--semantic-warning) 8%, var(--semantic-surface));
+  border: 1px solid color-mix(in srgb, var(--semantic-warning) 20%, var(--semantic-border-soft));
+}
+
+.nn-readiness-section-label {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.nn-readiness-actions-strip {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  margin: 0 1.5rem;
+  padding: 1rem 1.25rem;
+  border-radius: 0.75rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-brand) 10%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-brand) 2%, var(--semantic-panel-muted));
+}
+@container (min-width: 28rem) {
+  .nn-readiness-actions-strip {
+    flex-direction: row;
+    gap: 2rem;
+    margin: 0 1.75rem;
+  }
+}
+
+.nn-readiness-details {
+  border-top: 1px solid color-mix(in srgb, var(--semantic-border-soft) 80%, transparent);
+}
+.nn-readiness-details-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  cursor: pointer;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--semantic-text-muted);
+  transition: color 0.15s;
+}
+.nn-readiness-details-trigger:hover {
+  color: var(--semantic-brand);
+}
+@media (min-width: 640px) {
+  .nn-readiness-details-trigger {
+    padding-left: 1.75rem;
+    padding-right: 1.75rem;
+  }
+}
+
+/* ── Benchmark Card ─────────────────────────────────────────────────── */
+
+.nn-benchmark-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 1rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-info) 16%, var(--semantic-border-soft));
+  background: linear-gradient(
+    168deg,
+    color-mix(in srgb, var(--semantic-info) 4%, var(--semantic-surface)) 0%,
+    var(--semantic-surface) 100%
+  );
+  box-shadow: var(--semantic-shadow-soft);
+}
+
+.nn-benchmark-percentile-block {
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-brand) 14%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-brand) 3%, var(--semantic-surface));
 }

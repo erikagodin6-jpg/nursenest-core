@@ -44,6 +44,8 @@ import { buildCountdownCopy, daysUntilExamUtc } from "@/lib/learner/exam-timelin
 import { DashboardCoachCard } from "@/components/student/dashboard/coach-card";
 import { CoachWeakSummary } from "@/components/study/coach-weak-summary";
 import { isStudyCoachEnabled } from "@/lib/ai/learner-ai-policy";
+import { computeBenchmarkData, type BenchmarkData } from "@/lib/learner/benchmark-engine";
+import { BenchmarkCard, BenchmarkLockedCard } from "@/components/student/dashboard/benchmark-card";
 
 function retentionPersonalNote(t: LearnerMarketingT, prefs: Awaited<ReturnType<typeof loadLearnerRetentionPreferences>>): string | null {
   if (!prefs) return null;
@@ -141,9 +143,10 @@ export default async function LearnerDashboardPage() {
           </div>
         </section>
 
-        {/* Locked readiness preview */}
+        {/* Locked readiness + benchmark previews */}
         <section className="nn-dash-section">
           <ReadinessLockedCard />
+          <BenchmarkLockedCard />
         </section>
 
         {/* Blurred preview of adaptive study recommendations */}
@@ -158,6 +161,7 @@ export default async function LearnerDashboardPage() {
   let snapshot = null;
   let studySnap: Awaited<ReturnType<typeof buildLearnerStudySnapshot>> = null;
   let weakTopicTitles: string[] = [];
+  let benchmark: BenchmarkData | null = null;
   try {
     const [snap, nextSnap, notes, todayGoal, questionBankGoal, retentionPrefs, examUser] = await Promise.all([
       loadPremiumDashboardSnapshot(userId, entitlement),
@@ -174,6 +178,7 @@ export default async function LearnerDashboardPage() {
     snapshot = snap;
     studySnap = nextSnap;
     weakTopicTitles = studySnap?.weakTopics.map((w) => w.topic) ?? [];
+    benchmark = snap ? await computeBenchmarkData(userId, snap.readiness) : null;
     const progressFeedbackLine = studySnap?.topicTrends.find((r) => r.momentum === "improving")?.summary ?? null;
     if (snapshot) {
       const resume =
@@ -258,6 +263,7 @@ export default async function LearnerDashboardPage() {
           <section className="nn-dash-section">
             <p className="nn-dash-section-label">Performance &amp; Gaps</p>
             <LearnerDashboardInsightPanels snapshot={snapshot} t={t} />
+            {benchmark && <BenchmarkCard data={benchmark} />}
             {heatmapTopics.length > 0 && <WeaknessHeatmap topics={heatmapTopics} />}
             {isStudyCoachEnabled() && weakTopicTitles.length > 0 && (
               <CoachWeakSummary

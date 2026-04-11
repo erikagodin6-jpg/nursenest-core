@@ -159,16 +159,16 @@ export function computeReadiness(args: {
       trend: null,
       summary:
         calibratedPreview
-          ? `Complete about ${signalProfile.minPracticeItems}+ graded items or at least ${signalProfile.minMockAttempts} mock(s) with 5+ questions each before we can estimate readiness.`
-          : "Complete about 15+ graded items in practice sessions or at least one mock with 5+ questions so we can estimate readiness.",
+          ? `Answer at least ${signalProfile.minPracticeItems} practice questions or complete ${signalProfile.minMockAttempts} practice exam(s) so we can calculate your readiness.`
+          : "Answer at least 15 practice questions or complete one practice exam so we can calculate your readiness score.",
       factors: [],
       whatToImprove: [
-        "Complete a timed practice session or full practice exam.",
-        "Work through lessons in your plan to build topic coverage.",
+        "Start a practice session or take a practice exam.",
+        "Work through lessons in your study plan.",
       ],
       nextActions: [
-        "Run a block in the question bank or a practice exam, then return here.",
-        "Open Lessons and complete at least one module in your pathway.",
+        "Try a practice session or exam, then check back here.",
+        "Start a lesson in your study plan.",
       ],
       holdingBack: [],
       topWeakAreas: [],
@@ -187,18 +187,18 @@ export function computeReadiness(args: {
     practicePoints = Math.round(35 * clamp01(acc));
     factors.push({
       id: "practice_accuracy",
-      label: "Practice accuracy",
+      label: "Practice Questions",
       points: practicePoints,
       maxPoints: practiceMax,
-      detail: `${practiceCorrect}/${practiceTotal} graded items correct in recent completed sessions (your plan scope).`,
+      detail: `${practiceCorrect} of ${practiceTotal} questions answered correctly in recent sessions.`,
     });
   } else {
     factors.push({
       id: "practice_accuracy",
-      label: "Practice accuracy",
+      label: "Practice Questions",
       points: 0,
       maxPoints: 0,
-      detail: `Only ${practiceTotal} graded items. You need at least ${signalProfile.minPracticeItems} before this signal is included in the denominator.`,
+      detail: `${practiceTotal} questions answered so far. Complete at least ${signalProfile.minPracticeItems} to include this in your score.`,
     });
   }
 
@@ -211,15 +211,15 @@ export function computeReadiness(args: {
       usableMocks.reduce((s, m) => s + (m.total > 0 ? (m.score / m.total) * 100 : 0), 0) / usableMocks.length;
     mockPoints = Math.round(30 * clamp01(avgPct / 100));
     const spread = mockPercentStdDev(recentMocks);
-    let mockDetail = `Average ${Math.round(avgPct)}% across ${usableMocks.length} recent mock attempt(s) (5+ items each).`;
+    let mockDetail = `${Math.round(avgPct)}% average across your ${usableMocks.length} most recent practice exam(s).`;
     if (spread != null && spread > 12) {
-      mockDetail += ` Spread is ~${Math.round(spread)}% between mocks. Readiness weights consistency, not one lucky run.`;
+      mockDetail += ` Your scores varied quite a bit between exams, so the estimate is weighted toward consistency.`;
       const dampen = Math.max(0.72, 1 - (spread - 12) / 140);
       mockPoints = Math.round(mockPoints * dampen);
     }
     factors.push({
       id: "mock_performance",
-      label: "Recent mock performance",
+      label: "Practice Exams",
       points: mockPoints,
       maxPoints: mockMax,
       detail: mockDetail,
@@ -227,10 +227,10 @@ export function computeReadiness(args: {
   } else {
     factors.push({
       id: "mock_performance",
-      label: "Recent mock performance",
+      label: "Practice Exams",
       points: 0,
       maxPoints: 0,
-      detail: "No recent mock with 5+ items. This signal is omitted from the denominator until you complete one.",
+      detail: "Complete a full practice exam to include this in your score.",
     });
   }
 
@@ -241,10 +241,10 @@ export function computeReadiness(args: {
     topicPoints = 25;
     factors.push({
       id: "topic_errors",
-      label: "Topic error load",
+      label: "Topic Strength",
       points: topicPoints,
       maxPoints: topicMax,
-      detail: "No recorded topic misses in recent scored sessions, or not enough data to attribute errors yet.",
+      detail: "No weak topics identified yet. This improves as you answer more questions.",
     });
   } else {
     const top = weakTopics.slice(0, 3);
@@ -254,10 +254,10 @@ export function computeReadiness(args: {
     topicPoints = Math.round(25 * clamp01(1 - avgMiss / 100));
     factors.push({
       id: "topic_errors",
-      label: "Topic error load",
+      label: "Topic Strength",
       points: topicPoints,
       maxPoints: topicMax,
-      detail: `Weighted miss pressure on priority weak topics ~${Math.round(avgMiss)}% (ledger + sessions). Lower is better.`,
+      detail: `Your weakest topics have a ~${Math.round(avgMiss)}% miss rate. Bringing this down will lift your score.`,
     });
   }
 
@@ -269,18 +269,18 @@ export function computeReadiness(args: {
     lessonPoints = Math.round(15 * clamp01(lessonsCompleted / lessonsAvailable));
     factors.push({
       id: "lesson_completion",
-      label: "Lesson completion",
+      label: "Lesson Progress",
       points: lessonPoints,
       maxPoints: lessonMax,
-      detail: `${lessonsCompleted} of ${lessonsAvailable} lessons completed in your plan pool.`,
+      detail: `${lessonsCompleted} of ${lessonsAvailable} lessons finished.`,
     });
   } else {
     factors.push({
       id: "lesson_completion",
-      label: "Lesson completion",
+      label: "Lesson Progress",
       points: 0,
       maxPoints: 0,
-      detail: "No lesson pool counted for your scope. Pathway or catalog may still be loading.",
+      detail: "Lessons are being set up for your exam track.",
     });
   }
 
@@ -311,20 +311,20 @@ export function computeReadiness(args: {
 
   let summary =
     confidence === "high"
-      ? "Based on recent practice accuracy, mock scores, topic performance, and lesson completion. This is an estimate, not a pass guarantee."
+      ? "Based on your recent practice, exam scores, topic performance, and lessons completed."
       : confidence === "medium"
-        ? "Preliminary estimate. More timed practice and mocks will improve accuracy."
-        : "Early estimate. Numbers will shift as you complete more sessions.";
+        ? "This estimate will become more precise as you complete more practice sessions and exams."
+        : "Early estimate based on limited data. Your score will sharpen with more practice.";
   if (calibratedPreview) {
-    summary += " Thresholds for this exam track are intentionally stricter.";
+    summary += " Scoring for this exam track is calibrated conservatively.";
   }
 
   const whatToImprove: string[] = [];
   if (practiceTotal >= MIN_PRACTICE_ITEMS && practiceCorrect / practiceTotal < 0.65) {
-    whatToImprove.push("Review rationales on missed questions before adding volume.");
+    whatToImprove.push("Review explanations on missed questions before adding more practice.");
   }
   if (usableMocks.length && usableMocks.reduce((s, m) => s + m.score / m.total, 0) / usableMocks.length < 0.65) {
-    whatToImprove.push("Try shorter topic-focused blocks before long mocks.");
+    whatToImprove.push("Focus on shorter topic drills before taking full-length exams.");
   }
   if (weakTopics.length) {
     whatToImprove.push(
@@ -335,18 +335,18 @@ export function computeReadiness(args: {
     );
   }
   if (lessonsAvailable > 0 && lessonsCompleted / lessonsAvailable < 0.3) {
-    whatToImprove.push("Work through more lessons to build topic coverage.");
+    whatToImprove.push("Continue working through lessons to strengthen your foundation.");
   }
   if (whatToImprove.length === 0) {
-    whatToImprove.push("Keep mixing lessons, topic drills, and full mocks each week.");
+    whatToImprove.push("Continue alternating between lessons, topic practice, and full exams.");
   }
 
   const nextActions: string[] = [];
   if (weakTopics[0]) {
-    nextActions.push(`Practice ${weakTopics[0].topic} in the question bank.`);
+    nextActions.push(`Practice ${weakTopics[0].topic} questions.`);
   }
-  nextActions.push("Run a full mock this week and review every miss.");
-  nextActions.push("Complete the next lesson in your pathway.");
+  nextActions.push("Take a full practice exam and review your mistakes.");
+  nextActions.push("Continue with your next lesson.");
 
   const holdingBack: string[] = [];
   for (const f of factors) {
@@ -392,15 +392,15 @@ export function readinessBandLabel(band: ReadinessBand): string {
 export function readinessBandGuidance(band: ReadinessBand): string {
   switch (band) {
     case "insufficient_data":
-      return "Complete more practice sessions so we can estimate your readiness accurately.";
+      return "We need a bit more data to calculate your score. Complete a practice session or a full exam to get started.";
     case "not_ready":
-      return "Focus on your weakest topics and work through lessons before attempting more mocks.";
+      return "Your score shows room to grow. Reviewing your weakest topics now will have the biggest impact.";
     case "improving":
-      return "You are building a foundation. Keep drilling weak areas and reviewing rationales.";
+      return "You are making progress. Stay consistent with practice and review, especially on topics you find difficult.";
     case "near_ready":
-      return "You are close. Tighten up remaining weak topics and run a full mock to confirm.";
+      return "You are in a strong position. A couple more focused sessions on remaining weak spots could push you over the line.";
     case "ready":
-      return "Your signals look strong. Maintain with spaced review and rest before exam day.";
+      return "You are performing at exam level. Stay sharp with light review and make sure to rest before your exam.";
     default:
       return "";
   }

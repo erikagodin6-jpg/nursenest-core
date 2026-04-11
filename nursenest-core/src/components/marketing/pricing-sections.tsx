@@ -25,6 +25,7 @@ import {
   MARKETING_PRIMARY_CTA_CLASS,
   MARKETING_SECONDARY_CTA_CLASS,
 } from "@/lib/theme/marketing-hero-pattern";
+import { FadeUp } from "@/lib/motion";
 
 // ── Shared token aliases (CSS custom properties) ──────────────────────────────
 
@@ -100,14 +101,14 @@ const COMPARISON_ROWS: {
 export function FeatureComparisonTable() {
   return (
     <section className="mt-16" aria-labelledby="real-compare-heading">
-      <div className="mb-6 text-center">
+      <FadeUp className="mb-6 text-center">
         <h2 id="real-compare-heading" className="nn-marketing-h2">
           What changes when you unlock Premium
         </h2>
         <p className="nn-marketing-body-sm mx-auto mt-2 max-w-2xl text-muted-foreground">
           Every feature below is built into the platform. See exactly what you get with full access.
         </p>
-      </div>
+      </FadeUp>
 
       <div
         className="overflow-x-auto rounded-2xl shadow-sm"
@@ -547,14 +548,14 @@ const UNLOCK_BLOCKS = [
 export function PricingUnlockSection() {
   return (
     <section className="mt-20" aria-labelledby="what-you-unlock-heading">
-      <div className="mb-10 text-center">
+      <FadeUp className="mb-10 text-center">
         <h2 id="what-you-unlock-heading" className="nn-marketing-h2">
           Everything You Need to Pass, in One System
         </h2>
         <p className="nn-marketing-body-sm mx-auto mt-2 max-w-2xl text-muted-foreground">
           Start your free trial and get instant access to all of these. No setup, no delay.
         </p>
-      </div>
+      </FadeUp>
       <div className="space-y-6">
         {UNLOCK_BLOCKS.map((block) => (
           <UnlockFeatureBlock key={block.label} {...block} />
@@ -609,14 +610,14 @@ const PRODUCT_AREAS: {
 export function ProductPreviewGrid() {
   return (
     <section className="mt-20" aria-labelledby="product-preview-heading">
-      <div className="mb-8 text-center">
+      <FadeUp className="mb-8 text-center">
         <h2 id="product-preview-heading" className="nn-marketing-h2">
           Practice, Test, and Review: All Connected
         </h2>
         <p className="nn-marketing-body-sm mx-auto mt-2 max-w-2xl text-muted-foreground">
           One system that shows you exactly what to study, tests your readiness, and helps you fix weak areas.
         </p>
-      </div>
+      </FadeUp>
       <div className="grid gap-4 sm:grid-cols-3">
         {PRODUCT_AREAS.map((area) => (
           <ScreenshotProductCard
@@ -660,14 +661,14 @@ const TRUST_POINTS = [
 export function PricingTrustReassurance() {
   return (
     <section className="mt-20" aria-labelledby="trust-heading">
-      <div className="mb-8 text-center">
+      <FadeUp className="mb-8 text-center">
         <h2 id="trust-heading" className="nn-marketing-h2">
           Built for students who want to pass
         </h2>
         <p className="nn-marketing-body-sm mx-auto mt-2 max-w-lg text-muted-foreground">
           Used by nursing students preparing for NCLEX and REx-PN across Canada and the US.
         </p>
-      </div>
+      </FadeUp>
       <div className="grid gap-4 sm:grid-cols-3">
         {TRUST_POINTS.map((p) => (
           <div
@@ -705,10 +706,12 @@ export function PricingCTA({ plansHref }: { plansHref: string }) {
         border: `1px solid color-mix(in srgb, var(--theme-primary) 20%, ${BORDER})`,
       }}
     >
-      <h2 className="nn-marketing-h2 mb-3">Start studying smarter today</h2>
-      <p className="nn-marketing-body-sm mx-auto mb-8 max-w-lg text-muted-foreground">
-        Try everything free. No charge today. Cancel anytime before your trial ends.
-      </p>
+      <FadeUp>
+        <h2 className="nn-marketing-h2 mb-3">Start studying smarter today</h2>
+        <p className="nn-marketing-body-sm mx-auto mb-8 max-w-lg text-muted-foreground">
+          Try everything free. No charge today. Cancel anytime before your trial ends.
+        </p>
+      </FadeUp>
       <div className="flex flex-wrap items-center justify-center gap-3">
         <Link href={plansHref} className={MARKETING_PRIMARY_CTA_CLASS}>
           Start Free Trial
