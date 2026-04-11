@@ -4,6 +4,12 @@ import Link from "next/link";
 import { useState, useMemo } from "react";
 import { ChevronDown, BookOpen } from "lucide-react";
 import type { ConfidenceLevel } from "./confidence-selector";
+import {
+  PremiumLockCard,
+  LockedPreviewCard,
+  UpgradePromptCard,
+  usePremiumGateImpression,
+} from "./premium-gate";
 
 // ── Data Types ──────────────────────────────────────────────────────────────
 
@@ -456,33 +462,33 @@ export function ReviewSummaryStrip({
 
 export interface SmartReviewScreenProps {
   items: SmartReviewItem[];
+  /** Pass false for free users to show gated preview (spec §6). Default true. */
+  isEntitled?: boolean;
 }
 
 /**
  * SmartReviewLayout — the full Smart Review Screen (spec §2).
  *
- * Page structure (strict order per spec §2):
- *   1. ReviewSummaryStrip
- *   2. ReviewFilters
- *   3. 4 ReviewGroupSection blocks
+ * Gating (spec §6):
+ *   isEntitled = true  → all 4 groups + filters
+ *   isEntitled = false → Group 1 (limited to 3 items) + locked preview of
+ *                        Group 2 + PremiumLockCard for Groups 3-4
  *
  * Groups:
  *   1. High Priority Fixes   — incorrect + high conf   (warning surface)
  *   2. Needs Review          — incorrect + other        (neutral surface)
  *   3. Uncertain Knowledge   — correct + low/med        (info surface)
  *   4. Strong Areas          — correct + high conf      (success surface)
- *
- * All surfaces derive from theme tokens — zero hardcoded colors.
  */
-export function SmartReviewLayout({ items }: SmartReviewScreenProps) {
+export function SmartReviewLayout({ items, isEntitled = true }: SmartReviewScreenProps) {
+  usePremiumGateImpression("smartReviewLockedViewed", isEntitled);
+
   const [showOnlyIncorrect, setShowOnlyIncorrect] = useState(false);
   const [showOnlyHighConf, setShowOnlyHighConf] = useState(false);
   const [filterTopic, setFilterTopic] = useState<string | null>(null);
 
-  // Compute groups once from raw items
   const groups = useMemo(() => buildGroups(items), [items]);
 
-  // Unique topics for the filter dropdown
   const topics = useMemo(() => {
     const ts = new Set<string>();
     for (const item of items) {
@@ -491,7 +497,6 @@ export function SmartReviewLayout({ items }: SmartReviewScreenProps) {
     return [...ts].sort();
   }, [items]);
 
-  // Apply active filters to each group's item list
   function applyFilters(groupItems: SmartReviewItem[]): SmartReviewItem[] {
     return groupItems.filter((item) => {
       if (showOnlyIncorrect && item.isCorrect) return false;
@@ -501,12 +506,57 @@ export function SmartReviewLayout({ items }: SmartReviewScreenProps) {
     });
   }
 
+  // ── Free (non-entitled) view ─────────────────────────────────────────────
+  if (!isEntitled) {
+    const priorityGroup = groups.find((g) => g.id === "priority")!;
+    const needsReviewGroup = groups.find((g) => g.id === "needs-review")!;
+
+    // Group 1: show up to 3 items, no filters, no lesson deep-links
+    const limitedPriorityItems = priorityGroup.items.slice(0, 3);
+
+    return (
+      <div className="nn-smart-review">
+        {/* Summary strip (always free) */}
+        <ReviewSummaryStrip groups={groups} totalItems={items.length} />
+
+        {/* Group 1 — High Priority Fixes (limited to 3, no filters) */}
+        <ReviewGroupSection
+          group={priorityGroup}
+          filteredItems={limitedPriorityItems}
+        />
+
+        {/* Locked preview of Group 2 */}
+        {needsReviewGroup.items.length > 0 ? (
+          <LockedPreviewCard
+            overlayTitle="Unlock full smart review"
+            overlayDescription="See every question grouped by confidence and review priority — overconfidence patterns, uncertain knowledge, and strongest areas in one place."
+          >
+            <ReviewGroupSection
+              group={needsReviewGroup}
+              filteredItems={needsReviewGroup.items.slice(0, 2)}
+            />
+          </LockedPreviewCard>
+        ) : null}
+
+        {/* Groups 3-4 fully locked */}
+        <PremiumLockCard
+          title="Uncertain Knowledge + Strong Areas"
+          description="Unlock the full review to see where you guessed correctly, where you are genuinely strong, and get advanced filtering by topic and confidence level."
+          ctaLabel="View plans"
+          secondaryHref="/app/lessons"
+          secondaryLabel="Continue free study"
+        />
+      </div>
+    );
+  }
+
+  // ── Premium (entitled) view ──────────────────────────────────────────────
   return (
     <div className="nn-smart-review">
       {/* 1 — Summary strip */}
       <ReviewSummaryStrip groups={groups} totalItems={items.length} />
 
-      {/* 2 — Filter controls (only when there's meaningful data) */}
+      {/* 2 — Filter controls */}
       {items.length > 1 ? (
         <ReviewFilters
           showOnlyIncorrect={showOnlyIncorrect}
@@ -519,7 +569,7 @@ export function SmartReviewLayout({ items }: SmartReviewScreenProps) {
         />
       ) : null}
 
-      {/* 3 — 4 group sections */}
+      {/* 3 — All 4 groups */}
       {groups.map((group) => (
         <ReviewGroupSection
           key={group.id}

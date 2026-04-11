@@ -4,7 +4,7 @@ import type { TierCode } from "@prisma/client";
 import Link from "next/link";
 import { MarketingTrackedLink } from "@/components/marketing/marketing-tracked-link";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { ArrowRight, Check, Lock, Sparkles } from "lucide-react";
+import { ArrowRight, Check } from "lucide-react";
 import { buildTierPricingNarrative } from "@/lib/conversion/pricing-catalog";
 import { trackClientEvent } from "@/lib/observability/posthog-client";
 import { PH } from "@/lib/observability/posthog-conversion-events";
@@ -35,6 +35,14 @@ import {
   MARKETING_TERTIARY_LINK_CLASS,
 } from "@/lib/theme/marketing-hero-pattern";
 import { MarketingTrustSignalsStrip } from "@/components/marketing/marketing-trust-signals-strip";
+import { PricingHero } from "@/components/marketing/pricing-hero";
+import {
+  FeatureComparisonTable,
+  PricingUnlockSection,
+  ProductPreviewGrid,
+  PricingTrustReassurance,
+  PricingCTA,
+} from "@/components/marketing/pricing-sections";
 
 type PlanRow = {
   tier: TierCode;
@@ -72,9 +80,6 @@ const DURATION_LABEL_KEYS: Record<BillingDuration, string> = {
   "6-month": "pages.pricing.duration.6month",
   yearly: "pages.pricing.conversion.duration12",
 };
-
-/** Rows for Free vs paid comparison (aligned with tier value props). */
-const COMPARE_FEATURE_KEYS = ["sample", "rationale", "lessons", "cat", "analytics"] as const;
 
 function checkoutErrorUserMessage(
   parsed: ParsedCheckoutErrorBody,
@@ -245,23 +250,14 @@ export function PricingPageClient({
 
   return (
     <main className="mx-auto w-full max-w-6xl nn-marketing-x pb-[var(--nn-rhythm-page-y)] pt-0">
-      {/* 1. Header */}
-      <header className="border-b border-[var(--border-subtle)] pb-10 pt-2">
-        <div className="mx-auto max-w-3xl text-center">
-          <h1 className="nn-marketing-h1 text-balance">{heading}</h1>
-          <p className="nn-marketing-body mt-3 text-pretty text-muted-foreground">{heroSub}</p>
-          <p className="nn-marketing-body-sm mt-2 text-pretty text-muted-foreground">{intro}</p>
-          <div className="mx-auto mt-6 max-w-xl text-left">
-            <MarketingTrustSignalsStrip variant="compact" />
-          </div>
-          <p className="nn-marketing-caption mx-auto mt-4 max-w-lg text-muted-foreground">{t("pages.pricing.conversion.checkoutTrust")}</p>
-          <p className="nn-marketing-body-sm mx-auto mt-3 max-w-lg text-center text-muted-foreground">
-            <Link href={comparisonSectionHref} className="font-semibold text-primary underline-offset-4 hover:underline">
-              {t("home.comparison.pricingLink")}
-            </Link>
-          </p>
-        </div>
-      </header>
+      {/* 1. Hero (spec §3) */}
+      <PricingHero studySystemHref={tryQuestionsHref} />
+
+      {/* Trust strip + legal anchors below hero */}
+      <div className="mt-6 flex flex-col items-center gap-3">
+        <MarketingTrustSignalsStrip variant="compact" />
+        <p className="nn-marketing-caption text-muted-foreground">{t("pages.pricing.conversion.checkoutTrust")}</p>
+      </div>
 
       {/* Country + tier */}
       <section className="mt-10 space-y-6">
@@ -316,57 +312,8 @@ export function PricingPageClient({
         <p className="mx-auto max-w-2xl text-center text-sm text-muted-foreground">{narrative.subhead}</p>
       </section>
 
-      {/* Free vs paid — transparent before term selection */}
-      <section className="mt-12" aria-labelledby="pricing-compare-heading">
-        <div className="mb-5 text-center">
-          <h2 id="pricing-compare-heading" className="nn-marketing-h2">
-            {t("pages.pricing.compare.title")}
-          </h2>
-          <p className="nn-marketing-body-sm mx-auto mt-2 max-w-2xl text-muted-foreground">{t("pages.pricing.compare.subtitle")}</p>
-        </div>
-        <div className="overflow-x-auto rounded-2xl border border-[var(--theme-card-border)] bg-card shadow-sm">
-          <table className="w-full min-w-[min(100%,520px)] border-collapse text-left text-sm">
-            <thead>
-              <tr className="border-b border-[var(--border-subtle)] bg-muted/30">
-                <th scope="col" className="px-4 py-3 font-semibold text-[var(--theme-heading-text)]">
-                  {t("pages.pricing.compare.colFeature")}
-                </th>
-                <th scope="col" className="px-4 py-3 font-semibold text-muted-foreground">
-                  {t("pages.pricing.compare.colFree")}
-                </th>
-                <th scope="col" className="px-4 py-3 font-semibold text-primary">
-                  {t("pages.pricing.compare.colPaid")}
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {COMPARE_FEATURE_KEYS.map((key) => (
-                <tr key={key} className="border-b border-[var(--border-subtle)] last:border-0">
-                  <th scope="row" className="px-4 py-3.5 align-top font-medium text-[var(--theme-body-text)]">
-                    {t(`pages.pricing.compare.row.${key}.label`)}
-                  </th>
-                  <td className="px-4 py-3.5 align-top text-muted-foreground">
-                    <span className="flex gap-2">
-                      {key === "sample" ? (
-                        <Sparkles className="mt-0.5 h-4 w-4 shrink-0 text-[var(--semantic-info)]" aria-hidden />
-                      ) : (
-                        <Lock className="mt-0.5 h-4 w-4 shrink-0 text-[var(--semantic-warning)]" aria-hidden />
-                      )}
-                      <span>{t(`pages.pricing.compare.row.${key}.free`)}</span>
-                    </span>
-                  </td>
-                  <td className="px-4 py-3.5 align-top text-[var(--theme-body-text)]">
-                    <span className="flex gap-2">
-                      <Check className="mt-0.5 h-4 w-4 shrink-0 text-[var(--semantic-success)]" aria-hidden />
-                      <span>{t(`pages.pricing.compare.row.${key}.paid`)}</span>
-                    </span>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </section>
+      {/* 3. Core feature comparison (spec §5) — mapped to real gated features */}
+      <FeatureComparisonTable />
 
       {/* 2–4. Duration cards + includes + pricing */}
       <section className="mt-12" aria-labelledby="pricing-plans-heading">
@@ -516,6 +463,18 @@ export function PricingPageClient({
         </ul>
         <p className="mt-4 text-xs text-muted-foreground">{t("pages.pricing.billing.cancelComfort")}</p>
       </section>
+
+      {/* 4. What you unlock (spec §6) — maps exactly to gated features */}
+      <PricingUnlockSection />
+
+      {/* 5. Product experience preview (spec §7) */}
+      <ProductPreviewGrid />
+
+      {/* 6. Trust + reassurance (spec §8) */}
+      <PricingTrustReassurance />
+
+      {/* 7. Final CTA (spec §9) */}
+      <PricingCTA plansHref="#pricing-plans-heading" />
 
       {/* Compact: institutional + exam hubs */}
       <section className="mt-10 rounded-xl border border-[var(--trust-surface-border)] bg-[var(--trust-surface)] px-4 py-4 text-sm text-muted-foreground">

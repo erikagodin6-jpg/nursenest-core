@@ -49,6 +49,7 @@ import {
   SmartReviewLayout,
   type SmartReviewItem,
 } from "@/components/study/smart-review-screen";
+import { StudyPlanFromResults } from "@/components/study/study-plan";
 import { CatSessionLayout, CatTopBar, CatContentGrid } from "@/components/study/cat-session-layout";
 import { QuestionCard, AnswerOptionRow } from "@/components/study/cat-question-card";
 import type { AnswerOptionState } from "@/components/study/cat-question-card";
@@ -79,11 +80,19 @@ export function PracticeTestRunnerClient({
   userId,
   userLabel,
   protectionFlags,
+  isEntitled = true,
 }: {
   testId: string;
   userId: string;
   userLabel: string;
   protectionFlags: PremiumProtectionFlags;
+  /**
+   * Whether this user has an active premium subscription.
+   * Controls gating of Adaptive Study Plan, Smart Review, and Confidence Analytics.
+   * Defaults to `true` so existing call-sites without entitlement wiring remain
+   * fully functional — wire `false` for free/trial accounts at the page level.
+   */
+  isEntitled?: boolean;
 }) {
   const [phase, setPhase] = useState<"loading" | "ready" | "error">("loading");
   const [error, setError] = useState<string | null>(null);
@@ -732,6 +741,7 @@ export function PracticeTestRunnerClient({
                 confidence={confidence}
                 correctness={correctnessMap}
                 questionMeta={questionMetaMap}
+                isEntitled={isEntitled}
               />
             </div>
           </div>
@@ -765,11 +775,51 @@ export function PracticeTestRunnerClient({
                 <h3 className="mb-5 font-semibold text-[var(--semantic-text-primary)]">
                   Smart Review
                 </h3>
-                <SmartReviewLayout items={smartReviewItems} />
+                <SmartReviewLayout items={smartReviewItems} isEntitled={isEntitled} />
               </div>
             </div>
           );
         })() : null}
+
+        {/* ── Adaptive Study Plan (CAT or linear practice with results) ── */}
+        {(() => {
+          const readinessScore = results.catReport?.readinessScore ?? results.accuracyPct;
+          const weakAreas = results.catReport?.weakAreas ?? results.weakAreas ?? [];
+          // Derive overconfidence signal from confidence + correctness maps
+          let overconfidentCount = 0;
+          let uncertainCorrectCount = 0;
+          for (const [qid, lvl] of Object.entries(confidence)) {
+            const isCorrect = correctnessMap[qid];
+            if (lvl === "high" && isCorrect === false) overconfidentCount++;
+            if ((lvl === "low" || lvl === "medium") && isCorrect === true)
+              uncertainCorrectCount++;
+          }
+          const totalRated = Object.keys(confidence).length;
+          const hasOverconfidence =
+            totalRated > 0 && overconfidentCount / totalRated >= 0.2;
+          const hasManyUncertainCorrect =
+            totalRated > 0 && uncertainCorrectCount / totalRated >= 0.25;
+
+          // Only render when there is something meaningful to plan from
+          if (weakAreas.length === 0 && Object.keys(results.byTopic).length === 0) return null;
+
+          return (
+            <div className="mx-auto max-w-[900px] px-6 pb-8">
+              <div className="nn-cat-question-card">
+                  <StudyPlanFromResults
+                  readinessScore={readinessScore}
+                  byTopic={results.byTopic}
+                  weakAreas={weakAreas}
+                  hasOverconfidence={hasOverconfidence}
+                  hasManyUncertainCorrect={hasManyUncertainCorrect}
+                  pathwayId={testConfig?.pathwayId ?? null}
+                  testId={testId}
+                  isEntitled={isEntitled}
+                />
+              </div>
+            </div>
+          );
+        })()}
 
         {/* ── Coach card (CAT-specific, premium) ──────────────────── */}
         {results.catReport ? (

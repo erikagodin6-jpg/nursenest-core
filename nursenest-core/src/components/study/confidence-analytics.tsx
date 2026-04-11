@@ -1,6 +1,11 @@
 "use client";
 
 import type { ConfidenceLevel } from "./confidence-selector";
+import {
+  LockedMetricCard,
+  PremiumLockCard,
+  usePremiumGateImpression,
+} from "./premium-gate";
 
 // ── Types ───────────────────────────────────────────────────────────────────
 
@@ -238,18 +243,26 @@ export function ReviewPriorityGroups({ items }: { items: ReviewItem[] }) {
 /**
  * ConfidenceAnalyticsBlock — the full confidence section for the results page.
  *
- * Renders only when meaningful confidence data exists (at least one rated
- * question with a known correctness outcome).
+ * Gating (spec §7):
+ *   isEntitled = true  → full: strip + pattern cards + priority groups
+ *   isEntitled = false → strip + one blurred metric + lock for patterns/priority
+ *
+ * Renders only when meaningful confidence data exists.
  */
 export function ConfidenceAnalyticsBlock({
   confidence,
   correctness,
   questionMeta,
+  isEntitled = true,
 }: {
   confidence: Record<string, ConfidenceLevel>;
   correctness: Record<string, boolean>;
   questionMeta?: Record<string, { index: number; topic?: string | null }>;
+  /** Pass false to show the gated preview for free users (spec §7). */
+  isEntitled?: boolean;
 }) {
+  usePremiumGateImpression("confidenceAnalyticsLockedViewed", isEntitled);
+
   const { stats, highConfidenceAccuracy, reviewItems } = computeConfidenceStats(
     confidence,
     correctness,
@@ -257,6 +270,43 @@ export function ConfidenceAnalyticsBlock({
   );
 
   if (stats.totalRated === 0) return null;
+
+  if (!isEntitled) {
+    return (
+      <div className="space-y-5">
+        {/* Summary strip — always free */}
+        <ConfidenceSummaryStrip highConfidenceAccuracy={highConfidenceAccuracy} />
+
+        {/* One visible metric (total rated) + blurred placeholders */}
+        <div>
+          <p className="nn-confidence-section-title">Confidence Patterns</p>
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+            {/* One real metric — total rated questions */}
+            <div className="nn-confidence-pattern-card">
+              <p className="nn-confidence-pattern-card__label">Questions Rated</p>
+              <p className="nn-confidence-pattern-card__value tabular-nums">
+                {stats.totalRated}
+              </p>
+              <p className="nn-confidence-pattern-card__desc">
+                You rated your confidence on {stats.totalRated} question
+                {stats.totalRated !== 1 ? "s" : ""} this session.
+              </p>
+            </div>
+            {/* Two locked metric cards */}
+            <LockedMetricCard heading="Overconfident Errors" placeholderValue="—" />
+            <LockedMetricCard heading="Strong Knowledge" placeholderValue="—" />
+          </div>
+        </div>
+
+        {/* Review priority — fully locked */}
+        <PremiumLockCard
+          title="Where to Focus Next"
+          description="Access deeper readiness reporting: overconfidence patterns, uncertain knowledge areas, and a prioritised review queue grouped by question confidence."
+          ctaLabel="View plans"
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-5">

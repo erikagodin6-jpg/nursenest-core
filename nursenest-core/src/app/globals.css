@@ -5213,3 +5213,694 @@ html[data-theme="dark-mode"] .nn-cat-opt--incorrect {
     flex-wrap: wrap;
   }
 }
+
+/* ============================================================
+   ADAPTIVE STUDY PLAN
+   Personalized 3-section planner — multi-surface palette
+   ============================================================ */
+
+/* ── Outer wrapper ─────────────────────────────────────────── */
+
+.nn-study-plan {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* ── Summary Card (surface-emphasis) ──────────────────────── */
+
+.nn-study-plan-summary {
+  border-radius: 1rem;
+  padding: 24px;
+  background: var(--surface-emphasis,
+    color-mix(in srgb, var(--semantic-brand) 8%, var(--semantic-surface)));
+  border: 1px solid
+    color-mix(in srgb, var(--theme-primary) 22%, var(--semantic-border-soft));
+}
+
+.nn-study-plan-summary__label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--semantic-text-muted);
+  margin-bottom: 4px;
+}
+
+.nn-study-plan-summary__heading {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--semantic-text-primary);
+  margin-bottom: 8px;
+}
+
+.nn-study-plan-summary__meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.nn-study-plan-summary__score {
+  font-size: 2.25rem;
+  font-weight: 900;
+  line-height: 1;
+  color: var(--semantic-text-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+.nn-study-plan-summary__interp {
+  font-size: 0.9375rem;
+  line-height: 1.65;
+  color: var(--semantic-text-secondary);
+}
+
+/* ── Section wrappers ──────────────────────────────────────── */
+
+.nn-study-plan-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.nn-study-plan-section__title {
+  font-size: 1.0625rem;
+  font-weight: 800;
+  color: var(--semantic-text-primary);
+}
+
+.nn-study-plan-section__desc {
+  font-size: 0.875rem;
+  color: var(--semantic-text-secondary);
+  margin-top: -6px;
+  line-height: 1.6;
+}
+
+/* ── Focus Areas ───────────────────────────────────────────── */
+
+.nn-focus-areas-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.nn-focus-area-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: 0.75rem;
+  border: 1px solid var(--semantic-border-soft);
+}
+
+/* Major Gap → soft warning */
+.nn-focus-area-row--major {
+  background: var(--semantic-warning-soft,
+    color-mix(in srgb, var(--semantic-warning) 8%, var(--semantic-surface)));
+  border-color: color-mix(in srgb, var(--semantic-warning) 22%, var(--semantic-border-soft));
+}
+
+/* Needs Reinforcement → soft info */
+.nn-focus-area-row--reinforcement {
+  background: var(--semantic-info-soft,
+    color-mix(in srgb, var(--semantic-info) 7%, var(--semantic-surface)));
+  border-color: color-mix(in srgb, var(--semantic-info) 18%, var(--semantic-border-soft));
+}
+
+/* Slight Weakness → neutral */
+.nn-focus-area-row--slight {
+  background: var(--semantic-panel-muted,
+    color-mix(in srgb, var(--semantic-border-soft) 40%, var(--semantic-surface)));
+}
+
+.nn-focus-area-row__body {
+  flex: 1;
+  min-width: 0;
+}
+
+.nn-focus-area-row__name {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: var(--semantic-text-primary);
+}
+
+.nn-focus-area-row__signal {
+  font-size: 0.8125rem;
+  color: var(--semantic-text-muted);
+  margin-top: 2px;
+}
+
+.nn-focus-area-row__right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.nn-focus-area-row__label {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 9px;
+  border-radius: 99px;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  white-space: nowrap;
+  background: color-mix(in srgb, var(--semantic-warning) 14%, var(--semantic-surface));
+  color: var(--semantic-text-primary);
+}
+
+.nn-focus-area-row__label--reinforcement {
+  background: color-mix(in srgb, var(--semantic-info) 12%, var(--semantic-surface));
+}
+
+.nn-focus-area-row__label--slight {
+  background: color-mix(in srgb, var(--semantic-border-soft) 60%, var(--semantic-surface));
+}
+
+.nn-focus-area-row__pct {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--semantic-text-muted);
+}
+
+/* ── Daily Study Cards ─────────────────────────────────────── */
+
+.nn-study-day-card {
+  border-radius: 1rem;
+  overflow: hidden;
+  border: 1px solid var(--semantic-border-soft);
+}
+
+/* Alternating soft surfaces */
+.nn-study-day-card--a {
+  background: var(--surface-soft-a,
+    color-mix(in srgb, var(--theme-primary) 4%, var(--semantic-surface)));
+}
+
+.nn-study-day-card--b {
+  background: var(--surface-soft-b,
+    color-mix(in srgb, var(--theme-primary) 7%, var(--semantic-surface)));
+}
+
+.nn-study-day-card__header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--semantic-border-soft);
+}
+
+.nn-study-day-card__day-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--theme-primary) 15%, var(--semantic-surface));
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--semantic-text-primary);
+  flex-shrink: 0;
+}
+
+.nn-study-day-card__title {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: var(--semantic-text-primary);
+}
+
+.nn-study-day-card__body {
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: var(--semantic-surface);
+}
+
+/* ── Study Block Items ─────────────────────────────────────── */
+
+.nn-study-block {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 0.625rem;
+  border: 1px solid var(--semantic-border-soft);
+  background: var(--semantic-surface);
+}
+
+.nn-study-block__icon {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 0.5rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 0.875rem;
+}
+
+.nn-study-block__icon--lesson {
+  background: var(--semantic-info-soft,
+    color-mix(in srgb, var(--semantic-info) 10%, var(--semantic-surface)));
+  color: var(--semantic-info, var(--semantic-text-secondary));
+}
+
+.nn-study-block__icon--practice {
+  background: var(--role-success-soft,
+    color-mix(in srgb, var(--role-success, var(--semantic-success)) 10%, var(--semantic-surface)));
+  color: var(--semantic-success, var(--semantic-text-secondary));
+}
+
+.nn-study-block__icon--review {
+  background: var(--semantic-warning-soft,
+    color-mix(in srgb, var(--semantic-warning) 10%, var(--semantic-surface)));
+  color: var(--semantic-warning, var(--semantic-text-secondary));
+}
+
+.nn-study-block__icon--recap {
+  background: var(--surface-soft-b,
+    color-mix(in srgb, var(--theme-primary) 7%, var(--semantic-surface)));
+  color: var(--semantic-text-secondary);
+}
+
+.nn-study-block__content {
+  flex: 1;
+  min-width: 0;
+}
+
+.nn-study-block__type-label {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--semantic-text-muted);
+}
+
+.nn-study-block__instruction {
+  font-size: 0.875rem;
+  line-height: 1.55;
+  color: var(--semantic-text-primary);
+}
+
+.nn-study-block__action {
+  flex-shrink: 0;
+}
+
+/* ── Retest Strategy Card (surface-soft-info) ──────────────── */
+
+.nn-retest-card {
+  border-radius: 1rem;
+  padding: 20px 24px;
+  background: var(--semantic-info-soft,
+    color-mix(in srgb, var(--semantic-info) 7%, var(--semantic-surface)));
+  border: 1px solid
+    color-mix(in srgb, var(--semantic-info) 20%, var(--semantic-border-soft));
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.nn-retest-card__heading {
+  font-size: 1.0625rem;
+  font-weight: 800;
+  color: var(--semantic-text-primary);
+}
+
+.nn-retest-card__timing {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: 0.625rem;
+  background: var(--semantic-surface);
+  border: 1px solid var(--semantic-border-soft);
+}
+
+.nn-retest-card__timing-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--semantic-text-muted);
+}
+
+.nn-retest-card__timing-text {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--semantic-text-primary);
+}
+
+.nn-retest-card__recommendation {
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: var(--semantic-text-secondary);
+}
+
+/* ── Mobile ────────────────────────────────────────────────── */
+
+@media (max-width: 639px) {
+  .nn-study-block {
+    flex-wrap: wrap;
+  }
+
+  .nn-study-block__action {
+    width: 100%;
+  }
+
+  .nn-focus-area-row {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .nn-focus-area-row__right {
+    align-items: flex-start;
+    flex-direction: row;
+  }
+}
+
+/* ============================================================
+   PREMIUM GATE SYSTEM
+   Locked states, preview fades, upgrade prompts
+   All colors via CSS custom properties — no hardcoded values
+   ============================================================ */
+
+/* ── Shared locked surface tokens ──────────────────────────── */
+/* Uses semantic tokens that adapt across all themes           */
+
+/* ── PremiumLockCard — standalone locked section ───────────── */
+
+.nn-premium-lock-card {
+  border-radius: 1rem;
+  border: 1px solid var(--semantic-border-soft);
+  background: color-mix(
+    in srgb,
+    var(--semantic-border-soft) 18%,
+    var(--semantic-surface)
+  );
+  overflow: hidden;
+}
+
+.nn-premium-lock-card__header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--semantic-border-soft);
+}
+
+.nn-premium-lock-card__icon {
+  color: var(--semantic-text-muted);
+  flex-shrink: 0;
+}
+
+.nn-premium-lock-card__title {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: var(--semantic-text-secondary);
+}
+
+.nn-premium-lock-card__badge {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 9px;
+  border-radius: 99px;
+  background: color-mix(
+    in srgb,
+    var(--theme-primary) 12%,
+    var(--semantic-surface)
+  );
+  border: 1px solid
+    color-mix(in srgb, var(--theme-primary) 22%, var(--semantic-border-soft));
+  font-size: 0.6875rem;
+  font-weight: 700;
+  color: var(--semantic-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.nn-premium-lock-card__body {
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.nn-premium-lock-card__description {
+  font-size: 0.875rem;
+  line-height: 1.65;
+  color: var(--semantic-text-muted);
+}
+
+.nn-premium-lock-card__actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* ── LockedPreviewCard — preview + fade + lock ─────────────── */
+
+.nn-locked-preview {
+  position: relative;
+  border-radius: 1rem;
+  overflow: hidden;
+  border: 1px solid var(--semantic-border-soft);
+}
+
+.nn-locked-preview__content {
+  /* Content shown at reduced opacity — readable structure, muted detail */
+  opacity: 0.35;
+  pointer-events: none;
+  user-select: none;
+  /* Fade bottom half out using a mask */
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    black 0%,
+    black 30%,
+    transparent 85%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    black 0%,
+    black 30%,
+    transparent 85%
+  );
+}
+
+.nn-locked-preview__overlay {
+  /* Positioned over the preview — shows lock CTA */
+  padding: 14px 20px 18px;
+  background: color-mix(
+    in srgb,
+    var(--semantic-border-soft) 18%,
+    var(--semantic-surface)
+  );
+  border-top: 1px solid var(--semantic-border-soft);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.nn-locked-preview__overlay-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--semantic-text-secondary);
+}
+
+.nn-locked-preview__overlay-desc {
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  color: var(--semantic-text-muted);
+}
+
+/* ── PreviewDivider — visual boundary between free/locked ─── */
+
+.nn-preview-divider {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 4px;
+}
+
+.nn-preview-divider__line {
+  flex: 1;
+  height: 1px;
+  background: var(--semantic-border-soft);
+}
+
+.nn-preview-divider__label {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: 99px;
+  background: color-mix(
+    in srgb,
+    var(--theme-primary) 9%,
+    var(--semantic-surface)
+  );
+  border: 1px solid
+    color-mix(in srgb, var(--theme-primary) 18%, var(--semantic-border-soft));
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--semantic-text-muted);
+  white-space: nowrap;
+}
+
+/* ── UpgradePromptCard — end-of-page conversion block ──────── */
+
+.nn-upgrade-prompt-card {
+  border-radius: 1rem;
+  padding: 24px;
+  background: var(--surface-emphasis,
+    color-mix(in srgb, var(--semantic-brand) 8%, var(--semantic-surface)));
+  border: 1px solid
+    color-mix(in srgb, var(--theme-primary) 20%, var(--semantic-border-soft));
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.nn-upgrade-prompt-card__title {
+  font-size: 1.0625rem;
+  font-weight: 800;
+  color: var(--semantic-text-primary);
+}
+
+.nn-upgrade-prompt-card__body {
+  font-size: 0.875rem;
+  line-height: 1.65;
+  color: var(--semantic-text-secondary);
+}
+
+.nn-upgrade-prompt-card__bullets {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.nn-upgrade-prompt-card__bullet {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 0.875rem;
+  color: var(--semantic-text-secondary);
+}
+
+.nn-upgrade-prompt-card__bullet::before {
+  content: "✓";
+  font-weight: 700;
+  color: var(--semantic-success, var(--role-success));
+  flex-shrink: 0;
+  margin-top: 0.1em;
+}
+
+.nn-upgrade-prompt-card__actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* ── LockedMetricCard — blurred analytics card ─────────────── */
+
+.nn-locked-metric-card {
+  border-radius: 0.875rem;
+  border: 1px solid var(--semantic-border-soft);
+  background: color-mix(
+    in srgb,
+    var(--semantic-border-soft) 14%,
+    var(--semantic-surface)
+  );
+  overflow: hidden;
+}
+
+.nn-locked-metric-card__header {
+  padding: 12px 16px 8px;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--semantic-text-secondary);
+  border-bottom: 1px solid var(--semantic-border-soft);
+}
+
+.nn-locked-metric-card__blur {
+  padding: 12px 16px;
+  filter: blur(4px);
+  opacity: 0.4;
+  user-select: none;
+  pointer-events: none;
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: var(--semantic-text-primary);
+}
+
+.nn-locked-metric-card__lock {
+  padding: 8px 16px 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--semantic-text-muted);
+}
+
+/* ── Day shell — locked day card placeholder ───────────────── */
+
+.nn-study-day-shell {
+  border-radius: 1rem;
+  overflow: hidden;
+  border: 1px dashed var(--semantic-border-soft);
+  background: color-mix(
+    in srgb,
+    var(--semantic-border-soft) 10%,
+    var(--semantic-surface)
+  );
+}
+
+.nn-study-day-shell__header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 20px;
+}
+
+.nn-study-day-shell__badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background: var(--semantic-border-soft);
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--semantic-text-muted);
+  flex-shrink: 0;
+}
+
+.nn-study-day-shell__title {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: var(--semantic-text-muted);
+  flex: 1;
+}
+
+.nn-study-day-shell__lock {
+  color: var(--semantic-text-muted);
+  flex-shrink: 0;
+}
