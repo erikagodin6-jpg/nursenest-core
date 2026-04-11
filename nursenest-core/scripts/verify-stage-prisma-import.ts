@@ -385,11 +385,19 @@ async function runDbChecks(stageFiles: StageFile[]) {
   if (fs.existsSync(absCheckpointDir)) {
     const checkpointFiles = fs.readdirSync(absCheckpointDir).filter((f) => f.endsWith("-checkpoint.json"));
     for (const cf of checkpointFiles) {
-      const checkpoint = JSON.parse(fs.readFileSync(path.join(absCheckpointDir, cf), "utf8"));
-      if (!checkpoint.runId || !checkpoint.completedAt) {
-        warn("checkpoint_integrity", `${cf}: missing runId or completedAt`, checkpoint);
+      const cp = JSON.parse(fs.readFileSync(path.join(absCheckpointDir, cf), "utf8"));
+      if (!cp.runId || !cp.completedAt) {
+        warn("checkpoint_integrity", `${cf}: missing runId or completedAt`, cp);
       } else {
-        info("checkpoint_integrity", `${cf}: runId=${checkpoint.runId} completedAt=${checkpoint.completedAt} lessons=${checkpoint.lessonsInserted} questions=${checkpoint.questionsInserted}`);
+        const lessonSummary = `lessons inserted=${cp.lessonsInserted} skipped=${cp.lessonsSkipped ?? "?"}`;
+        const qSummary = `questions inserted=${cp.questionsInserted} skipped=${cp.questionsSkipped ?? "?"}`;
+        // If both inserted=0 and skipped=0 and completedAt is set, that's suspicious
+        if (cp.lessonsInserted === 0 && cp.questionsInserted === 0 &&
+            (cp.lessonsSkipped ?? 0) === 0 && (cp.questionsSkipped ?? 0) === 0) {
+          warn("checkpoint_integrity", `${cf}: all zero counts — may indicate a failed/interrupted run`, cp);
+        } else {
+          info("checkpoint_integrity", `${cf}: runId=${cp.runId} completedAt=${cp.completedAt} | ${lessonSummary} | ${qSummary}`);
+        }
       }
     }
     if (checkpointFiles.length === 0) {

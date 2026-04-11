@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "stage": "prisma_import",
-  "runId": "a5b35506-7596-49f2-9537-7eb1c8e0bc23",
-  "generatedAt": "2026-04-11T03:05:01.993Z",
+  "runId": "4dccb923-99a3-403f-aa69-e17f39198034",
+  "generatedAt": "2026-04-11T03:14:40.431Z",
   "programs": [
     "np"
   ],
@@ -18,7 +18,7 @@
   ],
   "pathwayLessonUpserts": [
     {
-      "pipelineId": "afa5ad1d-5c2e-45e7-97f5-cdee66eb2e03",
+      "pipelineId": "6395f432-7fdb-4658-91cc-4bdf4a729c34",
       "upsertKey": {
         "pathwayId": "aanp-fnp",
         "slug": "knee-pain-differential--np-advanced-batch-01",
@@ -78,11 +78,11 @@
         "status": "PUBLISHED",
         "sortOrder": 1000,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "94847fa5-b38b-457d-a57c-ec4d0fc6738b",
+      "pipelineId": "94e34356-bd63-4e36-8abd-8b9f7404f57f",
       "upsertKey": {
         "pathwayId": "aanp-fnp",
         "slug": "uti-uncomplicated-complicated-stewardship--np-advanced-batch-01",
@@ -142,11 +142,11 @@
         "status": "PUBLISHED",
         "sortOrder": 1001,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "4a9eaaa8-cae8-4ead-8f79-6150f89036b9",
+      "pipelineId": "e08aca98-8452-4d48-9744-83759cf15135",
       "upsertKey": {
         "pathwayId": "aanp-fnp",
         "slug": "t2dm-intensification-beyond-metformin--np-advanced-batch-01",
@@ -206,11 +206,11 @@
         "status": "PUBLISHED",
         "sortOrder": 1002,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "bdc73b4a-8b0e-4abc-a975-ec929e2c5ad5",
+      "pipelineId": "ea393a2f-422a-4ea7-adff-41566d1d1879",
       "upsertKey": {
         "pathwayId": "aanp-fnp",
         "slug": "copd-gold-staging-inhaler-selection--np-advanced-batch-01",
@@ -270,11 +270,11 @@
         "status": "PUBLISHED",
         "sortOrder": 1003,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "3d6a0960-bd4a-48e1-b8a8-08db795b9c08",
+      "pipelineId": "50439970-5d88-4dad-a7c9-b403a484fe30",
       "upsertKey": {
         "pathwayId": "aanp-fnp",
         "slug": "headache-differential-red-flags--np-advanced-batch-01",
@@ -328,11 +328,11 @@
         "status": "PUBLISHED",
         "sortOrder": 1004,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "2288e6ee-af7f-4a91-9d77-bc0e23774676",
+      "pipelineId": "d9687d75-bdcc-4f57-be52-86ec7eb48b91",
       "upsertKey": {
         "pathwayId": "aanp-fnp",
         "slug": "syncope-differential-vasovagal-cardiac-neuro--np-advanced-batch-01",
@@ -392,11 +392,11 @@
         "status": "PUBLISHED",
         "sortOrder": 1005,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "823d0601-3673-4a00-8493-46ae02e945f4",
+      "pipelineId": "78c99f25-436b-43fd-9fd7-90c1b29e0724",
       "upsertKey": {
         "pathwayId": "aanp-fnp",
         "slug": "hypertension-red-flags-referral--np-advanced-batch-01",
@@ -456,11 +456,11 @@
         "status": "PUBLISHED",
         "sortOrder": 1006,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "39fde552-fcd7-42bd-a7b5-842842db142e",
+      "pipelineId": "91bd9898-0ac6-498b-89e6-f2676605c63e",
       "upsertKey": {
         "pathwayId": "aanp-fnp",
         "slug": "cancer-red-flags-primary-care--np-advanced-batch-01",
@@ -520,11 +520,11 @@
         "status": "PUBLISHED",
         "sortOrder": 1007,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "2479af9c-f60d-4499-bfb3-00dab6cf0169",
+      "pipelineId": "ba5242ff-c0c7-4906-8284-b0fe6bcb3ebc",
       "upsertKey": {
         "pathwayId": "aanp-fnp",
         "slug": "prep-hiv-prevention-prescribing-monitoring--np-advanced-batch-01",
@@ -584,11 +584,11 @@
         "status": "PUBLISHED",
         "sortOrder": 1008,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "cc30f8b2-db85-47b2-add9-976914d75287",
+      "pipelineId": "5d13e0c1-7e1f-43a5-9baa-8bc13327831c",
       "upsertKey": {
         "pathwayId": "aanp-fnp",
         "slug": "geriatric-assessment-falls-polypharmacy-frailty--np-advanced-batch-01",
@@ -648,11 +648,11 @@
         "status": "PUBLISHED",
         "sortOrder": 1009,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "ea9fa75f-d048-46c4-a79f-8a5e2f583978",
+      "pipelineId": "c109a0b2-65ef-4ee2-a4ae-eaeb8202271d",
       "upsertKey": {
         "pathwayId": "aanp-fnp",
         "slug": "deprescribing-beers-criteria-older-adults--np-advanced-batch-01",
@@ -712,11 +712,11 @@
         "status": "PUBLISHED",
         "sortOrder": 1010,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "ad4be7f3-3292-40fa-ae15-641fceb7f0fb",
+      "pipelineId": "36c41f95-d059-44e4-9043-93784da2d912",
       "upsertKey": {
         "pathwayId": "aanp-fnp",
         "slug": "psoriasis-atopic-dermatitis-stepwise-biologic--np-advanced-batch-01",
@@ -776,11 +776,11 @@
         "status": "PUBLISHED",
         "sortOrder": 1011,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "79c8b9d1-0f04-4d25-b9fb-3cbed7304799",
+      "pipelineId": "8eec87d0-1dc7-46c4-b9b9-b7b304d14867",
       "upsertKey": {
         "pathwayId": "aanp-fnp",
         "slug": "smoking-cessation-pharmacotherapy-counseling--np-advanced-batch-01",
@@ -840,11 +840,11 @@
         "status": "PUBLISHED",
         "sortOrder": 1012,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "0ee47f5c-41a3-43f9-8cab-0c254056f22a",
+      "pipelineId": "e76903ea-4c6d-4849-9a4e-ece4989b9843",
       "upsertKey": {
         "pathwayId": "aanp-fnp",
         "slug": "knee-pain-differential-lesson-01--np-advanced-batch-02",
@@ -910,11 +910,11 @@
         "status": "PUBLISHED",
         "sortOrder": 1013,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "bd0acc3e-c5fa-467d-97af-1337e09e60b8",
+      "pipelineId": "c5b8c621-bcbe-4b15-a4f3-a7f6208baa13",
       "upsertKey": {
         "pathwayId": "aanp-fnp",
         "slug": "uti-uncomplicated-complicated-stewardship-lesson-01--np-advanced-batch-02",
@@ -980,11 +980,11 @@
         "status": "PUBLISHED",
         "sortOrder": 1014,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "5d1464a6-f63a-449d-b69e-8915f317ec1a",
+      "pipelineId": "764bf6fc-c47f-450a-975b-22e1803eb4c1",
       "upsertKey": {
         "pathwayId": "aanp-fnp",
         "slug": "t2dm-intensification-beyond-metformin-lesson-01--np-advanced-batch-02",
@@ -1050,11 +1050,11 @@
         "status": "PUBLISHED",
         "sortOrder": 1015,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "2958535a-6807-49bc-919b-1ffd270261f3",
+      "pipelineId": "51df9705-a86b-4954-bcdf-722e0f384b80",
       "upsertKey": {
         "pathwayId": "aanp-fnp",
         "slug": "copd-gold-staging-inhaler-selection-lesson-01--np-advanced-batch-02",
@@ -1120,11 +1120,11 @@
         "status": "PUBLISHED",
         "sortOrder": 1016,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "7248143b-f19f-4718-bc7a-4d6d26ea2cd1",
+      "pipelineId": "1c8d5072-4c71-4e49-9610-ed6b24738702",
       "upsertKey": {
         "pathwayId": "aanp-fnp",
         "slug": "headache-differential-red-flags-lesson-01--np-advanced-batch-02",
@@ -1184,11 +1184,11 @@
         "status": "PUBLISHED",
         "sortOrder": 1017,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "347eb437-7ca1-47f3-960b-f9ed599f1f54",
+      "pipelineId": "ca1c0ddc-826c-47a0-a87f-ad8beaacf315",
       "upsertKey": {
         "pathwayId": "aanp-fnp",
         "slug": "syncope-differential-vasovagal-cardiac-neuro-lesson-01--np-advanced-batch-02",
@@ -1254,11 +1254,11 @@
         "status": "PUBLISHED",
         "sortOrder": 1018,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "5666b464-f3a5-45d3-b9fc-ea6277542a86",
+      "pipelineId": "738c21c4-ab89-4dea-a07b-6ea142e5d44e",
       "upsertKey": {
         "pathwayId": "aanp-fnp",
         "slug": "hypertension-red-flags-referral-lesson-01--np-advanced-batch-02",
@@ -1324,11 +1324,11 @@
         "status": "PUBLISHED",
         "sortOrder": 1019,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "b16f5ee6-c2f7-41db-b94e-db8632f485c8",
+      "pipelineId": "6365c92b-4c96-45c9-a2dd-74e8ef354cb2",
       "upsertKey": {
         "pathwayId": "aanp-fnp",
         "slug": "cancer-red-flags-primary-care-lesson-01--np-advanced-batch-02",
@@ -1388,11 +1388,11 @@
         "status": "PUBLISHED",
         "sortOrder": 1020,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "85e10e2e-e86b-4175-ad94-05f85a5e52db",
+      "pipelineId": "4dfb7355-f693-47fb-b2b0-bbb560495e11",
       "upsertKey": {
         "pathwayId": "aanp-fnp",
         "slug": "prep-hiv-prevention-prescribing-monitoring-lesson-01--np-advanced-batch-02",
@@ -1458,11 +1458,11 @@
         "status": "PUBLISHED",
         "sortOrder": 1021,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "616358b9-4558-4d72-a029-817912ec0c7a",
+      "pipelineId": "ebd8c2f0-3912-4e46-a7ae-0acb8cfc19ad",
       "upsertKey": {
         "pathwayId": "aanp-fnp",
         "slug": "geriatric-assessment-falls-polypharmacy-frailty-lesson-01--np-advanced-batch-02",
@@ -1528,11 +1528,11 @@
         "status": "PUBLISHED",
         "sortOrder": 1022,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "c449594a-cb41-46ef-934b-5c417a9c0394",
+      "pipelineId": "2f70340b-5c77-42d9-a5ba-e8378f5aa4e3",
       "upsertKey": {
         "pathwayId": "aanp-fnp",
         "slug": "deprescribing-beers-criteria-older-adults-lesson-01--np-advanced-batch-02",
@@ -1592,11 +1592,11 @@
         "status": "PUBLISHED",
         "sortOrder": 1023,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "eb9e1c80-c2dd-4f08-a102-7528c3e23fea",
+      "pipelineId": "ccf652f5-7a7f-44d5-9bb2-34f215ef20cd",
       "upsertKey": {
         "pathwayId": "aanp-fnp",
         "slug": "psoriasis-atopic-dermatitis-stepwise-biologic-lesson-01--np-advanced-batch-02",
@@ -1650,11 +1650,11 @@
         "status": "PUBLISHED",
         "sortOrder": 1024,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "e685fd50-f19a-4095-a5da-404cfeb14da5",
+      "pipelineId": "d1115b51-2a78-41b9-94ea-9a408d3b2ede",
       "upsertKey": {
         "pathwayId": "aanp-fnp",
         "slug": "smoking-cessation-pharmacotherapy-counseling-lesson-01--np-advanced-batch-02",
@@ -1714,13 +1714,13 @@
         "status": "PUBLISHED",
         "sortOrder": 1025,
         "locale": "en",
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     }
   ],
   "examQuestionUpserts": [
     {
-      "pipelineId": "a7b8c5d4-f477-462c-bad7-2158e90237ef",
+      "pipelineId": "7335973b-3c29-4342-9c32-6f3e9f6d7d46",
       "upsertKey": {
         "stemHash": "2e233c003276bab1a66c4bb5914bab3b"
       },
@@ -1767,13 +1767,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "848a18a9-4fb1-498c-83a0-322a32789fd4",
+      "pipelineId": "5296aa88-2e89-46d4-88d1-fec374422364",
       "upsertKey": {
         "stemHash": "364ac318321b470b75e6a4d1cb68b5eb"
       },
@@ -1820,13 +1820,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "2a9979e5-fdd0-4c59-a0c5-43ff8dbfd6e3",
+      "pipelineId": "bdb9c35c-82d4-47bc-8faf-96e4448cc6aa",
       "upsertKey": {
         "stemHash": "180abff0024a72e4403b0bbe573ca369"
       },
@@ -1873,13 +1873,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "3122ea84-dd09-4832-8696-cb346d6f8978",
+      "pipelineId": "eb8f1e77-3d35-4f65-be5d-6b9112232391",
       "upsertKey": {
         "stemHash": "429ebfdb413ac1c07b4c7e03306ecaa2"
       },
@@ -1926,13 +1926,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "1795bc58-0efe-44ac-800e-c24090bd64bc",
+      "pipelineId": "ca99d14a-1b1c-4d04-84c3-a95b9571ae1a",
       "upsertKey": {
         "stemHash": "b7d251466cf8ed9f4b4066e6364a1bc9"
       },
@@ -1979,13 +1979,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "0d8800ac-a942-4b96-891c-e7487a81cdfb",
+      "pipelineId": "bbe09e8b-d892-41fe-a981-ca33488d5057",
       "upsertKey": {
         "stemHash": "1d2108851f6f23cf6e82f673ec557890"
       },
@@ -2032,13 +2032,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "55cb2dc9-6e54-4322-bf88-ac5b4b51ba29",
+      "pipelineId": "68ffa7b0-43e0-4baf-b1c3-52b9158bf3e0",
       "upsertKey": {
         "stemHash": "9a2400c57cebdb1b3462a1206330591c"
       },
@@ -2085,13 +2085,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "0162f2f4-f51d-4fe4-8c79-e1aeae2dd340",
+      "pipelineId": "8fa7ec02-fdaa-4bc1-b92a-a69a282d12ab",
       "upsertKey": {
         "stemHash": "6ed11e2e0ae799cd5d38c04bb49a4e73"
       },
@@ -2138,13 +2138,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "4469c472-64fd-469e-8181-fc6094219516",
+      "pipelineId": "49596f66-d2dc-47ea-911d-50b258f3e160",
       "upsertKey": {
         "stemHash": "588e1e666ed0c5d2a3d492bdcb996c88"
       },
@@ -2191,13 +2191,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "97ecc781-d0ac-4acc-83f4-9b0b5c70a2d5",
+      "pipelineId": "7499c139-ab94-4018-8cb2-faed3fecbb9f",
       "upsertKey": {
         "stemHash": "a37dc89a87ef0066d974ee53a2b04711"
       },
@@ -2244,13 +2244,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "c518654b-c8ba-443a-8b1c-f2fa993a6517",
+      "pipelineId": "b6dc4686-594a-4cf5-b4fc-25441135ffec",
       "upsertKey": {
         "stemHash": "9aa10d9bd96e6077b1d5bf6737aeb52f"
       },
@@ -2297,13 +2297,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "c6ff46b4-1a29-4eb8-a9e9-fb0843ee0e1f",
+      "pipelineId": "eb1ea9d9-04f6-49a0-879e-bb21fde55cf0",
       "upsertKey": {
         "stemHash": "b2c786e154ece67043def93fe62e43fc"
       },
@@ -2350,13 +2350,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "91417a24-1be1-49ba-a3a8-86a4d7db7a56",
+      "pipelineId": "c87b6aa0-96f0-415e-b4ce-0dcc87728d6e",
       "upsertKey": {
         "stemHash": "5f729eb1fd4dbf22ccf76c7a40275be2"
       },
@@ -2403,13 +2403,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "e8776578-7136-4383-9c66-fe843873f5f2",
+      "pipelineId": "469e08f5-9753-4d83-826d-1f678f7218b7",
       "upsertKey": {
         "stemHash": "42fce35b08f45dc9a2bc07dad82bcc6d"
       },
@@ -2456,13 +2456,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "895f8552-d7ac-4b18-8d9f-031caadaed8e",
+      "pipelineId": "2ed8123c-4a23-44b8-865d-864e6e17bd8e",
       "upsertKey": {
         "stemHash": "e79251ef41eacc0f921ef7cfdc753899"
       },
@@ -2509,13 +2509,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "79dc7c64-6408-4f3e-9c67-4f91ffb70d57",
+      "pipelineId": "ef07e288-911c-40fc-9f8b-96d2d28b4633",
       "upsertKey": {
         "stemHash": "1947b5b64641e772315d07bdad33b88e"
       },
@@ -2562,13 +2562,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "401c2bbf-3f34-417f-84eb-18f37af9ebb6",
+      "pipelineId": "309e6de0-2a29-497e-b35b-ca3d2a260a11",
       "upsertKey": {
         "stemHash": "805e40639eae309faed9209410482a58"
       },
@@ -2615,13 +2615,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "367a8437-00b7-4fd5-a9cb-6f8a3673cb19",
+      "pipelineId": "d620dcf8-a00c-4f9d-96d0-d2f332d0bfb0",
       "upsertKey": {
         "stemHash": "527b286d307a0f0ab548a6471d57f969"
       },
@@ -2668,13 +2668,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "1d0a4e87-837c-431c-95bb-d841000ed5a3",
+      "pipelineId": "088afc53-2668-4ce6-9480-c5fe1bd9018e",
       "upsertKey": {
         "stemHash": "9fe63d1fe9af29eea3d5b83567f69e79"
       },
@@ -2721,13 +2721,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "76cde662-a9af-461d-8f47-ebbd7ebbd79a",
+      "pipelineId": "f2c54ae4-f4b9-49cd-be4e-0d48dfd84009",
       "upsertKey": {
         "stemHash": "69a1596a0b7a8ce766c3df4bd60351c0"
       },
@@ -2774,13 +2774,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "a6620c88-4f69-44a7-bf0c-993de0c10345",
+      "pipelineId": "6436703d-79a3-4ce9-adb5-292a7d1bfd12",
       "upsertKey": {
         "stemHash": "89690f73a3e4062787747d6f4750feef"
       },
@@ -2827,13 +2827,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "12e5e11f-1968-4353-b667-c0cab285393a",
+      "pipelineId": "e537d79a-8ed7-4328-b04f-94a4406d4833",
       "upsertKey": {
         "stemHash": "9d2143b6e62b9b12b2683355fd4d0493"
       },
@@ -2880,13 +2880,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "a8e8559a-9937-4fd3-814c-803617cdd022",
+      "pipelineId": "f803d4b0-3edf-4a7b-aee4-860365a93fef",
       "upsertKey": {
         "stemHash": "e60036276275a23880c363335a4369f7"
       },
@@ -2933,13 +2933,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "c91c9803-b7b0-40f6-abca-5b03023a9797",
+      "pipelineId": "11fc4bfd-fce6-445c-88f2-8b83c680deca",
       "upsertKey": {
         "stemHash": "8193ee3da21ef9146318b1faa37747a8"
       },
@@ -2986,13 +2986,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "37bc7b6c-20df-4a0d-bfe2-8bcf72e8eee2",
+      "pipelineId": "10ded963-7adb-4386-b325-dca17005c2a2",
       "upsertKey": {
         "stemHash": "4ad451bf9176faba8d965595190c9672"
       },
@@ -3039,13 +3039,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "384d1fec-8042-4b9a-a74e-975e97a08fcf",
+      "pipelineId": "6634b3c8-2525-4bb6-8b09-bf10ea4f0dfb",
       "upsertKey": {
         "stemHash": "17c5ce7f316145dc805c66ddc26a983e"
       },
@@ -3092,13 +3092,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "edaa37da-bdd3-47a5-943a-cb22edbbe68b",
+      "pipelineId": "2286bf30-3606-4ba1-aa2f-10862e4a563c",
       "upsertKey": {
         "stemHash": "27f1b7a96c0769ba4aa90dbfad7a9394"
       },
@@ -3145,13 +3145,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "75432800-0711-4802-acdc-c730640cd134",
+      "pipelineId": "6dc10630-6237-441d-99fa-d76ddaedcb89",
       "upsertKey": {
         "stemHash": "c2cfaaa07fdfadd8f3351de2ba665e9e"
       },
@@ -3198,13 +3198,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "1153ed81-dae2-4185-924f-2156203a4b36",
+      "pipelineId": "12b27537-50cd-4cab-934e-cd60f297a506",
       "upsertKey": {
         "stemHash": "ec5fbed012557b901629ca041524851d"
       },
@@ -3251,13 +3251,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "bbc0b7b6-1df3-44ee-aa5d-d1bd3a57d9f3",
+      "pipelineId": "065a94e5-1103-4340-8f33-548977dd4f6f",
       "upsertKey": {
         "stemHash": "0ac6b34253ad04e92ad6a00462fb4cbe"
       },
@@ -3304,13 +3304,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "287546b0-aab2-44fa-ba0f-bea4e5934301",
+      "pipelineId": "9ba86f30-569b-4a1e-a574-8f280464742b",
       "upsertKey": {
         "stemHash": "f3d529913cf3350c7fcb06c23f342edf"
       },
@@ -3357,13 +3357,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "b62c1287-b176-45fb-81c3-89c545b8391d",
+      "pipelineId": "a902c7f1-3720-419d-9e31-1e54ee0c01c2",
       "upsertKey": {
         "stemHash": "1bc8b79abbac608abe79a64b73469844"
       },
@@ -3410,13 +3410,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "b519a4b3-7169-42a3-b7e2-a101dd48c138",
+      "pipelineId": "28c80525-5063-4f55-aaf0-6e785adbdf2c",
       "upsertKey": {
         "stemHash": "c0c5b952176aa8a5b75bb375d83c19aa"
       },
@@ -3464,13 +3464,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "0f1cf43c-c258-408c-be3d-fcfb27ded1bf",
+      "pipelineId": "4fe7a531-e588-4446-b2eb-2841e63a6149",
       "upsertKey": {
         "stemHash": "2214ccaf5d38c7ffb7f0fb382b1df44c"
       },
@@ -3517,13 +3517,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "4ecf32d0-3cc3-4844-8b7a-0f4a004b5d4b",
+      "pipelineId": "b6ab65b0-e675-493a-8a3b-361f80b4af50",
       "upsertKey": {
         "stemHash": "b00c6dc4e73bae8c8de2c204eed0a2e3"
       },
@@ -3570,13 +3570,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "f49282d1-54dc-487a-a122-a6ece507dd34",
+      "pipelineId": "b8dfd247-bb28-4605-8a96-1309ae668bb5",
       "upsertKey": {
         "stemHash": "4d75befbc3fdc8a9493ff3f8f550add6"
       },
@@ -3623,13 +3623,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "c97713fa-b913-4af7-8191-cded59e52f15",
+      "pipelineId": "b8cf3a54-6af5-4873-834a-1242907b8503",
       "upsertKey": {
         "stemHash": "802d4891af9a62c1aebd08539a020e59"
       },
@@ -3676,13 +3676,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "850bf829-2ce2-42c2-ba57-9a16d362be82",
+      "pipelineId": "a7a88d32-a7bd-461a-9bc7-44e9a9138d8b",
       "upsertKey": {
         "stemHash": "75887cac724ff2394eb558c21e6fcc8d"
       },
@@ -3729,13 +3729,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "b54ac405-92ed-49aa-affa-b72470657ae5",
+      "pipelineId": "b73de447-28c7-4672-93bf-c58de092e0f4",
       "upsertKey": {
         "stemHash": "2ac9a71b4349f2a1bc1cc737ac0b559d"
       },
@@ -3782,13 +3782,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "48ce7043-3b02-4848-b8e2-a9eba9135610",
+      "pipelineId": "610213ce-859c-4da2-aab3-c92b912085ed",
       "upsertKey": {
         "stemHash": "0b65c35e3e8015cfa95e9d36631ada03"
       },
@@ -3835,13 +3835,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "524ea1a7-9f19-42c0-a3ab-96d5b0bb0317",
+      "pipelineId": "ec6e50ff-0e6b-431d-bc2f-3ce1c5657677",
       "upsertKey": {
         "stemHash": "89e42d29fa2fb11c2a1ae1c3f314877f"
       },
@@ -3888,13 +3888,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "fe7e4cd8-783d-438a-af94-f9fdf5a79434",
+      "pipelineId": "09a144a4-edb6-404e-914e-5831f6150f59",
       "upsertKey": {
         "stemHash": "b4495502d2845a842f10c99d32286a4b"
       },
@@ -3941,13 +3941,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "09df4405-4b83-453a-918b-8ba43eab8636",
+      "pipelineId": "41f1e59c-d7e9-4e8d-92de-6df9c1d981c6",
       "upsertKey": {
         "stemHash": "fbf7de0a2d440ae818d5fa4569028ed1"
       },
@@ -3994,13 +3994,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "3636569e-396d-4fcf-a48b-88332400aac5",
+      "pipelineId": "e12211c8-a6b6-41cb-8870-cee3d45abf0d",
       "upsertKey": {
         "stemHash": "2c2c1f395b45c74a9afb3baabd78315a"
       },
@@ -4047,13 +4047,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "a6a78507-a3af-4f41-8f6e-9e309bb96041",
+      "pipelineId": "95634127-a64d-4104-907e-b3699dfde2c4",
       "upsertKey": {
         "stemHash": "08a193a22f6de15258f3293292da5ca7"
       },
@@ -4100,13 +4100,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "c02f034f-7d3f-4168-9e3e-b0a60f5f5801",
+      "pipelineId": "6fa7104c-2d2b-4c1d-84f2-3b8879d57278",
       "upsertKey": {
         "stemHash": "7f4c03b3c25c3e36c948e3c8cc54ee1a"
       },
@@ -4153,13 +4153,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "6bb30865-3bff-4d4f-af23-920cc6c8d1e5",
+      "pipelineId": "a07fdee7-bd87-4bfa-92d2-5cacae23b196",
       "upsertKey": {
         "stemHash": "e6d7dabea7e70b079061926b76558151"
       },
@@ -4206,13 +4206,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "ea9be39f-ae8a-493e-a62c-c4fbd3b7c9be",
+      "pipelineId": "0dd81150-473f-4515-99f3-088c90670a0c",
       "upsertKey": {
         "stemHash": "a969d0c217223f0162934916f785fe97"
       },
@@ -4259,13 +4259,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "b61d7152-08b5-4417-9517-3e08edeb5768",
+      "pipelineId": "7f28bf79-9a66-42b3-861f-387111fe0e88",
       "upsertKey": {
         "stemHash": "45d6f6ce44a2c4230de331fd395b9ddc"
       },
@@ -4312,13 +4312,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "c9e13585-f09c-4d87-b5fb-e80ceb2242a9",
+      "pipelineId": "121d1969-221a-4edf-9143-284c4eea575f",
       "upsertKey": {
         "stemHash": "99406c8e7037c4b2c51e776547eb6a11"
       },
@@ -4365,13 +4365,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "76df65d8-196d-4c95-94dd-b346fa64caa3",
+      "pipelineId": "7ebf6e32-bea1-488c-98cc-a61efe01b218",
       "upsertKey": {
         "stemHash": "9cb2b54b9f4c9e7b0cdc1417c8f31943"
       },
@@ -4418,13 +4418,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "e9ee93da-7d00-48d9-936c-aa3ee560a99a",
+      "pipelineId": "7aa002c5-839b-403a-8802-4ed1f36a9738",
       "upsertKey": {
         "stemHash": "66583336798ecd8aba7ae56add0d412d"
       },
@@ -4471,13 +4471,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "29c1d542-6bec-4124-b727-f013fd9648fa",
+      "pipelineId": "b1abc73a-391d-4efa-a562-9b8a0d4196ec",
       "upsertKey": {
         "stemHash": "66e7c3d40443e8ab39583ad85cde363f"
       },
@@ -4524,13 +4524,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "f54edda3-b12b-4c62-9fd0-c5b1b9c522f1",
+      "pipelineId": "e716c96a-11a8-4ab3-a569-9a1b991e21bf",
       "upsertKey": {
         "stemHash": "e72de72dbf967a10bb340725b415c548"
       },
@@ -4577,13 +4577,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "37b4906f-2dcd-486e-81ac-2ae45c06f6cf",
+      "pipelineId": "30538e90-f6b2-45a0-9d40-7e04d87933d4",
       "upsertKey": {
         "stemHash": "785a8dae73ca28784ff9a85a8dd48ddc"
       },
@@ -4630,13 +4630,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "3c19dab6-db0b-401a-b585-bda43dfcc507",
+      "pipelineId": "6350710f-984a-4625-8739-389524a0f757",
       "upsertKey": {
         "stemHash": "9f5a5c0af8b4077a9231a3b69d5d53b4"
       },
@@ -4683,13 +4683,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "bef130da-3cf6-46a2-9588-ffa5e922cb46",
+      "pipelineId": "5acd3d80-5ff5-4310-b5c8-c543b7488d3c",
       "upsertKey": {
         "stemHash": "d56a97edf158b77ab4b0e9df6061d002"
       },
@@ -4736,13 +4736,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "979f2b55-be58-4ea0-a0a8-2e56ecfc2bf5",
+      "pipelineId": "e710e5be-8452-4d8b-af84-bd21cc6b5598",
       "upsertKey": {
         "stemHash": "1ac8539104564c2aa2d4ecc7acf241e3"
       },
@@ -4789,13 +4789,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "044917a7-c338-4da6-a0a8-71560d969c8b",
+      "pipelineId": "d03fed66-a82b-441b-af52-fd2fbed71166",
       "upsertKey": {
         "stemHash": "b4b042d4cfdf2c30be6cd0e771cdfdc4"
       },
@@ -4842,13 +4842,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "5c1d95ac-8235-44d1-b0d0-fa8feea7aee8",
+      "pipelineId": "83732df8-e057-46d1-9ff2-6ccb59aea1db",
       "upsertKey": {
         "stemHash": "a89efd3092f5957f06ff87abe8462796"
       },
@@ -4895,13 +4895,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "4510381b-3528-4543-935c-18158ed66592",
+      "pipelineId": "2b23178a-effc-4e26-81de-52319fd289ed",
       "upsertKey": {
         "stemHash": "f59c16873af554d57cdf135532ae2207"
       },
@@ -4948,13 +4948,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "7760e8c8-e94b-4c9f-9a62-dd9ae0dea617",
+      "pipelineId": "3664a02c-3538-43bf-b331-8f3d12fb1a11",
       "upsertKey": {
         "stemHash": "b80e8152314d747de072c7f1d2982f9f"
       },
@@ -5001,13 +5001,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "43699179-ad4c-42cf-8759-dc9b7d213b9d",
+      "pipelineId": "8d7d64b0-a26e-4f18-a8bb-f125ade6daa9",
       "upsertKey": {
         "stemHash": "4c824f456d15bf70d16a301deedfcb34"
       },
@@ -5054,13 +5054,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "ec8eb5a2-4f8d-4ef7-9c00-6e9c2c73cb9a",
+      "pipelineId": "f21c5156-83c7-4814-9d1f-e557a8131db6",
       "upsertKey": {
         "stemHash": "f67cfe6c122bc74eb755d19842a06e4d"
       },
@@ -5107,13 +5107,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "8b661703-1b97-4ced-82bc-c4b367410855",
+      "pipelineId": "1de45aed-03df-40bb-86fa-d8d190c3c7df",
       "upsertKey": {
         "stemHash": "ffb34f30859574c67c06e11295ac23a8"
       },
@@ -5160,13 +5160,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "21f555be-14ab-4540-af40-4b2efa9d101d",
+      "pipelineId": "9fae521a-3e22-48c0-80ca-53757426e060",
       "upsertKey": {
         "stemHash": "36874a1e8e4140bb4d2cc4145371e7f1"
       },
@@ -5213,13 +5213,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "986dcbfb-44a2-4ee2-a3a9-0f7a2c622934",
+      "pipelineId": "357e8b64-2075-4a48-bfdb-3507e4a3f8c9",
       "upsertKey": {
         "stemHash": "32d98c19166f2b956bbf8a02fb7cde21"
       },
@@ -5266,13 +5266,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "bc0f2c02-1a32-4f9a-9484-b8e2b7ab7b7c",
+      "pipelineId": "a0a41757-7a64-4b1e-b5b5-3b71d46344bc",
       "upsertKey": {
         "stemHash": "184720d497221bfea8269a68c0fa342c"
       },
@@ -5319,13 +5319,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "060bb45c-56d7-4cf5-918f-0c3bf16f3a96",
+      "pipelineId": "facf1025-1177-4548-ba97-a42ce91d80fd",
       "upsertKey": {
         "stemHash": "803c81d6f3f20a3c527bd4e06c46a2ef"
       },
@@ -5372,13 +5372,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "919e9f32-3b38-4272-beb8-5555e50f7a80",
+      "pipelineId": "e0ca2809-6445-49ad-a6b0-30d463a801c6",
       "upsertKey": {
         "stemHash": "b110641b874ef634b12d5b38f67b9d09"
       },
@@ -5425,13 +5425,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "5e089c10-1e31-4f55-bc29-11732a38c315",
+      "pipelineId": "9a7b6b49-ee8a-4043-a38f-b8c0515bb517",
       "upsertKey": {
         "stemHash": "5d371adb02351ceeb5e244dbc768d013"
       },
@@ -5478,13 +5478,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "3350366a-4ec0-4171-972e-9157f06f1676",
+      "pipelineId": "2794ad6f-2564-4223-a982-efa399dcd1c0",
       "upsertKey": {
         "stemHash": "4c45176f818cf92962aa328b78927e0e"
       },
@@ -5531,13 +5531,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "696f41c7-5d81-40f6-9663-1e1e2d094ab1",
+      "pipelineId": "ff495e54-64fd-4b99-a79e-e857d4fe26b9",
       "upsertKey": {
         "stemHash": "47423eba2db6fd1fef000d38ea8bb9b9"
       },
@@ -5584,13 +5584,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "aaba1176-e3df-49c3-8c77-9e4bc4247ba1",
+      "pipelineId": "247ab6b1-4071-4b12-ad84-916345dd02c2",
       "upsertKey": {
         "stemHash": "8057aa2d9330c1e767705444895bc7c6"
       },
@@ -5637,13 +5637,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "a6bcbc02-8cfa-444e-b42b-9f4f971a5ab6",
+      "pipelineId": "01f3106f-0aa0-40b6-ad86-206b42fb9616",
       "upsertKey": {
         "stemHash": "faefbfbf466feea7b8566f0b52cee8fb"
       },
@@ -5690,13 +5690,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "dc8b82c7-78bb-4e24-a934-198f69303a40",
+      "pipelineId": "e1c3cb15-045f-41db-94f3-5c4052b9a3b3",
       "upsertKey": {
         "stemHash": "481fb40a04800a0768164419a5d5dd18"
       },
@@ -5743,13 +5743,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "8fb135f7-5134-40e2-8036-0257df067ccd",
+      "pipelineId": "54b49215-2c04-41b5-911b-fe2173601998",
       "upsertKey": {
         "stemHash": "01ca22cbd058abf3a2be06d51ffb0026"
       },
@@ -5796,13 +5796,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "9d29b7bd-84a4-4462-901e-dc0477b375ef",
+      "pipelineId": "560386ca-4c37-4b74-ab04-89d2587b1e1a",
       "upsertKey": {
         "stemHash": "9c761f5a1eeafd9d482faa8fcb45725d"
       },
@@ -5849,13 +5849,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "75ff2f1f-2c88-4087-bcd7-07f94814a3fd",
+      "pipelineId": "65ea1045-9731-4fdb-8e5d-daf748fa4c65",
       "upsertKey": {
         "stemHash": "4839f6f56452e7475fb4c9d8769342a2"
       },
@@ -5902,13 +5902,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "3337ccd6-317b-4ad3-ad7d-e30802d0a18d",
+      "pipelineId": "b52f2e35-626c-41f4-b1bd-e69c6cc1aa97",
       "upsertKey": {
         "stemHash": "b70d3b3def8c1b174df5545705324c2f"
       },
@@ -5955,13 +5955,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "f8ac9944-f379-4e78-ab26-f7c1b584e029",
+      "pipelineId": "d50eaaaf-64c1-4fb3-913b-d19b90e261ce",
       "upsertKey": {
         "stemHash": "545d393cf2e53cecbcbc8f19d683fc97"
       },
@@ -6007,13 +6007,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "e5fc3099-292f-43fa-a7e4-c018d691a32d",
+      "pipelineId": "e386d74c-cb1b-4787-a259-95419ac7bf5b",
       "upsertKey": {
         "stemHash": "6c0e36269b2c49f76ac72ab0493fa38e"
       },
@@ -6059,13 +6059,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "d65be523-0358-4e96-acc4-b66b9db51b34",
+      "pipelineId": "3906daeb-c817-4270-9c04-7ce30bb350de",
       "upsertKey": {
         "stemHash": "f51d31c895e54fa3f83d5a27b2782a9e"
       },
@@ -6113,13 +6113,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "8a6166df-3d26-4516-860f-1c32eddcbf72",
+      "pipelineId": "43b7c756-6bd6-47da-b94d-bbac4e6e039b",
       "upsertKey": {
         "stemHash": "c8f28e90036e1ac845f797aa0ae5d02c"
       },
@@ -6166,13 +6166,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "f1d9e546-76ff-424d-ba30-19633d21c934",
+      "pipelineId": "8da58810-a0df-4154-9cb0-68f765c80b8f",
       "upsertKey": {
         "stemHash": "b98293aef4941532b07898e03e294e90"
       },
@@ -6219,13 +6219,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "c0b4a262-cf26-4b0f-9aaa-c9539a7cc251",
+      "pipelineId": "879b48e6-a5e7-4c94-8040-f47126ee127e",
       "upsertKey": {
         "stemHash": "f90d39bf827a18d7c0b403f75adb246c"
       },
@@ -6272,13 +6272,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "8f559b43-722f-407f-a39f-cc5fcf2d74d6",
+      "pipelineId": "7af8758b-b54e-40ac-a255-f3abad2ce932",
       "upsertKey": {
         "stemHash": "6b756a1ecf9fe1455c9dd9e07d695d01"
       },
@@ -6324,13 +6324,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "6b0e9cc8-3c86-4faf-b8e5-8bac9ec6eeed",
+      "pipelineId": "f54f2c75-d44e-4534-a760-f80fa5f9d577",
       "upsertKey": {
         "stemHash": "12f85c02843cd48479b0262a26be4b07"
       },
@@ -6376,13 +6376,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "712dc420-f17b-4310-aaaf-5ef530e07f94",
+      "pipelineId": "e270987b-d82a-4206-a1a7-956bbc70a781",
       "upsertKey": {
         "stemHash": "af26218408b02cf8df1b22ea78c74098"
       },
@@ -6430,13 +6430,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "ebedb4da-b28e-41be-a72b-fa61bc010eea",
+      "pipelineId": "805031c6-cd1d-481f-bb6c-1923679a9034",
       "upsertKey": {
         "stemHash": "cd3cd599b83488a9fc2498662c70a70c"
       },
@@ -6484,13 +6484,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "46c7eab1-9d06-4904-9380-3b2177bb1980",
+      "pipelineId": "59fcb1db-1713-4354-91bd-89ebc3b59655",
       "upsertKey": {
         "stemHash": "900d7cadae84a9dce9a78bb2b79c49ff"
       },
@@ -6537,13 +6537,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "5fd18656-e6a9-41a7-8d9a-b73650131018",
+      "pipelineId": "da7cd031-af84-462f-bb0b-395506d8f372",
       "upsertKey": {
         "stemHash": "d7f875d2aa98174a77969dedda3c51e8"
       },
@@ -6591,13 +6591,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "58cccc85-d342-4f3c-bb74-7a800f1608b8",
+      "pipelineId": "77664385-6a20-429c-86f5-fe256dd31180",
       "upsertKey": {
         "stemHash": "7597ccda50397ba35edf47fcb765b45f"
       },
@@ -6643,13 +6643,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "0d26f343-7b50-4531-b701-21a8d85bf116",
+      "pipelineId": "27c85367-72a0-4786-a296-690e260de375",
       "upsertKey": {
         "stemHash": "fb841133226206f3b345ad6b38eb564e"
       },
@@ -6697,13 +6697,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "0f843ff8-ff4c-4ea1-9298-e3b1b89c0084",
+      "pipelineId": "8edb1744-18a5-40ab-8d1b-295c09654985",
       "upsertKey": {
         "stemHash": "a5d428d62a182f50b33dc6344c83306f"
       },
@@ -6752,13 +6752,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "2fde0464-392d-444b-9ab4-05f7c8c7a0c4",
+      "pipelineId": "1f492f13-bdb9-48a0-8f1b-d58e284bfa88",
       "upsertKey": {
         "stemHash": "cb9633f46ed49bfc8c34f78ab85d039f"
       },
@@ -6805,13 +6805,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "7800edbd-ea96-487a-b2ea-7214c02a1a8b",
+      "pipelineId": "aaa81add-902e-43bf-bf29-0d0f0a811524",
       "upsertKey": {
         "stemHash": "6ac842b1e7b2ff731acaea81b126f635"
       },
@@ -6860,13 +6860,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "704ba223-0c8c-4d2b-9236-1c9b1f0482a1",
+      "pipelineId": "25b818f9-1ef2-4d9a-9841-98a1fd513095",
       "upsertKey": {
         "stemHash": "5b0e03b07e33eb712064f2f9ca782705"
       },
@@ -6913,13 +6913,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "5ab3fcc7-e7e0-45bd-9c7e-d00d598aee7e",
+      "pipelineId": "00bb327b-e168-47a0-b19b-135d64a1e7c5",
       "upsertKey": {
         "stemHash": "d925a35b8c9e0c462da71ee95802538e"
       },
@@ -6967,13 +6967,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "2076cd86-c4a1-47e6-8d5e-5d368711973e",
+      "pipelineId": "598a8ea1-4424-4113-ae3b-31895419fb25",
       "upsertKey": {
         "stemHash": "095503d51c489670991f7628ae2acb6d"
       },
@@ -7019,13 +7019,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "d143b54c-9f48-4e8b-9fe8-a2c02c421f61",
+      "pipelineId": "730d2fe7-9ba4-49a4-b89f-01398383aadb",
       "upsertKey": {
         "stemHash": "4ca61b61a55f9e8aff4ed0d0f65b70ad"
       },
@@ -7071,13 +7071,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "9b533346-d461-4af7-8baf-34e2217825d7",
+      "pipelineId": "251525a5-4c1e-4d80-9847-11e06262c6a0",
       "upsertKey": {
         "stemHash": "f44cc006a1748263f2024b7ebcbc10fe"
       },
@@ -7124,13 +7124,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "21be064e-122f-44a7-80b5-b52b3507e5f9",
+      "pipelineId": "e0be7157-8234-4863-bdbf-a566163372c6",
       "upsertKey": {
         "stemHash": "6855a29653dfa506ae396a517d80c84d"
       },
@@ -7177,13 +7177,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "78fd3ca6-0d35-404b-8097-65654857197e",
+      "pipelineId": "30d77ec9-e618-4e27-818a-47137387abe7",
       "upsertKey": {
         "stemHash": "1031ca1d553d2edb2b89f88e39fbcbc7"
       },
@@ -7230,13 +7230,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "018fc7cb-3c7e-41fd-964a-f3f3240e7be9",
+      "pipelineId": "1a135f32-e99d-4d80-b2e2-265e414d8dfc",
       "upsertKey": {
         "stemHash": "4adf589e61abf5c43954587fc32f320d"
       },
@@ -7283,13 +7283,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "39b6e9b8-734c-4dcc-a8ba-495e839bae15",
+      "pipelineId": "b4bb0657-bdc0-40c0-ae17-316f60fb3e5f",
       "upsertKey": {
         "stemHash": "8727021b25f8559931581a8503988d6e"
       },
@@ -7336,13 +7336,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "b595ee64-92c7-4723-aadc-7f5c092b2b10",
+      "pipelineId": "ae2cc584-15a3-48fe-906d-5a751fdf12b6",
       "upsertKey": {
         "stemHash": "0809ddccf93c722aba660dab3b538cfa"
       },
@@ -7389,13 +7389,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "8dba41ed-f420-4e97-aa53-69aa74c10e5f",
+      "pipelineId": "0c2b995e-0d7b-4601-a2c8-43e464707243",
       "upsertKey": {
         "stemHash": "39c5fe1e5d9b8e82fd0815a5b0da3a68"
       },
@@ -7443,13 +7443,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "69f8ad6c-c5ff-46be-8d2d-20280272e273",
+      "pipelineId": "46e9db52-999d-4373-a669-fd57a997bd15",
       "upsertKey": {
         "stemHash": "aeb95895e8fb83e5da528412d7fa20b7"
       },
@@ -7497,13 +7497,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "c9137086-5163-4047-b1ae-690ce694aa79",
+      "pipelineId": "3b44592a-1eea-465e-9c85-3310a95b97da",
       "upsertKey": {
         "stemHash": "424fb7306aef3d7163c470b65896fbc2"
       },
@@ -7550,13 +7550,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "d312e123-ed9f-4266-aa58-5ffc37c40bcc",
+      "pipelineId": "a39405d4-816b-4427-8c49-aa968b7d09a1",
       "upsertKey": {
         "stemHash": "1777a0b8dc6cedb30e3f462c7987ce38"
       },
@@ -7604,13 +7604,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "53ea6ca5-2bb2-45b0-ae7d-c83c98c983f8",
+      "pipelineId": "fcdc79f5-43f2-4999-9d9e-db306b982ccf",
       "upsertKey": {
         "stemHash": "cb23cd6a986c6e7b5a4d7743679e935f"
       },
@@ -7658,13 +7658,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "9bcb333f-b0e5-4433-86b1-131fad8ee47a",
+      "pipelineId": "955fc305-37cb-4b3a-b045-0d7469969369",
       "upsertKey": {
         "stemHash": "4bf8f9eb994b27dc3ece4c944ca6bc55"
       },
@@ -7712,13 +7712,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "ee37493a-344a-45f6-bb1f-9af7c4a1b6d4",
+      "pipelineId": "4d4746e1-53f8-49a4-b15a-6cc07c5ab1f1",
       "upsertKey": {
         "stemHash": "2170f320b594d5a45d0d341c63dc967c"
       },
@@ -7766,13 +7766,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "30aaadf7-6e16-43fa-9ddb-c5928cc45925",
+      "pipelineId": "897396a5-b559-46d6-9e5a-bf4a7a50d9f3",
       "upsertKey": {
         "stemHash": "e0d5680a2f908eb3b741b78ef0c7a68a"
       },
@@ -7819,13 +7819,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "6f5958f4-44e7-43d1-aa54-a697cb20d33c",
+      "pipelineId": "a5260b18-00f0-4953-9262-6a966b0e918c",
       "upsertKey": {
         "stemHash": "83f08b5adedc5a3b658e18b0234d5e48"
       },
@@ -7873,13 +7873,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "caed4db4-e48a-416a-bd45-8be25fcd127c",
+      "pipelineId": "41e9896e-8fed-4e0d-8d30-aa690c517fd8",
       "upsertKey": {
         "stemHash": "7f72f35981ace82e55100b74c24533a8"
       },
@@ -7926,13 +7926,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "376afa5c-c44c-41c2-97bc-471a4c9d9307",
+      "pipelineId": "384d0c7e-3925-4bdc-8d2d-821e89ab6b02",
       "upsertKey": {
         "stemHash": "f1bf1a3bf5c269915514bdf1c73e460a"
       },
@@ -7980,13 +7980,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "5fa01980-5a25-47af-ada6-624ce9d0fe0a",
+      "pipelineId": "1b3ef4fb-0b9d-42eb-b31c-21f9866ab2e4",
       "upsertKey": {
         "stemHash": "3ae7559b826dc0c352e7a53993ba13dd"
       },
@@ -8035,13 +8035,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "ccb2dd58-f965-43ed-8c71-b06077727ae5",
+      "pipelineId": "f12b70e3-b5b7-4202-8922-5579a9a97534",
       "upsertKey": {
         "stemHash": "e786b43aa3577de35790efe9f9bba0bc"
       },
@@ -8088,13 +8088,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "884427bc-5945-4e2a-ab9e-45996ddd2405",
+      "pipelineId": "c0b6f136-95b1-4152-814b-0ee0771ef823",
       "upsertKey": {
         "stemHash": "9f05a22c6fd9b1f50de330d6dfd0f40b"
       },
@@ -8141,13 +8141,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "f52c72ae-177f-4e06-9ccd-72b163f532e5",
+      "pipelineId": "fb26d696-2da6-4a34-b15e-919669447c1c",
       "upsertKey": {
         "stemHash": "8be542fcc822d36a34a9c193429ce376"
       },
@@ -8195,13 +8195,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "9b06343c-890a-4711-9c70-e10c0b7ac771",
+      "pipelineId": "08b267ee-1828-4ae8-8d1d-5439b35555c3",
       "upsertKey": {
         "stemHash": "37b2ed951af745942f275cbbc5b9a66f"
       },
@@ -8249,13 +8249,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "09ff7b87-ee40-4988-a949-97e7f038ad12",
+      "pipelineId": "366a2cca-1e0b-4950-874b-d2f81bfd2ed1",
       "upsertKey": {
         "stemHash": "16dcc267817f8496887a9f3cfdda933e"
       },
@@ -8302,13 +8302,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "d673a9d6-dd77-41a7-89f4-850f565b6675",
+      "pipelineId": "9c3b271e-c2a2-4d12-adb1-6a03521b933e",
       "upsertKey": {
         "stemHash": "ddf250f50a2d9941fdc1b3847743d3e1"
       },
@@ -8356,13 +8356,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "c24cb32b-fa0b-409c-90eb-883046c86664",
+      "pipelineId": "ca62d81b-e794-48ac-af34-0d2fdd21a2b9",
       "upsertKey": {
         "stemHash": "45f5961a53d0b69198d3b9e90dfb91cb"
       },
@@ -8409,13 +8409,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "fc381ab3-b046-4f11-bc57-ef69835f53c1",
+      "pipelineId": "788c59d3-f941-44ed-8901-12b45fb4fb67",
       "upsertKey": {
         "stemHash": "700e068cce189c651bf09fccf4f60f8e"
       },
@@ -8462,13 +8462,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "02fdd521-c390-4a4c-b7f8-aad978589cf7",
+      "pipelineId": "a301480d-7b5c-41bd-815f-8395ef3b5a25",
       "upsertKey": {
         "stemHash": "4feaa812cf5e5083fb124700d2bc089f"
       },
@@ -8516,13 +8516,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "9e7e6732-7260-4e15-8876-70fda41481cd",
+      "pipelineId": "a0b30d7b-4064-4828-b06e-8cde5d7970e9",
       "upsertKey": {
         "stemHash": "07c719325de216fc1f4cf0998b3d74cc"
       },
@@ -8569,13 +8569,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "c6ab0b04-2a0d-400b-b49e-36491d3d1d98",
+      "pipelineId": "97752510-8887-4c7c-bf3a-d46420da3607",
       "upsertKey": {
         "stemHash": "f47873371c541be2d86d09e05bac5926"
       },
@@ -8622,13 +8622,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "6b6e5b61-5857-4693-a075-c2c61325cf29",
+      "pipelineId": "2cc680c0-fdad-44e8-97af-21378a1b2ef2",
       "upsertKey": {
         "stemHash": "4abaa649f2ae699179782dab93a19ae8"
       },
@@ -8675,13 +8675,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "04edc1b1-885f-449c-b30e-90c34e193e11",
+      "pipelineId": "9dcaed0b-7170-45d9-8332-05e8a9533e4a",
       "upsertKey": {
         "stemHash": "a6a8e4de726bb28def4e583f20f6ee3e"
       },
@@ -8729,13 +8729,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "639b0da5-4b2c-4fcb-9f7f-bd3f9b6c9655",
+      "pipelineId": "2b0edfad-d671-4007-9ffe-d5096fdaab67",
       "upsertKey": {
         "stemHash": "b20e47375399d7b16f48b411ea2df041"
       },
@@ -8784,13 +8784,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "bda33425-7787-4722-a3ff-1a58c32ac58f",
+      "pipelineId": "ef78d0ad-5482-4e28-b5cd-ac18640eb685",
       "upsertKey": {
         "stemHash": "5321c9ae0cd0a2b5d9d409a311c79486"
       },
@@ -8839,13 +8839,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "a796281a-7130-46ad-ba56-3d5f9492db1b",
+      "pipelineId": "ed93c8da-2775-4545-b4f1-073c5a8ca7d7",
       "upsertKey": {
         "stemHash": "4e3ee45e1184e6faa89acd95d25c63ee"
       },
@@ -8892,13 +8892,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "01f78387-940a-4f6a-aa37-ec5cde4d51db",
+      "pipelineId": "9c42ac64-3f1d-4d97-b248-0fe5e3eb17e6",
       "upsertKey": {
         "stemHash": "0ae3a3fb7720b2142b27291429016630"
       },
@@ -8945,13 +8945,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "120f6343-deae-4585-a2a5-dae456ea2fec",
+      "pipelineId": "3f685c0d-8a29-4193-9ead-f0b1c7372a3d",
       "upsertKey": {
         "stemHash": "d93bf2de99d504d4cd4f14be28513643"
       },
@@ -8999,13 +8999,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "0dc32085-fbdf-44f9-a08e-b89d26e3635d",
+      "pipelineId": "bbb976cd-778a-4c55-9bb1-fa3b96fa92cd",
       "upsertKey": {
         "stemHash": "72479ca4135987be4c1bee948b1f7ebb"
       },
@@ -9052,13 +9052,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "77d5b226-1eb9-405e-9577-dd6a3169a7ed",
+      "pipelineId": "067aaa18-d90e-487a-a75d-b49ab28a3023",
       "upsertKey": {
         "stemHash": "3dafef40b4c2e411423c803bc892d657"
       },
@@ -9105,13 +9105,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "5870cb2e-fa0c-499b-b24b-8b7970b07508",
+      "pipelineId": "9b060660-14ac-46e1-b9a6-6474307750a7",
       "upsertKey": {
         "stemHash": "33c700815e6903a102d9db2ab765524c"
       },
@@ -9160,13 +9160,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "53cc6f54-e3ec-433c-b861-3d27ab92e4ee",
+      "pipelineId": "04cba8f7-835e-423a-984b-dd6e94faec5c",
       "upsertKey": {
         "stemHash": "52102eda499166a95d614132cae0d143"
       },
@@ -9215,13 +9215,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "b0dbbf5f-1df9-4ae1-8437-5cd2bee7dfe4",
+      "pipelineId": "d9e561ef-99c2-43e6-b1e5-719d9afe56dd",
       "upsertKey": {
         "stemHash": "1ae30e43cc03dd8e4e439291eef525a5"
       },
@@ -9270,13 +9270,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "c4e170f6-b52f-4993-b4ff-491d56b478bf",
+      "pipelineId": "c92c0ef5-db96-4ab7-b09a-a53244e51b4d",
       "upsertKey": {
         "stemHash": "48db9d308b293840ca552b668cb38488"
       },
@@ -9324,13 +9324,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "b43e2909-c4a6-4858-a0c8-d7c28e47312e",
+      "pipelineId": "36f83b02-fe75-44c1-b078-e4eac7ce0876",
       "upsertKey": {
         "stemHash": "7d9a520f372f8494aa5bc1b98b9ab08a"
       },
@@ -9379,13 +9379,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "2aaee710-11cf-4847-982c-a025fe55847a",
+      "pipelineId": "5187c58b-1b9b-4e37-897f-2f178f80d39a",
       "upsertKey": {
         "stemHash": "c2efa309a8e36f700bb28b71521d35d0"
       },
@@ -9433,13 +9433,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "0494138e-045c-4768-bc74-da160dd02acc",
+      "pipelineId": "7380c8fe-9a9f-4311-a2fc-4e0d535e7f4d",
       "upsertKey": {
         "stemHash": "8aacf7c0a84df0af6b72890d91c26600"
       },
@@ -9486,13 +9486,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "4384baa3-efc1-436f-a3da-505e3aad7c8f",
+      "pipelineId": "9da07434-696e-43f8-b0bc-6654e7c38b07",
       "upsertKey": {
         "stemHash": "c32f7c21d2902852cfca834d62abb8d8"
       },
@@ -9539,13 +9539,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "d3875096-4f6f-4f3c-af0e-08c743be1a5b",
+      "pipelineId": "2efb744a-dbf8-430f-a538-a00ee7a721d4",
       "upsertKey": {
         "stemHash": "de26d6d4b907d6563c4eed00d583d4e4"
       },
@@ -9592,13 +9592,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "b5603f9c-9fe5-450b-8481-dc8906332303",
+      "pipelineId": "a6da7327-dda1-4bab-938a-d4ce75627639",
       "upsertKey": {
         "stemHash": "15128fd9e6113a4b7a04ab124d3780a2"
       },
@@ -9646,13 +9646,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "3c4f18dd-865c-494e-92b6-b36908e9c9c9",
+      "pipelineId": "8384d51e-07b3-471c-b7ff-203e7285a8f3",
       "upsertKey": {
         "stemHash": "d63da0fc646b5a3f21cddccdb54b774f"
       },
@@ -9701,13 +9701,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "dc37754d-e7ed-4487-8316-678b5f9bd4d5",
+      "pipelineId": "2c1c76d0-68c9-48bd-8bd6-b4c03fe15388",
       "upsertKey": {
         "stemHash": "810502916180b870d5e079a4af1ec732"
       },
@@ -9754,13 +9754,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "a87154c0-91c1-4f77-806a-b51bd60099a5",
+      "pipelineId": "bdc59180-122f-4c17-bde8-8a87ee268497",
       "upsertKey": {
         "stemHash": "0754ba989d361157908833a3c61f573a"
       },
@@ -9807,13 +9807,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "d3b67020-729f-4933-92e2-4350d2dc652d",
+      "pipelineId": "74577c19-e16e-47e5-85f7-a3c4a471570f",
       "upsertKey": {
         "stemHash": "b3692bc46097e69abcdb25723743886d"
       },
@@ -9860,13 +9860,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "20984fa5-afbb-44df-98a2-e23849a4fbdf",
+      "pipelineId": "70ec41e0-8141-4e6d-a1ce-19b46df14dfd",
       "upsertKey": {
         "stemHash": "93d908fd8b37e8f20f2ba7bfb3c23b13"
       },
@@ -9914,13 +9914,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "b23d1944-5d9d-4c78-9b79-6d284a16926f",
+      "pipelineId": "6265cab7-46eb-4ba4-91e0-9e021e07c782",
       "upsertKey": {
         "stemHash": "066e56575f79a52118706e0703e7ddc1"
       },
@@ -9967,13 +9967,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "2f44fb46-c3ad-40b4-8849-da27c4261b84",
+      "pipelineId": "ef224f94-0c47-4d0a-b692-83ad171aa8aa",
       "upsertKey": {
         "stemHash": "234b0a92bfc8b01b11e23169637ea151"
       },
@@ -10019,13 +10019,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "71d8db65-c84e-4118-9337-93ccfd196e04",
+      "pipelineId": "71bc78dc-e664-4643-b911-94aa209b46fb",
       "upsertKey": {
         "stemHash": "b58e042e020c159864ed320e8afe36d2"
       },
@@ -10072,13 +10072,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "0f1d4544-6cc7-4bdb-b684-8680a4997ff8",
+      "pipelineId": "db354ae2-13d2-4d78-b7b2-fbca7cf21a13",
       "upsertKey": {
         "stemHash": "2f7e69bc5254670f89e1aa61b60e90d8"
       },
@@ -10125,13 +10125,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "b12881ff-a5f1-4b4a-9e43-3aece31173d1",
+      "pipelineId": "99a86943-99dc-46e6-b7c6-ef4f6167626b",
       "upsertKey": {
         "stemHash": "0d058c66c17f6f81566bef0b258169d9"
       },
@@ -10178,13 +10178,13 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     },
     {
-      "pipelineId": "4fb01fee-1a7b-4a5a-9b0f-5b85b8878447",
+      "pipelineId": "63818237-9850-4ea8-81b9-3bbba31f72cf",
       "upsertKey": {
         "stemHash": "de0bf1b7af27a0ee858361b9f281695f"
       },
@@ -10232,9 +10232,9 @@
         "isFlashcardSource": false,
         "isStudyGuideLinked": false,
         "isTutorReady": false,
-        "publishedAt": "2026-04-11T03:05:01.993Z",
+        "publishedAt": "2026-04-11T03:14:40.431Z",
         "sourceVersion": 1,
-        "generatedAt": "2026-04-11T03:05:01.993Z"
+        "generatedAt": "2026-04-11T03:14:40.431Z"
       }
     }
   ],
