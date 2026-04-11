@@ -653,26 +653,6 @@ async function pathwayHasPublishedDbLessons(pathwayId: string): Promise<boolean>
   return !!row;
 }
 
-/** Count published rows for pathway in one locale (bounded index). Optional topic filter for allied / scoped hubs. */
-async function countPublishedDbLessonsForPathwayLocale(
-  pathwayId: string,
-  locale: string,
-  topicSlugsIn?: string[],
-  hubSearch?: string,
-): Promise<number> {
-  if (topicSlugsIn && topicSlugsIn.length === 0) return 0;
-  const base: Prisma.PathwayLessonWhereInput = {
-    pathwayId,
-    status: ContentStatus.PUBLISHED,
-    locale,
-    ...(topicSlugsIn && topicSlugsIn.length > 0 ? { topicSlug: { in: topicSlugsIn } } : {}),
-  };
-  const where: Prisma.PathwayLessonWhereInput =
-    hubSearch && hubSearch.length >= PATHWAY_HUB_SEARCH_MIN_LEN
-      ? { AND: [base, pathwayLessonHubSearchWhere(hubSearch)] }
-      : base;
-  return dbCall(() => prisma.pathwayLesson.count({ where }), 0);
-}
 
 /** Total published rows for pathway across locales (audit / metrics). */
 async function countPublishedDbLessonsAllLocales(pathwayId: string): Promise<number> {
@@ -789,8 +769,6 @@ function clampPage(page: number): number {
  */
 async function getPathwayLessonsPageImpl(
   pathwayId: string,
-  page: number = 1,
-  pageSize: number = PATHWAY_HUB_PAGE_SIZE_DEFAULT,
   marketingLocale?: string,
   listOptions?: { topicSlugsIn?: string[]; q?: string },
 ): Promise<PathwayLessonsPageResult> {
@@ -897,8 +875,8 @@ async function getPathwayLessonsPageWithDataCache(
   const topicKey = JSON.stringify(listOptions?.topicSlugsIn?.slice().sort() ?? []);
   const qKey = listOptions?.q ?? "";
   return unstable_cache(
-    async () => getPathwayLessonsPageImpl(pathwayId, page, pageSize, marketingLocale, listOptions),
-    ["pathway-hub", pathwayId, String(page), String(pageSize), marketingLocale ?? "", topicKey, qKey],
+    async () => getPathwayLessonsPageImpl(pathwayId, marketingLocale, listOptions),
+    ["pathway-hub-all", pathwayId, marketingLocale ?? "", topicKey, qKey],
     { revalidate: PATHWAY_LESSON_PUBLIC_REVALIDATE_SECONDS, tags: [`pathway-lessons:${pathwayId}`] },
   )();
 }
