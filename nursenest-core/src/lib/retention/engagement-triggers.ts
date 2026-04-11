@@ -7,8 +7,8 @@ import type { TodayGoalProgress } from "@/lib/learner/load-today-goal-progress";
 /**
  * Engagement notification trigger engine.
  *
- * Computes a prioritised list of in-app nudges from the learner's current state.
- * Does NOT persist notifications — computes them on the fly from existing data
+ * Computes a prioritized list of in-app nudges from the learner's current state.
+ * Does NOT persist notifications. Computes them on the fly from existing data
  * (study activity, streak, exam date, weak topics, flashcard due counts).
  *
  * Design: supportive, not stressful. Calm tone. Max 4 nudges returned.
@@ -49,19 +49,19 @@ function buildInactiveNudge(hoursSinceActivity: number): EngagementNudge | null 
     return {
       kind: "inactive_48h",
       priority: 1,
-      headline: "You're falling behind",
-      body: "Continue your study plan today. Even 5 minutes keeps you on track.",
+      headline: "It's been a couple days",
+      body: "Even a short session keeps your progress moving. Pick up where you left off.",
       href: "/app",
       ctaLabel: "Continue Studying",
-      tone: "warning",
+      tone: "info",
     };
   }
   if (hoursSinceActivity >= 24) {
     return {
       kind: "inactive_24h",
       priority: 3,
-      headline: "You haven't studied today",
-      body: "Pick up where you left off to keep your momentum going.",
+      headline: "Continue your study plan",
+      body: "A quick session today keeps your momentum going.",
       href: "/app",
       ctaLabel: "Resume Study",
       tone: "info",
@@ -93,8 +93,8 @@ function buildStreakNudges(
     nudges.push({
       kind: "streak_milestone",
       priority: 6,
-      headline: `${streakDays}-day streak!`,
-      body: "You're building a strong study habit. Keep it going.",
+    headline: `${streakDays}-day study streak`,
+    body: "Consistency like this compounds. Keep it going.",
       href: "/app",
       ctaLabel: "View Dashboard",
       tone: "success",
@@ -109,8 +109,8 @@ function buildWeakAreaNudge(weakTopic: string | null): EngagementNudge | null {
   return {
     kind: "weak_area_review",
     priority: 4,
-    headline: "Review this topic before you forget it",
-    body: `You've been struggling with ${weakTopic}. A short practice session can help.`,
+    headline: `${weakTopic} needs more practice`,
+    body: "A short focused session on this topic will help your accuracy.",
     href: "/app/questions",
     ctaLabel: "Practice Now",
     tone: "info",
@@ -124,8 +124,8 @@ function buildImprovementNudge(
   return {
     kind: "improvement",
     priority: 7,
-    headline: "You're improving, keep going",
-    body: `Your accuracy in ${improvingTopic} is trending up. A few more sessions will lock it in.`,
+    headline: `${improvingTopic} is trending up`,
+    body: "Your accuracy is improving. A few more sessions will solidify it.",
     href: "/app/questions",
     ctaLabel: "Keep Practicing",
     tone: "success",

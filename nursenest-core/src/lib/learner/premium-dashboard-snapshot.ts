@@ -121,8 +121,8 @@ function buildMomentumMessages(args: {
   if (args.streakDays >= 3) {
     out.push(
       args.streakDays >= 7
-        ? `You have a ${args.streakDays}-day study streak. Consistency like this compounds.`
-        : `${args.streakDays} days in a row with activity. Keep the chain going.`,
+        ? `${args.streakDays}-day study streak. Consistency like this compounds.`
+        : `${args.streakDays} days in a row. Keep it going.`,
     );
   }
 
@@ -130,24 +130,24 @@ function buildMomentumMessages(args: {
     const latest = args.recentMocks[0]!;
     const prev = args.recentMocks[1]!;
     if (latest.pct > prev.pct) {
-      out.push(`You improved on your latest mock (${latest.pct}% vs ${prev.pct}% on the prior attempt).`);
+      out.push(`Latest mock improved: ${latest.pct}% vs ${prev.pct}% prior.`);
     }
   }
 
   if (args.topStrongTopic) {
-    out.push(`You’re building real strength in ${args.topStrongTopic}. Balance it with one weak-topic set per session.`);
+    out.push(`Performing well in ${args.topStrongTopic}. Mix in a weak-topic set to balance.`);
   }
 
   if (args.lessonPct >= 40 && args.lessonPct < 85) {
-    out.push(`You’re past the early stretch of your lesson plan (${args.lessonPct}% complete). Momentum matters now.`);
+    out.push(`${args.lessonPct}% of your lesson plan complete.`);
   }
 
   if (args.readiness.band === "near_ready") {
-    out.push("You’re close to exam-ready on our blended readiness view. Tighten weak topics and run one more full mock.");
+    out.push("Getting close to exam-ready. Focus on weak topics and run another mock.");
   } else if (args.readiness.band === "ready") {
-    out.push("Signals look strong. Stay exam-sharp with spaced mocks, sleep, and light review.");
+    out.push("Looking strong. Stay sharp with spaced review and rest.");
   } else if (args.readiness.band === "improving") {
-    out.push("Trajectory is positive. Add one more scored block this week to solidify gains.");
+    out.push("Trending in the right direction. One more scored session this week will help.");
   }
 
   return [...new Set(out)].slice(0, 4);
@@ -155,13 +155,13 @@ function buildMomentumMessages(args: {
 
 function examReadyHeadline(readiness: ReadinessResult): string | null {
   if (readiness.band === "near_ready") {
-    return "You’re close to exam-ready";
+    return "Close to exam-ready";
   }
   if (readiness.band === "ready") {
-    return "You’re in strong exam shape";
+    return "In strong exam shape";
   }
   if (readiness.band === "improving" && readiness.score != null && readiness.score >= 55) {
-    return "You’re gaining ground toward exam readiness";
+    return "Gaining ground toward exam readiness";
   }
   return null;
 }

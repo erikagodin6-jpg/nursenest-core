@@ -19,6 +19,8 @@ import { readLearnerStudyDefaults } from "@/lib/student/learner-study-defaults";
 import { QuestionChoiceLetter } from "@/components/student/question-choice-letter";
 import { PostSessionExamInsights } from "@/components/student/post-session-exam-insights";
 import { PostTestStudyNextCard } from "@/components/student/post-test-study-next-card";
+import { SessionFeedbackStrip } from "@/components/student/session-feedback-strip";
+import { generateClientSessionFeedback } from "@/lib/learner/session-feedback-client";
 
 type ExamQuestion = {
   id: string;

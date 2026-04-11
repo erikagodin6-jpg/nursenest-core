@@ -4,6 +4,7 @@ import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { loadTodayGoalProgress } from "@/lib/learner/load-today-goal-progress";
 import { loadStudyStreakDays } from "@/lib/learner/premium-dashboard-snapshot";
+import { resolveLessonRefFromProgressId } from "@/lib/lessons/lesson-progress-resolver";
 import {
   computeEngagementNudges,
   loadHoursSinceLastActivity,
@@ -16,7 +17,7 @@ export async function GET() {
   const gate = await requireSubscriberSession();
   if (!gate.ok) return gate.response;
 
-  const { userId } = gate;
+  const { userId, entitlement } = gate;
   if (!isDatabaseUrlConfigured()) {
     return NextResponse.json({ nudges: [] });
   }
@@ -28,11 +29,10 @@ export async function GET() {
       loadHoursSinceLastActivity(userId),
       prisma.user.findUnique({
         where: { id: userId },
-        select: { examDate: true },
+        select: { examDate: true, learnerPath: true },
       }),
     ]);
 
-    // Weak/improving topics from UserTopicStat (computed from correctCount / wrongCount)
     const topicStats = await prisma.userTopicStat.findMany({
       where: { userId },
       orderBy: { wrongCount: "desc" },
@@ -50,7 +50,6 @@ export async function GET() {
     const improvingTopicName =
       withRates.find((t) => t.missRate < 0.3 && t.total >= 5)?.topic ?? null;
 
-    // Flashcard due counts (lightweight, no entitlement scope needed for counts)
     let flashcardDueToday = 0;
     let flashcardOverdue = 0;
     try {
@@ -70,6 +69,28 @@ export async function GET() {
       // Flashcard tables may not exist
     }
 
+    let continueLesson: { title: string; href: string } | null = null;
+    try {
+      const incompleteProgress = await prisma.progress.findFirst({
+        where: { userId, completedAt: null },
+        orderBy: { updatedAt: "desc" },
+        select: { lessonId: true },
+      });
+
+      if (incompleteProgress?.lessonId) {
+        const resolved = await resolveLessonRefFromProgressId({
+          lessonId: incompleteProgress.lessonId,
+          entitlement,
+          learnerPath: userRow?.learnerPath ?? null,
+        });
+        if (resolved) {
+          continueLesson = { title: resolved.title, href: resolved.href };
+        }
+      }
+    } catch {
+      // Non-critical
+    }
+
     const ctx: EngagementContext = {
       streakDays,
       todayGoal,
@@ -78,7 +99,7 @@ export async function GET() {
       examDate: userRow?.examDate ?? null,
       flashcardDueToday,
       flashcardOverdue,
-      continueLesson: null,
+      continueLesson,
       hoursSinceLastActivity: hoursSince,
     };
 
