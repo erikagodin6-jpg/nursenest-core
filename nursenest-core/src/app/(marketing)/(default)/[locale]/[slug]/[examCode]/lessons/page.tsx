@@ -9,10 +9,7 @@ import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry"
 import { resolveExamPathwaySafe } from "@/lib/exam-pathways/resolve-exam-pathway-safe";
 import { marketingPathwayLessonsIndexPath } from "@/lib/lessons/lesson-routes";
 import { defaultPathwayLessonContentLocaleForExamHubRoute } from "@/lib/lessons/pathway-lesson-locale";
-import {
-  PATHWAY_HUB_PAGE_SIZE_MAX,
-  normalizePathwayHubSearchQuery,
-} from "@/lib/lessons/pathway-lesson-loader";
+import { normalizePathwayHubSearchQuery } from "@/lib/lessons/pathway-lesson-loader";
 import { PathwayLessonsCurriculumHub } from "@/components/pathway-lessons/pathway-lessons-curriculum-hub";
 import { pathwayLessonHubMetaDescription, pathwayLessonHubMetaTitle } from "@/lib/lessons/pathway-lesson-hub-seo";
 import { pathwayLessonHasRenderableHubSlug } from "@/lib/lessons/pathway-lesson-types";
@@ -33,7 +30,7 @@ export const maxDuration = 60;
 
 type Props = {
   params: Promise<{ locale: string; slug: string; examCode: string }>;
-  searchParams: Promise<{ page?: string; pageSize?: string; q?: string }>;
+  searchParams: Promise<{ q?: string }>;
 };
 
 export async function generateMetadata({ params, searchParams }: Props): Promise<Metadata> {
@@ -79,7 +76,7 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
     pathway,
     {
       pageRequested: 1,
-      pageSizeRequested: PATHWAY_HUB_PAGE_SIZE_MAX,
+      pageSizeRequested: 1,
       lessonContentLocale,
       listOpts,
       qEffective: qEffective ?? "",

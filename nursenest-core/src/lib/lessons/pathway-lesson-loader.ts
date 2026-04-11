@@ -778,8 +778,10 @@ function clampPage(page: number): number {
 }
 
 /**
- * Paginated lessons for hub rendering — never loads the full pathway in one query.
- * Catalog fallback uses a capped in-memory slice (see PATHWAY_CATALOG_LIST_HARD_CAP).
+ * Full-catalog hub load — returns all lessons in one bounded query, no skip/offset.
+ * Hard-capped at {@link PATHWAY_CATALOG_LIST_HARD_CAP} rows as a safety net.
+ * `page` / `pageSize` params are preserved in the signature for cache-key compatibility
+ * but are not used for offset math. The result always has `page: 1, pageCount: 1`.
  *
  * @param marketingLocale Requested **lesson content** locale (BCP-47 base), not the exam URL country segment.
  * @param listOptions.topicSlugsIn When set, restrict to these topic slugs (empty array = no matches). Omit for full pathway.
@@ -792,8 +794,6 @@ async function getPathwayLessonsPageImpl(
   marketingLocale?: string,
   listOptions?: { topicSlugsIn?: string[]; q?: string },
 ): Promise<PathwayLessonsPageResult> {
-  const ps = clampPageSize(pageSize);
-  const p = Math.min(clampPage(page), maxSafeOffsetPage(ps));
   const requested = normalizePathwayLessonLocale(marketingLocale);
   const lessonDbOverlays = await fetchPublishedPathwayLessonOverlayMapSafe(requested);
   const topicSlugsIn = listOptions?.topicSlugsIn;
@@ -804,46 +804,21 @@ async function getPathwayLessonsPageImpl(
   if (dbAny) {
     const t0 = performance.now();
     const effective = await resolveEffectiveListLocale(pathwayId, requested);
+    // Load all scoped-gold rows not yet in DB, then all DB rows — no skip/offset.
     const missingGolds = await listMissingScopedGoldHubRows(pathwayId, effective, topicSlugsIn);
     const goldsFiltered = qRaw ? missingGolds.filter((row) => lessonInputMatchesHubSearch(row, qLower)) : missingGolds;
-    const g = goldsFiltered.length;
-    const dbCount = await countPublishedDbLessonsForPathwayLocale(pathwayId, effective, topicSlugsIn, qRaw);
-    let total = dbCount + g;
-    let pageCount = total === 0 ? 1 : Math.max(1, Math.ceil(total / ps));
-    let safePage = total === 0 ? 1 : Math.min(p, pageCount);
-    let start = (safePage - 1) * ps;
-    let raw: LessonInput[];
-    if (missingGolds.length > 0 && g > 0) {
-      let vi = start;
-      const goldOnPage: LessonInput[] = [];
-      while (vi < g && goldOnPage.length < ps) {
-        goldOnPage.push(goldsFiltered[vi]);
-        vi += 1;
-      }
-      const dbTake = ps - goldOnPage.length;
-      const dbSkip = Math.max(0, vi - g);
-      const dbRows =
-        dbTake > 0
-          ? await loadPublishedLessonRowsPage(pathwayId, effective, dbSkip, dbTake, topicSlugsIn, qRaw)
-          : [];
-      raw = [...goldOnPage, ...dbRows];
-    } else if (missingGolds.length > 0 && g === 0) {
-      /** Search excluded all gold rows — paginate DB matches only. */
-      total = dbCount;
-      pageCount = total === 0 ? 1 : Math.max(1, Math.ceil(total / ps));
-      safePage = total === 0 ? 1 : Math.min(p, pageCount);
-      start = (safePage - 1) * ps;
-      raw = await loadPublishedLessonRowsPage(pathwayId, effective, start, ps, topicSlugsIn, qRaw);
-    } else {
-      raw = await loadPublishedLessonRowsPage(pathwayId, effective, start, ps, topicSlugsIn, qRaw);
-    }
+    const dbRows = await loadPublishedLessonRowsPage(
+      pathwayId, effective, 0, PATHWAY_CATALOG_LIST_HARD_CAP, topicSlugsIn, qRaw,
+    );
+    const raw = [...goldsFiltered, ...dbRows];
+    const total = raw.length;
     const durationMs = Math.round(performance.now() - t0);
     safeServerLog("pathway_lessons", "hub_list_db_timing", {
       pathwayId,
       pathwayLessonRuntimeSource: "database",
       durationMs,
-      page: safePage,
-      pageSize: ps,
+      page: 1,
+      pageSize: total,
       total,
       hubSearch: qRaw ? "1" : "0",
     });
@@ -861,9 +836,9 @@ async function getPathwayLessonsPageImpl(
         pathwayId,
       ),
       total,
-      page: safePage,
-      pageSize: ps,
-      pageCount,
+      page: 1,
+      pageSize: total,
+      pageCount: 1,
       locale: {
         requested,
         effective,
@@ -873,19 +848,17 @@ async function getPathwayLessonsPageImpl(
     };
   }
 
+  // Catalog fallback — filter and slice to hard cap, no skip.
   const allRaw = filterCatalogLessonsByTopicSlugs(getCatalogLessonsRaw(pathwayId), topicSlugsIn);
   const filteredRaw = qRaw ? allRaw.filter((row) => lessonInputMatchesHubSearch(row, qLower)) : allRaw;
+  const slice = filteredRaw.slice(0, PATHWAY_CATALOG_LIST_HARD_CAP);
   const total = filteredRaw.length;
-  const pageCount = Math.max(1, Math.ceil(total / ps));
-  const safePage = Math.min(p, pageCount);
-  const skip = (safePage - 1) * ps;
-  const slice = filteredRaw.slice(skip, skip + ps);
   safeServerLog("pathway_lessons", "hub_list_source", {
     pathwayId,
     pathwayLessonRuntimeSource: total > 0 ? "catalog" : "none",
     total,
-    page: safePage,
-    pageSize: ps,
+    page: 1,
+    pageSize: slice.length,
     hubSearch: qRaw ? "1" : "0",
   });
   const catMeta = lessonLocaleMeta(marketingLocale, "en", requested !== "en", true);
@@ -902,9 +875,9 @@ async function getPathwayLessonsPageImpl(
       pathwayId,
     ),
     total,
-    page: safePage,
-    pageSize: ps,
-    pageCount,
+    page: 1,
+    pageSize: slice.length,
+    pageCount: 1,
     locale: {
       requested,
       effective: "en",
