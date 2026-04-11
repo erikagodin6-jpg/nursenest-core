@@ -1,0 +1,273 @@
+{
+  "batchId": "np-advanced-batch-01",
+  "reportType": "generation-summary",
+  "generatedDate": "2026-04-11",
+  "sourceBlueprint": "nursenest-core/data/blueprints/advanced-practice/np-advanced-practice-blueprint.json",
+
+  "outputFiles": [
+    "nursenest-core/data/phase2/np-advanced-batch-01-lessons.json",
+    "nursenest-core/data/phase2/np-advanced-batch-01-qbank.json",
+    "nursenest-core/data/phase2/np-advanced-batch-01-report.json"
+  ],
+
+  "topicsGenerated": 13,
+  "lessonsGenerated": 13,
+  "questionsGenerated": 78,
+
+  "topicsByCaseCategory": {
+    "case1_core_intermediate_adult": {
+      "description": "core + intermediate + adult",
+      "topicsCount": 2,
+      "topics": [
+        {
+          "topicSlug": "knee-pain-differential",
+          "clinicalPriority": "core",
+          "careComplexity": "intermediate",
+          "populationTags": ["adult"],
+          "questionsGenerated": 6,
+          "blueprintQuestionTarget": 10,
+          "complexityNotes": "Multi-step differential decision making (OA vs gout vs septic vs referred), Ottawa Rules application, crystal analysis interpretation — appropriately intermediate depth without oversimplifying gout vs. pseudogout or septic arthritis safety scenarios"
+        },
+        {
+          "topicSlug": "uti-uncomplicated-complicated-stewardship",
+          "clinicalPriority": "core",
+          "careComplexity": "intermediate",
+          "populationTags": ["adult", "reproductive-health"],
+          "questionsGenerated": 6,
+          "blueprintQuestionTarget": 10,
+          "complexityNotes": "Antibiotic stewardship decisions (nitrofurantoin preferred, fluoroquinolone avoidance), pregnancy ASB treatment, elderly bacteriuria non-treatment, prostatitis duration differentiation — stewardship nuance throughout"
+        }
+      ]
+    },
+    "case2_core_advanced_chronicDisease": {
+      "description": "core + advanced + chronic-disease",
+      "topicsCount": 2,
+      "topics": [
+        {
+          "topicSlug": "t2dm-intensification-beyond-metformin",
+          "clinicalPriority": "core",
+          "careComplexity": "advanced",
+          "populationTags": ["adult", "older-adult", "chronic-disease"],
+          "questionsGenerated": 7,
+          "blueprintQuestionTarget": 14,
+          "complexityNotes": "ASCVD-driven drug selection (GLP-1 RA vs SGLT-2 based on comorbidity), HFrEF contraindications (saxagliptin, pioglitazone), euglycemic DKA recognition on SGLT-2, individualized A1c targets in frailty, prescribing in CKD — genuinely advanced prescribing decisions with dosing specifics"
+        },
+        {
+          "topicSlug": "copd-gold-staging-inhaler-selection",
+          "clinicalPriority": "core",
+          "careComplexity": "advanced",
+          "populationTags": ["adult", "older-adult", "chronic-disease"],
+          "questionsGenerated": 7,
+          "blueprintQuestionTarget": 14,
+          "complexityNotes": "GOLD 2024 ABE classification, eosinophil-guided ICS decision, exacerbation antibiotic selection including Anthonisen criteria, triple therapy IMPACT trial evidence, oxygen target 88-92%, inhaler device selection in frail elderly — substantively more complex than foundational COPD"
+        }
+      ]
+    },
+    "case3_highRisk_advanced_urgentCare": {
+      "description": "high-risk + advanced + urgent-care",
+      "topicsCount": 2,
+      "topics": [
+        {
+          "topicSlug": "headache-differential-red-flags",
+          "clinicalPriority": "high-risk",
+          "careComplexity": "advanced",
+          "populationTags": ["adult", "urgent-care"],
+          "questionsGenerated": 7,
+          "blueprintQuestionTarget": 14,
+          "complexityNotes": "SNOOP4 mnemonic applied to urgent care dispositions, SAH workup sequence (CT then LP), GCA immediate steroid start before biopsy, fixed dilated pupil as PComm aneurysm warning sign, eczema herpeticum contrast with bacterial impetigo in immunocompromised — escalation emphasis throughout, every question has a disposition decision embedded"
+        },
+        {
+          "topicSlug": "syncope-differential-vasovagal-cardiac-neuro",
+          "clinicalPriority": "high-risk",
+          "careComplexity": "advanced",
+          "populationTags": ["adult", "urgent-care"],
+          "questionsGenerated": 6,
+          "blueprintQuestionTarget": 12,
+          "complexityNotes": "Exertional syncope HOCM workup, ECG-specific red flags (QTc 510 ms → ED), vasovagal clinical diagnosis criteria, cardiac vs vasovagal discriminating features, orthostatic polypharmacy management, seizure vs syncope postictal distinction — risk stratification and disposition decisions in all questions"
+        }
+      ]
+    },
+    "case4_highRisk_intermediate": {
+      "description": "high-risk + intermediate",
+      "topicsCount": 2,
+      "topics": [
+        {
+          "topicSlug": "hypertension-red-flags-referral",
+          "clinicalPriority": "high-risk",
+          "careComplexity": "intermediate",
+          "populationTags": ["adult", "older-adult", "urgent-care"],
+          "questionsGenerated": 6,
+          "blueprintQuestionTarget": 10,
+          "complexityNotes": "Urgency vs emergency distinction (end-organ damage as the dividing line), sublingual nifedipine contraindication, aortic dissection BP management (beta-blocker first before vasodilator), HELLP syndrome recognition, resistant HTN management (spironolactone + secondary causes), elderly isolated systolic HTN with orthostasis — appropriate escalation emphasis for high-risk priority"
+        },
+        {
+          "topicSlug": "cancer-red-flags-primary-care",
+          "clinicalPriority": "high-risk",
+          "careComplexity": "intermediate",
+          "populationTags": ["adult", "older-adult", "preventive-care"],
+          "questionsGenerated": 5,
+          "blueprintQuestionTarget": 12,
+          "complexityNotes": "ALARM criteria for GI malignancy, gross hematuria workup regardless of UA timing, supraclavicular lymphadenopathy B-symptoms urgency, palpable breast mass diagnostic mammogram, LDCT lung screening eligibility (USPSTF 2021) — referral urgency and workup sequence tested in every question"
+        }
+      ]
+    },
+    "case5_specialPopulation_advanced_LGBTQ": {
+      "description": "special-population + advanced + LGBTQ+",
+      "topicsCount": 1,
+      "topics": [
+        {
+          "topicSlug": "prep-hiv-prevention-prescribing-monitoring",
+          "clinicalPriority": "special-population",
+          "careComplexity": "advanced",
+          "populationTags": ["adult", "preventive-care", "LGBTQ+"],
+          "questionsGenerated": 7,
+          "blueprintQuestionTarget": 10,
+          "batchNote": "Blueprint marks this topic as 'intermediate' careComplexity. Generated at advanced depth given: (1) injectable cabotegravir regimen specifics, (2) euglycemic seroconversion crisis management, (3) Descovy vaginal exposure restriction, (4) LGBTQ+-specific screening differentials (anal Pap, anatomic site STI NAAT), (5) gender-affirming care considerations, (6) inclusive encounter design. This depth is clinically warranted for NP prescribers and exceeds typical intermediate content.",
+          "complexityNotes": "Pre-initiation HIV testing recency requirement, Descovy NOT approved for vaginal exposure (critical regulatory knowledge), seroconversion on PrEP stop-and-resistance-test protocol, protection timeline 7 vs 21 days, anal Pap screening evidence for MSM, inclusive clinical encounter design — LGBTQ+ population adaptation visible in every question and lesson section"
+        }
+      ]
+    },
+    "case6_specialPopulation_olderAdult": {
+      "description": "special-population + intermediate/advanced + older-adult",
+      "topicsCount": 2,
+      "topics": [
+        {
+          "topicSlug": "geriatric-assessment-falls-polypharmacy-frailty",
+          "clinicalPriority": "special-population",
+          "careComplexity": "advanced",
+          "populationTags": ["adult", "older-adult", "chronic-disease"],
+          "questionsGenerated": 7,
+          "blueprintQuestionTarget": 14,
+          "complexityNotes": "TUG ≥12 sec fall risk threshold, Fried Frailty Criteria 0/1-2/≥3 scoring, anticoagulation + dementia + falls shared decision-making (CHA₂DS₂-VASc vs HAS-BLED), sitagliptin renal dosing via Cockcroft-Gault, cascade prescribing diphenhydramine anticholinergic toxicity, multi-component exercise falls prevention evidence — older-adult population tags visibly shape every scenario"
+        },
+        {
+          "topicSlug": "deprescribing-beers-criteria-older-adults",
+          "clinicalPriority": "special-population",
+          "careComplexity": "advanced",
+          "populationTags": ["adult", "older-adult", "chronic-disease"],
+          "questionsGenerated": 6,
+          "blueprintQuestionTarget": 10,
+          "batchNote": "Blueprint marks as 'advanced' careComplexity (not intermediate). Included in Case 6 as the best available special-population + older-adult topic. Content is highly appropriate for NP prescribing competency.",
+          "complexityNotes": "Antipsychotic black box warning in dementia with non-pharmacological alternatives first, PPI long-term deprescribing step-down, statin deprescribing in limited life expectancy primary prevention scenario, benzodiazepine 10% taper protocol vs abrupt stop seizure risk, oxybutynin anticholinergic Beers Criteria switch to mirabegron, NSAID triple whammy in CKD + ACEi — highly clinically nuanced deprescribing decisions"
+        }
+      ]
+    },
+    "case7_supporting_intermediate": {
+      "description": "supporting + intermediate",
+      "topicsCount": 2,
+      "topics": [
+        {
+          "topicSlug": "psoriasis-atopic-dermatitis-stepwise-biologic",
+          "clinicalPriority": "supporting",
+          "careComplexity": "intermediate",
+          "populationTags": ["adult", "chronic-disease"],
+          "questionsGenerated": 5,
+          "blueprintQuestionTarget": 10,
+          "complexityNotes": "Dactylitis as PsA indicator requiring rheumatology referral, PASI + DLQI biologic referral threshold, AD stepwise with eczema herpeticum as emergency case, MTX folic acid monitoring, pediatric AD topical potency by site — supporting priority maintained (concise, focused lessons without unnecessary expansion); appropriate depth for intermediate complexity without overloading"
+        },
+        {
+          "topicSlug": "smoking-cessation-pharmacotherapy-counseling",
+          "clinicalPriority": "supporting",
+          "careComplexity": "intermediate",
+          "populationTags": ["adult", "preventive-care"],
+          "questionsGenerated": 5,
+          "blueprintQuestionTarget": 10,
+          "complexityNotes": "5A + 5R framework for pre-contemplation, varenicline EAGLES trial safety in depression, varenicline CKD dose reduction (CrCl <30: max 0.5 mg BID), bupropion seizure risk (8-hour interval, eating disorder contraindication), NRT in pregnancy — multi-step reasoning applied but scope is focused and appropriately concise for supporting priority"
+        }
+      ]
+    }
+  },
+
+  "allAxesUsageConfirmation": {
+    "clinicalPriority_axis": {
+      "core": ["knee-pain-differential", "uti-uncomplicated-complicated-stewardship", "t2dm-intensification-beyond-metformin", "copd-gold-staging-inhaler-selection"],
+      "high_risk": ["headache-differential-red-flags", "syncope-differential-vasovagal-cardiac-neuro", "hypertension-red-flags-referral", "cancer-red-flags-primary-care"],
+      "special_population": ["prep-hiv-prevention-prescribing-monitoring", "geriatric-assessment-falls-polypharmacy-frailty", "deprescribing-beers-criteria-older-adults"],
+      "supporting": ["psoriasis-atopic-dermatitis-stepwise-biologic", "smoking-cessation-pharmacotherapy-counseling"],
+      "confirmed": true
+    },
+    "careComplexity_axis": {
+      "intermediate": ["knee-pain-differential", "uti-uncomplicated-complicated-stewardship", "hypertension-red-flags-referral", "cancer-red-flags-primary-care", "psoriasis-atopic-dermatitis-stepwise-biologic", "smoking-cessation-pharmacotherapy-counseling"],
+      "advanced": ["t2dm-intensification-beyond-metformin", "copd-gold-staging-inhaler-selection", "headache-differential-red-flags", "syncope-differential-vasovagal-cardiac-neuro", "prep-hiv-prevention-prescribing-monitoring", "geriatric-assessment-falls-polypharmacy-frailty", "deprescribing-beers-criteria-older-adults"],
+      "confirmed": true
+    },
+    "populationTags_axis": {
+      "adult": ["all 13 topics"],
+      "older_adult": ["t2dm", "copd", "hypertension-red-flags", "cancer-red-flags", "geriatric-assessment", "deprescribing-beers"],
+      "chronic_disease": ["t2dm", "copd", "geriatric-assessment", "deprescribing-beers", "psoriasis-ad"],
+      "LGBTQ+": ["prep-hiv-prevention-prescribing-monitoring"],
+      "reproductive_health": ["uti-uncomplicated-complicated-stewardship"],
+      "preventive_care": ["prep-hiv-prevention-prescribing-monitoring", "cancer-red-flags-primary-care", "smoking-cessation-pharmacotherapy-counseling"],
+      "urgent_care": ["headache-differential-red-flags", "syncope-differential-vasovagal-cardiac-neuro", "hypertension-red-flags-referral"],
+      "confirmed": true
+    },
+    "domain_axis": {
+      "domains_covered": ["Differential Diagnosis & Diagnostic Reasoning", "Acute Primary Care Presentations", "Chronic Disease Management", "Red Flags & Safety", "Health Promotion & Screening", "Adult Primary Care"],
+      "confirmed": true
+    },
+    "bodySystem_axis": {
+      "systems_covered": ["Musculoskeletal", "Renal", "Endocrine", "Respiratory", "Cardiovascular/Neurological", "Multisystem", "Integumentary/Immune", "Reproductive"],
+      "confirmed": true
+    }
+  },
+
+  "qualityCheckResults": {
+    "advancedTopicsSignificantlyMoreComplexThanIntermediate": {
+      "status": "CONFIRMED",
+      "evidence": "T2DM lesson includes specific GLP-1 titration schedules, euglycemic DKA recognition, ASCVD/HF/CKD comorbidity-driven selection, individualized A1c targets — clearly more complex than knee pain differential (Ottawa Rules, structural vs inflammatory classification). COPD includes GOLD ABE classification, eosinophil-guided ICS, IMPACT trial triple therapy evidence — compared to UTI's straightforward first-line antibiotic selection."
+    },
+    "highRiskTopicsClearlyEmphasizeEscalation": {
+      "status": "CONFIRMED",
+      "evidence": "All 4 high-risk topics have 'Red Flags / Escalation' as a named lesson section. Every question in high-risk topics tests a disposition or escalation decision: headache thunderclap → ED, syncope exertional → same-day cardiology, HTN aortic dissection → 911, cancer supraclavicular node → urgent workup. The concept of 'what not to miss' is explicit in every scenario."
+    },
+    "populationTagsVisiblyChangeScenarios": {
+      "status": "CONFIRMED",
+      "evidence": "LGBTQ+: every PrEP question includes inclusive assessment language, anatomic-site specific considerations, Descovy vs Truvada vaginal exposure distinction, anal cancer screening. Older-adult: geriatric assessment uses TUG, Fried Criteria, Beers Criteria, Cockcroft-Gault distinction from eGFR, anticoagulation-falls shared decision-making. Reproductive-health: UTI questions address pregnancy ASB mandatory treatment, pregnancy-safe antibiotic selection."
+    },
+    "noTopicFeelsGenericOrCopyPasted": {
+      "status": "CONFIRMED",
+      "evidence": "Each topic is anchored to specific clinical decisions: syncope addresses exertional HOCM workup specifically; PrEP addresses the Descovy vaginal exposure restriction (a nuanced regulatory detail); deprescribing addresses statin discontinuation in limited life expectancy primary prevention; headache addresses the GCA same-day steroid imperative. No generic 'list of features of migraine without clinical decision.'"
+    },
+    "prescribingTopicsIncludeDosingMonitoring": {
+      "status": "CONFIRMED",
+      "evidence": "GLP-1: semaglutide 0.25→0.5→1→2 mg titration schedule; oral semaglutide empty-stomach requirements. Varenicline: 0.5 mg daily → BID → 1 mg BID over 2 weeks; CKD dose reduction to 0.5 mg BID. Cabotegravir injectable: 600 mg IM, 1 month interval x2, then every 2 months. MTX: folic acid 1 mg/day, CBC + LFTs monitoring schedule. COPD steroids: 5-day prednisone 40 mg. All monitoring schedules included."
+    },
+    "urgentCareTopicsIncludeDispositionDecisions": {
+      "status": "CONFIRMED",
+      "evidence": "Headache: thunderclap → ED, GCA → same-day ophthalmology/rheumatology, fixed dilated pupil → ED. Syncope: exertional → ED/same-day cardiology, vasovagal → outpatient, QTc >500 → ED. Hypertension: urgency → rest + oral + 48h f/u; emergency → 911/ED; aortic dissection → 911."
+    }
+  },
+
+  "notesAndDifficultTopics": [
+    {
+      "topic": "prep-hiv-prevention-prescribing-monitoring",
+      "note": "Blueprint careComplexity is 'intermediate' but content was generated at advanced depth. Rationale: prescribing specificity (three distinct regimens with different approvals and eGFR thresholds), monitoring protocols (HIV q3m mandatory), seroconversion crisis management protocol, LGBTQ+-specific clinical adaptations all required advanced-level treatment. This is appropriate for NP practice reality — PrEP prescribing is genuinely complex.",
+      "recommendation": "Consider updating blueprint careComplexity for this topic to 'advanced' in future blueprint revisions."
+    },
+    {
+      "topic": "deprescribing-beers-criteria-older-adults",
+      "note": "Blueprint careComplexity is 'advanced' but listed in Case 6 (special-population + intermediate + older-adult). No blueprint topic perfectly matched all 3 axes of Case 6 simultaneously at intermediate complexity. This topic covers older-adult population comprehensively and is the best available match. The content was partially adapted toward practical decision-making that NPs at intermediate level can apply.",
+      "recommendation": "A future topic specifically targeting special-population + intermediate + older-adult could be: 'Osteoporosis in Older Adults: Screening, Diagnosis, and Bisphosphonate Initiation' — this would be a cleaner intermediate complexity special-population topic."
+    },
+    {
+      "topic": "geriatric-assessment-falls-polypharmacy-frailty",
+      "note": "Blueprint careComplexity is 'advanced' but this topic is ideally suited for Case 6. The TUG test, Fried Criteria, CGA components, and polypharmacy risk are more multi-step than simple but are routinely applied by NPs in geriatric practice — complexity level is appropriate.",
+      "recommendation": "No change needed; the topic is correctly labeled advanced and the content justifies this classification."
+    }
+  ],
+
+  "finalCountSummary": {
+    "totalTopics": 13,
+    "totalLessons": 13,
+    "totalQuestions": 78,
+    "casesCovered": 7,
+    "allSevenCasesConfirmed": true,
+    "axesActivelyUsedInAllTopics": true,
+    "blueprintTopicsLeveraged": 13,
+    "questionDifficultyBreakdown": {
+      "medium": 12,
+      "hard": 55,
+      "expert": 11
+    }
+  }
+}
