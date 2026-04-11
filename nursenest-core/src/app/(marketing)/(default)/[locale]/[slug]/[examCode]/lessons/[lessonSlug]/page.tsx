@@ -8,7 +8,6 @@ import { PathwayLessonSectionContent } from "@/components/lessons/pathway-lesson
 import { contentTierForPathwayLessonRender } from "@/lib/lessons/global-lesson-architecture";
 import { getMeasurementSystemForCountry } from "@/lib/measurements/measurement-system";
 import { PremiumLessonPublishNotice } from "@/components/lessons/premium-lesson-publish-notice";
-import { PathwayLessonQuizzes } from "@/components/lessons/pathway-lesson-quizzes";
 import { PathwayLessonLockedSectionsPreview } from "@/components/lessons/pathway-lesson-locked-sections-preview";
 import { PathwayLessonActions } from "@/components/lessons/pathway-lesson-actions";
 import { PathwayLessonProgressBadgeLive } from "@/components/lessons/pathway-lesson-progress-badge-live";
@@ -47,6 +46,7 @@ import {
   loadPathwayLessonProgressForSlug,
   type PathwayLessonProgressStatus,
 } from "@/lib/lessons/pathway-lesson-progress";
+import { PathwayLessonAssessmentExperience } from "@/components/lessons/pathway-lesson-assessment-experience";
 import { LessonStructuralQualityNotice } from "@/components/lessons/lesson-structural-quality-notice";
 import { PathwayLessonDetailHeader } from "@/components/lessons/pathway-lesson-detail-header";
 import {
@@ -301,50 +301,55 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
           </aside>
         ) : null}
 
-        <main className="mt-10">
-          {/* space-y-9: clearer chunking between long sections (readability). */}
-          <article className="mx-auto max-w-[42rem] space-y-9">
-            {visible.map((section, idx) => (
-              <section
-                key={section.id}
-                className={`nn-lesson-article-section scroll-mt-24 ${idx % 2 === 1 ? "nn-lesson-article-section--alt" : ""}`}
-              >
-                <h2 className="nn-marketing-h3 border-b border-[color-mix(in_srgb,var(--border-subtle)_78%,var(--theme-primary))] pb-3.5 text-[var(--theme-heading-text)]">
-                  {section.heading?.trim() || "Section"}
-                </h2>
-                <div className="mt-6">
-                  <PathwayLessonSectionContent
-                    text={typeof section.body === "string" ? section.body : ""}
-                    figures={section.figures}
-                    lessonWikiBasePath={base}
-                    viewerTier={lessonContentTier}
-                    measurementSystem={lessonMeasurementSystem}
-                  />
-                </div>
-              </section>
-            ))}
-          </article>
-        </main>
-
-        <div className="mx-auto mt-10 max-w-[42rem]">
-          <PathwayLessonQuizzes preTest={lesson.preTest} postTest={lesson.postTest} fullAccess={fullAccess} />
-        </div>
-
-        {lockedSections.length > 0 ? (
-          <div className="mx-auto mt-8 max-w-[42rem]">
-            <PathwayLessonLockedSectionsPreview sections={lockedSections} />
-          </div>
-        ) : null}
-
-        <PathwayLessonActions
+        <PathwayLessonAssessmentExperience
+          userId={userId}
           pathwayId={pathway.id}
           lessonSlug={lesson.slug}
-          topicCode={lesson.topicSlug}
-          topicLabel={lesson.topic}
-          userId={userId}
-          canMarkComplete={fullAccess}
           initialProgress={lessonProgress}
-        />
+          preTest={lesson.preTest}
+          postTest={lesson.postTest}
+          fullAccess={fullAccess}
+        >
+          <main className="mt-10">
+            <article className="mx-auto max-w-[42rem] space-y-9">
+              {visible.map((section, idx) => (
+                <section
+                  key={section.id}
+                  className={`nn-lesson-article-section scroll-mt-24 ${idx % 2 === 1 ? "nn-lesson-article-section--alt" : ""}`}
+                >
+                  <h2 className="nn-marketing-h3 border-b border-[color-mix(in_srgb,var(--border-subtle)_78%,var(--theme-primary))] pb-3.5 text-[var(--theme-heading-text)]">
+                    {section.heading?.trim() || "Section"}
+                  </h2>
+                  <div className="mt-6">
+                    <PathwayLessonSectionContent
+                      text={typeof section.body === "string" ? section.body : ""}
+                      figures={section.figures}
+                      lessonWikiBasePath={base}
+                      viewerTier={lessonContentTier}
+                      measurementSystem={lessonMeasurementSystem}
+                    />
+                  </div>
+                </section>
+              ))}
+            </article>
+          </main>
+
+          {lockedSections.length > 0 ? (
+            <div className="mx-auto mt-8 max-w-[42rem]">
+              <PathwayLessonLockedSectionsPreview sections={lockedSections} />
+            </div>
+          ) : null}
+
+          <PathwayLessonActions
+            pathwayId={pathway.id}
+            lessonSlug={lesson.slug}
+            topicCode={lesson.topicSlug}
+            topicLabel={lesson.topic}
+            userId={userId}
+            canMarkComplete={fullAccess}
+            initialProgress={lessonProgress}
+          />
+        </PathwayLessonAssessmentExperience>
 
         <Suspense fallback={<PathwayLessonDetailDeferredSkeleton />}>
           <PathwayLessonDetailDeferred

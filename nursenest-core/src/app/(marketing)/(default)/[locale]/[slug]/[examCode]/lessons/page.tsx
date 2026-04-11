@@ -3,6 +3,7 @@ import { notFound, redirect } from "next/navigation";
 import { getOptionalPublicSession } from "@/lib/auth/optional-public-session";
 import { PathwayLessonContentLocaleBanner } from "@/components/lessons/pathway-lesson-content-locale-banner";
 import { PathwayLessonPagination } from "@/components/pathway-lessons/pathway-lesson-pagination";
+import { LessonsHomeHeader } from "@/components/pathway-lessons/lessons-home-header";
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { loadPathwayLessonsHubAggregates } from "@/lib/exam-pathways/marketing-hub-optional-data";
@@ -17,7 +18,7 @@ import {
 import { PathwayLessonsCurriculumHub } from "@/components/pathway-lessons/pathway-lessons-curriculum-hub";
 import { pathwayLessonHubMetaDescription, pathwayLessonHubMetaTitle } from "@/lib/lessons/pathway-lesson-hub-seo";
 import { pathwayLessonHasRenderableHubSlug } from "@/lib/lessons/pathway-lesson-types";
-import { Search } from "lucide-react";
+import { pathwayLessonsHubLead } from "@/lib/lessons/pathway-lessons-hub-intro";
 import { pathwayLessonsHubBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 import { absoluteUrl } from "@/lib/seo/site-origin";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
@@ -25,6 +26,7 @@ import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlemen
 import { canViewFullPathwayLesson } from "@/lib/lessons/pathway-lesson-access";
 import type { PathwayLessonProgressStatus } from "@/lib/lessons/pathway-lesson-progress";
 import { loadPathwayHubSubscriberData } from "@/lib/learner/pathway-lesson-continuation";
+import { equivalentExamHubUrlAfterRegionToggle } from "@/lib/marketing/marketing-region-equivalent-hub";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 
@@ -115,37 +117,33 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
   const { crumbs, schemaItems } = pathwayLessonsHubBreadcrumbs(pathway);
 
   if (pageResult.total === 0) {
+    const querySuffix = qEffective ? `?q=${encodeURIComponent(qEffective)}` : "";
+    const canadaHref =
+      pathway.countrySlug === "canada"
+        ? `${base}${querySuffix}`
+        : `${equivalentExamHubUrlAfterRegionToggle(base, "CA") ?? base}${querySuffix}`;
+    const usHref =
+      pathway.countrySlug === "us"
+        ? `${base}${querySuffix}`
+        : `${equivalentExamHubUrlAfterRegionToggle(base, "US") ?? base}${querySuffix}`;
+
     return (
       <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8">
         <BreadcrumbJsonLd items={schemaItems} />
         <div className="mb-6">
           <BreadcrumbTrail items={crumbs} />
         </div>
-        <header className="rounded-3xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-6 shadow-[var(--semantic-shadow-soft)] sm:p-7">
-          <p className="text-sm font-medium text-[var(--theme-muted-text)]">{pathway.displayName}</p>
-          <h1 className="mt-1 text-3xl font-semibold tracking-tight text-[var(--theme-heading-text)] sm:text-4xl">Lessons</h1>
-          <p className="mt-2 max-w-3xl text-sm leading-relaxed text-[var(--theme-muted-text)]">
-            A calm, system-based lesson catalog for {pathway.shortName}: one concept per lesson, arranged for fast scanning.
-          </p>
-          <form action={base} method="get" className="mt-5 flex flex-col gap-3 sm:flex-row">
-            <label htmlFor="pathway-lessons-search" className="sr-only">
-              Search lessons
-            </label>
-            <div className="relative max-w-xl flex-1">
-              <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--theme-muted-text)]" />
-              <input
-                id="pathway-lessons-search"
-                name="q"
-                defaultValue={qEffective ?? ""}
-                placeholder="Search lessons"
-                className="min-h-11 w-full rounded-full border border-[var(--semantic-border-soft)] bg-[var(--theme-page-bg)] py-2.5 pl-10 pr-4 text-sm text-[var(--theme-heading-text)] outline-none transition focus:border-[var(--semantic-brand)] focus:ring-2 focus:ring-[color-mix(in_srgb,var(--semantic-brand)_16%,transparent)]"
-              />
-            </div>
-            <button type="submit" className="inline-flex min-h-11 items-center justify-center rounded-full nn-btn-secondary px-4 py-2 text-sm font-semibold">
-              Search
-            </button>
-          </form>
-        </header>
+        <LessonsHomeHeader
+          eyebrow={pathway.displayName}
+          title={`${pathway.shortName} lessons`}
+          description={pathwayLessonsHubLead(pathway)}
+          searchBasePath={base}
+          initialQuery={qEffective ?? undefined}
+          countryOptions={[
+            { label: "Canada", href: canadaHref, active: pathway.countrySlug === "canada" },
+            { label: "US", href: usHref, active: pathway.countrySlug === "us" },
+          ]}
+        />
         {pageResult.locale ? <PathwayLessonContentLocaleBanner listLocale={pageResult.locale} /> : null}
         <div className="mt-6 rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-6">
           <p className="text-sm font-medium text-[var(--theme-heading-text)]">
@@ -201,6 +199,15 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
   const progressStatuses = canShowProgressMap ? Object.values(progressMap) : [];
   const completedCount = progressStatuses.filter((status) => status === "completed").length;
   const inProgressCount = progressStatuses.filter((status) => status === "in_progress").length;
+  const querySuffix = qEffective ? `?q=${encodeURIComponent(qEffective)}` : "";
+  const canadaHref =
+    pathway.countrySlug === "canada"
+      ? `${base}${querySuffix}`
+      : `${equivalentExamHubUrlAfterRegionToggle(base, "CA") ?? base}${querySuffix}`;
+  const usHref =
+    pathway.countrySlug === "us"
+      ? `${base}${querySuffix}`
+      : `${equivalentExamHubUrlAfterRegionToggle(base, "US") ?? base}${querySuffix}`;
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8">
@@ -208,52 +215,24 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
       <div className="mb-6">
         <BreadcrumbTrail items={crumbs} />
       </div>
-      <header className="rounded-3xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-6 shadow-[var(--semantic-shadow-soft)] sm:p-7">
-        <p className="text-sm font-medium text-[var(--theme-muted-text)]">{pathway.displayName}</p>
-        <h1 className="mt-1 text-3xl font-semibold tracking-tight text-[var(--theme-heading-text)] sm:text-4xl">Lessons</h1>
-        <p className="mt-2 max-w-3xl text-sm leading-relaxed text-[var(--theme-muted-text)]">
-          A calm, system-based lesson catalog for {pathway.shortName}: one concept per lesson, arranged for fast scanning.
-        </p>
-        <div className="mt-4 flex flex-wrap gap-2">
-          <span className="inline-flex min-h-8 items-center rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-3 text-xs font-semibold text-[var(--semantic-text-secondary)]">
-            {pageResult.total} total lessons
-          </span>
-          <span className="inline-flex min-h-8 items-center rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-cool)] px-3 text-xs font-semibold text-[var(--semantic-text-secondary)]">
-            Page {pageResult.page} of {pageResult.pageCount}
-          </span>
-          {canShowProgressMap ? (
-            <span className="inline-flex min-h-8 items-center rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-positive)] px-3 text-xs font-semibold text-[var(--semantic-text-secondary)]">
-              {completedCount} completed · {inProgressCount} in progress
-            </span>
-          ) : null}
-        </div>
-        <form action={base} method="get" className="mt-5 flex flex-col gap-3 sm:flex-row">
-          <label htmlFor="pathway-lessons-search" className="sr-only">
-            Search lessons
-          </label>
-          <div className="relative max-w-xl flex-1">
-            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--theme-muted-text)]" />
-            <input
-              id="pathway-lessons-search"
-              name="q"
-              defaultValue={qEffective ?? ""}
-              placeholder="Search lessons"
-              className="min-h-11 w-full rounded-full border border-[var(--semantic-border-soft)] bg-[var(--theme-page-bg)] py-2.5 pl-10 pr-4 text-sm text-[var(--theme-heading-text)] outline-none transition focus:border-[var(--semantic-brand)] focus:ring-2 focus:ring-[color-mix(in_srgb,var(--semantic-brand)_16%,transparent)]"
-            />
-          </div>
-          <button type="submit" className="inline-flex min-h-11 items-center justify-center rounded-full nn-btn-secondary px-4 py-2 text-sm font-semibold">
-            Search
-          </button>
-          {qEffective ? (
-            <a
-              href={base}
-              className="inline-flex min-h-11 items-center justify-center rounded-full border border-[var(--semantic-border-soft)] px-4 py-2 text-sm font-semibold text-[var(--theme-heading-text)] transition hover:bg-[var(--semantic-panel-muted)]"
-            >
-              Clear
-            </a>
-          ) : null}
-        </form>
-      </header>
+      <LessonsHomeHeader
+        eyebrow={pathway.displayName}
+        title={`${pathway.shortName} lessons`}
+        description={pathwayLessonsHubLead(pathway)}
+        searchBasePath={base}
+        initialQuery={qEffective ?? undefined}
+        countryOptions={[
+          { label: "Canada", href: canadaHref, active: pathway.countrySlug === "canada" },
+          { label: "US", href: usHref, active: pathway.countrySlug === "us" },
+        ]}
+        stats={[
+          { label: `${pageResult.total} total lessons` },
+          { label: `Page ${pageResult.page} of ${pageResult.pageCount}`, tone: "cool" },
+          ...(canShowProgressMap
+            ? [{ label: `${completedCount} completed · ${inProgressCount} in progress`, tone: "positive" as const }]
+            : []),
+        ]}
+      />
       {pageResult.locale ? <PathwayLessonContentLocaleBanner listLocale={pageResult.locale} /> : null}
 
       <div id="pathway-lesson-library" className="mt-8 scroll-mt-24">

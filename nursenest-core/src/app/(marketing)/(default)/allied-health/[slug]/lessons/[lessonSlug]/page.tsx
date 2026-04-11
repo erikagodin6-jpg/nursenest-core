@@ -3,7 +3,6 @@ import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 import { PathwayLessonBody } from "@/components/lessons/pathway-lesson-body";
-import { PathwayLessonQuizzes } from "@/components/lessons/pathway-lesson-quizzes";
 import { PathwayLessonLockedSectionsPreview } from "@/components/lessons/pathway-lesson-locked-sections-preview";
 import { PathwayLessonActions } from "@/components/lessons/pathway-lesson-actions";
 import { PathwayLessonPreviewBanner } from "@/components/lessons/pathway-lesson-preview-banner";
@@ -57,6 +56,7 @@ import {
   loadPathwayLessonProgressForSlug,
   type PathwayLessonProgressStatus,
 } from "@/lib/lessons/pathway-lesson-progress";
+import { PathwayLessonAssessmentExperience } from "@/components/lessons/pathway-lesson-assessment-experience";
 import { loadRelatedExamQuestionStemsForPathwayLesson } from "@/lib/lessons/lesson-question-cross-links";
 import { PathwayLessonRelatedQuestions } from "@/components/lessons/pathway-lesson-related-questions";
 import { PathwayLessonStudyLoopCta } from "@/components/lessons/pathway-lesson-study-loop-cta";
@@ -276,36 +276,44 @@ export default async function AlliedHealthSlugLessonDetailPage({ params }: Props
         )
       ) : null}
 
-      <article className="mt-8 space-y-8">
-        {visible.map((section) => (
-          <section key={section.id} className="border-b border-[var(--theme-separator)] pb-8 last:border-0">
-            <h2 className="text-xl font-semibold text-[var(--theme-heading-text)]">
-              {section.heading?.trim() || "Section"}
-            </h2>
-            <div className="mt-3">
-              <PathwayLessonBody
-                text={typeof section.body === "string" ? section.body : ""}
-                lessonWikiBasePath={base}
-                measurementSystem={lessonMeasurementSystem}
-              />
-            </div>
-          </section>
-        ))}
-      </article>
-
-      <PathwayLessonQuizzes preTest={lesson.preTest} postTest={lesson.postTest} fullAccess={fullAccess} />
-
-      {lockedSections.length > 0 ? <PathwayLessonLockedSectionsPreview sections={lockedSections} /> : null}
-
-      <PathwayLessonActions
+      <PathwayLessonAssessmentExperience
+        userId={userId}
         pathwayId={pathway.id}
         lessonSlug={lesson.slug}
-        topicCode={lesson.topicSlug}
-        topicLabel={lesson.topic}
-        userId={userId}
-        canMarkComplete={fullAccess}
         initialProgress={lessonProgress}
-      />
+        preTest={lesson.preTest}
+        postTest={lesson.postTest}
+        fullAccess={fullAccess}
+      >
+        <article className="mt-8 space-y-8">
+          {visible.map((section) => (
+            <section key={section.id} className="border-b border-[var(--theme-separator)] pb-8 last:border-0">
+              <h2 className="text-xl font-semibold text-[var(--theme-heading-text)]">
+                {section.heading?.trim() || "Section"}
+              </h2>
+              <div className="mt-3">
+                <PathwayLessonBody
+                  text={typeof section.body === "string" ? section.body : ""}
+                  lessonWikiBasePath={base}
+                  measurementSystem={lessonMeasurementSystem}
+                />
+              </div>
+            </section>
+          ))}
+        </article>
+
+        {lockedSections.length > 0 ? <PathwayLessonLockedSectionsPreview sections={lockedSections} /> : null}
+
+        <PathwayLessonActions
+          pathwayId={pathway.id}
+          lessonSlug={lesson.slug}
+          topicCode={lesson.topicSlug}
+          topicLabel={lesson.topic}
+          userId={userId}
+          canMarkComplete={fullAccess}
+          initialProgress={lessonProgress}
+        />
+      </PathwayLessonAssessmentExperience>
 
       <p className="mt-6 text-sm text-muted">
         Also see:{" "}
