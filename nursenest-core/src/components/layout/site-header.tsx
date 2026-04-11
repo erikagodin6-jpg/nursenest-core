@@ -120,9 +120,9 @@ export function SiteHeader() {
       <MarketingSiteSubNav />
 
       {mobileOpen ? (
-        <div className="fixed inset-0 z-[200] md:hidden">
+        <div className="fixed inset-0 z-[200] md:hidden animate-[nn-overlay-enter_0.24s_ease_both]">
           <button type="button" className="absolute inset-0 bg-black/40" aria-label={t("nav.closeMenu")} onClick={() => setMobileOpen(false)} />
-          <div className="absolute end-0 top-0 flex h-[100dvh] max-h-[100dvh] w-[min(100%,20rem)] flex-col border-s border-[var(--theme-separator)] bg-[var(--theme-card-bg)] shadow-[var(--shadow-elevated)]">
+          <div className="absolute end-0 top-0 flex h-[100dvh] max-h-[100dvh] w-[min(100%,20rem)] flex-col border-s border-[var(--theme-separator)] bg-[var(--theme-card-bg)] shadow-[var(--shadow-elevated)] animate-[nn-drawer-slide-in_0.28s_cubic-bezier(0.25,0.1,0.25,1)_both]">
             <div className="flex h-14 shrink-0 items-center justify-between border-b border-[var(--theme-separator)] px-4 pt-[max(0.5rem,env(safe-area-inset-top))]">
               <Link
                 href={localizeHref("/")}

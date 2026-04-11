@@ -2,6 +2,7 @@
 
 import { useMemo } from "react";
 import { ArrowRight, Stethoscope, HeartPulse, Award, Dna } from "lucide-react";
+import { FadeUp, StaggerGroup, StaggerItem, ScaleIn } from "@/lib/motion";
 import { MarketingHeroCarousel } from "@/components/marketing/marketing-hero-carousel";
 import { buildHomepageHeroSlidesAtIndices } from "@/config/home-hero-carousel";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
@@ -80,24 +81,32 @@ export function HomeConversionHero() {
       <div className="pointer-events-none absolute inset-0 nn-hero-pastel-layers opacity-[0.92]" aria-hidden />
       <div className="relative mx-auto max-w-6xl px-4 py-12 sm:px-6 md:py-16 lg:px-8">
         <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,26rem)] lg:gap-12">
-          <div className="min-w-0 space-y-6">
-            <p className="mb-2 inline-flex items-center rounded-full border border-[var(--accent-surface-a-border)] bg-[var(--accent-surface-a)] px-3 py-0.5 nn-marketing-caption font-bold uppercase tracking-[0.12em] text-[var(--accent-surface-a-text)]">
-              {t("home.conversion.heroEyebrow")}
-            </p>
-            <h1
-              id="home-conversion-hero-heading"
-              className="nn-marketing-h1 text-balance text-[var(--theme-heading-text)]"
-              data-testid="text-hero-heading"
-            >
-              {t("home.conversion.heroTitle")}
-            </h1>
-            <p className="nn-marketing-body max-w-xl text-pretty text-[var(--theme-muted-text)]" data-testid="text-hero-subheading">
-              {t("home.conversion.heroSub")}
-            </p>
+          <StaggerGroup className="min-w-0 space-y-6" staggerMs={70} whenInView once>
+            <StaggerItem>
+              <p className="mb-2 inline-flex items-center rounded-full border border-[var(--accent-surface-a-border)] bg-[var(--accent-surface-a)] px-3 py-0.5 nn-marketing-caption font-bold uppercase tracking-[0.12em] text-[var(--accent-surface-a-text)]">
+                {t("home.conversion.heroEyebrow")}
+              </p>
+            </StaggerItem>
+            <StaggerItem>
+              <h1
+                id="home-conversion-hero-heading"
+                className="nn-marketing-h1 text-balance text-[var(--theme-heading-text)]"
+                data-testid="text-hero-heading"
+              >
+                {t("home.conversion.heroTitle")}
+              </h1>
+            </StaggerItem>
+            <StaggerItem>
+              <p className="nn-marketing-body max-w-xl text-pretty text-[var(--theme-muted-text)]" data-testid="text-hero-subheading">
+                {t("home.conversion.heroSub")}
+              </p>
+            </StaggerItem>
 
-            <div className="max-w-xl">
-              <MarketingTrustSignalsStrip variant="default" homeHeroTrust />
-            </div>
+            <StaggerItem>
+              <div className="max-w-xl">
+                <MarketingTrustSignalsStrip variant="default" homeHeroTrust />
+              </div>
+            </StaggerItem>
 
             <div
               className="nn-accent-surface-b rounded-2xl px-4 py-4"

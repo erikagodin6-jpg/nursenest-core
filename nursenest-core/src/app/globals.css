@@ -1466,8 +1466,28 @@ html[data-theme="deep-twilight"] .nn-trust-mark {
   animation: nn-header-enter 0.36s cubic-bezier(0.25, 0.1, 0.25, 1) both;
 }
 
+@keyframes nn-overlay-enter {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes nn-drawer-slide-in {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .nn-header-animate-in {
+  .nn-header-animate-in,
+  [class*="animate-[nn-overlay-enter"],
+  [class*="animate-[nn-drawer-slide-in"] {
     animation: none;
   }
 }
