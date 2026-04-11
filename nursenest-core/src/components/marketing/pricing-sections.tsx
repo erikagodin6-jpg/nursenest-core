@@ -521,7 +521,7 @@ const UNLOCK_BLOCKS = [
       "Catch overconfident errors: answers you got wrong but thought you knew",
       "Identify uncertain correct answers so you can reinforce guessed knowledge",
       "Track strong mastery: what you truly know under exam conditions",
-      "Prioritised review queue: Where to Focus Next",
+      "Prioritized review queue: Where to Focus Next",
     ],
     accentColor: "var(--semantic-info)",
     preview: <ConfidenceAnalyticsPreview />,
@@ -601,7 +601,7 @@ const PRODUCT_AREAS: {
     screenshotId: 7,
     icon: "📊",
     title: "Results + remediation",
-    desc: "Structured results with weak areas, strengths, confidence patterns, and a personalised study plan generated from your data.",
+    desc: "Structured results with weak areas, strengths, confidence patterns, and a personalized study plan generated from your data.",
     detail: "Smart review · Study plan · Confidence analytics · Retest strategy",
   },
 ];

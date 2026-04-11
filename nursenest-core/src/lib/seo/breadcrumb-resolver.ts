@@ -153,11 +153,11 @@ export function appShellBreadcrumbs(
     case "lessons":
       return [HOME, { name: "Lessons", href: undefined }];
     case "questions":
-      return [HOME, { name: "Question bank", href: undefined }];
+      return [HOME, { name: "Question Bank", href: undefined }];
     case "exams":
-      return [HOME, { name: "Practice exams", href: undefined }];
+      return [HOME, { name: "Practice Exams", href: undefined }];
     case "practice-tests":
-      return [HOME, { name: "Practice tests", href: undefined }];
+      return [HOME, { name: "Practice Tests", href: undefined }];
     default:
       return [HOME];
   }

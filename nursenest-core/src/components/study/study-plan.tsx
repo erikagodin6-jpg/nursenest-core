@@ -139,7 +139,7 @@ const INTERPRETATION: Record<ReadinessBand, string> = {
   approaching:
     "You are approaching readiness, but a few key systems are limiting consistency.",
   exam_ready:
-    "Your performance is strong and stable — focus on weak areas to lock in a high pass probability.",
+    "Your performance is strong and stable. Focus on weak areas to lock in a high pass probability.",
 };
 
 // ── Plan Generator ────────────────────────────────────────────────────────────
@@ -167,7 +167,7 @@ export function generateStudyPlan(input: StudyPlanInput): StudyPlan {
     if (hasOverconfidence && label === "major-gap") {
       confidenceSignal = "Often answered incorrectly with high confidence";
     } else if (hasManyUncertainCorrect && wt.accuracyPct >= 55) {
-      confidenceSignal = "Uncertain answers — reinforce for reliable recall";
+      confidenceSignal = "Uncertain answers: reinforce for reliable recall";
     }
     return {
       topic: wt.topic,
@@ -192,14 +192,14 @@ export function generateStudyPlan(input: StudyPlanInput): StudyPlan {
     days = [
       {
         dayNumber: 1,
-        title: `Day 1 — Core Weak Area Repair${hasOverconfidence ? " (Overconfidence Correction)" : ""}`,
+        title: `Day 1: Core Weak Area Repair${hasOverconfidence ? " (Overconfidence Correction)" : ""}`,
         variant: "a",
         blocks: [
           ...(hasOverconfidence
             ? [
                 {
                   type: "review" as const,
-                  instruction: `Review the questions you got wrong with high confidence — understanding why you were wrong is the fastest path to improvement.`,
+                  instruction: `Review the questions you got wrong with high confidence. Understanding why you were wrong is the fastest path to improvement.`,
                   actionLabel: "Review session",
                   href: `/app/practice-tests/${testId}/results`,
                 },
@@ -207,7 +207,7 @@ export function generateStudyPlan(input: StudyPlanInput): StudyPlan {
             : []),
           {
             type: "lesson",
-            instruction: `Study the lesson covering ${topic1} — read all sections and take notes on key concepts.`,
+            instruction: `Study the lesson covering ${topic1}. Read all sections and take notes on key concepts.`,
             actionLabel: "Open lesson",
             href: lessonsHref(pathwayId, topic1),
           },
@@ -227,7 +227,7 @@ export function generateStudyPlan(input: StudyPlanInput): StudyPlan {
       },
       {
         dayNumber: 2,
-        title: `Day 2 — ${topic2} Foundation`,
+        title: `Day 2: ${topic2} Foundation`,
         variant: "b",
         blocks: [
           {
@@ -252,7 +252,7 @@ export function generateStudyPlan(input: StudyPlanInput): StudyPlan {
       },
       {
         dayNumber: 3,
-        title: "Day 3 — Mixed Practice and Error Review",
+        title: "Day 3: Mixed Practice and Error Review",
         variant: "a",
         blocks: [
           {
@@ -271,7 +271,7 @@ export function generateStudyPlan(input: StudyPlanInput): StudyPlan {
             ? [
                 {
                   type: "recap" as const,
-                  instruction: "You had many uncertain correct answers — revisit lessons on those topics to turn guesses into reliable knowledge.",
+                  instruction: "You had many uncertain correct answers. Revisit lessons on those topics to turn guesses into reliable knowledge.",
                   actionLabel: "Go to lessons",
                   href: lessonsHref(pathwayId),
                 },
@@ -281,7 +281,7 @@ export function generateStudyPlan(input: StudyPlanInput): StudyPlan {
       },
       {
         dayNumber: 4,
-        title: `Day 4 — ${topic3} Study Block`,
+        title: `Day 4: ${topic3} Study Block`,
         variant: "b",
         blocks: [
           {
@@ -300,7 +300,7 @@ export function generateStudyPlan(input: StudyPlanInput): StudyPlan {
       },
       {
         dayNumber: 5,
-        title: "Day 5 — Reassessment Preparation",
+        title: "Day 5: Reassessment Preparation",
         variant: "a",
         blocks: [
           {
@@ -317,7 +317,7 @@ export function generateStudyPlan(input: StudyPlanInput): StudyPlan {
           },
           {
             type: "recap",
-            instruction: "Do not take a CAT yet — complete 1–2 more study sessions first to build reliability.",
+            instruction: "Do not take a CAT yet. Complete 1–2 more study sessions first to build reliability.",
             actionLabel: "View study plan",
             href: practiceHref(),
           },
@@ -329,7 +329,7 @@ export function generateStudyPlan(input: StudyPlanInput): StudyPlan {
     days = [
       {
         dayNumber: 1,
-        title: `Day 1 — ${topic1} Deep Dive${hasOverconfidence ? " + Overconfidence Correction" : ""}`,
+        title: `Day 1: ${topic1} Deep Dive${hasOverconfidence ? " + Overconfidence Correction" : ""}`,
         variant: "a",
         blocks: [
           ...(hasOverconfidence
@@ -364,7 +364,7 @@ export function generateStudyPlan(input: StudyPlanInput): StudyPlan {
       },
       {
         dayNumber: 2,
-        title: `Day 2 — ${topic2} Focus`,
+        title: `Day 2: ${topic2} Focus`,
         variant: "b",
         blocks: [
           {
@@ -383,7 +383,7 @@ export function generateStudyPlan(input: StudyPlanInput): StudyPlan {
             ? [
                 {
                   type: "recap" as const,
-                  instruction: "You had many uncertain correct answers — revisit those lesson sections to build confident, reliable recall.",
+                  instruction: "You had many uncertain correct answers. Revisit those lesson sections to build confident, reliable recall.",
                   actionLabel: "Go to lessons",
                   href: lessonsHref(pathwayId),
                 },
@@ -393,12 +393,12 @@ export function generateStudyPlan(input: StudyPlanInput): StudyPlan {
       },
       {
         dayNumber: 3,
-        title: "Day 3 — Timed Practice",
+        title: "Day 3: Timed Practice",
         variant: "a",
         blocks: [
           {
             type: "practice",
-            instruction: "Complete 20 questions under timed conditions to simulate exam pressure. Aim for a steady pace — approximately 90 seconds per question.",
+            instruction: "Complete 20 questions under timed conditions to simulate exam pressure. Aim for a steady pace, approximately 90 seconds per question.",
             actionLabel: "Start timed practice",
             href: practiceHref(),
           },
@@ -412,7 +412,7 @@ export function generateStudyPlan(input: StudyPlanInput): StudyPlan {
       },
       {
         dayNumber: 4,
-        title: "Day 4 — Pre-CAT Consolidation",
+        title: "Day 4: Pre-CAT Consolidation",
         variant: "b",
         blocks: [
           {
@@ -441,7 +441,7 @@ export function generateStudyPlan(input: StudyPlanInput): StudyPlan {
     days = [
       {
         dayNumber: 1,
-        title: "Day 1 — CAT Simulation + Targeted Review",
+        title: "Day 1: CAT Simulation + Targeted Review",
         variant: "a",
         blocks: [
           {
@@ -454,7 +454,7 @@ export function generateStudyPlan(input: StudyPlanInput): StudyPlan {
             ? [
                 {
                   type: "review" as const,
-                  instruction: "After your CAT, review the high-confidence questions you got wrong — even strong performers have calibration gaps.",
+                  instruction: "After your CAT, review the high-confidence questions you got wrong. Even strong performers have calibration gaps.",
                   actionLabel: "Review session",
                   href: `/app/practice-tests/${testId}/results`,
                 },
@@ -470,12 +470,12 @@ export function generateStudyPlan(input: StudyPlanInput): StudyPlan {
       },
       {
         dayNumber: 2,
-        title: "Day 2 — Weak Area Precision Practice",
+        title: "Day 2: Weak Area Precision Practice",
         variant: "b",
         blocks: [
           {
             type: "practice",
-            instruction: `Complete 20 targeted questions across ${topic1} and ${topic2} — prioritise clinical reasoning over recall.`,
+            instruction: `Complete 20 targeted questions across ${topic1} and ${topic2}. Prioritize clinical reasoning over recall.`,
             actionLabel: "Start practice",
             href: practiceHref(),
           },
@@ -489,7 +489,7 @@ export function generateStudyPlan(input: StudyPlanInput): StudyPlan {
             ? [
                 {
                   type: "recap" as const,
-                  instruction: "Several correct answers relied on guessing — revisit those lesson sections to convert uncertain knowledge into confident mastery.",
+                  instruction: "Several correct answers relied on guessing. Revisit those lesson sections to convert uncertain knowledge into confident mastery.",
                   actionLabel: "Go to lessons",
                   href: lessonsHref(pathwayId),
                 },
@@ -499,12 +499,12 @@ export function generateStudyPlan(input: StudyPlanInput): StudyPlan {
       },
       {
         dayNumber: 3,
-        title: "Day 3 — Final Consolidation and Retest",
+        title: "Day 3: Final Consolidation and Retest",
         variant: "a",
         blocks: [
           {
             type: "practice",
-            instruction: "Complete 25 mixed-difficulty questions across all systems. Focus on maintaining consistency — not just getting easy items correct.",
+            instruction: "Complete 25 mixed-difficulty questions across all systems. Focus on maintaining consistency, not just getting easy items correct.",
             actionLabel: "Start practice",
             href: practiceHref(),
           },
@@ -516,7 +516,7 @@ export function generateStudyPlan(input: StudyPlanInput): StudyPlan {
           },
           {
             type: "recap",
-            instruction: "You are exam-ready. Take another CAT to confirm stability — strong performers tend to show consistent scores across 2+ sessions.",
+            instruction: "You are exam-ready. Take another CAT to confirm stability. Strong performers tend to show consistent scores across 2+ sessions.",
             actionLabel: "Start another CAT",
             href: practiceHref(),
           },
@@ -554,7 +554,7 @@ export function generateStudyPlan(input: StudyPlanInput): StudyPlan {
         return {
           timing: "Now or after one additional review session",
           recommendation:
-            "Your readiness is high. You can retest immediately or after one targeted review session. Focus on maintaining consistency — two strong CAT scores in a row is your target.",
+            "Your readiness is high. You can retest immediately or after one targeted review session. Focus on maintaining consistency: two strong CAT scores in a row is your target.",
           catHref: practiceHref(),
         };
     }
@@ -799,7 +799,7 @@ export function StudyPlanLayout({
           <PremiumLockCard
             title={`${plan.focusAreas.length - 2} more focus areas`}
             description="Unlock the full ranked list of weak topics with severity labels and lesson links for each."
-            ctaLabel="View plans"
+            ctaLabel="View Plans"
           />
         ) : null}
       </div>
@@ -807,7 +807,7 @@ export function StudyPlanLayout({
       {/* 3 — Daily Study Plan */}
       <div className="nn-study-plan-section">
         <h3 className="nn-study-plan-section__title">
-          Daily Study Plan — Next {plan.days.length} Days
+          Daily Study Plan: Next {plan.days.length} Days
         </h3>
         <p className="nn-study-plan-section__desc">
           Each day is structured with lessons, practice, and review. Complete
@@ -826,13 +826,13 @@ export function StudyPlanLayout({
               <LockedDayShell
                 key={day.dayNumber}
                 dayNumber={day.dayNumber}
-                title={day.title.replace(/^Day \d+ — /, "")}
+                title={day.title.replace(/^Day \d+: /, "")}
               />
             ))}
             <PremiumLockCard
               title="Unlock your full study plan"
               description={`Unlock all ${plan.days.length} days of your personalized plan with structured lessons, practice questions, and review blocks tailored to your weak areas.`}
-              ctaLabel="View plans"
+              ctaLabel="View Plans"
               secondaryHref="/app/lessons"
               secondaryLabel="Continue free study"
             />

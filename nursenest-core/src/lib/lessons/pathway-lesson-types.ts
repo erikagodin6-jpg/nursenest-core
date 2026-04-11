@@ -139,6 +139,12 @@ export type PathwayLessonSection = {
    * Optional — absent for most lessons until recall content is authored.
    */
   keyRecallFacts?: KeyRecallFact[];
+  /**
+   * Optional URL for pre-generated section audio (TTS or studio recording).
+   * Only populated for sections that have audio available.
+   * Absent for most sections — LessonSectionAudioButton renders nothing when null/undefined.
+   */
+  audioUrl?: string | null;
 };
 
 /** Inline pre/post checks for pathway lessons (catalog or DB JSON). */
@@ -194,6 +200,12 @@ export type PathwayLessonRecord = {
   audienceTiers?: PathwayLessonAudienceTier[];
   countryScope?: PathwayLessonCountryScope;
   examRelevance?: PathwayLessonExamRelevance;
+  /**
+   * Optional URL for pre-generated lesson-level audio (TTS or studio narration).
+   * When present, the LessonAudioCard renders a play control above the lesson article.
+   * Absent for most lessons — component renders nothing gracefully when null/undefined.
+   */
+  audioUrl?: string | null;
 };
 
 /** Hub cards must not link with empty or whitespace slugs (defensive; DB/catalog should always set slug). */

@@ -28,7 +28,7 @@ export function PathwayTopicClusterGroupedNav({ lessonsBasePath, topicClusters, 
     <section aria-label="Browse by topic" className="nn-study-card nn-study-card--wash p-4 sm:p-5">
       <h2 className="nn-marketing-h4 text-[var(--theme-heading-text)]">Browse by topic cluster</h2>
       <p className="nn-marketing-caption mt-1 text-muted">
-        Organized by clinical theme — same lessons as the full list ({pathwayShortName}).
+        Organized by clinical theme. Same lessons as the full list ({pathwayShortName}).
       </p>
       <div className="mt-4 space-y-5">
         {groups.map((g) => (

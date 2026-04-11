@@ -96,7 +96,7 @@ function StudyPlanPreview() {
             1
           </span>
           <span className="text-xs font-bold" style={{ color: TEXT_PRIMARY }}>
-            Day 1 — Core Weak Area Repair
+            Day 1: Core Weak Area Repair
           </span>
         </div>
         <div className="space-y-1.5 pl-9">
@@ -110,7 +110,7 @@ function StudyPlanPreview() {
         </div>
       </div>
 
-      {["Day 2 — Second Focus Area", "Day 3 — Timed Practice + Review", "Day 4 — CAT Simulation"].map(
+      {["Day 2: Second Focus Area", "Day 3: Timed Practice + Review", "Day 4: CAT Simulation"].map(
         (title, i) => (
           <div
             key={i}
@@ -262,7 +262,7 @@ function CatExamPreview() {
           </span>
         </div>
         <p className="mt-2 text-xs" style={{ color: TEXT_SECONDARY }}>
-          You are close — Cardiac and Pharmacology are limiting your score.
+          You are close. Cardiac and Pharmacology are limiting your score.
         </p>
         <div
           className="mt-3 h-1.5 overflow-hidden rounded-full"
@@ -440,7 +440,7 @@ export function HomeFeatureDeepDivesSection() {
       bullets: [
         "3–5 day structured plan built from your CAT readiness score and weak areas",
         "Daily tasks: lessons, targeted practice questions, and review sessions",
-        "Direct links to relevant lessons and question sets — no searching",
+        "Direct links to relevant lessons and question sets, no searching",
         "Retest strategy: exact timing and recommended next steps",
       ],
       primaryCta: "Unlock study plans",
@@ -458,7 +458,7 @@ export function HomeFeatureDeepDivesSection() {
       bullets: [
         "Every completed question grouped by correctness and confidence level",
         "High Priority Fixes: questions you got wrong but rated as confident",
-        "Needs Review, Uncertain Knowledge, and Strong Areas — all clearly separated",
+        "Needs Review, Uncertain Knowledge, and Strong Areas, all clearly separated",
         "Direct lesson links from every question row in the review list",
       ],
       primaryCta: "See smart review",
@@ -507,7 +507,7 @@ export function HomeFeatureDeepDivesSection() {
             The full readiness system
           </h2>
           <p className="nn-marketing-body mt-3 text-pretty" style={{ color: TEXT_MUTED }}>
-            Everything connects — practice, test, review, and improve — built around your weak areas and confidence patterns.
+            Everything connects: practice, test, review, and improve. Built around your weak areas and confidence patterns.
           </p>
         </header>
 

@@ -428,12 +428,12 @@ const PAYWALL_PRESETS: Record<
     bullets: [
       "Adaptive CAT exams that mirror the real test",
       "Readiness scoring so you know when to sit",
-      "Full study plan personalised to your weak areas",
+      "Full study plan personalized to your weak areas",
     ],
   },
   lesson: {
     title: "Unlock This Lesson",
-    description: "This lesson is part of your personalised study system.",
+    description: "This lesson is part of your personalized study system.",
     bullets: [
       "Understand key concepts faster",
       "Fix your weak areas with Smart Review",
@@ -463,7 +463,7 @@ const PAYWALL_PRESETS: Record<
     description: "See exactly what you're getting wrong and how to fix it.",
     bullets: [
       "Questions grouped by urgency and confidence",
-      "Prioritised review queue",
+      "Prioritized review queue",
       "Direct lesson links for every question",
     ],
   },
@@ -473,14 +473,14 @@ const PAYWALL_PRESETS: Record<
     bullets: [
       "Overconfidence detection",
       "Uncertain knowledge tracking",
-      "Prioritised review recommendations",
+      "Prioritized review recommendations",
     ],
   },
   dashboard: {
     title: "Unlock Your Full Study System",
-    description: "Start your free trial to access your personalised study plan, smart review, and full exam practice.",
+    description: "Start your free trial to access your personalized study plan, smart review, and full exam practice.",
     bullets: [
-      "Personalised study plan built from your weak areas",
+      "Personalized study plan built from your weak areas",
       "Smart review that shows you exactly what to fix",
       "Readiness scoring so you know when to take the exam",
     ],

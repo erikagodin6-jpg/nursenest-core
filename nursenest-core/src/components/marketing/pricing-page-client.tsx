@@ -267,9 +267,9 @@ export function PricingPageClient({
 
   const DURATION_MICROCOPY: Record<BillingDuration, string> = {
     monthly: "Full access to all lessons, questions, and exams",
-    "3-month": "Everything you need to pass — most students choose this",
+    "3-month": "Everything you need to pass. Most students choose this",
     "6-month": "More time to build confidence at your own pace",
-    yearly: "Best value for long-term prep — save the most",
+    yearly: "Best value for long-term prep. Save the most",
   };
 
   const tierTabs: { id: Segment; labelKey: string }[] = [
@@ -465,7 +465,7 @@ export function PricingPageClient({
             </p>
             <p className="mt-2 text-sm text-muted-foreground">
               Full access to all lessons, practice tests, CAT exams, flashcards, and analytics.
-              No charge until your trial ends — cancel anytime with one click.
+              No charge until your trial ends. Cancel anytime in one click.
             </p>
             <p className="mt-1 text-xs text-muted-foreground">
               Payment method required to prevent abuse. You won't be charged during your trial.
@@ -528,12 +528,12 @@ export function PricingPageClient({
           {trialDays > 0 && (
             <li className="flex gap-2">
               <Check className="mt-0.5 h-4 w-4 shrink-0 text-[var(--semantic-success)]" aria-hidden />
-              {trialDays}-day free trial — no charge until it ends
+              {trialDays}-day free trial, no charge until it ends
             </li>
           )}
           <li className="flex gap-2">
             <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden />
-            Cancel anytime — no questions asked
+            Cancel anytime from your account
           </li>
           <li className="flex gap-2">
             <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden />

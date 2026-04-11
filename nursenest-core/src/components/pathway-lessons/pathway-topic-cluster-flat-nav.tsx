@@ -40,14 +40,14 @@ export function PathwayTopicClusterFlatNav({ lessonsBasePath, topicClusters, pat
     <section aria-label="Browse by topic" className="rounded-xl border border-border bg-card p-4">
       <h2 className="text-sm font-bold text-[var(--theme-heading-text)]">Browse by topic cluster</h2>
       <p className="mt-1 text-xs text-muted">
-        Same lessons, alternate index — useful when you study by organ system or theme ({pathwayShortName}).
+        Same lessons, alternate index. Useful when you study by organ system or theme ({pathwayShortName}).
       </p>
       <ul className="mt-3 flex flex-wrap gap-2">{visible.map(chip)}</ul>
       {hasOverflow ? (
         <details className="mt-3 group rounded-lg border border-dashed border-border bg-[var(--theme-muted-surface)]/50 p-3">
           <summary className="cursor-pointer list-none text-sm font-semibold text-primary [&::-webkit-details-marker]:hidden">
             <span className="underline-offset-2 group-open:underline">
-              All topic clusters ({topicClusters.length}) — expand
+              All topic clusters ({topicClusters.length}): expand
             </span>
           </summary>
           <ul className="mt-3 flex flex-wrap gap-2 border-t border-border pt-3">{overflow.map(chip)}</ul>

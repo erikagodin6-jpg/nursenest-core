@@ -32,7 +32,7 @@ export function PathwayTopicClusterSiblingNav({
     <nav aria-label="Other topic clusters in this pathway" className="nn-study-card nn-study-card--wash p-4 sm:p-5">
       <p className="text-xs font-semibold uppercase tracking-wide text-primary">Explore other topics</p>
       <p className="nn-marketing-caption mt-1 text-muted-foreground">
-        Same exam scope — jump to another cluster without returning to the full lesson list.
+        Same exam scope. Jump to another cluster without returning to the full lesson list.
       </p>
       <ul className="mt-3 flex flex-wrap gap-2">
         {siblings.map((t) => (

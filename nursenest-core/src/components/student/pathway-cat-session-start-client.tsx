@@ -132,7 +132,7 @@ export function PathwayCatSessionStartClient({
         <p className="mt-2 text-sm text-muted-foreground">
           {catLine ? (
             <>
-              <span className="font-medium text-foreground">{catLine}</span> — adaptive session: one question at a time,
+              <span className="font-medium text-foreground">{catLine}</span>, adaptive session: one question at a time,
               pool filtered to this exam and your plan. Choose Study Mode (rationales as you go) or Test Mode (rationales after
               the run).
             </>
@@ -184,7 +184,7 @@ export function PathwayCatSessionStartClient({
       <div>
         <p className="text-sm font-medium text-foreground">How do you want to run this CAT?</p>
         <p className="mt-1 text-xs text-muted-foreground">
-          Same adaptive engine and scoring either way — only on-screen teaching and pacing differ.
+          Same adaptive engine and scoring either way. Only on-screen teaching and pacing differ.
         </p>
         <div className="mt-3 grid gap-3 sm:grid-cols-2">
           <button
@@ -215,7 +215,7 @@ export function PathwayCatSessionStartClient({
             <p className="text-xs font-bold uppercase tracking-widest text-primary">Test Mode</p>
             <p className="mt-2 text-sm font-semibold text-foreground">No rationales until the end</p>
             <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
-              Exam-style focus — no hints during the live CAT. Explanations unlock in post-exam review.
+              Exam-style focus: no hints during the live CAT. Explanations unlock in post-exam review.
             </p>
           </button>
         </div>
