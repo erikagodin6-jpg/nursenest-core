@@ -1,0 +1,1078 @@
+{
+  "version": 1,
+  "phase": 2,
+  "part": 1,
+  "label": "Phase 2 Questions — Red Flags & Safety (np-p2-001 through np-p2-062)",
+  "generatedDate": "2026-04-11",
+  "scopeFenceRef": "np-scope-fences.json",
+  "phase1AnchorRef": "np-phase1-finalization.json",
+  "difficultyPolicy": "hard or expert only — no medium",
+  "topics": [
+    "hypertension-red-flags-referral (np-p2-001 to np-p2-010)",
+    "neurological-red-flags-emergency 2A (np-p2-011 to np-p2-016)",
+    "neurological-red-flags-emergency 2B (np-p2-017 to np-p2-022)",
+    "cancer-red-flags-primary-care 2A (np-p2-023 to np-p2-028)",
+    "cancer-red-flags-primary-care 2B (np-p2-029 to np-p2-034)",
+    "pediatric-red-flags-dont-miss 2A (np-p2-035 to np-p2-041)",
+    "pediatric-red-flags-dont-miss 2B (np-p2-042 to np-p2-048)",
+    "psychiatric-red-flags-safety 2A (np-p2-049 to np-p2-055)",
+    "psychiatric-red-flags-safety 2B (np-p2-056 to np-p2-062)"
+  ],
+  "questions": [
+
+    {
+      "questionId": "np-p2-001",
+      "topicSlug": "hypertension-red-flags-referral",
+      "lessonPart": "2",
+      "difficulty": "expert",
+      "stemAnchor": "BP 210/118 + headache + altered mental status + papilledema — hypertensive emergency vs urgency disposition",
+      "stem": "A 58-year-old man with known hypertension presents to your clinic reporting a severe headache and 'feeling confused' since this morning. His wife reports he has been 'not himself' for 3 hours. BP is 210/118 mmHg, HR 88, RR 18, SpO2 98%. Fundoscopic examination reveals bilateral blurred disc margins and flame hemorrhages. He is oriented to person only. Which of the following is the most appropriate immediate action?",
+      "options": {
+        "A": "Administer oral labetalol 200 mg and reassess blood pressure in 2 hours",
+        "B": "Administer sublingual nifedipine to rapidly reduce blood pressure",
+        "C": "Call 911 for emergent transfer to the ED for IV antihypertensive therapy",
+        "D": "Schedule an urgent next-day follow-up with neurology and begin amlodipine"
+      },
+      "correctAnswer": "C",
+      "rationale": "This is a hypertensive emergency — BP ≥180/120 with acute end-organ damage (hypertensive encephalopathy: altered mental status + papilledema + flame hemorrhages). Hypertensive emergency requires IV antihypertensive therapy (nitroprusside, nicardipine, or labetalol IV) in a monitored setting — oral agents are inadequate. Option A (oral labetalol) is appropriate for urgency, not emergency. Option B (sublingual nifedipine) is contraindicated — it causes precipitous, uncontrolled BP drops and is no longer used for any hypertensive emergency. Option D delays appropriate care. The NP must call 911 immediately."
+    },
+
+    {
+      "questionId": "np-p2-002",
+      "topicSlug": "hypertension-red-flags-referral",
+      "lessonPart": "2",
+      "difficulty": "hard",
+      "stemAnchor": "BP 188/110 + no symptoms + headache x2 days — urgency vs emergency triage decision",
+      "stem": "A 44-year-old woman with hypertension (on amlodipine 5 mg) calls your clinic after checking her BP at a pharmacy — BP is 188/110 mmHg on two readings. She reports a mild headache for the past two days, which she attributes to stress. She has no chest pain, shortness of breath, vision changes, or confusion. She walks to the clinic immediately. Repeat BP in clinic is 184/108 mmHg. Neurological exam is normal; fundoscopic exam shows sharp disc margins. Which of the following best describes her clinical status and most appropriate management?",
+      "options": {
+        "A": "Hypertensive emergency requiring 911 activation and IV antihypertensive therapy",
+        "B": "Hypertensive urgency; oral medication adjustment with reassessment within 24 hours is appropriate",
+        "C": "Stage 2 hypertension requiring immediate ED transfer regardless of symptoms",
+        "D": "BP measurement artifact; have her rest 10 minutes and discharge without intervention"
+      },
+      "correctAnswer": "B",
+      "rationale": "Hypertensive urgency is defined as BP ≥180/120 mmHg WITHOUT evidence of acute end-organ damage. This patient has a BP of 184/108–188/110 with only mild headache, a normal neurological exam, and no papilledema. Urgency does NOT require ED transfer — outpatient oral medication adjustment (e.g., increasing amlodipine, adding a second agent) with reassessment within 24 hours is appropriate. Option A (emergency) requires evidence of acute organ damage (encephalopathy, papilledema, AKI, acute HF, aortic dissection, NSTEMI) — absent here. Option C overcalls the urgency. Option D fails to address a clinically significant BP level requiring intervention."
+    },
+
+    {
+      "questionId": "np-p2-003",
+      "topicSlug": "hypertension-red-flags-referral",
+      "lessonPart": "2",
+      "difficulty": "expert",
+      "stemAnchor": "Young woman + resistant HTN + spontaneous hypokalemia K 2.9 + BP uncontrolled on 3 agents — secondary HTN workup",
+      "stem": "A 29-year-old woman presents for a medication review. She was diagnosed with hypertension at age 24 and is currently on lisinopril 40 mg, amlodipine 10 mg, and chlorthalidone 25 mg daily, yet her BP remains 158/96 mmHg. Basic metabolic panel shows: Na 142, K 2.9, CO2 30, Cr 0.8. She denies diarrhea, vomiting, or diuretic overuse. She does not take NSAIDs or oral contraceptives. Physical exam reveals no abdominal bruit and no cushingoid features. Which of the following is the most appropriate next step to evaluate her resistant hypertension?",
+      "options": {
+        "A": "Increase chlorthalidone to 50 mg daily and add spironolactone 25 mg",
+        "B": "Obtain aldosterone-to-renin ratio (ARR) to screen for primary aldosteronism",
+        "C": "Order 24-hour urine cortisol to screen for Cushing syndrome",
+        "D": "Obtain plasma free metanephrines to screen for pheochromocytoma"
+      },
+      "correctAnswer": "B",
+      "rationale": "This patient has resistant hypertension (uncontrolled on 3 agents including a diuretic) at a young age with spontaneous hypokalemia (K 2.9 without diuretic overuse or GI losses) — the classic pattern of primary aldosteronism (Conn syndrome). The initial screening test is the aldosterone-to-renin ratio (ARR); an ARR >20–30 with plasma aldosterone >15 ng/dL is suspicious. Primary aldosteronism is the most common cause of secondary hypertension. Option A adds an aldosterone antagonist without confirming the diagnosis. Option C (Cushing screen) is appropriate when proximal muscle weakness, central obesity, purple striae, and moon facies are present — absent here. Option D (pheochromocytoma screen) is indicated for paroxysmal hypertension with classic triad — absent here."
+    },
+
+    {
+      "questionId": "np-p2-004",
+      "topicSlug": "hypertension-red-flags-referral",
+      "lessonPart": "2",
+      "difficulty": "hard",
+      "stemAnchor": "BP 178/112 + sudden onset tearing chest/back pain + unequal arm BP 24 mmHg — aortic dissection vs hypertensive emergency",
+      "stem": "A 67-year-old man with longstanding hypertension presents to your urgent care clinic with sudden-onset severe chest pain radiating to his back that began 40 minutes ago. He describes the pain as 'tearing' and says it was worst at onset. BP right arm 178/112 mmHg; BP left arm 154/88 mmHg. HR 104. He is diaphoretic and appears in pain. D-dimer is 1.8 µg/mL (elevated). ECG shows sinus tachycardia without ST changes. Which of the following is the most appropriate next action?",
+      "options": {
+        "A": "Initiate IV nicardipine to lower BP and contact nephrology for hypertensive emergency",
+        "B": "Administer aspirin 324 mg and activate STEMI protocol",
+        "C": "Call 911 immediately for emergent transfer; suspected aortic dissection requires CT aortography in the ED",
+        "D": "Order urgent troponin and repeat ECG in 30 minutes to evaluate for NSTEMI"
+      },
+      "correctAnswer": "C",
+      "rationale": "The clinical picture is highly concerning for aortic dissection: sudden tearing chest-back pain maximal at onset, interarm BP difference of 24 mmHg (>20 mmHg = significant), diaphoresis, and elevated D-dimer. Aortic dissection is a life-threatening emergency requiring immediate CT aortography for diagnosis. The diagnosis must be established before treatment decisions. Option A (nicardipine) is premature without confirmed diagnosis and should not delay transfer. Option B (aspirin + STEMI protocol) is dangerous — anticoagulation/thrombolytics in aortic dissection are potentially lethal. Option D delays life-saving diagnosis. Call 911 immediately; do not delay for additional in-office testing."
+    },
+
+    {
+      "questionId": "np-p2-005",
+      "topicSlug": "hypertension-red-flags-referral",
+      "lessonPart": "2",
+      "difficulty": "hard",
+      "stemAnchor": "Pregnant 32 weeks + BP 164/108 + headache + visual changes — eclampsia pre-eclampsia distinction",
+      "stem": "A 28-year-old G2P1 at 32 weeks gestation is seen in your outpatient clinic for a routine prenatal visit. She reports a headache for the past 2 days and describes 'seeing flashing lights.' BP today is 164/108 mmHg (previously normotensive). Urine dipstick: 2+ proteinuria. She has no clonus but reports right upper quadrant discomfort. Which of the following is the most appropriate immediate action?",
+      "options": {
+        "A": "Start oral labetalol 200 mg and schedule return visit in one week",
+        "B": "Initiate magnesium sulfate and call 911 for emergent OB transfer",
+        "C": "Reassure her that mild headaches and floaters are common in pregnancy and no action is needed",
+        "D": "Order ambulatory blood pressure monitoring and recheck in 24 hours"
+      },
+      "correctAnswer": "B",
+      "rationale": "This patient meets criteria for severe-range preeclampsia with severe features: BP ≥160/110, proteinuria, headache, visual disturbances, and RUQ pain. The presence of severe features (BP ≥160/110 + neurological or hepatic symptoms) constitutes an obstetric emergency with imminent eclampsia risk. Magnesium sulfate provides seizure prophylaxis and must be initiated; emergent OB transfer is required. Option A (oral labetalol alone) is insufficient for severe features and delays definitive management. Option C dismisses clearly severe features. Option D is inappropriate — this is not a monitoring situation; this is an emergency requiring immediate escalation."
+    },
+
+    {
+      "questionId": "np-p2-006",
+      "topicSlug": "hypertension-red-flags-referral",
+      "lessonPart": "2",
+      "difficulty": "hard",
+      "stemAnchor": "Paroxysmal BP spikes 200+/120 + headache + palpitations + diaphoresis + episodic — pheochromocytoma recognition",
+      "stem": "A 35-year-old woman presents with episodic severe headaches occurring 2–3 times weekly for the past 4 months. Each episode lasts 15–30 minutes and is associated with palpitations, profuse sweating, and a 'pounding feeling in her chest.' During a recent episode witnessed by her husband, she appeared flushed with a pulse of 130. She has no history of hypertension; her in-office BP today is 128/82. Basic labs are normal. Her primary care provider previously attributed the episodes to panic disorder. Which of the following screening test is most appropriate?",
+      "options": {
+        "A": "Ambulatory cardiac monitoring (Holter) to evaluate for paroxysmal arrhythmia",
+        "B": "Plasma free metanephrines or 24-hour urine catecholamines/metanephrines",
+        "C": "Aldosterone-to-renin ratio to screen for primary aldosteronism",
+        "D": "24-hour urine cortisol to evaluate for Cushing syndrome"
+      },
+      "correctAnswer": "B",
+      "rationale": "The classic pheochromocytoma triad is paroxysmal headache + palpitations + diaphoresis with episodic hypertension. The episodic nature, normal between-episode BP, and young patient should raise high suspicion. Plasma free metanephrines (most sensitive, >95%) or 24-hour urine fractionated metanephrines/catecholamines are the preferred screening tests. Aldosterone-to-renin ratio (C) is for sustained hypertension with hypokalemia. Cortisol (D) is for Cushing features. Holter monitoring (A) might detect arrhythmia but would miss the endocrine cause. This is a classic NP-level screening decision where anchoring on 'panic disorder' leads to a missed diagnosis."
+    },
+
+    {
+      "questionId": "np-p2-007",
+      "topicSlug": "hypertension-red-flags-referral",
+      "lessonPart": "2",
+      "difficulty": "hard",
+      "stemAnchor": "Patient with multiple in-office high BP but normal home readings — white coat HTN ABPM indication",
+      "stem": "A 52-year-old man is referred for hypertension management. In-office BP has been consistently elevated at three visits: 146/92, 152/96, and 148/90 mmHg. He has been recording home readings twice daily for two weeks, which average 118/74 mmHg. He is currently on no antihypertensive medications. He is a non-smoker with no DM, no CKD, and no cardiovascular disease history. Which of the following is the most appropriate next step?",
+      "options": {
+        "A": "Begin antihypertensive therapy with lisinopril 10 mg based on consistently elevated office readings",
+        "B": "Order ambulatory blood pressure monitoring (ABPM) to differentiate white coat hypertension from sustained hypertension",
+        "C": "Reassure the patient that his normal home readings confirm normal blood pressure, and no further workup is needed",
+        "D": "Diagnose masked hypertension and initiate combination antihypertensive therapy"
+      },
+      "correctAnswer": "B",
+      "rationale": "White coat hypertension (WCH) is defined as persistently elevated in-office BP with normal out-of-office BP readings. This patient's pattern (consistently elevated office BP, consistently normal home readings) is highly suggestive of WCH. ABPM is the gold standard to confirm the diagnosis. Starting antihypertensives without confirmation risks treating a normotensive patient and causing hypotension at home. Option C is incorrect because ABPM is still required — home readings alone, while suggestive, are not as validated as ABPM. Option D (masked hypertension) is the opposite pattern: normal in-office, elevated out-of-office — not applicable here. Patients with WCH still require monitoring as they have higher long-term risk of developing sustained HTN."
+    },
+
+    {
+      "questionId": "np-p2-008",
+      "topicSlug": "hypertension-red-flags-referral",
+      "lessonPart": "2",
+      "difficulty": "expert",
+      "stemAnchor": "Older man on ACEi + new eGFR drop 45 to 28 after addition — bilateral renal artery stenosis recognition",
+      "stem": "A 71-year-old man with hypertension, T2DM, and CKD (baseline eGFR 45 mL/min) was started on lisinopril 10 mg 4 weeks ago. Repeat BMP today shows creatinine 2.1 mg/dL (was 1.4 mg/dL) with eGFR 28 mL/min. K+ is 5.4 mEq/L. He has no symptoms. BP is 140/88 mmHg. His abdominal aorta has a bruit audible on exam. Which of the following best explains his acute kidney injury and is the most appropriate next step?",
+      "options": {
+        "A": "ACEi-induced hyperkalemia is the primary problem; discontinue lisinopril and start amlodipine",
+        "B": "This degree of creatinine rise is expected and acceptable with ACEi initiation in CKD; continue lisinopril",
+        "C": "This presentation suggests bilateral renal artery stenosis; discontinue lisinopril and order renal artery Doppler ultrasound",
+        "D": "Start IV normal saline for pre-renal azotemia and resume lisinopril after volume repletion"
+      },
+      "correctAnswer": "C",
+      "rationale": "An abdominal bruit + acute kidney injury after starting an ACEi with a creatinine rise >30% from baseline suggests bilateral renal artery stenosis (or stenosis of a single functioning kidney). In bilateral RAS, the ACEi removes efferent arteriole constriction that was maintaining GFR — the result is a precipitous GFR drop. A rise in creatinine ≤30% from baseline is acceptable and expected with ACEi in CKD; this patient's creatinine rose from 1.4 to 2.1 (50% increase), exceeding the threshold. Lisinopril must be discontinued and renal artery Doppler ultrasound ordered. If bilateral RAS is confirmed, ACEi/ARB are CONTRAINDICATED. Option B incorrectly accepts this degree of rise as normal."
+    },
+
+    {
+      "questionId": "np-p2-009",
+      "topicSlug": "hypertension-red-flags-referral",
+      "lessonPart": "2",
+      "difficulty": "hard",
+      "stemAnchor": "62-year-old with BP 190/115 + new severe headache but clear fundoscopy + normal neuro exam — urgency not emergency",
+      "stem": "A 62-year-old woman with known hypertension (on metoprolol succinate 50 mg daily) presents to your clinic reporting her 'worst headache in years.' BP is 190/115 mmHg. She describes the headache as bilateral pressure, rated 7/10, without associated nausea, vomiting, visual changes, or confusion. Her neurological exam is entirely normal. Fundoscopic examination reveals sharp, distinct disc margins without hemorrhages or exudates. Which of the following represents the most appropriate management?",
+      "options": {
+        "A": "Call 911 for emergent transfer due to the patient's 'worst headache in years' (thunderclap concern)",
+        "B": "Perform immediate LP to rule out subarachnoid hemorrhage before addressing blood pressure",
+        "C": "Administer oral clonidine 0.2 mg, repeat BP in 1–2 hours, and arrange close follow-up within 24 hours",
+        "D": "Start intravenous labetalol and begin BP lowering to <160/100 within 30 minutes"
+      },
+      "correctAnswer": "C",
+      "rationale": "This is hypertensive urgency: BP ≥180/120 without end-organ damage. Key: the 'worst headache in years' does NOT qualify as a thunderclap headache (which is maximal at onset in seconds — SAH pattern covered in Phase 1). This headache is bilateral pressure-type and the patient has a clear exam, normal fundoscopy, and no neurological deficits — consistent with hypertension-related headache, not SAH. For urgency, oral medication adjustment (e.g., oral clonidine, increasing existing antihypertensive, or adding a new oral agent) with reassessment within 24 hours is appropriate. Option A overcalls without true thunderclap features. Option B is not indicated without thunderclap/SAH concern. Option D (IV labetalol) is for hypertensive emergency only."
+    },
+
+    {
+      "questionId": "np-p2-010",
+      "topicSlug": "hypertension-red-flags-referral",
+      "lessonPart": "2",
+      "difficulty": "expert",
+      "stemAnchor": "Obese patient + resistant HTN on 4 meds + snoring + daytime sleepiness — OSA as secondary HTN cause",
+      "stem": "A 48-year-old man with BMI 41 presents for follow-up of hypertension that has been difficult to control. He is currently on lisinopril 40 mg, amlodipine 10 mg, chlorthalidone 25 mg, and spironolactone 50 mg. His BP averages 148/92 mmHg. His wife reports he snores loudly and has witnessed apneas. He reports excessive daytime sleepiness (Epworth score 16/24). Aldosterone-to-renin ratio was negative. Which of the following is the most appropriate next step to address his resistant hypertension?",
+      "options": {
+        "A": "Increase spironolactone to 100 mg and add hydralazine as the fifth antihypertensive",
+        "B": "Refer for sleep study and initiation of CPAP therapy, which has been shown to reduce BP in OSA",
+        "C": "Order 24-hour urine catecholamines to screen for pheochromocytoma",
+        "D": "Refer to renal for consideration of denervation procedure"
+      },
+      "correctAnswer": "B",
+      "rationale": "Obstructive sleep apnea (OSA) is one of the most common causes of resistant hypertension. This patient has a BMI of 41, loud snoring, witnessed apneas, and excessive daytime sleepiness (Epworth ≥10) — a clinically evident OSA presentation. Untreated OSA activates the sympathetic nervous system and RAAS, causing nocturnal hypertension and blunting antihypertensive drug efficacy. CPAP therapy is associated with modest but meaningful BP reduction in OSA with resistant HTN. The secondary HTN workup (ARR negative) has already been initiated. Option A escalates medications without addressing the underlying reversible cause. Option C (pheochromocytoma) lacks the episodic BP spikes and classic triad. Option D (renal denervation) is investigational and not recommended without exhausting reversible causes including OSA."
+    },
+
+    {
+      "questionId": "np-p2-011",
+      "topicSlug": "neurological-red-flags-emergency",
+      "lessonPart": "2A",
+      "difficulty": "expert",
+      "stemAnchor": "78-year-old + sudden left facial droop + arm weakness + slurred speech lasting 12 minutes — TIA high-risk ABCD2 score, ED disposition",
+      "stem": "A 78-year-old man with hypertension, diabetes, and atrial fibrillation (on warfarin, INR 1.6 today) presents 35 minutes after a 12-minute episode of left facial drooping, left arm weakness, and slurred speech. All symptoms fully resolved before arrival. His INR today is 1.6 (subtherapeutic). BP is 168/94 mmHg. Neurological exam is now normal. Which of the following is the most appropriate next step?",
+      "options": {
+        "A": "Schedule non-urgent MRI brain within 1 week and increase warfarin dose",
+        "B": "Activate 911 for emergent transfer to stroke center; TIA with ABCD2 ≥6 requires same-day evaluation",
+        "C": "Start aspirin 325 mg and schedule carotid duplex and echocardiogram within 48 hours",
+        "D": "Reassure the patient that complete resolution of symptoms confirms this was a TIA and not a stroke; discharge with neurology follow-up in 1 month"
+      },
+      "correctAnswer": "B",
+      "rationale": "This patient has an ABCD2 score of 7: Age ≥60 (1), BP ≥140/90 (1), Clinical features = unilateral weakness (2), Duration 10–59 min (1), Diabetes (1) = 6 points, exceeding the high-risk threshold of ≥4. Additionally, he has a subtherapeutic INR on warfarin for AF (the likely cardioembolic source) — this represents a very high 48-hour stroke risk (>8%). The current standard of care requires same-day evaluation at a stroke center for TIA with ABCD2 ≥4 or any dual antiplatelet or anticoagulation consideration. Option A (1-week MRI) is dangerously delayed. Option C (aspirin) alone is inadequate — DAPT may be appropriate but his AF makes anticoagulation optimization the priority. Option D is wrong: complete resolution is expected with TIA; this does not reduce urgency."
+    },
+
+    {
+      "questionId": "np-p2-012",
+      "topicSlug": "neurological-red-flags-emergency",
+      "lessonPart": "2A",
+      "difficulty": "hard",
+      "stemAnchor": "34-year-old + sudden severe vertigo + dysarthria + ipsilateral facial numbness + contralateral limb ataxia — posterior stroke vs labyrinthitis",
+      "stem": "A 34-year-old woman presents with sudden-onset severe dizziness that began 2 hours ago and has not improved. She describes it as 'the room spinning.' She has difficulty walking without holding onto the wall. Neurological exam reveals: dysarthria, right-sided facial numbness, right Horner syndrome (ptosis, miosis), and left arm and leg ataxia. She has no nausea but appears anxious. Which of the following is the most appropriate diagnosis and action?",
+      "options": {
+        "A": "Benign paroxysmal positional vertigo (BPPV); perform Epley maneuver",
+        "B": "Acute labyrinthitis; start meclizine and follow up in 2 days",
+        "C": "Posterior circulation ischemic stroke (likely PICA territory — Wallenberg syndrome); call 911 immediately",
+        "D": "Vestibular migraine; administer IV prochlorperazine and observe 1 hour"
+      },
+      "correctAnswer": "C",
+      "rationale": "This is Wallenberg syndrome (lateral medullary syndrome from PICA occlusion): ipsilateral facial numbness, ipsilateral Horner syndrome (ptosis, miosis, anhidrosis), contralateral limb sensory loss, dysarthria, dysphagia, and ipsilateral limb ataxia. This is a posterior circulation stroke, not vestibular disease. BPPV and labyrinthitis do not cause dysarthria, Horner syndrome, or sensory dissociation. The key distinguishing feature is the combination of bulbar signs with crossed sensory findings — this is a brainstem stroke. Call 911 immediately for CT followed by MRI and stroke team evaluation. Missing this diagnosis as 'labyrinthitis' or 'vestibular migraine' is a high-yield NP examination trap."
+    },
+
+    {
+      "questionId": "np-p2-013",
+      "topicSlug": "neurological-red-flags-emergency",
+      "lessonPart": "2A",
+      "difficulty": "hard",
+      "stemAnchor": "45-year-old + low back pain + urinary retention + perianal numbness + bilateral leg weakness — cauda equina syndrome emergent MRI",
+      "stem": "A 45-year-old man presents with a 48-hour history of worsening low back pain. Today he reports difficulty starting urination and describes numbness in the area he 'sits on.' His wife notes he has been dragging both feet when walking. Examination reveals decreased anal sphincter tone, saddle anesthesia (bilateral perineal/perianal numbness), 4/5 strength in both lower extremities, and absent ankle jerks bilaterally. He had an MRI-confirmed L4-L5 disc herniation 6 months ago treated conservatively. Which of the following is the most appropriate next step?",
+      "options": {
+        "A": "Prescribe cyclobenzaprine and methocarbamol with a follow-up in 1 week",
+        "B": "Order an outpatient lumbar MRI within 72 hours and refer to orthopedics",
+        "C": "Call 911 for immediate transfer; cauda equina syndrome requires emergent MRI and neurosurgical evaluation within hours",
+        "D": "Start dexamethasone 10 mg IV and schedule an urgent neurology appointment for tomorrow"
+      },
+      "correctAnswer": "C",
+      "rationale": "Cauda equina syndrome (CES) is a surgical emergency. The classic presentation is saddle anesthesia, bladder/bowel dysfunction (urinary retention before incontinence), bilateral lower extremity weakness, and areflexia — all present here. Delay in diagnosis results in irreversible sphincter paralysis and permanent lower extremity neurological deficits. Emergent MRI (within hours) and neurosurgical evaluation are required. Option B (72-hour MRI) is far too delayed — CES hours matter. Option A (muscle relaxants) is dangerously inappropriate. Option D (dexamethasone) may have a role in spinal cord compression from malignancy but is not the primary action — transfer comes first."
+    },
+
+    {
+      "questionId": "np-p2-014",
+      "topicSlug": "neurological-red-flags-emergency",
+      "lessonPart": "2A",
+      "difficulty": "expert",
+      "stemAnchor": "Older woman + known breast cancer + 3 weeks progressive bilateral leg weakness + urine incontinence + mid-thoracic pain — malignant spinal cord compression",
+      "stem": "A 66-year-old woman with known breast cancer (on hormone therapy, last oncology visit 3 months ago) presents with a 3-week history of progressively worsening mid-thoracic back pain, bilateral leg weakness (now using a walker), and urinary incontinence that began yesterday. She has no fever. Neurological exam reveals 3/5 bilateral lower extremity strength, decreased sensation below the umbilicus, and bilateral hyperreflexia with positive Babinski signs. Which of the following is the most appropriate immediate management?",
+      "options": {
+        "A": "Start celecoxib 200 mg twice daily and refer to pain management within 1 week",
+        "B": "Administer dexamethasone 10 mg IV immediately and call 911 for emergent transfer for MRI spine and radiation oncology evaluation",
+        "C": "Schedule outpatient MRI thoracic spine within 48 hours and contact her oncologist",
+        "D": "Refer to physical therapy for lower extremity strengthening and fall prevention"
+      },
+      "correctAnswer": "B",
+      "rationale": "This is malignant spinal cord compression (MSCC) — an oncological emergency. Features: known breast cancer (common source of bone/spine metastases) + progressive bilateral lower extremity weakness + sensory level + Babinski signs + new urinary incontinence + thoracic pain. Immediate dexamethasone (10–16 mg IV) reduces spinal cord edema and preserves neurological function. Emergent MRI is required to confirm the level and extent. Radiation oncology (and possibly neurosurgery) must be contacted for emergent treatment. Option C (48-hour MRI) would allow permanent paralysis to develop. Option D is inappropriate for a neurological emergency. Time to treatment is the key determinant of neurological outcome — each hour of delay matters."
+    },
+
+    {
+      "questionId": "np-p2-015",
+      "topicSlug": "neurological-red-flags-emergency",
+      "lessonPart": "2A",
+      "difficulty": "hard",
+      "stemAnchor": "52-year-old diabetic + sudden left hand weakness + face normal + speech normal + resolves — lacunar TIA motor strip territory",
+      "stem": "A 52-year-old man with hypertension and poorly controlled T2DM presents 90 minutes after a 20-minute episode of sudden, isolated left hand and forearm weakness. There was no facial involvement, no language disturbance, and no vision change. The episode resolved completely. He had a similar but shorter episode 3 weeks ago that he 'forgot to mention.' BP is 178/102 mmHg. Neurological exam is now entirely normal. Which of the following is the most appropriate response?",
+      "options": {
+        "A": "Diagnose as peripheral nerve entrapment (carpal tunnel syndrome) and refer to neurology as outpatient within 3 weeks",
+        "B": "Initiate dual antiplatelet therapy with aspirin + clopidogrel and discharge with urgent neurology follow-up in 48 hours",
+        "C": "Activate 911 for emergent stroke center evaluation; recurrent TIA with high ABCD2 score requires same-day evaluation",
+        "D": "Order outpatient carotid duplex and brain MRI within 1 week; start aspirin and increase antihypertensives"
+      },
+      "correctAnswer": "C",
+      "rationale": "This patient has had TWO episodes of focal neurological deficit — the prior event 3 weeks ago and the current event. Recurrent TIA dramatically increases 48-hour stroke risk. ABCD2 score: Age 52 (0), BP ≥140/90 (1), Clinical = unilateral weakness (2), Duration 10–59 min (1), DM (1) = 5 points — high risk. Recurrence raises this further. Same-day stroke center evaluation is required. Dual antiplatelet (POINT/CHANCE trials) may be appropriate but must be initiated in the context of a stroke center evaluation with imaging to exclude hemorrhage. Option A (carpal tunnel) is incorrect — isolated limb motor TIA from a contralateral cortical or lacunar source does not cause carpal tunnel pattern. Option D delays evaluation inappropriately for a recurrent TIA patient."
+    },
+
+    {
+      "questionId": "np-p2-016",
+      "topicSlug": "neurological-red-flags-emergency",
+      "lessonPart": "2A",
+      "difficulty": "expert",
+      "stemAnchor": "Ascending bilateral flaccid weakness + areflexia + 10 days post-Campylobacter diarrhea — Guillain-Barré respiratory threat",
+      "stem": "A 40-year-old woman presents with bilateral leg weakness that began 5 days ago and has progressed to involve her arms. She had a bout of bloody diarrhea 10 days prior that resolved without treatment. Examination reveals 2/5 lower extremity strength, 3/5 upper extremity strength, bilateral areflexia, and diminished pin sensation in her feet. She has no fever. Vital signs: SpO2 96%, RR 22. She reports shortness of breath when lying flat. Which of the following is the most critical next action?",
+      "options": {
+        "A": "Order electromyography (EMG) and nerve conduction studies as an urgent outpatient test within 48 hours",
+        "B": "Start empiric intravenous immunoglobulin (IVIG) in the clinic and schedule follow-up in 3 days",
+        "C": "Call 911 immediately; this clinical picture is consistent with Guillain-Barré syndrome with impending respiratory failure",
+        "D": "Start oral prednisone 60 mg/day and monitor in clinic for 2 hours before discharge decision"
+      },
+      "correctAnswer": "C",
+      "rationale": "Guillain-Barré syndrome (GBS): ascending bilateral flaccid weakness + areflexia + preceding Campylobacter infection (most common GBS trigger). SpO2 of 96% with RR 22 and orthopnea suggests early respiratory compromise. GBS can progress to respiratory failure within hours — the critical clinical marker is respiratory muscle involvement. Bedside assessment: inability to count to 20 in one breath, NIF <−25 cmH₂O, or FVC <20 mL/kg = ICU admission criteria. The NP must call 911 immediately. Option B (IVIG in clinic) is premature and unsafe without ICU monitoring capability. Option A (outpatient EMG in 48 hours) would allow life-threatening respiratory failure. Oral prednisone (D) is NOT indicated in GBS — it is ineffective and may worsen outcomes."
+    },
+
+    {
+      "questionId": "np-p2-017",
+      "topicSlug": "neurological-red-flags-emergency",
+      "lessonPart": "2B",
+      "difficulty": "hard",
+      "stemAnchor": "22-year-old + first generalized convulsion + post-ictal confusion + no prior history — first seizure workup disposition",
+      "stem": "A 22-year-old college student is brought in by friends after a witnessed generalized tonic-clonic seizure lasting approximately 3 minutes. He had 1–2 minutes of tonic-clonic activity and then was confused and sleepy for 20 minutes (post-ictal). He has no prior seizure history, takes no medications, and reports he was studying all night and skipped meals. He is now awake, oriented, and has a normal neurological exam. There was no alcohol or drug use. Glucose is 98 mg/dL. Which of the following is the most appropriate management?",
+      "options": {
+        "A": "Prescribe levetiracetam 500 mg twice daily empirically and schedule routine neurology follow-up",
+        "B": "Discharge home with instructions to avoid driving and follow up with primary care within 1 week",
+        "C": "Refer for urgent brain MRI and EEG within 24–48 hours; advise no driving until clearance; do NOT start AED empirically",
+        "D": "Administer lorazepam 2 mg IV and observe for 4 hours, then discharge if no recurrence"
+      },
+      "correctAnswer": "C",
+      "rationale": "A first unprovoked seizure in a young adult with normal post-ictal exam and normal glucose requires urgent neurological workup (MRI brain, EEG) to identify a structural or epileptiform cause before committing to AED therapy. The NP's role is: initiate workup + refer neurology + advise driving restriction (legal in most states until seizure-free for 6 months). AEDs are NOT started empirically after a single unprovoked seizure without EEG/imaging — starting one without neurology evaluation is outside NP scope without specialist guidance. Option A (start levetiracetam) is inappropriate without confirming epilepsy diagnosis. Option B (wait 1 week) is too delayed — urgent (24–48h) workup is required. Option D (lorazepam) is for active/prolonged seizure — not needed once seizure has self-terminated."
+    },
+
+    {
+      "questionId": "np-p2-018",
+      "topicSlug": "neurological-red-flags-emergency",
+      "lessonPart": "2B",
+      "difficulty": "expert",
+      "stemAnchor": "19-year-old + fever + stiff neck + petechial rash — meningococcemia LP timing vs antibiotics first",
+      "stem": "A 19-year-old college student is brought in by his roommate. He has had severe headache, fever to 39.8°C, and stiff neck for 8 hours. On exam you note a petechial-to-purpuric rash on his lower extremities and trunk. He is lethargic but arousable. BP 102/68 mmHg. Which of the following is the most appropriate immediate action sequence?",
+      "options": {
+        "A": "Obtain non-contrast CT head to rule out mass before performing LP, then give antibiotics",
+        "B": "Perform LP immediately to confirm meningococcal meningitis, then begin ceftriaxone",
+        "C": "Administer ceftriaxone 2g IV immediately and call 911 for emergency transfer — do NOT delay antibiotics for imaging or LP",
+        "D": "Start oral ciprofloxacin while calling for transport to avoid needle procedures in clinic"
+      },
+      "correctAnswer": "C",
+      "rationale": "Meningococcal meningitis (Neisseria meningitidis) is a medical emergency with a mortality rate that increases significantly with each hour of delay in antibiotics. The purpuric rash is characteristic — a clinical diagnosis trigger for immediate empiric ceftriaxone 2g IV (or IM if IV access not available). The principle is: antibiotics first, then diagnostic workup (LP, CT). A 30-minute delay for CT or LP while withholding antibiotics is associated with measurable mortality increase. In-clinic LP is not appropriate for a hemodynamically compromised meningococcal patient. Option A delays antibiotics for CT. Option B delays antibiotics for LP. Option D (oral ciprofloxacin) has no role — IV antibiotics are required for meningococcal disease."
+    },
+
+    {
+      "questionId": "np-p2-019",
+      "topicSlug": "neurological-red-flags-emergency",
+      "lessonPart": "2B",
+      "difficulty": "hard",
+      "stemAnchor": "63-year-old with confusion + ophthalmoplegia + ataxia + alcohol history — Wernicke encephalopathy thiamine first",
+      "stem": "A 63-year-old man with known alcohol use disorder is brought by EMS after being found confused at home. He has consumed approximately 12 drinks per day for 20 years. Examination reveals: confusion (disoriented to place/time), bilateral lateral gaze palsy, and unsteady gait with wide-based stance. BP is 110/70, HR 104, temperature 37.1°C, glucose 88 mg/dL. Which of the following is the MOST critical immediate intervention?",
+      "options": {
+        "A": "Administer dextrose 50% IV immediately to treat possible hypoglycemia",
+        "B": "Administer thiamine 500 mg IV before any glucose administration",
+        "C": "Order CT head with contrast and start broad-spectrum antibiotics for possible meningoencephalitis",
+        "D": "Give naloxone 0.4 mg IV to reverse possible opioid coingestant causing altered mental status"
+      },
+      "correctAnswer": "B",
+      "rationale": "Wernicke encephalopathy (WE) presents with the classic triad: confusion + ophthalmoplegia (lateral gaze palsy is the most common finding — nystagmus, or CN VI palsy) + ataxia. In any malnourished or alcohol use disorder patient with altered mental status, thiamine must be administered BEFORE glucose. Glucose administration without thiamine in a thiamine-deficient patient can precipitate or worsen Wernicke encephalopathy by depleting the remaining thiamine stores needed for glucose metabolism. Standard protocol: thiamine 500 mg IV first, then glucose. Option A is dangerous without thiamine first. Options C and D address other diagnoses not supported by the classic triad — but even in an uncertain presentation in an alcoholic patient, thiamine should be given first."
+    },
+
+    {
+      "questionId": "np-p2-020",
+      "topicSlug": "neurological-red-flags-emergency",
+      "lessonPart": "2B",
+      "difficulty": "expert",
+      "stemAnchor": "30-year-old + new psychosis + fever + agitation + positive Babinski + CSF PCR — HSV encephalitis acyclovir before confirmation",
+      "stem": "A 30-year-old previously healthy woman is brought in by her husband after 4 days of progressive behavioral change, new-onset visual hallucinations, and a new generalized seizure this morning. She had a mild upper respiratory illness 2 weeks prior. Temp 38.4°C, BP 138/88, HR 106. Neurological exam: agitated, confused, with focal slowing on temporal EEG pattern reported from the ED. MRI is pending. CSF from LP is slightly turbid; RBCs 15/mm³, WBCs 120 (lymphocytic predominance), protein 82 mg/dL, glucose 52 mg/dL (serum 110 mg/dL). Which of the following is the most appropriate immediate pharmacological action pending CSF PCR results?",
+      "options": {
+        "A": "Administer IV ceftriaxone + vancomycin for bacterial meningitis coverage",
+        "B": "Start IV acyclovir 10 mg/kg every 8 hours empirically for HSV encephalitis",
+        "C": "Begin high-dose IV methylprednisolone for autoimmune encephalitis pending anti-NMDAR antibody results",
+        "D": "Withhold all treatment pending PCR results since antibiotics are ineffective against viral encephalitis"
+      },
+      "correctAnswer": "B",
+      "rationale": "This is HSV encephalitis until proven otherwise: fever + behavioral change + temporal lobe involvement (temporal EEG slowing) + lymphocytic CSF pleocytosis with slightly elevated protein + recent viral illness (herpes can reactivate). HSV encephalitis has 70% mortality if untreated and substantial morbidity even when treated — acyclovir must be started empirically without waiting for CSF PCR (which takes 24–72 hours). Starting acyclovir does not preclude adding bacterial coverage (option A can be added if bacterial meningitis is also on the differential), but HSV encephalitis is the primary concern in this young patient with temporal involvement. Option D (withhold all treatment) is dangerously wrong. Option C (methylprednisolone) may be considered after ruling out viral and bacterial causes — not as first action."
+    },
+
+    {
+      "questionId": "np-p2-021",
+      "topicSlug": "neurological-red-flags-emergency",
+      "lessonPart": "2B",
+      "difficulty": "hard",
+      "stemAnchor": "40-year-old + new-onset psychosis workup — medical causes of psychosis CBC CMP TSH B12 RPR HIV urine drug screen",
+      "stem": "A 40-year-old man with no prior psychiatric history is brought by his wife. Over the past 3 weeks he has become increasingly paranoid, believes neighbors are 'spying' on him, and had an episode of hearing voices that told him to leave the house. He has had no fever, no headache, no seizures. He is alert, oriented to person and place (but not time), and not confused between questions. His wife denies any illicit drug use but reports he has been 'acting weird' even when sober. Which of the following initial workup is most appropriate before attributing this presentation to a primary psychiatric disorder?",
+      "options": {
+        "A": "Initiate risperidone 2 mg daily and refer to psychiatry for outpatient evaluation next week",
+        "B": "Perform CBC, CMP, TSH, B12, RPR, HIV, urine drug screen, and brain MRI before initiating antipsychotic therapy",
+        "C": "Diagnose bipolar disorder with psychotic features and start a mood stabilizer empirically",
+        "D": "Refer to AA and substance use counseling as alcohol use disorder with alcoholic hallucinosis is most likely"
+      },
+      "correctAnswer": "B",
+      "rationale": "New-onset psychosis in middle age requires a medical workup to exclude organic causes before diagnosing a primary psychiatric disorder. The differential for organic psychosis includes: CNS infections (HIV, syphilis, HSV), autoimmune encephalitis, B12 deficiency, hypothyroidism, adrenal insufficiency, hepatic encephalopathy, illicit drug use, and structural brain lesion. The workup includes CBC, CMP, TSH, B12, RPR, HIV, urine drug screen, and brain MRI. Initiating antipsychotics before ruling out a treatable medical cause (e.g., CNS syphilis, B12 deficiency) is inappropriate. Options A and C start psychiatric medications without workup. Option D (alcoholic hallucinosis) is possible but not confirmed — workup is required first."
+    },
+
+    {
+      "questionId": "np-p2-022",
+      "topicSlug": "neurological-red-flags-emergency",
+      "lessonPart": "2B",
+      "difficulty": "hard",
+      "stemAnchor": "Diabetic patient on metformin + CT contrast scheduled + eGFR 38 — contrast nephropathy prevention protocol",
+      "stem": "A 64-year-old woman with T2DM and CKD (eGFR 38 mL/min) is scheduled for a CT chest with contrast to evaluate a pulmonary nodule. She takes metformin 1000 mg twice daily, lisinopril 10 mg daily, and atorvastatin 40 mg. Which of the following represents the most appropriate pre-procedure medication management?",
+      "options": {
+        "A": "Continue all medications as usual; eGFR 38 is above the threshold for contrast concern",
+        "B": "Hold metformin starting the day of contrast administration and do not restart for 48 hours post-procedure; ensure adequate hydration",
+        "C": "Discontinue lisinopril 1 week prior to the procedure and give IV N-acetylcysteine the morning of the scan",
+        "D": "Cancel the CT with contrast and order MRI without contrast as a safer alternative in all CKD patients"
+      },
+      "correctAnswer": "B",
+      "rationale": "The primary concern in this CKD patient receiving IV contrast is contrast-induced nephropathy (CIN). The management protocol: (1) Hold metformin on the day of contrast and for 48 hours post-procedure — metformin can accumulate if AKI occurs post-contrast, leading to lactic acidosis (rare but potentially fatal); (2) Ensure IV hydration (saline 1 mL/kg/hr before and after procedure); (3) Use the lowest contrast volume possible. Lisinopril (option C) holding is not the primary intervention. N-acetylcysteine evidence is mixed and not the primary action. Option D is inappropriate — contrast CT is appropriate if the indication is strong; CIN risk can be mitigated. Option A underestimates the risk — eGFR 38 (G3b) is in the range where metformin must be held."
+    },
+
+    {
+      "questionId": "np-p2-023",
+      "topicSlug": "cancer-red-flags-primary-care",
+      "lessonPart": "2A",
+      "difficulty": "hard",
+      "stemAnchor": "68-year-old male + iron-deficiency anemia + no obvious bleeding source + norcocytic — colorectal cancer workup",
+      "stem": "A 68-year-old man presents for an annual well visit. CBC reveals: Hgb 10.2 g/dL, MCV 74 fL, WBC 7.2, platelets 312. He denies visible rectal bleeding, hematuria, or hemoptysis. He takes aspirin 81 mg daily and ibuprofen occasionally. He completed a FOBT (fecal occult blood test) that is positive on two of three samples. He has no family history of colorectal cancer. He underwent colonoscopy 10 years ago with 2 tubular adenomas removed. Which of the following is the most appropriate next step?",
+      "options": {
+        "A": "Recheck CBC in 3 months after starting oral iron supplementation",
+        "B": "Start oral iron supplementation and repeat FOBT in 1 year as routine screening",
+        "C": "Order colonoscopy urgently — iron-deficiency anemia in an older man with positive FOBT and prior adenomas requires colorectal cancer exclusion",
+        "D": "Attribute the anemia to NSAID use (ibuprofen); discontinue ibuprofen and recheck Hgb in 4 weeks"
+      },
+      "correctAnswer": "C",
+      "rationale": "Iron-deficiency anemia (microcytic, hypochromic) in an older male is a gastrointestinal cancer red flag until proven otherwise. This patient has: age 68, male sex, IDA, positive FOBT, and prior adenoma history — all independently elevating colorectal cancer (CRC) risk. NSAIDs can cause GI bleeding but do not account for the full clinical picture of IDA + positive FOBT + prior adenomas in a 68-year-old. The appropriate action is urgent colonoscopy, not deferring to iron supplementation or routine repeat FOBT. IDA in post-menopausal women or any male requires an upper and lower GI source to be excluded before attributing to dietary deficiency or NSAID use."
+    },
+
+    {
+      "questionId": "np-p2-024",
+      "topicSlug": "cancer-red-flags-primary-care",
+      "lessonPart": "2A",
+      "difficulty": "hard",
+      "stemAnchor": "55-year-old smoker + 15-lb weight loss + hemoptysis + CXR hilar mass — lung cancer workup",
+      "stem": "A 55-year-old man with a 35-pack-year smoking history presents with an 8-week history of productive cough with streaks of blood, unintentional 15-pound weight loss over 3 months, and progressive fatigue. CXR shows a right hilar mass with ipsilateral mediastinal widening. He has no fever, and CBC is normal. Which of the following is the most appropriate next step?",
+      "options": {
+        "A": "Treat for community-acquired pneumonia with azithromycin and repeat CXR in 6 weeks",
+        "B": "Order CT chest with contrast and refer urgently to pulmonology for bronchoscopic evaluation",
+        "C": "Start empiric treatment for TB with RIPE therapy pending sputum cultures",
+        "D": "Order PET scan as the first imaging step to avoid unnecessary radiation"
+      },
+      "correctAnswer": "B",
+      "rationale": "A heavy smoker with hemoptysis, significant weight loss, and a hilar mass on CXR has lung cancer until proven otherwise. The first step is CT chest with contrast (more sensitive and specific than CXR for mass characterization) followed by bronchoscopy for tissue diagnosis. Urgent pulmonology referral is appropriate. Treating with antibiotics (option A) is a common error that delays lung cancer diagnosis — a visible hilar mass should not be treated empirically as pneumonia. TB (option C) is possible (hemoptysis + weight loss) but requires sputum AFB before empiric RIPE; the hilar mass with mediastinal widening is more consistent with malignancy in a Western smoker. PET scan (option D) is typically ordered AFTER tissue diagnosis for staging, not as the first step."
+    },
+
+    {
+      "questionId": "np-p2-025",
+      "topicSlug": "cancer-red-flags-primary-care",
+      "lessonPart": "2A",
+      "difficulty": "expert",
+      "stemAnchor": "62-year-old + painless progressive dysphagia solids then liquids + 20 lb weight loss — esophageal cancer workup",
+      "stem": "A 62-year-old man with longstanding GERD (on PPI for 10 years) presents with progressive difficulty swallowing that began 3 months ago with solid foods and has now progressed to include soft foods. He has lost 20 pounds over 4 months without trying. He denies odynophagia but reports regurgitation of undigested food. He smokes one pack per day and drinks 2–3 glasses of wine daily. Which of the following is the most appropriate next action?",
+      "options": {
+        "A": "Double the PPI dose to twice daily and schedule follow-up in 6 weeks to assess dysphagia response",
+        "B": "Order barium swallow as the first-line evaluation for dysphagia",
+        "C": "Refer urgently for upper endoscopy (EGD) — progressive dysphagia with weight loss in a high-risk patient requires urgent cancer exclusion",
+        "D": "Treat empirically for esophageal candidiasis with fluconazole given his PPI use history"
+      },
+      "correctAnswer": "C",
+      "rationale": "Progressive dysphagia (solids → liquids) + significant weight loss + risk factors (GERD for 10+ years with possible Barrett's, smoking, alcohol use) in a 62-year-old constitutes cancer alarm features. Upper endoscopy (EGD) is the definitive diagnostic test — it allows direct visualization and biopsy of the esophageal mucosa. Barium swallow (option B) can suggest but cannot biopsy a lesion — appropriate for dysphagia without alarm features but not the first choice with alarm features present. Doubling PPI (option A) is appropriate for uncomplicated GERD — not for alarm dysphagia. Fluconazole (option D) is for candidal esophagitis — typically occurs in immunocompromised patients with odynophagia, not obstructive progressive dysphagia."
+    },
+
+    {
+      "questionId": "np-p2-026",
+      "topicSlug": "cancer-red-flags-primary-care",
+      "lessonPart": "2A",
+      "difficulty": "hard",
+      "stemAnchor": "45-year-old woman + painless jaundice + weight loss + new-onset DM + CT shows pancreatic head mass — pancreatic cancer referral",
+      "stem": "A 45-year-old nonsmoking woman presents for evaluation of yellow discoloration of her skin and sclera that developed over 3 weeks. She denies abdominal pain. She has unintentionally lost 18 pounds over 3 months. Her primary care provider recently noted new-onset diabetes mellitus (A1c 7.8%) with no family history. Exam reveals scleral icterus, painless jaundice, and a non-tender, palpable gallbladder. Total bilirubin is 8.2 mg/dL (direct 6.9 mg/dL). LFTs show elevated alkaline phosphatase and GGT with normal transaminases. Which of the following best explains this presentation and the most appropriate next action?",
+      "options": {
+        "A": "Biliary colic; order abdominal ultrasound and hepatobiliary surgery referral for cholecystectomy",
+        "B": "Autoimmune hepatitis; order ANA, anti-smooth muscle antibody, and liver biopsy",
+        "C": "Pancreatic head malignancy (Courvoisier sign); order CT abdomen with pancreatic protocol and urgent gastroenterology/surgery referral",
+        "D": "Acute viral hepatitis; order hepatitis A, B, C serologies and advise supportive care"
+      },
+      "correctAnswer": "C",
+      "rationale": "This presentation is classic for pancreatic head cancer: painless jaundice (obstructive: direct hyperbilirubinemia + elevated ALP/GGT), palpable non-tender gallbladder (Courvoisier sign — obstructed bile duct with a compliant, non-scarred gallbladder), significant weight loss, and new-onset DM (pancreatic exocrine/endocrine tissue destruction). CT abdomen with pancreatic protocol is the appropriate first imaging study. Urgent GI/surgery referral is needed. Biliary colic (option A) is painful and episodic, not painless progressive jaundice. Autoimmune hepatitis (option B) typically shows elevated transaminases. Viral hepatitis (option D) shows transaminase elevation, not the cholestatic pattern seen here."
+    },
+
+    {
+      "questionId": "np-p2-027",
+      "topicSlug": "cancer-red-flags-primary-care",
+      "lessonPart": "2A",
+      "difficulty": "expert",
+      "stemAnchor": "54-year-old + facial swelling + arm edema + distended neck veins + lung mass — SVC syndrome oncological emergency",
+      "stem": "A 54-year-old man with a 40-pack-year smoking history and newly identified right upper lobe lung mass (on CT ordered for hemoptysis) presents to your clinic. He reports his face has become increasingly swollen over the past 2 weeks and his shirt collar feels tight. His arms are also swollen bilaterally. Exam reveals facial plethora, bilateral arm edema, distended non-pulsatile neck veins, and visible collateral veins across his chest. BP is 148/88 mmHg; SpO2 92% on room air. Which of the following is the most appropriate next step?",
+      "options": {
+        "A": "Start furosemide 40 mg orally for bilateral arm and facial edema",
+        "B": "Elevate his head of bed, restrict sodium, and return for follow-up in 1 week",
+        "C": "Call 911 for emergent transfer — this presentation is consistent with superior vena cava syndrome, an oncological emergency",
+        "D": "Order echocardiogram to evaluate for right heart failure as the cause of edema"
+      },
+      "correctAnswer": "C",
+      "rationale": "Superior vena cava (SVC) syndrome: facial/arm edema + distended neck veins + collateral chest wall veins + SpO2 92% in a patient with a known lung mass. This is an oncological emergency caused by mediastinal compression of the SVC (most commonly by lung cancer or lymphoma). Emergent oncology/radiation oncology consultation is required — radiation or stent placement can relieve SVC obstruction rapidly. Diuretics (option A) are ineffective and dangerous in SVC syndrome. Option B delays emergent care. Option D (echo) is not the priority — the diagnosis is clinical and the urgency requires immediate transfer, not outpatient cardiac imaging."
+    },
+
+    {
+      "questionId": "np-p2-028",
+      "topicSlug": "cancer-red-flags-primary-care",
+      "lessonPart": "2A",
+      "difficulty": "hard",
+      "stemAnchor": "32-year-old + fever + night sweats + 12% weight loss + non-tender rubbery supraclavicular node — lymphoma B-symptom workup",
+      "stem": "A 32-year-old woman presents with a 3-month history of progressive fatigue and night sweats that soak her bed linens. She has lost 14 pounds over 6 months without dieting. She noticed a lump above her right clavicle 3 weeks ago. Exam reveals a 2.5 cm, firm, non-tender, rubbery lymph node in the right supraclavicular fossa. She has no splenomegaly. LDH is 390 U/L (elevated). Which of the following is the most appropriate immediate action?",
+      "options": {
+        "A": "Treat with azithromycin for 10 days for presumed atypical infection and recheck the node in 3 weeks",
+        "B": "Perform fine-needle aspiration (FNA) of the supraclavicular node as the initial diagnostic procedure",
+        "C": "Obtain CBC, LDH, uric acid, CXR, and refer urgently for excisional lymph node biopsy — this presentation meets criteria for lymphoma workup",
+        "D": "Order chest CT and schedule follow-up in 4 weeks to ensure the node has not grown before deciding on biopsy"
+      },
+      "correctAnswer": "C",
+      "rationale": "This patient has lymphoma B symptoms (fever, drenching night sweats, ≥10% weight loss in 6 months) + right supraclavicular lymphadenopathy (always concerning — right supraclavicular: lung/mediastinal malignancy) + elevated LDH (marker of cell turnover). The combination mandates urgent workup and excisional lymph node biopsy. CBC, LDH, uric acid, and CXR are the initial laboratory and imaging studies. FNA (option B) is insufficient for lymphoma diagnosis — tissue architecture must be preserved to classify lymphoma subtype (Hodgkin vs non-Hodgkin, and further subclassification). Option A (antibiotics) delays diagnosis of a malignancy. Option D delays the inevitable biopsy unnecessarily given the clinical picture."
+    },
+
+    {
+      "questionId": "np-p2-029",
+      "topicSlug": "cancer-red-flags-primary-care",
+      "lessonPart": "2B",
+      "difficulty": "hard",
+      "stemAnchor": "26-year-old male + painless left testicular mass + beta-hCG elevated — testicular cancer urgent workup",
+      "stem": "A 26-year-old man presents concerned about a 'hard lump' he noticed in his left testicle 3 weeks ago. It is painless and has not changed in size. He denies trauma. His right testicle is normal. Examination reveals a 2 cm, firm, non-tender, non-transilluminating mass in the left testis. Scrotal ultrasound confirms a solid, hypoechoic mass. Beta-hCG is 450 mIU/mL (elevated). AFP is 18 ng/mL (normal). LDH is 220 U/L (slightly elevated). Which of the following is the most appropriate next step?",
+      "options": {
+        "A": "Reassure the patient that a painless testicular mass is most likely a benign hydrocele and repeat ultrasound in 3 months",
+        "B": "Refer urgently to urology for radical orchiectomy through an inguinal approach",
+        "C": "Perform transscrotal needle biopsy to confirm malignancy before referral",
+        "D": "Start empiric doxycycline for epididymo-orchitis and follow up in 2 weeks"
+      },
+      "correctAnswer": "B",
+      "rationale": "A solid, non-transilluminating testicular mass in a young male with elevated beta-hCG (marker for nonseminomatous germ cell tumor) is testicular cancer until proven otherwise. Radical orchiectomy via an INGUINAL approach is both diagnostic and therapeutic — transscrotal biopsy (option C) is contraindicated because it disrupts lymphatic drainage, potentially seeding inguinal nodes and changing staging/treatment. Hydrocele (option A) transilluminates — this does not, making the diagnosis unlikely. Epididymo-orchitis (option D) is painful; this is a painless mass. The elevated beta-hCG is a strong indicator of malignancy. Urgent urology referral is the correct action."
+    },
+
+    {
+      "questionId": "np-p2-030",
+      "topicSlug": "cancer-red-flags-primary-care",
+      "lessonPart": "2B",
+      "difficulty": "hard",
+      "stemAnchor": "52-year-old woman + nipple inversion + peau d'orange skin + breast erythema without fever — inflammatory breast cancer recognition",
+      "stem": "A 52-year-old woman presents with a 6-week history of redness, warmth, and swelling of her right breast. She has no fever. She notes the nipple has become inverted over the same time period, which is new. The skin of the right breast has a dimpled, orange-peel texture (peau d'orange). The breast is non-tender and there is no fluctuance. She was treated with antibiotics twice (cephalexin × 10 days, then clindamycin × 10 days) with no improvement. Which of the following is the most appropriate next step?",
+      "options": {
+        "A": "Switch to IV vancomycin for MRSA mastitis and refer to infectious disease",
+        "B": "Continue with a third antibiotic course (trimethoprim-sulfamethoxazole) and recheck in 2 weeks",
+        "C": "Refer urgently to breast surgery/oncology — this presentation is consistent with inflammatory breast cancer",
+        "D": "Order breast ultrasound to identify an abscess for incision and drainage"
+      },
+      "correctAnswer": "C",
+      "rationale": "Inflammatory breast cancer (IBC) is a diagnosis frequently missed by being attributed to mastitis. Classic features: breast erythema + peau d'orange (dermal lymphatic invasion) + new nipple inversion + non-tender presentation + no improvement with antibiotics (2 failed antibiotic courses here). Mastitis is typically painful, tender, and resolves with antibiotics; it is most common postpartum. IBC does not require a palpable mass. Any antibiotic-non-responsive breast erythema with peau d'orange should be treated as IBC until proven otherwise with urgent oncology referral and skin punch biopsy. Options A and B delay malignancy diagnosis with further antibiotic courses."
+    },
+
+    {
+      "questionId": "np-p2-031",
+      "topicSlug": "cancer-red-flags-primary-care",
+      "lessonPart": "2B",
+      "difficulty": "expert",
+      "stemAnchor": "71-year-old + constant night back pain + known prostate cancer + bilateral leg numbness — malignant MSCC emergent steroids",
+      "stem": "A 71-year-old man with stage IV prostate cancer (on enzalutamide) presents with a 2-week worsening history of mid-back pain that is constant and worse at night. He notes bilateral leg tingling that began 4 days ago and has difficulty buttoning his shirt due to finger weakness. He has 4/5 bilateral lower extremity strength, hyperreflexia, and a positive Babinski bilaterally. Sensation is diminished in a band-like pattern across his mid-abdomen. Bladder and bowel function are currently intact. Which of the following is the most appropriate immediate action?",
+      "options": {
+        "A": "Increase enzalutamide dose and add a second hormonal agent for disease progression",
+        "B": "Prescribe oxycodone for pain control and schedule outpatient spine MRI within 1 week",
+        "C": "Administer dexamethasone 10–16 mg IV immediately and call 911 for emergent MRI and radiation oncology",
+        "D": "Start naproxen and physical therapy referral for musculoskeletal back pain in a cancer patient"
+      },
+      "correctAnswer": "C",
+      "rationale": "Malignant spinal cord compression (MSCC) is an oncological emergency. This patient has: known metastatic prostate cancer + progressive back pain + bilateral hyperreflexia + Babinski sign + bilateral leg weakness + sensory level at mid-abdomen + upper limb involvement. Immediate dexamethasone 10–16 mg IV reduces cord edema and is the critical first action. Emergent MRI spine (full spine if possible) and radiation oncology evaluation must follow. Time to treatment determines neurological outcome — bladder/bowel function is currently intact, giving a brief window to act. Option B (opioid + outpatient MRI in 1 week) risks permanent paralysis. Options A and D are inappropriate for an emergency neurological presentation."
+    },
+
+    {
+      "questionId": "np-p2-032",
+      "topicSlug": "cancer-red-flags-primary-care",
+      "lessonPart": "2B",
+      "difficulty": "hard",
+      "stemAnchor": "48-year-old + hematuria no pain + heavy smoking history + occupational aniline dye — bladder cancer workup cystoscopy",
+      "stem": "A 48-year-old man presents after noticing dark-brown urine on 3 occasions over the past month. He denies pain, dysuria, or frequency. He is a 25-pack-year smoker and worked in a rubber manufacturing plant for 18 years. UA reveals 3+ blood with no protein, no nitrites, and no bacteria. Urine culture is negative. Creatinine is 1.0 mg/dL. Renal ultrasound is normal. Which of the following is the most appropriate next step?",
+      "options": {
+        "A": "Treat for occult UTI with ciprofloxacin and repeat UA in 3 weeks",
+        "B": "Reassure that painless hematuria in men is usually benign and schedule follow-up in 6 months",
+        "C": "Refer to urology for cystoscopy — painless gross hematuria in a high-risk patient requires bladder cancer exclusion",
+        "D": "Order CT urogram to evaluate renal pelvis and ureters as the first diagnostic step"
+      },
+      "correctAnswer": "C",
+      "rationale": "Painless gross hematuria in a male is bladder cancer until proven otherwise. This patient has two major risk factors: heavy smoking (most important risk factor for bladder cancer) and occupational aromatic amine (aniline dye) exposure, a well-established bladder carcinogen. A normal renal ultrasound and negative culture do not exclude bladder cancer. Cystoscopy is the required diagnostic procedure — it allows direct visualization of the bladder mucosa and biopsy. CT urogram (option D) can complement cystoscopy but does not replace it for bladder lesions. Options A and B dangerously delay the cancer diagnosis. The NP must recognize this pattern and refer urgently to urology."
+    },
+
+    {
+      "questionId": "np-p2-033",
+      "topicSlug": "cancer-red-flags-primary-care",
+      "lessonPart": "2B",
+      "difficulty": "hard",
+      "stemAnchor": "63-year-old + 8% weight loss 3 months + normal initial cancer screen — CT chest/abdo/pelvis for unexplained weight loss",
+      "stem": "A 63-year-old man presents with unintentional weight loss of 18 pounds over 4 months (starting BMI 28, now 24). He denies fever, night sweats, change in bowel habits, rectal bleeding, hemoptysis, or dysphagia. He is a non-smoker. He underwent colonoscopy 2 years ago (normal), low-dose CT lung cancer screening 8 months ago (normal), and PSA is 1.4 ng/mL. CBC, CMP, TSH, and urinalysis are all normal. Which of the following is the most appropriate next step?",
+      "options": {
+        "A": "Recommend dietary counseling and nutritional supplementation; repeat weight check in 3 months",
+        "B": "Order CT chest/abdomen/pelvis with contrast to evaluate for occult malignancy",
+        "C": "Screen for depression and anxiety, as these are the most common causes of unintentional weight loss",
+        "D": "Start mirtazapine 15 mg for appetite stimulation and follow up in 6 weeks"
+      },
+      "correctAnswer": "B",
+      "rationale": "Unexplained weight loss of ≥5% in 6 months or ≥10 pounds without identifiable cause after initial screening warrants CT chest/abdomen/pelvis to evaluate for occult malignancy. This patient has lost approximately 8% body weight over 4 months with a normal initial laboratory evaluation, recent normal colonoscopy and CT lung screen, and no other organ-specific symptoms. When initial screening is negative and the degree of weight loss is significant, CT cross-sectional imaging is the next appropriate step. Depression (option C) is the most common non-malignant cause of weight loss but should not be assumed without excluding malignancy given the degree of weight loss. Option D (appetite stimulant) addresses a symptom without seeking the cause."
+    },
+
+    {
+      "questionId": "np-p2-034",
+      "topicSlug": "cancer-red-flags-primary-care",
+      "lessonPart": "2B",
+      "difficulty": "expert",
+      "stemAnchor": "Left shoulder pain + Horner syndrome + arm weakness in a smoker — Pancoast tumor superior sulcus recognition",
+      "stem": "A 59-year-old male smoker (45 pack-years) presents with a 3-month history of left shoulder pain radiating down the medial aspect of his left arm. He reports progressive weakness in his left hand grip. On exam: left ptosis, left miosis, left anhidrosis (confirmed on direct exam), and atrophy of the intrinsic hand muscles. CXR reveals an opacity at the left lung apex. Which of the following best describes this syndrome and the most appropriate next action?",
+      "options": {
+        "A": "Cervical disc herniation; order MRI cervical spine and refer to orthopedics",
+        "B": "Brachial plexus injury from occupational strain; refer to physical therapy",
+        "C": "Pancoast tumor (superior sulcus tumor); order CT chest with contrast and refer urgently to thoracic oncology",
+        "D": "Cluster headache with associated Horner syndrome; start verapamil 240 mg daily"
+      },
+      "correctAnswer": "C",
+      "rationale": "Pancoast syndrome (superior sulcus tumor): apical lung mass + ipsilateral Horner syndrome (ptosis, miosis, anhidrosis from compression of cervical sympathetic chain at the apex) + brachial plexopathy (medial arm pain, intrinsic hand muscle atrophy from C8/T1 involvement). The apical CXR opacity in a heavy smoker completes the picture. CT chest with contrast is the first imaging step; PET-CT and MRI brachial plexus will follow for staging. Cervical disc (option A) does not cause Horner syndrome. Cluster headache (option D) causes secondary Horner without lung apex mass or arm weakness. Recognition of this triad — Horner + arm pain/weakness + apical lung opacity in a smoker — is a high-yield NP certification examination topic."
+    },
+
+    {
+      "questionId": "np-p2-035",
+      "topicSlug": "pediatric-red-flags-dont-miss",
+      "lessonPart": "2A",
+      "difficulty": "expert",
+      "stemAnchor": "3-day-old neonate + bilious vomiting + abdominal distension — malrotation volvulus surgical emergency",
+      "stem": "A 3-day-old male neonate, born at term via uncomplicated vaginal delivery, is brought in by his mother because of two episodes of green-colored vomiting in the past 4 hours. He has been breastfeeding but now refuses to latch. Abdomen appears mildly distended. He has passed one meconium stool on day 1. Which of the following is the most appropriate immediate action?",
+      "options": {
+        "A": "Switch to hypoallergenic formula and follow up in 48 hours for feeding reassessment",
+        "B": "Order an upper GI contrast series as an outpatient study within 24 hours to evaluate for malrotation",
+        "C": "Call 911 for immediate transfer to a pediatric surgical center — bilious vomiting in a neonate is malrotation with midgut volvulus until proven otherwise",
+        "D": "Reassure the mother that some neonatal vomiting is normal; evaluate for GERD and start ranitidine"
+      },
+      "correctAnswer": "C",
+      "rationale": "Bilious (green) vomiting in any neonate is a surgical emergency — malrotation with midgut volvulus until proven otherwise. Midgut volvulus presents typically in the first month of life and can progress to bowel infarction and death within hours if not surgically corrected. The NP must NOT delay for outpatient imaging or nutritional adjustment — immediate transfer to a pediatric surgical center is required. Option B (outpatient upper GI in 24 hours) would risk bowel necrosis. GERD (option D) is not bilious and is a diagnosis of exclusion. The rule is simple and absolute: bilious vomiting in a neonate = surgical emergency."
+    },
+
+    {
+      "questionId": "np-p2-036",
+      "topicSlug": "pediatric-red-flags-dont-miss",
+      "lessonPart": "2A",
+      "difficulty": "hard",
+      "stemAnchor": "6-week-old with fever 38.2 + no source — full septic workup admission rule <28 days",
+      "stem": "A mother brings her 6-week-old (42 days old) infant to your clinic with a rectal temperature of 38.2°C taken at home. The infant appears alert and is feeding normally. She has no cough, rhinorrhea, or diarrhea. Her fontanelle is flat. She was born at 38 weeks with no NICU stay. Which of the following best describes the appropriate management approach for this febrile infant?",
+      "options": {
+        "A": "Diagnose viral illness clinically, advise acetaminophen, and follow up if fever persists >72 hours",
+        "B": "Order CBC, CMP, and UA; if low-risk criteria are met, discharge with 24-hour follow-up",
+        "C": "Call 911 for immediate ED transfer — any infant under 28 days with fever ≥38°C requires a full septic workup and admission regardless of appearance",
+        "D": "Prescribe amoxicillin empirically for otitis media and bring back in 3 days"
+      },
+      "correctAnswer": "B",
+      "rationale": "This infant is 42 days old — beyond the strict 28-day threshold for automatic full septic workup and admission (applies to <28 days). For infants 29–60 days with fever, risk stratification protocols (Philadelphia, Boston, Rochester criteria) can guide safe outpatient management if all low-risk criteria are met (well-appearing, no source, low WBC, clean UA, reliable caregiver with 24-hour follow-up). If this infant were <28 days, option C would be correct. At 42 days with a well-appearing infant, a step-down protocol is appropriate. Option A (no workup) is inappropriate — febrile infants under 3 months require at minimum CBC/UA/urine culture. Option D (empiric amoxicillin) without a source exam or workup is inappropriate."
+    },
+
+    {
+      "questionId": "np-p2-037",
+      "topicSlug": "pediatric-red-flags-dont-miss",
+      "lessonPart": "2A",
+      "difficulty": "hard",
+      "stemAnchor": "4-month-old + posterior rib fractures on XR + no mechanism given — non-accidental trauma mandatory reporting",
+      "stem": "A 4-month-old girl is brought in by her father for 'fussiness' for 3 days. CXR obtained to evaluate for respiratory infection incidentally reveals healing bilateral posterior rib fractures at multiple levels. Her father states she 'fell off the couch' 2 weeks ago. She is alert, has no external bruising, and currently appears comfortable. Developmental milestone: she cannot roll over. Which of the following is the most appropriate action?",
+      "options": {
+        "A": "Accept the explanation — infants can sustain rib fractures from falls off furniture",
+        "B": "Order a full skeletal survey, retinal examination, and head CT; report suspected non-accidental trauma to Child Protective Services",
+        "C": "Reassure the father that healing rib fractures are common in active infants and repeat CXR in 3 weeks",
+        "D": "Refer to orthopedics for evaluation of possible osteogenesis imperfecta as the most likely cause of multiple rib fractures"
+      },
+      "correctAnswer": "B",
+      "rationale": "Posterior rib fractures in an infant are highly specific for non-accidental trauma (NAT/child abuse). The mechanism: squeezing the infant's chest during shaking compresses the posterior rib head against the transverse process. A 4-month-old cannot roll over — she cannot fall off a couch independently, and even if she did, a couch fall does not generate sufficient force for multiple posterior rib fractures. NAT workup: full skeletal survey, retinal exam (hemorrhages from shaking), and head MRI/CT (intracranial injury). Mandatory report to Child Protective Services is legally required — on suspicion, not confirmation. Osteogenesis imperfecta (option D) can cause fractures but would be associated with blue sclera, hearing loss, and dentinogenesis imperfecta — the forensic context here makes NAT the primary concern."
+    },
+
+    {
+      "questionId": "np-p2-038",
+      "topicSlug": "pediatric-red-flags-dont-miss",
+      "lessonPart": "2A",
+      "difficulty": "expert",
+      "stemAnchor": "2-day-old neonate + dusky color when feeding + improves with crying + SpO2 75% — ductus-dependent congenital heart disease",
+      "stem": "A 2-day-old male is brought in by his mother, who reports he turns 'blue around his lips' every time he feeds. She notes he calms and 'pinks up' when he cries. He was born at 39 weeks and passed newborn screen the day prior at home birth. SpO2 on pulse oximetry is 75% on room air. HR is 168. Lung exam is clear bilaterally. There is a soft 2/6 systolic murmur at the upper left sternal border. Which of the following is the most appropriate immediate action?",
+      "options": {
+        "A": "Prescribe hypoallergenic formula for milk protein allergy as the cause of feeding difficulty",
+        "B": "Start supplemental oxygen via nasal cannula and schedule cardiology referral for next week",
+        "C": "Call 911 immediately — SpO2 75% in a neonate with cyanosis that worsens with feeding but improves with crying suggests a ductus-dependent congenital heart lesion requiring prostaglandin E1",
+        "D": "Reassure the mother that this is central cyanosis from normal neonatal transition; recheck at the 1-month well child visit"
+      },
+      "correctAnswer": "C",
+      "rationale": "Cyanosis that worsens with feeding but improves with crying is a classic sign of a ductus-dependent congenital heart lesion (e.g., transposition of the great arteries, critical pulmonary stenosis, hypoplastic left heart syndrome). SpO2 of 75% in a 2-day-old is critically low. As the ductus arteriosus closes in the first days of life, infants with ductus-dependent circulation become critically hypoxic. Emergency management: prostaglandin E1 (PGE1) to maintain ductal patency — administered only in an ICU setting. Supplemental oxygen alone (option B) is insufficient and may actually accelerate ductal closure in some lesions. The NP must call 911 immediately. This is a pediatric cardiac surgical emergency."
+    },
+
+    {
+      "questionId": "np-p2-039",
+      "topicSlug": "pediatric-red-flags-dont-miss",
+      "lessonPart": "2A",
+      "difficulty": "hard",
+      "stemAnchor": "12-month-old + any bruise + not yet walking — bruising in non-mobile infant NAT concern",
+      "stem": "A 12-month-old boy is brought in for a well child visit. He is not yet walking but pulls to stand. Mom reports he has been 'super active' and 'bumps into everything.' On exam, you note a 2 cm purple bruise on his inner left thigh and a 1.5 cm bruise on his left ear. The family history is unremarkable. The mother explains both are from 'everyday bumps.' Coagulation studies (PT, PTT, platelet count) are normal. Which of the following is the most appropriate response?",
+      "options": {
+        "A": "Document the bruises as consistent with normal activity in a mobile 12-month-old and complete the well child visit",
+        "B": "Accept the explanation; bruising of a mobile child in soft tissue areas is expected",
+        "C": "Report suspected non-accidental trauma to Child Protective Services; obtain skeletal survey and ophthalmology referral",
+        "D": "Order repeat coagulation studies in 4 weeks to evaluate for bleeding disorder before escalating"
+      },
+      "correctAnswer": "C",
+      "rationale": "The 'TEN-4' rule: bruising on the Torso, Ears, or Neck in a child ≤4 years, OR ANY bruising in a child <4 months, is concerning for non-accidental trauma (NAT). A 12-month-old who does not yet walk independently cannot generate sufficient force through independent activity to bruise the inner thigh or ear. Ear bruising in any child who is not independently ambulatory is a high-specificity indicator of NAT. Normal coagulation studies make bleeding diathesis less likely but do not exclude it fully — a hematology referral and further workup should accompany the NAT workup. Mandatory CPS report is required. Option A incorrectly labels these as normal activity bruises in a non-walking child. Option D delays mandatory reporting."
+    },
+
+    {
+      "questionId": "np-p2-040",
+      "topicSlug": "pediatric-red-flags-dont-miss",
+      "lessonPart": "2A",
+      "difficulty": "hard",
+      "stemAnchor": "Term neonate day 3 + no meconium passed + abdominal distension + rectal exam triggers explosive stool — Hirschsprung disease",
+      "stem": "A 3-day-old term male has not passed meconium since delivery. He has progressive abdominal distension and has been vomiting. On rectal exam, your finger reveals a narrow anal canal, and on withdrawal you trigger an explosive release of stool and gas. CXR shows dilated bowel loops without free air. Which of the following is the most appropriate diagnosis and next step?",
+      "options": {
+        "A": "Normal neonatal constipation; recommend glycerin suppository and follow up in 48 hours",
+        "B": "Meconium ileus from cystic fibrosis; order sweat chloride test and arrange outpatient GI referral",
+        "C": "Hirschsprung disease; urgent pediatric surgical referral for rectal biopsy to confirm aganglionosis",
+        "D": "Necrotizing enterocolitis (NEC); transfer to NICU immediately for IV antibiotics and NPO"
+      },
+      "correctAnswer": "C",
+      "rationale": "Hirschsprung disease (congenital aganglionosis) classic presentation: failure to pass meconium in the first 48 hours of life + abdominal distension + vomiting + explosive passage of stool on rectal examination (as the examiner's finger decompresses the aganglionic narrowed segment). The 'squirt sign' on rectal exam is classic. Urgent pediatric surgical consultation and rectal suction biopsy (absence of ganglion cells) confirm the diagnosis. NEC (option D) presents with bloody stools, pneumatosis intestinalis on XR, and systemic illness — free air if perforation occurs. Meconium ileus (option B) associated with CF does not show the explosive rectal exam decompression. Glycerin suppository (option A) would be insufficient for an aganglionic segment."
+    },
+
+    {
+      "questionId": "np-p2-041",
+      "topicSlug": "pediatric-red-flags-dont-miss",
+      "lessonPart": "2A",
+      "difficulty": "hard",
+      "stemAnchor": "5-month-old girl + intermittent inconsolable crying + vomiting + currant jelly stool — intussusception ileocolic",
+      "stem": "A 5-month-old girl is brought in by her father. She has been having intermittent 15-minute episodes of crying with legs pulled up to her chest, followed by periods of normalcy, for the past 8 hours. She vomited twice. Her father reports finding red, jelly-like material in her diaper this morning. She appears lethargic in your office between episodes. Abdomen is soft with mild RUQ fullness. Which of the following is the most appropriate action?",
+      "options": {
+        "A": "Diagnose colic; reassure and recommend simethicone drops",
+        "B": "Diagnose gastroenteritis; recommend oral rehydration and follow up if not improved in 3 days",
+        "C": "Call 911 for immediate transfer — currant jelly stool + episodic colicky pain + lethargy in a 5-month-old is intussusception until proven otherwise",
+        "D": "Obtain abdominal X-ray in your clinic to assess for obstruction before calling for transfer"
+      },
+      "correctAnswer": "C",
+      "rationale": "Intussusception (typically ileocolic) classic triad: episodic colicky pain with intermittent well-appearing periods + vomiting + currant jelly stool (blood-tinged mucus from bowel wall ischemia — a LATE sign). Lethargy between episodes is a worrisome sign indicating hemodynamic compromise. Most common in 5-month to 3-year-old infants. Emergent transfer for ultrasound (gold standard diagnosis) and air or contrast enema reduction. Currant jelly stool indicates mucosal ischemia — delayed treatment risks perforation. Colic (option A) does not cause currant jelly stool. Gastroenteritis (option B) does not cause episodic pain or currant jelly stool. Delaying transfer for an in-office X-ray (option D) is inappropriate given the severity of the presentation."
+    },
+
+    {
+      "questionId": "np-p2-042",
+      "topicSlug": "pediatric-red-flags-dont-miss",
+      "lessonPart": "2B",
+      "difficulty": "expert",
+      "stemAnchor": "4-year-old + fever 5 days + strawberry tongue + bilateral conjunctivitis + diffuse rash + right cervical node 2 cm — Kawasaki disease IVIG decision",
+      "stem": "A 4-year-old girl has had fever to 39.8°C for 6 days that has not responded to antipyretics. On exam: bilateral non-purulent conjunctival injection, strawberry tongue, cracked erythematous lips, diffuse polymorphous rash on her trunk, and a right-sided 2 cm cervical lymph node. Hands and feet show erythema and early edema. Labs: CRP 7.4 mg/dL, ESR 88 mm/hr, WBC 18,000, platelet count 580,000. Which of the following best represents the appropriate management?",
+      "options": {
+        "A": "Treat with amoxicillin for Group A Streptococcal scarlet fever and follow up in 48 hours",
+        "B": "Reassure that the findings are consistent with viral exanthem; schedule return if fever persists beyond 10 days",
+        "C": "Administer IVIG 2 g/kg + aspirin and arrange urgent pediatric cardiology evaluation for echocardiogram",
+        "D": "Order monospot test and EBV serology for infectious mononucleosis as the most likely diagnosis"
+      },
+      "correctAnswer": "C",
+      "rationale": "Classic Kawasaki disease is present: fever ≥5 days + 4 of 5 CRASH criteria — Conjunctivitis (bilateral non-purulent) ✓, Rash ✓, Adenopathy (cervical >1.5 cm) ✓, Strawberry tongue/lip changes ✓, Hand/foot erythema ✓. This meets complete Kawasaki criteria. IVIG 2 g/kg (reduces coronary artery aneurysm risk from 25% untreated to <5%) + aspirin is the treatment. Echocardiogram at diagnosis is required to evaluate coronary arteries. Scarlet fever (option A) has sandpaper rash + pharyngitis + Group A Strep — no conjunctivitis, no extremity changes. EBV (option D) causes posterior cervical adenopathy + splenomegaly + heterophile-positive mono — different pattern. Viral exanthem (option B) does not persist ≥5 days with this multi-system pattern."
+    },
+
+    {
+      "questionId": "np-p2-043",
+      "topicSlug": "pediatric-red-flags-dont-miss",
+      "lessonPart": "2B",
+      "difficulty": "hard",
+      "stemAnchor": "3-year-old + sudden stridor + drooling + tripod position + high fever — epiglottitis do not examine throat",
+      "stem": "A 3-year-old boy is brought in by his parents with a 12-hour history of progressively worsening difficulty breathing and 'noisy breathing.' His mother reports he started drooling and refuses to swallow. Temp is 39.9°C. He is sitting in a tripod position (leaning forward, hands on knees). You hear audible inspiratory stridor. His voice is muffled. Which of the following represents the most appropriate immediate action?",
+      "options": {
+        "A": "Perform a throat exam with a tongue depressor to assess the epiglottis and pharynx",
+        "B": "Order a stat lateral neck X-ray to look for the 'thumbprint sign' before any other action",
+        "C": "Call 911 immediately — do NOT examine the throat or agitate the child; maintain calm until ENT/anesthesia arrives for airway management",
+        "D": "Administer racemic epinephrine and dexamethasone for croup and observe for 2 hours"
+      },
+      "correctAnswer": "C",
+      "rationale": "This is epiglottitis until proven otherwise: high fever + stridor + drooling + muffled voice + tripod position in a young child. Critical rule: do NOT examine the throat with a tongue depressor — stimulating the inflamed epiglottis can trigger complete laryngospasm and immediate airway obstruction. The child must be kept calm, upright, with the parent present. ENT and anesthesia must manage the airway in a controlled setting (OR). Call 911 immediately. Croup (option D) presents with barky cough, low-grade fever, and responds to racemic epinephrine/dexamethasone — drooling and tripod positioning are not croup features. Lateral neck X-ray showing 'thumbprint sign' confirms epiglottitis but should not delay airway management call."
+    },
+
+    {
+      "questionId": "np-p2-044",
+      "topicSlug": "pediatric-red-flags-dont-miss",
+      "lessonPart": "2B",
+      "difficulty": "hard",
+      "stemAnchor": "2-year-old + witnessed choking + sudden onset wheeze + unilateral air trapping — foreign body aspiration",
+      "stem": "A 2-year-old girl is brought in by her mother, who witnessed her choking on a peanut 30 minutes ago. After a coughing spell, the child appeared to recover and is now breathing but has developed a new wheeze. SpO2 is 95%. Physical exam reveals diminished breath sounds on the left with a persistent monophonic wheeze. CXR (expiratory film) shows left lung hyperinflation compared to the right. Which of the following is the most appropriate action?",
+      "options": {
+        "A": "Prescribe albuterol MDI and follow up in 24 hours for 'first episode of asthma'",
+        "B": "Perform abdominal thrusts (Heimlich maneuver) since the foreign body has not been expelled",
+        "C": "Call 911 for urgent transfer for bronchoscopic evaluation and removal of the aspirated foreign body",
+        "D": "Order CT chest to localize the foreign body before referring to surgery in 48 hours"
+      },
+      "correctAnswer": "C",
+      "rationale": "Foreign body aspiration (FBA): witnessed choking + sudden onset wheeze + unilateral decreased breath sounds + unilateral air trapping (from ball-valve obstruction — the foreign body allows air in but not out, causing air trapping on expiratory film). Bronchoscopy is the definitive diagnostic and therapeutic procedure — it must be done urgently (not emergently unless complete obstruction). Do NOT perform Heimlich maneuver (option B) on a child who is still breathing and coughing — Heimlich is for complete obstruction (child cannot breathe or cough). Albuterol (option A) would worsen air trapping. Delayed CT and surgery referral in 48 hours (option D) risks distal migration, erosion, or complete obstruction. The child needs urgent airway management."
+    },
+
+    {
+      "questionId": "np-p2-045",
+      "topicSlug": "pediatric-red-flags-dont-miss",
+      "lessonPart": "2B",
+      "difficulty": "hard",
+      "stemAnchor": "8-year-old + migratory arthritis + new murmur + recent strep pharyngitis — acute rheumatic fever Jones criteria",
+      "stem": "A 8-year-old girl presents with swollen, painful joints that have migrated: first the right knee, then the left ankle, now the right wrist over a 10-day period. She had a sore throat treated with a 5-day course of amoxicillin 3 weeks ago (not confirmed strep — 'given for precaution'). On exam she has a new 3/6 holosystolic murmur at the apex. Temp 38.1°C. ESR 68 mm/hr, CRP 3.8 mg/dL. ASO titer is 420 IU/mL (elevated). ECG shows PR interval of 240 ms. Which of the following is the most appropriate action?",
+      "options": {
+        "A": "Treat with ibuprofen and advise the parents this is reactive arthritis from a viral illness",
+        "B": "Refer for echocardiogram and initiate penicillin G + aspirin; diagnose acute rheumatic fever (ARF)",
+        "C": "Order ANA and anti-CCP antibodies to evaluate for juvenile idiopathic arthritis (JIA)",
+        "D": "Diagnose viral myocarditis and admit to the PICU for cardiac monitoring"
+      },
+      "correctAnswer": "B",
+      "rationale": "This patient meets Jones criteria for acute rheumatic fever (ARF): Major criteria — migratory polyarthritis ✓ + carditis (new murmur + prolonged PR) ✓ = 2 major criteria; plus evidence of prior GAS infection (elevated ASO titer). ARF Jones criteria: 2 major OR 1 major + 2 minor (fever, elevated ESR/CRP, prolonged PR, elevated WBC) + evidence of streptococcal infection. Treatment: penicillin G to eradicate residual GAS + aspirin for arthritis/carditis. Echocardiogram to assess mitral valve involvement (subclinical carditis). Long-term secondary prophylaxis with monthly benzathine penicillin is required. JIA (option C) does not explain the carditis or elevated ASO. Viral myocarditis (option D) does not cause migratory arthritis or elevated ASO."
+    },
+
+    {
+      "questionId": "np-p2-046",
+      "topicSlug": "pediatric-red-flags-dont-miss",
+      "lessonPart": "2B",
+      "difficulty": "expert",
+      "stemAnchor": "10-year-old + baseball to head + lost consciousness 30 seconds + vomited once + GCS 15 — PECARN CT decision rule",
+      "stem": "A 10-year-old boy was hit in the right temporal region by a baseball 2 hours ago. He lost consciousness for approximately 30 seconds, then became alert. He vomited once. He now has a headache rated 4/10. GCS is 15. There is a soft tissue swelling over the right temporal region. He is alert, oriented, and following commands. Which of the following is the most appropriate management?",
+      "options": {
+        "A": "Apply the PECARN rule: this patient has LOC AND vomiting — he requires CT head to exclude intracranial injury",
+        "B": "He is GCS 15 and currently well-appearing; PECARN classifies him as low risk; observe 4–6 hours without CT",
+        "C": "Discharge home with standard concussion precautions since he is asymptomatic now",
+        "D": "Administer acetaminophen and schedule repeat neurological exam tomorrow"
+      },
+      "correctAnswer": "A",
+      "rationale": "PECARN pediatric head CT decision rule for children ≥2 years: CT is recommended if ANY of these high-risk factors are present: GCS <15, signs of skull fracture (palpable, non-frontal scalp hematoma, battle sign, hemotympanum), altered mental status, or severe mechanism. Observation is preferred if: isolated LOC <5 seconds OR isolated vomiting OR non-severe mechanism — but NOT if multiple factors are present. This patient has BOTH LOC (30 seconds — longer than trivial 5 seconds) AND vomiting — two intermediate-risk factors together warrant CT or at minimum prolonged observation. The temporal swelling (temporal bone = thin) adds concern for temporal epidural hematoma risk. In a child with LOC >5 seconds + vomiting + temporal hematoma, CT head is appropriate. Option B would be correct if these were isolated findings; combined, CT is warranted."
+    },
+
+    {
+      "questionId": "np-p2-047",
+      "topicSlug": "pediatric-red-flags-dont-miss",
+      "lessonPart": "2B",
+      "difficulty": "hard",
+      "stemAnchor": "16-year-old + sore throat + anterior cervical LAD + bilateral tonsillar exudate + rash after amoxicillin — EBV mono amoxicillin rash",
+      "stem": "A 16-year-old girl presents with a 5-day history of severe sore throat, fatigue, and difficulty swallowing. Exam reveals: temperature 38.6°C, bilateral anterior and posterior cervical lymphadenopathy, significantly enlarged tonsils with exudate bilaterally, splenomegaly on palpation. Rapid strep test is negative. Her primary care provider prescribed amoxicillin 500 mg TID 3 days ago. She now presents with a diffuse maculopapular rash covering her trunk, arms, and legs. Which of the following best explains the rash?",
+      "options": {
+        "A": "True penicillin allergy — amoxicillin has caused an IgE-mediated allergic reaction; label her as penicillin-allergic",
+        "B": "Amoxicillin-induced rash in EBV infectious mononucleosis — this is NOT a true penicillin allergy; do not label her penicillin-allergic",
+        "C": "Viral exanthem from EBV itself — the rash is unrelated to the amoxicillin",
+        "D": "Scarlet fever from Group A Strep despite negative rapid strep — start cephalexin as alternative antibiotic"
+      },
+      "correctAnswer": "B",
+      "rationale": "The amoxicillin rash in EBV infectious mononucleosis is a classic teaching point: approximately 80–100% of patients with EBV mono who receive amoxicillin or ampicillin develop a diffuse maculopapular rash. This is NOT a true penicillin allergy — it is a drug-virus interaction caused by immune activation of EBV-infected B cells. Falsely labeling this patient as penicillin-allergic would deprive her of future use of first-line antibiotics for many infections. The rash disappears as the mono resolves. This question also tests recognition that the negative rapid strep + bilateral posterior adenopathy + splenomegaly + this rash pattern = EBV mono. The Phase 1 question np-p1-065 (fever topic) specifically addressed this distinction — this question reinforces the same concept in a different context (the actual rash presentation vs the diagnostic workup)."
+    },
+
+    {
+      "questionId": "np-p2-048",
+      "topicSlug": "pediatric-red-flags-dont-miss",
+      "lessonPart": "2B",
+      "difficulty": "expert",
+      "stemAnchor": "8-year-old + fever 4 days + bilateral non-purulent conjunctivitis + rash + 3 of 5 CRASH criteria — incomplete Kawasaki",
+      "stem": "An 8-year-old boy has had fever for 5 days (max 39.5°C). On exam: bilateral non-purulent conjunctivitis and a polymorphous rash on his trunk are present. His lips are not cracked and his tongue is normal. No lymphadenopathy is noted. Hands show no erythema. CBC: WBC 18,000, platelets 620,000. CRP 9.2 mg/dL. ESR 96 mm/hr. Echocardiogram is requested. Which of the following diagnosis most accurately describes this presentation?",
+      "options": {
+        "A": "Complete Kawasaki disease; meets all 5 criteria",
+        "B": "Incomplete Kawasaki disease; fever ≥5 days + 2 classic criteria + elevated acute phase reactants warrant echo and possible IVIG",
+        "C": "Viral exanthem with reactive thrombocytosis; observe and follow up in 3 days",
+        "D": "Systemic juvenile idiopathic arthritis (sJIA) with fever and rash; refer to pediatric rheumatology"
+      },
+      "correctAnswer": "B",
+      "rationale": "Incomplete (atypical) Kawasaki disease: fever ≥5 days + 2–3 classic criteria (conjunctivitis + rash = 2) without meeting the 4-of-5 full Kawasaki criteria. Per AHA guidelines, incomplete Kawasaki should be considered when fever ≥5 days is present with 2 or more classic features + elevated acute phase reactants (CRP ≥3 mg/dL, ESR ≥40 mm/hr). Echocardiography is required — evidence of coronary artery abnormalities (Z score ≥2.5) confirms Kawasaki regardless of clinical criteria count. IVIG should be administered if echo shows coronary changes or if clinical + lab picture strongly supports incomplete KD. Viral exanthem (option C) does not explain 5-day fever with CRP 9.2 + ESR 96. sJIA (option D) presents with quotidian fever, salmon-colored rash, and arthritis — different pattern."
+    },
+
+    {
+      "questionId": "np-p2-049",
+      "topicSlug": "psychiatric-red-flags-safety",
+      "lessonPart": "2A",
+      "difficulty": "expert",
+      "stemAnchor": "24-year-old + PHQ-9 item 9 response + plan with firearm access + LGBTQ+ identity — C-SSRS stratification involuntary hold",
+      "stem": "A 24-year-old transgender male presents for follow-up of MDD. PHQ-9 score is 21 (severe). On item 9, he scores 3 ('thoughts that you would be better off dead or of hurting yourself in some way — nearly every day'). During the C-SSRS, he endorses active suicidal ideation with a specific plan (intending to use his roommate's firearm) and states he has been thinking about this daily for 2 weeks. He has no prior suicide attempts. He declines voluntary hospitalization. Which of the following is the most appropriate action?",
+      "options": {
+        "A": "Document the conversation, provide the National Suicide Prevention Lifeline number, and increase his antidepressant dose",
+        "B": "Create a safety plan with him and schedule a follow-up appointment in 3 days",
+        "C": "Initiate an involuntary psychiatric hold (5150/Baker Act) — active ideation with plan and means access constitutes imminent danger to self",
+        "D": "Recommend he ask his roommate to store the firearm elsewhere and discharge with a safety plan"
+      },
+      "correctAnswer": "C",
+      "rationale": "This patient has C-SSRS active suicidal ideation WITH a specific plan (firearm) AND access to means — the highest-risk combination. Key criteria met for involuntary hold: (1) active plan with identified means, (2) access to firearm (lethal means — suicide completion rate by firearm is >85%), (3) daily ideation for 2 weeks. He declines voluntary hospitalization. Involuntary hold criteria in most states: danger to self + mental disorder + unable or unwilling to accept voluntary treatment. A safety plan and follow-up in 3 days (option B) is appropriate for LOW risk — not for active plan + lethal means access. Means restriction counseling (option D) is incomplete — he must be safe first. Increasing the antidepressant (option A) does not address the immediate risk."
+    },
+
+    {
+      "questionId": "np-p2-050",
+      "topicSlug": "psychiatric-red-flags-safety",
+      "lessonPart": "2A",
+      "difficulty": "hard",
+      "stemAnchor": "67-year-old widower + recent retirement + passive ideation only + no plan + strong religious objection — low-risk safety plan discharge",
+      "stem": "A 67-year-old widowed man comes in for a follow-up visit after his wife died 8 weeks ago. PHQ-9 score is 18 (moderately severe). He endorses: 'I've had thoughts that I'd be okay with dying, like if God took me in my sleep.' He denies active thoughts of suicide, has no plan, and has never made an attempt. He is Catholic and states suicide would be a mortal sin — he has no intention of harming himself. He has two adult children who visit weekly. He is engaged in our conversation and tearful but interactive. Which of the following is the most appropriate management?",
+      "options": {
+        "A": "Hospitalize involuntarily — any suicidal ideation in an elderly widowed male requires inpatient care",
+        "B": "Discharge with a safety plan, initiation of antidepressant therapy, and follow-up within 1–2 weeks",
+        "C": "Discharge without any intervention since his religious beliefs preclude suicide",
+        "D": "Refer to psychiatry for outpatient evaluation in 2 months since this is grief, not depression"
+      },
+      "correctAnswer": "B",
+      "rationale": "This patient has passive suicidal ideation (wishes to die without active intent, plan, or means) with multiple strong protective factors: religious objection to suicide (one of the strongest protective factors), engaged adult family support, interactive and cooperative with care, no prior attempts. He does NOT meet involuntary hold criteria — the hold requires danger to self, which requires active intent/plan or grave disability. Appropriate management: safety plan (document protective factors, provide crisis line, agree on follow-up plan), initiate antidepressant (PHQ-9 ≥15 with functional impairment), and close follow-up within 1–2 weeks. Option A (involuntary hold) is disproportionate for passive ideation with strong protective factors. Option D delays needed intervention."
+    },
+
+    {
+      "questionId": "np-p2-051",
+      "topicSlug": "psychiatric-red-flags-safety",
+      "lessonPart": "2A",
+      "difficulty": "hard",
+      "stemAnchor": "38-year-old male on sertraline + just lost job + recent divorce + asks about medication lethal dose — high-risk means assessment",
+      "stem": "A 38-year-old man on sertraline 100 mg (prescribed by you for MDD) calls in requesting a 90-day prescription refill. During the call he mentions he recently lost his job and his divorce was finalized last week. He then asks, 'How many of these pills would it take to be harmful if someone took too many at once?' Which of the following is the most appropriate response?",
+      "options": {
+        "A": "Answer his question clinically: 'SSRIs have a high therapeutic index and are rarely fatal even in overdose' and send the 90-day refill",
+        "B": "Ignore the question and send a 30-day refill with follow-up in 4 weeks",
+        "C": "Screen immediately with C-SSRS; do NOT refill 90 days until risk assessment is completed; limit supply and arrange urgent face-to-face evaluation today or tomorrow",
+        "D": "Discontinue sertraline immediately as it may increase suicidal ideation and refer to crisis services"
+      },
+      "correctAnswer": "C",
+      "rationale": "This call contains multiple high-risk signals: recent major life stressors (job loss + divorce finalization) + a direct question about medication lethal dose = a screened sentinel event requiring immediate suicide risk assessment. Providing a 90-day supply of any psychiatric medication to a patient who may be researching lethality is contraindicated. The NP should: (1) conduct an immediate phone-based C-SSRS assessment, (2) limit supply to a small quantity pending in-person evaluation, (3) arrange urgent face-to-face evaluation within 24 hours, (4) if the patient endorses active ideation with plan — escalate to crisis line or emergency services. Option A provides lethality information to a potentially at-risk patient. Option B ignores the red flag entirely. Option D abruptly discontinuing sertraline can worsen depression and increase risk."
+    },
+
+    {
+      "questionId": "np-p2-052",
+      "topicSlug": "psychiatric-red-flags-safety",
+      "lessonPart": "2A",
+      "difficulty": "expert",
+      "stemAnchor": "Patient expresses intent to harm identified former coworker by name + access to firearm — Tarasoff duty to warn",
+      "stem": "A 45-year-old male patient with major depressive disorder presents for a follow-up visit. He becomes increasingly agitated when discussing a former coworker he holds responsible for his recent termination. He states: 'I know where David (full name provided) lives, and I have my gun in my car right now. I've been driving by his house every night. One of these nights I'm going to make him pay.' Which of the following actions is legally and ethically required of the NP?",
+      "options": {
+        "A": "Document the statement in the medical record and notify the patient's family only",
+        "B": "Maintain confidentiality — disclosing this information would violate HIPAA",
+        "C": "Notify the identified potential victim AND law enforcement; evaluate the patient for involuntary hold",
+        "D": "Refer the patient to psychiatry for outpatient evaluation within 1 week and increase his antidepressant"
+      },
+      "correctAnswer": "C",
+      "rationale": "This is a Tarasoff duty-to-warn scenario. The Tarasoff ruling (California 1974) establishes the legal duty for mental health providers: if a patient makes a specific, credible threat to an identifiable third party, the provider must (1) notify the potential victim, and (2) notify law enforcement. Elements present: specific threat + identified victim by name + stated means (firearm in car) + stalking behavior (driving by his house nightly) + stated intent. This obligation overrides HIPAA confidentiality in most jurisdictions. The patient must also be evaluated for involuntary hold (danger to others). Documenting and waiting (option A) is inadequate. Family notification (option A) does not satisfy the legal Tarasoff duty. Option D dangerously delays action on an imminent threat."
+    },
+
+    {
+      "questionId": "np-p2-053",
+      "topicSlug": "psychiatric-red-flags-safety",
+      "lessonPart": "2A",
+      "difficulty": "hard",
+      "stemAnchor": "16-year-old LGBTQ+ teen + recent school bullying + PHQ-9 severe + previous attempt 1 year ago — high-risk adolescent assessment",
+      "stem": "A 16-year-old gender non-conforming adolescent is brought in by a parent after their school counselor expressed concern. PHQ-9 score is 22 (severe). They disclose severe bullying at school for the past 3 months about their gender identity. They attempted an overdose with acetaminophen one year ago and were hospitalized for 3 days. They deny current active ideation but state 'I've been thinking a lot about how there's no point to anything.' C-SSRS reveals passive ideation without current plan or intent. Which of the following best characterizes the risk level and appropriate management?",
+      "options": {
+        "A": "Low risk — no active ideation; reassure and schedule routine follow-up in 6 weeks",
+        "B": "Moderate-high risk — prior attempt + LGBTQ+ identity + ongoing bullying + severe PHQ-9 warrants urgent psychiatric evaluation within 24–48 hours",
+        "C": "Involuntary hold is required because any prior suicide attempter with passive ideation must be hospitalized",
+        "D": "Refer to school counseling and address bullying as the primary intervention; schedule follow-up in 1 month"
+      },
+      "correctAnswer": "B",
+      "rationale": "This adolescent's risk stratification: prior attempt (strongest single predictor of future attempt) + LGBTQ+ identity without affirming support (3× higher suicide risk) + ongoing psychosocial stressor (bullying) + severe PHQ-9 (22) + passive ideation. While passive ideation without current plan does not mandate involuntary hold, the cumulative risk factors place this patient in the moderate-high risk category requiring urgent psychiatric evaluation. Same-day or next-day psychiatric consultation is appropriate. Option A underestimates the risk — a prior attempter with ongoing stressors and severe depression should never be classified as low risk. Option C (automatic hold for passive ideation) is incorrect — the hold threshold requires active danger or grave disability, not passive ideation alone. Option D inadequately addresses the psychiatric severity."
+    },
+
+    {
+      "questionId": "np-p2-054",
+      "topicSlug": "psychiatric-red-flags-safety",
+      "lessonPart": "2A",
+      "difficulty": "hard",
+      "stemAnchor": "Patient taking TCA + expresses SI + asks for 3-month supply — lethal means restriction prescription limit",
+      "stem": "A 52-year-old woman with chronic MDD is being managed on nortriptyline 75 mg (a tricyclic antidepressant) with partial response. She discloses passive suicidal ideation today — wishes she wasn't alive, no plan, no intent, no access to firearms. Her PHQ-9 is 14. She requests a 90-day refill for her nortriptyline prescription. Which of the following is the most appropriate prescribing decision?",
+      "options": {
+        "A": "Provide a 90-day supply to reduce pharmacy trips and improve medication access",
+        "B": "Switch to an SSRI immediately since TCAs should never be prescribed in patients with any suicidal ideation",
+        "C": "Provide a 2–4 week supply only; arrange close follow-up within 2 weeks; consider guardian-supervised dispensing",
+        "D": "Prescribe as requested; the passive ideation is low risk and does not affect prescribing decisions"
+      },
+      "correctAnswer": "C",
+      "rationale": "Tricyclic antidepressants (TCAs) are among the most lethal medications in overdose — a 10-day supply can be a lethal dose (cardiotoxicity from sodium channel blockade). Any patient with suicidal ideation on a TCA should receive restricted quantities. The principle of lethal means restriction applied to prescribing: limit supply to 2–4 weeks maximum in the presence of any suicidal ideation; consider having a trusted family member hold the medication (guardian-supervised dispensing). A 90-day supply (option A) places a lethal quantity within reach. Option B (switch to SSRI) may ultimately be appropriate but is a separate clinical decision — the immediate action is supply restriction. Option D ignores an evidence-based prescribing safety principle."
+    },
+
+    {
+      "questionId": "np-p2-055",
+      "topicSlug": "psychiatric-red-flags-safety",
+      "lessonPart": "2A",
+      "difficulty": "expert",
+      "stemAnchor": "Native American 58-year-old + alcohol use disorder + recent incarceration + isolation + passive SI — population-specific high-risk identification",
+      "stem": "A 58-year-old Native American man presents for management of alcohol use disorder and depression following release from 6-month incarceration 3 weeks ago. He is divorced, lives alone on a rural reservation, and reports he has no close contacts in the area. He denies active suicidal ideation but describes feeling 'invisible' and says 'nobody would miss me.' PHQ-9 score is 16. He is not on any medications. Which of the following represents the most accurate risk characterization and appropriate response?",
+      "options": {
+        "A": "Low risk — no active ideation and a PHQ-9 of 16 alone does not require escalation",
+        "B": "Moderate-high risk — multiple high-risk markers for suicide completion present; initiate treatment, safety plan, and close follow-up within 1–2 weeks with outreach support",
+        "C": "Involuntary hold is required based on the passive 'nobody would miss me' statement alone",
+        "D": "Address alcohol use disorder only and schedule mental health follow-up in 3 months"
+      },
+      "correctAnswer": "B",
+      "rationale": "This patient has multiple population-specific high-risk factors for suicide completion: (1) Native American male (highest suicide rate of any US demographic group), (2) alcohol use disorder (3× increased suicide risk), (3) recent incarceration (transition period = very high risk), (4) social isolation (rural, no support network), (5) divorce, (6) PHQ-9 16 (moderately severe), (7) passive ideation ('nobody would miss me' is a warning sign). Passive ideation alone does not mandate involuntary hold, but this patient's cumulative profile requires urgent action: initiate antidepressant + alcohol use disorder treatment, comprehensive safety plan with crisis resources, and close follow-up within 1–2 weeks with built-in outreach (phone check-in). Option A grossly underestimates risk in a high-risk demographic. Option C incorrectly applies involuntary hold criteria. Option D defers mental health care inappropriately."
+    },
+
+    {
+      "questionId": "np-p2-056",
+      "topicSlug": "psychiatric-red-flags-safety",
+      "lessonPart": "2B",
+      "difficulty": "expert",
+      "stemAnchor": "48-year-old + new psychosis + low sodium + recent steroid initiation + confusion — steroid-induced psychosis organic workup",
+      "stem": "A 48-year-old woman with newly diagnosed temporal arteritis was started on prednisone 60 mg daily 5 days ago. Her husband brings her in because she has been talking to 'people who aren't there' since yesterday, is agitated, and had her first episode of disorganized behavior this morning. She had no prior psychiatric history. BMP: Na 128 mEq/L, K 3.0, Cr 0.9. TSH is normal. Glucose is 198 mg/dL. Which of the following is the most appropriate initial management?",
+      "options": {
+        "A": "Initiate haloperidol 5 mg IM immediately for acute psychotic agitation",
+        "B": "Diagnose new-onset schizophrenia and refer urgently to psychiatry for antipsychotic initiation",
+        "C": "Reduce prednisone dose and correct hyponatremia; these are the most likely organic causes of her acute psychosis",
+        "D": "Order brain MRI with contrast to evaluate for temporal arteritis CNS involvement"
+      },
+      "correctAnswer": "C",
+      "rationale": "This is steroid-induced psychosis + hyponatremia — both organic causes. Prednisone 60 mg/day is a classic trigger for steroid psychosis (usually dose-dependent, onset typically days 5–10). Additionally, hyponatremia (Na 128) itself can cause confusion and psychosis. The correct approach is to treat the organic causes first: taper prednisone to the minimum effective dose for temporal arteritis (often 30–40 mg after initial dose) and correct hyponatremia. Diagnosing schizophrenia (option B) in a 48-year-old with no prior history who developed psychosis 5 days after starting high-dose steroids is premature and incorrect. Haloperidol (option A) may be needed if dangerous agitation persists after organic cause correction, but organic cause treatment is the priority. Option D (MRI for CNS vasculitis) is less urgent — organic drug/metabolic causes should be addressed first."
+    },
+
+    {
+      "questionId": "np-p2-057",
+      "topicSlug": "psychiatric-red-flags-safety",
+      "lessonPart": "2B",
+      "difficulty": "hard",
+      "stemAnchor": "22-year-old + 3 weeks progressive hallucinations + flat affect + social withdrawal + HIV-negative + normal labs — first-episode psychosis workup",
+      "stem": "A 22-year-old man is brought by his parents. Over 3 weeks he has been hearing voices that comment on his actions, believes the government has implanted a device in his head, and has become reclusive. He was an honors student until 6 months ago. Urine drug screen is negative. CBC, CMP, TSH, B12, RPR, and HIV are all negative. Brain MRI shows no abnormality. He has no family history of schizophrenia. Which of the following is the most appropriate next step?",
+      "options": {
+        "A": "Initiate risperidone 2 mg daily in your clinic and schedule follow-up in 6 weeks",
+        "B": "Refer urgently to a first-episode psychosis (FEP) program or psychiatric evaluation for antipsychotic initiation under specialist supervision",
+        "C": "Reassure the family that this is likely a late adolescent adjustment disorder and will resolve without medication",
+        "D": "Order EEG to evaluate for complex partial seizures as a cause of his hallucinations"
+      },
+      "correctAnswer": "B",
+      "rationale": "This is a first-episode psychosis (FEP) presentation: gradual-onset positive symptoms (auditory hallucinations, paranoid delusions) + negative symptoms (flat affect, social withdrawal) + prodromal academic decline in a young adult with normal medical workup. First-episode psychosis evaluation and antipsychotic initiation should occur under psychiatric specialist supervision in a specialized FEP program — early coordinated care (NAVIGATE, RAISE studies) improves long-term outcomes. Initiating antipsychotics in primary care without psychiatric specialist input is outside NP scope for first-episode psychosis. Option A (risperidone in primary care) is inappropriate without specialist co-management. Option C (reassurance) dismisses a serious neuropsychiatric illness. Option D (EEG) may be part of a broader workup if seizure is suspected — but normal MRI and no motor symptoms make this lower priority."
+    },
+
+    {
+      "questionId": "np-p2-058",
+      "topicSlug": "psychiatric-red-flags-safety",
+      "lessonPart": "2B",
+      "difficulty": "hard",
+      "stemAnchor": "Delirium vs dementia — elderly patient + acute fluctuating confusion vs slowly progressive — clinical distinction",
+      "stem": "A 78-year-old woman with known Alzheimer's dementia (MMSE 18/30 at baseline) is brought in by her daughter. Over the past 2 days she has been 'not herself' — more confused than usual, talking to people who aren't there, and unable to recognize her daughter at times. She does not recognize her daughter today (new from baseline). Temperature is 38.3°C. Urinalysis reveals 3+ nitrites, 3+ leukocyte esterase. Which of the following is the most accurate clinical interpretation?",
+      "options": {
+        "A": "This represents Alzheimer's disease progression — no intervention beyond reassurance is needed",
+        "B": "This is delirium superimposed on dementia, likely secondary to a urinary tract infection — treat the underlying cause",
+        "C": "New-onset psychosis in dementia; initiate quetiapine for behavioral management",
+        "D": "Sundowning behavior — provide nighttime melatonin and bright light therapy"
+      },
+      "correctAnswer": "B",
+      "rationale": "Delirium superimposed on dementia (DSD): an ACUTE change above a known dementia baseline — fluctuating consciousness, new hallucinations, worsening cognition that is ACUTE (2 days), with an identifiable medical cause (UTI = urinalysis strongly positive). Key distinguishing features: delirium = ACUTE fluctuating consciousness + identifiable precipitant; dementia = slowly progressive with stable fluctuation. This patient's sudden acute worsening beyond her baseline Alzheimer's level, triggered by fever and UTI, is classic DSD. Treatment is the underlying cause (UTI antibiotics) — the confusion should resolve as the infection clears. Option A (Alzheimer's progression) is incorrect for a 2-day acute change. Option C (quetiapine) for behavioral management in dementia is sometimes used but is not the first action when a treatable medical cause is identified. Sundowning (D) is a chronic nocturnal pattern — not acute 2-day worsening."
+    },
+
+    {
+      "questionId": "np-p2-059",
+      "topicSlug": "psychiatric-red-flags-safety",
+      "lessonPart": "2B",
+      "difficulty": "expert",
+      "stemAnchor": "Agitated patient + threatening + refusal to leave + de-escalation failing — acute agitation management safety protocol",
+      "stem": "A 34-year-old man with a history of bipolar disorder presents demanding a specific controlled substance prescription. When you decline, he becomes verbally aggressive, stands up, and begins moving toward you. He is loud, unpredictable, and has pushed a chair. Other patients in the waiting room are visible through the window. De-escalation attempts (low voice, offering him a seat, naming his emotions) have been unsuccessful. Which of the following is the most appropriate next step?",
+      "options": {
+        "A": "Attempt to physically restrain the patient to prevent injury to yourself and others",
+        "B": "Increase the verbal de-escalation intensity and engage him one-on-one in a private room",
+        "C": "Call 911 immediately; do not attempt physical restraint without security/law enforcement",
+        "D": "Administer intramuscular haloperidol to manage acute agitation before law enforcement arrives"
+      },
+      "correctAnswer": "C",
+      "rationale": "Primary care clinic safety protocol for acute agitation that does not respond to de-escalation: call 911 immediately. Do NOT attempt physical restraint without trained security personnel — physical confrontation by clinical staff without restraint training increases injury risk for both the patient and the provider. Moving the patient to a private room (option B) isolates both parties and increases danger. Physical restraint by the NP alone (option A) is dangerous. IM haloperidol (option D) may be used for pharmacological calming in emergency settings with appropriate monitoring — but in a primary care clinic, this is outside safe practice without emergency medication protocols and monitoring capability. The correct response is call 911, maintain distance, exit with other patients to a safe area if possible."
+    },
+
+    {
+      "questionId": "np-p2-060",
+      "topicSlug": "psychiatric-red-flags-safety",
+      "lessonPart": "2B",
+      "difficulty": "hard",
+      "stemAnchor": "28-year-old + excited delirium + agitation + hyperthermia + superhuman strength + police physical restraint — risk of sudden death",
+      "stem": "A 28-year-old man is brought in by police who found him agitated, incoherent, and 'unbelievably strong' in a parking lot. He is profusely diaphoretic, temperature 40.2°C. He is tachycardic at 142 bpm. He is restrained and continues to struggle violently against physical restraints. He has no ID. Urine drug screen is positive for cocaine. Which of the following represents the most critical clinical concern and immediate action?",
+      "options": {
+        "A": "Administer IV saline for suspected heat exhaustion from physical exertion",
+        "B": "Apply chemical sedation (benzodiazepine IM) and monitor; this is excited delirium syndrome with risk of sudden cardiac death during prone restraint",
+        "C": "Apply additional physical restraints in prone position to protect staff from injury",
+        "D": "Order CT head to evaluate for intracranial hemorrhage before any medication"
+      },
+      "correctAnswer": "B",
+      "rationale": "Excited delirium syndrome (ExDS): extreme agitation + hyperthermia + diaphoresis + tachycardia + superhuman strength + cocaine use. ExDS is associated with high risk of sudden cardiac death, particularly during or immediately following prone restraint (positional asphyxia + catecholamine surge). Critical management: (1) Chemical sedation with benzodiazepine (lorazepam or midazolam IM) is preferred to prolonged physical restraint — reduces the catecholamine storm and risk of cardiac arrest; (2) Avoid prone restraint once sedation is administered; (3) Monitor cardiac rhythm and temperature continuously; (4) IV saline for hyperthermia. Prone position (option C) is contraindicated in ExDS — it increases mortality. CT head (option D) is not the immediate priority — securing the airway and cardiovascular stability come first."
+    },
+
+    {
+      "questionId": "np-p2-061",
+      "topicSlug": "psychiatric-red-flags-safety",
+      "lessonPart": "2B",
+      "difficulty": "hard",
+      "stemAnchor": "35-year-old postpartum + 2 weeks postdelivery + hearing voices telling her to harm baby + refusing hospital — postpartum psychosis emergency",
+      "stem": "A 35-year-old woman, G2P2, is brought to your clinic by her husband 2 weeks after an uncomplicated vaginal delivery. Her husband reports she has not slept more than 1–2 hours per night for the past 5 days, has been talking 'nonsense,' and this morning told him 'the baby doesn't need me anymore.' She appears agitated and disheveled. She tells you directly that she hears a voice telling her the baby would be 'better off without her.' She refuses hospital admission. Which of the following is the most appropriate action?",
+      "options": {
+        "A": "Diagnose postpartum depression and prescribe sertraline with 2-week follow-up",
+        "B": "Initiate an involuntary psychiatric hold — postpartum psychosis with infanticidal ideation and danger to self is a psychiatric emergency",
+        "C": "Discharge home with her husband as the 'supportive caregiver' and arrange outpatient psychiatry within 1 week",
+        "D": "Advise the husband to remove the baby from the home until the mother's mood improves"
+      },
+      "correctAnswer": "B",
+      "rationale": "Postpartum psychosis (PPP): onset within 2–4 weeks postpartum + sleep deprivation + disorganized behavior + auditory hallucinations + command hallucinations related to the infant + danger to self (and potential infant) — this is a psychiatric emergency distinct from postpartum depression. PPP is associated with 4–5% infanticide risk and significant suicide risk. Involuntary psychiatric hospitalization is required if the patient refuses voluntary admission, given the command hallucinations regarding the infant. Option A (sertraline) treats postpartum depression, not psychosis. Option C (discharge home with husband) places both mother and infant at immediate risk. Option D (remove baby) is an insufficient safety measure without inpatient psychiatric stabilization."
+    },
+
+    {
+      "questionId": "np-p2-062",
+      "topicSlug": "psychiatric-red-flags-safety",
+      "lessonPart": "2B",
+      "difficulty": "expert",
+      "stemAnchor": "55-year-old + new onset auditory hallucinations + RPR reactive 1:64 + history of unprotected sex — neurosyphilis psychiatric presentation",
+      "stem": "A 55-year-old man with no prior psychiatric history presents with new-onset auditory hallucinations and paranoid ideation over the past 3 months. He has also reported progressively worsening memory and personality change. He has a history of multiple sexual partners and does not consistently use condoms. His medical workup shows: RPR 1:64 (reactive), FTA-ABS positive. CSF analysis: VDRL positive, WBC 22 (lymphocytic). HIV is negative. Which of the following is the most appropriate treatment?",
+      "options": {
+        "A": "Start antipsychotic medication and refer to psychiatry for long-term management",
+        "B": "Treat with benzathine penicillin G 2.4 million units IM weekly for 3 weeks (late latent syphilis protocol)",
+        "C": "Initiate IV aqueous penicillin G 18–24 million units per day for 10–14 days — neurosyphilis protocol",
+        "D": "Treat with doxycycline 100 mg twice daily for 28 days — alternative to penicillin for neurosyphilis"
+      },
+      "correctAnswer": "C",
+      "rationale": "This is neurosyphilis presenting as psychiatric illness — auditory hallucinations, paranoia, and cognitive decline with CSF VDRL positive (specific for CNS infection). Psychiatric manifestations of neurosyphilis (meningovascular, parenchymatous, or tabes dorsalis) are organic and require antibiotics, not antipsychotics primarily. Treatment: IV aqueous penicillin G 18–24 million units/day for 10–14 days — NOT IM benzathine penicillin (which does not achieve adequate CSF levels). Option B (benzathine penicillin IM) is for late latent syphilis WITHOUT CNS involvement — benzathine penicillin does not penetrate the CSF adequately. Option D (doxycycline) has limited evidence for neurosyphilis and is not the preferred regimen. Option A (antipsychotics alone) misses the treatable infectious cause — the psychiatric symptoms can partially reverse with adequate antibiotics."
+    }
+
+  ]
+}
