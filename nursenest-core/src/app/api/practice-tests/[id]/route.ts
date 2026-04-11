@@ -316,7 +316,12 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
       return NextResponse.json({ error: "This question is already submitted" }, { status: 409 });
     }
     const nextAdaptive = mergeLinearCommittedQuestionId(row.adaptiveState, qid);
-    const feedback = await buildLinearCommitFeedback(qid, userAns, gate.entitlement);
+    const feedback = await buildLinearCommitFeedback(
+      qid,
+      userAns,
+      gate.entitlement,
+      cfg.pathwayId ?? null,
+    );
     if (!feedback) {
       return NextResponse.json({ error: "Question not available" }, { status: 404 });
     }
@@ -338,6 +343,10 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
           isCorrect: feedback.isCorrect,
           rationale: feedback.rationale,
           correctKeys: feedback.correctKeys,
+          correctAnswerExplanation: feedback.correctAnswerExplanation,
+          distractorRationalesMap: feedback.distractorRationalesMap,
+          keyTakeaway: feedback.keyTakeaway,
+          relatedLessons: feedback.relatedLessons,
         },
       });
     }

@@ -28,6 +28,17 @@ import type { PracticeTestTeachingItem } from "@/lib/practice-tests/build-teachi
 import { getLinearCommittedQuestionIds } from "@/lib/practice-tests/practice-linear-engine";
 import { PracticeRationalePanel } from "@/components/study/practice-rationale-panel";
 import type { RationalePanelStatus } from "@/components/study/practice-rationale-panel";
+import {
+  PracticeSessionLayout,
+  PracticeTopBar,
+  PracticeSessionGrid,
+} from "@/components/study/practice-session-layout";
+import {
+  PracticeQuestionCard,
+  PracticeAnswerOptionRow,
+} from "@/components/study/practice-question-card";
+import type { PracticeOptionState } from "@/components/study/practice-question-card";
+import { PracticeRationaleFullPanel } from "@/components/study/practice-rationale-full-panel";
 import { CatSessionLayout, CatTopBar, CatContentGrid } from "@/components/study/cat-session-layout";
 import { QuestionCard, AnswerOptionRow } from "@/components/study/cat-question-card";
 import type { AnswerOptionState } from "@/components/study/cat-question-card";
@@ -97,7 +108,15 @@ export function PracticeTestRunnerClient({
   const [linearCommittedIds, setLinearCommittedIds] = useState<string[]>([]);
   /** Practice-mode per-question feedback after commit (not fully restored on reload). */
   const [linearPracticeFeedback, setLinearPracticeFeedback] = useState<
-    Record<string, { isCorrect: boolean; rationale: string | null; correctKeys: string[] }>
+    Record<string, {
+      isCorrect: boolean;
+      rationale: string | null;
+      correctKeys: string[];
+      correctAnswerExplanation?: string | null;
+      distractorRationalesMap?: Record<string, string> | null;
+      keyTakeaway?: string | null;
+      relatedLessons?: { title: string; href: string }[];
+    }>
   >({});
   /** CAT Study Mode: rationale for the current item after scoring, before the next adaptive pick. */
   const [catStudyFeedback, setCatStudyFeedback] = useState<CatStudyFeedbackPayload | null>(null);
@@ -483,7 +502,15 @@ export function PracticeTestRunnerClient({
         ok?: boolean;
         error?: string;
         committedQuestionIds?: string[];
-        feedback?: { isCorrect: boolean; rationale: string | null; correctKeys: string[] };
+        feedback?: {
+          isCorrect: boolean;
+          rationale: string | null;
+          correctKeys: string[];
+          correctAnswerExplanation?: string | null;
+          distractorRationalesMap?: Record<string, string> | null;
+          keyTakeaway?: string | null;
+          relatedLessons?: { title: string; href: string }[];
+        };
       };
       if (!res.ok) throw new Error(data.error ?? "Could not submit answer.");
       if (Array.isArray(data.committedQuestionIds)) {
@@ -496,6 +523,10 @@ export function PracticeTestRunnerClient({
             isCorrect: data.feedback!.isCorrect,
             rationale: data.feedback!.rationale,
             correctKeys: data.feedback!.correctKeys ?? [],
+            correctAnswerExplanation: data.feedback!.correctAnswerExplanation ?? null,
+            distractorRationalesMap: data.feedback!.distractorRationalesMap ?? null,
+            keyTakeaway: data.feedback!.keyTakeaway ?? null,
+            relatedLessons: data.feedback!.relatedLessons ?? [],
           },
         }));
       }
@@ -1054,7 +1085,7 @@ export function PracticeTestRunnerClient({
                 {catOptions}
 
                 {/* CAT study feedback (inline, after options) */}
-                {catStudyFeedbackActive && catStudyFeedback ? (
+                {rationalePanelMode === "feedback" && catStudyFeedback ? (
                   <div className="mt-6 border-t border-[var(--semantic-border-soft)] pt-5">
                     <CatStudyFeedbackPanel
                       feedback={catStudyFeedback}
@@ -1093,8 +1124,8 @@ export function PracticeTestRunnerClient({
                     End session
                   </button>
 
-                  {/* Primary action */}
-                  {catStudyFeedbackActive ? null : idx < total - 1 ? (
+                  {/* Primary action — hidden when study feedback is showing */}
+                  {rationalePanelMode === "feedback" ? null : idx < total - 1 ? (
                     <button
                       type="button"
                       disabled={saving || !hasMeaningfulAnswer(current.id)}
@@ -1133,13 +1164,234 @@ export function PracticeTestRunnerClient({
   }
 
   // ══════════════════════════════════════════════════════════════════════════
-  // PRACTICE / STUDY MODE — 2-column layout with rationale panel
-  // Used for: linear practice, linear exam, CAT study mode
+  // LINEAR PRACTICE / EXAM MODE — spec-driven viewport-height 2-col layout
+  // 60/40 grid · no page scroll on desktop · all rationale shown at once
   // ══════════════════════════════════════════════════════════════════════════
+
+  // Per-option state for the new circular-badge answer rows
+  function practiceOptState(canonical: string): PracticeOptionState {
+    const isSelected =
+      raw === canonical || (Array.isArray(raw) && raw.includes(canonical));
+    if (
+      isLinearEngine &&
+      currentCommitted &&
+      linearDelivery === "practice" &&
+      linearFeedback
+    ) {
+      const ck = new Set(linearFeedback.correctKeys);
+      if (ck.has(canonical)) return "correct";
+      if (isSelected) return "incorrect";
+      return "dim";
+    }
+    if (isLinearEngine && currentCommitted && linearDelivery === "exam") {
+      return isSelected ? "selected" : "dim";
+    }
+    return isSelected ? "selected" : "default";
+  }
+
+  const optIsLocked = isLinearEngine && currentCommitted;
+
+  const practiceOptionRows =
+    optsCanonical.length === 0 ? (
+      <p className="rounded-md border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-4 py-3 text-sm text-[var(--semantic-text-muted)]">
+        No answer choices were returned for this item. Use Retry, reload the
+        test, or contact support if this persists.
+      </p>
+    ) : isSata ? (
+      <ul
+        className="nn-practice-opt-list"
+        role="group"
+        aria-label="Answer choices — select all that apply"
+      >
+        {optsCanonical.map((canonical, i) => {
+          const selected = Array.isArray(raw) ? raw.includes(canonical) : false;
+          return (
+            <li key={canonical}>
+              <PracticeAnswerOptionRow
+                index={i}
+                text={optsDisplay[i] ?? canonical}
+                state={practiceOptState(canonical)}
+                disabled={optIsLocked}
+                isCheckbox
+                checked={selected}
+                onChange={(checked) => {
+                  const prev = Array.isArray(raw) ? [...raw] : [];
+                  setAnswerForCurrent(
+                    checked
+                      ? [...prev, canonical]
+                      : prev.filter((x) => x !== canonical),
+                  );
+                }}
+              />
+            </li>
+          );
+        })}
+      </ul>
+    ) : (
+      <ul
+        className="nn-practice-opt-list"
+        role="radiogroup"
+        aria-label="Answer choices"
+      >
+        {optsCanonical.map((canonical, i) => (
+          <li key={canonical}>
+            <PracticeAnswerOptionRow
+              index={i}
+              text={optsDisplay[i] ?? canonical}
+              state={practiceOptState(canonical)}
+              disabled={optIsLocked}
+              onClick={() => setAnswerForCurrent(canonical)}
+            />
+          </li>
+        ))}
+      </ul>
+    );
+
+  const rationaleFullStatus: import("@/components/study/practice-rationale-full-panel").PracticeRationaleFullPanelStatus =
+    isLinearEngine && linearDelivery === "practice" && currentCommitted && linearFeedback
+      ? linearFeedback.isCorrect
+        ? "correct"
+        : "incorrect"
+      : isLinearEngine && linearDelivery === "exam" && currentCommitted
+        ? "exam_locked"
+        : "waiting";
+
+  const topBarRightLabel =
+    isLinearEngine && committedCount > 0
+      ? `${committedAnsweredPct}% complete`
+      : modeLabel;
+
   return (
-    <div className="space-y-4">
-      <ProtectedPremiumContent userLabel={userLabel} flags={protectionFlags} telemetrySurface="practice_test">
-        <ExamSessionShell neutralPalette>
+    <ProtectedPremiumContent
+      userLabel={userLabel}
+      flags={protectionFlags}
+      telemetrySurface="practice_test"
+    >
+      <PracticeSessionLayout>
+        <PracticeTopBar
+          current={idx + 1}
+          total={total}
+          rightLabel={topBarRightLabel}
+          progressPct={sessionPct}
+          saving={saving}
+        />
+        <PracticeSessionGrid>
+          {/* LEFT — question + options + nav */}
+          <div>
+            <PracticeQuestionCard
+              stem={
+                typeof current.stem === "string" && current.stem.trim().length > 0
+                  ? current.stem
+                  : "Question text is unavailable. Try reloading this item."
+              }
+              topic={current.topic}
+              subtopic={current.subtopic}
+              difficultyLabel={
+                current.difficulty != null
+                  ? difficultyBandLabel(current.difficulty)
+                  : null
+              }
+              optionsLabel={isSata ? "Select all that apply" : "Select the best answer"}
+            >
+              {timedMode && timeLimitSec != null ? (
+                <p className="rounded-lg border border-[color-mix(in_srgb,var(--semantic-warning)_28%,var(--semantic-border-soft))] bg-[var(--semantic-warning-soft)] px-3 py-2 text-xs font-medium text-[var(--semantic-warning-contrast)]">
+                  Timed session — the exam may end automatically when time expires.
+                </p>
+              ) : null}
+              {timedMode ? (
+                <div className="flex justify-end">
+                  <ExamTimerReadout remainingSec={remainingSec} />
+                </div>
+              ) : null}
+              {practiceOptionRows}
+              <div className="nn-practice-q-nav">
+                <button
+                  type="button"
+                  aria-pressed={Boolean(flagged[current.id])}
+                  className={`inline-flex min-h-[2.5rem] shrink-0 items-center rounded-full border px-4 py-2 text-xs font-semibold uppercase tracking-wide transition ${
+                    flagged[current.id]
+                      ? "border-[color-mix(in_srgb,var(--semantic-brand)_26%,var(--semantic-border-soft))] bg-[var(--surface-emphasis,color-mix(in_srgb,var(--semantic-brand)_8%,var(--semantic-surface)))] text-[var(--semantic-text-primary)]"
+                      : "border-[var(--semantic-border-soft)] text-[var(--semantic-text-muted)] hover:bg-[var(--surface-soft-a,var(--semantic-panel-muted))]"
+                  }`}
+                  onClick={() =>
+                    setFlagged((f) => ({ ...f, [current.id]: !f[current.id] }))
+                  }
+                >
+                  {flagged[current.id] ? "Marked" : "Flag"}
+                </button>
+                <div className="nn-practice-q-nav__spacer" />
+                {!isLinearEngine ? (
+                  <button
+                    type="button"
+                    disabled={idx === 0}
+                    className="nn-btn-secondary min-h-[2.5rem] rounded-lg px-4 text-sm font-semibold disabled:opacity-40"
+                    onClick={() => void goPrev()}
+                  >
+                    Previous
+                  </button>
+                ) : null}
+                {isLinearEngine && !currentCommitted ? (
+                  <button
+                    type="button"
+                    disabled={saving || !hasMeaningfulAnswer(current.id)}
+                    className="nn-btn-primary min-h-[2.5rem] rounded-lg px-5 text-sm font-semibold shadow-none disabled:opacity-40"
+                    onClick={() => void submitLinearCommit()}
+                  >
+                    {saving ? "Submitting…" : "Submit answer"}
+                  </button>
+                ) : null}
+                {idx < total - 1 ? (
+                  <button
+                    type="button"
+                    disabled={isLinearEngine && !currentCommitted}
+                    className="nn-btn-primary min-h-[2.5rem] rounded-lg px-5 text-sm font-semibold shadow-none disabled:opacity-40"
+                    onClick={() => void goNext()}
+                  >
+                    Next
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    disabled={saving || (isLinearEngine && !currentCommitted)}
+                    className="nn-btn-primary min-h-[2.5rem] rounded-lg px-5 text-sm font-semibold shadow-none disabled:opacity-40"
+                    onClick={() => void submitTest()}
+                  >
+                    {saving ? "Submitting…" : "Finish"}
+                  </button>
+                )}
+                <button
+                  type="button"
+                  className="text-xs font-medium text-[var(--semantic-text-muted)] underline-offset-2 hover:text-[var(--semantic-text-secondary)] hover:underline"
+                  onClick={() => void abandon()}
+                >
+                  Abandon
+                </button>
+              </div>
+            </PracticeQuestionCard>
+          </div>
+          {/* RIGHT — full rationale: correct answer + why correct + each wrong option + takeaway + lessons */}
+          <div>
+            <PracticeRationaleFullPanel
+              status={rationaleFullStatus}
+              correctKeys={linearFeedback?.correctKeys}
+              optionDisplayMap={optionDisplayMap}
+              allOptionKeys={optsCanonical}
+              correctAnswerExplanation={linearFeedback?.correctAnswerExplanation}
+              rationale={linearFeedback?.rationale}
+              distractorRationalesMap={linearFeedback?.distractorRationalesMap}
+              keyTakeaway={linearFeedback?.keyTakeaway}
+              relatedLessons={linearFeedback?.relatedLessons ?? []}
+            />
+          </div>
+        </PracticeSessionGrid>
+      </PracticeSessionLayout>
+    </ProtectedPremiumContent>
+  );
+  // Intentionally not used in new layout — kept so old ExamSessionShell path is not lost
+  void ExamSessionShell;
+  void PracticeRationalePanel;
+  void rationalePanelStatus;
+}
           {/* ── Slim session header ────────────────────────────────────── */}
           <div className="nn-practice-session-header">
             <div className="nn-practice-session-header__row">
