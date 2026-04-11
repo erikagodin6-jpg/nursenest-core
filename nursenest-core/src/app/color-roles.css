@@ -47,18 +47,18 @@
 /* Theme-scoped overrides (lavender, ocean, sage, dark-*, …): same roles, hue from --theme-primary */
 :where([data-theme]) {
   /* CTA: theme + warm shift so buttons read as “action” vs decorative primary hue elsewhere */
-  --role-cta: color-mix(in srgb, var(--theme-primary) 78%, #ea580c);
-  --role-cta-foreground: #ffffff;
-  --role-cta-hover: color-mix(in srgb, var(--role-cta) 88%, var(--theme-heading-text));
-  --role-cta-pressed: color-mix(in srgb, var(--role-cta) 74%, var(--theme-heading-text));
+  --role-cta: var(--palette-button-primary, color-mix(in srgb, var(--theme-primary) 78%, #ea580c));
+  --role-cta-foreground: var(--palette-button-primary-text, #ffffff);
+  --role-cta-hover: color-mix(in srgb, var(--role-cta) 88%, var(--palette-heading, var(--theme-heading-text)));
+  --role-cta-pressed: color-mix(in srgb, var(--role-cta) 74%, var(--palette-heading, var(--theme-heading-text)));
   --role-cta-shadow: color-mix(in srgb, var(--role-cta) 44%, transparent);
   --role-cta-soft: color-mix(in srgb, var(--role-cta) 11%, var(--bg-card, var(--theme-card-bg)));
-  --role-cta-on-soft: color-mix(in srgb, var(--role-cta) 78%, var(--theme-heading-text));
+  --role-cta-on-soft: color-mix(in srgb, var(--role-cta) 78%, var(--palette-heading, var(--theme-heading-text)));
 
   /* Secondary actions (ghost / outline) */
-  --role-secondary-action-bg: var(--bg-card, var(--theme-card-bg));
-  --role-secondary-action-border: var(--border-medium, var(--theme-input-border));
-  --role-secondary-action-text: var(--theme-menu-text);
+  --role-secondary-action-bg: var(--palette-button-secondary, var(--bg-card, var(--theme-card-bg)));
+  --role-secondary-action-border: color-mix(in srgb, var(--palette-border, var(--theme-border)) 72%, var(--border-medium, var(--theme-input-border)));
+  --role-secondary-action-text: var(--palette-button-secondary-text, var(--theme-menu-text));
   --role-secondary-action-hover-bg: var(--accent-soft);
 
   /* Success / readiness */
@@ -74,19 +74,19 @@
   --role-warning-border: color-mix(in srgb, #f59e0b 32%, var(--border-subtle));
 
   /* Premium: slightly deeper surface so tier cards feel “above” generic panels */
-  --role-premium-surface: color-mix(in srgb, var(--theme-primary) 13%, var(--bg-card, var(--theme-card-bg)));
-  --role-premium-border: color-mix(in srgb, var(--theme-primary) 42%, var(--border-medium));
-  --role-premium-text: color-mix(in srgb, var(--theme-primary) 48%, var(--theme-heading-text));
+  --role-premium-surface: color-mix(in srgb, var(--palette-secondary, var(--theme-secondary)) 17%, var(--bg-card, var(--theme-card-bg)));
+  --role-premium-border: color-mix(in srgb, var(--palette-accent, var(--theme-accent)) 34%, var(--border-medium));
+  --role-premium-text: color-mix(in srgb, var(--palette-accent, var(--theme-accent)) 54%, var(--palette-heading, var(--theme-heading-text)));
   --role-premium-glow: color-mix(in srgb, var(--theme-primary) 14%, transparent);
   /* Urgency copy (deadlines, savings): warm, not alarm red */
   --role-heat-text: color-mix(in srgb, #c2410c 42%, var(--theme-heading-text));
 
   --semantic-progress-track: color-mix(in srgb, var(--theme-body-text) 8%, var(--bg-inset, var(--theme-card-bg)));
   --semantic-progress-fill: var(--role-success);
-  --semantic-progress-fill-accent: var(--accent-primary, var(--theme-primary));
-  --semantic-info-bg: color-mix(in srgb, var(--theme-primary) 8%, var(--bg-card, var(--theme-card-bg)));
-  --semantic-info-border: color-mix(in srgb, var(--theme-primary) 22%, var(--border-subtle));
-  --semantic-info-text: var(--theme-heading-text);
+  --semantic-progress-fill-accent: var(--accent-primary, var(--palette-primary, var(--theme-primary)));
+  --semantic-info-bg: color-mix(in srgb, var(--palette-secondary, var(--theme-secondary)) 10%, var(--bg-card, var(--theme-card-bg)));
+  --semantic-info-border: color-mix(in srgb, var(--palette-secondary, var(--theme-secondary)) 25%, var(--border-subtle));
+  --semantic-info-text: var(--palette-heading, var(--theme-heading-text));
 }
 
 /*

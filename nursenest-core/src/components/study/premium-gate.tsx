@@ -73,16 +73,15 @@ function trackPaywallCta(surface: string, action: string) {
 // ── Shared upgrade href ───────────────────────────────────────────────────────
 
 const UPGRADE_HREF = "/pricing";
-const CONTINUE_HREF = "/app/lessons";
 const DEFAULT_CTA_LABEL = "Start Free Trial";
-const DEFAULT_LOCK_EXPLANATION = "Start your free trial to unlock full access.";
 
 // ── PremiumLockCard ───────────────────────────────────────────────────────────
 
 /**
  * PremiumLockCard — a polished locked section card.
  *
- * Subtle background. Lock icon in header. Optional bullet points.
+ * Theme-tinted background with accent bar. Lock icon in a branded circle.
+ * Optional bullet points with check icons.
  * Consistent "Start Free Trial" CTA with optional secondary link.
  *
  * Use when the entire section is locked with no free preview.
@@ -112,10 +111,11 @@ export function PremiumLockCard({
   return (
     <div className="nn-premium-lock-card">
       <div className="nn-premium-lock-card__header">
-        <Lock className="nn-premium-lock-card__icon h-4 w-4" aria-hidden />
+        <span className="nn-premium-lock-card__icon-wrap">
+          <Lock className="nn-premium-lock-card__icon h-3.5 w-3.5" aria-hidden />
+        </span>
         <span className="nn-premium-lock-card__title">{title}</span>
         <span className="nn-premium-lock-card__badge">
-          <Lock className="h-2.5 w-2.5" aria-hidden />
           Premium
         </span>
       </div>
@@ -125,7 +125,11 @@ export function PremiumLockCard({
           <ul className="nn-premium-lock-card__bullets">
             {bullets.map((b) => (
               <li key={b} className="nn-premium-lock-card__bullet">
-                <CheckCircle2 className="mt-0.5 h-3.5 w-3.5 shrink-0" style={{ color: "var(--semantic-success)" }} aria-hidden />
+                <CheckCircle2
+                  className="mt-0.5 h-3.5 w-3.5 shrink-0"
+                  style={{ color: "var(--semantic-success)" }}
+                  aria-hidden
+                />
                 {b}
               </li>
             ))}
@@ -154,7 +158,7 @@ export function PremiumLockCard({
             </Link>
           ) : null}
         </div>
-        <p className="mt-2 text-center text-[11px] text-muted-foreground">
+        <p className="mt-1 text-center text-[11px] text-muted-foreground">
           No charge today · Cancel anytime
         </p>
       </div>
@@ -166,7 +170,7 @@ export function PremiumLockCard({
 
 /**
  * LockedPreviewCard — renders a faded preview of `children`, then an
- * overlay with a lock message below it (spec §4, §5).
+ * overlay with a lock message below it.
  *
  * The preview content is visible as structure but muted via opacity + mask.
  * The overlay sits below (not on top), keeping the layout clear.
@@ -197,7 +201,7 @@ export function LockedPreviewCard({
       {/* Lock overlay */}
       <div className="nn-locked-preview__overlay">
         <p className="nn-locked-preview__overlay-title">
-          <Lock className="h-3.5 w-3.5" aria-hidden />
+          <Lock className="h-3.5 w-3.5 shrink-0" aria-hidden />
           {overlayTitle}
         </p>
         <p className="nn-locked-preview__overlay-desc">{overlayDescription}</p>
@@ -217,7 +221,7 @@ export function LockedPreviewCard({
             View Plans
           </Link>
         </div>
-        <p className="mt-2 text-[11px] text-muted-foreground">
+        <p className="mt-1 text-[11px] text-muted-foreground">
           No charge today · Cancel anytime
         </p>
       </div>
@@ -228,10 +232,10 @@ export function LockedPreviewCard({
 // ── UpgradePromptCard ─────────────────────────────────────────────────────────
 
 /**
- * UpgradePromptCard — a restrained end-of-page conversion block (spec §9).
+ * UpgradePromptCard — a restrained end-of-page conversion block.
  *
- * Surface-emphasis card. No aggressive copy. Bullets describe the premium
- * intelligence layer specifically. One primary CTA + one low-pressure secondary.
+ * Theme-tinted card with accent bar. Bullet points use CheckCircle2 icons.
+ * One primary CTA + one low-pressure secondary.
  */
 export function UpgradePromptCard({
   isEntitled = true,
@@ -242,25 +246,30 @@ export function UpgradePromptCard({
 
   if (isEntitled) return null;
 
+  const bullets = [
+    "Lessons and review linked to what you actually missed",
+    "Readiness score that tracks when you are exam-ready",
+    "Adaptive CAT exams that mirror the real test format",
+  ];
+
   return (
     <div className="nn-upgrade-prompt-card">
-      <p className="nn-upgrade-prompt-card__title">
-        Your Full Study System
-      </p>
+      <p className="nn-upgrade-prompt-card__title">Your Full Study System</p>
       <p className="nn-upgrade-prompt-card__body">
         Lessons, Smart Review, readiness scoring, and adaptive practice exams,
         all connected to your weak areas.
       </p>
       <ul className="nn-upgrade-prompt-card__bullets">
-        <li className="nn-upgrade-prompt-card__bullet">
-          Lessons and review linked to what you actually missed
-        </li>
-        <li className="nn-upgrade-prompt-card__bullet">
-          Readiness score that tracks when you are exam-ready
-        </li>
-        <li className="nn-upgrade-prompt-card__bullet">
-          Adaptive CAT exams that mirror the real test format
-        </li>
+        {bullets.map((b) => (
+          <li key={b} className="nn-upgrade-prompt-card__bullet">
+            <CheckCircle2
+              className="mt-0.5 h-4 w-4 shrink-0"
+              style={{ color: "var(--semantic-success)" }}
+              aria-hidden
+            />
+            {b}
+          </li>
+        ))}
       </ul>
       <div className="nn-upgrade-prompt-card__actions">
         <Link
@@ -277,7 +286,7 @@ export function UpgradePromptCard({
           View Plans
         </Link>
       </div>
-      <p className="mt-3 text-center text-[11px] text-muted-foreground">
+      <p className="mt-1 text-center text-[11px] text-muted-foreground">
         No charge today · Cancel anytime before your trial ends
       </p>
     </div>
@@ -310,7 +319,7 @@ export function EntitledSection({
 
 /**
  * PreviewDivider — visual separator between free preview content and
- * locked continuation (spec §4, §5).
+ * locked continuation.
  *
  * Shows a horizontal rule with a centered "Premium" pill label.
  */
@@ -331,7 +340,7 @@ export function PreviewDivider({ label = "Included with Premium" }: { label?: st
 
 /**
  * LockedMetricCard — shows a metric card with a visible heading but
- * blurred number area (spec §7, §10).
+ * blurred number area.
  *
  * Visible heading communicates what the metric measures.
  * Blurred value teases depth without revealing the number.
@@ -362,9 +371,8 @@ export function LockedMetricCard({
 /**
  * LockedDayShell — placeholder card shown for locked study days.
  *
- * Dashed border. Muted badge. Lock icon. Does not reveal content.
- * Shows the day number and a generic locked title so users know
- * more days exist and understand the plan structure.
+ * Dashed border. Day badge. Lock icon. Does not reveal content.
+ * Shows the day number and a generic locked title so users understand the plan structure.
  */
 export function LockedDayShell({
   dayNumber,

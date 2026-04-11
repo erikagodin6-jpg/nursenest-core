@@ -31,7 +31,7 @@ export function HomeFinalStudyCta() {
     >
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <div className="text-center">
-          <p className="nn-marketing-caption mb-3 font-semibold uppercase tracking-widest text-[color-mix(in_srgb,var(--theme-primary)_78%,var(--theme-heading-text))]">
+          <p className="nn-marketing-caption mb-3 font-semibold uppercase tracking-widest text-[color-mix(in_srgb,var(--palette-accent,var(--theme-accent))_78%,var(--theme-heading-text))]">
             Get started in 30 seconds
           </p>
           <h2 id="home-final-cta-heading" className="nn-marketing-h2 text-balance">
@@ -53,7 +53,7 @@ export function HomeFinalStudyCta() {
               className="flex flex-col items-center gap-2 rounded-2xl border border-[var(--border-subtle)] bg-[var(--theme-card-bg)] px-4 py-5 text-center"
             >
               <span
-                className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--theme-primary)_15%,var(--theme-card-bg))] text-sm font-bold text-[var(--theme-primary)]"
+                className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-[var(--palette-badge,var(--theme-accent))] text-sm font-bold text-[var(--palette-badge-text,var(--theme-heading-text))]"
                 aria-hidden
               >
                 {step.n}

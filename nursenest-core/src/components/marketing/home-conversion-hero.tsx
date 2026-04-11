@@ -2,9 +2,7 @@
 
 import { useMemo } from "react";
 import { ArrowRight, Stethoscope, HeartPulse, Award, Dna } from "lucide-react";
-import { FadeUp, StaggerGroup, StaggerItem, ScaleIn } from "@/lib/motion";
-import { MarketingHeroCarousel } from "@/components/marketing/marketing-hero-carousel";
-import { buildHomepageHeroSlidesAtIndices } from "@/config/home-hero-carousel";
+import { FadeUp, StaggerGroup, StaggerItem } from "@/lib/motion";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { HUB } from "@/lib/marketing/marketing-entry-routes";
@@ -28,9 +26,6 @@ import {
 } from "@/lib/marketing/country-exam-offerings";
 import type { LucideIcon } from "lucide-react";
 
-/** Learner home, question UI, session reports — instant product comprehension. */
-const PREVIEW_SLIDE_INDICES: readonly number[] = [9, 0, 11];
-
 const HOME_HERO_TRACK_ICONS: Record<HomeHeroPrimaryTrackId, LucideIcon> = {
   rn: Stethoscope,
   pn: HeartPulse,
@@ -49,11 +44,6 @@ export function HomeConversionHero() {
     [region],
   );
   const setRegionAndRefresh = useMarketingRegionToggleWithRefresh(setRegion, regionToggleAnalytics);
-
-  const slides = useMemo(
-    () => buildHomepageHeroSlidesAtIndices(t, PREVIEW_SLIDE_INDICES),
-    [t],
-  );
 
   const loc = (path: string) => withMarketingLocale(locale, path);
 
@@ -79,9 +69,9 @@ export function HomeConversionHero() {
       aria-labelledby="home-conversion-hero-heading"
     >
       <div className="pointer-events-none absolute inset-0 nn-hero-pastel-layers opacity-[0.92]" aria-hidden />
-      <div className="relative mx-auto max-w-6xl px-4 py-12 sm:px-6 md:py-16 lg:px-8">
-        <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,26rem)] lg:gap-12">
-          <StaggerGroup className="min-w-0 space-y-6" staggerMs={70} whenInView once>
+      <div className="relative py-16 md:py-24">
+        <div className="mx-auto max-w-3xl px-6">
+          <StaggerGroup className="min-w-0 space-y-8 text-left" staggerMs={70} whenInView once>
             <StaggerItem>
               <p className="mb-2 inline-flex items-center rounded-full border border-[var(--accent-surface-a-border)] bg-[var(--accent-surface-a)] px-3 py-0.5 nn-marketing-caption font-bold uppercase tracking-[0.12em] text-[var(--accent-surface-a-text)]">
                 {t("home.conversion.heroEyebrow")}
@@ -110,7 +100,7 @@ export function HomeConversionHero() {
 
             <StaggerItem>
             <div
-              className="nn-accent-surface-b rounded-2xl px-4 py-4"
+              className="nn-accent-surface-b rounded-2xl border border-[var(--accent-surface-b-border)] px-4 py-4 shadow-[var(--shadow-card)]"
               data-testid="hero-tier-quick-entry"
             >
               <div className="mb-3 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
@@ -162,9 +152,9 @@ export function HomeConversionHero() {
                         event: PH.funnelHomeToExamHub,
                         eventProps: { placement: "hero_track_grid", pathway: track.id, region },
                       }}
-                      className={`group flex min-h-0 flex-col rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-bubble)] p-3 text-left shadow-sm transition hover:border-[color-mix(in_srgb,var(--theme-primary)_35%,var(--border-subtle))] hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--ring-accent)] ${
+                      className={`group flex min-h-0 flex-col rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-bubble)] p-3 text-left shadow-sm transition hover:border-[color-mix(in_srgb,var(--palette-accent,var(--theme-accent))_36%,var(--border-subtle))] hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--ring-accent)] ${
                         featured
-                          ? "ring-1 ring-[color-mix(in_srgb,var(--theme-primary)_40%,var(--border-subtle))]"
+                          ? "ring-1 ring-[color-mix(in_srgb,var(--palette-accent,var(--theme-accent))_42%,var(--border-subtle))]"
                           : ""
                       }`}
                       data-testid={`button-hero-track-${track.id}`}
@@ -279,27 +269,6 @@ export function HomeConversionHero() {
               <p className="nn-marketing-caption max-w-lg text-pretty text-[var(--theme-muted-text)]">{t("home.conversion.heroTrustMicro")}</p>
             </StaggerItem>
           </StaggerGroup>
-
-          <ScaleIn
-            className="relative mx-auto w-full max-w-md rounded-2xl border border-[var(--border-subtle)] bg-[var(--theme-card-bg)]/85 p-2 shadow-[var(--shadow-elevated)] backdrop-blur-sm lg:mx-0 lg:max-w-none"
-            data-testid="home-hero-platform-preview"
-            whenInView
-            once
-          >
-            <div
-              className="pointer-events-none absolute -inset-px rounded-2xl opacity-90 [background-image:var(--nn-aesthetic-frame-shine)]"
-              aria-hidden
-            />
-            <div className="relative overflow-hidden rounded-xl">
-              <MarketingHeroCarousel
-                slides={slides}
-                mediaFrame="default"
-                testIdPrefix="home-hero-preview"
-                imgTestIdPrefix="hero-preview"
-                captionOverlay
-              />
-            </div>
-          </ScaleIn>
         </div>
       </div>
     </section>
