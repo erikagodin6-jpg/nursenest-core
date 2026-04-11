@@ -1,4 +1,4 @@
-import { SystemSection } from "@/components/pathway-lessons/system-section";
+import { LessonSystemCard } from "@/components/pathway-lessons/lesson-system-card";
 import { PremiumEmptyState } from "@/components/ui/premium-empty-state";
 import {
   buildPathwayLessonSystemSections,
@@ -23,7 +23,6 @@ export function PathwayLessonsCurriculumHub({
   lessonsBasePath,
   progressMap = {},
   canShowProgressMap = false,
-  showLockedState = false,
 }: Props) {
   const safeLessons = lessons.filter(pathwayLessonHasRenderableHubSlug);
   const sections = buildPathwayLessonSystemSections(safeLessons);
@@ -45,16 +44,14 @@ export function PathwayLessonsCurriculumHub({
   }
 
   return (
-    <div className="space-y-5">
+    <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
       {sections.map((section, sectionIndex) => (
-        <SystemSection
+        <LessonSystemCard
           key={section.id}
           section={section}
           lessonsBasePath={lessonsBasePath}
           progressMap={progressMap}
           showProgress={canShowProgressMap}
-          showLockedState={showLockedState}
-          sectionIndex={sectionIndex}
         />
       ))}
     </div>
