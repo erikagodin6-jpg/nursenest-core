@@ -184,6 +184,103 @@
       }
     }
   ],
+  "phase2_fences": [
+    {
+      "fenceId": "SF-05",
+      "severity": "HIGH",
+      "appliedDate": "2026-04-11",
+      "phase": 2,
+      "slugA": "hypertension-red-flags-referral",
+      "slugB": "hypertension-step-therapy-guideline",
+      "boundary": {
+        "slugA_owns": [
+          "ACC/AHA BP classification: Normal (<120/80), Elevated (120–129/<80), Stage 1 (130–139/80–89), Stage 2 (≥140/90)",
+          "Hypertensive urgency definition: BP ≥180/120 without end-organ damage",
+          "Hypertensive emergency definition: BP ≥180/120 WITH end-organ damage (encephalopathy, retinal changes, pulmonary edema, AKI, aortic dissection, NSTEMI)",
+          "End-organ damage recognition: papilledema, altered mental status, chest pain, dyspnea, hematuria, retinal hemorrhage/exudate",
+          "Disposition decision: urgency → can be managed outpatient with same-day medication adjustment; emergency → 911 or ED transfer",
+          "Secondary hypertension red flag recognition: young patient, resistant HTN, hypokalemia (hyperaldosteronism), paroxysmal features (pheochromocytoma), sudden onset or worsening (renal artery stenosis)",
+          "White coat vs masked hypertension recognition and indication for ambulatory BP monitoring (ABPM)",
+          "Referral criteria to nephrology/endocrinology/cardiology for resistant or secondary HTN",
+          "BP target awareness by comorbidity: diabetes (<130/80), CKD with proteinuria (<130/80), older adult (SPRINT trial)"
+        ],
+        "slugA_may_not_include": [
+          "First-line drug class selection by patient profile (thiazide vs CCB vs ACEi/ARB)",
+          "Compelling indications matching drug class to comorbidity (ACEi for DM, BBs for HF, thiazide for isolated systolic)",
+          "Step therapy escalation sequence (add-on agent selection after Step 1)",
+          "Antihypertensive dose ranges and titration",
+          "Drug-drug interactions between antihypertensives",
+          "Adverse effect profiles by antihypertensive class",
+          "Combination pill selection or rationale"
+        ],
+        "slugB_owns": [
+          "First-line antihypertensive class selection: thiazide diuretics (HCTZ, chlorthalidone), ACE inhibitors (lisinopril), ARBs (losartan), calcium channel blockers (amlodipine) — by patient characteristics",
+          "Compelling indications for drug class: ACEi/ARB for DM or CKD with proteinuria, beta-blockers post-MI or HFrEF, thiazides in Black patients without CKD/DM, CCBs as alternative in Black patients",
+          "Step therapy: Step 1 monotherapy → Step 2 2-drug combo (preferred: ACEi + CCB or ARB + CCB) → Step 3 add thiazide or spironolactone",
+          "Resistant HTN: definition (uncontrolled on ≥3 drug classes including diuretic, optimal doses) and addition of spironolactone or further evaluation",
+          "Antihypertensive adverse effects: ACEi cough (switch to ARB), hyperkalemia (ACEi/ARB in CKD), peripheral edema (CCB), hyponatremia and hypokalemia (thiazides), angioedema (ACEi absolute contraindication switch to ARB)",
+          "Contraindications: ACEi/ARB in pregnancy (teratogenic), beta-blockers in decompensated HF or high-degree AV block, thiazides and sulfa allergy"
+        ],
+        "slugB_may_not_include": [
+          "ACC/AHA BP staging thresholds or classification",
+          "Hypertensive urgency vs emergency definitions or management pathway",
+          "Secondary hypertension recognition or referral criteria",
+          "End-organ damage recognition features",
+          "White coat hypertension or ABPM indications",
+          "When to transfer vs manage outpatient"
+        ]
+      }
+    },
+    {
+      "fenceId": "SF-06",
+      "severity": "HIGH",
+      "appliedDate": "2026-04-11",
+      "phase": 2,
+      "slugA": "heart-failure-gdmt-primary-care",
+      "slugAlessonPart": "2A",
+      "slugB": "heart-failure-gdmt-primary-care",
+      "slugBlessonPart": "2B",
+      "crossTopicFence": "ace-arb-arni-indications-monitoring",
+      "boundary": {
+        "slugA_lessonPart_2A_owns": [
+          "HFrEF vs HFpEF vs HFmrEF classification by ejection fraction (EF <40% = HFrEF; 41–49% = HFmrEF; ≥50% = HFpEF)",
+          "NYHA functional classification: Class I–IV symptoms and activity tolerance",
+          "BNP and NT-proBNP interpretation for HF diagnosis vs monitoring (BNP >400: likely HF; <100: HF unlikely; rising BNP on therapy = poor prognosis)",
+          "Echocardiography interpretation: which findings distinguish HFrEF from HFpEF (EF measurement, diastolic parameters, wall thickness, LA enlargement)",
+          "HF phenotype recognition from clinical features: S3 gallop + dilated cardiomyopathy + low EF = HFrEF; hypertensive elderly woman + preserved heart size + diastolic dysfunction = HFpEF",
+          "Acutely decompensated HF recognition: orthopnea, PND, increased weight, worsening edema, rising BNP — disposition trigger to higher level of care",
+          "Triggers for HF decompensation: dietary sodium excess, medication non-adherence, new AF, ischemia, infection, NSAID use"
+        ],
+        "slugA_lessonPart_2A_may_not_include": [
+          "Which GDMT drug class to add based on EF threshold",
+          "ACE inhibitor or ARNi starting doses in HF",
+          "Beta-blocker selection rationale for HFrEF (carvedilol vs metoprolol succinate vs bisoprolol)",
+          "Mineralocorticoid receptor antagonist (MRA) indications and monitoring",
+          "SGLT-2 inhibitor use for HF (DAPA-HF, EMPEROR-Reduced data)",
+          "Diuretic dose adjustment for volume management",
+          "GDMT titration schedules or contraindications per drug class"
+        ],
+        "slugB_lessonPart_2B_owns": [
+          "HFrEF GDMT four-pillar framework: (1) ACEi or ARNi, (2) evidence-based beta-blocker, (3) MRA, (4) SGLT-2 inhibitor — initiation sequence and EF thresholds",
+          "ARNi (sacubitril/valsartan): superiority over ACEi (PARADIGM-HF), 36-hour washout before/after ACEi to prevent angioedema, contraindicated with ACEi concurrent use",
+          "Evidence-based beta-blockers for HFrEF: carvedilol, metoprolol succinate, bisoprolol — NOT atenolol, NOT labetalol, NOT non-selective without vasodilating properties",
+          "MRA (spironolactone or eplerenone): indicated for HFrEF EF ≤35% with NYHA Class II–IV; monitor K⁺ and creatinine at 1 week and 4 weeks after initiation; hold if K⁺ >5.0 or eGFR <30",
+          "SGLT-2 inhibitors (dapagliflozin, empagliflozin) for HFrEF regardless of diabetes status — HF outcome benefit independent of glycemic effect",
+          "HFpEF management: fewer proven mortality benefits; diuretics for congestion, SGLT-2 (EMPEROR-Preserved data), control of underlying HTN and AF",
+          "Diuresis in HF: loop diuretics (furosemide) for acute decongestion; electrolyte monitoring; target dry weight",
+          "Device therapy indications from primary care perspective: CRT if EF ≤35% + LBBB + NYHA III; ICD if EF ≤35%; refer to cardiology"
+        ],
+        "slugB_lessonPart_2B_may_not_include": [
+          "EF-based HF classification criteria (belongs to 2A)",
+          "NYHA class assignment criteria (belongs to 2A)",
+          "BNP/NT-proBNP threshold interpretation for diagnosis (belongs to 2A)",
+          "HF decompensation recognition triggers (belongs to 2A)",
+          "Echocardiography phenotype interpretation (belongs to 2A)"
+        ],
+        "crossTopicFenceNote": "ace-arb-arni-indications-monitoring (Prescribing & Advanced Pharmacology domain) owns: drug-specific mechanism details, pharmacokinetic properties, adverse effect management for individual agents, monitoring parameter schedules, and cross-drug class interactions. heart-failure-gdmt-primary-care owns: the CLINICAL DECISION of WHICH drug class to add/up-titrate and WHEN (guideline thresholds, NYHA triggers, EF criteria). Questions testing specific drug AE management or mechanism belong to ace-arb-arni-indications-monitoring."
+      }
+    }
+  ],
   "phase1_generation_rules": {
     "description": "Rules enforced during Phase 1 (Diagnostic Foundations) content generation. All 14 topics are differential diagnosis / diagnostic reasoning topics. These rules are absolute.",
     "permitted_question_types": [

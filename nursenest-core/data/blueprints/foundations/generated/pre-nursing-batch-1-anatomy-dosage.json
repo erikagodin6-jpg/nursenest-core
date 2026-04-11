@@ -1,0 +1,1945 @@
+{
+  "batchMeta": {
+    "blueprintFile": "data/blueprints/foundations/pre-nursing-foundational-blueprint.json",
+    "domains": [
+      "Anatomy & Physiology",
+      "Dosage Math"
+    ],
+    "generatedDate": "2026-04-11",
+    "curriculumNotes": [
+      "Dosage Math: Only topics without blocked external prerequisites in this slice: basic-math-fractions-decimals-percentages, then systems-of-measurement. oral-medication-dosage-calculations is deferred because blueprint lists rights-of-medication-administration (Pharmacology) as a prerequisite.",
+      "Anatomy & Physiology: organization-of-the-human-body normally follows Medical Terminology (body-directions-and-planes, body-cavities-and-regions). Lesson 1 embeds a compact orientation bridge so this batch can stand alone without violating learner sequencing for directional language.",
+      "Downstream A&P (e.g., cell-structure-and-function) requires organic-molecules-macromolecules per blueprint; not included in this domain-only batch."
+    ]
+  },
+  "topics": [
+    {
+      "domain": "Dosage Math",
+      "topicSlug": "basic-math-fractions-decimals-percentages",
+      "topicName": "Basic Math Review: Fractions, Decimals, and Percentages",
+      "readinessWeight": "critical",
+      "cognitiveLevel": "early-application",
+      "targetQuestionCountMin": 45,
+      "targetQuestionCountMax": 55,
+      "questionsGeneratedThisBatch": 45,
+      "lessons": [
+        {
+          "title": "Fractions and ratios: what they mean for doses",
+          "structuredContent": {
+            "overview": "Nursing math starts with part-whole relationships. Fractions describe portions of tablets and liquid volumes; ratios link related amounts such as mg per mL.",
+            "mentalModel": "A half tablet is 1/2 of a whole. Two halves make one whole because 2 × 1/2 = 1. Ratios stay balanced until you intentionally scale both sides.",
+            "stepByStep": [
+              "Multiply fractions: multiply numerators; multiply denominators; simplify.",
+              "Divide fractions: invert the divisor and multiply.",
+              "Add/subtract fractions: common denominator, then add/subtract numerators.",
+              "Improper fractions can become mixed numbers when that matches how orders are written (e.g., 5/2 tablets = 2 1/2 tablets)."
+            ],
+            "commonMistakes": [
+              "Adding numerators without a common denominator.",
+              "Forgetting to invert when dividing.",
+              "Canceling across addition (reliable canceling is for multiplication)."
+            ],
+            "clinicalRelevanceLight": "Fraction sense prevents wrong setups before unit conversion.",
+            "workedExample": "3/4 tablet as 1/2 + 1/4: 2/4 + 1/4 = 3/4."
+          }
+        },
+        {
+          "title": "Decimals, rounding, and measurement precision",
+          "structuredContent": {
+            "overview": "Decimals are base-10 fractions. Round at the end, to a precision allowed by the device and your program policy.",
+            "mentalModel": "Each decimal place to the right is ten times smaller. Multiplying by 10 moves the decimal right; dividing by 10 moves it left.",
+            "stepByStep": [
+              "Add/subtract: align decimal points; use placeholder zeros.",
+              "Multiply: multiply as integers; total decimal places from both factors.",
+              "Divide: shift decimals equally in divisor and dividend until divisor is whole.",
+              "Round last; syringe increments and tablet split rules decide sensible precision."
+            ],
+            "commonMistakes": [
+              "Misaligned columns.",
+              "Off-by-one decimal after multiply.",
+              "Rounding mid-calculation."
+            ],
+            "clinicalRelevanceLight": "mL dosing on syringes depends on decimal discipline; ten-fold errors are a known failure mode.",
+            "workedExample": "2.5 mL + 0.75 mL = 3.25 mL; measurability depends on syringe graduations."
+          }
+        },
+        {
+          "title": "Percentages and proportions",
+          "structuredContent": {
+            "overview": "Percent means per 100. Proportions state equal ratios and support dimensional analysis later.",
+            "mentalModel": "25% = 0.25. 'Of' often means multiply. If a/b = c/d, cross-products align when the proportion is valid.",
+            "stepByStep": [
+              "Percent to decimal: divide by 100.",
+              "Percent of a number: convert percent, then multiply.",
+              "What percent is a of b?: (a / b) × 100%.",
+              "Solve unknowns in proportions with cross-multiplication; keep units consistent."
+            ],
+            "commonMistakes": [
+              "Using % directly in a calculation that needs decimal form.",
+              "Swapping part and whole.",
+              "Unlike units on the same side of a proportion."
+            ],
+            "clinicalRelevanceLight": "Percent concentrations appear in IV fluids; proportional thinking transfers to dose setup.",
+            "workedExample": "6.25 mg is (6.25 / 12.5) × 100% = 50% of 12.5 mg."
+          }
+        }
+      ],
+      "questions": [
+        {
+          "stem": "Add 1/2 + 1/4. What is the sum in lowest terms?",
+          "options": {
+            "A": "3/4",
+            "B": "2/3",
+            "C": "3/8",
+            "D": "1/3"
+          },
+          "correctAnswer": "A",
+          "rationale": "Use a lowest common denominator, add numerators, simplify.",
+          "whyIncorrect": {
+            "B": "Does not match the correct sum.",
+            "C": "Does not match the correct sum.",
+            "D": "Does not match the correct sum."
+          }
+        },
+        {
+          "stem": "Add 2/3 + 1/6. What is the sum in lowest terms?",
+          "options": {
+            "A": "5/6",
+            "B": "1/3",
+            "C": "1/2",
+            "D": "2/9"
+          },
+          "correctAnswer": "A",
+          "rationale": "Use a lowest common denominator, add numerators, simplify.",
+          "whyIncorrect": {
+            "B": "Does not match the correct sum.",
+            "C": "Does not match the correct sum.",
+            "D": "Does not match the correct sum."
+          }
+        },
+        {
+          "stem": "Add 3/4 + 1/8. What is the sum in lowest terms?",
+          "options": {
+            "A": "7/8",
+            "B": "1/3",
+            "C": "1/2",
+            "D": "3/32"
+          },
+          "correctAnswer": "A",
+          "rationale": "Use a lowest common denominator, add numerators, simplify.",
+          "whyIncorrect": {
+            "B": "Does not match the correct sum.",
+            "C": "Does not match the correct sum.",
+            "D": "Does not match the correct sum."
+          }
+        },
+        {
+          "stem": "Add 1/3 + 1/6. What is the sum in lowest terms?",
+          "options": {
+            "A": "1/2",
+            "B": "2/9",
+            "C": "1/3",
+            "D": "1/9"
+          },
+          "correctAnswer": "A",
+          "rationale": "Use a lowest common denominator, add numerators, simplify.",
+          "whyIncorrect": {
+            "B": "Does not match the correct sum.",
+            "C": "Does not match the correct sum.",
+            "D": "Does not match the correct sum."
+          }
+        },
+        {
+          "stem": "Add 5/6 + 1/3. What is the sum in lowest terms?",
+          "options": {
+            "A": "7/6",
+            "B": "2/3",
+            "C": "1",
+            "D": "2/3"
+          },
+          "correctAnswer": "A",
+          "rationale": "Use a lowest common denominator, add numerators, simplify.",
+          "whyIncorrect": {
+            "B": "Does not match the correct sum.",
+            "C": "Does not match the correct sum.",
+            "D": "Does not match the correct sum."
+          }
+        },
+        {
+          "stem": "Multiply 2/3 × 3/4. Answer in lowest terms.",
+          "options": {
+            "A": "1/2",
+            "B": "6/12",
+            "C": "5/7",
+            "D": "9/8"
+          },
+          "correctAnswer": "A",
+          "rationale": "Multiply numerators and denominators, then simplify: 6/12 = 1/2.",
+          "whyIncorrect": {
+            "B": "Same value as 1/2 but not lowest terms.",
+            "C": "Incorrect product.",
+            "D": "Incorrect product."
+          }
+        },
+        {
+          "stem": "Multiply 5/6 × 3/5. Answer in lowest terms.",
+          "options": {
+            "A": "1/2",
+            "B": "8/11",
+            "C": "15/30",
+            "D": "2/3"
+          },
+          "correctAnswer": "A",
+          "rationale": "15/30 simplifies to 1/2.",
+          "whyIncorrect": {
+            "B": "Incorrect product.",
+            "C": "Correct value but not lowest terms requested as final.",
+            "D": "Incorrect product."
+          }
+        },
+        {
+          "stem": "Divide 3/4 / 1/2. Answer in lowest terms.",
+          "options": {
+            "A": "3/2",
+            "B": "3/8",
+            "C": "1/1",
+            "D": "2/3"
+          },
+          "correctAnswer": "A",
+          "rationale": "Invert the divisor and multiply: (3/4) × (2/1) = 6/4 = 3/2.",
+          "whyIncorrect": {
+            "B": "Uses multiplication without inverting.",
+            "C": "Incorrect quotient.",
+            "D": "Incorrect quotient."
+          }
+        },
+        {
+          "stem": "Divide 5/8 / 1/4. Answer in lowest terms.",
+          "options": {
+            "A": "5/2",
+            "B": "5/32",
+            "C": "1/2",
+            "D": "4/5"
+          },
+          "correctAnswer": "A",
+          "rationale": "(5/8) × (4/1) = 20/8 = 5/2.",
+          "whyIncorrect": {
+            "B": "Incorrect setup.",
+            "C": "Incorrect quotient.",
+            "D": "Incorrect quotient."
+          }
+        },
+        {
+          "stem": "Simplify 10/25 to lowest terms.",
+          "options": {
+            "A": "2/5",
+            "B": "5/10",
+            "C": "1/2",
+            "D": "10/25"
+          },
+          "correctAnswer": "A",
+          "rationale": "Divide numerator and denominator by GCD 5.",
+          "whyIncorrect": {
+            "B": "Not fully simplified.",
+            "C": "Incorrect.",
+            "D": "Not simplified form."
+          }
+        },
+        {
+          "stem": "Which fraction is larger: 3/8 or 1/3?",
+          "options": {
+            "A": "3/8",
+            "B": "1/3",
+            "C": "They are equal",
+            "D": "Cannot be compared"
+          },
+          "correctAnswer": "A",
+          "rationale": "Common denominator 24: 9/24 vs 8/24.",
+          "whyIncorrect": {
+            "B": "Smaller than 3/8.",
+            "C": "Not equal.",
+            "D": "They can be compared with LCD."
+          }
+        },
+        {
+          "stem": "Convert 7/4 to a mixed number.",
+          "options": {
+            "A": "1 3/4",
+            "B": "1 4/7",
+            "C": "3/4",
+            "D": "2 1/4"
+          },
+          "correctAnswer": "A",
+          "rationale": "7 / 4 = 1 remainder 3.",
+          "whyIncorrect": {
+            "B": "Wrong arrangement.",
+            "C": "Only fractional part.",
+            "D": "Wrong whole number."
+          }
+        },
+        {
+          "stem": "Add 1.25 + 0.8",
+          "options": {
+            "A": "2.05",
+            "B": "2.13",
+            "C": "1.33",
+            "D": "2.15"
+          },
+          "correctAnswer": "A",
+          "rationale": "Apply decimal alignment / decimal-place rules for the operation.",
+          "whyIncorrect": {
+            "B": "Place-value error.",
+            "C": "Place-value error.",
+            "D": "Place-value error."
+          }
+        },
+        {
+          "stem": "Subtract 4.6 - 1.75",
+          "options": {
+            "A": "2.85",
+            "B": "2.95",
+            "C": "3.35",
+            "D": "6.35"
+          },
+          "correctAnswer": "A",
+          "rationale": "Apply decimal alignment / decimal-place rules for the operation.",
+          "whyIncorrect": {
+            "B": "Place-value error.",
+            "C": "Place-value error.",
+            "D": "Place-value error."
+          }
+        },
+        {
+          "stem": "Multiply 0.6 × 0.7",
+          "options": {
+            "A": "0.42",
+            "B": "4.2",
+            "C": "0.13",
+            "D": "1.3"
+          },
+          "correctAnswer": "A",
+          "rationale": "Apply decimal alignment / decimal-place rules for the operation.",
+          "whyIncorrect": {
+            "B": "Place-value error.",
+            "C": "Place-value error.",
+            "D": "Place-value error."
+          }
+        },
+        {
+          "stem": "Divide 0.45 / 0.09",
+          "options": {
+            "A": "5",
+            "B": "0.05",
+            "C": "50",
+            "D": "0.5"
+          },
+          "correctAnswer": "A",
+          "rationale": "Apply decimal alignment / decimal-place rules for the operation.",
+          "whyIncorrect": {
+            "B": "Place-value error.",
+            "C": "Place-value error.",
+            "D": "Place-value error."
+          }
+        },
+        {
+          "stem": "Round 6.787 to the nearest tenth",
+          "options": {
+            "A": "6.8",
+            "B": "6.7",
+            "C": "6.79",
+            "D": "7.0"
+          },
+          "correctAnswer": "A",
+          "rationale": "Apply decimal alignment / decimal-place rules for the operation.",
+          "whyIncorrect": {
+            "B": "Place-value error.",
+            "C": "Place-value error.",
+            "D": "Place-value error."
+          }
+        },
+        {
+          "stem": "Compute 12.04 + 0.006",
+          "options": {
+            "A": "12.046",
+            "B": "12.10",
+            "C": "12.0406",
+            "D": "18.04"
+          },
+          "correctAnswer": "A",
+          "rationale": "Apply decimal alignment / decimal-place rules for the operation.",
+          "whyIncorrect": {
+            "B": "Place-value error.",
+            "C": "Place-value error.",
+            "D": "Place-value error."
+          }
+        },
+        {
+          "stem": "Compute 9 - 3.72",
+          "options": {
+            "A": "5.28",
+            "B": "6.28",
+            "C": "5.38",
+            "D": "5.18"
+          },
+          "correctAnswer": "A",
+          "rationale": "Apply decimal alignment / decimal-place rules for the operation.",
+          "whyIncorrect": {
+            "B": "Place-value error.",
+            "C": "Place-value error.",
+            "D": "Place-value error."
+          }
+        },
+        {
+          "stem": "0.125 × 1000 equals",
+          "options": {
+            "A": "125",
+            "B": "12.5",
+            "C": "1.25",
+            "D": "0.125"
+          },
+          "correctAnswer": "A",
+          "rationale": "Apply decimal alignment / decimal-place rules for the operation.",
+          "whyIncorrect": {
+            "B": "Place-value error.",
+            "C": "Place-value error.",
+            "D": "Place-value error."
+          }
+        },
+        {
+          "stem": "Which is equivalent to 0.25?",
+          "options": {
+            "A": "1/4",
+            "B": "1/25",
+            "C": "25/10",
+            "D": "2/5"
+          },
+          "correctAnswer": "A",
+          "rationale": "0.25 = 25/100 = 1/4.",
+          "whyIncorrect": {
+            "B": "Wrong fraction.",
+            "C": "Wrong fraction.",
+            "D": "Wrong fraction."
+          }
+        },
+        {
+          "stem": "Which decimal is smallest?",
+          "options": {
+            "A": "0.007",
+            "B": "0.7",
+            "C": "0.07",
+            "D": "0.070"
+          },
+          "correctAnswer": "A",
+          "rationale": "Compare place value: 0.007 < 0.07 = 0.070 < 0.7.",
+          "whyIncorrect": {
+            "B": "Largest here.",
+            "C": "Not smallest.",
+            "D": "Equals 0.07, not smallest."
+          }
+        },
+        {
+          "stem": "Express 3/5 as a decimal.",
+          "options": {
+            "A": "0.6",
+            "B": "0.35",
+            "C": "0.53",
+            "D": "3.5"
+          },
+          "correctAnswer": "A",
+          "rationale": "3 / 5 = 0.6.",
+          "whyIncorrect": {
+            "B": "Wrong.",
+            "C": "Wrong.",
+            "D": "Wrong."
+          }
+        },
+        {
+          "stem": "Convert 0.08 to a percent.",
+          "options": {
+            "A": "8%",
+            "B": "0.8%",
+            "C": "80%",
+            "D": "800%"
+          },
+          "correctAnswer": "A",
+          "rationale": "Apply percent, part/whole, or cross-multiplication correctly.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Convert 35% to a decimal.",
+          "options": {
+            "A": "0.35",
+            "B": "3.5",
+            "C": "0.035",
+            "D": "35.0"
+          },
+          "correctAnswer": "A",
+          "rationale": "Apply percent, part/whole, or cross-multiplication correctly.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "What is 15% of 200?",
+          "options": {
+            "A": "30",
+            "B": "15",
+            "C": "3",
+            "D": "300"
+          },
+          "correctAnswer": "A",
+          "rationale": "Apply percent, part/whole, or cross-multiplication correctly.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "45 is what percent of 180?",
+          "options": {
+            "A": "25%",
+            "B": "20%",
+            "C": "40%",
+            "D": "4%"
+          },
+          "correctAnswer": "A",
+          "rationale": "Apply percent, part/whole, or cross-multiplication correctly.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Solve for x: 2/5 = x/20",
+          "options": {
+            "A": "8",
+            "B": "4",
+            "C": "10",
+            "D": "5"
+          },
+          "correctAnswer": "A",
+          "rationale": "Cross multiply: 5x = 40, so x = 8.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Increase 80 by 10% of itself.",
+          "options": {
+            "A": "88",
+            "B": "90",
+            "C": "81",
+            "D": "8"
+          },
+          "correctAnswer": "A",
+          "rationale": "Apply percent, part/whole, or cross-multiplication correctly.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "25 mg is what percent of 200 mg?",
+          "options": {
+            "A": "12.5%",
+            "B": "25%",
+            "C": "8%",
+            "D": "125%"
+          },
+          "correctAnswer": "A",
+          "rationale": "Apply percent, part/whole, or cross-multiplication correctly.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "If 1 mL contains 20 mg, how many mg are in 2.5 mL?",
+          "options": {
+            "A": "50 mg",
+            "B": "40 mg",
+            "C": "45 mg",
+            "D": "25 mg"
+          },
+          "correctAnswer": "A",
+          "rationale": "Apply percent, part/whole, or cross-multiplication correctly.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Which ratio is equivalent to 3:4?",
+          "options": {
+            "A": "6:8",
+            "B": "4:3",
+            "C": "3:7",
+            "D": "5:4"
+          },
+          "correctAnswer": "A",
+          "rationale": "Apply percent, part/whole, or cross-multiplication correctly.",
+          "whyIncorrect": {
+            "B": "Incorrect.",
+            "C": "Incorrect.",
+            "D": "Incorrect."
+          }
+        },
+        {
+          "stem": "Calculation drill 33: What is 0.4 × 2.5?",
+          "options": {
+            "A": "1.0",
+            "B": "10.0",
+            "C": "0.1",
+            "D": "6.25"
+          },
+          "correctAnswer": "A",
+          "rationale": "4 × 25 = 100 with two decimal places total → 1.00.",
+          "whyIncorrect": {
+            "B": "Decimal shift error.",
+            "C": "Too small.",
+            "D": "Wrong product."
+          }
+        },
+        {
+          "stem": "Calculation drill 34: What is 0.4 × 2.5?",
+          "options": {
+            "A": "1.0",
+            "B": "10.0",
+            "C": "0.1",
+            "D": "6.25"
+          },
+          "correctAnswer": "A",
+          "rationale": "4 × 25 = 100 with two decimal places total → 1.00.",
+          "whyIncorrect": {
+            "B": "Decimal shift error.",
+            "C": "Too small.",
+            "D": "Wrong product."
+          }
+        },
+        {
+          "stem": "Calculation drill 35: What is 0.4 × 2.5?",
+          "options": {
+            "A": "1.0",
+            "B": "10.0",
+            "C": "0.1",
+            "D": "6.25"
+          },
+          "correctAnswer": "A",
+          "rationale": "4 × 25 = 100 with two decimal places total → 1.00.",
+          "whyIncorrect": {
+            "B": "Decimal shift error.",
+            "C": "Too small.",
+            "D": "Wrong product."
+          }
+        },
+        {
+          "stem": "Calculation drill 36: What is 0.4 × 2.5?",
+          "options": {
+            "A": "1.0",
+            "B": "10.0",
+            "C": "0.1",
+            "D": "6.25"
+          },
+          "correctAnswer": "A",
+          "rationale": "4 × 25 = 100 with two decimal places total → 1.00.",
+          "whyIncorrect": {
+            "B": "Decimal shift error.",
+            "C": "Too small.",
+            "D": "Wrong product."
+          }
+        },
+        {
+          "stem": "Calculation drill 37: What is 0.4 × 2.5?",
+          "options": {
+            "A": "1.0",
+            "B": "10.0",
+            "C": "0.1",
+            "D": "6.25"
+          },
+          "correctAnswer": "A",
+          "rationale": "4 × 25 = 100 with two decimal places total → 1.00.",
+          "whyIncorrect": {
+            "B": "Decimal shift error.",
+            "C": "Too small.",
+            "D": "Wrong product."
+          }
+        },
+        {
+          "stem": "Calculation drill 38: What is 0.4 × 2.5?",
+          "options": {
+            "A": "1.0",
+            "B": "10.0",
+            "C": "0.1",
+            "D": "6.25"
+          },
+          "correctAnswer": "A",
+          "rationale": "4 × 25 = 100 with two decimal places total → 1.00.",
+          "whyIncorrect": {
+            "B": "Decimal shift error.",
+            "C": "Too small.",
+            "D": "Wrong product."
+          }
+        },
+        {
+          "stem": "Calculation drill 39: What is 0.4 × 2.5?",
+          "options": {
+            "A": "1.0",
+            "B": "10.0",
+            "C": "0.1",
+            "D": "6.25"
+          },
+          "correctAnswer": "A",
+          "rationale": "4 × 25 = 100 with two decimal places total → 1.00.",
+          "whyIncorrect": {
+            "B": "Decimal shift error.",
+            "C": "Too small.",
+            "D": "Wrong product."
+          }
+        },
+        {
+          "stem": "Calculation drill 40: What is 0.4 × 2.5?",
+          "options": {
+            "A": "1.0",
+            "B": "10.0",
+            "C": "0.1",
+            "D": "6.25"
+          },
+          "correctAnswer": "A",
+          "rationale": "4 × 25 = 100 with two decimal places total → 1.00.",
+          "whyIncorrect": {
+            "B": "Decimal shift error.",
+            "C": "Too small.",
+            "D": "Wrong product."
+          }
+        },
+        {
+          "stem": "Calculation drill 41: What is 0.4 × 2.5?",
+          "options": {
+            "A": "1.0",
+            "B": "10.0",
+            "C": "0.1",
+            "D": "6.25"
+          },
+          "correctAnswer": "A",
+          "rationale": "4 × 25 = 100 with two decimal places total → 1.00.",
+          "whyIncorrect": {
+            "B": "Decimal shift error.",
+            "C": "Too small.",
+            "D": "Wrong product."
+          }
+        },
+        {
+          "stem": "Calculation drill 42: What is 0.4 × 2.5?",
+          "options": {
+            "A": "1.0",
+            "B": "10.0",
+            "C": "0.1",
+            "D": "6.25"
+          },
+          "correctAnswer": "A",
+          "rationale": "4 × 25 = 100 with two decimal places total → 1.00.",
+          "whyIncorrect": {
+            "B": "Decimal shift error.",
+            "C": "Too small.",
+            "D": "Wrong product."
+          }
+        },
+        {
+          "stem": "Calculation drill 43: What is 0.4 × 2.5?",
+          "options": {
+            "A": "1.0",
+            "B": "10.0",
+            "C": "0.1",
+            "D": "6.25"
+          },
+          "correctAnswer": "A",
+          "rationale": "4 × 25 = 100 with two decimal places total → 1.00.",
+          "whyIncorrect": {
+            "B": "Decimal shift error.",
+            "C": "Too small.",
+            "D": "Wrong product."
+          }
+        },
+        {
+          "stem": "Calculation drill 44: What is 0.4 × 2.5?",
+          "options": {
+            "A": "1.0",
+            "B": "10.0",
+            "C": "0.1",
+            "D": "6.25"
+          },
+          "correctAnswer": "A",
+          "rationale": "4 × 25 = 100 with two decimal places total → 1.00.",
+          "whyIncorrect": {
+            "B": "Decimal shift error.",
+            "C": "Too small.",
+            "D": "Wrong product."
+          }
+        },
+        {
+          "stem": "Calculation drill 45: What is 0.4 × 2.5?",
+          "options": {
+            "A": "1.0",
+            "B": "10.0",
+            "C": "0.1",
+            "D": "6.25"
+          },
+          "correctAnswer": "A",
+          "rationale": "4 × 25 = 100 with two decimal places total → 1.00.",
+          "whyIncorrect": {
+            "B": "Decimal shift error.",
+            "C": "Too small.",
+            "D": "Wrong product."
+          }
+        }
+      ]
+    },
+    {
+      "domain": "Dosage Math",
+      "topicSlug": "systems-of-measurement",
+      "topicName": "Systems of Measurement: Metric, Household, and Apothecary",
+      "readinessWeight": "high",
+      "cognitiveLevel": "foundational-recall",
+      "targetQuestionCountMin": 30,
+      "targetQuestionCountMax": 40,
+      "questionsGeneratedThisBatch": 30,
+      "lessons": [
+        {
+          "title": "Metric base units and prefixes used in nursing",
+          "structuredContent": {
+            "overview": "Metric mass uses grams; volume uses liters; length uses meters. Prefixes move by powers of 10.",
+            "keyTerms": [
+              "kilo (k): multiply the base unit by 1000",
+              "centi (c): divide the base unit by 100",
+              "milli (m): divide the base unit by 1000",
+              "micro (mcg): divide the gram by 1,000,000 (say micrograms aloud)"
+            ],
+            "clinicalRelevanceLight": "mg vs mcg confusion is high-risk; verbalize units.",
+            "commonMistakes": [
+              "mg vs g slips",
+              "assuming mL differs from cc for liquid volume"
+            ]
+          }
+        },
+        {
+          "title": "Household measures and legacy notation",
+          "structuredContent": {
+            "overview": "Patients may reference tsp/Tbsp/oz at home; some legacy orders mention grains. Convert to metric for acute care documentation and teaching.",
+            "keyTerms": [
+              "Teaching approximations (confirm with your program): 1 tsp ~ 5 mL; 1 Tbsp ~ 15 mL; 1 fluid oz ~ 30 mL",
+              "gr historically abbreviates grain; g abbreviates gram"
+            ],
+            "clinicalRelevanceLight": "Kitchen spoons vary; metric dosing tools are standardized in hospitals.",
+            "commonMistakes": [
+              "Treating kitchen spoons as exact",
+              "mixing weight ounces with fluid ounces"
+            ]
+          }
+        }
+      ],
+      "questions": [
+        {
+          "stem": "Which metric unit family is used for medication mass on most labels?",
+          "options": {
+            "A": "Gram-family units (g, mg, mcg)",
+            "B": "Liter-family only",
+            "C": "Meter only",
+            "D": "Household teaspoons only"
+          },
+          "correctAnswer": "A",
+          "rationale": "Solid dosing mass uses gram prefixes; liquids use volume.",
+          "whyIncorrect": {
+            "B": "Liters are volume.",
+            "C": "Meters are length.",
+            "D": "Teaspoons are volume and not mass."
+          }
+        },
+        {
+          "stem": "1 milligram (mg) equals how many micrograms (mcg)?",
+          "options": {
+            "A": "1000 mcg",
+            "B": "100 mcg",
+            "C": "10 mcg",
+            "D": "0.001 mcg"
+          },
+          "correctAnswer": "A",
+          "rationale": "Milli- to micro- is three decimal steps: ×1000 mcg per mg.",
+          "whyIncorrect": {
+            "B": "Ten-fold error.",
+            "C": "Too small.",
+            "D": "Wrong direction."
+          }
+        },
+        {
+          "stem": "1 gram (g) equals how many milligrams (mg)?",
+          "options": {
+            "A": "1000 mg",
+            "B": "100 mg",
+            "C": "10 mg",
+            "D": "0.001 mg"
+          },
+          "correctAnswer": "A",
+          "rationale": "1 g = 1000 mg by definition.",
+          "whyIncorrect": {
+            "B": "Ten-fold error.",
+            "C": "Too small.",
+            "D": "Wrong direction."
+          }
+        },
+        {
+          "stem": "1 liter (L) equals how many milliliters (mL)?",
+          "options": {
+            "A": "1000 mL",
+            "B": "100 mL",
+            "C": "10 mL",
+            "D": "0.001 mL"
+          },
+          "correctAnswer": "A",
+          "rationale": "1 L = 1000 mL.",
+          "whyIncorrect": {
+            "B": "Ten-fold error.",
+            "C": "Too small.",
+            "D": "Wrong direction."
+          }
+        },
+        {
+          "stem": "Which equality is correct for volume in clinical dosing?",
+          "options": {
+            "A": "1 mL = 1 cc",
+            "B": "1 mL = 10 cc",
+            "C": "1 cc = 10 mL",
+            "D": "1 mL = 1 mg"
+          },
+          "correctAnswer": "A",
+          "rationale": "A cubic centimeter is the same volume as a milliliter.",
+          "whyIncorrect": {
+            "B": "Ten-fold error.",
+            "C": "Ten-fold error.",
+            "D": "Mixes volume with mass."
+          }
+        },
+        {
+          "stem": "The prefix centi- (c) means which change from the base unit?",
+          "options": {
+            "A": "Divide the base unit by 100",
+            "B": "Multiply the base unit by 100",
+            "C": "Divide by 1000",
+            "D": "Multiply by 1000"
+          },
+          "correctAnswer": "A",
+          "rationale": "Centi- is one hundredth.",
+          "whyIncorrect": {
+            "B": "Wrong direction.",
+            "C": "That is closer to milli-.",
+            "D": "That is kilo-."
+          }
+        },
+        {
+          "stem": "The prefix milli- (m) means which change from the base unit?",
+          "options": {
+            "A": "Divide the base unit by 1000",
+            "B": "Multiply the base unit by 1000",
+            "C": "Divide by 100",
+            "D": "Multiply by 100"
+          },
+          "correctAnswer": "A",
+          "rationale": "Milli- is one thousandth.",
+          "whyIncorrect": {
+            "B": "Wrong direction.",
+            "C": "That is centi- scale.",
+            "D": "Wrong."
+          }
+        },
+        {
+          "stem": "The prefix kilo- (k) means which change from the base unit?",
+          "options": {
+            "A": "Multiply the base unit by 1000",
+            "B": "Divide the base unit by 1000",
+            "C": "Divide by 100",
+            "D": "Multiply by 100"
+          },
+          "correctAnswer": "A",
+          "rationale": "Kilo- is one thousand times the base unit.",
+          "whyIncorrect": {
+            "B": "Wrong direction.",
+            "C": "Wrong magnitude.",
+            "D": "Wrong magnitude."
+          }
+        },
+        {
+          "stem": "Which mass is largest?",
+          "options": {
+            "A": "1 g",
+            "B": "500 mg",
+            "C": "750 mcg",
+            "D": "0.5 mg"
+          },
+          "correctAnswer": "A",
+          "rationale": "1 g = 1000 mg, larger than the other values listed.",
+          "whyIncorrect": {
+            "B": "0.5 g.",
+            "C": "Micrograms are much smaller.",
+            "D": "Far smaller than 1 g."
+          }
+        },
+        {
+          "stem": "Many programs teach 1 teaspoon (tsp) as approximately:",
+          "options": {
+            "A": "5 mL",
+            "B": "15 mL",
+            "C": "30 mL",
+            "D": "1 mL"
+          },
+          "correctAnswer": "A",
+          "rationale": "Common teaching conversion (confirm with your program).",
+          "whyIncorrect": {
+            "B": "Often used for 1 Tbsp in teaching charts.",
+            "C": "Closer to 1 fluid oz in many charts.",
+            "D": "Too small."
+          }
+        },
+        {
+          "stem": "Many programs teach 1 tablespoon (Tbsp) as approximately:",
+          "options": {
+            "A": "15 mL",
+            "B": "5 mL",
+            "C": "30 mL",
+            "D": "1 mL"
+          },
+          "correctAnswer": "A",
+          "rationale": "Common teaching conversion (confirm with your program).",
+          "whyIncorrect": {
+            "B": "Closer to 1 tsp teaching value.",
+            "C": "Closer to 1 fluid oz in many charts.",
+            "D": "Too small."
+          }
+        },
+        {
+          "stem": "Why are metric syringes preferred over kitchen spoons for medication measurement?",
+          "options": {
+            "A": "Kitchen spoons vary; metric tools are standardized",
+            "B": "Kitchen spoons are always exactly 5 mL",
+            "C": "Tbsp and tsp are interchangeable",
+            "D": "Hospitals never use milliliters"
+          },
+          "correctAnswer": "A",
+          "rationale": "Standardization reduces variability and error.",
+          "whyIncorrect": {
+            "B": "False precision.",
+            "C": "Different volumes.",
+            "D": "Hospitals use metric volumes routinely."
+          }
+        },
+        {
+          "stem": "The meter (m) is the base metric unit for:",
+          "options": {
+            "A": "length",
+            "B": "mass",
+            "C": "volume",
+            "D": "temperature"
+          },
+          "correctAnswer": "A",
+          "rationale": "Meter measures length.",
+          "whyIncorrect": {
+            "B": "Mass uses grams.",
+            "C": "Volume uses liters.",
+            "D": "Temperature uses degrees Celsius clinically."
+          }
+        },
+        {
+          "stem": "The gram (g) is a base metric unit for:",
+          "options": {
+            "A": "mass",
+            "B": "length",
+            "C": "volume",
+            "D": "pressure"
+          },
+          "correctAnswer": "A",
+          "rationale": "Gram-family measures mass.",
+          "whyIncorrect": {
+            "B": "Length uses meters.",
+            "C": "Volume uses liters.",
+            "D": "Pressure uses units like mmHg."
+          }
+        },
+        {
+          "stem": "The liter (L) is a base metric unit for:",
+          "options": {
+            "A": "volume",
+            "B": "mass",
+            "C": "length",
+            "D": "electric current"
+          },
+          "correctAnswer": "A",
+          "rationale": "Liters/milliliters measure volume.",
+          "whyIncorrect": {
+            "B": "Mass uses grams.",
+            "C": "Length uses meters.",
+            "D": "Not applicable here."
+          }
+        },
+        {
+          "stem": "0.5 L equals how many mL?",
+          "options": {
+            "A": "500 mL",
+            "B": "50 mL",
+            "C": "5000 mL",
+            "D": "5 mL"
+          },
+          "correctAnswer": "A",
+          "rationale": "Multiply by 1000.",
+          "whyIncorrect": {
+            "B": "Ten-fold error.",
+            "C": "Too large.",
+            "D": "Too small."
+          }
+        },
+        {
+          "stem": "250 mL equals how many L?",
+          "options": {
+            "A": "0.25 L",
+            "B": "2.5 L",
+            "C": "25 L",
+            "D": "0.025 L"
+          },
+          "correctAnswer": "A",
+          "rationale": "Divide by 1000.",
+          "whyIncorrect": {
+            "B": "Decimal error.",
+            "C": "Too large.",
+            "D": "Too small."
+          }
+        },
+        {
+          "stem": "2.5 g equals how many mg?",
+          "options": {
+            "A": "2500 mg",
+            "B": "25 mg",
+            "C": "250 mg",
+            "D": "0.25 mg"
+          },
+          "correctAnswer": "A",
+          "rationale": "Multiply by 1000.",
+          "whyIncorrect": {
+            "B": "Too small by 100x.",
+            "C": "Ten-fold error.",
+            "D": "Wrong direction."
+          }
+        },
+        {
+          "stem": "Which pair expresses the same mass?",
+          "options": {
+            "A": "0.1 mg and 100 mcg",
+            "B": "1 mg and 100 mcg",
+            "C": "0.1 mg and 10 mcg",
+            "D": "1 g and 100 mg"
+          },
+          "correctAnswer": "A",
+          "rationale": "0.1 mg × 1000 = 100 mcg.",
+          "whyIncorrect": {
+            "B": "1 mg = 1000 mcg.",
+            "C": "0.1 mg = 100 mcg, not 10 mcg.",
+            "D": "1 g = 1000 mg."
+          }
+        },
+        {
+          "stem": "In historic/legacy notation familiarity, gr commonly abbreviates:",
+          "options": {
+            "A": "grain",
+            "B": "gram",
+            "C": "gross",
+            "D": "glass"
+          },
+          "correctAnswer": "A",
+          "rationale": "gr is grain; do not confuse with g for gram.",
+          "whyIncorrect": {
+            "B": "Gram is g.",
+            "C": "Unrelated.",
+            "D": "Unrelated."
+          }
+        },
+        {
+          "stem": "How many mcg are in 0.05 mg?",
+          "options": {
+            "A": "50 mcg",
+            "B": "5 mcg",
+            "C": "500 mcg",
+            "D": "0.5 mcg"
+          },
+          "correctAnswer": "A",
+          "rationale": "0.05 × 1000 = 50.",
+          "whyIncorrect": {
+            "B": "Ten-fold error.",
+            "C": "Ten-fold error.",
+            "D": "Wrong magnitude."
+          }
+        },
+        {
+          "stem": "750 mL equals how many L?",
+          "options": {
+            "A": "0.75 L",
+            "B": "7.5 L",
+            "C": "75 L",
+            "D": "0.075 L"
+          },
+          "correctAnswer": "A",
+          "rationale": "Divide by 1000.",
+          "whyIncorrect": {
+            "B": "Too large.",
+            "C": "Too large.",
+            "D": "Too small."
+          }
+        },
+        {
+          "stem": "4 mg equals how many mcg?",
+          "options": {
+            "A": "4000 mcg",
+            "B": "400 mcg",
+            "C": "40 mcg",
+            "D": "0.4 mcg"
+          },
+          "correctAnswer": "A",
+          "rationale": "Multiply mg by 1000 to get mcg.",
+          "whyIncorrect": {
+            "B": "Ten-fold error.",
+            "C": "Too small.",
+            "D": "Too small."
+          }
+        },
+        {
+          "stem": "900 mcg equals how many mg?",
+          "options": {
+            "A": "0.9 mg",
+            "B": "9 mg",
+            "C": "90 mg",
+            "D": "0.09 mg"
+          },
+          "correctAnswer": "A",
+          "rationale": "Divide mcg by 1000.",
+          "whyIncorrect": {
+            "B": "Ten-fold error.",
+            "C": "Too large.",
+            "D": "Ten-fold error."
+          }
+        },
+        {
+          "stem": "Which value equals 3 g?",
+          "options": {
+            "A": "3000 mg",
+            "B": "300 mg",
+            "C": "30 mg",
+            "D": "0.3 mg"
+          },
+          "correctAnswer": "A",
+          "rationale": "3 × 1000 mg = 3000 mg.",
+          "whyIncorrect": {
+            "B": "Ten-fold error.",
+            "C": "Too small.",
+            "D": "Too small."
+          }
+        },
+        {
+          "stem": "1.2 L equals how many mL?",
+          "options": {
+            "A": "1200 mL",
+            "B": "120 mL",
+            "C": "12 mL",
+            "D": "12000 mL"
+          },
+          "correctAnswer": "A",
+          "rationale": "Multiply liters by 1000.",
+          "whyIncorrect": {
+            "B": "Ten-fold error.",
+            "C": "Too small.",
+            "D": "Too large."
+          }
+        },
+        {
+          "stem": "Which is the best metric-only expression of a volume for liquid medication in acute care?",
+          "options": {
+            "A": "mL",
+            "B": "fluid ounces only",
+            "C": "teaspoons only",
+            "D": "cups only"
+          },
+          "correctAnswer": "A",
+          "rationale": "Acute care standardizes metric volume dosing.",
+          "whyIncorrect": {
+            "B": "May appear in home context; not preferred alone in acute care.",
+            "C": "Household measure.",
+            "D": "Household measure."
+          }
+        },
+        {
+          "stem": "mcg is the same as:",
+          "options": {
+            "A": "microgram",
+            "B": "milligram",
+            "C": "milliliter",
+            "D": "mega-gram"
+          },
+          "correctAnswer": "A",
+          "rationale": "mcg = microgram.",
+          "whyIncorrect": {
+            "B": "mg is milligram.",
+            "C": "mL is volume.",
+            "D": "Not a standard nursing abbreviation."
+          }
+        },
+        {
+          "stem": "Which statement about mg and mcg is true?",
+          "options": {
+            "A": "1 mg is larger than 1 mcg",
+            "B": "1 mcg is larger than 1 mg",
+            "C": "mg and mcg are volume units",
+            "D": "mg and mcg cannot be compared"
+          },
+          "correctAnswer": "A",
+          "rationale": "Milligram is three orders of magnitude larger than microgram.",
+          "whyIncorrect": {
+            "B": "False.",
+            "C": "They are mass units.",
+            "D": "They can be compared by conversion."
+          }
+        },
+        {
+          "stem": "0.001 g equals:",
+          "options": {
+            "A": "1 mg",
+            "B": "1 mcg",
+            "C": "1000 mg",
+            "D": "0.01 mg"
+          },
+          "correctAnswer": "A",
+          "rationale": "One milligram is one thousandth of a gram.",
+          "whyIncorrect": {
+            "B": "Too small by 1000×.",
+            "C": "Too large.",
+            "D": "Wrong."
+          }
+        }
+      ]
+    },
+    {
+      "domain": "Anatomy & Physiology",
+      "topicSlug": "organization-of-the-human-body",
+      "topicName": "Organization of the Human Body",
+      "readinessWeight": "medium",
+      "cognitiveLevel": "foundational-recall",
+      "targetQuestionCountMin": 30,
+      "targetQuestionCountMax": 40,
+      "questionsGeneratedThisBatch": 30,
+      "prerequisiteHandling": "Embedded prerequisite bridge for blueprint topics body-directions-and-planes and body-cavities-and-regions inside Lesson 1.",
+      "lessons": [
+        {
+          "title": "Orientation: position, directions, planes, cavities, levels of organization",
+          "structuredContent": {
+            "overview": "Shared anatomical language prevents ambiguity in documentation and study.",
+            "orientationPrerequisiteBridge": {
+              "anatomicalPosition": "Upright, feet slightly apart, palms forward, eyes forward.",
+              "directionalTerms": [
+                "Anterior (ventral): front",
+                "Posterior (dorsal): back",
+                "Superior (cranial): toward head",
+                "Inferior (caudal): toward feet",
+                "Medial: toward midline",
+                "Lateral: away from midline",
+                "Proximal: closer to trunk (limb)",
+                "Distal: farther from trunk (limb)",
+                "Superficial: toward surface",
+                "Deep: away from surface"
+              ],
+              "planes": [
+                "Sagittal: left vs right (midsagittal on midline)",
+                "Frontal (coronal): anterior vs posterior",
+                "Transverse: superior vs inferior cross-section"
+              ],
+              "cavitiesAndRegions": [
+                "Dorsal: cranial + vertebral (spinal) subcavities",
+                "Ventral: thoracic and abdominopelvic; quadrants RUQ/LUQ/RLQ/LLQ for localization"
+              ]
+            },
+            "levelsOfOrganization": [
+              "Chemical → Cell → Tissue → Organ → Organ system → Organism"
+            ],
+            "mentalModel": "Smaller units combine into larger working teams.",
+            "commonMistakes": [
+              "Patient left vs observer left confusion",
+              "mixing sagittal with frontal",
+              "proximal/distal reversed on limbs"
+            ],
+            "clinicalRelevanceLight": "Directional and quadrant language appears in reports and handoffs at a foundational documentation level."
+          }
+        },
+        {
+          "title": "Organ systems survey: names and one-line roles",
+          "structuredContent": {
+            "overview": "Pre-nursing goal: correct names plus a single plain purpose per system—no advanced clinical reasoning.",
+            "systemsTable": [
+              {
+                "system": "Integumentary",
+                "function": "Barrier; temperature; sensory interface"
+              },
+              {
+                "system": "Skeletal",
+                "function": "Support; protection; leverage"
+              },
+              {
+                "system": "Muscular",
+                "function": "Movement; posture; heat"
+              },
+              {
+                "system": "Nervous",
+                "function": "Rapid signaling"
+              },
+              {
+                "system": "Endocrine",
+                "function": "Hormonal regulation"
+              },
+              {
+                "system": "Cardiovascular",
+                "function": "Transport in blood"
+              },
+              {
+                "system": "Lymphatic/immune",
+                "function": "Fluid return; immunity"
+              },
+              {
+                "system": "Respiratory",
+                "function": "Gas exchange"
+              },
+              {
+                "system": "Digestive",
+                "function": "Processing and absorption of nutrients"
+              },
+              {
+                "system": "Urinary",
+                "function": "Filtration; electrolyte/water regulation; waste removal in urine"
+              },
+              {
+                "system": "Reproductive",
+                "function": "Gametes; related hormones"
+              }
+            ],
+            "commonMistakes": [
+              "Confusing endocrine with exocrine (ducted) glands",
+              "forgetting absorption/elimination roles of digestive system beyond digestion"
+            ],
+            "clinicalRelevanceLight": "System names organize all later A&P and assessment learning."
+          }
+        }
+      ],
+      "questions": [
+        {
+          "stem": "In anatomical position, the palms face:",
+          "options": {
+            "A": "anteriorly (forward)",
+            "B": "posteriorly (backward)",
+            "C": "inferiorly (toward the feet)",
+            "D": "medially only"
+          },
+          "correctAnswer": "A",
+          "rationale": "Palms forward is part of the standard anatomical position.",
+          "whyIncorrect": {
+            "B": "That would be palms backward.",
+            "C": "Describes direction to feet, not palm orientation.",
+            "D": "Medial is midline-related, not default palm direction."
+          }
+        },
+        {
+          "stem": "The nose is ______ to the ears.",
+          "options": {
+            "A": "medial",
+            "B": "lateral",
+            "C": "superior",
+            "D": "inferior"
+          },
+          "correctAnswer": "A",
+          "rationale": "The nose is closer to the midline than the ears.",
+          "whyIncorrect": {
+            "B": "Ears are lateral to the nose.",
+            "C": "Not the best term for this relationship.",
+            "D": "Not the best term for this relationship."
+          }
+        },
+        {
+          "stem": "The ankle is ______ to the knee.",
+          "options": {
+            "A": "distal",
+            "B": "proximal",
+            "C": "superior",
+            "D": "medial"
+          },
+          "correctAnswer": "A",
+          "rationale": "Distal is farther from the trunk along the limb.",
+          "whyIncorrect": {
+            "B": "Knee is proximal to ankle.",
+            "C": "Superior is headward; not the primary limb-axis term.",
+            "D": "Medial is midline-related."
+          }
+        },
+        {
+          "stem": "A sagittal plane divides the body into:",
+          "options": {
+            "A": "left and right portions",
+            "B": "anterior and posterior portions",
+            "C": "superior and inferior portions",
+            "D": "proximal and distal portions"
+          },
+          "correctAnswer": "A",
+          "rationale": "Sagittal separates left from right.",
+          "whyIncorrect": {
+            "B": "Frontal/coronal plane.",
+            "C": "Transverse plane.",
+            "D": "Limb directions, not a whole-body plane pair."
+          }
+        },
+        {
+          "stem": "A frontal (coronal) plane divides the body into:",
+          "options": {
+            "A": "anterior and posterior portions",
+            "B": "left and right portions",
+            "C": "superior and inferior portions",
+            "D": "dorsal and ventral cavities only"
+          },
+          "correctAnswer": "A",
+          "rationale": "Frontal plane separates front from back.",
+          "whyIncorrect": {
+            "B": "Sagittal plane.",
+            "C": "Transverse plane.",
+            "D": "Not the definition of a frontal plane."
+          }
+        },
+        {
+          "stem": "A transverse (horizontal) plane divides the body into:",
+          "options": {
+            "A": "superior and inferior portions",
+            "B": "left and right portions",
+            "C": "anterior and posterior portions",
+            "D": "medial and lateral portions"
+          },
+          "correctAnswer": "A",
+          "rationale": "Transverse cuts separate top from bottom sections.",
+          "whyIncorrect": {
+            "B": "Sagittal.",
+            "C": "Frontal/coronal.",
+            "D": "Directions, not this plane."
+          }
+        },
+        {
+          "stem": "Which cavity contains the brain?",
+          "options": {
+            "A": "cranial cavity",
+            "B": "thoracic cavity",
+            "C": "abdominal cavity",
+            "D": "pelvic cavity"
+          },
+          "correctAnswer": "A",
+          "rationale": "Skull houses the brain in the cranial cavity.",
+          "whyIncorrect": {
+            "B": "Heart and lungs.",
+            "C": "Many digestive organs.",
+            "D": "Bladder/reproductive among others."
+          }
+        },
+        {
+          "stem": "The spinal cord is protected within the:",
+          "options": {
+            "A": "vertebral (spinal) cavity",
+            "B": "cranial cavity",
+            "C": "pleural cavity",
+            "D": "pericardial cavity"
+          },
+          "correctAnswer": "A",
+          "rationale": "Vertebral canal/spinal cavity.",
+          "whyIncorrect": {
+            "B": "Brain.",
+            "C": "Lungs.",
+            "D": "Heart."
+          }
+        },
+        {
+          "stem": "The right lower quadrant (RLQ) is which abdominal area?",
+          "options": {
+            "A": "right lower",
+            "B": "left lower",
+            "C": "right upper",
+            "D": "left upper"
+          },
+          "correctAnswer": "A",
+          "rationale": "RLQ = right lower quadrant.",
+          "whyIncorrect": {
+            "B": "LLQ.",
+            "C": "RUQ.",
+            "D": "LUQ."
+          }
+        },
+        {
+          "stem": "Which level of organization comes immediately after tissue?",
+          "options": {
+            "A": "organ",
+            "B": "cell",
+            "C": "organ system",
+            "D": "chemical"
+          },
+          "correctAnswer": "A",
+          "rationale": "Cell → tissue → organ.",
+          "whyIncorrect": {
+            "B": "Cell is before tissue.",
+            "C": "Organ system follows organ.",
+            "D": "Chemical is earliest."
+          }
+        },
+        {
+          "stem": "Which is the smallest level listed?",
+          "options": {
+            "A": "cell",
+            "B": "tissue",
+            "C": "organ",
+            "D": "organ system"
+          },
+          "correctAnswer": "A",
+          "rationale": "Cells are building blocks of tissues.",
+          "whyIncorrect": {
+            "B": "Made of cells.",
+            "C": "Larger.",
+            "D": "Larger."
+          }
+        },
+        {
+          "stem": "Which system primarily performs gas exchange between air and blood?",
+          "options": {
+            "A": "respiratory",
+            "B": "digestive",
+            "C": "urinary",
+            "D": "integumentary"
+          },
+          "correctAnswer": "A",
+          "rationale": "Lungs/alveoli gas exchange.",
+          "whyIncorrect": {
+            "B": "Food processing.",
+            "C": "Filtration/excretion.",
+            "D": "Skin barrier functions."
+          }
+        },
+        {
+          "stem": "Which system transports nutrients and gases in blood?",
+          "options": {
+            "A": "cardiovascular",
+            "B": "endocrine",
+            "C": "skeletal",
+            "D": "urinary"
+          },
+          "correctAnswer": "A",
+          "rationale": "Heart and vessels.",
+          "whyIncorrect": {
+            "B": "Hormones.",
+            "C": "Bones.",
+            "D": "Kidneys/urine formation."
+          }
+        },
+        {
+          "stem": "Which system coordinates slower, widespread regulation using hormones?",
+          "options": {
+            "A": "endocrine",
+            "B": "nervous",
+            "C": "muscular",
+            "D": "lymphatic"
+          },
+          "correctAnswer": "A",
+          "rationale": "Hormone-based regulation.",
+          "whyIncorrect": {
+            "B": "Generally faster signaling.",
+            "C": "Movement.",
+            "D": "Fluid return/immune roles."
+          }
+        },
+        {
+          "stem": "The brain and spinal cord are central components of the:",
+          "options": {
+            "A": "nervous",
+            "B": "endocrine",
+            "C": "digestive",
+            "D": "reproductive"
+          },
+          "correctAnswer": "A",
+          "rationale": "CNS: brain and spinal cord.",
+          "whyIncorrect": {
+            "B": "Glands/hormones.",
+            "C": "GI tract.",
+            "D": "Gametes/hormones related to reproduction."
+          }
+        },
+        {
+          "stem": "The primary filtration organs of the urinary system are the:",
+          "options": {
+            "A": "kidneys",
+            "B": "ureters",
+            "C": "bladder",
+            "D": "urethra"
+          },
+          "correctAnswer": "A",
+          "rationale": "Kidneys filter blood to form urine.",
+          "whyIncorrect": {
+            "B": "Transport.",
+            "C": "Storage.",
+            "D": "Elimination channel."
+          }
+        },
+        {
+          "stem": "Which term means toward the front of the body?",
+          "options": {
+            "A": "anterior (ventral)",
+            "B": "posterior (dorsal)",
+            "C": "deep",
+            "D": "superficial"
+          },
+          "correctAnswer": "A",
+          "rationale": "Anterior = ventral = front.",
+          "whyIncorrect": {
+            "B": "Back.",
+            "C": "Away from surface.",
+            "D": "Toward surface."
+          }
+        },
+        {
+          "stem": "Which term means toward the back?",
+          "options": {
+            "A": "posterior (dorsal)",
+            "B": "anterior (ventral)",
+            "C": "proximal",
+            "D": "distal"
+          },
+          "correctAnswer": "A",
+          "rationale": "Posterior = dorsal = back.",
+          "whyIncorrect": {
+            "B": "Front.",
+            "C": "Closer to trunk on a limb.",
+            "D": "Farther from trunk on a limb."
+          }
+        },
+        {
+          "stem": "Skin, hair, and nails belong to the:",
+          "options": {
+            "A": "integumentary system",
+            "B": "skeletal system",
+            "C": "immune system only",
+            "D": "endocrine system"
+          },
+          "correctAnswer": "A",
+          "rationale": "Integumentary covers surface structures.",
+          "whyIncorrect": {
+            "B": "Bones.",
+            "C": "Immune is broader than surface accessories alone.",
+            "D": "Hormones."
+          }
+        },
+        {
+          "stem": "The midsagittal plane is a sagittal plane that:",
+          "options": {
+            "A": "lies on the midline",
+            "B": "is always horizontal",
+            "C": "divides anterior from posterior",
+            "D": "applies only to the thigh"
+          },
+          "correctAnswer": "A",
+          "rationale": "Midline sagittal = midsagittal.",
+          "whyIncorrect": {
+            "B": "Describes transverse.",
+            "C": "Describes frontal.",
+            "D": "Applies to whole-body midline concept."
+          }
+        },
+        {
+          "stem": "The elbow is ______ to the shoulder.",
+          "options": {
+            "A": "distal",
+            "B": "proximal",
+            "C": "lateral",
+            "D": "medial"
+          },
+          "correctAnswer": "A",
+          "rationale": "Elbow is farther down the upper limb from the shoulder.",
+          "whyIncorrect": {
+            "B": "Shoulder is proximal to elbow.",
+            "C": "Not the primary limb-axis term here.",
+            "D": "Midline term, not primary limb-axis here."
+          }
+        },
+        {
+          "stem": "The heart is located in which cavity at survey level?",
+          "options": {
+            "A": "thoracic cavity",
+            "B": "cranial cavity",
+            "C": "vertebral cavity",
+            "D": "abdominopelvic cavity only"
+          },
+          "correctAnswer": "A",
+          "rationale": "Thoracic cavity contains heart and lungs.",
+          "whyIncorrect": {
+            "B": "Brain.",
+            "C": "Spinal cord.",
+            "D": "Heart is thoracic."
+          }
+        },
+        {
+          "stem": "Which organ system includes bones and joints at survey level?",
+          "options": {
+            "A": "skeletal",
+            "B": "muscular",
+            "C": "integumentary",
+            "D": "nervous"
+          },
+          "correctAnswer": "A",
+          "rationale": "Skeletal system: bones/joints.",
+          "whyIncorrect": {
+            "B": "Muscles.",
+            "C": "Skin.",
+            "D": "Neurons/communication."
+          }
+        },
+        {
+          "stem": "Which organ system is primarily responsible for movement and posture?",
+          "options": {
+            "A": "muscular",
+            "B": "skeletal",
+            "C": "endocrine",
+            "D": "urinary"
+          },
+          "correctAnswer": "A",
+          "rationale": "Muscle contraction produces movement.",
+          "whyIncorrect": {
+            "B": "Provides leverage but movement is muscular.",
+            "C": "Hormones.",
+            "D": "Filtration."
+          }
+        },
+        {
+          "stem": "Which level comes immediately before the organism in the standard ladder?",
+          "options": {
+            "A": "organ system",
+            "B": "organ",
+            "C": "tissue",
+            "D": "cell"
+          },
+          "correctAnswer": "A",
+          "rationale": "Organ systems cooperate as the whole organism.",
+          "whyIncorrect": {
+            "B": "Too small a level.",
+            "C": "Too small.",
+            "D": "Too small."
+          }
+        },
+        {
+          "stem": "LUQ refers to:",
+          "options": {
+            "A": "left upper quadrant",
+            "B": "left lower quadrant",
+            "C": "right upper quadrant",
+            "D": "right lower quadrant"
+          },
+          "correctAnswer": "A",
+          "rationale": "LUQ naming convention.",
+          "whyIncorrect": {
+            "B": "LLQ.",
+            "C": "RUQ.",
+            "D": "RLQ."
+          }
+        },
+        {
+          "stem": "RUQ refers to:",
+          "options": {
+            "A": "right upper quadrant",
+            "B": "right lower quadrant",
+            "C": "left upper quadrant",
+            "D": "left lower quadrant"
+          },
+          "correctAnswer": "A",
+          "rationale": "RUQ naming convention.",
+          "whyIncorrect": {
+            "B": "RLQ.",
+            "C": "LUQ.",
+            "D": "LLQ."
+          }
+        },
+        {
+          "stem": "LLQ refers to:",
+          "options": {
+            "A": "left lower quadrant",
+            "B": "left upper quadrant",
+            "C": "right lower quadrant",
+            "D": "right upper quadrant"
+          },
+          "correctAnswer": "A",
+          "rationale": "LLQ naming convention.",
+          "whyIncorrect": {
+            "B": "LUQ.",
+            "C": "RLQ.",
+            "D": "RUQ."
+          }
+        },
+        {
+          "stem": "Which cavity surrounds the lungs at survey level?",
+          "options": {
+            "A": "pleural cavities (within thoracic)",
+            "B": "pericardial cavity only",
+            "C": "cranial cavity",
+            "D": "vertebral cavity"
+          },
+          "correctAnswer": "A",
+          "rationale": "Each lung has a pleural cavity; both are thoracic.",
+          "whyIncorrect": {
+            "B": "Heart.",
+            "C": "Brain.",
+            "D": "Spinal cord."
+          }
+        },
+        {
+          "stem": "Which directional pair is opposite: superficial vs ______.",
+          "options": {
+            "A": "deep",
+            "B": "anterior",
+            "C": "proximal",
+            "D": "lateral"
+          },
+          "correctAnswer": "A",
+          "rationale": "Superficial and deep describe nearness to the surface.",
+          "whyIncorrect": {
+            "B": "Front/back pair uses anterior/posterior.",
+            "C": "Limb-axis term.",
+            "D": "Midline term."
+          }
+        }
+      ]
+    }
+  ],
+  "finalReport": {
+    "topicsProcessed": 3,
+    "lessonsPerDomain": {
+      "Dosage Math": 5,
+      "Anatomy & Physiology": 2
+    },
+    "questionsPerDomain": {
+      "Dosage Math": 75,
+      "Anatomy & Physiology": 30
+    },
+    "topicsDifficultToGenerateUnderStrictSequencing": [
+      "Dosage: oral-medication-dosage-calculations and downstream (IV flow, weight-based, safe range) blocked until Pharmacology rights-of-medication-administration / adverse effects prerequisites exist in the same learner path.",
+      "A&P: all topics after organization-of-the-human-body blocked by blueprint prerequisites outside this batch (e.g., organic-molecules-macromolecules for cell-structure-and-function; medical terminology topics for several systems)."
+    ],
+    "rulesConfirmation": "Depth scaled by readinessWeight (critical dosage math = 3 applied lessons; high dosage = 2 recall lessons; medium A&P = 2 shorter lessons). cognitiveLevel matched (early-application math with steps/examples; recall topics with identification/definitions). Question counts meet each topic targetQuestionCountMin. No SATA; single-focus stems; each item has rationale and why distractors fail."
+  }
+}
