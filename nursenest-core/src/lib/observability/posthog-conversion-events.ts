@@ -156,6 +156,20 @@ export const PH = {
 
   // ── Experiments ──────────────────────────────────────────────────────────
   experimentStarted: "$experiment_started",
+
+  // ── Retention & engagement ─────────────────────────────────────────────
+  /** Notification bell panel opened. */
+  notificationPanelOpened: "notification_panel_opened",
+  /** Smart engagement nudge clicked (kind dimension distinguishes trigger type). */
+  engagementNudgeClicked: "engagement_nudge_clicked",
+  /** Nudge dismissed by user. */
+  engagementNudgeDismissed: "engagement_nudge_dismissed",
+  /** Spaced repetition reminder CTA clicked. */
+  spacedReviewReminderClicked: "spaced_review_reminder_clicked",
+  /** User returned to the app after inactivity (24h+ gap). */
+  userReactivated: "user_reactivated",
+  /** Session frequency signal — fired once per unique UTC day with activity (deduped client-side). */
+  dailyActiveSignal: "daily_active_signal",
 } as const;
 
 export type AppSection =

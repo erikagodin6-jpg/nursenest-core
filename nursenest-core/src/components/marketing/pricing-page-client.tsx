@@ -283,7 +283,7 @@ export function PricingPageClient({
     <main className="mx-auto w-full max-w-6xl nn-marketing-x pb-[var(--nn-rhythm-page-y)] pt-0">
       {/* 1. Hero */}
       <PricingHero
-        studySystemHref={tryQuestionsHref}
+        studySystemHref={localize("/how-it-works")}
         ctaLabel={heroCtaLabel}
         trialSubtext={trialSubtext}
       />

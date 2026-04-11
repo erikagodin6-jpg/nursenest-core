@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
-import { prisma } from "@/lib/db/prisma";
+import { prisma } from "@/lib/db";
 import { captureServerEvent } from "@/lib/observability/posthog-server";
-import { analyticsDistinctId } from "@/lib/observability/analytics-distinct-id";
+import { analyticsDistinctId } from "@/lib/observability/posthog-distinct-id";
 
 export async function POST(req: Request) {
   const session = await auth();

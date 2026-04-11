@@ -5,6 +5,8 @@ import { auth } from "@/lib/auth";
 import { LearnerDailyMomentumCard } from "@/components/student/learner-daily-momentum-card";
 import { LearnerDashboardAdvantageStrip } from "@/components/student/learner-dashboard-advantage-strip";
 import { LearnerDashboardCommandCenter } from "@/components/student/learner-dashboard-command-center";
+import { EngagementNudgeStrip } from "@/components/student/engagement-nudge-strip";
+import { SpacedReviewReminder } from "@/components/student/spaced-review-reminder";
 import { PremiumEmptyState } from "@/components/ui/premium-empty-state";
 import { PremiumLearnerHub } from "@/components/student/premium-learner-hub";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
@@ -13,7 +15,7 @@ import { LockedStudyNextPreview } from "@/components/student/locked-study-next-p
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { buildLearnerStudySnapshot } from "@/lib/learner/build-learner-study-snapshot";
-import { prisma } from "@/lib/db/prisma";
+import { prisma } from "@/lib/db";
 import {
   buildContinueLearningItems,
   continueLearningItemsToLinks,
@@ -190,6 +192,12 @@ export default async function LearnerDashboardPage() {
               progressFeedbackLine={progressFeedbackLine}
             />
           ) : null}
+
+          {/* Smart engagement nudges (inactive, streak, weak area, improvement, near exam) */}
+          <EngagementNudgeStrip maxItems={3} />
+
+          {/* Spaced repetition flashcard reminder */}
+          <SpacedReviewReminder />
 
           {/* Core analytics: readiness score, quick actions, progress, performance, weak areas */}
           <LearnerDashboardInsightPanels snapshot={snapshot} t={t} />

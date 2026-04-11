@@ -43,6 +43,16 @@ import { buildQuickReviewBullets } from "@/lib/lessons/pathway-lesson-quick-revi
 import { resolveLessonImage } from "@/lib/content/resolve-lesson-image";
 import { LessonClinicalImageCard } from "@/components/lessons/lesson-clinical-image-card";
 import { pathwayLessonPublicDetailPath } from "@/lib/lessons/pathway-lesson-types";
+import dynamic from "next/dynamic";
+import { LessonRecallProvider } from "@/components/lessons/lesson-recall-context";
+import { LessonRecallToggle } from "@/components/lessons/lesson-recall-toggle";
+import { LessonRecallBlock } from "@/components/lessons/lesson-recall-block";
+import { LessonKeyRecallChip } from "@/components/lessons/lesson-key-recall-chip";
+
+const LessonCheckpointCardDynamic = dynamic(
+  () => import("@/components/lessons/lesson-checkpoint-card").then((m) => m.LessonCheckpointCard),
+  { ssr: false, loading: () => null },
+);
 import {
   loadPathwayLessonProgressForSlug,
   type PathwayLessonProgressStatus,
@@ -303,26 +313,40 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
           postTest={fullAccess ? lesson.postTest : undefined}
           fullAccess={fullAccess}
         >
-          <main className="mt-8">
-            <article className="mx-auto max-w-[44rem] space-y-5">
-              {visible.map((section) => (
-                <LessonSectionCard
-                  key={section.id}
-                  id={section.id}
-                  heading={section.heading}
-                  kind={section.kind}
-                >
-                  <PathwayLessonSectionContent
-                    text={typeof section.body === "string" ? section.body : ""}
-                    figures={section.figures}
-                    lessonWikiBasePath={base}
-                    viewerTier={lessonContentTier}
-                    measurementSystem={lessonMeasurementSystem}
-                  />
-                </LessonSectionCard>
-              ))}
-            </article>
-          </main>
+          <LessonRecallProvider>
+            <main className="mt-8">
+              <div className="mx-auto mb-3 flex max-w-[44rem] justify-end">
+                <LessonRecallToggle />
+              </div>
+              <article className="mx-auto max-w-[44rem] space-y-5">
+                {visible.map((section) => (
+                  <LessonSectionCard
+                    key={section.id}
+                    id={section.id}
+                    heading={section.heading}
+                    kind={section.kind}
+                  >
+                    <PathwayLessonSectionContent
+                      text={typeof section.body === "string" ? section.body : ""}
+                      figures={section.figures}
+                      lessonWikiBasePath={base}
+                      viewerTier={lessonContentTier}
+                      measurementSystem={lessonMeasurementSystem}
+                    />
+                    {section.keyRecallFacts?.length ? (
+                      <LessonKeyRecallChip facts={section.keyRecallFacts} />
+                    ) : null}
+                    {section.recallPrompts?.length ? (
+                      <LessonRecallBlock prompts={section.recallPrompts} />
+                    ) : null}
+                    {section.checkpointQuestions?.length ? (
+                      <LessonCheckpointCardDynamic questions={section.checkpointQuestions} />
+                    ) : null}
+                  </LessonSectionCard>
+                ))}
+              </article>
+            </main>
+          </LessonRecallProvider>
 
           {lockedSections.length > 0 ? (
             <div className="mx-auto mt-6 max-w-[44rem]">

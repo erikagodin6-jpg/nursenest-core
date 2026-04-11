@@ -65,6 +65,16 @@ import { getMeasurementSystemForCountry } from "@/lib/measurements/measurement-s
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { resolveLessonImage } from "@/lib/content/resolve-lesson-image";
 import { LessonClinicalImageCard } from "@/components/lessons/lesson-clinical-image-card";
+import nextDynamic from "next/dynamic";
+import { LessonRecallProvider } from "@/components/lessons/lesson-recall-context";
+import { LessonRecallToggle } from "@/components/lessons/lesson-recall-toggle";
+import { LessonRecallBlock } from "@/components/lessons/lesson-recall-block";
+import { LessonKeyRecallChip } from "@/components/lessons/lesson-key-recall-chip";
+
+const LessonCheckpointCardDynamic = nextDynamic(
+  () => import("@/components/lessons/lesson-checkpoint-card").then((m) => m.LessonCheckpointCard),
+  { ssr: false, loading: () => null },
+);
 
 export const dynamic = "force-dynamic";
 export const revalidate = 86400;
@@ -303,22 +313,36 @@ export default async function AlliedHealthSlugLessonDetailPage({ params }: Props
         postTest={lesson.postTest}
         fullAccess={fullAccess}
       >
-        <article className="mt-8 space-y-5">
-          {visible.map((section) => (
-            <LessonSectionCard
-              key={section.id}
-              id={section.id}
-              heading={section.heading}
-              kind={section.kind}
-            >
-              <PathwayLessonBody
-                text={typeof section.body === "string" ? section.body : ""}
-                lessonWikiBasePath={base}
-                measurementSystem={lessonMeasurementSystem}
-              />
-            </LessonSectionCard>
-          ))}
-        </article>
+        <LessonRecallProvider>
+          <div className="mb-3 flex justify-end">
+            <LessonRecallToggle />
+          </div>
+          <article className="mt-5 space-y-5">
+            {visible.map((section) => (
+              <LessonSectionCard
+                key={section.id}
+                id={section.id}
+                heading={section.heading}
+                kind={section.kind}
+              >
+                <PathwayLessonBody
+                  text={typeof section.body === "string" ? section.body : ""}
+                  lessonWikiBasePath={base}
+                  measurementSystem={lessonMeasurementSystem}
+                />
+                {section.keyRecallFacts?.length ? (
+                  <LessonKeyRecallChip facts={section.keyRecallFacts} />
+                ) : null}
+                {section.recallPrompts?.length ? (
+                  <LessonRecallBlock prompts={section.recallPrompts} />
+                ) : null}
+                {section.checkpointQuestions?.length ? (
+                  <LessonCheckpointCardDynamic questions={section.checkpointQuestions} />
+                ) : null}
+              </LessonSectionCard>
+            ))}
+          </article>
+        </LessonRecallProvider>
 
         {lockedSections.length > 0 ? <PathwayLessonLockedSectionsPreview sections={lockedSections} /> : null}
 

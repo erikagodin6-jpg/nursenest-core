@@ -1,5 +1,9 @@
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { marketingLessonDetailHref, marketingPathwayLessonDetailPath } from "@/lib/lessons/lesson-routes";
+import type { RecallPrompt, CheckpointQuestion, KeyRecallFact } from "@/lib/lessons/lesson-recall-types";
+
+// Re-export so consumers don't need two imports when working with lesson sections + recall.
+export type { RecallPrompt, CheckpointQuestion, KeyRecallFact };
 
 /**
  * Section bodies may include tier-scoped segments via `<TierBlock tier="PN|RN|NP|ALL">…</TierBlock>`
@@ -120,6 +124,21 @@ export type PathwayLessonSection = {
   examFocus?: PathwayLessonExamFocus;
   /** Inline diagrams / algorithms — lazy-loaded in the lesson UI. */
   figures?: PathwayLessonFigure[];
+  /**
+   * Active recall: reveal-answer cards shown after the section body.
+   * Optional — absent for most lessons until recall content is authored.
+   */
+  recallPrompts?: RecallPrompt[];
+  /**
+   * Active recall: 1–3 multiple-choice checkpoint questions shown after the section.
+   * Lazy-loaded. Optional — absent for most lessons until recall content is authored.
+   */
+  checkpointQuestions?: CheckpointQuestion[];
+  /**
+   * Active recall: short key facts shown as blur-to-reveal chips after the section.
+   * Optional — absent for most lessons until recall content is authored.
+   */
+  keyRecallFacts?: KeyRecallFact[];
 };
 
 /** Inline pre/post checks for pathway lessons (catalog or DB JSON). */

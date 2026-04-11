@@ -54,10 +54,11 @@ export function SiteHeader() {
     return () => document.removeEventListener("click", close);
   }, []);
 
-  const marketingNav = [
-    { href: "/lessons", labelKey: "nav.lessons" as const },
-    { href: "/pricing", labelKey: "nav.pricing" as const },
-    { href: "/faq", labelKey: "footer.faq" as const },
+  const marketingNav: { href: string; labelKey?: string; label?: string }[] = [
+    { href: "/lessons", labelKey: "nav.lessons" },
+    { href: "/how-it-works", label: "How It Works" },
+    { href: "/pricing", labelKey: "nav.pricing" },
+    { href: "/faq", labelKey: "footer.faq" },
   ];
 
   return (
@@ -93,7 +94,7 @@ export function SiteHeader() {
                   })
                 }
               >
-                {t(item.labelKey)}
+                {item.label ?? t(item.labelKey!)}
               </Link>
             ))}
           </nav>
@@ -189,7 +190,7 @@ export function SiteHeader() {
                       setMobileOpen(false);
                     }}
                   >
-                    {t(item.labelKey)}
+                    {item.label ?? t(item.labelKey!)}
                   </Link>
                 ))}
               </div>
