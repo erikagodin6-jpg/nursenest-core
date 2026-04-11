@@ -72,7 +72,7 @@ export async function GET() {
     let continueLesson: { title: string; href: string } | null = null;
     try {
       const incompleteProgress = await prisma.progress.findFirst({
-        where: { userId, completedAt: null },
+        where: { userId, completed: false },
         orderBy: { updatedAt: "desc" },
         select: { lessonId: true },
       });
