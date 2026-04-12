@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useSession } from "next-auth/react";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTheme } from "next-themes";
 import { getNavChromeStyle, getNavChromeVars } from "@/lib/theme/nav-chrome";
 import { ChevronDown, ChevronRight, MapPin, Menu, Settings, X } from "lucide-react";
@@ -15,7 +15,6 @@ import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { MarketingLanguagePreferenceList } from "@/components/i18n/marketing-language-preference";
 import { stripMarketingLocalePrefix, withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { SiteBrandLogoMark } from "@/components/brand/site-brand-logo";
-import { MarketingHeaderUtilityStrip } from "@/components/layout/marketing-header-utility-strip";
 import { ThemePicker } from "@/components/theme/theme-picker";
 import { Button } from "@/components/ui/button";
 import {
@@ -50,12 +49,15 @@ import { ALLIED_PROFESSIONS, ALLIED_HUB_CATEGORY_ORDER, ALLIED_HUB_CATEGORY_META
 import { formatEyebrow, formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
 import { CONTINUE_STUDYING_CTA, PRIMARY_CTA } from "@/lib/copy/cta-copy";
 import { THEME_OPTIONS } from "@/lib/theme/theme-registry";
+import { CompactCountryTrigger, CountrySelector } from "@/components/layout/global-context-switcher";
 
 /** Keep desktop nav pills single-line and compact so the full global IA fits cleanly. */
 const NAV_LINK_CLASS =
-  "nn-marketing-body-sm nn-marketing-nav-link inline-flex items-center justify-center whitespace-nowrap text-center font-semibold tracking-tight";
+  "nn-marketing-body-sm nn-marketing-nav-link inline-flex h-9 items-center justify-center whitespace-nowrap px-2.5 text-center font-semibold leading-none tracking-tight xl:px-3";
 const HEADER_SECONDARY_ACTION_CLASS =
-  "inline-flex min-h-[42px] items-center justify-center rounded-xl border border-[var(--nav-border)] px-3.5 py-2 text-sm font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]";
+  "inline-flex min-h-[38px] items-center justify-center rounded-xl border border-[var(--nav-border)] px-3 py-2 text-sm font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]";
+const HEADER_UTILITY_BUTTON_CLASS =
+  "inline-flex h-9 items-center gap-1.5 rounded-full border border-[var(--nav-border)] bg-transparent px-2.5 text-[11px] font-medium tracking-wide text-[var(--nav-fg)] transition-colors hover:bg-[var(--nav-hover)]";
 type ExamMenuKey = "rn" | "pn" | "np" | "allied";
 
 type MegaMenuLink = {
@@ -341,16 +343,16 @@ export function SiteHeader() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [mobileContextOpen, setMobileContextOpen] = useState(false);
   const [mobileExpandedMega, setMobileExpandedMega] = useState<ExamMenuKey | null>(null);
-  const [langOpen, setLangOpen] = useState(false);
+  const [desktopCountryOpen, setDesktopCountryOpen] = useState(false);
+  const [desktopLangOpen, setDesktopLangOpen] = useState(false);
+  const [mobileLangOpen, setMobileLangOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [openMegaMenu, setOpenMegaMenu] = useState<ExamMenuKey | null>(null);
   const [resumeStudyingCta, setResumeStudyingCta] = useState<HeaderResumeCta>(null);
-  const [contextBarCountryOpen, setContextBarCountryOpen] = useState(false);
-  const [contextBarLangOpen, setContextBarLangOpen] = useState(false);
-  const [contextBarProfOpen, setContextBarProfOpen] = useState(false);
-  const [contextBarExamOpen, setContextBarExamOpen] = useState(false);
   const closeMegaTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const langRef = useRef<HTMLDivElement>(null);
+  const desktopCountryRef = useRef<HTMLDivElement>(null);
+  const desktopLangRef = useRef<HTMLDivElement>(null);
+  const mobileLangRef = useRef<HTMLDivElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
 
   const globalRegion: GlobalRegionSlug = region === "CA" ? "canada" : "us";
@@ -373,15 +375,29 @@ export function SiteHeader() {
     closeMegaTimeoutRef.current = setTimeout(() => setOpenMegaMenu(null), 120);
   };
 
+  const handleDesktopRegionSelect = useCallback(
+    (newRegion: GlobalRegionSlug) => {
+      if (newRegion === "us") setRegionAndRefresh("US");
+      else if (newRegion === "canada") setRegionAndRefresh("CA");
+      else setRegionAndRefresh(region);
+      setDesktopCountryOpen(false);
+    },
+    [region, setRegionAndRefresh],
+  );
+
   useEffect(() => {
     const close = (e: MouseEvent) => {
-      if (!langRef.current?.contains(e.target as Node)) setLangOpen(false);
+      if (!desktopCountryRef.current?.contains(e.target as Node)) setDesktopCountryOpen(false);
+      if (!desktopLangRef.current?.contains(e.target as Node)) setDesktopLangOpen(false);
+      if (!mobileLangRef.current?.contains(e.target as Node)) setMobileLangOpen(false);
       if (!headerRef.current?.contains(e.target as Node)) setOpenMegaMenu(null);
     };
     const onEscape = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         setOpenMegaMenu(null);
-        setLangOpen(false);
+        setDesktopCountryOpen(false);
+        setDesktopLangOpen(false);
+        setMobileLangOpen(false);
       }
     };
     document.addEventListener("click", close);
@@ -404,6 +420,9 @@ export function SiteHeader() {
   useEffect(() => {
     setOpenMegaMenu(null);
     setMobileExpandedMega(null);
+    setDesktopCountryOpen(false);
+    setDesktopLangOpen(false);
+    setMobileLangOpen(false);
   }, [pathname, locale, region]);
 
   useEffect(
@@ -508,7 +527,6 @@ export function SiteHeader() {
 
   return (
     <div style={navChromeVars} className="sticky top-0 z-50 nn-header-animate-in" ref={headerRef}>
-      <MarketingHeaderUtilityStrip variant="dark-bar" />
       <header
         style={isLightTheme ? undefined : { ...navChromeStyle, boxShadow: "inset 0 1px 0 0 rgba(255,255,255,0.15)" }}
         className={`relative w-full border-b${isLightTheme ? " nn-header-logo-row nn-header-logo-row--scrolled" : " nn-header-dark-surface"}`}
@@ -523,7 +541,7 @@ export function SiteHeader() {
               className="nn-header-logo-link group flex min-w-0 shrink-0 items-center gap-2.5 overflow-visible bg-transparent"
               aria-label={t("brand.homeAriaLabel")}
             >
-              <SiteBrandLogoMark />
+              <SiteBrandLogoMark exactSourceOnly />
             </Link>
             {/* Mobile controls — only visible below lg */}
             <div className="flex items-center gap-2 lg:hidden">
@@ -550,17 +568,17 @@ export function SiteHeader() {
           </div>
 
           {/* ── Desktop main header row ── */}
-          <div className="hidden min-h-[4.75rem] items-center justify-between gap-4 py-3 lg:flex">
+          <div className="hidden min-h-[4.5rem] items-center gap-3 py-3 lg:flex">
             <Link
               href={localizeHref("/")}
-              className="nn-header-logo-link group flex min-w-0 flex-none items-center gap-2.5 overflow-visible bg-transparent lg:min-w-[14rem] xl:min-w-[15rem]"
+              className="nn-header-logo-link group flex min-w-0 flex-none items-center gap-2.5 overflow-visible bg-transparent lg:min-w-[11rem] xl:min-w-[12rem]"
               aria-label={t("brand.homeAriaLabel")}
             >
-              <SiteBrandLogoMark />
+              <SiteBrandLogoMark exactSourceOnly />
             </Link>
             <nav
               aria-label={isLearnerAuthenticated ? "Learner navigation" : t("nav.marketingExplore")}
-              className="flex min-w-0 flex-1 items-center justify-center gap-1.5 xl:gap-2"
+              className="flex min-w-0 flex-1 items-center justify-center gap-0.5 xl:gap-1"
             >
             {isAuthLoading ? (
               <div className="flex items-center gap-3" aria-hidden>
@@ -583,7 +601,7 @@ export function SiteHeader() {
                         aria-expanded={expanded}
                         aria-controls={`mega-menu-${menu.key}`}
                         data-active={isMegaMenuKeyActive(menu.key, strippedPath) || undefined}
-                        className={`${NAV_LINK_CLASS} inline-flex items-center gap-1 text-center`}
+                      className={`${NAV_LINK_CLASS} inline-flex items-center gap-1 text-center`}
                         onClick={() => setOpenMegaMenu(expanded ? null : menu.key)}
                         onFocus={() => setOpenMegaMenu(menu.key)}
                       >
@@ -637,13 +655,75 @@ export function SiteHeader() {
             )}
           </nav>
 
-          <div className="flex shrink-0 items-center justify-end gap-2 lg:min-w-[15rem] xl:min-w-[16rem]">
+          <div className="flex shrink-0 items-center justify-end gap-2">
               {isAuthLoading ? (
                 <span className="inline-flex h-9 w-32 animate-pulse rounded-xl bg-[var(--nav-hover)]" aria-hidden />
               ) : !isAuthenticated ? (
                 <div className="flex items-center gap-2">
+                  {isMarketingNav ? (
+                    <div className="hidden items-center gap-1.5 lg:flex">
+                      <div className="relative" ref={desktopCountryRef}>
+                        <CompactCountryTrigger
+                          region={globalRegion}
+                          onClick={() => setDesktopCountryOpen((open) => !open)}
+                        />
+                        {desktopCountryOpen ? (
+                          <div className="absolute end-0 z-[120] mt-2">
+                            <CountrySelector
+                              currentRegion={globalRegion}
+                              onSelect={handleDesktopRegionSelect}
+                              onClose={() => setDesktopCountryOpen(false)}
+                              variant="popover"
+                            />
+                          </div>
+                        ) : null}
+                      </div>
+                      <div className="relative" ref={desktopLangRef}>
+                        <button
+                          type="button"
+                          onClick={() => setDesktopLangOpen((open) => !open)}
+                          className={HEADER_UTILITY_BUTTON_CLASS}
+                          aria-expanded={desktopLangOpen}
+                          aria-label={`${t("nav.language")}: ${locale.toUpperCase()}. Click to change.`}
+                        >
+                          <span>{locale.toUpperCase()}</span>
+                          <ChevronDown className={`h-3 w-3 shrink-0 opacity-60 transition-transform ${desktopLangOpen ? "rotate-180" : ""}`} aria-hidden />
+                        </button>
+                        {desktopLangOpen ? (
+                          <div className="absolute end-0 z-[120] mt-2 max-h-56 w-52 overflow-y-auto rounded-xl border border-[var(--nav-border)] bg-[var(--nav-bg)] p-1 shadow-[var(--shadow-card-hover)]">
+                            <MarketingLanguagePreferenceList
+                              onDone={() => setDesktopLangOpen(false)}
+                              renderItem={({ code, name, flag, disabled, onSelect }) => (
+                                <button
+                                  type="button"
+                                  disabled={disabled}
+                                  onClick={onSelect}
+                                  className={`flex w-full items-center gap-2 rounded-lg px-2 py-2 text-left text-xs hover:bg-[var(--nav-hover)] ${
+                                    code === locale ? "bg-[var(--nav-active)] font-medium text-[var(--nav-fg)]" : "text-[var(--nav-muted)]"
+                                  }`}
+                                >
+                                  <span>{flag}</span>
+                                  {name}
+                                </button>
+                              )}
+                            />
+                          </div>
+                        ) : null}
+                      </div>
+                      <div className="text-[var(--nav-fg)] [&_button]:min-h-0 [&_button]:border-[var(--nav-border)] [&_button]:bg-transparent [&_button]:px-2.5 [&_button]:py-1.5 [&_button]:text-[11px] [&_button]:font-medium [&_button]:shadow-none [&_button]:hover:bg-[var(--nav-hover)] [&_button]:hover:text-[var(--nav-fg)]">
+                        <ThemePicker
+                          className="shrink-0"
+                          labels={{
+                            navTheme: t("nav.theme"),
+                            themeGroupLight: t("nav.themeGroupLight"),
+                            themeGroupDark: t("nav.themeGroupDark"),
+                          }}
+                        />
+                      </div>
+                    </div>
+                  ) : null}
                   <Link href={localizeHref(`/login?callbackUrl=${encodeURIComponent("/app")}`)} className={HEADER_SECONDARY_ACTION_CLASS}>
-                    {formatTitleCase("Sign In", locale)}
+                    {formatTitleCase("Login", locale)}
                   </Link>
                   <Link
                     href={localizeHref(`/signup?callbackUrl=${encodeURIComponent("/app")}`)}
@@ -824,16 +904,18 @@ export function SiteHeader() {
       </header>
 
       {/* Context chip row — shows current country, language, profession, exam */}
-      <GlobalContextBar
-        region={globalRegion}
-        locale={globalLocale}
-        profession={activeProfession}
-        exam={activeExam}
-        onRegionClick={() => setMobileContextOpen(true)}
-        onLanguageClick={() => setMobileContextOpen(true)}
-        onProfessionClick={() => setMobileContextOpen(true)}
-        onExamClick={() => setMobileContextOpen(true)}
-      />
+      {!isMarketingNav ? (
+        <GlobalContextBar
+          region={globalRegion}
+          locale={globalLocale}
+          profession={activeProfession}
+          exam={activeExam}
+          onRegionClick={() => setMobileContextOpen(true)}
+          onLanguageClick={() => setMobileContextOpen(true)}
+          onProfessionClick={() => setMobileContextOpen(true)}
+          onExamClick={() => setMobileContextOpen(true)}
+        />
+      ) : null}
 
       {/* Mobile context/settings drawer — separate from main nav */}
       <MobileContextDrawer
@@ -875,7 +957,7 @@ export function SiteHeader() {
                 aria-label={t("brand.homeAriaLabel")}
                 onClick={() => setMobileOpen(false)}
               >
-                <SiteBrandLogoMark />
+                <SiteBrandLogoMark exactSourceOnly />
               </Link>
               <Button type="button" variant="ghost" className="h-10 w-10 shrink-0 rounded-xl border border-[var(--nav-border)] p-0 text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]" aria-label={t("nav.closeMenu")} onClick={() => setMobileOpen(false)}>
                 <X className="h-5 w-5" />
@@ -1180,19 +1262,19 @@ export function SiteHeader() {
               </p>
               <hr className="my-3 border-[var(--header-border)]" />
               <p className="mb-2 nn-marketing-body-sm font-medium tracking-normal text-[var(--nav-muted)]">{t("nav.language")}</p>
-              <div className="relative mb-3" ref={langRef}>
+              <div className="relative mb-3" ref={mobileLangRef}>
                 <button
                   type="button"
-                  onClick={() => setLangOpen((o) => !o)}
+                  onClick={() => setMobileLangOpen((o) => !o)}
                   className="flex w-full items-center justify-between gap-2 rounded-xl border border-[var(--nav-border)] bg-[var(--nav-bg)] px-3 py-2 nn-marketing-body-sm font-medium tracking-normal text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                 >
                   {t("nav.language")}
-                  <ChevronDown className={`h-4 w-4 shrink-0 transition-transform ${langOpen ? "rotate-180" : ""}`} />
+                  <ChevronDown className={`h-4 w-4 shrink-0 transition-transform ${mobileLangOpen ? "rotate-180" : ""}`} />
                 </button>
-                {langOpen ? (
+                {mobileLangOpen ? (
                   <div className="mt-1 max-h-48 overflow-y-auto rounded-xl border border-[var(--nav-border)] bg-[var(--nav-bg)] p-1 shadow-[var(--shadow-elevated)]">
                     <MarketingLanguagePreferenceList
-                      onDone={() => setLangOpen(false)}
+                      onDone={() => setMobileLangOpen(false)}
                       renderItem={({ code, name, flag, disabled, onSelect }) => (
                         <button
                           type="button"

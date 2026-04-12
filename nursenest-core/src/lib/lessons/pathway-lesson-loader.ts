@@ -53,7 +53,6 @@ import {
   PATHWAY_HUB_PAGE_SIZE_DEFAULT,
   PATHWAY_HUB_PAGE_SIZE_MAX,
 } from "@/lib/lessons/pathway-lesson-scale";
-import { RELATED_LESSONS_EXCLUDE_SLUG_SENTINEL } from "@/lib/lessons/lesson-question-cross-links";
 
 type CatalogShape = {
   version: number;
@@ -100,6 +99,8 @@ export const PATHWAY_LESSON_PUBLIC_REVALIDATE_SECONDS = 3600;
 export const RELATED_PATHWAY_LESSONS_LIMIT = 8;
 /** Topic-filtered question hub / cross-links: same numeric cap as {@link RELATED_PATHWAY_LESSONS_LIMIT}. */
 export const RELATED_LESSONS_FOR_TOPIC_CAP = RELATED_PATHWAY_LESSONS_LIMIT;
+/** Pass to {@link getRelatedPathwayLessons} when no lesson should be excluded (hub / topic-only views). */
+export const RELATED_LESSONS_EXCLUDE_SLUG_SENTINEL = "__related_lessons_exclude_none__";
 /** Sitemap / batch reads: rows per round-trip. */
 export const PATHWAY_LESSON_SITEMAP_BATCH = 600;
 /** Absolute safety cap: catalog pathways with more lessons are truncated for list/hub pagination math. */

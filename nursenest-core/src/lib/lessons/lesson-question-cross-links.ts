@@ -264,8 +264,7 @@ export async function loadRelatedExamQuestionStemsForPathwayLesson(
   );
 }
 
-/** Pass to {@link getRelatedPathwayLessons} when no lesson should be excluded (hub / topic-only views). */
-export const RELATED_LESSONS_EXCLUDE_SLUG_SENTINEL = "__related_lessons_exclude_none__";
+export { RELATED_LESSONS_EXCLUDE_SLUG_SENTINEL } from "@/lib/lessons/pathway-lesson-loader";
 
 /**
  * Resolve `topicSlug` from a human topic label (one row) so we can reuse {@link getRelatedPathwayLessons} safely.

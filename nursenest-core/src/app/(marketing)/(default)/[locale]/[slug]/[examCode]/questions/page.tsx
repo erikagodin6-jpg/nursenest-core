@@ -16,13 +16,11 @@ import {
   pathwayAppQuestionBankTopicHref,
 } from "@/components/lessons/pathway-lesson-link-practice";
 import { marketingExamHubBasePath, marketingPathwayLessonsIndexPath } from "@/lib/lessons/lesson-routes";
-import {
-  RELATED_LESSONS_EXCLUDE_SLUG_SENTINEL,
-  resolveTopicSlugForPathwayTopicLabel,
-} from "@/lib/lessons/lesson-question-cross-links";
+import { resolveTopicSlugForPathwayTopicLabel } from "@/lib/lessons/lesson-question-cross-links";
 import { defaultPathwayLessonContentLocaleForExamHubRoute } from "@/lib/lessons/pathway-lesson-locale";
 import {
   getRelatedPathwayLessons,
+  RELATED_LESSONS_EXCLUDE_SLUG_SENTINEL,
   RELATED_LESSONS_FOR_TOPIC_CAP,
   RELATED_PATHWAY_LESSONS_LIMIT,
 } from "@/lib/lessons/pathway-lesson-loader";

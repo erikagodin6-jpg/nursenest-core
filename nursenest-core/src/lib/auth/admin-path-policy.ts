@@ -37,6 +37,8 @@ const SUPPORT_ALLOWED_PREFIXES = [
   "/admin/access",
   "/admin/analytics",
   "/admin/automation-logs",
+  "/admin/generation",
+  "/admin/queue",
   "/admin/diagnostics",
   "/admin/operations",
   "/admin/subscriptions",
