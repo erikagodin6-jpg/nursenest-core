@@ -1,4 +1,5 @@
 import {
+  BlogBatchPublishMode,
   BlogBatchScheduleItemStatus,
   BlogBatchScheduleStatus,
   BlogFunnelStage,
@@ -7,6 +8,7 @@ import {
 } from "@prisma/client";
 import { normalizeBlogTopicKey } from "@/lib/blog/blog-intent-dedupe";
 import { generateBlogAiDraft } from "@/lib/blog/generate-blog-ai-draft";
+import { runBlogBatchLocalizedFollowup } from "@/lib/blog/blog-batch-localized-followup";
 import { isAdminAiGenerationEnabled } from "@/lib/ai/admin-ai-policy";
 import { assertOpenAiKeyConfigured } from "@/lib/ai/openai-env";
 import { prisma } from "@/lib/db";
@@ -43,6 +45,127 @@ export function parseTopicLines(raw: string): ParsedTopicLines {
     topics.push(t);
   }
   return { topics, droppedDuplicateLines };
+}
+
+function splitTabbedTopicAndIsoDate(line: string): { topic: string; at: Date } | null {
+  const parts = line
+    .split("\t")
+    .map((s) => s.trim())
+    .filter((p) => p.length > 0);
+  if (parts.length !== 2) return null;
+  const [a, b] = parts;
+  const tryA = Date.parse(a);
+  const tryB = Date.parse(b);
+  const aOk = !Number.isNaN(tryA);
+  const bOk = !Number.isNaN(tryB);
+  if (aOk && !bOk) return { at: new Date(tryA), topic: b };
+  if (bOk && !aOk) return { at: new Date(tryB), topic: a };
+  return null;
+}
+
+function parseCustomDateTopicLines(
+  raw: string,
+): { rows: { topic: string; at: Date }[]; droppedDuplicateLines: number } | { error: string } {
+  const lines = raw.split(/\r?\n/);
+  const seen = new Set<string>();
+  const rows: { topic: string; at: Date }[] = [];
+  let droppedDuplicateLines = 0;
+  let lineNum = 0;
+  for (const line of lines) {
+    lineNum += 1;
+    const trimmed = line.trim();
+    if (trimmed.length < 3) continue;
+    const parsed = splitTabbedTopicAndIsoDate(trimmed);
+    if (!parsed) {
+      return {
+        error: `Line ${lineNum}: expected "ISO8601<TAB>topic" or "topic<TAB>ISO8601" (tab-separated date + topic).`,
+      };
+    }
+    const key = normalizeBlogTopicKey(parsed.topic);
+    if (!key) {
+      return { error: `Line ${lineNum}: topic is too short or invalid after parsing.` };
+    }
+    if (seen.has(key)) {
+      droppedDuplicateLines += 1;
+      continue;
+    }
+    seen.add(key);
+    rows.push({ topic: parsed.topic, at: parsed.at });
+  }
+  if (rows.length === 0) {
+    return { error: "No valid dated topic lines (each non-empty line needs a tab-separated ISO date and topic)." };
+  }
+  if (rows.length > 500) {
+    return { error: "Too many topics (max 500 after dedupe)." };
+  }
+  return { rows, droppedDuplicateLines };
+}
+
+export type BlogBatchScheduleRowInput = {
+  topicsText: string;
+  publishMode: BlogBatchPublishMode;
+  startAt: Date;
+  cadencePerDay: number;
+};
+
+export type BlogBatchScheduleBuiltRow = {
+  topic: string;
+  plannedPublishAt: Date;
+  canonicalTopicKey: string | null;
+};
+
+export function buildBlogBatchScheduleItemRows(
+  input: BlogBatchScheduleRowInput,
+):
+  | { ok: true; rows: BlogBatchScheduleBuiltRow[]; droppedDuplicateLines: number }
+  | { ok: false; error: string } {
+  if (input.publishMode === BlogBatchPublishMode.CUSTOM_DATES) {
+    const parsed = parseCustomDateTopicLines(input.topicsText);
+    if ("error" in parsed) return { ok: false, error: parsed.error };
+    const rows = parsed.rows.map((r) => ({
+      topic: r.topic,
+      plannedPublishAt: r.at,
+      canonicalTopicKey: normalizeBlogTopicKey(r.topic),
+    }));
+    return { ok: true, rows, droppedDuplicateLines: parsed.droppedDuplicateLines };
+  }
+
+  const { topics, droppedDuplicateLines } = parseTopicLines(input.topicsText);
+  if (topics.length === 0) {
+    return { ok: false, error: "No valid topics (need at least one line with 3+ characters)." };
+  }
+  if (topics.length > 500) {
+    return { ok: false, error: "Too many topics (max 500 after dedupe)." };
+  }
+
+  const interval = slotIntervalMs(input.cadencePerDay);
+
+  if (input.publishMode === BlogBatchPublishMode.PUBLISH_IMMEDIATE) {
+    const slot = input.startAt;
+    const rows = topics.map((topic) => ({
+      topic,
+      plannedPublishAt: slot,
+      canonicalTopicKey: normalizeBlogTopicKey(topic),
+    }));
+    return { ok: true, rows, droppedDuplicateLines };
+  }
+
+  const rows = topics.map((topic, i) => ({
+    topic,
+    plannedPublishAt: new Date(input.startAt.getTime() + i * interval),
+    canonicalTopicKey: normalizeBlogTopicKey(topic),
+  }));
+  return { ok: true, rows, droppedDuplicateLines };
+}
+
+function effectivePublishAtForBatchItem(
+  publishMode: BlogBatchPublishMode,
+  itemPlannedPublishAt: Date,
+  now: Date,
+): Date | undefined {
+  if (publishMode === BlogBatchPublishMode.DRAFT_ONLY) return undefined;
+  if (publishMode === BlogBatchPublishMode.PUBLISH_IMMEDIATE) return now;
+  return itemPlannedPublishAt;
 }
 
 export type ProcessBatchSchedulesResult = {

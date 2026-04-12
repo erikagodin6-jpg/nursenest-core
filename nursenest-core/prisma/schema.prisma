@@ -567,6 +567,14 @@ enum BlogBatchScheduleItemStatus {
   SKIPPED
 }
 
+/** How batch items map generation slots to canonical publish intent. */
+enum BlogBatchPublishMode {
+  STAGGERED_PUBLISH
+  DRAFT_ONLY
+  PUBLISH_IMMEDIATE
+  CUSTOM_DATES
+}
+
 /** Ad-hoc admin batch: generate drafts from a topic list (no publish cadence). */
 enum BlogDraftGenerationBatchStatus {
   ACTIVE
@@ -757,6 +765,9 @@ model BlogCampaignItem {
 model BlogBatchSchedule {
   id              String                  @id @default(cuid())
   status          BlogBatchScheduleStatus @default(ACTIVE)
+  publishMode     BlogBatchPublishMode    @default(STAGGERED_PUBLISH)
+  /** Optional JSON: `{ "locales": ["fr","es","tl","hi"] }` — server maps default region per locale after each canonical item succeeds. */
+  localizationOptions Json?
   /** Posts per 24h window (1–12). Slot interval = 24h / cadencePerDay. */
   cadencePerDay   Int
   startAt         DateTime
