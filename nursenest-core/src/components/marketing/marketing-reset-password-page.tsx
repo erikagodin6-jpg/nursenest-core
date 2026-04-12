@@ -31,6 +31,7 @@ export async function MarketingResetPasswordPage({
             backToLoginHref={loginHref}
             backToLoginLabel={m["pages.resetPassword.backToLoginLabel"] ?? "Back to sign in"}
             submitLabel={m["pages.resetPassword.submitLabel"] ?? "Update password"}
+            savingLabel={m["pages.resetPassword.savingLabel"] ?? "Saving\u2026"}
             successMessage={m["pages.resetPassword.successMessage"] ?? "Your password has been updated. You can sign in now."}
             errorGeneric={
               m["pages.resetPassword.errorGeneric"] ??

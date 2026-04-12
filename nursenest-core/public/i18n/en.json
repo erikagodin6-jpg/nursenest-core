@@ -20855,5 +20855,9 @@
       "topicsPracticedHint": "Distinct topics with at least one graded question attempt",
       "recentSessionsLabel": "Recent sessions"
     }
-  }
+  },
+  "pages.login.cantFindAccount": "Can't find your account? Check your inbox for emails from NurseNest to confirm which email you signed up with.",
+  "pages.forgotPassword.notEmailMessage": "Password reset uses the email on your account. Please enter your email address, not your username.",
+  "pages.forgotPassword.sendingLabel": "Sending…",
+  "pages.resetPassword.savingLabel": "Saving…"
 }

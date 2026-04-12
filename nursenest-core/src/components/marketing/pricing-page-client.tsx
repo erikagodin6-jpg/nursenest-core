@@ -2,7 +2,8 @@
 
 import type { TierCode } from "@prisma/client";
 import Link from "next/link";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { Suspense, useCallback, useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { Check } from "lucide-react";
 import { buildTierPricingNarrative } from "@/lib/conversion/pricing-catalog";
 import { trackClientEvent } from "@/lib/observability/posthog-client";
@@ -137,6 +138,23 @@ function checkoutErrorUserMessage(
   return t("pages.pricing.error.checkoutUnavailable");
 }
 
+function CheckoutCancelledNotice() {
+  const sp = useSearchParams();
+  const [dismissed, setDismissed] = useState(false);
+  if (dismissed || sp.get("checkout") !== "cancelled") return null;
+  return (
+    <div className="rounded-xl border border-[color-mix(in_srgb,var(--semantic-warning)_30%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_8%,var(--color-card))] px-4 py-3 text-sm shadow-[var(--elevation-rest)]">
+      <p className="font-semibold text-[var(--semantic-warning-contrast)]">Checkout was cancelled</p>
+      <p className="mt-0.5 text-[color-mix(in_srgb,var(--semantic-warning-contrast)_85%,var(--semantic-text-muted))]">
+        No payment was taken. Choose a plan whenever you&apos;re ready.
+      </p>
+      <button type="button" onClick={() => setDismissed(true)} className="mt-1.5 text-xs underline opacity-70 hover:opacity-100">
+        Dismiss
+      </button>
+    </div>
+  );
+}
+
 export function PricingPageClient({
   heading,
   intro,
@@ -156,6 +174,7 @@ export function PricingPageClient({
   const [checkoutOpsHint, setCheckoutOpsHint] = useState<string | null>(null);
   const [checkoutLoading, setCheckoutLoading] = useState(false);
   const [policiesAccepted, setPoliciesAccepted] = useState(false);
+  const [plansLoaded, setPlansLoaded] = useState(false);
   const { locale, t } = useMarketingI18n();
   const { region } = useNursenestRegion();
 
@@ -184,6 +203,7 @@ export function PricingPageClient({
           setNursingPlans(data.plans ?? []);
           setAlliedPlans(data.alliedPlans ?? []);
           if (typeof data.trialDays === "number") setTrialDays(data.trialDays);
+          setPlansLoaded(true);
         }
       } catch {
         if (!cancelled) setLoadError(t("pages.pricing.error.loadPlans"));
@@ -278,7 +298,7 @@ export function PricingPageClient({
         setCheckoutLoading(false);
       }
     },
-    [policiesAccepted, tier, trialDays, t, isAllied, selectedAlliedCareer],
+    [policiesAccepted, tier, trialDays, t, isAllied, selectedAlliedCareer, region],
   );
 
   const SEGMENT_ORDER: Segment[] = ["prenursing", "newgrad", "rn", "pn", "np", "allied"];
@@ -364,10 +384,16 @@ export function PricingPageClient({
 
         {loadError ? <p className="text-center text-sm text-destructive">{loadError}</p> : null}
 
+        <Suspense fallback={null}>
+          <CheckoutCancelledNotice />
+        </Suspense>
+
         {/* Pricing cards */}
         <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4 xl:gap-6 xl:items-start">
           {BILLING_DURATION_ORDER.map((duration) => {
             const row = rowByDuration.get(duration);
+            // Once plans have loaded, skip cards for durations that don't exist for this tier
+            if (plansLoaded && !row) return null;
             const isBest = row?.isBestValue ?? duration === "yearly";
             const isPop = row?.isMostPopular ?? false;
             const isHighlighted = isBest || isPop;

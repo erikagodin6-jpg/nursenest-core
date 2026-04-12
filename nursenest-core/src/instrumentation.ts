@@ -21,6 +21,21 @@ function validateAuthEnv(): void {
   }
 }
 
+function validateStripeAppEnv(): void {
+  if (process.env.NODE_ENV !== "production") return;
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL?.trim();
+  if (!appUrl) {
+    console.error(
+      "[nursenest-core] stripe env: NEXT_PUBLIC_APP_URL is not set — Stripe checkout success_url and cancel_url will point to http://localhost:3000 in production. Set this to your public app origin (e.g. https://app.nursenest.ca).",
+    );
+  }
+  if (!process.env.STRIPE_WEBHOOK_SECRET?.trim()) {
+    console.error(
+      "[nursenest-core] stripe env: STRIPE_WEBHOOK_SECRET is not set — webhook signature verification will reject all Stripe events. Subscription activation will not work.",
+    );
+  }
+}
+
 export async function register() {
   if (process.env.NEXT_RUNTIME === "nodejs") {
     logStartupContext();
@@ -29,6 +44,7 @@ export async function register() {
       `[nursenest-core] instrumentation: nodejs runtime registered PORT=${process.env.PORT ?? "(unset)"}`,
     );
     validateAuthEnv();
+    validateStripeAppEnv();
     logStripeProductionPricingMisconfiguration();
     await import("./sentry.server.config");
     process.on("unhandledRejection", (reason) => {

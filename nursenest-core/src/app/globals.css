@@ -209,15 +209,19 @@ body {
   --nav-link: var(--nav-fg);
   --nav-link-hover: var(--theme-nav-foreground, var(--nav-fg));
   --nav-link-active: var(--nav-fg);
+  /* Wire role-cta-foreground to the per-theme value so light-primary themes
+     get dark text on buttons automatically. Fallback #ffffff for dark primaries. */
+  --role-cta-foreground: var(--theme-primary-foreground, #ffffff);
   --nav-cta-bg: var(--role-cta, var(--accent-primary));
   --nav-cta-fg: var(--role-cta-foreground, #ffffff);
   --footer-bg: var(--theme-brand-strong, var(--nav-bg));
   --footer-fg: var(--nav-fg);
   --footer-muted: color-mix(in srgb, var(--footer-fg) 76%, var(--footer-bg));
   --footer-border: color-mix(in srgb, var(--nav-border) 80%, var(--footer-bg));
-  /* Pills: use badge color for a more visible tint on white card backgrounds */
+  /* Pills: always dark text against the light pill tint background.
+     35% primary tint + 65% heading-text ensures readable colour with theme personality. */
   --pill-bg: var(--theme-pill-bg, color-mix(in srgb, var(--palette-badge, var(--theme-accent)) 80%, var(--bg-card)));
-  --pill-fg: var(--theme-pill-text, color-mix(in srgb, var(--text-accent) 85%, var(--theme-heading-text)));
+  --pill-fg: var(--theme-pill-text, color-mix(in srgb, var(--theme-primary) 35%, var(--theme-heading-text)));
   --pill-border: var(--theme-pill-border, color-mix(in srgb, var(--text-accent, var(--accent-primary)) 44%, var(--border-subtle)));
 
   /*
@@ -509,6 +513,7 @@ html[data-theme="storm-slate"] {
   --nav-link: var(--nav-fg);
   --nav-link-hover: var(--theme-nav-foreground, var(--nav-fg));
   --nav-link-active: var(--nav-fg);
+  --role-cta-foreground: var(--theme-primary-foreground, #ffffff);
   --nav-cta-bg: var(--theme-primary-button-bg, var(--role-cta, var(--theme-primary)));
   --nav-cta-fg: var(--theme-primary-button-text, var(--role-cta-foreground, #ffffff));
   --footer-bg: var(--theme-brand-strong, var(--nav-bg));

@@ -3403,5 +3403,9 @@
   "nav.tierDrop.preNursingDesc": "Foundation courses and entrance exam prep",
   "nav.tierDrop.toolsTitle": "Study Tools",
   "nav.tierDrop.toolsDesc": "Flashcards, AI tutor, and study utilities",
-  "nav.hub.lessonProgress": "{completed} of {total} lessons complete"
+  "nav.hub.lessonProgress": "{completed} of {total} lessons complete",
+  "pages.login.cantFindAccount": "Can't find your account? Check your inbox for emails from NurseNest to confirm which email you signed up with.",
+  "pages.forgotPassword.notEmailMessage": "Password reset uses the email on your account. Please enter your email address, not your username.",
+  "pages.forgotPassword.sendingLabel": "Sending…",
+  "pages.resetPassword.savingLabel": "Saving…"
 }

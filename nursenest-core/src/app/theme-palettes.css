@@ -1274,23 +1274,55 @@
 [data-theme="lavender-dream"]  { --theme-topbar-bg: #7A5C9E; --theme-topbar-text: #ffffff; }
 
 /*
- * Primary-foreground for high-luminance primaries — used on active tabs, chips, badges.
- * Light pink / steel blue primaries can't support white text; use dark near-black instead.
+ * Button / pill foreground contrast — light-primary themes need dark text.
+ * Rule: if the primary colour has high luminance (pastels, light mid-tones),
+ * white text fails WCAG AA. Use a dark colour pulled from the theme's hue instead.
+ * Dark-primary themes keep the default #ffffff foreground set per-theme above.
  */
+
+/* Pink / rose / coral family */
 [data-theme="blush"],
 [data-theme="pastel-blush"],
-[data-theme="strawberry"] {
+[data-theme="strawberry"],
+[data-theme="strawberry-cream"],
+[data-theme="coral"],
+[data-theme="rose-quartz"],
+[data-theme="dusty-rose"],
+[data-theme="coral-sunset"] {
   --theme-primary-foreground: #3d0a1a;
 }
-[data-theme="multi-pastel"] {
-  --theme-primary-foreground: #1e3a5f;
-}
-/* Pastel teal/mint chips: primary is too light for white text */
-[data-theme="pastel-mint"] { --theme-primary-foreground: #0d5c3e; }
-/* Lavender family chips */
+
+/* Lavender / purple family — these are mid-light, white text fails */
 [data-theme="lavender"],
 [data-theme="pastel-lavender"],
 [data-theme="pastel-lilac"],
 [data-theme="lavender-dream"] {
-  --theme-primary-foreground: #ffffff;
+  --theme-primary-foreground: #2a1040;
+}
+
+/* Teal / mint / sage / green family */
+[data-theme="mint"],
+[data-theme="pastel-mint"],
+[data-theme="soft-sage"],
+[data-theme="sage-garden"],
+[data-theme="mint-breeze"],
+[data-theme="teal"] {
+  --theme-primary-foreground: #082822;
+}
+
+/* Multi-pastel (blue-tinted) */
+[data-theme="multi-pastel"] {
+  --theme-primary-foreground: #1e3a5f;
+}
+
+/* Warm neutrals — sand, honey, golden */
+[data-theme="neutral-sand"],
+[data-theme="golden-hour"],
+[data-theme="honey-cream"] {
+  --theme-primary-foreground: #1f1000;
+}
+
+/* Cool neutrals — slate */
+[data-theme="neutral-slate"] {
+  --theme-primary-foreground: #0e1620;
 }

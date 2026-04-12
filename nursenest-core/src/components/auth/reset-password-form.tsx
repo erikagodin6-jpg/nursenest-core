@@ -8,6 +8,7 @@ type Props = {
   backToLoginHref: string;
   backToLoginLabel: string;
   submitLabel: string;
+  savingLabel?: string;
   successMessage: string;
   errorGeneric: string;
   passwordLabel: string;
@@ -21,6 +22,7 @@ export function ResetPasswordForm({
   backToLoginHref,
   backToLoginLabel,
   submitLabel,
+  savingLabel = "Saving\u2026",
   successMessage,
   errorGeneric,
   passwordLabel,
@@ -112,7 +114,7 @@ export function ResetPasswordForm({
       />
       {error ? <p className="text-sm text-red-600">{error}</p> : null}
       <button className="w-full rounded-xl bg-primary px-4 py-2 font-semibold text-primary-foreground disabled:opacity-60" type="submit" disabled={loading}>
-        {loading ? "Saving…" : submitLabel}
+        {loading ? savingLabel : submitLabel}
       </button>
     </form>
   );

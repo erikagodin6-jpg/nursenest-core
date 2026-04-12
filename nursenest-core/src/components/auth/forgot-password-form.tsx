@@ -7,8 +7,10 @@ type Props = {
   backToLoginHref: string;
   backToLoginLabel: string;
   submitLabel: string;
+  sendingLabel?: string;
   successMessage: string;
   errorMessage: string;
+  notEmailMessage?: string;
   emailPlaceholder: string;
 };
 
@@ -16,8 +18,10 @@ export function ForgotPasswordForm({
   backToLoginHref,
   backToLoginLabel,
   submitLabel,
+  sendingLabel = "Sending\u2026",
   successMessage,
   errorMessage,
+  notEmailMessage = "Password reset uses the email on your account. Please enter your email address, not your username.",
   emailPlaceholder,
 }: Props) {
   const [loading, setLoading] = useState(false);
@@ -32,9 +36,7 @@ export function ForgotPasswordForm({
     try {
       const email = String(formData.get("email") ?? "").trim();
       if (email.length > 0 && !email.includes("@")) {
-        setError(
-          "Password reset uses the email on your account. Please enter your email address, not your username.",
-        );
+        setError(notEmailMessage);
         setLoading(false);
         return;
       }
@@ -97,7 +99,7 @@ export function ForgotPasswordForm({
       />
       {error ? <p className="text-sm text-red-600">{error}</p> : null}
       <button className="w-full rounded-xl bg-primary px-4 py-2 font-semibold text-primary-foreground disabled:opacity-60" type="submit" disabled={loading}>
-        {loading ? "Sending…" : submitLabel}
+        {loading ? sendingLabel : submitLabel}
       </button>
       <Link className="block text-center text-sm font-semibold text-primary hover:underline" href={backToLoginHref}>
         {backToLoginLabel}

@@ -239,6 +239,105 @@ export function generateCardsFromSession(
   });
 }
 
+// ── ExamQuestion → flashcard (admin pipeline) ─────────────────────────────────
+
+/**
+ * Minimal shape of an ExamQuestion row needed for flashcard generation.
+ * Using a subset type so this function works both with raw Prisma results
+ * and with NormalizedQuestion from the pipeline schema.
+ */
+export interface ExamQuestionForFlashcard {
+  id: string;
+  stem: string;
+  /** Json — serialized as string[] or { label, text }[] depending on pipeline version. */
+  options: unknown;
+  /** Json — string (MCQ) or string[] (SATA/Priority). */
+  correctAnswer: unknown;
+  rationale: string | null;
+  keyTakeaway?: string | null;
+  memoryHook?: string | null;
+  clinicalPearl?: string | null;
+  mnemonic?: string | null;
+  topic: string | null;
+  bodySystem: string | null;
+}
+
+/**
+ * Normalise the options JSON to a plain string array.
+ * Handles both `string[]` and `{ label: string; text: string }[]` shapes.
+ */
+function normaliseOptions(raw: unknown): string[] {
+  if (!Array.isArray(raw)) return [];
+  return raw.map((o) => {
+    if (typeof o === "string") return o;
+    if (typeof o === "object" && o !== null && "text" in o) return String((o as { text: unknown }).text);
+    return String(o);
+  });
+}
+
+/**
+ * Extract the correct answer text from the correctAnswer JSON and options list.
+ * MCQ: correctAnswer is the option text string.
+ * SATA/Priority: correctAnswer is an array of option text strings.
+ */
+function resolveCorrectAnswerText(rawAnswer: unknown, options: string[]): string {
+  if (typeof rawAnswer === "string") return rawAnswer;
+  if (Array.isArray(rawAnswer)) return rawAnswer.join(", ");
+  // Fallback: first option
+  return options[0] ?? "";
+}
+
+/**
+ * Generate a flashcard from a single ExamQuestion for the admin sync pipeline.
+ *
+ * Front: the clinical question stem (what the exam asks).
+ * Back:  correct answer + rationale + optional clinical enrichment fields.
+ *
+ * Returns null if the question lacks the minimum required fields (stem + rationale).
+ */
+export function generateCardFromExamQuestion(
+  q: ExamQuestionForFlashcard,
+): GeneratedFlashcardInput | null {
+  if (!q.stem || q.stem.trim().length < 10) return null;
+  if (!q.rationale || q.rationale.trim().length < 20) return null;
+
+  const options = normaliseOptions(q.options);
+  const correctAnswer = resolveCorrectAnswerText(q.correctAnswer, options);
+
+  // Build the back: "Correct answer: X\n\nRationale: …" + optional enrichment
+  const backParts: string[] = [
+    `Correct answer: ${correctAnswer}`,
+    `\n${q.rationale.trim()}`,
+  ];
+  if (q.keyTakeaway) backParts.push(`\nKey takeaway: ${q.keyTakeaway}`);
+  if (q.memoryHook) backParts.push(`\nMemory hook: ${q.memoryHook}`);
+  if (q.mnemonic) backParts.push(`\nMnemonic: ${q.mnemonic}`);
+
+  return {
+    front: q.stem.trim(),
+    back: backParts.join(""),
+    sourceType: "rationale_derived",
+    contentKey: `exam_q:${q.id}`,
+    sourceId: q.id,
+    topic: q.topic ?? "General",
+    bodySystem: q.bodySystem ?? undefined,
+    hint: q.clinicalPearl ?? undefined,
+  };
+}
+
+/**
+ * Batch-generate flashcard inputs from a list of ExamQuestion rows.
+ * Skips questions with insufficient content (null rationale, short stem).
+ */
+export function generateCardsFromExamQuestions(
+  questions: ExamQuestionForFlashcard[],
+): GeneratedFlashcardInput[] {
+  return questions.flatMap((q) => {
+    const card = generateCardFromExamQuestion(q);
+    return card ? [card] : [];
+  });
+}
+
 // ── Deck metadata ─────────────────────────────────────────────────────────────
 
 /**
