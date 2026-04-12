@@ -2,7 +2,7 @@
 /**
  * Full content coverage across tiers, countries, and domains (RN / PN / NP / Allied / New Grad).
  *
- * Output: JSON report + console summary. Deep lesson�bank scan can take several minutes.
+ * Output: JSON report + console summary. Deep lesson-to-bank scan can take several minutes.
  *
  *   npx tsx scripts/full-content-coverage-audit.ts
  *   npx tsx scripts/full-content-coverage-audit.ts --json-out=./reports/full-content-coverage.json

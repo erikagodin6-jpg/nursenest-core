@@ -434,6 +434,7 @@ model EmailVerificationToken {
   @@index([userId])
 }
 
+/// Persisted Stripe subscription row — logical **user subscription** (region, tier/profession, plan, status, renewal).
 model Subscription {
   id                   String             @id @default(cuid())
   userId               String
@@ -445,6 +446,10 @@ model Subscription {
   planTier             TierCode?
   planCountry          CountryCode?
   planDuration         String?            @db.VarChar(20)
+  /** Checkout `metadata.planCode` (e.g. `canada_nursing_monthly` or regional code). */
+  planCode             String?            @db.VarChar(96)
+  /** Checkout `metadata.region` when global regional pricing was used (e.g. `philippines`). */
+  billingRegionSlug    String?            @db.VarChar(32)
   /** When planTier is ALLIED, the specific career line purchased (e.g. paramedic, mlt). */
   alliedCareer         String?            @db.VarChar(64)
   currentPeriodEnd     DateTime?

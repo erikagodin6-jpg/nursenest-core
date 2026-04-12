@@ -1,10 +1,10 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
-import { resolveEntitlement, type AccessScope } from "@/lib/entitlements/resolve-entitlement";
+import { accessScopeFromUserAccess, getUserAccess, type AccessScope, type UserAccess } from "@/lib/entitlements/get-user-access";
 import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 
-export type SubscriberSessionOk = { ok: true; userId: string; entitlement: AccessScope };
+export type SubscriberSessionOk = { ok: true; userId: string; entitlement: AccessScope; userAccess: UserAccess };
 export type SubscriberSessionFail = { ok: false; response: NextResponse };
 export type SubscriberSessionResult = SubscriberSessionOk | SubscriberSessionFail;
 
@@ -29,9 +29,9 @@ export async function requireSubscriberSession(): Promise<SubscriberSessionResul
 
   setSentryServerContext({ route: "requireSubscriberSession", feature: SERVER_FEATURE.entitlement, userId });
 
-  let entitlement: AccessScope;
+  let userAccess: UserAccess;
   try {
-    entitlement = await resolveEntitlement(userId);
+    userAccess = await getUserAccess(userId);
   } catch (e) {
     safeServerLogCritical("entitlement", "resolve_failed", { api: "subscriber_gate" }, e);
     return {
@@ -42,6 +42,8 @@ export async function requireSubscriberSession(): Promise<SubscriberSessionResul
       ),
     };
   }
+
+  const entitlement = accessScopeFromUserAccess(userAccess);
 
   if (!entitlement.hasAccess) {
     safeServerLog("access", "denied", {
@@ -57,5 +59,5 @@ export async function requireSubscriberSession(): Promise<SubscriberSessionResul
     };
   }
 
-  return { ok: true, userId, entitlement };
+  return { ok: true, userId, entitlement, userAccess };
 }
