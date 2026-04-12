@@ -36,7 +36,7 @@ export const BRAND_NAME = "NurseNest" as const;
  * The img uses {@link HEADER_BRAND_LOGO_IMG_CLASSNAME} (`h-full`, `object-contain`) inside this slot.
  */
 export const HEADER_BRAND_LOGO_SLOT_CLASSNAME =
-  "nn-brand-header-logo-slot inline-flex flex-none shrink-0 items-center justify-start overflow-hidden self-center bg-transparent h-5 max-h-5 w-auto max-w-[min(92vw,10rem)] sm:h-6 sm:max-h-6 sm:max-w-[12rem] lg:h-7 lg:max-h-7 lg:max-w-[14rem]" as const;
+  "nn-brand-header-logo-slot inline-flex flex-none shrink-0 items-center justify-start overflow-visible self-center bg-transparent h-8 max-h-8 w-auto max-w-[min(92vw,11rem)] sm:h-9 sm:max-h-9 sm:max-w-[13rem] lg:h-10 lg:max-h-10 lg:max-w-[15rem]" as const;
 
 /** @deprecated Homepage no longer enlarges the mark; kept as empty merge for older call sites. */
 export const HOME_BRAND_LOGO_MARK_CLASSNAME = "" as const;
@@ -45,7 +45,7 @@ export const HOME_BRAND_LOGO_MARK_CLASSNAME = "" as const;
  * Raster mark: fills slot height; width from aspect ratio; `object-contain` keeps sharpness and trims effective padding vs stretching.
  */
 export const HEADER_BRAND_LOGO_IMG_CLASSNAME =
-  "nn-brand-header-logo block h-full w-auto max-h-full max-w-full shrink-0 bg-transparent object-contain object-left [image-rendering:auto]" as const;
+  "nn-brand-header-logo block h-full w-auto max-h-full max-w-full shrink-0 bg-transparent object-contain object-left [image-rendering:auto] [mix-blend-mode:normal]" as const;
 
 /** Site footer: smaller than header; same object-contain rules, no vertical stretch. */
 export const FOOTER_BRAND_LOGO_SLOT_CLASSNAME =

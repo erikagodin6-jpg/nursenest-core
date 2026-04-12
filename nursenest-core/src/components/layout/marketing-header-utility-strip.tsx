@@ -7,9 +7,6 @@ import { MarketingLanguagePreferenceList } from "@/components/i18n/marketing-lan
 import { ThemePicker } from "@/components/theme/theme-picker";
 import { useNursenestRegion } from "@/lib/region/use-nursenest-region";
 import { useMarketingRegionToggleWithRefresh } from "@/lib/region/use-marketing-region-toggle";
-import {
-  marketingRegionToggleSegment,
-} from "@/lib/theme/marketing-region-toggle";
 import { CompactCountryTrigger, CountrySelector } from "@/components/layout/global-context-switcher";
 import { getRegionFlag } from "@/lib/navigation/context-switch-helpers";
 import type { GlobalRegionSlug } from "@/lib/i18n/global-regions";
