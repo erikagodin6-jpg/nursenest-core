@@ -6,10 +6,11 @@
  * in src/lib/flashcards/flashcard-generation.ts.
  *
  * Strategy:
- *   - One FlashcardDeck per (tier × bodySystem) combination.
+ *   - One FlashcardDeck per (tier × bodySystem × countryCode) combination.
  *   - One Flashcard per ExamQuestion, keyed by sourceKey = "exam_q:{id}".
  *   - One FlashcardTag per bodySystem — enables /flashcards/[bodySystem] topic pages.
- *   - FlashcardDeckOnTag joins each deck to its body-system tag.
+ *   - One FlashcardTag per unique ExamQuestion.topic within each deck.
+ *   - FlashcardDeckOnTag joins each deck to its body-system tag and topic tags.
  *   - Upserts are idempotent: re-running never duplicates anything.
  *
  * Usage:
@@ -254,12 +255,33 @@ async function main() {
       update: {},
     });
 
-    // Link deck ↔ tag (idempotent — composite PK prevents duplicates)
+    // Link deck ↔ bodySystem tag (idempotent — composite PK prevents duplicates)
     await prisma.flashcardDeckOnTag.upsert({
       where: { deckId_tagId: { deckId: deck.id, tagId: tag.id } },
       create: { deckId: deck.id, tagId: tag.id },
       update: {},
     });
+
+    // Upsert FlashcardTag per unique topic found in this deck's source questions
+    const seenTopicSlugs = new Set<string>();
+    for (const card of cards) {
+      const topicRaw = questionMeta.get(card.sourceId)?.topic?.trim();
+      if (!topicRaw) continue;
+      const topicSlug = topicRaw.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+      if (!topicSlug || seenTopicSlugs.has(topicSlug)) continue;
+      seenTopicSlugs.add(topicSlug);
+      const topicName = topicRaw.replace(/\b\w/g, (c) => c.toUpperCase());
+      const topicTag = await prisma.flashcardTag.upsert({
+        where: { slug: topicSlug },
+        create: { slug: topicSlug, name: topicName },
+        update: {},
+      });
+      await prisma.flashcardDeckOnTag.upsert({
+        where: { deckId_tagId: { deckId: deck.id, tagId: topicTag.id } },
+        create: { deckId: deck.id, tagId: topicTag.id },
+        update: {},
+      });
+    }
 
     // Upsert each Flashcard
     const cardStatus = publish ? ContentStatus.PUBLISHED : ContentStatus.DRAFT;
@@ -292,7 +314,7 @@ async function main() {
   }
 
   console.log(`\n  ✓ ${decksUpserted} deck(s) upserted`);
-  console.log(`  ✓ ${decksUpserted} FlashcardTag(s) upserted (one per body system)`);
+  console.log(`  ✓ FlashcardTag(s) upserted: one per body system + one per unique topic per deck`);
   console.log(`  ✓ ${cardsUpserted} card(s) upserted`);
   if (publish) {
     console.log(`\nSync complete. Decks + cards are PUBLISHED + PUBLIC_PREVIEW.`);

@@ -72,10 +72,7 @@ test.describe("CAT entrypoint routing", () => {
 
   test("tampered invalid pathway CAT route is blocked", async ({ page }) => {
     const response = await page.goto("/us/rpn/rex-pn/cat", { waitUntil: "domcontentloaded" });
-    expect(response?.status()).toBeGreaterThanOrEqual(200);
-    expect(response?.status()).toBeLessThan(500);
-    await expect(page.locator('a[href="/us/rpn/rex-pn/lessons"]')).toHaveCount(0);
-    await expect(page.locator('a[href="/us/rpn/rex-pn/questions"]')).toHaveCount(0);
+    expect(response?.status()).toBe(404);
     await expect(page.locator('a[href*="callbackUrl=%2Fus%2Frpn%2Frex-pn%2Fcat"]')).toHaveCount(0);
   });
 });
