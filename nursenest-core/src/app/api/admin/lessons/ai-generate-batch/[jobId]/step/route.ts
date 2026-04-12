@@ -76,7 +76,7 @@ export async function POST(req: Request, ctx: Props) {
       const summary = await loadLessonBatchSummaryWithHydration(prisma, jobId);
       const derived = summary ? resolveLessonBatchDerived(summary) : null;
       const j = await prisma.aiGenerationJob.findUnique({ where: { id: jobId } });
-      const payload = {
+      const payload: Record<string, unknown> = {
         done: true,
         stopped: true,
         reason: j?.status === JobStatus.CANCELLED ? "canceled" : "job_not_running",
@@ -84,9 +84,8 @@ export async function POST(req: Request, ctx: Props) {
         derived,
         batchChunk: { processedInRequest, maxItemsPerRun: control.maxItemsPerRun },
       };
-      return processedInRequest === 0
-        ? NextResponse.json(payload)
-        : NextResponse.json({ ...payload, lastItemResult: lastPayload, batchChunk: { processedInRequest, maxItemsPerRun: control.maxItemsPerRun } });
+      if (processedInRequest > 0 && lastPayload) payload.lastItemResult = lastPayload;
+      return NextResponse.json(payload);
     }
 
     if (claim.kind === "idle") {
@@ -102,10 +101,10 @@ export async function POST(req: Request, ctx: Props) {
         derived,
         batchChunk: { processedInRequest, maxItemsPerRun: control.maxItemsPerRun },
       };
-      if (processedInRequest === 0) {
-        return NextResponse.json(payload);
+      if (processedInRequest > 0 && lastPayload) {
+        return NextResponse.json({ ...payload, lastItemResult: lastPayload });
       }
-      return NextResponse.json({ ...payload, lastItemResult: lastPayload });
+      return NextResponse.json(payload);
     }
 
     const row = claim.row;

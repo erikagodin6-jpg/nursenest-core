@@ -19,6 +19,12 @@ import {
   adminAiLessonDifficultySchema,
 } from "@/lib/lessons/admin-ai-lesson-schema";
 import { prisma } from "@/lib/db";
+import {
+  batchControlSchema,
+  findJobByIdempotencyKey,
+  idempotencyKeySchema,
+} from "@/lib/ai/controlled-ai-batch";
+import { loadLessonBatchSummaryWithHydration } from "@/lib/lessons/admin-ai-lesson-batch";
 
 export const runtime = "nodejs";
 
@@ -34,6 +40,9 @@ const bodySchema = z.object({
   difficulty: adminAiLessonDifficultySchema,
   relatedCategoryIds: z.array(z.string().min(5)).max(12).optional(),
   allowDuplicates: z.boolean().default(false),
+  /** Same key + user within lookback returns existing job (idempotent create). */
+  idempotencyKey: idempotencyKeySchema,
+  batchControl: batchControlSchema.optional(),
 });
 
 export async function POST(req: Request) {
@@ -55,6 +64,24 @@ export async function POST(req: Request) {
   }
 
   const d = parsed.data;
+
+  if (d.idempotencyKey) {
+    const existing = await findJobByIdempotencyKey(prisma, {
+      createdById: gate.admin.userId,
+      tool: ADMIN_LESSON_BATCH_TOOL,
+      idempotencyKey: d.idempotencyKey,
+    });
+    if (existing) {
+      const summary = await loadLessonBatchSummaryWithHydration(prisma, existing.id);
+      return NextResponse.json({
+        ok: true,
+        jobId: existing.id,
+        summary,
+        idempotentReplay: true,
+      });
+    }
+  }
+
   const topics = parseTopicList(d.topicsRaw);
   if (topics.length === 0) {
     return NextResponse.json({ error: "No topics parsed from input" }, { status: 400 });
@@ -84,6 +111,8 @@ export async function POST(req: Request) {
           difficulty: d.difficulty ?? null,
           relatedCategoryIds: d.relatedCategoryIds ?? [],
           allowDuplicates: d.allowDuplicates,
+          ...(d.idempotencyKey ? { idempotencyKey: d.idempotencyKey } : {}),
+          ...(d.batchControl ? { batchControl: d.batchControl } : {}),
         } as object,
         resultSummary: {} as object,
         createdById: gate.admin.userId,

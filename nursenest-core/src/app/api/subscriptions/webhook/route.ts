@@ -146,6 +146,8 @@ export async function POST(req: Request) {
           where: { userId, status: SubscriptionStatus.ACTIVE },
         });
         const customerId = typeof session.customer === "string" ? session.customer : session.customer?.id ?? "";
+        const planCodeMeta = session.metadata?.planCode?.trim() || undefined;
+        const billingRegionMeta = session.metadata?.region?.trim() || undefined;
         await prisma.$transaction(async (tx) => {
           await tx.subscription.upsert({
             where: { stripeSubscriptionId: subId },
@@ -154,6 +156,8 @@ export async function POST(req: Request) {
               ...(plan ? { planTier: plan.tier, planCountry: plan.country } : {}),
               ...(durationMeta ? { planDuration: durationMeta } : {}),
               ...(alliedCareerMeta ? { alliedCareer: alliedCareerMeta } : {}),
+              ...(planCodeMeta ? { planCode: planCodeMeta } : {}),
+              ...(billingRegionMeta ? { billingRegionSlug: billingRegionMeta } : {}),
               currentPeriodEnd: lifecycle.currentPeriodEnd ?? null,
               trialEnd: lifecycle.trialEnd ?? null,
               cancelAtPeriodEnd: lifecycle.cancelAtPeriodEnd,
@@ -166,6 +170,8 @@ export async function POST(req: Request) {
               planTier: plan?.tier,
               planCountry: plan?.country,
               planDuration: durationMeta,
+              planCode: planCodeMeta,
+              billingRegionSlug: billingRegionMeta,
               alliedCareer: alliedCareerMeta,
               currentPeriodEnd: lifecycle.currentPeriodEnd,
               trialEnd: lifecycle.trialEnd,

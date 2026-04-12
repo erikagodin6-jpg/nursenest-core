@@ -1,8 +1,6 @@
 import { NextResponse } from "next/server";
-import { SubscriptionStatus } from "@prisma/client";
 import { auth } from "@/lib/auth";
-import { isLearnerEntitlementAdminOverrideRole } from "@/lib/auth/staff-roles";
-import { prisma } from "@/lib/db";
+import { getUserAccess } from "@/lib/entitlements/get-user-access";
 
 export const dynamic = "force-dynamic";
 
@@ -16,30 +14,24 @@ export async function GET() {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const user = await prisma.user.findUnique({
-    where: { id: userId },
-    select: { role: true, tier: true, country: true },
-  });
-  if (!user) {
-    return NextResponse.json({ error: "Not found" }, { status: 404 });
-  }
-
-  let subscriptionStatus: "active" | "grace" | "none" = "none";
-  if (isLearnerEntitlementAdminOverrideRole(user.role)) {
-    subscriptionStatus = "active";
-  } else {
-    const sub = await prisma.subscription.findFirst({
-      where: { userId, status: { in: [SubscriptionStatus.ACTIVE, SubscriptionStatus.GRACE] } },
-      orderBy: { createdAt: "desc" },
-      select: { status: true },
-    });
-    if (sub?.status === SubscriptionStatus.ACTIVE) subscriptionStatus = "active";
-    else if (sub?.status === SubscriptionStatus.GRACE) subscriptionStatus = "grace";
-  }
+  const userAccess = await getUserAccess(userId);
 
   return NextResponse.json({
-    tier: user.tier,
-    country: user.country,
-    subscriptionStatus,
+    tier: userAccess.allowedProfession.tier,
+    country: userAccess.allowedRegion.country,
+    subscriptionStatus:
+      userAccess.plan.status === "active" || userAccess.plan.status === "grace"
+        ? userAccess.plan.status === "grace"
+          ? "grace"
+          : "active"
+        : "none",
+    subscription: {
+      planCode: userAccess.plan.planCode,
+      planDuration: userAccess.plan.duration,
+      planStatus: userAccess.plan.status,
+      expiresAt: userAccess.plan.expiresAt?.toISOString() ?? null,
+      billingRegionSlug: userAccess.allowedRegion.billingRegionSlug,
+      examPathwayId: userAccess.allowedExam.pathwayId,
+    },
   });
 }
