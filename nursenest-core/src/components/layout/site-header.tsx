@@ -487,13 +487,8 @@ export function SiteHeader() {
     <div className="sticky top-0 z-50 nn-header-animate-in" ref={headerRef}>
       <MarketingHeaderUtilityStrip variant="dark-bar" />
       <header
-        style={{
-          ...navChromeStyle,
-          boxShadow: isScrolled
-            ? "0 10px 28px -18px rgba(0,0,0,0.30)"
-            : "0 1px 0 rgba(255,255,255,0.12)",
-        }}
-        className="isolate border-b transition-[box-shadow] duration-200"
+        style={navChromeStyle}
+        className="w-full border-b"
       >
         <div className="nn-section-shell grid h-16 grid-cols-[auto,1fr,auto] items-center gap-4 sm:gap-6">
           <Link

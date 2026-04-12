@@ -4,12 +4,14 @@ import { useSession, signOut } from "next-auth/react";
 import Link from "next/link";
 import { ChevronDown, User } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useTheme } from "next-themes";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { mapLegacyMarketingHref } from "@/lib/legacy-marketing-routes";
 import { isStaffRole } from "@/lib/auth/staff-roles";
 import { formatTitleCase } from "@/lib/format/text-case";
 import { PRIMARY_CTA } from "@/lib/copy/cta-copy";
+import { getNavChromeStyle } from "@/lib/theme/nav-chrome";
 
 const SIGN_IN_CLASS =
   "nn-marketing-body-sm inline-flex items-center rounded-md px-3 py-2 font-medium tracking-normal text-[color:var(--nn-nav-fg,var(--nav-link))] transition-colors duration-150 hover:bg-[color:var(--nn-nav-hover-bg,var(--nav-hover))] hover:text-[color:var(--nn-nav-hover-fg,var(--nav-link-hover))]";
@@ -36,6 +38,8 @@ export function MarketingHeaderAuthDesktop() {
   const { t, locale } = useMarketingI18n();
   const localizeHref = useLocalizeHref();
   const { data: session, status } = useSession();
+  const { theme } = useTheme();
+  const navChromeStyle = getNavChromeStyle(theme);
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -57,7 +61,7 @@ export function MarketingHeaderAuthDesktop() {
     const loginToApp = localizeHref(`/login?callbackUrl=${encodeURIComponent("/app")}`);
     const signupToApp = localizeHref(`/signup?callbackUrl=${encodeURIComponent("/app")}`);
     return (
-      <div className="flex max-w-[100vw] items-center gap-2">
+      <div style={navChromeStyle} className="flex max-w-[100vw] items-center gap-2">
         <Link href={loginToApp} className={SIGN_IN_CLASS}>
           {formatTitleCase(t("nav.logIn"), locale)}
         </Link>
@@ -73,7 +77,7 @@ export function MarketingHeaderAuthDesktop() {
   const admin = isStaffRole(user.role);
 
   return (
-    <div className="relative inline-block max-w-full" ref={ref}>
+    <div style={navChromeStyle} className="relative inline-block max-w-full" ref={ref}>
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
