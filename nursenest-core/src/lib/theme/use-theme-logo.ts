@@ -2,7 +2,7 @@
 
 import { useMemo, useSyncExternalStore } from "react";
 import { getThemeLogoPathForThemeId, headerLogoModeForTheme, resolveLogoForTheme, themeLogoObjectKeyForTheme } from "@/lib/branding/theme-logo-map";
-import { getHeaderBrandLogoLoadChain } from "@/lib/theme/theme-logo-url";
+import { getHeaderBrandLogoLoadChain, type ThemeLogoVariant } from "@/lib/theme/theme-logo-url";
 import { normalizeThemeIdForLogo } from "@/lib/theme/theme-logo-resolve";
 import { NURSENEST_DEFAULT_THEME, THEME_STORAGE_KEY } from "@/lib/theme/theme-registry";
 
@@ -44,25 +44,27 @@ function getServerSnapshot(): string {
  * Active theme logo follows `data-theme` (and the same localStorage key as the boot script), not
  * next-themes React state alone. That keeps the raster aligned with CSS variables and avoids a
  * brief wrong-theme logo when the DOM is already set after `beforeInteractive` boot.
+ *
+ * @param logoVariant - "full" (default) = leaf + wordmark; "leaf" = icon only (404/error pages).
  */
-export function useThemeLogo(): {
+export function useThemeLogo(logoVariant: ThemeLogoVariant = "full"): {
   /** Canonical theme id used for logo mapping. */
   themeId: string;
-  /** Spaces object key for the active theme mark (e.g. `oceanbrandlogo_transparent.png`). */
+  /** Spaces object key for the active theme mark. */
   mappedSpaceKey: string;
   /** Deterministic header logo mode chosen from theme contrast profile. */
   headerLogoMode: "dark-header" | "light-header";
-  /** Ordered URLs: same-origin proxy first, then public CDN, then fallbacks. */
+  /** Ordered URLs: CDN first, then same-origin fallbacks. */
   loadChain: string[];
 } {
   const domThemeId = useSyncExternalStore(subscribe, readDomThemeId, getServerSnapshot);
   const activeId = normalizeThemeIdForLogo(domThemeId);
-  const mappedSpaceKey = useMemo(() => themeLogoObjectKeyForTheme(activeId), [activeId]);
+  const mappedSpaceKey = useMemo(() => themeLogoObjectKeyForTheme(activeId, logoVariant), [activeId, logoVariant]);
   const headerLogoMode = useMemo(() => headerLogoModeForTheme(activeId), [activeId]);
   const loadChain = useMemo(() => {
-    const chain = getHeaderBrandLogoLoadChain(activeId, headerLogoMode);
+    const chain = getHeaderBrandLogoLoadChain(activeId, headerLogoMode, logoVariant);
     return chain.length > 0 ? chain : [resolveLogoForTheme(activeId), getThemeLogoPathForThemeId(activeId)];
-  }, [activeId, headerLogoMode]);
+  }, [activeId, headerLogoMode, logoVariant]);
 
   return {
     themeId: activeId,

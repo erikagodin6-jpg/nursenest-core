@@ -1,17 +1,19 @@
 /**
  * Theme → logo URL resolution (server- and client-safe; no React hooks).
  *
- * **Canonical load order (`getThemeLogoLoadChain` → `getHeaderBrandLogoLoadChain`):**
- * 1. CDN Spaces `Logos/{themeId-nohyphens}-transparent.png` — final uploaded transparent asset (primary)
- * 2. `/logos/{themeId}-brandlogo.png`                       — same-origin pre-generated PNG (safety net)
- * 3. `/branding/theme-logos/{themeId}brandlogo_transparent.png` — older committed PNGs (secondary net)
- * 4. `/logos/{themeId}-brandlogo.svg`                        — wordmark SVG fallback
- * 5. `/logos/themes/nursenest-logo-{themeId}.svg`            — universal SVG safety net (all themes)
+ * **Variants:**
+ *   "full" (default) — leaf + "NurseNest" wordmark  → header / footer / auth
+ *   "leaf"           — leaf icon only, tight-cropped → 404 / error / compact UI
+ *
+ * **Canonical load order (per variant):**
+ *   1. CDN Spaces `Logos/…-transparent.png`         — uploaded canonical asset (primary)
+ *   2. `/logos/{themeId}-brandlogo.png`              — same-origin pre-generated PNG (safety net)
+ *   3. `/branding/theme-logos/…brandlogo_transparent.png` — older committed PNG (secondary net)
+ *   4. `/logos/{themeId}-brandlogo.svg`              — SVG wordmark fallback (full only)
+ *   5. `/logos/themes/nursenest-logo-{themeId}.svg`  — universal SVG safety net
  *
  * `theme-logo-map.ts` is the ONLY source of truth for theme → Spaces object key mapping.
  * This file builds ordered chains; `use-theme-logo.ts` wraps them as a React hook.
- *
- * Re-exports `getThemeLogo` / `getThemeLogoUrl` from `@/lib/branding/theme-brand-logo-cdn`.
  */
 import { getPrimaryBrandMarkObjectKey, getSpacesBlueBrandLogoObjectKey, nursenestImagesSpaceObjectUrl } from "@/config/marketing-cdn.catalog";
 import {
@@ -24,6 +26,7 @@ import {
   getThemeLogoPngPathForThemeId,
   getThemeLogoSvgPathForThemeId,
   type HeaderLogoMode,
+  type ThemeLogoVariant,
   themeLogoObjectKeyForTheme,
 } from "@/lib/branding/theme-logo-map";
 import { getThemeLogoUrl } from "@/lib/branding/theme-brand-logo-cdn";
@@ -34,6 +37,8 @@ import {
 } from "@/lib/marketing-resolve-image-url";
 import { NURSENEST_DEFAULT_THEME } from "@/lib/theme/theme-registry";
 import { normalizeThemeIdForLogo } from "@/lib/theme/theme-logo-resolve";
+
+export type { ThemeLogoVariant };
 
 /** @deprecated Compatibility alias; use `getThemeLogoPathForThemeId` directly. */
 export const CANONICAL_BRAND_LOGO_LOCAL_PATH = getThemeLogoPathForThemeId(NURSENEST_DEFAULT_THEME);
@@ -50,11 +55,11 @@ function uniqueStrings(urls: string[]): string[] {
 }
 
 /** Spaces object key for the theme logo — for `/api/marketing-assets/...`. */
-export function getThemeLogoObjectKey(themeId: string): string {
-  return themeLogoObjectKeyForTheme(themeId);
+export function getThemeLogoObjectKey(themeId: string, variant: ThemeLogoVariant = "full"): string {
+  return themeLogoObjectKeyForTheme(themeId, variant);
 }
 
-/** Public CDN URL for the active theme’s pre-colored logo raster (alias of {@link getThemeLogoUrl}). */
+/** Public CDN URL for the active theme's pre-colored logo raster (alias of {@link getThemeLogoUrl}). */
 export function getThemeLogoPublicUrl(themeId: string): string {
   return getThemeLogoUrl(themeId);
 }
@@ -62,47 +67,57 @@ export function getThemeLogoPublicUrl(themeId: string): string {
 export { getThemeLogo, getThemeLogoUrl } from "@/lib/branding/theme-brand-logo-cdn";
 
 /**
- * Ordered URLs for `<img src>`: Spaces CDN Logos/ asset first (canonical uploaded transparent),
- * then same-origin PNGs and SVGs as safety nets.
+ * Ordered `<img src>` try-chain for a theme logo.
  *
- * Priority:
- *   1. CDN `Logos/{themeId-nohyphens}-transparent.png` — final uploaded asset (primary source)
- *   2. `/logos/{themeId}-brandlogo.png`                — same-origin pre-generated PNG (CDN fallback)
- *   3. `/branding/theme-logos/{themeId}brandlogo_transparent.png` — older committed PNG (secondary net)
- *   4. `/logos/{themeId}-brandlogo.svg`                — wordmark SVG fallback
- *   5. `/logos/themes/nursenest-logo-{themeId}.svg`    — universal SVG safety net (all themes)
+ * variant="full" (default):
+ *   CDN full logo → same-origin PNG → committed PNG → default-theme fallbacks → SVGs
+ *
+ * variant="leaf":
+ *   CDN leaf logo → CDN full logo (fallback) → same-origin PNG → SVGs
+ *   (no committed branding PNGs — those only exist for the full wordmark)
  */
-export function getThemeLogoLoadChain(themeId?: string | null): string[] {
-  const id = normalizeThemeIdForLogo(themeId ?? NURSENEST_DEFAULT_THEME);
+export function getThemeLogoLoadChain(
+  themeId?: string | null,
+  logoVariant: ThemeLogoVariant = "full",
+): string[] {
+  const id    = normalizeThemeIdForLogo(themeId ?? NURSENEST_DEFAULT_THEME);
   const defId = NURSENEST_DEFAULT_THEME;
 
-  const key    = themeLogoObjectKeyForTheme(id);
-  const defKey = themeLogoObjectKeyForTheme(defId);
+  const key    = themeLogoObjectKeyForTheme(id, logoVariant);
+  const defKey = themeLogoObjectKeyForTheme(defId, logoVariant);
 
   const out: string[] = [];
 
-  // 1. Spaces CDN Logos/ — canonical uploaded transparent asset, highest priority.
+  // 1. Spaces CDN — canonical uploaded transparent asset for this variant.
   pushKeyVariants(out, key);
 
-  // 2. Same-origin pre-generated PNG — safety net when CDN is unavailable.
-  out.push(getThemeLogoPngPathForThemeId(id));
-
-  // 3. Older committed branding PNG — secondary same-origin safety net.
-  out.push(`${COMMITTED_THEME_LOGO_PUBLIC_PREFIX}${id}brandlogo_transparent.png`);
-
-  // 4. Default-theme CDN + local equivalents (non-default themes only).
-  if (id !== defId) {
-    pushKeyVariants(out, defKey);
-    out.push(getThemeLogoPngPathForThemeId(defId));
-    out.push(`${COMMITTED_THEME_LOGO_PUBLIC_PREFIX}${defId}brandlogo_transparent.png`);
+  if (logoVariant === "leaf") {
+    // For leaf: if leaf CDN fails, fall back to the full-wordmark CDN asset as a safe degradation.
+    const fullKey = themeLogoObjectKeyForTheme(id, "full");
+    pushKeyVariants(out, fullKey);
+    out.push(getThemeLogoPngPathForThemeId(id));
+  } else {
+    // For full: same-origin pre-generated PNG → older committed branding PNG.
+    out.push(getThemeLogoPngPathForThemeId(id));
+    out.push(`${COMMITTED_THEME_LOGO_PUBLIC_PREFIX}${id}brandlogo_transparent.png`);
   }
 
-  // 5. SVG fallbacks — all themes have these files.
+  // 2. Default-theme equivalents as belt-and-suspenders (non-default themes only).
+  if (id !== defId) {
+    pushKeyVariants(out, defKey);
+    if (logoVariant === "full") {
+      out.push(getThemeLogoPngPathForThemeId(defId));
+      out.push(`${COMMITTED_THEME_LOGO_PUBLIC_PREFIX}${defId}brandlogo_transparent.png`);
+    }
+  }
+
+  // 3. SVG fallbacks — all themes have these files (full wordmark SVG is the safest final net).
   const svgPath = getThemeLogoPathForThemeId(id);
   const svgFb   = id !== defId ? getThemeLogoPathForThemeId(defId) : null;
 
   return uniqueStrings([
     ...out,
+    ...(logoVariant === "full" ? [getThemeLogoSvgPathForThemeId(id)] : []),
     ...(svgPath ? [svgPath] : []),
     ...(svgFb   ? [svgFb]  : []),
   ]);
@@ -115,7 +130,7 @@ function stemFromObjectKey(objectKey: string): string {
 }
 
 function pushKeyVariants(out: string[], objectKey: string) {
-  const pub = nursenestImagesSpaceObjectUrl(objectKey);
+  const pub   = nursenestImagesSpaceObjectUrl(objectKey);
   const proxy = marketingProxyPathForKey(objectKey);
   if (marketingImageUsesProxy()) {
     out.push(proxy, pub);
@@ -127,7 +142,7 @@ function pushKeyVariants(out: string[], objectKey: string) {
 }
 
 /**
- * Tinted / mask-style header mark (catalog “primary” stem). Name retains “Blue” for history; assets are
+ * Tinted / mask-style header mark (catalog "primary" stem). Name retains "Blue" for history; assets are
  * transparent rasters from `marketing-cdn.catalog`, not arbitrary theme colors.
  */
 export function getBlueBrandMarkLoadChain(): string[] {
@@ -148,21 +163,22 @@ export function getBlueBrandMarkLoadChain(): string[] {
 /**
  * Full `<img>` try chain for the marketing header wordmark (`SiteBrandLogoMark` / `useThemeLogo`).
  *
- * The Spaces CDN `Logos/{themeId-nohyphens}-transparent.png` asset is always the primary source —
- * these are the final uploaded transparent logos and are correct for every theme regardless of
- * header surface color.  Same-origin PNGs and SVGs trail as safety nets.
+ * variant="full" (default) → header / footer / auth: full leaf + wordmark.
+ * variant="leaf"           → 404 / error / compact: leaf icon only.
  *
- * The `preferredMode` parameter is accepted for API compatibility but no longer changes
- * the ordering — the uploaded Logos/ assets are already the right version for each theme.
+ * The `preferredMode` parameter is kept for API compatibility only; the uploaded
+ * Logos/ assets are already the correct version for each theme regardless of surface.
  */
-export function getHeaderBrandLogoLoadChain(themeId?: string | null, preferredMode?: HeaderLogoMode): string[] {
-  void preferredMode; // retained for API compatibility; Logos/ CDN assets are always correct
-  const id = normalizeThemeIdForLogo(themeId ?? NURSENEST_DEFAULT_THEME);
-  // CDN Logos/ is already #1 inside getThemeLogoLoadChain.
-  const themeRasterChain = getThemeLogoLoadChain(id);
-  // SVG fallbacks: wordmark SVG, then universal themes/ SVG.
-  const themeSvg     = getThemeLogoSvgPathForThemeId(id);
-  const universalSvg = getThemeLogoPathForThemeId(id);
+export function getHeaderBrandLogoLoadChain(
+  themeId?: string | null,
+  preferredMode?: HeaderLogoMode,
+  logoVariant: ThemeLogoVariant = "full",
+): string[] {
+  void preferredMode;
+  const id               = normalizeThemeIdForLogo(themeId ?? NURSENEST_DEFAULT_THEME);
+  const themeRasterChain = getThemeLogoLoadChain(id, logoVariant);
+  const themeSvg         = getThemeLogoSvgPathForThemeId(id);
+  const universalSvg     = getThemeLogoPathForThemeId(id);
+  // SVG fallbacks trail the raster chain; PRIMARY_LOGO_* are absolute last resort.
   return uniqueStrings([...themeRasterChain, themeSvg, universalSvg, PRIMARY_LOGO_URL, PRIMARY_LOGO_CDN_URL]);
 }
-
