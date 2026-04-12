@@ -63,13 +63,16 @@ export function LessonSectionCard({
       aria-label={heading?.trim() || "Lesson section"}
     >
       <span className="nn-lesson-section-chip inline-flex items-center gap-1.5" aria-hidden="true">
-        <ChipIcon className="nn-icon-sm" />
+        <ChipIcon className="nn-icon-sm" aria-hidden="true" />
         {chipLabel}
       </span>
-      <h2 className="nn-marketing-h3 mt-3 text-[var(--palette-heading)]">
+      <h2
+        className="nn-marketing-h3 mt-3"
+        style={{ color: "var(--lsc-contrast, var(--palette-heading))" }}
+      >
         {heading?.trim() || "Section"}
       </h2>
-      <div className="mt-5">{children}</div>
+      <div className="mt-6">{children}</div>
     </section>
   );
 }

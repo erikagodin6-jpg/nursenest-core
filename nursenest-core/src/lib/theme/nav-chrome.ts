@@ -487,6 +487,22 @@ export function getNavChrome(themeId?: string | null): NavChromeTheme {
   return NAV_CHROME_BY_THEME[key] ?? FALLBACK;
 }
 
+/** CSS custom properties only — no direct backgroundColor/color. Use on wrapper elements that
+ *  need to propagate chrome vars to siblings/children without overriding their own backgrounds. */
+export function getNavChromeVars(themeId?: string | null): CSSProperties {
+  const t = getNavChrome(themeId);
+  return {
+    ["--nn-nav-bg" as string]: t.chrome,
+    ["--nn-nav-fg" as string]: t.foreground,
+    ["--nn-nav-border" as string]: t.border,
+    ["--nn-nav-hover-bg" as string]: t.hoverBg,
+    ["--nn-nav-hover-fg" as string]: t.hoverFg,
+    ["--nn-nav-panel" as string]: t.panel,
+  };
+}
+
+/** Full chrome style — includes direct backgroundColor, color, borderColor. Use on the actual
+ *  chrome surface elements (header, footer, sub-nav). */
 export function getNavChromeStyle(themeId?: string | null): CSSProperties {
   const t = getNavChrome(themeId);
   return {

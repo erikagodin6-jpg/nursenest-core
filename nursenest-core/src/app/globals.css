@@ -215,9 +215,10 @@ body {
   --footer-fg: var(--nav-fg);
   --footer-muted: color-mix(in srgb, var(--footer-fg) 76%, var(--footer-bg));
   --footer-border: color-mix(in srgb, var(--nav-border) 80%, var(--footer-bg));
-  --pill-bg: var(--theme-pill-bg, color-mix(in srgb, var(--surface-accent-soft) 82%, var(--bg-card)));
+  /* Pills: use badge color for a more visible tint on white card backgrounds */
+  --pill-bg: var(--theme-pill-bg, color-mix(in srgb, var(--palette-badge, var(--theme-accent)) 65%, var(--bg-card)));
   --pill-fg: var(--theme-pill-text, color-mix(in srgb, var(--text-accent) 85%, var(--theme-heading-text)));
-  --pill-border: var(--theme-pill-border, var(--surface-bubble-border));
+  --pill-border: var(--theme-pill-border, color-mix(in srgb, var(--text-accent, var(--accent-primary)) 32%, var(--border-subtle)));
 
   /*
    * Bubble / accent surfaces — the primary location where theme color appears.
@@ -1285,7 +1286,7 @@ html[data-theme] .nn-marketing-surface {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
-  background: var(--surface, var(--bg-card));
+  background: var(--bg-card);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-xl);
   box-shadow: var(--elevation-rest);
@@ -1501,14 +1502,13 @@ html[data-theme] .nn-marketing-surface {
  *   3. nn-header-accent-bar    – thin bottom strip on brand/nav background
  */
 
-/* Top dark brand bar (and bottom accent bar base) for light-theme 3-layer header */
+/* Top brand bar — uses nn-nav-bg from the sticky wrapper's CSS vars (set by getNavChromeVars) */
 .nn-header-utility-dark {
-  background: var(--theme-nav-background, var(--nav-bg));
-  color: var(--theme-nav-foreground, var(--nav-fg));
-  border-bottom: 1px solid color-mix(in srgb, var(--theme-nav-foreground, var(--nav-fg)) 12%, transparent);
-  /* Override utility rail alias tokens so inner text references resolve correctly */
-  --header-utility-text: var(--theme-nav-foreground, var(--nav-fg));
-  --header-utility-border: color-mix(in srgb, var(--theme-nav-foreground, var(--nav-fg)) 12%, transparent);
+  background: var(--nn-nav-bg, var(--theme-nav-background, var(--nav-bg)));
+  color: var(--nn-nav-fg, var(--theme-nav-foreground, var(--nav-fg)));
+  border-bottom: 1px solid var(--nn-nav-border, color-mix(in srgb, var(--nn-nav-fg, var(--nav-fg)) 18%, transparent));
+  --header-utility-text: var(--nn-nav-fg, var(--theme-nav-foreground, var(--nav-fg)));
+  --header-utility-border: var(--nn-nav-border, color-mix(in srgb, var(--nn-nav-fg, var(--nav-fg)) 18%, transparent));
 }
 
 /* Logo/content row — sits on page background, content uses heading/body text */
@@ -2100,7 +2100,7 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-exam-chrome-dim {
 
 .nn-study-callout {
   border-radius: 1.125rem;
-  border: 1px solid var(--surface-bubble-border);
+  border: 1.5px solid var(--surface-bubble-border);
   background: var(--surface-bubble);
   box-shadow: var(--shadow-card);
 }
@@ -2115,18 +2115,12 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-exam-chrome-dim {
   border-top: 3px solid color-mix(in srgb, var(--theme-primary) 72%, white);
 }
 
-/* NP lesson detail: second accent band from `--theme-secondary` (theme-switch safe, not monochrome). */
+/* NP lesson detail: dual-hue top border accent to distinguish NP content. */
 .nn-lesson-page-shell--np {
-  border-color: color-mix(
+  border-top-color: color-mix(
     in srgb,
-    var(--theme-primary) 7%,
-    color-mix(in srgb, var(--palette-primary-deep, var(--theme-secondary)) 14%, var(--border-subtle))
-  );
-  background: linear-gradient(
-    135deg,
-    color-mix(in srgb, var(--theme-primary) 3.2%, var(--bg-page)) 0%,
-    var(--bg-page) 42%,
-    color-mix(in srgb, var(--palette-primary-deep, var(--theme-secondary)) 5%, var(--bg-section)) 100%
+    var(--palette-primary-deep, var(--theme-secondary)) 72%,
+    white
   );
 }
 
@@ -2180,16 +2174,16 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-exam-chrome-dim {
 
 .nn-lesson-prose {
   font-size: 1.0625rem;
-  line-height: 1.78;
-  letter-spacing: -0.01em;
-  color: var(--palette-text);
+  line-height: 1.8;
+  letter-spacing: -0.008em;
+  color: var(--semantic-text-secondary, var(--palette-text));
   max-width: 72ch;
 }
 
 @media (min-width: 768px) {
   .nn-lesson-prose {
     font-size: 1.075rem;
-    line-height: 1.82;
+    line-height: 1.84;
   }
 }
 
@@ -2343,8 +2337,8 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-exam-chrome-dim {
 }
 
 .nn-lesson-page-header {
-  padding-bottom: 1.5rem;
-  border-bottom: 1px solid var(--semantic-border-soft);
+  padding-bottom: 1.75rem;
+  border-bottom: 1.5px solid var(--border-subtle);
 }
 
 .nn-lesson-layout {

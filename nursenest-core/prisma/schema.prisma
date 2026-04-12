@@ -635,6 +635,7 @@ model BlogPost {
   batchScheduleItems           BlogBatchScheduleItem[]
   draftGenerationBatchItems    BlogDraftGenerationBatchItem[]
   contentAutomationLogs        ContentAutomationLog[]
+  localizedVariants            LocalizedBlogArticle[]
   targetKeyword String?
   keywordCluster String?
   countryTarget CountryCode?
@@ -893,6 +894,105 @@ model ContentAutomationLog {
   @@index([createdAt])
   @@index([blogPostId])
   @@index([correlationId])
+}
+
+// ── Localized blog content (international SEO expansion) ─────────────────────
+
+/** Lifecycle of a localized blog article from AI generation through editorial approval to publication. */
+enum LocalizedBlogStatus {
+  DRAFT
+  AI_GENERATED
+  AI_ADAPTED
+  PENDING_REVIEW
+  APPROVED
+  SCHEDULED
+  PUBLISHED
+  REJECTED
+}
+
+/** How a localized variant was produced from the canonical article. */
+enum BlogAdaptationType {
+  ORIGINAL
+  TRANSLATED
+  ADAPTED
+  LOCALIZED_REWRITE
+  MARKET_EXPANSION
+}
+
+/**
+ * Localized variant of a canonical BlogPost for international SEO expansion.
+ * References the canonical BlogPost via canonicalArticleId but stores its own
+ * fully adapted content, SEO metadata, and editorial state.
+ *
+ * Each (canonicalArticleId, locale, region) tuple is unique — one variant per
+ * locale/region combination per canonical article.
+ */
+model LocalizedBlogArticle {
+  id                    String               @id @default(cuid())
+  canonicalArticleId    String
+  canonicalArticle      BlogPost             @relation(fields: [canonicalArticleId], references: [id], onDelete: Cascade)
+
+  // ── Localization coordinates ──────────────────────────────────────────────
+  locale                String               @db.VarChar(10)
+  region                String               @db.VarChar(32)
+  profession            String?              @db.VarChar(32)
+  exam                  String?              @db.VarChar(48)
+
+  // ── Adaptation metadata ───────────────────────────────────────────────────
+  sourceLanguage        String               @default("en") @db.VarChar(10)
+  adaptationType        BlogAdaptationType   @default(ADAPTED)
+  contentStatus         LocalizedBlogStatus  @default(DRAFT)
+  aiModelVersion        String?              @db.VarChar(64)
+  aiPromptVersion       String?              @db.VarChar(32)
+
+  // ── Content ───────────────────────────────────────────────────────────────
+  localizedTitle        String
+  localizedExcerpt      String               @db.Text
+  localizedBody         String               @db.Text
+  canonicalSlug         String               @db.VarChar(200)
+  localizedSlug         String               @db.VarChar(200)
+
+  // ── SEO ───────────────────────────────────────────────────────────────────
+  localizedMetaTitle    String?
+  localizedMetaDescription String?           @db.Text
+  seoKeywordPrimary     String?
+  seoKeywordSecondary   String[]             @default([])
+  searchIntent          String?              @db.VarChar(48)
+  hreflangJson          Json?
+  canonicalUrl          String?
+
+  // ── Conversion ────────────────────────────────────────────────────────────
+  targetAudience        String?              @db.VarChar(64)
+  ctaVariant            String?              @db.VarChar(48)
+  ctaText               String?
+  ctaHref               String?
+  internalLinkTargets   Json?
+
+  // ── Review / safety ───────────────────────────────────────────────────────
+  complianceReviewRequired Boolean           @default(false)
+  medicalReviewRequired    Boolean           @default(false)
+  editorialReviewRequired  Boolean           @default(true)
+  reviewFlags            String[]            @default([])
+  editorialNotes         String?             @db.Text
+
+  // ── Publishing ────────────────────────────────────────────────────────────
+  publishedAt           DateTime?
+  scheduledAt           DateTime?
+  rejectedAt            DateTime?
+  rejectionReason       String?              @db.Text
+
+  // ── Diagnostics ───────────────────────────────────────────────────────────
+  generationLog         Json                 @default("[]")
+
+  createdAt             DateTime             @default(now())
+  updatedAt             DateTime             @updatedAt
+
+  @@unique([canonicalArticleId, locale, region])
+  @@index([contentStatus, scheduledAt])
+  @@index([region, locale, contentStatus])
+  @@index([canonicalArticleId])
+  @@index([localizedSlug])
+  @@index([createdAt])
 }
 
 /** Production `content_items` — lessons are `type = "lesson"`. */
