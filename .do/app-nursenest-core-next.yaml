@@ -20,7 +20,9 @@ services:
     # DB: set `DATABASE_URL` (SECRET) to DigitalOcean Managed Postgres URI. Prisma uses this only.
     # Migrations: GitHub Actions → “Prisma migrate” workflow with secret `DATABASE_URL` (same URI as here).
     # Drop .next/cache after build; prune devDependencies to shrink the slug (runtime uses production deps only).
-    build_command: npm ci && npm run build:deploy && npm prune --omit=dev
+    # environment_slug=node-js buildpack runs `npm install` automatically before build_command;
+    # do NOT include `npm ci` here — that would double-install and waste build minutes.
+    build_command: npm run build:deploy && npm prune --omit=dev
     run_command: npm run start
     http_port: 8080
     routes:
@@ -36,7 +38,7 @@ services:
     envs:
       - key: NODE_ENV
         value: production
-        scope: RUN_TIME
+        scope: BUILD_AND_RUN_TIME
       - key: PORT
         value: "8080"
         scope: RUN_TIME

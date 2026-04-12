@@ -2,13 +2,13 @@
  * Theme → logo URL resolution (server- and client-safe; no React hooks).
  *
  * **Canonical load order (`getThemeLogoLoadChain` → `getHeaderBrandLogoLoadChain`):**
- * 1. `/logos/{themeId}-brandlogo.png`                       — new RGBA-transparent PNGs (same-origin)
- * 2. `/branding/theme-logos/{themeId}brandlogo_transparent.png` — older committed PNGs (also transparent)
- * 3. CDN / Spaces URL                                        — network-dependent, may be stale
- * 4. `/logos/{themeId}-brandlogo.svg`                        — wordmark SVG (40/56 themes)
- * 5. `/logos/themes/nursenest-logo-{themeId}.svg`            — universal SVG safety net (all 56 themes)
+ * 1. CDN Spaces `Logos/{themeId-nohyphens}-transparent.png` — final uploaded transparent asset (primary)
+ * 2. `/logos/{themeId}-brandlogo.png`                       — same-origin pre-generated PNG (safety net)
+ * 3. `/branding/theme-logos/{themeId}brandlogo_transparent.png` — older committed PNGs (secondary net)
+ * 4. `/logos/{themeId}-brandlogo.svg`                        — wordmark SVG fallback
+ * 5. `/logos/themes/nursenest-logo-{themeId}.svg`            — universal SVG safety net (all themes)
  *
- * `theme-logo-map.ts` is the single source of truth for theme → asset key mapping.
+ * `theme-logo-map.ts` is the ONLY source of truth for theme → Spaces object key mapping.
  * This file builds ordered chains; `use-theme-logo.ts` wraps them as a React hook.
  *
  * Re-exports `getThemeLogo` / `getThemeLogoUrl` from `@/lib/branding/theme-brand-logo-cdn`.
@@ -23,9 +23,7 @@ import {
   getThemeLogoPathForThemeId,
   getThemeLogoPngPathForThemeId,
   getThemeLogoSvgPathForThemeId,
-  headerLogoModeForTheme,
   type HeaderLogoMode,
-  resolveLogoForTheme,
   themeLogoObjectKeyForTheme,
 } from "@/lib/branding/theme-logo-map";
 import { getThemeLogoUrl } from "@/lib/branding/theme-brand-logo-cdn";
@@ -64,61 +62,49 @@ export function getThemeLogoPublicUrl(themeId: string): string {
 export { getThemeLogo, getThemeLogoUrl } from "@/lib/branding/theme-brand-logo-cdn";
 
 /**
- * Ordered URLs for `<img src>`: new canonical transparent PNGs first, then committed branding PNGs,
- * then CDN as secondary, then SVG fallbacks.
+ * Ordered URLs for `<img src>`: Spaces CDN Logos/ asset first (canonical uploaded transparent),
+ * then same-origin PNGs and SVGs as safety nets.
  *
  * Priority:
- *   1. /logos/{themeId}-brandlogo.png   — newly added RGBA-transparent PNGs (same-origin, verified)
- *   2. /branding/theme-logos/{themeId}brandlogo_transparent.png — older committed PNGs (also transparent)
- *   3. CDN URL                          — network-dependent; may be stale
- *   4. /logos/themes/nursenest-logo-{themeId}.svg — universal SVG (all 56 themes)
+ *   1. CDN `Logos/{themeId-nohyphens}-transparent.png` — final uploaded asset (primary source)
+ *   2. `/logos/{themeId}-brandlogo.png`                — same-origin pre-generated PNG (CDN fallback)
+ *   3. `/branding/theme-logos/{themeId}brandlogo_transparent.png` — older committed PNG (secondary net)
+ *   4. `/logos/{themeId}-brandlogo.svg`                — wordmark SVG fallback
+ *   5. `/logos/themes/nursenest-logo-{themeId}.svg`    — universal SVG safety net (all themes)
  */
 export function getThemeLogoLoadChain(themeId?: string | null): string[] {
   const id = normalizeThemeIdForLogo(themeId ?? NURSENEST_DEFAULT_THEME);
   const defId = NURSENEST_DEFAULT_THEME;
 
-  // CDN object key (may be a short alias for some themes via THEME_LOGO_FILENAME_BY_THEME_ID).
-  const key = themeLogoObjectKeyForTheme(id);
+  const key    = themeLogoObjectKeyForTheme(id);
   const defKey = themeLogoObjectKeyForTheme(defId);
-
-  // New canonical transparent PNGs (/logos/{themeId}-brandlogo.png) — 34/56 themes have valid RGBA.
-  const canonicalPng    = getThemeLogoPngPathForThemeId(id);
-  const canonicalPngDef = id !== defId ? getThemeLogoPngPathForThemeId(defId) : null;
-
-  // Older committed same-origin branding PNGs (26 themes have these; also verified transparent).
-  const localStandard = `${COMMITTED_THEME_LOGO_PUBLIC_PREFIX}${id}brandlogo_transparent.png`;
-  const localCdnKey   = `${COMMITTED_THEME_LOGO_PUBLIC_PREFIX}${key}`;
-  const localDefStd   = `${COMMITTED_THEME_LOGO_PUBLIC_PREFIX}${defId}brandlogo_transparent.png`;
-
-  // Universal SVG fallbacks (all 56 themes have /logos/themes/nursenest-logo-{themeId}.svg).
-  const svgPath = getThemeLogoPathForThemeId(id);
-  const svgFb   = id !== defId ? getThemeLogoPathForThemeId(defId) : null;
 
   const out: string[] = [];
 
-  // 1. Canonical new transparent PNGs — highest priority, same-origin, no CDN dependency.
-  out.push(canonicalPng);
-
-  // 2. Older committed branding PNGs (standard pattern first, then CDN-key-based path).
-  out.push(localStandard);
-  if (localCdnKey !== localStandard) out.push(localCdnKey);
-
-  // 3. CDN as tertiary source (network-dependent; object may differ from local committed file).
-  out.push(resolveLogoForTheme(id));
+  // 1. Spaces CDN Logos/ — canonical uploaded transparent asset, highest priority.
   pushKeyVariants(out, key);
 
-  // 4. Default-theme equivalents as belt-and-suspenders for non-default themes.
+  // 2. Same-origin pre-generated PNG — safety net when CDN is unavailable.
+  out.push(getThemeLogoPngPathForThemeId(id));
+
+  // 3. Older committed branding PNG — secondary same-origin safety net.
+  out.push(`${COMMITTED_THEME_LOGO_PUBLIC_PREFIX}${id}brandlogo_transparent.png`);
+
+  // 4. Default-theme CDN + local equivalents (non-default themes only).
   if (id !== defId) {
-    if (canonicalPngDef) out.push(canonicalPngDef);
-    out.push(localDefStd);
-    out.push(resolveLogoForTheme(defId));
     pushKeyVariants(out, defKey);
+    out.push(getThemeLogoPngPathForThemeId(defId));
+    out.push(`${COMMITTED_THEME_LOGO_PUBLIC_PREFIX}${defId}brandlogo_transparent.png`);
   }
+
+  // 5. SVG fallbacks — all themes have these files.
+  const svgPath = getThemeLogoPathForThemeId(id);
+  const svgFb   = id !== defId ? getThemeLogoPathForThemeId(defId) : null;
 
   return uniqueStrings([
     ...out,
     ...(svgPath ? [svgPath] : []),
-    ...(svgFb  ? [svgFb]  : []),
+    ...(svgFb   ? [svgFb]  : []),
   ]);
 }
 
@@ -162,24 +148,21 @@ export function getBlueBrandMarkLoadChain(): string[] {
 /**
  * Full `<img>` try chain for the marketing header wordmark (`SiteBrandLogoMark` / `useThemeLogo`).
  *
- * The new canonical transparent PNGs (/logos/{themeId}-brandlogo.png) are the primary source
- * for all header modes, since they are same-origin, verified RGBA-transparent, and independent
- * of CDN state.  SVG variants (wordmark and universal) follow as text-based transparent fallbacks.
- * CDN and committed branding PNGs are included via `getThemeLogoLoadChain` as secondary/tertiary.
+ * The Spaces CDN `Logos/{themeId-nohyphens}-transparent.png` asset is always the primary source —
+ * these are the final uploaded transparent logos and are correct for every theme regardless of
+ * header surface color.  Same-origin PNGs and SVGs trail as safety nets.
+ *
+ * The `preferredMode` parameter is accepted for API compatibility but no longer changes
+ * the ordering — the uploaded Logos/ assets are already the right version for each theme.
  */
 export function getHeaderBrandLogoLoadChain(themeId?: string | null, preferredMode?: HeaderLogoMode): string[] {
+  void preferredMode; // retained for API compatibility; Logos/ CDN assets are always correct
   const id = normalizeThemeIdForLogo(themeId ?? NURSENEST_DEFAULT_THEME);
-  const mode = preferredMode ?? headerLogoModeForTheme(id);
-  // Full raster + CDN + committed chain (canonical PNG is already #1 inside this chain).
+  // CDN Logos/ is already #1 inside getThemeLogoLoadChain.
   const themeRasterChain = getThemeLogoLoadChain(id);
-  // SVG fallbacks: wordmark SVG for 40/56 themes, universal themes/ SVG for all 56.
-  const themeSvg     = getThemeLogoSvgPathForThemeId(id); // /logos/{themeId}-brandlogo.svg
-  const universalSvg = getThemeLogoPathForThemeId(id);    // /logos/themes/nursenest-logo-{themeId}.svg
-  if (mode === "light-header") {
-    // On light surfaces, SVG (theme-colored, good contrast) before rasters.
-    return uniqueStrings([themeSvg, universalSvg, ...themeRasterChain, PRIMARY_LOGO_URL, PRIMARY_LOGO_CDN_URL]);
-  }
-  // Dark-header: rasters first (canonical PNG → committed PNG → CDN), then SVGs.
+  // SVG fallbacks: wordmark SVG, then universal themes/ SVG.
+  const themeSvg     = getThemeLogoSvgPathForThemeId(id);
+  const universalSvg = getThemeLogoPathForThemeId(id);
   return uniqueStrings([...themeRasterChain, themeSvg, universalSvg, PRIMARY_LOGO_URL, PRIMARY_LOGO_CDN_URL]);
 }
 

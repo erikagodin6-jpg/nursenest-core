@@ -2,25 +2,22 @@
 
 import { useMemo, useState } from "react";
 import {
-  COMMITTED_THEME_LOGO_PUBLIC_PREFIX,
   brandLogoRasterContrastClass,
 } from "@/lib/branding/logo-config";
 import { relativeLuminanceFromHex } from "@/lib/color/hex-luminance";
+import { themeLogoObjectKeyForTheme } from "@/lib/branding/theme-logo-map";
+import { nursenestImagesSpaceObjectUrl } from "@/config/marketing-cdn.catalog";
 import type { ThemeOption } from "@/lib/theme/theme-registry";
 import { THEME_OPTIONS } from "@/lib/theme/theme-registry";
 import { getThemeLogoLoadChain } from "@/lib/theme/theme-logo-url";
 import { THEME_PRESENTATION_CSS_VARS, THEME_RHYTHM_CSS_VARS } from "@/lib/theme/theme-presentation";
 
-function canonicalThemeLogoPath(themeId: string): string {
-  return `${COMMITTED_THEME_LOGO_PUBLIC_PREFIX}${themeId}brandlogo_transparent.png`;
-}
-
 function ThemeQaCard({ opt }: { opt: ThemeOption }) {
   const [loadFailed, setLoadFailed] = useState(false);
   const chain = useMemo(() => getThemeLogoLoadChain(opt.id), [opt.id]);
   const firstUrl = chain[0] ?? "";
-  const expected = canonicalThemeLogoPath(opt.id);
-  const usesLocalCanonical = firstUrl === expected;
+  const expectedCdnUrl = nursenestImagesSpaceObjectUrl(themeLogoObjectKeyForTheme(opt.id));
+  const usesLocalCanonical = firstUrl === expectedCdnUrl;
   const contrastClass = brandLogoRasterContrastClass(opt.id);
   const lum = relativeLuminanceFromHex(opt.color);
   const softMark = lum >= 0.88 && opt.group === "light";
@@ -50,11 +47,11 @@ function ThemeQaCard({ opt }: { opt: ThemeOption }) {
       <div className="flex flex-wrap gap-1.5 text-[9px]">
         {!usesLocalCanonical ? (
           <span className="rounded bg-amber-500/15 px-1.5 py-0.5 font-medium text-amber-900 dark:text-amber-100">
-            First URL ≠ local canonical
+            CDN asset not first
           </span>
         ) : (
           <span className="rounded bg-emerald-500/10 px-1.5 py-0.5 font-medium text-emerald-900 dark:text-emerald-100">
-            Local canonical first
+            CDN canonical first
           </span>
         )}
         {loadFailed ? (

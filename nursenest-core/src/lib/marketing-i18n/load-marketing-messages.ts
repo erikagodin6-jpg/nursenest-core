@@ -9,8 +9,11 @@ import { safeServerLog } from "@/lib/observability/safe-server-log";
  * Canonical merged bundles live at `public/i18n/{locale}.json` (built by
  * `script/compile-i18n.ts` + `script/merge-marketing-i18n.ts`).
  *
- * Resolution: `process.cwd()`-relative paths only (app root on DO, or monorepo root in dev) so NFT
- * tracing stays scoped — dynamic `readFile`/`stat` paths use Turbopack ignore comments in source.
+ * Resolution: two `process.cwd()`-relative candidates (app root on DO; monorepo root in dev).
+ * Note: `process.cwd()` is dynamic so Turbopack cannot statically trace the exact files.
+ * The NFT warning for next.config.ts is suppressed via `outputFileTracingExcludes` in
+ * next.config.ts, and the i18n files are explicitly included via `outputFileTracingIncludes`.
+ * The `..` candidate is intentionally absent so tracing never escapes the package root.
  *
  * Optional: `MARKETING_I18N_CDN_BASE` loads bundles when files are not on disk. CDN payloads are
  * merged with on-disk English for any missing/empty keys so stale CDN objects cannot drop groups
@@ -33,13 +36,14 @@ function mergeMissingMessageKeys(primary: MarketingMessages, fallback: Marketing
 
 function resolveMergedI18nPath(locale: string): string | null {
   const file = `${locale}.json`;
-  const cwd = /* turbopackIgnore: true */ process.cwd();
-  const cwdCandidates = [
-    path.join(cwd, "public", "i18n", file),
-    path.join(cwd, "nursenest-core", "public", "i18n", file),
-    path.join(cwd, "..", "nursenest-core", "public", "i18n", file),
+  // Two scoped candidates only — no `..` so paths never escape the package root.
+  // NFT control is handled in next.config.ts (outputFileTracingExcludes/Includes),
+  // not via turbopackIgnore (which only affects dynamic import()/require(), not fs calls).
+  const candidates = [
+    path.join(process.cwd(), "public", "i18n", file),
+    path.join(process.cwd(), "nursenest-core", "public", "i18n", file),
   ];
-  for (const p of cwdCandidates) {
+  for (const p of candidates) {
     if (existsSync(p)) return p;
   }
   return null;

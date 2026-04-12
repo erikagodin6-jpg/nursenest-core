@@ -89,6 +89,16 @@ const nextConfig: NextConfig = {
   experimental: {
     externalDir: true,
   },
+  // next.config.ts is evaluated at build time only; exclude it from server-component NFT so
+  // dynamic process.cwd() usage in load-marketing-messages.ts does not trigger the
+  // "unexpected file in NFT list" Turbopack warning.
+  outputFileTracingExcludes: {
+    "/**": ["./next.config.ts", "./next.config.js", "./next.config.mjs"],
+  },
+  // Explicitly include merged i18n bundles so server components can readFileSync them at runtime.
+  outputFileTracingIncludes: {
+    "/**": ["./public/i18n/**/*.json"],
+  },
   async redirects() {
     return [
       legacyMedMathRedirect,
