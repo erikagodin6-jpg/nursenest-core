@@ -4,6 +4,7 @@
 import { ContentStatus } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { getExamPathwayById, listExamPathways } from "@/lib/exam-pathways/exam-product-registry";
+import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import {
   countRelatedExamQuestionsForPathwayLesson,
   lessonQuestionCoverageTierFromCount,
@@ -140,8 +141,6 @@ export async function scanLessonQuestionLinkCoverageForPathways(
     summary: buildLessonQuestionLinkSummary(sortedIds, skippedPathways, rows),
   };
 }
-
-import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 
 /**
  * Full scan: every published EN pathway lesson × registry pathways (optionally one pathway id).

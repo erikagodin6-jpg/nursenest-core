@@ -25,6 +25,7 @@
     "audit:lesson-links": "tsx scripts/audit-lesson-links.ts",
     "audit:lesson-question-coverage": "tsx scripts/lesson-question-link-coverage.ts",
     "audit:lesson-question-gap-fill": "tsx scripts/lesson-question-gap-fill.ts",
+    "audit:full-content-coverage": "tsx scripts/full-content-coverage-audit.ts",
     "test:lesson-links-audit": "tsx --test scripts/audit-lesson-links.test.ts",
     "audit:pathway-lessons": "tsx scripts/audit-pathway-lesson-inventory.ts",
     "audit:np-spine-db": "tsx scripts/np-lesson-spine-vs-db.mts",
