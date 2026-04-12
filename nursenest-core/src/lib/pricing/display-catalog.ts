@@ -55,6 +55,8 @@ const LIST_PRICE_MAJOR: Partial<Record<TierCode, Record<BillingDuration, number>
   PRE_NURSING: { monthly: 24.99, "3-month": 59.99, "6-month": 89.99, yearly: 129.99 },
   NEW_GRAD: { monthly: 24.99, "3-month": 59.99, "6-month": 89.99, yearly: 129.99 },
   RPN: { monthly: 29.99, "3-month": 69.99, "6-month": 109.99, yearly: 159.99 },
+  // LVN_LPN = US LPN/LVN track (NCLEX-PN) — same price tier as RPN
+  LVN_LPN: { monthly: 29.99, "3-month": 69.99, "6-month": 109.99, yearly: 159.99 },
   RN: { monthly: 39.99, "3-month": 89.99, "6-month": 139.99, yearly: 199.99 },
   NP: { monthly: 49.99, "3-month": 119.99, "6-month": 179.99, yearly: 259.99 },
 };
@@ -78,7 +80,7 @@ const ANCHOR_PRICE_MAJOR: Partial<Record<TierCode, Partial<Record<BillingDuratio
 
 // ── Tiers sold ──────────────────────────────────────────────────────────────
 
-export const NURSING_TIERS: TierCode[] = ["PRE_NURSING", "NEW_GRAD", "RPN", "RN", "NP"];
+export const NURSING_TIERS: TierCode[] = ["PRE_NURSING", "NEW_GRAD", "RPN", "LVN_LPN", "RN", "NP"];
 
 /** @deprecated Kept for backward compat with code that still expects the old shape. */
 export const NURSING_TIERS_BY_COUNTRY: Record<"CA" | "US", TierCode[]> = {

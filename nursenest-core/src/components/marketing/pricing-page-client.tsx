@@ -84,11 +84,12 @@ type AlliedPlanRow = {
 
 type Segment = "prenursing" | "newgrad" | "rn" | "pn" | "np" | "allied";
 
-function segmentToTier(segment: Segment): TierCode {
+function segmentToTier(segment: Segment, isUS?: boolean): TierCode {
   switch (segment) {
     case "prenursing": return "PRE_NURSING";
     case "newgrad": return "NEW_GRAD";
-    case "pn": return "RPN";
+    // "pn" covers both Canada RPN and US LVN_LPN — resolve by region
+    case "pn": return isUS ? "LVN_LPN" : "RPN";
     case "rn": return "RN";
     case "np": return "NP";
     case "allied": return "ALLIED";
@@ -193,7 +194,8 @@ export function PricingPageClient({
     };
   }, [t]);
 
-  const tier = segmentToTier(segment);
+  const isUS = region === "US";
+  const tier = segmentToTier(segment, isUS);
   const narrative = buildTierPricingNarrative(t, tier);
   const isAllied = segment === "allied";
 
