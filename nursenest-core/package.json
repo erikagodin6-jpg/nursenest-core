@@ -89,6 +89,7 @@
     "admin:reset-password": "tsx scripts/reset-admin.ts",
     "content:sync-question-flashcards": "tsx scripts/sync-question-flashcards.ts",
     "content:sync-question-flashcards:dry-run": "tsx scripts/sync-question-flashcards.ts --dry-run",
+    "content:sync-question-flashcards:publish": "tsx scripts/sync-question-flashcards.ts --publish",
     "db:bootstrap-if-empty": "tsx scripts/bootstrap-admin-if-empty.ts",
     "screenshots:seed-demo": "tsx scripts/seed-screenshot-demo-user.ts",
     "screenshots:capture": "node scripts/capture-screenshots.mjs",

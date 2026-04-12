@@ -8,18 +8,21 @@
  * Strategy:
  *   - One FlashcardDeck per (tier × bodySystem) combination.
  *   - One Flashcard per ExamQuestion, keyed by sourceKey = "exam_q:{id}".
- *   - Upserts are idempotent: re-running never duplicates cards.
- *   - Category rows are auto-created by bodySystem slug if missing.
+ *   - One FlashcardTag per bodySystem — enables /flashcards/[bodySystem] topic pages.
+ *   - FlashcardDeckOnTag joins each deck to its body-system tag.
+ *   - Upserts are idempotent: re-running never duplicates anything.
  *
  * Usage:
  *   npx tsx scripts/sync-question-flashcards.ts [options]
  *
  * Options:
- *   --tier=RN         Only sync questions for a specific tier (default: all)
+ *   --tier=RN               Only sync questions for a specific tier (default: all)
  *   --body-system=cardiovascular  Only sync one body system
- *   --status=PUBLISHED  Only pull published questions (default: PUBLISHED)
- *   --dry-run         Print counts without writing to DB
- *   --limit=100       Cap how many questions to process (useful for testing)
+ *   --status=PUBLISHED      Only pull published questions (default: PUBLISHED)
+ *   --dry-run               Print counts without writing to DB
+ *   --limit=100             Cap how many questions to process (useful for testing)
+ *   --publish               Create/promote decks as PUBLISHED + PUBLIC_PREVIEW
+ *                           (without this flag decks remain DRAFT + SUBSCRIBER)
  *
  * Run after migration: npx prisma migrate deploy
  * Or in dev:           npx prisma migrate dev
@@ -48,6 +51,7 @@ function parseArgs() {
     bodySystem: args["body-system"],
     status: (args["status"] ?? "PUBLISHED") as ContentStatus,
     dryRun: args["dry-run"] === "true",
+    publish: args["publish"] === "true",
     limit: args["limit"] ? parseInt(args["limit"], 10) : undefined,
   };
 }
@@ -110,10 +114,11 @@ function categorySlug(bodySystem: string): string {
 // ── Core sync logic ───────────────────────────────────────────────────────────
 
 async function main() {
-  const { tier, bodySystem, status, dryRun, limit } = parseArgs();
+  const { tier, bodySystem, status, dryRun, publish, limit } = parseArgs();
 
   console.log("\n── NurseNest Question → Flashcard Sync ──");
   if (dryRun) console.log("  DRY RUN — no DB writes");
+  if (publish) console.log("  --publish: decks will be PUBLISHED + PUBLIC_PREVIEW");
 
   // Step 1: fetch qualifying ExamQuestion rows
   const where = {
@@ -208,6 +213,8 @@ async function main() {
 
     // Upsert FlashcardDeck
     const slug = deckSlug(tierCode, bs);
+    const deckVisibility = publish ? "PUBLIC_PREVIEW" : "SUBSCRIBER";
+    const deckStatus = publish ? ContentStatus.PUBLISHED : ContentStatus.DRAFT;
     const deck = await prisma.flashcardDeck.upsert({
       where: { slug },
       create: {
@@ -217,12 +224,14 @@ async function main() {
         country: countryCodeVal,
         tier: tierCode,
         examFamily: examFamilyVal,
-        visibility: "SUBSCRIBER",
-        status: ContentStatus.DRAFT,
+        visibility: deckVisibility,
+        status: deckStatus,
         cardCount: cards.length,
       },
       update: {
         cardCount: cards.length,
+        // When --publish is passed, promote existing DRAFT decks to published
+        ...(publish ? { status: deckStatus, visibility: deckVisibility } : {}),
         updatedAt: new Date(),
       },
     });
@@ -237,7 +246,22 @@ async function main() {
       update: {},
     });
 
+    // Upsert FlashcardTag for this body system — enables /flashcards/[bodySystem] topic pages
+    const tag = await prisma.flashcardTag.upsert({
+      where: { slug: catSlug },
+      create: { slug: catSlug, name: catName },
+      update: {},
+    });
+
+    // Link deck ↔ tag (idempotent — composite PK prevents duplicates)
+    await prisma.flashcardDeckOnTag.upsert({
+      where: { deckId_tagId: { deckId: deck.id, tagId: tag.id } },
+      create: { deckId: deck.id, tagId: tag.id },
+      update: {},
+    });
+
     // Upsert each Flashcard
+    const cardStatus = publish ? ContentStatus.PUBLISHED : ContentStatus.DRAFT;
     for (let i = 0; i < cards.length; i++) {
       const input = cards[i];
       await prisma.flashcard.upsert({
@@ -248,7 +272,7 @@ async function main() {
           country: countryCodeVal,
           tier: tierCode,
           examFamily: examFamilyVal,
-          status: ContentStatus.DRAFT,
+          status: cardStatus,
           categoryId: category.id,
           deckId: deck.id,
           positionInDeck: i,
@@ -258,6 +282,7 @@ async function main() {
           front: input.front,
           back: input.back,
           positionInDeck: i,
+          ...(publish ? { status: cardStatus } : {}),
           updatedAt: new Date(),
         },
       });
@@ -266,8 +291,15 @@ async function main() {
   }
 
   console.log(`\n  ✓ ${decksUpserted} deck(s) upserted`);
+  console.log(`  ✓ ${decksUpserted} FlashcardTag(s) upserted (one per body system)`);
   console.log(`  ✓ ${cardsUpserted} card(s) upserted`);
-  console.log(`\nSync complete. Cards are in DRAFT status — review in admin before publishing.\n`);
+  if (publish) {
+    console.log(`\nSync complete. Decks + cards are PUBLISHED + PUBLIC_PREVIEW.`);
+    console.log(`Topic pages live at /flashcards/{bodySystem} — e.g. /flashcards/cardiovascular\n`);
+  } else {
+    console.log(`\nSync complete. Cards are DRAFT — run with --publish to make them public.`);
+    console.log(`Or promote individually in the admin panel.\n`);
+  }
 }
 
 main()
