@@ -56,14 +56,17 @@ export function LessonsToolbar({ searchBasePath, initialQuery, countryOptions, t
 
       {/* Result count strip — shown when a query is active or always if count provided */}
       {(initialQuery || totalCount !== undefined) && (
-        <div className="border-t border-[var(--semantic-border-soft)] pt-3 text-xs text-[var(--theme-muted-text)]">
-          {initialQuery && totalCount !== undefined
-            ? `${totalCount.toLocaleString()} ${totalCount === 1 ? "lesson" : "lessons"} match "${initialQuery}"`
-            : totalCount !== undefined
-              ? `${totalCount.toLocaleString()} ${totalCount === 1 ? "lesson" : "lessons"} in this pathway`
-              : initialQuery
-                ? `Showing results for "${initialQuery}"`
-                : null}
+        <div className="flex items-center gap-2 border-t border-[var(--semantic-border-soft)] pt-3">
+          <span className="inline-flex h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--semantic-brand)]" aria-hidden />
+          <p className="text-xs font-medium text-[var(--theme-muted-text)]">
+            {initialQuery && totalCount !== undefined
+              ? <><strong className="text-[var(--theme-heading-text)]">{totalCount.toLocaleString()}</strong> {totalCount === 1 ? "lesson matches" : "lessons match"} <span className="italic">&ldquo;{initialQuery}&rdquo;</span></>
+              : totalCount !== undefined
+                ? <><strong className="text-[var(--theme-heading-text)]">{totalCount.toLocaleString()}</strong> {totalCount === 1 ? "lesson" : "lessons"} in this pathway</>
+                : initialQuery
+                  ? `Showing results for "${initialQuery}"`
+                  : null}
+          </p>
         </div>
       )}
     </div>

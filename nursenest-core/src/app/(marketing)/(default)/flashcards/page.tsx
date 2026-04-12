@@ -152,7 +152,7 @@ export default async function PublicFlashcardsHubPage() {
       {/* ── Featured decks ── */}
       <section
         id="flashcard-deck-library"
-        className="mt-10"
+        className="mt-8"
         aria-labelledby="featured-decks-heading"
       >
         <div className="mb-5 flex items-center justify-between gap-3">
@@ -183,6 +183,34 @@ export default async function PublicFlashcardsHubPage() {
             ))}
           </ul>
         )}
+      </section>
+
+      {/* ── Bottom CTA band ── */}
+      <section
+        className="mt-12 rounded-[1.75rem] border border-[var(--semantic-border-soft)] bg-gradient-to-br from-[var(--hero-gradient-start)] via-[var(--semantic-surface)] to-[var(--hero-gradient-end)] p-6 text-center shadow-[var(--semantic-shadow-soft)] sm:p-8"
+        aria-label="Get started studying"
+      >
+        <GraduationCap className="mx-auto mb-3 h-8 w-8 text-[var(--semantic-brand)]" aria-hidden />
+        <h2 className="text-xl font-semibold tracking-tight text-[var(--theme-heading-text)]">
+          Ready to study? Create a free account.
+        </h2>
+        <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-[var(--theme-muted-text)]">
+          Sign in to track your progress, study all decks, and build custom study plans.
+        </p>
+        <div className="mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row">
+          <Link
+            href={login}
+            className="inline-flex min-h-[48px] w-full max-w-[220px] items-center justify-center rounded-full bg-[var(--semantic-brand)] px-6 py-3 text-sm font-semibold text-white transition hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_24%,transparent)]"
+          >
+            {t("pages.publicFlashcardsHub.ctaSignIn")}
+          </Link>
+          <Link
+            href={pricing}
+            className="inline-flex min-h-[48px] w-full max-w-[220px] items-center justify-center rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-6 py-3 text-sm font-semibold text-[var(--theme-heading-text)] transition hover:bg-[color-mix(in_srgb,var(--semantic-brand)_5%,var(--semantic-surface))] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_24%,transparent)]"
+          >
+            {t("pages.publicFlashcardsHub.ctaPricing")}
+          </Link>
+        </div>
       </section>
     </main>
   );
@@ -248,12 +276,13 @@ function FlashcardDeckCard({ deck, locale, t }: DeckProps) {
       )}
 
       {/* CTA */}
-      <div className="mt-4 border-t border-[var(--semantic-border-soft)] pt-4">
+      <div className="mt-5 border-t border-[var(--semantic-border-soft)] pt-4">
         <Link
           href={href}
-          className="inline-flex min-h-[40px] items-center justify-center rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-5 py-2 text-sm font-semibold text-[var(--theme-heading-text)] transition hover:bg-[color-mix(in_srgb,var(--semantic-brand)_8%,var(--semantic-surface))] hover:text-[var(--semantic-brand)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_24%,transparent)]"
+          className="inline-flex min-h-[44px] w-full items-center justify-center gap-1.5 rounded-full bg-[var(--semantic-brand)] px-5 py-2 text-sm font-semibold text-white transition hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_24%,transparent)]"
         >
-          Study this deck →
+          Study this deck
+          <span aria-hidden>→</span>
         </Link>
       </div>
     </article>

@@ -570,13 +570,14 @@
   --theme-topbar-bg: var(--theme-primary);
   --theme-topbar-text: #ffffff;
   /*
-   * Neutral page background: 2% primary tint — nearly invisible, ensures the page reads
-   * as clinical/white regardless of theme. Theme color concentrates on bubble/accent surfaces.
-   * Previously 5% which caused visible full-page hue shifts between themes.
+   * Page background: 4% primary tint on a neutral base — subtle but perceivable.
+   * Creates visible separation from the pure-white card surfaces (#ffffff = --theme-card-bg).
+   * Previously 2% which was invisible; 5% caused noticeable full-page hue shifts.
+   * Base is neutral cool-gray (#f2f4f7) not pure white so the tint is anchored.
    */
-  --theme-page-bg: color-mix(in srgb, #ffffff 98%, var(--theme-primary));
-  /* Nav: 2% tint — barely distinguishable from the page, theme shows in topbar + accents */
-  --theme-nav-bg: color-mix(in srgb, #ffffff 98%, var(--theme-primary));
+  --theme-page-bg: color-mix(in srgb, var(--theme-primary) 4%, #f2f4f7);
+  /* Nav: matches page bg for light themes (theme shows in topbar + context bar chrome) */
+  --theme-nav-bg: color-mix(in srgb, var(--theme-primary) 4%, #f2f4f7);
   --theme-nav-text: #6b7280;
   --theme-nav-border: color-mix(in srgb, var(--theme-primary) 10%, transparent);
   --theme-menu-text: #374151;

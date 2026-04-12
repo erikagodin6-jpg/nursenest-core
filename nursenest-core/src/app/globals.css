@@ -74,9 +74,9 @@ body {
   /* Centralized palette roles (seeded before ThemeStateHydration applies per-theme values). */
   --palette-primary: #1da2d8;
   --palette-accent: #2563eb;
-  --palette-background: #fafcff;
+  --palette-background: #f2f4f7;
   --palette-surface: #ffffff;
-  --palette-surface-alt: #e3ecfb;
+  --palette-surface-alt: #e8ecf2;
   --palette-text: #4b5563;
   --palette-text-muted: #6b7280;
   --palette-heading: #111827;
@@ -1511,9 +1511,9 @@ html[data-theme] .nn-marketing-surface {
   --header-utility-border: var(--nn-nav-border, color-mix(in srgb, var(--nn-nav-fg, var(--nav-fg)) 18%, transparent));
 }
 
-/* Logo/content row — sits on page background, content uses heading/body text */
+/* Logo/content row — sits on white/near-white surface, visually above the tinted page canvas */
 .nn-header-logo-row {
-  background: var(--theme-background, var(--bg-page));
+  background: var(--theme-header-surface, var(--palette-surface, #ffffff));
   color: var(--theme-heading-text);
   border-bottom: none;
   box-shadow: none;
@@ -1523,21 +1523,24 @@ html[data-theme] .nn-marketing-surface {
   --header-link: var(--theme-heading-text);
   --header-link-hover: var(--theme-brand-strong, var(--theme-primary));
   --header-link-active: var(--theme-brand-strong, var(--theme-primary));
-  --header-background: var(--theme-background, var(--bg-page));
+  --header-background: var(--theme-header-surface, var(--palette-surface, #ffffff));
   --header-text: var(--theme-heading-text);
   --header-border: color-mix(in srgb, var(--theme-border, var(--border)) 50%, transparent);
   /* Override nav surface tokens to work on light page surface */
   --nav-fg: var(--theme-heading-text);
   --nav-link: var(--theme-heading-text);
   --nav-link-hover: var(--theme-brand-strong, var(--theme-primary));
-  --nav-hover: color-mix(in srgb, var(--theme-primary) 8%, var(--theme-background, transparent));
-  --nav-active: color-mix(in srgb, var(--theme-primary) 10%, var(--theme-background, transparent));
+  --nav-hover: color-mix(in srgb, var(--theme-primary) 8%, var(--theme-header-surface, #ffffff));
+  --nav-active: color-mix(in srgb, var(--theme-primary) 10%, var(--theme-header-surface, #ffffff));
   --nav-border: var(--theme-border, var(--border));
   --nav-muted: var(--theme-muted-text, var(--text-muted));
 }
 
 .nn-header-logo-row--scrolled {
-  box-shadow: 0 6px 24px -8px color-mix(in srgb, var(--theme-heading-text) 10%, transparent);
+  /* Stronger shadow so the white logo row visually floats above the page canvas */
+  box-shadow:
+    0 1px 0 0 color-mix(in srgb, var(--theme-border, var(--border)) 50%, transparent),
+    0 8px 28px -6px color-mix(in srgb, var(--theme-heading-text) 14%, transparent);
 }
 
 /* Bottom accent strip separating logo row from page content (light themes) */
