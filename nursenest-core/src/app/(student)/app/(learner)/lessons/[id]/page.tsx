@@ -262,38 +262,53 @@ export default async function LessonDetailPage({ params }: Props) {
       }
     }
     return (
-      <main>
-        <Link href="/app/lessons" className="text-sm font-medium text-primary hover:underline">
-          {t("learner.lessons.detail.allLessons")}
-        </Link>
-        <h1 className="mt-4 text-3xl font-bold">{title}</h1>
-        <PremiumLessonShell
-          userId={userId}
-          userLabel={userLabel}
-          flags={flags}
-          scope={LearnerNoteScope.CONTENT_LESSON}
-          contextId={id}
-          sourceLabel={title}
-        >
-          <LegacyMonolithLessonBody lesson={resolvedLesson.lesson} />
-        </PremiumLessonShell>
-        {isStudyCoachEnabled() && (
-          <CoachLessonHelper lessonTitle={title} topic={title} />
-        )}
-        <LessonContinueStudyNextBlock bundle={legacyContinue} />
-        <div className="mt-10 flex flex-wrap gap-2 border-t border-border pt-6">
+      <main className="nn-lesson-page">
+        <header className="nn-lesson-page-header">
           <Link
-            href="/app/questions"
-            className="rounded-full bg-role-cta px-4 py-2 text-sm font-semibold text-role-cta-foreground"
+            href="/app/lessons"
+            className="inline-flex items-center gap-1.5 text-sm font-medium transition-colors hover:underline"
+            style={{ color: "var(--semantic-text-muted)" }}
           >
-            {t("learner.lessons.detail.ctaQuestionBank")}
+            ← {t("learner.lessons.detail.allLessons")}
           </Link>
-          <Link
-            href="/app/exams"
-            className="rounded-full border border-border px-4 py-2 text-sm font-semibold hover:bg-muted"
+          <h1
+            className="mt-4 text-2xl font-bold leading-tight tracking-tight sm:text-3xl"
+            style={{ color: "var(--semantic-text-primary)" }}
           >
-            {t("learner.lessons.detail.ctaTimedExam")}
-          </Link>
+            {title}
+          </h1>
+        </header>
+        <div className="mt-8">
+          <PremiumLessonShell
+            userId={userId}
+            userLabel={userLabel}
+            flags={flags}
+            scope={LearnerNoteScope.CONTENT_LESSON}
+            contextId={id}
+            sourceLabel={title}
+          >
+            <LegacyMonolithLessonBody lesson={resolvedLesson.lesson} />
+          </PremiumLessonShell>
+          {isStudyCoachEnabled() && (
+            <CoachLessonHelper lessonTitle={title} topic={title} />
+          )}
+          <LessonContinueStudyNextBlock bundle={legacyContinue} />
+          <div className="mt-10 flex flex-wrap gap-3 border-t pt-6" style={{ borderColor: "var(--border-subtle)" }}>
+            <Link
+              href="/app/questions"
+              className="inline-flex items-center rounded-xl px-5 py-2.5 text-sm font-semibold transition-opacity hover:opacity-90"
+              style={{ background: "var(--semantic-brand)", color: "#fff" }}
+            >
+              {t("learner.lessons.detail.ctaQuestionBank")}
+            </Link>
+            <Link
+              href="/app/exams"
+              className="inline-flex items-center rounded-xl border px-5 py-2.5 text-sm font-semibold transition-colors hover:opacity-80"
+              style={{ borderColor: "var(--border-subtle)", color: "var(--semantic-text-secondary)", background: "var(--bg-card)" }}
+            >
+              {t("learner.lessons.detail.ctaTimedExam")}
+            </Link>
+          </div>
         </div>
       </main>
     );
@@ -419,7 +434,7 @@ export default async function LessonDetailPage({ params }: Props) {
                 sourceLabel={record.title}
                 qualityNotice={<LessonQualityNotice tier={pathwayQuality.tier} wordCount={pathwayQuality.wordCount} />}
               >
-                <article className="space-y-5">
+                <article className="space-y-6">
                   {visible.map((section) => (
                     <LessonSectionCard
                       key={section.id}
@@ -484,20 +499,29 @@ export default async function LessonDetailPage({ params }: Props) {
                 catAuthState="signed_in"
               />
             ) : null}
-            <div className="mt-8 flex flex-wrap gap-2 border-t pt-6" style={{ borderColor: "var(--semantic-border-soft)" }}>
+            <div
+              className="mt-10 flex flex-wrap gap-3 border-t pt-6"
+              style={{ borderColor: "var(--border-subtle)" }}
+            >
               <Link
                 href={
                   pathway
                     ? buildAppQuestionBankTopicDrillHref(pathway, record.topic, record.topicSlug ?? undefined)
                     : "/app/questions"
                 }
-                className="rounded-full bg-role-cta px-4 py-2 text-sm font-semibold text-role-cta-foreground"
+                className="inline-flex items-center rounded-xl px-5 py-2.5 text-sm font-semibold transition-opacity hover:opacity-90"
+                style={{ background: "var(--semantic-brand)", color: "#fff" }}
               >
                 {t("learner.lessons.detail.ctaQuestionBank")}
               </Link>
               <Link
                 href={buildAppPracticeTestsHubHref(pathwayId)}
-                className="rounded-full border border-border px-4 py-2 text-sm font-semibold hover:bg-muted"
+                className="inline-flex items-center rounded-xl border px-5 py-2.5 text-sm font-semibold transition-colors hover:opacity-80"
+                style={{
+                  borderColor: "var(--border-subtle)",
+                  color: "var(--semantic-text-secondary)",
+                  background: "var(--bg-card)",
+                }}
               >
                 {t("learner.lessons.detail.ctaPathwayPracticeTests")}
               </Link>
@@ -531,40 +555,62 @@ export default async function LessonDetailPage({ params }: Props) {
   }
 
   return (
-    <main>
-      <Link href="/app/lessons" className="text-sm font-medium text-primary hover:underline">
-        {t("learner.lessons.detail.allLessons")}
-      </Link>
-      <h1 className="mt-4 text-3xl font-bold">{row.title}</h1>
-      {row.summary ? <p className="mt-2 text-sm text-muted">{row.summary}</p> : null}
-      <PremiumLessonShell
-        userId={userId}
-        userLabel={userLabel}
-        flags={flags}
-        scope={LearnerNoteScope.CONTENT_LESSON}
-        contextId={id}
-        sourceLabel={row.title}
-        qualityNotice={<LessonQualityNotice tier={contentQ.tier} wordCount={contentQ.wordCount} />}
-      >
-        <LessonBody content={row.content as unknown} />
-      </PremiumLessonShell>
-      {isStudyCoachEnabled() && (
-        <CoachLessonHelper
-          lessonTitle={row.title}
-          topic={row.bodySystem?.trim() || undefined}
-        />
-      )}
-      <LessonContinueStudyNextBlock bundle={contentContinue} />
-      <div className="mt-10 flex flex-wrap gap-2 border-t border-border pt-6">
+    <main className="nn-lesson-page">
+      <header className="nn-lesson-page-header">
         <Link
-          href="/app/questions"
-          className="rounded-full bg-role-cta px-4 py-2 text-sm font-semibold text-role-cta-foreground"
+          href="/app/lessons"
+          className="inline-flex items-center gap-1.5 text-sm font-medium transition-colors hover:underline"
+          style={{ color: "var(--semantic-text-muted)" }}
         >
-          {t("learner.lessons.detail.ctaQuestionBank")}
+          ← {t("learner.lessons.detail.allLessons")}
         </Link>
-        <Link href="/app/exams" className="rounded-full border border-border px-4 py-2 text-sm font-semibold hover:bg-muted">
-          {t("learner.lessons.detail.ctaTimedExam")}
-        </Link>
+        <h1
+          className="mt-4 text-2xl font-bold leading-tight tracking-tight sm:text-3xl"
+          style={{ color: "var(--semantic-text-primary)" }}
+        >
+          {row.title}
+        </h1>
+        {row.summary ? (
+          <p className="mt-2 text-sm leading-relaxed" style={{ color: "var(--semantic-text-muted)" }}>
+            {row.summary}
+          </p>
+        ) : null}
+      </header>
+      <div className="mt-8">
+        <PremiumLessonShell
+          userId={userId}
+          userLabel={userLabel}
+          flags={flags}
+          scope={LearnerNoteScope.CONTENT_LESSON}
+          contextId={id}
+          sourceLabel={row.title}
+          qualityNotice={<LessonQualityNotice tier={contentQ.tier} wordCount={contentQ.wordCount} />}
+        >
+          <LessonBody content={row.content as unknown} />
+        </PremiumLessonShell>
+        {isStudyCoachEnabled() && (
+          <CoachLessonHelper
+            lessonTitle={row.title}
+            topic={row.bodySystem?.trim() || undefined}
+          />
+        )}
+        <LessonContinueStudyNextBlock bundle={contentContinue} />
+        <div className="mt-10 flex flex-wrap gap-3 border-t pt-6" style={{ borderColor: "var(--border-subtle)" }}>
+          <Link
+            href="/app/questions"
+            className="inline-flex items-center rounded-xl px-5 py-2.5 text-sm font-semibold transition-opacity hover:opacity-90"
+            style={{ background: "var(--semantic-brand)", color: "#fff" }}
+          >
+            {t("learner.lessons.detail.ctaQuestionBank")}
+          </Link>
+          <Link
+            href="/app/exams"
+            className="inline-flex items-center rounded-xl border px-5 py-2.5 text-sm font-semibold transition-colors hover:opacity-80"
+            style={{ borderColor: "var(--border-subtle)", color: "var(--semantic-text-secondary)", background: "var(--bg-card)" }}
+          >
+            {t("learner.lessons.detail.ctaTimedExam")}
+          </Link>
+        </div>
       </div>
     </main>
   );

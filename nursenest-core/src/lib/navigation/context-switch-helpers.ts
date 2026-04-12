@@ -20,7 +20,7 @@ import {
   listPublicExamPathways,
   buildExamPathwayPath,
   type ExamPathwayDefinition,
-} from "@/lib/exam-pathways/exam-product-registry";
+} from "@/lib/exam-pathways";
 
 // ── Types ────────────────────────────────────────────────────────────────────
 

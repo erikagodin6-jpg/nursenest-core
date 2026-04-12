@@ -244,6 +244,7 @@ export function PricingPageClient({
           duration,
           acceptPolicies: true,
           policyVersion: LEGAL_POLICY_BUNDLE_VERSION,
+          region,
         };
         if (isAllied) {
           body.alliedCareer = selectedAlliedCareer;

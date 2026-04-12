@@ -24,6 +24,9 @@ import {
 } from "@/lib/theme/marketing-region-toggle";
 import { trackClientEvent } from "@/lib/observability/posthog-client";
 import { PH } from "@/lib/observability/posthog-conversion-events";
+import { GlobalContextBar } from "@/components/layout/global-context-bar";
+import { MobileContextDrawer, MobileContextTrigger } from "@/components/layout/mobile-context-drawer";
+import type { GlobalRegionSlug, GlobalLocaleCode } from "@/lib/i18n/global-regions";
 import {
   defaultPathwayIdForMarketingOffering,
   marketingExamHubPath,
@@ -333,14 +336,22 @@ export function SiteHeader() {
   );
   const setRegionAndRefresh = useMarketingRegionToggleWithRefresh(setRegion, regionToggleAnalytics);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [mobileContextOpen, setMobileContextOpen] = useState(false);
   const [mobileExpandedMega, setMobileExpandedMega] = useState<ExamMenuKey | null>(null);
   const [langOpen, setLangOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [openMegaMenu, setOpenMegaMenu] = useState<ExamMenuKey | null>(null);
   const [resumeStudyingCta, setResumeStudyingCta] = useState<HeaderResumeCta>(null);
+  const [contextBarCountryOpen, setContextBarCountryOpen] = useState(false);
+  const [contextBarLangOpen, setContextBarLangOpen] = useState(false);
+  const [contextBarProfOpen, setContextBarProfOpen] = useState(false);
+  const [contextBarExamOpen, setContextBarExamOpen] = useState(false);
   const closeMegaTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const langRef = useRef<HTMLDivElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
+
+  const globalRegion: GlobalRegionSlug = region === "CA" ? "canada" : "us";
+  const globalLocale: GlobalLocaleCode = (locale as GlobalLocaleCode) ?? "en";
 
   const localizeHref = (href: string) => {
     const mapped = mapLegacyMarketingHref(href);
@@ -425,6 +436,10 @@ export function SiteHeader() {
     isLearnerAuthenticated && user
       ? examIndicatorLabel(user.country as LearnerCountry, user.tier as LearnerTier)
       : null;
+  const activeProfession: string = isLearnerAuthenticated && user?.tier
+    ? (user.tier === "RPN" || user.tier === "LVN_LPN" ? "pn" : user.tier === "NP" ? "np" : user.tier === "ALLIED" ? "allied" : "rn")
+    : "rn";
+  const activeExam: string | null = null;
   const pricingNav = {
     key: "pricing",
     href: HUB.pricing,
@@ -619,15 +634,21 @@ export function SiteHeader() {
               )}
             </div>
 
-            <Button
-              type="button"
-              variant="ghost"
-              className="h-10 w-10 shrink-0 rounded-xl border border-[var(--header-border)] p-0 text-[var(--header-text)] hover:bg-[var(--nav-hover)] lg:hidden"
-              aria-label={t("nav.openMenu")}
-              onClick={() => setMobileOpen(true)}
-            >
-              <Menu className="h-5 w-5" aria-hidden />
-            </Button>
+            <div className="flex items-center gap-1.5 lg:hidden">
+              <MobileContextTrigger
+                region={globalRegion}
+                onClick={() => setMobileContextOpen(true)}
+              />
+              <Button
+                type="button"
+                variant="ghost"
+                className="h-10 w-10 shrink-0 rounded-xl border border-[var(--header-border)] p-0 text-[var(--header-text)] hover:bg-[var(--nav-hover)]"
+                aria-label={t("nav.openMenu")}
+                onClick={() => setMobileOpen(true)}
+              >
+                <Menu className="h-5 w-5" aria-hidden />
+              </Button>
+            </div>
           </div>
         </div>
         {isMarketingNav && openMega ? (
@@ -776,6 +797,47 @@ export function SiteHeader() {
       </header>
 
       {isLightTheme && <div className="nn-header-accent-bar" aria-hidden="true" />}
+
+      {/* Context chip row — shows current country, language, profession, exam */}
+      <GlobalContextBar
+        region={globalRegion}
+        locale={globalLocale}
+        profession={activeProfession}
+        exam={activeExam}
+        onRegionClick={() => setMobileContextOpen(true)}
+        onLanguageClick={() => setMobileContextOpen(true)}
+        onProfessionClick={() => setMobileContextOpen(true)}
+        onExamClick={() => setMobileContextOpen(true)}
+      />
+
+      {/* Mobile context/settings drawer — separate from main nav */}
+      <MobileContextDrawer
+        open={mobileContextOpen}
+        onClose={() => setMobileContextOpen(false)}
+        region={globalRegion}
+        locale={globalLocale}
+        profession={activeProfession}
+        exam={activeExam}
+        onRegionChange={(newRegion) => {
+          if (newRegion === "us") setRegionAndRefresh("US");
+          else if (newRegion === "canada") setRegionAndRefresh("CA");
+          setMobileContextOpen(false);
+        }}
+        onLocaleChange={() => {
+          setMobileContextOpen(false);
+        }}
+        onProfessionChange={() => {
+          setMobileContextOpen(false);
+        }}
+        onExamChange={() => {
+          setMobileContextOpen(false);
+        }}
+        themeLabels={{
+          navTheme: t("nav.theme"),
+          themeGroupLight: t("nav.themeGroupLight"),
+          themeGroupDark: t("nav.themeGroupDark"),
+        }}
+      />
 
       {mobileOpen ? (
         <div className="fixed inset-0 z-[200] md:hidden animate-[nn-overlay-enter_0.24s_ease_both]">

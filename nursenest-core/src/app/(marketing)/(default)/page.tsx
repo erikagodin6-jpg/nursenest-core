@@ -15,6 +15,7 @@ import { resolveMarketingCopy } from "@/lib/marketing-i18n-core";
 import { getMarketingRegionFromCookies } from "@/lib/region/marketing-region-server";
 import { defaultHomeMetaDescription, defaultHomeMetaTitle } from "@/lib/marketing/nursing-tier-public-labels";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
+import { ExamSelectorGate } from "@/components/onboarding/exam-selector-gate";
 
 /** ISR: homepage shell (lesson teaser strip removed — routing-first layout). */
 export const revalidate = 600;
@@ -83,6 +84,7 @@ export default async function HomePage() {
         </div>
       ) : null}
       <HomeRestoredClient />
+      <ExamSelectorGate />
     </>
   );
 }

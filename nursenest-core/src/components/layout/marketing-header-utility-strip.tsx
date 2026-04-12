@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ChevronDown } from "lucide-react";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { MarketingLanguagePreferenceList } from "@/components/i18n/marketing-language-preference";
@@ -11,6 +11,9 @@ import {
   marketingRegionToggleSegment,
   marketingRegionToggleShell,
 } from "@/lib/theme/marketing-region-toggle";
+import { CompactCountryTrigger, CountrySelector } from "@/components/layout/global-context-switcher";
+import { getRegionFlag } from "@/lib/navigation/context-switch-helpers";
+import type { GlobalRegionSlug } from "@/lib/i18n/global-regions";
 
 /**
  * Desktop-only preferences rail.
@@ -27,21 +30,70 @@ export function MarketingHeaderUtilityStrip({ variant = "standard" }: { variant?
   );
   const setRegionAndRefresh = useMarketingRegionToggleWithRefresh(setRegion, regionToggleAnalytics);
   const [langOpen, setLangOpen] = useState(false);
+  const [countryOpen, setCountryOpen] = useState(false);
   const langRef = useRef<HTMLDivElement>(null);
+  const countryRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const close = (e: MouseEvent) => {
       if (!langRef.current?.contains(e.target as Node)) setLangOpen(false);
+      if (!countryRef.current?.contains(e.target as Node)) setCountryOpen(false);
+    };
+    const onEscape = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setLangOpen(false);
+        setCountryOpen(false);
+      }
     };
     document.addEventListener("click", close);
-    return () => document.removeEventListener("click", close);
+    document.addEventListener("keydown", onEscape);
+    return () => {
+      document.removeEventListener("click", close);
+      document.removeEventListener("keydown", onEscape);
+    };
   }, []);
+
+  const handleCountrySelect = useCallback(
+    (newRegion: GlobalRegionSlug) => {
+      // Map global regions to the legacy US/CA toggle for existing state management
+      if (newRegion === "us") setRegionAndRefresh("US");
+      else if (newRegion === "canada") setRegionAndRefresh("CA");
+      else {
+        // For international regions, persist via the same mechanism
+        // but keep region as-is since NursenestRegionRoot only handles US/CA
+        setRegionAndRefresh(region);
+      }
+      setCountryOpen(false);
+    },
+    [region, setRegionAndRefresh],
+  );
+
+  // Derive GlobalRegionSlug from legacy US/CA region
+  const globalRegion: GlobalRegionSlug = region === "CA" ? "canada" : "us";
 
   return (
     <div className={`${variant === "dark-bar" ? "nn-header-utility-dark" : "nn-header-utility"} hidden md:block`}>
       <div className="nn-section-shell flex h-9 items-center justify-end gap-2 lg:gap-2.5">
+        {/* Country selector — replaces old US/CA toggle with global selector */}
+        <div className="relative" ref={countryRef}>
+          <CompactCountryTrigger
+            region={globalRegion}
+            onClick={() => setCountryOpen((o) => !o)}
+          />
+          {countryOpen && (
+            <div className="absolute end-0 z-[120] mt-1">
+              <CountrySelector
+                currentRegion={globalRegion}
+                onSelect={handleCountrySelect}
+                onClose={() => setCountryOpen(false)}
+                variant="popover"
+              />
+            </div>
+          )}
+        </div>
+
+        {/* Legacy US/CA quick toggle — kept for users familiar with it */}
         <div className="flex items-center gap-1.5">
-          <span className="nn-marketing-caption shrink-0 leading-none text-[var(--header-utility-text)]">{t("nav.regionLabel")}</span>
           <div className={marketingRegionToggleShell("pill")} role="group" aria-label={t("nav.regionLabel")}>
             <button
               type="button"

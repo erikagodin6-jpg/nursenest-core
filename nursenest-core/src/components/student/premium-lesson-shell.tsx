@@ -1,6 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
+import { LockKeyhole } from "lucide-react";
 import { LearnerNoteScope } from "@prisma/client";
 import type { PremiumProtectionFlags } from "@/lib/premium-protection/config";
 import { ProtectedPremiumContent } from "@/components/student/protected-premium-content";
@@ -33,10 +34,21 @@ export function PremiumLessonShell({
   children,
 }: Props) {
   return (
-    <div className="space-y-4">
-      <p className="rounded-lg border border-border/60 bg-muted/30 px-3 py-2 text-xs text-muted">
-        Premium content is for individual subscriber use. Notes are printable; protected lesson content is not. Copying is
-        limited on lesson text. This is deterrence only, not DRM.
+    <div className="space-y-5">
+      <p
+        className="flex items-start gap-2.5 rounded-xl border px-4 py-3 text-xs font-medium leading-relaxed"
+        style={{
+          background: "color-mix(in srgb, var(--semantic-brand) 5%, var(--bg-card))",
+          borderColor: "color-mix(in srgb, var(--semantic-brand) 14%, var(--border-subtle))",
+          color: "var(--semantic-text-muted)",
+        }}
+      >
+        <LockKeyhole
+          className="mt-0.5 h-3.5 w-3.5 shrink-0"
+          style={{ color: "var(--semantic-brand)" }}
+          aria-hidden="true"
+        />
+        Premium subscriber content. Notes are printable; copying is deterred but not DRM-locked.
       </p>
       {qualityNotice}
       <ProtectedPremiumContent

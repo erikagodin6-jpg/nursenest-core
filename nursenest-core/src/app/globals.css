@@ -1977,10 +1977,20 @@ html[data-theme="deep-twilight"] .nn-trust-mark {
   }
 }
 
+@keyframes nn-drawer-slide-up {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .nn-header-animate-in,
   [class*="animate-[nn-overlay-enter"],
   [class*="animate-[nn-drawer-slide-in"],
+  [class*="animate-[nn-drawer-slide-up"],
   [class*="animate-[nn-mega-panel-enter"] {
     animation: none;
   }
@@ -2222,10 +2232,11 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-exam-chrome-dim {
   --lsc-contrast: var(--semantic-info-contrast);
 
   border-radius: 1.25rem;
-  border: 1.5px solid color-mix(in srgb, var(--lsc-color) 28%, var(--semantic-border-soft));
-  /* Use lsc-soft directly — stronger color presence without being harsh */
+  /* Uniform border, but left side gets a stronger accent via box-shadow inset trick */
+  border: 1.5px solid color-mix(in srgb, var(--lsc-color) 22%, var(--semantic-border-soft));
+  border-left: 4px solid color-mix(in srgb, var(--lsc-color) 65%, var(--semantic-border-soft));
   background: var(--lsc-soft);
-  padding: 1.625rem 1.5rem 2rem;
+  padding: 1.625rem 1.5rem 2rem 1.625rem;
   box-shadow: var(--elevation-rest);
   transition:
     box-shadow var(--motion-base) var(--motion-ease),
@@ -2235,14 +2246,15 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-exam-chrome-dim {
 
 @media (min-width: 640px) {
   .nn-lesson-section-card {
-    padding: 2.25rem 2.125rem 2.625rem;
+    padding: 2rem 2.125rem 2.5rem 2.25rem;
   }
 }
 
 @media (prefers-reduced-motion: no-preference) {
   .nn-lesson-section-card:hover {
     box-shadow: 0 6px 24px color-mix(in srgb, var(--lsc-color) 14%, transparent), var(--elevation-hover);
-    border-color: color-mix(in srgb, var(--lsc-color) 40%, var(--semantic-border-soft));
+    border-color: color-mix(in srgb, var(--lsc-color) 38%, var(--semantic-border-soft));
+    border-left-color: color-mix(in srgb, var(--lsc-color) 80%, var(--semantic-border-soft));
   }
 }
 
@@ -2310,6 +2322,7 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-exam-chrome-dim {
 /*
  * Section label chip — inherits --lsc-* from the parent card.
  * Renders as a small colored eyebrow/pill above the section heading.
+ * Slightly more saturated and high-contrast than the card background for clear scanability.
  */
 .nn-lesson-section-chip {
   display: inline-flex;
@@ -2318,14 +2331,14 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-exam-chrome-dim {
   border-radius: 0.5rem;
   font-size: 0.6875rem;
   font-weight: 700;
-  letter-spacing: 0.065em;
+  letter-spacing: 0.07em;
   text-transform: uppercase;
-  padding: 0.3125rem 0.75rem;
+  padding: 0.3rem 0.7rem;
   line-height: 1.4;
   white-space: nowrap;
   color: var(--lsc-contrast);
-  background: color-mix(in srgb, var(--lsc-color) 20%, white);
-  border: 1px solid color-mix(in srgb, var(--lsc-color) 38%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--lsc-color) 16%, var(--bg-card, white));
+  border: 1px solid color-mix(in srgb, var(--lsc-color) 42%, var(--semantic-border-soft));
 }
 
 /* ==========================================================================
@@ -2333,12 +2346,12 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-exam-chrome-dim {
  * ========================================================================== */
 
 .nn-lesson-page {
-  padding-bottom: 4rem;
+  padding-bottom: 4.5rem;
 }
 
 .nn-lesson-page-header {
-  padding-bottom: 1.75rem;
-  border-bottom: 1.5px solid var(--border-subtle);
+  padding-bottom: 2rem;
+  border-bottom: 2px solid color-mix(in srgb, var(--theme-primary) 14%, var(--border-subtle));
 }
 
 .nn-lesson-layout {
@@ -2379,12 +2392,13 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-exam-chrome-dim {
     top: 5.5rem;
     max-height: calc(100vh - 7rem);
     overflow-y: auto;
-    padding: 1.25rem 1rem;
-    border-radius: 1rem;
+    padding: 1.375rem 1.125rem;
+    border-radius: 1.125rem;
     background: var(--bg-card);
-    border: 1px solid var(--border-subtle);
+    border: 1px solid color-mix(in srgb, var(--theme-primary) 12%, var(--border-subtle));
     box-shadow: var(--elevation-rest);
     scrollbar-width: none;
+    border-top: 3px solid color-mix(in srgb, var(--theme-primary) 50%, var(--border-subtle));
   }
   .nn-lesson-section-nav::-webkit-scrollbar {
     display: none;
@@ -2395,8 +2409,8 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-exam-chrome-dim {
   display: flex;
   align-items: flex-start;
   gap: 0.625rem;
-  padding: 0.4375rem 0.5rem;
-  border-radius: 0.5rem;
+  padding: 0.5rem 0.625rem;
+  border-radius: 0.625rem;
   text-decoration: none;
   transition:
     background var(--motion-base, 150ms) ease,
@@ -2404,18 +2418,18 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-exam-chrome-dim {
 }
 
 .nn-lesson-nav-item:hover {
-  background: color-mix(in srgb, var(--semantic-brand) 6%, transparent);
+  background: color-mix(in srgb, var(--theme-primary) 7%, transparent);
 }
 
 .nn-lesson-nav-item[data-active] {
-  background: color-mix(in srgb, var(--semantic-brand) 10%, transparent);
+  background: color-mix(in srgb, var(--theme-primary) 11%, transparent);
 }
 
 .nn-lesson-nav-dot {
-  width: 0.5rem;
-  height: 0.5rem;
+  width: 0.5625rem;
+  height: 0.5625rem;
   border-radius: 50%;
-  margin-top: 0.25rem;
+  margin-top: 0.28rem;
   flex-shrink: 0;
   background: var(--semantic-border-soft);
   transition: background var(--motion-base, 150ms) ease;
@@ -2436,13 +2450,13 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-exam-chrome-dim {
 .nn-lesson-nav-label {
   font-size: 0.8125rem;
   font-weight: 500;
-  line-height: 1.4;
+  line-height: 1.45;
   color: var(--semantic-text-primary);
   transition: color var(--motion-base, 150ms) ease;
 }
 
 .nn-lesson-nav-item[data-active] .nn-lesson-nav-label {
-  color: var(--semantic-brand);
+  color: var(--theme-primary);
   font-weight: 600;
 }
 
@@ -2455,7 +2469,7 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-exam-chrome-dim {
 }
 
 .nn-lesson-nav-item[data-active] .nn-lesson-nav-chip {
-  color: color-mix(in srgb, var(--semantic-brand) 70%, var(--semantic-text-muted));
+  color: color-mix(in srgb, var(--theme-primary) 70%, var(--semantic-text-muted));
 }
 
 /* ==========================================================================

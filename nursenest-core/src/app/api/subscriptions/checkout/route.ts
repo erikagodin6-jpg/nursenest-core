@@ -24,12 +24,16 @@ import {
   STRIPE_PRICE_NOT_CONFIGURED_CODE,
 } from "@/lib/stripe/checkout-api-diagnostics";
 import { findPriceEntry, findAlliedPriceEntry, type BillingDuration } from "@/lib/stripe/pricing-map";
+import { getRegionalPricing } from "@/lib/pricing/regional-pricing-map";
+import { isGlobalRegionSlug, type GlobalRegionSlug } from "@/lib/i18n/global-regions";
 import type { TierCode } from "@prisma/client";
 
 const bodySchema = z.object({
   tier: z.enum(["PRE_NURSING", "NEW_GRAD", "RPN", "LVN_LPN", "RN", "NP", "ALLIED"]),
   duration: z.enum(["monthly", "3-month", "6-month", "yearly"]),
   alliedCareer: z.enum(ALLIED_CAREER_KEYS as unknown as [string, ...string[]]).optional(),
+  /** Global region slug for regional pricing (e.g. "philippines", "india"). Falls back to "canada" (CA). */
+  region: z.string().optional(),
   acceptPolicies: z.literal(true),
   policyVersion: z.string().min(1).max(64),
 });
@@ -64,8 +68,11 @@ export async function POST(req: Request) {
     );
   }
 
-  const { tier, duration, policyVersion, alliedCareer } = parsed.data;
-  const country = "CA" as const;
+  const { tier, duration, policyVersion, alliedCareer, region: rawRegion } = parsed.data;
+
+  const resolvedRegion: GlobalRegionSlug | undefined =
+    rawRegion && isGlobalRegionSlug(rawRegion) ? rawRegion : undefined;
+  const country = resolvedRegion === "us" ? "US" as const : "CA" as const;
 
   if (tier === "ALLIED" && !alliedCareer) {
     const msg = "Please select a specific career line for Allied Health.";
@@ -87,18 +94,42 @@ export async function POST(req: Request) {
   const durationCode = duration as BillingDuration;
   const careerKey = alliedCareer as AlliedCareerKey | undefined;
 
-  const price = tierCode === "ALLIED" && careerKey
-    ? findAlliedPriceEntry(country, careerKey, durationCode)
-    : findPriceEntry(country, tierCode, durationCode);
+  // Try regional pricing first (covers all 18 global markets), fall back to legacy CA/US map
+  let priceId: string | undefined;
+  let planCode: string | undefined;
+  let resolvedCurrency: string = country === "US" ? "USD" : "CAD";
+
+  if (resolvedRegion) {
+    const regionalConfig = getRegionalPricing(resolvedRegion);
+    const profKey = tierCode === "ALLIED" ? "allied" : "nursing";
+    const entry = regionalConfig[profKey][durationCode];
+    if (entry.stripePriceId) {
+      priceId = entry.stripePriceId;
+      planCode = `${resolvedRegion}_${profKey}_${durationCode}`;
+      resolvedCurrency = entry.currency;
+    }
+  }
+
+  // Fall back to legacy CA/US price map if regional didn't resolve
+  if (!priceId) {
+    const price = tierCode === "ALLIED" && careerKey
+      ? findAlliedPriceEntry(country, careerKey, durationCode)
+      : findPriceEntry(country, tierCode, durationCode);
+    if (price) {
+      priceId = price.priceId;
+      planCode = price.planCode;
+    }
+  }
 
   const missingEnvKey = tierCode === "ALLIED" && careerKey
     ? alliedStripePriceEnvKey(country, careerKey, durationCode)
     : stripePriceEnvKey(country, tierCode, durationCode);
 
-  if (!price) {
+  if (!priceId || !planCode) {
     safeServerLog("stripe_checkout", "rejected_missing_stripe_price_env", {
       tier: String(tier),
       duration: String(duration),
+      region: resolvedRegion ?? "none",
       alliedCareer: careerKey ?? "",
       envKey: missingEnvKey.slice(0, 80),
     });
@@ -148,10 +179,10 @@ export async function POST(req: Request) {
     const metadata: Record<string, string> = {
       userId,
       country,
-      currency: "CAD",
+      currency: resolvedCurrency,
       tier,
       duration,
-      planCode: price.planCode,
+      planCode,
       trialDays: String(trialDays),
       app: "nursenest-core",
       legalPolicyVersion: policyVersion,
@@ -160,10 +191,13 @@ export async function POST(req: Request) {
     if (careerKey) {
       metadata.alliedCareer = careerKey;
     }
+    if (resolvedRegion) {
+      metadata.region = resolvedRegion;
+    }
 
     const checkoutSession = await stripe.checkout.sessions.create({
       mode: "subscription",
-      line_items: [{ price: price.priceId, quantity: 1 }],
+      line_items: [{ price: priceId, quantity: 1 }],
       ...(trialDays > 0 ? {
         subscription_data: { trial_period_days: trialDays },
         payment_method_collection: "always",
@@ -180,7 +214,7 @@ export async function POST(req: Request) {
       tier: String(tier),
       duration: String(duration),
       alliedCareer: careerKey ?? undefined,
-      planCode: price.planCode,
+      planCode,
     });
     return NextResponse.json({ url: checkoutSession.url });
   } catch (e) {
