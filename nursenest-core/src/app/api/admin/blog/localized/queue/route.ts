@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
 import { prisma } from "@/lib/db";
+
+// @ts-expect-error — available after prisma generate + migration
+const localizedModel = () => prisma.localizedBlogArticle as Record<string, (...args: unknown[]) => Promise<unknown>>;
 import { buildExpansionQueue } from "@/lib/blog/generate-localized-blog";
 import { GLOBAL_LOCALE_CODES, GLOBAL_REGION_SLUGS } from "@/lib/i18n/global-regions";
 import type { GlobalLocaleCode, GlobalRegionSlug } from "@/lib/i18n/global-regions";
@@ -58,13 +61,13 @@ export async function POST(req: NextRequest) {
   });
 
   // Check which variants already exist
-  const existingVariants = await prisma.localizedBlogArticle.findMany({
+  const existingVariants = await localizedModel().findMany({
     where: { canonicalArticleId: d.canonicalArticleId },
     select: { locale: true, region: true, contentStatus: true },
-  });
+  }) as { locale: string; region: string; contentStatus: string }[];
 
   const existingMap = new Map<string, string>(
-    existingVariants.map((v: { locale: string; region: string; contentStatus: string }) => [`${v.locale}:${v.region}`, v.contentStatus]),
+    existingVariants.map((v) => [`${v.locale}:${v.region}`, v.contentStatus]),
   );
 
   const enrichedQueue = queue.map((item) => ({

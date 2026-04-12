@@ -1,0 +1,366 @@
+/**
+ * Structured localization profiles for question delivery.
+ *
+ * Defines terminology, unit systems, context profiles, and adaptation rules
+ * per target region. Used by the market fit engine and variant selection logic.
+ *
+ * This is config data, not prompts — the AI adaptation engine reads this
+ * to know HOW to adapt, but the rules themselves are structured and auditable.
+ */
+
+import type { GlobalLocaleCode, GlobalRegionSlug } from "@/lib/i18n/global-regions";
+
+// ── Types ────────────────────────────────────────────────────────────────────
+
+export type UnitSystem = "conventional" | "si" | "mixed";
+export type MedicationNaming = "us_brand" | "generic_international" | "uk_brand" | "mixed";
+export type NursingTerminologyStyle = "us_nclex" | "canadian" | "uk_nmc" | "international" | "local";
+export type AudienceType = "domestic" | "international" | "mixed";
+
+export type LocalizationProfile = {
+  region: GlobalRegionSlug;
+  displayName: string;
+  defaultLocale: GlobalLocaleCode;
+  allowedLocales: readonly GlobalLocaleCode[];
+
+  unitSystem: UnitSystem;
+  medicationNaming: MedicationNaming;
+  terminologyStyle: NursingTerminologyStyle;
+  audienceType: AudienceType;
+
+  /** Exams that are relevant for this market's learners. */
+  examRelevance: string[];
+  /** Professions typically served in this market. */
+  professionRelevance: string[];
+
+  /** Whether questions should use Fahrenheit or Celsius defaults. */
+  temperatureUnit: "fahrenheit" | "celsius";
+  /** Whether weight references should default to lbs or kg. */
+  weightUnit: "lbs" | "kg";
+
+  /** Whether bilingual question delivery is preferred. */
+  bilingualDeliveryPreferred: boolean;
+  /** Tone guidance for localized content. */
+  toneGuidance: string;
+  /** Sensitivity notes for content adaptation. */
+  sensitivityNotes: string[];
+};
+
+// ── Profiles ─────────────────────────────────────────────────────────────────
+
+export const QUESTION_LOCALIZATION_PROFILES: Record<GlobalRegionSlug, LocalizationProfile> = {
+  philippines: {
+    region: "philippines",
+    displayName: "Philippines",
+    defaultLocale: "en",
+    allowedLocales: ["en", "tl"],
+    unitSystem: "mixed",
+    medicationNaming: "generic_international",
+    terminologyStyle: "us_nclex",
+    audienceType: "international",
+    examRelevance: ["NCLEX-RN", "NCLEX-PN"],
+    professionRelevance: ["rn", "pn"],
+    temperatureUnit: "celsius",
+    weightUnit: "kg",
+    bilingualDeliveryPreferred: true,
+    toneGuidance: "Clear, internationally understandable English. Tagalog bilingual where approved.",
+    sensitivityNotes: ["Avoid US-only cultural assumptions in patient scenarios"],
+  },
+  india: {
+    region: "india",
+    displayName: "India",
+    defaultLocale: "en",
+    allowedLocales: ["en", "hi"],
+    unitSystem: "si",
+    medicationNaming: "generic_international",
+    terminologyStyle: "international",
+    audienceType: "international",
+    examRelevance: ["NCLEX-RN", "NCLEX-PN"],
+    professionRelevance: ["rn"],
+    temperatureUnit: "celsius",
+    weightUnit: "kg",
+    bilingualDeliveryPreferred: true,
+    toneGuidance: "Professional, value-focused. Hindi bilingual where approved.",
+    sensitivityNotes: ["Use generic drug names", "Avoid US-only jargon unless exam-specific"],
+  },
+  nigeria: {
+    region: "nigeria",
+    displayName: "Nigeria",
+    defaultLocale: "en",
+    allowedLocales: ["en"],
+    unitSystem: "si",
+    medicationNaming: "generic_international",
+    terminologyStyle: "international",
+    audienceType: "international",
+    examRelevance: ["NCLEX-RN"],
+    professionRelevance: ["rn"],
+    temperatureUnit: "celsius",
+    weightUnit: "kg",
+    bilingualDeliveryPreferred: false,
+    toneGuidance: "Trustworthy, guided, internationally accessible English.",
+    sensitivityNotes: ["Questions should feel globally relevant, not US-culture-coded"],
+  },
+  kenya: {
+    region: "kenya",
+    displayName: "Kenya",
+    defaultLocale: "en",
+    allowedLocales: ["en"],
+    unitSystem: "si",
+    medicationNaming: "generic_international",
+    terminologyStyle: "international",
+    audienceType: "international",
+    examRelevance: ["NCLEX-RN"],
+    professionRelevance: ["rn"],
+    temperatureUnit: "celsius",
+    weightUnit: "kg",
+    bilingualDeliveryPreferred: false,
+    toneGuidance: "Clear, supportive, internationally accessible.",
+    sensitivityNotes: ["Avoid narrow US cultural references in scenarios"],
+  },
+  pakistan: {
+    region: "pakistan",
+    displayName: "Pakistan",
+    defaultLocale: "en",
+    allowedLocales: ["en"],
+    unitSystem: "si",
+    medicationNaming: "generic_international",
+    terminologyStyle: "international",
+    audienceType: "international",
+    examRelevance: ["NCLEX-RN"],
+    professionRelevance: ["rn"],
+    temperatureUnit: "celsius",
+    weightUnit: "kg",
+    bilingualDeliveryPreferred: false,
+    toneGuidance: "Professional, structured, respectful.",
+    sensitivityNotes: [],
+  },
+  bangladesh: {
+    region: "bangladesh",
+    displayName: "Bangladesh",
+    defaultLocale: "en",
+    allowedLocales: ["en"],
+    unitSystem: "si",
+    medicationNaming: "generic_international",
+    terminologyStyle: "international",
+    audienceType: "international",
+    examRelevance: ["NCLEX-RN"],
+    professionRelevance: ["rn"],
+    temperatureUnit: "celsius",
+    weightUnit: "kg",
+    bilingualDeliveryPreferred: false,
+    toneGuidance: "Supportive, practical.",
+    sensitivityNotes: [],
+  },
+  "south-africa": {
+    region: "south-africa",
+    displayName: "South Africa",
+    defaultLocale: "en",
+    allowedLocales: ["en"],
+    unitSystem: "si",
+    medicationNaming: "generic_international",
+    terminologyStyle: "international",
+    audienceType: "mixed",
+    examRelevance: ["NCLEX-RN"],
+    professionRelevance: ["rn"],
+    temperatureUnit: "celsius",
+    weightUnit: "kg",
+    bilingualDeliveryPreferred: false,
+    toneGuidance: "Professional, empowering.",
+    sensitivityNotes: [],
+  },
+  uae: {
+    region: "uae",
+    displayName: "UAE",
+    defaultLocale: "en",
+    allowedLocales: ["en"],
+    unitSystem: "si",
+    medicationNaming: "generic_international",
+    terminologyStyle: "international",
+    audienceType: "international",
+    examRelevance: ["NCLEX-RN"],
+    professionRelevance: ["rn"],
+    temperatureUnit: "celsius",
+    weightUnit: "kg",
+    bilingualDeliveryPreferred: false,
+    toneGuidance: "Professional, focused.",
+    sensitivityNotes: [],
+  },
+  "saudi-arabia": {
+    region: "saudi-arabia",
+    displayName: "Saudi Arabia",
+    defaultLocale: "en",
+    allowedLocales: ["en"],
+    unitSystem: "si",
+    medicationNaming: "generic_international",
+    terminologyStyle: "international",
+    audienceType: "international",
+    examRelevance: ["NCLEX-RN"],
+    professionRelevance: ["rn"],
+    temperatureUnit: "celsius",
+    weightUnit: "kg",
+    bilingualDeliveryPreferred: false,
+    toneGuidance: "Respectful, professional.",
+    sensitivityNotes: [],
+  },
+  singapore: {
+    region: "singapore",
+    displayName: "Singapore",
+    defaultLocale: "en",
+    allowedLocales: ["en"],
+    unitSystem: "si",
+    medicationNaming: "generic_international",
+    terminologyStyle: "international",
+    audienceType: "mixed",
+    examRelevance: ["NCLEX-RN"],
+    professionRelevance: ["rn"],
+    temperatureUnit: "celsius",
+    weightUnit: "kg",
+    bilingualDeliveryPreferred: false,
+    toneGuidance: "Professional, efficient.",
+    sensitivityNotes: [],
+  },
+  jamaica: {
+    region: "jamaica",
+    displayName: "Jamaica",
+    defaultLocale: "en",
+    allowedLocales: ["en"],
+    unitSystem: "mixed",
+    medicationNaming: "generic_international",
+    terminologyStyle: "international",
+    audienceType: "international",
+    examRelevance: ["NCLEX-RN"],
+    professionRelevance: ["rn"],
+    temperatureUnit: "celsius",
+    weightUnit: "kg",
+    bilingualDeliveryPreferred: false,
+    toneGuidance: "Warm, encouraging.",
+    sensitivityNotes: [],
+  },
+  trinidad: {
+    region: "trinidad",
+    displayName: "Trinidad and Tobago",
+    defaultLocale: "en",
+    allowedLocales: ["en"],
+    unitSystem: "mixed",
+    medicationNaming: "generic_international",
+    terminologyStyle: "international",
+    audienceType: "international",
+    examRelevance: ["NCLEX-RN"],
+    professionRelevance: ["rn"],
+    temperatureUnit: "celsius",
+    weightUnit: "kg",
+    bilingualDeliveryPreferred: false,
+    toneGuidance: "Warm, direct.",
+    sensitivityNotes: [],
+  },
+  ireland: {
+    region: "ireland",
+    displayName: "Ireland",
+    defaultLocale: "en",
+    allowedLocales: ["en"],
+    unitSystem: "si",
+    medicationNaming: "uk_brand",
+    terminologyStyle: "uk_nmc",
+    audienceType: "mixed",
+    examRelevance: ["NCLEX-RN"],
+    professionRelevance: ["rn"],
+    temperatureUnit: "celsius",
+    weightUnit: "kg",
+    bilingualDeliveryPreferred: false,
+    toneGuidance: "Professional, clear.",
+    sensitivityNotes: ["UK/Ireland nursing terminology preferred over US where applicable"],
+  },
+  "new-zealand": {
+    region: "new-zealand",
+    displayName: "New Zealand",
+    defaultLocale: "en",
+    allowedLocales: ["en"],
+    unitSystem: "si",
+    medicationNaming: "generic_international",
+    terminologyStyle: "international",
+    audienceType: "mixed",
+    examRelevance: ["NCLEX-RN"],
+    professionRelevance: ["rn"],
+    temperatureUnit: "celsius",
+    weightUnit: "kg",
+    bilingualDeliveryPreferred: false,
+    toneGuidance: "Direct, practical.",
+    sensitivityNotes: [],
+  },
+  canada: {
+    region: "canada",
+    displayName: "Canada",
+    defaultLocale: "en",
+    allowedLocales: ["en", "fr"],
+    unitSystem: "si",
+    medicationNaming: "generic_international",
+    terminologyStyle: "canadian",
+    audienceType: "domestic",
+    examRelevance: ["NCLEX-RN", "NCLEX-PN", "REx-PN", "CNPLE"],
+    professionRelevance: ["rn", "rpn", "pn", "np"],
+    temperatureUnit: "celsius",
+    weightUnit: "kg",
+    bilingualDeliveryPreferred: false,
+    toneGuidance: "Professional, exam-focused. Respect RPN vs RN distinctions.",
+    sensitivityNotes: [
+      "REx-PN content must stay aligned to practical nursing scope",
+      "Do not show NCLEX-RN assumptions to RPN users",
+      "Use SI units and Canadian practice norms",
+    ],
+  },
+  us: {
+    region: "us",
+    displayName: "United States",
+    defaultLocale: "en",
+    allowedLocales: ["en", "es"],
+    unitSystem: "conventional",
+    medicationNaming: "us_brand",
+    terminologyStyle: "us_nclex",
+    audienceType: "domestic",
+    examRelevance: ["NCLEX-RN", "NCLEX-PN", "NP-US"],
+    professionRelevance: ["rn", "pn", "np"],
+    temperatureUnit: "fahrenheit",
+    weightUnit: "lbs",
+    bilingualDeliveryPreferred: false,
+    toneGuidance: "Confident, exam-focused, data-driven.",
+    sensitivityNotes: [],
+  },
+  uk: {
+    region: "uk",
+    displayName: "United Kingdom",
+    defaultLocale: "en",
+    allowedLocales: ["en"],
+    unitSystem: "si",
+    medicationNaming: "uk_brand",
+    terminologyStyle: "uk_nmc",
+    audienceType: "mixed",
+    examRelevance: ["NCLEX-RN"],
+    professionRelevance: ["rn"],
+    temperatureUnit: "celsius",
+    weightUnit: "kg",
+    bilingualDeliveryPreferred: false,
+    toneGuidance: "Professional, clear.",
+    sensitivityNotes: ["UK nursing terminology preferred where applicable"],
+  },
+  aus: {
+    region: "aus",
+    displayName: "Australia",
+    defaultLocale: "en",
+    allowedLocales: ["en"],
+    unitSystem: "si",
+    medicationNaming: "generic_international",
+    terminologyStyle: "international",
+    audienceType: "mixed",
+    examRelevance: ["NCLEX-RN"],
+    professionRelevance: ["rn"],
+    temperatureUnit: "celsius",
+    weightUnit: "kg",
+    bilingualDeliveryPreferred: false,
+    toneGuidance: "Direct, professional.",
+    sensitivityNotes: [],
+  },
+};
+
+export function getLocalizationProfile(region: GlobalRegionSlug): LocalizationProfile {
+  return QUESTION_LOCALIZATION_PROFILES[region];
+}

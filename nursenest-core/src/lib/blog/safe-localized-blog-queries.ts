@@ -5,18 +5,98 @@
  * - Wraps Prisma calls in `withDatabaseFallback` so missing DB doesn't crash SSR.
  * - Returns lightweight projections for list/card views.
  * - Enforces visibility rules (only PUBLISHED or SCHEDULED-past-publishAt).
+ *
+ * NOTE: Prisma types for `LocalizedBlogArticle` will become available after running
+ * `prisma generate` once the migration is applied. Until then, this file uses manual
+ * type definitions and ts-expect-error on prisma model access.
  */
 
 import "server-only";
 
-import type { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { withDatabaseFallback } from "@/lib/db/safe-database";
 import type { GlobalLocaleCode, GlobalRegionSlug } from "@/lib/i18n/global-regions";
 
+// ── Manual types (replace with Prisma imports after prisma generate) ─────────
+
+export type LocalizedBlogIndexPost = {
+  id: string;
+  localizedTitle: string;
+  localizedExcerpt: string;
+  localizedSlug: string;
+  locale: string;
+  region: string;
+  profession: string | null;
+  exam: string | null;
+  contentStatus: string;
+  publishedAt: Date | null;
+  scheduledAt: Date | null;
+  createdAt: Date;
+  canonicalArticleId: string;
+};
+
+export type LocalizedBlogFullPost = {
+  id: string;
+  canonicalArticleId: string;
+  locale: string;
+  region: string;
+  profession: string | null;
+  exam: string | null;
+  sourceLanguage: string;
+  adaptationType: string;
+  contentStatus: string;
+  aiModelVersion: string | null;
+  localizedTitle: string;
+  localizedExcerpt: string;
+  localizedBody: string;
+  canonicalSlug: string;
+  localizedSlug: string;
+  localizedMetaTitle: string | null;
+  localizedMetaDescription: string | null;
+  seoKeywordPrimary: string | null;
+  seoKeywordSecondary: string[];
+  searchIntent: string | null;
+  hreflangJson: unknown;
+  canonicalUrl: string | null;
+  targetAudience: string | null;
+  ctaVariant: string | null;
+  ctaText: string | null;
+  ctaHref: string | null;
+  internalLinkTargets: unknown;
+  complianceReviewRequired: boolean;
+  medicalReviewRequired: boolean;
+  editorialReviewRequired: boolean;
+  reviewFlags: string[];
+  publishedAt: Date | null;
+  scheduledAt: Date | null;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
+export type LocalizedBlogAdminListRow = {
+  id: string;
+  canonicalArticleId: string;
+  locale: string;
+  region: string;
+  profession: string | null;
+  exam: string | null;
+  localizedTitle: string;
+  localizedSlug: string;
+  contentStatus: string;
+  adaptationType: string;
+  complianceReviewRequired: boolean;
+  medicalReviewRequired: boolean;
+  editorialReviewRequired: boolean;
+  reviewFlags: string[];
+  publishedAt: Date | null;
+  scheduledAt: Date | null;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
 // ── Visibility ───────────────────────────────────────────────────────────────
 
-function localizedBlogLiveWhere(now: Date = new Date()): Prisma.LocalizedBlogArticleWhereInput {
+function localizedBlogLiveWhere(now: Date = new Date()): Record<string, unknown> {
   return {
     OR: [
       { contentStatus: "PUBLISHED" },
@@ -32,6 +112,17 @@ export function localizedBlogIsLive(
   if (row.contentStatus === "PUBLISHED") return true;
   if (row.contentStatus === "SCHEDULED" && row.scheduledAt && row.scheduledAt.getTime() <= now.getTime()) return true;
   return false;
+}
+
+// ── Prisma model accessor (typed escape hatch before prisma generate) ────────
+
+function localizedModel(): {
+  findMany: (args: Record<string, unknown>) => Promise<unknown[]>;
+  findUnique: (args: Record<string, unknown>) => Promise<unknown>;
+  count: (args: Record<string, unknown>) => Promise<number>;
+} {
+  // @ts-expect-error — LocalizedBlogArticle model exists after prisma generate + migration
+  return prisma.localizedBlogArticle;
 }
 
 // ── List / index queries ─────────────────────────────────────────────────────
@@ -50,16 +141,10 @@ const indexSelect = {
   scheduledAt: true,
   createdAt: true,
   canonicalArticleId: true,
-} satisfies Prisma.LocalizedBlogArticleSelect;
-
-export type LocalizedBlogIndexPost = Prisma.LocalizedBlogArticleGetPayload<{ select: typeof indexSelect }>;
+};
 
 export const LOCALIZED_BLOG_LIST_PAGE_SIZE = 24;
 
-/**
- * Get a paginated list of published localized blog articles for a specific
- * locale/region/profession/exam combination.
- */
 export async function getPublishedLocalizedBlogPostsPage(params: {
   locale: GlobalLocaleCode;
   region: GlobalRegionSlug;
@@ -72,7 +157,7 @@ export async function getPublishedLocalizedBlogPostsPage(params: {
   const safeSize = Math.min(100, Math.max(1, Math.floor(params.pageSize ?? LOCALIZED_BLOG_LIST_PAGE_SIZE)));
   const now = new Date();
 
-  const where: Prisma.LocalizedBlogArticleWhereInput = {
+  const where = {
     AND: [
       localizedBlogLiveWhere(now),
       { locale: params.locale },
@@ -82,19 +167,21 @@ export async function getPublishedLocalizedBlogPostsPage(params: {
     ],
   };
 
+  const m = localizedModel();
+
   const [posts, total] = await Promise.all([
     withDatabaseFallback(
       () =>
-        prisma.localizedBlogArticle.findMany({
+        m.findMany({
           where,
           orderBy: { createdAt: "desc" },
           select: indexSelect,
           skip: (safePage - 1) * safeSize,
           take: safeSize,
-        }),
-      [],
+        }) as Promise<LocalizedBlogIndexPost[]>,
+      [] as LocalizedBlogIndexPost[],
     ),
-    withDatabaseFallback(() => prisma.localizedBlogArticle.count({ where }), 0),
+    withDatabaseFallback(() => m.count({ where }), 0),
   ]);
 
   return { posts, total, page: safePage, pageSize: safeSize };
@@ -138,13 +225,8 @@ const fullSelect = {
   scheduledAt: true,
   createdAt: true,
   updatedAt: true,
-} satisfies Prisma.LocalizedBlogArticleSelect;
+};
 
-export type LocalizedBlogFullPost = Prisma.LocalizedBlogArticleGetPayload<{ select: typeof fullSelect }>;
-
-/**
- * Get a published localized blog article by its slug within a specific route family.
- */
 export async function getPublishedLocalizedBlogBySlug(params: {
   locale: string;
   region: string;
@@ -153,9 +235,10 @@ export async function getPublishedLocalizedBlogBySlug(params: {
   slug: string;
 }): Promise<LocalizedBlogFullPost | null> {
   const now = new Date();
+  const m = localizedModel();
   const rows = await withDatabaseFallback(
     () =>
-      prisma.localizedBlogArticle.findMany({
+      m.findMany({
         where: {
           localizedSlug: params.slug,
           locale: params.locale,
@@ -165,8 +248,8 @@ export async function getPublishedLocalizedBlogBySlug(params: {
         },
         select: fullSelect,
         take: 1,
-      }),
-    [],
+      }) as Promise<LocalizedBlogFullPost[]>,
+    [] as LocalizedBlogFullPost[],
   );
 
   const row = rows[0] ?? null;
@@ -175,16 +258,14 @@ export async function getPublishedLocalizedBlogBySlug(params: {
   return row;
 }
 
-/**
- * Get all published variants of a canonical article (for hreflang generation).
- */
 export async function getPublishedVariantsForCanonical(canonicalArticleId: string): Promise<
   { locale: string; region: string; profession: string | null; exam: string | null; localizedSlug: string }[]
 > {
   const now = new Date();
+  const m = localizedModel();
   return withDatabaseFallback(
     () =>
-      prisma.localizedBlogArticle.findMany({
+      m.findMany({
         where: {
           canonicalArticleId,
           ...localizedBlogLiveWhere(now),
@@ -196,7 +277,7 @@ export async function getPublishedVariantsForCanonical(canonicalArticleId: strin
           exam: true,
           localizedSlug: true,
         },
-      }),
+      }) as Promise<{ locale: string; region: string; profession: string | null; exam: string | null; localizedSlug: string }[]>,
     [],
   );
 }
@@ -209,9 +290,10 @@ export async function getSitemapLocalizedBlogRows(): Promise<
   { locale: string; region: string; profession: string | null; exam: string | null; localizedSlug: string; updatedAt: Date }[]
 > {
   const now = new Date();
+  const m = localizedModel();
   return withDatabaseFallback(
     () =>
-      prisma.localizedBlogArticle.findMany({
+      m.findMany({
         where: localizedBlogLiveWhere(now),
         select: {
           locale: true,
@@ -223,7 +305,7 @@ export async function getSitemapLocalizedBlogRows(): Promise<
         },
         orderBy: { updatedAt: "desc" },
         take: SITEMAP_CAP,
-      }),
+      }) as Promise<{ locale: string; region: string; profession: string | null; exam: string | null; localizedSlug: string; updatedAt: Date }[]>,
     [],
   );
 }
@@ -249,9 +331,7 @@ const adminListSelect = {
   scheduledAt: true,
   createdAt: true,
   updatedAt: true,
-} satisfies Prisma.LocalizedBlogArticleSelect;
-
-export type LocalizedBlogAdminListRow = Prisma.LocalizedBlogArticleGetPayload<{ select: typeof adminListSelect }>;
+};
 
 export async function getAdminLocalizedBlogList(params: {
   canonicalArticleId?: string;
@@ -264,21 +344,23 @@ export async function getAdminLocalizedBlogList(params: {
   const safePage = Math.max(1, params.page ?? 1);
   const safeSize = Math.min(100, Math.max(1, params.pageSize ?? 50));
 
-  const where: Prisma.LocalizedBlogArticleWhereInput = {};
+  const where: Record<string, unknown> = {};
   if (params.canonicalArticleId) where.canonicalArticleId = params.canonicalArticleId;
   if (params.region) where.region = params.region;
   if (params.locale) where.locale = params.locale;
-  if (params.contentStatus) where.contentStatus = params.contentStatus as never;
+  if (params.contentStatus) where.contentStatus = params.contentStatus;
+
+  const m = localizedModel();
 
   const [rows, total] = await Promise.all([
-    prisma.localizedBlogArticle.findMany({
+    m.findMany({
       where,
       orderBy: { createdAt: "desc" },
       select: adminListSelect,
       skip: (safePage - 1) * safeSize,
       take: safeSize,
-    }),
-    prisma.localizedBlogArticle.count({ where }),
+    }) as Promise<LocalizedBlogAdminListRow[]>,
+    m.count({ where }),
   ]);
 
   return { rows, total };

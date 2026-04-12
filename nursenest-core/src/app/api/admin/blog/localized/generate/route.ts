@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
 import { prisma } from "@/lib/db";
+
+// @ts-expect-error — available after prisma generate + migration
+const localizedModel = () => prisma.localizedBlogArticle as Record<string, (...args: unknown[]) => Promise<unknown>>;
 import {
   extractCanonicalBrief,
   buildAdaptationSystemPrompt,
@@ -97,7 +100,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Check for existing variant
-    const existing = await prisma.localizedBlogArticle.findUnique({
+    const existing = await localizedModel().findUnique({
       where: {
         canonicalArticleId_locale_region: {
           canonicalArticleId: d.canonicalArticleId,
@@ -143,15 +146,16 @@ export async function POST(req: NextRequest) {
     };
 
     if (existing) {
-      const updatedLog = appendGenerationLog(existing.generationLog, logEntry);
-      const updated = await prisma.localizedBlogArticle.update({
-        where: { id: existing.id },
+      const ex = existing as { id: string; generationLog: unknown };
+      const updatedLog = appendGenerationLog(ex.generationLog, logEntry);
+      const updated = await localizedModel().update({
+        where: { id: ex.id },
         data: { ...articleData, generationLog: updatedLog },
       });
       return NextResponse.json({ article: updated, mode: "updated" });
     }
 
-    const created = await prisma.localizedBlogArticle.create({
+    const created = await localizedModel().create({
       data: {
         canonicalArticleId: d.canonicalArticleId,
         ...articleData,

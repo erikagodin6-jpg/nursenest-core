@@ -4,6 +4,9 @@ import { requireAdmin } from "@/lib/admin/ensure-admin";
 import { prisma } from "@/lib/db";
 import { getAdminLocalizedBlogList } from "@/lib/blog/safe-localized-blog-queries";
 
+// @ts-expect-error — available after prisma generate + migration
+const localizedModel = () => prisma.localizedBlogArticle as Record<string, (...args: unknown[]) => Promise<unknown>>;
+
 const createSchema = z.object({
   canonicalArticleId: z.string().min(1),
   locale: z.string().min(2).max(10),
@@ -81,7 +84,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Canonical article not found" }, { status: 404 });
   }
 
-  const existing = await prisma.localizedBlogArticle.findUnique({
+  const existing = await localizedModel().findUnique({
     where: {
       canonicalArticleId_locale_region: {
         canonicalArticleId: d.canonicalArticleId,
@@ -90,7 +93,7 @@ export async function POST(req: NextRequest) {
       },
     },
     select: { id: true },
-  });
+  }) as { id: string } | null;
   if (existing) {
     return NextResponse.json(
       { error: "A localized variant already exists for this canonical article + locale + region combination", existingId: existing.id },
@@ -98,7 +101,7 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const article = await prisma.localizedBlogArticle.create({
+  const article = await localizedModel().create({
     data: {
       canonicalArticleId: d.canonicalArticleId,
       locale: d.locale,
