@@ -682,7 +682,7 @@
   --theme-border: #E0D6F0;
   --theme-ring: #BDA6CE;
   --theme-page-bg: #FBF8FF;
-  --theme-heading-text: #3E2F5B;
+  --theme-heading-text: #5A4878;
   --theme-body-text: #6C5A8C;
   --theme-muted-text: #6C5A8C;
   --theme-card-bg: #ffffff;
@@ -747,9 +747,9 @@
   --state-info: #E0ECF8;
   --state-danger-soft: #FBE6E4;
 
-  --logo-primary: #3852B4;
+  --logo-primary: #5068CC;
   --logo-accent: #F3BE7A;
-  --logo-text: #1F2A44;
+  --logo-text: #30405E;
 }
 
 [data-theme="strawberry-cream"] {
@@ -787,9 +787,9 @@
   --state-info: #EBE6F4;
   --state-danger-soft: #FBDAD4;
 
-  --logo-primary: #EA7B7B;
+  --logo-primary: #ECA0A0;
   --logo-accent: #FFEAD3;
-  --logo-text: #5A2A2A;
+  --logo-text: #644040;
 }
 
 [data-theme="ocean-mist"] {
@@ -802,9 +802,9 @@
   --theme-border: #D4E6E8;
   --theme-ring: #1D546D;
   --theme-page-bg: #F7FBFC;
-  --theme-heading-text: #0F2E3A;
-  --theme-body-text: #4F6F7A;
-  --theme-muted-text: #4F6F7A;
+  --theme-heading-text: #1E4050;
+  --theme-body-text: #4A6875;
+  --theme-muted-text: #4A6875;
   --theme-card-bg: #ffffff;
   --theme-topbar-bg: #144050;
   --theme-topbar-text: #ffffff;
@@ -843,7 +843,7 @@
   --theme-border: #C8E6DE;
   --theme-ring: #3A9E8F;
   --theme-page-bg: #F6FCFA;
-  --theme-heading-text: #1A3A34;
+  --theme-heading-text: #2A4A44;
   --theme-body-text: #4E7A6E;
   --theme-muted-text: #4E7A6E;
   --theme-card-bg: #ffffff;
@@ -911,7 +911,7 @@
 
   --logo-primary: #C4788A;
   --logo-accent: #F5E0C8;
-  --logo-text: #4A2230;
+  --logo-text: #604A58;
 }
 
 /* ── 8. Golden Hour ── */
@@ -950,9 +950,9 @@
   --state-info: #E4E6EE;
   --state-danger-soft: #FDE4E0;
 
-  --logo-primary: #B8860B;
+  --logo-primary: #C49A18;
   --logo-accent: #FAE6B8;
-  --logo-text: #3D2E0A;
+  --logo-text: #5A4420;
 }
 
 /* ── 9. Sage Garden ── */
@@ -966,7 +966,7 @@
   --theme-border: #CCD8CA;
   --theme-ring: #6B8E6B;
   --theme-page-bg: #F8FAF7;
-  --theme-heading-text: #2A3C28;
+  --theme-heading-text: #3A5038;
   --theme-body-text: #5A6E58;
   --theme-muted-text: #5A6E58;
   --theme-card-bg: #ffffff;
@@ -1032,9 +1032,9 @@
   --state-info: #E6E4F0;
   --state-danger-soft: #F8DCD6;
 
-  --logo-primary: #E07050;
+  --logo-primary: #E89878;
   --logo-accent: #FCE4B8;
-  --logo-text: #4A1E14;
+  --logo-text: #62382A;
 }
 
 /* ── 11. Arctic Frost ── */
@@ -1048,7 +1048,7 @@
   --theme-border: #C8DDE8;
   --theme-ring: #4A7A9B;
   --theme-page-bg: #F6FAFC;
-  --theme-heading-text: #1A2E40;
+  --theme-heading-text: #2A3E54;
   --theme-body-text: #4E6A7E;
   --theme-muted-text: #4E6A7E;
   --theme-card-bg: #ffffff;
@@ -1114,9 +1114,9 @@
   --state-info: #E2E6F4;
   --state-danger-soft: #FCE0E4;
 
-  --logo-primary: #7A4A8A;
+  --logo-primary: #9668B0;
   --logo-accent: #F0DDE8;
-  --logo-text: #30183A;
+  --logo-text: #583A72;
 }
 
 /* ── 13. Honey Cream ── */
@@ -1124,15 +1124,15 @@
   --theme-primary: #A07840;
   --theme-primary-foreground: #ffffff;
   --theme-secondary: #C09868;
-  --theme-secondary-foreground: #A07840;
+  --theme-secondary-foreground: #7A5828;
   --theme-accent: #F8E8CC;
-  --theme-accent-foreground: #A07840;
+  --theme-accent-foreground: #7A5828;
   --theme-border: #E4D4BE;
   --theme-ring: #A07840;
   --theme-page-bg: #FDFAF4;
-  --theme-heading-text: #3A2A10;
-  --theme-body-text: #7A6440;
-  --theme-muted-text: #7A6440;
+  --theme-heading-text: #584220;
+  --theme-body-text: #8A7450;
+  --theme-muted-text: #8A7450;
   --theme-card-bg: #ffffff;
   --theme-topbar-bg: #785830;
   --theme-topbar-text: #ffffff;
@@ -1165,17 +1165,17 @@
   --theme-primary: #B07080;
   --theme-primary-foreground: #ffffff;
   --theme-secondary: #C89098;
-  --theme-secondary-foreground: #B07080;
+  --theme-secondary-foreground: #8A5060;
   --theme-accent: #F4E0D8;
-  --theme-accent-foreground: #B07080;
+  --theme-accent-foreground: #8A5060;
   --theme-border: #E4CED0;
   --theme-ring: #B07080;
   --theme-page-bg: #FCF8F6;
-  --theme-heading-text: #3E1E24;
-  --theme-body-text: #7A4E58;
-  --theme-muted-text: #7A4E58;
+  --theme-heading-text: #5A3844;
+  --theme-body-text: #7A5A64;
+  --theme-muted-text: #7A5A64;
   --theme-card-bg: #ffffff;
-  --theme-topbar-bg: #8A4858;
+  --theme-topbar-bg: #8A5868;
   --theme-topbar-text: #ffffff;
 
   --lesson-summary: #F2E4E4;
@@ -1198,7 +1198,7 @@
 
   --logo-primary: #B07080;
   --logo-accent: #F4E0D8;
-  --logo-text: #3E1E24;
+  --logo-text: #5A3844;
 }
 
 
@@ -1215,7 +1215,7 @@
   --theme-topbar-text: #ffffff;
 }
 [data-theme="pastel-blush"] {
-  --theme-topbar-bg: #d4505c;
+  --theme-topbar-bg: #c06878;
   --theme-topbar-text: #ffffff;
 }
 [data-theme="strawberry"] {
@@ -1264,7 +1264,7 @@
 
 /* Warm / Pink extended */
 [data-theme="rose-gold"] { --theme-topbar-bg: #8f3d4e; --theme-topbar-text: #ffffff; }
-[data-theme="coral"]     { --theme-topbar-bg: #cc3c3c; --theme-topbar-text: #ffffff; }
+[data-theme="coral"]     { --theme-topbar-bg: #c06060; --theme-topbar-text: #ffffff; }
 
 /* Blue */
 [data-theme="clinical-light"] { --theme-topbar-bg: #1d5bcf; --theme-topbar-text: #ffffff; }
@@ -1296,7 +1296,8 @@
 [data-theme="lavender"],
 [data-theme="pastel-lavender"],
 [data-theme="pastel-lilac"],
-[data-theme="lavender-dream"] {
+[data-theme="lavender-dream"],
+[data-theme="plum-velvet"] {
   --theme-primary-foreground: #2a1040;
 }
 
