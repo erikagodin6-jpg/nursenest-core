@@ -67,14 +67,14 @@ async function persistQuestionBatchItem(
   const mergedItems = [...s.items];
   mergedItems[idx] = { ...mergedItems[idx]!, ...patch };
   const allTerminal = mergedItems.every((i) => isTerminalQuestionBatchStatus(i.status));
-  const nearDupStemNorms =
-    nearDupStemNormAppend != null && nearDupStemNormAppend.length > 0
-      ? [...(s.nearDupStemNorms ?? []), nearDupStemNormAppend].slice(-NEAR_DUP_NORMS_CAP)
-      : s.nearDupStemNorms;
+  const nextSummary: QuestionBatchResultSummaryV1 = { ...s, items: mergedItems };
+  if (nearDupStemNormAppend != null && nearDupStemNormAppend.length > 0) {
+    nextSummary.nearDupStemNorms = [...(s.nearDupStemNorms ?? []), nearDupStemNormAppend].slice(-NEAR_DUP_NORMS_CAP);
+  }
   await prisma.aiGenerationJob.update({
     where: { id: jobId },
     data: {
-      resultSummary: { ...s, items: mergedItems, ...(nearDupStemNorms ? { nearDupStemNorms } : {}) } as object,
+      resultSummary: nextSummary as object,
       status: allTerminal ? JobStatus.COMPLETED : JobStatus.RUNNING,
       ...(tokenDelta != null ? { tokensUsed: (fresh?.tokensUsed ?? 0) + tokenDelta } : {}),
     },
@@ -372,7 +372,15 @@ export async function POST(req: Request, ctx: Props) {
         }
 
         const dupSet = new Set<string>();
-        const v = validateNormalizedQuestion(norm, { duplicateStemHashes: dupSet });
+        const v = validateNormalizedQuestion(norm, {
+          duplicateStemHashes: dupSet,
+          expectedTags: {
+            topic: item.topic,
+            tier: settings.tier,
+            exam: settings.examFamily,
+          },
+          priorNormalizedStems: summary.nearDupStemNorms ?? [],
+        });
         const warnings = [...v.warnings];
         if (existingQ) warnings.push("Stem hash matches an existing Question in the bank.");
         if (existingDraft) warnings.push("Stem hash matches another pending/approved draft.");
@@ -383,6 +391,7 @@ export async function POST(req: Request, ctx: Props) {
           errors: v.errors,
           warnings,
           duplicateRisk: v.duplicateRisk,
+          autoValidation: v.autoValidation,
         };
 
         const draft = await prisma.generatedQuestionDraft.create({
@@ -417,6 +426,7 @@ export async function POST(req: Request, ctx: Props) {
             startedAt: null,
           },
           totalTokens ?? 0,
+          v.ok ? normalizeGeneratedStemForNearDupList(norm.stem) : undefined,
         );
 
         await prisma.aiGenerationLog.create({

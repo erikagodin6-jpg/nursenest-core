@@ -507,7 +507,7 @@ export async function GET(req: NextRequest) {
 
   const user = await prisma.user.findUnique({
     where: { id: userId },
-    select: { country: true, tier: true, freeQuestionViews: true },
+    select: { country: true, tier: true },
   });
   if (!user) {
     return NextResponse.json({ error: "Unauthorized", code: "unauthorized" }, { status: 401 });
@@ -538,16 +538,18 @@ export async function GET(req: NextRequest) {
       id: true,
       stem: true,
       questionType: true,
+      options: true,
       difficulty: true,
       exam: true,
       topic: true,
       bodySystem: true,
     } as const;
 
+    const exSql = excludeQuestionIdsSql(excludeIds);
     const idRows = await withRetry(() =>
       prisma.$queryRaw<{ id: string }[]>`
         SELECT id FROM exam_questions
-        WHERE ${freeSql}
+        WHERE ${freeSql} ${exSql}
         ORDER BY random()
         LIMIT ${take}
       `,
@@ -562,19 +564,7 @@ export async function GET(req: NextRequest) {
     const order = new Map(ids.map((id, i) => [id, i]));
     const questions = [...rows].sort((a, b) => (order.get(a.id) ?? 0) - (order.get(b.id) ?? 0));
 
-    const used = questions.length;
-    if (used > 0) {
-      await prisma.user.update({
-        where: { id: userId },
-        data: {
-          freeQuestionViews: {
-            increment: used,
-          },
-        },
-      });
-    }
-
-    const remaining = Math.max(0, snap.questionRemaining - used);
+    const remaining = snap.questionRemaining;
     const sanitized = localizeQuestionListForApi(
       questions as Array<Record<string, unknown>>,
       freemiumFields,
@@ -611,10 +601,10 @@ export async function GET(req: NextRequest) {
       mode: "freemium" as const,
       fields: freemiumFields,
       sort: "random" as const,
-      excludeIdsCount: 0,
+      excludeIdsCount: excludeIds.length,
       freemiumRemainingAfterBatch: remaining,
       rationaleLocked: true as const,
-      upgradeRequiredFor: ["full_question_bank", "rationales", "grading", "filters", "pathway_scoped_bank"] as const,
+      upgradeRequiredFor: ["full_question_bank", "rationales", "filters", "pathway_scoped_bank"] as const,
       ...(educationalLocale !== DEFAULT_MARKETING_LOCALE
         ? { educationalContentLocale: educationalLocale }
         : {}),

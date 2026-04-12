@@ -20,6 +20,7 @@ import {
   validateNormalizedQuestion,
   withQuestionDraftContext,
 } from "@/lib/content/ai-draft-validation";
+import { normalizeGeneratedStemForNearDupList } from "@/lib/content/generated-question-auto-validation";
 import { stemHash } from "@/lib/content/stem-hash";
 import { prisma } from "@/lib/db";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
@@ -210,6 +211,7 @@ export async function runLessonGapAiDrafts(options: {
       const cc = countryFromApi(country);
       const ef = examFamilyFromApi(examFamily);
       const dupSet = new Set<string>();
+      const nearDupStems: string[] = [];
       let draftCount = 0;
       const examContextLabel = `${examFamily} · ${country}`;
 
@@ -252,11 +254,22 @@ export async function runLessonGapAiDrafts(options: {
           }),
         ]);
 
-        const v = validateNormalizedQuestion(norm, { duplicateStemHashes: dupSet });
+        const v = validateNormalizedQuestion(norm, {
+          duplicateStemHashes: dupSet,
+          expectedTags: {
+            topic: row.topic,
+            subtopic: row.topicSlug,
+            bodySystem: row.bodySystem,
+            tier,
+            exam: examFamily,
+          },
+          priorNormalizedStems: nearDupStems,
+        });
         const warnings = [...v.warnings];
         if (existingQ) warnings.push("Stem hash matches an existing Question in the bank.");
         if (existingDraft) warnings.push("Stem hash matches another pending/approved draft.");
         const duplicateRisk = v.duplicateRisk || Boolean(existingQ || existingDraft);
+        if (v.ok) nearDupStems.push(normalizeGeneratedStemForNearDupList(norm.stem));
 
         await prisma.generatedQuestionDraft.create({
           data: {
@@ -270,6 +283,7 @@ export async function runLessonGapAiDrafts(options: {
               errors: v.errors,
               warnings,
               duplicateRisk,
+              autoValidation: v.autoValidation,
             },
             reviewStatus: DraftReviewStatus.PENDING_REVIEW,
             stemHash: sh,

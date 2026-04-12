@@ -21,6 +21,7 @@ import {
   validateNormalizedQuestion,
   withQuestionDraftContext,
 } from "@/lib/content/ai-draft-validation";
+import { normalizeGeneratedStemForNearDupList } from "@/lib/content/generated-question-auto-validation";
 import { stemHash } from "@/lib/content/stem-hash";
 import { prisma } from "@/lib/db";
 
@@ -177,6 +178,7 @@ export async function POST(req: Request) {
     const cc = countryFromApi(country);
     const ef = examFamilyFromApi(examFamily);
     const dupSet = new Set<string>();
+    const nearDupStems: string[] = [];
     const draftIds: string[] = [];
 
     const examContextLabel = `${examFamily} · ${country}`;
@@ -221,17 +223,23 @@ export async function POST(req: Request) {
         }),
       ]);
 
-      const v = validateNormalizedQuestion(norm, { duplicateStemHashes: dupSet });
+      const v = validateNormalizedQuestion(norm, {
+        duplicateStemHashes: dupSet,
+        expectedTags: { topic, tier, exam: examFamily },
+        priorNormalizedStems: nearDupStems,
+      });
       const warnings = [...v.warnings];
       if (existingQ) warnings.push("Stem hash matches an existing Question in the bank.");
       if (existingDraft) warnings.push("Stem hash matches another pending/approved draft.");
       if (existingQ || existingDraft) v.duplicateRisk = true;
+      if (v.ok) nearDupStems.push(normalizeGeneratedStemForNearDupList(norm.stem));
 
       const validationJson = {
         ok: v.ok,
         errors: v.errors,
         warnings,
         duplicateRisk: v.duplicateRisk,
+        autoValidation: v.autoValidation,
       };
 
       const draft = await prisma.generatedQuestionDraft.create({

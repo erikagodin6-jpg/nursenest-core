@@ -119,7 +119,14 @@ export async function POST(req: Request, ctx: Props) {
     };
 
     const dupSet = new Set<string>();
-    const v = validateNormalizedQuestion(mergedNorm, { duplicateStemHashes: dupSet });
+    const v = validateNormalizedQuestion(mergedNorm, {
+      duplicateStemHashes: dupSet,
+      expectedTags: {
+        tier: String(draft.tier),
+        exam: String(draft.examFamily),
+        topic: mergedNorm.topicTag ?? mergedNorm.metadata?.tags?.[0] ?? undefined,
+      },
+    });
     const sh = stemHash(mergedNorm.stem);
 
     const [existingQ, existingDraft] = await Promise.all([
@@ -144,6 +151,7 @@ export async function POST(req: Request, ctx: Props) {
       errors: v.errors,
       warnings,
       duplicateRisk,
+      autoValidation: v.autoValidation,
     };
 
     await prisma.generatedQuestionDraft.update({

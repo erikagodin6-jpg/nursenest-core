@@ -5,7 +5,6 @@ import { prisma } from "@/lib/db";
 import { safeServerLogCritical } from "@/lib/observability/safe-server-log";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 import { withRetry } from "@/lib/resilience/with-retry";
-import type { Prisma } from "@prisma/client";
 import { recordTopicOutcomesSequential } from "@/lib/learner/topic-performance";
 import { normalizeTopicLabel } from "@/lib/learner/weak-topics-from-sessions";
 import { buildRationalePayloadForGradeResponse } from "@/lib/content-quality/rationale-display";
@@ -21,6 +20,7 @@ import { resolveRationaleLessonLinksForQuestion } from "@/lib/learner/rationale-
 import { analyticsDistinctId, captureServerEvent } from "@/lib/observability/posthog-server";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 import { incrementBankQuestionsGradedToday } from "@/lib/learner/increment-bank-questions-graded-today";
+import { gradeMatches, normalizeCorrect } from "@/lib/questions/grade-answer-match";
 
 function topicRoutingConfidence(row: { subtopic?: string | null; topic?: string | null; bodySystem?: string | null }): RecommendationConfidence {
   if ((row.subtopic ?? "").trim().length > 1) return "high";
@@ -38,25 +38,6 @@ function effectivePathwayIdForGrade(
   const stored = (storedLearnerPath ?? "").trim();
   if (stored && getExamPathwayById(stored)) return stored;
   return null;
-}
-
-function normalizeCorrect(correctAnswer: Prisma.JsonValue | null | undefined): string[] {
-  if (correctAnswer == null) return [];
-  if (Array.isArray(correctAnswer)) return correctAnswer.map((x) => String(x));
-  if (typeof correctAnswer === "string") return [correctAnswer];
-  return [String(correctAnswer)];
-}
-
-function gradeMatches(questionType: string, correct: string[], userAnswer: unknown): boolean {
-  const t = questionType.toUpperCase();
-  if (t === "SATA" || t === "SELECT_ALL_THAT_APPLY") {
-    const u = Array.isArray(userAnswer) ? userAnswer.map((x) => String(x)).sort() : [];
-    const c = [...correct].map(String).sort();
-    if (u.length !== c.length) return false;
-    return u.every((v, i) => v === c[i]);
-  }
-  const u = userAnswer == null ? "" : String(userAnswer);
-  return correct.length > 0 && u === String(correct[0]);
 }
 
 export async function POST(req: Request) {

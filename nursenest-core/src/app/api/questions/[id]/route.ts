@@ -176,11 +176,6 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string 
       return NextResponse.json({ error: "Not found" }, { status: 404 });
     }
 
-    await prisma.user.update({
-      where: { id: userId },
-      data: { freeQuestionViews: { increment: 1 } },
-    });
-
     const freemiumBody = {
       question: mergeQuestionApiPayload({ ...q } as Record<string, unknown>, educationalLocale, questionOverlayBundle),
       mode: "freemium" as const,
