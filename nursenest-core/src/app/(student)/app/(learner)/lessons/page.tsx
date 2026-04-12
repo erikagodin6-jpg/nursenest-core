@@ -18,6 +18,8 @@ import {
 } from "@/lib/lessons/app-pathway-lesson-list-scope";
 import { paginateLegacyContentMapLessons } from "@/lib/lessons/legacy-content-map-lessons";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { FreemiumCrossTrackNudge } from "@/components/student/freemium-cross-track-nudge";
+import { FreemiumPreviewExhaustedSurface } from "@/components/student/freemium-preview-exhausted-surface";
 import { FreemiumLessonPeek } from "@/components/student/freemium-lesson-peek";
 import { LearnerStudyQuickLinksCard } from "@/components/student/learner-study-quick-links-card";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
@@ -25,6 +27,7 @@ import { LEARNER_APP_LESSONS_PAGE_SIZE } from "@/lib/lessons/pathway-lesson-scal
 import { loadPathwayLessonProgressMap, type PathwayLessonProgressStatus } from "@/lib/lessons/pathway-lesson-progress";
 import { LessonCard, LessonCardChip } from "@/components/student/product/lesson-card";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
+import { freemiumLessonsExhausted, freemiumQuestionsExhausted } from "@/lib/conversion/freemium-gates";
 
 type AppLessonListRow = {
   id: string;
@@ -113,9 +116,17 @@ export default async function LessonsPage({ searchParams }: Props) {
           {t("learner.lessons.list.freemiumTail")}
         </p>
         <div className="mt-6">
-          <SubscriptionPaywall context="lessons" freemiumRemainingLessons={snap?.lessonRemaining ?? 0} />
+          <SubscriptionPaywall
+            context="lessons"
+            freemiumRemainingLessons={snap?.lessonRemaining ?? 0}
+            freemiumRemainingQuestions={snap?.questionRemaining ?? 0}
+          />
         </div>
-        {userId && snap && snap.lessonRemaining > 0 ? <FreemiumLessonPeek /> : null}
+        {userId && snap && freemiumQuestionsExhausted(snap) && !freemiumLessonsExhausted(snap) ? (
+          <FreemiumCrossTrackNudge variant="questions_exhausted" />
+        ) : null}
+        {userId && snap && !freemiumLessonsExhausted(snap) ? <FreemiumLessonPeek /> : null}
+        {userId && snap && freemiumLessonsExhausted(snap) ? <FreemiumPreviewExhaustedSurface kind="lessons" /> : null}
       </main>
     );
   }

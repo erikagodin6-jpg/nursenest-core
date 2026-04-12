@@ -1,12 +1,10 @@
 "use client";
 
-import { useMemo, useSyncExternalStore } from "react";
-import { getThemeLogoPathForThemeId, headerLogoModeForTheme, resolveLogoForTheme, themeLogoObjectKeyForTheme } from "@/lib/branding/theme-logo-map";
-import { getHeaderBrandLogoLoadChain, type ThemeLogoVariant } from "@/lib/theme/theme-logo-url";
-import { normalizeThemeIdForLogo } from "@/lib/theme/theme-logo-resolve";
+import { useEffect, useMemo, useSyncExternalStore } from "react";
+import { headerLogoModeForTheme } from "@/lib/branding/theme-logo-map";
+import { resolveThemeLogo, type ThemeLogoVariant } from "@/lib/branding/resolve-theme-logo";
+import { parseRegisteredThemeId } from "@/lib/theme/theme-logo-resolve";
 import { NURSENEST_DEFAULT_THEME, THEME_STORAGE_KEY } from "@/lib/theme/theme-registry";
-import { nursenestImagesSpaceObjectUrl } from "@/config/marketing-cdn.catalog";
-import { marketingImageUsesProxy, marketingProxyPathForKey } from "@/lib/marketing-resolve-image-url";
 
 function subscribe(onChange: () => void) {
   if (typeof window === "undefined" || typeof document === "undefined") {
@@ -25,13 +23,14 @@ function subscribe(onChange: () => void) {
   };
 }
 
-function readDomThemeId(): string {
+/** Raw `data-theme` / storage value (may be non-registry during hydration edge cases). */
+function readDomThemeRaw(): string {
   if (typeof document === "undefined") return NURSENEST_DEFAULT_THEME;
   const attr = document.documentElement.getAttribute("data-theme");
-  if (attr && attr.length > 0) return normalizeThemeIdForLogo(attr);
+  if (attr && attr.length > 0) return attr.trim();
   try {
     const v = localStorage.getItem(THEME_STORAGE_KEY);
-    if (v) return normalizeThemeIdForLogo(v);
+    if (v) return v.trim();
   } catch {
     /* ignore */
   }
@@ -46,47 +45,46 @@ function getServerSnapshot(): string {
  * Active theme logo follows `data-theme` (and the same localStorage key as the boot script), not
  * next-themes React state alone. That keeps the raster aligned with CSS variables and avoids a
  * brief wrong-theme logo when the DOM is already set after `beforeInteractive` boot.
- *
- * @param logoVariant - "full" (default) = leaf + wordmark; "leaf" = icon only (404/error pages).
  */
 export function useThemeLogo(logoVariant: ThemeLogoVariant = "full"): {
-  /** Canonical theme id used for logo mapping. */
+  /** Registry id when `data-theme` is valid; otherwise null. */
+  registeredThemeId: string | null;
+  /** Raw theme string from DOM / storage (diagnostics). */
+  rawThemeId: string;
+  /** Prefer registered id for logs; falls back to raw when unregistered. */
   themeId: string;
-  /** Spaces object key for the active theme mark. */
-  mappedSpaceKey: string;
-  /** Deterministic header logo mode chosen from theme contrast profile. */
+  mappedSpaceKey: string | null;
   headerLogoMode: "dark-header" | "light-header";
-  /** Ordered URLs: CDN first, then same-origin fallbacks. Used for non-header surfaces. */
-  loadChain: string[];
-  /**
-   * Single explicit CDN/proxy URL for this theme + variant.
-   * Computed directly from the theme logo map — no chain, no fallbacks.
-   * Use this for the site header and 404 page via `exactSourceOnly`.
-   */
-  singleSrc: string;
+  url: string | null;
+  kind: "cdn" | "text-fallback";
 } {
-  const domThemeId = useSyncExternalStore(subscribe, readDomThemeId, getServerSnapshot);
-  const activeId = normalizeThemeIdForLogo(domThemeId);
-  const mappedSpaceKey = useMemo(() => themeLogoObjectKeyForTheme(activeId, logoVariant), [activeId, logoVariant]);
-  const headerLogoMode = useMemo(() => headerLogoModeForTheme(activeId), [activeId]);
-  const loadChain = useMemo(() => {
-    const chain = getHeaderBrandLogoLoadChain(activeId, headerLogoMode, logoVariant);
-    return chain.length > 0 ? chain : [resolveLogoForTheme(activeId), getThemeLogoPathForThemeId(activeId)];
-  }, [activeId, headerLogoMode, logoVariant]);
+  const rawThemeId = useSyncExternalStore(subscribe, readDomThemeRaw, getServerSnapshot);
+  const registeredThemeId = useMemo(() => parseRegisteredThemeId(rawThemeId), [rawThemeId]);
+  const themeId = registeredThemeId ?? rawThemeId;
+  const headerTarget = registeredThemeId ?? NURSENEST_DEFAULT_THEME;
+  const headerLogoMode = useMemo(() => headerLogoModeForTheme(headerTarget), [headerTarget]);
+  const resolved = useMemo(
+    () => resolveThemeLogo(registeredThemeId, logoVariant),
+    [registeredThemeId, logoVariant],
+  );
 
-  // Single explicit source: one CDN object key → one URL. No committed PNGs, no SVG fallbacks,
-  // no cross-theme substitution. Used exclusively when exactSourceOnly=true.
-  const singleSrc = useMemo(() => {
-    const objectKey = themeLogoObjectKeyForTheme(activeId, logoVariant);
-    if (marketingImageUsesProxy()) return marketingProxyPathForKey(objectKey);
-    return nursenestImagesSpaceObjectUrl(objectKey);
-  }, [activeId, logoVariant]);
+  useEffect(() => {
+    if (process.env.NODE_ENV === "production") return;
+    // eslint-disable-next-line no-console -- dev-only theme logo diagnostic
+    console.debug("[theme-logo]", {
+      themeId: registeredThemeId ?? rawThemeId,
+      resolvedLogoUrl: resolved.url,
+      textFallback: resolved.kind === "text-fallback",
+    });
+  }, [registeredThemeId, rawThemeId, resolved.url, resolved.kind]);
 
   return {
-    themeId: activeId,
-    mappedSpaceKey,
+    registeredThemeId,
+    rawThemeId,
+    themeId,
+    mappedSpaceKey: resolved.objectKey,
     headerLogoMode,
-    loadChain,
-    singleSrc,
+    url: resolved.url,
+    kind: resolved.kind,
   };
 }

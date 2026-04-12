@@ -541,7 +541,7 @@ export function SiteHeader() {
               className="nn-header-logo-link group flex min-w-0 shrink-0 items-center gap-2.5 overflow-visible bg-transparent"
               aria-label={t("brand.homeAriaLabel")}
             >
-              <SiteBrandLogoMark exactSourceOnly />
+              <SiteBrandLogoMark />
             </Link>
             {/* Mobile controls — only visible below lg */}
             <div className="flex items-center gap-2 lg:hidden">
@@ -574,7 +574,7 @@ export function SiteHeader() {
               className="nn-header-logo-link group flex min-w-0 flex-none items-center gap-2.5 overflow-visible bg-transparent lg:min-w-[11rem] xl:min-w-[12rem]"
               aria-label={t("brand.homeAriaLabel")}
             >
-              <SiteBrandLogoMark exactSourceOnly />
+              <SiteBrandLogoMark />
             </Link>
             <nav
               aria-label={isLearnerAuthenticated ? "Learner navigation" : t("nav.marketingExplore")}
@@ -963,7 +963,7 @@ export function SiteHeader() {
                 aria-label={t("brand.homeAriaLabel")}
                 onClick={() => setMobileOpen(false)}
               >
-                <SiteBrandLogoMark exactSourceOnly />
+                <SiteBrandLogoMark />
               </Link>
               <Button type="button" variant="ghost" className="h-10 w-10 shrink-0 rounded-xl border border-[var(--nav-border)] p-0 text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]" aria-label={t("nav.closeMenu")} onClick={() => setMobileOpen(false)}>
                 <X className="h-5 w-5" />

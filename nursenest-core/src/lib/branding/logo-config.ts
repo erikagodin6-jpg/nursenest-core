@@ -5,9 +5,8 @@ import { NURSENEST_DEFAULT_THEME } from "@/lib/theme/theme-registry";
 export const COMMITTED_THEME_LOGO_PUBLIC_PREFIX = "/branding/theme-logos/" as const;
 
 /**
- * Global site logo fallbacks (header uses `SiteBrandLogoMark` → `getHeaderBrandLogoLoadChain`:
- * committed transparent PNG first, then CDN/proxy, then `PRIMARY_LOGO_URL`, then local SVG).
- * Default brand theme is ocean/clinical-blue (`NURSENEST_DEFAULT_THEME`).
+ * Legacy same-origin / generic brand fallbacks. Per-theme marks resolve only via
+ * `resolveThemeLogo` (CDN/proxy) — see `SiteBrandLogoMark`.
  */
 export const PRIMARY_LOGO_URL = `${COMMITTED_THEME_LOGO_PUBLIC_PREFIX}${NURSENEST_DEFAULT_THEME}brandlogo_transparent.png` as const;
 

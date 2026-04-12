@@ -1,5 +1,7 @@
 import { Suspense } from "react";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
+import { FreemiumCrossTrackNudge } from "@/components/student/freemium-cross-track-nudge";
+import { FreemiumPreviewExhaustedSurface } from "@/components/student/freemium-preview-exhausted-surface";
 import { FreemiumQuestionPeek } from "@/components/student/freemium-question-peek";
 import { QuestionBankPracticeClient } from "@/components/student/question-bank-practice-client";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
@@ -15,6 +17,7 @@ import { LearnerStudyQuickLinksCard } from "@/components/student/learner-study-q
 import { getServerPremiumProtectionFlags } from "@/lib/premium-protection/config";
 import { maskUserLabelForWatermark } from "@/lib/premium-protection/mask-user-label";
 import { appShellBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
+import { freemiumLessonsExhausted, freemiumQuestionsExhausted } from "@/lib/conversion/freemium-gates";
 
 export default async function QuestionBankPage() {
   const { t } = await getLearnerMarketingBundle();
@@ -76,9 +79,14 @@ export default async function QuestionBankPage() {
           <SubscriptionPaywall
             context="questions"
             freemiumRemainingQuestions={snap?.questionRemaining ?? 0}
+            freemiumRemainingLessons={snap?.lessonRemaining ?? 0}
           />
         </div>
-        {userId && snap && snap.questionRemaining > 0 ? <FreemiumQuestionPeek /> : null}
+        {userId && snap && freemiumLessonsExhausted(snap) && !freemiumQuestionsExhausted(snap) ? (
+          <FreemiumCrossTrackNudge variant="lessons_exhausted" />
+        ) : null}
+        {userId && snap && !freemiumQuestionsExhausted(snap) ? <FreemiumQuestionPeek /> : null}
+        {userId && snap && freemiumQuestionsExhausted(snap) ? <FreemiumPreviewExhaustedSurface kind="questions" /> : null}
       </main>
     );
   }

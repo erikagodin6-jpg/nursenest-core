@@ -1,6 +1,6 @@
 /**
  * **Source of truth for theme ids** used across the app: CSS `[data-theme="…"]` palettes, the theme picker,
- * and per-theme logo file resolution via `getThemeLogoPathForThemeId`.
+ * and per-theme logo URLs via `resolveThemeLogo` (`src/lib/branding/resolve-theme-logo.ts`).
  * Favicon generation tints to the default theme primary; wordmark PNGs are produced
  * by `scripts/generate-theme-logos-from-registry.ts`. Legacy shared logo filenames are not used for theme marks.
  *

@@ -1,21 +1,20 @@
 /**
- * Compatibility exports for callers that need theme -> Spaces object key lookups.
- * Mapping source-of-truth lives in `src/lib/branding/theme-logo-map.ts`.
+ * Theme id → Spaces object key for nursenest-images CDN rasters.
+ * Source of truth: {@link THEME_LOGO_SPACE_KEYS} in `src/lib/branding/resolve-theme-logo.ts`.
  */
-import { NURSENEST_DEFAULT_THEME, THEME_OPTIONS } from "@/lib/theme/theme-registry";
-import { themeLogoObjectKeyForTheme } from "@/lib/branding/theme-logo-map";
+import { THEME_LOGO_SPACE_KEYS } from "@/lib/branding/resolve-theme-logo";
+import { THEME_OPTIONS, type ThemeOption } from "@/lib/theme/theme-registry";
 
-export type ThemeId = (typeof THEME_OPTIONS)[number]["id"];
+export type ThemeId = ThemeOption["id"];
 
-/** Explicit theme id → Spaces key (no leading slash). */
+/** Explicit theme id → Spaces key when a CDN logo exists; omitted ids have no mapped asset. */
 export const THEME_BRAND_LOGO_SPACE_KEYS = Object.fromEntries(
-  THEME_OPTIONS.map((o) => [o.id, themeLogoObjectKeyForTheme(o.id)]),
-) as Record<ThemeId, string>;
+  THEME_OPTIONS.flatMap((o) => {
+    const k = THEME_LOGO_SPACE_KEYS[o.id];
+    return k ? ([[o.id, k]] as const) : [];
+  }),
+) as Partial<Record<ThemeId, string>>;
 
-const KEYS = THEME_BRAND_LOGO_SPACE_KEYS as Readonly<Record<string, string>>;
-
-export function getThemeBrandLogoSpaceKeyForCanonicalId(themeId: string): string {
-  const k = KEYS[themeId];
-  if (k) return k;
-  return KEYS[NURSENEST_DEFAULT_THEME]!;
+export function getThemeBrandLogoSpaceKeyForCanonicalId(themeId: string): string | null {
+  return THEME_BRAND_LOGO_SPACE_KEYS[themeId as ThemeId] ?? null;
 }

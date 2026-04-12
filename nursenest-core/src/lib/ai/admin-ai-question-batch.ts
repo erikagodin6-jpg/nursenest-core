@@ -29,6 +29,10 @@ export type QuestionBatchItem = {
   itemId: string;
   topic: string;
   batchTopicKey: string;
+  /** Base concept line when using {@link variationDirective} (prompt + tagging). */
+  baseTopic?: string;
+  /** Extra prompt block from the variation engine (age, setting, archetype, etc.). */
+  variationDirective?: string;
   status: QuestionBatchItemStatus;
   startedAt?: string | null;
   draftId?: string;
@@ -44,6 +48,8 @@ export type QuestionBatchResultSummaryV1 = {
   settings: QuestionBatchSettings;
   /** Normalized stems for near-duplicate detection within this job (no full-bank scan). */
   nearDupStemNorms?: string[];
+  /** Correct-option index fingerprints (MCQ/SATA) used within this job. */
+  usedAnswerPatterns?: string[];
 };
 
 function normalizeTopic(topic: string): string {
@@ -66,8 +72,13 @@ export function parseQuestionBatchTopicList(raw: string): string[] {
   return out;
 }
 
-export function questionBatchTopicKey(topic: string, settings: QuestionBatchSettings): string {
-  const base = [
+export function questionBatchTopicKey(
+  topic: string,
+  settings: QuestionBatchSettings,
+  /** When set, differentiates variations of the same base topic. */
+  variationSignature?: string,
+): string {
+  const parts = [
     normalizeTopic(topic),
     settings.tier,
     settings.country,
@@ -79,8 +90,11 @@ export function questionBatchTopicKey(topic: string, settings: QuestionBatchSett
     settings.lessonId ?? "",
     settings.lessonTargetIds.slice().sort().join(","),
     settings.questionStyleHints.slice().sort().join(","),
-  ].join("|");
-  return createHash("sha256").update(base).digest("hex").slice(0, 40);
+  ];
+  if (variationSignature?.trim()) {
+    parts.push(normalizeTopic(variationSignature));
+  }
+  return createHash("sha256").update(parts.join("|")).digest("hex").slice(0, 40);
 }
 
 export function parseQuestionBatchSummary(raw: unknown): QuestionBatchResultSummaryV1 | null {

@@ -1,4 +1,4 @@
-import { getThemeLogoPathForThemeId } from "@/lib/branding/theme-logo-map";
+import { resolveThemeLogo } from "@/lib/branding/resolve-theme-logo";
 import { getThemePaletteTokens } from "@/lib/theme/theme-palette-tokens";
 import { THEME_OPTIONS } from "@/lib/theme/theme-registry";
 
@@ -21,7 +21,7 @@ export const THEME_LOGO_CONFIG: Record<string, ThemeLogoEntry> = Object.fromEntr
       heading: palette?.heading ?? "#111827",
       background: palette?.background ?? "#ffffff",
       logoColor: palette?.logoPrimary ?? theme.color,
-      logoPath: getThemeLogoPathForThemeId(theme.id),
+      logoPath: resolveThemeLogo(theme.id, "full").url ?? "",
     };
     return [theme.id, entry];
   }),

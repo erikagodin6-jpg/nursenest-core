@@ -89,6 +89,8 @@ export function MarketingHeroCarousel({
     });
   }, [slideFingerprint, slides.length]);
 
+  const currentSlide = slides[current];
+
   useEffect(() => {
     if (!onActiveSlideAnalytics || !currentSlide || !hasLoaded) return;
     if (lastAnalyticsSlideIndex.current === currentSlide.index) return;
@@ -101,7 +103,6 @@ export function MarketingHeroCarousel({
   }, [failed]);
 
   const validCount = slides.length - failed.size;
-  const currentSlide = slides[current];
 
   const startTimer = useCallback(() => {
     if (timerRef.current) clearInterval(timerRef.current);

@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { PracticeTestsHubClient } from "@/components/student/practice-tests-hub-client";
 import { isCatExamSimulationFeatureEnabled } from "@/lib/exams/cat-exam-simulation";
+import { FreemiumPreviewExhaustedSurface } from "@/components/student/freemium-preview-exhausted-surface";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
 import { auth } from "@/lib/auth";
 import { getFreemiumSnapshot } from "@/lib/entitlements/freemium";
@@ -47,8 +48,13 @@ export default async function PracticeTestsPage() {
           <p className="mt-2 text-sm text-[var(--semantic-text-secondary)]">{t("learner.practiceTests.subtitle.locked")}</p>
         </div>
         <div>
-          <SubscriptionPaywall context="questions" freemiumRemainingQuestions={snap?.questionRemaining ?? 0} />
+          <SubscriptionPaywall
+            context="questions"
+            freemiumRemainingQuestions={snap?.questionRemaining ?? 0}
+            freemiumRemainingLessons={snap?.lessonRemaining ?? 0}
+          />
         </div>
+        <FreemiumPreviewExhaustedSurface kind="cat" />
       </main>
     );
   }

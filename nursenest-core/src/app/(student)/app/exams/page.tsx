@@ -3,6 +3,7 @@ import { ExamSessionErrorBoundary } from "@/components/exam/exam-session-error-b
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { ExamPracticeClient } from "@/components/student/exam-practice-client";
 import { LearnerStudyQuickLinksCard } from "@/components/student/learner-study-quick-links-card";
+import { FreemiumPreviewExhaustedSurface } from "@/components/student/freemium-preview-exhausted-surface";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";

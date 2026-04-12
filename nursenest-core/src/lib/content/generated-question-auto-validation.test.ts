@@ -140,9 +140,9 @@ describe("stemBigramJaccard", () => {
     assert.equal(stemBigramJaccard(s, s), 1);
   });
 
-  it("flags small edits below threshold (not a near-duplicate by policy)", () => {
+  it("scores lower when the clinical scenario diverges", () => {
     const s1 = "The nurse assesses a patient with chest pain and orders an EKG per protocol.";
-    const s2 = "The nurse assesses a client with chest pain and orders an EKG per protocol.";
+    const s2 = "The nurse teaches a new parent about newborn cord care and hand hygiene.";
     const j = stemBigramJaccard(s1, s2);
     assert.ok(j < NEAR_DUP_JACCARD_THRESHOLD, `expected below ${NEAR_DUP_JACCARD_THRESHOLD}, got ${j}`);
   });

@@ -25,6 +25,10 @@ export type QuestionGenerationContext = {
   /** Optional type hints e.g. prioritization, pharmacology */
   questionStyleHints: string[];
   lessonHints: LessonHintRow[];
+  /** Single-item batch step: full variation block from {@link formatVariationDirective}. */
+  variationDirective?: string;
+  /** Multi-item generation: one directive per array element (length must equal quantity). */
+  variationDirectives?: string[];
 };
 
 const ITEM_SHAPE = `Each array element MUST be one JSON object with:
@@ -78,6 +82,20 @@ export function buildExamQuestionUserPrompt(ctx: QuestionGenerationContext): str
 
   const cat = ctx.categoryLabel ? `\nCategory context: ${ctx.categoryLabel}.` : "";
 
+  const variationBlock = (() => {
+    if (ctx.variationDirectives && ctx.variationDirectives.length === ctx.quantity) {
+      const lines = ctx.variationDirectives.map((d, i) => `Item ${i + 1}:\n${d}`);
+      return [
+        "VARIATION SET (each item MUST satisfy its block; stems must not reuse the same scenario or answer-letter pattern):",
+        ...lines,
+      ].join("\n\n");
+    }
+    if (ctx.variationDirective?.trim()) {
+      return ctx.variationDirective.trim();
+    }
+    return "";
+  })();
+
   return [
     `Generate exactly ${ctx.quantity} questions.`,
     `Topic focus: ${ctx.topic}`,
@@ -89,6 +107,10 @@ export function buildExamQuestionUserPrompt(ctx: QuestionGenerationContext): str
     hints,
     cat,
     lessonBlock,
+    variationBlock,
+    ctx.quantity > 1
+      ? "Across items: use different patient ages/settings where applicable, different stems, and vary MCQ correct option positions (avoid repeating the same correctIndex pattern)."
+      : "",
     `Return ONLY a JSON array of ${ctx.quantity} objects matching the schema from the system message.`,
   ]
     .filter(Boolean)

@@ -1,5 +1,6 @@
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { PathwayCatSessionStartClient } from "@/components/student/pathway-cat-session-start-client";
+import { FreemiumPreviewExhaustedSurface } from "@/components/student/freemium-preview-exhausted-surface";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
 import { auth } from "@/lib/auth";
 import { getFreemiumSnapshot } from "@/lib/entitlements/freemium";
@@ -52,8 +53,13 @@ export default async function PathwayCatStartPage({ searchParams }: Props) {
         <h1 className="text-3xl font-bold">Pathway CAT practice</h1>
         <p className="mt-2 text-sm text-muted">Subscribe to run adaptive sessions matched to your exam track.</p>
         <div className="mt-6">
-          <SubscriptionPaywall context="questions" freemiumRemainingQuestions={snap?.questionRemaining ?? 0} />
+          <SubscriptionPaywall
+            context="questions"
+            freemiumRemainingQuestions={snap?.questionRemaining ?? 0}
+            freemiumRemainingLessons={snap?.lessonRemaining ?? 0}
+          />
         </div>
+        <FreemiumPreviewExhaustedSurface kind="cat" />
       </main>
     );
   }

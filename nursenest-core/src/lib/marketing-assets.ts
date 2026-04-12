@@ -81,17 +81,17 @@ export {
 } from "@/config/theme-brand-logo-cdn";
 
 /** @deprecated Use `getThemeLogoUrl` from `@/lib/theme/theme-logo-url` */
-export function getResolvedThemeLogoUrl(themeId: string): string {
+export function getResolvedThemeLogoUrl(themeId: string): string | null {
   return getThemeLogoUrl(themeId);
 }
 
 export {
   getHeaderBrandLogoLoadChain,
   getThemeLogo,
-  getThemeLogoLoadChain,
   getThemeLogoObjectKey,
   getThemeLogoPublicUrl,
   getThemeLogoUrl,
+  resolveThemeLogo,
 } from "@/lib/theme/theme-logo-url";
 export { useThemeLogo } from "@/lib/theme/use-theme-logo";
 export { normalizeThemeIdForLogo, THEME_LOGO_ALIASES } from "@/lib/theme/theme-logo-resolve";

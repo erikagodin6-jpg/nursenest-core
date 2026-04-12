@@ -19,8 +19,14 @@ import {
   findJobByIdempotencyKey,
   idempotencyKeySchema,
 } from "@/lib/ai/controlled-ai-batch";
+import {
+  buildVariationSpecsForConcept,
+  clampVariationsPerTopicBatch,
+  formatVariationDirective,
+} from "@/lib/ai/question-variation-engine";
 
 const MAX_TOPICS = 35;
+const MAX_BATCH_ITEMS = 200;
 
 const bodySchema = z.object({
   topicsRaw: z.string().min(2).max(20_000),
@@ -35,6 +41,8 @@ const bodySchema = z.object({
   categoryId: z.string().optional(),
   lessonTargets: z.string().max(2000).optional(),
   allowDuplicates: z.boolean().default(false),
+  /**1 = one item per topic line; 2–8 expands each topic into unique scenario variations. */
+  variationsPerTopic: z.coerce.number().int().min(1).max(8).optional(),
   idempotencyKey: idempotencyKeySchema,
   batchControl: batchControlSchema.optional(),
 });
@@ -88,6 +96,17 @@ export async function POST(req: Request) {
     );
   }
 
+  const variationsPerTopic = clampVariationsPerTopicBatch(d.variationsPerTopic);
+  const expandedCount = topics.length * variationsPerTopic;
+  if (expandedCount > MAX_BATCH_ITEMS) {
+    return NextResponse.json(
+      {
+        error: `Too many batch items (${expandedCount}); max ${MAX_BATCH_ITEMS}. Reduce topics or variationsPerTopic (currently ${variationsPerTopic}).`,
+      },
+      { status: 400 },
+    );
+  }
+
   const hints = (d.questionTypes ?? "")
     .split(/[,;]+/g)
     .map((s) => s.trim())
@@ -119,16 +138,35 @@ export async function POST(req: Request) {
     categoryId: d.categoryId?.trim() || null,
   };
 
+  const items: QuestionBatchResultSummaryV1["items"] = [];
+  for (const topic of topics) {
+    if (variationsPerTopic <= 1) {
+      items.push({
+        itemId: randomUUID(),
+        topic,
+        batchTopicKey: questionBatchTopicKey(topic, settings),
+        status: "pending" as const,
+      });
+    } else {
+      const specs = buildVariationSpecsForConcept(topic, variationsPerTopic);
+      for (const spec of specs) {
+        items.push({
+          itemId: randomUUID(),
+          baseTopic: topic,
+          topic,
+          variationDirective: formatVariationDirective(spec),
+          batchTopicKey: questionBatchTopicKey(topic, settings, spec.signature),
+          status: "pending" as const,
+        });
+      }
+    }
+  }
+
   const summary: QuestionBatchResultSummaryV1 = {
     version: 1,
     allowDuplicates: d.allowDuplicates,
     settings,
-    items: topics.map((topic) => ({
-      itemId: randomUUID(),
-      topic,
-      batchTopicKey: questionBatchTopicKey(topic, settings),
-      status: "pending" as const,
-    })),
+    items,
   };
 
   const model = getOpenAiChatModel();
@@ -137,7 +175,7 @@ export async function POST(req: Request) {
       tool: ADMIN_QUESTION_BATCH_JOB_TOOL,
       status: JobStatus.RUNNING,
       model,
-      sourcePrompt: `Batch question generation: ${topics.length} topics (${d.examFamily}, ${d.country}, ${d.tier})`,
+      sourcePrompt: `Batch question generation: ${topics.length} topics × ${variationsPerTopic} variations (${d.examFamily}, ${d.country}, ${d.tier})`,
       inputPayload: {
         ...d,
         topics,

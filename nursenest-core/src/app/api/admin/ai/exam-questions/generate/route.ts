@@ -13,6 +13,7 @@ import { isAdminAiGenerationEnabled } from "@/lib/ai/admin-ai-policy";
 import { checkAdminAiGenerateLimit } from "@/lib/ai/admin-rate-limit";
 import { openAiChatCompletion } from "@/lib/ai/openai-chat-completions";
 import { assertOpenAiKeyConfigured } from "@/lib/ai/openai-env";
+import { buildVariationSpecsForConcept, formatVariationDirective } from "@/lib/ai/question-variation-engine";
 import {
   countryFromApi,
   examFamilyFromApi,
@@ -118,6 +119,9 @@ export async function POST(req: Request) {
     pathway?.trim() ||
     (tier === "np" ? "NP / advanced practice" : tier === "rpn" ? "RPN/LPN" : tier === "rn" ? "RN" : "RN");
 
+  const variationSpecs = buildVariationSpecsForConcept(topic, quantity);
+  const variationDirectives = variationSpecs.map(formatVariationDirective);
+
   const genCtx = {
     topic,
     quantity,
@@ -130,6 +134,9 @@ export async function POST(req: Request) {
     questionTypeMode,
     questionStyleHints: styleHints,
     lessonHints,
+    ...(quantity > 0 && variationDirectives.length === quantity
+      ? { variationDirectives }
+      : {}),
   };
 
   const sourcePrompt = `${buildExamQuestionUserPrompt(genCtx)}\n\n[system spec: exam-style items with rationales + lesson links]`;

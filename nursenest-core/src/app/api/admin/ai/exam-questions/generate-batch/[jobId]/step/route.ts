@@ -7,7 +7,6 @@ import {
   findQuestionDraftByBatchTopicKey,
   isTerminalQuestionBatchStatus,
   parseQuestionBatchSummary,
-  questionBatchTopicKey,
   reviveStaleQuestionBatchItems,
   type QuestionBatchItem,
   type QuestionBatchResultSummaryV1,
@@ -17,6 +16,7 @@ import {
   openAiExamQuestionItemsForContext,
   type LessonHintRow,
 } from "@/lib/ai/admin-ai-question-pipeline";
+import { answerPatternFingerprint } from "@/lib/ai/question-variation-engine";
 import {
   abortQuestionBatchForSafety,
   BATCH_ABORT_ERROR_THRESHOLD,
@@ -51,6 +51,7 @@ const stepBodySchema = z.object({
 });
 
 const NEAR_DUP_NORMS_CAP = 48;
+const ANSWER_PATTERN_CAP = 64;
 
 async function persistQuestionBatchItem(
   jobId: string,
@@ -58,6 +59,7 @@ async function persistQuestionBatchItem(
   patch: Partial<QuestionBatchItem>,
   tokenDelta?: number,
   nearDupStemNormAppend?: string,
+  answerPatternAppend?: string,
 ): Promise<QuestionBatchResultSummaryV1 | null> {
   const fresh = await prisma.aiGenerationJob.findUnique({ where: { id: jobId } });
   const s = parseQuestionBatchSummary(fresh?.resultSummary);
@@ -70,6 +72,9 @@ async function persistQuestionBatchItem(
   const nextSummary: QuestionBatchResultSummaryV1 = { ...s, items: mergedItems };
   if (nearDupStemNormAppend != null && nearDupStemNormAppend.length > 0) {
     nextSummary.nearDupStemNorms = [...(s.nearDupStemNorms ?? []), nearDupStemNormAppend].slice(-NEAR_DUP_NORMS_CAP);
+  }
+  if (answerPatternAppend != null && answerPatternAppend.length > 0) {
+    nextSummary.usedAnswerPatterns = [...(s.usedAnswerPatterns ?? []), answerPatternAppend].slice(-ANSWER_PATTERN_CAP);
   }
   await prisma.aiGenerationJob.update({
     where: { id: jobId },
@@ -210,7 +215,7 @@ export async function POST(req: Request, ctx: Props) {
         lessonHints = rows.map((r) => ({ id: r.id, title: r.title, slug: r.slug }));
       }
 
-      const key = questionBatchTopicKey(item.topic, settings);
+        const key = item.batchTopicKey;
 
       try {
         if (!summary.allowDuplicates) {
@@ -237,8 +242,9 @@ export async function POST(req: Request, ctx: Props) {
           }
         }
 
+        const topicForModel = item.baseTopic ?? item.topic;
         const genCtx = {
-          topic: item.topic,
+          topic: topicForModel,
           quantity: 1,
           tier: settings.tier,
           pathwayLabel: settings.pathwayLabel,
@@ -249,6 +255,9 @@ export async function POST(req: Request, ctx: Props) {
           questionTypeMode: settings.questionTypeMode,
           questionStyleHints: settings.questionStyleHints,
           lessonHints,
+          ...(item.variationDirective?.trim()
+            ? { variationDirective: item.variationDirective.trim() }
+            : {}),
         };
 
         const { items: aiItems, totalTokens } = await openAiExamQuestionItemsForContext(genCtx);
@@ -263,10 +272,10 @@ export async function POST(req: Request, ctx: Props) {
           batchTopicKey: key,
           batchJobId: jobId,
           batchItemId: item.itemId,
-          batchSourceTopic: item.topic,
+          batchSourceTopic: topicForModel,
         };
 
-        const sourcePrompt = `topic=${item.topic}; batch=${jobId}; item=${item.itemId}`;
+        const sourcePrompt = `topic=${topicForModel}; batch=${jobId}; item=${item.itemId}`;
 
         const normBase = normalizeAiQuestionItem(first);
         if (!normBase.ok) {
@@ -375,7 +384,7 @@ export async function POST(req: Request, ctx: Props) {
         const v = validateNormalizedQuestion(norm, {
           duplicateStemHashes: dupSet,
           expectedTags: {
-            topic: item.topic,
+            topic: topicForModel,
             tier: settings.tier,
             exam: settings.examFamily,
           },
@@ -386,12 +395,24 @@ export async function POST(req: Request, ctx: Props) {
         if (existingDraft) warnings.push("Stem hash matches another pending/approved draft.");
         if (existingQ || existingDraft) v.duplicateRisk = true;
 
+        const answerFp = answerPatternFingerprint(norm);
+        const answerPatternDup = (summary.usedAnswerPatterns ?? []).includes(answerFp);
+        const patternErrors = answerPatternDup
+          ? [
+              "Variation: same correct-option index pattern as another item in this batch — shuffle distractors or change which option is keyed correct.",
+            ]
+          : [];
+        const mergedErrors = [...v.errors, ...patternErrors];
+        const mergedOk = mergedErrors.length === 0;
+
         const validationJson = {
-          ok: v.ok,
-          errors: v.errors,
+          ok: mergedOk,
+          errors: mergedErrors,
           warnings,
           duplicateRisk: v.duplicateRisk,
           autoValidation: v.autoValidation,
+          answerPattern: answerFp,
+          answerPatternDuplicate: answerPatternDup,
         };
 
         const draft = await prisma.generatedQuestionDraft.create({
@@ -426,7 +447,8 @@ export async function POST(req: Request, ctx: Props) {
             startedAt: null,
           },
           totalTokens ?? 0,
-          v.ok ? normalizeGeneratedStemForNearDupList(norm.stem) : undefined,
+          mergedOk ? normalizeGeneratedStemForNearDupList(norm.stem) : undefined,
+          mergedOk ? answerFp : undefined,
         );
 
         await prisma.aiGenerationLog.create({

@@ -11,6 +11,7 @@ import {
   type QuestionGenerationContext,
 } from "@/lib/ai/admin-ai-question-pipeline";
 import { assertOpenAiKeyConfigured } from "@/lib/ai/openai-env";
+import { buildVariationSpecsForConcept, formatVariationDirective } from "@/lib/ai/question-variation-engine";
 import { openAiChatCompletion } from "@/lib/ai/openai-chat-completions";
 import {
   countryFromApi,
@@ -147,8 +148,12 @@ export async function runLessonGapAiDrafts(options: {
     const country = pathwayToApiCountry(pathway);
     const examFamily = pathwayToExamFamilyKey(pathway);
 
+    const topicLine = `${row.topic} — align to lesson “${row.title}” (body system: ${row.bodySystem})`;
+    const variationSpecs = buildVariationSpecsForConcept(`${topicLine}|${row.slug}`, quantity);
+    const variationDirectives = variationSpecs.map(formatVariationDirective);
+
     const genCtx: QuestionGenerationContext = {
-      topic: `${row.topic} — align to lesson “${row.title}” (body system: ${row.bodySystem})`,
+      topic: topicLine,
       quantity,
       tier,
       pathwayLabel: pathway.displayName,
@@ -158,6 +163,7 @@ export async function runLessonGapAiDrafts(options: {
       questionTypeMode: "auto",
       questionStyleHints: ["clinical judgment", "safety", "prioritization"],
       lessonHints: [],
+      ...(variationDirectives.length === quantity ? { variationDirectives } : {}),
     };
 
     const sourcePrompt = `${buildExamQuestionUserPrompt(genCtx)}\n\n[lesson gap fill: require topic/subtopic tags to include "${row.topicSlug}" and "${row.bodySystem}"]`;
