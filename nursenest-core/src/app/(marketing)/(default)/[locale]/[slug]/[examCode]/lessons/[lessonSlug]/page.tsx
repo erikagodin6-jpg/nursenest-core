@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
+import { Layers } from "lucide-react";
 import { ExamFamily, type TierCode } from "@prisma/client";
 import { auth } from "@/lib/auth";
 import { PathwayLessonSectionContent } from "@/components/lessons/pathway-lesson-body";
@@ -381,6 +382,42 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
             contentLocale={lessonContentLocale}
           />
         </Suspense>
+
+        {/* Flashcard cross-link — always shown; links to topic-scoped flashcard page when topic exists */}
+        {lesson.topicSlug ? (
+          <aside
+            className="mx-auto mt-10 max-w-[44rem] rounded-[1.25rem] border border-[color-mix(in_srgb,var(--semantic-info)_20%,var(--semantic-border-soft))] bg-[var(--semantic-panel-cool)] px-5 py-4"
+            aria-label="Flashcard study suggestion"
+          >
+            <div className="flex items-start gap-3">
+              <span className="mt-0.5 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[color-mix(in_srgb,var(--semantic-brand)_12%,var(--semantic-surface))]" aria-hidden>
+                <Layers className="h-4 w-4 text-[var(--semantic-brand)]" strokeWidth={1.75} />
+              </span>
+              <div className="min-w-0">
+                <p className="text-sm font-semibold text-[var(--theme-heading-text)]">
+                  Study {lesson.topic ? `${lesson.topic} ` : ""}with flashcards
+                </p>
+                <p className="mt-0.5 text-sm leading-6 text-[var(--theme-muted-text)]">
+                  Reinforce what you just read with active recall. Review key terms, lab values, medications, and nursing interventions for this topic.
+                </p>
+                <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1">
+                  <Link
+                    href={`/flashcards/${lesson.topicSlug}`}
+                    className="inline-flex items-center gap-1 text-sm font-semibold text-[var(--semantic-brand)] hover:underline focus-visible:outline-none focus-visible:underline"
+                  >
+                    Open {lesson.topic ? `${lesson.topic} ` : ""}decks →
+                  </Link>
+                  <Link
+                    href="/flashcards"
+                    className="text-sm text-[var(--theme-muted-text)] hover:text-[var(--theme-heading-text)] hover:underline focus-visible:outline-none focus-visible:underline"
+                  >
+                    Browse all flashcards
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </aside>
+        ) : null}
 
         <p className="mt-10 text-center text-xs text-[var(--theme-muted-text)]">
           <Link href="/blog" className="font-medium text-primary hover:underline">

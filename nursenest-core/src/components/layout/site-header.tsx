@@ -572,6 +572,15 @@ export function SiteHeader() {
               </>
             ) : (
               <>
+                {/* Tier pill — accent-colored, visible from lg breakpoint */}
+                {learnerExamBadge ? (
+                  <span
+                    className="inline-flex shrink-0 items-center rounded-full bg-[color-mix(in_srgb,var(--nav-cta-bg,var(--theme-primary))_18%,var(--header-background,transparent))] px-2.5 py-1 text-[11px] font-bold uppercase tracking-widest text-[var(--nav-cta-bg,var(--nav-fg))]"
+                    aria-label={`Your pathway: ${learnerExamBadge}`}
+                  >
+                    {learnerExamBadge}
+                  </span>
+                ) : null}
                 {learnerLinks.map((item) => (
                   <Link
                     key={item.key}
@@ -604,11 +613,6 @@ export function SiteHeader() {
                 </div>
               ) : isLearnerAuthenticated ? (
                 <div className="flex items-center gap-2">
-                  {learnerExamBadge ? (
-                    <span className="hidden rounded-full border border-[var(--nav-border)] bg-[var(--surface)] px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide text-[var(--nav-muted)] xl:inline-flex">
-                      {learnerExamBadge}
-                    </span>
-                  ) : null}
                   <Link
                     href={resumeStudyingCta?.href ?? "/app"}
                     className="nn-nav-cta inline-flex min-h-0 items-center justify-center rounded-xl px-4 py-2 text-sm font-semibold"
