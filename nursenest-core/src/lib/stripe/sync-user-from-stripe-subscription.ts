@@ -1,4 +1,4 @@
-import { CountryCode, TierCode } from "@prisma/client";
+import { CountryCode, TierCode, type Prisma } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { findTierCountryByPriceId } from "@/lib/stripe/pricing-map";
@@ -40,7 +40,7 @@ export async function syncUserFromCheckoutSessionMetadata(
 ): Promise<void> {
   const plan = planFromCheckoutMetadata(metadata);
   if (!plan) return;
-  const data: Record<string, unknown> = { tier: plan.tier, country: plan.country };
+  const data: Prisma.UserUpdateInput = { tier: plan.tier, country: plan.country };
   if (plan.alliedCareer) {
     data.alliedProfessionKey = plan.alliedCareer;
   }
@@ -48,7 +48,7 @@ export async function syncUserFromCheckoutSessionMetadata(
   safeServerLog("stripe_sync", "user_profile_from_checkout_metadata", {
     tier: plan.tier,
     country: plan.country,
-    alliedCareer: plan.alliedCareer ?? null,
+    alliedCareer: plan.alliedCareer ?? undefined,
   });
 }
 
@@ -60,7 +60,7 @@ export async function syncUserFromStripePriceId(userId: string, priceId: string)
     });
     return;
   }
-  const data: Record<string, unknown> = { tier: mapped.tier, country: mapped.country };
+  const data: Prisma.UserUpdateInput = { tier: mapped.tier, country: mapped.country };
   if (mapped.alliedCareer) {
     data.alliedProfessionKey = mapped.alliedCareer;
   }
@@ -68,6 +68,6 @@ export async function syncUserFromStripePriceId(userId: string, priceId: string)
   safeServerLog("stripe_sync", "user_profile_from_price_id", {
     tier: mapped.tier,
     country: mapped.country,
-    alliedCareer: mapped.alliedCareer ?? null,
+    alliedCareer: mapped.alliedCareer ?? undefined,
   });
 }

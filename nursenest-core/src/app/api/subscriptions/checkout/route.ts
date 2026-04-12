@@ -27,7 +27,6 @@ import { findPriceEntry, findAlliedPriceEntry, type BillingDuration } from "@/li
 import type { TierCode } from "@prisma/client";
 
 const bodySchema = z.object({
-  country: z.enum(["CA", "US"]),
   tier: z.enum(["PRE_NURSING", "NEW_GRAD", "RPN", "LVN_LPN", "RN", "NP", "ALLIED"]),
   duration: z.enum(["monthly", "3-month", "6-month", "yearly"]),
   alliedCareer: z.enum(ALLIED_CAREER_KEYS as unknown as [string, ...string[]]).optional(),
@@ -65,7 +64,8 @@ export async function POST(req: Request) {
     );
   }
 
-  const { country, tier, duration, policyVersion, alliedCareer } = parsed.data;
+  const { tier, duration, policyVersion, alliedCareer } = parsed.data;
+  const country = "CA" as const;
 
   if (tier === "ALLIED" && !alliedCareer) {
     const msg = "Please select a specific career line for Allied Health.";
@@ -97,7 +97,6 @@ export async function POST(req: Request) {
 
   if (!price) {
     safeServerLog("stripe_checkout", "rejected_missing_stripe_price_env", {
-      country,
       tier: String(tier),
       duration: String(duration),
       alliedCareer: careerKey ?? "",
@@ -149,6 +148,7 @@ export async function POST(req: Request) {
     const metadata: Record<string, string> = {
       userId,
       country,
+      currency: "CAD",
       tier,
       duration,
       planCode: price.planCode,
@@ -177,7 +177,6 @@ export async function POST(req: Request) {
     });
 
     await captureServerEvent(analyticsDistinctId(userId), "checkout_session_created", {
-      country,
       tier: String(tier),
       duration: String(duration),
       alliedCareer: careerKey ?? undefined,
@@ -186,7 +185,6 @@ export async function POST(req: Request) {
     return NextResponse.json({ url: checkoutSession.url });
   } catch (e) {
     safeServerLog("stripe_checkout", "checkout_session_create_failed", {
-      country,
       tier: String(tier),
       duration: String(duration),
       alliedCareer: careerKey ?? "",
@@ -194,7 +192,7 @@ export async function POST(req: Request) {
     safeServerLogCritical(
       "stripe_checkout",
       "stripe_checkout_session_failed",
-      { country, tier: String(tier), duration: String(duration) },
+      { tier: String(tier), duration: String(duration) },
       e,
     );
     const msg = "Unable to start checkout. Try again shortly.";

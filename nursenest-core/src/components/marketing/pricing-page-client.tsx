@@ -84,22 +84,15 @@ type AlliedPlanRow = {
 
 type Segment = "prenursing" | "newgrad" | "rn" | "pn" | "np" | "allied";
 
-function segmentToTierCountry(segment: Segment, country: "CA" | "US"): { tier: TierCode; country: "CA" | "US" } {
+function segmentToTier(segment: Segment): TierCode {
   switch (segment) {
-    case "prenursing":
-      return { tier: "PRE_NURSING", country };
-    case "newgrad":
-      return { tier: "NEW_GRAD", country };
-    case "pn":
-      return country === "CA" ? { tier: "RPN", country: "CA" } : { tier: "LVN_LPN", country: "US" };
-    case "rn":
-      return { tier: "RN", country };
-    case "np":
-      return { tier: "NP", country };
-    case "allied":
-      return { tier: "ALLIED", country };
-    default:
-      return { tier: "RN", country };
+    case "prenursing": return "PRE_NURSING";
+    case "newgrad": return "NEW_GRAD";
+    case "pn": return "RPN";
+    case "rn": return "RN";
+    case "np": return "NP";
+    case "allied": return "ALLIED";
+    default: return "RN";
   }
 }
 
@@ -137,7 +130,6 @@ export function PricingPageClient({
   heroSub: string;
 }) {
   const [segment, setSegment] = useState<Segment>("rn");
-  const [country, setCountry] = useState<"CA" | "US">("US");
   const [selectedAlliedCareer, setSelectedAlliedCareer] = useState<AlliedCareerKey>("paramedic");
   const [nursingPlans, setNursingPlans] = useState<NursingPlanRow[]>([]);
   const [alliedPlans, setAlliedPlans] = useState<AlliedPlanRow[]>([]);
@@ -157,10 +149,6 @@ export function PricingPageClient({
   const trialSubtext = TRIAL_MESSAGING_COPY[trialMsgVariant] ?? "No charge today. Cancel anytime before your trial ends.";
 
   useEffect(() => {
-    setCountry(region === "US" ? "US" : "CA");
-  }, [region]);
-
-  useEffect(() => {
     trackClientEvent("pricing_page_viewed", {
       actor: "anonymous",
       funnel_step: "pricing_page_view",
@@ -168,7 +156,6 @@ export function PricingPageClient({
   }, []);
 
   const localize = useCallback((href: string) => withMarketingLocale(locale, href), [locale]);
-  const comparisonSectionHref = `${localize("/")}#home-comparison-heading`;
 
   useEffect(() => {
     let cancelled = false;
@@ -191,19 +178,18 @@ export function PricingPageClient({
     };
   }, [t]);
 
-  const { tier, country: effectiveCountry } = segmentToTierCountry(segment, country);
+  const tier = segmentToTier(segment);
   const narrative = buildTierPricingNarrative(t, tier);
-
   const isAllied = segment === "allied";
 
   const filteredNursingPlans = useMemo(
-    () => nursingPlans.filter((p) => p.tier === tier && p.country === effectiveCountry),
-    [nursingPlans, tier, effectiveCountry],
+    () => nursingPlans.filter((p) => p.tier === tier),
+    [nursingPlans, tier],
   );
 
   const filteredAlliedPlans = useMemo(
-    () => alliedPlans.filter((p) => p.country === effectiveCountry && p.alliedCareer === selectedAlliedCareer),
-    [alliedPlans, effectiveCountry, selectedAlliedCareer],
+    () => alliedPlans.filter((p) => p.alliedCareer === selectedAlliedCareer),
+    [alliedPlans, selectedAlliedCareer],
   );
 
   const displayPlans = isAllied ? filteredAlliedPlans : filteredNursingPlans;
@@ -215,32 +201,28 @@ export function PricingPageClient({
   }, [displayPlans]);
 
   const tryQuestionsHref = localize(rnQuestions(region));
-
   const termsHref = localize("/terms");
   const privacyHref = localize("/privacy");
   const refundHref = localize("/refund-policy");
 
-  const examLinks = useMemo(() => {
-    const rc = country === "US" ? "US" : "CA";
-    return {
-      rn: {
-        labelKey: `pages.pricing.examCard.rn${rc}`,
-        href: localize(marketingExamHubPath(country, "rn")),
-      },
-      pn: {
-        labelKey: country === "US" ? "pages.pricing.examCard.pnUS" : "pages.pricing.examCard.pnCA",
-        href: localize(marketingExamHubPath(country, "pn")),
-      },
-      np: {
-        labelKey: `pages.pricing.examCard.np${rc}`,
-        href: localize(marketingExamHubPath(country, "np")),
-      },
-      allied: {
-        labelKey: `pages.pricing.examCard.allied${rc}`,
-        href: localize(marketingExamHubPath(country, "allied")),
-      },
-    } as const;
-  }, [country, localize]);
+  const examLinks = useMemo(() => ({
+    rn: {
+      labelKey: "pages.pricing.examCard.rnCA",
+      href: localize(marketingExamHubPath("CA", "rn")),
+    },
+    pn: {
+      labelKey: "pages.pricing.examCard.pnCA",
+      href: localize(marketingExamHubPath("CA", "pn")),
+    },
+    np: {
+      labelKey: "pages.pricing.examCard.npCA",
+      href: localize(marketingExamHubPath("CA", "np")),
+    },
+    allied: {
+      labelKey: "pages.pricing.examCard.alliedCA",
+      href: localize(marketingExamHubPath("CA", "allied")),
+    },
+  } as const), [localize]);
 
   const startCheckout = useCallback(
     async (duration: BillingDuration) => {
@@ -254,7 +236,6 @@ export function PricingPageClient({
       trackClientEvent(PH.checkoutStarted, {
         actor: "anonymous",
         funnel_step: "checkout_initiated",
-        country: effectiveCountry,
         tier: String(tier),
         duration: String(duration),
         has_trial: trialDays > 0,
@@ -263,7 +244,6 @@ export function PricingPageClient({
       });
       try {
         const body: Record<string, unknown> = {
-          country: effectiveCountry,
           tier,
           duration,
           acceptPolicies: true,
@@ -300,16 +280,16 @@ export function PricingPageClient({
         setCheckoutLoading(false);
       }
     },
-    [effectiveCountry, policiesAccepted, tier, trialDays, t, isAllied, selectedAlliedCareer],
+    [policiesAccepted, tier, trialDays, t, isAllied, selectedAlliedCareer],
   );
 
   const includeKeys = ["lessons", "bank", "cat", "analytics"] as const;
 
-  const DURATION_MICROCOPY: Record<BillingDuration, string> = {
-    monthly: "Full access to all lessons, questions, and exams",
-    "3-month": "Everything you need to pass. Most students choose this",
-    "6-month": "More time to build confidence at your own pace",
-    yearly: "Best value for long-term prep. Save the most",
+  const DURATION_MICROCOPY_KEYS: Record<BillingDuration, string> = {
+    monthly: "pages.pricing.card.fullAccessMicro",
+    "3-month": "pages.pricing.card.mostStudentsMicro",
+    "6-month": "pages.pricing.card.buildConfidenceMicro",
+    yearly: "pages.pricing.card.bestValueMicro",
   };
 
   const tierTabs: { id: Segment; labelKey: string }[] = [
@@ -321,58 +301,24 @@ export function PricingPageClient({
     { id: "allied", labelKey: "pages.pricing.segment.allied" },
   ];
 
-  const currencyNotice = country === "CA"
-    ? "Canadian Pricing Is Shown in CAD"
-    : "Pricing Is Shown in USD";
-
   return (
     <main className="mx-auto flex w-full max-w-6xl flex-col gap-14 nn-marketing-x pb-[var(--nn-rhythm-page-y)] pt-0 md:gap-16">
-      {/* 1. Hero */}
+      {/* Hero */}
       <PricingHero
         studySystemHref={localize("/how-it-works")}
         ctaLabel={heroCtaLabel}
         trialSubtext={trialSubtext}
       />
 
-      {/* Trust strip + legal anchors below hero */}
       <div className="nn-section-enter flex flex-col items-center gap-3 pt-2">
         <MarketingTrustSignalsStrip variant="compact" />
         <p className="nn-marketing-caption text-muted-foreground">{t("pages.pricing.conversion.checkoutTrust")}</p>
       </div>
 
-      {/* Country + tier */}
+      {/* Currency notice + tier tabs */}
       <section className="nn-section-enter space-y-6">
-        <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
-          <span className="text-sm font-medium text-muted-foreground">{t("pages.pricing.conversion.billingRegion")}</span>
-          <div className="flex gap-2" role="group" aria-label={t("pages.pricing.conversion.billingRegion")}>
-            <button
-              type="button"
-              onClick={() => setCountry("CA")}
-              className={`rounded-full px-4 py-2 text-sm font-semibold transition-[background-color,color,box-shadow,transform] duration-150 ease-out ${
-                country === "CA"
-                  ? "bg-primary text-primary-foreground shadow-[var(--elevation-rest)]"
-                  : "border border-border bg-card text-[var(--palette-text)] hover:-translate-y-px hover:bg-[var(--surface-interactive-hover)] hover:shadow-[var(--elevation-hover)]"
-              }`}
-            >
-              {t("pages.pricing.country.ca")}
-            </button>
-            <button
-              type="button"
-              onClick={() => setCountry("US")}
-              className={`rounded-full px-4 py-2 text-sm font-semibold transition-[background-color,color,box-shadow,transform] duration-150 ease-out ${
-                country === "US"
-                  ? "bg-primary text-primary-foreground shadow-[var(--elevation-rest)]"
-                  : "border border-border bg-card text-[var(--palette-text)] hover:-translate-y-px hover:bg-[var(--surface-interactive-hover)] hover:shadow-[var(--elevation-hover)]"
-              }`}
-            >
-              {t("pages.pricing.country.us")}
-            </button>
-          </div>
-        </div>
-
-        {/* Currency notice */}
         <p className="text-center text-xs font-semibold tracking-wide text-[var(--semantic-info)]">
-          {currencyNotice}
+          {t("pages.pricing.market.currencyNotice.cadOnly")}
         </p>
 
         <div>
@@ -382,7 +328,10 @@ export function PricingPageClient({
               <button
                 key={id}
                 type="button"
-                onClick={() => setSegment(id)}
+                onClick={() => {
+                  setSegment(id);
+                  trackClientEvent("plan_selected", { segment: id, tier: segmentToTier(id) });
+                }}
                 className={`rounded-full px-4 py-2.5 text-sm font-semibold transition-[background-color,color,box-shadow,transform,border-color] duration-150 ease-out ${
                   segment === id
                     ? "bg-role-cta text-role-cta-foreground shadow-[0_4px_14px_var(--role-cta-shadow)]"
@@ -399,7 +348,7 @@ export function PricingPageClient({
         {isAllied && (
           <div className="mx-auto max-w-lg">
             <p className="mb-2 text-center text-sm font-medium text-muted-foreground">
-              Select Your Career Line
+              {t("pages.pricing.allied.selectCareer")}
             </p>
             <div className="flex flex-wrap justify-center gap-2">
               {ALLIED_CAREER_KEYS.map((career) => (
@@ -408,10 +357,7 @@ export function PricingPageClient({
                   type="button"
                   onClick={() => {
                     setSelectedAlliedCareer(career);
-                    trackClientEvent("allied_career_plan_selected", {
-                      career,
-                      country: effectiveCountry,
-                    });
+                    trackClientEvent("allied_career_plan_selected", { career });
                   }}
                   className={`rounded-full px-3 py-1.5 text-xs font-semibold transition-[background-color,color,box-shadow,transform] duration-150 ease-out ${
                     selectedAlliedCareer === career
@@ -424,7 +370,7 @@ export function PricingPageClient({
               ))}
             </div>
             <p className="mt-2 text-center text-[11px] text-muted-foreground">
-              Each career line is a separate plan. Access is limited to the career you purchase.
+              {t("pages.pricing.allied.separatePlanNote")}
             </p>
           </div>
         )}
@@ -432,15 +378,14 @@ export function PricingPageClient({
         <p className="mx-auto max-w-2xl text-center text-sm text-muted-foreground">{narrative.subhead}</p>
       </section>
 
-      {/* 3. Core feature comparison */}
       <FeatureComparisonTable />
 
-      {/* 2-4. Duration cards + includes + pricing */}
+      {/* Duration cards */}
       <section aria-labelledby="pricing-plans-heading">
         <div className="mb-6 text-center">
           <h2 id="pricing-plans-heading" className="nn-marketing-h2">
             {isAllied
-              ? `${ALLIED_CAREER_DISPLAY_NAMES[selectedAlliedCareer]} Plans`
+              ? t("pages.pricing.allied.plansHeading", { career: ALLIED_CAREER_DISPLAY_NAMES[selectedAlliedCareer] })
               : t("pages.pricing.conversion.pickTerm")}
           </h2>
           <p className="nn-marketing-body-sm mt-2 text-muted-foreground">{t("pages.pricing.conversion.pickTermSub")}</p>
@@ -480,13 +425,13 @@ export function PricingPageClient({
                 <h3 className="nn-marketing-h3 mt-1">{t(DURATION_LABEL_KEYS[duration])}</h3>
 
                 <p className="mt-1.5 text-[13px] leading-snug text-muted-foreground">
-                  {DURATION_MICROCOPY[duration]}
+                  {t(DURATION_MICROCOPY_KEYS[duration])}
                 </p>
 
                 {duration !== "monthly" && (
                   <p className="mt-1 inline-flex items-center gap-1.5 text-[11px] font-semibold tracking-wide text-[var(--semantic-success)]">
                     <span className="inline-block h-1.5 w-1.5 rounded-full bg-[var(--semantic-success)]" aria-hidden />
-                    Founding pricing
+                    {t("pages.pricing.card.foundingPricing")}
                   </p>
                 )}
 
@@ -548,14 +493,13 @@ export function PricingPageClient({
         {trialDays > 0 && (
           <div className="mx-auto mt-8 max-w-xl rounded-xl border border-[var(--semantic-success)]/20 bg-[color-mix(in_srgb,var(--semantic-success)_5%,var(--color-card))] px-5 py-4 text-center shadow-[var(--elevation-rest)]">
             <p className="text-base font-semibold text-[var(--palette-heading)]">
-              Try everything free for {trialDays} days
+              {t("pages.pricing.trial.freeForDays", { days: trialDays })}
             </p>
             <p className="mt-2 text-sm text-muted-foreground">
-              Full access to all lessons, practice tests, CAT exams, flashcards, and analytics.
-              No charge until your trial ends. Cancel anytime in one click.
+              {t("pages.pricing.trial.fullAccessBody")}
             </p>
             <p className="mt-1 text-xs text-muted-foreground">
-              Payment method required to prevent abuse. You won't be charged during your trial.
+              {t("pages.pricing.trial.paymentMethodNote")}
             </p>
           </div>
         )}
@@ -615,12 +559,12 @@ export function PricingPageClient({
           {trialDays > 0 && (
             <li className="flex gap-2">
               <Check className="nn-icon-md mt-0.5 shrink-0 text-[var(--semantic-success)]" aria-hidden />
-              {trialDays}-day free trial, no charge until it ends
+              {t("pages.pricing.card.freeTrialBullet", { days: trialDays })}
             </li>
           )}
           <li className="flex gap-2">
             <Check className="nn-icon-md mt-0.5 shrink-0 text-primary" aria-hidden />
-            Cancel anytime from your account
+            {t("pages.pricing.card.cancelAnytime")}
           </li>
           <li className="flex gap-2">
             <Check className="nn-icon-md mt-0.5 shrink-0 text-primary" aria-hidden />
@@ -634,19 +578,11 @@ export function PricingPageClient({
         <p className="mt-4 text-xs text-muted-foreground">{t("pages.pricing.billing.cancelComfort")}</p>
       </section>
 
-      {/* 4. What you unlock */}
       <PricingUnlockSection />
-
-      {/* 5. Product experience preview */}
       <ProductPreviewGrid />
-
-      {/* 6. Trust + reassurance */}
       <PricingTrustReassurance />
-
-      {/* 7. Final CTA */}
       <PricingCTA plansHref="#pricing-plans-heading" />
 
-      {/* Compact: institutional + exam hubs */}
       <section className="rounded-xl border border-[var(--trust-surface-border)] bg-[var(--trust-surface)] px-4 py-4 text-sm text-muted-foreground">
         <p>{t("pages.pricing.institutionalBanner")}</p>
         <Link href={institutionalHref} className="nn-link-quiet mt-2 inline-block font-semibold">
@@ -657,7 +593,7 @@ export function PricingPageClient({
       <section>
         <h2 className="nn-marketing-h2">{t("pages.pricing.examChoose.title")}</h2>
         <p className="nn-marketing-body-sm mt-2 text-muted-foreground">
-          {t(country === "US" ? "pages.pricing.examChoose.subtitleUS" : "pages.pricing.examChoose.subtitleCA")}
+          {t("pages.pricing.examChoose.subtitleCA")}
         </p>
         <div className="mt-4 grid gap-3 sm:grid-cols-2">
           {Object.values(examLinks).map((item) => (
@@ -672,42 +608,16 @@ export function PricingPageClient({
         </div>
         {segment === "np" ? (
           <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
-            {country === "US" ? (
-              <>
-                {t("pages.pricing.npTracksIntroUS")}{" "}
-                <MarketingTrackedLink
-                  href={localize(buildExamPathwayPath(getExamPathwayById("us-np-fnp")!))}
-                  event={PH.marketingPathwayHubCta}
-                  eventProps={{ surface: "pricing_np_link", pathway_id: "us-np-fnp" }}
-                  className="font-semibold text-primary hover:underline"
-                >
-                  FNP
-                </MarketingTrackedLink>
-                {", "}
-                <MarketingTrackedLink
-                  href={localize(buildExamPathwayPath(getExamPathwayById("us-np-pmhnp")!))}
-                  event={PH.marketingPathwayHubCta}
-                  eventProps={{ surface: "pricing_np_link", pathway_id: "us-np-pmhnp" }}
-                  className="font-semibold text-primary hover:underline"
-                >
-                  PMHNP
-                </MarketingTrackedLink>
-                .
-              </>
-            ) : (
-              <>
-                {t("pages.pricing.npTracksIntroCA")}{" "}
-                <MarketingTrackedLink
-                  href={localize(buildExamPathwayPath(getExamPathwayById("ca-np-cnple")!))}
-                  event={PH.marketingPathwayHubCta}
-                  eventProps={{ surface: "pricing_np_link", pathway_id: "ca-np-cnple" }}
-                  className="font-semibold text-primary hover:underline"
-                >
-                  CNPLE hub
-                </MarketingTrackedLink>
-                .
-              </>
-            )}
+            {t("pages.pricing.npTracksIntroCA")}{" "}
+            <MarketingTrackedLink
+              href={localize(buildExamPathwayPath(getExamPathwayById("ca-np-cnple")!))}
+              event={PH.marketingPathwayHubCta}
+              eventProps={{ surface: "pricing_np_link", pathway_id: "ca-np-cnple" }}
+              className="font-semibold text-primary hover:underline"
+            >
+              CNPLE hub
+            </MarketingTrackedLink>
+            .
           </p>
         ) : null}
       </section>
@@ -717,7 +627,7 @@ export function PricingPageClient({
           {heroCtaLabel}
         </Link>
         <Link href={tryQuestionsHref} className={MARKETING_TERTIARY_LINK_CLASS}>
-          Or try free questions first
+          {t("pages.pricing.cta.tryFreeFirst")}
         </Link>
       </div>
 

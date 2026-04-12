@@ -51,14 +51,27 @@ export function resolveLogoForTheme(themeId?: string | null): string {
 }
 
 /**
- * Canonical local fallback assets used when Spaces logo loading fails.
+ * Primary canonical local transparent PNG for the theme.
+ * These are the "newly added transparent logo files" at /public/logos/{themeId}-brandlogo.png.
+ * 34 of 56 themes have valid RGBA PNG here; the other 22 fall through via onerror.
+ */
+export function getThemeLogoPngPathForThemeId(themeId?: string | null): string {
+  const canonicalThemeId = normalizeThemeIdForLogo(themeId ?? NURSENEST_DEFAULT_THEME);
+  const resolvedThemeId = AVAILABLE_THEME_IDS.has(canonicalThemeId)
+    ? canonicalThemeId
+    : NURSENEST_DEFAULT_THEME;
+  return `/logos/${resolvedThemeId}-brandlogo.png`;
+}
+
+/**
+ * Canonical local SVG fallback assets (all 56 themes have this file).
  */
 export function getThemeLogoPathForThemeId(themeId?: string | null): string {
   const canonicalThemeId = normalizeThemeIdForLogo(themeId ?? NURSENEST_DEFAULT_THEME);
   const resolvedThemeId = AVAILABLE_THEME_IDS.has(canonicalThemeId)
     ? canonicalThemeId
     : NURSENEST_DEFAULT_THEME;
-  return `/logos/themes/nursenest-logo-${resolvedThemeId}.png`;
+  return `/logos/themes/nursenest-logo-${resolvedThemeId}.svg`;
 }
 
 export const THEME_LOCAL_LOGO_MAP: Record<string, string> = Object.fromEntries(

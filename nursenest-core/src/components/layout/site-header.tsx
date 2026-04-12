@@ -491,7 +491,7 @@ export function SiteHeader() {
             : `nn-header-nav ${isScrolled ? "nn-header-nav--scrolled" : ""}`
         }
       >
-        <div className="nn-section-shell grid h-16 grid-cols-[auto,1fr,auto] items-center gap-3 sm:gap-5 lg:h-[4.35rem]">
+        <div className="nn-section-shell grid h-16 grid-cols-[auto,1fr,auto] items-center gap-4 sm:gap-6">
           <Link
             href={localizeHref("/")}
             className="nn-header-logo-link group flex min-w-0 shrink-0 items-center gap-2.5 overflow-visible bg-transparent pe-2.5"

@@ -3,7 +3,7 @@ import type { TierCode } from "@prisma/client";
 import type { BillingDuration } from "@/lib/pricing/billing-types";
 import {
   BILLING_DURATION_ORDER,
-  NURSING_TIERS_BY_COUNTRY,
+  NURSING_TIERS,
   ALLIED_CAREER_KEYS,
   ALLIED_CAREER_DISPLAY_NAMES,
   eachNursingPricedCombination,
@@ -23,7 +23,7 @@ export const dynamic = "force-dynamic";
 
 type NursingPlanRow = {
   tier: TierCode;
-  country: "CA" | "US";
+  country: "CA";
   duration: BillingDuration;
   checkoutAvailable: boolean;
   totalLabel: string;
@@ -39,7 +39,7 @@ type AlliedPlanRow = {
   tier: "ALLIED";
   alliedCareer: AlliedCareerKey;
   alliedCareerLabel: string;
-  country: "CA" | "US";
+  country: "CA";
   duration: BillingDuration;
   checkoutAvailable: boolean;
   totalLabel: string;
@@ -55,53 +55,53 @@ export async function GET() {
 
   const nursingPlans: NursingPlanRow[] = [];
   for (const combo of eachNursingPricedCombination()) {
-    const { country, tier, duration, planCode } = combo;
-    const total = getDisplayTotalMajorUnits(country, tier, duration);
+    const { tier, duration, planCode } = combo;
+    const total = getDisplayTotalMajorUnits("CA", tier, duration);
     if (total === undefined) continue;
 
     const months = durationMonths(duration);
     const monthlyEquiv = Number((total / months).toFixed(2));
-    const monthlyPlan = getDisplayTotalMajorUnits(country, tier, "monthly");
+    const monthlyPlan = getDisplayTotalMajorUnits("CA", tier, "monthly");
     const baselineMonthly =
       monthlyPlan !== undefined && months > 1 ? Number((monthlyPlan * months).toFixed(2)) : 0;
     const savingsVsMonthly =
       months > 1 && baselineMonthly > 0 ? Math.max(0, Math.round((1 - total / baselineMonthly) * 100)) : 0;
 
-    const priceEntry = findPriceEntry(country, tier, duration);
-    const hasYearly = Boolean(findPriceEntry(country, tier, "yearly"));
+    const priceEntry = findPriceEntry("CA", tier, duration);
+    const hasYearly = Boolean(findPriceEntry("CA", tier, "yearly"));
     const isBestValue = duration === "yearly" || (!hasYearly && duration === "6-month");
     const isMostPopular = duration === "3-month";
 
-    const anchorPrice = getAnchorPriceMajorUnits(country, tier, duration);
+    const anchorPrice = getAnchorPriceMajorUnits("CA", tier, duration);
 
     nursingPlans.push({
       tier,
-      country,
+      country: "CA",
       duration,
       checkoutAvailable: Boolean(priceEntry),
-      totalLabel: formatCurrencyLabel(total, country),
-      monthlyEquivalentLabel: formatPerMonthLabel(monthlyEquiv, country),
+      totalLabel: formatCurrencyLabel(total),
+      monthlyEquivalentLabel: formatPerMonthLabel(monthlyEquiv),
       savingsVsMonthlyPercent: savingsVsMonthly,
       isBestValue: Boolean(isBestValue && months > 1),
       isMostPopular,
-      anchorPriceLabel: anchorPrice ? formatCurrencyLabel(anchorPrice, country) : null,
+      anchorPriceLabel: anchorPrice ? formatCurrencyLabel(anchorPrice) : null,
       planCode,
     });
   }
 
   const alliedPlans: AlliedPlanRow[] = [];
   for (const combo of eachAlliedPricedCombination()) {
-    const { country, duration, alliedCareer, planCode } = combo;
+    const { duration, alliedCareer, planCode } = combo;
     if (!alliedCareer) continue;
-    const total = getAlliedDisplayPrice(country, duration);
+    const total = getAlliedDisplayPrice("CA", duration);
     const months = durationMonths(duration);
     const monthlyEquiv = Number((total / months).toFixed(2));
-    const monthlyBase = getAlliedDisplayPrice(country, "monthly");
+    const monthlyBase = getAlliedDisplayPrice("CA", "monthly");
     const baselineMonthly = months > 1 ? Number((monthlyBase * months).toFixed(2)) : 0;
     const savingsVsMonthly =
       months > 1 && baselineMonthly > 0 ? Math.max(0, Math.round((1 - total / baselineMonthly) * 100)) : 0;
 
-    const priceEntry = findAlliedPriceEntry(country, alliedCareer, duration);
+    const priceEntry = findAlliedPriceEntry("CA", alliedCareer, duration);
     const isBestValue = duration === "yearly";
     const isMostPopular = duration === "3-month";
 
@@ -109,11 +109,11 @@ export async function GET() {
       tier: "ALLIED",
       alliedCareer,
       alliedCareerLabel: ALLIED_CAREER_DISPLAY_NAMES[alliedCareer],
-      country,
+      country: "CA",
       duration,
       checkoutAvailable: Boolean(priceEntry),
-      totalLabel: formatCurrencyLabel(total, country),
-      monthlyEquivalentLabel: formatPerMonthLabel(monthlyEquiv, country),
+      totalLabel: formatCurrencyLabel(total),
+      monthlyEquivalentLabel: formatPerMonthLabel(monthlyEquiv),
       savingsVsMonthlyPercent: savingsVsMonthly,
       isBestValue: Boolean(isBestValue && months > 1),
       isMostPopular,
@@ -123,7 +123,7 @@ export async function GET() {
 
   return NextResponse.json({
     durations: BILLING_DURATION_ORDER,
-    nursingTiersByCountry: NURSING_TIERS_BY_COUNTRY,
+    nursingTiers: NURSING_TIERS,
     alliedCareers: ALLIED_CAREER_KEYS,
     alliedCareerLabels: ALLIED_CAREER_DISPLAY_NAMES,
     plans: nursingPlans,

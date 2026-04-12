@@ -28,7 +28,7 @@ export function SiteBrandLogoMark({
   onMarkState?: (state: BrandMarkLoadState) => void;
 }) {
   const { slotClassName, imgClassName } = brandLogoMarkPresentation(variant);
-  const { themeId, mappedSpaceKey, headerLogoMode, loadChain } = useThemeLogo();
+  const { themeId, loadChain } = useThemeLogo();
   const [candidateIndex, setCandidateIndex] = useState(0);
   const [showTextFallback, setShowTextFallback] = useState(false);
 
@@ -42,28 +42,27 @@ export function SiteBrandLogoMark({
   const src = chainSrc;
 
   useEffect(() => {
-    if (process.env.NODE_ENV === "development") {
-      console.debug("[SiteBrandLogo]", {
-        normalizedThemeId: themeId,
-        mappedSpacesKey: mappedSpaceKey,
-        headerLogoMode,
-        firstAttemptUrl: loadChain[0],
-        resolvedSrc: src,
-        fallbackCandidateIndex: safeIndex,
-        chainLength: loadChain.length,
-      });
-    }
-  }, [themeId, mappedSpaceKey, headerLogoMode, src, safeIndex, loadChain]);
-
-  useEffect(() => {
     onMarkState?.("loading");
   }, [onMarkState, src]);
 
   const handleLoad = useCallback(() => {
+    if (process.env.NODE_ENV === "development") {
+      // Classify the resolved source so it's easy to spot which asset won.
+      const source =
+        src.startsWith("/logos/") && src.endsWith("-brandlogo.png") ? "canonical-local-png"
+        : src.startsWith("/branding/theme-logos/") ? "committed-branding-png"
+        : src.startsWith("http") ? "cdn"
+        : src.endsWith(".svg") ? "local-svg"
+        : "unknown";
+      console.debug(`[logo-debug] theme=${themeId} resolved=${src} source=${source}`);
+    }
     onMarkState?.("ready");
-  }, [onMarkState]);
+  }, [onMarkState, src, themeId]);
 
   const handleError = useCallback(() => {
+    if (process.env.NODE_ENV === "development") {
+      console.debug(`[logo-debug] theme=${themeId} failed=${src} trying=${loadChain[candidateIndex + 1] ?? "none"}`);
+    }
     logBrandLogoLoadFailure(src, themeId, safeIndex);
     if (candidateIndex < loadChain.length - 1) {
       setCandidateIndex((i) => i + 1);

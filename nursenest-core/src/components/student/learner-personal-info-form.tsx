@@ -8,10 +8,12 @@ import type { PersonalProfilePayload } from "@/lib/learner/load-personal-profile
 import type { LearnerMarketingT } from "@/lib/learner/learner-marketing-server";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 
-const TIERS: TierCode[] = [TierCode.RPN, TierCode.LVN_LPN, TierCode.RN, TierCode.NP, TierCode.ALLIED];
+const TIERS: TierCode[] = [TierCode.PRE_NURSING, TierCode.NEW_GRAD, TierCode.RPN, TierCode.LVN_LPN, TierCode.RN, TierCode.NP, TierCode.ALLIED];
 const COUNTRIES: CountryCode[] = [CountryCode.CA, CountryCode.US];
 
 const TIER_I18N_KEY: Record<TierCode, string> = {
+  [TierCode.PRE_NURSING]: "learner.personalPage.tierPRE_NURSING",
+  [TierCode.NEW_GRAD]: "learner.personalPage.tierNEW_GRAD",
   [TierCode.RPN]: "learner.personalPage.tierRPN",
   [TierCode.LVN_LPN]: "learner.personalPage.tierLVN_LPN",
   [TierCode.RN]: "learner.personalPage.tierRN",
