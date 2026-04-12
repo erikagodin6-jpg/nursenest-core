@@ -2,6 +2,7 @@
 
 import { LayoutDashboard, MonitorSmartphone, Sparkles, Stethoscope } from "lucide-react";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
+import { formatEyebrow, formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
 
 const ICONS = [Sparkles, Stethoscope, LayoutDashboard, MonitorSmartphone] as const;
 const IDS = ["adaptive", "rationales", "readiness", "mobile"] as const;
@@ -10,7 +11,7 @@ const IDS = ["adaptive", "rationales", "readiness", "mobile"] as const;
  * Four-column feature grid: adaptive exams, rationales, readiness, mobile-friendly.
  */
 export function HomeFeaturesSection() {
-  const { t } = useMarketingI18n();
+  const { t, locale } = useMarketingI18n();
 
   return (
     <section
@@ -32,13 +33,14 @@ export function HomeFeaturesSection() {
           {IDS.map((id, i) => {
             const Icon = ICONS[i]!;
             return (
-              <li key={id} className="nn-card-soft p-5">
-                <div className="nn-accent-icon-wrap mb-3 flex h-10 w-10 items-center justify-center rounded-lg">
+              <li key={id} className="nn-card-system nn-card-system-pad nn-card-system--interactive">
+                <div className="nn-card-system__icon">
                   <Icon className="nn-accent-icon h-5 w-5" aria-hidden />
                 </div>
-                <h3 className="nn-marketing-h4 text-[var(--theme-heading-text)]">{t(`home.conversion.features.${id}Title`)}</h3>
-                <p className="nn-marketing-body-sm mt-2 text-pretty text-[var(--theme-muted-text)]">
-                  {t(`home.conversion.features.${id}Body`)}
+                <p className="nn-card-system__eyebrow">{formatEyebrow("Feature", locale)}</p>
+                <h3 className="nn-card-system__title">{formatTitleCase(t(`home.conversion.features.${id}Title`), locale)}</h3>
+                <p className="nn-card-system__description">
+                  {formatSentenceCase(t(`home.conversion.features.${id}Body`), locale)}
                 </p>
               </li>
             );

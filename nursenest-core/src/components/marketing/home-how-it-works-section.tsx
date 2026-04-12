@@ -1,60 +1,48 @@
 "use client";
 
-import { BookOpen, ClipboardList, Flag, LayoutDashboard } from "lucide-react";
+import { BookOpen, ClipboardList, Flag } from "lucide-react";
+import { useNursenestRegion } from "@/lib/region/use-nursenest-region";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
-import { buildExamPathwayPath, getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
-import { HUB } from "@/lib/marketing/marketing-entry-routes";
-import { useNursenestRegion } from "@/lib/region/use-nursenest-region";
-import { HomeConversionCtaStrip } from "@/components/marketing/home-conversion-cta-strip";
+import { HUB, rnQuestions } from "@/lib/marketing/marketing-entry-routes";
 import { MarketingTrackedLink } from "@/components/marketing/marketing-tracked-link";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 import { formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
+import { PRIMARY_CTA, SECONDARY_CTA, TERTIARY_CTA } from "@/lib/copy/cta-copy";
 
 /**
- * Four-step path: Learn → Practice → Track → Pass. Concrete links use the region’s default RN pathway where applicable.
+ * Simplified three-step loop for fast homepage scanning.
  */
 export function HomeHowItWorksSection() {
-  const { t, locale } = useMarketingI18n();
+  const { locale } = useMarketingI18n();
   const { region } = useNursenestRegion();
   const loc = (path: string) => withMarketingLocale(locale, path);
 
-  const rnPathway = getExamPathwayById(region === "US" ? "us-rn-nclex-rn" : "ca-rn-nclex-rn");
-  const questionsHref = rnPathway ? loc(buildExamPathwayPath(rnPathway, "questions")) : loc("/us/rn/nclex-rn/questions");
-  const lessonsHref = rnPathway ? loc(buildExamPathwayPath(rnPathway, "lessons")) : loc("/us/rn/nclex-rn/lessons");
-  const practiceExamsHref = loc(HUB.practiceExams);
+  const questionsHref = loc(rnQuestions(region));
 
   const steps = [
     {
       icon: BookOpen,
-      title: t("home.conversion.how.step1Title"),
-      body: t("home.conversion.how.step1Body"),
-      href: lessonsHref,
-      label: t("home.conversion.how.step1Cta"),
+      title: "Learn",
+      body: "Study focused lessons mapped to your exact nursing pathway.",
+      href: loc(HUB.examLessons),
+      label: TERTIARY_CTA,
       testId: "how-step-learn",
     },
     {
       icon: ClipboardList,
-      title: t("home.conversion.how.step2Title"),
-      body: t("home.conversion.how.step2Body"),
+      title: "Practice",
+      body: "Train with exam-style questions and full rationales on every item.",
       href: questionsHref,
-      label: t("home.conversion.how.step2Cta"),
+      label: SECONDARY_CTA,
       testId: "how-step-practice",
     },
     {
-      icon: LayoutDashboard,
-      title: t("home.conversion.how.step3Title"),
-      body: t("home.conversion.how.step3Body"),
-      href: loc(HUB.signup),
-      label: t("home.conversion.how.step3Cta"),
-      testId: "how-step-track",
-    },
-    {
       icon: Flag,
-      title: t("home.conversion.how.step4Title"),
-      body: t("home.conversion.how.step4Body"),
-      href: practiceExamsHref,
-      label: t("home.conversion.how.step4Cta"),
+      title: "Pass",
+      body: "Use CAT and readiness tracking to close weak areas before exam day.",
+      href: loc(HUB.practiceExams),
+      label: PRIMARY_CTA,
       testId: "how-step-pass",
     },
   ] as const;
@@ -62,36 +50,37 @@ export function HomeHowItWorksSection() {
   return (
     <section
       id="home-how-it-works"
-      className="scroll-mt-20 border-b border-[var(--border)] bg-[var(--section-bg)] py-12 md:py-16"
+      className="nn-section-block scroll-mt-20 border-b border-[var(--border)] bg-[var(--section-bg)]"
       aria-labelledby="home-how-heading"
       data-testid="section-how-it-works"
     >
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-        <header className="mx-auto mb-10 max-w-2xl text-center">
+      <div className="nn-section-shell">
+        <header className="mx-auto mb-12 max-w-2xl text-center">
           <h2 id="home-how-heading" className="nn-marketing-h2 text-balance">
-            {formatTitleCase(t("home.conversion.how.title"), locale)}
+            {formatTitleCase("How It Works", locale)}
           </h2>
           <p className="nn-marketing-body mx-auto mt-2 max-w-xl text-pretty text-[var(--theme-muted-text)]">
-            {formatSentenceCase(t("home.conversion.how.sub"), locale)}
+            {formatSentenceCase("A simple three-step loop to build confidence and readiness faster.", locale)}
           </p>
         </header>
 
-        <ol className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <ol className="grid gap-5 md:grid-cols-3">
           {steps.map((s, i) => (
-            <li key={s.testId} className="nn-card-soft relative flex flex-col p-6">
-              <div className="mb-4 flex items-center gap-3">
-                <span className="nn-accent-icon-wrap flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-sm font-bold tabular-nums text-[var(--theme-primary)]">
+            <li key={s.testId} className="nn-card-system nn-card-system-pad nn-card-system--interactive relative">
+              <div className="mb-1 flex items-center gap-3">
+                <span className="nn-card-system__icon text-sm font-bold tabular-nums text-[var(--theme-primary)]">
                   {i + 1}
                 </span>
                 <s.icon className="h-6 w-6 text-[color-mix(in_srgb,var(--theme-primary)_85%,var(--theme-heading-text))]" aria-hidden />
               </div>
-              <h3 className="nn-marketing-h3 text-balance">{formatTitleCase(s.title, locale)}</h3>
-              <p className="nn-marketing-body-sm mt-2 flex-1 text-pretty text-[var(--theme-muted-text)]">{formatSentenceCase(s.body, locale)}</p>
+              <p className="nn-card-system__eyebrow">{formatTitleCase(`Step ${i + 1}`, locale)}</p>
+              <h3 className="nn-card-system__title">{formatTitleCase(s.title, locale)}</h3>
+              <p className="nn-card-system__description">{formatSentenceCase(s.body, locale)}</p>
               <MarketingTrackedLink
                 href={s.href}
                 event={PH.marketingHomeExploreHubClick}
                 eventProps={{ surface: "how_it_works", step: i + 1, region }}
-                className="mt-4 inline-flex text-sm font-semibold text-[var(--theme-primary)] underline-offset-4 hover:underline"
+                className="nn-card-system__cta underline-offset-4 hover:underline"
                 data-testid={s.testId}
               >
                 {formatTitleCase(s.label, locale)}
@@ -99,10 +88,6 @@ export function HomeHowItWorksSection() {
             </li>
           ))}
         </ol>
-
-        <div className="mx-auto mt-10 max-w-5xl border-t border-[var(--border-subtle)] pt-10">
-          <HomeConversionCtaStrip placement="after_how_it_works" />
-        </div>
       </div>
     </section>
   );

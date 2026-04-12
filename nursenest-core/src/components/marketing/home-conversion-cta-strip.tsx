@@ -12,6 +12,7 @@ import {
   MARKETING_SECONDARY_CTA_COMPACT_CLASS,
 } from "@/lib/theme/marketing-hero-pattern";
 import { formatTitleCase } from "@/lib/format/text-case";
+import { PRIMARY_CTA, SECONDARY_CTA, TERTIARY_CTA } from "@/lib/copy/cta-copy";
 
 export type HomeConversionCtaStripPlacement =
   | "after_exam_paths"
@@ -40,7 +41,7 @@ export function HomeConversionCtaStrip({ placement }: { placement: HomeConversio
         eventProps={{ region, destination: "signup", surface: "inline_cta", placement }}
         className={`${MARKETING_PRIMARY_CTA_COMPACT_CLASS} rounded-xl`}
       >
-        {formatTitleCase(t("home.conversion.ctaStartPracticing"), locale)}
+        {formatTitleCase(PRIMARY_CTA, locale)}
         <ArrowRight className="ml-1.5 h-4 w-4 shrink-0" aria-hidden />
       </MarketingTrackedLink>
       <MarketingTrackedLink
@@ -49,7 +50,7 @@ export function HomeConversionCtaStrip({ placement }: { placement: HomeConversio
         eventProps={{ region, destination: "question_bank", surface: "inline_cta", placement }}
         className={`${MARKETING_SECONDARY_CTA_COMPACT_CLASS} rounded-xl border border-[var(--border-subtle)]`}
       >
-        {formatTitleCase(t("home.conversion.ctaTryFreeBank"), locale)}
+        {formatTitleCase(SECONDARY_CTA, locale)}
       </MarketingTrackedLink>
       <MarketingTrackedLink
         href={loc(HUB.examLessons)}
@@ -57,7 +58,7 @@ export function HomeConversionCtaStrip({ placement }: { placement: HomeConversio
         eventProps={{ region, destination: "lessons", surface: "inline_cta", placement }}
         className={`${MARKETING_SECONDARY_CTA_COMPACT_CLASS} rounded-xl border border-[var(--border-subtle)]`}
       >
-        {formatTitleCase(t("home.conversion.ctaExploreLessons"), locale)}
+        {formatTitleCase(TERTIARY_CTA, locale)}
       </MarketingTrackedLink>
     </div>
   );

@@ -7,6 +7,13 @@ import { NextRequest } from "next/server";
 import { authCallbacks } from "@/lib/auth-callbacks";
 import { JWT_SESSION_MAX_AGE_SEC, JWT_SESSION_UPDATE_AGE_SEC } from "@/lib/auth/auth-session-constants";
 import { hashLoginIdentifierForLog } from "@/lib/auth/log-auth-identifier";
+import {
+  isLoginLocked,
+  recordLoginFailure,
+  clearLoginFailures,
+  getFailureCount,
+  CAPTCHA_THRESHOLD,
+} from "@/lib/auth/login-lockout";
 import { isEmailLikeIdentifier, normalizeLoginIdentifier } from "@/lib/auth/normalize-login-identifier";
 import { checkRateLimit } from "@/lib/http/rate-limit-in-memory";
 import { SubscriptionStatus, UserRole } from "@prisma/client";
@@ -94,11 +101,22 @@ export const authConfig: NextAuthConfig = {
         const password = String(credentials.password ?? "");
         const idHash = identifier ? hashLoginIdentifierForLog(identifier) : "";
         const authMode = isEmailLikeIdentifier(identifier) ? "email" : "username";
+        const lockKey = `login-lock:${idHash || ip}`;
 
         if (!identifier || !password) {
           safeServerLog("auth", "login_failed", {
             reason: "missing_fields",
             ip: ip.slice(0, 64),
+          });
+          return null;
+        }
+
+        const lockStatus = isLoginLocked(lockKey);
+        if (lockStatus.locked) {
+          safeServerLog("auth", "login_locked_out", {
+            idHash,
+            ip: ip.slice(0, 64),
+            remainingMin: Math.ceil(lockStatus.remainingMs / 60_000),
           });
           return null;
         }
@@ -127,25 +145,39 @@ export const authConfig: NextAuthConfig = {
         }
 
         if (!user?.passwordHash) {
+          recordLoginFailure(lockKey);
           safeServerLog("auth", "login_failed", {
             reason: "no_account_or_no_password",
             authMode,
             idHash,
             ip: ip.slice(0, 64),
+            failureCount: getFailureCount(lockKey),
           });
           return null;
         }
 
         const ok = await compare(password, user.passwordHash);
         if (!ok) {
+          recordLoginFailure(lockKey);
           safeServerLog("auth", "login_failed", {
             reason: "invalid_password",
             authMode,
             idHash,
             ip: ip.slice(0, 64),
+            failureCount: getFailureCount(lockKey),
           });
           return null;
         }
+
+        clearLoginFailures(lockKey);
+
+        prisma.user.update({
+          where: { id: user.id },
+          data: {
+            lastLoginIp: ip !== "unknown" ? ip.slice(0, 64) : null,
+            lastLoginAt: new Date(),
+          },
+        }).catch(() => {});
 
         safeServerLog("auth", "login_success", {
           authMode,

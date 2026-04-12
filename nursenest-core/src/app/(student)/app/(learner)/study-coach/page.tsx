@@ -29,6 +29,13 @@ import { WeakAreaDimensionsTabs } from "@/components/study/weak-area-dimensions-
 import { ProbabilityUpliftCard } from "@/components/study/probability-uplift-card";
 import { AdaptiveDailyPlanCard } from "@/components/study/adaptive-daily-plan-card";
 import { BehindScheduleAlert } from "@/components/study/behind-schedule-alert";
+import {
+  BROWSE_LESSONS_CTA,
+  OPEN_STUDY_HUB_CTA,
+  PRIMARY_CTA,
+  SIGN_IN_CTA,
+  VIEW_PRICING_CTA,
+} from "@/lib/copy/cta-copy";
 
 export async function generateMetadata(): Promise<Metadata> {
   return safeGenerateMetadata(
@@ -56,11 +63,11 @@ export default async function StudyCoachPage() {
           headline="Adaptive Study Coach"
           body="Sign in to access your personalised, always-current study plan."
           primaryCta={{
-            label: "Sign in",
+            label: SIGN_IN_CTA,
             href: loginWithCallback("/app/study-coach"),
             variant: "primary",
           }}
-          secondaryCtas={[{ label: "Browse lessons", href: "/lessons", variant: "secondary" }]}
+          secondaryCtas={[{ label: BROWSE_LESSONS_CTA, href: "/lessons", variant: "secondary" }]}
           visualLayout="stack"
           ctaLayout="stack"
         />
@@ -78,8 +85,8 @@ export default async function StudyCoachPage() {
           headline="Adaptive Study Coach"
           body="We couldn't verify your subscription status. Please try again."
           tone="default"
-          primaryCta={{ label: "Open Study Hub", href: "/app", variant: "primary" }}
-          secondaryCtas={[{ label: "Browse lessons", href: "/lessons", variant: "secondary" }]}
+          primaryCta={{ label: OPEN_STUDY_HUB_CTA, href: "/app", variant: "primary" }}
+          secondaryCtas={[{ label: BROWSE_LESSONS_CTA, href: "/lessons", variant: "secondary" }]}
           visualLayout="stack"
           ctaLayout="stack"
         />
@@ -95,9 +102,9 @@ export default async function StudyCoachPage() {
           headline="Adaptive Study Coach"
           body="The adaptive study engine is part of a NurseNest subscription."
           tone="locked"
-          primaryCta={{ label: "View plans", href: "/pricing", variant: "primary" }}
+          primaryCta={{ label: VIEW_PRICING_CTA, href: "/pricing", variant: "primary" }}
           secondaryCtas={[
-            { label: "Open Study Hub", href: "/app", variant: "secondary" },
+            { label: OPEN_STUDY_HUB_CTA, href: "/app", variant: "secondary" },
             { label: "Study Plan", href: "/app/study-plan", variant: "secondary" },
           ]}
           visualLayout="stack"
@@ -137,7 +144,7 @@ export default async function StudyCoachPage() {
               className="rounded-xl px-5 py-2.5 text-sm font-semibold"
               style={{ background: "var(--accent-primary)", color: "#fff" }}
             >
-              Start practising
+              {PRIMARY_CTA}
             </a>
             <a
               href="/app/lessons"
@@ -148,7 +155,7 @@ export default async function StudyCoachPage() {
                 color: "var(--accent-primary)",
               }}
             >
-              Browse lessons
+              {BROWSE_LESSONS_CTA}
             </a>
           </div>
         </div>

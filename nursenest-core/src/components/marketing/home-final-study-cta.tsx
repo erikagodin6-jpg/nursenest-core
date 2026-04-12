@@ -7,65 +7,41 @@ import { HUB } from "@/lib/marketing/marketing-entry-routes";
 import { useNursenestRegion } from "@/lib/region/use-nursenest-region";
 import { MarketingTrackedLink } from "@/components/marketing/marketing-tracked-link";
 import { PH } from "@/lib/observability/posthog-conversion-events";
-import { MARKETING_PRIMARY_CTA_CLASS, MARKETING_TERTIARY_LINK_CLASS } from "@/lib/theme/marketing-hero-pattern";
+import { MARKETING_PRIMARY_CTA_CLASS } from "@/lib/theme/marketing-hero-pattern";
 import { formatEyebrow, formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
-
-const STEPS = [
-  { n: "1", label: "Pick your exam", sub: "RN, LPN/RPN, NP, or Allied" },
-  { n: "2", label: "Try free questions", sub: "No credit card needed" },
-  { n: "3", label: "Build your plan", sub: "Lessons + test bank + CAT" },
-] as const;
+import { PRIMARY_CTA } from "@/lib/copy/cta-copy";
 
 /**
- * Closing conversion block: "30 seconds" framing with three-step onboarding indicators.
+ * Closing conversion block with one clear primary action.
  */
 export function HomeFinalStudyCta() {
-  const { t, locale } = useMarketingI18n();
+  const { locale } = useMarketingI18n();
   const { region } = useNursenestRegion();
   const loc = (path: string) => withMarketingLocale(locale, path);
 
   return (
     <section
-      className="border-t border-[var(--footer-border)] bg-[var(--hero-branded-wash)] py-12 md:py-16"
+      className="nn-section-block border-t border-[var(--footer-border)] bg-[var(--hero-branded-wash)]"
       aria-labelledby="home-final-cta-heading"
       data-testid="section-final-study-cta"
     >
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+      <div className="nn-section-shell">
         <div className="text-center">
           <p className="nn-marketing-caption mb-3 font-semibold uppercase tracking-widest text-[color-mix(in_srgb,var(--palette-accent,var(--theme-accent))_78%,var(--theme-heading-text))]">
-            {formatEyebrow("Get started in 30 seconds", locale)}
+            {formatEyebrow("Ready To Start", locale)}
           </p>
           <h2 id="home-final-cta-heading" className="nn-marketing-h2 text-balance">
-            {formatTitleCase(t("home.conversion.final.title"), locale)}
+            {formatTitleCase("Start your exam prep with a system built for your license.", locale)}
           </h2>
           <p className="nn-marketing-body-sm mx-auto mt-2 max-w-lg text-pretty text-[var(--theme-muted-text)]">
-            {formatSentenceCase(t("home.conversion.final.sub"), locale)}
+            {formatSentenceCase(
+              "Get pathway-scoped practice, rationales, and readiness tracking in one place.",
+              locale,
+            )}
           </p>
         </div>
 
-        {/* 3-step onboarding flow */}
-        <ol
-          className="mx-auto mt-10 grid max-w-3xl gap-4 sm:grid-cols-3"
-          aria-label="How to get started"
-        >
-          {STEPS.map((step) => (
-            <li
-              key={step.n}
-              className="flex flex-col items-center gap-2 rounded-2xl border border-[var(--border)] bg-[var(--card-bg)] px-4 py-5 text-center"
-            >
-              <span
-                className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-[var(--pill-border)] bg-[var(--pill-bg)] text-sm font-bold text-[var(--pill-fg)]"
-                aria-hidden
-              >
-                {step.n}
-              </span>
-              <span className="nn-marketing-body-sm font-semibold text-[var(--theme-heading-text)]">{formatTitleCase(step.label, locale)}</span>
-              <span className="nn-marketing-caption text-[var(--theme-muted-text)]">{formatSentenceCase(step.sub, locale)}</span>
-            </li>
-          ))}
-        </ol>
-
-        <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row sm:flex-wrap">
+        <div className="mt-8 flex flex-col items-center justify-center gap-4">
           <MarketingTrackedLink
             href={loc(HUB.signup)}
             event={PH.marketingHomeFinalCta}
@@ -73,52 +49,10 @@ export function HomeFinalStudyCta() {
             className={`${MARKETING_PRIMARY_CTA_CLASS} rounded-xl shadow-[var(--shadow-card)] sm:min-w-[240px]`}
             data-testid="button-final-signup-primary"
           >
-            <span className="whitespace-nowrap">{formatTitleCase(t("home.conversion.final.ctaPrimary"), locale)}</span>
+            <span className="whitespace-nowrap">{formatTitleCase(PRIMARY_CTA, locale)}</span>
             <ArrowRight className="ml-2 h-5 w-5 shrink-0" aria-hidden />
           </MarketingTrackedLink>
-          <MarketingTrackedLink
-            href="#home-exam-paths"
-            event={PH.marketingHomeFinalCta}
-            eventProps={{ choice: "exam_paths_anchor", region, surface: "final" }}
-            className={MARKETING_TERTIARY_LINK_CLASS}
-            data-testid="button-final-choose-exam"
-          >
-            {formatTitleCase(t("home.conversion.final.ctaSecondary"), locale)}
-          </MarketingTrackedLink>
         </div>
-
-        <p className="nn-marketing-body-sm mx-auto mt-6 flex max-w-xl flex-wrap items-center justify-center gap-x-2 gap-y-1 text-[var(--theme-muted-text)]">
-          <MarketingTrackedLink
-            href={loc(HUB.practiceExams)}
-            event={PH.marketingHomeFinalCta}
-            eventProps={{ choice: "practice_exams_overview", region, surface: "final" }}
-            className="font-semibold text-primary underline-offset-4 hover:underline"
-          >
-            {formatTitleCase(t("home.conversion.final.linkPracticeExams"), locale)}
-          </MarketingTrackedLink>
-          <span className="text-[var(--theme-muted-text)]" aria-hidden>
-            ·
-          </span>
-          <MarketingTrackedLink
-            href={loc(HUB.questionBank)}
-            event={PH.marketingHomeFinalCta}
-            eventProps={{ choice: "question_bank_overview", region, surface: "final" }}
-            className="font-semibold text-primary underline-offset-4 hover:underline"
-          >
-            {formatTitleCase(t("home.conversion.final.linkQuestionBank"), locale)}
-          </MarketingTrackedLink>
-          <span className="text-[var(--theme-muted-text)]" aria-hidden>
-            ·
-          </span>
-          <MarketingTrackedLink
-            href={loc(HUB.examLessons)}
-            event={PH.marketingHomeFinalCta}
-            eventProps={{ choice: "lessons_overview", region, surface: "final" }}
-            className="font-semibold text-primary underline-offset-4 hover:underline"
-          >
-            {formatTitleCase(t("home.conversion.final.linkExploreLessons"), locale)}
-          </MarketingTrackedLink>
-        </p>
       </div>
     </section>
   );

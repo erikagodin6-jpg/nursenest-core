@@ -32,6 +32,13 @@ import { PassReadinessCard } from "@/components/study/pass-readiness-card";
 import { DailyStudyPlanCard } from "@/components/study/daily-study-plan-card";
 import { WeeklyStudyPlanSection } from "@/components/study/weekly-study-plan-section";
 import { BenchmarkPercentileCard } from "@/components/study/benchmark-percentile-card";
+import {
+  BROWSE_LESSONS_CTA,
+  OPEN_STUDY_HUB_CTA,
+  PRIMARY_CTA,
+  SIGN_IN_CTA,
+  VIEW_PRICING_CTA,
+} from "@/lib/copy/cta-copy";
 
 export async function generateMetadata(): Promise<Metadata> {
   return safeGenerateMetadata(
@@ -56,11 +63,11 @@ export default async function CoachPage() {
           headline="Adaptive Study Coach"
           body="Sign in to access your personalized study coach."
           primaryCta={{
-            label: "Sign in",
+            label: SIGN_IN_CTA,
             href: loginWithCallback("/app/coach"),
             variant: "primary",
           }}
-          secondaryCtas={[{ label: "Browse lessons", href: "/lessons", variant: "secondary" }]}
+          secondaryCtas={[{ label: BROWSE_LESSONS_CTA, href: "/lessons", variant: "secondary" }]}
           visualLayout="stack"
           ctaLayout="stack"
         />
@@ -78,8 +85,8 @@ export default async function CoachPage() {
           headline="Adaptive Study Coach"
           body="We could not verify your subscription status. Please try again."
           tone="default"
-          primaryCta={{ label: "Open Study Hub", href: "/app", variant: "primary" }}
-          secondaryCtas={[{ label: "Browse lessons", href: "/lessons", variant: "secondary" }]}
+          primaryCta={{ label: OPEN_STUDY_HUB_CTA, href: "/app", variant: "primary" }}
+          secondaryCtas={[{ label: BROWSE_LESSONS_CTA, href: "/lessons", variant: "secondary" }]}
           visualLayout="stack"
           ctaLayout="stack"
         />
@@ -95,9 +102,9 @@ export default async function CoachPage() {
           headline="Adaptive Study Coach"
           body="The full study coach is available with a NurseNest subscription."
           tone="locked"
-          primaryCta={{ label: "View plans", href: "/pricing", variant: "primary" }}
+          primaryCta={{ label: VIEW_PRICING_CTA, href: "/pricing", variant: "primary" }}
           secondaryCtas={[
-            { label: "Open Study Hub", href: "/app", variant: "secondary" },
+            { label: OPEN_STUDY_HUB_CTA, href: "/app", variant: "secondary" },
             { label: "Study Plan", href: "/app/study-plan", variant: "secondary" },
           ]}
           visualLayout="stack"
@@ -143,7 +150,7 @@ export default async function CoachPage() {
                 color: "var(--semantic-surface, white)",
               }}
             >
-              Start practicing
+              {PRIMARY_CTA}
             </a>
           </div>
         </div>

@@ -18,6 +18,9 @@ export type PersonalProfilePathwayPreview = {
 
 export type PersonalProfilePayload = {
   name: string;
+  firstName: string | null;
+  lastName: string | null;
+  displayName: string | null;
   email: string;
   country: CountryCode;
   tier: TierCode;
@@ -48,6 +51,9 @@ export async function loadPersonalProfilePayload(
       where: { id: userId },
       select: {
         name: true,
+        firstName: true,
+        lastName: true,
+        displayName: true,
         email: true,
         country: true,
         tier: true,
@@ -88,6 +94,9 @@ export async function loadPersonalProfilePayload(
 
   return {
     name: user.name,
+    firstName: user.firstName,
+    lastName: user.lastName,
+    displayName: user.displayName,
     email: user.email,
     country: user.country,
     tier: user.tier,

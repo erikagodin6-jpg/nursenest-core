@@ -7,6 +7,7 @@ import { HUB } from "@/lib/marketing/marketing-entry-routes";
 import { HomeConversionCtaStrip } from "@/components/marketing/home-conversion-cta-strip";
 import { MarketingTrackedLink } from "@/components/marketing/marketing-tracked-link";
 import { PH } from "@/lib/observability/posthog-conversion-events";
+import { formatEyebrow, formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
 
 const PILLARS = [
   { id: "cat" as const, icon: Layers, hrefKey: "cat" as const },
@@ -36,12 +37,12 @@ export function HomeProductPillarsSection() {
 
   return (
     <section
-      className="border-b border-[var(--border)] bg-[var(--page-bg)] py-12 md:py-16"
+      className="nn-section-block border-b border-[var(--border)] bg-[var(--page-bg)]"
       aria-labelledby="home-product-pillars-heading"
       data-testid="section-product-pillars"
     >
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-        <header className="mx-auto mb-10 max-w-2xl text-center">
+      <div className="nn-section-shell">
+        <header className="mx-auto mb-12 max-w-2xl text-center">
           <h2 id="home-product-pillars-heading" className="nn-marketing-h2 text-balance text-[var(--theme-heading-text)]">
             {t("home.conversion.pillars.title")}
           </h2>
@@ -60,19 +61,20 @@ export function HomeProductPillarsSection() {
                   href={href}
                   event={PH.marketingHomeExploreHubClick}
                   eventProps={{ surface: "product_pillars", pillar: p.id }}
-                  className="nn-card-soft nn-student-card-lift group flex h-full min-h-[13rem] flex-col p-6 transition-[border-color,box-shadow]"
+                  className="nn-card-system nn-card-system-pad nn-card-system--interactive nn-student-card-lift group h-full min-h-[13rem]"
                 >
-                  <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl border border-[color-mix(in_srgb,var(--theme-primary)_22%,var(--border-subtle))] bg-[color-mix(in_srgb,var(--theme-primary)_8%,var(--theme-card-bg))]">
+                  <div className="nn-card-system__icon">
                     <Icon className="h-5 w-5 text-[var(--theme-primary)]" aria-hidden strokeWidth={2} />
                   </div>
-                  <h3 className="nn-marketing-h3 text-balance text-[var(--theme-heading-text)]">
-                    {t(`home.conversion.pillars.${p.id}Title`)}
+                  <p className="nn-card-system__eyebrow">{formatEyebrow(p.id.replace("-", " "), locale)}</p>
+                  <h3 className="nn-card-system__title">
+                    {formatTitleCase(t(`home.conversion.pillars.${p.id}Title`), locale)}
                   </h3>
-                  <p className="nn-marketing-body-sm mt-2 flex-1 text-pretty text-[var(--theme-muted-text)]">
-                    {t(`home.conversion.pillars.${p.id}Body`)}
+                  <p className="nn-card-system__description">
+                    {formatSentenceCase(t(`home.conversion.pillars.${p.id}Body`), locale)}
                   </p>
-                  <span className="mt-4 inline-flex items-center text-sm font-semibold text-[var(--nn-aesthetic-accent)]">
-                    {t(`home.conversion.pillars.${p.id}Cta`)}
+                  <span className="nn-card-system__cta">
+                    {formatTitleCase(t(`home.conversion.pillars.${p.id}Cta`), locale)}
                     <ArrowRight className="ml-1.5 h-4 w-4 transition group-hover:translate-x-0.5" aria-hidden />
                   </span>
                 </MarketingTrackedLink>
@@ -81,7 +83,7 @@ export function HomeProductPillarsSection() {
           })}
         </ul>
 
-        <div className="mx-auto mt-10 max-w-5xl border-t border-[var(--border-subtle)] pt-10">
+        <div className="mx-auto mt-12 max-w-5xl border-t border-[var(--border-subtle)] pt-10">
           <HomeConversionCtaStrip placement="after_pillars" />
         </div>
       </div>

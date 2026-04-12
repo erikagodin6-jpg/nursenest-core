@@ -20,6 +20,7 @@ import Link from "next/link";
 import type { NoteRow, NotesPagePayload } from "@/lib/learner/notes-index-types";
 import { HighlightsList } from "@/components/study/highlights-list";
 import { loadMoreNotes, loadFilteredNotes } from "./actions";
+import { BROWSE_LESSONS_CTA, BROWSE_QUESTIONS_CTA } from "@/lib/copy/cta-copy";
 
 // ── Search helpers ────────────────────────────────────────────────────────────
 
@@ -199,7 +200,7 @@ function NotesList({
               color: "var(--semantic-brand)",
             }}
           >
-            Browse lessons
+            {BROWSE_LESSONS_CTA}
           </Link>
           <Link
             href="/app/questions"
@@ -210,7 +211,7 @@ function NotesList({
               color: "var(--semantic-text-secondary)",
             }}
           >
-            Practice questions
+            {BROWSE_QUESTIONS_CTA}
           </Link>
         </div>
       </div>

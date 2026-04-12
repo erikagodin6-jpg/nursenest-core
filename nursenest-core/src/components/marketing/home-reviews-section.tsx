@@ -2,6 +2,7 @@
 
 import { Star } from "lucide-react";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
+import { formatEyebrow, formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
 
 const CARD_KEYS = [
   { quote: "home.landing.reviews.card1.quote", meta: "home.landing.reviews.card1.meta" },
@@ -31,7 +32,7 @@ function StarRow({ count = 5 }: { count?: number }) {
  * Copy is static scenarios, not a live feed.
  */
 export function HomeReviewsSection() {
-  const { t } = useMarketingI18n();
+  const { t, locale } = useMarketingI18n();
 
   return (
     <section
@@ -68,13 +69,16 @@ export function HomeReviewsSection() {
           {CARD_KEYS.map((c) => (
             <li
               key={c.quote}
-              className="nn-card-soft nn-marketing-card-pad nn-card-interactive flex flex-col border-t-2 border-t-[color-mix(in_srgb,var(--palette-primary)_45%,transparent)]"
+              className="nn-card-system nn-card-system-pad nn-card-system--interactive border-t-2 border-t-[color-mix(in_srgb,var(--palette-primary)_45%,transparent)]"
             >
+              <p className="nn-card-system__eyebrow">{formatEyebrow("Student Review", locale)}</p>
               <StarRow />
-              <blockquote className="nn-marketing-body-sm flex-1 text-pretty text-[var(--palette-text)]">
-                &ldquo;{t(c.quote)}&rdquo;
+              <blockquote className="nn-card-system__description flex-1 text-[var(--palette-text)]">
+                &ldquo;{formatSentenceCase(t(c.quote), locale)}&rdquo;
               </blockquote>
-              <p className="nn-marketing-caption mt-3 text-[var(--palette-text-muted)]">{t(c.meta)}</p>
+              <p className="nn-card-system__title text-[0.92rem] text-[var(--palette-text-muted)]">
+                {formatTitleCase(t(c.meta), locale)}
+              </p>
             </li>
           ))}
         </ul>

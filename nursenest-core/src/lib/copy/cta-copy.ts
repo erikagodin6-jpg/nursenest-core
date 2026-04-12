@@ -8,6 +8,7 @@ export const BROWSE_LESSONS_CTA = "Browse Lessons";
 export const BROWSE_QUESTIONS_CTA = "Browse Questions";
 export const VIEW_PRICING_CTA = "View Pricing";
 export const COMPARE_PLANS_CTA = "Compare Plans";
+export const OPEN_STUDY_HUB_CTA = "Open Study Hub";
 
 export const SIGN_IN_CTA = "Sign In";
 export const GET_STARTED_CTA = "Get Started";

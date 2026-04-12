@@ -280,7 +280,7 @@ export function PricingPageClient({
   ];
 
   return (
-    <main className="mx-auto w-full max-w-6xl nn-marketing-x pb-[var(--nn-rhythm-page-y)] pt-0">
+    <main className="mx-auto flex w-full max-w-6xl flex-col gap-14 nn-marketing-x pb-[var(--nn-rhythm-page-y)] pt-0 md:gap-16">
       {/* 1. Hero */}
       <PricingHero
         studySystemHref={localize("/how-it-works")}
@@ -289,13 +289,13 @@ export function PricingPageClient({
       />
 
       {/* Trust strip + legal anchors below hero */}
-      <div className="nn-section-enter mt-6 flex flex-col items-center gap-3">
+      <div className="nn-section-enter flex flex-col items-center gap-3 pt-2">
         <MarketingTrustSignalsStrip variant="compact" />
         <p className="nn-marketing-caption text-muted-foreground">{t("pages.pricing.conversion.checkoutTrust")}</p>
       </div>
 
       {/* Country + tier */}
-      <section className="nn-section-enter mt-10 space-y-6">
+      <section className="nn-section-enter space-y-6">
         <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
           <span className="text-sm font-medium text-muted-foreground">{t("pages.pricing.conversion.billingRegion")}</span>
           <div className="flex gap-2" role="group" aria-label={t("pages.pricing.conversion.billingRegion")}>
@@ -351,7 +351,7 @@ export function PricingPageClient({
       <FeatureComparisonTable />
 
       {/* 2–4. Duration cards + includes + pricing */}
-      <section className="mt-12" aria-labelledby="pricing-plans-heading">
+      <section aria-labelledby="pricing-plans-heading">
         <div className="mb-6 text-center">
           <h2 id="pricing-plans-heading" className="nn-marketing-h2">
             {t("pages.pricing.conversion.pickTerm")}
@@ -485,7 +485,7 @@ export function PricingPageClient({
       </section>
 
       {/* Policy + errors */}
-      <section className="mt-10 max-w-xl mx-auto">
+      <section className="mx-auto max-w-xl">
         <p className="text-sm text-muted-foreground">{t("pages.pricing.conversion.policyOnce")}</p>
         <p className="mt-2 text-sm text-muted-foreground">{t("pages.pricing.billing.recurringShort")}</p>
         {checkoutError ? <p className="mt-3 text-sm text-destructive">{checkoutError}</p> : null}
@@ -521,7 +521,7 @@ export function PricingPageClient({
       </section>
 
       {/* Guarantee */}
-      <section className="nn-elevation-panel nn-motion-standard mt-12 rounded-2xl border-[var(--palette-border)] p-6">
+      <section className="nn-elevation-panel nn-motion-standard rounded-2xl border-[var(--palette-border)] p-6">
         <h2 className="nn-marketing-h3">{t("pages.pricing.trust.guaranteeTitle")}</h2>
         <p className="mt-2 text-sm text-muted-foreground">{t("pages.pricing.trust.guaranteeBody")}</p>
         <ul className="mt-4 space-y-2 text-sm text-[var(--palette-text)]">
@@ -560,14 +560,14 @@ export function PricingPageClient({
       <PricingCTA plansHref="#pricing-plans-heading" />
 
       {/* Compact: institutional + exam hubs */}
-      <section className="mt-10 rounded-xl border border-[var(--trust-surface-border)] bg-[var(--trust-surface)] px-4 py-4 text-sm text-muted-foreground">
+      <section className="rounded-xl border border-[var(--trust-surface-border)] bg-[var(--trust-surface)] px-4 py-4 text-sm text-muted-foreground">
         <p>{t("pages.pricing.institutionalBanner")}</p>
         <Link href={institutionalHref} className="nn-link-quiet mt-2 inline-block font-semibold">
           {t("pages.pricing.institutionalLink")} →
         </Link>
       </section>
 
-      <section className="mt-10">
+      <section>
         <h2 className="nn-marketing-h2">{t("pages.pricing.examChoose.title")}</h2>
         <p className="nn-marketing-body-sm mt-2 text-muted-foreground">
           {t(country === "US" ? "pages.pricing.examChoose.subtitleUS" : "pages.pricing.examChoose.subtitleCA")}
@@ -625,7 +625,7 @@ export function PricingPageClient({
         ) : null}
       </section>
 
-      <div className="mt-10 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
+      <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
         <Link href="#pricing-plans-heading" className={MARKETING_PRIMARY_CTA_CLASS}>
           {heroCtaLabel}
         </Link>
@@ -634,7 +634,7 @@ export function PricingPageClient({
         </Link>
       </div>
 
-      <p className="mt-8 text-center text-xs text-muted-foreground">{t("pages.pricing.social.pricingFooterLine")}</p>
+      <p className="mt-2 text-center text-xs text-muted-foreground">{t("pages.pricing.social.pricingFooterLine")}</p>
     </main>
   );
 }

@@ -46,6 +46,7 @@ import { CoachWeakSummary } from "@/components/study/coach-weak-summary";
 import { isStudyCoachEnabled } from "@/lib/ai/learner-ai-policy";
 import { computeBenchmarkData, type BenchmarkData } from "@/lib/learner/benchmark-engine";
 import { BenchmarkCard, BenchmarkLockedCard } from "@/components/student/dashboard/benchmark-card";
+import { resolveDisplayName } from "@/lib/user/resolve-display-name";
 
 function retentionPersonalNote(t: LearnerMarketingT, prefs: Awaited<ReturnType<typeof loadLearnerRetentionPreferences>>): string | null {
   if (!prefs) return null;
@@ -95,15 +96,18 @@ export default async function LearnerDashboardPage() {
     );
   }
 
+  let userDisplayName: string | null = null;
+
   // Redirect to onboarding if user hasn't completed it yet
   try {
     const user = await prisma.user.findUnique({
       where: { id: userId },
-      select: { onboardingCompletedAt: true },
+      select: { onboardingCompletedAt: true, firstName: true, displayName: true, name: true },
     });
     if (user && !user.onboardingCompletedAt) {
       redirect("/app/onboarding");
     }
+    userDisplayName = user ? resolveDisplayName(user) : null;
   } catch (e) {
     // redirect() throws a NEXT_REDIRECT error; re-throw it
     if (e && typeof e === "object" && "digest" in e) throw e;
@@ -221,7 +225,9 @@ export default async function LearnerDashboardPage() {
           <section className="nn-dash-section">
             <div className="nn-learner-page-hero">
               <p className="text-[0.6875rem] font-bold uppercase tracking-[0.1em] text-[var(--semantic-brand)]">{t("learner.dashboard.kicker")}</p>
-              <h1 className="mt-1.5 text-2xl font-extrabold tracking-tight text-[var(--semantic-text-primary)] sm:text-3xl">{t("learner.dashboard.title")}</h1>
+              <h1 className="mt-1.5 text-2xl font-extrabold tracking-tight text-[var(--semantic-text-primary)] sm:text-3xl">
+                {userDisplayName ? `Welcome Back, ${userDisplayName}` : t("learner.dashboard.title")}
+              </h1>
               <p className="mt-2.5 max-w-2xl text-[0.9375rem] leading-relaxed text-[var(--semantic-text-secondary)]">{t("learner.dashboard.subtitle.subscriber")}</p>
             </div>
             <PrimaryActionCard action={dashModel.nextAction} />

@@ -43,8 +43,13 @@ export function SignupForm({
       actor: "anonymous",
       funnel_step: "signup_submit",
     });
+    const rawFirst = String(formData.get("firstName") ?? "").trim();
+    const rawLast = String(formData.get("lastName") ?? "").trim();
+    const fullName = rawLast ? `${rawFirst} ${rawLast}` : rawFirst;
     const payload = {
-      name: String(formData.get("name") ?? ""),
+      name: fullName,
+      firstName: rawFirst || null,
+      lastName: rawLast || null,
       username: String(formData.get("username") ?? ""),
       email: String(formData.get("email") ?? ""),
       password: String(formData.get("password") ?? ""),
@@ -80,13 +85,23 @@ export function SignupForm({
 
   return (
     <form action={onSubmit} className="mt-6 space-y-4">
-      <input
-        className="w-full rounded-xl border border-[var(--border-medium)] bg-[var(--bg-card)] px-3 py-2 text-[var(--theme-body-text)] placeholder:text-muted-foreground"
-        type="text"
-        name="name"
-        placeholder={t("pages.signup.placeholderName")}
-        required
-      />
+      <div className="grid gap-3 sm:grid-cols-2">
+        <input
+          className="w-full rounded-xl border border-[var(--border-medium)] bg-[var(--bg-card)] px-3 py-2 text-[var(--theme-body-text)] placeholder:text-muted-foreground"
+          type="text"
+          name="firstName"
+          placeholder="First Name"
+          required
+          autoComplete="given-name"
+        />
+        <input
+          className="w-full rounded-xl border border-[var(--border-medium)] bg-[var(--bg-card)] px-3 py-2 text-[var(--theme-body-text)] placeholder:text-muted-foreground"
+          type="text"
+          name="lastName"
+          placeholder="Last Name (Optional)"
+          autoComplete="family-name"
+        />
+      </div>
       <input
         className="w-full rounded-xl border border-[var(--border-medium)] bg-[var(--bg-card)] px-3 py-2 text-[var(--theme-body-text)] placeholder:text-muted-foreground"
         type="text"

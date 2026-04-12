@@ -18,6 +18,7 @@ import {
 } from "@/components/study/guided-study-stack";
 import type { BreadcrumbCrumb } from "@/lib/seo/breadcrumb-types";
 import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
+import { BROWSE_LESSONS_CTA, SIGN_IN_CTA } from "@/lib/copy/cta-copy";
 
 export const dynamic = "force-dynamic";
 
@@ -55,11 +56,11 @@ export default async function GuidedStudyPage() {
           headline="Guided Study Mode"
           body="Sign in to access your personalized study guide."
           primaryCta={{
-            label: "Sign in",
+            label: SIGN_IN_CTA,
             href: loginWithCallback("/app/guided"),
             variant: "primary",
           }}
-          secondaryCtas={[{ label: "Browse lessons", href: "/lessons", variant: "secondary" }]}
+          secondaryCtas={[{ label: BROWSE_LESSONS_CTA, href: "/lessons", variant: "secondary" }]}
           visualLayout="stack"
           ctaLayout="stack"
         />

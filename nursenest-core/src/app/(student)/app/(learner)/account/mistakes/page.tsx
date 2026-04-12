@@ -12,6 +12,7 @@ import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { remediationTopicDrillHref } from "@/lib/learner/remediation-links";
 import { MistakeNotebookClient } from "@/components/mistakes/mistake-notebook-client";
 import { loadMistakeNotebookAction } from "./actions";
+import { BROWSE_QUESTIONS_CTA, SIGN_IN_CTA } from "@/lib/copy/cta-copy";
 
 export async function generateMetadata(): Promise<Metadata> {
   return safeGenerateMetadata(
@@ -37,11 +38,11 @@ export default async function MistakeNotebookPage() {
           headline="Mistake Notebook"
           body="Sign in to track your missed questions and learn from your errors more effectively."
           primaryCta={{
-            label: "Sign in",
+            label: SIGN_IN_CTA,
             href: loginWithCallback("/app/account/mistakes"),
             variant: "primary",
           }}
-          secondaryCtas={[{ label: "Practice questions", href: "/app/questions", variant: "secondary" }]}
+          secondaryCtas={[{ label: BROWSE_QUESTIONS_CTA, href: "/app/questions", variant: "secondary" }]}
           visualLayout="stack"
           ctaLayout="stack"
         />

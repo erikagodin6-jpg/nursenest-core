@@ -1,0 +1,37 @@
+import { redirect } from "next/navigation";
+import type { Metadata } from "next";
+import { auth } from "@/lib/auth";
+import { prisma } from "@/lib/db";
+import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
+import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
+import { QuickStartFlowClient } from "./quick-start-flow-client";
+
+export const dynamic = "force-dynamic";
+
+export const metadata: Metadata = {
+  title: "Quick Start Assessment",
+  robots: { index: false, follow: false },
+};
+
+export default async function QuickStartPage() {
+  const session = await auth();
+  const userId = (session?.user as { id?: string })?.id;
+
+  if (!userId || !isDatabaseUrlConfigured()) {
+    redirect(loginWithCallback("/app/quick-start"));
+  }
+
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    select: {
+      baselineAssessmentCompletedAt: true,
+      baselineAssessmentSummary: true,
+    },
+  });
+
+  if (user?.baselineAssessmentCompletedAt) {
+    redirect("/app");
+  }
+
+  return <QuickStartFlowClient />;
+}

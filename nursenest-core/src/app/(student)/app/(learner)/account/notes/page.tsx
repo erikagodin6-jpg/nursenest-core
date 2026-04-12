@@ -10,6 +10,7 @@ import { appAccountBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { loadNotesPagePayload } from "./actions";
 import { NotesIndexClient } from "./notes-index-client";
+import { BROWSE_LESSONS_CTA, SIGN_IN_CTA } from "@/lib/copy/cta-copy";
 
 export async function generateMetadata(): Promise<Metadata> {
   return safeGenerateMetadata(
@@ -35,11 +36,11 @@ export default async function AccountNotesPage() {
           headline="Notes & Highlights"
           body="Sign in to access your study notes, bookmarks, and saved rationales."
           primaryCta={{
-            label: "Sign in",
+            label: SIGN_IN_CTA,
             href: loginWithCallback("/app/account/notes"),
             variant: "primary",
           }}
-          secondaryCtas={[{ label: "Browse lessons", href: "/lessons", variant: "secondary" }]}
+          secondaryCtas={[{ label: BROWSE_LESSONS_CTA, href: "/lessons", variant: "secondary" }]}
           visualLayout="stack"
           ctaLayout="stack"
         />

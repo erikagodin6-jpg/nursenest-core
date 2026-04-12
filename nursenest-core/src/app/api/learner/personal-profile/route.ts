@@ -20,6 +20,9 @@ export const runtime = "nodejs";
 const patchSchema = z
   .object({
     name: z.string().min(1).max(120).optional(),
+    firstName: z.string().max(100).optional(),
+    lastName: z.union([z.string().max(100), z.null()]).optional(),
+    displayName: z.union([z.string().max(200), z.null()]).optional(),
     country: z.nativeEnum(CountryCode).optional(),
     tier: z.nativeEnum(TierCode).optional(),
     learnerPath: z.union([z.string().min(1).max(80), z.null()]).optional(),
@@ -153,6 +156,9 @@ export async function PATCH(req: Request) {
 
     const data: Record<string, unknown> = {};
     if (body.name !== undefined) data.name = body.name.trim();
+    if (body.firstName !== undefined) data.firstName = body.firstName.trim() || null;
+    if (body.lastName !== undefined) data.lastName = body.lastName === null ? null : body.lastName.trim() || null;
+    if (body.displayName !== undefined) data.displayName = body.displayName === null ? null : body.displayName.trim() || null;
     if (body.country !== undefined) data.country = body.country;
     if (body.tier !== undefined) data.tier = body.tier;
     if (nextLearnerPath !== undefined) data.learnerPath = nextLearnerPath;

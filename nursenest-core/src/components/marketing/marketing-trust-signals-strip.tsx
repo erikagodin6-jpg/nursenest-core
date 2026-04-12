@@ -24,13 +24,16 @@ export function MarketingTrustSignalsStrip({
   const { t } = useMarketingI18n();
   const pad = variant === "compact" ? "py-3 px-3 sm:px-4" : "py-4 px-4 sm:px-5";
   const gap = variant === "compact" ? "gap-2" : "gap-2.5";
+  const containerClass = homeHeroTrust
+    ? "rounded-xl border border-[var(--border,var(--border-subtle))] bg-[var(--surface,var(--bg-card,var(--theme-card-bg)))] shadow-[var(--elevation-rest)]"
+    : "nn-trust-surface rounded-xl";
 
   return (
     <div
-      className={`nn-trust-surface rounded-xl ${pad}`}
+      className={`${containerClass} ${pad}`}
       data-testid="marketing-trust-signals-strip"
     >
-      {/* nn-trust-surface: secondary-family tint that clearly differs from primary-tinted surfaces */}
+      {/* Home hero trust strip uses card surface so it never blends with the page shell. */}
       {examHub ? (
         <p className="nn-marketing-body-sm mb-3 text-pretty text-[var(--theme-body-text)]">{t("components.trustSignals.examHubIntro")}</p>
       ) : null}

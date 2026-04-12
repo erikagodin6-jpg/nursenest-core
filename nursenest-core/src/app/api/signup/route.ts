@@ -4,6 +4,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { Prisma } from "@prisma/client";
 import { strongPasswordSchema } from "@/lib/auth/password-policy";
+import { createAndSendVerificationEmail, normalizeEmailForDedup } from "@/lib/auth/email-verification";
 import { validateUsernameForSignup } from "@/lib/auth/username-rules";
 import { isTurnstileEnforced, verifyTurnstileToken } from "@/lib/captcha/verify-turnstile";
 import { prisma } from "@/lib/db";
@@ -28,6 +29,8 @@ const schema = z.object({
   password: strongPasswordSchema,
   username: z.string(),
   name: z.preprocess((v) => (typeof v === "string" ? v.trim() : v), z.string().min(1).max(200)),
+  firstName: z.preprocess((v) => (typeof v === "string" ? v.trim() : v), z.string().max(100).optional().nullable()),
+  lastName: z.preprocess((v) => (typeof v === "string" ? v.trim() : v), z.string().max(100).optional().nullable()),
   country: z.enum(["CA", "US"]),
   tier: z.enum(["RPN", "LVN_LPN", "RN", "NP", "ALLIED"]),
   examFocus: z.preprocess(emptyToUndef, z.string().max(120).optional()),
@@ -133,7 +136,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Username already taken", code: "duplicate_username" }, { status: 409 });
   }
 
-  const { email, name, password, country, tier, examFocus, studyGoal, dailyStudyMinutes, learnerPath } = parsed.data;
+  const { email, name, firstName, lastName, password, country, tier, examFocus, studyGoal, dailyStudyMinutes, learnerPath } = parsed.data;
   const passwordHash = await hash(password, 12);
 
   let createdId: string;
@@ -141,12 +144,17 @@ export async function POST(req: Request) {
     const created = await prisma.user.create({
       data: {
         email: email.toLowerCase(),
+        normalizedEmail: normalizeEmailForDedup(email),
         username: normalizedUsername,
         name,
+        firstName: firstName || null,
+        lastName: lastName || null,
         passwordHash,
         country,
         tier,
         role: "LEARNER",
+        authProvider: "credentials",
+        signupIp: ip !== "unknown" ? ip.slice(0, 64) : null,
         examFocus: examFocus ?? null,
         studyGoal: studyGoal ?? null,
         dailyStudyMinutes: dailyStudyMinutes ?? null,
@@ -200,5 +208,12 @@ export async function POST(req: Request) {
     tier: String(parsed.data.tier),
     country: String(parsed.data.country),
   });
-  return NextResponse.json({ ok: true }, { status: 201 });
+
+  createAndSendVerificationEmail(createdId, email.toLowerCase()).catch((e) => {
+    safeServerLog("signup", "verification_email_fire_and_forget_error", {
+      detail: e instanceof Error ? e.message.slice(0, 200) : "unknown",
+    });
+  });
+
+  return NextResponse.json({ ok: true, verificationSent: true }, { status: 201 });
 }

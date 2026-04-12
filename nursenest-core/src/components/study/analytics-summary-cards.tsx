@@ -13,6 +13,7 @@
 
 import type { TopicRow } from "@/lib/study/analytics-data";
 import { formatEyebrow, formatSentenceCase } from "@/lib/format/text-case";
+import { PRIMARY_CTA } from "@/lib/copy/cta-copy";
 
 type CardDef = {
   label: string;
@@ -46,7 +47,7 @@ export function AnalyticsSummaryCards({
       sub:
         topTopics.length > 0
           ? `Across ${topicRows.length} topic${topicRows.length !== 1 ? "s" : ""}`
-          : "Start practicing to track topics",
+          : `${PRIMARY_CTA} to track topics.`,
       surface: "var(--semantic-panel-cool)",
       valueCss: "var(--semantic-info-contrast, var(--semantic-info))",
       borderCss: "color-mix(in srgb, var(--semantic-info) 25%, transparent)",

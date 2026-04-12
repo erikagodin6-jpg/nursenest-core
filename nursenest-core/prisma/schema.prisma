@@ -136,15 +136,26 @@ enum PreNursingDatePlanType {
 model User {
   id                      String         @id @default(cuid())
   email                   String         @unique
+  /** Lowercase, trimmed email for dedup (dot-stripping, alias-insensitive). */
+  normalizedEmail         String?
   /** Lowercase login handle; optional. PostgreSQL allows multiple NULLs under UNIQUE. */
   username                String?        @unique
   name                    String
+  firstName               String?        @db.VarChar(100)
+  lastName                String?        @db.VarChar(100)
+  displayName             String?        @db.VarChar(200)
   passwordHash            String?
   /** Bumped on password change/reset so JWTs can be invalidated without per-device session rows. */
   credentialVersion       Int            @default(0)
+  emailVerified           Boolean        @default(false)
+  /** How the account was created (credentials, google, etc.). */
+  authProvider            String         @default("credentials") @db.VarChar(32)
   role                    UserRole       @default(LEARNER)
   country                 CountryCode
   tier                    TierCode
+  signupIp                String?        @db.VarChar(64)
+  lastLoginIp             String?        @db.VarChar(64)
+  lastLoginAt             DateTime?
   examFocus               String?
   studyGoal               String?
   dailyStudyMinutes       Int?
@@ -204,6 +215,7 @@ model User {
   lessonDraftsCreated     GeneratedLessonDraft[]      @relation("LessonDraftCreatedBy")
   lessonDraftsReviewed    GeneratedLessonDraft[]      @relation("LessonDraftReviewedBy")
   passwordResetTokens     PasswordResetToken[]
+  emailVerificationTokens EmailVerificationToken[]
   emailNotificationLogs   EmailNotificationLog[]
   flashcardProgress       FlashcardProgress[]
   flashcardStudySessions  FlashcardStudySession[]
@@ -225,6 +237,7 @@ model User {
   mediaAssetsUploaded          MediaAsset[]                 @relation("MediaAssetUploadedBy")
 
   @@index([alliedProfessionKey])
+  @@index([normalizedEmail])
 }
 
 /** Admin-managed binary assets on Spaces (blogs, lessons, marketing). */
@@ -397,6 +410,18 @@ model EmailNotificationLog {
 
 /** One-time password reset tokens; raw token is never stored (only SHA-256 hex). */
 model PasswordResetToken {
+  id        String   @id @default(cuid())
+  tokenHash String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}
+
+/** Email verification tokens; raw token is never stored (only SHA-256 hex). */
+model EmailVerificationToken {
   id        String   @id @default(cuid())
   tokenHash String   @unique
   userId    String

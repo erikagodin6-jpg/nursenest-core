@@ -14,6 +14,8 @@ function matches(path: string, prefix: string): boolean {
 const SUPER_ONLY_PREFIXES = [
   "/admin/premium-protection",
   "/api/admin/protection-abuse-reviews",
+  "/admin/fraud",
+  "/api/admin/fraud-dashboard",
   "/admin/i18n",
   "/api/admin/i18n-diagnostics",
 ];

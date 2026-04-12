@@ -2,6 +2,13 @@ import Link from "next/link";
 import type { LucideIcon } from "lucide-react";
 import { ClipboardList, Timer, LineChart } from "lucide-react";
 import { formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
+import {
+  BROWSE_LESSONS_CTA,
+  BROWSE_QUESTIONS_CTA,
+  PRIMARY_CTA,
+  SECONDARY_CTA,
+  TERTIARY_CTA,
+} from "@/lib/copy/cta-copy";
 
 type ModeCard = {
   icon: LucideIcon;
@@ -63,23 +70,20 @@ export function StudyModeCards({ heading = "Start studying", cards }: Props) {
           return (
             <div
               key={card.title}
-              className={`nn-study-card ${styles.border} flex flex-col gap-4 p-6 transition-all`}
+              className={`nn-card-system nn-card-system-pad nn-card-system--interactive ${styles.border}`}
             >
               <span
-                className={`${styles.iconBg} flex h-11 w-11 items-center justify-center rounded-xl`}
+                className={`nn-card-system__icon ${styles.iconBg}`}
                 aria-hidden
               >
                 <Icon className={`h-5 w-5 ${styles.icon}`} strokeWidth={1.75} />
               </span>
-              <div className="flex-1">
-                <p className="text-sm font-semibold text-[var(--theme-heading-text)]">{formatTitleCase(card.title)}</p>
-                <p className="mt-1.5 text-sm leading-relaxed text-[var(--theme-muted-text)]">
-                  {formatSentenceCase(card.description)}
-                </p>
-              </div>
+              <p className="nn-card-system__eyebrow">{formatTitleCase("Study Mode")}</p>
+              <p className="nn-card-system__title">{formatTitleCase(card.title)}</p>
+              <p className="nn-card-system__description">{formatSentenceCase(card.description)}</p>
               <Link
                 href={card.href}
-                className={`${styles.btn} inline-flex min-h-[40px] items-center justify-center rounded-full px-5 py-2 text-sm font-semibold transition-opacity`}
+                className={`${styles.btn} nn-card-system__cta inline-flex min-h-[40px] justify-center rounded-full px-5 py-2 transition-opacity`}
               >
                 {formatTitleCase(card.cta)}
               </Link>
@@ -103,7 +107,7 @@ export function defaultStudyModeCards(opts: {
       icon: Timer,
       title: "Quick Practice",
       description: `Short focused sets scoped to ${opts.pathwayShortName}. Pick up where you left off anytime.`,
-      cta: "Start now",
+      cta: PRIMARY_CTA,
       href: opts.quickHref,
       accent: "success",
     },
@@ -111,7 +115,7 @@ export function defaultStudyModeCards(opts: {
       icon: ClipboardList,
       title: "Full Session",
       description: "Work through a full timed block of board-style vignettes with rationales after each item.",
-      cta: "Begin session",
+      cta: SECONDARY_CTA,
       href: opts.fullHref,
       accent: "brand",
     },
@@ -119,7 +123,7 @@ export function defaultStudyModeCards(opts: {
       icon: LineChart,
       title: "Adaptive CAT",
       description: "Computer-adaptive test that adjusts difficulty in real time—closest to exam day conditions.",
-      cta: "Run CAT",
+      cta: PRIMARY_CTA,
       href: opts.catHref,
       accent: "purple",
     },
@@ -138,7 +142,7 @@ export function defaultLessonModeCards(opts: {
       icon: ClipboardList,
       title: "Study Lessons",
       description: `Structured clinical lessons scoped to ${opts.pathwayShortName}, grouped by body system.`,
-      cta: "Browse lessons",
+      cta: BROWSE_LESSONS_CTA,
       href: opts.lessonsHref,
       accent: "brand",
     },
@@ -146,7 +150,7 @@ export function defaultLessonModeCards(opts: {
       icon: Timer,
       title: "Practice Questions",
       description: "Board-style vignettes and rationales scoped to this exam after each lesson topic.",
-      cta: "Start questions",
+      cta: BROWSE_QUESTIONS_CTA,
       href: opts.questionsHref,
       accent: "success",
     },
@@ -154,7 +158,7 @@ export function defaultLessonModeCards(opts: {
       icon: LineChart,
       title: "Adaptive CAT",
       description: "Computer-adaptive exam simulation that adjusts difficulty in real time.",
-      cta: "Run CAT",
+      cta: TERTIARY_CTA,
       href: opts.catHref,
       accent: "purple",
     },

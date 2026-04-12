@@ -5,6 +5,7 @@ import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { checkRateLimit } from "@/lib/http/rate-limit-in-memory";
 import { hashTrialDeviceFingerprint } from "@/lib/trial/trial-fingerprint";
 import { TRIAL_DURATION_MS } from "@/lib/trial/trial-constants";
+import { captureServerEvent, analyticsDistinctId } from "@/lib/observability/posthog-server";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { expireStaleTrialForUser } from "@/lib/trial/expire-stale-trial";
 
@@ -72,6 +73,8 @@ export async function attemptStartTrial(args: {
     select: { userId: true },
   });
   if (existingBinding && existingBinding.userId !== userId) {
+    captureServerEvent(analyticsDistinctId(userId), "trial_blocked", { reason: "device_already_trialed" }).catch(() => {});
+    captureServerEvent(analyticsDistinctId(userId), "duplicate_account_detected", { signal: "device_fingerprint" }).catch(() => {});
     return {
       ok: false,
       code: "device_already_trialed",
@@ -84,6 +87,7 @@ export async function attemptStartTrial(args: {
     where: { id: userId },
     select: {
       email: true,
+      emailVerified: true,
       trialStatus: true,
       trialUsedAt: true,
       trialEndsAt: true,
@@ -95,7 +99,18 @@ export async function attemptStartTrial(args: {
     return { ok: false, code: "user_not_found", message: "Account not found.", status: 404 };
   }
 
+  if (!user.emailVerified) {
+    captureServerEvent(analyticsDistinctId(userId), "trial_blocked", { reason: "email_not_verified" }).catch(() => {});
+    return {
+      ok: false,
+      code: "email_not_verified",
+      message: "Verify your email before starting a free trial. Check your inbox for a verification link.",
+      status: 403,
+    };
+  }
+
   if (user._count.subscriptions > 0) {
+    captureServerEvent(analyticsDistinctId(userId), "trial_blocked", { reason: "has_subscription_history" }).catch(() => {});
     return {
       ok: false,
       code: "has_subscription_history",
@@ -105,6 +120,7 @@ export async function attemptStartTrial(args: {
   }
 
   if (user.trialUsedAt != null || user.trialStatus === TrialStatus.EXHAUSTED) {
+    captureServerEvent(analyticsDistinctId(userId), "trial_blocked", { reason: "trial_already_used" }).catch(() => {});
     return { ok: false, code: "trial_already_used", message: "You already used your free trial.", status: 403 };
   }
 
@@ -171,5 +187,6 @@ export async function attemptStartTrial(args: {
   }
 
   safeServerLog("trial", "trial_started", { userIdPrefix: userId.slice(0, 8) });
+  captureServerEvent(analyticsDistinctId(userId), "trial_started", {}).catch(() => {});
   return { ok: true, trialEndsAt: ends.toISOString() };
 }

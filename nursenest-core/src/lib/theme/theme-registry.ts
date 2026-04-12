@@ -100,7 +100,7 @@ export const THEME_OPTIONS: ThemeOption[] = [
   { id: "graphite-blue", label: "Graphite Blue", color: "#4A607A", group: "light", logoVariant: "neutral", named: true },
   { id: "north-sea", label: "North Sea", color: "#2E5D7B", group: "light", logoVariant: "neutral", named: true },
   { id: "slate", label: "Slate", color: "#64748b", group: "light", logoVariant: "neutral" },
-  { id: "midnight", label: "Midnight", color: "#1e293b", group: "light", logoVariant: "neutral" },
+  { id: "midnight", label: "Midnight", color: "#1e293b", group: "dark", logoVariant: "dark" },
   { id: "neutral-sand", label: "Sand", color: "#a08060", group: "light", logoVariant: "neutral" },
   { id: "neutral-slate", label: "Cool Slate", color: "#708090", group: "light", logoVariant: "neutral" },
 

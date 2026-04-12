@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowRight, Stethoscope, HeartPulse, Award, Dna, BookOpen } from "lucide-react";
+import { ArrowRight, Stethoscope, HeartPulse, Award, Dna } from "lucide-react";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { marketingExamHubPath } from "@/lib/marketing/country-exam-offerings";
@@ -9,6 +9,7 @@ import { HomeConversionCtaStrip } from "@/components/marketing/home-conversion-c
 import { MarketingTrackedLink } from "@/components/marketing/marketing-tracked-link";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 import { formatEyebrow, formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
+import { getPathwayHubCta } from "@/lib/copy/cta-copy";
 import type { LucideIcon } from "lucide-react";
 
 type ExamCard = {
@@ -17,7 +18,7 @@ type ExamCard = {
   iconColor: string;
   titleKey: string;
   descKey: string;
-  ctaKey: string;
+  pathwayLabel: string;
   /** i18n key for the exam-label chip (US/CA where terminology differs). */
   metaKey: string;
   href: string;
@@ -25,7 +26,7 @@ type ExamCard = {
 };
 
 /**
- * Prominent exam selection: five rich pathway cards — RN, LPN/RPN, NP, Allied, New Grad.
+ * Prominent exam selection: four rich pathway cards — RN, LPN/RPN, NP, Allied.
  * Each shows icon, exam name, description, region-aware exam label, and a direct hub CTA.
  */
 export function HomeExamSelectionSection() {
@@ -40,7 +41,7 @@ export function HomeExamSelectionSection() {
       iconColor: "text-[var(--semantic-info)]",
       titleKey: "home.conversion.examCard.rnTitle",
       descKey: "home.conversion.examCard.rnDesc",
-      ctaKey: "home.conversion.examCard.ctaRn",
+      pathwayLabel: "RN",
       metaKey: "home.conversion.examCard.metaRn",
       href: loc(marketingExamHubPath(region, "rn")),
       featured: true,
@@ -51,7 +52,7 @@ export function HomeExamSelectionSection() {
       iconColor: "text-[var(--semantic-warning)]",
       titleKey: region === "US" ? "home.conversion.examCard.pnTitleUS" : "home.conversion.examCard.pnTitleCA",
       descKey: region === "US" ? "home.conversion.examCard.pnDescUS" : "home.conversion.examCard.pnDescCA",
-      ctaKey: "home.conversion.examCard.ctaPn",
+      pathwayLabel: "PN",
       metaKey: region === "US" ? "home.conversion.examCard.metaPnUS" : "home.conversion.examCard.metaPnCA",
       href: loc(marketingExamHubPath(region, "pn")),
     },
@@ -61,7 +62,7 @@ export function HomeExamSelectionSection() {
       iconColor: "text-[var(--semantic-brand)]",
       titleKey: region === "US" ? "home.conversion.examCard.npTitleUS" : "home.conversion.examCard.npTitleCA",
       descKey: region === "US" ? "home.conversion.examCard.npDescUS" : "home.conversion.examCard.npDescCA",
-      ctaKey: "home.conversion.examCard.ctaNp",
+      pathwayLabel: "NP",
       metaKey: region === "US" ? "home.conversion.examCard.metaNpUS" : "home.conversion.examCard.metaNpCA",
       href: loc(marketingExamHubPath(region, "np")),
     },
@@ -71,33 +72,23 @@ export function HomeExamSelectionSection() {
       iconColor: "text-[var(--semantic-success)]",
       titleKey: "home.conversion.examCard.alliedTitle",
       descKey: "home.conversion.examCard.alliedDesc",
-      ctaKey: "home.conversion.examCard.ctaAllied",
+      pathwayLabel: "Allied Health",
       metaKey: "home.conversion.examCard.metaAllied",
       href: loc(marketingExamHubPath(region, "allied")),
-    },
-    {
-      id: "new-grad",
-      icon: BookOpen,
-      iconColor: "text-[var(--semantic-chart-2)]",
-      titleKey: "home.conversion.examCard.newGradTitle",
-      descKey: "home.conversion.examCard.newGradDesc",
-      ctaKey: "home.conversion.examCard.ctaNewGrad",
-      metaKey: "home.conversion.examCard.metaPreNursing",
-      href: loc("/pre-nursing"),
     },
   ];
 
   return (
     <section
       id="home-exam-paths"
-      className="scroll-mt-20 border-b border-[var(--trust-surface-border)] bg-[var(--trust-surface)] py-12 md:py-16"
+      className="nn-section-block scroll-mt-20 border-b border-[var(--trust-surface-border)] bg-[var(--trust-surface)]"
       aria-labelledby="home-exam-selection-heading"
       data-testid="section-exam-selection"
     >
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-        <header className="mx-auto mb-8 max-w-2xl text-center md:mb-10">
+      <div className="nn-section-shell">
+        <header className="mx-auto mb-12 max-w-2xl text-center">
           <h2 id="home-exam-selection-heading" className="nn-marketing-h2 text-balance">
-            {formatTitleCase(t("home.conversion.examSelectionTitle"), locale)}
+            {formatTitleCase("Choose Your Exam Hub", locale)}
           </h2>
           <p className="nn-marketing-body mx-auto mt-2 max-w-xl text-pretty text-[var(--theme-muted-text)]">
             {formatSentenceCase(t("home.conversion.examSelectionSub"), locale)}
@@ -107,7 +98,7 @@ export function HomeExamSelectionSection() {
           </p>
         </header>
 
-        <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+        <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {cards.map((c) => {
             const Icon = c.icon;
             return (
@@ -122,26 +113,26 @@ export function HomeExamSelectionSection() {
                   }}
                   data-nn-marketing-region={region}
                   data-nn-exam-card-id={c.id}
-                  className="nn-card-soft nn-student-card-lift group flex h-full min-h-[14rem] flex-col p-5 transition hover:border-[color-mix(in_srgb,var(--theme-primary)_40%,var(--border-subtle))]"
+                  className="nn-card-system nn-card-system-pad nn-card-system--interactive nn-student-card-lift group h-full min-h-[14rem]"
                 >
                   {/* Icon badge */}
                   <span
-                    className="mb-3 inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[color-mix(in_srgb,currentColor_12%,var(--theme-card-bg))] transition group-hover:scale-105"
+                    className="nn-card-system__icon transition group-hover:scale-105"
                     aria-hidden
                   >
                     <Icon className={`h-5 w-5 ${c.iconColor}`} />
                   </span>
 
                   {/* Exam label chip */}
-                  <span className="nn-marketing-caption nn-accent-pill mb-2 inline-flex w-fit items-center rounded-full px-2.5 py-0.5 font-semibold uppercase tracking-wide">
+                  <span className="nn-card-system__eyebrow">
                     {formatEyebrow(t(c.metaKey), locale)}
                   </span>
 
-                  <span className="nn-marketing-h3 text-balance leading-snug">{formatTitleCase(t(c.titleKey), locale)}</span>
-                  <span className="nn-marketing-body-sm mt-2 flex-1 text-[var(--theme-muted-text)]">{formatSentenceCase(t(c.descKey), locale)}</span>
+                  <span className="nn-card-system__title">{formatTitleCase(t(c.titleKey), locale)}</span>
+                  <span className="nn-card-system__description">{formatSentenceCase(t(c.descKey), locale)}</span>
 
-                  <span className="mt-4 inline-flex items-center text-sm font-semibold text-[var(--nn-aesthetic-accent)]">
-                    {formatTitleCase(t(c.ctaKey), locale)}
+                  <span className="nn-card-system__cta">
+                    {formatTitleCase(getPathwayHubCta(c.pathwayLabel), locale)}
                     <ArrowRight className="ml-1.5 h-4 w-4 transition group-hover:translate-x-1" aria-hidden />
                   </span>
                 </MarketingTrackedLink>
@@ -150,7 +141,7 @@ export function HomeExamSelectionSection() {
           })}
         </ul>
 
-        <div className="mx-auto mt-10 max-w-5xl border-t border-[var(--border-subtle)] pt-10">
+        <div className="mx-auto mt-12 max-w-5xl border-t border-[var(--border-subtle)] pt-10">
           <HomeConversionCtaStrip placement="after_exam_paths" />
         </div>
       </div>

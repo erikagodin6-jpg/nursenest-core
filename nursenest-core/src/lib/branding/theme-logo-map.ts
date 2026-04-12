@@ -6,7 +6,7 @@
 import { nursenestImagesSpaceObjectUrl } from "@/config/marketing-cdn.catalog";
 import { relativeLuminanceFromHex } from "@/lib/color/hex-luminance";
 import { marketingImageUsesProxy, marketingProxyFallbackEnabled, marketingProxyPathForKey } from "@/lib/marketing-resolve-image-url";
-import { getThemePaletteTokens } from "@/lib/theme/theme-palette-tokens";
+import { getThemeSurfaceContrastTokens } from "@/lib/theme/theme-palette-tokens";
 import { NURSENEST_DEFAULT_THEME, THEME_OPTIONS, type ThemeOption } from "@/lib/theme/theme-registry";
 import { normalizeThemeIdForLogo } from "@/lib/theme/theme-logo-resolve";
 
@@ -85,9 +85,16 @@ export function getThemeLogoSvgPathForThemeId(themeId?: string | null): string {
  */
 export function headerLogoModeForTheme(themeId?: string | null): HeaderLogoMode {
   const canonicalThemeId = normalizeThemeIdForLogo(themeId ?? NURSENEST_DEFAULT_THEME);
-  const palette = getThemePaletteTokens(canonicalThemeId);
-  const surface = palette?.topBarBackground ?? palette?.navBackground;
+  const semantic = getThemeSurfaceContrastTokens(canonicalThemeId);
+  const surface = semantic?.navBackground;
+  const navForeground = semantic?.navForeground;
   if (!surface) return "dark-header";
   const luminance = relativeLuminanceFromHex(surface);
-  return luminance < 0.47 ? "dark-header" : "light-header";
+  // Deterministic rule: darker/saturated header surfaces use dark-header mark assets.
+  // If nav foreground is white-ish, we keep dark-header mode to preserve contrast.
+  if (navForeground) {
+    const fgLuminance = relativeLuminanceFromHex(navForeground);
+    if (fgLuminance > 0.8) return "dark-header";
+  }
+  return luminance < 0.5 ? "dark-header" : "light-header";
 }

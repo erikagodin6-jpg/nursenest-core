@@ -1,3 +1,5 @@
+import { relativeLuminanceFromHex } from "@/lib/color/hex-luminance";
+
 export type ThemePaletteTokens = {
   primary: string;
   primaryDeep: string;
@@ -2616,4 +2618,393 @@ export const THEME_PALETTE_TOKENS: Record<string, ThemePaletteTokens> = {
 
 export function getThemePaletteTokens(themeId: string): ThemePaletteTokens | null {
   return THEME_PALETTE_TOKENS[themeId] ?? null;
+}
+
+export type ThemeSurfaceContrastTokens = {
+  background: string;
+  backgroundSubtle: string;
+  surface: string;
+  surfaceStrong: string;
+  border: string;
+  borderStrong: string;
+  text: string;
+  textMuted: string;
+  heading: string;
+  textOnBrand: string;
+  brand: string;
+  brandStrong: string;
+  navBackground: string;
+  navForeground: string;
+  navHover: string;
+  navBorder: string;
+  primaryButtonBg: string;
+  primaryButtonText: string;
+  primaryButtonHover: string;
+  secondaryButtonBg: string;
+  secondaryButtonText: string;
+  secondaryButtonBorder: string;
+  secondaryButtonHover: string;
+  pillBg: string;
+  pillText: string;
+  pillBorder: string;
+  logoOnLight: string;
+  logoOnDark: string;
+};
+
+const CANONICAL_SURFACE_TOKEN_OVERRIDES: Readonly<Record<string, ThemeSurfaceContrastTokens>> = {
+  "pastel-lavender": {
+    background: "#FCFAFF",
+    backgroundSubtle: "#F7F2FF",
+    surface: "#F1EAFE",
+    surfaceStrong: "#E6DBFB",
+    border: "#D9C9F4",
+    borderStrong: "#BFA7EA",
+    text: "#43385B",
+    textMuted: "#675A82",
+    heading: "#2F2547",
+    textOnBrand: "#FFFFFF",
+    brand: "#6F4CCF",
+    brandStrong: "#5C3DB4",
+    navBackground: "#6F4CCF",
+    navForeground: "#FFFFFF",
+    navHover: "#F3ECFF",
+    navBorder: "#5C3DB4",
+    primaryButtonBg: "#6F4CCF",
+    primaryButtonText: "#FFFFFF",
+    primaryButtonHover: "#5C3DB4",
+    secondaryButtonBg: "#FFFFFF",
+    secondaryButtonText: "#43385B",
+    secondaryButtonBorder: "#D9C9F4",
+    secondaryButtonHover: "#F7F2FF",
+    pillBg: "#EFE7FF",
+    pillText: "#4A3B6E",
+    pillBorder: "#D8C8F5",
+    logoOnLight: "#2F2547",
+    logoOnDark: "#FFFFFF",
+  },
+  "pastel-lilac": {
+    background: "#FDFBFF",
+    backgroundSubtle: "#F8F3FF",
+    surface: "#F3ECFC",
+    surfaceStrong: "#E8DDF8",
+    border: "#DCCDF0",
+    borderStrong: "#C3AFE3",
+    text: "#453B59",
+    textMuted: "#6D6283",
+    heading: "#302742",
+    textOnBrand: "#FFFFFF",
+    brand: "#7B5AC8",
+    brandStrong: "#6848B0",
+    navBackground: "#7B5AC8",
+    navForeground: "#FFFFFF",
+    navHover: "#F4EEFF",
+    navBorder: "#6848B0",
+    primaryButtonBg: "#7B5AC8",
+    primaryButtonText: "#FFFFFF",
+    primaryButtonHover: "#6848B0",
+    secondaryButtonBg: "#FFFFFF",
+    secondaryButtonText: "#453B59",
+    secondaryButtonBorder: "#DCCDF0",
+    secondaryButtonHover: "#F8F3FF",
+    pillBg: "#F1EAFE",
+    pillText: "#4D4168",
+    pillBorder: "#DCCDF0",
+    logoOnLight: "#302742",
+    logoOnDark: "#FFFFFF",
+  },
+  blush: {
+    background: "#FFF9FB",
+    backgroundSubtle: "#FFF2F6",
+    surface: "#FDE8EF",
+    surfaceStrong: "#F8D7E2",
+    border: "#EFC4D2",
+    borderStrong: "#DDA5B9",
+    text: "#5A3F4A",
+    textMuted: "#7B5B68",
+    heading: "#402934",
+    textOnBrand: "#FFFFFF",
+    brand: "#D96C93",
+    brandStrong: "#BF557C",
+    navBackground: "#D96C93",
+    navForeground: "#FFFFFF",
+    navHover: "#FFF0F5",
+    navBorder: "#BF557C",
+    primaryButtonBg: "#D96C93",
+    primaryButtonText: "#FFFFFF",
+    primaryButtonHover: "#BF557C",
+    secondaryButtonBg: "#FFFFFF",
+    secondaryButtonText: "#5A3F4A",
+    secondaryButtonBorder: "#EFC4D2",
+    secondaryButtonHover: "#FFF2F6",
+    pillBg: "#FDEAF0",
+    pillText: "#6B4352",
+    pillBorder: "#EDC8D6",
+    logoOnLight: "#402934",
+    logoOnDark: "#FFFFFF",
+  },
+  mint: {
+    background: "#F7FCFC",
+    backgroundSubtle: "#EEF8F8",
+    surface: "#E4F3F3",
+    surfaceStrong: "#D4EBEB",
+    border: "#B7DCDD",
+    borderStrong: "#8FC4C7",
+    text: "#29484A",
+    textMuted: "#4D6D6F",
+    heading: "#183638",
+    textOnBrand: "#FFFFFF",
+    brand: "#2F8F9D",
+    brandStrong: "#267887",
+    navBackground: "#2F8F9D",
+    navForeground: "#FFFFFF",
+    navHover: "#EAF8F9",
+    navBorder: "#267887",
+    primaryButtonBg: "#2F8F9D",
+    primaryButtonText: "#FFFFFF",
+    primaryButtonHover: "#267887",
+    secondaryButtonBg: "#FFFFFF",
+    secondaryButtonText: "#29484A",
+    secondaryButtonBorder: "#B7DCDD",
+    secondaryButtonHover: "#EEF8F8",
+    pillBg: "#E7F5F5",
+    pillText: "#2D5A5D",
+    pillBorder: "#B7DCDD",
+    logoOnLight: "#183638",
+    logoOnDark: "#FFFFFF",
+  },
+  ocean: {
+    background: "#F7FBFF",
+    backgroundSubtle: "#EEF6FD",
+    surface: "#E4F0FB",
+    surfaceStrong: "#D5E7F8",
+    border: "#B8D1EA",
+    borderStrong: "#8EB6DD",
+    text: "#25435B",
+    textMuted: "#4D6A82",
+    heading: "#173147",
+    textOnBrand: "#FFFFFF",
+    brand: "#2D7FD3",
+    brandStrong: "#236BBC",
+    navBackground: "#2D7FD3",
+    navForeground: "#FFFFFF",
+    navHover: "#EEF6FF",
+    navBorder: "#236BBC",
+    primaryButtonBg: "#2D7FD3",
+    primaryButtonText: "#FFFFFF",
+    primaryButtonHover: "#236BBC",
+    secondaryButtonBg: "#FFFFFF",
+    secondaryButtonText: "#25435B",
+    secondaryButtonBorder: "#B8D1EA",
+    secondaryButtonHover: "#EEF6FD",
+    pillBg: "#E8F2FD",
+    pillText: "#31516B",
+    pillBorder: "#BCD4EC",
+    logoOnLight: "#173147",
+    logoOnDark: "#FFFFFF",
+  },
+  forest: {
+    background: "#F7FCF9",
+    backgroundSubtle: "#EEF8F1",
+    surface: "#E1F0E6",
+    surfaceStrong: "#D0E6D8",
+    border: "#B3D2BE",
+    borderStrong: "#88B299",
+    text: "#284538",
+    textMuted: "#4B6B59",
+    heading: "#183124",
+    textOnBrand: "#FFFFFF",
+    brand: "#2F8A57",
+    brandStrong: "#256F46",
+    navBackground: "#2F8A57",
+    navForeground: "#FFFFFF",
+    navHover: "#EAF7EE",
+    navBorder: "#256F46",
+    primaryButtonBg: "#2F8A57",
+    primaryButtonText: "#FFFFFF",
+    primaryButtonHover: "#256F46",
+    secondaryButtonBg: "#FFFFFF",
+    secondaryButtonText: "#284538",
+    secondaryButtonBorder: "#B3D2BE",
+    secondaryButtonHover: "#EEF8F1",
+    pillBg: "#E7F4EB",
+    pillText: "#335743",
+    pillBorder: "#B7D6C1",
+    logoOnLight: "#183124",
+    logoOnDark: "#FFFFFF",
+  },
+  slate: {
+    background: "#F8FAFC",
+    backgroundSubtle: "#F1F5F9",
+    surface: "#E8EEF5",
+    surfaceStrong: "#D9E2EC",
+    border: "#C4D0DD",
+    borderStrong: "#9FB0C2",
+    text: "#334155",
+    textMuted: "#58677A",
+    heading: "#1F2A37",
+    textOnBrand: "#FFFFFF",
+    brand: "#556B8A",
+    brandStrong: "#465A75",
+    navBackground: "#556B8A",
+    navForeground: "#FFFFFF",
+    navHover: "#EFF4FA",
+    navBorder: "#465A75",
+    primaryButtonBg: "#556B8A",
+    primaryButtonText: "#FFFFFF",
+    primaryButtonHover: "#465A75",
+    secondaryButtonBg: "#FFFFFF",
+    secondaryButtonText: "#334155",
+    secondaryButtonBorder: "#C4D0DD",
+    secondaryButtonHover: "#F1F5F9",
+    pillBg: "#EDF2F7",
+    pillText: "#405062",
+    pillBorder: "#C8D3DF",
+    logoOnLight: "#1F2A37",
+    logoOnDark: "#FFFFFF",
+  },
+  "neutral-sand": {
+    background: "#FFFCF7",
+    backgroundSubtle: "#FBF5EA",
+    surface: "#F4E9D7",
+    surfaceStrong: "#EBDDC6",
+    border: "#DCC9A9",
+    borderStrong: "#C5AD84",
+    text: "#5A4834",
+    textMuted: "#7A6650",
+    heading: "#3F3020",
+    textOnBrand: "#FFFFFF",
+    brand: "#B88746",
+    brandStrong: "#9F7238",
+    navBackground: "#B88746",
+    navForeground: "#FFFFFF",
+    navHover: "#FFF6E8",
+    navBorder: "#9F7238",
+    primaryButtonBg: "#B88746",
+    primaryButtonText: "#FFFFFF",
+    primaryButtonHover: "#9F7238",
+    secondaryButtonBg: "#FFFFFF",
+    secondaryButtonText: "#5A4834",
+    secondaryButtonBorder: "#DCC9A9",
+    secondaryButtonHover: "#FBF5EA",
+    pillBg: "#F7EDDF",
+    pillText: "#6B533B",
+    pillBorder: "#DECDAF",
+    logoOnLight: "#3F3020",
+    logoOnDark: "#FFFFFF",
+  },
+  "dark-clinical": {
+    background: "#0F172A",
+    backgroundSubtle: "#162033",
+    surface: "#1E293B",
+    surfaceStrong: "#334155",
+    border: "#475569",
+    borderStrong: "#64748B",
+    text: "#E2E8F0",
+    textMuted: "#B8C4D3",
+    heading: "#F8FAFC",
+    textOnBrand: "#F8FAFC",
+    brand: "#06B6D4",
+    brandStrong: "#0891B2",
+    navBackground: "#0B2030",
+    navForeground: "#F8FAFC",
+    navHover: "#163249",
+    navBorder: "#1E3A56",
+    primaryButtonBg: "#06B6D4",
+    primaryButtonText: "#082F39",
+    primaryButtonHover: "#0891B2",
+    secondaryButtonBg: "transparent",
+    secondaryButtonText: "#E2E8F0",
+    secondaryButtonBorder: "#475569",
+    secondaryButtonHover: "#162033",
+    pillBg: "#163249",
+    pillText: "#D7F7FF",
+    pillBorder: "#24506D",
+    logoOnLight: "#0F172A",
+    logoOnDark: "#FFFFFF",
+  },
+  midnight: {
+    background: "#0B1220",
+    backgroundSubtle: "#121B2B",
+    surface: "#182235",
+    surfaceStrong: "#22314A",
+    border: "#32445D",
+    borderStrong: "#4A607E",
+    text: "#E5EDF7",
+    textMuted: "#B7C4D6",
+    heading: "#FFFFFF",
+    textOnBrand: "#FFFFFF",
+    brand: "#4C6FFF",
+    brandStrong: "#3B5AE0",
+    navBackground: "#101A2B",
+    navForeground: "#FFFFFF",
+    navHover: "#18253D",
+    navBorder: "#22314A",
+    primaryButtonBg: "#4C6FFF",
+    primaryButtonText: "#FFFFFF",
+    primaryButtonHover: "#3B5AE0",
+    secondaryButtonBg: "transparent",
+    secondaryButtonText: "#E5EDF7",
+    secondaryButtonBorder: "#32445D",
+    secondaryButtonHover: "#121B2B",
+    pillBg: "#1A2740",
+    pillText: "#DDE7FF",
+    pillBorder: "#314A76",
+    logoOnLight: "#0B1220",
+    logoOnDark: "#FFFFFF",
+  },
+};
+
+function normalizedSurfaceKey(themeId: string): string {
+  if (themeId === "sand") return "neutral-sand";
+  return themeId;
+}
+
+function deriveSurfaceTokensFromPalette(palette: ThemePaletteTokens): ThemeSurfaceContrastTokens {
+  const navBackground =
+    palette.navBackground.trim().toLowerCase() === "#ffffff" ? palette.primaryDeep : palette.navBackground;
+  const navForeground = relativeLuminanceFromHex(navBackground) < 0.45 ? "#FFFFFF" : palette.heading;
+  const secondaryButtonBg =
+    navBackground === palette.primaryDeep && relativeLuminanceFromHex(palette.background) < 0.45
+      ? "transparent"
+      : palette.buttonSecondary;
+
+  return {
+    background: palette.background,
+    backgroundSubtle: palette.surface,
+    surface: palette.surfaceAlt,
+    surfaceStrong: palette.surfaceStrong,
+    border: palette.border,
+    borderStrong: palette.borderStrong,
+    text: palette.text,
+    textMuted: palette.textMuted,
+    heading: palette.heading,
+    textOnBrand: navForeground,
+    brand: palette.primary,
+    brandStrong: palette.primaryDeep,
+    navBackground,
+    navForeground,
+    navHover: palette.navHover,
+    navBorder: palette.navBorder,
+    primaryButtonBg: palette.buttonPrimary,
+    primaryButtonText: palette.buttonPrimaryText,
+    primaryButtonHover: palette.primaryDeep,
+    secondaryButtonBg,
+    secondaryButtonText: palette.buttonSecondaryText,
+    secondaryButtonBorder: palette.border,
+    secondaryButtonHover: palette.navHover,
+    pillBg: palette.badge,
+    pillText: palette.badgeText,
+    pillBorder: palette.border,
+    logoOnLight: palette.logoOnLight,
+    logoOnDark: palette.logoOnDark,
+  };
+}
+
+export function getThemeSurfaceContrastTokens(themeId: string): ThemeSurfaceContrastTokens | null {
+  const normalizedThemeId = normalizedSurfaceKey(themeId);
+  const override = CANONICAL_SURFACE_TOKEN_OVERRIDES[normalizedThemeId];
+  if (override) return override;
+  const palette = getThemePaletteTokens(normalizedThemeId);
+  if (!palette) return null;
+  return deriveSurfaceTokensFromPalette(palette);
 }

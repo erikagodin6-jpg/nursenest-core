@@ -53,6 +53,12 @@ import { ExamCountdownHero } from "@/components/study/exam-countdown-hero";
 import { WeeklyPacingPanel } from "@/components/study/weekly-pacing-panel";
 import { RecoveryPlanCard } from "@/components/study/recovery-plan-card";
 import { buildRecoveryPlan } from "@/lib/learner/recovery-planner";
+import {
+  BROWSE_LESSONS_CTA,
+  OPEN_STUDY_HUB_CTA,
+  PRIMARY_CTA,
+  SIGN_IN_CTA,
+} from "@/lib/copy/cta-copy";
 
 // ── Lazy client ───────────────────────────────────────────────────────────────
 import { ExamPlanLazyClient } from "./exam-plan-lazy-client";
@@ -96,8 +102,8 @@ export default async function ExamPlanPage() {
         <PremiumEmptyState
           headline="My Exam Plan"
           body="Sign in to access your personalized exam readiness dashboard."
-          primaryCta={{ label: "Sign in", href: loginWithCallback("/app/exam-plan"), variant: "primary" }}
-          secondaryCtas={[{ label: "Browse lessons", href: "/lessons", variant: "secondary" }]}
+          primaryCta={{ label: SIGN_IN_CTA, href: loginWithCallback("/app/exam-plan"), variant: "primary" }}
+          secondaryCtas={[{ label: BROWSE_LESSONS_CTA, href: "/lessons", variant: "secondary" }]}
           visualLayout="stack"
           ctaLayout="stack"
         />
@@ -113,8 +119,8 @@ export default async function ExamPlanPage() {
         <PremiumEmptyState
           headline="My Exam Plan"
           body="We couldn't verify your access. Please try again."
-          primaryCta={{ label: "Open study hub", href: "/app", variant: "primary" }}
-          secondaryCtas={[{ label: "Browse lessons", href: "/lessons", variant: "secondary" }]}
+          primaryCta={{ label: OPEN_STUDY_HUB_CTA, href: "/app", variant: "primary" }}
+          secondaryCtas={[{ label: BROWSE_LESSONS_CTA, href: "/lessons", variant: "secondary" }]}
           visualLayout="stack"
           ctaLayout="stack"
         />
@@ -168,9 +174,9 @@ export default async function ExamPlanPage() {
         <PremiumEmptyState
           headline="My Exam Plan"
           body="Complete a few practice sessions or your baseline assessment to activate your personalized exam plan."
-          primaryCta={{ label: "Start practice", href: "/app/questions", variant: "primary" }}
+          primaryCta={{ label: PRIMARY_CTA, href: "/app/questions", variant: "primary" }}
           secondaryCtas={[
-            { label: "Browse lessons", href: "/app/lessons", variant: "secondary" },
+            { label: BROWSE_LESSONS_CTA, href: "/app/lessons", variant: "secondary" },
             { label: "Baseline assessment", href: "/app/baseline-assessment", variant: "secondary" },
           ]}
           visualLayout="stack"

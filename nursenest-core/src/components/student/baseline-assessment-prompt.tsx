@@ -22,7 +22,7 @@ export function BaselineAssessmentPrompt({ show }: { show: boolean }) {
     }
   }, [router]);
 
-  if (!show || dismissed || pathname === "/app/baseline-assessment") {
+  if (!show || dismissed || pathname === "/app/quick-start") {
     return null;
   }
 
@@ -32,18 +32,18 @@ export function BaselineAssessmentPrompt({ show }: { show: boolean }) {
       aria-labelledby="baseline-prompt-heading"
     >
       <h2 id="baseline-prompt-heading" className="text-lg font-semibold text-[var(--theme-heading-text)]">
-        Find your starting point
+        Find Your Starting Point
       </h2>
       <p className="mt-2 max-w-2xl text-sm leading-relaxed text-[var(--theme-body-text)]">
-        Take a short baseline quiz (about 10 questions). It helps personalize your study plan and weak-area signals. No pressure, and you
+        Take a short assessment (about 10 questions) to personalize your study plan and identify your weak areas. No pressure, and you
         can skip anytime.
       </p>
       <div className="mt-4 flex flex-wrap gap-3">
         <Link
-          href="/app/baseline-assessment"
+          href="/app/quick-start"
           className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground hover:brightness-110"
         >
-          Take quick baseline (recommended)
+          Take Quick Assessment
         </Link>
         <button
           type="button"

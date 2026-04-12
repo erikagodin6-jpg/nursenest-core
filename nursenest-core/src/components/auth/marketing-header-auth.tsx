@@ -9,6 +9,7 @@ import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { mapLegacyMarketingHref } from "@/lib/legacy-marketing-routes";
 import { isStaffRole } from "@/lib/auth/staff-roles";
 import { formatTitleCase } from "@/lib/format/text-case";
+import { PRIMARY_CTA } from "@/lib/copy/cta-copy";
 
 const SIGN_IN_CLASS =
   "nn-marketing-body-sm inline-flex items-center rounded-lg px-3 py-2 font-medium tracking-normal text-[var(--nav-link)] transition-colors duration-150 hover:bg-[var(--nav-hover)] hover:text-[var(--nav-link-hover)]";
@@ -61,7 +62,7 @@ export function MarketingHeaderAuthDesktop() {
           {formatTitleCase(t("nav.logIn"), locale)}
         </Link>
         <Link href={signupToApp} className={GET_STARTED_CLASS}>
-          {formatTitleCase(t("nav.getStarted"), locale)}
+          {formatTitleCase(PRIMARY_CTA, locale)}
         </Link>
       </div>
     );
@@ -152,7 +153,7 @@ export function MarketingHeaderAuthMobile({ onNavigate }: { onNavigate: () => vo
           {formatTitleCase(t("nav.logIn"), locale)}
         </Link>
         <Link href={signupToApp} className={`${GET_STARTED_CLASS} flex-1`} onClick={onNavigate}>
-          {formatTitleCase(t("nav.getStarted"), locale)}
+          {formatTitleCase(PRIMARY_CTA, locale)}
         </Link>
       </div>
     );

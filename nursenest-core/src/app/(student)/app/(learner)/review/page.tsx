@@ -18,6 +18,7 @@ import { MasteredRecentlySection } from "@/components/study/mastered-recently-se
 import { ReviewQueueClient } from "@/app/(student)/app/(learner)/review/review-queue-client";
 import { ContextualPaywallCard } from "@/components/study/premium-gate";
 import type { UnifiedReviewData } from "@/lib/study/unified-review-types";
+import { BROWSE_LESSONS_CTA, PRIMARY_CTA } from "@/lib/copy/cta-copy";
 
 export const dynamic = "force-dynamic";
 
@@ -168,7 +169,7 @@ export default async function ReviewQueuePage() {
                 color: "var(--theme-primary-foreground, #fff)",
               }}
             >
-              Start a practice session
+              {PRIMARY_CTA}
             </Link>
             <Link
               href="/app/flashcards"
@@ -190,7 +191,7 @@ export default async function ReviewQueuePage() {
                 color: "var(--theme-text, var(--foreground))",
               }}
             >
-              Browse lessons
+              {BROWSE_LESSONS_CTA}
             </Link>
           </div>
         </div>

@@ -29,7 +29,7 @@ export function OnboardingPageClient({ userId }: { userId: string }) {
 
       <TrialOnboardingFlow
         userId={userId}
-        onComplete={() => router.push("/pricing")}
+        onComplete={() => router.push("/app/quick-start")}
       />
     </main>
   );

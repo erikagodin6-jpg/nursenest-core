@@ -1,123 +1,69 @@
 "use client";
 
-import { Check, Shield, Users, BookOpen, Brain } from "lucide-react";
-import { useMarketingI18n } from "@/lib/marketing-i18n";
+import { Brain, Crosshair, Scale, ShieldCheck } from "lucide-react";
 import { formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
-
-type Props = {
-  questionCount: number;
-};
-
-function formatQ(n: number, locale: string): string {
-  if (n <= 0) return "";
-  return n.toLocaleString(locale.replace(/_/g, "-"));
-}
-
-const STATS = [
-  {
-    icon: Brain,
-    iconColor: "text-[var(--semantic-info)]",
-    number: "3,500+",
-    label: "Practice questions",
-    sub: "NGN-style included",
-  },
-  {
-    icon: BookOpen,
-    iconColor: "text-[var(--semantic-brand)]",
-    number: "150+",
-    label: "Guided lessons",
-    sub: "Across all nursing tiers",
-  },
-  {
-    icon: Users,
-    iconColor: "text-[var(--semantic-success)]",
-    number: "12+",
-    label: "Exam pathways",
-    sub: "RN, LPN/RPN, NP & Allied",
-  },
-] as const;
+import { useMarketingI18n } from "@/lib/marketing-i18n";
 
 /**
- * Trust band: stat grid, scope-aligned proof line, vs-generic differentiators.
+ * Differentiation section: concise comparison-style points for fast scanning.
  */
-export function HomeTrustProofSection({ questionCount }: Props) {
-  const { t, locale } = useMarketingI18n();
-  const q = formatQ(questionCount, locale);
-
-  const compareKeys = ["one", "two", "three"] as const;
+export function HomeTrustProofSection() {
+  const { locale } = useMarketingI18n();
+  const points = [
+    {
+      icon: Brain,
+      title: "Not Generic Question Banks",
+      body: "Built for nursing exam decision-making, not random mixed-discipline trivia.",
+    },
+    {
+      icon: ShieldCheck,
+      title: "Built For Your Exact License",
+      body: "RN, PN or RPN, NP, and allied tracks stay scoped so context does not drift.",
+    },
+    {
+      icon: Scale,
+      title: "Readiness Tracked Over Time",
+      body: "Session trends and weak-area signals show what changed and what needs work next.",
+    },
+    {
+      icon: Crosshair,
+      title: "Adapts To Your Weak Areas",
+      body: "Lessons, questions, and CAT flow together so remediation is targeted, not manual.",
+    },
+  ] as const;
 
   return (
     <section
-      className="nn-section-block nn-section-enter border-b border-[var(--trust-surface-border)] bg-[var(--trust-surface)]"
-      aria-labelledby="home-trust-proof-heading"
-      data-testid="section-trust-proof"
+      className="nn-section-block nn-section-enter border-b border-[var(--border-subtle)] bg-[var(--page-bg)]"
+      aria-labelledby="home-differentiation-heading"
+      data-testid="section-home-differentiation"
     >
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-        <header className="mx-auto mb-8 max-w-2xl text-center md:mb-10">
-          <h2 id="home-trust-proof-heading" className="nn-marketing-h2 text-balance">
-            {formatTitleCase(t("home.conversion.proof.title"), locale)}
+      <div className="nn-section-shell">
+        <header className="mx-auto mb-10 max-w-2xl text-center">
+          <h2 id="home-differentiation-heading" className="nn-marketing-h2 text-balance">
+            {formatTitleCase("Why NurseNest Is Different", locale)}
           </h2>
           <p className="nn-marketing-body mx-auto mt-2 max-w-xl text-pretty text-[var(--palette-text-muted)]">
-            {formatSentenceCase(t("home.conversion.proof.sub"), locale)}
+            {formatSentenceCase(
+              "A focused readiness system for your specific license, not a generic question archive.",
+              locale,
+            )}
           </p>
         </header>
-
-        {/* Stat grid */}
-        <ul className="mx-auto mb-10 grid max-w-4xl gap-4 sm:grid-cols-3">
-          {STATS.map((s) => {
-            const Icon = s.icon;
-            const displayNumber = s.label.toLowerCase().includes("question") && q ? q : s.number;
+        <ul className="grid gap-4 md:grid-cols-2">
+          {points.map((point) => {
+            const Icon = point.icon;
             return (
-              <li
-                key={s.label}
-                className="nn-marketing-card nn-card-interactive flex flex-col items-center rounded-2xl px-5 py-6 text-center"
-              >
-                <span
-                  className="mb-3 inline-flex h-11 w-11 items-center justify-center rounded-xl bg-[color-mix(in_srgb,currentColor_12%,var(--bg-card))]"
-                  aria-hidden
-                >
-                  <Icon className={`nn-icon-lg ${s.iconColor}`} />
+              <li key={point.title} className="nn-card-system nn-card-system-pad nn-card-system--interactive text-left">
+                <span className="nn-card-system__icon mb-2">
+                  <Icon className="nn-icon-lg text-[var(--semantic-brand)]" aria-hidden />
                 </span>
-                <span className="nn-marketing-h2 tabular-nums text-[var(--palette-heading)]">{displayNumber}</span>
-                <span className="nn-marketing-body-sm mt-1 font-semibold text-[var(--palette-text)]">{formatTitleCase(s.label, locale)}</span>
-                <span className="nn-marketing-caption mt-0.5 text-[var(--palette-text-muted)]">{formatSentenceCase(s.sub, locale)}</span>
+                <h3 className="nn-card-system__title">{formatTitleCase(point.title, locale)}</h3>
+                <p className="nn-card-system__description">{formatSentenceCase(point.body, locale)}</p>
               </li>
             );
           })}
         </ul>
-
-        {/* Honest proof line */}
-        <div className="mx-auto mb-10 max-w-3xl rounded-2xl border border-[var(--border-subtle)] bg-[var(--nn-presentation-ribbon)] px-5 py-5 shadow-[var(--elevation-rest)] sm:px-8 sm:py-6">
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between sm:gap-8">
-            <div className="shrink-0">
-              <p className="nn-marketing-h3 tabular-nums text-[var(--palette-heading)]">{q || "3,500+"}</p>
-              <p className="nn-marketing-caption mt-1 text-[var(--palette-text-muted)]">{formatSentenceCase(t("home.conversion.proof.statQuestionsLabel"), locale)}</p>
-            </div>
-            <p className="nn-marketing-body-sm max-w-md flex-1 text-pretty text-[var(--palette-text)]">
-              {formatSentenceCase(q ? t("home.conversion.proof.statLine", { count: q }) : t("home.conversion.proof.statFallback"), locale)}
-            </p>
-          </div>
-          <p className="nn-marketing-body-sm mt-4 flex items-start gap-2 border-t border-[var(--border-subtle)] pt-4 text-[var(--palette-text-muted)]">
-            <Shield className="nn-icon-md mt-0.5 shrink-0 text-[var(--palette-accent)]" aria-hidden />
-            {formatSentenceCase(t("home.conversion.proof.passRatesHonest"), locale)}
-          </p>
-        </div>
-
-        {/* Differentiators */}
-        <div className="mb-4">
-          <h3 className="nn-marketing-h3 mb-4 text-center text-[var(--palette-heading)]">{formatTitleCase(t("home.conversion.proof.compareTitle"), locale)}</h3>
-          <ul className="mx-auto grid max-w-3xl gap-3">
-            {compareKeys.map((k) => (
-              <li
-                key={k}
-                className="nn-marketing-card nn-card-interactive flex gap-3 rounded-xl px-4 py-3 text-left"
-              >
-                <Check className="nn-icon-lg mt-0.5 shrink-0 text-[var(--semantic-success)]" aria-hidden />
-                <span className="nn-marketing-body-sm text-[var(--palette-text)]">{formatSentenceCase(t(`home.conversion.proof.compare${k}`), locale)}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
       </div>
     </section>
   );

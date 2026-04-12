@@ -6,6 +6,7 @@ import { checkRateLimit } from "@/lib/http/rate-limit-in-memory";
 import { prisma } from "@/lib/db";
 import { hashPasswordResetToken } from "@/lib/password-reset-crypto";
 import { PASSWORD_RESET_TOKEN_TTL_MS } from "@/lib/auth/password-reset-constants";
+import { captureServerEvent, analyticsDistinctId } from "@/lib/observability/posthog-server";
 import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
 
 export const runtime = "nodejs";
@@ -104,6 +105,7 @@ export async function POST(req: Request) {
       tokenHashPrefix,
       ip: ip.slice(0, 64),
     });
+    captureServerEvent(analyticsDistinctId(row.userId), "password_reset_completed", {}).catch(() => {});
 
     return NextResponse.json({ ok: true, message: "Password updated. You can sign in now." });
   } catch (e) {

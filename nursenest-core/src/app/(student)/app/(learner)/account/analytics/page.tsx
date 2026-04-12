@@ -12,6 +12,12 @@ import { loadAnalyticsPagePayload } from "@/lib/study/analytics-data";
 import { AnalyticsHero } from "@/components/study/analytics-hero";
 import { AnalyticsSummaryCards } from "@/components/study/analytics-summary-cards";
 import { AnalyticsDetailClient } from "./analytics-detail-client";
+import {
+  BROWSE_LESSONS_CTA,
+  OPEN_STUDY_HUB_CTA,
+  SIGN_IN_CTA,
+  VIEW_PRICING_CTA,
+} from "@/lib/copy/cta-copy";
 
 export async function generateMetadata(): Promise<Metadata> {
   return safeGenerateMetadata(
@@ -36,11 +42,11 @@ export default async function AccountAnalyticsPage() {
           headline="Analytics"
           body="Sign in to access your performance analytics."
           primaryCta={{
-            label: "Sign in",
+            label: SIGN_IN_CTA,
             href: loginWithCallback("/app/account/analytics"),
             variant: "primary",
           }}
-          secondaryCtas={[{ label: "Browse lessons", href: "/lessons", variant: "secondary" }]}
+          secondaryCtas={[{ label: BROWSE_LESSONS_CTA, href: "/lessons", variant: "secondary" }]}
           visualLayout="stack"
           ctaLayout="stack"
         />
@@ -58,8 +64,8 @@ export default async function AccountAnalyticsPage() {
           headline="Analytics"
           body="We could not verify your subscription status. Please try again."
           tone="default"
-          primaryCta={{ label: "Open Study Hub", href: "/app", variant: "primary" }}
-          secondaryCtas={[{ label: "Browse lessons", href: "/lessons", variant: "secondary" }]}
+          primaryCta={{ label: OPEN_STUDY_HUB_CTA, href: "/app", variant: "primary" }}
+          secondaryCtas={[{ label: BROWSE_LESSONS_CTA, href: "/lessons", variant: "secondary" }]}
           visualLayout="stack"
           ctaLayout="stack"
         />
@@ -75,8 +81,8 @@ export default async function AccountAnalyticsPage() {
           headline="Analytics"
           body="Deeper analytics are available with a NurseNest subscription."
           tone="locked"
-          primaryCta={{ label: "View plans", href: "/pricing", variant: "primary" }}
-          secondaryCtas={[{ label: "Open Study Hub", href: "/app", variant: "secondary" }]}
+          primaryCta={{ label: VIEW_PRICING_CTA, href: "/pricing", variant: "primary" }}
+          secondaryCtas={[{ label: OPEN_STUDY_HUB_CTA, href: "/app", variant: "secondary" }]}
           visualLayout="stack"
           ctaLayout="stack"
         />

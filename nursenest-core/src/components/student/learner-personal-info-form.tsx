@@ -40,6 +40,9 @@ export function LearnerPersonalInfoForm({
 }) {
   const router = useRouter();
   const [name, setName] = useState(initial.name);
+  const [firstName, setFirstName] = useState(initial.firstName ?? "");
+  const [lastName, setLastName] = useState(initial.lastName ?? "");
+  const [displayName, setDisplayName] = useState(initial.displayName ?? "");
   const [country, setCountry] = useState<CountryCode>(initial.country);
   const [tier, setTier] = useState<TierCode>(initial.tier);
   const [learnerPath, setLearnerPath] = useState(initial.learnerPath ?? "");
@@ -62,6 +65,9 @@ export function LearnerPersonalInfoForm({
 
   const applyProfile = useCallback((p: PersonalProfilePayload) => {
     setName(p.name);
+    setFirstName(p.firstName ?? "");
+    setLastName(p.lastName ?? "");
+    setDisplayName(p.displayName ?? "");
     setCountry(p.country);
     setTier(p.tier);
     setLearnerPath(p.learnerPath ?? "");
@@ -138,6 +144,9 @@ export function LearnerPersonalInfoForm({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name: name.trim(),
+          firstName: firstName.trim() || null,
+          lastName: lastName.trim() || null,
+          displayName: displayName.trim() || null,
           ...(!regionTierLocked ? { country, tier } : {}),
           learnerPath: learnerPath.trim() ? learnerPath.trim() : null,
           studyGoal: studyGoal.trim() ? studyGoal.trim() : null,
@@ -173,6 +182,54 @@ export function LearnerPersonalInfoForm({
             <p className="mt-1 text-xs text-muted-foreground">{t("learner.personalPage.section.identitySub")}</p>
           </div>
           <div className="space-y-4 p-5">
+            <div className="grid gap-4 sm:grid-cols-2">
+              <div>
+                <label htmlFor="pi-first-name" className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                  First Name
+                </label>
+                <input
+                  id="pi-first-name"
+                  name="firstName"
+                  autoComplete="given-name"
+                  maxLength={100}
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
+                  className="mt-1 w-full rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-2 text-sm"
+                />
+              </div>
+              <div>
+                <label htmlFor="pi-last-name" className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                  Last Name
+                </label>
+                <input
+                  id="pi-last-name"
+                  name="lastName"
+                  autoComplete="family-name"
+                  maxLength={100}
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
+                  className="mt-1 w-full rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-2 text-sm"
+                />
+              </div>
+            </div>
+            <div>
+              <label htmlFor="pi-display-name" className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                Display Name
+              </label>
+              <input
+                id="pi-display-name"
+                name="displayName"
+                autoComplete="nickname"
+                maxLength={200}
+                placeholder={firstName.trim() || name.split(" ")[0] || ""}
+                value={displayName}
+                onChange={(e) => setDisplayName(e.target.value)}
+                className="mt-1 w-full max-w-lg rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-2 text-sm"
+              />
+              <p className="mt-1.5 text-xs text-muted-foreground">
+                How your name appears across NurseNest. Leave blank to use your first name.
+              </p>
+            </div>
             <div>
               <label htmlFor="pi-name" className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
                 {t("learner.profile.label.name")}

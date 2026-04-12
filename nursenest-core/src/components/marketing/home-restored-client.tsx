@@ -1,23 +1,19 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
-import { useMarketingI18n } from "@/lib/marketing-i18n";
-import { mapLegacyMarketingHref } from "@/lib/legacy-marketing-routes";
 import { HomeConversionHero } from "@/components/marketing/home-conversion-hero";
+import { HomeTrustStripSection } from "@/components/marketing/home-trust-strip-section";
 import { HomeExamSelectionSection } from "@/components/marketing/home-exam-selection-section";
-import { HomeProductPillarsSection } from "@/components/marketing/home-product-pillars-section";
 import { HomeHowItWorksSection } from "@/components/marketing/home-how-it-works-section";
-import { HomeFeatureDeepDivesSection } from "@/components/marketing/home-feature-deep-dives-section";
 import { HomePlatformPreviewSection } from "@/components/marketing/home-platform-preview-section";
 import { HomeTrustProofSection } from "@/components/marketing/home-trust-proof-section";
-import { HomeReviewsSection } from "@/components/marketing/home-reviews-section";
 import { HomeFinalStudyCta } from "@/components/marketing/home-final-study-cta";
 import { FunnelHomepageViewBeacon } from "@/components/marketing/funnel-analytics-beacons";
 import { useNursenestRegion } from "@/lib/region/use-nursenest-region";
 
 type HomeStatsPayload = {
   questionCount: number;
+  registeredLearners: number;
 };
 
 /**
@@ -25,7 +21,6 @@ type HomeStatsPayload = {
  * competitor comparison, how it works, trust, reviews, final CTA.
  */
 export default function HomeRestoredClient() {
-  const { t } = useMarketingI18n();
   const { region } = useNursenestRegion();
   const marketingRegion = region === "US" ? "US" : "CA";
   const [homeStats, setHomeStats] = useState<HomeStatsPayload | null>(null);
@@ -49,40 +44,29 @@ export default function HomeRestoredClient() {
   }, []);
 
   const questionCount = homeStats?.questionCount ?? 0;
+  const registeredLearners = homeStats?.registeredLearners ?? 0;
 
   return (
     <div className="font-sans md:animate-page-enter flex min-h-screen flex-col overflow-x-hidden bg-[var(--page-bg)]">
       <FunnelHomepageViewBeacon marketingRegion={marketingRegion} />
       <div className="flex-grow overflow-x-hidden">
-        {/* §1 – Conversion Hero: headline, primary CTAs, region toggle */}
+        {/* 1. HERO */}
         <HomeConversionHero />
-        {/* §2 – Pathway Selection: RN / RPN / NP / Allied cards */}
+        {/* 2. TRUST STRIP */}
+        <HomeTrustStripSection
+          questionCount={questionCount}
+          registeredLearners={registeredLearners}
+        />
+        {/* 3. PATHWAY SELECTION */}
         <HomeExamSelectionSection />
-        {/* §3 – Study Mode Entry: Lessons / Practice / CAT */}
-        <HomeProductPillarsSection />
-        {/* §4 – System Explanation: 4 steps (Learn → Practice → CAT → Improve) */}
+        {/* 4. HOW IT WORKS */}
         <HomeHowItWorksSection />
-        {/* §5 – Feature Deep Dives: Adaptive Plan / Smart Review / CAT */}
-        <HomeFeatureDeepDivesSection />
-        {/* §6 – Platform Preview: practice, CAT, results UI */}
+        {/* 5. PRODUCT PROOF */}
         <HomePlatformPreviewSection />
-        {/* §7 – Trust + social proof: differentiation + reviews */}
-        <HomeTrustProofSection questionCount={questionCount} />
-        <HomeReviewsSection />
-        {/* §8 – Final CTA */}
+        {/* 6. DIFFERENTIATION */}
+        <HomeTrustProofSection />
+        {/* 7. FINAL CTA */}
         <HomeFinalStudyCta />
-
-        <div className="mx-auto mt-2 max-w-6xl border-t border-[var(--border-subtle)] bg-[var(--section-bg)] px-4 py-8 text-center sm:px-6 lg:px-8">
-          <Link
-            href={mapLegacyMarketingHref("/languages")}
-            className="nn-marketing-body-sm inline-flex items-center gap-2 text-[var(--theme-muted-text)] transition-colors hover:text-[var(--theme-heading-text)]"
-            data-testid="link-home-languages"
-          >
-            <span aria-hidden="true">🌐</span>
-            <span>{t("pages.home.availableIn20LanguagesStudy")}</span>
-            <span aria-hidden="true">→</span>
-          </Link>
-        </div>
       </div>
     </div>
   );

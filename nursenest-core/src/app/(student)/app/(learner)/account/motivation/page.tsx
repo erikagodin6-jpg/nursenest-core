@@ -14,6 +14,12 @@ import { TopicProgressGrid } from "@/components/study/topic-progress-grid";
 import { ReadinessProgressCard } from "@/components/study/readiness-progress-card";
 import { MilestoneCard } from "@/components/study/milestone-card";
 import { loadMoreTopicsAction } from "./actions";
+import {
+  BROWSE_LESSONS_CTA,
+  OPEN_STUDY_HUB_CTA,
+  SIGN_IN_CTA,
+  VIEW_PRICING_CTA,
+} from "@/lib/copy/cta-copy";
 
 export async function generateMetadata(): Promise<Metadata> {
   return safeGenerateMetadata(
@@ -38,11 +44,11 @@ export default async function AccountMotivationPage() {
           headline="Progress & Motivation"
           body="Sign in to see your study streak, topic progress, and readiness evolution."
           primaryCta={{
-            label: "Sign in",
+            label: SIGN_IN_CTA,
             href: loginWithCallback("/app/account/motivation"),
             variant: "primary",
           }}
-          secondaryCtas={[{ label: "Browse lessons", href: "/lessons", variant: "secondary" }]}
+          secondaryCtas={[{ label: BROWSE_LESSONS_CTA, href: "/lessons", variant: "secondary" }]}
           visualLayout="stack"
           ctaLayout="stack"
         />
@@ -60,8 +66,8 @@ export default async function AccountMotivationPage() {
           headline="Progress & Motivation"
           body="We could not verify your subscription status. Please try again."
           tone="default"
-          primaryCta={{ label: "Open Study Hub", href: "/app", variant: "primary" }}
-          secondaryCtas={[{ label: "Browse lessons", href: "/lessons", variant: "secondary" }]}
+          primaryCta={{ label: OPEN_STUDY_HUB_CTA, href: "/app", variant: "primary" }}
+          secondaryCtas={[{ label: BROWSE_LESSONS_CTA, href: "/lessons", variant: "secondary" }]}
           visualLayout="stack"
           ctaLayout="stack"
         />
@@ -77,8 +83,8 @@ export default async function AccountMotivationPage() {
           headline="Progress & Motivation"
           body="Detailed progress tracking is available with a NurseNest subscription."
           tone="locked"
-          primaryCta={{ label: "View plans", href: "/pricing", variant: "primary" }}
-          secondaryCtas={[{ label: "Open Study Hub", href: "/app", variant: "secondary" }]}
+          primaryCta={{ label: VIEW_PRICING_CTA, href: "/pricing", variant: "primary" }}
+          secondaryCtas={[{ label: OPEN_STUDY_HUB_CTA, href: "/app", variant: "secondary" }]}
           visualLayout="stack"
           ctaLayout="stack"
         />

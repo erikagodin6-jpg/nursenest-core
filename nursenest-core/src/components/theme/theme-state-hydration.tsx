@@ -10,59 +10,11 @@ import {
 } from "@/lib/theme/theme-registry";
 import {
   getThemePaletteTokens,
+  getThemeSurfaceContrastTokens,
   PALETTE_ROLE_KEYS,
-  type ThemePaletteTokens,
 } from "@/lib/theme/theme-palette-tokens";
 
 const ALLOWED_THEME_IDS = new Set(THEME_OPTIONS.map((o) => o.id));
-const LIGHT_THEME_IDS = new Set(THEME_OPTIONS.filter((o) => o.group === "light").map((o) => o.id));
-const DARK_THEME_IDS = new Set(THEME_OPTIONS.filter((o) => o.group === "dark").map((o) => o.id));
-
-const PINK_NAV_THEMES = new Set([
-  "blush",
-  "pastel-blush",
-  "strawberry",
-  "rose-gold",
-  "coral",
-  "petal-pop",
-  "cotton-candy",
-  "pink-skies",
-  "rose-quartz",
-  "strawberry-cream",
-  "dusty-rose",
-  "coral-sunset",
-]);
-
-const BERRY_NAV_THEMES = new Set(["berry", "berry-bonbon", "violet-night", "plum-mist", "plum-velvet"]);
-const INDIGO_NAV_THEMES = new Set([
-  "indigo",
-  "lavender",
-  "pastel-lavender",
-  "pastel-lilac",
-  "lavender-dream",
-  "deep-twilight",
-  "midnight-indigo",
-]);
-const GREEN_NAV_THEMES = new Set([
-  "mint",
-  "pastel-mint",
-  "teal",
-  "forest",
-  "soft-sage",
-  "sage-garden",
-  "evergreen-steel",
-  "clinical-light",
-  "dark-clinical",
-]);
-const STABLE_ANCHOR_NAV_THEMES = new Set([
-  "multi-pastel",
-  "pastel-party",
-  "rainbow-sherbet",
-  "sunny-lilac",
-  "sky-kiss",
-  "bluebird",
-  "mint-breeze",
-]);
 
 function parseHexColor(value: string): { r: number; g: number; b: number } | null {
   const hex = value.trim().replace(/^#/, "");
@@ -106,83 +58,6 @@ function pickReadableText(background: string, darkText: string, lightText: strin
     : darkText;
 }
 
-function resolveLightThemeNavAnchor(themeId: string, palette: ThemePaletteTokens): string {
-  if (themeId === "mint-breeze") {
-    // Product requirement: Mint Breeze nav anchor must be blue, not mint.
-    return mixHex(palette.accent, "#0f172a", 0.34);
-  }
-  if (STABLE_ANCHOR_NAV_THEMES.has(themeId)) {
-    return mixHex(palette.primaryDeep, "#0f172a", 0.42);
-  }
-  if (PINK_NAV_THEMES.has(themeId) || BERRY_NAV_THEMES.has(themeId)) {
-    return mixHex(palette.primaryDeep, "#0f172a", 0.44);
-  }
-  if (INDIGO_NAV_THEMES.has(themeId)) {
-    return mixHex(palette.primaryDeep, "#0f172a", 0.4);
-  }
-  if (GREEN_NAV_THEMES.has(themeId)) {
-    return mixHex(palette.primaryDeep, "#052e2b", 0.38);
-  }
-  return mixHex(palette.primaryDeep, "#0f172a", 0.36);
-}
-
-function normalizeLightThemeHierarchy(themeId: string, palette: ThemePaletteTokens): ThemePaletteTokens {
-  // Keep light themes soft but increase luminance separation between page, surfaces, and chrome.
-  const background = mixHex(palette.background, "#ffffff", 0.5);
-  let surface = mixHex(background, palette.primaryDeep, 0.1);
-  if (contrastRatio(background, surface) < 1.12) {
-    surface = mixHex(background, palette.primaryDeep, 0.18);
-  }
-
-  let surfaceAlt = mixHex(surface, palette.primaryDeep, 0.2);
-  if (contrastRatio(surface, surfaceAlt) < 1.08) {
-    surfaceAlt = mixHex(surface, palette.primaryDeep, 0.24);
-  }
-  const surfaceStrong = mixHex(surfaceAlt, palette.primaryDeep, 0.16);
-
-  let border = mixHex(palette.border, palette.primaryDeep, 0.16);
-  if (contrastRatio(surface, border) < 1.2) {
-    border = mixHex(surface, palette.primaryDeep, 0.3);
-  }
-  const borderStrong = mixHex(palette.borderStrong, palette.primaryDeep, 0.2);
-
-  const navBackground = resolveLightThemeNavAnchor(themeId, palette);
-  const navBorder = mixHex(navBackground, palette.primaryDeep, 0.34);
-  const navText = pickReadableText(navBackground, "#0f172a", palette.logoOnDark);
-  const navTextMuted = mixHex(navText, navBackground, 0.32);
-  const navHover = mixHex(navBackground, palette.primaryDeep, 0.18);
-  const navActive = mixHex(navBackground, palette.accent, 0.2);
-
-  const badge = mixHex(palette.badge, palette.primaryDeep, 0.16);
-  const buttonSecondary = mixHex(palette.buttonSecondary, palette.primaryDeep, 0.18);
-  const buttonSecondaryText = pickReadableText(buttonSecondary, palette.heading, palette.logoOnDark);
-
-  return {
-    ...palette,
-    background,
-    surface,
-    surfaceAlt,
-    surfaceStrong,
-    border,
-    borderStrong,
-    navBackground,
-    navBorder,
-    navText,
-    navTextMuted,
-    navHover,
-    navActive,
-    badge,
-    buttonSecondary,
-    buttonSecondaryText,
-  };
-}
-
-function getEffectivePalette(themeId: string, palette: ThemePaletteTokens): ThemePaletteTokens {
-  if (DARK_THEME_IDS.has(themeId)) return palette;
-  if (!LIGHT_THEME_IDS.has(themeId)) return palette;
-  return normalizeLightThemeHierarchy(themeId, palette);
-}
-
 /**
  * next-themes initializes `theme` as undefined on the server (no localStorage).
  * After hydration, sync React state + document from localStorage / data-theme so
@@ -193,9 +68,9 @@ export function ThemeStateHydration() {
   const didSync = useRef(false);
 
   const applyPaletteRoles = (themeId: string) => {
-    const rawPalette = getThemePaletteTokens(themeId);
-    if (!rawPalette) return;
-    const palette = getEffectivePalette(themeId, rawPalette);
+    const palette = getThemePaletteTokens(themeId);
+    const semantic = getThemeSurfaceContrastTokens(themeId);
+    if (!palette || !semantic) return;
     const root = document.documentElement;
     const toCssVar = (key: string) =>
       `--palette-${key.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`)}`;
@@ -207,7 +82,7 @@ export function ThemeStateHydration() {
     root.style.setProperty("--palette-nav", palette.navBackground);
     root.style.setProperty("--text-primary", palette.text);
     root.style.setProperty("--text-muted", palette.textMuted);
-    root.style.setProperty("--text-on-accent", pickReadableText(palette.navBackground, "#0f172a", palette.logoOnDark));
+    root.style.setProperty("--text-on-accent", semantic.textOnBrand);
     root.style.setProperty("--border-subtle", palette.border);
     root.style.setProperty("--accent-primary", palette.buttonPrimary);
     root.style.setProperty("--accent-secondary", palette.accent);
@@ -222,36 +97,75 @@ export function ThemeStateHydration() {
     setIfHex("--theme-primary", palette.primary);
     setIfHex("--theme-secondary", palette.primaryDeep);
     setIfHex("--theme-accent", palette.accent);
-    setIfHex("--theme-page-bg", palette.background);
-    setIfHex("--theme-card-bg", palette.surface);
-    setIfHex("--theme-heading-text", palette.heading);
-    setIfHex("--theme-body-text", palette.text);
-    setIfHex("--theme-muted-text", palette.textMuted);
-    setIfHex("--theme-border", palette.border);
+    setIfHex("--theme-page-bg", semantic.background);
+    setIfHex("--theme-card-bg", semantic.surface);
+    setIfHex("--theme-heading-text", semantic.heading);
+    setIfHex("--theme-body-text", semantic.text);
+    setIfHex("--theme-muted-text", semantic.textMuted);
+    setIfHex("--theme-border", semantic.border);
     setIfHex("--theme-ring", palette.ring);
-    setIfHex("--theme-nav-bg", palette.navBackground);
-    setIfHex("--palette-nav-background", palette.navBackground);
-    setIfHex("--theme-nav-border", palette.navBorder);
-    setIfHex("--theme-nav-text", palette.navText);
-    setIfHex("--palette-nav-text", palette.navText);
-    setIfHex("--theme-menu-text", palette.navText);
-    setIfHex("--theme-menu-hover-bg", palette.navHover);
-    setIfHex("--theme-menu-active-bg", palette.navActive);
-    setIfHex("--theme-menu-hover-text", palette.navText);
+    setIfHex("--theme-nav-bg", semantic.navBackground);
+    setIfHex("--palette-nav-background", semantic.navBackground);
+    setIfHex("--theme-nav-border", semantic.navBorder);
+    setIfHex("--theme-nav-text", semantic.navForeground);
+    setIfHex("--palette-nav-text", semantic.navForeground);
+    setIfHex("--theme-menu-text", semantic.navForeground);
+    setIfHex("--theme-menu-hover-bg", semantic.navHover);
+    setIfHex("--theme-menu-active-bg", semantic.navHover);
+    setIfHex("--theme-menu-hover-text", semantic.navForeground);
     setIfHex("--theme-topbar-bg", palette.topBarBackground);
     setIfHex("--theme-topbar-text", palette.topBarText);
-    setIfHex("--theme-card-border", palette.border);
-    setIfHex("--theme-separator", palette.borderStrong);
+    setIfHex("--theme-card-border", semantic.border);
+    setIfHex("--theme-separator", semantic.borderStrong);
     setIfHex("--theme-focus-ring", palette.ring);
-    setIfHex("--theme-primary-foreground", palette.buttonPrimaryText);
+    setIfHex("--theme-primary-foreground", semantic.primaryButtonText);
     setIfHex("--logo-primary", palette.logoPrimary);
-    const logoText = pickReadableText(palette.navBackground, palette.logoOnLight, palette.logoOnDark);
+    const logoText = pickReadableText(semantic.navBackground, semantic.logoOnLight, semantic.logoOnDark);
     setIfHex("--logo-text", logoText);
-    setIfHex("--logo-on-dark", palette.logoOnDark);
-    setIfHex("--header-on-dark", palette.logoOnDark);
+    setIfHex("--logo-on-dark", semantic.logoOnDark);
+    setIfHex("--header-on-dark", semantic.textOnBrand);
     setIfHex("--state-success", palette.success);
     setIfHex("--state-warning", palette.warning);
     setIfHex("--state-danger-soft", palette.danger);
+
+    // Canonical surface/contrast token contract (single source of truth for themed UI layers).
+    setIfHex("--theme-background", semantic.background);
+    setIfHex("--theme-background-subtle", semantic.backgroundSubtle);
+    setIfHex("--theme-surface", semantic.surface);
+    setIfHex("--theme-surface-strong", semantic.surfaceStrong);
+    setIfHex("--theme-border-strong", semantic.borderStrong);
+    setIfHex("--theme-text-on-brand", semantic.textOnBrand);
+    setIfHex("--theme-brand", semantic.brand);
+    setIfHex("--theme-brand-strong", semantic.brandStrong);
+    setIfHex("--theme-nav-background", semantic.navBackground);
+    setIfHex("--theme-nav-foreground", semantic.navForeground);
+    setIfHex("--theme-nav-hover", semantic.navHover);
+    setIfHex("--theme-nav-border-strong", semantic.navBorder);
+    setIfHex("--theme-primary-button-bg", semantic.primaryButtonBg);
+    setIfHex("--theme-primary-button-text", semantic.primaryButtonText);
+    setIfHex("--theme-primary-button-hover", semantic.primaryButtonHover);
+    root.style.setProperty("--theme-secondary-button-bg", semantic.secondaryButtonBg);
+    setIfHex("--theme-secondary-button-text", semantic.secondaryButtonText);
+    setIfHex("--theme-secondary-button-border", semantic.secondaryButtonBorder);
+    setIfHex("--theme-secondary-button-hover", semantic.secondaryButtonHover);
+    setIfHex("--theme-pill-bg", semantic.pillBg);
+    setIfHex("--theme-pill-text", semantic.pillText);
+    setIfHex("--theme-pill-border", semantic.pillBorder);
+    setIfHex("--theme-logo-on-light", semantic.logoOnLight);
+    setIfHex("--theme-logo-on-dark", semantic.logoOnDark);
+
+    // CTA role system now inherits directly from canonical theme interactive tokens.
+    root.style.setProperty("--role-cta", semantic.primaryButtonBg);
+    root.style.setProperty("--role-cta-foreground", semantic.primaryButtonText);
+    root.style.setProperty("--role-cta-hover", semantic.primaryButtonHover);
+    root.style.setProperty("--role-cta-pressed", mixHex(semantic.primaryButtonHover, semantic.heading, 0.16));
+    root.style.setProperty("--role-cta-shadow", `color-mix(in srgb, ${semantic.primaryButtonBg} 38%, transparent)`);
+    root.style.setProperty("--role-cta-soft", `color-mix(in srgb, ${semantic.primaryButtonBg} 11%, ${semantic.surface})`);
+    root.style.setProperty("--role-cta-on-soft", semantic.pillText);
+    root.style.setProperty("--role-secondary-action-bg", semantic.secondaryButtonBg);
+    root.style.setProperty("--role-secondary-action-text", semantic.secondaryButtonText);
+    root.style.setProperty("--role-secondary-action-border", semantic.secondaryButtonBorder);
+    root.style.setProperty("--role-secondary-action-hover-bg", semantic.secondaryButtonHover);
 
     // Lesson semantic mapping (fixed roles from product requirement).
     setIfHex("--lesson-summary", palette.box1);

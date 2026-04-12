@@ -37,6 +37,7 @@ import {
   type ScreenshotId,
 } from "@/lib/marketing/screenshot-registry";
 import { formatEyebrow, formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
+import { PRIMARY_CTA, SECONDARY_CTA, VIEW_PRICING_CTA } from "@/lib/copy/cta-copy";
 
 // ── Shared token helpers ───────────────────────────────────────────────────────
 
@@ -446,9 +447,9 @@ export function HomeFeatureDeepDivesSection() {
         "Direct links to relevant lessons and question sets, no searching",
         "Retest strategy: exact timing and recommended next steps",
       ],
-      primaryCta: "Unlock study plans",
+      primaryCta: VIEW_PRICING_CTA,
       primaryHref: pricingHref,
-      secondaryCta: "Try practice first",
+      secondaryCta: SECONDARY_CTA,
       secondaryHref: questionsHref,
       accentColor: "var(--theme-primary)",
       preview: <FeatureScreenshot id={8} />,
@@ -465,9 +466,9 @@ export function HomeFeatureDeepDivesSection() {
         "Needs Review, Uncertain Knowledge, and Strong Areas, all clearly separated",
         "Direct lesson links from every question row in the review list",
       ],
-      primaryCta: "See smart review",
+      primaryCta: VIEW_PRICING_CTA,
       primaryHref: pricingHref,
-      secondaryCta: "Start practicing",
+      secondaryCta: PRIMARY_CTA,
       secondaryHref: questionsHref,
       accentColor: "var(--semantic-warning, #f59e0b)",
       preview: <FeatureScreenshot id={9} />,
@@ -484,9 +485,9 @@ export function HomeFeatureDeepDivesSection() {
         "Category-level breakdown shows which body systems are weakest",
         "Tracks improvement across sessions so you know when you're ready to retest",
       ],
-      primaryCta: "Try a CAT exam",
+      primaryCta: PRIMARY_CTA,
       primaryHref: catHref,
-      secondaryCta: "View plans",
+      secondaryCta: VIEW_PRICING_CTA,
       secondaryHref: pricingHref,
       accentColor: "var(--semantic-success, #22c55e)",
       preview: <FeatureScreenshot id={6} />,
@@ -498,11 +499,11 @@ export function HomeFeatureDeepDivesSection() {
 
   return (
     <section
-      className="border-b border-[var(--border)] bg-[var(--page-bg)] py-16 md:py-20"
+      className="nn-section-block border-b border-[var(--border)] bg-[var(--page-bg)]"
       aria-labelledby="home-features-heading"
       data-testid="section-feature-deep-dives"
     >
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+      <div className="nn-section-shell">
         <header className="mx-auto mb-14 max-w-2xl text-center">
           <h2
             id="home-features-heading"
@@ -516,7 +517,7 @@ export function HomeFeatureDeepDivesSection() {
           </p>
         </header>
 
-        <div className="space-y-6">
+        <div className="space-y-8">
           {blocks.map((block) => (
             <FeatureBlockRow key={block.label} {...block} />
           ))}
@@ -531,7 +532,7 @@ export function HomeFeatureDeepDivesSection() {
             className={MARKETING_PRIMARY_CTA_CLASS}
             data-testid="feature-section-pricing-cta"
           >
-            {formatTitleCase("View study plans", locale)}
+            {formatTitleCase(VIEW_PRICING_CTA, locale)}
             <ArrowRight className="ml-2 h-5 w-5 shrink-0" aria-hidden />
           </MarketingTrackedLink>
           <MarketingTrackedLink
@@ -541,7 +542,7 @@ export function HomeFeatureDeepDivesSection() {
             className={MARKETING_SECONDARY_CTA_CLASS}
             data-testid="feature-section-questions-cta"
           >
-            {formatTitleCase("Try free questions first", locale)}
+            {formatTitleCase(SECONDARY_CTA, locale)}
           </MarketingTrackedLink>
         </div>
       </div>

@@ -4,6 +4,7 @@ import { checkRateLimit } from "@/lib/http/rate-limit-in-memory";
 import { prisma } from "@/lib/db";
 import { generatePasswordResetRawToken, hashPasswordResetToken } from "@/lib/password-reset-crypto";
 import { PASSWORD_RESET_TOKEN_TTL_MS } from "@/lib/auth/password-reset-constants";
+import { captureServerEvent, analyticsDistinctId } from "@/lib/observability/posthog-server";
 import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
 import { buildPasswordResetUrl, sendPasswordResetEmail } from "@/lib/send-password-reset-email";
 
@@ -106,6 +107,7 @@ export async function POST(req: Request) {
 
     const resetUrl = buildPasswordResetUrl(rawToken);
     const sendResult = await sendPasswordResetEmail({ toEmail: email, resetUrl });
+    captureServerEvent(analyticsDistinctId(user.id), "password_reset_requested", {}).catch(() => {});
 
     const base = {
       ok: true as const,
