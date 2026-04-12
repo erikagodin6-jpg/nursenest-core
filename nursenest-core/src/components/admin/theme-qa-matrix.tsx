@@ -15,6 +15,8 @@ function ThemeQaCard({ opt }: { opt: ThemeOption }) {
   const resolved = useMemo(() => resolveThemeLogo(opt.id, "full"), [opt.id]);
   const firstUrl = resolved.url ?? "";
   const usesCdn = resolved.kind === "cdn" && Boolean(firstUrl);
+  const borrowed =
+    usesCdn && resolved.assetThemeId && resolved.assetThemeId !== opt.id;
   const contrastClass = brandLogoRasterContrastClass(opt.id);
   const lum = relativeLuminanceFromHex(opt.color);
   const softMark = lum >= 0.88 && opt.group === "light";
@@ -45,6 +47,13 @@ function ThemeQaCard({ opt }: { opt: ThemeOption }) {
         {!usesCdn ? (
           <span className="rounded bg-amber-500/15 px-1.5 py-0.5 font-medium text-amber-900 dark:text-amber-100">
             No CDN map
+          </span>
+        ) : borrowed ? (
+          <span
+            className="rounded bg-sky-500/10 px-1.5 py-0.5 font-medium text-sky-950 dark:text-sky-100"
+            title={`Asset from theme: ${resolved.assetThemeId}`}
+          >
+            CDN borrow → {resolved.assetThemeId}
           </span>
         ) : (
           <span className="rounded bg-emerald-500/10 px-1.5 py-0.5 font-medium text-emerald-900 dark:text-emerald-100">

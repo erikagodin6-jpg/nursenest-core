@@ -23,10 +23,11 @@ export function AuthLeafWatermark() {
         "pointer-events-none select-none",
         "absolute bottom-[-3rem] right-[-3rem]",
         "h-[260px] w-[260px] object-contain",
+        "bg-transparent shadow-none ring-0 outline-none [mix-blend-mode:normal]",
         "opacity-[0.055]",
         "hidden sm:block",
       ].join(" ")}
-      style={{ transform: "rotate(9deg)" }}
+      style={{ transform: "rotate(9deg)", backgroundColor: "transparent" }}
     />
   );
 }

@@ -772,18 +772,16 @@ a {
 }
 
 /*
- * Header wordmark slot.
- *
- * background-color: The slot inherits the correct surface for each header type:
- *   - Light-theme headers: --header-background is set to the light surface by .nn-header-logo-row
- *     (inherits via cascade → slot background is the light surface colour).
- *   - Coloured-theme headers (ocean, blush, etc.): --header-background is NOT set on the <header>
- *     element, so the fallback --nn-nav-bg (the nav chrome colour) is used instead.
- * This ensures transparent logo pixels always reveal the correct header background colour
- * rather than showing white or a mismatched tint.
+ * Brand wordmark slots (header / footer / auth / learner / hero).
+ * Keep slot + <img> backgrounds fully transparent so true-alpha CDN marks show the
+ * parent surface through transparent pixels — no painted white/black “matte” box.
  */
-.nn-brand-header-logo-slot {
-  background-color: var(--header-background, var(--nn-nav-bg, transparent)) !important;
+.nn-brand-header-logo-slot,
+.nn-brand-footer-logo-slot,
+.nn-brand-auth-logo-slot,
+.nn-brand-learner-logo-slot,
+.nn-brand-hero-logo-slot {
+  background-color: transparent !important;
   background-image: none !important;
   border: 0;
   box-shadow: none;
@@ -792,7 +790,11 @@ a {
   border-radius: 0;
 }
 
-.nn-brand-header-logo-slot img.nn-brand-header-logo {
+.nn-brand-header-logo-slot img.nn-brand-header-logo,
+.nn-brand-footer-logo-slot img.nn-brand-footer-logo,
+.nn-brand-auth-logo-slot img.nn-brand-auth-logo,
+.nn-brand-learner-logo-slot img.nn-brand-learner-logo,
+.nn-brand-hero-logo-slot img.nn-brand-hero-logo {
   background-color: transparent !important;
   background-image: none !important;
   border: 0;
@@ -806,7 +808,17 @@ a {
   width: auto !important;
   height: 100% !important;
   object-fit: contain;
+}
+
+.nn-brand-header-logo-slot img.nn-brand-header-logo,
+.nn-brand-learner-logo-slot img.nn-brand-learner-logo {
   object-position: left center;
+}
+
+.nn-brand-footer-logo-slot img.nn-brand-footer-logo,
+.nn-brand-auth-logo-slot img.nn-brand-auth-logo,
+.nn-brand-hero-logo-slot img.nn-brand-hero-logo {
+  object-position: center;
 }
 
 .nn-header-logo-link {

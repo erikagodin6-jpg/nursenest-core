@@ -7,6 +7,7 @@ import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
 import { resolveExamPathwaySafe } from "@/lib/exam-pathways/resolve-exam-pathway-safe";
+import { ExamFamily } from "@prisma/client";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { marketingPathwayLessonTopicClusterPath, marketingPathwayLessonsIndexPath } from "@/lib/lessons/lesson-routes";
 import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
@@ -84,16 +85,24 @@ export async function generateMetadata({ params }: Pick<Props, "params">): Promi
           topicClusters.find((t) => t.topicSlug === topicSlug)?.label ?? topicSlug.replace(/-/g, " ");
         const title = pathwayLessonTopicClusterMetaTitle(pathway, label);
         const description = pathwayLessonTopicClusterMetaDescription(pathway, label);
+        const examKeyword =
+          pathway.examFamily === ExamFamily.NCLEX_RN || pathway.examFamily === ExamFamily.NCLEX_PN
+            ? "NCLEX lessons"
+            : pathway.examFamily === ExamFamily.NP
+              ? "nurse practitioner lessons"
+              : pathway.examFamily === ExamFamily.REX_PN
+                ? "REx-PN lessons"
+                : "nursing exam lessons";
         const keywords = Array.from(
           new Set(
             [
-              topicLabel,
+              label,
               pathway.shortName,
               pathway.displayName,
               `${pathway.shortName} lessons`,
-              `${topicLabel} lessons`,
+              `${label} lessons`,
               `${pathway.countrySlug === "canada" ? "Canada" : "US"} ${pathway.shortName}`,
-              "NCLEX lessons",
+              examKeyword,
               "clinical reasoning",
               "question bank",
               "CAT practice",
