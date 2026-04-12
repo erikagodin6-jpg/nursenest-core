@@ -42,6 +42,8 @@ export type QuestionBatchResultSummaryV1 = {
   items: QuestionBatchItem[];
   allowDuplicates: boolean;
   settings: QuestionBatchSettings;
+  /** Normalized stems for near-duplicate detection within this job (no full-bank scan). */
+  nearDupStemNorms?: string[];
 };
 
 function normalizeTopic(topic: string): string {

@@ -1,5 +1,15 @@
 import { QuestionType } from "@prisma/client";
-import type { NormalizedQuestionDraft } from "@/lib/content/ai-draft-validation";
+
+/** Subset of {@link NormalizedQuestionDraft} — kept local to avoid circular imports. */
+export type GeneratedQuestionDraftShape = {
+  stem: string;
+  rationale: string;
+  options: string[];
+  answerKey: string[];
+  questionType: QuestionType;
+  topicTag?: string;
+  metadata?: { tags?: string[] };
+};
 
 /** Max stems to compare per validation (bounded work, no DB). */
 export const NEAR_DUP_MAX_PRIOR = 48;
@@ -68,13 +78,13 @@ export function stemBigramJaccard(a: string, b: string): number {
   return union === 0 ? 0 : inter / union;
 }
 
-function resolveTopic(n: NormalizedQuestionDraft, expected?: GeneratedQuestionExpectedTags): string {
+function resolveTopic(n: GeneratedQuestionDraftShape, expected?: GeneratedQuestionExpectedTags): string {
   const fromDraft = (n.topicTag ?? n.metadata?.tags?.[0] ?? "").trim();
   if (fromDraft.length >= 2) return fromDraft;
   return (expected?.topic ?? "").trim();
 }
 
-function tagsBlob(n: NormalizedQuestionDraft): string {
+function tagsBlob(n: GeneratedQuestionDraftShape): string {
   const tags = n.metadata?.tags ?? [];
   return `${tags.join(" ")} ${n.stem}`.toLowerCase();
 }
@@ -84,7 +94,7 @@ function tagsBlob(n: NormalizedQuestionDraft): string {
  * Heuristic, bounded CPU; optional `priorNormalizedStems` is caller-provided (e.g. same batch), never a full DB scan.
  */
 export function validateGeneratedQuestionAuto(
-  n: NormalizedQuestionDraft,
+  n: GeneratedQuestionDraftShape,
   opts: {
     expectedTags?: GeneratedQuestionExpectedTags;
     /** Normalized-for-similarity stems from the same run/batch (capped by caller). */

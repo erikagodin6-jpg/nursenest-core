@@ -35,6 +35,7 @@ import {
   validateNormalizedQuestion,
   withQuestionDraftContext,
 } from "@/lib/content/ai-draft-validation";
+import { normalizeGeneratedStemForNearDupList } from "@/lib/content/generated-question-auto-validation";
 import { stemHash } from "@/lib/content/stem-hash";
 import { prisma } from "@/lib/db";
 
@@ -49,11 +50,14 @@ const stepBodySchema = z.object({
   batchControl: batchControlSchema.optional(),
 });
 
+const NEAR_DUP_NORMS_CAP = 48;
+
 async function persistQuestionBatchItem(
   jobId: string,
   itemId: string,
   patch: Partial<QuestionBatchItem>,
   tokenDelta?: number,
+  nearDupStemNormAppend?: string,
 ): Promise<QuestionBatchResultSummaryV1 | null> {
   const fresh = await prisma.aiGenerationJob.findUnique({ where: { id: jobId } });
   const s = parseQuestionBatchSummary(fresh?.resultSummary);
@@ -63,10 +67,14 @@ async function persistQuestionBatchItem(
   const mergedItems = [...s.items];
   mergedItems[idx] = { ...mergedItems[idx]!, ...patch };
   const allTerminal = mergedItems.every((i) => isTerminalQuestionBatchStatus(i.status));
+  const nearDupStemNorms =
+    nearDupStemNormAppend != null && nearDupStemNormAppend.length > 0
+      ? [...(s.nearDupStemNorms ?? []), nearDupStemNormAppend].slice(-NEAR_DUP_NORMS_CAP)
+      : s.nearDupStemNorms;
   await prisma.aiGenerationJob.update({
     where: { id: jobId },
     data: {
-      resultSummary: { ...s, items: mergedItems } as object,
+      resultSummary: { ...s, items: mergedItems, ...(nearDupStemNorms ? { nearDupStemNorms } : {}) } as object,
       status: allTerminal ? JobStatus.COMPLETED : JobStatus.RUNNING,
       ...(tokenDelta != null ? { tokensUsed: (fresh?.tokensUsed ?? 0) + tokenDelta } : {}),
     },

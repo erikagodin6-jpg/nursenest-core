@@ -1,14 +1,30 @@
 import { CountryCode, ExamFamily, QuestionType, TierCode } from "@prisma/client";
 import { z } from "zod";
 import { stemHash } from "@/lib/content/stem-hash";
+import {
+  validateGeneratedQuestionAuto,
+  type GeneratedQuestionExpectedTags,
+} from "@/lib/content/generated-question-auto-validation";
 import { validateQuestionForPublish } from "@/lib/content/publish-validation";
 import { validateQuestionPayload } from "@/lib/content/question-schema";
+
+export type { GeneratedQuestionExpectedTags };
 
 export type DraftValidationResult = {
   ok: boolean;
   errors: string[];
   warnings: string[];
   duplicateRisk: boolean;
+  /** Automated quality gate (heuristic); failures are also listed in `errors`. */
+  autoValidation?: { passed: boolean; rejectionReasons: string[] };
+};
+
+export type ValidateNormalizedQuestionOpts = {
+  duplicateStemHashes: Set<string>;
+  /** Tier + exam + optional topic/subtopic/body from the generation job. */
+  expectedTags?: GeneratedQuestionExpectedTags;
+  /** Stems normalized for near-duplicate checks within the same run (no DB). */
+  priorNormalizedStems?: string[];
 };
 
 const lessonLinkSuggestionSchema = z.object({
@@ -149,7 +165,7 @@ export function withQuestionDraftContext(
 
 export function validateNormalizedQuestion(
   n: NormalizedQuestionDraft,
-  opts: { duplicateStemHashes: Set<string> },
+  opts: ValidateNormalizedQuestionOpts,
 ): DraftValidationResult {
   const errors: string[] = [];
   const warnings: string[] = [];
@@ -179,11 +195,21 @@ export function validateNormalizedQuestion(
     warnings.push("SATA with only one keyed answer — confirm this is intentional (NCLEX-style SATA usually has 2+ correct).");
   }
 
+  const auto = validateGeneratedQuestionAuto(n, {
+    expectedTags: opts.expectedTags,
+    priorNormalizedStems: opts.priorNormalizedStems,
+  });
+  if (!auto.passed) {
+    errors.push(...auto.rejectionReasons);
+  }
+  warnings.push(...auto.warnings);
+
   return {
     ok: errors.length === 0,
     errors,
     warnings,
     duplicateRisk,
+    autoValidation: { passed: auto.passed, rejectionReasons: auto.rejectionReasons },
   };
 }
 
