@@ -49,6 +49,7 @@ import {
   MAX_PROGRAMMATIC_SEO_SITEMAP_SLUGS,
 } from "@/lib/seo/programmatic-registry";
 import { getAllToolSlugs } from "@/lib/tools/tool-registry";
+import { collectPathwayTopicProgrammaticPublicPaths } from "@/lib/seo/pathway-topic-programmatic-registry";
 
 const SORTED_LOCALES = [...CORE_HOSTED_MARKETING_LOCALES].sort();
 
@@ -80,6 +81,12 @@ export function collectNpPracticeTestHubUrls(origin: string): string[] {
   return listNpPracticeTestSegmentPaths().map(
     ({ countrySlug, roleTrack, segment }) => `${o}/${countrySlug}/${roleTrack}/${segment}`,
   );
+}
+
+/** Pathway hub long-tail programmatic SEO (`/{country}/{role}/{exam}/{seoSlug}`). */
+export function collectPathwayTopicProgrammaticUrls(origin: string): string[] {
+  const o = normalizeOrigin(origin);
+  return collectPathwayTopicProgrammaticPublicPaths().map((p) => `${o}${p}`);
 }
 
 /** Exam hub URLs: /{country}/{role}/{exam} + pricing + questions landing */
@@ -275,6 +282,7 @@ export async function collectCoreUrls(origin: string): Promise<string[]> {
     ...base,
     ...collectExamPathwayUrls(o),
     ...collectNpPracticeTestHubUrls(o),
+    ...collectPathwayTopicProgrammaticUrls(o),
     ...collectAlliedMarketingUrls(o),
     ...collectPreNursingSeoUrls(o),
     ...lessonUrls,
@@ -321,6 +329,9 @@ export function collectLocaleMarketingUrls(origin: string, locale: string): stri
   for (const slug of getProgrammaticSlugsForSitemap()) {
     if (slug in PROGRAMMATIC_SLUG_TO_PATHWAY_PATH) continue;
     urls.push(add(`/${locale}/${slug}`));
+  }
+  for (const p of collectPathwayTopicProgrammaticPublicPaths()) {
+    urls.push(add(`/${locale}${p}`));
   }
   return urls;
 }

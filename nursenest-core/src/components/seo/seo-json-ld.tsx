@@ -138,12 +138,18 @@ export function BlogFaqPageJsonLd({ items }: { items: { question: string; answer
 export function ProgrammaticPageJsonLd({
   page,
   locale,
+  /** Leading-slash path when the page is not at `/{slug}` or `/{locale}/{slug}` (e.g. hub long-tail SEO). */
+  resourcePath,
 }: {
   page: SeoPageDefinition;
   locale: string;
+  resourcePath?: string;
 }) {
-  const url =
-    locale === DEFAULT_MARKETING_LOCALE
+  const path =
+    resourcePath?.startsWith("/") ? resourcePath : resourcePath ? `/${resourcePath}` : null;
+  const url = path
+    ? absoluteUrl(path)
+    : locale === DEFAULT_MARKETING_LOCALE
       ? absoluteUrl(`/${page.slug}`)
       : absoluteUrl(`/${locale}/${page.slug}`);
 

@@ -11,6 +11,7 @@ import {
   rnQuestions,
 } from "@/lib/marketing/marketing-entry-routes";
 import { buildExamPathwayPath, getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
+import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import type { SeoCluster, SeoPageDefinition } from "@/lib/seo/programmatic-registry";
 import { clusterQuestionBankHref } from "@/lib/seo/programmatic-seo-cluster-links";
 
@@ -126,6 +127,8 @@ export function resolveProgrammaticProductLinks(
   page: SeoPageDefinition,
   locale: string,
   marketingRegion: MarketingRegionToggle = "US",
+  /** When the page is rendered under a specific exam hub, link into that hub’s lessons, bank, and CAT. */
+  pathway?: ExamPathwayDefinition | null,
 ): ProgrammaticProductLinks {
   const loc = (p: string) => withMarketingLocale(locale, p);
   const pack = page.linkPack ?? inferLinkPackFromCluster(page.cluster);
@@ -134,7 +137,21 @@ export function resolveProgrammaticProductLinks(
   const testBank = loc(HUB.questionBank);
   const exams = loc(HUB.practiceExams);
   const flashcards = loc("/flashcards");
-  const cat = resolveProgrammaticCatHref(page, marketingRegion, loc);
+  const cat = pathway
+    ? loc(buildExamPathwayPath(pathway, "cat"))
+    : resolveProgrammaticCatHref(page, marketingRegion, loc);
+
+  if (pathway) {
+    return {
+      lessons: loc(buildExamPathwayPath(pathway, "lessons")),
+      questions: loc(buildExamPathwayPath(pathway, "questions")),
+      cat,
+      testBank,
+      exams,
+      tools,
+      flashcards,
+    };
+  }
 
   const slugHub = pathwayLessonsQuestionsFromProgrammaticSlug(page.slug, marketingRegion);
   if (slugHub) {

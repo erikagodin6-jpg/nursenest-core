@@ -2,6 +2,8 @@ import Link from "next/link";
 import { Fragment } from "react";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
+import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
+import type { BreadcrumbResolution } from "@/lib/seo/breadcrumb-types";
 import type { SeoPageDefinition } from "@/lib/seo/programmatic-registry";
 import { buildProgrammaticSeoBreadcrumbResolution } from "@/lib/seo/programmatic-breadcrumbs";
 import { getProgrammaticPracticeConversionConfig } from "@/lib/seo/programmatic-practice-config";
@@ -30,6 +32,9 @@ export async function ProgrammaticSeoPage({
   marketingRegion = "US",
   /** True when rendered from `/[locale]/[slug]` (prefix belongs in URLs). False on cookie-localized `(default)` routes. */
   localizedUrl = false,
+  breadcrumbResolution,
+  jsonLdResourcePath,
+  pathwayForProductLinks,
 }: {
   page: SeoPageDefinition;
   locale: string;
@@ -38,6 +43,11 @@ export async function ProgrammaticSeoPage({
   /** Canada/US exam toggle (cookie on `(default)` routes). */
   marketingRegion?: MarketingRegionToggle;
   localizedUrl?: boolean;
+  /** When set (hub long-tail pages), overrides flat programmatic breadcrumbs. */
+  breadcrumbResolution?: BreadcrumbResolution;
+  /** English-default path for JSON-LD `url` when not `/{slug}`. Leading slash. */
+  jsonLdResourcePath?: string;
+  pathwayForProductLinks?: ExamPathwayDefinition | null;
 }) {
   const m = await loadMarketingMessages(locale);
   const en = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
@@ -46,15 +56,17 @@ export async function ProgrammaticSeoPage({
   const signup = withMarketingLocale(locale, "/signup");
   const pricing = withMarketingLocale(locale, HUB.pricing);
   const loginToApp = withMarketingLocale(locale, `/login?callbackUrl=${encodeURIComponent("/app")}`);
-  const product = resolveProgrammaticProductLinks(page, locale, marketingRegion);
+  const product = resolveProgrammaticProductLinks(page, locale, marketingRegion, pathwayForProductLinks);
   const { lessons, questions, cat, testBank, exams, tools, flashcards } = product;
 
   const pathForProgrammatic = (slug: string) =>
     localizedUrl && locale !== DEFAULT_MARKETING_LOCALE ? `/${locale}/${slug}` : `/${slug}`;
 
-  const { crumbs, schemaItems } = buildProgrammaticSeoBreadcrumbResolution(page, locale, {
-    localized: localizedUrl,
-  });
+  const { crumbs, schemaItems } =
+    breadcrumbResolution ??
+    buildProgrammaticSeoBreadcrumbResolution(page, locale, {
+      localized: localizedUrl,
+    });
   const practiceConfig = getProgrammaticPracticeConversionConfig(page.slug);
   const introLead =
     locale !== DEFAULT_MARKETING_LOCALE
@@ -63,7 +75,7 @@ export async function ProgrammaticSeoPage({
 
   return (
     <>
-      <ProgrammaticPageJsonLd page={page} locale={locale} />
+      <ProgrammaticPageJsonLd page={page} locale={locale} resourcePath={jsonLdResourcePath} />
       <BreadcrumbJsonLd items={schemaItems} />
       <article className="nn-marketing-surface mx-auto max-w-3xl px-4 py-10 sm:px-6 lg:px-8">
         <BreadcrumbTrail items={crumbs} />

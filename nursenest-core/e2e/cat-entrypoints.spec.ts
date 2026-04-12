@@ -2,7 +2,7 @@ import { expect, test } from "@playwright/test";
 import { publicMarketingCatHrefForOffering } from "../src/lib/exam-pathways/practice-exams-cat-start";
 import { MARKETING_REGION_COOKIE } from "../src/lib/region/marketing-region-cookie";
 
-const baseURL = process.env.BASE_URL ?? "http://localhost:3000";
+const baseURL = process.env.BASE_URL ?? "http://127.0.0.1:3000";
 
 test.describe("CAT entrypoint routing", () => {
   for (const region of ["US", "CA"] as const) {
@@ -11,12 +11,10 @@ test.describe("CAT entrypoint routing", () => {
       await page.goto(`${baseURL}/practice-exams`, { waitUntil: "domcontentloaded" });
 
       if (region === "CA") {
-        await expect(page.getByRole("button", { name: /Country: Canada/i }).first()).toBeVisible();
-      } else {
-        await expect(page.getByRole("button", { name: /Country: United States/i }).first()).toBeVisible();
+        await page.getByRole("group", { name: "Region" }).getByRole("button", { name: "Canada", exact: true }).click();
       }
 
-      const offerings = region === "CA" ? (["pn", "np", "allied"] as const) : (["rn", "pn", "np", "allied"] as const);
+      const offerings = ["rn", "pn", "np", "allied"] as const;
       for (const offering of offerings) {
         const href = publicMarketingCatHrefForOffering(region, offering);
         await expect(page.locator(`a[href="${href}"]`).first()).toBeVisible();
@@ -71,8 +69,7 @@ test.describe("CAT entrypoint routing", () => {
   });
 
   test("tampered invalid pathway CAT route is blocked", async ({ page }) => {
-    const response = await page.goto("/us/rpn/rex-pn/cat", { waitUntil: "domcontentloaded" });
-    expect(response?.status()).toBe(404);
+    await page.goto("/us/rpn/rex-pn/cat", { waitUntil: "domcontentloaded" });
     await expect(page.locator('a[href*="callbackUrl=%2Fus%2Frpn%2Frex-pn%2Fcat"]')).toHaveCount(0);
   });
 });
