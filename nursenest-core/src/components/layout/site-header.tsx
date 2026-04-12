@@ -516,7 +516,7 @@ export function SiteHeader() {
             className="nn-header-logo-link group flex min-w-0 shrink-0 items-center gap-2.5 overflow-visible bg-transparent pe-2.5"
             aria-label={t("brand.homeAriaLabel")}
           >
-            <SiteBrandLogoMark />
+            <SiteBrandLogoMark exactSourceOnly />
           </Link>
 
           <nav
@@ -534,15 +534,20 @@ export function SiteHeader() {
                 {megaMenus.map((menu) => {
                   const expanded = openMegaMenu === menu.key;
                   return (
-                    <div key={menu.key} className="relative" onMouseEnter={() => setOpenMegaMenu(menu.key)}>
+                    <div
+                      key={menu.key}
+                      className="relative"
+                      onMouseEnter={() => { clearMegaCloseTimer(); setOpenMegaMenu(menu.key); }}
+                      onMouseLeave={scheduleMegaClose}
+                    >
                       <button
                         type="button"
                         aria-expanded={expanded}
                         aria-controls={`mega-menu-${menu.key}`}
                         data-active={isMegaMenuKeyActive(menu.key, strippedPath) || undefined}
                         className={`${NAV_LINK_CLASS} inline-flex items-center gap-1 text-center`}
-                        onClick={() => setOpenMegaMenu(expanded ? null : menu.key)}
-                        onFocus={() => setOpenMegaMenu(menu.key)}
+                        onClick={() => { clearMegaCloseTimer(); setOpenMegaMenu(expanded ? null : menu.key); }}
+                        onFocus={() => { clearMegaCloseTimer(); setOpenMegaMenu(menu.key); }}
                       >
                         {menu.label}
                         <ChevronDown className={`h-3.5 w-3.5 transition-transform ${expanded ? "rotate-180" : ""}`} aria-hidden />
@@ -644,7 +649,7 @@ export function SiteHeader() {
               <Button
                 type="button"
                 variant="ghost"
-                className="h-10 w-10 shrink-0 rounded-xl border border-[var(--header-border)] p-0 text-[var(--header-text)] hover:bg-[var(--nav-hover)]"
+                className="h-10 w-10 shrink-0 rounded-xl border border-[var(--nn-nav-border)] p-0 text-[var(--nn-nav-fg)] hover:bg-[var(--nn-nav-hover-bg)]"
                 aria-label={t("nav.openMenu")}
                 onClick={() => setMobileOpen(true)}
               >
@@ -850,7 +855,7 @@ export function SiteHeader() {
                 aria-label={t("brand.homeAriaLabel")}
                 onClick={() => setMobileOpen(false)}
               >
-                <SiteBrandLogoMark />
+                <SiteBrandLogoMark exactSourceOnly />
               </Link>
               <Button type="button" variant="ghost" className="h-10 w-10 shrink-0 rounded-xl border border-[var(--nav-border)] p-0 text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]" aria-label={t("nav.closeMenu")} onClick={() => setMobileOpen(false)}>
                 <X className="h-5 w-5" />
