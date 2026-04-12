@@ -24,6 +24,7 @@ import {
   pathwayLessonMarketingDetailHref,
 } from "@/lib/lessons/pathway-lesson-types";
 import { pathwayTopicClusterBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
+import { PathwayTopicClusterProgrammaticSeo } from "@/components/pathway-lessons/pathway-topic-cluster-programmatic-seo";
 import { PathwayTopicClusterSiblingNav } from "@/components/pathway-lessons/pathway-topic-cluster-sibling-nav";
 import { absoluteUrl } from "@/lib/seo/site-origin";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
@@ -83,9 +84,26 @@ export async function generateMetadata({ params }: Pick<Props, "params">): Promi
           topicClusters.find((t) => t.topicSlug === topicSlug)?.label ?? topicSlug.replace(/-/g, " ");
         const title = pathwayLessonTopicClusterMetaTitle(pathway, label);
         const description = pathwayLessonTopicClusterMetaDescription(pathway, label);
+        const keywords = Array.from(
+          new Set(
+            [
+              topicLabel,
+              pathway.shortName,
+              pathway.displayName,
+              `${pathway.shortName} lessons`,
+              `${topicLabel} lessons`,
+              `${pathway.countrySlug === "canada" ? "Canada" : "US"} ${pathway.shortName}`,
+              "NCLEX lessons",
+              "clinical reasoning",
+              "question bank",
+              "CAT practice",
+            ].filter(Boolean),
+          ),
+        ).slice(0, 20);
         return {
           title,
           description,
+          keywords,
           alternates: { canonical },
           openGraph: { title, description, url: canonical, type: "website" },
           twitter: { card: "summary_large_image", title, description },
@@ -213,10 +231,6 @@ export default async function PathwayLessonTopicClusterPage({ params, searchPara
       <h1 className="mt-2 text-3xl font-extrabold text-[var(--theme-heading-text)]">
         {label} · {pathway.shortName}
       </h1>
-      <p className="mt-3 text-[var(--theme-muted-text)]">
-        {label} lessons for {pathway.displayName}: same {pathway.countrySlug === "canada" ? "Canadian" : "US"} exam scope as
-        the parent hub—topics here are not mixed with other countries or license levels.
-      </p>
 
       <div className="mt-6">
         <PathwayTopicClusterSiblingNav
@@ -225,6 +239,15 @@ export default async function PathwayLessonTopicClusterPage({ params, searchPara
           currentTopicSlug={topicSlug}
         />
       </div>
+
+      <PathwayTopicClusterProgrammaticSeo
+        pathway={pathway}
+        lessonsBasePath={base}
+        topicLabel={label}
+        topicSlug={topicSlug}
+        relatedLessons={lessons.map((l) => ({ slug: l.slug, title: l.title, topic: l.topic }))}
+        siblingTopics={topicClusters.map((t) => ({ topicSlug: t.topicSlug, label: t.label }))}
+      />
 
       {pageResult.locale ? <PathwayLessonContentLocaleBanner listLocale={pageResult.locale} /> : null}
 

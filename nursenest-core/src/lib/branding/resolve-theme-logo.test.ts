@@ -1,6 +1,9 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import { THEME_LOGO_SPACE_KEYS, resolveThemeLogo } from "@/lib/branding/resolve-theme-logo";
+import {
+  THEME_LOGO_SPACE_KEYS,
+  resolveThemeLogo,
+} from "@/lib/branding/resolve-theme-logo";
 import { THEME_OPTIONS } from "@/lib/theme/theme-registry";
 
 const CDN_BASE = "https://nursenest-images.tor1.cdn.digitaloceanspaces.com";
@@ -10,24 +13,39 @@ describe("resolveThemeLogo", () => {
     const r = resolveThemeLogo("teal", "full");
     assert.equal(r.kind, "cdn");
     assert.ok(r.url?.startsWith(CDN_BASE), r.url ?? "");
-    assert.equal(
-      r.url,
-      `${CDN_BASE}/Logos/teal-leaf_transparent.png`,
-    );
+    assert.equal(r.url, `${CDN_BASE}/Logos/teal-leaf_transparent.png`);
     assert.equal(r.objectKey, "Logos/teal-leaf_transparent.png");
+    assert.equal(r.assetThemeId, "teal");
   });
 
-  it("returns null and text-fallback for an unmapped registered theme", () => {
+  it("borrows a same-family mapped logo when the theme has no dedicated CDN key", () => {
     const r = resolveThemeLogo("ocean-mist", "full");
+    assert.equal(r.kind, "cdn");
+    assert.equal(r.assetThemeId, "ocean");
+    assert.equal(r.objectKey, THEME_LOGO_SPACE_KEYS.ocean);
+    assert.equal(r.url, `${CDN_BASE}/Logos/north-sea-leaf-transparent.png`);
+  });
+
+  it("returns text-fallback for a non-registry / unknown theme string", () => {
+    const r = resolveThemeLogo("__not_a_theme__", "full");
     assert.equal(r.kind, "text-fallback");
     assert.equal(r.url, null);
     assert.equal(r.objectKey, null);
+    assert.equal(r.assetThemeId, null);
   });
 
   it("does not return a same-origin path for a mapped theme", () => {
     const r = resolveThemeLogo("slate", "full");
     assert.equal(r.kind, "cdn");
     assert.ok(r.url && !r.url.startsWith("/"), r.url ?? "");
+  });
+
+  it("resolves every registered theme to a CDN URL (direct or family borrow)", () => {
+    for (const t of THEME_OPTIONS) {
+      const r = resolveThemeLogo(t.id, "full");
+      assert.equal(r.kind, "cdn", t.id);
+      assert.ok(r.url && r.objectKey && r.assetThemeId, t.id);
+    }
   });
 
   it("has no duplicate keys in THEME_LOGO_SPACE_KEYS (object literal guarantee + registry check)", () => {

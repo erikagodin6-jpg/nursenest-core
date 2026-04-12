@@ -15,7 +15,7 @@ export function FreemiumLessonPeek() {
     const ac = new AbortController();
     (async () => {
       try {
-        const res = await fetch("/api/lessons?pageSize=4", { signal: ac.signal });
+        const res = await fetch(`/api/lessons?pageSize=${FREEMIUM_LESSON_LIST_PAGE_SIZE}`, { signal: ac.signal });
         const data = await res.json();
         if (!res.ok) {
           if (!cancelled) setError(data.message ?? "Preview unavailable.");

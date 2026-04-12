@@ -1,6 +1,8 @@
 /**
  * Canonical theme → Spaces object key for the pre-colored transparent brand raster.
- * Exact registered theme ids only — no computed keys, no alias substitution, no local fallbacks.
+ *
+ * Primary map: exact `data-theme` id → CDN key. When a theme has no dedicated asset, an explicit
+ * same-family fallback id borrows a mapped logo (still CDN — never local `/public` chains).
  */
 import { nursenestImagesSpaceObjectUrl } from "@/config/marketing-cdn.catalog";
 import { marketingImageUsesProxy, marketingProxyPathForKey } from "@/lib/marketing-resolve-image-url";
@@ -13,6 +15,8 @@ export type ResolvedThemeLogo = {
   url: string | null;
   kind: ThemeLogoResolutionKind;
   objectKey: string | null;
+  /** Theme id whose `THEME_LOGO_SPACE_KEYS` entry was used (equals requested id when directly mapped). */
+  assetThemeId: string | null;
 };
 
 /**
@@ -64,13 +68,34 @@ export const THEME_LOGO_SPACE_KEYS: Readonly<Record<string, string>> = {
   "midnight-ink": "Logos/midnight-ink-leaf-transparent.png",
 } as const;
 
+/**
+ * Registered themes without a dedicated CDN key → borrow a mapped sibling in the same visual family.
+ * Keys must exist in `THEME_OPTIONS`; values must exist in `THEME_LOGO_SPACE_KEYS`.
+ */
+const THEME_LOGO_FALLBACK_THEME_ID: Readonly<Record<string, string>> = {
+  "ocean-mist": "ocean",
+  "mint-breeze": "teal",
+  "rose-quartz": "dusty-rose",
+  "plum-velvet": "lavender-dream",
+  "midnight-indigo": "deep-twilight",
+  mint: "teal",
+  "pastel-mint": "teal",
+  "soft-sage": "sage-garden",
+  "evergreen-steel": "forest",
+  "sky-kiss": "clinical-light",
+  bluebird: "arctic-frost",
+  "graphite-blue": "slate",
+  "neutral-sand": "honey-cream",
+  "dark-academia": "deep-twilight",
+};
+
 function urlForObjectKey(objectKey: string): string {
   if (marketingImageUsesProxy()) return marketingProxyPathForKey(objectKey);
   return nursenestImagesSpaceObjectUrl(objectKey);
 }
 
 /**
- * Registered theme id → Spaces object key, or null when the theme has no mapped CDN asset.
+ * Registered theme id → Spaces object key, or null when neither a direct nor family fallback map applies.
  * `logoVariant` is reserved for future split full/leaf keys; today both use the same mapped raster.
  */
 export function themeLogoSpaceKeyForRegisteredTheme(
@@ -78,21 +103,33 @@ export function themeLogoSpaceKeyForRegisteredTheme(
   _logoVariant: ThemeLogoVariant = "full",
 ): string | null {
   if (!themeId) return null;
-  return THEME_LOGO_SPACE_KEYS[themeId] ?? null;
+  const direct = THEME_LOGO_SPACE_KEYS[themeId];
+  if (direct) return direct;
+  const borrow = THEME_LOGO_FALLBACK_THEME_ID[themeId];
+  if (!borrow) return null;
+  return THEME_LOGO_SPACE_KEYS[borrow] ?? null;
 }
 
 /**
- * Single entry point for theme brand raster URLs. Unmapped themes return text-fallback only (no substitution).
+ * Single entry point for theme brand raster URLs. Uses direct CDN map, then explicit same-family fallback.
+ * Unknown / invalid theme ids → text-fallback only (no random default theme).
  */
 export function resolveThemeLogo(
   themeId: string | null | undefined,
   logoVariant: ThemeLogoVariant = "full",
 ): ResolvedThemeLogo {
+  void logoVariant;
   const id = themeId && themeId.length > 0 ? themeId : null;
-  const objectKey = themeLogoSpaceKeyForRegisteredTheme(id, logoVariant);
-  if (!id || !objectKey) {
-    return { url: null, kind: "text-fallback", objectKey: null };
+  if (!id) {
+    return { url: null, kind: "text-fallback", objectKey: null, assetThemeId: null };
+  }
+  const directKey = THEME_LOGO_SPACE_KEYS[id];
+  const assetThemeId = directKey ? id : (THEME_LOGO_FALLBACK_THEME_ID[id] ?? null);
+  const objectKey =
+    directKey ?? (assetThemeId ? THEME_LOGO_SPACE_KEYS[assetThemeId] ?? null : null);
+  if (!objectKey || !assetThemeId) {
+    return { url: null, kind: "text-fallback", objectKey: null, assetThemeId: null };
   }
   const url = urlForObjectKey(objectKey);
-  return { url, kind: "cdn", objectKey };
+  return { url, kind: "cdn", objectKey, assetThemeId };
 }

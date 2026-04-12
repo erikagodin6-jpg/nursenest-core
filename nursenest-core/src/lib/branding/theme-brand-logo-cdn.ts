@@ -1,6 +1,6 @@
 /**
  * Public CDN URLs for per-theme brand rasters on DigitalOcean Spaces (`nursenest-images`).
- * Resolution: {@link resolveThemeLogo} — exact theme id match, no default substitution.
+ * Resolution: {@link resolveThemeLogo} — direct CDN map, then explicit same-family borrow when needed.
  */
 import { getThemeBrandLogoSpaceKeyForCanonicalId } from "@/config/theme-brand-logo-space-keys";
 import {

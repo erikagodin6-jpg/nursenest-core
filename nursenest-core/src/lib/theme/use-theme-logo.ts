@@ -57,6 +57,8 @@ export function useThemeLogo(logoVariant: ThemeLogoVariant = "full"): {
   headerLogoMode: "dark-header" | "light-header";
   url: string | null;
   kind: "cdn" | "text-fallback";
+  /** Theme id whose CDN key was used (may differ when borrowing a sibling logo). */
+  assetThemeId: string | null;
 } {
   const rawThemeId = useSyncExternalStore(subscribe, readDomThemeRaw, getServerSnapshot);
   const registeredThemeId = useMemo(() => parseRegisteredThemeId(rawThemeId), [rawThemeId]);
@@ -74,9 +76,13 @@ export function useThemeLogo(logoVariant: ThemeLogoVariant = "full"): {
     console.debug("[theme-logo]", {
       themeId: registeredThemeId ?? rawThemeId,
       resolvedLogoUrl: resolved.url,
+      assetThemeId: resolved.assetThemeId,
+      borrowedLogo: Boolean(
+        registeredThemeId && resolved.assetThemeId && registeredThemeId !== resolved.assetThemeId,
+      ),
       textFallback: resolved.kind === "text-fallback",
     });
-  }, [registeredThemeId, rawThemeId, resolved.url, resolved.kind]);
+  }, [registeredThemeId, rawThemeId, resolved.url, resolved.kind, resolved.assetThemeId]);
 
   return {
     registeredThemeId,
@@ -86,5 +92,6 @@ export function useThemeLogo(logoVariant: ThemeLogoVariant = "full"): {
     headerLogoMode,
     url: resolved.url,
     kind: resolved.kind,
+    assetThemeId: resolved.assetThemeId,
   };
 }

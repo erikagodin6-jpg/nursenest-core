@@ -50,10 +50,26 @@ export function pathwayLessonTopicClusterMetaTitle(pathway: ExamPathwayDefinitio
   return `${topicLabel} · ${pathway.shortName} lessons (${pathwayCountryLabel(pathway)}) | NurseNest`;
 }
 
+function truncateMetaDescription(text: string, maxLen = 158): string {
+  const t = text.trim();
+  if (t.length <= maxLen) return t;
+  const slice = t.slice(0, maxLen - 1);
+  const lastSpace = slice.lastIndexOf(" ");
+  const base = lastSpace > 48 ? slice.slice(0, lastSpace) : slice;
+  return `${base}…`;
+}
+
+/**
+ * SERP-focused meta for topic lesson clusters (lesson-level topic intent).
+ * Keeps length within common snippet limits while adding question-bank + CAT vocabulary.
+ */
 export function pathwayLessonTopicClusterMetaDescription(
   pathway: ExamPathwayDefinition,
   topicLabel: string,
 ): string {
   const place = pathway.countrySlug === "canada" ? "Canadian" : "US";
-  return `Lessons tagged “${topicLabel}” for ${pathway.displayName} (${place} exam scope). Read previews here; subscribe for full lesson depth and pathway-matched questions.`;
+  const exam = pathway.displayName;
+  const topic = topicLabel.trim();
+  const raw = `${topic} lessons for ${pathway.shortName} (${exam}, ${place} scope): guided readings, clinical reasoning, and links to pathway-matched practice questions plus CAT-style adaptive study.`;
+  return truncateMetaDescription(raw);
 }
