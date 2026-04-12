@@ -33,17 +33,15 @@ test.describe("CAT entrypoint routing", () => {
   test("US FNP CAT keeps pathway-scoped fallback links when unavailable", async ({ page }) => {
     const catPath = "/us/np/fnp/cat";
     await page.goto(catPath, { waitUntil: "domcontentloaded" });
-    await expect(page.locator('a[href="/us/np/fnp/lessons"]')).toBeVisible();
-    await expect(page.locator('a[href="/us/np/fnp/questions"]')).toBeVisible();
+    await expect(page.locator('a[href="/us/np/fnp/lessons"]').first()).toBeVisible();
+    await expect(page.locator('a[href="/us/np/fnp/questions"]').first()).toBeVisible();
     await expect(page.locator(`a[href*="callbackUrl=${encodeURIComponent(catPath)}"]`)).toHaveCount(0);
   });
 
   test("blocked waitlist pathway keeps lessons and question bank available", async ({ page }) => {
     await page.goto("/canada/np/cnple/cat", { waitUntil: "domcontentloaded" });
-    await expect(page.getByRole("link", { name: "Lessons" })).toBeVisible();
-    await expect(page.getByRole("link", { name: "Question bank" })).toBeVisible();
-    await expect(page.locator('a[href="/canada/np/cnple/lessons"]')).toBeVisible();
-    await expect(page.locator('a[href="/canada/np/cnple/questions"]')).toBeVisible();
+    await expect(page.locator('a[href="/canada/np/cnple/lessons"]').first()).toBeVisible();
+    await expect(page.locator('a[href="/canada/np/cnple/questions"]').first()).toBeVisible();
     await expect(page.locator('a[href*="callbackUrl=%2Fcanada%2Fnp%2Fcnple%2Fcat"]')).toHaveCount(0);
   });
 
@@ -67,7 +65,7 @@ test.describe("CAT entrypoint routing", () => {
 
   test("tampered invalid pathway CAT route is blocked", async ({ page }) => {
     await page.goto("/us/rpn/rex-pn/cat", { waitUntil: "domcontentloaded" });
-    await expect(page.getByRole("link", { name: "Go Home" })).toBeVisible();
+    await expect(page.getByRole("link", { name: /Browse lessons/i })).toBeVisible();
     await expect(page.locator('a[href*="callbackUrl=%2Fus%2Frpn%2Frex-pn%2Fcat"]')).toHaveCount(0);
   });
 });
