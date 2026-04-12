@@ -143,7 +143,7 @@ export function LearnerPersonalInfoForm({
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          name: name.trim(),
+          name: [firstName.trim(), lastName.trim()].filter(Boolean).join(" ") || name.trim(),
           firstName: firstName.trim() || null,
           lastName: lastName.trim() || null,
           displayName: displayName.trim() || null,
@@ -227,23 +227,8 @@ export function LearnerPersonalInfoForm({
                 className="mt-1 w-full max-w-lg rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-2 text-sm"
               />
               <p className="mt-1.5 text-xs text-muted-foreground">
-                How your name appears across NurseNest. Leave blank to use your first name.
+                Optional. If left blank, your first name will be used.
               </p>
-            </div>
-            <div>
-              <label htmlFor="pi-name" className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                {t("learner.profile.label.name")}
-              </label>
-              <input
-                id="pi-name"
-                name="name"
-                autoComplete="name"
-                required
-                maxLength={120}
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                className="mt-1 w-full max-w-lg rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-2 text-sm"
-              />
             </div>
             <div>
               <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{t("learner.profile.label.email")}</span>

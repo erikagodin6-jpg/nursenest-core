@@ -3,6 +3,7 @@ import { auth } from "@/lib/auth";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { LearnerAccountCrossLinks } from "@/components/student/learner-account-cross-links";
 import { LearnerBillingPageContent } from "@/components/student/learner-billing-page-content";
+import { BillingPortalReturnBanner } from "@/components/student/billing-portal-return-banner";
 import { PremiumEmptyState } from "@/components/ui/premium-empty-state";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { loadBillingPagePayload } from "@/lib/learner/load-billing-page-payload";
@@ -69,6 +70,7 @@ export default async function AccountBillingPage() {
   return (
     <main className="space-y-6">
       <BreadcrumbTrail items={crumbs} />
+      <BillingPortalReturnBanner />
       <div>
         <h1 className="text-2xl font-bold text-[var(--theme-heading-text)]">{t("learner.account.billing.title")}</h1>
         <p className="mt-2 max-w-2xl text-sm text-muted-foreground">{t("learner.account.billing.intro")}</p>

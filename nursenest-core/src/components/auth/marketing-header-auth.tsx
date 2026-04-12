@@ -88,7 +88,7 @@ export function MarketingHeaderAuthDesktop() {
       {open ? (
         <div
           role="menu"
-          className="absolute end-0 z-[100] mt-2 min-w-[13rem] rounded-xl border border-[var(--nav-border)] bg-[var(--nav-bg)] py-1 shadow-[var(--shadow-elevated)]"
+          className="nn-nav-popup absolute end-0 z-[100] mt-2 min-w-[13rem] rounded-xl border border-[var(--nav-border)] bg-[var(--nav-bg)] py-1 shadow-[var(--shadow-elevated)]"
         >
           <div className="border-b border-[var(--nav-border)] px-3 py-2 text-xs text-[var(--nav-muted)]">
             <div className="font-mono text-[11px] text-[var(--nav-muted)]" title={user.id}>

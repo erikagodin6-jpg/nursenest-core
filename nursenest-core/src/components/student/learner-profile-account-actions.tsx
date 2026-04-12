@@ -4,6 +4,7 @@ import Link from "next/link";
 import { signOut } from "next-auth/react";
 import { useState } from "react";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
+import { trackClientEvent } from "@/lib/observability/posthog-client";
 
 export function LearnerProfileAccountActions({
   hasPassword,
@@ -63,6 +64,7 @@ export function LearnerProfileAccountActions({
   async function openBillingPortal() {
     setBillingBusy(true);
     setError(null);
+    trackClientEvent("billing_portal_opened", { surface: "account_actions" });
     try {
       const res = await fetch("/api/billing/portal", { method: "POST" });
       const data = (await res.json()) as { url?: string; error?: string };

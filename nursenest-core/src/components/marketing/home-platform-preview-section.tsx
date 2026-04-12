@@ -1,58 +1,38 @@
 "use client";
 
-import { useMemo } from "react";
-import { Activity, CheckCircle2, FileText } from "lucide-react";
-import { MarketingHeroCarousel } from "@/components/marketing/marketing-hero-carousel";
-import { buildHomepageHeroSlidesAtIndices } from "@/config/home-hero-carousel";
+import { useMemo, useState } from "react";
+import { Activity, CheckCircle2, FileText, Target } from "lucide-react";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { HomeConversionCtaStrip } from "@/components/marketing/home-conversion-cta-strip";
-import { MarketingChainScreenshot } from "@/components/marketing/marketing-screenshot-stack";
-import { getScreenshotsByIds } from "@/lib/marketing/screenshot-registry";
 import { formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
 
 /**
- * Order screenshots so the first passes highlight bank, rationales/lessons, flashcards, dashboard,
- * lesson library, reports, and NGN-style items before the rest (still all 15 slides, no duplicates).
- * Indices are zero-based against `HOMEPAGE_HERO_SLIDE_METADATA` (screenshot1 … screenshot15).
- */
-const PLATFORM_PREVIEW_SLIDE_ORDER: readonly number[] = [
-  9, 0, 11, 1, 2, 12, 4, 3, 5, 6, 7, 8, 10, 13, 14,
-];
-
-/**
- * Full screenshot carousel directly under the homepage hero CTAs so visitors see the product early.
- * Uses the same CDN image chain and i18n slide copy as `MarketingHeroCarousel` elsewhere.
+ * In-product proof block showing the real interaction model:
+ * question -> answer selection -> rationale -> readiness feedback.
  */
 export function HomePlatformPreviewSection() {
-  const { t, locale } = useMarketingI18n();
-  const slides = useMemo(
-    () => buildHomepageHeroSlidesAtIndices(t, PLATFORM_PREVIEW_SLIDE_ORDER),
-    [t, locale],
+  const { locale } = useMarketingI18n();
+  const [selectedAnswer, setSelectedAnswer] = useState<"A" | "B" | "C" | "D" | null>("B");
+
+  const options = useMemo(
+    () =>
+      [
+        { id: "A", text: "Increase oxygen to 6 L/min and reassess in 20 minutes." },
+        { id: "B", text: "Assess respiratory status now and notify the provider of acute decline." },
+        { id: "C", text: "Administer the next PRN opioid dose to reduce anxiety-driven tachypnea." },
+        { id: "D", text: "Delay reassessment until the next scheduled vital-sign check." },
+      ] as const,
+    [],
   );
-  const proofShots = useMemo(() => getScreenshotsByIds([10, 1, 7]), []);
-  const productProof = [
-    {
-      icon: FileText,
-      title: "Question Example",
-      body: "Exam-style stems with realistic distractors, scoped to your pathway and region.",
-      line1: "Priority: post-op respiratory decline after opioid dose",
-      line2: "Select the safest next nursing action",
-    },
-    {
-      icon: CheckCircle2,
-      title: "Rationale Preview",
-      body: "See why the correct option is right and why each incorrect option is unsafe.",
-      line1: "Correct answer logic tied to patient cues",
-      line2: "Wrong-option breakdown to prevent repeat errors",
-    },
-    {
-      icon: Activity,
-      title: "CAT Dashboard",
-      body: "Track readiness score, weak categories, and trend direction across sessions.",
-      line1: "Readiness: 68 - approaching exam readiness",
-      line2: "Weak areas: pharmacology and cardiac rhythm",
-    },
+  const correctAnswer = "B";
+  const isCorrect = selectedAnswer === correctAnswer;
+  const readinessBands = [
+    { label: "Readiness", value: 72, toneClass: "nn-progress-fill-semantic-readiness" },
+    { label: "Clinical Safety", value: 79, toneClass: "nn-progress-fill-semantic-success" },
+    { label: "Priority Decisions", value: 66, toneClass: "nn-progress-fill-semantic-info" },
+    { label: "Pharmacology", value: 58, toneClass: "nn-progress-fill-semantic-warning" },
   ] as const;
+  const weakAreas = ["Pharmacology", "Cardiac Rhythm", "Delegation"] as const;
 
   return (
     <section
@@ -67,65 +47,124 @@ export function HomePlatformPreviewSection() {
             {formatTitleCase("Product Proof", locale)}
           </p>
           <h2 id="home-platform-preview-heading" className="nn-marketing-h2 mt-2 text-balance">
-            {formatTitleCase("See The Product In Action", locale)}
+            {formatTitleCase("Experience The Platform Workflow", locale)}
           </h2>
           <p className="nn-marketing-body mx-auto mt-2 max-w-2xl text-pretty text-[var(--theme-muted-text)]">
-            {formatSentenceCase("Real UI previews: question flow, rationale depth, CAT readiness, and session reporting.", locale)}
-          </p>
-          <p className="nn-marketing-caption mx-auto mt-3 max-w-2xl text-pretty text-[color-mix(in_srgb,var(--theme-primary)_70%,var(--theme-muted-text))]">
-            {t("home.landing.platformCarousel.previewLabels")}
+            {formatSentenceCase("Walk through the same interaction loop learners use every day: answer, review rationale, then act on readiness feedback.", locale)}
           </p>
         </header>
-        <div className="mx-auto mb-8 grid w-full max-w-5xl gap-4 md:grid-cols-3">
-          {productProof.map((item) => {
-            const Icon = item.icon;
-            return (
-              <article key={item.title} className="nn-card-system nn-card-system-pad text-left">
-                <span className="nn-card-system__icon mb-2">
-                  <Icon className="nn-icon-md text-[var(--semantic-brand)]" aria-hidden />
-                </span>
-                <h3 className="nn-card-system__title">{formatTitleCase(item.title, locale)}</h3>
-                <p className="nn-card-system__description">{formatSentenceCase(item.body, locale)}</p>
-                <div className="mt-3 rounded-lg border border-[var(--border-subtle)] bg-[var(--surface)] px-3 py-3">
-                  <p className="text-sm font-semibold text-[var(--palette-text)]">
-                    {formatSentenceCase(item.line1, locale)}
-                  </p>
-                  <p className="mt-1 text-sm text-[var(--palette-text-muted)]">
-                    {formatSentenceCase(item.line2, locale)}
-                  </p>
+        <div className="mx-auto grid w-full max-w-5xl gap-4 md:grid-cols-2">
+          <article className="nn-card-system nn-card-system-pad">
+            <span className="nn-card-system__icon mb-2">
+              <FileText className="nn-icon-md text-[var(--semantic-brand)]" aria-hidden />
+            </span>
+            <p className="nn-card-system__eyebrow">{formatTitleCase("Real Question Card", locale)}</p>
+            <h3 className="nn-card-system__title">{formatTitleCase("Question And Answer Selection", locale)}</h3>
+            <p className="nn-card-system__description">
+              {formatSentenceCase("Exam-style prompts with pathway-specific decision making and realistic distractors.", locale)}
+            </p>
+            <div className="mt-4 rounded-xl border border-[var(--border-subtle)] bg-[var(--surface)] p-4">
+              <p className="text-sm font-semibold text-[var(--palette-text)]">
+                {formatSentenceCase("A postoperative learner reports new shortness of breath, oxygen saturation of 88%, and increasing restlessness. What is the best immediate nursing action?", locale)}
+              </p>
+              <ul className="mt-3 space-y-2">
+                {options.map((option) => {
+                  const active = selectedAnswer === option.id;
+                  return (
+                    <li key={option.id}>
+                      <button
+                        type="button"
+                        onClick={() => setSelectedAnswer(option.id)}
+                        className={`w-full rounded-lg border px-3 py-2 text-left text-sm transition ${
+                          active
+                            ? "border-[var(--semantic-brand)] bg-[color-mix(in_srgb,var(--semantic-brand)_12%,var(--surface))] text-[var(--palette-text)]"
+                            : "border-[var(--border-subtle)] bg-[var(--bg-card)] text-[var(--palette-text-muted)] hover:border-[var(--semantic-brand)] hover:text-[var(--palette-text)]"
+                        }`}
+                      >
+                        <span className="font-semibold">{option.id}.</span> {option.text}
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          </article>
+
+          <article className="nn-card-system nn-card-system-pad">
+            <span className="nn-card-system__icon mb-2">
+              <CheckCircle2 className="nn-icon-md text-[var(--semantic-success)]" aria-hidden />
+            </span>
+            <p className="nn-card-system__eyebrow">{formatTitleCase("Rationale Block", locale)}</p>
+            <h3 className="nn-card-system__title">{formatTitleCase("Full Rationale Explanation", locale)}</h3>
+            <p className="nn-card-system__description">
+              {formatSentenceCase("Every option receives feedback so learners understand why an answer is safe or unsafe.", locale)}
+            </p>
+            <div className="mt-4 rounded-xl border border-[var(--border-subtle)] bg-[var(--surface)] p-4">
+              <p className={`text-sm font-semibold ${isCorrect ? "text-[var(--semantic-success)]" : "text-[var(--semantic-warning)]"}`}>
+                {isCorrect
+                  ? formatTitleCase("Correct: Immediate respiratory assessment and escalation.", locale)
+                  : formatTitleCase("Recommended: Assess and escalate immediately.", locale)}
+              </p>
+              <p className="mt-2 text-sm text-[var(--palette-text-muted)]">
+                {formatSentenceCase("This client shows acute deterioration (hypoxemia, restlessness, respiratory change). Priority is immediate assessment and provider notification before additional sedatives or delayed checks.", locale)}
+              </p>
+              <ul className="mt-3 space-y-2 text-sm text-[var(--palette-text-muted)]">
+                <li>- {formatSentenceCase("Option A delays escalation while the patient is unstable.", locale)}</li>
+                <li>- {formatSentenceCase("Option C risks worsening respiratory suppression.", locale)}</li>
+                <li>- {formatSentenceCase("Option D postpones action despite high-risk symptoms.", locale)}</li>
+              </ul>
+            </div>
+          </article>
+
+          <article className="nn-card-system nn-card-system-pad md:col-span-2">
+            <span className="nn-card-system__icon mb-2">
+              <Activity className="nn-icon-md text-[var(--semantic-info)]" aria-hidden />
+            </span>
+            <p className="nn-card-system__eyebrow">{formatTitleCase("Performance Summary", locale)}</p>
+            <h3 className="nn-card-system__title">{formatTitleCase("Readiness, Weak Areas, And Adaptive Feedback", locale)}</h3>
+            <p className="nn-card-system__description">
+              {formatSentenceCase("After each session, learners get clear readiness metrics, weak-area targeting, and next-step guidance.", locale)}
+            </p>
+            <div className="mt-4 grid gap-4 lg:grid-cols-2">
+              <div className="rounded-xl border border-[var(--border-subtle)] bg-[var(--surface)] p-4">
+                <p className="text-sm font-semibold text-[var(--palette-text)]">{formatTitleCase("Readiness Snapshot", locale)}</p>
+                <ul className="mt-3 space-y-3">
+                  {readinessBands.map((band) => (
+                    <li key={band.label}>
+                      <div className="mb-1 flex items-center justify-between text-sm">
+                        <span className="text-[var(--palette-text-muted)]">{formatTitleCase(band.label, locale)}</span>
+                        <span className="font-semibold text-[var(--palette-text)]">{band.value}%</span>
+                      </div>
+                      <div className="nn-progress-track-semantic">
+                        <span
+                          className={`nn-progress-fill ${band.toneClass}`}
+                          style={{ width: `${band.value}%` }}
+                          aria-hidden
+                        />
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div className="rounded-xl border border-[var(--border-subtle)] bg-[var(--surface)] p-4">
+                <p className="text-sm font-semibold text-[var(--palette-text)]">{formatTitleCase("Weak Areas To Prioritize", locale)}</p>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {weakAreas.map((topic) => (
+                    <span
+                      key={topic}
+                      className="inline-flex items-center rounded-full border border-[var(--pill-border)] bg-[var(--pill-bg)] px-3 py-1 text-xs font-semibold text-[var(--pill-fg)]"
+                    >
+                      <Target className="mr-1.5 h-3 w-3" aria-hidden />
+                      {formatTitleCase(topic, locale)}
+                    </span>
+                  ))}
                 </div>
-              </article>
-            );
-          })}
-        </div>
-        <div className="mx-auto w-full max-w-5xl min-w-0">
-          <MarketingHeroCarousel
-            slides={slides}
-            mediaFrame="default"
-            testIdPrefix="home-platform-carousel"
-            imgTestIdPrefix="platform"
-            captionOverlay
-          />
-        </div>
-        <div className="mx-auto mt-10 grid w-full max-w-5xl gap-4 md:grid-cols-3">
-          {proofShots.map((shot) => (
-            <article key={shot.id} className="nn-card-system nn-card-system-pad text-left">
-              <MarketingChainScreenshot
-                objectKey={shot.objectKey}
-                publicUrl={shot.publicUrl}
-                alt={shot.alt ?? shot.label}
-                rounded="rounded-xl"
-                className="mb-3 border-[var(--border-subtle)]"
-              />
-              <h3 className="nn-card-system__title">{formatTitleCase(shot.label, locale)}</h3>
-              <p className="nn-card-system__description">{formatSentenceCase(shot.description, locale)}</p>
-            </article>
-          ))}
-        </div>
-        <div className="mx-auto mt-4 max-w-4xl text-center">
-          <p className="nn-marketing-body-sm text-[var(--theme-muted-text)]">
-            {formatSentenceCase(t("home.landing.platformCarousel.proofLine"), locale)}
-          </p>
+                <p className="mt-4 rounded-lg border border-[var(--border-subtle)] bg-[var(--bg-card)] px-3 py-3 text-sm text-[var(--palette-text-muted)]">
+                  {formatSentenceCase("Adaptive recommendation: complete a 15-question focused set on pharmacology, then run a readiness check to validate improvement.", locale)}
+                </p>
+              </div>
+            </div>
+          </article>
         </div>
         <div className="mx-auto mt-12 max-w-5xl border-t border-[var(--border-subtle)] pt-10">
           <HomeConversionCtaStrip placement="after_platform_preview" />

@@ -442,6 +442,10 @@ model Subscription {
   /** Stripe checkout / price-derived plan; when set, entitlements prefer this over `User.tier` for access scope. */
   planTier             TierCode?
   planCountry          CountryCode?
+  planDuration         String?            @db.VarChar(20)
+  currentPeriodEnd     DateTime?
+  trialEnd             DateTime?
+  cancelAtPeriodEnd    Boolean            @default(false)
   createdAt            DateTime           @default(now())
   updatedAt            DateTime           @updatedAt
 }

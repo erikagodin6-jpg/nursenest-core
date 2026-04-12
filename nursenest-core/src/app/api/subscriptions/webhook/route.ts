@@ -5,6 +5,7 @@ import type Stripe from "stripe";
 import { Prisma, SubscriptionStatus } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
+import { getStripeClient } from "@/lib/stripe/stripe-client";
 import { analyticsDistinctId, captureServerEvent } from "@/lib/observability/posthog-server";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 import { productEvent } from "@/lib/observability/product-events";
@@ -15,14 +16,6 @@ import {
   syncUserFromCheckoutSessionMetadata,
   syncUserFromStripePriceId,
 } from "@/lib/stripe/sync-user-from-stripe-subscription";
-
-/** Dynamic import so Next build (collect page data) never loads Stripe without a key. */
-async function getStripeClient(): Promise<Stripe | null> {
-  const key = process.env.STRIPE_SECRET_KEY?.trim();
-  if (!key) return null;
-  const { default: Stripe } = await import("stripe");
-  return new Stripe(key);
-}
 
 /**
  * Maps Stripe subscription status to DB. Returns `null` when we should **not** overwrite the row
@@ -51,6 +44,25 @@ function firstSubscriptionPriceId(sub: Stripe.Subscription): string | undefined 
   const item = sub.items?.data?.[0];
   if (!item?.price) return undefined;
   return typeof item.price === "string" ? item.price : item.price.id;
+}
+
+type LifecycleData = {
+  currentPeriodEnd?: Date;
+  trialEnd?: Date;
+  cancelAtPeriodEnd: boolean;
+};
+
+function billingLifecycleFields(sub: Stripe.Subscription): LifecycleData {
+  const fields: LifecycleData = { cancelAtPeriodEnd: Boolean(sub.cancel_at_period_end) };
+  const periodEnd = (sub as unknown as Record<string, unknown>).current_period_end;
+  if (typeof periodEnd === "number" && periodEnd > 0) {
+    fields.currentPeriodEnd = new Date(periodEnd * 1000);
+  }
+  const trialEnd = (sub as unknown as Record<string, unknown>).trial_end;
+  if (typeof trialEnd === "number" && trialEnd > 0) {
+    fields.trialEnd = new Date(trialEnd * 1000);
+  }
+  return fields;
 }
 
 function warnIfStripeKeyModeMismatch(): void {
@@ -114,28 +126,47 @@ export async function POST(req: Request) {
       const subId = typeof session.subscription === "string" ? session.subscription : session.subscription?.id;
       if (userId && subId) {
         const plan = planFromCheckoutMetadata(session.metadata ?? undefined);
+        const durationMeta = session.metadata?.duration ?? undefined;
         if (!plan) {
           safeServerLog("stripe_webhook", "checkout_missing_plan_metadata", {
             hasMetadata: session.metadata && Object.keys(session.metadata).length > 0 ? 1 : 0,
           });
         }
+
+        let lifecycle: LifecycleData = { cancelAtPeriodEnd: false };
+        try {
+          const stripeSub = await stripe.subscriptions.retrieve(subId);
+          lifecycle = billingLifecycleFields(stripeSub);
+        } catch {
+          safeServerLog("stripe_webhook", "lifecycle_fetch_failed_checkout", {});
+        }
+
         const activeBefore = await prisma.subscription.count({
           where: { userId, status: SubscriptionStatus.ACTIVE },
         });
+        const customerId = typeof session.customer === "string" ? session.customer : session.customer?.id ?? "";
         await prisma.$transaction(async (tx) => {
           await tx.subscription.upsert({
             where: { stripeSubscriptionId: subId },
             update: {
               status: SubscriptionStatus.ACTIVE,
               ...(plan ? { planTier: plan.tier, planCountry: plan.country } : {}),
+              ...(durationMeta ? { planDuration: durationMeta } : {}),
+              currentPeriodEnd: lifecycle.currentPeriodEnd ?? null,
+              trialEnd: lifecycle.trialEnd ?? null,
+              cancelAtPeriodEnd: lifecycle.cancelAtPeriodEnd,
             },
             create: {
               userId,
               status: SubscriptionStatus.ACTIVE,
               stripeSubscriptionId: subId,
-              stripeCustomerId: typeof session.customer === "string" ? session.customer : session.customer?.id ?? "",
+              stripeCustomerId: customerId,
               planTier: plan?.tier,
               planCountry: plan?.country,
+              planDuration: durationMeta,
+              currentPeriodEnd: lifecycle.currentPeriodEnd,
+              trialEnd: lifecycle.trialEnd,
+              cancelAtPeriodEnd: lifecycle.cancelAtPeriodEnd,
             },
           });
         });
@@ -169,28 +200,37 @@ export async function POST(req: Request) {
       if (row?.userId && priceId) {
         await syncUserFromStripePriceId(row.userId, priceId);
       }
-      const data: Prisma.SubscriptionUpdateManyMutationInput = {};
+      const lifecycle = billingLifecycleFields(sub);
+      const data: Prisma.SubscriptionUpdateManyMutationInput = {
+        currentPeriodEnd: lifecycle.currentPeriodEnd ?? null,
+        trialEnd: lifecycle.trialEnd ?? null,
+        cancelAtPeriodEnd: lifecycle.cancelAtPeriodEnd,
+      };
       if (status !== null) data.status = status;
       if (mapped) {
         data.planTier = mapped.tier;
         data.planCountry = mapped.country;
       }
-      if (Object.keys(data).length > 0) {
-        await prisma.$transaction(async (tx) => {
-          await tx.subscription.updateMany({
-            where: { stripeSubscriptionId: sub.id },
-            data,
-          });
+      await prisma.$transaction(async (tx) => {
+        await tx.subscription.updateMany({
+          where: { stripeSubscriptionId: sub.id },
+          data,
         });
-      }
+      });
     }
 
     if (event.type === "customer.subscription.deleted") {
-      const subscription = event.data.object as Stripe.Subscription;
+      const sub = event.data.object as Stripe.Subscription;
+      const lifecycle = billingLifecycleFields(sub);
       await prisma.$transaction(async (tx) => {
         await tx.subscription.updateMany({
-          where: { stripeSubscriptionId: subscription.id },
-          data: { status: SubscriptionStatus.CANCELLED },
+          where: { stripeSubscriptionId: sub.id },
+          data: {
+            status: SubscriptionStatus.CANCELLED,
+            cancelAtPeriodEnd: true,
+            currentPeriodEnd: lifecycle.currentPeriodEnd ?? null,
+            trialEnd: lifecycle.trialEnd ?? null,
+          },
         });
       });
     }

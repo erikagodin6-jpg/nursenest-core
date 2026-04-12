@@ -1,4 +1,4 @@
-import { SubscriptionStatus, type CountryCode, type TierCode } from "@prisma/client";
+import { SubscriptionStatus, TrialStatus, type CountryCode, type TierCode } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { isLearnerEntitlementAdminOverrideRole } from "@/lib/auth/staff-roles";
@@ -9,7 +9,7 @@ import { withRetry } from "@/lib/resilience/with-retry";
 
 export type AccessScope = {
   hasAccess: boolean;
-  reason: "active_subscription" | "admin_override" | "grace_period" | "no_access";
+  reason: "active_subscription" | "admin_override" | "grace_period" | "active_trial" | "no_access";
   tier: TierCode | null;
   country: CountryCode | null;
 };
@@ -22,7 +22,7 @@ export async function resolveEntitlement(userId: string): Promise<AccessScope> {
   const user = await withRetry(() =>
     prisma.user.findUnique({
       where: { id: userId },
-      select: { role: true, tier: true, country: true },
+      select: { role: true, tier: true, country: true, trialStatus: true, trialEndsAt: true },
     }),
   );
 
@@ -41,7 +41,10 @@ export async function resolveEntitlement(userId: string): Promise<AccessScope> {
 
   const subscription = await withRetry(() =>
     prisma.subscription.findFirst({
-      where: { userId, status: { in: [SubscriptionStatus.ACTIVE, SubscriptionStatus.GRACE] } },
+      where: {
+        userId,
+        status: { in: [SubscriptionStatus.ACTIVE, SubscriptionStatus.GRACE, SubscriptionStatus.PAST_DUE] },
+      },
       orderBy: { createdAt: "desc" },
       select: { status: true, planTier: true, planCountry: true },
     }),
@@ -66,12 +69,25 @@ export async function resolveEntitlement(userId: string): Promise<AccessScope> {
     };
   }
 
-  if (subscription?.status === SubscriptionStatus.GRACE) {
+  if (subscription?.status === SubscriptionStatus.GRACE || subscription?.status === SubscriptionStatus.PAST_DUE) {
     return {
       hasAccess: true,
       reason: "grace_period",
       tier: effectiveTier,
       country: effectiveCountry,
+    };
+  }
+
+  if (
+    user.trialStatus === TrialStatus.ACTIVE &&
+    user.trialEndsAt &&
+    user.trialEndsAt.getTime() > Date.now()
+  ) {
+    return {
+      hasAccess: true,
+      reason: "active_trial",
+      tier: user.tier,
+      country: baseCountry,
     };
   }
 

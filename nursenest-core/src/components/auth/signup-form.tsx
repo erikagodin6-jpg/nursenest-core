@@ -90,7 +90,7 @@ export function SignupForm({
           className="w-full rounded-xl border border-[var(--border-medium)] bg-[var(--bg-card)] px-3 py-2 text-[var(--theme-body-text)] placeholder:text-muted-foreground"
           type="text"
           name="firstName"
-          placeholder="First Name"
+          placeholder={t("pages.signup.placeholderFirstName") ?? "First name"}
           required
           autoComplete="given-name"
         />
@@ -98,7 +98,7 @@ export function SignupForm({
           className="w-full rounded-xl border border-[var(--border-medium)] bg-[var(--bg-card)] px-3 py-2 text-[var(--theme-body-text)] placeholder:text-muted-foreground"
           type="text"
           name="lastName"
-          placeholder="Last Name (Optional)"
+          placeholder={t("pages.signup.placeholderLastName") ?? "Last name"}
           autoComplete="family-name"
         />
       </div>

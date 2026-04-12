@@ -1,0 +1,386 @@
+[
+  {
+    "scenario": "desktop-light",
+    "theme": "pastel-lavender",
+    "viewport": {
+      "width": 1440,
+      "height": 1000
+    },
+    "pages": [
+      {
+        "route": "/",
+        "url": "http://localhost:3000/",
+        "checks": {
+          "logoVisible": false,
+          "noLogoArtifact": false,
+          "navLinksVisible": false,
+          "loginVisible": false,
+          "startPracticingVisible": false,
+          "sectionShellAligned": false,
+          "utilitySubordinate": false,
+          "stickyIntentional": false,
+          "stickyNoJump": false,
+          "noLogoFlickerOnScroll": false,
+          "mobileMenuOpens": null,
+          "mobileNoOverflow": null,
+          "notes": [
+            "Main header selector not found on this route."
+          ]
+        },
+        "summary": {
+          "A.mainHeader": "fail",
+          "B.utilityStrip": "fail",
+          "C.sticky": "fail",
+          "F.assetRendering": "fail"
+        }
+      },
+      {
+        "route": "/pricing",
+        "url": "http://localhost:3000/pricing",
+        "checks": {
+          "logoVisible": false,
+          "noLogoArtifact": false,
+          "navLinksVisible": false,
+          "loginVisible": false,
+          "startPracticingVisible": false,
+          "sectionShellAligned": false,
+          "utilitySubordinate": false,
+          "stickyIntentional": false,
+          "stickyNoJump": false,
+          "noLogoFlickerOnScroll": false,
+          "mobileMenuOpens": null,
+          "mobileNoOverflow": null,
+          "notes": [
+            "Main header selector not found on this route."
+          ]
+        },
+        "summary": {
+          "A.mainHeader": "fail",
+          "B.utilityStrip": "fail",
+          "C.sticky": "fail",
+          "F.assetRendering": "fail"
+        }
+      },
+      {
+        "route": "/login",
+        "url": "http://localhost:3000/login",
+        "checks": {
+          "logoVisible": false,
+          "noLogoArtifact": false,
+          "navLinksVisible": false,
+          "loginVisible": false,
+          "startPracticingVisible": false,
+          "sectionShellAligned": false,
+          "utilitySubordinate": false,
+          "stickyIntentional": false,
+          "stickyNoJump": false,
+          "noLogoFlickerOnScroll": false,
+          "mobileMenuOpens": null,
+          "mobileNoOverflow": null,
+          "notes": [
+            "Main header selector not found on this route."
+          ]
+        },
+        "summary": {
+          "A.mainHeader": "fail",
+          "B.utilityStrip": "fail",
+          "C.sticky": "fail",
+          "F.assetRendering": "fail"
+        }
+      }
+    ],
+    "screenshots": [
+      "/root/nursenest-core/nursenest-core/reports/header-qa-2026-04-12T03-18-32-368Z/desktop-light-home.png",
+      "/root/nursenest-core/nursenest-core/reports/header-qa-2026-04-12T03-18-32-368Z/desktop-light-_pricing.png",
+      "/root/nursenest-core/nursenest-core/reports/header-qa-2026-04-12T03-18-32-368Z/desktop-light-_login.png"
+    ]
+  },
+  {
+    "scenario": "desktop-dark",
+    "theme": "dark-clinical",
+    "viewport": {
+      "width": 1440,
+      "height": 1000
+    },
+    "pages": [
+      {
+        "route": "/",
+        "url": "http://localhost:3000/",
+        "checks": {
+          "logoVisible": false,
+          "noLogoArtifact": false,
+          "navLinksVisible": false,
+          "loginVisible": false,
+          "startPracticingVisible": false,
+          "sectionShellAligned": false,
+          "utilitySubordinate": false,
+          "stickyIntentional": false,
+          "stickyNoJump": false,
+          "noLogoFlickerOnScroll": false,
+          "mobileMenuOpens": null,
+          "mobileNoOverflow": null,
+          "notes": [
+            "Main header selector not found on this route."
+          ]
+        },
+        "summary": {
+          "A.mainHeader": "fail",
+          "B.utilityStrip": "fail",
+          "C.sticky": "fail",
+          "F.assetRendering": "fail"
+        }
+      },
+      {
+        "route": "/pricing",
+        "url": "http://localhost:3000/pricing",
+        "checks": {
+          "logoVisible": true,
+          "noLogoArtifact": true,
+          "navLinksVisible": true,
+          "loginVisible": true,
+          "startPracticingVisible": true,
+          "sectionShellAligned": true,
+          "utilitySubordinate": true,
+          "stickyIntentional": false,
+          "stickyNoJump": true,
+          "noLogoFlickerOnScroll": true,
+          "mobileMenuOpens": null,
+          "mobileNoOverflow": null,
+          "notes": []
+        },
+        "summary": {
+          "A.mainHeader": "pass",
+          "B.utilityStrip": "pass",
+          "C.sticky": "fail",
+          "F.assetRendering": "pass"
+        }
+      },
+      {
+        "route": "/login",
+        "url": "http://localhost:3000/login",
+        "checks": {
+          "logoVisible": true,
+          "noLogoArtifact": true,
+          "navLinksVisible": true,
+          "loginVisible": true,
+          "startPracticingVisible": true,
+          "sectionShellAligned": true,
+          "utilitySubordinate": true,
+          "stickyIntentional": false,
+          "stickyNoJump": true,
+          "noLogoFlickerOnScroll": true,
+          "mobileMenuOpens": null,
+          "mobileNoOverflow": null,
+          "notes": []
+        },
+        "summary": {
+          "A.mainHeader": "pass",
+          "B.utilityStrip": "pass",
+          "C.sticky": "fail",
+          "F.assetRendering": "pass"
+        }
+      }
+    ],
+    "screenshots": [
+      "/root/nursenest-core/nursenest-core/reports/header-qa-2026-04-12T03-18-32-368Z/desktop-dark-home.png",
+      "/root/nursenest-core/nursenest-core/reports/header-qa-2026-04-12T03-18-32-368Z/desktop-dark-_pricing.png",
+      "/root/nursenest-core/nursenest-core/reports/header-qa-2026-04-12T03-18-32-368Z/desktop-dark-_login.png"
+    ]
+  },
+  {
+    "scenario": "mobile-light",
+    "theme": "mint",
+    "viewport": {
+      "width": 375,
+      "height": 812
+    },
+    "pages": [
+      {
+        "route": "/",
+        "url": "http://localhost:3000/",
+        "checks": {
+          "logoVisible": false,
+          "noLogoArtifact": false,
+          "navLinksVisible": false,
+          "loginVisible": false,
+          "startPracticingVisible": false,
+          "sectionShellAligned": false,
+          "utilitySubordinate": false,
+          "stickyIntentional": false,
+          "stickyNoJump": false,
+          "noLogoFlickerOnScroll": false,
+          "mobileMenuOpens": null,
+          "mobileNoOverflow": null,
+          "notes": [
+            "Main header selector not found on this route."
+          ]
+        },
+        "summary": {
+          "A.mainHeader": "fail",
+          "B.utilityStrip": "fail",
+          "C.sticky": "fail",
+          "F.assetRendering": "fail",
+          "E.mobileDrawer": "fail"
+        }
+      },
+      {
+        "route": "/pricing",
+        "url": "http://localhost:3000/pricing",
+        "checks": {
+          "logoVisible": false,
+          "noLogoArtifact": false,
+          "navLinksVisible": false,
+          "loginVisible": false,
+          "startPracticingVisible": false,
+          "sectionShellAligned": false,
+          "utilitySubordinate": false,
+          "stickyIntentional": false,
+          "stickyNoJump": false,
+          "noLogoFlickerOnScroll": false,
+          "mobileMenuOpens": null,
+          "mobileNoOverflow": null,
+          "notes": [
+            "Main header selector not found on this route."
+          ]
+        },
+        "summary": {
+          "A.mainHeader": "fail",
+          "B.utilityStrip": "fail",
+          "C.sticky": "fail",
+          "F.assetRendering": "fail",
+          "E.mobileDrawer": "fail"
+        }
+      },
+      {
+        "route": "/login",
+        "url": "http://localhost:3000/login",
+        "checks": {
+          "logoVisible": false,
+          "noLogoArtifact": false,
+          "navLinksVisible": false,
+          "loginVisible": false,
+          "startPracticingVisible": false,
+          "sectionShellAligned": false,
+          "utilitySubordinate": false,
+          "stickyIntentional": false,
+          "stickyNoJump": false,
+          "noLogoFlickerOnScroll": false,
+          "mobileMenuOpens": null,
+          "mobileNoOverflow": null,
+          "notes": [
+            "Main header selector not found on this route."
+          ]
+        },
+        "summary": {
+          "A.mainHeader": "fail",
+          "B.utilityStrip": "fail",
+          "C.sticky": "fail",
+          "F.assetRendering": "fail",
+          "E.mobileDrawer": "fail"
+        }
+      }
+    ],
+    "screenshots": [
+      "/root/nursenest-core/nursenest-core/reports/header-qa-2026-04-12T03-18-32-368Z/mobile-light-home.png",
+      "/root/nursenest-core/nursenest-core/reports/header-qa-2026-04-12T03-18-32-368Z/mobile-light-home-drawer-open.png",
+      "/root/nursenest-core/nursenest-core/reports/header-qa-2026-04-12T03-18-32-368Z/mobile-light-_pricing.png",
+      "/root/nursenest-core/nursenest-core/reports/header-qa-2026-04-12T03-18-32-368Z/mobile-light-_login.png"
+    ]
+  },
+  {
+    "scenario": "mobile-dark",
+    "theme": "midnight",
+    "viewport": {
+      "width": 375,
+      "height": 812
+    },
+    "pages": [
+      {
+        "route": "/",
+        "url": "http://localhost:3000/",
+        "checks": {
+          "logoVisible": false,
+          "noLogoArtifact": false,
+          "navLinksVisible": false,
+          "loginVisible": false,
+          "startPracticingVisible": false,
+          "sectionShellAligned": false,
+          "utilitySubordinate": false,
+          "stickyIntentional": false,
+          "stickyNoJump": false,
+          "noLogoFlickerOnScroll": false,
+          "mobileMenuOpens": null,
+          "mobileNoOverflow": null,
+          "notes": [
+            "Main header selector not found on this route."
+          ]
+        },
+        "summary": {
+          "A.mainHeader": "fail",
+          "B.utilityStrip": "fail",
+          "C.sticky": "fail",
+          "F.assetRendering": "fail",
+          "E.mobileDrawer": "fail"
+        }
+      },
+      {
+        "route": "/pricing",
+        "url": "http://localhost:3000/pricing",
+        "checks": {
+          "logoVisible": true,
+          "noLogoArtifact": true,
+          "navLinksVisible": true,
+          "loginVisible": true,
+          "startPracticingVisible": true,
+          "sectionShellAligned": true,
+          "utilitySubordinate": true,
+          "stickyIntentional": false,
+          "stickyNoJump": true,
+          "noLogoFlickerOnScroll": true,
+          "mobileMenuOpens": true,
+          "mobileNoOverflow": true,
+          "notes": []
+        },
+        "summary": {
+          "A.mainHeader": "pass",
+          "B.utilityStrip": "pass",
+          "C.sticky": "fail",
+          "F.assetRendering": "pass",
+          "E.mobileDrawer": "pass"
+        }
+      },
+      {
+        "route": "/login",
+        "url": "http://localhost:3000/login",
+        "checks": {
+          "logoVisible": true,
+          "noLogoArtifact": true,
+          "navLinksVisible": true,
+          "loginVisible": true,
+          "startPracticingVisible": true,
+          "sectionShellAligned": true,
+          "utilitySubordinate": true,
+          "stickyIntentional": false,
+          "stickyNoJump": true,
+          "noLogoFlickerOnScroll": true,
+          "mobileMenuOpens": true,
+          "mobileNoOverflow": true,
+          "notes": []
+        },
+        "summary": {
+          "A.mainHeader": "pass",
+          "B.utilityStrip": "pass",
+          "C.sticky": "fail",
+          "F.assetRendering": "pass",
+          "E.mobileDrawer": "pass"
+        }
+      }
+    ],
+    "screenshots": [
+      "/root/nursenest-core/nursenest-core/reports/header-qa-2026-04-12T03-18-32-368Z/mobile-dark-home.png",
+      "/root/nursenest-core/nursenest-core/reports/header-qa-2026-04-12T03-18-32-368Z/mobile-dark-home-drawer-open.png",
+      "/root/nursenest-core/nursenest-core/reports/header-qa-2026-04-12T03-18-32-368Z/mobile-dark-_pricing.png",
+      "/root/nursenest-core/nursenest-core/reports/header-qa-2026-04-12T03-18-32-368Z/mobile-dark-_login.png"
+    ]
+  }
+]

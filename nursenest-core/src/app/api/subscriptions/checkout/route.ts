@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import type Stripe from "stripe";
 import { z } from "zod";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
@@ -7,6 +6,7 @@ import { LEGAL_POLICY_BUNDLE_VERSION } from "@/lib/legal/legal-config";
 import { analyticsDistinctId, captureServerEvent } from "@/lib/observability/posthog-server";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 import { safeServerLogCritical } from "@/lib/observability/safe-server-log";
+import { getStripeClient } from "@/lib/stripe/stripe-client";
 import { stripePriceEnvKey, STRIPE_TRIAL_DAYS } from "@/lib/pricing/display-catalog";
 import {
   CHECKOUT_INVALID_PAYLOAD_CODE,
@@ -20,14 +20,6 @@ import {
 import { findPriceEntry, type BillingDuration } from "@/lib/stripe/pricing-map";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import type { TierCode } from "@prisma/client";
-
-/** Dynamic import so Next build (collect page data) never loads Stripe without a key. */
-async function getStripeClient(): Promise<Stripe | null> {
-  const key = process.env.STRIPE_SECRET_KEY?.trim();
-  if (!key) return null;
-  const { default: Stripe } = await import("stripe");
-  return new Stripe(key);
-}
 
 const bodySchema = z.object({
   country: z.enum(["CA", "US"]),
@@ -112,13 +104,21 @@ export async function POST(req: Request) {
 
   try {
     const acceptedAt = new Date();
-    await prisma.user.update({
+    const userForCheckout = await prisma.user.update({
       where: { id: userId },
       data: {
         legalPoliciesAcceptedAt: acceptedAt,
         legalPoliciesVersion: policyVersion,
       },
+      select: { email: true, learnerPath: true },
     });
+
+    const existingSub = await prisma.subscription.findFirst({
+      where: { userId, stripeCustomerId: { not: "" } },
+      orderBy: { createdAt: "desc" },
+      select: { stripeCustomerId: true },
+    });
+    const existingCustomerId = existingSub?.stripeCustomerId?.trim() || undefined;
 
     const trialDays = STRIPE_TRIAL_DAYS;
     const checkoutSession = await stripe.checkout.sessions.create({
@@ -128,6 +128,8 @@ export async function POST(req: Request) {
         subscription_data: { trial_period_days: trialDays },
         payment_method_collection: "always",
       } : {}),
+      ...(existingCustomerId ? { customer: existingCustomerId } : { customer_email: userForCheckout.email }),
+      allow_promotion_codes: true,
       success_url: `${appUrl}/app?checkout=success`,
       cancel_url: `${appUrl}/pricing?checkout=cancelled`,
       client_reference_id: userId,
@@ -140,6 +142,7 @@ export async function POST(req: Request) {
         app: "nursenest-core",
         legalPolicyVersion: policyVersion,
         legalPoliciesAcceptedAt: acceptedAt.toISOString(),
+        ...(tier === "ALLIED" && userForCheckout.learnerPath ? { alliedProfession: userForCheckout.learnerPath } : {}),
       },
     });
 

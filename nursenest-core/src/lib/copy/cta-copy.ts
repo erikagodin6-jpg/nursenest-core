@@ -13,6 +13,8 @@ export const OPEN_STUDY_HUB_CTA = "Open Study Hub";
 export const SIGN_IN_CTA = "Sign In";
 export const GET_STARTED_CTA = "Get Started";
 export const START_FREE_CTA = "Start Free";
+export const RESUME_STUDYING_CTA = "Resume Studying";
+export const CONTINUE_STUDYING_CTA = "Continue Studying";
 
 export function getPathwayHubCta(pathwayLabel: string): string {
   const compact = pathwayLabel.replace(/\s+/g, " ").trim();

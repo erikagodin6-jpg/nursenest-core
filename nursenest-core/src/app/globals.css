@@ -787,6 +787,14 @@ a {
   object-position: left center;
 }
 
+.nn-header-logo-link {
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  padding: 0;
+}
+
 .nn-card {
   background: var(--bg-card, var(--theme-card-bg));
   border: 1px solid var(--border-subtle, var(--theme-card-border));
@@ -1458,9 +1466,11 @@ html[data-theme] .nn-marketing-surface {
 
 /* Header utility rail — preferences / region strip above the main nav */
 .nn-header-utility {
-  background: var(--header-utility-surface);
-  border-bottom: 1px solid var(--header-utility-border);
+  background: color-mix(in srgb, var(--header-utility-surface) 86%, var(--header-background));
+  border-bottom: 1px solid color-mix(in srgb, var(--header-utility-border) 78%, var(--header-background));
   color: var(--header-utility-text);
+  backdrop-filter: blur(2px);
+  opacity: 0.96;
 }
 
 /* Main sticky nav — elevated band with visible separation from hero below */
@@ -1468,7 +1478,7 @@ html[data-theme] .nn-marketing-surface {
   background: var(--header-background);
   color: var(--nav-fg);
   border-bottom: 1px solid var(--header-border);
-  box-shadow: none;
+  box-shadow: 0 1px 0 color-mix(in srgb, var(--header-border) 35%, transparent);
   isolation: isolate;
   backdrop-filter: none;
   transition:
@@ -1479,6 +1489,75 @@ html[data-theme] .nn-marketing-surface {
 .nn-header-nav--scrolled {
   box-shadow: var(--header-nav-shadow);
   border-bottom-color: color-mix(in srgb, var(--header-border) 86%, var(--header-background));
+}
+
+/* === Light-theme 3-layer header ===
+ *
+ * Dark themes use a single unified dark header (nn-header-nav, unchanged above).
+ * Light themes use three stacked bands:
+ *   1. nn-header-utility-dark  – top preferences rail on brand/nav background
+ *   2. nn-header-logo-row      – logo + nav links + CTA on page background
+ *   3. nn-header-accent-bar    – thin bottom strip on brand/nav background
+ */
+
+/* Top dark brand bar (and bottom accent bar base) for light-theme 3-layer header */
+.nn-header-utility-dark {
+  background: var(--theme-nav-background, var(--nav-bg));
+  color: var(--theme-nav-foreground, var(--nav-fg));
+  border-bottom: 1px solid color-mix(in srgb, var(--theme-nav-foreground, var(--nav-fg)) 12%, transparent);
+  /* Override utility rail alias tokens so inner text references resolve correctly */
+  --header-utility-text: var(--theme-nav-foreground, var(--nav-fg));
+  --header-utility-border: color-mix(in srgb, var(--theme-nav-foreground, var(--nav-fg)) 12%, transparent);
+}
+
+/* Logo/content row — sits on page background, content uses heading/body text */
+.nn-header-logo-row {
+  background: var(--theme-background, var(--bg-page));
+  color: var(--theme-heading-text);
+  border-bottom: none;
+  box-shadow: none;
+  isolation: isolate;
+  transition: box-shadow var(--motion-base) var(--motion-ease);
+  /* Override header link tokens to work on a light page surface */
+  --header-link: var(--theme-heading-text);
+  --header-link-hover: var(--theme-brand-strong, var(--theme-primary));
+  --header-link-active: var(--theme-brand-strong, var(--theme-primary));
+  --header-background: var(--theme-background, var(--bg-page));
+  --header-text: var(--theme-heading-text);
+  --header-border: color-mix(in srgb, var(--theme-border, var(--border)) 50%, transparent);
+  /* Override nav surface tokens to work on light page surface */
+  --nav-fg: var(--theme-heading-text);
+  --nav-link: var(--theme-heading-text);
+  --nav-link-hover: var(--theme-brand-strong, var(--theme-primary));
+  --nav-hover: color-mix(in srgb, var(--theme-primary) 8%, var(--theme-background, transparent));
+  --nav-active: color-mix(in srgb, var(--theme-primary) 10%, var(--theme-background, transparent));
+  --nav-border: var(--theme-border, var(--border));
+  --nav-muted: var(--theme-muted-text, var(--text-muted));
+}
+
+.nn-header-logo-row--scrolled {
+  box-shadow: 0 6px 24px -8px color-mix(in srgb, var(--theme-heading-text) 10%, transparent);
+}
+
+/* Bottom accent strip separating logo row from page content (light themes) */
+.nn-header-accent-bar {
+  height: 3px;
+  background: var(--theme-nav-background, var(--nav-bg));
+}
+
+/* Nav popup panels that always render on the dark nav-background surface.
+ * Apply to any absolutely-positioned dropdown inside nn-header-logo-row to
+ * reset the overridden light-surface tokens back to dark-surface values. */
+.nn-nav-popup {
+  --nav-fg: var(--theme-nav-foreground, #ffffff);
+  --nav-link: var(--theme-nav-foreground, #ffffff);
+  --nav-link-hover: var(--theme-nav-foreground, #ffffff);
+  --nav-link-active: var(--theme-nav-foreground, #ffffff);
+  --nav-hover: color-mix(in srgb, var(--theme-nav-foreground, #fff) 12%, var(--theme-nav-background, transparent));
+  --nav-active: color-mix(in srgb, var(--theme-nav-foreground, #fff) 10%, var(--theme-nav-background, transparent));
+  --nav-muted: color-mix(in srgb, var(--theme-nav-foreground, #fff) 70%, var(--theme-nav-background, transparent));
+  --nav-border: color-mix(in srgb, var(--theme-nav-foreground, #fff) 15%, var(--theme-nav-background, transparent));
+  --header-border: color-mix(in srgb, var(--theme-nav-foreground, #fff) 15%, var(--theme-nav-background, transparent));
 }
 
 .nn-footer-surface {

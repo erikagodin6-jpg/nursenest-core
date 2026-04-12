@@ -10,7 +10,8 @@ import { SiteBrandLogoMark } from "@/components/brand/site-brand-logo";
 import { useNursenestRegion } from "@/lib/region/use-nursenest-region";
 import { marketingExamPrepHubs } from "@/lib/marketing/marketing-exam-navigation";
 import { loginWithCallback, rnQuestions } from "@/lib/marketing/marketing-entry-routes";
-import { formatEyebrow, formatTitleCase } from "@/lib/format/text-case";
+import { PRIMARY_CTA } from "@/lib/copy/cta-copy";
+import { formatTitleCase } from "@/lib/format/text-case";
 
 function formatFooterNode(children: React.ReactNode, locale: string): React.ReactNode {
   return typeof children === "string" ? formatTitleCase(children, locale) : children;
@@ -48,177 +49,67 @@ export function SiteFooter() {
   const { region } = useNursenestRegion();
   const examHubs = marketingExamPrepHubs(region);
   const learnerSignInHref = withMarketingLocale(locale, loginWithCallback("/app"));
+  const startPracticingHref = withMarketingLocale(locale, "/signup?callbackUrl=%2Fapp");
 
   return (
     <footer className="nn-footer-surface mt-auto py-[var(--nn-rhythm-footer-y)] text-[var(--footer-fg)] shadow-[inset_0_1px_0_color-mix(in_srgb,var(--footer-fg)_8%,transparent)]">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="nn-section-shell">
         <div className="mb-6 sm:mb-8">
           <EmailSignupBanner />
         </div>
 
-        <div className="mb-6 grid grid-cols-2 gap-6 sm:gap-8 md:grid-cols-4 sm:mb-8">
-          <div>
-            <h3 className="mb-3 break-words text-sm font-semibold text-[var(--footer-fg)]">{formatEyebrow(t("footer.studyTools"), locale)}</h3>
-            <ul className="space-y-2 text-sm text-[var(--footer-fg)]">
-              <li>
-                <FLink href="/lessons">{t("footer.clinicalLessons")}</FLink>
-              </li>
-              <li>
-                <FLink href="/flashcards">{t("nav.flashcards")}</FLink>
-              </li>
-              <li>
-                <FLink href="/pre-nursing">{t("footer.preNursing")}</FLink>
-              </li>
-              <li>
-                <FLink href="/med-math">{t("footer.medMath")}</FLink>
-              </li>
-              <li>
-                <FLink href="/anatomy">{t("footer.anatomyExplorer")}</FLink>
-              </li>
-              <li>
-                <FLink href="/practice-exams">{t("footer.mockExams")}</FLink>
-              </li>
-              <li>
-                <FLink href={rnQuestions(region)}>{t("footer.testBank")}</FLink>
-              </li>
-              <li>
-                <FLink href="/case-studies">{t("footer.caseStudies")}</FLink>
-              </li>
-              <li>
-                <FLink href="/tools">{t("footer.clinicalTools")}</FLink>
-              </li>
-              <li>
-                <FLink href="/blog">{t("footer.blog")}</FLink>
-              </li>
-            </ul>
-          </div>
+        <div className="mb-8 rounded-2xl border border-[var(--footer-border)] bg-[color-mix(in_srgb,var(--footer-fg)_4%,var(--footer-bg))] px-5 py-6 sm:px-6 sm:py-7">
+          <div className="grid gap-7 md:grid-cols-2 lg:grid-cols-4">
+            <div className="space-y-4">
+              <div className="flex items-center bg-transparent">
+                <SiteBrandLogoMark variant="footer" />
+              </div>
+              <p className="max-w-xs text-sm leading-relaxed text-[var(--footer-muted)]">
+                Exam-focused prep for RN, PN / RPN, NP, and Allied Health learners across the United States and Canada.
+              </p>
+            </div>
 
-          <div>
-            <h3 className="mb-3 break-words text-sm font-semibold text-[var(--footer-fg)]">{formatEyebrow(t("footer.examPrep"), locale)}</h3>
-            <ul className="space-y-2 text-sm text-[var(--footer-fg)]">
-              <li>
-                <FLink href="/exam-prep">{t("footer.linkNursingExamPrepHub")}</FLink>
-              </li>
-              <li>
-                <FLink href={examHubs.rn}>{t("footer.linkNclexRnPrep")}</FLink>
-              </li>
-              <li>
-                <FLink href={examHubs.pn}>
-                  {region === "US" ? t("footer.linkPnExamPrepUs") : t("footer.linkPnExamPrepCa")}
-                </FLink>
-              </li>
-              <li>
-                <FLink href={examHubs.np}>
-                  {region === "US" ? t("footer.linkNpExamPrepUs") : t("footer.linkNpExamPrepCa")}
-                </FLink>
-              </li>
-              <li>
-                <FLink href="/question-of-the-day">{t("footer.questionOfTheDay")}</FLink>
-              </li>
-            </ul>
-            <h3 className="mb-3 mt-6 break-words text-sm font-semibold text-[var(--footer-fg)]">{formatEyebrow(t("footer.newGradSupportSection"), locale)}</h3>
-            <ul className="space-y-2 text-sm text-[var(--footer-fg)]">
-              <li>
-                <FLink href="/newgrad">{t("footer.newGradHub")}</FLink>
-              </li>
-              <li>
-                <FLink href="/new-grad/nursing">{t("footer.nursing")}</FLink>
-              </li>
-              <li>
-                <FLink href="/new-grad/paramedic">{t("footer.paramedic")}</FLink>
-              </li>
-              <li>
-                <FLink href="/new-grad/respiratory-therapy">{t("footer.respiratoryTherapy")}</FLink>
-              </li>
-            </ul>
-          </div>
+            <div>
+              <h3 className="mb-3 text-sm font-semibold text-[var(--footer-fg)]">{formatTitleCase("Exam Pathways", locale)}</h3>
+              <ul className="space-y-2 text-sm text-[var(--footer-fg)]">
+                <li><FLink href={examHubs.rn}>RN</FLink></li>
+                <li><FLink href={examHubs.pn}>PN / RPN</FLink></li>
+                <li><FLink href={examHubs.np}>NP</FLink></li>
+                <li><FLink href={examHubs.allied}>Allied Health</FLink></li>
+              </ul>
+            </div>
 
-          <div>
-            <h3 className="mb-3 break-words text-sm font-semibold text-[var(--footer-fg)]">{formatEyebrow(t("footer.resources"), locale)}</h3>
-            <ul className="space-y-2 text-sm text-[var(--footer-fg)]">
-              <li>
-                <FLink href="/shop">{t("nav.store")}</FLink>
-              </li>
-              <li>
-                <FLink href="/pricing">{t("footer.pricing")}</FLink>
-              </li>
-              <li>
-                <FLink href={learnerSignInHref}>{t("footer.learnerSignIn")}</FLink>
-              </li>
-              <li>
-                <FLink href="/faq">{t("footer.faq")}</FLink>
-              </li>
-              <li>
-                <FLink href="/contact">{t("footer.contact")}</FLink>
-              </li>
-              <li>
-                <FLink href="/about">{t("footer.about")}</FLink>
-              </li>
-              <li>
-                <FLink href="/for-institutions">{t("footer.forSchools")}</FLink>
-              </li>
-            </ul>
-            <h3 className="mb-3 mt-6 break-words text-sm font-semibold text-[var(--footer-fg)]">{formatEyebrow(t("footer.nursingSpecialties"), locale)}</h3>
-            <ul className="space-y-2 text-sm text-[var(--footer-fg)]">
-              <li>
-                <FLink href="/nursing-specialties">{t("footer.allSpecialties")}</FLink>
-              </li>
-              <li>
-                <FLink href="/guides/icu-nursing-ultimate-guide">{t("footer.icuGuide")}</FLink>
-              </li>
-              <li>
-                <FLink href="/guides/nicu-nursing-ultimate-guide">{t("footer.nicuGuide")}</FLink>
-              </li>
-            </ul>
-          </div>
+            <div>
+              <h3 className="mb-3 text-sm font-semibold text-[var(--footer-fg)]">{formatTitleCase("Explore", locale)}</h3>
+              <ul className="space-y-2 text-sm text-[var(--footer-fg)]">
+                <li><FLink href="/pricing">Pricing</FLink></li>
+                <li><FLink href="/lessons">Lessons</FLink></li>
+                <li><FLink href={rnQuestions(region)}>Practice Questions</FLink></li>
+                <li><FLink href="/blog">Blog</FLink></li>
+                <li><FLink href="/tools">Tools</FLink></li>
+              </ul>
+            </div>
 
-          <div>
-            <h3 className="mb-3 break-words text-sm font-semibold text-[var(--footer-fg)]">{formatEyebrow(t("footer.legal"), locale)}</h3>
-            <ul className="space-y-2 text-sm text-[var(--footer-fg)]">
-              <li>
-                <FLink href="/terms">{t("footer.terms")}</FLink>
-              </li>
-              <li>
-                <FLink href="/privacy">{t("footer.privacy")}</FLink>
-              </li>
-              <li>
-                <FLink href="/disclaimer">{t("footer.disclaimer")}</FLink>
-              </li>
-              <li>
-                <FLink href="/refund-policy">{t("footer.refundPolicy")}</FLink>
-              </li>
-              <li>
-                <FLink href="/acceptable-use">{t("footer.acceptableUse")}</FLink>
-              </li>
-            </ul>
-            <h3 className="mb-3 mt-6 break-words text-sm font-semibold text-[var(--footer-fg)]">{formatEyebrow(t("footer.alliedHealth"), locale)}</h3>
-            <ul className="space-y-2 text-sm text-[var(--footer-fg)]">
-              <li>
-                <FLink href="/allied-health">{t("footer.alliedHealthExamPrep")}</FLink>
-              </li>
-              <li>
-                <FLink href="/allied-health/rrt-exam-prep">{t("footer.linkAlliedRespiratoryTherapy")}</FLink>
-              </li>
-              <li>
-                <FLink href="/allied-health/paramedic-exam-prep">{t("footer.linkAlliedParamedic")}</FLink>
-              </li>
-            </ul>
-            <h3 className="mb-3 mt-6 break-words text-sm font-semibold text-[var(--footer-fg)]">{formatEyebrow(t("footer.educationEcosystem"), locale)}</h3>
-            <ul className="space-y-2 text-sm text-[var(--footer-fg)]">
-              <li>
-                <FLink href="/">{t("footer.linkEcosystemNursenest")}</FLink>
-              </li>
-              <li>
-                <a href="https://applynest.ca" target="_blank" rel="noopener noreferrer" className="nn-footer-link">
-                  {formatTitleCase(t("footer.linkEcosystemApplynest"), locale)}
-                </a>
-              </li>
-            </ul>
+            <div>
+              <h3 className="mb-3 text-sm font-semibold text-[var(--footer-fg)]">{formatTitleCase("Account", locale)}</h3>
+              <ul className="space-y-2 text-sm text-[var(--footer-fg)]">
+                <li><FLink href={learnerSignInHref}>Login</FLink></li>
+                <li>
+                  <Link
+                    href={startPracticingHref}
+                    className="nn-nav-cta inline-flex min-h-[40px] items-center justify-center rounded-xl px-4 py-2 text-sm font-semibold"
+                  >
+                    {formatTitleCase(PRIMARY_CTA, locale)}
+                  </Link>
+                </li>
+                <li><FLink href="/contact">Contact Support</FLink></li>
+              </ul>
+            </div>
           </div>
         </div>
 
         <div className="mb-6 rounded-xl border border-[var(--footer-border)] bg-[color-mix(in_srgb,var(--footer-fg)_4%,var(--footer-bg))] px-4 pb-6 pt-6">
-          <h3 className="mb-3 break-words text-sm font-semibold text-[var(--footer-fg)]">{formatEyebrow(t("footer.studyInYourLanguage"), locale)}</h3>
+          <h3 className="mb-3 break-words text-sm font-semibold text-[var(--footer-fg)]">{formatTitleCase(t("footer.studyInYourLanguage"), locale)}</h3>
           <div className="mb-3 flex flex-wrap gap-2">
             <MarketingLanguagePreferenceList
               renderItem={({ code, name, flag, disabled, onSelect }) => (
@@ -242,9 +133,6 @@ export function SiteFooter() {
         </div>
 
         <div className="flex flex-col items-center justify-between gap-4 rounded-xl border border-[var(--footer-border)] bg-[color-mix(in_srgb,var(--footer-fg)_5%,var(--footer-bg))] px-4 py-5 md:flex-row">
-          <div className="flex items-center gap-2 bg-transparent">
-            <SiteBrandLogoMark variant="footer" />
-          </div>
           <div className="text-sm text-[var(--footer-muted)]">
             © {new Date().getFullYear()} {t("brand.nurseNest")}. {t("footer.rights")}
           </div>

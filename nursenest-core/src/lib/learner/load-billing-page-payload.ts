@@ -88,11 +88,10 @@ export function formatBillingTierLabel(tier: TierCode, country: CountryCode | st
 async function loadStripeRenewalSnapshot(stripeSubscriptionId: string | null | undefined): Promise<StripeRenewalSnapshot | null> {
   const sid = stripeSubscriptionId?.trim();
   if (!sid) return null;
-  const key = process.env.STRIPE_SECRET_KEY?.trim();
-  if (!key) return null;
   try {
-    const Stripe = (await import("stripe")).default;
-    const stripe = new Stripe(key);
+    const { getStripeClient } = await import("@/lib/stripe/stripe-client");
+    const stripe = await getStripeClient();
+    if (!stripe) return null;
     const sub = await stripe.subscriptions.retrieve(sid);
     const item = sub.items.data[0];
     const rawInterval = item?.price?.recurring?.interval ?? (item?.plan as { interval?: string } | undefined)?.interval;
@@ -174,6 +173,10 @@ export async function loadBillingPagePayload(userId: string): Promise<BillingPag
         stripeCustomerId: true,
         planTier: true,
         planCountry: true,
+        planDuration: true,
+        currentPeriodEnd: true,
+        trialEnd: true,
+        cancelAtPeriodEnd: true,
         createdAt: true,
         updatedAt: true,
       },
@@ -226,7 +229,14 @@ export async function loadBillingPagePayload(userId: string): Promise<BillingPag
       ? listPathwaysCompatibleWithSubscription(entitlement).map((p) => p.shortName || p.displayName)
       : [];
 
-  const stripeRenewal = await loadStripeRenewalSnapshot(subscription?.stripeSubscriptionId);
+  let stripeRenewal = await loadStripeRenewalSnapshot(subscription?.stripeSubscriptionId);
+  if (!stripeRenewal && subscriptionRow?.currentPeriodEnd) {
+    stripeRenewal = {
+      billingInterval: null,
+      currentPeriodEnd: subscriptionRow.currentPeriodEnd,
+      cancelAtPeriodEnd: subscriptionRow.cancelAtPeriodEnd ?? false,
+    };
+  }
 
   const surface = deriveSurface({
     user,
@@ -239,7 +249,8 @@ export async function loadBillingPagePayload(userId: string): Promise<BillingPag
     subscription &&
     (subscription.status === SubscriptionStatus.ACTIVE ||
       subscription.status === SubscriptionStatus.GRACE ||
-      subscription.status === SubscriptionStatus.PAST_DUE);
+      subscription.status === SubscriptionStatus.PAST_DUE ||
+      subscription.status === SubscriptionStatus.CANCELLED);
   const showBillingPortal = Boolean(portalEligibleSub && subscription.stripeCustomerId?.trim());
 
   const now = Date.now();

@@ -1,4 +1,3 @@
-import type Stripe from "stripe";
 import { Prisma, TrialStatus } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
@@ -8,17 +7,11 @@ import { TRIAL_DURATION_MS } from "@/lib/trial/trial-constants";
 import { captureServerEvent, analyticsDistinctId } from "@/lib/observability/posthog-server";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { expireStaleTrialForUser } from "@/lib/trial/expire-stale-trial";
+import { getStripeClient } from "@/lib/stripe/stripe-client";
 
 export type StartTrialResult =
   | { ok: true; trialEndsAt: string }
   | { ok: false; code: string; message: string; status: number };
-
-async function getStripeClient(): Promise<Stripe | null> {
-  const key = process.env.STRIPE_SECRET_KEY?.trim();
-  if (!key) return null;
-  const { default: Stripe } = await import("stripe");
-  return new Stripe(key);
-}
 
 /**
  * If Stripe finds any subscription (past or present) on this email, deny trial
