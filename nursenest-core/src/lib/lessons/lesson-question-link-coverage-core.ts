@@ -1,7 +1,7 @@
 /**
  * Shared lesson ↔ bank link coverage scan (same predicate as lesson UI / audits).
  */
-import { ContentStatus, type CountryCode, type TierCode } from "@prisma/client";
+import { ContentStatus } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { getExamPathwayById, listExamPathways } from "@/lib/exam-pathways/exam-product-registry";
 import {
@@ -48,13 +48,6 @@ export type LessonQuestionLinkCoverageSummary = {
   };
 };
 
-function neededForIdealBand(count: number): number {
-  return relatedExamQuestionsNeededForIdealBand(count);
-}
-
-/** @internal export for gap-fill script */
-export { neededForIdealBand };
-
 /**
  * Full scan: every published EN pathway lesson × registry pathways (optionally one pathway id).
  */
@@ -95,7 +88,7 @@ export async function scanLessonQuestionLinkCoverage(pathwayFilter?: string | nu
       });
       const tier = lessonQuestionCoverageTierFromCount(relatedQuestionCount);
       const neededForMin = relatedExamQuestionsNeededForMinTarget(relatedQuestionCount);
-      const neededIdeal = neededForIdealBand(relatedQuestionCount);
+      const neededIdeal = relatedExamQuestionsNeededForIdealBand(relatedQuestionCount);
       rows.push({
         pathwayId,
         slug: L.slug,

@@ -35,6 +35,11 @@ export function relatedExamQuestionsNeededForMinTarget(currentCount: number): nu
   return Math.max(0, RELATED_EXAM_QUESTIONS_MIN_TARGET - currentCount);
 }
 
+/** How many additional items are needed to reach the ideal band lower bound ({@link RELATED_EXAM_QUESTIONS_IDEAL_MIN}); 0 if already there or above. */
+export function relatedExamQuestionsNeededForIdealBand(currentCount: number): number {
+  return Math.max(0, RELATED_EXAM_QUESTIONS_IDEAL_MIN - currentCount);
+}
+
 /** Max `topic.contains` OR branches from title/slug tokens (additive only; direct matches stay separate). */
 const MAX_TOPIC_CONTAINS_TOKENS = 6;
 
