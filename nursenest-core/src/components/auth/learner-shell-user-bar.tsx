@@ -204,7 +204,7 @@ export function LearnerShellUserBar({ pathwayShortLabel = null }: { pathwayShort
               type="button"
               className="w-full touch-manipulation rounded-xl px-3 py-2.5 text-left text-sm font-medium text-foreground transition-colors hover:bg-[var(--surface-interactive-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/25"
               role="menuitem"
-              onClick={() => void signOut({ callbackUrl: "/" })}
+              onClick={() => void signOut({ redirectTo: "/" })}
             >
               {t("nav.signout")}
             </button>

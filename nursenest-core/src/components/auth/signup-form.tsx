@@ -30,12 +30,33 @@ export function SignupForm({
     return `${withMarketingLocale(locale, "/login")}?callbackUrl=${encodeURIComponent(target)}`;
   }, [searchParams, locale]);
   const [error, setError] = useState<string | null>(null);
+  const [pending, setPending] = useState(false);
   const [captchaToken, setCaptchaToken] = useState<string | null>(null);
   const [country, setCountry] = useState<"CA" | "US">("CA");
   const [examFocus, setExamFocus] = useState<SignupExamFocusValue>("nclex_rn");
   const onCaptcha = useCallback((tok: string | null) => setCaptchaToken(tok), []);
 
   const examOptions = useMemo(() => signupExamFocusOptions(country, t), [country, t]);
+
+  function signupErrorMessage(data: { error?: string; code?: string }): string {
+    if (typeof data.error === "string" && data.error.length > 0) return data.error;
+    switch (data.code) {
+      case "duplicate_email":
+        return "That email is already registered.";
+      case "duplicate_username":
+        return "That username is taken.";
+      case "captcha":
+        return "Captcha verification failed. Refresh the page and try again.";
+      case "validation":
+      case "invalid_username":
+        return "Check your details and try again.";
+      case "db":
+      case "missing_table":
+        return "We could not complete signup. Try again shortly.";
+      default:
+        return t("pages.signup.errorGeneric");
+    }
+  }
 
   async function onSubmit(formData: FormData) {
     setError(null);
@@ -49,46 +70,59 @@ export function SignupForm({
     const rawFirst = String(formData.get("firstName") ?? "").trim();
     const rawLast = String(formData.get("lastName") ?? "").trim();
     const fullName = rawLast ? `${rawFirst} ${rawLast}` : rawFirst;
+    const learnerPathRaw = String(formData.get("learnerPath") ?? "").trim();
     const payload = {
       name: fullName,
       firstName: rawFirst || null,
       lastName: rawLast || null,
-      username: String(formData.get("username") ?? ""),
-      email: String(formData.get("email") ?? ""),
+      username: String(formData.get("username") ?? "").trim(),
+      email: String(formData.get("email") ?? "").trim(),
       password: String(formData.get("password") ?? ""),
       country,
       tier: String(formData.get("tier") ?? "RN"),
       examFocus,
       studyGoal: String(formData.get("studyGoal") ?? ""),
       dailyStudyMinutes: Number(formData.get("dailyStudyMinutes") ?? 30),
-      learnerPath: String(formData.get("learnerPath") ?? ""),
+      learnerPath: learnerPathRaw || undefined,
       ...(captchaToken ? { captchaToken } : {}),
     };
 
-    const res = await fetch("/api/signup", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
+    setPending(true);
+    try {
+      const res = await fetch("/api/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
 
-    const data = (await res.json().catch(() => ({}))) as { error?: string };
+      const data = (await res.json().catch(() => ({}))) as { error?: string; code?: string };
 
-    if (!res.ok) {
-      setError(typeof data.error === "string" ? data.error : t("pages.signup.errorGeneric"));
-      return;
+      if (!res.ok) {
+        setError(signupErrorMessage(data));
+        return;
+      }
+      trackProductEvent(PH.signupSuccessClient, {
+        actor: "anonymous",
+        funnel_step: "account_created",
+        marketing_locale: locale,
+        signup_country: country,
+        exam_focus: examFocus,
+      });
+      router.push(loginAfterSignupHref);
+    } finally {
+      setPending(false);
     }
-    trackProductEvent(PH.signupSuccessClient, {
-      actor: "anonymous",
-      funnel_step: "account_created",
-      marketing_locale: locale,
-      signup_country: country,
-      exam_focus: examFocus,
-    });
-    router.push(loginAfterSignupHref);
   }
 
   return (
-    <form action={onSubmit} className="mt-6 space-y-4">
+    <form
+      className="mt-6 space-y-4"
+      onSubmit={(e) => {
+        e.preventDefault();
+        if (pending) return;
+        void onSubmit(new FormData(e.currentTarget));
+      }}
+    >
       <div className="grid gap-3 sm:grid-cols-2">
         <input
           className="w-full rounded-xl border border-[var(--border-medium)] bg-[var(--bg-card)] px-3 py-2 text-[var(--theme-body-text)] placeholder:text-muted-foreground"
@@ -212,8 +246,12 @@ export function SignupForm({
         {t("pages.signup.legalAfter")}
       </p>
       {error ? <p className="text-sm text-red-600">{error}</p> : null}
-      <button className="nn-btn-primary w-full px-4 py-3 text-base font-semibold" type="submit">
-        {t("pages.signup.createAccount")}
+      <button
+        className="nn-btn-primary w-full px-4 py-3 text-base font-semibold disabled:pointer-events-none disabled:opacity-60"
+        type="submit"
+        disabled={pending}
+      >
+        {pending ? `${t("pages.signup.createAccount")}…` : t("pages.signup.createAccount")}
       </button>
       <p className="text-center text-sm text-muted-foreground">
         <Link href={loginAfterSignupHref} className="font-semibold text-primary underline-offset-2 hover:underline">

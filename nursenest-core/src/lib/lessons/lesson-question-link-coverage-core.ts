@@ -48,24 +48,55 @@ export type LessonQuestionLinkCoverageSummary = {
   };
 };
 
+function buildLessonQuestionLinkSummary(
+  pathwayIds: string[],
+  skippedPathways: string[],
+  rows: LessonQuestionLinkCoverageRow[],
+): LessonQuestionLinkCoverageSummary {
+  return {
+    generatedAt: new Date().toISOString(),
+    pathwayCount: pathwayIds.length - skippedPathways.length,
+    lessonRows: rows.length,
+    byTier: {
+      critical: rows.filter((r) => r.tier === "critical").length,
+      low: rows.filter((r) => r.tier === "low").length,
+      below_minimum: rows.filter((r) => r.tier === "below_minimum").length,
+      adequate: rows.filter((r) => r.tier === "adequate").length,
+      ideal: rows.filter((r) => r.tier === "ideal").length,
+    },
+    zeroQuestions: rows.filter((r) => r.relatedQuestionCount === 0).length,
+    underFiveQuestions: rows.filter((r) => r.relatedQuestionCount > 0 && r.relatedQuestionCount < 5).length,
+    belowMinTarget: rows.filter((r) => r.relatedQuestionCount < RELATED_EXAM_QUESTIONS_MIN_TARGET).length,
+    belowIdealBand: rows.filter(
+      (r) =>
+        r.relatedQuestionCount >= RELATED_EXAM_QUESTIONS_MIN_TARGET &&
+        r.relatedQuestionCount < RELATED_EXAM_QUESTIONS_IDEAL_MIN,
+    ).length,
+    skippedPathways,
+    thresholds: {
+      minTarget: RELATED_EXAM_QUESTIONS_MIN_TARGET,
+      idealMin: RELATED_EXAM_QUESTIONS_IDEAL_MIN,
+      idealMax: 25,
+    },
+  };
+}
+
 /**
- * Full scan: every published EN pathway lesson × registry pathways (optionally one pathway id).
+ * Scan arbitrary pathway ids (e.g. registry + DB-only catalogs). Unresolved ids are skipped with counts in summary.
  */
-export async function scanLessonQuestionLinkCoverage(pathwayFilter?: string | null): Promise<{
+export async function scanLessonQuestionLinkCoverageForPathways(
+  pathwayIds: string[],
+  resolvePathway: (pathwayId: string) => ExamPathwayDefinition | undefined,
+): Promise<{
   rows: LessonQuestionLinkCoverageRow[];
   summary: LessonQuestionLinkCoverageSummary;
 }> {
-  const pathwayIds = pathwayFilter
-    ? [pathwayFilter]
-    : listExamPathways()
-        .map((p) => p.id)
-        .sort((a, b) => a.localeCompare(b));
-
+  const sortedIds = [...new Set(pathwayIds)].sort((a, b) => a.localeCompare(b));
   const rows: LessonQuestionLinkCoverageRow[] = [];
   const skippedPathways: string[] = [];
 
-  for (const pathwayId of pathwayIds) {
-    const pathway = getExamPathwayById(pathwayId);
+  for (const pathwayId of sortedIds) {
+    const pathway = resolvePathway(pathwayId);
     if (!pathway) {
       skippedPathways.push(pathwayId);
       continue;
@@ -104,32 +135,26 @@ export async function scanLessonQuestionLinkCoverage(pathwayFilter?: string | nu
     }
   }
 
-  const summary: LessonQuestionLinkCoverageSummary = {
-    generatedAt: new Date().toISOString(),
-    pathwayCount: pathwayIds.length - skippedPathways.length,
-    lessonRows: rows.length,
-    byTier: {
-      critical: rows.filter((r) => r.tier === "critical").length,
-      low: rows.filter((r) => r.tier === "low").length,
-      below_minimum: rows.filter((r) => r.tier === "below_minimum").length,
-      adequate: rows.filter((r) => r.tier === "adequate").length,
-      ideal: rows.filter((r) => r.tier === "ideal").length,
-    },
-    zeroQuestions: rows.filter((r) => r.relatedQuestionCount === 0).length,
-    underFiveQuestions: rows.filter((r) => r.relatedQuestionCount > 0 && r.relatedQuestionCount < 5).length,
-    belowMinTarget: rows.filter((r) => r.relatedQuestionCount < RELATED_EXAM_QUESTIONS_MIN_TARGET).length,
-    belowIdealBand: rows.filter(
-      (r) =>
-        r.relatedQuestionCount >= RELATED_EXAM_QUESTIONS_MIN_TARGET &&
-        r.relatedQuestionCount < RELATED_EXAM_QUESTIONS_IDEAL_MIN,
-    ).length,
-    skippedPathways,
-    thresholds: {
-      minTarget: RELATED_EXAM_QUESTIONS_MIN_TARGET,
-      idealMin: RELATED_EXAM_QUESTIONS_IDEAL_MIN,
-      idealMax: 25,
-    },
+  return {
+    rows,
+    summary: buildLessonQuestionLinkSummary(sortedIds, skippedPathways, rows),
   };
+}
 
-  return { rows, summary };
+import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
+
+/**
+ * Full scan: every published EN pathway lesson × registry pathways (optionally one pathway id).
+ */
+export async function scanLessonQuestionLinkCoverage(pathwayFilter?: string | null): Promise<{
+  rows: LessonQuestionLinkCoverageRow[];
+  summary: LessonQuestionLinkCoverageSummary;
+}> {
+  const pathwayIds = pathwayFilter
+    ? [pathwayFilter]
+    : listExamPathways()
+        .map((p) => p.id)
+        .sort((a, b) => a.localeCompare(b));
+
+  return scanLessonQuestionLinkCoverageForPathways(pathwayIds, (id) => getExamPathwayById(id));
 }

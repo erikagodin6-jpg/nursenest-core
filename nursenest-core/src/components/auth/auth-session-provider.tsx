@@ -7,5 +7,9 @@ import { SessionProvider } from "next-auth/react";
  * after credential login and navigation.
  */
 export function AuthSessionProvider({ children }: { children: React.ReactNode }) {
-  return <SessionProvider>{children}</SessionProvider>;
+  return (
+    <SessionProvider refetchOnWindowFocus refetchWhenOffline={false}>
+      {children}
+    </SessionProvider>
+  );
 }

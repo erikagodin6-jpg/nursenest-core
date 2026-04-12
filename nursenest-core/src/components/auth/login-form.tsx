@@ -20,32 +20,51 @@ export function LoginForm({
   const router = useRouter();
   const searchParams = useSearchParams();
   const [error, setError] = useState<string | null>(null);
+  const [pending, setPending] = useState(false);
 
   async function onSubmit(formData: FormData) {
     setError(null);
     const email = String(formData.get("email") ?? "").trim();
     const password = String(formData.get("password") ?? "");
-    const fromQuery = safeCallbackPath(searchParams.get("callbackUrl"));
-    const redirectTarget = fromQuery ?? "/app";
-
-    const result = await signIn("credentials", {
-      email,
-      password,
-      redirect: false,
-      redirectTo: redirectTarget,
-    });
-
-    if (result?.error) {
+    if (!email || !password) {
       setError(t("pages.login.errorInvalid"));
       return;
     }
-    if (result && result.ok === false) {
-      setError(t("pages.login.errorGeneric"));
-      return;
-    }
+    const fromQuery = safeCallbackPath(searchParams.get("callbackUrl"));
+    const redirectTarget = fromQuery ?? "/app";
 
-    router.refresh();
-    router.push(redirectTarget);
+    setPending(true);
+    try {
+      const result = await signIn("credentials", {
+        email,
+        password,
+        redirect: false,
+        redirectTo: redirectTarget,
+      });
+
+      if (!result) {
+        setError(t("pages.login.errorGeneric"));
+        return;
+      }
+      if (result.error) {
+        const code = result.code;
+        if (code === "CredentialsSignin" || result.status === 401) {
+          setError(t("pages.login.errorInvalid"));
+        } else {
+          setError(t("pages.login.errorGeneric"));
+        }
+        return;
+      }
+      if (result.ok === false) {
+        setError(t("pages.login.errorGeneric"));
+        return;
+      }
+
+      router.refresh();
+      router.push(redirectTarget);
+    } finally {
+      setPending(false);
+    }
   }
 
   return (
@@ -53,6 +72,7 @@ export function LoginForm({
       className="mt-6 space-y-4"
       onSubmit={(e) => {
         e.preventDefault();
+        if (pending) return;
         const fd = new FormData(e.currentTarget);
         void onSubmit(fd);
       }}
@@ -103,10 +123,11 @@ export function LoginForm({
         {t("pages.login.legalAfter")}
       </p>
       <button
-        className="w-full rounded-xl bg-role-cta px-4 py-3 text-sm font-semibold text-role-cta-foreground transition hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--primary)_40%,transparent)]"
+        className="w-full rounded-xl bg-role-cta px-4 py-3 text-sm font-semibold text-role-cta-foreground transition hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--primary)_40%,transparent)] disabled:pointer-events-none disabled:opacity-60"
         type="submit"
+        disabled={pending}
       >
-        {t("pages.login.submit")}
+        {pending ? `${t("pages.login.submit")}…` : t("pages.login.submit")}
       </button>
     </form>
   );

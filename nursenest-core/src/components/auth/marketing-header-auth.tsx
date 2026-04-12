@@ -126,7 +126,7 @@ export function MarketingHeaderAuthDesktop() {
             type="button"
             className="block w-full border-t border-[var(--nav-border)] px-3 py-2 text-start nn-marketing-body-sm font-medium tracking-normal text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
             role="menuitem"
-            onClick={() => void signOut({ callbackUrl: "/" })}
+            onClick={() => void signOut({ redirectTo: "/" })}
           >
             {formatTitleCase(t("nav.signout"), locale)}
           </button>
@@ -193,7 +193,7 @@ export function MarketingHeaderAuthMobile({ onNavigate }: { onNavigate: () => vo
       <button
         type="button"
         className="w-full rounded-xl border border-[var(--nav-border)] px-3 py-2.5 nn-marketing-body-sm font-medium tracking-normal text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
-        onClick={() => void signOut({ callbackUrl: "/" })}
+        onClick={() => void signOut({ redirectTo: "/" })}
       >
         {formatTitleCase(t("nav.signout"), locale)}
       </button>

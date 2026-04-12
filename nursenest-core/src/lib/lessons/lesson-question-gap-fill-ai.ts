@@ -256,7 +256,7 @@ export async function runLessonGapAiDrafts(options: {
         const warnings = [...v.warnings];
         if (existingQ) warnings.push("Stem hash matches an existing Question in the bank.");
         if (existingDraft) warnings.push("Stem hash matches another pending/approved draft.");
-        if (existingQ || existingDraft) v.duplicateRisk = true;
+        const duplicateRisk = v.duplicateRisk || Boolean(existingQ || existingDraft);
 
         await prisma.generatedQuestionDraft.create({
           data: {
@@ -269,7 +269,7 @@ export async function runLessonGapAiDrafts(options: {
               ok: v.ok,
               errors: v.errors,
               warnings,
-              duplicateRisk: v.duplicateRisk,
+              duplicateRisk,
             },
             reviewStatus: DraftReviewStatus.PENDING_REVIEW,
             stemHash: sh,

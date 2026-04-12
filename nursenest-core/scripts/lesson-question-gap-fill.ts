@@ -103,6 +103,7 @@ async function main() {
     }
   }
 
+  /** AI drafts are not published; counts only change after promote to the bank. */
   const scanFinal = aiDrafts ? await scanLessonQuestionLinkCoverage(pathway) : scanAfterSalvage;
 
   const payload = {
@@ -110,7 +111,14 @@ async function main() {
     pathwayFilter: pathway,
     apply,
     aiDrafts,
-    salvageNotes,
+    notes: [
+      ...salvageNotes,
+      ...(aiDrafts
+        ? [
+            "AI output is stored as GeneratedQuestionDraft only; scanFinal counts exclude drafts until you promote with pathway-aligned topic/exam/tier.",
+          ]
+        : []),
+    ],
     scanBefore: { summary: scanBefore.summary, rowCount: scanBefore.rows.length },
     salvagePlanCount: salvagePlan.length,
     salvageApplied: applied,

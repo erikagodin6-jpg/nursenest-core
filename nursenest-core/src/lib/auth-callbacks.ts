@@ -1,4 +1,5 @@
 import type { NextAuthConfig } from "next-auth";
+import type { SessionUserRole } from "@/types/next-auth";
 
 /**
  * Shared JWT + session callbacks for the Node auth handler and the Edge middleware
@@ -43,19 +44,31 @@ export const authCallbacks: NonNullable<NextAuthConfig["callbacks"]> = {
     return token;
   },
   async session({ session, token }) {
-    if (session.user) {
-      const su = session.user as unknown as Record<string, unknown>;
-      if (token.sub) su.id = token.sub;
-      if (token.email !== undefined && token.email !== null) su.email = token.email as string;
-      if (token.name !== undefined && token.name !== null) su.name = token.name as string;
-      su.role = token.role;
-      su.country = token.country;
-      su.tier = token.tier;
-      su.alliedProfessionKey = token.alliedProfessionKey ?? null;
-      su.subscriptionStatus = token.subscriptionStatus;
-      su.credentialVersion =
-        typeof token.credentialVersion === "number" ? token.credentialVersion : 0;
+    if (!session.user) {
+      return session;
     }
+    const su = session.user as unknown as Record<string, unknown>;
+    /** Stable strings for client hooks / headers — never leave `id` undefined after login. */
+    const id = typeof token.sub === "string" && token.sub.length > 0 ? token.sub : "";
+    su.id = id;
+    su.email = typeof token.email === "string" ? token.email : "";
+    su.name = typeof token.name === "string" && token.name.length > 0 ? token.name : su.email || "Learner";
+    su.role = (token.role ?? "LEARNER") as SessionUserRole;
+    su.country = (token.country === "CA" || token.country === "US" ? token.country : "US") as "CA" | "US";
+    su.tier = (token.tier === "RPN" ||
+    token.tier === "LVN_LPN" ||
+    token.tier === "RN" ||
+    token.tier === "NP" ||
+    token.tier === "ALLIED"
+      ? token.tier
+      : "RN") as typeof token.tier;
+    su.alliedProfessionKey =
+      typeof token.alliedProfessionKey === "string" ? token.alliedProfessionKey : null;
+    su.subscriptionStatus =
+      token.subscriptionStatus === "active" || token.subscriptionStatus === "grace"
+        ? token.subscriptionStatus
+        : "none";
+    su.credentialVersion = typeof token.credentialVersion === "number" ? token.credentialVersion : 0;
     return session;
   },
 };

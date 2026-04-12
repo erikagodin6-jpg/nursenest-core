@@ -50,7 +50,7 @@ export function LearnerProfileAccountActions({
       setNewPassword("");
       setConfirmPassword("");
       if (data.signOutRecommended) {
-        await signOut({ callbackUrl: "/login" });
+        await signOut({ redirectTo: "/login" });
         return;
       }
       setMessage(data.message ?? t("learner.security.passwordUpdatedFallback"));

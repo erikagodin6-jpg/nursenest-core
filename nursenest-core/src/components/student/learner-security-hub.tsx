@@ -57,7 +57,7 @@ export function LearnerSecurityHub({
             disabled={signingOut}
             onClick={() => {
               setSigningOut(true);
-              void signOut({ callbackUrl: "/login" });
+              void signOut({ redirectTo: "/login" });
             }}
             className="inline-flex rounded-full bg-role-cta px-5 py-3 text-sm font-semibold text-role-cta-foreground disabled:opacity-50"
           >
