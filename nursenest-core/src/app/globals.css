@@ -74,9 +74,9 @@ body {
   /* Centralized palette roles (seeded before ThemeStateHydration applies per-theme values). */
   --palette-primary: #1da2d8;
   --palette-accent: #2563eb;
-  --palette-background: #f7faff;
+  --palette-background: #fafcff;
   --palette-surface: #ffffff;
-  --palette-surface-alt: #edf3fc;
+  --palette-surface-alt: #e3ecfb;
   --palette-text: #4b5563;
   --palette-text-muted: #6b7280;
   --palette-heading: #111827;
@@ -86,7 +86,7 @@ body {
   --palette-button-primary-text: #ffffff;
   --palette-button-secondary: #e4ecfb;
   --palette-button-secondary-text: #244d8a;
-  --palette-badge: #dbe8fb;
+  --palette-badge: #bfd3f8;
   --palette-badge-text: #285393;
   --palette-nav-background: #f1f6fd;
   --palette-nav: var(--palette-nav-background);
@@ -216,9 +216,9 @@ body {
   --footer-muted: color-mix(in srgb, var(--footer-fg) 76%, var(--footer-bg));
   --footer-border: color-mix(in srgb, var(--nav-border) 80%, var(--footer-bg));
   /* Pills: use badge color for a more visible tint on white card backgrounds */
-  --pill-bg: var(--theme-pill-bg, color-mix(in srgb, var(--palette-badge, var(--theme-accent)) 65%, var(--bg-card)));
+  --pill-bg: var(--theme-pill-bg, color-mix(in srgb, var(--palette-badge, var(--theme-accent)) 80%, var(--bg-card)));
   --pill-fg: var(--theme-pill-text, color-mix(in srgb, var(--text-accent) 85%, var(--theme-heading-text)));
-  --pill-border: var(--theme-pill-border, color-mix(in srgb, var(--text-accent, var(--accent-primary)) 32%, var(--border-subtle)));
+  --pill-border: var(--theme-pill-border, color-mix(in srgb, var(--text-accent, var(--accent-primary)) 44%, var(--border-subtle)));
 
   /*
    * Bubble / accent surfaces — the primary location where theme color appears.

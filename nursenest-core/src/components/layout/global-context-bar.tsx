@@ -148,10 +148,10 @@ function ContextPill({
   const baseClass =
     "inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-semibold tracking-wide transition-colors duration-100";
   const interactiveClass = isClickable
-    ? "cursor-pointer hover:bg-white/20 focus-visible:outline-2 focus-visible:outline-[var(--ring)]"
+    ? "cursor-pointer hover:bg-white/30 focus-visible:outline-2 focus-visible:outline-[var(--ring)]"
     : "cursor-default";
   const colorClass = active
-    ? "bg-white/15 text-[var(--nn-nav-fg,white)] border border-white/25"
+    ? "bg-white/22 text-[var(--nn-nav-fg,white)] border border-white/35"
     : "text-[var(--nn-nav-fg,white)] opacity-70";
 
   if (isClickable) {
@@ -176,6 +176,6 @@ function ContextPill({
 
 function ContextDivider() {
   return (
-    <span className="h-3 w-px shrink-0 bg-white/25" aria-hidden />
+    <span className="h-3 w-px shrink-0 bg-white/35" aria-hidden />
   );
 }

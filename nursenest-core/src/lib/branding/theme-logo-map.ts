@@ -98,7 +98,65 @@ const THEME_LOGO_ENTRIES: Readonly<Record<string, ThemeLogoEntry>> = {
   "dark-mode":         { full: "Logos/darkmode-transparent.png",         leaf: "Logos/leaf-only/dark-mode-leaf_transparent.png" },
   "dark-clinical":     { full: "Logos/darkclinical-transparent.png",     leaf: "Logos/leaf-only/dark-clinical-leaf_transparent.png" },
   "dark-academia":     { full: "Logos/darkacademia-transparent.png",     leaf: "Logos/leaf-only/dark-academia-leaf_transparent.png" },
+
+  // ── Named themes added after initial 40 — assets pending upload ──
+  // Pink family (named)
+  "petal-pop":         { full: "Logos/petalpop-transparent.png",         leaf: "Logos/leaf-only/petal-pop-leaf_transparent.png" },
+  "cotton-candy":      { full: "Logos/cottoncandy-transparent.png",      leaf: "Logos/leaf-only/cotton-candy-leaf_transparent.png" },
+  "pink-skies":        { full: "Logos/pinkskies-transparent.png",        leaf: "Logos/leaf-only/pink-skies-leaf_transparent.png" },
+  "berry-bonbon":      { full: "Logos/berrybonbon-transparent.png",      leaf: "Logos/leaf-only/berry-bonbon-leaf_transparent.png" },
+  // Mint / Teal family (named)
+  "evergreen-steel":   { full: "Logos/evergreensteel-transparent.png",   leaf: "Logos/leaf-only/evergreen-steel-leaf_transparent.png" },
+  // Multi-pastel (named)
+  "pastel-party":      { full: "Logos/pastelparty-transparent.png",      leaf: "Logos/leaf-only/pastel-party-leaf_transparent.png" },
+  "rainbow-sherbet":   { full: "Logos/rainbowsherbet-transparent.png",   leaf: "Logos/leaf-only/rainbow-sherbet-leaf_transparent.png" },
+  // Lavender / Purple family (named)
+  "sunny-lilac":       { full: "Logos/sunnylilac-transparent.png",       leaf: "Logos/leaf-only/sunny-lilac-leaf_transparent.png" },
+  "sky-kiss":          { full: "Logos/skykiss-transparent.png",          leaf: "Logos/leaf-only/sky-kiss-leaf_transparent.png" },
+  "bluebird":          { full: "Logos/bluebird-transparent.png",         leaf: "Logos/leaf-only/bluebird-leaf_transparent.png" },
+  "violet-night":      { full: "Logos/violetnight-transparent.png",      leaf: "Logos/leaf-only/violet-night-leaf_transparent.png" },
+  "plum-mist":         { full: "Logos/plummist-transparent.png",         leaf: "Logos/leaf-only/plum-mist-leaf_transparent.png" },
+  // Neutral (named)
+  "graphite-blue":     { full: "Logos/graphiteblue-transparent.png",     leaf: "Logos/leaf-only/graphite-blue-leaf_transparent.png" },
+  "north-sea":         { full: "Logos/northsea-transparent.png",         leaf: "Logos/leaf-only/north-sea-leaf_transparent.png" },
+  // Dark (named)
+  "midnight-ink":      { full: "Logos/midnightink-transparent.png",      leaf: "Logos/leaf-only/midnight-ink-leaf_transparent.png" },
+  "storm-slate":       { full: "Logos/stormslate-transparent.png",       leaf: "Logos/leaf-only/storm-slate-leaf_transparent.png" },
 };
+
+/**
+ * Themes that have entries in THEME_LOGO_ENTRIES but whose CDN assets have not
+ * yet been confirmed uploaded. When these themes are active, the logo request
+ * will 404 on CDN and fall through to the local SVG fallback.
+ *
+ * To resolve: upload both full + leaf Spaces objects for each listed theme id,
+ * using the exact key from THEME_LOGO_ENTRIES above.
+ *
+ * Generate with: scripts/generate-leaf-logos.mjs (or equivalent batch tool).
+ */
+export const THEMES_PENDING_CDN_ASSETS: readonly string[] = [
+  "petal-pop",
+  "cotton-candy",
+  "pink-skies",
+  "berry-bonbon",
+  "evergreen-steel",
+  "pastel-party",
+  "rainbow-sherbet",
+  "sunny-lilac",
+  "sky-kiss",
+  "bluebird",
+  "violet-night",
+  "plum-mist",
+  "graphite-blue",
+  "north-sea",
+  "midnight-ink",
+  "storm-slate",
+] as const;
+
+/** True when the given theme id has a pending CDN asset upload. */
+export function themeLogoHasPendingAssets(themeId: string): boolean {
+  return (THEMES_PENDING_CDN_ASSETS as readonly string[]).includes(themeId);
+}
 
 /**
  * Spaces object key for a theme's logo.
