@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { FREEMIUM_LESSON_LIST_PAGE_SIZE } from "@/lib/conversion/constants";
 
 type Row = { id: string; title: string; summary: string; slug: string };
 

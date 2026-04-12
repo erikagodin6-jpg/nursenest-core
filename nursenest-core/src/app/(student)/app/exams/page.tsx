@@ -83,16 +83,10 @@ export default async function ExamsPage({ searchParams }: ExamsPageProps) {
           <SubscriptionPaywall
             context="exams"
             freemiumRemainingQuestions={snap?.questionRemaining ?? 0}
+            freemiumRemainingLessons={snap?.lessonRemaining ?? 0}
           />
         </div>
-        <section className="nn-card mt-6 p-4 text-sm text-muted">
-          <p className="font-semibold text-foreground">{t("learner.exams.page.afterSubscribe.title")}</p>
-          <ul className="mt-2 list-inside list-disc space-y-1">
-            <li>{t("learner.exams.page.afterSubscribe.li1")}</li>
-            <li>{t("learner.exams.page.afterSubscribe.li2")}</li>
-            <li>{t("learner.exams.page.afterSubscribe.li3")}</li>
-          </ul>
-        </section>
+        <FreemiumPreviewExhaustedSurface kind="exams" />
       </main>
     );
   }

@@ -37,6 +37,13 @@ describe("questionBatchTopicKey", () => {
     const b = questionBatchTopicKey("Sepsis", { ...s, tier: "np" });
     assert.notEqual(a, b);
   });
+
+  it("changes when variation signature is provided", () => {
+    const s = baseSettings();
+    const a = questionBatchTopicKey("Sepsis", s);
+    const b = questionBatchTopicKey("Sepsis", s, "icu|infant|priority");
+    assert.notEqual(a, b);
+  });
 });
 
 describe("reviveStaleQuestionBatchItems", () => {
