@@ -52,7 +52,7 @@ export function MarketingSiteSubNav() {
   return (
     <nav
       aria-label={t("nav.pathwayHubsAria")}
-      className="border-b border-[var(--nav-border)] bg-[var(--nav-hover)]"
+      className="border-b border-[var(--nav-border)] bg-[var(--nav-bg)]"
     >
       <div className="mx-auto max-w-7xl px-3 sm:px-4 lg:px-8">
         <ul className="-mx-3 flex h-10 snap-x snap-mandatory items-center gap-1 overflow-x-auto overscroll-x-contain px-3 py-1.5 sm:mx-0 sm:gap-1.5 sm:overflow-x-visible sm:px-0 sm:py-2 md:h-11 md:justify-center md:gap-2 lg:gap-2.5">

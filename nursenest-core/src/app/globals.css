@@ -180,33 +180,29 @@ body {
   --card-bg: var(--bg-card);
   --card-fg: var(--theme-body-text);
   --section-bg: var(--bg-section);
-  --border: var(--theme-border);
-  --ring: var(--theme-ring);
+  --border: color-mix(in srgb, var(--theme-border) 86%, var(--bg-page));
+  --ring: color-mix(in srgb, var(--theme-ring) 84%, #ffffff);
 
   /*
    * Dedicated navigation/frame tokens.
    * These keep top and bottom chrome visibly denser than the page body.
    */
-  --nav-bg: color-mix(
-    in srgb,
-    var(--palette-nav, var(--theme-nav-bg)) 84%,
-    var(--palette-primary-deep, var(--theme-primary)) 16%
-  );
-  --nav-fg: var(--palette-nav-text, var(--theme-topbar-text));
-  --nav-muted: color-mix(in srgb, var(--nav-fg) 72%, var(--nav-bg));
-  --nav-border: color-mix(in srgb, var(--palette-nav-border, var(--theme-nav-border)) 76%, var(--nav-bg));
-  --nav-hover: color-mix(in srgb, var(--palette-nav-hover, var(--theme-menu-hover-bg)) 72%, var(--nav-bg));
-  --nav-active: color-mix(in srgb, var(--palette-nav-active, var(--theme-menu-active-bg)) 80%, var(--nav-bg));
+  --nav-bg: color-mix(in srgb, var(--palette-nav, var(--theme-nav-bg)) 68%, var(--palette-primary-deep, var(--theme-primary)) 32%);
+  --nav-fg: color-mix(in srgb, var(--palette-nav-text, var(--theme-heading-text)) 94%, #0b1324);
+  --nav-muted: color-mix(in srgb, var(--nav-fg) 68%, var(--nav-bg));
+  --nav-border: color-mix(in srgb, var(--palette-nav-border, var(--theme-nav-border)) 78%, var(--palette-primary-deep, var(--theme-primary)));
+  --nav-hover: color-mix(in srgb, var(--nav-fg) 12%, var(--nav-bg));
+  --nav-active: color-mix(in srgb, var(--nav-fg) 20%, var(--nav-bg));
   --nav-link: var(--nav-fg);
-  --nav-link-hover: color-mix(in srgb, var(--nav-fg) 92%, #ffffff);
+  --nav-link-hover: color-mix(in srgb, var(--nav-fg) 96%, #000000);
   --nav-link-active: var(--nav-fg);
   --nav-cta-bg: var(--role-cta, var(--accent-primary));
   --nav-cta-fg: var(--role-cta-foreground, #ffffff);
-  --footer-bg: color-mix(in srgb, var(--nav-bg) 82%, var(--palette-primary-deep, var(--theme-primary)) 18%);
+  --footer-bg: color-mix(in srgb, var(--nav-bg) 64%, var(--palette-primary-deep, var(--theme-primary)) 36%);
   --footer-fg: var(--nav-fg);
-  --footer-muted: color-mix(in srgb, var(--footer-fg) 76%, var(--footer-bg));
-  --footer-border: color-mix(in srgb, var(--nav-border) 84%, var(--footer-bg));
-  --pill-bg: var(--surface-accent-soft);
+  --footer-muted: color-mix(in srgb, var(--footer-fg) 70%, var(--footer-bg));
+  --footer-border: color-mix(in srgb, var(--nav-border) 82%, var(--footer-bg));
+  --pill-bg: color-mix(in srgb, var(--surface-accent-soft) 82%, var(--bg-card));
   --pill-fg: color-mix(in srgb, var(--text-accent) 85%, var(--theme-heading-text));
   --pill-border: var(--surface-bubble-border);
 
@@ -248,9 +244,9 @@ body {
   --header-utility-surface: color-mix(in srgb, var(--palette-top-bar-background, var(--theme-topbar-bg)) 16%, var(--bg-page));
   --header-utility-border: color-mix(in srgb, var(--palette-top-bar-background, var(--theme-topbar-bg)) 35%, var(--border-subtle));
   --header-utility-text: color-mix(in srgb, var(--palette-top-bar-text, var(--theme-heading-text)) 82%, var(--palette-text-muted, var(--theme-muted-text)));
-  --header-nav-surface: color-mix(in srgb, var(--nav-bg) 82%, var(--palette-primary-deep, var(--theme-primary)) 18%);
+  --header-nav-surface: color-mix(in srgb, var(--nav-bg) 86%, var(--palette-primary-deep, var(--theme-primary)) 14%);
   --header-nav-border: color-mix(in srgb, var(--nav-border) 78%, var(--header-nav-surface));
-  --header-nav-shadow: 0 8px 24px -18px color-mix(in srgb, var(--theme-heading-text) 32%, transparent);
+  --header-nav-shadow: 0 10px 28px -18px color-mix(in srgb, var(--theme-heading-text) 34%, transparent);
   --header-background: var(--header-nav-surface);
   --header-text: var(--nav-fg);
   --header-muted-text: var(--nav-muted);
@@ -482,25 +478,25 @@ html[data-theme="storm-slate"] {
   --header-utility-surface: color-mix(in srgb, hsl(from var(--bg-page) h s calc(l - 4%)) 90%, var(--theme-topbar-bg));
   --header-utility-border: color-mix(in srgb, var(--theme-primary) 20%, var(--border-medium));
   --header-utility-text: color-mix(in srgb, var(--theme-heading-text) 78%, var(--theme-muted-text));
-  --nav-bg: color-mix(in srgb, var(--theme-card-bg) 84%, var(--theme-primary));
+  --nav-bg: color-mix(in srgb, var(--theme-card-bg) 74%, var(--theme-primary));
   --nav-fg: color-mix(in srgb, var(--theme-heading-text) 90%, #ffffff);
   --nav-muted: color-mix(in srgb, var(--nav-fg) 74%, var(--nav-bg));
-  --nav-border: color-mix(in srgb, var(--theme-primary) 30%, var(--border-medium));
+  --nav-border: color-mix(in srgb, var(--theme-primary) 36%, var(--border-medium));
   --nav-hover: color-mix(in srgb, var(--theme-primary) 17%, var(--nav-bg));
-  --nav-active: color-mix(in srgb, var(--theme-primary) 24%, var(--nav-bg));
+  --nav-active: color-mix(in srgb, var(--theme-primary) 28%, var(--nav-bg));
   --nav-link: var(--nav-fg);
   --nav-link-hover: color-mix(in srgb, var(--nav-fg) 92%, #ffffff);
   --nav-link-active: var(--nav-fg);
   --nav-cta-bg: color-mix(in srgb, var(--role-cta, var(--theme-primary)) 92%, #ffffff);
   --nav-cta-fg: var(--role-cta-foreground, #ffffff);
-  --footer-bg: color-mix(in srgb, hsl(from var(--bg-page) h s calc(l - 3.5%)) 92%, var(--theme-primary));
+  --footer-bg: color-mix(in srgb, hsl(from var(--bg-page) h s calc(l - 4.5%)) 80%, var(--theme-primary));
   --footer-fg: color-mix(in srgb, var(--theme-heading-text) 92%, #ffffff);
   --footer-muted: color-mix(in srgb, var(--footer-fg) 72%, var(--footer-bg));
   --footer-border: color-mix(in srgb, var(--nav-border) 84%, var(--footer-bg));
   --pill-bg: color-mix(in srgb, var(--theme-primary) 15%, var(--bg-card));
   --pill-fg: color-mix(in srgb, var(--theme-heading-text) 90%, #ffffff);
   --pill-border: color-mix(in srgb, var(--theme-primary) 36%, var(--border-subtle));
-  --header-nav-surface: color-mix(in srgb, var(--nav-bg) 76%, var(--theme-primary) 24%);
+  --header-nav-surface: color-mix(in srgb, var(--nav-bg) 70%, var(--theme-primary) 30%);
   --header-nav-border: color-mix(in srgb, var(--nav-border) 80%, var(--header-nav-surface));
   --header-nav-shadow: 0 10px 24px -16px color-mix(in srgb, #000000 55%, transparent);
   --header-background: var(--header-nav-surface);
@@ -1282,7 +1278,7 @@ html[data-theme] .nn-marketing-surface {
   border-radius: 9999px;
   border: 1px solid transparent;
   padding: 0.5rem 0.875rem;
-  color: var(--header-text);
+  color: var(--nav-link);
   transition:
     background-color var(--motion-base) var(--motion-ease),
     color var(--motion-base) var(--motion-ease),
@@ -1292,16 +1288,21 @@ html[data-theme] .nn-marketing-surface {
 
 .nn-marketing-nav-link:hover {
   color: var(--nav-link-hover);
-  border-color: color-mix(in srgb, var(--header-text) 22%, var(--header-border));
-  background: color-mix(in srgb, var(--header-text) 10%, var(--header-background));
+  border-color: color-mix(in srgb, var(--nav-border) 82%, var(--header-background));
+  background: var(--nav-hover);
 }
 
 .nn-marketing-nav-link[aria-current="page"],
 .nn-marketing-nav-link[data-active="true"] {
   color: var(--nav-link-active);
-  border-color: color-mix(in srgb, var(--header-text) 28%, var(--header-border));
-  background: color-mix(in srgb, var(--header-text) 14%, var(--header-background));
+  border-color: color-mix(in srgb, var(--nav-border) 90%, var(--header-background));
+  background: var(--nav-active);
   box-shadow: inset 0 1px 0 color-mix(in srgb, #ffffff 18%, transparent);
+}
+
+.nn-marketing-nav-link:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
 }
 
 /* Header utility rail — preferences / region strip above the main nav */
@@ -1316,6 +1317,7 @@ html[data-theme] .nn-marketing-surface {
   background: var(--header-background);
   border-bottom: 1px solid var(--header-border);
   box-shadow: var(--header-nav-shadow);
+  isolation: isolate;
   transition: box-shadow var(--motion-base) var(--motion-ease);
 }
 
@@ -1331,12 +1333,18 @@ html[data-theme] .nn-marketing-surface {
     text-decoration-color 0.18s ease;
   text-decoration: underline;
   text-underline-offset: 0.16em;
-  text-decoration-color: color-mix(in srgb, var(--palette-text-muted) 38%, transparent);
+  text-decoration-color: color-mix(in srgb, var(--footer-muted) 46%, transparent);
 }
 
 .nn-footer-link:hover {
   color: var(--footer-fg);
   text-decoration-color: color-mix(in srgb, var(--footer-fg) 38%, transparent);
+}
+
+.nn-footer-link:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+  border-radius: 0.375rem;
 }
 
 /* Hero branded surface — opt-in wash for above-fold sections */

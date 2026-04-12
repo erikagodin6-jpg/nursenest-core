@@ -61,14 +61,14 @@ export function MarketingHeaderUtilityStrip() {
           <button
             type="button"
             onClick={() => setLangOpen((o) => !o)}
-            className="flex items-center gap-0.5 rounded-full bg-transparent px-2 py-0.5 text-[11px] font-normal tracking-wide text-[var(--header-utility-text)] transition-colors hover:bg-[var(--surface-interactive-hover)] hover:text-[var(--theme-heading-text)]"
+            className="flex items-center gap-0.5 rounded-full bg-transparent px-2 py-0.5 text-[11px] font-normal tracking-wide text-[var(--header-utility-text)] transition-colors hover:bg-[var(--nav-hover)] hover:text-[var(--nav-fg)]"
             aria-expanded={langOpen}
           >
             {t("nav.language")}
             <ChevronDown className={`h-3 w-3 shrink-0 opacity-50 transition-transform ${langOpen ? "rotate-180" : ""}`} />
           </button>
           {langOpen ? (
-            <div className="absolute end-0 z-[120] mt-1 max-h-56 w-52 overflow-y-auto rounded-xl border border-[var(--border-medium)] bg-[var(--bg-elevated)] p-1 shadow-[var(--shadow-card-hover)]">
+            <div className="absolute end-0 z-[120] mt-1 max-h-56 w-52 overflow-y-auto rounded-xl border border-[var(--nav-border)] bg-[var(--nav-bg)] p-1 shadow-[var(--shadow-card-hover)]">
               <MarketingLanguagePreferenceList
                 onDone={() => setLangOpen(false)}
                 renderItem={({ code, name, flag, disabled, onSelect }) => (
@@ -76,8 +76,8 @@ export function MarketingHeaderUtilityStrip() {
                     type="button"
                     disabled={disabled}
                     onClick={onSelect}
-                    className={`flex w-full items-center gap-2 rounded-lg px-2 py-2 text-left text-xs hover:bg-[var(--surface-interactive-hover)] ${
-                      code === locale ? "bg-[var(--surface-selected)] font-medium text-[var(--theme-heading-text)]" : "text-[var(--theme-body-text)]"
+                    className={`flex w-full items-center gap-2 rounded-lg px-2 py-2 text-left text-xs hover:bg-[var(--nav-hover)] ${
+                      code === locale ? "bg-[var(--nav-active)] font-medium text-[var(--nav-fg)]" : "text-[var(--nav-muted)]"
                     }`}
                   >
                     <span>{flag}</span>
@@ -89,7 +89,7 @@ export function MarketingHeaderUtilityStrip() {
           ) : null}
         </div>
 
-        <div className="text-[var(--header-utility-text)] [&_button]:min-h-0 [&_button]:border-[var(--header-utility-border)] [&_button]:bg-transparent [&_button]:px-2 [&_button]:py-0.5 [&_button]:text-[11px] [&_button]:font-normal [&_button]:shadow-none [&_button]:hover:bg-[var(--surface-interactive-hover)] [&_button]:hover:text-[var(--theme-heading-text)]">
+        <div className="text-[var(--header-utility-text)] [&_button]:min-h-0 [&_button]:border-[var(--header-utility-border)] [&_button]:bg-transparent [&_button]:px-2 [&_button]:py-0.5 [&_button]:text-[11px] [&_button]:font-normal [&_button]:shadow-none [&_button]:hover:bg-[var(--nav-hover)] [&_button]:hover:text-[var(--nav-fg)]">
           <ThemePicker
             className="shrink-0"
             labels={{

@@ -11,7 +11,7 @@ import { isStaffRole } from "@/lib/auth/staff-roles";
 import { formatNavLabel } from "@/lib/format/title-case";
 
 const SIGN_IN_CLASS =
-  "nn-marketing-body-sm inline-flex items-center rounded-lg px-3 py-2 font-medium tracking-normal text-[var(--header-text)] transition-colors duration-150 hover:bg-[color-mix(in_srgb,var(--header-text)_10%,var(--header-background))] hover:text-[var(--header-text)]";
+  "nn-marketing-body-sm inline-flex items-center rounded-lg px-3 py-2 font-medium tracking-normal text-[var(--nav-link)] transition-colors duration-150 hover:bg-[var(--nav-hover)] hover:text-[var(--nav-link-hover)]";
 
 const GET_STARTED_CLASS =
   "nn-button-primary nn-nav-cta inline-flex min-h-0 items-center justify-center rounded-xl px-4 py-2 text-sm font-semibold";
@@ -76,7 +76,7 @@ export function MarketingHeaderAuthDesktop() {
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
-        className="flex max-w-[min(100%,12rem)] items-center gap-1 rounded-lg border border-[var(--header-border)] bg-[color-mix(in_srgb,var(--header-text)_8%,var(--header-background))] px-3 py-2 nn-marketing-body-sm font-medium tracking-normal text-[var(--header-text)] hover:bg-[color-mix(in_srgb,var(--header-text)_14%,var(--header-background))] sm:max-w-[14rem]"
+        className="flex max-w-[min(100%,12rem)] items-center gap-1 rounded-lg border border-[var(--header-border)] bg-[var(--nav-active)] px-3 py-2 nn-marketing-body-sm font-medium tracking-normal text-[var(--nav-fg)] hover:bg-[var(--nav-hover)] sm:max-w-[14rem]"
         aria-expanded={open}
         aria-haspopup="menu"
       >
@@ -87,9 +87,9 @@ export function MarketingHeaderAuthDesktop() {
       {open ? (
         <div
           role="menu"
-          className="absolute end-0 z-[100] mt-2 min-w-[13rem] rounded-xl border border-[var(--border-subtle)] bg-[var(--card-bg)] py-1 shadow-[var(--shadow-elevated)]"
+          className="absolute end-0 z-[100] mt-2 min-w-[13rem] rounded-xl border border-[var(--nav-border)] bg-[var(--nav-bg)] py-1 shadow-[var(--shadow-elevated)]"
         >
-          <div className="border-b border-[var(--border-subtle)] px-3 py-2 text-xs text-[var(--theme-muted-text)]">
+          <div className="border-b border-[var(--nav-border)] px-3 py-2 text-xs text-[var(--nav-muted)]">
             <div className="font-mono text-[11px] text-[var(--nav-muted)]" title={user.id}>
               {t("account.idPrefix")} {user.id?.slice(0, 8)}…
             </div>
@@ -101,7 +101,7 @@ export function MarketingHeaderAuthDesktop() {
           </div>
           <Link
             href="/app"
-            className="block break-words px-3 py-2 text-start nn-marketing-body-sm font-medium tracking-normal text-[var(--theme-heading-text)] [overflow-wrap:anywhere] hover:bg-[var(--surface-interactive-hover)]"
+            className="block break-words px-3 py-2 text-start nn-marketing-body-sm font-medium tracking-normal text-[var(--nav-fg)] [overflow-wrap:anywhere] hover:bg-[var(--nav-hover)]"
             role="menuitem"
             onClick={() => setOpen(false)}
           >
@@ -110,7 +110,7 @@ export function MarketingHeaderAuthDesktop() {
           {admin ? (
             <Link
               href="/admin"
-              className="block break-words px-3 py-2 text-start nn-marketing-body-sm font-medium tracking-normal text-[var(--theme-heading-text)] [overflow-wrap:anywhere] hover:bg-[var(--surface-interactive-hover)]"
+              className="block break-words px-3 py-2 text-start nn-marketing-body-sm font-medium tracking-normal text-[var(--nav-fg)] [overflow-wrap:anywhere] hover:bg-[var(--nav-hover)]"
               role="menuitem"
               onClick={() => setOpen(false)}
             >
@@ -119,7 +119,7 @@ export function MarketingHeaderAuthDesktop() {
           ) : null}
           <button
             type="button"
-            className="block w-full border-t border-[var(--border-subtle)] px-3 py-2 text-start nn-marketing-body-sm font-medium tracking-normal text-[var(--theme-heading-text)] hover:bg-[var(--surface-interactive-hover)]"
+            className="block w-full border-t border-[var(--nav-border)] px-3 py-2 text-start nn-marketing-body-sm font-medium tracking-normal text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
             role="menuitem"
             onClick={() => void signOut({ callbackUrl: "/" })}
           >

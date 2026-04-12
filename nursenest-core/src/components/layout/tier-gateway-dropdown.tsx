@@ -30,7 +30,7 @@ type TierItem = {
 };
 
 const NAV_TRIGGER_CLASS =
-  "nn-marketing-body-sm nn-marketing-nav-link font-medium tracking-tight text-[var(--theme-menu-text)] flex items-center gap-1";
+  "nn-marketing-body-sm nn-marketing-nav-link flex items-center gap-1 font-medium tracking-tight text-[var(--nav-link)]";
 
 export function TierGatewayDropdown({
   triggerLabelKey = "nav.exams",
@@ -140,11 +140,11 @@ export function TierGatewayDropdown({
       {open ? (
         <div
           role="menu"
-          className="absolute start-0 top-full z-[300] mt-1.5 w-[22rem] rounded-2xl border border-[var(--theme-separator)] bg-[var(--theme-card-bg)] p-2 shadow-[var(--shadow-elevated)] backdrop-blur-sm"
+          className="absolute start-0 top-full z-[300] mt-1.5 w-[22rem] rounded-2xl border border-[var(--nav-border)] bg-[var(--nav-bg)] p-2 shadow-[var(--shadow-elevated)]"
           onMouseEnter={openDropdown}
           onMouseLeave={scheduleClose}
         >
-          <p className="nn-marketing-label px-3 pb-2 pt-2 text-[var(--theme-muted-text)]">
+          <p className="nn-marketing-label px-3 pb-2 pt-2 text-[var(--nav-muted)]">
             {t("nav.tierDrop.heading")}
           </p>
           <ul className="space-y-0.5">
@@ -156,7 +156,7 @@ export function TierGatewayDropdown({
                   <Link
                     href={href}
                     role="menuitem"
-                    className="group flex items-start gap-3 rounded-xl px-3 py-2.5 transition-colors hover:bg-[var(--surface-accent-soft)]"
+                    className="group flex items-start gap-3 rounded-xl px-3 py-2.5 transition-colors hover:bg-[var(--nav-hover)]"
                     onClick={() => {
                       setOpen(false);
                       trackClientEvent(PH.marketingNavClick, {
@@ -167,14 +167,14 @@ export function TierGatewayDropdown({
                       });
                     }}
                   >
-                    <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[var(--surface-accent-soft)] text-[var(--text-accent)] transition-colors group-hover:bg-[var(--surface-bubble)]">
+                    <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[var(--nav-active)] text-[var(--nav-fg)] transition-colors group-hover:bg-[var(--nav-link)] group-hover:text-[var(--nav-bg)]">
                       <Icon className="h-4 w-4" strokeWidth={1.75} aria-hidden />
                     </span>
                     <span className="min-w-0">
-                      <span className="nn-marketing-body-sm block font-semibold leading-tight tracking-tight text-[var(--theme-heading-text)]">
+                      <span className="nn-marketing-body-sm block font-semibold leading-tight tracking-tight text-[var(--nav-fg)]">
                         {formatNavLabel(t(item.titleKey as Parameters<typeof t>[0]), { locale, context: `tier-dropdown.${item.key}` })}
                       </span>
-                      <span className="nn-marketing-caption mt-0.5 block leading-snug text-[var(--theme-muted-text)]">
+                      <span className="nn-marketing-caption mt-0.5 block leading-snug text-[var(--nav-muted)]">
                         {t(item.descKey as Parameters<typeof t>[0])}
                       </span>
                     </span>

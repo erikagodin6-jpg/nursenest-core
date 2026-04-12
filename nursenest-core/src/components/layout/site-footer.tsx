@@ -50,7 +50,7 @@ export function SiteFooter() {
   const learnerSignInHref = withMarketingLocale(locale, loginWithCallback("/app"));
 
   return (
-    <footer className="nn-footer-surface mt-auto py-[var(--nn-rhythm-footer-y)] text-[var(--footer-fg)]">
+    <footer className="nn-footer-surface mt-auto py-[var(--nn-rhythm-footer-y)] text-[var(--footer-fg)] shadow-[inset_0_1px_0_color-mix(in_srgb,var(--footer-fg)_8%,transparent)]">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mb-6 sm:mb-8">
           <EmailSignupBanner />
@@ -217,7 +217,7 @@ export function SiteFooter() {
           </div>
         </div>
 
-        <div className="mb-6 border-t border-[var(--footer-border)] pb-6 pt-6">
+        <div className="mb-6 rounded-xl border border-[var(--footer-border)] bg-[color-mix(in_srgb,var(--footer-fg)_4%,var(--footer-bg))] px-4 pb-6 pt-6">
           <h3 className="mb-3 break-words text-sm font-semibold text-[var(--footer-fg)]">{formatNavLabel(t("footer.studyInYourLanguage"), { locale, context: "site-footer.study-language" })}</h3>
           <div className="mb-3 flex flex-wrap gap-2">
             <MarketingLanguagePreferenceList
@@ -241,7 +241,7 @@ export function SiteFooter() {
           </Link>
         </div>
 
-        <div className="flex flex-col items-center justify-between gap-4 border-t border-[var(--footer-border)] pt-6 md:flex-row">
+        <div className="flex flex-col items-center justify-between gap-4 rounded-xl border border-[var(--footer-border)] bg-[color-mix(in_srgb,var(--footer-fg)_5%,var(--footer-bg))] px-4 py-5 md:flex-row">
           <div className="flex items-center gap-2 bg-transparent">
             <SiteBrandLogoMark variant="footer" />
           </div>
