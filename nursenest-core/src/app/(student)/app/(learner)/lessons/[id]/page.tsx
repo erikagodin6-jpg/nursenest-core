@@ -332,7 +332,14 @@ export default async function LessonDetailPage({ params }: Props) {
           })
         : Promise.resolve([]),
       pathway != null
-        ? getRelatedPathwayLessons(pathway.id, record.topicSlug, record.slug, RELATED_PATHWAY_LESSONS_LIMIT)
+        ? getRelatedPathwayLessons(
+            pathway.id,
+            record.topicSlug,
+            record.slug,
+            RELATED_PATHWAY_LESSONS_LIMIT,
+            record.localeMeta?.contentLocale ?? record.localeMeta?.requestedContentLocale,
+            record.bodySystem,
+          )
         : Promise.resolve([]),
       userId
         ? loadPathwayLessonProgressForSlug(userId, pathwayId, record.slug).catch(() => "not_started" as const)

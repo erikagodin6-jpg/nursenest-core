@@ -28,7 +28,7 @@ export async function PathwayLessonDetailDeferred({
   contentLocale: string;
 }) {
   const [relatedRaw, relatedQuestionStems] = await Promise.all([
-    getRelatedPathwayLessons(pathway.id, lesson.topicSlug, lesson.slug, undefined, contentLocale),
+    getRelatedPathwayLessons(pathway.id, lesson.topicSlug, lesson.slug, undefined, contentLocale, lesson.bodySystem),
     loadRelatedExamQuestionStemsForPathwayLesson({
       pathway,
       lessonSlug: lesson.slug,

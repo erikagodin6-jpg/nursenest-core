@@ -71,7 +71,7 @@ export function rankRelatedLessonSlugsForQuestion(
   pathwayCtx: PathwayRationaleContext | null,
   options?: RankRelatedLessonSlugsOptions,
 ): RankedLessonSlug[] {
-  const maxLinks = options?.maxLinks ?? 3;
+  const maxLinks = options?.maxLinks ?? 5;
   const minScore = options?.minScore ?? 72;
   const diversityStrong = options?.diversityStrongThreshold ?? 92;
 

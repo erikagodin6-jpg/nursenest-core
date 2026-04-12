@@ -178,7 +178,14 @@ export default async function AlliedHealthSlugLessonDetailPage({ params }: Props
 
   let related: Awaited<ReturnType<typeof getRelatedPathwayLessons>> = [];
   try {
-    const raw = await getRelatedPathwayLessons(pathway.id, lesson.topicSlug, lesson.slug, 8, lessonContentLocale);
+    const raw = await getRelatedPathwayLessons(
+      pathway.id,
+      lesson.topicSlug,
+      lesson.slug,
+      8,
+      lessonContentLocale,
+      lesson.bodySystem,
+    );
     related = raw.filter(
       (r) =>
         pathwayLessonHasRenderableHubSlug(r) && alliedLessonMatchesProfessionFilter(r, prof.topicSlugsIn),

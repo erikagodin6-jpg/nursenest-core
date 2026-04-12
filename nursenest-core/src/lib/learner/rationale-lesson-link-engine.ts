@@ -33,7 +33,7 @@ export function inferRationaleLessonSlugCandidates(
     /** Question stem (graded flows) — improves token overlap with lesson titles. */
     stem?: string | null;
   },
-  max = 3,
+  max = 5,
 ): RationaleLessonSlugCandidate[] {
   const pathwayCtx = pathwayRationaleContextFromId(args.pathwayId);
   const topicCode =

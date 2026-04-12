@@ -53,6 +53,7 @@ import {
   PATHWAY_HUB_PAGE_SIZE_DEFAULT,
   PATHWAY_HUB_PAGE_SIZE_MAX,
 } from "@/lib/lessons/pathway-lesson-scale";
+import { RELATED_LESSONS_EXCLUDE_SLUG_SENTINEL } from "@/lib/lessons/lesson-question-cross-links";
 
 type CatalogShape = {
   version: number;
@@ -1288,10 +1289,14 @@ async function getRelatedPathwayLessonsImpl(
   excludeSlug: string,
   limit: number = RELATED_PATHWAY_LESSONS_LIMIT,
   marketingLocale?: string,
+  /** When the same-topic list is short, fill up to `limit` with other topics in this body system (deduped). */
+  relatedBackfillBodySystem?: string | null,
 ): Promise<PathwayLessonRecord[]> {
   const cap = Math.min(24, Math.max(1, Math.floor(limit)));
   const requested = normalizePathwayLessonLocale(marketingLocale);
   const lessonDbOverlays = await fetchPublishedPathwayLessonOverlayMapSafe(requested);
+  const slugWhere: Prisma.PathwayLessonWhereInput =
+    excludeSlug === RELATED_LESSONS_EXCLUDE_SLUG_SENTINEL ? {} : { slug: { not: excludeSlug } };
 
   const dbHas = await pathwayHasPublishedDbLessons(pathwayId);
   if (dbHas) {
@@ -1304,7 +1309,7 @@ async function getRelatedPathwayLessonsImpl(
             status: ContentStatus.PUBLISHED,
             topicSlug,
             locale: effective,
-            slug: { not: excludeSlug },
+            ...slugWhere,
           },
           orderBy: [{ sortOrder: "asc" }, { slug: "asc" }],
           take: cap,
@@ -1313,20 +1318,69 @@ async function getRelatedPathwayLessonsImpl(
       [],
     );
     const meta = lessonLocaleMeta(marketingLocale, effective, requested !== effective, false);
-    const mapped = rows.map((r) =>
-      applyLessonEducationalOverlay(
-        withLocaleMeta(normalizeLessonForHubList(pathwayLessonRowToInput({ ...r, sections: [] }), pathwayId), meta),
-        marketingLocale,
-        pathwayId,
-        lessonDbOverlays,
-      ),
-    );
-    return mapped.filter(pathwayLessonHasRenderableHubSlug);
+    const mapDbRows = (batch: typeof rows) =>
+      batch
+        .map((r) =>
+          applyLessonEducationalOverlay(
+            withLocaleMeta(
+              normalizeLessonForHubList(pathwayLessonRowToInput({ ...r, sections: [] }), pathwayId),
+              meta,
+            ),
+            marketingLocale,
+            pathwayId,
+            lessonDbOverlays,
+          ),
+        )
+        .filter(pathwayLessonHasRenderableHubSlug);
+
+    let merged = mapDbRows(rows);
+    const bsTrim = relatedBackfillBodySystem?.trim();
+    if (bsTrim && merged.length < cap) {
+      const need = cap - merged.length;
+      const seenSlugs = new Set(merged.map((m) => m.slug));
+      const backfillRows = await dbCall(
+        () =>
+          prisma.pathwayLesson.findMany({
+            where: {
+              pathwayId,
+              status: ContentStatus.PUBLISHED,
+              locale: effective,
+              bodySystem: { equals: bsTrim, mode: "insensitive" },
+              topicSlug: { not: topicSlug },
+              ...slugWhere,
+            },
+            orderBy: [{ sortOrder: "asc" }, { slug: "asc" }],
+            take: Math.min(24, need + 12),
+            select: PATHWAY_LESSON_HUB_LIST_SELECT,
+          }),
+        [],
+      );
+      const extra = mapDbRows(backfillRows).filter((l) => !seenSlugs.has(l.slug));
+      merged = [...merged, ...extra].slice(0, cap);
+    }
+    return merged;
   }
 
   const catMeta = lessonLocaleMeta(marketingLocale, "en", requested !== "en", true);
-  return getCatalogLessonsRaw(pathwayId)
-    .filter((l) => l.topicSlug === topicSlug && l.slug !== excludeSlug)
+  const catalogPrimary = getCatalogLessonsRaw(pathwayId).filter(
+    (l) => l.topicSlug === topicSlug && l.slug !== excludeSlug,
+  );
+  const bsTrimCat = relatedBackfillBodySystem?.trim();
+  let catalogMerged = catalogPrimary;
+  if (bsTrimCat && catalogPrimary.length < cap) {
+    const need = cap - catalogPrimary.length;
+    const seen = new Set(catalogPrimary.map((p) => p.slug));
+    const extra = getCatalogLessonsRaw(pathwayId).filter(
+      (l) =>
+        l.topicSlug !== topicSlug &&
+        l.slug !== excludeSlug &&
+        !seen.has(l.slug) &&
+        (l.bodySystem ?? "").trim().toLowerCase() === bsTrimCat.toLowerCase(),
+    );
+    catalogMerged = [...catalogPrimary, ...extra.slice(0, need)];
+  }
+
+  return catalogMerged
     .slice(0, cap)
     .map((raw) =>
       applyLessonEducationalOverlay(
@@ -1345,9 +1399,18 @@ async function getRelatedPathwayLessonsWithDataCache(
   excludeSlug: string,
   limit: number = RELATED_PATHWAY_LESSONS_LIMIT,
   marketingLocale?: string,
+  relatedBackfillBodySystem?: string | null,
 ): Promise<PathwayLessonRecord[]> {
   return unstable_cache(
-    async () => getRelatedPathwayLessonsImpl(pathwayId, topicSlug, excludeSlug, limit, marketingLocale),
+    async () =>
+      getRelatedPathwayLessonsImpl(
+        pathwayId,
+        topicSlug,
+        excludeSlug,
+        limit,
+        marketingLocale,
+        relatedBackfillBodySystem,
+      ),
     [
       "pathway-related",
       pathwayId,
@@ -1355,6 +1418,7 @@ async function getRelatedPathwayLessonsWithDataCache(
       excludeSlug,
       String(limit),
       marketingLocale ?? "",
+      relatedBackfillBodySystem?.trim().toLowerCase() ?? "",
     ],
     { revalidate: PATHWAY_LESSON_PUBLIC_REVALIDATE_SECONDS, tags: [`pathway-lessons:${pathwayId}`] },
   )();

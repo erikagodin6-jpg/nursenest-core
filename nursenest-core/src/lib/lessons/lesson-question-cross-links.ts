@@ -201,14 +201,29 @@ export function buildRelatedExamQuestionWhereForPathwayLesson(
 
   const orClauses: Prisma.ExamQuestionWhereInput[] = [...bridgeFirst];
   if (topicTrim.length > 0) {
-    orClauses.push({ topic: { equals: topicTrim, mode: "insensitive" } });
+    orClauses.push({
+      OR: [
+        { topic: { equals: topicTrim, mode: "insensitive" } },
+        { subtopic: { equals: topicTrim, mode: "insensitive" } },
+      ],
+    });
   }
   if (fromSlugPhrase.length > 0 && fromSlugPhrase !== topicTrim.toLowerCase()) {
-    orClauses.push({ topic: { equals: fromSlugPhrase, mode: "insensitive" } });
+    orClauses.push({
+      OR: [
+        { topic: { equals: fromSlugPhrase, mode: "insensitive" } },
+        { subtopic: { equals: fromSlugPhrase, mode: "insensitive" } },
+      ],
+    });
   }
   if (!skipTitleSlugTokenFallback) {
     for (const tok of tokens) {
-      orClauses.push({ topic: { contains: tok, mode: "insensitive" } });
+      orClauses.push({
+        OR: [
+          { topic: { contains: tok, mode: "insensitive" } },
+          { subtopic: { contains: tok, mode: "insensitive" } },
+        ],
+      });
     }
   }
   if (bodySystem?.trim()) {
