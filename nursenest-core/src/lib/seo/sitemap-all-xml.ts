@@ -1,6 +1,7 @@
 import "server-only";
 
 import { listBlogSitemapUrlsSafe } from "@/lib/seo/sitemap-blog-xml";
+import { listLocalizedBlogSitemapUrlsSafe } from "@/lib/seo/sitemap-localized-blog-xml";
 import {
   buildSitemapUrlsetFromAbsoluteUrls,
   collectCoreUrls,
@@ -39,6 +40,10 @@ export async function buildSingleSitemapXmlSafe(): Promise<string> {
   }
 
   for (const url of await listBlogSitemapUrlsSafe()) {
+    all.add(url);
+  }
+
+  for (const url of await listLocalizedBlogSitemapUrlsSafe()) {
     all.add(url);
   }
 

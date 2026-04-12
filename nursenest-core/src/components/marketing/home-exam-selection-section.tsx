@@ -114,16 +114,12 @@ export function HomeExamSelectionSection() {
                   }}
                   data-nn-marketing-region={region}
                   data-nn-exam-card-id={c.id}
-                  className="nn-card-system nn-card-system--interactive nn-student-card-lift group relative h-full min-h-[14rem] overflow-hidden"
-                  style={{ paddingTop: "1.625rem" }}
+                  className="nn-card-system nn-card-system-pad nn-card-system--interactive nn-student-card-lift group relative h-full min-h-[14rem] overflow-hidden"
+                  style={{
+                    borderTopColor: `color-mix(in srgb, ${c.accentColor} 70%, var(--border-subtle))`,
+                    borderTopWidth: "3px",
+                  }}
                 >
-                  {/* Top accent stripe */}
-                  <div
-                    className="absolute inset-x-0 top-0 h-[3px]"
-                    style={{ background: `color-mix(in srgb, ${c.accentColor} 90%, white)` }}
-                    aria-hidden
-                  />
-                  <div className="nn-card-system-pad pt-0">
                     {/* Icon badge — colored per pathway */}
                     <span
                       className="nn-card-system__icon mb-1 transition group-hover:scale-105"
@@ -148,8 +144,7 @@ export function HomeExamSelectionSection() {
                       {formatTitleCase(getPathwayHubCta(c.pathwayLabel), locale)}
                       <ArrowRight className="ml-1.5 h-4 w-4 transition group-hover:translate-x-1" aria-hidden />
                     </span>
-                  </div>
-                </MarketingTrackedLink>
+                  </MarketingTrackedLink>
               </li>
             );
           })}
