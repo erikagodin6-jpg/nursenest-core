@@ -1,8 +1,7 @@
 "use client";
 
 import { useMemo, useSyncExternalStore } from "react";
-import { getThemeLogoObjectKeyFromNormalizedId } from "@/lib/branding/theme-brand-logo-cdn";
-import { getThemeLogoPathForThemeId } from "@/lib/branding/theme-logo-map";
+import { getThemeLogoPathForThemeId, resolveLogoForTheme, themeLogoObjectKeyForTheme } from "@/lib/branding/theme-logo-map";
 import { getHeaderBrandLogoLoadChain } from "@/lib/theme/theme-logo-url";
 import { normalizeThemeIdForLogo } from "@/lib/theme/theme-logo-resolve";
 import { NURSENEST_DEFAULT_THEME, THEME_STORAGE_KEY } from "@/lib/theme/theme-registry";
@@ -56,10 +55,12 @@ export function useThemeLogo(): {
 } {
   const domThemeId = useSyncExternalStore(subscribe, readDomThemeId, getServerSnapshot);
   const activeId = normalizeThemeIdForLogo(domThemeId);
-  const mappedSpaceKey = useMemo(() => getThemeLogoObjectKeyFromNormalizedId(activeId), [activeId]);
+  const mappedSpaceKey = useMemo(() => themeLogoObjectKeyForTheme(activeId), [activeId]);
   const loadChain = useMemo(() => {
+    const primary = resolveLogoForTheme(activeId);
     const chain = getHeaderBrandLogoLoadChain(activeId);
-    return chain.length > 0 ? chain : [getThemeLogoPathForThemeId(activeId)];
+    const merged = [primary, ...chain.filter((url) => url !== primary)];
+    return merged.length > 0 ? merged : [getThemeLogoPathForThemeId(activeId)];
   }, [activeId]);
 
   return {

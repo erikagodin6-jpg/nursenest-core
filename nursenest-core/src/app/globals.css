@@ -140,7 +140,8 @@ body {
    * regardless of the active theme. Opt-in via --surface-bubble* / --surface-accent* or
    * .nn-surface-bubble* utility classes for localized themed surfaces.
    */
-  --theme-page-bg: var(--palette-background);
+  /* Keep each light theme hue, but lift it closer to white for a paler page shell. */
+  --theme-page-bg: color-mix(in srgb, var(--palette-background) 68%, #ffffff);
   --theme-card-bg: var(--palette-surface);
   --theme-nav-bg: var(--palette-nav, var(--palette-nav-background));
   --theme-nav-border: var(--palette-nav-border);
@@ -154,10 +155,9 @@ body {
   --theme-primary-foreground: var(--text-on-accent, var(--palette-button-primary-text));
   --page-bg: var(--theme-page-bg);
   --bg-page: var(--theme-page-bg);
-  /* 3% tint: barely perceptible section rhythm, not a coloured band */
-  --bg-section: color-mix(in srgb, var(--palette-primary-deep, var(--theme-secondary, var(--palette-primary))) 8%, var(--bg-page));
-  /* 1.5% alternating strip — neutral rhythm line only */
-  --bg-section-alt: color-mix(in srgb, var(--palette-surface-alt, var(--theme-secondary, var(--palette-primary-deep))) 55%, var(--bg-page));
+  /* Keep section rhythm subtle and airy on light themes. */
+  --bg-section: color-mix(in srgb, var(--palette-primary-deep, var(--theme-secondary, var(--palette-primary))) 5.5%, var(--bg-page));
+  --bg-section-alt: color-mix(in srgb, var(--palette-surface-alt, var(--theme-secondary, var(--palette-primary-deep))) 40%, var(--bg-page));
   /* Cards stay close to pure card-bg — theme shows up only in bubble/accent surfaces */
   --bg-card: var(--palette-surface, var(--theme-card-bg));
   --bg-elevated: color-mix(in srgb, var(--theme-card-bg) 90%, var(--theme-heading-text));
@@ -464,7 +464,14 @@ html[data-theme="dark-clinical"],
 html[data-theme="dark-academia"],
 html[data-theme="dark-mode"],
 html[data-theme="midnight-indigo"],
-html[data-theme="deep-twilight"] {
+html[data-theme="deep-twilight"],
+html[data-theme="evergreen-steel"],
+html[data-theme="midnight-ink"],
+html[data-theme="storm-slate"] {
+  /* Dark themes keep their authored base backgrounds (no whitening). */
+  --theme-page-bg: var(--palette-background);
+  --page-bg: var(--theme-page-bg);
+  --bg-page: var(--theme-page-bg);
   --bg-section: color-mix(in srgb, var(--theme-primary) 6%, var(--theme-page-bg));
   --bg-section-alt: color-mix(in srgb, var(--theme-primary) 3.5%, var(--theme-page-bg));
   --bg-card: color-mix(in srgb, var(--theme-primary) 4%, var(--theme-card-bg));
