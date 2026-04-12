@@ -70,7 +70,7 @@ export function NotFoundClient({
               className="inline-flex rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_35%,transparent)] focus-visible:ring-offset-4 focus-visible:ring-offset-[var(--semantic-page-bg)]"
               aria-label={`${BRAND_NAME} home`}
             >
-              <SiteBrandLogoMark variant="hero" />
+              <SiteBrandLogoMark variant="hero" logoVariant="leaf" />
             </Link>
           </div>
         </div>

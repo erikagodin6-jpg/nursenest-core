@@ -50,7 +50,9 @@ import { formatEyebrow, formatSentenceCase, formatTitleCase } from "@/lib/format
 import { CONTINUE_STUDYING_CTA, PRIMARY_CTA } from "@/lib/copy/cta-copy";
 import { THEME_OPTIONS } from "@/lib/theme/theme-registry";
 
-const NAV_LINK_CLASS = "nn-marketing-body-sm nn-marketing-nav-link whitespace-nowrap font-semibold tracking-tight";
+/** Long translated labels (e.g. pricing): wrap instead of forcing one line or overflow. */
+const NAV_LINK_CLASS =
+  "nn-marketing-body-sm nn-marketing-nav-link max-w-[10rem] text-balance break-words text-center leading-tight whitespace-normal font-semibold tracking-tight lg:max-w-[12rem]";
 const HEADER_SECONDARY_ACTION_CLASS =
   "inline-flex min-h-[42px] items-center justify-center rounded-xl border border-[var(--nav-border)] px-3.5 py-2 text-sm font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]";
 type ExamMenuKey = "rn" | "pn" | "np" | "allied";
@@ -367,7 +369,7 @@ export function SiteHeader() {
 
   const scheduleMegaClose = () => {
     clearMegaCloseTimer();
-    closeMegaTimeoutRef.current = setTimeout(() => setOpenMegaMenu(null), 120);
+    closeMegaTimeoutRef.current = setTimeout(() => setOpenMegaMenu(null), 300);
   };
 
   useEffect(() => {
@@ -504,7 +506,9 @@ export function SiteHeader() {
       <MarketingHeaderUtilityStrip variant="dark-bar" />
       <header
         style={isLightTheme ? undefined : navChromeStyle}
-        className={`w-full border-b${isLightTheme ? " nn-header-logo-row" : ""}`}
+        className={`relative w-full border-b${isLightTheme ? " nn-header-logo-row" : ""}`}
+        onMouseEnter={isMarketingNav ? clearMegaCloseTimer : undefined}
+        onMouseLeave={isMarketingNav ? scheduleMegaClose : undefined}
       >
         <div className="nn-section-shell grid h-16 grid-cols-[auto,1fr,auto] items-center gap-4 sm:gap-6">
           <Link
@@ -518,8 +522,6 @@ export function SiteHeader() {
           <nav
             aria-label={isLearnerAuthenticated ? "Learner navigation" : t("nav.marketingExplore")}
             className="hidden min-w-0 flex-1 items-center justify-center gap-6 lg:flex xl:gap-7"
-            onMouseEnter={isMarketingNav ? clearMegaCloseTimer : undefined}
-            onMouseLeave={isMarketingNav ? scheduleMegaClose : undefined}
           >
             {isAuthLoading ? (
               <div className="flex items-center gap-3" aria-hidden>
@@ -838,7 +840,7 @@ export function SiteHeader() {
       />
 
       {mobileOpen ? (
-        <div className="fixed inset-0 z-[200] md:hidden animate-[nn-overlay-enter_0.24s_ease_both]">
+        <div className="fixed inset-0 z-[200] lg:hidden animate-[nn-overlay-enter_0.24s_ease_both]">
           <button type="button" className="absolute inset-0 bg-black/56" aria-label={t("nav.closeMenu")} onClick={() => setMobileOpen(false)} />
           <div className="absolute inset-x-0 top-0 flex h-[100dvh] max-h-[100dvh] flex-col border-b border-[var(--nav-border)] bg-[var(--nav-bg)] text-[var(--nav-fg)] shadow-[var(--shadow-elevated)] animate-[nn-drawer-slide-in_0.28s_cubic-bezier(0.25,0.1,0.25,1)_both]">
             <div className="flex h-16 shrink-0 items-center justify-between border-b border-[var(--header-border)] px-4 pt-[max(0.5rem,env(safe-area-inset-top))]">

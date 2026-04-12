@@ -10,32 +10,29 @@ import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
 import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
 import { buildMarketingWebPageJsonLdProps } from "@/lib/seo/marketing-webpage-jsonld";
-import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
 import { resolveMarketingCopy } from "@/lib/marketing-i18n-core";
-import { getMarketingRegionFromCookies } from "@/lib/region/marketing-region-server";
 import { defaultHomeMetaDescription, defaultHomeMetaTitle } from "@/lib/marketing/nursing-tier-public-labels";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { ExamSelectorGate } from "@/components/onboarding/exam-selector-gate";
 
-/** ISR: homepage shell (lesson teaser strip removed — routing-first layout). */
+/** ISR: homepage shell — static with 10-min revalidation. No cookies; locale/region defaults to en/US. */
 export const revalidate = 600;
+
+const STATIC_LOCALE = DEFAULT_MARKETING_LOCALE;
+const STATIC_REGION = "US" as const;
 
 export async function generateMetadata(): Promise<Metadata> {
   return safeGenerateMetadata(
     async () => {
-      const locale = await getMarketingLocaleForDefaultRoute();
-      const marketingRegion = await getMarketingRegionFromCookies();
-      const m = await loadMarketingMessages(locale);
-      const en = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
-      const metaSfx = marketingRegion === "US" ? "US" : "CA";
-      const title = resolveMarketingCopy(m, `pages.home.metaTitle${metaSfx}`, en, defaultHomeMetaTitle(marketingRegion));
+      const m = await loadMarketingMessages(STATIC_LOCALE);
+      const title = resolveMarketingCopy(m, "pages.home.metaTitleUS", m, defaultHomeMetaTitle(STATIC_REGION));
       const description = resolveMarketingCopy(
         m,
-        `pages.home.metaDescription${metaSfx}`,
-        en,
-        defaultHomeMetaDescription(marketingRegion),
+        "pages.home.metaDescriptionUS",
+        m,
+        defaultHomeMetaDescription(STATIC_REGION),
       );
-      const alt = marketingAlternatesSharedPage(locale, "/");
+      const alt = marketingAlternatesSharedPage(STATIC_LOCALE, "/");
       return {
         title,
         description,
@@ -53,24 +50,20 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function HomePage() {
-  const locale = await getMarketingLocaleForDefaultRoute();
-  const marketingRegion = await getMarketingRegionFromCookies();
-  const m = await loadMarketingMessages(locale);
-  const en = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
-  const metaSfx = marketingRegion === "US" ? "US" : "CA";
-  const title = resolveMarketingCopy(m, `pages.home.metaTitle${metaSfx}`, en, defaultHomeMetaTitle(marketingRegion));
+  const m = await loadMarketingMessages(STATIC_LOCALE);
+  const title = resolveMarketingCopy(m, "pages.home.metaTitleUS", m, defaultHomeMetaTitle(STATIC_REGION));
   const description = resolveMarketingCopy(
     m,
-    `pages.home.metaDescription${metaSfx}`,
-    en,
-    defaultHomeMetaDescription(marketingRegion),
+    "pages.home.metaDescriptionUS",
+    m,
+    defaultHomeMetaDescription(STATIC_REGION),
   );
   const { crumbs, schemaItems } = marketingHomeSurfaceBreadcrumbs();
   return (
     <>
       <WebPageJsonLd
         {...buildMarketingWebPageJsonLdProps({
-          locale,
+          locale: STATIC_LOCALE,
           enPath: "/",
           title,
           description,

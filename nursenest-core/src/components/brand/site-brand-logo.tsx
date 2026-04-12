@@ -10,25 +10,43 @@ import {
 import { getThemeLogoPathForThemeId } from "@/lib/branding/theme-logo-map";
 import { logBrandLogoLoadFailure } from "@/lib/observability/brand-logo-client-log";
 import { useThemeLogo } from "@/lib/theme/use-theme-logo";
+import type { ThemeLogoVariant } from "@/lib/theme/theme-logo-url";
 
 export type BrandMarkLoadState = "loading" | "ready" | "error";
 
 /**
- * Theme-aware brand mark: `useThemeLogo` → `getHeaderBrandLogoLoadChain` (theme brand assets only).
- * Presentation: {@link brandLogoMarkPresentation}; optional `className` merges onto the slot (legacy homepage override is deprecated).
+ * Theme-aware brand mark.
+ *
+ * `variant`     — presentation slot sizing (header / footer / auth / learner / hero).
+ * `logoVariant` — which asset: "full" (default) = leaf + wordmark; "leaf" = icon only.
+ *
+ * Usage rules:
+ *   header / footer / auth → logoVariant="full"  (default, no prop needed)
+ *   404 / error pages      → logoVariant="leaf"
+ *   compact / badge / icon → logoVariant="leaf"
  */
 export function SiteBrandLogoMark({
   className = DEFAULT_BRAND_LOGO_MARK_CLASSNAME,
   variant = "header",
+  logoVariant = "full",
   onMarkState,
+  exactSourceOnly = false,
 }: {
   className?: string;
-  /** Shared sizing contract: header (default), footer, auth, learner shell. */
+  /** Presentation slot (sizing). */
   variant?: BrandLogoMarkVariant;
+  /** Content: "full" = leaf + wordmark (default); "leaf" = icon only. */
+  logoVariant?: ThemeLogoVariant;
   onMarkState?: (state: BrandMarkLoadState) => void;
+  /**
+   * When true, only loadChain[0] (the CDN primary URL) is tried.
+   * On failure the component goes straight to text fallback — no legacy
+   * committed PNGs or SVGs can win. Use on the site header and 404 page.
+   */
+  exactSourceOnly?: boolean;
 }) {
   const { slotClassName, imgClassName } = brandLogoMarkPresentation(variant);
-  const { themeId, loadChain } = useThemeLogo();
+  const { themeId, loadChain } = useThemeLogo(logoVariant);
   const [candidateIndex, setCandidateIndex] = useState(0);
   const [showTextFallback, setShowTextFallback] = useState(false);
 
@@ -61,16 +79,17 @@ export function SiteBrandLogoMark({
 
   const handleError = useCallback(() => {
     if (process.env.NODE_ENV === "development") {
-      console.debug(`[logo-debug] theme=${themeId} failed=${src} trying=${loadChain[candidateIndex + 1] ?? "none"}`);
+      const next = exactSourceOnly ? "text-fallback" : (loadChain[candidateIndex + 1] ?? "none");
+      console.debug(`[logo-debug] theme=${themeId} failed=${src} trying=${next}`);
     }
     logBrandLogoLoadFailure(src, themeId, safeIndex);
-    if (candidateIndex < loadChain.length - 1) {
+    if (!exactSourceOnly && candidateIndex < loadChain.length - 1) {
       setCandidateIndex((i) => i + 1);
       return;
     }
     setShowTextFallback(true);
     onMarkState?.("error");
-  }, [candidateIndex, loadChain.length, onMarkState, src, themeId, safeIndex]);
+  }, [exactSourceOnly, candidateIndex, loadChain.length, onMarkState, src, themeId, safeIndex]);
 
   if (showTextFallback) {
     return (

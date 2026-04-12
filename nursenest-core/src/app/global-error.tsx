@@ -37,7 +37,7 @@ export default function GlobalError({
         >
           <main className="mx-auto mt-16 w-full max-w-xl">
             <a href="/" className="mb-6 inline-flex items-center gap-2 bg-transparent">
-              <SiteBrandLogoMark variant="auth" />
+              <SiteBrandLogoMark variant="auth" logoVariant="leaf" />
             </a>
             <div className="rounded-2xl border border-border bg-card p-8 shadow-sm">
               <h1 className="text-2xl font-bold">Something went wrong</h1>

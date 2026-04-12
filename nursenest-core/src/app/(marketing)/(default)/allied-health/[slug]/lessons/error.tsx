@@ -18,7 +18,7 @@ export default function AlliedHealthLessonsSegmentError({
     <div className="flex min-h-[40vh] flex-col items-center justify-center px-6 py-14">
       <div className="nn-card max-w-md p-8 text-center">
         <a href="/" className="mb-5 inline-flex justify-center bg-transparent" aria-label="NurseNest home">
-          <SiteBrandLogoMark variant="auth" />
+          <SiteBrandLogoMark variant="auth" logoVariant="leaf" />
         </a>
         <h1 className="text-xl font-bold text-[var(--theme-heading-text)]">Lessons unavailable</h1>
         <p className="mt-2 text-sm text-[var(--theme-muted-text)]">

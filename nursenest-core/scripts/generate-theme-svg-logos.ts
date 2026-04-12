@@ -100,7 +100,7 @@ function buildTemplate(wordmarkPath: string): string {
   <g id="logo-root">
     <g id="leaf-shape">
       <path id="leaf-outer" d="${leaf.outer}" fill="CURRENT_COLOR"/>
-      <path id="leaf-vein" d="${leaf.vein}" fill="#FFFFFF"/>
+      <path id="leaf-vein" d="${leaf.vein}" fill="none"/>
     </g>
     <path id="wordmark" d="${wordmarkPath}" fill="CURRENT_COLOR"/>
   </g>

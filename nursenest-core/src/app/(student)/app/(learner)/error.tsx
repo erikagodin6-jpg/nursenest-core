@@ -25,7 +25,7 @@ export default function LearnerError({
   return (
     <main className="space-y-4">
       <a href="/app" className="inline-flex bg-transparent" aria-label={t("brand.homeAriaLabel")}>
-        <SiteBrandLogoMark variant="auth" />
+        <SiteBrandLogoMark variant="auth" logoVariant="leaf" />
       </a>
       <h1 className="text-2xl font-bold">{t("learner.error.section.title")}</h1>
       <p className="text-sm text-muted">{t("learner.error.section.description")}</p>

@@ -88,18 +88,18 @@ export function getThemeLogoLoadChain(
 
   const out: string[] = [];
 
-  // 1. Spaces CDN — canonical uploaded transparent asset for this variant.
-  pushKeyVariants(out, key);
-
   if (logoVariant === "leaf") {
-    // For leaf: if leaf CDN fails, fall back to the full-wordmark CDN asset as a safe degradation.
+    // Leaf: CDN leaf first → CDN full fallback → local PNG.
+    pushKeyVariants(out, key);
     const fullKey = themeLogoObjectKeyForTheme(id, "full");
     pushKeyVariants(out, fullKey);
     out.push(getThemeLogoPngPathForThemeId(id));
   } else {
-    // For full: same-origin pre-generated PNG → older committed branding PNG.
+    // Full: local transparent PNGs first (confirmed RGBA), CDN as fallback.
+    // CDN assets may carry non-transparent backgrounds; local files are the safe source.
     out.push(getThemeLogoPngPathForThemeId(id));
     out.push(`${COMMITTED_THEME_LOGO_PUBLIC_PREFIX}${id}brandlogo_transparent.png`);
+    pushKeyVariants(out, key);
   }
 
   // 2. Default-theme equivalents as belt-and-suspenders (non-default themes only).

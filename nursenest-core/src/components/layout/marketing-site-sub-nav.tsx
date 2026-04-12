@@ -23,8 +23,9 @@ function isSubNavActive(strippedPath: string, href: string): boolean {
   return false;
 }
 
+/** Allow wrapping for long German/French/Spanish labels; cap width so pills scroll horizontally instead of stretching. */
 const LINK_BASE =
-  "flex items-center whitespace-nowrap rounded-full px-3 py-1.5 text-[13px] font-medium leading-snug tracking-tight transition-[background,color,box-shadow] duration-200 md:px-3.5 md:py-2 md:text-sm";
+  "flex min-h-[2.25rem] w-max max-w-[min(100%,13rem)] items-center justify-center whitespace-normal text-balance break-words rounded-full px-2.5 py-1.5 text-[13px] font-medium leading-snug tracking-tight transition-[background,color,box-shadow] duration-200 md:max-w-[15rem] md:px-3.5 md:py-2 md:text-sm";
 
 /**
  * Pathway sub-navigation — soft editorial tint; pill active state (no harsh tabs).
@@ -60,12 +61,12 @@ export function MarketingSiteSubNav() {
       className="border-b"
     >
       <div className="mx-auto max-w-7xl px-3 sm:px-4 lg:px-8">
-        <ul className="-mx-3 flex h-10 snap-x snap-mandatory items-center gap-1 overflow-x-auto overscroll-x-contain px-3 py-1.5 sm:mx-0 sm:gap-1.5 sm:overflow-x-visible sm:px-0 sm:py-2 md:h-11 md:justify-center md:gap-2 lg:gap-2.5">
+        <ul className="-mx-3 flex min-h-10 snap-x snap-mandatory items-stretch gap-1 overflow-x-auto overscroll-x-contain px-3 py-1.5 sm:mx-0 sm:items-center sm:gap-1.5 sm:overflow-x-visible sm:px-0 sm:py-2 md:min-h-11 md:justify-center md:gap-2 lg:gap-2.5">
           {items.map((item) => {
             const href = localize(item.href);
             const active = isSubNavActive(strippedPath, item.href);
             return (
-              <li key={item.key} className="flex shrink-0 snap-start items-center">
+              <li key={item.key} className="flex shrink-0 snap-start items-stretch sm:items-center">
                 <Link
                   href={href}
                   className={`${LINK_BASE} ${

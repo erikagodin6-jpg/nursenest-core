@@ -39,25 +39,25 @@ export function HomeConversionHero() {
     >
       <div className="relative pt-8 pb-16 md:pt-8 md:pb-20">
         <div className="nn-section-shell">
-          <div className="grid gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
-            <div className="space-y-6">
-              <p className="nn-marketing-caption inline-flex w-fit items-center rounded-full border border-[var(--pill-border)] bg-[var(--pill-bg)] px-3 py-1 font-semibold text-[var(--pill-fg)]">
+          <div className="grid min-w-0 gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
+            <div className="min-w-0 space-y-6">
+              <p className="nn-marketing-caption inline-block max-w-full text-balance break-words rounded-full border border-[var(--pill-border)] bg-[var(--pill-bg)] px-3 py-1 font-semibold text-[var(--pill-fg)]">
                 {formatTitleCase("NurseNest Exam Prep Platform", locale)}
               </p>
               <h1
                 id="home-conversion-hero-heading"
-                className="nn-marketing-h1 max-w-2xl text-balance text-[var(--palette-heading)]"
+                className="nn-marketing-h1 max-w-2xl text-balance break-words text-[var(--palette-heading)]"
                 data-testid="text-hero-heading"
               >
                 {formatTitleCase("Pass your exam with prep built for your license", locale)}
               </h1>
-              <p className="nn-marketing-body max-w-xl text-pretty text-[var(--palette-text-muted)]" data-testid="text-hero-subheading">
+              <p className="nn-marketing-body max-w-xl text-pretty break-words text-[var(--palette-text-muted)]" data-testid="text-hero-subheading">
                 {formatSentenceCase(
                   "Train with pathway-scoped questions, full rationales, and CAT readiness signals so every study session moves you closer to exam day.",
                   locale,
                 )}
               </p>
-              <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
+              <div className="flex min-w-0 flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-stretch sm:justify-start">
                 <MarketingTrackedLink
                   href={loc(HUB.signup)}
                   event={PH.marketingHomeHeroPrimaryCta}
@@ -66,7 +66,7 @@ export function HomeConversionHero() {
                   data-testid="button-hero-start-practicing"
                 >
                   {formatTitleCase(PRIMARY_CTA, locale)}
-                  <ArrowRight className="ml-2 h-5 w-5 shrink-0" aria-hidden />
+                  <ArrowRight className="h-5 w-5 shrink-0" aria-hidden />
                 </MarketingTrackedLink>
                 <MarketingTrackedLink
                   href={loc(HUB.questionBank)}
@@ -78,7 +78,7 @@ export function HomeConversionHero() {
                   {formatTitleCase(SECONDARY_CTA, locale)}
                 </MarketingTrackedLink>
               </div>
-              <p className="nn-marketing-caption flex items-start gap-2 text-[var(--palette-text-muted)]">
+              <p className="nn-marketing-caption flex min-w-0 items-start gap-2 text-balance break-words text-[var(--palette-text-muted)]">
                 <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-[var(--semantic-success)]" aria-hidden />
                 {formatSentenceCase("No credit card required to start your first practice sessions.", locale)}
               </p>
