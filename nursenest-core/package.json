@@ -86,6 +86,7 @@
     "ops:admin-dashboard": "tsx scripts/report-admin-operations-dashboard.ts",
     "ops:learning-loop-audit": "tsx scripts/audit-learning-loop-sample.ts",
     "db:ensure-admin": "tsx scripts/ensure-admin-user.ts",
+    "admin:reset-password": "tsx scripts/reset-admin.ts",
     "db:bootstrap-if-empty": "tsx scripts/bootstrap-admin-if-empty.ts",
     "screenshots:seed-demo": "tsx scripts/seed-screenshot-demo-user.ts",
     "screenshots:capture": "node scripts/capture-screenshots.mjs",

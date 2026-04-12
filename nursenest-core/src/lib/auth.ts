@@ -144,14 +144,26 @@ export const authConfig: NextAuthConfig = {
           return null;
         }
 
-        if (!user?.passwordHash) {
+        if (!user) {
           recordLoginFailure(lockKey);
           safeServerLog("auth", "login_failed", {
-            reason: "no_account_or_no_password",
+            reason: "user_not_found",
             authMode,
             idHash,
             ip: ip.slice(0, 64),
             failureCount: getFailureCount(lockKey),
+          });
+          return null;
+        }
+
+        if (!user.passwordHash) {
+          recordLoginFailure(lockKey);
+          safeServerLog("auth", "login_failed", {
+            reason: "no_password_hash",
+            authMode,
+            idHash,
+            userIdPrefix: user.id.slice(0, 8),
+            ip: ip.slice(0, 64),
           });
           return null;
         }
