@@ -3,13 +3,15 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { useReducedMotion } from "@/lib/motion/use-reduced-motion";
-import { SiteBrandLogoMark } from "@/components/brand/site-brand-logo";
 import type { NotFoundResumeStudying } from "@/lib/ui/not-found-resume";
 
 type NotFoundClientProps = {
   isAuthenticated: boolean;
   resumeStudying: NotFoundResumeStudying | null;
 };
+
+const LEAF_URL =
+  "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/leaflogo2_transparent.png";
 
 function FloatingLogo() {
   const reduced = useReducedMotion();
@@ -21,24 +23,41 @@ function FloatingLogo() {
         reduced
           ? {}
           : {
-              y: [0, -4, 0],
-              rotate: [0, 1.2, 0, -1.2, 0],
-              opacity: [0.9, 1, 0.9],
+              y: [0, -6, 0],
+              rotate: [0, 1.5, 0, -1.5, 0],
+              opacity: [0.88, 1, 0.88],
             }
       }
       transition={
         reduced
           ? {}
           : {
-              duration: 5,
+              duration: 5.5,
               ease: "easeInOut",
               repeat: Infinity,
               repeatType: "loop",
             }
       }
-      whileHover={reduced ? {} : { rotate: -3, transition: { duration: 0.3 } }}
+      whileHover={reduced ? {} : { rotate: -4, scale: 1.04, transition: { duration: 0.3 } }}
     >
-      <SiteBrandLogoMark variant="hero" />
+      {/* Leaf image masked to theme primary color */}
+      <div
+        aria-hidden="true"
+        style={{
+          width: 120,
+          height: 120,
+          background: "var(--theme-primary)",
+          maskImage: `url(${LEAF_URL})`,
+          maskSize: "contain",
+          maskRepeat: "no-repeat",
+          maskPosition: "center",
+          WebkitMaskImage: `url(${LEAF_URL})`,
+          WebkitMaskSize: "contain",
+          WebkitMaskRepeat: "no-repeat",
+          WebkitMaskPosition: "center",
+          opacity: 0.9,
+        }}
+      />
     </motion.div>
   );
 }
