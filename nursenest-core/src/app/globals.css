@@ -89,9 +89,16 @@ body {
   --palette-badge: #dbe8fb;
   --palette-badge-text: #285393;
   --palette-nav-background: #f1f6fd;
+  --palette-nav: var(--palette-nav-background);
   --palette-nav-border: #bed1f0;
   --palette-top-bar-background: #1e4fa8;
   --palette-top-bar-text: #ffffff;
+  --text-primary: var(--palette-text);
+  --text-muted: var(--palette-text-muted);
+  --text-on-accent: var(--palette-top-bar-text);
+  --border-subtle: var(--palette-border);
+  --accent-primary: var(--palette-button-primary);
+  --accent-secondary: var(--palette-accent);
   /* Hero gradient first-paint: neutral transparent so no ocean flash before hydration. */
   --nn-aesthetic-hero-glow: none;
   --nn-aesthetic-hero-mesh: none;
@@ -131,16 +138,16 @@ body {
    */
   --theme-page-bg: var(--palette-background);
   --theme-card-bg: var(--palette-surface);
-  --theme-nav-bg: var(--palette-nav-background);
+  --theme-nav-bg: var(--palette-nav, var(--palette-nav-background));
   --theme-nav-border: var(--palette-nav-border);
   --theme-topbar-bg: var(--palette-top-bar-background);
   --theme-topbar-text: var(--palette-top-bar-text);
-  --theme-heading-text: var(--palette-heading);
-  --theme-body-text: var(--palette-text);
-  --theme-muted-text: var(--palette-text-muted);
+  --theme-heading-text: var(--text-primary, var(--palette-heading));
+  --theme-body-text: var(--text-primary, var(--palette-text));
+  --theme-muted-text: var(--text-muted, var(--palette-text-muted));
   --theme-border: var(--palette-border);
   --theme-ring: var(--palette-ring);
-  --theme-primary-foreground: var(--palette-button-primary-text);
+  --theme-primary-foreground: var(--text-on-accent, var(--palette-button-primary-text));
   --bg-page: var(--theme-page-bg);
   /* 3% tint: barely perceptible section rhythm, not a coloured band */
   --bg-section: color-mix(in srgb, var(--palette-primary-deep, var(--theme-secondary, var(--palette-primary))) 8%, var(--bg-page));
@@ -164,7 +171,7 @@ body {
   --surface-selected: color-mix(in srgb, var(--palette-accent, var(--theme-accent)) 16%, var(--bg-card));
   --surface-input: color-mix(in srgb, var(--palette-primary-deep, var(--theme-secondary, var(--palette-primary))) 8%, var(--theme-input-bg));
   --surface-chip: color-mix(in srgb, var(--palette-badge, var(--theme-accent)) 75%, var(--bg-card));
-  --text-on-accent: var(--palette-button-primary-text, var(--theme-primary-foreground));
+  --text-on-accent: var(--palette-nav-text, var(--palette-button-primary-text, var(--theme-primary-foreground)));
 
   /*
    * Bubble / accent surfaces — the primary location where theme color appears.
@@ -204,10 +211,10 @@ body {
   --header-utility-surface: color-mix(in srgb, var(--palette-top-bar-background, var(--theme-topbar-bg)) 16%, var(--bg-page));
   --header-utility-border: color-mix(in srgb, var(--palette-top-bar-background, var(--theme-topbar-bg)) 35%, var(--border-subtle));
   --header-utility-text: color-mix(in srgb, var(--palette-top-bar-text, var(--theme-heading-text)) 82%, var(--palette-text-muted, var(--theme-muted-text)));
-  --header-nav-surface: var(--palette-nav-background, var(--theme-nav-bg));
+  --header-nav-surface: var(--palette-nav, var(--theme-nav-bg));
   --header-nav-border: color-mix(in srgb, var(--palette-nav-border, var(--theme-nav-border)) 88%, var(--border-medium));
   --header-nav-shadow: var(--shadow-nav);
-  --footer-surface: color-mix(in srgb, var(--palette-nav-background, var(--theme-nav-bg)) 72%, var(--bg-section));
+  --footer-surface: var(--palette-nav, var(--theme-nav-bg));
 
   /*
    * Hero branded wash — used as hero section base background.
@@ -1200,7 +1207,7 @@ html[data-theme] .nn-marketing-surface {
 .nn-marketing-nav-link {
   border-bottom: 2px solid transparent;
   padding-bottom: 0.125rem;
-  color: var(--palette-heading);
+  color: var(--text-on-accent);
   transition:
     color var(--motion-base) var(--motion-ease),
     border-color var(--motion-base) var(--motion-ease),
@@ -1236,7 +1243,7 @@ html[data-theme] .nn-marketing-surface {
 }
 
 .nn-footer-link {
-  color: var(--palette-text);
+  color: var(--text-on-accent);
   transition:
     color 0.18s ease,
     text-decoration-color 0.18s ease;
@@ -1246,8 +1253,8 @@ html[data-theme] .nn-marketing-surface {
 }
 
 .nn-footer-link:hover {
-  color: var(--palette-heading);
-  text-decoration-color: color-mix(in srgb, var(--palette-heading) 38%, transparent);
+  color: var(--text-on-accent);
+  text-decoration-color: color-mix(in srgb, var(--text-on-accent) 38%, transparent);
 }
 
 /* Hero branded surface — opt-in wash for above-fold sections */

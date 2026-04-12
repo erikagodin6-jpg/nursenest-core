@@ -117,7 +117,7 @@ describe("PATCH /api/practice-tests/[id] CAT completion paths", () => {
       results: catResults,
       adaptiveState: { theta: 0.32, se: 0.58 },
     }));
-    mock.method(practiceTestRouteDeps, "enrichPracticeTestResultsWithCatCoach", async (results) => ({
+    mock.method(practiceTestRouteDeps, "enrichPracticeTestResultsWithCatCoach", async (results: PracticeTestResultsJson) => ({
       ...results,
       catCoach,
     }));
@@ -164,7 +164,7 @@ describe("PATCH /api/practice-tests/[id] CAT completion paths", () => {
       results: catResults,
       adaptiveState: { theta: 0.32, se: 0.58 },
     }));
-    mock.method(practiceTestRouteDeps, "enrichPracticeTestResultsWithCatCoach", async (results) => ({
+    mock.method(practiceTestRouteDeps, "enrichPracticeTestResultsWithCatCoach", async (results: PracticeTestResultsJson) => ({
       ...results,
       catCoach,
     }));

@@ -53,8 +53,8 @@ export function SiteFooter() {
 
         <div className="mb-6 grid grid-cols-2 gap-6 sm:gap-8 md:grid-cols-4 sm:mb-8">
           <div>
-            <h3 className="mb-3 break-words text-sm font-semibold text-[var(--palette-heading)]">{t("footer.studyTools")}</h3>
-            <ul className="space-y-2 text-sm text-[var(--palette-text-muted)]">
+            <h3 className="mb-3 break-words text-sm font-semibold text-[var(--text-on-accent)]">{t("footer.studyTools")}</h3>
+            <ul className="space-y-2 text-sm text-[var(--text-on-accent)]">
               <li>
                 <FLink href="/lessons">{t("footer.clinicalLessons")}</FLink>
               </li>
@@ -89,8 +89,8 @@ export function SiteFooter() {
           </div>
 
           <div>
-            <h3 className="mb-3 break-words text-sm font-semibold text-[var(--palette-heading)]">{t("footer.examPrep")}</h3>
-            <ul className="space-y-2 text-sm text-[var(--palette-text-muted)]">
+            <h3 className="mb-3 break-words text-sm font-semibold text-[var(--text-on-accent)]">{t("footer.examPrep")}</h3>
+            <ul className="space-y-2 text-sm text-[var(--text-on-accent)]">
               <li>
                 <FLink href="/exam-prep">{t("footer.linkNursingExamPrepHub")}</FLink>
               </li>
@@ -111,8 +111,8 @@ export function SiteFooter() {
                 <FLink href="/question-of-the-day">{t("footer.questionOfTheDay")}</FLink>
               </li>
             </ul>
-            <h3 className="mb-3 mt-6 break-words text-sm font-semibold text-[var(--palette-heading)]">{t("footer.newGradSupportSection")}</h3>
-            <ul className="space-y-2 text-sm text-[var(--palette-text-muted)]">
+            <h3 className="mb-3 mt-6 break-words text-sm font-semibold text-[var(--text-on-accent)]">{t("footer.newGradSupportSection")}</h3>
+            <ul className="space-y-2 text-sm text-[var(--text-on-accent)]">
               <li>
                 <FLink href="/newgrad">{t("footer.newGradHub")}</FLink>
               </li>
@@ -129,8 +129,8 @@ export function SiteFooter() {
           </div>
 
           <div>
-            <h3 className="mb-3 break-words text-sm font-semibold text-[var(--palette-heading)]">{t("footer.resources")}</h3>
-            <ul className="space-y-2 text-sm text-[var(--palette-text-muted)]">
+            <h3 className="mb-3 break-words text-sm font-semibold text-[var(--text-on-accent)]">{t("footer.resources")}</h3>
+            <ul className="space-y-2 text-sm text-[var(--text-on-accent)]">
               <li>
                 <FLink href="/shop">{t("nav.store")}</FLink>
               </li>
@@ -153,8 +153,8 @@ export function SiteFooter() {
                 <FLink href="/for-institutions">{t("footer.forSchools")}</FLink>
               </li>
             </ul>
-            <h3 className="mb-3 mt-6 break-words text-sm font-semibold text-[var(--palette-heading)]">{t("footer.nursingSpecialties")}</h3>
-            <ul className="space-y-2 text-sm text-[var(--palette-text-muted)]">
+            <h3 className="mb-3 mt-6 break-words text-sm font-semibold text-[var(--text-on-accent)]">{t("footer.nursingSpecialties")}</h3>
+            <ul className="space-y-2 text-sm text-[var(--text-on-accent)]">
               <li>
                 <FLink href="/nursing-specialties">{t("footer.allSpecialties")}</FLink>
               </li>
@@ -168,8 +168,8 @@ export function SiteFooter() {
           </div>
 
           <div>
-            <h3 className="mb-3 break-words text-sm font-semibold text-[var(--palette-heading)]">{t("footer.legal")}</h3>
-            <ul className="space-y-2 text-sm text-[var(--palette-text-muted)]">
+            <h3 className="mb-3 break-words text-sm font-semibold text-[var(--text-on-accent)]">{t("footer.legal")}</h3>
+            <ul className="space-y-2 text-sm text-[var(--text-on-accent)]">
               <li>
                 <FLink href="/terms">{t("footer.terms")}</FLink>
               </li>
@@ -186,8 +186,8 @@ export function SiteFooter() {
                 <FLink href="/acceptable-use">{t("footer.acceptableUse")}</FLink>
               </li>
             </ul>
-            <h3 className="mb-3 mt-6 break-words text-sm font-semibold text-[var(--palette-heading)]">{t("footer.alliedHealth")}</h3>
-            <ul className="space-y-2 text-sm text-[var(--palette-text-muted)]">
+            <h3 className="mb-3 mt-6 break-words text-sm font-semibold text-[var(--text-on-accent)]">{t("footer.alliedHealth")}</h3>
+            <ul className="space-y-2 text-sm text-[var(--text-on-accent)]">
               <li>
                 <FLink href="/allied-health">{t("footer.alliedHealthExamPrep")}</FLink>
               </li>
@@ -198,8 +198,8 @@ export function SiteFooter() {
                 <FLink href="/allied-health/paramedic-exam-prep">{t("footer.linkAlliedParamedic")}</FLink>
               </li>
             </ul>
-            <h3 className="mb-3 mt-6 break-words text-sm font-semibold text-[var(--palette-heading)]">{t("footer.educationEcosystem")}</h3>
-            <ul className="space-y-2 text-sm text-[var(--palette-text-muted)]">
+            <h3 className="mb-3 mt-6 break-words text-sm font-semibold text-[var(--text-on-accent)]">{t("footer.educationEcosystem")}</h3>
+            <ul className="space-y-2 text-sm text-[var(--text-on-accent)]">
               <li>
                 <FLink href="/">{t("footer.linkEcosystemNursenest")}</FLink>
               </li>
@@ -213,7 +213,7 @@ export function SiteFooter() {
         </div>
 
         <div className="mb-6 border-t border-[var(--header-nav-border)] pb-6 pt-6">
-          <h3 className="mb-3 break-words text-sm font-semibold text-[var(--palette-heading)]">{t("footer.studyInYourLanguage")}</h3>
+          <h3 className="mb-3 break-words text-sm font-semibold text-[var(--text-on-accent)]">{t("footer.studyInYourLanguage")}</h3>
           <div className="mb-3 flex flex-wrap gap-2">
             <MarketingLanguagePreferenceList
               renderItem={({ code, name, flag, disabled, onSelect }) => (
@@ -221,8 +221,8 @@ export function SiteFooter() {
                   type="button"
                   disabled={disabled}
                   onClick={onSelect}
-                  className={`inline-flex items-center gap-1 text-xs transition-colors hover:text-[var(--palette-heading)] ${
-                    code === locale ? "font-semibold text-[var(--palette-heading)]" : "text-[var(--palette-text-muted)]"
+                  className={`inline-flex items-center gap-1 text-xs transition-colors hover:text-[var(--text-on-accent)] ${
+                    code === locale ? "font-semibold text-[var(--text-on-accent)]" : "text-[var(--text-on-accent)]/80"
                   }`}
                 >
                   <span>{flag}</span>
@@ -240,12 +240,12 @@ export function SiteFooter() {
           <div className="flex items-center gap-2 bg-transparent">
             <SiteBrandLogoMark variant="footer" />
           </div>
-          <div className="text-sm text-[var(--palette-text-muted)]">
+          <div className="text-sm text-[var(--text-on-accent)]">
             © {new Date().getFullYear()} {t("brand.nurseNest")}. {t("footer.rights")}
           </div>
         </div>
 
-        <div className="mx-auto mt-4 max-w-3xl text-center text-xs leading-relaxed text-[var(--palette-text-muted)] opacity-70">
+        <div className="mx-auto mt-4 max-w-3xl text-center text-xs leading-relaxed text-[var(--text-on-accent)] opacity-70">
           {t("footer.legalDisclaimer")}
         </div>
       </div>

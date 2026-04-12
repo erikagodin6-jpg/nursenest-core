@@ -48,6 +48,8 @@ import {
 import { marketingPathwayLessonsIndexPath } from "@/lib/lessons/lesson-routes";
 import { CoachLessonHelper } from "@/components/study/coach-lesson-helper";
 import { isStudyCoachEnabled } from "@/lib/ai/learner-ai-policy";
+import { loadPathwayLessonProgressForSlug } from "@/lib/lessons/pathway-lesson-progress";
+import { LessonAssessmentFlow } from "@/components/lessons/lesson-assessment-flow";
 
 function LessonBody({ content }: { content: unknown }) {
   if (Array.isArray(content)) {
@@ -298,7 +300,7 @@ export default async function LessonDetailPage({ params }: Props) {
     const pathwayId = resolvedLesson.pathwayId;
     const pathway = getExamPathwayById(pathwayId);
     const examFraming = getLearnerExamFraming(pathwayId);
-    const [relatedQuestionStems, relatedLessonsRaw] = await Promise.all([
+    const [relatedQuestionStems, relatedLessonsRaw, initialProgress] = await Promise.all([
       pathway != null
         ? loadRelatedExamQuestionStemsForPathwayLesson({
             pathway,
@@ -312,6 +314,9 @@ export default async function LessonDetailPage({ params }: Props) {
       pathway != null
         ? getRelatedPathwayLessons(pathway.id, record.topicSlug, record.slug, RELATED_PATHWAY_LESSONS_LIMIT)
         : Promise.resolve([]),
+      userId
+        ? loadPathwayLessonProgressForSlug(userId, pathwayId, record.slug).catch(() => "not_started" as const)
+        : Promise.resolve("not_started" as const),
     ]);
     const relatedLessonsDisplay = mergeRelatedLessonDisplayList(
       record.relatedLessonRefs,
@@ -348,35 +353,47 @@ export default async function LessonDetailPage({ params }: Props) {
           </p>
         ) : null}
         {record.seoDescription ? <p className="mt-2 text-sm text-muted">{record.seoDescription}</p> : null}
+        {/* Pre/post assessment flow — wraps the lesson article */}
         <div className="mt-6">
-          <PremiumLessonShell
+          <LessonAssessmentFlow
             userId={userId}
-            userLabel={userLabel}
-            flags={flags}
-            scope={LearnerNoteScope.PATHWAY_LESSON}
-            contextId={id}
+            lessonId={id}
             pathwayId={pathwayId}
+            lessonSlug={record.slug}
             topic={record.topic}
-            sourceLabel={record.title}
-            qualityNotice={<LessonQualityNotice tier={pathwayQuality.tier} wordCount={pathwayQuality.wordCount} />}
+            initialProgress={initialProgress}
+            preTest={record.preTest}
+            postTest={record.postTest}
           >
-            <article className="space-y-8">
-              {visible.map((section) => (
-                <section key={section.id} className="border-b border-border pb-8 last:border-0">
-                  <h2 className="text-xl font-semibold text-[var(--theme-heading-text)]">
-                    {section.heading?.trim() || t("learner.lessons.detail.sectionFallback")}
-                  </h2>
-                  <div className="mt-3">
-                    <PathwayLessonBody
-                      text={typeof section.body === "string" ? section.body : ""}
-                      viewerTier={lessonViewerTier}
-                      measurementSystem={lessonMeasurementSystem ?? undefined}
-                    />
-                  </div>
-                </section>
-              ))}
-            </article>
-          </PremiumLessonShell>
+            <PremiumLessonShell
+              userId={userId}
+              userLabel={userLabel}
+              flags={flags}
+              scope={LearnerNoteScope.PATHWAY_LESSON}
+              contextId={id}
+              pathwayId={pathwayId}
+              topic={record.topic}
+              sourceLabel={record.title}
+              qualityNotice={<LessonQualityNotice tier={pathwayQuality.tier} wordCount={pathwayQuality.wordCount} />}
+            >
+              <article className="space-y-8">
+                {visible.map((section) => (
+                  <section key={section.id} className="border-b border-border pb-8 last:border-0">
+                    <h2 className="text-xl font-semibold text-[var(--theme-heading-text)]">
+                      {section.heading?.trim() || t("learner.lessons.detail.sectionFallback")}
+                    </h2>
+                    <div className="mt-3">
+                      <PathwayLessonBody
+                        text={typeof section.body === "string" ? section.body : ""}
+                        viewerTier={lessonViewerTier}
+                        measurementSystem={lessonMeasurementSystem ?? undefined}
+                      />
+                    </div>
+                  </section>
+                ))}
+              </article>
+            </PremiumLessonShell>
+          </LessonAssessmentFlow>
         </div>
         {isStudyCoachEnabled() && (
           <CoachLessonHelper

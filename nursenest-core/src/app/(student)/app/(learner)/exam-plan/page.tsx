@@ -181,7 +181,27 @@ export default async function ExamPlanPage() {
   }
 
   const { coach, weakAreas, pathwayId } = data;
-  const { readiness, adaptive, passReadiness, benchmark, examDate, daysUntilExam, streakDays, overallAccuracyPct } = coach;
+  const { readiness, adaptive, passReadiness, benchmark, examDate, daysUntilExam, streakDays, overallAccuracyPct, catSessionCount } = coach;
+
+  // ── Derive recovery plan inputs from available data ──────────────────────
+  // inactiveDays: if streak is 0 and user has prior history, treat as at least 1 missed day
+  const hasPriorHistory = catSessionCount > 0 || weakAreas.length > 0;
+  const inactiveDays = streakDays === 0 && hasPriorHistory ? 2 : 0;
+
+  const recoveryPlan = buildRecoveryPlan({
+    status: adaptive.planTrack.status,
+    daysUntilExam,
+    dailyStudyMinutes: null,
+    cadence: adaptive.studyCadencePreference,
+    overallAccuracyPct,
+    weakTopics: adaptive.weakTop3,
+    inactiveDays,
+    mockCount: catSessionCount,
+    lessonPct: 0, // approximate — lesson pct not directly exposed on CoachPageData
+    readinessBand: readiness.band,
+  });
+
+  const isBehind = adaptive.planTrack.status !== "on_track";
 
   // Trend data — loaded server-side (lightweight: last 8 practice tests)
   const trendPoints = await loadExamPlanTrendAction().catch(() => []);
@@ -210,15 +230,44 @@ export default async function ExamPlanPage() {
         primaryNextTitle={adaptive.primaryNext.title}
       />
 
-      {/* Exam date editor — inline, below summary row */}
-      <div className="flex items-center justify-end">
+      {/* ── NEW: Exam countdown + pacing + recovery block ──────────────── */}
+      <section aria-labelledby="countdown-heading" className="space-y-4">
+        <h2
+          id="countdown-heading"
+          className="text-lg font-bold"
+          style={{ color: "var(--semantic-text-primary)" }}
+        >
+          Exam Countdown &amp; Pacing
+        </h2>
+
+        {/* 2a. Premium countdown ring with milestones */}
+        <ExamCountdownHero
+          daysUntilExam={daysUntilExam}
+          examDate={examDate}
+          planTrack={adaptive.planTrack}
+          milestones={adaptive.milestones}
+        />
+
+        {/* 2b. Exam date editor — inline */}
         <ExamDateEditor
           initialData={{
             examDate: examDate,
             examDatePlanType: coach.examDatePlanType,
           }}
         />
-      </div>
+
+        {/* 2c. Day-by-day pacing grid */}
+        <WeeklyPacingPanel
+          plan={adaptive.weeklyPlan}
+          planTrack={adaptive.planTrack}
+          daysUntilExam={daysUntilExam}
+        />
+
+        {/* 2d. Recovery plan — only when behind */}
+        {isBehind && recoveryPlan && (
+          <RecoveryPlanCard plan={recoveryPlan} />
+        )}
+      </section>
 
       {/* 3. Today's plan ──────────────────────────────────────────────────── */}
       <TodaysPlanSection adaptive={adaptive} />
@@ -250,7 +299,7 @@ export default async function ExamPlanPage() {
         <BenchmarkPercentileCard benchmark={benchmark} />
       </section>
 
-      {/* 8. Weekly plan ───────────────────────────────────────────────────── */}
+      {/* 8. Weekly plan (existing summary cards) ─────────────────────────── */}
       <section aria-labelledby="weekly-plan-heading">
         <h2
           id="weekly-plan-heading"
