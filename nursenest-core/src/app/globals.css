@@ -1457,11 +1457,17 @@ html[data-theme] .nn-marketing-surface {
 
 /* Marketing header: nav links — accent underline on hover, stronger contrast */
 .nn-marketing-nav-link {
+  display: inline-flex;
+  min-height: 2.5rem;
+  align-items: center;
+  justify-content: center;
   border-radius: 9999px;
   border: 1px solid transparent;
-  padding: 0.5rem 0.875rem;
-  color: var(--header-link, var(--nav-link));
+  padding: 0.45rem 0.7rem;
+  color: var(--nav-link, var(--header-link, var(--nav-fg)));
+  line-height: 1;
   white-space: nowrap;
+  flex-shrink: 0;
   transition:
     background-color var(--motion-base) var(--motion-ease),
     color var(--motion-base) var(--motion-ease),
@@ -1470,14 +1476,14 @@ html[data-theme] .nn-marketing-surface {
 }
 
 .nn-marketing-nav-link:hover {
-  color: var(--header-link-hover, var(--nav-link-hover));
+  color: var(--nav-link-hover, var(--header-link-hover, var(--nav-fg)));
   border-color: color-mix(in srgb, var(--nav-border) 82%, var(--header-background));
   background: var(--nav-hover);
 }
 
 .nn-marketing-nav-link[aria-current="page"],
 .nn-marketing-nav-link[data-active="true"] {
-  color: var(--header-link-active, var(--nav-link-active));
+  color: var(--nav-link-active, var(--header-link-active, var(--nav-fg)));
   border-color: color-mix(in srgb, var(--nav-border) 90%, var(--header-background));
   background: var(--nav-active);
   box-shadow: inset 0 1px 0 color-mix(in srgb, #ffffff 18%, transparent);
@@ -1563,6 +1569,20 @@ html[data-theme] .nn-marketing-surface {
   box-shadow:
     0 1px 0 0 color-mix(in srgb, var(--theme-border, var(--border)) 50%, transparent),
     0 8px 28px -6px color-mix(in srgb, var(--theme-heading-text) 14%, transparent);
+}
+
+/* Dark-theme headers need explicit nav token rebinding so text stays white on the dark chrome surface. */
+.nn-header-dark-surface {
+  --nav-fg: var(--nn-nav-fg, #ffffff);
+  --nav-link: var(--nn-nav-fg, #ffffff);
+  --nav-link-hover: var(--nn-nav-hover-fg, #ffffff);
+  --nav-link-active: var(--nn-nav-fg, #ffffff);
+  --nav-hover: var(--nn-nav-hover-bg, rgba(255, 255, 255, 0.14));
+  --nav-active: color-mix(in srgb, var(--nn-nav-fg, #ffffff) 12%, transparent);
+  --nav-border: var(--nn-nav-border, rgba(255, 255, 255, 0.18));
+  --nav-muted: color-mix(in srgb, var(--nn-nav-fg, #ffffff) 84%, transparent);
+  --header-background: var(--nn-nav-bg, var(--theme-nav-background, var(--nav-bg)));
+  --header-border: var(--nn-nav-border, rgba(255, 255, 255, 0.18));
 }
 
 /* Nav row — bottom product-nav strip in light-theme 3-row headers.

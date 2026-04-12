@@ -51,9 +51,9 @@ import { formatEyebrow, formatSentenceCase, formatTitleCase } from "@/lib/format
 import { CONTINUE_STUDYING_CTA, PRIMARY_CTA } from "@/lib/copy/cta-copy";
 import { THEME_OPTIONS } from "@/lib/theme/theme-registry";
 
-/** Long translated labels (e.g. pricing): wrap instead of forcing one line or overflow. */
+/** Keep desktop nav pills single-line and compact so the full global IA fits cleanly. */
 const NAV_LINK_CLASS =
-  "nn-marketing-body-sm nn-marketing-nav-link max-w-[10rem] text-balance break-words text-center leading-tight whitespace-normal font-semibold tracking-tight lg:max-w-[12rem]";
+  "nn-marketing-body-sm nn-marketing-nav-link inline-flex items-center justify-center whitespace-nowrap text-center font-semibold tracking-tight";
 const HEADER_SECONDARY_ACTION_CLASS =
   "inline-flex min-h-[42px] items-center justify-center rounded-xl border border-[var(--nav-border)] px-3.5 py-2 text-sm font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]";
 type ExamMenuKey = "rn" | "pn" | "np" | "allied";
@@ -449,12 +449,16 @@ export function SiteHeader() {
     matchBase: HUB.pricing,
     label: formatTitleCase("Pricing", locale),
   };
+  const marketingBrowseLinks: HeaderNavLink[] = [
+    pricingNav,
+    { key: "blog", href: "/blog", matchBase: "/blog", label: formatTitleCase("Blog", locale) },
+    { key: "faq", href: "/faq", matchBase: "/faq", label: formatTitleCase(t("footer.faq"), locale) },
+    { key: "tools", href: HUB.tools, matchBase: HUB.tools, label: formatTitleCase(t("nav.tools"), locale) },
+  ];
   const openMega = megaMenus.find((menu) => menu.key === openMegaMenu) ?? null;
 
   const mobileMoreNav: { key: string; href: string; label: string }[] = [
-    { key: "faq", href: "/faq", label: formatTitleCase(t("footer.faq"), locale) },
     { key: "pre-nursing", href: "/pre-nursing", label: formatTitleCase(t("nav.preNursing"), locale) },
-    { key: "tools", href: HUB.tools, label: formatTitleCase(t("nav.tools"), locale) },
   ];
 
   const strippedPath = stripMarketingLocalePrefix(pathname).pathname;
@@ -507,13 +511,13 @@ export function SiteHeader() {
       <MarketingHeaderUtilityStrip variant="dark-bar" />
       <header
         style={isLightTheme ? undefined : { ...navChromeStyle, boxShadow: "inset 0 1px 0 0 rgba(255,255,255,0.15)" }}
-        className={`relative w-full border-b${isLightTheme ? " nn-header-logo-row nn-header-logo-row--scrolled" : ""}`}
+        className={`relative w-full border-b${isLightTheme ? " nn-header-logo-row nn-header-logo-row--scrolled" : " nn-header-dark-surface"}`}
         onMouseEnter={isMarketingNav ? clearMegaCloseTimer : undefined}
         onMouseLeave={isMarketingNav ? scheduleMegaClose : undefined}
       >
         <div className="nn-section-shell flex flex-col">
-          {/* ── Row 2: Brand row — logo centered on desktop, + hamburger on mobile ── */}
-          <div className="flex h-[4.5rem] items-center justify-between gap-4 border-b border-[var(--header-border)] lg:justify-center">
+          {/* ── Mobile brand row ── */}
+          <div className="flex h-[4.5rem] items-center justify-between gap-4 border-b border-[var(--header-border)] lg:hidden">
             <Link
               href={localizeHref("/")}
               className="nn-header-logo-link group flex min-w-0 shrink-0 items-center gap-2.5 overflow-visible bg-transparent"
@@ -545,11 +549,18 @@ export function SiteHeader() {
             </div>
           </div>
 
-          {/* ── Row 3: Main nav row — desktop only ── */}
-          <div className={`hidden h-12 items-center gap-4 lg:flex${isLightTheme ? " nn-header-nav-row" : ""}`}>
+          {/* ── Desktop main header row ── */}
+          <div className="hidden min-h-[4.75rem] items-center justify-between gap-4 py-3 lg:flex">
+            <Link
+              href={localizeHref("/")}
+              className="nn-header-logo-link group flex min-w-0 flex-none items-center gap-2.5 overflow-visible bg-transparent lg:min-w-[14rem] xl:min-w-[15rem]"
+              aria-label={t("brand.homeAriaLabel")}
+            >
+              <SiteBrandLogoMark />
+            </Link>
             <nav
               aria-label={isLearnerAuthenticated ? "Learner navigation" : t("nav.marketingExplore")}
-              className="flex flex-1 min-w-0 items-center justify-center gap-6 xl:gap-8"
+              className="flex min-w-0 flex-1 items-center justify-center gap-1.5 xl:gap-2"
             >
             {isAuthLoading ? (
               <div className="flex items-center gap-3" aria-hidden>
@@ -582,21 +593,24 @@ export function SiteHeader() {
                     </div>
                   );
                 })}
-                <Link
-                  href={localizeHref(pricingNav.href)}
-                  aria-current={isActivePath(strippedPath, pricingNav.matchBase) ? "page" : undefined}
-                  className={`${NAV_LINK_CLASS} text-center`}
-                  onClick={() =>
-                    trackClientEvent(PH.marketingNavClick, {
-                      actor: navActor,
-                      nav_id: pricingNav.key,
-                      surface: "site_header_desktop",
-                      marketing_region: region,
-                    })
-                  }
-                >
-                  {pricingNav.label}
-                </Link>
+                {marketingBrowseLinks.map((item) => (
+                  <Link
+                    key={item.key}
+                    href={localizeHref(item.href)}
+                    aria-current={isActivePath(strippedPath, item.matchBase) ? "page" : undefined}
+                    className={NAV_LINK_CLASS}
+                    onClick={() =>
+                      trackClientEvent(PH.marketingNavClick, {
+                        actor: navActor,
+                        nav_id: item.key,
+                        surface: "site_header_desktop",
+                        marketing_region: region,
+                      })
+                    }
+                  >
+                    {item.label}
+                  </Link>
+                ))}
               </>
             ) : (
               <>
@@ -623,7 +637,7 @@ export function SiteHeader() {
             )}
           </nav>
 
-          <div className="flex shrink-0 items-center justify-end gap-2 lg:min-w-[10rem]">
+          <div className="flex shrink-0 items-center justify-end gap-2 lg:min-w-[15rem] xl:min-w-[16rem]">
               {isAuthLoading ? (
                 <span className="inline-flex h-9 w-32 animate-pulse rounded-xl bg-[var(--nav-hover)]" aria-hidden />
               ) : !isAuthenticated ? (
@@ -1032,26 +1046,29 @@ export function SiteHeader() {
                         </div>
                       );
                     })}
-                    <Link
-                      href={localizeHref(pricingNav.href)}
-                      aria-current={isActivePath(strippedPath, pricingNav.matchBase) ? "page" : undefined}
-                      className={`flex items-center gap-2 rounded-xl px-3 py-3 text-[15px] font-semibold transition-colors ${isActivePath(strippedPath, pricingNav.matchBase) ? "text-[var(--nav-link-active)]" : "text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"}`}
-                      onClick={() => {
-                        trackClientEvent(PH.marketingNavClick, {
-                          actor: navActor,
-                          nav_id: pricingNav.key,
-                          surface: "site_header_mobile_drawer",
-                          marketing_region: region,
-                        });
-                        setMobileOpen(false);
-                      }}
-                    >
-                      <span
-                        className={`h-1.5 w-1.5 shrink-0 rounded-full transition-opacity duration-100 ${isActivePath(strippedPath, pricingNav.matchBase) ? "bg-[var(--text-accent)] opacity-100" : "opacity-0"}`}
-                        aria-hidden
-                      />
-                      {pricingNav.label}
-                    </Link>
+                    {marketingBrowseLinks.map((item) => (
+                      <Link
+                        key={item.key}
+                        href={localizeHref(item.href)}
+                        aria-current={isActivePath(strippedPath, item.matchBase) ? "page" : undefined}
+                        className={`flex items-center gap-2 rounded-xl px-3 py-3 text-[15px] font-semibold transition-colors ${isActivePath(strippedPath, item.matchBase) ? "text-[var(--nav-link-active)]" : "text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"}`}
+                        onClick={() => {
+                          trackClientEvent(PH.marketingNavClick, {
+                            actor: navActor,
+                            nav_id: item.key,
+                            surface: "site_header_mobile_drawer",
+                            marketing_region: region,
+                          });
+                          setMobileOpen(false);
+                        }}
+                      >
+                        <span
+                          className={`h-1.5 w-1.5 shrink-0 rounded-full transition-opacity duration-100 ${isActivePath(strippedPath, item.matchBase) ? "bg-[var(--text-accent)] opacity-100" : "opacity-0"}`}
+                          aria-hidden
+                        />
+                        {item.label}
+                      </Link>
+                    ))}
                   </>
                 )}
               </div>

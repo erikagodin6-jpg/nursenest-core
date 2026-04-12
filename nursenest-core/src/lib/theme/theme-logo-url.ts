@@ -70,7 +70,7 @@ export { getThemeLogo, getThemeLogoUrl } from "@/lib/branding/theme-brand-logo-c
  * Ordered `<img src>` try-chain for a theme logo.
  *
  * variant="full" (default):
- *   CDN full logo → same-origin PNG → committed PNG → default-theme fallbacks → SVGs
+ *   same-origin SVG → universal SVG → CDN full logo → legacy PNG fallbacks
  *
  * variant="leaf":
  *   CDN leaf logo → CDN full logo (fallback) → same-origin PNG → SVGs
@@ -95,8 +95,8 @@ export function getThemeLogoLoadChain(
     pushKeyVariants(out, fullKey);
     out.push(getThemeLogoPngPathForThemeId(id));
   } else {
-    // Full: local transparent PNGs first (confirmed RGBA), CDN as fallback.
-    // CDN assets may carry non-transparent backgrounds; local files are the safe source.
+    // Full: existing same-origin SVGs are the fastest reliable local source for the marketing header.
+    // Keep CDN + legacy PNG paths behind them as safety nets for other surfaces.
     out.push(getThemeLogoPngPathForThemeId(id));
     out.push(`${COMMITTED_THEME_LOGO_PUBLIC_PREFIX}${id}brandlogo_transparent.png`);
     pushKeyVariants(out, key);
@@ -116,9 +116,9 @@ export function getThemeLogoLoadChain(
   const svgFb   = id !== defId ? getThemeLogoPathForThemeId(defId) : null;
 
   return uniqueStrings([
-    ...out,
     ...(logoVariant === "full" ? [getThemeLogoSvgPathForThemeId(id)] : []),
     ...(svgPath ? [svgPath] : []),
+    ...out,
     ...(svgFb   ? [svgFb]  : []),
   ]);
 }
