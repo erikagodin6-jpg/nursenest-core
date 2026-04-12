@@ -51,7 +51,7 @@ export default function HomeRestoredClient() {
   const questionCount = homeStats?.questionCount ?? 0;
 
   return (
-    <div className="font-sans md:animate-page-enter flex min-h-screen flex-col overflow-x-hidden bg-[var(--theme-page-bg)]">
+    <div className="font-sans md:animate-page-enter flex min-h-screen flex-col overflow-x-hidden bg-[var(--page-bg)]">
       <FunnelHomepageViewBeacon marketingRegion={marketingRegion} />
       <div className="flex-grow overflow-x-hidden">
         {/* §1 – Conversion Hero: headline, primary CTAs, region toggle */}
@@ -72,7 +72,7 @@ export default function HomeRestoredClient() {
         {/* §8 – Final CTA */}
         <HomeFinalStudyCta />
 
-        <div className="mx-auto max-w-6xl px-4 py-8 text-center sm:px-6 lg:px-8">
+        <div className="mx-auto mt-2 max-w-6xl border-t border-[var(--border-subtle)] bg-[var(--section-bg)] px-4 py-8 text-center sm:px-6 lg:px-8">
           <Link
             href={mapLegacyMarketingHref("/languages")}
             className="nn-marketing-body-sm inline-flex items-center gap-2 text-[var(--theme-muted-text)] transition-colors hover:text-[var(--theme-heading-text)]"

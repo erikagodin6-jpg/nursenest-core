@@ -21,6 +21,19 @@ import type { NoteRow, NotesPagePayload } from "@/lib/learner/notes-index-types"
 import { HighlightsList } from "@/components/study/highlights-list";
 import { loadMoreNotes, loadFilteredNotes } from "./actions";
 
+// ── Search helpers ────────────────────────────────────────────────────────────
+
+function matchesSearch(note: NoteRow, q: string): boolean {
+  if (!q) return true;
+  const lower = q.toLowerCase();
+  return (
+    (note.title?.toLowerCase().includes(lower) ?? false) ||
+    note.bodySnippet.toLowerCase().includes(lower) ||
+    (note.topic?.toLowerCase().includes(lower) ?? false) ||
+    note.scopeLabel.toLowerCase().includes(lower)
+  );
+}
+
 // ── Filter tabs ───────────────────────────────────────────────────────────────
 
 type FilterTab = "all" | "bookmarks" | "rationales";
@@ -132,16 +145,22 @@ function NotesList({
   initialHasMore,
   initialCursor,
   filter,
+  searchQuery,
 }: {
   initialItems: NoteRow[];
   initialHasMore: boolean;
   initialCursor: string | null;
   filter: FilterTab;
+  searchQuery: string;
 }) {
   const [items, setItems] = useState(initialItems);
   const [hasMore, setHasMore] = useState(initialHasMore);
   const [cursor, setCursor] = useState(initialCursor);
   const [isPending, startTransition] = useTransition();
+
+  const filtered = searchQuery
+    ? items.filter((n) => matchesSearch(n, searchQuery))
+    : items;
 
   function handleLoadMore() {
     if (!cursor || !hasMore || isPending) return;
@@ -154,7 +173,7 @@ function NotesList({
     });
   }
 
-  if (items.length === 0) {
+  if (filtered.length === 0) {
     return (
       <div
         className="rounded-2xl px-6 py-10 text-center"
@@ -164,7 +183,9 @@ function NotesList({
         }}
       >
         <p className="text-sm" style={{ color: "var(--semantic-text-muted)" }}>
-          {filter === "all"
+          {searchQuery
+            ? `No notes match "${searchQuery}".`
+            : filter === "all"
             ? "No notes yet. Start by writing notes inside any lesson or question."
             : "No notes match this filter."}
         </p>
@@ -198,7 +219,7 @@ function NotesList({
 
   return (
     <div className="space-y-2.5">
-      {items.map((note) => (
+      {filtered.map((note) => (
         <NoteListCard key={note.id} note={note} />
       ))}
       {hasMore && (
@@ -231,6 +252,7 @@ export type NotesIndexClientProps = {
 
 export function NotesIndexClient({ payload, userId: _userId }: NotesIndexClientProps) {
   const [activeTab, setActiveTab] = useState<FilterTab>("all");
+  const [searchQuery, setSearchQuery] = useState("");
 
   // Bookmark / rationale state lazy-loaded when tabs open
   const [bookmarkItems, setBookmarkItems] = useState<NoteRow[] | null>(null);
@@ -284,12 +306,18 @@ export function NotesIndexClient({ payload, userId: _userId }: NotesIndexClientP
   return (
     <div className="space-y-6">
       {/* ── Summary cards ─────────────────────────────────────────────────── */}
-      <div className="grid grid-cols-3 gap-3">
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
         <SummaryCard
           label="Total notes"
           value={payload.total}
           accentColor="var(--semantic-brand)"
           surface="var(--surface-soft-a, color-mix(in srgb, var(--theme-primary) 3.5%, var(--bg-page)))"
+        />
+        <SummaryCard
+          label="Section notes"
+          value={payload.sectionNoteCount}
+          accentColor="var(--semantic-chart-2, var(--semantic-brand))"
+          surface="color-mix(in srgb, var(--semantic-chart-2, var(--semantic-brand)) 5%, var(--bg-card))"
         />
         <SummaryCard
           label="Bookmarks"
@@ -303,6 +331,41 @@ export function NotesIndexClient({ payload, userId: _userId }: NotesIndexClientP
           accentColor="var(--semantic-success)"
           surface="var(--surface-soft-b, color-mix(in srgb, var(--semantic-success) 5%, var(--bg-card)))"
         />
+      </div>
+
+      {/* ── Search bar ────────────────────────────────────────────────────── */}
+      <div className="relative">
+        <span
+          className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-sm"
+          style={{ color: "var(--semantic-text-muted)" }}
+          aria-hidden="true"
+        >
+          🔍
+        </span>
+        <input
+          type="search"
+          placeholder="Search your notes, topics, or source…"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="w-full rounded-xl border bg-transparent py-2.5 pl-9 pr-4 text-sm transition-colors focus:outline-none focus:ring-1"
+          style={{
+            background: "var(--semantic-surface)",
+            borderColor: "var(--semantic-border-soft)",
+            color: "var(--semantic-text-primary)",
+          }}
+          aria-label="Search notes"
+        />
+        {searchQuery ? (
+          <button
+            type="button"
+            onClick={() => setSearchQuery("")}
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-xs"
+            style={{ color: "var(--semantic-text-muted)" }}
+            aria-label="Clear search"
+          >
+            ✕
+          </button>
+        ) : null}
       </div>
 
       {/* ── Tab bar ───────────────────────────────────────────────────────── */}
@@ -347,6 +410,7 @@ export function NotesIndexClient({ payload, userId: _userId }: NotesIndexClientP
             initialHasMore={payload.hasMore}
             initialCursor={payload.cursor}
             filter="all"
+            searchQuery={searchQuery}
           />
         </section>
       )}

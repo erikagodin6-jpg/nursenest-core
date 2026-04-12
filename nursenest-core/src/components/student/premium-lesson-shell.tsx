@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 import { LearnerNoteScope } from "@prisma/client";
 import type { PremiumProtectionFlags } from "@/lib/premium-protection/config";
 import { ProtectedPremiumContent } from "@/components/student/protected-premium-content";
-import { StudyNotesPanel } from "@/components/student/study-notes-panel";
+import { LessonNotesDrawer } from "@/components/lessons/lesson-notes-drawer";
 
 type Props = {
   userId: string;
@@ -46,7 +46,7 @@ export function PremiumLessonShell({
       >
         {children}
       </ProtectedPremiumContent>
-      <StudyNotesPanel
+      <LessonNotesDrawer
         userId={userId}
         scope={scope}
         contextId={contextId}

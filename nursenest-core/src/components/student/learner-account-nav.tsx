@@ -31,6 +31,7 @@ const GROUPS: readonly NavGroup[] = [
       { href: "/app/account/study-history", key: "learner.account.nav.studyHistory" },
       { href: "/app/account/cat-history", key: "learner.account.nav.catHistory" },
       { href: "/app/account/review-queue", key: "learner.account.nav.reviewQueue" },
+      { href: "/app/account/notes", key: "learner.account.nav.notesHighlights" },
     ],
   },
   {

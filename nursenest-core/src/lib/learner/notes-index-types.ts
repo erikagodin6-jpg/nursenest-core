@@ -17,6 +17,8 @@ export type NoteRow = {
   isBookmark: boolean;
   /** true when contextId starts with "rationale:" */
   isSavedRationale: boolean;
+  /** true when contextId starts with "sn:" (per-section inline note) */
+  isSectionNote: boolean;
 };
 
 export type NotesPagePayload = {
@@ -28,4 +30,5 @@ export type NotesPagePayload = {
   total: number;
   bookmarkCount: number;
   rationaleCount: number;
+  sectionNoteCount: number;
 };

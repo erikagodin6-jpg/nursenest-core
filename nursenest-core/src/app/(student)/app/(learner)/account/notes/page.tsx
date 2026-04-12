@@ -113,8 +113,9 @@ export default async function AccountNotesPage() {
           </div>
 
           {/* Quick stats */}
-          <div className="flex shrink-0 gap-4">
+          <div className="flex shrink-0 flex-wrap gap-4">
             <StatPill label="Notes" value={payload.total} color="var(--semantic-brand)" />
+            <StatPill label="Section notes" value={payload.sectionNoteCount} color="var(--semantic-chart-2, var(--semantic-brand))" />
             <StatPill label="Bookmarks" value={payload.bookmarkCount} color="var(--semantic-info)" />
             <StatPill
               label="Rationales"

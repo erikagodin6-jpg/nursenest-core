@@ -42,6 +42,7 @@ function toNoteRow(r: {
     scopeLabel: labelForLearnerNoteScope(r.scope),
     isBookmark: r.contextId.startsWith("bk:"),
     isSavedRationale: r.contextId.startsWith("rationale:"),
+    isSectionNote: r.contextId.startsWith("sn:"),
   };
 }
 
@@ -49,12 +50,12 @@ function toNoteRow(r: {
 
 export async function loadNotesPagePayload(userId: string): Promise<NotesPagePayload> {
   if (!isDatabaseUrlConfigured()) {
-    return { notes: [], hasMore: false, cursor: null, total: 0, bookmarkCount: 0, rationaleCount: 0 };
+    return { notes: [], hasMore: false, cursor: null, total: 0, bookmarkCount: 0, rationaleCount: 0, sectionNoteCount: 0 };
   }
 
   const PAGE_SIZE = 10;
 
-  const [rows, total, bookmarkCount, rationaleCount] = await Promise.all([
+  const [rows, total, bookmarkCount, rationaleCount, sectionNoteCount] = await Promise.all([
     prisma.learnerNote.findMany({
       where: { userId },
       orderBy: { updatedAt: "desc" },
@@ -64,6 +65,7 @@ export async function loadNotesPagePayload(userId: string): Promise<NotesPagePay
     prisma.learnerNote.count({ where: { userId } }),
     prisma.learnerNote.count({ where: { userId, contextId: { startsWith: "bk:" } } }),
     prisma.learnerNote.count({ where: { userId, contextId: { startsWith: "rationale:" } } }),
+    prisma.learnerNote.count({ where: { userId, contextId: { startsWith: "sn:" } } }),
   ]);
 
   const hasMore = rows.length > PAGE_SIZE;
@@ -76,6 +78,7 @@ export async function loadNotesPagePayload(userId: string): Promise<NotesPagePay
     total,
     bookmarkCount,
     rationaleCount,
+    sectionNoteCount,
   };
 }
 

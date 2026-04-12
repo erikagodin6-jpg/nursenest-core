@@ -51,7 +51,7 @@ export function MarketingSiteSubNav() {
   return (
     <nav
       aria-label={t("nav.pathwayHubsAria")}
-      className="border-b border-[color-mix(in_srgb,var(--theme-primary)_12%,var(--border-subtle))] bg-[color-mix(in_srgb,var(--theme-primary)_6.5%,var(--theme-page-bg))]"
+      className="border-b border-[var(--nav-border)] bg-[var(--nav-hover)]"
     >
       <div className="mx-auto max-w-7xl px-3 sm:px-4 lg:px-8">
         <ul className="-mx-3 flex h-10 snap-x snap-mandatory items-center gap-1 overflow-x-auto overscroll-x-contain px-3 py-1.5 sm:mx-0 sm:gap-1.5 sm:overflow-x-visible sm:px-0 sm:py-2 md:h-11 md:justify-center md:gap-2 lg:gap-2.5">
@@ -64,8 +64,8 @@ export function MarketingSiteSubNav() {
                   href={href}
                   className={`${LINK_BASE} ${
                     active
-                      ? "bg-[color-mix(in_srgb,var(--theme-primary)_14%,var(--theme-page-bg))] text-[var(--theme-heading-text)] shadow-[inset_0_1px_0_rgba(255,255,255,0.45)] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]"
-                      : "text-[color-mix(in_srgb,var(--theme-muted-text)_92%,var(--theme-heading-text))] hover:bg-[color-mix(in_srgb,var(--theme-primary)_8%,var(--theme-page-bg))] hover:text-[var(--theme-heading-text)]"
+                      ? "bg-[var(--nav-active)] text-[var(--nav-fg)] shadow-[inset_0_1px_0_rgba(255,255,255,0.18)] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]"
+                      : "text-[var(--nav-muted)] hover:bg-[var(--nav-active)] hover:text-[var(--nav-fg)]"
                   } `}
                   onClick={() =>
                     trackClientEvent(PH.marketingSubNavClick, {

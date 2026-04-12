@@ -50,6 +50,7 @@ import { CoachLessonHelper } from "@/components/study/coach-lesson-helper";
 import { isStudyCoachEnabled } from "@/lib/ai/learner-ai-policy";
 import { loadPathwayLessonProgressForSlug } from "@/lib/lessons/pathway-lesson-progress";
 import { LessonAssessmentFlow } from "@/components/lessons/lesson-assessment-flow";
+import { LessonSectionNoteInline } from "@/components/lessons/lesson-section-note-inline";
 
 function LessonBody({ content }: { content: unknown }) {
   if (Array.isArray(content)) {
@@ -389,6 +390,17 @@ export default async function LessonDetailPage({ params }: Props) {
                         measurementSystem={lessonMeasurementSystem ?? undefined}
                       />
                     </div>
+                    {/* Per-section note button (non-intrusive, below content) */}
+                    {userId ? (
+                      <LessonSectionNoteInline
+                        userId={userId}
+                        sectionId={section.id}
+                        sectionHeading={section.heading?.trim() ?? ""}
+                        scope="PATHWAY_LESSON"
+                        pathwayId={pathwayId}
+                        topic={record.topic}
+                      />
+                    ) : null}
                   </section>
                 ))}
               </article>

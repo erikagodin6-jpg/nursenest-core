@@ -107,7 +107,7 @@ export function SiteHeader() {
             <Button
               type="button"
               variant="ghost"
-              className="h-9 w-9 shrink-0 p-0 text-[var(--palette-nav-text)] md:hidden"
+              className="h-9 w-9 shrink-0 p-0 text-[var(--nav-fg)] md:hidden"
               aria-label={t("nav.openMenu")}
               onClick={() => setMobileOpen(true)}
             >
@@ -214,13 +214,13 @@ export function SiteHeader() {
                 <button
                   type="button"
                   onClick={() => setLangOpen((o) => !o)}
-                  className="flex w-full items-center justify-between gap-2 rounded-xl border border-[var(--border-medium)] px-3 py-2 nn-marketing-body-sm font-medium tracking-normal text-[var(--palette-text)]"
+                  className="flex w-full items-center justify-between gap-2 rounded-xl border border-[var(--nav-border)] px-3 py-2 nn-marketing-body-sm font-medium tracking-normal text-[var(--nav-fg)]"
                 >
                   {t("nav.language")}
                   <ChevronDown className={`h-4 w-4 shrink-0 transition-transform ${langOpen ? "rotate-180" : ""}`} />
                 </button>
                 {langOpen ? (
-                  <div className="mt-1 max-h-48 overflow-y-auto rounded-xl border border-[var(--border-medium)] bg-[var(--bg-page)] p-1">
+                  <div className="mt-1 max-h-48 overflow-y-auto rounded-xl border border-[var(--nav-border)] bg-[var(--nav-bg)] p-1">
                     <MarketingLanguagePreferenceList
                       onDone={() => setLangOpen(false)}
                       renderItem={({ code, name, flag, disabled, onSelect }) => (
@@ -228,8 +228,8 @@ export function SiteHeader() {
                           type="button"
                           disabled={disabled}
                           onClick={onSelect}
-                          className={`flex w-full items-center gap-2 rounded-lg px-2 py-2 text-left nn-marketing-body-sm font-medium tracking-normal text-[var(--palette-text)] hover:bg-[var(--palette-nav-hover)] ${
-                            code === locale ? "bg-[var(--palette-nav-hover)]/60" : ""
+                          className={`flex w-full items-center gap-2 rounded-lg px-2 py-2 text-left nn-marketing-body-sm font-medium tracking-normal text-[var(--nav-fg)] hover:bg-[var(--nav-hover)] ${
+                            code === locale ? "bg-[var(--nav-hover)]/60" : ""
                           }`}
                         >
                           <span>{flag}</span>
