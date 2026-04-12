@@ -233,24 +233,24 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
       </div>
 
       {/* 4. Lesson library */}
-      <div id="pathway-lesson-library" className="mt-8 scroll-mt-24">
-        <details open className="group/lesson-library">
-          <summary className="mb-4 flex cursor-pointer list-none items-center justify-between gap-3 rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-4 py-3 text-sm font-medium text-[var(--semantic-brand)] shadow-[var(--semantic-shadow-soft)] hover:bg-[color-mix(in_srgb,var(--semantic-brand)_5%,var(--semantic-surface))] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_24%,transparent)]">
-            <span className="text-[var(--theme-muted-text)]">
-              {pageResult.total} {pageResult.total === 1 ? "lesson" : "lessons"}
-            </span>
-            <span className="group-open/lesson-library:hidden">Show full lesson list</span>
-            <span className="hidden group-open/lesson-library:inline">Hide full lesson list</span>
-          </summary>
-          <PathwayLessonsCurriculumHub
-            lessons={lessons}
-            lessonsBasePath={base}
-            progressMap={progressMap}
-            canShowProgressMap={canShowProgressMap}
-            showLockedState={!canShowResume}
-          />
-        </details>
-      </div>
+      <section id="pathway-lesson-library" className="mt-8 scroll-mt-24" aria-labelledby="lesson-library-heading">
+        {/* Section toolbar: heading + count badge */}
+        <div className="mb-4 flex flex-wrap items-center justify-between gap-3 border-b border-[var(--semantic-border-soft)] pb-4">
+          <h2 id="lesson-library-heading" className="text-base font-semibold text-[var(--theme-heading-text)]">
+            Lesson library
+          </h2>
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-3 py-1 text-xs font-semibold text-[var(--theme-muted-text)]">
+            {pageResult.total.toLocaleString()} {pageResult.total === 1 ? "lesson" : "lessons"}
+          </span>
+        </div>
+        <PathwayLessonsCurriculumHub
+          lessons={lessons}
+          lessonsBasePath={base}
+          progressMap={progressMap}
+          canShowProgressMap={canShowProgressMap}
+          showLockedState={!canShowResume}
+        />
+      </section>
 
       {/* 7. Bottom navigation */}
       <StudyBottomNav

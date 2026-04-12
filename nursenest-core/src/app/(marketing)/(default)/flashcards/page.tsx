@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { BookOpen, GraduationCap, Layers, Tag } from "lucide-react";
 import { absoluteUrl } from "@/lib/seo/site-origin";
 import { loadPublicFlashcardHub } from "@/lib/seo/public-flashcard-landing";
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
@@ -59,97 +60,201 @@ export default async function PublicFlashcardsHubPage() {
   const pricing = withMarketingLocale(locale, "/pricing");
 
   return (
-    <div className="mx-auto max-w-4xl px-4 py-12 sm:px-6">
+    <main className="mx-auto max-w-5xl px-4 py-8 sm:px-6 lg:px-8 lg:py-12">
       <BreadcrumbJsonLd
         items={[
           { name: t("nav.home"), path: "/" },
           { name: t("nav.flashcards"), path: "/flashcards" },
         ]}
       />
+
+      {/* ── Breadcrumb ── */}
       <nav className="mb-6 nn-marketing-caption" aria-label="Breadcrumb">
         <ol className="flex flex-wrap items-center gap-2">
           <li>
-            <Link href={home} className="text-primary underline">
+            <Link href={home} className="text-[var(--semantic-brand)] hover:underline">
               {t("nav.home")}
             </Link>
           </li>
-          <li aria-hidden>/</li>
+          <li aria-hidden className="text-[var(--theme-muted-text)]">/</li>
           <li className="font-medium text-[var(--theme-heading-text)]">{t("nav.flashcards")}</li>
         </ol>
       </nav>
 
-      <h1 className="nn-marketing-h1">{t("pages.publicFlashcardsHub.h1")}</h1>
-      <p className="mt-3 max-w-2xl nn-marketing-body-sm text-[var(--theme-muted-text)]">{t("pages.publicFlashcardsHub.intro")}</p>
+      {/* ── Page header ── */}
+      <header className="relative overflow-hidden rounded-[1.75rem] border border-[var(--semantic-border-soft)] bg-gradient-to-br from-[var(--hero-gradient-start)] via-[var(--semantic-surface)] to-[var(--hero-gradient-end)] p-6 shadow-[var(--semantic-shadow-soft)] sm:p-8">
+        <div
+          className="pointer-events-none absolute -right-12 -top-20 h-52 w-52 rounded-full bg-[color-mix(in_srgb,var(--semantic-brand)_7%,transparent)] blur-3xl"
+          aria-hidden
+        />
+        <div className="relative flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+          <div className="min-w-0">
+            <div className="mb-3 inline-flex items-center gap-1.5 rounded-full border border-[var(--pill-border)] bg-[var(--pill-bg)] px-3 py-1 text-xs font-semibold text-[var(--pill-fg)]">
+              <BookOpen className="h-3 w-3" aria-hidden />
+              Flashcard Library
+            </div>
+            <h1 className="text-2xl font-semibold tracking-tight text-[var(--theme-heading-text)] sm:text-4xl">
+              {t("pages.publicFlashcardsHub.h1")}
+            </h1>
+            <p className="mt-2 max-w-xl text-sm leading-6 text-[var(--theme-muted-text)]">
+              {t("pages.publicFlashcardsHub.intro")}
+            </p>
+          </div>
+          <div className="flex shrink-0 flex-col gap-2 sm:flex-row sm:items-center">
+            <Link
+              href={login}
+              className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-[var(--semantic-brand)] px-5 py-2.5 text-sm font-semibold text-white transition hover:opacity-90"
+            >
+              {t("pages.publicFlashcardsHub.ctaSignIn")}
+            </Link>
+            <Link
+              href={pricing}
+              className="inline-flex min-h-[44px] items-center justify-center rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-5 py-2.5 text-sm font-semibold text-[var(--theme-heading-text)] transition hover:bg-[color-mix(in_srgb,var(--semantic-brand)_5%,var(--semantic-surface))]"
+            >
+              {t("pages.publicFlashcardsHub.ctaPricing")}
+            </Link>
+          </div>
+        </div>
 
-      <section className="mt-10">
-        <h2 className="nn-marketing-h3">{t("pages.publicFlashcardsHub.sectionTopicsTitle")}</h2>
-        <ul className="mt-4 flex flex-wrap gap-2">
-          {topics.length === 0 ? (
-            <li className="text-sm text-[var(--theme-muted-text)]">{t("pages.publicFlashcardsHub.topicsEmpty")}</li>
-          ) : (
-            topics.map((topic) => (
+        {/* Stats row */}
+        <div className="relative mt-6 flex flex-wrap gap-4 border-t border-[var(--semantic-border-soft)] pt-5">
+          <StatItem icon={GraduationCap} label="Flashcard decks" value={featuredDecks.length} />
+          {topics.length > 0 && <StatItem icon={Tag} label="Topics" value={topics.length} />}
+          <StatItem icon={Layers} label="Free to preview" value="All decks" />
+        </div>
+      </header>
+
+      {/* ── Topics cloud — only when populated ── */}
+      {topics.length > 0 && (
+        <section className="mt-10" aria-labelledby="topics-heading">
+          <div className="mb-4 flex items-center gap-2">
+            <Tag className="h-4 w-4 text-[var(--semantic-brand)]" aria-hidden />
+            <h2 id="topics-heading" className="text-base font-semibold text-[var(--theme-heading-text)]">
+              {t("pages.publicFlashcardsHub.sectionTopicsTitle")}
+            </h2>
+          </div>
+          <ul className="flex flex-wrap gap-2">
+            {topics.map((topic) => (
               <li key={topic.slug}>
                 <Link
                   href={withMarketingLocale(locale, `/flashcards/${topic.slug}`)}
-                  className="inline-flex rounded-full border border-border bg-card px-3 py-1.5 text-sm font-medium hover:border-primary/40"
+                  className="nn-chip inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-sm font-medium transition"
                 >
                   {topic.name}
                 </Link>
               </li>
-            ))
-          )}
-        </ul>
-      </section>
-
-      <section className="mt-12" id="flashcard-deck-library">
-        <details open className="group/flashcard-decks">
-          <summary className="mb-4 flex cursor-pointer list-none items-center justify-between gap-3 rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-4 py-3 text-sm font-medium text-[var(--semantic-brand)] shadow-[var(--semantic-shadow-soft)] hover:bg-[color-mix(in_srgb,var(--semantic-brand)_5%,var(--semantic-surface))] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_24%,transparent)]">
-            <span className="text-[var(--theme-muted-text)]">
-              {featuredDecks.length} {featuredDecks.length === 1 ? "deck" : "decks"}
-            </span>
-            <span className="group-open/flashcard-decks:hidden">Show featured decks</span>
-            <span className="hidden group-open/flashcard-decks:inline">Hide featured decks</span>
-          </summary>
-          <ul className="space-y-6">
-            {featuredDecks.length === 0 ? (
-              <li className="text-sm text-[var(--theme-muted-text)]">{t("pages.publicFlashcardsHub.featuredEmpty")}</li>
-            ) : (
-              featuredDecks.map((d) => (
-                <li key={d.slug} className="nn-card p-5">
-                  <Link
-                    href={withMarketingLocale(locale, `/flashcards/${d.slug}`)}
-                    className="nn-marketing-h3 text-primary hover:underline"
-                  >
-                    {d.title}
-                  </Link>
-                  {d.description ? <p className="mt-2 text-sm text-[var(--theme-muted-text)]">{d.description}</p> : null}
-                  <p className="mt-2 text-xs text-[var(--theme-muted-text)]">
-                    {t("pages.publicFlashcardsHub.deckCardLine", { count: d.cardCount })}
-                  </p>
-                  {d.sampleFront ? (
-                    <blockquote className="mt-4 rounded-lg border border-border bg-muted/30 p-4 text-sm text-[var(--theme-heading-text)]">
-                      <span className="text-xs font-semibold uppercase text-primary">{t("pages.publicFlashcardsHub.sampleCardBadge")}</span>
-                      <p className="mt-2 whitespace-pre-wrap">{d.sampleFront}</p>
-                    </blockquote>
-                  ) : null}
-                </li>
-              ))
-            )}
+            ))}
           </ul>
-        </details>
-      </section>
+        </section>
+      )}
 
-      <div className="mt-12 flex flex-wrap gap-3">
+      {/* ── Featured decks ── */}
+      <section
+        id="flashcard-deck-library"
+        className="mt-10"
+        aria-labelledby="featured-decks-heading"
+      >
+        <div className="mb-5 flex items-center justify-between gap-3">
+          <h2 id="featured-decks-heading" className="text-lg font-semibold text-[var(--theme-heading-text)]">
+            Featured decks
+          </h2>
+          <span className="rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-3 py-1 text-xs font-semibold text-[var(--theme-muted-text)]">
+            {featuredDecks.length} {featuredDecks.length === 1 ? "deck" : "decks"}
+          </span>
+        </div>
+
+        {featuredDecks.length === 0 ? (
+          <div className="rounded-[1.5rem] border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-8 text-center shadow-[var(--semantic-shadow-soft)]">
+            <BookOpen className="mx-auto mb-3 h-8 w-8 text-[var(--semantic-text-muted)]" aria-hidden />
+            <p className="text-sm font-medium text-[var(--theme-heading-text)]">
+              {t("pages.publicFlashcardsHub.featuredEmpty")}
+            </p>
+            <p className="mt-1 text-sm text-[var(--theme-muted-text)]">
+              Check back soon — new decks are added regularly.
+            </p>
+          </div>
+        ) : (
+          <ul className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+            {featuredDecks.map((d) => (
+              <li key={d.slug}>
+                <FlashcardDeckCard deck={d} locale={locale} t={t} />
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
+    </main>
+  );
+}
+
+// ── Sub-components ──────────────────────────────────────────────────────────
+
+function StatItem({ icon: Icon, label, value }: { icon: React.ComponentType<{ className?: string; "aria-hidden"?: boolean }>; label: string; value: string | number }) {
+  return (
+    <div className="flex items-center gap-2">
+      <Icon className="h-4 w-4 text-[var(--semantic-brand)]" aria-hidden />
+      <span className="text-sm font-semibold text-[var(--theme-heading-text)]">{value}</span>
+      <span className="text-sm text-[var(--theme-muted-text)]">{label}</span>
+    </div>
+  );
+}
+
+type DeckProps = {
+  deck: { slug: string; title: string; description: string | null; cardCount: number; sampleFront: string | null };
+  locale: string;
+  t: (key: string, p?: Record<string, string | number>) => string;
+};
+
+function FlashcardDeckCard({ deck, locale, t }: DeckProps) {
+  const href = withMarketingLocale(locale, `/flashcards/${deck.slug}`);
+
+  return (
+    <article className="flex h-full flex-col rounded-[1.5rem] border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5 shadow-[var(--semantic-shadow-soft)] transition-shadow hover:shadow-[var(--shadow-elevated)]">
+      {/* Card header */}
+      <div className="flex items-start justify-between gap-3">
         <Link
-          href={login}
-          className="inline-flex rounded-full bg-role-cta px-5 py-2.5 text-sm font-semibold text-role-cta-foreground"
+          href={href}
+          className="text-base font-semibold leading-snug text-[var(--theme-heading-text)] hover:text-[var(--semantic-brand)] hover:underline"
         >
-          {t("pages.publicFlashcardsHub.ctaSignIn")}
+          {deck.title}
         </Link>
-        <Link href={pricing} className="inline-flex rounded-full border border-border px-5 py-2.5 text-sm font-semibold">
-          {t("pages.publicFlashcardsHub.ctaPricing")}
+        <span
+          className={`ml-auto shrink-0 rounded-full border px-2.5 py-0.5 text-xs font-semibold ${
+            deck.cardCount > 0
+              ? "border-[color-mix(in_srgb,var(--semantic-success)_24%,var(--semantic-border-soft))] bg-[var(--semantic-success-soft)] text-[var(--semantic-success-contrast)]"
+              : "border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] text-[var(--theme-muted-text)]"
+          }`}
+        >
+          {t("pages.publicFlashcardsHub.deckCardLine", { count: deck.cardCount })}
+        </span>
+      </div>
+
+      {/* Description */}
+      {deck.description ? (
+        <p className="mt-2 text-sm leading-6 text-[var(--theme-muted-text)]">{deck.description}</p>
+      ) : null}
+
+      {/* Sample card */}
+      {deck.sampleFront ? (
+        <div className="mt-4 flex-1 rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-cool)] p-4">
+          <p className="mb-1.5 text-[10px] font-bold uppercase tracking-widest text-[var(--semantic-brand)]">
+            {t("pages.publicFlashcardsHub.sampleCardBadge")}
+          </p>
+          <p className="text-sm leading-6 text-[var(--theme-heading-text)]">{deck.sampleFront}</p>
+        </div>
+      ) : (
+        <div className="mt-4 flex-1" />
+      )}
+
+      {/* CTA */}
+      <div className="mt-4 border-t border-[var(--semantic-border-soft)] pt-4">
+        <Link
+          href={href}
+          className="inline-flex min-h-[40px] items-center justify-center rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-5 py-2 text-sm font-semibold text-[var(--theme-heading-text)] transition hover:bg-[color-mix(in_srgb,var(--semantic-brand)_8%,var(--semantic-surface))] hover:text-[var(--semantic-brand)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_24%,transparent)]"
+        >
+          Study this deck →
         </Link>
       </div>
-    </div>
+    </article>
   );
 }

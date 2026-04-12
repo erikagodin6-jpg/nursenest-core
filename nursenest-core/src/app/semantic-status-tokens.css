@@ -43,13 +43,13 @@
   --semantic-chart-5: #f3b0c3;
   --decorative-1: color-mix(in srgb, var(--semantic-info) 42%, var(--semantic-brand));
   --decorative-2: color-mix(in srgb, var(--semantic-success) 38%, var(--semantic-warning));
-  --semantic-panel-muted: color-mix(in srgb, var(--semantic-brand) 5%, var(--semantic-surface));
-  --semantic-panel-warm: color-mix(in srgb, var(--semantic-warning) 7%, var(--semantic-surface));
-  --semantic-panel-cool: color-mix(in srgb, var(--semantic-info) 7%, var(--semantic-surface));
-  --semantic-panel-positive: color-mix(in srgb, var(--semantic-success) 8%, var(--semantic-surface));
-  --hero-gradient-start: color-mix(in srgb, var(--semantic-brand) 10%, var(--semantic-surface));
-  --hero-gradient-mid: color-mix(in srgb, var(--semantic-info) 8%, var(--semantic-surface));
-  --hero-gradient-end: color-mix(in srgb, var(--semantic-success) 9%, var(--semantic-surface));
+  --semantic-panel-muted: color-mix(in srgb, var(--semantic-brand) 9%, var(--semantic-surface));
+  --semantic-panel-warm: color-mix(in srgb, var(--semantic-warning) 10%, var(--semantic-surface));
+  --semantic-panel-cool: color-mix(in srgb, var(--semantic-info) 10%, var(--semantic-surface));
+  --semantic-panel-positive: color-mix(in srgb, var(--semantic-success) 11%, var(--semantic-surface));
+  --hero-gradient-start: color-mix(in srgb, var(--semantic-brand) 12%, var(--semantic-surface));
+  --hero-gradient-mid: color-mix(in srgb, var(--semantic-info) 10%, var(--semantic-surface));
+  --hero-gradient-end: color-mix(in srgb, var(--semantic-success) 11%, var(--semantic-surface));
 }
 
 :where([data-theme]) {
@@ -87,10 +87,10 @@
   --semantic-chart-4: var(--semantic-warning);
   --semantic-chart-5: #a855f7;
   /* Learner surfaces: tinted panels instead of flat muted gray */
-  --semantic-panel-muted: color-mix(in srgb, var(--theme-primary) 4%, var(--bg-card));
-  --semantic-panel-warm: color-mix(in srgb, var(--semantic-warning) 6%, var(--bg-card));
-  --semantic-panel-cool: color-mix(in srgb, var(--semantic-info) 6%, var(--bg-card));
-  --semantic-panel-positive: color-mix(in srgb, var(--semantic-success) 7%, var(--bg-card));
+  --semantic-panel-muted: color-mix(in srgb, var(--theme-primary) 8%, var(--bg-card));
+  --semantic-panel-warm: color-mix(in srgb, var(--semantic-warning) 10%, var(--bg-card));
+  --semantic-panel-cool: color-mix(in srgb, var(--semantic-info) 10%, var(--bg-card));
+  --semantic-panel-positive: color-mix(in srgb, var(--semantic-success) 11%, var(--bg-card));
 
   /* -----------------------------------------------------------------------
    * Multi-surface layering system — visual depth without harsh contrast

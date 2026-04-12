@@ -108,7 +108,7 @@ export function LessonSystemCard({
         </div>
       </div>
 
-      <div className="mt-3 space-y-1">
+      <div className="mt-3 space-y-0.5">
         {visibleLessons.map((lesson) => {
           const href = pathwayLessonMarketingDetailHref(lessonsBasePath, lesson.slug);
           if (!href) return null;
@@ -127,12 +127,12 @@ export function LessonSystemCard({
       </div>
 
       {overflowLessons.length > 0 ? (
-        <details className="mt-2 group">
+        <details className="mt-1 group">
           <summary className="cursor-pointer list-none rounded-lg px-3 py-2 text-sm font-medium text-[var(--semantic-brand)] transition hover:bg-[color-mix(in_srgb,var(--semantic-brand)_6%,var(--semantic-surface))] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_24%,transparent)]">
-            <span className="group-open:hidden">Show more</span>
+            <span className="group-open:hidden">+{overflowLessons.length} more</span>
             <span className="hidden group-open:inline">Show less</span>
           </summary>
-          <div className="mt-1 space-y-1">
+          <div className="mt-0.5 space-y-0.5">
             {overflowLessons.map((lesson) => {
               const href = pathwayLessonMarketingDetailHref(lessonsBasePath, lesson.slug);
               if (!href) return null;

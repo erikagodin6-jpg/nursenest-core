@@ -20,7 +20,8 @@ export async function loadPublicFlashcardHub(): Promise<{
 }> {
   return withDatabaseFallback(async () => {
     const deckWhere = publicMarketingFlashcardDeckWhere();
-    const [topics, decks] = await Promise.all([
+    // Fetch more than 12 so dedup doesn't leave us short
+    const [topics, rawDecks] = await Promise.all([
       prisma.flashcardTag.findMany({
         where: { decks: { some: { deck: deckWhere } } },
         orderBy: { name: "asc" },
@@ -28,9 +29,9 @@ export async function loadPublicFlashcardHub(): Promise<{
         select: { slug: true, name: true },
       }),
       prisma.flashcardDeck.findMany({
-        where: deckWhere,
+        where: { ...deckWhere, cardCount: { gt: 0 } },
         orderBy: [{ sortOrder: "asc" }, { title: "asc" }],
-        take: 12,
+        take: 24,
         select: {
           slug: true,
           title: true,
@@ -46,9 +47,24 @@ export async function loadPublicFlashcardHub(): Promise<{
       }),
     ]);
 
+    // Deduplicate by slug, then by normalised title — keeps first occurrence per pair.
+    const seenSlugs = new Set<string>();
+    const seenTitles = new Set<string>();
+    const deduped = rawDecks.filter((d) => {
+      const normTitle = d.title.trim().toLowerCase();
+      if (seenSlugs.has(d.slug) || seenTitles.has(normTitle)) return false;
+      seenSlugs.add(d.slug);
+      seenTitles.add(normTitle);
+      return true;
+    });
+
+    // Remove decks that are clearly targeted at non-nursing audiences.
+    const NON_NURSING_KEYWORDS = /paramedic|emt\b|firefighter|fire fighter/i;
+    const nursingDecks = deduped.filter((d) => !NON_NURSING_KEYWORDS.test(d.title));
+
     return {
       topics,
-      featuredDecks: decks.map((d) => ({
+      featuredDecks: nursingDecks.slice(0, 12).map((d) => ({
         slug: d.slug,
         title: d.title,
         description: d.description,
