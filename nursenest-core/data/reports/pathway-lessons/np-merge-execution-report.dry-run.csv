@@ -1,33 +1,33 @@
 pathwayId,topicSlug,mergeTargetTopicSlug,status,reasonCode,sourceLessonIds,sourceLessonSlugs,targetLessonIds,targetLessonSlugs,appliedArchiveCount,notes
-ca-np-cnple,mens-bph,renal-bph,REJECTED,target_missing,,,,,0,"No published target lesson exists for topic ""renal-bph""."
-ca-np-cnple,mens-ed,renal-ed,REJECTED,target_missing,,,,,0,"No published target lesson exists for topic ""renal-ed""."
-ca-np-cnple,mens-infertility,renal-male-infertility,REJECTED,target_missing,,,,,0,"No published target lesson exists for topic ""renal-male-infertility""."
-ca-np-cnple,mens-prostatitis,renal-prostatitis,REJECTED,target_missing,,,,,0,"No published target lesson exists for topic ""renal-prostatitis""."
-ca-np-cnple,msk-osteoporosis,endo-osteoporosis,REJECTED,target_missing,,,,,0,"No published target lesson exists for topic ""endo-osteoporosis""."
-ca-np-cnple,pharm-polypharm-cross,geri-polypharm,REJECTED,target_missing,,,,,0,"No published target lesson exists for topic ""geri-polypharm""."
-ca-np-cnple,resp-pe,cv-pe,REJECTED,target_missing,,,,,0,"No published target lesson exists for topic ""cv-pe""."
-ca-np-cnple,wh-osteoporosis,endo-osteoporosis,REJECTED,target_missing,,,,,0,"No published target lesson exists for topic ""endo-osteoporosis""."
-us-np-agpcnp,mens-bph,renal-bph,REJECTED,target_missing,,,,,0,"No published target lesson exists for topic ""renal-bph""."
-us-np-agpcnp,mens-ed,renal-ed,REJECTED,target_missing,,,,,0,"No published target lesson exists for topic ""renal-ed""."
-us-np-agpcnp,mens-infertility,renal-male-infertility,REJECTED,target_missing,,,,,0,"No published target lesson exists for topic ""renal-male-infertility""."
-us-np-agpcnp,mens-prostatitis,renal-prostatitis,REJECTED,target_missing,,,,,0,"No published target lesson exists for topic ""renal-prostatitis""."
-us-np-agpcnp,msk-osteoporosis,endo-osteoporosis,REJECTED,target_missing,,,,,0,"No published target lesson exists for topic ""endo-osteoporosis""."
-us-np-agpcnp,pharm-polypharm-cross,geri-polypharm,REJECTED,target_missing,,,,,0,"No published target lesson exists for topic ""geri-polypharm""."
-us-np-agpcnp,resp-pe,cv-pe,REJECTED,target_missing,,,,,0,"No published target lesson exists for topic ""cv-pe""."
-us-np-agpcnp,wh-osteoporosis,endo-osteoporosis,REJECTED,target_missing,,,,,0,"No published target lesson exists for topic ""endo-osteoporosis""."
-us-np-fnp,mens-bph,renal-bph,REJECTED,target_missing,,,,,0,"No published target lesson exists for topic ""renal-bph""."
-us-np-fnp,mens-ed,renal-ed,REJECTED,target_missing,,,,,0,"No published target lesson exists for topic ""renal-ed""."
-us-np-fnp,mens-infertility,renal-male-infertility,REJECTED,target_missing,,,,,0,"No published target lesson exists for topic ""renal-male-infertility""."
-us-np-fnp,mens-prostatitis,renal-prostatitis,REJECTED,target_missing,,,,,0,"No published target lesson exists for topic ""renal-prostatitis""."
-us-np-fnp,msk-osteoporosis,endo-osteoporosis,REJECTED,target_missing,,,,,0,"No published target lesson exists for topic ""endo-osteoporosis""."
-us-np-fnp,pharm-polypharm-cross,geri-polypharm,REJECTED,target_missing,,,,,0,"No published target lesson exists for topic ""geri-polypharm""."
-us-np-fnp,resp-pe,cv-pe,REJECTED,target_missing,,,,,0,"No published target lesson exists for topic ""cv-pe""."
-us-np-fnp,wh-osteoporosis,endo-osteoporosis,REJECTED,target_missing,,,,,0,"No published target lesson exists for topic ""endo-osteoporosis""."
-us-np-pmhnp,pharm-polypharm-cross,geri-polypharm,REJECTED,target_missing,,,,,0,"No published target lesson exists for topic ""geri-polypharm""."
-us-np-pnp-pc,msk-osteoporosis,endo-osteoporosis,REJECTED,target_missing,,,,,0,"No published target lesson exists for topic ""endo-osteoporosis""."
-us-np-pnp-pc,pharm-polypharm-cross,geri-polypharm,REJECTED,target_missing,,,,,0,"No published target lesson exists for topic ""geri-polypharm""."
-us-np-pnp-pc,resp-pe,cv-pe,REJECTED,target_missing,,,,,0,"No published target lesson exists for topic ""cv-pe""."
-us-np-whnp,msk-osteoporosis,endo-osteoporosis,REJECTED,target_missing,,,,,0,"No published target lesson exists for topic ""endo-osteoporosis""."
-us-np-whnp,pharm-polypharm-cross,geri-polypharm,REJECTED,target_missing,,,,,0,"No published target lesson exists for topic ""geri-polypharm""."
-us-np-whnp,resp-pe,cv-pe,REJECTED,target_missing,,,,,0,"No published target lesson exists for topic ""cv-pe""."
-us-np-whnp,wh-osteoporosis,endo-osteoporosis,REJECTED,target_missing,,,,,0,"No published target lesson exists for topic ""endo-osteoporosis""."
+ca-np-cnple,mens-bph,renal-bph,UNCHANGED,no_published_source_rows,,,cmnwat0jg00030nstop09vwzd,renal-bph,0,No published source rows remain; merge is already satisfied or previously suppressed.
+ca-np-cnple,mens-ed,renal-ed,UNCHANGED,no_published_source_rows,,,cmnwat0jk00040nstbi3vm81j,renal-ed,0,No published source rows remain; merge is already satisfied or previously suppressed.
+ca-np-cnple,mens-infertility,renal-male-infertility,UNCHANGED,no_published_source_rows,,,cmnwat0jp00050nstinyaya26,renal-male-infertility,0,No published source rows remain; merge is already satisfied or previously suppressed.
+ca-np-cnple,mens-prostatitis,renal-prostatitis,UNCHANGED,no_published_source_rows,,,cmnwat0ju00060nstp95y4siq,renal-prostatitis,0,No published source rows remain; merge is already satisfied or previously suppressed.
+ca-np-cnple,msk-osteoporosis,endo-osteoporosis,UNCHANGED,no_published_source_rows,,,cmnwat0j800010nstyxwpbh67,endo-osteoporosis,0,No published source rows remain; merge is already satisfied or previously suppressed.
+ca-np-cnple,pharm-polypharm-cross,geri-polypharm,UNCHANGED,no_published_source_rows,,,cmnwat0jd00020nstl6n8gh1y,geri-polypharm,0,No published source rows remain; merge is already satisfied or previously suppressed.
+ca-np-cnple,resp-pe,cv-pe,UNCHANGED,no_published_source_rows,,,cmnwat0ir00000nstdi7btrkv,cv-pe,0,No published source rows remain; merge is already satisfied or previously suppressed.
+ca-np-cnple,wh-osteoporosis,endo-osteoporosis,UNCHANGED,no_published_source_rows,,,cmnwat0j800010nstyxwpbh67,endo-osteoporosis,0,No published source rows remain; merge is already satisfied or previously suppressed.
+us-np-agpcnp,mens-bph,renal-bph,UNCHANGED,no_published_source_rows,,,cmnwat0kb000a0nsto82wef89,renal-bph,0,No published source rows remain; merge is already satisfied or previously suppressed.
+us-np-agpcnp,mens-ed,renal-ed,UNCHANGED,no_published_source_rows,,,cmnwat0kf000b0nstsyhk0gtc,renal-ed,0,No published source rows remain; merge is already satisfied or previously suppressed.
+us-np-agpcnp,mens-infertility,renal-male-infertility,UNCHANGED,no_published_source_rows,,,cmnwat0kj000c0nst71woed32,renal-male-infertility,0,No published source rows remain; merge is already satisfied or previously suppressed.
+us-np-agpcnp,mens-prostatitis,renal-prostatitis,UNCHANGED,no_published_source_rows,,,cmnwat0kn000d0nstfc40bniu,renal-prostatitis,0,No published source rows remain; merge is already satisfied or previously suppressed.
+us-np-agpcnp,msk-osteoporosis,endo-osteoporosis,UNCHANGED,no_published_source_rows,,,cmnwat0k300080nstmqevl33m,endo-osteoporosis,0,No published source rows remain; merge is already satisfied or previously suppressed.
+us-np-agpcnp,pharm-polypharm-cross,geri-polypharm,UNCHANGED,no_published_source_rows,,,cmnwat0k700090nstmpob8nzd,geri-polypharm,0,No published source rows remain; merge is already satisfied or previously suppressed.
+us-np-agpcnp,resp-pe,cv-pe,UNCHANGED,no_published_source_rows,,,cmnwat0jy00070nstms7zrsut,cv-pe,0,No published source rows remain; merge is already satisfied or previously suppressed.
+us-np-agpcnp,wh-osteoporosis,endo-osteoporosis,UNCHANGED,no_published_source_rows,,,cmnwat0k300080nstmqevl33m,endo-osteoporosis,0,No published source rows remain; merge is already satisfied or previously suppressed.
+us-np-fnp,mens-bph,renal-bph,UNCHANGED,no_published_source_rows,,,cmnwat0l2000h0nsta4b8ifc3,renal-bph,0,No published source rows remain; merge is already satisfied or previously suppressed.
+us-np-fnp,mens-ed,renal-ed,UNCHANGED,no_published_source_rows,,,cmnwat0l7000i0nstcuzeypjq,renal-ed,0,No published source rows remain; merge is already satisfied or previously suppressed.
+us-np-fnp,mens-infertility,renal-male-infertility,UNCHANGED,no_published_source_rows,,,cmnwat0lb000j0nst1phuiaqq,renal-male-infertility,0,No published source rows remain; merge is already satisfied or previously suppressed.
+us-np-fnp,mens-prostatitis,renal-prostatitis,UNCHANGED,no_published_source_rows,,,cmnwat0lf000k0nsth94bdgma,renal-prostatitis,0,No published source rows remain; merge is already satisfied or previously suppressed.
+us-np-fnp,msk-osteoporosis,endo-osteoporosis,UNCHANGED,no_published_source_rows,,,cmnwat0kv000f0nstsqh5kbx0,endo-osteoporosis,0,No published source rows remain; merge is already satisfied or previously suppressed.
+us-np-fnp,pharm-polypharm-cross,geri-polypharm,UNCHANGED,no_published_source_rows,,,cmnwat0kz000g0nst3bf7tsgt,geri-polypharm,0,No published source rows remain; merge is already satisfied or previously suppressed.
+us-np-fnp,resp-pe,cv-pe,UNCHANGED,no_published_source_rows,,,cmnwat0kr000e0nstycd7dm6v,cv-pe,0,No published source rows remain; merge is already satisfied or previously suppressed.
+us-np-fnp,wh-osteoporosis,endo-osteoporosis,UNCHANGED,no_published_source_rows,,,cmnwat0kv000f0nstsqh5kbx0,endo-osteoporosis,0,No published source rows remain; merge is already satisfied or previously suppressed.
+us-np-pmhnp,pharm-polypharm-cross,geri-polypharm,UNCHANGED,no_published_source_rows,,,cmnwat0lj000l0nstrd4kc93a,geri-polypharm,0,No published source rows remain; merge is already satisfied or previously suppressed.
+us-np-pnp-pc,msk-osteoporosis,endo-osteoporosis,UNCHANGED,no_published_source_rows,,,cmnwat0lr000n0nstnzad4twu,endo-osteoporosis,0,No published source rows remain; merge is already satisfied or previously suppressed.
+us-np-pnp-pc,pharm-polypharm-cross,geri-polypharm,UNCHANGED,no_published_source_rows,,,cmnwat0lv000o0nst1g2et4rt,geri-polypharm,0,No published source rows remain; merge is already satisfied or previously suppressed.
+us-np-pnp-pc,resp-pe,cv-pe,UNCHANGED,no_published_source_rows,,,cmnwat0lo000m0nstd4g74cod,cv-pe,0,No published source rows remain; merge is already satisfied or previously suppressed.
+us-np-whnp,msk-osteoporosis,endo-osteoporosis,UNCHANGED,no_published_source_rows,,,cmnwat0m2000q0nst4keoks16,endo-osteoporosis,0,No published source rows remain; merge is already satisfied or previously suppressed.
+us-np-whnp,pharm-polypharm-cross,geri-polypharm,UNCHANGED,no_published_source_rows,,,cmnwat0m5000r0nstwb1ai19y,geri-polypharm,0,No published source rows remain; merge is already satisfied or previously suppressed.
+us-np-whnp,resp-pe,cv-pe,UNCHANGED,no_published_source_rows,,,cmnwat0lz000p0nstccvvskqx,cv-pe,0,No published source rows remain; merge is already satisfied or previously suppressed.
+us-np-whnp,wh-osteoporosis,endo-osteoporosis,UNCHANGED,no_published_source_rows,,,cmnwat0m2000q0nst4keoks16,endo-osteoporosis,0,No published source rows remain; merge is already satisfied or previously suppressed.

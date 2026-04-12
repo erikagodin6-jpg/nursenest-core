@@ -17,6 +17,11 @@ export const PH = {
   /** Marketing homepage and pathway hub CTAs (funnel diagnostics). */
   marketingHomeHeroPrimaryCta: "marketing_home_hero_primary_cta",
   marketingHomeHeroSecondaryCta: "marketing_home_hero_secondary_cta",
+  /**
+   * Homepage hero carousel: active slide changed (autoplay or dots).
+   * Dimensions: `hero_screenshot_index` (1–15), `hero_exam_track` (coarse RN/PN/NP/… — maintain map in `home-hero-carousel.ts`).
+   */
+  marketingHomeHeroCarouselTierImpression: "marketing_home_hero_carousel_tier_impression",
   marketingHomeQuickEntryClick: "marketing_home_quick_entry_click",
   marketingHomeExploreHubClick: "marketing_home_explore_hub_click",
   marketingHomePathwayCardPrimary: "marketing_home_pathway_card_primary",
@@ -64,6 +69,12 @@ export const PH = {
   funnelHomepageViewed: "funnel_homepage_viewed",
   /** Exam pathway marketing hub overview viewed (canonical hub route). */
   funnelExamHubViewed: "funnel_exam_hub_viewed",
+  /** Public `/question-bank` marketing landing (once per mount). */
+  marketingQuestionBankLandingViewed: "marketing_question_bank_landing_viewed",
+  /** Public pathway CAT intro (`/…/cat`) once per mount. */
+  marketingCatLandingViewed: "marketing_cat_landing_viewed",
+  /** Public pathway lesson article (`/…/lessons/:slug`) once per mount. */
+  marketingPathwayLessonDetailViewed: "marketing_pathway_lesson_detail_viewed",
   /**
    * User clicked lessons, questions, or CAT card on the hub (intent to study).
    * Prefer this over generic hub CTA for funnel drop-off from hub → study surfaces.

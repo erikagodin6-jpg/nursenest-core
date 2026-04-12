@@ -9,8 +9,8 @@ import {
   signupExamFocusOptions,
   type SignupExamFocusValue,
 } from "@/lib/marketing/signup-exam-focus-options";
-import { trackClientEvent } from "@/lib/observability/posthog-client";
 import { PH } from "@/lib/observability/posthog-conversion-events";
+import { trackProductEvent } from "@/lib/observability/product-analytics";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { safeCallbackPath } from "@/lib/auth/safe-callback-path";
@@ -39,9 +39,12 @@ export function SignupForm({
 
   async function onSubmit(formData: FormData) {
     setError(null);
-    trackClientEvent(PH.signupSubmitAttempt, {
+    trackProductEvent(PH.signupSubmitAttempt, {
       actor: "anonymous",
       funnel_step: "signup_submit",
+      marketing_locale: locale,
+      signup_country: country,
+      exam_focus: examFocus,
     });
     const rawFirst = String(formData.get("firstName") ?? "").trim();
     const rawLast = String(formData.get("lastName") ?? "").trim();
@@ -74,11 +77,12 @@ export function SignupForm({
       setError(typeof data.error === "string" ? data.error : t("pages.signup.errorGeneric"));
       return;
     }
-    trackClientEvent(PH.signupSuccessClient, {
+    trackProductEvent(PH.signupSuccessClient, {
       actor: "anonymous",
       funnel_step: "account_created",
+      marketing_locale: locale,
+      signup_country: country,
       exam_focus: examFocus,
-      country,
     });
     router.push(loginAfterSignupHref);
   }

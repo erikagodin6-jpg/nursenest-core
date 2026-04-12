@@ -23,6 +23,7 @@ import { getOptionalPublicSession } from "@/lib/auth/optional-public-session";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { ContentEmptyState } from "@/components/ui/content-empty-state";
+import { MarketingPathwayCatViewBeacon } from "@/components/observability/marketing-study-surface-view-beacons";
 
 export const dynamicParams = true;
 
@@ -128,6 +129,7 @@ export default async function PathwayCatEntryPage({ params }: Props) {
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-12">
+      <MarketingPathwayCatViewBeacon pathway={pathway} hubPath={marketingCatPath} />
       <BreadcrumbJsonLd items={schemaItems} />
       <div className="mb-6">
         <BreadcrumbTrail items={crumbs} />

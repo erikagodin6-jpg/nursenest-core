@@ -6,8 +6,8 @@ import { Suspense, useCallback, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { Check } from "lucide-react";
 import { buildTierPricingNarrative } from "@/lib/conversion/pricing-catalog";
-import { trackClientEvent } from "@/lib/observability/posthog-client";
 import { PH } from "@/lib/observability/posthog-conversion-events";
+import { trackProductEvent } from "@/lib/observability/product-analytics";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { useNursenestRegion } from "@/lib/region/use-nursenest-region";
@@ -184,11 +184,14 @@ export function PricingPageClient({
   const trialSubtext = TRIAL_MESSAGING_COPY[trialMsgVariant] ?? "No charge today. Cancel anytime before your trial ends.";
 
   useEffect(() => {
-    trackClientEvent("pricing_page_viewed", {
+    trackProductEvent("pricing_page_viewed", {
       actor: "anonymous",
       funnel_step: "pricing_page_view",
+      marketing_locale: locale,
+      marketing_region: region,
+      pricing_segment: segment,
     });
-  }, []);
+  }, [locale, region, segment]);
 
   const localize = useCallback((href: string) => withMarketingLocale(locale, href), [locale]);
 
@@ -254,14 +257,18 @@ export function PricingPageClient({
         return;
       }
       setCheckoutLoading(true);
-      trackClientEvent(PH.checkoutStarted, {
+      trackProductEvent(PH.checkoutStarted, {
         actor: "anonymous",
         funnel_step: "checkout_initiated",
+        stripe_tier: String(tier),
         tier: String(tier),
         duration: String(duration),
         has_trial: trialDays > 0,
         trial_days: trialDays,
-        ...(isAllied ? { alliedCareer: selectedAlliedCareer } : {}),
+        marketing_locale: locale,
+        marketing_region: region,
+        pricing_segment: segment,
+        ...(isAllied ? { allied_career: selectedAlliedCareer } : {}),
       });
       try {
         const body: Record<string, unknown> = {
@@ -301,7 +308,7 @@ export function PricingPageClient({
         setCheckoutLoading(false);
       }
     },
-    [policiesAccepted, tier, trialDays, t, isAllied, selectedAlliedCareer, region],
+    [policiesAccepted, tier, trialDays, t, isAllied, selectedAlliedCareer, region, locale, segment],
   );
 
   const SEGMENT_ORDER: Segment[] = ["prenursing", "newgrad", "rn", "pn", "np", "allied"];
@@ -342,7 +349,12 @@ export function PricingPageClient({
                 type="button"
                 onClick={() => {
                   setSegment(id);
-                  trackClientEvent("tier_selected", { segment: id, tier: segmentToTier(id) });
+                  trackProductEvent("tier_selected", {
+                    segment: id,
+                    tier: segmentToTier(id),
+                    marketing_locale: locale,
+                    marketing_region: region,
+                  });
                 }}
                 className={`rounded-full px-4 py-2.5 text-sm font-semibold transition-[background-color,color,box-shadow,transform,border-color] duration-150 ease-out ${
                   segment === id
@@ -369,7 +381,11 @@ export function PricingPageClient({
                   type="button"
                   onClick={() => {
                     setSelectedAlliedCareer(career);
-                    trackClientEvent("allied_career_selected", { career });
+                    trackProductEvent("allied_career_selected", {
+                      career,
+                      marketing_locale: locale,
+                      marketing_region: region,
+                    });
                   }}
                   className={`rounded-full px-3 py-1.5 text-xs font-semibold transition-[background-color,color,box-shadow,transform] duration-150 ease-out ${
                     selectedAlliedCareer === career

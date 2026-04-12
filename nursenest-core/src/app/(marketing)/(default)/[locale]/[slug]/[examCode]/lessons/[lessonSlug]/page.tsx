@@ -35,6 +35,7 @@ import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { pathwayLessonDetailBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 import { absoluteUrl } from "@/lib/seo/site-origin";
+import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { MarketingStudyCrossLinks } from "@/components/seo/marketing-study-cross-links";
 import { LessonQualityNotice } from "@/components/lessons/lesson-quality-notice";
@@ -63,6 +64,7 @@ import {
   PathwayLessonDetailDeferredSkeleton,
 } from "@/components/lessons/pathway-lesson-detail-deferred";
 import { PathwayLessonRecordChips } from "@/components/pathway-lessons/pathway-lesson-record-chips";
+import { MarketingPathwayLessonDetailViewBeacon } from "@/components/observability/marketing-study-surface-view-beacons";
 
 /** Avoid enumerating every lesson at build (large `.next` output + ENOSPC on small disks). */
 export const dynamicParams = true;
@@ -200,6 +202,7 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
     topicSlug: lesson.topicSlug,
   });
   const requestedNorm = normalizePathwayLessonLocale(lessonContentLocale);
+  const marketingUiLocale = await getMarketingLocaleForDefaultRoute();
   const showLocaleFallbackNotice = Boolean(
     lesson.localeMeta &&
       (lesson.localeMeta.usedLocaleFallback ||
@@ -211,6 +214,13 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
       <div
         className={`nn-lesson-page-shell px-4 py-9 sm:px-8 sm:py-11${pathway.examFamily === ExamFamily.NP ? " nn-lesson-page-shell--np" : ""}`}
       >
+        <MarketingPathwayLessonDetailViewBeacon
+          pathway={pathway}
+          lessonSlug={lesson.slug}
+          topicSlug={lesson.topicSlug}
+          topicLabel={lesson.topic}
+          marketingLocale={marketingUiLocale}
+        />
         <BreadcrumbJsonLd items={schemaItems} />
         <div className="mb-6">
           <BreadcrumbTrail items={crumbs} />

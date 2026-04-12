@@ -38,6 +38,22 @@ export type HomeHeroSlide = {
   alt: string;
 };
 
+/**
+ * Coarse exam “tier” / track label for hero carousel analytics (screenshot index 1–15).
+ * Update when marketing swaps hero screenshots so funnels stay interpretable.
+ */
+export function getHomeHeroSlideExamTrackKey(screenshotIndex1To15: number): string {
+  const m: Partial<Record<number, string>> = {
+    1: "pn",
+    2: "rn",
+    3: "clinical_judgment",
+    7: "np",
+    9: "study_modes",
+    10: "rn",
+  };
+  return m[screenshotIndex1To15] ?? "platform";
+}
+
 /** Non-localized slide metadata only (image chain inputs). One entry per screenshot 1…15. */
 export type HomeHeroSlideMetadata = {
   index: number;

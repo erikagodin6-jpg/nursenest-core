@@ -65,11 +65,7 @@ export function ExamPathwayHub({
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-10 sm:py-14">
-      <FunnelExamHubViewBeacon
-        pathwayId={pathway.id}
-        hubPath={marketingHubPath}
-        countrySlug={pathway.countrySlug}
-      />
+      <FunnelExamHubViewBeacon pathway={pathway} hubPath={marketingHubPath} />
       {npSeoAliasSegment ? (
         <NpSeoAliasHubAnalytics
           pathwayId={pathway.id}

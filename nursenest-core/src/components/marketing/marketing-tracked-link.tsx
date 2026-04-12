@@ -3,7 +3,7 @@
 import type React from "react";
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { trackClientEvent } from "@/lib/observability/posthog-client";
+import { trackProductEvent } from "@/lib/observability/product-analytics";
 
 type Props = {
   href: string;
@@ -38,8 +38,8 @@ export function MarketingTrackedLink({
       href={href}
       className={className}
       onClick={() => {
-        trackClientEvent(event, eventProps);
-        if (secondaryCapture) trackClientEvent(secondaryCapture.event, secondaryCapture.eventProps);
+        trackProductEvent(event, eventProps);
+        if (secondaryCapture) trackProductEvent(secondaryCapture.event, secondaryCapture.eventProps);
       }}
       {...rest}
     >

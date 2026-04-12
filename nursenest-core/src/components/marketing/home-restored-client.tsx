@@ -9,6 +9,7 @@ import { HomePlatformPreviewSection } from "@/components/marketing/home-platform
 import { HomeTrustProofSection } from "@/components/marketing/home-trust-proof-section";
 import { HomeFinalStudyCta } from "@/components/marketing/home-final-study-cta";
 import { FunnelHomepageViewBeacon } from "@/components/marketing/funnel-analytics-beacons";
+import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { useNursenestRegion } from "@/lib/region/use-nursenest-region";
 
 type HomeStatsPayload = {
@@ -21,6 +22,7 @@ type HomeStatsPayload = {
  * competitor comparison, how it works, trust, reviews, final CTA.
  */
 export default function HomeRestoredClient() {
+  const { locale } = useMarketingI18n();
   const { region } = useNursenestRegion();
   const marketingRegion = region === "US" ? "US" : "CA";
   const [homeStats, setHomeStats] = useState<HomeStatsPayload | null>(null);
@@ -48,7 +50,7 @@ export default function HomeRestoredClient() {
 
   return (
     <div className="font-sans md:animate-page-enter flex min-h-screen flex-col overflow-x-hidden bg-[var(--page-bg)]">
-      <FunnelHomepageViewBeacon marketingRegion={marketingRegion} />
+      <FunnelHomepageViewBeacon marketingRegion={marketingRegion} marketingLocale={locale} />
       <div className="flex-grow overflow-x-hidden">
         {/* 1. HERO */}
         <HomeConversionHero />

@@ -27,6 +27,7 @@ import {
 } from "@/lib/marketing/nursing-tier-public-labels";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { buildMarketingWebPageJsonLdProps } from "@/lib/seo/marketing-webpage-jsonld";
+import { MarketingQuestionBankViewBeacon } from "@/components/observability/marketing-study-surface-view-beacons";
 
 export const revalidate = 600;
 
@@ -159,6 +160,7 @@ export default async function QuestionBankHubPage() {
 
   return (
     <>
+      <MarketingQuestionBankViewBeacon marketingRegion={marketingRegion} marketingLocale={locale} />
       <WebPageJsonLd
         {...buildMarketingWebPageJsonLdProps({
           locale,

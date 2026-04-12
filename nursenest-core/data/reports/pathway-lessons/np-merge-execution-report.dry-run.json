@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-12T21:41:46.331Z",
+  "generatedAt": "2026-04-12T21:51:29.739Z",
   "planFile": "data/reports/pathway-lessons/np-execution-plan.json",
   "dbAccessEnabled": true,
   "applyEnabled": false,
@@ -7,8 +7,8 @@
     "DEFERRED": 0,
     "WOULD_APPLY": 0,
     "APPLIED": 0,
-    "REJECTED": 32,
-    "UNCHANGED": 0,
+    "REJECTED": 0,
+    "UNCHANGED": 32,
     "totalRows": 32
   },
   "rows": [
@@ -18,13 +18,17 @@
       "mergeTargetTopicSlug": "renal-bph",
       "sourceLessonIds": [],
       "sourceLessonSlugs": [],
-      "targetLessonIds": [],
-      "targetLessonSlugs": [],
+      "targetLessonIds": [
+        "cmnwat0jg00030nstop09vwzd"
+      ],
+      "targetLessonSlugs": [
+        "renal-bph"
+      ],
       "appliedArchiveCount": 0,
-      "status": "REJECTED",
-      "reasonCode": "target_missing",
+      "status": "UNCHANGED",
+      "reasonCode": "no_published_source_rows",
       "notes": [
-        "No published target lesson exists for topic \"renal-bph\"."
+        "No published source rows remain; merge is already satisfied or previously suppressed."
       ]
     },
     {
@@ -33,13 +37,17 @@
       "mergeTargetTopicSlug": "renal-ed",
       "sourceLessonIds": [],
       "sourceLessonSlugs": [],
-      "targetLessonIds": [],
-      "targetLessonSlugs": [],
+      "targetLessonIds": [
+        "cmnwat0jk00040nstbi3vm81j"
+      ],
+      "targetLessonSlugs": [
+        "renal-ed"
+      ],
       "appliedArchiveCount": 0,
-      "status": "REJECTED",
-      "reasonCode": "target_missing",
+      "status": "UNCHANGED",
+      "reasonCode": "no_published_source_rows",
       "notes": [
-        "No published target lesson exists for topic \"renal-ed\"."
+        "No published source rows remain; merge is already satisfied or previously suppressed."
       ]
     },
     {
@@ -48,13 +56,17 @@
       "mergeTargetTopicSlug": "renal-male-infertility",
       "sourceLessonIds": [],
       "sourceLessonSlugs": [],
-      "targetLessonIds": [],
-      "targetLessonSlugs": [],
+      "targetLessonIds": [
+        "cmnwat0jp00050nstinyaya26"
+      ],
+      "targetLessonSlugs": [
+        "renal-male-infertility"
+      ],
       "appliedArchiveCount": 0,
-      "status": "REJECTED",
-      "reasonCode": "target_missing",
+      "status": "UNCHANGED",
+      "reasonCode": "no_published_source_rows",
       "notes": [
-        "No published target lesson exists for topic \"renal-male-infertility\"."
+        "No published source rows remain; merge is already satisfied or previously suppressed."
       ]
     },
     {
@@ -63,13 +75,17 @@
       "mergeTargetTopicSlug": "renal-prostatitis",
       "sourceLessonIds": [],
       "sourceLessonSlugs": [],
-      "targetLessonIds": [],
-      "targetLessonSlugs": [],
+      "targetLessonIds": [
+        "cmnwat0ju00060nstp95y4siq"
+      ],
+      "targetLessonSlugs": [
+        "renal-prostatitis"
+      ],
       "appliedArchiveCount": 0,
-      "status": "REJECTED",
-      "reasonCode": "target_missing",
+      "status": "UNCHANGED",
+      "reasonCode": "no_published_source_rows",
       "notes": [
-        "No published target lesson exists for topic \"renal-prostatitis\"."
+        "No published source rows remain; merge is already satisfied or previously suppressed."
       ]
     },
     {
@@ -78,13 +94,17 @@
       "mergeTargetTopicSlug": "endo-osteoporosis",
       "sourceLessonIds": [],
       "sourceLessonSlugs": [],
-      "targetLessonIds": [],
-      "targetLessonSlugs": [],
+      "targetLessonIds": [
+        "cmnwat0j800010nstyxwpbh67"
+      ],
+      "targetLessonSlugs": [
+        "endo-osteoporosis"
+      ],
       "appliedArchiveCount": 0,
-      "status": "REJECTED",
-      "reasonCode": "target_missing",
+      "status": "UNCHANGED",
+      "reasonCode": "no_published_source_rows",
       "notes": [
-        "No published target lesson exists for topic \"endo-osteoporosis\"."
+        "No published source rows remain; merge is already satisfied or previously suppressed."
       ]
     },
     {
@@ -93,13 +113,17 @@
       "mergeTargetTopicSlug": "geri-polypharm",
       "sourceLessonIds": [],
       "sourceLessonSlugs": [],
-      "targetLessonIds": [],
-      "targetLessonSlugs": [],
+      "targetLessonIds": [
+        "cmnwat0jd00020nstl6n8gh1y"
+      ],
+      "targetLessonSlugs": [
+        "geri-polypharm"
+      ],
       "appliedArchiveCount": 0,
-      "status": "REJECTED",
-      "reasonCode": "target_missing",
+      "status": "UNCHANGED",
+      "reasonCode": "no_published_source_rows",
       "notes": [
-        "No published target lesson exists for topic \"geri-polypharm\"."
+        "No published source rows remain; merge is already satisfied or previously suppressed."
       ]
     },
     {
@@ -108,13 +132,17 @@
       "mergeTargetTopicSlug": "cv-pe",
       "sourceLessonIds": [],
       "sourceLessonSlugs": [],
-      "targetLessonIds": [],
-      "targetLessonSlugs": [],
+      "targetLessonIds": [
+        "cmnwat0ir00000nstdi7btrkv"
+      ],
+      "targetLessonSlugs": [
+        "cv-pe"
+      ],
       "appliedArchiveCount": 0,
-      "status": "REJECTED",
-      "reasonCode": "target_missing",
+      "status": "UNCHANGED",
+      "reasonCode": "no_published_source_rows",
       "notes": [
-        "No published target lesson exists for topic \"cv-pe\"."
+        "No published source rows remain; merge is already satisfied or previously suppressed."
       ]
     },
     {
@@ -123,13 +151,17 @@
       "mergeTargetTopicSlug": "endo-osteoporosis",
       "sourceLessonIds": [],
       "sourceLessonSlugs": [],
-      "targetLessonIds": [],
-      "targetLessonSlugs": [],
+      "targetLessonIds": [
+        "cmnwat0j800010nstyxwpbh67"
+      ],
+      "targetLessonSlugs": [
+        "endo-osteoporosis"
+      ],
       "appliedArchiveCount": 0,
-      "status": "REJECTED",
-      "reasonCode": "target_missing",
+      "status": "UNCHANGED",
+      "reasonCode": "no_published_source_rows",
       "notes": [
-        "No published target lesson exists for topic \"endo-osteoporosis\"."
+        "No published source rows remain; merge is already satisfied or previously suppressed."
       ]
     },
     {
@@ -138,13 +170,17 @@
       "mergeTargetTopicSlug": "renal-bph",
       "sourceLessonIds": [],
       "sourceLessonSlugs": [],
-      "targetLessonIds": [],
-      "targetLessonSlugs": [],
+      "targetLessonIds": [
+        "cmnwat0kb000a0nsto82wef89"
+      ],
+      "targetLessonSlugs": [
+        "renal-bph"
+      ],
       "appliedArchiveCount": 0,
-      "status": "REJECTED",
-      "reasonCode": "target_missing",
+      "status": "UNCHANGED",
+      "reasonCode": "no_published_source_rows",
       "notes": [
-        "No published target lesson exists for topic \"renal-bph\"."
+        "No published source rows remain; merge is already satisfied or previously suppressed."
       ]
     },
     {
@@ -153,13 +189,17 @@
       "mergeTargetTopicSlug": "renal-ed",
       "sourceLessonIds": [],
       "sourceLessonSlugs": [],
-      "targetLessonIds": [],
-      "targetLessonSlugs": [],
+      "targetLessonIds": [
+        "cmnwat0kf000b0nstsyhk0gtc"
+      ],
+      "targetLessonSlugs": [
+        "renal-ed"
+      ],
       "appliedArchiveCount": 0,
-      "status": "REJECTED",
-      "reasonCode": "target_missing",
+      "status": "UNCHANGED",
+      "reasonCode": "no_published_source_rows",
       "notes": [
-        "No published target lesson exists for topic \"renal-ed\"."
+        "No published source rows remain; merge is already satisfied or previously suppressed."
       ]
     },
     {
@@ -168,13 +208,17 @@
       "mergeTargetTopicSlug": "renal-male-infertility",
       "sourceLessonIds": [],
       "sourceLessonSlugs": [],
-      "targetLessonIds": [],
-      "targetLessonSlugs": [],
+      "targetLessonIds": [
+        "cmnwat0kj000c0nst71woed32"
+      ],
+      "targetLessonSlugs": [
+        "renal-male-infertility"
+      ],
       "appliedArchiveCount": 0,
-      "status": "REJECTED",
-      "reasonCode": "target_missing",
+      "status": "UNCHANGED",
+      "reasonCode": "no_published_source_rows",
       "notes": [
-        "No published target lesson exists for topic \"renal-male-infertility\"."
+        "No published source rows remain; merge is already satisfied or previously suppressed."
       ]
     },
     {
@@ -183,13 +227,17 @@
       "mergeTargetTopicSlug": "renal-prostatitis",
       "sourceLessonIds": [],
       "sourceLessonSlugs": [],
-      "targetLessonIds": [],
-      "targetLessonSlugs": [],
+      "targetLessonIds": [
+        "cmnwat0kn000d0nstfc40bniu"
+      ],
+      "targetLessonSlugs": [
+        "renal-prostatitis"
+      ],
       "appliedArchiveCount": 0,
-      "status": "REJECTED",
-      "reasonCode": "target_missing",
+      "status": "UNCHANGED",
+      "reasonCode": "no_published_source_rows",
       "notes": [
-        "No published target lesson exists for topic \"renal-prostatitis\"."
+        "No published source rows remain; merge is already satisfied or previously suppressed."
       ]
     },
     {
@@ -198,13 +246,17 @@
       "mergeTargetTopicSlug": "endo-osteoporosis",
       "sourceLessonIds": [],
       "sourceLessonSlugs": [],
-      "targetLessonIds": [],
-      "targetLessonSlugs": [],
+      "targetLessonIds": [
+        "cmnwat0k300080nstmqevl33m"
+      ],
+      "targetLessonSlugs": [
+        "endo-osteoporosis"
+      ],
       "appliedArchiveCount": 0,
-      "status": "REJECTED",
-      "reasonCode": "target_missing",
+      "status": "UNCHANGED",
+      "reasonCode": "no_published_source_rows",
       "notes": [
-        "No published target lesson exists for topic \"endo-osteoporosis\"."
+        "No published source rows remain; merge is already satisfied or previously suppressed."
       ]
     },
     {
@@ -213,13 +265,17 @@
       "mergeTargetTopicSlug": "geri-polypharm",
       "sourceLessonIds": [],
       "sourceLessonSlugs": [],
-      "targetLessonIds": [],
-      "targetLessonSlugs": [],
+      "targetLessonIds": [
+        "cmnwat0k700090nstmpob8nzd"
+      ],
+      "targetLessonSlugs": [
+        "geri-polypharm"
+      ],
       "appliedArchiveCount": 0,
-      "status": "REJECTED",
-      "reasonCode": "target_missing",
+      "status": "UNCHANGED",
+      "reasonCode": "no_published_source_rows",
       "notes": [
-        "No published target lesson exists for topic \"geri-polypharm\"."
+        "No published source rows remain; merge is already satisfied or previously suppressed."
       ]
     },
     {
@@ -228,13 +284,17 @@
       "mergeTargetTopicSlug": "cv-pe",
       "sourceLessonIds": [],
       "sourceLessonSlugs": [],
-      "targetLessonIds": [],
-      "targetLessonSlugs": [],
+      "targetLessonIds": [
+        "cmnwat0jy00070nstms7zrsut"
+      ],
+      "targetLessonSlugs": [
+        "cv-pe"
+      ],
       "appliedArchiveCount": 0,
-      "status": "REJECTED",
-      "reasonCode": "target_missing",
+      "status": "UNCHANGED",
+      "reasonCode": "no_published_source_rows",
       "notes": [
-        "No published target lesson exists for topic \"cv-pe\"."
+        "No published source rows remain; merge is already satisfied or previously suppressed."
       ]
     },
     {
@@ -243,13 +303,17 @@
       "mergeTargetTopicSlug": "endo-osteoporosis",
       "sourceLessonIds": [],
       "sourceLessonSlugs": [],
-      "targetLessonIds": [],
-      "targetLessonSlugs": [],
+      "targetLessonIds": [
+        "cmnwat0k300080nstmqevl33m"
+      ],
+      "targetLessonSlugs": [
+        "endo-osteoporosis"
+      ],
       "appliedArchiveCount": 0,
-      "status": "REJECTED",
-      "reasonCode": "target_missing",
+      "status": "UNCHANGED",
+      "reasonCode": "no_published_source_rows",
       "notes": [
-        "No published target lesson exists for topic \"endo-osteoporosis\"."
+        "No published source rows remain; merge is already satisfied or previously suppressed."
       ]
     },
     {
@@ -258,13 +322,17 @@
       "mergeTargetTopicSlug": "renal-bph",
       "sourceLessonIds": [],
       "sourceLessonSlugs": [],
-      "targetLessonIds": [],
-      "targetLessonSlugs": [],
+      "targetLessonIds": [
+        "cmnwat0l2000h0nsta4b8ifc3"
+      ],
+      "targetLessonSlugs": [
+        "renal-bph"
+      ],
       "appliedArchiveCount": 0,
-      "status": "REJECTED",
-      "reasonCode": "target_missing",
+      "status": "UNCHANGED",
+      "reasonCode": "no_published_source_rows",
       "notes": [
-        "No published target lesson exists for topic \"renal-bph\"."
+        "No published source rows remain; merge is already satisfied or previously suppressed."
       ]
     },
     {
@@ -273,13 +341,17 @@
       "mergeTargetTopicSlug": "renal-ed",
       "sourceLessonIds": [],
       "sourceLessonSlugs": [],
-      "targetLessonIds": [],
-      "targetLessonSlugs": [],
+      "targetLessonIds": [
+        "cmnwat0l7000i0nstcuzeypjq"
+      ],
+      "targetLessonSlugs": [
+        "renal-ed"
+      ],
       "appliedArchiveCount": 0,
-      "status": "REJECTED",
-      "reasonCode": "target_missing",
+      "status": "UNCHANGED",
+      "reasonCode": "no_published_source_rows",
       "notes": [
-        "No published target lesson exists for topic \"renal-ed\"."
+        "No published source rows remain; merge is already satisfied or previously suppressed."
       ]
     },
     {
@@ -288,13 +360,17 @@
       "mergeTargetTopicSlug": "renal-male-infertility",
       "sourceLessonIds": [],
       "sourceLessonSlugs": [],
-      "targetLessonIds": [],
-      "targetLessonSlugs": [],
+      "targetLessonIds": [
+        "cmnwat0lb000j0nst1phuiaqq"
+      ],
+      "targetLessonSlugs": [
+        "renal-male-infertility"
+      ],
       "appliedArchiveCount": 0,
-      "status": "REJECTED",
-      "reasonCode": "target_missing",
+      "status": "UNCHANGED",
+      "reasonCode": "no_published_source_rows",
       "notes": [
-        "No published target lesson exists for topic \"renal-male-infertility\"."
+        "No published source rows remain; merge is already satisfied or previously suppressed."
       ]
     },
     {
@@ -303,13 +379,17 @@
       "mergeTargetTopicSlug": "renal-prostatitis",
       "sourceLessonIds": [],
       "sourceLessonSlugs": [],
-      "targetLessonIds": [],
-      "targetLessonSlugs": [],
+      "targetLessonIds": [
+        "cmnwat0lf000k0nsth94bdgma"
+      ],
+      "targetLessonSlugs": [
+        "renal-prostatitis"
+      ],
       "appliedArchiveCount": 0,
-      "status": "REJECTED",
-      "reasonCode": "target_missing",
+      "status": "UNCHANGED",
+      "reasonCode": "no_published_source_rows",
       "notes": [
-        "No published target lesson exists for topic \"renal-prostatitis\"."
+        "No published source rows remain; merge is already satisfied or previously suppressed."
       ]
     },
     {
@@ -318,13 +398,17 @@
       "mergeTargetTopicSlug": "endo-osteoporosis",
       "sourceLessonIds": [],
       "sourceLessonSlugs": [],
-      "targetLessonIds": [],
-      "targetLessonSlugs": [],
+      "targetLessonIds": [
+        "cmnwat0kv000f0nstsqh5kbx0"
+      ],
+      "targetLessonSlugs": [
+        "endo-osteoporosis"
+      ],
       "appliedArchiveCount": 0,
-      "status": "REJECTED",
-      "reasonCode": "target_missing",
+      "status": "UNCHANGED",
+      "reasonCode": "no_published_source_rows",
       "notes": [
-        "No published target lesson exists for topic \"endo-osteoporosis\"."
+        "No published source rows remain; merge is already satisfied or previously suppressed."
       ]
     },
     {
@@ -333,13 +417,17 @@
       "mergeTargetTopicSlug": "geri-polypharm",
       "sourceLessonIds": [],
       "sourceLessonSlugs": [],
-      "targetLessonIds": [],
-      "targetLessonSlugs": [],
+      "targetLessonIds": [
+        "cmnwat0kz000g0nst3bf7tsgt"
+      ],
+      "targetLessonSlugs": [
+        "geri-polypharm"
+      ],
       "appliedArchiveCount": 0,
-      "status": "REJECTED",
-      "reasonCode": "target_missing",
+      "status": "UNCHANGED",
+      "reasonCode": "no_published_source_rows",
       "notes": [
-        "No published target lesson exists for topic \"geri-polypharm\"."
+        "No published source rows remain; merge is already satisfied or previously suppressed."
       ]
     },
     {
@@ -348,13 +436,17 @@
       "mergeTargetTopicSlug": "cv-pe",
       "sourceLessonIds": [],
       "sourceLessonSlugs": [],
-      "targetLessonIds": [],
-      "targetLessonSlugs": [],
+      "targetLessonIds": [
+        "cmnwat0kr000e0nstycd7dm6v"
+      ],
+      "targetLessonSlugs": [
+        "cv-pe"
+      ],
       "appliedArchiveCount": 0,
-      "status": "REJECTED",
-      "reasonCode": "target_missing",
+      "status": "UNCHANGED",
+      "reasonCode": "no_published_source_rows",
       "notes": [
-        "No published target lesson exists for topic \"cv-pe\"."
+        "No published source rows remain; merge is already satisfied or previously suppressed."
       ]
     },
     {
@@ -363,13 +455,17 @@
       "mergeTargetTopicSlug": "endo-osteoporosis",
       "sourceLessonIds": [],
       "sourceLessonSlugs": [],
-      "targetLessonIds": [],
-      "targetLessonSlugs": [],
+      "targetLessonIds": [
+        "cmnwat0kv000f0nstsqh5kbx0"
+      ],
+      "targetLessonSlugs": [
+        "endo-osteoporosis"
+      ],
       "appliedArchiveCount": 0,
-      "status": "REJECTED",
-      "reasonCode": "target_missing",
+      "status": "UNCHANGED",
+      "reasonCode": "no_published_source_rows",
       "notes": [
-        "No published target lesson exists for topic \"endo-osteoporosis\"."
+        "No published source rows remain; merge is already satisfied or previously suppressed."
       ]
     },
     {
@@ -378,13 +474,17 @@
       "mergeTargetTopicSlug": "geri-polypharm",
       "sourceLessonIds": [],
       "sourceLessonSlugs": [],
-      "targetLessonIds": [],
-      "targetLessonSlugs": [],
+      "targetLessonIds": [
+        "cmnwat0lj000l0nstrd4kc93a"
+      ],
+      "targetLessonSlugs": [
+        "geri-polypharm"
+      ],
       "appliedArchiveCount": 0,
-      "status": "REJECTED",
-      "reasonCode": "target_missing",
+      "status": "UNCHANGED",
+      "reasonCode": "no_published_source_rows",
       "notes": [
-        "No published target lesson exists for topic \"geri-polypharm\"."
+        "No published source rows remain; merge is already satisfied or previously suppressed."
       ]
     },
     {
@@ -393,13 +493,17 @@
       "mergeTargetTopicSlug": "endo-osteoporosis",
       "sourceLessonIds": [],
       "sourceLessonSlugs": [],
-      "targetLessonIds": [],
-      "targetLessonSlugs": [],
+      "targetLessonIds": [
+        "cmnwat0lr000n0nstnzad4twu"
+      ],
+      "targetLessonSlugs": [
+        "endo-osteoporosis"
+      ],
       "appliedArchiveCount": 0,
-      "status": "REJECTED",
-      "reasonCode": "target_missing",
+      "status": "UNCHANGED",
+      "reasonCode": "no_published_source_rows",
       "notes": [
-        "No published target lesson exists for topic \"endo-osteoporosis\"."
+        "No published source rows remain; merge is already satisfied or previously suppressed."
       ]
     },
     {
@@ -408,13 +512,17 @@
       "mergeTargetTopicSlug": "geri-polypharm",
       "sourceLessonIds": [],
       "sourceLessonSlugs": [],
-      "targetLessonIds": [],
-      "targetLessonSlugs": [],
+      "targetLessonIds": [
+        "cmnwat0lv000o0nst1g2et4rt"
+      ],
+      "targetLessonSlugs": [
+        "geri-polypharm"
+      ],
       "appliedArchiveCount": 0,
-      "status": "REJECTED",
-      "reasonCode": "target_missing",
+      "status": "UNCHANGED",
+      "reasonCode": "no_published_source_rows",
       "notes": [
-        "No published target lesson exists for topic \"geri-polypharm\"."
+        "No published source rows remain; merge is already satisfied or previously suppressed."
       ]
     },
     {
@@ -423,13 +531,17 @@
       "mergeTargetTopicSlug": "cv-pe",
       "sourceLessonIds": [],
       "sourceLessonSlugs": [],
-      "targetLessonIds": [],
-      "targetLessonSlugs": [],
+      "targetLessonIds": [
+        "cmnwat0lo000m0nstd4g74cod"
+      ],
+      "targetLessonSlugs": [
+        "cv-pe"
+      ],
       "appliedArchiveCount": 0,
-      "status": "REJECTED",
-      "reasonCode": "target_missing",
+      "status": "UNCHANGED",
+      "reasonCode": "no_published_source_rows",
       "notes": [
-        "No published target lesson exists for topic \"cv-pe\"."
+        "No published source rows remain; merge is already satisfied or previously suppressed."
       ]
     },
     {
@@ -438,13 +550,17 @@
       "mergeTargetTopicSlug": "endo-osteoporosis",
       "sourceLessonIds": [],
       "sourceLessonSlugs": [],
-      "targetLessonIds": [],
-      "targetLessonSlugs": [],
+      "targetLessonIds": [
+        "cmnwat0m2000q0nst4keoks16"
+      ],
+      "targetLessonSlugs": [
+        "endo-osteoporosis"
+      ],
       "appliedArchiveCount": 0,
-      "status": "REJECTED",
-      "reasonCode": "target_missing",
+      "status": "UNCHANGED",
+      "reasonCode": "no_published_source_rows",
       "notes": [
-        "No published target lesson exists for topic \"endo-osteoporosis\"."
+        "No published source rows remain; merge is already satisfied or previously suppressed."
       ]
     },
     {
@@ -453,13 +569,17 @@
       "mergeTargetTopicSlug": "geri-polypharm",
       "sourceLessonIds": [],
       "sourceLessonSlugs": [],
-      "targetLessonIds": [],
-      "targetLessonSlugs": [],
+      "targetLessonIds": [
+        "cmnwat0m5000r0nstwb1ai19y"
+      ],
+      "targetLessonSlugs": [
+        "geri-polypharm"
+      ],
       "appliedArchiveCount": 0,
-      "status": "REJECTED",
-      "reasonCode": "target_missing",
+      "status": "UNCHANGED",
+      "reasonCode": "no_published_source_rows",
       "notes": [
-        "No published target lesson exists for topic \"geri-polypharm\"."
+        "No published source rows remain; merge is already satisfied or previously suppressed."
       ]
     },
     {
@@ -468,13 +588,17 @@
       "mergeTargetTopicSlug": "cv-pe",
       "sourceLessonIds": [],
       "sourceLessonSlugs": [],
-      "targetLessonIds": [],
-      "targetLessonSlugs": [],
+      "targetLessonIds": [
+        "cmnwat0lz000p0nstccvvskqx"
+      ],
+      "targetLessonSlugs": [
+        "cv-pe"
+      ],
       "appliedArchiveCount": 0,
-      "status": "REJECTED",
-      "reasonCode": "target_missing",
+      "status": "UNCHANGED",
+      "reasonCode": "no_published_source_rows",
       "notes": [
-        "No published target lesson exists for topic \"cv-pe\"."
+        "No published source rows remain; merge is already satisfied or previously suppressed."
       ]
     },
     {
@@ -483,13 +607,17 @@
       "mergeTargetTopicSlug": "endo-osteoporosis",
       "sourceLessonIds": [],
       "sourceLessonSlugs": [],
-      "targetLessonIds": [],
-      "targetLessonSlugs": [],
+      "targetLessonIds": [
+        "cmnwat0m2000q0nst4keoks16"
+      ],
+      "targetLessonSlugs": [
+        "endo-osteoporosis"
+      ],
       "appliedArchiveCount": 0,
-      "status": "REJECTED",
-      "reasonCode": "target_missing",
+      "status": "UNCHANGED",
+      "reasonCode": "no_published_source_rows",
       "notes": [
-        "No published target lesson exists for topic \"endo-osteoporosis\"."
+        "No published source rows remain; merge is already satisfied or previously suppressed."
       ]
     }
   ]

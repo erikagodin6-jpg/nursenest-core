@@ -7,9 +7,10 @@ import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { HUB } from "@/lib/marketing/marketing-entry-routes";
 import { useNursenestRegion } from "@/lib/region/use-nursenest-region";
 import { MarketingHeroCarousel } from "@/components/marketing/marketing-hero-carousel";
-import { buildHomepageHeroSlidesAtIndices } from "@/config/home-hero-carousel";
+import { buildHomepageHeroSlidesAtIndices, getHomeHeroSlideExamTrackKey } from "@/config/home-hero-carousel";
 import { MarketingTrackedLink } from "@/components/marketing/marketing-tracked-link";
 import { PH } from "@/lib/observability/posthog-conversion-events";
+import { trackProductEvent } from "@/lib/observability/product-analytics";
 import {
   MARKETING_PRIMARY_CTA_CLASS,
   MARKETING_SECONDARY_CTA_CLASS,
@@ -61,7 +62,14 @@ export function HomeConversionHero() {
                 <MarketingTrackedLink
                   href={loc(HUB.signup)}
                   event={PH.marketingHomeHeroPrimaryCta}
-                  eventProps={{ region, destination: "signup", surface: "hero_primary" }}
+                  eventProps={{
+                    region,
+                    marketing_region: region,
+                    marketing_locale: locale,
+                    destination: "signup",
+                    surface: "hero_primary",
+                    exam_tier_band: "undifferentiated_cta",
+                  }}
                   className={`${MARKETING_PRIMARY_CTA_CLASS} rounded-xl shadow-[var(--shadow-card)]`}
                   data-testid="button-hero-start-practicing"
                 >
@@ -71,7 +79,14 @@ export function HomeConversionHero() {
                 <MarketingTrackedLink
                   href={loc(HUB.questionBank)}
                   event={PH.marketingHomeHeroSecondaryCta}
-                  eventProps={{ region, destination: "question_bank", surface: "hero_try_free" }}
+                  eventProps={{
+                    region,
+                    marketing_region: region,
+                    marketing_locale: locale,
+                    destination: "question_bank",
+                    surface: "hero_try_free",
+                    exam_tier_band: "undifferentiated_cta",
+                  }}
                   className={`${MARKETING_SECONDARY_CTA_CLASS} rounded-xl border border-[var(--border-subtle)] shadow-sm`}
                   data-testid="button-hero-try-free-questions"
                 >
@@ -94,6 +109,15 @@ export function HomeConversionHero() {
                 testIdPrefix="hero-platform-carousel"
                 imgTestIdPrefix="hero-platform"
                 captionOverlay
+                onActiveSlideAnalytics={(slide) => {
+                  trackProductEvent(PH.marketingHomeHeroCarouselTierImpression, {
+                    marketing_locale: locale,
+                    marketing_region: region,
+                    hero_screenshot_index: slide.index,
+                    hero_exam_track: getHomeHeroSlideExamTrackKey(slide.index),
+                    surface: "home_conversion_hero_carousel",
+                  });
+                }}
               />
             </div>
           </div>

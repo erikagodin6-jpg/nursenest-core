@@ -35,6 +35,8 @@ export type MarketingHeroCarouselProps = {
    * (homepage platform preview). When false, copy sits below the frame (legacy layout).
    */
   captionOverlay?: boolean;
+  /** Fires when the visible slide changes (autoplay, dots, or swipe) — for conversion analytics. */
+  onActiveSlideAnalytics?: (slide: HomeHeroSlide) => void;
 };
 
 /**
@@ -55,6 +57,7 @@ export function MarketingHeroCarousel({
   imgTestIdPrefix = "hero",
   autoplayIntervalMs = 5000,
   captionOverlay = false,
+  onActiveSlideAnalytics,
 }: MarketingHeroCarouselProps) {
   const { t } = useMarketingI18n();
   const [current, setCurrent] = useState(0);
@@ -68,6 +71,7 @@ export function MarketingHeroCarousel({
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const unavailableReported = useRef(false);
   const lastSlideFingerprintRef = useRef<string | null>(null);
+  const lastAnalyticsSlideIndex = useRef<number | null>(null);
 
   const slideFingerprint = slides.map((s) => `${s.objectKey}\u0001${s.publicUrl}`).join("\u0002");
 
@@ -81,8 +85,16 @@ export function MarketingHeroCarousel({
       setHeroTierByIndex({});
       setFailed(new Set());
       setCurrent(0);
+      lastAnalyticsSlideIndex.current = null;
     });
   }, [slideFingerprint, slides.length]);
+
+  useEffect(() => {
+    if (!onActiveSlideAnalytics || !currentSlide || !hasLoaded) return;
+    if (lastAnalyticsSlideIndex.current === currentSlide.index) return;
+    lastAnalyticsSlideIndex.current = currentSlide.index;
+    onActiveSlideAnalytics(currentSlide);
+  }, [currentSlide, hasLoaded, onActiveSlideAnalytics]);
 
   useEffect(() => {
     failedRef.current = failed;

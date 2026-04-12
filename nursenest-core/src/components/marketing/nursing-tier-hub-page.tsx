@@ -11,7 +11,7 @@ import { StudyCard } from "@/components/ui/study-card";
 import type { NursingTierHubActionId, NursingTierHubContent } from "@/lib/marketing/nursing-tier-hub-content";
 import { pathwayMarketingHubLinkContext } from "@/lib/marketing/np-seo-alias-analytics-props";
 import { PH } from "@/lib/observability/posthog-conversion-events";
-import { trackClientEvent } from "@/lib/observability/posthog-client";
+import { pathwayAnalyticsDimensions, trackProductEvent } from "@/lib/observability/product-analytics";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
 
 const ACTION_ICON: Record<NursingTierHubActionId, LucideIcon> = {
@@ -62,7 +62,7 @@ export function NursingTierHubPage({
 
   return (
     <>
-      <FunnelExamHubViewBeacon pathwayId={pathway.id} hubPath={hubPath} countrySlug={pathway.countrySlug} />
+      <FunnelExamHubViewBeacon pathway={pathway} hubPath={hubPath} />
       {npSeoAliasSegment ? (
         <NpSeoAliasHubAnalytics
           pathwayId={pathway.id}
@@ -135,16 +135,15 @@ export function NursingTierHubPage({
                   className={ACTION_CLASS[action.id]}
                   ariaLabel={`${action.label} - ${pathway.shortName}`}
                   onClick={() => {
-                    trackClientEvent(PH.marketingPathwayHubCta, {
-                      ...linkCtx,
-                      pathway_id: pathway.id,
+                    const base = { ...linkCtx, ...pathwayAnalyticsDimensions(pathway) };
+                    trackProductEvent(PH.marketingPathwayHubCta, {
+                      ...base,
                       surface: eventMeta.surface,
                       destination_type: eventMeta.destinationType,
                       link_target: eventMeta.linkTarget,
                     });
-                    trackClientEvent(PH.funnelExamHubStudyIntent, {
-                      ...linkCtx,
-                      pathway_id: pathway.id,
+                    trackProductEvent(PH.funnelExamHubStudyIntent, {
+                      ...base,
                       destination_type: eventMeta.destinationType,
                       link_target: eventMeta.linkTarget,
                     });

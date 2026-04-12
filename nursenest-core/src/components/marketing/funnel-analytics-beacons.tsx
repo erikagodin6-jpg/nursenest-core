@@ -1,54 +1,49 @@
 "use client";
 
-import posthog from "posthog-js";
 import { useEffect, useRef } from "react";
-import { initPosthogClient } from "@/lib/observability/posthog-client";
+import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { PH } from "@/lib/observability/posthog-conversion-events";
-
-function captureWhenConfigured(event: string, props: Record<string, string | number | boolean | undefined>) {
-  if (!process.env.NEXT_PUBLIC_POSTHOG_KEY?.trim()) return;
-  initPosthogClient();
-  try {
-    posthog.capture(event, props);
-  } catch {
-    // no-op
-  }
-}
+import { pathwayAnalyticsDimensions, trackProductEvent } from "@/lib/observability/product-analytics";
 
 /** One lightweight capture per homepage load (marketing region = US | CA). */
-export function FunnelHomepageViewBeacon({ marketingRegion }: { marketingRegion: "US" | "CA" }) {
-  const sent = useRef(false);
-  useEffect(() => {
-    if (sent.current) return;
-    sent.current = true;
-    captureWhenConfigured(PH.funnelHomepageViewed, {
-      actor: "anonymous",
-      marketing_region: marketingRegion,
-    });
-  }, [marketingRegion]);
-  return null;
-}
-
-/** Exam pathway marketing hub overview — once per mount. */
-export function FunnelExamHubViewBeacon({
-  pathwayId,
-  hubPath,
-  countrySlug,
+export function FunnelHomepageViewBeacon({
+  marketingRegion,
+  marketingLocale,
 }: {
-  pathwayId: string;
-  hubPath: string;
-  countrySlug: string;
+  marketingRegion: "US" | "CA";
+  /** BCP-47 marketing UI locale (overlay). */
+  marketingLocale?: string;
 }) {
   const sent = useRef(false);
   useEffect(() => {
     if (sent.current) return;
     sent.current = true;
-    captureWhenConfigured(PH.funnelExamHubViewed, {
+    trackProductEvent(PH.funnelHomepageViewed, {
       actor: "anonymous",
-      pathway_id: pathwayId,
-      hub_path: hubPath,
-      country_slug: countrySlug,
+      marketing_region: marketingRegion,
+      marketing_locale: marketingLocale ?? "en",
     });
-  }, [pathwayId, hubPath, countrySlug]);
+  }, [marketingRegion, marketingLocale]);
+  return null;
+}
+
+/** Exam pathway marketing hub overview — once per mount. */
+export function FunnelExamHubViewBeacon({
+  pathway,
+  hubPath,
+}: {
+  pathway: Pick<ExamPathwayDefinition, "id" | "countrySlug" | "roleTrack" | "examCode" | "examKey" | "stripeTier">;
+  hubPath: string;
+}) {
+  const sent = useRef(false);
+  useEffect(() => {
+    if (sent.current) return;
+    sent.current = true;
+    trackProductEvent(PH.funnelExamHubViewed, {
+      actor: "anonymous",
+      hub_path: hubPath,
+      ...pathwayAnalyticsDimensions(pathway),
+    });
+  }, [pathway, hubPath]);
   return null;
 }
