@@ -5,6 +5,8 @@ import { getThemeLogoPathForThemeId, headerLogoModeForTheme, resolveLogoForTheme
 import { getHeaderBrandLogoLoadChain, type ThemeLogoVariant } from "@/lib/theme/theme-logo-url";
 import { normalizeThemeIdForLogo } from "@/lib/theme/theme-logo-resolve";
 import { NURSENEST_DEFAULT_THEME, THEME_STORAGE_KEY } from "@/lib/theme/theme-registry";
+import { nursenestImagesSpaceObjectUrl } from "@/config/marketing-cdn.catalog";
+import { marketingImageUsesProxy, marketingProxyPathForKey } from "@/lib/marketing-resolve-image-url";
 
 function subscribe(onChange: () => void) {
   if (typeof window === "undefined" || typeof document === "undefined") {
@@ -54,8 +56,14 @@ export function useThemeLogo(logoVariant: ThemeLogoVariant = "full"): {
   mappedSpaceKey: string;
   /** Deterministic header logo mode chosen from theme contrast profile. */
   headerLogoMode: "dark-header" | "light-header";
-  /** Ordered URLs: CDN first, then same-origin fallbacks. */
+  /** Ordered URLs: CDN first, then same-origin fallbacks. Used for non-header surfaces. */
   loadChain: string[];
+  /**
+   * Single explicit CDN/proxy URL for this theme + variant.
+   * Computed directly from the theme logo map — no chain, no fallbacks.
+   * Use this for the site header and 404 page via `exactSourceOnly`.
+   */
+  singleSrc: string;
 } {
   const domThemeId = useSyncExternalStore(subscribe, readDomThemeId, getServerSnapshot);
   const activeId = normalizeThemeIdForLogo(domThemeId);
@@ -66,10 +74,19 @@ export function useThemeLogo(logoVariant: ThemeLogoVariant = "full"): {
     return chain.length > 0 ? chain : [resolveLogoForTheme(activeId), getThemeLogoPathForThemeId(activeId)];
   }, [activeId, headerLogoMode, logoVariant]);
 
+  // Single explicit source: one CDN object key → one URL. No committed PNGs, no SVG fallbacks,
+  // no cross-theme substitution. Used exclusively when exactSourceOnly=true.
+  const singleSrc = useMemo(() => {
+    const objectKey = themeLogoObjectKeyForTheme(activeId, logoVariant);
+    if (marketingImageUsesProxy()) return marketingProxyPathForKey(objectKey);
+    return nursenestImagesSpaceObjectUrl(objectKey);
+  }, [activeId, logoVariant]);
+
   return {
     themeId: activeId,
     mappedSpaceKey,
     headerLogoMode,
     loadChain,
+    singleSrc,
   };
 }

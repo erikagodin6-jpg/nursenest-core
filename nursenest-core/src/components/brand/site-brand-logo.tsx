@@ -24,6 +24,9 @@ export type BrandMarkLoadState = "loading" | "ready" | "error";
  *   header / footer / auth → logoVariant="full"  (default, no prop needed)
  *   404 / error pages      → logoVariant="leaf"
  *   compact / badge / icon → logoVariant="leaf"
+ *
+ * `exactSourceOnly` — bypass the fallback chain and use a single direct CDN URL.
+ *   Pass on the site header and 404 page to prevent legacy assets from winning.
  */
 export function SiteBrandLogoMark({
   className = DEFAULT_BRAND_LOGO_MARK_CLASSNAME,
@@ -39,14 +42,92 @@ export function SiteBrandLogoMark({
   logoVariant?: ThemeLogoVariant;
   onMarkState?: (state: BrandMarkLoadState) => void;
   /**
-   * When true, only loadChain[0] (the CDN primary URL) is tried.
-   * On failure the component goes straight to text fallback — no legacy
-   * committed PNGs or SVGs can win. Use on the site header and 404 page.
+   * When true, the component renders from `singleSrc` — one direct CDN/proxy URL
+   * computed from the theme logo map. No chain iteration, no committed PNG fallback,
+   * no SVG substitution, no cross-theme fallback. On failure goes straight to text.
+   * Use on the site header (full) and 404 page (leaf).
    */
   exactSourceOnly?: boolean;
 }) {
   const { slotClassName, imgClassName } = brandLogoMarkPresentation(variant);
-  const { themeId, loadChain } = useThemeLogo(logoVariant);
+  const { themeId, loadChain, singleSrc } = useThemeLogo(logoVariant);
+
+  // ── Exact-source path (header / 404): no chain, no candidateIndex ──────────
+  const [exactFailed, setExactFailed] = useState(false);
+
+  useEffect(() => {
+    setExactFailed(false);
+  }, [singleSrc]);
+
+  const handleExactLoad = useCallback(() => {
+    if (process.env.NODE_ENV === "development") {
+      console.debug(`[logo-debug] exact theme=${themeId} resolved=${singleSrc}`);
+    }
+    onMarkState?.("ready");
+  }, [onMarkState, singleSrc, themeId]);
+
+  const handleExactError = useCallback(() => {
+    if (process.env.NODE_ENV === "development") {
+      console.debug(`[logo-debug] exact theme=${themeId} failed=${singleSrc} → text-fallback`);
+    }
+    logBrandLogoLoadFailure(singleSrc, themeId, 0);
+    setExactFailed(true);
+    onMarkState?.("error");
+  }, [onMarkState, singleSrc, themeId]);
+
+  if (exactSourceOnly) {
+    if (exactFailed) {
+      return (
+        <span className={`${slotClassName} ${className}`.trim()} aria-label={BRAND_NAME}>
+          <span className="text-lg font-semibold leading-none tracking-tight text-primary sm:text-xl lg:text-2xl">
+            {BRAND_NAME}
+          </span>
+        </span>
+      );
+    }
+    return (
+      <span className={`${slotClassName} ${className}`.trim()}>
+        <img
+          key={`${themeId}-exact-${singleSrc}`}
+          src={singleSrc}
+          alt={BRAND_NAME}
+          loading="eager"
+          decoding="async"
+          className={imgClassName}
+          onLoad={handleExactLoad}
+          onError={handleExactError}
+        />
+      </span>
+    );
+  }
+
+  // ── Chain path (footer / auth / learner / other surfaces) ──────────────────
+  return <SiteBrandLogoMarkChain
+    className={className}
+    slotClassName={slotClassName}
+    imgClassName={imgClassName}
+    themeId={themeId}
+    loadChain={loadChain}
+    onMarkState={onMarkState}
+  />;
+}
+
+/** Internal chain-walking renderer used for non-header surfaces only. */
+function SiteBrandLogoMarkChain({
+  className,
+  slotClassName,
+  imgClassName,
+  themeId,
+  loadChain,
+  onMarkState,
+}: {
+  className: string;
+  slotClassName: string;
+  imgClassName: string;
+  themeId: string;
+  loadChain: string[];
+  onMarkState?: (state: BrandMarkLoadState) => void;
+}) {
   const [candidateIndex, setCandidateIndex] = useState(0);
   const [showTextFallback, setShowTextFallback] = useState(false);
 
@@ -56,8 +137,7 @@ export function SiteBrandLogoMark({
   }, [themeId, loadChain]);
 
   const safeIndex = Math.min(candidateIndex, Math.max(0, loadChain.length - 1));
-  const chainSrc = loadChain[safeIndex] ?? loadChain[0] ?? getThemeLogoPathForThemeId(themeId);
-  const src = chainSrc;
+  const src = loadChain[safeIndex] ?? loadChain[0] ?? getThemeLogoPathForThemeId(themeId);
 
   useEffect(() => {
     onMarkState?.("loading");
@@ -65,38 +145,33 @@ export function SiteBrandLogoMark({
 
   const handleLoad = useCallback(() => {
     if (process.env.NODE_ENV === "development") {
-      // Classify the resolved source so it's easy to spot which asset won.
       const source =
         src.startsWith("/logos/") && src.endsWith("-brandlogo.png") ? "canonical-local-png"
         : src.startsWith("/branding/theme-logos/") ? "committed-branding-png"
         : src.startsWith("http") ? "cdn"
         : src.endsWith(".svg") ? "local-svg"
         : "unknown";
-      console.debug(`[logo-debug] theme=${themeId} resolved=${src} source=${source}`);
+      console.debug(`[logo-debug] chain theme=${themeId} resolved=${src} source=${source}`);
     }
     onMarkState?.("ready");
   }, [onMarkState, src, themeId]);
 
   const handleError = useCallback(() => {
     if (process.env.NODE_ENV === "development") {
-      const next = exactSourceOnly ? "text-fallback" : (loadChain[candidateIndex + 1] ?? "none");
-      console.debug(`[logo-debug] theme=${themeId} failed=${src} trying=${next}`);
+      console.debug(`[logo-debug] chain theme=${themeId} failed=${src} trying=${loadChain[candidateIndex + 1] ?? "none"}`);
     }
     logBrandLogoLoadFailure(src, themeId, safeIndex);
-    if (!exactSourceOnly && candidateIndex < loadChain.length - 1) {
+    if (candidateIndex < loadChain.length - 1) {
       setCandidateIndex((i) => i + 1);
       return;
     }
     setShowTextFallback(true);
     onMarkState?.("error");
-  }, [exactSourceOnly, candidateIndex, loadChain.length, onMarkState, src, themeId, safeIndex]);
+  }, [candidateIndex, loadChain, onMarkState, src, themeId, safeIndex]);
 
   if (showTextFallback) {
     return (
-      <span
-        className={`${slotClassName} ${className}`.trim()}
-        aria-label={BRAND_NAME}
-      >
+      <span className={`${slotClassName} ${className}`.trim()} aria-label={BRAND_NAME}>
         <span className="text-lg font-semibold leading-none tracking-tight text-primary sm:text-xl lg:text-2xl">
           {BRAND_NAME}
         </span>

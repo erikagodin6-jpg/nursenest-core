@@ -6,7 +6,7 @@ import { useSession } from "next-auth/react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useTheme } from "next-themes";
 import { getNavChromeStyle, getNavChromeVars } from "@/lib/theme/nav-chrome";
-import { ChevronDown, ChevronRight, MapPin, Menu, X } from "lucide-react";
+import { ChevronDown, ChevronRight, MapPin, Menu, Settings, X } from "lucide-react";
 import { mapLegacyMarketingHref } from "@/lib/legacy-marketing-routes";
 import { isStaffRole } from "@/lib/auth/staff-roles";
 import { useNursenestRegion } from "@/lib/region/use-nursenest-region";
@@ -25,7 +25,7 @@ import {
 import { trackClientEvent } from "@/lib/observability/posthog-client";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 import { GlobalContextBar } from "@/components/layout/global-context-bar";
-import { MobileContextDrawer, MobileContextTrigger } from "@/components/layout/mobile-context-drawer";
+import { MobileContextDrawer } from "@/components/layout/mobile-context-drawer";
 import type { GlobalRegionSlug, GlobalLocaleCode } from "@/lib/i18n/global-regions";
 import {
   defaultPathwayIdForMarketingOffering,
@@ -538,7 +538,6 @@ export function SiteHeader() {
                       key={menu.key}
                       className="relative"
                       onMouseEnter={() => { clearMegaCloseTimer(); setOpenMegaMenu(menu.key); }}
-                      onMouseLeave={scheduleMegaClose}
                     >
                       <button
                         type="button"
@@ -641,16 +640,22 @@ export function SiteHeader() {
               )}
             </div>
 
-            <div className="flex items-center gap-1.5 lg:hidden">
-              <MobileContextTrigger
-                region={globalRegion}
+            <div className="flex items-center gap-2 lg:hidden">
+              <button
+                type="button"
                 onClick={() => setMobileContextOpen(true)}
-              />
+                className="md:hidden inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-[var(--nn-nav-border)] bg-transparent p-0 text-[var(--nn-nav-fg)] transition-colors hover:bg-[var(--nn-nav-hover-bg)]"
+                aria-label="Region and language settings"
+                aria-expanded={mobileContextOpen}
+              >
+                <Settings className="h-[18px] w-[18px]" aria-hidden />
+              </button>
               <Button
                 type="button"
                 variant="ghost"
                 className="h-10 w-10 shrink-0 rounded-xl border border-[var(--nn-nav-border)] p-0 text-[var(--nn-nav-fg)] hover:bg-[var(--nn-nav-hover-bg)]"
                 aria-label={t("nav.openMenu")}
+                aria-expanded={mobileOpen}
                 onClick={() => setMobileOpen(true)}
               >
                 <Menu className="h-5 w-5" aria-hidden />
