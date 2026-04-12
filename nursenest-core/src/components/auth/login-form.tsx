@@ -63,7 +63,7 @@ export function LoginForm({
         </label>
         <input
           id="login-identifier"
-          className="w-full rounded-xl border border-border bg-background px-3 py-2"
+          className="w-full rounded-xl border border-border bg-background px-3 py-2.5 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--primary)_30%,transparent)]"
           type="text"
           name="email"
           placeholder={t("pages.login.placeholderIdentifier")}
@@ -72,18 +72,23 @@ export function LoginForm({
         />
       </div>
       <div className="space-y-1.5">
-        <input
-          className="w-full rounded-xl border border-border bg-background px-3 py-2"
-          type="password"
-          name="password"
-          placeholder={t("pages.login.placeholderPassword")}
-          required
-        />
-        <div className="flex justify-end sm:justify-start">
+        <div className="flex items-center justify-between gap-2">
+          <label htmlFor="login-password" className="text-sm font-medium text-foreground">
+            {t("pages.login.fieldPasswordLabel")}
+          </label>
           <Link href={forgotPasswordHref} className="text-sm font-medium text-primary hover:underline">
             {t("pages.login.forgotPasswordLink")}
           </Link>
         </div>
+        <input
+          id="login-password"
+          className="w-full rounded-xl border border-border bg-background px-3 py-2.5 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--primary)_30%,transparent)]"
+          type="password"
+          name="password"
+          placeholder={t("pages.login.placeholderPassword")}
+          required
+          autoComplete="current-password"
+        />
       </div>
       {error ? <p className="text-sm text-red-600">{error}</p> : null}
       <p className="text-xs leading-relaxed text-muted-foreground">
@@ -97,7 +102,10 @@ export function LoginForm({
         </Link>
         {t("pages.login.legalAfter")}
       </p>
-      <button className="w-full rounded-xl bg-role-cta px-4 py-2 font-semibold text-role-cta-foreground" type="submit">
+      <button
+        className="w-full rounded-xl bg-role-cta px-4 py-3 text-sm font-semibold text-role-cta-foreground transition hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--primary)_40%,transparent)]"
+        type="submit"
+      >
         {t("pages.login.submit")}
       </button>
     </form>

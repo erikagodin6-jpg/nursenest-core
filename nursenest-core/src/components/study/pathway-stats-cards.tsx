@@ -55,7 +55,7 @@ export function PathwayStatsCards({ stats }: Props) {
       className={`grid gap-3 ${
         stats.length === 2
           ? "grid-cols-2"
-          : stats.length === 3
+          :         stats.length === 3
             ? "grid-cols-3"
             : "grid-cols-2 sm:grid-cols-4"
       }`}
@@ -69,15 +69,15 @@ export function PathwayStatsCards({ stats }: Props) {
           <div
             key={stat.label}
             role="listitem"
-            className={`${accent.bg} flex flex-col gap-1.5 rounded-2xl border border-[var(--semantic-border-soft)] p-4 shadow-[var(--semantic-shadow-soft)] sm:p-5`}
+            className={`${accent.bg} flex flex-col gap-1 rounded-2xl border border-[var(--semantic-border-soft)] p-3 shadow-[var(--semantic-shadow-soft)] sm:gap-1.5 sm:p-5`}
           >
             <span
-              className={`${accent.iconBg} flex h-8 w-8 items-center justify-center rounded-lg`}
+              className={`${accent.iconBg} hidden h-8 w-8 items-center justify-center rounded-lg sm:flex`}
               aria-hidden
             >
               <Icon className={`h-4 w-4 ${accent.icon}`} strokeWidth={1.75} />
             </span>
-            <p className={`text-2xl font-extrabold tracking-tight ${accent.value}`}>
+            <p className={`text-xl font-extrabold tracking-tight sm:text-2xl ${accent.value}`}>
               {typeof stat.value === "number" ? stat.value.toLocaleString() : stat.value}
             </p>
             <p className="text-xs font-medium text-[var(--theme-muted-text)]">{stat.label}</p>
