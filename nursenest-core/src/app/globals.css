@@ -2096,6 +2096,135 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-exam-chrome-dim {
   border: 1px solid color-mix(in srgb, var(--lsc-color) 26%, var(--semantic-border-soft));
 }
 
+/* ==========================================================================
+ * Lesson page layout — premium two-column with sticky section nav
+ * ========================================================================== */
+
+.nn-lesson-page {
+  padding-bottom: 4rem;
+}
+
+.nn-lesson-page-header {
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--semantic-border-soft);
+}
+
+.nn-lesson-layout {
+  display: block;
+}
+
+@media (min-width: 1024px) {
+  .nn-lesson-layout {
+    display: grid;
+    grid-template-columns: 1fr 15rem;
+    gap: 2.5rem;
+    align-items: start;
+  }
+}
+
+@media (min-width: 1280px) {
+  .nn-lesson-layout {
+    gap: 3.5rem;
+  }
+}
+
+.nn-lesson-main {
+  min-width: 0;
+}
+
+/* ==========================================================================
+ * Lesson quick-jump nav sidebar
+ * ========================================================================== */
+
+.nn-lesson-section-nav {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .nn-lesson-section-nav {
+    display: block;
+    position: sticky;
+    top: 5.5rem;
+    max-height: calc(100vh - 7rem);
+    overflow-y: auto;
+    padding: 1.25rem 1rem;
+    border-radius: 1rem;
+    background: color-mix(in srgb, var(--semantic-surface) 85%, transparent);
+    border: 1px solid var(--semantic-border-soft);
+    scrollbar-width: none;
+  }
+  .nn-lesson-section-nav::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.nn-lesson-nav-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.625rem;
+  padding: 0.4375rem 0.5rem;
+  border-radius: 0.5rem;
+  text-decoration: none;
+  transition:
+    background var(--motion-base, 150ms) ease,
+    opacity var(--motion-base, 150ms) ease;
+}
+
+.nn-lesson-nav-item:hover {
+  background: color-mix(in srgb, var(--semantic-brand) 6%, transparent);
+}
+
+.nn-lesson-nav-item[data-active] {
+  background: color-mix(in srgb, var(--semantic-brand) 10%, transparent);
+}
+
+.nn-lesson-nav-dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  margin-top: 0.25rem;
+  flex-shrink: 0;
+  background: var(--semantic-border-soft);
+  transition: background var(--motion-base, 150ms) ease;
+}
+
+.nn-lesson-nav-dot[data-role=info]        { background: var(--semantic-info); }
+.nn-lesson-nav-dot[data-role=warning]     { background: var(--semantic-warning); }
+.nn-lesson-nav-dot[data-role=danger]      { background: var(--semantic-danger); }
+.nn-lesson-nav-dot[data-role=success]     { background: var(--semantic-success); }
+.nn-lesson-nav-dot[data-role=education]   { background: var(--semantic-success); }
+.nn-lesson-nav-dot[data-role=concept]     { background: var(--semantic-violet, #7c3aed); }
+.nn-lesson-nav-dot[data-role=action]      { background: var(--semantic-teal, #0d9488); }
+.nn-lesson-nav-dot[data-role=diagnostic]  { background: var(--semantic-cyan, #0891b2); }
+.nn-lesson-nav-dot[data-role=application] { background: var(--semantic-chart-5, #6366f1); }
+.nn-lesson-nav-dot[data-role=review]      { background: var(--semantic-brand); }
+.nn-lesson-nav-dot[data-role=cta]         { background: var(--semantic-text-muted); }
+
+.nn-lesson-nav-label {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--semantic-text-primary);
+  transition: color var(--motion-base, 150ms) ease;
+}
+
+.nn-lesson-nav-item[data-active] .nn-lesson-nav-label {
+  color: var(--semantic-brand);
+  font-weight: 600;
+}
+
+.nn-lesson-nav-chip {
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--semantic-text-muted);
+}
+
+.nn-lesson-nav-item[data-active] .nn-lesson-nav-chip {
+  color: color-mix(in srgb, var(--semantic-brand) 70%, var(--semantic-text-muted));
+}
+
 /*
  * End-of-lesson study loop: slightly stronger frame than a wash card so the block reads as “what’s next”
  * without loud chrome (hierarchy fix: guided loop vs body copy).

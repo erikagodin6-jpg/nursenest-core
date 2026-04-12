@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { LearnerNoteScope, type TierCode } from "@prisma/client";
 import { auth } from "@/lib/auth";
-import { PathwayLessonBody } from "@/components/lessons/pathway-lesson-body";
 import { PremiumLessonShell } from "@/components/student/premium-lesson-shell";
 import { getServerPremiumProtectionFlags } from "@/lib/premium-protection/config";
 import { maskUserLabelForWatermark } from "@/lib/premium-protection/mask-user-label";
@@ -347,115 +346,166 @@ export default async function LessonDetailPage({ params }: Props) {
         pathwayContinue = null;
       }
     }
+    // Derive next lesson for navigation (prefer adaptive continue, fall back to first related)
+    const nextLessonNav = (() => {
+      if (pathwayContinue?.primary) {
+        return { title: pathwayContinue.primary.title, href: pathwayContinue.primary.href };
+      }
+      const first = relatedLessonsDisplay[0];
+      if (first && pathway) {
+        const base = marketingPathwayLessonsIndexPath(pathway);
+        return { title: first.title, href: `${base}/${first.slug}` };
+      }
+      return null;
+    })();
+
+    const examFramingLabel =
+      examFraming.region !== "unknown" ? examFraming.examIdentityLabel : null;
+
+    // Nav sections for quick-jump (only sections with non-empty headings)
+    const navSections = visible.map((s) => ({
+      id: s.id,
+      heading: s.heading?.trim() ?? "",
+      kind: s.kind ?? null,
+    }));
+
     return (
-      <main>
-        <Link href="/app/lessons" className="text-sm font-medium text-primary hover:underline">
-          {t("learner.lessons.detail.allLessons")}
-        </Link>
-        <h1 className="mt-4 text-3xl font-bold">{record.title}</h1>
-        {examFraming.region !== "unknown" ? (
-          <p className="mt-2 text-xs text-muted-foreground">
-            Aligned to {examFraming.examIdentityLabel} expectations (study content; follow your regulator for authoritative scope).
-          </p>
-        ) : null}
-        {record.seoDescription ? <p className="mt-2 text-sm text-muted">{record.seoDescription}</p> : null}
-        {/* Pre/post assessment flow — wraps the lesson article */}
-        <div className="mt-6">
-          <LessonAssessmentFlow
-            userId={userId}
-            lessonId={id}
-            pathwayId={pathwayId}
-            lessonSlug={record.slug}
-            topic={record.topic}
-            initialProgress={initialProgress}
-            preTest={record.preTest}
-            postTest={record.postTest}
-          >
-            <PremiumLessonShell
+      <main className="nn-lesson-page">
+        {/* ── Premium lesson header ──────────────────────────────────────── */}
+        <LessonPageHeader
+          title={record.title}
+          topic={record.topic}
+          bodySystem={record.bodySystem}
+          topicSlug={record.topicSlug}
+          pathwayId={pathwayId}
+          examFramingLabel={examFramingLabel}
+          sectionCount={visible.length}
+          examRelevance={record.examRelevance ?? null}
+          audienceTiers={record.audienceTiers ?? null}
+          progress={initialProgress}
+        />
+
+        {/* ── Two-column layout: article + sticky sidebar ────────────────── */}
+        <div className="nn-lesson-layout mt-8">
+          {/* ── Main article column ─────────────────────────────────────── */}
+          <div className="nn-lesson-main min-w-0">
+            {/* Top nav: back link */}
+            <LessonNavButtons
+              position="top"
+              backHref="/app/lessons"
+              backLabel={t("learner.lessons.detail.allLessons")}
+              nextLesson={null}
+            />
+
+            {/* Pre/post assessment flow wraps the lesson article */}
+            <LessonAssessmentFlow
               userId={userId}
-              userLabel={userLabel}
-              flags={flags}
-              scope={LearnerNoteScope.PATHWAY_LESSON}
-              contextId={id}
+              lessonId={id}
               pathwayId={pathwayId}
+              lessonSlug={record.slug}
               topic={record.topic}
-              sourceLabel={record.title}
-              qualityNotice={<LessonQualityNotice tier={pathwayQuality.tier} wordCount={pathwayQuality.wordCount} />}
+              initialProgress={initialProgress}
+              preTest={record.preTest}
+              postTest={record.postTest}
             >
-              <article className="space-y-8">
-                {visible.map((section) => (
-                  <section key={section.id} className="border-b border-border pb-8 last:border-0">
-                    <h2 className="text-xl font-semibold text-[var(--theme-heading-text)]">
-                      {section.heading?.trim() || t("learner.lessons.detail.sectionFallback")}
-                    </h2>
-                    <div className="mt-3">
-                      <PathwayLessonBody
+              <PremiumLessonShell
+                userId={userId}
+                userLabel={userLabel}
+                flags={flags}
+                scope={LearnerNoteScope.PATHWAY_LESSON}
+                contextId={id}
+                pathwayId={pathwayId}
+                topic={record.topic}
+                sourceLabel={record.title}
+                qualityNotice={<LessonQualityNotice tier={pathwayQuality.tier} wordCount={pathwayQuality.wordCount} />}
+              >
+                <article className="space-y-5">
+                  {visible.map((section) => (
+                    <LessonSectionCard
+                      key={section.id}
+                      id={section.id}
+                      heading={section.heading?.trim() || t("learner.lessons.detail.sectionFallback")}
+                      kind={section.kind ?? null}
+                    >
+                      <PathwayLessonSectionContent
                         text={typeof section.body === "string" ? section.body : ""}
+                        figures={section.figures}
                         viewerTier={lessonViewerTier}
                         measurementSystem={lessonMeasurementSystem ?? undefined}
                       />
-                    </div>
-                    {/* Per-section note button (non-intrusive, below content) */}
-                    {userId ? (
-                      <LessonSectionNoteInline
-                        userId={userId}
-                        sectionId={section.id}
-                        sectionHeading={section.heading?.trim() ?? ""}
-                        scope="PATHWAY_LESSON"
-                        pathwayId={pathwayId}
-                        topic={record.topic}
-                      />
-                    ) : null}
-                  </section>
-                ))}
-              </article>
-            </PremiumLessonShell>
-          </LessonAssessmentFlow>
-        </div>
-        {isStudyCoachEnabled() && (
-          <CoachLessonHelper
-            lessonTitle={record.title}
-            topic={record.topic}
-          />
-        )}
-        <LessonContinueStudyNextBlock bundle={pathwayContinue} />
-        {pathway ? (
-          <PathwayLessonRelatedQuestions
-            pathway={pathway}
-            lessonTopic={record.topic}
-            topicSlug={record.topicSlug}
-            items={relatedQuestionStems}
-            appLinksMode="direct"
-          />
-        ) : null}
-        {pathway ? (
-          <PathwayLessonStudyLoopCta
-            pathway={pathway}
-            lessonsBasePath={marketingPathwayLessonsIndexPath(pathway)}
-            topicLabel={record.topic}
-            topicSlug={record.topicSlug}
-            relatedLessons={relatedLessonsDisplay}
-            currentSlug={record.slug}
-            catAuthState="signed_in"
-          />
-        ) : null}
-        <div className="mt-10 flex flex-wrap gap-2 border-t border-border pt-6">
-          <Link
-            href={
-              pathway
-                ? buildAppQuestionBankTopicDrillHref(pathway, record.topic, record.topicSlug ?? undefined)
-                : "/app/questions"
-            }
-            className="rounded-full bg-role-cta px-4 py-2 text-sm font-semibold text-role-cta-foreground"
-          >
-            {t("learner.lessons.detail.ctaQuestionBank")}
-          </Link>
-          <Link
-            href={buildAppPracticeTestsHubHref(pathwayId)}
-            className="rounded-full border border-border px-4 py-2 text-sm font-semibold hover:bg-muted"
-          >
-            {t("learner.lessons.detail.ctaPathwayPracticeTests")}
-          </Link>
+                      {userId ? (
+                        <LessonSectionNoteInline
+                          userId={userId}
+                          sectionId={section.id}
+                          sectionHeading={section.heading?.trim() ?? ""}
+                          scope="PATHWAY_LESSON"
+                          pathwayId={pathwayId}
+                          topic={record.topic}
+                        />
+                      ) : null}
+                    </LessonSectionCard>
+                  ))}
+                </article>
+              </PremiumLessonShell>
+            </LessonAssessmentFlow>
+
+            {/* Bottom prev/next navigation */}
+            <LessonNavButtons
+              position="bottom"
+              backHref="/app/lessons"
+              backLabel={t("learner.lessons.detail.allLessons")}
+              nextLesson={nextLessonNav}
+            />
+
+            {isStudyCoachEnabled() && (
+              <CoachLessonHelper
+                lessonTitle={record.title}
+                topic={record.topic}
+              />
+            )}
+            <LessonContinueStudyNextBlock bundle={pathwayContinue} />
+            {pathway ? (
+              <PathwayLessonRelatedQuestions
+                pathway={pathway}
+                lessonTopic={record.topic}
+                topicSlug={record.topicSlug}
+                items={relatedQuestionStems}
+                appLinksMode="direct"
+              />
+            ) : null}
+            {pathway ? (
+              <PathwayLessonStudyLoopCta
+                pathway={pathway}
+                lessonsBasePath={marketingPathwayLessonsIndexPath(pathway)}
+                topicLabel={record.topic}
+                topicSlug={record.topicSlug}
+                relatedLessons={relatedLessonsDisplay}
+                currentSlug={record.slug}
+                catAuthState="signed_in"
+              />
+            ) : null}
+            <div className="mt-8 flex flex-wrap gap-2 border-t pt-6" style={{ borderColor: "var(--semantic-border-soft)" }}>
+              <Link
+                href={
+                  pathway
+                    ? buildAppQuestionBankTopicDrillHref(pathway, record.topic, record.topicSlug ?? undefined)
+                    : "/app/questions"
+                }
+                className="rounded-full bg-role-cta px-4 py-2 text-sm font-semibold text-role-cta-foreground"
+              >
+                {t("learner.lessons.detail.ctaQuestionBank")}
+              </Link>
+              <Link
+                href={buildAppPracticeTestsHubHref(pathwayId)}
+                className="rounded-full border border-border px-4 py-2 text-sm font-semibold hover:bg-muted"
+              >
+                {t("learner.lessons.detail.ctaPathwayPracticeTests")}
+              </Link>
+            </div>
+          </div>
+
+          {/* ── Sticky section nav sidebar (desktop only) ─────────────── */}
+          <LessonSectionNav sections={navSections} />
         </div>
       </main>
     );
