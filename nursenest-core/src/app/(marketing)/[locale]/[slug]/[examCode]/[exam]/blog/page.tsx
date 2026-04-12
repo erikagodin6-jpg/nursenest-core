@@ -7,19 +7,26 @@ import {
   getPublishedLocalizedBlogPostsPage,
   LOCALIZED_BLOG_LIST_PAGE_SIZE,
 } from "@/lib/blog/safe-localized-blog-queries";
-import { isGlobalRegionSlug, REGION_CONFIG, type GlobalLocaleCode, type GlobalRegionSlug } from "@/lib/i18n/global-regions";
+import {
+  normalizeBlogIndexParams,
+  type RawBlogIndexParams,
+  buildLocalizedBlogHref,
+} from "@/lib/blog/localized-blog-route-params";
+import { isGlobalRegionSlug, REGION_CONFIG } from "@/lib/i18n/global-regions";
+import type { GlobalLocaleCode, GlobalRegionSlug } from "@/lib/i18n/global-regions";
 import { isCoreHostedNonDefaultLocale } from "@/lib/i18n/marketing-locale-policy";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
+// See src/lib/blog/localized-blog-route-params.ts for why slug/examCode are overloaded here.
 type Props = {
-  params: Promise<{ locale: string; region: string; profession: string; exam: string }>;
+  params: Promise<RawBlogIndexParams>;
   searchParams: Promise<{ page?: string }>;
 };
 
 export const revalidate = 120;
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { locale, region, profession, exam } = await params;
+  const { locale, region, profession, exam } = normalizeBlogIndexParams(await params);
   const pathname = `/${locale}/${region}/${profession}/${exam}/blog`;
 
   return safeGenerateMetadata(
@@ -31,7 +38,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       return {
         title: `${exam.toUpperCase()} Blog — ${regionName} | NurseNest`,
         description: `Exam prep articles, study tips, and guides for ${exam.toUpperCase()} nursing exam preparation in ${regionName}.`,
-        alternates: { canonical: `/${locale}/${region}/${profession}/${exam}/blog` },
+        alternates: { canonical: pathname },
       };
     },
     { pathname, locale, routeGroup: "marketing.locale.localized_blog.index" },
@@ -39,7 +46,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function LocalizedBlogIndexPage({ params, searchParams }: Props) {
-  const { locale, region, profession, exam } = await params;
+  const { locale, region, profession, exam } = normalizeBlogIndexParams(await params);
   const sp = await searchParams;
 
   if (!isCoreHostedNonDefaultLocale(locale) && locale !== "en") notFound();
@@ -59,7 +66,7 @@ export default async function LocalizedBlogIndexPage({ params, searchParams }: P
   });
 
   const totalPages = Math.ceil(total / pageSize);
-  const basePath = `/${locale}/${region}/${profession}/${exam}/blog`;
+  const basePath = buildLocalizedBlogHref({ locale, region, profession, exam });
 
   const breadcrumbs = [
     { label: "Home", href: `/${locale}/${region}` },
@@ -91,8 +98,11 @@ export default async function LocalizedBlogIndexPage({ params, searchParams }: P
       ) : (
         <div className="space-y-6">
           {posts.map((post) => (
-            <article key={post.id} className="rounded-xl border border-[var(--theme-card-border)] p-5 transition-shadow hover:shadow-md">
-              <Link href={`${basePath}/${post.localizedSlug}`} className="group">
+            <article
+              key={post.id}
+              className="rounded-xl border border-[var(--theme-card-border)] p-5 transition-shadow hover:shadow-md"
+            >
+              <Link href={buildLocalizedBlogHref({ locale, region, profession, exam, postSlug: post.localizedSlug })} className="group">
                 <h2 className="text-xl font-bold text-[var(--theme-heading-text)] group-hover:text-primary">
                   {post.localizedTitle}
                 </h2>

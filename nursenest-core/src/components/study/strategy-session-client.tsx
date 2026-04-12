@@ -32,6 +32,7 @@ import type {
 } from "@/app/(student)/app/(learner)/strategy/actions";
 import { loadMoreStrategyQuestions } from "@/app/(student)/app/(learner)/strategy/actions";
 import type { SessionMode } from "@/lib/study/strategy-taxonomy";
+import { SuccessLeaf } from "@/components/ui/success-leaf";
 
 // ── Types ──────────────────────────────────────────────────────────────────────
 
@@ -245,9 +246,10 @@ function SessionDone({
       </div>
       <div>
         <p
-          className="text-xl font-bold"
+          className="flex items-center gap-2 text-xl font-bold"
           style={{ color: "var(--theme-heading-text)" }}
         >
+          <SuccessLeaf show size={22} />
           Session complete
         </p>
         <p className="mt-2 text-sm" style={{ color: "var(--theme-muted-text)" }}>

@@ -11,6 +11,7 @@ import {
   PlayCircle,
   Zap,
 } from "lucide-react";
+import { TrackedStudyLoopCatLink } from "@/components/student/tracked-study-loop-cat-link";
 import type { LearnerMarketingT } from "@/lib/learner/learner-marketing-server";
 import { isPriorityWinner, resolveInteractionPriority } from "@/lib/student/interaction-priority";
 
@@ -21,6 +22,8 @@ export type QuickActionGuided = {
   hasRecentCompletion?: boolean;
   /** Pathway-specific CAT start href (e.g. `/app/practice-tests/start?pathwayId=us-rn-nclex-rn`). Falls back to generic start page. */
   catStartHref?: string | null;
+  /** Whether the CAT CTA is pathway-scoped or still needs explicit pathway selection. */
+  catDestinationKind?: "app_start" | "generic_chooser";
   /** Exam code for scoped copy (e.g. "NCLEX-RN") — pair with catPathwayLine */
   catPathwayLabel?: string | null;
   /** Full pathway line (e.g. "US RN · NCLEX-RN") for subtitle when label is set */
@@ -77,7 +80,8 @@ export function QuickActionPanel({
   const resumeTitle = guided?.continueLesson?.title ?? null;
   const weakHref = hasWeakAreas ? "#dashboard-weak-areas" : "/app/questions";
   const catStartHref = guided?.catStartHref?.trim() || "/app/practice-tests/start";
-  const catScoped = Boolean(guided?.catPathwayLabel?.trim() && guided?.catPathwayLine?.trim());
+  const catScoped =
+    guided?.catDestinationKind === "app_start" && Boolean(guided?.catPathwayLabel?.trim() && guided?.catPathwayLine?.trim());
 
   return (
     <section className="nn-surface-bubble rounded-2xl p-4 shadow-[var(--shadow-card)] sm:p-6" aria-labelledby={`${id}-heading`}>
@@ -122,9 +126,10 @@ export function QuickActionPanel({
         </Link>
 
         {/* Card 2: Start CAT */}
-        <Link
+        <TrackedStudyLoopCatLink
           href={catStartHref}
-          data-nn-qa-dashboard-cat-card={catScoped ? "scoped" : "generic"}
+          sourceSurface="dashboard_quick_actions"
+          dashboardCatCard={catScoped ? "scoped" : "generic"}
           className={`group flex flex-col gap-1.5 rounded-xl border bg-[color-mix(in_srgb,var(--semantic-brand)_10%,var(--semantic-surface))] px-4 py-3.5 transition-[transform,background-color,box-shadow,border-color] duration-200 hover:bg-[color-mix(in_srgb,var(--semantic-brand)_16%,var(--semantic-surface))] hover:shadow-[var(--semantic-shadow-soft)] motion-safe:hover:-translate-y-0.5 ${
             hasRecentCompletion
               ? emphasizeCat
@@ -155,7 +160,7 @@ export function QuickActionPanel({
               If you have more than one exam track, you’ll pick the pathway on the next screen.
             </p>
           ) : null}
-        </Link>
+        </TrackedStudyLoopCatLink>
 
         {/* Card 3: Weak topics (when available) or Question bank */}
         <Link

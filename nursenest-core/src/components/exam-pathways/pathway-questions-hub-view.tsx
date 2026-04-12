@@ -1,3 +1,4 @@
+import type React from "react";
 import Link from "next/link";
 import { BookOpen, Brain, Zap, CheckCircle, Users, ArrowLeft, ArrowRight } from "lucide-react";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";

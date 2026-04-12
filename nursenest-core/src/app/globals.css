@@ -3866,6 +3866,243 @@ html[data-theme="deep-twilight"] .nn-exam-session.nn-cat-exam-session {
 }
 
 /* ============================================================
+ * DESIGN SYSTEM: Teaching section color taxonomy
+ * Maps structured teaching payload section ids to semantic hues.
+ * Used by TeachingBreakdown for premium color-coded rationale.
+ * ============================================================ */
+
+.nn-teaching-section {
+  border-radius: 0.875rem;
+  border: 1px solid var(--semantic-border-soft);
+  background: color-mix(in srgb, var(--semantic-brand) 4%, var(--semantic-surface));
+  padding: 0.875rem 1rem 1rem;
+  box-shadow: 0 1px 0 color-mix(in srgb, var(--semantic-text-primary) 3%, transparent);
+}
+
+/* Blue/info: why the correct answer is right */
+.nn-teaching-section--correct {
+  border-color: color-mix(in srgb, var(--semantic-info) 28%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-info) 7%, var(--semantic-surface));
+}
+
+/* Green: key clinical takeaway / memory anchor */
+.nn-teaching-section--takeaway {
+  border-color: color-mix(in srgb, var(--semantic-success) 26%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-success) 7%, var(--semantic-surface));
+}
+
+/* Amber: why wrong answers are tempting */
+.nn-teaching-section--distractors {
+  border-color: color-mix(in srgb, var(--semantic-warning) 26%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-warning) 7%, var(--semantic-surface));
+}
+
+/* Purple: exam strategy / clinical test-taking tip */
+.nn-teaching-section--tip {
+  --nn-tip-purple: #a855f7;
+  border-color: color-mix(in srgb, var(--nn-tip-purple) 26%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--nn-tip-purple) 7%, var(--semantic-surface));
+}
+
+/* Rose: common trap / pitfall */
+.nn-teaching-section--trap {
+  border-color: color-mix(in srgb, var(--semantic-danger) 22%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-danger) 5%, var(--semantic-surface));
+}
+
+/* Soft info-teal: memory hook, clinical pearl */
+.nn-teaching-section--memory {
+  border-color: color-mix(in srgb, var(--semantic-info) 20%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-info) 5%, var(--semantic-surface));
+}
+
+.nn-teaching-section__label {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  margin: 0 0 0.5rem;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--semantic-text-muted);
+}
+
+.nn-teaching-section--correct .nn-teaching-section__label {
+  color: var(--semantic-info-contrast, var(--semantic-info));
+}
+
+.nn-teaching-section--takeaway .nn-teaching-section__label {
+  color: var(--semantic-success-contrast, var(--semantic-success));
+}
+
+.nn-teaching-section--distractors .nn-teaching-section__label {
+  color: var(--semantic-warning-contrast);
+}
+
+.nn-teaching-section--tip .nn-teaching-section__label {
+  --nn-tip-purple: #a855f7;
+  color: color-mix(in srgb, var(--nn-tip-purple) 88%, var(--semantic-text-primary));
+}
+
+.nn-teaching-section--trap .nn-teaching-section__label {
+  color: var(--semantic-danger-contrast, var(--semantic-danger));
+}
+
+.nn-teaching-section__body {
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.62;
+  color: var(--semantic-text-secondary);
+  white-space: pre-wrap;
+}
+
+/* ============================================================
+ * DESIGN SYSTEM: Session completion / results hero
+ * ============================================================ */
+
+.nn-session-score-hero {
+  padding: 1.5rem 1.25rem 1.25rem;
+  border-radius: 1.25rem;
+  border: 1px solid color-mix(in srgb, var(--theme-primary) 14%, var(--border-subtle));
+  background: linear-gradient(
+    158deg,
+    color-mix(in srgb, var(--theme-primary) 8%, var(--nn-presentation-wash, var(--bg-section-alt))) 0%,
+    var(--theme-page-bg, var(--bg-page)) 52%,
+    color-mix(in srgb, var(--semantic-success) 6%, var(--theme-card-bg, var(--bg-card))) 100%
+  );
+  box-shadow: var(--shadow-card);
+}
+
+@media (min-width: 640px) {
+  .nn-session-score-hero {
+    padding: 2rem 1.75rem 1.75rem;
+  }
+}
+
+.nn-session-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+  margin-top: 1.125rem;
+}
+
+@media (max-width: 400px) {
+  .nn-session-stat-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.nn-session-stat-card {
+  border-radius: 0.875rem;
+  border: 1px solid color-mix(in srgb, var(--theme-primary) 10%, var(--border-subtle));
+  background: var(--theme-card-bg, var(--bg-card));
+  padding: 0.875rem 0.75rem 0.9rem;
+  box-shadow: 0 1px 0 color-mix(in srgb, var(--theme-primary) 4%, transparent);
+  text-align: center;
+}
+
+.nn-session-stat-card--correct {
+  border-color: color-mix(in srgb, var(--role-success, var(--semantic-success)) 28%, var(--border-subtle));
+  background: var(--role-success-soft, color-mix(in srgb, var(--semantic-success) 7%, var(--bg-card)));
+}
+
+.nn-session-stat-card--wrong {
+  border-color: color-mix(in srgb, var(--semantic-danger) 22%, var(--border-subtle));
+  background: color-mix(in srgb, var(--semantic-danger) 5%, var(--theme-card-bg, var(--bg-card)));
+}
+
+/* ============================================================
+ * DESIGN SYSTEM: Confidence rating chips (support tool)
+ * ============================================================ */
+
+.nn-confidence-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.nn-confidence-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.125rem;
+  padding: 0.375rem 0.875rem;
+  border-radius: 9999px;
+  border: 1px solid color-mix(in srgb, var(--theme-primary) 14%, var(--border-subtle));
+  background: var(--theme-card-bg, var(--bg-card));
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--theme-muted-text);
+  cursor: pointer;
+  transition: border-color 0.15s ease, background-color 0.15s ease, color 0.15s ease;
+}
+
+.nn-confidence-chip:hover {
+  border-color: color-mix(in srgb, var(--semantic-brand) 24%, var(--border-subtle));
+  color: var(--theme-heading-text);
+  background: color-mix(in srgb, var(--semantic-brand) 6%, var(--theme-card-bg, var(--bg-card)));
+}
+
+.nn-confidence-chip--low.nn-confidence-chip--selected {
+  border-color: color-mix(in srgb, var(--semantic-danger) 34%, var(--border-subtle));
+  background: color-mix(in srgb, var(--semantic-danger) 10%, var(--theme-card-bg, var(--bg-card)));
+  color: var(--semantic-danger-contrast);
+}
+
+.nn-confidence-chip--medium.nn-confidence-chip--selected {
+  border-color: color-mix(in srgb, var(--semantic-warning) 34%, var(--border-subtle));
+  background: color-mix(in srgb, var(--semantic-warning) 10%, var(--theme-card-bg, var(--bg-card)));
+  color: var(--semantic-warning-contrast);
+}
+
+.nn-confidence-chip--high.nn-confidence-chip--selected {
+  border-color: color-mix(in srgb, var(--semantic-success) 34%, var(--border-subtle));
+  background: color-mix(in srgb, var(--semantic-success) 10%, var(--theme-card-bg, var(--bg-card)));
+  color: var(--semantic-success-contrast);
+}
+
+/* ============================================================
+ * DESIGN SYSTEM: Question bank loading skeleton
+ * ============================================================ */
+
+.nn-qbank-skeleton {
+  overflow: hidden;
+  border-radius: 1.25rem;
+  border: 1px solid var(--semantic-border-soft);
+  background: color-mix(in srgb, var(--semantic-brand) 3%, var(--semantic-surface));
+  box-shadow: var(--shadow-card);
+}
+
+.nn-qbank-skeleton__bar {
+  border-radius: 0.5rem;
+  background: color-mix(in srgb, var(--semantic-brand) 8%, var(--semantic-panel-muted));
+  position: relative;
+  overflow: hidden;
+}
+
+.nn-qbank-skeleton__bar::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in srgb, var(--semantic-surface) 60%, transparent),
+    transparent
+  );
+  animation: nn-skeleton-shimmer 1.5s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nn-qbank-skeleton__bar::after {
+    animation: none;
+  }
+}
+
+/* ============================================================
    CAT SESSION LAYOUT — Spec-driven, exam-like, minimal
    max-width 1200px | 65/35 grid | neutral surfaces only
    ============================================================ */
@@ -4384,6 +4621,16 @@ html[data-theme="deep-twilight"] .nn-cat-opt--incorrect {
   margin-bottom: 16px;
 }
 
+/* Results header card entrance */
+.nn-results-header {
+  animation: nn-success-reveal 0.32s cubic-bezier(0.25, 0.1, 0.25, 1) both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .nn-results-header {
+    animation: none;
+  }
+}
+
 /* Topic bar row */
 .nn-cat-topic-row {
   display: flex;
@@ -4457,6 +4704,12 @@ html[data-theme="deep-twilight"] .nn-cat-opt--incorrect {
   background: var(--semantic-surface-elevated, var(--semantic-surface));
   padding: 40px 48px 36px;
   text-align: center;
+  animation: nn-success-reveal 0.36s cubic-bezier(0.25, 0.1, 0.25, 1) both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .nn-cat-readiness-hero {
+    animation: none;
+  }
 }
 
 @media (max-width: 639px) {
@@ -4514,6 +4767,12 @@ html[data-theme="deep-twilight"] .nn-cat-opt--incorrect {
   font-weight: 600;
   letter-spacing: 0.02em;
   border: 1px solid;
+  animation: nn-success-reveal 0.28s 0.12s cubic-bezier(0.25, 0.1, 0.25, 1) both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .nn-cat-readiness-badge {
+    animation: none;
+  }
 }
 
 .nn-cat-readiness-badge--not-ready {

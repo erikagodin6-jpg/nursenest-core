@@ -1,4 +1,4 @@
-import { appCatWeakFocusPath } from "@/lib/exam-pathways/pathway-cat-flow";
+import { resolveStudyLoopCatHref } from "@/lib/exam-pathways/study-loop-cat-routing";
 
 /**
  * Client-safe study-loop helpers: aggregate per-session performance and build next-step URLs.
@@ -107,7 +107,11 @@ export function buildAppTopicDrillHref(args: {
 }
 
 export function practiceTestsWeakFocusHref(pathwayId: string | null): string {
-  return appCatWeakFocusPath(pathwayId);
+  return resolveStudyLoopCatHref({
+    authState: "signed_in",
+    pathwayId,
+    intent: "weak_focus",
+  });
 }
 
 /** Signed-in practice-tests hub with pathway pre-selected (`PracticeTestsHubClient` reads `pathwayId`). */

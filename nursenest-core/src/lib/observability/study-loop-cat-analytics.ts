@@ -1,10 +1,18 @@
 import { buildGlobalExamContext } from "@/lib/exam-context/exam-registry";
 import { examContextAnalyticsProps } from "@/lib/exam-context/global-exam-context";
 
-type StudyLoopCatSurface =
+export type StudyLoopCatSurface =
   | "adaptive_study_overview_primary"
   | "adaptive_study_overview_secondary"
-  | "question_bank_session_panel";
+  | "dashboard_quick_actions"
+  | "lesson_study_loop_primary"
+  | "lesson_study_loop_secondary"
+  | "learner_overview_quick_link"
+  | "practice_test_results_retest_weak"
+  | "practice_test_results_same_pathway"
+  | "question_bank_session_panel"
+  | "report_card_summary"
+  | "study_quick_links";
 
 type StudyLoopCatEntryType = "pathway_scoped_start" | "weak_focus" | "pathway_chooser" | "history" | "other";
 
@@ -43,12 +51,13 @@ export function buildStudyLoopCatClickProps(args: {
   pathwayId?: string | null;
   allowed?: boolean;
 }) {
+  const pathname = pathnameFromHref(args.href);
   const searchParams = searchParamsFromHref(args.href);
   const resolvedPathwayId = searchParams.get("pathwayId")?.trim() || args.pathwayId?.trim() || null;
   return {
     source_surface: args.sourceSurface,
     cat_entry_type: entryTypeForHref(args.href),
-    cat_entry_surface: pathnameFromHref(args.href).startsWith("/practice-exams") ? "public" : "app",
+    cat_entry_surface: pathname.startsWith("/app/") ? "app" : "public",
     allowed: args.allowed ?? true,
     pathway_id: resolvedPathwayId ?? undefined,
     ...examContextAnalyticsProps(buildGlobalExamContext(resolvedPathwayId, "en")),

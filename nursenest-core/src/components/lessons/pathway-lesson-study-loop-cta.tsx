@@ -9,6 +9,7 @@ import {
   lessonStudyLoopRelatedLessonsHubHref,
   normalizeLessonTopicContext,
 } from "@/components/lessons/pathway-lesson-link-practice";
+import { TrackedStudyLoopCatLink } from "@/components/student/tracked-study-loop-cat-link";
 import { pathwayLessonMarketingDetailHref } from "@/lib/lessons/pathway-lesson-types";
 
 type RelatedRow = { slug: string; title: string };
@@ -158,19 +159,23 @@ export function PathwayLessonStudyLoopCta({
                 : `Open the public landing for ${catShort} to see how sessions work, then sign in when you are ready.`}
             </p>
             <div className="mt-4 flex flex-col gap-2">
-              <Link
+              <TrackedStudyLoopCatLink
                 href={cat.primaryHref}
+                sourceSurface="lesson_study_loop_primary"
+                pathwayId={pathway.id}
                 className="inline-flex min-h-11 items-center justify-center rounded-full bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition hover:opacity-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/35 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--theme-page-bg)]"
               >
                 {cat.primaryKind === "app_start" ? `Start ${catShort}` : `View ${catShort} landing`}
-              </Link>
+              </TrackedStudyLoopCatLink>
               {cat.showAdaptiveShortcut && cat.secondaryHref ? (
-                <Link
+                <TrackedStudyLoopCatLink
                   href={cat.secondaryHref}
+                  sourceSurface="lesson_study_loop_secondary"
+                  pathwayId={pathway.id}
                   className="nn-study-pill-secondary inline-flex min-h-11 items-center justify-center px-4 py-2.5"
                 >
                   Start {catShort}
-                </Link>
+                </TrackedStudyLoopCatLink>
               ) : (
                 <p className="text-xs text-[var(--theme-muted-text)]">
                   Timed practice exams are available from your exam hub if adaptive CAT is not enabled for this track yet.

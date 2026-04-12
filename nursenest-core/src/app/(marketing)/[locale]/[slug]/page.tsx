@@ -8,7 +8,6 @@ import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
 /**
  * Canonical English programmatic pages live under `/seo/[slug]`; localized URLs use this route.
- * A full locale×slug matrix at build time inflates `.next` and can hit disk limits in CI.
  * `generateStaticParams` is empty: each locale+slug is generated on first request and cached (ISR).
  */
 export const dynamicParams = true;

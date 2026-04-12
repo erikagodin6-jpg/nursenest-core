@@ -8,7 +8,7 @@ import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { getFreemiumSnapshot } from "@/lib/entitlements/freemium";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
-import { resolveStudySurfaceCatHref } from "@/lib/exam-pathways/pathway-cat-flow";
+import { resolveStudyLoopCatHref } from "@/lib/exam-pathways/study-loop-cat-routing";
 import { listPathwaysCompatibleWithSubscription } from "@/lib/exam-pathways/pathway-entitlements";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 import { LearnerStudyQuickLinksCard } from "@/components/student/learner-study-quick-links-card";
@@ -83,9 +83,11 @@ export default async function QuestionBankPage() {
     );
   }
 
-  const catHref = resolveStudySurfaceCatHref({
+  const catHref = resolveStudyLoopCatHref({
+    authState: "signed_in",
     pathwayId: defaultPathwayId,
     availablePathwayIds: pathwayOptions.map((p) => p.id),
+    intent: "start",
   });
 
   return (

@@ -26,7 +26,12 @@ export function sanitizeSlug(raw: string): string {
 /**
  * Build the canonical route path for a localized blog article.
  *
- * Pattern: /[locale]/[region]/[profession]/[exam]/blog/[slug]
+ * Canonical URL pattern: /:locale/:region/:profession/:exam/blog/:slug
+ *
+ * Note: in the Next.js route tree this path is represented as
+ * /[locale]/[slug]/[examCode]/[exam]/blog/[postSlug] due to cross-route-group
+ * param-name constraints. Always use normalizeBlogPostParams() in route files
+ * before calling this helper. See localized-blog-route-params.ts for details.
  *
  * When locale is "en", we still include it for consistency in localized routes
  * (different from the legacy `/blog/[slug]` route which has no locale prefix).

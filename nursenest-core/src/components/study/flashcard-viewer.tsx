@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import { SuccessLeaf } from "@/components/ui/success-leaf";
 
 // ── Shared card type ──────────────────────────────────────────────────────────
 
@@ -270,16 +271,7 @@ function DoneScreen({ onReset, deckRef }: { onReset: () => void; deckRef?: strin
           "1px solid color-mix(in srgb, var(--semantic-success, #22c55e) 22%, transparent)",
       }}
     >
-      <div
-        className="flex h-14 w-14 items-center justify-center rounded-full text-2xl"
-        style={{
-          background:
-            "color-mix(in srgb, var(--semantic-success, #22c55e) 16%, transparent)",
-        }}
-        aria-hidden
-      >
-        ✓
-      </div>
+      <SuccessLeaf show size={36} />
       <div>
         <p
           className="text-lg font-semibold"

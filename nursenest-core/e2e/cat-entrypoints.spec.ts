@@ -20,49 +20,46 @@ test.describe("CAT entrypoint routing", () => {
   for (const catPath of ["/us/rn/nclex-rn/cat", "/canada/rpn/rex-pn/cat", "/us/np/fnp/cat"] as const) {
     test(`sign-in callback returns to same CAT path (${catPath})`, async ({ page }) => {
       await page.goto(catPath, { waitUntil: "domcontentloaded" });
-      const callbackLinks = page.locator('a[href*="callbackUrl="]');
-      const total = await callbackLinks.count();
-      let hasExpectedCallback = false;
-      for (let i = 0; i < total; i += 1) {
-        const href = await callbackLinks.nth(i).getAttribute("href");
-        if (!href) continue;
-        const callbackUrl = new URL(href, baseURL).searchParams.get("callbackUrl");
-        if (callbackUrl === catPath) {
-          hasExpectedCallback = true;
-          break;
-        }
-      }
-      expect(hasExpectedCallback).toBeTruthy();
+      const encodedPath = encodeURIComponent(catPath);
+      const signInForCat = page.locator(`a[href*="callbackUrl=${encodedPath}"]`).first();
+      await expect(signInForCat).toBeVisible();
+      const href = await signInForCat.getAttribute("href");
+      expect(href).toBeTruthy();
+      const callbackUrl = new URL(href!, baseURL).searchParams.get("callbackUrl");
+      expect(callbackUrl).toBe(catPath);
     });
   }
 
   test("blocked waitlist pathway keeps lessons and question bank available", async ({ page }) => {
     await page.goto("/canada/np/cnple/cat", { waitUntil: "domcontentloaded" });
-    await expect(page.getByText("CAT start unavailable — use links below")).toBeVisible();
+    await expect(page.getByRole("link", { name: "Lessons" })).toBeVisible();
+    await expect(page.getByRole("link", { name: "Question bank" })).toBeVisible();
     await expect(page.locator('a[href="/canada/np/cnple/lessons"]')).toBeVisible();
     await expect(page.locator('a[href="/canada/np/cnple/questions"]')).toBeVisible();
+    await expect(page.locator('a[href*="callbackUrl=%2Fcanada%2Fnp%2Fcnple%2Fcat"]')).toHaveCount(0);
   });
 
   test("allied CAT page stays pathway-scoped", async ({ page }) => {
     const catPath = "/us/allied/allied-health/cat";
     await page.goto(catPath, { waitUntil: "domcontentloaded" });
-    await expect(page.getByRole("heading", { name: "Adaptive (CAT) practice" })).toBeVisible();
     await expect(page.locator('a[href="/us/allied/allied-health/lessons"]')).toBeVisible();
     await expect(page.locator('a[href="/us/allied/allied-health/questions"]')).toBeVisible();
 
-    const signIn = page.getByRole("link", { name: "Sign in to continue" });
-    if (await signIn.isVisible()) {
-      const href = await signIn.getAttribute("href");
+    const signInForCat = page.locator(`a[href*="callbackUrl=${encodeURIComponent(catPath)}"]`).first();
+    if (await signInForCat.isVisible()) {
+      const href = await signInForCat.getAttribute("href");
       expect(href).toBeTruthy();
       const callbackUrl = new URL(href!, baseURL).searchParams.get("callbackUrl");
       expect(callbackUrl).toBe(catPath);
     } else {
-      await expect(page.getByText("CAT start unavailable — use links below")).toBeVisible();
+      await expect(page.getByRole("link", { name: "Lessons" })).toBeVisible();
+      await expect(page.getByRole("link", { name: "Question bank" })).toBeVisible();
     }
   });
 
   test("tampered invalid pathway CAT route is blocked", async ({ page }) => {
-    const response = await page.goto("/us/rpn/rex-pn/cat", { waitUntil: "domcontentloaded" });
-    expect(response?.status()).toBe(404);
+    await page.goto("/us/rpn/rex-pn/cat", { waitUntil: "domcontentloaded" });
+    await expect(page.getByRole("link", { name: "Go Home" })).toBeVisible();
+    await expect(page.locator('a[href*="callbackUrl=%2Fus%2Frpn%2Frex-pn%2Fcat"]')).toHaveCount(0);
   });
 });

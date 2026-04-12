@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
+import { BookOpen, ClipboardList, Layers } from "lucide-react";
+import { NpQuestionsHubBoardLinks } from "@/components/exam-pathways/np-questions-hub-board-links";
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
@@ -9,6 +10,7 @@ import { resolveExamPathwaySafe } from "@/lib/exam-pathways/resolve-exam-pathway
 import { HUB, loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { getNpPracticeTestLandingCopy } from "@/lib/exam-pathways/np-practice-test-segments";
 import { pathwayMarketingHubLinkContext } from "@/lib/marketing/np-seo-alias-analytics-props";
+import { PathwayQuestionHubRelatedLessons } from "@/components/pathway-lessons/pathway-question-hub-related-lessons";
 import {
   humanizeTopicSlug,
   pathwayAppQuestionBankTopicHref,
@@ -31,9 +33,10 @@ import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { recordRouteRenderFallback } from "@/lib/observability/route-fallback-tracker";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { ContentEmptyState } from "@/components/ui/content-empty-state";
-import { NpQuestionsHubBoardLinks } from "@/components/exam-pathways/np-questions-hub-board-links";
-import { PathwayLiveInventoryStrip } from "@/components/exam-pathways/pathway-live-inventory-strip";
-import { PathwayQuestionHubRelatedLessons } from "@/components/pathway-lessons/pathway-question-hub-related-lessons";
+import { PathwayHero } from "@/components/study/pathway-hero";
+import { PathwayStatsCards } from "@/components/study/pathway-stats-cards";
+import { StudyModeCards, defaultStudyModeCards } from "@/components/study/study-mode-cards";
+import { StudyBottomNav } from "@/components/study/study-bottom-nav";
 
 export const dynamicParams = true;
 
@@ -60,7 +63,7 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
         ? `${narrowedLabel} · Practice questions · ${pathway.displayName} | NurseNest`
         : `Practice questions · ${pathway.displayName} | NurseNest`;
       const description = narrowedLabel
-        ? `Board-style items for ${pathway.shortName} focused on ${narrowedLabel}. Sign in to run sets that stay inside this exam’s scope.`
+        ? `Board-style items for ${pathway.shortName} focused on ${narrowedLabel}. Sign in to run sets that stay inside this exam's scope.`
         : `Clinical vignettes and rationales scoped to ${pathway.shortName} (${pathway.countrySlug === "canada" ? "Canada" : "US"}). Sign in to practice with your plan.`;
       return {
         title,
@@ -169,117 +172,124 @@ export default async function ExamPathwayQuestionsHubPage({ params, searchParams
   const examName = pathway.contentExamKeys.length ? pathway.contentExamKeys.join(" / ") : pathway.shortName;
   const lessonsHref = marketingPathwayLessonsIndexPath(pathway);
   const catHref = buildExamPathwayPath(pathway, "cat");
+  const questionsHubPath = buildExamPathwayPath(pathway, "questions");
+
   const appQuestionsScoped = isTopicNarrowed
     ? pathwayAppQuestionBankTopicHref(pathway, topicFilterTrim, topicSlugFromUrl || clusterSlugForLessons || undefined)
     : loginWithCallback(`/app/questions?${new URLSearchParams({ pathwayId: pathway.id }).toString()}`);
-  const questionsHubPath = buildExamPathwayPath(pathway, "questions");
+
+  // Stat card values — use snapshot counts when available
+  const questionCount = questionSnapshot?.status === "ok" ? questionSnapshot.pathwayScopedCount : null;
+  const adaptiveCount = questionSnapshot?.status === "ok" ? questionSnapshot.adaptiveEligibleCount : null;
+
+  const heroSubtitle = isTopicNarrowed
+    ? `Showing questions for ${displayTopicLabel} — same scope and language as ${examName}.`
+    : `Board-style vignettes and rationales written for ${examName} (${countryLabel}). Sign in to practice with your plan.`;
+
+  const studyCards = defaultStudyModeCards({
+    quickHref: appQuestionsScoped,
+    fullHref: appQuestionsScoped,
+    catHref,
+    pathwayShortName: pathway.shortName,
+  });
 
   return (
-    <div className="mx-auto max-w-3xl px-4 py-12">
+    <main className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
       <BreadcrumbJsonLd items={schemaItems} />
-      <div className="mb-6">
+
+      {/* Breadcrumb trail */}
+      <div className="mb-5">
         <BreadcrumbTrail items={crumbs} />
       </div>
-      <Link href={overviewHref} className="text-sm font-medium text-primary hover:underline">
-        ← {pathway.shortName} overview
-      </Link>
-      <h1 className="mt-4 text-3xl font-extrabold text-[var(--theme-heading-text)]">
-        {pathway.shortName} {countryLabel} practice questions
-      </h1>
-      <p className="mt-3 text-[var(--theme-muted-text)]">
-        {isTopicNarrowed ? (
-          <>
-            You’re narrowing to{" "}
-            <span className="font-semibold text-[var(--theme-heading-text)]">{displayTopicLabel}</span>. Items stay inside{" "}
-            {pathway.shortName} and {examName}; sign in to run the same filter in the app.
-          </>
-        ) : (
-          <>
-            Vignettes, distractors, and rationales written for {examName}—same scope and language you’ll see on test day for your{" "}
-            {countryLabel} track.
-          </>
-        )}
-      </p>
-      <PathwayLiveInventoryStrip
-        pathway={pathway}
-        questionSnapshot={questionSnapshot}
-        lessonCount={pathwayLessonCount}
-        variant="questions"
+
+      {/* 1. Hero */}
+      <PathwayHero
+        title={`${pathway.shortName} ${countryLabel} practice questions`}
+        subtitle={heroSubtitle}
+        backLink={{ label: `${pathway.shortName} overview`, href: overviewHref }}
+        ctas={[
+          { label: "Start practising", href: appQuestionsScoped, variant: "primary" },
+          { label: "Browse lessons", href: lessonsHref, variant: "outline" },
+          { label: "Create account", href: "/signup", variant: "ghost" },
+        ]}
       />
-      {questionSnapshot?.status === "ok" && questionSnapshot.pathwayScopedCount === 0 ? (
-        <ContentEmptyState
-          variant="questions"
-          primaryCta={{ label: "Start available topics", href: lessonsHref }}
-          secondaryCtas={[
-            { label: "Try CAT exam", href: catHref },
-            { label: "Create account", href: "/signup", variant: "ghost" },
-          ]}
-        />
+
+      {/* 2. Stat cards */}
+      {(questionCount !== null || adaptiveCount !== null || pathwayLessonCount !== undefined) ? (
+        <div className="mt-6">
+          <PathwayStatsCards
+            stats={[
+              ...(questionCount !== null
+                ? [{ value: questionCount, label: "Practice questions", icon: ClipboardList, accent: "brand" as const }]
+                : []),
+              ...(adaptiveCount !== null
+                ? [{ value: adaptiveCount, label: "CAT-eligible items", icon: Layers, accent: "info" as const }]
+                : []),
+              ...(typeof pathwayLessonCount === "number"
+                ? [{ value: pathwayLessonCount, label: "Lessons available", icon: BookOpen, accent: "success" as const }]
+                : []),
+            ]}
+          />
+        </div>
       ) : null}
+
+      {/* Empty state when no questions exist */}
+      {questionSnapshot?.status === "ok" && questionSnapshot.pathwayScopedCount === 0 ? (
+        <div className="mt-6">
+          <ContentEmptyState
+            variant="questions"
+            primaryCta={{ label: "Start available topics", href: lessonsHref }}
+            secondaryCtas={[
+              { label: "Try CAT exam", href: catHref },
+              { label: "Create account", href: "/signup", variant: "ghost" },
+            ]}
+          />
+        </div>
+      ) : null}
+
+      {/* 3. Study mode cards */}
+      <div className="mt-8">
+        <StudyModeCards heading="Start studying" cards={studyCards} />
+      </div>
+
+      {/* 4. Content area — topic-narrowed view or NP board links */}
       {isTopicNarrowed ? (
-        <>
-          <aside className="nn-study-card nn-study-card--wash mt-6 p-4 sm:p-5">
-            <p className="text-sm font-semibold text-[var(--theme-heading-text)]">Narrowed to one clinical topic</p>
+        <div className="mt-8 space-y-4">
+          <aside className="nn-study-card nn-study-card--wash p-5">
+            <p className="text-sm font-semibold text-[var(--theme-heading-text)]">Filtered to one clinical topic</p>
             <p className="mt-1 text-sm text-[var(--theme-muted-text)]">
-              You landed here from a lesson or topic link. Open the full hub anytime to see every topic in this pathway.
+              You landed here from a lesson or topic link. Open the full hub to see every topic for this pathway.
             </p>
-            <Link
+            <a
               href={questionsHubPath}
-              className="mt-3 inline-flex text-sm font-semibold text-primary underline underline-offset-2 hover:no-underline"
+              className="mt-3 inline-flex text-sm font-semibold text-[var(--semantic-brand)] underline underline-offset-2 hover:no-underline"
             >
               Clear topic — full practice hub
-            </Link>
+            </a>
           </aside>
           <PathwayQuestionHubRelatedLessons
             topicLabel={displayTopicLabel}
             lessonsBasePath={marketingPathwayLessonsIndexPath(pathway)}
             lessons={relatedLessonsForTopic}
           />
-        </>
+        </div>
       ) : null}
+
       {pathway.roleTrack === "np" ? (
-        <div className="mt-4 rounded-xl border border-[var(--theme-card-border)] bg-[var(--theme-muted-surface)]/50 p-4 text-sm text-[var(--theme-body-text)]">
+        <div className="mt-6 rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-cool)] p-4 text-sm text-[var(--theme-body-text)]">
           <NpQuestionsHubBoardLinks pathwayId={pathway.id} linkContext={boardLinkContext} />
         </div>
       ) : null}
-      <div className="mt-8 flex flex-col gap-4 rounded-2xl border border-[var(--theme-card-border)] bg-[var(--theme-muted-surface)]/30 p-5 sm:p-6">
-        <p className="text-sm font-semibold text-[var(--theme-heading-text)]">Start in the app</p>
-        <p className="text-sm text-[var(--theme-muted-text)]">
-          Signed-in practice keeps items, rationales, and filters locked to {pathway.shortName}. New here? Create an account, then
-          jump straight into items.
-        </p>
-        <div className="flex flex-wrap gap-3">
-          <Link
-            href={appQuestionsScoped}
-            className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-primary px-6 py-2.5 text-sm font-semibold text-primary-foreground"
-          >
-            Start items
-          </Link>
-          <Link
-            href="/app/questions"
-            className="inline-flex min-h-[44px] items-center justify-center rounded-full border border-border px-6 py-2.5 text-sm font-semibold hover:bg-card"
-          >
-            Open practice
-          </Link>
-          <Link href="/signup" className="inline-flex min-h-[44px] items-center justify-center rounded-full border border-primary/30 px-6 py-2.5 text-sm font-semibold text-primary hover:bg-primary/5">
-            Create account
-          </Link>
-        </div>
-        <div className="flex flex-wrap gap-x-4 gap-y-2 border-t border-[var(--theme-card-border)] pt-4 text-sm">
-          <Link href={lessonsHref} className="font-semibold text-primary hover:underline">
-            Clinical lessons for this exam
-          </Link>
-          <Link href={catHref} className="font-semibold text-primary hover:underline">
-            CAT prep for this pathway
-          </Link>
-          <Link href={HUB.practiceExams} className="font-semibold text-primary hover:underline">
-            Practice exams
-          </Link>
-          <Link href={overviewHref} className="font-semibold text-primary hover:underline">
-            Exam overview
-          </Link>
-        </div>
-      </div>
-    </div>
+
+      {/* 7. Bottom nav */}
+      <StudyBottomNav
+        relatedLinks={[
+          { label: "Clinical lessons", href: lessonsHref },
+          { label: "Adaptive CAT", href: catHref },
+          { label: "Practice exams", href: HUB.practiceExams },
+          { label: "Exam overview", href: overviewHref },
+        ]}
+      />
+    </main>
   );
 }

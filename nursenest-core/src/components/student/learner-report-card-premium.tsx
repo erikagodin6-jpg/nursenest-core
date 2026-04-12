@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import Link from "next/link";
 import type { ReportCardData } from "@/lib/learner/load-report-card-data";
 import { resolveStudyLoopCatHref } from "@/lib/exam-pathways/study-loop-cat-routing";
+import { TrackedStudyLoopCatLink } from "@/components/student/tracked-study-loop-cat-link";
 import { remediationCatPracticeHref, remediationTopicDrillHref } from "@/lib/learner/remediation-links";
 import { readinessBandLabel, readinessBandProgressFillClass } from "@/lib/learner/readiness-score";
 import type { LearnerMarketingT } from "@/lib/learner/learner-marketing-server";
@@ -597,9 +598,14 @@ export function LearnerReportCardPremium({
         <Link href="/app/questions" className="inline-flex rounded-full border border-border px-4 py-2.5 text-sm font-semibold hover:bg-muted/80">
           {t("learner.profile.quickLinks.questionBank")}
         </Link>
-        <Link href={catStartHref} className="inline-flex rounded-full border border-border px-4 py-2.5 text-sm font-semibold hover:bg-muted/80">
+        <TrackedStudyLoopCatLink
+          href={catStartHref}
+          sourceSurface="report_card_summary"
+          pathwayId={preferredPathwayId}
+          className="inline-flex rounded-full border border-border px-4 py-2.5 text-sm font-semibold hover:bg-muted/80"
+        >
           {t("learner.profile.quickLinks.catPractice")}
-        </Link>
+        </TrackedStudyLoopCatLink>
       </div>
     </div>
   );

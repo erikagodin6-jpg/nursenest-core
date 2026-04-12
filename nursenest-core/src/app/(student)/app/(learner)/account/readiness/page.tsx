@@ -12,7 +12,7 @@ import { ReadinessStrengthGrid } from "@/components/study/readiness-strength-gri
 import { ReadinessFocusPlan } from "@/components/study/readiness-focus-plan";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
-import { resolveStudySurfaceCatHref } from "@/lib/exam-pathways/pathway-cat-flow";
+import { resolveStudyLoopCatHref } from "@/lib/exam-pathways/study-loop-cat-routing";
 import { loadReadinessDashboardData } from "@/lib/learner/readiness-dashboard-data";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
@@ -128,9 +128,11 @@ export default async function AccountReadinessPage() {
     snapshot.pathways[0]?.pathwayId ??
     null;
 
-  const catHref = resolveStudySurfaceCatHref({
+  const catHref = resolveStudyLoopCatHref({
+    authState: "signed_in",
     pathwayId: preferredPathwayId,
     availablePathwayIds: snapshot.pathways.map((p) => p.pathwayId),
+    intent: "start",
   });
 
   // Overall accuracy from UserTopicStat aggregated via practice stats

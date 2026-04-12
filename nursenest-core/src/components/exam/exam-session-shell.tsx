@@ -48,15 +48,32 @@ export function ExamSessionTopBar({
 }
 
 /** Thin progress track — fill uses theme primary at restrained opacity. */
-export function ExamProgressBar({ current, total }: { current: number; total: number }) {
+export function ExamProgressBar({
+  current,
+  total,
+  answeredCount,
+}: {
+  current: number;
+  total: number;
+  /** Optional: how many questions have been answered/graded (for richer status). */
+  answeredCount?: number;
+}) {
   const pct = total > 0 ? Math.min(100, Math.max(0, (current / total) * 100)) : 0;
+  const remaining = total - (answeredCount ?? current - 1);
   return (
     <div className="nn-exam-progress border-b border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-4 py-2.5">
       <div className="nn-marketing-caption mb-1.5 flex justify-between gap-3 font-semibold uppercase tracking-wide text-[var(--semantic-text-muted)]">
         <span>Session progress</span>
-        <span className="shrink-0 tabular-nums text-[var(--semantic-text-primary)]">
-          {current} / {total}
-        </span>
+        <div className="flex items-center gap-2 shrink-0">
+          {answeredCount != null && answeredCount > 0 ? (
+            <span className="rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-2 py-0.5 text-[10px] font-semibold tabular-nums text-[var(--semantic-text-muted)]">
+              {remaining} left
+            </span>
+          ) : null}
+          <span className="tabular-nums text-[var(--semantic-text-primary)]">
+            {current} / {total}
+          </span>
+        </div>
       </div>
       <div
         className="nn-progress-track-semantic nn-progress-track-semantic--md"

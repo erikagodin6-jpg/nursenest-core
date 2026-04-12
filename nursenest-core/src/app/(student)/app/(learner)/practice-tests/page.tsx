@@ -11,7 +11,7 @@ import {
   listPathwaysCompatibleWithSubscription,
   pathwayAllowsCatAdaptiveStart,
 } from "@/lib/exam-pathways/pathway-entitlements";
-import { resolveStudySurfaceCatHref } from "@/lib/exam-pathways/pathway-cat-flow";
+import { resolveStudyLoopCatHref } from "@/lib/exam-pathways/study-loop-cat-routing";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 import { LearnerStudyQuickLinksCard } from "@/components/student/learner-study-quick-links-card";
 import Link from "next/link";
@@ -68,9 +68,11 @@ export default async function PracticeTestsPage() {
     examFamily: p.examFamily,
   }));
   const catEligiblePathwayIds = compatiblePathways.filter(pathwayAllowsCatAdaptiveStart).map((p) => p.id);
-  const catHref = resolveStudySurfaceCatHref({
+  const catHref = resolveStudyLoopCatHref({
+    authState: "signed_in",
     pathwayId: defaultPathwayId,
     availablePathwayIds: catEligiblePathwayIds,
+    intent: "start",
   });
 
   return (

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { SuccessLeaf } from "@/components/ui/success-leaf";
 
 /**
  * One-time subtle acknowledgment when today's goal completes (sessionStorage per UTC day).
@@ -33,7 +34,8 @@ export function LearnerDailyGoalCelebrationClient({
   if (!visible) return null;
 
   return (
-    <p className="text-xs font-medium text-[var(--semantic-success-contrast)]" role="status" aria-live="polite">
+    <p className="flex items-center gap-1.5 text-xs font-medium text-[var(--semantic-success-contrast)]" role="status" aria-live="polite">
+      <SuccessLeaf show={visible} size={16} />
       {message}
     </p>
   );

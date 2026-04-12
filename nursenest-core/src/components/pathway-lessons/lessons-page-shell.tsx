@@ -1,21 +1,37 @@
 import type { ReactNode } from "react";
+import { PathwayHero } from "@/components/study/pathway-hero";
+
+type CtaButton = {
+  label: string;
+  href: string;
+  variant: "primary" | "outline" | "ghost";
+};
 
 type Props = {
   title: string;
   subtitle: string;
   toolbar?: ReactNode;
+  /** Optional CTA group rendered in the hero (e.g. Start / Browse / Sign up). */
+  ctas?: CtaButton[];
+  /** Optional back link shown above the title. */
+  backLink?: { label: string; href: string };
   children: ReactNode;
 };
 
-export function LessonsPageShell({ title, subtitle, toolbar, children }: Props) {
+/**
+ * Page shell for lessons hub pages.
+ * Delegates to the shared PathwayHero so the lessons and questions hubs stay visually unified.
+ */
+export function LessonsPageShell({ title, subtitle, toolbar, ctas, backLink, children }: Props) {
   return (
     <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-      <header className="rounded-[1.75rem] border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5 shadow-[var(--semantic-shadow-soft)] sm:p-6">
-        <h1 className="text-2xl font-semibold tracking-tight text-[var(--theme-heading-text)] sm:text-4xl">{title}</h1>
-        <p className="mt-2 max-w-3xl text-sm leading-6 text-[var(--theme-muted-text)]">{subtitle}</p>
-        {toolbar}
-      </header>
-
+      <PathwayHero
+        title={title}
+        subtitle={subtitle}
+        toolbar={toolbar}
+        ctas={ctas}
+        backLink={backLink}
+      />
       <div className="mt-8">{children}</div>
     </main>
   );

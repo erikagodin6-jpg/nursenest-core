@@ -11,7 +11,7 @@ import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlemen
 import { loadReportCardData } from "@/lib/learner/load-report-card-data";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
-import { resolveStudySurfaceCatHref } from "@/lib/exam-pathways/pathway-cat-flow";
+import { resolveStudyLoopCatHref } from "@/lib/exam-pathways/study-loop-cat-routing";
 import { appAccountBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { emptyStateCopy } from "@/lib/ui/empty-state-copy";
@@ -116,9 +116,11 @@ export default async function AccountReportCardPage() {
     undefined;
   const preferredPathwayId =
     report.pathways.find((p) => p.lessonsTotal > 0)?.pathwayId ?? report.pathways[0]?.pathwayId ?? null;
-  const catHref = resolveStudySurfaceCatHref({
+  const catHref = resolveStudyLoopCatHref({
+    authState: "signed_in",
     pathwayId: preferredPathwayId,
     availablePathwayIds: report.pathways.map((p) => p.pathwayId),
+    intent: "start",
   });
 
   return (

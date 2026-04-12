@@ -61,6 +61,7 @@ export async function PathwayLessonDetailDeferred({
         topicSlug={lesson.topicSlug}
         relatedLessons={relatedDisplay}
         currentSlug={lesson.slug}
+        catAuthState="public"
       />
     </>
   );

@@ -11,6 +11,7 @@ import {
   Sparkles,
   Target,
 } from "lucide-react";
+import { TrackedStudyLoopCatLink } from "@/components/student/tracked-study-loop-cat-link";
 import type { LearnerMarketingT } from "@/lib/learner/learner-marketing-server";
 
 /**
@@ -65,18 +66,34 @@ export function LearnerStudyQuickLinksCard({
       <ul className="mt-5 grid list-none gap-3 px-6 pb-6 sm:grid-cols-2 lg:grid-cols-3">
         {studyLinks.map(({ href, labelKey, icon: Icon, accent }) => (
           <li key={href}>
-            <Link
-              href={href}
-              data-study-accent={accent}
-              className="nn-study-link-tile group flex min-h-[3.25rem] items-center gap-3 px-3 py-2.5"
-            >
-              <span className="nn-study-link-icon-wrap" aria-hidden>
-                <Icon className="h-5 w-5" strokeWidth={2} />
-              </span>
-              <span className="min-w-0 break-words text-sm font-semibold leading-snug text-[var(--semantic-text-primary)]">
-                {t(labelKey)}
-              </span>
-            </Link>
+            {accent === "cat" ? (
+              <TrackedStudyLoopCatLink
+                href={href}
+                sourceSurface="study_quick_links"
+                className="nn-study-link-tile group flex min-h-[3.25rem] items-center gap-3 px-3 py-2.5"
+                studyAccent={accent}
+              >
+                <span className="nn-study-link-icon-wrap" aria-hidden>
+                  <Icon className="h-5 w-5" strokeWidth={2} />
+                </span>
+                <span className="min-w-0 break-words text-sm font-semibold leading-snug text-[var(--semantic-text-primary)]">
+                  {t(labelKey)}
+                </span>
+              </TrackedStudyLoopCatLink>
+            ) : (
+              <Link
+                href={href}
+                data-study-accent={accent}
+                className="nn-study-link-tile group flex min-h-[3.25rem] items-center gap-3 px-3 py-2.5"
+              >
+                <span className="nn-study-link-icon-wrap" aria-hidden>
+                  <Icon className="h-5 w-5" strokeWidth={2} />
+                </span>
+                <span className="min-w-0 break-words text-sm font-semibold leading-snug text-[var(--semantic-text-primary)]">
+                  {t(labelKey)}
+                </span>
+              </Link>
+            )}
           </li>
         ))}
       </ul>

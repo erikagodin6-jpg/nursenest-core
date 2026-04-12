@@ -10,7 +10,7 @@ import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlemen
 import { maxSafeOffsetPage } from "@/lib/api/api-pagination-limits";
 import { prisma } from "@/lib/db";
 import { withDatabaseFallback } from "@/lib/db/safe-database";
-import { resolveStudySurfaceCatHref } from "@/lib/exam-pathways/pathway-cat-flow";
+import { resolveStudyLoopCatHref } from "@/lib/exam-pathways/study-loop-cat-routing";
 import {
   pathwayLessonsAppListWhere,
   pathwayLessonsAppListWhereWithTopicFilter,
@@ -136,9 +136,11 @@ export default async function LessonsPage({ searchParams }: Props) {
   );
   const learnerPath = learnerPathRow?.learnerPath ?? null;
   const visiblePathwayIds = visiblePathwayIdsForAppLessons(entitlement, learnerPath);
-  const catHref = resolveStudySurfaceCatHref({
+  const catHref = resolveStudyLoopCatHref({
+    authState: "signed_in",
     pathwayId: pathwayIdFilter ?? learnerPath,
     availablePathwayIds: visiblePathwayIds,
+    intent: "start",
   });
 
   const lessonsBlockFromDb = await withDatabaseFallback(async () => {

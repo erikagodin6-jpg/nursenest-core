@@ -7,7 +7,8 @@ import {
   remediationLessonsTopicHref,
   remediationTopicDrillHref,
 } from "@/lib/learner/remediation-links";
-import { appPathwayCatSessionStartPath } from "@/lib/exam-pathways/pathway-cat-flow";
+import { TrackedStudyLoopCatLink } from "@/components/student/tracked-study-loop-cat-link";
+import { resolveStudyLoopCatHref } from "@/lib/exam-pathways/study-loop-cat-routing";
 import { semanticFillClassForAccuracyPct } from "@/lib/ui/semantic-progress-fill";
 import type { BenchmarkServiceResult } from "@/lib/study/benchmarking/benchmark-service";
 import { PracticeBenchmarkBlock } from "@/components/study/practice-benchmark-block";
@@ -63,7 +64,7 @@ export function PracticeTestResultsStatic({
 
   return (
     <div className="space-y-6">
-      <div className="overflow-hidden rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-6 shadow-[var(--shadow-card)]">
+      <div className="nn-results-header overflow-hidden rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-6 shadow-[var(--shadow-card)]">
         <p className="text-[10px] font-bold uppercase tracking-widest text-[var(--semantic-text-muted)]">Results</p>
         <h2 className="mt-1 text-xl font-bold text-[var(--semantic-text-primary)]">
           {title?.trim() || (cat ? "Adaptive (CAT) practice" : "Practice test")}
@@ -205,19 +206,27 @@ export function PracticeTestResultsStatic({
             {weakFollowUpCopy.suggestedFollowUp}
           </p>
           <div className="mt-2 flex flex-wrap gap-2">
-            <Link
+            <TrackedStudyLoopCatLink
               href={remediationCatPracticeHref(results.weakAreas[0], config?.pathwayId ?? null)}
+              sourceSurface="practice_test_results_retest_weak"
+              pathwayId={config?.pathwayId ?? null}
               className="inline-flex rounded-full bg-role-cta px-4 py-2 text-xs font-semibold text-role-cta-foreground shadow-sm hover:opacity-95"
             >
               {weakFollowUpCopy.retestWeak}
-            </Link>
+            </TrackedStudyLoopCatLink>
             {config?.pathwayId ? (
-              <Link
-                href={appPathwayCatSessionStartPath(config.pathwayId)}
+              <TrackedStudyLoopCatLink
+                href={resolveStudyLoopCatHref({
+                  authState: "signed_in",
+                  pathwayId: config.pathwayId,
+                  intent: "start",
+                })}
+                sourceSurface="practice_test_results_same_pathway"
+                pathwayId={config.pathwayId}
                 className="inline-flex rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-4 py-2 text-xs font-semibold text-[var(--semantic-text-primary)] hover:bg-[var(--semantic-panel-muted)]"
               >
                 {weakFollowUpCopy.adaptiveSamePathway}
-              </Link>
+              </TrackedStudyLoopCatLink>
             ) : null}
           </div>
         </div>

@@ -5,6 +5,7 @@ import { usePreNursingT } from "@/content/pre-nursing/pre-nursing-i18n";
 import { fisherYatesShuffle } from "@shared/shuffle";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { SuccessLeaf } from "@/components/ui/success-leaf";
 import {
   CheckCircle2,
   XCircle,
@@ -413,7 +414,10 @@ export function SelfCheckQuiz({
               {percentage}%
             </span>
           </div>
-          <h3 className="text-xl font-bold text-heading mb-2">{title}: Complete</h3>
+          <div className="mx-auto mb-2 flex items-center justify-center gap-2">
+            <SuccessLeaf show={completed} size={22} />
+            <h3 className="text-xl font-bold text-heading">{title}: Complete</h3>
+          </div>
           <p className="text-foreground mb-1">
             {score}/{questions.length} correct
           </p>

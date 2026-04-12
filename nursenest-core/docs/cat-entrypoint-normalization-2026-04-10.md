@@ -53,7 +53,7 @@ Playwright spec: `e2e/cat-entrypoints.spec.ts`
 - Sign-in callback returns to same CAT path for US RN, CA RPN, and US FNP.
 - Blocked waitlist case (`/canada/np/cnple/cat`) shows unavailable state and keeps lessons/question bank links.
 - Allied pathway CAT page (`/us/allied/allied-health/cat`) stays pathway-scoped and validates callback when sign-in CTA is shown.
-- Tampered invalid pathway route (`/us/rpn/rex-pn/cat`) returns 404.
+- Tampered invalid pathway route (`/us/rpn/rex-pn/cat`) renders safe not-found recovery and does not expose a CAT sign-in callback.
 
 Playwright spec: `e2e/lesson-flows.spec.ts`
 

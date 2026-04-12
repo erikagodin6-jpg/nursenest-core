@@ -246,6 +246,8 @@ export function QuestionBankPracticeClient({
   const [highlightOn, setHighlightOn] = useState<Record<string, boolean>>({});
   /** Session-local mark for review (exam-style bank); not persisted server-side. */
   const [markedForReview, setMarkedForReview] = useState<Record<string, boolean>>({});
+  /** Per-question confidence self-rating (low/medium/high) — UI-only, analytics only. */
+  const [confidence, setConfidence] = useState<Record<string, "low" | "medium" | "high">>({});
   const feedbackAnchorRef = useRef<HTMLDivElement | null>(null);
   const feedbackScrollMarkerRef = useRef<string | null>(null);
 
@@ -291,6 +293,12 @@ export function QuestionBankPracticeClient({
     setStrikeOut({});
     setHighlightOn({});
   }, [current?.id]);
+
+  /** Reset confidence selection when moving to a new question that hasn't been answered yet. */
+  useEffect(() => {
+    const id = current?.id;
+    if (!id || graded[id]) return;
+  }, [current?.id, graded]);
 
   useEffect(() => {
     feedbackScrollMarkerRef.current = null;
@@ -823,7 +831,40 @@ export function QuestionBankPracticeClient({
   }
 
   if (phase === "loading") {
-    return <p className="text-sm text-muted">{t("learner.qbank.loading")}</p>;
+    return (
+      <div className="mt-6 nn-qbank-skeleton" aria-busy="true" aria-label={t("learner.qbank.loading")}>
+        {/* Top bar skeleton */}
+        <div className="border-b border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-brand)_5%,var(--semantic-surface))] px-4 py-3">
+          <div className="flex justify-between gap-3">
+            <div className="space-y-2 flex-1">
+              <div className="nn-qbank-skeleton__bar h-3 w-24 rounded" />
+              <div className="nn-qbank-skeleton__bar h-4 w-40 rounded" />
+            </div>
+            <div className="nn-qbank-skeleton__bar h-3 w-16 rounded self-center" />
+          </div>
+        </div>
+        {/* Progress bar skeleton */}
+        <div className="border-b border-[var(--semantic-border-soft)] px-4 py-2.5">
+          <div className="nn-qbank-skeleton__bar h-2 w-full rounded-full" />
+        </div>
+        {/* Content skeleton */}
+        <div className="p-5 space-y-6">
+          {/* Stem */}
+          <div className="space-y-2.5">
+            <div className="nn-qbank-skeleton__bar h-4 w-full rounded" />
+            <div className="nn-qbank-skeleton__bar h-4 w-11/12 rounded" />
+            <div className="nn-qbank-skeleton__bar h-4 w-9/12 rounded" />
+            <div className="nn-qbank-skeleton__bar h-4 w-10/12 rounded" />
+          </div>
+          {/* Options */}
+          <div className="space-y-3">
+            {[0, 1, 2, 3].map((i) => (
+              <div key={i} className="nn-qbank-skeleton__bar h-14 w-full rounded-xl" />
+            ))}
+          </div>
+        </div>
+      </div>
+    );
   }
 
   if (phase === "error") {
@@ -1130,26 +1171,49 @@ export function QuestionBankPracticeClient({
         <ExamSessionShell neutralPalette className="overflow-hidden shadow-md">
           <ExamSessionTopBar
             left={
-              <div>
+              <div className="space-y-1">
                 <p className="nn-marketing-caption font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">
                   {t("learner.qbank.ui.questionOf", { n: idx + 1, total })}
                 </p>
                 {current.topic ? (
-                  <p className="mt-1 line-clamp-2 nn-marketing-body-sm font-medium text-[var(--theme-heading-text)]">
+                  <p className="line-clamp-1 nn-marketing-body-sm font-medium text-[var(--theme-heading-text)]">
                     {current.topic}
                   </p>
                 ) : null}
               </div>
             }
             center={
-              <span className="nn-marketing-caption font-semibold text-[var(--theme-muted-text)]">
-                {sortForApi === "random" ? t("learner.qbank.ui.sortRandom") : t("learner.qbank.ui.sortRecent")}
-              </span>
+              sessionTotal > 0 ? (
+                <span
+                  className={`inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 nn-marketing-caption font-semibold tabular-nums ${
+                    sessionTotal > 0 && sessionRight / sessionTotal >= 0.8
+                      ? "border-[color-mix(in_srgb,var(--semantic-success)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-success)_8%,var(--semantic-surface))] text-[var(--semantic-success-contrast,var(--semantic-success))]"
+                      : sessionTotal > 0 && sessionRight / sessionTotal >= 0.6
+                        ? "border-[color-mix(in_srgb,var(--semantic-warning)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_8%,var(--semantic-surface))] text-[var(--semantic-warning-contrast)]"
+                        : "border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] text-[var(--semantic-text-muted)]"
+                  }`}
+                  title={`${sessionRight} of ${sessionTotal} correct so far`}
+                >
+                  <span aria-hidden>✓</span>
+                  {sessionRight}/{sessionTotal}
+                </span>
+              ) : (
+                <span className="nn-marketing-caption font-semibold text-[var(--theme-muted-text)]">
+                  {sortForApi === "random" ? t("learner.qbank.ui.sortRandom") : t("learner.qbank.ui.sortRecent")}
+                </span>
+              )
             }
             right={
-              <span className="nn-marketing-caption font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">
-                {current.questionType}
-              </span>
+              <div className="flex flex-col items-end gap-1">
+                <span className="nn-marketing-caption font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">
+                  {current.questionType}
+                </span>
+                {markedForReview[current.id] ? (
+                  <span className="nn-marketing-caption font-semibold text-[var(--semantic-warning-contrast)] uppercase tracking-wide">
+                    Flagged
+                  </span>
+                ) : null}
+              </div>
             }
           />
           <ExamProgressBar current={idx + 1} total={total} />
@@ -1288,46 +1352,77 @@ export function QuestionBankPracticeClient({
             </div>
 
             {!g ? (
-              <div className="nn-question-nav-actions !flex-col !items-stretch sm:!flex-row sm:!items-center">
-                {examShell ? (
+              <div className="space-y-4">
+                {/* Confidence rating — support tool, UI only */}
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="text-xs font-semibold uppercase tracking-wide text-[var(--semantic-text-muted)] shrink-0">
+                    Confidence
+                  </span>
+                  <div className="nn-confidence-row">
+                    {(["low", "medium", "high"] as const).map((level) => {
+                      const sel = confidence[current.id] === level;
+                      const labels: Record<string, string> = { low: "Not sure", medium: "Probably", high: "Confident" };
+                      return (
+                        <button
+                          key={level}
+                          type="button"
+                          aria-pressed={sel}
+                          onClick={() =>
+                            setConfidence((prev) => ({
+                              ...prev,
+                              [current.id]: sel ? (undefined as unknown as "low") : level,
+                            }))
+                          }
+                          className={`nn-confidence-chip nn-confidence-chip--${level} ${sel ? "nn-confidence-chip--selected" : ""}`}
+                        >
+                          {labels[level]}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                <div className="nn-question-nav-actions !flex-col !items-stretch sm:!flex-row sm:!items-center">
+                  {examShell ? (
+                    <button
+                      type="button"
+                      aria-pressed={Boolean(markedForReview[current.id])}
+                      className={`order-first inline-flex min-h-[2.75rem] shrink-0 items-center rounded-full border px-4 py-2 text-xs font-semibold uppercase tracking-wide transition sm:order-none ${
+                        markedForReview[current.id]
+                          ? "border-[color-mix(in_srgb,var(--semantic-warning)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_8%,var(--semantic-surface))] text-[var(--semantic-warning-contrast)]"
+                          : "border-[var(--semantic-border-soft)] text-[var(--semantic-text-muted)] hover:bg-[var(--semantic-panel-muted)]"
+                      }`}
+                      onClick={() => setMarkedForReview((f) => ({ ...f, [current.id]: !f[current.id] }))}
+                    >
+                      {markedForReview[current.id] ? t("learner.qbank.examUi.markedReview") : t("learner.qbank.examUi.markReview")}
+                    </button>
+                  ) : null}
                   <button
                     type="button"
-                    aria-pressed={Boolean(markedForReview[current.id])}
-                    className={`order-first inline-flex min-h-[2.75rem] shrink-0 items-center rounded-full border px-4 py-2 text-xs font-semibold uppercase tracking-wide transition sm:order-none ${
-                      markedForReview[current.id]
-                        ? "border-[color-mix(in_srgb,var(--semantic-brand)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_8%,var(--semantic-surface))] text-[var(--semantic-text-primary)]"
-                        : "border-[var(--semantic-border-soft)] text-[var(--semantic-text-muted)] hover:bg-[var(--semantic-panel-muted)]"
-                    }`}
-                    onClick={() => setMarkedForReview((f) => ({ ...f, [current.id]: !f[current.id] }))}
+                    disabled={grading || answer === null || (Array.isArray(answer) && answer.length === 0)}
+                    className="nn-btn-primary inline-flex min-h-[3rem] w-full items-center justify-center rounded-full px-8 text-base font-semibold shadow-none disabled:opacity-50 sm:w-auto sm:px-10"
+                    onClick={() => void checkAnswer()}
                   >
-                    {markedForReview[current.id] ? t("learner.qbank.examUi.markedReview") : t("learner.qbank.examUi.markReview")}
+                    {grading ? t("learner.qbank.ui.checking") : t("learner.qbank.ui.checkAnswer")}
                   </button>
-                ) : null}
-                <button
-                  type="button"
-                  disabled={grading || answer === null || (Array.isArray(answer) && answer.length === 0)}
-                  className="nn-btn-primary inline-flex min-h-[3rem] w-full items-center justify-center rounded-full px-8 text-base font-semibold shadow-none disabled:opacity-50 sm:w-auto sm:px-10"
-                  onClick={() => void checkAnswer()}
-                >
-                  {grading ? t("learner.qbank.ui.checking") : t("learner.qbank.ui.checkAnswer")}
-                </button>
-                <div className="flex w-full gap-2 sm:ml-auto sm:w-auto">
-                  <button
-                    type="button"
-                    disabled={idx === 0}
-                    className="nn-btn-secondary min-h-[3rem] flex-1 rounded-full px-4 text-sm font-semibold disabled:opacity-40 sm:flex-none sm:px-5"
-                    onClick={prev}
-                  >
-                    {t("learner.qbank.ui.previous")}
-                  </button>
-                  <button
-                    type="button"
-                    disabled={idx >= total - 1}
-                    className="nn-btn-secondary min-h-[3rem] flex-1 rounded-full px-4 text-sm font-semibold disabled:opacity-40 sm:flex-none sm:px-5"
-                    onClick={next}
-                  >
-                    {t("learner.qbank.ui.skipForNow")}
-                  </button>
+                  <div className="flex w-full gap-2 sm:ml-auto sm:w-auto">
+                    <button
+                      type="button"
+                      disabled={idx === 0}
+                      className="nn-btn-secondary min-h-[3rem] flex-1 rounded-full px-4 text-sm font-semibold disabled:opacity-40 sm:flex-none sm:px-5"
+                      onClick={prev}
+                    >
+                      {t("learner.qbank.ui.previous")}
+                    </button>
+                    <button
+                      type="button"
+                      disabled={idx >= total - 1}
+                      className="nn-btn-secondary min-h-[3rem] flex-1 rounded-full px-4 text-sm font-semibold disabled:opacity-40 sm:flex-none sm:px-5"
+                      onClick={next}
+                    >
+                      {t("learner.qbank.ui.skipForNow")}
+                    </button>
+                  </div>
                 </div>
               </div>
             ) : (

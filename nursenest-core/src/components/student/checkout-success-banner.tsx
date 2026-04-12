@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
+import { SuccessLeaf } from "@/components/ui/success-leaf";
 
 function Inner() {
   const sp = useSearchParams();
@@ -41,7 +42,10 @@ function Inner() {
 
   return (
     <div className="mb-6 rounded-2xl border border-[color-mix(in_srgb,var(--semantic-success)_35%,var(--semantic-border-soft))] bg-[var(--semantic-success-soft)] px-4 py-3 text-sm text-[var(--semantic-success-contrast)] shadow-[var(--semantic-shadow-soft)]">
-      <p className="font-semibold">You are in. Welcome to full access.</p>
+      <p className="flex items-center gap-2 font-semibold">
+        <SuccessLeaf show={open} size={20} />
+        You are in. Welcome to full access.
+      </p>
       <p className="mt-1 text-[color-mix(in_srgb,var(--semantic-success-contrast)_92%,var(--semantic-text-primary))]">
         Billing confirmed. Jump into your question bank or start a practice exam while your session refreshes entitlements.
       </p>

@@ -66,10 +66,7 @@ export function LessonSectionCard({
         <ChipIcon className="nn-icon-sm" aria-hidden="true" />
         {chipLabel}
       </span>
-      <h2
-        className="nn-marketing-h3 mt-3 tracking-tight"
-        style={{ color: "var(--lsc-contrast, var(--palette-heading))", fontWeight: 700 }}
-      >
+      <h2 className="nn-marketing-h3 mt-3 tracking-tight text-[var(--theme-heading-text)]">
         {heading?.trim() || "Section"}
       </h2>
       <div className="mt-5">{children}</div>

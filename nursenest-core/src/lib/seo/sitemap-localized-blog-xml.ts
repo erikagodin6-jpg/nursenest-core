@@ -2,7 +2,7 @@
  * Localized blog sitemap: published LocalizedBlogArticle URLs.
  *
  * Complements `sitemap-blog-xml.ts` (canonical blog posts) with
- * localized variant URLs following the /[locale]/[region]/[profession]/[exam]/blog/[slug] pattern.
+ * localized variant URLs following the /:locale/:region/:profession/:exam/blog/:slug canonical pattern.
  */
 
 import "server-only";

@@ -8,6 +8,7 @@ import { LearnerAccountToolGrid } from "@/components/student/learner-account-too
 import { LearnerProfileAccountActions } from "@/components/student/learner-profile-account-actions";
 import { AdaptiveStudyOverview } from "@/components/student/adaptive-study-overview";
 import { LockedStudyNextPreview } from "@/components/student/locked-study-next-preview";
+import { TrackedStudyLoopCatLink } from "@/components/student/tracked-study-loop-cat-link";
 import { PremiumEmptyState } from "@/components/ui/premium-empty-state";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
@@ -541,8 +542,10 @@ export default async function LearnerAccountOverviewPage() {
             >
               {t("learner.profile.quickLinks.flashcards")}
             </Link>
-            <Link
+            <TrackedStudyLoopCatLink
               href={catStartHref}
+              sourceSurface="learner_overview_quick_link"
+              pathwayId={preferredPathwayId}
               className={`nn-premium-action-chip rounded-full border bg-card px-4 py-2 text-sm font-semibold hover:bg-muted/80 ${
                 quickLinkEmphasisTarget === "cat"
                   ? "border-[color-mix(in_srgb,var(--semantic-brand)_34%,var(--semantic-border-soft))]"
@@ -550,7 +553,7 @@ export default async function LearnerAccountOverviewPage() {
               }`}
             >
               {t("learner.profile.quickLinks.catPractice")}
-            </Link>
+            </TrackedStudyLoopCatLink>
             <Link
               href="/app/study-plan"
               className="nn-premium-action-chip rounded-full border border-role-cta/30 bg-role-cta-soft px-4 py-2 text-sm font-semibold text-role-cta-on-soft"
