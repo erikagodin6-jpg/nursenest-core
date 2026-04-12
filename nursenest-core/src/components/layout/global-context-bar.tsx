@@ -64,7 +64,13 @@ export function GlobalContextBar({
   const hasMultipleExams = exams.length > 1;
 
   return (
-    <div className="nn-context-bar border-b border-[var(--border-subtle)] bg-[var(--surface)]">
+    <div
+      className="nn-context-bar border-b"
+      style={{
+        background: "var(--nn-nav-bg, var(--surface))",
+        borderColor: "var(--nn-nav-border, var(--border-subtle))",
+      }}
+    >
       <div className="nn-section-shell flex h-9 items-center gap-1.5 overflow-x-auto scrollbar-none sm:gap-2">
         {/* Country pill */}
         <ContextPill
@@ -142,11 +148,11 @@ function ContextPill({
   const baseClass =
     "inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-semibold tracking-wide transition-colors duration-100";
   const interactiveClass = isClickable
-    ? "cursor-pointer hover:bg-[var(--accent-surface-a)] hover:text-[var(--text-accent)] focus-visible:outline-2 focus-visible:outline-[var(--ring)]"
+    ? "cursor-pointer hover:bg-white/20 focus-visible:outline-2 focus-visible:outline-[var(--ring)]"
     : "cursor-default";
   const colorClass = active
-    ? "bg-[var(--surface-strong)] text-[var(--theme-heading-text)] border border-[var(--border-subtle)]"
-    : "text-[var(--theme-muted-text)]";
+    ? "bg-white/15 text-[var(--nn-nav-fg,white)] border border-white/25"
+    : "text-[var(--nn-nav-fg,white)] opacity-70";
 
   if (isClickable) {
     return (
@@ -170,6 +176,6 @@ function ContextPill({
 
 function ContextDivider() {
   return (
-    <span className="h-3 w-px shrink-0 bg-[var(--border-subtle)]" aria-hidden />
+    <span className="h-3 w-px shrink-0 bg-white/25" aria-hidden />
   );
 }

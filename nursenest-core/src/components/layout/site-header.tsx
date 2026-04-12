@@ -503,8 +503,8 @@ export function SiteHeader() {
     <div style={navChromeVars} className="sticky top-0 z-50 nn-header-animate-in" ref={headerRef}>
       <MarketingHeaderUtilityStrip variant="dark-bar" />
       <header
-        style={navChromeStyle}
-        className="w-full border-b"
+        style={isLightTheme ? undefined : navChromeStyle}
+        className={`w-full border-b${isLightTheme ? " nn-header-logo-row" : ""}`}
       >
         <div className="nn-section-shell grid h-16 grid-cols-[auto,1fr,auto] items-center gap-4 sm:gap-6">
           <Link
@@ -795,8 +795,6 @@ export function SiteHeader() {
           </div>
         ) : null}
       </header>
-
-      {isLightTheme && <div className="nn-header-accent-bar" aria-hidden="true" />}
 
       {/* Context chip row — shows current country, language, profession, exam */}
       <GlobalContextBar
