@@ -771,9 +771,19 @@ a {
   text-decoration: none;
 }
 
-/* Header wordmark: inside `.nn-brand-header-logo-slot`, respect slot bounds so every theme maps into the same visual frame. */
+/*
+ * Header wordmark slot.
+ *
+ * background-color: The slot inherits the correct surface for each header type:
+ *   - Light-theme headers: --header-background is set to the light surface by .nn-header-logo-row
+ *     (inherits via cascade → slot background is the light surface colour).
+ *   - Coloured-theme headers (ocean, blush, etc.): --header-background is NOT set on the <header>
+ *     element, so the fallback --nn-nav-bg (the nav chrome colour) is used instead.
+ * This ensures transparent logo pixels always reveal the correct header background colour
+ * rather than showing white or a mismatched tint.
+ */
 .nn-brand-header-logo-slot {
-  background-color: transparent !important;
+  background-color: var(--header-background, var(--nn-nav-bg, transparent)) !important;
   background-image: none !important;
   border: 0;
   box-shadow: none;

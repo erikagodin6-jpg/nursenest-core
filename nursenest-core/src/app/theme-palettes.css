@@ -130,14 +130,14 @@
 }
 
 [data-theme="pastel-blush"] {
-  --theme-primary: #f5838e;
+  --theme-primary: #F0A8B8;
   --theme-primary-foreground: #ffffff;
-  --theme-secondary: #fff0f2;
-  --theme-secondary-foreground: #d4505c;
-  --theme-accent: #ffe8eb;
-  --theme-accent-foreground: #f5838e;
-  --theme-border: #ffc4ca;
-  --theme-ring: #f5838e;
+  --theme-secondary: #fff3f6;
+  --theme-secondary-foreground: #b86070;
+  --theme-accent: #fce8ef;
+  --theme-accent-foreground: #F0A8B8;
+  --theme-border: #f7c8d4;
+  --theme-ring: #F0A8B8;
 }
 
 [data-theme="pastel-lavender"] {
@@ -241,14 +241,14 @@
 }
 
 [data-theme="coral"] {
-  --theme-primary: #ff6b6b;
+  --theme-primary: #F4A0A0;
   --theme-primary-foreground: #ffffff;
   --theme-secondary: #fff5f5;
-  --theme-secondary-foreground: #ff6b6b;
-  --theme-accent: #ffe3e3;
-  --theme-accent-foreground: #ff6b6b;
-  --theme-border: #ffc9c9;
-  --theme-ring: #ff6b6b;
+  --theme-secondary-foreground: #c06868;
+  --theme-accent: #fde8e8;
+  --theme-accent-foreground: #F4A0A0;
+  --theme-border: #f8cece;
+  --theme-ring: #F4A0A0;
 }
 
 [data-theme="indigo"] {
@@ -713,20 +713,20 @@
 /* ── Named themes (production) ────────────────────────────────────── */
 
 [data-theme="blueberry-sherbet"] {
-  --theme-primary: #3852B4;
+  --theme-primary: #5068CC;
   --theme-primary-foreground: #ffffff;
-  --theme-secondary: #5E7AC4;
-  --theme-secondary-foreground: #3852B4;
+  --theme-secondary: #7090D4;
+  --theme-secondary-foreground: #3A52A0;
   --theme-accent: #F3BE7A;
-  --theme-accent-foreground: #3852B4;
-  --theme-border: #D6DCFF;
-  --theme-ring: #3852B4;
-  --theme-page-bg: #F8F9FF;
-  --theme-heading-text: #1F2A44;
-  --theme-body-text: #5A678C;
-  --theme-muted-text: #5A678C;
+  --theme-accent-foreground: #3A52A0;
+  --theme-border: #C8D4F8;
+  --theme-ring: #5068CC;
+  --theme-page-bg: #F6F8FF;
+  --theme-heading-text: #30405E;
+  --theme-body-text: #6070A0;
+  --theme-muted-text: #6070A0;
   --theme-card-bg: #ffffff;
-  --theme-topbar-bg: #2A3E8C;
+  --theme-topbar-bg: #3A50A4;
   --theme-topbar-text: #ffffff;
 
   --lesson-summary: #E7ECFF;
@@ -753,18 +753,18 @@
 }
 
 [data-theme="strawberry-cream"] {
-  --theme-primary: #EA7B7B;
+  --theme-primary: #ECA0A0;
   --theme-primary-foreground: #ffffff;
-  --theme-secondary: #C86B6B;
-  --theme-secondary-foreground: #5A2A2A;
+  --theme-secondary: #CA9090;
+  --theme-secondary-foreground: #5A3838;
   --theme-accent: #FFEAD3;
-  --theme-accent-foreground: #C86B6B;
-  --theme-border: #FFD1D1;
-  --theme-ring: #EA7B7B;
-  --theme-page-bg: #FFF6F6;
-  --theme-heading-text: #5A2A2A;
-  --theme-body-text: #8C4A4A;
-  --theme-muted-text: #8C4A4A;
+  --theme-accent-foreground: #AA6060;
+  --theme-border: #F8CECE;
+  --theme-ring: #ECA0A0;
+  --theme-page-bg: #FFF8F8;
+  --theme-heading-text: #644040;
+  --theme-body-text: #8A6060;
+  --theme-muted-text: #8A6060;
   --theme-card-bg: #ffffff;
   --theme-topbar-bg: #B84063;
   --theme-topbar-text: #ffffff;
@@ -884,9 +884,9 @@
   --theme-border: #EACFD6;
   --theme-ring: #C4788A;
   --theme-page-bg: #FDF8F9;
-  --theme-heading-text: #4A2230;
-  --theme-body-text: #7A4E5A;
-  --theme-muted-text: #7A4E5A;
+  --theme-heading-text: #604A58;
+  --theme-body-text: #7A5A66;
+  --theme-muted-text: #7A5A66;
   --theme-card-bg: #ffffff;
   --theme-topbar-bg: #8E4A5E;
   --theme-topbar-text: #ffffff;
@@ -916,20 +916,20 @@
 
 /* ── 8. Golden Hour ── */
 [data-theme="golden-hour"] {
-  --theme-primary: #B8860B;
+  --theme-primary: #C49A18;
   --theme-primary-foreground: #ffffff;
-  --theme-secondary: #D4A84B;
-  --theme-secondary-foreground: #B8860B;
+  --theme-secondary: #D4B065;
+  --theme-secondary-foreground: #8A6810;
   --theme-accent: #FAE6B8;
-  --theme-accent-foreground: #B8860B;
-  --theme-border: #E8DCC0;
-  --theme-ring: #B8860B;
-  --theme-page-bg: #FDFBF5;
-  --theme-heading-text: #3D2E0A;
-  --theme-body-text: #7A6530;
-  --theme-muted-text: #7A6530;
+  --theme-accent-foreground: #8A6810;
+  --theme-border: #EAD8B0;
+  --theme-ring: #C49A18;
+  --theme-page-bg: #FDFBF2;
+  --theme-heading-text: #5A4420;
+  --theme-body-text: #8A7540;
+  --theme-muted-text: #8A7540;
   --theme-card-bg: #ffffff;
-  --theme-topbar-bg: #8A6508;
+  --theme-topbar-bg: #8A6810;
   --theme-topbar-text: #ffffff;
 
   --lesson-summary: #F5EDDA;
@@ -998,20 +998,20 @@
 
 /* ── 10. Coral Sunset ── */
 [data-theme="coral-sunset"] {
-  --theme-primary: #E07050;
+  --theme-primary: #E89878;
   --theme-primary-foreground: #ffffff;
-  --theme-secondary: #E8907A;
-  --theme-secondary-foreground: #E07050;
+  --theme-secondary: #EAA898;
+  --theme-secondary-foreground: #B06050;
   --theme-accent: #FCE4B8;
-  --theme-accent-foreground: #E07050;
-  --theme-border: #F4D0C4;
-  --theme-ring: #E07050;
-  --theme-page-bg: #FFF9F6;
-  --theme-heading-text: #4A1E14;
-  --theme-body-text: #8A5040;
-  --theme-muted-text: #8A5040;
+  --theme-accent-foreground: #A06050;
+  --theme-border: #F4D4C4;
+  --theme-ring: #E89878;
+  --theme-page-bg: #FFFAF6;
+  --theme-heading-text: #62382A;
+  --theme-body-text: #8A6458;
+  --theme-muted-text: #8A6458;
   --theme-card-bg: #ffffff;
-  --theme-topbar-bg: #B04830;
+  --theme-topbar-bg: #B05840;
   --theme-topbar-text: #ffffff;
 
   --lesson-summary: #FDE8E2;
@@ -1080,20 +1080,20 @@
 
 /* ── 12. Plum Velvet ── */
 [data-theme="plum-velvet"] {
-  --theme-primary: #7A4A8A;
+  --theme-primary: #9668B0;
   --theme-primary-foreground: #ffffff;
-  --theme-secondary: #9A6EAA;
-  --theme-secondary-foreground: #7A4A8A;
+  --theme-secondary: #AE84C4;
+  --theme-secondary-foreground: #724090;
   --theme-accent: #F0DDE8;
-  --theme-accent-foreground: #7A4A8A;
+  --theme-accent-foreground: #724090;
   --theme-border: #DEC8E8;
-  --theme-ring: #7A4A8A;
+  --theme-ring: #9668B0;
   --theme-page-bg: #FBF8FC;
-  --theme-heading-text: #30183A;
-  --theme-body-text: #6A4878;
-  --theme-muted-text: #6A4878;
+  --theme-heading-text: #583A72;
+  --theme-body-text: #785888;
+  --theme-muted-text: #785888;
   --theme-card-bg: #ffffff;
-  --theme-topbar-bg: #5A3068;
+  --theme-topbar-bg: #6A4080;
   --theme-topbar-text: #ffffff;
 
   --lesson-summary: #F0E6F4;
