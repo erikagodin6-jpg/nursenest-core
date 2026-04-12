@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useSyncExternalStore } from "react";
-import { getThemeLogoPathForThemeId, resolveLogoForTheme, themeLogoObjectKeyForTheme } from "@/lib/branding/theme-logo-map";
+import { getThemeLogoPathForThemeId, headerLogoModeForTheme, resolveLogoForTheme, themeLogoObjectKeyForTheme } from "@/lib/branding/theme-logo-map";
 import { getHeaderBrandLogoLoadChain } from "@/lib/theme/theme-logo-url";
 import { normalizeThemeIdForLogo } from "@/lib/theme/theme-logo-resolve";
 import { NURSENEST_DEFAULT_THEME, THEME_STORAGE_KEY } from "@/lib/theme/theme-registry";
@@ -50,22 +50,24 @@ export function useThemeLogo(): {
   themeId: string;
   /** Spaces object key for the active theme mark (e.g. `oceanbrandlogo_transparent.png`). */
   mappedSpaceKey: string;
+  /** Deterministic header logo mode chosen from theme contrast profile. */
+  headerLogoMode: "dark-header" | "light-header";
   /** Ordered URLs: same-origin proxy first, then public CDN, then fallbacks. */
   loadChain: string[];
 } {
   const domThemeId = useSyncExternalStore(subscribe, readDomThemeId, getServerSnapshot);
   const activeId = normalizeThemeIdForLogo(domThemeId);
   const mappedSpaceKey = useMemo(() => themeLogoObjectKeyForTheme(activeId), [activeId]);
+  const headerLogoMode = useMemo(() => headerLogoModeForTheme(activeId), [activeId]);
   const loadChain = useMemo(() => {
-    const primary = resolveLogoForTheme(activeId);
-    const chain = getHeaderBrandLogoLoadChain(activeId);
-    const merged = [primary, ...chain.filter((url) => url !== primary)];
-    return merged.length > 0 ? merged : [getThemeLogoPathForThemeId(activeId)];
-  }, [activeId]);
+    const chain = getHeaderBrandLogoLoadChain(activeId, headerLogoMode);
+    return chain.length > 0 ? chain : [resolveLogoForTheme(activeId), getThemeLogoPathForThemeId(activeId)];
+  }, [activeId, headerLogoMode]);
 
   return {
     themeId: activeId,
     mappedSpaceKey,
+    headerLogoMode,
     loadChain,
   };
 }

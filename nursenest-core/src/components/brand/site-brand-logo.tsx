@@ -28,7 +28,7 @@ export function SiteBrandLogoMark({
   onMarkState?: (state: BrandMarkLoadState) => void;
 }) {
   const { slotClassName, imgClassName } = brandLogoMarkPresentation(variant);
-  const { themeId, mappedSpaceKey, loadChain } = useThemeLogo();
+  const { themeId, mappedSpaceKey, headerLogoMode, loadChain } = useThemeLogo();
   const [candidateIndex, setCandidateIndex] = useState(0);
   const [showTextFallback, setShowTextFallback] = useState(false);
 
@@ -46,13 +46,14 @@ export function SiteBrandLogoMark({
       console.debug("[SiteBrandLogo]", {
         normalizedThemeId: themeId,
         mappedSpacesKey: mappedSpaceKey,
+        headerLogoMode,
         firstAttemptUrl: loadChain[0],
         resolvedSrc: src,
         fallbackCandidateIndex: safeIndex,
         chainLength: loadChain.length,
       });
     }
-  }, [themeId, mappedSpaceKey, src, safeIndex, loadChain]);
+  }, [themeId, mappedSpaceKey, headerLogoMode, src, safeIndex, loadChain]);
 
   useEffect(() => {
     onMarkState?.("loading");

@@ -97,6 +97,7 @@ body {
   --palette-nav-text-muted: #5b6b82;
   --palette-top-bar-background: #1e4fa8;
   --palette-top-bar-text: #ffffff;
+  --header-on-dark: #ffffff;
   --text-primary: var(--palette-text);
   --text-muted: var(--palette-text-muted);
   --text-on-accent: var(--palette-top-bar-text);
@@ -187,8 +188,12 @@ body {
    * Dedicated navigation/frame tokens.
    * These keep top and bottom chrome visibly denser than the page body.
    */
-  --nav-bg: color-mix(in srgb, var(--palette-nav, var(--theme-nav-bg)) 68%, var(--palette-primary-deep, var(--theme-primary)) 32%);
-  --nav-fg: color-mix(in srgb, var(--palette-nav-text, var(--theme-heading-text)) 94%, #0b1324);
+  --nav-bg: color-mix(in srgb, var(--palette-nav, var(--theme-nav-bg)) 62%, var(--palette-primary-deep, var(--theme-primary)) 38%);
+  /*
+   * Root-cause fix: nav fg must derive from topbar-on-color token, not body/nav text tokens.
+   * Header/nav surfaces are intentionally denser; dark body text can disappear on saturated hues.
+   */
+  --nav-fg: var(--header-on-dark, var(--logo-on-dark, #ffffff));
   --nav-muted: color-mix(in srgb, var(--nav-fg) 68%, var(--nav-bg));
   --nav-border: color-mix(in srgb, var(--palette-nav-border, var(--theme-nav-border)) 78%, var(--palette-primary-deep, var(--theme-primary)));
   --nav-hover: color-mix(in srgb, var(--nav-fg) 12%, var(--nav-bg));
@@ -250,6 +255,9 @@ body {
   --header-background: var(--header-nav-surface);
   --header-text: var(--nav-fg);
   --header-muted-text: var(--nav-muted);
+  --header-link: var(--nav-link);
+  --header-link-hover: var(--nav-link-hover);
+  --header-link-active: var(--nav-link-active);
   --header-border: var(--header-nav-border);
   --header-cta: var(--nav-cta-bg);
   --header-cta-text: var(--nav-cta-fg);
@@ -479,7 +487,7 @@ html[data-theme="storm-slate"] {
   --header-utility-border: color-mix(in srgb, var(--theme-primary) 20%, var(--border-medium));
   --header-utility-text: color-mix(in srgb, var(--theme-heading-text) 78%, var(--theme-muted-text));
   --nav-bg: color-mix(in srgb, var(--theme-card-bg) 74%, var(--theme-primary));
-  --nav-fg: color-mix(in srgb, var(--theme-heading-text) 90%, #ffffff);
+  --nav-fg: var(--header-on-dark, var(--logo-on-dark, #ffffff));
   --nav-muted: color-mix(in srgb, var(--nav-fg) 74%, var(--nav-bg));
   --nav-border: color-mix(in srgb, var(--theme-primary) 36%, var(--border-medium));
   --nav-hover: color-mix(in srgb, var(--theme-primary) 17%, var(--nav-bg));
@@ -502,6 +510,9 @@ html[data-theme="storm-slate"] {
   --header-background: var(--header-nav-surface);
   --header-text: var(--nav-fg);
   --header-muted-text: var(--nav-muted);
+  --header-link: var(--nav-link);
+  --header-link-hover: var(--nav-link-hover);
+  --header-link-active: var(--nav-link-active);
   --header-border: var(--header-nav-border);
   --header-cta: var(--nav-cta-bg);
   --header-cta-text: var(--nav-cta-fg);
@@ -1278,7 +1289,7 @@ html[data-theme] .nn-marketing-surface {
   border-radius: 9999px;
   border: 1px solid transparent;
   padding: 0.5rem 0.875rem;
-  color: var(--nav-link);
+  color: var(--header-link, var(--nav-link));
   transition:
     background-color var(--motion-base) var(--motion-ease),
     color var(--motion-base) var(--motion-ease),
@@ -1287,14 +1298,14 @@ html[data-theme] .nn-marketing-surface {
 }
 
 .nn-marketing-nav-link:hover {
-  color: var(--nav-link-hover);
+  color: var(--header-link-hover, var(--nav-link-hover));
   border-color: color-mix(in srgb, var(--nav-border) 82%, var(--header-background));
   background: var(--nav-hover);
 }
 
 .nn-marketing-nav-link[aria-current="page"],
 .nn-marketing-nav-link[data-active="true"] {
-  color: var(--nav-link-active);
+  color: var(--header-link-active, var(--nav-link-active));
   border-color: color-mix(in srgb, var(--nav-border) 90%, var(--header-background));
   background: var(--nav-active);
   box-shadow: inset 0 1px 0 color-mix(in srgb, #ffffff 18%, transparent);
@@ -1315,6 +1326,7 @@ html[data-theme] .nn-marketing-surface {
 /* Main sticky nav — elevated band with visible separation from hero below */
 .nn-header-nav {
   background: var(--header-background);
+  color: var(--nav-fg);
   border-bottom: 1px solid var(--header-border);
   box-shadow: var(--header-nav-shadow);
   isolation: isolate;
@@ -5782,55 +5794,60 @@ html[data-theme="deep-twilight"] .nn-cat-opt--incorrect {
 .nn-study-plan {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 2rem;
 }
 
-/* ── Summary Card (surface-emphasis) ──────────────────────── */
+.nn-study-plan__divider {
+  height: 1px;
+  background: var(--semantic-border-soft);
+  margin: 0.25rem 0;
+}
+
+/* ── Summary Card ─────────────────────────────────────────── */
 
 .nn-study-plan-summary {
   border-radius: 1rem;
-  padding: 24px;
+  padding: 1.5rem 1.75rem;
   background: var(--surface-emphasis,
-    color-mix(in srgb, var(--semantic-brand) 8%, var(--semantic-surface)));
+    color-mix(in srgb, var(--semantic-brand) 6%, var(--semantic-surface)));
   border: 1px solid
-    color-mix(in srgb, var(--theme-primary) 22%, var(--semantic-border-soft));
+    color-mix(in srgb, var(--theme-primary) 18%, var(--semantic-border-soft));
 }
 
 .nn-study-plan-summary__label {
-  font-size: 0.75rem;
+  font-size: 0.6875rem;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.07em;
-  color: var(--semantic-text-muted);
-  margin-bottom: 4px;
+  letter-spacing: 0.1em;
+  color: var(--semantic-brand);
+  margin-bottom: 0.75rem;
 }
 
-.nn-study-plan-summary__heading {
-  font-size: 1.25rem;
-  font-weight: 800;
-  color: var(--semantic-text-primary);
-  margin-bottom: 8px;
-}
-
-.nn-study-plan-summary__meta {
+.nn-study-plan-summary__hero {
   display: flex;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 10px;
+  gap: 1.25rem;
 }
 
 .nn-study-plan-summary__score {
-  font-size: 2.25rem;
+  font-size: 3rem;
   font-weight: 900;
   line-height: 1;
   color: var(--semantic-text-primary);
   font-variant-numeric: tabular-nums;
+  flex-shrink: 0;
+}
+
+.nn-study-plan-summary__hero-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  min-width: 0;
 }
 
 .nn-study-plan-summary__interp {
-  font-size: 0.9375rem;
-  line-height: 1.65;
+  font-size: 0.875rem;
+  line-height: 1.6;
   color: var(--semantic-text-secondary);
 }
 
@@ -5839,19 +5856,20 @@ html[data-theme="deep-twilight"] .nn-cat-opt--incorrect {
 .nn-study-plan-section {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 1rem;
 }
 
 .nn-study-plan-section__title {
-  font-size: 1.0625rem;
+  font-size: 1.125rem;
   font-weight: 800;
+  letter-spacing: -0.01em;
   color: var(--semantic-text-primary);
 }
 
 .nn-study-plan-section__desc {
-  font-size: 0.875rem;
-  color: var(--semantic-text-secondary);
-  margin-top: -6px;
+  font-size: 0.8125rem;
+  color: var(--semantic-text-muted);
+  margin-top: -0.25rem;
   line-height: 1.6;
 }
 
@@ -5860,15 +5878,15 @@ html[data-theme="deep-twilight"] .nn-cat-opt--incorrect {
 .nn-focus-areas-list {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 0.5rem;
 }
 
 .nn-focus-area-row {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 12px;
-  padding: 14px 16px;
+  gap: 0.75rem;
+  padding: 0.875rem 1rem;
   border-radius: 0.75rem;
   border: 1px solid var(--semantic-border-soft);
 }
@@ -5952,22 +5970,21 @@ html[data-theme="deep-twilight"] .nn-cat-opt--incorrect {
   border: 1px solid var(--semantic-border-soft);
 }
 
-/* Alternating soft surfaces */
 .nn-study-day-card--a {
   background: var(--surface-soft-a,
-    color-mix(in srgb, var(--theme-primary) 4%, var(--semantic-surface)));
+    color-mix(in srgb, var(--theme-primary) 3%, var(--semantic-surface)));
 }
 
 .nn-study-day-card--b {
   background: var(--surface-soft-b,
-    color-mix(in srgb, var(--theme-primary) 7%, var(--semantic-surface)));
+    color-mix(in srgb, var(--theme-primary) 5%, var(--semantic-surface)));
 }
 
 .nn-study-day-card__header {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 14px 20px;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
   border-bottom: 1px solid var(--semantic-border-soft);
 }
 
@@ -5975,27 +5992,29 @@ html[data-theme="deep-twilight"] .nn-cat-opt--incorrect {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 2rem;
-  height: 2rem;
-  border-radius: 50%;
-  background: color-mix(in srgb, var(--theme-primary) 15%, var(--semantic-surface));
-  font-size: 0.75rem;
-  font-weight: 800;
-  color: var(--semantic-text-primary);
+  padding: 0.25rem 0.625rem;
+  border-radius: 99px;
+  background: color-mix(in srgb, var(--semantic-brand) 12%, var(--semantic-surface));
+  font-size: 0.6875rem;
+  font-weight: 700;
+  color: var(--semantic-brand);
   flex-shrink: 0;
+  white-space: nowrap;
+  letter-spacing: 0.02em;
 }
 
 .nn-study-day-card__title {
   font-size: 0.9375rem;
   font-weight: 700;
   color: var(--semantic-text-primary);
+  letter-spacing: -0.005em;
 }
 
 .nn-study-day-card__body {
-  padding: 16px 20px;
+  padding: 1rem 1.25rem;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 0.75rem;
   background: var(--semantic-surface);
 }
 
@@ -6003,52 +6022,66 @@ html[data-theme="deep-twilight"] .nn-cat-opt--incorrect {
 
 .nn-study-block {
   display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 12px 14px;
-  border-radius: 0.625rem;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.875rem 1rem;
+  border-radius: 0.75rem;
   border: 1px solid var(--semantic-border-soft);
   background: var(--semantic-surface);
 }
 
+.nn-study-block__step-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.375rem;
+  flex-shrink: 0;
+  padding-top: 0.125rem;
+}
+
+.nn-study-block__step-number {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  color: var(--semantic-text-muted);
+  line-height: 1;
+}
+
 .nn-study-block__icon {
-  width: 2rem;
-  height: 2rem;
+  width: 1.75rem;
+  height: 1.75rem;
   border-radius: 0.5rem;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  font-size: 0.875rem;
 }
 
 .nn-study-block__icon--lesson {
-  background: var(--semantic-info-soft,
-    color-mix(in srgb, var(--semantic-info) 10%, var(--semantic-surface)));
+  background: color-mix(in srgb, var(--semantic-info) 10%, var(--semantic-surface));
   color: var(--semantic-info, var(--semantic-text-secondary));
 }
 
 .nn-study-block__icon--practice {
-  background: var(--role-success-soft,
-    color-mix(in srgb, var(--role-success, var(--semantic-success)) 10%, var(--semantic-surface)));
+  background: color-mix(in srgb, var(--semantic-success) 10%, var(--semantic-surface));
   color: var(--semantic-success, var(--semantic-text-secondary));
 }
 
 .nn-study-block__icon--review {
-  background: var(--semantic-warning-soft,
-    color-mix(in srgb, var(--semantic-warning) 10%, var(--semantic-surface)));
+  background: color-mix(in srgb, var(--semantic-warning) 10%, var(--semantic-surface));
   color: var(--semantic-warning, var(--semantic-text-secondary));
 }
 
 .nn-study-block__icon--recap {
-  background: var(--surface-soft-b,
-    color-mix(in srgb, var(--theme-primary) 7%, var(--semantic-surface)));
+  background: color-mix(in srgb, var(--theme-primary) 7%, var(--semantic-surface));
   color: var(--semantic-text-secondary);
 }
 
 .nn-study-block__content {
   flex: 1;
   min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
 }
 
 .nn-study-block__type-label {
@@ -6060,79 +6093,94 @@ html[data-theme="deep-twilight"] .nn-cat-opt--incorrect {
 }
 
 .nn-study-block__instruction {
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
   line-height: 1.55;
   color: var(--semantic-text-primary);
 }
 
-.nn-study-block__action {
-  flex-shrink: 0;
+.nn-study-block__cta {
+  display: inline-flex;
+  align-items: center;
+  margin-top: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--semantic-brand);
+  text-decoration: none;
+  transition: opacity 0.15s;
 }
 
-/* ── Retest Strategy Card (surface-soft-info) ──────────────── */
+.nn-study-block__cta:hover {
+  opacity: 0.8;
+}
+
+.nn-study-block__cta::after {
+  content: " \2192";
+  margin-left: 0.25rem;
+}
+
+/* ── Retest Strategy Card ──────────────────────────────────── */
 
 .nn-retest-card {
   border-radius: 1rem;
-  padding: 20px 24px;
-  background: var(--semantic-info-soft,
-    color-mix(in srgb, var(--semantic-info) 7%, var(--semantic-surface)));
+  padding: 1.25rem 1.5rem;
+  background: color-mix(in srgb, var(--semantic-info) 5%, var(--semantic-surface));
   border: 1px solid
-    color-mix(in srgb, var(--semantic-info) 20%, var(--semantic-border-soft));
+    color-mix(in srgb, var(--semantic-info) 16%, var(--semantic-border-soft));
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 0.625rem;
 }
 
 .nn-retest-card__heading {
-  font-size: 1.0625rem;
+  font-size: 1rem;
   font-weight: 800;
   color: var(--semantic-text-primary);
 }
 
-.nn-retest-card__timing {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  padding: 12px 14px;
-  border-radius: 0.625rem;
-  background: var(--semantic-surface);
-  border: 1px solid var(--semantic-border-soft);
-}
-
-.nn-retest-card__timing-label {
-  font-size: 0.75rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--semantic-text-muted);
-}
-
 .nn-retest-card__timing-text {
-  font-size: 0.9375rem;
+  font-size: 0.875rem;
   font-weight: 600;
   color: var(--semantic-text-primary);
 }
 
 .nn-retest-card__recommendation {
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
   line-height: 1.6;
   color: var(--semantic-text-secondary);
+}
+
+.nn-retest-card__cta {
+  display: inline-flex;
+  align-items: center;
+  margin-top: 0.25rem;
+  padding: 0.5rem 1.25rem;
+  border-radius: 99px;
+  background: var(--semantic-brand);
+  color: white;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  text-decoration: none;
+  box-shadow: var(--semantic-shadow-soft);
+  transition: all 0.15s;
+}
+
+.nn-retest-card__cta:hover {
+  filter: brightness(1.05);
+  box-shadow: 0 2px 8px color-mix(in srgb, var(--semantic-brand) 30%, transparent);
 }
 
 /* ── Mobile ────────────────────────────────────────────────── */
 
 @media (max-width: 639px) {
-  .nn-study-block {
-    flex-wrap: wrap;
-  }
-
-  .nn-study-block__action {
-    width: 100%;
+  .nn-study-plan-summary__hero {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
   }
 
   .nn-focus-area-row {
     flex-direction: column;
-    gap: 8px;
+    gap: 0.5rem;
   }
 
   .nn-focus-area-row__right {

@@ -12,6 +12,7 @@
  */
 
 import type { TopicRow } from "@/lib/study/analytics-data";
+import { formatEyebrow, formatSentenceCase } from "@/lib/format/text-case";
 
 type CardDef = {
   label: string;
@@ -108,7 +109,7 @@ function SummaryCard({
       }}
     >
       <p className="text-xs font-semibold uppercase tracking-wide text-[var(--semantic-text-muted)]">
-        {label}
+        {formatEyebrow(label)}
       </p>
       <p
         className="text-3xl font-extrabold tabular-nums"
@@ -116,7 +117,7 @@ function SummaryCard({
       >
         {value}
       </p>
-      <p className="text-xs text-[var(--semantic-text-muted)]">{sub}</p>
+      <p className="text-xs text-[var(--semantic-text-muted)]">{formatSentenceCase(sub)}</p>
     </div>
   );
 }

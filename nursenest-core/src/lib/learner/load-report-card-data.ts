@@ -14,6 +14,11 @@ import type { ReadinessResult } from "@/lib/learner/readiness-score";
 import type { TopicTrendRow } from "@/lib/learner/topic-performance";
 import type { WeakTopicRow } from "@/lib/learner/weak-topics-from-sessions";
 import type { PracticeTestConfigJson, PracticeTestResultsJson } from "@/lib/practice-tests/types";
+import {
+  computePeerComparison,
+  bestReportCardComparisonArgs,
+  type PeerComparisonResult,
+} from "@/lib/study/benchmarking/peer-comparison-service";
 
 export type TierAccuracyBucket = {
   tierKey: string;
@@ -90,6 +95,12 @@ export type ReportCardData = {
   recommendedQuizTopic: string | null;
   /** Detailed mock rows for the report log table. */
   mockLog: Array<{ id: string; examTitle: string; score: number; total: number; pct: number; createdAt: Date }>;
+  /**
+   * Peer comparison result for the most meaningful available context:
+   * CAT readiness score → linear practice accuracy → overall question bank.
+   * Null when DB not configured or no score is available to compare.
+   */
+  peerBenchmark: PeerComparisonResult | null;
 };
 
 const MOCK_ATTEMPT_LIMIT = 80;
@@ -346,7 +357,15 @@ export async function loadReportCardData(userId: string, entitlement: AccessScop
     accuracyPct: mockSumTotal > 0 ? Math.round((mockSumScore / mockSumTotal) * 100) : null,
   };
 
-  const recentPracticeTests: RecentPracticeTestRow[] = practiceRows.map((row) => {
+  // Enriched practice test rows — includes pathwayId, CAT readiness score, and exam config
+  // for use by both the display list and the peer comparison service.
+  type EnrichedPracticeTestRow = RecentPracticeTestRow & {
+    pathwayId: string | null;
+    catReadinessScore: number | null;
+    examConfigId: string | null;
+  };
+
+  const enrichedPracticeTests: EnrichedPracticeTestRow[] = practiceRows.map((row) => {
     const cfg = row.config as PracticeTestConfigJson | null;
     const res = row.results as PracticeTestResultsJson | null;
     const isCat = cfg?.selectionMode === "cat";
@@ -357,6 +376,10 @@ export async function loadReportCardData(userId: string, entitlement: AccessScop
         : res && res.scoreTotal > 0
           ? Math.round((res.scoreCorrect / res.scoreTotal) * 100)
           : null;
+    const catReadinessScore =
+      isCat && res?.catReport?.readinessScore != null
+        ? Math.round(res.catReport.readinessScore)
+        : null;
     return {
       id: row.id,
       title: row.title,
@@ -365,8 +388,24 @@ export async function loadReportCardData(userId: string, entitlement: AccessScop
       scoreTotal: res?.scoreTotal ?? 0,
       isCat,
       pathwayLabel: pid ? pathwayLabelById.get(pid) ?? null : null,
+      pathwayId: pid,
+      catReadinessScore,
+      examConfigId: cfg?.catExamConfigId ?? null,
     };
   });
+
+  const recentPracticeTests: RecentPracticeTestRow[] = enrichedPracticeTests;
+
+  // Peer benchmark: best available comparison context (CAT → practice → overall)
+  const preferredPathwayId =
+    pathways.find((p) => p.lessonsTotal > 0)?.pathwayId ?? pathways[0]?.pathwayId ?? null;
+  const peerComparisonArgs = bestReportCardComparisonArgs({
+    userId,
+    recentPracticeTests: enrichedPracticeTests,
+    overallAccuracyPct: bankGraded.accuracyPct,
+    preferredPathwayId,
+  });
+  const peerBenchmark = await computePeerComparison(peerComparisonArgs).catch(() => null);
 
   return {
     scopeTier: dash.scope.tier,
@@ -388,5 +427,6 @@ export async function loadReportCardData(userId: string, entitlement: AccessScop
     continueLesson: dash.continueLesson ? { title: dash.continueLesson.title, href: dash.continueLesson.href } : null,
     recommendedQuizTopic: dash.recommendedQuizTopic,
     mockLog,
+    peerBenchmark: peerBenchmark ?? null,
   };
 }

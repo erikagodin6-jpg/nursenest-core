@@ -5,6 +5,7 @@ import { resolveStudyLoopCatHref } from "@/lib/exam-pathways/study-loop-cat-rout
 import { remediationCatPracticeHref, remediationTopicDrillHref } from "@/lib/learner/remediation-links";
 import { readinessBandLabel, readinessBandProgressFillClass } from "@/lib/learner/readiness-score";
 import type { LearnerMarketingT } from "@/lib/learner/learner-marketing-server";
+import { PeerComparisonPanel } from "@/components/study/peer-comparison-panel";
 
 function pctBar(pct: number | null, label: string) {
   const v = pct == null ? 0 : Math.min(100, Math.max(0, pct));
@@ -476,6 +477,11 @@ export function LearnerReportCardPremium({
           </div>
         )}
       </section>
+
+      {/* Peer benchmark — context-aware percentile comparison */}
+      {data.peerBenchmark && data.peerBenchmark.activationState !== "unavailable" ? (
+        <PeerComparisonPanel result={data.peerBenchmark} variant="full" />
+      ) : null}
 
       {/* Next steps */}
       <section className="rounded-2xl border border-role-cta/20 bg-role-cta-soft/40 p-5">

@@ -8,6 +8,7 @@ import { useNursenestRegion } from "@/lib/region/use-nursenest-region";
 import { MarketingTrackedLink } from "@/components/marketing/marketing-tracked-link";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 import { MARKETING_PRIMARY_CTA_CLASS, MARKETING_TERTIARY_LINK_CLASS } from "@/lib/theme/marketing-hero-pattern";
+import { formatEyebrow, formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
 
 const STEPS = [
   { n: "1", label: "Pick your exam", sub: "RN, LPN/RPN, NP, or Allied" },
@@ -32,13 +33,13 @@ export function HomeFinalStudyCta() {
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <div className="text-center">
           <p className="nn-marketing-caption mb-3 font-semibold uppercase tracking-widest text-[color-mix(in_srgb,var(--palette-accent,var(--theme-accent))_78%,var(--theme-heading-text))]">
-            Get started in 30 seconds
+            {formatEyebrow("Get started in 30 seconds", locale)}
           </p>
           <h2 id="home-final-cta-heading" className="nn-marketing-h2 text-balance">
-            {t("home.conversion.final.title")}
+            {formatTitleCase(t("home.conversion.final.title"), locale)}
           </h2>
           <p className="nn-marketing-body-sm mx-auto mt-2 max-w-lg text-pretty text-[var(--theme-muted-text)]">
-            {t("home.conversion.final.sub")}
+            {formatSentenceCase(t("home.conversion.final.sub"), locale)}
           </p>
         </div>
 
@@ -58,8 +59,8 @@ export function HomeFinalStudyCta() {
               >
                 {step.n}
               </span>
-              <span className="nn-marketing-body-sm font-semibold text-[var(--theme-heading-text)]">{step.label}</span>
-              <span className="nn-marketing-caption text-[var(--theme-muted-text)]">{step.sub}</span>
+              <span className="nn-marketing-body-sm font-semibold text-[var(--theme-heading-text)]">{formatTitleCase(step.label, locale)}</span>
+              <span className="nn-marketing-caption text-[var(--theme-muted-text)]">{formatSentenceCase(step.sub, locale)}</span>
             </li>
           ))}
         </ol>
@@ -72,7 +73,7 @@ export function HomeFinalStudyCta() {
             className={`${MARKETING_PRIMARY_CTA_CLASS} rounded-xl shadow-[var(--shadow-card)] sm:min-w-[240px]`}
             data-testid="button-final-signup-primary"
           >
-            <span className="whitespace-nowrap">{t("home.conversion.final.ctaPrimary")}</span>
+            <span className="whitespace-nowrap">{formatTitleCase(t("home.conversion.final.ctaPrimary"), locale)}</span>
             <ArrowRight className="ml-2 h-5 w-5 shrink-0" aria-hidden />
           </MarketingTrackedLink>
           <MarketingTrackedLink
@@ -82,7 +83,7 @@ export function HomeFinalStudyCta() {
             className={MARKETING_TERTIARY_LINK_CLASS}
             data-testid="button-final-choose-exam"
           >
-            {t("home.conversion.final.ctaSecondary")}
+            {formatTitleCase(t("home.conversion.final.ctaSecondary"), locale)}
           </MarketingTrackedLink>
         </div>
 
@@ -93,7 +94,7 @@ export function HomeFinalStudyCta() {
             eventProps={{ choice: "practice_exams_overview", region, surface: "final" }}
             className="font-semibold text-primary underline-offset-4 hover:underline"
           >
-            {t("home.conversion.final.linkPracticeExams")}
+            {formatTitleCase(t("home.conversion.final.linkPracticeExams"), locale)}
           </MarketingTrackedLink>
           <span className="text-[var(--theme-muted-text)]" aria-hidden>
             ·
@@ -104,7 +105,7 @@ export function HomeFinalStudyCta() {
             eventProps={{ choice: "question_bank_overview", region, surface: "final" }}
             className="font-semibold text-primary underline-offset-4 hover:underline"
           >
-            {t("home.conversion.final.linkQuestionBank")}
+            {formatTitleCase(t("home.conversion.final.linkQuestionBank"), locale)}
           </MarketingTrackedLink>
           <span className="text-[var(--theme-muted-text)]" aria-hidden>
             ·
@@ -115,7 +116,7 @@ export function HomeFinalStudyCta() {
             eventProps={{ choice: "lessons_overview", region, surface: "final" }}
             className="font-semibold text-primary underline-offset-4 hover:underline"
           >
-            {t("home.conversion.final.linkExploreLessons")}
+            {formatTitleCase(t("home.conversion.final.linkExploreLessons"), locale)}
           </MarketingTrackedLink>
         </p>
       </div>

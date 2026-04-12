@@ -8,6 +8,7 @@ import { useNursenestRegion } from "@/lib/region/use-nursenest-region";
 import { HomeConversionCtaStrip } from "@/components/marketing/home-conversion-cta-strip";
 import { MarketingTrackedLink } from "@/components/marketing/marketing-tracked-link";
 import { PH } from "@/lib/observability/posthog-conversion-events";
+import { formatEyebrow, formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
 import type { LucideIcon } from "lucide-react";
 
 type ExamCard = {
@@ -96,13 +97,13 @@ export function HomeExamSelectionSection() {
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <header className="mx-auto mb-8 max-w-2xl text-center md:mb-10">
           <h2 id="home-exam-selection-heading" className="nn-marketing-h2 text-balance">
-            {t("home.conversion.examSelectionTitle")}
+            {formatTitleCase(t("home.conversion.examSelectionTitle"), locale)}
           </h2>
           <p className="nn-marketing-body mx-auto mt-2 max-w-xl text-pretty text-[var(--theme-muted-text)]">
-            {t("home.conversion.examSelectionSub")}
+            {formatSentenceCase(t("home.conversion.examSelectionSub"), locale)}
           </p>
           <p className="nn-marketing-caption mx-auto mt-3 max-w-lg text-pretty text-[var(--theme-muted-text)]">
-            {t("home.conversion.examSelectionFreeHint")}
+            {formatSentenceCase(t("home.conversion.examSelectionFreeHint"), locale)}
           </p>
         </header>
 
@@ -133,14 +134,14 @@ export function HomeExamSelectionSection() {
 
                   {/* Exam label chip */}
                   <span className="nn-marketing-caption nn-accent-pill mb-2 inline-flex w-fit items-center rounded-full px-2.5 py-0.5 font-semibold uppercase tracking-wide">
-                    {t(c.metaKey)}
+                    {formatEyebrow(t(c.metaKey), locale)}
                   </span>
 
-                  <span className="nn-marketing-h3 text-balance leading-snug">{t(c.titleKey)}</span>
-                  <span className="nn-marketing-body-sm mt-2 flex-1 text-[var(--theme-muted-text)]">{t(c.descKey)}</span>
+                  <span className="nn-marketing-h3 text-balance leading-snug">{formatTitleCase(t(c.titleKey), locale)}</span>
+                  <span className="nn-marketing-body-sm mt-2 flex-1 text-[var(--theme-muted-text)]">{formatSentenceCase(t(c.descKey), locale)}</span>
 
                   <span className="mt-4 inline-flex items-center text-sm font-semibold text-[var(--nn-aesthetic-accent)]">
-                    {t(c.ctaKey)}
+                    {formatTitleCase(t(c.ctaKey), locale)}
                     <ArrowRight className="ml-1.5 h-4 w-4 transition group-hover:translate-x-1" aria-hidden />
                   </span>
                 </MarketingTrackedLink>

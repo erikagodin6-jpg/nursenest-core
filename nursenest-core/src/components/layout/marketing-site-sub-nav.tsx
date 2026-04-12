@@ -11,7 +11,7 @@ import { stripMarketingLocalePrefix, withMarketingLocale } from "@/lib/i18n/mark
 import { useNursenestRegion } from "@/lib/region/use-nursenest-region";
 import { getExamNavStripItems } from "@/lib/marketing/country-exam-offerings";
 import { HUB } from "@/lib/marketing/marketing-entry-routes";
-import { formatNavLabel } from "@/lib/format/title-case";
+import { formatTitleCase } from "@/lib/format/text-case";
 
 function isSubNavActive(strippedPath: string, href: string): boolean {
   const base = href.split("?")[0] || "";
@@ -76,7 +76,7 @@ export function MarketingSiteSubNav() {
                     })
                   }
                 >
-                  {formatNavLabel(t(item.labelKey), { locale, context: `marketing-sub-nav.${item.key}` })}
+                  {formatTitleCase(t(item.labelKey), locale)}
                 </Link>
               </li>
             );

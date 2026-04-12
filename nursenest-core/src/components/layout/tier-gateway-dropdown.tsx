@@ -19,7 +19,7 @@ import { marketingExamHubPath } from "@/lib/marketing/country-exam-offerings";
 import { HUB } from "@/lib/marketing/marketing-entry-routes";
 import { trackClientEvent } from "@/lib/observability/posthog-client";
 import { PH } from "@/lib/observability/posthog-conversion-events";
-import { formatNavLabel } from "@/lib/format/title-case";
+import { formatEyebrow, formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
 
 type TierItem = {
   key: string;
@@ -130,7 +130,7 @@ export function TierGatewayDropdown({
         onClick={() => setOpen((o) => !o)}
         className={navLinkClass ?? NAV_TRIGGER_CLASS}
       >
-        {formatNavLabel(t(triggerLabelKey as Parameters<typeof t>[0]), { locale, context: "tier-dropdown.trigger" })}
+        {formatTitleCase(t(triggerLabelKey as Parameters<typeof t>[0]), locale)}
         <ChevronDown
           className={`h-3.5 w-3.5 shrink-0 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
           aria-hidden
@@ -145,7 +145,7 @@ export function TierGatewayDropdown({
           onMouseLeave={scheduleClose}
         >
           <p className="nn-marketing-label px-3 pb-2 pt-2 text-[var(--nav-muted)]">
-            {t("nav.tierDrop.heading")}
+            {formatEyebrow(t("nav.tierDrop.heading"), locale)}
           </p>
           <ul className="space-y-0.5">
             {items.map((item) => {
@@ -172,10 +172,10 @@ export function TierGatewayDropdown({
                     </span>
                     <span className="min-w-0">
                       <span className="nn-marketing-body-sm block font-semibold leading-tight tracking-tight text-[var(--nav-fg)]">
-                        {formatNavLabel(t(item.titleKey as Parameters<typeof t>[0]), { locale, context: `tier-dropdown.${item.key}` })}
+                        {formatTitleCase(t(item.titleKey as Parameters<typeof t>[0]), locale)}
                       </span>
                       <span className="nn-marketing-caption mt-0.5 block leading-snug text-[var(--nav-muted)]">
-                        {t(item.descKey as Parameters<typeof t>[0])}
+                        {formatSentenceCase(t(item.descKey as Parameters<typeof t>[0]), locale)}
                       </span>
                     </span>
                   </Link>

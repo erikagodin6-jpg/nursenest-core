@@ -23,7 +23,7 @@ import { trackClientEvent } from "@/lib/observability/posthog-client";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 import { marketingExamHubPath } from "@/lib/marketing/country-exam-offerings";
 import { HUB, rnQuestions } from "@/lib/marketing/marketing-entry-routes";
-import { formatNavLabel } from "@/lib/format/title-case";
+import { formatTitleCase } from "@/lib/format/text-case";
 
 const NAV_LINK_CLASS = "nn-marketing-body-sm nn-marketing-nav-link font-semibold tracking-tight";
 
@@ -65,45 +65,45 @@ export function SiteHeader() {
       key: "rn",
       href: marketingExamHubPath(region, "rn"),
       matchBase: marketingExamHubPath(region, "rn"),
-      label: formatNavLabel(t("nav.tierDrop.rnTitle"), { locale, context: "site-header.rn" }),
+      label: formatTitleCase(t("nav.tierDrop.rnTitle"), locale),
     },
     {
       key: "pn",
       href: marketingExamHubPath(region, "pn"),
       matchBase: marketingExamHubPath(region, "pn"),
-      label: formatNavLabel(region === "CA" ? t("nav.tierDrop.rpnTitle") : t("nav.tierDrop.lpnTitle"), { locale, context: "site-header.pn" }),
+      label: formatTitleCase(region === "CA" ? t("nav.tierDrop.rpnTitle") : t("nav.tierDrop.lpnTitle"), locale),
     },
     {
       key: "np",
       href: marketingExamHubPath(region, "np"),
       matchBase: marketingExamHubPath(region, "np"),
-      label: formatNavLabel(t("nav.tierDrop.npTitle"), { locale, context: "site-header.np" }),
+      label: formatTitleCase(t("nav.tierDrop.npTitle"), locale),
     },
     {
       key: "allied",
       href: marketingExamHubPath(region, "allied"),
       matchBase: marketingExamHubPath(region, "allied"),
-      label: formatNavLabel(t("nav.tierDrop.alliedTitle"), { locale, context: "site-header.allied" }),
+      label: formatTitleCase(t("nav.tierDrop.alliedTitle"), locale),
     },
     {
       key: "lessons",
       href: "/lessons",
       matchBase: "/lessons",
-      label: formatNavLabel(t("nav.lessons"), { locale, context: "site-header.lessons" }),
+      label: formatTitleCase(t("nav.lessons"), locale),
     },
     {
       key: "practice-questions",
       href: rnQuestions(region),
       matchBase: rnQuestions(region),
-      label: formatNavLabel(t("footer.testBank"), { locale, context: "site-header.test-bank" }),
+      label: formatTitleCase(t("footer.testBank"), locale),
     },
   ] as const;
 
   const mobileMoreNav: { key: string; href: string; label: string }[] = [
-    { key: "pricing", href: "/pricing", label: formatNavLabel(t("nav.pricing"), { locale, context: "site-header.pricing" }) },
-    { key: "faq", href: "/faq", label: formatNavLabel(t("footer.faq"), { locale, context: "site-header.faq" }) },
-    { key: "pre-nursing", href: "/pre-nursing", label: formatNavLabel(t("nav.preNursing"), { locale, context: "site-header.pre-nursing" }) },
-    { key: "tools", href: HUB.tools, label: formatNavLabel(t("nav.tools"), { locale, context: "site-header.tools" }) },
+    { key: "pricing", href: "/pricing", label: formatTitleCase(t("nav.pricing"), locale) },
+    { key: "faq", href: "/faq", label: formatTitleCase(t("footer.faq"), locale) },
+    { key: "pre-nursing", href: "/pre-nursing", label: formatTitleCase(t("nav.preNursing"), locale) },
+    { key: "tools", href: HUB.tools, label: formatTitleCase(t("nav.tools"), locale) },
   ];
 
   const strippedPath = stripMarketingLocalePrefix(pathname).pathname;
@@ -235,14 +235,14 @@ export function SiteHeader() {
                   className="nn-nav-cta inline-flex min-h-[48px] items-center justify-center rounded-xl px-4 py-3 text-sm font-semibold"
                   onClick={() => setMobileOpen(false)}
                 >
-                  {formatNavLabel(t("nav.getStarted"), { locale, context: "site-header.mobile.cta" })}
+                  {formatTitleCase(t("nav.getStarted"), locale)}
                 </Link>
                 <Link
                   href={localizeHref(`/login?callbackUrl=${encodeURIComponent("/app")}`)}
                   className="inline-flex min-h-[46px] items-center justify-center rounded-xl border border-[var(--nav-border)] px-4 py-3 text-sm font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                   onClick={() => setMobileOpen(false)}
                 >
-                  {formatNavLabel(t("nav.logIn"), { locale, context: "site-header.mobile.login" })}
+                  {formatTitleCase(t("nav.logIn"), locale)}
                 </Link>
               </div>
 

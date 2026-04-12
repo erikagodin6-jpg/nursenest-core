@@ -36,6 +36,7 @@ import {
   SCREENSHOT_REGISTRY,
   type ScreenshotId,
 } from "@/lib/marketing/screenshot-registry";
+import { formatEyebrow, formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
 
 // ── Shared token helpers ───────────────────────────────────────────────────────
 
@@ -331,6 +332,7 @@ type FeatureBlock = {
   /** flip = visual on left, text on right */
   flip?: boolean;
   testId: string;
+  locale: string;
 };
 
 function FeatureBlockRow({
@@ -345,6 +347,7 @@ function FeatureBlockRow({
   preview,
   flip = false,
   testId,
+  locale,
 }: FeatureBlock) {
   return (
     <div
@@ -365,14 +368,14 @@ function FeatureBlockRow({
             color: TEXT_MUTED,
           }}
         >
-          {label}
+          {formatEyebrow(label, locale)}
         </p>
 
         <h3
           className="nn-marketing-h2 text-balance"
           style={{ color: TEXT_PRIMARY }}
         >
-          {title}
+          {formatTitleCase(title, locale)}
         </h3>
 
         <ul className="space-y-3">
@@ -383,7 +386,7 @@ function FeatureBlockRow({
                 style={{ color: "var(--semantic-success, #22c55e)" }}
                 aria-hidden
               />
-              {b}
+              {formatSentenceCase(b, locale)}
             </li>
           ))}
         </ul>
@@ -393,11 +396,11 @@ function FeatureBlockRow({
             href={primaryHref}
             className={`${MARKETING_PRIMARY_CTA_CLASS} sm:w-auto`}
           >
-            {primaryCta}
+            {formatTitleCase(primaryCta, locale)}
             <ArrowRight className="ml-2 h-4 w-4 shrink-0" aria-hidden />
           </Link>
           <Link href={secondaryHref} className={`${MARKETING_SECONDARY_CTA_CLASS} sm:w-auto`}>
-            {secondaryCta}
+            {formatTitleCase(secondaryCta, locale)}
           </Link>
         </div>
       </div>
@@ -451,6 +454,7 @@ export function HomeFeatureDeepDivesSection() {
       preview: <FeatureScreenshot id={8} />,
       flip: false,
       testId: "feature-block-study-plan",
+      locale,
     },
     {
       label: "Smart Review",
@@ -469,6 +473,7 @@ export function HomeFeatureDeepDivesSection() {
       preview: <FeatureScreenshot id={9} />,
       flip: true,
       testId: "feature-block-smart-review",
+      locale,
     },
     {
       label: "CAT Exam Simulation",
@@ -487,6 +492,7 @@ export function HomeFeatureDeepDivesSection() {
       preview: <FeatureScreenshot id={6} />,
       flip: false,
       testId: "feature-block-cat",
+      locale,
     },
   ];
 
@@ -503,10 +509,10 @@ export function HomeFeatureDeepDivesSection() {
             className="nn-marketing-h2 text-balance"
             style={{ color: TEXT_PRIMARY }}
           >
-            The full readiness system
+            {formatTitleCase("The full readiness system", locale)}
           </h2>
           <p className="nn-marketing-body mt-3 text-pretty" style={{ color: TEXT_MUTED }}>
-            Everything connects: practice, test, review, and improve. Built around your weak areas and confidence patterns.
+            {formatSentenceCase("Everything connects: practice, test, review, and improve. Built around your weak areas and confidence patterns.", locale)}
           </p>
         </header>
 
@@ -525,7 +531,7 @@ export function HomeFeatureDeepDivesSection() {
             className={MARKETING_PRIMARY_CTA_CLASS}
             data-testid="feature-section-pricing-cta"
           >
-            View study plans
+            {formatTitleCase("View study plans", locale)}
             <ArrowRight className="ml-2 h-5 w-5 shrink-0" aria-hidden />
           </MarketingTrackedLink>
           <MarketingTrackedLink
@@ -535,7 +541,7 @@ export function HomeFeatureDeepDivesSection() {
             className={MARKETING_SECONDARY_CTA_CLASS}
             data-testid="feature-section-questions-cta"
           >
-            Try free questions first
+            {formatTitleCase("Try free questions first", locale)}
           </MarketingTrackedLink>
         </div>
       </div>

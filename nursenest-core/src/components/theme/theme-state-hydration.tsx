@@ -248,6 +248,7 @@ export function ThemeStateHydration() {
     const logoText = pickReadableText(palette.navBackground, palette.logoOnLight, palette.logoOnDark);
     setIfHex("--logo-text", logoText);
     setIfHex("--logo-on-dark", palette.logoOnDark);
+    setIfHex("--header-on-dark", palette.logoOnDark);
     setIfHex("--state-success", palette.success);
     setIfHex("--state-warning", palette.warning);
     setIfHex("--state-danger-soft", palette.danger);

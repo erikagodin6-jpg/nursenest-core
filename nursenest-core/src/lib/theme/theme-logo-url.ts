@@ -18,7 +18,14 @@ import {
   PRIMARY_LOGO_CDN_URL,
   PRIMARY_LOGO_URL,
 } from "@/lib/branding/logo-config";
-import { getThemeLogoPathForThemeId, resolveLogoForTheme, themeLogoObjectKeyForTheme } from "@/lib/branding/theme-logo-map";
+import {
+  getThemeLogoPathForThemeId,
+  getThemeLogoSvgPathForThemeId,
+  headerLogoModeForTheme,
+  type HeaderLogoMode,
+  resolveLogoForTheme,
+  themeLogoObjectKeyForTheme,
+} from "@/lib/branding/theme-logo-map";
 import { getThemeLogoUrl } from "@/lib/branding/theme-brand-logo-cdn";
 import {
   marketingImageUsesProxy,
@@ -126,9 +133,14 @@ export function getBlueBrandMarkLoadChain(): string[] {
 /**
  * Full `<img>` try chain for the marketing header wordmark (`SiteBrandLogoMark` / `useThemeLogo`).
  */
-export function getHeaderBrandLogoLoadChain(themeId?: string | null): string[] {
+export function getHeaderBrandLogoLoadChain(themeId?: string | null, preferredMode?: HeaderLogoMode): string[] {
   const id = normalizeThemeIdForLogo(themeId ?? NURSENEST_DEFAULT_THEME);
+  const mode = preferredMode ?? headerLogoModeForTheme(id);
   const themeRasterChain = getThemeLogoLoadChain(id);
-  return uniqueStrings([...themeRasterChain, PRIMARY_LOGO_URL, PRIMARY_LOGO_CDN_URL]);
+  const themeSvg = getThemeLogoSvgPathForThemeId(id);
+  if (mode === "light-header") {
+    return uniqueStrings([themeSvg, ...themeRasterChain, PRIMARY_LOGO_URL, PRIMARY_LOGO_CDN_URL]);
+  }
+  return uniqueStrings([...themeRasterChain, themeSvg, PRIMARY_LOGO_URL, PRIMARY_LOGO_CDN_URL]);
 }
 

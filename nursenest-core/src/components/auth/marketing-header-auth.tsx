@@ -8,7 +8,7 @@ import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { mapLegacyMarketingHref } from "@/lib/legacy-marketing-routes";
 import { isStaffRole } from "@/lib/auth/staff-roles";
-import { formatNavLabel } from "@/lib/format/title-case";
+import { formatTitleCase } from "@/lib/format/text-case";
 
 const SIGN_IN_CLASS =
   "nn-marketing-body-sm inline-flex items-center rounded-lg px-3 py-2 font-medium tracking-normal text-[var(--nav-link)] transition-colors duration-150 hover:bg-[var(--nav-hover)] hover:text-[var(--nav-link-hover)]";
@@ -58,10 +58,10 @@ export function MarketingHeaderAuthDesktop() {
     return (
       <div className="flex max-w-[100vw] items-center gap-2">
         <Link href={loginToApp} className={SIGN_IN_CLASS}>
-          {formatNavLabel(t("nav.logIn"), { locale, context: "header-auth.login" })}
+          {formatTitleCase(t("nav.logIn"), locale)}
         </Link>
         <Link href={signupToApp} className={GET_STARTED_CLASS}>
-          {formatNavLabel(t("nav.getStarted"), { locale, context: "header-auth.get-started" })}
+          {formatTitleCase(t("nav.getStarted"), locale)}
         </Link>
       </div>
     );
@@ -105,7 +105,7 @@ export function MarketingHeaderAuthDesktop() {
             role="menuitem"
             onClick={() => setOpen(false)}
           >
-            {formatNavLabel(t("nav.learnerApp"), { locale, context: "header-auth.learner-app" })}
+            {formatTitleCase(t("nav.learnerApp"), locale)}
           </Link>
           {admin ? (
             <Link
@@ -114,7 +114,7 @@ export function MarketingHeaderAuthDesktop() {
               role="menuitem"
               onClick={() => setOpen(false)}
             >
-              {formatNavLabel(t("nav.admin"), { locale, context: "header-auth.admin" })}
+              {formatTitleCase(t("nav.admin"), locale)}
             </Link>
           ) : null}
           <button
@@ -123,7 +123,7 @@ export function MarketingHeaderAuthDesktop() {
             role="menuitem"
             onClick={() => void signOut({ callbackUrl: "/" })}
           >
-            {formatNavLabel(t("nav.signout"), { locale, context: "header-auth.sign-out" })}
+            {formatTitleCase(t("nav.signout"), locale)}
           </button>
         </div>
       ) : null}
@@ -149,10 +149,10 @@ export function MarketingHeaderAuthMobile({ onNavigate }: { onNavigate: () => vo
     return (
       <div className="mt-4 flex gap-2">
         <Link href={loginToApp} className={`${SIGN_IN_CLASS} flex-1 justify-center border border-[var(--nav-border)] py-2`} onClick={onNavigate}>
-          {formatNavLabel(t("nav.logIn"), { locale, context: "header-auth.mobile.login" })}
+          {formatTitleCase(t("nav.logIn"), locale)}
         </Link>
         <Link href={signupToApp} className={`${GET_STARTED_CLASS} flex-1`} onClick={onNavigate}>
-          {formatNavLabel(t("nav.getStarted"), { locale, context: "header-auth.mobile.get-started" })}
+          {formatTitleCase(t("nav.getStarted"), locale)}
         </Link>
       </div>
     );
@@ -174,7 +174,7 @@ export function MarketingHeaderAuthMobile({ onNavigate }: { onNavigate: () => vo
         className="block rounded-xl border border-[var(--nav-border)] px-3 py-2.5 nn-marketing-body-sm font-medium tracking-normal text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
         onClick={onNavigate}
       >
-        {formatNavLabel(t("nav.learnerApp"), { locale, context: "header-auth.mobile.learner-app" })}
+        {formatTitleCase(t("nav.learnerApp"), locale)}
       </Link>
       {admin ? (
         <Link
@@ -182,7 +182,7 @@ export function MarketingHeaderAuthMobile({ onNavigate }: { onNavigate: () => vo
           className="block rounded-xl border border-primary/20 bg-primary/5 px-3 py-2.5 nn-marketing-body-sm font-medium tracking-normal text-primary hover:bg-primary/10"
           onClick={onNavigate}
         >
-          {formatNavLabel(t("nav.admin"), { locale, context: "header-auth.mobile.admin" })}
+          {formatTitleCase(t("nav.admin"), locale)}
         </Link>
       ) : null}
       <button
@@ -190,7 +190,7 @@ export function MarketingHeaderAuthMobile({ onNavigate }: { onNavigate: () => vo
         className="w-full rounded-xl border border-[var(--nav-border)] px-3 py-2.5 nn-marketing-body-sm font-medium tracking-normal text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
         onClick={() => void signOut({ callbackUrl: "/" })}
       >
-        {formatNavLabel(t("nav.signout"), { locale, context: "header-auth.mobile.sign-out" })}
+        {formatTitleCase(t("nav.signout"), locale)}
       </button>
     </div>
   );

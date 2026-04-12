@@ -4,7 +4,9 @@
  * Keep all explicit per-theme Spaces logo filenames in this file only.
  */
 import { nursenestImagesSpaceObjectUrl } from "@/config/marketing-cdn.catalog";
+import { relativeLuminanceFromHex } from "@/lib/color/hex-luminance";
 import { marketingImageUsesProxy, marketingProxyFallbackEnabled, marketingProxyPathForKey } from "@/lib/marketing-resolve-image-url";
+import { getThemePaletteTokens } from "@/lib/theme/theme-palette-tokens";
 import { NURSENEST_DEFAULT_THEME, THEME_OPTIONS, type ThemeOption } from "@/lib/theme/theme-registry";
 import { normalizeThemeIdForLogo } from "@/lib/theme/theme-logo-resolve";
 
@@ -65,3 +67,27 @@ export const THEME_LOCAL_LOGO_MAP: Record<string, string> = Object.fromEntries(
 
 /** @deprecated Use `THEME_LOCAL_LOGO_MAP`. */
 export const THEME_LOGO_MAP = THEME_LOCAL_LOGO_MAP;
+
+export type HeaderLogoMode = "dark-header" | "light-header";
+
+/** Theme-specific local SVG wordmark path used as a light-header-first candidate. */
+export function getThemeLogoSvgPathForThemeId(themeId?: string | null): string {
+  const canonicalThemeId = normalizeThemeIdForLogo(themeId ?? NURSENEST_DEFAULT_THEME);
+  const resolvedThemeId = AVAILABLE_THEME_IDS.has(canonicalThemeId)
+    ? canonicalThemeId
+    : NURSENEST_DEFAULT_THEME;
+  return `/logos/${resolvedThemeId}-brandlogo.svg`;
+}
+
+/**
+ * Deterministic header logo mode based on tokenized header/topbar surface luminance.
+ * Dark surfaces use dark-header mode (prefer high-contrast raster chain first).
+ */
+export function headerLogoModeForTheme(themeId?: string | null): HeaderLogoMode {
+  const canonicalThemeId = normalizeThemeIdForLogo(themeId ?? NURSENEST_DEFAULT_THEME);
+  const palette = getThemePaletteTokens(canonicalThemeId);
+  const surface = palette?.topBarBackground ?? palette?.navBackground;
+  if (!surface) return "dark-header";
+  const luminance = relativeLuminanceFromHex(surface);
+  return luminance < 0.47 ? "dark-header" : "light-header";
+}

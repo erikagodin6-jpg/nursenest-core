@@ -9,6 +9,7 @@ import { useNursenestRegion } from "@/lib/region/use-nursenest-region";
 import { HomeConversionCtaStrip } from "@/components/marketing/home-conversion-cta-strip";
 import { MarketingTrackedLink } from "@/components/marketing/marketing-tracked-link";
 import { PH } from "@/lib/observability/posthog-conversion-events";
+import { formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
 
 /**
  * Four-step path: Learn → Practice → Track → Pass. Concrete links use the region’s default RN pathway where applicable.
@@ -68,10 +69,10 @@ export function HomeHowItWorksSection() {
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <header className="mx-auto mb-10 max-w-2xl text-center">
           <h2 id="home-how-heading" className="nn-marketing-h2 text-balance">
-            {t("home.conversion.how.title")}
+            {formatTitleCase(t("home.conversion.how.title"), locale)}
           </h2>
           <p className="nn-marketing-body mx-auto mt-2 max-w-xl text-pretty text-[var(--theme-muted-text)]">
-            {t("home.conversion.how.sub")}
+            {formatSentenceCase(t("home.conversion.how.sub"), locale)}
           </p>
         </header>
 
@@ -84,8 +85,8 @@ export function HomeHowItWorksSection() {
                 </span>
                 <s.icon className="h-6 w-6 text-[color-mix(in_srgb,var(--theme-primary)_85%,var(--theme-heading-text))]" aria-hidden />
               </div>
-              <h3 className="nn-marketing-h3 text-balance">{s.title}</h3>
-              <p className="nn-marketing-body-sm mt-2 flex-1 text-pretty text-[var(--theme-muted-text)]">{s.body}</p>
+              <h3 className="nn-marketing-h3 text-balance">{formatTitleCase(s.title, locale)}</h3>
+              <p className="nn-marketing-body-sm mt-2 flex-1 text-pretty text-[var(--theme-muted-text)]">{formatSentenceCase(s.body, locale)}</p>
               <MarketingTrackedLink
                 href={s.href}
                 event={PH.marketingHomeExploreHubClick}
@@ -93,7 +94,7 @@ export function HomeHowItWorksSection() {
                 className="mt-4 inline-flex text-sm font-semibold text-[var(--theme-primary)] underline-offset-4 hover:underline"
                 data-testid={s.testId}
               >
-                {s.label}
+                {formatTitleCase(s.label, locale)}
               </MarketingTrackedLink>
             </li>
           ))}

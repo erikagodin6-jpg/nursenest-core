@@ -10,6 +10,7 @@ import {
   MARKETING_SECONDARY_CTA_COMPACT_CLASS,
 } from "@/lib/theme/marketing-hero-pattern";
 import { alliedHealthLessonsIndexPath, alliedHealthSegmentPath } from "@/lib/lessons/lesson-routes";
+import { formatTitleCase } from "@/lib/format/text-case";
 
 /** Marketing copy for `/allied-health` (loaded from `pages.alliedHealthHub.*`). */
 export type AlliedHealthHubCopy = {
@@ -38,10 +39,7 @@ export type AlliedHealthHubCopy = {
 };
 
 function professionChipLabel(key: string): string {
-  return key
-    .split("-")
-    .map((w) => w.slice(0, 1).toUpperCase() + w.slice(1))
-    .join(" ");
+  return formatTitleCase(key.replace(/-/g, " "));
 }
 
 /** Above-the-fold scan of every track; same links as the grid below. */

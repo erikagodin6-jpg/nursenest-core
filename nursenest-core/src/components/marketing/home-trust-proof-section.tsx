@@ -2,6 +2,7 @@
 
 import { Check, Shield, Users, BookOpen, Brain } from "lucide-react";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
+import { formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
 
 type Props = {
   questionCount: number;
@@ -54,10 +55,10 @@ export function HomeTrustProofSection({ questionCount }: Props) {
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <header className="mx-auto mb-8 max-w-2xl text-center md:mb-10">
           <h2 id="home-trust-proof-heading" className="nn-marketing-h2 text-balance">
-            {t("home.conversion.proof.title")}
+            {formatTitleCase(t("home.conversion.proof.title"), locale)}
           </h2>
           <p className="nn-marketing-body mx-auto mt-2 max-w-xl text-pretty text-[var(--palette-text-muted)]">
-            {t("home.conversion.proof.sub")}
+            {formatSentenceCase(t("home.conversion.proof.sub"), locale)}
           </p>
         </header>
 
@@ -78,8 +79,8 @@ export function HomeTrustProofSection({ questionCount }: Props) {
                   <Icon className={`nn-icon-lg ${s.iconColor}`} />
                 </span>
                 <span className="nn-marketing-h2 tabular-nums text-[var(--palette-heading)]">{displayNumber}</span>
-                <span className="nn-marketing-body-sm mt-1 font-semibold text-[var(--palette-text)]">{s.label}</span>
-                <span className="nn-marketing-caption mt-0.5 text-[var(--palette-text-muted)]">{s.sub}</span>
+                <span className="nn-marketing-body-sm mt-1 font-semibold text-[var(--palette-text)]">{formatTitleCase(s.label, locale)}</span>
+                <span className="nn-marketing-caption mt-0.5 text-[var(--palette-text-muted)]">{formatSentenceCase(s.sub, locale)}</span>
               </li>
             );
           })}
@@ -90,21 +91,21 @@ export function HomeTrustProofSection({ questionCount }: Props) {
           <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between sm:gap-8">
             <div className="shrink-0">
               <p className="nn-marketing-h3 tabular-nums text-[var(--palette-heading)]">{q || "3,500+"}</p>
-              <p className="nn-marketing-caption mt-1 text-[var(--palette-text-muted)]">{t("home.conversion.proof.statQuestionsLabel")}</p>
+              <p className="nn-marketing-caption mt-1 text-[var(--palette-text-muted)]">{formatSentenceCase(t("home.conversion.proof.statQuestionsLabel"), locale)}</p>
             </div>
             <p className="nn-marketing-body-sm max-w-md flex-1 text-pretty text-[var(--palette-text)]">
-              {q ? t("home.conversion.proof.statLine", { count: q }) : t("home.conversion.proof.statFallback")}
+              {formatSentenceCase(q ? t("home.conversion.proof.statLine", { count: q }) : t("home.conversion.proof.statFallback"), locale)}
             </p>
           </div>
           <p className="nn-marketing-body-sm mt-4 flex items-start gap-2 border-t border-[var(--border-subtle)] pt-4 text-[var(--palette-text-muted)]">
             <Shield className="nn-icon-md mt-0.5 shrink-0 text-[var(--palette-accent)]" aria-hidden />
-            {t("home.conversion.proof.passRatesHonest")}
+            {formatSentenceCase(t("home.conversion.proof.passRatesHonest"), locale)}
           </p>
         </div>
 
         {/* Differentiators */}
         <div className="mb-4">
-          <h3 className="nn-marketing-h3 mb-4 text-center text-[var(--palette-heading)]">{t("home.conversion.proof.compareTitle")}</h3>
+          <h3 className="nn-marketing-h3 mb-4 text-center text-[var(--palette-heading)]">{formatTitleCase(t("home.conversion.proof.compareTitle"), locale)}</h3>
           <ul className="mx-auto grid max-w-3xl gap-3">
             {compareKeys.map((k) => (
               <li
@@ -112,7 +113,7 @@ export function HomeTrustProofSection({ questionCount }: Props) {
                 className="nn-marketing-card nn-card-interactive flex gap-3 rounded-xl px-4 py-3 text-left"
               >
                 <Check className="nn-icon-lg mt-0.5 shrink-0 text-[var(--semantic-success)]" aria-hidden />
-                <span className="nn-marketing-body-sm text-[var(--palette-text)]">{t(`home.conversion.proof.compare${k}`)}</span>
+                <span className="nn-marketing-body-sm text-[var(--palette-text)]">{formatSentenceCase(t(`home.conversion.proof.compare${k}`), locale)}</span>
               </li>
             ))}
           </ul>

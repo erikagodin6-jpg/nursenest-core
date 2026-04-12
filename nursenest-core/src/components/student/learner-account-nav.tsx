@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
-import { formatNavLabel } from "@/lib/format/title-case";
+import { formatEyebrow, formatTitleCase } from "@/lib/format/text-case";
 
 type NavItem = { href: string; key: string };
 type NavGroup = { sectionKey: string; items: readonly NavItem[] };
@@ -72,7 +72,7 @@ export function LearnerAccountNav() {
         {GROUPS.map((group) => (
           <div key={group.sectionKey} className="mb-3 last:mb-0">
             <p className="px-2 pb-1 pt-2 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground lg:px-3">
-              {formatNavLabel(t(group.sectionKey), { locale, context: `learner-account.group.${group.sectionKey}` })}
+              {formatEyebrow(t(group.sectionKey), locale)}
             </p>
             <ul className="flex gap-1 overflow-x-auto pb-1 lg:flex-col lg:overflow-x-visible lg:pb-0">
               {group.items.map(({ href, key }) => {
@@ -87,7 +87,7 @@ export function LearnerAccountNav() {
                           : "text-[var(--theme-menu-text)] hover:bg-[var(--surface-interactive-hover)]"
                       }`}
                     >
-                      {formatNavLabel(t(key), { locale, context: `learner-account.item.${key}` })}
+                      {formatTitleCase(t(key), locale)}
                     </Link>
                   </li>
                 );

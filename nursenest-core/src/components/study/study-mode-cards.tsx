@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { LucideIcon } from "lucide-react";
 import { ClipboardList, Timer, LineChart } from "lucide-react";
+import { formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
 
 type ModeCard = {
   icon: LucideIcon;
@@ -53,7 +54,7 @@ export function StudyModeCards({ heading = "Start studying", cards }: Props) {
         id="study-modes-heading"
         className="mb-4 text-lg font-semibold text-[var(--theme-heading-text)]"
       >
-        {heading}
+        {formatTitleCase(heading)}
       </h2>
       <div className="grid gap-4 sm:grid-cols-3">
         {cards.map((card) => {
@@ -71,16 +72,16 @@ export function StudyModeCards({ heading = "Start studying", cards }: Props) {
                 <Icon className={`h-5 w-5 ${styles.icon}`} strokeWidth={1.75} />
               </span>
               <div className="flex-1">
-                <p className="text-sm font-semibold text-[var(--theme-heading-text)]">{card.title}</p>
+                <p className="text-sm font-semibold text-[var(--theme-heading-text)]">{formatTitleCase(card.title)}</p>
                 <p className="mt-1.5 text-sm leading-relaxed text-[var(--theme-muted-text)]">
-                  {card.description}
+                  {formatSentenceCase(card.description)}
                 </p>
               </div>
               <Link
                 href={card.href}
                 className={`${styles.btn} inline-flex min-h-[40px] items-center justify-center rounded-full px-5 py-2 text-sm font-semibold transition-opacity`}
               >
-                {card.cta}
+                {formatTitleCase(card.cta)}
               </Link>
             </div>
           );
