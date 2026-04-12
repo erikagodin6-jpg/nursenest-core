@@ -773,19 +773,24 @@ a {
 
 /* Header wordmark: inside `.nn-brand-header-logo-slot`, respect slot bounds so every theme maps into the same visual frame. */
 .nn-brand-header-logo-slot {
-  background-color: transparent;
+  background-color: transparent !important;
+  background-image: none !important;
   border: 0;
   box-shadow: none;
+  outline: none;
   padding: 0;
   border-radius: 0;
 }
 
 .nn-brand-header-logo-slot img.nn-brand-header-logo {
-  background-color: transparent;
+  background-color: transparent !important;
+  background-image: none !important;
   border: 0;
   box-shadow: none;
+  outline: none;
   padding: 0;
   border-radius: 0;
+  mix-blend-mode: normal;
   max-width: 100% !important;
   max-height: 100% !important;
   width: auto !important;
@@ -795,10 +800,12 @@ a {
 }
 
 .nn-header-logo-link {
-  background: transparent;
+  background: transparent !important;
+  background-image: none !important;
   border: 0;
   border-radius: 0;
   box-shadow: none;
+  outline: none;
   padding: 0;
 }
 
