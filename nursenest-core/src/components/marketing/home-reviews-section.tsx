@@ -35,7 +35,7 @@ export function HomeReviewsSection() {
 
   return (
     <section
-      className="nn-section-block nn-section-enter border-t border-[var(--border-subtle)] bg-[var(--bg-page)]"
+      className="nn-section-block nn-section-enter border-t border-[var(--border)] bg-[var(--page-bg)]"
       aria-labelledby="home-reviews-heading"
       data-testid="section-home-reviews"
     >

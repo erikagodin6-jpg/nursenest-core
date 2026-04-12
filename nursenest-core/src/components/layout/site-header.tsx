@@ -132,13 +132,13 @@ export function SiteHeader() {
               >
                 <SiteBrandLogoMark />
               </Link>
-              <Button type="button" variant="ghost" className="h-9 w-9 shrink-0 p-0" aria-label={t("nav.closeMenu")} onClick={() => setMobileOpen(false)}>
+              <Button type="button" variant="ghost" className="h-9 w-9 shrink-0 p-0 text-[var(--nav-fg)]" aria-label={t("nav.closeMenu")} onClick={() => setMobileOpen(false)}>
                 <X className="h-5 w-5" />
               </Button>
             </div>
             <div className="min-h-0 flex-1 space-y-1 overflow-y-auto overscroll-y-contain px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-3">
               <div className="mb-3 flex flex-col gap-1">
-                <p className="mb-1 px-3 text-[11px] font-semibold uppercase tracking-widest text-[var(--palette-text-muted)]">
+                <p className="mb-1 px-3 text-[11px] font-semibold uppercase tracking-widest text-[var(--nav-muted)]">
                   {t("nav.tierDrop.heading")}
                 </p>
                 {[
@@ -172,7 +172,7 @@ export function SiteHeader() {
                 ))}
               </div>
               <div className="mb-3 flex flex-col gap-1">
-                <p className="mb-1 px-3 text-[11px] font-semibold uppercase tracking-widest text-[var(--palette-text-muted)]">
+                <p className="mb-1 px-3 text-[11px] font-semibold uppercase tracking-widest text-[var(--nav-muted)]">
                   {t("nav.more")}
                 </p>
                 {marketingNav.map((item) => (
@@ -195,7 +195,7 @@ export function SiteHeader() {
                 ))}
               </div>
 
-              <p className="mb-2 nn-marketing-caption text-[var(--palette-text-muted)]">{t("nav.regionLabel")}</p>
+              <p className="mb-2 nn-marketing-caption text-[var(--nav-muted)]">{t("nav.regionLabel")}</p>
               <div className={`mb-3 ${marketingRegionToggleShellMobileRow()}`} role="group" aria-label={t("nav.regionLabel")}>
                 <button type="button" onClick={() => setRegionAndRefresh("US")} className={marketingRegionToggleSegment(region === "US", "mobile")}>
                   {t("home.region.us")}
@@ -204,12 +204,12 @@ export function SiteHeader() {
                   {t("home.region.ca")}
                 </button>
               </div>
-              <p className="mb-3 flex items-start gap-2 nn-marketing-body-sm font-medium tracking-normal text-[var(--palette-text-muted)]">
+              <p className="mb-3 flex items-start gap-2 nn-marketing-body-sm font-medium tracking-normal text-[var(--nav-muted)]">
                 <MapPin className="mt-0.5 h-3.5 w-3.5 shrink-0" />
                 {region === "US" ? t("home.region.usDesc") : t("home.region.caDesc")}
               </p>
               <hr className="my-3 border-[var(--header-nav-border)]" />
-              <p className="mb-2 nn-marketing-body-sm font-medium tracking-normal text-[var(--palette-text-muted)]">{t("nav.language")}</p>
+              <p className="mb-2 nn-marketing-body-sm font-medium tracking-normal text-[var(--nav-muted)]">{t("nav.language")}</p>
               <div className="relative mb-3" ref={langRef}>
                 <button
                   type="button"

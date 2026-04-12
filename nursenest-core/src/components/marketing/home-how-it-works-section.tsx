@@ -61,7 +61,7 @@ export function HomeHowItWorksSection() {
   return (
     <section
       id="home-how-it-works"
-      className="scroll-mt-20 border-b border-[var(--border-subtle)] bg-[var(--theme-page-bg)] py-12 md:py-16"
+      className="scroll-mt-20 border-b border-[var(--border)] bg-[var(--section-bg)] py-12 md:py-16"
       aria-labelledby="home-how-heading"
       data-testid="section-how-it-works"
     >

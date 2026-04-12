@@ -212,7 +212,7 @@ export function SiteFooter() {
           </div>
         </div>
 
-        <div className="mb-6 border-t border-[var(--nav-border)] pb-6 pt-6">
+        <div className="mb-6 border-t border-[var(--footer-border)] pb-6 pt-6">
           <h3 className="mb-3 break-words text-sm font-semibold text-[var(--footer-fg)]">{t("footer.studyInYourLanguage")}</h3>
           <div className="mb-3 flex flex-wrap gap-2">
             <MarketingLanguagePreferenceList
@@ -222,7 +222,7 @@ export function SiteFooter() {
                   disabled={disabled}
                   onClick={onSelect}
                   className={`inline-flex items-center gap-1 text-xs transition-colors hover:text-[var(--footer-fg)] ${
-                    code === locale ? "font-semibold text-[var(--footer-fg)]" : "text-[var(--footer-fg)]/80"
+                    code === locale ? "font-semibold text-[var(--footer-fg)]" : "text-[var(--footer-muted)]"
                   }`}
                 >
                   <span>{flag}</span>
@@ -236,16 +236,16 @@ export function SiteFooter() {
           </Link>
         </div>
 
-        <div className="flex flex-col items-center justify-between gap-4 border-t border-[var(--nav-border)] pt-6 md:flex-row">
+        <div className="flex flex-col items-center justify-between gap-4 border-t border-[var(--footer-border)] pt-6 md:flex-row">
           <div className="flex items-center gap-2 bg-transparent">
             <SiteBrandLogoMark variant="footer" />
           </div>
-          <div className="text-sm text-[var(--footer-fg)]">
+          <div className="text-sm text-[var(--footer-muted)]">
             © {new Date().getFullYear()} {t("brand.nurseNest")}. {t("footer.rights")}
           </div>
         </div>
 
-        <div className="mx-auto mt-4 max-w-3xl text-center text-xs leading-relaxed text-[var(--footer-fg)] opacity-70">
+        <div className="mx-auto mt-4 max-w-3xl text-center text-xs leading-relaxed text-[var(--footer-muted)]">
           {t("footer.legalDisclaimer")}
         </div>
       </div>

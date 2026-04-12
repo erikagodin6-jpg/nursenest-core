@@ -132,7 +132,7 @@ export function HomeExamSelectionSection() {
                   </span>
 
                   {/* Exam label chip */}
-                  <span className="nn-marketing-caption mb-1.5 font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">
+                  <span className="nn-marketing-caption nn-accent-pill mb-2 inline-flex w-fit items-center rounded-full px-2.5 py-0.5 font-semibold uppercase tracking-wide">
                     {t(c.metaKey)}
                   </span>
 

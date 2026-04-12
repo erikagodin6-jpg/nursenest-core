@@ -36,7 +36,7 @@ export function HomeProductPillarsSection() {
 
   return (
     <section
-      className="border-b border-[var(--border-subtle)] bg-[var(--theme-page-bg)] py-12 md:py-16"
+      className="border-b border-[var(--border)] bg-[var(--page-bg)] py-12 md:py-16"
       aria-labelledby="home-product-pillars-heading"
       data-testid="section-product-pillars"
     >

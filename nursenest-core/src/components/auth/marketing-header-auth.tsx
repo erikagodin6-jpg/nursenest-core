@@ -13,7 +13,7 @@ const SIGN_IN_CLASS =
   "nn-marketing-body-sm inline-flex items-center rounded-full px-2 py-1.5 font-medium tracking-normal text-[var(--nav-fg)] transition-colors duration-150 hover:bg-[var(--nav-hover)] hover:text-[var(--nav-fg)] sm:px-3 sm:py-2";
 
 const GET_STARTED_CLASS =
-  "nn-button-primary px-4 py-2 rounded-xl inline-flex min-h-0 items-center justify-center text-sm font-medium text-[var(--role-cta-foreground)]";
+  "nn-button-primary nn-nav-cta inline-flex min-h-0 items-center justify-center rounded-xl px-4 py-2 text-sm font-medium";
 
 function useLocalizeHref() {
   const { locale } = useMarketingI18n();
@@ -89,7 +89,7 @@ export function MarketingHeaderAuthDesktop() {
           className="absolute end-0 z-[100] mt-1 min-w-[13rem] rounded-xl border border-[var(--nav-border)] bg-[var(--nav-bg)] py-1 shadow-lg"
         >
           <div className="border-b border-[var(--header-nav-border)] px-3 py-2 text-xs text-[var(--nav-muted)]">
-            <div className="font-mono text-[11px] text-foreground/80" title={user.id}>
+            <div className="font-mono text-[11px] text-[var(--nav-muted)]" title={user.id}>
               {t("account.idPrefix")} {user.id?.slice(0, 8)}…
             </div>
             {admin ? (

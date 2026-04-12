@@ -197,8 +197,18 @@ body {
   --nav-border: color-mix(in srgb, var(--palette-nav-border, var(--theme-nav-border)) 76%, var(--nav-bg));
   --nav-hover: color-mix(in srgb, var(--palette-nav-hover, var(--theme-menu-hover-bg)) 72%, var(--nav-bg));
   --nav-active: color-mix(in srgb, var(--palette-nav-active, var(--theme-menu-active-bg)) 80%, var(--nav-bg));
+  --nav-link: var(--nav-fg);
+  --nav-link-hover: color-mix(in srgb, var(--nav-fg) 92%, #ffffff);
+  --nav-link-active: var(--nav-fg);
+  --nav-cta-bg: var(--role-cta, var(--accent-primary));
+  --nav-cta-fg: var(--role-cta-foreground, #ffffff);
   --footer-bg: color-mix(in srgb, var(--nav-bg) 82%, var(--palette-primary-deep, var(--theme-primary)) 18%);
   --footer-fg: var(--nav-fg);
+  --footer-muted: color-mix(in srgb, var(--footer-fg) 76%, var(--footer-bg));
+  --footer-border: color-mix(in srgb, var(--nav-border) 84%, var(--footer-bg));
+  --pill-bg: var(--surface-accent-soft);
+  --pill-fg: color-mix(in srgb, var(--text-accent) 85%, var(--theme-heading-text));
+  --pill-border: var(--surface-bubble-border);
 
   /*
    * Bubble / accent surfaces — the primary location where theme color appears.
@@ -465,8 +475,18 @@ html[data-theme="deep-twilight"] {
   --nav-border: color-mix(in srgb, var(--theme-primary) 30%, var(--border-medium));
   --nav-hover: color-mix(in srgb, var(--theme-primary) 17%, var(--nav-bg));
   --nav-active: color-mix(in srgb, var(--theme-primary) 24%, var(--nav-bg));
+  --nav-link: var(--nav-fg);
+  --nav-link-hover: color-mix(in srgb, var(--nav-fg) 92%, #ffffff);
+  --nav-link-active: var(--nav-fg);
+  --nav-cta-bg: color-mix(in srgb, var(--role-cta, var(--theme-primary)) 92%, #ffffff);
+  --nav-cta-fg: var(--role-cta-foreground, #ffffff);
   --footer-bg: color-mix(in srgb, hsl(from var(--bg-page) h s calc(l - 3.5%)) 92%, var(--theme-primary));
   --footer-fg: color-mix(in srgb, var(--theme-heading-text) 92%, #ffffff);
+  --footer-muted: color-mix(in srgb, var(--footer-fg) 72%, var(--footer-bg));
+  --footer-border: color-mix(in srgb, var(--nav-border) 84%, var(--footer-bg));
+  --pill-bg: color-mix(in srgb, var(--theme-primary) 15%, var(--bg-card));
+  --pill-fg: color-mix(in srgb, var(--theme-heading-text) 90%, #ffffff);
+  --pill-border: color-mix(in srgb, var(--theme-primary) 36%, var(--border-subtle));
   --header-nav-surface: var(--nav-bg);
   --header-nav-border: var(--nav-border);
   --header-nav-shadow: var(--shadow-nav);
@@ -1242,7 +1262,7 @@ html[data-theme] .nn-marketing-surface {
 .nn-marketing-nav-link {
   border-bottom: 2px solid transparent;
   padding-bottom: 0.125rem;
-  color: var(--nav-fg);
+  color: var(--nav-link);
   transition:
     color var(--motion-base) var(--motion-ease),
     border-color var(--motion-base) var(--motion-ease),
@@ -1250,9 +1270,15 @@ html[data-theme] .nn-marketing-surface {
 }
 
 .nn-marketing-nav-link:hover {
-  color: var(--text-accent);
-  border-bottom-color: var(--accent-surface-a-border);
+  color: var(--nav-link-hover);
+  border-bottom-color: color-mix(in srgb, var(--nav-link-hover) 36%, transparent);
   transform: translateY(-1px);
+}
+
+.nn-marketing-nav-link[aria-current="page"],
+.nn-marketing-nav-link[data-active="true"] {
+  color: var(--nav-link-active);
+  border-bottom-color: color-mix(in srgb, var(--nav-link-active) 46%, transparent);
 }
 
 /* Header utility rail — preferences / region strip above the main nav */
@@ -1272,11 +1298,11 @@ html[data-theme] .nn-marketing-surface {
 
 .nn-footer-surface {
   background: var(--footer-surface);
-  border-top: 1px solid var(--nav-border);
+  border-top: 1px solid var(--footer-border);
 }
 
 .nn-footer-link {
-  color: var(--footer-fg);
+  color: var(--footer-muted);
   transition:
     color 0.18s ease,
     text-decoration-color 0.18s ease;
@@ -1371,9 +1397,9 @@ html[data-theme="deep-twilight"] .nn-brand-header-logo-slot .nn-brand-header-log
   display: inline-flex;
   align-items: center;
   border-radius: 9999px;
-  background: var(--surface-chip);
-  border: 1px solid var(--border-subtle);
-  color: var(--theme-heading-text);
+  background: var(--pill-bg);
+  border: 1px solid var(--pill-border);
+  color: var(--pill-fg);
   transition:
     background-color 0.15s ease,
     border-color 0.15s ease,
@@ -1382,9 +1408,9 @@ html[data-theme="deep-twilight"] .nn-brand-header-logo-slot .nn-brand-header-log
 
 /* Hover: step up to bubble (14%) — clearly different from resting 9% */
 .nn-chip:hover:not([data-selected="true"]):not([aria-pressed="true"]) {
-  background: var(--surface-bubble);
-  border-color: var(--surface-bubble-border);
-  color: var(--text-accent);
+  background: color-mix(in srgb, var(--pill-bg) 68%, var(--nav-hover));
+  border-color: color-mix(in srgb, var(--pill-border) 86%, var(--nav-border));
+  color: color-mix(in srgb, var(--pill-fg) 88%, var(--nav-link-hover));
 }
 
 /*
@@ -1408,9 +1434,9 @@ html[data-theme="deep-twilight"] .nn-brand-header-logo-slot .nn-brand-header-log
 /* Tab-style pills (segmented controls) */
 .nn-tab-pill {
   border-radius: 9999px;
-  border: 1px solid var(--border-subtle);
-  background: var(--surface-chip);
-  color: var(--theme-menu-text);
+  border: 1px solid var(--pill-border);
+  background: var(--pill-bg);
+  color: var(--pill-fg);
   transition:
     background-color 0.15s ease,
     border-color 0.15s ease,
@@ -1419,9 +1445,9 @@ html[data-theme="deep-twilight"] .nn-brand-header-logo-slot .nn-brand-header-log
 
 /* Hover: surface-bubble (14%) — clearly lifted from resting 9% */
 .nn-tab-pill:hover {
-  background: var(--surface-bubble);
-  border-color: var(--surface-bubble-border);
-  color: var(--text-accent);
+  background: color-mix(in srgb, var(--pill-bg) 68%, var(--nav-hover));
+  border-color: color-mix(in srgb, var(--pill-border) 84%, var(--nav-border));
+  color: color-mix(in srgb, var(--pill-fg) 88%, var(--nav-link-hover));
 }
 
 /* Active tab → strong accent fill — same full-primary treatment as nn-chip selected */
@@ -1451,9 +1477,9 @@ html[data-theme="deep-twilight"] .nn-brand-header-logo-slot .nn-brand-header-log
 }
 /* Pill badge — soft themed background with contrasting themed text */
 .nn-accent-pill {
-  background: var(--surface-accent-soft);
-  border: 1px solid var(--surface-bubble-border);
-  color: var(--text-accent);
+  background: var(--pill-bg);
+  border: 1px solid var(--pill-border);
+  color: var(--pill-fg);
 }
 .nn-accent-soft-ring {
   border-color: var(--surface-bubble-border);
@@ -1499,6 +1525,18 @@ html[data-theme="deep-twilight"] .nn-brand-header-logo-slot .nn-brand-header-log
     background-color var(--motion-fast) var(--motion-ease),
     transform var(--motion-fast) var(--motion-ease),
     box-shadow var(--motion-base) var(--motion-ease);
+}
+
+/* Header/nav CTA variant — remains readable on denser nav surfaces. */
+.nn-nav-cta {
+  background: var(--nav-cta-bg);
+  color: var(--nav-cta-fg);
+  border: 1px solid color-mix(in srgb, var(--nav-cta-bg) 58%, var(--nav-border));
+  box-shadow: 0 6px 16px -8px color-mix(in srgb, var(--nav-cta-bg) 52%, transparent);
+}
+.nn-nav-cta:hover:not(:disabled):not([aria-disabled="true"]) {
+  filter: brightness(1.05);
+  box-shadow: 0 10px 22px -10px color-mix(in srgb, var(--nav-cta-bg) 58%, transparent);
 }
 .nn-button-primary:hover:not(:disabled):not([aria-disabled="true"]) {
   background: var(--role-cta-hover, var(--accent-hover));
@@ -1547,6 +1585,13 @@ html[data-theme="deep-twilight"] .nn-brand-header-logo-slot .nn-brand-header-log
   box-shadow: none;
 }
 
+.nn-btn-primary:focus-visible,
+.nn-button-primary:focus-visible,
+.nn-nav-cta:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
 .nn-btn-secondary {
   background: var(--role-secondary-action-bg, var(--bg-card, var(--theme-card-bg)));
   border: 1px solid var(--role-secondary-action-border, var(--border-subtle, var(--theme-input-border)));
@@ -1567,6 +1612,11 @@ html[data-theme="deep-twilight"] .nn-brand-header-logo-slot .nn-brand-header-log
   color: var(--theme-heading-text);
   transform: translateY(var(--lift-hover-y));
   box-shadow: var(--elevation-hover);
+}
+
+.nn-btn-secondary:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
 }
 
 /* Trust marks (checks, shields): stable green family — not competing with CTA purple/warm */

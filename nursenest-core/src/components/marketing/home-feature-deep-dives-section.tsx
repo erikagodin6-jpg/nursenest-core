@@ -39,15 +39,15 @@ import {
 
 // ── Shared token helpers ───────────────────────────────────────────────────────
 
-const SURFACE = "var(--semantic-surface, var(--theme-page-bg))";
-const SURFACE_ELEVATED = "color-mix(in srgb, var(--theme-primary) 4%, var(--theme-card-bg))";
-const SOFT_A = "color-mix(in srgb, var(--theme-primary) 6%, var(--theme-card-bg))";
-const SOFT_B = "color-mix(in srgb, var(--theme-primary) 10%, var(--theme-card-bg))";
-const WARNING_SOFT = "color-mix(in srgb, var(--semantic-warning, #f59e0b) 8%, var(--theme-card-bg))";
-const INFO_SOFT = "color-mix(in srgb, var(--semantic-info, #3b82f6) 8%, var(--theme-card-bg))";
-const SUCCESS_SOFT = "color-mix(in srgb, var(--semantic-success, #22c55e) 8%, var(--theme-card-bg))";
-const NEUTRAL_MUTED = "color-mix(in srgb, var(--border-subtle) 42%, var(--theme-card-bg))";
-const BORDER = "var(--border-subtle)";
+const SURFACE = "var(--page-bg)";
+const SURFACE_ELEVATED = "color-mix(in srgb, var(--theme-primary) 4%, var(--card-bg))";
+const SOFT_A = "color-mix(in srgb, var(--theme-primary) 6%, var(--card-bg))";
+const SOFT_B = "color-mix(in srgb, var(--theme-primary) 10%, var(--card-bg))";
+const WARNING_SOFT = "color-mix(in srgb, var(--semantic-warning) 8%, var(--card-bg))";
+const INFO_SOFT = "color-mix(in srgb, var(--semantic-info) 8%, var(--card-bg))";
+const SUCCESS_SOFT = "color-mix(in srgb, var(--semantic-success) 8%, var(--card-bg))";
+const NEUTRAL_MUTED = "color-mix(in srgb, var(--border) 42%, var(--card-bg))";
+const BORDER = "var(--border)";
 const TEXT_PRIMARY = "var(--theme-heading-text)";
 const TEXT_SECONDARY = "var(--theme-body-text)";
 const TEXT_MUTED = "var(--theme-muted-text)";
@@ -89,7 +89,7 @@ function StudyPlanPreview() {
           <span
             className="inline-flex h-7 w-7 items-center justify-center rounded-full text-xs font-bold"
             style={{
-              background: "color-mix(in srgb, var(--theme-primary) 15%, var(--theme-card-bg))",
+              background: "color-mix(in srgb, var(--theme-primary) 15%, var(--card-bg))",
               color: TEXT_PRIMARY,
             }}
           >
@@ -139,7 +139,7 @@ function StudyPlanPreview() {
       <div
         className="rounded-xl px-3 py-2.5 text-center"
         style={{
-          background: "color-mix(in srgb, var(--theme-primary) 8%, var(--theme-card-bg))",
+          background: "color-mix(in srgb, var(--theme-primary) 8%, var(--card-bg))",
           border: `1px solid color-mix(in srgb, var(--theme-primary) 20%, ${BORDER})`,
         }}
       >
@@ -193,7 +193,7 @@ function SmartReviewPreview() {
       <div
         className="rounded-lg px-3 py-2 text-center"
         style={{
-          background: "color-mix(in srgb, var(--theme-primary) 8%, var(--theme-card-bg))",
+          background: "color-mix(in srgb, var(--theme-primary) 8%, var(--card-bg))",
           border: `1px solid color-mix(in srgb, var(--theme-primary) 18%, ${BORDER})`,
         }}
       >
@@ -492,8 +492,7 @@ export function HomeFeatureDeepDivesSection() {
 
   return (
     <section
-      className="border-b border-[var(--border-subtle)] py-16 md:py-20"
-      style={{ background: "var(--theme-page-bg)" }}
+      className="border-b border-[var(--border)] bg-[var(--page-bg)] py-16 md:py-20"
       aria-labelledby="home-features-heading"
       data-testid="section-feature-deep-dives"
     >

@@ -29,7 +29,7 @@ export function HomePlatformPreviewSection() {
   return (
     <section
       id="home-platform-preview"
-      className="nn-panel-chart-fade scroll-mt-20 border-t border-[var(--border-subtle)] bg-[var(--theme-page-bg)] pt-7 pb-9 md:pt-9 md:pb-11"
+      className="nn-panel-chart-fade scroll-mt-20 border-t border-[var(--border)] bg-[var(--section-bg)] pt-7 pb-9 md:pt-9 md:pb-11"
       aria-labelledby="home-platform-preview-heading"
       data-testid="section-home-platform-carousel"
     >

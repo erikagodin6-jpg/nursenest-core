@@ -25,7 +25,7 @@ export function HomeFinalStudyCta() {
 
   return (
     <section
-      className="border-t border-[var(--header-nav-border)] bg-[var(--hero-branded-wash)] py-12 md:py-16"
+      className="border-t border-[var(--footer-border)] bg-[var(--hero-branded-wash)] py-12 md:py-16"
       aria-labelledby="home-final-cta-heading"
       data-testid="section-final-study-cta"
     >
@@ -50,10 +50,10 @@ export function HomeFinalStudyCta() {
           {STEPS.map((step) => (
             <li
               key={step.n}
-              className="flex flex-col items-center gap-2 rounded-2xl border border-[var(--border-subtle)] bg-[var(--theme-card-bg)] px-4 py-5 text-center"
+              className="flex flex-col items-center gap-2 rounded-2xl border border-[var(--border)] bg-[var(--card-bg)] px-4 py-5 text-center"
             >
               <span
-                className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-[var(--palette-badge,var(--theme-accent))] text-sm font-bold text-[var(--palette-badge-text,var(--theme-heading-text))]"
+                className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-[var(--pill-border)] bg-[var(--pill-bg)] text-sm font-bold text-[var(--pill-fg)]"
                 aria-hidden
               >
                 {step.n}

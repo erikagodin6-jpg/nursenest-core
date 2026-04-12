@@ -51,6 +51,11 @@ import { isStudyCoachEnabled } from "@/lib/ai/learner-ai-policy";
 import { loadPathwayLessonProgressForSlug } from "@/lib/lessons/pathway-lesson-progress";
 import { LessonAssessmentFlow } from "@/components/lessons/lesson-assessment-flow";
 import { LessonSectionNoteInline } from "@/components/lessons/lesson-section-note-inline";
+import { LessonSectionCard } from "@/components/lessons/lesson-section-card";
+import { PathwayLessonSectionContent } from "@/components/lessons/pathway-lesson-body";
+import { LessonPageHeader } from "@/components/lessons/lesson-page-header";
+import { LessonSectionNav } from "@/components/lessons/lesson-section-nav";
+import { LessonNavButtons } from "@/components/lessons/lesson-nav-buttons";
 
 function LessonBody({ content }: { content: unknown }) {
   if (Array.isArray(content)) {
