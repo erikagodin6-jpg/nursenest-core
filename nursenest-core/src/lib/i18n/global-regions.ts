@@ -302,7 +302,9 @@ export function regionsByPriority(priority: RegionPriority): GlobalRegionSlug[] 
   return GLOBAL_REGION_SLUGS.filter((s) => REGION_CONFIG[s].priority === priority);
 }
 
-// ── Fallback region (global-first, NOT US) ───────────────────────────────────
+// ── Fallback region ───────────────────────────────────────────────────────────
+// Must be a region with a valid hub route (/us or /canada). Changing this to
+// any other slug will 404 visitors whose geo-IP cannot be detected.
 
-export const GLOBAL_DEFAULT_REGION: GlobalRegionSlug = "philippines";
+export const GLOBAL_DEFAULT_REGION: GlobalRegionSlug = "us";
 export const GLOBAL_DEFAULT_LOCALE: GlobalLocaleCode = "en";

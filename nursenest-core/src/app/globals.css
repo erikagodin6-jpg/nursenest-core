@@ -879,13 +879,13 @@ a {
 }
 .nn-ui-btn--outline {
   background: transparent;
-  color: var(--theme-menu-text);
-  border-color: var(--role-secondary-action-border);
+  color: var(--theme-primary);
+  border: 2px solid var(--theme-primary);
 }
 .nn-ui-btn--outline:hover:not(:disabled):not([aria-disabled="true"]) {
-  background: var(--accent-soft);
-  border-color: var(--border-medium);
-  color: var(--theme-heading-text);
+  background: var(--theme-primary);
+  border-color: var(--theme-primary);
+  color: var(--role-cta-foreground, #fff);
 }
 .nn-ui-btn--ghost {
   background: transparent;

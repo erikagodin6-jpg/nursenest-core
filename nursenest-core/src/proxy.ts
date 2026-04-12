@@ -65,14 +65,18 @@ export async function proxy(request: NextRequest, event: NextFetchEvent) {
     );
 
     const geo = resolveGeo(ipCountry, acceptLang, overrideCookie);
-    const redirectTo = geoRedirectPath(geo);
+    // Only redirect to regions that have actual hub routes. All others fall back
+    // to /us so visitors never hit a 404 on the root path.
+    const HUB_REGIONS = new Set(["us", "canada"]);
+    const safeGeo = HUB_REGIONS.has(geo.region) ? geo : { ...geo, region: "us" as const };
+    const redirectTo = geoRedirectPath(safeGeo);
     const url = request.nextUrl.clone();
     url.pathname = redirectTo;
 
     const response = NextResponse.redirect(url, 307);
 
     if (!overrideCookie) {
-      response.cookies.set(GLOBAL_REGION_COOKIE, geo.region, {
+      response.cookies.set(GLOBAL_REGION_COOKIE, safeGeo.region, {
         path: "/",
         maxAge: GLOBAL_REGION_COOKIE_MAX_AGE,
         sameSite: "lax",
@@ -80,7 +84,7 @@ export async function proxy(request: NextRequest, event: NextFetchEvent) {
       });
     }
 
-    response.headers.set("x-nn-geo-source", geo.source);
+    response.headers.set("x-nn-geo-source", safeGeo.source);
     if (geo.detectedCountryCode) {
       response.headers.set("x-nn-geo-country", geo.detectedCountryCode);
     }
