@@ -9,7 +9,7 @@ import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry"
 import { resolveExamPathwaySafe } from "@/lib/exam-pathways/resolve-exam-pathway-safe";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { marketingPathwayLessonTopicClusterPath, marketingPathwayLessonsIndexPath } from "@/lib/lessons/lesson-routes";
-import { defaultPathwayLessonContentLocaleForExamHubRoute } from "@/lib/lessons/pathway-lesson-locale";
+import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
 import {
   PATHWAY_HUB_PAGE_SIZE_DEFAULT,
   getLessonsForTopicPage,
@@ -76,7 +76,7 @@ export async function generateMetadata({ params }: Pick<Props, "params">): Promi
       if (!pathway) return {};
       const canonicalPath = marketingPathwayLessonTopicClusterPath(pathway, topicSlug);
       const canonical = absoluteUrl(canonicalPath);
-      const loc = defaultPathwayLessonContentLocaleForExamHubRoute();
+      const loc = await getMarketingLocaleForDefaultRoute();
       try {
         const topicClusters = await listTopicClusters(pathway.id, loc);
         const label =
@@ -125,7 +125,7 @@ export async function generateMetadata({ params }: Pick<Props, "params">): Promi
 export default async function PathwayLessonTopicClusterPage({ params, searchParams }: Props) {
   const { locale: countrySlug, slug: roleTrack, examCode, topicSlug } = await params;
   const pathname = `/${countrySlug}/${roleTrack}/${examCode}/lessons/topics/${topicSlug}`;
-  const lessonContentLocale = defaultPathwayLessonContentLocaleForExamHubRoute();
+  const lessonContentLocale = await getMarketingLocaleForDefaultRoute();
   const pathway = resolveExamPathwaySafe(countrySlug, roleTrack, examCode, { pathname });
   if (!pathway) notFound();
 

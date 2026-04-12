@@ -82,7 +82,7 @@ export function resolveGeo(
  * Falls back to the region's default locale.
  *
  * Only considers our supported locale codes — no BCP-47 subtag matching beyond
- * primary language code (sufficient for the 5 locales we support).
+ * primary language code (sufficient for the locales listed in `GLOBAL_LOCALE_CODES`).
  */
 function pickLocaleForRegion(
   region: GlobalRegionSlug,

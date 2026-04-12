@@ -17,7 +17,7 @@ import {
 } from "@/components/lessons/pathway-lesson-link-practice";
 import { marketingExamHubBasePath, marketingPathwayLessonsIndexPath } from "@/lib/lessons/lesson-routes";
 import { resolveTopicSlugForPathwayTopicLabel } from "@/lib/lessons/lesson-question-cross-links";
-import { defaultPathwayLessonContentLocaleForExamHubRoute } from "@/lib/lessons/pathway-lesson-locale";
+import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
 import {
   getRelatedPathwayLessons,
   RELATED_LESSONS_EXCLUDE_SLUG_SENTINEL,
@@ -94,7 +94,7 @@ export default async function ExamPathwayQuestionsHubPage({ params, searchParams
   });
 
   const topicFilterTrim = topicFilter.trim();
-  const lessonContentLocale = defaultPathwayLessonContentLocaleForExamHubRoute();
+  const lessonContentLocale = await getMarketingLocaleForDefaultRoute();
   let relatedLessonsForTopic: Awaited<ReturnType<typeof getRelatedPathwayLessons>> = [];
 
   let clusterSlugForLessons: string | null = topicSlugFromUrl || null;

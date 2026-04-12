@@ -1,6 +1,17 @@
 import { DEFAULT_MARKETING_LOCALE, MARKETING_LOCALE_CODES } from "@/lib/i18n/marketing-locale-policy";
 
 /**
+ * Canonical `pathway_lessons.locale` for authored rows. Translations ship as file/DB overlays
+ * (`public/i18n/educational-overlays/...`) so we do not duplicate full lesson rows per language when English exists.
+ */
+export const PATHWAY_LESSON_CANONICAL_DB_LOCALE = "en" as const;
+
+/**
+ * Locales we ship educational overlays for (subset of marketing codes). Hindi (`hi`) can be added when bundles exist.
+ */
+export const PATHWAY_LESSON_OVERLAY_TARGET_LOCALES = ["es", "fr", "tl", "hi"] as const;
+
+/**
  * Allowed `pathway_lessons.locale` values (subset of marketing UI codes; extend when adding DB rows).
  * Keys are normalized with {@link normalizePathwayLessonLocale}.
  */
@@ -22,8 +33,10 @@ export function normalizePathwayLessonLocale(locale: string | undefined): string
 
 /**
  * **Exam hub URLs** under `(default)/[locale]/[slug]/[examCode]` use the first segment as **countrySlug**
- * (`us`, `canada`), not a lesson content locale. Pass {@link DEFAULT_MARKETING_LOCALE} (or a future UI locale)
- * separately into pathway lesson loaders for `pathway_lessons.locale`.
+ * (`us`, `canada`), not lesson UI language. For **viewer-facing** lesson loads, call
+ * `getMarketingLocaleForDefaultRoute` from `@/lib/i18n/marketing-locale-server` (cookie / picker) and pass it into
+ * `getPathwayLesson` / hub loaders so
+ * overlays apply. Use this helper only when you intentionally want English-only resolution (e.g. internal diagnostics).
  */
 export function defaultPathwayLessonContentLocaleForExamHubRoute(): string {
   return DEFAULT_MARKETING_LOCALE;

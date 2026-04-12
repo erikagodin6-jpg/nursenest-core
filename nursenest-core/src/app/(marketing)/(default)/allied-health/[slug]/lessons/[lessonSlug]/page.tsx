@@ -20,10 +20,8 @@ import {
   getPathwayLessonPreviewKind,
   visibleSectionsForLesson,
 } from "@/lib/lessons/pathway-lesson-access";
-import {
-  defaultPathwayLessonContentLocaleForExamHubRoute,
-  normalizePathwayLessonLocale,
-} from "@/lib/lessons/pathway-lesson-locale";
+import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
+import { normalizePathwayLessonLocale } from "@/lib/lessons/pathway-lesson-locale";
 import {
   getPathwayLesson,
   getRelatedPathwayLessons,
@@ -99,7 +97,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       const resolved = resolveProfession(slug);
       const prof = resolved?.prof;
       const pathway = prof ? getPathwayOrThrow(prof.pathwayId) : undefined;
-      const lessonContentLocale = defaultPathwayLessonContentLocaleForExamHubRoute();
+      const lessonContentLocale = await getMarketingLocaleForDefaultRoute();
       const lesson = pathway ? await getPathwayLesson(pathway.id, lessonSlug, lessonContentLocale) : undefined;
       if (!prof || !pathway || !lesson) return {};
       if (!alliedLessonMatchesProfessionFilter(lesson, prof.topicSlugsIn)) return {};
@@ -137,7 +135,7 @@ export default async function AlliedHealthSlugLessonDetailPage({ params }: Props
   const pathway = getPathwayOrThrow(prof.pathwayId);
   if (!pathway) notFound();
 
-  const lessonContentLocale = defaultPathwayLessonContentLocaleForExamHubRoute();
+  const lessonContentLocale = await getMarketingLocaleForDefaultRoute();
   const lesson = await getPathwayLesson(pathway.id, lessonSlug, lessonContentLocale);
   if (!lesson) notFound();
   if (!alliedLessonMatchesProfessionFilter(lesson, prof.topicSlugsIn)) notFound();

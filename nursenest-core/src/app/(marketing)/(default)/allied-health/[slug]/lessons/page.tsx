@@ -14,7 +14,7 @@ import {
   getPathwayOrThrow,
   isAlliedHeroExamPrepSlug,
 } from "@/lib/allied/allied-professions-registry";
-import { defaultPathwayLessonContentLocaleForExamHubRoute } from "@/lib/lessons/pathway-lesson-locale";
+import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
 import { pathwayCountryLabel } from "@/lib/lessons/pathway-lesson-hub-seo";
 import {
   getPathwayLessonsPage,
@@ -62,7 +62,7 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
       const { prof } = resolved;
       const pathway = getPathwayOrThrow(prof.pathwayId);
       if (!pathway) return { title: "Not found" };
-      const loc = defaultPathwayLessonContentLocaleForExamHubRoute();
+      const loc = await getMarketingLocaleForDefaultRoute();
       const lessonTotal =
         pathway != null
           ? await countPublishedPathwayLessonsForAlliedMarketing(
@@ -106,7 +106,7 @@ export default async function AlliedHealthSlugLessonsPage({ params, searchParams
   if (!pathway) notFound();
 
   const professionHeroPath = alliedHealthSegmentPath(prof.segment);
-  const lessonContentLocale = defaultPathwayLessonContentLocaleForExamHubRoute();
+  const lessonContentLocale = await getMarketingLocaleForDefaultRoute();
   const base = alliedHealthLessonsIndexPath(prof.professionKey);
   const sp = await searchParams;
   const pageRequested = Math.max(1, Number(sp.page ?? "1") || 1);

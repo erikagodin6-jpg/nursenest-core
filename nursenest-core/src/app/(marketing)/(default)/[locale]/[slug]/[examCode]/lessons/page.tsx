@@ -9,7 +9,7 @@ import { loadPathwayLessonsHubAggregates } from "@/lib/exam-pathways/marketing-h
 import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
 import { resolveExamPathwaySafe } from "@/lib/exam-pathways/resolve-exam-pathway-safe";
 import { marketingPathwayLessonsIndexPath, marketingExamHubBasePath } from "@/lib/lessons/lesson-routes";
-import { defaultPathwayLessonContentLocaleForExamHubRoute } from "@/lib/lessons/pathway-lesson-locale";
+import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
 import { normalizePathwayHubSearchQuery } from "@/lib/lessons/pathway-lesson-loader";
 import { PathwayLessonsCurriculumHub } from "@/components/pathway-lessons/pathway-lessons-curriculum-hub";
 import { pathwayLessonHubMetaDescription, pathwayLessonHubMetaTitle } from "@/lib/lessons/pathway-lesson-hub-seo";
@@ -68,7 +68,7 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
 export default async function PathwayLessonsHubPage({ params, searchParams }: Props) {
   const { locale: countrySlug, slug: roleTrack, examCode } = await params;
   const pathname = `/${countrySlug}/${roleTrack}/${examCode}`;
-  const lessonContentLocale = defaultPathwayLessonContentLocaleForExamHubRoute();
+  const lessonContentLocale = await getMarketingLocaleForDefaultRoute();
   const pathway = resolveExamPathwaySafe(countrySlug, roleTrack, examCode, { pathname });
   if (!pathway) notFound();
 

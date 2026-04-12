@@ -58,6 +58,14 @@ const REGION_PRICING_TIER: Record<GlobalRegionSlug, PricingTier> = {
   singapore: "mid",
   ireland: "mid",
   "new-zealand": "mid",
+  japan: "mid",
+  "south-korea": "mid",
+  indonesia: "low",
+  vietnam: "low",
+  thailand: "low",
+  italy: "mid",
+  greece: "mid",
+  germany: "high",
   us: "high",
   canada: "high",
   uk: "high",
@@ -153,6 +161,38 @@ const LOCAL_CURRENCY_OVERRIDES: Partial<
   singapore: {
     nursing: { monthly: 34.99, "3-month": 79.99, "6-month": 119.99, yearly: 179.99 },
     allied: { monthly: 24.99, "3-month": 59.99, "6-month": 99.99, yearly: 149.99 },
+  },
+  japan: {
+    nursing: { monthly: 3_980, "3-month": 9_800, "6-month": 14_800, yearly: 21_800 },
+    allied: { monthly: 2_980, "3-month": 7_800, "6-month": 11_800, yearly: 17_800 },
+  },
+  "south-korea": {
+    nursing: { monthly: 32_900, "3-month": 79_900, "6-month": 119_900, yearly: 179_900 },
+    allied: { monthly: 26_900, "3-month": 64_900, "6-month": 99_900, yearly: 149_900 },
+  },
+  indonesia: {
+    nursing: { monthly: 149_000, "3-month": 359_000, "6-month": 579_000, yearly: 849_000 },
+    allied: { monthly: 119_000, "3-month": 289_000, "6-month": 469_000, yearly: 699_000 },
+  },
+  vietnam: {
+    nursing: { monthly: 249_000, "3-month": 599_000, "6-month": 949_000, yearly: 1_399_000 },
+    allied: { monthly: 199_000, "3-month": 479_000, "6-month": 759_000, yearly: 1_099_000 },
+  },
+  thailand: {
+    nursing: { monthly: 799, "3-month": 1_999, "6-month": 3_199, yearly: 4_699 },
+    allied: { monthly: 649, "3-month": 1_599, "6-month": 2_599, yearly: 3_799 },
+  },
+  italy: {
+    nursing: { monthly: 22.99, "3-month": 54.99, "6-month": 84.99, yearly: 124.99 },
+    allied: { monthly: 18.99, "3-month": 44.99, "6-month": 69.99, yearly: 104.99 },
+  },
+  greece: {
+    nursing: { monthly: 22.99, "3-month": 54.99, "6-month": 84.99, yearly: 124.99 },
+    allied: { monthly: 18.99, "3-month": 44.99, "6-month": 69.99, yearly: 104.99 },
+  },
+  germany: {
+    nursing: { monthly: 34.99, "3-month": 79.99, "6-month": 119.99, yearly: 179.99 },
+    allied: { monthly: 27.99, "3-month": 64.99, "6-month": 99.99, yearly: 149.99 },
   },
 };
 

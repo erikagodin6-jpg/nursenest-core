@@ -14,7 +14,7 @@
 
 // ── Locale codes ─────────────────────────────────────────────────────────────
 
-export const GLOBAL_LOCALE_CODES = ["en", "fr", "es", "tl", "hi"] as const;
+export const GLOBAL_LOCALE_CODES = ["en", "fr", "es", "tl", "hi", "ja", "ko", "it", "el", "de"] as const;
 export type GlobalLocaleCode = (typeof GLOBAL_LOCALE_CODES)[number];
 
 export function isGlobalLocaleCode(v: string): v is GlobalLocaleCode {
@@ -40,6 +40,15 @@ export const GLOBAL_REGION_SLUGS = [
   "trinidad",
   "ireland",
   "new-zealand",
+  // Asia / Europe expansion (SEO + geo; exam hubs may still route via US/CA pathways)
+  "japan",
+  "south-korea",
+  "indonesia",
+  "vietnam",
+  "thailand",
+  "italy",
+  "greece",
+  "germany",
   // Legacy / competitive
   "us",
   "canada",
@@ -214,6 +223,86 @@ export const REGION_CONFIG: Record<GlobalRegionSlug, RegionConfig> = {
     currencyCode: "NZD",
     currencySymbol: "NZ$",
     countryCodes: ["NZ"],
+  },
+  japan: {
+    slug: "japan",
+    displayName: "Japan",
+    priority: "secondary",
+    defaultLocale: "ja",
+    allowedLocales: ["ja", "en"],
+    currencyCode: "JPY",
+    currencySymbol: "¥",
+    countryCodes: ["JP"],
+  },
+  "south-korea": {
+    slug: "south-korea",
+    displayName: "South Korea",
+    priority: "secondary",
+    defaultLocale: "ko",
+    allowedLocales: ["ko", "en"],
+    currencyCode: "KRW",
+    currencySymbol: "₩",
+    countryCodes: ["KR"],
+  },
+  indonesia: {
+    slug: "indonesia",
+    displayName: "Indonesia",
+    priority: "secondary",
+    defaultLocale: "en",
+    allowedLocales: ["en"],
+    currencyCode: "IDR",
+    currencySymbol: "Rp",
+    countryCodes: ["ID"],
+  },
+  vietnam: {
+    slug: "vietnam",
+    displayName: "Vietnam",
+    priority: "secondary",
+    defaultLocale: "en",
+    allowedLocales: ["en"],
+    currencyCode: "VND",
+    currencySymbol: "₫",
+    countryCodes: ["VN"],
+  },
+  thailand: {
+    slug: "thailand",
+    displayName: "Thailand",
+    priority: "secondary",
+    defaultLocale: "en",
+    allowedLocales: ["en"],
+    currencyCode: "THB",
+    currencySymbol: "฿",
+    countryCodes: ["TH"],
+  },
+  italy: {
+    slug: "italy",
+    displayName: "Italy",
+    priority: "secondary",
+    defaultLocale: "it",
+    allowedLocales: ["it", "en"],
+    currencyCode: "EUR",
+    currencySymbol: "€",
+    countryCodes: ["IT"],
+  },
+  greece: {
+    slug: "greece",
+    displayName: "Greece",
+    priority: "secondary",
+    defaultLocale: "el",
+    allowedLocales: ["el", "en"],
+    currencyCode: "EUR",
+    currencySymbol: "€",
+    countryCodes: ["GR"],
+  },
+  germany: {
+    slug: "germany",
+    displayName: "Germany",
+    priority: "secondary",
+    defaultLocale: "de",
+    allowedLocales: ["de", "en"],
+    currencyCode: "EUR",
+    currencySymbol: "€",
+    countryCodes: ["DE"],
   },
   // ── Legacy / competitive ───────────────────────────────────────────────────
   us: {

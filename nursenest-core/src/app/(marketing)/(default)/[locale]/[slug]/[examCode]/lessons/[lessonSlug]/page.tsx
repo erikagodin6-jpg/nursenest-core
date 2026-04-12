@@ -24,10 +24,7 @@ import {
   getPathwayLessonPreviewKind,
   visibleSectionsForLesson,
 } from "@/lib/lessons/pathway-lesson-access";
-import {
-  defaultPathwayLessonContentLocaleForExamHubRoute,
-  normalizePathwayLessonLocale,
-} from "@/lib/lessons/pathway-lesson-locale";
+import { normalizePathwayLessonLocale } from "@/lib/lessons/pathway-lesson-locale";
 import { loadPathwayLessonWithLegacySlugRedirect } from "@/lib/lessons/pathway-lesson-detail-redirect";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { prisma } from "@/lib/db";
@@ -84,8 +81,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       const pathway = resolveExamPathwaySafe(countrySlug, roleTrack, examCode, {
         pathname,
       });
-      const contentLocale = defaultPathwayLessonContentLocaleForExamHubRoute();
-      const lesson = pathway ? await loadPathwayLessonWithLegacySlugRedirect(pathway, lessonSlug, contentLocale) : undefined;
+      const viewerLessonLocale = await getMarketingLocaleForDefaultRoute();
+      const lesson = pathway
+        ? await loadPathwayLessonWithLegacySlugRedirect(pathway, lessonSlug, viewerLessonLocale)
+        : undefined;
       if (!pathway || !lesson) return {};
       const path = pathwayLessonPublicDetailPath(pathway, lesson.slug);
       if (!path) return {};
@@ -138,7 +137,7 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
   const pathname = `/${countrySlug}/${roleTrack}/${examCode}/lessons/${lessonSlug}`;
   const pathway = resolveExamPathwaySafe(countrySlug, roleTrack, examCode, { pathname });
   if (!pathway) notFound();
-  const lessonContentLocale = defaultPathwayLessonContentLocaleForExamHubRoute();
+  const lessonContentLocale = await getMarketingLocaleForDefaultRoute();
 
   const [lessonResult, sessionResult] = await Promise.allSettled([
     loadPathwayLessonWithLegacySlugRedirect(pathway, lessonSlug, lessonContentLocale),

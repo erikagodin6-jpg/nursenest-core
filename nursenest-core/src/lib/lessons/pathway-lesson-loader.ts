@@ -18,7 +18,11 @@ import type { PathwayLessonEducationalOverlay } from "@/lib/i18n/educational-con
 import { applyPathwayLessonEducationalOverlay } from "@/lib/i18n/educational-content-overlay";
 import { fetchPublishedPathwayLessonOverlayMapSafe } from "@/lib/i18n/educational-translation-db";
 import { inferExamAudienceFromPathwayId } from "@/lib/lessons/exam-complete-lesson-template";
-import { normalizePathwayLessonLocale, PATHWAY_LESSON_SITEMAP_LOCALE } from "@/lib/lessons/pathway-lesson-locale";
+import {
+  normalizePathwayLessonLocale,
+  PATHWAY_LESSON_CANONICAL_DB_LOCALE,
+  PATHWAY_LESSON_SITEMAP_LOCALE,
+} from "@/lib/lessons/pathway-lesson-locale";
 import {
   evaluatePathwayLessonStructuralGate,
   lessonUsesPremiumStructure,
@@ -687,6 +691,23 @@ async function resolveEffectiveListLocale(pathwayId: string, requestedRaw: strin
   return sorted[0] ?? "en";
 }
 
+/**
+ * Prefer {@link PATHWAY_LESSON_CANONICAL_DB_LOCALE} rows when the pathway has any published English lessons;
+ * otherwise fall back to {@link resolveEffectiveListLocale} (legacy pathways with non-English-only rows).
+ */
+async function effectiveLocaleForPathwayLessonDbRows(pathwayId: string, requestedRaw: string): Promise<string> {
+  const requested = normalizePathwayLessonLocale(requestedRaw);
+  const enCount = await dbCall(
+    () =>
+      prisma.pathwayLesson.count({
+        where: { pathwayId, status: ContentStatus.PUBLISHED, locale: PATHWAY_LESSON_CANONICAL_DB_LOCALE },
+      }),
+    0,
+  );
+  if (enCount > 0) return PATHWAY_LESSON_CANONICAL_DB_LOCALE;
+  return resolveEffectiveListLocale(pathwayId, requested);
+}
+
 const PATHWAY_LESSON_HUB_LIST_SELECT = {
   slug: true,
   title: true,
@@ -783,7 +804,7 @@ async function getPathwayLessonsPageImpl(
   const dbAny = await pathwayHasPublishedDbLessons(pathwayId);
   if (dbAny) {
     const t0 = performance.now();
-    const effective = await resolveEffectiveListLocale(pathwayId, requested);
+    const effective = await effectiveLocaleForPathwayLessonDbRows(pathwayId, requested);
     // Load all scoped-gold rows not yet in DB, then all DB rows — no skip/offset.
     const missingGolds = await listMissingScopedGoldHubRows(pathwayId, effective, topicSlugsIn);
     const goldsFiltered = qRaw ? missingGolds.filter((row) => lessonInputMatchesHubSearch(row, qLower)) : missingGolds;
@@ -904,7 +925,7 @@ async function getLessonsForTopicPageImpl(
   const dbHas = await pathwayHasPublishedDbLessons(pathwayId);
   if (dbHas) {
     const t0 = performance.now();
-    const effective = await resolveEffectiveListLocale(pathwayId, requested);
+    const effective = await effectiveLocaleForPathwayLessonDbRows(pathwayId, requested);
     const total = await dbCall(
       () =>
         prisma.pathwayLesson.count({
@@ -1117,29 +1138,33 @@ async function getLessonsForTopicPageWithDataCache(
 
 export const getLessonsForTopicPage = cache(getLessonsForTopicPageWithDataCache);
 
-/** Single lesson by slug — one targeted DB fetch (requested locale, then English fallback). */
+/** Single lesson by slug — canonical English DB row when present, then file/DB overlays; legacy non-English row if no English. */
 async function getPathwayLessonImpl(
   pathwayId: string,
   slug: string,
   marketingLocale?: string,
 ): Promise<PathwayLessonRecord | undefined> {
-  const requested = normalizePathwayLessonLocale(marketingLocale);
-  const lessonDbOverlays = await fetchPublishedPathwayLessonOverlayMapSafe(requested);
+  const overlayLocale = normalizePathwayLessonLocale(marketingLocale);
+  const lessonDbOverlays = await fetchPublishedPathwayLessonOverlayMapSafe(overlayLocale);
 
-  const rowRequested = await dbCall(
+  const rowEn = await dbCall(
     () =>
       prisma.pathwayLesson.findUnique({
         where: {
-          pathwayId_slug_locale: { pathwayId, slug, locale: requested },
+          pathwayId_slug_locale: {
+            pathwayId,
+            slug,
+            locale: PATHWAY_LESSON_CANONICAL_DB_LOCALE,
+          },
         },
       }),
     null,
   );
-  if (rowRequested && rowRequested.status === ContentStatus.PUBLISHED) {
+  if (rowEn && rowEn.status === ContentStatus.PUBLISHED) {
     return applyOverlayAndStructural(
       withLocaleMeta(
-        normalizeLesson(pathwayLessonRowToInput(rowRequested), pathwayId),
-        lessonLocaleMeta(marketingLocale, requested, false, false),
+        normalizeLesson(pathwayLessonRowToInput(rowEn), pathwayId),
+        lessonLocaleMeta(marketingLocale, PATHWAY_LESSON_CANONICAL_DB_LOCALE, false, false),
       ),
       marketingLocale,
       pathwayId,
@@ -1147,21 +1172,21 @@ async function getPathwayLessonImpl(
     );
   }
 
-  if (requested !== "en") {
-    const rowEn = await dbCall(
+  if (overlayLocale !== PATHWAY_LESSON_CANONICAL_DB_LOCALE) {
+    const rowRequested = await dbCall(
       () =>
         prisma.pathwayLesson.findUnique({
           where: {
-            pathwayId_slug_locale: { pathwayId, slug, locale: "en" },
+            pathwayId_slug_locale: { pathwayId, slug, locale: overlayLocale },
           },
         }),
       null,
     );
-    if (rowEn && rowEn.status === ContentStatus.PUBLISHED) {
+    if (rowRequested && rowRequested.status === ContentStatus.PUBLISHED) {
       return applyOverlayAndStructural(
         withLocaleMeta(
-          normalizeLesson(pathwayLessonRowToInput(rowEn), pathwayId),
-          lessonLocaleMeta(marketingLocale, "en", true, false),
+          normalizeLesson(pathwayLessonRowToInput(rowRequested), pathwayId),
+          lessonLocaleMeta(marketingLocale, overlayLocale, false, false),
         ),
         marketingLocale,
         pathwayId,
@@ -1181,7 +1206,10 @@ async function getPathwayLessonImpl(
     });
   }
   return applyOverlayAndStructural(
-    withLocaleMeta(normalizeLesson(hit, pathwayId), lessonLocaleMeta(marketingLocale, "en", requested !== "en", true)),
+    withLocaleMeta(
+      normalizeLesson(hit, pathwayId),
+      lessonLocaleMeta(marketingLocale, PATHWAY_LESSON_CANONICAL_DB_LOCALE, overlayLocale !== "en", true),
+    ),
     marketingLocale,
     pathwayId,
     lessonDbOverlays,
@@ -1301,7 +1329,7 @@ async function getRelatedPathwayLessonsImpl(
 
   const dbHas = await pathwayHasPublishedDbLessons(pathwayId);
   if (dbHas) {
-    const effective = await resolveEffectiveListLocale(pathwayId, requested);
+    const effective = await effectiveLocaleForPathwayLessonDbRows(pathwayId, requested);
     const rows = await dbCall(
       () =>
         prisma.pathwayLesson.findMany({
@@ -1472,7 +1500,10 @@ function topicClustersFromCatalogPathway(pathwayId: string): TopicCluster[] {
 async function listTopicClustersImpl(pathwayId: string, marketingLocale?: string): Promise<TopicCluster[]> {
   const dbHas = await pathwayHasPublishedDbLessons(pathwayId);
   if (dbHas) {
-    const effective = await resolveEffectiveListLocale(pathwayId, normalizePathwayLessonLocale(marketingLocale));
+    const effective = await effectiveLocaleForPathwayLessonDbRows(
+      pathwayId,
+      normalizePathwayLessonLocale(marketingLocale),
+    );
     const groups = await dbCall(
       () =>
         prisma.pathwayLesson.groupBy({
