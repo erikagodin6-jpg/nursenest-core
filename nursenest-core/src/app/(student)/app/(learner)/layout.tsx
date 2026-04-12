@@ -12,6 +12,7 @@ import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlemen
 import { loadLearnerStudyNextBlock } from "@/lib/learner/load-learner-study-next-block";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import { prisma } from "@/lib/db";
+import { resolveDashboardIdentity } from "@/lib/learner/resolve-dashboard-identity";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { userShouldSeeBaselinePrompt } from "@/lib/baseline/baseline-assessment";
 import { BaselineAssessmentPrompt } from "@/components/student/baseline-assessment-prompt";
@@ -43,6 +44,7 @@ export default async function LearnerShellLayout({ children }: { children: React
             baselineAssessmentSkippedAt: true,
             baselineAssessmentCompletedAt: true,
             learnerPath: true,
+            alliedProfessionKey: true,
           },
         });
         showBaselinePrompt = u != null && userShouldSeeBaselinePrompt(u);
@@ -50,6 +52,14 @@ export default async function LearnerShellLayout({ children }: { children: React
         if (lp) {
           const p = getExamPathwayById(lp);
           pathwayShortLabel = p ? p.shortName || p.displayName : lp.slice(0, 48);
+        } else if (u?.alliedProfessionKey) {
+          // Allied users don't have a learnerPath; derive label from career identity
+          const identity = resolveDashboardIdentity({
+            tier: (session?.user as { tier?: string })?.tier,
+            learnerPathId: null,
+            alliedProfessionKey: u.alliedProfessionKey,
+          });
+          pathwayShortLabel = identity.pill;
         }
       } catch {
         showBaselinePrompt = false;

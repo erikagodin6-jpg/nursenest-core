@@ -113,8 +113,8 @@ export default async function AlliedCareerHubPage({ params }: Props) {
   const categoryMeta = ALLIED_HUB_CATEGORY_META[prof.hubCategory];
 
   const crumbs = [
-    { label: "Allied Health", href: "/allied-health" },
-    { label: prof.h1, href: careerBasePath },
+    { name: "Allied Health", href: "/allied-health" },
+    { name: prof.h1, href: careerBasePath },
   ];
   const schemaItems = [
     { name: "Home", item: absoluteUrl("/") },

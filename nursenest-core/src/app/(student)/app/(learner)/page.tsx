@@ -47,6 +47,7 @@ import { isStudyCoachEnabled } from "@/lib/ai/learner-ai-policy";
 import { computeBenchmarkData, type BenchmarkData } from "@/lib/learner/benchmark-engine";
 import { BenchmarkCard, BenchmarkLockedCard } from "@/components/student/dashboard/benchmark-card";
 import { resolveDisplayName } from "@/lib/user/resolve-display-name";
+import { resolveDashboardIdentity } from "@/lib/learner/resolve-dashboard-identity";
 
 function retentionPersonalNote(t: LearnerMarketingT, prefs: Awaited<ReturnType<typeof loadLearnerRetentionPreferences>>): string | null {
   if (!prefs) return null;
@@ -97,17 +98,28 @@ export default async function LearnerDashboardPage() {
   }
 
   let userDisplayName: string | null = null;
+  let userLearnerPath: string | null = null;
+  let userAlliedProfessionKey: string | null = null;
 
   // Redirect to onboarding if user hasn't completed it yet
   try {
     const user = await prisma.user.findUnique({
       where: { id: userId },
-      select: { onboardingCompletedAt: true, firstName: true, displayName: true, name: true },
+      select: {
+        onboardingCompletedAt: true,
+        firstName: true,
+        displayName: true,
+        name: true,
+        learnerPath: true,
+        alliedProfessionKey: true,
+      },
     });
     if (user && !user.onboardingCompletedAt) {
       redirect("/app/onboarding");
     }
     userDisplayName = user ? resolveDisplayName(user) : null;
+    userLearnerPath = user?.learnerPath ?? null;
+    userAlliedProfessionKey = user?.alliedProfessionKey ?? null;
   } catch (e) {
     // redirect() throws a NEXT_REDIRECT error; re-throw it
     if (e && typeof e === "object" && "digest" in e) throw e;
@@ -132,6 +144,11 @@ export default async function LearnerDashboardPage() {
   }
 
   if (!entitlement.hasAccess) {
+    const lockedIdentity = resolveDashboardIdentity({
+      tier: session?.user?.tier,
+      learnerPathId: userLearnerPath,
+      alliedProfessionKey: userAlliedProfessionKey,
+    });
     return (
       <main className="nn-dash">
         <BreadcrumbTrail items={crumbs} />
@@ -139,7 +156,12 @@ export default async function LearnerDashboardPage() {
         {/* Page header */}
         <section className="nn-dash-section">
           <div className="nn-learner-page-hero">
-            <p className="text-[0.6875rem] font-bold uppercase tracking-[0.1em] text-[var(--semantic-brand)]">{t("learner.dashboard.kicker")}</p>
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="inline-flex items-center rounded-full bg-[color-mix(in_srgb,var(--semantic-brand)_12%,var(--semantic-surface))] px-3 py-1 text-[11px] font-bold uppercase tracking-widest text-[var(--semantic-brand)]">
+                {lockedIdentity.pill}
+              </span>
+              <p className="text-[0.6875rem] font-medium text-[var(--semantic-text-secondary)]">{lockedIdentity.subtitle}</p>
+            </div>
             <h1 className="mt-1.5 text-2xl font-extrabold tracking-tight text-[var(--semantic-text-primary)] sm:text-3xl">{t("learner.dashboard.title")}</h1>
             <p className="mt-2.5 max-w-2xl text-[0.9375rem] leading-relaxed text-[var(--semantic-text-secondary)]">
               Your study system is ready. Unlock it to get started.
@@ -217,6 +239,12 @@ export default async function LearnerDashboardPage() {
           attempted: w.attempted,
         }));
 
+      const identity = resolveDashboardIdentity({
+        tier: session?.user?.tier,
+        learnerPathId: userLearnerPath,
+        alliedProfessionKey: userAlliedProfessionKey,
+      });
+
       return (
         <main className="nn-dash">
           <BreadcrumbTrail items={crumbs} />
@@ -224,7 +252,13 @@ export default async function LearnerDashboardPage() {
           {/* ── Hero + Primary CTA ────────────────────────────────── */}
           <section className="nn-dash-section">
             <div className="nn-learner-page-hero">
-              <p className="text-[0.6875rem] font-bold uppercase tracking-[0.1em] text-[var(--semantic-brand)]">{t("learner.dashboard.kicker")}</p>
+              {/* Identity pill + exam/career subtitle */}
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="inline-flex items-center rounded-full bg-[color-mix(in_srgb,var(--semantic-brand)_14%,var(--semantic-surface))] px-3 py-1 text-[11px] font-bold uppercase tracking-widest text-[var(--semantic-brand)]">
+                  {identity.pill}
+                </span>
+                <p className="text-[0.6875rem] font-medium text-[var(--semantic-text-secondary)]">{identity.subtitle}</p>
+              </div>
               <h1 className="mt-1.5 text-2xl font-extrabold tracking-tight text-[var(--semantic-text-primary)] sm:text-3xl">
                 {userDisplayName ? `${userDisplayName}\u2019s Study Hub` : t("learner.dashboard.title")}
               </h1>
