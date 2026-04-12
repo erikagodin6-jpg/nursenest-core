@@ -8,12 +8,13 @@ import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { mapLegacyMarketingHref } from "@/lib/legacy-marketing-routes";
 import { isStaffRole } from "@/lib/auth/staff-roles";
+import { formatNavLabel } from "@/lib/format/title-case";
 
 const SIGN_IN_CLASS =
-  "nn-marketing-body-sm inline-flex items-center rounded-full px-2 py-1.5 font-medium tracking-normal text-[var(--nav-fg)] transition-colors duration-150 hover:bg-[var(--nav-hover)] hover:text-[var(--nav-fg)] sm:px-3 sm:py-2";
+  "nn-marketing-body-sm inline-flex items-center rounded-lg px-3 py-2 font-medium tracking-normal text-[var(--header-text)] transition-colors duration-150 hover:bg-[color-mix(in_srgb,var(--header-text)_10%,var(--header-background))] hover:text-[var(--header-text)]";
 
 const GET_STARTED_CLASS =
-  "nn-button-primary nn-nav-cta inline-flex min-h-0 items-center justify-center rounded-xl px-4 py-2 text-sm font-medium";
+  "nn-button-primary nn-nav-cta inline-flex min-h-0 items-center justify-center rounded-xl px-4 py-2 text-sm font-semibold";
 
 function useLocalizeHref() {
   const { locale } = useMarketingI18n();
@@ -31,7 +32,7 @@ function useLocalizeHref() {
  * Marketing header: Sign in + Get Started (guests) or account menu (signed-in). Same component at all breakpoints.
  */
 export function MarketingHeaderAuthDesktop() {
-  const { t } = useMarketingI18n();
+  const { t, locale } = useMarketingI18n();
   const localizeHref = useLocalizeHref();
   const { data: session, status } = useSession();
   const [open, setOpen] = useState(false);
@@ -55,12 +56,12 @@ export function MarketingHeaderAuthDesktop() {
     const loginToApp = localizeHref(`/login?callbackUrl=${encodeURIComponent("/app")}`);
     const signupToApp = localizeHref(`/signup?callbackUrl=${encodeURIComponent("/app")}`);
     return (
-      <div className="flex max-w-[100vw] items-center gap-1.5 sm:gap-2">
+      <div className="flex max-w-[100vw] items-center gap-2">
         <Link href={loginToApp} className={SIGN_IN_CLASS}>
-          {t("nav.logIn")}
+          {formatNavLabel(t("nav.logIn"), { locale, context: "header-auth.login" })}
         </Link>
         <Link href={signupToApp} className={GET_STARTED_CLASS}>
-          {t("nav.getStarted")}
+          {formatNavLabel(t("nav.getStarted"), { locale, context: "header-auth.get-started" })}
         </Link>
       </div>
     );
@@ -75,7 +76,7 @@ export function MarketingHeaderAuthDesktop() {
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
-        className="flex max-w-[min(100%,12rem)] items-center gap-1 rounded-full border border-[var(--nav-border)] px-2 py-1.5 nn-marketing-body-sm font-medium tracking-normal text-[var(--nav-fg)] hover:bg-[var(--nav-hover)] sm:max-w-[14rem] sm:px-3 sm:py-2"
+        className="flex max-w-[min(100%,12rem)] items-center gap-1 rounded-lg border border-[var(--header-border)] bg-[color-mix(in_srgb,var(--header-text)_8%,var(--header-background))] px-3 py-2 nn-marketing-body-sm font-medium tracking-normal text-[var(--header-text)] hover:bg-[color-mix(in_srgb,var(--header-text)_14%,var(--header-background))] sm:max-w-[14rem]"
         aria-expanded={open}
         aria-haspopup="menu"
       >
@@ -86,9 +87,9 @@ export function MarketingHeaderAuthDesktop() {
       {open ? (
         <div
           role="menu"
-          className="absolute end-0 z-[100] mt-1 min-w-[13rem] rounded-xl border border-[var(--nav-border)] bg-[var(--nav-bg)] py-1 shadow-lg"
+          className="absolute end-0 z-[100] mt-2 min-w-[13rem] rounded-xl border border-[var(--border-subtle)] bg-[var(--card-bg)] py-1 shadow-[var(--shadow-elevated)]"
         >
-          <div className="border-b border-[var(--header-nav-border)] px-3 py-2 text-xs text-[var(--nav-muted)]">
+          <div className="border-b border-[var(--border-subtle)] px-3 py-2 text-xs text-[var(--theme-muted-text)]">
             <div className="font-mono text-[11px] text-[var(--nav-muted)]" title={user.id}>
               {t("account.idPrefix")} {user.id?.slice(0, 8)}…
             </div>
@@ -100,29 +101,29 @@ export function MarketingHeaderAuthDesktop() {
           </div>
           <Link
             href="/app"
-            className="block break-words px-3 py-2 text-start nn-marketing-body-sm font-medium tracking-normal text-[var(--nav-fg)] [overflow-wrap:anywhere] hover:bg-[var(--nav-hover)]"
+            className="block break-words px-3 py-2 text-start nn-marketing-body-sm font-medium tracking-normal text-[var(--theme-heading-text)] [overflow-wrap:anywhere] hover:bg-[var(--surface-interactive-hover)]"
             role="menuitem"
             onClick={() => setOpen(false)}
           >
-            {t("nav.learnerApp")}
+            {formatNavLabel(t("nav.learnerApp"), { locale, context: "header-auth.learner-app" })}
           </Link>
           {admin ? (
             <Link
               href="/admin"
-              className="block break-words px-3 py-2 text-start nn-marketing-body-sm font-medium tracking-normal text-[var(--nav-fg)] [overflow-wrap:anywhere] hover:bg-[var(--nav-hover)]"
+              className="block break-words px-3 py-2 text-start nn-marketing-body-sm font-medium tracking-normal text-[var(--theme-heading-text)] [overflow-wrap:anywhere] hover:bg-[var(--surface-interactive-hover)]"
               role="menuitem"
               onClick={() => setOpen(false)}
             >
-              {t("nav.admin")}
+              {formatNavLabel(t("nav.admin"), { locale, context: "header-auth.admin" })}
             </Link>
           ) : null}
           <button
             type="button"
-            className="block w-full border-t border-[var(--header-nav-border)] px-3 py-2 text-start nn-marketing-body-sm font-medium tracking-normal text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+            className="block w-full border-t border-[var(--border-subtle)] px-3 py-2 text-start nn-marketing-body-sm font-medium tracking-normal text-[var(--theme-heading-text)] hover:bg-[var(--surface-interactive-hover)]"
             role="menuitem"
             onClick={() => void signOut({ callbackUrl: "/" })}
           >
-            {t("nav.signout")}
+            {formatNavLabel(t("nav.signout"), { locale, context: "header-auth.sign-out" })}
           </button>
         </div>
       ) : null}
@@ -134,7 +135,7 @@ export function MarketingHeaderAuthDesktop() {
  * Mobile drawer account block (optional; header bar uses {@link MarketingHeaderAuthDesktop} at all sizes).
  */
 export function MarketingHeaderAuthMobile({ onNavigate }: { onNavigate: () => void }) {
-  const { t } = useMarketingI18n();
+  const { t, locale } = useMarketingI18n();
   const localizeHref = useLocalizeHref();
   const { data: session, status } = useSession();
 
@@ -148,10 +149,10 @@ export function MarketingHeaderAuthMobile({ onNavigate }: { onNavigate: () => vo
     return (
       <div className="mt-4 flex gap-2">
         <Link href={loginToApp} className={`${SIGN_IN_CLASS} flex-1 justify-center border border-[var(--nav-border)] py-2`} onClick={onNavigate}>
-          {t("nav.logIn")}
+          {formatNavLabel(t("nav.logIn"), { locale, context: "header-auth.mobile.login" })}
         </Link>
         <Link href={signupToApp} className={`${GET_STARTED_CLASS} flex-1`} onClick={onNavigate}>
-          {t("nav.getStarted")}
+          {formatNavLabel(t("nav.getStarted"), { locale, context: "header-auth.mobile.get-started" })}
         </Link>
       </div>
     );
@@ -173,7 +174,7 @@ export function MarketingHeaderAuthMobile({ onNavigate }: { onNavigate: () => vo
         className="block rounded-xl border border-[var(--nav-border)] px-3 py-2.5 nn-marketing-body-sm font-medium tracking-normal text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
         onClick={onNavigate}
       >
-        {t("nav.learnerApp")}
+        {formatNavLabel(t("nav.learnerApp"), { locale, context: "header-auth.mobile.learner-app" })}
       </Link>
       {admin ? (
         <Link
@@ -181,7 +182,7 @@ export function MarketingHeaderAuthMobile({ onNavigate }: { onNavigate: () => vo
           className="block rounded-xl border border-primary/20 bg-primary/5 px-3 py-2.5 nn-marketing-body-sm font-medium tracking-normal text-primary hover:bg-primary/10"
           onClick={onNavigate}
         >
-          {t("nav.admin")}
+          {formatNavLabel(t("nav.admin"), { locale, context: "header-auth.mobile.admin" })}
         </Link>
       ) : null}
       <button
@@ -189,7 +190,7 @@ export function MarketingHeaderAuthMobile({ onNavigate }: { onNavigate: () => vo
         className="w-full rounded-xl border border-[var(--nav-border)] px-3 py-2.5 nn-marketing-body-sm font-medium tracking-normal text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
         onClick={() => void signOut({ callbackUrl: "/" })}
       >
-        {t("nav.signout")}
+        {formatNavLabel(t("nav.signout"), { locale, context: "header-auth.mobile.sign-out" })}
       </button>
     </div>
   );

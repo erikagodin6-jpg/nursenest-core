@@ -10,6 +10,11 @@ import { SiteBrandLogoMark } from "@/components/brand/site-brand-logo";
 import { useNursenestRegion } from "@/lib/region/use-nursenest-region";
 import { marketingExamPrepHubs } from "@/lib/marketing/marketing-exam-navigation";
 import { loginWithCallback, rnQuestions } from "@/lib/marketing/marketing-entry-routes";
+import { formatNavLabel } from "@/lib/format/title-case";
+
+function formatFooterNode(children: React.ReactNode, locale: string, context: string): React.ReactNode {
+  return typeof children === "string" ? formatNavLabel(children, { locale, context }) : children;
+}
 
 function FLink({
   href,
@@ -26,14 +31,14 @@ function FLink({
   if (external) {
     return (
       <a href={to} className={className} rel="noopener noreferrer">
-        {children}
+        {formatFooterNode(children, locale, "site-footer.external-link")}
       </a>
     );
   }
   const path = to.startsWith("/") ? to : `/${to}`;
   return (
     <Link href={withMarketingLocale(locale, path)} className={className}>
-      {children}
+      {formatFooterNode(children, locale, "site-footer.link")}
     </Link>
   );
 }
@@ -53,7 +58,7 @@ export function SiteFooter() {
 
         <div className="mb-6 grid grid-cols-2 gap-6 sm:gap-8 md:grid-cols-4 sm:mb-8">
           <div>
-            <h3 className="mb-3 break-words text-sm font-semibold text-[var(--footer-fg)]">{t("footer.studyTools")}</h3>
+            <h3 className="mb-3 break-words text-sm font-semibold text-[var(--footer-fg)]">{formatNavLabel(t("footer.studyTools"), { locale, context: "site-footer.study-tools" })}</h3>
             <ul className="space-y-2 text-sm text-[var(--footer-fg)]">
               <li>
                 <FLink href="/lessons">{t("footer.clinicalLessons")}</FLink>
@@ -89,7 +94,7 @@ export function SiteFooter() {
           </div>
 
           <div>
-            <h3 className="mb-3 break-words text-sm font-semibold text-[var(--footer-fg)]">{t("footer.examPrep")}</h3>
+            <h3 className="mb-3 break-words text-sm font-semibold text-[var(--footer-fg)]">{formatNavLabel(t("footer.examPrep"), { locale, context: "site-footer.exam-prep" })}</h3>
             <ul className="space-y-2 text-sm text-[var(--footer-fg)]">
               <li>
                 <FLink href="/exam-prep">{t("footer.linkNursingExamPrepHub")}</FLink>
@@ -111,7 +116,7 @@ export function SiteFooter() {
                 <FLink href="/question-of-the-day">{t("footer.questionOfTheDay")}</FLink>
               </li>
             </ul>
-            <h3 className="mb-3 mt-6 break-words text-sm font-semibold text-[var(--footer-fg)]">{t("footer.newGradSupportSection")}</h3>
+            <h3 className="mb-3 mt-6 break-words text-sm font-semibold text-[var(--footer-fg)]">{formatNavLabel(t("footer.newGradSupportSection"), { locale, context: "site-footer.new-grad-support" })}</h3>
             <ul className="space-y-2 text-sm text-[var(--footer-fg)]">
               <li>
                 <FLink href="/newgrad">{t("footer.newGradHub")}</FLink>
@@ -129,7 +134,7 @@ export function SiteFooter() {
           </div>
 
           <div>
-            <h3 className="mb-3 break-words text-sm font-semibold text-[var(--footer-fg)]">{t("footer.resources")}</h3>
+            <h3 className="mb-3 break-words text-sm font-semibold text-[var(--footer-fg)]">{formatNavLabel(t("footer.resources"), { locale, context: "site-footer.resources" })}</h3>
             <ul className="space-y-2 text-sm text-[var(--footer-fg)]">
               <li>
                 <FLink href="/shop">{t("nav.store")}</FLink>
@@ -153,7 +158,7 @@ export function SiteFooter() {
                 <FLink href="/for-institutions">{t("footer.forSchools")}</FLink>
               </li>
             </ul>
-            <h3 className="mb-3 mt-6 break-words text-sm font-semibold text-[var(--footer-fg)]">{t("footer.nursingSpecialties")}</h3>
+            <h3 className="mb-3 mt-6 break-words text-sm font-semibold text-[var(--footer-fg)]">{formatNavLabel(t("footer.nursingSpecialties"), { locale, context: "site-footer.nursing-specialties" })}</h3>
             <ul className="space-y-2 text-sm text-[var(--footer-fg)]">
               <li>
                 <FLink href="/nursing-specialties">{t("footer.allSpecialties")}</FLink>
@@ -168,7 +173,7 @@ export function SiteFooter() {
           </div>
 
           <div>
-            <h3 className="mb-3 break-words text-sm font-semibold text-[var(--footer-fg)]">{t("footer.legal")}</h3>
+            <h3 className="mb-3 break-words text-sm font-semibold text-[var(--footer-fg)]">{formatNavLabel(t("footer.legal"), { locale, context: "site-footer.legal" })}</h3>
             <ul className="space-y-2 text-sm text-[var(--footer-fg)]">
               <li>
                 <FLink href="/terms">{t("footer.terms")}</FLink>
@@ -186,7 +191,7 @@ export function SiteFooter() {
                 <FLink href="/acceptable-use">{t("footer.acceptableUse")}</FLink>
               </li>
             </ul>
-            <h3 className="mb-3 mt-6 break-words text-sm font-semibold text-[var(--footer-fg)]">{t("footer.alliedHealth")}</h3>
+            <h3 className="mb-3 mt-6 break-words text-sm font-semibold text-[var(--footer-fg)]">{formatNavLabel(t("footer.alliedHealth"), { locale, context: "site-footer.allied-health" })}</h3>
             <ul className="space-y-2 text-sm text-[var(--footer-fg)]">
               <li>
                 <FLink href="/allied-health">{t("footer.alliedHealthExamPrep")}</FLink>
@@ -198,14 +203,14 @@ export function SiteFooter() {
                 <FLink href="/allied-health/paramedic-exam-prep">{t("footer.linkAlliedParamedic")}</FLink>
               </li>
             </ul>
-            <h3 className="mb-3 mt-6 break-words text-sm font-semibold text-[var(--footer-fg)]">{t("footer.educationEcosystem")}</h3>
+            <h3 className="mb-3 mt-6 break-words text-sm font-semibold text-[var(--footer-fg)]">{formatNavLabel(t("footer.educationEcosystem"), { locale, context: "site-footer.education-ecosystem" })}</h3>
             <ul className="space-y-2 text-sm text-[var(--footer-fg)]">
               <li>
                 <FLink href="/">{t("footer.linkEcosystemNursenest")}</FLink>
               </li>
               <li>
                 <a href="https://applynest.ca" target="_blank" rel="noopener noreferrer" className="nn-footer-link">
-                  {t("footer.linkEcosystemApplynest")}
+                  {formatNavLabel(t("footer.linkEcosystemApplynest"), { locale, context: "site-footer.applynest-link" })}
                 </a>
               </li>
             </ul>
@@ -213,7 +218,7 @@ export function SiteFooter() {
         </div>
 
         <div className="mb-6 border-t border-[var(--footer-border)] pb-6 pt-6">
-          <h3 className="mb-3 break-words text-sm font-semibold text-[var(--footer-fg)]">{t("footer.studyInYourLanguage")}</h3>
+          <h3 className="mb-3 break-words text-sm font-semibold text-[var(--footer-fg)]">{formatNavLabel(t("footer.studyInYourLanguage"), { locale, context: "site-footer.study-language" })}</h3>
           <div className="mb-3 flex flex-wrap gap-2">
             <MarketingLanguagePreferenceList
               renderItem={({ code, name, flag, disabled, onSelect }) => (
@@ -232,7 +237,7 @@ export function SiteFooter() {
             />
           </div>
           <Link href={mapLegacyMarketingHref("/languages")} className="nn-footer-link text-xs">
-            {t("footer.viewAllLanguages")}
+            {formatNavLabel(t("footer.viewAllLanguages"), { locale, context: "site-footer.view-languages" })}
           </Link>
         </div>
 

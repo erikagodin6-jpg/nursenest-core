@@ -1,7 +1,5 @@
 import { NURSENEST_IMAGES_SPACE_PUBLIC_BASE_URL } from "@/config/marketing-cdn.catalog";
-import { relativeLuminanceFromHex } from "@/lib/color/hex-luminance";
-import { getThemePaletteTokens } from "@/lib/theme/theme-palette-tokens";
-import { NURSENEST_DEFAULT_THEME, THEME_OPTIONS } from "@/lib/theme/theme-registry";
+import { NURSENEST_DEFAULT_THEME } from "@/lib/theme/theme-registry";
 
 /** Same-origin transparent theme marks (see `scripts/generate-theme-logos-from-registry.ts`). */
 export const COMMITTED_THEME_LOGO_PUBLIC_PREFIX = "/branding/theme-logos/" as const;
@@ -101,70 +99,8 @@ export function brandLogoMarkPresentation(variant: BrandLogoMarkVariant = "heade
 /** Extra classes merged onto the slot in `<SiteBrandLogoMark />` (call sites rarely need overrides). */
 export const DEFAULT_BRAND_LOGO_MARK_CLASSNAME = "" as const;
 
-/**
- * CSS filter for brand mark images — adapts the logo mark to theme context.
- *
- * ## Dark themes
- * The SVG fallback (`nursenest-mark.svg`) is a dark-colored mark. On dark nav backgrounds
- * it would be invisible. `brightness(0) invert(1)` converts any mark to opaque white —
- * safe for both the SVG fallback and correctly-produced light-on-transparent dark-theme PNGs
- * (white → brightness(0) → black → invert → white = no-op; dark → brightness(0) → black → invert → white).
- * A subtle drop-shadow restores depth.
- *
- * ## High-luminance light themes
- * Very pale primaries (pastels) on a near-white header need a hairline edge to stay visible.
- *
- * ## Standard light themes
- * No filter — dark mark on a light-tinted nav reads clearly.
- */
+/** Legacy compatibility hook — logo filters are disabled; raw theme PNGs are used directly. */
 export function brandLogoRasterContrastClass(themeId: string): string {
-  const contrastRatio = (a: string, b: string): number => {
-    const l1 = relativeLuminanceFromHex(a);
-    const l2 = relativeLuminanceFromHex(b);
-    const lighter = Math.max(l1, l2);
-    const darker = Math.min(l1, l2);
-    return (lighter + 0.05) / (darker + 0.05);
-  };
-
-  const palette = getThemePaletteTokens(themeId);
-  if (palette) {
-    let navColor = palette.navBackground;
-    if (typeof window !== "undefined" && typeof document !== "undefined") {
-      const cssNav = getComputedStyle(document.documentElement).getPropertyValue("--palette-nav").trim();
-      if (/^#[0-9a-fA-F]{6}$/.test(cssNav)) navColor = cssNav;
-    }
-
-    const navLuminance = relativeLuminanceFromHex(navColor);
-    const primaryContrast = contrastRatio(navColor, palette.logoPrimary);
-    const lightContrast = contrastRatio(navColor, palette.logoOnDark);
-
-    // Accent/dark nav backgrounds should always render a light logo variant.
-    if (navLuminance < 0.34 || primaryContrast < 2.2) {
-      return "[filter:brightness(0)_invert(1)_drop-shadow(0_1px_3px_rgba(0,0,0,0.45))]";
-    }
-
-    // Light navs with low logo contrast get a subtle edge to keep legibility.
-    if (primaryContrast < 3.2) {
-      return navLuminance > 0.72
-        ? "[filter:drop-shadow(0_0_1px_rgba(15,23,42,0.34))]"
-        : "[filter:drop-shadow(0_0_1px_rgba(255,255,255,0.42))]";
-    }
-
-    // If the light logo is much clearer, nudge toward higher contrast on tinted chrome.
-    if (lightContrast >= primaryContrast + 1.4) {
-      return "[filter:brightness(0)_invert(1)_drop-shadow(0_1px_2px_rgba(0,0,0,0.36))]";
-    }
-  }
-
-  const opt = THEME_OPTIONS.find((o) => o.id === themeId);
-  if (!opt) return "";
-  if (opt.group === "dark") {
-    // Convert dark logo to white silhouette for dark nav backgrounds.
-    return "[filter:brightness(0)_invert(1)_drop-shadow(0_1px_3px_rgba(0,0,0,0.4))]";
-  }
-  if (relativeLuminanceFromHex(opt.color) >= 0.55) {
-    // Very light primary: add a hairline edge so the mark doesn't vanish on light chrome.
-    return "[filter:drop-shadow(0_0_1px_rgba(15,23,42,0.28))]";
-  }
+  void themeId;
   return "";
 }

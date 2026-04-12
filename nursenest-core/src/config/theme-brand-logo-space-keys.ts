@@ -14,9 +14,27 @@ import { NURSENEST_DEFAULT_THEME, THEME_OPTIONS } from "@/lib/theme/theme-regist
 
 export type ThemeId = (typeof THEME_OPTIONS)[number]["id"];
 
+/**
+ * Explicit Spaces object-key overrides for themes with dedicated uploaded logo files.
+ * Keep keys canonical (theme ids from THEME_OPTIONS).
+ */
+const THEME_BRAND_LOGO_OBJECT_KEY_OVERRIDES: Readonly<Partial<Record<ThemeId, string>>> = {
+  "pastel-lavender": "pastellavenderlogo.png",
+  "pastel-lilac": "pastellilaclogo.png",
+  "pastel-mint": "pastelmintlogo.png",
+  "rose-gold": "rosegoldlogo.png",
+  "rose-quartz": "rosequartzlogo.png",
+  "neutral-sand": "sandlogo.png",
+  "neutral-slate": "slatelogo.png",
+  "soft-sage": "softsagelogo.png",
+  "strawberry-cream": "strawberrycreamlogo.png",
+  strawberry: "strawberrylogo.png",
+  teal: "teallogo.png",
+};
+
 /** Explicit theme id → Spaces key (no leading slash). */
 export const THEME_BRAND_LOGO_SPACE_KEYS = Object.fromEntries(
-  THEME_OPTIONS.map((o) => [o.id, `${o.id}brandlogo_transparent.png`]),
+  THEME_OPTIONS.map((o) => [o.id, THEME_BRAND_LOGO_OBJECT_KEY_OVERRIDES[o.id] ?? `${o.id}brandlogo_transparent.png`]),
 ) as Record<ThemeId, string>;
 
 const KEYS = THEME_BRAND_LOGO_SPACE_KEYS as Readonly<Record<string, string>>;

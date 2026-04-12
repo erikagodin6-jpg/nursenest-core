@@ -19,6 +19,7 @@ import { marketingExamHubPath } from "@/lib/marketing/country-exam-offerings";
 import { HUB } from "@/lib/marketing/marketing-entry-routes";
 import { trackClientEvent } from "@/lib/observability/posthog-client";
 import { PH } from "@/lib/observability/posthog-conversion-events";
+import { formatNavLabel } from "@/lib/format/title-case";
 
 type TierItem = {
   key: string;
@@ -129,7 +130,7 @@ export function TierGatewayDropdown({
         onClick={() => setOpen((o) => !o)}
         className={navLinkClass ?? NAV_TRIGGER_CLASS}
       >
-        {t(triggerLabelKey as Parameters<typeof t>[0])}
+        {formatNavLabel(t(triggerLabelKey as Parameters<typeof t>[0]), { locale, context: "tier-dropdown.trigger" })}
         <ChevronDown
           className={`h-3.5 w-3.5 shrink-0 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
           aria-hidden
@@ -171,7 +172,7 @@ export function TierGatewayDropdown({
                     </span>
                     <span className="min-w-0">
                       <span className="nn-marketing-body-sm block font-semibold leading-tight tracking-tight text-[var(--theme-heading-text)]">
-                        {t(item.titleKey as Parameters<typeof t>[0])}
+                        {formatNavLabel(t(item.titleKey as Parameters<typeof t>[0]), { locale, context: `tier-dropdown.${item.key}` })}
                       </span>
                       <span className="nn-marketing-caption mt-0.5 block leading-snug text-[var(--theme-muted-text)]">
                         {t(item.descKey as Parameters<typeof t>[0])}

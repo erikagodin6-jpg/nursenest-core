@@ -248,9 +248,15 @@ body {
   --header-utility-surface: color-mix(in srgb, var(--palette-top-bar-background, var(--theme-topbar-bg)) 16%, var(--bg-page));
   --header-utility-border: color-mix(in srgb, var(--palette-top-bar-background, var(--theme-topbar-bg)) 35%, var(--border-subtle));
   --header-utility-text: color-mix(in srgb, var(--palette-top-bar-text, var(--theme-heading-text)) 82%, var(--palette-text-muted, var(--theme-muted-text)));
-  --header-nav-surface: var(--nav-bg);
-  --header-nav-border: var(--nav-border);
-  --header-nav-shadow: var(--shadow-nav);
+  --header-nav-surface: color-mix(in srgb, var(--nav-bg) 82%, var(--palette-primary-deep, var(--theme-primary)) 18%);
+  --header-nav-border: color-mix(in srgb, var(--nav-border) 78%, var(--header-nav-surface));
+  --header-nav-shadow: 0 8px 24px -18px color-mix(in srgb, var(--theme-heading-text) 32%, transparent);
+  --header-background: var(--header-nav-surface);
+  --header-text: var(--nav-fg);
+  --header-muted-text: var(--nav-muted);
+  --header-border: var(--header-nav-border);
+  --header-cta: var(--nav-cta-bg);
+  --header-cta-text: var(--nav-cta-fg);
   --footer-surface: var(--footer-bg);
 
   /*
@@ -487,9 +493,15 @@ html[data-theme="deep-twilight"] {
   --pill-bg: color-mix(in srgb, var(--theme-primary) 15%, var(--bg-card));
   --pill-fg: color-mix(in srgb, var(--theme-heading-text) 90%, #ffffff);
   --pill-border: color-mix(in srgb, var(--theme-primary) 36%, var(--border-subtle));
-  --header-nav-surface: var(--nav-bg);
-  --header-nav-border: var(--nav-border);
-  --header-nav-shadow: var(--shadow-nav);
+  --header-nav-surface: color-mix(in srgb, var(--nav-bg) 76%, var(--theme-primary) 24%);
+  --header-nav-border: color-mix(in srgb, var(--nav-border) 80%, var(--header-nav-surface));
+  --header-nav-shadow: 0 10px 24px -16px color-mix(in srgb, #000000 55%, transparent);
+  --header-background: var(--header-nav-surface);
+  --header-text: var(--nav-fg);
+  --header-muted-text: var(--nav-muted);
+  --header-border: var(--header-nav-border);
+  --header-cta: var(--nav-cta-bg);
+  --header-cta-text: var(--nav-cta-fg);
   --footer-surface: var(--footer-bg);
   --hero-branded-wash: color-mix(in srgb, var(--theme-primary) 14%, var(--theme-page-bg));
   /* Dark accent surfaces — stronger percentages for contrast on dark backgrounds */
@@ -1260,25 +1272,29 @@ html[data-theme] .nn-marketing-surface {
 
 /* Marketing header: nav links — accent underline on hover, stronger contrast */
 .nn-marketing-nav-link {
-  border-bottom: 2px solid transparent;
-  padding-bottom: 0.125rem;
-  color: var(--nav-link);
+  border-radius: 9999px;
+  border: 1px solid transparent;
+  padding: 0.5rem 0.875rem;
+  color: var(--header-text);
   transition:
+    background-color var(--motion-base) var(--motion-ease),
     color var(--motion-base) var(--motion-ease),
     border-color var(--motion-base) var(--motion-ease),
-    transform var(--motion-fast) var(--motion-ease);
+    box-shadow var(--motion-base) var(--motion-ease);
 }
 
 .nn-marketing-nav-link:hover {
   color: var(--nav-link-hover);
-  border-bottom-color: color-mix(in srgb, var(--nav-link-hover) 36%, transparent);
-  transform: translateY(-1px);
+  border-color: color-mix(in srgb, var(--header-text) 22%, var(--header-border));
+  background: color-mix(in srgb, var(--header-text) 10%, var(--header-background));
 }
 
 .nn-marketing-nav-link[aria-current="page"],
 .nn-marketing-nav-link[data-active="true"] {
   color: var(--nav-link-active);
-  border-bottom-color: color-mix(in srgb, var(--nav-link-active) 46%, transparent);
+  border-color: color-mix(in srgb, var(--header-text) 28%, var(--header-border));
+  background: color-mix(in srgb, var(--header-text) 14%, var(--header-background));
+  box-shadow: inset 0 1px 0 color-mix(in srgb, #ffffff 18%, transparent);
 }
 
 /* Header utility rail — preferences / region strip above the main nav */
@@ -1290,8 +1306,8 @@ html[data-theme] .nn-marketing-surface {
 
 /* Main sticky nav — elevated band with visible separation from hero below */
 .nn-header-nav {
-  background: var(--header-nav-surface);
-  border-bottom: 1px solid var(--header-nav-border);
+  background: var(--header-background);
+  border-bottom: 1px solid var(--header-border);
   box-shadow: var(--header-nav-shadow);
   transition: box-shadow var(--motion-base) var(--motion-ease);
 }
@@ -1339,43 +1355,6 @@ html[data-theme] .nn-marketing-surface {
 .nn-trust-surface {
   background: var(--trust-surface);
   border: 1px solid var(--trust-surface-border);
-}
-
-/* Header logo: very subtle theme tint on raster marks — no muddy or neon results */
-html[data-theme="ocean"] .nn-brand-header-logo-slot .nn-brand-header-logo,
-html[data-theme="clinical-light"] .nn-brand-header-logo-slot .nn-brand-header-logo {
-  filter: saturate(1.04) hue-rotate(-30deg);
-}
-
-html[data-theme="mint"] .nn-brand-header-logo-slot .nn-brand-header-logo,
-html[data-theme="pastel-mint"] .nn-brand-header-logo-slot .nn-brand-header-logo,
-html[data-theme="teal"] .nn-brand-header-logo-slot .nn-brand-header-logo {
-  filter: saturate(1.06) hue-rotate(-14deg);
-}
-
-html[data-theme="blush"] .nn-brand-header-logo-slot .nn-brand-header-logo {
-  filter: saturate(1.05) hue-rotate(22deg);
-}
-
-html[data-theme="pastel-blush"] .nn-brand-header-logo-slot .nn-brand-header-logo,
-html[data-theme="strawberry"] .nn-brand-header-logo-slot .nn-brand-header-logo {
-  filter: saturate(1.08) hue-rotate(16deg);
-}
-
-html[data-theme="forest"] .nn-brand-header-logo-slot .nn-brand-header-logo,
-html[data-theme="soft-sage"] .nn-brand-header-logo-slot .nn-brand-header-logo {
-  filter: saturate(1.06) hue-rotate(-95deg);
-}
-
-html[data-theme="multi-pastel"] .nn-brand-header-logo-slot .nn-brand-header-logo {
-  filter: saturate(1.03) hue-rotate(-18deg);
-}
-
-/* Dark themes: logo needs to lift off the dark background — brightness boost, no color shift */
-html[data-theme="dark-mode"] .nn-brand-header-logo-slot .nn-brand-header-logo,
-html[data-theme="midnight-indigo"] .nn-brand-header-logo-slot .nn-brand-header-logo,
-html[data-theme="deep-twilight"] .nn-brand-header-logo-slot .nn-brand-header-logo {
-  filter: brightness(1.35) saturate(0.85);
 }
 
 /* Inset / muted panel inside a card */
@@ -1529,14 +1508,14 @@ html[data-theme="deep-twilight"] .nn-brand-header-logo-slot .nn-brand-header-log
 
 /* Header/nav CTA variant — remains readable on denser nav surfaces. */
 .nn-nav-cta {
-  background: var(--nav-cta-bg);
-  color: var(--nav-cta-fg);
-  border: 1px solid color-mix(in srgb, var(--nav-cta-bg) 58%, var(--nav-border));
-  box-shadow: 0 6px 16px -8px color-mix(in srgb, var(--nav-cta-bg) 52%, transparent);
+  background: var(--header-cta);
+  color: var(--header-cta-text);
+  border: 1px solid color-mix(in srgb, var(--header-cta) 58%, var(--header-border));
+  box-shadow: 0 8px 18px -10px color-mix(in srgb, var(--header-cta) 56%, transparent);
 }
 .nn-nav-cta:hover:not(:disabled):not([aria-disabled="true"]) {
   filter: brightness(1.05);
-  box-shadow: 0 10px 22px -10px color-mix(in srgb, var(--nav-cta-bg) 58%, transparent);
+  box-shadow: 0 12px 24px -12px color-mix(in srgb, var(--header-cta) 60%, transparent);
 }
 .nn-button-primary:hover:not(:disabled):not([aria-disabled="true"]) {
   background: var(--role-cta-hover, var(--accent-hover));
@@ -2223,6 +2202,33 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-exam-chrome-dim {
 
 .nn-lesson-nav-item[data-active] .nn-lesson-nav-chip {
   color: color-mix(in srgb, var(--semantic-brand) 70%, var(--semantic-text-muted));
+}
+
+/* ==========================================================================
+ * Mistake Notebook — card styles
+ * ========================================================================== */
+
+.nn-mistake-card {
+  border-radius: 1.125rem;
+  border: 1px solid var(--semantic-border-soft);
+  background: var(--bg-card, var(--semantic-surface));
+  padding: 1.125rem 1.25rem 1.375rem;
+  transition:
+    box-shadow var(--motion-base, 150ms) ease,
+    border-color var(--motion-base, 150ms) ease;
+}
+
+@media (min-width: 640px) {
+  .nn-mistake-card {
+    padding: 1.375rem 1.5rem 1.625rem;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .nn-mistake-card:hover {
+    box-shadow: 0 4px 16px color-mix(in srgb, var(--semantic-danger) 8%, transparent), var(--elevation-rest);
+    border-color: color-mix(in srgb, var(--semantic-danger) 18%, var(--semantic-border-soft));
+  }
 }
 
 /*

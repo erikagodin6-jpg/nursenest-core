@@ -2,22 +2,17 @@
  * Theme → logo URL resolution (server- and client-safe; no React hooks).
  *
  * **Precedence for raster wordmarks (`getThemeLogoLoadChain`):**
- * 1. Same-origin committed PNG: `/branding/theme-logos/{themeId}brandlogo_transparent.png`
- * 2. Public CDN URL for that Spaces object key (`getThemeLogoUrl` / `THEME_BRAND_LOGO_SPACE_KEYS`)
- * 3. Optional same-origin proxy path when `marketingImageUsesProxy` / `marketingProxyFallbackEnabled` apply
- * 4. Repeat 1–3 for the **default theme** (`NURSENEST_DEFAULT_THEME`) so a broken single-theme file still falls back to the canonical brand mark
+ * 1. Theme-specific Spaces asset URL(s), using existing CDN/proxy conventions
+ * 2. Same-origin committed PNG fallback: `/branding/theme-logos/{objectKey}`
+ * 3. Repeat for the default theme (`NURSENEST_DEFAULT_THEME`)
+ * 4. Same-origin committed SVG fallback (`/logos/themes/...`) as the final safety net only
  *
  * **Header pipeline (`getHeaderBrandLogoLoadChain`)** uses strict NurseNest brand assets only.
  * No generic logo placeholders are included in the chain.
  *
  * Re-exports `getThemeLogo` / `getThemeLogoUrl` from `@/lib/branding/theme-brand-logo-cdn`.
  */
-import {
-  getPrimaryBrandMarkObjectKey,
-  getSpacesBlueBrandLogoObjectKey,
-  headerUsesThemeTintedBrandMark,
-  nursenestImagesSpaceObjectUrl,
-} from "@/config/marketing-cdn.catalog";
+import { getPrimaryBrandMarkObjectKey, getSpacesBlueBrandLogoObjectKey, nursenestImagesSpaceObjectUrl } from "@/config/marketing-cdn.catalog";
 import {
   COMMITTED_THEME_LOGO_PUBLIC_PREFIX,
   PRIMARY_LOGO_CDN_URL,
@@ -61,31 +56,32 @@ export function getThemeLogoPublicUrl(themeId: string): string {
 export { getThemeLogo, getThemeLogoUrl } from "@/lib/branding/theme-brand-logo-cdn";
 
 /**
- * Ordered URLs for `<img src>`: theme-specific asset, then default-theme fallback, with optional proxy variants.
- *
- * Priority: per-theme SVG (outlined, pre-colored) → committed PNG → CDN → proxy → default theme fallbacks.
+ * Ordered URLs for `<img src>`: theme-specific Spaces asset first, then default-theme fallbacks.
  */
 export function getThemeLogoLoadChain(themeId?: string | null): string[] {
   const id = normalizeThemeIdForLogo(themeId ?? NURSENEST_DEFAULT_THEME);
   const defId = NURSENEST_DEFAULT_THEME;
 
-  const svgPath = getThemeLogoPathForThemeId(id);
-  const svgFb = id !== defId ? getThemeLogoPathForThemeId(defId) : null;
-
   const key = getThemeLogoObjectKeyFromNormalizedId(id);
   const defKey = getThemeLogoObjectKeyFromNormalizedId(defId);
   const local = `${COMMITTED_THEME_LOGO_PUBLIC_PREFIX}${key}`;
   const localFb = `${COMMITTED_THEME_LOGO_PUBLIC_PREFIX}${defKey}`;
-  const pub = getThemeLogoUrl(id);
-  const pubFb = getThemeLogoUrl(defId);
-  const proxy = marketingProxyPathForKey(key);
-  const proxyFb = marketingProxyPathForKey(defKey);
+  const svgPath = getThemeLogoPathForThemeId(id);
+  const svgFb = id !== defId ? getThemeLogoPathForThemeId(defId) : null;
+  const out: string[] = [];
+
+  pushKeyVariants(out, key);
+  out.push(local);
+
+  if (id !== defId) {
+    pushKeyVariants(out, defKey);
+    out.push(localFb);
+  }
 
   return uniqueStrings([
+    ...out,
     ...(svgPath ? [svgPath] : []),
-    local, pub, proxy,
     ...(svgFb ? [svgFb] : []),
-    localFb, pubFb, proxyFb,
   ]);
 }
 
@@ -132,10 +128,6 @@ export function getBlueBrandMarkLoadChain(): string[] {
 export function getHeaderBrandLogoLoadChain(themeId?: string | null): string[] {
   const id = normalizeThemeIdForLogo(themeId ?? NURSENEST_DEFAULT_THEME);
   const themeRasterChain = getThemeLogoLoadChain(id);
-  if (headerUsesThemeTintedBrandMark()) {
-    const blue = getBlueBrandMarkLoadChain();
-    return uniqueStrings([...themeRasterChain, ...blue, PRIMARY_LOGO_URL, PRIMARY_LOGO_CDN_URL]);
-  }
   return uniqueStrings([...themeRasterChain, PRIMARY_LOGO_URL, PRIMARY_LOGO_CDN_URL]);
 }
 

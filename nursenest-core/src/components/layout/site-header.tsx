@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { ChevronDown, MapPin, Menu, X } from "lucide-react";
 import { mapLegacyMarketingHref } from "@/lib/legacy-marketing-routes";
@@ -8,11 +9,10 @@ import { useNursenestRegion } from "@/lib/region/use-nursenest-region";
 import { useMarketingRegionToggleWithRefresh } from "@/lib/region/use-marketing-region-toggle";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { MarketingLanguagePreferenceList } from "@/components/i18n/marketing-language-preference";
-import { withMarketingLocale } from "@/lib/i18n/marketing-path";
+import { stripMarketingLocalePrefix, withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { SiteBrandLogoMark } from "@/components/brand/site-brand-logo";
 import { MarketingHeaderAuthDesktop } from "@/components/auth/marketing-header-auth";
 import { MarketingHeaderUtilityStrip } from "@/components/layout/marketing-header-utility-strip";
-import { MarketingSiteSubNav } from "@/components/layout/marketing-site-sub-nav";
 import { ThemePicker } from "@/components/theme/theme-picker";
 import { Button } from "@/components/ui/button";
 import {
@@ -21,15 +21,21 @@ import {
 } from "@/lib/theme/marketing-region-toggle";
 import { trackClientEvent } from "@/lib/observability/posthog-client";
 import { PH } from "@/lib/observability/posthog-conversion-events";
-import { TierGatewayDropdown } from "@/components/layout/tier-gateway-dropdown";
 import { marketingExamHubPath } from "@/lib/marketing/country-exam-offerings";
-import { HUB } from "@/lib/marketing/marketing-entry-routes";
+import { HUB, rnQuestions } from "@/lib/marketing/marketing-entry-routes";
+import { formatNavLabel } from "@/lib/format/title-case";
 
-/* nn-marketing-nav-link handles color, hover, and underline via CSS class */
 const NAV_LINK_CLASS = "nn-marketing-body-sm nn-marketing-nav-link font-semibold tracking-tight";
+
+function isActivePath(current: string, base: string): boolean {
+  if (!base || base === "/") return current === "/";
+  if (current === base) return true;
+  return current.startsWith(`${base}/`);
+}
 
 export function SiteHeader() {
   const { t, locale } = useMarketingI18n();
+  const pathname = usePathname() ?? "/";
   const { region, setRegion } = useNursenestRegion();
   const regionToggleAnalytics = useMemo(
     () => ({ currentRegion: region, surface: "site_header_mobile_drawer" as const }),
@@ -54,22 +60,62 @@ export function SiteHeader() {
     return () => document.removeEventListener("click", close);
   }, []);
 
-  const marketingNav: { href: string; labelKey?: string; label?: string }[] = [
-    { href: "/lessons", labelKey: "nav.lessons" },
-    { href: "/how-it-works", label: "How It Works" },
-    { href: "/pricing", labelKey: "nav.pricing" },
-    { href: "/faq", labelKey: "footer.faq" },
+  const primaryNav = [
+    {
+      key: "rn",
+      href: marketingExamHubPath(region, "rn"),
+      matchBase: marketingExamHubPath(region, "rn"),
+      label: formatNavLabel(t("nav.tierDrop.rnTitle"), { locale, context: "site-header.rn" }),
+    },
+    {
+      key: "pn",
+      href: marketingExamHubPath(region, "pn"),
+      matchBase: marketingExamHubPath(region, "pn"),
+      label: formatNavLabel(region === "CA" ? t("nav.tierDrop.rpnTitle") : t("nav.tierDrop.lpnTitle"), { locale, context: "site-header.pn" }),
+    },
+    {
+      key: "np",
+      href: marketingExamHubPath(region, "np"),
+      matchBase: marketingExamHubPath(region, "np"),
+      label: formatNavLabel(t("nav.tierDrop.npTitle"), { locale, context: "site-header.np" }),
+    },
+    {
+      key: "allied",
+      href: marketingExamHubPath(region, "allied"),
+      matchBase: marketingExamHubPath(region, "allied"),
+      label: formatNavLabel(t("nav.tierDrop.alliedTitle"), { locale, context: "site-header.allied" }),
+    },
+    {
+      key: "lessons",
+      href: "/lessons",
+      matchBase: "/lessons",
+      label: formatNavLabel(t("nav.lessons"), { locale, context: "site-header.lessons" }),
+    },
+    {
+      key: "practice-questions",
+      href: rnQuestions(region),
+      matchBase: rnQuestions(region),
+      label: formatNavLabel(t("footer.testBank"), { locale, context: "site-header.test-bank" }),
+    },
+  ] as const;
+
+  const mobileMoreNav: { key: string; href: string; label: string }[] = [
+    { key: "pricing", href: "/pricing", label: formatNavLabel(t("nav.pricing"), { locale, context: "site-header.pricing" }) },
+    { key: "faq", href: "/faq", label: formatNavLabel(t("footer.faq"), { locale, context: "site-header.faq" }) },
+    { key: "pre-nursing", href: "/pre-nursing", label: formatNavLabel(t("nav.preNursing"), { locale, context: "site-header.pre-nursing" }) },
+    { key: "tools", href: HUB.tools, label: formatNavLabel(t("nav.tools"), { locale, context: "site-header.tools" }) },
   ];
+
+  const strippedPath = stripMarketingLocalePrefix(pathname).pathname;
 
   return (
     <div className="sticky top-0 z-50 nn-header-animate-in">
       <MarketingHeaderUtilityStrip />
-
       <header className="nn-header-nav">
-        <div className="mx-auto flex h-14 max-w-7xl items-center justify-between gap-2 px-3 sm:gap-4 sm:px-5 lg:h-[3.75rem] lg:gap-6 lg:px-8">
+        <div className="mx-auto grid h-16 max-w-7xl grid-cols-[auto,1fr,auto] items-center gap-3 px-4 sm:gap-5 sm:px-6 lg:h-[4.35rem] lg:px-8">
           <Link
             href={localizeHref("/")}
-            className="group flex min-w-0 shrink-0 items-center gap-2 overflow-hidden bg-transparent"
+            className="group flex min-w-0 shrink-0 items-center gap-2 overflow-hidden bg-transparent pe-2"
             aria-label={t("brand.homeAriaLabel")}
           >
             <SiteBrandLogoMark />
@@ -77,53 +123,51 @@ export function SiteHeader() {
 
           <nav
             aria-label={t("nav.marketingExplore")}
-            className="hidden min-w-0 flex-1 items-center justify-center md:flex md:gap-5 lg:gap-8"
+            className="hidden min-w-0 flex-1 items-center justify-center gap-1.5 lg:flex xl:gap-2"
           >
-            <TierGatewayDropdown navLinkClass={`${NAV_LINK_CLASS} flex items-center gap-1`} />
-            {marketingNav.map((item) => (
+            {primaryNav.map((item) => (
               <Link
-                key={item.href}
+                key={item.key}
                 href={localizeHref(item.href)}
-                className={`${NAV_LINK_CLASS} max-w-[11rem] truncate`}
+                aria-current={isActivePath(strippedPath, item.matchBase) ? "page" : undefined}
+                className={`${NAV_LINK_CLASS} text-center`}
                 onClick={() =>
                   trackClientEvent(PH.marketingNavClick, {
                     actor: "anonymous",
-                    nav_id: item.href,
+                    nav_id: item.key,
                     surface: "site_header_desktop",
                     marketing_region: region,
                   })
                 }
               >
-                {item.label ?? t(item.labelKey!)}
+                {item.label}
               </Link>
             ))}
           </nav>
 
-          <div className="flex shrink-0 items-center gap-1.5 sm:gap-2 md:gap-3">
-            <div className="flex min-w-0 items-center">
+          <div className="flex shrink-0 items-center justify-end gap-2 sm:gap-3">
+            <div className="hidden min-w-0 items-center lg:flex">
               <MarketingHeaderAuthDesktop />
             </div>
 
             <Button
               type="button"
               variant="ghost"
-              className="h-9 w-9 shrink-0 p-0 text-[var(--nav-fg)] md:hidden"
+              className="h-10 w-10 shrink-0 rounded-xl border border-[var(--header-border)] p-0 text-[var(--header-text)] hover:bg-[var(--nav-hover)] lg:hidden"
               aria-label={t("nav.openMenu")}
               onClick={() => setMobileOpen(true)}
             >
-              <Menu className="h-5 w-5" />
+              <Menu className="h-5 w-5" aria-hidden />
             </Button>
           </div>
         </div>
       </header>
 
-      <MarketingSiteSubNav />
-
       {mobileOpen ? (
         <div className="fixed inset-0 z-[200] md:hidden animate-[nn-overlay-enter_0.24s_ease_both]">
-          <button type="button" className="absolute inset-0 bg-black/40" aria-label={t("nav.closeMenu")} onClick={() => setMobileOpen(false)} />
-          <div className="absolute end-0 top-0 flex h-[100dvh] max-h-[100dvh] w-[min(100%,20rem)] flex-col border-s border-[var(--header-nav-border)] bg-[var(--header-nav-surface)] shadow-[var(--shadow-elevated)] animate-[nn-drawer-slide-in_0.28s_cubic-bezier(0.25,0.1,0.25,1)_both]">
-            <div className="flex h-14 shrink-0 items-center justify-between border-b border-[var(--header-nav-border)] px-4 pt-[max(0.5rem,env(safe-area-inset-top))]">
+          <button type="button" className="absolute inset-0 bg-black/48" aria-label={t("nav.closeMenu")} onClick={() => setMobileOpen(false)} />
+          <div className="absolute inset-x-0 top-0 flex h-[100dvh] max-h-[100dvh] flex-col border-b border-[var(--header-border)] bg-[var(--card-bg)] shadow-[var(--shadow-elevated)] animate-[nn-drawer-slide-in_0.28s_cubic-bezier(0.25,0.1,0.25,1)_both]">
+            <div className="flex h-16 shrink-0 items-center justify-between border-b border-[var(--border-subtle)] px-4 pt-[max(0.5rem,env(safe-area-inset-top))]">
               <Link
                 href={localizeHref("/")}
                 className="flex min-w-0 shrink-0 items-center overflow-hidden bg-transparent"
@@ -132,70 +176,77 @@ export function SiteHeader() {
               >
                 <SiteBrandLogoMark />
               </Link>
-              <Button type="button" variant="ghost" className="h-9 w-9 shrink-0 p-0 text-[var(--nav-fg)]" aria-label={t("nav.closeMenu")} onClick={() => setMobileOpen(false)}>
+              <Button type="button" variant="ghost" className="h-10 w-10 shrink-0 rounded-xl border border-[var(--border-subtle)] p-0 text-[var(--theme-heading-text)] hover:bg-[var(--surface-interactive-hover)]" aria-label={t("nav.closeMenu")} onClick={() => setMobileOpen(false)}>
                 <X className="h-5 w-5" />
               </Button>
             </div>
-            <div className="min-h-0 flex-1 space-y-1 overflow-y-auto overscroll-y-contain px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-3">
-              <div className="mb-3 flex flex-col gap-1">
-                <p className="mb-1 px-3 text-[11px] font-semibold uppercase tracking-widest text-[var(--nav-muted)]">
-                  {t("nav.tierDrop.heading")}
+            <div className="min-h-0 flex-1 space-y-5 overflow-y-auto overscroll-y-contain px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-5">
+              <div className="space-y-1">
+                <p className="px-2 text-[11px] font-semibold uppercase tracking-widest text-[var(--theme-muted-text)]">
+                  {t("nav.marketingExplore")}
                 </p>
-                {[
-                  { key: "rn", href: marketingExamHubPath(region, "rn"), labelKey: "nav.tierDrop.rnTitle" as const },
-                  {
-                    key: "pn",
-                    href: marketingExamHubPath(region, "pn"),
-                    labelKey: (region === "CA" ? "nav.tierDrop.rpnTitle" : "nav.tierDrop.lpnTitle") as Parameters<typeof t>[0],
-                  },
-                  { key: "np", href: marketingExamHubPath(region, "np"), labelKey: "nav.tierDrop.npTitle" as const },
-                  { key: "allied", href: marketingExamHubPath(region, "allied"), labelKey: "nav.tierDrop.alliedTitle" as const },
-                  { key: "pre-nursing", href: "/pre-nursing", labelKey: "nav.tierDrop.preNursingTitle" as const },
-                  { key: "tools", href: HUB.tools, labelKey: "nav.tierDrop.toolsTitle" as const },
-                ].map((tier) => (
+                {primaryNav.map((item) => (
                   <Link
-                    key={tier.key}
-                    href={localizeHref(tier.href)}
-                    className={`${NAV_LINK_CLASS} rounded-xl px-3 py-2.5`}
-                    onClick={() => {
-                      trackClientEvent(PH.marketingNavClick, {
-                        actor: "anonymous",
-                        nav_id: `tier_drop_${tier.key}`,
-                        surface: "site_header_mobile_drawer",
-                        marketing_region: region,
-                      });
-                      setMobileOpen(false);
-                    }}
-                  >
-                    {t(tier.labelKey)}
-                  </Link>
-                ))}
-              </div>
-              <div className="mb-3 flex flex-col gap-1">
-                <p className="mb-1 px-3 text-[11px] font-semibold uppercase tracking-widest text-[var(--nav-muted)]">
-                  {t("nav.more")}
-                </p>
-                {marketingNav.map((item) => (
-                  <Link
-                    key={item.href}
+                    key={item.key}
                     href={localizeHref(item.href)}
-                    className={`${NAV_LINK_CLASS} rounded-xl px-3 py-2.5`}
+                    className="flex items-center rounded-xl px-3 py-3 text-[15px] font-semibold text-[var(--theme-heading-text)] transition-colors hover:bg-[var(--surface-interactive-hover)]"
                     onClick={() => {
                       trackClientEvent(PH.marketingNavClick, {
                         actor: "anonymous",
-                        nav_id: item.href,
+                        nav_id: item.key,
                         surface: "site_header_mobile_drawer",
                         marketing_region: region,
                       });
                       setMobileOpen(false);
                     }}
                   >
-                    {item.label ?? t(item.labelKey!)}
+                    {item.label}
                   </Link>
                 ))}
               </div>
 
-              <p className="mb-2 nn-marketing-caption text-[var(--nav-muted)]">{t("nav.regionLabel")}</p>
+              <div className="space-y-1">
+                <p className="px-2 text-[11px] font-semibold uppercase tracking-widest text-[var(--theme-muted-text)]">
+                  {t("nav.more")}
+                </p>
+                {mobileMoreNav.map((item) => (
+                  <Link
+                    key={item.key}
+                    href={localizeHref(item.href)}
+                    className="flex items-center rounded-xl px-3 py-3 text-[15px] font-medium text-[var(--theme-body-text)] transition-colors hover:bg-[var(--surface-interactive-hover)] hover:text-[var(--theme-heading-text)]"
+                    onClick={() => {
+                      trackClientEvent(PH.marketingNavClick, {
+                        actor: "anonymous",
+                        nav_id: item.key,
+                        surface: "site_header_mobile_drawer",
+                        marketing_region: region,
+                      });
+                      setMobileOpen(false);
+                    }}
+                  >
+                    {item.label}
+                  </Link>
+                ))}
+              </div>
+
+              <div className="mt-1 flex flex-col gap-2 border-t border-[var(--border-subtle)] pt-5">
+                <Link
+                  href={localizeHref(`/signup?callbackUrl=${encodeURIComponent("/app")}`)}
+                  className="nn-nav-cta inline-flex min-h-[48px] items-center justify-center rounded-xl px-4 py-3 text-sm font-semibold"
+                  onClick={() => setMobileOpen(false)}
+                >
+                  {formatNavLabel(t("nav.getStarted"), { locale, context: "site-header.mobile.cta" })}
+                </Link>
+                <Link
+                  href={localizeHref(`/login?callbackUrl=${encodeURIComponent("/app")}`)}
+                  className="inline-flex min-h-[46px] items-center justify-center rounded-xl border border-[var(--border-subtle)] px-4 py-3 text-sm font-medium text-[var(--theme-heading-text)] hover:bg-[var(--surface-interactive-hover)]"
+                  onClick={() => setMobileOpen(false)}
+                >
+                  {formatNavLabel(t("nav.logIn"), { locale, context: "site-header.mobile.login" })}
+                </Link>
+              </div>
+
+              <p className="mb-2 nn-marketing-caption text-[var(--theme-muted-text)]">{t("nav.regionLabel")}</p>
               <div className={`mb-3 ${marketingRegionToggleShellMobileRow()}`} role="group" aria-label={t("nav.regionLabel")}>
                 <button type="button" onClick={() => setRegionAndRefresh("US")} className={marketingRegionToggleSegment(region === "US", "mobile")}>
                   {t("home.region.us")}
@@ -208,19 +259,19 @@ export function SiteHeader() {
                 <MapPin className="mt-0.5 h-3.5 w-3.5 shrink-0" />
                 {region === "US" ? t("home.region.usDesc") : t("home.region.caDesc")}
               </p>
-              <hr className="my-3 border-[var(--header-nav-border)]" />
-              <p className="mb-2 nn-marketing-body-sm font-medium tracking-normal text-[var(--nav-muted)]">{t("nav.language")}</p>
+              <hr className="my-3 border-[var(--border-subtle)]" />
+              <p className="mb-2 nn-marketing-body-sm font-medium tracking-normal text-[var(--theme-muted-text)]">{t("nav.language")}</p>
               <div className="relative mb-3" ref={langRef}>
                 <button
                   type="button"
                   onClick={() => setLangOpen((o) => !o)}
-                  className="flex w-full items-center justify-between gap-2 rounded-xl border border-[var(--nav-border)] px-3 py-2 nn-marketing-body-sm font-medium tracking-normal text-[var(--nav-fg)]"
+                  className="flex w-full items-center justify-between gap-2 rounded-xl border border-[var(--border-subtle)] px-3 py-2 nn-marketing-body-sm font-medium tracking-normal text-[var(--theme-heading-text)]"
                 >
                   {t("nav.language")}
                   <ChevronDown className={`h-4 w-4 shrink-0 transition-transform ${langOpen ? "rotate-180" : ""}`} />
                 </button>
                 {langOpen ? (
-                  <div className="mt-1 max-h-48 overflow-y-auto rounded-xl border border-[var(--nav-border)] bg-[var(--nav-bg)] p-1">
+                  <div className="mt-1 max-h-48 overflow-y-auto rounded-xl border border-[var(--border-subtle)] bg-[var(--card-bg)] p-1 shadow-[var(--shadow-elevated)]">
                     <MarketingLanguagePreferenceList
                       onDone={() => setLangOpen(false)}
                       renderItem={({ code, name, flag, disabled, onSelect }) => (
@@ -228,8 +279,8 @@ export function SiteHeader() {
                           type="button"
                           disabled={disabled}
                           onClick={onSelect}
-                          className={`flex w-full items-center gap-2 rounded-lg px-2 py-2 text-left nn-marketing-body-sm font-medium tracking-normal text-[var(--nav-fg)] hover:bg-[var(--nav-hover)] ${
-                            code === locale ? "bg-[var(--nav-hover)]/60" : ""
+                          className={`flex w-full items-center gap-2 rounded-lg px-2 py-2 text-left nn-marketing-body-sm font-medium tracking-normal text-[var(--theme-heading-text)] hover:bg-[var(--surface-interactive-hover)] ${
+                            code === locale ? "bg-[var(--surface-selected)]" : ""
                           }`}
                         >
                           <span>{flag}</span>

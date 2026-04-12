@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
+import { formatNavLabel } from "@/lib/format/title-case";
 
 type NavItem = { href: string; key: string };
 type NavGroup = { sectionKey: string; items: readonly NavItem[] };
@@ -30,7 +31,9 @@ const GROUPS: readonly NavGroup[] = [
     items: [
       { href: "/app/account/study-history", key: "learner.account.nav.studyHistory" },
       { href: "/app/account/cat-history", key: "learner.account.nav.catHistory" },
+      { href: "/app/review", key: "learner.account.nav.smartReview" },
       { href: "/app/account/review-queue", key: "learner.account.nav.reviewQueue" },
+      { href: "/app/account/mistakes", key: "learner.account.nav.mistakeNotebook" },
       { href: "/app/account/notes", key: "learner.account.nav.notesHighlights" },
     ],
   },
@@ -55,7 +58,7 @@ function isActive(pathname: string, href: string): boolean {
 
 export function LearnerAccountNav() {
   const pathname = usePathname();
-  const { t } = useMarketingI18n();
+  const { t, locale } = useMarketingI18n();
 
   return (
     <nav
@@ -69,7 +72,7 @@ export function LearnerAccountNav() {
         {GROUPS.map((group) => (
           <div key={group.sectionKey} className="mb-3 last:mb-0">
             <p className="px-2 pb-1 pt-2 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground lg:px-3">
-              {t(group.sectionKey)}
+              {formatNavLabel(t(group.sectionKey), { locale, context: `learner-account.group.${group.sectionKey}` })}
             </p>
             <ul className="flex gap-1 overflow-x-auto pb-1 lg:flex-col lg:overflow-x-visible lg:pb-0">
               {group.items.map(({ href, key }) => {
@@ -84,7 +87,7 @@ export function LearnerAccountNav() {
                           : "text-[var(--theme-menu-text)] hover:bg-[var(--surface-interactive-hover)]"
                       }`}
                     >
-                      {t(key)}
+                      {formatNavLabel(t(key), { locale, context: `learner-account.item.${key}` })}
                     </Link>
                   </li>
                 );

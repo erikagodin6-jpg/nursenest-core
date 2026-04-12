@@ -5,7 +5,6 @@ import {
   BRAND_NAME,
   DEFAULT_BRAND_LOGO_MARK_CLASSNAME,
   brandLogoMarkPresentation,
-  brandLogoRasterContrastClass,
   type BrandLogoMarkVariant,
 } from "@/lib/branding/logo-config";
 import { getThemeLogoPathForThemeId } from "@/lib/branding/theme-logo-map";
@@ -86,9 +85,6 @@ export function SiteBrandLogoMark({
     );
   }
 
-  const isSvg = src.endsWith(".svg");
-  const contrastClass = isSvg ? "" : brandLogoRasterContrastClass(themeId);
-
   return (
     <span className={`${slotClassName} ${className}`.trim()}>
       <img
@@ -97,7 +93,7 @@ export function SiteBrandLogoMark({
         alt={BRAND_NAME}
         loading="eager"
         decoding="async"
-        className={`${imgClassName} ${contrastClass}`.trim()}
+        className={imgClassName}
         onLoad={handleLoad}
         onError={handleError}
       />
