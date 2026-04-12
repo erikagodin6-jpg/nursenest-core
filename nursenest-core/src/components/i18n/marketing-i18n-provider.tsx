@@ -3,6 +3,8 @@
 import { createContext, useContext, useEffect, useMemo, type ReactNode } from "react";
 import { formatMarketingMessage, type MarketingMessages } from "@/lib/marketing-i18n-core";
 import { isRtlMarketingLocale, localePrimarySubtag } from "@/lib/i18n/marketing-locale-policy";
+import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
+import { validateMarketingHeroNavCriticalKeys } from "@/lib/marketing/marketing-hero-nav-critical-keys";
 
 type Params = Record<string, string | number | undefined>;
 
@@ -45,6 +47,21 @@ export function MarketingI18nProvider({
     }),
     [locale, messages, fallbackMessages],
   );
+
+  useEffect(() => {
+    if (process.env.NODE_ENV !== "development") return;
+    const canonicalEn =
+      fallbackMessages ?? (locale === DEFAULT_MARKETING_LOCALE ? messages : undefined);
+    if (!canonicalEn) return;
+    const { ok, missing } = validateMarketingHeroNavCriticalKeys(canonicalEn);
+    if (!ok) {
+      console.error(
+        "[MarketingI18nProvider] Canonical English bundle is missing hero/nav critical keys (fix before shipping):\n",
+        missing.join("\n"),
+      );
+    }
+  }, [locale, messages, fallbackMessages]);
+
   return (
     <MarketingI18nContext.Provider value={value}>
       <HtmlLangSync locale={locale} />

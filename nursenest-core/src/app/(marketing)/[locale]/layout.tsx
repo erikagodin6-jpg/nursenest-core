@@ -28,10 +28,10 @@ export default async function MarketingLocaleLayout({
   try {
     /** Cookie sync: `cookies().set` is not allowed in RSC; {@link MarketingLocaleUrlSync} calls the server action. */
     serverRegion = (await getMarketingRegionFromCookies()) as MarketingRegionToggle;
-    messages = await loadMarketingMessages(locale);
-    if (locale !== DEFAULT_MARKETING_LOCALE) {
-      fallbackMessages = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
-    }
+    const en = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
+    messages = locale === DEFAULT_MARKETING_LOCALE ? en : await loadMarketingMessages(locale);
+    /** Always supply English so missing overlay keys resolve to canonical copy in production. */
+    fallbackMessages = en;
   } catch (e) {
     console.error("[marketing-locale-layout] failed to load locale/region data", {
       error: e instanceof Error ? e.message : String(e),

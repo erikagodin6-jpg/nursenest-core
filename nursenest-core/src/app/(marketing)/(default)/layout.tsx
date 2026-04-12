@@ -19,10 +19,11 @@ export default async function MarketingDefaultLocaleLayout({ children }: { child
   try {
     resolvedLocale = await getMarketingLocaleForDefaultRoute();
     serverRegion = (await getMarketingRegionFromCookies()) as MarketingRegionToggle;
-    messages = await loadMarketingMessages(resolvedLocale);
-    if (resolvedLocale !== DEFAULT_MARKETING_LOCALE) {
-      fallbackMessages = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
-    }
+    const en = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
+    messages =
+      resolvedLocale === DEFAULT_MARKETING_LOCALE ? en : await loadMarketingMessages(resolvedLocale);
+    /** Always supply English so missing overlay keys resolve to canonical copy in production. */
+    fallbackMessages = en;
   } catch (e) {
     console.error("[marketing-default-layout] failed to load locale/region data", {
       error: e instanceof Error ? e.message : String(e),

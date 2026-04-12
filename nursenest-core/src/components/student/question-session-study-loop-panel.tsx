@@ -101,7 +101,8 @@ export function QuestionSessionStudyLoopPanel({ questions, graded, pathwayId, vi
             {weak.slice(0, 5).map((row) => {
               const drill =
                 row.topicDrillHref ?? buildAppTopicDrillHref({ topic: row.topic, topicCode: row.topicCode, pathwayId });
-              const wrongPct = row.total > 0 ? Math.round((row.wrong / row.total) * 100) : 0;
+              const total = row.wrong + row.right;
+              const wrongPct = total > 0 ? Math.round((row.wrong / total) * 100) : 0;
               return (
                 <li
                   key={row.topic}

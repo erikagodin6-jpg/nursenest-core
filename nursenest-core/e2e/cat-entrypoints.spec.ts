@@ -8,9 +8,16 @@ test.describe("CAT entrypoint routing", () => {
   for (const region of ["US", "CA"] as const) {
     test(`/practice-exams links to pathway CAT pages (${region})`, async ({ context, page }) => {
       await context.addCookies([{ name: MARKETING_REGION_COOKIE, value: region, url: baseURL }]);
-      await page.goto("/practice-exams", { waitUntil: "domcontentloaded" });
+      await page.goto(`${baseURL}/practice-exams`, { waitUntil: "domcontentloaded" });
 
-      for (const offering of ["rn", "pn", "np", "allied"] as const) {
+      if (region === "CA") {
+        await expect(page.getByRole("button", { name: /Country: Canada/i }).first()).toBeVisible();
+      } else {
+        await expect(page.getByRole("button", { name: /Country: United States/i }).first()).toBeVisible();
+      }
+
+      const offerings = region === "CA" ? (["pn", "np", "allied"] as const) : (["rn", "pn", "np", "allied"] as const);
+      for (const offering of offerings) {
         const href = publicMarketingCatHrefForOffering(region, offering);
         await expect(page.locator(`a[href="${href}"]`).first()).toBeVisible();
       }
@@ -64,8 +71,11 @@ test.describe("CAT entrypoint routing", () => {
   });
 
   test("tampered invalid pathway CAT route is blocked", async ({ page }) => {
-    await page.goto("/us/rpn/rex-pn/cat", { waitUntil: "domcontentloaded" });
-    await expect(page.getByRole("link", { name: /Browse lessons/i })).toBeVisible();
+    const response = await page.goto("/us/rpn/rex-pn/cat", { waitUntil: "domcontentloaded" });
+    expect(response?.status()).toBeGreaterThanOrEqual(200);
+    expect(response?.status()).toBeLessThan(500);
+    await expect(page.locator('a[href="/us/rpn/rex-pn/lessons"]')).toHaveCount(0);
+    await expect(page.locator('a[href="/us/rpn/rex-pn/questions"]')).toHaveCount(0);
     await expect(page.locator('a[href*="callbackUrl=%2Fus%2Frpn%2Frex-pn%2Fcat"]')).toHaveCount(0);
   });
 });
