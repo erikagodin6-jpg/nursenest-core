@@ -6,8 +6,10 @@ import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-s
 import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
 import { resolveExamPathwaySafe } from "@/lib/exam-pathways/resolve-exam-pathway-safe";
 import type { MarketingRegionToggle } from "@/lib/marketing/marketing-entry-routes";
-import { getPathwayTopicProgrammaticRow } from "@/lib/seo/pathway-topic-programmatic-registry";
-import { PATHWAY_TOPIC_PROGRAMMATIC_REVALIDATE_SECONDS } from "@/lib/seo/pathway-topic-programmatic-registry";
+import {
+  getPathwayTopicProgrammaticRow,
+  PATHWAY_TOPIC_PROGRAMMATIC_REVALIDATE_SECONDS,
+} from "@/lib/seo/pathway-topic-programmatic-registry";
 import { buildPathwayTopicProgrammaticBreadcrumbResolution } from "@/lib/seo/pathway-topic-programmatic-breadcrumbs";
 import { buildPathwayTopicProgrammaticMetadata } from "@/lib/seo/pathway-topic-programmatic-metadata";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";

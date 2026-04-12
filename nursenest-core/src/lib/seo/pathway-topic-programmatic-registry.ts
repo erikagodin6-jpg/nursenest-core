@@ -216,8 +216,8 @@ function lessonsAngleSlug(pathwayId: string, body: BodyTopic): string {
   if (pathwayId.includes("np-")) {
     return `np-lessons-${body.key}`;
   }
-  if (pathwayId === "us-lpn-nclex-pn" || pathwayId === "ca-rpn-rex-pn") {
-    return pathwayId === "ca-rpn-rex-pn" ? `pn-lessons-${body.key}` : `pn-lessons-${body.key}`;
+   if (pathwayId === "us-lpn-nclex-pn" || pathwayId === "ca-rpn-rex-pn") {
+    return `pn-lessons-${body.key}`;
   }
   return `rn-lessons-${body.key}`;
 }
