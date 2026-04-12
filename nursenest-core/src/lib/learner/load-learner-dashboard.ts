@@ -37,6 +37,8 @@ export type RecentMock = {
 
 export type LearnerDashboardModel = {
   scope: { tier: string; country: string };
+  /** Saved exam pathway on the user profile (for deep links). */
+  learnerPath: string | null;
   lessonsCompleted: number;
   lessonsAvailable: number;
   questionsInMocksLast14d: number;
@@ -184,6 +186,7 @@ export async function loadLearnerDashboard(
 
   return {
     scope: { tier, country },
+    learnerPath,
     lessonsCompleted,
     lessonsAvailable,
     questionsInMocksLast14d,
