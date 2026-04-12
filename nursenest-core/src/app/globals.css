@@ -1965,10 +1965,22 @@ html[data-theme="deep-twilight"] .nn-trust-mark {
   }
 }
 
+@keyframes nn-mega-panel-enter {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .nn-header-animate-in,
   [class*="animate-[nn-overlay-enter"],
-  [class*="animate-[nn-drawer-slide-in"] {
+  [class*="animate-[nn-drawer-slide-in"],
+  [class*="animate-[nn-mega-panel-enter"] {
     animation: none;
   }
 }
