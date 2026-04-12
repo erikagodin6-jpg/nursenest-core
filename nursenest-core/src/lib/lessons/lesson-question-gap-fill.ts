@@ -192,4 +192,4 @@ export async function recountLessonsAfterSalvage(items: LessonGapSalvageItem[]):
   return out.sort((a, b) => a.pathwayId.localeCompare(b.pathwayId) || a.slug.localeCompare(b.slug));
 }
 
-export { RELATED_EXAM_QUESTIONS_MIN_TARGET, listExamPathways };
+export { RELATED_EXAM_QUESTIONS_MIN_TARGET };

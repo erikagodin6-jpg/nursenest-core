@@ -60,6 +60,7 @@ const SUPPORT_ALLOWED_PREFIXES = [
   "/api/admin/cat-blueprint-sessions",
   "/api/admin/qa",
   "/api/admin/question-bank-diagnostics",
+  "/api/admin/lesson-question-link-coverage",
   "/api/admin/scalability-report",
   "/api/admin/pathway-lesson-translations",
   "/api/admin/pre-nursing-report",
