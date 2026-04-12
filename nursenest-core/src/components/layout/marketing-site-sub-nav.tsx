@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useMemo } from "react";
+import { useTheme } from "next-themes";
+import { getNavChromeStyle } from "@/lib/theme/nav-chrome";
 import { trackClientEvent } from "@/lib/observability/posthog-client";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 import { mapLegacyMarketingHref } from "@/lib/legacy-marketing-routes";
@@ -31,6 +33,8 @@ export function MarketingSiteSubNav() {
   const pathname = usePathname() ?? "/";
   const { t, locale } = useMarketingI18n();
   const { region } = useNursenestRegion();
+  const { theme } = useTheme();
+  const navChromeStyle = getNavChromeStyle(theme);
 
   const localize = (href: string) => {
     const mapped = mapLegacyMarketingHref(href);
@@ -52,7 +56,8 @@ export function MarketingSiteSubNav() {
   return (
     <nav
       aria-label={t("nav.pathwayHubsAria")}
-      className="border-b border-[var(--nav-border)] bg-[var(--nav-bg)]"
+      style={navChromeStyle}
+      className="border-b"
     >
       <div className="mx-auto max-w-7xl px-3 sm:px-4 lg:px-8">
         <ul className="-mx-3 flex h-10 snap-x snap-mandatory items-center gap-1 overflow-x-auto overscroll-x-contain px-3 py-1.5 sm:mx-0 sm:gap-1.5 sm:overflow-x-visible sm:px-0 sm:py-2 md:h-11 md:justify-center md:gap-2 lg:gap-2.5">
@@ -65,8 +70,8 @@ export function MarketingSiteSubNav() {
                   href={href}
                   className={`${LINK_BASE} ${
                     active
-                      ? "bg-[var(--nav-active)] text-[var(--nav-fg)] shadow-[inset_0_1px_0_rgba(255,255,255,0.18)] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]"
-                      : "text-[var(--nav-muted)] hover:bg-[var(--nav-active)] hover:text-[var(--nav-fg)]"
+                      ? "bg-[color:var(--nn-nav-hover-bg)] text-[color:var(--nn-nav-fg)] shadow-[inset_0_1px_0_rgba(255,255,255,0.18)]"
+                      : "text-[color:var(--nn-nav-fg)] opacity-75 hover:bg-[color:var(--nn-nav-hover-bg)] hover:opacity-100"
                   } `}
                   onClick={() =>
                     trackClientEvent(PH.marketingSubNavClick, {

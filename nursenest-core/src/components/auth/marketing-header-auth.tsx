@@ -12,7 +12,7 @@ import { formatTitleCase } from "@/lib/format/text-case";
 import { PRIMARY_CTA } from "@/lib/copy/cta-copy";
 
 const SIGN_IN_CLASS =
-  "nn-marketing-body-sm inline-flex items-center rounded-lg px-3 py-2 font-medium tracking-normal text-[var(--nav-link)] transition-colors duration-150 hover:bg-[var(--nav-hover)] hover:text-[var(--nav-link-hover)]";
+  "nn-marketing-body-sm inline-flex items-center rounded-md px-3 py-2 font-medium tracking-normal text-[color:var(--nn-nav-fg,var(--nav-link))] transition-colors duration-150 hover:bg-[color:var(--nn-nav-hover-bg,var(--nav-hover))] hover:text-[color:var(--nn-nav-hover-fg,var(--nav-link-hover))]";
 
 const GET_STARTED_CLASS =
   "nn-button-primary nn-nav-cta inline-flex min-h-0 items-center justify-center rounded-xl px-4 py-2 text-sm font-semibold";
@@ -77,7 +77,7 @@ export function MarketingHeaderAuthDesktop() {
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
-        className="flex max-w-[min(100%,12rem)] items-center gap-1 rounded-lg border border-[var(--header-border)] bg-[var(--nav-active)] px-3 py-2 nn-marketing-body-sm font-medium tracking-normal text-[var(--nav-fg)] hover:bg-[var(--nav-hover)] sm:max-w-[14rem]"
+        className="flex max-w-[min(100%,12rem)] items-center gap-1 rounded-md border border-[color:var(--nn-nav-border,var(--header-border))] bg-[color:var(--nn-nav-hover-bg,var(--nav-active))] px-3 py-2 nn-marketing-body-sm font-medium tracking-normal text-[color:var(--nn-nav-fg,var(--nav-fg))] hover:bg-[color:var(--nn-nav-hover-bg,var(--nav-hover))] sm:max-w-[14rem]"
         aria-expanded={open}
         aria-haspopup="menu"
       >

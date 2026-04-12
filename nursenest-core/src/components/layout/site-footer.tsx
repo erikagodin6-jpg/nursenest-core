@@ -1,7 +1,9 @@
 "use client";
 
 import Link from "next/link";
+import { useTheme } from "next-themes";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
+import { getNavChromeStyle } from "@/lib/theme/nav-chrome";
 import { mapLegacyMarketingHref, resolveMarketingHref } from "@/lib/legacy-marketing-routes";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { EmailSignupBanner } from "@/components/marketing/email-signup-banner";
@@ -46,13 +48,18 @@ function FLink({
 
 export function SiteFooter() {
   const { t, locale } = useMarketingI18n();
+  const { theme } = useTheme();
+  const navChromeStyle = getNavChromeStyle(theme);
   const { region } = useNursenestRegion();
   const examHubs = marketingExamPrepHubs(region);
   const learnerSignInHref = withMarketingLocale(locale, loginWithCallback("/app"));
   const startPracticingHref = withMarketingLocale(locale, "/signup?callbackUrl=%2Fapp");
 
   return (
-    <footer className="nn-footer-surface mt-auto py-[var(--nn-rhythm-footer-y)] text-[var(--footer-fg)] shadow-[inset_0_1px_0_color-mix(in_srgb,var(--footer-fg)_8%,transparent)]">
+    <footer
+      style={navChromeStyle}
+      className="nn-footer-surface mt-auto py-[var(--nn-rhythm-footer-y)] shadow-[inset_0_1px_0_rgba(255,255,255,0.12)]"
+    >
       <div className="nn-section-shell">
         <div className="mb-6 sm:mb-8">
           <EmailSignupBanner />

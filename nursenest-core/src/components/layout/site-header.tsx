@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useTheme } from "next-themes";
+import { getNavChromeStyle } from "@/lib/theme/nav-chrome";
 import { ChevronDown, ChevronRight, MapPin, Menu, X } from "lucide-react";
 import { mapLegacyMarketingHref } from "@/lib/legacy-marketing-routes";
 import { isStaffRole } from "@/lib/auth/staff-roles";
@@ -317,6 +318,7 @@ export function SiteHeader() {
   const { t, locale } = useMarketingI18n();
   const pathname = usePathname() ?? "/";
   const { theme } = useTheme();
+  const navChromeStyle = getNavChromeStyle(theme);
   // Default to light (ocean, the app default, is a light theme) so SSR and first paint match.
   const isLightTheme = useMemo(() => {
     if (!theme) return true;
@@ -485,6 +487,7 @@ export function SiteHeader() {
     <div className="sticky top-0 z-50 nn-header-animate-in" ref={headerRef}>
       <MarketingHeaderUtilityStrip variant={isLightTheme ? "dark-bar" : "standard"} />
       <header
+        style={navChromeStyle}
         className={
           isLightTheme
             ? `nn-header-logo-row ${isScrolled ? "nn-header-logo-row--scrolled" : ""}`
