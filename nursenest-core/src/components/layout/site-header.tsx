@@ -369,7 +369,7 @@ export function SiteHeader() {
 
   const scheduleMegaClose = () => {
     clearMegaCloseTimer();
-    closeMegaTimeoutRef.current = setTimeout(() => setOpenMegaMenu(null), 300);
+    closeMegaTimeoutRef.current = setTimeout(() => setOpenMegaMenu(null), 120);
   };
 
   useEffect(() => {
@@ -505,8 +505,8 @@ export function SiteHeader() {
     <div style={navChromeVars} className="sticky top-0 z-50 nn-header-animate-in" ref={headerRef}>
       <MarketingHeaderUtilityStrip variant="dark-bar" />
       <header
-        style={isLightTheme ? undefined : navChromeStyle}
-        className={`relative w-full border-b${isLightTheme ? " nn-header-logo-row" : ""}`}
+        style={isLightTheme ? undefined : { ...navChromeStyle, boxShadow: "inset 0 1px 0 0 rgba(255,255,255,0.15)" }}
+        className={`relative w-full border-b${isLightTheme ? " nn-header-logo-row nn-header-logo-row--scrolled" : ""}`}
         onMouseEnter={isMarketingNav ? clearMegaCloseTimer : undefined}
         onMouseLeave={isMarketingNav ? scheduleMegaClose : undefined}
       >
@@ -537,7 +537,7 @@ export function SiteHeader() {
                     <div
                       key={menu.key}
                       className="relative"
-                      onMouseEnter={() => { clearMegaCloseTimer(); setOpenMegaMenu(menu.key); }}
+                      onMouseEnter={() => setOpenMegaMenu(menu.key)}
                     >
                       <button
                         type="button"
@@ -545,8 +545,8 @@ export function SiteHeader() {
                         aria-controls={`mega-menu-${menu.key}`}
                         data-active={isMegaMenuKeyActive(menu.key, strippedPath) || undefined}
                         className={`${NAV_LINK_CLASS} inline-flex items-center gap-1 text-center`}
-                        onClick={() => { clearMegaCloseTimer(); setOpenMegaMenu(expanded ? null : menu.key); }}
-                        onFocus={() => { clearMegaCloseTimer(); setOpenMegaMenu(menu.key); }}
+                        onClick={() => setOpenMegaMenu(expanded ? null : menu.key)}
+                        onFocus={() => setOpenMegaMenu(menu.key)}
                       >
                         {menu.label}
                         <ChevronDown className={`h-3.5 w-3.5 transition-transform ${expanded ? "rotate-180" : ""}`} aria-hidden />
@@ -669,8 +669,6 @@ export function SiteHeader() {
             role="dialog"
             aria-label={`${openMega.label} menu`}
             className="absolute inset-x-0 top-full z-[120] hidden lg:block animate-[nn-mega-panel-enter_0.16s_cubic-bezier(0.22,0.61,0.36,1)_both]"
-            onMouseEnter={clearMegaCloseTimer}
-            onMouseLeave={scheduleMegaClose}
           >
             <div className="nn-section-shell pb-5 pt-1.5">
               <div className="overflow-hidden rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-strong)] shadow-[var(--shadow-elevated)]">
