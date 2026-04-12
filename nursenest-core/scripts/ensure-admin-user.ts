@@ -65,9 +65,12 @@ async function main() {
 
   const existing = await prisma.user.findUnique({ where: { email }, select: { id: true } });
 
+  // Use SUPER_ADMIN (ADMIN is deprecated but still works; SUPER_ADMIN is preferred for new rows)
   const updateData: Prisma.UserUpdateInput = {
     passwordHash,
-    role: "ADMIN",
+    role: "SUPER_ADMIN",
+    // Bump credentialVersion so any existing JWT sessions are invalidated
+    credentialVersion: { increment: 1 },
   };
   if (username !== null) {
     updateData.username = username;
@@ -80,7 +83,7 @@ async function main() {
     email,
     name: nameFromEnv || "Admin",
     passwordHash,
-    role: "ADMIN" as const,
+    role: "SUPER_ADMIN" as const,
     country,
     tier,
     username: username ?? undefined,
@@ -93,7 +96,12 @@ async function main() {
       })
     : await prisma.user.create({ data: createData });
 
-  console.log("Admin user ready:", user.email, "username=", user.username ?? "(none)", "role=", user.role);
+  console.log(`\n✓ Admin user ${existing ? "updated" : "created"} successfully`);
+  console.log(`  email:    ${user.email}`);
+  console.log(`  username: ${user.username ?? "(none)"}`);
+  console.log(`  role:     ${user.role}`);
+  console.log(`  id:       ${user.id}`);
+  console.log(`\nYou can now log in at /login using email "${user.email}" or username "${user.username ?? "(not set)"}"\n`);
 }
 
 main()

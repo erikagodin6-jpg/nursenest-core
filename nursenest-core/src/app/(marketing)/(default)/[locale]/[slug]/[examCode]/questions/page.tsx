@@ -194,7 +194,7 @@ export default async function ExamPathwayQuestionsHubPage({ params, searchParams
   });
 
   return (
-    <main className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
+    <main className="mx-auto max-w-5xl px-4 py-8 sm:px-6 lg:px-8 lg:py-12">
       <BreadcrumbJsonLd items={schemaItems} />
 
       {/* Breadcrumb trail */}
@@ -216,7 +216,7 @@ export default async function ExamPathwayQuestionsHubPage({ params, searchParams
 
       {/* 2. Stat cards */}
       {(questionCount !== null || adaptiveCount !== null || pathwayLessonCount !== undefined) ? (
-        <div className="mt-6">
+        <div className="mt-5">
           <PathwayStatsCards
             stats={[
               ...(questionCount !== null
@@ -255,16 +255,16 @@ export default async function ExamPathwayQuestionsHubPage({ params, searchParams
       {/* 4. Content area — topic-narrowed view or NP board links */}
       {isTopicNarrowed ? (
         <div className="mt-8 space-y-4">
-          <aside className="nn-study-card nn-study-card--wash p-5">
+          <aside className="rounded-[1.25rem] border border-[color-mix(in_srgb,var(--semantic-info)_18%,var(--semantic-border-soft))] bg-[var(--semantic-panel-cool)] p-5">
             <p className="text-sm font-semibold text-[var(--theme-heading-text)]">Filtered to one clinical topic</p>
-            <p className="mt-1 text-sm text-[var(--theme-muted-text)]">
+            <p className="mt-1 text-sm leading-6 text-[var(--theme-muted-text)]">
               You landed here from a lesson or topic link. Open the full hub to see every topic for this pathway.
             </p>
             <a
               href={questionsHubPath}
-              className="mt-3 inline-flex text-sm font-semibold text-[var(--semantic-brand)] underline underline-offset-2 hover:no-underline"
+              className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-[var(--semantic-brand)] underline underline-offset-2 hover:no-underline"
             >
-              Clear topic — full practice hub
+              ← Clear topic filter
             </a>
           </aside>
           <PathwayQuestionHubRelatedLessons
@@ -276,12 +276,12 @@ export default async function ExamPathwayQuestionsHubPage({ params, searchParams
       ) : null}
 
       {pathway.roleTrack === "np" ? (
-        <div className="mt-6 rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-cool)] p-4 text-sm text-[var(--theme-body-text)]">
+        <div className="mt-8 rounded-[1.25rem] border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-cool)] p-5 shadow-[var(--semantic-shadow-soft)]">
           <NpQuestionsHubBoardLinks pathwayId={pathway.id} linkContext={boardLinkContext} />
         </div>
       ) : null}
 
-      {/* 7. Bottom nav */}
+      {/* Bottom nav */}
       <StudyBottomNav
         relatedLinks={[
           { label: "Clinical lessons", href: lessonsHref },

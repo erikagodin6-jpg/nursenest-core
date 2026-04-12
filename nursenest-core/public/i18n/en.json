@@ -19844,6 +19844,7 @@
   "pages.login.errorGeneric": "Unable to sign in. Try again.",
   "pages.login.errorInvalid": "Invalid email, username, or password.",
   "pages.login.fieldIdentifierLabel": "Email or username",
+  "pages.login.fieldPasswordLabel": "Password",
   "pages.login.forgotPasswordLink": "Forgot password?",
   "pages.login.legalAfter": ".",
   "pages.login.legalAnd": " and ",
