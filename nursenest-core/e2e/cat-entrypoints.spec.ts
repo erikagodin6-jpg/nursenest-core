@@ -17,7 +17,7 @@ test.describe("CAT entrypoint routing", () => {
     });
   }
 
-  for (const catPath of ["/us/rn/nclex-rn/cat", "/canada/rpn/rex-pn/cat", "/us/np/fnp/cat"] as const) {
+  for (const catPath of ["/us/rn/nclex-rn/cat", "/canada/rpn/rex-pn/cat"] as const) {
     test(`sign-in callback returns to same CAT path (${catPath})`, async ({ page }) => {
       await page.goto(catPath, { waitUntil: "domcontentloaded" });
       const encodedPath = encodeURIComponent(catPath);
@@ -29,6 +29,14 @@ test.describe("CAT entrypoint routing", () => {
       expect(callbackUrl).toBe(catPath);
     });
   }
+
+  test("US FNP CAT keeps pathway-scoped fallback links when unavailable", async ({ page }) => {
+    const catPath = "/us/np/fnp/cat";
+    await page.goto(catPath, { waitUntil: "domcontentloaded" });
+    await expect(page.locator('a[href="/us/np/fnp/lessons"]')).toBeVisible();
+    await expect(page.locator('a[href="/us/np/fnp/questions"]')).toBeVisible();
+    await expect(page.locator(`a[href*="callbackUrl=${encodeURIComponent(catPath)}"]`)).toHaveCount(0);
+  });
 
   test("blocked waitlist pathway keeps lessons and question bank available", async ({ page }) => {
     await page.goto("/canada/np/cnple/cat", { waitUntil: "domcontentloaded" });
