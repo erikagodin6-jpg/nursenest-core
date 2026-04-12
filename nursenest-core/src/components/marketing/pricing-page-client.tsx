@@ -197,8 +197,8 @@ export function PricingPageClient({
     (async () => {
       try {
         const res = await fetch("/api/pricing/options");
-        const data = await res.json();
         if (!res.ok) throw new Error("load_failed");
+        const data = await res.json();
         if (!cancelled) {
           setNursingPlans(data.plans ?? []);
           setAlliedPlans(data.alliedPlans ?? []);
@@ -206,7 +206,10 @@ export function PricingPageClient({
           setPlansLoaded(true);
         }
       } catch {
-        if (!cancelled) setLoadError(t("pages.pricing.error.loadPlans"));
+        if (!cancelled) {
+          setLoadError(t("pages.pricing.error.loadPlans"));
+          setPlansLoaded(true);
+        }
       }
     })();
     return () => {
