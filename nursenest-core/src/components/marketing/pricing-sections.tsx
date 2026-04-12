@@ -51,31 +51,38 @@ const TEXT_MUTED = "var(--semantic-text-muted)";
 // ── Section 2: Value Props Strip ────────────────────────────────────────────
 
 const VALUE_PROPS = [
-  { icon: Target, label: "Personalized Study Plan" },
-  { icon: Eye, label: "Smart Review of Mistakes" },
-  { icon: ClipboardCheck, label: "Real Exam-Style Questions" },
-  { icon: TrendingUp, label: "Readiness Tracking" },
+  { icon: Target, label: "Personalized Study Plan", accent: "var(--palette-primary)" },
+  { icon: Eye, label: "Smart Review of Mistakes", accent: "var(--semantic-warning)" },
+  { icon: ClipboardCheck, label: "Real Exam-Style Questions", accent: "var(--semantic-info)" },
+  { icon: TrendingUp, label: "Readiness Tracking", accent: "var(--semantic-success)" },
 ] as const;
 
 export function ValuePropsStrip() {
   return (
-    <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
-      {VALUE_PROPS.map(({ icon: Icon, label }) => (
+    <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 sm:gap-5">
+      {VALUE_PROPS.map(({ icon: Icon, label, accent }) => (
         <div
           key={label}
-          className="nn-elevation-panel flex flex-col items-center gap-2.5 rounded-xl px-4 py-5 text-center"
+          className="nn-elevation-panel nn-motion-standard flex flex-col items-center gap-3 rounded-2xl px-5 py-6 text-center"
           style={{
-            background: SURFACE_ELEVATED,
-            border: `1px solid ${BORDER}`,
+            background: `color-mix(in srgb, ${accent} 4%, var(--semantic-surface))`,
+            border: `1px solid color-mix(in srgb, ${accent} 14%, ${BORDER})`,
           }}
         >
-          <Icon
-            className="h-5 w-5"
-            style={{ color: "var(--palette-primary)" }}
-            aria-hidden
-          />
+          <div
+            className="flex h-10 w-10 items-center justify-center rounded-xl"
+            style={{
+              background: `color-mix(in srgb, ${accent} 12%, ${SURFACE})`,
+            }}
+          >
+            <Icon
+              className="h-5 w-5"
+              style={{ color: accent }}
+              aria-hidden
+            />
+          </div>
           <span
-            className="text-xs font-semibold leading-tight"
+            className="text-sm font-semibold leading-tight"
             style={{ color: TEXT_PRIMARY }}
           >
             {label}
@@ -138,21 +145,21 @@ export function PricingFeaturesGrid() {
           Every plan includes full access to all of these features
         </p>
       </FadeUp>
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
         {FEATURES.map((f) => (
           <div
             key={f.title}
-            className="nn-elevation-panel nn-motion-standard flex flex-col gap-3 rounded-2xl p-6"
+            className="nn-elevation-panel nn-motion-standard flex flex-col gap-4 rounded-2xl p-7"
             style={{
               background: SURFACE_ELEVATED,
               border: `1px solid ${BORDER}`,
             }}
           >
             <div
-              className="flex h-10 w-10 items-center justify-center rounded-xl"
+              className="flex h-11 w-11 items-center justify-center rounded-xl"
               style={{
-                background: `color-mix(in srgb, ${f.accent} 10%, ${SURFACE})`,
-                border: `1px solid color-mix(in srgb, ${f.accent} 20%, ${BORDER})`,
+                background: `color-mix(in srgb, ${f.accent} 12%, ${SURFACE})`,
+                border: `1px solid color-mix(in srgb, ${f.accent} 18%, ${BORDER})`,
               }}
             >
               <f.icon className="h-5 w-5" style={{ color: f.accent }} aria-hidden />
@@ -175,35 +182,49 @@ const WHY_POINTS = [
     icon: Crosshair,
     title: "You Are Guided, Not Guessing",
     desc: "Your study plan is built from your actual performance data, not a generic syllabus.",
+    accent: "var(--palette-primary)",
   },
   {
     icon: Eye,
     title: "Focus on Weak Areas",
     desc: "The system identifies where you struggle and prioritizes those topics automatically.",
+    accent: "var(--semantic-warning)",
   },
   {
     icon: ShieldCheck,
     title: "Know When You Are Ready",
     desc: "Readiness scoring tells you when your weak areas are resolved and you can walk into your exam with confidence.",
+    accent: "var(--semantic-success)",
   },
 ] as const;
 
 export function WhyItWorks() {
   return (
     <section aria-labelledby="why-heading">
-      <FadeUp className="mb-8 text-center">
+      <FadeUp className="mb-10 text-center">
         <h2 id="why-heading" className="nn-marketing-h2">
           Why NurseNest Works
         </h2>
       </FadeUp>
-      <div className="grid gap-4 sm:grid-cols-3">
+      <div className="grid gap-5 sm:grid-cols-3 sm:gap-6">
         {WHY_POINTS.map((p) => (
           <div
             key={p.title}
-            className="nn-elevation-panel nn-motion-standard flex flex-col gap-3 rounded-2xl p-6"
-            style={{ background: SURFACE_ELEVATED, border: `1px solid ${BORDER}` }}
+            className="nn-elevation-panel nn-motion-standard flex flex-col gap-4 overflow-hidden rounded-2xl p-7"
+            style={{
+              background: SURFACE_ELEVATED,
+              border: `1px solid ${BORDER}`,
+              borderLeft: `3px solid ${p.accent}`,
+            }}
           >
-            <p.icon className="h-6 w-6" style={{ color: "var(--palette-primary)" }} aria-hidden />
+            <div
+              className="flex h-10 w-10 items-center justify-center rounded-xl"
+              style={{
+                background: `color-mix(in srgb, ${p.accent} 10%, ${SURFACE})`,
+              }}
+            >
+              <p.icon className="h-5 w-5" style={{ color: p.accent }} aria-hidden />
+            </div>
             <h3 className="nn-marketing-h4">{p.title}</h3>
             <p className="text-sm leading-relaxed" style={{ color: TEXT_SECONDARY }}>
               {p.desc}
@@ -732,14 +753,22 @@ export function PricingTrustReassurance() {
           Built for Students Who Want to Pass
         </h2>
       </FadeUp>
-      <div className="grid gap-4 sm:grid-cols-3">
+      <div className="grid gap-5 sm:grid-cols-3 sm:gap-6">
         {TRUST_POINTS.map((p) => (
           <div
             key={p.headline}
-            className="nn-elevation-panel nn-motion-standard rounded-2xl p-6"
+            className="nn-elevation-panel nn-motion-standard rounded-2xl p-7"
             style={{ background: SURFACE_ELEVATED, border: `1px solid ${BORDER}` }}
           >
-            <p.icon className="nn-icon-lg mb-3 text-[var(--semantic-info)]" aria-hidden />
+            <div
+              className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl"
+              style={{
+                background: `color-mix(in srgb, var(--semantic-info) 10%, ${SURFACE})`,
+                border: `1px solid color-mix(in srgb, var(--semantic-info) 18%, ${BORDER})`,
+              }}
+            >
+              <p.icon className="h-5 w-5" style={{ color: "var(--semantic-info)" }} aria-hidden />
+            </div>
             <h3 className="nn-marketing-h4 mb-2">{p.headline}</h3>
             <p className="text-sm leading-relaxed" style={{ color: TEXT_SECONDARY }}>
               {p.body}
@@ -756,7 +785,7 @@ export function PricingTrustReassurance() {
 export function PricingCTA({ plansHref }: { plansHref: string }) {
   return (
     <section
-      className="rounded-2xl p-10 text-center shadow-[var(--elevation-rest)]"
+      className="rounded-3xl px-8 py-14 text-center shadow-[var(--elevation-rest)] sm:px-12 sm:py-16"
       style={{
         background: `
           linear-gradient(

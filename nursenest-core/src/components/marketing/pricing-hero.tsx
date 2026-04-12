@@ -12,7 +12,7 @@ export function PricingHero({
 }) {
   return (
     <section
-      className="relative overflow-hidden rounded-2xl px-6 py-16 text-center sm:px-12 sm:py-24"
+      className="relative overflow-hidden rounded-3xl px-6 py-20 text-center sm:px-14 sm:py-28"
       style={{
         background: `
           linear-gradient(
@@ -57,17 +57,17 @@ export function PricingHero({
         </p>
 
         <p
-          className="mx-auto mt-5 inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-semibold tracking-wide"
+          className="mx-auto mt-6 inline-flex items-center gap-2 rounded-full px-5 py-2 text-sm font-semibold tracking-wide shadow-sm"
           style={{
-            background: "color-mix(in srgb, var(--semantic-success) 8%, var(--semantic-surface))",
-            border: "1px solid color-mix(in srgb, var(--semantic-success) 20%, var(--semantic-border-soft))",
+            background: "color-mix(in srgb, var(--semantic-success) 10%, var(--semantic-surface))",
+            border: "1px solid color-mix(in srgb, var(--semantic-success) 22%, var(--semantic-border-soft))",
             color: "var(--semantic-text-secondary)",
           }}
         >
           All Prices Are Shown in Canadian Dollars
         </p>
 
-        <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+        <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
           <Link href="#pricing-plans-heading" className={MARKETING_PRIMARY_CTA_CLASS}>
             {ctaLabel}
           </Link>

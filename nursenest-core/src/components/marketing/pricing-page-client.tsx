@@ -2,17 +2,14 @@
 
 import type { TierCode } from "@prisma/client";
 import Link from "next/link";
-import { MarketingTrackedLink } from "@/components/marketing/marketing-tracked-link";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { ArrowRight, Check } from "lucide-react";
+import { Check } from "lucide-react";
 import { buildTierPricingNarrative } from "@/lib/conversion/pricing-catalog";
 import { trackClientEvent } from "@/lib/observability/posthog-client";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { useNursenestRegion } from "@/lib/region/use-nursenest-region";
-import { buildExamPathwayPath, getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
-import { marketingExamHubPath } from "@/lib/marketing/country-exam-offerings";
 import { rnQuestions } from "@/lib/marketing/marketing-entry-routes";
 import { LEGAL_POLICY_BUNDLE_VERSION } from "@/lib/legal/legal-config";
 import {
@@ -38,10 +35,13 @@ import {
   MARKETING_SECONDARY_CTA_CLASS,
   MARKETING_TERTIARY_LINK_CLASS,
 } from "@/lib/theme/marketing-hero-pattern";
-import { MarketingTrustSignalsStrip } from "@/components/marketing/marketing-trust-signals-strip";
 import { PricingHero } from "@/components/marketing/pricing-hero";
 import {
+  ValuePropsStrip,
   FeatureComparisonTable,
+  PricingFeaturesGrid,
+  WhyItWorks,
+  AlliedHealthClarity,
   PricingUnlockSection,
   ProductPreviewGrid,
   PricingTrustReassurance,
@@ -96,11 +96,27 @@ function segmentToTier(segment: Segment): TierCode {
   }
 }
 
-const DURATION_LABEL_KEYS: Record<BillingDuration, string> = {
-  monthly: "pages.pricing.duration.monthly",
-  "3-month": "pages.pricing.duration.3month",
-  "6-month": "pages.pricing.duration.6month",
-  yearly: "pages.pricing.conversion.duration12",
+const SEGMENT_LABELS: Record<Segment, string> = {
+  prenursing: "Pre-Nursing",
+  newgrad: "New Grad",
+  rn: "RN / NCLEX-RN",
+  pn: "RPN / REx-PN",
+  np: "NP",
+  allied: "Allied Health",
+};
+
+const DURATION_LABELS: Record<BillingDuration, string> = {
+  monthly: "Monthly",
+  "3-month": "3 Month",
+  "6-month": "6 Month",
+  yearly: "12 Month",
+};
+
+const DURATION_MICROCOPY: Record<BillingDuration, string> = {
+  monthly: "Flexible access",
+  "3-month": "Most students choose this",
+  "6-month": "Build confidence at your own pace",
+  yearly: "Best value for long-term prep",
 };
 
 function checkoutErrorUserMessage(
@@ -141,7 +157,6 @@ export function PricingPageClient({
   const [policiesAccepted, setPoliciesAccepted] = useState(false);
   const { locale, t } = useMarketingI18n();
   const { region } = useNursenestRegion();
-  const institutionalHref = withMarketingLocale(locale, "/for-institutions");
 
   const heroCtaVariant = useExperiment("hero_cta");
   const trialMsgVariant = useExperiment("trial_messaging");
@@ -205,25 +220,6 @@ export function PricingPageClient({
   const privacyHref = localize("/privacy");
   const refundHref = localize("/refund-policy");
 
-  const examLinks = useMemo(() => ({
-    rn: {
-      labelKey: "pages.pricing.examCard.rnCA",
-      href: localize(marketingExamHubPath("CA", "rn")),
-    },
-    pn: {
-      labelKey: "pages.pricing.examCard.pnCA",
-      href: localize(marketingExamHubPath("CA", "pn")),
-    },
-    np: {
-      labelKey: "pages.pricing.examCard.npCA",
-      href: localize(marketingExamHubPath("CA", "np")),
-    },
-    allied: {
-      labelKey: "pages.pricing.examCard.alliedCA",
-      href: localize(marketingExamHubPath("CA", "allied")),
-    },
-  } as const), [localize]);
-
   const startCheckout = useCallback(
     async (duration: BillingDuration) => {
       setCheckoutError(null);
@@ -272,8 +268,7 @@ export function PricingPageClient({
           setCheckoutLoading(false);
           return;
         }
-        const url = (data as { url: string }).url;
-        window.location.href = url;
+        window.location.href = (data as { url: string }).url;
       } catch {
         setCheckoutOpsHint(null);
         setCheckoutError(t("pages.pricing.error.checkoutNetwork"));
@@ -283,54 +278,45 @@ export function PricingPageClient({
     [policiesAccepted, tier, trialDays, t, isAllied, selectedAlliedCareer],
   );
 
-  const includeKeys = ["lessons", "bank", "cat", "analytics"] as const;
-
-  const DURATION_MICROCOPY_KEYS: Record<BillingDuration, string> = {
-    monthly: "pages.pricing.card.fullAccessMicro",
-    "3-month": "pages.pricing.card.mostStudentsMicro",
-    "6-month": "pages.pricing.card.buildConfidenceMicro",
-    yearly: "pages.pricing.card.bestValueMicro",
-  };
-
-  const tierTabs: { id: Segment; labelKey: string }[] = [
-    { id: "prenursing", labelKey: "pages.pricing.segment.prenursing" },
-    { id: "newgrad", labelKey: "pages.pricing.segment.newgrad" },
-    { id: "rn", labelKey: "pages.pricing.segment.rn" },
-    { id: "pn", labelKey: "pages.pricing.segment.pnCombined" },
-    { id: "np", labelKey: "pages.pricing.segment.np" },
-    { id: "allied", labelKey: "pages.pricing.segment.allied" },
-  ];
+  const SEGMENT_ORDER: Segment[] = ["prenursing", "newgrad", "rn", "pn", "np", "allied"];
 
   return (
-    <main className="mx-auto flex w-full max-w-6xl flex-col gap-14 nn-marketing-x pb-[var(--nn-rhythm-page-y)] pt-0 md:gap-16">
-      {/* Hero */}
+    <main className="mx-auto flex w-full max-w-6xl flex-col gap-20 nn-marketing-x pb-[var(--nn-rhythm-page-y)] pt-0 md:gap-24">
+
+      {/* ── Section 1: Hero ── */}
       <PricingHero
         studySystemHref={localize("/how-it-works")}
         ctaLabel={heroCtaLabel}
         trialSubtext={trialSubtext}
       />
 
-      <div className="nn-section-enter flex flex-col items-center gap-3 pt-2">
-        <MarketingTrustSignalsStrip variant="compact" />
-        <p className="nn-marketing-caption text-muted-foreground">{t("pages.pricing.conversion.checkoutTrust")}</p>
-      </div>
+      {/* ── Section 2: Trust + Value Strip ── */}
+      <ValuePropsStrip />
 
-      {/* Currency notice + tier tabs */}
-      <section className="nn-section-enter space-y-6">
-        <p className="text-center text-xs font-semibold tracking-wide text-[var(--semantic-info)]">
-          {t("pages.pricing.market.currencyNotice.cadOnly")}
-        </p>
+      {/* ── Section 3: Plan Selector + Section 4: Pricing Cards ── */}
+      <section aria-labelledby="pricing-plans-heading" className="space-y-12">
+        <div className="text-center">
+          <h2 id="pricing-plans-heading" className="nn-marketing-h2">
+            Choose Your Plan
+          </h2>
+          <p className="nn-marketing-body-sm mx-auto mt-2 max-w-xl text-muted-foreground">
+            {narrative.subhead}
+          </p>
+        </div>
 
-        <div>
-          <p className="mb-3 text-center text-sm font-medium text-muted-foreground">{t("pages.pricing.conversion.chooseTrack")}</p>
+        {/* Tier tabs */}
+        <div className="space-y-4">
+          <p className="text-center text-sm font-medium text-muted-foreground">
+            Select Your Exam Track
+          </p>
           <div className="flex flex-wrap justify-center gap-2">
-            {tierTabs.map(({ id, labelKey }) => (
+            {SEGMENT_ORDER.map((id) => (
               <button
                 key={id}
                 type="button"
                 onClick={() => {
                   setSegment(id);
-                  trackClientEvent("plan_selected", { segment: id, tier: segmentToTier(id) });
+                  trackClientEvent("tier_selected", { segment: id, tier: segmentToTier(id) });
                 }}
                 className={`rounded-full px-4 py-2.5 text-sm font-semibold transition-[background-color,color,box-shadow,transform,border-color] duration-150 ease-out ${
                   segment === id
@@ -338,7 +324,7 @@ export function PricingPageClient({
                     : "border border-[var(--border-medium)] bg-card text-[var(--palette-text)] hover:-translate-y-px hover:bg-[var(--surface-interactive-hover)] hover:shadow-[var(--elevation-hover)]"
                 }`}
               >
-                {t(labelKey)}
+                {SEGMENT_LABELS[id]}
               </button>
             ))}
           </div>
@@ -346,9 +332,9 @@ export function PricingPageClient({
 
         {/* Allied career selector */}
         {isAllied && (
-          <div className="mx-auto max-w-lg">
-            <p className="mb-2 text-center text-sm font-medium text-muted-foreground">
-              {t("pages.pricing.allied.selectCareer")}
+          <div className="mx-auto max-w-lg space-y-3">
+            <p className="text-center text-sm font-medium text-muted-foreground">
+              Select Your Career Line
             </p>
             <div className="flex flex-wrap justify-center gap-2">
               {ALLIED_CAREER_KEYS.map((career) => (
@@ -357,7 +343,7 @@ export function PricingPageClient({
                   type="button"
                   onClick={() => {
                     setSelectedAlliedCareer(career);
-                    trackClientEvent("allied_career_plan_selected", { career });
+                    trackClientEvent("allied_career_selected", { career });
                   }}
                   className={`rounded-full px-3 py-1.5 text-xs font-semibold transition-[background-color,color,box-shadow,transform] duration-150 ease-out ${
                     selectedAlliedCareer === career
@@ -369,120 +355,110 @@ export function PricingPageClient({
                 </button>
               ))}
             </div>
-            <p className="mt-2 text-center text-[11px] text-muted-foreground">
-              {t("pages.pricing.allied.separatePlanNote")}
-            </p>
+            <AlliedHealthClarity />
           </div>
         )}
 
-        <p className="mx-auto max-w-2xl text-center text-sm text-muted-foreground">{narrative.subhead}</p>
-      </section>
+        {loadError ? <p className="text-center text-sm text-destructive">{loadError}</p> : null}
 
-      <FeatureComparisonTable />
-
-      {/* Duration cards */}
-      <section aria-labelledby="pricing-plans-heading">
-        <div className="mb-6 text-center">
-          <h2 id="pricing-plans-heading" className="nn-marketing-h2">
-            {isAllied
-              ? t("pages.pricing.allied.plansHeading", { career: ALLIED_CAREER_DISPLAY_NAMES[selectedAlliedCareer] })
-              : t("pages.pricing.conversion.pickTerm")}
-          </h2>
-          <p className="nn-marketing-body-sm mt-2 text-muted-foreground">{t("pages.pricing.conversion.pickTermSub")}</p>
-          <p className="nn-marketing-caption mt-2 text-muted-foreground">{t("pages.pricing.conversion.stripeFast")}</p>
-          <p className="nn-marketing-caption mt-3 font-medium text-primary">{t("pages.pricing.conversion.mostStudentsLine")}</p>
-        </div>
-
-        {loadError ? <p className="mb-6 text-center text-sm text-destructive">{loadError}</p> : null}
-
-        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        {/* Pricing cards */}
+        <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4 xl:gap-6 xl:items-start">
           {BILLING_DURATION_ORDER.map((duration) => {
             const row = rowByDuration.get(duration);
             const isBest = row?.isBestValue ?? duration === "yearly";
             const isPop = row?.isMostPopular ?? false;
             const isHighlighted = isBest || isPop;
+
             return (
               <article
                 key={duration}
-                className={`nn-card-interactive nn-elevation-panel nn-motion-standard relative flex flex-col rounded-2xl p-5 ${
-                  isBest
-                    ? "border-primary ring-2 ring-primary/25 bg-[color-mix(in_srgb,var(--palette-primary)_3%,var(--color-card))]"
-                    : isPop
-                      ? "border-[var(--semantic-info)] ring-1 ring-[var(--semantic-info)]/20 bg-card"
-                      : "border-[var(--palette-border)] bg-card"
+                className={`nn-card-interactive nn-motion-standard relative flex flex-col rounded-2xl transition-shadow duration-200 ${
+                  isPop
+                    ? "z-10 border-2 border-[var(--semantic-info)] bg-[color-mix(in_srgb,var(--semantic-info)_5%,var(--color-card))] p-7 shadow-[0_8px_32px_-4px_color-mix(in_srgb,var(--semantic-info)_20%,transparent)] xl:-my-3 xl:p-8"
+                    : isBest
+                      ? "border-2 border-primary bg-[color-mix(in_srgb,var(--palette-primary)_4%,var(--color-card))] p-7 shadow-[0_4px_20px_-4px_color-mix(in_srgb,var(--palette-primary)_14%,transparent)]"
+                      : "border border-[var(--palette-border)] bg-card p-6 shadow-[var(--elevation-rest)] hover:shadow-[var(--elevation-hover)]"
                 }`}
               >
-                {isBest ? (
-                  <span className="absolute -top-2.5 left-1/2 -translate-x-1/2 rounded-full bg-primary px-3 py-0.5 text-[11px] font-bold uppercase tracking-wide text-primary-foreground shadow-[var(--elevation-rest)]">
-                    {t("pages.pricing.conversion.badgeBestValue")}
+                {isPop ? (
+                  <span className="absolute -top-3.5 left-1/2 -translate-x-1/2 rounded-full bg-[var(--semantic-info)] px-5 py-1.5 text-xs font-bold uppercase tracking-wide text-white shadow-[0_2px_8px_color-mix(in_srgb,var(--semantic-info)_30%,transparent)]">
+                    Most Popular
                   </span>
-                ) : isPop ? (
-                  <span className="absolute -top-2.5 left-1/2 -translate-x-1/2 rounded-full bg-[var(--semantic-info)] px-3 py-0.5 text-[11px] font-bold uppercase tracking-wide text-white shadow-[var(--elevation-rest)]">
-                    {t("pages.pricing.conversion.badgePopular")}
+                ) : isBest ? (
+                  <span className="absolute -top-3.5 left-1/2 -translate-x-1/2 rounded-full bg-primary px-5 py-1.5 text-xs font-bold uppercase tracking-wide text-primary-foreground shadow-[0_2px_8px_color-mix(in_srgb,var(--palette-primary)_24%,transparent)]">
+                    Best Value
                   </span>
                 ) : null}
 
-                <h3 className="nn-marketing-h3 mt-1">{t(DURATION_LABEL_KEYS[duration])}</h3>
+                <h3 className={isPop ? "text-xl font-bold text-[var(--palette-heading)]" : "nn-marketing-h3"}>{DURATION_LABELS[duration]}</h3>
 
-                <p className="mt-1.5 text-[13px] leading-snug text-muted-foreground">
-                  {t(DURATION_MICROCOPY_KEYS[duration])}
+                <p className={`mt-2 leading-snug text-muted-foreground ${isPop ? "text-sm font-medium" : "text-[13px]"}`}>
+                  {DURATION_MICROCOPY[duration]}
                 </p>
 
                 {duration !== "monthly" && (
-                  <p className="mt-1 inline-flex items-center gap-1.5 text-[11px] font-semibold tracking-wide text-[var(--semantic-success)]">
+                  <p className="mt-2 inline-flex items-center gap-1.5 text-[11px] font-semibold tracking-wide text-[var(--semantic-success)]">
                     <span className="inline-block h-1.5 w-1.5 rounded-full bg-[var(--semantic-success)]" aria-hidden />
-                    {t("pages.pricing.card.foundingPricing")}
+                    Founding Pricing
                   </p>
                 )}
 
-                <ul className="mt-4 flex-1 space-y-2 text-sm text-[var(--palette-text)]">
-                  {includeKeys.map((k) => (
-                    <li key={k} className="flex gap-2">
-                      <Check className="nn-icon-md mt-0.5 shrink-0 text-[var(--semantic-success)]" aria-hidden />
-                      <span>{t(`pages.pricing.conversion.includes.${k}`)}</span>
-                    </li>
-                  ))}
-                </ul>
-
                 {row ? (
                   <>
-                    <div className="mt-6">
+                    <div
+                      className="mt-6 border-t pt-5"
+                      style={{ borderColor: isPop
+                        ? "color-mix(in srgb, var(--semantic-info) 15%, var(--semantic-border-soft))"
+                        : "var(--semantic-border-soft)" }}
+                    >
                       {"anchorPriceLabel" in row && row.anchorPriceLabel && (
                         <p className="text-sm text-muted-foreground line-through decoration-muted-foreground/50">
                           {row.anchorPriceLabel}
                         </p>
                       )}
-                      <p className="nn-marketing-h3 tabular-nums text-[var(--palette-heading)]">{row.totalLabel}</p>
+                      <p className={`font-black tabular-nums text-[var(--palette-heading)] ${isPop ? "text-3xl" : isHighlighted ? "text-[28px]" : "text-2xl"}`}>
+                        {row.totalLabel}
+                      </p>
                     </div>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="mt-1 text-sm text-muted-foreground">
                       {row.monthlyEquivalentLabel} {t("pages.pricing.plan.avgSuffix")}
                     </p>
                     {row.savingsVsMonthlyPercent > 0 ? (
-                      <p className="mt-1 text-xs font-semibold text-[var(--semantic-success)]">
+                      <p className="mt-1.5 text-xs font-semibold text-[var(--semantic-success)]">
                         {t("pages.pricing.plan.saveVsMonthly", { pct: row.savingsVsMonthlyPercent })}
                       </p>
                     ) : null}
+
+                    <ul className="mt-6 flex-1 space-y-2.5 text-sm text-[var(--palette-text)]">
+                      {["All lessons and questions", "CAT exams and practice tests", "Smart review and analytics", "Personalized study plan"].map((item) => (
+                        <li key={item} className="flex gap-2">
+                          <Check className="mt-0.5 h-4 w-4 shrink-0 text-[var(--semantic-success)]" aria-hidden />
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+
                     <button
                       type="button"
                       disabled={checkoutLoading || !policiesAccepted || !row.checkoutAvailable}
                       onClick={() => startCheckout(duration)}
-                      className={`${isHighlighted ? MARKETING_PRIMARY_CTA_CLASS : MARKETING_SECONDARY_CTA_CLASS} mt-4 w-full justify-center disabled:pointer-events-none disabled:opacity-50`}
+                      className={`${isHighlighted ? MARKETING_PRIMARY_CTA_CLASS : MARKETING_SECONDARY_CTA_CLASS} mt-6 w-full justify-center disabled:pointer-events-none disabled:opacity-50`}
                     >
-                      {row.checkoutAvailable
-                        ? heroCtaLabel
-                        : t("pages.pricing.conversion.ctaUnavailable")}
+                      {row.checkoutAvailable ? heroCtaLabel : "Coming Soon"}
                     </button>
                     {row.checkoutAvailable ? (
-                      <p className="mt-2 text-center text-[11px] leading-snug text-muted-foreground">
-                        {trialSubtext}
+                      <p className={`mt-3 text-center text-xs leading-snug ${isPop ? "font-semibold text-[var(--semantic-info)]" : "text-muted-foreground"}`}>
+                        No Charge Today
                       </p>
                     ) : (
-                      <p className="mt-2 text-center text-[11px] leading-snug text-muted-foreground">{t("pages.pricing.conversion.checkoutHintAlt")}</p>
+                      <p className="mt-3 text-center text-xs leading-snug text-muted-foreground">
+                        This plan is not yet available for checkout
+                      </p>
                     )}
                   </>
                 ) : (
-                  <div className="mt-6 flex flex-1 flex-col justify-end">
-                    <p className="text-sm text-muted-foreground">{t("pages.pricing.conversion.planLoading")}</p>
+                  <div className="mt-8 flex flex-1 flex-col justify-end">
+                    <p className="text-sm text-muted-foreground">Loading pricing...</p>
                   </div>
                 )}
               </article>
@@ -490,148 +466,87 @@ export function PricingPageClient({
           })}
         </div>
 
+        {/* Trial callout */}
         {trialDays > 0 && (
-          <div className="mx-auto mt-8 max-w-xl rounded-xl border border-[var(--semantic-success)]/20 bg-[color-mix(in_srgb,var(--semantic-success)_5%,var(--color-card))] px-5 py-4 text-center shadow-[var(--elevation-rest)]">
-            <p className="text-base font-semibold text-[var(--palette-heading)]">
-              {t("pages.pricing.trial.freeForDays", { days: trialDays })}
+          <div className="mx-auto max-w-xl rounded-2xl border border-[var(--semantic-success)]/20 bg-[color-mix(in_srgb,var(--semantic-success)_5%,var(--color-card))] px-8 py-6 text-center shadow-[var(--elevation-rest)]">
+            <p className="text-lg font-semibold text-[var(--palette-heading)]">
+              Try Everything Free for {trialDays} Days
             </p>
-            <p className="mt-2 text-sm text-muted-foreground">
-              {t("pages.pricing.trial.fullAccessBody")}
+            <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+              Full access to all lessons, practice tests, CAT exams, and analytics.
+              No charge until your trial ends. Cancel anytime in one click.
             </p>
-            <p className="mt-1 text-xs text-muted-foreground">
-              {t("pages.pricing.trial.paymentMethodNote")}
+            <p className="mt-2 text-xs text-muted-foreground">
+              Payment method required to start your trial. You will not be charged during the trial period.
             </p>
           </div>
         )}
 
-        <div className="mx-auto mt-4 max-w-xl rounded-xl border border-dashed border-border bg-muted/20 px-5 py-4 text-center shadow-[var(--elevation-rest)]">
-          <p className="text-base font-semibold text-[var(--palette-heading)]">{t("pages.pricing.conversion.freeTeaserTitle")}</p>
-          <p className="mt-2 text-sm text-muted-foreground">{t("pages.pricing.conversion.freeTeaserBody")}</p>
-          <p className="mt-1 text-xs text-muted-foreground">{t("pages.pricing.conversion.freeTeaser")}</p>
-          <Link href={tryQuestionsHref} className={`${MARKETING_SECONDARY_CTA_CLASS} mt-4 inline-flex justify-center`}>
-            {t("pages.pricing.tier.freeCta")}
-            <ArrowRight className="ml-2 h-4 w-4" aria-hidden />
-          </Link>
+        {/* Policy acceptance */}
+        <div className="mx-auto max-w-xl space-y-4">
+          {checkoutError ? <p className="text-center text-sm text-destructive">{checkoutError}</p> : null}
+          {checkoutOpsHint ? (
+            <p className="rounded-md border border-border/80 bg-muted/40 px-3 py-2 font-mono text-xs text-muted-foreground">{checkoutOpsHint}</p>
+          ) : null}
+
+          <div className="rounded-xl border border-[var(--accent-surface-b-border)] bg-[var(--accent-surface-b)] p-4 text-sm">
+            <label className="flex cursor-pointer gap-3">
+              <input
+                type="checkbox"
+                className="mt-1 h-4 w-4 shrink-0 rounded border-border"
+                checked={policiesAccepted}
+                onChange={(e) => setPoliciesAccepted(e.target.checked)}
+              />
+              <span className="text-[var(--palette-text)]">
+                {t("pages.pricing.checkout.policyAckStart")}
+                <Link href={termsHref} className="nn-link-quiet font-semibold">
+                  {t("pages.pricing.checkout.policyTermsLabel")}
+                </Link>
+                {t("pages.pricing.checkout.policyAckBetween1")}
+                <Link href={privacyHref} className="nn-link-quiet font-semibold">
+                  {t("pages.pricing.checkout.policyPrivacyLabel")}
+                </Link>
+                {t("pages.pricing.checkout.policyAckBetween2")}
+                <Link href={refundHref} className="nn-link-quiet font-semibold">
+                  {t("pages.pricing.checkout.policyRefundLabel")}
+                </Link>
+                {t("pages.pricing.checkout.policyAckEnd")}
+              </span>
+            </label>
+          </div>
         </div>
       </section>
 
-      {/* Policy + errors */}
-      <section className="mx-auto max-w-xl">
-        <p className="text-sm text-muted-foreground">{t("pages.pricing.conversion.policyOnce")}</p>
-        <p className="mt-2 text-sm text-muted-foreground">{t("pages.pricing.billing.recurringShort")}</p>
-        {checkoutError ? <p className="mt-3 text-sm text-destructive">{checkoutError}</p> : null}
-        {checkoutOpsHint ? (
-          <p className="mt-2 rounded-md border border-border/80 bg-muted/40 px-3 py-2 font-mono text-xs text-muted-foreground">{checkoutOpsHint}</p>
-        ) : null}
+      {/* ── Section 5 (comparison) ── */}
+      <FeatureComparisonTable />
 
-        <div className="mt-6 rounded-xl border border-[var(--accent-surface-b-border)] bg-[var(--accent-surface-b)] p-4 text-sm">
-          <label className="flex cursor-pointer gap-3">
-            <input
-              type="checkbox"
-              className="mt-1 h-4 w-4 shrink-0 rounded border-border"
-              checked={policiesAccepted}
-              onChange={(e) => setPoliciesAccepted(e.target.checked)}
-            />
-            <span className="text-[var(--palette-text)]">
-              {t("pages.pricing.checkout.policyAckStart")}
-              <Link href={termsHref} className="nn-link-quiet font-semibold">
-                {t("pages.pricing.checkout.policyTermsLabel")}
-              </Link>
-              {t("pages.pricing.checkout.policyAckBetween1")}
-              <Link href={privacyHref} className="nn-link-quiet font-semibold">
-                {t("pages.pricing.checkout.policyPrivacyLabel")}
-              </Link>
-              {t("pages.pricing.checkout.policyAckBetween2")}
-              <Link href={refundHref} className="nn-link-quiet font-semibold">
-                {t("pages.pricing.checkout.policyRefundLabel")}
-              </Link>
-              {t("pages.pricing.checkout.policyAckEnd")}
-            </span>
-          </label>
-        </div>
-      </section>
+      {/* ── Section 6: What You Get ── */}
+      <PricingFeaturesGrid />
 
-      {/* Guarantee */}
-      <section className="nn-elevation-panel nn-motion-standard rounded-2xl border-[var(--palette-border)] p-6">
-        <h2 className="nn-marketing-h3">{t("pages.pricing.trust.guaranteeTitle")}</h2>
-        <p className="mt-2 text-sm text-muted-foreground">{t("pages.pricing.trust.guaranteeBody")}</p>
-        <ul className="mt-4 space-y-2 text-sm text-[var(--palette-text)]">
-          {trialDays > 0 && (
-            <li className="flex gap-2">
-              <Check className="nn-icon-md mt-0.5 shrink-0 text-[var(--semantic-success)]" aria-hidden />
-              {t("pages.pricing.card.freeTrialBullet", { days: trialDays })}
-            </li>
-          )}
-          <li className="flex gap-2">
-            <Check className="nn-icon-md mt-0.5 shrink-0 text-primary" aria-hidden />
-            {t("pages.pricing.card.cancelAnytime")}
-          </li>
-          <li className="flex gap-2">
-            <Check className="nn-icon-md mt-0.5 shrink-0 text-primary" aria-hidden />
-            {t("pages.pricing.trust.bullet1")}
-          </li>
-          <li className="flex gap-2">
-            <Check className="nn-icon-md mt-0.5 shrink-0 text-primary" aria-hidden />
-            {t("pages.pricing.trust.bullet2")}
-          </li>
-        </ul>
-        <p className="mt-4 text-xs text-muted-foreground">{t("pages.pricing.billing.cancelComfort")}</p>
-      </section>
-
+      {/* ── Section 6b: Deep unlock showcase ── */}
       <PricingUnlockSection />
+
+      {/* ── Product screenshots ── */}
       <ProductPreviewGrid />
+
+      {/* ── Section 7: Why NurseNest Works ── */}
+      <WhyItWorks />
+
+      {/* ── Trust ── */}
       <PricingTrustReassurance />
+
+      {/* ── Section 9: Final CTA ── */}
       <PricingCTA plansHref="#pricing-plans-heading" />
 
-      <section className="rounded-xl border border-[var(--trust-surface-border)] bg-[var(--trust-surface)] px-4 py-4 text-sm text-muted-foreground">
-        <p>{t("pages.pricing.institutionalBanner")}</p>
-        <Link href={institutionalHref} className="nn-link-quiet mt-2 inline-block font-semibold">
-          {t("pages.pricing.institutionalLink")} →
-        </Link>
-      </section>
-
-      <section>
-        <h2 className="nn-marketing-h2">{t("pages.pricing.examChoose.title")}</h2>
-        <p className="nn-marketing-body-sm mt-2 text-muted-foreground">
-          {t("pages.pricing.examChoose.subtitleCA")}
-        </p>
-        <div className="mt-4 grid gap-3 sm:grid-cols-2">
-          {Object.values(examLinks).map((item) => (
-            <Link
-              key={item.labelKey}
-              href={item.href}
-              className="nn-elevation-panel nn-motion-standard rounded-xl border-[var(--palette-border)] p-4 hover:border-[var(--border-medium)]"
-            >
-              <p className="nn-marketing-h4">{t(item.labelKey)}</p>
-            </Link>
-          ))}
-        </div>
-        {segment === "np" ? (
-          <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
-            {t("pages.pricing.npTracksIntroCA")}{" "}
-            <MarketingTrackedLink
-              href={localize(buildExamPathwayPath(getExamPathwayById("ca-np-cnple")!))}
-              event={PH.marketingPathwayHubCta}
-              eventProps={{ surface: "pricing_np_link", pathway_id: "ca-np-cnple" }}
-              className="font-semibold text-primary hover:underline"
-            >
-              CNPLE hub
-            </MarketingTrackedLink>
-            .
-          </p>
-        ) : null}
-      </section>
-
+      {/* Bottom links */}
       <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
         <Link href="#pricing-plans-heading" className={MARKETING_PRIMARY_CTA_CLASS}>
           {heroCtaLabel}
         </Link>
         <Link href={tryQuestionsHref} className={MARKETING_TERTIARY_LINK_CLASS}>
-          {t("pages.pricing.cta.tryFreeFirst")}
+          Or Try Free Questions First
         </Link>
       </div>
-
-      <p className="mt-2 text-center text-xs text-muted-foreground">{t("pages.pricing.social.pricingFooterLine")}</p>
     </main>
   );
 }
