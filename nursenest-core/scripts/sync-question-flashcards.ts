@@ -91,19 +91,19 @@ function mapCountryCode(raw: string | null): CountryCode {
   return CountryCode.CA; // default; adjust per your setup
 }
 
-/** Build a stable deck slug: "q-cards-{tier}-{bodySystem}". */
-function deckSlug(tier: TierCode, bodySystem: string): string {
+/** Build a stable deck slug: "q-cards-{tier}-{bodySystem}-{countryCode}". */
+function deckSlug(tier: TierCode, bodySystem: string, countryCode: CountryCode): string {
   const bs = bodySystem.toLowerCase().replace(/[^a-z0-9]+/g, "-");
-  return `q-cards-${tier.toLowerCase()}-${bs}`;
+  return `q-cards-${tier.toLowerCase()}-${bs}-${countryCode.toLowerCase()}`;
 }
 
-/** Build a human deck title: "RN Cardiovascular — Exam Flashcards". */
-function deckTitle(tier: TierCode, bodySystem: string): string {
+/** Build a human deck title: "RN Cardiovascular (CA) — Exam Flashcards". */
+function deckTitle(tier: TierCode, bodySystem: string, countryCode: CountryCode): string {
   const bs = bodySystem
     .split(/[-_\s]+/)
     .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
     .join(" ");
-  return `${tier} ${bs} — Exam Flashcards`;
+  return `${tier} ${bs} (${countryCode}) — Exam Flashcards`;
 }
 
 /** Build a stable category slug for a bodySystem. */
@@ -175,10 +175,10 @@ async function main() {
     return;
   }
 
-  // Step 3: group by (tier, bodySystem) for deck assignment
-  // Each card input maps back to its source question for tier/country info.
+  // Step 3: group by (tier, bodySystem, countryCode) for deck assignment
+  // Each card input maps back to its source question for tier/country/topic info.
   const questionMeta = new Map(
-    questions.map((q) => [q.id, { tier: q.tier, exam: q.exam, countryCode: q.countryCode }]),
+    questions.map((q) => [q.id, { tier: q.tier, exam: q.exam, countryCode: q.countryCode, topic: q.topic }]),
   );
 
   type DeckKey = string;
@@ -186,7 +186,8 @@ async function main() {
     const meta = questionMeta.get(input.sourceId);
     const t = meta?.tier ?? "RN";
     const bs = input.bodySystem ?? "general";
-    return `${t}::${bs}`;
+    const cc = meta?.countryCode ?? "CA";
+    return `${t}::${bs}::${cc}`;
   };
 
   const grouped = new Map<DeckKey, GeneratedFlashcardInput[]>();
@@ -202,24 +203,24 @@ async function main() {
 
   // Step 4: upsert decks, categories, and cards
   for (const [key, cards] of grouped) {
-    const [rawTier, rawBodySystem] = key.split("::");
+    const [rawTier, rawBodySystem, rawCountry] = key.split("::");
     const tierCode = mapTierCode(rawTier);
     const bs = rawBodySystem ?? "general";
 
-    // Resolve exam family from first card's source question
+    // Resolve exam family and country from first card's source question
     const firstMeta = questionMeta.get(cards[0].sourceId);
     const examFamilyVal = mapExamFamily(firstMeta?.exam ?? null);
-    const countryCodeVal = mapCountryCode(firstMeta?.countryCode ?? null);
+    const countryCodeVal = mapCountryCode(rawCountry ?? firstMeta?.countryCode ?? null);
 
     // Upsert FlashcardDeck
-    const slug = deckSlug(tierCode, bs);
+    const slug = deckSlug(tierCode, bs, countryCodeVal);
     const deckVisibility = publish ? "PUBLIC_PREVIEW" : "SUBSCRIBER";
     const deckStatus = publish ? ContentStatus.PUBLISHED : ContentStatus.DRAFT;
     const deck = await prisma.flashcardDeck.upsert({
       where: { slug },
       create: {
         slug,
-        title: deckTitle(tierCode, bs),
+        title: deckTitle(tierCode, bs, countryCodeVal),
         description: `Exam-derived flashcards for ${bs.replace(/-/g, " ")} (${tierCode}).`,
         country: countryCodeVal,
         tier: tierCode,
