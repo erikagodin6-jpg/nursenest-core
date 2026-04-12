@@ -1548,6 +1548,25 @@ html[data-theme] .nn-marketing-surface {
     0 8px 28px -6px color-mix(in srgb, var(--theme-heading-text) 14%, transparent);
 }
 
+/* Nav row — bottom product-nav strip in light-theme 3-row headers.
+ * Child of nn-header-logo-row; re-asserts dark-bar surface tokens so links read
+ * white-on-dark instead of inheriting the light page-surface overrides above. */
+.nn-header-nav-row {
+  background: var(--nn-nav-bg, var(--theme-nav-background, var(--nav-bg)));
+  color: var(--nn-nav-fg, var(--theme-nav-foreground, var(--nav-fg)));
+  border-top: 1px solid color-mix(in srgb, var(--nn-nav-fg, var(--nav-fg)) 10%, transparent);
+  --nav-fg:          var(--nn-nav-fg, var(--theme-nav-foreground, var(--nav-fg)));
+  --nav-link:        var(--nn-nav-fg, var(--nav-fg));
+  --nav-link-hover:  var(--nn-nav-fg, var(--nav-fg));
+  --nav-link-active: var(--nn-nav-fg, var(--nav-fg));
+  --nav-hover:       color-mix(in srgb, var(--nn-nav-fg, var(--nav-fg)) 14%, transparent);
+  --nav-active:      color-mix(in srgb, var(--nn-nav-fg, var(--nav-fg)) 10%, transparent);
+  --nav-border:      color-mix(in srgb, var(--nn-nav-fg, var(--nav-fg)) 18%, transparent);
+  --nav-muted:       color-mix(in srgb, var(--nn-nav-fg, var(--nav-fg)) 62%, transparent);
+  --header-background: var(--nn-nav-bg, var(--theme-nav-background, var(--nav-bg)));
+  --header-border:   color-mix(in srgb, var(--nn-nav-fg, var(--nav-fg)) 15%, transparent);
+}
+
 /* Bottom accent strip separating logo row from page content (light themes) */
 .nn-header-accent-bar {
   height: 3px;

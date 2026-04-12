@@ -9,7 +9,6 @@ import { useNursenestRegion } from "@/lib/region/use-nursenest-region";
 import { useMarketingRegionToggleWithRefresh } from "@/lib/region/use-marketing-region-toggle";
 import {
   marketingRegionToggleSegment,
-  marketingRegionToggleShell,
 } from "@/lib/theme/marketing-region-toggle";
 import { CompactCountryTrigger, CountrySelector } from "@/components/layout/global-context-switcher";
 import { getRegionFlag } from "@/lib/navigation/context-switch-helpers";
@@ -90,26 +89,6 @@ export function MarketingHeaderUtilityStrip({ variant = "standard" }: { variant?
               />
             </div>
           )}
-        </div>
-
-        {/* Legacy US/CA quick toggle — kept for users familiar with it */}
-        <div className="flex items-center gap-1.5">
-          <div className={marketingRegionToggleShell("pill")} role="group" aria-label={t("nav.regionLabel")}>
-            <button
-              type="button"
-              onClick={() => setRegionAndRefresh("US")}
-              className={marketingRegionToggleSegment(region === "US", "compact")}
-            >
-              {t("home.region.us")}
-            </button>
-            <button
-              type="button"
-              onClick={() => setRegionAndRefresh("CA")}
-              className={marketingRegionToggleSegment(region === "CA", "compact")}
-            >
-              {t("home.region.ca")}
-            </button>
-          </div>
         </div>
 
         <div className="relative" ref={langRef}>

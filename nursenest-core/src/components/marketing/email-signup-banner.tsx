@@ -11,7 +11,7 @@ export function EmailSignupBanner() {
   const [msg, setMsg] = useState<string | null>(null);
 
   return (
-    <div className="rounded-2xl border border-[var(--theme-card-border)] bg-gradient-to-br from-primary/10 via-[var(--theme-card-bg)] to-[var(--theme-secondary)] p-6 shadow-[var(--shadow-card)]">
+    <div className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-cool)] p-6 shadow-[var(--semantic-shadow-soft)]">
       <div className="mx-auto flex max-w-3xl flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h3 className="nn-marketing-h3">{t("footer.emailBannerTitle")}</h3>

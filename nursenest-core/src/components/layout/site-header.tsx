@@ -511,19 +511,46 @@ export function SiteHeader() {
         onMouseEnter={isMarketingNav ? clearMegaCloseTimer : undefined}
         onMouseLeave={isMarketingNav ? scheduleMegaClose : undefined}
       >
-        <div className="nn-section-shell grid h-16 grid-cols-[auto,1fr,auto] items-center gap-4 sm:gap-6">
-          <Link
-            href={localizeHref("/")}
-            className="nn-header-logo-link group flex min-w-0 shrink-0 items-center gap-2.5 overflow-visible bg-transparent pe-2.5"
-            aria-label={t("brand.homeAriaLabel")}
-          >
-            <SiteBrandLogoMark exactSourceOnly />
-          </Link>
+        <div className="nn-section-shell flex flex-col">
+          {/* ── Row 2: Brand row — logo centered on desktop, + hamburger on mobile ── */}
+          <div className="flex h-[4.5rem] items-center justify-between gap-4 border-b border-[var(--header-border)] lg:justify-center">
+            <Link
+              href={localizeHref("/")}
+              className="nn-header-logo-link group flex min-w-0 shrink-0 items-center gap-2.5 overflow-visible bg-transparent"
+              aria-label={t("brand.homeAriaLabel")}
+            >
+              <SiteBrandLogoMark exactSourceOnly />
+            </Link>
+            {/* Mobile controls — only visible below lg */}
+            <div className="flex items-center gap-2 lg:hidden">
+              <button
+                type="button"
+                onClick={() => setMobileContextOpen(true)}
+                className="md:hidden inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-[var(--nn-nav-border)] bg-transparent p-0 text-[var(--nn-nav-fg)] transition-colors hover:bg-[var(--nn-nav-hover-bg)]"
+                aria-label="Region and language settings"
+                aria-expanded={mobileContextOpen}
+              >
+                <Settings className="h-[18px] w-[18px]" aria-hidden />
+              </button>
+              <Button
+                type="button"
+                variant="ghost"
+                className="h-10 w-10 shrink-0 rounded-xl border border-[var(--nn-nav-border)] p-0 text-[var(--nn-nav-fg)] hover:bg-[var(--nn-nav-hover-bg)]"
+                aria-label={t("nav.openMenu")}
+                aria-expanded={mobileOpen}
+                onClick={() => setMobileOpen(true)}
+              >
+                <Menu className="h-5 w-5" aria-hidden />
+              </Button>
+            </div>
+          </div>
 
-          <nav
-            aria-label={isLearnerAuthenticated ? "Learner navigation" : t("nav.marketingExplore")}
-            className="hidden min-w-0 flex-1 items-center justify-center gap-6 lg:flex xl:gap-7"
-          >
+          {/* ── Row 3: Main nav row — desktop only ── */}
+          <div className={`hidden h-12 items-center gap-4 lg:flex${isLightTheme ? " nn-header-nav-row" : ""}`}>
+            <nav
+              aria-label={isLearnerAuthenticated ? "Learner navigation" : t("nav.marketingExplore")}
+              className="flex flex-1 min-w-0 items-center justify-center gap-6 xl:gap-8"
+            >
             {isAuthLoading ? (
               <div className="flex items-center gap-3" aria-hidden>
                 {[0, 1, 2, 3].map((index) => (
@@ -596,14 +623,13 @@ export function SiteHeader() {
             )}
           </nav>
 
-          <div className="flex shrink-0 items-center justify-end gap-3 sm:gap-4 lg:min-w-[12rem]">
-            <div className="hidden min-w-0 items-center lg:flex">
+          <div className="flex shrink-0 items-center justify-end gap-2 lg:min-w-[10rem]">
               {isAuthLoading ? (
                 <span className="inline-flex h-9 w-32 animate-pulse rounded-xl bg-[var(--nav-hover)]" aria-hidden />
               ) : !isAuthenticated ? (
-                <div className="flex max-w-[100vw] items-center gap-2">
+                <div className="flex items-center gap-2">
                   <Link href={localizeHref(`/login?callbackUrl=${encodeURIComponent("/app")}`)} className={HEADER_SECONDARY_ACTION_CLASS}>
-                    {formatTitleCase("Login", locale)}
+                    {formatTitleCase("Sign In", locale)}
                   </Link>
                   <Link
                     href={localizeHref(`/signup?callbackUrl=${encodeURIComponent("/app")}`)}
@@ -623,9 +649,6 @@ export function SiteHeader() {
                   <Link href="/app" className={HEADER_SECONDARY_ACTION_CLASS}>
                     {formatTitleCase("Dashboard", locale)}
                   </Link>
-                  <Link href="/app/account/overview" className={HEADER_SECONDARY_ACTION_CLASS}>
-                    {formatTitleCase("Account", locale)}
-                  </Link>
                 </div>
               ) : (
                 <div className="flex items-center gap-2">
@@ -638,36 +661,11 @@ export function SiteHeader() {
                   <Link href="/app" className={HEADER_SECONDARY_ACTION_CLASS}>
                     {formatTitleCase("Dashboard", locale)}
                   </Link>
-                  <Link href="/app/account/overview" className={HEADER_SECONDARY_ACTION_CLASS}>
-                    {formatTitleCase("Account", locale)}
-                  </Link>
                 </div>
               )}
-            </div>
-
-            <div className="flex items-center gap-2 lg:hidden">
-              <button
-                type="button"
-                onClick={() => setMobileContextOpen(true)}
-                className="md:hidden inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-[var(--nn-nav-border)] bg-transparent p-0 text-[var(--nn-nav-fg)] transition-colors hover:bg-[var(--nn-nav-hover-bg)]"
-                aria-label="Region and language settings"
-                aria-expanded={mobileContextOpen}
-              >
-                <Settings className="h-[18px] w-[18px]" aria-hidden />
-              </button>
-              <Button
-                type="button"
-                variant="ghost"
-                className="h-10 w-10 shrink-0 rounded-xl border border-[var(--nn-nav-border)] p-0 text-[var(--nn-nav-fg)] hover:bg-[var(--nn-nav-hover-bg)]"
-                aria-label={t("nav.openMenu")}
-                aria-expanded={mobileOpen}
-                onClick={() => setMobileOpen(true)}
-              >
-                <Menu className="h-5 w-5" aria-hidden />
-              </Button>
-            </div>
           </div>
-        </div>
+          </div>{/* /nav-row */}
+        </div>{/* /shell */}
         {isMarketingNav && openMega ? (
           <div
             id={`mega-menu-${openMega.key}`}
