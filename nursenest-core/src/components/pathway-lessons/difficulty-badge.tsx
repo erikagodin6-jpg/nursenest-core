@@ -10,7 +10,7 @@ export function DifficultyBadge({ difficulty }: { difficulty: LessonDifficulty }
 
   return (
     <span
-      className={`inline-flex min-h-6 items-center rounded-full border px-2.5 text-[11px] font-semibold leading-none ${className}`}
+      className={`inline-flex shrink-0 min-h-6 items-center rounded-full border px-2.5 text-[11px] font-semibold leading-none ${className}`}
     >
       {difficulty}
     </span>

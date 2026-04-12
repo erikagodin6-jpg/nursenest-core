@@ -30,7 +30,7 @@ export function LessonRow({ href, title, progressStatus, durationLabel, difficul
     >
       <StatusIcon status={progressStatus} />
       <span className="min-w-0 flex-1 truncate font-medium text-[var(--theme-heading-text)]">{title}</span>
-      <span className="text-xs font-medium text-[var(--theme-muted-text)]">{durationLabel}</span>
+      <span className="shrink-0 text-xs font-medium text-[var(--theme-muted-text)]">{durationLabel}</span>
       <DifficultyBadge difficulty={difficulty} />
       <ChevronRight
         className="h-4 w-4 shrink-0 text-[var(--semantic-text-muted)] transition-transform group-hover:translate-x-0.5 group-hover:text-[var(--theme-heading-text)]"
