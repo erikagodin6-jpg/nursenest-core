@@ -13,10 +13,14 @@ import {
   slotIntervalMs,
 } from "@/lib/blog/blog-batch-schedule";
 import { prisma } from "@/lib/db";
+import type { GlobalLocaleCode } from "@/lib/i18n/global-regions";
+import { GLOBAL_LOCALE_CODES } from "@/lib/i18n/global-regions";
 
 const localizationOptionsSchema = z
   .object({
-    locales: z.array(z.enum(["en", "fr", "es", "tl", "hi"])).max(8),
+    locales: z
+      .array(z.string().refine((v): v is GlobalLocaleCode => (GLOBAL_LOCALE_CODES as readonly string[]).includes(v)))
+      .max(12),
   })
   .strict();
 

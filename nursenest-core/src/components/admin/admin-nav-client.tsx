@@ -68,6 +68,7 @@ const GROUPS: NavGroup[] = [
     title: "Content & inventory",
     items: [
       { href: "/admin/inventory", label: "Inventory drill-down", icon: Package },
+      { href: "/admin/content-coverage", label: "Content coverage", icon: BarChart3 },
       { href: "/admin/content", label: "Coverage & quality", icon: Layers },
       { href: "/admin/lessons", label: "Lessons", icon: GraduationCap },
       { href: "/admin/questions", label: "Question bank", icon: ClipboardList },

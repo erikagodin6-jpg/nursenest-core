@@ -17,7 +17,10 @@ import { ContentStatus } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { RN_NCLEX_CATALOG_RATIONALE_ENTRIES } from "@/lib/learner/lesson-question-rationale/rn-nclex-catalog-rationale-registry";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
-import { buildRelatedExamQuestionWhereForPathwayLesson } from "@/lib/lessons/lesson-question-cross-links";
+import {
+  countRelatedExamQuestionsForPathwayLesson,
+  RELATED_EXAM_QUESTIONS_MIN_TARGET,
+} from "@/lib/lessons/lesson-question-cross-links";
 import { RN_NCLEX_PRIORITIZED_LESSON_SLUGS } from "@/lib/lessons/rn-nclex-lesson-question-bridge";
 
 const REGISTRY_SLUGS = new Set(RN_NCLEX_CATALOG_RATIONALE_ENTRIES.map((e) => e.lessonSlug));
@@ -31,7 +34,7 @@ type RnNclexLinkAuditRow = {
 
 function linkStatusForCount(n: number): "OK" | "LOW" | "NONE" {
   if (n === 0) return "NONE";
-  if (n >= 6) return "OK";
+  if (n >= RELATED_EXAM_QUESTIONS_MIN_TARGET) return "OK";
   return "LOW";
 }
 
@@ -97,16 +100,11 @@ async function main() {
         }
       : fallbackLessonFields(lessonSlug);
 
-    const where = buildRelatedExamQuestionWhereForPathwayLesson({
+    const relatedQuestionCount = await countRelatedExamQuestionsForPathwayLesson({
       pathway,
       lessonSlug,
       ...meta,
     });
-
-    let relatedQuestionCount = 0;
-    if (where) {
-      relatedQuestionCount = await prisma.examQuestion.count({ where });
-    }
 
     results.push({
       lessonSlug,
@@ -135,7 +133,10 @@ async function main() {
 
   console.log("\n--- Summary ---");
   console.log(`Related questions NONE (0): ${noneQ.length}`, noneQ.map((r) => r.lessonSlug).join(", ") || "(none)");
-  console.log(`Related questions LOW (1–5): ${lowQ.length}`, lowQ.map((r) => r.lessonSlug).join(", ") || "(none)");
+  console.log(
+    `Related questions LOW (1–${RELATED_EXAM_QUESTIONS_MIN_TARGET - 1}): ${lowQ.length}`,
+    lowQ.map((r) => r.lessonSlug).join(", ") || "(none)",
+  );
   console.log(`Rationale registry NO_MAPPING: ${noMap.length}`, noMap.map((r) => r.lessonSlug).join(", ") || "(none)");
 
   const payload = { pathwayId: pathway.id, generatedAt: new Date().toISOString(), rows: results };

@@ -57,8 +57,8 @@ export function PathwayLessonRelatedQuestions({
       <p className="nn-marketing-body-sm mt-2 max-w-prose text-[var(--theme-muted-text)]">
         {hasSamples ? (
           <>
-            Sample stems from the same {pathway.shortName} pool tagged to this topic—open any item in the app bank or run a
-            full topic drill.
+            Sample stems (up to the current display cap) from the same {pathway.shortName} pool aligned to this lesson—open
+            any item in the app bank or run a full topic drill.
           </>
         ) : (
           <>

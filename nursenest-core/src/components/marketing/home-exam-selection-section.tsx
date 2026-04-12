@@ -27,7 +27,7 @@ type ExamCard = {
 /**
  * Prominent exam selection: four rich pathway cards — RN, LPN/RPN, NP, Allied.
  * Each card has a colored top accent and semantic icon for immediate visual differentiation.
- * Section uses white background so cards elevate clearly from the page.
+ * Section uses `page-bg` (not `bg-card`) so pathway cards read clearly above the band.
  */
 export function HomeExamSelectionSection() {
   const { t, locale } = useMarketingI18n();
@@ -85,7 +85,7 @@ export function HomeExamSelectionSection() {
   return (
     <section
       id="home-exam-paths"
-      className="nn-section-block scroll-mt-20 border-b border-[var(--border-subtle)] bg-[var(--bg-card)]"
+      className="nn-section-block scroll-mt-20 border-b border-[var(--border-subtle)] bg-[var(--page-bg)]"
       aria-labelledby="home-exam-selection-heading"
       data-testid="section-exam-selection"
     >

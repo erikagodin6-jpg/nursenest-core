@@ -9,8 +9,31 @@ import {
   hasExplicitRnNclexLessonBridge,
 } from "@/lib/lessons/rn-nclex-lesson-question-bank-bridge";
 
-/** Upper bound for cross-link lists (lesson ↔ question bank). Single `findMany` uses `take` with this value. */
-export const RELATED_EXAM_QUESTIONS_CAP = 8;
+/** Minimum related questions we aim to surface from the bank for each lesson (coverage / completeness). */
+export const RELATED_EXAM_QUESTIONS_MIN_TARGET = 8;
+/** Lower bound of the “ideal” band (product prefers 15–25 visible when the pool allows). */
+export const RELATED_EXAM_QUESTIONS_IDEAL_MIN = 15;
+/**
+ * Upper bound for cross-link lists (lesson ↔ question bank). Single `findMany` uses `take` with this value.
+ * Keeps one bounded query; ordering is `updatedAt desc` so the list stays fresh without duplicate IDs.
+ */
+export const RELATED_EXAM_QUESTIONS_CAP = 25;
+
+export type LessonQuestionCoverageTier = "critical" | "low" | "below_minimum" | "adequate" | "ideal";
+
+/** Classify bank pool size for a lesson using the same predicate as {@link loadRelatedExamQuestionStemsForPathwayLesson}. */
+export function lessonQuestionCoverageTierFromCount(count: number): LessonQuestionCoverageTier {
+  if (count === 0) return "critical";
+  if (count < 5) return "low";
+  if (count < RELATED_EXAM_QUESTIONS_MIN_TARGET) return "below_minimum";
+  if (count < RELATED_EXAM_QUESTIONS_IDEAL_MIN) return "adequate";
+  return "ideal";
+}
+
+/** How many additional published questions (per the lesson link predicate) are needed to reach the minimum target. */
+export function relatedExamQuestionsNeededForMinTarget(currentCount: number): number {
+  return Math.max(0, RELATED_EXAM_QUESTIONS_MIN_TARGET - currentCount);
+}
 
 /** Max `topic.contains` OR branches from title/slug tokens (additive only; direct matches stay separate). */
 const MAX_TOPIC_CONTAINS_TOKENS = 6;
@@ -262,6 +285,17 @@ export async function loadRelatedExamQuestionStemsForPathwayLesson(
     },
     [],
   );
+}
+
+/**
+ * Count of pathway-scoped published questions matching the lesson (same `where` as stems loader). For audits only.
+ */
+export async function countRelatedExamQuestionsForPathwayLesson(
+  args: RelatedExamQuestionPathwayLessonArgs,
+): Promise<number> {
+  const where = buildRelatedExamQuestionWhereForPathwayLesson(args);
+  if (!where) return 0;
+  return withDatabaseFallback(() => prisma.examQuestion.count({ where }), 0);
 }
 
 export { RELATED_LESSONS_EXCLUDE_SLUG_SENTINEL } from "@/lib/lessons/pathway-lesson-loader";

@@ -5,9 +5,8 @@
  *   full — leaf icon + "NurseNest" wordmark  (header / footer / auth)
  *   leaf — leaf icon only, tight-cropped      (404 / error / compact UI)
  *
- * All keys point into the nursenest-images bucket:
- *   full: Logos/{themeId-nohyphens}-transparent.png
- *   leaf: Logos/leaf-only/{themeId}-leaf_transparent.png
+ * All keys point into the nursenest-images bucket. Filenames follow the uploaded
+ * transparent rasters in `Logos/` (mixed naming: `*logo_transparent.png`, `*-leaf-transparent.png`, etc.).
  *
  * DO NOT add per-theme logo paths anywhere else — always delegate to
  * themeLogoObjectKeyForTheme(id, variant).
@@ -35,8 +34,7 @@ type ThemeLogoEntry = {
 /**
  * Canonical Spaces object keys for every theme's two logo variants.
  *
- * full → Logos/{themeId-nohyphens}-transparent.png
- * leaf → Logos/leaf-only/{themeId}-leaf_transparent.png
+ * full / leaf → see `THEME_LOGO_ENTRIES` (leaf may reuse the full raster when only one asset exists).
  *
  * This is the ONLY place theme→logo keys are defined.
  * All 40 required themes have explicit entries.
@@ -44,38 +42,39 @@ type ThemeLogoEntry = {
  */
 const THEME_LOGO_ENTRIES: Readonly<Record<string, ThemeLogoEntry>> = {
   // ── Clinical / Default ──
-  ocean:               { full: "Logos/ocean-transparent.png",            leaf: "Logos/leaf-only/ocean-leaf_transparent.png" },
-  "clinical-light":    { full: "Logos/clinicallight-transparent.png",    leaf: "Logos/leaf-only/clinical-light-leaf_transparent.png" },
+  /** Default “Clinical Blue” theme — shares the uploaded clinical-light transparent mark until a dedicated `ocean` raster exists on Spaces. */
+  ocean:               { full: "Logos/clinicallight-transparent.png",    leaf: "Logos/clinicallight-transparent.png" },
+  "clinical-light":    { full: "Logos/clinicallight-transparent.png",    leaf: "Logos/clinicallight-transparent.png" },
 
   // ── Named production themes ──
-  "blueberry-sherbet": { full: "Logos/blueberrysherbet-transparent.png", leaf: "Logos/leaf-only/blueberry-sherbet-leaf_transparent.png" },
-  "strawberry-cream":  { full: "Logos/strawberrycream-transparent.png",  leaf: "Logos/leaf-only/strawberry-cream-leaf_transparent.png" },
+  "blueberry-sherbet": { full: "Logos/blueberry_sherbet_logo.png",       leaf: "Logos/blueberry_sherbet_logo.png" },
+  "strawberry-cream":  { full: "Logos/strawberry-cream-leaf_transparent.png", leaf: "Logos/strawberry-cream-leaf_transparent.png" },
   "ocean-mist":        { full: "Logos/oceanmist-transparent.png",        leaf: "Logos/leaf-only/ocean-mist-leaf_transparent.png" },
-  "lavender-dream":    { full: "Logos/lavenderdream-transparent.png",    leaf: "Logos/leaf-only/lavender-dream-leaf_transparent.png" },
+  "lavender-dream":    { full: "Logos/lavenderdreamlogo_transparent.png", leaf: "Logos/lavenderdreamlogo_transparent.png" },
   "mint-breeze":       { full: "Logos/mintbreeze-transparent.png",       leaf: "Logos/leaf-only/mint-breeze-leaf_transparent.png" },
   "rose-quartz":       { full: "Logos/rosequartz-transparent.png",       leaf: "Logos/leaf-only/rose-quartz-leaf_transparent.png" },
-  "golden-hour":       { full: "Logos/goldenhour-transparent.png",       leaf: "Logos/leaf-only/golden-hour-leaf_transparent.png" },
-  "sage-garden":       { full: "Logos/sagegarden-transparent.png",       leaf: "Logos/leaf-only/sage-garden-leaf_transparent.png" },
-  "coral-sunset":      { full: "Logos/coralsunset-transparent.png",      leaf: "Logos/leaf-only/coral-sunset-leaf_transparent.png" },
-  "arctic-frost":      { full: "Logos/arcticfrost-transparent.png",      leaf: "Logos/leaf-only/arctic-frost-leaf_transparent.png" },
+  "golden-hour":       { full: "Logos/goldenhourlogo_transparent.png",   leaf: "Logos/goldenhourlogo_transparent.png" },
+  "sage-garden":       { full: "Logos/sagegardenlogo-transparent.png",   leaf: "Logos/sagegardenlogo-transparent.png" },
+  "coral-sunset":      { full: "Logos/coralsunsetlogo_transparent.png",  leaf: "Logos/coralsunsetlogo_transparent.png" },
+  "arctic-frost":      { full: "Logos/arcticfrost-transparent.png",      leaf: "Logos/arcticfrost-transparent_transparent(2)_leaf.png" },
   "plum-velvet":       { full: "Logos/plumvelvet-transparent.png",       leaf: "Logos/leaf-only/plum-velvet-leaf_transparent.png" },
-  "honey-cream":       { full: "Logos/honeycream-transparent.png",       leaf: "Logos/leaf-only/honey-cream-leaf_transparent.png" },
-  "dusty-rose":        { full: "Logos/dustyrose-transparent.png",        leaf: "Logos/leaf-only/dusty-rose-leaf_transparent.png" },
+  "honey-cream":       { full: "Logos/honeycreamlogo_transparent.png",   leaf: "Logos/honeycreamlogo_transparent.png" },
+  "dusty-rose":        { full: "Logos/dustyroselogo_transparent.png",    leaf: "Logos/dustyroselogo_transparent.png" },
   "midnight-indigo":   { full: "Logos/midnightindigo-transparent.png",   leaf: "Logos/leaf-only/midnight-indigo-leaf_transparent.png" },
-  "deep-twilight":     { full: "Logos/deeptwilight-transparent.png",     leaf: "Logos/leaf-only/deep-twilight-leaf_transparent.png" },
+  "deep-twilight":     { full: "Logos/deeptwilightlogo_transparent.png", leaf: "Logos/deeptwilightlogo_transparent.png" },
 
   // ── Pink family ──
   blush:               { full: "Logos/blush-transparent.png",            leaf: "Logos/leaf-only/blush-leaf_transparent.png" },
   "pastel-blush":      { full: "Logos/pastelblush-transparent.png",      leaf: "Logos/leaf-only/pastel-blush-leaf_transparent.png" },
   strawberry:          { full: "Logos/strawberry-transparent.png",       leaf: "Logos/leaf-only/strawberry-leaf_transparent.png" },
   "rose-gold":         { full: "Logos/rosegold-transparent.png",         leaf: "Logos/leaf-only/rose-gold-leaf_transparent.png" },
-  coral:               { full: "Logos/coral-transparent.png",            leaf: "Logos/leaf-only/coral-leaf_transparent.png" },
+  coral:               { full: "Logos/corallogo_transparent.png",        leaf: "Logos/corallogo_transparent.png" },
 
   // ── Mint / Teal family ──
   mint:                { full: "Logos/mint-transparent.png",             leaf: "Logos/leaf-only/mint-leaf_transparent.png" },
   "pastel-mint":       { full: "Logos/pastelmint-transparent.png",       leaf: "Logos/leaf-only/pastel-mint-leaf_transparent.png" },
-  teal:                { full: "Logos/teal-transparent.png",             leaf: "Logos/leaf-only/teal-leaf_transparent.png" },
-  forest:              { full: "Logos/forest-transparent.png",           leaf: "Logos/leaf-only/forest-leaf_transparent.png" },
+  teal:                { full: "Logos/teal-leaf_transparent.png",        leaf: "Logos/teal-leaf_transparent.png" },
+  forest:              { full: "Logos/forestlogo_transparent.png",       leaf: "Logos/forestlogo_transparent.png" },
   "soft-sage":         { full: "Logos/softsage-transparent.png",         leaf: "Logos/leaf-only/soft-sage-leaf_transparent.png" },
 
   // ── Multi-pastel ──
@@ -85,72 +84,56 @@ const THEME_LOGO_ENTRIES: Readonly<Record<string, ThemeLogoEntry>> = {
   lavender:            { full: "Logos/lavender-transparent.png",         leaf: "Logos/leaf-only/lavender-leaf_transparent.png" },
   "pastel-lavender":   { full: "Logos/pastellavender-transparent.png",   leaf: "Logos/leaf-only/pastel-lavender-leaf_transparent.png" },
   "pastel-lilac":      { full: "Logos/pastellilac-transparent.png",      leaf: "Logos/leaf-only/pastel-lilac-leaf_transparent.png" },
-  berry:               { full: "Logos/berry-transparent.png",            leaf: "Logos/leaf-only/berry-leaf_transparent.png" },
+  berry:               { full: "Logos/berrylogo_transparent.png",        leaf: "Logos/berrylogo-transparent.png" },
   indigo:              { full: "Logos/indigo-transparent.png",           leaf: "Logos/leaf-only/indigo-leaf_transparent.png" },
 
   // ── Neutral ──
-  slate:               { full: "Logos/slate-transparent.png",            leaf: "Logos/leaf-only/slate-leaf_transparent.png" },
+  slate:               { full: "Logos/slate-leaf_transparent.png",         leaf: "Logos/slate-leaf_transparent.png" },
   midnight:            { full: "Logos/midnight-transparent.png",         leaf: "Logos/leaf-only/midnight-leaf_transparent.png" },
-  "neutral-sand":      { full: "Logos/neutralsand-transparent.png",      leaf: "Logos/leaf-only/neutral-sand-leaf_transparent.png" },
+  "neutral-sand":      { full: "Logos/sandlogo.-transparentpng.png",     leaf: "Logos/sandlogo.-transparentpng.png" },
   "neutral-slate":     { full: "Logos/neutralslate-transparent.png",     leaf: "Logos/leaf-only/neutral-slate-leaf_transparent.png" },
 
   // ── Dark ──
   "dark-mode":         { full: "Logos/darkmode-transparent.png",         leaf: "Logos/leaf-only/dark-mode-leaf_transparent.png" },
-  "dark-clinical":     { full: "Logos/darkclinical-transparent.png",     leaf: "Logos/leaf-only/dark-clinical-leaf_transparent.png" },
+  "dark-clinical":     { full: "Logos/darkcllinicallogo_transparent.png", leaf: "Logos/darkcllinicallogo_transparent.png" },
   "dark-academia":     { full: "Logos/darkacademia-transparent.png",     leaf: "Logos/leaf-only/dark-academia-leaf_transparent.png" },
 
-  // ── Named themes added after initial 40 — assets pending upload ──
-  // Pink family (named)
-  "petal-pop":         { full: "Logos/petalpop-transparent.png",         leaf: "Logos/leaf-only/petal-pop-leaf_transparent.png" },
+  // ── Pink family (named) ──
+  "petal-pop":         { full: "Logos/petal-pop-leaf-transparent.png",   leaf: "Logos/petal-pop-leaf-transparent.png" },
   "cotton-candy":      { full: "Logos/cottoncandy-transparent.png",      leaf: "Logos/leaf-only/cotton-candy-leaf_transparent.png" },
-  "pink-skies":        { full: "Logos/pinkskies-transparent.png",        leaf: "Logos/leaf-only/pink-skies-leaf_transparent.png" },
-  "berry-bonbon":      { full: "Logos/berrybonbon-transparent.png",      leaf: "Logos/leaf-only/berry-bonbon-leaf_transparent.png" },
+  "pink-skies":        { full: "Logos/pink-skies-leaf-transparent.png", leaf: "Logos/pink-skies-leaf-transparent.png" },
+  "berry-bonbon":      { full: "Logos/berry-bonbon-logo-transparent.png", leaf: "Logos/berry-bonbon-logo-transparent.png" },
   // Mint / Teal family (named)
-  "evergreen-steel":   { full: "Logos/evergreensteel-transparent.png",   leaf: "Logos/leaf-only/evergreen-steel-leaf_transparent.png" },
+  "evergreen-steel":   { full: "Logos/evergreen-steel-logo-transparent.png", leaf: "Logos/evergreen-steel-logo-transparent.png" },
   // Multi-pastel (named)
-  "pastel-party":      { full: "Logos/pastelparty-transparent.png",      leaf: "Logos/leaf-only/pastel-party-leaf_transparent.png" },
-  "rainbow-sherbet":   { full: "Logos/rainbowsherbet-transparent.png",   leaf: "Logos/leaf-only/rainbow-sherbet-leaf_transparent.png" },
+  "pastel-party":      { full: "Logos/pastel-party-leaf-transparent.png", leaf: "Logos/pastel-party-leaf-transparent.png" },
+  "rainbow-sherbet":   { full: "Logos/rainbow-sherbet-leaf-transparent.png", leaf: "Logos/rainbow-sherbet-leaf-transparent.png" },
   // Lavender / Purple family (named)
-  "sunny-lilac":       { full: "Logos/sunnylilac-transparent.png",       leaf: "Logos/leaf-only/sunny-lilac-leaf_transparent.png" },
+  "sunny-lilac":       { full: "Logos/sunny-lilac-leaf-transparent.png", leaf: "Logos/sunny-lilac-leaf-transparent.png" },
   "sky-kiss":          { full: "Logos/skykiss-transparent.png",          leaf: "Logos/leaf-only/sky-kiss-leaf_transparent.png" },
-  "bluebird":          { full: "Logos/bluebird-transparent.png",         leaf: "Logos/leaf-only/bluebird-leaf_transparent.png" },
-  "violet-night":      { full: "Logos/violetnight-transparent.png",      leaf: "Logos/leaf-only/violet-night-leaf_transparent.png" },
-  "plum-mist":         { full: "Logos/plummist-transparent.png",         leaf: "Logos/leaf-only/plum-mist-leaf_transparent.png" },
+  "bluebird":          { full: "Logos/bluebird-leaf-transparent.png",    leaf: "Logos/bluebird-leaf-transparent.png" },
+  "violet-night":      { full: "Logos/violet-night-leaf-transparent.png", leaf: "Logos/violet-night-leaf-transparent.png" },
+  "plum-mist":         { full: "Logos/plum-mist-leaf-transparent.png",   leaf: "Logos/plum-mist-leaf-transparent.png" },
   // Neutral (named)
-  "graphite-blue":     { full: "Logos/graphiteblue-transparent.png",     leaf: "Logos/leaf-only/graphite-blue-leaf_transparent.png" },
-  "north-sea":         { full: "Logos/northsea-transparent.png",         leaf: "Logos/leaf-only/north-sea-leaf_transparent.png" },
+  "graphite-blue":     { full: "Logos/graphite-blue-leaf-transparent.png", leaf: "Logos/graphite-blue-leaf-transparent.png" },
+  "north-sea":         { full: "Logos/north-sea-leaf-transparent.png",     leaf: "Logos/north-sea-leaf-transparent.png" },
   // Dark (named)
-  "midnight-ink":      { full: "Logos/midnightink-transparent.png",      leaf: "Logos/leaf-only/midnight-ink-leaf_transparent.png" },
-  "storm-slate":       { full: "Logos/stormslate-transparent.png",       leaf: "Logos/leaf-only/storm-slate-leaf_transparent.png" },
+  "midnight-ink":      { full: "Logos/midnight-ink-leaf-transparent.png", leaf: "Logos/midnight-ink-leaf-transparent.png" },
+  "storm-slate":       { full: "Logos/storm-slate-leaf-transparent.png", leaf: "Logos/storm-slate-leaf-transparent.png" },
 };
 
 /**
- * Themes that have entries in THEME_LOGO_ENTRIES but whose CDN assets have not
- * yet been confirmed uploaded. When these themes are active, the logo request
- * will 404 on CDN and fall through to the local SVG fallback.
- *
- * To resolve: upload both full + leaf Spaces objects for each listed theme id,
- * using the exact key from THEME_LOGO_ENTRIES above.
- *
- * Generate with: scripts/generate-leaf-logos.mjs (or equivalent batch tool).
+ * Themes whose `Logos/…` keys are still placeholders (no confirmed transparent raster on Spaces).
+ * Upload assets matching the keys in `THEME_LOGO_ENTRIES`, then remove the id from this list.
  */
 export const THEMES_PENDING_CDN_ASSETS: readonly string[] = [
-  "petal-pop",
   "cotton-candy",
-  "pink-skies",
-  "berry-bonbon",
-  "evergreen-steel",
-  "pastel-party",
-  "rainbow-sherbet",
-  "sunny-lilac",
   "sky-kiss",
-  "bluebird",
-  "violet-night",
-  "plum-mist",
-  "graphite-blue",
-  "north-sea",
-  "midnight-ink",
-  "storm-slate",
+  "ocean-mist",
+  "mint-breeze",
+  "rose-quartz",
+  "plum-velvet",
+  "midnight-indigo",
 ] as const;
 
 /** True when the given theme id has a pending CDN asset upload. */

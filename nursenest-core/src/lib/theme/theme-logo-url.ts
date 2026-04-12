@@ -95,11 +95,12 @@ export function getThemeLogoLoadChain(
     pushKeyVariants(out, fullKey);
     out.push(getThemeLogoPngPathForThemeId(id));
   } else {
-    // Full: existing same-origin SVGs are the fastest reliable local source for the marketing header.
-    // Keep CDN + legacy PNG paths behind them as safety nets for other surfaces.
+    // Full: prefer Spaces transparent rasters first so `<img>` does not pick a same-origin PNG with a
+    // white matte before CDN (avoids “white box” around the mark). SVG candidates still precede this
+    // list in `uniqueStrings` below.
+    pushKeyVariants(out, key);
     out.push(getThemeLogoPngPathForThemeId(id));
     out.push(`${COMMITTED_THEME_LOGO_PUBLIC_PREFIX}${id}brandlogo_transparent.png`);
-    pushKeyVariants(out, key);
   }
 
   // 2. Default-theme equivalents as belt-and-suspenders (non-default themes only).
