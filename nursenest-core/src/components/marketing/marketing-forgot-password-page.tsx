@@ -1,4 +1,5 @@
 import { ForgotPasswordForm } from "@/components/auth/forgot-password-form";
+import { AuthLeafWatermark } from "@/components/brand/auth-leaf-watermark";
 import { SiteBrandLogoMark } from "@/components/brand/site-brand-logo";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
@@ -9,7 +10,9 @@ export async function MarketingForgotPasswordPage({ locale }: { locale: string }
 
   return (
     <main className="mx-auto w-full max-w-md nn-marketing-x nn-rhythm-page">
-      <div className="nn-card p-6 sm:p-8">
+      <div className="nn-card relative overflow-hidden p-6 sm:p-8">
+        <AuthLeafWatermark />
+        <div className="relative z-[1]">
         <div className="mb-6 flex justify-center bg-transparent">
           <SiteBrandLogoMark variant="auth" logoVariant="leaf" className="!h-11 !max-h-11 sm:!h-12 sm:!max-h-12" />
         </div>
@@ -29,6 +32,7 @@ export async function MarketingForgotPasswordPage({ locale }: { locale: string }
           errorMessage={m["pages.forgotPassword.errorMessage"] ?? "Something went wrong. Please try again."}
           emailPlaceholder={m["pages.forgotPassword.emailPlaceholder"] ?? "Email address on your account"}
         />
+        </div>
       </div>
     </main>
   );

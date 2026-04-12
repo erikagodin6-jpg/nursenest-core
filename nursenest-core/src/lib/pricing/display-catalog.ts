@@ -50,24 +50,34 @@ export function professionKeyToCareerKey(professionKey: string): AlliedCareerKey
 }
 
 // ── Nursing tier prices (CAD) ────────────────────────────────────────────────
+//
+// Source of truth: Stripe prices exported 2026-03-14.
+// PRE_NURSING and LVN_LPN are omitted — no Stripe prices exist for them yet.
+// NEW_GRAD has no 3-month Stripe price — that duration is intentionally absent.
+// Amounts must match what is configured in Stripe; checkout charges the Stripe
+// price, not these display values.
 
-const LIST_PRICE_MAJOR: Partial<Record<TierCode, Record<BillingDuration, number>>> = {
-  PRE_NURSING: { monthly: 24.99, "3-month": 59.99, "6-month": 89.99, yearly: 129.99 },
-  NEW_GRAD: { monthly: 24.99, "3-month": 59.99, "6-month": 89.99, yearly: 129.99 },
-  RPN: { monthly: 29.99, "3-month": 69.99, "6-month": 109.99, yearly: 159.99 },
-  // LVN_LPN = US LPN/LVN track (NCLEX-PN) — same price tier as RPN
-  LVN_LPN: { monthly: 29.99, "3-month": 69.99, "6-month": 109.99, yearly: 159.99 },
-  RN: { monthly: 39.99, "3-month": 89.99, "6-month": 139.99, yearly: 199.99 },
-  NP: { monthly: 49.99, "3-month": 119.99, "6-month": 179.99, yearly: 259.99 },
+const LIST_PRICE_MAJOR: Partial<Record<TierCode, Partial<Record<BillingDuration, number>>>> = {
+  // New Grad Prep — 3 plans only (no 3-month in Stripe)
+  NEW_GRAD: { monthly: 9.99, "6-month": 39.99, yearly: 59.99 },
+  // Canada RPN / REx-PN
+  RPN: { monthly: 24.99, "3-month": 59.99, "6-month": 99.99, yearly: 149.99 },
+  // RN / NCLEX-RN
+  RN: { monthly: 29.99, "3-month": 74.99, "6-month": 119.99, yearly: 179.99 },
+  // Nurse Practitioner
+  NP: { monthly: 39.99, "3-month": 99.99, "6-month": 159.99, yearly: 239.99 },
 };
 
 // ── Allied Health prices (CAD, same for every career) ────────────────────────
+//
+// All 7 allied careers share the same 4 Stripe prices (price_1TAxCe…, price_1TAxDb…,
+// price_1TAxEa…, price_1TAxF7…). Each career's env vars point to these same IDs.
 
 const ALLIED_PRICE: Record<BillingDuration, number> = {
-  monthly: 24.99,
-  "3-month": 59.99,
-  "6-month": 89.99,
-  yearly: 129.99,
+  monthly: 14.99,
+  "3-month": 34.99,
+  "6-month": 59.99,
+  yearly: 99.99,
 };
 
 // ── Anchor prices (strikethrough "was" values for conversion UI) ─────────────
