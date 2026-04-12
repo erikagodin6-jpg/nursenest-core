@@ -2,8 +2,7 @@
  * Single claimed lesson batch queue item — generation, duplicate skip, failure handling.
  * Used by POST /api/admin/lessons/ai-generate-batch/[jobId]/step (possibly multiple times per request).
  */
-import { DraftReviewStatus } from "@prisma/client";
-import type { PrismaClient } from "@prisma/client";
+import { DraftReviewStatus, type LessonBatchQueueItem, type PrismaClient } from "@prisma/client";
 import type { AdminSession } from "@/lib/admin/ensure-admin";
 import {
   findLessonDraftDuplicate,
@@ -21,7 +20,6 @@ import {
   generateAdminAiLesson,
 } from "@/lib/lessons/admin-ai-lesson-pipeline";
 import { getOpenAiChatModel } from "@/lib/ai/openai-env";
-import type { LessonBatchQueueItem } from "@prisma/client";
 
 export type LessonBatchStepResult = Record<string, unknown>;
 

@@ -5,6 +5,7 @@ import { z } from "zod";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
 import {
   ADMIN_QUESTION_BATCH_JOB_TOOL,
+  parseQuestionBatchSummary,
   parseQuestionBatchTopicList,
   questionBatchTopicKey,
   type QuestionBatchResultSummaryV1,
@@ -13,6 +14,11 @@ import {
 import { assertOpenAiKeyConfigured, getOpenAiChatModel } from "@/lib/ai/openai-env";
 import { isAdminAiGenerationEnabled } from "@/lib/ai/admin-ai-policy";
 import { prisma } from "@/lib/db";
+import {
+  batchControlSchema,
+  findJobByIdempotencyKey,
+  idempotencyKeySchema,
+} from "@/lib/ai/controlled-ai-batch";
 
 const MAX_TOPICS = 35;
 
@@ -29,6 +35,8 @@ const bodySchema = z.object({
   categoryId: z.string().optional(),
   lessonTargets: z.string().max(2000).optional(),
   allowDuplicates: z.boolean().default(false),
+  idempotencyKey: idempotencyKeySchema,
+  batchControl: batchControlSchema.optional(),
 });
 
 export async function POST(req: Request) {
@@ -50,6 +58,25 @@ export async function POST(req: Request) {
   }
 
   const d = parsed.data;
+
+  if (d.idempotencyKey) {
+    const existing = await findJobByIdempotencyKey(prisma, {
+      createdById: gate.admin.userId,
+      tool: ADMIN_QUESTION_BATCH_JOB_TOOL,
+      idempotencyKey: d.idempotencyKey,
+    });
+    if (existing) {
+      const job = await prisma.aiGenerationJob.findUnique({ where: { id: existing.id } });
+      const summary = parseQuestionBatchSummary(job?.resultSummary);
+      return NextResponse.json({
+        ok: true,
+        jobId: existing.id,
+        summary,
+        idempotentReplay: true,
+      });
+    }
+  }
+
   const topics = parseQuestionBatchTopicList(d.topicsRaw);
   if (topics.length === 0) {
     return NextResponse.json({ error: "No topics parsed from input" }, { status: 400 });
@@ -111,7 +138,13 @@ export async function POST(req: Request) {
       status: JobStatus.RUNNING,
       model,
       sourcePrompt: `Batch question generation: ${topics.length} topics (${d.examFamily}, ${d.country}, ${d.tier})`,
-      inputPayload: { ...d, topics, settings } as object,
+      inputPayload: {
+        ...d,
+        topics,
+        settings,
+        ...(d.idempotencyKey ? { idempotencyKey: d.idempotencyKey } : {}),
+        ...(d.batchControl ? { batchControl: d.batchControl } : {}),
+      } as object,
       resultSummary: summary as object,
       createdById: gate.admin.userId,
     },

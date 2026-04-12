@@ -4,11 +4,33 @@ import { afterEach, describe, it, mock } from "node:test";
 import { PracticeTestStatus } from "@prisma/client";
 import type { PracticeTestResultsJson } from "@/lib/practice-tests/types";
 import { PATCH, practiceTestRouteDeps } from "@/app/api/practice-tests/[id]/route";
+import type { SubscriberSessionOk } from "@/lib/entitlements/require-subscriber-session";
 
-const gate = {
-  ok: true as const,
+const gate: SubscriberSessionOk = {
+  ok: true,
   userId: "user_test_123",
-  entitlement: { tier: "subscriber", country: "US" },
+  entitlement: {
+    hasAccess: true,
+    reason: "active_subscription",
+    tier: "RN",
+    country: "US",
+    alliedCareer: null,
+  },
+  userAccess: {
+    userId: "user_test_123",
+    hasPremium: true,
+    reason: "active_subscription",
+    allowedRegion: { country: "US", billingRegionSlug: null },
+    allowedProfession: { tier: "RN", alliedCareer: null },
+    allowedExam: { pathwayId: null },
+    plan: {
+      planCode: null,
+      duration: null,
+      status: "active",
+      expiresAt: null,
+      cancelAtPeriodEnd: false,
+    },
+  },
 };
 
 const catConfig = {

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { getUserAccess } from "@/lib/entitlements/get-user-access";
+import { prisma } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
 
@@ -14,17 +15,22 @@ export async function GET() {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
+  const exists = await prisma.user.findUnique({ where: { id: userId }, select: { id: true } });
+  if (!exists) {
+    return NextResponse.json({ error: "Not found" }, { status: 404 });
+  }
+
   const userAccess = await getUserAccess(userId);
+
+  let subscriptionStatus: "active" | "grace" | "none" = "none";
+  if (userAccess.hasPremium) {
+    subscriptionStatus = userAccess.reason === "grace_period" ? "grace" : "active";
+  }
 
   return NextResponse.json({
     tier: userAccess.allowedProfession.tier,
     country: userAccess.allowedRegion.country,
-    subscriptionStatus:
-      userAccess.plan.status === "active" || userAccess.plan.status === "grace"
-        ? userAccess.plan.status === "grace"
-          ? "grace"
-          : "active"
-        : "none",
+    subscriptionStatus,
     subscription: {
       planCode: userAccess.plan.planCode,
       planDuration: userAccess.plan.duration,
