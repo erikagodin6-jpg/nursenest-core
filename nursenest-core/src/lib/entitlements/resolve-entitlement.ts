@@ -6,29 +6,36 @@ import { normalizeCountryCodeForEntitlement } from "@/lib/entitlements/country-c
 import { effectiveTierCountryForAccess } from "@/lib/entitlements/subscription-plan";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { withRetry } from "@/lib/resilience/with-retry";
+import type { AlliedCareerKey } from "@/lib/pricing/display-catalog";
 
 export type AccessScope = {
   hasAccess: boolean;
   reason: "active_subscription" | "admin_override" | "grace_period" | "active_trial" | "no_access";
   tier: TierCode | null;
   country: CountryCode | null;
+  /** When tier is ALLIED, the specific career line the user purchased. */
+  alliedCareer: AlliedCareerKey | null;
 };
 
 export async function resolveEntitlement(userId: string): Promise<AccessScope> {
-  if (!isDatabaseUrlConfigured()) {
-    return { hasAccess: false, reason: "no_access", tier: null, country: null };
-  }
+  const noAccess: AccessScope = { hasAccess: false, reason: "no_access", tier: null, country: null, alliedCareer: null };
+  if (!isDatabaseUrlConfigured()) return noAccess;
 
   const user = await withRetry(() =>
     prisma.user.findUnique({
       where: { id: userId },
-      select: { role: true, tier: true, country: true, trialStatus: true, trialEndsAt: true },
+      select: {
+        role: true,
+        tier: true,
+        country: true,
+        trialStatus: true,
+        trialEndsAt: true,
+        alliedProfessionKey: true,
+      },
     }),
   );
 
-  if (!user) {
-    return { hasAccess: false, reason: "no_access", tier: null, country: null };
-  }
+  if (!user) return noAccess;
 
   if (isLearnerEntitlementAdminOverrideRole(user.role)) {
     return {
@@ -36,6 +43,7 @@ export async function resolveEntitlement(userId: string): Promise<AccessScope> {
       reason: "admin_override",
       tier: user.tier,
       country: normalizeCountryCodeForEntitlement(user.country),
+      alliedCareer: (user.alliedProfessionKey as AlliedCareerKey) ?? null,
     };
   }
 
@@ -46,12 +54,15 @@ export async function resolveEntitlement(userId: string): Promise<AccessScope> {
         status: { in: [SubscriptionStatus.ACTIVE, SubscriptionStatus.GRACE, SubscriptionStatus.PAST_DUE] },
       },
       orderBy: { createdAt: "desc" },
-      select: { status: true, planTier: true, planCountry: true },
+      select: { status: true, planTier: true, planCountry: true, alliedCareer: true },
     }),
   );
 
   const baseCountry = normalizeCountryCodeForEntitlement(user.country);
   const { tier: effectiveTier, country: effectiveCountry } = effectiveTierCountryForAccess(user, subscription);
+  const effectiveAlliedCareer = (subscription?.alliedCareer as AlliedCareerKey)
+    ?? (user.alliedProfessionKey as AlliedCareerKey)
+    ?? null;
 
   if (subscription?.planTier && subscription.planTier !== user.tier) {
     safeServerLog("entitlement", "user_tier_subscription_plan_mismatch", {
@@ -66,6 +77,7 @@ export async function resolveEntitlement(userId: string): Promise<AccessScope> {
       reason: "active_subscription",
       tier: effectiveTier,
       country: effectiveCountry,
+      alliedCareer: effectiveTier === "ALLIED" ? effectiveAlliedCareer : null,
     };
   }
 
@@ -75,6 +87,7 @@ export async function resolveEntitlement(userId: string): Promise<AccessScope> {
       reason: "grace_period",
       tier: effectiveTier,
       country: effectiveCountry,
+      alliedCareer: effectiveTier === "ALLIED" ? effectiveAlliedCareer : null,
     };
   }
 
@@ -88,8 +101,9 @@ export async function resolveEntitlement(userId: string): Promise<AccessScope> {
       reason: "active_trial",
       tier: user.tier,
       country: baseCountry,
+      alliedCareer: user.tier === "ALLIED" ? effectiveAlliedCareer : null,
     };
   }
 
-  return { hasAccess: false, reason: "no_access", tier: user.tier, country: baseCountry };
+  return { hasAccess: false, reason: "no_access", tier: user.tier, country: baseCountry, alliedCareer: null };
 }

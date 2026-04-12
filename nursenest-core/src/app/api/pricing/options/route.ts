@@ -3,40 +3,59 @@ import type { TierCode } from "@prisma/client";
 import type { BillingDuration } from "@/lib/pricing/billing-types";
 import {
   BILLING_DURATION_ORDER,
-  eachPricedCombination,
+  NURSING_TIERS_BY_COUNTRY,
+  ALLIED_CAREER_KEYS,
+  ALLIED_CAREER_DISPLAY_NAMES,
+  eachNursingPricedCombination,
+  eachAlliedPricedCombination,
   durationMonths,
   formatCurrencyLabel,
   formatPerMonthLabel,
   getDisplayTotalMajorUnits,
+  getAlliedDisplayPrice,
   getAnchorPriceMajorUnits,
   STRIPE_TRIAL_DAYS,
+  type AlliedCareerKey,
 } from "@/lib/pricing/display-catalog";
-import { findPriceEntry, logStripePricingConfigurationGaps } from "@/lib/stripe/pricing-map";
+import { findPriceEntry, findAlliedPriceEntry, logStripePricingConfigurationGaps } from "@/lib/stripe/pricing-map";
 
 export const dynamic = "force-dynamic";
 
+type NursingPlanRow = {
+  tier: TierCode;
+  country: "CA" | "US";
+  duration: BillingDuration;
+  checkoutAvailable: boolean;
+  totalLabel: string;
+  monthlyEquivalentLabel: string;
+  savingsVsMonthlyPercent: number;
+  isBestValue: boolean;
+  isMostPopular: boolean;
+  anchorPriceLabel: string | null;
+  planCode: string;
+};
+
+type AlliedPlanRow = {
+  tier: "ALLIED";
+  alliedCareer: AlliedCareerKey;
+  alliedCareerLabel: string;
+  country: "CA" | "US";
+  duration: BillingDuration;
+  checkoutAvailable: boolean;
+  totalLabel: string;
+  monthlyEquivalentLabel: string;
+  savingsVsMonthlyPercent: number;
+  isBestValue: boolean;
+  isMostPopular: boolean;
+  planCode: string;
+};
+
 export async function GET() {
   logStripePricingConfigurationGaps();
-  const tiers = Array.from(
-    new Set(
-      Array.from(eachPricedCombination(), (c) => c.tier),
-    ),
-  ) as TierCode[];
 
-  const plans: Array<{
-    tier: TierCode;
-    country: "CA" | "US";
-    duration: BillingDuration;
-    checkoutAvailable: boolean;
-    totalLabel: string;
-    monthlyEquivalentLabel: string;
-    savingsVsMonthlyPercent: number;
-    isBestValue: boolean;
-    isMostPopular: boolean;
-    anchorPriceLabel: string | null;
-  }> = [];
-
-  for (const { country, tier, duration } of eachPricedCombination()) {
+  const nursingPlans: NursingPlanRow[] = [];
+  for (const combo of eachNursingPricedCombination()) {
+    const { country, tier, duration, planCode } = combo;
     const total = getDisplayTotalMajorUnits(country, tier, duration);
     if (total === undefined) continue;
 
@@ -55,7 +74,7 @@ export async function GET() {
 
     const anchorPrice = getAnchorPriceMajorUnits(country, tier, duration);
 
-    plans.push({
+    nursingPlans.push({
       tier,
       country,
       duration,
@@ -66,13 +85,49 @@ export async function GET() {
       isBestValue: Boolean(isBestValue && months > 1),
       isMostPopular,
       anchorPriceLabel: anchorPrice ? formatCurrencyLabel(anchorPrice, country) : null,
+      planCode,
+    });
+  }
+
+  const alliedPlans: AlliedPlanRow[] = [];
+  for (const combo of eachAlliedPricedCombination()) {
+    const { country, duration, alliedCareer, planCode } = combo;
+    if (!alliedCareer) continue;
+    const total = getAlliedDisplayPrice(country, duration);
+    const months = durationMonths(duration);
+    const monthlyEquiv = Number((total / months).toFixed(2));
+    const monthlyBase = getAlliedDisplayPrice(country, "monthly");
+    const baselineMonthly = months > 1 ? Number((monthlyBase * months).toFixed(2)) : 0;
+    const savingsVsMonthly =
+      months > 1 && baselineMonthly > 0 ? Math.max(0, Math.round((1 - total / baselineMonthly) * 100)) : 0;
+
+    const priceEntry = findAlliedPriceEntry(country, alliedCareer, duration);
+    const isBestValue = duration === "yearly";
+    const isMostPopular = duration === "3-month";
+
+    alliedPlans.push({
+      tier: "ALLIED",
+      alliedCareer,
+      alliedCareerLabel: ALLIED_CAREER_DISPLAY_NAMES[alliedCareer],
+      country,
+      duration,
+      checkoutAvailable: Boolean(priceEntry),
+      totalLabel: formatCurrencyLabel(total, country),
+      monthlyEquivalentLabel: formatPerMonthLabel(monthlyEquiv, country),
+      savingsVsMonthlyPercent: savingsVsMonthly,
+      isBestValue: Boolean(isBestValue && months > 1),
+      isMostPopular,
+      planCode,
     });
   }
 
   return NextResponse.json({
     durations: BILLING_DURATION_ORDER,
-    tiers,
-    plans,
+    nursingTiersByCountry: NURSING_TIERS_BY_COUNTRY,
+    alliedCareers: ALLIED_CAREER_KEYS,
+    alliedCareerLabels: ALLIED_CAREER_DISPLAY_NAMES,
+    plans: nursingPlans,
+    alliedPlans,
     trialDays: STRIPE_TRIAL_DAYS,
   });
 }

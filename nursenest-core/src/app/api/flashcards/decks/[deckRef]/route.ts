@@ -15,6 +15,7 @@ const NO_ACCESS: AccessScope = {
   reason: "no_access",
   tier: null,
   country: null,
+  alliedCareer: null,
 };
 
 type Props = { params: Promise<{ deckRef: string }> };

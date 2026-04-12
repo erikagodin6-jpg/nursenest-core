@@ -5,13 +5,14 @@ import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import { subscriptionCoversPathwayBase } from "./pathway-entitlements";
 
 function scope(
-  partial: Pick<AccessScope, "hasAccess" | "reason" | "tier" | "country">,
+  partial: Pick<AccessScope, "hasAccess" | "reason" | "tier" | "country"> & { alliedCareer?: AccessScope["alliedCareer"] },
 ): AccessScope {
   return {
     hasAccess: partial.hasAccess,
     reason: partial.reason,
     tier: partial.tier,
     country: partial.country,
+    alliedCareer: partial.alliedCareer ?? null,
   };
 }
 

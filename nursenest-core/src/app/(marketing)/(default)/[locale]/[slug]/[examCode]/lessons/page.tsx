@@ -153,7 +153,7 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
   }
   const scope =
     entitlement === "error"
-      ? { hasAccess: false, reason: "no_access" as const, tier: null, country: null }
+      ? { hasAccess: false, reason: "no_access" as const, tier: null, country: null, alliedCareer: null }
       : entitlement;
 
   let progressMap: Record<string, PathwayLessonProgressStatus> = {};

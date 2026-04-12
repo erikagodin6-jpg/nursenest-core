@@ -11,6 +11,7 @@ function scope(p: Partial<AccessScope> & Pick<AccessScope, "hasAccess" | "reason
     reason: p.reason,
     tier: p.tier ?? null,
     country: p.country ?? null,
+    alliedCareer: p.alliedCareer ?? null,
   };
 }
 

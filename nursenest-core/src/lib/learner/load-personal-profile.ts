@@ -82,7 +82,7 @@ export async function loadPersonalProfilePayload(
   const scopeForPathways: AccessScope =
     entitlement !== "error"
       ? entitlement
-      : { hasAccess: false, reason: "no_access", tier: user.tier, country: user.country };
+      : { hasAccess: false, reason: "no_access", tier: user.tier, country: user.country, alliedCareer: null };
   const pathwayTierCountry =
     !regionTierLocked && pathwayPreview ? pathwayPreview : { country: user.country, tier: user.tier };
   const pathwayOptions = listPathwayPicksForProfile(

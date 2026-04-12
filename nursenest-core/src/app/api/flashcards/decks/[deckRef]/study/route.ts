@@ -32,6 +32,7 @@ const NO_ACCESS: AccessScope = {
   reason: "no_access",
   tier: null,
   country: null,
+  alliedCareer: null,
 };
 
 const PREVIEW_CARD_CAP = 12;

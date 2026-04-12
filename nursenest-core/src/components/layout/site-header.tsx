@@ -502,7 +502,7 @@ export function SiteHeader() {
 
           <nav
             aria-label={isLearnerAuthenticated ? "Learner navigation" : t("nav.marketingExplore")}
-            className="hidden min-w-0 flex-1 items-center justify-center gap-5 lg:flex xl:gap-7"
+            className="hidden min-w-0 flex-1 items-center justify-center gap-6 lg:flex xl:gap-7"
             onMouseEnter={isMarketingNav ? clearMegaCloseTimer : undefined}
             onMouseLeave={isMarketingNav ? scheduleMegaClose : undefined}
           >
@@ -676,11 +676,11 @@ export function SiteHeader() {
                   </Link>
 
                   {/* ── Secondary groups + region links (right) ── */}
-                  <div className="p-7">
+                  <div className="p-8">
                     <div className="grid grid-cols-3 gap-x-6 gap-y-7">
                       {openMega.groups.map((group) => (
                         <div key={group.key}>
-                          <p className="mb-2.5 border-b border-[var(--border-subtle)] pb-2 text-[10px] font-bold uppercase tracking-widest text-[var(--theme-muted-text)]">
+                          <p className="mb-3 border-b border-[var(--border-subtle)] pb-2 text-[10px] font-bold uppercase tracking-widest text-[var(--theme-muted-text)]">
                             {formatEyebrow(group.heading, locale)}
                           </p>
                           <ul className="space-y-1.5">
@@ -821,10 +821,17 @@ export function SiteHeader() {
                             type="button"
                             aria-expanded={expanded}
                             aria-controls={`mobile-mega-${menu.key}`}
-                            className="flex w-full items-center justify-between px-3 py-3 text-left text-[15px] font-semibold text-[var(--nav-fg)]"
+                            data-active={isMegaMenuKeyActive(menu.key, strippedPath) || undefined}
+                            className={`flex w-full items-center justify-between px-3 py-3 text-left text-[15px] font-semibold transition-colors ${isMegaMenuKeyActive(menu.key, strippedPath) ? "text-[var(--nav-link-active)]" : "text-[var(--nav-fg)]"}`}
                             onClick={() => setMobileExpandedMega(expanded ? null : menu.key)}
                           >
-                            {menu.label}
+                            <span className="flex items-center gap-2">
+                              <span
+                                className={`h-1.5 w-1.5 shrink-0 rounded-full transition-opacity duration-100 ${isMegaMenuKeyActive(menu.key, strippedPath) ? "bg-[var(--text-accent)] opacity-100" : "opacity-0"}`}
+                                aria-hidden
+                              />
+                              {menu.label}
+                            </span>
                             <ChevronDown className={`h-4 w-4 shrink-0 transition-transform ${expanded ? "rotate-180" : ""}`} aria-hidden />
                           </button>
 
@@ -861,7 +868,7 @@ export function SiteHeader() {
                               {/* Secondary groups */}
                               {menu.groups.map((group) => (
                                 <div key={`${menu.key}-${group.key}`}>
-                                  <p className="mb-2 border-b border-[var(--nav-border)] pb-1.5 text-[11px] font-bold uppercase tracking-widest text-[var(--nav-muted)]">
+                                  <p className="mb-2.5 border-b border-[var(--nav-border)] pb-1.5 text-[11px] font-bold uppercase tracking-widest text-[var(--nav-muted)]">
                                     {formatEyebrow(group.heading, locale)}
                                   </p>
                                   <ul className="space-y-1">
@@ -954,7 +961,8 @@ export function SiteHeader() {
                     })}
                     <Link
                       href={localizeHref(pricingNav.href)}
-                      className="flex items-center rounded-xl px-3 py-3 text-[15px] font-semibold text-[var(--nav-fg)] transition-colors hover:bg-[var(--nav-hover)]"
+                      aria-current={isActivePath(strippedPath, pricingNav.matchBase) ? "page" : undefined}
+                      className={`flex items-center gap-2 rounded-xl px-3 py-3 text-[15px] font-semibold transition-colors ${isActivePath(strippedPath, pricingNav.matchBase) ? "text-[var(--nav-link-active)]" : "text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"}`}
                       onClick={() => {
                         trackClientEvent(PH.marketingNavClick, {
                           actor: navActor,
@@ -965,6 +973,10 @@ export function SiteHeader() {
                         setMobileOpen(false);
                       }}
                     >
+                      <span
+                        className={`h-1.5 w-1.5 shrink-0 rounded-full transition-opacity duration-100 ${isActivePath(strippedPath, pricingNav.matchBase) ? "bg-[var(--text-accent)] opacity-100" : "opacity-0"}`}
+                        aria-hidden
+                      />
                       {pricingNav.label}
                     </Link>
                   </>

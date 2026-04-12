@@ -163,6 +163,7 @@ describe("createCatPracticeTestPayload (no DB path)", () => {
       reason: "admin_override",
       tier: "RN",
       country: "US",
+      alliedCareer: null,
     };
     const out = await createCatPracticeTestPayload(
       "test-user",

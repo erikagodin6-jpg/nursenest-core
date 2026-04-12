@@ -166,7 +166,7 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
 
   const scope =
     entitlement === "error"
-      ? { hasAccess: false, reason: "no_access" as const, tier: null, country: null }
+      ? { hasAccess: false, reason: "no_access" as const, tier: null, country: null, alliedCareer: null }
       : entitlement;
 
   const fullAccess = canViewFullPathwayLesson(scope, pathway, learnerPathResolved);

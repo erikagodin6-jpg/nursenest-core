@@ -2,6 +2,9 @@ import type { TierCode } from "@prisma/client";
 import {
   eachPricedCombination,
   stripePriceEnvKey,
+  alliedStripePriceEnvKey,
+  type AlliedCareerKey,
+  type PricedCombination,
 } from "@/lib/pricing/display-catalog";
 import type { BillingDuration } from "@/lib/pricing/billing-types";
 import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
@@ -13,28 +16,41 @@ export type PriceEntry = {
   country: "CA" | "US";
   duration: BillingDuration;
   priceId: string;
+  alliedCareer?: AlliedCareerKey;
+  planCode: string;
 };
 
-/**
- * Full matrix: country + tier + billing duration → Stripe Price env var + resolved id (if set).
- * Single place to audit coverage; `display-catalog` defines which cells exist in the product.
- */
 export type StripePriceMatrixRow = {
   country: "CA" | "US";
   tier: TierCode;
   duration: BillingDuration;
-  /** Env var name, e.g. `STRIPE_PRICE_CA_RN_YEARLY`. */
+  alliedCareer?: AlliedCareerKey;
+  planCode: string;
   envKey: string;
-  /** Stripe Price id when `envKey` is set in the environment. */
   priceId: string | null;
 };
 
+function envKeyForCombination(c: PricedCombination): string {
+  if (c.alliedCareer) {
+    return alliedStripePriceEnvKey(c.country, c.alliedCareer, c.duration);
+  }
+  return stripePriceEnvKey(c.country, c.tier, c.duration);
+}
+
 export function eachStripePriceMatrixRow(): StripePriceMatrixRow[] {
   const rows: StripePriceMatrixRow[] = [];
-  for (const { country, tier, duration } of eachPricedCombination()) {
-    const envKey = stripePriceEnvKey(country, tier, duration);
+  for (const combo of eachPricedCombination()) {
+    const envKey = envKeyForCombination(combo);
     const v = process.env[envKey]?.trim();
-    rows.push({ country, tier, duration, envKey, priceId: v || null });
+    rows.push({
+      country: combo.country,
+      tier: combo.tier,
+      duration: combo.duration,
+      alliedCareer: combo.alliedCareer,
+      planCode: combo.planCode,
+      envKey,
+      priceId: v || null,
+    });
   }
   return rows;
 }
@@ -51,7 +67,6 @@ export function isStripePricingFullyConfigured(): boolean {
 
 let loggedPricingGaps = false;
 
-/** Idempotent server log when any expected `STRIPE_PRICE_*` env is unset (checkout will show unavailable for that cell). */
 export function logStripePricingConfigurationGaps(): void {
   if (loggedPricingGaps) return;
   loggedPricingGaps = true;
@@ -65,7 +80,6 @@ export function logStripePricingConfigurationGaps(): void {
   });
 }
 
-/** Production: Stripe secret is set but one or more price envs are missing — misconfiguration. */
 export function logStripeProductionPricingMisconfiguration(): void {
   if (process.env.NODE_ENV !== "production") return;
   const key = process.env.STRIPE_SECRET_KEY?.trim();
@@ -90,29 +104,45 @@ function buildPriceMap(): PriceEntry[] {
       country: r.country,
       duration: r.duration,
       priceId: r.priceId,
+      alliedCareer: r.alliedCareer,
+      planCode: r.planCode,
     }));
 }
 
-/**
- * Stripe Price IDs — set via env `STRIPE_PRICE_{country}_{tier}_{MONTHLY|3MONTH|6MONTH|YEARLY}`.
- * Only combinations with a non-empty env value are checkout-eligible. UI amounts always come from
- * `display-catalog.ts` so labels and Stripe stay aligned when envs are set.
- */
 export const priceMap: PriceEntry[] = buildPriceMap();
 
+/** Find a nursing tier price entry. */
 export function findPriceEntry(
   country: "CA" | "US",
   tier: TierCode,
   duration: BillingDuration,
 ): PriceEntry | undefined {
-  return priceMap.find((p) => p.country === country && p.tier === tier && p.duration === duration);
+  return priceMap.find(
+    (p) => p.country === country && p.tier === tier && p.duration === duration && !p.alliedCareer,
+  );
 }
 
-/** Reverse lookup: Stripe Price id → plan identity (first match wins; each id should be unique per env). */
+/** Find an allied career price entry. */
+export function findAlliedPriceEntry(
+  country: "CA" | "US",
+  career: AlliedCareerKey,
+  duration: BillingDuration,
+): PriceEntry | undefined {
+  return priceMap.find(
+    (p) => p.country === country && p.tier === "ALLIED" && p.alliedCareer === career && p.duration === duration,
+  );
+}
+
+/** Find any price entry by plan code. */
+export function findPriceEntryByPlanCode(planCode: string): PriceEntry | undefined {
+  return priceMap.find((p) => p.planCode === planCode);
+}
+
+/** Reverse lookup: Stripe Price id to plan identity. */
 export function findTierCountryByPriceId(
   priceId: string,
-): { tier: TierCode; country: "CA" | "US"; duration: BillingDuration } | undefined {
+): { tier: TierCode; country: "CA" | "US"; duration: BillingDuration; alliedCareer?: AlliedCareerKey } | undefined {
   const row = priceMap.find((p) => p.priceId === priceId);
   if (!row) return undefined;
-  return { tier: row.tier, country: row.country, duration: row.duration };
+  return { tier: row.tier, country: row.country, duration: row.duration, alliedCareer: row.alliedCareer };
 }

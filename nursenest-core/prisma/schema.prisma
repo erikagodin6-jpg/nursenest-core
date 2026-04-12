@@ -13,6 +13,8 @@ enum CountryCode {
 }
 
 enum TierCode {
+  PRE_NURSING
+  NEW_GRAD
   RPN
   LVN_LPN
   RN
@@ -443,6 +445,8 @@ model Subscription {
   planTier             TierCode?
   planCountry          CountryCode?
   planDuration         String?            @db.VarChar(20)
+  /** When planTier is ALLIED, the specific career line purchased (e.g. paramedic, mlt). */
+  alliedCareer         String?            @db.VarChar(64)
   currentPeriodEnd     DateTime?
   trialEnd             DateTime?
   cancelAtPeriodEnd    Boolean            @default(false)

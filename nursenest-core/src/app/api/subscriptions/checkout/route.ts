@@ -5,9 +5,15 @@ import { prisma } from "@/lib/db";
 import { LEGAL_POLICY_BUNDLE_VERSION } from "@/lib/legal/legal-config";
 import { analyticsDistinctId, captureServerEvent } from "@/lib/observability/posthog-server";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
-import { safeServerLogCritical } from "@/lib/observability/safe-server-log";
+import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
 import { getStripeClient } from "@/lib/stripe/stripe-client";
-import { stripePriceEnvKey, STRIPE_TRIAL_DAYS } from "@/lib/pricing/display-catalog";
+import {
+  stripePriceEnvKey,
+  alliedStripePriceEnvKey,
+  STRIPE_TRIAL_DAYS,
+  ALLIED_CAREER_KEYS,
+  type AlliedCareerKey,
+} from "@/lib/pricing/display-catalog";
 import {
   CHECKOUT_INVALID_PAYLOAD_CODE,
   CHECKOUT_POLICY_VERSION_MISMATCH_CODE,
@@ -17,14 +23,14 @@ import {
   includeStripePriceEnvKeyInCheckoutResponse,
   STRIPE_PRICE_NOT_CONFIGURED_CODE,
 } from "@/lib/stripe/checkout-api-diagnostics";
-import { findPriceEntry, type BillingDuration } from "@/lib/stripe/pricing-map";
-import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { findPriceEntry, findAlliedPriceEntry, type BillingDuration } from "@/lib/stripe/pricing-map";
 import type { TierCode } from "@prisma/client";
 
 const bodySchema = z.object({
   country: z.enum(["CA", "US"]),
-  tier: z.enum(["RPN", "LVN_LPN", "RN", "NP", "ALLIED"]),
+  tier: z.enum(["PRE_NURSING", "NEW_GRAD", "RPN", "LVN_LPN", "RN", "NP", "ALLIED"]),
   duration: z.enum(["monthly", "3-month", "6-month", "yearly"]),
+  alliedCareer: z.enum(ALLIED_CAREER_KEYS as unknown as [string, ...string[]]).optional(),
   acceptPolicies: z.literal(true),
   policyVersion: z.string().min(1).max(64),
 });
@@ -59,7 +65,16 @@ export async function POST(req: Request) {
     );
   }
 
-  const { country, tier, duration, policyVersion } = parsed.data;
+  const { country, tier, duration, policyVersion, alliedCareer } = parsed.data;
+
+  if (tier === "ALLIED" && !alliedCareer) {
+    const msg = "Please select a specific career line for Allied Health.";
+    return NextResponse.json(
+      { code: CHECKOUT_INVALID_PAYLOAD_CODE, message: msg, error: msg },
+      { status: 400 },
+    );
+  }
+
   if (policyVersion !== LEGAL_POLICY_BUNDLE_VERSION) {
     const msg = "Policy version outdated. Refresh the page and try again.";
     return NextResponse.json(
@@ -67,15 +82,25 @@ export async function POST(req: Request) {
       { status: 400 },
     );
   }
+
   const tierCode = tier as TierCode;
   const durationCode = duration as BillingDuration;
-  const price = findPriceEntry(country, tierCode, durationCode);
-  const missingEnvKey = stripePriceEnvKey(country, tierCode, durationCode);
+  const careerKey = alliedCareer as AlliedCareerKey | undefined;
+
+  const price = tierCode === "ALLIED" && careerKey
+    ? findAlliedPriceEntry(country, careerKey, durationCode)
+    : findPriceEntry(country, tierCode, durationCode);
+
+  const missingEnvKey = tierCode === "ALLIED" && careerKey
+    ? alliedStripePriceEnvKey(country, careerKey, durationCode)
+    : stripePriceEnvKey(country, tierCode, durationCode);
+
   if (!price) {
     safeServerLog("stripe_checkout", "rejected_missing_stripe_price_env", {
       country,
       tier: String(tier),
       duration: String(duration),
+      alliedCareer: careerKey ?? "",
       envKey: missingEnvKey.slice(0, 80),
     });
     const msg = "This plan is not available for checkout. Billing configuration is incomplete.";
@@ -121,6 +146,21 @@ export async function POST(req: Request) {
     const existingCustomerId = existingSub?.stripeCustomerId?.trim() || undefined;
 
     const trialDays = STRIPE_TRIAL_DAYS;
+    const metadata: Record<string, string> = {
+      userId,
+      country,
+      tier,
+      duration,
+      planCode: price.planCode,
+      trialDays: String(trialDays),
+      app: "nursenest-core",
+      legalPolicyVersion: policyVersion,
+      legalPoliciesAcceptedAt: acceptedAt.toISOString(),
+    };
+    if (careerKey) {
+      metadata.alliedCareer = careerKey;
+    }
+
     const checkoutSession = await stripe.checkout.sessions.create({
       mode: "subscription",
       line_items: [{ price: price.priceId, quantity: 1 }],
@@ -133,23 +173,15 @@ export async function POST(req: Request) {
       success_url: `${appUrl}/app?checkout=success`,
       cancel_url: `${appUrl}/pricing?checkout=cancelled`,
       client_reference_id: userId,
-      metadata: {
-        userId,
-        country,
-        tier,
-        duration,
-        trialDays: String(trialDays),
-        app: "nursenest-core",
-        legalPolicyVersion: policyVersion,
-        legalPoliciesAcceptedAt: acceptedAt.toISOString(),
-        ...(tier === "ALLIED" && userForCheckout.learnerPath ? { alliedProfession: userForCheckout.learnerPath } : {}),
-      },
+      metadata,
     });
 
     await captureServerEvent(analyticsDistinctId(userId), "checkout_session_created", {
       country,
       tier: String(tier),
       duration: String(duration),
+      alliedCareer: careerKey ?? undefined,
+      planCode: price.planCode,
     });
     return NextResponse.json({ url: checkoutSession.url });
   } catch (e) {
@@ -157,6 +189,7 @@ export async function POST(req: Request) {
       country,
       tier: String(tier),
       duration: String(duration),
+      alliedCareer: careerKey ?? "",
     });
     safeServerLogCritical(
       "stripe_checkout",

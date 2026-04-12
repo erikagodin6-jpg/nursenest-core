@@ -14,6 +14,7 @@ export type BillingSubscriptionRow = {
   stripeCustomerId: string | null;
   planTier: TierCode | null;
   planCountry: CountryCode | null;
+  alliedCareer: string | null;
   createdAt: Date;
   updatedAt: Date;
 };
@@ -173,6 +174,7 @@ export async function loadBillingPagePayload(userId: string): Promise<BillingPag
         stripeCustomerId: true,
         planTier: true,
         planCountry: true,
+        alliedCareer: true,
         planDuration: true,
         currentPeriodEnd: true,
         trialEnd: true,
@@ -204,6 +206,7 @@ export async function loadBillingPagePayload(userId: string): Promise<BillingPag
         stripeCustomerId: subscriptionRow.stripeCustomerId,
         planTier: subscriptionRow.planTier,
         planCountry: subscriptionRow.planCountry,
+        alliedCareer: subscriptionRow.alliedCareer ?? null,
         createdAt: subscriptionRow.createdAt,
         updatedAt: subscriptionRow.updatedAt,
       }

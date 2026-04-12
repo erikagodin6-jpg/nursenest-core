@@ -37,7 +37,7 @@ export function HomeConversionHero() {
       data-testid="hero-section"
       aria-labelledby="home-conversion-hero-heading"
     >
-      <div className="relative py-20 md:py-24">
+      <div className="relative pt-8 pb-16 md:pt-8 md:pb-20">
         <div className="nn-section-shell">
           <div className="grid gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
             <div className="space-y-6">

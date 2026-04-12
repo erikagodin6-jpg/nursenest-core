@@ -9,7 +9,7 @@ export type PageEntitlementResult = AccessScope | "error";
  */
 export async function resolveEntitlementForPage(userId: string): Promise<PageEntitlementResult> {
   if (!userId) {
-    return { hasAccess: false, reason: "no_access", tier: null, country: null };
+    return { hasAccess: false, reason: "no_access", tier: null, country: null, alliedCareer: null };
   }
   try {
     return await resolveEntitlement(userId);

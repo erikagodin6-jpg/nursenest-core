@@ -127,6 +127,7 @@ export async function POST(req: Request) {
       if (userId && subId) {
         const plan = planFromCheckoutMetadata(session.metadata ?? undefined);
         const durationMeta = session.metadata?.duration ?? undefined;
+        const alliedCareerMeta = plan?.alliedCareer ?? session.metadata?.alliedCareer ?? undefined;
         if (!plan) {
           safeServerLog("stripe_webhook", "checkout_missing_plan_metadata", {
             hasMetadata: session.metadata && Object.keys(session.metadata).length > 0 ? 1 : 0,
@@ -152,6 +153,7 @@ export async function POST(req: Request) {
               status: SubscriptionStatus.ACTIVE,
               ...(plan ? { planTier: plan.tier, planCountry: plan.country } : {}),
               ...(durationMeta ? { planDuration: durationMeta } : {}),
+              ...(alliedCareerMeta ? { alliedCareer: alliedCareerMeta } : {}),
               currentPeriodEnd: lifecycle.currentPeriodEnd ?? null,
               trialEnd: lifecycle.trialEnd ?? null,
               cancelAtPeriodEnd: lifecycle.cancelAtPeriodEnd,
@@ -164,6 +166,7 @@ export async function POST(req: Request) {
               planTier: plan?.tier,
               planCountry: plan?.country,
               planDuration: durationMeta,
+              alliedCareer: alliedCareerMeta,
               currentPeriodEnd: lifecycle.currentPeriodEnd,
               trialEnd: lifecycle.trialEnd,
               cancelAtPeriodEnd: lifecycle.cancelAtPeriodEnd,
@@ -210,6 +213,7 @@ export async function POST(req: Request) {
       if (mapped) {
         data.planTier = mapped.tier;
         data.planCountry = mapped.country;
+        if (mapped.alliedCareer) data.alliedCareer = mapped.alliedCareer;
       }
       await prisma.$transaction(async (tx) => {
         await tx.subscription.updateMany({

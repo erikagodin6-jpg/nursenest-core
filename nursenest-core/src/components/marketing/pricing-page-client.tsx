@@ -12,7 +12,6 @@ import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { useNursenestRegion } from "@/lib/region/use-nursenest-region";
 import { buildExamPathwayPath, getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
-import { HUB } from "@/lib/marketing/marketing-entry-routes";
 import { marketingExamHubPath } from "@/lib/marketing/country-exam-offerings";
 import { rnQuestions } from "@/lib/marketing/marketing-entry-routes";
 import { LEGAL_POLICY_BUNDLE_VERSION } from "@/lib/legal/legal-config";
@@ -28,7 +27,12 @@ import {
   type ParsedCheckoutErrorBody,
 } from "@/lib/stripe/checkout-api-diagnostics";
 import type { BillingDuration } from "@/lib/stripe/pricing-map";
-import { BILLING_DURATION_ORDER } from "@/lib/pricing/display-catalog";
+import {
+  BILLING_DURATION_ORDER,
+  ALLIED_CAREER_KEYS,
+  ALLIED_CAREER_DISPLAY_NAMES,
+  type AlliedCareerKey,
+} from "@/lib/pricing/display-catalog";
 import {
   MARKETING_PRIMARY_CTA_CLASS,
   MARKETING_SECONDARY_CTA_CLASS,
@@ -49,7 +53,7 @@ import {
   TRIAL_MESSAGING_COPY,
 } from "@/lib/experiments/experiment-engine";
 
-type PlanRow = {
+type NursingPlanRow = {
   tier: TierCode;
   country: "CA" | "US";
   duration: BillingDuration;
@@ -60,13 +64,32 @@ type PlanRow = {
   isBestValue: boolean;
   isMostPopular: boolean;
   anchorPriceLabel: string | null;
+  planCode: string;
 };
 
-/** RN, combined PN (RPN CA / LPN US), NP, Allied — matches public tier SKUs. */
-type Segment = "rn" | "pn" | "np" | "allied";
+type AlliedPlanRow = {
+  tier: "ALLIED";
+  alliedCareer: AlliedCareerKey;
+  alliedCareerLabel: string;
+  country: "CA" | "US";
+  duration: BillingDuration;
+  checkoutAvailable: boolean;
+  totalLabel: string;
+  monthlyEquivalentLabel: string;
+  savingsVsMonthlyPercent: number;
+  isBestValue: boolean;
+  isMostPopular: boolean;
+  planCode: string;
+};
+
+type Segment = "prenursing" | "newgrad" | "rn" | "pn" | "np" | "allied";
 
 function segmentToTierCountry(segment: Segment, country: "CA" | "US"): { tier: TierCode; country: "CA" | "US" } {
   switch (segment) {
+    case "prenursing":
+      return { tier: "PRE_NURSING", country };
+    case "newgrad":
+      return { tier: "NEW_GRAD", country };
     case "pn":
       return country === "CA" ? { tier: "RPN", country: "CA" } : { tier: "LVN_LPN", country: "US" };
     case "rn":
@@ -115,7 +138,9 @@ export function PricingPageClient({
 }) {
   const [segment, setSegment] = useState<Segment>("rn");
   const [country, setCountry] = useState<"CA" | "US">("US");
-  const [plans, setPlans] = useState<PlanRow[]>([]);
+  const [selectedAlliedCareer, setSelectedAlliedCareer] = useState<AlliedCareerKey>("paramedic");
+  const [nursingPlans, setNursingPlans] = useState<NursingPlanRow[]>([]);
+  const [alliedPlans, setAlliedPlans] = useState<AlliedPlanRow[]>([]);
   const [trialDays, setTrialDays] = useState(3);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [checkoutError, setCheckoutError] = useState<string | null>(null);
@@ -153,7 +178,8 @@ export function PricingPageClient({
         const data = await res.json();
         if (!res.ok) throw new Error("load_failed");
         if (!cancelled) {
-          setPlans(data.plans ?? []);
+          setNursingPlans(data.plans ?? []);
+          setAlliedPlans(data.alliedPlans ?? []);
           if (typeof data.trialDays === "number") setTrialDays(data.trialDays);
         }
       } catch {
@@ -168,16 +194,25 @@ export function PricingPageClient({
   const { tier, country: effectiveCountry } = segmentToTierCountry(segment, country);
   const narrative = buildTierPricingNarrative(t, tier);
 
-  const filtered = useMemo(
-    () => plans.filter((p) => p.tier === tier && p.country === effectiveCountry),
-    [plans, tier, effectiveCountry],
+  const isAllied = segment === "allied";
+
+  const filteredNursingPlans = useMemo(
+    () => nursingPlans.filter((p) => p.tier === tier && p.country === effectiveCountry),
+    [nursingPlans, tier, effectiveCountry],
   );
 
+  const filteredAlliedPlans = useMemo(
+    () => alliedPlans.filter((p) => p.country === effectiveCountry && p.alliedCareer === selectedAlliedCareer),
+    [alliedPlans, effectiveCountry, selectedAlliedCareer],
+  );
+
+  const displayPlans = isAllied ? filteredAlliedPlans : filteredNursingPlans;
+
   const rowByDuration = useMemo(() => {
-    const m = new Map<BillingDuration, PlanRow>();
-    for (const p of filtered) m.set(p.duration, p);
+    const m = new Map<BillingDuration, NursingPlanRow | AlliedPlanRow>();
+    for (const p of displayPlans) m.set(p.duration, p);
     return m;
-  }, [filtered]);
+  }, [displayPlans]);
 
   const tryQuestionsHref = localize(rnQuestions(region));
 
@@ -224,18 +259,23 @@ export function PricingPageClient({
         duration: String(duration),
         has_trial: trialDays > 0,
         trial_days: trialDays,
+        ...(isAllied ? { alliedCareer: selectedAlliedCareer } : {}),
       });
       try {
+        const body: Record<string, unknown> = {
+          country: effectiveCountry,
+          tier,
+          duration,
+          acceptPolicies: true,
+          policyVersion: LEGAL_POLICY_BUNDLE_VERSION,
+        };
+        if (isAllied) {
+          body.alliedCareer = selectedAlliedCareer;
+        }
         const res = await fetch("/api/subscriptions/checkout", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            country: effectiveCountry,
-            tier,
-            duration,
-            acceptPolicies: true,
-            policyVersion: LEGAL_POLICY_BUNDLE_VERSION,
-          }),
+          body: JSON.stringify(body),
         });
         const data: unknown = await res.json();
         if (!res.ok || !(data && typeof data === "object" && "url" in data && (data as { url?: unknown }).url)) {
@@ -260,7 +300,7 @@ export function PricingPageClient({
         setCheckoutLoading(false);
       }
     },
-    [effectiveCountry, policiesAccepted, tier, trialDays, t],
+    [effectiveCountry, policiesAccepted, tier, trialDays, t, isAllied, selectedAlliedCareer],
   );
 
   const includeKeys = ["lessons", "bank", "cat", "analytics"] as const;
@@ -273,11 +313,17 @@ export function PricingPageClient({
   };
 
   const tierTabs: { id: Segment; labelKey: string }[] = [
+    { id: "prenursing", labelKey: "pages.pricing.segment.prenursing" },
+    { id: "newgrad", labelKey: "pages.pricing.segment.newgrad" },
     { id: "rn", labelKey: "pages.pricing.segment.rn" },
     { id: "pn", labelKey: "pages.pricing.segment.pnCombined" },
     { id: "np", labelKey: "pages.pricing.segment.np" },
     { id: "allied", labelKey: "pages.pricing.segment.allied" },
   ];
+
+  const currencyNotice = country === "CA"
+    ? "Canadian Pricing Is Shown in CAD"
+    : "Pricing Is Shown in USD";
 
   return (
     <main className="mx-auto flex w-full max-w-6xl flex-col gap-14 nn-marketing-x pb-[var(--nn-rhythm-page-y)] pt-0 md:gap-16">
@@ -324,6 +370,11 @@ export function PricingPageClient({
           </div>
         </div>
 
+        {/* Currency notice */}
+        <p className="text-center text-xs font-semibold tracking-wide text-[var(--semantic-info)]">
+          {currencyNotice}
+        </p>
+
         <div>
           <p className="mb-3 text-center text-sm font-medium text-muted-foreground">{t("pages.pricing.conversion.chooseTrack")}</p>
           <div className="flex flex-wrap justify-center gap-2">
@@ -344,17 +395,53 @@ export function PricingPageClient({
           </div>
         </div>
 
+        {/* Allied career selector */}
+        {isAllied && (
+          <div className="mx-auto max-w-lg">
+            <p className="mb-2 text-center text-sm font-medium text-muted-foreground">
+              Select Your Career Line
+            </p>
+            <div className="flex flex-wrap justify-center gap-2">
+              {ALLIED_CAREER_KEYS.map((career) => (
+                <button
+                  key={career}
+                  type="button"
+                  onClick={() => {
+                    setSelectedAlliedCareer(career);
+                    trackClientEvent("allied_career_plan_selected", {
+                      career,
+                      country: effectiveCountry,
+                    });
+                  }}
+                  className={`rounded-full px-3 py-1.5 text-xs font-semibold transition-[background-color,color,box-shadow,transform] duration-150 ease-out ${
+                    selectedAlliedCareer === career
+                      ? "bg-[var(--semantic-brand)] text-white shadow-[var(--elevation-rest)]"
+                      : "border border-[var(--border-medium)] bg-card text-[var(--palette-text)] hover:-translate-y-px hover:bg-[var(--surface-interactive-hover)] hover:shadow-[var(--elevation-hover)]"
+                  }`}
+                >
+                  {ALLIED_CAREER_DISPLAY_NAMES[career]}
+                </button>
+              ))}
+            </div>
+            <p className="mt-2 text-center text-[11px] text-muted-foreground">
+              Each career line is a separate plan. Access is limited to the career you purchase.
+            </p>
+          </div>
+        )}
+
         <p className="mx-auto max-w-2xl text-center text-sm text-muted-foreground">{narrative.subhead}</p>
       </section>
 
-      {/* 3. Core feature comparison (spec §5) — mapped to real gated features */}
+      {/* 3. Core feature comparison */}
       <FeatureComparisonTable />
 
-      {/* 2–4. Duration cards + includes + pricing */}
+      {/* 2-4. Duration cards + includes + pricing */}
       <section aria-labelledby="pricing-plans-heading">
         <div className="mb-6 text-center">
           <h2 id="pricing-plans-heading" className="nn-marketing-h2">
-            {t("pages.pricing.conversion.pickTerm")}
+            {isAllied
+              ? `${ALLIED_CAREER_DISPLAY_NAMES[selectedAlliedCareer]} Plans`
+              : t("pages.pricing.conversion.pickTerm")}
           </h2>
           <p className="nn-marketing-body-sm mt-2 text-muted-foreground">{t("pages.pricing.conversion.pickTermSub")}</p>
           <p className="nn-marketing-caption mt-2 text-muted-foreground">{t("pages.pricing.conversion.stripeFast")}</p>
@@ -415,7 +502,7 @@ export function PricingPageClient({
                 {row ? (
                   <>
                     <div className="mt-6">
-                      {row.anchorPriceLabel && (
+                      {"anchorPriceLabel" in row && row.anchorPriceLabel && (
                         <p className="text-sm text-muted-foreground line-through decoration-muted-foreground/50">
                           {row.anchorPriceLabel}
                         </p>
@@ -547,16 +634,16 @@ export function PricingPageClient({
         <p className="mt-4 text-xs text-muted-foreground">{t("pages.pricing.billing.cancelComfort")}</p>
       </section>
 
-      {/* 4. What you unlock (spec §6) — maps exactly to gated features */}
+      {/* 4. What you unlock */}
       <PricingUnlockSection />
 
-      {/* 5. Product experience preview (spec §7) */}
+      {/* 5. Product experience preview */}
       <ProductPreviewGrid />
 
-      {/* 6. Trust + reassurance (spec §8) */}
+      {/* 6. Trust + reassurance */}
       <PricingTrustReassurance />
 
-      {/* 7. Final CTA (spec §9) */}
+      {/* 7. Final CTA */}
       <PricingCTA plansHref="#pricing-plans-heading" />
 
       {/* Compact: institutional + exam hubs */}

@@ -39,7 +39,7 @@ export function MarketingHeaderUtilityStrip({ variant = "standard" }: { variant?
 
   return (
     <div className={`${variant === "dark-bar" ? "nn-header-utility-dark" : "nn-header-utility"} hidden md:block`}>
-      <div className="nn-section-shell flex h-7 items-center justify-end gap-2 lg:gap-2.5">
+      <div className="nn-section-shell flex h-9 items-center justify-end gap-2 lg:gap-2.5">
         <div className="flex items-center gap-1.5">
           <span className="nn-marketing-caption shrink-0 leading-none text-[var(--header-utility-text)]">{t("nav.regionLabel")}</span>
           <div className={marketingRegionToggleShell("pill")} role="group" aria-label={t("nav.regionLabel")}>

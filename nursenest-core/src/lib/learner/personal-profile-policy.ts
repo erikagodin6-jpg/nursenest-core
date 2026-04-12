@@ -44,12 +44,14 @@ export function listPathwayPicksForProfile(
             reason: "admin_override",
             tier: profileTier,
             country: profileCountry,
+            alliedCareer: entitlement.alliedCareer ?? null,
           }
         : {
             hasAccess: true,
             reason: "active_subscription",
             tier: profileTier,
             country: profileCountry,
+            alliedCareer: entitlement.alliedCareer ?? null,
           };
     return listPathwaysCompatibleWithSubscription(scope).map((p) => ({
       id: p.id,

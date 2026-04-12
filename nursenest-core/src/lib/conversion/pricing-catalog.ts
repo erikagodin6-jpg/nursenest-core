@@ -16,7 +16,9 @@ export type TierPricingNarrative = {
 
 type MarketingT = (key: string, params?: Record<string, string | number | undefined>) => string;
 
-function tierToNarrativeSlug(tier: TierCode): "rpn" | "lvn_lpn" | "rn" | "np" | "allied" {
+function tierToNarrativeSlug(tier: TierCode): "prenursing" | "newgrad" | "rpn" | "lvn_lpn" | "rn" | "np" | "allied" {
+  if (tier === "PRE_NURSING") return "prenursing";
+  if (tier === "NEW_GRAD") return "newgrad";
   if (tier === "RPN") return "rpn";
   if (tier === "LVN_LPN") return "lvn_lpn";
   if (tier === "NP") return "np";
