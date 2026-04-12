@@ -49,7 +49,7 @@ import { ALLIED_PROFESSIONS, ALLIED_HUB_CATEGORY_ORDER, ALLIED_HUB_CATEGORY_META
 import { formatEyebrow, formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
 import { CONTINUE_STUDYING_CTA, PRIMARY_CTA } from "@/lib/copy/cta-copy";
 import { THEME_OPTIONS } from "@/lib/theme/theme-registry";
-import { CompactCountryTrigger, CountrySelector } from "@/components/layout/global-context-switcher";
+import { CountrySelector } from "@/components/layout/global-context-switcher";
 
 /** Keep desktop nav pills single-line and compact so the full global IA fits cleanly. */
 const NAV_LINK_CLASS =
@@ -302,7 +302,7 @@ function createMegaMenus(region: "US" | "CA"): MegaMenuConfig[] {
     },
     {
       key: "allied",
-      label: "Allied Health",
+      label: "Allied",
       hubHref: alliedHubHref,
       hubDescription: "Select your career to access lessons, practice questions, and exam prep scoped to your profession.",
       groups: ALLIED_HUB_CATEGORY_ORDER.map((catId) => {
@@ -663,10 +663,16 @@ export function SiteHeader() {
                   {isMarketingNav ? (
                     <div className="hidden items-center gap-1.5 lg:flex">
                       <div className="relative" ref={desktopCountryRef}>
-                        <CompactCountryTrigger
-                          region={globalRegion}
+                        <button
+                          type="button"
                           onClick={() => setDesktopCountryOpen((open) => !open)}
-                        />
+                          className={HEADER_UTILITY_BUTTON_CLASS}
+                          aria-expanded={desktopCountryOpen}
+                          aria-label={`Region: ${globalRegion === "canada" ? "Canada" : "US"}. Click to change.`}
+                        >
+                          <span>{globalRegion === "canada" ? "CA" : "US"}</span>
+                          <ChevronDown className={`h-3 w-3 shrink-0 opacity-60 transition-transform ${desktopCountryOpen ? "rotate-180" : ""}`} aria-hidden />
+                        </button>
                         {desktopCountryOpen ? (
                           <div className="absolute end-0 z-[120] mt-2">
                             <CountrySelector
