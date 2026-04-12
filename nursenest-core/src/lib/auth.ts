@@ -209,6 +209,7 @@ export const authConfig: NextAuthConfig = {
           role: user.role,
           country: user.country,
           tier: user.tier,
+          alliedProfessionKey: user.alliedProfessionKey ?? null,
           subscriptionStatus,
           credentialVersion: user.credentialVersion ?? 0,
         };

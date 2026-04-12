@@ -14,6 +14,7 @@ export const authCallbacks: NonNullable<NextAuthConfig["callbacks"]> = {
         role?: unknown;
         country?: unknown;
         tier?: unknown;
+        alliedProfessionKey?: unknown;
         subscriptionStatus?: unknown;
         credentialVersion?: unknown;
       };
@@ -23,6 +24,8 @@ export const authCallbacks: NonNullable<NextAuthConfig["callbacks"]> = {
       token.role = u.role as typeof token.role;
       token.country = u.country as typeof token.country;
       token.tier = u.tier as typeof token.tier;
+      token.alliedProfessionKey =
+        typeof u.alliedProfessionKey === "string" ? u.alliedProfessionKey : null;
       token.subscriptionStatus = u.subscriptionStatus as typeof token.subscriptionStatus;
       token.credentialVersion =
         typeof u.credentialVersion === "number" ? u.credentialVersion : 0;
@@ -48,6 +51,7 @@ export const authCallbacks: NonNullable<NextAuthConfig["callbacks"]> = {
       su.role = token.role;
       su.country = token.country;
       su.tier = token.tier;
+      su.alliedProfessionKey = token.alliedProfessionKey ?? null;
       su.subscriptionStatus = token.subscriptionStatus;
       su.credentialVersion =
         typeof token.credentialVersion === "number" ? token.credentialVersion : 0;

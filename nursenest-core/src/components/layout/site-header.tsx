@@ -46,6 +46,7 @@ import {
 } from "@/lib/marketing/marketing-entry-routes";
 import { publicMarketingCatHrefForOffering } from "@/lib/marketing/marketing-exam-navigation";
 import { resolveStudySurfaceCatHref } from "@/lib/exam-pathways/pathway-cat-flow";
+import { ALLIED_PROFESSIONS, ALLIED_HUB_CATEGORY_ORDER, ALLIED_HUB_CATEGORY_META } from "@/lib/allied/allied-professions-registry";
 import { formatEyebrow, formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
 import { CONTINUE_STUDYING_CTA, PRIMARY_CTA } from "@/lib/copy/cta-copy";
 import { THEME_OPTIONS } from "@/lib/theme/theme-registry";
@@ -142,11 +143,21 @@ function offeringIdForTier(tier: LearnerTier): CountryExamOfferingId {
   }
 }
 
-function examIndicatorLabel(country: LearnerCountry, tier: LearnerTier): string {
+function examIndicatorLabel(country: LearnerCountry, tier: LearnerTier, alliedProfessionKey?: string | null): string {
   const regionLabel = country === "CA" ? "Canada" : "US";
   if (tier === "LVN_LPN") return `${regionLabel} PN`;
   if (tier === "RPN") return `${regionLabel} RPN`;
-  if (tier === "ALLIED") return `${regionLabel} Allied Health`;
+  if (tier === "ALLIED") {
+    if (alliedProfessionKey) {
+      const prof = ALLIED_PROFESSIONS.find((p) => p.professionKey === alliedProfessionKey);
+      if (prof) {
+        // Extract short acronym or abbreviated label from h1 (e.g. "PTA", "MLT", "RRT")
+        const match = prof.h1.match(/\(([A-Z/]+)\)/);
+        return match ? match[1] : prof.professionKey.toUpperCase();
+      }
+    }
+    return "Allied Health";
+  }
   return `${regionLabel} ${tier}`;
 }
 
@@ -291,30 +302,20 @@ function createMegaMenus(region: "US" | "CA"): MegaMenuConfig[] {
       key: "allied",
       label: "Allied Health",
       hubHref: alliedHubHref,
-      hubDescription: "Choose your profession-specific hub and jump into exam prep.",
-      groups: [
-        {
-          key: "learn",
-          heading: "Learn",
-          links: [
-            { key: "allied-lessons", label: "Lessons", href: alliedHubHref },
-            { key: "allied-careers", label: "Career Pathways", href: alliedCareerPathwaysHref },
-          ],
-        },
-        {
-          key: "practice",
-          heading: "Practice",
-          links: [
-            { key: "allied-questions", label: "Practice Questions", href: alliedQuestions(region) },
-            { key: "allied-readiness", label: "CAT Readiness Exam", href: publicMarketingCatHrefForOffering(region, "allied") },
-          ],
-        },
-        {
-          key: "tools",
-          heading: "Study Tools",
-          links: [{ key: "allied-study-plan", label: "Build A Study Plan", href: studyPlanSignupHref }],
-        },
-      ],
+      hubDescription: "Select your career to access lessons, practice questions, and exam prep scoped to your profession.",
+      groups: ALLIED_HUB_CATEGORY_ORDER.map((catId) => {
+        const cat = ALLIED_HUB_CATEGORY_META[catId];
+        const profs = ALLIED_PROFESSIONS.filter((p) => p.hubCategory === catId);
+        return {
+          key: `allied-cat-${catId}`,
+          heading: cat.label,
+          links: profs.map((p) => ({
+            key: `allied-${p.professionKey}`,
+            label: p.h1.replace(/ exam prep$/i, "").replace(/ \(.*\)$/i, "").trim(),
+            href: `/allied/${p.professionKey}`,
+          })),
+        };
+      }),
     },
   ];
 }
@@ -436,7 +437,7 @@ export function SiteHeader() {
   const learnerLinks = useMemo(() => createLearnerNavLinks(locale, learnerPathwayId), [locale, learnerPathwayId]);
   const learnerExamBadge =
     isLearnerAuthenticated && user
-      ? examIndicatorLabel(user.country as LearnerCountry, user.tier as LearnerTier)
+      ? examIndicatorLabel(user.country as LearnerCountry, user.tier as LearnerTier, (user as { alliedProfessionKey?: string | null }).alliedProfessionKey)
       : null;
   const activeProfession: string = isLearnerAuthenticated && user?.tier
     ? (user.tier === "RPN" || user.tier === "LVN_LPN" ? "pn" : user.tier === "NP" ? "np" : user.tier === "ALLIED" ? "allied" : "rn")

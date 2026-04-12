@@ -17,6 +17,8 @@ declare module "next-auth" {
       role: SessionUserRole;
       country: "CA" | "US";
       tier: "RPN" | "LVN_LPN" | "RN" | "NP" | "ALLIED";
+      /** For ALLIED tier users: their specific profession key (e.g. "paramedic", "mlt"). */
+      alliedProfessionKey?: string | null;
       /** Mirrors last login; server routes still use resolveEntitlement — never trust alone for gating. */
       subscriptionStatus?: "active" | "grace" | "none";
       /** Incremented server-side on password change; used to rotate trust across devices on next sign-in. */
@@ -32,6 +34,8 @@ declare module "next-auth/jwt" {
     role?: SessionUserRole;
     country?: "CA" | "US";
     tier?: "RPN" | "LVN_LPN" | "RN" | "NP" | "ALLIED";
+    /** For ALLIED tier users: their specific profession key. */
+    alliedProfessionKey?: string | null;
     subscriptionStatus?: "active" | "grace" | "none";
     credentialVersion?: number;
   }
