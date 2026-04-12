@@ -1,13 +1,14 @@
 "use client";
 
 import { useCallback, useMemo, useState } from "react";
-import type { BlogBatchScheduleStatus, BlogPostTemplate } from "@prisma/client";
+import type { BlogBatchPublishMode, BlogBatchScheduleStatus, BlogPostTemplate } from "@prisma/client";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
 type ScheduleListRow = {
   id: string;
   status: BlogBatchScheduleStatus;
+  publishMode: BlogBatchPublishMode;
   cadencePerDay: number;
   startAt: string;
   nextRunAt: string | null;
@@ -61,15 +62,33 @@ export function AdminBlogTopicBatchClient({
   const [exam, setExam] = useState("NCLEX-RN");
   const [country, setCountry] = useState("unspecified");
   const [template, setTemplate] = useState<BlogPostTemplate>("TOPIC_EXPLAINED");
+  const [publishMode, setPublishMode] = useState<BlogBatchPublishMode>("STAGGERED_PUBLISH");
+  const [locFr, setLocFr] = useState(false);
+  const [locEs, setLocEs] = useState(false);
+  const [locTl, setLocTl] = useState(false);
+  const [locHi, setLocHi] = useState(false);
+  const [locEn, setLocEn] = useState(false);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [preview, setPreview] = useState<{
     totalTopics: number;
     droppedDuplicateLines: number;
+    publishMode?: BlogBatchPublishMode;
     preview: { topic: string; plannedPublishAt: string }[];
   } | null>(null);
   const [detail, setDetail] = useState<ScheduleDetail | null>(null);
   const [runLoading, setRunLoading] = useState(false);
+
+  const localizationPayload = useMemo(() => {
+    const locales = [
+      ...(locEn ? (["en"] as const) : []),
+      ...(locFr ? (["fr"] as const) : []),
+      ...(locEs ? (["es"] as const) : []),
+      ...(locTl ? (["tl"] as const) : []),
+      ...(locHi ? (["hi"] as const) : []),
+    ];
+    return locales.length > 0 ? { locales: [...locales] } : undefined;
+  }, [locEn, locFr, locEs, locTl, locHi]);
 
   const refreshList = useCallback(async () => {
     const res = await fetch("/api/admin/blog/batch-schedule");
@@ -93,6 +112,8 @@ export function AdminBlogTopicBatchClient({
           exam,
           country,
           defaultTemplate: template,
+          publishMode,
+          localizationOptions: localizationPayload,
           dryRun: true,
         }),
       });
@@ -105,13 +126,14 @@ export function AdminBlogTopicBatchClient({
       setPreview({
         totalTopics: data.totalTopics,
         droppedDuplicateLines: data.droppedDuplicateLines,
+        publishMode: data.publishMode,
         preview: data.preview,
       });
       setMessage(`Preview: ${data.totalTopics} topics (${data.droppedDuplicateLines} duplicate lines removed).`);
     } finally {
       setLoading(false);
     }
-  }, [topicsText, cadencePerDay, startAtLocal, exam, country, template]);
+  }, [topicsText, cadencePerDay, startAtLocal, exam, country, template, publishMode, localizationPayload]);
 
   const createSchedule = useCallback(async () => {
     setMessage(null);
@@ -128,6 +150,8 @@ export function AdminBlogTopicBatchClient({
           exam,
           country,
           defaultTemplate: template,
+          publishMode,
+          localizationOptions: localizationPayload,
         }),
       });
       const data = await res.json();
@@ -145,7 +169,7 @@ export function AdminBlogTopicBatchClient({
     } finally {
       setLoading(false);
     }
-  }, [topicsText, cadencePerDay, startAtLocal, exam, country, template, refreshList]);
+  }, [topicsText, cadencePerDay, startAtLocal, exam, country, template, publishMode, localizationPayload, refreshList]);
 
   const loadDetail = useCallback(async (id: string) => {
     const res = await fetch(`/api/admin/blog/batch-schedule/${id}`);
@@ -202,8 +226,8 @@ export function AdminBlogTopicBatchClient({
       <section className="rounded-xl border border-border/80 bg-[var(--theme-card-bg)] p-6 shadow-sm">
         <h2 className="text-lg font-semibold text-[var(--theme-heading-text)]">New topic batch</h2>
         <p className="mt-1 text-sm text-muted-foreground">
-          One topic per line. Duplicates in the paste are dropped. Generation uses the same AI + dedupe rules as the single-post
-          generator. Cron or “Run processor now” picks up due items.
+          One topic per line (unless you use custom dates mode). Duplicates in the paste are dropped. Generation uses the same AI +
+          dedupe rules as the single-post generator. Cron or “Run processor now” picks up due items.
         </p>
 
         <div className="mt-4 space-y-4">
@@ -215,10 +239,70 @@ export function AdminBlogTopicBatchClient({
               id="topics-batch"
               rows={10}
               className="mt-1.5 w-full rounded-md border border-input bg-background px-3 py-2 font-mono text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-              placeholder={"Pharmacology lab values for NCLEX\nDelegation and assignment\n..."}
+              placeholder={
+                publishMode === "CUSTOM_DATES" ?
+                  "2026-04-20T14:00:00.000Z\tPharmacology lab values for NCLEX\n2026-04-21T14:00:00.000Z\tDelegation and assignment"
+                : "Pharmacology lab values for NCLEX\nDelegation and assignment\n..."
+              }
               value={topicsText}
               onChange={(e) => setTopicsText(e.target.value)}
             />
+          </div>
+
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div>
+              <label htmlFor="publish-mode" className="text-sm font-medium">
+                Publish mode
+              </label>
+              <select
+                id="publish-mode"
+                className="mt-1.5 flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                value={publishMode}
+                onChange={(e) => setPublishMode(e.target.value as BlogBatchPublishMode)}
+              >
+                <option value="STAGGERED_PUBLISH">Staggered publish (start + cadence per slot)</option>
+                <option value="DRAFT_ONLY">Draft only (slot triggers generation; never auto-publish)</option>
+                <option value="PUBLISH_IMMEDIATE">Publish immediately when each item runs</option>
+                <option value="CUSTOM_DATES">Custom schedule (ISO date, tab, topic per line)</option>
+              </select>
+              <p className="mt-1 text-xs text-muted-foreground">
+                {publishMode === "CUSTOM_DATES" ?
+                  "Each non-empty line must be ISO 8601 date, a tab, then the topic (or topic, tab, ISO). Cadence is ignored for slot times."
+                : publishMode === "DRAFT_ONLY" ?
+                  "Slots control when drafts are generated; canonical posts stay in DRAFT until you publish from blog admin."
+                : publishMode === "PUBLISH_IMMEDIATE" ?
+                  "When the processor runs an item, the canonical post is published right away (planned time still gates when generation runs)."
+                : "Uses start time and cadence so each slot can schedule or publish based on whether the time is in the future."}
+              </p>
+            </div>
+            <div>
+              <span className="text-sm font-medium">Localized variants (optional)</span>
+              <p className="mt-0.5 text-xs text-muted-foreground">
+                After each canonical post succeeds, the server can generate localized articles for checked locales (default region per
+                locale). Localized rows still require editorial review before publish.
+              </p>
+              <div className="mt-2 flex flex-wrap gap-3 text-sm">
+                {(
+                  [
+                    ["en", locEn, setLocEn],
+                    ["fr", locFr, setLocFr],
+                    ["es", locEs, setLocEs],
+                    ["tl", locTl, setLocTl],
+                    ["hi", locHi, setLocHi],
+                  ] as const
+                ).map(([code, checked, set]) => (
+                  <label key={code} className="inline-flex items-center gap-1.5">
+                    <input
+                      type="checkbox"
+                      className="h-4 w-4 rounded border-input"
+                      checked={checked}
+                      onChange={(e) => set(e.target.checked)}
+                    />
+                    <span>{code}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -290,7 +374,10 @@ export function AdminBlogTopicBatchClient({
 
           {preview ? (
             <div className="rounded-lg border border-dashed border-primary/30 bg-primary/5 p-3 text-sm">
-              <p className="font-medium text-primary">Preview (first slots)</p>
+              <p className="font-medium text-primary">
+                Preview (first slots)
+                {preview.publishMode ? <span className="ml-2 font-normal text-muted-foreground">· {preview.publishMode}</span> : null}
+              </p>
               <ul className="mt-2 space-y-1 font-mono text-xs text-muted-foreground">
                 {preview.preview.map((row) => (
                   <li key={row.plannedPublishAt + row.topic}>
@@ -323,6 +410,7 @@ export function AdminBlogTopicBatchClient({
             <thead className="bg-muted/50 text-xs uppercase text-muted-foreground">
               <tr>
                 <th className="px-3 py-2">Status</th>
+                <th className="px-3 py-2">Mode</th>
                 <th className="px-3 py-2">Exam</th>
                 <th className="px-3 py-2">Cadence</th>
                 <th className="px-3 py-2">Progress</th>
@@ -336,6 +424,7 @@ export function AdminBlogTopicBatchClient({
                   <td className="px-3 py-2">
                     <Badge className={`rounded-full px-2 py-0.5 text-xs font-normal ${statusBadgeClass(s.status)}`}>{s.status}</Badge>
                   </td>
+                  <td className="px-3 py-2 text-xs text-muted-foreground">{s.publishMode.split("_").join(" ")}</td>
                   <td className="px-3 py-2">{s.exam}</td>
                   <td className="px-3 py-2">{s.cadencePerDay}/day</td>
                   <td className="px-3 py-2">

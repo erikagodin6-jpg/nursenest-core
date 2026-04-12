@@ -16,6 +16,7 @@ import { fetchSimpleDraftStudyLinks } from "@/lib/blog/blog-simple-draft-study-l
 import { blogPrimaryStudyCta } from "@/lib/blog/blog-study-cta";
 import { buildOutline, detectRiskFlags, thinDraftWarning } from "@/lib/blog/seo-campaign-engine";
 import { prisma } from "@/lib/db";
+import { BLOG_ARTICLE_MIN_WORDS, countWordsFromHtml } from "@/lib/blog/blog-word-count";
 
 export type GenerateBlogAiDraftInput = {
   topic: string;
@@ -120,7 +121,8 @@ export async function generateBlogAiDraft(d: GenerateBlogAiDraftInput): Promise<
 
   const system = `You write SEO-aware HTML for NurseNest nursing education blog posts. Output valid HTML only: use <h2>, <h3>, <p>, <ul>, <li>, <strong>. No markdown. No fabricated statistics or pass-rate claims. Be accurate and conservative. Audience: nursing students preparing for licensure exams.
 Include a short "Key takeaways" section and a short FAQ section when natural.
-Do not include medical treatment advice beyond educational exam prep framing.`;
+Do not include medical treatment advice beyond educational exam prep framing.
+When you cite or summarize external evidence-style claims, keep tone educational; if a References section is included, use APA 7-style reference list formatting (hanging indent style via paragraph text is acceptable in HTML).`;
 
   const user = `Write the article body (HTML only, no outer <html>).
 
@@ -135,10 +137,12 @@ ${d.targetKeyword ? `Primary target keyword: ${d.targetKeyword}` : ""}
 ${d.keywordCluster ? `Keyword cluster: ${d.keywordCluster}` : ""}
 Tone: ${d.tone ?? "professional"}
 
+Length: aim for at least ${BLOG_ARTICLE_MIN_WORDS} words of substantive, non-repetitive body content (excluding filler).
+
 Include:
 - A short intro paragraph
-- 3–5 H2 sections with practical, exam-relevant guidance
-- One short bullet list where helpful
+- 5–8 H2 sections (use H3 where helpful) with practical, exam-relevant guidance
+- At least one bullet list where helpful
 - A closing paragraph with a soft CTA to practice (no fake guarantees)
 
 Title (for context only, do not repeat as H1 in body): ${title}`;
@@ -151,7 +155,7 @@ Title (for context only, do not repeat as H1 in body): ${title}`;
         { role: "user", content: user },
       ],
       temperature: 0.45,
-      maxTokens: 3600,
+      maxTokens: 8192,
     });
     bodyHtml = response.content.trim();
     if (bodyHtml.length < 200) {
@@ -183,8 +187,39 @@ Title (for context only, do not repeat as H1 in body): ${title}`;
     studyRelatedPaths = [];
   }
 
-  const bodyWithStudy =
+  let bodyWithStudy =
     studyAppendix && !bodyHtml.includes("Study next in NurseNest") ? `${bodyHtml.trim()}\n${studyAppendix}` : bodyHtml;
+
+  let wordCount = countWordsFromHtml(bodyWithStudy);
+  if (wordCount < BLOG_ARTICLE_MIN_WORDS) {
+    try {
+      const expand = await openAiChatCompletion({
+        messages: [
+          { role: "system", content: system },
+          { role: "user", content: user },
+          { role: "assistant", content: bodyHtml },
+          {
+            role: "user",
+            content: `The article is only ${wordCount} words after stripping HTML. Expand it to at least ${BLOG_ARTICLE_MIN_WORDS} words of substantive NCLEX-style teaching. Keep valid HTML (<h2>, <h3>, <p>, <ul>, <li>, <strong> only). Preserve any existing "Study next in NurseNest" appendix block verbatim at the end if present. Return the full revised HTML only.`,
+          },
+        ],
+        temperature: 0.35,
+        maxTokens: 8192,
+      });
+      const expandedMain = expand.content.trim();
+      bodyWithStudy =
+        studyAppendix && !expandedMain.includes("Study next in NurseNest") ?
+          `${expandedMain}\n${studyAppendix}`
+        : expandedMain;
+      wordCount = countWordsFromHtml(bodyWithStudy);
+    } catch {
+      /* keep wordCount as-is */
+    }
+  }
+
+  if (wordCount < BLOG_ARTICLE_MIN_WORDS) {
+    return { ok: false, error: `Article body too short (${wordCount} words; minimum ${BLOG_ARTICLE_MIN_WORDS}).` };
+  }
 
   const excerpt = bodyWithStudy.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim().slice(0, 480);
   const seoDescription = excerpt.slice(0, 320);

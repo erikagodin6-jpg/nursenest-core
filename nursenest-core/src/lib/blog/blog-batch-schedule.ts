@@ -245,6 +245,8 @@ export async function processDueBlogBatchScheduleItems(now: Date = new Date()): 
       const template = schedule.defaultTemplate ?? BlogPostTemplate.TOPIC_EXPLAINED;
       const intent = schedule.defaultIntent ?? BlogPostIntent.EXAM_PREP;
 
+      const publishAt = effectivePublishAtForBatchItem(schedule.publishMode, item.plannedPublishAt, now);
+
       const result = await generateBlogAiDraft({
         topic: item.topicRaw,
         exam: schedule.exam,
@@ -253,7 +255,7 @@ export async function processDueBlogBatchScheduleItems(now: Date = new Date()): 
         intent,
         funnelStage: BlogFunnelStage.CONSIDERATION,
         targetKeyword: item.topicRaw,
-        publishAt: item.plannedPublishAt,
+        publishAt,
       });
 
       if (!result.ok) {
@@ -302,6 +304,29 @@ export async function processDueBlogBatchScheduleItems(now: Date = new Date()): 
       });
       processedItems += 1;
       await refreshBlogBatchScheduleStats(schedule.id);
+
+      const locRaw = schedule.localizationOptions;
+      const locObj =
+        locRaw && typeof locRaw === "object" && !Array.isArray(locRaw) ?
+          (locRaw as { locales?: unknown }).locales
+        : null;
+      if (Array.isArray(locObj) && locObj.length > 0) {
+        const locales = locObj.filter((x): x is string => typeof x === "string" && x.trim().length > 0);
+        if (locales.length > 0) {
+          try {
+            await runBlogBatchLocalizedFollowup({
+              canonicalArticleId: result.post.id,
+              locales,
+              scheduleCountry: schedule.country,
+              exam: schedule.exam,
+            });
+          } catch (e) {
+            const m = e instanceof Error ? e.message : String(e);
+            errors.push(`localization:${result.post.slug}:${m}`);
+            safeServerLog("blog_batch_schedule", "localized_followup_failed", { postId: result.post.id, message: m });
+          }
+        }
+      }
     } catch (e) {
       const msg = e instanceof Error ? e.message : String(e);
       errors.push(`${item.id}: ${msg}`);

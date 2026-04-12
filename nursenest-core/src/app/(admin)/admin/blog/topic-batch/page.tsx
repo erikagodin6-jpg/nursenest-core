@@ -25,6 +25,7 @@ export default async function AdminBlogTopicBatchPage() {
       exam: true,
       country: true,
       defaultTemplate: true,
+      publishMode: true,
       createdAt: true,
     },
   });

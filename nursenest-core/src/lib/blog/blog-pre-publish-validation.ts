@@ -1,5 +1,6 @@
 import type { BlogImageStatus, BlogPostStatus, CountryCode, Prisma } from "@prisma/client";
 import { BLOG_ARTICLE_MIN_BODY_CHARS } from "@/lib/blog/blog-article-generation-pipeline";
+import { BLOG_ARTICLE_MIN_WORDS, countWordsFromHtml } from "@/lib/blog/blog-word-count";
 import { coerceBlogSourceRows, validateSources } from "@/lib/blog/apa7";
 import { parseInternalLinkPlanJson } from "@/lib/blog/blog-image-workflow";
 import { parseMarketingLessonDetailPath } from "@/lib/blog/blog-internal-link-verify";
@@ -15,6 +16,7 @@ export type PrePublishCheckId =
   | "meta_description"
   | "excerpt"
   | "body"
+  | "body_word_count"
   | "references_required"
   | "sources_structure"
   | "internal_links"
@@ -277,6 +279,16 @@ export async function validateBlogPrePublish(
       severity: "block",
       message: `Article body is too short (min ${BLOG_ARTICLE_MIN_BODY_CHARS} characters).`,
       fix: "Complete the article body or regenerate content from the control panel.",
+    });
+  }
+
+  const bodyWords = countWordsFromHtml(body);
+  if (bodyWords < BLOG_ARTICLE_MIN_WORDS) {
+    push(issues, {
+      id: "body_word_count",
+      severity: "block",
+      message: `Article body is too short for publish (${bodyWords} words; minimum ${BLOG_ARTICLE_MIN_WORDS}).`,
+      fix: "Expand the article body or regenerate with the long-form blog generator until it meets the word minimum.",
     });
   }
 
