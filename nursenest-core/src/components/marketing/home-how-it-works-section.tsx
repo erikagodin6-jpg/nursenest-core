@@ -10,8 +10,16 @@ import { PH } from "@/lib/observability/posthog-conversion-events";
 import { formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
 import { PRIMARY_CTA, SECONDARY_CTA, TERTIARY_CTA } from "@/lib/copy/cta-copy";
 
+const STEP_COLORS = [
+  { bg: "var(--semantic-info)", soft: "var(--semantic-info-soft)", contrast: "var(--semantic-info-contrast)" },
+  { bg: "var(--semantic-brand)", soft: "var(--semantic-brand-soft)", contrast: "var(--semantic-brand-contrast)" },
+  { bg: "var(--semantic-success)", soft: "var(--semantic-success-soft)", contrast: "var(--semantic-success-contrast)" },
+] as const;
+
 /**
- * Simplified three-step loop for fast homepage scanning.
+ * Premium three-step flow section.
+ * Distinct primary-tinted background differentiates it visually from white card sections.
+ * Step numbers are large colored circles for clear scanability.
  */
 export function HomeHowItWorksSection() {
   const { locale } = useMarketingI18n();
@@ -50,7 +58,8 @@ export function HomeHowItWorksSection() {
   return (
     <section
       id="home-how-it-works"
-      className="nn-section-block scroll-mt-20 border-b border-[var(--border)] bg-[var(--section-bg)]"
+      className="nn-section-block scroll-mt-20 border-y border-[var(--accent-surface-c-border)]"
+      style={{ background: "var(--accent-surface-c)" }}
       aria-labelledby="home-how-heading"
       data-testid="section-how-it-works"
     >
@@ -64,29 +73,57 @@ export function HomeHowItWorksSection() {
           </p>
         </header>
 
-        <ol className="grid gap-5 md:grid-cols-3">
-          {steps.map((s, i) => (
-            <li key={s.testId} className="nn-card-system nn-card-system-pad nn-card-system--interactive relative">
-              <div className="mb-1 flex items-center gap-3">
-                <span className="nn-card-system__icon text-sm font-bold tabular-nums text-[var(--theme-primary)]">
-                  {i + 1}
-                </span>
-                <s.icon className="h-6 w-6 text-[color-mix(in_srgb,var(--theme-primary)_85%,var(--theme-heading-text))]" aria-hidden />
-              </div>
-              <p className="nn-card-system__eyebrow">{formatTitleCase(`Step ${i + 1}`, locale)}</p>
-              <h3 className="nn-card-system__title">{formatTitleCase(s.title, locale)}</h3>
-              <p className="nn-card-system__description">{formatSentenceCase(s.body, locale)}</p>
-              <MarketingTrackedLink
-                href={s.href}
-                event={PH.marketingHomeExploreHubClick}
-                eventProps={{ surface: "how_it_works", step: i + 1, region }}
-                className="nn-card-system__cta underline-offset-4 hover:underline"
-                data-testid={s.testId}
+        <ol className="grid gap-6 md:grid-cols-3">
+          {steps.map((s, i) => {
+            const Icon = s.icon;
+            const color = STEP_COLORS[i];
+            return (
+              <li
+                key={s.testId}
+                className="relative flex flex-col rounded-2xl border bg-[var(--bg-card)] p-6 shadow-[var(--elevation-rest)]"
+                style={{ borderColor: `color-mix(in srgb, ${color.bg} 22%, var(--border-subtle))` }}
               >
-                {formatTitleCase(s.label, locale)}
-              </MarketingTrackedLink>
-            </li>
-          ))}
+                {/* Step number + icon row */}
+                <div className="mb-4 flex items-center gap-3">
+                  <span
+                    className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-sm font-bold"
+                    style={{
+                      background: `color-mix(in srgb, ${color.bg} 18%, var(--bg-card))`,
+                      color: color.bg,
+                      border: `1.5px solid color-mix(in srgb, ${color.bg} 35%, var(--border-subtle))`,
+                    }}
+                    aria-hidden
+                  >
+                    {i + 1}
+                  </span>
+                  <Icon
+                    className="h-5 w-5"
+                    style={{ color: color.bg }}
+                    aria-hidden
+                  />
+                </div>
+
+                <h3 className="nn-marketing-h3 mb-2" style={{ color: "var(--palette-heading)" }}>
+                  {formatTitleCase(s.title, locale)}
+                </h3>
+                <p className="nn-marketing-body-sm flex-grow text-[var(--theme-muted-text)]">
+                  {formatSentenceCase(s.body, locale)}
+                </p>
+
+                <MarketingTrackedLink
+                  href={s.href}
+                  event={PH.marketingHomeExploreHubClick}
+                  eventProps={{ surface: "how_it_works", step: i + 1, region }}
+                  className="mt-4 inline-flex items-center text-sm font-semibold transition-colors hover:underline"
+                  style={{ color: color.bg }}
+                  data-testid={s.testId}
+                >
+                  {formatTitleCase(s.label, locale)}
+                  <span className="ml-1 text-xs">→</span>
+                </MarketingTrackedLink>
+              </li>
+            );
+          })}
         </ol>
       </div>
     </section>

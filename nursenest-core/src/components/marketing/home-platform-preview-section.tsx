@@ -3,7 +3,6 @@
 import { useMemo, useState } from "react";
 import { Activity, CheckCircle2, FileText, Target } from "lucide-react";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
-import { HomeConversionCtaStrip } from "@/components/marketing/home-conversion-cta-strip";
 import { formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
 
 /**
@@ -37,7 +36,7 @@ export function HomePlatformPreviewSection() {
   return (
     <section
       id="home-platform-preview"
-      className="nn-section-block nn-panel-chart-fade scroll-mt-20 border-t border-[var(--border)] bg-[var(--section-bg)]"
+      className="nn-section-block scroll-mt-20 border-y border-[var(--border-subtle)] bg-[var(--bg-card)]"
       aria-labelledby="home-platform-preview-heading"
       data-testid="section-home-platform-carousel"
     >
@@ -165,9 +164,6 @@ export function HomePlatformPreviewSection() {
               </div>
             </div>
           </article>
-        </div>
-        <div className="mx-auto mt-12 max-w-5xl border-t border-[var(--border-subtle)] pt-10">
-          <HomeConversionCtaStrip placement="after_platform_preview" />
         </div>
       </div>
     </section>

@@ -4,37 +4,43 @@ import { Brain, Crosshair, Scale, ShieldCheck } from "lucide-react";
 import { formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 
+const POINTS = [
+  {
+    icon: Brain,
+    iconColor: "var(--semantic-info)",
+    title: "Not Generic Question Banks",
+    body: "Built for nursing exam decision-making, not random mixed-discipline trivia.",
+  },
+  {
+    icon: ShieldCheck,
+    iconColor: "var(--semantic-success)",
+    title: "Built For Your Exact License",
+    body: "RN, PN or RPN, NP, and allied tracks stay scoped so context does not drift.",
+  },
+  {
+    icon: Scale,
+    iconColor: "var(--semantic-warning)",
+    title: "Readiness Tracked Over Time",
+    body: "Session trends and weak-area signals show what changed and what needs work next.",
+  },
+  {
+    icon: Crosshair,
+    iconColor: "var(--semantic-brand)",
+    title: "Adapts To Your Weak Areas",
+    body: "Lessons, questions, and CAT flow together so remediation is targeted, not manual.",
+  },
+] as const;
+
 /**
- * Differentiation section: concise comparison-style points for fast scanning.
+ * Differentiation section: four colorful feature cards, each with a unique semantic icon color.
+ * Tinted surface separates this visually from adjacent white card sections.
  */
 export function HomeTrustProofSection() {
   const { locale } = useMarketingI18n();
-  const points = [
-    {
-      icon: Brain,
-      title: "Not Generic Question Banks",
-      body: "Built for nursing exam decision-making, not random mixed-discipline trivia.",
-    },
-    {
-      icon: ShieldCheck,
-      title: "Built For Your Exact License",
-      body: "RN, PN or RPN, NP, and allied tracks stay scoped so context does not drift.",
-    },
-    {
-      icon: Scale,
-      title: "Readiness Tracked Over Time",
-      body: "Session trends and weak-area signals show what changed and what needs work next.",
-    },
-    {
-      icon: Crosshair,
-      title: "Adapts To Your Weak Areas",
-      body: "Lessons, questions, and CAT flow together so remediation is targeted, not manual.",
-    },
-  ] as const;
 
   return (
     <section
-      className="nn-section-block nn-section-enter border-b border-[var(--border-subtle)] bg-[var(--page-bg)]"
+      className="nn-section-block nn-section-enter border-y border-[var(--trust-surface-border)] bg-[var(--trust-surface)]"
       aria-labelledby="home-differentiation-heading"
       data-testid="section-home-differentiation"
     >
@@ -50,16 +56,37 @@ export function HomeTrustProofSection() {
             )}
           </p>
         </header>
-        <ul className="grid gap-4 md:grid-cols-2">
-          {points.map((point) => {
+
+        <ul className="grid gap-5 md:grid-cols-2">
+          {POINTS.map((point) => {
             const Icon = point.icon;
             return (
-              <li key={point.title} className="nn-card-system nn-card-system-pad nn-card-system--interactive text-left">
-                <span className="nn-card-system__icon mb-2">
-                  <Icon className="nn-icon-lg text-[var(--semantic-brand)]" aria-hidden />
+              <li
+                key={point.title}
+                className="flex gap-4 rounded-2xl border bg-[var(--bg-card)] p-6 shadow-[var(--elevation-rest)]"
+                style={{
+                  borderColor: `color-mix(in srgb, ${point.iconColor} 20%, var(--border-subtle))`,
+                  borderLeft: `3px solid ${point.iconColor}`,
+                }}
+              >
+                <span
+                  className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border"
+                  style={{
+                    background: `color-mix(in srgb, ${point.iconColor} 10%, var(--bg-card))`,
+                    borderColor: `color-mix(in srgb, ${point.iconColor} 24%, var(--border-subtle))`,
+                  }}
+                  aria-hidden
+                >
+                  <Icon className="h-5 w-5" style={{ color: point.iconColor }} />
                 </span>
-                <h3 className="nn-card-system__title">{formatTitleCase(point.title, locale)}</h3>
-                <p className="nn-card-system__description">{formatSentenceCase(point.body, locale)}</p>
+                <div>
+                  <h3 className="nn-marketing-h3 mb-1.5" style={{ color: "var(--palette-heading)" }}>
+                    {formatTitleCase(point.title, locale)}
+                  </h3>
+                  <p className="nn-marketing-body-sm text-[var(--theme-muted-text)]">
+                    {formatSentenceCase(point.body, locale)}
+                  </p>
+                </div>
               </li>
             );
           })}

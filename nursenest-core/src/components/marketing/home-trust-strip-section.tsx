@@ -32,12 +32,16 @@ export function HomeTrustStripSection({ questionCount, registeredLearners }: Pro
 
   return (
     <section
-      className="nn-section-enter border-b border-[var(--border)] bg-[var(--surface-strong)] py-8"
+      className="nn-section-enter border-b border-[var(--border-subtle)] py-8"
+      style={{ background: "var(--accent-surface-a)" }}
       aria-labelledby="home-trust-strip-heading"
       data-testid="section-home-trust-strip"
     >
       <div className="nn-section-shell">
-        <div className="mx-auto max-w-5xl rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface)] px-5 py-5 shadow-[var(--elevation-rest)] sm:px-6">
+        <div
+          className="mx-auto max-w-5xl rounded-2xl border bg-[var(--bg-card)] px-5 py-5 shadow-[var(--elevation-rest)] sm:px-6"
+          style={{ borderColor: "color-mix(in srgb, var(--theme-primary) 14%, var(--border-subtle))" }}
+        >
           <div className="mb-4 flex items-center justify-center gap-2 text-center">
             <Sparkles className="nn-icon-md text-[var(--semantic-brand)]" aria-hidden />
             <p id="home-trust-strip-heading" className="nn-marketing-body font-semibold text-[var(--palette-heading)]">

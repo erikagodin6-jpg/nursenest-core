@@ -84,7 +84,10 @@ export function HomeConversionHero() {
               </p>
             </div>
 
-            <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-3 shadow-[var(--elevation-rest)]">
+            <div
+              className="overflow-hidden rounded-2xl border bg-[var(--bg-card)] p-2.5 shadow-[var(--shadow-elevated)]"
+              style={{ borderColor: "color-mix(in srgb, var(--theme-primary) 18%, var(--border-subtle))" }}
+            >
               <MarketingHeroCarousel
                 slides={slides}
                 mediaFrame="hero"
