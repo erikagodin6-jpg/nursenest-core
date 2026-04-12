@@ -120,6 +120,7 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
     <LessonsToolbar
       searchBasePath={base}
       initialQuery={qEffective ?? undefined}
+      totalCount={pageResult.total}
       countryOptions={[
         { label: "Canada", href: canadaHref, active: pathway.countrySlug === "canada" },
         { label: "US", href: usHref, active: pathway.countrySlug === "us" },

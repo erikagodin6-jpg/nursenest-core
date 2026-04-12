@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import type { LucideIcon } from "lucide-react";
 import Link from "next/link";
 import { BookOpen, GraduationCap, Layers, Tag } from "lucide-react";
 import { absoluteUrl } from "@/lib/seo/site-origin";
@@ -189,7 +190,7 @@ export default async function PublicFlashcardsHubPage() {
 
 // ── Sub-components ──────────────────────────────────────────────────────────
 
-function StatItem({ icon: Icon, label, value }: { icon: React.ComponentType<{ className?: string; "aria-hidden"?: boolean }>; label: string; value: string | number }) {
+function StatItem({ icon: Icon, label, value }: { icon: LucideIcon; label: string; value: string | number }) {
   return (
     <div className="flex items-center gap-2">
       <Icon className="h-4 w-4 text-[var(--semantic-brand)]" aria-hidden />
