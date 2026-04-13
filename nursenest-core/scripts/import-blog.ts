@@ -5,6 +5,10 @@
  * - data/replit-exports/imaging_blog_articles.json
  * - data/replit-exports/seo_articles.json
  * - client/src/data/seo-content-articles.ts
+ *
+ * Usage:
+ * - `npx tsx scripts/import-blog.ts` (apply mode)
+ * - `npx tsx scripts/import-blog.ts --dry-run` (no writes)
  */
 import { config as loadEnv } from "dotenv";
 import fs from "node:fs";
@@ -123,17 +127,6 @@ function parseStatus(raw: unknown): BlogPostStatus {
 function excerptFromContent(content: string): string {
   const plain = content.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
   return plain.slice(0, 500);
-}
-
-function uniqueSlug(base: string, slugSet: Set<string>): string {
-  let candidate = base;
-  let i = 1;
-  while (slugSet.has(candidate)) {
-    i += 1;
-    candidate = `${base}-${i}`.slice(0, 120);
-  }
-  slugSet.add(candidate);
-  return candidate;
 }
 
 async function* streamJsonArray(filePath: string): AsyncGenerator<unknown, void, void> {
@@ -512,22 +505,97 @@ function logBatchProgress(batchStats: RunStats): void {
 
 async function processBatch(
   batch: NormalizedBlogRow[],
-  state: { hashes: Set<string>; slugs: Set<string> },
+  state: ExistingPostIndex,
   run: RunStats,
+  dryRun: boolean,
 ): Promise<void> {
   for (const row of batch) {
+    const sourceKey = sourceKeyForRow(row);
+    const sourceTag = sourceTagForRow(row);
     const recordHash = hashTitleContent(row.title, row.content);
-    if (state.hashes.has(recordHash)) {
-      run.duplicatesSkipped += 1;
+    const canonicalSlug = normalizeSlug(row.slug ? row.slug : `${row.source}-${row.sourceId}`);
+
+    const existing =
+      state.bySourceKey.get(sourceKey) ??
+      state.bySlug.get(canonicalSlug) ??
+      state.byHash.get(recordHash) ??
+      null;
+
+    const nextTags = [...new Set([...(row.seoKeywords ?? []), sourceTag])];
+    if (existing) {
+      const payloadChanged =
+        existing.title !== row.title ||
+        existing.body !== row.content ||
+        existing.postStatus !== row.postStatus ||
+        (existing.publishAt?.getTime() ?? 0) !== (row.publishAt?.getTime() ?? 0) ||
+        (existing.scheduledAt?.getTime() ?? 0) !== (row.scheduledAt?.getTime() ?? 0) ||
+        (existing.legacySource ?? null) !== row.source ||
+        (existing.seoTitle ?? null) !== (row.seoTitle ?? null) ||
+        (existing.seoDescription ?? null) !== (row.seoDescription ?? null) ||
+        JSON.stringify([...existing.tags].sort()) !== JSON.stringify([...nextTags].sort()) ||
+        existing.slug !== canonicalSlug;
+
+      if (!payloadChanged) {
+        run.unchangedSkipped += 1;
+        run.totalProcessed += 1;
+        continue;
+      }
+
+      if (dryRun) {
+        run.dryRunUpdates += 1;
+        run.totalProcessed += 1;
+        continue;
+      }
+
+      const slugConflict = state.bySlug.get(canonicalSlug);
+      const nextSlug = slugConflict && slugConflict.id !== existing.id ? existing.slug : canonicalSlug;
+      try {
+        const updated = await prisma.blogPost.update({
+          where: { id: existing.id },
+          data: {
+            slug: nextSlug,
+            title: row.title,
+            excerpt: excerptFromContent(row.content),
+            body: row.content,
+            postStatus: row.postStatus,
+            publishAt: row.publishAt,
+            scheduledAt: row.scheduledAt,
+            createdAt: row.createdAt ?? undefined,
+            seoTitle: row.seoTitle,
+            seoDescription: row.seoDescription,
+            tags: nextTags,
+            legacySource: row.source,
+          },
+        });
+        const updatedPost: ExistingPost = {
+          id: updated.id,
+          slug: updated.slug,
+          title: updated.title,
+          body: updated.body,
+          tags: [...updated.tags],
+          postStatus: updated.postStatus,
+          publishAt: updated.publishAt,
+          scheduledAt: updated.scheduledAt,
+          legacySource: updated.legacySource,
+          seoTitle: updated.seoTitle,
+          seoDescription: updated.seoDescription,
+        };
+        state.bySlug.set(updated.slug, updatedPost);
+        state.byHash.set(hashTitleContent(updated.title, updated.body), updatedPost);
+        state.bySourceKey.set(sourceKey, updatedPost);
+        run.updated += 1;
+      } catch (error) {
+        run.failures += 1;
+        run.failureReasons.push(
+          `${row.source}:${row.sourceId} -> ${error instanceof Error ? error.message : String(error)}`,
+        );
+      }
       run.totalProcessed += 1;
       continue;
     }
 
-    const slugSeed = normalizeSlug(row.slug ? row.slug : row.title);
-    const slug = uniqueSlug(slugSeed, state.slugs);
-
     const createData = {
-      slug,
+      slug: canonicalSlug,
       title: row.title,
       excerpt: excerptFromContent(row.content),
       body: row.content,
@@ -537,21 +605,40 @@ async function processBatch(
       createdAt: row.createdAt ?? undefined,
       seoTitle: row.seoTitle,
       seoDescription: row.seoDescription,
-      tags: row.seoKeywords ?? [],
+      tags: nextTags,
       legacySource: row.source,
     };
 
+    if (dryRun) {
+      run.dryRunCreates += 1;
+      run.totalProcessed += 1;
+      continue;
+    }
+
     let writeError: unknown = null;
-    for (let attempt = 0; attempt < 2; attempt += 1) {
+    for (let attempt = 0; attempt < 1; attempt += 1) {
       try {
-        await prisma.blogPost.create({ data: createData });
+        const created = await prisma.blogPost.create({ data: createData });
+        const createdPost: ExistingPost = {
+          id: created.id,
+          slug: created.slug,
+          title: created.title,
+          body: created.body,
+          tags: [...created.tags],
+          postStatus: created.postStatus,
+          publishAt: created.publishAt,
+          scheduledAt: created.scheduledAt,
+          legacySource: created.legacySource,
+          seoTitle: created.seoTitle,
+          seoDescription: created.seoDescription,
+        };
+        state.bySlug.set(created.slug, createdPost);
+        state.byHash.set(hashTitleContent(created.title, created.body), createdPost);
+        state.bySourceKey.set(sourceKey, createdPost);
         writeError = null;
         break;
       } catch (error) {
         writeError = error;
-        if (attempt === 0) {
-          continue;
-        }
       }
     }
 
@@ -564,8 +651,7 @@ async function processBatch(
       continue;
     }
 
-    state.hashes.add(recordHash);
-    run.imported += 1;
+    run.created += 1;
     run.totalProcessed += 1;
   }
 }
@@ -601,12 +687,16 @@ function parseArgs() {
 }
 
 async function main() {
+  const { dryRun } = parseArgs();
   const state = await loadExistingDedupState();
   const run: RunStats = {
     batchNumber: 0,
     totalProcessed: 0,
-    imported: 0,
-    duplicatesSkipped: 0,
+    created: 0,
+    updated: 0,
+    unchangedSkipped: 0,
+    dryRunCreates: 0,
+    dryRunUpdates: 0,
     failures: 0,
     failureReasons: [],
   };
@@ -619,7 +709,7 @@ async function main() {
     if (batch.length < batchSize) continue;
 
     run.batchNumber += 1;
-    await processBatch(batch, state, run);
+    await processBatch(batch, state, run, dryRun);
     logBatchProgress(run);
     batch = [];
     batchSize = maybeReduceBatchSize(batchSize);
@@ -627,7 +717,7 @@ async function main() {
 
   if (batch.length > 0) {
     run.batchNumber += 1;
-    await processBatch(batch, state, run);
+    await processBatch(batch, state, run, dryRun);
     logBatchProgress(run);
     batch = [];
   }
@@ -638,8 +728,12 @@ async function main() {
   console.log(
     JSON.stringify(
       {
-        totalBlogPostsImported: run.imported,
-        duplicatesSkipped: run.duplicatesSkipped,
+        dryRun,
+        totalBlogPostsCreated: run.created,
+        totalBlogPostsUpdated: run.updated,
+        dryRunCreates: run.dryRunCreates,
+        dryRunUpdates: run.dryRunUpdates,
+        unchangedSkipped: run.unchangedSkipped,
         failures: run.failures,
         failureReasons: run.failureReasons,
       },

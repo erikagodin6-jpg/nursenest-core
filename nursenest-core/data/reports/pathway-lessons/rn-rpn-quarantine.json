@@ -1,7 +1,77 @@
 {
-  "generatedAt": "2026-03-31T16:47:15.766Z",
-  "totalRows": 4,
+  "generatedAt": "2026-04-13T20:23:53.045Z",
+  "totalRows": 18,
   "rows": [
+    {
+      "source": "catalog-json",
+      "sourceId": "ca-rn-nclex-rn:abdominal-aortic-aneurysm-nclex-rn",
+      "reason": "insufficient_title_or_content"
+    },
+    {
+      "source": "catalog-json",
+      "sourceId": "ca-rn-nclex-rn:acute-coronary-syndrome-nclex-rn",
+      "reason": "insufficient_title_or_content"
+    },
+    {
+      "source": "catalog-json",
+      "sourceId": "ca-rn-nclex-rn:atrial-fibrillation-nclex-rn",
+      "reason": "insufficient_title_or_content"
+    },
+    {
+      "source": "catalog-json",
+      "sourceId": "ca-rn-nclex-rn:cabg-and-postoperative-cabg-complications-nclex-rn",
+      "reason": "insufficient_title_or_content"
+    },
+    {
+      "source": "catalog-json",
+      "sourceId": "ca-rn-nclex-rn:cardiac-tamponade-nclex-rn",
+      "reason": "insufficient_title_or_content"
+    },
+    {
+      "source": "catalog-json",
+      "sourceId": "ca-rn-nclex-rn:deep-vein-thrombosis-dvt-prevention-and-nursing-management-nclex-rn",
+      "reason": "insufficient_title_or_content"
+    },
+    {
+      "source": "catalog-json",
+      "sourceId": "ca-rn-nclex-rn:defibrillation-vs-synchronized-cardioversion-nclex-rn",
+      "reason": "insufficient_title_or_content"
+    },
+    {
+      "source": "catalog-json",
+      "sourceId": "ca-rn-nclex-rn:heart-failure-nclex-rn",
+      "reason": "insufficient_title_or_content"
+    },
+    {
+      "source": "catalog-json",
+      "sourceId": "ca-rn-nclex-rn:hypertensive-encephalopathy-nclex-rn",
+      "reason": "insufficient_title_or_content"
+    },
+    {
+      "source": "catalog-json",
+      "sourceId": "ca-rn-nclex-rn:infective-endocarditis-nclex-rn",
+      "reason": "insufficient_title_or_content"
+    },
+    {
+      "source": "catalog-json",
+      "sourceId": "ca-rn-nclex-rn:myocardial-infarction-nclex-rn",
+      "reason": "insufficient_title_or_content"
+    },
+    {
+      "source": "catalog-json",
+      "sourceId": "ca-rn-nclex-rn:peripheral-artery-disease-nclex-rn",
+      "reason": "insufficient_title_or_content"
+    },
+    {
+      "source": "catalog-json",
+      "sourceId": "ca-rn-nclex-rn:phlebostatic-axis-nclex-rn",
+      "reason": "insufficient_title_or_content"
+    },
+    {
+      "source": "catalog-json",
+      "sourceId": "ca-rn-nclex-rn:pulmonary-embolism-nclex-rn",
+      "reason": "insufficient_title_or_content"
+    },
     {
       "source": "legacy-content-map",
       "sourceId": "generalized-anxiety-disorder-rn",

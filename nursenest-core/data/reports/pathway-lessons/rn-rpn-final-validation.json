@@ -1,212 +1,51 @@
 {
-  "generatedAt": "2026-03-31T16:47:16.443Z",
+  "generatedAt": "2026-04-13T20:23:53.894Z",
   "currentTotalsBeforeRecovery": {
-    "us-rn-nclex-rn": 122,
-    "ca-rn-nclex-rn": 123,
-    "us-lpn-nclex-pn": 61,
-    "ca-rpn-rex-pn": 61
+    "us-rn-nclex-rn": 1026,
+    "ca-rn-nclex-rn": 742,
+    "us-lpn-nclex-pn": 1052,
+    "ca-rpn-rex-pn": 1041
   },
   "finalPublishedDbByPathway": {
-    "ca-rn-nclex-rn": 708,
-    "ca-rpn-rex-pn": 983,
-    "us-lpn-nclex-pn": 994,
-    "us-rn-nclex-rn": 718
+    "ca-rn-nclex-rn": 742,
+    "ca-rpn-rex-pn": 1041,
+    "us-lpn-nclex-pn": 1052,
+    "us-rn-nclex-rn": 1026
   },
   "countSemantics": {
     "historicalUniqueLegacyLessonsInContentMap": {
       "rnTier": 587,
       "rpnPnTier": 922,
-      "note": "Unique legacy contentMap keys per tier — not the same unit as pathway row counts (each key maps to US+CA rows)."
+      "note": "Unique legacy IDs per tier — not comparable to summed pathway row counts without reconciliation (each ID maps to US+CA rows)."
     },
-    "recoveredFromSourceOperations": 3088,
-    "recoveredFromSourceOperationsNote": "inserted+updated in recovery run; counts DB operations per pathway+slug, not unique lessons. See rn-rpn-count-reconciliation.json.",
-    "finalLivePublishedRowsCombinedRn": 1426,
-    "finalLivePublishedRowsCombinedRpnPn": 1977,
+    "recoveredFromSourceOperations": 0,
+    "recoveredFromSourceOperationsNote": "DB insert/update operations on pathway+slug keys — equals inserted+updated, not unique canonical lessons.",
+    "finalLivePublishedRowsCombinedRn": 1768,
+    "finalLivePublishedRowsCombinedRpnPn": 2093,
     "reconciliationReport": "data/reports/pathway-lessons/rn-rpn-count-reconciliation.json"
   },
   "historicalEstimate": {
     "rn": 587,
     "rpnPn": 922
   },
-  "recoveredFromSource": 3088,
+  "recoveredFromSource": 0,
   "generatedTrueGapLessons": 0,
   "hubTotals": {
-    "us-rn-nclex-rn": 718,
-    "ca-rn-nclex-rn": 708,
-    "us-lpn-nclex-pn": 994,
-    "ca-rpn-rex-pn": 983
+    "us-rn-nclex-rn": 1026,
+    "ca-rn-nclex-rn": 742,
+    "us-lpn-nclex-pn": 1052,
+    "ca-rpn-rex-pn": 1041
   },
   "detailRouteTotals": {
-    "us-rn-nclex-rn": 718,
-    "ca-rn-nclex-rn": 708,
-    "us-lpn-nclex-pn": 994,
-    "ca-rpn-rex-pn": 983
+    "us-rn-nclex-rn": 0,
+    "ca-rn-nclex-rn": 0,
+    "us-lpn-nclex-pn": 0,
+    "ca-rpn-rex-pn": 0
   },
   "randomResolutionChecks": {
-    "total": 32,
+    "total": 0,
     "failed": 0,
-    "rows": [
-      {
-        "pathwayId": "us-rn-nclex-rn",
-        "slug": "respiratory-assessment-ngn",
-        "resolved": true
-      },
-      {
-        "pathwayId": "us-rn-nclex-rn",
-        "slug": "us-rn-pulmonary-embolism",
-        "resolved": true
-      },
-      {
-        "pathwayId": "us-rn-nclex-rn",
-        "slug": "us-rn-heart-failure",
-        "resolved": true
-      },
-      {
-        "pathwayId": "us-rn-nclex-rn",
-        "slug": "us-rn-myocardial-infarction",
-        "resolved": true
-      },
-      {
-        "pathwayId": "us-rn-nclex-rn",
-        "slug": "us-rn-angina",
-        "resolved": true
-      },
-      {
-        "pathwayId": "us-rn-nclex-rn",
-        "slug": "us-rn-dysrhythmias",
-        "resolved": true
-      },
-      {
-        "pathwayId": "us-rn-nclex-rn",
-        "slug": "us-rn-hypertension",
-        "resolved": true
-      },
-      {
-        "pathwayId": "us-rn-nclex-rn",
-        "slug": "us-rn-shock",
-        "resolved": true
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "fluid-balance-acute-care",
-        "resolved": true
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "cardiovascular-prioritization",
-        "resolved": true
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "ca-rn-pulmonary-embolism",
-        "resolved": true
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "ca-rn-heart-failure",
-        "resolved": true
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "ca-rn-myocardial-infarction",
-        "resolved": true
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "ca-rn-angina",
-        "resolved": true
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "ca-rn-dysrhythmias",
-        "resolved": true
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "ca-rn-hypertension",
-        "resolved": true
-      },
-      {
-        "pathwayId": "us-lpn-nclex-pn",
-        "slug": "lpn-scope-delegation-priority",
-        "resolved": true
-      },
-      {
-        "pathwayId": "us-lpn-nclex-pn",
-        "slug": "us-pn-pulmonary-embolism",
-        "resolved": true
-      },
-      {
-        "pathwayId": "us-lpn-nclex-pn",
-        "slug": "us-pn-heart-failure",
-        "resolved": true
-      },
-      {
-        "pathwayId": "us-lpn-nclex-pn",
-        "slug": "us-pn-myocardial-infarction",
-        "resolved": true
-      },
-      {
-        "pathwayId": "us-lpn-nclex-pn",
-        "slug": "us-pn-angina",
-        "resolved": true
-      },
-      {
-        "pathwayId": "us-lpn-nclex-pn",
-        "slug": "us-pn-dysrhythmias",
-        "resolved": true
-      },
-      {
-        "pathwayId": "us-lpn-nclex-pn",
-        "slug": "us-pn-hypertension",
-        "resolved": true
-      },
-      {
-        "pathwayId": "us-lpn-nclex-pn",
-        "slug": "us-pn-shock",
-        "resolved": true
-      },
-      {
-        "pathwayId": "ca-rpn-rex-pn",
-        "slug": "pn-scope-safety-basics",
-        "resolved": true
-      },
-      {
-        "pathwayId": "ca-rpn-rex-pn",
-        "slug": "ca-rpn-pulmonary-embolism",
-        "resolved": true
-      },
-      {
-        "pathwayId": "ca-rpn-rex-pn",
-        "slug": "ca-rpn-heart-failure",
-        "resolved": true
-      },
-      {
-        "pathwayId": "ca-rpn-rex-pn",
-        "slug": "ca-rpn-myocardial-infarction",
-        "resolved": true
-      },
-      {
-        "pathwayId": "ca-rpn-rex-pn",
-        "slug": "ca-rpn-angina",
-        "resolved": true
-      },
-      {
-        "pathwayId": "ca-rpn-rex-pn",
-        "slug": "ca-rpn-dysrhythmias",
-        "resolved": true
-      },
-      {
-        "pathwayId": "ca-rpn-rex-pn",
-        "slug": "ca-rpn-hypertension",
-        "resolved": true
-      },
-      {
-        "pathwayId": "ca-rpn-rex-pn",
-        "slug": "ca-rpn-shock",
-        "resolved": true
-      }
-    ]
+    "rows": []
   },
   "adminOpsCountMatch": true,
   "sampleUrls": [

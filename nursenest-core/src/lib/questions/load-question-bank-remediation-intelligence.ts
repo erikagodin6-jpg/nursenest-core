@@ -114,7 +114,7 @@ export async function loadQuestionBankRemediationIntelligence(): Promise<Questio
         }>
       >`
         SELECT
-          COUNT(*) FILTER (WHERE exam = 'ALLIED' AND status = 'published' AND country_code = 'CA')::bigint AS ca_rows,
+          COUNT(*) FILTER (WHERE exam = 'ALLIED' AND status = 'published' AND (country_code = 'CA' OR country_code IS NULL))::bigint AS ca_rows,
           COUNT(*) FILTER (WHERE exam = 'ALLIED' AND status = 'published' AND (country_code = 'US' OR country_code IS NULL))::bigint AS us_or_null_rows,
           COUNT(*) FILTER (WHERE exam = 'ALLIED' AND status = 'published' AND region_scope = 'BOTH')::bigint AS shared_region_rows,
           COUNT(*) FILTER (WHERE exam = 'ALLIED' AND status = 'published' AND (exam ILIKE '%CA%' OR exam ILIKE '%CAN%'))::bigint AS ca_exam_tag_rows

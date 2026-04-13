@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-03-31T16:46:48.173Z",
+  "generatedAt": "2026-04-13T20:23:53.039Z",
   "rows": [
     {
       "sourcePath": "../client/src/data/lessons/index.ts (contentMap)",
@@ -8,18 +8,19 @@
       "validLessonCount": 1509,
       "invalidLessonCount": 0,
       "pathwayMapping": "RN->us-rn+ca-rn, RPN->us-lpn+ca-rpn",
-      "currentlyImportedIntoPathwayLessons": 0,
+      "currentlyImportedIntoPathwayLessons": 3014,
       "currentlySurfacedInRuntime": true,
-      "sourceQualityClass": "historical/high-value"
+      "sourceQualityClass": "historical/high-value",
+      "note": "Per-pathway rows mirror legacy RN/RPN lessons (US+CA tiers); unique historical lesson count is ~587 RN + ~922 RPN tier lessons in contentMap, not 4x."
     },
     {
       "sourcePath": "src/content/pathway-lessons/catalog.json",
       "sourceType": "json",
-      "rawLessonCount": 367,
-      "validLessonCount": 367,
+      "rawLessonCount": 471,
+      "validLessonCount": 471,
       "invalidLessonCount": 0,
       "pathwayMapping": "direct",
-      "currentlyImportedIntoPathwayLessons": 367,
+      "currentlyImportedIntoPathwayLessons": 471,
       "currentlySurfacedInRuntime": true,
       "sourceQualityClass": "current/curated"
     },
@@ -30,7 +31,7 @@
       "validLessonCount": 74,
       "invalidLessonCount": 0,
       "pathwayMapping": "bucket->pathway map",
-      "currentlyImportedIntoPathwayLessons": 52,
+      "currentlyImportedIntoPathwayLessons": 74,
       "currentlySurfacedInRuntime": true,
       "sourceQualityClass": "historical/high-value"
     },

@@ -145,7 +145,8 @@ function alliedPathwayCountrySql(countryCode: CountryCode): Prisma.Sql {
   if (countryCode === CountryCode.US) {
     return Prisma.sql` AND (country_code = 'US' OR country_code IS NULL)`;
   }
-  return Prisma.sql` AND country_code = 'CA'`;
+  // Legacy imports often leave country_code null to indicate cross-market allied availability.
+  return Prisma.sql` AND (country_code = 'CA' OR country_code IS NULL)`;
 }
 
 async function loadTopicGroups(examKeys: string[], alliedCountry?: CountryCode): Promise<TopicGroupRow[]> {

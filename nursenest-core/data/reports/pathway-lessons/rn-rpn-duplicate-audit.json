@@ -1,162 +1,162 @@
 {
-  "generatedAt": "2026-03-31T16:47:15.766Z",
+  "generatedAt": "2026-04-13T20:23:53.045Z",
   "totalRows": 52,
   "rows": [
     {
       "key": "us-rn-nclex-rn::us-rn-pulmonary-embolism",
-      "keptSource": "materialized-rn-pn",
-      "droppedSource": "catalog-json",
-      "reason": "richer_or_higher_priority_source"
+      "keptSource": "catalog-json",
+      "droppedSource": "materialized-rn-pn",
+      "reason": "existing_candidate_richer_or_higher_priority"
     },
     {
       "key": "us-rn-nclex-rn::us-rn-heart-failure",
-      "keptSource": "materialized-rn-pn",
-      "droppedSource": "catalog-json",
-      "reason": "richer_or_higher_priority_source"
+      "keptSource": "catalog-json",
+      "droppedSource": "materialized-rn-pn",
+      "reason": "existing_candidate_richer_or_higher_priority"
     },
     {
       "key": "us-rn-nclex-rn::us-rn-myocardial-infarction",
-      "keptSource": "materialized-rn-pn",
-      "droppedSource": "catalog-json",
-      "reason": "richer_or_higher_priority_source"
+      "keptSource": "catalog-json",
+      "droppedSource": "materialized-rn-pn",
+      "reason": "existing_candidate_richer_or_higher_priority"
     },
     {
       "key": "us-rn-nclex-rn::us-rn-angina",
-      "keptSource": "materialized-rn-pn",
-      "droppedSource": "catalog-json",
-      "reason": "richer_or_higher_priority_source"
+      "keptSource": "catalog-json",
+      "droppedSource": "materialized-rn-pn",
+      "reason": "existing_candidate_richer_or_higher_priority"
     },
     {
       "key": "us-rn-nclex-rn::us-rn-dysrhythmias",
-      "keptSource": "materialized-rn-pn",
-      "droppedSource": "catalog-json",
-      "reason": "richer_or_higher_priority_source"
+      "keptSource": "catalog-json",
+      "droppedSource": "materialized-rn-pn",
+      "reason": "existing_candidate_richer_or_higher_priority"
     },
     {
       "key": "us-rn-nclex-rn::us-rn-hypertension",
-      "keptSource": "materialized-rn-pn",
-      "droppedSource": "catalog-json",
-      "reason": "richer_or_higher_priority_source"
+      "keptSource": "catalog-json",
+      "droppedSource": "materialized-rn-pn",
+      "reason": "existing_candidate_richer_or_higher_priority"
     },
     {
       "key": "us-rn-nclex-rn::us-rn-shock",
-      "keptSource": "materialized-rn-pn",
-      "droppedSource": "catalog-json",
-      "reason": "richer_or_higher_priority_source"
+      "keptSource": "catalog-json",
+      "droppedSource": "materialized-rn-pn",
+      "reason": "existing_candidate_richer_or_higher_priority"
     },
     {
       "key": "us-rn-nclex-rn::us-rn-asthma",
-      "keptSource": "materialized-rn-pn",
-      "droppedSource": "catalog-json",
-      "reason": "richer_or_higher_priority_source"
+      "keptSource": "catalog-json",
+      "droppedSource": "materialized-rn-pn",
+      "reason": "existing_candidate_richer_or_higher_priority"
     },
     {
       "key": "us-rn-nclex-rn::us-rn-ards",
-      "keptSource": "materialized-rn-pn",
-      "droppedSource": "catalog-json",
-      "reason": "richer_or_higher_priority_source"
+      "keptSource": "catalog-json",
+      "droppedSource": "materialized-rn-pn",
+      "reason": "existing_candidate_richer_or_higher_priority"
     },
     {
       "key": "us-rn-nclex-rn::us-rn-pneumonia",
-      "keptSource": "materialized-rn-pn",
-      "droppedSource": "catalog-json",
-      "reason": "richer_or_higher_priority_source"
+      "keptSource": "catalog-json",
+      "droppedSource": "materialized-rn-pn",
+      "reason": "existing_candidate_richer_or_higher_priority"
     },
     {
       "key": "us-rn-nclex-rn::us-rn-copd-respiratory",
-      "keptSource": "materialized-rn-pn",
-      "droppedSource": "catalog-json",
-      "reason": "richer_or_higher_priority_source"
+      "keptSource": "catalog-json",
+      "droppedSource": "materialized-rn-pn",
+      "reason": "existing_candidate_richer_or_higher_priority"
     },
     {
       "key": "us-rn-nclex-rn::us-rn-abg-interpretation",
-      "keptSource": "materialized-rn-pn",
-      "droppedSource": "catalog-json",
-      "reason": "richer_or_higher_priority_source"
+      "keptSource": "catalog-json",
+      "droppedSource": "materialized-rn-pn",
+      "reason": "existing_candidate_richer_or_higher_priority"
     },
     {
       "key": "us-rn-nclex-rn::us-rn-acid-base-advanced",
-      "keptSource": "materialized-rn-pn",
-      "droppedSource": "catalog-json",
-      "reason": "richer_or_higher_priority_source"
+      "keptSource": "catalog-json",
+      "droppedSource": "materialized-rn-pn",
+      "reason": "existing_candidate_richer_or_higher_priority"
     },
     {
       "key": "us-rn-nclex-rn::us-rn-sodium-imbalance",
-      "keptSource": "materialized-rn-pn",
-      "droppedSource": "catalog-json",
-      "reason": "richer_or_higher_priority_source"
+      "keptSource": "catalog-json",
+      "droppedSource": "materialized-rn-pn",
+      "reason": "existing_candidate_richer_or_higher_priority"
     },
     {
       "key": "us-rn-nclex-rn::us-rn-potassium-imbalance",
-      "keptSource": "materialized-rn-pn",
-      "droppedSource": "catalog-json",
-      "reason": "richer_or_higher_priority_source"
+      "keptSource": "catalog-json",
+      "droppedSource": "materialized-rn-pn",
+      "reason": "existing_candidate_richer_or_higher_priority"
     },
     {
       "key": "us-rn-nclex-rn::us-rn-insulin-hypoglycemia",
-      "keptSource": "materialized-rn-pn",
-      "droppedSource": "catalog-json",
-      "reason": "richer_or_higher_priority_source"
+      "keptSource": "catalog-json",
+      "droppedSource": "materialized-rn-pn",
+      "reason": "existing_candidate_richer_or_higher_priority"
     },
     {
       "key": "us-rn-nclex-rn::us-rn-sepsis",
-      "keptSource": "materialized-rn-pn",
-      "droppedSource": "catalog-json",
-      "reason": "richer_or_higher_priority_source"
+      "keptSource": "catalog-json",
+      "droppedSource": "materialized-rn-pn",
+      "reason": "existing_candidate_richer_or_higher_priority"
     },
     {
       "key": "us-rn-nclex-rn::us-rn-infection-control",
-      "keptSource": "materialized-rn-pn",
-      "droppedSource": "catalog-json",
-      "reason": "richer_or_higher_priority_source"
+      "keptSource": "catalog-json",
+      "droppedSource": "materialized-rn-pn",
+      "reason": "existing_candidate_richer_or_higher_priority"
     },
     {
       "key": "us-rn-nclex-rn::us-rn-anticoagulants",
-      "keptSource": "materialized-rn-pn",
-      "droppedSource": "catalog-json",
-      "reason": "richer_or_higher_priority_source"
+      "keptSource": "catalog-json",
+      "droppedSource": "materialized-rn-pn",
+      "reason": "existing_candidate_richer_or_higher_priority"
     },
     {
       "key": "us-rn-nclex-rn::us-rn-antibiotics",
-      "keptSource": "materialized-rn-pn",
-      "droppedSource": "catalog-json",
-      "reason": "richer_or_higher_priority_source"
+      "keptSource": "catalog-json",
+      "droppedSource": "materialized-rn-pn",
+      "reason": "existing_candidate_richer_or_higher_priority"
     },
     {
       "key": "us-rn-nclex-rn::us-rn-pain-management",
-      "keptSource": "materialized-rn-pn",
-      "droppedSource": "catalog-json",
-      "reason": "richer_or_higher_priority_source"
+      "keptSource": "catalog-json",
+      "droppedSource": "materialized-rn-pn",
+      "reason": "existing_candidate_richer_or_higher_priority"
     },
     {
       "key": "us-rn-nclex-rn::us-rn-wound-care",
-      "keptSource": "materialized-rn-pn",
-      "droppedSource": "catalog-json",
-      "reason": "richer_or_higher_priority_source"
+      "keptSource": "catalog-json",
+      "droppedSource": "materialized-rn-pn",
+      "reason": "existing_candidate_richer_or_higher_priority"
     },
     {
       "key": "us-rn-nclex-rn::us-rn-delegation",
-      "keptSource": "materialized-rn-pn",
-      "droppedSource": "catalog-json",
-      "reason": "richer_or_higher_priority_source"
+      "keptSource": "catalog-json",
+      "droppedSource": "materialized-rn-pn",
+      "reason": "existing_candidate_richer_or_higher_priority"
     },
     {
       "key": "us-rn-nclex-rn::us-rn-fluid-balance",
-      "keptSource": "materialized-rn-pn",
-      "droppedSource": "catalog-json",
-      "reason": "richer_or_higher_priority_source"
+      "keptSource": "catalog-json",
+      "droppedSource": "materialized-rn-pn",
+      "reason": "existing_candidate_richer_or_higher_priority"
     },
     {
       "key": "us-rn-nclex-rn::us-rn-prioritization-abcs",
-      "keptSource": "materialized-rn-pn",
-      "droppedSource": "catalog-json",
-      "reason": "richer_or_higher_priority_source"
+      "keptSource": "catalog-json",
+      "droppedSource": "materialized-rn-pn",
+      "reason": "existing_candidate_richer_or_higher_priority"
     },
     {
       "key": "us-rn-nclex-rn::us-rn-general-nursing-clinical",
-      "keptSource": "materialized-rn-pn",
-      "droppedSource": "catalog-json",
-      "reason": "richer_or_higher_priority_source"
+      "keptSource": "catalog-json",
+      "droppedSource": "materialized-rn-pn",
+      "reason": "existing_candidate_richer_or_higher_priority"
     },
     {
       "key": "us-lpn-nclex-pn::us-pn-pulmonary-embolism",
