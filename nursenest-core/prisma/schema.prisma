@@ -114,6 +114,32 @@ enum FlashcardDeckVisibility {
   HIDDEN
 }
 
+/** Learner / visitor product feedback and bug intake (admin triage). */
+enum UserFeedbackCategory {
+  BUG
+  BROKEN_CONTENT
+  CONFUSING_QUESTION
+  LESSON_ISSUE
+  BILLING_SUBSCRIPTION
+  PERFORMANCE
+  FEATURE_REQUEST
+  GENERAL
+}
+
+enum UserFeedbackSeverity {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum UserFeedbackStatus {
+  NEW
+  UNDER_REVIEW
+  FIXED
+  DISMISSED
+}
+
 /** AI-generated content review workflow — never auto-published to learner pools. */
 enum DraftReviewStatus {
   PENDING_REVIEW
@@ -237,6 +263,8 @@ model User {
   blogDraftGenerationBatches   BlogDraftGenerationBatch[]
   contentAutomationLogs        ContentAutomationLog[]
   mediaAssetsUploaded          MediaAsset[]                 @relation("MediaAssetUploadedBy")
+  /** Bug reports / product feedback filed from learner or marketing surfaces (optional user link). */
+  feedbackReports              UserFeedbackReport[]
 
   @@index([alliedProfessionKey])
   @@index([normalizedEmail])
@@ -1655,4 +1683,35 @@ model EducationalTranslationOverlay {
   @@index([locale, status, sourceKind])
   @@index([sourceKind, status])
   @@map("educational_translation_overlays")
+}
+
+/**
+ * Structured product feedback and bug reports (learner + marketing).
+ * Optional screenshot stored as data URL when small enough — prefer object storage for heavy media later.
+ */
+model UserFeedbackReport {
+  id                String               @id @default(cuid())
+  createdAt         DateTime             @default(now())
+  updatedAt         DateTime             @updatedAt
+  status            UserFeedbackStatus   @default(NEW)
+  category          UserFeedbackCategory
+  severity          UserFeedbackSeverity @default(MEDIUM)
+  summary           String               @db.VarChar(500)
+  details           String?              @db.Text
+  pageUrl           String               @db.VarChar(2048)
+  routeKey          String?              @db.VarChar(512)
+  userId            String?
+  user              User?                @relation(fields: [userId], references: [id], onDelete: SetNull)
+  pathwayId         String?              @db.VarChar(64)
+  examContextJson   Json?
+  userAgent         String?              @db.VarChar(512)
+  deviceHint        String?              @db.VarChar(120)
+  screenshotDataUrl String?              @db.Text
+  clientMetaJson    Json?
+
+  @@index([status, createdAt])
+  @@index([category, createdAt])
+  @@index([severity, createdAt])
+  @@index([userId, createdAt])
+  @@index([routeKey])
 }
