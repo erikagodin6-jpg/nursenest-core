@@ -49,7 +49,10 @@ export default async function AdminAnalyticsPage() {
             Study performance
           </Link>
           <Link href="/admin/analytics/product-intelligence" className="text-primary underline">
-            Product intelligence →
+            Product intelligence
+          </Link>
+          <Link href="/admin/analytics/weak-areas" className="text-primary underline">
+            Weak areas →
           </Link>
         </div>
       </div>

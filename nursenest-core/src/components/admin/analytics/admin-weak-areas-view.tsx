@@ -240,7 +240,7 @@ export function AdminWeakAreasView({ data }: { data: AdminWeakAreasData }) {
         <p className="mt-2">
           Weights and normalizers live in{" "}
           <code className="rounded bg-muted px-1 py-0.5 text-xs">src/lib/admin/weak-areas-scoring.ts</code>. Each card
-          shows <strong>classification</strong> (underperforming vs low exposure vs decline) so low-traffic items are not
+          shows classification (underperforming vs low exposure vs decline) so low-traffic items are not
           misread as “avoided.”
         </p>
         <p className="mt-2">
