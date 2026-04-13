@@ -3,9 +3,9 @@
 import Link from "next/link";
 import { useMemo } from "react";
 import { usePathname } from "next/navigation";
+import { BrandLeafMark } from "@/components/brand/brand-leaf-mark";
 import { SiteBrandLogoMark } from "@/components/brand/site-brand-logo";
 import { BRAND_NAME } from "@/lib/branding/logo-config";
-import { pickNotFoundCopy } from "@/lib/ui/not-found-copy";
 import {
   BROWSE_LESSONS_HREF,
   buildNotFoundRecoverySuggestions,
@@ -33,8 +33,6 @@ export function NotFoundClient({
 }) {
   const pathname = usePathname() ?? "/";
 
-  const copy = useMemo(() => pickNotFoundCopy(pathname), [pathname]);
-
   const smart = useMemo(() => buildNotFoundRecoverySuggestions(pathname), [pathname]);
 
   const recoveryLinks = useMemo(() => {
@@ -51,54 +49,55 @@ export function NotFoundClient({
     return mergeNotFoundRecoveryLinks(smart, base, NOT_FOUND_RECOVERY_CAP);
   }, [isAuthenticated, resumeStudying, smart]);
 
+  const primaryHref = isAuthenticated ? "/app" : "/login?callbackUrl=%2Fapp";
+  const secondaryHref = isAuthenticated ? "/app/lessons" : BROWSE_LESSONS_HREF;
+
   return (
     <main className="relative min-h-[min(100vh,880px)] px-4 py-16 sm:px-6 sm:py-20">
       <div
-        className="pointer-events-none absolute inset-0 -z-10 opacity-[0.5] motion-reduce:opacity-40"
+        className="pointer-events-none absolute inset-0 -z-10 opacity-[0.45] motion-reduce:opacity-35"
         aria-hidden
         style={{
           background:
-            "radial-gradient(ellipse 80% 55% at 50% -10%, color-mix(in srgb, var(--semantic-brand) 14%, transparent), transparent 58%), radial-gradient(ellipse 70% 45% at 100% 100%, color-mix(in srgb, var(--semantic-panel-cool) 22%, transparent), transparent 55%)",
+            "radial-gradient(ellipse 78% 52% at 50% -8%, color-mix(in srgb, var(--semantic-brand) 12%, transparent), transparent 58%), radial-gradient(ellipse 68% 42% at 100% 100%, color-mix(in srgb, var(--semantic-panel-cool) 18%, transparent), transparent 55%)",
         }}
       />
 
-      <div className="mx-auto flex w-full max-w-lg flex-col items-center text-center">
-        <div className="flex min-h-[5.25rem] w-full max-w-[18rem] flex-col items-center justify-center sm:min-h-[6rem]">
-          <div className="nn-not-found-logo-drift inline-flex">
-            <Link
-              href="/"
-              className="inline-flex rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_35%,transparent)] focus-visible:ring-offset-4 focus-visible:ring-offset-[var(--semantic-page-bg)]"
-              aria-label={`${BRAND_NAME} home`}
-            >
-              <SiteBrandLogoMark variant="hero" logoVariant="leaf" />
-            </Link>
-          </div>
-        </div>
+      <div className="mx-auto flex w-full max-w-md flex-col items-center text-center">
+        <Link
+          href="/"
+          className="mb-8 inline-flex rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_35%,transparent)] focus-visible:ring-offset-4 focus-visible:ring-offset-[var(--semantic-page-bg)]"
+          aria-label={`${BRAND_NAME} home`}
+        >
+          <SiteBrandLogoMark variant="hero" logoVariant="leaf" />
+        </Link>
 
-        <p className="mt-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-[var(--semantic-text-secondary)]">404</p>
+        <BrandLeafMark size={64} className="mb-2" />
+
+        <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[var(--semantic-text-secondary)]">404</p>
 
         <h1 className="mt-4 text-balance text-2xl font-bold tracking-tight text-[var(--theme-heading-text)] sm:text-[1.65rem]">
-          {copy.headline}
+          Page Not Found
         </h1>
         <p className="mt-3 max-w-md text-pretty text-sm leading-relaxed text-[var(--theme-muted-text)] sm:text-[0.95rem]">
-          {copy.subtext}
+          This page is not available or may have moved.
         </p>
 
         <div className="mt-10 flex w-full max-w-md flex-col gap-3 sm:flex-row sm:flex-wrap sm:justify-center">
           <Link
-            href="/"
-            className="inline-flex min-h-[44px] flex-1 items-center justify-center rounded-full bg-primary px-6 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition motion-safe:duration-200 hover:opacity-95 sm:flex-none sm:min-w-[9.5rem]"
+            href={primaryHref}
+            className="inline-flex min-h-[44px] flex-1 items-center justify-center rounded-full bg-primary px-6 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition motion-safe:duration-200 hover:opacity-95 sm:flex-none sm:min-w-[11rem]"
           >
-            Go home
+            Return to Dashboard
           </Link>
-          <Link href={BROWSE_LESSONS_HREF} className={`${secondaryButtonClass()} sm:min-w-[9.5rem]`}>
-            Browse lessons
+          <Link href={secondaryHref} className={`${secondaryButtonClass()} sm:min-w-[11rem]`}>
+            Go to Lessons
           </Link>
         </div>
 
         {recoveryLinks.length > 0 ? (
-          <div className="mt-10 w-full max-w-md space-y-2 border-t border-[color-mix(in_srgb,var(--semantic-border-soft)_85%,transparent)] pt-8">
-            <p className="text-xs font-semibold uppercase tracking-wide text-[var(--semantic-text-secondary)]">Keep going</p>
+          <div className="mt-12 w-full max-w-md space-y-2 border-t border-[color-mix(in_srgb,var(--semantic-border-soft)_85%,transparent)] pt-8">
+            <p className="text-xs font-semibold uppercase tracking-wide text-[var(--semantic-text-secondary)]">Related links</p>
             <ul className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:justify-center">
               {recoveryLinks.map((item) => (
                 <li key={item.href} className="w-full sm:w-auto">
@@ -115,10 +114,6 @@ export function NotFoundClient({
             </ul>
           </div>
         ) : null}
-
-        <p className="mt-12 max-w-sm text-xs text-[var(--semantic-text-muted)]">
-          Tip: bookmark your pathway hub so your next session stays one tap away.
-        </p>
       </div>
     </main>
   );

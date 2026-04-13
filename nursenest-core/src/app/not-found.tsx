@@ -4,7 +4,7 @@ import { NotFoundClient } from "@/components/errors/not-found-client";
 import { loadResumeStudyingForNotFound } from "@/lib/ui/not-found-resume";
 
 export const metadata: Metadata = {
-  title: "Page not found",
+  title: "Page Not Found",
   robots: { index: false, follow: true },
 };
 

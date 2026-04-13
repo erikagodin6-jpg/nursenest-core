@@ -10,6 +10,8 @@ export type ProductErrorStateProps = {
   description: string;
   /** Optional reference line (digest, request id) */
   reference?: string;
+  /** Prefix for reference line; default "Reference:" */
+  referenceLabel?: string;
   /** Dev-only technical detail */
   detail?: string | null;
   onRetry?: () => void;
@@ -32,6 +34,7 @@ export function ProductErrorState({
   title,
   description,
   reference,
+  referenceLabel = "Reference:",
   detail,
   onRetry,
   retryLabel = "Try again",
@@ -65,7 +68,7 @@ export function ProductErrorState({
           <p className="mt-2 text-sm leading-relaxed text-[var(--semantic-text-secondary)]">{description}</p>
           {reference ? (
             <p className="mt-2 text-xs text-[var(--semantic-text-muted)]" suppressHydrationWarning>
-              Reference: {reference}
+              {referenceLabel} {reference}
             </p>
           ) : null}
           {detail ? <p className="mt-2 font-mono text-xs text-[var(--semantic-text-muted)]">{detail}</p> : null}

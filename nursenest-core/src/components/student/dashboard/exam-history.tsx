@@ -84,10 +84,10 @@ export function ExamHistory({ mocks, t, maxRows = 6 }: { mocks: RecentMock[]; t:
         <div className="mt-4">
           <PremiumEmptyState
             data-nn-empty="exam-history"
+            brandMark="leaf"
             tone="early"
             density="compact"
             visualLayout="split"
-            Icon={GraduationCap}
             headline={emptyStateCopy.noExamHistory.headline}
             body={t("learner.dashboard.insight.recentEmpty")}
             hint={emptyStateCopy.noExamHistory.body}

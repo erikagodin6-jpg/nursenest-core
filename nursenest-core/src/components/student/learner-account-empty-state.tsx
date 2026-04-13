@@ -23,6 +23,7 @@ export function LearnerAccountEmptyState({
   return (
     <PremiumEmptyState
       data-nn-empty="learner-account"
+      brandMark="leaf"
       tone="early"
       headline={title}
       body={body}

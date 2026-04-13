@@ -18,6 +18,7 @@ import {
   SIGN_IN_CTA,
   VIEW_PRICING_CTA,
 } from "@/lib/copy/cta-copy";
+import { emptyStateCopy } from "@/lib/ui/empty-state-copy";
 
 export async function generateMetadata(): Promise<Metadata> {
   return safeGenerateMetadata(
@@ -95,9 +96,31 @@ export default async function AccountAnalyticsPage() {
   const payload = await loadAnalyticsPagePayload(userId);
   const { summary, trendWindow, hasMorTrend, trendCursor } = payload;
 
+  const noAnalyticsYet =
+    summary.totalQuestionsAnswered === 0 &&
+    summary.studySessionCount === 0 &&
+    summary.catSessionCount === 0;
+  const analyticsIntro = emptyStateCopy.noAnalyticsYet();
+
   return (
     <main className="space-y-6">
       <BreadcrumbTrail items={crumbs} />
+
+      {noAnalyticsYet ? (
+        <PremiumEmptyState
+          data-nn-empty="account-analytics-quiet"
+          brandMark="leaf"
+          tone="early"
+          density="compact"
+          headline={analyticsIntro.headline}
+          body={analyticsIntro.body}
+          hint={analyticsIntro.hint}
+          primaryCta={{ label: "Open question bank", href: "/app/questions", variant: "primary" }}
+          secondaryCtas={[{ label: BROWSE_LESSONS_CTA, href: "/app/lessons", variant: "secondary" }]}
+          visualLayout="stack"
+          ctaLayout="stack"
+        />
+      ) : null}
 
       {/* Page header */}
       <div className="nn-learner-page-hero">

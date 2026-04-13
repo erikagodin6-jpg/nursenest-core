@@ -162,7 +162,7 @@ export function LearnerReportCardPremium({
           <div className="rounded-2xl border border-dashed border-[color-mix(in_srgb,var(--semantic-info)_20%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_35%,var(--semantic-surface))] px-6 py-8 text-center">
             <p className="text-sm font-semibold text-[var(--semantic-text-primary)]">{t("learner.reportCard.readiness.insufficientTitle")}</p>
             <p className="mx-auto mt-2 max-w-md text-xs leading-relaxed text-[var(--semantic-text-muted)]">{t("learner.reportCard.readiness.insufficientBody")}</p>
-            <div className="mt-6 flex flex-col items-stretch justify-center gap-3 xs:flex-row xs:flex-wrap xs:items-center">
+            <div className="mt-6 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:flex-wrap sm:items-center">
               <Link
                 href="/app/questions"
                 className="inline-flex justify-center rounded-full bg-role-cta px-5 py-2.5 text-sm font-semibold text-role-cta-foreground shadow-sm transition hover:opacity-95"
@@ -178,9 +178,9 @@ export function LearnerReportCardPremium({
             </div>
           </div>
         ) : (
-          <div className="grid gap-6 lg:grid-cols-2">
-            <div className="flex flex-col gap-3">
-              <LearnerReportInset tone="secondary">
+          <div className="grid gap-6 lg:grid-cols-2 lg:gap-8">
+            <div className="flex flex-col gap-4">
+              <LearnerReportInset tone="supportive">
                 <div className="flex items-center gap-4">
                   <div
                     className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full text-xl font-extrabold tabular-nums text-[var(--theme-heading-text)]"
@@ -215,9 +215,9 @@ export function LearnerReportCardPremium({
                 {data.readiness.summary ? <p className="mt-3 text-xs leading-relaxed text-muted-foreground">{data.readiness.summary}</p> : null}
               </LearnerReportInset>
             </div>
-            <LearnerReportInset tone="secondary">
-              <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">{t("learner.reportCard.readiness.factorsLabel")}</p>
-              <div className="mt-3 flex flex-col gap-2">
+            <LearnerReportInset tone="warm">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.1em] text-[var(--semantic-text-secondary)]">{t("learner.reportCard.readiness.factorsLabel")}</p>
+              <div className="mt-4 flex flex-col gap-3">
                 {data.readiness.factors.map((f) => {
                   const pct = f.maxPoints > 0 ? Math.round((f.points / f.maxPoints) * 100) : null;
                   return (
@@ -265,13 +265,13 @@ export function LearnerReportCardPremium({
         intro={null}
         tone="secondary"
       >
-        <div className="grid gap-5 lg:grid-cols-2">
-          <LearnerReportInset>
-            <p className="text-[11px] font-semibold uppercase tracking-wide text-primary">{t("learner.reportCard.bankSessionsLabel")}</p>
+        <div className="grid gap-6 lg:grid-cols-2 lg:gap-8">
+          <LearnerReportInset tone="supportive">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.1em] text-[var(--semantic-info)]">{t("learner.reportCard.bankSessionsLabel")}</p>
             {data.bankGraded.total > 0 ? (
               <>
                 {pctBar(data.bankGraded.accuracyPct, t("learner.reportCard.accuracy"))}
-                <p className="mt-3 text-xs text-muted-foreground">
+                <p className="mt-4 text-xs leading-relaxed text-[var(--semantic-text-muted)]">
                   {t("learner.reportCard.bankSessionsDetail", {
                     correct: data.bankGraded.correct,
                     total: data.bankGraded.total,
@@ -283,12 +283,12 @@ export function LearnerReportCardPremium({
               <Na>{t("learner.reportCard.bankSessionsNa")}</Na>
             )}
           </LearnerReportInset>
-          <LearnerReportInset>
-            <p className="text-[11px] font-semibold uppercase tracking-wide text-primary">{t("learner.reportCard.mockExamsLabel")}</p>
+          <LearnerReportInset tone="warm">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.1em] text-[var(--semantic-warning)]">{t("learner.reportCard.mockExamsLabel")}</p>
             {data.mockAggregate.sumTotal > 0 ? (
               <>
                 {pctBar(data.mockAggregate.accuracyPct, t("learner.reportCard.accuracy"))}
-                <p className="mt-3 text-xs text-muted-foreground">
+                <p className="mt-4 text-xs leading-relaxed text-[var(--semantic-text-muted)]">
                   {t("learner.reportCard.mockDetail", {
                     attempts: data.mockAggregate.attempts,
                     items: data.mockAggregate.sumTotal,
@@ -305,7 +305,7 @@ export function LearnerReportCardPremium({
         ) : null}
       </LearnerReportCardSection>
 
-      <div className="grid gap-8 lg:grid-cols-2">
+      <div className="grid gap-8 lg:grid-cols-2 lg:gap-10">
         <LearnerReportCardSection
           id="rc-pathways"
           eyebrow={t("learner.reportCard.section.pathwaysSub")}
@@ -339,7 +339,7 @@ export function LearnerReportCardPremium({
           eyebrow={t("learner.reportCard.section.questionTierSub")}
           title={t("learner.reportCard.section.questionTier")}
           intro={null}
-          tone="secondary"
+          tone="supportive"
         >
           {data.byQuestionTier.length > 0 ? (
             <ul className="space-y-4">
@@ -369,10 +369,10 @@ export function LearnerReportCardPremium({
         tone="supportive"
       >
         {data.mockByExamTier.length > 0 ? (
-          <ul className="grid gap-4 sm:grid-cols-2">
-            {data.mockByExamTier.map((m) => (
+          <ul className="grid gap-5 sm:grid-cols-2">
+            {data.mockByExamTier.map((m, i) => (
               <li key={m.tierKey}>
-                <LearnerReportInset>
+                <LearnerReportInset tone={i % 2 === 0 ? "supportive" : "warm"}>
                   <p className="text-sm font-medium text-foreground">{m.displayLabel}</p>
                   <p className="mt-1 text-xs text-muted-foreground">{t("learner.reportCard.mockTierAttempts", { n: m.attempts })}</p>
                   {pctBar(m.accuracyPct, t("learner.reportCard.accuracy"))}
@@ -392,14 +392,14 @@ export function LearnerReportCardPremium({
         intro={null}
         tone="warm"
       >
-        <div className="grid gap-8 lg:grid-cols-2">
-          <div>
+        <div className="grid gap-8 lg:grid-cols-2 lg:gap-10">
+          <div className="min-w-0">
             {data.weakTopics.length > 0 ? (
-              <ul className="space-y-2">
+              <ul className="space-y-3">
                 {data.weakTopics.map((w) => (
                   <li
                     key={w.normalizedTopic ?? w.topic}
-                    className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-[color-mix(in_srgb,var(--semantic-warning)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-warm)_55%,var(--semantic-surface))] px-3 py-2.5 text-sm"
+                    className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-[color-mix(in_srgb,var(--semantic-warning)_24%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-warm)_48%,var(--semantic-surface))] px-4 py-3.5 text-sm shadow-[var(--semantic-shadow-soft)]"
                   >
                     <span className="font-medium text-foreground">{w.topic}</span>
                     <span className="tabular-nums text-xs text-muted-foreground">
@@ -412,11 +412,11 @@ export function LearnerReportCardPremium({
               <Na>{t("learner.reportCard.weakNa")}</Na>
             )}
           </div>
-          <div className="rounded-2xl border border-[color-mix(in_srgb,var(--semantic-success)_24%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-positive)_35%,var(--semantic-surface))] p-5">
-            <p className="text-[11px] font-semibold uppercase tracking-wide text-[var(--semantic-success)]">{t("learner.reportCard.section.strongTopics")}</p>
-            <p className="mt-1 text-xs text-muted-foreground">{t("learner.reportCard.section.strongTopicsSub")}</p>
+          <div className="rounded-2xl border border-[color-mix(in_srgb,var(--semantic-success)_26%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-positive)_42%,var(--semantic-surface))] p-6 shadow-[var(--semantic-shadow-soft)]">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.1em] text-[var(--semantic-success)]">{t("learner.reportCard.section.strongTopics")}</p>
+            <p className="mt-2 max-w-md text-xs leading-relaxed text-[var(--semantic-text-muted)]">{t("learner.reportCard.section.strongTopicsSub")}</p>
             {data.strongTopics.length > 0 ? (
-              <ul className="mt-4 flex flex-wrap gap-2">
+              <ul className="mt-5 flex flex-wrap gap-2">
                 {data.strongTopics.map((s) => (
                   <li
                     key={s.normalizedTopic ?? s.topic}
@@ -442,12 +442,15 @@ export function LearnerReportCardPremium({
           intro={null}
           tone="supportive"
         >
-          <ul className="space-y-3">
+          <ul className="space-y-4">
             {data.topicTrends.map((tr) => (
-              <li key={tr.topic} className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-2.5 text-sm shadow-[var(--semantic-shadow-soft)]">
-                <span className="font-medium text-foreground">{tr.topic}</span>
-                <span className="ml-2 text-xs text-[var(--semantic-chart-3)]">· {tr.momentum}</span>
-                <p className="mt-1 text-xs leading-snug text-muted-foreground">{tr.summary}</p>
+              <li
+                key={tr.topic}
+                className="rounded-2xl border border-[color-mix(in_srgb,var(--semantic-chart-3)_14%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_22%,var(--semantic-surface))] px-4 py-4 text-sm shadow-[var(--semantic-shadow-soft)]"
+              >
+                <span className="font-semibold text-[var(--semantic-text-primary)]">{tr.topic}</span>
+                <span className="ml-2 text-xs font-medium text-[var(--semantic-chart-3)]">· {tr.momentum}</span>
+                <p className="mt-2 text-xs leading-relaxed text-[var(--semantic-text-muted)]">{tr.summary}</p>
               </li>
             ))}
           </ul>
@@ -462,20 +465,27 @@ export function LearnerReportCardPremium({
         tone="secondary"
       >
         {data.trendEligible ? (
-          <div className="space-y-3">
-            {data.mockWeeklyTrend.map((pt) => (
-              <div key={pt.weekStart} className="flex items-center gap-3 text-sm">
-                <span className="w-28 shrink-0 tabular-nums text-xs text-muted-foreground">
+          <div className="space-y-4">
+            {data.mockWeeklyTrend.map((pt, i) => (
+              <div
+                key={pt.weekStart}
+                className={`flex flex-col gap-3 rounded-2xl border border-[var(--semantic-border-soft)] p-4 sm:flex-row sm:items-center sm:gap-4 ${
+                  i % 2 === 0
+                    ? "bg-[color-mix(in_srgb,var(--semantic-panel-muted)_55%,var(--semantic-surface))]"
+                    : "bg-[color-mix(in_srgb,var(--semantic-panel-cool)_12%,var(--semantic-surface))]"
+                }`}
+              >
+                <span className="w-full shrink-0 tabular-nums text-xs font-medium text-[var(--semantic-text-secondary)] sm:w-28">
                   {new Date(pt.weekStart + "T12:00:00.000Z").toLocaleDateString(localeTag, { month: "short", day: "numeric" })}
                 </span>
-                <div className="min-w-0 flex-1 space-y-1">
-                  <div className="flex justify-between text-xs">
-                    <span className="text-muted-foreground">{t("learner.reportCard.trendAttempts", { n: pt.attempts })}</span>
-                    <span className="tabular-nums font-medium text-foreground">{pt.avgPct}%</span>
+                <div className="min-w-0 flex-1 space-y-2">
+                  <div className="flex flex-wrap justify-between gap-2 text-xs">
+                    <span className="text-[var(--semantic-text-muted)]">{t("learner.reportCard.trendAttempts", { n: pt.attempts })}</span>
+                    <span className="tabular-nums font-semibold text-[var(--semantic-text-primary)]">{pt.avgPct}%</span>
                   </div>
-                  <div className="nn-progress-track-semantic">
+                  <div className="nn-progress-track-semantic nn-progress-track-semantic--md">
                     <div
-                      className="h-full rounded-full nn-progress-fill-semantic-readiness transition-[width] duration-300"
+                      className={`h-full rounded-full ${semanticFillClassForAccuracyPct(pt.avgPct)} transition-[width] duration-300`}
                       style={{ width: `${pt.avgPct}%` }}
                     />
                   </div>
@@ -495,15 +505,15 @@ export function LearnerReportCardPremium({
         intro={null}
         tone="secondary"
       >
-        <div className="grid gap-6 lg:grid-cols-2">
-          <LearnerReportInset>
-            <p className="text-xs font-semibold text-[var(--semantic-text-primary)]">{t("learner.reportCard.section.recentBank")}</p>
+        <div className="grid gap-6 lg:grid-cols-2 lg:gap-8">
+          <LearnerReportInset tone="supportive">
+            <p className="text-xs font-semibold uppercase tracking-wide text-[var(--semantic-info)]">{t("learner.reportCard.section.recentBank")}</p>
             {data.recentBankSessions.some((s) => s.total > 0) ? (
-              <ul className="mt-3 divide-y divide-border/50">
+              <ul className="mt-4 divide-y divide-[color-mix(in_srgb,var(--semantic-border-soft)_80%,transparent)]">
                 {data.recentBankSessions
                   .filter((s) => s.total > 0)
                   .map((s) => (
-                    <li key={s.id} className="flex flex-wrap items-center justify-between gap-2 py-3 first:pt-0">
+                    <li key={s.id} className="flex flex-wrap items-center justify-between gap-3 py-4 first:pt-0">
                       <div className="min-w-0">
                         <p className="truncate text-sm font-medium text-foreground">{s.examTitle ?? t("learner.reportCard.sessionUntitled")}</p>
                         <p className="text-[11px] text-muted-foreground">
@@ -520,12 +530,12 @@ export function LearnerReportCardPremium({
               <Na>{t("learner.reportCard.recentBankNa")}</Na>
             )}
           </LearnerReportInset>
-          <LearnerReportInset>
-            <p className="text-xs font-semibold text-[var(--semantic-text-primary)]">{t("learner.reportCard.section.practiceTests")}</p>
+          <LearnerReportInset tone="warm">
+            <p className="text-xs font-semibold uppercase tracking-wide text-[var(--semantic-warning)]">{t("learner.reportCard.section.practiceTests")}</p>
             {data.recentPracticeTests.length > 0 ? (
-              <ul className="mt-3 divide-y divide-border/50">
+              <ul className="mt-4 divide-y divide-[color-mix(in_srgb,var(--semantic-border-soft)_80%,transparent)]">
                 {data.recentPracticeTests.map((pt) => (
-                  <li key={pt.id} className="flex flex-wrap items-center justify-between gap-2 py-3 first:pt-0">
+                  <li key={pt.id} className="flex flex-wrap items-center justify-between gap-3 py-4 first:pt-0">
                     <div className="min-w-0">
                       <p className="truncate text-sm font-medium text-foreground">
                         {pt.title?.trim() || t("learner.reportCard.practiceTestUntitled")}
@@ -565,25 +575,28 @@ export function LearnerReportCardPremium({
         intro={null}
         tone="success"
       >
-        <LearnerSurface tone="success" padding="md" radius="lg" shadow={false} className="mb-6 border-[color-mix(in_srgb,var(--semantic-success)_28%,var(--semantic-border-soft))]">
-          <p className="text-[11px] font-semibold uppercase tracking-wide text-[var(--semantic-success)]">{t("learner.reportCard.next.questions")}</p>
+        <LearnerSurface tone="success" padding="lg" radius="lg" accentTop className="mb-8 border-[color-mix(in_srgb,var(--semantic-success)_26%,var(--semantic-border-soft))] shadow-[var(--semantic-shadow-soft)]">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.1em] text-[var(--semantic-success)]">{t("learner.reportCard.next.questions")}</p>
           {primaryTopic ? (
             <Link
               href={remediationTopicDrillHref(primaryTopic, preferredPathwayId)}
-              className="mt-2 block text-base font-semibold text-[var(--semantic-text-primary)] underline-offset-2 hover:underline"
+              className="mt-3 block text-base font-semibold text-[var(--semantic-text-primary)] underline-offset-4 transition hover:text-[var(--semantic-brand)] hover:underline"
             >
               {t("learner.reportCard.next.questionsTopic", { topic: primaryTopic })}
             </Link>
           ) : (
-            <p className="mt-2 text-sm text-muted-foreground">{t("learner.reportCard.next.questionsNa")}</p>
+            <p className="mt-3 text-sm leading-relaxed text-[var(--semantic-text-muted)]">{t("learner.reportCard.next.questionsNa")}</p>
           )}
-          <Link href="/app/questions" className="mt-3 inline-flex text-xs font-semibold text-primary hover:underline">
+          <Link
+            href="/app/questions"
+            className="mt-5 inline-flex w-fit rounded-full border border-[color-mix(in_srgb,var(--semantic-success)_35%,var(--semantic-border-soft))] bg-[var(--semantic-surface)] px-4 py-2 text-xs font-semibold text-[var(--semantic-text-primary)] shadow-sm transition hover:bg-[color-mix(in_srgb,var(--semantic-panel-positive)_40%,var(--semantic-surface))]"
+          >
             {t("learner.reportCard.next.questionsOpen")}
           </Link>
         </LearnerSurface>
-        <div className="grid gap-4 md:grid-cols-2">
-          <LearnerReportInset>
-            <p className="text-xs font-semibold uppercase tracking-wide text-primary">{t("learner.reportCard.next.lessons")}</p>
+        <div className="grid gap-5 md:grid-cols-2 md:gap-6">
+          <LearnerReportInset tone="supportive">
+            <p className="text-xs font-semibold uppercase tracking-wide text-[var(--semantic-info)]">{t("learner.reportCard.next.lessons")}</p>
             {data.continueLesson ? (
               <Link href={data.continueLesson.href} className="mt-2 block text-sm font-medium text-foreground underline-offset-2 hover:underline">
                 {data.continueLesson.title}
@@ -591,18 +604,27 @@ export function LearnerReportCardPremium({
             ) : (
               <p className="mt-2 text-sm text-muted-foreground">{t("learner.reportCard.next.lessonsNa")}</p>
             )}
-            <Link href="/app/lessons" className="mt-3 inline-flex text-xs font-semibold text-primary hover:underline">
+            <Link
+              href="/app/lessons"
+              className="mt-4 inline-flex w-fit rounded-full bg-role-cta px-4 py-2 text-xs font-semibold text-role-cta-foreground shadow-sm transition hover:opacity-95"
+            >
               {t("learner.reportCard.next.lessonsBrowse")}
             </Link>
           </LearnerReportInset>
-          <LearnerReportInset>
-            <p className="text-xs font-semibold uppercase tracking-wide text-primary">{t("learner.reportCard.next.cat")}</p>
-            <p className="mt-2 text-sm text-muted-foreground">{t("learner.reportCard.next.catBody")}</p>
-            <div className="mt-3 flex flex-col gap-2">
-              <Link href="/app/exams" className="inline-flex text-xs font-semibold text-primary hover:underline">
+          <LearnerReportInset tone="warm">
+            <p className="text-xs font-semibold uppercase tracking-wide text-[var(--semantic-warning)]">{t("learner.reportCard.next.cat")}</p>
+            <p className="mt-3 text-sm leading-relaxed text-[var(--semantic-text-muted)]">{t("learner.reportCard.next.catBody")}</p>
+            <div className="mt-4 flex flex-col gap-2">
+              <Link
+                href="/app/exams"
+                className="inline-flex w-fit rounded-full border border-[color-mix(in_srgb,var(--semantic-border-soft)_85%,var(--semantic-brand))] bg-[var(--semantic-surface)] px-4 py-2 text-xs font-semibold text-[var(--semantic-text-primary)] transition hover:bg-[var(--semantic-panel-muted)]"
+              >
                 {t("learner.reportCard.next.catMocks")}
               </Link>
-              <Link href={remediationCatPracticeHref(primaryTopic || undefined, preferredPathwayId)} className="inline-flex text-xs font-semibold text-primary hover:underline">
+              <Link
+                href={remediationCatPracticeHref(primaryTopic || undefined, preferredPathwayId)}
+                className="inline-flex w-fit rounded-full border border-[color-mix(in_srgb,var(--semantic-brand)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_06%,var(--semantic-surface))] px-4 py-2 text-xs font-semibold text-[var(--semantic-brand)] transition hover:opacity-95"
+              >
                 {t("learner.reportCard.next.catBuilder")}
               </Link>
             </div>
@@ -617,10 +639,10 @@ export function LearnerReportCardPremium({
         intro={null}
         tone="secondary"
       >
-        <div className="overflow-x-auto rounded-xl border border-[var(--semantic-border-soft)]">
+        <div className="overflow-x-auto rounded-2xl border border-[var(--semantic-border-soft)] shadow-[var(--semantic-shadow-soft)]">
           <table className="w-full min-w-[24rem] text-left text-sm">
             <thead>
-              <tr className="border-b border-border/60 text-xs uppercase tracking-wide text-muted-foreground">
+              <tr className="border-b border-[color-mix(in_srgb,var(--semantic-border-soft)_90%,transparent)] bg-[color-mix(in_srgb,var(--semantic-panel-muted)_70%,var(--semantic-surface))] text-xs uppercase tracking-wide text-[var(--semantic-text-secondary)]">
                 <th className="px-4 py-3 font-medium">{t("learner.account.reportCard.colExam")}</th>
                 <th className="px-4 py-3 font-medium">{t("learner.account.reportCard.colScore")}</th>
                 <th className="px-4 py-3 font-medium">{t("learner.account.reportCard.colDate")}</th>
@@ -630,7 +652,7 @@ export function LearnerReportCardPremium({
             <tbody>
               {data.mockLog.length === 0 ? (
                 <tr>
-                  <td colSpan={4} className="px-4 py-8 text-center text-muted-foreground">
+                  <td colSpan={4} className="px-6 py-12 text-center text-sm leading-relaxed text-[var(--semantic-text-muted)]">
                     {t("learner.account.reportCard.empty")}
                   </td>
                 </tr>
@@ -655,23 +677,29 @@ export function LearnerReportCardPremium({
         </div>
       </LearnerReportCardSection>
 
-      <aside className="rounded-xl border border-primary/15 bg-primary/5 p-4 text-xs text-muted-foreground">
-        <p className="font-medium text-foreground">{t("learner.exams.page.reportCardTitle")}</p>
-        <p className="mt-2 leading-relaxed">{t("learner.exams.page.reportCardBody")}</p>
-      </aside>
+      <LearnerSurface tone="secondary" padding="md" radius="lg" shadow={false} className="border-[color-mix(in_srgb,var(--semantic-brand)_12%,var(--semantic-border-soft))]">
+        <p className="text-sm font-semibold text-[var(--semantic-text-primary)]">{t("learner.exams.page.reportCardTitle")}</p>
+        <p className="mt-2 max-w-2xl text-xs leading-relaxed text-[var(--semantic-text-muted)]">{t("learner.exams.page.reportCardBody")}</p>
+      </LearnerSurface>
 
-      <div className="flex flex-wrap gap-3">
-        <Link href="/app/exams" className="inline-flex rounded-full bg-role-cta px-4 py-2.5 text-sm font-semibold text-role-cta-foreground">
+      <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
+        <Link
+          href="/app/exams"
+          className="inline-flex justify-center rounded-full bg-role-cta px-5 py-2.5 text-sm font-semibold text-role-cta-foreground shadow-sm transition hover:opacity-95"
+        >
           {t("learner.account.reportCard.ctaExams")}
         </Link>
-        <Link href="/app/questions" className="inline-flex rounded-full border border-border px-4 py-2.5 text-sm font-semibold hover:bg-muted/80">
+        <Link
+          href="/app/questions"
+          className="inline-flex justify-center rounded-full border border-[color-mix(in_srgb,var(--semantic-border-soft)_88%,var(--semantic-info))] bg-[var(--semantic-surface)] px-5 py-2.5 text-sm font-semibold text-[var(--semantic-text-primary)] shadow-sm transition hover:bg-[var(--semantic-panel-cool)]"
+        >
           {t("learner.profile.quickLinks.questionBank")}
         </Link>
         <TrackedStudyLoopCatLink
           href={catStartHref}
           sourceSurface="report_card_summary"
           pathwayId={preferredPathwayId}
-          className="inline-flex rounded-full border border-border px-4 py-2.5 text-sm font-semibold hover:bg-muted/80"
+          className="inline-flex justify-center rounded-full border border-[color-mix(in_srgb,var(--semantic-border-soft)_88%,var(--semantic-brand))] bg-[color-mix(in_srgb,var(--semantic-brand)_05%,var(--semantic-surface))] px-5 py-2.5 text-sm font-semibold text-[var(--semantic-text-primary)] shadow-sm transition hover:bg-[var(--semantic-panel-muted)]"
         >
           {t("learner.profile.quickLinks.catPractice")}
         </TrackedStudyLoopCatLink>

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Crosshair, CheckCircle2 } from "lucide-react";
+import { Crosshair } from "lucide-react";
 import type { WeakAreaInsight, WeaknessTier } from "@/lib/insights/types";
 import type { LearnerMarketingT } from "@/lib/learner/learner-marketing-server";
 import { remediationLessonsTopicHref, remediationTopicDrillHref } from "@/lib/learner/remediation-links";
@@ -115,13 +115,13 @@ export function DashboardWeakAreasCard({
           <div className="mt-5">
             <PremiumEmptyState
               data-nn-empty="dashboard-weak-areas"
+              brandMark="leaf"
               tone="early"
               density="compact"
               visualLayout="split"
-              Icon={CheckCircle2}
               headline="No focus areas identified yet"
               body={t("learner.dashboard.insight.weakEmpty")}
-              hint={emptyStateCopy.noWeakAreasYet.body}
+              hint={emptyStateCopy.noWeakTopicsYet().body}
               primaryCta={{ label: t("learner.dashboard.empty.startPracticeCta"), href: "/app/questions", variant: "primary" }}
               className="border-[color-mix(in_srgb,var(--semantic-success)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-success)_05%,var(--semantic-surface))]"
             />

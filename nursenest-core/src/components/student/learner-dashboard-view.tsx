@@ -355,12 +355,13 @@ export async function LearnerDashboardView({ data }: { data: LearnerDashboardMod
             <div className="mt-4">
               <PremiumEmptyState
                 data-nn-empty="learner-dashboard-weak-signals"
+                brandMark="leaf"
                 tone="early"
                 density="compact"
                 visualLayout="stack"
                 headline={t("learner.dashboard.empty.weakSignalsTitle")}
                 body={t("learner.dashboard.empty.weakSignalsBody")}
-                hint={emptyStateCopy.noWeakAreasYet.body}
+                hint={emptyStateCopy.noWeakTopicsYet().body}
                 primaryCta={{ label: t("learner.dashboard.empty.openPracticeExams"), href: "/app/exams", variant: "primary" }}
               />
             </div>
@@ -388,12 +389,13 @@ export async function LearnerDashboardView({ data }: { data: LearnerDashboardMod
             <div className="mt-4">
               <PremiumEmptyState
                 data-nn-empty="learner-dashboard-recent-mocks"
+                brandMark="leaf"
                 tone="early"
                 density="compact"
                 visualLayout="stack"
                 headline={t("learner.dashboard.empty.recentMocksTitle")}
                 body={t("learner.dashboard.empty.recentMocksBody")}
-                hint={emptyStateCopy.noExamHistory.body}
+                hint={emptyStateCopy.noRecentPractice().hint}
                 primaryCta={{ label: t("learner.dashboard.empty.openPracticeExams"), href: "/app/exams", variant: "primary" }}
               />
             </div>
