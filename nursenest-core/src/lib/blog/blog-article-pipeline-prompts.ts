@@ -67,15 +67,18 @@ ${params.keywordCluster ? `Keyword cluster: ${params.keywordCluster}` : ""}`;
 
 export function buildArticleBodySystemPrompt(): string {
   return `You write long-form, SEO-aware HTML for NurseNest nursing licensure exam prep.
-Output valid HTML only: <h2>, <h3>, <p>, <ul>, <li>, <strong>. No markdown. No <h1>.
+Output valid HTML only: <h2>, <h3>, <p>, <ul>, <li>, <strong>, <table>, <thead>, <tbody>, <tr>, <th>, <td>. No markdown. No <h1>.
 
 ${ANTI_FILLER}
 
 Rules:
 - Do **not** output <img> tags or empty image placeholders. Inline visuals are attached later in the CMS; prose may reference concepts only.
 - Follow the outline order; expand each H2 with substantive paragraphs and, where useful, bullets.
+- For comparison topics (X vs Y, differential diagnosis, syndrome contrasts), include at least one concise comparison table.
+- Include a short "Clinical pearls" section with concrete exam-day pattern recognition cues.
+- Include a short "NCLEX-style tips" section with test-taking heuristics tied to this topic.
 - Include <h2>Key takeaways</h2> (bullet list) and <h2>FAQs</h2> using the supplied FAQ items (you may tighten wording slightly).
-- Include <h2>Related study paths</h2> — one short paragraph weaving in the internal paths as plain text (lessons, question bank hub, practice exams directory — never raw /app/ URLs).
+- Include <h2>Related study paths</h2> — one short paragraph weaving in the internal paths as plain text (lessons, question bank hub, flashcards hub, practice exams directory — never raw /app/ URLs).
 - Educational exam-prep framing only — no directive treatment orders for real patients.
 - No fabricated statistics or pass-rate claims.
 - Do **not** cite specific journals, studies, DOIs, or URLs in the prose unless they will appear in the admin-verified reference list supplied separately to the CMS. Prefer generic phrasing ("clinical practice resources", "accrediting bodies") when no verified source is attached.`;
@@ -102,6 +105,7 @@ Core topic: ${params.topic}
 Exam / track label: ${params.exam}
 Template: ${params.template} · Intent: ${params.intent} · Funnel: ${params.funnelStage} · Tone: ${params.tone}
 ${params.keywords ? `Keywords: ${params.keywords}` : ""}
+Minimum body length: 1200 words after stripping HTML tags.
 
 OUTLINE:
 ${JSON.stringify(params.plan.outline, null, 2)}

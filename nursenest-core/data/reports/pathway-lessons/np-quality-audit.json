@@ -1,15 +1,15 @@
 {
-  "generatedAt": "2026-03-31T17:53:27.491Z",
+  "generatedAt": "2026-04-13T20:27:31.647Z",
   "thresholds": {
     "thinBodyChars": 2500,
     "historicalMarker": "historical NP/APRN lesson restored from legacy corpus"
   },
   "summaryCounts": {
-    "importedRich": 4744,
-    "importedThin": 876,
-    "curated": 0,
+    "importedRich": 7137,
+    "importedThin": 1308,
+    "curated": 173,
     "generated": 0,
-    "needsEnrichment": 138
+    "needsEnrichment": 258
   },
   "note": "Post-import classification; refine after manual review of FNP-only catalog vs multi-track rows."
 }

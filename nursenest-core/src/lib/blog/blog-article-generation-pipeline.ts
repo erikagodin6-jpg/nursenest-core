@@ -39,6 +39,7 @@ import {
 import type { BlogControlPanelPlan } from "@/lib/blog/blog-control-panel-schema";
 import { annotateBlogInternalLinkRowsWithVerification } from "@/lib/blog/blog-internal-link-verify";
 import { normalizePlanSuggestedLessonRows } from "@/lib/blog/blog-internal-lesson-links";
+import { BLOG_ARTICLE_MIN_WORDS, countWordsFromHtml } from "@/lib/blog/blog-word-count";
 
 export const BLOG_ARTICLE_MIN_BODY_CHARS = 450;
 
@@ -123,6 +124,16 @@ export async function runBlogArticleGenerationPipeline(
 
   if (bodyHtml.length < MIN_BODY_CHARS) {
     return { ok: false, stage: "body", error: "Article body too short after generation", plan, bodyHtml };
+  }
+  const bodyWordCount = countWordsFromHtml(bodyHtml);
+  if (bodyWordCount < BLOG_ARTICLE_MIN_WORDS) {
+    return {
+      ok: false,
+      stage: "body",
+      error: `Article body too short after generation (${bodyWordCount} words; minimum ${BLOG_ARTICLE_MIN_WORDS}).`,
+      plan,
+      bodyHtml,
+    };
   }
 
   if (!persist) {

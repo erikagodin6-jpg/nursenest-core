@@ -1,197 +1,38 @@
 {
-  "generatedAt": "2026-03-31T17:53:28.188Z",
+  "generatedAt": "2026-04-13T20:24:45.707Z",
   "totalsBeforeRun": {
-    "us-np-fnp": 39,
-    "us-np-agpcnp": 24,
-    "us-np-pmhnp": 24,
-    "ca-np-cnple": 24
+    "us-np-fnp": 1573,
+    "us-np-agpcnp": 1465,
+    "us-np-whnp": 8,
+    "us-np-pnp-pc": 8,
+    "us-np-pmhnp": 1459,
+    "ca-np-cnple": 1465
   },
   "finalPublishedDbByPathway": {
-    "ca-np-cnple": 1438,
-    "us-np-agpcnp": 1438,
-    "us-np-fnp": 1444,
-    "us-np-pmhnp": 1438
+    "ca-np-cnple": 1465,
+    "us-np-agpcnp": 1465,
+    "us-np-fnp": 1573,
+    "us-np-pmhnp": 1459,
+    "us-np-pnp-pc": 8,
+    "us-np-whnp": 8
   },
-  "npPublishedTotal": 5758,
+  "npPublishedTotal": 5978,
   "historicalNpUniqueInContentMapApprox": 1409,
-  "recoveredFromSourceOperations": 5647,
-  "countSemantics": {
-    "note": "recoveredFromSourceOperations counts insert+update in the initial apply run; historicalNpUniqueInContentMapApprox is distinct legacy contentMap keys matching NP heuristic (not ×4).",
-    "npImportSummary": "data/reports/pathway-lessons/np-import-summary.json"
-  },
+  "recoveredFromSourceOperations": 0,
   "generatedNpGapLessons": 0,
   "hubTotalsMatchDb": true,
   "detailRouteTotals": {
-    "us-np-fnp": 1444,
-    "us-np-agpcnp": 1438,
-    "us-np-pmhnp": 1438,
-    "ca-np-cnple": 1438
+    "us-np-fnp": 0,
+    "us-np-agpcnp": 0,
+    "us-np-whnp": 0,
+    "us-np-pnp-pc": 0,
+    "us-np-pmhnp": 0,
+    "ca-np-cnple": 0
   },
   "randomResolutionChecks": {
-    "total": 32,
+    "total": 0,
     "failed": 0,
-    "rows": [
-      {
-        "pathwayId": "us-np-fnp",
-        "slug": "fnp-differential-primary-care",
-        "resolved": true
-      },
-      {
-        "pathwayId": "us-np-fnp",
-        "slug": "fnp-womens-prenatal-anemia-workup",
-        "resolved": true
-      },
-      {
-        "pathwayId": "us-np-fnp",
-        "slug": "fnp-pediatric-fever-urgency",
-        "resolved": true
-      },
-      {
-        "pathwayId": "us-np-fnp",
-        "slug": "fnp-adolescent-mental-health-screening",
-        "resolved": true
-      },
-      {
-        "pathwayId": "us-np-fnp",
-        "slug": "fnp-adult-hypertension-intensification",
-        "resolved": true
-      },
-      {
-        "pathwayId": "us-np-fnp",
-        "slug": "fnp-geriatric-falls-syncope",
-        "resolved": true
-      },
-      {
-        "pathwayId": "us-np-fnp",
-        "slug": "fnp-overlay-heart-failure",
-        "resolved": true
-      },
-      {
-        "pathwayId": "us-np-fnp",
-        "slug": "fnp-overlay-myocardial-infarction",
-        "resolved": true
-      },
-      {
-        "pathwayId": "us-np-agpcnp",
-        "slug": "htn-guideline-based-plans",
-        "resolved": true
-      },
-      {
-        "pathwayId": "us-np-agpcnp",
-        "slug": "diabetes-a1c-medication-escalation",
-        "resolved": true
-      },
-      {
-        "pathwayId": "us-np-agpcnp",
-        "slug": "hyperlipidemia-risk-discussion",
-        "resolved": true
-      },
-      {
-        "pathwayId": "us-np-agpcnp",
-        "slug": "women-s-health-screening-ages",
-        "resolved": true
-      },
-      {
-        "pathwayId": "us-np-agpcnp",
-        "slug": "pediatric-well-visits-red-flags",
-        "resolved": true
-      },
-      {
-        "pathwayId": "us-np-agpcnp",
-        "slug": "acute-chest-pain-workup-outline",
-        "resolved": true
-      },
-      {
-        "pathwayId": "us-np-agpcnp",
-        "slug": "shortness-of-breath-triage",
-        "resolved": true
-      },
-      {
-        "pathwayId": "us-np-agpcnp",
-        "slug": "abdominal-pain-ddx-framework",
-        "resolved": true
-      },
-      {
-        "pathwayId": "us-np-pmhnp",
-        "slug": "htn-guideline-based-plans",
-        "resolved": true
-      },
-      {
-        "pathwayId": "us-np-pmhnp",
-        "slug": "diabetes-a1c-medication-escalation",
-        "resolved": true
-      },
-      {
-        "pathwayId": "us-np-pmhnp",
-        "slug": "hyperlipidemia-risk-discussion",
-        "resolved": true
-      },
-      {
-        "pathwayId": "us-np-pmhnp",
-        "slug": "women-s-health-screening-ages",
-        "resolved": true
-      },
-      {
-        "pathwayId": "us-np-pmhnp",
-        "slug": "pediatric-well-visits-red-flags",
-        "resolved": true
-      },
-      {
-        "pathwayId": "us-np-pmhnp",
-        "slug": "acute-chest-pain-workup-outline",
-        "resolved": true
-      },
-      {
-        "pathwayId": "us-np-pmhnp",
-        "slug": "shortness-of-breath-triage",
-        "resolved": true
-      },
-      {
-        "pathwayId": "us-np-pmhnp",
-        "slug": "abdominal-pain-ddx-framework",
-        "resolved": true
-      },
-      {
-        "pathwayId": "ca-np-cnple",
-        "slug": "htn-guideline-based-plans",
-        "resolved": true
-      },
-      {
-        "pathwayId": "ca-np-cnple",
-        "slug": "diabetes-a1c-medication-escalation",
-        "resolved": true
-      },
-      {
-        "pathwayId": "ca-np-cnple",
-        "slug": "hyperlipidemia-risk-discussion",
-        "resolved": true
-      },
-      {
-        "pathwayId": "ca-np-cnple",
-        "slug": "women-s-health-screening-ages",
-        "resolved": true
-      },
-      {
-        "pathwayId": "ca-np-cnple",
-        "slug": "pediatric-well-visits-red-flags",
-        "resolved": true
-      },
-      {
-        "pathwayId": "ca-np-cnple",
-        "slug": "acute-chest-pain-workup-outline",
-        "resolved": true
-      },
-      {
-        "pathwayId": "ca-np-cnple",
-        "slug": "shortness-of-breath-triage",
-        "resolved": true
-      },
-      {
-        "pathwayId": "ca-np-cnple",
-        "slug": "abdominal-pain-ddx-framework",
-        "resolved": true
-      }
-    ]
+    "rows": []
   },
   "adminOpsCountMatch": true,
   "staticParamsNote": "Lesson detail uses dynamicParams; validation via loader + random checks.",
@@ -203,6 +44,14 @@
     {
       "pathwayId": "us-np-agpcnp",
       "hub": "/us/np/agpcnp/lessons"
+    },
+    {
+      "pathwayId": "us-np-whnp",
+      "hub": "/us/np/whnp/lessons"
+    },
+    {
+      "pathwayId": "us-np-pnp-pc",
+      "hub": "/us/np/pnp-pc/lessons"
     },
     {
       "pathwayId": "us-np-pmhnp",
@@ -219,5 +68,7 @@
       "data/reports/pathway-lessons/rn-rpn-count-reconciliation.json"
     ]
   },
-  "blockers": []
+  "blockers": [
+    "See np-quarantine.json"
+  ]
 }

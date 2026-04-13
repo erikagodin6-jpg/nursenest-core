@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-03-31T17:53:26.408Z",
+  "generatedAt": "2026-04-13T20:27:29.317Z",
   "note": "Post-import snapshot: currentlyImported counts reflect published pathway_lessons keys after recovery.",
   "historicalNpInventoryEstimate": {
     "uniqueLegacyNpLessonIdsInContentMap": 1409,
@@ -14,8 +14,8 @@
       "invalidLessonCount": 0,
       "uniqueLegacyNpIdsApprox": 1409,
       "pathwayMapping": "legacy NP keys → all four NP pathways",
-      "rowsExpandedToPathways": 5636,
-      "currentlyImportedIntoPathwayLessons": 5620,
+      "rowsExpandedToPathways": 8454,
+      "currentlyImportedIntoPathwayLessons": 8430,
       "currentlySurfacedInRuntime": true,
       "sourceQualityClass": "historical/high-value"
     },
@@ -23,10 +23,10 @@
       "sourcePath": "src/content/pathway-lessons/catalog.json",
       "sourceType": "json",
       "pathwayId": "us-np-fnp",
-      "rawLessonCount": 15,
-      "validLessonCount": 15,
+      "rawLessonCount": 91,
+      "validLessonCount": 91,
       "pathwayMapping": "us-np-fnp only",
-      "currentlyImportedIntoPathwayLessons": 15,
+      "currentlyImportedIntoPathwayLessons": 91,
       "currentlySurfacedInRuntime": true,
       "sourceQualityClass": "curated/FNP-specific"
     },
@@ -34,9 +34,9 @@
       "sourcePath": "data/materialized/np-clinical-layer-2026/catalog-np-overlays.json",
       "sourceType": "json",
       "rawLessonCount": 9,
-      "validLessonCount": 36,
+      "validLessonCount": 54,
       "pathwayMapping": "usNpFnp overlays × four pathways",
-      "currentlyImportedIntoPathwayLessons": 36,
+      "currentlyImportedIntoPathwayLessons": 54,
       "currentlySurfacedInRuntime": true,
       "sourceQualityClass": "materialized/NP-overlays"
     },

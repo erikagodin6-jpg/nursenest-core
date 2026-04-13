@@ -1,16 +1,21 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { getOptionalPublicSession } from "@/lib/auth/optional-public-session";
 import { LessonsPageShell } from "@/components/pathway-lessons/lessons-page-shell";
 import { LessonsToolbar } from "@/components/pathway-lessons/lessons-toolbar";
+import { PathwayLessonPagination } from "@/components/pathway-lessons/pathway-lesson-pagination";
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { loadPathwayLessonsHubAggregates } from "@/lib/exam-pathways/marketing-hub-optional-data";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
 import { resolveExamPathwaySafe } from "@/lib/exam-pathways/resolve-exam-pathway-safe";
 import { marketingPathwayLessonsIndexPath, marketingExamHubBasePath } from "@/lib/lessons/lesson-routes";
 import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
-import { normalizePathwayHubSearchQuery } from "@/lib/lessons/pathway-lesson-loader";
+import {
+  normalizePathwayHubSearchQuery,
+  PATHWAY_HUB_PAGE_SIZE_DEFAULT,
+  PATHWAY_HUB_PAGE_SIZE_MAX,
+} from "@/lib/lessons/pathway-lesson-loader";
 import { PathwayLessonsCurriculumHub } from "@/components/pathway-lessons/pathway-lessons-curriculum-hub";
 import { pathwayLessonHubMetaDescription, pathwayLessonHubMetaTitle } from "@/lib/lessons/pathway-lesson-hub-seo";
 import { pathwayRegionAwareExamName } from "@/lib/lessons/pathway-lesson-hub-seo";
@@ -38,7 +43,7 @@ export const maxDuration = 60;
 
 type Props = {
   params: Promise<{ locale: string; slug: string; examCode: string }>;
-  searchParams: Promise<{ q?: string }>;
+  searchParams: Promise<{ q?: string; page?: string; pageSize?: string }>;
 };
 
 export async function generateMetadata({ params, searchParams }: Props): Promise<Metadata> {
@@ -47,6 +52,7 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
   const hubPath = `${pathname}/lessons`;
   const sp = await searchParams;
   const q = normalizePathwayHubSearchQuery(sp.q);
+  const page = Math.max(1, Number(sp.page ?? "1") || 1);
   return safeGenerateMetadata(
     async () => {
       const pathway = resolveExamPathwaySafe(countrySlug, roleTrack, examCode, { pathname });
@@ -58,7 +64,7 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
       return {
         title,
         description,
-        alternates: { canonical },
+        alternates: { canonical: page > 1 ? `${canonical}?page=${page}` : canonical },
         openGraph: { title, description, url: canonical, type: "website" },
         ...(q ? { robots: { index: false, follow: true } } : {}),
       };
@@ -76,14 +82,17 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
 
   const base = marketingPathwayLessonsIndexPath(pathway);
   const sp = await searchParams;
+  const pageRequested = Math.max(1, Number(sp.page ?? "1") || 1);
+  const rawSize = Number(sp.pageSize ?? String(PATHWAY_HUB_PAGE_SIZE_DEFAULT)) || PATHWAY_HUB_PAGE_SIZE_DEFAULT;
+  const pageSizeRequested = Math.min(PATHWAY_HUB_PAGE_SIZE_MAX, Math.max(8, Math.floor(rawSize)));
   const qEffective = normalizePathwayHubSearchQuery(sp.q);
   const listOpts = typeof sp.q === "string" && sp.q.trim().length > 0 ? { q: sp.q } : undefined;
 
   const { pageResult, questionSnapshot } = await loadPathwayLessonsHubAggregates(
     pathway,
     {
-      pageRequested: 1,
-      pageSizeRequested: 1,
+      pageRequested,
+      pageSizeRequested,
       lessonContentLocale,
       listOpts,
       qEffective: qEffective ?? "",
@@ -98,6 +107,13 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
       roleTrack,
     },
   );
+  if (pageResult.total > 0 && pageRequested !== pageResult.page) {
+    const qs = new URLSearchParams();
+    if (pageResult.page > 1) qs.set("page", String(pageResult.page));
+    if (qEffective) qs.set("q", qEffective);
+    const query = qs.toString();
+    redirect(query ? `${base}?${query}` : base);
+  }
 
   const lessons = pageResult.items.filter(pathwayLessonHasRenderableHubSlug);
   const { schemaItems } = pathwayLessonsHubBreadcrumbs(pathway);
@@ -244,6 +260,14 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
           showLockedState={!canShowResume}
         />
       </section>
+      <PathwayLessonPagination
+        basePath={base}
+        page={pageResult.page}
+        pageCount={pageResult.pageCount}
+        total={pageResult.total}
+        pageSize={pageResult.pageSize}
+        hubSearch={qEffective}
+      />
 
       <section className="mt-8">
         <StudyModeCards heading="Other ways to study" cards={studyCards} />

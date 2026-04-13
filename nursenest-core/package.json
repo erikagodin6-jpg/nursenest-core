@@ -110,6 +110,7 @@
     "content:topic-map": "node scripts/generate-master-topic-map.mjs",
     "content:validate-topic-map": "node scripts/validate-master-topic-map.mjs",
     "content:blog-bulk-schedule": "node scripts/blog-bulk-schedule.mjs",
+    "content:high-intent-nursing-schedule": "tsx scripts/schedule-high-intent-nursing-blog.ts",
     "content:audit": "tsx scripts/content-audit-authoritative.ts",
     "import:blog": "tsx scripts/import-blog.ts",
     "import:content-items": "tsx scripts/import-content-items-json.ts",

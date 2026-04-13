@@ -1,4 +1,4 @@
-import { getOpenAiChatModel } from "@/lib/ai/openai-env";
+import { getOpenAiApiKey, getOpenAiBaseUrl, getOpenAiChatModel } from "@/lib/ai/openai-env";
 
 type ChatMessage = { role: "system" | "user" | "assistant"; content: string };
 
@@ -16,13 +16,12 @@ export async function openAiChatCompletion(params: {
   temperature: number;
   maxTokens: number;
 }): Promise<ChatCompletionResult> {
-  const key = process.env.AI_INTEGRATIONS_OPENAI_API_KEY?.trim();
+  const key = getOpenAiApiKey();
   if (!key) {
-    throw new Error("Missing AI_INTEGRATIONS_OPENAI_API_KEY");
+    throw new Error("Missing AI_INTEGRATIONS_OPENAI_API_KEY (or OPENAI_API_KEY)");
   }
 
-  const base =
-    process.env.AI_INTEGRATIONS_OPENAI_BASE_URL?.replace(/\/$/, "") || "https://api.openai.com/v1";
+  const base = getOpenAiBaseUrl().replace(/\/$/, "");
   const url = `${base}/chat/completions`;
   const model = getOpenAiChatModel();
 

@@ -37,9 +37,10 @@ import {
 } from "@/lib/blog/blog-article-pipeline-prompts";
 import type { BlogImageSlotAttachment } from "@/lib/blog/blog-image-workflow";
 import { seedBlogAdminPublishLog } from "@/lib/blog/blog-admin-publish-log";
-import { blogPrimaryStudyCta } from "@/lib/blog/blog-study-cta";
+import { blogPrimaryStudyCta, marketingStudyHubsForBlogExam } from "@/lib/blog/blog-study-cta";
 import { detectRiskFlags, thinDraftWarning } from "@/lib/blog/seo-campaign-engine";
 import { prisma } from "@/lib/db";
+import { HUB } from "@/lib/marketing/marketing-entry-routes";
 
 export type ControlPanelGenerateInput = {
   topic: string;
@@ -97,6 +98,34 @@ function sanitizeSlugInput(s: string, exam: string, topic: string): string {
     .replace(/^-|-$/g, "")
     .slice(0, 100);
   return fallback || "blog-draft";
+}
+
+function appendRequiredStudyLinksBlock(params: {
+  bodyHtml: string;
+  exam: string;
+  country: "US" | "CA" | "unspecified";
+  relatedPaths: string[];
+}): string {
+  const hubs = marketingStudyHubsForBlogExam(params.exam, params.country);
+  const links: Array<{ href: string; label: string }> = [];
+  const push = (href: string, label: string) => {
+    if (!href || links.some((l) => l.href === href)) return;
+    links.push({ href, label });
+  };
+
+  for (const href of params.relatedPaths.slice(0, 2)) {
+    push(href, "Topic-matched lesson path");
+  }
+  push(hubs.lessonsHub, "Lessons hub");
+  push(hubs.questionBankHub, "Question bank hub");
+  push(HUB.flashcards, "Flashcards hub");
+  push(hubs.practiceExamsHub, "Practice exams hub");
+
+  const missingAny = links.some((l) => !params.bodyHtml.includes(`href="${l.href}"`));
+  if (!missingAny) return params.bodyHtml;
+
+  const listHtml = links.map((l) => `<li><a href="${l.href}">${l.label}</a></li>`).join("");
+  return `${params.bodyHtml.trim()}\n<h2>Study next in NurseNest</h2><ul>${listHtml}</ul>`;
 }
 
 export async function fetchControlPanelPlan(input: ControlPanelGenerateInput): Promise<BlogControlPanelPlan> {
@@ -242,6 +271,8 @@ export async function persistControlPanelDraft(
   const apaReferences = partition.apaLines;
   const sourceCheck = partition.sourceCheck;
 
+  const relatedPaths = lessonRowsToRelatedPaths(plan.suggestedInternalLessons, input.country);
+
   const cta = blogPrimaryStudyCta({
     exam: input.exam,
     country: input.country,
@@ -249,8 +280,14 @@ export async function persistControlPanelDraft(
     funnel: input.funnelStage,
     template: input.template,
   });
+  const bodyWithRequiredLinks = appendRequiredStudyLinksBlock({
+    bodyHtml,
+    exam: input.exam,
+    country: input.country,
+    relatedPaths,
+  });
   const riskFlags = detectRiskFlags({ template: input.template, keyword: input.targetKeyword ?? input.topic });
-  const thinWarning = thinDraftWarning(bodyHtml);
+  const thinWarning = thinDraftWarning(bodyWithRequiredLinks);
 
   const citationGate = evaluateCitationGate({
     riskFlags,
@@ -267,8 +304,6 @@ export async function persistControlPanelDraft(
   }
   const countryTarget: CountryCode | null =
     input.country === "US" ? CountryCode.US : input.country === "CA" ? CountryCode.CA : null;
-
-  const relatedPaths = lessonRowsToRelatedPaths(plan.suggestedInternalLessons, input.country);
 
   const tagsForSeo = input.keywords
     ? input.keywords.split(",").map((s) => s.trim()).filter(Boolean).slice(0, 12)
@@ -301,7 +336,7 @@ export async function persistControlPanelDraft(
         slug,
         title: pageTitle,
         excerpt: excerpt.length >= 10 ? excerpt : `${pageTitle.slice(0, 200)}. Draft excerpt; edit before publish.`,
-        body: bodyHtml,
+        body: bodyWithRequiredLinks,
         exam: input.exam,
         targetKeyword: normalizedTopic || (input.targetKeyword ?? input.topic).slice(0, 200),
         keywordCluster: input.keywordCluster ?? null,

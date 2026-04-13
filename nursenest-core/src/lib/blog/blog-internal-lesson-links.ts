@@ -18,6 +18,7 @@ export function isAllowedBlogInternalHref(href: string): boolean {
   if (!p.startsWith("/") || p.startsWith("//")) return false;
   if (p.startsWith("/app/") || p.startsWith("/api/") || p.startsWith("/admin")) return false;
   if (p === "/lessons" || p === "/practice-exams" || p === "/blog" || p.startsWith("/blog/")) return true;
+  if (p === "/flashcards" || p.startsWith("/flashcards/")) return true;
   if (p.startsWith("/tools/") || p === "/tools") return true;
   if (p.startsWith("/allied-health")) return true;
   if (p.startsWith("/pre-nursing")) return true;
@@ -126,6 +127,7 @@ export function getBlogInternalLinkPathHintsForPrompt(exam: string, country: "US
   lines.push(
     `Public practice exam directory (CAT-style mocks marketing entry): ${HUB.practiceExams}`,
     `Question bank discovery hub: ${HUB.questionBank}`,
+    `Flashcards hub: ${HUB.flashcards}`,
     "When recommending adaptive/CAT practice, link practice_exams or practice_programmatic kinds — never /app/exams in article HTML.",
   );
 
@@ -135,7 +137,7 @@ export function getBlogInternalLinkPathHintsForPrompt(exam: string, country: "US
 
   lines.push(
     "Do not link to /app/*, /api/*, or external domains.",
-    "Include a mix where relevant: 1–2 lesson detail URLs (only if confident path matches a real lesson slug pattern), lessons hub, question bank hub, /practice-exams, and optional programmatic practice landing for the exam.",
+    "Include a mix where relevant: 1–2 lesson detail URLs (only if confident path matches a real lesson slug pattern), lessons hub, question bank hub, flashcards hub, /practice-exams, and optional programmatic practice landing for the exam.",
     "linkKind: lesson | lessons_hub | question_bank | topic_cluster | practice_exams | practice_programmatic | general",
     "Max 12 suggestions total.",
   );

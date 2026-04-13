@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-03-31T17:53:26.418Z",
+  "generatedAt": "2026-04-13T20:27:29.361Z",
   "totalRows": 9,
   "rows": [
     {
@@ -34,9 +34,9 @@
     },
     {
       "key": "us-np-fnp::fnp-overlay-diabetes-metabolic",
-      "keptSource": "materialized-np",
-      "droppedSource": "catalog-json",
-      "reason": "richer_or_higher_priority_source"
+      "keptSource": "catalog-json",
+      "droppedSource": "materialized-np",
+      "reason": "existing_candidate_richer_or_higher_priority"
     },
     {
       "key": "us-np-fnp::fnp-overlay-sepsis-infection",
