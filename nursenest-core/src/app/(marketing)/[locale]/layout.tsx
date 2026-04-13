@@ -10,6 +10,7 @@ import { getMarketingRegionFromCookies } from "@/lib/region/marketing-region-ser
 import { MarketingMainErrorBoundary } from "@/components/marketing/marketing-main-error-boundary";
 import { NursenestRegionRoot } from "@/lib/region/use-nursenest-region";
 import type { MarketingRegionToggle } from "@/lib/marketing/marketing-entry-routes";
+import { PageTransitionShell } from "@/lib/motion/page-transition-shell";
 
 export default async function MarketingLocaleLayout({
   children,
@@ -49,7 +50,9 @@ export default async function MarketingLocaleLayout({
         <div className="nn-marketing-surface flex min-h-screen flex-col">
           <SiteHeader />
           <main className="flex-1">
-            <MarketingMainErrorBoundary name="marketing_locale_main">{children}</MarketingMainErrorBoundary>
+            <MarketingMainErrorBoundary name="marketing_locale_main">
+              <PageTransitionShell>{children}</PageTransitionShell>
+            </MarketingMainErrorBoundary>
           </main>
           <SiteFooter />
         </div>

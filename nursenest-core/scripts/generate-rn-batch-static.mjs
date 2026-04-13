@@ -15,6 +15,117 @@ const OUT = path.join(ROOT, "output/rn-content-batch.json");
 
 const PROGRAM = "rn-nclex-exam-prep";
 
+/** One exam-focused sentence woven into lesson + question stems (topic-specific). */
+const TOPIC_SNIPPET = {
+  "myocardial-infarction":
+    "High-yield cues include ischemic chest discomfort patterns, serial troponins and ECG evolution, time-to-reperfusion language, and bleeding risk when antithrombotics are used.",
+  "ischemic-stroke":
+    "Focus on last-known-well timing, NIHSS-style severity language without inventing a score, hemorrhagic conversion precautions, and blood pressure goals as commonly tested in acute ischemic stroke care.",
+  "hypertensive-crisis":
+    "Separate hypertensive emergency (end-organ symptoms) from urgency; exams test first-line assessment for neurologic, cardiac, and renal target-organ damage and safe escalation.",
+  "pulmonary-embolism":
+    "Expect questions on sudden dyspnea, tachycardia, risk factors, oxygenation, anticoagulation safety, and bleeding precautions—not memorizing a single diagnostic algorithm in isolation.",
+  "acute-respiratory-distress-syndrome":
+    "ARDS is tested through refractory hypoxemia concepts, lung-protective ventilation principles, prone positioning as a concept, and preventing ventilator-associated complications.",
+  "diabetic-ketoacidosis":
+    "DKA stems emphasize ketosis, anion gap, potassium shifts during insulin therapy, fluid resuscitation concepts, and frequent reassessment rather than cookbook numbers without orders.",
+  "hyperosmolar-hyperglycemic-state":
+    "HHS is tested via profound dehydration, hyperosmolarity, neurologic changes, slower onset than DKA, and careful correction concepts with monitoring priorities.",
+  "acute-kidney-injury":
+    "AKI questions reward identifying prerenal, intrarenal, and postrenal patterns, nephrotoxin avoidance, intake/output trends, and indications for urgent nephrology involvement.",
+  "liver-cirrhosis-hepatic-encephalopathy":
+    "Cirrhosis bundles include ascites infection suspicion, variceal bleed risk, ammonia as an imperfect marker, lactulose/rifaximin concepts, and bleeding coagulopathy framing.",
+  "gastrointestinal-bleeding":
+    "GI bleed items test hemodynamic stability assessment, airway protection if altered, large-bore access concepts, type-and-screen language, and avoiding blind NSAID use.",
+  "heart-failure":
+    "HF exams mix HFrEF/HFpEF recognition, daily weights, orthopnea/PND, diuretic response, and exacerbation triggers including diet and medication adherence.",
+  "atrial-fibrillation":
+    "AFib items emphasize irregularly irregular rhythm recognition, rate versus rhythm control concepts, stroke risk framing, and anticoagulation safety/monitoring—not casual cardioversion without context.",
+  "pneumonia":
+    "Pneumonia care is tested through oxygenation, cultures before antibiotics when feasible, aspiration risk, CURB-65 style severity language, and vaccine education opportunities.",
+  "chronic-obstructive-pulmonary-disease":
+    "COPD exacerbation stems include increased work of breathing, infection triggers, controlled oxygen in chronic CO2 retainers as a concept, and bronchodilator therapy safety.",
+  "asthma-acute-exacerbation":
+    "Asthma emergencies test SpO2, accessory muscle use, peak flow as a trend tool when available, beta-agonist administration, and when to escalate to rapid response.",
+  "chronic-kidney-disease":
+    "CKD questions cover diet restrictions, anemia management concepts, bone mineral disease, dialysis access protection, and medication dose adjustments as a principle.",
+  "acute-pancreatitis":
+    "Pancreatitis items emphasize pain control, NPO with nutrition escalation concepts, alcohol and gallstone triggers, and monitoring for systemic inflammatory complications.",
+  "inflammatory-bowel-disease":
+    "IBD nursing focuses on stool patterns, dehydration, immunosuppressant infection risk, surgical considerations, and psychosocial impacts of chronic illness.",
+  "fractures-and-orthopedic-care":
+    "Orthopedic fundamentals include neurovascular checks, compartment syndrome red flags, immobilization safety, and DVT prevention education without replacing provider protocols.",
+  "hip-replacement-post-op":
+    "THA post-op items test hip precautions, neurovascular assessment, DVT/PE prevention, pain control with sedation risk, and fall prevention.",
+  "wound-care-pressure-injuries":
+    "Pressure injury staging concepts, moisture/incontinence management, turning schedules, nutrition as a contributor, and wound assessment documentation appear frequently.",
+  "urinary-tract-infection":
+    "UTI and CAUTI items reward catheter necessity review, specimen collection teaching, antibiotic stewardship concepts, and sepsis vigilance in older adults.",
+  "appendicitis-and-peritonitis":
+    "Appendicitis/peritonitis tests rebound guarding language, NPO readiness, pain reassessment, sudden pain relief as a possible perforation clue, and surgical collaboration.",
+  "burns-thermal-injury":
+    "Burn questions include airway inhalation suspicion, fluid resuscitation as a principle, infection prevention, and pain management complexity—not guessing Parkland numbers without an order.",
+  "sepsis-and-septic-shock":
+    "Sepsis bundles emphasize early recognition, lactate as a screening tool, cultures before antibiotics when it will not dangerously delay therapy, and hemodynamic reassessment.",
+  "anticoagulation-therapy":
+    "Anticoagulation items test aPTT/INR concepts as commonly used, bleeding precautions, reversal as a principle, DOAC renal considerations, and peri-procedure communication.",
+  "insulin-management":
+    "Insulin safety focuses on hypoglycemia recognition, correction insulin cautions, basal-bolus concepts, and sick-day rules as patient education points.",
+  "diuretic-therapy":
+    "Diuretics are tested through electrolyte loss (especially potassium), orthostasis, renal function trends, and ototoxicity risk with rapid IV loops as a concept.",
+  "opioid-analgesics":
+    "Opioid items emphasize respiratory depression, sedation assessment tools as concepts, naloxone education, multimodal analgesia, and bowel regimen planning.",
+  "antihypertensive-medications":
+    "Antihypertensive classes are tested via orthostasis, cough with ACE inhibitors as a classic concept, contraindications in pregnancy as a principle, and adherence barriers.",
+  "antibiotic-selection-and-safety":
+    "Antibiotic stems include allergy verification, culture timing, C. difficile risk communication, renal dosing as a principle, and finishing courses as education—not blanket advice.",
+  "corticosteroid-therapy":
+    "Steroids are tested through hyperglycemia, infection risk, GI irritation, adrenal suppression concepts with taper, and bone health as teaching points.",
+  "digoxin-cardiac-glycosides":
+    "Digoxin items emphasize narrow therapeutic index, bradyarrhythmia toxicity suspicion, hypokalemia interaction concepts, and apical pulse checks before administration.",
+  "anticonvulsant-medications":
+    "Anticonvulsants test therapeutic levels as a concept where applicable, sedation, SJS/TEN education as a rare risk concept, and abrupt discontinuation risks.",
+  "antipsychotic-medications":
+    "Antipsychotic safety includes EPS, QT prolongation as a concept, metabolic monitoring, orthostasis, and fall risk especially in older adults.",
+  "emergency-triage-principles":
+    "Triage items compare CTAS/ESI-style priority language at a conceptual level: life threats first, stable minor complaints later, and reassessment when waiting.",
+  "post-operative-complications":
+    "Post-op priorities include airway, bleeding, ileus, fever workup concepts, DVT/PE suspicion, and wound complications with clear escalation paths.",
+  "deteriorating-patient-rapid-response":
+    "Early warning scores as a concept, subtle tachypnea, new confusion, activation criteria, and closed-loop communication after calling a team are common exam angles.",
+  "multiple-patient-assignment":
+    "Multi-patient stems reward ABCDE thinking, stable versus unstable framing, and delegating appropriate tasks while retaining assessment of unstable patients.",
+  "airway-management-priority":
+    "Airway questions test jaw thrust/chin lift as concepts, suctioning indications, positioning, calling for help early, and avoiding food/fluid if aspiration risk is high.",
+  "shock-recognition-and-response":
+    "Shock types are tested through cold/warm clues as concepts, lactate, fluid responsiveness as a principle, and identifying cardiogenic versus distributive patterns at a high level.",
+  "fluid-and-electrolyte-imbalances":
+    "Electrolyte items emphasize cardiac rhythm risk with potassium and calcium, isotonic versus hypotonic fluid concepts at a principle level, and neuro changes with sodium.",
+  "pain-assessment-and-management":
+    "Pain items test assessment tools, reassessment after interventions, opioid risk mitigation, and non-pharmacologic adjuncts without stigmatizing the patient.",
+  "fall-prevention-and-safety":
+    "Fall prevention includes risk scales as concepts, bed alarms as adjuncts not substitutes, toileting schedules, environment checks, and safe mobility with assistive devices.",
+  "medication-administration-safety":
+    "Med safety tests the rights, look-alike/sound-alike precautions, high-alert drug awareness, independent double-check concepts, and incident reporting as quality improvement.",
+  "infection-control-and-precautions":
+    "Infection control items reward standard precautions always, indication-matched PPE, airborne/droplet/contact distinctions, and transport precautions as concepts.",
+  "surgical-site-infection-prevention":
+    "SSI prevention tests sterile field respect, glycemic control as a concept, hair removal principles, and wound assessment for infection signs.",
+  "delegation-to-uap":
+    "Delegation tests five rights of delegation, stable versus unstable patients, tasks vs assessments, and maintaining accountability after assignment.",
+  "lpn-rpn-scope-of-practice":
+    "RN/RPN(LPN) collaboration items emphasize scope boundaries, teaching versus assigning judgment tasks, and shared accountability in team models.",
+  "interprofessional-collaboration-sbar":
+    "SBAR items test concise situation-background-assessment-recommendation structure, closed-loop orders read-back, and respectful escalation.",
+};
+
+function snippetFor(t) {
+  return (
+    TOPIC_SNIPPET[t.topicSlug] ||
+    `Exam items for ${t.topicLabel} typically pair assessment data with the safest nursing action and the best communication choice under ${t.country} RN preparation standards.`
+  );
+}
+
 function stemHash(stem) {
   return crypto.createHash("sha256").update(stem.replace(/\s+/g, " ").trim().toLowerCase()).digest("hex").slice(0, 32);
 }
@@ -80,7 +191,8 @@ function buildLesson(allTopics, t) {
     String(x).toLowerCase().replace(/\s+/g, "-"),
   );
 
-  const summary = `Exam-focused review of ${t.topicLabel} for RN candidates in the ${countryLabel(t.country)} context, with emphasis on assessment cues, priority interventions, monitoring, and patient safety. ${regionNote(t)}`;
+  const sn = snippetFor(t);
+  const summary = `Exam-focused review of ${t.topicLabel} for RN candidates in the ${countryLabel(t.country)} context, with emphasis on assessment cues, priority interventions, monitoring, and patient safety. ${sn} ${regionNote(t)}`;
 
   const learningObjectives = [
     `Describe priority assessment findings and monitoring parameters for ${t.topicLabel} on a medical-surgical or step-down unit.`,
@@ -93,11 +205,11 @@ function buildLesson(allTopics, t) {
   const sections = [
     {
       heading: "Clinical overview",
-      body: `${t.topicLabel} is a high-yield topic for RN licensing exams because it blends pathophysiology, assessment, interventions, and safety. Nurses are tested on recognizing instability early, selecting the best first action, and anticipating complications rather than memorizing rare trivia. Keep the ${t.bodySystem.replace(/-/g, " ")} lens in mind: trends beat single numbers, and airway–breathing–circulation threats outrank comfort tasks when priorities compete. ${ctx}`,
+      body: `${t.topicLabel} is a high-yield topic for RN licensing exams because it blends pathophysiology, assessment, interventions, and safety. Nurses are tested on recognizing instability early, selecting the best first action, and anticipating complications rather than memorizing rare trivia. Keep the ${t.bodySystem.replace(/-/g, " ")} lens in mind: trends beat single numbers, and airway–breathing–circulation threats outrank comfort tasks when priorities compete. Topic focus: ${sn} ${ctx}`,
     },
     {
       heading: "Pathophysiology and risk factors (exam lens)",
-      body: `Focus on mechanisms that create predictable nursing priorities: tissue oxygen delivery, fluid shifts, inflammation, end-organ perfusion, and medication-related vulnerabilities. Exam items often pair a subtle trend (rising heart rate, narrowing pulse pressure, new confusion, or progressive work of breathing) with a distractor that sounds reasonable but delays escalation. Ask yourself what would harm the patient fastest if ignored, and what assessment data would change your next action within minutes.`,
+      body: `Focus on mechanisms that create predictable nursing priorities: tissue oxygen delivery, fluid shifts, inflammation, end-organ perfusion, and medication-related vulnerabilities. Exam items often pair a subtle trend (rising heart rate, narrowing pulse pressure, new confusion, or progressive work of breathing) with a distractor that sounds reasonable but delays escalation. Ask yourself what would harm the patient fastest if ignored, and what assessment data would change your next action within minutes. Reinforce: ${sn}`,
     },
     {
       heading: "Assessment and monitoring",
@@ -164,40 +276,76 @@ function buildQuestions(allTopics, t) {
   const qs = [];
   let qi = 0;
   for (const kind of plan) {
-    const id = `${t.topicSlug}::q${qi}`;
     if (kind === "mcq") {
-      qs.push(buildMcq(t, domain, subdomain, tags, baseRelated, qi, id));
+      qs.push(buildMcq(t, domain, subdomain, tags, baseRelated, qi));
     } else {
-      qs.push(buildSata(t, domain, subdomain, tags, baseRelated, qi, id));
+      qs.push(buildSata(t, domain, subdomain, tags, baseRelated, qi));
     }
     qi++;
   }
   return qs;
 }
 
-function buildMcq(t, domain, subdomain, tags, baseRelated, qi, id) {
-  const stem = `(${t.country} context, topic ${t.topicSlug}, item ${qi + 1}/4) A nurse is caring for a patient with ${t.topicLabel}. Which action should the nurse take first?`;
-  const choices = [
-    `A. Perform a focused assessment aligned with ${titleCaseBodySystem(t.bodySystem)} priorities and trending vitals`,
-    `B. Complete lower-priority comfort measures before reassessing perfusion and airway protection`,
-    `C. Delegate total clinical judgment for unstable findings to the unlicensed assistive personnel (UAP/PSW)`,
-    `D. Delay notification despite new acute confusion, hypotension, or SpO2 88% on room air`,
+function buildMcq(t, domain, subdomain, tags, baseRelated, qi) {
+  const sn = snippetFor(t);
+  const label = t.topicLabel;
+  const packs = [
+    {
+      stem: `(${t.country} RN prep; ${t.topicSlug}; Q${qi + 1}) A patient is being cared for on a medical-surgical unit with a working diagnosis related to ${label}. The nurse notes a new, objective change suggesting worsening perfusion or oxygenation. Which priority action is most appropriate first? Exam focus: ${sn}`,
+      choices: [
+        `A. Perform a focused assessment (including airway, breathing, circulation, and neuro checks) and follow unit escalation for acute changes`,
+        `B. Finish non-urgent charting tasks before reassessing the patient because stable documentation is the priority`,
+        `C. Ask the UAP/PSW to independently interpret the change and decide whether to call the provider`,
+        `D. Tell the patient to "sleep it off" and reassess next round without additional vitals`,
+      ],
+      correctAnswer: "A",
+      incorrectRationales: {
+        B: "Documentation is important, but it does not precede assessment of new objective instability; exams consistently prioritize patient assessment over administrative tasks when safety is at risk.",
+        C: "Unlicensed assistive personnel cannot replace RN assessment and clinical judgment for acute changes; the RN must evaluate, supervise, and escalate when indicated.",
+        D: "Dismissing acute changes without assessment violates standards of care and patient safety expectations on RN exams.",
+      },
+    },
+    {
+      stem: `(${t.country} RN prep; ${t.topicSlug}; Q${qi + 1}) The nurse is preparing patient education before discharge for ${label}. Which teaching statement best reflects safe, exam-style priorities? Context: ${sn}`,
+      choices: [
+        `A. Teach warning signs that require urgent evaluation and how to contact the care team, aligned with the patient's literacy and language needs`,
+        `B. Advise the patient to stop all prescribed medications if they feel better to avoid side effects`,
+        `C. Tell the patient to double the next dose if a dose is missed to "catch up" without contacting a provider`,
+        `D. Recommend ignoring new swelling, chest pain, or sudden shortness of breath for 24 hours unless it worsens dramatically`,
+      ],
+      correctAnswer: "A",
+      incorrectRationales: {
+        B: "Patients should not discontinue prescribed medications without provider guidance; this option introduces serious harm and is never the best teaching answer.",
+        C: "Doubling doses after a missed dose is unsafe for many medication classes and is not appropriate generic teaching.",
+        D: "Red-flag symptoms should prompt urgent evaluation; delaying care is clinically unsafe and fails exam expectations for patient education.",
+      },
+    },
+    {
+      stem: `(${t.country} RN prep; ${t.topicSlug}; Q${qi + 1}) Which nursing action best demonstrates safe medication and monitoring practice for ${label}? Hint: ${sn}`,
+      choices: [
+        `A. Verify the medication order, confirm patient identity, assess relevant vitals/labs per protocol, and document administration and patient response`,
+        `B. Administer a PRN sedative first whenever the patient seems anxious, without reassessing respiratory status`,
+        `C. Crush enteric-coated or extended-release medications whenever administration is easier for the nurse`,
+        `D. Skip allergy verification if the patient has received the medication before on a prior admission`,
+      ],
+      correctAnswer: "A",
+      incorrectRationales: {
+        B: "Sedation decisions require assessment of respiratory status and indication; indiscriminate PRN use is unsafe.",
+        C: "Altering formulation without an order and pharmacist guidance can change absorption and cause harm.",
+        D: "Allergy verification is a standard safety step; prior tolerance does not remove the need to verify each administration cycle per policy.",
+      },
+    },
   ];
-  const correctAnswer = "A";
-  const rationale = `The stem anchors ${t.topicLabel} (${t.topicSlug}) for RN exam preparation. The first action is always to assess and stabilize immediate threats to airway, breathing, circulation, and neurologic status using focused data—not to defer assessment for comfort, to delegate clinical judgment for unstable findings, or to delay escalation when objective instability is present. This pattern matches NCLEX-style prioritization: collect or confirm critical data, intervene within scope, notify when thresholds are met, and document the sequence. ${regionNote(t)}`;
-  const incorrectRationales = {
-    B: "Comfort measures matter, but they do not precede assessment when the stem implies potential instability or competing priorities where ABCs and perfusion take precedence.",
-    C: "UAP/PSW can assist with appropriate tasks, but unstable assessment findings require RN evaluation, supervision, and often physician/advanced practice provider notification—delegation never replaces nursing judgment for unstable patients.",
-    D: "Acute changes such as confusion, hypotension, or significant hypoxemia require timely assessment, intervention, and notification per unit protocols; delaying care increases patient risk.",
-  };
-  return finalizeQuestion({
-    stem,
+  const pack = packs[qi % 3];
+  const rationale = `This item tests RN-level safety and clinical judgment for ${label} (${t.topicSlug}). The correct option applies assessment-first and evidence-aligned nursing actions, including rights-based medication administration, appropriate escalation, and patient education that emphasizes red flags. Incorrect options illustrate common NCLEX distractors: delaying assessment, unsafe teaching, inappropriate delegation of judgment, or violating medication safety standards. ${regionNote(t)}`;
+  return {
+    stem: pack.stem,
     questionType: "single-best-answer",
-    choices,
-    correctAnswer,
+    choices: pack.choices,
+    correctAnswer: pack.correctAnswer,
     correctAnswers: null,
     rationale,
-    incorrectRationales,
+    incorrectRationales: pack.incorrectRationales,
     difficulty: t.difficulty,
     topicSlug: t.topicSlug,
     tags,
@@ -209,11 +357,12 @@ function buildMcq(t, domain, subdomain, tags, baseRelated, qi, id) {
     exam: "nclex-rn",
     cognitiveLevel: cognitiveFor(qi, "mcq"),
     relatedLessonSlugs: baseRelated,
-  });
+  };
 }
 
-function buildSata(t, domain, subdomain, tags, baseRelated, qi, id) {
-  const stem = `(${t.country} context, topic ${t.topicSlug}, item ${qi + 1}/4) Select all that apply: Which nursing actions are appropriate for safe care of a patient with ${t.topicLabel}?`;
+function buildSata(t, domain, subdomain, tags, baseRelated, qi) {
+  const sn = snippetFor(t);
+  const stem = `(${t.country} RN prep; ${t.topicSlug}; Q${qi + 1}) Select all that apply: Which nursing actions are appropriate for safe care of a patient with ${t.topicLabel}? Exam focus: ${sn}`;
   const choices = [
     "A. Monitor trends in vitals and level of consciousness alongside ordered labs",
     "B. Verify medications using rights of administration and high-alert precautions when applicable",
@@ -226,7 +375,7 @@ function buildSata(t, domain, subdomain, tags, baseRelated, qi, id) {
   const incorrectRationales = {
     C: "Indefinite withholding of fluids and nutrition without orders and a documented plan is not a blanket appropriate action; nutrition and hydration decisions require provider direction and clinical context.",
   };
-  return finalizeQuestion({
+  return {
     stem,
     questionType: "sata",
     choices,
@@ -245,13 +394,6 @@ function buildSata(t, domain, subdomain, tags, baseRelated, qi, id) {
     exam: "nclex-rn",
     cognitiveLevel: cognitiveFor(qi, "sata"),
     relatedLessonSlugs: baseRelated,
-  });
-}
-
-function finalizeQuestion(q) {
-  return {
-    ...q,
-    _stemId: undefined,
   };
 }
 

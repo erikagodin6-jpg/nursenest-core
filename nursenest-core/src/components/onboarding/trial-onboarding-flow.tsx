@@ -115,27 +115,63 @@ export function TrialOnboardingFlow({
     if (step > 0) setStep((s) => s - 1);
   }
 
+  async function submitOnboarding(payload: {
+    examGoal: string | null;
+    examDate: string | null;
+    studyStyle: string | null;
+  }): Promise<boolean> {
+    const res = await fetch("/api/onboarding/complete", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+    return res.ok;
+  }
+
+  /** Skip timeline & study-style — save exam goal with sensible defaults and go straight to study. */
+  async function completeFast() {
+    if (!state.examGoal) return;
+    setSaving(true);
+    try {
+      const ok = await submitOnboarding({
+        examGoal: state.examGoal,
+        examDate: null,
+        studyStyle: "questions",
+      });
+      if (ok) {
+        trackClientEvent("onboarding_completed", {
+          exam_goal: state.examGoal,
+          has_exam_date: false,
+          study_style: "questions",
+          fast_path: true,
+        });
+        onComplete?.();
+      }
+    } catch {
+      /* stay on step; user can retry */
+    } finally {
+      setSaving(false);
+    }
+  }
+
   async function completeOnboarding() {
     setSaving(true);
     try {
-      await fetch("/api/onboarding/complete", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          examGoal: state.examGoal,
-          examDate: state.examDateNotScheduled ? null : state.examDate,
-          studyStyle: state.studyStyle,
-        }),
+      const ok = await submitOnboarding({
+        examGoal: state.examGoal,
+        examDate: state.examDateNotScheduled ? null : state.examDate,
+        studyStyle: state.studyStyle,
       });
-      trackClientEvent("onboarding_completed", {
-        exam_goal: state.examGoal ?? "none",
-        has_exam_date: Boolean(state.examDate),
-        study_style: state.studyStyle ?? "none",
-      });
-      onComplete?.();
+      if (ok) {
+        trackClientEvent("onboarding_completed", {
+          exam_goal: state.examGoal ?? "none",
+          has_exam_date: Boolean(state.examDate),
+          study_style: state.studyStyle ?? "none",
+        });
+        onComplete?.();
+      }
     } catch {
-      // Silently continue — onboarding is not blocking
-      onComplete?.();
+      /* stay on step */
     } finally {
       setSaving(false);
     }
@@ -199,24 +235,41 @@ export function TrialOnboardingFlow({
 
       {/* Navigation */}
       {step < 3 && (
-        <div className="mt-8 flex items-center justify-between">
-          <button
-            type="button"
-            onClick={goBack}
-            disabled={step === 0}
-            className="text-sm font-medium text-muted-foreground transition hover:text-foreground disabled:invisible"
-          >
-            Back
-          </button>
-          <button
-            type="button"
-            onClick={goNext}
-            disabled={!canAdvance()}
-            className="nn-btn-primary inline-flex min-h-[2.5rem] items-center gap-2 rounded-lg px-5 text-sm font-semibold shadow-none disabled:opacity-40"
-          >
-            Continue
-            <ArrowRight className="h-4 w-4" />
-          </button>
+        <div className="mt-8 flex flex-col gap-3">
+          {step === 0 && state.examGoal ? (
+            <button
+              type="button"
+              onClick={() => void completeFast()}
+              disabled={saving}
+              className="nn-btn-primary inline-flex min-h-[2.75rem] w-full items-center justify-center gap-2 rounded-xl px-5 text-sm font-semibold shadow-none disabled:opacity-50"
+            >
+              {saving ? "Saving…" : "Start studying now"}
+            </button>
+          ) : null}
+          <div className="flex items-center justify-between">
+            <button
+              type="button"
+              onClick={goBack}
+              disabled={step === 0}
+              className="text-sm font-medium text-muted-foreground transition hover:text-foreground disabled:invisible"
+            >
+              Back
+            </button>
+            <button
+              type="button"
+              onClick={goNext}
+              disabled={!canAdvance() || saving}
+              className="nn-btn-primary inline-flex min-h-[2.5rem] items-center gap-2 rounded-lg px-5 text-sm font-semibold shadow-none disabled:opacity-40"
+            >
+              Continue
+              <ArrowRight className="h-4 w-4" />
+            </button>
+          </div>
+          {step === 0 && state.examGoal ? (
+            <p className="text-center text-xs text-muted-foreground">
+              Or continue to add your exam date and study preferences.
+            </p>
+          ) : null}
         </div>
       )}
     </div>
@@ -409,10 +462,9 @@ function StepCta({
         <CheckCircle2 className="h-8 w-8" style={{ color: "var(--semantic-success)" }} />
       </div>
 
-      <h2 className="nn-onboarding-step__title">Your Study Plan is Ready</h2>
+      <h2 className="nn-onboarding-step__title">Start studying now</h2>
       <p className="nn-onboarding-step__subtitle">
-        Start your free trial to unlock your personalized study plan,
-        smart review, and full exam practice.
+        Jump into your first lesson and question set. You can start a trial or upgrade anytime from your study hub.
       </p>
 
       <div className="mt-8 flex flex-col items-center gap-3">
@@ -422,7 +474,7 @@ function StepCta({
           onClick={onStartTrial}
           className="nn-btn-primary inline-flex min-h-[3rem] w-full max-w-xs items-center justify-center rounded-xl px-6 text-base font-semibold shadow-none disabled:opacity-50"
         >
-          {saving ? "Setting up…" : "Start Free Trial"}
+          {saving ? "Setting up…" : "Start studying now"}
         </button>
         <button
           type="button"
@@ -430,12 +482,12 @@ function StepCta({
           onClick={onExplore}
           className="text-sm font-medium text-muted-foreground transition hover:text-foreground"
         >
-          Explore limited access
+          Save and explore limited access
         </button>
       </div>
 
       <p className="mt-4 text-xs text-muted-foreground">
-        No charge today · Cancel anytime before your trial ends
+        Full bank and lessons may require an active plan — you will see what is included before you pay.
       </p>
     </div>
   );

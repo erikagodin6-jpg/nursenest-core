@@ -1,10 +1,15 @@
 "use client";
 
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { TrialOnboardingFlow } from "@/components/onboarding/trial-onboarding-flow";
 
 export function OnboardingPageClient({ userId }: { userId: string }) {
   const router = useRouter();
+
+  useEffect(() => {
+    router.prefetch("/app/start-studying");
+  }, [router]);
 
   return (
     <main className="flex min-h-[70vh] flex-col items-center justify-center px-4 py-12">
@@ -29,7 +34,7 @@ export function OnboardingPageClient({ userId }: { userId: string }) {
 
       <TrialOnboardingFlow
         userId={userId}
-        onComplete={() => router.push("/app/quick-start")}
+        onComplete={() => router.replace("/app/start-studying")}
       />
     </main>
   );

@@ -16,7 +16,18 @@ describe("rationale-lesson-link-engine", () => {
     assert.ok(c.some((x) => x.slug === SEPSIS_GOLD_SLUG));
   });
 
-  it("maps prioritization language to clinical judgment slug", () => {
+  it("maps prioritization on RN NCLEX to clinical judgment gold", () => {
+    const c = inferRationaleLessonSlugCandidates({
+      topic: "Prioritization",
+      subtopic: "",
+      bodySystem: null,
+      tags: ["delegation"],
+      pathwayId: "us-rn-nclex-rn",
+    });
+    assert.ok(c.some((x) => x.slug === CLINICAL_JUDGMENT_GOLD_SLUG));
+  });
+
+  it("maps prioritization + delegation on US PN to tier PN lesson slugs", () => {
     const c = inferRationaleLessonSlugCandidates({
       topic: "Prioritization",
       subtopic: "",
@@ -24,7 +35,8 @@ describe("rationale-lesson-link-engine", () => {
       tags: ["delegation"],
       pathwayId: "us-lpn-nclex-pn",
     });
-    assert.ok(c.some((x) => x.slug === CLINICAL_JUDGMENT_GOLD_SLUG));
+    assert.ok(c.some((x) => x.slug === "us-pn-prioritization-abcs"));
+    assert.ok(c.some((x) => x.slug === "us-pn-delegation"));
   });
 
   it("returns empty when haystack is too thin", () => {

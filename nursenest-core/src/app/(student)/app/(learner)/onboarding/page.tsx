@@ -23,7 +23,7 @@ export default async function OnboardingPage() {
   });
 
   if (user?.onboardingCompletedAt) {
-    redirect("/app");
+    redirect("/app/start-studying");
   }
 
   return <OnboardingPageClient userId={userId} />;

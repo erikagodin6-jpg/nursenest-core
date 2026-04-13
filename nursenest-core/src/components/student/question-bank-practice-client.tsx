@@ -16,6 +16,7 @@ import {
   recordQuestionPerformanceEvent,
 } from "@/lib/learner/question-performance-events";
 import { PremiumRationalePanel } from "@/components/student/premium-rationale-panel";
+import { QuestionReviewActionStrip } from "@/components/study/question-review-rationale-blocks";
 import type { QuestionListEmptyDiagnostics } from "@/lib/questions/question-list-empty-diagnostics";
 import type { EmptyCopyI18n } from "@/lib/student/gated-state-messages-i18n";
 import { readLearnerStudyDefaults } from "@/lib/student/learner-study-defaults";

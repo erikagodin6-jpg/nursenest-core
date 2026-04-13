@@ -40,7 +40,7 @@ export function BaselineAssessmentPrompt({ show }: { show: boolean }) {
       </p>
       <div className="mt-4 flex flex-wrap gap-3">
         <Link
-          href="/app/quick-start"
+          href="/app/quick-start?diagnostic=1"
           className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground hover:brightness-110"
         >
           Take Quick Assessment

@@ -37,7 +37,7 @@ export async function loadAdminRecentBackgroundJobs(
           updatedAt: true,
         },
       });
-      return { jobs, degraded: false };
+      return { jobs, degraded: false as boolean };
     },
     { jobs: [], degraded: true },
   );

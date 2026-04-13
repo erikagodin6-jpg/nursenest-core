@@ -20,6 +20,10 @@ import { PathwayLessonProgressRefreshListener } from "@/components/lessons/pathw
 import { LearnerShellPrimaryNav } from "@/components/layout/learner-shell-primary-nav";
 import { LearnerShellBrandHomeLink } from "@/components/student/learner-shell-brand-home-link";
 import { LearnerUnauthenticatedGate } from "@/components/student/learner-unauthenticated-gate";
+import {
+  PageTransitionShell,
+  learnerShellShouldDisablePageTransition,
+} from "@/lib/motion/page-transition-shell";
 
 /** Auth is enforced in `src/proxy.ts` (Next.js 16+) so this layout never calls `redirect()` for missing session. Locale + i18n: `app/(student)/app/layout.tsx`. */
 export const dynamic = "force-dynamic";
@@ -106,7 +110,9 @@ export default async function LearnerShellLayout({ children }: { children: React
             <CheckoutSuccessBanner />
           </div>
           <BaselineAssessmentPrompt show={showBaselinePrompt} />
-          {children}
+          <PageTransitionShell shouldDisableTransition={learnerShellShouldDisablePageTransition}>
+            {children}
+          </PageTransitionShell>
         </div>
       </LearnerExamChromeGate>
     </SentryLearnerShell>

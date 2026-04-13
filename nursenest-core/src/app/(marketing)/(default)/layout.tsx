@@ -7,6 +7,7 @@ import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
 import { NursenestRegionRoot } from "@/lib/region/use-nursenest-region";
 import type { MarketingRegionToggle } from "@/lib/marketing/marketing-entry-routes";
+import { PageTransitionShell } from "@/lib/motion/page-transition-shell";
 
 export default async function MarketingDefaultLocaleLayout({ children }: { children: React.ReactNode }) {
   const resolvedLocale: string = DEFAULT_MARKETING_LOCALE;
@@ -36,7 +37,9 @@ export default async function MarketingDefaultLocaleLayout({ children }: { child
         <div className="nn-marketing-surface flex min-h-screen flex-col">
           <SiteHeader />
           <PathwayLessonProgressRefreshListener />
-          <main className="flex min-h-0 flex-1 flex-col">{children}</main>
+          <main className="flex min-h-0 flex-1 flex-col">
+            <PageTransitionShell>{children}</PageTransitionShell>
+          </main>
           <SiteFooter />
         </div>
       </NursenestRegionRoot>

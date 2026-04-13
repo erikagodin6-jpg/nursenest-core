@@ -2,7 +2,13 @@
 
 import Link from "next/link";
 import { BookOpen, ChevronDown, Sparkles } from "lucide-react";
+import type { ReactNode } from "react";
 import { useMemo } from "react";
+import {
+  hasStructuredReviewContent,
+  partitionRationaleSectionsForReview,
+} from "@/lib/learner/rationale-review-structure";
+import { QuestionReviewRationaleBlocks } from "@/components/study/question-review-rationale-blocks";
 import type { ContentQualityTier } from "@/lib/content-quality/standards";
 import type { RationaleReferenceMedia } from "@/lib/content-quality/rationale-media";
 import type { NormalizedTeachingPayload, TeachingMediaBundle } from "@/lib/content-quality/teaching-payload";
@@ -148,6 +154,8 @@ export function PremiumRationalePanel({
   variant = "default",
   /** When `variant` is `exam`, start with rationale expanded (e.g. after incorrect). */
   defaultOpenExplanation = false,
+  reviewActionStrip,
+  recommendationsSlot,
 }: {
   correct: boolean;
   rationale: string | null;
@@ -160,6 +168,10 @@ export function PremiumRationalePanel({
   rationaleLessonLinks?: RationaleLessonLinkClient[] | null;
   variant?: "default" | "exam";
   defaultOpenExplanation?: boolean;
+  /** Bookmark / mistake notebook / notes — rendered after rationale body. */
+  reviewActionStrip?: ReactNode;
+  /** Drill, flashcards, topic links — after lesson links when present. */
+  recommendationsSlot?: ReactNode;
 }) {
   const { t } = useMarketingI18n();
   const rawLessonLinks = (rationaleLessonLinks ?? []).filter((l) => l.href?.trim() && l.ctaKey);
@@ -171,10 +183,18 @@ export function PremiumRationalePanel({
   const missing = tier === "missing" || (!rationale?.trim() && rawSections.length === 0);
   const useTeaching = Boolean(teaching?.sections?.length);
 
-  const { key, restSections, rationaleForBody } = useMemo(
-    () => extractKeyTakeaway(rationaleSections ?? [], rationale, useTeaching),
-    [rationaleSections, rationale, useTeaching],
+  const structuredBuckets = useMemo(
+    () => partitionRationaleSectionsForReview(rationaleSections ?? []),
+    [rationaleSections],
   );
+  const useStructuredRationale = !useTeaching && hasStructuredReviewContent(structuredBuckets);
+
+  const { key, restSections, rationaleForBody } = useMemo(() => {
+    if (useTeaching || useStructuredRationale) {
+      return { key: null, restSections: [], rationaleForBody: null };
+    }
+    return extractKeyTakeaway(rationaleSections ?? [], rationale, false);
+  }, [useTeaching, useStructuredRationale, rationaleSections, rationale]);
 
   const { explanation: explanationSections, wrong: wrongSections } = useMemo(
     () => partitionWrongSections(restSections),
@@ -206,6 +226,13 @@ export function PremiumRationalePanel({
             }
             variant="plain"
           />
+        </div>
+      ) : useStructuredRationale ? (
+        <div className="mt-3 space-y-1">
+          <QuestionReviewRationaleBlocks buckets={structuredBuckets} />
+          {!useTeaching && missing ? (
+            <p className="mt-2 text-xs italic text-[var(--semantic-text-muted)]">{t("learner.qbank.examUi.noRationale")}</p>
+          ) : null}
         </div>
       ) : (
         <>
@@ -260,6 +287,7 @@ export function PremiumRationalePanel({
           ) : null}
         </>
       )}
+      {reviewActionStrip ? <div className="mt-1">{reviewActionStrip}</div> : null}
       {!useTeaching && referenceMedia && referenceMedia.length > 0 ? (
         <LegacyReferenceFigures items={referenceMedia} />
       ) : null}
@@ -284,6 +312,14 @@ export function PremiumRationalePanel({
               </li>
             ))}
           </ul>
+        </div>
+      ) : null}
+      {recommendationsSlot ? (
+        <div className="mt-4 rounded-2xl border border-[color-mix(in_srgb,var(--semantic-chart-2)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-chart-2)_6%,var(--semantic-surface))] p-4 sm:p-5">
+          <p className="text-[11px] font-bold uppercase tracking-widest text-[var(--semantic-text-muted)]">
+            {t("learner.qbank.review.recommendedNext")}
+          </p>
+          <div className="mt-3">{recommendationsSlot}</div>
         </div>
       ) : null}
     </>

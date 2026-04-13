@@ -13,7 +13,12 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-export default async function QuickStartPage() {
+type Props = { searchParams: Promise<{ diagnostic?: string }> };
+
+export default async function QuickStartPage({ searchParams }: Props) {
+  const sp = await searchParams;
+  const diagnostic = sp.diagnostic === "1" || sp.diagnostic === "true";
+
   const session = await auth();
   const userId = (session?.user as { id?: string })?.id;
 
@@ -30,7 +35,11 @@ export default async function QuickStartPage() {
   });
 
   if (user?.baselineAssessmentCompletedAt) {
-    redirect("/app");
+    redirect("/app/start-studying");
+  }
+
+  if (!diagnostic) {
+    redirect("/app/start-studying");
   }
 
   return <QuickStartFlowClient />;

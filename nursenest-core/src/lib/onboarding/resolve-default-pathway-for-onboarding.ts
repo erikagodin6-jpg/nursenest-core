@@ -36,8 +36,15 @@ export function resolveDefaultPathwayIdForOnboarding(
     return assignablePathwayId(us ? "us-allied-core" : "ca-allied-core");
   }
 
+  const assignable = (p: (typeof EXAM_PATHWAYS)[number]) =>
+    p.status !== "hidden" && p.status !== "upcoming";
+
   const fallback = EXAM_PATHWAYS.find(
-    (p) => p.countryCode === country && p.status !== "hidden" && p.examFamily === ExamFamily.NCLEX_RN && p.roleTrack === "rn",
+    (p) => p.countryCode === country && assignable(p) && p.examFamily === ExamFamily.NCLEX_RN && p.roleTrack === "rn",
   );
-  return fallback?.id ?? EXAM_PATHWAYS.find((p) => p.countryCode === country && p.status !== "hidden")?.id ?? null;
+  return (
+    fallback?.id ??
+    EXAM_PATHWAYS.find((p) => p.countryCode === country && assignable(p))?.id ??
+    null
+  );
 }
