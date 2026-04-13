@@ -487,7 +487,7 @@ async function main() {
         prismaTotalBlogPosts: total,
         prismaPublishedBlogPosts: published,
         imageReport,
-        note: "Published and scheduled rows are imported regardless of body length/date; drafts are skipped by status only.",
+        note: "Published, scheduled, and draft rows are imported without length/date filtering; scheduling metadata is preserved.",
       },
       null,
       2,

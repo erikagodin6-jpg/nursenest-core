@@ -6,9 +6,8 @@
  * - Returns lightweight projections for list/card views.
  * - Enforces visibility rules (only PUBLISHED or SCHEDULED-past-publishAt).
  *
- * NOTE: Prisma types for `LocalizedBlogArticle` will become available after running
- * `prisma generate` once the migration is applied. Until then, this file uses manual
- * type definitions and ts-expect-error on prisma model access.
+ * NOTE: This file keeps lightweight manual view types and a narrow model accessor
+ * so localized blog reads stay robust even when broader Prisma typing changes.
  */
 
 import "server-only";
@@ -114,6 +113,28 @@ export function localizedBlogIsLive(
   return false;
 }
 
+export function shouldFallbackToEnglishLocale(
+  requestedLocale: string,
+  primaryMatchCount: number,
+): boolean {
+  return requestedLocale !== "en" && primaryMatchCount === 0;
+}
+
+export function buildLocalizedEnglishFallbackWhere(params: {
+  slug: string;
+  region: string;
+  profession: string;
+  exam: string;
+}): Record<string, unknown> {
+  return {
+    OR: [{ localizedSlug: params.slug }, { canonicalSlug: params.slug }],
+    locale: "en",
+    region: params.region,
+    profession: params.profession,
+    exam: params.exam,
+  };
+}
+
 // ── Prisma model accessor (typed escape hatch before prisma generate) ────────
 
 function localizedModel(): {
@@ -121,7 +142,6 @@ function localizedModel(): {
   findUnique: (args: Record<string, unknown>) => Promise<unknown>;
   count: (args: Record<string, unknown>) => Promise<number>;
 } {
-  // @ts-expect-error — LocalizedBlogArticle model exists after prisma generate + migration
   return prisma.localizedBlogArticle;
 }
 
@@ -184,7 +204,7 @@ export async function getPublishedLocalizedBlogPostsPage(params: {
     withDatabaseFallback(() => m.count({ where }), 0),
   ]);
 
-  if (posts.length === 0 && params.locale !== "en") {
+  if (shouldFallbackToEnglishLocale(params.locale, posts.length)) {
     const fallbackWhere = {
       AND: [
         localizedBlogLiveWhere(now),
@@ -280,17 +300,16 @@ export async function getPublishedLocalizedBlogBySlug(params: {
   );
 
   const row = rows[0] ?? null;
-  if (!row && params.locale !== "en") {
+  if (shouldFallbackToEnglishLocale(params.locale, row ? 1 : 0)) {
     const fallbackRows = await withDatabaseFallback(
       () =>
         m.findMany({
-          where: {
-            OR: [{ localizedSlug: params.slug }, { canonicalSlug: params.slug }],
-            locale: "en",
+          where: buildLocalizedEnglishFallbackWhere({
+            slug: params.slug,
             region: params.region,
             profession: params.profession,
             exam: params.exam,
-          },
+          }),
           select: fullSelect,
           take: 1,
         }) as Promise<LocalizedBlogFullPost[]>,

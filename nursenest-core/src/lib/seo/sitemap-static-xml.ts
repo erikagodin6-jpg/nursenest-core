@@ -319,8 +319,14 @@ export function collectLocaleMarketingUrls(origin: string, locale: string): stri
   urls.push(add(`/${locale}/question-bank`));
   urls.push(add(`/${locale}/practice-exams`));
   urls.push(add(`/${locale}/pre-nursing`));
+  // Only include lesson URLs for slugs that have an overlay file for this locale.
+  // All 27 registry slugs are valid for English (default route), but localized routes
+  // guard with notFound() when no overlay exists — so we must not submit those to search engines.
+  const overlaySlugs = getPreNursingOverlaySlugsForLocale(locale);
   for (const mod of PRE_NURSING_MODULE_REGISTRY) {
-    urls.push(add(`/${locale}/pre-nursing/lessons/${mod.slug}`));
+    if (overlaySlugs.has(mod.slug)) {
+      urls.push(add(`/${locale}/pre-nursing/lessons/${mod.slug}`));
+    }
   }
   urls.push(add(`/${locale}/for-institutions`));
   urls.push(add(`/${locale}/faq`));

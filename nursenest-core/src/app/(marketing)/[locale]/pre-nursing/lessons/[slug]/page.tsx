@@ -90,7 +90,7 @@ export default async function LocalizedPreNursingLessonModulePage({ params }: Pr
           <BreadcrumbTrail items={crumbs} />
         </div>
         <Link
-          href={`/${locale}/pre-nursing/lessons`}
+          href={`/${locale}/pre-nursing`}
           className="mb-2 inline-flex items-center gap-2 text-sm font-medium text-[var(--theme-muted-text)] hover:text-primary"
         >
           <ArrowLeft className="h-4 w-4" />

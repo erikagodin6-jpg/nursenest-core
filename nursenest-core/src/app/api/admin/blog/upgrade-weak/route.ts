@@ -42,6 +42,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Invalid payload", details: parsed.error.flatten() }, { status: 400 });
   }
   const { limit, minWords, dryRun } = parsed.data;
+  console.info("[blog_upgrade_weak] scan_start", { limit, minWords, dryRun: Boolean(dryRun) });
 
   const candidates = await prisma.blogPost.findMany({
     where: {
@@ -79,6 +80,7 @@ export async function POST(req: Request) {
     .slice(0, limit);
 
   if (dryRun) {
+    console.info("[blog_upgrade_weak] dry_run_selected", { count: weak.length });
     return NextResponse.json({
       ok: true,
       dryRun: true,
@@ -127,6 +129,11 @@ export async function POST(req: Request) {
         { persist: false },
       );
       if (!pipeline.ok) {
+        console.error("[blog_upgrade_weak] regenerate_failed", {
+          id: post.id,
+          slug: post.slug,
+          error: pipeline.error,
+        });
         results.push({
           id: post.id,
           slug: post.slug,
@@ -168,14 +175,26 @@ export async function POST(req: Request) {
         afterWordCount,
         upgraded: afterWordCount >= minWords,
       });
+      console.info("[blog_upgrade_weak] regenerate_success", {
+        id: post.id,
+        slug: post.slug,
+        beforeWords: row.wordCount,
+        afterWords: afterWordCount,
+      });
     } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      console.error("[blog_upgrade_weak] regenerate_exception", {
+        id: post.id,
+        slug: post.slug,
+        error: message,
+      });
       results.push({
         id: post.id,
         slug: post.slug,
         title: post.title,
         beforeWordCount: row.wordCount,
         upgraded: false,
-        error: error instanceof Error ? error.message : String(error),
+        error: message,
       });
     }
   }
