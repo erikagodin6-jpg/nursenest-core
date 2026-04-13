@@ -28,7 +28,6 @@ import {
   loadPathwayLessonProgressMap,
   type PathwayLessonProgressStatus,
 } from "@/lib/lessons/pathway-lesson-progress";
-import { normalizeLesson, pathwayLessonRowToInput } from "@/lib/lessons/pathway-lesson-loader";
 import { LessonCard, LessonCardChip } from "@/components/student/product/lesson-card";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { freemiumLessonsExhausted, freemiumQuestionsExhausted } from "@/lib/conversion/freemium-gates";
@@ -217,7 +216,10 @@ export default async function LessonsPage({ searchParams }: Props) {
     });
 
     if (pathwaySample) {
-      const pathwayAllRows = await prisma.pathwayLesson.findMany({
+      const pathwayTotal = await prisma.pathwayLesson.count({ where: pathwayWhere });
+      const pageCount = Math.max(1, Math.ceil(pathwayTotal / LEARNER_APP_LESSONS_PAGE_SIZE) || 1);
+      const safePage = Math.min(pageRequested, pageCount);
+      const pathwayRows = await prisma.pathwayLesson.findMany({
         where: pathwayWhere,
         select: {
           id: true,
@@ -235,19 +237,9 @@ export default async function LessonsPage({ searchParams }: Props) {
           locale: true,
         },
         orderBy: { updatedAt: "desc" },
-        take: 500,
+        skip: (safePage - 1) * LEARNER_APP_LESSONS_PAGE_SIZE,
+        take: LEARNER_APP_LESSONS_PAGE_SIZE,
       });
-      const readyRows = pathwayAllRows.filter((r) => {
-        const rec = normalizeLesson(pathwayLessonRowToInput(r), r.pathwayId);
-        return Boolean(rec.structuralQuality?.publicComplete);
-      });
-      const pathwayTotal = readyRows.length;
-      const pageCount = Math.max(1, Math.ceil(pathwayTotal / LEARNER_APP_LESSONS_PAGE_SIZE) || 1);
-      const safePage = Math.min(pageRequested, pageCount);
-      const pathwayRows = readyRows.slice(
-        (safePage - 1) * LEARNER_APP_LESSONS_PAGE_SIZE,
-        safePage * LEARNER_APP_LESSONS_PAGE_SIZE,
-      );
       const rows: AppLessonListRow[] = pathwayRows.map((r) => ({
         id: r.id,
         title: r.title,

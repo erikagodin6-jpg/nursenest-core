@@ -59,7 +59,6 @@ type Props = {
   lessonsBasePath: string;
   progressMap: Record<string, PathwayLessonProgressStatus>;
   showProgress: boolean;
-  defaultVisibleRows?: number;
 };
 
 export function LessonSystemCard({
@@ -67,13 +66,10 @@ export function LessonSystemCard({
   lessonsBasePath,
   progressMap,
   showProgress,
-  defaultVisibleRows = 5,
 }: Props) {
   const visual = SYSTEM_VISUALS[section.systemLabel] ?? { icon: Activity, accentVar: "--semantic-brand" };
   const Icon = visual.icon;
   const systemStyle = { "--nn-system-accent": `var(${visual.accentVar})` } as CSSProperties;
-  const visibleLessons = section.lessons.slice(0, defaultVisibleRows);
-  const overflowLessons = section.lessons.slice(defaultVisibleRows);
   const completedCount = showProgress
     ? section.lessons.filter((lesson) => progressMap[lesson.slug] === "completed").length
     : 0;
@@ -113,7 +109,7 @@ export function LessonSystemCard({
       </div>
 
       <div className="mt-3.5 space-y-1">
-        {visibleLessons.map((lesson) => {
+        {section.lessons.map((lesson) => {
           const href = pathwayLessonMarketingDetailHref(lessonsBasePath, lesson.slug);
           if (!href) return null;
 
@@ -130,33 +126,6 @@ export function LessonSystemCard({
           );
         })}
       </div>
-
-      {overflowLessons.length > 0 ? (
-        <details className="mt-2 group">
-          <summary className="cursor-pointer list-none rounded-lg px-3 py-2 text-sm font-medium text-[var(--semantic-brand)] transition hover:bg-[color-mix(in_srgb,var(--semantic-brand)_6%,var(--semantic-surface))] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_24%,transparent)]">
-            <span className="group-open:hidden">+{overflowLessons.length} more</span>
-            <span className="hidden group-open:inline">Show less</span>
-          </summary>
-          <div className="mt-1 space-y-1">
-            {overflowLessons.map((lesson) => {
-              const href = pathwayLessonMarketingDetailHref(lessonsBasePath, lesson.slug);
-              if (!href) return null;
-
-              return (
-                <LessonRow
-                  key={lesson.slug}
-                  href={href}
-                  title={lesson.title}
-                  progressStatus={showProgress ? (progressMap[lesson.slug] ?? "not_started") : "not_started"}
-                  yieldBadgeLabel={pathwayLessonYieldLabel(lesson.activeExamMeta?.yieldLevel)}
-                  durationLabel={lessonEstimatedDurationLabel(lesson)}
-                  difficulty={lessonDifficultyLabel(lesson)}
-                />
-              );
-            })}
-          </div>
-        </details>
-      ) : null}
     </section>
   );
 }
