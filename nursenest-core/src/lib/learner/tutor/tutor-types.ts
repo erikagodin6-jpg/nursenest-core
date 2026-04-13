@@ -3,7 +3,6 @@
  * Keep this JSON-safe for future `POST /api/learner/tutor/*` bodies.
  */
 export type LearnerTutorShellContext = {
-  userId: string;
   /** Primary pathway id from profile (`learnerPath`), when set. */
   pathwayId: string | null;
   /** Short label for copy (“NCLEX-RN”, allied pill, etc.). */

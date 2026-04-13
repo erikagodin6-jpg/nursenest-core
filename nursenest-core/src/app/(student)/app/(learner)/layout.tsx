@@ -24,6 +24,8 @@ import {
   PageTransitionShell,
   learnerShellShouldDisablePageTransition,
 } from "@/lib/motion/page-transition-shell";
+import { isLearnerTutorShellEnabled } from "@/lib/learner/tutor/learner-tutor-policy";
+import { LearnerTutorShell } from "@/components/learner-tutor";
 
 /** Auth is enforced in `src/proxy.ts` (Next.js 16+) so this layout never calls `redirect()` for missing session. Locale + i18n: `app/(student)/app/layout.tsx`. */
 export const dynamic = "force-dynamic";
@@ -35,10 +37,13 @@ export default async function LearnerShellLayout({ children }: { children: React
   let studyNextBlock = null;
   let showBaselinePrompt = false;
   let pathwayShortLabel: string | null = null;
+  let pathwayId: string | null = null;
+  let entitlement: Awaited<ReturnType<typeof resolveEntitlementForPage>> = "error";
+
   if (userId) {
-    const ent = await resolveEntitlementForPage(userId);
-    if (ent !== "error" && ent.hasAccess) {
-      studyNextBlock = await loadLearnerStudyNextBlock(userId, ent);
+    entitlement = await resolveEntitlementForPage(userId);
+    if (entitlement !== "error" && entitlement.hasAccess) {
+      studyNextBlock = await loadLearnerStudyNextBlock(userId, entitlement);
     }
     if (isDatabaseUrlConfigured()) {
       try {
@@ -53,6 +58,7 @@ export default async function LearnerShellLayout({ children }: { children: React
         });
         showBaselinePrompt = u != null && userShouldSeeBaselinePrompt(u);
         const lp = u?.learnerPath?.trim();
+        pathwayId = lp && lp.length > 0 ? lp : null;
         if (lp) {
           const p = getExamPathwayById(lp);
           pathwayShortLabel = p ? p.shortName || p.displayName : lp.slice(0, 48);
@@ -74,6 +80,11 @@ export default async function LearnerShellLayout({ children }: { children: React
   if (!userId) {
     return <LearnerUnauthenticatedGate />;
   }
+
+  const tutorContext =
+    entitlement !== "error" && entitlement.hasAccess && isLearnerTutorShellEnabled()
+      ? { pathwayId, pathwayLabel: pathwayShortLabel }
+      : null;
 
   return (
     <SentryLearnerShell userId={userId}>
@@ -113,6 +124,7 @@ export default async function LearnerShellLayout({ children }: { children: React
           <PageTransitionShell shouldDisableTransition={learnerShellShouldDisablePageTransition}>
             {children}
           </PageTransitionShell>
+          {tutorContext ? <LearnerTutorShell context={tutorContext} /> : null}
         </div>
       </LearnerExamChromeGate>
     </SentryLearnerShell>

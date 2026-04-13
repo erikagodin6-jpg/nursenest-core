@@ -118,10 +118,11 @@ export function LearnerTutorDock({ context, intents }: { context: LearnerTutorSh
           />
           <div
             ref={panelRef}
+            tabIndex={-1}
             role="dialog"
             aria-modal="true"
             aria-labelledby={titleId}
-            className="nn-ls-tutor-panel relative z-[61] flex h-full w-full max-w-md flex-col border-l border-[color-mix(in_srgb,var(--semantic-border-soft)_90%,transparent)] bg-[var(--semantic-bg-base)] shadow-[var(--semantic-shadow-soft)]"
+            className="nn-ls-tutor-panel relative z-[61] flex h-full w-full max-w-md flex-col border-l border-[color-mix(in_srgb,var(--semantic-border-soft)_90%,transparent)] bg-[var(--semantic-bg-base)] shadow-[var(--semantic-shadow-soft)] outline-none"
           >
             <div className="flex items-start justify-between gap-3 border-b border-[color-mix(in_srgb,var(--semantic-border-soft)_85%,transparent)] px-5 py-4">
               <LearnerKickerHeading id={titleId} kicker={t("learner.tutor.panel.kicker")} title={t("learner.tutor.panel.title")} intro={intro} />
