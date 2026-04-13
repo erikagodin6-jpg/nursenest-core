@@ -6,16 +6,14 @@ import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-s
 import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
 import { resolveExamPathwaySafe } from "@/lib/exam-pathways/resolve-exam-pathway-safe";
 import type { MarketingRegionToggle } from "@/lib/marketing/marketing-entry-routes";
-import {
-  getPathwayTopicProgrammaticRow,
-  PATHWAY_TOPIC_PROGRAMMATIC_REVALIDATE_SECONDS,
-} from "@/lib/seo/pathway-topic-programmatic-registry";
+import { getPathwayTopicProgrammaticRow } from "@/lib/seo/pathway-topic-programmatic-registry";
+import { PROGRAMMATIC_SEO_ISR_REVALIDATE_SECONDS } from "@/lib/seo/programmatic-registry";
 import { buildPathwayTopicProgrammaticBreadcrumbResolution } from "@/lib/seo/pathway-topic-programmatic-breadcrumbs";
 import { buildPathwayTopicProgrammaticMetadata } from "@/lib/seo/pathway-topic-programmatic-metadata";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
 export const dynamicParams = true;
-export const revalidate = PATHWAY_TOPIC_PROGRAMMATIC_REVALIDATE_SECONDS;
+export const revalidate = PROGRAMMATIC_SEO_ISR_REVALIDATE_SECONDS;
 
 export function generateStaticParams(): { locale: string; slug: string; examCode: string; seoSlug: string }[] {
   return [];

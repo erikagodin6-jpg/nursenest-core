@@ -74,8 +74,9 @@ export function computeReadinessScore(input: CoachReadinessInput): ReadinessScor
     );
   }
 
-  if (input.recentAccuracyPct != null) {
-    const acc = clamp(input.recentAccuracyPct, 0, 100);
+  const accCombined = input.recentAccuracyPct ?? input.practiceAccuracyPct;
+  if (accCombined != null) {
+    const acc = clamp(accCombined, 0, 100);
     const impact: ReadinessFactor["impact"] = acc >= 72 ? "positive" : acc < 58 ? "negative" : "neutral";
     add(
       "recent_accuracy",
@@ -210,12 +211,12 @@ export function computeReadinessScore(input: CoachReadinessInput): ReadinessScor
 
   let confidence: ReadinessScore["confidence"] = "moderate";
   const thin =
-    input.recentAccuracyPct == null &&
+    accCombined == null &&
     input.appReadinessScore == null &&
     input.mockExamAvgPct == null &&
     input.weakTopicCount === 0;
   if (thin) confidence = "low";
-  if (input.recentAccuracyPct != null && input.appReadinessScore != null && input.weakTopicCount > 0) {
+  if (accCombined != null && input.appReadinessScore != null && input.weakTopicCount > 0) {
     confidence = "high";
   }
 

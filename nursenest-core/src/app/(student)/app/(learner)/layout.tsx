@@ -93,42 +93,42 @@ export default async function LearnerShellLayout({ children }: { children: React
       <LearnerExamChromeGate>
         <LearnerFeedbackShell pathwayId={pathwayId}>
           <div className="nn-learner-app mx-auto w-full max-w-6xl px-4 py-[var(--nn-rhythm-shell-y)] sm:px-6">
-          <PathwayLessonProgressRefreshListener />
-          <LearnerAppSectionAnalytics />
-          <header className="nn-learner-exam-chrome-target nn-card mb-[var(--nn-rhythm-tight-y)] flex min-h-14 flex-col gap-3 rounded-2xl p-3 sm:gap-4 lg:min-h-16 lg:flex-row lg:items-center lg:justify-between lg:p-4">
-            <div className="flex min-w-0 flex-wrap items-center gap-3 md:gap-4">
-              <LearnerShellBrandHomeLink />
-              <LearnerShellPrimaryNav />
+            <PathwayLessonProgressRefreshListener />
+            <LearnerAppSectionAnalytics />
+            <header className="nn-learner-exam-chrome-target nn-card mb-[var(--nn-rhythm-tight-y)] flex min-h-14 flex-col gap-3 rounded-2xl p-3 sm:gap-4 lg:min-h-16 lg:flex-row lg:items-center lg:justify-between lg:p-4">
+              <div className="flex min-w-0 flex-wrap items-center gap-3 md:gap-4">
+                <LearnerShellBrandHomeLink />
+                <LearnerShellPrimaryNav />
+              </div>
+              <div className="flex flex-wrap items-center gap-3">
+                <LearnerShellUserBar pathwayShortLabel={pathwayShortLabel} />
+                <UserFeedbackNavPill />
+                <LearnerShellLanguageControl />
+                <LearnerThemeControl />
+              </div>
+            </header>
+            {studyNextBlock ? (
+              <div className="nn-learner-exam-chrome-dim mb-[var(--nn-rhythm-tight-y)]">
+                <Suspense
+                  fallback={
+                    <div
+                      className="min-h-[10rem] rounded-xl border border-[var(--nn-presentation-divider)] bg-[var(--nn-presentation-wash)]"
+                      aria-hidden
+                    />
+                  }
+                >
+                  <LearnerStudyNextBlock model={studyNextBlock} />
+                </Suspense>
+              </div>
+            ) : null}
+            <div className="nn-learner-exam-chrome-dim">
+              <CheckoutSuccessBanner />
             </div>
-            <div className="flex flex-wrap items-center gap-3">
-              <LearnerShellUserBar pathwayShortLabel={pathwayShortLabel} />
-              <UserFeedbackNavPill />
-              <LearnerShellLanguageControl />
-              <LearnerThemeControl />
-            </div>
-          </header>
-          {studyNextBlock ? (
-            <div className="nn-learner-exam-chrome-dim mb-[var(--nn-rhythm-tight-y)]">
-              <Suspense
-                fallback={
-                  <div
-                    className="min-h-[10rem] rounded-xl border border-[var(--nn-presentation-divider)] bg-[var(--nn-presentation-wash)]"
-                    aria-hidden
-                  />
-                }
-              >
-                <LearnerStudyNextBlock model={studyNextBlock} />
-              </Suspense>
-            </div>
-          ) : null}
-          <div className="nn-learner-exam-chrome-dim">
-            <CheckoutSuccessBanner />
-          </div>
-          <BaselineAssessmentPrompt show={showBaselinePrompt} />
-          <PageTransitionShell shouldDisableTransition={learnerShellShouldDisablePageTransition}>
-            {children}
-          </PageTransitionShell>
-          {tutorContext ? <LearnerTutorShell context={tutorContext} /> : null}
+            <BaselineAssessmentPrompt show={showBaselinePrompt} />
+            <PageTransitionShell shouldDisableTransition={learnerShellShouldDisablePageTransition}>
+              {children}
+            </PageTransitionShell>
+            {tutorContext ? <LearnerTutorShell context={tutorContext} /> : null}
           </div>
         </LearnerFeedbackShell>
       </LearnerExamChromeGate>

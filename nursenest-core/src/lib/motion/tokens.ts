@@ -8,15 +8,24 @@
  * `--brand-motion-fast|normal|medium|slow` and `--brand-motion-ease*`.
  */
 export const BRAND_MOTION = {
-  /** 140–180ms — hovers, taps, small UI */
-  fastSec: 0.16,
-  /** 180–240ms — default entrance, tab swap, dropdowns */
+  /** 120–160ms — hovers, taps, small UI */
+  fastSec: 0.14,
+  /** ~200ms — default entrance, tab swap, dropdowns */
   normalSec: 0.2,
+  /** ~220ms — hero line reveals (stagger children use this per item) */
+  heroRevealSec: 0.22,
+  /** ~180ms — card shadow / lift polish */
+  cardHoverSec: 0.18,
   /** 240–320ms — modals, sheets, larger panels */
   mediumSec: 0.28,
   /** 320–420ms — deliberate section reveals only */
   slowSec: 0.36,
+  /** Decorative leaf float loop (404) */
+  notFoundLeafFloatSec: 5.2,
 } as const;
+
+/** Default stagger between hero lines (ms), converted to seconds in `staggerContainer`. */
+export const BRAND_STAGGER_CHILD_MS = 65;
 
 /** Maximum vertical travel for reveals (px). */
 export const BRAND_MOTION_DISTANCE_PX = {
@@ -29,7 +38,7 @@ export const BRAND_MOTION_DISTANCE_PX = {
   carouselCrossfade: 0,
 } as const;
 
-/** Hover lift clamp: 1–3px (Framer whileHover). */
+/** Hover lift clamp: 2px for cards and Framer `whileHover` presets. */
 export const BRAND_HOVER_LIFT_Y = -2;
 
 /** Subtle press scale (never below 0.96 for brand surfaces). */

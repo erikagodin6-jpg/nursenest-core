@@ -33,8 +33,7 @@ function buildWhere(sp: Record<string, string | undefined>): Prisma.UserFeedback
   if (sev) where.severity = sev;
   if (sp.userId?.trim()) {
     where.userId = sp.userId.trim();
-  }
-  if (sp.signedIn === "1") {
+  } else if (sp.signedIn === "1") {
     where.userId = { not: null };
   }
   const pageQ = sp.pageQ?.trim();
