@@ -11,7 +11,7 @@ import {
 import { z } from "zod";
 import { openAiChatCompletion } from "@/lib/ai/openai-chat-completions";
 import type { BlogSourceRecord } from "@/lib/blog/apa7";
-import { coerceBlogSourceRows, validateSources } from "@/lib/blog/apa7";
+import { coerceBlogSourceRows } from "@/lib/blog/apa7";
 import {
   buildCitationEnvelope,
   evaluateCitationGate,
