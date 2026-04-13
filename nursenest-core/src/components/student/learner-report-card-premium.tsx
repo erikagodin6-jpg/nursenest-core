@@ -154,9 +154,9 @@ export function LearnerReportCardPremium({
 
       <LearnerReportCardSection
         id="rc-readiness"
-        eyebrow={t("learner.reportCard.section.readiness")}
+        eyebrow={t("learner.reportCard.section.readinessSub")}
         title={t("learner.reportCard.section.readiness")}
-        intro={t("learner.reportCard.section.readinessSub")}
+        intro={null}
         tone="supportive"
       >
         {data.readiness.band === "insufficient_data" || data.readiness.score == null ? (
@@ -255,9 +255,9 @@ export function LearnerReportCardPremium({
 
       <LearnerReportCardSection
         id="rc-performance"
-        eyebrow={t("learner.reportCard.section.overall")}
+        eyebrow={t("learner.reportCard.section.overallSub")}
         title={t("learner.reportCard.section.overall")}
-        intro={t("learner.reportCard.section.overallSub")}
+        intro={null}
         tone="secondary"
       >
         <div className="grid gap-5 lg:grid-cols-2">
@@ -303,9 +303,9 @@ export function LearnerReportCardPremium({
       <div className="grid gap-8 lg:grid-cols-2">
         <LearnerReportCardSection
           id="rc-pathways"
-          eyebrow={t("learner.reportCard.section.pathways")}
+          eyebrow={t("learner.reportCard.section.pathwaysSub")}
           title={t("learner.reportCard.section.pathways")}
-          intro={t("learner.reportCard.section.pathwaysSub")}
+          intro={null}
           tone="warm"
         >
           {data.pathways.some((p) => p.lessonsTotal > 0) ? (
@@ -331,9 +331,9 @@ export function LearnerReportCardPremium({
 
         <LearnerReportCardSection
           id="rc-question-tier"
-          eyebrow={t("learner.reportCard.section.questionTier")}
+          eyebrow={t("learner.reportCard.section.questionTierSub")}
           title={t("learner.reportCard.section.questionTier")}
-          intro={t("learner.reportCard.section.questionTierSub")}
+          intro={null}
           tone="secondary"
         >
           {data.byQuestionTier.length > 0 ? (
@@ -358,9 +358,9 @@ export function LearnerReportCardPremium({
 
       <LearnerReportCardSection
         id="rc-mock-tier"
-        eyebrow={t("learner.reportCard.section.mockTier")}
+        eyebrow={t("learner.reportCard.section.mockTierSub")}
         title={t("learner.reportCard.section.mockTier")}
-        intro={t("learner.reportCard.section.mockTierSub")}
+        intro={null}
         tone="supportive"
       >
         {data.mockByExamTier.length > 0 ? (
@@ -382,9 +382,9 @@ export function LearnerReportCardPremium({
 
       <LearnerReportCardSection
         id="rc-topic-signals"
-        eyebrow={t("learner.reportCard.section.weakTopics")}
+        eyebrow={t("learner.reportCard.section.weakTopicsSub")}
         title={t("learner.reportCard.section.weakTopics")}
-        intro={t("learner.reportCard.section.weakTopicsSub")}
+        intro={null}
         tone="warm"
       >
         <div className="grid gap-8 lg:grid-cols-2">
@@ -432,9 +432,9 @@ export function LearnerReportCardPremium({
       {data.topicTrends.length > 0 ? (
         <LearnerReportCardSection
           id="rc-topic-trends"
-          eyebrow={t("learner.reportCard.section.trends")}
+          eyebrow={t("learner.reportCard.section.trendsSub")}
           title={t("learner.reportCard.section.trends")}
-          intro={t("learner.reportCard.section.trendsSub")}
+          intro={null}
           tone="supportive"
         >
           <ul className="space-y-3">
@@ -451,9 +451,9 @@ export function LearnerReportCardPremium({
 
       <LearnerReportCardSection
         id="rc-mock-trend"
-        eyebrow={t("learner.reportCard.section.mockTrend")}
+        eyebrow={t("learner.reportCard.section.mockTrendSub")}
         title={t("learner.reportCard.section.mockTrend")}
-        intro={t("learner.reportCard.section.mockTrendSub")}
+        intro={null}
         tone="secondary"
       >
         {data.trendEligible ? (
@@ -485,9 +485,9 @@ export function LearnerReportCardPremium({
 
       <LearnerReportCardSection
         id="rc-sessions"
-        eyebrow={t("learner.reportCard.section.recentBank")}
-        title={t("learner.reportCard.section.recentBank")}
-        intro={`${t("learner.reportCard.section.recentBankSub")} · ${t("learner.reportCard.section.practiceTestsSub")}`}
+        eyebrow={`${t("learner.reportCard.section.recentBankSub")} · ${t("learner.reportCard.section.practiceTestsSub")}`}
+        title={`${t("learner.reportCard.section.recentBank")} · ${t("learner.reportCard.section.practiceTests")}`}
+        intro={null}
         tone="secondary"
       >
         <div className="grid gap-6 lg:grid-cols-2">
@@ -555,9 +555,9 @@ export function LearnerReportCardPremium({
 
       <LearnerReportCardSection
         id="rc-next"
-        eyebrow={t("learner.reportCard.section.nextSteps")}
+        eyebrow={t("learner.reportCard.section.nextStepsSub")}
         title={t("learner.reportCard.section.nextSteps")}
-        intro={t("learner.reportCard.section.nextStepsSub")}
+        intro={null}
         tone="success"
       >
         <LearnerSurface tone="success" padding="md" radius="lg" shadow={false} className="mb-6 border-[color-mix(in_srgb,var(--semantic-success)_28%,var(--semantic-border-soft))]">
@@ -607,9 +607,9 @@ export function LearnerReportCardPremium({
 
       <LearnerReportCardSection
         id="rc-mock-log"
-        eyebrow={t("learner.reportCard.mockLogHeading")}
+        eyebrow={t("learner.reportCard.mockLogSub")}
         title={t("learner.reportCard.mockLogHeading")}
-        intro={t("learner.reportCard.mockLogSub")}
+        intro={null}
         tone="secondary"
       >
         <div className="overflow-x-auto rounded-xl border border-[var(--semantic-border-soft)]">

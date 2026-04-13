@@ -151,7 +151,7 @@ function pickLocalizedOverlayString(
   if (!q.acceptTranslation) {
     safeServerLog("i18n", "educational_translation_quality_fallback", {
       locale,
-      reasons: q.reasons.slice(0, 8),
+      reasons: q.reasons.slice(0, 8).join("; "),
       ...logCtx,
     });
     return { value: englishBase, fellBack: true };
