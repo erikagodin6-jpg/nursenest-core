@@ -11,6 +11,7 @@ import { appShellBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 import type { Metadata } from "next";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
+import { loadStudySettings } from "@/lib/learner/load-study-settings";
 
 type Props = { params: Promise<{ id: string }> };
 
@@ -49,6 +50,7 @@ export default async function PracticeTestRunPage({ params }: Props) {
   const email = (session?.user as { email?: string | null })?.email ?? null;
   const protectionFlags = getServerPremiumProtectionFlags();
   const userLabel = maskUserLabelForWatermark(email, userId || "unknown");
+  const studySettings = await loadStudySettings(userId);
 
   if (!entitlement.hasAccess) {
     const snap = userId ? await getFreemiumSnapshot(userId) : null;
@@ -84,6 +86,7 @@ export default async function PracticeTestRunPage({ params }: Props) {
             userId={userId}
             userLabel={userLabel}
             protectionFlags={protectionFlags}
+            studySettings={studySettings}
           />
         </ExamSessionErrorBoundary>
       </div>

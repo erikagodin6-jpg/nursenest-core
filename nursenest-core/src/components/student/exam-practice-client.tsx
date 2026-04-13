@@ -21,6 +21,7 @@ import { PostSessionExamInsights } from "@/components/student/post-session-exam-
 import { PostTestStudyNextCard } from "@/components/student/post-test-study-next-card";
 import { SessionFeedbackStrip } from "@/components/student/session-feedback-strip";
 import { generateClientSessionFeedback } from "@/lib/learner/session-feedback-client";
+import type { StudySettings } from "@/lib/learner/study-settings";
 
 type ExamQuestion = {
   id: string;
@@ -64,6 +65,7 @@ export function ExamPracticeClient({
   userId,
   /** Suggested countdown length when learner picks timed mode (NCLEX-style full mocks often use 5h). */
   timedSuggestedMinutes = 90,
+  studySettings,
 }: {
   examId: string | null;
   examTitle?: string | null;
@@ -74,6 +76,7 @@ export function ExamPracticeClient({
   /** When set, timed vs untimed button order follows Settings & study preferences. */
   userId?: string | null;
   timedSuggestedMinutes?: number;
+  studySettings: StudySettings;
 }) {
   const { t } = useMarketingI18n();
   const { session: STORAGE_SESSION, exam: STORAGE_EXAM } = storageKeys(sessionNamespace);

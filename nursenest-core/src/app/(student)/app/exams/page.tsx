@@ -29,6 +29,7 @@ import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 import { appShellBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
+import { loadStudySettings } from "@/lib/learner/load-study-settings";
 
 const HISTORY_PAGE_SIZE = 15;
 const MAX_HISTORY_PAGE_INDEX = 400;
@@ -56,6 +57,7 @@ export default async function ExamsPage({ searchParams }: ExamsPageProps) {
   const session = await auth();
   const userId = (session?.user as { id?: string })?.id ?? "";
   const entitlement = await resolveEntitlementForPage(userId);
+  const studySettings = await loadStudySettings(userId);
 
   const examCrumbs = appShellBreadcrumbs("exams");
 
@@ -163,7 +165,7 @@ export default async function ExamsPage({ searchParams }: ExamsPageProps) {
 
       {defaultExam ? (
         <ExamSessionErrorBoundary surface="exam_default">
-          <ExamPracticeClient userId={userId} examId={defaultExam.id} examTitle={defaultExam.title} />
+          <ExamPracticeClient userId={userId} examId={defaultExam.id} examTitle={defaultExam.title} studySettings={studySettings} />
         </ExamSessionErrorBoundary>
       ) : (
         <aside className="nn-card border-[color-mix(in_srgb,var(--semantic-warning)_32%,var(--semantic-border-soft))] bg-[var(--semantic-warning-soft)] p-4 text-sm text-[var(--semantic-warning-contrast)] shadow-[var(--semantic-shadow-soft)]">
@@ -185,6 +187,7 @@ export default async function ExamsPage({ searchParams }: ExamsPageProps) {
           examTitle={t("learner.exams.examTitle.mixedClinical")}
           questionTag={MIXED_PRACTICE_2026_RN_PN_TAG}
           sessionNamespace="mixed2026"
+          studySettings={studySettings}
         />
         </ExamSessionErrorBoundary>
       </section>
@@ -199,6 +202,7 @@ export default async function ExamsPage({ searchParams }: ExamsPageProps) {
           examTitle={t("learner.exams.examTitle.rnMixed")}
           questionTag={EXAM_PRESET_RN_MIXED_2026_TAG}
           sessionNamespace="rnMixed2026"
+          studySettings={studySettings}
         />
         </ExamSessionErrorBoundary>
       </section>
@@ -213,6 +217,7 @@ export default async function ExamsPage({ searchParams }: ExamsPageProps) {
           examTitle={t("learner.exams.examTitle.pnMixed")}
           questionTag={EXAM_PRESET_PN_MIXED_2026_TAG}
           sessionNamespace="pnMixed2026"
+          studySettings={studySettings}
         />
         </ExamSessionErrorBoundary>
       </section>
@@ -236,6 +241,7 @@ export default async function ExamsPage({ searchParams }: ExamsPageProps) {
               examTitle={t("learner.exams.examTitle.rnFull")}
               questionTag={EXAM_PRESET_US_RN_FULL_2026_TAG}
               sessionNamespace="usRnFull2026"
+              studySettings={studySettings}
             />
             </ExamSessionErrorBoundary>
           </div>
@@ -252,6 +258,7 @@ export default async function ExamsPage({ searchParams }: ExamsPageProps) {
               examTitle={t("learner.exams.examTitle.pnFull")}
               questionTag={EXAM_PRESET_US_PN_FULL_2026_TAG}
               sessionNamespace="usPnFull2026"
+              studySettings={studySettings}
             />
             </ExamSessionErrorBoundary>
           </div>
