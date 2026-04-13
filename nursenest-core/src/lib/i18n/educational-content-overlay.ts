@@ -883,7 +883,7 @@ export function applyFlashcardDeckOverlay(
     : deck.title;
   let description: string | null = deck.description;
   if (d.description !== undefined) {
-    const r = pickLocalizedOverlayString(deck.description ?? "", d.description, locale, {
+    const r = pickLocalizedOverlayString(deck.description ?? "", d.description ?? undefined, locale, {
       surface: "flashcard_deck_description",
       deckId: deck.id,
     });
