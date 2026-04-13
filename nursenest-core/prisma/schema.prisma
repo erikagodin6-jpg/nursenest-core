@@ -1708,10 +1708,17 @@ model UserFeedbackReport {
   deviceHint        String?              @db.VarChar(120)
   screenshotDataUrl String?              @db.Text
   clientMetaJson    Json?
+  /** Admin-only triage notes (not shown to reporters). */
+  internalNotes     String?              @db.Text
+  /** When set, this row is treated as a duplicate of the canonical report (triage / analytics). */
+  duplicateOfId     String?
+  duplicateOf       UserFeedbackReport?  @relation("UserFeedbackDupParent", fields: [duplicateOfId], references: [id], onDelete: SetNull)
+  childDuplicates   UserFeedbackReport[] @relation("UserFeedbackDupParent")
 
   @@index([status, createdAt])
   @@index([category, createdAt])
   @@index([severity, createdAt])
   @@index([userId, createdAt])
   @@index([routeKey])
+  @@index([duplicateOfId])
 }

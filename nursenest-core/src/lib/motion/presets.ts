@@ -160,7 +160,7 @@ export const pressDownTransition: Transition = {
   ease: EASE_LUXURY,
 };
 
-/** Framer `whileHover` payload — max 3px lift. */
+/** Framer `whileHover` payload — token lift (2px). */
 export const hoverLiftMotion = {
   y: BRAND_HOVER_LIFT_Y,
   transition: hoverLiftTransition,

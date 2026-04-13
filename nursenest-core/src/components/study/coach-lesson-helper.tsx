@@ -3,7 +3,7 @@
 import { Sparkles, ListOrdered, BookCheck } from "lucide-react";
 import { useStudyCoach } from "@/lib/coach/use-study-coach";
 import { CoachResponsePanel } from "./coach-response-panel";
-import type { CoachIntent, CoachContext } from "@/lib/coach/study-coach-actions";
+import type { CoachIntent, CoachContext } from "@/lib/coach/study-coach-types";
 
 /**
  * CoachLessonHelper: structured helper panel on lesson pages.
@@ -17,10 +17,13 @@ export function CoachLessonHelper({
   lessonTitle,
   lessonContent,
   topic,
+  studyNextHint,
 }: {
   lessonTitle: string;
   lessonContent?: string;
   topic?: string | null;
+  /** When true, shows a quiet line that this lesson aligns with the learner's top ranked priority. */
+  studyNextHint?: boolean;
 }) {
   const coach = useStudyCoach();
 
@@ -33,8 +36,8 @@ export function CoachLessonHelper({
     coach.ask(intent, baseContext);
   }
 
-  function handleFollowUp(intent: CoachIntent) {
-    coach.ask(intent, baseContext);
+  function handleFollowUp(intent: CoachIntent, ctx: CoachContext) {
+    coach.ask(intent, ctx);
   }
 
   const actions = [
@@ -49,6 +52,13 @@ export function CoachLessonHelper({
         <Sparkles className="h-4 w-4 text-[var(--semantic-brand)]" aria-hidden />
         <span className="nn-coach-lesson-strip__title">Study Coach</span>
       </div>
+
+      {studyNextHint ? (
+        <p className="nn-coach-lesson-strip__hint">
+          This topic lines up with your current top study priority. After you read, a short review will help it
+          stick.
+        </p>
+      ) : null}
 
       {coach.status === "idle" && (
         <div className="nn-coach-lesson-strip__actions">
@@ -72,6 +82,7 @@ export function CoachLessonHelper({
         error={coach.error}
         onFollowUp={handleFollowUp}
         onClose={coach.reset}
+        followUpBaseContext={baseContext}
       />
     </div>
   );

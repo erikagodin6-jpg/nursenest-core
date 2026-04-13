@@ -150,7 +150,8 @@ function hubCardClass(variant: CardVariant): string {
 }
 
 function listCardClass(variant: CardVariant): string {
-  const base = "nn-study-card flex h-full flex-col p-4 transition-[box-shadow,transform,border-color] duration-200 hover:-translate-y-px hover:shadow-[var(--shadow-card-hover)] focus-within:ring-2 focus-within:ring-[var(--ring-accent)] sm:p-5";
+  const base =
+    "nn-study-card flex h-full flex-col p-4 transition-[box-shadow,transform,border-color] duration-[var(--brand-motion-card-hover)] ease-[var(--brand-motion-ease-luxury)] hover:-translate-y-0.5 hover:shadow-[var(--shadow-card-hover)] focus-within:ring-2 focus-within:ring-[var(--ring-accent)] sm:p-5";
   switch (variant) {
     case "featured":
       return `${base} nn-study-card--wash`;

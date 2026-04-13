@@ -1,9 +1,12 @@
 "use client";
 
-import { MessageCircle } from "lucide-react";
+import { MessagesSquare } from "lucide-react";
 import { useUserFeedback } from "@/components/feedback/user-feedback-context";
 
-/** Compact control for headers and toolbars (paired with {@link UserFeedbackDock}). */
+/**
+ * Secondary, quiet control in the learner shell header (pairs with the global FAB).
+ * Reads as tertiary nav — not a loud support widget.
+ */
 export function UserFeedbackNavPill({ className = "" }: { className?: string }) {
   const { open } = useUserFeedback();
 
@@ -11,10 +14,11 @@ export function UserFeedbackNavPill({ className = "" }: { className?: string }) 
     <button
       type="button"
       onClick={open}
-      className={`nn-focus-ring inline-flex min-h-[40px] shrink-0 items-center gap-1.5 rounded-xl border border-[color-mix(in_srgb,var(--semantic-border-soft)_85%,transparent)] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_22%,var(--surface-strong))] px-3 py-2 text-xs font-semibold text-[var(--theme-heading-text)] transition hover:border-[color-mix(in_srgb,var(--semantic-brand)_35%,var(--semantic-border-soft))] sm:text-sm ${className}`}
+      className={`nn-global-feedback-header-trigger ${className}`}
       aria-haspopup="dialog"
+      aria-label="Send feedback or report a bug"
     >
-      <MessageCircle className="h-4 w-4 text-[var(--semantic-brand)]" aria-hidden />
+      <MessagesSquare className="h-3.5 w-3.5 shrink-0 opacity-90" aria-hidden strokeWidth={2} />
       <span className="hidden sm:inline">Feedback</span>
       <span className="sm:hidden">Help</span>
     </button>

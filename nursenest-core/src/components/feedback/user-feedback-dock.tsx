@@ -1,30 +1,33 @@
 "use client";
 
-import { MessageCirclePlus } from "lucide-react";
+import { MessagesSquare } from "lucide-react";
 import { useUserFeedback } from "@/components/feedback/user-feedback-context";
 import { UserFeedbackDialog } from "@/components/feedback/user-feedback-dialog";
+import { useGlobalFeedbackKeyboardShortcut } from "@/components/feedback/use-global-feedback-keyboard";
 
 /**
- * Floating entry + modal host. Keeps the affordance visible without covering content.
+ * Primary global entry: soft glass pill, lower-left (keeps lower-right clear for optional tutor dock).
+ * Mobile: icon-only circle with full phrase in aria-label. Desktop: icon + short label.
  */
 export function UserFeedbackDock() {
   const { open } = useUserFeedback();
+  useGlobalFeedbackKeyboardShortcut(open);
 
   return (
     <>
       <button
         type="button"
+        id="nn-global-feedback-trigger"
         onClick={open}
-        className="nn-focus-ring fixed bottom-5 left-5 z-[90] flex h-12 max-w-[min(100vw-2.5rem,14rem)] items-center gap-2 rounded-full border border-[color-mix(in_srgb,var(--semantic-brand)_35%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_40%,var(--surface-strong))] px-4 text-left text-sm font-semibold text-[var(--theme-heading-text)] shadow-[var(--shadow-elevated)] backdrop-blur-sm transition hover:border-[color-mix(in_srgb,var(--semantic-info)_40%,var(--semantic-border-soft))] hover:bg-[color-mix(in_srgb,var(--semantic-panel-positive)_35%,var(--surface-strong))] sm:bottom-6 sm:left-6"
+        className="nn-global-feedback-fab"
         aria-haspopup="dialog"
+        aria-label="Send feedback or report a bug. Keyboard shortcut: Alt Shift F."
+        aria-keyshortcuts="Alt+Shift+F"
       >
-        <span
-          className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--semantic-brand)_16%,transparent)] text-[var(--semantic-brand)]"
-          aria-hidden
-        >
-          <MessageCirclePlus className="h-4 w-4" />
+        <span className="nn-global-feedback-fab__icon" aria-hidden>
+          <MessagesSquare className="h-[1.05rem] w-[1.05rem] sm:h-[1.1rem] sm:w-[1.1rem]" strokeWidth={2} />
         </span>
-        <span className="min-w-0 truncate">Feedback</span>
+        <span className="nn-global-feedback-fab__label">Feedback</span>
       </button>
       <UserFeedbackDialog />
     </>

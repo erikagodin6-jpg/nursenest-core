@@ -3,7 +3,7 @@
 import { ListChecks } from "lucide-react";
 import { useStudyCoach } from "@/lib/coach/use-study-coach";
 import { CoachResponsePanel } from "./coach-response-panel";
-import type { CoachIntent, CoachContext } from "@/lib/coach/study-coach-actions";
+import type { CoachIntent, CoachContext } from "@/lib/coach/study-coach-types";
 
 /**
  * CoachWeakSummary: generates a structured review summary of weak topics.
@@ -34,8 +34,8 @@ export function CoachWeakSummary({
     coach.ask("weak_summary", context);
   }
 
-  function handleFollowUp(intent: CoachIntent) {
-    coach.ask(intent, context);
+  function handleFollowUp(intent: CoachIntent, ctx: CoachContext) {
+    coach.ask(intent, ctx);
   }
 
   return (
@@ -55,10 +55,9 @@ export function CoachWeakSummary({
         status={coach.status}
         response={coach.response}
         error={coach.error}
-        onFollowUp={(intent: CoachIntent, _ctx: CoachContext) =>
-          handleFollowUp(intent)
-        }
+        onFollowUp={handleFollowUp}
         onClose={coach.reset}
+        followUpBaseContext={context}
       />
     </div>
   );

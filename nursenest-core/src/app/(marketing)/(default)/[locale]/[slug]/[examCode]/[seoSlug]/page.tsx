@@ -7,13 +7,13 @@ import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry"
 import { resolveExamPathwaySafe } from "@/lib/exam-pathways/resolve-exam-pathway-safe";
 import type { MarketingRegionToggle } from "@/lib/marketing/marketing-entry-routes";
 import { getPathwayTopicProgrammaticRow } from "@/lib/seo/pathway-topic-programmatic-registry";
-import { PROGRAMMATIC_SEO_ISR_REVALIDATE_SECONDS } from "@/lib/seo/programmatic-registry";
 import { buildPathwayTopicProgrammaticBreadcrumbResolution } from "@/lib/seo/pathway-topic-programmatic-breadcrumbs";
 import { buildPathwayTopicProgrammaticMetadata } from "@/lib/seo/pathway-topic-programmatic-metadata";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
 export const dynamicParams = true;
-export const revalidate = PROGRAMMATIC_SEO_ISR_REVALIDATE_SECONDS;
+/** Must be a numeric literal for Next static route config (keep aligned with `PROGRAMMATIC_SEO_ISR_REVALIDATE_SECONDS`). */
+export const revalidate = 86400;
 
 export function generateStaticParams(): { locale: string; slug: string; examCode: string; seoSlug: string }[] {
   return [];

@@ -54,13 +54,13 @@ export function HomeConversionHero() {
       <div className="relative pt-10 pb-20 md:pt-12 md:pb-24">
         <div className="nn-section-shell">
           <div className="grid min-w-0 gap-12 lg:grid-cols-[1.06fr_0.94fr] lg:items-center lg:gap-14">
-            <StaggerGroup className="min-w-0 space-y-7" staggerMs={55} whenInView once viewMargin="-12px">
-              <StaggerItem variant="softReveal">
+            <StaggerGroup className="min-w-0 space-y-7" whenInView once viewMargin="-12px">
+              <StaggerItem variant="softReveal" timing="hero">
                 <p className="nn-marketing-caption inline-block max-w-full text-balance break-words rounded-full border border-[var(--pill-border)] bg-[var(--pill-bg)] px-3.5 py-1.5 font-semibold tracking-wide text-[var(--pill-fg)]">
                   {formatTitleCase("NurseNest Exam Prep Platform", locale)}
                 </p>
               </StaggerItem>
-              <StaggerItem>
+              <StaggerItem timing="hero">
                 <h1
                   id="home-conversion-hero-heading"
                   className="nn-marketing-h1 max-w-[22rem] text-balance break-words text-[var(--palette-heading)] sm:max-w-2xl sm:leading-[1.08]"
@@ -74,7 +74,7 @@ export function HomeConversionHero() {
                   </span>
                 </h1>
               </StaggerItem>
-              <StaggerItem variant="softReveal">
+              <StaggerItem variant="softReveal" timing="hero">
                 <p
                   className="nn-marketing-body max-w-xl text-pretty break-words leading-relaxed text-[var(--palette-text-muted)]"
                   data-testid="text-hero-subheading"
@@ -85,7 +85,7 @@ export function HomeConversionHero() {
                   )}
                 </p>
               </StaggerItem>
-              <StaggerItem>
+              <StaggerItem timing="hero">
                 <div className="flex min-w-0 flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-stretch sm:justify-start sm:gap-4">
                   <MarketingTrackedLink
                     href={loc(HUB.signup)}
@@ -122,7 +122,7 @@ export function HomeConversionHero() {
                   </MarketingTrackedLink>
                 </div>
               </StaggerItem>
-              <StaggerItem variant="softReveal">
+              <StaggerItem variant="softReveal" timing="hero">
                 <ul className="grid gap-2.5 sm:grid-cols-2 sm:gap-x-4 sm:gap-y-2">
                   {trustChips.map((row) => {
                     const RowIcon = row.icon;
@@ -143,7 +143,7 @@ export function HomeConversionHero() {
                   })}
                 </ul>
               </StaggerItem>
-              <StaggerItem variant="softReveal">
+              <StaggerItem variant="softReveal" timing="hero">
                 <p className="nn-marketing-caption flex min-w-0 items-start gap-2 text-balance break-words text-[var(--palette-text-muted)]">
                   <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-[var(--semantic-success)]" aria-hidden />
                   {formatSentenceCase("No credit card required to start your first practice sessions.", locale)}
@@ -151,7 +151,7 @@ export function HomeConversionHero() {
               </StaggerItem>
             </StaggerGroup>
 
-            <ScaleIn className="min-w-0" whenInView once viewMargin="-20px">
+            <ScaleIn className="min-w-0" timing="hero" whenInView once viewMargin="-20px">
             <div
               className="relative rounded-[1.35rem] p-[2px] shadow-[0_28px_72px_-28px_color-mix(in_srgb,var(--palette-heading)_14%,transparent)]"
               style={{

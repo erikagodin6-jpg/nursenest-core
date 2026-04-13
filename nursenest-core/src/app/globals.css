@@ -43,7 +43,7 @@ body {
   --elevation-hover: var(--shadow-card-hover);
   --elevation-active: 0 2px 10px -6px rgba(0, 0, 0, 0.14), 0 1px 4px rgba(0, 0, 0, 0.09);
   --elevation-overlay: var(--shadow-elevated);
-  --lift-hover-y: -1px;
+  --lift-hover-y: -2px;
   --lift-card-hover-y: -2px;
   --lift-press-y: 0;
   --motion-fast: 120ms;
@@ -51,14 +51,16 @@ body {
   --motion-slow: 180ms;
   --motion-ease: cubic-bezier(0.22, 0.61, 0.36, 1);
   /* NurseNest brand motion — mirrors `src/lib/motion/tokens.ts` (Framer uses seconds; CSS uses ms) */
-  --brand-motion-fast: 160ms;
+  --brand-motion-fast: 140ms;
   --brand-motion-normal: 200ms;
+  --brand-motion-hero: 220ms;
+  --brand-motion-card-hover: 180ms;
   --brand-motion-medium: 280ms;
   --brand-motion-slow: 360ms;
   --brand-motion-ease-luxury: cubic-bezier(0.25, 0.1, 0.25, 1);
   --brand-motion-ease-calm-out: cubic-bezier(0.16, 1, 0.3, 1);
   /* Primary / CTA press & lift — 120–180ms, calm ease (used by .nn-ui-btn, .nn-btn-*, dashboard CTAs) */
-  --nn-btn-motion-duration: 150ms;
+  --nn-btn-motion-duration: 140ms;
   --nn-btn-motion-ease: cubic-bezier(0.25, 0.1, 0.25, 1);
 
   /* Marketing / exam-prep: one card recipe (padding, radius, shadow) */
@@ -1262,15 +1264,15 @@ html[data-theme="deep-twilight"] .nn-ui-btn--destructive {
 }
 .nn-motion-standard {
   transition:
-    transform var(--motion-base) var(--motion-ease),
-    box-shadow var(--motion-base) var(--motion-ease),
-    border-color var(--motion-base) var(--motion-ease),
-    background-color var(--motion-base) var(--motion-ease),
-    color var(--motion-base) var(--motion-ease),
-    opacity var(--motion-fast) var(--motion-ease);
+    transform var(--brand-motion-card-hover) var(--brand-motion-ease-luxury),
+    box-shadow var(--brand-motion-card-hover) var(--brand-motion-ease-luxury),
+    border-color var(--brand-motion-card-hover) var(--brand-motion-ease-luxury),
+    background-color var(--brand-motion-card-hover) var(--brand-motion-ease-luxury),
+    color var(--brand-motion-card-hover) var(--brand-motion-ease-luxury),
+    opacity var(--brand-motion-fast) var(--brand-motion-ease-luxury);
 }
 .nn-motion-standard:hover {
-  transform: translateY(var(--lift-hover-y));
+  transform: translateY(var(--lift-card-hover-y));
 }
 .nn-motion-standard:active {
   transform: translateY(var(--lift-press-y));
@@ -1589,13 +1591,22 @@ html[data-theme] .nn-marketing-surface {
     background-color var(--motion-base) var(--motion-ease),
     color var(--motion-base) var(--motion-ease),
     border-color var(--motion-base) var(--motion-ease),
-    box-shadow var(--motion-base) var(--motion-ease);
+    box-shadow var(--motion-base) var(--motion-ease),
+    transform var(--brand-motion-normal) var(--brand-motion-ease-luxury),
+    opacity var(--brand-motion-normal) var(--brand-motion-ease-luxury);
 }
 
 .nn-marketing-nav-link:hover {
   color: var(--nav-link-hover, var(--header-link-hover, var(--nav-fg)));
   border-color: color-mix(in srgb, var(--nav-border) 82%, var(--header-background));
   background: var(--nav-hover);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .nn-marketing-nav-link:hover {
+    transform: translateY(-1px);
+    opacity: 0.94;
+  }
 }
 
 .nn-marketing-nav-link[aria-current="page"],
@@ -2141,14 +2152,16 @@ html[data-theme="deep-twilight"] .nn-trust-mark {
 @keyframes nn-header-enter {
   from {
     opacity: 0;
+    transform: translateY(-6px);
   }
   to {
     opacity: 1;
+    transform: translateY(0);
   }
 }
 
 .nn-header-animate-in {
-  animation: nn-header-enter 0.36s cubic-bezier(0.25, 0.1, 0.25, 1) both;
+  animation: nn-header-enter var(--brand-motion-medium) var(--brand-motion-ease-luxury) both;
 }
 
 @keyframes nn-overlay-enter {
@@ -2211,6 +2224,20 @@ html[data-theme="deep-twilight"] .nn-trust-mark {
   animation: nn-skeleton-fade-in var(--brand-motion-medium) var(--brand-motion-ease-luxury) both;
 }
 
+@keyframes nn-skeleton-soft-pulse {
+  0%,
+  100% {
+    opacity: 0.52;
+  }
+  50% {
+    opacity: 0.82;
+  }
+}
+
+.nn-skeleton-soft-pulse {
+  animation: nn-skeleton-soft-pulse 2.8s var(--brand-motion-ease-calm-out) infinite;
+}
+
 @keyframes nn-drawer-slide-up {
   from {
     transform: translateY(100%);
@@ -2233,6 +2260,13 @@ html[data-theme="deep-twilight"] .nn-trust-mark {
   }
   .nn-skeleton-fade {
     animation: none;
+  }
+  .nn-skeleton-soft-pulse {
+    animation: none;
+  }
+  .nn-marketing-nav-link:hover {
+    transform: none;
+    opacity: 1;
   }
   .nn-motion-standard:hover,
   .nn-motion-standard:active {
@@ -7914,6 +7948,9 @@ html[data-theme="deep-twilight"] .nn-cat-opt--incorrect {
   gap: 0.625rem;
   padding: 0.5rem 0;
 }
+.nn-coach-panel__loading--skeleton {
+  align-items: stretch;
+}
 .nn-coach-panel__error {
   display: flex;
   align-items: flex-start;
@@ -8035,6 +8072,263 @@ html[data-theme="deep-twilight"] .nn-cat-opt--incorrect {
 
 .nn-coach-weak-summary {
   margin-top: 0.75rem;
+}
+
+/* ── Study Coach phase-2 surfaces (semantic tokens only) ───────────── */
+
+.nn-coach-lesson-strip__hint {
+  margin: 0 0 0.75rem;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: var(--semantic-text-secondary);
+  padding: 0.5rem 0.625rem;
+  border-radius: 0.5rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-info) 22%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-panel-cool) 40%, var(--semantic-surface));
+}
+
+.nn-coach-readiness-card {
+  border-radius: 1rem;
+  padding: 1rem 1.25rem;
+  border: 1.5px solid var(--semantic-border-soft);
+  background: var(--semantic-surface);
+  box-shadow: 0 1px 3px -1px color-mix(in srgb, var(--semantic-brand) 5%, transparent);
+}
+.nn-coach-readiness-card__eyebrow {
+  margin: 0 0 0.5rem;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--semantic-text-muted);
+}
+.nn-coach-readiness-card__row {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+}
+.nn-coach-readiness-card__score {
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  color: var(--semantic-text-primary);
+}
+.nn-coach-readiness-card__meta {
+  min-width: 0;
+}
+.nn-coach-readiness-card__band {
+  margin: 0;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--semantic-text-primary);
+}
+.nn-coach-readiness-card__conf {
+  margin: 0.25rem 0 0;
+  font-size: 0.75rem;
+  color: var(--semantic-text-secondary);
+}
+.nn-coach-readiness-card__note {
+  margin: 0.75rem 0 0;
+  font-size: 0.75rem;
+  line-height: 1.45;
+  color: var(--semantic-text-secondary);
+}
+.nn-coach-readiness-card--at-risk {
+  border-color: color-mix(in srgb, var(--semantic-danger) 28%, var(--semantic-border-soft));
+  background: linear-gradient(
+    165deg,
+    color-mix(in srgb, var(--semantic-danger) 6%, var(--semantic-surface)) 0%,
+    var(--semantic-surface) 100%
+  );
+}
+.nn-coach-readiness-card--borderline {
+  border-color: color-mix(in srgb, var(--semantic-warning) 26%, var(--semantic-border-soft));
+  background: linear-gradient(
+    165deg,
+    color-mix(in srgb, var(--semantic-warning) 7%, var(--semantic-surface)) 0%,
+    var(--semantic-surface) 100%
+  );
+}
+.nn-coach-readiness-card--passing-range {
+  border-color: color-mix(in srgb, var(--semantic-info) 24%, var(--semantic-border-soft));
+  background: linear-gradient(
+    165deg,
+    color-mix(in srgb, var(--semantic-info) 6%, var(--semantic-surface)) 0%,
+    var(--semantic-surface) 100%
+  );
+}
+.nn-coach-readiness-card--strong {
+  border-color: color-mix(in srgb, var(--semantic-success) 24%, var(--semantic-border-soft));
+  background: linear-gradient(
+    165deg,
+    color-mix(in srgb, var(--semantic-success) 6%, var(--semantic-surface)) 0%,
+    var(--semantic-surface) 100%
+  );
+}
+
+.nn-coach-priority-list {
+  border-radius: 1rem;
+  padding: 1rem 1.25rem;
+  border: 1.5px solid color-mix(in srgb, var(--semantic-chart-2) 18%, var(--semantic-border-soft));
+  background: linear-gradient(
+    170deg,
+    color-mix(in srgb, var(--semantic-chart-2) 5%, var(--semantic-surface)) 0%,
+    var(--semantic-surface) 100%
+  );
+}
+.nn-coach-priority-list__title {
+  margin: 0;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--semantic-text-primary);
+}
+.nn-coach-priority-list__intro {
+  margin: 0.35rem 0 0.75rem;
+  font-size: 0.75rem;
+  line-height: 1.45;
+  color: var(--semantic-text-secondary);
+}
+.nn-coach-priority-list__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+.nn-coach-priority-list__item {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-start;
+}
+.nn-coach-priority-list__dot {
+  margin-top: 0.35rem;
+  height: 0.5rem;
+  width: 0.5rem;
+  border-radius: 9999px;
+  flex-shrink: 0;
+}
+.nn-coach-priority-list__dot--1 {
+  background: var(--semantic-danger);
+}
+.nn-coach-priority-list__dot--2 {
+  background: var(--semantic-warning);
+}
+.nn-coach-priority-list__dot--3 {
+  background: var(--semantic-info);
+}
+.nn-coach-priority-list__dot--4 {
+  background: var(--semantic-chart-3);
+}
+.nn-coach-priority-list__dot--5 {
+  background: var(--semantic-chart-4);
+}
+.nn-coach-priority-list__body {
+  min-width: 0;
+}
+.nn-coach-priority-list__label {
+  margin: 0;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--semantic-text-primary);
+}
+.nn-coach-priority-list__reason {
+  margin: 0.2rem 0 0;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  color: var(--semantic-text-secondary);
+}
+
+.nn-coach-pattern-insights {
+  border-radius: 1rem;
+  padding: 1rem 1.25rem;
+  border: 1.5px solid color-mix(in srgb, var(--semantic-chart-4) 18%, var(--semantic-border-soft));
+  background: linear-gradient(
+    170deg,
+    color-mix(in srgb, var(--semantic-panel-warm) 35%, var(--semantic-surface)) 0%,
+    var(--semantic-surface) 100%
+  );
+}
+.nn-coach-pattern-insights__title {
+  margin: 0 0 0.5rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--semantic-text-primary);
+}
+.nn-coach-pattern-insights__list {
+  margin: 0;
+  padding-left: 1.1rem;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--semantic-text-secondary);
+}
+.nn-coach-pattern-insights__item {
+  margin-bottom: 0.35rem;
+}
+
+.nn-coach-intervention {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.875rem 1rem;
+  border-radius: 0.875rem;
+  border: 1.5px solid var(--semantic-border-soft);
+  background: var(--semantic-surface);
+}
+.nn-coach-intervention__text {
+  flex: 1;
+  min-width: 0;
+}
+.nn-coach-intervention__title {
+  margin: 0;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--semantic-text-primary);
+}
+.nn-coach-intervention__message {
+  margin: 0.35rem 0 0;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: var(--semantic-text-secondary);
+}
+.nn-coach-intervention__dismiss {
+  flex-shrink: 0;
+  margin: -0.15rem -0.15rem 0 0;
+  padding: 0.25rem;
+  border-radius: 0.375rem;
+  color: var(--semantic-text-muted);
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+.nn-coach-intervention__dismiss:hover {
+  color: var(--semantic-text-primary);
+  background: color-mix(in srgb, var(--semantic-text-primary) 6%, transparent);
+}
+.nn-coach-intervention--action {
+  border-color: color-mix(in srgb, var(--semantic-warning) 30%, var(--semantic-border-soft));
+  background: linear-gradient(
+    165deg,
+    color-mix(in srgb, var(--semantic-warning) 8%, var(--semantic-surface)) 0%,
+    var(--semantic-surface) 100%
+  );
+}
+.nn-coach-intervention--watch {
+  border-color: color-mix(in srgb, var(--semantic-info) 28%, var(--semantic-border-soft));
+  background: linear-gradient(
+    165deg,
+    color-mix(in srgb, var(--semantic-panel-cool) 45%, var(--semantic-surface)) 0%,
+    var(--semantic-surface) 100%
+  );
+}
+.nn-coach-intervention--info {
+  border-color: color-mix(in srgb, var(--semantic-chart-3) 22%, var(--semantic-border-soft));
+  background: linear-gradient(
+    165deg,
+    color-mix(in srgb, var(--semantic-chart-3) 7%, var(--semantic-surface)) 0%,
+    var(--semantic-surface) 100%
+  );
 }
 
 /* ── Session Feedback Strip ────────────────────────────────────────── */

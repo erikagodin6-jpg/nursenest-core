@@ -66,7 +66,7 @@ export function PathwayNclexScalableLessonSection({
     return (
       <li
         key={l.slug}
-        className="nn-study-card nn-study-card--wash nn-student-card-lift p-4 transition-[box-shadow,transform,border-color] duration-200 hover:-translate-y-px hover:shadow-[var(--shadow-card-hover)] sm:p-5"
+        className="nn-study-card nn-study-card--wash nn-student-card-lift p-4 transition-[box-shadow,transform,border-color] duration-[var(--brand-motion-card-hover)] ease-[var(--brand-motion-ease-luxury)] hover:-translate-y-0.5 hover:shadow-[var(--shadow-card-hover)] sm:p-5"
       >
         <div className="flex flex-wrap items-start justify-between gap-2">
           <PathwayLessonRecordChips lesson={l} className="min-w-0 flex-1" />
@@ -150,7 +150,7 @@ export function PathwayNclexScalableLessonSection({
               return (
                 <li
                   key={l.slug}
-                  className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-2.5 shadow-[var(--semantic-shadow-soft)] transition-[box-shadow,transform] duration-200 hover:shadow-[var(--shadow-card-hover)]"
+                  className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-2.5 shadow-[var(--semantic-shadow-soft)] transition-[box-shadow,transform] duration-[var(--brand-motion-card-hover)] ease-[var(--brand-motion-ease-luxury)] hover:-translate-y-0.5 hover:shadow-[var(--shadow-card-hover)]"
                 >
                   <div className="min-w-0">
                     <PathwayLessonRecordChips lesson={l} omitTopic className="mb-1" />

@@ -3,7 +3,7 @@
 import { Compass, ListChecks, CalendarRange } from "lucide-react";
 import { useStudyCoach } from "@/lib/coach/use-study-coach";
 import { CoachResponsePanel } from "@/components/study/coach-response-panel";
-import type { CoachIntent, CoachContext } from "@/lib/coach/study-coach-actions";
+import type { CoachIntent, CoachContext } from "@/lib/coach/study-coach-types";
 
 /**
  * DashboardCoachCard: concise guidance card on the learner dashboard.
@@ -34,8 +34,8 @@ export function DashboardCoachCard({
     coach.ask(intent, context);
   }
 
-  function handleFollowUp(intent: CoachIntent) {
-    coach.ask(intent, context);
+  function handleFollowUp(intent: CoachIntent, ctx: CoachContext) {
+    coach.ask(intent, ctx);
   }
 
   const actions = [
@@ -73,6 +73,7 @@ export function DashboardCoachCard({
         error={coach.error}
         onFollowUp={handleFollowUp}
         onClose={coach.reset}
+        followUpBaseContext={context}
       />
     </div>
   );

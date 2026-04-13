@@ -3,7 +3,7 @@
 import { Lightbulb, HelpCircle, BookCheck } from "lucide-react";
 import { useStudyCoach } from "@/lib/coach/use-study-coach";
 import { CoachResponsePanel } from "./coach-response-panel";
-import type { CoachIntent, CoachContext } from "@/lib/coach/study-coach-actions";
+import type { CoachIntent, CoachContext } from "@/lib/coach/study-coach-types";
 
 /**
  * CoachReviewHelper: inline guidance actions on the smart review screen.
@@ -40,8 +40,8 @@ export function CoachReviewHelper({
     coach.ask(intent, baseContext);
   }
 
-  function handleFollowUp(intent: CoachIntent) {
-    coach.ask(intent, baseContext);
+  function handleFollowUp(intent: CoachIntent, ctx: CoachContext) {
+    coach.ask(intent, ctx);
   }
 
   const actions = wasCorrect
@@ -82,6 +82,7 @@ export function CoachReviewHelper({
         error={coach.error}
         onFollowUp={handleFollowUp}
         onClose={coach.reset}
+        followUpBaseContext={baseContext}
       />
     </div>
   );

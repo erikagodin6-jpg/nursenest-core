@@ -1,7 +1,11 @@
 "use client";
 
-import { X, Loader2, AlertCircle } from "lucide-react";
-import type { CoachResponse, CoachIntent, CoachContext } from "@/lib/coach/study-coach-actions";
+import { X, AlertCircle } from "lucide-react";
+import type {
+  CoachResponse,
+  CoachIntent,
+  CoachContext,
+} from "@/lib/coach/study-coach-types";
 import type { CoachStatus } from "@/lib/coach/use-study-coach";
 
 /**
@@ -15,12 +19,15 @@ export function CoachResponsePanel({
   error,
   onFollowUp,
   onClose,
+  followUpBaseContext,
 }: {
   status: CoachStatus;
   response: CoachResponse | null;
   error: string | null;
   onFollowUp?: (intent: CoachIntent, context: CoachContext) => void;
   onClose: () => void;
+  /** Merged into each follow-up request so the API keeps dashboard or item context. */
+  followUpBaseContext?: CoachContext;
 }) {
   if (status === "idle") return null;
 
@@ -46,11 +53,14 @@ export function CoachResponsePanel({
 
       <div className="nn-coach-panel__body">
         {status === "loading" && (
-          <div className="nn-coach-panel__loading">
-            <Loader2 className="h-5 w-5 animate-spin text-[var(--semantic-brand)]" />
-            <p className="text-sm text-[var(--semantic-text-secondary)]">
-              Working on it...
-            </p>
+          <div
+            className="nn-coach-panel__loading nn-coach-panel__loading--skeleton flex flex-col gap-2.5"
+            aria-busy="true"
+          >
+            <div className="h-2.5 w-full rounded-md bg-[var(--semantic-border-soft)] nn-skeleton-soft-pulse motion-reduce:animate-none" />
+            <div className="h-2.5 w-[92%] rounded-md bg-[var(--semantic-border-soft)] nn-skeleton-soft-pulse motion-reduce:animate-none" />
+            <div className="h-2.5 w-[64%] rounded-md bg-[var(--semantic-border-soft)]/90 nn-skeleton-soft-pulse motion-reduce:animate-none" />
+            <p className="text-sm text-[var(--semantic-text-secondary)]">Working on it...</p>
           </div>
         )}
 
@@ -84,7 +94,9 @@ export function CoachResponsePanel({
                     key={f.intent}
                     type="button"
                     className="nn-coach-follow-up-btn"
-                    onClick={() => onFollowUp(f.intent, {})}
+                    onClick={() =>
+                      onFollowUp(f.intent, { ...(followUpBaseContext ?? {}) })
+                    }
                   >
                     {f.label}
                   </button>

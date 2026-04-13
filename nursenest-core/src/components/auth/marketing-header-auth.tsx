@@ -12,6 +12,7 @@ import { isStaffRole } from "@/lib/auth/staff-roles";
 import { formatTitleCase } from "@/lib/format/text-case";
 import { PRIMARY_CTA } from "@/lib/copy/cta-copy";
 import { getNavChromeStyle } from "@/lib/theme/nav-chrome";
+import { UserFeedbackAccountMenuItem } from "@/components/feedback/user-feedback-account-menu-item";
 
 const SIGN_IN_CLASS =
   "nn-marketing-body-sm inline-flex items-center rounded-md px-3 py-2 font-medium tracking-normal text-[color:var(--nn-nav-fg,var(--nav-link))] transition-colors duration-150 hover:bg-[color:var(--nn-nav-hover-bg,var(--nav-hover))] hover:text-[color:var(--nn-nav-hover-fg,var(--nav-link-hover))]";
@@ -122,6 +123,10 @@ export function MarketingHeaderAuthDesktop() {
               {formatTitleCase(t("nav.admin"), locale)}
             </Link>
           ) : null}
+          <UserFeedbackAccountMenuItem
+            onActivate={() => setOpen(false)}
+            className="block w-full border-t border-[var(--nav-border)] px-3 py-2 text-start nn-marketing-body-sm font-medium tracking-normal text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+          />
           <button
             type="button"
             className="block w-full border-t border-[var(--nav-border)] px-3 py-2 text-start nn-marketing-body-sm font-medium tracking-normal text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
@@ -190,6 +195,10 @@ export function MarketingHeaderAuthMobile({ onNavigate }: { onNavigate: () => vo
           {formatTitleCase(t("nav.admin"), locale)}
         </Link>
       ) : null}
+      <UserFeedbackAccountMenuItem
+        onActivate={onNavigate}
+        className="w-full rounded-xl border border-[var(--nav-border)] px-3 py-2.5 text-start nn-marketing-body-sm font-medium tracking-normal text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+      />
       <button
         type="button"
         className="w-full rounded-xl border border-[var(--nav-border)] px-3 py-2.5 nn-marketing-body-sm font-medium tracking-normal text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"

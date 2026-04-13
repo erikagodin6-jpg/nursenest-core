@@ -5,7 +5,7 @@ import type {
   CoachIntent,
   CoachContext,
   CoachResponse,
-} from "@/lib/coach/study-coach-actions";
+} from "@/lib/coach/study-coach-types";
 
 export type CoachStatus = "idle" | "loading" | "success" | "error";
 

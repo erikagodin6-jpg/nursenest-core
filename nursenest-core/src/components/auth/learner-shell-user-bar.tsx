@@ -6,6 +6,7 @@ import { ChevronDown, User } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { isStaffRole } from "@/lib/auth/staff-roles";
+import { UserFeedbackAccountMenuItem } from "@/components/feedback/user-feedback-account-menu-item";
 
 type MenuItem = { href: string; i18nKey: string };
 
@@ -200,6 +201,10 @@ export function LearnerShellUserBar({ pathwayShortLabel = null }: { pathwayShort
             </div>
           ) : null}
           <div className="border-t border-[var(--border-subtle)] bg-[var(--bg-muted)]/30 p-2">
+            <UserFeedbackAccountMenuItem
+              onActivate={close}
+              className={`${linkClass} mb-1.5 w-full border-0 text-left text-foreground`}
+            />
             <button
               type="button"
               className="w-full touch-manipulation rounded-xl px-3 py-2.5 text-left text-sm font-medium text-foreground transition-colors hover:bg-[var(--surface-interactive-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/25"

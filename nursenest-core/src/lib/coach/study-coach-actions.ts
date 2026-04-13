@@ -14,10 +14,10 @@ import { followUpsForIntent, titleForIntent } from "./study-coach-followups";
 export type {
   CoachIntent,
   CoachContext,
+  CoachFollowUpAction,
   CoachRequest,
   CoachResponse,
   CoachSection,
-  CoachFollowUpAction,
 } from "./study-coach-types";
 
 export { followUpsForIntent, titleForIntent } from "./study-coach-followups";

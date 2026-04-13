@@ -3,7 +3,7 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { ArrowRight, BookMarked, BookOpen, ClipboardList, Layers, Loader2, Search, Sparkles, Target } from "lucide-react";
+import { ArrowRight, BookMarked, BookOpen, ClipboardList, Layers, Search, Sparkles, Target } from "lucide-react";
 import type { StudyNextRecommendation } from "@/lib/learner/study-next-types";
 import type { LearnerStudyNextBlockModel } from "@/lib/learner/load-learner-study-next-block";
 
@@ -120,9 +120,22 @@ export function LearnerCommandCenterClient() {
 
   if (phase === "loading" || !payload) {
     return (
-      <div className="flex min-h-[40vh] flex-col items-center justify-center gap-3 text-[var(--semantic-text-muted)]">
-        <Loader2 className="h-8 w-8 animate-spin text-[var(--semantic-brand)]" aria-hidden />
-        <p className="text-sm font-medium">Preparing your study hub…</p>
+      <div
+        className="mx-auto w-full max-w-3xl space-y-6 py-8"
+        aria-busy="true"
+        aria-label="Loading study hub"
+      >
+        <div className="space-y-3 rounded-3xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-6 sm:p-8">
+          <div className="h-4 w-40 rounded-md bg-[var(--semantic-border-soft)] nn-skeleton-fade nn-skeleton-soft-pulse motion-reduce:animate-none" />
+          <div className="h-10 w-full max-w-md rounded-lg bg-[var(--semantic-border-soft)] nn-skeleton-fade nn-skeleton-soft-pulse motion-reduce:animate-none" />
+          <div className="h-4 w-full rounded-md bg-[var(--semantic-border-soft)]/80 nn-skeleton-fade nn-skeleton-soft-pulse motion-reduce:animate-none" />
+          <div className="h-4 w-[85%] max-w-lg rounded-md bg-[var(--semantic-border-soft)]/70 nn-skeleton-fade nn-skeleton-soft-pulse motion-reduce:animate-none" />
+        </div>
+        <div className="grid gap-4 sm:grid-cols-2">
+          <div className="h-36 rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-4 nn-skeleton-fade nn-skeleton-soft-pulse motion-reduce:animate-none" />
+          <div className="h-36 rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-4 nn-skeleton-fade nn-skeleton-soft-pulse motion-reduce:animate-none" />
+        </div>
+        <p className="text-center text-sm font-medium text-[var(--semantic-text-muted)]">Preparing your study hub…</p>
       </div>
     );
   }

@@ -242,7 +242,7 @@ export function MarketingHeroCarousel({
         {!hasLoaded && mediaOk ? (
           <div
             className={`absolute inset-0 bg-gradient-to-br from-[var(--theme-separator)] via-[var(--theme-muted-surface)] to-[var(--theme-input-border)] ${
-              reducedMotion ? "opacity-90" : "nn-skeleton-fade animate-pulse"
+              reducedMotion ? "opacity-90" : "nn-skeleton-fade nn-skeleton-soft-pulse"
             }`}
             aria-hidden
           />
@@ -320,7 +320,7 @@ export function MarketingHeroCarousel({
                   onClick={() => {
                     if (!failed.has(index)) setCurrent(index);
                   }}
-                  className={`h-2 rounded-full transition-all duration-300 ${
+                  className={`h-2 rounded-full transition-all duration-[var(--brand-motion-normal)] ease-[var(--brand-motion-ease-luxury)] ${
                     index === current ? "w-6 bg-role-cta" : "w-2 bg-[var(--theme-muted-text)]/35 hover:bg-[var(--theme-muted-text)]/55"
                   } ${failed.has(index) ? "cursor-not-allowed opacity-40" : ""}`}
                   aria-label={t("components.marketingHeroCarousel.goToSlide", { n: index + 1 })}
