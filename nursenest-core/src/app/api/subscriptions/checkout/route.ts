@@ -47,117 +47,169 @@ function sessionUserId(session: { user?: unknown } | null): string | undefined {
 }
 
 export async function POST(req: Request) {
-  const session = await auth();
-  const userId = sessionUserId(session);
-  if (!userId) {
-    const msg = "Sign in required to start checkout.";
-    return NextResponse.json(
-      { code: CHECKOUT_UNAUTHORIZED_CODE, message: msg, error: msg },
-      { status: 401 },
-    );
-  }
-
-  setSentryServerContext({ route: "/api/subscriptions/checkout", feature: SERVER_FEATURE.payment, userId });
-
-  const parsed = bodySchema.safeParse(await req.json());
-  if (!parsed.success) {
-    const msg = "Invalid checkout request. Refresh the page and try again.";
-    return NextResponse.json(
-      { code: CHECKOUT_INVALID_PAYLOAD_CODE, message: msg, error: msg },
-      { status: 400 },
-    );
-  }
-
-  const { tier, duration, policyVersion, alliedCareer, region: rawRegion } = parsed.data;
-
-  const resolvedRegion: GlobalRegionSlug | undefined =
-    rawRegion && isGlobalRegionSlug(rawRegion) ? rawRegion : undefined;
-  const country = resolvedRegion === "us" ? "US" as const : "CA" as const;
-
-  if (tier === "ALLIED" && !alliedCareer) {
-    const msg = "Please select a specific career line for Allied Health.";
-    return NextResponse.json(
-      { code: CHECKOUT_INVALID_PAYLOAD_CODE, message: msg, error: msg },
-      { status: 400 },
-    );
-  }
-
-  if (policyVersion !== LEGAL_POLICY_BUNDLE_VERSION) {
-    const msg = "Policy version outdated. Refresh the page and try again.";
-    return NextResponse.json(
-      { code: CHECKOUT_POLICY_VERSION_MISMATCH_CODE, message: msg, error: msg },
-      { status: 400 },
-    );
-  }
-
-  const tierCode = tier as TierCode;
-  const durationCode = duration as BillingDuration;
-  const careerKey = alliedCareer as AlliedCareerKey | undefined;
-
-  // Try regional pricing first (covers all 18 global markets), fall back to legacy CA/US map
-  let priceId: string | undefined;
-  let planCode: string | undefined;
-  let resolvedCurrency: string = country === "US" ? "USD" : "CAD";
-
-  if (resolvedRegion) {
-    const regionalConfig = getRegionalPricing(resolvedRegion);
-    const profKey = tierCode === "ALLIED" ? "allied" : "nursing";
-    const entry = regionalConfig[profKey][durationCode];
-    if (entry.stripePriceId) {
-      priceId = entry.stripePriceId;
-      planCode = `${resolvedRegion}_${profKey}_${durationCode}`;
-      resolvedCurrency = entry.currency;
-    }
-  }
-
-  // Fall back to legacy CA/US price map if regional didn't resolve
-  if (!priceId) {
-    const price = tierCode === "ALLIED" && careerKey
-      ? findAlliedPriceEntry(country, careerKey, durationCode)
-      : findPriceEntry(country, tierCode, durationCode);
-    if (price) {
-      priceId = price.priceId;
-      planCode = price.planCode;
-    }
-  }
-
-  const missingEnvKey = tierCode === "ALLIED" && careerKey
-    ? alliedStripePriceEnvKey(country, careerKey, durationCode)
-    : stripePriceEnvKey(country, tierCode, durationCode);
-
-  if (!priceId || !planCode) {
-    safeServerLog("stripe_checkout", "rejected_missing_stripe_price_env", {
-      tier: String(tier),
-      duration: String(duration),
-      region: resolvedRegion ?? "none",
-      alliedCareer: careerKey ?? "",
-      envKey: missingEnvKey.slice(0, 80),
-    });
-    const msg = "This plan is not available for checkout. Billing configuration is incomplete.";
-    const payload: Record<string, string> = {
-      code: STRIPE_PRICE_NOT_CONFIGURED_CODE,
-      message: msg,
-      error: msg,
-    };
-    if (includeStripePriceEnvKeyInCheckoutResponse()) {
-      payload.envKey = missingEnvKey;
-    }
-    return NextResponse.json(payload, { status: 400 });
-  }
-
-  const stripe = await getStripeClient();
-  if (!stripe) {
-    safeServerLog("stripe_checkout", "stripe_client_unavailable", {});
-    const msg = "Billing is temporarily unavailable. Try again shortly.";
-    return NextResponse.json(
-      { code: CHECKOUT_STRIPE_UNAVAILABLE_CODE, message: msg, error: msg },
-      { status: 503 },
-    );
-  }
-
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, "") ?? "http://localhost:3000";
-
   try {
+    safeServerLog("stripe_checkout", "checkout_route_entered", { route: "/api/subscriptions/checkout" });
+
+    const session = await auth();
+    const userId = sessionUserId(session);
+    safeServerLog("stripe_checkout", "checkout_session_state", {
+      sessionExists: session ? 1 : 0,
+      userIdExists: userId ? 1 : 0,
+    });
+    if (!userId) {
+      safeServerLog("stripe_checkout", "checkout_route_unauthorized", { route: "/api/subscriptions/checkout" });
+      const msg = "Sign in required to start checkout.";
+      return NextResponse.json(
+        { code: CHECKOUT_UNAUTHORIZED_CODE, message: msg, error: msg },
+        { status: 401 },
+      );
+    }
+
+    setSentryServerContext({ route: "/api/subscriptions/checkout", feature: SERVER_FEATURE.payment, userId });
+
+    let requestBody: unknown;
+    try {
+      requestBody = await req.json();
+    } catch (error) {
+      console.error("[stripe_checkout] invalid_json_payload", error);
+      safeServerLog("stripe_checkout", "checkout_invalid_json_payload", { route: "/api/subscriptions/checkout" });
+      const msg = "Invalid checkout request. Refresh the page and try again.";
+      return NextResponse.json(
+        { code: CHECKOUT_INVALID_PAYLOAD_CODE, message: msg, error: msg },
+        { status: 400 },
+      );
+    }
+
+    const parsed = bodySchema.safeParse(requestBody);
+    if (!parsed.success) {
+      safeServerLog("stripe_checkout", "checkout_payload_validation_failed", {
+        route: "/api/subscriptions/checkout",
+        issues: parsed.error.issues.map((issue) => issue.path.join(".")).join(","),
+      });
+      const msg = "Invalid checkout request. Refresh the page and try again.";
+      return NextResponse.json(
+        { code: CHECKOUT_INVALID_PAYLOAD_CODE, message: msg, error: msg },
+        { status: 400 },
+      );
+    }
+
+    const { tier, duration, policyVersion, alliedCareer, region: rawRegion } = parsed.data;
+
+    const resolvedRegion: GlobalRegionSlug | undefined =
+      rawRegion && isGlobalRegionSlug(rawRegion) ? rawRegion : undefined;
+    const country = resolvedRegion === "us" ? "US" as const : "CA" as const;
+
+    if (tier === "ALLIED" && !alliedCareer) {
+      safeServerLog("stripe_checkout", "checkout_missing_allied_career", { tier, duration });
+      const msg = "Please select a specific career line for Allied Health.";
+      return NextResponse.json(
+        { code: CHECKOUT_INVALID_PAYLOAD_CODE, message: msg, error: msg },
+        { status: 400 },
+      );
+    }
+
+    if (policyVersion !== LEGAL_POLICY_BUNDLE_VERSION) {
+      safeServerLog("stripe_checkout", "checkout_policy_version_mismatch", {
+        policyVersion,
+        expectedPolicyVersion: LEGAL_POLICY_BUNDLE_VERSION,
+      });
+      const msg = "Policy version outdated. Refresh the page and try again.";
+      return NextResponse.json(
+        { code: CHECKOUT_POLICY_VERSION_MISMATCH_CODE, message: msg, error: msg },
+        { status: 400 },
+      );
+    }
+
+    const tierCode = tier as TierCode;
+    const durationCode = duration as BillingDuration;
+    const careerKey = alliedCareer as AlliedCareerKey | undefined;
+    const requestedPathway = tierCode === "ALLIED" ? (careerKey ?? "ALLIED") : tierCode;
+    safeServerLog("stripe_checkout", "checkout_request_selection", {
+      tier: tierCode,
+      duration: durationCode,
+      pathway: requestedPathway,
+      region: resolvedRegion ?? "",
+    });
+
+    // Try regional pricing first (covers all 18 global markets), fall back to legacy CA/US map
+    let priceId: string | undefined;
+    let planCode: string | undefined;
+    let resolvedCurrency: string = country === "US" ? "USD" : "CAD";
+
+    if (resolvedRegion) {
+      const regionalConfig = getRegionalPricing(resolvedRegion);
+      const profKey = tierCode === "ALLIED" ? "allied" : "nursing";
+      const entry = regionalConfig[profKey][durationCode];
+      if (entry.stripePriceId) {
+        priceId = entry.stripePriceId;
+        planCode = `${resolvedRegion}_${profKey}_${durationCode}`;
+        resolvedCurrency = entry.currency;
+      }
+    }
+
+    // Fall back to legacy CA/US price map if regional didn't resolve
+    if (!priceId) {
+      const price = tierCode === "ALLIED" && careerKey
+        ? findAlliedPriceEntry(country, careerKey, durationCode)
+        : findPriceEntry(country, tierCode, durationCode);
+      if (price) {
+        priceId = price.priceId;
+        planCode = price.planCode;
+      }
+    }
+
+    const missingEnvKey = tierCode === "ALLIED" && careerKey
+      ? alliedStripePriceEnvKey(country, careerKey, durationCode)
+      : stripePriceEnvKey(country, tierCode, durationCode);
+    safeServerLog("stripe_checkout", "checkout_price_resolution", {
+      pathway: requestedPathway,
+      tier: tierCode,
+      duration: durationCode,
+      envKey: missingEnvKey,
+      priceId: priceId ?? "",
+    });
+
+    if (!priceId || !planCode) {
+      safeServerLog("stripe_checkout", "rejected_missing_stripe_price_env", {
+        tier: String(tier),
+        duration: String(duration),
+        region: resolvedRegion ?? "none",
+        alliedCareer: careerKey ?? "",
+        envKey: missingEnvKey.slice(0, 80),
+      });
+      const msg = "This plan is not available for checkout. Billing configuration is incomplete.";
+      const payload: Record<string, string> = {
+        code: STRIPE_PRICE_NOT_CONFIGURED_CODE,
+        message: msg,
+        error: msg,
+      };
+      if (includeStripePriceEnvKeyInCheckoutResponse()) {
+        payload.envKey = missingEnvKey;
+      }
+      return NextResponse.json(payload, { status: 400 });
+    }
+    safeServerLog("stripe_checkout", "checkout_price_selected", {
+      userId,
+      tier,
+      duration,
+      alliedCareer: careerKey ?? "",
+      priceId,
+      planCode,
+      region: resolvedRegion ?? "",
+    });
+
+    const stripe = await getStripeClient();
+    if (!stripe) {
+      safeServerLog("stripe_checkout", "stripe_client_unavailable", {});
+      const msg = "Billing is temporarily unavailable. Try again shortly.";
+      return NextResponse.json(
+        { code: CHECKOUT_STRIPE_UNAVAILABLE_CODE, message: msg, error: msg },
+        { status: 503 },
+      );
+    }
+
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, "") ?? "http://localhost:3000";
+
     const acceptedAt = new Date();
     const userForCheckout = await prisma.user.update({
       where: { id: userId },
@@ -195,11 +247,15 @@ export async function POST(req: Request) {
       metadata.region = resolvedRegion;
     }
 
+    const subscriptionData = trialDays > 0
+      ? { trial_period_days: trialDays }
+      : undefined;
+
     const checkoutSession = await stripe.checkout.sessions.create({
       mode: "subscription",
       line_items: [{ price: priceId, quantity: 1 }],
-      ...(trialDays > 0 ? {
-        subscription_data: { trial_period_days: trialDays },
+      ...(subscriptionData ? {
+        subscription_data: subscriptionData,
         payment_method_collection: "always",
       } : {}),
       ...(existingCustomerId ? { customer: existingCustomerId } : { customer_email: userForCheckout.email }),
@@ -209,6 +265,28 @@ export async function POST(req: Request) {
       client_reference_id: userId,
       metadata,
     });
+    safeServerLog("stripe_checkout", "checkout_session_created_stripe_payload", {
+      stripeSessionId: checkoutSession.id,
+      mode: checkoutSession.mode,
+      status: checkoutSession.status,
+      paymentStatus: checkoutSession.payment_status,
+      amountSubtotal: checkoutSession.amount_subtotal ?? 0,
+      amountTotal: checkoutSession.amount_total ?? 0,
+      currency: checkoutSession.currency ?? "",
+      trialPeriodDays: subscriptionData?.trial_period_days ?? 0,
+      hasSubscriptionDataTrial: Boolean(subscriptionData?.trial_period_days),
+      metadataTrialDays: checkoutSession.metadata?.trialDays ?? "",
+      urlPresent: Boolean(checkoutSession.url),
+      existingCustomer: Boolean(existingCustomerId),
+    });
+    const checkoutUrl = checkoutSession.url?.trim();
+    if (!checkoutUrl) {
+      throw new Error("Stripe checkout session did not include a redirect URL.");
+    }
+    safeServerLog("stripe_checkout", "checkout_session_url_returned", {
+      stripeSessionId: checkoutSession.id,
+      checkoutUrl,
+    });
 
     await captureServerEvent(analyticsDistinctId(userId), "checkout_session_created", {
       tier: String(tier),
@@ -216,17 +294,16 @@ export async function POST(req: Request) {
       alliedCareer: careerKey ?? undefined,
       planCode,
     });
-    return NextResponse.json({ url: checkoutSession.url });
+    return NextResponse.json({ url: checkoutUrl });
   } catch (e) {
+    console.error("[stripe_checkout] unhandled_checkout_error", e);
     safeServerLog("stripe_checkout", "checkout_session_create_failed", {
-      tier: String(tier),
-      duration: String(duration),
-      alliedCareer: careerKey ?? "",
+      route: "/api/subscriptions/checkout",
     });
     safeServerLogCritical(
       "stripe_checkout",
       "stripe_checkout_session_failed",
-      { tier: String(tier), duration: String(duration) },
+      { route: "/api/subscriptions/checkout" },
       e,
     );
     const msg = "Unable to start checkout. Try again shortly.";

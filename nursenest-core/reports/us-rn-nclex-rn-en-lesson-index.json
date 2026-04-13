@@ -140,7 +140,7 @@
     "title": "Asthma (NCLEX-RN, US)",
     "category": "respiratory",
     "subcategory": "Asthma",
-    "completeness": "PARTIAL",
+    "completeness": "COMPLETE",
     "questions": "yes"
   },
   {
@@ -156,7 +156,7 @@
     "title": "ARDS (NCLEX-RN, US)",
     "category": "respiratory",
     "subcategory": "ARDS",
-    "completeness": "PARTIAL",
+    "completeness": "COMPLETE",
     "questions": "yes"
   },
   {
@@ -188,7 +188,7 @@
     "title": "COPD & respiratory basics (NCLEX-RN, US)",
     "category": "respiratory",
     "subcategory": "COPD & respiratory basics",
-    "completeness": "PARTIAL",
+    "completeness": "COMPLETE",
     "questions": "yes"
   },
   {
@@ -604,7 +604,7 @@
     "title": "Asthma & Status Asthmaticus (NCLEX-RN, US)",
     "category": "respiratory",
     "subcategory": "Respiratory",
-    "completeness": "EMPTY",
+    "completeness": "COMPLETE",
     "questions": "yes"
   },
   {
@@ -772,7 +772,7 @@
     "title": "Diuretics & Electrolyte Shifts (NCLEX-RN, US)",
     "category": "fluids-electrolytes",
     "subcategory": "Pharmacology",
-    "completeness": "EMPTY",
+    "completeness": "COMPLETE",
     "questions": "yes"
   },
   {
@@ -828,7 +828,7 @@
     "title": "Hyponatremia vs Hypernatremia (NCLEX-RN, US)",
     "category": "renal",
     "subcategory": "Fluids & Electrolytes",
-    "completeness": "EMPTY",
+    "completeness": "COMPLETE",
     "questions": "yes"
   },
   {
@@ -836,7 +836,7 @@
     "title": "Hypo- vs Hyperkalemia (NCLEX-RN, US)",
     "category": "renal",
     "subcategory": "Fluids & Electrolytes",
-    "completeness": "EMPTY",
+    "completeness": "COMPLETE",
     "questions": "yes"
   },
   {
@@ -852,7 +852,7 @@
     "title": "Fluid Volume Deficit (NCLEX-RN, US)",
     "category": "renal",
     "subcategory": "Fluids & Electrolytes",
-    "completeness": "EMPTY",
+    "completeness": "COMPLETE",
     "questions": "yes"
   },
   {
@@ -868,7 +868,7 @@
     "title": "Fluid Volume Excess (NCLEX-RN, US)",
     "category": "renal",
     "subcategory": "Fluids & Electrolytes",
-    "completeness": "EMPTY",
+    "completeness": "COMPLETE",
     "questions": "yes"
   },
   {
@@ -892,7 +892,7 @@
     "title": "Magnesium & Arrhythmia Risk (NCLEX-RN, US)",
     "category": "renal",
     "subcategory": "Fluids & Electrolytes",
-    "completeness": "EMPTY",
+    "completeness": "COMPLETE",
     "questions": "yes"
   },
   {
@@ -900,7 +900,7 @@
     "title": "Calcium & Tetany (NCLEX-RN, US)",
     "category": "renal",
     "subcategory": "Fluids & Electrolytes",
-    "completeness": "EMPTY",
+    "completeness": "COMPLETE",
     "questions": "yes"
   },
   {
@@ -916,7 +916,7 @@
     "title": "Phosphate Shifts in Renal (NCLEX-RN, US)",
     "category": "renal",
     "subcategory": "Fluids & Electrolytes",
-    "completeness": "EMPTY",
+    "completeness": "COMPLETE",
     "questions": "yes"
   },
   {
@@ -932,7 +932,7 @@
     "title": "Mixed Acid-Base Patterns (NCLEX-RN, US)",
     "category": "renal",
     "subcategory": "Fluids & Electrolytes",
-    "completeness": "EMPTY",
+    "completeness": "COMPLETE",
     "questions": "yes"
   },
   {
@@ -1068,7 +1068,7 @@
     "title": "Stroke Assessment & tPA Window (NCLEX-RN, US)",
     "category": "neuro",
     "subcategory": "Neurological",
-    "completeness": "EMPTY",
+    "completeness": "COMPLETE",
     "questions": "yes"
   },
   {
@@ -1084,7 +1084,7 @@
     "title": "Seizure Precautions & Rescue Meds (NCLEX-RN, US)",
     "category": "neuro",
     "subcategory": "Neurological",
-    "completeness": "EMPTY",
+    "completeness": "COMPLETE",
     "questions": "yes"
   },
   {
@@ -1100,7 +1100,7 @@
     "title": "Increased ICP & Positioning (NCLEX-RN, US)",
     "category": "neuro",
     "subcategory": "Neurological",
-    "completeness": "EMPTY",
+    "completeness": "COMPLETE",
     "questions": "yes"
   },
   {
@@ -1196,7 +1196,7 @@
     "title": "Thyroid Storm & Myxedema Clues (NCLEX-RN, US)",
     "category": "endocrine",
     "subcategory": "Endocrine",
-    "completeness": "EMPTY",
+    "completeness": "COMPLETE",
     "questions": "yes"
   },
   {

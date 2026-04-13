@@ -27,12 +27,16 @@ import type { ScoredReviewItem } from "@/lib/study/srs-scheduler";
 // ── Source types ──────────────────────────────────────────────────────────────
 
 export type FlashcardSourceType =
-  | "lesson_concept"    // general section concept/key point
-  | "lesson_definition" // definition / terminology card
-  | "lesson_distinction" // compare-and-contrast
-  | "rationale_derived" // generated from missed question explanation
-  | "weak_area"         // generated for a weak topic (low accuracy)
-  | "key_fact";         // single-line clinical fact / value
+  | "lesson_concept"      // general section concept/key point
+  | "lesson_definition"   // definition / terminology card
+  | "lesson_distinction"  // compare-and-contrast
+  | "rationale_derived"   // core question card: stem → correct answer + rationale
+  | "clinical_pearl_card" // isolated clinical pearl from a question's clinicalPearl field
+  | "exam_trap_card"      // common NCLEX pitfall from clinicalTrap field
+  | "mnemonic_card"       // memory hook from mnemonic / memoryHook field
+  | "key_takeaway_card"   // standalone takeaway distinct from the rationale
+  | "weak_area"           // generated for a weak topic (low accuracy)
+  | "key_fact";           // single-line clinical fact / value
 
 // ── Generated card input ──────────────────────────────────────────────────────
 
@@ -245,6 +249,12 @@ export function generateCardsFromSession(
  * Minimal shape of an ExamQuestion row needed for flashcard generation.
  * Using a subset type so this function works both with raw Prisma results
  * and with NormalizedQuestion from the pipeline schema.
+ *
+ * Fields beyond stem+rationale power additional card types:
+ *   clinicalPearl  → "clinical_pearl_card"
+ *   clinicalTrap   → "exam_trap_card"
+ *   mnemonic / memoryHook → "mnemonic_card"
+ *   keyTakeaway    → "key_takeaway_card" (when distinct from rationale)
  */
 export interface ExamQuestionForFlashcard {
   id: string;
@@ -258,6 +268,10 @@ export interface ExamQuestionForFlashcard {
   memoryHook?: string | null;
   clinicalPearl?: string | null;
   mnemonic?: string | null;
+  /** Common NCLEX/REx-PN pitfalls or distractors for this concept. */
+  clinicalTrap?: string | null;
+  /** Test-taking strategy or clinical reasoning guidance. */
+  examStrategy?: string | null;
   topic: string | null;
   bodySystem: string | null;
 }

@@ -219,7 +219,7 @@ export function PathwayLessonBody({
     return null;
   }
   return (
-    <div className="nn-lesson-prose space-y-5">
+    <div className="nn-lesson-prose space-y-6">
       {paragraphs.map((p, idx) => {
         const block = parseParagraphBlock(p);
 

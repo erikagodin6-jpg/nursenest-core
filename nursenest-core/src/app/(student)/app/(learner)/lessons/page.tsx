@@ -345,9 +345,24 @@ export default async function LessonsPage({ searchParams }: Props) {
         <p className="mt-1">{t("learner.lessons.list.studyRhythmBody")}</p>
       </aside>
       {lessons.length === 0 ? (
-        <p className="nn-card mt-4 p-6 text-sm text-muted">
-          {t("learner.lessons.list.emptyList")}
-        </p>
+        <div className="nn-card mt-4 space-y-3 p-6 text-sm text-muted">
+          <p className="font-semibold text-[var(--semantic-text-primary)]">No lessons available yet for this topic</p>
+          <p>{t("learner.lessons.list.emptyList")}</p>
+          <div className="flex flex-wrap gap-3">
+            <Link
+              href="/app/lessons"
+              className="inline-flex items-center rounded-xl border border-[var(--semantic-border-soft)] px-4 py-2 font-semibold text-[var(--semantic-brand)] hover:underline"
+            >
+              Explore available lessons
+            </Link>
+            <Link
+              href={catHref}
+              className="inline-flex items-center rounded-xl border border-[var(--semantic-border-soft)] px-4 py-2 font-semibold text-[var(--semantic-brand)] hover:underline"
+            >
+              Start adaptive exam
+            </Link>
+          </div>
+        </div>
       ) : null}
       <div className="mt-4 space-y-3">
         {lessons.map((lesson) => {

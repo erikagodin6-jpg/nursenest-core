@@ -13,6 +13,7 @@ import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-serve
 import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import type { BreadcrumbCrumb } from "@/lib/seo/breadcrumb-types";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
+import { normalizeLesson, pathwayLessonRowToInput } from "@/lib/lessons/pathway-lesson-loader";
 
 export const dynamic = "force-dynamic";
 
@@ -61,7 +62,7 @@ export default async function StartStudyingPage() {
   const pathway = pathwayId ? getExamPathwayById(pathwayId) : null;
   const lessonLocale = locale.split("-")[0] || "en";
 
-  let firstLesson =
+  const firstLessonRaw =
     pathwayId != null
       ? await prisma.pathwayLesson.findFirst({
           where: {
@@ -70,15 +71,53 @@ export default async function StartStudyingPage() {
             locale: lessonLocale,
           },
           orderBy: [{ sortOrder: "asc" }, { updatedAt: "desc" }],
-          select: { id: true, title: true, topic: true },
+          select: {
+            id: true,
+            title: true,
+            topic: true,
+            slug: true,
+            topicSlug: true,
+            bodySystem: true,
+            previewSectionCount: true,
+            seoTitle: true,
+            seoDescription: true,
+            sections: true,
+            locale: true,
+          },
         })
       : null;
+  let firstLesson = firstLessonRaw;
+  if (
+    firstLessonRaw &&
+    pathwayId != null &&
+    !normalizeLesson(pathwayLessonRowToInput(firstLessonRaw), pathwayId).structuralQuality?.publicComplete
+  ) {
+    firstLesson = null;
+  }
   if (!firstLesson && pathwayId != null && lessonLocale !== "en") {
-    firstLesson = await prisma.pathwayLesson.findFirst({
+    const fallbackRaw = await prisma.pathwayLesson.findFirst({
       where: { pathwayId, status: ContentStatus.PUBLISHED, locale: "en" },
       orderBy: [{ sortOrder: "asc" }, { updatedAt: "desc" }],
-      select: { id: true, title: true, topic: true },
+      select: {
+        id: true,
+        title: true,
+        topic: true,
+        slug: true,
+        topicSlug: true,
+        bodySystem: true,
+        previewSectionCount: true,
+        seoTitle: true,
+        seoDescription: true,
+        sections: true,
+        locale: true,
+      },
     });
+    if (
+      fallbackRaw &&
+      normalizeLesson(pathwayLessonRowToInput(fallbackRaw), pathwayId).structuralQuality?.publicComplete
+    ) {
+      firstLesson = fallbackRaw;
+    }
   }
 
   const entitlement = await resolveEntitlementForPage(userId);

@@ -721,7 +721,9 @@ export function stripPathwayLessonToHubListShape(full: PathwayLessonRecord): Pat
 }
 
 function listCatalogPathwayIdsWithLessonsSync(): string[] {
-  return Object.keys(data.pathways).filter((id) => (data.pathways[id]?.lessons?.length ?? 0) > 0);
+  return Object.keys(data.pathways).filter((id) =>
+    getCatalogPathwayLessonsSync(id).some((lesson) => lesson.structuralQuality?.publicComplete),
+  );
 }
 
 function filterCatalogLessonsByTopicSlugs(raw: LessonInput[], topicSlugsIn?: string[]): LessonInput[] {
@@ -1765,16 +1767,20 @@ async function listTopicClustersImpl(pathwayId: string, marketingLocale?: string
       pathwayId,
       normalizePathwayLessonLocale(marketingLocale),
     );
-    const groups = await dbCall(
+    const rows = await dbCall(
       () =>
-        prisma.pathwayLesson.groupBy({
-          by: ["topicSlug"],
+        prisma.pathwayLesson.findMany({
           where: { pathwayId, status: ContentStatus.PUBLISHED, locale: effective },
-          _count: { _all: true },
+          select: { topicSlug: true, topic: true, sections: true, slug: true, title: true, bodySystem: true, seoTitle: true, seoDescription: true, previewSectionCount: true, locale: true },
+          take: 2000,
+          orderBy: [{ sortOrder: "asc" }, { slug: "asc" }],
         }),
       [],
     );
-    if (groups.length === 0) {
+    const completeRows = rows.filter((row) =>
+      normalizeLesson(pathwayLessonRowToInput(row), pathwayId).structuralQuality?.publicComplete,
+    );
+    if (completeRows.length === 0) {
       const catClusters = topicClustersFromCatalogPathway(pathwayId);
       if (catClusters.length > 0) {
         safeServerLog("pathway_lessons", "topic_index_catalog_supplement", {
@@ -1786,24 +1792,19 @@ async function listTopicClustersImpl(pathwayId: string, marketingLocale?: string
       }
       return [];
     }
-    const slugs = groups.map((g) => g.topicSlug);
-    // Safety cap: topic cardinality should be low (<100 per pathway) but guard against catalog explosions.
-    const labelRows = await dbCall(
-      () =>
-        prisma.pathwayLesson.findMany({
-          where: { pathwayId, status: ContentStatus.PUBLISHED, locale: effective, topicSlug: { in: slugs } },
-          distinct: ["topicSlug"],
-          select: { topicSlug: true, topic: true },
-          take: 200,
-        }),
-      [],
-    );
-    const labelBySlug = new Map(labelRows.map((r) => [r.topicSlug, r.topic]));
-    return groups
-      .map((g) => ({
-        topicSlug: g.topicSlug,
-        label: labelBySlug.get(g.topicSlug) ?? g.topicSlug,
-        count: g._count._all,
+    const bySlug = new Map<string, { label: string; count: number }>();
+    for (const row of completeRows) {
+      const key = row.topicSlug;
+      if (!key) continue;
+      const cur = bySlug.get(key) ?? { label: row.topic || key, count: 0 };
+      cur.count += 1;
+      bySlug.set(key, cur);
+    }
+    return [...bySlug.entries()]
+      .map(([topicSlug, value]) => ({
+        topicSlug,
+        label: value.label,
+        count: value.count,
       }))
       .sort((a, b) => a.label.localeCompare(b.label));
   }

@@ -16,6 +16,7 @@ import { formatTopicLabelForDisplay, normalizeTopicKey } from "@/lib/learner/top
 import { resolveTopicRemediationLinks } from "@/lib/learner/topic-remediation-links";
 import type { WeakTopicRow } from "@/lib/learner/weak-topics-from-sessions";
 import { pathwayLessonsAppListWhere } from "@/lib/lessons/app-pathway-lesson-list-scope";
+import { normalizeLesson, pathwayLessonRowToInput } from "@/lib/lessons/pathway-lesson-loader";
 
 export type LessonContinueContext =
   | { variant: "pathway"; lessonId: string; pathwayId: string; topicSlug: string }
@@ -39,11 +40,26 @@ async function findNextPathwayLessonInAppOrder(
   learnerPath: string | null,
 ): Promise<{ id: string; title: string } | null> {
   const baseWhere = pathwayLessonsAppListWhere(entitlement, learnerPath);
-  const rows = await prisma.pathwayLesson.findMany({
+  const rowsRaw = await prisma.pathwayLesson.findMany({
     where: { AND: [baseWhere, { pathwayId }] },
     orderBy: [{ sortOrder: "asc" }, { id: "asc" }],
-    select: { id: true, title: true },
+    select: {
+      id: true,
+      title: true,
+      slug: true,
+      topic: true,
+      topicSlug: true,
+      bodySystem: true,
+      previewSectionCount: true,
+      seoTitle: true,
+      seoDescription: true,
+      sections: true,
+      locale: true,
+    },
   });
+  const rows = rowsRaw.filter((row) =>
+    normalizeLesson(pathwayLessonRowToInput(row), pathwayId).structuralQuality?.publicComplete,
+  );
   const idx = rows.findIndex((r) => r.id === currentLessonId);
   if (idx < 0 || idx >= rows.length - 1) return null;
   const n = rows[idx + 1]!;

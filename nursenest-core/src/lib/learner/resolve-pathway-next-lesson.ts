@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/db";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { pathwayLessonsAppListWhere, visiblePathwayIdsForAppLessons } from "@/lib/lessons/app-pathway-lesson-list-scope";
+import { normalizeLesson, pathwayLessonRowToInput } from "@/lib/lessons/pathway-lesson-loader";
 import { normalizeTopicKey } from "@/lib/learner/topic-normalize";
 import { syntheticPathwayLessonId } from "@/lib/lessons/pathway-lesson-progress";
 import { pathwayLessonMarketingDetailHref } from "@/lib/lessons/pathway-lesson-types";
@@ -48,12 +49,24 @@ export async function resolvePathwayNextLesson(
   for (const pathwayId of orderedPathwayIds(learnerPath, visible)) {
     const prefix = `pathway:${pathwayId}:`;
 
-    const [lessons, completedCount, lastProgress] = await Promise.all([
+    const [lessonsRaw, completedCount, lastProgress] = await Promise.all([
       prisma.pathwayLesson.findMany({
         where: { AND: [pathwayWhere, { pathwayId }] },
         orderBy: [{ sortOrder: "asc" }, { slug: "asc" }],
         take: 500,
-        select: { id: true, title: true, slug: true },
+        select: {
+          id: true,
+          title: true,
+          slug: true,
+          topic: true,
+          topicSlug: true,
+          bodySystem: true,
+          previewSectionCount: true,
+          seoTitle: true,
+          seoDescription: true,
+          sections: true,
+          locale: true,
+        },
       }),
       prisma.progress.count({
         where: { userId, completed: true, lessonId: { startsWith: prefix } },
@@ -65,6 +78,9 @@ export async function resolvePathwayNextLesson(
       }),
     ]);
 
+    const lessons = lessonsRaw.filter((row) =>
+      normalizeLesson(pathwayLessonRowToInput(row), pathwayId).structuralQuality?.publicComplete,
+    );
     if (lessons.length === 0) continue;
 
     for (let i = 0; i < lessons.length; i += NEXT_LESSON_CHUNK) {
@@ -118,12 +134,27 @@ export async function resolveNextIncompleteMarketingPathwayLesson(
   if (!visible.includes(pathwayId)) return null;
 
   const pathwayWhere = pathwayLessonsAppListWhere(entitlement, learnerPath);
-  const lessons = await prisma.pathwayLesson.findMany({
+  const lessonsRaw = await prisma.pathwayLesson.findMany({
     where: { AND: [pathwayWhere, { pathwayId }] },
     orderBy: [{ sortOrder: "asc" }, { slug: "asc" }],
     take: 500,
-    select: { title: true, slug: true },
+    select: {
+      id: true,
+      title: true,
+      slug: true,
+      topic: true,
+      topicSlug: true,
+      bodySystem: true,
+      previewSectionCount: true,
+      seoTitle: true,
+      seoDescription: true,
+      sections: true,
+      locale: true,
+    },
   });
+  const lessons = lessonsRaw.filter((row) =>
+    normalizeLesson(pathwayLessonRowToInput(row), pathwayId).structuralQuality?.publicComplete,
+  );
   if (lessons.length === 0) return null;
 
   for (let i = 0; i < lessons.length; i += NEXT_LESSON_CHUNK) {
@@ -167,12 +198,26 @@ export async function resolvePathwayLessonForWeakTopic(
   const pathwayWhere = pathwayLessonsAppListWhere(entitlement, learnerPath);
 
   for (const pathwayId of orderedPathwayIds(learnerPath, visible)) {
-    const rows = await prisma.pathwayLesson.findMany({
+    const rowsRaw = await prisma.pathwayLesson.findMany({
       where: { AND: [pathwayWhere, { pathwayId }] },
       orderBy: [{ sortOrder: "asc" }, { slug: "asc" }],
       take: 250,
-      select: { id: true, title: true, topic: true, topicSlug: true },
+      select: {
+        id: true,
+        title: true,
+        topic: true,
+        topicSlug: true,
+        bodySystem: true,
+        previewSectionCount: true,
+        seoTitle: true,
+        seoDescription: true,
+        sections: true,
+        locale: true,
+      },
     });
+    const rows = rowsRaw.filter((row) =>
+      normalizeLesson(pathwayLessonRowToInput(row), pathwayId).structuralQuality?.publicComplete,
+    );
 
     for (const r of rows) {
       const fromTopic = normalizeTopicKey(r.topic);

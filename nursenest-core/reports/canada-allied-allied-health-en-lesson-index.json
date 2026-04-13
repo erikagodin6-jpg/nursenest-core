@@ -37,7 +37,7 @@
     "category": "safety",
     "subcategory": "Medical Laboratory",
     "completeness": "EMPTY",
-    "questions": "yes"
+    "questions": "no"
   },
   {
     "slug": "coag-sample-handling",
@@ -45,7 +45,7 @@
     "category": "safety",
     "subcategory": "Medical Laboratory",
     "completeness": "EMPTY",
-    "questions": "yes"
+    "questions": "no"
   },
   {
     "slug": "contrast-reaction-preparedness",
@@ -53,7 +53,7 @@
     "category": "safety",
     "subcategory": "Diagnostic Imaging",
     "completeness": "EMPTY",
-    "questions": "yes"
+    "questions": "no"
   },
   {
     "slug": "pregnancy-screening-before-imaging",
@@ -61,7 +61,7 @@
     "category": "safety",
     "subcategory": "Diagnostic Imaging",
     "completeness": "EMPTY",
-    "questions": "yes"
+    "questions": "no"
   },
   {
     "slug": "high-alert-med-storage",
@@ -85,7 +85,7 @@
     "category": "safety",
     "subcategory": "Rehab & Therapy",
     "completeness": "EMPTY",
-    "questions": "yes"
+    "questions": "no"
   },
   {
     "slug": "functional-mobility-screening",
@@ -93,7 +93,7 @@
     "category": "safety",
     "subcategory": "Rehab & Therapy",
     "completeness": "EMPTY",
-    "questions": "yes"
+    "questions": "no"
   },
   {
     "slug": "trauma-triage-basics",
@@ -101,7 +101,7 @@
     "category": "safety",
     "subcategory": "EMS / Prehospital",
     "completeness": "EMPTY",
-    "questions": "yes"
+    "questions": "no"
   },
   {
     "slug": "stroke-pre-notification",
@@ -109,7 +109,7 @@
     "category": "neuro",
     "subcategory": "EMS / Prehospital",
     "completeness": "EMPTY",
-    "questions": "yes"
+    "questions": "no"
   },
   {
     "slug": "sterile-field-breaks",
@@ -117,7 +117,7 @@
     "category": "safety",
     "subcategory": "Infection Control (Allied)",
     "completeness": "EMPTY",
-    "questions": "yes"
+    "questions": "no"
   },
   {
     "slug": "ppe-sequence",
@@ -133,7 +133,7 @@
     "category": "safety",
     "subcategory": "Safety (Allied)",
     "completeness": "EMPTY",
-    "questions": "yes"
+    "questions": "no"
   },
   {
     "slug": "chemical-spill-initial-steps",
@@ -141,7 +141,7 @@
     "category": "safety",
     "subcategory": "Safety (Allied)",
     "completeness": "EMPTY",
-    "questions": "yes"
+    "questions": "no"
   },
   {
     "slug": "sepsis-recognition-and-bundles",
@@ -157,7 +157,7 @@
     "category": "safety",
     "subcategory": "Cardiac Emergencies",
     "completeness": "EMPTY",
-    "questions": "yes"
+    "questions": "no"
   },
   {
     "slug": "endocrine-crises-rapid-differentiation",
@@ -165,7 +165,7 @@
     "category": "safety",
     "subcategory": "Endocrine Crises",
     "completeness": "EMPTY",
-    "questions": "yes"
+    "questions": "no"
   },
   {
     "slug": "neuro-deterioration-escalation",
@@ -173,7 +173,7 @@
     "category": "neuro",
     "subcategory": "Neuro Deterioration",
     "completeness": "EMPTY",
-    "questions": "yes"
+    "questions": "no"
   },
   {
     "slug": "respiratory-failure-escalation-ladder",

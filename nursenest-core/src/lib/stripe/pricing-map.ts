@@ -96,6 +96,22 @@ export function logStripeProductionPricingMisconfiguration(): void {
   );
 }
 
+export function logStripeCheckoutEnvStartupStatus(): void {
+  const stripeSecret = process.env.STRIPE_SECRET_KEY?.trim();
+  if (!stripeSecret) {
+    console.error(
+      "[nursenest-core] stripe checkout env: STRIPE_SECRET_KEY is missing — checkout session creation will fail.",
+    );
+  }
+
+  const missingPriceEnvKeys = listMissingStripePriceEnvKeys();
+  if (missingPriceEnvKeys.length > 0) {
+    console.error(
+      `[nursenest-core] stripe checkout env: missing ${missingPriceEnvKeys.length} STRIPE_PRICE_* key(s): ${missingPriceEnvKeys.join(", ")}`,
+    );
+  }
+}
+
 function buildPriceMap(): PriceEntry[] {
   return eachStripePriceMatrixRow()
     .filter((r): r is StripePriceMatrixRow & { priceId: string } => Boolean(r.priceId))

@@ -11566,5 +11566,157 @@
     "subcategory": "Neuro Deterioration",
     "completeness": "EMPTY",
     "questions": "no"
+  },
+  {
+    "slug": "early-vs-late-shock",
+    "title": "Early vs Late Shock: Recognition and Priorities (AGPCNP)",
+    "category": "cardiovascular",
+    "subcategory": "Shock Stages",
+    "completeness": "EMPTY",
+    "questions": "no"
+  },
+  {
+    "slug": "shock-states-comparison",
+    "title": "Shock States Comparison: Hypovolemic, Cardiogenic, Obstructive, Distributive (AGPCNP)",
+    "category": "cardiovascular",
+    "subcategory": "Shock States",
+    "completeness": "EMPTY",
+    "questions": "no"
+  },
+  {
+    "slug": "hemodynamics-bedside-interpretation",
+    "title": "Hemodynamics at the Bedside (AGPCNP)",
+    "category": "safety",
+    "subcategory": "Hemodynamics",
+    "completeness": "EMPTY",
+    "questions": "no"
+  },
+  {
+    "slug": "sepsis-recognition-and-bundles",
+    "title": "Sepsis Recognition and Bundle Timing Priorities (AGPCNP)",
+    "category": "sepsis",
+    "subcategory": "Sepsis",
+    "completeness": "EMPTY",
+    "questions": "no"
+  },
+  {
+    "slug": "oxygenation-failure-patterns",
+    "title": "Oxygenation Failure Patterns (AGPCNP)",
+    "category": "safety",
+    "subcategory": "Oxygenation",
+    "completeness": "EMPTY",
+    "questions": "no"
+  },
+  {
+    "slug": "cardiac-emergencies-first-hour",
+    "title": "Cardiac Emergencies: First-Hour Prioritization (AGPCNP)",
+    "category": "safety",
+    "subcategory": "Cardiac Emergencies",
+    "completeness": "EMPTY",
+    "questions": "no"
+  },
+  {
+    "slug": "renal-emergencies-hyperkalemia-aki",
+    "title": "Renal Emergencies: Hyperkalemia and AKI Deterioration (AGPCNP)",
+    "category": "renal",
+    "subcategory": "Renal Emergencies",
+    "completeness": "EMPTY",
+    "questions": "no"
+  },
+  {
+    "slug": "endocrine-crises-rapid-differentiation",
+    "title": "Endocrine Crises: Rapid Differentiation (AGPCNP)",
+    "category": "safety",
+    "subcategory": "Endocrine Crises",
+    "completeness": "EMPTY",
+    "questions": "no"
+  },
+  {
+    "slug": "acid-base-disorders-rapid-interpretation",
+    "title": "Acid-Base Disorders: Rapid Interpretation (AGPCNP)",
+    "category": "renal",
+    "subcategory": "Acid-Base Disorders",
+    "completeness": "EMPTY",
+    "questions": "no"
+  },
+  {
+    "slug": "fluids-and-electrolytes-danger-patterns",
+    "title": "Fluids and Electrolytes: Danger Patterns (AGPCNP)",
+    "category": "renal",
+    "subcategory": "Fluids and Electrolytes",
+    "completeness": "EMPTY",
+    "questions": "no"
+  },
+  {
+    "slug": "vasopressor-selection-and-safety",
+    "title": "Vasopressor Selection and Safety Monitoring (AGPCNP)",
+    "category": "safety",
+    "subcategory": "Vasopressors",
+    "completeness": "EMPTY",
+    "questions": "no"
+  },
+  {
+    "slug": "lactate-and-perfusion-trending",
+    "title": "Lactate and Perfusion Trending (AGPCNP)",
+    "category": "safety",
+    "subcategory": "Perfusion Trends",
+    "completeness": "EMPTY",
+    "questions": "no"
+  },
+  {
+    "slug": "respiratory-failure-escalation-ladder",
+    "title": "Respiratory Failure Escalation Ladder (AGPCNP)",
+    "category": "safety",
+    "subcategory": "Respiratory Failure",
+    "completeness": "EMPTY",
+    "questions": "no"
+  },
+  {
+    "slug": "septic-vs-cardiogenic-shock-differentiation",
+    "title": "Septic vs Cardiogenic Shock: Bedside Differentiation (AGPCNP)",
+    "category": "cardiovascular",
+    "subcategory": "Shock Differentiation",
+    "completeness": "EMPTY",
+    "questions": "no"
+  },
+  {
+    "slug": "hyperkalemia-ecg-and-emergent-treatment",
+    "title": "Hyperkalemia: ECG Changes and Emergent Treatment (AGPCNP)",
+    "category": "renal",
+    "subcategory": "Hyperkalemia Emergencies",
+    "completeness": "EMPTY",
+    "questions": "no"
+  },
+  {
+    "slug": "hypoglycemia-vs-hyperglycemia-priority-response",
+    "title": "Hypoglycemia vs Hyperglycemia: Priority Response (AGPCNP)",
+    "category": "safety",
+    "subcategory": "Glycemic Emergencies",
+    "completeness": "EMPTY",
+    "questions": "no"
+  },
+  {
+    "slug": "intracranial-pressure-escalation-pathway",
+    "title": "Increased Intracranial Pressure: Escalation Pathway (AGPCNP)",
+    "category": "neuro",
+    "subcategory": "Increased ICP",
+    "completeness": "EMPTY",
+    "questions": "no"
+  },
+  {
+    "slug": "fluid-resuscitation-initial-vs-reassessment",
+    "title": "Fluid Resuscitation: Initial vs Reassessment-Driven Strategy (AGPCNP)",
+    "category": "renal",
+    "subcategory": "Fluid Resuscitation",
+    "completeness": "EMPTY",
+    "questions": "no"
+  },
+  {
+    "slug": "abg-acid-base-and-compensation-patterns",
+    "title": "ABG Compensation Patterns: Action Priorities (AGPCNP)",
+    "category": "respiratory",
+    "subcategory": "ABG Compensation",
+    "completeness": "EMPTY",
+    "questions": "no"
   }
 ]

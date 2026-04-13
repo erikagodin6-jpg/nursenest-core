@@ -1,5 +1,7 @@
 import type { PathwayLessonQuizItem } from "@/lib/lessons/pathway-lesson-types";
 
+const OPTION_LETTERS = ["A", "B", "C", "D", "E", "F"];
+
 function QuizList({
   title,
   items,
@@ -13,26 +15,45 @@ function QuizList({
   return (
     <section className="border-b border-[color-mix(in_srgb,var(--border-subtle)_88%,var(--theme-primary))] pb-8 last:border-b-0 last:pb-0">
       <h2 className="nn-marketing-h3 text-[var(--theme-heading-text)]">{title}</h2>
-      <ol className="mt-4 list-decimal space-y-5 pl-5 nn-marketing-body-sm text-[var(--theme-body-text)] marker:font-semibold marker:text-[var(--theme-heading-text)]">
+      <ol className="mt-5 space-y-7 pl-0 list-none">
         {items.map((q, i) => (
-          <li key={i} className="marker:font-semibold">
-            <p className="font-medium text-foreground">{q.question}</p>
-            <ul className="mt-2 list-inside list-[circle] space-y-1 text-muted-foreground">
+          <li key={i}>
+            <p className="text-[0.9375rem] font-semibold leading-snug text-[var(--theme-heading-text)]">
+              <span className="mr-2 text-[var(--semantic-text-secondary)]">{i + 1}.</span>
+              {q.question}
+            </p>
+            <ul className="mt-3 space-y-2 pl-0 list-none">
               {q.options.map((opt, j) => (
-                <li key={j}>
-                  {showAnswers && j === q.correct ? (
-                    <strong className="text-foreground">{opt}</strong>
-                  ) : (
-                    opt
-                  )}
+                <li
+                  key={j}
+                  className={`flex items-baseline gap-2.5 rounded-lg px-3 py-2 text-[0.9rem] leading-relaxed transition-colors ${
+                    showAnswers && j === q.correct
+                      ? "bg-[color-mix(in_srgb,var(--semantic-success)_10%,transparent)] text-[var(--semantic-success-contrast)] font-medium"
+                      : "text-[var(--theme-body-text)]"
+                  }`}
+                >
+                  <span
+                    className={`shrink-0 rounded-md px-1.5 py-0.5 text-[0.7rem] font-bold uppercase tracking-wider ${
+                      showAnswers && j === q.correct
+                        ? "bg-[var(--semantic-success)] text-white"
+                        : "bg-[color-mix(in_srgb,var(--theme-primary)_12%,var(--bg-card))] text-[var(--semantic-text-secondary)]"
+                    }`}
+                  >
+                    {OPTION_LETTERS[j] ?? String(j + 1)}
+                  </span>
+                  <span>{opt}</span>
                 </li>
               ))}
             </ul>
             {showAnswers && q.rationale ? (
-              <p className="mt-2 whitespace-pre-wrap text-xs text-muted-foreground">
-                <span className="font-semibold text-foreground">Rationale: </span>
-                {q.rationale}
-              </p>
+              <div className="nn-lesson-rationale mt-3">
+                <p className="text-[0.675rem] font-bold uppercase tracking-widest text-[var(--semantic-success-contrast)]">
+                  Rationale
+                </p>
+                <p className="mt-1 text-[0.875rem] leading-relaxed text-[var(--semantic-text-secondary)] whitespace-pre-wrap">
+                  {q.rationale}
+                </p>
+              </div>
             ) : null}
           </li>
         ))}

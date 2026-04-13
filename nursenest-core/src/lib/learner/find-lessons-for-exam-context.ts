@@ -16,6 +16,7 @@ import {
 import { pathwayRationaleContextFromId } from "@/lib/learner/lesson-question-rationale/pathway-context";
 import type { QuestionRationaleSignals } from "@/lib/learner/lesson-question-rationale/types";
 import type { RationaleLessonLinkKind } from "@/lib/learner/lesson-question-rationale/types";
+import { normalizeLesson, pathwayLessonRowToInput } from "@/lib/lessons/pathway-lesson-loader";
 
 export type ExamContextLessonHit = {
   id: string;
@@ -83,10 +84,20 @@ export async function findLessonsForExamContext(
       topicSlug: true,
       bodySystem: true,
       countryCode: true,
+      previewSectionCount: true,
+      seoTitle: true,
+      seoDescription: true,
+      sections: true,
+      locale: true,
+      pathwayId: true,
     },
   });
 
-  if (rows.length === 0) {
+  const completeRows = rows.filter((row) =>
+    normalizeLesson(pathwayLessonRowToInput(row), pathwayId).structuralQuality?.publicComplete,
+  );
+
+  if (completeRows.length === 0) {
     return { pathwayId, topicSlug, primary: null, related: [], suppressedReason: "no_published_rows" };
   }
 
@@ -102,7 +113,7 @@ export async function findLessonsForExamContext(
   const ranked = rankPathwayLessonRowsForQuestion(
     signals,
     pathwayCtx,
-    rows as PathwayLessonScoreRow[],
+    completeRows as PathwayLessonScoreRow[],
     topicSlug,
   );
 

@@ -125,7 +125,6 @@ export async function loadProgressPagePayload(userId: string, entitlement: Acces
   const [
     pathwayRows,
     contentLessonTotal,
-    pathwayLessonTotal,
     lessonsCompleted,
     lessonsInProgressCount,
     topicSums,
@@ -138,7 +137,6 @@ export async function loadProgressPagePayload(userId: string, entitlement: Acces
   ] = await Promise.all([
     loadPathwayStudySummaries(userId, entitlement),
     prisma.contentItem.count({ where: { ...lessonWhere, type: "lesson" } }),
-    prisma.pathwayLesson.count({ where: pathwayWhere }),
     prisma.progress.count({ where: { userId, completed: true } }),
     prisma.progress.count({ where: { userId, completed: false } }),
     prisma.userTopicStat
@@ -177,6 +175,7 @@ export async function loadProgressPagePayload(userId: string, entitlement: Acces
     }),
   ]);
 
+  const pathwayLessonTotal = pathwayRows.reduce((sum, row) => sum + row.lessonsTotal, 0);
   const lessonsAvailable = contentLessonTotal + pathwayLessonTotal;
   const notStartedPool = Math.max(0, lessonsAvailable - lessonsCompleted - lessonsInProgressCount);
 

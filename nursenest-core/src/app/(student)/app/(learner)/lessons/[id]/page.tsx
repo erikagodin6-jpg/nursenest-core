@@ -255,14 +255,7 @@ export default async function LessonDetailPage({ params }: Props) {
 
   if (resolvedLesson.kind === "not_found") {
     safeServerLog("page_lesson_detail", "lesson_not_found", { id });
-    return (
-      <main className="space-y-4">
-        <p className="text-sm text-muted">{t("learner.lessons.detail.notFound")}</p>
-        <Link className="text-sm font-semibold text-primary underline" href="/app/lessons">
-          {t("learner.lessons.detail.backToLessons")}
-        </Link>
-      </main>
-    );
+    notFound();
   }
 
   if (resolvedLesson.kind === "out_of_plan") {

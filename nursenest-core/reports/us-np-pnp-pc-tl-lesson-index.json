@@ -22,5 +22,45 @@
     "subcategory": "Polypharmacy",
     "completeness": "EMPTY",
     "questions": "no"
+  },
+  {
+    "slug": "sepsis-recognition-and-bundles",
+    "title": "Sepsis Recognition and Bundle Timing Priorities (PNP-PC)",
+    "category": "sepsis",
+    "subcategory": "Sepsis",
+    "completeness": "EMPTY",
+    "questions": "no"
+  },
+  {
+    "slug": "cardiac-emergencies-first-hour",
+    "title": "Cardiac Emergencies: First-Hour Prioritization (PNP-PC)",
+    "category": "safety",
+    "subcategory": "Cardiac Emergencies",
+    "completeness": "EMPTY",
+    "questions": "no"
+  },
+  {
+    "slug": "endocrine-crises-rapid-differentiation",
+    "title": "Endocrine Crises: Rapid Differentiation (PNP-PC)",
+    "category": "safety",
+    "subcategory": "Endocrine Crises",
+    "completeness": "EMPTY",
+    "questions": "no"
+  },
+  {
+    "slug": "neuro-deterioration-escalation",
+    "title": "Neuro Deterioration: Escalation Triggers (PNP-PC)",
+    "category": "neuro",
+    "subcategory": "Neuro Deterioration",
+    "completeness": "EMPTY",
+    "questions": "no"
+  },
+  {
+    "slug": "respiratory-failure-escalation-ladder",
+    "title": "Respiratory Failure Escalation Ladder (PNP-PC)",
+    "category": "safety",
+    "subcategory": "Respiratory Failure",
+    "completeness": "EMPTY",
+    "questions": "no"
   }
 ]

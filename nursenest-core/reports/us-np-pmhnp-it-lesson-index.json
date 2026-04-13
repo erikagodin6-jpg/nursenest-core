@@ -68,7 +68,7 @@
     "title": "Heart Failure GDMT Basics (NP certification, US)",
     "category": "cardiovascular",
     "subcategory": "Cardiovascular (NP)",
-    "completeness": "EMPTY",
+    "completeness": "PARTIAL",
     "questions": "no"
   },
   {
@@ -84,7 +84,7 @@
     "title": "COPD GOLD Overview (NP certification, US)",
     "category": "respiratory",
     "subcategory": "Respiratory (NP)",
-    "completeness": "EMPTY",
+    "completeness": "PARTIAL",
     "questions": "no"
   },
   {
@@ -92,7 +92,7 @@
     "title": "Asthma Step-Up Therapy (NP certification, US)",
     "category": "respiratory",
     "subcategory": "Respiratory (NP)",
-    "completeness": "EMPTY",
+    "completeness": "PARTIAL",
     "questions": "no"
   },
   {
@@ -108,7 +108,7 @@
     "title": "Renal Dose Adjustment Awareness (NP certification, US)",
     "category": "renal",
     "subcategory": "Pharmacology (NP)",
-    "completeness": "EMPTY",
+    "completeness": "PARTIAL",
     "questions": "no"
   },
   {
@@ -164,7 +164,7 @@
     "title": "CKD Staging & Med Avoid List (NP certification, US)",
     "category": "renal",
     "subcategory": "Renal & GU (NP)",
-    "completeness": "EMPTY",
+    "completeness": "PARTIAL",
     "questions": "no"
   },
   {
@@ -172,7 +172,7 @@
     "title": "BPH vs Cancer Screening Talk (NP certification, US)",
     "category": "renal",
     "subcategory": "Renal & GU (NP)",
-    "completeness": "EMPTY",
+    "completeness": "PARTIAL",
     "questions": "no"
   },
   {
@@ -11508,6 +11508,14 @@
     "title": "Polypharmacy",
     "category": "safety",
     "subcategory": "Polypharmacy",
+    "completeness": "EMPTY",
+    "questions": "no"
+  },
+  {
+    "slug": "neuro-deterioration-escalation",
+    "title": "Neuro Deterioration: Escalation Triggers (PMHNP)",
+    "category": "neuro",
+    "subcategory": "Neuro Deterioration",
     "completeness": "EMPTY",
     "questions": "no"
   }

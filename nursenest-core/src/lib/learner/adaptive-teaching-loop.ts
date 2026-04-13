@@ -6,6 +6,7 @@ import {
 } from "@/lib/content-quality/teaching-payload";
 import type { QuestionPerformanceEventV1, WeakPerformanceArea } from "@/lib/learner/question-performance-events";
 import { deriveWeakAreasFromPerformanceEvents } from "@/lib/learner/question-performance-events";
+import { normalizeLesson, pathwayLessonRowToInput } from "@/lib/lessons/pathway-lesson-loader";
 
 export type AdaptiveLoopContentRecommendation = {
   kind: "question" | "lesson";
@@ -139,11 +140,26 @@ export async function buildAdaptiveTeachingLoopFromPerformance(args: {
         prioritizedSubtopic ? { topicSlug: { contains: prioritizedSubtopic.toLowerCase(), mode: "insensitive" } } : undefined,
       ].filter(Boolean) as any,
     },
-    select: { id: true, title: true, topic: true, topicSlug: true },
+    select: {
+      id: true,
+      title: true,
+      topic: true,
+      topicSlug: true,
+      slug: true,
+      bodySystem: true,
+      previewSectionCount: true,
+      seoTitle: true,
+      seoDescription: true,
+      sections: true,
+      locale: true,
+      pathwayId: true,
+    },
     take: 2,
   });
 
-  const lessonRecommendations: AdaptiveLoopContentRecommendation[] = lessonRows.map((r) => ({
+  const lessonRecommendations: AdaptiveLoopContentRecommendation[] = lessonRows
+    .filter((r) => normalizeLesson(pathwayLessonRowToInput(r), r.pathwayId).structuralQuality?.publicComplete)
+    .map((r) => ({
     kind: "lesson",
     id: r.id,
     title: r.title,
@@ -153,7 +169,7 @@ export async function buildAdaptiveTeachingLoopFromPerformance(args: {
     strongTeachingPayload: false,
     conceptImageAvailable: false,
     conceptImageUrl: null,
-  }));
+    }));
 
   const recommendedContent = [...questionRecommendations, ...lessonRecommendations];
   const strongTeachingPayloadExists = recommendedContent.some((r) => r.strongTeachingPayload);

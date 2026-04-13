@@ -19,6 +19,7 @@ import {
   type TopicTrendRow,
 } from "@/lib/learner/topic-performance";
 import type { WeakTopicRow } from "@/lib/learner/weak-topics-from-sessions";
+import { normalizeLesson, pathwayLessonRowToInput } from "@/lib/lessons/pathway-lesson-loader";
 
 export type ContinueLesson = {
   title: string;
@@ -77,9 +78,26 @@ export async function loadLearnerDashboard(
   const lessonWhere = lessonAccessWhere(entitlement);
   const pathwayWhere = pathwayLessonsAppListWhere(entitlement, learnerPath);
 
-  const [contentLessonTotal, pathwayLessonTotal, lessonsCompleted, incompleteProgress] = await Promise.all([
+  const [contentLessonTotal, pathwayLessonRows, lessonsCompleted, incompleteProgress] = await Promise.all([
     prisma.contentItem.count({ where: { ...lessonWhere, type: "lesson" } }),
-    prisma.pathwayLesson.count({ where: pathwayWhere }),
+    prisma.pathwayLesson.findMany({
+      where: pathwayWhere,
+      select: {
+        id: true,
+        pathwayId: true,
+        slug: true,
+        title: true,
+        topic: true,
+        topicSlug: true,
+        bodySystem: true,
+        previewSectionCount: true,
+        seoTitle: true,
+        seoDescription: true,
+        sections: true,
+        locale: true,
+      },
+      take: 2000,
+    }),
     prisma.progress.count({ where: { userId, completed: true } }),
     prisma.progress.findFirst({
       where: { userId, completed: false },
@@ -88,6 +106,9 @@ export async function loadLearnerDashboard(
     }),
   ]);
 
+  const pathwayLessonTotal = pathwayLessonRows.filter((row) =>
+    normalizeLesson(pathwayLessonRowToInput(row), row.pathwayId).structuralQuality?.publicComplete,
+  ).length;
   const lessonsAvailable = contentLessonTotal + pathwayLessonTotal;
 
   const since = new Date(Date.now() - 14 * 24 * 60 * 60 * 1000);
@@ -231,13 +252,36 @@ export async function loadPathwayStudySummaries(
   const baseWhere = pathwayLessonsAppListWhere(entitlement, learnerPath);
 
   // Two queries regardless of pathway count (was 3N sequential).
-  const [lessonCountGroups, allPathwayProgress] = await Promise.all([
-    // Batch: lesson counts per pathway in a single groupBy.
-    prisma.pathwayLesson.groupBy({
-      by: ["pathwayId"],
+  const [lessonRows, allPathwayProgress] = await Promise.all([
+    prisma.pathwayLesson.findMany({
       where: baseWhere,
-      _count: { _all: true },
-    }).catch(() => [] as { pathwayId: string; _count: { _all: number } }[]),
+      select: {
+        pathwayId: true,
+        slug: true,
+        title: true,
+        topic: true,
+        topicSlug: true,
+        bodySystem: true,
+        previewSectionCount: true,
+        seoTitle: true,
+        seoDescription: true,
+        sections: true,
+        locale: true,
+      },
+      take: 2500,
+    }).catch(() => [] as Array<{
+      pathwayId: string;
+      slug: string;
+      title: string;
+      topic: string;
+      topicSlug: string;
+      bodySystem: string;
+      previewSectionCount: number;
+      seoTitle: string;
+      seoDescription: string;
+      sections: unknown;
+      locale: string;
+    }>),
     // Batch: all completed/in-progress pathway lessons for this user, aggregated in memory.
     prisma.progress.findMany({
       where: { userId, lessonId: { startsWith: "pathway:" } },
@@ -245,7 +289,13 @@ export async function loadPathwayStudySummaries(
     }).catch(() => [] as { lessonId: string; completed: boolean }[]),
   ]);
 
-  const totalsByPathway = new Map(lessonCountGroups.map((g) => [g.pathwayId, g._count._all]));
+  const totalsByPathway = new Map<string, number>();
+  for (const row of lessonRows) {
+    if (!normalizeLesson(pathwayLessonRowToInput({ ...row, id: `${row.pathwayId}:${row.slug}` }), row.pathwayId).structuralQuality?.publicComplete) {
+      continue;
+    }
+    totalsByPathway.set(row.pathwayId, (totalsByPathway.get(row.pathwayId) ?? 0) + 1);
+  }
 
   // Parse "pathway:{pathwayId}:{slug}" and tally per pathwayId.
   const progressByPathway = new Map<string, { completed: number; inProgress: number }>();

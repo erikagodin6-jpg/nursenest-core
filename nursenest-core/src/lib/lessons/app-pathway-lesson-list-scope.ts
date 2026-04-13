@@ -94,11 +94,12 @@ export function pathwayLessonsAppListWhereWithTopicFilter(
 export function appPathwayLessonVisibleToSubscriber(
   scope: AccessScope,
   row: Pick<
-    { pathwayId: string; countryCode: CountryCode | null; tierCode: TierCode | null },
-    "pathwayId" | "countryCode" | "tierCode"
+    { pathwayId: string; countryCode: CountryCode | null; tierCode: TierCode | null; status?: ContentStatus | null },
+    "pathwayId" | "countryCode" | "tierCode" | "status"
   >,
   learnerPath: string | null | undefined,
 ): boolean {
+  if (row.status && row.status !== ContentStatus.PUBLISHED) return false;
   const pathway = getExamPathwayById(row.pathwayId);
   if (!pathway) return false;
   if (!canViewFullPathwayLesson(scope, pathway, learnerPath)) return false;

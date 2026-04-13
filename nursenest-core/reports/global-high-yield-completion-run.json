@@ -1,5 +1,5 @@
 {
-  "runAt": "2026-04-13T16:08:01.055Z",
+  "runAt": "2026-04-13T16:26:59.438Z",
   "pathwayCount": 12,
   "perPathway": [
     {
@@ -8,56 +8,38 @@
       "tier": "rpn",
       "exam": "rex-pn",
       "topicsCreated": {
-        "count": 19,
+        "count": 1,
         "slugs": [
-          "early-vs-late-shock",
-          "shock-states-comparison",
-          "hemodynamics-bedside-interpretation",
-          "sepsis-recognition-and-bundles",
-          "oxygenation-failure-patterns",
-          "cardiac-emergencies-first-hour",
-          "renal-emergencies-hyperkalemia-aki",
-          "endocrine-crises-rapid-differentiation",
-          "acid-base-disorders-rapid-interpretation",
-          "fluids-and-electrolytes-danger-patterns",
-          "vasopressor-selection-and-safety",
-          "lactate-and-perfusion-trending",
-          "respiratory-failure-escalation-ladder",
-          "septic-vs-cardiogenic-shock-differentiation",
-          "hyperkalemia-ecg-and-emergent-treatment",
-          "hypoglycemia-vs-hyperglycemia-priority-response",
-          "intracranial-pressure-escalation-pathway",
-          "fluid-resuscitation-initial-vs-reassessment",
-          "abg-acid-base-and-compensation-patterns"
+          "neuro-deterioration-escalation"
         ]
       },
       "lessonsUpgraded": {
         "count": 20,
         "slugs": [
-          "asthma-basics-rpn",
-          "bp26-carpn-lab-abg-interpret",
-          "bp26-carpn-pa-dialysis-access",
-          "bp26-carpn-x003-heart-failure-discharge-teaching",
-          "bp26-carpn-x007-home-oxygen-teaching",
-          "bp26-carpn-x009-calcium-imbalance-cues",
-          "bp26-carpn-x010-magnesium-monitoring-on-replacement",
-          "bp26-carpn-x011-fluid-restriction-teaching",
-          "catheter-care-cauti-prevention",
-          "dialysis-diet-teaching",
-          "heart-sounds-2-rpn",
-          "heart-sounds-rpn",
-          "hyperkalemia-vs-hypokalemia-ecg-changes-and-rpn",
-          "potassium-imbalance-rpn",
-          "seizure-observation",
-          "short-acting-insulin-rpn",
-          "bp26-carpn-pa-burn-fluid-first",
-          "hypovolemic-shock-basics-for-practical-nurses-rpn",
-          "shock-types-recognition-rpn",
-          "toxic-shock-syndrome-rpn"
+          "ca-rpn-abg-interpretation",
+          "ca-rpn-acid-base-advanced",
+          "ca-rpn-ards",
+          "ca-rpn-asthma",
+          "ca-rpn-copd-respiratory",
+          "ca-rpn-fluid-balance",
+          "ca-rpn-heart-failure",
+          "ca-rpn-insulin-hypoglycemia",
+          "ca-rpn-potassium-imbalance",
+          "ca-rpn-shock",
+          "ca-rpn-sodium-imbalance",
+          "copd-home-care",
+          "daily-weights-pattern",
+          "heart-failure-monitoring",
+          "hypokalemia-symptoms",
+          "i-o-fluid-restriction-teaching",
+          "oxygen-devices-for-pn-care",
+          "stroke-sequela-mobility-assist",
+          "insulin-administration-checks",
+          "ca-rpn-sepsis"
         ]
       },
-      "updatedCompleteCount": 37,
-      "remainingPartialEmptyCount": 1004,
+      "updatedCompleteCount": 20,
+      "remainingPartialEmptyCount": 1002,
       "remainingHighYieldGaps": [],
       "localeHandlingSummary": [
         {
@@ -134,56 +116,38 @@
       "tier": "rn",
       "exam": "nclex-rn",
       "topicsCreated": {
-        "count": 19,
+        "count": 1,
         "slugs": [
-          "early-vs-late-shock",
-          "shock-states-comparison",
-          "hemodynamics-bedside-interpretation",
-          "sepsis-recognition-and-bundles",
-          "oxygenation-failure-patterns",
-          "cardiac-emergencies-first-hour",
-          "renal-emergencies-hyperkalemia-aki",
-          "endocrine-crises-rapid-differentiation",
-          "neuro-deterioration-escalation",
-          "acid-base-disorders-rapid-interpretation",
-          "fluids-and-electrolytes-danger-patterns",
-          "vasopressor-selection-and-safety",
-          "lactate-and-perfusion-trending",
-          "septic-vs-cardiogenic-shock-differentiation",
-          "hyperkalemia-ecg-and-emergent-treatment",
-          "hypoglycemia-vs-hyperglycemia-priority-response",
-          "intracranial-pressure-escalation-pathway",
-          "fluid-resuscitation-initial-vs-reassessment",
-          "abg-acid-base-and-compensation-patterns"
+          "respiratory-failure-escalation-ladder"
         ]
       },
       "lessonsUpgraded": {
         "count": 20,
         "slugs": [
-          "aki-prerenal-vs-intrarenal",
-          "calcium-tetany",
-          "dka-vs-hhs-priorities-hy",
-          "fluid-volume-deficit",
-          "fluid-volume-excess",
-          "hemodialysis-access-care",
-          "hypo-vs-hyperkalemia-hy",
-          "hyponatremia-vs-hypernatremia-hy",
-          "increased-icp-positioning",
-          "indwelling-catheter-risks",
-          "kidney-stones-strain-management",
-          "magnesium-arrhythmia-risk",
-          "mixed-acid-base-patterns",
-          "peritoneal-dialysis-complications",
-          "phosphate-shifts-in-renal",
-          "seizure-precautions-rescue-meds",
-          "stroke-assessment-tpa-window",
-          "thyroid-storm-myxedema-clues",
-          "uti-vs-pyelonephritis",
-          "diuretics-electrolyte-shifts"
+          "abg-interpretation-basics-hy",
+          "ards-ventilation-basics",
+          "asthma-status-asthmaticus",
+          "ca-rn-abg-interpretation",
+          "ca-rn-acid-base-advanced",
+          "ca-rn-ards",
+          "ca-rn-asthma",
+          "ca-rn-copd-respiratory",
+          "ca-rn-fluid-balance",
+          "ca-rn-heart-failure",
+          "ca-rn-insulin-hypoglycemia",
+          "ca-rn-potassium-imbalance",
+          "ca-rn-shock",
+          "ca-rn-sodium-imbalance",
+          "copd-exacerbation-oxygen",
+          "fluid-balance-acute-care",
+          "heart-failure-nursing-priorities-hy",
+          "shock-recognition-fluids",
+          "insulin-hypoglycemia-hy",
+          "ca-rn-sepsis"
         ]
       },
-      "updatedCompleteCount": 40,
-      "remainingPartialEmptyCount": 702,
+      "updatedCompleteCount": 20,
+      "remainingPartialEmptyCount": 703,
       "remainingHighYieldGaps": [],
       "localeHandlingSummary": [
         {
@@ -259,6 +223,454 @@
       "country": "canada",
       "tier": "np",
       "exam": "cnple",
+      "topicsCreated": {
+        "count": 1,
+        "slugs": [
+          "neuro-deterioration-escalation"
+        ]
+      },
+      "lessonsUpgraded": {
+        "count": 20,
+        "slugs": [
+          "bph-vs-cancer-screening-talk",
+          "ckd-staging-med-avoid-list",
+          "heart-failure-gdmt-basics",
+          "heart-transplant-rejection-np",
+          "hf-advanced-np",
+          "renal-dose-adjustment-awareness",
+          "asthma-step-up-therapy",
+          "copd-gold-overview",
+          "fnp-overlay-respiratory-acute",
+          "fnp-overlay-sepsis-infection",
+          "abg-advanced-np",
+          "asthma-outpatient-np",
+          "asthma-pathophysiology-np-level-np",
+          "copd-outpatient-np",
+          "copd-pathophysiology-np-level-np",
+          "hemodynamic-monitoring-np",
+          "shock-syndromes-np",
+          "fnp-overlay-abg-acid-base",
+          "fnp-overlay-heart-failure",
+          "fnp-overlay-shock"
+        ]
+      },
+      "updatedCompleteCount": 0,
+      "remainingPartialEmptyCount": 1446,
+      "remainingHighYieldGaps": [],
+      "localeHandlingSummary": [
+        {
+          "locale": "en",
+          "effectiveLocale": "en",
+          "usedEnglishFallback": false,
+          "seoIndexable": true
+        },
+        {
+          "locale": "fr",
+          "effectiveLocale": "fr",
+          "usedEnglishFallback": false,
+          "seoIndexable": true
+        },
+        {
+          "locale": "es",
+          "effectiveLocale": "es",
+          "usedEnglishFallback": false,
+          "seoIndexable": true
+        },
+        {
+          "locale": "tl",
+          "effectiveLocale": "en",
+          "usedEnglishFallback": true,
+          "seoIndexable": false
+        },
+        {
+          "locale": "hi",
+          "effectiveLocale": "en",
+          "usedEnglishFallback": true,
+          "seoIndexable": false
+        },
+        {
+          "locale": "ja",
+          "effectiveLocale": "en",
+          "usedEnglishFallback": true,
+          "seoIndexable": false
+        },
+        {
+          "locale": "ko",
+          "effectiveLocale": "en",
+          "usedEnglishFallback": true,
+          "seoIndexable": false
+        },
+        {
+          "locale": "it",
+          "effectiveLocale": "en",
+          "usedEnglishFallback": true,
+          "seoIndexable": false
+        },
+        {
+          "locale": "el",
+          "effectiveLocale": "en",
+          "usedEnglishFallback": true,
+          "seoIndexable": false
+        },
+        {
+          "locale": "de",
+          "effectiveLocale": "en",
+          "usedEnglishFallback": true,
+          "seoIndexable": false
+        }
+      ],
+      "progressTowardComplete": {
+        "lessonsAtLeast300": true,
+        "highYieldClosed": true,
+        "mostLessonsComplete": false,
+        "flashcardsAvailable": false
+      }
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "country": "us",
+      "tier": "lpn",
+      "exam": "nclex-pn",
+      "topicsCreated": {
+        "count": 1,
+        "slugs": [
+          "neuro-deterioration-escalation"
+        ]
+      },
+      "lessonsUpgraded": {
+        "count": 20,
+        "slugs": [
+          "copd-home-care",
+          "daily-weights-pattern",
+          "heart-failure-monitoring",
+          "hypokalemia-symptoms",
+          "i-o-fluid-restriction-teaching",
+          "oxygen-devices-for-pn-care",
+          "stroke-sequela-mobility-assist",
+          "us-pn-abg-interpretation",
+          "us-pn-acid-base-advanced",
+          "us-pn-ards",
+          "us-pn-asthma",
+          "us-pn-copd-respiratory",
+          "us-pn-fluid-balance",
+          "us-pn-heart-failure",
+          "us-pn-insulin-hypoglycemia",
+          "us-pn-potassium-imbalance",
+          "us-pn-shock",
+          "us-pn-sodium-imbalance",
+          "insulin-administration-checks",
+          "us-pn-sepsis"
+        ]
+      },
+      "updatedCompleteCount": 18,
+      "remainingPartialEmptyCount": 1015,
+      "remainingHighYieldGaps": [],
+      "localeHandlingSummary": [
+        {
+          "locale": "en",
+          "effectiveLocale": "en",
+          "usedEnglishFallback": false,
+          "seoIndexable": true
+        },
+        {
+          "locale": "fr",
+          "effectiveLocale": "fr",
+          "usedEnglishFallback": false,
+          "seoIndexable": true
+        },
+        {
+          "locale": "es",
+          "effectiveLocale": "es",
+          "usedEnglishFallback": false,
+          "seoIndexable": true
+        },
+        {
+          "locale": "tl",
+          "effectiveLocale": "en",
+          "usedEnglishFallback": true,
+          "seoIndexable": false
+        },
+        {
+          "locale": "hi",
+          "effectiveLocale": "en",
+          "usedEnglishFallback": true,
+          "seoIndexable": false
+        },
+        {
+          "locale": "ja",
+          "effectiveLocale": "en",
+          "usedEnglishFallback": true,
+          "seoIndexable": false
+        },
+        {
+          "locale": "ko",
+          "effectiveLocale": "en",
+          "usedEnglishFallback": true,
+          "seoIndexable": false
+        },
+        {
+          "locale": "it",
+          "effectiveLocale": "en",
+          "usedEnglishFallback": true,
+          "seoIndexable": false
+        },
+        {
+          "locale": "el",
+          "effectiveLocale": "en",
+          "usedEnglishFallback": true,
+          "seoIndexable": false
+        },
+        {
+          "locale": "de",
+          "effectiveLocale": "en",
+          "usedEnglishFallback": true,
+          "seoIndexable": false
+        }
+      ],
+      "progressTowardComplete": {
+        "lessonsAtLeast300": true,
+        "highYieldClosed": true,
+        "mostLessonsComplete": false,
+        "flashcardsAvailable": false
+      }
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "country": "us",
+      "tier": "rn",
+      "exam": "nclex-rn",
+      "topicsCreated": {
+        "count": 0,
+        "slugs": []
+      },
+      "lessonsUpgraded": {
+        "count": 20,
+        "slugs": [
+          "cardiovascular-assessment-lesson-1",
+          "cauti-prevention-lesson-1",
+          "diuretics-lesson-1",
+          "diuretics-lesson-2",
+          "increased-icp-positioning",
+          "insulin-administration-lesson-1",
+          "insulin-administration-lesson-2",
+          "iv-fluid-types-lesson-1",
+          "iv-fluid-types-lesson-2",
+          "mixed-acid-base-patterns",
+          "oxygen-therapy-devices-lesson-1",
+          "potassium-imbalances-lesson-1",
+          "seizure-precautions-rescue-meds",
+          "sodium-imbalances-lesson-1",
+          "sodium-imbalances-lesson-2",
+          "stroke-assessment-tpa-window",
+          "thyroid-storm-myxedema-clues",
+          "urinary-catheterization-lesson-1",
+          "clinical-deterioration-rapid-response-lesson-1",
+          "clinical-deterioration-rapid-response-lesson-2"
+        ]
+      },
+      "updatedCompleteCount": 189,
+      "remainingPartialEmptyCount": 837,
+      "remainingHighYieldGaps": [],
+      "localeHandlingSummary": [
+        {
+          "locale": "en",
+          "effectiveLocale": "en",
+          "usedEnglishFallback": false,
+          "seoIndexable": true
+        },
+        {
+          "locale": "fr",
+          "effectiveLocale": "fr",
+          "usedEnglishFallback": false,
+          "seoIndexable": true
+        },
+        {
+          "locale": "es",
+          "effectiveLocale": "es",
+          "usedEnglishFallback": false,
+          "seoIndexable": true
+        },
+        {
+          "locale": "tl",
+          "effectiveLocale": "en",
+          "usedEnglishFallback": true,
+          "seoIndexable": false
+        },
+        {
+          "locale": "hi",
+          "effectiveLocale": "en",
+          "usedEnglishFallback": true,
+          "seoIndexable": false
+        },
+        {
+          "locale": "ja",
+          "effectiveLocale": "en",
+          "usedEnglishFallback": true,
+          "seoIndexable": false
+        },
+        {
+          "locale": "ko",
+          "effectiveLocale": "en",
+          "usedEnglishFallback": true,
+          "seoIndexable": false
+        },
+        {
+          "locale": "it",
+          "effectiveLocale": "en",
+          "usedEnglishFallback": true,
+          "seoIndexable": false
+        },
+        {
+          "locale": "el",
+          "effectiveLocale": "en",
+          "usedEnglishFallback": true,
+          "seoIndexable": false
+        },
+        {
+          "locale": "de",
+          "effectiveLocale": "en",
+          "usedEnglishFallback": true,
+          "seoIndexable": false
+        }
+      ],
+      "progressTowardComplete": {
+        "lessonsAtLeast300": true,
+        "highYieldClosed": true,
+        "mostLessonsComplete": false,
+        "flashcardsAvailable": false
+      }
+    },
+    {
+      "pathwayId": "us-np-fnp",
+      "country": "us",
+      "tier": "np",
+      "exam": "fnp",
+      "topicsCreated": {
+        "count": 19,
+        "slugs": [
+          "early-vs-late-shock",
+          "shock-states-comparison",
+          "hemodynamics-bedside-interpretation",
+          "sepsis-recognition-and-bundles",
+          "oxygenation-failure-patterns",
+          "cardiac-emergencies-first-hour",
+          "renal-emergencies-hyperkalemia-aki",
+          "endocrine-crises-rapid-differentiation",
+          "acid-base-disorders-rapid-interpretation",
+          "fluids-and-electrolytes-danger-patterns",
+          "vasopressor-selection-and-safety",
+          "lactate-and-perfusion-trending",
+          "respiratory-failure-escalation-ladder",
+          "septic-vs-cardiogenic-shock-differentiation",
+          "hyperkalemia-ecg-and-emergent-treatment",
+          "hypoglycemia-vs-hyperglycemia-priority-response",
+          "intracranial-pressure-escalation-pathway",
+          "fluid-resuscitation-initial-vs-reassessment",
+          "abg-acid-base-and-compensation-patterns"
+        ]
+      },
+      "lessonsUpgraded": {
+        "count": 20,
+        "slugs": [
+          "fnp-overlay-respiratory-acute",
+          "bp26-usnp-pad-003-physiological_adaptation-renal-gu",
+          "bp26-usnp-pad-006-health_promotion_maintenance-fluids-electrolytes",
+          "bp26-usnp-pad-013-risk_reduction-renal-gu",
+          "bp26-usnp-pad-016-safety_and_infection-fluids-electrolytes",
+          "bp26-usnp-pad-023-basic_care_comfort-renal-gu",
+          "bp26-usnp-pad-026-pharmacological_therapies-fluids-electrolytes",
+          "bp26-usnp-pad-033-management_of_care-renal-gu",
+          "bp26-usnp-pad-036-psychosocial_integrity-fluids-electrolytes",
+          "bp26-usnp-pad-043-physiological_adaptation-renal-gu",
+          "bp26-usnp-pad-046-health_promotion_maintenance-fluids-electrolytes",
+          "bp26-usnp-pad-053-risk_reduction-renal-gu",
+          "bp26-usnp-pad-056-safety_and_infection-fluids-electrolytes",
+          "bp26-usnp-pad-063-basic_care_comfort-renal-gu",
+          "bp26-usnp-pad-066-pharmacological_therapies-fluids-electrolytes",
+          "bp26-usnp-pad-073-management_of_care-renal-gu",
+          "fnp-overlay-sepsis-infection",
+          "fnp-overlay-abg-acid-base",
+          "fnp-overlay-heart-failure",
+          "fnp-overlay-shock"
+        ]
+      },
+      "updatedCompleteCount": 0,
+      "remainingPartialEmptyCount": 1573,
+      "remainingHighYieldGaps": [],
+      "localeHandlingSummary": [
+        {
+          "locale": "en",
+          "effectiveLocale": "en",
+          "usedEnglishFallback": false,
+          "seoIndexable": true
+        },
+        {
+          "locale": "fr",
+          "effectiveLocale": "fr",
+          "usedEnglishFallback": false,
+          "seoIndexable": true
+        },
+        {
+          "locale": "es",
+          "effectiveLocale": "es",
+          "usedEnglishFallback": false,
+          "seoIndexable": true
+        },
+        {
+          "locale": "tl",
+          "effectiveLocale": "en",
+          "usedEnglishFallback": true,
+          "seoIndexable": false
+        },
+        {
+          "locale": "hi",
+          "effectiveLocale": "en",
+          "usedEnglishFallback": true,
+          "seoIndexable": false
+        },
+        {
+          "locale": "ja",
+          "effectiveLocale": "en",
+          "usedEnglishFallback": true,
+          "seoIndexable": false
+        },
+        {
+          "locale": "ko",
+          "effectiveLocale": "en",
+          "usedEnglishFallback": true,
+          "seoIndexable": false
+        },
+        {
+          "locale": "it",
+          "effectiveLocale": "en",
+          "usedEnglishFallback": true,
+          "seoIndexable": false
+        },
+        {
+          "locale": "el",
+          "effectiveLocale": "en",
+          "usedEnglishFallback": true,
+          "seoIndexable": false
+        },
+        {
+          "locale": "de",
+          "effectiveLocale": "en",
+          "usedEnglishFallback": true,
+          "seoIndexable": false
+        }
+      ],
+      "progressTowardComplete": {
+        "lessonsAtLeast300": true,
+        "highYieldClosed": true,
+        "mostLessonsComplete": false,
+        "flashcardsAvailable": false
+      }
+    },
+    {
+      "pathwayId": "us-np-agpcnp",
+      "country": "us",
+      "tier": "np",
+      "exam": "agpcnp",
       "topicsCreated": {
         "count": 19,
         "slugs": [
@@ -381,10 +793,10 @@
       }
     },
     {
-      "pathwayId": "us-lpn-nclex-pn",
+      "pathwayId": "us-np-pmhnp",
       "country": "us",
-      "tier": "lpn",
-      "exam": "nclex-pn",
+      "tier": "np",
+      "exam": "pmhnp",
       "topicsCreated": {
         "count": 19,
         "slugs": [
@@ -412,460 +824,30 @@
       "lessonsUpgraded": {
         "count": 20,
         "slugs": [
-          "bp26-uslpn-pa-aki-urine-labs",
-          "bp26-uslpn-pa-asthma-exac",
-          "bp26-uslpn-pa-chf-volume",
-          "bp26-uslpn-pa-copd-exac",
-          "bp26-uslpn-pa-dka-vs-hhs",
-          "bp26-uslpn-pa-hyperk-emerg",
-          "bp26-uslpn-pa-hyponat-symp",
-          "bp26-uslpn-pa-ich-nih",
-          "bp26-uslpn-pa-shock-classify",
-          "bp26-uslpn-pa-stroke-window",
-          "bp26-uslpn-ph-insulin-safety",
-          "catheter-care-cauti-prevention",
-          "dialysis-diet-teaching",
-          "seizure-observation",
-          "us-pn-renal-genitourinary-care",
-          "us-pn-insulin-hypoglycemia",
-          "bp26-uslpn-cs-multiorgan-triage",
-          "bp26-uslpn-pa-gi-bleed-stable",
-          "bp26-uslpn-pa-sepsis-trending",
-          "us-pn-sepsis"
-        ]
-      },
-      "updatedCompleteCount": 34,
-      "remainingPartialEmptyCount": 1018,
-      "remainingHighYieldGaps": [],
-      "localeHandlingSummary": [
-        {
-          "locale": "en",
-          "effectiveLocale": "en",
-          "usedEnglishFallback": false,
-          "seoIndexable": true
-        },
-        {
-          "locale": "fr",
-          "effectiveLocale": "fr",
-          "usedEnglishFallback": false,
-          "seoIndexable": true
-        },
-        {
-          "locale": "es",
-          "effectiveLocale": "es",
-          "usedEnglishFallback": false,
-          "seoIndexable": true
-        },
-        {
-          "locale": "tl",
-          "effectiveLocale": "en",
-          "usedEnglishFallback": true,
-          "seoIndexable": false
-        },
-        {
-          "locale": "hi",
-          "effectiveLocale": "en",
-          "usedEnglishFallback": true,
-          "seoIndexable": false
-        },
-        {
-          "locale": "ja",
-          "effectiveLocale": "en",
-          "usedEnglishFallback": true,
-          "seoIndexable": false
-        },
-        {
-          "locale": "ko",
-          "effectiveLocale": "en",
-          "usedEnglishFallback": true,
-          "seoIndexable": false
-        },
-        {
-          "locale": "it",
-          "effectiveLocale": "en",
-          "usedEnglishFallback": true,
-          "seoIndexable": false
-        },
-        {
-          "locale": "el",
-          "effectiveLocale": "en",
-          "usedEnglishFallback": true,
-          "seoIndexable": false
-        },
-        {
-          "locale": "de",
-          "effectiveLocale": "en",
-          "usedEnglishFallback": true,
-          "seoIndexable": false
-        }
-      ],
-      "progressTowardComplete": {
-        "lessonsAtLeast300": true,
-        "highYieldClosed": true,
-        "mostLessonsComplete": false,
-        "flashcardsAvailable": false
-      }
-    },
-    {
-      "pathwayId": "us-rn-nclex-rn",
-      "country": "us",
-      "tier": "rn",
-      "exam": "nclex-rn",
-      "topicsCreated": {
-        "count": 0,
-        "slugs": []
-      },
-      "lessonsUpgraded": {
-        "count": 20,
-        "slugs": [
-          "asthma-status-asthmaticus",
-          "calcium-tetany",
-          "cardiovascular-assessment-lesson-1",
-          "cauti-prevention-lesson-1",
-          "diuretics-lesson-1",
-          "diuretics-lesson-2",
-          "fluid-volume-deficit",
-          "fluid-volume-excess",
-          "hypo-vs-hyperkalemia-hy",
-          "hyponatremia-vs-hypernatremia-hy",
-          "insulin-administration-lesson-1",
-          "insulin-administration-lesson-2",
-          "magnesium-arrhythmia-risk",
-          "oxygen-therapy-devices-lesson-1",
-          "phosphate-shifts-in-renal",
-          "urinary-catheterization-lesson-1",
-          "us-rn-ards",
-          "us-rn-asthma",
-          "us-rn-copd-respiratory",
-          "diuretics-electrolyte-shifts"
-        ]
-      },
-      "updatedCompleteCount": 191,
-      "remainingPartialEmptyCount": 835,
-      "remainingHighYieldGaps": [],
-      "localeHandlingSummary": [
-        {
-          "locale": "en",
-          "effectiveLocale": "en",
-          "usedEnglishFallback": false,
-          "seoIndexable": true
-        },
-        {
-          "locale": "fr",
-          "effectiveLocale": "fr",
-          "usedEnglishFallback": false,
-          "seoIndexable": true
-        },
-        {
-          "locale": "es",
-          "effectiveLocale": "es",
-          "usedEnglishFallback": false,
-          "seoIndexable": true
-        },
-        {
-          "locale": "tl",
-          "effectiveLocale": "en",
-          "usedEnglishFallback": true,
-          "seoIndexable": false
-        },
-        {
-          "locale": "hi",
-          "effectiveLocale": "en",
-          "usedEnglishFallback": true,
-          "seoIndexable": false
-        },
-        {
-          "locale": "ja",
-          "effectiveLocale": "en",
-          "usedEnglishFallback": true,
-          "seoIndexable": false
-        },
-        {
-          "locale": "ko",
-          "effectiveLocale": "en",
-          "usedEnglishFallback": true,
-          "seoIndexable": false
-        },
-        {
-          "locale": "it",
-          "effectiveLocale": "en",
-          "usedEnglishFallback": true,
-          "seoIndexable": false
-        },
-        {
-          "locale": "el",
-          "effectiveLocale": "en",
-          "usedEnglishFallback": true,
-          "seoIndexable": false
-        },
-        {
-          "locale": "de",
-          "effectiveLocale": "en",
-          "usedEnglishFallback": true,
-          "seoIndexable": false
-        }
-      ],
-      "progressTowardComplete": {
-        "lessonsAtLeast300": true,
-        "highYieldClosed": true,
-        "mostLessonsComplete": false,
-        "flashcardsAvailable": false
-      }
-    },
-    {
-      "pathwayId": "us-np-fnp",
-      "country": "us",
-      "tier": "np",
-      "exam": "fnp",
-      "topicsCreated": {
-        "count": 1,
-        "slugs": [
-          "neuro-deterioration-escalation"
-        ]
-      },
-      "lessonsUpgraded": {
-        "count": 20,
-        "slugs": [
-          "bp26-usnp-pad-003-physiological_adaptation-renal-gu",
-          "bp26-usnp-pad-006-health_promotion_maintenance-fluids-electrolytes",
-          "bp26-usnp-pad-013-risk_reduction-renal-gu",
-          "bp26-usnp-pad-016-safety_and_infection-fluids-electrolytes",
-          "bp26-usnp-pad-023-basic_care_comfort-renal-gu",
-          "bp26-usnp-pad-026-pharmacological_therapies-fluids-electrolytes",
-          "bp26-usnp-pad-033-management_of_care-renal-gu",
-          "bp26-usnp-pad-036-psychosocial_integrity-fluids-electrolytes",
-          "bp26-usnp-pad-043-physiological_adaptation-renal-gu",
-          "bp26-usnp-pad-046-health_promotion_maintenance-fluids-electrolytes",
-          "bp26-usnp-pad-053-risk_reduction-renal-gu",
-          "bp26-usnp-pad-056-safety_and_infection-fluids-electrolytes",
-          "bp26-usnp-pad-063-basic_care_comfort-renal-gu",
-          "bp26-usnp-pad-066-pharmacological_therapies-fluids-electrolytes",
-          "bp26-usnp-pad-073-management_of_care-renal-gu",
           "fnp-overlay-respiratory-acute",
-          "fnp-overlay-sepsis-infection",
-          "fnp-overlay-abg-acid-base",
-          "fnp-overlay-heart-failure",
-          "fnp-overlay-shock"
-        ]
-      },
-      "updatedCompleteCount": 0,
-      "remainingPartialEmptyCount": 1554,
-      "remainingHighYieldGaps": [],
-      "localeHandlingSummary": [
-        {
-          "locale": "en",
-          "effectiveLocale": "en",
-          "usedEnglishFallback": false,
-          "seoIndexable": true
-        },
-        {
-          "locale": "fr",
-          "effectiveLocale": "fr",
-          "usedEnglishFallback": false,
-          "seoIndexable": true
-        },
-        {
-          "locale": "es",
-          "effectiveLocale": "es",
-          "usedEnglishFallback": false,
-          "seoIndexable": true
-        },
-        {
-          "locale": "tl",
-          "effectiveLocale": "en",
-          "usedEnglishFallback": true,
-          "seoIndexable": false
-        },
-        {
-          "locale": "hi",
-          "effectiveLocale": "en",
-          "usedEnglishFallback": true,
-          "seoIndexable": false
-        },
-        {
-          "locale": "ja",
-          "effectiveLocale": "en",
-          "usedEnglishFallback": true,
-          "seoIndexable": false
-        },
-        {
-          "locale": "ko",
-          "effectiveLocale": "en",
-          "usedEnglishFallback": true,
-          "seoIndexable": false
-        },
-        {
-          "locale": "it",
-          "effectiveLocale": "en",
-          "usedEnglishFallback": true,
-          "seoIndexable": false
-        },
-        {
-          "locale": "el",
-          "effectiveLocale": "en",
-          "usedEnglishFallback": true,
-          "seoIndexable": false
-        },
-        {
-          "locale": "de",
-          "effectiveLocale": "en",
-          "usedEnglishFallback": true,
-          "seoIndexable": false
-        }
-      ],
-      "progressTowardComplete": {
-        "lessonsAtLeast300": true,
-        "highYieldClosed": true,
-        "mostLessonsComplete": false,
-        "flashcardsAvailable": false
-      }
-    },
-    {
-      "pathwayId": "us-np-agpcnp",
-      "country": "us",
-      "tier": "np",
-      "exam": "agpcnp",
-      "topicsCreated": {
-        "count": 1,
-        "slugs": [
-          "neuro-deterioration-escalation"
-        ]
-      },
-      "lessonsUpgraded": {
-        "count": 20,
-        "slugs": [
+          "asthma-step-up-therapy",
           "bph-vs-cancer-screening-talk",
           "ckd-staging-med-avoid-list",
+          "copd-gold-overview",
           "heart-failure-gdmt-basics",
           "heart-transplant-rejection-np",
           "hf-advanced-np",
           "renal-dose-adjustment-awareness",
-          "asthma-step-up-therapy",
-          "copd-gold-overview",
-          "fnp-overlay-respiratory-acute",
           "fnp-overlay-sepsis-infection",
+          "fnp-overlay-abg-acid-base",
+          "fnp-overlay-heart-failure",
+          "fnp-overlay-shock",
           "abg-advanced-np",
           "asthma-outpatient-np",
           "asthma-pathophysiology-np-level-np",
           "copd-outpatient-np",
           "copd-pathophysiology-np-level-np",
           "hemodynamic-monitoring-np",
-          "shock-syndromes-np",
-          "fnp-overlay-abg-acid-base",
-          "fnp-overlay-heart-failure",
-          "fnp-overlay-shock"
+          "shock-syndromes-np"
         ]
       },
       "updatedCompleteCount": 0,
-      "remainingPartialEmptyCount": 1446,
-      "remainingHighYieldGaps": [],
-      "localeHandlingSummary": [
-        {
-          "locale": "en",
-          "effectiveLocale": "en",
-          "usedEnglishFallback": false,
-          "seoIndexable": true
-        },
-        {
-          "locale": "fr",
-          "effectiveLocale": "fr",
-          "usedEnglishFallback": false,
-          "seoIndexable": true
-        },
-        {
-          "locale": "es",
-          "effectiveLocale": "es",
-          "usedEnglishFallback": false,
-          "seoIndexable": true
-        },
-        {
-          "locale": "tl",
-          "effectiveLocale": "en",
-          "usedEnglishFallback": true,
-          "seoIndexable": false
-        },
-        {
-          "locale": "hi",
-          "effectiveLocale": "en",
-          "usedEnglishFallback": true,
-          "seoIndexable": false
-        },
-        {
-          "locale": "ja",
-          "effectiveLocale": "en",
-          "usedEnglishFallback": true,
-          "seoIndexable": false
-        },
-        {
-          "locale": "ko",
-          "effectiveLocale": "en",
-          "usedEnglishFallback": true,
-          "seoIndexable": false
-        },
-        {
-          "locale": "it",
-          "effectiveLocale": "en",
-          "usedEnglishFallback": true,
-          "seoIndexable": false
-        },
-        {
-          "locale": "el",
-          "effectiveLocale": "en",
-          "usedEnglishFallback": true,
-          "seoIndexable": false
-        },
-        {
-          "locale": "de",
-          "effectiveLocale": "en",
-          "usedEnglishFallback": true,
-          "seoIndexable": false
-        }
-      ],
-      "progressTowardComplete": {
-        "lessonsAtLeast300": true,
-        "highYieldClosed": true,
-        "mostLessonsComplete": false,
-        "flashcardsAvailable": false
-      }
-    },
-    {
-      "pathwayId": "us-np-pmhnp",
-      "country": "us",
-      "tier": "np",
-      "exam": "pmhnp",
-      "topicsCreated": {
-        "count": 1,
-        "slugs": [
-          "neuro-deterioration-escalation"
-        ]
-      },
-      "lessonsUpgraded": {
-        "count": 20,
-        "slugs": [
-          "bph-vs-cancer-screening-talk",
-          "ckd-staging-med-avoid-list",
-          "heart-failure-gdmt-basics",
-          "heart-transplant-rejection-np",
-          "hf-advanced-np",
-          "renal-dose-adjustment-awareness",
-          "asthma-step-up-therapy",
-          "copd-gold-overview",
-          "fnp-overlay-respiratory-acute",
-          "fnp-overlay-sepsis-infection",
-          "abg-advanced-np",
-          "asthma-outpatient-np",
-          "asthma-pathophysiology-np-level-np",
-          "copd-outpatient-np",
-          "copd-pathophysiology-np-level-np",
-          "hemodynamic-monitoring-np",
-          "shock-syndromes-np",
-          "fnp-overlay-abg-acid-base",
-          "fnp-overlay-heart-failure",
-          "fnp-overlay-shock"
-        ]
-      },
-      "updatedCompleteCount": 0,
-      "remainingPartialEmptyCount": 1440,
+      "remainingPartialEmptyCount": 1459,
       "remainingHighYieldGaps": [],
       "localeHandlingSummary": [
         {
@@ -942,14 +924,8 @@
       "tier": "np",
       "exam": "whnp",
       "topicsCreated": {
-        "count": 5,
-        "slugs": [
-          "sepsis-recognition-and-bundles",
-          "cardiac-emergencies-first-hour",
-          "endocrine-crises-rapid-differentiation",
-          "neuro-deterioration-escalation",
-          "respiratory-failure-escalation-ladder"
-        ]
+        "count": 0,
+        "slugs": []
       },
       "lessonsUpgraded": {
         "count": 2,
@@ -1044,14 +1020,8 @@
       "tier": "np",
       "exam": "pnp-pc",
       "topicsCreated": {
-        "count": 5,
-        "slugs": [
-          "sepsis-recognition-and-bundles",
-          "cardiac-emergencies-first-hour",
-          "endocrine-crises-rapid-differentiation",
-          "neuro-deterioration-escalation",
-          "respiratory-failure-escalation-ladder"
-        ]
+        "count": 0,
+        "slugs": []
       },
       "lessonsUpgraded": {
         "count": 2,
@@ -1146,14 +1116,8 @@
       "tier": "allied",
       "exam": "allied-health",
       "topicsCreated": {
-        "count": 5,
-        "slugs": [
-          "sepsis-recognition-and-bundles",
-          "cardiac-emergencies-first-hour",
-          "endocrine-crises-rapid-differentiation",
-          "neuro-deterioration-escalation",
-          "respiratory-failure-escalation-ladder"
-        ]
+        "count": 0,
+        "slugs": []
       },
       "lessonsUpgraded": {
         "count": 4,
@@ -1249,14 +1213,8 @@
       "tier": "allied",
       "exam": "allied-health",
       "topicsCreated": {
-        "count": 5,
-        "slugs": [
-          "sepsis-recognition-and-bundles",
-          "cardiac-emergencies-first-hour",
-          "endocrine-crises-rapid-differentiation",
-          "neuro-deterioration-escalation",
-          "respiratory-failure-escalation-ladder"
-        ]
+        "count": 0,
+        "slugs": []
       },
       "lessonsUpgraded": {
         "count": 4,

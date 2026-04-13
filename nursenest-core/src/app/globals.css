@@ -2522,7 +2522,7 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-exam-chrome-dim {
 }
 
 .nn-lesson-prose strong {
-  font-weight: 650;
+  font-weight: 700;
   color: var(--palette-heading, var(--semantic-text-primary));
 }
 
@@ -2666,6 +2666,18 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-exam-chrome-dim {
   color: var(--semantic-text-secondary);
   font-size: 0.8125rem;
   line-height: 1.5;
+}
+
+/* ── Quiz rationale panels ───────────────────────────────────────────────────
+ * Green-tinted inset block beneath each question when answers are revealed.
+ * Clear visual separation from options; sized for comfortable reading.
+ * ─────────────────────────────────────────────────────────────────────────── */
+.nn-lesson-rationale {
+  border-left: 3px solid color-mix(in srgb, var(--semantic-success) 55%, transparent);
+  background: color-mix(in srgb, var(--semantic-success) 6%, var(--bg-card, white));
+  border-radius: 0 0.625rem 0.625rem 0;
+  padding: 0.625rem 0.875rem;
+  margin-top: 0.75rem;
 }
 
 /* ==========================================================================

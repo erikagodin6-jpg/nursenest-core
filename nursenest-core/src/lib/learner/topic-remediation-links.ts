@@ -5,6 +5,7 @@ import { prisma } from "@/lib/db";
 import { lessonAccessWhere } from "@/lib/entitlements/content-access-scope";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { pathwayLessonsAppListWhere } from "@/lib/lessons/app-pathway-lesson-list-scope";
+import { normalizeLesson, pathwayLessonRowToInput } from "@/lib/lessons/pathway-lesson-loader";
 
 function appendTopicCodeToDrillHref(href: string, topicCode: string): string {
   if (!topicCode || href.includes("topicCode=")) return href;
@@ -39,8 +40,8 @@ export async function resolveTopicRemediationLinks(
     const pathwayScope = pathwayLessonsAppListWhere(entitlement, learnerPath);
     const contentScope = lessonAccessWhere(entitlement);
 
-    const [pathwayLesson, contentLesson] = await Promise.all([
-      prisma.pathwayLesson.findFirst({
+    const [pathwayLessonRows, contentLesson] = await Promise.all([
+      prisma.pathwayLesson.findMany({
         where: {
           AND: [
             pathwayScope,
@@ -51,8 +52,22 @@ export async function resolveTopicRemediationLinks(
             },
           ],
         },
-        select: { id: true },
-        orderBy: { sortOrder: "asc" },
+        select: {
+          id: true,
+          pathwayId: true,
+          title: true,
+          slug: true,
+          topic: true,
+          topicSlug: true,
+          bodySystem: true,
+          previewSectionCount: true,
+          seoTitle: true,
+          seoDescription: true,
+          sections: true,
+          locale: true,
+        },
+        orderBy: [{ sortOrder: "asc" }, { slug: "asc" }],
+        take: 24,
       }),
       prisma.contentItem.findFirst({
         where: {
@@ -62,6 +77,10 @@ export async function resolveTopicRemediationLinks(
         orderBy: { updatedAt: "desc" },
       }),
     ]);
+    const pathwayLesson =
+      pathwayLessonRows.find((row) =>
+        normalizeLesson(pathwayLessonRowToInput(row), row.pathwayId).structuralQuality?.publicComplete,
+      ) ?? null;
     if (pathwayLesson) lessonHref = `/app/lessons/${pathwayLesson.id}`;
     else if (contentLesson) lessonHref = `/app/lessons/${contentLesson.id}`;
   }

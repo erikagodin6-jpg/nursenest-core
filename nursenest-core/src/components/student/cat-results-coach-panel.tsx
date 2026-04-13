@@ -233,7 +233,6 @@ export function CatResultsCoachPanel({
               (l) => l && typeof l.href === "string" && isSafeInternalStudyLinkHref(l.href),
             );
             const hasLesson = safeLinks.some((l) => l.kind === "lesson");
-            const lessonPartial = coach.lessonContentSignal?.lessonPartialAvailable;
             return (
               <li key={`${s.title}-${i}`} className="rounded-xl border border-[var(--semantic-border-soft)] bg-background/80 p-4">
                 <p className="text-sm font-semibold text-foreground">
@@ -264,11 +263,6 @@ export function CatResultsCoachPanel({
                       {l.label}
                     </Link>
                   ))}
-                  {!hasLesson && lessonPartial && (
-                    <span className="inline-flex items-center rounded-full border border-dashed border-muted-foreground/30 bg-muted/30 px-3 py-1.5 text-xs text-muted-foreground">
-                      Lesson coming soon
-                    </span>
-                  )}
                 </div>
               </li>
             );

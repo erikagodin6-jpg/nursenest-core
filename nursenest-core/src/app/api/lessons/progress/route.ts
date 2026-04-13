@@ -7,6 +7,7 @@ import { notSubscribedResponse, requireSubscriberSession } from "@/lib/entitleme
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { appPathwayLessonVisibleToSubscriber } from "@/lib/lessons/app-pathway-lesson-list-scope";
+import { getPublishedPathwayLessonRecordById } from "@/lib/lessons/pathway-lesson-loader";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { captureLessonProgressAnalytics } from "@/lib/observability/lesson-progress-analytics";
@@ -53,6 +54,13 @@ export async function POST(req: Request) {
     where: { id: lessonId },
   });
   if (pw && pw.status === ContentStatus.PUBLISHED) {
+    const completeRecord = await getPublishedPathwayLessonRecordById(lessonId);
+    if (!completeRecord) {
+      safeServerLog("api_lessons_progress", "denied_non_complete_pathway_lesson", {
+        lessonIdPrefix: lessonId.slice(0, 8),
+      });
+      return notSubscribedResponse();
+    }
     if (!appPathwayLessonVisibleToSubscriber(gate.entitlement, pw, learnerPath)) {
       safeServerLog("api_lessons_progress", "denied_out_of_scope_pathway_lesson", {
         lessonIdPrefix: lessonId.slice(0, 8),

@@ -12422,5 +12422,13 @@
     "subcategory": "Prostatitis",
     "completeness": "PARTIAL",
     "questions": "no"
+  },
+  {
+    "slug": "neuro-deterioration-escalation",
+    "title": "Neuro Deterioration: Escalation Triggers (FNP)",
+    "category": "neuro",
+    "subcategory": "Neuro Deterioration",
+    "completeness": "EMPTY",
+    "questions": "no"
   }
 ]

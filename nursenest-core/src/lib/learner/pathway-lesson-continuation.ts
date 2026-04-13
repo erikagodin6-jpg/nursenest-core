@@ -9,6 +9,7 @@ import { canViewFullPathwayLesson } from "@/lib/lessons/pathway-lesson-access";
 import { pathwayLessonMarketingDetailHref } from "@/lib/lessons/pathway-lesson-types";
 import { resolveNextIncompleteMarketingPathwayLesson } from "@/lib/learner/resolve-pathway-next-lesson";
 import { loadPathwayHubProgressBatch, type PathwayLessonProgressStatus } from "@/lib/lessons/pathway-lesson-progress";
+import { normalizeLesson, pathwayLessonRowToInput } from "@/lib/lessons/pathway-lesson-loader";
 
 /**
  * Most recently touched pathway lesson for this user — derived from `Progress.updatedAt`
@@ -29,10 +30,25 @@ export async function getLastTouchedPathwayLesson(
   const slug = row.lessonId.slice(prefix.length);
   if (!slug) return null;
   const lesson = await prisma.pathwayLesson.findFirst({
-    where: { pathwayId, slug },
-    select: { title: true },
+    where: { pathwayId, slug, status: "PUBLISHED" },
+    select: {
+      title: true,
+      slug: true,
+      topic: true,
+      topicSlug: true,
+      bodySystem: true,
+      previewSectionCount: true,
+      seoTitle: true,
+      seoDescription: true,
+      sections: true,
+      locale: true,
+      pathwayId: true,
+    },
   });
-  const title = lesson?.title?.trim() || slug;
+  if (!lesson || !normalizeLesson(pathwayLessonRowToInput({ ...lesson, id: `${pathwayId}:${slug}` }), pathwayId).structuralQuality?.publicComplete) {
+    return null;
+  }
+  const title = lesson.title?.trim() || slug;
   return { title, slug, completed: row.completed };
 }
 
@@ -81,10 +97,28 @@ export async function loadPathwayHubSubscriberData(
   let lastTouched: PathwayHubResumePayload["lastTouched"] = null;
   if (batch.lastForResume) {
     const titleRow = await prisma.pathwayLesson.findFirst({
-      where: { pathwayId: pathway.id, slug: batch.lastForResume.slug },
-      select: { title: true },
+      where: { pathwayId: pathway.id, slug: batch.lastForResume.slug, status: "PUBLISHED" },
+      select: {
+        title: true,
+        slug: true,
+        topic: true,
+        topicSlug: true,
+        bodySystem: true,
+        previewSectionCount: true,
+        seoTitle: true,
+        seoDescription: true,
+        sections: true,
+        locale: true,
+      },
     });
-    const title = titleRow?.title?.trim() ?? batch.lastForResume.slug;
+    const title =
+      titleRow &&
+      normalizeLesson(pathwayLessonRowToInput({ ...titleRow, id: `${pathway.id}:${batch.lastForResume.slug}` }), pathway.id).structuralQuality?.publicComplete
+        ? (titleRow.title?.trim() ?? batch.lastForResume.slug)
+        : null;
+    if (!title) {
+      return { resume: emptyResume, progressMap: batch.progressMap };
+    }
     const href = pathwayLessonMarketingDetailHref(lessonsBasePath, batch.lastForResume.slug);
     if (href) {
       lastTouched = {

@@ -80,6 +80,11 @@ type AlliedPlanRow = {
 
 type Segment = "prenursing" | "newgrad" | "rn" | "pn" | "np" | "allied";
 
+type CheckoutRequestError = Error & {
+  parsed?: ParsedCheckoutErrorBody;
+  status?: number;
+};
+
 function segmentToTier(segment: Segment, isUS?: boolean): TierCode {
   switch (segment) {
     case "prenursing": return "PRE_NURSING";
@@ -173,6 +178,8 @@ export function PricingPageClient({
   const [checkoutOpsHint, setCheckoutOpsHint] = useState<string | null>(null);
   const [checkoutLoading, setCheckoutLoading] = useState(false);
   const [policiesAccepted, setPoliciesAccepted] = useState(false);
+  const [showConsentPrompt, setShowConsentPrompt] = useState(false);
+  const [pendingCheckoutDuration, setPendingCheckoutDuration] = useState<BillingDuration | null>(null);
   const [plansLoaded, setPlansLoaded] = useState(false);
   const { locale, t } = useMarketingI18n();
   const { region } = useNursenestRegion();
@@ -249,10 +256,6 @@ export function PricingPageClient({
     async (duration: BillingDuration) => {
       setCheckoutError(null);
       setCheckoutOpsHint(null);
-      if (!policiesAccepted) {
-        setCheckoutError(t("pages.pricing.checkout.mustAcceptPolicies"));
-        return;
-      }
       setCheckoutLoading(true);
       trackProductEvent(PH.checkoutStarted, {
         actor: "anonymous",
@@ -278,35 +281,119 @@ export function PricingPageClient({
         if (isAllied) {
           body.alliedCareer = selectedAlliedCareer;
         }
+        console.info("[pricing_checkout] request_payload", body);
+
         const res = await fetch("/api/subscriptions/checkout", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(body),
         });
-        const data: unknown = await res.json();
-        if (!res.ok || !(data && typeof data === "object" && "url" in data && (data as { url?: unknown }).url)) {
-          const parsed = parseCheckoutApiErrorBody(data);
-          setCheckoutOpsHint(null);
-          if (parsed.code === STRIPE_PRICE_NOT_CONFIGURED_CODE) {
-            setCheckoutError(t("pages.pricing.error.checkoutPlanNotConfigured"));
-            if (showStripePriceEnvKeyOnCheckoutError() && parsed.envKey) {
-              setCheckoutOpsHint(t("pages.pricing.error.checkoutOpsStripePrice", { envKey: parsed.envKey }));
-            }
-          } else {
-            setCheckoutError(checkoutErrorUserMessage(parsed, res.status, t));
-          }
-          setCheckoutLoading(false);
-          return;
+        console.info("[pricing_checkout] response_status", {
+          status: res.status,
+          ok: res.ok,
+          contentType: res.headers.get("content-type") ?? "",
+        });
+
+        const responseText = await res.text();
+        const contentType = res.headers.get("content-type") ?? "";
+
+        if (!res.ok) {
+          console.error("[pricing_checkout] checkout API error response", {
+            status: res.status,
+            contentType,
+            body: responseText,
+          });
         }
-        window.location.href = (data as { url: string }).url;
-      } catch {
+
+        let parsedBody: unknown = null;
+        const trimmedResponse = responseText.trim();
+        const responseLooksJson =
+          contentType.toLowerCase().includes("application/json") ||
+          trimmedResponse.startsWith("{") ||
+          trimmedResponse.startsWith("[");
+        if (trimmedResponse.length > 0 && responseLooksJson) {
+          try {
+            parsedBody = JSON.parse(trimmedResponse) as unknown;
+          } catch (parseError) {
+            console.error("[pricing_checkout] response_json_parse_failed", parseError);
+            parsedBody = null;
+          }
+        }
+
+        if (!res.ok) {
+          const parsed = parseCheckoutApiErrorBody(parsedBody);
+          console.error("[pricing_checkout] parsed_error_body", parsed);
+          const err = new Error(checkoutErrorUserMessage(parsed, res.status, t)) as CheckoutRequestError;
+          err.parsed = parsed;
+          err.status = res.status;
+          throw err;
+        }
+
+        if (!contentType.toLowerCase().includes("application/json")) {
+          console.error("[pricing_checkout] checkout API returned non-JSON response", {
+            status: res.status,
+            contentType,
+            body: responseText,
+          });
+          throw new Error("Checkout service returned an unexpected response format.");
+        }
+
+        if (!parsedBody || typeof parsedBody !== "object") {
+          throw new Error("Checkout service returned an empty response.");
+        }
+
+        const checkoutUrl = (parsedBody as { url?: unknown }).url;
+        if (typeof checkoutUrl !== "string" || checkoutUrl.trim().length === 0) {
+          throw new Error("Checkout service did not return a Stripe redirect URL.");
+        }
+        console.info("[pricing_checkout] redirect_url_received", { checkoutUrl });
+        window.location.assign(checkoutUrl);
+      } catch (error) {
+        console.error("[pricing_checkout] start checkout failed", error);
         setCheckoutOpsHint(null);
-        setCheckoutError(t("pages.pricing.error.checkoutNetwork"));
+        const checkoutErr = error as CheckoutRequestError;
+        if (checkoutErr.parsed?.code === STRIPE_PRICE_NOT_CONFIGURED_CODE) {
+          setCheckoutError(t("pages.pricing.error.checkoutPlanNotConfigured"));
+          if (showStripePriceEnvKeyOnCheckoutError() && checkoutErr.parsed.envKey) {
+            setCheckoutOpsHint(t("pages.pricing.error.checkoutOpsStripePrice", { envKey: checkoutErr.parsed.envKey }));
+          }
+        } else {
+          const msg = error instanceof Error && error.message.trim().length > 0
+            ? error.message
+            : t("pages.pricing.error.checkoutNetwork");
+          setCheckoutError(msg);
+        }
         setCheckoutLoading(false);
       }
     },
-    [policiesAccepted, tier, trialDays, t, isAllied, selectedAlliedCareer, region, locale, segment],
+    [tier, trialDays, t, isAllied, selectedAlliedCareer, region, locale, segment],
   );
+
+  const requestCheckout = useCallback(
+    (duration: BillingDuration) => {
+      setCheckoutError(null);
+      setCheckoutOpsHint(null);
+      if (policiesAccepted) {
+        void startCheckout(duration);
+        return;
+      }
+      setPendingCheckoutDuration(duration);
+      setShowConsentPrompt(true);
+    },
+    [policiesAccepted, startCheckout],
+  );
+
+  const confirmConsentAndCheckout = useCallback(() => {
+    if (!pendingCheckoutDuration) return;
+    if (!policiesAccepted) {
+      setCheckoutError(t("pages.pricing.checkout.mustAcceptPolicies"));
+      return;
+    }
+    setShowConsentPrompt(false);
+    const duration = pendingCheckoutDuration;
+    setPendingCheckoutDuration(null);
+    void startCheckout(duration);
+  }, [pendingCheckoutDuration, policiesAccepted, startCheckout, t]);
 
   const SEGMENT_ORDER: Segment[] = ["prenursing", "newgrad", "rn", "pn", "np", "allied"];
 
@@ -486,8 +573,8 @@ export function PricingPageClient({
 
                     <button
                       type="button"
-                      disabled={checkoutLoading || !policiesAccepted || !row.checkoutAvailable}
-                      onClick={() => startCheckout(duration)}
+                      disabled={checkoutLoading || !row.checkoutAvailable}
+                      onClick={() => requestCheckout(duration)}
                       className={`${isHighlighted ? MARKETING_PRIMARY_CTA_CLASS : MARKETING_SECONDARY_CTA_CLASS} mt-6 w-full justify-center disabled:pointer-events-none disabled:opacity-50`}
                     >
                       {row.checkoutAvailable ? TRIAL_PRIMARY_COPY : "Coming Soon"}
@@ -517,6 +604,68 @@ export function PricingPageClient({
           })}
         </div>
 
+        {showConsentPrompt ? (
+          <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/45 px-4 pb-4 pt-24 sm:items-center sm:pb-6">
+            <div className="w-full max-w-xl rounded-2xl border border-[var(--accent-surface-b-border)] bg-[var(--color-card)] p-5 shadow-[var(--elevation-hover)] sm:p-6">
+              <h3 className="text-lg font-semibold text-[var(--palette-heading)]">
+                Confirm before checkout
+              </h3>
+              <p className="mt-2 text-sm text-muted-foreground">
+                Before we take you to secure checkout, please confirm your agreement to our policies, including recurring billing and cancellation rules.
+              </p>
+
+              <div className="mt-4 rounded-xl border border-[var(--accent-surface-b-border)] bg-[var(--accent-surface-b)] p-4 text-sm">
+                <label className="flex cursor-pointer gap-3">
+                  <input
+                    type="checkbox"
+                    className="mt-1 h-4 w-4 shrink-0 rounded border-border"
+                    checked={policiesAccepted}
+                    onChange={(e) => setPoliciesAccepted(e.target.checked)}
+                  />
+                  <span className="text-[var(--palette-text)]">
+                    {t("pages.pricing.checkout.policyAckStart")}
+                    <Link href={termsHref} className="nn-link-quiet font-semibold">
+                      {t("pages.pricing.checkout.policyTermsLabel")}
+                    </Link>
+                    {t("pages.pricing.checkout.policyAckBetween1")}
+                    <Link href={privacyHref} className="nn-link-quiet font-semibold">
+                      {t("pages.pricing.checkout.policyPrivacyLabel")}
+                    </Link>
+                    {t("pages.pricing.checkout.policyAckBetween2")}
+                    <Link href={refundHref} className="nn-link-quiet font-semibold">
+                      {t("pages.pricing.checkout.policyRefundLabel")}
+                    </Link>
+                    {t("pages.pricing.checkout.policyAckEnd")}
+                  </span>
+                </label>
+              </div>
+
+              <div className="mt-5 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+                <button
+                  type="button"
+                  className={MARKETING_TERTIARY_LINK_CLASS}
+                  onClick={() => {
+                    setShowConsentPrompt(false);
+                    setPendingCheckoutDuration(null);
+                    setCheckoutError(null);
+                  }}
+                  disabled={checkoutLoading}
+                >
+                  Not now
+                </button>
+                <button
+                  type="button"
+                  className={MARKETING_PRIMARY_CTA_CLASS}
+                  onClick={confirmConsentAndCheckout}
+                  disabled={checkoutLoading || !policiesAccepted}
+                >
+                  Continue to secure checkout
+                </button>
+              </div>
+            </div>
+          </div>
+        ) : null}
+
         {/* Trial callout */}
         {trialDays > 0 && (
           <div className="mx-auto max-w-xl rounded-2xl border border-[var(--semantic-success)]/20 bg-[color-mix(in_srgb,var(--semantic-success)_5%,var(--color-card))] px-8 py-6 text-center shadow-[var(--elevation-rest)]">
@@ -533,38 +682,12 @@ export function PricingPageClient({
           </div>
         )}
 
-        {/* Policy acceptance */}
+        {/* Checkout feedback */}
         <div className="mx-auto max-w-xl space-y-4">
           {checkoutError ? <p className="text-center text-sm text-destructive">{checkoutError}</p> : null}
           {checkoutOpsHint ? (
             <p className="rounded-md border border-border/80 bg-muted/40 px-3 py-2 font-mono text-xs text-muted-foreground">{checkoutOpsHint}</p>
           ) : null}
-
-          <div className="rounded-xl border border-[var(--accent-surface-b-border)] bg-[var(--accent-surface-b)] p-4 text-sm">
-            <label className="flex cursor-pointer gap-3">
-              <input
-                type="checkbox"
-                className="mt-1 h-4 w-4 shrink-0 rounded border-border"
-                checked={policiesAccepted}
-                onChange={(e) => setPoliciesAccepted(e.target.checked)}
-              />
-              <span className="text-[var(--palette-text)]">
-                {t("pages.pricing.checkout.policyAckStart")}
-                <Link href={termsHref} className="nn-link-quiet font-semibold">
-                  {t("pages.pricing.checkout.policyTermsLabel")}
-                </Link>
-                {t("pages.pricing.checkout.policyAckBetween1")}
-                <Link href={privacyHref} className="nn-link-quiet font-semibold">
-                  {t("pages.pricing.checkout.policyPrivacyLabel")}
-                </Link>
-                {t("pages.pricing.checkout.policyAckBetween2")}
-                <Link href={refundHref} className="nn-link-quiet font-semibold">
-                  {t("pages.pricing.checkout.policyRefundLabel")}
-                </Link>
-                {t("pages.pricing.checkout.policyAckEnd")}
-              </span>
-            </label>
-          </div>
         </div>
       </section>
 

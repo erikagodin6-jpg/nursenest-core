@@ -3,7 +3,10 @@ import "@/lib/db/env-bootstrap";
 import { logDatabaseEnvOnce } from "@/lib/db/database-env";
 import { logStartupContext } from "@/lib/env/server-env";
 import { logHighMemory } from "@/lib/observability/perf-log";
-import { logStripeProductionPricingMisconfiguration } from "@/lib/stripe/pricing-map";
+import {
+  logStripeCheckoutEnvStartupStatus,
+  logStripeProductionPricingMisconfiguration,
+} from "@/lib/stripe/pricing-map";
 
 function validateAuthEnv(): void {
   if (process.env.NODE_ENV !== "production") return;
@@ -45,6 +48,7 @@ export async function register() {
     );
     validateAuthEnv();
     validateStripeAppEnv();
+    logStripeCheckoutEnvStartupStatus();
     logStripeProductionPricingMisconfiguration();
     await import("./sentry.server.config");
     process.on("unhandledRejection", (reason) => {
