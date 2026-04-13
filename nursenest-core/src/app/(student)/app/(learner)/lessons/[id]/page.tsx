@@ -60,6 +60,11 @@ import { LessonPageHeader } from "@/components/lessons/lesson-page-header";
 import { LessonSectionNav } from "@/components/lessons/lesson-section-nav";
 import { LessonNavButtons } from "@/components/lessons/lesson-nav-buttons";
 import { loadStudySettings } from "@/lib/learner/load-study-settings";
+import {
+  LESSON_STUDY_LOOP_MIN_QUESTIONS,
+  loadLessonStudyLoopBankPack,
+} from "@/lib/lessons/load-lesson-study-loop-bank-pack";
+import { PathwayLessonStudyLoopOrchestrator } from "@/components/lessons/pathway-lesson-study-loop-orchestrator";
 
 function LessonBody({
   content,
@@ -371,34 +376,57 @@ export default async function LessonDetailPage({ params }: Props) {
     const pathwayId = resolvedLesson.pathwayId;
     const pathway = getExamPathwayById(pathwayId);
     const examFraming = getLearnerExamFraming(pathwayId);
-    const [relatedQuestionStems, relatedLessonsRaw, initialProgress, pathwayStudySnap] = await Promise.all([
-      pathway != null
-        ? loadRelatedExamQuestionStemsForPathwayLesson({
+    const bankLoopPackPromise =
+      userId &&
+      pathway &&
+      studySettings.lessonStudyLoopEnabled &&
+      studySettings.enablePrePostQuizzes
+        ? loadLessonStudyLoopBankPack({
             pathway,
-            lessonSlug: record.slug,
             lessonTitle: record.title,
             lessonTopic: record.topic,
             lessonTopicSlug: record.topicSlug,
             bodySystem: record.bodySystem,
+            lessonSlug: record.slug,
+            lessonKey: `${pathwayId}:${record.slug}`,
           })
-        : Promise.resolve([]),
-      pathway != null
-        ? getRelatedPathwayLessons(
-            pathway.id,
-            record.topicSlug,
-            record.slug,
-            RELATED_PATHWAY_LESSONS_LIMIT,
-            record.localeMeta?.contentLocale ?? record.localeMeta?.requestedContentLocale,
-            record.bodySystem,
-          )
-        : Promise.resolve([]),
-      userId
-        ? loadPathwayLessonProgressForSlug(userId, pathwayId, record.slug).catch(() => "not_started" as const)
-        : Promise.resolve("not_started" as const),
-      userId
-        ? buildLearnerStudySnapshot(userId, entitlement, learnerPath).catch(() => null)
-        : Promise.resolve(null),
-    ]);
+        : Promise.resolve({
+            items: [],
+            questionIds: [],
+            poolCount: 0,
+            targetRequested: 0,
+          });
+
+    const [relatedQuestionStems, relatedLessonsRaw, initialProgress, pathwayStudySnap, bankLoopPack] =
+      await Promise.all([
+        pathway != null
+          ? loadRelatedExamQuestionStemsForPathwayLesson({
+              pathway,
+              lessonSlug: record.slug,
+              lessonTitle: record.title,
+              lessonTopic: record.topic,
+              lessonTopicSlug: record.topicSlug,
+              bodySystem: record.bodySystem,
+            })
+          : Promise.resolve([]),
+        pathway != null
+          ? getRelatedPathwayLessons(
+              pathway.id,
+              record.topicSlug,
+              record.slug,
+              RELATED_PATHWAY_LESSONS_LIMIT,
+              record.localeMeta?.contentLocale ?? record.localeMeta?.requestedContentLocale,
+              record.bodySystem,
+            )
+          : Promise.resolve([]),
+        userId
+          ? loadPathwayLessonProgressForSlug(userId, pathwayId, record.slug).catch(() => "not_started" as const)
+          : Promise.resolve("not_started" as const),
+        userId
+          ? buildLearnerStudySnapshot(userId, entitlement, learnerPath).catch(() => null)
+          : Promise.resolve(null),
+        bankLoopPackPromise,
+      ]);
     const studyNextHint =
       Boolean(
         pathwayStudySnap &&
@@ -452,6 +480,162 @@ export default async function LessonDetailPage({ params }: Props) {
       kind: s.kind ?? null,
     }));
 
+    const studyLoopBankActive =
+      Boolean(userId) &&
+      pathway != null &&
+      studySettings.lessonStudyLoopEnabled &&
+      studySettings.enablePrePostQuizzes &&
+      bankLoopPack.items.length >= LESSON_STUDY_LOOP_MIN_QUESTIONS;
+
+    const stemPreviewByQuestionId: Record<string, string> = {};
+    for (const stem of relatedQuestionStems) {
+      stemPreviewByQuestionId[stem.id] = stem.stemPreview;
+    }
+
+    const pathwayLessonMainColumn = (
+      <>
+        {/* Top nav: back link */}
+        <LessonNavButtons
+          position="top"
+          backHref="/app/lessons"
+          backLabel={t("learner.lessons.detail.allLessons")}
+          nextLesson={null}
+        />
+
+        <LessonAssessmentFlow
+          userId={userId}
+          lessonId={id}
+          pathwayId={pathwayId}
+          lessonSlug={record.slug}
+          topic={record.topic}
+          initialProgress={initialProgress}
+          preTest={record.preTest}
+          postTest={record.postTest}
+          assessmentsEnabled={studySettings.enablePrePostQuizzes}
+          disableCatalogAssessments={studyLoopBankActive}
+        >
+          <PremiumLessonShell
+            userId={userId}
+            userLabel={userLabel}
+            flags={flags}
+            scope={LearnerNoteScope.PATHWAY_LESSON}
+            contextId={id}
+            pathwayId={pathwayId}
+            topic={record.topic}
+            sourceLabel={record.title}
+            qualityNotice={<LessonQualityNotice tier={pathwayQuality.tier} wordCount={pathwayQuality.wordCount} />}
+          >
+            <article className="space-y-6">
+              {visible.length > 0 ? (
+                visible.map((section) => (
+                  <LessonSectionCard
+                    key={section.id}
+                    id={section.id}
+                    heading={section.heading?.trim() || t("learner.lessons.detail.sectionFallback")}
+                    kind={section.kind ?? null}
+                  >
+                    <PathwayLessonSectionContent
+                      text={typeof section.body === "string" ? section.body : ""}
+                      figures={section.figures}
+                      examFocus={section.examFocus}
+                      viewerTier={lessonViewerTier}
+                      measurementSystem={lessonMeasurementSystem ?? undefined}
+                      emptyBodyMessage={t("learner.lessons.detail.sectionEmptyBody")}
+                      figuresVisualLeadMessage={t("learner.lessons.detail.sectionFiguresVisualLead")}
+                    />
+                    {userId ? (
+                      <LessonSectionNoteInline
+                        userId={userId}
+                        sectionId={section.id}
+                        sectionHeading={section.heading?.trim() ?? ""}
+                        scope="PATHWAY_LESSON"
+                        pathwayId={pathwayId}
+                        topic={record.topic}
+                      />
+                    ) : null}
+                  </LessonSectionCard>
+                ))
+              ) : visibleRaw.length > 0 ? (
+                <LessonSectionCard
+                  id="lesson-reading-refine"
+                  heading={t("learner.lessons.detail.lessonArticleRefiningTitle")}
+                  kind={null}
+                >
+                  <p className="text-sm leading-relaxed" style={{ color: "var(--semantic-text-secondary)" }}>
+                    {t("learner.lessons.detail.lessonArticleRefiningBody")}
+                  </p>
+                </LessonSectionCard>
+              ) : null}
+            </article>
+          </PremiumLessonShell>
+        </LessonAssessmentFlow>
+
+        <LessonNavButtons
+          position="bottom"
+          backHref="/app/lessons"
+          backLabel={t("learner.lessons.detail.allLessons")}
+          nextLesson={nextLessonNav}
+        />
+
+        {isStudyCoachEnabled() && (
+          <CoachLessonHelper
+            lessonTitle={record.title}
+            lessonContent={pathwayCoachExcerpt || undefined}
+            topic={record.topic}
+            studyNextHint={studyNextHint}
+          />
+        )}
+        <LessonContinueStudyNextBlock bundle={pathwayContinue} />
+        {pathway ? (
+          <PathwayLessonRelatedQuestions
+            pathway={pathway}
+            lessonTopic={record.topic}
+            topicSlug={record.topicSlug}
+            items={relatedQuestionStems}
+            appLinksMode="direct"
+          />
+        ) : null}
+        {pathway ? (
+          <PathwayLessonStudyLoopCta
+            pathway={pathway}
+            lessonsBasePath={marketingPathwayLessonsIndexPath(pathway)}
+            topicLabel={record.topic}
+            topicSlug={record.topicSlug}
+            relatedLessons={relatedLessonsDisplay}
+            currentSlug={record.slug}
+            catAuthState="signed_in"
+          />
+        ) : null}
+        <div
+          className="mt-10 flex flex-wrap gap-3 border-t pt-6"
+          style={{ borderColor: "var(--border-subtle)" }}
+        >
+          <Link
+            href={
+              pathway
+                ? buildAppQuestionBankTopicDrillHref(pathway, record.topic, record.topicSlug ?? undefined)
+                : "/app/questions"
+            }
+            className="inline-flex items-center rounded-xl px-5 py-2.5 text-sm font-semibold transition-opacity hover:opacity-90"
+            style={{ background: "var(--semantic-brand)", color: "#fff" }}
+          >
+            {t("learner.lessons.detail.ctaQuestionBank")}
+          </Link>
+          <Link
+            href={buildAppPracticeTestsHubHref(pathwayId)}
+            className="inline-flex items-center rounded-xl border px-5 py-2.5 text-sm font-semibold transition-colors hover:opacity-80"
+            style={{
+              borderColor: "var(--border-subtle)",
+              color: "var(--semantic-text-secondary)",
+              background: "var(--bg-card)",
+            }}
+          >
+            {t("learner.lessons.detail.ctaPathwayPracticeTests")}
+          </Link>
+        </div>
+      </>
+    );
+
     return (
       <main className="nn-lesson-page">
         {/* ── Premium lesson header ──────────────────────────────────────── */}
@@ -472,146 +656,26 @@ export default async function LessonDetailPage({ params }: Props) {
         <div className="nn-lesson-layout mt-8">
           {/* ── Main article column ─────────────────────────────────────── */}
           <div className="nn-lesson-main min-w-0">
-            {/* Top nav: back link */}
-            <LessonNavButtons
-              position="top"
-              backHref="/app/lessons"
-              backLabel={t("learner.lessons.detail.allLessons")}
-              nextLesson={null}
-            />
-
-            {/* Pre/post assessment flow wraps the lesson article */}
-            <LessonAssessmentFlow
-              userId={userId}
-              lessonId={id}
-              pathwayId={pathwayId}
-              lessonSlug={record.slug}
-              topic={record.topic}
-              initialProgress={initialProgress}
-              preTest={record.preTest}
-              postTest={record.postTest}
-              assessmentsEnabled={studySettings.enablePrePostQuizzes}
-            >
-              <PremiumLessonShell
+            {studyLoopBankActive ? (
+              <PathwayLessonStudyLoopOrchestrator
                 userId={userId}
-                userLabel={userLabel}
-                flags={flags}
-                scope={LearnerNoteScope.PATHWAY_LESSON}
-                contextId={id}
+                lessonId={id}
                 pathwayId={pathwayId}
+                lessonSlug={record.slug}
                 topic={record.topic}
-                sourceLabel={record.title}
-                qualityNotice={<LessonQualityNotice tier={pathwayQuality.tier} wordCount={pathwayQuality.wordCount} />}
+                shuffleSeed={`${pathwayId}:${record.slug}`}
+                bankItems={bankLoopPack.items}
+                questionIds={bankLoopPack.questionIds}
+                poolCount={bankLoopPack.poolCount}
+                initialProgress={initialProgress}
+                defaultLoopEnabled={studySettings.lessonStudyLoopEnabled}
+                stemPreviewByQuestionId={stemPreviewByQuestionId}
               >
-                <article className="space-y-6">
-                  {visible.length > 0 ? (
-                    visible.map((section) => (
-                      <LessonSectionCard
-                        key={section.id}
-                        id={section.id}
-                        heading={section.heading?.trim() || t("learner.lessons.detail.sectionFallback")}
-                        kind={section.kind ?? null}
-                      >
-                        <PathwayLessonSectionContent
-                          text={typeof section.body === "string" ? section.body : ""}
-                          figures={section.figures}
-                          examFocus={section.examFocus}
-                          viewerTier={lessonViewerTier}
-                          measurementSystem={lessonMeasurementSystem ?? undefined}
-                          emptyBodyMessage={t("learner.lessons.detail.sectionEmptyBody")}
-                          figuresVisualLeadMessage={t("learner.lessons.detail.sectionFiguresVisualLead")}
-                        />
-                        {userId ? (
-                          <LessonSectionNoteInline
-                            userId={userId}
-                            sectionId={section.id}
-                            sectionHeading={section.heading?.trim() ?? ""}
-                            scope="PATHWAY_LESSON"
-                            pathwayId={pathwayId}
-                            topic={record.topic}
-                          />
-                        ) : null}
-                      </LessonSectionCard>
-                    ))
-                  ) : visibleRaw.length > 0 ? (
-                    <LessonSectionCard
-                      id="lesson-reading-refine"
-                      heading={t("learner.lessons.detail.lessonArticleRefiningTitle")}
-                      kind={null}
-                    >
-                      <p className="text-sm leading-relaxed" style={{ color: "var(--semantic-text-secondary)" }}>
-                        {t("learner.lessons.detail.lessonArticleRefiningBody")}
-                      </p>
-                    </LessonSectionCard>
-                  ) : null}
-                </article>
-              </PremiumLessonShell>
-            </LessonAssessmentFlow>
-
-            {/* Bottom prev/next navigation */}
-            <LessonNavButtons
-              position="bottom"
-              backHref="/app/lessons"
-              backLabel={t("learner.lessons.detail.allLessons")}
-              nextLesson={nextLessonNav}
-            />
-
-            {isStudyCoachEnabled() && (
-              <CoachLessonHelper
-                lessonTitle={record.title}
-                lessonContent={pathwayCoachExcerpt || undefined}
-                topic={record.topic}
-                studyNextHint={studyNextHint}
-              />
+                {pathwayLessonMainColumn}
+              </PathwayLessonStudyLoopOrchestrator>
+            ) : (
+              pathwayLessonMainColumn
             )}
-            <LessonContinueStudyNextBlock bundle={pathwayContinue} />
-            {pathway ? (
-              <PathwayLessonRelatedQuestions
-                pathway={pathway}
-                lessonTopic={record.topic}
-                topicSlug={record.topicSlug}
-                items={relatedQuestionStems}
-                appLinksMode="direct"
-              />
-            ) : null}
-            {pathway ? (
-              <PathwayLessonStudyLoopCta
-                pathway={pathway}
-                lessonsBasePath={marketingPathwayLessonsIndexPath(pathway)}
-                topicLabel={record.topic}
-                topicSlug={record.topicSlug}
-                relatedLessons={relatedLessonsDisplay}
-                currentSlug={record.slug}
-                catAuthState="signed_in"
-              />
-            ) : null}
-            <div
-              className="mt-10 flex flex-wrap gap-3 border-t pt-6"
-              style={{ borderColor: "var(--border-subtle)" }}
-            >
-              <Link
-                href={
-                  pathway
-                    ? buildAppQuestionBankTopicDrillHref(pathway, record.topic, record.topicSlug ?? undefined)
-                    : "/app/questions"
-                }
-                className="inline-flex items-center rounded-xl px-5 py-2.5 text-sm font-semibold transition-opacity hover:opacity-90"
-                style={{ background: "var(--semantic-brand)", color: "#fff" }}
-              >
-                {t("learner.lessons.detail.ctaQuestionBank")}
-              </Link>
-              <Link
-                href={buildAppPracticeTestsHubHref(pathwayId)}
-                className="inline-flex items-center rounded-xl border px-5 py-2.5 text-sm font-semibold transition-colors hover:opacity-80"
-                style={{
-                  borderColor: "var(--border-subtle)",
-                  color: "var(--semantic-text-secondary)",
-                  background: "var(--bg-card)",
-                }}
-              >
-                {t("learner.lessons.detail.ctaPathwayPracticeTests")}
-              </Link>
-            </div>
           </div>
 
           {/* ── Sticky section nav sidebar (desktop only) ─────────────── */}

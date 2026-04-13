@@ -249,6 +249,11 @@ export function LearnerStudySettingsHub({
                 body: "Offer lesson diagnostics and post-lesson checks around lesson content.",
               },
               {
+                key: "lessonStudyLoopEnabled" as const,
+                title: "Guided lesson study loop",
+                body: "On pathway lessons, show an optional bank-backed quick check before reading and a reshuffled review after you finish, with score comparison. You can still skip per lesson.",
+              },
+              {
                 key: "showHeatmap" as const,
                 title: "Weakness heatmap",
                 body: "Display the weakness heatmap and similar topic intensity surfaces on the learner dashboard.",

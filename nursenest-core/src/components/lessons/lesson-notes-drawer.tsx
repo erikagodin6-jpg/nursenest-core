@@ -30,6 +30,8 @@ import {
 } from "react";
 import type { LearnerNoteScope } from "@prisma/client";
 import type { PremiumProtectionFlags } from "@/lib/premium-protection/config";
+import { trackClientEvent } from "@/lib/observability/posthog-client";
+import { PH } from "@/lib/observability/posthog-conversion-events";
 
 // ─── Props ─────────────────────────────────────────────────────────────────────
 
@@ -278,6 +280,7 @@ export function LessonNotesDrawer({
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
   const [saveState, setSaveState] = useState<SaveState>("idle");
+  const notesEditedTracked = useRef(false);
   const [savedAt, setSavedAt] = useState<Date | null>(null);
   const [initialDone, setInitialDone] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -354,6 +357,17 @@ export function LessonNotesDrawer({
         if (res.ok) {
           setSaveState("saved");
           setSavedAt(new Date());
+          if (
+            scope === "PATHWAY_LESSON" &&
+            nextBody.trim().length > 24 &&
+            !notesEditedTracked.current
+          ) {
+            notesEditedTracked.current = true;
+            trackClientEvent(PH.learnerLessonNotesEdited, {
+              pathway_id: (pathwayId ?? "").slice(0, 64),
+              context_id_prefix: contextId.slice(0, 8),
+            });
+          }
           setTimeout(() => setSaveState("idle"), 3000);
         } else {
           setSaveState("error");
@@ -435,7 +449,18 @@ export function LessonNotesDrawer({
       <NotesFAB
         open={open}
         hasContent={hasContent}
-        onClick={() => setOpen((o) => !o)}
+        onClick={() =>
+          setOpen((o) => {
+            const next = !o;
+            if (!o && next && scope === "PATHWAY_LESSON") {
+              trackClientEvent(PH.learnerLessonNotesOpened, {
+                pathway_id: (pathwayId ?? "").slice(0, 64),
+                context_id_prefix: contextId.slice(0, 8),
+              });
+            }
+            return next;
+          })
+        }
       />
 
       {/* ── Drawer (desktop side panel + mobile bottom sheet) ─────────────── */}

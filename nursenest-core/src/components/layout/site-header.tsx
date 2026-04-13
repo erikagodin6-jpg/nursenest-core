@@ -843,7 +843,7 @@ export function SiteHeader() {
                   {/* ── Primary hub card (left) ── */}
                   <Link
                     href={localizeHref(openMega.hubHref)}
-                    className="group flex flex-col justify-between gap-10 border-r border-[var(--border-subtle)] bg-[var(--accent-surface-a)] p-8 ring-1 ring-inset ring-[var(--accent-surface-a-border)] transition-[background-color,box-shadow] duration-150 ease-[var(--motion-ease)] hover:bg-[var(--accent-surface-a-border)] hover:shadow-[var(--shadow-card-hover)] focus-visible:outline-2 focus-visible:outline-[var(--ring)]"
+                    className="group flex flex-col items-start justify-between gap-10 border-r border-[var(--border-subtle)] bg-[var(--accent-surface-a)] p-8 text-left ring-1 ring-inset ring-[var(--accent-surface-a-border)] transition-[background-color,box-shadow] duration-150 ease-[var(--motion-ease)] hover:bg-[var(--accent-surface-a-border)] hover:shadow-[var(--shadow-card-hover)] focus-visible:outline-2 focus-visible:outline-[var(--ring)]"
                     onClick={() => {
                       setOpenMegaMenu(null);
                       trackClientEvent(PH.marketingNavClick, {
@@ -873,20 +873,20 @@ export function SiteHeader() {
                   </Link>
 
                   {/* ── Secondary groups + region links (right) ── */}
-                  <div className="p-8">
-                    <div className="grid grid-cols-3 gap-x-6 gap-y-7">
+                  <div className="p-8 text-left">
+                    <div className="grid w-full grid-cols-3 justify-items-start gap-x-8 gap-y-7">
                       {openMega.groups.map((group) => (
-                        <div key={group.key}>
+                        <div key={group.key} className="w-full min-w-0 text-left">
                           <p className="mb-3 border-b border-[var(--border-subtle)] pb-2 text-[10px] font-bold uppercase tracking-widest text-[var(--theme-muted-text)]">
                             {formatEyebrow(group.heading, locale)}
                           </p>
-                          <ul className="space-y-1.5">
+                          <ul className="w-full space-y-1.5">
                             {group.links.map((link) => (
                               <li key={link.key}>
                                 <Link
                                   href={localizeHref(link.href)}
                                   aria-current={isActivePath(strippedPath, link.href) ? "page" : undefined}
-                                  className={`flex items-center gap-1.5 rounded-lg px-2 py-2 text-sm transition-[background-color,color,transform] duration-100 ease-[var(--motion-ease)] focus-visible:outline-2 focus-visible:outline-[var(--ring)] ${isActivePath(strippedPath, link.href) ? "bg-[var(--nav-active)] font-semibold text-[var(--nav-link-active)]" : "font-medium text-[var(--theme-heading-text)] hover:translate-x-0.5 hover:bg-[var(--nav-hover)] hover:text-[var(--nav-link-hover)]"}`}
+                                  className={`flex w-full items-center justify-start gap-1.5 rounded-lg px-2 py-2 text-left text-sm transition-[background-color,color,transform] duration-100 ease-[var(--motion-ease)] focus-visible:outline-2 focus-visible:outline-[var(--ring)] ${isActivePath(strippedPath, link.href) ? "bg-[var(--nav-active)] font-semibold text-[var(--nav-link-active)]" : "font-medium text-[var(--theme-heading-text)] hover:translate-x-0.5 hover:bg-[var(--nav-hover)] hover:text-[var(--nav-link-hover)]"}`}
                                   onClick={() => {
                                     setOpenMegaMenu(null);
                                     trackClientEvent(PH.marketingNavClick, {
