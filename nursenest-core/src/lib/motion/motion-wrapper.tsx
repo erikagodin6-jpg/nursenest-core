@@ -128,10 +128,24 @@ interface StaggerProps extends RevealProps {
 export const StaggerGroup = forwardRef<HTMLDivElement | HTMLOListElement, StaggerProps>(
   ({ children, staggerMs = 50, whenInView = true, viewMargin = "-40px", once = true, as = "div", ...rest }, ref) => {
     const reduced = useReducedMotion();
-    const Tag = as === "ol" ? motion.ol : motion.div;
+    if (as === "ol") {
+      return (
+        <motion.ol
+          ref={ref as Ref<HTMLOListElement>}
+          variants={pickVariants(reduced, staggerContainer(staggerMs))}
+          initial="hidden"
+          {...(whenInView
+            ? { whileInView: "visible", viewport: { once, margin: viewMargin } }
+            : { animate: "visible" })}
+          {...(rest as Omit<HTMLMotionProps<"ol">, "variants">)}
+        >
+          {children}
+        </motion.ol>
+      );
+    }
     return (
-      <Tag
-        ref={ref as Ref<HTMLDivElement & HTMLOListElement>}
+      <motion.div
+        ref={ref as Ref<HTMLDivElement>}
         variants={pickVariants(reduced, staggerContainer(staggerMs))}
         initial="hidden"
         {...(whenInView
@@ -140,7 +154,7 @@ export const StaggerGroup = forwardRef<HTMLDivElement | HTMLOListElement, Stagge
         {...rest}
       >
         {children}
-      </Tag>
+      </motion.div>
     );
   },
 );
@@ -161,16 +175,27 @@ export const StaggerItem = forwardRef<
   const reduced = useReducedMotion();
   const full = variant === "softReveal" ? softRevealVariants : fadeUpVariants;
   const tr = timing === "hero" ? transitionHeroReveal : transitionNormal;
-  const Tag = as === "li" ? motion.li : motion.div;
+  if (as === "li") {
+    return (
+      <motion.li
+        ref={ref as Ref<HTMLLIElement>}
+        variants={reduced ? reducedMotionVariants : full}
+        transition={pickTransition(reduced, tr)}
+        {...(rest as Omit<HTMLMotionProps<"li">, "variants">)}
+      >
+        {children}
+      </motion.li>
+    );
+  }
   return (
-    <Tag
-      ref={ref as Ref<HTMLDivElement & HTMLLIElement>}
+    <motion.div
+      ref={ref as Ref<HTMLDivElement>}
       variants={reduced ? reducedMotionVariants : full}
       transition={pickTransition(reduced, tr)}
       {...rest}
     >
       {children}
-    </Tag>
+    </motion.div>
   );
 });
 StaggerItem.displayName = "StaggerItem";
