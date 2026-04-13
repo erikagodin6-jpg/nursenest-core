@@ -58,7 +58,7 @@ const HEADER_SECONDARY_ACTION_CLASS =
   "inline-flex min-h-[38px] items-center justify-center rounded-xl border border-[var(--nav-border)] px-3 py-2 text-sm font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]";
 const HEADER_UTILITY_BUTTON_CLASS =
   "inline-flex h-9 items-center gap-1.5 rounded-full border border-[var(--nav-border)] bg-transparent px-2.5 text-[11px] font-medium tracking-wide text-[var(--nav-fg)] transition-colors hover:bg-[var(--nav-hover)]";
-type ExamMenuKey = "rn" | "pn" | "np" | "allied";
+type ExamMenuKey = "rn" | "pn" | "np" | "newgrad" | "allied";
 
 type MegaMenuLink = {
   key: string;
@@ -124,6 +124,7 @@ function isMegaMenuKeyActive(key: ExamMenuKey, strippedPath: string): boolean {
     rn:     ["/us/rn/", "/canada/rn/"],
     pn:     ["/us/lpn/", "/canada/rpn/"],
     np:     ["/us/np/", "/canada/np/"],
+    newgrad:[ "/pre-nursing/", "/lessons", "/question-bank", "/flashcards", "/practice-exams" ],
     allied: ["/us/allied/", "/canada/allied/"],
   };
   return (prefixes[key] ?? []).some((p) => strippedPath.startsWith(p));
@@ -191,6 +192,12 @@ function createMegaMenus(region: "US" | "CA"): MegaMenuConfig[] {
   const npQuestionHref = npNpQuestionsForRegion(region);
   const studyPlanSignupHref = `${HUB.signup}?callbackUrl=${encodeURIComponent("/app/study-plan")}`;
   const alliedCareerPathwaysHref = alliedCareersMarketingUrl();
+  const newGradHub = "/pre-nursing";
+  const newGradLessons = HUB.examLessons;
+  const newGradPractice = HUB.questionBank;
+  const newGradExams = HUB.practiceExams;
+  const newGradFlashcards = HUB.flashcards;
+  const newGradHowItWorks = "/how-it-works";
 
   return [
     {
@@ -298,6 +305,39 @@ function createMegaMenus(region: "US" | "CA"): MegaMenuConfig[] {
       regionLinks: [
         { key: "np-us", label: "US NP Branches", href: npUsHub, isPrimary: region === "US" },
         { key: "np-ca", label: "Canada NP Branches", href: npCaHub, isPrimary: region === "CA" },
+      ],
+    },
+    {
+      key: "newgrad",
+      label: "New Grad",
+      hubHref: newGradHub,
+      hubDescription: "Start with the core new-grad pathway and ramp with practical study activities.",
+      groups: [
+        {
+          key: "learn",
+          heading: "Learn",
+          links: [
+            { key: "ng-lessons", label: "Lessons", href: newGradLessons },
+            { key: "ng-flashcards", label: "Flashcards", href: newGradFlashcards },
+          ],
+        },
+        {
+          key: "practice",
+          heading: "Practice",
+          links: [
+            { key: "ng-questions", label: "Practice Questions", href: newGradPractice },
+            { key: "ng-exams", label: "Practice Exams", href: newGradExams },
+            { key: "ng-readiness", label: "CAT Readiness Exam", href: publicMarketingCatHrefForOffering(region, "rn") },
+          ],
+        },
+        {
+          key: "tools",
+          heading: "Study Tools",
+          links: [
+            { key: "ng-study-plan", label: "Build A Study Plan", href: studyPlanSignupHref },
+            { key: "ng-how", label: "How It Works", href: newGradHowItWorks },
+          ],
+        },
       ],
     },
     {
@@ -471,6 +511,7 @@ export function SiteHeader() {
     pricingNav,
     { key: "blog", href: "/blog", matchBase: "/blog", label: formatTitleCase("Blog", locale) },
     { key: "faq", href: "/faq", matchBase: "/faq", label: formatTitleCase(t("footer.faq"), locale) },
+    { key: "pre-nursing", href: "/pre-nursing", matchBase: "/pre-nursing", label: formatTitleCase(t("nav.preNursing"), locale) },
     { key: "tools", href: HUB.tools, matchBase: HUB.tools, label: formatTitleCase(t("nav.tools"), locale) },
   ];
   const openMega = megaMenus.find((menu) => menu.key === openMegaMenu) ?? null;
@@ -658,35 +699,11 @@ export function SiteHeader() {
             >
               <SiteBrandLogoMark />
             </Link>
-            <nav
-              aria-label={isLearnerAuthenticated ? "Learner navigation" : t("nav.marketingExplore")}
-              className="flex min-w-0 flex-1 items-center justify-center gap-0.5 xl:gap-1"
-            >
             {isMarketingNav ? (
-              <>
-                {megaMenus.map((menu) => {
-                  const expanded = openMegaMenu === menu.key;
-                  return (
-                    <div
-                      key={menu.key}
-                      className="relative"
-                      onMouseEnter={() => setOpenMegaMenu(menu.key)}
-                    >
-                      <button
-                        type="button"
-                        aria-expanded={expanded}
-                        aria-controls={`mega-menu-${menu.key}`}
-                        data-active={isMegaMenuKeyActive(menu.key, strippedPath) || undefined}
-                      className={`${NAV_LINK_CLASS} inline-flex items-center gap-1 text-center`}
-                        onClick={() => setOpenMegaMenu(expanded ? null : menu.key)}
-                        onFocus={() => setOpenMegaMenu(menu.key)}
-                      >
-                        {menu.label}
-                        <ChevronDown className={`h-3.5 w-3.5 transition-transform ${expanded ? "rotate-180" : ""}`} aria-hidden />
-                      </button>
-                    </div>
-                  );
-                })}
+              <nav
+                aria-label={t("nav.marketingExplore")}
+                className="flex min-w-0 flex-1 items-center justify-center gap-0.5 xl:gap-1"
+              >
                 {marketingBrowseLinks.map((item) => (
                   <Link
                     key={item.key}
@@ -705,9 +722,12 @@ export function SiteHeader() {
                     {item.label}
                   </Link>
                 ))}
-              </>
+              </nav>
             ) : (
-              <>
+              <nav
+                aria-label="Learner navigation"
+                className="flex min-w-0 flex-1 items-center justify-center gap-0.5 xl:gap-1"
+              >
                 {/* Tier pill — accent-colored, visible from lg breakpoint */}
                 {learnerExamBadge ? (
                   <span
@@ -727,9 +747,8 @@ export function SiteHeader() {
                     {item.label}
                   </Link>
                 ))}
-              </>
+              </nav>
             )}
-          </nav>
 
           <div className="flex shrink-0 items-center justify-end gap-2">
               {!isAuthenticated ? (
@@ -771,7 +790,38 @@ export function SiteHeader() {
               )}
           </div>
           </div>{/* /nav-row */}
-          {isMarketingNav ? <div className="hidden lg:block nn-header-accent-bar" /> : null}
+          {isMarketingNav ? (
+            <div className="hidden min-h-[3.25rem] items-center nn-header-nav-row lg:flex">
+              <nav
+                aria-label={t("nav.marketingExplore")}
+                className="flex min-w-0 flex-1 items-center justify-center gap-0.5 xl:gap-1"
+              >
+                {megaMenus.map((menu) => {
+                  const expanded = openMegaMenu === menu.key;
+                  return (
+                    <div
+                      key={menu.key}
+                      className="relative"
+                      onMouseEnter={() => setOpenMegaMenu(menu.key)}
+                    >
+                      <button
+                        type="button"
+                        aria-expanded={expanded}
+                        aria-controls={`mega-menu-${menu.key}`}
+                        data-active={isMegaMenuKeyActive(menu.key, strippedPath) || undefined}
+                        className={`${NAV_LINK_CLASS} inline-flex items-center gap-1 text-center`}
+                        onClick={() => setOpenMegaMenu(expanded ? null : menu.key)}
+                        onFocus={() => setOpenMegaMenu(menu.key)}
+                      >
+                        {menu.label}
+                        <ChevronDown className={`h-3.5 w-3.5 transition-transform ${expanded ? "rotate-180" : ""}`} aria-hidden />
+                      </button>
+                    </div>
+                  );
+                })}
+              </nav>
+            </div>
+          ) : null}
         </div>{/* /shell */}
         {isMarketingNav && openMega ? (
           <div
