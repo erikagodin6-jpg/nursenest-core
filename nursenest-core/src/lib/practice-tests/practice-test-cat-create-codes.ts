@@ -1,5 +1,6 @@
 /** Stable API codes for POST /api/practice-tests (CAT branch). Keep in sync with route + cat-session. */
 export const PRACTICE_TEST_CAT_CREATE_CODE = {
+  cat_invalid_question_count: "cat_invalid_question_count",
   exam_sim_disabled: "exam_sim_disabled",
   exam_sim_unsupported_pathway: "exam_sim_unsupported_pathway",
   pathway_not_found: "pathway_not_found",

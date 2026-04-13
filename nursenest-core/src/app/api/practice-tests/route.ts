@@ -159,7 +159,22 @@ export async function POST(req: Request) {
 
   const parsed = createSchema.safeParse(body);
   if (!parsed.success) {
-    return NextResponse.json({ error: "Invalid body", details: parsed.error.flatten() }, { status: 400 });
+    const firstIssue = parsed.error.issues[0];
+    const isQuestionCountIssue = firstIssue?.path?.includes("questionCount");
+    const issueMessage =
+      typeof firstIssue?.message === "string" && firstIssue.message.trim().length > 0
+        ? firstIssue.message
+        : "Invalid request payload.";
+    return NextResponse.json(
+      {
+        error: issueMessage,
+        code: isQuestionCountIssue
+          ? PRACTICE_TEST_CAT_CREATE_CODE.cat_invalid_question_count
+          : "invalid_request_payload",
+        details: parsed.error.flatten(),
+      },
+      { status: 400 },
+    );
   }
 
   const d = parsed.data;
@@ -298,6 +313,18 @@ export async function POST(req: Request) {
       d.catPresentationMode === "exam_simulation" && simPathway?.examFamily !== ExamFamily.NP
         ? 145
         : 150;
+    if (d.questionCount > pathwayCap) {
+      return NextResponse.json(
+        {
+          error:
+            pathwayCap === 145
+              ? "RN/RPN readiness exam simulation allows up to 145 questions."
+              : "NP readiness exam simulation allows up to 150 questions.",
+          code: PRACTICE_TEST_CAT_CREATE_CODE.cat_invalid_question_count,
+        },
+        { status: 400 },
+      );
+    }
     const configuredCount = readinessConfig?.maxQuestions ?? d.questionCount;
     const enforcedQuestionCount = Math.min(configuredCount, pathwayCap);
     const enforcedTimedMode =
@@ -376,6 +403,17 @@ export async function POST(req: Request) {
       timed: enforcedTimedMode,
       ...examContextAnalyticsProps(buildGlobalExamContext(pathwayIdForCat, "en")),
     });
+    if (isDev) {
+      safeServerLog("practice_tests", "CAT_START_VALIDATION_DEV", {
+        userIdPrefix: gate.userId.slice(0, 8),
+        pathwayId: pathwayIdForCat,
+        requestedQuestionCount: d.questionCount,
+        configuredQuestionCount: configuredCount,
+        enforcedQuestionCount,
+        pathwayCap,
+        catPresentationMode: d.catPresentationMode,
+      });
+    }
     if (isDev) {
       safeServerLog("practice_tests", "CAT_START_SUCCESS_DEV", {
         userIdPrefix: gate.userId.slice(0, 8),

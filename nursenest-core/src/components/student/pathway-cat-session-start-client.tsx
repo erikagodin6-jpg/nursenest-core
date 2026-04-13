@@ -9,7 +9,10 @@ import { buildExamPathwayPath, getExamPathwayById } from "@/lib/exam-pathways/ex
 import type { CatPracticeReadinessResult } from "@/lib/practice-tests/cat-practice-readiness";
 import { PRACTICE_TEST_CAT_CREATE_CODE } from "@/lib/practice-tests/practice-test-cat-create-codes";
 import { CatAmbiguityPathwayPicker } from "@/components/student/cat-ambiguity-pathway-picker";
-import { resolveReadinessStartQuestionCount } from "@/components/student/pathway-cat-start-payload";
+import {
+  isHardBlockingReadinessCode,
+  resolveReadinessStartQuestionCount,
+} from "@/components/student/pathway-cat-start-payload";
 
 export function PathwayCatSessionStartClient({
   initialPathwayId,
@@ -32,6 +35,7 @@ export function PathwayCatSessionStartClient({
   const [errorCode, setErrorCode] = useState<string | null>(null);
   const [readinessLoading, setReadinessLoading] = useState(false);
   const [readiness, setReadiness] = useState<CatPracticeReadinessResult | null>(null);
+  const [readinessRefreshToken, setReadinessRefreshToken] = useState(0);
 
   const pathwayMeta = useMemo(() => (pathwayId ? getExamPathwayById(pathwayId) : undefined), [pathwayId]);
   const catShort = pathwayMeta ? catPathwayShortCatLabel(pathwayMeta) : null;
@@ -47,6 +51,26 @@ export function PathwayCatSessionStartClient({
   const examTitle = publicCopy?.title ?? (pathwayMeta ? catShort : "Exam pathway");
   const fallbackLessons = pathwayId ? (fallbackLessonsByPathway?.[pathwayId] ?? []) : [];
   const lessonsHubHref = pathwayMeta ? buildExamPathwayPath(pathwayMeta, "lessons") : "/app/lessons";
+  const readinessCode = readiness?.ok === false ? readiness.code : null;
+  const readinessGate = useMemo(() => {
+    if (!readiness || readiness.ok) return { blocked: false, title: "" };
+    if (readiness.code === PRACTICE_TEST_CAT_CREATE_CODE.pathway_not_entitled) {
+      return {
+        blocked: true,
+        title: "Pathway does not match your subscription",
+      };
+    }
+    if (readiness.code === PRACTICE_TEST_CAT_CREATE_CODE.cat_pool_invalid) {
+      return {
+        blocked: true,
+        title: "Not enough CAT-ready questions yet",
+      };
+    }
+    return {
+      blocked: false,
+      title: "We could not verify CAT readiness right now",
+    };
+  }, [readiness]);
 
   useEffect(() => {
     if (!pathwayId.trim()) {
@@ -63,7 +87,17 @@ export function PathwayCatSessionStartClient({
           credentials: "same-origin",
         });
         const data = (await res.json()) as CatPracticeReadinessResult;
-        if (!cancelled) setReadiness(data);
+        if (!cancelled) {
+          setReadiness(data);
+          if (isDev) {
+            console.info("[CAT start] readiness", {
+              pathwayId,
+              ok: Boolean(data.ok),
+              code: data.ok ? null : data.code,
+              message: data.ok ? null : data.message,
+            });
+          }
+        }
       } catch {
         if (!cancelled) {
           setReadiness({
@@ -79,7 +113,7 @@ export function PathwayCatSessionStartClient({
     return () => {
       cancelled = true;
     };
-  }, [pathwayId]);
+  }, [pathwayId, isDev, readinessRefreshToken]);
 
   const start = useCallback(async () => {
     if (!pathwayId.trim()) return;
@@ -87,8 +121,7 @@ export function PathwayCatSessionStartClient({
     setError(null);
     setErrorCode(null);
     try {
-      const catPresentationMode =
-        readinessConfig?.engineType === "CAT" ? "exam_simulation" : "practice";
+      const catPresentationMode = "exam_simulation";
       const questionCount = resolveReadinessStartQuestionCount({
         configuredMaxQuestions: readinessConfig?.maxQuestions ?? 150,
         catPresentationMode,
@@ -226,7 +259,7 @@ export function PathwayCatSessionStartClient({
       {readiness && !readiness.ok ? (
         <aside className="rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-warning-soft)] p-4 text-sm text-[var(--semantic-text-primary)] shadow-sm">
           <p className="font-semibold">
-            Adaptive exam not available yet for this pathway
+            {readinessGate.title}
           </p>
           <p className="mt-1 text-muted-foreground">{readiness.message}</p>
           {fallbackLessons.length > 0 ? (
@@ -264,9 +297,7 @@ export function PathwayCatSessionStartClient({
                 </Link>
               </li>
             ) : null}
-            {(readiness.code === PRACTICE_TEST_CAT_CREATE_CODE.pathway_track_not_ready ||
-              readiness.code === PRACTICE_TEST_CAT_CREATE_CODE.pathway_not_found) &&
-            pathwayMeta ? (
+            {readiness.code === PRACTICE_TEST_CAT_CREATE_CODE.pathway_not_found && pathwayMeta ? (
               <li>
                 <Link className="font-medium text-primary underline" href={buildExamPathwayPath(pathwayMeta)}>
                   Pathway hub
@@ -318,14 +349,26 @@ export function PathwayCatSessionStartClient({
             !pathwayId.trim() ||
             needsPathwayChoice ||
             readinessLoading ||
-            (readiness !== null && !readiness.ok) ||
+            isHardBlockingReadinessCode(readinessCode) ||
             false
           }
           className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-primary px-6 py-2.5 text-sm font-semibold text-primary-foreground disabled:opacity-50"
           onClick={() => void start()}
         >
-          {creating ? "Starting…" : readinessLoading ? "Checking…" : publicCopy?.effectiveMode === "production_ready" ? "Start Readiness Exam" : "Start Assessment"}
+          {creating ? "Starting…" : readinessLoading ? "Checking…" : "Start Readiness Exam"}
         </button>
+        {!readinessLoading && readinessCode === "readiness_fetch_failed" ? (
+          <button
+            type="button"
+            className="inline-flex min-h-[44px] items-center justify-center rounded-full border border-border px-6 py-2.5 text-sm font-semibold hover:bg-card"
+            onClick={() => {
+              setReadiness(null);
+              setReadinessRefreshToken((t) => t + 1);
+            }}
+          >
+            Retry readiness check
+          </button>
+        ) : null}
         <Link
           href="/app/practice-tests"
           className="inline-flex min-h-[44px] items-center justify-center rounded-full border border-border px-6 py-2.5 text-sm font-semibold hover:bg-card"
