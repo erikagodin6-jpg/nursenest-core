@@ -24,6 +24,8 @@ const dmSans = DM_Sans({
 
 const siteUrl = MARKETING_SITE_ORIGIN;
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
