@@ -143,6 +143,12 @@ function clipWords(text: string, maxWords: number): string {
 }
 
 type TriggerRule = { id: string; re: RegExp };
+type PrecisionGateResult = {
+  matched: boolean;
+  precision: "true_positive_estimate" | "borderline" | "false_positive";
+  inclusionHits: string[];
+  exclusionHits: string[];
+};
 
 const ELECTROLYTE_STRONG_INCLUDE_RULES: TriggerRule[] = [
   { id: "potassium_disorder", re: /\b(hyperkal|hypokal|k\+|potassium(?:\s+(?:level|shift|replacement|repletion|supplement))?)\b/i },
@@ -212,6 +218,76 @@ function detectElectrolytesMatch(haystack: string): {
   };
 }
 
+const ABG_STRONG_INCLUDE_RULES: TriggerRule[] = [
+  { id: "abg_interpretation", re: /\b(abg interpretation|abg results|interpret (?:the )?abg|arterial blood gas results|acid[- ]base interpretation)\b/i },
+  { id: "respiratory_acidosis", re: /\b(respiratory acidosis|acute respiratory acidosis|chronic respiratory acidosis)\b/i },
+  { id: "respiratory_alkalosis", re: /\b(respiratory alkalosis)\b/i },
+  { id: "metabolic_acidosis", re: /\b(metabolic acidosis|anion gap metabolic acidosis|high anion gap acidosis)\b/i },
+  { id: "metabolic_alkalosis", re: /\b(metabolic alkalosis)\b/i },
+  { id: "compensation_pattern", re: /\b(compensat|partially compensated|uncompensated|mixed acid[- ]base|winter(?:'s)? formula)\b/i },
+  { id: "acid_base_decision_sequence", re: /\b(classify pH first|interpret (?:the )?abg|primary disorder)\b/i },
+];
+
+const ABG_CONTEXT_RULES: TriggerRule[] = [
+  { id: "ventilation_context", re: /\b(hypoventilation|hyperventilation|ventilator|minute ventilation)\b/i },
+  { id: "critical_metabolic_context", re: /\b(dka|lactic acidosis|sepsis|renal failure)\b/i },
+];
+
+const ABG_EXCLUSION_RULES: TriggerRule[] = [
+  { id: "pulmonary_hypertension_only", re: /\b(pulmonary hypertension|pah)\b/i },
+  { id: "non_abg_respiratory_workup", re: /\b(spirometry|bronchoscopy|hilar lymphadenopathy|sarcoidosis)\b/i },
+  { id: "hematology_lymphoma_only", re: /\b(hodgkin|lymphoma|reed-sternberg|lymphadenopathy)\b/i },
+  { id: "oxygen_device_only", re: /\b(venturi|nasal cannula|simple mask|nonrebreather|fio2)\b/i },
+  { id: "non_clinical_meta", re: /\b(replit import|deck cards|placeholder)\b/i },
+];
+
+function detectAbgAcidBaseMatch(haystack: string): PrecisionGateResult {
+  const inclusionHits = collectTriggerHits(haystack, ABG_STRONG_INCLUDE_RULES);
+  const contextHits = collectTriggerHits(haystack, ABG_CONTEXT_RULES);
+  const exclusionHits = collectTriggerHits(haystack, ABG_EXCLUSION_RULES);
+  const tripletSignalCount = [/\bpH\b/i, /\bPaCO2\b/i, /\bHCO3\b/i, /\bbicarbonate\b/i, /\bbase excess\b/i].filter((re) =>
+    re.test(haystack),
+  ).length;
+  const hasTripletContext = /\b(acidosis|alkalosis|acid[- ]base|compensat|anion gap|abg)\b/i.test(haystack);
+  const hasTripletRelationship = tripletSignalCount >= 2 && hasTripletContext;
+  const allInclusionHits = hasTripletRelationship ? [...inclusionHits, "abg_triplet_relationship"] : inclusionHits;
+  const hasStrong = allInclusionHits.length > 0;
+  const hasExclusion = exclusionHits.length > 0;
+  const specificSignalCount = allInclusionHits.filter((hit) => hit !== "abg_interpretation").length;
+
+  if (hasStrong && hasExclusion && specificSignalCount === 0) {
+    return {
+      matched: false,
+      precision: "false_positive",
+      inclusionHits: [...allInclusionHits, ...contextHits],
+      exclusionHits,
+    };
+  }
+
+  if (hasStrong && !hasExclusion) {
+    return {
+      matched: true,
+      precision: "true_positive_estimate",
+      inclusionHits: [...allInclusionHits, ...contextHits],
+      exclusionHits,
+    };
+  }
+  if (hasStrong && hasExclusion) {
+    return {
+      matched: true,
+      precision: "borderline",
+      inclusionHits: [...allInclusionHits, ...contextHits],
+      exclusionHits,
+    };
+  }
+  return {
+    matched: false,
+    precision: hasExclusion ? "false_positive" : "borderline",
+    inclusionHits: [...inclusionHits, ...contextHits],
+    exclusionHits,
+  };
+}
+
 function detectBatch(seed: ControlledRationaleSeed): HighYieldRationaleBatchId | null {
   const haystack = [
     seed.topic,
@@ -225,8 +301,10 @@ function detectBatch(seed: ControlledRationaleSeed): HighYieldRationaleBatchId |
   if (!haystack.trim()) return null;
   const electrolyteGate = detectElectrolytesMatch(haystack);
   if (electrolyteGate.matched) return "electrolytes";
+  const abgGate = detectAbgAcidBaseMatch(haystack);
+  if (abgGate.matched) return "abg_acid_base";
   const match = HIGH_YIELD_RATIONALE_BATCHES.find(
-    (batch) => batch.id !== "electrolytes" && batch.patterns.some((re) => re.test(haystack)),
+    (batch) => batch.id !== "electrolytes" && batch.id !== "abg_acid_base" && batch.patterns.some((re) => re.test(haystack)),
   );
   return match?.id ?? null;
 }
@@ -277,7 +355,10 @@ export function buildControlledRationaleEnrichment(seed: ControlledRationaleSeed
     .filter(Boolean)
     .join(" ");
   const electrolytesGate = detectElectrolytesMatch(matchHaystack);
+  const abgGate = detectAbgAcidBaseMatch(matchHaystack);
   const batchId = detectBatch(seed);
+  const precisionGate: PrecisionGateResult | null =
+    batchId === "electrolytes" ? electrolytesGate : batchId === "abg_acid_base" ? abgGate : null;
   const sourceAnchors = [
     seed.correctAnswerExplanation,
     seed.rationale,
@@ -302,13 +383,13 @@ export function buildControlledRationaleEnrichment(seed: ControlledRationaleSeed
         sourceAnchorCount,
         sourceAnchorWordCount,
         minimumSubstanceMet: false,
-        ...(batchId === "electrolytes"
+        ...(precisionGate
           ? {
-              matchPrecision: electrolytesGate.precision,
-              topInclusionTrigger: electrolytesGate.inclusionHits[0] ?? null,
-              topExclusionTrigger: electrolytesGate.exclusionHits[0] ?? null,
-              inclusionHitCount: electrolytesGate.inclusionHits.length,
-              exclusionHitCount: electrolytesGate.exclusionHits.length,
+              matchPrecision: precisionGate.precision,
+              topInclusionTrigger: precisionGate.inclusionHits[0] ?? null,
+              topExclusionTrigger: precisionGate.exclusionHits[0] ?? null,
+              inclusionHitCount: precisionGate.inclusionHits.length,
+              exclusionHitCount: precisionGate.exclusionHits.length,
             }
           : {}),
       },
@@ -328,13 +409,13 @@ export function buildControlledRationaleEnrichment(seed: ControlledRationaleSeed
         sourceAnchorCount,
         sourceAnchorWordCount,
         minimumSubstanceMet: false,
-        ...(batchId === "electrolytes"
+        ...(precisionGate
           ? {
-              matchPrecision: electrolytesGate.precision,
-              topInclusionTrigger: electrolytesGate.inclusionHits[0] ?? null,
-              topExclusionTrigger: electrolytesGate.exclusionHits[0] ?? null,
-              inclusionHitCount: electrolytesGate.inclusionHits.length,
-              exclusionHitCount: electrolytesGate.exclusionHits.length,
+              matchPrecision: precisionGate.precision,
+              topInclusionTrigger: precisionGate.inclusionHits[0] ?? null,
+              topExclusionTrigger: precisionGate.exclusionHits[0] ?? null,
+              inclusionHitCount: precisionGate.inclusionHits.length,
+              exclusionHitCount: precisionGate.exclusionHits.length,
             }
           : {}),
       },
@@ -354,13 +435,13 @@ export function buildControlledRationaleEnrichment(seed: ControlledRationaleSeed
         sourceAnchorCount,
         sourceAnchorWordCount,
         minimumSubstanceMet: false,
-        ...(batchId === "electrolytes"
+        ...(precisionGate
           ? {
-              matchPrecision: electrolytesGate.precision,
-              topInclusionTrigger: electrolytesGate.inclusionHits[0] ?? null,
-              topExclusionTrigger: electrolytesGate.exclusionHits[0] ?? null,
-              inclusionHitCount: electrolytesGate.inclusionHits.length,
-              exclusionHitCount: electrolytesGate.exclusionHits.length,
+              matchPrecision: precisionGate.precision,
+              topInclusionTrigger: precisionGate.inclusionHits[0] ?? null,
+              topExclusionTrigger: precisionGate.exclusionHits[0] ?? null,
+              inclusionHitCount: precisionGate.inclusionHits.length,
+              exclusionHitCount: precisionGate.exclusionHits.length,
             }
           : {}),
       },
@@ -386,6 +467,15 @@ export function buildControlledRationaleEnrichment(seed: ControlledRationaleSeed
         sourceAnchorCount,
         sourceAnchorWordCount,
         minimumSubstanceMet: false,
+        ...(precisionGate
+          ? {
+              matchPrecision: precisionGate.precision,
+              topInclusionTrigger: precisionGate.inclusionHits[0] ?? null,
+              topExclusionTrigger: precisionGate.exclusionHits[0] ?? null,
+              inclusionHitCount: precisionGate.inclusionHits.length,
+              exclusionHitCount: precisionGate.exclusionHits.length,
+            }
+          : {}),
       },
     };
   }
@@ -401,13 +491,13 @@ export function buildControlledRationaleEnrichment(seed: ControlledRationaleSeed
       sourceAnchorCount,
       sourceAnchorWordCount,
       minimumSubstanceMet: true,
-      ...(batchId === "electrolytes"
+      ...(precisionGate
         ? {
-            matchPrecision: electrolytesGate.precision,
-            topInclusionTrigger: electrolytesGate.inclusionHits[0] ?? null,
-            topExclusionTrigger: electrolytesGate.exclusionHits[0] ?? null,
-            inclusionHitCount: electrolytesGate.inclusionHits.length,
-            exclusionHitCount: electrolytesGate.exclusionHits.length,
+            matchPrecision: precisionGate.precision,
+            topInclusionTrigger: precisionGate.inclusionHits[0] ?? null,
+            topExclusionTrigger: precisionGate.exclusionHits[0] ?? null,
+            inclusionHitCount: precisionGate.inclusionHits.length,
+            exclusionHitCount: precisionGate.exclusionHits.length,
           }
         : {}),
     },
