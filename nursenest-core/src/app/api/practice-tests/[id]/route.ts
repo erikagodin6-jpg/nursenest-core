@@ -2,23 +2,17 @@ import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { PracticeTestStatus } from "@prisma/client";
 import { z } from "zod";
-import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-session";
 import { prisma } from "@/lib/db";
-import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
+import { SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 import { withRetry } from "@/lib/resilience/with-retry";
 import { questionAccessWhere } from "@/lib/entitlements/content-access-scope";
-import { advanceCatPracticeTest, finalizeCatPracticeTest } from "@/lib/practice-tests/cat-session";
 /**
  * Topic ledger updates run only when a practice test completes (linear or CAT finalization).
  * Incremental recording on each CAT advance would double-count if the client retried the same step
  * or replayed answers; completion uses the full question id + answer set once.
  */
-import { recordTopicOutcomesFromPracticeTest } from "@/lib/learner/topic-performance";
 import { buildLinearCommitFeedback } from "@/lib/practice-tests/build-linear-commit-feedback";
 import { getLinearCommittedQuestionIds, mergeLinearCommittedQuestionId } from "@/lib/practice-tests/practice-linear-engine";
-import { enrichPracticeTestResultsWithCatCoach } from "@/lib/practice-tests/enrich-cat-results-coach";
-import { computePracticeTestResults } from "@/lib/practice-tests/score-practice-test";
-import { parsePracticeTestConfigAtBoundary } from "@/lib/practice-tests/practice-test-config-boundary";
 import type { PracticeTestConfigJson, PracticeTestResultsJson } from "@/lib/practice-tests/types";
 
 function withCatSessionResultMeta(
@@ -35,36 +29,11 @@ function withCatSessionResultMeta(
   };
 }
 import { buildPracticeTestTeachingReview } from "@/lib/practice-tests/build-teaching-review";
-import {
-  enforcePracticeTestDetailProtection,
-  enforcePracticeTestMutationProtection,
-} from "@/lib/http/api-protection";
 import { mergeQuestionApiPayload } from "@/lib/i18n/educational-content-overlay";
 import { resolveMergedQuestionOverlayBundle } from "@/lib/i18n/educational-translation-db";
 import { getMarketingLocaleFromRequestCookie } from "@/lib/i18n/marketing-locale-cookie";
-import {
-  captureCatCoachGenerationAnalytics,
-  capturePracticeTestCompletedAnalytics,
-} from "@/lib/observability/learner-product-analytics";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
-
-export const practiceTestRouteDeps = {
-  requireSubscriberSession,
-  prisma,
-  findPracticeTest: (args: Parameters<typeof prisma.practiceTest.findFirst>[0]) => prisma.practiceTest.findFirst(args),
-  updatePracticeTest: (args: Parameters<typeof prisma.practiceTest.update>[0]) => prisma.practiceTest.update(args),
-  setSentryServerContext,
-  advanceCatPracticeTest,
-  finalizeCatPracticeTest,
-  recordTopicOutcomesFromPracticeTest,
-  enrichPracticeTestResultsWithCatCoach,
-  computePracticeTestResults,
-  parsePracticeTestConfigAtBoundary,
-  capturePracticeTestCompletedAnalytics,
-  captureCatCoachGenerationAnalytics,
-  enforcePracticeTestDetailProtection,
-  enforcePracticeTestMutationProtection,
-};
+import { practiceTestRouteDeps } from "./route-deps";
 
 const previewSelect = {
   id: true,

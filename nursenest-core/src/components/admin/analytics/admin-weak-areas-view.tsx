@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import Link from "next/link";
 import type { AdminWeakAreasData, RankedWeakArea } from "@/lib/admin/load-admin-weak-areas";
 
@@ -92,7 +93,7 @@ function Section({
   id: string;
   title: string;
   subtitle: string;
-  children: React.ReactNode;
+  children: ReactNode;
 }) {
   return (
     <section id={id} className="scroll-mt-24 space-y-4">
@@ -274,7 +275,7 @@ export function AdminWeakAreasView({ data }: { data: AdminWeakAreasData }) {
       <Section
         id="weak-pages"
         title="Weak or noisy surfaces (feedback)"
-        subtitle="Ranked by friction density and report-volume trend vs the prior window. Authenticated cohort only — anonymous reports are excluded when any cohort filter is applied."
+        subtitle="Ranked by friction density and report-volume trend vs the prior window. Authenticated cohort only for now; anonymous reports are not included in these rankings."
       >
         <div className="grid gap-4 lg:grid-cols-2">
           {data.rankedUnpopularPages.length === 0 ? (

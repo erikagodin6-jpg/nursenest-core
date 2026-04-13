@@ -3,8 +3,6 @@
  * Conservative: collapse formatting noise (whitespace, slash variants, case) without semantic synonym merging.
  */
 
-import { createHash } from "node:crypto";
-
 /** Must match Prisma UserTopicStat.topic @db.VarChar(80) */
 export const MAX_TOPIC_KEY_LENGTH = 80;
 
@@ -12,7 +10,12 @@ export const MAX_TOPIC_KEY_LENGTH = 80;
 const TRUNC_HASH_LEN = 5;
 
 function stableHash16(input: string): string {
-  return createHash("sha256").update(input, "utf8").digest("hex").slice(0, 4);
+  let hash = 0x811c9dc5;
+  for (let i = 0; i < input.length; i += 1) {
+    hash ^= input.charCodeAt(i);
+    hash = Math.imul(hash, 0x01000193);
+  }
+  return (hash >>> 0).toString(16).padStart(8, "0").slice(0, 4);
 }
 
 /**

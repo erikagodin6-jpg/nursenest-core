@@ -3,7 +3,8 @@ import assert from "node:assert/strict";
 import { afterEach, describe, it, mock } from "node:test";
 import { PracticeTestStatus } from "@prisma/client";
 import type { PracticeTestResultsJson } from "@/lib/practice-tests/types";
-import { PATCH, practiceTestRouteDeps } from "@/app/api/practice-tests/[id]/route";
+import { PATCH } from "@/app/api/practice-tests/[id]/route";
+import { practiceTestRouteDeps } from "@/app/api/practice-tests/[id]/route-deps";
 import type { SubscriberSessionOk } from "@/lib/entitlements/require-subscriber-session";
 
 const gate: SubscriberSessionOk = {

@@ -2,7 +2,7 @@
  * Admin “weak areas” intelligence: ranked entities + dual-window trends + cohort filters.
  * All metrics are explainable; PostHog sections are optional (personal API key + project id).
  */
-import { CountryCode, Prisma, UserRole } from "@prisma/client";
+import { ContentStatus, CountryCode, Prisma, UserRole } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { isRuntimeSafeMode } from "@/lib/runtime/safe-mode";
@@ -373,7 +373,7 @@ export async function loadAdminWeakAreas(q: WeakAreasQuery): Promise<AdminWeakAr
   let pathwayOptions: Array<{ id: string; label: string }> = [];
   try {
     const rows = await prisma.pathwayLesson.findMany({
-      where: { status: "PUBLISHED" },
+      where: { status: ContentStatus.PUBLISHED },
       select: { pathwayId: true },
       distinct: ["pathwayId"],
       orderBy: { pathwayId: "asc" },
@@ -815,27 +815,13 @@ export async function loadAdminWeakAreas(q: WeakAreasQuery): Promise<AdminWeakAr
           AND timestamp >= toDate('${q.fromDay.replace(/'/g, "''")}')
           AND timestamp < toDate('${q.toDay.replace(/'/g, "''")}') + INTERVAL 1 DAY
       `);
-      const checkoutPrev = await posthogHogqlTable(`
-        SELECT uniqExact(distinct_id) AS u
-        FROM events
-        WHERE event = '${PH.checkoutStarted}'
-          AND timestamp >= toDate('${q.prevFromDay.replace(/'/g, "''")}')
-          AND timestamp < toDate('${q.prevToDay.replace(/'/g, "''")}') + INTERVAL 1 DAY
-      `);
       let checkoutUvCur = 0;
-      let checkoutUvPrev = 0;
       if (checkoutCur.ok && checkoutCur.rows[0]) {
         const idx = checkoutCur.columns.indexOf("u");
         if (idx >= 0) checkoutUvCur = Number(checkoutCur.rows[0][idx] ?? 0);
       }
-      if (checkoutPrev.ok && checkoutPrev.rows[0]) {
-        const idx = checkoutPrev.columns.indexOf("u");
-        if (idx >= 0) checkoutUvPrev = Number(checkoutPrev.rows[0][idx] ?? 0);
-      }
       const totalUvCur = curU.reduce((a, x) => a + x.uv, 0) || 1;
-      const totalUvPrev = prevU.reduce((a, x) => a + x.uv, 0) || 1;
       const gapCur = 1 - checkoutUvCur / totalUvCur;
-      const gapPrev = 1 - checkoutUvPrev / Math.max(1, totalUvPrev);
 
       for (const row of curU) {
         const prevUv = prevMap.get(row.url) ?? null;
@@ -900,7 +886,7 @@ function clamp01(x: number): number {
 }
 
 function classifySurface(
-  surface: string,
+  _surface: string,
   score: number,
   total: number,
   prevTotal: number,
