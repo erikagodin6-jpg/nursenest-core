@@ -1,21 +1,24 @@
 /**
- * Canonical theme → Spaces object key for the pre-colored transparent brand raster.
+ * Theme wordmarks: registered ids resolve to `/public/logos/{id}-brandlogo.svg` (see {@link THEME_LOGOS}).
  *
- * Primary map: exact `data-theme` id → CDN key. When a theme has no dedicated asset, an explicit
- * same-family fallback id borrows a mapped logo (still CDN — never local `/public` chains).
+ * `THEME_LOGO_SPACE_KEYS` remains for Spaces-backed marketing proxies and tooling; runtime header/footer
+ * marks use local SVGs only (no CSS tinting, no PNG chain).
  */
 import { nursenestImagesSpaceObjectUrl } from "@/config/marketing-cdn.catalog";
 import { marketingImageUsesProxy, marketingProxyPathForKey } from "@/lib/marketing-resolve-image-url";
+import { THEME_LOGOS } from "@/lib/theme/theme-logo-config";
+import { parseRegisteredThemeId } from "@/lib/theme/theme-logo-resolve";
+import { NURSENEST_DEFAULT_THEME } from "@/lib/theme/theme-registry";
 
 export type ThemeLogoVariant = "full" | "leaf";
 
-export type ThemeLogoResolutionKind = "cdn" | "text-fallback";
+export type ThemeLogoResolutionKind = "local" | "text-fallback";
 
 export type ResolvedThemeLogo = {
   url: string | null;
   kind: ThemeLogoResolutionKind;
   objectKey: string | null;
-  /** Theme id whose `THEME_LOGO_SPACE_KEYS` entry was used (equals requested id when directly mapped). */
+  /** Registry theme id that owns the resolved asset (same as requested id for local SVGs). */
   assetThemeId: string | null;
 };
 
@@ -111,25 +114,25 @@ export function themeLogoSpaceKeyForRegisteredTheme(
 }
 
 /**
- * Single entry point for theme brand raster URLs. Uses direct CDN map, then explicit same-family fallback.
- * Unknown / invalid theme ids → text-fallback only (no random default theme).
+ * Single entry point for the in-app theme wordmark URL. Uses {@link THEME_LOGOS}; unknown ids → text-fallback.
+ * If a future registry id were missing from `THEME_LOGOS`, falls back to the default theme asset.
  */
 export function resolveThemeLogo(
   themeId: string | null | undefined,
   logoVariant: ThemeLogoVariant = "full",
 ): ResolvedThemeLogo {
   void logoVariant;
-  const id = themeId && themeId.length > 0 ? themeId : null;
-  if (!id) {
+  const registered = parseRegisteredThemeId(themeId);
+  if (!registered) {
     return { url: null, kind: "text-fallback", objectKey: null, assetThemeId: null };
   }
-  const directKey = THEME_LOGO_SPACE_KEYS[id];
-  const assetThemeId = directKey ? id : (THEME_LOGO_FALLBACK_THEME_ID[id] ?? null);
-  const objectKey =
-    directKey ?? (assetThemeId ? THEME_LOGO_SPACE_KEYS[assetThemeId] ?? null : null);
-  if (!objectKey || !assetThemeId) {
+  const directPath = (THEME_LOGOS as Record<string, string | undefined>)[registered];
+  const url =
+    directPath ??
+    (THEME_LOGOS as Record<string, string | undefined>)[NURSENEST_DEFAULT_THEME] ??
+    null;
+  if (!url) {
     return { url: null, kind: "text-fallback", objectKey: null, assetThemeId: null };
   }
-  const url = urlForObjectKey(objectKey);
-  return { url, kind: "cdn", objectKey, assetThemeId };
+  return { url, kind: "local", objectKey: null, assetThemeId: registered };
 }

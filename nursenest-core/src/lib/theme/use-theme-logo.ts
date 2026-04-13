@@ -56,7 +56,7 @@ export function useThemeLogo(logoVariant: ThemeLogoVariant = "full"): {
   mappedSpaceKey: string | null;
   headerLogoMode: "dark-header" | "light-header";
   url: string | null;
-  kind: "cdn" | "text-fallback";
+  kind: "local" | "text-fallback";
   /** Theme id whose CDN key was used (may differ when borrowing a sibling logo). */
   assetThemeId: string | null;
 } {

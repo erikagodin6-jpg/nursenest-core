@@ -1,6 +1,6 @@
 /**
- * Public CDN URLs for per-theme brand rasters on DigitalOcean Spaces (`nursenest-images`).
- * Resolution: {@link resolveThemeLogo} — direct CDN map, then explicit same-family borrow when needed.
+ * Theme wordmark URLs for marketing helpers. {@link resolveThemeLogo} returns same-origin `/logos/…` SVGs;
+ * Spaces keys below remain for legacy `/api/marketing-assets` and catalog tooling.
  */
 import { getThemeBrandLogoSpaceKeyForCanonicalId } from "@/config/theme-brand-logo-space-keys";
 import {

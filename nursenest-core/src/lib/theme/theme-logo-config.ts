@@ -39,9 +39,6 @@ export const THEME_LOGO_CONFIG: Record<string, ThemeLogoEntry> = Object.fromEntr
   }),
 );
 
-/** @deprecated Prefer {@link THEME_LOGOS} */
-export const THEME_LOGOS_LEGACY_MAP: Record<string, string> = { ...THEME_LOGOS };
-
 export function getThemeLogoPath(themeId: string): string | null {
   return (THEME_LOGOS as Record<string, string | undefined>)[themeId] ?? null;
 }
