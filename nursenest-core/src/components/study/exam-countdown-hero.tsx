@@ -24,6 +24,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { CalendarDays, CheckCircle2, Circle, Pencil } from "lucide-react";
 import type { PlanTrackAssessment, ExamPlanMilestone } from "@/lib/learner/exam-plan-engine";
+import type { PaceForecast } from "@/lib/learner/recovery-planner";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -36,6 +37,9 @@ interface ExamCountdownHeroProps {
   totalStudyDays?: number;
   planTrack: PlanTrackAssessment;
   milestones: ExamPlanMilestone[];
+  forecast: PaceForecast;
+  streakDays?: number;
+  recoveryCompleted?: boolean;
   onEditDate?: () => void;
 }
 
@@ -331,6 +335,9 @@ export function ExamCountdownHero({
   totalStudyDays = 120,
   planTrack,
   milestones,
+  forecast,
+  streakDays = 0,
+  recoveryCompleted = false,
   onEditDate,
 }: ExamCountdownHeroProps) {
   const urgency = classifyUrgency(daysUntilExam, examDate);
@@ -341,6 +348,22 @@ export function ExamCountdownHero({
 
   const completedMilestones = milestones.filter((m) => m.complete).length;
   const totalMilestones = milestones.length;
+  const steadyStateLabel = recoveryCompleted
+    ? "Recovery completed"
+    : forecast.state === "ahead"
+      ? "Ahead of schedule"
+      : streakDays >= 5
+        ? `${streakDays}-day study streak`
+        : planTrack.status === "on_track"
+          ? "Plan holding steady"
+          : null;
+  const steadyStateColor = recoveryCompleted
+    ? "var(--semantic-success)"
+    : forecast.state === "ahead"
+      ? "var(--semantic-success)"
+      : streakDays >= 5
+        ? "var(--semantic-brand)"
+        : "var(--semantic-info)";
 
   return (
     <div
@@ -493,6 +516,25 @@ export function ExamCountdownHero({
           {/* Plan track status */}
           <div>
             <StatusPill track={planTrack} />
+            {steadyStateLabel && (
+              <div
+                style={{
+                  marginTop: "0.5rem",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 6,
+                  padding: "5px 10px",
+                  borderRadius: 99,
+                  background: `color-mix(in srgb, ${steadyStateColor} 10%, var(--bg-card))`,
+                  border: `1px solid color-mix(in srgb, ${steadyStateColor} 20%, var(--border-subtle))`,
+                  color: steadyStateColor,
+                  fontSize: "0.6875rem",
+                  fontWeight: 700,
+                }}
+              >
+                {steadyStateLabel}
+              </div>
+            )}
             <p
               style={{
                 marginTop: "0.625rem",
@@ -516,6 +558,58 @@ export function ExamCountdownHero({
                 {planTrack.detail}
               </p>
             )}
+            <div
+              style={{
+                marginTop: "0.875rem",
+                padding: "0.875rem 1rem",
+                borderRadius: "0.9rem",
+                background:
+                  forecast.state === "behind"
+                    ? "color-mix(in srgb, var(--semantic-warning) 8%, var(--bg-card))"
+                    : forecast.state === "ahead"
+                      ? "color-mix(in srgb, var(--semantic-success) 8%, var(--bg-card))"
+                      : "color-mix(in srgb, var(--accent-primary) 6%, var(--bg-card))",
+                border:
+                  forecast.state === "behind"
+                    ? "1px solid color-mix(in srgb, var(--semantic-warning) 18%, var(--border-subtle))"
+                    : forecast.state === "ahead"
+                      ? "1px solid color-mix(in srgb, var(--semantic-success) 18%, var(--border-subtle))"
+                      : "1px solid color-mix(in srgb, var(--accent-primary) 16%, var(--border-subtle))",
+              }}
+            >
+              <p
+                style={{
+                  fontSize: "0.625rem",
+                  fontWeight: 800,
+                  textTransform: "uppercase",
+                  letterSpacing: "0.08em",
+                  color: "var(--semantic-text-muted)",
+                }}
+              >
+                Forecast
+              </p>
+              <p
+                style={{
+                  marginTop: 4,
+                  fontSize: "0.875rem",
+                  fontWeight: 700,
+                  lineHeight: 1.45,
+                  color: "var(--theme-heading-text, var(--semantic-text-primary))",
+                }}
+              >
+                {forecast.summary}
+              </p>
+              <p
+                style={{
+                  marginTop: 3,
+                  fontSize: "0.75rem",
+                  lineHeight: 1.5,
+                  color: "var(--semantic-text-muted)",
+                }}
+              >
+                {forecast.detail}
+              </p>
+            </div>
           </div>
 
           {/* Milestones */}
@@ -595,8 +689,7 @@ export function ExamCountdownHero({
                   color: "var(--semantic-text-muted)",
                 }}
               >
-                Adding your exam date unlocks a personalised weekly plan, pacing targets, and
-                adaptive recommendations tuned to your specific timeline.
+                Set your exam date to unlock pacing forecasts, weekly targets, and recovery guidance tied to your actual timeline.
               </p>
             </div>
           )}

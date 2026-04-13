@@ -400,13 +400,14 @@ interface WeeklyPacingPanelProps {
 export function WeeklyPacingPanel({ plan, planTrack, daysUntilExam }: WeeklyPacingPanelProps) {
   const weekDays = buildWeekPlan(plan, planTrack, daysUntilExam);
   const isBehind = planTrack.status !== "on_track";
+  const headerAccent = isBehind ? "var(--semantic-info)" : "var(--accent-primary)";
 
   return (
     <div
       style={{
         borderRadius: "1rem",
-        border: `1px solid color-mix(in srgb, var(--accent-primary) 14%, var(--border-subtle))`,
-        background: `color-mix(in srgb, var(--accent-primary) 4%, var(--bg-card))`,
+        border: `1px solid color-mix(in srgb, ${headerAccent} 14%, var(--border-subtle))`,
+        background: `color-mix(in srgb, ${headerAccent} 4%, var(--bg-card))`,
         boxShadow: "var(--shadow-card, 0 2px 8px rgb(0 0 0 / 0.04))",
         overflow: "hidden",
       }}
@@ -418,7 +419,7 @@ export function WeeklyPacingPanel({ plan, planTrack, daysUntilExam }: WeeklyPaci
           alignItems: "center",
           justifyContent: "space-between",
           padding: "14px 20px",
-          borderBottom: `1px solid color-mix(in srgb, var(--accent-primary) 12%, var(--border-subtle))`,
+          borderBottom: `1px solid color-mix(in srgb, ${headerAccent} 12%, var(--border-subtle))`,
           flexWrap: "wrap",
           gap: "0.5rem",
         }}
@@ -434,7 +435,9 @@ export function WeeklyPacingPanel({ plan, planTrack, daysUntilExam }: WeeklyPaci
             This Week&apos;s Pacing
           </p>
           <p style={{ fontSize: "0.75rem", color: "var(--semantic-text-muted)" }}>
-            {plan.rationale}
+            {isBehind
+              ? `${plan.rationale} Focus on the marked catch-up days first.`
+              : `${plan.rationale} Keep the same rhythm unless your exam date changes.`}
           </p>
         </div>
         {isBehind && (
@@ -453,6 +456,24 @@ export function WeeklyPacingPanel({ plan, planTrack, daysUntilExam }: WeeklyPaci
             }}
           >
             ▲ Adjusted for catch-up
+          </span>
+        )}
+        {!isBehind && (
+          <span
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 5,
+              padding: "4px 10px",
+              borderRadius: 99,
+              background: "color-mix(in srgb, var(--semantic-success) 10%, var(--bg-card))",
+              border: "1px solid color-mix(in srgb, var(--semantic-success) 20%, var(--border-subtle))",
+              fontSize: "0.6875rem",
+              fontWeight: 700,
+              color: "var(--semantic-success)",
+            }}
+          >
+            Steady plan week
           </span>
         )}
       </div>

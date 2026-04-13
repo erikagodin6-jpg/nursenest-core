@@ -4,7 +4,7 @@ function bandLabel(band: ReadinessBand): string {
   if (band === "at_risk") return "At Risk";
   if (band === "borderline") return "Borderline";
   if (band === "passing_range") return "Passing Range";
-  return "Strong";
+  return "Stable";
 }
 
 function bandModifier(band: ReadinessBand): string {

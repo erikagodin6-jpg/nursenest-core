@@ -49,10 +49,10 @@ function buildInactiveNudge(hoursSinceActivity: number): EngagementNudge | null 
     return {
       kind: "inactive_48h",
       priority: 1,
-      headline: "It's been a couple days",
-      body: "Even a short session keeps your progress moving. Pick up where you left off.",
+      headline: "No study activity in the last 48 hours",
+      body: "Resume your last lesson or practice set to keep your plan current.",
       href: "/app",
-      ctaLabel: "Continue Studying",
+      ctaLabel: "Resume study",
       tone: "info",
     };
   }
@@ -61,9 +61,9 @@ function buildInactiveNudge(hoursSinceActivity: number): EngagementNudge | null 
       kind: "inactive_24h",
       priority: 3,
       headline: "Continue your study plan",
-      body: "A quick session today keeps your momentum going.",
+      body: "A short session today keeps your recent progress current.",
       href: "/app",
-      ctaLabel: "Resume Study",
+      ctaLabel: "Resume study",
       tone: "info",
     };
   }
@@ -80,10 +80,10 @@ function buildStreakNudges(
     nudges.push({
       kind: "streak_protect",
       priority: 2,
-      headline: `Protect your ${streakDays}-day streak`,
-      body: "Complete one study activity today to keep your streak alive.",
+      headline: `${streakDays}-day activity streak`,
+      body: "Complete one study activity today to continue this streak.",
       href: "/app/questions",
-      ctaLabel: "Quick Practice",
+      ctaLabel: "Start practice",
       tone: "warning",
     });
   }
@@ -93,10 +93,10 @@ function buildStreakNudges(
     nudges.push({
       kind: "streak_milestone",
       priority: 6,
-    headline: `${streakDays}-day study streak`,
-    body: "Consistency like this compounds. Keep it going.",
+      headline: `${streakDays}-day study streak`,
+      body: "Daily study activity has been consistent. Continue with the next planned step.",
       href: "/app",
-      ctaLabel: "View Dashboard",
+      ctaLabel: "Open dashboard",
       tone: "success",
     });
   }
@@ -110,9 +110,9 @@ function buildWeakAreaNudge(weakTopic: string | null): EngagementNudge | null {
     kind: "weak_area_review",
     priority: 4,
     headline: `${weakTopic} needs more practice`,
-    body: "A short focused session on this topic will help your accuracy.",
+    body: "Review this topic now to reduce repeat misses.",
     href: "/app/questions",
-    ctaLabel: "Practice Now",
+    ctaLabel: "Review topic",
     tone: "info",
   };
 }
@@ -124,10 +124,10 @@ function buildImprovementNudge(
   return {
     kind: "improvement",
     priority: 7,
-    headline: `${improvingTopic} is trending up`,
-    body: "Your accuracy is improving. A few more sessions will solidify it.",
+    headline: `${improvingTopic} accuracy is improving`,
+    body: "Repeat this topic to confirm the change with more data.",
     href: "/app/questions",
-    ctaLabel: "Keep Practicing",
+    ctaLabel: "Repeat topic",
     tone: "success",
   };
 }
@@ -145,9 +145,9 @@ function buildNearExamNudge(
     kind: "near_exam",
     priority: 1,
     headline: `${daysUntil} day${daysUntil === 1 ? "" : "s"} until your exam`,
-    body: "Focus on your weakest areas and take a practice exam to check your readiness.",
+    body: "Review weak topics and complete a practice exam to check readiness before test day.",
     href: "/app/exams",
-    ctaLabel: "Practice Exam",
+    ctaLabel: "Start practice exam",
     tone: "warning",
   };
 }
@@ -162,9 +162,9 @@ function buildFlashcardDueNudge(
     kind: "flashcard_due",
     priority: 5,
     headline: `${total} flashcard${total === 1 ? "" : "s"} due for review`,
-    body: "Spaced repetition works best when you review on schedule.",
+    body: "Review due cards now to reinforce retention on schedule.",
     href: "/app/flashcards",
-    ctaLabel: "Review Cards",
+    ctaLabel: "Review cards",
     tone: "info",
   };
 }
@@ -179,7 +179,7 @@ function buildContinuePlanNudge(
     headline: "Continue your study plan",
     body: `Pick up where you left off: ${continueLesson.title}`,
     href: continueLesson.href,
-    ctaLabel: "Continue Lesson",
+    ctaLabel: "Resume lesson",
     tone: "encourage",
   };
 }

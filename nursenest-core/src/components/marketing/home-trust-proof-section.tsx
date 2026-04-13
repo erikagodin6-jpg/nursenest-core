@@ -9,26 +9,26 @@ const POINTS = [
   {
     icon: Brain,
     iconColor: "var(--semantic-info)",
-    title: "Not Generic Question Banks",
-    body: "Built for nursing exam decision-making, not random mixed-discipline trivia.",
+    title: "Question sets scoped to nursing exams",
+    body: "Content is written for nursing exam decisions, not mixed-discipline trivia.",
   },
   {
     icon: ShieldCheck,
     iconColor: "var(--semantic-success)",
-    title: "Built For Your Exact License",
-    body: "RN, PN or RPN, NP, and allied tracks stay scoped so context does not drift.",
+    title: "Matched to your license",
+    body: "RN, PN or RPN, NP, and allied tracks stay scoped so content matches the correct exam context.",
   },
   {
     icon: Scale,
     iconColor: "var(--semantic-warning)",
-    title: "Readiness Tracked Over Time",
-    body: "Session trends and weak-area signals show what changed and what needs work next.",
+    title: "Readiness tracked over time",
+    body: "Session trends and weak-topic signals show what changed and what needs review next.",
   },
   {
     icon: Crosshair,
     iconColor: "var(--semantic-brand)",
-    title: "Adapts To Your Weak Areas",
-    body: "Lessons, questions, and CAT flow together so remediation is targeted, not manual.",
+    title: "Review follows weak areas",
+    body: "Lessons, questions, and CAT sessions stay linked so follow-up review is targeted.",
   },
 ] as const;
 
@@ -48,11 +48,11 @@ export function HomeTrustProofSection() {
       <div className="nn-section-shell">
         <FadeUp whenInView once viewMargin="-32px" className="mx-auto mb-12 max-w-2xl text-center">
           <h2 id="home-differentiation-heading" className="nn-marketing-h2 text-balance">
-            {formatTitleCase("Why NurseNest Is Different", locale)}
+            {formatTitleCase("Why learners use NurseNest", locale)}
           </h2>
           <p className="nn-marketing-body mx-auto mt-3 max-w-xl text-pretty leading-relaxed text-[var(--palette-text-muted)]">
             {formatSentenceCase(
-              "A focused readiness system for your specific license, not a generic question archive.",
+              "A readiness system matched to your license, with lessons and practice connected in one workflow.",
               locale,
             )}
           </p>

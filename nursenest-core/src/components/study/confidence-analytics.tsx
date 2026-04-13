@@ -292,7 +292,7 @@ export function ConfidenceAnalyticsBlock({
             </div>
             {/* Two locked metric cards */}
             <LockedMetricCard heading="Overconfident Errors" placeholderValue="—" />
-            <LockedMetricCard heading="Strong Knowledge" placeholderValue="—" />
+            <LockedMetricCard heading="Established knowledge" placeholderValue="N/A" />
           </div>
         </div>
 

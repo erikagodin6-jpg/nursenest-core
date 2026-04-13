@@ -34,7 +34,7 @@ export function ProductErrorState({
   title,
   description,
   reference,
-  referenceLabel = "Reference:",
+  referenceLabel = "Reference",
   detail,
   onRetry,
   retryLabel = "Try again",

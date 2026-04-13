@@ -52,7 +52,7 @@ import { PremiumExamPlanUpgradeCard } from "@/components/study/premium-exam-plan
 import { ExamCountdownHero } from "@/components/study/exam-countdown-hero";
 import { WeeklyPacingPanel } from "@/components/study/weekly-pacing-panel";
 import { RecoveryPlanCard } from "@/components/study/recovery-plan-card";
-import { buildRecoveryPlan } from "@/lib/learner/recovery-planner";
+import { buildPaceForecast, buildRecoveryPlan } from "@/lib/learner/recovery-planner";
 import {
   BROWSE_LESSONS_CTA,
   OPEN_STUDY_HUB_CTA,
@@ -66,6 +66,7 @@ import { ExamPlanLazyClient } from "./exam-plan-lazy-client";
 // ── Data ──────────────────────────────────────────────────────────────────────
 import { loadExamPlanPageData } from "@/lib/study/exam-plan/exam-plan-data";
 import { loadExamPlanTrendAction } from "./actions";
+import { loadPremiumDashboardSnapshot } from "@/lib/learner/premium-dashboard-snapshot";
 
 // ── Breadcrumbs ───────────────────────────────────────────────────────────────
 
@@ -188,6 +189,9 @@ export default async function ExamPlanPage() {
 
   const { coach, weakAreas, pathwayId } = data;
   const { readiness, adaptive, passReadiness, benchmark, examDate, daysUntilExam, streakDays, overallAccuracyPct, catSessionCount } = coach;
+  const premiumSnapshot = await loadPremiumDashboardSnapshot(userId, entitlement);
+  const lessonsCompleted = premiumSnapshot?.overallLessons.completed ?? 0;
+  const lessonsTotal = premiumSnapshot?.overallLessons.total ?? 0;
 
   // ── Derive recovery plan inputs from available data ──────────────────────
   // inactiveDays: if streak is 0 and user has prior history, treat as at least 1 missed day
@@ -207,7 +211,23 @@ export default async function ExamPlanPage() {
     readinessBand: readiness.band,
   });
 
+  const completedMilestones = adaptive.milestones.filter((milestone) => milestone.complete).length;
+  const paceForecast = buildPaceForecast({
+    daysUntilExam,
+    examDate,
+    planTrack: adaptive.planTrack.status,
+    weeklyPlan: adaptive.weeklyPlan,
+    lessonsCompleted,
+    lessonsTotal,
+    milestonesCompleted: completedMilestones,
+    milestonesTotal: adaptive.milestones.length,
+  });
+
   const isBehind = adaptive.planTrack.status !== "on_track";
+  const recoveryCompleted =
+    !isBehind &&
+    streakDays > 0 &&
+    (paceForecast.state === "ahead" || paceForecast.state === "on_pace");
 
   // Trend data — loaded server-side (lightweight: last 8 practice tests)
   const trendPoints = await loadExamPlanTrendAction().catch(() => []);
@@ -252,6 +272,9 @@ export default async function ExamPlanPage() {
           examDate={examDate}
           planTrack={adaptive.planTrack}
           milestones={adaptive.milestones}
+          forecast={paceForecast}
+          streakDays={streakDays}
+          recoveryCompleted={recoveryCompleted}
         />
 
         {/* 2b. Exam date editor — inline */}

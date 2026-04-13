@@ -301,7 +301,7 @@ export function LearnerCommandCenterClient() {
                 />
               ))
             ) : (
-              <EmptyBrowse message="No notes yet — open a lesson or question and jot a takeaway." />
+              <EmptyBrowse message="No notes yet. Open a lesson or question and save a takeaway." />
             )}
           </BrowseGroup>
 
@@ -310,14 +310,14 @@ export function LearnerCommandCenterClient() {
             title="Weak topics"
             slug="weak"
             footerHref="/app/account/focus-areas"
-            footerLabel="Focus areas"
+            footerLabel="Weak topics"
           >
             {payload.weakTopics.length ? (
               payload.weakTopics.slice(0, 6).map((w) => (
                 <BrowseRow key={w.topic} href={w.href} title={w.topic} meta={`${w.missRate}% miss`} sub="Topic drill in question bank" />
               ))
             ) : (
-              <EmptyBrowse message="No weak-topic signal yet — answer a few more questions to personalize this list." />
+              <EmptyBrowse message="No weak-topic signal yet. Answer a few more questions to personalize this list." />
             )}
           </BrowseGroup>
 

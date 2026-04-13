@@ -436,7 +436,6 @@ export function SiteHeader() {
 
   const megaMenus = useMemo(() => createMegaMenus(region), [region]);
   const user = session?.user;
-  const isAuthLoading = sessionStatus === "loading";
   const isAuthenticated = Boolean(sessionStatus === "authenticated" && user);
   const isAdminAuthenticated = Boolean(isAuthenticated && user?.role && isStaffRole(user.role));
   const isLearnerAuthenticated = Boolean(
@@ -590,13 +589,7 @@ export function SiteHeader() {
               aria-label={isLearnerAuthenticated ? "Learner navigation" : t("nav.marketingExplore")}
               className="flex min-w-0 flex-1 items-center justify-center gap-0.5 xl:gap-1"
             >
-            {isAuthLoading ? (
-              <div className="flex items-center gap-3" aria-hidden>
-                {[0, 1, 2, 3].map((index) => (
-                  <span key={index} className="h-4 w-16 animate-pulse rounded-full bg-[var(--nav-hover)]" />
-                ))}
-              </div>
-            ) : isMarketingNav ? (
+            {isMarketingNav ? (
               <>
                 {megaMenus.map((menu) => {
                   const expanded = openMegaMenu === menu.key;
@@ -666,9 +659,7 @@ export function SiteHeader() {
           </nav>
 
           <div className="flex shrink-0 items-center justify-end gap-2">
-              {isAuthLoading ? (
-                <span className="inline-flex h-9 w-32 animate-pulse rounded-xl bg-[var(--nav-hover)]" aria-hidden />
-              ) : !isAuthenticated ? (
+              {!isAuthenticated ? (
                 <div className="flex items-center gap-2">
                   {isMarketingNav ? (
                     <div className="hidden items-center gap-1.5 lg:flex">

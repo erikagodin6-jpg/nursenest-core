@@ -107,9 +107,9 @@ function buildGroups(items: SmartReviewItem[]): ReviewGroup[] {
     },
     {
       id: "strong",
-      title: "Strong Areas",
+      title: "Established knowledge",
       description:
-        "Right answer, high confidence. These topics are solid for now.",
+        "Correct answers with high confidence. These topics need less review right now.",
       variantClass: "nn-review-group--strong",
       defaultExpanded: false,
       items: buckets.strong,
@@ -345,13 +345,13 @@ export function ReviewGroupSection({
 function emptyMessage(groupId: GroupId): string {
   switch (groupId) {
     case "priority":
-      return "No high-confidence mistakes in this session. Strong calibration.";
+      return "No high-confidence errors in this session.";
     case "needs-review":
       return "No incorrect answers in this group.";
     case "uncertain":
-      return "No uncertain correct answers. Your confidence is well calibrated.";
+      return "No low-confidence correct answers in this group.";
     case "strong":
-      return "No high-confidence correct answers yet. More practice will fill this group.";
+      return "No high-confidence correct answers recorded yet.";
   }
 }
 
@@ -450,10 +450,10 @@ export function ReviewSummaryStrip({
       return `${priorityCount} question${priorityCount !== 1 ? "s" : ""} where you felt confident but got it wrong. Worth reviewing first.`;
     }
     if (uncertainCount > 0) {
-      return `Good accuracy, but ${uncertainCount} answer${uncertainCount !== 1 ? "s" : ""} relied on guessing. Reinforcing those topics will help.`;
+      return `${uncertainCount} answer${uncertainCount !== 1 ? "s" : ""} were correct with low confidence. Review those topics next.`;
     }
     if (strongCount === totalItems && totalItems > 0) {
-      return "Clean session. Every answer was correct with high confidence.";
+      return "All answers were correct with high confidence in this session.";
     }
     return "Your session, organized by correctness and confidence.";
   }

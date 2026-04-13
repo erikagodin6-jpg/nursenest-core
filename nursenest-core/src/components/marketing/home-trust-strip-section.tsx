@@ -25,10 +25,10 @@ export function HomeTrustStripSection({ questionCount, registeredLearners }: Pro
   const learners = formatCount(registeredLearners, locale);
 
   const pills = [
-    { icon: BadgeCheck, label: "Exam-Aligned Scope", iconClass: "text-[var(--semantic-success)]" },
-    { icon: Layers3, label: "Adaptive CAT", iconClass: "text-[var(--semantic-info)]" },
-    { icon: ClipboardCheck, label: "Rationales On Every Item", iconClass: "text-[var(--semantic-brand)]" },
-    { icon: Brain, label: q ? `${q} Questions` : "Thousands Of Questions", iconClass: "text-[var(--semantic-warning)]" },
+    { icon: BadgeCheck, label: "Exam-scoped content", iconClass: "text-[var(--semantic-success)]" },
+    { icon: Layers3, label: "Adaptive CAT sessions", iconClass: "text-[var(--semantic-info)]" },
+    { icon: ClipboardCheck, label: "Rationale on every item", iconClass: "text-[var(--semantic-brand)]" },
+    { icon: Brain, label: q ? `${q} questions` : "Large question bank", iconClass: "text-[var(--semantic-warning)]" },
   ] as const;
 
   return (
@@ -47,12 +47,12 @@ export function HomeTrustStripSection({ questionCount, registeredLearners }: Pro
           <div className="mb-5 flex flex-col items-center justify-center gap-2 text-center sm:flex-row sm:gap-3">
             <Globe2 className="nn-icon-md shrink-0 text-[var(--semantic-info)]" aria-hidden />
             <p id="home-trust-strip-heading" className="nn-marketing-body max-w-prose font-semibold leading-snug text-[var(--palette-heading)]">
-              {formatTitleCase("Used by nursing students across the United States and Canada", locale)}
+              {formatTitleCase("Built for nursing learners in the United States and Canada", locale)}
             </p>
           </div>
           {learners ? (
             <p className="nn-marketing-caption mb-5 text-center text-[var(--palette-text-muted)]">
-              {formatSentenceCase(`${learners} registered learners currently preparing in the platform.`, locale)}
+              {formatSentenceCase(`${learners} registered learners are currently preparing in the platform.`, locale)}
             </p>
           ) : null}
           <ul className="flex flex-wrap items-center justify-center gap-2 sm:gap-3">

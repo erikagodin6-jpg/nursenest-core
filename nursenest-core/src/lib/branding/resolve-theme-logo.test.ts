@@ -4,23 +4,23 @@ import {
   THEME_LOGO_SPACE_KEYS,
   resolveThemeLogo,
 } from "@/lib/branding/resolve-theme-logo";
-import { THEME_LOGOS } from "@/lib/theme/theme-logo-config";
 import { THEME_OPTIONS } from "@/lib/theme/theme-registry";
 
 describe("resolveThemeLogo", () => {
-  it("returns a same-origin SVG path for a mapped theme (full variant)", () => {
+  it("returns a CDN URL for a mapped theme (full variant)", () => {
     const r = resolveThemeLogo("teal", "full");
     assert.equal(r.kind, "local");
-    assert.equal(r.url, "/logos/teal-brandlogo.svg");
-    assert.equal(r.objectKey, null);
+    assert.equal(r.url, "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/Logos/teal-leaf_transparent.png");
+    assert.equal(r.objectKey, "Logos/teal-leaf_transparent.png");
     assert.equal(r.assetThemeId, "teal");
   });
 
-  it("resolves every registered theme id to its own local SVG (no CDN borrow)", () => {
+  it("resolves every registered theme id from the explicit CDN key map", () => {
     const r = resolveThemeLogo("ocean-mist", "full");
     assert.equal(r.kind, "local");
     assert.equal(r.assetThemeId, "ocean-mist");
-    assert.equal(r.url, "/logos/ocean-mist-brandlogo.svg");
+    assert.equal(r.objectKey, "Logos/north-sea-leaf-transparent.png");
+    assert.equal(r.url, "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/Logos/north-sea-leaf-transparent.png");
   });
 
   it("returns text-fallback for a non-registry / unknown theme string", () => {
@@ -31,19 +31,19 @@ describe("resolveThemeLogo", () => {
     assert.equal(r.assetThemeId, null);
   });
 
-  it("returns a /logos path for slate", () => {
+  it("returns an explicit mapped key for slate", () => {
     const r = resolveThemeLogo("slate", "full");
     assert.equal(r.kind, "local");
-    assert.ok(r.url?.startsWith("/logos/"), r.url ?? "");
-    assert.equal(r.url, "/logos/slate-brandlogo.svg");
+    assert.equal(r.objectKey, "Logos/slate-leaf_transparent.png");
+    assert.equal(r.url, "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/Logos/slate-leaf_transparent.png");
   });
 
-  it("resolves every registered theme to a local URL", () => {
+  it("resolves every registered theme to a mapped CDN URL", () => {
     for (const t of THEME_OPTIONS) {
       const r = resolveThemeLogo(t.id, "full");
       assert.equal(r.kind, "local", t.id);
-      assert.ok(r.url && r.url.startsWith("/logos/"), t.id);
-      assert.equal(r.url, THEME_LOGOS[t.id], t.id);
+      assert.ok(r.objectKey && r.objectKey.startsWith("Logos/"), t.id);
+      assert.ok(r.url && r.url.includes("/Logos/"), t.id);
       assert.equal(r.assetThemeId, t.id, t.id);
     }
   });

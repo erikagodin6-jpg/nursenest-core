@@ -20,7 +20,7 @@ function consistencyLabel(
 ): { label: string; accent: string } {
   if (accuracyPct == null) return { label: "No data yet", accent: "var(--semantic-text-muted)" };
   if (accuracyPct >= 75 && streakDays >= 5)
-    return { label: "Strong", accent: "var(--semantic-success)" };
+    return { label: "Stable", accent: "var(--semantic-success)" };
   if (accuracyPct >= 65 || streakDays >= 3)
     return { label: "Moderate", accent: "var(--semantic-info)" };
   return { label: "Building", accent: "var(--semantic-warning)" };
@@ -37,7 +37,7 @@ function difficultyInterpretation(
   const hasPacing = lower.some((l) => l.includes("time") || l.includes("pacing"));
 
   if (readinessBand === "ready") {
-    return { text: "Strong on harder items — exam-ready performance.", accent: "var(--semantic-success)" };
+    return { text: "Stable on harder items. Current performance supports exam readiness.", accent: "var(--semantic-success)" };
   }
   if (hasDifficulty) {
     return { text: "Struggling with harder items. Focus on concept depth.", accent: "var(--semantic-warning)" };
@@ -46,9 +46,9 @@ function difficultyInterpretation(
     return { text: "Pacing may be affecting accuracy. Practice timed segments.", accent: "var(--semantic-info)" };
   }
   if (readinessBand === "near_ready") {
-    return { text: "Stable at moderate difficulty — approaching exam readiness.", accent: "var(--semantic-info)" };
+    return { text: "Stable at moderate difficulty. Current data is approaching exam readiness.", accent: "var(--semantic-info)" };
   }
-  return { text: "Building across difficulty levels — consistent practice is key.", accent: "var(--semantic-brand)" };
+  return { text: "Building across difficulty levels. Continue steady practice to improve stability.", accent: "var(--semantic-brand)" };
 }
 
 // ── Mini card shell ───────────────────────────────────────────────────────────

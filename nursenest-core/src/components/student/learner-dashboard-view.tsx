@@ -40,14 +40,13 @@ export async function LearnerDashboardView({ data }: { data: LearnerDashboardMod
       <header className="relative overflow-hidden rounded-3xl border border-primary/20 bg-gradient-to-br from-primary/[0.12] via-[var(--theme-card-bg)] to-[var(--theme-page-bg)] p-6 sm:p-8">
         <div className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-primary/10 blur-3xl" aria-hidden />
         <div className="relative">
-          <p className="text-xs font-semibold uppercase tracking-wider text-primary">Your study hub</p>
+          <p className="text-xs font-semibold uppercase tracking-wider text-primary">Study hub</p>
           <h1 className="mt-2 text-3xl font-bold tracking-tight text-[var(--theme-heading-text)] sm:text-4xl">
-            What to do next
+            Next study steps
           </h1>
           <p className="mt-3 max-w-2xl text-sm leading-relaxed text-[var(--theme-body-text)]/85">
             Content is scoped to <span className="font-semibold text-foreground">{data.scope.tier}</span> ·{" "}
-            <span className="font-semibold text-foreground">{data.scope.country}</span>. Use the shortcuts below to stay on
-            track.
+            <span className="font-semibold text-foreground">{data.scope.country}</span>. Use the shortcuts below to continue.
           </p>
         </div>
       </header>
@@ -155,7 +154,7 @@ export async function LearnerDashboardView({ data }: { data: LearnerDashboardMod
             {weakestFactors.length > 0 ? (
               <div>
                 <p className="font-medium text-foreground" title="Lowest-contributing factors in your current readiness score.">
-                  Weakest factors
+                  Lowest factors
                 </p>
                 <p className="mt-1 text-xs">{weakestFactors.map((f) => f.label).join(" · ")}</p>
               </div>
@@ -199,7 +198,7 @@ export async function LearnerDashboardView({ data }: { data: LearnerDashboardMod
               style={{ width: data.lessonsAvailable > 0 ? `${Math.min(100, (data.lessonsCompleted / data.lessonsAvailable) * 100)}%` : "0%" }}
             />
           </div>
-          <p className="mt-2 text-xs font-medium text-primary">{lessonPct} of pool touched</p>
+          <p className="mt-2 text-xs font-medium text-primary">{lessonPct} of current pool completed</p>
         </div>
 
         <div className="nn-card p-5">

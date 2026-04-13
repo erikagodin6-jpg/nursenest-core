@@ -152,7 +152,7 @@ export function ProtectedPremiumContent({
       if (isFormControl(e.target) && isNotesEditorTarget(e.target)) return;
       e.preventDefault();
       queue("copy_blocked");
-      showToast("Copying is disabled for premium study content. You can save notes instead.");
+      showToast("Copying is unavailable for protected study content. Save notes instead.");
     };
 
     const onCutCapture = (e: ClipboardEvent) => {
@@ -161,7 +161,7 @@ export function ProtectedPremiumContent({
       if (!root || !(e.target instanceof Node) || !root.contains(e.target)) return;
       e.preventDefault();
       queue("cut_blocked");
-      showToast("Copying is disabled for premium study content. You can save notes instead.");
+      showToast("Copying is unavailable for protected study content. Save notes instead.");
     };
 
     const onContextMenu = (e: MouseEvent) => {
@@ -186,7 +186,7 @@ export function ProtectedPremiumContent({
         e.preventDefault();
         if (e.key === "x" || e.key === "X") queue("cut_blocked");
         else queue("copy_blocked");
-        showToast("Copying is disabled for premium study content. You can save notes instead.");
+        showToast("Copying is unavailable for protected study content. Save notes instead.");
       }
     };
 
@@ -227,7 +227,7 @@ export function ProtectedPremiumContent({
         lastPrintTelemetryAt.current = now;
         queue("print_prompt");
       }
-      showToast("Protected lesson and rationale content cannot be printed. You can print your notes.");
+      showToast("Protected lesson and rationale content cannot be printed. You can print saved notes.");
     };
     window.addEventListener("beforeprint", onBeforePrint);
     return () => window.removeEventListener("beforeprint", onBeforePrint);

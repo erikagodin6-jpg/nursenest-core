@@ -41,16 +41,13 @@ export function HomeFinalStudyCta() {
             className="nn-marketing-caption mb-3 font-bold uppercase tracking-widest"
             style={{ color: "color-mix(in srgb, var(--palette-accent, var(--theme-accent)) 78%, var(--theme-heading-text))" }}
           >
-            {formatEyebrow("Ready to start", locale)}
+            {formatEyebrow("Start when ready", locale)}
           </p>
           <h2 id="home-final-cta-heading" className="nn-marketing-h2 text-balance">
-            {formatTitleCase("Start your exam prep with a system built for your license.", locale)}
+            {formatTitleCase("Start exam prep with a system matched to your license.", locale)}
           </h2>
           <p className="nn-marketing-body-sm mx-auto mt-3 max-w-lg text-pretty leading-relaxed text-[var(--theme-muted-text)]">
-            {formatSentenceCase(
-              "Get pathway-scoped practice, rationales, and readiness tracking in one place.",
-              locale,
-            )}
+            {formatSentenceCase("Get pathway-scoped practice, rationales, and readiness tracking in one place.", locale)}
           </p>
 
           {/* Trust microcopy row */}
@@ -85,7 +82,7 @@ export function HomeFinalStudyCta() {
         </div>
 
           <p className="nn-marketing-caption mx-auto mt-6 max-w-md text-pretty text-[var(--theme-muted-text)]">
-            {formatSentenceCase("Prefer to review plans first?", locale)}{" "}
+            {formatSentenceCase("Review plan details first.", locale)}{" "}
             <MarketingTrackedLink
               href={loc(HUB.pricing)}
               event={PH.marketingHomeFinalCta}

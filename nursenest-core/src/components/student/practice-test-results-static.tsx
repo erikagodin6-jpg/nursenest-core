@@ -38,11 +38,11 @@ function humanizeKey(s: string): string {
 function difficultyTrendHint(label: "rising" | "falling" | "mixed" | "flat"): string {
   switch (label) {
     case "rising":
-      return "Difficulty ramps up — typical when the CAT is probing your ceiling.";
+      return "Difficulty increased. This often means the CAT is testing your upper range.";
     case "falling":
-      return "Difficulty eases — the run may be stabilizing or shifting content mix.";
+      return "Difficulty decreased. The run may be stabilizing or shifting topic mix.";
     case "mixed":
-      return "Difficulty moves up and down — mixed domains or adaptive refocus.";
+      return "Difficulty moved up and down. This can reflect mixed domains or adaptive refocus.";
     default:
       return "Difficulty stays level across most of the run.";
   }
@@ -68,7 +68,7 @@ function outcomeTilesForPractice(args: {
   if (cat && results.catReport) {
     const rep = results.catReport;
     const trail = humanizeKey(rep.trajectory);
-    const stability = coach?.stabilityTrendLabel ? humanizeKey(coach.stabilityTrendLabel) : "—";
+    const stability = coach?.stabilityTrendLabel ? humanizeKey(coach.stabilityTrendLabel) : "N/A";
     const strengthList =
       coach?.strongestDomains?.filter(Boolean).slice(0, 2).join(" · ") ||
       rep.categoryBreakdown
@@ -76,8 +76,8 @@ function outcomeTilesForPractice(args: {
         .map((c) => c.category)
         .slice(0, 2)
         .join(" · ") ||
-      "—";
-    const weakHead = results.weakAreas[0] ?? rep.weakAreas[0] ?? "—";
+      "N/A";
+    const weakHead = results.weakAreas[0] ?? rep.weakAreas[0] ?? "N/A";
     const weakHint =
       coach?.specificStudyActions?.[0] ?? rep.suggestedNextSteps?.[0] ?? coach?.keyRiskFactor ?? "Review weak domains below, then rerun CAT.";
 
@@ -140,7 +140,7 @@ function outcomeTilesForPractice(args: {
     {
       icon: Target,
       label: "Toughest area",
-      value: extremesLow[0]?.label ?? "—",
+      value: extremesLow[0]?.label ?? "N/A",
       hint:
         extremesLow[0] != null
           ? `${extremesLow[0].pct}% accuracy in this topic bucket`
@@ -151,7 +151,7 @@ function outcomeTilesForPractice(args: {
       icon: Timer,
       label: "Pacing",
       value: `${results.scoreTotal} items`,
-      hint: "Fixed-length practice — compare time on task in your full review.",
+      hint: "Fixed-length practice. Compare time on task in your full review.",
       accent: "c4",
     },
   ];
@@ -207,14 +207,14 @@ export function PracticeTestResultsStatic({
     <div className="space-y-3 leading-relaxed">
       {cat && feedbackMode === "study" ? (
         <p>
-          Study mode — rationales after each item. In-session rationale steps recorded:{" "}
+          Study mode. Rationales appear after each item. In-session rationale steps recorded:{" "}
           <span className="font-medium text-[var(--semantic-text-primary)]">
-            {typeof results.catStudyRationaleSteps === "number" ? results.catStudyRationaleSteps : "—"}
+            {typeof results.catStudyRationaleSteps === "number" ? results.catStudyRationaleSteps : "N/A"}
           </span>
           .
         </p>
       ) : null}
-      {cat && feedbackMode === "test" ? <p>Test mode — rationales held until the end of this CAT run.</p> : null}
+      {cat && feedbackMode === "test" ? <p>Test mode. Rationales appear after the CAT run ends.</p> : null}
       {results.readinessLabel != null ? (
         <p className="font-medium text-[var(--semantic-text-primary)]">Readiness label: {results.readinessLabel}</p>
       ) : null}

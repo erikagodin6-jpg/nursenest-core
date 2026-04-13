@@ -481,7 +481,7 @@ function SmartReviewPreview() {
     { label: "High Priority Fixes", count: 4, bg: WARNING_SOFT, accent: "var(--semantic-warning)" },
     { label: "Needs Review", count: 6, bg: NEUTRAL_MUTED, accent: TEXT_MUTED },
     { label: "Uncertain Knowledge", count: 5, bg: INFO_SOFT, accent: "var(--semantic-info)" },
-    { label: "Strong Areas", count: 8, bg: SUCCESS_SOFT, accent: "var(--role-success, var(--semantic-success))" },
+    { label: "Established knowledge", count: 8, bg: SUCCESS_SOFT, accent: "var(--role-success, var(--semantic-success))" },
   ];
   return (
     <div className="space-y-2 text-xs">
@@ -514,7 +514,7 @@ function ConfidenceAnalyticsPreview() {
   const cards = [
     { label: "Overconfident Errors", value: "4", bg: WARNING_SOFT, accent: "var(--semantic-warning)" },
     { label: "Uncertain Correct", value: "7", bg: INFO_SOFT, accent: "var(--semantic-info)" },
-    { label: "Strong Knowledge", value: "11", bg: SUCCESS_SOFT, accent: "var(--role-success, var(--semantic-success))" },
+    { label: "Established knowledge", value: "11", bg: SUCCESS_SOFT, accent: "var(--role-success, var(--semantic-success))" },
   ];
   return (
     <div className="space-y-2.5 text-xs">

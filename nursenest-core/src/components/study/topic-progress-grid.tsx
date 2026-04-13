@@ -30,7 +30,7 @@ const STATUS_META: Record<
     text: "var(--semantic-success)",
   },
   strong: {
-    label: "Strong",
+    label: "Established",
     bg: "color-mix(in srgb, var(--semantic-success) 9%, var(--semantic-surface))",
     text: "var(--semantic-success)",
   },
@@ -45,7 +45,7 @@ const STATUS_META: Record<
     text: "var(--semantic-warning)",
   },
   critical: {
-    label: "Needs work",
+    label: "Needs review",
     bg: "color-mix(in srgb, var(--semantic-danger) 12%, var(--semantic-surface))",
     text: "var(--semantic-danger)",
   },

@@ -73,7 +73,7 @@ function trackPaywallCta(surface: string, action: string) {
 // ── Shared upgrade href ───────────────────────────────────────────────────────
 
 const UPGRADE_HREF = "/pricing";
-const DEFAULT_CTA_LABEL = "Start Free Trial";
+const DEFAULT_CTA_LABEL = "Start free access";
 
 // ── PremiumLockCard ───────────────────────────────────────────────────────────
 
@@ -137,7 +137,7 @@ export function PremiumLockCard({
         )}
         {tierLabel && (
           <p className="nn-premium-lock-card__tier-hint">
-            Part of the {tierLabel} plan
+            Included in the {tierLabel} plan
           </p>
         )}
         <div className="nn-premium-lock-card__actions">
@@ -159,7 +159,7 @@ export function PremiumLockCard({
           ) : null}
         </div>
         <p className="mt-1 text-center text-[11px] text-muted-foreground">
-          No charge today · Cancel anytime
+          No charge today. Cancel anytime.
         </p>
       </div>
     </div>
@@ -218,11 +218,11 @@ export function LockedPreviewCard({
             onClick={() => surface && trackPaywallCta(surface, "secondary")}
             className="nn-btn-secondary inline-flex min-h-[2rem] items-center rounded-lg px-3.5 text-sm font-semibold"
           >
-            View Plans
+            View plans
           </Link>
         </div>
         <p className="mt-1 text-[11px] text-muted-foreground">
-          No charge today · Cancel anytime
+          No charge today. Cancel anytime.
         </p>
       </div>
     </div>
@@ -248,7 +248,7 @@ export function UpgradePromptCard({
 
   const bullets = [
     "Lessons and review linked to what you actually missed",
-    "Readiness score that tracks when you are exam-ready",
+    "Readiness score that shows whether current data supports exam readiness",
     "Adaptive CAT exams that mirror the real test format",
   ];
 
@@ -277,17 +277,17 @@ export function UpgradePromptCard({
           onClick={() => trackPaywallCta("upgrade_prompt_card", "primary")}
           className="nn-btn-primary inline-flex min-h-[2.5rem] items-center rounded-lg px-4 text-sm font-semibold shadow-none"
         >
-          Start Free Trial
+          Start free access
         </Link>
         <Link
           href={UPGRADE_HREF}
           className="nn-btn-secondary inline-flex min-h-[2.5rem] items-center rounded-lg px-4 text-sm font-semibold"
         >
-          View Plans
+          View plans
         </Link>
       </div>
       <p className="mt-1 text-center text-[11px] text-muted-foreground">
-        No charge today · Cancel anytime before your trial ends
+        No charge today. Cancel anytime before your trial ends.
       </p>
     </div>
   );
@@ -323,7 +323,7 @@ export function EntitledSection({
  *
  * Shows a horizontal rule with a centered "Premium" pill label.
  */
-export function PreviewDivider({ label = "Included with Premium" }: { label?: string }) {
+export function PreviewDivider({ label = "Included with subscription" }: { label?: string }) {
   return (
     <div className="nn-preview-divider" role="separator" aria-label={label}>
       <div className="nn-preview-divider__line" aria-hidden />
@@ -360,7 +360,7 @@ export function LockedMetricCard({
       </div>
       <div className="nn-locked-metric-card__lock">
         <Lock className="h-3 w-3" aria-hidden />
-        <span>Included with trial</span>
+        <span>Included with subscription</span>
       </div>
     </div>
   );
@@ -413,8 +413,8 @@ const PAYWALL_PRESETS: Record<
   { title: string; description: string; bullets: string[] }
 > = {
   weak_topic: {
-    title: "Continue This Lesson",
-    description: "This topic showed up in your weak areas. Full access lets you work through it properly.",
+      title: "Continue this lesson",
+      description: "This topic appears in your weak areas. Full access lets you review the full lesson and linked practice.",
     bullets: [
       "Structured lesson with key concepts explained",
       "Practice questions linked to this topic",
@@ -422,8 +422,8 @@ const PAYWALL_PRESETS: Record<
     ],
   },
   post_questions: {
-    title: "Review Your Mistakes",
-    description: "See what you got wrong and why, grouped by what matters most.",
+      title: "Review missed questions",
+      description: "Review missed questions and the linked lesson guidance in one place.",
     bullets: [
       "Every mistake grouped by confidence and urgency",
       "Lesson links for each question you missed",
@@ -431,8 +431,8 @@ const PAYWALL_PRESETS: Record<
     ],
   },
   near_exam: {
-    title: "Get Exam-Ready",
-    description: "Your exam is coming up. Full access gives you the tools to prepare properly.",
+      title: "Prepare for test day",
+      description: "Your exam date is approaching. Full access adds timed practice, readiness tracking, and targeted review.",
     bullets: [
       "Adaptive CAT exams that mirror the real test",
       "Readiness score so you know when to sit",
@@ -440,8 +440,8 @@ const PAYWALL_PRESETS: Record<
     ],
   },
   lesson: {
-    title: "Continue This Lesson",
-    description: "This lesson is part of your study pathway. Start a trial to continue.",
+      title: "Continue this lesson",
+      description: "This lesson is part of your study pathway. Start free access to continue.",
     bullets: [
       "Full lesson content with key concepts",
       "Practice questions tied to this topic",
@@ -449,8 +449,8 @@ const PAYWALL_PRESETS: Record<
     ],
   },
   lesson_highyield: {
-    title: "Continue This Lesson",
-    description: "This is a high-yield topic. It comes up often on the exam.",
+      title: "Continue this lesson",
+      description: "This topic appears often in exam preparation and needs full review.",
     bullets: [
       "Full lesson content with clinical focus",
       "Practice questions tied to this topic",
@@ -458,8 +458,8 @@ const PAYWALL_PRESETS: Record<
     ],
   },
   practice_test: {
-    title: "Full Practice Exams",
-    description: "Timed, adaptive exams that match the format you will see on test day.",
+      title: "Full practice exams",
+      description: "Timed adaptive exams help you practice the same test format used in this pathway.",
     bullets: [
       "Adaptive CAT with real-time difficulty adjustment",
       "Performance breakdown by topic and confidence",
@@ -467,8 +467,8 @@ const PAYWALL_PRESETS: Record<
     ],
   },
   smart_review: {
-    title: "Smart Review",
-    description: "Your mistakes, organized by what to fix first.",
+      title: "Smart Review",
+      description: "Missed questions are grouped by what needs review first.",
     bullets: [
       "Questions grouped by urgency and confidence",
       "Prioritized review queue for high-impact fixes",
@@ -476,8 +476,8 @@ const PAYWALL_PRESETS: Record<
     ],
   },
   confidence_analytics: {
-    title: "Confidence Analytics",
-    description: "See where your confidence matches your accuracy, and where it does not.",
+      title: "Confidence analytics",
+      description: "Compare confidence with accuracy so review starts with the highest-risk gaps.",
     bullets: [
       "Overconfident error detection",
       "Uncertain knowledge patterns",
@@ -485,8 +485,8 @@ const PAYWALL_PRESETS: Record<
     ],
   },
   dashboard: {
-    title: "Your Full Study System",
-    description: "Lessons, Smart Review, readiness scoring, and adaptive CAT exams, all connected.",
+      title: "Full study system",
+      description: "Lessons, Smart Review, readiness scoring, and adaptive CAT exams stay connected across the same pathway.",
     bullets: [
       "Study plan built from your actual weak areas",
       "Smart Review that prioritizes what to fix first",
@@ -494,8 +494,8 @@ const PAYWALL_PRESETS: Record<
     ],
   },
   generic: {
-    title: "Full Access",
-    description: "All lessons, practice exams, Smart Review, and analytics.",
+      title: "Full access",
+      description: "Lessons, practice exams, Smart Review, and analytics for your pathway.",
     bullets: [
       "Structured lessons across your pathway",
       "Adaptive CAT exams and practice tests",
@@ -530,9 +530,9 @@ export function ContextualPaywallCard({
 
   if (topicName) {
     if (context === "weak_topic") {
-      description = `${topicName} showed up in your weak areas. Full access lets you work through it properly.`;
+      description = `${topicName} appears in your weak areas. Full access lets you review it in the full lesson flow.`;
     } else if (context === "lesson" || context === "lesson_highyield") {
-      title = `Unlock: ${topicName}`;
+      title = `Open ${topicName}`;
     }
   }
 
@@ -546,7 +546,7 @@ export function ContextualPaywallCard({
       description={description}
       bullets={preset.bullets}
       secondaryHref={UPGRADE_HREF}
-      secondaryLabel="View Plans"
+      secondaryLabel="View plans"
       surface={surface}
     />
   );

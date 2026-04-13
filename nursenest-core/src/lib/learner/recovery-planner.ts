@@ -19,7 +19,7 @@
  * The plan is framed as "here's a workable path" not "you fell behind".
  */
 
-import type { PlanTrackStatus } from "@/lib/learner/exam-plan-engine";
+import type { PlanTrackStatus, WeeklyStudyPlan } from "@/lib/learner/exam-plan-engine";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -39,10 +39,14 @@ export type RecoveryAction = {
   label: string;
   /** 1–2 supportive sentences explaining the why. */
   rationale: string;
+  /** Short computed explanation for why this action is ranked here. */
+  evidence: string | null;
   /** Concrete target or change, e.g. "+25 questions/day" or "–1 flashcard session/wk". */
   concreteTarget: string | null;
   /** Direct link to act now. */
   href: string;
+  /** Short action-oriented CTA label. */
+  ctaLabel: string;
 };
 
 export type RecoveryPlan = {
@@ -59,6 +63,16 @@ export type RecoveryPlan = {
   reductions: { label: string; rationale: string }[];
   /** Approximate extra minutes/day needed to catch up. */
   extraMinutesPerDay: number | null;
+};
+
+export type PaceForecastState = "no_date" | "ahead" | "on_pace" | "behind";
+
+export type PaceForecast = {
+  state: PaceForecastState;
+  summary: string;
+  detail: string;
+  calendarBufferDays: number | null;
+  studyDayDelta: number | null;
 };
 
 // ── Input ─────────────────────────────────────────────────────────────────────
@@ -110,6 +124,83 @@ function quizBoostPerDay(status: PlanTrackStatus, overallAccuracyPct: number | n
   if (overallAccuracyPct != null && overallAccuracyPct >= 70) return base + 10;
   if (overallAccuracyPct != null && overallAccuracyPct < 50) return Math.round(base * 0.7);
   return base;
+}
+
+function activeStudyDaysPerWeek(
+  status: PlanTrackStatus,
+  weeklyPlan: Pick<WeeklyStudyPlan, "lessonsToFinish" | "questionVolume">,
+): number {
+  if (status === "at_risk" || status === "overdue") return 7;
+  if (weeklyPlan.questionVolume >= 160 || weeklyPlan.lessonsToFinish > 3) return 6;
+  return 5;
+}
+
+export function buildPaceForecast(args: {
+  daysUntilExam: number | null;
+  examDate: string | null;
+  planTrack: PlanTrackStatus;
+  weeklyPlan: WeeklyStudyPlan;
+  lessonsCompleted: number;
+  lessonsTotal: number;
+  milestonesCompleted: number;
+  milestonesTotal: number;
+}): PaceForecast {
+  if (!args.examDate || args.daysUntilExam == null || args.daysUntilExam < 0) {
+    return {
+      state: "no_date",
+      summary: "Set an exam date to unlock pacing forecasts.",
+      detail: "Forecasts use your remaining lesson load, milestone status, and current weekly targets.",
+      calendarBufferDays: null,
+      studyDayDelta: null,
+    };
+  }
+
+  const lessonsRemaining = Math.max(0, args.lessonsTotal - args.lessonsCompleted);
+  const weeklyLessonRate = Math.max(1, args.weeklyPlan.lessonsToFinish || 1);
+  const lessonCalendarDays = lessonsRemaining === 0
+    ? 0
+    : Math.ceil((lessonsRemaining / weeklyLessonRate) * 7);
+  const incompleteMilestones = Math.max(0, args.milestonesTotal - args.milestonesCompleted);
+  const strategicDays = Math.max(
+    0,
+    incompleteMilestones - (lessonsRemaining > 0 ? 1 : 0),
+  ) * 2;
+  const calendarDaysNeeded = lessonCalendarDays + strategicDays;
+  const calendarBufferDays = args.daysUntilExam - calendarDaysNeeded;
+  const activeDays = activeStudyDaysPerWeek(args.planTrack, args.weeklyPlan);
+
+  if (calendarBufferDays >= 5) {
+    return {
+      state: "ahead",
+      summary: `At this pace, you are likely to finish ${calendarBufferDays} day${calendarBufferDays === 1 ? "" : "s"} early`,
+      detail: "Based on remaining lesson modules, incomplete milestones, and current weekly targets.",
+      calendarBufferDays,
+      studyDayDelta: Math.max(1, Math.round((calendarBufferDays * activeDays) / 7)),
+    };
+  }
+
+  if (calendarBufferDays >= 0) {
+    return {
+      state: "on_pace",
+      summary: "At this pace, you are on track to finish before your exam date",
+      detail: "Based on remaining lesson modules, incomplete milestones, and current weekly targets.",
+      calendarBufferDays,
+      studyDayDelta: 0,
+    };
+  }
+
+  const studyDayShortfall = Math.max(
+    1,
+    Math.ceil((Math.abs(calendarBufferDays) * activeDays) / 7),
+  );
+
+  return {
+    state: "behind",
+    summary: `At this pace, you may fall short by about ${studyDayShortfall} study day${studyDayShortfall === 1 ? "" : "s"}`,
+    detail: "Based on remaining lesson modules, incomplete milestones, and current weekly targets.",
+    calendarBufferDays,
+    studyDayDelta: -studyDayShortfall,
+  };
 }
 
 // ── Low-value activity reductions ─────────────────────────────────────────────
@@ -171,14 +262,17 @@ function buildRedistributeAction(
       inactiveDays === 1
         ? "One missed day is easy to absorb. Adding a short catch-up block today re-syncs the plan without disruption."
         : `You have ${inactiveDays} days to catch up. Spreading sessions across the next few days keeps the load manageable — no need for long cramming blocks.`,
+    evidence: "Closes the largest share of recent missed study time.",
     concreteTarget: `+${extraMin} min/day for ${Math.max(2, inactiveDays)} days`,
     href: "/app/questions?studyMode=weak",
+    ctaLabel: "Start catch-up block",
   };
 }
 
 function buildQuizBoostAction(
   boost: number,
   status: PlanTrackStatus,
+  overallAccuracyPct: number | null,
 ): RecoveryAction {
   return {
     id: "quiz_frequency",
@@ -187,8 +281,13 @@ function buildQuizBoostAction(
     label: "Increase daily question volume",
     rationale:
       "Scored practice questions are the highest-signal activity for both readiness growth and gap identification. A small daily increase compounds quickly.",
+    evidence:
+      overallAccuracyPct != null && overallAccuracyPct >= 70
+        ? "Adds efficient volume because current accuracy can support a larger block."
+        : "Closes missed practice volume without overloading review time.",
     concreteTarget: `+${boost} questions/day`,
     href: "/app/questions",
+    ctaLabel: "Start scored block",
   };
 }
 
@@ -214,6 +313,10 @@ function buildWeakFocusAction(weakTopics: string[], status: PlanTrackStatus): Re
         : "Targeted drills on your worst areas outperform general review sessions."),
     concreteTarget: topTopic ? `Start with: ${topTopic}` : "Use weak-area filter",
     href,
+    evidence: topTopic
+      ? "Best next topic based on weak-area yield."
+      : "Uses the current weak-area filter to prioritize review.",
+    ctaLabel: topTopic ? `Drill ${topTopic.toLowerCase()} now` : "Review weak-topic set",
   };
 }
 
@@ -229,8 +332,10 @@ function buildMockAction(daysUntilExam: number | null, mockCount: number): Recov
       mockCount === 0
         ? "You haven't done a full timed attempt yet. Mocks build pacing instinct and surface gaps that drills don't. Even one session changes how the plan reads."
         : "Another mock-style block will sharpen pacing and show where to concentrate remaining effort.",
+    evidence: "Adds pacing data before the exam window gets tighter.",
     concreteTarget: "1 timed session this week",
     href: "/app/exams",
+    ctaLabel: "Schedule next mock",
   };
 }
 
@@ -244,8 +349,10 @@ function buildFlashcardAction(status: PlanTrackStatus): RecoveryAction {
       status === "at_risk"
         ? "15 minutes of flashcard review each morning surfaces what slipped overnight and costs no extra study time."
         : "A daily flashcard habit ensures key concepts stay active — especially for topics you haven't drilled recently.",
+    evidence: "Protects retention while question volume increases.",
     concreteTarget: "15 min/day",
     href: "/app/flashcards",
+    ctaLabel: "Review flashcards now",
   };
 }
 
@@ -258,8 +365,10 @@ function buildLessonCutAction(lessonPct: number, daysUntilExam: number | null): 
     label: "Replace passive lesson reading with active recall",
     rationale:
       "With a solid lesson foundation, reading new modules delivers diminishing returns. Swap one lesson session per day for a targeted drill on that module's topic.",
+    evidence: "Prioritize review before adding more new content.",
     concreteTarget: "–30 min lesson / +30 min drill",
     href: "/app/questions",
+    ctaLabel: "Open lesson-linked drill",
   };
 }
 
@@ -310,7 +419,7 @@ export function buildRecoveryPlan(input: RecoveryPlannerInput): RecoveryPlan | n
   const rawActions: Array<RecoveryAction | null> = [
     buildWeakFocusAction(input.weakTopics, input.status),
     buildRedistributeAction(input.inactiveDays, extraMin),
-    buildQuizBoostAction(boost, input.status),
+    buildQuizBoostAction(boost, input.status, input.overallAccuracyPct),
     buildMockAction(input.daysUntilExam, input.mockCount),
     buildFlashcardAction(input.status),
     buildLessonCutAction(input.lessonPct, input.daysUntilExam),

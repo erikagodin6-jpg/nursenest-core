@@ -181,7 +181,7 @@ function SmartReviewPreview() {
       desc: "Correct + low confidence",
     },
     {
-      label: "Strong Areas",
+      label: "Established knowledge",
       count: 8,
       bg: SUCCESS_SOFT,
       accent: "var(--semantic-success, #22c55e)",

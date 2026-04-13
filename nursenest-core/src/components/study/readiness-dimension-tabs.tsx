@@ -41,9 +41,9 @@ function accuracyFillClass(pct: number): string {
 }
 
 function accuracyLabel(pct: number): string {
-  if (pct >= 80) return "Strong";
+  if (pct >= 80) return "Established";
   if (pct >= 60) return "Solid";
-  if (pct >= 40) return "Needs work";
+  if (pct >= 40) return "Needs review";
   return "Weak";
 }
 
@@ -138,7 +138,7 @@ function DimensionEmpty({ dimension }: { dimension: string }) {
           color: "var(--theme-primary-foreground, #fff)",
         }}
       >
-        Practice questions →
+        Practice questions
       </Link>
     </div>
   );
@@ -216,7 +216,7 @@ export function ReadinessDimensionTabs({
           className="mt-0.5 text-xs"
           style={{ color: "var(--semantic-text-muted, var(--muted-foreground))" }}
         >
-          Accuracy by dimension — ranked weakest-first to prioritise your focus.
+          Accuracy by dimension. Ranked weakest first to prioritize review.
         </p>
       </div>
 

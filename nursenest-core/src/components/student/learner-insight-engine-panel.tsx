@@ -11,7 +11,7 @@ function tierLabel(t: string): string {
     case "moderate":
       return "Moderate";
     case "strong":
-      return "Strong";
+      return "Stable";
     default:
       return t;
   }

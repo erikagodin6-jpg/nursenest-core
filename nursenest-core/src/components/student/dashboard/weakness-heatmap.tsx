@@ -11,10 +11,10 @@ export type HeatmapTopic = {
 };
 
 const HEAT_COLORS = [
-  { max: 0.2, bg: "var(--semantic-success)", label: "Strong" },
-  { max: 0.35, bg: "var(--semantic-info)", label: "Moderate" },
-  { max: 0.5, bg: "var(--semantic-warning)", label: "Needs Work" },
-  { max: 1.0, bg: "var(--semantic-danger)", label: "Weak" },
+  { max: 0.2, bg: "var(--semantic-success)", label: "Established" },
+  { max: 0.35, bg: "var(--semantic-info)", label: "Mixed" },
+  { max: 0.5, bg: "var(--semantic-warning)", label: "Review needed" },
+  { max: 1.0, bg: "var(--semantic-danger)", label: "High priority" },
 ];
 
 function heatColor(missRate: number): string {
@@ -43,7 +43,7 @@ export function WeaknessHeatmap({
     <FadeUp className="nn-heatmap-card" whenInView once viewMargin="-24px">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <h3 className="text-[0.9375rem] font-bold" style={{ color: "var(--semantic-text-primary)" }}>
-          Topic Strength Map
+          Topic performance map
         </h3>
         <div className="flex items-center gap-3">
           {HEAT_COLORS.map((h) => (

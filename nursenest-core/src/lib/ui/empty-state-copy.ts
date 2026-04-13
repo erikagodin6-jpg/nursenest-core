@@ -37,33 +37,33 @@ const noSearchResults = Object.assign(
         ? `Nothing matched “${query}” for ${pathwayLine}. Try a shorter keyword, clear filters, or browse the full hub.`
         : query
           ? `Nothing matched “${query}”. Try a shorter keyword, clear filters, or browse the full hub.`
-          : "Try a shorter keyword, clear filters, or browse by topic — your hub has more than what fits one query.",
+          : "Try a shorter keyword, clear filters, or browse by topic. Your hub includes more than one query can show.",
   }),
   {
     headline: "No matches for that search",
-    body: "Try a shorter keyword, clear filters, or browse by topic — your hub has more than what fits one query.",
+    body: "Try a shorter keyword, clear filters, or browse by topic. Your hub includes more than one query can show.",
   } satisfies EmptyStateCopyEntry,
 );
 
 const noProgressYet = Object.assign(
   (): EmptyStateCopyEntry => ({
     headline: "You haven’t started here yet",
-    body: "Your progress will appear here after you begin. Start with a lesson or a practice set to build momentum.",
+    body: "Your progress will appear here after your first lesson or practice set.",
   }),
   {
     headline: "You haven’t started here yet",
-    body: "Your progress will appear here after you begin. Start with a lesson or a practice set to build momentum.",
+    body: "Your progress will appear here after your first lesson or practice set.",
   } satisfies EmptyStateCopyEntry,
 );
 
 const noWeakAreasYet = Object.assign(
   (): EmptyStateCopyEntry => ({
-    headline: "We need a bit more signal first",
-    body: "Complete more graded questions so we can spot patterns and personalize focus areas for you.",
+    headline: "More data needed",
+    body: "Complete more graded questions. Then we can identify weak topics and suggest targeted review.",
   }),
   {
-    headline: "We need a bit more signal first",
-    body: "Complete more graded questions so we can spot patterns and personalize focus areas for you.",
+    headline: "More data needed",
+    body: "Complete more graded questions. Then we can identify weak topics and suggest targeted review.",
   } satisfies EmptyStateCopyEntry,
 );
 
@@ -71,12 +71,12 @@ const entitlementLocked = Object.assign(
   ({ exam }: { exam?: string } = {}): EmptyStateCopyEntry => ({
     headline: "This content is part of your subscription",
     body: exam
-      ? `Upgrade to unlock ${exam} study tools, lessons, and guided next steps without losing your current progress.`
-      : "Upgrade to unlock full access — your pathway hub and practice tools are ready when you are.",
+      ? `Upgrade to unlock ${exam} lessons, practice tools, and next-step guidance without losing your current progress.`
+      : "Upgrade to unlock full access to your pathway hub and practice tools.",
   }),
   {
     headline: "This content is part of your subscription",
-    body: "Upgrade to unlock full access — your pathway hub and practice tools are ready when you are.",
+    body: "Upgrade to unlock full access to your pathway hub and practice tools.",
   } satisfies EmptyStateCopyEntry,
 );
 
@@ -98,34 +98,34 @@ const thinInventory = Object.assign(
     headline: "This section is still growing",
     body:
       pathwayLine || exam
-        ? `${pathwayLine ?? exam} content is being expanded carefully. In the meantime, nearby study tools and pathway-scoped practice are ready now.`
-        : "New lessons land here on a steady cadence. In the meantime, pathway-scoped practice and your hub tools stay available.",
-    hint: "Try a nearby topic, the question bank, or the pathway hub while this library fills in.",
+        ? `${pathwayLine ?? exam} content is still being expanded. Use nearby study tools or pathway-scoped practice while this section is completed.`
+        : "This lesson library is still being expanded. Use pathway-scoped practice and your hub tools while new lessons are added.",
+    hint: "Try a nearby topic, the question bank, or the pathway hub while this section is completed.",
   }),
   {
     headline: "This section is still growing",
-    body: "New lessons land here on a steady cadence. In the meantime, pathway-scoped practice and your hub tools stay available.",
-    hint: "Try a nearby topic, the question bank, or the pathway hub while this library fills in.",
+    body: "This lesson library is still being expanded. Use pathway-scoped practice and your hub tools while new lessons are added.",
+    hint: "Try a nearby topic, the question bank, or the pathway hub while this section is completed.",
   } satisfies EmptyStateCopyEntry,
 );
 
 const notFound = Object.assign(
   ({ pathwayLine, exam, variant = 0 }: NotFoundCopyArgs = {}): EmptyStateCopyEntry => {
     const headlines = [
-      "This page took a little detour",
-      "Looks like this page wandered off",
+      "Page not found",
+      "This route is unavailable",
       "We couldn’t find that page",
     ] as const;
     const bodies = [
       pathwayLine
-        ? `${pathwayLine} study paths are still close by, and we can guide you back to something useful.`
-        : "Your next study step is still close by, and we can guide you back to something useful.",
+        ? `${pathwayLine} lessons and study tools are still available. Use the links below to continue.`
+        : "Use the links below to return to a valid study page.",
       exam
-        ? `${exam} prep is still nearby. Use the recovery links below to get back on track.`
-        : "No worries — we’ll help you head back to something helpful.",
+        ? `${exam} prep is still available. Use the links below to return to the correct route.`
+        : "Use the links below to return to a valid page.",
       pathwayLine
         ? `We couldn’t open this route, but ${pathwayLine} lessons and study tools are still available.`
-        : "We couldn’t open this route, but there’s still a clear way back into your study flow.",
+        : "We couldn’t open this route. Use the links below to continue.",
     ] as const;
 
     return {
@@ -135,8 +135,8 @@ const notFound = Object.assign(
     };
   },
   {
-    headline: "This page took a little detour",
-    body: "Your next study step is still close by, and we can guide you back to something useful.",
+    headline: "Page not found",
+    body: "Use the links below to return to a valid study page.",
     hint: "Choose a nearby study destination below.",
   } satisfies EmptyStateCopyEntry,
 );
@@ -149,8 +149,8 @@ const notFoundMinimal = Object.assign(
       "This route isn’t available",
     ] as const;
     const bodies = [
-      "Let’s get you back to a calmer, more useful study path.",
-      "No worries — the rest of NurseNest is still right where it should be.",
+      "Use the links below to return to a valid page.",
+      "Use the recovery links below to continue.",
       "Use the links below to head back to something helpful.",
     ] as const;
 
@@ -162,8 +162,8 @@ const notFoundMinimal = Object.assign(
   },
   {
     headline: "We couldn’t find that page",
-    body: "Let’s get you back to a calmer, more useful study path.",
-    hint: "We’ll keep the recovery paths simple and reliable.",
+    body: "Use the links below to return to a valid page.",
+    hint: "Use one of the recovery links below.",
   } satisfies EmptyStateCopyEntry,
 );
 
@@ -220,13 +220,13 @@ const noSavedNotes = Object.assign(
 const noStudyActivityYet = Object.assign(
   (): EmptyStateCopyEntry => ({
     headline: "No study activity yet",
-    body: "Once you study, this area fills in with momentum, streaks, and the next sensible step for your plan.",
-    hint: "Your dashboard stays available whenever you are ready to begin.",
+    body: "Once you study, this area shows recent activity and the next recommended step.",
+    hint: "Start with a lesson or question set to populate this view.",
   }),
   {
     headline: "No study activity yet",
-    body: "Once you study, this area fills in with momentum, streaks, and the next sensible step for your plan.",
-    hint: "Your dashboard stays available whenever you are ready to begin.",
+    body: "Once you study, this area shows recent activity and the next recommended step.",
+    hint: "Start with a lesson or question set to populate this view.",
   } satisfies EmptyStateCopyEntry,
 );
 
@@ -248,17 +248,17 @@ export const emptyStateCopy = {
   noStudyActivityYet,
   noExamHistory: {
     headline: "No exam sessions yet",
-    body: "Start a practice exam to build your readiness picture and track how you improve over time.",
+    body: "Start a practice exam to generate readiness data and session history.",
   },
   noHistoryYet,
   noRecommendations: {
     headline: "Recommendations will show up here",
-    body: "As you study, we’ll surface tailored next steps. Try a lesson or question set to get started.",
+    body: "As you study, this area will show the next recommended step. Start with a lesson or question set.",
   },
   entitlementLocked,
   accountLowData: {
     headline: "There isn’t much here yet",
-    body: "That usually means you’re just getting started — your hub fills in as you study.",
+    body: "This area fills in after your first lessons or practice sessions.",
   },
   notFound,
   notFoundMinimal,

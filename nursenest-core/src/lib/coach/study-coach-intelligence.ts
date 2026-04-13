@@ -164,7 +164,7 @@ export function formatReadinessExplainResponse(readiness: ReadinessScore): Coach
         ? "Borderline"
         : readiness.band === "passing_range"
           ? "Passing Range"
-          : "Strong";
+          : "Stable";
 
   const lines: string[] = [
     `Score: ${readiness.score} (${bandLabel}).`,

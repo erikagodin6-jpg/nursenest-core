@@ -3,10 +3,10 @@ import { normalizeNotFoundPathname } from "@/lib/ui/not-found-recovery";
 export type NotFoundCopyPair = { headline: string; subtext: string };
 
 const ROTATING_PAIRS: NotFoundCopyPair[] = [
-  { headline: "This page took a little detour", subtext: "Your next study step is still close by." },
-  { headline: "We couldn’t find that page", subtext: "We’ll help you find your way back." },
-  { headline: "Looks like this page wandered off", subtext: "Let’s guide you somewhere useful." },
-  { headline: "That address doesn’t match anything here", subtext: "No worries — let’s head back to something helpful." },
+  { headline: "Page not found", subtext: "Use the links below to return to a valid page." },
+  { headline: "We couldn’t find that page", subtext: "Use the recovery links below to continue." },
+  { headline: "This route is unavailable", subtext: "Return to your study hub or a nearby page." },
+  { headline: "That address does not match a page here", subtext: "Choose a valid destination below." },
 ];
 
 export function hashPathForIndex(pathname: string): number {

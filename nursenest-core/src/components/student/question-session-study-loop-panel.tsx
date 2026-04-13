@@ -24,9 +24,9 @@ type Props = {
 };
 
 function accuracyTier(pct: number): { label: string; colorClass: string } {
-  if (pct >= 80) return { label: "Strong", colorClass: "text-[var(--semantic-success-contrast,var(--semantic-success))]" };
-  if (pct >= 60) return { label: "Good", colorClass: "text-[var(--semantic-warning-contrast)]" };
-  return { label: "Needs work", colorClass: "text-[var(--semantic-danger-contrast,var(--semantic-danger))]" };
+  if (pct >= 80) return { label: "Established", colorClass: "text-[var(--semantic-success-contrast,var(--semantic-success))]" };
+  if (pct >= 60) return { label: "Mixed", colorClass: "text-[var(--semantic-warning-contrast)]" };
+  return { label: "Needs review", colorClass: "text-[var(--semantic-danger-contrast,var(--semantic-danger))]" };
 }
 
 export function QuestionSessionStudyLoopPanel({ questions, graded, pathwayId, visible }: Props) {
@@ -150,7 +150,7 @@ export function QuestionSessionStudyLoopPanel({ questions, graded, pathwayId, vi
             <div>
               <p className="font-semibold text-[var(--semantic-text-primary)]">{t("learner.studyLoop.allCorrectThisSet")}</p>
               <p className="mt-0.5 text-sm text-[var(--semantic-text-secondary)]">
-                All topics in this session answered correctly. Keep the momentum going.
+                All topics in this session were answered correctly. Continue with the next scheduled review.
               </p>
             </div>
           </div>

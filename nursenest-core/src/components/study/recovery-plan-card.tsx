@@ -133,6 +133,19 @@ function ActionRow({ action, index }: { action: RecoveryAction; index: number })
         >
           {action.rationale}
         </p>
+        {action.evidence && (
+          <p
+            style={{
+              marginTop: 5,
+              fontSize: "0.75rem",
+              lineHeight: 1.45,
+              color,
+              fontWeight: 600,
+            }}
+          >
+            {action.evidence}
+          </p>
+        )}
         {action.concreteTarget && (
           <span
             style={{
@@ -156,25 +169,30 @@ function ActionRow({ action, index }: { action: RecoveryAction; index: number })
       {/* CTA */}
       <Link
         href={action.href}
-        aria-label={`Start: ${action.label}`}
+        aria-label={action.ctaLabel}
         style={{
-          display: "flex",
+          display: "inline-flex",
           alignItems: "center",
           justifyContent: "center",
-          width: 32,
-          height: 32,
-          borderRadius: "50%",
+          minHeight: 32,
+          padding: "0 12px",
+          borderRadius: 99,
           background: isFirst
             ? "var(--accent-primary)"
             : `color-mix(in srgb, ${color} 10%, var(--bg-card))`,
           border: isFirst
             ? "none"
             : `1px solid color-mix(in srgb, ${color} 22%, var(--border-subtle))`,
-          color: isFirst ? "#fff" : color,
+          color: isFirst ? "var(--bg-card)" : color,
           flexShrink: 0,
           textDecoration: "none",
+          gap: 6,
+          fontSize: "0.75rem",
+          fontWeight: 700,
+          whiteSpace: "nowrap",
         }}
       >
+        <span>{action.ctaLabel}</span>
         <ArrowRight className="h-3.5 w-3.5" aria-hidden />
       </Link>
     </div>
@@ -269,7 +287,13 @@ interface RecoveryPlanCardProps {
 export function RecoveryPlanCard({ plan }: RecoveryPlanCardProps) {
   const accent = statusAccent(plan.status);
   const highImpact = plan.actions.filter((a) => a.priority === "highest_impact");
-  const secondary = plan.actions.filter((a) => a.priority !== "highest_impact");
+  const visibleHighImpact = highImpact.slice(0, 2);
+  const secondaryActions = plan.actions.filter((a) => a.priority === "secondary");
+  const optionalActions = plan.actions.filter((a) => a.priority === "optional");
+  const hiddenCount = Math.max(
+    0,
+    highImpact.length - visibleHighImpact.length + secondaryActions.length + optionalActions.length,
+  );
 
   return (
     <div
@@ -352,6 +376,16 @@ export function RecoveryPlanCard({ plan }: RecoveryPlanCardProps) {
                 {plan.consequence}
               </p>
             )}
+            <p
+              style={{
+                marginTop: 4,
+                fontSize: "0.75rem",
+                lineHeight: 1.5,
+                color: "var(--semantic-text-muted)",
+              }}
+            >
+              Focus on the highest-impact moves first. Lower-priority steps can wait until the plan feels stable again.
+            </p>
           </div>
         </div>
 
@@ -377,33 +411,76 @@ export function RecoveryPlanCard({ plan }: RecoveryPlanCardProps) {
             >
               Do these first
             </p>
-            {highImpact.map((action, i) => (
+            {visibleHighImpact.map((action, i) => (
               <ActionRow key={action.id} action={action} index={i} />
             ))}
           </div>
         )}
 
         {/* Secondary section */}
-        {secondary.filter((a) => a.priority === "secondary").length > 0 && (
-          <div>
-            <p
+        {hiddenCount > 0 && (
+          <details style={{ paddingTop: "0.75rem" }}>
+            <summary
               style={{
-                padding: "10px 0 0",
-                fontSize: "0.625rem",
-                fontWeight: 800,
-                textTransform: "uppercase",
-                letterSpacing: "0.1em",
-                color: "var(--semantic-text-muted)",
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 6,
+                padding: "7px 12px",
+                borderRadius: "0.625rem",
+                border: "1px solid var(--semantic-border-soft)",
+                background: "var(--semantic-panel-muted)",
+                color: "var(--semantic-text-secondary)",
+                fontSize: "0.75rem",
+                fontWeight: 700,
+                cursor: "pointer",
+                listStyle: "none",
               }}
             >
-              Also recommended
-            </p>
-            {secondary
-              .filter((a) => a.priority === "secondary")
-              .map((action, i) => (
-                <ActionRow key={action.id} action={action} index={highImpact.length + i} />
-              ))}
-          </div>
+              Show {hiddenCount} more step{hiddenCount === 1 ? "" : "s"}
+            </summary>
+            {secondaryActions.length > 0 && (
+              <div>
+                <p
+                  style={{
+                    padding: "10px 0 0",
+                    fontSize: "0.625rem",
+                    fontWeight: 800,
+                    textTransform: "uppercase",
+                    letterSpacing: "0.1em",
+                    color: "var(--semantic-text-muted)",
+                  }}
+                >
+                  Also recommended
+                </p>
+                {secondaryActions.map((action, i) => (
+                  <ActionRow key={action.id} action={action} index={visibleHighImpact.length + i} />
+                ))}
+              </div>
+            )}
+            {optionalActions.length > 0 && (
+              <div>
+                <p
+                  style={{
+                    padding: "10px 0 0",
+                    fontSize: "0.625rem",
+                    fontWeight: 800,
+                    textTransform: "uppercase",
+                    letterSpacing: "0.1em",
+                    color: "var(--semantic-text-muted)",
+                  }}
+                >
+                  Later, if needed
+                </p>
+                {optionalActions.map((action, i) => (
+                  <ActionRow
+                    key={action.id}
+                    action={action}
+                    index={visibleHighImpact.length + secondaryActions.length + i}
+                  />
+                ))}
+              </div>
+            )}
+          </details>
         )}
       </div>
 
@@ -470,7 +547,7 @@ export function RecoveryPlanCard({ plan }: RecoveryPlanCardProps) {
           }}
         >
           <Target className="h-3.5 w-3.5" aria-hidden />
-          Start now
+          Start catch-up block
         </Link>
         <Link
           href="/app/lessons"

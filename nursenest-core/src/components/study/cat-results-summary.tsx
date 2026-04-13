@@ -125,13 +125,13 @@ function deriveDifficultyLabel(results: PracticeTestResultsJson): string {
 function deriveConsistencyLabel(results: PracticeTestResultsJson): string {
   const level =
     results.catCoach?.confidenceLevel ?? results.catReport?.confidenceLevel;
-  if (level === "high") return "Strong";
+  if (level === "high") return "Stable";
   if (level === "medium") return "Moderate";
   if (level === "low") return "Low";
 
   const se = results.abilityStdError;
   if (se != null) {
-    if (se < 0.3) return "Strong";
+    if (se < 0.3) return "Stable";
     if (se < 0.5) return "Moderate";
     return "Low";
   }

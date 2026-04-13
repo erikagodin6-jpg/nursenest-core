@@ -67,10 +67,10 @@ export function HomeConversionHero() {
                   data-testid="text-hero-heading"
                 >
                   <span className="block text-[var(--palette-heading)]">
-                    {formatTitleCase("Pass your exam with prep", locale)}
+                  {formatTitleCase("Prepare for your exam with a plan", locale)}
                   </span>
                   <span className="mt-1 block text-[color-mix(in_srgb,var(--text-accent)_92%,var(--palette-heading))]">
-                    {formatTitleCase("built for your license", locale)}
+                    {formatTitleCase("matched to your license", locale)}
                   </span>
                 </h1>
               </StaggerItem>
@@ -80,7 +80,7 @@ export function HomeConversionHero() {
                   data-testid="text-hero-subheading"
                 >
                   {formatSentenceCase(
-                    "Train with pathway-scoped questions, full rationales, and readiness signals so each session advances a clear prep plan.",
+                    "Use pathway-scoped questions, full rationales, and readiness signals so each session supports a clear prep plan.",
                     locale,
                   )}
                 </p>
@@ -146,7 +146,7 @@ export function HomeConversionHero() {
               <StaggerItem variant="softReveal" timing="hero">
                 <p className="nn-marketing-caption flex min-w-0 items-start gap-2 text-balance break-words text-[var(--palette-text-muted)]">
                   <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-[var(--semantic-success)]" aria-hidden />
-                  {formatSentenceCase("No credit card required to start your first practice sessions.", locale)}
+                  {formatSentenceCase("No credit card required for your first practice sessions.", locale)}
                 </p>
               </StaggerItem>
             </StaggerGroup>

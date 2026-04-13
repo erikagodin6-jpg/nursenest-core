@@ -5,7 +5,7 @@ export type TopicWithAccuracy = {
 };
 
 type WeakDescriptor = "Major gap" | "Needs review" | "Inconsistent";
-type StrengthDescriptor = "Reliable" | "Strong" | "Consistent";
+type StrengthDescriptor = "Reliable" | "Established" | "Consistent";
 
 function weakDescriptor(pct: number): WeakDescriptor {
   if (pct < 30) return "Major gap";
@@ -15,7 +15,7 @@ function weakDescriptor(pct: number): WeakDescriptor {
 
 function strengthDescriptor(pct: number): StrengthDescriptor {
   if (pct >= 80) return "Reliable";
-  if (pct >= 70) return "Strong";
+  if (pct >= 70) return "Established";
   return "Consistent";
 }
 
@@ -111,7 +111,7 @@ export function TopicImpactBars({
 
       {/* ── Strengths ────────────────────────────────────────── */}
       <div className="nn-cat-results__section">
-        <h2 className="nn-cat-results__section-title">Current Strengths</h2>
+        <h2 className="nn-cat-results__section-title">Current stable areas</h2>
         <div className="nn-cat-section-strength">
           {strengthTopics.length > 0 ? (
             <>
@@ -137,7 +137,7 @@ export function TopicImpactBars({
               className="nn-cat-section-intro"
               style={{ marginBottom: 0 }}
             >
-              Not enough data to identify strong areas yet.
+              Not enough data to identify stable areas yet.
             </p>
           )}
         </div>
