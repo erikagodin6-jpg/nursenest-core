@@ -58,7 +58,7 @@ export function SiteFooter() {
   return (
     <footer
       style={navChromeStyle}
-      className="mt-auto border-t py-[var(--nn-rhythm-footer-y)]"
+      className="mt-auto border-t border-[var(--footer-border)] py-[var(--nn-rhythm-footer-y)] shadow-[inset_0_1px_0_0_color-mix(in_srgb,var(--footer-fg)_6%,transparent)]"
     >
       <div className="nn-section-shell">
         <div className="mb-6 sm:mb-8">

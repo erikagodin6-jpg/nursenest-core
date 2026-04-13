@@ -3,6 +3,7 @@
 import { Brain, Crosshair, Scale, ShieldCheck } from "lucide-react";
 import { formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
+import { FadeUp, StaggerGroup, StaggerItem } from "@/lib/motion";
 
 const POINTS = [
   {
@@ -45,32 +46,32 @@ export function HomeTrustProofSection() {
       data-testid="section-home-differentiation"
     >
       <div className="nn-section-shell">
-        <header className="mx-auto mb-10 max-w-2xl text-center">
+        <FadeUp whenInView once viewMargin="-32px" className="mx-auto mb-12 max-w-2xl text-center">
           <h2 id="home-differentiation-heading" className="nn-marketing-h2 text-balance">
             {formatTitleCase("Why NurseNest Is Different", locale)}
           </h2>
-          <p className="nn-marketing-body mx-auto mt-2 max-w-xl text-pretty text-[var(--palette-text-muted)]">
+          <p className="nn-marketing-body mx-auto mt-3 max-w-xl text-pretty leading-relaxed text-[var(--palette-text-muted)]">
             {formatSentenceCase(
               "A focused readiness system for your specific license, not a generic question archive.",
               locale,
             )}
           </p>
-        </header>
+        </FadeUp>
 
-        <ul className="grid gap-5 md:grid-cols-2">
-          {POINTS.map((point) => {
+        <StaggerGroup className="grid gap-5 md:grid-cols-2" staggerMs={52} whenInView once viewMargin="-40px">
+          {POINTS.map((point, idx) => {
             const Icon = point.icon;
             return (
-              <li
-                key={point.title}
-                className="flex gap-4 rounded-2xl border bg-[var(--bg-card)] p-6 shadow-[var(--elevation-rest)]"
+              <StaggerItem key={point.title} variant={idx % 2 === 0 ? "fadeUp" : "softReveal"} className="min-w-0">
+              <article
+                className="flex h-full gap-4 rounded-2xl border bg-[var(--bg-card)] p-6 shadow-[var(--shadow-elevated)] transition-[box-shadow,border-color] duration-200 ease-[var(--motion-ease)] hover:border-[color-mix(in_srgb,var(--semantic-border-soft)_1,var(--border-subtle))]"
                 style={{
-                  borderColor: `color-mix(in srgb, ${point.iconColor} 20%, var(--border-subtle))`,
-                  borderLeft: `3px solid ${point.iconColor}`,
+                  borderColor: `color-mix(in srgb, ${point.iconColor} 18%, var(--border-subtle))`,
+                  borderTop: `3px solid ${point.iconColor}`,
                 }}
               >
                 <span
-                  className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border"
+                  className="mt-0.5 flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border"
                   style={{
                     background: `color-mix(in srgb, ${point.iconColor} 10%, var(--bg-card))`,
                     borderColor: `color-mix(in srgb, ${point.iconColor} 24%, var(--border-subtle))`,
@@ -79,7 +80,7 @@ export function HomeTrustProofSection() {
                 >
                   <Icon className="h-5 w-5" style={{ color: point.iconColor }} />
                 </span>
-                <div>
+                <div className="min-w-0">
                   <h3 className="nn-marketing-h3 mb-1.5" style={{ color: "var(--palette-heading)" }}>
                     {formatTitleCase(point.title, locale)}
                   </h3>
@@ -87,10 +88,11 @@ export function HomeTrustProofSection() {
                     {formatSentenceCase(point.body, locale)}
                   </p>
                 </div>
-              </li>
+              </article>
+              </StaggerItem>
             );
           })}
-        </ul>
+        </StaggerGroup>
       </div>
     </section>
   );

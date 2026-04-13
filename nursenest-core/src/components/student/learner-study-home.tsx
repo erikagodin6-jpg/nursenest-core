@@ -264,7 +264,11 @@ export function LearnerStudyHome({
         {benchmark ? <BenchmarkCard data={benchmark} /> : null}
         {heatmapTopics.length > 0 ? <WeaknessHeatmap topics={heatmapTopics} /> : null}
         {showCoach && weakTopicTitles.length > 0 ? (
-          <CoachWeakSummary weakTopics={weakTopicTitles} examTarget={undefined} daysUntilExam={daysLeft} />
+          <CoachWeakSummary
+            weakTopics={weakTopicTitles}
+            examTarget={undefined}
+            daysUntilExam={daysLeft}
+          />
         ) : null}
       </LearnerStudySurfaceSection>
 

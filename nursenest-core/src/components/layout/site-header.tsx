@@ -784,7 +784,7 @@ export function SiteHeader() {
             className="absolute inset-x-0 top-full z-[120] hidden lg:block animate-[nn-mega-panel-enter_var(--brand-motion-normal)_var(--brand-motion-ease-luxury)_both]"
           >
             <div className="nn-section-shell pb-5 pt-1.5">
-              <div className="overflow-hidden rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-strong)] shadow-[var(--shadow-elevated)]">
+              <div className="overflow-hidden rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-strong)] shadow-[var(--shadow-elevated)] ring-1 ring-[color-mix(in_srgb,var(--semantic-border-soft)_1,var(--border-subtle))]">
                 <div className="grid lg:grid-cols-[5fr_7fr]">
 
                   {/* ── Primary hub card (left) ── */}

@@ -291,11 +291,11 @@ export function MarketingHeroCarousel({
             data-testid={captionTestId}
             aria-hidden
           >
-            <div className="bg-gradient-to-t from-black/78 via-black/35 to-transparent px-3 pb-2.5 pt-8 sm:px-4 sm:pb-3 sm:pt-10">
-              <p className="line-clamp-4 text-left text-sm font-semibold leading-snug text-white text-balance break-words drop-shadow-sm sm:text-base">
+            <div className="bg-gradient-to-t from-[color-mix(in_srgb,var(--palette-heading)_88%,transparent)] via-[color-mix(in_srgb,var(--palette-heading)_38%,transparent)] to-transparent px-3 pb-2.5 pt-8 sm:px-4 sm:pb-3 sm:pt-10">
+              <p className="line-clamp-4 text-left text-sm font-semibold leading-snug text-[var(--text-on-accent)] text-balance break-words drop-shadow-sm sm:text-base">
                 {currentSlide.title}
               </p>
-              <p className="mt-0.5 line-clamp-3 text-left text-xs leading-snug text-white/92 text-balance break-words sm:line-clamp-4 sm:text-sm">
+              <p className="mt-0.5 line-clamp-3 text-left text-xs leading-snug text-[color-mix(in_srgb,var(--text-on-accent)_92%,transparent)] text-balance break-words sm:line-clamp-4 sm:text-sm">
                 {currentSlide.caption}
               </p>
             </div>

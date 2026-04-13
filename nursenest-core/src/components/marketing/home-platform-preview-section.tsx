@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { Activity, CheckCircle2, FileText, Target } from "lucide-react";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
+import { FadeUp } from "@/lib/motion";
 
 /**
  * In-product proof block showing the real interaction model:
@@ -36,23 +37,31 @@ export function HomePlatformPreviewSection() {
   return (
     <section
       id="home-platform-preview"
-      className="nn-section-block scroll-mt-20 border-y border-[var(--border-subtle)] bg-[var(--bg-card)]"
+      className="nn-section-block scroll-mt-20 border-y border-[var(--border-subtle)] bg-[var(--page-bg)]"
       aria-labelledby="home-platform-preview-heading"
       data-testid="section-home-platform-carousel"
     >
       <div className="nn-section-shell">
-        <header className="mx-auto mb-8 max-w-3xl text-center md:mb-10">
-          <p className="nn-marketing-caption font-medium tracking-wide text-[color-mix(in_srgb,var(--theme-primary)_78%,var(--theme-heading-text))]">
+        <FadeUp whenInView once viewMargin="-28px" className="mx-auto mb-10 max-w-3xl text-center md:mb-12">
+          <p className="nn-marketing-eyebrow font-semibold tracking-wide text-[color-mix(in_srgb,var(--semantic-brand)_82%,var(--theme-heading-text))]">
             {formatTitleCase("Product Proof", locale)}
           </p>
-          <h2 id="home-platform-preview-heading" className="nn-marketing-h2 mt-2 text-balance">
+          <h2 id="home-platform-preview-heading" className="nn-marketing-h2 mt-3 text-balance">
             {formatTitleCase("Experience The Platform Workflow", locale)}
           </h2>
-          <p className="nn-marketing-body mx-auto mt-2 max-w-2xl text-pretty text-[var(--theme-muted-text)]">
+          <p className="nn-marketing-body mx-auto mt-3 max-w-2xl text-pretty leading-relaxed text-[var(--theme-muted-text)]">
             {formatSentenceCase("Walk through the same interaction loop learners use every day: answer, review rationale, then act on readiness feedback.", locale)}
           </p>
-        </header>
-        <div className="mx-auto grid w-full max-w-5xl gap-4 md:grid-cols-2">
+        </FadeUp>
+        <FadeUp whenInView once viewMargin="-40px" className="mx-auto w-full max-w-5xl">
+        <div
+          className="rounded-[1.35rem] p-[2px] shadow-[0_32px_80px_-36px_color-mix(in_srgb,var(--palette-heading)_12%,transparent)]"
+          style={{
+            background:
+              "linear-gradient(160deg, color-mix(in srgb, var(--semantic-info) 24%, var(--border-subtle)), color-mix(in srgb, var(--semantic-brand) 20%, var(--border-subtle)))",
+          }}
+        >
+        <div className="grid gap-4 rounded-[1.25rem] border border-[var(--border-subtle)] bg-[var(--bg-card)] p-4 sm:p-5 md:grid-cols-2 md:p-6">
           <article className="nn-card-system nn-card-system-pad">
             <span className="nn-card-system__icon mb-2">
               <FileText className="nn-icon-md text-[var(--semantic-brand)]" aria-hidden />
@@ -107,10 +116,10 @@ export function HomePlatformPreviewSection() {
               <p className="mt-2 text-sm text-[var(--palette-text-muted)]">
                 {formatSentenceCase("This client shows acute deterioration (hypoxemia, restlessness, respiratory change). Priority is immediate assessment and provider notification before additional sedatives or delayed checks.", locale)}
               </p>
-              <ul className="mt-3 space-y-2 text-sm text-[var(--palette-text-muted)]">
-                <li>- {formatSentenceCase("Option A delays escalation while the patient is unstable.", locale)}</li>
-                <li>- {formatSentenceCase("Option C risks worsening respiratory suppression.", locale)}</li>
-                <li>- {formatSentenceCase("Option D postpones action despite high-risk symptoms.", locale)}</li>
+              <ul className="mt-3 list-disc space-y-2 pl-5 text-sm text-[var(--palette-text-muted)]">
+                <li>{formatSentenceCase("Option A delays escalation while the patient is unstable.", locale)}</li>
+                <li>{formatSentenceCase("Option C risks worsening respiratory suppression.", locale)}</li>
+                <li>{formatSentenceCase("Option D postpones action despite high-risk symptoms.", locale)}</li>
               </ul>
             </div>
           </article>
@@ -165,6 +174,8 @@ export function HomePlatformPreviewSection() {
             </div>
           </article>
         </div>
+        </div>
+        </FadeUp>
       </div>
     </section>
   );

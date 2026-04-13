@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { BarChart3 } from "lucide-react";
+import { Activity, BarChart3, LineChart, Sparkles, Target, Timer } from "lucide-react";
 import { CatResultsCoachSection } from "@/components/student/cat-results-coach-section";
 import type { PracticeTestConfigJson, PracticeTestResultsJson } from "@/lib/practice-tests/types";
 import {
@@ -12,6 +12,12 @@ import { resolveStudyLoopCatHref } from "@/lib/exam-pathways/study-loop-cat-rout
 import { semanticFillClassForAccuracyPct } from "@/lib/ui/semantic-progress-fill";
 import type { BenchmarkServiceResult } from "@/lib/study/benchmarking/benchmark-service";
 import { PracticeBenchmarkBlock } from "@/components/study/practice-benchmark-block";
+import { LearnerSurface } from "@/components/learner-ui/learner-surface";
+import {
+  LearnerReportPercentileSlot,
+  PracticeSessionReportHero,
+  type LearnerReportOutcomeTile,
+} from "@/components/student/learner-report-card-primitives";
 
 export type PracticeTestWeakFollowUpCopy = {
   weakTitle: string;
@@ -29,6 +35,138 @@ export type PracticeTestIncorrectReviewItem = {
   topic: string | null;
 };
 
+export type PracticeTestPercentileSlotCopy = {
+  eyebrow: string;
+  title: string;
+  body: string;
+};
+
+function humanizeKey(s: string): string {
+  return s.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+}
+
+function difficultyTrendHint(label: "rising" | "falling" | "mixed" | "flat"): string {
+  switch (label) {
+    case "rising":
+      return "Difficulty ramps up — typical when the CAT is probing your ceiling.";
+    case "falling":
+      return "Difficulty eases — the run may be stabilizing or shifting content mix.";
+    case "mixed":
+      return "Difficulty moves up and down — mixed domains or adaptive refocus.";
+    default:
+      return "Difficulty stays level across most of the run.";
+  }
+}
+
+function topicExtremes(byTopic: PracticeTestResultsJson["byTopic"], weakest: boolean): { label: string; pct: number }[] {
+  return Object.entries(byTopic)
+    .map(([topic, { correct, total }]) => ({
+      topic,
+      pct: total > 0 ? Math.round((correct / total) * 100) : 0,
+    }))
+    .sort((a, b) => (weakest ? a.pct - b.pct : b.pct - a.pct))
+    .slice(0, 3);
+}
+
+function outcomeTilesForPractice(args: {
+  cat: boolean;
+  results: PracticeTestResultsJson;
+}): LearnerReportOutcomeTile[] {
+  const { cat, results } = args;
+  const coach = results.catCoach;
+
+  if (cat && results.catReport) {
+    const rep = results.catReport;
+    const trail = humanizeKey(rep.trajectory);
+    const stability = coach?.stabilityTrendLabel ? humanizeKey(coach.stabilityTrendLabel) : "—";
+    const strengthList =
+      coach?.strongestDomains?.filter(Boolean).slice(0, 2).join(" · ") ||
+      rep.categoryBreakdown
+        .filter((c) => c.strength === "strong")
+        .map((c) => c.category)
+        .slice(0, 2)
+        .join(" · ") ||
+      "—";
+    const weakHead = results.weakAreas[0] ?? rep.weakAreas[0] ?? "—";
+    const weakHint =
+      coach?.specificStudyActions?.[0] ?? rep.suggestedNextSteps?.[0] ?? coach?.keyRiskFactor ?? "Review weak domains below, then rerun CAT.";
+
+    return [
+      {
+        icon: LineChart,
+        label: "Trend",
+        value: trail,
+        hint: rep.readinessHeadline,
+        accent: "c1",
+      },
+      {
+        icon: Activity,
+        label: "Session arc",
+        value: stability,
+        hint: coach?.stabilityInterpretation ?? "Ability trend describes movement within this session only.",
+        accent: "c2",
+      },
+      {
+        icon: Sparkles,
+        label: "Strengths",
+        value: strengthList,
+        hint: coach ? difficultyTrendHint(coach.difficultyTrendLabel) : "Domain strengths from this adaptive run.",
+        accent: "c3",
+      },
+      {
+        icon: Target,
+        label: "Focus next",
+        value: weakHead,
+        hint: weakHint,
+        accent: "c4",
+      },
+    ];
+  }
+
+  const extremesHigh = topicExtremes(results.byTopic, false);
+  const extremesLow = topicExtremes(results.byTopic, true);
+  const incorrect = Math.max(0, results.scoreTotal - results.scoreCorrect);
+  return [
+    {
+      icon: LineChart,
+      label: "Score",
+      value: `${results.accuracyPct}%`,
+      hint: `${results.scoreCorrect} correct · ${incorrect} missed (${results.scoreTotal} items)`,
+      accent: "c1",
+    },
+    {
+      icon: BarChart3,
+      label: "Topic spread",
+      value: `${Object.keys(results.byTopic).length}`,
+      hint:
+        extremesHigh.length > 0
+          ? `Bright spots: ${extremesHigh
+              .map((x) => `${x.topic} (${x.pct}%)`)
+              .slice(0, 2)
+              .join(" · ")}`
+          : "No per-topic breakdown for this run.",
+      accent: "c2",
+    },
+    {
+      icon: Target,
+      label: "Toughest area",
+      value: extremesLow[0]?.topic ?? "—",
+      hint:
+        extremesLow[0] != null
+          ? `${extremesLow[0].pct}% accuracy in this topic bucket`
+          : "Keep drilling mixed sets to surface weak themes.",
+      accent: "c3",
+    },
+    {
+      icon: Timer,
+      label: "Pacing",
+      value: `${results.scoreTotal} items`,
+      hint: "Fixed-length practice — compare time on task in your full review.",
+      accent: "c4",
+    },
+  ];
+}
+
 /**
  * Server-rendered results summary for bookmarkable `/app/practice-tests/[id]/results`.
  * Full teaching review and notes remain on the main run page.
@@ -44,6 +182,7 @@ export function PracticeTestResultsStatic({
   sessionInsightFocus = null,
   weakFollowUpCopy = null,
   benchmarkResult = null,
+  percentileSlotCopy = null,
 }: {
   testId: string;
   title: string | null;
@@ -58,71 +197,98 @@ export function PracticeTestResultsStatic({
   weakFollowUpCopy?: PracticeTestWeakFollowUpCopy | null;
   /** Pathway-aware benchmark result. Null when not enough cohort data yet. */
   benchmarkResult?: BenchmarkServiceResult | null;
+  /** Reserved cohort / percentile lane (i18n from results page). */
+  percentileSlotCopy?: PracticeTestPercentileSlotCopy | null;
 }) {
   const cat = config?.selectionMode === "cat";
   const incorrect = Math.max(0, results.scoreTotal - results.scoreCorrect);
+  const feedbackMode = results.catExamFeedbackMode ?? config?.catExamFeedbackMode;
+  const badges = cat
+    ? [
+        { label: "CAT", tone: "brand" as const },
+        ...(feedbackMode === "study"
+          ? ([{ label: "Study mode", tone: "info" as const }] as const)
+          : feedbackMode === "test"
+            ? ([{ label: "Test mode", tone: "info" as const }] as const)
+            : []),
+      ]
+    : [{ label: "Practice test", tone: "muted" as const }];
+
+  const statTiles = outcomeTilesForPractice({ cat, results });
+
+  const heroFootnote = (
+    <div className="space-y-2">
+      {cat && feedbackMode === "study" ? (
+        <p>
+          Study mode — rationales after each item. In-session rationale steps recorded:{" "}
+          <span className="font-medium text-[var(--semantic-text-primary)]">
+            {typeof results.catStudyRationaleSteps === "number" ? results.catStudyRationaleSteps : "—"}
+          </span>
+          .
+        </p>
+      ) : null}
+      {cat && feedbackMode === "test" ? <p>Test mode — rationales held until the end of this CAT run.</p> : null}
+      {results.readinessLabel != null ? (
+        <p className="font-medium text-[var(--semantic-text-primary)]">Readiness label: {results.readinessLabel}</p>
+      ) : null}
+      {results.catReport ? (
+        <p>
+          Classification{" "}
+          <span className="font-semibold capitalize text-[var(--semantic-text-primary)]">{results.catReport.decision}</span>
+          {results.catReport.stoppedReason !== "completed" ? (
+            <>
+              {" "}
+              · Stopped {humanizeKey(results.catReport.stoppedReason)}
+            </>
+          ) : null}
+          {" "}
+          · {results.catReport.totalQuestions} adaptive items graded
+        </p>
+      ) : null}
+    </div>
+  );
+
+  const firstStudyNext = results.catCoach?.studyNext?.[0];
+  const firstStudyLink = firstStudyNext?.links?.[0];
 
   return (
-    <div className="space-y-6">
-      <div className="nn-results-header overflow-hidden rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-6 shadow-[var(--shadow-card)]">
-        <p className="text-[10px] font-bold uppercase tracking-widest text-[var(--semantic-text-muted)]">Results</p>
-        <h2 className="mt-1 text-xl font-bold text-[var(--semantic-text-primary)]">
-          {title?.trim() || (cat ? "Adaptive (CAT) practice" : "Practice test")}
-        </h2>
-        <p className="mt-1 text-sm text-[var(--semantic-text-muted)]">Completed {completedAtLabel}</p>
-        {cat && (results.catExamFeedbackMode ?? config?.catExamFeedbackMode) === "study" ? (
-          <p className="mt-2 text-xs text-[var(--semantic-text-muted)]">
-            Study Mode — you could review explanations after each item. In-session rationale steps recorded:{" "}
-            <span className="font-medium text-[var(--semantic-text-primary)]">
-              {typeof results.catStudyRationaleSteps === "number" ? results.catStudyRationaleSteps : "—"}
-            </span>
-            .
-          </p>
-        ) : cat && (results.catExamFeedbackMode ?? config?.catExamFeedbackMode) === "test" ? (
-          <p className="mt-2 text-xs text-[var(--semantic-text-muted)]">
-            Test Mode — rationales were held until after completion for this CAT run.
-          </p>
-        ) : null}
+    <div className="space-y-8">
+      <PracticeSessionReportHero
+        eyebrow="Session report"
+        title={title?.trim() || (cat ? "Adaptive (CAT) practice" : "Practice test")}
+        subtitle={`Completed ${completedAtLabel}`}
+        badges={badges}
+        scoreLabel="Outcome"
+        scorePrimary={`${results.scoreCorrect}/${results.scoreTotal}`}
+        scoreSecondary={`${results.accuracyPct}% accuracy · ${incorrect} missed`}
+        footnote={heroFootnote}
+        statTiles={statTiles}
+      />
 
-        <div className="mt-6 grid gap-4 sm:grid-cols-3">
-          <div className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-4 py-3">
-            <p className="text-[10px] font-semibold uppercase tracking-wide text-[var(--semantic-text-muted)]">Score</p>
-            <p className="mt-1 text-2xl font-bold tabular-nums text-[var(--semantic-text-primary)]">
-              {results.scoreCorrect}/{results.scoreTotal}
-            </p>
-            <p className="text-sm font-medium text-[var(--semantic-brand)]">{results.accuracyPct}% accuracy</p>
-          </div>
-          <div className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-4 py-3">
-            <p className="text-[10px] font-semibold uppercase tracking-wide text-[var(--semantic-text-muted)]">Correct</p>
-            <p className="mt-1 text-2xl font-bold tabular-nums text-[var(--role-success-text)]">{results.scoreCorrect}</p>
-          </div>
-          <div className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-4 py-3">
-            <p className="text-[10px] font-semibold uppercase tracking-wide text-[var(--semantic-text-muted)]">Incorrect</p>
-            <p className="mt-1 text-2xl font-bold tabular-nums text-[var(--semantic-text-primary)]">{incorrect}</p>
-          </div>
-        </div>
-
-        {results.readinessLabel != null ? (
-          <p className="mt-5 text-lg font-semibold text-[var(--semantic-text-primary)]">
-            Readiness: {results.readinessLabel}
-          </p>
-        ) : null}
-        {results.catReport ? (
-          <p className="mt-2 text-sm text-[var(--semantic-text-muted)]">
-            Classification:{" "}
-            <span className="font-semibold capitalize text-[var(--semantic-text-primary)]">{results.catReport.decision}</span>
-            {results.catReport.stoppedReason !== "completed" ? (
-              <>
-                {" "}
-                · Stopped:{" "}
-                <span className="text-[var(--semantic-text-primary)]">
-                  {results.catReport.stoppedReason.replace(/_/g, " ")}
-                </span>
-              </>
-            ) : null}
-          </p>
-        ) : null}
-      </div>
+      {firstStudyLink ? (
+        <LearnerSurface tone="success" padding="md" radius="lg" accentTop className="border-[color-mix(in_srgb,var(--semantic-success)_26%,var(--semantic-border-soft))]">
+          <p className="text-[11px] font-semibold uppercase tracking-wide text-[var(--semantic-success)]">Recommended next step</p>
+          <p className="mt-1 text-sm font-medium text-[var(--semantic-text-primary)]">{firstStudyNext.title}</p>
+          <p className="mt-1 text-xs text-[var(--semantic-text-muted)]">{firstStudyNext.reason}</p>
+          <Link
+            href={firstStudyLink.href}
+            className="mt-3 inline-flex text-sm font-semibold text-[var(--semantic-brand)] underline underline-offset-4 hover:opacity-90"
+          >
+            {firstStudyLink.label}
+          </Link>
+        </LearnerSurface>
+      ) : results.weakAreas[0] && config?.pathwayId != null ? (
+        <LearnerSurface tone="warm" padding="md" radius="lg" accentTop>
+          <p className="text-[11px] font-semibold uppercase tracking-wide text-[var(--semantic-warning)]">Recommended next step</p>
+          <p className="mt-1 text-sm text-[var(--semantic-text-primary)]">Drill your weakest tagged area, then review rationales on the test page.</p>
+          <Link
+            href={remediationTopicDrillHref(results.weakAreas[0], config.pathwayId)}
+            className="mt-3 inline-flex text-sm font-semibold text-[var(--semantic-brand)] underline underline-offset-4 hover:opacity-90"
+          >
+            Open targeted questions for {results.weakAreas[0]}
+          </Link>
+        </LearnerSurface>
+      ) : null}
 
       {cat && results.catReport ? (
         <CatResultsCoachSection
@@ -274,6 +440,14 @@ export function PracticeTestResultsStatic({
             Open full review on test page
           </Link>
         </div>
+      ) : null}
+
+      {percentileSlotCopy ? (
+        <LearnerReportPercentileSlot
+          eyebrow={percentileSlotCopy.eyebrow}
+          title={percentileSlotCopy.title}
+          body={percentileSlotCopy.body}
+        />
       ) : null}
 
       {benchmarkResult != null ? (

@@ -7,6 +7,7 @@ import { marketingExamHubPath } from "@/lib/marketing/country-exam-offerings";
 import { useNursenestRegion } from "@/lib/region/use-nursenest-region";
 import { MarketingTrackedLink } from "@/components/marketing/marketing-tracked-link";
 import { PH } from "@/lib/observability/posthog-conversion-events";
+import { FadeUp, StaggerGroup, StaggerItem } from "@/lib/motion";
 import { formatEyebrow, formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
 import { getPathwayHubCta } from "@/lib/copy/cta-copy";
 import type { LucideIcon } from "lucide-react";
@@ -90,20 +91,30 @@ export function HomeExamSelectionSection() {
       data-testid="section-exam-selection"
     >
       <div className="nn-section-shell">
-        <header className="mx-auto mb-10 max-w-2xl text-center">
+        <FadeUp whenInView once viewMargin="-32px" className="mx-auto mb-12 max-w-2xl text-center">
           <h2 id="home-exam-selection-heading" className="nn-marketing-h2 text-balance">
             {formatTitleCase("Choose Your Exam Hub", locale)}
           </h2>
-          <p className="nn-marketing-body mx-auto mt-2 max-w-xl text-pretty text-[var(--theme-muted-text)]">
+          <p className="nn-marketing-body mx-auto mt-3 max-w-xl text-pretty leading-relaxed text-[var(--theme-muted-text)]">
             {formatSentenceCase(t("home.conversion.examSelectionSub"), locale)}
           </p>
-        </header>
+        </FadeUp>
 
-        <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        <StaggerGroup
+          className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4"
+          staggerMs={48}
+          whenInView
+          once
+          viewMargin="-40px"
+        >
           {cards.map((c) => {
             const Icon = c.icon;
             return (
-              <li key={c.id} className={c.featured ? "sm:col-span-2 lg:col-span-1" : undefined}>
+              <StaggerItem
+                key={c.id}
+                variant="softReveal"
+                className={c.featured ? "min-w-0 sm:col-span-2 lg:col-span-1" : "min-w-0"}
+              >
                 <MarketingTrackedLink
                   href={c.href}
                   event={PH.marketingHomePathwayCardPrimary}
@@ -122,7 +133,7 @@ export function HomeExamSelectionSection() {
                 >
                     {/* Icon badge — colored per pathway */}
                     <span
-                      className="nn-card-system__icon mb-1 transition group-hover:scale-105"
+                      className="nn-card-system__icon mb-1 transition group-hover:scale-[1.03]"
                       style={{
                         background: `color-mix(in srgb, ${c.accentColor} 10%, var(--bg-card))`,
                         borderColor: `color-mix(in srgb, ${c.accentColor} 24%, var(--border-subtle))`,
@@ -145,10 +156,10 @@ export function HomeExamSelectionSection() {
                       <ArrowRight className="ml-1.5 h-4 w-4 transition group-hover:translate-x-1" aria-hidden />
                     </span>
                   </MarketingTrackedLink>
-              </li>
+              </StaggerItem>
             );
           })}
-        </ul>
+        </StaggerGroup>
       </div>
     </section>
   );

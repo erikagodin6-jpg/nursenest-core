@@ -9,6 +9,7 @@ import { MarketingTrackedLink } from "@/components/marketing/marketing-tracked-l
 import { PH } from "@/lib/observability/posthog-conversion-events";
 import { formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
 import { PRIMARY_CTA, SECONDARY_CTA, TERTIARY_CTA } from "@/lib/copy/cta-copy";
+import { FadeUp, StaggerGroup, StaggerItem } from "@/lib/motion";
 
 const STEP_COLORS = [
   { bg: "var(--semantic-info)", soft: "var(--semantic-info-soft)", contrast: "var(--semantic-info-contrast)" },
@@ -64,23 +65,32 @@ export function HomeHowItWorksSection() {
       data-testid="section-how-it-works"
     >
       <div className="nn-section-shell">
-        <header className="mx-auto mb-12 max-w-2xl text-center">
+        <FadeUp whenInView once viewMargin="-32px" className="mx-auto mb-12 max-w-2xl text-center">
           <h2 id="home-how-heading" className="nn-marketing-h2 text-balance">
             {formatTitleCase("How It Works", locale)}
           </h2>
-          <p className="nn-marketing-body mx-auto mt-2 max-w-xl text-pretty text-[var(--theme-muted-text)]">
+          <p className="nn-marketing-body mx-auto mt-3 max-w-xl text-pretty leading-relaxed text-[var(--theme-muted-text)]">
             {formatSentenceCase("A simple three-step loop to build confidence and readiness faster.", locale)}
           </p>
-        </header>
+        </FadeUp>
 
-        <ol className="grid gap-6 md:grid-cols-3">
+        <StaggerGroup
+          as="ol"
+          className="grid list-none gap-6 p-0 md:grid-cols-3"
+          staggerMs={56}
+          whenInView
+          once
+          viewMargin="-36px"
+        >
           {steps.map((s, i) => {
             const Icon = s.icon;
             const color = STEP_COLORS[i];
             return (
-              <li
+              <StaggerItem
+                as="li"
                 key={s.testId}
-                className="relative flex flex-col rounded-2xl border bg-[var(--bg-card)] p-6 shadow-[var(--elevation-rest)]"
+                variant="softReveal"
+                className="relative flex min-w-0 flex-col rounded-2xl border bg-[var(--bg-card)] p-6 shadow-[var(--shadow-elevated)]"
                 style={{ borderColor: `color-mix(in srgb, ${color.bg} 22%, var(--border-subtle))` }}
               >
                 {/* Step number + icon row */}
@@ -114,17 +124,19 @@ export function HomeHowItWorksSection() {
                   href={s.href}
                   event={PH.marketingHomeExploreHubClick}
                   eventProps={{ surface: "how_it_works", step: i + 1, region }}
-                  className="mt-4 inline-flex items-center text-sm font-semibold transition-colors hover:underline"
+                  className="group nn-motion-standard mt-5 inline-flex items-center rounded-lg px-1 py-0.5 text-sm font-semibold transition-colors hover:bg-[color-mix(in_srgb,var(--theme-primary)_6%,var(--bg-card))]"
                   style={{ color: color.bg }}
                   data-testid={s.testId}
                 >
                   {formatTitleCase(s.label, locale)}
-                  <span className="ml-1 text-xs">→</span>
+                  <span className="ml-1 text-xs transition-transform group-hover:translate-x-0.5" aria-hidden>
+                    →
+                  </span>
                 </MarketingTrackedLink>
-              </li>
+              </StaggerItem>
             );
           })}
-        </ol>
+        </StaggerGroup>
       </div>
     </section>
   );
