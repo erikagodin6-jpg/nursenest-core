@@ -64,6 +64,7 @@ import {
 import { PathwayLessonRecordChips } from "@/components/pathway-lessons/pathway-lesson-record-chips";
 import { MarketingPathwayLessonDetailViewBeacon } from "@/components/observability/marketing-study-surface-view-beacons";
 import { loadStudySettings } from "@/lib/learner/load-study-settings";
+import { cleanLessonTitleForDisplay } from "@/lib/lessons/lesson-title-presentation";
 
 /** Avoid enumerating every lesson at build (large `.next` output + ENOSPC on small disks). */
 export const dynamic = "force-dynamic";
@@ -203,7 +204,8 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
     !fullAccess && lesson.sections.length > visible.length
       ? lesson.sections.slice(visible.length).map(({ id, heading }) => ({ id, heading }))
       : [];
-  const { crumbs, schemaItems } = pathwayLessonDetailBreadcrumbs(pathway, lesson.slug, lesson.title);
+  const displayLessonTitle = cleanLessonTitleForDisplay(lesson.title);
+  const { crumbs, schemaItems } = pathwayLessonDetailBreadcrumbs(pathway, lesson.slug, displayLessonTitle);
   const lessonQuality = classifyPathwayLesson(lesson);
   const matchedLessonImage = resolveLessonImage({
     slug: lesson.slug,
@@ -244,7 +246,7 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
         <PathwayLessonDetailHeader
           pathway={pathway}
           lessonsBasePath={base}
-          lessonTitle={lesson.title}
+          lessonTitle={displayLessonTitle}
           lessonTopic={lesson.topic}
           bodySystem={lesson.bodySystem}
           metaChips={<PathwayLessonRecordChips lesson={lesson} omitTopic />}
@@ -317,12 +319,12 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
             url={matchedLessonImage.url}
             alt={matchedLessonImage.alt}
             source={matchedLessonImage.source}
-            lessonTitle={lesson.title}
+          lessonTitle={displayLessonTitle}
           />
         ) : null}
 
         {lesson.audioUrl ? (
-          <LessonAudioCard audioUrl={lesson.audioUrl} lessonTitle={lesson.title} />
+          <LessonAudioCard audioUrl={lesson.audioUrl} lessonTitle={displayLessonTitle} />
         ) : null}
 
         <PathwayLessonAssessmentExperience

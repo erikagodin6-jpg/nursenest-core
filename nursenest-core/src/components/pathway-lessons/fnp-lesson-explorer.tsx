@@ -26,6 +26,7 @@ import { LessonCardChip } from "@/components/student/product/lesson-card";
 import { PathwayLessonRecordChips } from "@/components/pathway-lessons/pathway-lesson-record-chips";
 import { PremiumEmptyState } from "@/components/ui/premium-empty-state";
 import { emptyStateCopy } from "@/lib/ui/empty-state-copy";
+import { cleanLessonTitleForDisplay } from "@/lib/lessons/lesson-title-presentation";
 
 function marketingQuestionsTopicHref(pathway: ExamPathwayDefinition, topic: string): string {
   const base = buildExamPathwayPath(pathway, "questions");
@@ -316,10 +317,12 @@ function FnpLessonCard({
       </div>
       {detailHref ? (
         <Link href={detailHref} className="mt-1 block text-lg font-semibold text-primary hover:underline">
-          {l.title}
+          {cleanLessonTitleForDisplay(l.title)}
         </Link>
       ) : (
-        <p className="mt-1 text-lg font-semibold text-[var(--theme-heading-text)]">{l.title}</p>
+        <p className="mt-1 text-lg font-semibold text-[var(--theme-heading-text)]">
+          {cleanLessonTitleForDisplay(l.title)}
+        </p>
       )}
 
       <div className="mt-4 grid gap-3 border-t border-border pt-4 text-sm sm:grid-cols-2">
@@ -369,7 +372,7 @@ function FnpLessonCard({
                     href={rh}
                     className="nn-surface-inset block rounded-xl px-3 py-2.5 text-sm font-semibold text-primary transition-colors hover:border-primary/35"
                   >
-                    {peer.meta.title}
+                    {cleanLessonTitleForDisplay(peer.meta.title)}
                   </Link>
                 </li>
               );

@@ -12,6 +12,7 @@ import {
 } from "@/lib/lessons/pathway-lesson-types";
 import { StudyCard } from "@/components/ui/study-card";
 import type { CardVariant, CardStatus } from "@/components/ui/study-card";
+import { cleanLessonTitleForDisplay } from "@/lib/lessons/lesson-title-presentation";
 
 type Group = {
   topicSlug: string;
@@ -102,7 +103,7 @@ function relatedLessonsForCard(
   const out: { href: string; title: string }[] = [];
   for (const x of pool) {
     const href = pathwayLessonMarketingDetailHref(lessonsBasePath, x.slug);
-    if (href) out.push({ href, title: x.title });
+    if (href) out.push({ href, title: cleanLessonTitleForDisplay(x.title) });
     if (out.length >= max) break;
   }
   return out;
@@ -222,7 +223,7 @@ export function PathwayLessonsGroupedHub({
                           data-nn-qa-primary-lesson={gi === 0 && idx === 0 ? "true" : undefined}
                           className="nn-marketing-h4 mt-2 text-[var(--theme-heading-text)] underline-offset-4 transition hover:text-primary hover:underline"
                         >
-                          {l.title}
+                          {cleanLessonTitleForDisplay(l.title)}
                         </Link>
                         <p className="nn-marketing-body-sm mt-2 line-clamp-3 flex-1 text-[var(--theme-muted-text)]">
                           {l.seoDescription}
@@ -281,7 +282,7 @@ export function PathwayLessonsGroupedHub({
                         surface="list"
                         variant={progressToCardVariant(ps)}
                         status={progressToCardStatus(ps, showProgress)}
-                        title={l.title}
+                        title={cleanLessonTitleForDisplay(l.title)}
                         href={href}
                         description={l.seoDescription}
                         meta={[{ label: `Item ${idx + 1}` }, { label: l.topic ?? group.label }]}
@@ -295,7 +296,7 @@ export function PathwayLessonsGroupedHub({
                             Drill this topic
                           </Link>
                         }
-                        ariaLabel={l.title}
+                        ariaLabel={cleanLessonTitleForDisplay(l.title)}
                       />
                     )}
                   </li>

@@ -33,6 +33,7 @@ import { absoluteUrl } from "@/lib/seo/site-origin";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { recordRouteRenderFallback } from "@/lib/observability/route-fallback-tracker";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { cleanLessonTitleForDisplay } from "@/lib/lessons/lesson-title-presentation";
 
 export const dynamic = "force-dynamic";
 export const dynamicParams = true;
@@ -100,7 +101,7 @@ function TopicClusterEmptyFallback({
           {related.map((l) => (
             <li key={l.slug}>
               <Link href={`${base}/${l.slug}`} className="text-sm font-semibold text-primary hover:underline">
-                {l.title}
+                {cleanLessonTitleForDisplay(l.title)}
               </Link>
             </li>
           ))}
@@ -255,7 +256,7 @@ export default async function PathwayLessonTopicClusterPage({ params, searchPara
     const related = fallback.items
       .filter(pathwayLessonHasRenderableHubSlug)
       .slice(0, 5)
-      .map((l) => ({ slug: l.slug, title: l.title }));
+      .map((l) => ({ slug: l.slug, title: cleanLessonTitleForDisplay(l.title) }));
     return <TopicClusterEmptyFallback pathway={pathway} base={base} topicSlug={topicSlug} related={related} />;
   }
   if (pageRequested !== pageResult.page) {
@@ -318,7 +319,7 @@ export default async function PathwayLessonTopicClusterPage({ params, searchPara
         lessonsBasePath={base}
         topicLabel={label}
         topicSlug={topicSlug}
-        relatedLessons={lessons.map((l) => ({ slug: l.slug, title: l.title, topic: l.topic }))}
+        relatedLessons={lessons.map((l) => ({ slug: l.slug, title: cleanLessonTitleForDisplay(l.title), topic: l.topic }))}
         siblingTopics={topicClusters.map((t) => ({ topicSlug: t.topicSlug, label: t.label }))}
       />
 
@@ -340,7 +341,7 @@ export default async function PathwayLessonTopicClusterPage({ params, searchPara
           return (
             <li key={l.slug} className="nn-card p-4">
               <Link href={href} className="text-lg font-semibold text-primary hover:underline">
-                {l.title}
+                {cleanLessonTitleForDisplay(l.title)}
               </Link>
               <p className="mt-2 text-sm text-muted">{l.seoDescription}</p>
               <div className="mt-3 flex flex-wrap gap-3 text-sm">

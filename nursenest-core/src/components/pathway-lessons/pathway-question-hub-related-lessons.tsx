@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { PathwayLessonRecord } from "@/lib/lessons/pathway-lesson-types";
 import { pathwayLessonMarketingDetailHref } from "@/lib/lessons/pathway-lesson-types";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { cleanLessonTitleForDisplay } from "@/lib/lessons/lesson-title-presentation";
 
 /**
  * When the question hub is topic-filtered, surface a few pathway lessons from the same topic cluster (bounded list).
@@ -45,7 +46,7 @@ export function PathwayQuestionHubRelatedLessons({
           return (
             <li key={l.slug}>
               <Link href={href} className="font-medium text-primary hover:underline">
-                {l.title}
+                {cleanLessonTitleForDisplay(l.title)}
               </Link>
             </li>
           );

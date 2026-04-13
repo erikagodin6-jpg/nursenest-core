@@ -70,6 +70,7 @@ import { LessonRecallToggle } from "@/components/lessons/lesson-recall-toggle";
 import { LessonRecallBlock } from "@/components/lessons/lesson-recall-block";
 import { LessonKeyRecallChip } from "@/components/lessons/lesson-key-recall-chip";
 import { loadStudySettings } from "@/lib/learner/load-study-settings";
+import { cleanLessonTitleForDisplay, compactPathwayLabel } from "@/lib/lessons/lesson-title-presentation";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 86400;
@@ -190,6 +191,8 @@ export default async function AlliedHealthSlugLessonDetailPage({ params }: Props
     related = [];
   }
   const relatedDisplay = mergeRelatedLessonDisplayList(lesson.relatedLessonRefs, related, RELATED_PATHWAY_LESSONS_LIMIT);
+  const displayLessonTitle = cleanLessonTitleForDisplay(lesson.title);
+  const compactExamLabel = compactPathwayLabel(pathway.shortName);
 
   const relatedQuestionStems = await loadRelatedExamQuestionStemsForPathwayLesson({
     pathway,
@@ -204,7 +207,7 @@ export default async function AlliedHealthSlugLessonDetailPage({ params }: Props
     prof.h1,
     professionHeroPath,
     base,
-    lesson.title,
+    displayLessonTitle,
     lessonPath,
   );
   const lessonQuality = classifyPathwayLesson(lesson);
@@ -235,9 +238,8 @@ export default async function AlliedHealthSlugLessonDetailPage({ params }: Props
       <Link href={base} className="text-sm font-medium text-primary hover:underline">
         ← Lessons ({prof.h1})
       </Link>
-      <p className="mt-3 text-xs font-semibold uppercase text-primary">{pathway.displayName}</p>
       <div className="mt-2 flex flex-wrap items-start justify-between gap-3">
-        <h1 className="text-3xl font-extrabold text-[var(--theme-heading-text)]">{lesson.title}</h1>
+        <h1 className="text-3xl font-extrabold text-[var(--theme-heading-text)]">{displayLessonTitle}</h1>
         {userId && fullAccess ? (
           <PathwayLessonProgressBadgeLive
             pathwayId={pathway.id}
@@ -248,7 +250,7 @@ export default async function AlliedHealthSlugLessonDetailPage({ params }: Props
         ) : null}
       </div>
       <p className="mt-2 text-sm text-muted">
-        {pathway.countryCode === "CA" ? "Canada" : "United States"} · {lesson.topic} · {lesson.bodySystem}
+        {compactExamLabel} · {pathway.countryCode === "CA" ? "Canada" : "United States"} · {lesson.bodySystem}
       </p>
       <div className="mt-4 space-y-3">
         <LessonQualityNotice tier={lessonQuality.tier} wordCount={lessonQuality.wordCount} />
@@ -299,12 +301,12 @@ export default async function AlliedHealthSlugLessonDetailPage({ params }: Props
           url={matchedLessonImage.url}
           alt={matchedLessonImage.alt}
           source={matchedLessonImage.source}
-          lessonTitle={lesson.title}
+          lessonTitle={displayLessonTitle}
         />
       ) : null}
 
       {lesson.audioUrl ? (
-        <LessonAudioCard audioUrl={lesson.audioUrl} lessonTitle={lesson.title} />
+        <LessonAudioCard audioUrl={lesson.audioUrl} lessonTitle={displayLessonTitle} />
       ) : null}
 
       <PathwayLessonAssessmentExperience

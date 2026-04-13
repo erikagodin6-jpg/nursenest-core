@@ -4,6 +4,7 @@ import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry"
 import { buildPathwayLessonTopicProgrammaticIntroParagraphs } from "@/lib/lessons/pathway-lesson-topic-programmatic-intro";
 import { marketingPathwayLessonTopicClusterPath } from "@/lib/lessons/lesson-routes";
 import { pathwayLessonMarketingDetailHref } from "@/lib/lessons/pathway-lesson-types";
+import { cleanLessonTitleForDisplay } from "@/lib/lessons/lesson-title-presentation";
 
 const linkClass =
   "font-semibold text-primary underline-offset-4 hover:underline focus-visible:outline-none focus-visible:underline";
@@ -88,7 +89,7 @@ export function PathwayTopicClusterProgrammaticSeo({
                 return (
                   <li key={l.slug}>
                     <Link href={href} className={linkClass}>
-                      {l.title}
+                      {cleanLessonTitleForDisplay(l.title)}
                     </Link>
                     {l.topic && l.topic !== topicLabel ? (
                       <span className="ml-1 text-xs text-[var(--theme-muted-text)]">({l.topic})</span>

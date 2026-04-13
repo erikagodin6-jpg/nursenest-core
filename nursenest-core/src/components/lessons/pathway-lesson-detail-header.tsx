@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { validateLearnerCopyForExamContext } from "@/lib/learner/validate-learner-copy-context";
 import { pathwayCountryLabel, pathwayRegionAwareExamName } from "@/lib/lessons/pathway-lesson-hub-seo";
+import { compactPathwayLabel } from "@/lib/lessons/lesson-title-presentation";
 
 type Props = {
   pathway: ExamPathwayDefinition;
@@ -30,6 +31,7 @@ export function PathwayLessonDetailHeader({
 }: Props) {
   const place = pathwayCountryLabel(pathway);
   const examName = pathwayRegionAwareExamName(pathway);
+  const compactExamName = compactPathwayLabel(examName);
   validateLearnerCopyForExamContext(pathway, lessonTitle, "lesson_header");
 
   return (
@@ -47,9 +49,9 @@ export function PathwayLessonDetailHeader({
         <div
           className="flex max-w-full flex-wrap items-center gap-x-2.5 gap-y-1.5 rounded-xl border border-[color-mix(in_srgb,var(--theme-primary)_12%,var(--border-subtle))] bg-[color-mix(in_srgb,var(--theme-primary)_4.5%,var(--bg-card))] px-3 py-2.5 text-sm shadow-[var(--shadow-card)]"
           role="group"
-          aria-label={`${examName}, ${place}`}
+          aria-label={`${compactExamName}, ${place}, ${bodySystem}`}
         >
-          <span className="font-semibold text-[var(--theme-heading-text)]">{examName}</span>
+          <span className="font-semibold text-[var(--theme-heading-text)]">{compactExamName}</span>
           <span aria-hidden className="text-[var(--theme-muted-text)]">
             ·
           </span>
@@ -57,17 +59,16 @@ export function PathwayLessonDetailHeader({
           <span aria-hidden className="text-[var(--theme-muted-text)]">
             ·
           </span>
-          <span className="text-[var(--theme-muted-text)]">{lessonTopic}</span>
+          <span className="text-[var(--theme-muted-text)]">{bodySystem}</span>
         </div>
         {metaChips ? <div className="mt-3 flex flex-wrap gap-1.5">{metaChips}</div> : null}
         <div className="mt-4 flex flex-wrap items-start justify-between gap-3">
           <div className="min-w-0 flex-1">
-            <p className="nn-marketing-caption font-semibold text-[var(--theme-muted-text)]">{pathway.displayName}</p>
             <h1 className="nn-marketing-h2 mt-2 text-balance">
               {lessonTitle}
             </h1>
             <p className="nn-marketing-body-sm mt-3 text-[var(--theme-muted-text)]">
-              <span className="font-medium text-[var(--theme-heading-text)]">{bodySystem}</span>
+              <span className="font-medium text-[var(--theme-heading-text)]">{lessonTopic}</span>
               <span aria-hidden className="mx-2 text-[var(--theme-muted-text)]">
                 ·
               </span>
