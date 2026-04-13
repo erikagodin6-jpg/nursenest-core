@@ -164,7 +164,9 @@
     "rationale:enrich:batch": "tsx scripts/rationale-enrichment-batch.ts",
     "rationale:enrich:electrolytes": "tsx scripts/rationale-enrichment-batch.ts --batch=electrolytes --max=20",
     "rationale:enrich:abg": "tsx scripts/rationale-enrichment-batch.ts --batch=abg_acid_base --max=15",
-    "rationale:enrich:cardiac": "tsx scripts/rationale-enrichment-batch.ts --batch=cardiac --max=25"
+    "rationale:enrich:cardiac": "tsx scripts/rationale-enrichment-batch.ts --batch=cardiac --max=25",
+    "rationale:enrich:electrolytes:trace": "tsx scripts/rationale-enrichment-batch.ts --batch=electrolytes --max=20 --trace=20",
+    "rationale:enrich:electrolytes:apply": "tsx scripts/rationale-enrichment-batch.ts --batch=electrolytes --max=20 --trace=20 --apply"
   },
   "dependencies": {
     "@auth/core": "0.37.2",
