@@ -1,6 +1,10 @@
 import Link from "next/link";
 import type { Prisma, UserFeedbackSeverity, UserFeedbackStatus } from "@prisma/client";
-import { UserFeedbackCategory as CatEnum, UserFeedbackSeverity as SevEnum } from "@prisma/client";
+import {
+  UserFeedbackCategory as CatEnum,
+  UserFeedbackSeverity as SevEnum,
+  UserFeedbackStatus as StatEnum,
+} from "@prisma/client";
 import {
   adminFeedbackInboxHref,
 } from "@/lib/admin/feedback-inbox-url";
