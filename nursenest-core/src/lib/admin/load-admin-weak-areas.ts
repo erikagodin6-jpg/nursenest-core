@@ -18,12 +18,29 @@ import {
   computeTopicWeakScore,
   lessonTrend,
   normalizeFrictionDensity,
-  pageTrend,
   severityFromScore,
   streakPain,
   type WeakAreaClassification,
   type WeakAreaTrend,
 } from "@/lib/admin/weak-areas-scoring";
+
+/** More user reports vs prior window = worse (inverse of marketing traffic). */
+function feedbackReportTrend(prev: number, cur: number): WeakAreaTrend {
+  if (prev < 3) return "unknown";
+  const ch = (cur - prev) / prev;
+  if (ch >= 0.22) return "worsening";
+  if (ch <= -0.22) return "improving";
+  return "flat";
+}
+
+/** Fewer unique visitors vs prior window = worse for conversion URLs. */
+function marketingTrafficTrend(prev: number | null, cur: number): WeakAreaTrend {
+  if (prev == null || prev < 5) return "unknown";
+  const ch = (cur - prev) / prev;
+  if (ch <= -0.18) return "worsening";
+  if (ch >= 0.15) return "improving";
+  return "flat";
+}
 
 export type WeakAreasSubscriptionFilter = "all" | "paying" | "trial_active" | "free_no_sub";
 export type WeakAreasRecencyFilter = "all" | "new_accounts" | "returning_accounts";
@@ -424,7 +441,7 @@ export async function loadAdminWeakAreas(q: WeakAreasQuery): Promise<AdminWeakAr
     for (const pl of plRows) {
       titles.set(pl.id, { title: pl.title, pathwayId: pl.pathwayId });
     }
-    for (const [lessonId, row] of curMap) {
+    for (const lessonId of curMap.keys()) {
       if (titles.has(lessonId)) continue;
       if (lessonId.startsWith("pathway:")) {
         const parts = lessonId.split(":");
@@ -474,8 +491,17 @@ export async function loadAdminWeakAreas(q: WeakAreasQuery): Promise<AdminWeakAr
       const prevTotal = p ? Number(p.total) : 0;
       const prevFriction = p ? Number(p.friction) : 0;
       const fd = normalizeFrictionDensity(friction, total);
+      const rt = feedbackReportTrend(prevTotal, total);
       const visitorDrop =
-        prevTotal >= 3 ? clamp01((prevTotal - total) / prevTotal) : prevFriction > 0 && friction > prevFriction ? 0.25 : 0;
+        rt === "worsening"
+          ? 0.42
+          : rt === "improving"
+            ? 0
+            : prevTotal >= 3
+              ? clamp01((prevTotal - total) / prevTotal)
+              : prevFriction > 0 && friction > prevFriction
+                ? 0.22
+                : 0;
       const score = computePageWeakScore({
         frictionDensity: fd,
         visitorDropoff: visitorDrop,
@@ -483,7 +509,7 @@ export async function loadAdminWeakAreas(q: WeakAreasQuery): Promise<AdminWeakAr
         uniqueVisitors: total,
         prevUniqueVisitors: prevTotal,
       });
-      const trend = pageTrend(prevTotal, total);
+      const trend = rt;
       const { classification, reasons } = classifySurface(surface, score, total, prevTotal, friction, prevFriction);
 
       rankedUnpopularPages.push({
@@ -496,9 +522,9 @@ export async function loadAdminWeakAreas(q: WeakAreasQuery): Promise<AdminWeakAr
         trend,
         trendSummary:
           trend === "worsening"
-            ? "Report volume or friction rose vs prior window."
+            ? "Report volume increased vs prior window (worse UX signal)."
             : trend === "improving"
-              ? "Reports eased vs prior window."
+              ? "Report volume decreased vs prior window."
               : prevTotal < 3
                 ? "Not enough prior-window data for a trend."
                 : "Roughly flat vs prior window.",
@@ -573,12 +599,12 @@ export async function loadAdminWeakAreas(q: WeakAreasQuery): Promise<AdminWeakAr
         reasons,
       });
     }
-    rankedConfusingQuestionAreas.sort((a, b) => b.score - a.score);
   } catch (e) {
     pushWarn(e, "topics");
   }
 
-  /** Confusing-question feedback routes — windowed trend. */
+  /** Confusing-question feedback routes — windowed trend (merged + re-sorted below). */
+  const confusionCards: RankedWeakArea[] = [];
   try {
     type CfRow = { surface: string; n: bigint };
     const fu = filteredUsersFu(q);
@@ -610,7 +636,6 @@ export async function loadAdminWeakAreas(q: WeakAreasQuery): Promise<AdminWeakAr
       GROUP BY 1
     `;
     const prevM = new Map(prevCf.map((x) => [x.surface, Number(x.n)]));
-    const confusionCards: RankedWeakArea[] = [];
     for (const row of curCf) {
       const surface = row.surface || "(unknown)";
       const n = Number(row.n);
@@ -648,10 +673,13 @@ export async function loadAdminWeakAreas(q: WeakAreasQuery): Promise<AdminWeakAr
       });
     }
     confusionCards.sort((a, b) => b.score - a.score);
-    rankedConfusingQuestionAreas = [...confusionCards.slice(0, 12), ...rankedConfusingQuestionAreas].slice(0, 36);
   } catch (e) {
     pushWarn(e, "confusionRoutes");
   }
+
+  rankedConfusingQuestionAreas = [...confusionCards.slice(0, 14), ...rankedConfusingQuestionAreas]
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 40);
 
   /** PostHog: learner sections + marketing URLs. */
   let rankedWeakLearnerFeatures: RankedWeakArea[] = [];
@@ -815,7 +843,7 @@ export async function loadAdminWeakAreas(q: WeakAreasQuery): Promise<AdminWeakAr
         const friction = 0;
         const checkoutGap = Math.max(0, gapCur - 0.02);
         const score = computeConversionPageScore({ frictionDensity: friction, visitorDropoff: drop, checkoutGap });
-        const trend = pageTrend(prevUv, row.uv);
+        const trend = marketingTrafficTrend(prevUv, row.uv);
         rankedWeakConversionPages.push({
           id: `conv:${row.url}`,
           title: row.url,
