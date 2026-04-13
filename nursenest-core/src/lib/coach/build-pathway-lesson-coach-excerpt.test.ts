@@ -6,7 +6,7 @@ import type { PathwayLessonSection } from "@/lib/lessons/pathway-lesson-types";
 function section(partial: Partial<PathwayLessonSection> & Pick<PathwayLessonSection, "id" | "body">): PathwayLessonSection {
   return {
     heading: "H",
-    kind: "body",
+    kind: "core",
     ...partial,
   };
 }

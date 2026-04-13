@@ -403,6 +403,7 @@ export default async function LessonDetailPage({ params }: Props) {
           record.topicSlug &&
           lessonTopicMatchesTopPriority(record.topicSlug, pathwayStudySnap),
       );
+    const pathwayCoachExcerpt = buildPathwayLessonCoachExcerpt(visible);
     const relatedLessonsDisplay = mergeRelatedLessonDisplayList(
       record.relatedLessonRefs,
       relatedLessonsRaw.filter(pathwayLessonHasRenderableHubSlug),

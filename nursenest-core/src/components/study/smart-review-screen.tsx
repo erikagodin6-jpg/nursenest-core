@@ -4,12 +4,7 @@ import Link from "next/link";
 import { useState, useMemo } from "react";
 import { ChevronDown, BookOpen } from "lucide-react";
 import type { ConfidenceLevel } from "./confidence-selector";
-import {
-  PremiumLockCard,
-  LockedPreviewCard,
-  UpgradePromptCard,
-  usePremiumGateImpression,
-} from "./premium-gate";
+import { PremiumLockCard, LockedPreviewCard, usePremiumGateImpression } from "./premium-gate";
 import { CoachReviewHelper } from "./coach-review-helper";
 import { CoachInterventionBanner } from "./coach-intervention-banner";
 import { detectReviewSessionInterventions, rankInterventions } from "@/lib/coach/study-coach-interventions";
