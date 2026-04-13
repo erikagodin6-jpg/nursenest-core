@@ -23,7 +23,9 @@ export function pathwayRegionAwareExamName(pathway: ExamPathwayDefinition): stri
   if (exam === "REX_PN") return "REx-PN";
   if (exam === "NCLEX_PN") return "NCLEX-PN";
   if (exam === "NCLEX_RN") return "NCLEX-RN";
-  return "NCLEX";
+  if (exam === "NP") return pathway.shortName || pathway.displayName;
+  if (exam === "ALLIED") return pathway.shortName || "Allied health";
+  return pathway.shortName || pathway.displayName;
 }
 
 /**
@@ -42,7 +44,7 @@ export function pathwayLessonHubH1(pathway: ExamPathwayDefinition): string {
     case "rpn":
       return `${examName} (RPN) clinical lessons · ${place} · ${sn}`;
     case "np":
-      return `Nurse practitioner exam review lessons · ${place} · ${sn}`;
+      return `${examName} exam review lessons · ${place} · ${sn}`;
     case "allied":
       return `Allied health exam prep lessons · ${place} · ${sn}`;
     default:

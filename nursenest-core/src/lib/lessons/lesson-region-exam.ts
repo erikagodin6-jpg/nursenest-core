@@ -1,6 +1,6 @@
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 
-export type LessonExamCode = "REX_PN" | "NCLEX_PN" | "NCLEX_RN" | "NCLEX";
+export type LessonExamCode = "REX_PN" | "NCLEX_PN" | "NCLEX_RN" | "NP" | "ALLIED" | "NCLEX";
 export type LessonCountryCode = "CA" | "US" | "GLOBAL";
 export type LessonPriority = "high" | "medium" | "low";
 
@@ -19,6 +19,8 @@ export function resolveLessonContextForPathway(pathway: Pick<ExamPathwayDefiniti
   if (pathway.roleTrack === "lpn" || pathway.roleTrack === "rpn") {
     return { exam: country === "CA" ? "REX_PN" : "NCLEX_PN", country };
   }
+  if (pathway.roleTrack === "np") return { exam: "NP", country };
+  if (pathway.roleTrack === "allied") return { exam: "ALLIED", country };
   return { exam: "NCLEX", country };
 }
 
@@ -31,6 +33,8 @@ export function resolveLessonContextForPathwayId(pathwayId: string): LessonConte
   if (pathwayId.includes("-rpn-rex-pn")) return { exam: "REX_PN", country };
   if (pathwayId.includes("-lpn-nclex-pn")) return { exam: "NCLEX_PN", country };
   if (pathwayId.includes("-rn-nclex-rn")) return { exam: "NCLEX_RN", country };
+  if (pathwayId.includes("-np-")) return { exam: "NP", country };
+  if (pathwayId.includes("-allied-")) return { exam: "ALLIED", country };
   return { exam: "NCLEX", country };
 }
 

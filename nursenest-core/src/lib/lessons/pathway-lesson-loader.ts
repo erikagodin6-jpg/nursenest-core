@@ -266,7 +266,7 @@ function sanitizeExamRelevance(raw: unknown): PathwayLessonExamRelevance | undef
 }
 
 function sanitizeRuntimeExam(raw: unknown): PathwayLessonRuntimeExam | undefined {
-  if (raw === "REX_PN" || raw === "NCLEX_PN" || raw === "NCLEX_RN" || raw === "NCLEX") return raw;
+  if (raw === "REX_PN" || raw === "NCLEX_PN" || raw === "NCLEX_RN" || raw === "NP" || raw === "ALLIED" || raw === "NCLEX") return raw;
   return undefined;
 }
 

@@ -40,6 +40,8 @@ function examNamesForContextExam(exam: string): string[] {
   if (exam === "NCLEX_RN") return ["NCLEX-RN", "RN-CAT", "NCLEX"];
   if (exam === "NCLEX_PN") return ["NCLEX-PN", "RPN-CAT", "NCLEX"];
   if (exam === "REX_PN") return ["REx-PN", "REX-PN", "RPN-CAT"];
+  if (exam === "NP") return ["NP", "CNPLE", "CAN-NP", "FNP", "AGPCNP", "PMHNP", "WHNP", "PNP-PC"];
+  if (exam === "ALLIED") return ["ALLIED"];
   return [exam.replaceAll("_", "-")];
 }
 

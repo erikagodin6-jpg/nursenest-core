@@ -44,7 +44,7 @@ export type PathwayLessonCountryScope = "us" | "ca" | "both";
 
 /** Relative exam weight for prioritization in expansion / hub ordering. */
 export type PathwayLessonExamRelevance = "high_yield" | "core" | "specialty";
-export type PathwayLessonRuntimeExam = "REX_PN" | "NCLEX_PN" | "NCLEX_RN" | "NCLEX";
+export type PathwayLessonRuntimeExam = "REX_PN" | "NCLEX_PN" | "NCLEX_RN" | "NP" | "ALLIED" | "NCLEX";
 export type PathwayLessonRuntimeCountry = "CA" | "US" | "GLOBAL";
 export type PathwayLessonPriority = "high" | "medium" | "low";
 export type PathwayLessonYieldLevel = "must_know" | "common" | "advanced" | "rare";

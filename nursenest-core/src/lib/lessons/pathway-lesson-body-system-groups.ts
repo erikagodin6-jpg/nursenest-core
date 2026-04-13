@@ -47,7 +47,7 @@ export function normalizePathwayLessonSystemLabel(
   system: string | null | undefined,
 ): PathwayLessonSystemLabel {
   const normalizedSystem = normalizeText(system);
-  if (!normalizedSystem) return "fundamentals";
+  if (!normalizedSystem) return "professional-practice-ethics";
   const classified = classifyLearningTopic(normalizedSystem, null);
   return classified.subcategoryId ?? classified.categoryId;
 }
