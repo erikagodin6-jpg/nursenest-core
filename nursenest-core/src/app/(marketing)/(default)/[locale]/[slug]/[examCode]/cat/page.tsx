@@ -23,6 +23,7 @@ import { getOptionalPublicSession } from "@/lib/auth/optional-public-session";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { MarketingPathwayCatViewBeacon } from "@/components/observability/marketing-study-surface-view-beacons";
+import { getExamLabel, getNursingRoleLabel } from "@/lib/labels/nursing-role-labels";
 
 export const dynamic = "force-dynamic";
 export const dynamicParams = true;
@@ -43,9 +44,20 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       const readinessConfig = readinessConfigForPathway(pathway);
       const publicCopy = publicCopyForReadinessConfig(readinessConfig);
       const country = pathway.countrySlug === "canada" ? "Canada" : "United States";
+      const uiCountry = pathway.countrySlug === "canada" ? "CA" : "US";
+      const pnRoleLabel = pathway.examFamily === "NCLEX_PN" || pathway.examFamily === "REX_PN"
+        ? getNursingRoleLabel({ country: uiCountry, role: "PN" })
+        : null;
+      const pnExamLabel = pathway.examFamily === "NCLEX_PN" || pathway.examFamily === "REX_PN"
+        ? getExamLabel({ country: uiCountry, role: "PN" })
+        : null;
+      const resolvedTitle = pnExamLabel ? `${pnExamLabel} Readiness Exam` : publicCopy.title;
+      const resolvedSubtitle = pnRoleLabel
+        ? `${pnRoleLabel} licensing exam`
+        : `${publicCopy.subtitle} for ${pathway.displayName}. Sign in to run a session matched to your pathway.`;
       return {
-        title: `${publicCopy.title} · ${country} | NurseNest`,
-        description: `${publicCopy.subtitle} for ${pathway.displayName}. Sign in to run a session matched to your pathway.`,
+        title: `${resolvedTitle} · ${country} | NurseNest`,
+        description: resolvedSubtitle,
         robots: { index: false, follow: true },
       };
     },
@@ -123,6 +135,15 @@ export default async function PathwayCatEntryPage({ params }: Props) {
   const catShort = catPathwayShortCatLabel(pathway);
   const readinessConfig = readinessConfigForPathway(pathway);
   const publicCopy = publicCopyForReadinessConfig(readinessConfig);
+  const uiCountry = pathway.countrySlug === "canada" ? "CA" : "US";
+  const pnRoleLabel = pathway.examFamily === "NCLEX_PN" || pathway.examFamily === "REX_PN"
+    ? getNursingRoleLabel({ country: uiCountry, role: "PN" })
+    : null;
+  const pnExamLabel = pathway.examFamily === "NCLEX_PN" || pathway.examFamily === "REX_PN"
+    ? getExamLabel({ country: uiCountry, role: "PN" })
+    : null;
+  const publicTitle = pnExamLabel ? `${pnExamLabel} Readiness Exam` : publicCopy.title;
+  const publicSubtitle = pnRoleLabel ? `${pnRoleLabel} licensing exam` : publicCopy.subtitle;
   const howItWorksItems =
     publicCopy.effectiveMode === "production_ready" && readinessConfig.engineType === "CAT"
       ? [
@@ -147,7 +168,11 @@ export default async function PathwayCatEntryPage({ params }: Props) {
           "Adaptive scoring calibrates to your current performance",
           "Use with lessons and question practice while coverage expands",
           ];
-  const primaryCtaLabel = publicCopy.effectiveMode === "production_ready" ? "Start Readiness Exam" : "Start Assessment";
+  const primaryCtaLabel = pnExamLabel
+    ? `Start ${pnExamLabel} Practice`
+    : publicCopy.effectiveMode === "production_ready"
+      ? "Start Readiness Exam"
+      : "Start Assessment";
   const questionsFirstLabel =
     publicCopy.effectiveMode === "production_ready"
       ? "Practice Questions First"
@@ -185,11 +210,11 @@ export default async function PathwayCatEntryPage({ params }: Props) {
         ← {pathway.shortName} overview
       </Link>
       <h1 className="mt-4 text-3xl font-extrabold text-[var(--theme-heading-text)]">
-        {publicCopy.title}
+        {publicTitle}
       </h1>
       <p className="mt-3 text-[var(--theme-muted-text)]">
-        {publicCopy.subtitle} for <strong className="text-[var(--theme-heading-text)]">{countryLabel}</strong> (
-        {pathway.displayName}).
+        {publicSubtitle} for <strong className="text-[var(--theme-heading-text)]">{countryLabel}</strong>
+        {pnRoleLabel ? "." : <> ({pathway.displayName}).</>}
       </p>
       {publicCopy.strongSimulationClaim ? (
         <p className="mt-2 text-sm font-medium text-[var(--theme-heading-text)]">

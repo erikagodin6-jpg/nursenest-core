@@ -50,6 +50,7 @@ import { formatEyebrow, formatSentenceCase, formatTitleCase } from "@/lib/format
 import { CONTINUE_STUDYING_CTA, PRIMARY_CTA } from "@/lib/copy/cta-copy";
 import { THEME_OPTIONS } from "@/lib/theme/theme-registry";
 import { CountrySelector } from "@/components/layout/global-context-switcher";
+import { getNursingRoleLabel } from "@/lib/labels/nursing-role-labels";
 
 /** Keep desktop nav pills single-line and compact so the full global IA fits cleanly. */
 const NAV_LINK_CLASS =
@@ -150,7 +151,7 @@ function offeringIdForTier(tier: LearnerTier): CountryExamOfferingId {
 
 function examIndicatorLabel(country: LearnerCountry, tier: LearnerTier, alliedProfessionKey?: string | null): string {
   const regionLabel = country === "CA" ? "Canada" : "US";
-  if (tier === "LVN_LPN") return `${regionLabel} PN`;
+  if (tier === "LVN_LPN") return `${regionLabel} ${getNursingRoleLabel({ country, role: "PN" })}`;
   if (tier === "RPN") return `${regionLabel} RPN`;
   if (tier === "ALLIED") {
     if (alliedProfessionKey) {
@@ -182,6 +183,7 @@ function createLearnerNavLinks(locale: string, pathwayId: string | null): Header
 }
 
 function createMegaMenus(region: "US" | "CA"): MegaMenuConfig[] {
+  const pnRoleLabel = getNursingRoleLabel({ country: region, role: "PN" });
   const rnHub = marketingExamHubPath(region, "rn");
   const pnHub = marketingExamHubPath(region, "pn");
   const npHub = marketingExamHubPath(region, "np");
@@ -233,7 +235,7 @@ function createMegaMenus(region: "US" | "CA"): MegaMenuConfig[] {
     },
     {
       key: "pn",
-      label: "PN / RPN",
+      label: pnRoleLabel,
       hubHref: pnHub,
       hubDescription: "Choose the hub for your region to start pathway-specific prep.",
       hubBadge: region === "CA" ? "Recommended for Canada" : "Recommended for US",

@@ -15,6 +15,7 @@ import { loginWithCallback, rnQuestions } from "@/lib/marketing/marketing-entry-
 import { PRIMARY_CTA } from "@/lib/copy/cta-copy";
 import { formatTitleCase } from "@/lib/format/text-case";
 import { SiteFooterFeedbackTrigger } from "@/components/layout/site-footer-feedback-trigger";
+import { getNursingRoleLabel } from "@/lib/labels/nursing-role-labels";
 
 function formatFooterNode(children: React.ReactNode, locale: string): React.ReactNode {
   return typeof children === "string" ? formatTitleCase(children, locale) : children;
@@ -53,6 +54,7 @@ export function SiteFooter() {
   const navChromeStyle = getNavChromeStyle(theme);
   const { region } = useNursenestRegion();
   const examHubs = marketingExamPrepHubs(region);
+  const pnRoleLabel = getNursingRoleLabel({ country: region, role: "PN" });
   const learnerSignInHref = withMarketingLocale(locale, loginWithCallback("/app"));
   const startPracticingHref = withMarketingLocale(locale, "/signup?callbackUrl=%2Fapp");
 
@@ -73,7 +75,7 @@ export function SiteFooter() {
                 <SiteBrandLogoMark variant="footer" logoVariant="leaf" />
               </div>
               <p className="max-w-xs text-sm leading-relaxed text-[var(--footer-muted)]">
-                Exam-focused prep for RN, PN / RPN, NP, and Allied Health learners across the United States and Canada.
+                Exam-focused prep for RN, {pnRoleLabel}, NP, and Allied Health learners across the United States and Canada.
               </p>
             </div>
 
@@ -81,7 +83,7 @@ export function SiteFooter() {
               <h3 className="text-sm font-semibold tracking-wide text-[var(--footer-fg)]">{formatTitleCase("Exam Pathways", locale)}</h3>
               <ul className="space-y-2.5 text-sm text-[var(--footer-fg)]">
                 <li><FLink href={examHubs.rn}>RN</FLink></li>
-                <li><FLink href={examHubs.pn}>PN / RPN</FLink></li>
+                <li><FLink href={examHubs.pn}>{pnRoleLabel}</FLink></li>
                 <li><FLink href={examHubs.np}>NP</FLink></li>
                 <li><FLink href={examHubs.allied}>Allied Health</FLink></li>
               </ul>
