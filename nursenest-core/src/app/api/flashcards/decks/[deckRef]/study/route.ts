@@ -90,6 +90,11 @@ export async function GET(req: NextRequest, { params }: Props) {
 
   try {
     if (usePreviewOnly) {
+      const totalPreviewAvailable = await withRetry(() =>
+        prisma.flashcard.count({
+          where: { deckId: deck.id, status: ContentStatus.PUBLISHED },
+        }),
+      );
       const cards = await withRetry(() =>
         prisma.flashcard.findMany({
           where: { deckId: deck.id, status: ContentStatus.PUBLISHED },
@@ -132,8 +137,8 @@ export async function GET(req: NextRequest, { params }: Props) {
         sessionMeta: {
           requestedCount,
           returnedCount: cards.length,
-          totalAvailable: cards.length,
-          hasMore: false,
+          totalAvailable: totalPreviewAvailable,
+          hasMore: cards.length < totalPreviewAvailable,
         },
       };
       const approx = estimateJsonUtf8Bytes(body);

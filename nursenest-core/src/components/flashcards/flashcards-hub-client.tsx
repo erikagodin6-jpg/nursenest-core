@@ -236,19 +236,6 @@ export function FlashcardsHubClient({
     setSavedStats(countSavedStudyItems());
   }, [starredOnly, savedOnly, notesOnly, revisitOnly]);
 
-  const hasPersistenceFilters = starredOnly || savedOnly || notesOnly || revisitOnly;
-  const persistenceStateIds = hasPersistenceFilters
-    ? getStudyItemIdsMatchingFilters(
-        {
-          starredOnly,
-          savedOnly,
-          notesOnly,
-          confusingOnly: revisitOnly,
-        },
-        500,
-      )
-    : [];
-
   const runBuilderSummary = useCallback(async () => {
     setBuilderLoading(true);
     setBuilderError(null);
@@ -261,11 +248,6 @@ export function FlashcardsHubClient({
       if (shuffleOn) params.set("shuffle", "1");
       if (weakOnly) params.set("weakOnly", "1");
       if (incorrectOnly) params.set("incorrectOnly", "1");
-      if (starredOnly) params.set("starredOnly", "1");
-      if (savedOnly) params.set("savedOnly", "1");
-      if (notesOnly) params.set("notesOnly", "1");
-      if (revisitOnly) params.set("revisitOnly", "1");
-      if (persistenceStateIds.length > 0) params.set("stateIds", persistenceStateIds.join(","));
       const res = await fetch(`/api/flashcards/custom-session?${params.toString()}`, { credentials: "include" });
       const json = (await res.json()) as {
         summary?: BuilderSummary;
@@ -283,7 +265,7 @@ export function FlashcardsHubClient({
     } finally {
       setBuilderLoading(false);
     }
-  }, [filters.pathwayId, selectedCategoryIds, cardLimit, studyMode, shuffleOn, weakOnly, incorrectOnly, starredOnly, savedOnly, notesOnly, revisitOnly, persistenceStateIds]);
+  }, [filters.pathwayId, selectedCategoryIds, cardLimit, studyMode, shuffleOn, weakOnly, incorrectOnly]);
 
   useEffect(() => {
     void runBuilderSummary();
@@ -307,7 +289,6 @@ export function FlashcardsHubClient({
   if (savedOnly) builderParams.set("savedOnly", "1");
   if (notesOnly) builderParams.set("notesOnly", "1");
   if (revisitOnly) builderParams.set("revisitOnly", "1");
-  if (persistenceStateIds.length > 0) builderParams.set("stateIds", persistenceStateIds.join(","));
   const startHref = `/app/flashcards/custom?${builderParams.toString()}`;
   const previewCustomCards = async () => {
     setBuilderError(null);

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { ActiveStudySession, type ActiveStudyCard } from "@/components/study/active-study-session";
+import { cardMatchesStudyFilters, hasActiveStudyFilters } from "@/lib/flashcards/study-session-persistence";
 
 type SessionPayload = {
   ok: boolean;
@@ -75,6 +76,9 @@ export function FlashcardCustomStudyClient() {
       try {
         const params = new URLSearchParams(query);
         params.set("includeCards", "1");
+        if (hasActiveStudyFilters(localFilters)) {
+          params.set("cardLimit", "all");
+        }
         const res = await fetch(`/api/flashcards/custom-session?${params.toString()}`, { credentials: "include" });
         const json = (await res.json()) as SessionPayload & { error?: string };
         if (!res.ok) throw new Error(json.error ?? "Unable to load custom session");
@@ -88,7 +92,7 @@ export function FlashcardCustomStudyClient() {
     return () => {
       active = false;
     };
-  }, [query]);
+  }, [query, localFilters]);
 
   if (loading) {
     return <div className="mx-auto max-w-3xl px-4 py-10 text-sm text-[var(--theme-muted-text)]">Building your custom flashcard session…</div>;
@@ -109,8 +113,10 @@ export function FlashcardCustomStudyClient() {
     .filter((c) => payload.summary.selectedCategories.includes(c.id))
     .map((c) => c.title);
 
+  const filteredCards = payload.cards.filter((card) => cardMatchesStudyFilters(card.id, localFilters));
   const cardLimit = parseCardLimitValue(payload.summary.cardLimit);
-  const activeCards: ActiveStudyCard[] = payload.cards.map((card) => ({
+  const limitedCards = Number.isFinite(cardLimit) ? filteredCards.slice(0, cardLimit) : filteredCards;
+  const activeCards: ActiveStudyCard[] = limitedCards.map((card) => ({
     id: card.id,
     prompt: card.front,
     answer: card.back,
@@ -142,7 +148,12 @@ export function FlashcardCustomStudyClient() {
         </p>
         {enabledQuickFilters.length > 0 ? (
           <p className="mt-1 text-sm text-[var(--theme-muted-text)]">
-            Review Filters: {enabledQuickFilters.join(", ")} · Session Items: {activeCards.length}
+            Local Review Filters: {enabledQuickFilters.join(", ")} · Session Items: {activeCards.length}
+          </p>
+        ) : null}
+        {enabledQuickFilters.length > 0 ? (
+          <p className="mt-1 text-sm text-[var(--theme-muted-text)]">
+            Estimated before local review filters: {payload.summary.matchingCards}
           </p>
         ) : null}
       </div>
