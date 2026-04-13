@@ -1,0 +1,386 @@
+{
+  "generatedAt": "2026-04-13T22:50:08.838Z",
+  "config": {
+    "maxItems": 25,
+    "includeFlashcards": true,
+    "batch": "cardiac"
+  },
+  "questionCount": 0,
+  "flashcardCount": 25,
+  "questions": [],
+  "flashcards": [
+    {
+      "id": "ffa4d12a-2ecf-44a0-a33e-f25e297be96e",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:36.488Z",
+      "batchId": "cardiac",
+      "applied": false,
+      "whyCorrect": "Clinical reasoning is not yet on file for this item.",
+      "clinicalPearl": "A concise clinical pearl is not available for this item yet.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": "source_content_too_weak",
+      "flags": [
+        "too_short",
+        "too_short"
+      ]
+    },
+    {
+      "id": "fea0a188-bb86-44e1-bdef-4b223e4ef39b",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:36.400Z",
+      "batchId": "cardiac",
+      "applied": true,
+      "whyCorrect": "2+ of: Temp >38°C or 90, RR >20 or PaCO2 12,000 or 10% bands",
+      "clinicalPearl": "2+ of: Temp >38°C or 90, RR >20 or PaCO2 12,000 or 10% bands Prioritize perfusion and rhythm instability; escalate rapidly for ischemic or hemodynamic red flags.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": null,
+      "flags": []
+    },
+    {
+      "id": "fb9a9d52-9342-44c6-9eb5-c06b6c41240d",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:36.219Z",
+      "batchId": "cardiac",
+      "applied": true,
+      "whyCorrect": "Hypotension, distended neck veins, muffled heart sounds",
+      "clinicalPearl": "Hypotension, distended neck veins, muffled heart sounds Prioritize perfusion and rhythm instability; escalate rapidly for ischemic or hemodynamic red flags.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": null,
+      "flags": [
+        "too_short"
+      ]
+    },
+    {
+      "id": "fafb89df-d57a-4c62-b8cb-3290bb4bc8b6",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:36.200Z",
+      "batchId": "cardiac",
+      "applied": true,
+      "whyCorrect": "Administer a diuretic as ordered.",
+      "clinicalPearl": "Administer a diuretic as ordered. Prioritize perfusion and rhythm instability; escalate rapidly for ischemic or hemodynamic red flags.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": null,
+      "flags": [
+        "too_short"
+      ]
+    },
+    {
+      "id": "fa96270f-38a9-4d7a-af24-2653831e1dfe",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:36.166Z",
+      "batchId": "cardiac",
+      "applied": false,
+      "whyCorrect": "Clinical reasoning is not yet on file for this item.",
+      "clinicalPearl": "A concise clinical pearl is not available for this item yet.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": "source_content_too_weak",
+      "flags": [
+        "too_short",
+        "too_short"
+      ]
+    },
+    {
+      "id": "fa38d0d8-b442-4adb-9ac6-5773f50f4ebf",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:36.150Z",
+      "batchId": "cardiac",
+      "applied": false,
+      "whyCorrect": "Clinical reasoning is not yet on file for this item.",
+      "clinicalPearl": "A concise clinical pearl is not available for this item yet.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": "source_content_too_weak",
+      "flags": [
+        "too_short",
+        "too_short"
+      ]
+    },
+    {
+      "id": "f97684f0-50b9-42dc-b29e-72c908e169c0",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:36.101Z",
+      "batchId": "cardiac",
+      "applied": false,
+      "whyCorrect": "Clinical reasoning is not yet on file for this item.",
+      "clinicalPearl": "A concise clinical pearl is not available for this item yet.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": "source_content_too_weak",
+      "flags": [
+        "too_short",
+        "too_short"
+      ]
+    },
+    {
+      "id": "f5e49ed6-0255-45a5-911f-4353fae0822a",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:35.855Z",
+      "batchId": "cardiac",
+      "applied": false,
+      "whyCorrect": "Clinical reasoning is not yet on file for this item.",
+      "clinicalPearl": "A concise clinical pearl is not available for this item yet.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": "source_content_too_weak",
+      "flags": [
+        "too_short",
+        "too_short"
+      ]
+    },
+    {
+      "id": "f52e0986-2c4d-41b7-9b18-75c3b4076df4",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:35.787Z",
+      "batchId": "cardiac",
+      "applied": true,
+      "whyCorrect": "Post-menopausal women have an increased risk of cardiovascular disease.",
+      "clinicalPearl": "Post-menopausal women have an increased risk of cardiovascular disease. Prioritize perfusion and rhythm instability; escalate rapidly for ischemic or hemodynamic red flags.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": null,
+      "flags": [
+        "too_short"
+      ]
+    },
+    {
+      "id": "f38bf893-1ee0-463a-a413-a375cf815913",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:35.645Z",
+      "batchId": "cardiac",
+      "applied": true,
+      "whyCorrect": "A) Take the medication only when you experience chest pain.",
+      "clinicalPearl": "A) Take the medication only when you experience chest pain. Prioritize perfusion and rhythm instability; escalate rapidly for ischemic or hemodynamic red flags.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": null,
+      "flags": [
+        "too_short"
+      ]
+    },
+    {
+      "id": "f2927480-6c0b-4b0f-bb10-5bc6ca06c89d",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:35.540Z",
+      "batchId": "cardiac",
+      "applied": true,
+      "whyCorrect": "1 mg IV/IO every 3–5 minutes.",
+      "clinicalPearl": "1 mg IV/IO every 3–5 minutes. Prioritize perfusion and rhythm instability; escalate rapidly for ischemic or hemodynamic red flags.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": null,
+      "flags": [
+        "too_short"
+      ]
+    },
+    {
+      "id": "f1b07415-3e5e-46a1-b680-b37b2390d0f9",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:35.467Z",
+      "batchId": "cardiac",
+      "applied": true,
+      "whyCorrect": "Progressive ventricular dilation, wall thinning, and shape change from spherical transformation of the damaged ventricle",
+      "clinicalPearl": "Progressive ventricular dilation, wall thinning, and shape change from spherical transformation of the damaged ventricle Prioritize perfusion and rhythm instability; escalate rapidly for ischemic or hemodynamic red flags.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": null,
+      "flags": []
+    },
+    {
+      "id": "efe6f5ab-0f60-45d9-bf3c-4215631c0c96",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:35.307Z",
+      "batchId": "cardiac",
+      "applied": true,
+      "whyCorrect": "The inferior wall of the left ventricle",
+      "clinicalPearl": "The inferior wall of the left ventricle Prioritize perfusion and rhythm instability; escalate rapidly for ischemic or hemodynamic red flags.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": null,
+      "flags": [
+        "too_short"
+      ]
+    },
+    {
+      "id": "ec1997ba-4aca-4805-9bc2-643aa6fed27b",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:35.037Z",
+      "batchId": "cardiac",
+      "applied": true,
+      "whyCorrect": "Convex (tombstone) and localized to specific coronary artery territory",
+      "clinicalPearl": "Convex (tombstone) and localized to specific coronary artery territory Prioritize perfusion and rhythm instability; escalate rapidly for ischemic or hemodynamic red flags.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": null,
+      "flags": [
+        "too_short"
+      ]
+    },
+    {
+      "id": "ea9a9dc4-e8be-43de-a4e4-19f7aaae4d93",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:34.947Z",
+      "batchId": "cardiac",
+      "applied": true,
+      "whyCorrect": "Lactate >4 mmol/L indicates severe tissue hypoperfusion with high mortality.",
+      "clinicalPearl": "Lactate >4 mmol/L indicates severe tissue hypoperfusion with high mortality. Prioritize perfusion and rhythm instability; escalate rapidly for ischemic or hemodynamic red flags.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": null,
+      "flags": [
+        "too_short"
+      ]
+    },
+    {
+      "id": "e79dc963-1d5e-4b1d-a32b-54ec9a104f67",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:34.674Z",
+      "batchId": "cardiac",
+      "applied": true,
+      "whyCorrect": "Myoglobin (1-3 hrs) → CK-MB (3-6 hrs) → Troponin I/T (3-6 hrs, peaks 12-24 hrs, elevated 7-14 days)",
+      "clinicalPearl": "Myoglobin (1-3 hrs) → CK-MB (3-6 hrs) → Troponin I/T (3-6 hrs, peaks 12-24 hrs, elevated 7-14 days) Prioritize perfusion and rhythm instability; escalate rapidly for ischemic or hemodynamic red flags.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": null,
+      "flags": []
+    },
+    {
+      "id": "e6d4b0ed-f8a8-4d39-8b02-4dff9b7f87d5",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:34.602Z",
+      "batchId": "cardiac",
+      "applied": true,
+      "whyCorrect": "The patient is likely dehydrated.",
+      "clinicalPearl": "The patient is likely dehydrated. Prioritize perfusion and rhythm instability; escalate rapidly for ischemic or hemodynamic red flags.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": null,
+      "flags": [
+        "too_short"
+      ]
+    },
+    {
+      "id": "e56e69c6-ce97-4cb5-b871-5d5525a74c3b",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:34.501Z",
+      "batchId": "cardiac",
+      "applied": false,
+      "whyCorrect": "Clinical reasoning is not yet on file for this item.",
+      "clinicalPearl": "A concise clinical pearl is not available for this item yet.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": "source_content_too_weak",
+      "flags": [
+        "too_short",
+        "too_short"
+      ]
+    },
+    {
+      "id": "e31e1a1a-9af7-4a68-aa05-02a4a12a4a26",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:34.325Z",
+      "batchId": "cardiac",
+      "applied": false,
+      "whyCorrect": "Clinical reasoning is not yet on file for this item.",
+      "clinicalPearl": "A concise clinical pearl is not available for this item yet.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": "source_content_too_weak",
+      "flags": [
+        "too_short",
+        "too_short"
+      ]
+    },
+    {
+      "id": "e2eb835a-4895-4fcf-9cbe-740a0ed5c3fc",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:34.295Z",
+      "batchId": "cardiac",
+      "applied": false,
+      "whyCorrect": "Clinical reasoning is not yet on file for this item.",
+      "clinicalPearl": "A concise clinical pearl is not available for this item yet.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": "source_content_too_weak",
+      "flags": [
+        "too_short",
+        "too_short"
+      ]
+    },
+    {
+      "id": "e2513eeb-52ad-49b2-bd4d-1e128405055d",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:34.257Z",
+      "batchId": "cardiac",
+      "applied": true,
+      "whyCorrect": "Prolonged PR interval, widened QRS, bradycardia, heart block, cardiac arrest at very high levels (>10 mEq/L)",
+      "clinicalPearl": "Prolonged PR interval, widened QRS, bradycardia, heart block, cardiac arrest at very high levels (>10 mEq/L) Prioritize perfusion and rhythm instability; escalate rapidly for ischemic or hemodynamic red flags.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": null,
+      "flags": []
+    },
+    {
+      "id": "df1fad42-4ec1-45d2-8492-1539f179b7bd",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:34.068Z",
+      "batchId": "cardiac",
+      "applied": false,
+      "whyCorrect": "Clinical reasoning is not yet on file for this item.",
+      "clinicalPearl": "A concise clinical pearl is not available for this item yet.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": "source_content_too_weak",
+      "flags": [
+        "too_short",
+        "too_short"
+      ]
+    },
+    {
+      "id": "dd14eefe-52c9-405d-815c-89db1a489ccd",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:33.877Z",
+      "batchId": "cardiac",
+      "applied": true,
+      "whyCorrect": "Non-invasive visualization of coronary arteries using IV contrast and CT. Good for ruling out CAD (high negative predictive value) in intermediate-risk patients",
+      "clinicalPearl": "Non-invasive visualization of coronary arteries using IV contrast and CT. Prioritize perfusion and rhythm instability; escalate rapidly for ischemic or hemodynamic red flags.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": null,
+      "flags": []
+    },
+    {
+      "id": "dcac557d-ae70-43a2-9e3f-1ad2447b1c8f",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:33.846Z",
+      "batchId": "cardiac",
+      "applied": false,
+      "whyCorrect": "Clinical reasoning is not yet on file for this item.",
+      "clinicalPearl": "A concise clinical pearl is not available for this item yet.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": "source_content_too_weak",
+      "flags": [
+        "too_short",
+        "too_short"
+      ]
+    },
+    {
+      "id": "db4d59c1-49c7-48ef-838e-b4a4078b059c",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:33.777Z",
+      "batchId": "cardiac",
+      "applied": true,
+      "whyCorrect": "Troponin is more specific to cardiac muscle, rises at same time as CK-MB, but stays elevated 7-14 days vs 2-3 days",
+      "clinicalPearl": "Troponin is more specific to cardiac muscle, rises at same time as CK-MB, but stays elevated 7-14 days vs 2-3 days Prioritize perfusion and rhythm instability; escalate rapidly for ischemic or hemodynamic red flags.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": null,
+      "flags": []
+    }
+  ]
+}

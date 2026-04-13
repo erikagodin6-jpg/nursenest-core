@@ -1,0 +1,320 @@
+{
+  "generatedAt": "2026-04-13T22:48:28.011Z",
+  "config": {
+    "maxItems": 20,
+    "includeFlashcards": true,
+    "batch": "electrolytes"
+  },
+  "questionCount": 0,
+  "flashcardCount": 20,
+  "questions": [],
+  "flashcards": [
+    {
+      "id": "ff8b656b-09ed-4ed6-a842-ef1b5a0037db",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:36.475Z",
+      "batchId": "electrolytes",
+      "applied": false,
+      "whyCorrect": "Clinical reasoning is not yet on file for this item.",
+      "clinicalPearl": "A concise clinical pearl is not available for this item yet.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": "source_content_too_weak",
+      "flags": [
+        "too_short",
+        "too_short"
+      ]
+    },
+    {
+      "id": "fd22218c-9bb6-4d33-914d-638ebc7a9528",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:36.315Z",
+      "batchId": "electrolytes",
+      "applied": false,
+      "whyCorrect": "Clinical reasoning is not yet on file for this item.",
+      "clinicalPearl": "A concise clinical pearl is not available for this item yet.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": "source_content_too_weak",
+      "flags": [
+        "too_short",
+        "too_short"
+      ]
+    },
+    {
+      "id": "f931769d-46f5-411c-9a10-faee0fe5a350",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:36.092Z",
+      "batchId": "electrolytes",
+      "applied": true,
+      "whyCorrect": "Low ADH → dilute urine → hypernatremia (diabetes insipidus)",
+      "clinicalPearl": "Low ADH → dilute urine → hypernatremia (diabetes insipidus) Trend labs with symptoms and ECG changes; treat unstable findings first.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": null,
+      "flags": [
+        "too_short"
+      ]
+    },
+    {
+      "id": "f6417655-8f88-41b7-9b69-d4ff6d35bcc2",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:35.891Z",
+      "batchId": "electrolytes",
+      "applied": true,
+      "whyCorrect": "Potassium (hypokalemia causes U waves; loop diuretics waste potassium)",
+      "clinicalPearl": "Potassium (hypokalemia causes U waves; loop diuretics waste potassium) Trend labs with symptoms and ECG changes; treat unstable findings first.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": null,
+      "flags": [
+        "too_short"
+      ]
+    },
+    {
+      "id": "f3f754be-fc45-4669-ba67-c29b9cf85421",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:35.683Z",
+      "batchId": "electrolytes",
+      "applied": true,
+      "whyCorrect": "Dehydration, excessive sodium intake, diabetes insipidus",
+      "clinicalPearl": "Dehydration, excessive sodium intake, diabetes insipidus Trend labs with symptoms and ECG changes; treat unstable findings first.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": null,
+      "flags": [
+        "too_short"
+      ]
+    },
+    {
+      "id": "f36b66ae-c491-4bda-956c-892e06b37998",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:35.627Z",
+      "batchId": "electrolytes",
+      "applied": true,
+      "whyCorrect": "Adequate intake of dairy, leafy greens, and fortified foods.",
+      "clinicalPearl": "Adequate intake of dairy, leafy greens, and fortified foods. Trend labs with symptoms and ECG changes; treat unstable findings first.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": null,
+      "flags": [
+        "too_short"
+      ]
+    },
+    {
+      "id": "ed9b0c70-6a48-40bb-b334-579c9f5f93e2",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:35.154Z",
+      "batchId": "electrolytes",
+      "applied": true,
+      "whyCorrect": "Dehydration, diabetes insipidus, excessive sodium intake, watery diarrhea, fever",
+      "clinicalPearl": "Dehydration, diabetes insipidus, excessive sodium intake, watery diarrhea, fever Trend labs with symptoms and ECG changes; treat unstable findings first.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": null,
+      "flags": [
+        "too_short"
+      ]
+    },
+    {
+      "id": "ed006acf-c96d-4681-87ed-a79d87330479",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:35.129Z",
+      "batchId": "electrolytes",
+      "applied": true,
+      "whyCorrect": "They can cause osteoporosis and hypocalcemia.",
+      "clinicalPearl": "They can cause osteoporosis and hypocalcemia. Trend labs with symptoms and ECG changes; treat unstable findings first.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": null,
+      "flags": [
+        "too_short"
+      ]
+    },
+    {
+      "id": "ea94bc01-5132-4d74-b2ab-405f95e32558",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:34.943Z",
+      "batchId": "electrolytes",
+      "applied": false,
+      "whyCorrect": "Clinical reasoning is not yet on file for this item.",
+      "clinicalPearl": "A concise clinical pearl is not available for this item yet.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": "source_content_too_weak",
+      "flags": [
+        "too_short",
+        "too_short"
+      ]
+    },
+    {
+      "id": "e92744a0-af18-4a4b-b69c-41e718755f3d",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:34.839Z",
+      "batchId": "electrolytes",
+      "applied": true,
+      "whyCorrect": "Calcium is essential for the coagulation cascade.",
+      "clinicalPearl": "Calcium is essential for the coagulation cascade. Trend labs with symptoms and ECG changes; treat unstable findings first.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": null,
+      "flags": [
+        "too_short"
+      ]
+    },
+    {
+      "id": "e887374b-9f8b-4c2a-8bc0-6cfb9f683ed3",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:34.760Z",
+      "batchId": "electrolytes",
+      "applied": true,
+      "whyCorrect": "Osmotic demyelination syndrome (central pontine myelinolysis)",
+      "clinicalPearl": "Osmotic demyelination syndrome (central pontine myelinolysis) Trend labs with symptoms and ECG changes; treat unstable findings first.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": null,
+      "flags": [
+        "too_short"
+      ]
+    },
+    {
+      "id": "e841fd4f-47b5-4460-9245-363f26d04895",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:34.735Z",
+      "batchId": "electrolytes",
+      "applied": false,
+      "whyCorrect": "Clinical reasoning is not yet on file for this item.",
+      "clinicalPearl": "A concise clinical pearl is not available for this item yet.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": "source_content_too_weak",
+      "flags": [
+        "too_short",
+        "too_short"
+      ]
+    },
+    {
+      "id": "e64d828c-8e99-4904-8ee8-97d7cf5d66f1",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:34.560Z",
+      "batchId": "electrolytes",
+      "applied": false,
+      "whyCorrect": "Clinical reasoning is not yet on file for this item.",
+      "clinicalPearl": "A concise clinical pearl is not available for this item yet.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": "source_content_too_weak",
+      "flags": [
+        "too_short",
+        "too_short"
+      ]
+    },
+    {
+      "id": "e1e47f76-4f77-4994-9163-44dbdec40708",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:34.222Z",
+      "batchId": "electrolytes",
+      "applied": false,
+      "whyCorrect": "Clinical reasoning is not yet on file for this item.",
+      "clinicalPearl": "A concise clinical pearl is not available for this item yet.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": "source_content_too_weak",
+      "flags": [
+        "too_short",
+        "too_short"
+      ]
+    },
+    {
+      "id": "df62d566-8272-457c-9aca-abb5a22c4907",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:34.092Z",
+      "batchId": "electrolytes",
+      "applied": true,
+      "whyCorrect": "Dark leafy greens, nuts, seeds, whole grains, dark chocolate, avocados, beans",
+      "clinicalPearl": "Dark leafy greens, nuts, seeds, whole grains, dark chocolate, avocados, beans Trend labs with symptoms and ECG changes; treat unstable findings first.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": null,
+      "flags": [
+        "too_short"
+      ]
+    },
+    {
+      "id": "de304f79-560e-4527-ae12-cb8d15224152",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:33.980Z",
+      "batchId": "electrolytes",
+      "applied": true,
+      "whyCorrect": "Water follows sodium — where sodium goes, water follows (osmotic pull)",
+      "clinicalPearl": "Water follows sodium — where sodium goes, water follows (osmotic pull) Trend labs with symptoms and ECG changes; treat unstable findings first.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": null,
+      "flags": [
+        "too_short"
+      ]
+    },
+    {
+      "id": "dd94ee71-3ecb-49c1-ae86-e0d2862e5d46",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:33.921Z",
+      "batchId": "electrolytes",
+      "applied": true,
+      "whyCorrect": "Dairy products, leafy greens, and fortified foods",
+      "clinicalPearl": "Dairy products, leafy greens, and fortified foods Trend labs with symptoms and ECG changes; treat unstable findings first.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": null,
+      "flags": [
+        "too_short"
+      ]
+    },
+    {
+      "id": "dafb633c-fa49-4651-acd9-11a6b4c9d4a8",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:33.753Z",
+      "batchId": "electrolytes",
+      "applied": true,
+      "whyCorrect": "Administer hypotonic fluids (0.45% NS or D5W) to replace free water.",
+      "clinicalPearl": "Administer hypotonic fluids (0.45% NS or D5W) to replace free water. Trend labs with symptoms and ECG changes; treat unstable findings first.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": null,
+      "flags": [
+        "too_short"
+      ]
+    },
+    {
+      "id": "dad32f4b-fc24-44f0-ba9b-6e4b85e7d8e4",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:33.746Z",
+      "batchId": "electrolytes",
+      "applied": false,
+      "whyCorrect": "Clinical reasoning is not yet on file for this item.",
+      "clinicalPearl": "A concise clinical pearl is not available for this item yet.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": "source_content_too_weak",
+      "flags": [
+        "too_short",
+        "too_short"
+      ]
+    },
+    {
+      "id": "d673c1d1-e9f4-4ea4-b551-de9b2d8c10ea",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:33.457Z",
+      "batchId": "electrolytes",
+      "applied": true,
+      "whyCorrect": "Renal failure, ACE inhibitors/ARBs, potassium-sparing diuretics, crush injuries, acidosis, burns",
+      "clinicalPearl": "Renal failure, ACE inhibitors/ARBs, potassium-sparing diuretics, crush injuries, acidosis, burns Trend labs with symptoms and ECG changes; treat unstable findings first.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": null,
+      "flags": [
+        "too_short"
+      ]
+    }
+  ]
+}

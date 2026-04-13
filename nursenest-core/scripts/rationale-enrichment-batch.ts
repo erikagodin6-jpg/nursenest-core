@@ -58,7 +58,7 @@ async function main() {
       ...(args.pathwayId ? { pathwayId: args.pathwayId } : {}),
     },
     orderBy: { updatedAt: "desc" },
-    take: 4000,
+    take: 25000,
     select: {
       id: true,
       stem: true,
@@ -124,7 +124,7 @@ async function main() {
         ...(args.pathwayId ? { deck: { pathwayId: args.pathwayId } } : {}),
       },
       orderBy: { updatedAt: "desc" },
-      take: 4000,
+      take: 25000,
       select: {
         id: true,
         front: true,

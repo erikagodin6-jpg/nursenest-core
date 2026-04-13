@@ -3,7 +3,7 @@ import { stripToPlainText } from "@/lib/content-quality/plain-text";
 export const HIGH_YIELD_RATIONALE_BATCHES = [
   {
     id: "electrolytes",
-    patterns: [/\belectrolyte|potassium|hyperkal|hypokal|sodium|hyponat|hypernat|calcium|magnesium\b/i],
+    patterns: [/\belectrolyte|potassium|hyperkal|hypokal|sodium|hyponat|hypernat|calcium|magnesium|clinical chemistry|fluid balance\b/i],
     examTip: "Trend labs with symptoms and ECG changes; treat unstable findings first.",
   },
   {
@@ -13,12 +13,12 @@ export const HIGH_YIELD_RATIONALE_BATCHES = [
   },
   {
     id: "cardiac",
-    patterns: [/\bcardiac|acs|stemi|nstemi|angina|arrhythm|heart failure|troponin|ecg\b/i],
+    patterns: [/\bcardiac|cardiovascular|acs|stemi|nstemi|angina|arrhythm|heart failure|troponin|ecg|hemodynamic|perfusion\b/i],
     examTip: "Prioritize perfusion and rhythm instability; escalate rapidly for ischemic or hemodynamic red flags.",
   },
   {
     id: "respiratory",
-    patterns: [/\brespiratory|hypox|oxygenation|ventilat|copd|asthma|peep|airway\b/i],
+    patterns: [/\brespiratory|hypox|oxygenation|ventilat|mechanical ventilation|copd|asthma|peep|airway\b/i],
     examTip: "Address airway and oxygenation first, then reassess response before advancing therapy.",
   },
   {
@@ -215,13 +215,31 @@ export function buildControlledRationaleEnrichment(seed: ControlledRationaleSeed
     };
   }
 
+  const whyCorrect = buildWhyCorrect(seed);
+  const whyWrong = buildWhyWrong(seed);
+  const clinicalPearl = buildClinicalPearl(seed, batchId);
+  const topicAnchor = buildTopicAnchor(seed);
+
+  const hasMinimumSubstance = wordCount(whyCorrect) >= 10 && wordCount(clinicalPearl) >= 8;
+  if (!hasMinimumSubstance) {
+    return {
+      batchId,
+      applied: false,
+      whyCorrect: "Clinical reasoning is not yet on file for this item.",
+      whyWrong: "Detailed distractor explanations are not available for this item yet.",
+      clinicalPearl: "A concise clinical pearl is not available for this item yet.",
+      topicAnchor,
+      skippedReason: "below_minimum_substance_threshold",
+    };
+  }
+
   return {
     batchId,
     applied: true,
-    whyCorrect: buildWhyCorrect(seed),
-    whyWrong: buildWhyWrong(seed),
-    clinicalPearl: buildClinicalPearl(seed, batchId),
-    topicAnchor: buildTopicAnchor(seed),
+    whyCorrect,
+    whyWrong,
+    clinicalPearl,
+    topicAnchor,
   };
 }
 

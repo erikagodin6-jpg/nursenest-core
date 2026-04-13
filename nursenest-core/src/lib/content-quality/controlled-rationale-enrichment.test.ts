@@ -24,7 +24,10 @@ describe("buildControlledRationaleEnrichment", () => {
     const out = buildControlledRationaleEnrichment({
       stem: "Which action is first in septic shock management?",
       topic: "Shock / Sepsis",
-      rationale: "Early source control and hemodynamic stabilization improve outcomes.",
+      rationale:
+        "Early source control and hemodynamic stabilization improve outcomes in septic shock because delayed perfusion support increases organ injury risk.",
+      correctAnswerExplanation:
+        "Prioritizing fluids, cultures, and antibiotics in sequence reduces time-to-treatment delays and supports tissue perfusion.",
     });
     assert.equal(out.applied, true);
     assert.equal(out.whyWrong, "Detailed distractor explanations are not available for this item yet.");
@@ -44,7 +47,8 @@ describe("buildFlashcardExplanationFromSources", () => {
   it("returns concise structured explanation for high-yield cardiac card", () => {
     const out = buildFlashcardExplanationFromSources({
       front: "What is the priority action for STEMI with ongoing chest pain?",
-      back: "Activate reperfusion pathway and monitor for hemodynamic compromise while giving ordered anti-ischemic therapy.",
+      back:
+        "Activate the reperfusion pathway immediately, monitor for hypotension and dysrhythmias, and administer ordered anti-ischemic therapy while escalating any instability.",
       topic: "Cardiac",
       subtopic: "ACS",
     });

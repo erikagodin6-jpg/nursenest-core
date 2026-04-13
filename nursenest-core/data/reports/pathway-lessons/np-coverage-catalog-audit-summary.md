@@ -1,6 +1,6 @@
 # NP coverage vs static catalog audit
 
-Generated: 2026-04-10T20:24:07.839Z
+Generated: 2026-04-13T22:48:26.983Z
 
 Mode selected: **auto**
 
@@ -10,12 +10,12 @@ DATABASE_URL present: **yes**
 
 ## Pathway lesson counts (authoritative source)
 
-- **ca-np-cnple:** 1438
-- **us-np-fnp:** 1444
-- **us-np-agpcnp:** 1438
-- **us-np-whnp:** 0
-- **us-np-pnp-pc:** 0
-- **us-np-pmhnp:** 1438
+- **ca-np-cnple:** 1465
+- **us-np-fnp:** 1643
+- **us-np-agpcnp:** 1465
+- **us-np-whnp:** 1422
+- **us-np-pnp-pc:** 1422
+- **us-np-pmhnp:** 1459
 
 ## Pathway lesson counts (static merged catalog baseline)
 
@@ -28,1458 +28,1485 @@ DATABASE_URL present: **yes**
 
 ## Classification counts (topic rows)
 
-- **EXISTS_STRONG_SKIP:** 46
-- **EXISTS_UPGRADE:** 27
-- **CREATE_NEW:** 93
+- **EXISTS_STRONG_SKIP:** 10
+- **EXISTS_UPGRADE:** 65
+- **CREATE_NEW:** 91
 - **MERGE_INTO_EXISTING:** 8
 
 ## Duplicate slugs across pathways
 
-- `12-lead-ecg-advanced-interpretation-np-level-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `a1c-interpretation-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `aaa-pathogenesis-and-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `aaa-rupture-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `abcde-melanoma-rule-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `abdominal-exam-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `abdominal-pain-algorithm-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
+- `12-lead-ecg-advanced-interpretation-np-level-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `a1c-interpretation-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `aaa-pathogenesis-and-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `aaa-rupture-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `abcde-melanoma-rule-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `abdominal-exam-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `abdominal-pain-algorithm-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
 - `abdominal-pain-ddx-framework`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `abg-advanced-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `abg-interpretation-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `abg-sampling-and-interpretation-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `abg-sampling-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `abnormal-uterine-bleeding-palm-coein-and-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `acei-arb-selection-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `acetaminophen-od-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `acid-base-electrolyte-patho-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `acid-base-physiology-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `acne-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `acs-diagnostic-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `acs-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `acs-management-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `actinic-keratosis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `acute-abdomen-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
+- `abg-acid-base-and-compensation-patterns`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
+- `abg-advanced-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `abg-interpretation-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `abg-sampling-and-interpretation-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `abg-sampling-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `abnormal-uterine-bleeding-palm-coein-and-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `acei-arb-selection-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `acetaminophen-od-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `acid-base-disorders-rapid-interpretation`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
+- `acid-base-electrolyte-patho-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `acid-base-physiology-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `acne-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `acs-diagnostic-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `acs-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `acs-management-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `actinic-keratosis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `acute-abdomen-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
 - `acute-chest-pain-workup-outline`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `acute-coronary-syndrome-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `acute-glomerulonephritis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `acute-kidney-injury-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `acute-liver-failure-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `acute-low-back-pain-algorithm-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `acute-pancreatitis-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `acute-postinfectious-glomerulonephritis-advanced-immunopathology-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `acute-testicular-pain-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `acute-visual-loss-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `adaptive-immunity-molecular-mechanisms-and-clinical-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `adaptive-immunity-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `additive-hypotension-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `adhd-basics-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `adhd-dsm5-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `adhd-pharmacology-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `adrenal-crisis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `adrenal-disorders-basics-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `adrenal-disorders-cushing-and-addison-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `adrenal-disorders-patho-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `adrenal-hemorrhage-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `adrenal-incidentaloma-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `adult-immunizations-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `advance-care-planning-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `advance-directives-ethics-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `advanced-cardiac-auscultation-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `advanced-cardiac-auscultation-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `advanced-critical-care-np-scope-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `advanced-dermatologic-assessment-and-management-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `advanced-fluid-electrolyte-and-acid-base-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `advanced-gerontology-np-scope-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `advanced-health-assessment-and-diagnostic-reasoning-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `advanced-heent-diagnostics-and-management-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `advanced-hemodialysis-and-renal-replacement-therapy-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `advanced-infectious-disease-management-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `advanced-nutritional-pharmacology-and-micronutrient-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `advanced-pathophysiology-foundations-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `advanced-practice-procedures-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `afib-anticoagulation-chadsvasc-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `afib-diagnostic-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `afib-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `afib-management-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `afib-rate-rhythm-logic-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
+- `acute-coronary-syndrome-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `acute-glomerulonephritis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `acute-kidney-injury-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `acute-liver-failure-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `acute-low-back-pain-algorithm-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `acute-pancreatitis-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `acute-postinfectious-glomerulonephritis-advanced-immunopathology-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `acute-testicular-pain-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `acute-visual-loss-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `adaptive-immunity-molecular-mechanisms-and-clinical-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `adaptive-immunity-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `additive-hypotension-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `adhd-basics-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `adhd-dsm5-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `adhd-pharmacology-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `adrenal-crisis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `adrenal-disorders-basics-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `adrenal-disorders-cushing-and-addison-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `adrenal-disorders-patho-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `adrenal-hemorrhage-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `adrenal-incidentaloma-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `adult-immunizations-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `advance-care-planning-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `advance-directives-ethics-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `advanced-cardiac-auscultation-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `advanced-cardiac-auscultation-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `advanced-critical-care-np-scope-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `advanced-dermatologic-assessment-and-management-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `advanced-fluid-electrolyte-and-acid-base-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `advanced-gerontology-np-scope-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `advanced-health-assessment-and-diagnostic-reasoning-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `advanced-heent-diagnostics-and-management-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `advanced-hemodialysis-and-renal-replacement-therapy-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `advanced-infectious-disease-management-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `advanced-nutritional-pharmacology-and-micronutrient-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `advanced-pathophysiology-foundations-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `advanced-practice-procedures-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `afib-anticoagulation-chadsvasc-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `afib-diagnostic-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `afib-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `afib-management-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `afib-rate-rhythm-logic-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
 - `afib-rate-vs-rhythm-decisions`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `aging-physiology-changes-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `airflow-dynamics-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `aki-diagnostic-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `aki-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `aki-mechanisms-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `aki-rifle-criteria-and-dialysis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `aki-vs-ckd-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `alcohol-use-screening-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `alcohol-withdrawal-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `alpha-1-antitrypsin-deficiency-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `alpha-1-antitrypsin-deficiency-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `als-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `altered-mental-status-algorithm-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `alzheimer-disease-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `amenorrhea-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `amniotic-fluid-embolism-dic-pathway-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `amniotic-fluid-embolism-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `amputation-care-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `amyloidosis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `ana-interpretation-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `anaphylaxis-advanced-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `androgen-insensitivity-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `androgen-insensitivity-syndrome-np-advanced-molecular-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `anemia-chronic-disease-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `anemia-mechanisms-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `angelman-syndrome-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `angioedema-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `anion-gap-metabolic-acidosis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `ankylosing-spondylitis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `annual-wellness-visit-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `antibiotic-duration-decisions-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `antibiotic-resistance-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `antibiotic-selection-logic-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `antibiotic-selection-resp-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `antibiotic-stewardship-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `anticholinergic-toxidrome-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `anticholinergics-in-respiratory-care-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `anticholinergics-resp-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
+- `aging-physiology-changes-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `airflow-dynamics-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `aki-diagnostic-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `aki-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `aki-mechanisms-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `aki-rifle-criteria-and-dialysis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `aki-vs-ckd-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `alcohol-use-screening-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `alcohol-withdrawal-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `alpha-1-antitrypsin-deficiency-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `alpha-1-antitrypsin-deficiency-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `als-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `altered-mental-status-algorithm-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `alzheimer-disease-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `amenorrhea-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `amniotic-fluid-embolism-dic-pathway-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `amniotic-fluid-embolism-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `amputation-care-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `amyloidosis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `ana-interpretation-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `anaphylaxis-advanced-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `androgen-insensitivity-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `androgen-insensitivity-syndrome-np-advanced-molecular-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `anemia-chronic-disease-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `anemia-mechanisms-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `angelman-syndrome-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `angioedema-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `anion-gap-metabolic-acidosis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `ankylosing-spondylitis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `annual-wellness-visit-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `antibiotic-duration-decisions-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `antibiotic-resistance-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `antibiotic-selection-logic-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `antibiotic-selection-resp-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `antibiotic-stewardship-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `anticholinergic-toxidrome-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `anticholinergics-in-respiratory-care-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `anticholinergics-resp-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
 - `anticoag-bridging-concepts`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `anticoagulants-doac-warfarin-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `anticoagulants-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `anticoagulation-therapy-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `antidiabetic-medications-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `antiepileptics-basics-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `antifungal-basics-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `antihypertensives-comparison-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `antimicrobial-stewardship-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `antiphospholipid-syndrome-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `antiplatelets-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `antipsychotic-metabolic-monitoring-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `antipsychotic-profiles-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `antipsychotic-qt-risk-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `antipsychotics-core-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `antisynthetase-syndrome-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `antiviral-basics-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `anxiety-disorders-core-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `anxiety-disorders-patho-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
+- `anticoagulants-doac-warfarin-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `anticoagulants-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `anticoagulation-therapy-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `antidiabetic-medications-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `antiepileptics-basics-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `antifungal-basics-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `antihypertensives-comparison-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `antimicrobial-stewardship-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `antiphospholipid-syndrome-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `antiplatelets-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `antipsychotic-metabolic-monitoring-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `antipsychotic-profiles-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `antipsychotic-qt-risk-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `antipsychotics-core-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `antisynthetase-syndrome-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `antiviral-basics-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `anxiety-disorders-core-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `anxiety-disorders-patho-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
 - `anxiety-first-line-med-selection`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `anxiety-ssri-firstline-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `aortic-dissection-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `apoptosis-necrosis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `appendicitis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `ards-advanced-management-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `ards-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `ards-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `arrhythmia-recognition-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `arrhythmogenesis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `ascvd-risk-calculation-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `aspirin-od-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `assessment-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `assessment-skills-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `asthma-diagnostic-criteria-2-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `asthma-diagnostic-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `asthma-emergency-management-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `asthma-emergency-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `asthma-outpatient-management-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `asthma-outpatient-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `asthma-pathophysiology-advanced-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `asthma-pathophysiology-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `asthma-pathophysiology-np-level-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `asthma-step-therapy-core-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `asthma-step-therapy-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
+- `anxiety-ssri-firstline-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `aortic-dissection-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `apoptosis-necrosis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `appendicitis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `ards-advanced-management-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `ards-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `ards-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `arrhythmia-recognition-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `arrhythmogenesis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `ascvd-risk-calculation-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `aspirin-od-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `assessment-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `assessment-skills-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `asthma-diagnostic-criteria-2-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `asthma-diagnostic-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `asthma-emergency-management-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `asthma-emergency-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `asthma-outpatient-management-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `asthma-outpatient-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `asthma-pathophysiology-advanced-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `asthma-pathophysiology-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `asthma-pathophysiology-np-level-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `asthma-step-therapy-core-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `asthma-step-therapy-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
 - `asthma-step-up-therapy`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `atherosclerosis-plaque-biology-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `atypical-antipsychotics-rx-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `aub-mechanisms-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `aub-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `aub-palm-coein-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `augmentation-strategies-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `autism-screening-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `autoimmune-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `autoimmune-pathogenesis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `b12-deficiency-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `b12-deficiency-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `bacterial-meningitis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `bacterial-vaginosis-molecular-microbiome-ecology-and-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `bacterial-vaginosis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `balanitis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `bartholinitis-glandular-anatomy-abscess-management-and-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `bartholinitis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `beers-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `beers-criteria-prescribing-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `behcet-disease-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `bells-palsy-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `benign-ovarian-cysts-folliculogenesis-iota-rules-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `benign-ovarian-cysts-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `benign-prostatic-hyperplasia-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `benzodiazepine-pharmacology-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `benzodiazepine-risks-rx-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `beta-agonists-saba-laba-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `beta-blocker-overdose-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `beta-blocker-selection-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `biliary-atresia-advanced-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `biliary-atresia-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `bilirubin-metabolism-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `bipolar-diagnostic-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `bipolar-disorder-core-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `bipolar-disorder-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `bipolar-mood-stabilizers-rx-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `bisphosphonate-prescribing-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `black-box-warnings-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `blast-injury-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `bleeding-risk-stacking-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `bnp-interpretation-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `borderline-lab-values-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `bowel-obstruction-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `bph-turp-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
+- `atherosclerosis-plaque-biology-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `atypical-antipsychotics-rx-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `aub-mechanisms-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `aub-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `aub-palm-coein-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `augmentation-strategies-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `autism-screening-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `autoimmune-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `autoimmune-pathogenesis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `b12-deficiency-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `b12-deficiency-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `bacterial-meningitis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `bacterial-vaginosis-molecular-microbiome-ecology-and-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `bacterial-vaginosis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `balanitis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `bartholinitis-glandular-anatomy-abscess-management-and-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `bartholinitis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `beers-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `beers-criteria-prescribing-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `behcet-disease-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `bells-palsy-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `benign-ovarian-cysts-folliculogenesis-iota-rules-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `benign-ovarian-cysts-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `benign-prostatic-hyperplasia-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `benzodiazepine-pharmacology-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `benzodiazepine-risks-rx-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `beta-agonists-saba-laba-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `beta-blocker-overdose-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `beta-blocker-selection-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `biliary-atresia-advanced-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `biliary-atresia-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `bilirubin-metabolism-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `bipolar-diagnostic-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `bipolar-disorder-core-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `bipolar-disorder-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `bipolar-mood-stabilizers-rx-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `bisphosphonate-prescribing-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `black-box-warnings-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `blast-injury-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `bleeding-risk-stacking-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `bnp-interpretation-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `borderline-lab-values-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `bowel-obstruction-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `bph-turp-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
 - `bph-vs-cancer-screening-talk`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `bppv-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `brain-death-assessment-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `brain-death-determination-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `breast-cancer-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `breast-cancer-screening-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `breast-cancer-screening-np-advanced-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `breast-exam-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `bronchiectasis-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `bronchiectasis-management-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `bronchiolitis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `bronchiolitis-patho-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `brown-sequard-syndrome-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `brugada-syndrome-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `brugada-syndrome-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `burn-resuscitation-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `calcium-channel-blocker-overdose-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `calcium-regulation-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `calcium-vitamin-d-logic-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `cancer-screening-guidelines-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `capacity-assessment-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `carbon-monoxide-poisoning-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `carcinoid-syndrome-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `cardiac-arrest-acls-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `cardiac-arrest-acls-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `cardiac-cath-care-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `cardiac-conduction-system-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `cardiac-output-determinants-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `cardiac-output-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `cardiac-tamponade-management-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `cardiac-tamponade-mgmt-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `cardiac-tamponade-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `cardiomyopathy-differential-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `cardiopulm-critical-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `cardiopulmonary-critical-patterns-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `cardiovascular-diagnostic-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `cardiovascular-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `cardiovascular-np-exp`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `cardiovascular-pathophysiology-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `cardiovascular-prescribing-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `cavernous-sinus-thrombosis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `cbc-interpretation-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `ccb-dhp-nondhp-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `cdiff-recurrence-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `celiac-disease-atypical-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `celiac-workup-algorithm-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `cellular-injury-adaptation-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `cellulitis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `central-line-insertion-and-bundle-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `central-line-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `central-pontine-myelinolysis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `cerebellar-exam-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `cerebral-venous-sinus-thrombosis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `cerebral-venous-sinus-thrombosis-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `cervical-cancer-screening-and-advanced-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `cervical-cancer-screening-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `cervical-insufficiency-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `cervicitis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `cervicitis-pathogen-molecular-biology-and-cdc-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `chest-drainage-system-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `chest-pain-workup-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `chest-xray-interpretation-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `chlamydia-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `cholangiocarcinoma-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `cholangitis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `cholecystectomy-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `cholecystectomy-np-advanced-biliary-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `cholecystitis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `cholesterol-embolization-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `cholinergic-toxidrome-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `chorioamnionitis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `chronic-diarrhea-algorithm-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `chronic-disease-management-plans-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `chronic-inflammation-mechanisms-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `chronic-inflammatory-states-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `chronic-kidney-disease-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `chronic-mesenteric-ischemia-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `chronic-pain-assessment-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `chronic-pain-mgmt-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `chronic-pancreatitis-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `chronic-stress-and-disease-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `cirrhosis-core-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `cirrhosis-diagnostic-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `cirrhosis-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `cirrhosis-patho-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `ckd-diagnostic-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `ckd-medication-adjustments-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `ckd-progression-patho-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
+- `bppv-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `brain-death-assessment-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `brain-death-determination-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `breast-cancer-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `breast-cancer-screening-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `breast-cancer-screening-np-advanced-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `breast-exam-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `bronchiectasis-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `bronchiectasis-management-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `bronchiolitis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `bronchiolitis-patho-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `brown-sequard-syndrome-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `brugada-syndrome-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `brugada-syndrome-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `burn-resuscitation-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `calcium-channel-blocker-overdose-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `calcium-regulation-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `calcium-vitamin-d-logic-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `cancer-screening-guidelines-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `capacity-assessment-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `carbon-monoxide-poisoning-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `carcinoid-syndrome-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `cardiac-arrest-acls-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `cardiac-arrest-acls-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `cardiac-cath-care-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `cardiac-conduction-system-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `cardiac-emergencies-first-hour`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `cardiac-output-determinants-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `cardiac-output-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `cardiac-tamponade-management-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `cardiac-tamponade-mgmt-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `cardiac-tamponade-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `cardiomyopathy-differential-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `cardiopulm-critical-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `cardiopulmonary-critical-patterns-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `cardiovascular-diagnostic-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `cardiovascular-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `cardiovascular-np-exp`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `cardiovascular-pathophysiology-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `cardiovascular-prescribing-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `cavernous-sinus-thrombosis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `cbc-interpretation-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `ccb-dhp-nondhp-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `cdiff-recurrence-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `celiac-disease-atypical-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `celiac-workup-algorithm-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `cellular-injury-adaptation-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `cellulitis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `central-line-insertion-and-bundle-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `central-line-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `central-pontine-myelinolysis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `cerebellar-exam-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `cerebral-venous-sinus-thrombosis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `cerebral-venous-sinus-thrombosis-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `cervical-cancer-screening-and-advanced-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `cervical-cancer-screening-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `cervical-insufficiency-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `cervicitis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `cervicitis-pathogen-molecular-biology-and-cdc-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `chest-drainage-system-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `chest-pain-workup-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `chest-xray-interpretation-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `chlamydia-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `cholangiocarcinoma-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `cholangitis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `cholecystectomy-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `cholecystectomy-np-advanced-biliary-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `cholecystitis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `cholesterol-embolization-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `cholinergic-toxidrome-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `chorioamnionitis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `chronic-diarrhea-algorithm-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `chronic-disease-management-plans-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `chronic-inflammation-mechanisms-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `chronic-inflammatory-states-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `chronic-kidney-disease-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `chronic-mesenteric-ischemia-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `chronic-pain-assessment-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `chronic-pain-mgmt-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `chronic-pancreatitis-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `chronic-stress-and-disease-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `cirrhosis-core-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `cirrhosis-diagnostic-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `cirrhosis-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `cirrhosis-patho-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `ckd-diagnostic-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `ckd-medication-adjustments-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `ckd-progression-patho-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
 - `ckd-staging-med-avoid-list`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `ckd-staging-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `clinical-prioritization-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `clinical-reasoning-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `cml-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `cmp-interpretation-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `coagulation-cascade-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `coagulation-disorders-patho-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `coagulopathies-basics-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `cognitive-decline-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `cognitive-screening-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `colon-cancer-screening-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `community-acquired-pneumonia-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `community-health-nursing-np-scope-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `community-nursing-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `compartment-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `compartment-syndrome-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `compensation-mechanisms-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `complete-neuro-exam-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `comprehensive-history-and-physical-advanced-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `comprehensive-history-and-physical-np-level-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `comprehensive-hpi-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `conduct-disorder-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `confirmatory-repeat-testing-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `confirmatory-testing-logic-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `congenital-heart-disease-patho-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `conn-syndrome-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `constrictive-pericarditis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `constrictive-pericarditis-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `continuous-bladder-irrigation-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `contraception-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `contraception-prescribing-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `contraceptive-selection-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `contrast-nephropathy-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `controlled-substances-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `copd-cellular-mechanisms-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `copd-diagnostic-criteria-and-gold-staging-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `copd-diagnostic-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `copd-exacerbation-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `copd-exacerbation-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `copd-exacerbation-rx-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
+- `ckd-staging-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `clinical-prioritization-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `clinical-reasoning-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `cml-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `cmp-interpretation-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `coagulation-cascade-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `coagulation-disorders-patho-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `coagulopathies-basics-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `cognitive-decline-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `cognitive-screening-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `colon-cancer-screening-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `community-acquired-pneumonia-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `community-health-nursing-np-scope-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `community-nursing-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `compartment-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `compartment-syndrome-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `compensation-mechanisms-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `complete-neuro-exam-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `comprehensive-history-and-physical-advanced-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `comprehensive-history-and-physical-np-level-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `comprehensive-hpi-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `conduct-disorder-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `confirmatory-repeat-testing-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `confirmatory-testing-logic-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `congenital-heart-disease-patho-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `conn-syndrome-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `constrictive-pericarditis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `constrictive-pericarditis-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `continuous-bladder-irrigation-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `contraception-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `contraception-prescribing-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `contraceptive-selection-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `contrast-nephropathy-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `controlled-substances-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `copd-cellular-mechanisms-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `copd-diagnostic-criteria-and-gold-staging-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `copd-diagnostic-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `copd-exacerbation-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `copd-exacerbation-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `copd-exacerbation-rx-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
 - `copd-gold-overview`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `copd-gold-staging-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `copd-lama-laba-ics-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `copd-outpatient-management-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `copd-outpatient-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `copd-pathophysiology-advanced-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `copd-pathophysiology-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `copd-pathophysiology-np-level-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `copd-pharmacotherapy-lama-laba-and-ics-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `cord-prolapse-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `core-fundamentals-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `coronary-artery-ectasia-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `coronary-microvascular-dysfunction-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `cortisol-testing-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `cranial-nerve-advanced-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `cranial-nerve-functions-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `craniopharyngioma-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `creutzfeldt-jakob-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `crisis-intervention-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `criteria-fulfillment-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `critical-care-advanced-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `critical-care-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `critical-care-ventilator-weaning-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `cross-system-concepts-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `cross-system-sepsis-cascade-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `croup-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `crrt-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `crush-injury-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `cryoglobulinemia-workup-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `cryptorchidism-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `cultural-safety-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `culture-negative-ie-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `cushing-syndrome-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `cushings-diagnostic-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `cv-core-physiology-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `cv-patho-atherosclerosis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `cv-patho-raas-pathology-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `cyanide-poisoning-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `cyp450-interactions-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `cystic-fibrosis-adult-management-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `cystic-fibrosis-adult-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `cytokine-cascade-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `cytokine-signaling-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `d-dimer-logic-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `damage-control-resus-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `delayed-puberty-molecular-and-prescriptive-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `delayed-puberty-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `delegation-license-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `delegation-np-expanded`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `delirium-dementia-advanced-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `delirium-vs-dementia-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `dementia-delirium-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `dementia-diagnostic-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `dementia-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `deprescribing-strategies-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `depression-core-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `depression-neurobiology-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `derm-core-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `dermatitis-herpetiformis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `dermatological-exam-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `dermatology-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `dermatomyositis-polymyositis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `dermoscopy-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `developmental-screening-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
+- `copd-gold-staging-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `copd-lama-laba-ics-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `copd-outpatient-management-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `copd-outpatient-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `copd-pathophysiology-advanced-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `copd-pathophysiology-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `copd-pathophysiology-np-level-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `copd-pharmacotherapy-lama-laba-and-ics-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `cord-prolapse-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `core-fundamentals-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `coronary-artery-ectasia-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `coronary-microvascular-dysfunction-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `cortisol-testing-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `cranial-nerve-advanced-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `cranial-nerve-functions-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `craniopharyngioma-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `creutzfeldt-jakob-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `crisis-intervention-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `criteria-fulfillment-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `critical-care-advanced-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `critical-care-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `critical-care-ventilator-weaning-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `cross-system-concepts-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `cross-system-sepsis-cascade-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `croup-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `crrt-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `crush-injury-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `cryoglobulinemia-workup-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `cryptorchidism-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `cultural-safety-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `culture-negative-ie-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `cushing-syndrome-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `cushings-diagnostic-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `cv-core-physiology-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `cv-patho-atherosclerosis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `cv-patho-raas-pathology-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `cv-pe`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc
+- `cyanide-poisoning-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `cyp450-interactions-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `cystic-fibrosis-adult-management-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `cystic-fibrosis-adult-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `cytokine-cascade-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `cytokine-signaling-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `d-dimer-logic-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `damage-control-resus-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `delayed-puberty-molecular-and-prescriptive-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `delayed-puberty-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `delegation-license-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `delegation-np-expanded`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `delirium-dementia-advanced-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `delirium-vs-dementia-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `dementia-delirium-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `dementia-diagnostic-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `dementia-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `deprescribing-strategies-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `depression-core-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `depression-neurobiology-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `derm-core-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `dermatitis-herpetiformis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `dermatological-exam-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `dermatology-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `dermatomyositis-polymyositis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `dermoscopy-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `developmental-screening-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
 - `diabetes-a1c-medication-escalation`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `diabetes-mellitus-types-1-and-2-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `diabetes-pregnancy-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `diabetes-technology-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `diabetic-ketoacidosis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `diagnostic-criteria-logic-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `diagnostic-reasoning-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `dic-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `dic-obstetrics-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `differential-diagnosis-formulation-advanced-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `differential-diagnosis-formulation-np-level-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `differential-diagnosis-narrowing-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `differential-diagnosis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `digoxin-toxicity-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `discontinuation-syndrome-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `diuretic-selection-logic-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `diuretics-loop-thiazide-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `dka-hhns-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `dka-hhs-basics-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `dka-hhs-patho-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `dka-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `dkahhs-anion-gap-and-osmolality-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `dm2-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `doac-reversal-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `doac-warfarin-selection-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `documentation-requirements-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `documentation-standards-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `drowning-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `drug-drug-interactions-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `drug-eruptions-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `drug-hypersensitivity-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `duchenne-md-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `dvt-basics-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `dvt-diagnostic-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `dvt-pe-diagnostic-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `dysmenorrhea-cox-2-pathways-and-advanced-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `dysmenorrhea-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `early-mobilization-icu-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `eating-disorder-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `eating-disorders-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `ecg-advanced-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `ecg-basics-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `eclampsia-endothelial-dysfunction-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `eclampsia-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `ect-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `ectopic-acth-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `ectopic-pregnancy-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `ectopic-pregnancy-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `eczema-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `edema-grading-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `effusive-constrictive-pericarditis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `egfr-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `ehlers-danlos-syndrome-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `electrolyte-abnormalities-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `electrolyte-safety-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `empiric-antibiotic-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `endemic-fungal-pneumonias-2-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `endemic-fungal-pneumonias-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `endo-adrenal-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `endo-antidiabetics-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `endo-diabetes-t1-t2-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `endo-dka-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `endo-patho-adrenal-axis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `endo-patho-insulin-resistance-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `endo-patho-thyroid-autoimmunity-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `endo-raas-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `endo-rx-sglt2-inhibitors-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `endo-thyroid-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `endocannabinoid-pharmacology-ecs-receptor-targets-and-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `endocannabinoid-pharmacology-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `endocrine-core-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `endocrine-diagnostic-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `endocrine-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `endocrine-np-exp`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `endocrine-pathophysiology-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `endocrine-prescribing-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `endometrial-polyp-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `endometrial-polyps-molecular-proliferation-and-hysteroscopic-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `endometriosis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `endometriosis-np-advanced-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `endometriosis-patho-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `endomyocardial-fibrosis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `eol-pharmacology-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `eosinophilic-esophagitis-advanced-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `eosinophilic-esophagitis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `eosinophilic-granulomatosis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `eosinophilic-granulomatosis-with-polyangiitis-churg-strauss-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `epilepsy-diagnostic-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `eps-recognition-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `erectile-dysfunction-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `ethics-np-comprehensive`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `ethics-np-practice-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `ethics-practice-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `evidence-based-assessment-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `evidence-based-practice-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `exam-strategy-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `fabry-disease-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `factor-v-leiden-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `failure-to-thrive-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `fall-risk-meds-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `fall-risk-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `falls-prevention-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `family-medicine-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `fat-embolism-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `febrile-infant-algorithm-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `febrile-neutropenia-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `febrile-seizures-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `fetal-surveillance-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `fibromuscular-dysplasia-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `fluid-and-electrolytes-3-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `fluid-balance-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `fluid-electrolytes-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `fnp-overlay-abg-acid-base`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `fnp-overlay-diabetes-metabolic`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `fnp-overlay-electrolytes-volume`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `fnp-overlay-heart-failure`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `fnp-overlay-myocardial-infarction`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `fnp-overlay-np-differential-prescribing-chronic`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `fnp-overlay-respiratory-acute`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `fnp-overlay-sepsis-infection`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `fnp-overlay-shock`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `fracture-types-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `frailty-assessment-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `frailty-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `fungal-infections-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `g6pd-deficiency-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `gad-diagnostic-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `gait-analysis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `galactorrhea-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `galactorrhea-np-advanced-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `gallbladder-disease-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `gaucher-disease-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `gcs-assessment-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `gerd-core-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `gerd-diagnostic-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `gerd-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `gerd-mechanisms-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `geriatric-assessment-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `geriatric-delirium-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `geriatric-depression-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `geriatric-falls-prevention-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `geriatric-medicine-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `geriatric-polypharmacy-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `geriatric-prescribing-beers-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `geriatric-prescribing-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `geriatrics-beers-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `geriatrics-core-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `geriatrics-delirium-prevention-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `gerontology-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `gestational-diabetes-screening-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `gfr-physiology-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `gi-bleed-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `gi-diagnostic-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `gi-hepatic-core-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `gi-hepatic-pathophysiology-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `gi-hepatology-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `gi-infections-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `gi-motility-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `gi-np-exp`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `gi-patho-acute-liver-failure-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `gi-patho-hepatic-encephalopathy-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `gi-patho-ibd-mucosal-immune-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `gi-prescribing-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `gi-rx-antiemetics-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `gi-rx-h-pylori-eradication-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `gi-rx-ppi-stewardship-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `giant-cell-arteritis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `glp1-agonists-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `glucagonoma-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `gout-advanced-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `gout-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `gout-pharmacologic-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `graft-vs-host-disease-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `granulomatosis-polyangiitis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `growth-development-milestones-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `guideline-application-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `guideline-based-diagnosis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `guillain-barre-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `gynecologic-conditions-vaginitis-pid-endometriosis-pcos-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `gynecological-exam-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `h-pylori-regimens-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `half-life-dosing-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `headache-differential-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `headache-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `headache-red-flags-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `health-promotion-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `hearing-loss-differential-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `heart-failure-advanced-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
+- `diabetes-mellitus-types-1-and-2-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `diabetes-pregnancy-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `diabetes-technology-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `diabetic-ketoacidosis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `diagnostic-criteria-logic-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `diagnostic-reasoning-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `dic-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `dic-obstetrics-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `differential-diagnosis-formulation-advanced-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `differential-diagnosis-formulation-np-level-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `differential-diagnosis-narrowing-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `differential-diagnosis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `digoxin-toxicity-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `discontinuation-syndrome-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `diuretic-selection-logic-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `diuretics-loop-thiazide-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `dka-hhns-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `dka-hhs-basics-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `dka-hhs-patho-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `dka-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `dkahhs-anion-gap-and-osmolality-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `dm2-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `doac-reversal-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `doac-warfarin-selection-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `documentation-requirements-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `documentation-standards-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `drowning-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `drug-drug-interactions-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `drug-eruptions-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `drug-hypersensitivity-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `duchenne-md-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `dvt-basics-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `dvt-diagnostic-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `dvt-pe-diagnostic-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `dysmenorrhea-cox-2-pathways-and-advanced-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `dysmenorrhea-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `early-mobilization-icu-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `early-vs-late-shock`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
+- `eating-disorder-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `eating-disorders-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `ecg-advanced-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `ecg-basics-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `eclampsia-endothelial-dysfunction-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `eclampsia-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `ect-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `ectopic-acth-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `ectopic-pregnancy-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `ectopic-pregnancy-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `eczema-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `edema-grading-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `effusive-constrictive-pericarditis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `egfr-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `ehlers-danlos-syndrome-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `electrolyte-abnormalities-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `electrolyte-safety-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `empiric-antibiotic-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `endemic-fungal-pneumonias-2-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `endemic-fungal-pneumonias-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `endo-adrenal-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `endo-antidiabetics-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `endo-diabetes-t1-t2-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `endo-dka-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `endo-osteoporosis`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc
+- `endo-patho-adrenal-axis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `endo-patho-insulin-resistance-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `endo-patho-thyroid-autoimmunity-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `endo-raas-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `endo-rx-sglt2-inhibitors-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `endo-thyroid-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `endocannabinoid-pharmacology-ecs-receptor-targets-and-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `endocannabinoid-pharmacology-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `endocrine-core-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `endocrine-crises-rapid-differentiation`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `endocrine-diagnostic-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `endocrine-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `endocrine-np-exp`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `endocrine-pathophysiology-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `endocrine-prescribing-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `endometrial-polyp-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `endometrial-polyps-molecular-proliferation-and-hysteroscopic-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `endometriosis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `endometriosis-np-advanced-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `endometriosis-patho-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `endomyocardial-fibrosis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `eol-pharmacology-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `eosinophilic-esophagitis-advanced-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `eosinophilic-esophagitis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `eosinophilic-granulomatosis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `eosinophilic-granulomatosis-with-polyangiitis-churg-strauss-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `epilepsy-diagnostic-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `eps-recognition-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `erectile-dysfunction-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `ethics-np-comprehensive`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `ethics-np-practice-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `ethics-practice-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `evidence-based-assessment-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `evidence-based-practice-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `exam-strategy-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `fabry-disease-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `factor-v-leiden-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `failure-to-thrive-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `fall-risk-meds-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `fall-risk-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `falls-prevention-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `family-medicine-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `fat-embolism-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `febrile-infant-algorithm-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `febrile-neutropenia-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `febrile-seizures-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `fetal-surveillance-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `fibromuscular-dysplasia-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `fluid-and-electrolytes-3-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `fluid-balance-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `fluid-electrolytes-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `fluid-resuscitation-initial-vs-reassessment`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
+- `fluids-and-electrolytes-danger-patterns`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
+- `fnp-overlay-abg-acid-base`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `fnp-overlay-diabetes-metabolic`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `fnp-overlay-electrolytes-volume`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `fnp-overlay-heart-failure`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `fnp-overlay-myocardial-infarction`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `fnp-overlay-np-differential-prescribing-chronic`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `fnp-overlay-respiratory-acute`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `fnp-overlay-sepsis-infection`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `fnp-overlay-shock`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `fracture-types-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `frailty-assessment-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `frailty-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `fungal-infections-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `g6pd-deficiency-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `gad-diagnostic-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `gait-analysis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `galactorrhea-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `galactorrhea-np-advanced-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `gallbladder-disease-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `gaucher-disease-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `gcs-assessment-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `gerd-core-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `gerd-diagnostic-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `gerd-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `gerd-mechanisms-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `geri-polypharm`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `geriatric-assessment-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `geriatric-delirium-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `geriatric-depression-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `geriatric-falls-prevention-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `geriatric-medicine-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `geriatric-polypharmacy-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `geriatric-prescribing-beers-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `geriatric-prescribing-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `geriatrics-beers-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `geriatrics-core-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `geriatrics-delirium-prevention-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `gerontology-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `gestational-diabetes-screening-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `gfr-physiology-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `gi-bleed-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `gi-diagnostic-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `gi-hepatic-core-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `gi-hepatic-pathophysiology-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `gi-hepatology-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `gi-infections-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `gi-motility-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `gi-np-exp`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `gi-patho-acute-liver-failure-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `gi-patho-hepatic-encephalopathy-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `gi-patho-ibd-mucosal-immune-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `gi-prescribing-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `gi-rx-antiemetics-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `gi-rx-h-pylori-eradication-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `gi-rx-ppi-stewardship-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `giant-cell-arteritis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `glp1-agonists-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `glucagonoma-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `gout-advanced-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `gout-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `gout-pharmacologic-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `graft-vs-host-disease-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `granulomatosis-polyangiitis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `growth-development-milestones-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `guideline-application-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `guideline-based-diagnosis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `guillain-barre-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `gynecologic-conditions-vaginitis-pid-endometriosis-pcos-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `gynecological-exam-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `h-pylori-regimens-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `half-life-dosing-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `headache-differential-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `headache-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `headache-red-flags-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `health-promotion-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `hearing-loss-differential-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `heart-failure-advanced-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
 - `heart-failure-gdmt-basics`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `heart-failure-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `heart-sound-interpretation-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `heart-transplant-rejection-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `heart-transplant-rejection-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `heent-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `hellp-syndrome-hepatic-cascade-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `hellp-syndrome-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `hellp-vs-ttp-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `hematology-diagnostic-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `hematology-leukemia-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `hematology-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `hematology-np-exp`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `hematology-pathophysiology-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `hematology-sickle-cell-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `hematopoiesis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `heme-core-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `heme-patho-dic-pathogenesis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `heme-patho-sickle-cell-vasocclusion-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `hemochromatosis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `hemodialysis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `hemodynamic-monitoring-advanced-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `hemodynamic-monitoring-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `hemodynamic-monitoring-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `hemodynamic-shock-physiology-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `hemothorax-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `hemothorax-management-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `hepatic-encephalopathy-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `hepatic-impairment-prescribing-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `hepatitis-basics-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `hepatitis-core-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `hepatitis-treatment-overview-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `hepatorenal-syndrome-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `hereditary-angioedema-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `hereditary-hemorrhagic-telangiectasia-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `hereditary-spherocytosis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `hf-acei-arb-arni-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `hf-advanced-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `hf-beta-blocker-agents-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `hf-diagnostic-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `hf-mechanisms-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `hf-mra-prescribing-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `hf-sglt2i-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `hfpef-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `hfpef-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `hhs-deep-dive-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `high-flow-nasal-cannula-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `high-yield-exam-patterns-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `hit-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `hiv-art-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `hiv-basics-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `hiv-diagnostic-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `hormone-therapy-rx-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `hospice-eligibility-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `host-pathogen-interaction-core-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `host-pathogen-interaction-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `hpa-axis-and-stress-response-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `hpa-axis-stress-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `hrt-prescribing-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `htn-all-stages-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `htn-diagnostic-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
+- `heart-failure-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `heart-sound-interpretation-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `heart-transplant-rejection-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `heart-transplant-rejection-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `heent-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `hellp-syndrome-hepatic-cascade-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `hellp-syndrome-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `hellp-vs-ttp-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `hematology-diagnostic-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `hematology-leukemia-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `hematology-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `hematology-np-exp`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `hematology-pathophysiology-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `hematology-sickle-cell-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `hematopoiesis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `heme-core-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `heme-patho-dic-pathogenesis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `heme-patho-sickle-cell-vasocclusion-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `hemochromatosis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `hemodialysis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `hemodynamic-monitoring-advanced-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `hemodynamic-monitoring-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `hemodynamic-monitoring-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `hemodynamic-shock-physiology-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `hemodynamics-bedside-interpretation`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
+- `hemothorax-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `hemothorax-management-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `hepatic-encephalopathy-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `hepatic-impairment-prescribing-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `hepatitis-basics-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `hepatitis-core-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `hepatitis-treatment-overview-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `hepatorenal-syndrome-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `hereditary-angioedema-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `hereditary-hemorrhagic-telangiectasia-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `hereditary-spherocytosis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `hf-acei-arb-arni-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `hf-advanced-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `hf-beta-blocker-agents-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `hf-diagnostic-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `hf-mechanisms-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `hf-mra-prescribing-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `hf-sglt2i-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `hfpef-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `hfpef-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `hhs-deep-dive-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `high-flow-nasal-cannula-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `high-yield-exam-patterns-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `hit-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `hiv-art-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `hiv-basics-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `hiv-diagnostic-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `hormone-therapy-rx-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `hospice-eligibility-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `host-pathogen-interaction-core-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `host-pathogen-interaction-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `hpa-axis-and-stress-response-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `hpa-axis-stress-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `hrt-prescribing-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `htn-all-stages-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `htn-diagnostic-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
 - `htn-guideline-based-plans`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `htn-guidelines-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `htn-mechanisms-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `huntington-disease-genetic-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `huntington-disease-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `hus-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `hy-exam-first-worst-presentations-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `hyperaldosteronism-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `hypercalcemia-malignancy-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `hypercalcemia-workup-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `hyperemesis-gravidarum-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `hyperkalemia-emergency-ecg-progression-and-advanced-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `hyperkalemia-emergency-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `hyperkalemia-mgmt-rx-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `hyperkalemia-stacking-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `hyperlipidemia-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `hyperlipidemia-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
+- `htn-guidelines-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `htn-mechanisms-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `huntington-disease-genetic-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `huntington-disease-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `hus-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `hy-exam-first-worst-presentations-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `hyperaldosteronism-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `hypercalcemia-malignancy-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `hypercalcemia-workup-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `hyperemesis-gravidarum-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `hyperkalemia-ecg-and-emergent-treatment`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
+- `hyperkalemia-emergency-ecg-progression-and-advanced-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `hyperkalemia-emergency-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `hyperkalemia-mgmt-rx-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `hyperkalemia-stacking-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `hyperlipidemia-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `hyperlipidemia-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
 - `hyperlipidemia-risk-discussion`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `hyperparathyroid-crisis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `hyperprolactinemia-workup-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `hypersensitivity-reactions-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `hypertensive-crisis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `hypertensive-emergency-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `hypertensive-emergency-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `hyperthyroidism-core-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `hyperthyroidism-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `hypertrophic-cardiomyopathy-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `hypocalcemia-algorithm-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `hypogonadism-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `hyponatremia-correction-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `hypospadias-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `hypothalamic-pituitary-axis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `hypothalamic-pituitary-ovarian-axis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `hypothermia-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `hypothyroidism-core-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `hypothyroidism-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `hypothyroidism-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `ibd-advanced-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `ibs-ibd-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `ibs-rome-iv-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `ibs-therapies-rx-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `icp-cerebral-perfusion-pressure-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `icu-delirium-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `icu-nutrition-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `ie-prophylaxis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `imaging-indications-neuro-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `imaging-interpretation-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `immune-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `immune-np-exp`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `immunodeficiency-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `immunologic-inflammatory-mechanisms-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `incision-drainage-abscess-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `increased-icp-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `infant-reflexes-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `infant-reflexes-np-advanced-assessment-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `infections-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `infectious-diagnostic-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `infectious-disease-core-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `infectious-disease-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `infectious-disease-prescribing-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `infectious-patho-antibiotic-resistance-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `infectious-patho-viral-replication-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `infectious-pathophysiology-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `infective-endocarditis-advanced-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `infective-endocarditis-advanced-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `infertility-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `infertility-np-advanced-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `infertility-workup-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `infiltrative-cardiomyopathy-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `inflammation-cascade-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `informatics-doc-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `informed-consent-advanced-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `informed-consent-prescribing-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `inhaled-corticosteroids-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `innate-adaptive-immunity-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `insomnia-pharmacotherapy-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `insulin-glucose-dynamics-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `insulin-pump-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `insulin-resistance-t2d-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `insulin-types-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `insulin-types-titration-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `insulinoma-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `integumentary-pathophysiology-epidermal-barrier-and-atopic-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `integumentary-pathophysiology-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `interstitial-lung-disease-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `interstitial-lung-disease-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `intimate-partner-violence-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `intra-aortic-balloon-pump-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `intra-aortic-balloon-pump-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `intussusception-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `iron-deficiency-anemia-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `iron-deficiency-anemia-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
+- `hyperparathyroid-crisis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `hyperprolactinemia-workup-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `hypersensitivity-reactions-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `hypertensive-crisis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `hypertensive-emergency-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `hypertensive-emergency-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `hyperthyroidism-core-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `hyperthyroidism-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `hypertrophic-cardiomyopathy-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `hypocalcemia-algorithm-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `hypoglycemia-vs-hyperglycemia-priority-response`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
+- `hypogonadism-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `hyponatremia-correction-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `hypospadias-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `hypothalamic-pituitary-axis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `hypothalamic-pituitary-ovarian-axis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `hypothermia-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `hypothyroidism-core-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `hypothyroidism-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `hypothyroidism-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `ibd-advanced-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `ibs-ibd-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `ibs-rome-iv-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `ibs-therapies-rx-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `icp-cerebral-perfusion-pressure-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `icu-delirium-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `icu-nutrition-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `ie-prophylaxis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `imaging-indications-neuro-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `imaging-interpretation-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `immune-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `immune-np-exp`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `immunodeficiency-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `immunologic-inflammatory-mechanisms-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `incision-drainage-abscess-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `increased-icp-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `infant-reflexes-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `infant-reflexes-np-advanced-assessment-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `infections-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `infectious-diagnostic-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `infectious-disease-core-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `infectious-disease-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `infectious-disease-prescribing-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `infectious-patho-antibiotic-resistance-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `infectious-patho-viral-replication-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `infectious-pathophysiology-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `infective-endocarditis-advanced-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `infective-endocarditis-advanced-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `infertility-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `infertility-np-advanced-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `infertility-workup-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `infiltrative-cardiomyopathy-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `inflammation-cascade-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `informatics-doc-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `informed-consent-advanced-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `informed-consent-prescribing-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `inhaled-corticosteroids-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `innate-adaptive-immunity-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `insomnia-pharmacotherapy-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `insulin-glucose-dynamics-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `insulin-pump-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `insulin-resistance-t2d-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `insulin-types-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `insulin-types-titration-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `insulinoma-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `integumentary-pathophysiology-epidermal-barrier-and-atopic-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `integumentary-pathophysiology-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `interstitial-lung-disease-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `interstitial-lung-disease-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `intimate-partner-violence-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `intra-aortic-balloon-pump-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `intra-aortic-balloon-pump-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `intracranial-pressure-escalation-pathway`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
+- `intussusception-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `iron-deficiency-anemia-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `iron-deficiency-anemia-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
 - `iron-deficiency-workup`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `iron-metabolism-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `iron-poisoning-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `iron-studies-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `ischemic-and-hemorrhagic-stroke-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `ischemic-heart-disease-patho-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `ischemic-stroke-cascade-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `joint-exam-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `joint-injection-technique-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `jvp-assessment-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `kawasaki-disease-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `ketamine-infusion-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `lab-confirms-diagnosis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `lab-interpretation-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `laba-safety-logic-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `labs-diagnostics-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `labyrinthitis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `leadership-mgmt-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `legal-edge-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `legal-ethical-prescribing-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `levothyroxine-dosing-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `lft-interpretation-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `libman-sacks-endocarditis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `lipase-amylase-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `lipid-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `lipid-monitoring-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `lipid-panel-analysis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `lithium-toxicity-advanced-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `liver-function-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `locked-in-syndrome-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `long-qt-syndrome-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `long-qt-syndrome-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `low-back-pain-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `lumbar-puncture-and-csf-analysis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `lumbar-puncture-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `lumbar-puncture-technique-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `lung-auscultation-interpretation-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `lung-cancer-staging-and-treatment-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `lung-cancer-staging-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `lyme-disease-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `lymphedema-assessment-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `lymphoma-workup-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `male-infertility-2-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `male-infertility-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `malignant-hyperthermia-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `mandatory-imaging-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `marfan-cardiac-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `marfan-cardiac-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `marfan-syndrome-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `marfan-syndrome-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `massive-transfusion-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `mast-cell-activation-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `mastitis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `mastitis-np-advanced-practice-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `maternal-newborn-edge-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `maternity-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `maternity-np-exp`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `mctd-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `mdd-dsm5-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `mechanical-vent-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `mechanical-ventilation-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `meckel-diverticulum-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `meckels-diverticulum-advanced-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `meconium-ileus-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `meconium-ileus-np-advanced-pathophysiology-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `medication-selection-logic-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `melanoma-staging-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `men-syndromes-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `menieres-disease-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `meningitis-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `menopause-and-hormone-therapy-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `menopause-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `menopause-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `menopause-pharmacotherapy-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `mens-health-bph-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `mens-health-ed-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `mens-health-infertility-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `mens-health-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `mens-health-prostate-screening-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `mens-health-prostatitis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `mens-health-testosterone-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `menstrual-physiology-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `mental-health-np-exp`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `metabolic-respiratory-disturbances-2-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `metabolic-respiratory-disturbances-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `metabolic-syndrome-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `metformin-firstline-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `methanol-ethylene-glycol-poisoning-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `methotrexate-np-molecular-pharmacology-and-prescriptive-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `methotrexate-safety-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `mi-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `microcirculation-failure-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `microscopic-colitis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `microscopic-polyangiitis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `migraine-diagnostic-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `migraine-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `migraine-tension-cluster-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `migraine-therapies-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `monitoring-safety-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `mood-stabilizers-core-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `mood-stabilizers-moa-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `motor-sensory-exam-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `motor-sensory-pathways-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `mrsa-decolonization-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `ms-diagnostic-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `msk-osteoarthritis-gout-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `msk-osteoporosis-fibromyalgia-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `msk-rheumatoid-arthritis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `msk-special-tests-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `multi-system-disease-interaction-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `multimodal-analgesia-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `multiple-sclerosis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `murmur-timing-logic-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `musculoskeletal-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `musculoskeletal-np-exp`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `myasthenia-gravis-crisis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `myasthenia-gravis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `myelodysplastic-syndromes-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `myocardial-infarction-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `myxedema-coma-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `nafld-nash-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `narrow-broad-spectrum-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `nas-opioid-withdrawal-scoring-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `necrotizing-fasciitis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `negative-pressure-wound-therapy-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `neonatal-abstinence-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `neonatal-hie-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `neonatal-jaundice-workup-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `neonatal-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `neonatal-np-exp`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `neonatal-rds-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `nephrogenic-di-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `nephrolithiasis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `nephrolithiasis-prevention-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `nephrotic-syndrome-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `neuro-core-physiology-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `neuro-delirium-dementia-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `neuro-depression-anxiety-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `neuro-diagnostic-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `neuro-exam-advanced-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `neuro-headaches-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `neuro-pain-physiology-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `neuro-parkinsons-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `neuro-patho-bbb-disruption-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `neuro-patho-cerebral-edema-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `neuro-patho-demyelination-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `neuro-patho-neurotransmitter-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `neuro-seizures-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `neuro-sleep-disorders-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `neuro-stroke-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `neurodegeneration-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `neurofibromatosis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `neurological-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `neurological-np-exp`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `neurological-pathophysiology-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `neuromuscular-blockade-monitoring-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `neuronal-signaling-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `neuropathic-pain-meds-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `neuropathic-pain-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `newborn-diabetic-mother-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `next-best-step-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `nms-advanced-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `non-invasive-ventilation-modes-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `non-invasive-ventilation-modes-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `normal-pressure-hydrocephalus-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `np-aaa-management`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `np-advanced-legal-and-regulatory-practice-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `np-anti-infectives-stewardship`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `np-cardiovascular-advanced-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `np-clinical-documentation-and-health-informatics-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `np-cultural-humility-and-equity-informed-practice-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `np-delegation-and-interprofessional-authority-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `np-health-promotion-and-preventive-medicine-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `np-high-risk-prescribing-and-safety`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `np-labs-and-diagnostics-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `np-leadership-and-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `np-maternal-newborn-and-reproductive-health-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `np-meningitis-management`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `np-obesity-pathophysiology-management`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `np-parkinson-disease-management`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `np-prescribing-calculations-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `np-respiratory-advanced-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `np-rheumatoid-arthritis-management`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `np-smoking-cessation-pharmacology`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `np-testbank-advanced-assessment`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `np-testbank-differential-diagnosis`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `np-testbank-emergency-management`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `np-testbank-prescribing`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `np-thalassemia-management`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `np-therapeutic-communication-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `np-vaccines-immunology-preventive`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `nursing-calc-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `nutrition-supplements-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `nutritional-assessment-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `obesity-medicine-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `obesity-prescribing-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `obstetric-hemorrhage-massive-transfusion-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `obstetric-hemorrhage-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `obstructive-restrictive-mechanisms-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `occupational-lung-disease-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `occupational-lung-disease-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `off-label-prescribing-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `oncology-np-exp`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `ophthalmoscopic-exam-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `opioid-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `opioid-od-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `opioid-tapering-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `opportunistic-infections-hiv-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `oral-candidiasis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `oral-candidiasis-np-prescriptive-and-molecular-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `orchitis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `organ-donation-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `organophosphate-poisoning-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `orthostatic-hypotension-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `orthostatic-hypotension-syndromes-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `orthostatic-vitals-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `osa-pathophysiology-deep-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `osteomyelitis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `osteoporosis-advanced-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `osteoporosis-core-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
+- `iron-metabolism-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `iron-poisoning-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `iron-studies-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `ischemic-and-hemorrhagic-stroke-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `ischemic-heart-disease-patho-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `ischemic-stroke-cascade-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `joint-exam-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `joint-injection-technique-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `jvp-assessment-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `kawasaki-disease-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `ketamine-infusion-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `lab-confirms-diagnosis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `lab-interpretation-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `laba-safety-logic-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `labs-diagnostics-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `labyrinthitis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `lactate-and-perfusion-trending`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
+- `leadership-mgmt-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `legal-edge-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `legal-ethical-prescribing-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `levothyroxine-dosing-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `lft-interpretation-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `libman-sacks-endocarditis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `lipase-amylase-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `lipid-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `lipid-monitoring-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `lipid-panel-analysis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `lithium-toxicity-advanced-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `liver-function-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `locked-in-syndrome-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `long-qt-syndrome-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `long-qt-syndrome-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `low-back-pain-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `lumbar-puncture-and-csf-analysis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `lumbar-puncture-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `lumbar-puncture-technique-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `lung-auscultation-interpretation-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `lung-cancer-staging-and-treatment-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `lung-cancer-staging-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `lyme-disease-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `lymphedema-assessment-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `lymphoma-workup-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `male-infertility-2-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `male-infertility-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `malignant-hyperthermia-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `mandatory-imaging-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `marfan-cardiac-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `marfan-cardiac-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `marfan-syndrome-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `marfan-syndrome-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `massive-transfusion-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `mast-cell-activation-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `mastitis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `mastitis-np-advanced-practice-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `maternal-newborn-edge-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `maternity-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `maternity-np-exp`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `mctd-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `mdd-dsm5-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `mechanical-vent-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `mechanical-ventilation-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `meckel-diverticulum-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `meckels-diverticulum-advanced-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `meconium-ileus-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `meconium-ileus-np-advanced-pathophysiology-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `medication-selection-logic-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `melanoma-staging-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `men-syndromes-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `menieres-disease-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `meningitis-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `menopause-and-hormone-therapy-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `menopause-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `menopause-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `menopause-pharmacotherapy-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `mens-health-bph-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `mens-health-ed-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `mens-health-infertility-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `mens-health-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `mens-health-prostate-screening-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `mens-health-prostatitis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `mens-health-testosterone-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `menstrual-physiology-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `mental-health-np-exp`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `metabolic-respiratory-disturbances-2-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `metabolic-respiratory-disturbances-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `metabolic-syndrome-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `metformin-firstline-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `methanol-ethylene-glycol-poisoning-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `methotrexate-np-molecular-pharmacology-and-prescriptive-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `methotrexate-safety-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `mi-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `microcirculation-failure-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `microscopic-colitis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `microscopic-polyangiitis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `migraine-diagnostic-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `migraine-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `migraine-tension-cluster-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `migraine-therapies-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `monitoring-safety-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `mood-stabilizers-core-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `mood-stabilizers-moa-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `motor-sensory-exam-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `motor-sensory-pathways-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `mrsa-decolonization-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `ms-diagnostic-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `msk-osteoarthritis-gout-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `msk-osteoporosis-fibromyalgia-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `msk-rheumatoid-arthritis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `msk-special-tests-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `multi-system-disease-interaction-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `multimodal-analgesia-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `multiple-sclerosis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `murmur-timing-logic-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `musculoskeletal-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `musculoskeletal-np-exp`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `myasthenia-gravis-crisis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `myasthenia-gravis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `myelodysplastic-syndromes-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `myocardial-infarction-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `myxedema-coma-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `nafld-nash-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `narrow-broad-spectrum-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `nas-opioid-withdrawal-scoring-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `necrotizing-fasciitis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `negative-pressure-wound-therapy-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `neonatal-abstinence-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `neonatal-hie-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `neonatal-jaundice-workup-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `neonatal-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `neonatal-np-exp`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `neonatal-rds-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `nephrogenic-di-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `nephrolithiasis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `nephrolithiasis-prevention-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `nephrotic-syndrome-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `neuro-core-physiology-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `neuro-delirium-dementia-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `neuro-depression-anxiety-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `neuro-deterioration-escalation`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `neuro-diagnostic-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `neuro-exam-advanced-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `neuro-headaches-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `neuro-pain-physiology-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `neuro-parkinsons-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `neuro-patho-bbb-disruption-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `neuro-patho-cerebral-edema-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `neuro-patho-demyelination-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `neuro-patho-neurotransmitter-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `neuro-seizures-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `neuro-sleep-disorders-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `neuro-stroke-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `neurodegeneration-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `neurofibromatosis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `neurological-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `neurological-np-exp`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `neurological-pathophysiology-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `neuromuscular-blockade-monitoring-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `neuronal-signaling-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `neuropathic-pain-meds-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `neuropathic-pain-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `newborn-diabetic-mother-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `next-best-step-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `nms-advanced-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `non-invasive-ventilation-modes-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `non-invasive-ventilation-modes-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `normal-pressure-hydrocephalus-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `np-aaa-management`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `np-advanced-legal-and-regulatory-practice-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `np-anti-infectives-stewardship`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `np-cardiovascular-advanced-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `np-clinical-documentation-and-health-informatics-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `np-cultural-humility-and-equity-informed-practice-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `np-delegation-and-interprofessional-authority-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `np-health-promotion-and-preventive-medicine-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `np-high-risk-prescribing-and-safety`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `np-labs-and-diagnostics-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `np-leadership-and-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `np-maternal-newborn-and-reproductive-health-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `np-meningitis-management`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `np-obesity-pathophysiology-management`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `np-parkinson-disease-management`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `np-prescribing-calculations-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `np-respiratory-advanced-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `np-rheumatoid-arthritis-management`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `np-smoking-cessation-pharmacology`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `np-testbank-advanced-assessment`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `np-testbank-differential-diagnosis`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `np-testbank-emergency-management`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `np-testbank-prescribing`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `np-thalassemia-management`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `np-therapeutic-communication-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `np-vaccines-immunology-preventive`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `nursing-calc-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `nutrition-supplements-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `nutritional-assessment-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `obesity-medicine-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `obesity-prescribing-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `obstetric-hemorrhage-massive-transfusion-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `obstetric-hemorrhage-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `obstructive-restrictive-mechanisms-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `occupational-lung-disease-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `occupational-lung-disease-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `off-label-prescribing-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `oncology-np-exp`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `ophthalmoscopic-exam-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `opioid-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `opioid-od-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `opioid-tapering-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `opportunistic-infections-hiv-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `oral-candidiasis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `oral-candidiasis-np-prescriptive-and-molecular-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `orchitis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `organ-donation-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `organophosphate-poisoning-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `orthostatic-hypotension-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `orthostatic-hypotension-syndromes-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `orthostatic-vitals-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `osa-pathophysiology-deep-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `osteomyelitis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `osteoporosis-advanced-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `osteoporosis-core-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
 - `osteoporosis-frax-basics`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `osteoporosis-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `osteoporosis-pharmacotherapy-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `otitis-externa-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `otitis-media-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `otitis-media-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `otitis-media-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `otoscopic-exam-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `oud-mat-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
+- `osteoporosis-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `osteoporosis-pharmacotherapy-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `otitis-externa-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `otitis-media-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `otitis-media-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `otitis-media-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `otoscopic-exam-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `oud-mat-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
 - `outpatient-pneumonia-antibiotics`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `ovarian-torsion-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `oxidative-stress-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `oxygen-dissociation-curve-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `pad-basics-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `pain-crisis-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `pain-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `pain-management-np-adv`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `pain-physiology-and-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `palliative-and-end-of-life-care-np-scope-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `palliative-assessment-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `palliative-ethics-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `palliative-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `palliative-pain-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `palliative-sedation-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `pancreatic-cancer-workup-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `pancreatic-neuroendocrine-tumors-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `pancreatitis-advanced-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `pancreatitis-basics-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `pancreatitis-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `pancreatitis-patho-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `panhypopituitarism-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `papilledema-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `paralytic-agents-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `parkinson-meds-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `parkinsons-advanced-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `parkinsons-disease-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `pca-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `pcos-core-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `pcos-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `pcos-pathophysiology-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `pcos-rotterdam-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `pdmp-usage-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `pe-basics-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `pe-diagnostic-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `pe-pathophysiology-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `pe-recognition-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `pediatric-asthma-assessment-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `pediatric-asthma-management-2-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `pediatric-asthma-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `pediatric-asthma-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `pediatric-dehydration-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `pediatric-diagnostic-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `pediatric-dosing-logic-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `pediatric-fever-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `pediatric-growth-disorders-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `pediatric-obesity-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `pediatric-pathophysiology-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `pediatric-prescribing-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `pediatric-red-flags-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `pediatric-vaccine-schedule-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `pediatric-weight-based-dosing-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `pediatric-weight-dosing-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
+- `ovarian-torsion-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `oxidative-stress-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `oxygen-dissociation-curve-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `oxygenation-failure-patterns`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
+- `pad-basics-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `pain-crisis-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `pain-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `pain-management-np-adv`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `pain-physiology-and-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `palliative-and-end-of-life-care-np-scope-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `palliative-assessment-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `palliative-ethics-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `palliative-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `palliative-pain-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `palliative-sedation-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `pancreatic-cancer-workup-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `pancreatic-neuroendocrine-tumors-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `pancreatitis-advanced-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `pancreatitis-basics-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `pancreatitis-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `pancreatitis-patho-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `panhypopituitarism-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `papilledema-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `paralytic-agents-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `parkinson-meds-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `parkinsons-advanced-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `parkinsons-disease-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `pca-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `pcos-core-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `pcos-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `pcos-pathophysiology-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `pcos-rotterdam-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `pdmp-usage-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `pe-basics-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `pe-diagnostic-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `pe-pathophysiology-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `pe-recognition-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `pediatric-asthma-assessment-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `pediatric-asthma-management-2-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `pediatric-asthma-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `pediatric-asthma-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `pediatric-dehydration-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `pediatric-diagnostic-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `pediatric-dosing-logic-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `pediatric-fever-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `pediatric-growth-disorders-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `pediatric-obesity-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `pediatric-pathophysiology-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `pediatric-prescribing-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `pediatric-red-flags-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `pediatric-vaccine-schedule-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `pediatric-weight-based-dosing-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `pediatric-weight-dosing-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
 - `pediatric-well-visits-red-flags`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `pediatrics-core-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `pediatrics-np-exp`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `peds-antibiotic-selection-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `peds-weight-dosing-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `pelvic-inflammatory-disease-cdc-guidelines-and-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `penile-cancer-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `peptic-ulcer-patho-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `percussion-patterns-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `perfusion-pressure-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `pericardial-effusion-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `peripheral-embolism-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `peripheral-neuropathy-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `peripheral-neuropathy-patho-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `peripheral-pulse-assessment-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `persistent-pulm-htn-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `personality-disorder-assessment-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `personality-disorders-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `pft-interpretation-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `pft-obstructive-restrictive-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `pharm-np-controlled-substances`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `pharm-np-high-risk`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `pharm-np-prescribing-principles`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `pharmacodynamics-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `pharmacokinetics-applied-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `pharmacology-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `pharmacotherapeutics-core-principles-otc-management-and-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `pharmacotherapeutics-principles-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `pharyngitis-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `pharyngitis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `pheochromocytoma-crisis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `pheochromocytoma-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `phimosis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `phimosis-np-advanced-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
+- `pediatrics-core-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `pediatrics-np-exp`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `peds-antibiotic-selection-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `peds-weight-dosing-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `pelvic-inflammatory-disease-cdc-guidelines-and-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `penile-cancer-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `peptic-ulcer-patho-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `percussion-patterns-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `perfusion-pressure-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `pericardial-effusion-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `peripheral-embolism-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `peripheral-neuropathy-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `peripheral-neuropathy-patho-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `peripheral-pulse-assessment-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `persistent-pulm-htn-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `personality-disorder-assessment-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `personality-disorders-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `pft-interpretation-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `pft-obstructive-restrictive-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `pharm-np-controlled-substances`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `pharm-np-high-risk`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `pharm-np-prescribing-principles`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `pharmacodynamics-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `pharmacokinetics-applied-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `pharmacology-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `pharmacotherapeutics-core-principles-otc-management-and-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `pharmacotherapeutics-principles-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `pharyngitis-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `pharyngitis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `pheochromocytoma-crisis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `pheochromocytoma-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `phimosis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `phimosis-np-advanced-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
 - `phq-9-safety-planning`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `pid-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `pku-adult-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `placenta-previa-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `plasmapheresis-indications-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `pleural-effusion-diagnostic-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `pleural-effusion-management-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `pleural-effusion-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `pneumonia-and-gas-exchange-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `pneumonia-diagnostic-criteria-and-severity-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `pneumonia-diagnostic-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `pneumonia-gas-exchange-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `pneumonia-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `pneumonia-outpatient-abx-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `pneumonia-outpatient-antibiotic-selection-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `pneumonia-outpatient-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `pneumothorax-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `point-of-care-us-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `polyarteritis-nodosa-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `polycystic-kidney-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `polymyalgia-rheumatica-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
+- `pid-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `pku-adult-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `placenta-previa-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `plasmapheresis-indications-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `pleural-effusion-diagnostic-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `pleural-effusion-management-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `pleural-effusion-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `pneumonia-and-gas-exchange-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `pneumonia-diagnostic-criteria-and-severity-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `pneumonia-diagnostic-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `pneumonia-gas-exchange-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `pneumonia-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `pneumonia-outpatient-abx-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `pneumonia-outpatient-antibiotic-selection-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `pneumonia-outpatient-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `pneumothorax-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `point-of-care-us-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `polyarteritis-nodosa-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `polycystic-kidney-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `polymyalgia-rheumatica-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
 - `polypharmacy-deprescribing`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `polypharmacy-deprescribing-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `polypharmacy-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `polypharmacy-risk-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `porphyria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `portal-hypertension-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `portal-hypertension-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `post-angiography-care-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `post-traumatic-stress-disorder-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `post-viral-syndromes-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `potassium-regulation-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `pphn-nitric-oxide-pathway-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `ppi-h2-blocker-logic-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `prader-willi-syndrome-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `precocious-puberty-molecular-mechanisms-and-gnrh-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `precocious-puberty-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `preconception-counseling-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `prediabetes-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `pregnancy-basics-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `pregnancy-safe-meds-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `pregnancy-safety-prescribing-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `preload-afterload-contractility-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `prenatal-assessment-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `prenatal-screening-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `preoperative-assessment-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `pres-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `prescribing-foundations-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `prescribing-process-logic-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `pressure-injury-prevention-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `pressure-volume-relationships-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `preventive-care-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `priapism-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `primary-headache-disorders-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `primary-sclerosing-cholangitis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `primary-secondary-lesions-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `procedures-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `professional-practice-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `prognostication-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `prone-positioning-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `prostate-cancer-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `prostate-cancer-screening-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `prostatitis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `prostatitis-syndromes-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `protein-binding-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `proteinuria-mechanisms-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `pseudogout-cppd-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `psoriasis-advanced-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `psoriasis-core-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `psoriatic-arthritis-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `psych-core-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `psych-patho-schizophrenia-dopamine-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `psych-patho-substance-use-neuroscience-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `psychiatric-diagnostic-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `psychiatric-diagnostic-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `psychiatric-pathophysiology-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `psychiatric-prescribing-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `psychiatry-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `psychopharmacology-advanced-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `pt-inr-aptt-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `ptsd-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `ptsd-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `pud-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `pulmonary-embolism-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `pulmonary-hypertension-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `pulmonary-hypertension-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `pulmonary-sarcoidosis-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `pulse-oximetry-limits-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `pvd-advanced-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `pvd-advanced-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `pvd-diagnostic-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `qt-prolongation-risks-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `ra-medication-escalation-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `raas-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `raas-physiology-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `ramsay-hunt-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `rare-genetic-disorders-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `rare-high-risk-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `rashes-differentiation-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `rds-surfactant-physiology-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `reactive-arthritis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `rectal-prostate-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `recurrent-pregnancy-loss-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `red-flag-adverse-effects-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `red-flag-mechanisms-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `red-flags-exam-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `reflex-grading-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `regional-anesthesia-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `renal-diagnostic-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
+- `polypharmacy-deprescribing-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `polypharmacy-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `polypharmacy-risk-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `porphyria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `portal-hypertension-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `portal-hypertension-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `post-angiography-care-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `post-traumatic-stress-disorder-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `post-viral-syndromes-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `potassium-regulation-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `pphn-nitric-oxide-pathway-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `ppi-h2-blocker-logic-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `prader-willi-syndrome-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `precocious-puberty-molecular-mechanisms-and-gnrh-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `precocious-puberty-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `preconception-counseling-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `prediabetes-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `pregnancy-basics-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `pregnancy-safe-meds-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `pregnancy-safety-prescribing-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `preload-afterload-contractility-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `prenatal-assessment-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `prenatal-screening-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `preoperative-assessment-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `pres-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `prescribing-foundations-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `prescribing-process-logic-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `pressure-injury-prevention-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `pressure-volume-relationships-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `preventive-care-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `priapism-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `primary-headache-disorders-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `primary-sclerosing-cholangitis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `primary-secondary-lesions-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `procedures-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `professional-practice-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `prognostication-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `prone-positioning-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `prostate-cancer-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `prostate-cancer-screening-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `prostatitis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `prostatitis-syndromes-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `protein-binding-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `proteinuria-mechanisms-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `pseudogout-cppd-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `psoriasis-advanced-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `psoriasis-core-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `psoriatic-arthritis-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `psych-core-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `psych-patho-schizophrenia-dopamine-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `psych-patho-substance-use-neuroscience-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `psychiatric-diagnostic-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `psychiatric-diagnostic-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `psychiatric-pathophysiology-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `psychiatric-prescribing-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `psychiatry-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `psychopharmacology-advanced-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `pt-inr-aptt-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `ptsd-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `ptsd-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `pud-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `pulmonary-embolism-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `pulmonary-hypertension-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `pulmonary-hypertension-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `pulmonary-sarcoidosis-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `pulse-oximetry-limits-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `pvd-advanced-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `pvd-advanced-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `pvd-diagnostic-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `qt-prolongation-risks-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `ra-medication-escalation-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `raas-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `raas-physiology-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `ramsay-hunt-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `rare-genetic-disorders-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `rare-high-risk-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `rashes-differentiation-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `rds-surfactant-physiology-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `reactive-arthritis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `rectal-prostate-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `recurrent-pregnancy-loss-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `red-flag-adverse-effects-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `red-flag-mechanisms-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `red-flags-exam-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `reflex-grading-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `regional-anesthesia-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `renal-bph`: ca-np-cnple, us-np-fnp, us-np-agpcnp
+- `renal-diagnostic-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
 - `renal-dose-adjustment-awareness`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `renal-dosing-adjustments-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `renal-electrolyte-prescribing-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `renal-elimination-dosing-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `renal-gu-core-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `renal-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `renal-np-exp`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `renal-patho-gfr-autoregulation-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `renal-patho-proteinuria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `renal-pathophysiology-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `renal-replacement-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `renal-rx-acid-base-correction-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `renal-rx-ckd-anemia-epo-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `renal-rx-diuretic-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `renal-rx-phosphate-binders-ckd-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `renal-rx-potassium-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `renal-tubular-acidosis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `renin-angiotensin-aldosterone-system-and-primary-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `renovascular-hypertension-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `resistance-mechanisms-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `resistance-principles-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `resistant-htn-strategies-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `resp-core-physiology-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `resp-patho-airway-remodeling-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `resp-patho-gas-exchange-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `resp-patho-surfactant-alveolar-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `resp-rx-biologics-severe-asthma-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `respiratory-diagnostic-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `respiratory-failure-management-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `respiratory-failure-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `respiratory-mechanics-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `respiratory-mechanics-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `respiratory-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `respiratory-np-exp`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `respiratory-pathophysiology-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `respiratory-prescribing-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `reversible-irreversible-injury-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `rh-alloimmunization-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `rheumatoid-arthritis-advanced-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `rheumatoid-arthritis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `rheumatology-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `rhinosinusitis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `rib-fractures-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `risk-benefit-reasoning-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `risk-stratification-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `rotavirus-gastroenteritis-np-advanced-practice-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `rotavirus-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `ruling-out-findings-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `saba-ics-logic-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `safety-ethics-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `sah-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `sarcoidosis-pulmonary-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `schizophrenia-basics-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `schizophrenia-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `sci-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `scleroderma-systemic-sclerosis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `sclerodermasystemic-sclerosis-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `scope-of-practice-ca-us-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `scope-of-practice-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `screening-guidelines-uspstf-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `second-degree-avb-type-i-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `secondary-hypertension-workup-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `sedation-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `sedative-hypnotic-toxidrome-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `seizure-disorders-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `seizure-physiology-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `seizure-safety-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `sensitivity-specificity-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `separation-anxiety-disorder-np-advanced-psychopharmacology-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `separation-anxiety-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `sepsis-cascade-patho-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `sepsis-cytokine-storm-and-sofa-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `sepsis-diagnostic-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `sepsis-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `sepsis-mastery-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `septic-arthritis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `serotonergic-toxidrome-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `serotonin-syndrome-advanced-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `serotonin-syndrome-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `serotonin-syndrome-risk-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `serum-sickness-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `severity-markers-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `sglt2i-cv-renal-benefit-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `shared-decision-making-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `shock-hemodynamic-monitoring-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `shock-syndromes-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `shock-types-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
+- `renal-dosing-adjustments-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `renal-ed`: ca-np-cnple, us-np-fnp, us-np-agpcnp
+- `renal-electrolyte-prescribing-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `renal-elimination-dosing-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `renal-emergencies-hyperkalemia-aki`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
+- `renal-gu-core-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `renal-male-infertility`: ca-np-cnple, us-np-fnp, us-np-agpcnp
+- `renal-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `renal-np-exp`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `renal-patho-gfr-autoregulation-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `renal-patho-proteinuria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `renal-pathophysiology-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `renal-prostatitis`: ca-np-cnple, us-np-fnp, us-np-agpcnp
+- `renal-replacement-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `renal-rx-acid-base-correction-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `renal-rx-ckd-anemia-epo-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `renal-rx-diuretic-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `renal-rx-phosphate-binders-ckd-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `renal-rx-potassium-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `renal-tubular-acidosis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `renin-angiotensin-aldosterone-system-and-primary-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `renovascular-hypertension-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `resistance-mechanisms-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `resistance-principles-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `resistant-htn-strategies-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `resp-core-physiology-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `resp-patho-airway-remodeling-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `resp-patho-gas-exchange-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `resp-patho-surfactant-alveolar-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `resp-rx-biologics-severe-asthma-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `respiratory-diagnostic-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `respiratory-failure-escalation-ladder`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `respiratory-failure-management-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `respiratory-failure-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `respiratory-mechanics-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `respiratory-mechanics-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `respiratory-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `respiratory-np-exp`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `respiratory-pathophysiology-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `respiratory-prescribing-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `reversible-irreversible-injury-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `rh-alloimmunization-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `rheumatoid-arthritis-advanced-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `rheumatoid-arthritis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `rheumatology-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `rhinosinusitis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `rib-fractures-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `risk-benefit-reasoning-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `risk-stratification-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `rotavirus-gastroenteritis-np-advanced-practice-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `rotavirus-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `ruling-out-findings-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `saba-ics-logic-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `safety-ethics-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `sah-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `sarcoidosis-pulmonary-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `schizophrenia-basics-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `schizophrenia-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `sci-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `scleroderma-systemic-sclerosis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `sclerodermasystemic-sclerosis-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `scope-of-practice-ca-us-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `scope-of-practice-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `screening-guidelines-uspstf-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `second-degree-avb-type-i-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `secondary-hypertension-workup-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `sedation-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `sedative-hypnotic-toxidrome-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `seizure-disorders-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `seizure-physiology-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `seizure-safety-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `sensitivity-specificity-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `separation-anxiety-disorder-np-advanced-psychopharmacology-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `separation-anxiety-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `sepsis-cascade-patho-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `sepsis-cytokine-storm-and-sofa-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `sepsis-diagnostic-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `sepsis-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `sepsis-mastery-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `sepsis-recognition-and-bundles`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `septic-arthritis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `septic-vs-cardiogenic-shock-differentiation`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
+- `serotonergic-toxidrome-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `serotonin-syndrome-advanced-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `serotonin-syndrome-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `serotonin-syndrome-risk-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `serum-sickness-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `severity-markers-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `sglt2i-cv-renal-benefit-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `shared-decision-making-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `shock-hemodynamic-monitoring-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `shock-states-comparison`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
+- `shock-syndromes-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `shock-types-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
 - `shortness-of-breath-triage`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `siadh-deep-pathophysiology-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `siadh-di-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `sibo-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `sickle-cell-crisis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `sickle-cell-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `sinusitis-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `sinusitis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `sjogren-syndrome-advanced-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `sjs-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `skin-biopsy-techniques-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `skin-cancers-basics-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `skin-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `sle-advanced-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `sleep-apnea-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `sleep-disorders-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `smart-therapy-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `smoking-cessation-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `snake-envenomation-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `snri-logic-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `snris-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `sodium-disorders-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `sodium-disorders-osmoregulation-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `sofa-and-apache-ii-scoring-advanced-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `sofa-and-apache-ii-scoring-np-level-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `sofa-apache-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `spinal-cord-injury-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `spine-exam-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `spirometry-interpretation-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `spontaneous-pneumothorax-2-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `spontaneous-pneumothorax-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `sports-physical-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `squamous-cell-carcinoma-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `ssri-selection-differences-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `ssri-sexual-side-effects-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `ssris-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `stable-angina-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `stable-ischemic-hd-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `statin-intensity-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `stemi-molecular-and-pharmacology-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `stemi-nstemi-algorithm-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `steminstemi-algorithm-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `sti-management-core-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `sti-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `sti-screening-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `sti-treatment-guidelines-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `stool-testing-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `stress-chronic-disease-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `stress-hpa-axis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `stress-ptsd-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `stroke-advanced-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `stroke-diagnostic-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `stroke-fast-nih-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `stroke-tia-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
+- `siadh-deep-pathophysiology-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `siadh-di-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `sibo-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `sickle-cell-crisis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `sickle-cell-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `sinusitis-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `sinusitis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `sjogren-syndrome-advanced-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `sjs-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `skin-biopsy-techniques-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `skin-cancers-basics-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `skin-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `sle-advanced-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `sleep-apnea-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `sleep-disorders-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `smart-therapy-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `smoking-cessation-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `snake-envenomation-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `snri-logic-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `snris-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `sodium-disorders-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `sodium-disorders-osmoregulation-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `sofa-and-apache-ii-scoring-advanced-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `sofa-and-apache-ii-scoring-np-level-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `sofa-apache-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `spinal-cord-injury-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `spine-exam-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `spirometry-interpretation-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `spontaneous-pneumothorax-2-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `spontaneous-pneumothorax-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `sports-physical-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `squamous-cell-carcinoma-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `ssri-selection-differences-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `ssri-sexual-side-effects-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `ssris-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `stable-angina-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `stable-ischemic-hd-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `statin-intensity-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `stemi-molecular-and-pharmacology-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `stemi-nstemi-algorithm-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `steminstemi-algorithm-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `sti-management-core-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `sti-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `sti-screening-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `sti-treatment-guidelines-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `stool-testing-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `stress-chronic-disease-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `stress-hpa-axis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `stress-ptsd-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `stroke-advanced-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `stroke-diagnostic-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `stroke-fast-nih-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `stroke-tia-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
 - `subclinical-hypothyroidism`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `substance-use-disorders-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `sucralfate-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `sucralfate-np-prescriptive-practice-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `sud-advanced-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `suicide-assessment-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `suicide-risk-assessment-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `swan-ganz-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `sympathomimetic-toxidrome-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `syncope-diagnostic-algorithm-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `syncope-emergency-workup-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `syphilis-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `systemic-and-pulmonary-circulation-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `systemic-pulmonary-circulation-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `systemic-steroids-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `t2d-diagnostic-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `takotsubo-cardiomyopathy-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `takotsubo-cardiomyopathy-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `targeted-temperature-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `tb-basics-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `tb-management-advanced-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `tb-management-advanced-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `tb-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `tbi-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `ten-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `testosterone-deficiency-and-hypogonadism-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `testosterone-deficiency-hypogonadism-evaluation-and-hormone-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `testosterone-deficiency-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `tetralogy-of-fallot-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `therapeutic-comm-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `therapeutic-communication-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `therapeutic-window-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `thiazide-prescribing-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `third-degree-avb-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `thoracic-aortic-aneurysm-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `thrombocytopenia-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `thromboembolism-patho-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `thrombolytics-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `thyroid-cancer-surveillance-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `thyroid-disorders-patho-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `thyroid-dysfunction-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `thyroid-exam-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `thyroid-hormone-therapy-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `thyroid-nodule-malignancy-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `thyroid-nodules-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `thyroid-regulation-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `thyroid-storm-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `tips-procedure-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `tissue-repair-fibrosis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `tls-renal-injury-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `tonsillectomy-care-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `toxic-multinodular-goiter-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `toxicology-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `toxicology-np-exp`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `toxicology-screening-approach-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `tracheobronchial-injury-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `tracheobronchial-injury-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `transfusion-reactions-hemolytic-vs-febrile-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `transfusion-reactions-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `transplant-rejection-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `trauma-atls-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `trauma-emergency-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `travel-medicine-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `tricyclic-antidepressant-overdose-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `trisomy-21-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `troponin-interpretation-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `tsh-interpretation-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `ttp-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `tuberculosis-fundamentals-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `tuberous-sclerosis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `tumor-lysis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `tumor-lysis-syndrome-uric-acid-crisis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `twin-to-twin-transfusion-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `type1-vs-type2-dm-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `type2-dm-pharmacotherapy-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `ulcerative-colitis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `ulcerative-colitis-np-advanced-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `umbilical-cord-prolapse-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `unstable-angina-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `urethral-stricture-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `urethral-stricture-np-advanced-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `urethritis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `urethritis-np-advanced-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `uri-differentiation-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `urinalysis-interpretation-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `urinary-incontinence-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `urine-culture-logic-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `uterine-prolapse-connective-tissue-biology-and-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `uterine-prolapse-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `uterine-rupture-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `uti-diagnostic-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `uti-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `uti-primary-care-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
+- `substance-use-disorders-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `sucralfate-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `sucralfate-np-prescriptive-practice-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `sud-advanced-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `suicide-assessment-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `suicide-risk-assessment-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `swan-ganz-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `sympathomimetic-toxidrome-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `syncope-diagnostic-algorithm-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `syncope-emergency-workup-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `syphilis-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `systemic-and-pulmonary-circulation-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `systemic-pulmonary-circulation-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `systemic-steroids-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `t2d-diagnostic-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `takotsubo-cardiomyopathy-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `takotsubo-cardiomyopathy-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `targeted-temperature-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `tb-basics-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `tb-management-advanced-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `tb-management-advanced-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `tb-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `tbi-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `ten-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `testosterone-deficiency-and-hypogonadism-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `testosterone-deficiency-hypogonadism-evaluation-and-hormone-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `testosterone-deficiency-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `tetralogy-of-fallot-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `therapeutic-comm-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `therapeutic-communication-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `therapeutic-window-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `thiazide-prescribing-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `third-degree-avb-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `thoracic-aortic-aneurysm-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `thrombocytopenia-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `thromboembolism-patho-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `thrombolytics-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `thyroid-cancer-surveillance-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `thyroid-disorders-patho-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `thyroid-dysfunction-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `thyroid-exam-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `thyroid-hormone-therapy-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `thyroid-nodule-malignancy-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `thyroid-nodules-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `thyroid-regulation-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `thyroid-storm-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `tips-procedure-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `tissue-repair-fibrosis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `tls-renal-injury-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `tonsillectomy-care-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `toxic-multinodular-goiter-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `toxicology-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `toxicology-np-exp`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `toxicology-screening-approach-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `tracheobronchial-injury-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `tracheobronchial-injury-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `transfusion-reactions-hemolytic-vs-febrile-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `transfusion-reactions-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `transplant-rejection-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `trauma-atls-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `trauma-emergency-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `travel-medicine-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `tricyclic-antidepressant-overdose-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `trisomy-21-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `troponin-interpretation-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `tsh-interpretation-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `ttp-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `tuberculosis-fundamentals-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `tuberous-sclerosis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `tumor-lysis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `tumor-lysis-syndrome-uric-acid-crisis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `twin-to-twin-transfusion-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `type1-vs-type2-dm-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `type2-dm-pharmacotherapy-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `ulcerative-colitis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `ulcerative-colitis-np-advanced-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `umbilical-cord-prolapse-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `unstable-angina-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `urethral-stricture-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `urethral-stricture-np-advanced-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `urethritis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `urethritis-np-advanced-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `uri-differentiation-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `urinalysis-interpretation-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `urinary-incontinence-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `urine-culture-logic-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `uterine-prolapse-connective-tissue-biology-and-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `uterine-prolapse-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `uterine-rupture-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `uti-diagnostic-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `uti-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `uti-primary-care-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
 - `uti-vs-asymptomatic-bacteriuria`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `uti-women-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `vaccine-catchup-schedules-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `vaccine-contraindications-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `vaginal-hematoma-advanced-np-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `vaginal-hematoma-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `vaginitis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `vaginitis-vaginal-microbiome-and-resistance-mechanisms-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `valve-disease-diagnostic-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `valvular-disease-mechanisms-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `valvular-disease-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `valvular-disease-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `vancomycin-therapy-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `vascular-assessment-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `vascular-resistance-principles-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `vasculitis-classification-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `vasculitis-coronary-arteries-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `vasopressors-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `vbac-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `vent-waveform-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `ventilation-perfusion-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `ventilator-associated-pneumonia-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `ventilator-associated-pneumonia-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `ventilator-bundle-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `vipoma-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `vp-shunt-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `vte-prophylaxis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `vte-prophylaxis-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `vulvodynia-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `vulvodynia-peripheral-sensitization-and-prescriptive-multimodal-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `warfarin-reversal-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `wells-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `wernicke-encephalopathy-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `wilson-disease-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
+- `uti-women-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `vaccine-catchup-schedules-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `vaccine-contraindications-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `vaginal-hematoma-advanced-np-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `vaginal-hematoma-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `vaginitis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `vaginitis-vaginal-microbiome-and-resistance-mechanisms-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `valve-disease-diagnostic-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `valvular-disease-mechanisms-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `valvular-disease-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `valvular-disease-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `vancomycin-therapy-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `vascular-assessment-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `vascular-resistance-principles-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `vasculitis-classification-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `vasculitis-coronary-arteries-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `vasopressor-selection-and-safety`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
+- `vasopressors-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `vbac-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `vent-waveform-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `ventilation-perfusion-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `ventilator-associated-pneumonia-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `ventilator-associated-pneumonia-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `ventilator-bundle-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `vipoma-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `vp-shunt-management-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `vte-prophylaxis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `vte-prophylaxis-np-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `vulvodynia-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `vulvodynia-peripheral-sensitization-and-prescriptive-multimodal-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `warfarin-reversal-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `wells-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `wernicke-encephalopathy-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `wilson-disease-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
 - `women-s-health-screening-ages`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `womens-health-amenorrhea-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `womens-health-contraception-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `womens-health-core-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `womens-health-diagnostic-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `womens-health-gynecologic-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `womens-health-hpo-axis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `womens-health-menopause-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `womens-health-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `womens-health-osteoporosis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `womens-health-pathophysiology-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `womens-health-prescribing-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `wound-care-np-adv`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `wound-healing-molecular-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `wound-irrigation-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `wound-specialist-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
-- `wound-vac-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-pmhnp
+- `womens-health-amenorrhea-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `womens-health-contraception-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `womens-health-core-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `womens-health-diagnostic-criteria-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `womens-health-gynecologic-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `womens-health-hpo-axis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `womens-health-menopause-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `womens-health-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `womens-health-osteoporosis-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `womens-health-pathophysiology-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `womens-health-prescribing-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `wound-care-np-adv`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `wound-healing-molecular-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `wound-irrigation-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `wound-specialist-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
+- `wound-vac-np`: ca-np-cnple, us-np-fnp, us-np-agpcnp, us-np-whnp, us-np-pnp-pc, us-np-pmhnp
 
 ## By system
 
 ### Cardiovascular (`cardiovascular`)
 
 - Topics: 18
-- STRONG_SKIP: 11 · UPGRADE: 2 · CREATE: 5 · MERGE: 0
+- STRONG_SKIP: 0 · UPGRADE: 13 · CREATE: 5 · MERGE: 0
 ### Respiratory (`respiratory`)
 
 - Topics: 12
@@ -1487,19 +1514,19 @@ DATABASE_URL present: **yes**
 ### Gastrointestinal (`gastrointestinal`)
 
 - Topics: 15
-- STRONG_SKIP: 3 · UPGRADE: 3 · CREATE: 9 · MERGE: 0
+- STRONG_SKIP: 1 · UPGRADE: 5 · CREATE: 9 · MERGE: 0
 ### Endocrine / metabolic (`endocrine_metabolic`)
 
 - Topics: 15
-- STRONG_SKIP: 7 · UPGRADE: 2 · CREATE: 6 · MERGE: 0
+- STRONG_SKIP: 0 · UPGRADE: 9 · CREATE: 6 · MERGE: 0
 ### Renal / genitourinary (`renal_gu`)
 
 - Topics: 11
-- STRONG_SKIP: 3 · UPGRADE: 3 · CREATE: 5 · MERGE: 0
+- STRONG_SKIP: 1 · UPGRADE: 5 · CREATE: 5 · MERGE: 0
 ### Neurology (`neurology`)
 
 - Topics: 11
-- STRONG_SKIP: 4 · UPGRADE: 3 · CREATE: 4 · MERGE: 0
+- STRONG_SKIP: 1 · UPGRADE: 6 · CREATE: 4 · MERGE: 0
 ### Musculoskeletal / rheumatology (`msk_rheum`)
 
 - Topics: 11
@@ -1507,19 +1534,19 @@ DATABASE_URL present: **yes**
 ### Women’s health (`womens_health`)
 
 - Topics: 14
-- STRONG_SKIP: 2 · UPGRADE: 2 · CREATE: 9 · MERGE: 1
+- STRONG_SKIP: 0 · UPGRADE: 4 · CREATE: 9 · MERGE: 1
 ### Men’s health (`mens_health`)
 
 - Topics: 7
-- STRONG_SKIP: 1 · UPGRADE: 1 · CREATE: 1 · MERGE: 4
+- STRONG_SKIP: 0 · UPGRADE: 2 · CREATE: 1 · MERGE: 4
 ### Pediatrics (`pediatrics`)
 
 - Topics: 7
-- STRONG_SKIP: 1 · UPGRADE: 1 · CREATE: 5 · MERGE: 0
+- STRONG_SKIP: 0 · UPGRADE: 2 · CREATE: 5 · MERGE: 0
 ### Infectious disease (`infectious_disease`)
 
 - Topics: 9
-- STRONG_SKIP: 3 · UPGRADE: 2 · CREATE: 4 · MERGE: 0
+- STRONG_SKIP: 0 · UPGRADE: 5 · CREATE: 4 · MERGE: 0
 ### Immunology / vaccines (`immunology_vaccines`)
 
 - Topics: 7
@@ -1531,22 +1558,22 @@ DATABASE_URL present: **yes**
 ### Dermatology (`dermatology`)
 
 - Topics: 6
-- STRONG_SKIP: 0 · UPGRADE: 0 · CREATE: 6 · MERGE: 0
+- STRONG_SKIP: 0 · UPGRADE: 1 · CREATE: 5 · MERGE: 0
 ### Hematology / oncology (`hematology_oncology`)
 
 - Topics: 5
-- STRONG_SKIP: 2 · UPGRADE: 0 · CREATE: 3 · MERGE: 0
+- STRONG_SKIP: 0 · UPGRADE: 2 · CREATE: 3 · MERGE: 0
 ### Geriatrics (`geriatrics`)
 
 - Topics: 6
-- STRONG_SKIP: 2 · UPGRADE: 1 · CREATE: 3 · MERGE: 0
+- STRONG_SKIP: 1 · UPGRADE: 2 · CREATE: 3 · MERGE: 0
 ### Preventive care / primary care core (`preventive_primary_core`)
 
 - Topics: 6
-- STRONG_SKIP: 2 · UPGRADE: 0 · CREATE: 4 · MERGE: 0
+- STRONG_SKIP: 3 · UPGRADE: 0 · CREATE: 3 · MERGE: 0
 ### Pharmacology (system-wide) (`pharmacology_systemwide`)
 
 - Topics: 7
-- STRONG_SKIP: 3 · UPGRADE: 1 · CREATE: 2 · MERGE: 1
+- STRONG_SKIP: 1 · UPGRADE: 3 · CREATE: 2 · MERGE: 1
 
 Full table: data/reports/pathway-lessons/np-coverage-catalog-audit.json (JSON rows array).
