@@ -108,6 +108,14 @@ export function PracticeTestRunnerClient({
   isEntitled?: boolean;
 }) {
   const [phase, setPhase] = useState<"loading" | "ready" | "error">("loading");
+  const { t } = useMarketingI18n();
+  const tx = useCallback(
+    (key: string, fallback: string, params?: Record<string, string | number | undefined>) => {
+      const resolved = t(key, params);
+      return resolved.startsWith("[missing:") ? fallback : resolved;
+    },
+    [t],
+  );
   const [error, setError] = useState<string | null>(null);
   const [questionIds, setQuestionIds] = useState<string[]>([]);
   const [questionCache, setQuestionCache] = useState<Record<string, QRow>>({});
@@ -369,6 +377,14 @@ export function PracticeTestRunnerClient({
   const qid = questionIds[idx];
   const current = qid ? questionCache[qid] : undefined;
   const total = questionIds.length;
+  const pathway = testConfig?.pathwayId ? getExamPathwayById(testConfig.pathwayId) : null;
+  const examName =
+    pathway?.shortName ??
+    (typeof current?.exam === "string" && current.exam.trim().length > 0
+      ? current.exam.trim()
+      : tx("learner.practiceTests.run.defaultExamName", "Practice Exam"));
+  const chromeVariant = examChromeVariantForPathway(testConfig?.pathwayId ?? null);
+  const chromeClass = `nn-exam-variant--${chromeVariant}`;
   const examSimulation = testConfig?.catPresentationMode === "exam_simulation";
   const catFeedbackStudy = Boolean(catMode && (testConfig?.catExamFeedbackMode ?? "test") === "study");
   // isExamStyle — single-column minimal layout for CAT test mode (spec §1, §14).
@@ -992,17 +1008,17 @@ export function PracticeTestRunnerClient({
   // Derived layout / display values
   const modeLabel = isLinearEngine
     ? linearDelivery === "exam"
-      ? "Linear exam"
-      : "Linear practice"
+      ? tx("learner.practiceTests.run.linearExamMode", "Linear exam")
+      : tx("learner.practiceTests.run.linearPracticeMode", "Linear practice")
     : catMode
       ? examSimulation
         ? aanpNpExamSim
-          ? "NP simulation · AANP-style"
-          : "NCLEX simulation · CAT"
+          ? tx("learner.practiceTests.run.npSimulationMode", "NP simulation · AANP-style")
+          : tx("learner.practiceTests.run.nclexSimulationMode", "NCLEX simulation · CAT")
         : catFeedbackStudy
-          ? "CAT · Study Mode"
-          : "CAT · Test Mode"
-      : "Practice test";
+          ? tx("learner.practiceTests.run.catStudyMode", "CAT · Study Mode")
+          : tx("learner.practiceTests.run.catTestMode", "CAT · Test Mode")
+      : tx("learner.practiceTests.run.practiceMode", "Practice test");
 
   const sessionPct = total > 0 ? Math.min(100, Math.max(0, ((idx + 1) / total) * 100)) : 0;
 
@@ -1034,10 +1050,20 @@ export function PracticeTestRunnerClient({
     const catOptions =
       optsCanonical.length === 0 ? (
         <p className="rounded-md border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-4 py-3 text-sm text-[var(--semantic-text-muted)]">
-          No answer choices returned. Try reloading or contact support.
+          {tx(
+            "learner.practiceTests.run.noAnswerChoices",
+            "No answer choices were returned for this item. Use Retry, reload the test, or contact support if this persists.",
+          )}
         </p>
       ) : isSata ? (
-        <ul className="nn-cat-opt-list" role="group" aria-label="Answer choices (select all that apply)">
+        <ul
+          className="nn-cat-opt-list"
+          role="group"
+          aria-label={tx(
+            "learner.practiceTests.run.answerChoicesSataAria",
+            "Answer choices (select all that apply)",
+          )}
+        >
           {optsCanonical.map((canonical, i) => {
             const selected = Array.isArray(raw) ? raw.includes(canonical) : false;
             const optState = catOptState(canonical);
@@ -1062,7 +1088,11 @@ export function PracticeTestRunnerClient({
           })}
         </ul>
       ) : (
-        <ul className="nn-cat-opt-list" role="radiogroup" aria-label="Answer choices">
+        <ul
+          className="nn-cat-opt-list"
+          role="radiogroup"
+          aria-label={tx("learner.practiceTests.run.answerChoicesAria", "Answer choices")}
+        >
           {optsCanonical.map((canonical, i) => (
             <li key={canonical}>
               <AnswerOptionRow
@@ -1092,13 +1122,24 @@ export function PracticeTestRunnerClient({
           flags={protectionFlags}
           telemetrySurface="practice_test"
         >
-          <CatSessionLayout>
+          <CatSessionLayout className={chromeClass}>
             {/* ── Top bar: Q counter + % complete + 6px progress bar ── */}
             <CatTopBar
+              examName={examName}
               current={idx + 1}
               total={total}
               saving={saving}
               timerSlot={<ExamTimerReadout remainingSec={timedMode ? remainingSec : null} />}
+              labels={{
+                question: tx("learner.practiceTests.run.question", "Question"),
+                of: tx("learner.practiceTests.run.of", "of"),
+                complete: tx("learner.practiceTests.run.complete", "complete"),
+                saving: tx("learner.practiceTests.run.saving", "Saving..."),
+                progressAria: tx(
+                  "learner.practiceTests.run.examProgressAria",
+                  `${examName} progress`,
+                ),
+              }}
             />
 
             {/*
@@ -1120,7 +1161,10 @@ export function PracticeTestRunnerClient({
                   {/* Timed warning */}
                   {timedMode && timeLimitSec != null ? (
                     <div className="nn-cat-exam-timing-alert mb-5" role="alert">
-                      Timed session: the exam may end automatically when time expires.
+                      {tx(
+                        "learner.practiceTests.run.timedAutoEnd",
+                        "Timed session: the exam may end automatically when time expires.",
+                      )}
                     </div>
                   ) : null}
 
@@ -1139,7 +1183,9 @@ export function PracticeTestRunnerClient({
 
                   {/* Options label */}
                   <p className="nn-cat-options-label">
-                    {isSata ? "Select all that apply" : "Select the best answer"}
+                    {isSata
+                      ? tx("learner.practiceTests.run.selectAllThatApply", "Select all that apply")
+                      : tx("learner.practiceTests.run.selectBestAnswer", "Select the best answer")}
                   </p>
 
                   {/* Answer options */}
@@ -1170,7 +1216,9 @@ export function PracticeTestRunnerClient({
                       onClick={() => setFlagged((f) => ({ ...f, [current.id]: !f[current.id] }))}
                     >
                       <span aria-hidden="true">{flagged[current.id] ? "★" : "☆"}</span>
-                      {flagged[current.id] ? "Flagged" : "Flag"}
+                      {flagged[current.id]
+                        ? tx("learner.practiceTests.run.flagged", "Flagged")
+                        : tx("learner.practiceTests.run.flag", "Flag")}
                     </button>
                     <button
                       type="button"
@@ -1178,7 +1226,7 @@ export function PracticeTestRunnerClient({
                       className="text-xs font-medium text-[var(--semantic-text-muted)] underline-offset-2 hover:text-[var(--semantic-text-secondary)] hover:underline"
                       onClick={() => void abandon()}
                     >
-                      End session
+                      {tx("learner.practiceTests.run.endSession", "End session")}
                     </button>
                     {idx < total - 1 ? (
                       <button
@@ -1187,7 +1235,9 @@ export function PracticeTestRunnerClient({
                         className="nn-btn-primary min-h-[2.75rem] rounded-lg px-6 text-sm font-semibold shadow-none disabled:opacity-40"
                         onClick={() => void catAdvance()}
                       >
-                        {saving ? "Working…" : "Next question"}
+                        {saving
+                          ? tx("learner.practiceTests.run.working", "Working...")
+                          : tx("learner.practiceTests.run.nextQuestion", "Next question")}
                       </button>
                     ) : (
                       <button
@@ -1196,7 +1246,9 @@ export function PracticeTestRunnerClient({
                         className="nn-btn-primary min-h-[2.75rem] rounded-lg px-6 text-sm font-semibold shadow-none disabled:opacity-40"
                         onClick={() => void catAdvance()}
                       >
-                        {saving ? "Working…" : "Submit & finish"}
+                        {saving
+                          ? tx("learner.practiceTests.run.working", "Working...")
+                          : tx("learner.practiceTests.run.submitAndFinish", "Submit & finish")}
                       </button>
                     )}
                   </div>
@@ -1215,7 +1267,10 @@ export function PracticeTestRunnerClient({
                   {/* Timed warning */}
                   {timedMode && timeLimitSec != null ? (
                     <div className="nn-cat-exam-timing-alert mb-5" role="alert">
-                      Timed session: the exam may end automatically when time expires.
+                      {tx(
+                        "learner.practiceTests.run.timedAutoEnd",
+                        "Timed session: the exam may end automatically when time expires.",
+                      )}
                     </div>
                   ) : null}
 
@@ -1234,7 +1289,9 @@ export function PracticeTestRunnerClient({
 
                   {/* Options label */}
                   <p className="nn-cat-options-label">
-                    {isSata ? "Select all that apply" : "Select the best answer"}
+                    {isSata
+                      ? tx("learner.practiceTests.run.selectAllThatApply", "Select all that apply")
+                      : tx("learner.practiceTests.run.selectBestAnswer", "Select the best answer")}
                   </p>
 
                   {/* Answer options */}
@@ -1257,7 +1314,9 @@ export function PracticeTestRunnerClient({
                     <div className="mt-6 border-t border-[var(--semantic-border-soft)] pt-5">
                       <CatStudyFeedbackPanel
                         feedback={catStudyFeedback}
-                        continueLabel={idx < total - 1 ? "Next adaptive item" : "View results"}
+                        continueLabel={idx < total - 1
+                          ? tx("learner.practiceTests.run.nextAdaptiveItem", "Next adaptive item")
+                          : tx("learner.practiceTests.run.viewResults", "View results")}
                         onContinue={() => void catAdvance()}
                         continueDisabled={saving}
                         pathwayId={testConfig?.pathwayId ?? null}
@@ -1278,7 +1337,9 @@ export function PracticeTestRunnerClient({
                       onClick={() => setFlagged((f) => ({ ...f, [current.id]: !f[current.id] }))}
                     >
                       <span aria-hidden="true">{flagged[current.id] ? "★" : "☆"}</span>
-                      {flagged[current.id] ? "Flagged" : "Flag"}
+                      {flagged[current.id]
+                        ? tx("learner.practiceTests.run.flagged", "Flagged")
+                        : tx("learner.practiceTests.run.flag", "Flag")}
                     </button>
                     <button
                       type="button"
@@ -1286,7 +1347,7 @@ export function PracticeTestRunnerClient({
                       className="text-xs font-medium text-[var(--semantic-text-muted)] underline-offset-2 hover:text-[var(--semantic-text-secondary)] hover:underline"
                       onClick={() => void abandon()}
                     >
-                      End session
+                      {tx("learner.practiceTests.run.endSession", "End session")}
                     </button>
                     {/* Primary action — hidden when study feedback is showing */}
                     {rationalePanelMode === "feedback" ? null : idx < total - 1 ? (
@@ -1296,7 +1357,9 @@ export function PracticeTestRunnerClient({
                         className="nn-btn-primary min-h-[2.75rem] rounded-lg px-6 text-sm font-semibold shadow-none disabled:opacity-40"
                         onClick={() => void catAdvance()}
                       >
-                        {saving ? "Working…" : "See explanation"}
+                        {saving
+                          ? tx("learner.practiceTests.run.working", "Working...")
+                          : tx("learner.practiceTests.run.seeExplanation", "See explanation")}
                       </button>
                     ) : (
                       <button
@@ -1305,7 +1368,9 @@ export function PracticeTestRunnerClient({
                         className="nn-btn-primary min-h-[2.75rem] rounded-lg px-6 text-sm font-semibold shadow-none disabled:opacity-40"
                         onClick={() => void catAdvance()}
                       >
-                        {saving ? "Working…" : "See explanation"}
+                        {saving
+                          ? tx("learner.practiceTests.run.working", "Working...")
+                          : tx("learner.practiceTests.run.seeExplanation", "See explanation")}
                       </button>
                     )}
                   </div>
@@ -1359,8 +1424,10 @@ export function PracticeTestRunnerClient({
   const practiceOptionRows =
     optsCanonical.length === 0 ? (
       <p className="rounded-md border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-4 py-3 text-sm text-[var(--semantic-text-muted)]">
-        No answer choices were returned for this item. Use Retry, reload the
-        test, or contact support if this persists.
+        {tx(
+          "learner.practiceTests.run.noAnswerChoices",
+          "No answer choices were returned for this item. Use Retry, reload the test, or contact support if this persists.",
+        )}
       </p>
     ) : isSata ? (
       <ul
@@ -1423,7 +1490,7 @@ export function PracticeTestRunnerClient({
 
   const topBarRightLabel =
     isLinearEngine && committedCount > 0
-      ? `${committedAnsweredPct}% complete`
+      ? `${committedAnsweredPct}% ${tx("learner.practiceTests.run.complete", "complete")}`
       : modeLabel;
 
   return (
@@ -1432,13 +1499,20 @@ export function PracticeTestRunnerClient({
       flags={protectionFlags}
       telemetrySurface="practice_test"
     >
-      <PracticeSessionLayout>
+      <PracticeSessionLayout className={chromeClass}>
         <PracticeTopBar
+          examName={examName}
           current={idx + 1}
           total={total}
           rightLabel={topBarRightLabel}
           progressPct={sessionPct}
           saving={saving}
+          labels={{
+            question: tx("learner.practiceTests.run.question", "Question"),
+            of: tx("learner.practiceTests.run.of", "of"),
+            saving: tx("learner.practiceTests.run.saving", "Saving..."),
+            progressAria: tx("learner.practiceTests.run.examProgressAria", `${examName} progress`),
+          }}
         />
         <PracticeSessionGrid>
           {/* LEFT — question + options + nav */}
@@ -1447,7 +1521,10 @@ export function PracticeTestRunnerClient({
               stem={
                 typeof current.stem === "string" && current.stem.trim().length > 0
                   ? current.stem
-                  : "Question text is unavailable. Try reloading this item."
+                  : tx(
+                    "learner.practiceTests.run.questionUnavailable",
+                    "Question text is unavailable. Try reloading this item.",
+                  )
               }
               topic={current.topic}
               subtopic={current.subtopic}
@@ -1456,11 +1533,16 @@ export function PracticeTestRunnerClient({
                   ? difficultyBandLabel(current.difficulty)
                   : null
               }
-              optionsLabel={isSata ? "Select all that apply" : "Select the best answer"}
+              optionsLabel={isSata
+                ? tx("learner.practiceTests.run.selectAllThatApply", "Select all that apply")
+                : tx("learner.practiceTests.run.selectBestAnswer", "Select the best answer")}
             >
               {timedMode && timeLimitSec != null ? (
                 <p className="rounded-lg border border-[color-mix(in_srgb,var(--semantic-warning)_28%,var(--semantic-border-soft))] bg-[var(--semantic-warning-soft)] px-3 py-2 text-xs font-medium text-[var(--semantic-warning-contrast)]">
-                  Timed session: the exam may end automatically when time expires.
+                  {tx(
+                    "learner.practiceTests.run.timedAutoEnd",
+                    "Timed session: the exam may end automatically when time expires.",
+                  )}
                 </p>
               ) : null}
               {timedMode ? (
@@ -1479,7 +1561,10 @@ export function PracticeTestRunnerClient({
                 />
               ) : (
                 <div className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-4 py-3 text-sm text-[var(--semantic-text-secondary)]">
-                  Confidence tracking is off in your study settings for this session.
+                  {tx(
+                    "learner.practiceTests.run.confidenceTrackingOff",
+                    "Confidence tracking is off in your study settings for this session.",
+                  )}
                 </div>
               )}
 
@@ -1496,7 +1581,9 @@ export function PracticeTestRunnerClient({
                     setFlagged((f) => ({ ...f, [current.id]: !f[current.id] }))
                   }
                 >
-                  {flagged[current.id] ? "Marked" : "Flag"}
+                  {flagged[current.id]
+                    ? tx("learner.practiceTests.run.marked", "Marked")
+                    : tx("learner.practiceTests.run.flag", "Flag")}
                 </button>
                 <div className="nn-practice-q-nav__spacer" />
                 {!isLinearEngine ? (
@@ -1506,7 +1593,7 @@ export function PracticeTestRunnerClient({
                     className="nn-btn-secondary min-h-[2.5rem] rounded-lg px-4 text-sm font-semibold disabled:opacity-40"
                     onClick={() => void goPrev()}
                   >
-                    Previous
+                    {tx("learner.practiceTests.run.previous", "Previous")}
                   </button>
                 ) : null}
                 {isLinearEngine && !currentCommitted ? (
@@ -1516,7 +1603,9 @@ export function PracticeTestRunnerClient({
                     className="nn-btn-primary min-h-[2.5rem] rounded-lg px-5 text-sm font-semibold shadow-none disabled:opacity-40"
                     onClick={() => void submitLinearCommit()}
                   >
-                    {saving ? "Submitting…" : "Submit answer"}
+                    {saving
+                      ? tx("learner.practiceTests.run.submitting", "Submitting...")
+                      : tx("learner.practiceTests.run.submitAnswer", "Submit answer")}
                   </button>
                 ) : null}
                 {idx < total - 1 ? (
@@ -1526,7 +1615,7 @@ export function PracticeTestRunnerClient({
                     className="nn-btn-primary min-h-[2.5rem] rounded-lg px-5 text-sm font-semibold shadow-none disabled:opacity-40"
                     onClick={() => void goNext()}
                   >
-                    Next
+                    {tx("learner.practiceTests.run.next", "Next")}
                   </button>
                 ) : (
                   <button
@@ -1535,7 +1624,9 @@ export function PracticeTestRunnerClient({
                     className="nn-btn-primary min-h-[2.5rem] rounded-lg px-5 text-sm font-semibold shadow-none disabled:opacity-40"
                     onClick={() => void submitTest()}
                   >
-                    {saving ? "Submitting…" : "Finish"}
+                    {saving
+                      ? tx("learner.practiceTests.run.submitting", "Submitting...")
+                      : tx("learner.practiceTests.run.finish", "Finish")}
                   </button>
                 )}
                 <button
@@ -1543,7 +1634,7 @@ export function PracticeTestRunnerClient({
                   className="text-xs font-medium text-[var(--semantic-text-muted)] underline-offset-2 hover:text-[var(--semantic-text-secondary)] hover:underline"
                   onClick={() => void abandon()}
                 >
-                  Abandon
+                  {tx("learner.practiceTests.run.abandon", "Abandon")}
                 </button>
               </div>
             </PracticeQuestionCard>

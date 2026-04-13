@@ -81,6 +81,19 @@ async function uniqueSlug(base: string): Promise<string> {
   }
 }
 
+async function hasBlogColumn(column: string): Promise<boolean> {
+  const rows = await prisma.$queryRawUnsafe<Array<{ present: number }>>(
+    `SELECT 1 AS present
+       FROM information_schema.columns
+      WHERE table_schema = 'public'
+        AND table_name = 'BlogPost'
+        AND column_name = $1
+      LIMIT 1`,
+    column,
+  );
+  return rows.length > 0;
+}
+
 async function main() {
   const apply = hasFlag("--apply");
   const maxPosts = Number(argValue("--max-posts") ?? `${DEFAULT_MAX_POSTS}`);
@@ -91,16 +104,26 @@ async function main() {
   const locales = (requestedLocales.length > 0 ? requestedLocales : GLOBAL_LOCALE_CODES.filter((l) => l !== SOURCE_LOCALE))
     .filter((l): l is string => l !== SOURCE_LOCALE)
     .slice(0, 24);
+  const supports = {
+    careerSlug: await hasBlogColumn("careerSlug"),
+    locale: await hasBlogColumn("locale"),
+    translationGroupId: await hasBlogColumn("translationGroupId"),
+    canonicalPostId: await hasBlogColumn("canonicalPostId"),
+    isAutoTranslated: await hasBlogColumn("isAutoTranslated"),
+    translationSource: await hasBlogColumn("translationSource"),
+  };
 
   const candidateRows = await prisma.blogPost.findMany({
     where: {
-      locale: SOURCE_LOCALE,
-      careerSlug: { not: null },
       OR: [
         { exam: { contains: "allied", mode: "insensitive" } },
         { tags: { has: "allied-health" } },
-        { careerSlug: { in: ["paramedic", "mlt", "imaging", "respiratory", "pta", "ota", "pharmacy-tech", "social-work"] } },
+        ...(supports.careerSlug
+          ? [{ careerSlug: { in: ["paramedic", "mlt", "imaging", "respiratory", "pta", "ota", "pharmacy-tech", "social-work"] } }]
+          : []),
       ],
+      ...(supports.locale ? { locale: SOURCE_LOCALE } : {}),
+      ...(supports.careerSlug ? { careerSlug: { not: null } } : {}),
     },
     orderBy: { createdAt: "desc" },
     take: Math.max(1, Math.min(200, maxPosts)),
@@ -114,16 +137,16 @@ async function main() {
       targetKeyword: true,
       postStatus: true,
       publishAt: true,
-      scheduledAt: true,
       tags: true,
       category: true,
-      careerSlug: true,
-      translationGroupId: true,
+      ...(supports.careerSlug ? { careerSlug: true } : {}),
+      ...(supports.translationGroupId ? { translationGroupId: true } : {}),
       sourcesJson: true,
       apaReferences: true,
       seoTitle: true,
       seoDescription: true,
       countryTarget: true,
+      legacySource: true,
     },
   });
 
@@ -139,21 +162,42 @@ async function main() {
   };
 
   for (const canonical of candidateRows) {
-    const profession = canonical.careerSlug ?? "unspecified";
+    const derivedCareer =
+      ("careerSlug" in canonical && typeof canonical.careerSlug === "string" && canonical.careerSlug) ||
+      (canonical.tags.includes("paramedic")
+        ? "paramedic"
+        : canonical.tags.includes("mlt")
+          ? "mlt"
+          : canonical.tags.includes("medical-imaging")
+            ? "imaging"
+            : null);
+    const profession = derivedCareer ?? "unspecified";
     const region = canonical.countryTarget === "CA" ? "canada" : "us";
-    const groupId = canonical.translationGroupId ?? normalizeSlug(canonical.slug);
+    const groupId =
+      (supports.translationGroupId && "translationGroupId" in canonical && typeof canonical.translationGroupId === "string"
+        ? canonical.translationGroupId
+        : null) ?? normalizeSlug(canonical.slug);
 
     for (const locale of locales) {
-      const existing = await prisma.blogPost.findFirst({
-        where: { translationGroupId: groupId, locale },
-        select: { id: true },
-      });
+      const existing = supports.translationGroupId && supports.locale
+        ? await prisma.blogPost.findFirst({
+            where: { translationGroupId: groupId, locale },
+            select: { id: true },
+          })
+        : null;
       if (existing) {
         register(locale, profession, "existing");
         continue;
       }
       if (!apply) {
         register(locale, profession, "generated");
+        continue;
+      }
+      if (!supports.locale || !supports.translationGroupId || !supports.canonicalPostId) {
+        register(locale, profession, "failed");
+        errors.push(
+          `${canonical.slug}:${locale}:Database schema is missing locale/translation columns. Apply blog migrations before --apply.`,
+        );
         continue;
       }
       try {
@@ -203,8 +247,7 @@ async function main() {
             exam: canonical.exam,
             postStatus: status,
             publishAt: status === BlogPostStatus.PUBLISHED ? canonical.publishAt ?? new Date() : null,
-            scheduledAt: null,
-            legacySource: canonical.translationSource ?? "allied-translation-backfill",
+            legacySource: canonical.legacySource ?? "allied-translation-backfill",
             seoTitle: processed.aiOutput.localizedMetaTitle.slice(0, 200),
             seoDescription: processed.aiOutput.localizedMetaDescription.slice(0, 500),
             locale,
@@ -213,7 +256,7 @@ async function main() {
             translationSource: "ai-backfill",
             translationGroupId: groupId,
             canonicalPostId: canonical.id,
-            careerSlug: profession,
+            ...(supports.careerSlug ? { careerSlug: profession } : {}),
             targetKeyword: processed.aiOutput.seoKeywordPrimary ?? canonical.targetKeyword ?? canonical.title,
             countryTarget: canonical.countryTarget,
             workflowStatus: status === BlogPostStatus.PUBLISHED ? BlogWorkflowStatus.PUBLISHED : BlogWorkflowStatus.GENERATED,
@@ -233,6 +276,7 @@ async function main() {
         apply,
         maxPosts,
         locales,
+        schemaSupport: supports,
         canonicalRowsScanned: candidateRows.length,
         byLocale,
         byProfession,
