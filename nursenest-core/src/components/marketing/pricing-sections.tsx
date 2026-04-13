@@ -33,7 +33,7 @@ import {
   MARKETING_PRIMARY_CTA_CLASS,
   MARKETING_SECONDARY_CTA_CLASS,
 } from "@/lib/theme/marketing-hero-pattern";
-import { FadeUp } from "@/lib/motion";
+import { FadeUp, StaggerGroup, StaggerItem } from "@/lib/motion";
 
 const SURFACE = "var(--semantic-surface)";
 const SURFACE_ELEVATED = "color-mix(in srgb, var(--palette-primary) 4%, var(--semantic-surface))";
@@ -59,37 +59,38 @@ const VALUE_PROPS = [
 
 export function ValuePropsStrip() {
   return (
-    <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 sm:gap-5">
+    <StaggerGroup className="grid grid-cols-2 gap-4 sm:grid-cols-4 sm:gap-5" staggerMs={45} whenInView once>
       {VALUE_PROPS.map(({ icon: Icon, label, accent }) => (
-        <div
-          key={label}
-          className="nn-elevation-panel nn-motion-standard flex flex-col items-center gap-3 rounded-2xl px-5 py-6 text-center"
-          style={{
-            background: `color-mix(in srgb, ${accent} 4%, var(--semantic-surface))`,
-            border: `1px solid color-mix(in srgb, ${accent} 14%, ${BORDER})`,
-          }}
-        >
+        <StaggerItem key={label} variant="softReveal">
           <div
-            className="flex h-10 w-10 items-center justify-center rounded-xl"
+            className="nn-elevation-panel nn-motion-standard flex h-full flex-col items-center gap-3 rounded-2xl px-5 py-6 text-center"
             style={{
-              background: `color-mix(in srgb, ${accent} 12%, ${SURFACE})`,
+              background: `color-mix(in srgb, ${accent} 4%, var(--semantic-surface))`,
+              border: `1px solid color-mix(in srgb, ${accent} 14%, ${BORDER})`,
             }}
           >
-            <Icon
-              className="h-5 w-5"
-              style={{ color: accent }}
-              aria-hidden
-            />
+            <div
+              className="flex h-10 w-10 items-center justify-center rounded-xl"
+              style={{
+                background: `color-mix(in srgb, ${accent} 12%, ${SURFACE})`,
+              }}
+            >
+              <Icon
+                className="h-5 w-5"
+                style={{ color: accent }}
+                aria-hidden
+              />
+            </div>
+            <span
+              className="text-sm font-semibold leading-tight"
+              style={{ color: TEXT_PRIMARY }}
+            >
+              {label}
+            </span>
           </div>
-          <span
-            className="text-sm font-semibold leading-tight"
-            style={{ color: TEXT_PRIMARY }}
-          >
-            {label}
-          </span>
-        </div>
+        </StaggerItem>
       ))}
-    </div>
+    </StaggerGroup>
   );
 }
 
@@ -145,32 +146,33 @@ export function PricingFeaturesGrid() {
           Every plan includes full access to all of these features
         </p>
       </FadeUp>
-      <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
+      <StaggerGroup className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6" staggerMs={50} whenInView once>
         {FEATURES.map((f) => (
-          <div
-            key={f.title}
-            className="nn-elevation-panel nn-motion-standard flex flex-col gap-4 rounded-2xl p-7"
-            style={{
-              background: SURFACE_ELEVATED,
-              border: `1px solid ${BORDER}`,
-            }}
-          >
+          <StaggerItem key={f.title} variant="softReveal">
             <div
-              className="flex h-11 w-11 items-center justify-center rounded-xl"
+              className="nn-elevation-panel nn-motion-standard flex h-full flex-col gap-4 rounded-2xl p-7"
               style={{
-                background: `color-mix(in srgb, ${f.accent} 12%, ${SURFACE})`,
-                border: `1px solid color-mix(in srgb, ${f.accent} 18%, ${BORDER})`,
+                background: SURFACE_ELEVATED,
+                border: `1px solid ${BORDER}`,
               }}
             >
-              <f.icon className="h-5 w-5" style={{ color: f.accent }} aria-hidden />
+              <div
+                className="flex h-11 w-11 items-center justify-center rounded-xl"
+                style={{
+                  background: `color-mix(in srgb, ${f.accent} 12%, ${SURFACE})`,
+                  border: `1px solid color-mix(in srgb, ${f.accent} 18%, ${BORDER})`,
+                }}
+              >
+                <f.icon className="h-5 w-5" style={{ color: f.accent }} aria-hidden />
+              </div>
+              <h3 className="nn-marketing-h4">{f.title}</h3>
+              <p className="text-sm leading-relaxed" style={{ color: TEXT_SECONDARY }}>
+                {f.desc}
+              </p>
             </div>
-            <h3 className="nn-marketing-h4">{f.title}</h3>
-            <p className="text-sm leading-relaxed" style={{ color: TEXT_SECONDARY }}>
-              {f.desc}
-            </p>
-          </div>
+          </StaggerItem>
         ))}
-      </div>
+      </StaggerGroup>
     </section>
   );
 }
@@ -206,32 +208,33 @@ export function WhyItWorks() {
           Why NurseNest Works
         </h2>
       </FadeUp>
-      <div className="grid gap-5 sm:grid-cols-3 sm:gap-6">
+      <StaggerGroup className="grid gap-5 sm:grid-cols-3 sm:gap-6" staggerMs={50} whenInView once>
         {WHY_POINTS.map((p) => (
-          <div
-            key={p.title}
-            className="nn-elevation-panel nn-motion-standard flex flex-col gap-4 overflow-hidden rounded-2xl p-7"
-            style={{
-              background: SURFACE_ELEVATED,
-              border: `1px solid ${BORDER}`,
-              borderLeft: `3px solid ${p.accent}`,
-            }}
-          >
+          <StaggerItem key={p.title} variant="softReveal">
             <div
-              className="flex h-10 w-10 items-center justify-center rounded-xl"
+              className="nn-elevation-panel nn-motion-standard flex h-full flex-col gap-4 overflow-hidden rounded-2xl p-7"
               style={{
-                background: `color-mix(in srgb, ${p.accent} 10%, ${SURFACE})`,
+                background: SURFACE_ELEVATED,
+                border: `1px solid ${BORDER}`,
+                borderLeft: `3px solid ${p.accent}`,
               }}
             >
-              <p.icon className="h-5 w-5" style={{ color: p.accent }} aria-hidden />
+              <div
+                className="flex h-10 w-10 items-center justify-center rounded-xl"
+                style={{
+                  background: `color-mix(in srgb, ${p.accent} 10%, ${SURFACE})`,
+                }}
+              >
+                <p.icon className="h-5 w-5" style={{ color: p.accent }} aria-hidden />
+              </div>
+              <h3 className="nn-marketing-h4">{p.title}</h3>
+              <p className="text-sm leading-relaxed" style={{ color: TEXT_SECONDARY }}>
+                {p.desc}
+              </p>
             </div>
-            <h3 className="nn-marketing-h4">{p.title}</h3>
-            <p className="text-sm leading-relaxed" style={{ color: TEXT_SECONDARY }}>
-              {p.desc}
-            </p>
-          </div>
+          </StaggerItem>
         ))}
-      </div>
+      </StaggerGroup>
     </section>
   );
 }

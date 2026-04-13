@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { trackClientEvent } from "@/lib/observability/posthog-client";
+import { FadeUp } from "@/lib/motion";
 
 export type HeatmapTopic = {
   topic: string;
@@ -39,7 +40,7 @@ export function WeaknessHeatmap({
   const visible = topics.slice(0, maxTopics);
 
   return (
-    <div className="nn-heatmap-card">
+    <FadeUp className="nn-heatmap-card" whenInView once viewMargin="-24px">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <h3 className="text-[0.9375rem] font-bold" style={{ color: "var(--semantic-text-primary)" }}>
           Topic Strength Map
@@ -100,6 +101,6 @@ export function WeaknessHeatmap({
           );
         })}
       </div>
-    </div>
+    </FadeUp>
   );
 }

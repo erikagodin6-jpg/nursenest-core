@@ -3,8 +3,7 @@
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 import Link from "next/link";
 import { BookOpenCheck, X } from "lucide-react";
-import type { LearnerTutorShellContext } from "@/lib/learner/tutor/tutor-types";
-import type { TutorIntentDefinition } from "@/lib/learner/tutor/tutor-types";
+import type { LearnerTutorShellContext, TutorIntentDefinition } from "@/lib/learner/tutor/tutor-types";
 import { LearnerKickerHeading, LearnerNotePanel, LearnerSurface } from "@/components/learner-ui";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { trackClientEvent } from "@/lib/observability/posthog-client";
@@ -49,15 +48,14 @@ function IntentRow({
 }
 
 /**
- * **Current:** opens a calm side sheet with **navigation intents** + visibly **planned** AI rows (no chat, no fake replies).
+ * **Current:** calm side sheet — **live** rows are in-app links only; **planned** rows are non-interactive (no fake AI).
  *
- * **Future:** same component can call model routes using `context` + page-bound question ids (see `TutorSessionBinder` TODO in module).
+ * **Future:** bind `TutorPageFocus` (see `tutor-session-binder.ts`) + server routes for model-backed intents.
  */
 export function LearnerTutorDock({ context, intents }: { context: LearnerTutorShellContext; intents: TutorIntentDefinition[] }) {
   const { t } = useMarketingI18n();
   const [open, setOpen] = useState(false);
   const panelRef = useRef<HTMLDivElement>(null);
-  const triggerRef = useRef<HTMLButtonElement>(null);
   const titleId = useId();
   const live = intents.filter((i) => i.phase === "live");
   const planned = intents.filter((i) => i.phase === "planned");
@@ -74,7 +72,7 @@ export function LearnerTutorDock({ context, intents }: { context: LearnerTutorSh
   }, [open, close]);
 
   useEffect(() => {
-    if (open) panelRef.current?.querySelector<HTMLElement>("a,button")?.focus();
+    if (open) panelRef.current?.focus();
   }, [open]);
 
   const trackOpen = () => {
@@ -87,10 +85,14 @@ export function LearnerTutorDock({ context, intents }: { context: LearnerTutorSh
     });
   };
 
+  const intro =
+    context.pathwayLabel != null && context.pathwayLabel.length > 0
+      ? t("learner.tutor.panel.introWithPath", { path: context.pathwayLabel })
+      : t("learner.tutor.panel.introGeneric");
+
   return (
     <>
       <button
-        ref={triggerRef}
         type="button"
         aria-haspopup="dialog"
         aria-expanded={open}
@@ -99,7 +101,7 @@ export function LearnerTutorDock({ context, intents }: { context: LearnerTutorSh
           setOpen((v) => !v);
           if (!open) trackOpen();
         }}
-        className="nn-ls-tutor-fab fixed bottom-5 right-5 z-[60] flex h-14 w-14 items-center justify-center rounded-2xl border border-[color-mix(in_srgb,var(--semantic-brand)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_10%,var(--semantic-surface))] text-[var(--semantic-brand)] shadow-[var(--semantic-shadow-soft)] transition motion-safe:duration-200 motion-safe:hover:translate-y-[-1px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_35%,transparent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--semantic-bg-base)]"
+        className="fixed bottom-5 right-5 z-[60] flex h-14 w-14 items-center justify-center rounded-2xl border border-[color-mix(in_srgb,var(--semantic-brand)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_10%,var(--semantic-surface))] text-[var(--semantic-brand)] shadow-[var(--semantic-shadow-soft)] transition motion-safe:duration-200 motion-safe:hover:translate-y-[-1px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_35%,transparent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--semantic-bg-base)]"
         title={t("learner.tutor.fab.label")}
       >
         <BookOpenCheck className="h-6 w-6" aria-hidden />
@@ -119,19 +121,10 @@ export function LearnerTutorDock({ context, intents }: { context: LearnerTutorSh
             role="dialog"
             aria-modal="true"
             aria-labelledby={titleId}
-            className="relative z-[61] flex h-full w-full max-w-md flex-col border-l border-[color-mix(in_srgb,var(--semantic-border-soft)_90%,transparent)] bg-[var(--semantic-bg-base)] shadow-[var(--semantic-shadow-soft)] motion-safe:animate-[nn-tutor-panel-in_0.22s_ease-out_both]"
+            className="nn-ls-tutor-panel relative z-[61] flex h-full w-full max-w-md flex-col border-l border-[color-mix(in_srgb,var(--semantic-border-soft)_90%,transparent)] bg-[var(--semantic-bg-base)] shadow-[var(--semantic-shadow-soft)]"
           >
             <div className="flex items-start justify-between gap-3 border-b border-[color-mix(in_srgb,var(--semantic-border-soft)_85%,transparent)] px-5 py-4">
-              <LearnerKickerHeading
-                id={titleId}
-                kicker={t("learner.tutor.panel.kicker")}
-                title={t("learner.tutor.panel.title")}
-                intro={
-                  context.pathwayLabel
-                    ? t("learner.tutor.panel.introWithPath", { path: context.pathwayLabel })
-                    : t("learner.tutor.panel.introGeneric")
-                }
-              />
+              <LearnerKickerHeading id={titleId} kicker={t("learner.tutor.panel.kicker")} title={t("learner.tutor.panel.title")} intro={intro} />
               <button
                 type="button"
                 onClick={close}
@@ -166,19 +159,6 @@ export function LearnerTutorDock({ context, intents }: { context: LearnerTutorSh
           </div>
         </div>
       ) : null}
-
-      <style jsx global>{`
-        @keyframes nn-tutor-panel-in {
-          from {
-            opacity: 0.85;
-            transform: translateX(12px);
-          }
-          to {
-            opacity: 1;
-            transform: translateX(0);
-          }
-        }
-      `}</style>
     </>
   );
 }
