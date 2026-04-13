@@ -788,7 +788,7 @@ export function PricingTrustReassurance() {
 export function PricingCTA({ plansHref }: { plansHref: string }) {
   return (
     <section
-      className="rounded-3xl px-8 py-14 text-center shadow-[var(--elevation-rest)] sm:px-12 sm:py-16"
+      className="nn-gradient-safe rounded-3xl px-8 py-14 text-center shadow-[var(--elevation-rest)] sm:px-12 sm:py-16"
       style={{
         background: `
           linear-gradient(

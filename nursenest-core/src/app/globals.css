@@ -1992,6 +1992,32 @@ html[data-theme] .nn-marketing-surface {
   position: relative;
   z-index: 1;
 }
+
+/*
+ * Gradient readability guardrail:
+ * Apply to containers with blended backgrounds so text/controls always use
+ * a deterministic high-contrast foreground, with a subtle theme-aware overlay.
+ */
+.nn-gradient-safe {
+  position: relative;
+  isolation: isolate;
+  color: var(--text-on-gradient, var(--theme-heading-text));
+}
+
+.nn-gradient-safe::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--gradient-overlay, linear-gradient(180deg, transparent, transparent));
+  pointer-events: none;
+  z-index: 0;
+}
+
+.nn-gradient-safe > * {
+  position: relative;
+  z-index: 1;
+}
 .nn-trust-check {
   /* Heading tone so contrast holds on every light theme (avoid fixed slate hex). */
   color: color-mix(in srgb, var(--theme-primary) 88%, var(--theme-heading-text));

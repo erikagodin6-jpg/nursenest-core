@@ -14,7 +14,7 @@ export function PricingHero({
 }) {
   return (
     <section
-      className="relative overflow-hidden rounded-3xl px-6 py-20 text-center sm:px-14 sm:py-28"
+      className="nn-gradient-safe relative overflow-hidden rounded-3xl px-6 py-20 text-center sm:px-14 sm:py-28"
       style={{
         background: `
           linear-gradient(
