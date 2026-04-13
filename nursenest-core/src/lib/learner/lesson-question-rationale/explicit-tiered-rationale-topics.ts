@@ -7,7 +7,6 @@ import { CLINICAL_JUDGMENT_GOLD_SLUG } from "@/lib/lessons/scoped-lessons/clinic
 import { COPD_GOLD_STANDARD_SLUG } from "@/lib/lessons/scoped-lessons/copd-gold-standard";
 import { FLUIDS_ELECTROLYTES_GOLD_SLUG } from "@/lib/lessons/scoped-lessons/fluids-electrolytes-emergencies-gold-standard";
 import { HIGH_ALERT_MEDS_GOLD_SLUG } from "@/lib/lessons/scoped-lessons/high-alert-medications-gold-standard";
-import { NP_NEUROLOGY_OUTPATIENT_PRIMARY_CARE_GOLD_SLUG } from "@/lib/lessons/scoped-lessons/np-neurology-outpatient-primary-care-gold-standard";
 import { NP_PRIMARY_CARE_FOUNDATIONS_GOLD_SLUG } from "@/lib/lessons/scoped-lessons/np-primary-care-foundations-gold-standard";
 import { SEPSIS_GOLD_SLUG } from "@/lib/lessons/scoped-lessons/sepsis-early-recognition-gold-standard";
 import { SHOCK_GOLD_SLUG } from "@/lib/lessons/scoped-lessons/shock-gold-standard";
@@ -172,7 +171,7 @@ export const EXPLICIT_TIERED_TOPIC_RULES: ExplicitTieredTopicRule[] = [
       rn_nclex: "increased-intracranial-pressure-nclex-rn",
       pn_us: "us-pn-hypertension",
       pn_ca: "ca-rpn-hypertension",
-      np: NP_NEUROLOGY_OUTPATIENT_PRIMARY_CARE_GOLD_SLUG,
+      np: NP_PRIMARY_CARE_FOUNDATIONS_GOLD_SLUG,
       allied: STROKE_ICP_GOLD_SLUG,
     },
     domain: "disease",

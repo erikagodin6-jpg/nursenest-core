@@ -16,6 +16,7 @@ import { CANADIAN_RPN_HIGH_YIELD_GOLD_SLUG } from "@/lib/lessons/scoped-lessons/
 import { COPD_GOLD_STANDARD_SLUG } from "@/lib/lessons/scoped-lessons/copd-gold-standard";
 import type { LessonRationaleMappingEntry } from "@/lib/learner/lesson-question-rationale/types";
 import { RN_NCLEX_CATALOG_RATIONALE_ENTRIES } from "@/lib/learner/lesson-question-rationale/rn-nclex-catalog-rationale-registry";
+import { TIER_RATIONALE_REGISTRY_EXPANSION } from "@/lib/learner/lesson-question-rationale/tier-rationale-registry-expansion";
 
 const CA = CountryCode.CA;
 
@@ -314,4 +315,5 @@ export const LESSON_RATIONALE_MAPPING_ENTRIES: LessonRationaleMappingEntry[] = [
     baseWeight: 90,
   },
   ...RN_NCLEX_CATALOG_RATIONALE_ENTRIES,
+  ...TIER_RATIONALE_REGISTRY_EXPANSION,
 ];

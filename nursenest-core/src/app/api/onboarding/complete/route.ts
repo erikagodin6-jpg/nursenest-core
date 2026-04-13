@@ -3,6 +3,7 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { captureServerEvent } from "@/lib/observability/posthog-server";
 import { analyticsDistinctId } from "@/lib/observability/posthog-distinct-id";
+import { resolveDefaultPathwayIdForOnboarding } from "@/lib/onboarding/resolve-default-pathway-for-onboarding";
 
 export async function POST(req: Request) {
   const session = await auth();
@@ -29,19 +30,26 @@ export async function POST(req: Request) {
     }
   }
 
-  const learnerPathMap: Record<string, string> = {
-    structured: "structured_plan",
-    questions: "practice_first",
-    weak_areas: "weak_area_focus",
-  };
-
   try {
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { country: true },
+    });
+    if (!user) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
+    }
+
+    const pathwayId = resolveDefaultPathwayIdForOnboarding(examGoal, user.country);
+
     await prisma.user.update({
       where: { id: userId },
       data: {
         examFocus: examGoal,
         examDate: examDate,
-        learnerPath: studyStyle ? (learnerPathMap[studyStyle] ?? studyStyle) : undefined,
+        /** Registry pathway id — used by learner app scoping (see `pathwayFromLearnerPath`). */
+        learnerPath: pathwayId ?? undefined,
+        targetExamPathwayId: pathwayId ?? undefined,
+        examGoalSetAt: new Date(),
         onboardingCompletedAt: new Date(),
       },
     });
@@ -50,9 +58,10 @@ export async function POST(req: Request) {
       exam_goal: examGoal ?? "none",
       has_exam_date: examDate !== null,
       study_style: studyStyle ?? "none",
+      pathway_id: pathwayId ?? "none",
     });
 
-    return NextResponse.json({ ok: true });
+    return NextResponse.json({ ok: true, pathwayId });
   } catch {
     return NextResponse.json({ error: "Could not save onboarding" }, { status: 500 });
   }

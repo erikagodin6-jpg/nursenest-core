@@ -3,7 +3,10 @@
  */
 import { EXAM_COMPLETE_MED_SAFETY_SLUGS } from "@/lib/lessons/scoped-lessons/exam-complete-med-safety-specs";
 import { CASE_STUDY_CASEBOOK_SLUGS } from "@/lib/lessons/scoped-lessons/case-study-casebook-specs";
+import { tryExplicitTieredTopicLinks } from "@/lib/learner/lesson-question-rationale/explicit-tiered-rationale-topics";
 import { LESSON_RATIONALE_MAPPING_ENTRIES } from "@/lib/learner/lesson-question-rationale/registry";
+import { TIER_RATIONALE_REGISTRY_EXTRA_SLUGS } from "@/lib/learner/lesson-question-rationale/tier-rationale-registry-expansion";
+import { gatesAllowEntry } from "@/lib/learner/lesson-question-rationale/tier-rationale-gates";
 import type {
   LessonConceptDomain,
   PathwayRationaleContext,
@@ -17,6 +20,7 @@ const SLUG_ALLOWLIST = new Set<string>([
   ...LESSON_RATIONALE_MAPPING_ENTRIES.map((e) => e.lessonSlug),
   ...EXAM_COMPLETE_MED_SAFETY_SLUGS,
   ...CASE_STUDY_CASEBOOK_SLUGS,
+  ...TIER_RATIONALE_REGISTRY_EXTRA_SLUGS,
 ]);
 
 export function haystackFromQuestionSignals(signals: QuestionRationaleSignals): string {
@@ -29,25 +33,6 @@ export function haystackFromQuestionSignals(signals: QuestionRationaleSignals): 
     stem,
   ];
   return parts.join(" ").toLowerCase();
-}
-
-function gatesAllowEntry(
-  entry: (typeof LESSON_RATIONALE_MAPPING_ENTRIES)[number],
-  ctx: PathwayRationaleContext | null,
-): boolean {
-  if (entry.pathwayIdsDeny?.length) {
-    if (ctx && entry.pathwayIdsDeny.includes(ctx.pathwayId)) return false;
-  }
-  if (entry.pathwayIdsAllow?.length) {
-    if (!ctx || !entry.pathwayIdsAllow.includes(ctx.pathwayId)) return false;
-  }
-  if (entry.countryCodesAllow?.length) {
-    if (!ctx || !entry.countryCodesAllow.includes(ctx.countryCode)) return false;
-  }
-  if (entry.roleTracksAllow?.length) {
-    if (!ctx || !entry.roleTracksAllow.includes(ctx.roleTrack)) return false;
-  }
-  return true;
 }
 
 function isAllowedEmitSlug(slug: string): boolean {
@@ -80,6 +65,13 @@ export function rankRelatedLessonSlugsForQuestion(
 
   const topicCode = (signals.topicCode ?? "").trim().toLowerCase();
   const bySlug = new Map<string, RankedLessonSlug>();
+
+  for (const hit of tryExplicitTieredTopicLinks(signals, pathwayCtx)) {
+    const prev = bySlug.get(hit.lessonSlug);
+    if (!prev || hit.score > prev.score) {
+      bySlug.set(hit.lessonSlug, hit);
+    }
+  }
 
   for (const entry of LESSON_RATIONALE_MAPPING_ENTRIES) {
     if (!gatesAllowEntry(entry, pathwayCtx)) continue;
