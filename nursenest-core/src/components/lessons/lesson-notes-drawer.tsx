@@ -171,7 +171,7 @@ function NotesFAB({
       {hasContent && !open ? (
         <span
           className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full text-[9px] font-bold"
-          style={{ background: "var(--semantic-success)", color: "#fff" }}
+          style={{ background: "var(--semantic-success)", color: "var(--text-inverse, #fff)" }}
           aria-label="Note saved"
         >
           ✓

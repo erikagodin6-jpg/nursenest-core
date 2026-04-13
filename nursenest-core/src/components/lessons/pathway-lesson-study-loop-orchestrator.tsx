@@ -289,7 +289,7 @@ export function PathwayLessonStudyLoopOrchestrator({
             <button
               type="button"
               className="rounded-full px-5 py-2.5 text-sm font-semibold transition-opacity hover:opacity-90"
-              style={{ background: "var(--semantic-chart-3)", color: "#fff" }}
+              style={{ background: "var(--semantic-chart-3)", color: "var(--text-inverse, #fff)" }}
               onClick={() => {
                 trackClientEvent(PH.learnerLessonStudyLoopPreStarted, {
                   pathway_id: pathwayId,
@@ -427,7 +427,7 @@ export function PathwayLessonStudyLoopOrchestrator({
             <button
               type="button"
               className="rounded-full px-5 py-2.5 text-sm font-semibold transition-opacity hover:opacity-90"
-              style={{ background: "var(--semantic-chart-4)", color: "#fff" }}
+              style={{ background: "var(--semantic-chart-4)", color: "var(--text-inverse, #fff)" }}
               onClick={() => {
                 trackClientEvent(PH.learnerLessonStudyLoopPostStarted, { pathway_id: pathwayId, lesson_slug: lessonSlug });
                 setStep("post");
