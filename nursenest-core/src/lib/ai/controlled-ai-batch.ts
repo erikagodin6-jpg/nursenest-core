@@ -1,6 +1,8 @@
 /**
  * Shared controls for admin AI batch jobs (lessons + questions):
  * chunk size per HTTP request, resume-safe processing, failure threshold abort, idempotent creates.
+ *
+ * @see {@link module:@/lib/ai/content-generation-pipeline} — unified progress types, API paths, re-exports.
  */
 import { JobStatus, type PrismaClient } from "@prisma/client";
 import { z } from "zod";

@@ -10,6 +10,7 @@ import {
   consecutiveFailuresLessonItems,
   mergeBatchControl,
 } from "@/lib/ai/controlled-ai-batch";
+import { batchProgressLogDetail, lessonBatchProgress } from "@/lib/ai/content-generation-pipeline";
 import { isAdminAiGenerationEnabled } from "@/lib/ai/admin-ai-policy";
 import { checkAdminAiGenerateLimit } from "@/lib/ai/admin-rate-limit";
 import { assertOpenAiKeyConfigured } from "@/lib/ai/openai-env";
@@ -196,6 +197,17 @@ export async function POST(req: Request, ctx: Props) {
       detail: { processedInRequest, terminal: false },
     },
   });
+
+  const summarySnap = await loadLessonBatchSummaryWithHydration(prisma, jobId);
+  if (summarySnap) {
+    await prisma.aiGenerationLog.create({
+      data: {
+        jobId,
+        step: "batch_progress_snapshot",
+        detail: batchProgressLogDetail(lessonBatchProgress(summarySnap)) as object,
+      },
+    });
+  }
 
   return NextResponse.json({
     ...(lastPayload ?? {}),

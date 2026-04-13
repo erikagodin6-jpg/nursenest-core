@@ -40,7 +40,7 @@ export type BlogMarketStrategy = {
 
 // ── Strategy definitions ─────────────────────────────────────────────────────
 
-export const BLOG_MARKET_STRATEGIES: Record<GlobalRegionSlug, BlogMarketStrategy> = {
+export const BLOG_MARKET_STRATEGIES: Partial<Record<GlobalRegionSlug, BlogMarketStrategy>> = {
   philippines: {
     region: "philippines",
     displayName: "Philippines",

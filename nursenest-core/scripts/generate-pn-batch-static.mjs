@@ -101,14 +101,15 @@ function questionCountForIndex(i) {
   return i < 30 ? 4 : 3;
 }
 
-/** Foundational difficulty: mostly easy/medium */
+/**
+ * Foundational / stable-patient emphasis for this batch (not a literal roll of each topic's blueprint %).
+ * Blueprint difficultyMix is still preserved on the topic row in blueprint exports elsewhere.
+ */
 function difficultyFor(topic, qIndex) {
-  const mix = topic.difficultyMix || { easy: 35, moderate: 50, hard: 15 };
-  const roll = (topic.topicSlug.length + qIndex * 7) % 100;
-  const e = mix.easy ?? 35;
-  const m = mix.moderate ?? 50;
-  if (roll < e) return "easy";
-  if (roll < e + m) return "medium";
+  const h = crypto.createHash("sha256").update(`${topic.topicSlug}:${qIndex}:pn-foundational`).digest();
+  const roll = h.readUInt16BE(0) % 100;
+  if (roll < 52) return "easy";
+  if (roll < 92) return "medium";
   return "hard";
 }
 
@@ -335,6 +336,9 @@ function main() {
   const caQ = questions.filter((q) => q.country === "CA").length;
   const usQ = questions.filter((q) => q.country === "US").length;
 
+  const diffCounts = { easy: 0, medium: 0, hard: 0 };
+  for (const q of questions) diffCounts[q.difficulty] = (diffCounts[q.difficulty] || 0) + 1;
+
   const out = {
     _meta: {
       description:
@@ -350,6 +354,7 @@ function main() {
         "rex-pn": questions.filter((q) => q.exam === "rex-pn").length,
         "nclex-pn": questions.filter((q) => q.exam === "nclex-pn").length,
       },
+      questionDifficulty: diffCounts,
       questionTypes: {
         "single-best-answer": questions.filter((q) => q.questionType === "single-best-answer").length,
         sata: questions.filter((q) => q.questionType === "sata").length,

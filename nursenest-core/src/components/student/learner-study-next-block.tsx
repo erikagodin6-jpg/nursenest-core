@@ -95,12 +95,96 @@ function RecommendationRow({
 export async function LearnerStudyNextBlock({ model }: { model: LearnerStudyNextBlockModel }) {
   const { t } = await getLearnerMarketingBundle();
   const secondary = model.secondary.slice(0, 2);
+  const dailyPct = Math.min(100, Math.round((model.todayGoalCredits / Math.max(1, model.todayGoalTarget)) * 100));
+  const streakBarPct = Math.min(100, model.streakDays * 12);
 
   return (
     <section
       className="nn-surface-bubble rounded-xl shadow-[var(--shadow-card)]"
       aria-labelledby="nn-study-next-heading"
     >
+      <div className="border-b border-[color-mix(in_srgb,var(--semantic-border-soft)_70%,transparent)] px-3 py-3 sm:px-3.5">
+        <p className="text-[10px] font-bold uppercase tracking-wider text-[var(--semantic-text-muted)]">
+          {t("learner.retention.stripPanelTitle")}
+        </p>
+        <div className="mt-3 grid gap-4 sm:grid-cols-2">
+          <div className="rounded-xl border border-[color-mix(in_srgb,var(--semantic-panel-positive)_45%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-positive)_10%,var(--semantic-surface))] p-3">
+            <div className="flex items-end justify-between gap-2">
+              <span className="text-[11px] font-semibold text-[var(--semantic-text-secondary)]">
+                {t("learner.retention.stripStreakLabel")}
+              </span>
+              <span className="text-2xl font-bold tabular-nums text-[var(--semantic-text-primary)]">{model.streakDays}</span>
+            </div>
+            <div className="nn-progress-track-semantic nn-progress-track-semantic--xs mt-2" aria-hidden>
+              <div className="nn-progress-fill-semantic-success transition-[width] duration-500" style={{ width: `${streakBarPct}%` }} />
+            </div>
+            <p className="mt-1.5 text-[10px] leading-snug text-[var(--semantic-text-muted)]">{t("learner.retention.stripStreakHint")}</p>
+            {model.streakDays > 0 && model.todayGoalCredits < model.todayGoalTarget ? (
+              <p className="mt-2 text-[10px] leading-snug text-[var(--semantic-warning-contrast)]">
+                {t("learner.retention.streakProtectShort")}
+              </p>
+            ) : null}
+          </div>
+          <div className="rounded-xl border border-[color-mix(in_srgb,var(--semantic-panel-cool)_45%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_10%,var(--semantic-surface))] p-3">
+            <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] font-semibold text-[var(--semantic-text-secondary)]">
+              <span>{t("learner.retention.stripDailyLabel")}</span>
+              <span className="tabular-nums text-[var(--semantic-text-muted)]">
+                {t("learner.retention.stripCredits", { n: model.todayGoalCredits, target: model.todayGoalTarget })}
+              </span>
+            </div>
+            <div
+              className="nn-progress-track-semantic nn-progress-track-semantic--xs mt-2"
+              role="progressbar"
+              aria-valuenow={model.todayGoalCredits}
+              aria-valuemin={0}
+              aria-valuemax={model.todayGoalTarget}
+            >
+              <div
+                className="nn-progress-fill-semantic-brand transition-[width] duration-500"
+                style={{ width: `${dailyPct}%` }}
+              />
+            </div>
+          </div>
+        </div>
+
+        {model.continueWhere ? (
+          <div className="mt-4 rounded-xl border border-[color-mix(in_srgb,var(--semantic-info)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-info)_8%,var(--semantic-surface))] p-3">
+            <p className="text-xs font-semibold text-[var(--semantic-text-primary)]">{t("learner.retention.stripContinueTitle")}</p>
+            <div className="mt-2 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+              <p className="min-w-0 text-sm font-medium leading-snug text-[var(--semantic-text-secondary)] [overflow-wrap:anywhere]">
+                {model.continueWhere.title}
+              </p>
+              <Link
+                href={model.continueWhere.href}
+                className="inline-flex shrink-0 min-h-9 items-center justify-center rounded-full bg-role-cta px-4 py-2 text-xs font-semibold text-role-cta-foreground shadow-[0_2px_8px_var(--role-cta-shadow)] transition hover:bg-role-cta-hover"
+              >
+                {t("learner.retention.stripContinueCta")}
+              </Link>
+            </div>
+          </div>
+        ) : null}
+
+        {model.weakDrills.length > 0 ? (
+          <div className="mt-4">
+            <p className="text-[11px] font-semibold uppercase tracking-wide text-[var(--semantic-text-muted)]">
+              {t("learner.retention.stripWeakLabel")}
+            </p>
+            <ul className="mt-2 flex flex-wrap gap-2" aria-label={t("learner.retention.stripWeakLabel")}>
+              {model.weakDrills.map((w) => (
+                <li key={w.href}>
+                  <Link
+                    href={w.href}
+                    className="inline-flex items-center rounded-full border border-[color-mix(in_srgb,var(--semantic-warning)_35%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_10%,var(--semantic-surface))] px-3 py-1.5 text-xs font-medium text-[var(--semantic-text-primary)] transition hover:border-[color-mix(in_srgb,var(--semantic-warning)_55%,var(--semantic-border-soft))]"
+                  >
+                    {w.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : null}
+      </div>
+
       <div className="flex flex-col gap-1 border-b border-border/50 px-3 py-2.5 sm:flex-row sm:items-center sm:justify-between sm:gap-3 sm:px-3.5">
         <div className="min-w-0">
           <p className="text-sm font-medium leading-snug text-[var(--theme-heading-text)]">{model.countdownPrimary}</p>

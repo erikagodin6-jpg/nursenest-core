@@ -8,7 +8,7 @@ import { usePreviousPathname } from "./use-previous-pathname";
 
 const EASE: [number, number, number, number] = [0.25, 0.1, 0.25, 1];
 /** Between 180–240ms; keeps route changes calm and quick. */
-const DURATION = 0.2;
+const DURATION = 0.22;
 const ENTER_Y = 6;
 
 export type PageTransitionShellProps = {

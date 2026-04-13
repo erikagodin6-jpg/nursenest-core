@@ -24,6 +24,7 @@ import {
   consecutiveFailuresQuestionItems,
   mergeBatchControl,
 } from "@/lib/ai/controlled-ai-batch";
+import { batchProgressLogDetail, questionBatchProgress } from "@/lib/ai/content-generation-pipeline";
 import { isAdminAiGenerationEnabled } from "@/lib/ai/admin-ai-policy";
 import { checkAdminAiGenerateLimit } from "@/lib/ai/admin-rate-limit";
 import { assertOpenAiKeyConfigured, getOpenAiChatModel } from "@/lib/ai/openai-env";
@@ -547,6 +548,18 @@ export async function POST(req: Request, ctx: Props) {
       detail: { processedInRequest, terminal: false },
     },
   });
+
+  const jobSnap = await prisma.aiGenerationJob.findUnique({ where: { id: jobId } });
+  const summarySnap = parseQuestionBatchSummary(jobSnap?.resultSummary);
+  if (summarySnap) {
+    await prisma.aiGenerationLog.create({
+      data: {
+        jobId,
+        step: "batch_progress_snapshot",
+        detail: batchProgressLogDetail(questionBatchProgress(summarySnap)) as object,
+      },
+    });
+  }
 
   return NextResponse.json({
     ...(lastPayload ?? {}),

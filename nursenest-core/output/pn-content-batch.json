@@ -3,7 +3,7 @@
     "description": "40 PN lessons + 150 PN questions generated from pn-content-blueprint.json (static, no API)",
     "program": "pn-practical-nursing",
     "blueprintFile": "data/blueprints/pn-content-blueprint.json",
-    "generatedAt": "2026-04-13T00:14:20.346Z",
+    "generatedAt": "2026-04-13T00:17:16.792Z",
     "totalLessons": 40,
     "totalQuestions": 150,
     "lessonsByCountry": {
@@ -17,6 +17,11 @@
     "questionsByExam": {
       "rex-pn": 79,
       "nclex-pn": 71
+    },
+    "questionDifficulty": {
+      "easy": 84,
+      "medium": 56,
+      "hard": 10
     },
     "questionTypes": {
       "single-best-answer": 135,
@@ -3312,7 +3317,7 @@
         "C": "Documentation should be timely and factual; delaying charting increases error risk and does not represent safe practice.",
         "D": "Family concerns and changes in condition should be addressed with assessment and appropriate reporting, not dismissal."
       },
-      "difficulty": "medium",
+      "difficulty": "easy",
       "topicSlug": "rpn-regulatory-framework-canada",
       "tags": [
         "cno",
@@ -3360,7 +3365,7 @@
         "C": "Documentation should be timely and factual; delaying charting increases error risk and does not represent safe practice.",
         "D": "Family concerns and changes in condition should be addressed with assessment and appropriate reporting, not dismissal."
       },
-      "difficulty": "medium",
+      "difficulty": "easy",
       "topicSlug": "rpn-regulatory-framework-canada",
       "tags": [
         "cno",
@@ -3456,7 +3461,7 @@
         "C": "Documentation should be timely and factual; delaying charting increases error risk and does not represent safe practice.",
         "D": "Family concerns and changes in condition should be addressed with assessment and appropriate reporting, not dismissal."
       },
-      "difficulty": "medium",
+      "difficulty": "hard",
       "topicSlug": "indigenous-cultural-safety-canada",
       "tags": [
         "indigenous",
@@ -3504,7 +3509,7 @@
         "C": "Documentation should be timely and factual; delaying charting increases error risk and does not represent safe practice.",
         "D": "Family concerns and changes in condition should be addressed with assessment and appropriate reporting, not dismissal."
       },
-      "difficulty": "medium",
+      "difficulty": "easy",
       "topicSlug": "indigenous-cultural-safety-canada",
       "tags": [
         "indigenous",
@@ -3556,7 +3561,7 @@
       "incorrectRationales": {
         "C": "Never withhold all medications due to a single unrelated refusal; follow rights verification, attempt to understand the refusal, and notify the prescriber or supervising nurse per policy."
       },
-      "difficulty": "medium",
+      "difficulty": "easy",
       "topicSlug": "indigenous-cultural-safety-canada",
       "tags": [
         "indigenous",
@@ -3605,7 +3610,7 @@
         "C": "Documentation should be timely and factual; delaying charting increases error risk and does not represent safe practice.",
         "D": "Family concerns and changes in condition should be addressed with assessment and appropriate reporting, not dismissal."
       },
-      "difficulty": "medium",
+      "difficulty": "easy",
       "topicSlug": "canadian-ltc-standards-fixing-act",
       "tags": [
         "ltc-standards",
@@ -3653,7 +3658,7 @@
         "C": "Documentation should be timely and factual; delaying charting increases error risk and does not represent safe practice.",
         "D": "Family concerns and changes in condition should be addressed with assessment and appropriate reporting, not dismissal."
       },
-      "difficulty": "medium",
+      "difficulty": "easy",
       "topicSlug": "canadian-ltc-standards-fixing-act",
       "tags": [
         "ltc-standards",
@@ -3701,7 +3706,7 @@
         "C": "Documentation should be timely and factual; delaying charting increases error risk and does not represent safe practice.",
         "D": "Family concerns and changes in condition should be addressed with assessment and appropriate reporting, not dismissal."
       },
-      "difficulty": "medium",
+      "difficulty": "easy",
       "topicSlug": "canadian-ltc-standards-fixing-act",
       "tags": [
         "ltc-standards",
@@ -3749,7 +3754,7 @@
         "C": "Documentation should be timely and factual; delaying charting increases error risk and does not represent safe practice.",
         "D": "Family concerns and changes in condition should be addressed with assessment and appropriate reporting, not dismissal."
       },
-      "difficulty": "medium",
+      "difficulty": "easy",
       "topicSlug": "canadian-ltc-standards-fixing-act",
       "tags": [
         "ltc-standards",
@@ -3797,7 +3802,7 @@
         "C": "Documentation should be timely and factual; delaying charting increases error risk and does not represent safe practice.",
         "D": "Family concerns and changes in condition should be addressed with assessment and appropriate reporting, not dismissal."
       },
-      "difficulty": "medium",
+      "difficulty": "easy",
       "topicSlug": "lpn-practice-standards-ncsbn",
       "tags": [
         "ncsbn",
@@ -3845,7 +3850,7 @@
         "C": "Documentation should be timely and factual; delaying charting increases error risk and does not represent safe practice.",
         "D": "Family concerns and changes in condition should be addressed with assessment and appropriate reporting, not dismissal."
       },
-      "difficulty": "medium",
+      "difficulty": "easy",
       "topicSlug": "lpn-practice-standards-ncsbn",
       "tags": [
         "ncsbn",
@@ -3893,7 +3898,7 @@
         "C": "Documentation should be timely and factual; delaying charting increases error risk and does not represent safe practice.",
         "D": "Family concerns and changes in condition should be addressed with assessment and appropriate reporting, not dismissal."
       },
-      "difficulty": "medium",
+      "difficulty": "hard",
       "topicSlug": "lpn-practice-standards-ncsbn",
       "tags": [
         "ncsbn",
@@ -3941,7 +3946,7 @@
         "C": "Documentation should be timely and factual; delaying charting increases error risk and does not represent safe practice.",
         "D": "Family concerns and changes in condition should be addressed with assessment and appropriate reporting, not dismissal."
       },
-      "difficulty": "medium",
+      "difficulty": "easy",
       "topicSlug": "lpn-practice-standards-ncsbn",
       "tags": [
         "ncsbn",
@@ -3989,7 +3994,7 @@
         "C": "Documentation should be timely and factual; delaying charting increases error risk and does not represent safe practice.",
         "D": "Family concerns and changes in condition should be addressed with assessment and appropriate reporting, not dismissal."
       },
-      "difficulty": "medium",
+      "difficulty": "easy",
       "topicSlug": "copd-stable-management-breathing",
       "tags": [
         "copd",
@@ -4044,7 +4049,7 @@
       "incorrectRationales": {
         "C": "Never withhold all medications due to a single unrelated refusal; follow rights verification, attempt to understand the refusal, and notify the prescriber or supervising nurse per policy."
       },
-      "difficulty": "medium",
+      "difficulty": "easy",
       "topicSlug": "copd-stable-management-breathing",
       "tags": [
         "copd",
@@ -4096,7 +4101,7 @@
         "C": "Documentation should be timely and factual; delaying charting increases error risk and does not represent safe practice.",
         "D": "Family concerns and changes in condition should be addressed with assessment and appropriate reporting, not dismissal."
       },
-      "difficulty": "medium",
+      "difficulty": "easy",
       "topicSlug": "copd-stable-management-breathing",
       "tags": [
         "copd",
@@ -4147,7 +4152,7 @@
         "C": "Documentation should be timely and factual; delaying charting increases error risk and does not represent safe practice.",
         "D": "Family concerns and changes in condition should be addressed with assessment and appropriate reporting, not dismissal."
       },
-      "difficulty": "medium",
+      "difficulty": "easy",
       "topicSlug": "copd-stable-management-breathing",
       "tags": [
         "copd",
@@ -4300,7 +4305,7 @@
         "C": "Documentation should be timely and factual; delaying charting increases error risk and does not represent safe practice.",
         "D": "Family concerns and changes in condition should be addressed with assessment and appropriate reporting, not dismissal."
       },
-      "difficulty": "medium",
+      "difficulty": "easy",
       "topicSlug": "diabetes-glucose-monitoring-foot-care",
       "tags": [
         "diabetes",
@@ -4351,7 +4356,7 @@
         "C": "Documentation should be timely and factual; delaying charting increases error risk and does not represent safe practice.",
         "D": "Family concerns and changes in condition should be addressed with assessment and appropriate reporting, not dismissal."
       },
-      "difficulty": "medium",
+      "difficulty": "easy",
       "topicSlug": "diabetes-glucose-monitoring-foot-care",
       "tags": [
         "diabetes",
@@ -4453,7 +4458,7 @@
         "C": "Documentation should be timely and factual; delaying charting increases error risk and does not represent safe practice.",
         "D": "Family concerns and changes in condition should be addressed with assessment and appropriate reporting, not dismissal."
       },
-      "difficulty": "medium",
+      "difficulty": "easy",
       "topicSlug": "hypertension-monitoring-management",
       "tags": [
         "hypertension",
@@ -4611,7 +4616,7 @@
         "C": "Documentation should be timely and factual; delaying charting increases error risk and does not represent safe practice.",
         "D": "Family concerns and changes in condition should be addressed with assessment and appropriate reporting, not dismissal."
       },
-      "difficulty": "medium",
+      "difficulty": "hard",
       "topicSlug": "uti-prevention-ltc-residents",
       "tags": [
         "uti",
@@ -4713,7 +4718,7 @@
         "C": "Documentation should be timely and factual; delaying charting increases error risk and does not represent safe practice.",
         "D": "Family concerns and changes in condition should be addressed with assessment and appropriate reporting, not dismissal."
       },
-      "difficulty": "medium",
+      "difficulty": "easy",
       "topicSlug": "uti-prevention-ltc-residents",
       "tags": [
         "uti",
@@ -4764,7 +4769,7 @@
         "C": "Documentation should be timely and factual; delaying charting increases error risk and does not represent safe practice.",
         "D": "Family concerns and changes in condition should be addressed with assessment and appropriate reporting, not dismissal."
       },
-      "difficulty": "medium",
+      "difficulty": "hard",
       "topicSlug": "uti-prevention-ltc-residents",
       "tags": [
         "uti",
@@ -4815,7 +4820,7 @@
         "C": "Documentation should be timely and factual; delaying charting increases error risk and does not represent safe practice.",
         "D": "Family concerns and changes in condition should be addressed with assessment and appropriate reporting, not dismissal."
       },
-      "difficulty": "medium",
+      "difficulty": "easy",
       "topicSlug": "documentation-principles-legal-standards",
       "tags": [
         "documentation",
@@ -4865,7 +4870,7 @@
         "C": "Documentation should be timely and factual; delaying charting increases error risk and does not represent safe practice.",
         "D": "Family concerns and changes in condition should be addressed with assessment and appropriate reporting, not dismissal."
       },
-      "difficulty": "medium",
+      "difficulty": "easy",
       "topicSlug": "documentation-principles-legal-standards",
       "tags": [
         "documentation",
@@ -5015,7 +5020,7 @@
         "C": "Documentation should be timely and factual; delaying charting increases error risk and does not represent safe practice.",
         "D": "Family concerns and changes in condition should be addressed with assessment and appropriate reporting, not dismissal."
       },
-      "difficulty": "medium",
+      "difficulty": "easy",
       "topicSlug": "sbar-communication-technique",
       "tags": [
         "sbar",
@@ -5069,7 +5074,7 @@
       "incorrectRationales": {
         "C": "Never withhold all medications due to a single unrelated refusal; follow rights verification, attempt to understand the refusal, and notify the prescriber or supervising nurse per policy."
       },
-      "difficulty": "medium",
+      "difficulty": "easy",
       "topicSlug": "sbar-communication-technique",
       "tags": [
         "sbar",
@@ -5120,7 +5125,7 @@
         "C": "Documentation should be timely and factual; delaying charting increases error risk and does not represent safe practice.",
         "D": "Family concerns and changes in condition should be addressed with assessment and appropriate reporting, not dismissal."
       },
-      "difficulty": "medium",
+      "difficulty": "easy",
       "topicSlug": "sbar-communication-technique",
       "tags": [
         "sbar",
@@ -5170,7 +5175,7 @@
         "C": "Documentation should be timely and factual; delaying charting increases error risk and does not represent safe practice.",
         "D": "Family concerns and changes in condition should be addressed with assessment and appropriate reporting, not dismissal."
       },
-      "difficulty": "medium",
+      "difficulty": "hard",
       "topicSlug": "sbar-communication-technique",
       "tags": [
         "sbar",
@@ -5220,7 +5225,7 @@
         "C": "Documentation should be timely and factual; delaying charting increases error risk and does not represent safe practice.",
         "D": "Family concerns and changes in condition should be addressed with assessment and appropriate reporting, not dismissal."
       },
-      "difficulty": "medium",
+      "difficulty": "easy",
       "topicSlug": "blood-glucose-monitoring-technique",
       "tags": [
         "blood-glucose",
@@ -5320,7 +5325,7 @@
         "C": "Documentation should be timely and factual; delaying charting increases error risk and does not represent safe practice.",
         "D": "Family concerns and changes in condition should be addressed with assessment and appropriate reporting, not dismissal."
       },
-      "difficulty": "medium",
+      "difficulty": "easy",
       "topicSlug": "blood-glucose-monitoring-technique",
       "tags": [
         "blood-glucose",
@@ -5370,7 +5375,7 @@
         "C": "Documentation should be timely and factual; delaying charting increases error risk and does not represent safe practice.",
         "D": "Family concerns and changes in condition should be addressed with assessment and appropriate reporting, not dismissal."
       },
-      "difficulty": "medium",
+      "difficulty": "easy",
       "topicSlug": "blood-glucose-monitoring-technique",
       "tags": [
         "blood-glucose",
@@ -5420,7 +5425,7 @@
         "C": "Documentation should be timely and factual; delaying charting increases error risk and does not represent safe practice.",
         "D": "Family concerns and changes in condition should be addressed with assessment and appropriate reporting, not dismissal."
       },
-      "difficulty": "medium",
+      "difficulty": "easy",
       "topicSlug": "fall-prevention-risk-assessment",
       "tags": [
         "fall-prevention",
@@ -5470,7 +5475,7 @@
         "C": "Documentation should be timely and factual; delaying charting increases error risk and does not represent safe practice.",
         "D": "Family concerns and changes in condition should be addressed with assessment and appropriate reporting, not dismissal."
       },
-      "difficulty": "medium",
+      "difficulty": "easy",
       "topicSlug": "fall-prevention-risk-assessment",
       "tags": [
         "fall-prevention",
@@ -5725,7 +5730,7 @@
         "C": "Documentation should be timely and factual; delaying charting increases error risk and does not represent safe practice.",
         "D": "Family concerns and changes in condition should be addressed with assessment and appropriate reporting, not dismissal."
       },
-      "difficulty": "medium",
+      "difficulty": "easy",
       "topicSlug": "oxygen-therapy-administration",
       "tags": [
         "oxygen-therapy",
@@ -5825,7 +5830,7 @@
         "C": "Documentation should be timely and factual; delaying charting increases error risk and does not represent safe practice.",
         "D": "Family concerns and changes in condition should be addressed with assessment and appropriate reporting, not dismissal."
       },
-      "difficulty": "medium",
+      "difficulty": "easy",
       "topicSlug": "pain-assessment-non-pharmacological",
       "tags": [
         "pain-assessment",
@@ -5875,7 +5880,7 @@
         "C": "Documentation should be timely and factual; delaying charting increases error risk and does not represent safe practice.",
         "D": "Family concerns and changes in condition should be addressed with assessment and appropriate reporting, not dismissal."
       },
-      "difficulty": "medium",
+      "difficulty": "easy",
       "topicSlug": "pain-assessment-non-pharmacological",
       "tags": [
         "pain-assessment",
@@ -5925,7 +5930,7 @@
         "C": "Documentation should be timely and factual; delaying charting increases error risk and does not represent safe practice.",
         "D": "Family concerns and changes in condition should be addressed with assessment and appropriate reporting, not dismissal."
       },
-      "difficulty": "medium",
+      "difficulty": "hard",
       "topicSlug": "pain-assessment-non-pharmacological",
       "tags": [
         "pain-assessment",
@@ -6025,7 +6030,7 @@
         "C": "Documentation should be timely and factual; delaying charting increases error risk and does not represent safe practice.",
         "D": "Family concerns and changes in condition should be addressed with assessment and appropriate reporting, not dismissal."
       },
-      "difficulty": "medium",
+      "difficulty": "easy",
       "topicSlug": "pressure-injury-prevention",
       "tags": [
         "pressure-injury",
@@ -6079,7 +6084,7 @@
       "incorrectRationales": {
         "C": "Never withhold all medications due to a single unrelated refusal; follow rights verification, attempt to understand the refusal, and notify the prescriber or supervising nurse per policy."
       },
-      "difficulty": "medium",
+      "difficulty": "easy",
       "topicSlug": "pressure-injury-prevention",
       "tags": [
         "pressure-injury",
@@ -6130,7 +6135,7 @@
         "C": "Documentation should be timely and factual; delaying charting increases error risk and does not represent safe practice.",
         "D": "Family concerns and changes in condition should be addressed with assessment and appropriate reporting, not dismissal."
       },
-      "difficulty": "medium",
+      "difficulty": "easy",
       "topicSlug": "pressure-injury-prevention",
       "tags": [
         "pressure-injury",
@@ -6180,7 +6185,7 @@
         "C": "Documentation should be timely and factual; delaying charting increases error risk and does not represent safe practice.",
         "D": "Family concerns and changes in condition should be addressed with assessment and appropriate reporting, not dismissal."
       },
-      "difficulty": "medium",
+      "difficulty": "easy",
       "topicSlug": "pressure-injury-prevention",
       "tags": [
         "pressure-injury",
@@ -6230,7 +6235,7 @@
         "C": "Documentation should be timely and factual; delaying charting increases error risk and does not represent safe practice.",
         "D": "Family concerns and changes in condition should be addressed with assessment and appropriate reporting, not dismissal."
       },
-      "difficulty": "easy",
+      "difficulty": "medium",
       "topicSlug": "urinary-catheter-care",
       "tags": [
         "urinary-catheter",
@@ -6279,7 +6284,7 @@
         "C": "Documentation should be timely and factual; delaying charting increases error risk and does not represent safe practice.",
         "D": "Family concerns and changes in condition should be addressed with assessment and appropriate reporting, not dismissal."
       },
-      "difficulty": "medium",
+      "difficulty": "easy",
       "topicSlug": "urinary-catheter-care",
       "tags": [
         "urinary-catheter",
@@ -6328,7 +6333,7 @@
         "C": "Documentation should be timely and factual; delaying charting increases error risk and does not represent safe practice.",
         "D": "Family concerns and changes in condition should be addressed with assessment and appropriate reporting, not dismissal."
       },
-      "difficulty": "medium",
+      "difficulty": "easy",
       "topicSlug": "urinary-catheter-care",
       "tags": [
         "urinary-catheter",
@@ -6377,7 +6382,7 @@
         "C": "Documentation should be timely and factual; delaying charting increases error risk and does not represent safe practice.",
         "D": "Family concerns and changes in condition should be addressed with assessment and appropriate reporting, not dismissal."
       },
-      "difficulty": "medium",
+      "difficulty": "easy",
       "topicSlug": "urinary-catheter-care",
       "tags": [
         "urinary-catheter",
@@ -6426,7 +6431,7 @@
         "C": "Documentation should be timely and factual; delaying charting increases error risk and does not represent safe practice.",
         "D": "Family concerns and changes in condition should be addressed with assessment and appropriate reporting, not dismissal."
       },
-      "difficulty": "medium",
+      "difficulty": "easy",
       "topicSlug": "vital-signs-measurement-reporting",
       "tags": [
         "vital-signs",
@@ -6479,7 +6484,7 @@
         "C": "Documentation should be timely and factual; delaying charting increases error risk and does not represent safe practice.",
         "D": "Family concerns and changes in condition should be addressed with assessment and appropriate reporting, not dismissal."
       },
-      "difficulty": "medium",
+      "difficulty": "easy",
       "topicSlug": "vital-signs-measurement-reporting",
       "tags": [
         "vital-signs",
@@ -6532,7 +6537,7 @@
         "C": "Documentation should be timely and factual; delaying charting increases error risk and does not represent safe practice.",
         "D": "Family concerns and changes in condition should be addressed with assessment and appropriate reporting, not dismissal."
       },
-      "difficulty": "medium",
+      "difficulty": "easy",
       "topicSlug": "vital-signs-measurement-reporting",
       "tags": [
         "vital-signs",
@@ -6589,7 +6594,7 @@
       "incorrectRationales": {
         "C": "Never withhold all medications due to a single unrelated refusal; follow rights verification, attempt to understand the refusal, and notify the prescriber or supervising nurse per policy."
       },
-      "difficulty": "medium",
+      "difficulty": "easy",
       "topicSlug": "vital-signs-measurement-reporting",
       "tags": [
         "vital-signs",
@@ -6643,7 +6648,7 @@
         "C": "Documentation should be timely and factual; delaying charting increases error risk and does not represent safe practice.",
         "D": "Family concerns and changes in condition should be addressed with assessment and appropriate reporting, not dismissal."
       },
-      "difficulty": "medium",
+      "difficulty": "easy",
       "topicSlug": "hand-hygiene-technique-when-to-use",
       "tags": [
         "hand-hygiene",
@@ -6743,7 +6748,7 @@
         "C": "Documentation should be timely and factual; delaying charting increases error risk and does not represent safe practice.",
         "D": "Family concerns and changes in condition should be addressed with assessment and appropriate reporting, not dismissal."
       },
-      "difficulty": "medium",
+      "difficulty": "easy",
       "topicSlug": "hand-hygiene-technique-when-to-use",
       "tags": [
         "hand-hygiene",
@@ -6793,7 +6798,7 @@
         "C": "Documentation should be timely and factual; delaying charting increases error risk and does not represent safe practice.",
         "D": "Family concerns and changes in condition should be addressed with assessment and appropriate reporting, not dismissal."
       },
-      "difficulty": "medium",
+      "difficulty": "easy",
       "topicSlug": "hand-hygiene-technique-when-to-use",
       "tags": [
         "hand-hygiene",
@@ -6893,7 +6898,7 @@
         "C": "Documentation should be timely and factual; delaying charting increases error risk and does not represent safe practice.",
         "D": "Family concerns and changes in condition should be addressed with assessment and appropriate reporting, not dismissal."
       },
-      "difficulty": "medium",
+      "difficulty": "easy",
       "topicSlug": "mrsa-vre-c-diff-management",
       "tags": [
         "mrsa",
@@ -7043,7 +7048,7 @@
         "C": "Documentation should be timely and factual; delaying charting increases error risk and does not represent safe practice.",
         "D": "Family concerns and changes in condition should be addressed with assessment and appropriate reporting, not dismissal."
       },
-      "difficulty": "medium",
+      "difficulty": "easy",
       "topicSlug": "ppe-donning-doffing-sequence",
       "tags": [
         "ppe",
@@ -7150,7 +7155,7 @@
         "C": "Documentation should be timely and factual; delaying charting increases error risk and does not represent safe practice.",
         "D": "Family concerns and changes in condition should be addressed with assessment and appropriate reporting, not dismissal."
       },
-      "difficulty": "medium",
+      "difficulty": "easy",
       "topicSlug": "ppe-donning-doffing-sequence",
       "tags": [
         "ppe",
@@ -7201,7 +7206,7 @@
         "C": "Documentation should be timely and factual; delaying charting increases error risk and does not represent safe practice.",
         "D": "Family concerns and changes in condition should be addressed with assessment and appropriate reporting, not dismissal."
       },
-      "difficulty": "medium",
+      "difficulty": "easy",
       "topicSlug": "ppe-donning-doffing-sequence",
       "tags": [
         "ppe",
@@ -7252,7 +7257,7 @@
         "C": "Documentation should be timely and factual; delaying charting increases error risk and does not represent safe practice.",
         "D": "Family concerns and changes in condition should be addressed with assessment and appropriate reporting, not dismissal."
       },
-      "difficulty": "medium",
+      "difficulty": "easy",
       "topicSlug": "standard-precautions-principles",
       "tags": [
         "standard-precautions",
@@ -7352,7 +7357,7 @@
         "C": "Documentation should be timely and factual; delaying charting increases error risk and does not represent safe practice.",
         "D": "Family concerns and changes in condition should be addressed with assessment and appropriate reporting, not dismissal."
       },
-      "difficulty": "medium",
+      "difficulty": "easy",
       "topicSlug": "standard-precautions-principles",
       "tags": [
         "standard-precautions",
@@ -7402,7 +7407,7 @@
         "C": "Documentation should be timely and factual; delaying charting increases error risk and does not represent safe practice.",
         "D": "Family concerns and changes in condition should be addressed with assessment and appropriate reporting, not dismissal."
       },
-      "difficulty": "medium",
+      "difficulty": "easy",
       "topicSlug": "standard-precautions-principles",
       "tags": [
         "standard-precautions",
@@ -7552,7 +7557,7 @@
         "C": "Documentation should be timely and factual; delaying charting increases error risk and does not represent safe practice.",
         "D": "Family concerns and changes in condition should be addressed with assessment and appropriate reporting, not dismissal."
       },
-      "difficulty": "medium",
+      "difficulty": "hard",
       "topicSlug": "transmission-based-precautions",
       "tags": [
         "contact-precautions",
@@ -7657,7 +7662,7 @@
         "C": "Documentation should be timely and factual; delaying charting increases error risk and does not represent safe practice.",
         "D": "Family concerns and changes in condition should be addressed with assessment and appropriate reporting, not dismissal."
       },
-      "difficulty": "medium",
+      "difficulty": "easy",
       "topicSlug": "advance-directives-end-of-life-ltc",
       "tags": [
         "advance-directives",
@@ -7759,7 +7764,7 @@
         "C": "Documentation should be timely and factual; delaying charting increases error risk and does not represent safe practice.",
         "D": "Family concerns and changes in condition should be addressed with assessment and appropriate reporting, not dismissal."
       },
-      "difficulty": "medium",
+      "difficulty": "easy",
       "topicSlug": "advance-directives-end-of-life-ltc",
       "tags": [
         "advance-directives",
@@ -7810,7 +7815,7 @@
         "C": "Documentation should be timely and factual; delaying charting increases error risk and does not represent safe practice.",
         "D": "Family concerns and changes in condition should be addressed with assessment and appropriate reporting, not dismissal."
       },
-      "difficulty": "medium",
+      "difficulty": "easy",
       "topicSlug": "advance-directives-end-of-life-ltc",
       "tags": [
         "advance-directives",
@@ -7861,7 +7866,7 @@
         "C": "Documentation should be timely and factual; delaying charting increases error risk and does not represent safe practice.",
         "D": "Family concerns and changes in condition should be addressed with assessment and appropriate reporting, not dismissal."
       },
-      "difficulty": "medium",
+      "difficulty": "easy",
       "topicSlug": "cognitive-changes-aging-supportive-care",
       "tags": [
         "cognitive-changes",
@@ -7961,7 +7966,7 @@
         "C": "Documentation should be timely and factual; delaying charting increases error risk and does not represent safe practice.",
         "D": "Family concerns and changes in condition should be addressed with assessment and appropriate reporting, not dismissal."
       },
-      "difficulty": "medium",
+      "difficulty": "easy",
       "topicSlug": "cognitive-changes-aging-supportive-care",
       "tags": [
         "cognitive-changes",
@@ -8115,7 +8120,7 @@
       "incorrectRationales": {
         "C": "Never withhold all medications due to a single unrelated refusal; follow rights verification, attempt to understand the refusal, and notify the prescriber or supervising nurse per policy."
       },
-      "difficulty": "medium",
+      "difficulty": "easy",
       "topicSlug": "elder-abuse-neglect-recognition-reporting",
       "tags": [
         "elder-abuse",
@@ -8166,7 +8171,7 @@
         "C": "Documentation should be timely and factual; delaying charting increases error risk and does not represent safe practice.",
         "D": "Family concerns and changes in condition should be addressed with assessment and appropriate reporting, not dismissal."
       },
-      "difficulty": "medium",
+      "difficulty": "easy",
       "topicSlug": "elder-abuse-neglect-recognition-reporting",
       "tags": [
         "elder-abuse",
@@ -8266,7 +8271,7 @@
         "C": "Documentation should be timely and factual; delaying charting increases error risk and does not represent safe practice.",
         "D": "Family concerns and changes in condition should be addressed with assessment and appropriate reporting, not dismissal."
       },
-      "difficulty": "medium",
+      "difficulty": "easy",
       "topicSlug": "ltc-resident-rights-person-centered",
       "tags": [
         "ltc",
@@ -8316,7 +8321,7 @@
         "C": "Documentation should be timely and factual; delaying charting increases error risk and does not represent safe practice.",
         "D": "Family concerns and changes in condition should be addressed with assessment and appropriate reporting, not dismissal."
       },
-      "difficulty": "medium",
+      "difficulty": "easy",
       "topicSlug": "ltc-resident-rights-person-centered",
       "tags": [
         "ltc",
@@ -8566,7 +8571,7 @@
         "C": "Documentation should be timely and factual; delaying charting increases error risk and does not represent safe practice.",
         "D": "Family concerns and changes in condition should be addressed with assessment and appropriate reporting, not dismissal."
       },
-      "difficulty": "medium",
+      "difficulty": "easy",
       "topicSlug": "physiological-changes-aging-nursing",
       "tags": [
         "aging",
@@ -8620,7 +8625,7 @@
       "incorrectRationales": {
         "C": "Never withhold all medications due to a single unrelated refusal; follow rights verification, attempt to understand the refusal, and notify the prescriber or supervising nurse per policy."
       },
-      "difficulty": "medium",
+      "difficulty": "easy",
       "topicSlug": "physiological-changes-aging-nursing",
       "tags": [
         "aging",
@@ -8773,7 +8778,7 @@
         "C": "Documentation should be timely and factual; delaying charting increases error risk and does not represent safe practice.",
         "D": "Family concerns and changes in condition should be addressed with assessment and appropriate reporting, not dismissal."
       },
-      "difficulty": "medium",
+      "difficulty": "hard",
       "topicSlug": "dementia-delirium-care-communication",
       "tags": [
         "dementia",
@@ -8875,7 +8880,7 @@
         "C": "Documentation should be timely and factual; delaying charting increases error risk and does not represent safe practice.",
         "D": "Family concerns and changes in condition should be addressed with assessment and appropriate reporting, not dismissal."
       },
-      "difficulty": "medium",
+      "difficulty": "easy",
       "topicSlug": "depression-recognition-supportive-care",
       "tags": [
         "depression",
@@ -9025,7 +9030,7 @@
         "C": "Documentation should be timely and factual; delaying charting increases error risk and does not represent safe practice.",
         "D": "Family concerns and changes in condition should be addressed with assessment and appropriate reporting, not dismissal."
       },
-      "difficulty": "medium",
+      "difficulty": "easy",
       "topicSlug": "depression-recognition-supportive-care",
       "tags": [
         "depression",
@@ -9075,7 +9080,7 @@
         "C": "Documentation should be timely and factual; delaying charting increases error risk and does not represent safe practice.",
         "D": "Family concerns and changes in condition should be addressed with assessment and appropriate reporting, not dismissal."
       },
-      "difficulty": "medium",
+      "difficulty": "easy",
       "topicSlug": "suicide-risk-identification-safe-environment",
       "tags": [
         "suicide-risk",
@@ -9129,7 +9134,7 @@
       "incorrectRationales": {
         "C": "Never withhold all medications due to a single unrelated refusal; follow rights verification, attempt to understand the refusal, and notify the prescriber or supervising nurse per policy."
       },
-      "difficulty": "medium",
+      "difficulty": "hard",
       "topicSlug": "suicide-risk-identification-safe-environment",
       "tags": [
         "suicide-risk",
@@ -9180,7 +9185,7 @@
         "C": "Documentation should be timely and factual; delaying charting increases error risk and does not represent safe practice.",
         "D": "Family concerns and changes in condition should be addressed with assessment and appropriate reporting, not dismissal."
       },
-      "difficulty": "medium",
+      "difficulty": "easy",
       "topicSlug": "suicide-risk-identification-safe-environment",
       "tags": [
         "suicide-risk",
@@ -9230,7 +9235,7 @@
         "C": "Documentation should be timely and factual; delaying charting increases error risk and does not represent safe practice.",
         "D": "Family concerns and changes in condition should be addressed with assessment and appropriate reporting, not dismissal."
       },
-      "difficulty": "hard",
+      "difficulty": "medium",
       "topicSlug": "suicide-risk-identification-safe-environment",
       "tags": [
         "suicide-risk",
@@ -9280,7 +9285,7 @@
         "C": "Documentation should be timely and factual; delaying charting increases error risk and does not represent safe practice.",
         "D": "Family concerns and changes in condition should be addressed with assessment and appropriate reporting, not dismissal."
       },
-      "difficulty": "medium",
+      "difficulty": "easy",
       "topicSlug": "therapeutic-communication-techniques",
       "tags": [
         "therapeutic-communication",
@@ -9329,7 +9334,7 @@
         "C": "Documentation should be timely and factual; delaying charting increases error risk and does not represent safe practice.",
         "D": "Family concerns and changes in condition should be addressed with assessment and appropriate reporting, not dismissal."
       },
-      "difficulty": "medium",
+      "difficulty": "easy",
       "topicSlug": "therapeutic-communication-techniques",
       "tags": [
         "therapeutic-communication",
@@ -9378,7 +9383,7 @@
         "C": "Documentation should be timely and factual; delaying charting increases error risk and does not represent safe practice.",
         "D": "Family concerns and changes in condition should be addressed with assessment and appropriate reporting, not dismissal."
       },
-      "difficulty": "medium",
+      "difficulty": "easy",
       "topicSlug": "therapeutic-communication-techniques",
       "tags": [
         "therapeutic-communication",
@@ -9577,7 +9582,7 @@
         "C": "Documentation should be timely and factual; delaying charting increases error risk and does not represent safe practice.",
         "D": "Family concerns and changes in condition should be addressed with assessment and appropriate reporting, not dismissal."
       },
-      "difficulty": "medium",
+      "difficulty": "easy",
       "topicSlug": "pediatric-medication-safety-dosing",
       "tags": [
         "pediatric-medications",
@@ -9631,7 +9636,7 @@
       "incorrectRationales": {
         "C": "Never withhold all medications due to a single unrelated refusal; follow rights verification, attempt to understand the refusal, and notify the prescriber or supervising nurse per policy."
       },
-      "difficulty": "medium",
+      "difficulty": "easy",
       "topicSlug": "pediatric-medication-safety-dosing",
       "tags": [
         "pediatric-medications",
@@ -9732,7 +9737,7 @@
         "C": "Documentation should be timely and factual; delaying charting increases error risk and does not represent safe practice.",
         "D": "Family concerns and changes in condition should be addressed with assessment and appropriate reporting, not dismissal."
       },
-      "difficulty": "medium",
+      "difficulty": "easy",
       "topicSlug": "pediatric-vital-signs-normal-ranges",
       "tags": [
         "pediatric-vital-signs",
@@ -9832,7 +9837,7 @@
         "C": "Documentation should be timely and factual; delaying charting increases error risk and does not represent safe practice.",
         "D": "Family concerns and changes in condition should be addressed with assessment and appropriate reporting, not dismissal."
       },
-      "difficulty": "medium",
+      "difficulty": "easy",
       "topicSlug": "pediatric-vital-signs-normal-ranges",
       "tags": [
         "pediatric-vital-signs",
@@ -9882,7 +9887,7 @@
         "C": "Documentation should be timely and factual; delaying charting increases error risk and does not represent safe practice.",
         "D": "Family concerns and changes in condition should be addressed with assessment and appropriate reporting, not dismissal."
       },
-      "difficulty": "medium",
+      "difficulty": "easy",
       "topicSlug": "analgesic-medications-opioids-non-opioids",
       "tags": [
         "analgesics",
@@ -9984,7 +9989,7 @@
         "C": "Documentation should be timely and factual; delaying charting increases error risk and does not represent safe practice.",
         "D": "Family concerns and changes in condition should be addressed with assessment and appropriate reporting, not dismissal."
       },
-      "difficulty": "medium",
+      "difficulty": "easy",
       "topicSlug": "analgesic-medications-opioids-non-opioids",
       "tags": [
         "analgesics",
@@ -10086,7 +10091,7 @@
         "C": "Documentation should be timely and factual; delaying charting increases error risk and does not represent safe practice.",
         "D": "Family concerns and changes in condition should be addressed with assessment and appropriate reporting, not dismissal."
       },
-      "difficulty": "medium",
+      "difficulty": "easy",
       "topicSlug": "antihypertensives-diuretics-basics",
       "tags": [
         "antihypertensives",
@@ -10243,7 +10248,7 @@
         "C": "Documentation should be timely and factual; delaying charting increases error risk and does not represent safe practice.",
         "D": "Family concerns and changes in condition should be addressed with assessment and appropriate reporting, not dismissal."
       },
-      "difficulty": "medium",
+      "difficulty": "hard",
       "topicSlug": "basic-dosage-calculations",
       "tags": [
         "dosage-calculation",
@@ -10343,7 +10348,7 @@
         "C": "Documentation should be timely and factual; delaying charting increases error risk and does not represent safe practice.",
         "D": "Family concerns and changes in condition should be addressed with assessment and appropriate reporting, not dismissal."
       },
-      "difficulty": "medium",
+      "difficulty": "easy",
       "topicSlug": "high-alert-medications-safety",
       "tags": [
         "high-alert",
@@ -10394,7 +10399,7 @@
         "C": "Documentation should be timely and factual; delaying charting increases error risk and does not represent safe practice.",
         "D": "Family concerns and changes in condition should be addressed with assessment and appropriate reporting, not dismissal."
       },
-      "difficulty": "medium",
+      "difficulty": "easy",
       "topicSlug": "high-alert-medications-safety",
       "tags": [
         "high-alert",
@@ -10496,7 +10501,7 @@
         "C": "Documentation should be timely and factual; delaying charting increases error risk and does not represent safe practice.",
         "D": "Family concerns and changes in condition should be addressed with assessment and appropriate reporting, not dismissal."
       },
-      "difficulty": "medium",
+      "difficulty": "easy",
       "topicSlug": "insulin-administration-types-technique",
       "tags": [
         "insulin",
@@ -10547,7 +10552,7 @@
         "C": "Documentation should be timely and factual; delaying charting increases error risk and does not represent safe practice.",
         "D": "Family concerns and changes in condition should be addressed with assessment and appropriate reporting, not dismissal."
       },
-      "difficulty": "medium",
+      "difficulty": "easy",
       "topicSlug": "insulin-administration-types-technique",
       "tags": [
         "insulin",
@@ -10653,7 +10658,7 @@
       "incorrectRationales": {
         "C": "Never withhold all medications due to a single unrelated refusal; follow rights verification, attempt to understand the refusal, and notify the prescriber or supervising nurse per policy."
       },
-      "difficulty": "medium",
+      "difficulty": "easy",
       "topicSlug": "oral-medication-administration",
       "tags": [
         "oral-medications",
@@ -10758,7 +10763,7 @@
         "C": "Documentation should be timely and factual; delaying charting increases error risk and does not represent safe practice.",
         "D": "Family concerns and changes in condition should be addressed with assessment and appropriate reporting, not dismissal."
       },
-      "difficulty": "medium",
+      "difficulty": "easy",
       "topicSlug": "oral-medication-administration",
       "tags": [
         "oral-medications",
