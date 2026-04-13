@@ -542,7 +542,7 @@ export function PricingPageClient({
                   }}
                   className={`rounded-full px-3 py-1.5 text-xs font-semibold transition-[background-color,color,box-shadow,transform] duration-150 ease-out ${
                     selectedAlliedCareer === career
-                      ? "bg-[var(--semantic-brand)] text-white shadow-[var(--elevation-rest)]"
+                      ? "bg-[var(--semantic-brand)] text-[var(--semantic-brand-contrast)] shadow-[var(--elevation-rest)]"
                       : "border border-[var(--border-medium)] bg-card text-[var(--palette-text)] hover:-translate-y-px hover:bg-[var(--surface-interactive-hover)] hover:shadow-[var(--elevation-hover)]"
                   }`}
                 >
@@ -582,7 +582,7 @@ export function PricingPageClient({
                 }`}
               >
                 {isPop ? (
-                  <span className="absolute -top-3.5 left-1/2 -translate-x-1/2 rounded-full bg-[var(--semantic-info)] px-5 py-1.5 text-xs font-bold uppercase tracking-wide text-white shadow-[0_2px_8px_color-mix(in_srgb,var(--semantic-info)_30%,transparent)]">
+                  <span className="absolute -top-3.5 left-1/2 -translate-x-1/2 rounded-full bg-[var(--semantic-info)] px-5 py-1.5 text-xs font-bold uppercase tracking-wide text-[var(--text-inverse)] shadow-[0_2px_8px_color-mix(in_srgb,var(--semantic-info)_30%,transparent)]">
                     Most Popular
                   </span>
                 ) : isBest ? (

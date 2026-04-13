@@ -10,6 +10,7 @@ import {
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import type { PathwayQuestionBankSnapshot } from "@/lib/exam-pathways/pathway-question-bank-snapshot";
 import { assessCatPracticeReadinessForPathway } from "@/lib/practice-tests/cat-practice-readiness";
+import { CAT_MIN_COMPLETE_POOL } from "@/lib/practice-tests/cat-pool";
 import { catPathwayRegionalExamLine, catPathwayShortCatLabel } from "@/lib/exam-pathways/cat-pathway-labels";
 import { appPathwayCatSessionStartPath } from "@/lib/exam-pathways/pathway-cat-flow";
 import { marketingCatPathForPathway } from "@/lib/exam-pathways/practice-exams-cat-start";
@@ -73,7 +74,7 @@ export type CatEligibilityAssessment = {
   debugDetail?: string;
 };
 
-const MIN_ADAPTIVE_MARKETING_SNAPSHOT = 8;
+const MIN_ADAPTIVE_MARKETING_SNAPSHOT = CAT_MIN_COMPLETE_POOL;
 
 function pathwayWaitlistOrUpcomingBlock(pathway: ExamPathwayDefinition): CatEligibilityAssessment | null {
   if (pathway.acquisitionMode === "info_only") {
@@ -145,7 +146,7 @@ export function assessMarketingCatSurfaceWithoutAuth(
       reason: "insufficient_cat_pool",
       nextAction: "use_question_bank",
       marketingPrimaryCta: "none",
-      safeUserMessage: `${cat} readiness is still being prepared for this pathway. Keep building momentum with practice questions and lessons, then return to run the full readiness exam.`,
+      safeUserMessage: `Adaptive exam not available yet for this pathway. At least ${MIN_ADAPTIVE_MARKETING_SNAPSHOT} complete questions are required before CAT can start.`,
       pathway,
       pathwayId: pathway.id,
       marketingCatPath,

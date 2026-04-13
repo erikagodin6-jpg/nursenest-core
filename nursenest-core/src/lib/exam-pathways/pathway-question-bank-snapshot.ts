@@ -7,6 +7,7 @@ import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { recordRouteRenderFallback } from "@/lib/observability/route-fallback-tracker";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { isCompleteCatQuestionRow } from "@/lib/practice-tests/cat-pool";
 
 const SNAPSHOT_TIMEOUT_MS = 10_000;
 const REVALIDATE_SECONDS = 3600;
@@ -39,14 +40,22 @@ async function computePathwayQuestionBankSnapshot(pathway: ExamPathwayDefinition
       const base = pathwayExamQuestionMarketingWhere(pathway);
       const counts = await Promise.allSettled([
         prisma.examQuestion.count({ where: base }),
-        prisma.examQuestion.count({
+        prisma.examQuestion.findMany({
           where: { AND: [base, { isAdaptiveEligible: true }] },
+          select: {
+            stem: true,
+            options: true,
+            correctAnswer: true,
+            rationale: true,
+          },
         }),
       ]);
       const pathwayScopedCount =
         counts[0]?.status === "fulfilled" && typeof counts[0].value === "number" ? counts[0].value : 0;
       const adaptiveEligibleCount =
-        counts[1]?.status === "fulfilled" && typeof counts[1].value === "number" ? counts[1].value : 0;
+        counts[1]?.status === "fulfilled" && Array.isArray(counts[1].value)
+          ? counts[1].value.filter((q) => isCompleteCatQuestionRow(q)).length
+          : 0;
       if (counts[0]?.status === "rejected" || counts[1]?.status === "rejected") {
         safeServerLog("exam_pathway_hub", "hub_data_load_failed", {
           event: "hub_data_load_failed",
