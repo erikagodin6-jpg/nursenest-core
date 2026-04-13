@@ -678,6 +678,22 @@ model BlogPost {
   publishAt    DateTime?
   /** Original legacy schedule timestamp (if imported from scheduled content). */
   scheduledAt  DateTime?
+  /** Profession/career dimension for shared nursing+allied infrastructure (e.g., rn, paramedic, mlt). */
+  careerSlug   String?
+  /** Content locale used for language-aware blog delivery. */
+  locale       String   @default("en")
+  /** Shared identifier linking translations of the same post. */
+  translationGroupId String?
+  /** Locale of the canonical/source article. */
+  sourceLocale String?
+  /** Whether this row was auto-translated from a source post. */
+  isAutoTranslated Boolean @default(false)
+  /** Translation provenance such as `ai`, `manual`, or `legacy`. */
+  translationSource String?
+  /** Canonical/source BlogPost row for translation variants (self relation). */
+  canonicalPostId String?
+  canonicalPost   BlogPost? @relation("BlogPostCanonicalRelation", fields: [canonicalPostId], references: [id], onDelete: SetNull)
+  translatedVariants BlogPost[] @relation("BlogPostCanonicalRelation")
   /** RN | PN | NP | Allied — drives cross-links and topic hubs (string for flexibility vs exam registry keys). */
   exam         String?
   /** Optional: overrides <title> / OG when set. */
@@ -754,6 +770,9 @@ model BlogPost {
   adminPublishLog Json @default("[]")
 
   @@index([postStatus, publishAt])
+  @@index([careerSlug, locale, postStatus, publishAt])
+  @@index([translationGroupId, locale])
+  @@index([canonicalPostId])
   @@index([scheduledAt])
   @@index([createdAt])
   @@index([campaignId, postStatus, publishAt])

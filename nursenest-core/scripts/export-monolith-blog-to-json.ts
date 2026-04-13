@@ -48,6 +48,7 @@ async function main() {
 
   try {
     const bodyOnItems = await hasColumn(client, "content_items", "body");
+    const scheduledOnItems = await hasColumn(client, "content_items", "scheduled_at");
 
     const contentSql = `
       SELECT
@@ -67,10 +68,7 @@ async function main() {
       FROM content_items
       WHERE type IN ('blog', 'blog-post', 'article')
         AND (status IS NULL OR status NOT IN ('merged', 'archived', 'quarantined'))
-        AND (
-          status = 'published'
-          OR (status = 'scheduled' AND scheduled_at IS NOT NULL AND scheduled_at <= NOW())
-        )
+        AND (status IS NULL OR status IN ('published', 'scheduled', 'draft'))
       ORDER BY COALESCE(published_at, scheduled_at, created_at) DESC NULLS LAST
     `;
 
@@ -96,12 +94,14 @@ async function main() {
     }
 
     if (await hasColumn(client, "imaging_blog_articles", "slug")) {
+      const imagingScheduled = await hasColumn(client, "imaging_blog_articles", "scheduled_at");
       const img = await client.query(`
         SELECT slug, title, summary, meta_description, category, content_html, tags,
                status, published_at, created_at, updated_at
+               ${imagingScheduled ? ", scheduled_at" : ""}
         FROM imaging_blog_articles
-        WHERE status = 'published'
-        ORDER BY published_at DESC NULLS LAST, updated_at DESC
+        WHERE status IN ('published', 'scheduled', 'draft')
+        ORDER BY COALESCE(published_at, ${imagingScheduled ? "scheduled_at" : "NULL"}, created_at) DESC NULLS LAST, updated_at DESC
         LIMIT 5000
       `);
       for (const row of img.rows) {
@@ -115,9 +115,10 @@ async function main() {
           tags: [...(row.tags || []), "medical-imaging"],
           content: null,
           content_html: row.content_html,
-          status: "published",
+          status: row.status ?? "published",
           published_at: row.published_at,
           created_at: row.created_at,
+          scheduled_at: imagingScheduled ? row.scheduled_at : null,
           cover_image: null,
           legacy_original_slug: row.slug,
         });
@@ -125,12 +126,14 @@ async function main() {
     }
 
     if (await hasColumn(client, "mlt_blog_posts", "slug")) {
+      const mltScheduled = await hasColumn(client, "mlt_blog_posts", "scheduled_at");
       const mlt = await client.query(`
         SELECT slug, title, excerpt, seo_description, discipline, content, tags,
                status, published_at, created_at, updated_at, featured_image
+               ${mltScheduled ? ", scheduled_at" : ""}
         FROM mlt_blog_posts
-        WHERE status = 'published'
-        ORDER BY published_at DESC NULLS LAST, updated_at DESC
+        WHERE status IN ('published', 'scheduled', 'draft')
+        ORDER BY COALESCE(published_at, ${mltScheduled ? "scheduled_at" : "NULL"}, created_at) DESC NULLS LAST, updated_at DESC
         LIMIT 5000
       `);
       for (const row of mlt.rows) {
@@ -143,9 +146,10 @@ async function main() {
           category: row.discipline || "Medical laboratory",
           tags: [...(row.tags || []), "mlt"],
           content: row.content,
-          status: "published",
+          status: row.status ?? "published",
           published_at: row.published_at,
           created_at: row.created_at,
+          scheduled_at: mltScheduled ? row.scheduled_at : null,
           cover_image: row.featured_image,
           legacy_original_slug: row.slug,
         });
@@ -160,6 +164,11 @@ async function main() {
       acc[s] = (acc[s] || 0) + 1;
       return acc;
     }, {});
+    const byStatus = out.reduce<Record<string, number>>((acc, r) => {
+      const s = String(r.status || "unknown").toLowerCase();
+      acc[s] = (acc[s] || 0) + 1;
+      return acc;
+    }, {});
 
     console.log(
       JSON.stringify(
@@ -168,6 +177,8 @@ async function main() {
           wrote: OUT,
           total: out.length,
           bySource,
+          byStatus,
+          includesDraftAndFutureScheduled: true,
           note: "blog_clusters are pillar SEO pages (not article bodies) — not exported here.",
         },
         null,

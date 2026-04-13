@@ -312,7 +312,7 @@ export default async function PathwayCatEntryPage({ params }: Props) {
               </h3>
               <ul className="mt-3 space-y-2 text-sm">
                 {fallbackLessons.slice(0, 5).map((lesson) => (
-                  <li key={lesson.id}>
+                  <li key={lesson.slug}>
                     <Link
                       href={`${lessonsHref}/${encodeURIComponent(lesson.slug)}`}
                       className="font-medium text-primary hover:underline"

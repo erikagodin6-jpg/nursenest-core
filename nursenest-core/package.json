@@ -23,6 +23,7 @@
     "ci:verify": "npm run db:generate && npm run typecheck && npm run build",
     "audit:internal-links": "tsx scripts/audit-internal-links.ts",
     "audit:blog-quality": "tsx scripts/audit-blog-quality.ts",
+    "audit:allied-blog-recovery": "tsx scripts/audit-allied-blog-recovery.ts",
     "audit:lesson-links": "tsx scripts/audit-lesson-links.ts",
     "audit:lesson-question-coverage": "tsx scripts/lesson-question-link-coverage.ts",
     "audit:lesson-question-gap-fill": "tsx scripts/lesson-question-gap-fill.ts",
