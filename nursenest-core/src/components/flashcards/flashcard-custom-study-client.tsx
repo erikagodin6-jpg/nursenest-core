@@ -40,6 +40,13 @@ const MODE_LABEL: Record<SessionPayload["summary"]["mode"], string> = {
   mixed: "Mixed",
 };
 
+function parseCardLimitValue(value: string): number {
+  if (value === "all") return Number.POSITIVE_INFINITY;
+  const n = Number(value);
+  if (!Number.isFinite(n) || n <= 0) return 20;
+  return n;
+}
+
 export function FlashcardCustomStudyClient() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -102,6 +109,7 @@ export function FlashcardCustomStudyClient() {
     .filter((c) => payload.summary.selectedCategories.includes(c.id))
     .map((c) => c.title);
 
+  const cardLimit = parseCardLimitValue(payload.summary.cardLimit);
   const activeCards: ActiveStudyCard[] = payload.cards.map((card) => ({
     id: card.id,
     prompt: card.front,
@@ -111,6 +119,7 @@ export function FlashcardCustomStudyClient() {
     subtopic: card.subtopic,
     sourceKey: card.sourceKey ?? null,
     pathwayId: card.pathwayId ?? payload.summary.pathwayId,
+    topicSlug: card.subtopic ?? null,
   }));
   const enabledQuickFilters = [
     localFilters.starredOnly ? "Starred" : null,
@@ -140,6 +149,12 @@ export function FlashcardCustomStudyClient() {
 
       <ActiveStudySession
         cards={activeCards}
+        sessionMeta={{
+          requestedCount: Number.isFinite(cardLimit) ? cardLimit : activeCards.length,
+          returnedCount: activeCards.length,
+          totalAvailable: payload.summary.matchingCards,
+          hasMore: payload.summary.matchingCards > activeCards.length,
+        }}
         header={{
           sessionTitle: "Custom Active Study Session",
           modeLabel: MODE_LABEL[payload.summary.mode],

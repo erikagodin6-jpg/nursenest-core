@@ -14,9 +14,9 @@ const FUNDAMENTALS_ALLOWED =
   /safety|infection control|hand hygiene|aseptic|sterile|ppe|isolation|prioritiz|delegat|communication|documentation|foundational|basic assessment|vital signs|therapeutic communication/i;
 
 const CATEGORY_BLOCKERS: Array<{ pattern: RegExp; categoryId: string }> = [
-  { pattern: /burn|skin graft|pressure injury|wound|cellulitis|rash|dermat/i, categoryId: "dermatology" },
-  { pattern: /heart failure|acs|arrhythm|mi\b|stemi|cardio|coronary|shock|hemodynamic/i, categoryId: "cardiovascular" },
-  { pattern: /copd|asthma|abg|oxygen|ventilat|pulmonary|pneumonia|respir/i, categoryId: "respiratory" },
+  { pattern: /burn|skin graft|pressure injury|wound|cellulitis|rash|dermat|lesion|melanoma|basal cell|squamous cell/i, categoryId: "dermatology" },
+  { pattern: /heart failure|acs|arrhythm|mi\b|stemi|cardio|coronary|shock|hemodynamic|perfusion/i, categoryId: "cardiovascular" },
+  { pattern: /copd|asthma|abg|oxygen|ventilat|pulmonary|pneumonia|respir|hypox|ecmo/i, categoryId: "respiratory" },
   { pattern: /dka|hhs|thyroid|adrenal|pituitary|endocrine|diabet|electrolyte|magnesium|calcium|potassium|sodium/i, categoryId: "endocrine" },
   { pattern: /stroke|seizure|icp|tbi|delirium|neurolog/i, categoryId: "neurology" },
   { pattern: /\bbph\b|prostat|renal|kidney|dialysis|aki|ckd|urinar|uti|gu\b/i, categoryId: "renal-genitourinary" },

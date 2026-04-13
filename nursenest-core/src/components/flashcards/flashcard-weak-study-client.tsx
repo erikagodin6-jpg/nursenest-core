@@ -129,6 +129,7 @@ export function FlashcardWeakStudyClient({
     subtopic: card.subtopic,
     sourceKey: card.sourceKey,
     pathwayId: card.pathwayId,
+    topicSlug: card.subtopic,
   }));
 
   return (
@@ -145,6 +146,12 @@ export function FlashcardWeakStudyClient({
       <ActiveStudySession
         cards={activeCards}
         loading={loading}
+        sessionMeta={{
+          requestedCount: activeCards.length,
+          returnedCount: activeCards.length,
+          totalAvailable: activeCards.length,
+          hasMore: false,
+        }}
         header={{
           sessionTitle: "Weak-Area Study Session",
           modeLabel: "Active Recall",

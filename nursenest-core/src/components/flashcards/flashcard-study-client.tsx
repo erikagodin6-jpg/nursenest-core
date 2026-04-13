@@ -158,6 +158,7 @@ export function FlashcardStudyClient({
     subtopic: card.subtopic ?? null,
     sourceKey: card.sourceKey ?? null,
     pathwayId: card.pathwayId ?? null,
+    topicSlug: card.subtopic ?? null,
   }));
 
   return (
