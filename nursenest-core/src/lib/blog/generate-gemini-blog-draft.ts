@@ -18,7 +18,7 @@ const geminiDraftSchema = z.object({
   slug: z.string().min(3).max(120),
   metaDescription: z.string().min(80).max(320),
   excerpt: z.string().min(80).max(360),
-  body: z.string().min(1500),
+  body: z.string().min(50),
 });
 
 type GeminiBlogDraftInput = {

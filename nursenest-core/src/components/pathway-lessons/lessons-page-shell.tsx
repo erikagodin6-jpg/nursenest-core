@@ -32,7 +32,7 @@ export function LessonsPageShell({ title, subtitle, toolbar, ctas, backLink, chi
         ctas={ctas}
         backLink={backLink}
       />
-      <div className="mt-3.5">{children}</div>
+      <div className="mt-3">{children}</div>
     </main>
   );
 }
