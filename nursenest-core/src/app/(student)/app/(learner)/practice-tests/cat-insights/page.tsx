@@ -94,7 +94,7 @@ export default function CatInsightsPage() {
           <div className="nn-card border-[var(--semantic-border-soft)] p-0 overflow-hidden">
             <div className="border-b border-[var(--semantic-border-soft)] px-5 py-3">
               <h2 className="text-sm font-semibold text-[var(--semantic-text-primary)]">Recent CAT sessions</h2>
-              <p className="text-xs text-muted-foreground">Newest first · paginated</p>
+              <p className="text-xs text-muted-foreground">Newest first</p>
             </div>
             {items.length === 0 && !loading ? (
               <p className="p-6 text-sm text-muted-foreground">

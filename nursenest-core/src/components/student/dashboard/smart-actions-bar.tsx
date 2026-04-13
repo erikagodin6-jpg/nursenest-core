@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { Brain, Target, BookOpen, Layers, ArrowRight } from "lucide-react";
 import { trackClientEvent } from "@/lib/observability/posthog-client";
+import { withPathwayScopeHref } from "@/lib/learner/pathway-scoped-href";
 
 const ACTIONS = [
   {
@@ -41,9 +42,11 @@ const ACTIONS = [
 export function SmartActionsBar({
   showAdaptiveAction = true,
   showWeaknessAction = true,
+  pathwayId = null,
 }: {
   showAdaptiveAction?: boolean;
   showWeaknessAction?: boolean;
+  pathwayId?: string | null;
 }) {
   const actions = ACTIONS.filter((action) => {
     if (action.id === "smart_session" && !showAdaptiveAction) return false;
@@ -59,7 +62,7 @@ export function SmartActionsBar({
         {actions.map((action) => (
           <Link
             key={action.id}
-            href={action.href}
+            href={withPathwayScopeHref(action.href, pathwayId)}
             onClick={() =>
               trackClientEvent("smart_action_clicked", { action_id: action.id })
             }

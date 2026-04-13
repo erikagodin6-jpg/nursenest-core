@@ -254,7 +254,7 @@ export function PreNursingModuleEngagement({
             </li>
             <li>
               <Link href="/pre-nursing/lessons" className="text-primary hover:underline">
-                Browse all modules (paginated)
+                Browse all modules
               </Link>
             </li>
             <li>

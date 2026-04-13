@@ -116,7 +116,7 @@ export function NclexRnLessonsHub({ pathway, lessons, lessonsBasePath, topicClus
       {navLinks.length > 0 && (
         <PathwayHubSection kind="navWash" as="nav" aria-label="NCLEX-RN lesson categories">
           <p className="nn-marketing-label">Jump to Client Needs</p>
-          <p className="nn-marketing-caption mt-1">Counts reflect lessons on this page (paginated hub).</p>
+          <p className="nn-marketing-caption mt-1">Counts reflect lessons on this page.</p>
           <ul className="mt-3 flex flex-wrap gap-2">
             {navLinks.map((s) => (
               <li key={s.anchor}>

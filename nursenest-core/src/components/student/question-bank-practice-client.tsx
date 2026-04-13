@@ -271,6 +271,10 @@ export function QuestionBankPracticeClient({
     if (!keys?.length) return null;
     return new Set(keys);
   }, [pathwayIdFilter, pathwayExamKeysByPathwayId]);
+  const validPathwayIdSet = useMemo(
+    () => new Set(pathwayOptions.map((p) => p.id)),
+    [pathwayOptions],
+  );
 
   const examBucketsForPathway = useMemo(() => {
     if (!pathwayExamKeySet || pathwayExamKeySet.size === 0) return examBuckets;
@@ -512,7 +516,13 @@ export function QuestionBankPracticeClient({
     const sm = searchParams.get("studyMode")?.trim().toLowerCase();
     if (tp) setTopic(tp);
     if (tpc) setTopicCodeFilter(tpc);
-    if (pid) setPathwayIdFilter(pid);
+    if (pid) {
+      if (validPathwayIdSet.size === 0 || validPathwayIdSet.has(pid)) {
+        setPathwayIdFilter(pid);
+      } else {
+        setPathwayIdFilter(defaultPathwayId ?? null);
+      }
+    }
     if (pr === "random" || pr === "random_bank") setPreset("random_bank");
     else if (pr === "topic" || pr === "topic_drill") setPreset("topic_drill");
     else if (pr === "mixed" || pr === "pathway_mixed") setPreset("pathway_mixed");
@@ -526,7 +536,7 @@ export function QuestionBankPracticeClient({
       setExamShell(false);
       setExamShowExplanation(true);
     }
-  }, [searchParams]);
+  }, [defaultPathwayId, searchParams, validPathwayIdSet]);
 
   useEffect(() => {
     if (phase !== "ready") return;

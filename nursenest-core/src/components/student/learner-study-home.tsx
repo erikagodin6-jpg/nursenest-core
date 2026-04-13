@@ -163,6 +163,11 @@ export function LearnerStudyHome({
   const showWeaknessAlerts = studySettings.enableWeaknessAlerts;
   const showDecayAlerts = studySettings.enableSpacedRepetition && studySettings.enableDecayAlerts;
   const showAdaptivePlan = studySettings.enableAdaptivePlan;
+  const preferredPathwayId =
+    snapshot.pathways.find((p) => p.pathwayId === snapshot.learnerPath)?.pathwayId ??
+    snapshot.pathways.find((p) => p.lessonsTotal > 0)?.pathwayId ??
+    snapshot.pathways[0]?.pathwayId ??
+    null;
   const heroContextLine = progressFeedbackLine ?? personalNote ?? momentumLine;
   const heroFocusTopic = weakTopicTitles[0] ?? strongHighlight[0]?.topic ?? null;
 
@@ -399,7 +404,11 @@ export function LearnerStudyHome({
           </div>
         </div>
         <div className="nn-dash-explore-stack">
-          <SmartActionsBar showAdaptiveAction={showAdaptivePlan} showWeaknessAction={showWeaknessAlerts} />
+          <SmartActionsBar
+            showAdaptiveAction={showAdaptivePlan}
+            showWeaknessAction={showWeaknessAlerts}
+            pathwayId={preferredPathwayId}
+          />
           <LearnerDashboardAdvantageStrip t={t} />
           <LearnerSurface tone="secondary" padding="md" radius="lg" shadow={false} className="nn-dash-account-cta">
             <p className="text-sm text-muted-foreground">{t("learner.dashboard.accountTeaser")}</p>

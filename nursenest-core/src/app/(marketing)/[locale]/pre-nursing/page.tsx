@@ -137,7 +137,7 @@ export default async function LocalizedPreNursingPage({ params }: Props) {
           <ul className="mt-4 flex flex-wrap gap-4 text-sm font-medium">
             <li>
               <Link href={l("/pre-nursing/lessons")} className="text-primary hover:underline">
-                {msgs["preNursing.hub.quickLinks.allLessons"] ?? "All lessons (paginated)"}
+                {msgs["preNursing.hub.quickLinks.allLessons"] ?? "Browse all lessons"}
               </Link>
             </li>
             <li>

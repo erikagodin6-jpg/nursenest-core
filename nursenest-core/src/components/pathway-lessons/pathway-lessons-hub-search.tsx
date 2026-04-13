@@ -16,7 +16,7 @@ export function PathwayLessonsHubSearch({ basePath, initialQuery, showHelperCopy
     <div className="space-y-2">
       {showHelperCopy ? (
         <p className="text-xs leading-relaxed text-[var(--theme-muted-text)]">
-          Searches title, topic, and URL slug across this pathway. Results stay paginated for fast loads.
+          Searches title, topic, and URL slug across this pathway. Results stay fast while you browse.
         </p>
       ) : null}
       <form method="get" action={basePath} className="flex flex-col gap-2 sm:flex-row sm:items-center">

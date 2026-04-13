@@ -104,7 +104,7 @@ export default function PreNursingLandingPage() {
           <ul className="mt-4 flex flex-wrap gap-4 text-sm font-medium">
             <li>
               <Link href="/pre-nursing/lessons" className="text-primary hover:underline">
-                All lessons (paginated)
+                Browse all lessons
               </Link>
             </li>
             <li>

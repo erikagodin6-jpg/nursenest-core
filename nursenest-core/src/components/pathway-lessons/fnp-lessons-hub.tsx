@@ -135,7 +135,7 @@ export function FnpLessonsHub({ pathway, lessons, lessonsBasePath, topicClusters
       <nav aria-label={`${pathway.shortName} lessons by population`} className="nn-study-card nn-study-card--wash p-4">
         <p className="nn-marketing-label">Jump to population lane</p>
         <p className="nn-marketing-caption mt-1">
-          Counts reflect lessons on this page (paginated hub). Use the domain chips below for assessment vs management.
+          Counts reflect lessons on this page. Use the domain chips below for assessment vs management.
         </p>
         <ul className="mt-3 flex flex-wrap gap-2">
           {FNP_LIFESPAN_ORDER.map((row) => (

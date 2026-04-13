@@ -48,12 +48,12 @@ export function PreNursingNextStepsBlock({ sourceSurface }: { sourceSurface: "hu
   const prioritizedTitle = useMemo(() => ROUTES.find((r) => r.key === hint)?.title ?? "General exam prep", [hint]);
 
   return (
-    <section className="nn-card mt-8 p-6">
+    <section className="nn-card mt-8 border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <h3 className="text-lg font-semibold text-[var(--theme-heading-text)]">What comes after Pre-Nursing</h3>
-        <span className="text-xs text-muted">Your hint: {hint === "unsure" ? "Not set yet" : prioritizedTitle}</span>
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">What comes after Pre-Nursing</h3>
+        <span className="text-xs text-gray-700 dark:text-gray-300">Your hint: {hint === "unsure" ? "Not set yet" : prioritizedTitle}</span>
       </div>
-      <p className="mt-2 text-sm text-muted">
+      <p className="mt-2 text-sm text-gray-700 dark:text-gray-300">
         Pre-Nursing stays free. When you want exam-style prep, compare the pathways below and choose a route that matches your
         goal and location.
       </p>
@@ -65,7 +65,9 @@ export function PreNursingNextStepsBlock({ sourceSurface }: { sourceSurface: "hu
             <Link
               key={route.key}
               href={href}
-              className={`rounded-xl border p-4 transition-colors ${highlighted ? "border-primary/45 bg-primary/5" : "border-border bg-card hover:bg-muted/40"}`}
+              className={`rounded-xl border border-gray-200 bg-white p-4 shadow-sm transition-colors hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-900 dark:hover:bg-gray-800 ${
+                highlighted ? "border-primary dark:border-primary" : ""
+              }`}
               onClick={() =>
                 trackClientEvent(PH.preNursingPathwayCtaClicked, {
                   source_surface: sourceSurface,
@@ -74,9 +76,9 @@ export function PreNursingNextStepsBlock({ sourceSurface }: { sourceSurface: "hu
                 })
               }
             >
-              <p className="text-sm font-semibold text-[var(--theme-heading-text)]">{route.title}</p>
-              <p className="mt-1 text-xs text-muted">{route.whoFor}</p>
-              <p className="mt-2 text-xs text-muted">{route.note}</p>
+              <p className="text-sm font-semibold text-gray-900 dark:text-white">{route.title}</p>
+              <p className="mt-1 text-xs text-gray-700 dark:text-gray-300">{route.whoFor}</p>
+              <p className="mt-2 text-xs text-gray-700 dark:text-gray-300">{route.note}</p>
             </Link>
           );
         })}
@@ -107,12 +109,12 @@ export function PreNursingNextStepsBlock({ sourceSurface }: { sourceSurface: "hu
           Browse exam lesson hubs
         </Link>
         {prioritizedHref ? (
-          <Link href={prioritizedHref} className="text-muted-foreground hover:text-primary hover:underline">
+          <Link href={prioritizedHref} className="text-gray-700 hover:text-primary hover:underline dark:text-gray-300">
             Open suggested pathway
           </Link>
         ) : null}
         {secondaryHref ? (
-          <Link href={secondaryHref} className="text-muted-foreground hover:text-primary hover:underline">
+          <Link href={secondaryHref} className="text-gray-700 hover:text-primary hover:underline dark:text-gray-300">
             Canada RN option
           </Link>
         ) : null}

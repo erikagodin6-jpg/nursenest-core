@@ -31,7 +31,7 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
           ? `Pre-Nursing lessons (page ${page}) | NurseNest`
           : "Free Pre-Nursing lessons & modules | NurseNest";
       const description =
-        "Free interactive Pre-Nursing modules: sciences, terminology, communication, and clinical reasoning, paginated for fast loads. No subscription required.";
+        "Free interactive Pre-Nursing modules: sciences, terminology, communication, and clinical reasoning with fast loading. No subscription required.";
       const path = page > 1 ? `/pre-nursing/lessons?page=${page}` : "/pre-nursing/lessons";
       return {
         title,
@@ -78,8 +78,7 @@ export default async function PreNursingLessonsHubPage({ searchParams }: Props) 
             Pre-nursing lessons &amp; modules
           </h1>
           <p className="mt-3 max-w-2xl text-muted">
-            Every card opens a full interactive module. This list is paginated so we never ship the entire catalog in one
-            HTML response.
+            Every card opens a full interactive module. Lessons load quickly as you browse the catalog.
           </p>
           <div className="mt-4 flex flex-wrap gap-3 text-sm">
             <Link href="/pre-nursing" className="font-semibold text-primary hover:underline">

@@ -39,6 +39,7 @@ import { BenchmarkLockedCard } from "@/components/student/dashboard/benchmark-ca
 import { resolveDisplayName } from "@/lib/user/resolve-display-name";
 import { resolveDashboardIdentity } from "@/lib/learner/resolve-dashboard-identity";
 import { loadStudySettings } from "@/lib/learner/load-study-settings";
+import { withPathwayScopeHref } from "@/lib/learner/pathway-scoped-href";
 
 function retentionPersonalNote(t: LearnerMarketingT, prefs: Awaited<ReturnType<typeof loadLearnerRetentionPreferences>>): string | null {
   if (!prefs) return null;
@@ -213,6 +214,19 @@ export default async function LearnerDashboardPage() {
         todayGoal != null && snapshot.studyStreakDays > 0 && todayGoal.credits < todayGoal.target;
 
       const dashModel = buildDashboardModel(snapshot, studySnap, todayGoal, studySettings);
+      const preferredPathwayId =
+        snapshot.pathways.find((p) => p.pathwayId === snapshot.learnerPath)?.pathwayId ??
+        snapshot.pathways.find((p) => p.lessonsTotal > 0)?.pathwayId ??
+        snapshot.pathways[0]?.pathwayId ??
+        null;
+      const scopedContinueLinks = continueLinks.map((link) => ({
+        ...link,
+        href: withPathwayScopeHref(link.href, preferredPathwayId),
+      }));
+      const scopedNextAction = {
+        ...dashModel.nextAction,
+        href: withPathwayScopeHref(dashModel.nextAction.href, preferredPathwayId),
+      };
 
       const countdown = buildCountdownCopy({
         examDatePlanType: examUser?.examDatePlanType ?? null,
@@ -263,8 +277,8 @@ export default async function LearnerDashboardPage() {
           benchmark={benchmark}
           heatmapTopics={heatmapTopics}
           weakTopicTitles={weakTopicTitles}
-          continueLinks={continueLinks}
-          nextAction={dashModel.nextAction}
+          continueLinks={scopedContinueLinks}
+          nextAction={scopedNextAction}
           todayGoal={todayGoal}
           questionBankGoal={questionBankGoal}
           resume={resume}
