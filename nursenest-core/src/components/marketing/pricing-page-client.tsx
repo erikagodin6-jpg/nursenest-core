@@ -3,7 +3,8 @@
 import type { TierCode } from "@prisma/client";
 import Link from "next/link";
 import { Suspense, useCallback, useEffect, useMemo, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
+import { useSession } from "next-auth/react";
 import { Check } from "lucide-react";
 import { buildTierPricingNarrative } from "@/lib/conversion/pricing-catalog";
 import { PH } from "@/lib/observability/posthog-conversion-events";
@@ -98,6 +99,19 @@ function segmentToTier(segment: Segment, isUS?: boolean): TierCode {
   }
 }
 
+function tierToSegment(tier: TierCode, isUS?: boolean): Segment {
+  switch (tier) {
+    case "PRE_NURSING": return "prenursing";
+    case "NEW_GRAD": return "newgrad";
+    case "LVN_LPN":
+    case "RPN": return "pn";
+    case "RN": return "rn";
+    case "NP": return "np";
+    case "ALLIED": return "allied";
+    default: return isUS ? "rn" : "rn";
+  }
+}
+
 const SEGMENT_LABELS: Record<Segment, string> = {
   prenursing: "Pre-Nursing",
   newgrad: "New Grad",
@@ -180,9 +194,13 @@ export function PricingPageClient({
   const [policiesAccepted, setPoliciesAccepted] = useState(false);
   const [showConsentPrompt, setShowConsentPrompt] = useState(false);
   const [pendingCheckoutDuration, setPendingCheckoutDuration] = useState<BillingDuration | null>(null);
+  const [checkoutIntentHandled, setCheckoutIntentHandled] = useState(false);
   const [plansLoaded, setPlansLoaded] = useState(false);
   const { locale, t } = useMarketingI18n();
   const { region } = useNursenestRegion();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const { status: authStatus } = useSession();
 
   const heroCtaLabel = TRIAL_PRIMARY_COPY;
   const trialSubtext = TRIAL_SECONDARY_COPY;
@@ -373,6 +391,20 @@ export function PricingPageClient({
     (duration: BillingDuration) => {
       setCheckoutError(null);
       setCheckoutOpsHint(null);
+      if (authStatus === "loading") return;
+      if (authStatus !== "authenticated") {
+        const callbackParams = new URLSearchParams(searchParams.toString());
+        callbackParams.set("checkoutIntent", "1");
+        callbackParams.set("checkoutTier", tier);
+        callbackParams.set("checkoutDuration", duration);
+        if (isAllied) callbackParams.set("checkoutAlliedCareer", selectedAlliedCareer);
+        else callbackParams.delete("checkoutAlliedCareer");
+        const callbackPath = `${pathname}?${callbackParams.toString()}`;
+        const loginPath = localize("/login");
+        const signInUrl = `${loginPath}?callbackUrl=${encodeURIComponent(callbackPath)}`;
+        window.location.assign(signInUrl);
+        return;
+      }
       if (policiesAccepted) {
         void startCheckout(duration);
         return;
@@ -380,7 +412,7 @@ export function PricingPageClient({
       setPendingCheckoutDuration(duration);
       setShowConsentPrompt(true);
     },
-    [policiesAccepted, startCheckout],
+    [authStatus, isAllied, localize, pathname, policiesAccepted, searchParams, selectedAlliedCareer, startCheckout, tier],
   );
 
   const confirmConsentAndCheckout = useCallback(() => {
@@ -396,6 +428,42 @@ export function PricingPageClient({
   }, [pendingCheckoutDuration, policiesAccepted, startCheckout, t]);
 
   const SEGMENT_ORDER: Segment[] = ["prenursing", "newgrad", "rn", "pn", "np", "allied"];
+
+  useEffect(() => {
+    if (checkoutIntentHandled || authStatus !== "authenticated") return;
+    if (searchParams.get("checkoutIntent") !== "1") return;
+
+    const checkoutTier = searchParams.get("checkoutTier");
+    const checkoutDuration = searchParams.get("checkoutDuration");
+    if (!checkoutTier || !checkoutDuration) return;
+
+    const allowedTiers: TierCode[] = ["PRE_NURSING", "NEW_GRAD", "RPN", "LVN_LPN", "RN", "NP", "ALLIED"];
+    const allowedDurations: BillingDuration[] = ["monthly", "3-month", "6-month", "yearly"];
+    if (!allowedTiers.includes(checkoutTier as TierCode) || !allowedDurations.includes(checkoutDuration as BillingDuration)) {
+      return;
+    }
+
+    const tierCode = checkoutTier as TierCode;
+    const durationCode = checkoutDuration as BillingDuration;
+    setSegment(tierToSegment(tierCode, region === "US"));
+    if (tierCode === "ALLIED") {
+      const checkoutAlliedCareer = searchParams.get("checkoutAlliedCareer");
+      if (checkoutAlliedCareer && ALLIED_CAREER_KEYS.includes(checkoutAlliedCareer as AlliedCareerKey)) {
+        setSelectedAlliedCareer(checkoutAlliedCareer as AlliedCareerKey);
+      }
+    }
+    setPendingCheckoutDuration(durationCode);
+    setShowConsentPrompt(true);
+    setCheckoutIntentHandled(true);
+
+    const cleanParams = new URLSearchParams(searchParams.toString());
+    cleanParams.delete("checkoutIntent");
+    cleanParams.delete("checkoutTier");
+    cleanParams.delete("checkoutDuration");
+    cleanParams.delete("checkoutAlliedCareer");
+    const cleanUrl = cleanParams.size > 0 ? `${pathname}?${cleanParams.toString()}` : pathname;
+    window.history.replaceState({}, "", cleanUrl);
+  }, [authStatus, checkoutIntentHandled, pathname, region, searchParams]);
 
   return (
     <main className="mx-auto flex w-full max-w-6xl flex-col gap-20 nn-marketing-x pb-[var(--nn-rhythm-page-y)] pt-0 md:gap-24">
