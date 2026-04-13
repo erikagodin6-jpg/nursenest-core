@@ -1,26 +1,27 @@
 /**
- * Pre-Nursing Exam Engine.
+ * Pre-Nursing Exam Engine — hardened for edge-case stability.
  *
  * Two modes:
  *
  * 1. Mini CAT — lightweight adaptive exam:
  *    - 10–15 questions, ~10 minutes
- *    - Ability scale 1.0–3.0 (maps directly to difficulty 1/2/3), hard-clamped
+ *    - Ability scale 1.0–3.0 (hard-clamped, rounded to 2 dp after every update)
  *    - Difficulty-weighted ability updates:
  *        easy correct +0.3, medium +0.5, hard +0.7
  *        easy wrong   −0.3, medium −0.5, hard −0.7
- *    - Jitter (0–0.1, same direction as base delta) adds subtle variation
- *      without ever reversing the direction of adjustment
- *    - Streak dampening: 3+ consecutive same-direction answers → ×0.85
- *      to prevent unrealistic spikes after long runs
+ *    - Jitter: 0–0.1 in the same direction as base delta (skipped if base === 0)
+ *    - Streak dampening: ≥3 consecutive same-outcome answers → ×0.85
+ *    - Floor/ceiling injection: at ability 1.0 with 2+ consecutive wrong answers,
+ *      occasionally serve a medium question; at 3.0 with 2+ wrong, serve medium.
+ *      Prevents infinite easy/hard loops at range edges.
+ *    - NaN guard: if any arithmetic produces NaN, ability stays unchanged
  *    - Early stop: after 8+ questions if last 5 are all correct or all wrong
- *    - Performance level: Beginner (<50% correct), Developing (50–74%), Strong (≥75%)
+ *    - Performance level: Beginner (<50%), Developing (50–74%), Strong (≥75%)
  *
  * 2. Practice Exam — fixed non-adaptive set:
  *    - 10 questions per module, balanced difficulty (40/40/20)
- *    - Weak areas: only modules with ≥2 attempted questions, capped at top 3
+ *    - Weak areas: ≥2 attempts required; fallback fills to 3 from next-lowest modules
  *
- * Both modes return `PreNursingExamResult` at completion.
  * All logic is pure / stateless — no network calls, no DB.
  */
 
@@ -88,6 +89,13 @@ const MINI_CAT_JITTER = 0.1;
 const MINI_CAT_STREAK_DAMPEN = 0.85;
 /** Minimum streak length before dampening activates. */
 const MINI_CAT_STREAK_THRESHOLD = 3;
+/**
+ * At the ability floor (1.0) or ceiling (3.0), how many consecutive same-direction
+ * answers before we inject a question from the adjacent band to break the loop.
+ */
+const MINI_CAT_EDGE_INJECT_AFTER = 2;
+/** Probability (0–1) of injecting an adjacent-band question at the range edge. */
+const MINI_CAT_EDGE_INJECT_PROB = 0.4;
 
 /**
  * Difficulty-weighted ability deltas.
@@ -135,10 +143,23 @@ function targetDifficulty(ability: number): 1 | 2 | 3 {
   return rounded as 1 | 2 | 3;
 }
 
+/** Pick one element at random from a non-empty array. */
+function pickRandom<T>(arr: T[]): T {
+  return arr[Math.floor(Math.random() * arr.length)] ?? arr[0]!;
+}
+
 /**
  * Select the next question from the pool given current state.
- * Priority: exact difficulty match → one step off → any unseen
- * Returns null when no unseen questions remain.
+ *
+ * Normal priority: exact difficulty match → adjacent difficulty → any unseen.
+ *
+ * Edge-injection guard (prevents infinite easy/hard loops at range boundaries):
+ * - At ability floor (1.0) with ≥MINI_CAT_EDGE_INJECT_AFTER consecutive wrong answers,
+ *   randomly inject a medium (difficulty 2) question with probability MINI_CAT_EDGE_INJECT_PROB.
+ * - At ability ceiling (3.0) with ≥MINI_CAT_EDGE_INJECT_AFTER consecutive wrong answers,
+ *   randomly inject a medium question with the same probability.
+ *
+ * Returns null only when no unseen questions remain.
  */
 export function selectNextQuestion(
   state: MiniCatState,
@@ -147,24 +168,44 @@ export function selectNextQuestion(
   const unseen = pool.filter((q) => !state.seenIds.has(q.id));
   if (unseen.length === 0) return null;
 
+  // Edge-injection: check if we're stuck at a boundary with repeated wrong answers
+  const streak = currentStreak(state.answers);
+  const wrongStreak = streak < 0 ? Math.abs(streak) : 0;
+  const atFloor = state.abilityEstimate <= MINI_CAT_MIN_ABILITY;
+  const atCeiling = state.abilityEstimate >= MINI_CAT_MAX_ABILITY;
+
+  if (wrongStreak >= MINI_CAT_EDGE_INJECT_AFTER && (atFloor || atCeiling)) {
+    if (Math.random() < MINI_CAT_EDGE_INJECT_PROB) {
+      const mediumUnseen = unseen.filter((q) => q.difficulty === 2);
+      if (mediumUnseen.length > 0) return pickRandom(mediumUnseen);
+    }
+  }
+
   const target = targetDifficulty(state.abilityEstimate);
 
   // Prefer exact difficulty match
   const exact = unseen.filter((q) => q.difficulty === target);
-  if (exact.length > 0) {
-    return exact[Math.floor(Math.random() * exact.length)] ?? exact[0]!;
-  }
+  if (exact.length > 0) return pickRandom(exact);
 
   // Fall back to adjacent difficulty
   const adjacent = unseen.filter(
-    (q) => q.difficulty === target - 1 || q.difficulty === target + 1,
+    (q) => q.difficulty === (target - 1) || q.difficulty === (target + 1),
   );
-  if (adjacent.length > 0) {
-    return adjacent[Math.floor(Math.random() * adjacent.length)] ?? adjacent[0]!;
-  }
+  if (adjacent.length > 0) return pickRandom(adjacent);
 
-  // Any unseen question
-  return unseen[Math.floor(Math.random() * unseen.length)] ?? unseen[0]!;
+  // Any remaining unseen question
+  return pickRandom(unseen);
+}
+
+/**
+ * Clamp a value to [min, max] and round to 2 decimal places.
+ * The rounding step prevents floating-point drift accumulating over a long session.
+ * The NaN guard falls back to `fallback` if arithmetic produces a non-finite result.
+ */
+function clampAbility(raw: number, fallback: number): number {
+  if (!isFinite(raw) || isNaN(raw)) return fallback;
+  const clamped = Math.max(MINI_CAT_MIN_ABILITY, Math.min(MINI_CAT_MAX_ABILITY, raw));
+  return Math.round(clamped * 100) / 100;
 }
 
 /**
@@ -172,12 +213,17 @@ export function selectNextQuestion(
  *
  * Update rules (applied in order):
  * 1. Base delta from difficulty table (correct → positive, wrong → negative).
- * 2. Jitter (0–MINI_CAT_JITTER) in the SAME direction as the base delta —
- *    never reverses the sign of the adjustment.
- * 3. Streak dampening: if there are ≥3 consecutive same-outcome answers
- *    (including this one), multiply the full delta by MINI_CAT_STREAK_DAMPEN
- *    to prevent runaway ability estimates.
- * 4. Clamp result to [MINI_CAT_MIN_ABILITY, MINI_CAT_MAX_ABILITY].
+ * 2. Jitter: 0–MINI_CAT_JITTER in the same direction as base.
+ *    Skipped entirely when base === 0 (Math.sign(0) = 0 avoids direction ambiguity).
+ * 3. Streak dampening ×0.85 when ≥3 consecutive same-outcome answers (including this one).
+ * 4. Clamp to [1.0, 3.0], round to 2 dp, NaN-guard (keeps prior value on failure).
+ *
+ * Invariants guaranteed on every return:
+ *   - abilityEstimate ∈ [1.0, 3.0]
+ *   - abilityEstimate is a finite number, never NaN
+ *   - correct answer → ability ≥ state.abilityEstimate (before clamp)
+ *   - wrong  answer  → ability ≤ state.abilityEstimate (before clamp)
+ *   - question.id added to seenIds (no repeats in subsequent selection)
  *
  * Returns a new state object (immutable-style).
  */
@@ -189,33 +235,31 @@ export function recordAnswer(
   const deltas = ABILITY_DELTA[question.difficulty];
   const base = correct ? deltas.correct : deltas.wrong;
 
-  // Jitter: always in the same direction as base (0 to +MINI_CAT_JITTER in magnitude).
-  // sign(base) * random(0, MINI_CAT_JITTER)
-  const jitter = Math.sign(base) * Math.random() * MINI_CAT_JITTER;
+  // Zero-delta guard: if base is somehow 0, skip jitter to avoid Math.sign(0) = 0
+  // producing a direction-ambiguous nudge. (ABILITY_DELTA never has 0 values, but
+  // this protects against future table edits.)
+  const jitter = base !== 0
+    ? Math.sign(base) * Math.random() * MINI_CAT_JITTER
+    : 0;
 
-  // Accumulate the new answer to check streak (including this answer)
+  // Build prospective answer list (includes this answer) for streak detection
   const prospectiveAnswers: MiniCatAnswer[] = [
     ...state.answers,
     { questionId: question.id, moduleSlug: question.moduleSlug, correct, difficulty: question.difficulty },
   ];
-  const streak = currentStreak(prospectiveAnswers);
-  const streakLen = Math.abs(streak);
+  const streakLen = Math.abs(currentStreak(prospectiveAnswers));
   const dampen = streakLen >= MINI_CAT_STREAK_THRESHOLD ? MINI_CAT_STREAK_DAMPEN : 1.0;
 
   const delta = (base + jitter) * dampen;
 
-  // Clamp to valid range after every update
-  const newAbility = Math.max(
-    MINI_CAT_MIN_ABILITY,
-    Math.min(MINI_CAT_MAX_ABILITY, state.abilityEstimate + delta),
-  );
+  // Clamp + round + NaN guard — ability is always a clean, bounded number
+  const newAbility = clampAbility(state.abilityEstimate + delta, state.abilityEstimate);
 
   const newSeenIds = new Set(state.seenIds);
   newSeenIds.add(question.id);
 
   return {
     abilityEstimate: newAbility,
-    // prospectiveAnswers already includes the new answer
     answers: prospectiveAnswers,
     seenIds: newSeenIds,
   };
@@ -303,10 +347,21 @@ function buildWeakAreas(answers: AnswerRecord[]): { weakAreas: WeakArea[]; stren
     }))
     .sort((a, b) => a.accuracyPct - b.accuracyPct);
 
-  // Only flag a module as weak if ≥2 questions were attempted (1 question is not enough signal).
-  // Cap at top 3, sorted by lowest accuracy.
-  const weakAreas = all.filter((a) => a.totalCount >= 2 && a.accuracyPct < 60).slice(0, 3);
-  // Strengths: ≥2 attempted and ≥75% accuracy
+  // Primary weak areas: ≥2 attempts and <60% accuracy, sorted by lowest accuracy, max 3
+  const qualified = all.filter((a) => a.totalCount >= 2 && a.accuracyPct < 60);
+  const weakAreas = qualified.slice(0, 3);
+
+  // Fallback fill: if fewer than 3 qualified, append the next-lowest accuracy modules
+  // that have ≥2 attempts (even if they're above 60%) until we have up to 3 entries.
+  if (weakAreas.length < 3) {
+    const weakSlugs = new Set(weakAreas.map((w) => w.moduleSlug));
+    const fillers = all
+      .filter((a) => a.totalCount >= 2 && !weakSlugs.has(a.moduleSlug))
+      .slice(0, 3 - weakAreas.length);
+    weakAreas.push(...fillers);
+  }
+
+  // Strengths: ≥2 attempts and ≥75% accuracy
   const strengths = all.filter((a) => a.totalCount >= 2 && a.accuracyPct >= 75);
 
   return { weakAreas, strengths };
