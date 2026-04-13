@@ -649,7 +649,7 @@ export function SiteHeader() {
           isLightTheme
             ? ` nn-header-logo-row${isScrolled ? " nn-header-logo-row--scrolled" : ""}`
             : " nn-header-dark-surface"
-        }`}
+        } overflow-visible`}
         onMouseEnter={isMarketingNav ? clearMegaCloseTimer : undefined}
         onMouseLeave={isMarketingNav ? scheduleMegaClose : undefined}
       >
@@ -660,9 +660,9 @@ export function SiteHeader() {
             </div>
           </div>
         ) : null}
-        <div className="nn-section-shell flex flex-col">
+        <div className="nn-section-shell flex flex-col overflow-visible">
           {/* ── Mobile brand row ── */}
-          <div className="flex h-[4.5rem] items-center justify-between gap-4 border-b border-[var(--header-border)] lg:hidden">
+          <div className="flex h-[4.5rem] items-center justify-between gap-4 overflow-visible border-b border-[var(--header-border)] lg:hidden">
             <Link
               href={localizeHref("/")}
               className="nn-header-logo-link group flex min-w-0 shrink-0 items-center gap-2.5 overflow-visible bg-transparent"
@@ -695,7 +695,7 @@ export function SiteHeader() {
           </div>
 
           {/* ── Desktop main header row ── */}
-          <div className="hidden min-h-[4.5rem] items-center gap-3 py-3 lg:flex">
+          <div className="hidden min-h-[4.5rem] items-center gap-3 overflow-visible py-3 lg:flex">
             <Link
               href={localizeHref("/")}
               className="nn-header-logo-link group flex min-w-0 flex-none items-center gap-2.5 overflow-visible bg-transparent lg:min-w-[11rem] xl:min-w-[12rem]"
@@ -1022,7 +1022,7 @@ export function SiteHeader() {
             <div className="flex h-16 shrink-0 items-center justify-between border-b border-[var(--header-border)] px-4 pt-[max(0.5rem,env(safe-area-inset-top))]">
               <Link
                 href={localizeHref("/")}
-                className="flex min-w-0 shrink-0 items-center overflow-hidden bg-transparent"
+                className="flex min-w-0 shrink-0 items-center overflow-visible bg-transparent"
                 aria-label={t("brand.homeAriaLabel")}
                 onClick={() => setMobileOpen(false)}
               >
