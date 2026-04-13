@@ -26,6 +26,7 @@ import type {
   LinkCandidate,
   LinkTarget,
   LinkTargetKind,
+  MatchStrength,
   ResolvedLinks,
 } from "@/lib/linking/internal-link-types";
 import { getTargetsForTopic, getTargetsByBodySystem } from "@/lib/linking/link-target-registry";
@@ -35,15 +36,8 @@ import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { isLocaleSeoIndexable } from "@/lib/i18n/language-readiness";
 
 // ── Match strength ────────────────────────────────────────────────────────────
-
-/**
- * Match strength controls the quality gate in buildCandidates.
- *
- * strong   — exact topicKey match (+ optional pathway/locale bonus)
- * moderate — synonym hint match or exact topicKey without pathway match
- * weak     — body-system fallback only; suppressed if strong/moderate exists
- */
-export type MatchStrength = "strong" | "moderate" | "weak";
+// MatchStrength is declared in internal-link-types.ts and re-exported here for
+// convenience so callers only need one import.
 
 /** Score thresholds for match strength classification. */
 const STRONG_THRESHOLD   = 25; // exact topic + pathway match
@@ -230,6 +224,7 @@ function buildCandidates(
       href: h.resolvedHref,
       anchorText: text,
       score: h.score,
+      strength: h.strength,
       localeMatch: h.localeMatch,
       pathwayMatch: h.pathwayMatch,
     } satisfies LinkCandidate;

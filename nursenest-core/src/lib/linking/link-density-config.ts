@@ -62,17 +62,17 @@ export const DENSITY_CONFIG: Record<LinkSurface, SurfaceDensityConfig> = {
     lesson:    { min: 0, max: 1 },
     flashcard: { min: 0, max: 0 },
     question:  { min: 0, max: 1 },
-    blog:      { min: 0, max: 1 },
+    blog:      { min: 0, max: 0 }, // no blog links from flashcard pages — too noisy
     cat:       { min: 0, max: 0 },
-    totalMax: 3,
+    totalMax: 2,
   },
   question: {
     lesson:    { min: 0, max: 1 },
     flashcard: { min: 0, max: 1 },
     question:  { min: 0, max: 0 },
-    blog:      { min: 0, max: 1 },
+    blog:      { min: 0, max: 0 }, // no blog links from question pages — stay focused
     cat:       { min: 0, max: 0 },
-    totalMax: 3,
+    totalMax: 2,
   },
   cat_result: {
     lesson:    { min: 0, max: 3 },

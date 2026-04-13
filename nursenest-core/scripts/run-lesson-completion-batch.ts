@@ -15,12 +15,35 @@ function hasFlag(name: string): boolean {
 async function main() {
   const pathwayId = arg("pathwayId") ?? "us-rn-nclex-rn";
   const batchSize = Number(arg("batchSize") ?? "20");
+  const offset = Number(arg("offset") ?? "0");
   const write = hasFlag("write");
+  const mode = (arg("mode") as "complete" | "refine" | undefined) ?? "complete";
+  const onlyCompleted = hasFlag("onlyCompleted");
+  const onlyNotComplete = hasFlag("onlyNotComplete");
+  const focusArea = arg("focusArea") as
+    | "cardiovascular"
+    | "respiratory"
+    | "neurological"
+    | "endocrine"
+    | "renal"
+    | "gi"
+    | "hematology"
+    | "pharmacology"
+    | "maternity"
+    | "pediatrics"
+    | "mental_health"
+    | "prioritization_safety"
+    | undefined;
 
   const report = await runLessonCompletionBatch({
     pathwayId,
     batchSize,
+    offset,
     write,
+    mode,
+    onlyCompleted,
+    onlyNotComplete,
+    focusArea,
   });
 
   console.log(JSON.stringify(report, null, 2));

@@ -111,9 +111,20 @@ export const LESSON_IMAGE_OVERRIDES: Readonly<Record<string, string>> = {
   // ── Immune / Inflammatory ─────────────────────────────────────
   "inflammatory-response": "uploads/images/inflammatory-response.webp",
   "inflammation-pathophysiology": "uploads/images/inflammatory-response.webp",
-  // Also applicable as a secondary figure in infection/sepsis lessons:
+  // Infection-control lessons across all pathways
   "ca-rn-infection-control": "uploads/images/inflammatory-response.webp",
   "us-rn-infection-control": "uploads/images/inflammatory-response.webp",
+  "ca-rpn-infection-control": "uploads/images/inflammatory-response.webp",
+  "us-pn-infection-control": "uploads/images/inflammatory-response.webp",
+  // C. diff / CDI lessons
+  "c-diff-infection-control": "uploads/images/inflammatory-response.webp",
+  "c-diff-contact-precautions": "uploads/images/inflammatory-response.webp",
+  // Wound infection lessons
+  "wound-infection-vs-colonization": "uploads/images/inflammatory-response.webp",
+
+  // ── Skin / Dermatitis ─────────────────────────────────────────
+  // atopic-dermatitis.webp is the best available image for dermatitis nursing lessons
+  "severe-dermatitis-skin-care": "uploads/images/atopic-dermatitis.webp",
 
   // ── Pediatric / Cardiovascular ────────────────────────────────
   "kawasaki-disease": "uploads/images/kawasaki-disease.webp",

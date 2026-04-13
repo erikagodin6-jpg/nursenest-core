@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { DM_Sans } from "next/font/google";
+import { DM_Sans, Inter } from "next/font/google";
 import Script from "next/script";
 import { AuthSessionProvider } from "@/components/auth/auth-session-provider";
 import { AnalyticsProvider } from "@/components/providers/analytics-provider";
@@ -17,6 +17,16 @@ const dmSans = DM_Sans({
   subsets: ["latin"],
   weight: "variable",
   style: ["normal", "italic"],
+  display: "swap",
+  adjustFontFallback: true,
+  preload: true,
+});
+
+const inter = Inter({
+  variable: "--font-inter",
+  subsets: ["latin"],
+  weight: "variable",
+  style: ["normal"],
   display: "swap",
   adjustFontFallback: true,
   preload: true,
@@ -80,7 +90,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${dmSans.variable} h-full antialiased`}
+      className={`${dmSans.variable} ${inter.variable} h-full antialiased`}
       data-theme="ocean"
       suppressHydrationWarning
     >

@@ -434,6 +434,439 @@
           "rationale": "The client is confused and cannot swallow safely — oral carbohydrates are contraindicated (aspiration risk). D50W IV push is the appropriate treatment for severe hypoglycemia in a patient with IV access. Glucagon IM is used when IV access is unavailable. After IV dextrose, recheck glucose in 15 minutes and provide a complex carbohydrate meal once consciousness is restored."
         }
       ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "us-rn-abg-interpretation",
+      "previewSectionCount": 2,
+      "seoTitle": "ABG interpretation nursing: pH, PaCO2, HCO3, compensation & NCLEX-RN Canada",
+      "seoDescription": "Complete RN lesson on ABG interpretation: normal values, 4-step method, respiratory vs metabolic acidosis/alkalosis, compensation, and NCLEX-RN clinical priorities.",
+      "sections": [
+        {
+          "id": "introduction",
+          "heading": "Overview",
+          "kind": "introduction",
+          "body": "**Arterial blood gas (ABG)** analysis is a bedside diagnostic tool that measures the adequacy of oxygenation, ventilation, and acid-base balance. For NCLEX-RN Canada, ABG interpretation is high-yield — it appears in questions about respiratory distress, COPD, mechanical ventilation, metabolic disorders, and sepsis.\n\n**Normal ABG values (remember these exactly):**\n- pH: 7.35–7.45 (acidosis < 7.35; alkalosis > 7.45)\n- PaCO₂: 35–45 mmHg (respiratory component — 'acid tank')\n- HCO₃⁻: 22–26 mEq/L (metabolic component — 'base buffer')\n- PaO₂: 80–100 mmHg (oxygenation)\n- SaO₂: 95–100%\n- Base excess: –2 to +2\n\n**Quick memory tool — ROME:**\n- **R**espiratory **O**pposite: pH and PaCO₂ move in opposite directions (↑CO₂ → ↓pH; ↓CO₂ → ↑pH)\n- **M**etabolic **E**qual: pH and HCO₃⁻ move in the same direction (↑HCO₃ → ↑pH; ↓HCO₃ → ↓pH)"
+        },
+        {
+          "id": "pathophysiology_overview",
+          "heading": "4-Step ABG Interpretation Method",
+          "kind": "pathophysiology_overview",
+          "body": "**Step 1: Is the pH normal, acidotic, or alkalotic?**\n- pH < 7.35 = acidosis\n- pH > 7.45 = alkalosis\n- pH 7.35–7.45 = within normal (may still be compensated)\n\n**Step 2: What is the primary respiratory component (PaCO₂)?**\n- PaCO₂ > 45 = respiratory acidosis contributor (hypoventilation — CO₂ retained)\n- PaCO₂ < 35 = respiratory alkalosis contributor (hyperventilation — CO₂ blown off)\n- PaCO₂ 35–45 = respiratory component is normal\n\n**Step 3: What is the primary metabolic component (HCO₃⁻)?**\n- HCO₃ < 22 = metabolic acidosis contributor (base deficit)\n- HCO₃ > 26 = metabolic alkalosis contributor (base excess)\n- HCO₃ 22–26 = metabolic component is normal\n\n**Step 4: Is there compensation?**\nThe body tries to normalize pH by adjusting the non-primary system:\n- If primary = respiratory acidosis → kidneys retain HCO₃ (HCO₃ rises)\n- If primary = respiratory alkalosis → kidneys excrete HCO₃ (HCO₃ falls)\n- If primary = metabolic acidosis → lungs hyperventilate to blow off CO₂ (PaCO₂ falls)\n- If primary = metabolic alkalosis → lungs hypoventilate to retain CO₂ (PaCO₂ rises)\n\n**Compensation terms:**\n- Uncompensated: pH abnormal, one system abnormal, other system normal\n- Partially compensated: pH abnormal, both systems abnormal (trying to fix but not there yet)\n- Fully compensated: pH normal (or at edge), both systems abnormal (both moved to fix pH)\n\n**The four primary disorders:**\n\n| Disorder | pH | PaCO₂ | HCO₃ |\n|---|---|---|---|\n| Respiratory acidosis | ↓ | ↑ | Normal (uncompensated) or ↑ (compensated) |\n| Respiratory alkalosis | ↑ | ↓ | Normal (uncompensated) or ↓ (compensated) |\n| Metabolic acidosis | ↓ | Normal (uncompensated) or ↓ (compensated) | ↓ |\n| Metabolic alkalosis | ↑ | Normal (uncompensated) or ↑ (compensated) | ↑ |\n\n**Common clinical causes:**\n\n- **Respiratory acidosis** (↓pH, ↑CO₂): hypoventilation — COPD exacerbation, opiate overdose, neuromuscular disease (GBS, MG), hypoventilation during mechanical ventilation, obesity hypoventilation\n- **Respiratory alkalosis** (↑pH, ↓CO₂): hyperventilation — anxiety/panic, severe hypoxemia (early response), pulmonary embolism (PE), early sepsis, salicylate overdose (early), mechanical ventilator over-ventilation\n- **Metabolic acidosis** (↓pH, ↓HCO₃): MUDPILES (Methanol, Uremia, DKA, Propylene glycol, Infection/sepsis, Lactic acidosis, Ethylene glycol, Salicylates); also severe diarrhea (HCO₃ loss)\n- **Metabolic alkalosis** (↑pH, ↑HCO₃): HCl loss (vomiting, NG suctioning), hypokalemia, excessive antacid use, diuretic use (chloride depletion alkalosis)"
+        },
+        {
+          "id": "signs_symptoms",
+          "heading": "Clinical Presentation by Disorder",
+          "kind": "signs_symptoms",
+          "body": "**Respiratory acidosis (high CO₂, low pH):**\n- Confusion, drowsiness, lethargy — CO₂ narcosis\n- Headache\n- Tachycardia, hypertension (early); bradycardia and hypotension (severe)\n- Cyanosis if hypoxemia coexists\n- Shallow or slow respirations (the cause of the acidosis)\n- Asterixis (liver flap tremor) in severe hypercapnia\n\n**Respiratory alkalosis (low CO₂, high pH):**\n- Lightheadedness, tingling in hands and feet (perioral and peripheral paresthesias)\n- Muscle cramping, carpopedal spasm (tetany from low ionized calcium)\n- Anxiety, hyperventilation\n- Tachypnea\n\n**Metabolic acidosis (low HCO₃, low pH):**\n- Kussmaul breathing: deep, regular, sighing respirations — compensatory hyperventilation\n- Warm, flushed skin (vasodilation in acidosis)\n- Lethargy, confusion (severe)\n- Nausea, vomiting, abdominal pain (in DKA, uremia)\n\n**Metabolic alkalosis (high HCO₃, high pH):**\n- Muscle weakness, cramping\n- Hypokalemia symptoms (alkalosis drives K⁺ into cells)\n- Nausea, vomiting\n- Hypoventilation (compensatory — body retains CO₂ to lower pH)"
+        },
+        {
+          "id": "red_flags",
+          "heading": "Red Flags / Critical ABG Values",
+          "kind": "red_flags",
+          "body": "**Critical and dangerous ABG findings — notify provider immediately:**\n- pH < 7.20 or > 7.60: extremes cause cardiac dysrhythmias and cardiovascular collapse\n- PaCO₂ > 60 in a patient NOT baseline hypercapnic: severe respiratory acidosis, likely needs ventilatory support\n- PaO₂ < 60 mmHg: significant hypoxemia (SpO₂ dropping toward the steep part of the O₂-Hgb dissociation curve)\n- PaO₂ < 40 mmHg: life-threatening hypoxemia\n\n**Critical trends:**\n- Rising PaCO₂ in a patient with asthma or severe pneumonia = impending respiratory failure (the expected finding is LOW CO₂ from hyperventilation; rising CO₂ = exhaustion)\n- Worsening pH despite treatment = treatment is failing; escalate care"
+        },
+        {
+          "id": "labs_diagnostics",
+          "heading": "Diagnostics / Clinical Application",
+          "kind": "labs_diagnostics",
+          "body": "**ABG collection procedure:**\n- Typically from radial artery (Allen's test first: compress radial and ulnar arteries, release ulnar — if palmar color returns = adequate collateral circulation = safe for radial puncture)\n- Collected in heparinized syringe; transport on ice if delay > 10–15 min; process immediately\n- Apply firm pressure for 5 minutes post-draw (prevent hematoma)\n\n**Anion gap calculation (for metabolic acidosis workup):**\n- Anion gap = Na⁺ – (Cl⁻ + HCO₃⁻)\n- Normal: 8–12 mEq/L\n- **Elevated anion gap metabolic acidosis (HAGMA)**: MUDPILES — extra acid added to the system (DKA, lactic acidosis, uremia, toxins)\n- **Normal anion gap metabolic acidosis (NAGMA)**: HCO₃ lost or Cl⁻ gained — diarrhea, renal tubular acidosis, early renal failure, excess NS infusion\n\n**ABG vs VBG (venous blood gas):**\n- VBG pH is approximately 0.03–0.05 lower than arterial\n- PaCO₂ approximately 4–6 mmHg higher venous\n- Used to monitor trend when arterial access is difficult; less reliable for acute oxygenation assessment\n\n**SpO₂ limitations:**\n- Pulse oximetry: non-invasive O₂ saturation estimate\n- Falsely NORMAL with: carbon monoxide poisoning (CO-Hgb reads as oxyhemoglobin), methemoglobinemia\n- Falsely LOW: dark nail polish, poor perfusion, motion artifact, anemia\n- Always correlate SpO₂ with clinical picture; obtain ABG if SpO₂ reliability is questioned"
+        },
+        {
+          "id": "nursing_assessment_interventions",
+          "heading": "Nursing Responsibilities",
+          "kind": "nursing_assessment_interventions",
+          "body": "**Interpreting ABGs — four-step process applied:**\n1. Check pH: acidotic or alkalotic?\n2. Check PaCO₂: does it explain the pH change (opposite direction) → respiratory cause\n3. Check HCO₃: does it explain the pH change (same direction) → metabolic cause\n4. Is compensation occurring? (the other system moving to normalize pH)\n\n**Management priorities by disorder:**\n\n**Respiratory acidosis:**\n- Treat the underlying cause (reverse opioids with naloxone; bronchodilate COPD; support airway)\n- Supplemental O₂ — but caution in COPD: target SpO₂ 88–92%\n- Prepare for possible non-invasive ventilation (BiPAP) or intubation\n- Monitor for CO₂ narcosis: assess LOC frequently\n\n**Respiratory alkalosis:**\n- Treat the underlying cause (anxiety → breathing techniques; pain → analgesia; early sepsis → resuscitation)\n- If anxiety-driven: reassurance + controlled breathing (breathe in through nose for 4 sec, hold 4, out 6 sec); avoid paper bags (not evidence-based, risk of hypoxia)\n- Monitor for tetany (carpopedal spasm, Chvostek's sign) from ionized calcium drop in alkalosis\n\n**Metabolic acidosis:**\n- Treat cause: DKA → insulin + fluids; lactic acidosis → treat sepsis/hypoperfusion; toxin → antidote/dialysis\n- Monitor for Kussmaul respirations (compensatory; do not suppress)\n- Bicarbonate therapy: reserved for severe acidosis (pH < 7.1 or with concurrent hyperkalemia, tricyclic OD)\n\n**Metabolic alkalosis:**\n- Most common: volume-deplete + hypokalemic → NS + KCl replacement\n- Stop NG suctioning if possible, or replace lost chloride\n- Address diuretic therapy as cause"
+        },
+        {
+          "id": "clinical_pearls",
+          "heading": "Clinical Pearls",
+          "kind": "clinical_pearls",
+          "body": "- **ROME mnemonic**: Respiratory Opposite (pH and CO₂ go in opposite directions); Metabolic Equal (pH and HCO₃ go in same direction)\n- **Compensation never overcorrects** — the body compensates to normalize pH, but it never reverses the pH to the other side. If pH 7.35 with PaCO₂ 55 and HCO₃ 30 = fully compensated respiratory acidosis (COPD baseline)\n- **Kussmaul breathing** is a compensatory response to metabolic acidosis — do NOT suppress it with sedatives or opioids\n- **CO poisoning**: SpO₂ normal (CO-Hgb misread as oxyhemoglobin) but patient is severely hypoxic. ABG with co-oximetry detects CO-Hgb. 100% FiO₂ is treatment.\n- **COPD patients**: may have chronic respiratory acidosis as their baseline. Compare to previous ABGs. A 'normal' pH with PaCO₂ 60 = chronic compensation — do not over-ventilate.\n- **Anion gap memory**: Na – (Cl + HCO₃) = normal 8–12. Gap > 12 = extra unmeasured anion (acid) = HAGMA (MUDPILES)"
+        },
+        {
+          "id": "client_education",
+          "heading": "Patient / Family Education",
+          "kind": "client_education",
+          "body": "**For patients with COPD and chronic hypercapnia:**\n- Explain why SpO₂ target is 88–92% (not 100%) — too much O₂ can worsen CO₂ retention\n- Teach pursed-lip breathing: slows respiratory rate, increases expiratory pressure, prevents alveolar collapse, reduces CO₂ retention\n- Teach diaphragmatic breathing: uses diaphragm more efficiently\n- Recognize signs of CO₂ retention: increasing drowsiness, early morning headache, confusion — seek medical care\n\n**For patients prone to hyperventilation/panic attacks:**\n- Teach controlled breathing: slow inhalation 4 sec, hold 4 sec, slow exhalation 6 sec\n- Identify triggers; use relaxation techniques\n- Respiratory alkalosis from hyperventilation: tingling, cramps — controlled breathing resolves it"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- Normal ABG: pH 7.35–7.45; PaCO₂ 35–45; HCO₃ 22–26; PaO₂ 80–100\n- ROME: Respiratory = Opposite (pH↑, CO₂↓ = resp alkalosis); Metabolic = Equal (pH↑, HCO₃↑ = met alkalosis)\n- Step-by-step: pH → PaCO₂ → HCO₃ → compensation → interpret\n- Respiratory acidosis: hypoventilation (COPD, opioids, neuromuscular disease)\n- Metabolic acidosis: anion gap (MUDPILES) or non-gap (diarrhea, RTA). Kussmaul = compensation — don't suppress.\n- Compensation never overcorrects. COPD chronic: pH normal but CO₂ high — compare to baseline.\n- SpO₂ falsely normal in CO poisoning → order co-oximetry ABG"
+        }
+      ],
+      "preTest": [
+        {
+          "question": "A client has the following ABG results: pH 7.28, PaCO₂ 62 mmHg, HCO₃ 24 mEq/L. How does the nurse interpret this?",
+          "options": [
+            "Metabolic acidosis, uncompensated",
+            "Respiratory acidosis, uncompensated",
+            "Respiratory alkalosis, compensated",
+            "Mixed metabolic and respiratory acidosis"
+          ],
+          "correct": 1,
+          "rationale": "pH 7.28 = acidosis. PaCO₂ 62 (elevated — moves pH opposite direction → explains the acidosis = respiratory cause). HCO₃ 24 = normal (no metabolic compensation yet). This is uncompensated respiratory acidosis. The kidneys have not yet had time to retain bicarbonate to normalize pH. Common causes: acute hypoventilation — opioid overdose, acute COPD exacerbation, acute neuromuscular failure."
+        },
+        {
+          "question": "A client with severe vomiting for 3 days has: pH 7.52, PaCO₂ 48 mmHg, HCO₃ 36 mEq/L. What is the interpretation?",
+          "options": [
+            "Respiratory alkalosis, partially compensated",
+            "Metabolic alkalosis, partially compensated — loss of HCl via vomiting raises serum HCO₃",
+            "Respiratory acidosis, compensated",
+            "Mixed respiratory and metabolic alkalosis"
+          ],
+          "correct": 1,
+          "rationale": "pH 7.52 = alkalosis. HCO₃ 36 (elevated — same direction as pH = metabolic cause). PaCO₂ 48 (elevated — the lungs are retaining CO₂ to compensate for metabolic alkalosis, moving PaCO₂ opposite from what caused it, to normalize pH). pH still elevated = partially compensated metabolic alkalosis. Vomiting loses HCl → chloride depletion alkalosis. Treatment: NS + KCl replacement."
+        }
+      ],
+      "postTest": [
+        {
+          "question": "A client with opioid overdose has an ABG: pH 7.22, PaCO₂ 72, HCO₃ 24. What is the most important immediate nursing action?",
+          "options": [
+            "Administer sodium bicarbonate IV to raise the pH",
+            "Prepare to administer naloxone and support airway/ventilation",
+            "Encourage deep breathing to increase CO₂ excretion",
+            "Increase IV fluid rate to dilute the accumulated acid"
+          ],
+          "correct": 1,
+          "rationale": "This is respiratory acidosis (high CO₂, low pH, normal HCO₃) from opioid-induced hypoventilation. The cause is suppressed respiratory drive → CO₂ retention. Treatment: naloxone to reverse opioids, airway support, ventilation. Bicarbonate does not address the cause (retained CO₂). Encouraging deep breathing is not possible in an obtunded patient. Fluids do not address CO₂."
+        },
+        {
+          "question": "A COPD patient's baseline ABGs are pH 7.37, PaCO₂ 58, HCO₃ 34. Today's ABGs are pH 7.28, PaCO₂ 74, HCO₃ 34. What does the nurse recognize?",
+          "options": [
+            "Acute decompensation on top of chronic respiratory acidosis — the acute component is the pH drop and CO₂ rise from the patient's baseline",
+            "Fully compensated respiratory acidosis — HCO₃ is already elevated",
+            "Normal for this COPD patient — no intervention needed",
+            "Metabolic alkalosis from chronic HCO₃ retention — give acetazolamide"
+          ],
+          "correct": 0,
+          "rationale": "The baseline shows chronic compensated respiratory acidosis (pH normal-ish, CO₂ high, HCO₃ high from renal compensation). Today: pH dropped to 7.28, CO₂ rose to 74 — an ACUTE deterioration on top of the chronic disease. The HCO₃ is unchanged (no new metabolic component), meaning the new CO₂ rise is acute and the kidneys haven't had time to compensate further. This patient needs assessment for acute exacerbation cause and respiratory support."
+        },
+        {
+          "question": "An anxious client undergoing a procedure begins hyperventilating, then reports tingling in both hands and around her mouth and cramping in her fingers. What is the nurse's initial intervention?",
+          "options": [
+            "Apply 100% FiO₂ via non-rebreather mask to correct hypoxemia",
+            "Coach the client to slow her breathing: breathe in for 4 seconds, hold, exhale slowly over 6 seconds",
+            "Insert an IV for bicarbonate administration",
+            "Obtain an urgent ECG — tingling suggests hyperkalemia"
+          ],
+          "correct": 1,
+          "rationale": "Hyperventilation causes respiratory alkalosis → low PaCO₂ → elevated pH → reduced ionized calcium (calcium binds more to albumin at high pH) → perioral and peripheral paresthesias, carpopedal spasm. Treatment: slow the breathing rate. Controlled breathing coaching immediately reverses respiratory alkalosis by allowing CO₂ to normalize. O₂ will worsen the problem. Bicarbonate is not indicated. Tingling from alkalosis is not related to hyperkalemia."
+        }
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "us-rn-acid-base-advanced",
+      "previewSectionCount": 2,
+      "seoTitle": "Acid-base advanced nursing: mixed disorders, anion gap, DKA, HHS & NCLEX-RN Canada",
+      "seoDescription": "Advanced RN lesson on acid-base: anion gap calculation, mixed disorders, DKA vs HHS, lactic acidosis, toxin-induced acid-base, and NCLEX-RN interpretation framework.",
+      "sections": [
+        {
+          "id": "introduction",
+          "heading": "Overview",
+          "kind": "introduction",
+          "body": "**Advanced acid-base** interpretation builds on the four basic disorders to recognize: mixed acid-base disorders, the clinical significance of anion gap, Delta-Delta calculation for triple disorders, expected compensation ranges, and specific high-yield clinical scenarios (DKA, HHS, sepsis, overdoses).\n\nFor NCLEX-RN Canada, this level of analysis appears in complex patient scenarios involving multiple organ systems or ICU-level presentations. The ability to correctly identify and prioritize acid-base findings drives correct nursing interventions.\n\n**Prerequisites:** Mastery of the four basic disorders, normal ABG values, and the ROME method (see ABG Interpretation lesson)."
+        },
+        {
+          "id": "pathophysiology_overview",
+          "heading": "Advanced Concepts: Anion Gap, Expected Compensation, Mixed Disorders",
+          "kind": "pathophysiology_overview",
+          "body": "**Anion gap (AG) — identifying the type of metabolic acidosis:**\n- AG = Na⁺ – (Cl⁻ + HCO₃⁻); normal = 8–12 mEq/L (some labs use 12 ± 4)\n- AG represents 'unmeasured anions' in plasma (mostly albumin, phosphate, sulfate, and organic acids)\n- **High AG metabolic acidosis (HAGMA)**: extra acid added to blood → consumes HCO₃ → AG rises. Causes: MUDPILES (Methanol, Uremia, DKA, Propylene glycol, Isoniazid/Iron, Lactic acidosis, Ethylene glycol, Salicylates)\n- **Normal AG metabolic acidosis (NAGMA)**: HCO₃ lost (not replaced by accumulating acid) → Cl⁻ rises to maintain electroneutrality. Causes: diarrhea (HCO₃-rich stool), renal tubular acidosis, ileostomy, early renal failure, excess normal saline administration (dilutional acidosis)\n\n**Corrected AG for hypoalbuminemia:**\n- Each 1 g/dL drop in albumin below 4.0 falsely lowers the anion gap by ~2.5 mEq/L\n- Corrected AG = measured AG + 2.5 × (4.0 – measured albumin)\n- Critical: septic patients with hypoalbuminemia may have a high AG acidosis masked by low albumin — correct before interpreting\n\n**Expected compensation ranges (Winter's formula and rules of thumb):**\n- Metabolic acidosis → respiratory compensation: expected PaCO₂ = (1.5 × HCO₃) + 8 ± 2 (Winter's formula)\n  - If actual PaCO₂ is HIGHER than expected → also has respiratory acidosis (mixed)\n  - If actual PaCO₂ is LOWER than expected → also has respiratory alkalosis (mixed)\n- Metabolic alkalosis → respiratory compensation: expected PaCO₂ rise = 0.7 × (HCO₃ rise above 24)\n- Acute respiratory acidosis → metabolic compensation: HCO₃ rises 1 mEq/L per 10 mmHg CO₂ rise (acute) or 3.5 mEq/L per 10 mmHg (chronic)\n- Acute respiratory alkalosis → HCO₃ falls 2 mEq/L per 10 mmHg CO₂ drop (acute) or 5 mEq/L (chronic)\n\n**Mixed acid-base disorders:** Two or more primary disorders occurring simultaneously. Detected when the compensatory response exceeds or falls short of expected ranges, or when the pH is normal but both PaCO₂ and HCO₃ are abnormal in the same direction.\n\n**Common mixed disorder examples:**\n- Cardiopulmonary arrest: metabolic acidosis (lactic) + respiratory acidosis (no ventilation)\n- COPD exacerbation with vomiting: chronic respiratory acidosis + metabolic alkalosis\n- Aspirin overdose: respiratory alkalosis (salicylates stimulate respiratory center) + metabolic acidosis (salicylic acid)\n- Sepsis: lactic acidosis (metabolic) + compensatory hyperventilation (respiratory alkalosis)"
+        },
+        {
+          "id": "signs_symptoms",
+          "heading": "High-Yield Clinical Scenarios",
+          "kind": "signs_symptoms",
+          "body": "**DKA (Diabetic Ketoacidosis):**\n- High AG metabolic acidosis (keto acids consume HCO₃)\n- Kussmaul breathing (respiratory compensation — deep, regular, fruity breath)\n- pH 6.8–7.3, HCO₃ usually < 15, glucose > 14 mg/dL or mEq/L (250 mg/dL), ketonemia/ketonuria\n- Treatment: IV insulin infusion, IV fluids (NS then 0.45% NaCl when glucose < 14 mg/dL or mEq/L), K⁺ replacement (insulin drives K⁺ into cells — hypokalemia can be fatal)\n\n**HHS (Hyperosmolar Hyperglycemic State):**\n- Glucose > 33 mg/dL or mEq/L (600 mg/dL), osmolality > 320 mOsm/kg\n- NO ketones (relative insulin preserved, prevents ketosis)\n- NO significant acidosis (pH normal or mild metabolic)\n- Severe dehydration, altered LOC\n- Treatment: large volume fluid resuscitation (more than DKA); slow glucose reduction (1–2 mg/dL or mEq/L/hr to prevent cerebral edema)\n\n**Lactic acidosis:**\n- Type A: inadequate O₂ delivery (septic shock, cardiac arrest, severe anemia)\n- Type B: cellular metabolic defect without hypoperfusion (metformin toxicity in renal failure, thiamine deficiency, cyanide)\n- ABG: high AG metabolic acidosis, elevated serum lactate > 2 mg/dL or mEq/L\n\n**Salicylate (ASA) overdose — classic mixed disorder:**\n- Early: salicylates directly stimulate the respiratory center → respiratory alkalosis\n- Later: salicylic acid + metabolic derangement → metabolic acidosis\n- Net result: respiratory alkalosis + metabolic acidosis (mixed)\n- Treatment: urine alkalinization (NaHCO₃) to trap ionized salicylate in urine; dialysis in severe cases\n\n**Cardiopulmonary arrest:**\n- Combined respiratory acidosis (no ventilation → CO₂ accumulation) + metabolic acidosis (tissue hypoperfusion → lactic acidosis)\n- Most severe combined acidosis scenario\n- Treat: CPR, ventilation, bicarbonate in prolonged arrest or concurrent hyperkalemia"
+        },
+        {
+          "id": "red_flags",
+          "heading": "Red Flags / Critical Acid-Base",
+          "kind": "red_flags",
+          "body": "**Immediately escalate:**\n- pH < 7.20: high risk for dysrhythmias, cardiovascular collapse; anticipate bicarbonate, ICU transfer\n- pH > 7.60: severe alkalosis → tetany, seizures, dysrhythmias\n- DKA with K⁺ < 3.5: DO NOT start insulin until K⁺ replaced — insulin drives K⁺ into cells, causing fatal hypokalemia\n- HHS with BS drop > 5 mg/dL or mEq/L/hr: risk of cerebral edema; call provider to slow correction\n- Mixed disorder not improving with treatment: reassess diagnosis — may be a toxin, missed cause, or additional primary disorder\n- Metabolic acidosis + clinical shock (lactate > 4): septic shock — start sepsis protocol immediately"
+        },
+        {
+          "id": "labs_diagnostics",
+          "heading": "Diagnostics / Labs",
+          "kind": "labs_diagnostics",
+          "body": "**Lab panel for metabolic acidosis workup:**\n- Anion gap (Na, Cl, HCO₃ — calculated)\n- Serum lactate (lactic acidosis)\n- BMP: glucose (DKA/HHS), K⁺ (DKA — critical), creatinine (renal failure), BUN\n- Blood/urine ketones (DKA)\n- Salicylate level, acetaminophen level, ethanol level (if toxin suspected)\n- Osmol gap: measured osmolality – calculated osmolality; > 10 = osmotically active substance present (methanol, ethanol, ethylene glycol, mannitol)\n\n**Lab panel for metabolic alkalosis workup:**\n- Serum K⁺ (hypokalemia drives alkalosis)\n- Urine Cl⁻: < 25 mEq/L = chloride-responsive (vomiting, NG suction, diuretics) → treat with NS + KCl; > 25 = chloride-resistant (hyperaldosteronism, Cushing's) → treat underlying cause\n\n**Key DKA lab monitoring sequence:**\n- Glucose hourly; electrolytes every 2–4 hours\n- K⁺ BEFORE starting insulin: if K⁺ < 3.5 → replace first, then start insulin\n- When glucose reaches 14 mg/dL or mEq/L (250 mg/dL): add dextrose to IV fluid; continue insulin until ketones clear and HCO₃ normalizes (not until glucose normalizes)"
+        },
+        {
+          "id": "nursing_assessment_interventions",
+          "heading": "Nursing Responsibilities",
+          "kind": "nursing_assessment_interventions",
+          "body": "**DKA nursing management protocol:**\n1. Two large-bore IVs; initiate 1 L NS over 1 hour (aggressive hydration)\n2. Check glucose hourly; electrolytes (especially K⁺) q2h\n3. Potassium: if K⁺ < 3.5 → hold insulin, replace K⁺ then start insulin. K⁺ 3.5–5.5 → add 20–40 mEq/L KCl to IV fluids. K⁺ > 5.5 → start insulin, hold KCl\n4. Insulin: regular insulin IV infusion (0.1 units/kg/hr); when glucose < 14 mg/dL or mEq/L, add D5W to IV and reduce insulin rate — goal: keep glucose 11–14 while ketosis resolves\n5. Transition to subcutaneous insulin: when patient eating, AG closed, HCO₃ > 18; give SQ insulin 1–2 hours BEFORE stopping IV drip\n6. Monitor: urine output (minimum 0.5 mL/kg/hr), mental status, signs of cerebral edema (headache, confusion, bradycardia in children)\n\n**HHS nursing management:**\n- Larger fluid volumes than DKA: 1–1.5 L/hr NS initially\n- Glucose correction: no faster than 3–4 mg/dL or mEq/L/hr (slower than DKA because HHS = severe dehydration, not just glucose)\n- Insulin: lower doses, less critical than fluids\n- Monitor electrolytes and osmolality frequently\n\n**Lactic acidosis management:**\n- Identify and aggressively treat the underlying cause (sepsis → antibiotics + resuscitation; metformin toxicity → hold metformin, dialysis if severe)\n- Serial lactate measurements every 2–4 hours to assess treatment response; goal lactate clearance > 10% per hour in sepsis\n- Bicarbonate: reserved for pH < 7.1 with hemodynamic instability; do NOT give to simply normalize pH (CO₂ produced intracellularly may worsen acidosis)"
+        },
+        {
+          "id": "clinical_pearls",
+          "heading": "Clinical Pearls",
+          "kind": "clinical_pearls",
+          "body": "- **K⁺ in DKA**: total body K⁺ is depleted (urinary losses), but serum K⁺ is often normal or HIGH initially (acidosis drives K⁺ out of cells). When insulin is started, K⁺ plummets dangerously — monitor frequently and replace proactively.\n- **Salicylate overdose**: early respiratory alkalosis is often mistaken for panic attack (tachypnea, anxiety). If a patient is hyperventilating AND has metabolic acidosis components on ABG → suspect salicylates → check level.\n- **Normal AG ≠ no problem**: a COPD patient with their usual AG of 10 and HCO₃ of 30 (compensated) is not in metabolic acidosis. Context matters. Always compare to patient's baseline if available.\n- **Correcting AG for albumin**: albumin 2 g/dL instead of 4 → expected AG would be 5, not 10 (5 falsely lower). If measured AG is 10 with albumin of 2 → corrected AG is 15 → actually elevated AG. Check albumin in every septic/malnourished patient before dismissing 'normal' AG.\n- **DKA resolves when ketosis clears**, NOT when glucose normalizes. Patients may need glucose-containing IV fluids and continued insulin to clear ketones.\n- **Kussmaul breathing is compensatory** — never suppress it with opioids or sedation unless securing the airway."
+        },
+        {
+          "id": "client_education",
+          "heading": "Patient Education",
+          "kind": "client_education",
+          "body": "**DKA prevention for type 1 diabetics:**\n- Sick day rules: NEVER stop insulin during illness even if not eating — the stress response raises blood sugar. Take at least 50% of usual dose and check glucose q4h\n- Check blood ketones (β-hydroxybutyrate meter) or urine ketones when glucose > 14 mg/dL or mEq/L\n- Seek emergency care: blood ketones > 3 mg/dL or mEq/L, glucose > 20 mg/dL or mEq/L + ketones, vomiting (cannot take insulin safely)\n- Hydration during illness: sip fluids (water, clear broth) every 15–30 minutes\n\n**Signs of DKA to recognize:**\n- Increased thirst, frequent urination\n- Nausea, vomiting, abdominal pain\n- Fruity breath (acetone)\n- Deep, rapid breathing (Kussmaul)\n- Feeling confused or drowsy → emergency: call 911"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- Anion gap = Na – (Cl + HCO₃); normal 8–12. HAGMA = MUDPILES. NAGMA = diarrhea, RTA, NS excess.\n- Correct AG for hypoalbuminemia: +2.5 per 1 g/dL below 4.0 — critical in septic patients.\n- Winter's formula: expected CO₂ in metabolic acidosis = (1.5 × HCO₃) + 8 ± 2. Deviation = mixed disorder.\n- DKA: HAGMA + ketones + glucose > 14. K⁺ before insulin — hold insulin if K⁺ < 3.5. Resolve when ketosis clears, not when glucose normalizes.\n- HHS: extreme hyperglycemia without ketosis. Large volume resuscitation. Slow glucose correction.\n- Salicylate OD: mixed respiratory alkalosis + metabolic acidosis. Lactic acidosis: treat the cause, not the pH.\n- K⁺ in DKA falls dramatically with insulin — monitor and replace aggressively."
+        }
+      ],
+      "preTest": [
+        {
+          "question": "A client with type 1 diabetes presents with ABG: pH 7.22, PaCO₂ 26, HCO₃ 11, glucose 24 mmol/L. What does the nurse interpret?",
+          "options": [
+            "Respiratory alkalosis, uncompensated",
+            "Metabolic acidosis with respiratory compensation (partially compensated) — likely DKA",
+            "Mixed respiratory and metabolic acidosis",
+            "Normal findings for a diabetic patient"
+          ],
+          "correct": 1,
+          "rationale": "pH 7.22 = acidosis. HCO₃ 11 (low — same direction as low pH = metabolic cause). PaCO₂ 26 (low — lungs blowing off CO₂ to compensate for metabolic acidosis = respiratory compensation). pH still abnormal = partially compensated. Glucose 24 mmol/L + metabolic acidosis = DKA. Kussmaul breathing (↓PaCO₂ via compensatory hyperventilation) is expected. Priority: K⁺ level before insulin."
+        }
+      ],
+      "postTest": [
+        {
+          "question": "A client with DKA has K⁺ 3.0 mEq/L and glucose 26 mmol/L. The provider orders insulin infusion to begin. What is the nurse's priority action?",
+          "options": [
+            "Begin the insulin infusion as ordered — glucose must be lowered immediately",
+            "Hold insulin and notify the provider — K⁺ 3.0 is below the safe threshold; insulin will drive K⁺ further down, risking fatal hypokalemia",
+            "Administer insulin and simultaneously hang a KCl drip",
+            "Delay all treatment until K⁺ and glucose are both within normal limits"
+          ],
+          "correct": 1,
+          "rationale": "In DKA management, insulin must be held when serum K⁺ < 3.5 mEq/L. Insulin activates the Na-K ATPase pump, driving K⁺ into cells — in a patient with K⁺ 3.0, this can cause fatal hypokalemia (cardiac dysrhythmias). Replace K⁺ first (typically 20–40 mEq/hr IV), recheck K⁺, then start insulin. Giving insulin with a KCl drip simultaneously is insufficient if the K⁺ is already critically low — the nurse must hold insulin and notify the provider."
+        },
+        {
+          "question": "A client presents with suspected methanol ingestion. ABG shows: pH 7.18, PaCO₂ 22, HCO₃ 8. Electrolytes: Na 140, Cl 102, HCO₃ 8. What does the nurse calculate the anion gap to be?",
+          "options": [
+            "AG = 8 (normal — no significant metabolic derangement)",
+            "AG = 30 (high anion gap — consistent with methanol poisoning causing HAGMA)",
+            "AG = 14 (mildly elevated — consistent with mild dehydration)",
+            "The anion gap cannot be calculated from these values"
+          ],
+          "correct": 1,
+          "rationale": "AG = Na – (Cl + HCO₃) = 140 – (102 + 8) = 140 – 110 = 30 mEq/L. Normal AG is 8–12; this AG of 30 is markedly elevated, indicating high anion gap metabolic acidosis (HAGMA). Methanol is metabolized to formic acid, which consumes HCO₃ and elevates the AG. This is a toxicological emergency. Treatment: fomepizole (methanol antidote), aggressive fluid/bicarbonate, dialysis in severe cases."
+        }
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "us-rn-sodium-imbalance",
+      "previewSectionCount": 2,
+      "seoTitle": "Sodium imbalance nursing: hyponatremia, hypernatremia, SIADH, DI & NCLEX-RN Canada",
+      "seoDescription": "Complete RN lesson on sodium imbalances: hyponatremia causes and types, hypernatremia, SIADH vs DI, fluid management, correction rates, and NCLEX-RN priorities.",
+      "sections": [
+        {
+          "id": "introduction",
+          "heading": "Overview",
+          "kind": "introduction",
+          "body": "**Sodium (Na⁺)** is the dominant extracellular cation, regulating extracellular fluid (ECF) osmolality and distribution. Sodium imbalances are among the most common electrolyte abnormalities in hospitalized patients. Because sodium determines serum osmolality, changes in Na⁺ directly cause water to shift between intracellular and extracellular compartments — explaining the neurological effects of both hypo and hypernatremia.\n\n**Normal serum sodium:** 135–145 mEq/L\n- Hyponatremia: Na⁺ < 135 mEq/L\n- Hypernatremia: Na⁺ > 145 mEq/L\n\n**Why sodium = water regulation.** Serum osmolality ≈ 2 × Na⁺ + glucose/18 + BUN/2.8 (normal: 280–295 mOsm/kg). ADH (antidiuretic hormone, vasopressin) is released when osmolality rises or blood volume drops → kidneys retain water → dilutes Na⁺ → osmolality falls. This system is the key to understanding both SIADH (too much ADH) and diabetes insipidus (too little ADH)."
+        },
+        {
+          "id": "pathophysiology_overview",
+          "heading": "Pathophysiology: Hyponatremia and Hypernatremia",
+          "kind": "pathophysiology_overview",
+          "body": "**Hyponatremia (Na⁺ < 135) — categorized by volume status:**\n\n**Hypovolemic hyponatremia** (total body Na⁺ depleted, water also depleted but less so): GI losses (vomiting, diarrhea), excessive sweating, diuretics, adrenal insufficiency. Treatment: isotonic NS to replace volume; treat underlying cause.\n\n**Euvolemic hyponatremia** (normal total body Na⁺, excess water): most commonly from SIADH (syndrome of inappropriate ADH secretion). ADH is secreted inappropriately despite low osmolality → kidneys retain free water → dilutional hyponatremia. Causes of SIADH: CNS disorders (stroke, trauma, meningitis), pulmonary diseases (pneumonia, SCLC), medications (SSRIs, carbamazepine, vincristine, cyclophosphamide), postoperative state. Treatment: fluid restriction ± salt tablets; conivaptan (V2 receptor antagonist) in severe cases.\n\n**Hypervolemic hyponatremia** (increased total body Na⁺ AND water, but water excess greater): heart failure, cirrhosis, nephrotic syndrome. Low effective arterial blood volume triggers ADH + RAAS → sodium and water retention, but water retained disproportionately. Treatment: fluid and salt restriction; diuretics; treat underlying disease.\n\n**Neurological effects of hyponatremia:** Water moves INTO brain cells as ECF becomes hypotonic → cerebral edema. Acute onset (< 48h) → symptomatic (headache, nausea, seizures, coma). Chronic hyponatremia (> 48h) → brain has adapted by extruding osmoles → fewer symptoms despite low Na⁺.\n\n**DANGER of rapid correction:** Osmotic demyelination syndrome (ODS, formerly central pontine myelinolysis). When Na⁺ is corrected too rapidly in chronic hyponatremia, the brain has adapted to low osmolality — rapid rise causes osmotic water shift OUT of brain cells → demyelination → quadriplegia, dysarthria, dysphagia, 'locked-in' syndrome. Maximum safe correction: 8–12 mEq/L in 24 hours, 18 mEq/L in 48 hours.\n\n**Hypernatremia (Na⁺ > 145) — always means free water deficit:**\n\n**Hypovolemic hypernatremia** (water and Na⁺ lost, water loss exceeds Na⁺ loss): diarrhea (hypotonic stool losses), severe insensible losses (fever, burns), diuretics, DI. ECF contracted, brain cells shrink as water moves out.\n\n**Euvolemic hypernatremia** (pure water loss): diabetes insipidus (central or nephrogenic). Central DI: hypothalamic/pituitary damage → insufficient ADH. Nephrogenic DI: kidneys insensitive to ADH (lithium toxicity, hypercalcemia, hypokalemia).\n\n**DANGER of rapid correction of hypernatremia:** Rapid water replacement dilutes ECF → water moves into brain cells (which adapted to high osmolality) → cerebral edema. Maximum safe correction: 10–12 mEq/L per 24 hours.\n\n**Diabetes Insipidus (DI) vs SIADH:**\n\n| Feature | SIADH | DI |\n|---|---|---|\n| ADH | Excess | Absent/ineffective |\n| Sodium | Low (< 135) | High (> 145) |\n| Urine output | Decreased (concentrated) | Massively increased (dilute) |\n| Urine specific gravity | > 1.020 | < 1.005 |\n| Urine osmolality | High | Low |\n| Serum osmolality | Low | High |\n| Treatment | Fluid restriction ± V2 blocker | Desmopressin (central DI); treat cause (nephrogenic) |"
+        },
+        {
+          "id": "signs_symptoms",
+          "heading": "Signs & Symptoms",
+          "kind": "signs_symptoms",
+          "body": "**Hyponatremia — neurological (cerebral edema from water influx):**\n- Mild (Na 130–135): nausea, headache, malaise, confusion, fatigue\n- Moderate (Na 120–130): lethargy, disorientation, muscle cramps\n- Severe (Na < 120, or rapid drop): seizures, respiratory arrest, coma\n\n**SIADH specifically:**\n- Concentrated urine (dark) despite low sodium\n- No edema (euvolemic)\n- Urine Na⁺ > 40 mEq/L (kidneys retaining sodium to compensate)\n\n**Hypernatremia — neurological (brain cell shrinkage from water efflux):**\n- Thirst (early, potent signal)\n- Dry mucous membranes, decreased skin turgor\n- Irritability, agitation\n- Lethargy, confusion, obtundation\n- Muscle weakness, fasciculations\n- Seizures, coma (severe — Na > 160)\n\n**DI specifically:**\n- Massive polyuria: 3–20 L/day of very dilute urine (SG < 1.005)\n- Intense polydipsia (if conscious and thirst mechanism intact)\n- Rapid hypernatremia and dehydration if unable to drink adequately (impaired LOC, elderly, infants)"
+        },
+        {
+          "id": "red_flags",
+          "heading": "Red Flags / Dangerous Sodium Levels",
+          "kind": "red_flags",
+          "body": "**Notify provider immediately:**\n- Na⁺ < 125 mEq/L with neurological symptoms (seizure, confusion): emergent hypertonic saline may be needed\n- Na⁺ > 155 mEq/L: severe hypernatremia — risk of intracranial hemorrhage from brain cell shrinkage\n- New seizure in any patient with hyponatremia\n- Correction rate > 12 mEq/L in 24h (hyponatremia) or > 12 mEq/L in 24h (hypernatremia): risk of ODS or cerebral edema — stop correction and notify provider\n\n**Hypertonic saline (3% NaCl) — requires ICU-level monitoring:**\n- Only for symptomatic severe hyponatremia (seizures, obtundation) with Na < 120\n- Administered at 1–2 mEq/L/hour of Na correction\n- Continuous neurological monitoring and Na⁺ q2h\n- STOP if Na rises > 8–10 mEq/L within first 24 hours in a chronic hyponatremia patient"
+        },
+        {
+          "id": "labs_diagnostics",
+          "heading": "Diagnostics / Labs",
+          "kind": "labs_diagnostics",
+          "body": "**Initial workup for hyponatremia:**\n- Serum Na⁺, K⁺, BMP\n- Serum osmolality (calculated and measured)\n- Urine Na⁺, urine osmolality, urine specific gravity\n- Assess volume status clinically: skin turgor, mucous membranes, JVP, orthostatic BP, weight\n\n**Differentiating SIADH:**\n- Serum osmolality low (< 280); urine osmolality inappropriately high (> 100 mOsm/kg)\n- Urine Na⁺ > 40 mEq/L (not conserving sodium despite hyponatremia)\n- Euvolemic clinically\n- No thyroid or adrenal dysfunction (both cause hyponatremia and must be excluded)\n\n**Workup for hypernatremia:**\n- Urine output and specific gravity (polyuria + low SG = DI)\n- Urine osmolality\n- Water deprivation test: no water for 8h → check urine osmolality. Then give desmopressin.\n  - Central DI: urine concentrates > 50% after desmopressin → ADH deficiency\n  - Nephrogenic DI: no response to desmopressin → kidney insensitivity\n\n**Monitoring during correction:**\n- Na⁺ every 2–4 hours during active correction\n- Urine output hourly (DI patients: massive output)\n- Neurological assessments every 1–2 hours"
+        },
+        {
+          "id": "nursing_assessment_interventions",
+          "heading": "Nursing Responsibilities",
+          "kind": "nursing_assessment_interventions",
+          "body": "**Hyponatremia nursing care:**\n- Fluid restriction: typically 800–1,000 mL/day for SIADH — post all fluid restriction signs; measure all input (ice chips = 50% volume)\n- Assess neurological status q2–4h: orientation, seizure activity, LOC\n- Seizure precautions: padded side rails, supplemental O₂ available, suction at bedside\n- Monitor I&O, daily weights\n- Safety: fall precautions (confusion from hyponatremia)\n- Track Na⁺ correction rate: do NOT allow rapid correction — alert provider if approaching 8 mEq/L correction within first 24h\n\n**SIADH medications:**\n- **Demeclocycline**: tetracycline that blocks ADH action on renal collecting ducts; second-line\n- **Tolvaptan/conivaptan (vaptans)**: V2 receptor antagonists — block ADH at kidney; cause free water diuresis; correct Na⁺; must initiate in hospital with close monitoring (can overcorrect rapidly); avoid in liver disease\n\n**Hypernatremia nursing care:**\n- Restore free water: oral hydration in conscious patients; IV D5W or 0.45% NaCl in IV-dependent patients\n- Monitor correction rate: Na⁺ should fall no faster than 10–12 mEq/L per 24h\n- I&O strict: output in DI patients may be 500+ mL/hour\n- Daily weight\n- Assess neurological status\n\n**Central DI medication:**\n- Desmopressin (DDAVP): synthetic ADH analog. Given intranasally, SL, or IV\n- Monitor: water intoxication risk if too much given (hyponatremia), weight, urine output\n- Compare fluid balance: give DDAVP when urine output > 200–300 mL/hour with SG < 1.005 in DI context"
+        },
+        {
+          "id": "clinical_pearls",
+          "heading": "Clinical Pearls",
+          "kind": "clinical_pearls",
+          "body": "- **Chronic hyponatremia corrects SLOWLY** — the danger is ODS from too-rapid correction. Target < 8–10 mEq/L in 24h. Acute hyponatremia with seizures: up to 1–2 mEq/L/h × 2h is acceptable to abort seizures.\n- **SIADH memory trick**: Small cell lung cancer (SCLC) and CNS disorders are the most tested NCLEX causes. Key finding: concentrated urine despite low serum Na⁺ and low serum osmolality.\n- **DI vs SIADH**: Na is HIGH in DI (too much water lost), LOW in SIADH (too much water retained). Urine is DILUTE in DI (kidneys can't concentrate), CONCENTRATED in SIADH (kidneys retain water).\n- **Pseudohyponatremia**: severe hyperlipidemia or hyperproteinemia causes falsely low sodium on older analyzers (ion-selective electrodes avoid this). True osmolality normal. No treatment needed.\n- **Hyperglycemia and Na⁺**: high glucose draws water into ECF → dilutes Na⁺. Correct: add 1.6 mEq/L to measured Na⁺ for every 5.6 mg/dL or mEq/L (100 mg/dL) glucose above normal. True Na⁺ may be normal or even high.\n- **SSRIs and hyponatremia**: particularly in elderly women — SIADH is a known side effect. Monitor Na⁺ at baseline and after initiation."
+        },
+        {
+          "id": "client_education",
+          "heading": "Patient Education",
+          "kind": "client_education",
+          "body": "**SIADH patient education:**\n- Fluid restriction is critical — excess water intake makes hyponatremia worse\n- Count ALL fluids: water, juice, soup, gelatin, popsicles, ice chips\n- Keep a fluid log; measure intake at home if instructed\n- Report: worsening headache, new confusion, nausea — may indicate worsening hyponatremia\n- Avoid NSAIDs: they potentiate SIADH\n\n**Central DI patient education:**\n- Desmopressin: take at same time each day; do not miss doses — can develop severe dehydration and hypernatremia quickly\n- Carry medical alert identification: 'Diabetes Insipidus — requires desmopressin'\n- Always have water accessible; monitor urine output (decreased = desmopressin working; massive = may need dose adjustment)\n- Avoid situations with restricted water access\n- Report: headache, visual changes (pituitary tumor involvement), massive urination returning\n\n**Low-sodium diet education (heart failure / hypervolemic hyponatremia):**\n- Sodium restriction: < 2,000 mg/day\n- Read labels: sodium is in many processed, canned, and restaurant foods\n- Fluid restriction: per provider recommendation\n- Weigh daily: report > 1 kg gain in 24h or > 2 kg in 1 week"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- Normal Na⁺ = 135–145. Hypo: < 135; Hyper: > 145.\n- Hyponatremia by volume: hypovolemic (losses), euvolemic (SIADH), hypervolemic (HF, cirrhosis)\n- SIADH: ↓Na, ↓serum osmolality, ↑urine Na, ↑urine osmolality. Treatment: fluid restriction ± vaptans.\n- DI: ↑Na, ↑serum osmolality, massive dilute urine (SG < 1.005). Central: desmopressin. Nephrogenic: treat cause.\n- Correction rate: hyponatremia max 8–10 mEq/L/24h → ODS risk. Hypernatremia max 10–12 mEq/L/24h → cerebral edema.\n- Seizure precautions for Na < 125 with neuro symptoms. Hypertonic saline only for acute symptomatic severe hyponatremia."
+        }
+      ],
+      "preTest": [
+        {
+          "question": "A client with small cell lung cancer has Na⁺ 118 mEq/L, serum osmolality 258 mOsm/kg, urine Na⁺ 65 mEq/L, and urine osmolality 680 mOsm/kg. What condition does the nurse suspect?",
+          "options": [
+            "Dehydration with hypovolemic hyponatremia",
+            "SIADH — concentrated urine despite low serum sodium and osmolality is the hallmark",
+            "Diabetes insipidus — cancer patients commonly develop DI",
+            "Pseudohyponatremia from elevated serum lipids"
+          ],
+          "correct": 1,
+          "rationale": "Classic SIADH presentation: low serum Na (118), low serum osmolality (258), and paradoxically concentrated urine (urine osmolality 680 — much higher than serum). The kidneys are retaining water under the influence of inappropriately secreted ADH, diluting the serum. Small cell lung cancer is a classic cause (ectopic ADH production). Treatment is fluid restriction ± vaptans."
+        }
+      ],
+      "postTest": [
+        {
+          "question": "A client with chronic hyponatremia (Na⁺ 119) is started on 3% NaCl. After 18 hours, Na⁺ is 133 mEq/L (a rise of 14 mEq/L). What is the nurse's priority action?",
+          "options": [
+            "Continue the infusion — the Na⁺ target has been reached",
+            "Stop the 3% NaCl infusion and notify the provider — the correction rate exceeds the safe limit of 8–10 mEq/L per 24h",
+            "Administer a loop diuretic to slow further correction",
+            "Give free water IV to dilute the sodium back down"
+          ],
+          "correct": 1,
+          "rationale": "In chronic hyponatremia, correcting Na⁺ faster than 8–10 mEq/L per 24 hours risks osmotic demyelination syndrome (ODS), a severe neurological injury. A rise of 14 mEq/L in 18 hours exceeds this threshold. The infusion must be stopped and the provider notified immediately. The provider may consider giving free water IV (D5W) to slow the correction."
+        },
+        {
+          "question": "A post-neurosurgical client has urine output of 450 mL/hour for the past 2 hours, urine specific gravity 1.001, and Na⁺ 148 mEq/L. What condition does the nurse suspect?",
+          "options": [
+            "SIADH — postoperative state is a known trigger",
+            "Central diabetes insipidus — pituitary/hypothalamic trauma during surgery impairs ADH secretion",
+            "Psychogenic polydipsia — the patient is drinking excessive water",
+            "Hypervolemia from excessive IV fluids during surgery"
+          ],
+          "correct": 1,
+          "rationale": "Massive dilute urine output (450 mL/hr × 2h), low specific gravity (1.001 = unable to concentrate urine), and rising sodium (148 — hypernatremia) after neurosurgery is the classic presentation of central diabetes insipidus. Neurosurgery can damage the pituitary or hypothalamus → loss of ADH production → kidneys cannot concentrate urine → free water is lost rapidly → hypernatremia. Treatment: desmopressin IV + free water replacement."
+        }
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "us-rn-insulin-hypoglycemia",
+      "previewSectionCount": 2,
+      "seoTitle": "Insulin and hypoglycemia nursing: types, peaks, hypoglycemia protocol & NCLEX-RN Canada",
+      "seoDescription": "Complete RN lesson on insulin therapy and hypoglycemia: insulin types and timing, hypoglycemia recognition, 15-15 rule, Somogyi effect, dawn phenomenon, and NCLEX-RN priorities.",
+      "sections": [
+        {
+          "id": "introduction",
+          "heading": "Overview",
+          "kind": "introduction",
+          "body": "**Insulin therapy** is central to diabetes management and a major source of medication errors and hypoglycemia incidents in both hospital and community settings. For NCLEX-RN Canada, insulin requires mastery of: types and timing, safe administration, hypoglycemia recognition and management, and patient education for safe home use.\n\n**Insulin is the only hormone that lowers blood glucose.** It facilitates cellular glucose uptake (muscle, fat, liver), inhibits hepatic glucose production, and promotes glycogen synthesis and fat storage.\n\n**Normal glucose targets (US Diabetes Standards):**\n- Fasting/pre-meal: 4.0–7.0 mg/dL or mEq/L\n- 2h post-meal: 5.0–10.0 mg/dL or mEq/L\n- At bedtime: 4.0–8.0 mg/dL or mEq/L (risk of nocturnal hypoglycemia if lower)\n- Hypoglycemia: < 4.0 mg/dL or mEq/L\n- Severe hypoglycemia: < 3.0 mg/dL or mEq/L or too low to self-treat"
+        },
+        {
+          "id": "pathophysiology_overview",
+          "heading": "Insulin Types, Onset, Peak, and Duration",
+          "kind": "pathophysiology_overview",
+          "body": "**Rapid-acting insulins (bolus, mealtime):**\n- **Lispro (Humalog), Aspart (NovoRapid), Glulisine (Apidra)**\n- Onset: 15 min; Peak: 1–2h; Duration: 3–5h\n- Give within 15 minutes of a meal\n- If patient cannot eat: hold and notify provider\n\n**Short-acting insulin (regular insulin):**\n- **Regular (Humulin R, Novolin ge Toronto)**\n- Onset: 30 min; Peak: 2–4h; Duration: 6–8h\n- Give 30 minutes before meal\n- Also used for IV insulin infusions (only insulin safe for IV)\n- Used in DKA management\n\n**Intermediate-acting insulin:**\n- **NPH (Humulin N, Novolin ge NPH)**\n- Onset: 2–4h; Peak: 4–10h; Duration: 12–18h\n- Cloudy appearance; must be gently rolled (not shaken) to resuspend\n- Often given bid (with meals) or as basal\n- Highest risk of nocturnal hypoglycemia (peak occurs overnight if given at bedtime)\n\n**Long-acting insulins (basal):**\n- **Glargine (Lantus, Basaglar)**, **Detemir (Levemir)**, **Degludec (Tresiba)**\n- Onset: 2–4h (glargine/detemir); Duration: 20–24h (glargine), 42h (degludec)\n- NO peak (glargine, degludec) — provides steady basal coverage\n- Given once daily (or bid for detemir); usually at bedtime\n- DO NOT mix in the same syringe with other insulins\n- Clear appearance\n\n**Premixed insulins (70/30, 50/50):**\n- Fixed ratio of NPH/regular or NPH/lispro\n- Less flexible; used in patients with stable diets\n\n**Concentration note:** Standard insulin is U-100 (100 units/mL). Some insulins are U-200, U-300, U-500 — require specialty pens or syringes. Do NOT use U-100 syringe with U-500 insulin.\n\n**Mixing insulin — when ordered:**\n- Draw clear (short-acting) FIRST, then cloudy (NPH)\n- Memory: 'clear before cloudy'\n- Never mix glargine or detemir with other insulins"
+        },
+        {
+          "id": "signs_symptoms",
+          "heading": "Hypoglycemia Recognition",
+          "kind": "signs_symptoms",
+          "body": "**Hypoglycemia = blood glucose < 4.0 mg/dL or mEq/L**\n\n**Adrenergic (early — sympathetic activation as body releases epinephrine to raise glucose):**\n- Trembling, shakiness\n- Palpitations, tachycardia\n- Diaphoresis (cold, clammy skin)\n- Pallor\n- Anxiety, nervousness\n- Hunger\n\n**Neuroglycopenic (later — brain glucose deprived):**\n- Confusion, difficulty concentrating\n- Slurred speech\n- Headache\n- Vision changes\n- Irritability, personality changes\n- Weakness, fatigue\n- Seizures (severe)\n- Loss of consciousness, coma (very severe — glucose < 2.0 mg/dL or mEq/L)\n\n**Special populations:**\n- **Beta-blocker users**: beta-blockers mask adrenergic symptoms (no tremor, no tachycardia, no diaphoresis). Only neuroglycopenic symptoms may be evident — and diaphoresis (mediated by cholinergic fibers) may still occur. Check glucose with ANY unexplained cognitive change in these patients.\n- **Hypoglycemia unawareness**: patients on long-term intensive therapy or with autonomic neuropathy lose adrenergic warning signals. They may have no symptoms until severely hypoglycemic — very dangerous."
+        },
+        {
+          "id": "red_flags",
+          "heading": "Red Flags / Severe Hypoglycemia",
+          "kind": "red_flags",
+          "body": "**Immediate action required:**\n- Blood glucose < 3.0 mg/dL or mEq/L or patient unable to self-treat (confusion, LOC)\n- Patient with altered LOC — NEVER give oral glucose (aspiration risk)\n- Glucose < 2.8 mg/dL or mEq/L in a non-diabetic: possible insulinoma, adrenal insufficiency, factitious insulin administration — investigate cause\n\n**Hospitalized patient — severe hypoglycemia protocol:**\n1. If IV access available: D50W (dextrose 50%) 25–50 mL IV push immediately\n2. If NO IV access: glucagon 1 mg IM or SC (stimulates hepatic glycogen release)\n3. Recheck glucose in 15 minutes\n4. Once conscious: oral carbohydrate meal\n5. Notify provider; investigate cause; adjust insulin orders\n\n**Do NOT leave a hypoglycemic patient alone.**\n\n**Insulin errors — high-alert medication:**\n- Nurse must independently double-check insulin type, dose, route, time with a second RN before administering\n- Always check blood glucose before administering insulin\n- Never administer rapid-acting insulin if patient is NPO or not eating"
+        },
+        {
+          "id": "labs_diagnostics",
+          "heading": "Diagnostics / Labs",
+          "kind": "labs_diagnostics",
+          "body": "**Blood glucose monitoring:**\n- Capillary glucose (finger-stick): bedside; requires calibrated meter and correct technique\n- Point-of-care glucose meters have ±10–15% margin of error; if result does not match clinical picture → send venous lab glucose\n- Glucose < 2.8 on meter with alert/unresponsive patient: treat first, verify later\n\n**Continuous glucose monitoring (CGM):**\n- Subcutaneous sensor; displays real-time glucose and trend arrows\n- Alerts for rapid drops or impending hypoglycemia\n- Still requires fingerstick confirmation before treating severe hypoglycemia\n\n**Other labs:**\n- HgbA1c: 3-month average glucose; target < 7.0% (most adults), < 7.5–8.0% (elderly, frequent hypoglycemia)\n- C-peptide: marker of endogenous insulin secretion; low = type 1 DM; high = insulinoma or type 2\n- Fasting insulin level: if insulinoma suspected\n\n**Somogyi Effect vs Dawn Phenomenon (common exam question):**\n- **Somogyi effect**: rebound hyperglycemia after nocturnal hypoglycemia. Too much bedtime insulin → nocturnal hypoglycemia → counter-regulatory hormones (glucagon, epinephrine) → rebound morning hyperglycemia. Fix: reduce bedtime insulin.\n- **Dawn phenomenon**: early morning hyperglycemia WITHOUT preceding hypoglycemia. Normal physiological surge of GH and cortisol in early morning → hepatic glucose production → rising glucose 4–8 AM. Fix: increase morning or bedtime insulin dose."
+        },
+        {
+          "id": "nursing_assessment_interventions",
+          "heading": "Nursing Responsibilities",
+          "kind": "nursing_assessment_interventions",
+          "body": "**15-15 Rule for mild-moderate hypoglycemia (conscious patient):**\n1. Give 15 grams of fast-acting carbohydrates:\n   - 4 glucose tablets OR 150 mL regular juice/non-diet pop OR 1 tbsp honey or sugar\n2. Wait 15 minutes\n3. Recheck blood glucose\n4. If still < 4.0 mg/dL or mEq/L: repeat 15g carbohydrates\n5. Once > 4.0 mg/dL or mEq/L: give a complex carbohydrate/protein snack if meal is not within 1 hour\n\n**Safe insulin administration — 5 rights + insulin-specific checks:**\n1. Right patient: 2 patient identifiers\n2. Right drug: insulin type (look-alike/sound-alike: Humalog vs Humulin; Lantus vs Lente — verify precisely)\n3. Right dose: dose should be verified by 2 nurses per hospital policy\n4. Right route: subcutaneous for most; IV only for regular insulin\n5. Right time: rapid-acting = 15 min before meal; regular = 30 min before\n6. CHECK GLUCOSE before administering; confirm patient will eat\n\n**SC injection technique:**\n- Rotate injection sites (abdomen fastest absorption; thigh slowest; arm intermediate)\n- 45° or 90° angle depending on tissue and needle length\n- Pinch skin for lean patients\n- Do NOT aspirate\n- Apply gentle pressure after — do NOT massage (speeds absorption unpredictably)\n\n**Insulin storage:**\n- Unopened vials/pens: refrigerated (2–8°C) until expiry\n- In-use vials/pens: room temperature, away from light and heat\n  - Vials: 28 days open\n  - Lantus pen: 28 days\n  - Other pens: 14–28 days depending on product — verify package insert\n- Do NOT freeze insulin; do NOT use if clumped, discolored, or precipitated\n\n**NPH insulin preparation:**\n- Gently roll between palms 10 times to resuspend\n- Do NOT shake — shaking creates bubbles and denatures protein"
+        },
+        {
+          "id": "clinical_pearls",
+          "heading": "Clinical Pearls",
+          "kind": "clinical_pearls",
+          "body": "- **Insulin is a HIGH-ALERT medication** — two-nurse verification is required at most facilities before administration. Never rush.\n- **Clear before cloudy** when mixing: draw regular (clear) first, then NPH (cloudy). Contaminating NPH with regular changes its onset/duration profile. Never mix glargine.\n- **Rapid-acting insulin requires a meal**: hold lispro/aspart if the patient is NPO, vomiting, or refusing meals. A patient who takes rapid-acting insulin without eating will become hypoglycemic.\n- **Beta-blockers mask hypoglycemia**: know your patients on carvedilol, metoprolol, atenolol — check glucose with ANY unexplained change in mental status.\n- **Somogyi vs dawn**: measure 3 AM glucose to differentiate. Low 3 AM glucose → Somogyi (reduce bedtime insulin). Normal or high 3 AM glucose → dawn phenomenon (increase or time insulin differently).\n- **D50W pushes glucose up rapidly** — do not give more than needed; hyperglycemia after treatment is also problematic. Recheck in 15 minutes."
+        },
+        {
+          "id": "client_education",
+          "heading": "Patient Education",
+          "kind": "client_education",
+          "body": "**Hypoglycemia prevention:**\n- Never skip meals if on insulin\n- Exercise: check glucose before, during, and after; reduce insulin or eat a snack before moderate exercise\n- Alcohol: inhibits hepatic glucose release → hypoglycemia risk; never drink on an empty stomach; eat before/during alcohol intake; limit to 1–2 drinks\n- Always carry fast-acting carbohydrates: glucose tablets, juice boxes, candy\n- Wear medical alert bracelet identifying diabetes and insulin use\n\n**Sick-day insulin rules:**\n- NEVER stop insulin during illness — illness increases glucose\n- Check glucose every 2–4 hours\n- Keep fluids up (broth, juice, water)\n- If unable to keep food down: small amounts of fluid carbohydrates (juice, regular soda)\n- Contact provider or go to ED if: persistent vomiting, glucose > 16 mg/dL or mEq/L, ketones, or unable to manage\n\n**Injection site rotation:**\n- Rotate within each area to prevent lipohypertrophy (lumpy tissue from overuse)\n- Lipohypertrophy causes erratic absorption — do not inject into lumps\n- Abdomen fastest (good for mealtime insulin); thigh/buttock slower (basal insulin OK)"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- Rapid-acting (lispro/aspart): onset 15 min, peak 1–2h; give within 15 min of meal; hold if NPO.\n- Regular insulin: onset 30 min, peak 2–4h; only insulin for IV; used in DKA.\n- NPH: intermediate, cloudy, peak 4–10h; roll (don't shake); highest nocturnal hypoglycemia risk.\n- Glargine/detemir: no peak, 24h; DO NOT mix; once daily at bedtime.\n- Hypoglycemia < 4.0 mg/dL or mEq/L: 15g fast carbs → recheck 15 min → repeat if needed. Unconscious: D50W IV or glucagon IM.\n- Beta-blockers mask adrenergic symptoms — watch for confusion instead.\n- Somogyi: rebound AM hyperglycemia from nocturnal hypo (reduce bedtime insulin). Dawn: physiological AM glucose rise from hormones (increase insulin).\n- Insulin = high-alert medication: 2-nurse verification required."
+        }
+      ],
+      "preTest": [
+        {
+          "question": "A client with type 1 diabetes has lispro insulin ordered with each meal. The nurse enters the room to administer the 12:00 noon dose and finds the client sitting at the bedside, drowsy, and not interested in eating the lunch tray that just arrived. Blood glucose is 4.6 mmol/L. What is the nurse's priority action?",
+          "options": [
+            "Administer the lispro as ordered — 4.6 mmol/L is within normal range",
+            "Hold the lispro, assess the client, and notify the provider — the client's altered state and refusal to eat make rapid-acting insulin unsafe",
+            "Give the lispro and then encourage the client to eat",
+            "Give half the dose since the patient is only eating a small amount"
+          ],
+          "correct": 1,
+          "rationale": "Rapid-acting insulin (lispro) peaks at 1–2 hours. If a client is not going to eat (drowsy, refusing food), administering full lispro insulin will cause hypoglycemia within 1–2 hours with no carbohydrate intake to offset it. The nurse should hold the insulin, assess the reason for drowsiness (current glucose 4.6 — could become hypoglycemic), and notify the provider to determine if insulin is appropriate given the situation."
+        }
+      ],
+      "postTest": [
+        {
+          "question": "A client reports waking up with a glucose of 16.8 mmol/L every morning. To determine if this is Somogyi effect or dawn phenomenon, what does the nurse teach the patient to do?",
+          "options": [
+            "Check glucose at bedtime for 3 consecutive nights",
+            "Measure glucose at 3 AM on 3 consecutive nights: low glucose = Somogyi effect; normal/high glucose = dawn phenomenon",
+            "Take an extra unit of bedtime insulin for 3 nights to see if morning glucose improves",
+            "Skip the bedtime dose and observe if morning glucose normalizes"
+          ],
+          "correct": 1,
+          "rationale": "Differentiating Somogyi from dawn phenomenon requires a 3 AM glucose check. Somogyi: nocturnal hypoglycemia (3 AM glucose low) → counter-regulatory hormone release → morning hyperglycemia. Treatment: reduce bedtime insulin. Dawn phenomenon: normal or elevated 3 AM glucose (physiological GH/cortisol surge) → hepatic glucose release → morning hyperglycemia. Treatment: increase or adjust insulin timing. The 3 AM glucose check is the diagnostic test."
+        },
+        {
+          "question": "A nurse is preparing to mix regular and NPH insulin in one syringe. Which sequence is correct?",
+          "options": [
+            "Draw NPH (cloudy) first, then regular (clear)",
+            "It does not matter which is drawn first — they are compatible",
+            "Draw regular (clear) first, then NPH (cloudy)",
+            "Always use separate syringes — regular and NPH cannot be mixed"
+          ],
+          "correct": 2,
+          "rationale": "'Clear before cloudy' — regular (clear) insulin is drawn first to prevent contaminating the regular insulin vial with NPH. If NPH enters the regular vial, the NPH's modifying proteins change the onset and duration of regular insulin, making subsequent doses unpredictable. Draw regular first: insert needle into regular vial, withdraw required units, then switch to NPH vial and withdraw required units. Regular and NPH are compatible in the same syringe."
+        },
+        {
+          "question": "A hospitalized client with diabetes was given insulin aspart 10 units at 12:30 PM. At 1:45 PM, the nurse finds the client diaphoretic, trembling, and confused. Blood glucose is 2.8 mmol/L. The client cannot swallow safely. What is the priority intervention?",
+          "options": [
+            "Give 15g of fast-acting carbohydrates by mouth and recheck in 15 minutes",
+            "Administer D50W 25 mL IV push immediately",
+            "Administer glucagon 1 mg IM and give oral juice simultaneously",
+            "Hold all further insulin doses for the day and reassess in 1 hour"
+          ],
+          "correct": 1,
+          "rationale": "The client is confused and cannot swallow safely — oral carbohydrates are contraindicated (aspiration risk). D50W IV push is the appropriate treatment for severe hypoglycemia in a patient with IV access. Glucagon IM is used when IV access is unavailable. After IV dextrose, recheck glucose in 15 minutes and provide a complex carbohydrate meal once consciousness is restored."
+        }
+      ]
     }
   ]
 }

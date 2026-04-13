@@ -4,14 +4,13 @@
  * Server component. Accepts a LinkContext, calls the resolver, and renders
  * a clean, theme-consistent block of related content links.
  *
- * Supports:
- * - blog surfaces (lessons + questions + flashcards + related blogs)
- * - lesson surfaces (flashcards + questions + related lessons)
- * - question surfaces (lesson review + flashcards)
- * - cat_result surfaces (recommended lessons + practice)
+ * Quality guarantee: a kind section (e.g. "Related Lessons") only renders
+ * when at least one candidate has strength "strong" or "moderate" — i.e. it
+ * matched the topic or a synonym, not just the body system. Weak (body-system
+ * fallback) candidates are shown only as a last resort and only if the section
+ * would otherwise be completely empty for that surface's required minimum.
  *
- * Renders nothing if no candidates are found, so it is safe to include
- * unconditionally on any page.
+ * Renders nothing at all when no qualifying candidates exist.
  */
 
 import Link from "next/link";
@@ -83,6 +82,17 @@ function LinkItem({ candidate }: { candidate: LinkCandidate }) {
   );
 }
 
+/**
+ * Returns only the candidates that meet the minimum quality bar.
+ * Weak (body-system fallback) candidates are allowed only when no
+ * strong/moderate candidates exist for this kind — they are never
+ * mixed into a section that already has relevant matches.
+ */
+function qualifiedCandidates(candidates: LinkCandidate[]): LinkCandidate[] {
+  const hasRelevant = candidates.some((c) => c.strength !== "weak");
+  return hasRelevant ? candidates.filter((c) => c.strength !== "weak") : candidates;
+}
+
 function KindSection({
   kind,
   candidates,
@@ -90,7 +100,8 @@ function KindSection({
   kind: LinkTargetKind;
   candidates: LinkCandidate[];
 }) {
-  if (candidates.length === 0) return null;
+  const qualified = qualifiedCandidates(candidates);
+  if (qualified.length === 0) return null;
 
   return (
     <div className="space-y-1.5">
@@ -99,7 +110,7 @@ function KindSection({
         {KIND_LABELS[kind]}
       </h3>
       <ul className="space-y-1 pl-1 text-sm text-[var(--theme-body-text)]">
-        {candidates.map((c) => (
+        {qualified.map((c) => (
           <LinkItem key={c.href} candidate={c} />
         ))}
       </ul>
@@ -133,17 +144,22 @@ export function RelatedContentBlock({ context, showKinds, heading, compact = fal
   const kindsToShow: LinkTargetKind[] =
     showKinds ?? DEFAULT_KINDS_FOR_SURFACE[context.surface] ?? ["lesson", "question"];
 
-  // Collect all candidates in display order
-  const allCandidates = kindsToShow.flatMap((k) => {
-    switch (k) {
-      case "lesson":    return resolved.lessons;
-      case "flashcard": return resolved.flashcards;
-      case "question":  return resolved.questions;
-      case "blog":      return resolved.blogs;
-      case "cat":       return resolved.cat;
-      default:          return [];
-    }
-  });
+  const candidatesFor = (k: LinkTargetKind): LinkCandidate[] => {
+    const raw = (() => {
+      switch (k) {
+        case "lesson":    return resolved.lessons;
+        case "flashcard": return resolved.flashcards;
+        case "question":  return resolved.questions;
+        case "blog":      return resolved.blogs;
+        case "cat":       return resolved.cat;
+        default:          return [];
+      }
+    })();
+    return qualifiedCandidates(raw);
+  };
+
+  // Collect all qualified candidates in display order for the compact variant
+  const allCandidates = kindsToShow.flatMap(candidatesFor);
 
   if (allCandidates.length === 0) return null;
 
@@ -155,16 +171,7 @@ export function RelatedContentBlock({ context, showKinds, heading, compact = fal
     );
   }
 
-  const activeKinds = kindsToShow.filter((k) => {
-    switch (k) {
-      case "lesson":    return resolved.lessons.length > 0;
-      case "flashcard": return resolved.flashcards.length > 0;
-      case "question":  return resolved.questions.length > 0;
-      case "blog":      return resolved.blogs.length > 0;
-      case "cat":       return resolved.cat.length > 0;
-      default:          return false;
-    }
-  });
+  const activeKinds = kindsToShow.filter((k) => candidatesFor(k).length > 0);
 
   if (activeKinds.length === 0) return null;
 
@@ -179,19 +186,9 @@ export function RelatedContentBlock({ context, showKinds, heading, compact = fal
         </h2>
       )}
       <div className={`grid gap-4 ${activeKinds.length > 1 ? "sm:grid-cols-2" : ""}`}>
-        {activeKinds.map((kind) => {
-          const candidates = (() => {
-            switch (kind) {
-              case "lesson":    return resolved.lessons;
-              case "flashcard": return resolved.flashcards;
-              case "question":  return resolved.questions;
-              case "blog":      return resolved.blogs;
-              case "cat":       return resolved.cat;
-              default:          return [];
-            }
-          })();
-          return <KindSection key={kind} kind={kind} candidates={candidates} />;
-        })}
+        {activeKinds.map((kind) => (
+          <KindSection key={kind} kind={kind} candidates={candidatesFor(kind)} />
+        ))}
       </div>
     </aside>
   );
@@ -206,9 +203,10 @@ export function RelatedContentBlock({ context, showKinds, heading, compact = fal
 export function BlogStudyNextStrip({ context }: { context: LinkContext }) {
   const resolved = resolveLinks({ ...context, surface: "blog" });
 
-  const topLesson    = resolved.lessons[0];
-  const topQuestion  = resolved.questions[0];
-  const topFlashcard = resolved.flashcards[0];
+  // Only show items that are clinically relevant matches — not body-system guesses
+  const topLesson    = qualifiedCandidates(resolved.lessons)[0];
+  const topQuestion  = qualifiedCandidates(resolved.questions)[0];
+  const topFlashcard = qualifiedCandidates(resolved.flashcards)[0];
 
   const items = [topLesson, topQuestion, topFlashcard].filter(Boolean) as LinkCandidate[];
   if (items.length === 0) return null;
@@ -256,9 +254,10 @@ export function CatResultRecommendations({
       pathway,
       topicKey,
     });
-    allLessons.push(...resolved.lessons.slice(0, 2));
-    allFlashcards.push(...resolved.flashcards.slice(0, 1));
-    allQuestions.push(...resolved.questions.slice(0, 1));
+    // Only include clinically relevant matches — not body-system guesses
+    allLessons.push(...qualifiedCandidates(resolved.lessons).slice(0, 2));
+    allFlashcards.push(...qualifiedCandidates(resolved.flashcards).slice(0, 1));
+    allQuestions.push(...qualifiedCandidates(resolved.questions).slice(0, 1));
   }
 
   // Deduplicate by href

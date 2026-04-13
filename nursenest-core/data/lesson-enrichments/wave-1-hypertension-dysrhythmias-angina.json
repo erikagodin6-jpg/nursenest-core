@@ -367,6 +367,372 @@
           "rationale": "After radial artery access for PCI, the radial artery may develop a thrombus causing hand ischemia. Tingling, pallor, and absent radial pulse indicate acute arterial occlusion — a limb-threatening emergency requiring immediate notification and vascular assessment. Mild bruising, soreness, and mild grip weakness are expected temporary findings."
         }
       ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "us-rn-hypertension",
+      "previewSectionCount": 2,
+      "seoTitle": "Hypertension nursing: pathophysiology, JNC stages, medications & NCLEX-RN Canada",
+      "seoDescription": "Complete RN lesson on hypertension: primary vs secondary HTN, target organ damage, antihypertensive classes, hypertensive urgency vs emergency, and NCLEX-RN priorities.",
+      "sections": [
+        {
+          "id": "introduction",
+          "heading": "Overview",
+          "kind": "introduction",
+          "body": "**Hypertension (HTN)** is defined as sustained systolic blood pressure ≥ 130 mmHg or diastolic ≥ 80 mmHg (ACC/AHA 2017 guidelines). It is the most prevalent chronic cardiovascular disease worldwide — affecting 1 in 3 US adults — and a major modifiable risk factor for stroke, MI, heart failure, chronic kidney disease, and aortic dissection.\n\n**Classification:**\n- Normal: SBP < 120 and DBP < 80\n- Elevated: SBP 120–129 and DBP < 80\n- Stage 1 HTN: SBP 130–139 OR DBP 80–89\n- Stage 2 HTN: SBP ≥ 140 OR DBP ≥ 90\n- Hypertensive urgency: SBP > 180 and/or DBP > 120, no acute end-organ damage\n- Hypertensive emergency: SBP > 180 and/or DBP > 120 WITH acute end-organ damage (encephalopathy, aortic dissection, acute MI, acute kidney injury, pulmonary edema)\n\nFor NCLEX-RN: know the medication classes and their nursing priorities, recognize hypertensive urgency vs emergency, and understand target organ damage surveillance."
+        },
+        {
+          "id": "pathophysiology_overview",
+          "heading": "Pathophysiology",
+          "kind": "pathophysiology_overview",
+          "body": "**Primary (essential) hypertension — 90–95% of cases.** No identifiable cause, but driven by complex interactions between genetic predisposition, environmental factors, and neurohormonal systems. Key mechanisms:\n\n**Increased cardiac output or peripheral resistance.** Mean arterial pressure (MAP) = cardiac output × systemic vascular resistance (SVR). HTN develops when either CO or SVR is chronically elevated. In early HTN: elevated CO from sympathetic activation (stress, obesity, high sodium intake → increased intravascular volume). Over time: vascular remodeling causes SVR to dominate — arteriolar walls thicken, lumen narrows, resistance rises permanently.\n\n**RAAS activation.** High sodium diet or renal ischemia triggers RAAS: renin → angiotensin I → ACE → angiotensin II. Angiotensin II is a potent vasoconstrictor AND stimulates aldosterone secretion (sodium/water retention) AND promotes vascular smooth muscle hypertrophy. This creates a self-reinforcing cycle: hypertension → renal efferent arteriolar constriction → further RAAS activation → further HTN.\n\n**Endothelial dysfunction.** Chronic hypertension damages the arterial endothelium, reducing nitric oxide (NO) production (NO is a vasodilator). This shifts the vascular tone toward vasoconstriction, accelerating the rise in SVR. Endothelial dysfunction also promotes atherosclerosis — the mechanism linking HTN to coronary artery disease and stroke.\n\n**Secondary hypertension — 5–10%.** Has an identifiable cause: primary hyperaldosteronism (Conn's syndrome — most common secondary cause), renal parenchymal disease (CKD), renovascular disease (renal artery stenosis), obstructive sleep apnea, pheochromocytoma, thyroid dysfunction, coarctation of the aorta, medication-induced (NSAIDs, OCPs, decongestants, corticosteroids).\n\n**Target organ damage.** Chronic high pressure damages multiple organs: cerebrovascular disease (stroke, TIA), coronary artery disease (angina, MI), left ventricular hypertrophy (→ diastolic dysfunction, HF), hypertensive nephropathy (CKD, proteinuria), hypertensive retinopathy (vision loss), peripheral arterial disease."
+        },
+        {
+          "id": "signs_symptoms",
+          "heading": "Signs & Symptoms",
+          "kind": "signs_symptoms",
+          "body": "**Chronic hypertension — usually asymptomatic ('silent killer'):**\n- Most patients have NO symptoms until target organ damage occurs\n- Headache (occipital, morning) — classic but nonspecific; often absent even in severe HTN\n- Epistaxis (nosebleeds) — associated with acute BP spikes, not chronic control\n- Tinnitus, dizziness — nonspecific\n- Visual changes — if hypertensive retinopathy is developing\n\n**Hypertensive urgency (SBP > 180, no end-organ damage):**\n- Severe headache\n- Anxiety, restlessness\n- Nausea\n- BP markedly elevated but no acute neurological, cardiac, or renal compromise\n\n**Hypertensive emergency — end-organ damage present:**\n- Hypertensive encephalopathy: severe headache, confusion, altered consciousness, seizures, papilledema\n- Aortic dissection: sudden severe ripping/tearing chest or back pain, unequal BP between arms\n- Acute MI: chest pain, diaphoresis, ECG changes\n- Acute pulmonary edema: dyspnea, crackles, SpO₂ drop\n- Acute kidney injury: oliguria, rising creatinine, hematuria\n- Eclampsia: HTN + seizures in pregnancy (obstetric emergency)\n\n**Physical exam findings:**\n- Forceful bounding pulse\n- S4 gallop (LV hypertrophy)\n- Fundoscopic: arteriovenous nicking, copper/silver wiring, papilledema (grade 4)\n- Xanthelasma (associated dyslipidemia)"
+        },
+        {
+          "id": "red_flags",
+          "heading": "Red Flags / Hypertensive Emergency",
+          "kind": "red_flags",
+          "body": "**Hypertensive emergency — call provider and initiate emergency protocol:**\n- SBP > 180 AND any of: new headache + confusion, chest pain, dyspnea, visual change, oliguria, focal neurological deficit\n- **Aortic dissection**: tearing back pain + unequal arm BPs → immediate CT angiography, surgical consultation\n- **Eclampsia**: BP ≥ 160/110 + seizure in pregnancy → magnesium sulfate IV, emergent delivery\n- **Hypertensive encephalopathy**: altered mental status + papilledema + severe HTN → ICU-level BP reduction\n- **Severe epistaxis with BP > 180**: apply direct pressure, position upright; do not leave patient alone\n- **Medication refusal with BP > 180**: do not discharge without provider discussion\n\n**In hypertensive emergency: goal is to lower MAP by 10–20% in first hour** (not to normal). Too-rapid reduction causes cerebral ischemia (BP autoregulation is reset at high baseline). IV labetalol or nicardipine are preferred."
+        },
+        {
+          "id": "labs_diagnostics",
+          "heading": "Diagnostics / Labs",
+          "kind": "labs_diagnostics",
+          "body": "**Baseline workup at HTN diagnosis:**\n- **Urinalysis + urine albumin:creatinine ratio**: proteinuria indicates hypertensive nephropathy or secondary renal cause\n- **BMP**: creatinine, BUN (renal function), potassium (hypokalemia → consider hyperaldosteronism or diuretic effect), glucose\n- **Fasting lipid panel**: cardiovascular risk stratification\n- **CBC**: secondary causes (polycythemia)\n- **TSH**: thyroid disease as secondary cause\n- **Fasting glucose / HgbA1c**: metabolic syndrome, diabetes (major HTN comorbidity)\n- **ECG**: left ventricular hypertrophy pattern (voltage criteria)\n- **Echocardiogram**: LVH, diastolic dysfunction (if suspected)\n\n**Secondary HTN workup (when indicated):**\n- Aldosterone:renin ratio (hyperaldosteronism)\n- 24-hour urine catecholamines (pheochromocytoma)\n- Renal duplex Doppler (renal artery stenosis)\n- Sleep study (OSA)\n\n**Blood pressure measurement technique:**\n- Seated, arm at heart level, 5 min rest before measurement\n- Proper cuff size (too small = falsely elevated)\n- Average 2 readings, 1–2 min apart\n- Measure bilateral BPs on initial visit; > 15 mmHg difference warrants investigation\n- White coat HTN: diagnose with 24-hr ambulatory BP monitoring"
+        },
+        {
+          "id": "nursing_assessment_interventions",
+          "heading": "Nursing Responsibilities",
+          "kind": "nursing_assessment_interventions",
+          "body": "**Antihypertensive medication classes — nursing priorities:**\n\n**ACE Inhibitors (–pril: lisinopril, ramipril, enalapril):**\n- First-line for HTN + diabetes, HTN + CKD, HTN + HF, post-MI\n- Monitor: dry cough (class effect, 10–15% of patients — switch to ARB); angioedema (rare but life-threatening — hold and notify); potassium (hyperkalemia risk); creatinine (transient rise is expected with initiation; significant rise = notify)\n- Hold if K⁺ > 5.5 or bilateral renal artery stenosis; contraindicated in pregnancy (teratogenic)\n\n**ARBs (–sartan: losartan, valsartan, candesartan):**\n- Same indications as ACEi; preferred when patient cannot tolerate ACEi cough\n- No cough side effect; angioedema possible but less common\n- Same electrolyte and renal monitoring as ACEi; teratogenic — same pregnancy contraindication\n\n**Beta-blockers (–olol: metoprolol, atenolol, bisoprolol, carvedilol):**\n- First-line post-MI, HTN + HF, HTN + angina, HTN + tachyarrhythmia\n- Monitor: bradycardia (hold if HR < 50–55), hypotension; mask signs of hypoglycemia in diabetics\n- Do NOT stop abruptly — rebound tachycardia, angina, HTN crisis\n- Caution: asthma, COPD (non-selective beta-blockers cause bronchoconstriction — use cardioselective if needed)\n\n**Calcium Channel Blockers (CCBs):**\n- Dihydropyridines (amlodipine, nifedipine): primarily vasodilators; used for HTN and angina\n  - Monitor: peripheral edema (dose-dependent; most common side effect), reflex tachycardia (nifedipine)\n- Non-dihydropyridines (diltiazem, verapamil): cardiac and vascular; used for rate control in AFib\n  - Monitor: bradycardia, heart block; constipation (verapamil); DO NOT combine with beta-blocker (additive AV block)\n\n**Thiazide diuretics (hydrochlorothiazide, chlorthalidone):**\n- First-line for uncomplicated HTN\n- Monitor: hypokalemia, hyponatremia, hyperuricemia (gout risk), hyperglycemia\n- Monitor K⁺ regularly; dietary K⁺ supplementation or co-prescribe K⁺-sparing diuretic\n\n**Assessment:**\n- BP every shift in hospitalized patients; bilateral BPs on initial assessment\n- Orthostatic BP checks: supine, then after 1–3 minutes standing; > 20/10 mmHg drop = orthostatic hypotension\n- Hold antihypertensives and notify provider: SBP < 90 or > 20 mmHg below patient's baseline\n- Assess for end-organ damage signs: neurological, renal, visual"
+        },
+        {
+          "id": "clinical_pearls",
+          "heading": "Clinical Pearls",
+          "kind": "clinical_pearls",
+          "body": "- **HTN is usually asymptomatic** — the absence of symptoms does NOT mean BP is controlled. Screen every patient.\n- **ACEi cough vs angioedema**: cough is annoying but benign — switch to ARB. Angioedema (lip/tongue/throat swelling) is an emergency — stop ACEi, give epinephrine if severe, never re-challenge.\n- **Beta-blocker withdrawal**: never abruptly stop in cardiac patients — rebound hypertension and angina, even MI risk.\n- **HCTZ and potassium**: monitor K⁺ q1–3 months. For patients on digoxin: hypokalemia from thiazide dramatically increases digoxin toxicity risk.\n- **Hypertensive emergency: lower MAP by 10–20% in first hour, not to normal** — autoregulation is reset at high BP; rapid normalization causes cerebral/coronary ischemia.\n- **Cocaine-induced HTN**: beta-blockers are contraindicated (unopposed alpha → paradoxical HTN). Use phentolamine or benzodiazepines.\n- **Amlodipine edema**: peripheral edema from CCBs is often mistaken for heart failure — check if ankle edema started after amlodipine was initiated."
+        },
+        {
+          "id": "client_education",
+          "heading": "Patient Education",
+          "kind": "client_education",
+          "body": "**The DASH diet (Dietary Approaches to Stop Hypertension):**\n- Reduce sodium: target < 1,500–2,300 mg/day (US Heart and Stroke guidelines: < 2,000 mg/day)\n- Increase potassium, calcium, magnesium: fruits, vegetables, low-fat dairy, nuts, whole grains\n- Reduce saturated and total fats\n- Limit alcohol: ≤ 2 standard drinks/day for men, ≤ 1 for women\n\n**Lifestyle modifications (can reduce SBP 5–15 mmHg):**\n- Regular aerobic exercise: 150 min/week of moderate-intensity activity\n- Weight loss: 1 mmHg reduction per kg of body weight lost\n- Smoking cessation (reduces cardiovascular risk even if BP does not change acutely)\n- Stress management: sleep, relaxation techniques\n\n**Medication adherence:**\n- Never stop BP medications without provider guidance — rebound HTN crisis is dangerous\n- Take at the same time every day — consistency maintains 24-hour coverage\n- Home BP monitoring: teach proper technique; target < 135/85 mmHg at home\n- Report: dizziness when standing (orthostatic hypotension), swollen ankles (CCB), dry cough (ACEi), lip or tongue swelling (angioedema — call 911)"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- HTN = 'silent killer' — usually asymptomatic until end-organ damage. Stage 1: ≥130/80; Stage 2: ≥140/90\n- Primary (95%): RAAS activation + endothelial dysfunction + high SVR. Secondary: rule out with aldosterone:renin, catecholamines, renal imaging\n- Hypertensive emergency: BP > 180 + end-organ damage → IV labetalol/nicardipine, lower MAP 10–20% in first hour, NOT to normal\n- ACEi/ARBs: monitor K⁺, creatinine, cough; teratogenic. Beta-blockers: never stop abruptly; mask hypoglycemia signs\n- DASH diet + exercise + weight loss + smoking cessation = 5–15 mmHg reduction without medication\n- Hold antihypertensives: SBP < 90 or > 20 mmHg below patient baseline"
+        }
+      ],
+      "preTest": [
+        {
+          "question": "A client with HTN is prescribed lisinopril and develops a dry, nonproductive cough 2 weeks after starting the medication. What is the nurse's best response?",
+          "options": [
+            "Tell the client to stop the medication immediately and go to the emergency room",
+            "Reassure the client this is a known side effect; document and notify the provider to consider switching to an ARB",
+            "Advise the client to take the medication with food to prevent the cough",
+            "Instruct the client to add an OTC cough suppressant and continue the medication"
+          ],
+          "correct": 1,
+          "rationale": "Dry, nonproductive cough is a class effect of ACE inhibitors (10–15% of patients) caused by bradykinin accumulation. It is benign but bothersome. The nurse should document it and notify the provider, who will likely switch to an ARB (which does not cause this side effect). Stopping lisinopril unilaterally is inappropriate. The cough is not food-related. Cough suppressants do not address the cause."
+        },
+        {
+          "question": "A client with HTN is prescribed metoprolol. The nurse is about to administer the 0800 dose when the client's HR is 48 bpm and BP is 122/78 mmHg. What should the nurse do?",
+          "options": [
+            "Administer the metoprolol as ordered — the BP is controlled",
+            "Hold the metoprolol, document the finding, and notify the provider",
+            "Give half the dose to reduce the risk of further bradycardia",
+            "Administer the dose and recheck HR in 30 minutes"
+          ],
+          "correct": 1,
+          "rationale": "Metoprolol (a beta-blocker) should be held when HR < 50–55 bpm because it will further slow the heart rate and may cause hemodynamically significant bradycardia or heart block. The nurse should hold the dose, document the HR, and notify the provider. Giving a half-dose is not an appropriate nursing modification without an order."
+        }
+      ],
+      "postTest": [
+        {
+          "question": "A client arrives at the ED with BP 198/112 mmHg and reports severe headache, blurred vision, and confusion. CT of the head is negative. What nursing action is the priority?",
+          "options": [
+            "Administer oral antihypertensives and discharge with follow-up",
+            "Lower BP to normal (120/80) within the next 30 minutes with IV medication",
+            "Initiate continuous BP monitoring, notify provider for IV antihypertensive orders, lower MAP by 10–20% in the first hour",
+            "Place client in Trendelenburg to improve cerebral perfusion"
+          ],
+          "correct": 2,
+          "rationale": "This is a hypertensive emergency (BP > 180 + neurological symptoms). IV antihypertensives (labetalol, nicardipine) are indicated. The MAP goal is a 10–20% reduction in the first hour — NOT rapid normalization, which can cause cerebral ischemia in a patient whose autoregulation is adapted to high BP. Trendelenburg would worsen cerebral congestion."
+        },
+        {
+          "question": "A nurse is teaching a client about amlodipine for hypertension. Which side effect should the client report to the provider?",
+          "options": [
+            "Dry, nonproductive cough",
+            "Progressive swelling of the ankles and feet",
+            "Fatigue and decreased exercise tolerance",
+            "Increased urination in the morning"
+          ],
+          "correct": 1,
+          "rationale": "Peripheral edema is the most common dose-dependent side effect of dihydropyridine CCBs like amlodipine. Significant or progressive ankle/foot swelling should be reported — the dose may need adjustment or the drug switched. Dry cough is an ACEi side effect. Fatigue and bradycardia are beta-blocker effects. Morning polyuria is a diuretic effect."
+        },
+        {
+          "question": "Which assessment finding should cause the nurse to hold scheduled antihypertensive medications and notify the provider?",
+          "options": [
+            "BP 148/92 mmHg",
+            "BP 88/52 mmHg with lightheadedness on standing",
+            "HR 72 bpm",
+            "Serum potassium 4.2 mEq/L"
+          ],
+          "correct": 1,
+          "rationale": "A BP of 88/52 with orthostatic symptoms indicates hypotension — the antihypertensives have lowered the BP too much. Holding the medications and notifying the provider prevents further hemodynamic compromise. A BP of 148/92 warrants administration (Stage 2 HTN). HR 72 and K⁺ 4.2 are normal and are not reasons to hold."
+        }
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "us-rn-dysrhythmias",
+      "previewSectionCount": 2,
+      "seoTitle": "Dysrhythmias nursing: rhythm recognition, AFib, VF, pacemakers & NCLEX-RN Canada",
+      "seoDescription": "Complete RN lesson on dysrhythmias: AFib, SVT, VT, VF, heart blocks, synchronized cardioversion, defibrillation, antiarrhythmics, and NCLEX-RN priorities.",
+      "sections": [
+        {
+          "id": "introduction",
+          "heading": "Overview",
+          "kind": "introduction",
+          "body": "**Dysrhythmias** (also called arrhythmias) are abnormal heart rhythms arising from disturbances in impulse formation, conduction, or both. They range from benign (occasional PACs) to immediately life-threatening (ventricular fibrillation). For NCLEX-RN, the priority is to identify whether a rhythm is hemodynamically stable or unstable, recognize the most common rhythms, and implement the correct intervention.\n\n**Key decision framework:**\n1. Is the patient symptomatic (hypotension, chest pain, altered LOC, dyspnea)? = UNSTABLE → immediate intervention\n2. What is the rate? Tachycardia > 100; bradycardia < 60\n3. Is the rhythm regular or irregular?\n4. Are QRS complexes narrow (< 0.12 sec = supraventricular) or wide (> 0.12 sec = ventricular or aberrant conduction)?\n5. What is the P-wave relationship to QRS?\n\n**Normal sinus rhythm (NSR):** Rate 60–100, regular, P before every QRS, PR 0.12–0.20 sec, QRS < 0.12 sec."
+        },
+        {
+          "id": "pathophysiology_overview",
+          "heading": "High-Yield Rhythms: Mechanisms and Features",
+          "kind": "pathophysiology_overview",
+          "body": "**Atrial Fibrillation (AFib):** Most common sustained dysrhythmia. Multiple chaotic re-entrant circuits in the atria fire at 350–600 impulses/min. The AV node acts as a gatekeeper, allowing only some impulses through → irregularly irregular ventricular response. ECG: no discernible P waves (replaced by fibrillatory baseline), irregularly irregular R-R intervals, narrow QRS (unless aberrant conduction). The greatest risk is atrial thrombus formation (blood stagnates in non-contracting left atrial appendage) → embolic stroke. Management: rate control (beta-blockers, non-DHP CCBs, digoxin) or rhythm control (antiarrhythmics, cardioversion); anticoagulation (warfarin, DOACs) for stroke prevention based on CHA₂DS₂-VASc score.\n\n**Atrial Flutter:** Regular atrial rate ~300/min; AV node typically conducts every 2nd or 3rd impulse → ventricular rate 150 (2:1 block) or 100 (3:1 block). ECG: sawtooth flutter waves most visible in leads II, III, aVF; regular P waves at ~300/min. Treated similarly to AFib.\n\n**SVT (Supraventricular Tachycardia/AVNRT):** Narrow complex tachycardia, rate 150–250, often abrupt onset and termination. Mechanism: re-entrant circuit in or near AV node. Treatment: vagal maneuvers first (Valsalva, carotid massage — AVOID in elderly with carotid disease); if ineffective, adenosine 6 mg rapid IV push (warn patient of brief chest pressure/asystole feeling); if unstable, synchronized cardioversion.\n\n**VT (Ventricular Tachycardia):** Wide complex tachycardia (QRS > 0.12 sec), rate 100–250, AV dissociation. Sustained VT = > 30 sec. With pulse: stable → antiarrhythmics (amiodarone); unstable → synchronized cardioversion. Pulseless VT = cardiac arrest → defibrillation (unsynchronized).\n\n**VF (Ventricular Fibrillation):** Completely disorganized ventricular electrical activity, no organized contractions, no pulse → cardiac arrest. ECG: chaotic waveform of varying amplitude, no identifiable QRS. Treatment: immediate CPR + defibrillation (AED/manual defibrillator). Defibrillation is the only effective treatment — do NOT delay for medications.\n\n**Heart Blocks:**\n- 1st degree: prolonged PR (> 0.20 sec); all impulses conducted; no treatment needed\n- 2nd degree Type I (Wenckebach): progressively lengthening PR until QRS drops; benign; monitor\n- 2nd degree Type II (Mobitz II): constant PR, then abrupt QRS drop; may progress to 3rd degree; may need pacemaker\n- 3rd degree (Complete Heart Block): no relationship between P waves and QRS; atrial and ventricular rates are independent; almost always requires pacemaker\n\n**Asystole:** No electrical or mechanical activity ('flat line'). CPR immediately. No defibrillation (nothing to defibrillate). Epinephrine 1 mg IV q3–5 min. Treat reversible causes (4 Hs and 4 Ts)."
+        },
+        {
+          "id": "signs_symptoms",
+          "heading": "Signs & Symptoms",
+          "kind": "signs_symptoms",
+          "body": "**Stable dysrhythmia:**\n- Palpitations ('fluttering', 'skipping', 'racing' sensation)\n- Mild lightheadedness\n- Fatigue\n- Mild dyspnea on exertion\n- Normal or near-normal BP\n- Patient alert and oriented\n\n**Unstable dysrhythmia (hemodynamic compromise — requires IMMEDIATE intervention):**\n- Hypotension (SBP < 90 mmHg)\n- Severe chest pain or pressure\n- Syncope or near-syncope\n- Acute dyspnea at rest, SpO₂ dropping\n- Altered level of consciousness, confusion\n- Signs of shock: cool, clammy skin; oliguria; mottling\n\n**Specific rhythm findings:**\n- AFib: irregularly irregular pulse; pulse deficit (palpated pulse < auscultated apical rate); risk for embolic stroke\n- SVT: sudden onset racing heart, rates 150–250, may feel pounding in neck\n- Bradycardia: slow rate with or without hypotension; syncope; near-syncope on exertion (complete heart block)\n- VT/VF: pulseless → cardiac arrest presentation"
+        },
+        {
+          "id": "red_flags",
+          "heading": "Red Flags / Unstable Rhythms",
+          "kind": "red_flags",
+          "body": "**Initiate emergency response immediately:**\n- **Pulseless VT or VF**: defibrillate NOW, start CPR, call rapid response/code\n- **Asystole or PEA**: CPR + epinephrine, treat reversible causes (4 Hs: hypoxia, hypovolemia, hypo/hyperkalemia, hypothermia; 4 Ts: tension pneumothorax, tamponade, toxins, thrombosis)\n- **Unstable VT with pulse** (SBP < 90, altered LOC): synchronized cardioversion\n- **New sustained bradycardia < 40 with symptoms**: atropine 1 mg IV; prepare for transcutaneous pacing\n- **New AFib with rapid ventricular response + hypotension**: rate control OR cardioversion depending on duration (if > 48h, anticoagulate before cardioversion — thrombus risk)\n- **Any rhythm change with hemodynamic deterioration**: notify provider immediately, prepare for emergency intervention"
+        },
+        {
+          "id": "labs_diagnostics",
+          "heading": "Diagnostics / Labs",
+          "kind": "labs_diagnostics",
+          "body": "**ECG and monitoring:**\n- **12-lead ECG**: standard for rhythm diagnosis; identifies P waves, PR interval, QRS width, QT interval, ST changes\n- **Telemetry**: continuous monitoring in any dysrhythmia-at-risk patient\n- **Rhythm strip documentation**: document every dysrhythmia with a rhythm strip and nursing note\n- **Ambulatory monitoring (Holter/event monitor)**: outpatient continuous recording for paroxysmal dysrhythmias\n\n**Labs for dysrhythmia workup:**\n- **Electrolytes**: K⁺ (hypo/hyperkalemia causes VT, VF), Mg²⁺ (hypomagnesemia → refractory dysrhythmias), Ca²⁺\n- **Troponin**: new dysrhythmia may be caused by MI\n- **TSH**: hyperthyroidism causes AFib\n- **Digoxin level**: toxicity causes many dysrhythmias (PAT with block, bradyarrhythmias)\n- **Drug levels**: antiarrhythmics (amiodarone, quinidine toxicity prolongs QT)\n\n**Interventions requiring nursing preparation:**\n- **Synchronized cardioversion**: sedate, apply pads, ensure synchronization mode activated, deliver shock in sync with R wave; used for stable VT with pulse, atrial flutter, AFib\n- **Defibrillation**: unsynchronized; used for pulseless VT, VF; NO delay — do NOT wait for 12-lead ECG"
+        },
+        {
+          "id": "nursing_assessment_interventions",
+          "heading": "Nursing Responsibilities",
+          "kind": "nursing_assessment_interventions",
+          "body": "**Continuous monitoring duties:**\n- Apply telemetry correctly — lead placement matters\n- Respond to all alarms promptly — assess patient first, then silence alarm\n- Document rhythm every shift and with any change; note rate, regularity, P:QRS relationship\n- Report any new rhythm or change in rhythm with hemodynamic data to provider\n\n**Vagal maneuver procedure (for SVT):**\n- Attempt only with provider order and IV access in place\n- Carotid massage: rotate head, palpate carotid pulse, apply gentle pressure below jaw for 5–10 sec — avoid in elderly (stroke risk from carotid plaque)\n- Valsalva: ask patient to bear down or blow into a syringe\n- Modified Valsalva: supine, legs elevated immediately after strain (increases vagal tone)\n\n**Adenosine administration (SVT):**\n- 6 mg rapid IV push into antecubital vein — must be given very fast\n- Follow immediately with 20 mL NS flush\n- Warn patient: brief chest tightness, flushing, 'near-death' feeling for a few seconds — this is expected\n- Have crash cart at bedside; monitor continuously\n- If 6 mg ineffective: 12 mg × 2 may be given\n\n**Antiarrhythmic medication monitoring:**\n- **Amiodarone**: pulmonary toxicity (new cough, dyspnea), thyroid dysfunction (hypo or hyper), photosensitivity, hepatotoxicity, peripheral neuropathy; VERY long half-life (40–55 days); monitor PFTs, LFTs, TFTs regularly\n- **Metoprolol/diltiazem** (rate control in AFib): bradycardia, hypotension — hold if HR < 50 or SBP < 90\n- **Digoxin**: narrow therapeutic index; check level and K⁺ before each dose\n\n**Pacemaker nursing care:**\n- Know the pacemaker settings: rate, sensitivity, output\n- Assess for pacemaker function: telemetry shows pacemaker spike before P or QRS\n- Assess for failure to capture (spike without QRS) or failure to sense (pacemaker fires on patient's own beat)\n- Temporary transvenous pacemaker: assess insertion site, keep leads dry, handle with care\n- Teach patients with permanent pacemakers: avoid strong magnets (MRI precautions), carry pacemaker card"
+        },
+        {
+          "id": "clinical_pearls",
+          "heading": "Clinical Pearls",
+          "kind": "clinical_pearls",
+          "body": "- **Synchronized vs unsynchronized cardioversion**: synchronized uses the R-wave to time the shock and prevents accidental R-on-T (which can trigger VF). Use for any organized rhythm with a pulse. Defibrillation is unsynchronized — only for pulseless rhythms.\n- **Adenosine is diagnostic AND therapeutic** in SVT — if SVT terminates then recurs, it confirms the mechanism. If it doesn't terminate and the rhythm continues, the diagnosis may be VT (adenosine doesn't work on VT).\n- **AFib and stroke risk**: the CHA₂DS₂-VASc score guides anticoagulation. Score ≥ 2 (men) or ≥ 3 (women) → anticoagulation. Paroxysmal AFib carries the same stroke risk as persistent — anticoagulate based on score, not on whether the patient is 'in' AFib at the time of assessment.\n- **Wenckebach is usually benign** (vagally mediated, inferior MI); Type II and 3rd degree are serious — may progress to asystole and need pacing.\n- **Amiodarone contraindications**: iodine allergy (contains iodine), thyroid disease, pulmonary disease — review before administering."
+        },
+        {
+          "id": "client_education",
+          "heading": "Patient Education",
+          "kind": "client_education",
+          "body": "**Atrial Fibrillation patient education:**\n- Anticoagulation is lifelong (unless a specific reversible cause is identified and treated)\n- Know the signs of stroke: FAST (Face drooping, Arm weakness, Speech difficulty, Time to call 911)\n- Pulse self-monitoring: if prescribed, teach to check pulse for 60 seconds — report if irregular when previously regular, rate > 100 or < 50\n- Avoid triggers: excessive alcohol ('holiday heart'), caffeine overuse, sleep deprivation, dehydration\n- If on warfarin: INR monitoring, consistent vitamin K intake, bleeding precautions\n\n**Permanent pacemaker patient education:**\n- Carry pacemaker identification card at all times\n- Tell all healthcare providers, airport security, and MRI technicians\n- Avoid strong electromagnetic fields (some welding equipment, some power tools)\n- Modern MRI-safe pacemakers exist — provider will advise\n- Do not lift more than prescribed weight limit for 4–6 weeks post-implant (allows lead fixation)\n- Report: persistent hiccups (diaphragm pacing — lead migration), dizziness, syncope (device malfunction), swelling or redness at implant site (infection)"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- Rhythm interpretation: rate → regularity → P waves → PR interval → QRS width → relationship → interpret\n- Hemodynamic stability determines treatment urgency: hypotension + altered LOC + chest pain = UNSTABLE → immediate intervention\n- VF/pulseless VT: defibrillate immediately (unsynchronized). Stable VT with pulse: amiodarone or synchronized cardioversion. Asystole: CPR + epinephrine, no defibrillation.\n- SVT: vagal maneuvers → adenosine → synchronized cardioversion if unstable\n- AFib: rate or rhythm control + anticoagulation (CHA₂DS₂-VASc ≥ 2 in men)\n- Complete heart block, Mobitz II: prepare for pacemaker. Wenckebach: usually monitor only."
+        }
+      ],
+      "preTest": [
+        {
+          "question": "A client on telemetry suddenly has no visible QRS complexes — the monitor shows a chaotic waveform of varying amplitudes. The client is unresponsive and pulseless. What is the nurse's immediate action?",
+          "options": [
+            "Perform synchronized cardioversion",
+            "Administer adenosine 6 mg rapid IV push",
+            "Begin CPR and defibrillate as soon as possible",
+            "Obtain a 12-lead ECG before intervening"
+          ],
+          "correct": 2,
+          "rationale": "This is ventricular fibrillation — a pulseless cardiac arrest rhythm. Immediate CPR and defibrillation (unsynchronized) are the only effective interventions. Do NOT delay for a 12-lead ECG. Do NOT use synchronized cardioversion (requires organized rhythm with R wave). Adenosine treats SVT, not VF."
+        },
+        {
+          "question": "A nurse is about to administer adenosine 6 mg IV for confirmed SVT. Which action is most important immediately before administration?",
+          "options": [
+            "Have the client perform Valsalva maneuver",
+            "Ensure IV access, have crash cart at bedside, warn patient of expected transient chest tightness",
+            "Administer slowly over 3 minutes to prevent adverse effects",
+            "Hold the medication until a 12-lead ECG confirms SVT"
+          ],
+          "correct": 1,
+          "rationale": "Adenosine must be given as a RAPID IV push (1–2 seconds) into a large antecubital vein, immediately followed by 20 mL saline flush. It briefly causes asystole (patient may feel dying — warn them first). Crash cart must be at bedside. Giving it slowly renders it ineffective. If the 12-lead already confirms SVT and the provider has ordered adenosine, the 12-lead has been done."
+        }
+      ],
+      "postTest": [
+        {
+          "question": "A client with new-onset AFib is scheduled for elective synchronized cardioversion. Which nursing assessment is the priority before the procedure?",
+          "options": [
+            "Confirm the client has been NPO for 6 hours",
+            "Verify therapeutic anticoagulation — if AFib duration is unknown or > 48h, cardioversion carries risk of embolizing atrial thrombus",
+            "Check that the defibrillator is in unsynchronized mode",
+            "Administer adenosine to slow the rate before cardioversion"
+          ],
+          "correct": 1,
+          "rationale": "If AFib has been present for > 48 hours or duration is unknown, a thrombus may have formed in the left atrial appendage. Cardioversion can dislodge it causing stroke. The patient must be anticoagulated for ≥ 3 weeks before elective cardioversion, OR a transesophageal echocardiogram (TEE) must rule out thrombus first. If emergent cardioversion is needed for hemodynamic instability, proceed regardless — but anticoagulate as soon as possible."
+        },
+        {
+          "question": "A client with a new pacemaker set at a rate of 70 bpm has a telemetry reading showing a pacing spike followed by no QRS complex. What does the nurse suspect?",
+          "options": [
+            "Normal pacemaker function — spikes are expected before QRS",
+            "Failure to capture — the pacing stimulus is not depolarizing the ventricle",
+            "Failure to sense — the pacemaker is not detecting the patient's native beats",
+            "Pacemaker-mediated tachycardia — a common benign phenomenon"
+          ],
+          "correct": 1,
+          "rationale": "Failure to capture occurs when the pacing spike fires but the ventricle does not respond (no QRS). This is a pacemaker malfunction requiring notification of the provider. Possible causes: lead dislodgement, increased pacing threshold, electrolyte imbalance. In a patient who is pacemaker-dependent, this is dangerous."
+        },
+        {
+          "question": "A nurse assesses a client with AFib. The apical pulse is 92 bpm but the radial pulse is 74 bpm. How does the nurse document this finding?",
+          "options": [
+            "Pulse deficit of 18 bpm — consistent with AFib; document and monitor",
+            "The radial pulse must be incorrect — repeat the reading",
+            "Pulse deficit indicates cardiogenic shock — notify provider immediately",
+            "Bradycardia at the radial — hold all rate-control medications"
+          ],
+          "correct": 0,
+          "rationale": "A pulse deficit (apical rate > radial rate) occurs when some ventricular contractions are too weak to generate a palpable peripheral pulse — common in AFib. A deficit of 18 is expected in uncontrolled AFib. It is documented and monitored. It does not indicate shock (BP and clinical status should be assessed separately). Rate-control medications are not held based on pulse deficit alone."
+        },
+        {
+          "question": "A client with new-onset third-degree (complete) heart block has a HR of 32 bpm and BP of 72/40 mmHg. While the provider is being called, what should the nurse do?",
+          "options": [
+            "Administer atropine 0.5 mg IV; prepare for transcutaneous pacing",
+            "Apply defibrillator pads and prepare for immediate defibrillation",
+            "Administer adenosine 6 mg rapid IV push",
+            "Increase oxygen and observe — the rate may improve spontaneously"
+          ],
+          "correct": 0,
+          "rationale": "Complete heart block with hemodynamic compromise (HR 32, BP 72/40) requires immediate treatment. Atropine 1 mg IV (for symptomatic bradycardia) and transcutaneous pacing are first-line while definitive transvenous or permanent pacing is arranged. Defibrillation treats VF/pulseless VT, not heart block. Adenosine slows conduction further — contraindicated. Observation alone is inappropriate given hemodynamic instability."
+        }
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "us-rn-angina",
+      "previewSectionCount": 2,
+      "seoTitle": "Angina nursing: stable vs unstable, nitrates, PCI, risk factors & NCLEX-RN Canada",
+      "seoDescription": "Complete RN lesson on angina: stable vs unstable vs Prinzmetal, nitroglycerin protocol, beta-blockers, calcium channel blockers, and NCLEX-RN clinical priorities.",
+      "sections": [
+        {
+          "id": "introduction",
+          "heading": "Overview",
+          "kind": "introduction",
+          "body": "**Angina pectoris** is chest pain or discomfort caused by myocardial ischemia — a mismatch between myocardial oxygen supply and demand — without myocardial necrosis. It is the clinical presentation of obstructive coronary artery disease (CAD) and a major warning sign for impending MI.\n\n**Three main types:**\n- **Stable angina**: predictable; provoked by exertion or emotional stress; relieved by rest or nitroglycerine within 5 minutes; caused by fixed atherosclerotic stenosis\n- **Unstable angina (ACS)**: new-onset pain at rest, increasing frequency/severity, or pain not relieved by 3 nitroglycerin tablets; caused by plaque rupture with partial occlusion; medical emergency\n- **Prinzmetal (variant/vasospastic) angina**: occurs at rest, often at night; caused by coronary artery spasm; transient ST elevation during attacks; treated with CCBs and nitrates (NOT beta-blockers)\n\nFor NCLEX-RN: differentiate stable from unstable, implement the nitroglycerine protocol correctly, know when to escalate."
+        },
+        {
+          "id": "pathophysiology_overview",
+          "heading": "Pathophysiology",
+          "kind": "pathophysiology_overview",
+          "body": "**Oxygen supply-demand mismatch.** The myocardium has very high oxygen extraction at rest (~75% vs ~25% for skeletal muscle) and almost no oxygen reserve. Any increase in demand — from exertion, emotional stress, tachycardia, or hypertension — must be met immediately by increased coronary blood flow. When coronary arteries are narrowed by atherosclerotic plaque, this compensatory increase in flow is limited.\n\n**Stable angina mechanism.** Fixed atherosclerotic stenosis reduces coronary blood flow. During exertion or stress, oxygen demand increases but supply cannot increase proportionally → ischemia → anaerobic metabolism → lactic acid accumulation → stimulates C-fiber pain receptors → anginal symptoms. Rest or nitroglycerine (which dilates coronary arteries and reduces preload/afterload) restores the supply-demand balance. No myocardial necrosis occurs — this distinguishes angina from MI (troponin is NEGATIVE in stable angina).\n\n**Unstable angina mechanism.** A vulnerable atherosclerotic plaque ruptures or erodes, exposing its thrombogenic contents. Platelet aggregation and partial thrombus formation reduce coronary blood flow further — enough to cause ischemia even at rest, without complete occlusion (which would cause STEMI). This is an ACS (acute coronary syndrome) — unstable angina and NSTEMI lie on a spectrum; the troponin determines which: negative troponin = unstable angina; elevated troponin = NSTEMI.\n\n**Prinzmetal angina.** Coronary artery spasm (transient severe narrowing) reduces blood flow without fixed plaque obstruction. Occurs at rest, often at night. ST elevation on ECG during attack (unlike stable angina). Triggers: cold, medications (cocaine, ephedrine), smoking, hyperventilation. Beta-blockers can worsen spasm by allowing unopposed alpha-adrenergic vasoconstriction — contraindicated. CCBs and nitrates are the treatment."
+        },
+        {
+          "id": "signs_symptoms",
+          "heading": "Signs & Symptoms",
+          "kind": "signs_symptoms",
+          "body": "**Stable angina:**\n- Substernal pressure, squeezing, heaviness, or tightness\n- Predictably provoked by exertion or emotional stress\n- Usually < 5–20 minutes duration\n- Relieved by rest or sublingual nitroglycerine within 5 minutes\n- May radiate: left arm, jaw, shoulder, neck\n- Diaphoresis, dyspnea may accompany\n\n**Unstable angina (ACS):**\n- New onset (no prior history) of angina at low exertion or rest\n- Changing pattern: previously stable angina that is now more frequent, more severe, or provoked by less exertion\n- Lasting > 20 minutes without full relief\n- Not relieved by 3 nitroglycerins in 15 minutes\n- May be accompanied by diaphoresis, nausea, dyspnea\n\n**Prinzmetal angina:**\n- Occurs at rest, often at night or early morning (vagal tone peak)\n- Transient ST elevation during attack, resolving after spasm breaks\n- No fixed activity pattern\n\n**Key distinction:** Stable angina resolves with rest or nitroglycerine and has a NEGATIVE troponin. Unstable angina does not reliably respond to nitroglycerin at rest. Both have negative troponin — if troponin is positive, it is NSTEMI, not angina."
+        },
+        {
+          "id": "red_flags",
+          "heading": "Red Flags / Unstable Angina",
+          "kind": "red_flags",
+          "body": "**Escalate immediately — these indicate unstable angina or ACS:**\n- Angina at rest, new onset, or with very minimal activity\n- Pain lasting > 20 minutes without relief\n- No relief after 3 sublingual nitroglycerine doses 5 minutes apart\n- Chest pain + diaphoresis, nausea, or vomiting\n- New ST changes on ECG (elevation or depression)\n- Elevated troponin (now NSTEMI, not just unstable angina)\n- Hypotension or signs of cardiogenic shock\n\n**Do NOT:**\n- Give nitroglycerine if SBP < 90 mmHg\n- Give nitroglycerine if patient has taken sildenafil (Viagra), tadalafil (Cialis), or vardenafil (Levitra) within 24–48 hours — profound hypotension risk\n- Give nitroglycerine in suspected inferior/right ventricular MI"
+        },
+        {
+          "id": "labs_diagnostics",
+          "heading": "Diagnostics / Labs",
+          "kind": "labs_diagnostics",
+          "body": "**Confirming and ruling out MI:**\n- **Troponin** (high-sensitivity): negative in angina. If positive → NSTEMI. Serial troponins 0h, 1h, 3h to rule out MI.\n- **ECG**: stable angina may show transient ST depression or T-wave inversion during pain, returning to normal with relief. Unstable angina: persistent ST/T changes.\n- **Exercise stress testing**: for stable angina evaluation — induces ischemia under monitored conditions; contraindicated in unstable angina\n- **Coronary angiography**: gold standard for identifying and characterizing stenoses; allows PCI at same sitting if significant lesions found\n- **CXR**: rule out other causes of chest pain (pneumonia, pneumothorax)\n\n**Labs:**\n- CBC: anemia worsens angina by reducing O₂ delivery\n- Fasting lipids: hyperlipidemia drives atherosclerosis\n- Fasting glucose, HgbA1c: diabetes accelerates CAD\n- Renal function: needed before contrast for angiography"
+        },
+        {
+          "id": "nursing_assessment_interventions",
+          "heading": "Nursing Responsibilities",
+          "kind": "nursing_assessment_interventions",
+          "body": "**Nitroglycerine protocol (sublingual, for active chest pain):**\n1. Assess and document pain: location, quality, severity (0–10), radiation, associated symptoms\n2. Obtain baseline vital signs (BP, HR, SpO₂)\n3. Administer NTG 0.4 mg SL; instruct patient to hold under tongue\n4. Reassess pain in 5 minutes\n5. If pain persists: 2nd NTG 0.4 mg SL; reassess in 5 minutes\n6. If pain persists: 3rd NTG 0.4 mg SL; reassess\n7. If pain persists after 3 tablets: notify provider IMMEDIATELY and prepare for 12-lead ECG, IV access, and possible emergency management\n\n**Before each nitroglycerine dose:**\n- Check BP: hold if SBP < 90 mmHg\n- Ask about PDE-5 inhibitors (sildenafil, tadalafil, vardenafil) — absolute contraindication within 24–48 hours\n- Instruct patient to remain seated or lying (hypotension risk)\n\n**Long-term antianginal medications:**\n- **Beta-blockers** (metoprolol, atenolol): reduce HR and contractility → decreased O₂ demand; first-line for stable angina; do not stop abruptly\n- **Long-acting nitrates** (isosorbide dinitrate/mononitrate): prophylactic; require nitrate-free interval (10–12 hours/day) to prevent tolerance\n- **CCBs** (amlodipine, diltiazem): vasodilate coronary arteries; used when beta-blockers contraindicated or for Prinzmetal\n- **Ranolazine**: late sodium current inhibitor; reduces ischemia without affecting heart rate or BP; used as add-on therapy\n- **Aspirin 81 mg daily**: antiplatelet — reduces thrombotic risk in all CAD patients\n- **Statins**: plaque stabilization and LDL reduction\n\n**Post-PCI nursing care:**\n- Femoral access site: keep leg straight 2–6 hours; assess for bleeding, hematoma, femoral pseudoaneurysm\n- Radial access site: ensure hemostatic band in place; assess circulation (pallor, paresthesia, capillary refill)\n- Monitor: HR, BP, ECG, access site, distal pulses\n- Dual antiplatelet therapy post-stent: aspirin + P2Y12 inhibitor (12 months for DES)"
+        },
+        {
+          "id": "clinical_pearls",
+          "heading": "Clinical Pearls",
+          "kind": "clinical_pearls",
+          "body": "- **3 tablets in 15 minutes, no relief = call 911 (or rapid response in hospital).** This is the patient education threshold — and the nursing escalation threshold too.\n- **Long-acting nitrates require a nitrate-free interval** to prevent tolerance. Isosorbide dinitrate is typically given bid (not qid) with the second dose by 5pm. Overnight patch removal applies the same principle.\n- **Prinzmetal angina: beta-blockers are contraindicated.** Blocking beta₂ receptors (vasodilatory) allows unopposed alpha vasoconstriction — worsen spasm. Use CCBs and nitrates.\n- **Nitroglycerine storage**: tablet form: dark glass container, away from heat/moisture; replace every 6 months; burning sensation under tongue confirms potency.\n- **Troponin separates angina from NSTEMI** — this is the critical biomarker decision point.\n- **Stable angina + negative exercise stress test** = low-risk; optimize medical therapy. If stress test positive → angiography."
+        },
+        {
+          "id": "client_education",
+          "heading": "Patient Education",
+          "kind": "client_education",
+          "body": "**Nitroglycerine home use:**\n- At first sign of angina: sit or lie down, take 1 NTG tablet under tongue, do not swallow\n- If pain persists after 5 min: take 2nd tablet\n- After 3rd tablet with no relief: call 911 immediately — do not drive yourself\n- May experience headache, dizziness, or flushing — normal vasodilatory effects; sit to avoid falls\n- Keep tablet in original dark glass bottle, away from heat, light, and moisture\n- Replace every 6 months — expired NTG loses potency\n\n**When to seek emergency care:**\n- Pain at rest (unusual for stable angina)\n- Pain worse than usual or different character\n- Pain not relieved by 3 tablets\n- Chest pain + shortness of breath, sweating, nausea\n\n**Risk factor modification:**\n- Smoking cessation: single most effective intervention\n- Blood pressure control, LDL lowering (statins), diabetes management\n- Regular moderate exercise as tolerated (but stop at onset of angina)\n- Cardiac rehabilitation after revascularization"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- Stable angina: exertion-provoked, relieved by rest/NTG in 5 min, NEGATIVE troponin. Unstable angina: rest pain, not relieved by 3 NTG, ACS territory.\n- Nitroglycerin protocol: 0.4 mg SL q5 min × 3; hold if SBP < 90, PDE-5 inhibitors taken in 24–48h; after 3 tabs no relief → escalate immediately\n- Prinzmetal: ST elevation at rest, nocturnal; treat with CCBs + nitrates; beta-blockers CONTRAINDICATED\n- Long-acting nitrate: require nitrate-free interval to prevent tolerance\n- Post-ACS: aspirin + statin + beta-blocker + ACEi; PCI: DAPT for 12 months post-DES\n- Differentiate: stable angina (troponin –) vs NSTEMI (troponin +) — the same pain, different biomarker"
+        }
+      ],
+      "preTest": [
+        {
+          "question": "A client with stable angina is experiencing chest pain rated 6/10 while at rest. He has already taken two sublingual nitroglycerine tablets 5 minutes apart with no relief. What is the nurse's next action?",
+          "options": [
+            "Wait an additional 10 minutes before giving the 3rd tablet",
+            "Administer a 3rd nitroglycerine 0.4 mg SL; if no relief after 5 more minutes, notify the provider and initiate emergency protocols",
+            "Administer IV morphine for pain relief",
+            "Reassure the client and encourage deep breathing exercises"
+          ],
+          "correct": 1,
+          "rationale": "After 2 nitroglycerins at 5-minute intervals with no relief, the 3rd dose is administered. If pain persists after the 3rd tablet, the provider must be notified immediately and emergency management initiated — this presentation suggests unstable angina or ACS. Waiting longer before giving the 3rd tablet is incorrect. Morphine is ordered by the provider, not independently administered without completing the NTG protocol first."
+        }
+      ],
+      "postTest": [
+        {
+          "question": "A client with a history of Prinzmetal angina is prescribed a calcium channel blocker. The client asks why they cannot take a beta-blocker like their friend with 'regular' angina. The nurse correctly explains:",
+          "options": [
+            "Beta-blockers are equally effective for Prinzmetal angina but have more side effects",
+            "Beta-blockers block beta-2 receptors, eliminating vasodilatory tone and allowing unopposed alpha-mediated vasoconstriction, which worsens coronary spasm",
+            "Beta-blockers interfere with the ECG findings in Prinzmetal angina",
+            "Prinzmetal angina is a chronic condition, and beta-blockers are only for acute MI"
+          ],
+          "correct": 1,
+          "rationale": "Beta-blockers are contraindicated in Prinzmetal angina. By blocking vasodilatory beta-2 receptors in coronary arteries, they allow unopposed alpha-adrenergic vasoconstriction, which can worsen or trigger coronary spasm. CCBs (diltiazem, amlodipine) and nitrates are used instead — they promote coronary vasodilation."
+        },
+        {
+          "question": "A client was prescribed isosorbide mononitrate twice daily for stable angina. He reports severe headaches and wonders why he sometimes gets angina overnight. What does the nurse assess first?",
+          "options": [
+            "Whether the client is taking both doses within 8 hours of each other",
+            "The client's BP before each dose",
+            "Whether the second dose is being taken by 5 PM to allow a nitrate-free interval",
+            "Whether the client is on a statin"
+          ],
+          "correct": 2,
+          "rationale": "Long-acting nitrates require a nitrate-free interval (typically 10–12 hours) to prevent tolerance. If the second dose is taken too late (after 5–7 PM), there is no drug-free period overnight when the drug has worn off. During this 'washout' interval, angina may occur — especially in Prinzmetal patients with nocturnal spasm. The client should take the second dose by 5 PM and accept some overnight coverage gap, managed with sublingual NTG PRN."
+        },
+        {
+          "question": "A nurse is preparing a post-PCI client (right radial approach) for discharge. Which assessment finding requires immediate notification of the provider?",
+          "options": [
+            "Mild bruising around the bandage site",
+            "Tingling and pallor of the right hand with absent radial pulse",
+            "Client reports occasional mild soreness at the wrist",
+            "Client has some difficulty making a tight fist"
+          ],
+          "correct": 1,
+          "rationale": "After radial artery access for PCI, the radial artery may develop a thrombus causing hand ischemia. Tingling, pallor, and absent radial pulse indicate acute arterial occlusion — a limb-threatening emergency requiring immediate notification and vascular assessment. Mild bruising, soreness, and mild grip weakness are expected temporary findings."
+        }
+      ]
     }
   ]
 }

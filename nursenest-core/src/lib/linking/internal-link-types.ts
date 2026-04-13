@@ -96,6 +96,14 @@ export type LinkContext = {
 
 // ── Candidates ────────────────────────────────────────────────────────────────
 
+/**
+ * Match quality of a resolved candidate.
+ * - strong   — exact topic key match with pathway alignment
+ * - moderate — exact topic key with no/any pathway, or synonym hint match
+ * - weak     — body-system fallback only (suppressed when stronger match exists)
+ */
+export type MatchStrength = "strong" | "moderate" | "weak";
+
 /** A resolved, ranked link candidate ready for rendering. */
 export type LinkCandidate = {
   kind: LinkTargetKind;
@@ -104,8 +112,10 @@ export type LinkCandidate = {
   href: string;
   /** Chosen anchor text (from anchorVariants, rotated for natural variation). */
   anchorText: string;
-  /** 1 = highest priority. Used to sort and cap results. */
+  /** Lower = higher priority. */
   score: number;
+  /** Match quality — use this to enforce a minimum bar in the UI. */
+  strength: MatchStrength;
   /** Whether this candidate matched the requested locale. */
   localeMatch: boolean;
   /** Whether this candidate matched the requested pathway. */
