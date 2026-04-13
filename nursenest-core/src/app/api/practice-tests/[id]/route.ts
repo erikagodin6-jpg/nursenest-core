@@ -52,6 +52,10 @@ function asIdList(raw: unknown): string[] {
   return raw.filter((x): x is string => typeof x === "string" && x.length > 4);
 }
 
+function toJsonObject(value: unknown): object {
+  return JSON.parse(JSON.stringify(value ?? {})) as object;
+}
+
 export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string }> }) {
   const gate = await practiceTestRouteDeps.requireSubscriberSession();
   if (!gate.ok) return gate.response;
@@ -400,8 +404,8 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
           answers: merged as object,
           cursorIndex,
           completedAt: new Date(),
-          results: resultsFinal as object,
-          adaptiveState: adv.adaptiveState as object,
+          results: toJsonObject(resultsFinal),
+          adaptiveState: toJsonObject(adv.adaptiveState),
           questionIds: ids as object,
           ...(elapsedMs !== undefined ? { elapsedMs } : {}),
         },
@@ -412,8 +416,16 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
       } catch {
         topicStatsSynced = false;
       }
-      practiceTestRouteDeps.capturePracticeTestCompletedAnalytics(gate.userId, gate.entitlement, cfg, resultsFinal);
-      practiceTestRouteDeps.captureCatCoachGenerationAnalytics(gate.userId, gate.entitlement, cfg, resultsFinal);
+      try {
+        practiceTestRouteDeps.capturePracticeTestCompletedAnalytics(gate.userId, gate.entitlement, cfg, resultsFinal);
+        practiceTestRouteDeps.captureCatCoachGenerationAnalytics(gate.userId, gate.entitlement, cfg, resultsFinal);
+      } catch (error) {
+        safeServerLog("cat_runner", "cat_completion_analytics_failed", {
+          event: "cat_completion_analytics_failed",
+          practiceTestId: id.slice(0, 16),
+          reason: error instanceof Error ? error.message : "unknown",
+        });
+      }
       return NextResponse.json({
         ok: true,
         results: resultsFinal,
@@ -438,46 +450,66 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
 
   if (parsed.data.action === "complete") {
     if (cfg.selectionMode === "cat") {
-      const fin = await practiceTestRouteDeps.finalizeCatPracticeTest(ids, merged, gate.entitlement, row.adaptiveState);
-      const answeredCount = ids.filter((qid) => merged[qid] !== undefined).length;
-      const resultsWithMeta = withCatSessionResultMeta(fin.results, cfg, answeredCount);
-      let resultsFinal = resultsWithMeta;
       try {
-        resultsFinal = await practiceTestRouteDeps.enrichPracticeTestResultsWithCatCoach(
-          resultsWithMeta,
-          fin.adaptiveState,
-          cfg,
-          gate.entitlement,
-          { practiceTestId: id },
-        );
+        const fin = await practiceTestRouteDeps.finalizeCatPracticeTest(ids, merged, gate.entitlement, row.adaptiveState);
+        const answeredCount = ids.filter((qid) => merged[qid] !== undefined).length;
+        const resultsWithMeta = withCatSessionResultMeta(fin.results, cfg, answeredCount);
+        let resultsFinal = resultsWithMeta;
+        try {
+          resultsFinal = await practiceTestRouteDeps.enrichPracticeTestResultsWithCatCoach(
+            resultsWithMeta,
+            fin.adaptiveState,
+            cfg,
+            gate.entitlement,
+            { practiceTestId: id },
+          );
+        } catch (error) {
+          safeServerLog("cat_runner", "cat_results_enrichment_failed", {
+            event: "cat_results_enrichment_failed",
+            practiceTestId: id.slice(0, 16),
+            reason: error instanceof Error ? error.message : "unknown",
+          });
+        }
+        await practiceTestRouteDeps.updatePracticeTest({
+          where: { id },
+          data: {
+            status: PracticeTestStatus.COMPLETED,
+            answers: merged as object,
+            cursorIndex,
+            completedAt: new Date(),
+            results: toJsonObject(resultsFinal),
+            adaptiveState: toJsonObject(fin.adaptiveState),
+            ...(elapsedMs !== undefined ? { elapsedMs } : {}),
+          },
+        });
+        let topicStatsSynced = true;
+        try {
+          await practiceTestRouteDeps.recordTopicOutcomesFromPracticeTest(gate.userId, ids, merged, gate.entitlement);
+        } catch {
+          topicStatsSynced = false;
+        }
+        try {
+          practiceTestRouteDeps.capturePracticeTestCompletedAnalytics(gate.userId, gate.entitlement, cfg, resultsFinal);
+          practiceTestRouteDeps.captureCatCoachGenerationAnalytics(gate.userId, gate.entitlement, cfg, resultsFinal);
+        } catch (error) {
+          safeServerLog("cat_runner", "cat_completion_analytics_failed", {
+            event: "cat_completion_analytics_failed",
+            practiceTestId: id.slice(0, 16),
+            reason: error instanceof Error ? error.message : "unknown",
+          });
+        }
+        return NextResponse.json({ ok: true, results: resultsFinal, topicStatsSynced });
       } catch (error) {
-        safeServerLog("cat_runner", "cat_results_enrichment_failed", {
-          event: "cat_results_enrichment_failed",
+        safeServerLog("cat_runner", "cat_complete_failed", {
+          event: "cat_complete_failed",
           practiceTestId: id.slice(0, 16),
           reason: error instanceof Error ? error.message : "unknown",
         });
+        return NextResponse.json(
+          { error: `Unable to complete exam: ${error instanceof Error ? error.message : "Unexpected error"}` },
+          { status: 400 },
+        );
       }
-      await practiceTestRouteDeps.updatePracticeTest({
-        where: { id },
-        data: {
-          status: PracticeTestStatus.COMPLETED,
-          answers: merged as object,
-          cursorIndex,
-          completedAt: new Date(),
-          results: resultsFinal as object,
-          adaptiveState: fin.adaptiveState as object,
-          ...(elapsedMs !== undefined ? { elapsedMs } : {}),
-        },
-      });
-      let topicStatsSynced = true;
-      try {
-        await practiceTestRouteDeps.recordTopicOutcomesFromPracticeTest(gate.userId, ids, merged, gate.entitlement);
-      } catch {
-        topicStatsSynced = false;
-      }
-      practiceTestRouteDeps.capturePracticeTestCompletedAnalytics(gate.userId, gate.entitlement, cfg, resultsFinal);
-      practiceTestRouteDeps.captureCatCoachGenerationAnalytics(gate.userId, gate.entitlement, cfg, resultsFinal);
-      return NextResponse.json({ ok: true, results: resultsFinal, topicStatsSynced });
     }
 
     const results = await practiceTestRouteDeps.computePracticeTestResults(ids, merged, gate.entitlement);
