@@ -5,17 +5,20 @@
  *
  * 1. Mini CAT — lightweight adaptive exam:
  *    - 10–15 questions, ~10 minutes
- *    - Ability scale 1.0–3.0 (maps directly to difficulty 1/2/3)
- *    - Difficulty-weighted ability updates + ±0.1 jitter:
+ *    - Ability scale 1.0–3.0 (maps directly to difficulty 1/2/3), hard-clamped
+ *    - Difficulty-weighted ability updates:
  *        easy correct +0.3, medium +0.5, hard +0.7
  *        easy wrong   −0.3, medium −0.5, hard −0.7
- *    - Jitter (±0.1) prevents mechanical predictability
+ *    - Jitter (0–0.1, same direction as base delta) adds subtle variation
+ *      without ever reversing the direction of adjustment
+ *    - Streak dampening: 3+ consecutive same-direction answers → ×0.85
+ *      to prevent unrealistic spikes after long runs
  *    - Early stop: after 8+ questions if last 5 are all correct or all wrong
  *    - Performance level: Beginner (<50% correct), Developing (50–74%), Strong (≥75%)
  *
  * 2. Practice Exam — fixed non-adaptive set:
  *    - 10 questions per module, balanced difficulty (40/40/20)
- *    - Returns same score + weak areas (capped at top 3)
+ *    - Weak areas: only modules with ≥2 attempted questions, capped at top 3
  *
  * Both modes return `PreNursingExamResult` at completion.
  * All logic is pure / stateless — no network calls, no DB.
@@ -79,18 +82,38 @@ const MINI_CAT_MIN_ABILITY = 1.0;
 const MINI_CAT_MAX_ABILITY = 3.0;
 const MINI_CAT_MAX_QUESTIONS = 15;
 const MINI_CAT_EARLY_STOP_AFTER = 8;
-const MINI_CAT_JITTER = 0.1; // small random nudge to prevent mechanical pattern
+/** Max jitter magnitude — always added in the same direction as the base delta. */
+const MINI_CAT_JITTER = 0.1;
+/** Streak dampening factor applied when 3+ consecutive same-direction answers. */
+const MINI_CAT_STREAK_DAMPEN = 0.85;
+/** Minimum streak length before dampening activates. */
+const MINI_CAT_STREAK_THRESHOLD = 3;
 
 /**
- * Difficulty-weighted ability delta.
+ * Difficulty-weighted ability deltas.
  * Correct on a hard question moves the needle more than correct on an easy one.
- * Jitter (±MINI_CAT_JITTER) adds subtle unpredictability without instability.
  */
 const ABILITY_DELTA: Record<1 | 2 | 3, { correct: number; wrong: number }> = {
   1: { correct:  0.3, wrong: -0.3 },
   2: { correct:  0.5, wrong: -0.5 },
   3: { correct:  0.7, wrong: -0.7 },
 };
+
+/**
+ * Count the current consecutive streak of same-outcome answers at the tail of
+ * the answer list. Returns a positive number for correct streaks, negative for
+ * wrong streaks (so the caller knows direction).
+ */
+function currentStreak(answers: MiniCatAnswer[]): number {
+  if (answers.length === 0) return 0;
+  const last = answers[answers.length - 1]!;
+  let count = 0;
+  for (let i = answers.length - 1; i >= 0; i--) {
+    if (answers[i]!.correct === last.correct) count++;
+    else break;
+  }
+  return last.correct ? count : -count;
+}
 
 // ── Mini CAT engine functions ──────────────────────────────────────────────────
 
@@ -147,9 +170,14 @@ export function selectNextQuestion(
 /**
  * Record a graded answer and update the ability estimate.
  *
- * Uses difficulty-weighted deltas so a correct hard answer lifts ability more
- * than a correct easy answer. A small jitter (±0.1) prevents mechanical step
- * patterns without destabilising the estimate.
+ * Update rules (applied in order):
+ * 1. Base delta from difficulty table (correct → positive, wrong → negative).
+ * 2. Jitter (0–MINI_CAT_JITTER) in the SAME direction as the base delta —
+ *    never reverses the sign of the adjustment.
+ * 3. Streak dampening: if there are ≥3 consecutive same-outcome answers
+ *    (including this one), multiply the full delta by MINI_CAT_STREAK_DAMPEN
+ *    to prevent runaway ability estimates.
+ * 4. Clamp result to [MINI_CAT_MIN_ABILITY, MINI_CAT_MAX_ABILITY].
  *
  * Returns a new state object (immutable-style).
  */
@@ -160,9 +188,23 @@ export function recordAnswer(
 ): MiniCatState {
   const deltas = ABILITY_DELTA[question.difficulty];
   const base = correct ? deltas.correct : deltas.wrong;
-  // Jitter: random in [-MINI_CAT_JITTER, +MINI_CAT_JITTER]
-  const jitter = (Math.random() * 2 - 1) * MINI_CAT_JITTER;
-  const delta = base + jitter;
+
+  // Jitter: always in the same direction as base (0 to +MINI_CAT_JITTER in magnitude).
+  // sign(base) * random(0, MINI_CAT_JITTER)
+  const jitter = Math.sign(base) * Math.random() * MINI_CAT_JITTER;
+
+  // Accumulate the new answer to check streak (including this answer)
+  const prospectiveAnswers: MiniCatAnswer[] = [
+    ...state.answers,
+    { questionId: question.id, moduleSlug: question.moduleSlug, correct, difficulty: question.difficulty },
+  ];
+  const streak = currentStreak(prospectiveAnswers);
+  const streakLen = Math.abs(streak);
+  const dampen = streakLen >= MINI_CAT_STREAK_THRESHOLD ? MINI_CAT_STREAK_DAMPEN : 1.0;
+
+  const delta = (base + jitter) * dampen;
+
+  // Clamp to valid range after every update
   const newAbility = Math.max(
     MINI_CAT_MIN_ABILITY,
     Math.min(MINI_CAT_MAX_ABILITY, state.abilityEstimate + delta),
@@ -173,15 +215,8 @@ export function recordAnswer(
 
   return {
     abilityEstimate: newAbility,
-    answers: [
-      ...state.answers,
-      {
-        questionId: question.id,
-        moduleSlug: question.moduleSlug,
-        correct,
-        difficulty: question.difficulty,
-      },
-    ],
+    // prospectiveAnswers already includes the new answer
+    answers: prospectiveAnswers,
     seenIds: newSeenIds,
   };
 }
@@ -268,9 +303,11 @@ function buildWeakAreas(answers: AnswerRecord[]): { weakAreas: WeakArea[]; stren
     }))
     .sort((a, b) => a.accuracyPct - b.accuracyPct);
 
-  // Cap weak areas at top 3 (lowest accuracy) to avoid overload
-  const weakAreas = all.filter((a) => a.accuracyPct < 60).slice(0, 3);
-  const strengths = all.filter((a) => a.accuracyPct >= 75);
+  // Only flag a module as weak if ≥2 questions were attempted (1 question is not enough signal).
+  // Cap at top 3, sorted by lowest accuracy.
+  const weakAreas = all.filter((a) => a.totalCount >= 2 && a.accuracyPct < 60).slice(0, 3);
+  // Strengths: ≥2 attempted and ≥75% accuracy
+  const strengths = all.filter((a) => a.totalCount >= 2 && a.accuracyPct >= 75);
 
   return { weakAreas, strengths };
 }
