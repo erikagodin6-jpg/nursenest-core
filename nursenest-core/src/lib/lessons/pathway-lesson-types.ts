@@ -171,6 +171,8 @@ export type PathwayLessonLocaleMeta = {
    * on top of the resolved lesson (audit trail for file-based translations).
    */
   educationalOverlayApplied?: boolean;
+  /** At least one overlay string failed quality checks and was reverted to English. */
+  overlayTranslationFallback?: boolean;
 };
 
 export type PathwayLessonRecord = {

@@ -11,6 +11,8 @@ import type {
   PathwayLessonSection,
 } from "@/lib/lessons/pathway-lesson-types";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { evaluateEducationalTranslation } from "@/lib/i18n/educational-translation-quality";
+import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 
 /** Per-question overlay keyed by `ExamQuestion.id` (stable). */
 export type QuestionEducationalOverlay = {

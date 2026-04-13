@@ -40,7 +40,7 @@ export async function GET() {
       loadLearnerStudyNextBlock(userId, entitlement).catch(() => null),
       loadUnifiedTopicPerformance(userId, entitlement, 14).catch(() => null),
       loadUnifiedReviewData(userId, entitlement).catch(() => null),
-      loadMistakeNotebook(userId).catch(() => [] as Awaited<ReturnType<typeof loadMistakeNotebook>>),
+      loadMistakeNotebook(userId).catch(() => []),
       prisma.learnerNote
         .findMany({
           where: { userId },
@@ -113,16 +113,23 @@ export async function GET() {
           message: "Open your review queue when you are ready.",
         };
 
-    const plannedLessons =
-      studyNext?.secondary
-        .filter((a) => a.type === "continue_pathway_lesson" || a.type === "weak_topic_lesson" || a.href.includes("/lessons"))
-        .slice(0, 6)
-        .map((a) => ({ title: a.title, href: a.href })) ?? [];
-    if (studyNext?.continueWhere && !plannedLessons.some((p) => p.href === studyNext.continueWhere.href)) {
-      plannedLessons.unshift({
-        title: studyNext.continueWhere.title,
-        href: studyNext.continueWhere.href,
-      });
+    const plannedLessons: { title: string; href: string }[] = [];
+    if (studyNext?.continueWhere) {
+      plannedLessons.push({ title: studyNext.continueWhere.title, href: studyNext.continueWhere.href });
+    }
+    const primary = studyNext?.primary;
+    if (
+      primary &&
+      (primary.type === "continue_pathway_lesson" || primary.type === "weak_topic_lesson") &&
+      !plannedLessons.some((p) => p.href === primary.href)
+    ) {
+      plannedLessons.unshift({ title: primary.title, href: primary.href });
+    }
+    for (const a of studyNext?.secondary ?? []) {
+      if (a.type !== "continue_pathway_lesson" && a.type !== "weak_topic_lesson") continue;
+      if (plannedLessons.some((p) => p.href === a.href)) continue;
+      plannedLessons.push({ title: a.title, href: a.href });
+      if (plannedLessons.length >= 8) break;
     }
 
     return NextResponse.json({
@@ -133,7 +140,7 @@ export async function GET() {
       review,
       plannedLessons: plannedLessons.slice(0, 8),
     });
-  } catch (e) {
+  } catch {
     return NextResponse.json({ error: "Unable to load command center" }, { status: 503 });
   }
 }
