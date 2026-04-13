@@ -85,7 +85,11 @@ export type PathwayLessonPremiumValidation = {
 /** Unified structural / SEO gate for public surfacing (premium spine vs legacy five-block). */
 export type PathwayLessonStructuralGate = {
   structureMode: "premium" | "legacy";
-  /** When false, lesson should be treated as incomplete for SEO / “complete” badges. */
+  /**
+   * When true, the lesson meets subscriber surfacing rules (required spine, scenario signal,
+   * banned-placeholder scan, and premium spine checks when applicable). Hubs, lists, and learner
+   * routes should treat `false` as unavailable to end users.
+   */
   publicComplete: boolean;
   issues: string[];
   warnings: string[];

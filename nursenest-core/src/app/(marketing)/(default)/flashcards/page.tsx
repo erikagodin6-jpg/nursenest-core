@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import type { LucideIcon } from "lucide-react";
 import Link from "next/link";
-import { BookOpen, GraduationCap, Layers, Tag } from "lucide-react";
+import { BookOpen, GraduationCap, Layers } from "lucide-react";
 import { absoluteUrl } from "@/lib/seo/site-origin";
 import { loadPublicFlashcardHub } from "@/lib/seo/public-flashcard-landing";
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
@@ -50,7 +50,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function PublicFlashcardsHubPage() {
-  const { topics, featuredDecks } = await loadPublicFlashcardHub();
+  const { featuredDecks, categorySections, highYieldDecks } = await loadPublicFlashcardHub();
   const locale = await getMarketingLocaleForDefaultRoute();
   const m = await loadMarketingMessages(locale);
   const en = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
@@ -120,36 +120,33 @@ export default async function PublicFlashcardsHubPage() {
         {/* Stats row */}
         <div className="relative mt-6 flex flex-wrap gap-4 border-t border-[var(--semantic-border-soft)] pt-5">
           <StatItem icon={GraduationCap} label="Flashcard decks" value={featuredDecks.length} />
-          {topics.length > 0 && <StatItem icon={Tag} label="Topics" value={topics.length} />}
+          <StatItem icon={Layers} label="Categories" value={categorySections.length} />
           <StatItem icon={Layers} label="Free to preview" value="All decks" />
         </div>
       </header>
 
-      {/* ── Topics cloud — only when populated ── */}
-      {topics.length > 0 && (
+      {/* ── High-yield section ── */}
+      {highYieldDecks.length > 0 ? (
         <section className="mt-10" aria-labelledby="topics-heading">
-          <div className="mb-4 flex items-center gap-2">
-            <Tag className="h-4 w-4 text-[var(--semantic-brand)]" aria-hidden />
-            <h2 id="topics-heading" className="text-base font-semibold text-[var(--theme-heading-text)]">
-              {t("pages.publicFlashcardsHub.sectionTopicsTitle")}
+          <div className="mb-5 flex items-center justify-between gap-3">
+            <h2 id="topics-heading" className="text-lg font-semibold text-[var(--theme-heading-text)]">
+              Review high-yield flashcards
             </h2>
+            <span className="rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-3 py-1 text-xs font-semibold text-[var(--theme-muted-text)]">
+              {highYieldDecks.length} prioritized
+            </span>
           </div>
-          <ul className="flex flex-wrap gap-2">
-            {topics.map((topic) => (
-              <li key={topic.slug}>
-                <Link
-                  href={withMarketingLocale(locale, `/flashcards/${topic.slug}`)}
-                  className="nn-chip inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-sm font-medium transition"
-                >
-                  {topic.name}
-                </Link>
+          <ul className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+            {highYieldDecks.slice(0, 6).map((deck) => (
+              <li key={deck.slug}>
+                <FlashcardDeckCard deck={deck} locale={locale} t={t} />
               </li>
             ))}
           </ul>
         </section>
-      )}
+      ) : null}
 
-      {/* ── Featured decks ── */}
+      {/* ── Category-structured decks ── */}
       <section
         id="flashcard-deck-library"
         className="mt-8"
@@ -157,7 +154,7 @@ export default async function PublicFlashcardsHubPage() {
       >
         <div className="mb-5 flex items-center justify-between gap-3">
           <h2 id="featured-decks-heading" className="text-lg font-semibold text-[var(--theme-heading-text)]">
-            Featured decks
+            Flashcards by lesson category
           </h2>
           <span className="rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-3 py-1 text-xs font-semibold text-[var(--theme-muted-text)]">
             {featuredDecks.length} {featuredDecks.length === 1 ? "deck" : "decks"}
@@ -174,14 +171,48 @@ export default async function PublicFlashcardsHubPage() {
               Check back soon — new decks are added regularly.
             </p>
           </div>
-        ) : (
-          <ul className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-            {featuredDecks.map((d) => (
-              <li key={d.slug}>
-                <FlashcardDeckCard deck={d} locale={locale} t={t} />
-              </li>
+        ) : categorySections.length === 0 ? null : (
+          <div className="space-y-8">
+            {categorySections.map((section) => (
+              <section key={section.id} aria-labelledby={`flashcards-category-${section.id}`}>
+                <div className="mb-4">
+                  <h3 id={`flashcards-category-${section.id}`} className="text-base font-semibold text-[var(--theme-heading-text)]">
+                    {section.title}
+                  </h3>
+                  <p className="mt-1 text-sm text-[var(--theme-muted-text)]">{section.description}</p>
+                </div>
+
+                {section.decks.length > 0 ? (
+                  <ul className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+                    {section.decks.map((deck) => (
+                      <li key={deck.slug}>
+                        <FlashcardDeckCard deck={deck} locale={locale} t={t} />
+                      </li>
+                    ))}
+                  </ul>
+                ) : null}
+
+                {(section.subcategories ?? []).length > 0 ? (
+                  <div className="mt-5 space-y-5">
+                    {section.subcategories?.map((sub) => (
+                      <div key={sub.id}>
+                        <h4 className="mb-3 text-sm font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">
+                          {sub.title}
+                        </h4>
+                        <ul className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+                          {sub.decks.map((deck) => (
+                            <li key={deck.slug}>
+                              <FlashcardDeckCard deck={deck} locale={locale} t={t} />
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))}
+                  </div>
+                ) : null}
+              </section>
             ))}
-          </ul>
+          </div>
         )}
       </section>
 
@@ -229,7 +260,14 @@ function StatItem({ icon: Icon, label, value }: { icon: LucideIcon; label: strin
 }
 
 type DeckProps = {
-  deck: { slug: string; title: string; description: string | null; cardCount: number; sampleFront: string | null };
+  deck: {
+    slug: string;
+    title: string;
+    description: string | null;
+    cardCount: number;
+    sampleFront: string | null;
+    lessonSource?: { slug: string; name: string };
+  };
   locale: string;
   t: (key: string, p?: Record<string, string | number>) => string;
 };
@@ -261,6 +299,15 @@ function FlashcardDeckCard({ deck, locale, t }: DeckProps) {
       {/* Description */}
       {deck.description ? (
         <p className="mt-2 text-sm leading-6 text-[var(--theme-muted-text)]">{deck.description}</p>
+      ) : null}
+
+      {deck.lessonSource ? (
+        <p className="mt-2 text-xs font-medium text-[var(--theme-muted-text)]">
+          Based on lesson:{" "}
+          <Link href={withMarketingLocale(locale, `/lessons?q=${encodeURIComponent(deck.lessonSource.name)}`)} className="underline underline-offset-2 hover:text-[var(--semantic-brand)]">
+            {deck.lessonSource.name}
+          </Link>
+        </p>
       ) : null}
 
       {/* Sample card */}

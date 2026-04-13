@@ -101,21 +101,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       const lesson = pathway ? await getPathwayLesson(pathway.id, lessonSlug, lessonContentLocale) : undefined;
       if (!prof || !pathway || !lesson) return {};
       if (!alliedLessonMatchesProfessionFilter(lesson, prof.topicSlugsIn)) return {};
+      if (!lesson.structuralQuality?.publicComplete) {
+        return { title: "Lesson", robots: { index: false, follow: false } };
+      }
       const path = alliedHealthLessonDetailPath(prof.professionKey, lesson.slug);
       const canonical = absoluteUrl(path);
-      const strictPublic = process.env.PATHWAY_LESSON_STRICT_PUBLIC_QUALITY === "1";
-      const gate = lesson.structuralQuality;
-      const incomplete = Boolean(gate && !gate.publicComplete);
-      const robots =
-        incomplete && (strictPublic || gate?.structureMode === "premium")
-          ? ({ index: false, follow: true } as const)
-          : ({ index: true, follow: true } as const);
       return {
         title: lesson.seoTitle,
         description: lesson.seoDescription,
         alternates: { canonical },
         openGraph: { title: lesson.seoTitle, description: lesson.seoDescription, url: canonical, type: "article" },
-        robots,
+        robots: { index: true, follow: true },
       };
     },
     { pathname: `/allied-health/${slug}/lessons/${lessonSlug}`, routeGroup: "marketing.default.allied_health.lesson" },

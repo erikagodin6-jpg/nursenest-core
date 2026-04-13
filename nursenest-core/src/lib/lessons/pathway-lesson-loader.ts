@@ -1844,23 +1844,53 @@ export async function listPathwayLessonSlugBatch(
       pathwayLessonRuntimeSource: dbHas ? "database" : catN > 0 ? "catalog" : "none",
     });
   }
+
+  const lessonDbOverlays = await fetchPublishedPathwayLessonOverlayMapSafe(loc);
+
   if (dbHas) {
     const rows = await dbCall(
       () =>
         prisma.pathwayLesson.findMany({
           where: { pathwayId, status: ContentStatus.PUBLISHED, locale: loc },
-          select: { slug: true, topicSlug: true },
+          select: PATHWAY_LESSON_HUB_LIST_SELECT_WITH_SECTIONS,
           orderBy: [{ sortOrder: "asc" }, { slug: "asc" }],
           skip: sk,
           take,
         }),
       [],
     );
-    return rows;
+    const meta = lessonLocaleMeta(undefined, loc, false, false);
+    return rows
+      .map((r) =>
+        applyOverlayAndStructural(
+          withLocaleMeta(normalizeLesson(pathwayLessonRowToInput(r), pathwayId), meta),
+          undefined,
+          pathwayId,
+          lessonDbOverlays,
+        ),
+      )
+      .filter((l) => l.structuralQuality?.publicComplete)
+      .map((l) => ({ slug: l.slug, topicSlug: l.topicSlug }));
   }
 
   const raw = getCatalogLessonsRaw(pathwayId).slice(sk, sk + take);
-  return raw.map((l) => ({ slug: l.slug, topicSlug: l.topicSlug }));
+  const metaCat = lessonLocaleMeta(
+    undefined,
+    PATHWAY_LESSON_CANONICAL_DB_LOCALE,
+    loc !== PATHWAY_LESSON_CANONICAL_DB_LOCALE,
+    true,
+  );
+  return raw
+    .map((hit) =>
+      applyOverlayAndStructural(
+        withLocaleMeta(normalizeLesson(hit, pathwayId), metaCat),
+        undefined,
+        pathwayId,
+        lessonDbOverlays,
+      ),
+    )
+    .filter((l) => l.structuralQuality?.publicComplete)
+    .map((l) => ({ slug: l.slug, topicSlug: l.topicSlug }));
 }
 
 /** Total lessons for pathway — count/sum only (audit, metrics). */
