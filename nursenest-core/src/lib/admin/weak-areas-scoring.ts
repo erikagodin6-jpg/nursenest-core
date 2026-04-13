@@ -32,19 +32,18 @@ export type WeakAreaTrend = "improving" | "worsening" | "flat" | "unknown";
 export const DEFAULT_WEAK_AREA_WEIGHTS = {
   lesson: {
     /** Penalize incomplete journeys (1 - completionRate). */
-    lowCompletion: 0.38,
+    lowCompletion: 0.42,
     /** Opened but never engaged (bounce proxy). */
-    neverEngaged: 0.3,
+    neverEngaged: 0.34,
     /** 1 - revisitRate among learners touching in-window. */
-    lowRevisit: 0.16,
+    lowRevisit: 0.24,
     /**
-     * Friction reports tied to a specific lesson (needs stable `lessonId`/`slug` in feedback meta).
-     * Kept at 0 until feedback rows reliably carry lesson keys — pathway-level friction appears in the
-     * “Friction surfaces” list instead.
+     * Friction tied to a specific lesson needs stable lesson keys in feedback — use the friction table
+     * in the dashboard until then.
      */
     feedbackFriction: 0,
-    /** Practice-test abandonment share in-window (cohort slice). */
-    practiceAbandonment: 0.16,
+    /** Optional: correlate lesson cohort with practice abandonment (0 = disabled). */
+    practiceAbandonment: 0,
   },
   page: {
     frictionDensity: 0.48,
@@ -141,7 +140,7 @@ export function classifyLesson(
     s.neverEngagedRate >= 0.35 ||
     s.completionRate <= 0.38 ||
     s.frictionDensity >= 0.55 ||
-    s.practiceAbandonRate >= 0.45;
+    s.practiceAbandonRate >= 0.5;
 
   const { trend, deltaCompletionPts } = lessonTrend(s);
   if (trend === "worsening" && vol >= 8) {

@@ -11,7 +11,7 @@ export function adminFeedbackInboxHref(
   }
   for (const [k, v] of Object.entries(patch)) {
     if (v === null || v === "") u.delete(k);
-    else u.set(k, v);
+    else if (v !== undefined) u.set(k, v);
   }
   const s = u.toString();
   return s ? `/admin/feedback?${s}` : "/admin/feedback";
