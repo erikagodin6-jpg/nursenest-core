@@ -432,7 +432,7 @@ export function FlashcardsHubClient({
             Review Filters
           </summary>
           <p className="mt-2 text-xs text-[var(--theme-muted-text)]">
-            Weak, incorrect, starred, saved, notes, and revisit filters are all applied in one server-side session build.
+            Server-backed filters: Weak Areas, Previously Incorrect. Local review filters from this browser: Starred, Saved, Notes, Marked for Revisit.
           </p>
           <div className="mt-3 grid gap-2 sm:grid-cols-2">
             <label className="flex items-center gap-2 text-xs text-[var(--theme-muted-text)]">
@@ -483,8 +483,11 @@ export function FlashcardsHubClient({
               ]
                 .filter(Boolean)
                 .join(", ")}{" "}
-              (applied to summary, preview, and session)
+              (from this browser)
             </p>
+          ) : null}
+          {(starredOnly || savedOnly || notesOnly || revisitOnly) ? (
+            <p>Counts are estimated before local review filters are applied.</p>
           ) : null}
         </div>
 

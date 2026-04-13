@@ -377,13 +377,22 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
     if (adv.kind === "completed") {
       const answeredCount = ids.filter((qid) => merged[qid] !== undefined).length;
       const resultsWithMeta = withCatSessionResultMeta(adv.results, cfg, answeredCount);
-      const resultsFinal = await practiceTestRouteDeps.enrichPracticeTestResultsWithCatCoach(
-        resultsWithMeta,
-        adv.adaptiveState,
-        cfg,
-        gate.entitlement,
-        { practiceTestId: id },
-      );
+      let resultsFinal = resultsWithMeta;
+      try {
+        resultsFinal = await practiceTestRouteDeps.enrichPracticeTestResultsWithCatCoach(
+          resultsWithMeta,
+          adv.adaptiveState,
+          cfg,
+          gate.entitlement,
+          { practiceTestId: id },
+        );
+      } catch (error) {
+        safeServerLog("cat_runner", "cat_results_enrichment_failed", {
+          event: "cat_results_enrichment_failed",
+          practiceTestId: id.slice(0, 16),
+          reason: error instanceof Error ? error.message : "unknown",
+        });
+      }
       await practiceTestRouteDeps.updatePracticeTest({
         where: { id },
         data: {
@@ -432,13 +441,22 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
       const fin = await practiceTestRouteDeps.finalizeCatPracticeTest(ids, merged, gate.entitlement, row.adaptiveState);
       const answeredCount = ids.filter((qid) => merged[qid] !== undefined).length;
       const resultsWithMeta = withCatSessionResultMeta(fin.results, cfg, answeredCount);
-      const resultsFinal = await practiceTestRouteDeps.enrichPracticeTestResultsWithCatCoach(
-        resultsWithMeta,
-        fin.adaptiveState,
-        cfg,
-        gate.entitlement,
-        { practiceTestId: id },
-      );
+      let resultsFinal = resultsWithMeta;
+      try {
+        resultsFinal = await practiceTestRouteDeps.enrichPracticeTestResultsWithCatCoach(
+          resultsWithMeta,
+          fin.adaptiveState,
+          cfg,
+          gate.entitlement,
+          { practiceTestId: id },
+        );
+      } catch (error) {
+        safeServerLog("cat_runner", "cat_results_enrichment_failed", {
+          event: "cat_results_enrichment_failed",
+          practiceTestId: id.slice(0, 16),
+          reason: error instanceof Error ? error.message : "unknown",
+        });
+      }
       await practiceTestRouteDeps.updatePracticeTest({
         where: { id },
         data: {

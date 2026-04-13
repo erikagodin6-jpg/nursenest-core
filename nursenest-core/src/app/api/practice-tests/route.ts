@@ -5,7 +5,6 @@ import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-
 import { enforcePracticeTestsListProtection } from "@/lib/http/api-protection";
 import { prisma } from "@/lib/db";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
-import { isCatExamSimulationFeatureEnabled } from "@/lib/exams/cat-exam-simulation";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import { readinessConfigForPathwayId } from "@/lib/exam-pathways/pathway-readiness-config";
 import {
@@ -197,12 +196,6 @@ export async function POST(req: Request) {
         selectionMode: d.selectionMode,
       });
     }
-    if (d.catPresentationMode === "exam_simulation" && !isCatExamSimulationFeatureEnabled()) {
-      return NextResponse.json(
-        { error: "Exam simulation is not enabled.", code: PRACTICE_TEST_CAT_CREATE_CODE.exam_sim_disabled },
-        { status: 403 },
-      );
-    }
     const compatible = listPathwaysCompatibleWithSubscription(gate.entitlement);
     const catEligible = compatible.filter(pathwayAllowsCatAdaptiveStart);
     const resolvedPathway = resolveCatPathwayIdForCatPost(d.pathwayId, catEligible);
@@ -345,6 +338,7 @@ export async function POST(req: Request) {
         AND: [
           { config: { path: ["selectionMode"], equals: "cat" } },
           { config: { path: ["pathwayId"], equals: pathwayIdForCat } },
+          { config: { path: ["catPresentationMode"], equals: d.catPresentationMode } },
         ],
       },
       select: { id: true },
