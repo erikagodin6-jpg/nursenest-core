@@ -314,7 +314,7 @@ export function LearnerReportCardPremium({
           tone="warm"
         >
           {data.pathways.some((p) => p.lessonsTotal > 0) ? (
-            <ul className="space-y-4">
+            <ul className="space-y-5">
               {data.pathways
                 .filter((p) => p.lessonsTotal > 0)
                 .map((p) => (

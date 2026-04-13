@@ -36,6 +36,7 @@ import {
   LearnerStudySurfaceSection,
   LearnerSurface,
 } from "@/components/learner-ui";
+import { BrandLeafIcon } from "@/components/brand/brand-leaf-icon";
 
 function RecentGainsBlock({
   trends,
@@ -50,7 +51,12 @@ function RecentGainsBlock({
   const strengths = strongTopics.slice(0, 4);
   if (improving.length === 0 && strengths.length === 0) {
     return (
-      <p className="text-sm leading-relaxed text-[var(--semantic-text-secondary)]">{t("learner.studyHome.recentGainsEmpty")}</p>
+      <div className="flex items-start gap-3 rounded-xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-brand)_04%,var(--semantic-surface))] px-4 py-3">
+        <span className="mt-0.5 shrink-0 rounded-lg border border-[color-mix(in_srgb,var(--semantic-brand)_18%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_06%,var(--semantic-surface))] p-1.5">
+          <BrandLeafIcon tone="muted" size={22} />
+        </span>
+        <p className="text-sm leading-relaxed text-[var(--semantic-text-secondary)]">{t("learner.studyHome.recentGainsEmpty")}</p>
+      </div>
     );
   }
   return (

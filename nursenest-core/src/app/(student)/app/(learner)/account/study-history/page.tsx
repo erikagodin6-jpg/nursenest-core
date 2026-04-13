@@ -100,12 +100,11 @@ export default async function AccountStudyHistoryPage() {
 
       {total === 0 ? (
         (() => {
-          const historyCopy = emptyStateCopy.noHistoryYet({ area: "study history" });
           return (
         <LearnerAccountEmptyState
           title={t("learner.account.studyHistory.emptyTitle")}
           body={t("learner.account.studyHistory.emptyBody")}
-          hint={historyCopy.body}
+          hint={emptyStateCopy.noStudyActivityYet().hint}
           ctaHref="/app"
           ctaLabel={t("learner.account.studyHistory.emptyCtaDashboard")}
           secondaryHref="/app/lessons"

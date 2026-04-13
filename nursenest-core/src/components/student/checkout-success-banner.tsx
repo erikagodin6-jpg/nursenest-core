@@ -41,13 +41,13 @@ function Inner() {
   if (!open) return null;
 
   return (
-    <div className="mb-6 rounded-2xl border border-[color-mix(in_srgb,var(--semantic-success)_35%,var(--semantic-border-soft))] bg-[var(--semantic-success-soft)] px-4 py-3 text-sm text-[var(--semantic-success-contrast)] shadow-[var(--semantic-shadow-soft)]">
-      <p className="flex items-center gap-2 font-semibold">
-        <SuccessLeaf show={open} size={20} />
-        You are in. Welcome to full access.
+    <div className="mb-6 rounded-2xl border border-[color-mix(in_srgb,var(--semantic-success)_32%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-success-soft)_94%,var(--semantic-surface))] px-4 py-3.5 text-sm text-[var(--semantic-success-contrast)] shadow-[var(--semantic-shadow-soft)]">
+      <p className="flex items-center gap-2.5 font-semibold leading-snug">
+        <SuccessLeaf show={open} size={18} />
+        Subscription active
       </p>
-      <p className="mt-1 text-[color-mix(in_srgb,var(--semantic-success-contrast)_92%,var(--semantic-text-primary))]">
-        Billing confirmed. Jump into your question bank or start a practice exam while your session refreshes entitlements.
+      <p className="mt-1.5 text-[color-mix(in_srgb,var(--semantic-success-contrast)_88%,var(--semantic-text-primary))] leading-relaxed">
+        Billing is confirmed. Your study areas will pick up full access as the session refreshes.
       </p>
       <div className="mt-2 flex flex-wrap gap-2">
         <Link

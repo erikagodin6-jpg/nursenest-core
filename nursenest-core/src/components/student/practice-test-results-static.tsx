@@ -217,7 +217,7 @@ export function PracticeTestResultsStatic({
   const statTiles = outcomeTilesForPractice({ cat, results });
 
   const heroFootnote = (
-    <div className="space-y-2">
+    <div className="space-y-3 leading-relaxed">
       {cat && feedbackMode === "study" ? (
         <p>
           Study mode — rationales after each item. In-session rationale steps recorded:{" "}
@@ -252,7 +252,7 @@ export function PracticeTestResultsStatic({
   const firstStudyLink = firstStudyNext?.links?.[0];
 
   return (
-    <div className="space-y-8">
+    <div className="flex flex-col gap-10 sm:gap-12">
       <PracticeSessionReportHero
         eyebrow="Session report"
         title={title?.trim() || (cat ? "Adaptive (CAT) practice" : "Practice test")}
@@ -266,24 +266,32 @@ export function PracticeTestResultsStatic({
       />
 
       {firstStudyLink ? (
-        <LearnerSurface tone="success" padding="md" radius="lg" accentTop className="border-[color-mix(in_srgb,var(--semantic-success)_26%,var(--semantic-border-soft))]">
-          <p className="text-[11px] font-semibold uppercase tracking-wide text-[var(--semantic-success)]">Recommended next step</p>
-          <p className="mt-1 text-sm font-medium text-[var(--semantic-text-primary)]">{firstStudyNext.title}</p>
-          <p className="mt-1 text-xs text-[var(--semantic-text-muted)]">{firstStudyNext.reason}</p>
+        <LearnerSurface
+          tone="success"
+          padding="lg"
+          radius="lg"
+          accentTop
+          className="border-[color-mix(in_srgb,var(--semantic-success)_26%,var(--semantic-border-soft))] shadow-[var(--semantic-shadow-soft)]"
+        >
+          <p className="text-[11px] font-semibold uppercase tracking-[0.1em] text-[var(--semantic-success)]">Recommended next step</p>
+          <p className="mt-3 text-sm font-semibold text-[var(--semantic-text-primary)]">{firstStudyNext.title}</p>
+          <p className="mt-2 max-w-2xl text-xs leading-relaxed text-[var(--semantic-text-muted)]">{firstStudyNext.reason}</p>
           <Link
             href={firstStudyLink.href}
-            className="mt-3 inline-flex text-sm font-semibold text-[var(--semantic-brand)] underline underline-offset-4 hover:opacity-90"
+            className="mt-5 inline-flex w-fit rounded-full bg-role-cta px-4 py-2 text-xs font-semibold text-role-cta-foreground shadow-sm transition hover:opacity-95"
           >
             {firstStudyLink.label}
           </Link>
         </LearnerSurface>
       ) : results.weakAreas[0] && config?.pathwayId != null ? (
-        <LearnerSurface tone="warm" padding="md" radius="lg" accentTop>
-          <p className="text-[11px] font-semibold uppercase tracking-wide text-[var(--semantic-warning)]">Recommended next step</p>
-          <p className="mt-1 text-sm text-[var(--semantic-text-primary)]">Drill your weakest tagged area, then review rationales on the test page.</p>
+        <LearnerSurface tone="warm" padding="lg" radius="lg" accentTop className="shadow-[var(--semantic-shadow-soft)]">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.1em] text-[var(--semantic-warning)]">Recommended next step</p>
+          <p className="mt-3 max-w-2xl text-sm leading-relaxed text-[var(--semantic-text-primary)]">
+            Drill your weakest tagged area, then review rationales on the test page.
+          </p>
           <Link
             href={remediationTopicDrillHref(results.weakAreas[0], config.pathwayId)}
-            className="mt-3 inline-flex text-sm font-semibold text-[var(--semantic-brand)] underline underline-offset-4 hover:opacity-90"
+            className="mt-5 inline-flex w-fit rounded-full border border-[color-mix(in_srgb,var(--semantic-warning)_28%,var(--semantic-border-soft))] bg-[var(--semantic-surface)] px-4 py-2 text-xs font-semibold text-[var(--semantic-text-primary)] shadow-sm transition hover:bg-[color-mix(in_srgb,var(--semantic-panel-warm)_35%,var(--semantic-surface))]"
           >
             Open targeted questions for {results.weakAreas[0]}
           </Link>
@@ -299,12 +307,12 @@ export function PracticeTestResultsStatic({
       ) : null}
 
       {sessionInsightStruggle || sessionInsightFocus ? (
-        <div className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-brand)_4%,var(--semantic-surface))] px-5 py-4 shadow-sm">
+        <div className="rounded-2xl border border-[color-mix(in_srgb,var(--semantic-info)_18%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_32%,var(--semantic-surface))] px-6 py-5 shadow-[var(--semantic-shadow-soft)]">
           {sessionInsightStruggle ? (
-            <p className="text-sm text-[var(--semantic-text-primary)]">{sessionInsightStruggle}</p>
+            <p className="text-sm leading-relaxed text-[var(--semantic-text-primary)]">{sessionInsightStruggle}</p>
           ) : null}
           {sessionInsightFocus ? (
-            <p className={`text-sm text-[var(--semantic-text-muted)] ${sessionInsightStruggle ? "mt-2" : ""}`}>
+            <p className={`text-sm leading-relaxed text-[var(--semantic-text-muted)] ${sessionInsightStruggle ? "mt-3" : ""}`}>
               {sessionInsightFocus}
             </p>
           ) : null}
@@ -312,25 +320,25 @@ export function PracticeTestResultsStatic({
       ) : null}
 
       {Object.keys(results.byTopic).length > 0 ? (
-        <div className="nn-panel-chart-fade rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-6 shadow-sm">
-          <div className="flex items-center gap-2">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-[color-mix(in_srgb,var(--semantic-info)_28%,var(--semantic-border-soft))] bg-[var(--semantic-panel-cool)]">
+        <div className="nn-panel-chart-fade rounded-2xl border border-[color-mix(in_srgb,var(--semantic-info)_12%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_18%,var(--semantic-surface))] p-6 sm:p-7 shadow-[var(--semantic-shadow-soft)]">
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-[color-mix(in_srgb,var(--semantic-info)_28%,var(--semantic-border-soft))] bg-[var(--semantic-panel-cool)]">
               <BarChart3 className="h-4 w-4 text-[var(--semantic-info)]" aria-hidden strokeWidth={2} />
             </div>
-            <h3 className="text-sm font-semibold uppercase tracking-wide text-[var(--semantic-text-muted)]">Topic breakdown</h3>
+            <h3 className="text-sm font-semibold uppercase tracking-[0.08em] text-[var(--semantic-text-secondary)]">Topic breakdown</h3>
           </div>
-          <ul className="mt-4 space-y-3">
+          <ul className="mt-6 space-y-5">
             {Object.entries(results.byTopic).map(([topic, { correct, total }]) => {
               const pct = total > 0 ? Math.round((correct / total) * 100) : 0;
               return (
-                <li key={topic}>
+                <li key={topic} className="rounded-xl border border-[color-mix(in_srgb,var(--semantic-border-soft)_75%,transparent)] bg-[color-mix(in_srgb,var(--semantic-surface)_70%,transparent)] px-3 py-3">
                   <div className="flex justify-between gap-3 text-sm">
-                    <span className="font-medium text-[var(--semantic-text-primary)]">{topic}</span>
+                    <span className="min-w-0 font-medium text-[var(--semantic-text-primary)]">{topic}</span>
                     <span className="shrink-0 tabular-nums text-[var(--semantic-text-muted)]">
                       {correct}/{total} ({pct}%)
                     </span>
                   </div>
-                  <div className="nn-progress-track-semantic nn-progress-track-semantic--md mt-2" role="presentation">
+                  <div className="nn-progress-track-semantic nn-progress-track-semantic--md mt-3" role="presentation">
                     <div
                       className={`h-full rounded-full ${semanticFillClassForAccuracyPct(pct)} nn-progress-fill-reveal transition-[width] duration-500`}
                       style={{ width: `${pct}%` }}
@@ -344,12 +352,12 @@ export function PracticeTestResultsStatic({
       ) : null}
 
       {results.weakAreas.length > 0 && weakFollowUpCopy ? (
-        <div className="rounded-2xl border border-[color-mix(in_srgb,var(--semantic-warning)_35%,var(--semantic-border-soft))] bg-[var(--semantic-warning-soft)] p-6 shadow-sm">
-          <h3 className="text-base font-semibold text-[var(--semantic-text-primary)]">{weakFollowUpCopy.weakTitle}</h3>
-          <p className="mt-1 text-sm text-[var(--semantic-text-muted)]">{weakFollowUpCopy.weakHint}</p>
-          <ul className="mt-4 space-y-4 text-sm">
+        <div className="rounded-2xl border border-[color-mix(in_srgb,var(--semantic-warning)_32%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning-soft)_88%,var(--semantic-surface))] p-6 sm:p-7 shadow-[var(--semantic-shadow-soft)]">
+          <h3 className="text-base font-semibold tracking-tight text-[var(--semantic-text-primary)]">{weakFollowUpCopy.weakTitle}</h3>
+          <p className="mt-2 max-w-2xl text-sm leading-relaxed text-[var(--semantic-text-muted)]">{weakFollowUpCopy.weakHint}</p>
+          <ul className="mt-6 space-y-4 text-sm">
             {results.weakAreas.map((w) => (
-              <li key={w} className="rounded-xl border border-[color-mix(in_srgb,var(--semantic-border-soft)_85%,transparent)] bg-[var(--semantic-surface)] px-3 py-3">
+              <li key={w} className="rounded-xl border border-[color-mix(in_srgb,var(--semantic-border-soft)_88%,transparent)] bg-[var(--semantic-surface)] px-4 py-4 shadow-[var(--semantic-shadow-soft)]">
                 <p className="font-medium text-[var(--semantic-text-primary)]">{w}</p>
                 <div className="mt-2 flex flex-wrap gap-2">
                   <Link
@@ -399,14 +407,14 @@ export function PracticeTestResultsStatic({
       ) : null}
 
       {incorrectReviewItems.length > 0 ? (
-        <div className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-6 shadow-sm">
-          <h3 className="text-base font-semibold text-[var(--semantic-text-primary)]">Missed items</h3>
-          <p className="mt-1 text-sm text-[var(--semantic-text-muted)]">
+        <div className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-panel-muted)_25%,var(--semantic-surface))] p-6 sm:p-7 shadow-[var(--semantic-shadow-soft)]">
+          <h3 className="text-base font-semibold tracking-tight text-[var(--semantic-text-primary)]">Missed items</h3>
+          <p className="mt-2 max-w-2xl text-sm leading-relaxed text-[var(--semantic-text-muted)]">
             Short previews from your session. Open the test page for full rationales and teaching review.
           </p>
-          <ul className="mt-4 space-y-4 text-sm">
+          <ul className="mt-6 space-y-5 text-sm">
             {incorrectReviewItems.map((item) => (
-              <li key={item.id} className="border-b border-[var(--semantic-border-soft)] pb-4 last:border-0 last:pb-0">
+              <li key={item.id} className="border-b border-[color-mix(in_srgb,var(--semantic-border-soft)_85%,transparent)] pb-5 last:border-0 last:pb-0">
                 <p className="text-[var(--semantic-text-primary)]">{item.stemPreview}</p>
                 <p className="mt-1.5 text-xs text-[var(--semantic-text-muted)]">
                   {item.topic ? (
@@ -428,14 +436,14 @@ export function PracticeTestResultsStatic({
           </ul>
         </div>
       ) : results.incorrectQuestionIds && results.incorrectQuestionIds.length > 0 ? (
-        <div className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-6 shadow-sm">
-          <h3 className="text-base font-semibold text-[var(--semantic-text-primary)]">Missed items</h3>
-          <p className="mt-1 text-sm text-[var(--semantic-text-muted)]">
+        <div className="rounded-2xl border border-dashed border-[color-mix(in_srgb,var(--semantic-text-muted)_20%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-muted)_35%,var(--semantic-surface))] p-6 sm:p-7">
+          <h3 className="text-base font-semibold tracking-tight text-[var(--semantic-text-primary)]">Missed items</h3>
+          <p className="mt-2 max-w-xl text-sm leading-relaxed text-[var(--semantic-text-muted)]">
             {results.incorrectQuestionIds.length} question(s) marked incorrect. Open the test page for full review.
           </p>
           <Link
             href={`/app/practice-tests/${testId}`}
-            className="mt-4 inline-flex text-sm font-semibold text-[var(--semantic-brand)] underline underline-offset-2"
+            className="mt-5 inline-flex w-fit rounded-full bg-role-cta px-4 py-2 text-xs font-semibold text-role-cta-foreground shadow-sm transition hover:opacity-95"
           >
             Open full review on test page
           </Link>
@@ -457,16 +465,16 @@ export function PracticeTestResultsStatic({
         />
       ) : null}
 
-      <div className="flex flex-wrap gap-3">
+      <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
         <Link
           href={`/app/practice-tests/${testId}`}
-          className="inline-flex rounded-full bg-role-cta px-5 py-2.5 text-sm font-semibold text-role-cta-foreground shadow-sm transition hover:opacity-95"
+          className="inline-flex justify-center rounded-full bg-role-cta px-5 py-2.5 text-sm font-semibold text-role-cta-foreground shadow-sm transition hover:opacity-95"
         >
           Open full review on test page
         </Link>
         <Link
           href="/app/practice-tests"
-          className="inline-flex rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-5 py-2.5 text-sm font-semibold text-[var(--semantic-text-primary)] hover:bg-[var(--semantic-panel-muted)]"
+          className="inline-flex justify-center rounded-full border border-[color-mix(in_srgb,var(--semantic-border-soft)_88%,var(--semantic-info))] bg-[var(--semantic-surface)] px-5 py-2.5 text-sm font-semibold text-[var(--semantic-text-primary)] shadow-sm transition hover:bg-[var(--semantic-panel-cool)]"
         >
           Practice tests home
         </Link>

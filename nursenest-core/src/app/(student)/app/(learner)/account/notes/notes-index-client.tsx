@@ -19,8 +19,10 @@ import { useState, useTransition } from "react";
 import Link from "next/link";
 import type { NoteRow, NotesPagePayload } from "@/lib/learner/notes-index-types";
 import { HighlightsList } from "@/components/study/highlights-list";
+import { PremiumEmptyState } from "@/components/ui/premium-empty-state";
 import { loadMoreNotes, loadFilteredNotes } from "./actions";
 import { BROWSE_LESSONS_CTA, BROWSE_QUESTIONS_CTA } from "@/lib/copy/cta-copy";
+import { emptyStateCopy } from "@/lib/ui/empty-state-copy";
 
 // ── Search helpers ────────────────────────────────────────────────────────────
 
@@ -175,46 +177,53 @@ function NotesList({
   }
 
   if (filtered.length === 0) {
+    const saved = emptyStateCopy.noSavedNotes();
+    if (searchQuery.trim()) {
+      return (
+        <PremiumEmptyState
+          data-nn-empty="notes-search"
+          brandMark="leaf"
+          tone="early"
+          density="compact"
+          headline="No matching notes"
+          body={`Nothing matched your search. Try fewer words or clear the search box.`}
+          primaryCta={{ label: BROWSE_LESSONS_CTA, href: "/app/lessons", variant: "primary" }}
+          secondaryCtas={[{ label: BROWSE_QUESTIONS_CTA, href: "/app/questions", variant: "secondary" }]}
+          visualLayout="stack"
+          ctaLayout="stack"
+        />
+      );
+    }
+    if (filter !== "all") {
+      return (
+        <PremiumEmptyState
+          data-nn-empty="notes-filter"
+          brandMark="leaf"
+          tone="early"
+          density="compact"
+          headline="Nothing in this view yet"
+          body="Switch to another tab or return to all notes to see what you have saved."
+          primaryCta={{ label: "View all notes", href: "/app/account/notes", variant: "primary" }}
+          secondaryCtas={[{ label: BROWSE_LESSONS_CTA, href: "/app/lessons", variant: "secondary" }]}
+          visualLayout="stack"
+          ctaLayout="stack"
+        />
+      );
+    }
     return (
-      <div
-        className="rounded-2xl px-6 py-10 text-center"
-        style={{
-          background: "var(--surface-soft-a, color-mix(in srgb, var(--theme-primary) 3.5%, var(--bg-page)))",
-          border: "1px solid var(--semantic-border-soft)",
-        }}
-      >
-        <p className="text-sm" style={{ color: "var(--semantic-text-muted)" }}>
-          {searchQuery
-            ? `No notes match "${searchQuery}".`
-            : filter === "all"
-            ? "No notes yet. Start by writing notes inside any lesson or question."
-            : "No notes match this filter."}
-        </p>
-        <div className="mt-4 flex justify-center gap-3">
-          <Link
-            href="/app/lessons"
-            className="rounded-full px-4 py-2 text-xs font-semibold transition-opacity hover:opacity-80"
-            style={{
-              background: "color-mix(in srgb, var(--semantic-brand) 10%, var(--semantic-surface))",
-              border: "1px solid color-mix(in srgb, var(--semantic-brand) 25%, transparent)",
-              color: "var(--semantic-brand)",
-            }}
-          >
-            {BROWSE_LESSONS_CTA}
-          </Link>
-          <Link
-            href="/app/questions"
-            className="rounded-full px-4 py-2 text-xs font-semibold transition-opacity hover:opacity-80"
-            style={{
-              background: "var(--semantic-surface)",
-              border: "1px solid var(--semantic-border-soft)",
-              color: "var(--semantic-text-secondary)",
-            }}
-          >
-            {BROWSE_QUESTIONS_CTA}
-          </Link>
-        </div>
-      </div>
+      <PremiumEmptyState
+        data-nn-empty="notes-none"
+        brandMark="leaf"
+        tone="early"
+        density="compact"
+        headline={saved.headline}
+        body={saved.body}
+        hint={saved.hint}
+        primaryCta={{ label: BROWSE_LESSONS_CTA, href: "/app/lessons", variant: "primary" }}
+        secondaryCtas={[{ label: BROWSE_QUESTIONS_CTA, href: "/app/questions", variant: "secondary" }]}
+        visualLayout="stack"
+        ctaLayout="stack"
+      />
     );
   }
 

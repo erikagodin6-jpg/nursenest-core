@@ -29,6 +29,20 @@ describe("PremiumEmptyState", () => {
     assert.match(html, /data-nn-premium-empty/);
   });
 
+  it("renders brand leaf mark when brandMark is leaf and no Icon", () => {
+    const html = renderToStaticMarkup(
+      <PremiumEmptyState
+        headline="H"
+        body="B"
+        brandMark="leaf"
+        primaryCta={{ label: "Go", href: "/ok" }}
+        animateEntrance={false}
+      />,
+    );
+    assert.match(html, /viewBox="0 0 50 32"/);
+    assert.match(html, /href="\/ok"/);
+  });
+
   it("sanitizes unsafe secondary CTAs to home fallback", () => {
     const html = renderToStaticMarkup(
       <PremiumEmptyState
