@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
-import { FlashcardViewer, type ViewerCard } from "@/components/study/flashcard-viewer";
+import { ActiveStudySession, type ActiveStudyCard } from "@/components/study/active-study-session";
+import { cardMatchesStudyFilters } from "@/lib/flashcards/study-session-persistence";
 
 type SessionPayload = {
   ok: boolean;
@@ -17,9 +18,21 @@ type SessionPayload = {
     incorrectOnly: boolean;
     starredOnly: boolean;
     cardLimit: string;
+    savedOnly?: boolean;
+    notesOnly?: boolean;
+    revisitOnly?: boolean;
   };
   categoryOptions: Array<{ id: string; title: string; count: number }>;
-  cards: ViewerCard[];
+  cards: Array<{
+    id: string;
+    front: string;
+    back: string;
+    topic?: string | null;
+    subtopic?: string | null;
+    explanation?: string;
+    sourceKey?: string | null;
+    pathwayId?: string | null;
+  }>;
 };
 
 const MODE_LABEL: Record<SessionPayload["summary"]["mode"], string> = {
@@ -37,6 +50,16 @@ export function FlashcardCustomStudyClient() {
     if (typeof window === "undefined") return "";
     return window.location.search;
   }, []);
+
+  const localFilters = useMemo(() => {
+    const params = new URLSearchParams(query);
+    return {
+      starredOnly: params.get("starredOnly") === "1",
+      savedOnly: params.get("savedOnly") === "1",
+      notesOnly: params.get("notesOnly") === "1",
+      confusingOnly: params.get("revisitOnly") === "1",
+    };
+  }, [query]);
 
   useEffect(() => {
     let active = true;
@@ -80,6 +103,24 @@ export function FlashcardCustomStudyClient() {
     .filter((c) => payload.summary.selectedCategories.includes(c.id))
     .map((c) => c.title);
 
+  const filteredCards = payload.cards.filter((card) => cardMatchesStudyFilters(card.id, localFilters));
+  const activeCards: ActiveStudyCard[] = filteredCards.map((card) => ({
+    id: card.id,
+    prompt: card.front,
+    answer: card.back,
+    explanation: card.explanation,
+    topic: card.topic,
+    subtopic: card.subtopic,
+    sourceKey: card.sourceKey ?? null,
+    pathwayId: card.pathwayId ?? payload.summary.pathwayId,
+  }));
+  const enabledQuickFilters = [
+    localFilters.starredOnly ? "Starred" : null,
+    localFilters.savedOnly ? "Saved" : null,
+    localFilters.notesOnly ? "With Notes" : null,
+    localFilters.confusingOnly ? "Marked for Revisit" : null,
+  ].filter(Boolean) as string[];
+
   return (
     <div className="mx-auto max-w-4xl px-4 py-8">
       <div className="mb-6 rounded-2xl border border-border bg-[var(--theme-card-bg)] p-5">
@@ -92,16 +133,20 @@ export function FlashcardCustomStudyClient() {
           Cards: {payload.summary.returnedCards} of {payload.summary.matchingCards} · Mode: {MODE_LABEL[payload.summary.mode]} · Shuffle:{" "}
           {payload.summary.shuffle ? "On" : "Off"}
         </p>
+        {enabledQuickFilters.length > 0 ? (
+          <p className="mt-1 text-sm text-[var(--theme-muted-text)]">
+            Review Filters: {enabledQuickFilters.join(", ")} · Session Items: {activeCards.length}
+          </p>
+        ) : null}
       </div>
 
-      <FlashcardViewer
-        initialCards={payload.cards}
-        session={null}
-        onRate={async () => {
-          // Quizlet-style custom sessions are practice-only in Phase 1.
-        }}
-        onReset={() => {
-          window.location.reload();
+      <ActiveStudySession
+        cards={activeCards}
+        header={{
+          sessionTitle: "Custom Active Study Session",
+          modeLabel: MODE_LABEL[payload.summary.mode],
+          categoriesLabel: selectedTitles.join(", ") || "All Categories",
+          exitHref: "/app/flashcards",
         }}
       />
 

@@ -77,6 +77,9 @@ export async function GET(req: NextRequest) {
   const weakOnly = sp.get("weakOnly") === "1";
   const incorrectOnly = sp.get("incorrectOnly") === "1";
   const starredOnly = sp.get("starredOnly") === "1";
+  const savedOnly = sp.get("savedOnly") === "1";
+  const notesOnly = sp.get("notesOnly") === "1";
+  const revisitOnly = sp.get("revisitOnly") === "1";
   const shuffle = sp.get("shuffle") === "1";
   const mode = parseStudyMode(sp.get("mode"));
   const limit = parseCardLimit(sp.get("cardLimit"));
@@ -105,6 +108,7 @@ export async function GET(req: NextRequest) {
       id: true,
       front: true,
       back: true,
+      sourceKey: true,
       category: { select: { name: true, topicCode: true } },
       deck: { select: { pathwayId: true, title: true } },
     },
@@ -168,13 +172,15 @@ export async function GET(req: NextRequest) {
           back: swap ? card.front : card.back,
           topic: card.category.name,
           subtopic: card.category.topicCode,
+          sourceKey: card.sourceKey,
+          pathwayId: card.deck?.pathwayId ?? pathwayId,
         };
       })
     : [];
 
   return NextResponse.json({
     ok: true,
-    unsupportedFilters: starredOnly ? ["starredOnly"] : [],
+    unsupportedFilters: [],
     summary: {
       pathwayId,
       selectedCategories,
@@ -185,6 +191,9 @@ export async function GET(req: NextRequest) {
       weakOnly,
       incorrectOnly,
       starredOnly,
+      savedOnly,
+      notesOnly,
+      revisitOnly,
       cardLimit: sp.get("cardLimit") ?? "20",
     },
     categoryOptions: applyCountsToBuilderCategories(pathwayId, categoryCounts),

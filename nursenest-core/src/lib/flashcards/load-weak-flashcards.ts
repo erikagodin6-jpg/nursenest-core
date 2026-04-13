@@ -15,6 +15,8 @@ export type WeakFlashcardRow = {
   front: string;
   back: string;
   deckSlug: string;
+  pathwayId: string | null;
+  sourceKey: string | null;
   topic: string;
   subtopic: string | null;
   confidence: RecommendationConfidence;
@@ -54,7 +56,8 @@ export async function loadWeakAreaFlashcardsForUser(
       id: true,
       front: true,
       back: true,
-      deck: { select: { slug: true } },
+      deck: { select: { slug: true, pathwayId: true } },
+      sourceKey: true,
       category: { select: { name: true, topicCode: true } },
     },
     take: FETCH_CAP,
@@ -71,6 +74,8 @@ export async function loadWeakAreaFlashcardsForUser(
       front: c.front,
       back: c.back,
       deckSlug: c.deck.slug,
+      pathwayId: c.deck.pathwayId,
+      sourceKey: c.sourceKey,
       topic: c.category.name,
       subtopic: c.category.topicCode,
       confidence: confidenceByCode.get(c.category.topicCode ?? "") ?? "low",

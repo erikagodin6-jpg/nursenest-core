@@ -94,14 +94,14 @@ export function classifyLearningTopic(
   const text = topicLabel.toLowerCase();
   void pathwayId;
 
-  if (hasAny(text, [/cardio|heart|coronary|ecg|arrhythm|hypertension|mi\b|stemi|heart failure|acs\b|angina|a-fib|afib/])) return { categoryId: "cardiovascular" };
-  if (hasAny(text, [/respir|airway|asthma|copd|oxygen|ventilat|pneumonia|pulmonary|abg|pe\b/])) return { categoryId: "respiratory" };
+  if (hasAny(text, [/cardio|heart|coronary|ecg|arrhythm|hypertension|mi\b|stemi|heart failure|acs\b|angina|a-fib|afib|shock|resusc|hemodynamic/])) return { categoryId: "cardiovascular" };
+  if (hasAny(text, [/respir|airway|asthma|copd|oxygen|ventilat|pneumonia|pulmonary|abg|\bpe\b/])) return { categoryId: "respiratory" };
   if (hasAny(text, [/neuro|stroke|seizure|cns|icp|delirium|tbi|gcs|tia\b|mening|parkinson|neuropathy/])) return { categoryId: "neurology" };
-  if (hasAny(text, [/infection control|hand hygiene|aseptic|sterile technique|standard precautions|isolation precautions|ppe/])) {
+  if (hasAny(text, [/infection control|hand hygiene|aseptic|sterile technique|standard precautions|isolation precautions|ppe|patient safety basics|foundational nursing skills|\bsafety\b|\bprioritization\b/])) {
     return { categoryId: "fundamentals" };
   }
   if (hasAny(text, [/\bgi\b|gastro|hepatic|liver|pancrea|bowel|ibd|crohn|colitis|cirrhosis|constipation|diarrhea/])) return { categoryId: "gastrointestinal" };
-  if (hasAny(text, [/renal|kidney|aki|ckd|dialysis|nephro|urinar|uti|pyelo|prostat|gu\b|bladder/])) return { categoryId: "renal-genitourinary" };
+  if (hasAny(text, [/renal|kidney|aki|ckd|dialysis|nephro|urinar|uti|pyelo|prostat|\bbph\b|gu\b|bladder|electrolyte|fluid balance/])) return { categoryId: "renal-genitourinary" };
   if (hasAny(text, [/endocrine|diabet|thyroid|dka|hhs|adrenal|pituitary|hypoglyc|hyperglyc|metabolic syndrome/])) return { categoryId: "endocrine" };
   if (hasAny(text, [/musculo|orthop|fracture|cast|arthritis|sprain|strain|joint|bone|spine|rheumat/])) return { categoryId: "musculoskeletal" };
   if (hasAny(text, [/heme|hemat|oncolog|anemia|leukemia|lymphoma|sickle|thrombocytopen|chemo|neutropenia|coagul/])) return { categoryId: "hematology-oncology" };

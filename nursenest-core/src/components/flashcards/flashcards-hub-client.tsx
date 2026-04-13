@@ -8,6 +8,7 @@ import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { FlashcardDeckGrid } from "@/components/study/flashcard-deck-grid";
 import { FlashcardFilters, type FlashcardFiltersValue } from "@/components/study/flashcard-filters";
 import type { DeckCardRow } from "@/components/study/flashcard-deck-card";
+import { countSavedStudyItems } from "@/lib/flashcards/study-session-persistence";
 
 type TagRow = { slug: string; name: string };
 
@@ -92,6 +93,10 @@ export function FlashcardsHubClient({
   const [weakOnly, setWeakOnly] = useState(false);
   const [incorrectOnly, setIncorrectOnly] = useState(false);
   const [starredOnly, setStarredOnly] = useState(false);
+  const [savedOnly, setSavedOnly] = useState(false);
+  const [notesOnly, setNotesOnly] = useState(false);
+  const [revisitOnly, setRevisitOnly] = useState(false);
+  const [savedStats, setSavedStats] = useState({ starred: 0, saved: 0, noted: 0, confusing: 0 });
   const [builderSummary, setBuilderSummary] = useState<BuilderSummary | null>(null);
   const [previewCards, setPreviewCards] = useState<Array<{ id: string; front: string; topic?: string | null }>>([]);
   const [builderLoading, setBuilderLoading] = useState(false);
@@ -219,10 +224,14 @@ export function FlashcardsHubClient({
 
   const totalDue = (dueSummary?.dueToday ?? 0) + (dueSummary?.overdue ?? 0);
   const modeLabel: Record<BuilderMode, string> = {
-    term_to_definition: "Term → Definition",
-    definition_to_term: "Definition → Term",
-    mixed: "Mixed",
+    term_to_definition: "Active Recall",
+    definition_to_term: "Reverse Recall",
+    mixed: "Mixed Recall",
   };
+
+  useEffect(() => {
+    setSavedStats(countSavedStudyItems());
+  }, [starredOnly, savedOnly, notesOnly, revisitOnly]);
 
   const runBuilderSummary = useCallback(async () => {
     setBuilderLoading(true);
@@ -247,7 +256,6 @@ export function FlashcardsHubClient({
       if (!res.ok) throw new Error(json.error ?? "Unable to build custom session.");
       if (json.summary) setBuilderSummary(json.summary);
       setBuilderCategories(json.categoryOptions ?? []);
-      if ((json.unsupportedFilters ?? []).includes("starredOnly")) setStarredOnly(false);
     } catch (e) {
       setBuilderError(e instanceof Error ? e.message : "Unable to build custom session.");
       setBuilderSummary(null);
@@ -275,6 +283,10 @@ export function FlashcardsHubClient({
   if (shuffleOn) builderParams.set("shuffle", "1");
   if (weakOnly) builderParams.set("weakOnly", "1");
   if (incorrectOnly) builderParams.set("incorrectOnly", "1");
+  if (starredOnly) builderParams.set("starredOnly", "1");
+  if (savedOnly) builderParams.set("savedOnly", "1");
+  if (notesOnly) builderParams.set("notesOnly", "1");
+  if (revisitOnly) builderParams.set("revisitOnly", "1");
   const startHref = `/app/flashcards/custom?${builderParams.toString()}`;
   const previewCustomCards = async () => {
     setBuilderError(null);
@@ -368,9 +380,9 @@ export function FlashcardsHubClient({
           <label className="block text-xs font-semibold text-[var(--theme-muted-text)]">
             Study mode
             <select className="mt-1 w-full rounded-lg border border-border px-3 py-2 text-sm" value={studyMode} onChange={(e) => setStudyMode(e.target.value as BuilderMode)}>
-              <option value="term_to_definition">Term → Definition</option>
-              <option value="definition_to_term">Definition → Term</option>
-              <option value="mixed">Mixed</option>
+              <option value="term_to_definition">Active Recall</option>
+              <option value="definition_to_term">Reverse Recall</option>
+              <option value="mixed">Mixed Recall</option>
             </select>
           </label>
         </div>
@@ -388,9 +400,21 @@ export function FlashcardsHubClient({
             <input type="checkbox" checked={incorrectOnly} onChange={(e) => setIncorrectOnly(e.target.checked)} />
             Include previously incorrect cards
           </label>
-          <label className="flex items-center gap-2 text-xs text-[var(--theme-muted-text)] opacity-60">
-            <input type="checkbox" checked={starredOnly} onChange={(e) => setStarredOnly(e.target.checked)} disabled />
-            Include starred/saved cards (coming soon)
+          <label className="flex items-center gap-2 text-xs text-[var(--theme-muted-text)]">
+            <input type="checkbox" checked={starredOnly} onChange={(e) => setStarredOnly(e.target.checked)} />
+            Starred Only ({savedStats.starred})
+          </label>
+          <label className="flex items-center gap-2 text-xs text-[var(--theme-muted-text)]">
+            <input type="checkbox" checked={savedOnly} onChange={(e) => setSavedOnly(e.target.checked)} />
+            Saved Only ({savedStats.saved})
+          </label>
+          <label className="flex items-center gap-2 text-xs text-[var(--theme-muted-text)]">
+            <input type="checkbox" checked={notesOnly} onChange={(e) => setNotesOnly(e.target.checked)} />
+            Notes Only ({savedStats.noted})
+          </label>
+          <label className="flex items-center gap-2 text-xs text-[var(--theme-muted-text)]">
+            <input type="checkbox" checked={revisitOnly} onChange={(e) => setRevisitOnly(e.target.checked)} />
+            Marked for Revisit ({savedStats.confusing})
           </label>
         </div>
 
@@ -436,6 +460,19 @@ export function FlashcardsHubClient({
           <p>
             Cards: {builderSummary?.matchingCards ?? 0} · Mode: {modeLabel[studyMode]} · Shuffle: {shuffleOn ? "On" : "Off"}
           </p>
+          {(starredOnly || savedOnly || notesOnly || revisitOnly) ? (
+            <p>
+              Review Filters: {[
+                starredOnly ? "Starred" : null,
+                savedOnly ? "Saved" : null,
+                notesOnly ? "With Notes" : null,
+                revisitOnly ? "Marked for Revisit" : null,
+              ]
+                .filter(Boolean)
+                .join(", ")}{" "}
+              (applied when the session starts)
+            </p>
+          ) : null}
         </div>
 
         <div className="mt-4 flex flex-wrap gap-3">

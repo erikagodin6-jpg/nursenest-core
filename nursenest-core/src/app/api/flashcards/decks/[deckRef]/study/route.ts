@@ -97,7 +97,9 @@ export async function GET(req: NextRequest, { params }: Props) {
             id: true,
             front: true,
             back: true,
+            sourceKey: true,
             category: { select: { name: true, topicCode: true } },
+            deck: { select: { pathwayId: true } },
           },
         }),
       );
@@ -119,6 +121,8 @@ export async function GET(req: NextRequest, { params }: Props) {
             fullBackAvailable: false,
             topic: c.category.name,
             subtopic: c.category.topicCode,
+            sourceKey: c.sourceKey,
+            pathwayId: c.deck?.pathwayId ?? null,
             ...(loc.explanation ? { explanation: loc.explanation } : {}),
           };
         }),
@@ -223,7 +227,9 @@ export async function GET(req: NextRequest, { params }: Props) {
           id: true,
           front: true,
           back: true,
+          sourceKey: true,
           category: { select: { name: true, topicCode: true } },
+          deck: { select: { pathwayId: true } },
         },
       }),
     );
@@ -232,7 +238,9 @@ export async function GET(req: NextRequest, { params }: Props) {
       id: string;
       front: string;
       back: string;
+      sourceKey: string | null;
       category: { name: string; topicCode: string | null };
+      deck: { pathwayId: string | null } | null;
     }>;
 
     const body = {
@@ -252,6 +260,8 @@ export async function GET(req: NextRequest, { params }: Props) {
           fullBackAvailable: true,
           topic: c.category.name,
           subtopic: c.category.topicCode,
+          sourceKey: c.sourceKey,
+          pathwayId: c.deck?.pathwayId ?? null,
           ...(loc.explanation ? { explanation: loc.explanation } : {}),
         };
       }),
