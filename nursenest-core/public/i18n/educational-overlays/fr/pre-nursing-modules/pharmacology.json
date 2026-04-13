@@ -1,0 +1,19 @@
+{
+  "overview": "La pharmacologie est l'étude des médicaments : leur mécanisme d'action, leur devenir dans l'organisme, leurs effets thérapeutiques et leurs effets indésirables. Pour l'infirmière, la pharmacologie est au cœur de la sécurité des soins — administrer un médicament exige bien plus que lire une étiquette.",
+  "key_concepts": [
+    "Pharmacocinétique (ADME) : Absorption → Distribution → Métabolisme → Élimination",
+    "Pharmacodynamie : mécanisme d'action du médicament (agoniste = active un récepteur, antagoniste = le bloque)",
+    "Règles des 8 « bons » : bon patient, bon médicament, bonne dose, bonne voie, bon moment, bonne documentation, bon motif, bonne réponse",
+    "Index thérapeutique : rapport entre dose toxique et dose efficace — étroit = risque élevé (digoxine, lithium, warfarine)",
+    "Interactions médicamenteuses : synergie (effet accru) vs antagonisme (effet réduit) vs toxicité additive"
+  ],
+  "nursing_responsibilities": "L'infirmière vérifie les cinq « bons » (au minimum) avant toute administration, évalue le patient avant et après la prise du médicament, surveille les effets indésirables et documente rigoureusement. Elle doit connaître les contre-indications et informer le prescripteur en cas de doute. Elle enseigne au patient l'utilisation correcte, les effets attendus et les signes d'alarme.",
+  "clinical_pearls": "Les médicaments à index thérapeutique étroit nécessitent un suivi des taux sériques (digoxinémie, lithiémie, INR pour la warfarine). La clairance rénale diminue avec l'âge — ajuster les doses chez la personne âgée. Certains médicaments nécessitent une administration à jeun (lévothyroxine) d'autres avec de la nourriture (AINS) pour optimiser l'absorption et réduire les effets gastro-intestinaux.",
+  "patient_education": "Enseignez au patient : le nom générique et commercial du médicament, son indication, la posologie et l'horaire, les effets indésirables à surveiller, les interactions alimentaires et médicamenteuses, et quand contacter le professionnel de santé. Insistez sur la nécessité de ne pas arrêter un traitement sans avis médical.",
+  "key_takeaways": [
+    "La pharmacocinétique décrit ce que le corps fait au médicament ; la pharmacodynamie décrit ce que le médicament fait au corps",
+    "L'index thérapeutique étroit implique une surveillance rapprochée des taux et des signes de toxicité",
+    "Les règles des 8 « bons » sont un filet de sécurité — ne jamais les contourner sous pression",
+    "L'éducation thérapeutique du patient améliore l'observance et prévient les erreurs à domicile"
+  ]
+}

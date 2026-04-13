@@ -318,6 +318,9 @@ export function collectLocaleMarketingUrls(origin: string, locale: string): stri
   urls.push(add(`/${locale}/question-bank`));
   urls.push(add(`/${locale}/practice-exams`));
   urls.push(add(`/${locale}/pre-nursing`));
+  for (const mod of PRE_NURSING_MODULE_REGISTRY) {
+    urls.push(add(`/${locale}/pre-nursing/lessons/${mod.slug}`));
+  }
   urls.push(add(`/${locale}/for-institutions`));
   urls.push(add(`/${locale}/faq`));
   urls.push(add(`/${locale}/terms`));
