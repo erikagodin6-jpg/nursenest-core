@@ -26,6 +26,7 @@ import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { applyFlashcardCardOverlay } from "@/lib/i18n/educational-content-overlay";
 import { resolveMergedFlashcardEducationalBundle } from "@/lib/i18n/educational-translation-db";
 import { getMarketingLocaleFromRequestCookie } from "@/lib/i18n/marketing-locale-cookie";
+import { buildFlashcardExplanationFromSources } from "@/lib/content-quality/controlled-rationale-enrichment";
 
 const NO_ACCESS: AccessScope = {
   hasAccess: false,
@@ -121,6 +122,14 @@ export async function GET(req: NextRequest, { params }: Props) {
             educationalLocale,
             flashcardBundle,
           );
+          const explanation =
+            loc.explanation ??
+            buildFlashcardExplanationFromSources({
+              front: loc.front,
+              back: loc.back,
+              topic: c.category.name,
+              subtopic: c.category.topicCode,
+            });
           return {
             id: c.id,
             front: loc.front,
@@ -130,7 +139,7 @@ export async function GET(req: NextRequest, { params }: Props) {
             subtopic: c.category.topicCode,
             sourceKey: c.sourceKey,
             pathwayId: c.deck?.pathwayId ?? null,
-            ...(loc.explanation ? { explanation: loc.explanation } : {}),
+            ...(explanation ? { explanation } : {}),
           };
         }),
         session: null,
@@ -272,6 +281,14 @@ export async function GET(req: NextRequest, { params }: Props) {
           educationalLocale,
           flashcardBundle,
         );
+        const explanation =
+          loc.explanation ??
+          buildFlashcardExplanationFromSources({
+            front: loc.front,
+            back: loc.back,
+            topic: c.category.name,
+            subtopic: c.category.topicCode,
+          });
         return {
           id: c.id,
           front: loc.front,
@@ -281,7 +298,7 @@ export async function GET(req: NextRequest, { params }: Props) {
           subtopic: c.category.topicCode,
           sourceKey: c.sourceKey,
           pathwayId: c.deck?.pathwayId ?? null,
-          ...(loc.explanation ? { explanation: loc.explanation } : {}),
+          ...(explanation ? { explanation } : {}),
         };
       }),
       session: {

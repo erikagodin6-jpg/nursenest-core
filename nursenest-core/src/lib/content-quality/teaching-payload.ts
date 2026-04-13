@@ -2,6 +2,7 @@ import type { Prisma } from "@prisma/client";
 import { stripToPlainText } from "@/lib/content-quality/plain-text";
 import { matchConceptImage } from "@/lib/education-images/match-concept-image";
 import { parseRationaleReferenceMedia, type RationaleReferenceMedia } from "@/lib/content-quality/rationale-media";
+import { buildControlledRationaleEnrichment } from "@/lib/content-quality/controlled-rationale-enrichment";
 
 export type TeachingDistractorNotes = string | null;
 
@@ -177,6 +178,29 @@ export function buildNormalizedTeachingPayload(row: ExamQuestionTeachingRow): No
       ? "For each option: decide if it is fully true in this scenario (select) or if it is unsafe, incomplete, or off-target (do not select). Common misses ignore a stem keyword, exceed scope, or treat a partial truth as sufficient."
       : "For each incorrect option, name why it fails the stem (wrong priority, unsafe action, outside scope, or a plausible but less urgent choice).");
 
+  const controlledEnrichment = buildControlledRationaleEnrichment({
+    stem: row.stem,
+    topic: row.topic,
+    subtopic: row.subtopic,
+    bodySystem: row.bodySystem,
+    tags: row.tags ?? null,
+    questionType: row.questionType,
+    correctAnswers,
+    rationale,
+    correctAnswerExplanation,
+    clinicalReasoning: row.clinicalReasoning?.trim() ? row.clinicalReasoning.trim() : null,
+    distractorNotes: distractorBody,
+    keyTakeaway,
+    examStrategy: row.examStrategy?.trim() ? row.examStrategy.trim() : null,
+  });
+
+  const whyCorrectBody = controlledEnrichment.applied
+    ? controlledEnrichment.whyCorrect
+    : mergeWhyThisIsCorrect(correctAnswerExplanation, rationale, row.clinicalReasoning?.trim() ? row.clinicalReasoning.trim() : null);
+
+  const whyWrongBody = controlledEnrichment.applied ? controlledEnrichment.whyWrong : distractorBody;
+  const clinicalPearlBody = controlledEnrichment.applied ? controlledEnrichment.clinicalPearl : row.clinicalPearl;
+
   const sections: Array<{ id: string; heading: string; body: string }> = [];
 
   // Canonical learner-facing order (then supplementary blocks).
@@ -190,9 +214,9 @@ export function buildNormalizedTeachingPayload(row: ExamQuestionTeachingRow): No
     sections,
     "why_correct",
     "Why this is correct",
-    mergeWhyThisIsCorrect(correctAnswerExplanation, rationale, row.clinicalReasoning?.trim() ? row.clinicalReasoning.trim() : null),
+    whyCorrectBody,
   );
-  pushSection(sections, "distractors", "Why the other options are wrong", distractorBody);
+  pushSection(sections, "distractors", "Why the other options are wrong", whyWrongBody);
   pushSection(
     sections,
     "takeaway",
@@ -202,9 +226,10 @@ export function buildNormalizedTeachingPayload(row: ExamQuestionTeachingRow): No
   const examStrategyBody = row.examStrategy?.trim() || defaultExamStrategyFallback(row.questionType, isSata);
   pushSection(sections, "exam_strategy", "Exam strategy", examStrategyBody);
   pushSection(sections, "concept", "Concept tested", conceptTested);
-  pushSection(sections, "pearl", "Clinical pearl", row.clinicalPearl);
+  pushSection(sections, "pearl", "Clinical pearl", clinicalPearlBody);
   pushSection(sections, "trap", "Common trap", row.clinicalTrap);
   pushSection(sections, "memory_hook", "Memory hook", row.memoryHook);
+  pushSection(sections, "topic_anchor", "Related lesson/topic anchor", controlledEnrichment.topicAnchor);
 
   const dedup: typeof sections = [];
   const seen = new Set<string>();

@@ -9,6 +9,7 @@ import {
   builderCategoryTitleForId,
   resolveBuilderCategoryId,
 } from "@/lib/flashcards/flashcard-builder-taxonomy";
+import { buildFlashcardExplanationFromSources } from "@/lib/content-quality/controlled-rationale-enrichment";
 
 type StudyMode = "term_to_definition" | "definition_to_term" | "mixed";
 
@@ -175,15 +176,26 @@ export async function GET(req: NextRequest) {
     ? limited.map((card, index) => {
         const mixedSwap = mode === "mixed" && index % 2 === 1;
         const swap = mode === "definition_to_term" || mixedSwap;
+        const front = swap ? card.back : card.front;
+        const back = swap ? card.front : card.back;
+        const topic = builderCategoryTitleForId(pathwayId, card.builderCategoryId);
+        const subtopic = card.category.topicCode;
+        const explanation = buildFlashcardExplanationFromSources({
+          front,
+          back,
+          topic,
+          subtopic,
+        });
         return {
           id: card.id,
-          front: swap ? card.back : card.front,
-          back: swap ? card.front : card.back,
-          topic: builderCategoryTitleForId(pathwayId, card.builderCategoryId),
-          subtopic: card.category.topicCode,
+          front,
+          back,
+          topic,
+          subtopic,
           rawTopic: card.category.name,
           sourceKey: card.sourceKey,
           pathwayId: card.deck?.pathwayId ?? pathwayId,
+          ...(explanation ? { explanation } : {}),
         };
       })
     : [];

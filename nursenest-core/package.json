@@ -157,7 +157,11 @@
     "ops:recover-np-historical": "tsx scripts/recover-np-historical-lessons.ts",
     "lessons:dedupe:scan": "tsx scripts/pathway-lesson-dedupe-cleanup.ts",
     "lessons:dedupe:report": "tsx scripts/pathway-lesson-dedupe-cleanup.ts --report-only",
-    "lessons:dedupe:apply": "tsx scripts/pathway-lesson-dedupe-cleanup.ts --apply"
+    "lessons:dedupe:apply": "tsx scripts/pathway-lesson-dedupe-cleanup.ts --apply",
+    "rationale:enrich:batch": "tsx scripts/rationale-enrichment-batch.ts",
+    "rationale:enrich:electrolytes": "tsx scripts/rationale-enrichment-batch.ts --batch=electrolytes --max=20",
+    "rationale:enrich:abg": "tsx scripts/rationale-enrichment-batch.ts --batch=abg_acid_base --max=15",
+    "rationale:enrich:cardiac": "tsx scripts/rationale-enrichment-batch.ts --batch=cardiac --max=25"
   },
   "dependencies": {
     "@auth/core": "0.37.2",
