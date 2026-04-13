@@ -20,7 +20,7 @@
     "title": "Heart failure (REx-PN / PN, Canada)",
     "category": "cardiovascular",
     "subcategory": "Heart failure",
-    "completeness": "EMPTY",
+    "completeness": "COMPLETE",
     "questions": "yes"
   },
   {
@@ -60,7 +60,7 @@
     "title": "Shock (REx-PN / PN, Canada)",
     "category": "cardiovascular",
     "subcategory": "Shock",
-    "completeness": "EMPTY",
+    "completeness": "COMPLETE",
     "questions": "yes"
   },
   {
@@ -68,7 +68,7 @@
     "title": "Asthma (REx-PN / PN, Canada)",
     "category": "respiratory",
     "subcategory": "Asthma",
-    "completeness": "EMPTY",
+    "completeness": "COMPLETE",
     "questions": "yes"
   },
   {
@@ -76,7 +76,7 @@
     "title": "ARDS (REx-PN / PN, Canada)",
     "category": "respiratory",
     "subcategory": "ARDS",
-    "completeness": "EMPTY",
+    "completeness": "COMPLETE",
     "questions": "yes"
   },
   {
@@ -92,7 +92,7 @@
     "title": "COPD & respiratory basics (REx-PN / PN, Canada)",
     "category": "respiratory",
     "subcategory": "COPD & respiratory basics",
-    "completeness": "EMPTY",
+    "completeness": "COMPLETE",
     "questions": "yes"
   },
   {
@@ -100,7 +100,7 @@
     "title": "ABG interpretation (REx-PN / PN, Canada)",
     "category": "respiratory",
     "subcategory": "ABG interpretation",
-    "completeness": "EMPTY",
+    "completeness": "COMPLETE",
     "questions": "yes"
   },
   {
@@ -108,7 +108,7 @@
     "title": "Acid–base disorders (advanced) (REx-PN / PN, Canada)",
     "category": "renal",
     "subcategory": "Acid–base disorders (advanced)",
-    "completeness": "EMPTY",
+    "completeness": "COMPLETE",
     "questions": "yes"
   },
   {
@@ -116,7 +116,7 @@
     "title": "Sodium imbalance (REx-PN / PN, Canada)",
     "category": "renal",
     "subcategory": "Sodium imbalance",
-    "completeness": "EMPTY",
+    "completeness": "COMPLETE",
     "questions": "yes"
   },
   {
@@ -124,7 +124,7 @@
     "title": "Potassium imbalance (REx-PN / PN, Canada)",
     "category": "renal",
     "subcategory": "Potassium imbalance",
-    "completeness": "EMPTY",
+    "completeness": "COMPLETE",
     "questions": "yes"
   },
   {
@@ -132,7 +132,7 @@
     "title": "Insulin & hypoglycemia (REx-PN / PN, Canada)",
     "category": "endocrine",
     "subcategory": "Insulin & hypoglycemia",
-    "completeness": "EMPTY",
+    "completeness": "COMPLETE",
     "questions": "yes"
   },
   {
@@ -140,7 +140,7 @@
     "title": "Sepsis (REx-PN / PN, Canada)",
     "category": "sepsis",
     "subcategory": "Sepsis",
-    "completeness": "EMPTY",
+    "completeness": "COMPLETE",
     "questions": "yes"
   },
   {
@@ -196,7 +196,7 @@
     "title": "Fluid deficit vs excess (REx-PN / PN, Canada)",
     "category": "renal",
     "subcategory": "Fluid deficit vs excess",
-    "completeness": "EMPTY",
+    "completeness": "COMPLETE",
     "questions": "yes"
   },
   {
@@ -252,7 +252,7 @@
     "title": "Heart Failure Monitoring (REx-PN / PN, Canada)",
     "category": "cardiovascular",
     "subcategory": "Cardiovascular (PN)",
-    "completeness": "EMPTY",
+    "completeness": "COMPLETE",
     "questions": "yes"
   },
   {
@@ -276,7 +276,7 @@
     "title": "Oxygen Devices for PN Care (REx-PN / PN, Canada)",
     "category": "respiratory",
     "subcategory": "Respiratory (PN)",
-    "completeness": "EMPTY",
+    "completeness": "COMPLETE",
     "questions": "yes"
   },
   {
@@ -292,7 +292,7 @@
     "title": "COPD Home Care (REx-PN / PN, Canada)",
     "category": "respiratory",
     "subcategory": "Respiratory (PN)",
-    "completeness": "EMPTY",
+    "completeness": "COMPLETE",
     "questions": "yes"
   },
   {
@@ -300,7 +300,7 @@
     "title": "Insulin Administration Checks (REx-PN / PN, Canada)",
     "category": "endocrine",
     "subcategory": "Pharmacology (PN)",
-    "completeness": "EMPTY",
+    "completeness": "COMPLETE",
     "questions": "yes"
   },
   {
@@ -324,7 +324,7 @@
     "title": "I&O & Fluid Restriction Teaching (REx-PN / PN, Canada)",
     "category": "renal",
     "subcategory": "Fluids & Electrolytes (PN)",
-    "completeness": "EMPTY",
+    "completeness": "COMPLETE",
     "questions": "yes"
   },
   {
@@ -332,7 +332,7 @@
     "title": "Hypokalemia Symptoms (REx-PN / PN, Canada)",
     "category": "renal",
     "subcategory": "Fluids & Electrolytes (PN)",
-    "completeness": "EMPTY",
+    "completeness": "COMPLETE",
     "questions": "yes"
   },
   {
@@ -340,7 +340,7 @@
     "title": "Daily Weights Pattern (REx-PN / PN, Canada)",
     "category": "renal",
     "subcategory": "Fluids & Electrolytes (PN)",
-    "completeness": "EMPTY",
+    "completeness": "COMPLETE",
     "questions": "yes"
   },
   {
@@ -364,7 +364,7 @@
     "title": "Stroke Sequela & Mobility Assist (REx-PN / PN, Canada)",
     "category": "neuro",
     "subcategory": "Neurological (PN)",
-    "completeness": "EMPTY",
+    "completeness": "COMPLETE",
     "questions": "yes"
   },
   {
@@ -477,7 +477,7 @@
     "category": "safety",
     "subcategory": "Safety (PN)",
     "completeness": "EMPTY",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "restraint-monitoring-requirements",
@@ -485,7 +485,7 @@
     "category": "safety",
     "subcategory": "Safety (PN)",
     "completeness": "EMPTY",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "bp26-carpn-pa-htn-crisis",
@@ -8166,5 +8166,13 @@
     "subcategory": "General",
     "completeness": "PARTIAL",
     "questions": "no"
+  },
+  {
+    "slug": "neuro-deterioration-escalation",
+    "title": "Neuro Deterioration: Escalation Triggers (REx-PN)",
+    "category": "neuro",
+    "subcategory": "Neuro Deterioration",
+    "completeness": "EMPTY",
+    "questions": "yes"
   }
 ]

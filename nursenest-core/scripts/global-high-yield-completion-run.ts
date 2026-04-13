@@ -184,29 +184,35 @@ function buildSections(title: string, synopsis: string): Prisma.InputJsonValue {
   }));
 }
 
-async function hasQuestionsForLesson(pathway: ExamPathwayDefinition, lesson: { topic: string; slug: string; bodySystem: string }): Promise<boolean> {
+async function buildQuestionCorpusForPathway(pathway: ExamPathwayDefinition): Promise<string> {
   const tierList = tierListForRole(pathway.roleTrack);
-  const topic = normalize(lesson.topic);
-  const slugText = normalize(lesson.slug.replace(/-/g, " "));
-  const body = normalize(lesson.bodySystem);
-  const n = await prisma.examQuestion.count({
+  const rows = await prisma.examQuestion.findMany({
     where: {
       status: "published",
       exam: { in: pathway.contentExamKeys },
       ...(tierList.length ? { tier: { in: tierList } } : {}),
-      OR: [
-        { topic: { contains: topic, mode: "insensitive" } },
-        { subtopic: { contains: topic, mode: "insensitive" } },
-        { topic: { contains: slugText, mode: "insensitive" } },
-        { subtopic: { contains: slugText, mode: "insensitive" } },
-        { bodySystem: { contains: body, mode: "insensitive" } },
-      ],
     },
+    select: { topic: true, subtopic: true, bodySystem: true, tags: true },
   });
-  return n > 0;
+  return normalize(
+    rows
+      .map((r) => `${r.topic ?? ""} ${r.subtopic ?? ""} ${r.bodySystem ?? ""} ${(r.tags ?? []).join(" ")}`)
+      .join("\n"),
+  );
 }
 
-async function auditPathwayLocale(pathway: ExamPathwayDefinition, locale: string) {
+function hasQuestionsForLessonFromCorpus(
+  questionCorpus: string,
+  lesson: { topic: string; slug: string; bodySystem: string },
+): boolean {
+  const topic = normalize(lesson.topic);
+  const slugText = normalize(lesson.slug.replace(/-/g, " "));
+  const body = normalize(lesson.bodySystem);
+  if (!questionCorpus) return false;
+  return [topic, slugText, body].some((k) => k.length > 1 && questionCorpus.includes(k));
+}
+
+async function auditPathwayLocale(pathway: ExamPathwayDefinition, locale: string, questionCorpus: string) {
   const localeLessons = await prisma.pathwayLesson.findMany({
     where: {
       pathwayId: pathway.id,
@@ -258,7 +264,7 @@ async function auditPathwayLocale(pathway: ExamPathwayDefinition, locale: string
   const duplicateTopicMap = new Map<string, string[]>();
 
   for (const l of lessons) {
-    const hasQ = await hasQuestionsForLesson(pathway, { topic: l.topic, slug: l.slug, bodySystem: l.bodySystem });
+    const hasQ = hasQuestionsForLessonFromCorpus(questionCorpus, { topic: l.topic, slug: l.slug, bodySystem: l.bodySystem });
     const completeness = completionFromSections(l.sections, hasQ);
     const category = (domainForText(`${l.title} ${l.topic} ${l.bodySystem} ${l.slug}`) ?? "safety").replaceAll("_", "-");
     index.push({
@@ -310,10 +316,11 @@ async function auditPathwayLocale(pathway: ExamPathwayDefinition, locale: string
 }
 
 async function processPathway(pathway: ExamPathwayDefinition) {
+  const questionCorpus = await buildQuestionCorpusForPathway(pathway);
   // Phase 1 audit over locales
   const localeSummaries: Array<Awaited<ReturnType<typeof auditPathwayLocale>>> = [];
   for (const locale of GLOBAL_LOCALE_CODES) {
-    localeSummaries.push(await auditPathwayLocale(pathway, locale));
+    localeSummaries.push(await auditPathwayLocale(pathway, locale, questionCorpus));
   }
 
   const enAudit = localeSummaries.find((x) => x.locale === "en") ?? localeSummaries[0]!;
@@ -378,7 +385,7 @@ async function processPathway(pathway: ExamPathwayDefinition) {
     const domain = domainForText(`${r.slug} ${r.title} ${r.topic} ${r.bodySystem}`);
     if (!domain) continue;
     if (!["cardiovascular", "respiratory", "renal", "endocrine", "neuro", "sepsis", "fluids_electrolytes"].includes(domain)) continue;
-    const hasQ = await hasQuestionsForLesson(pathway, { topic: r.topic, slug: r.slug, bodySystem: r.bodySystem });
+    const hasQ = hasQuestionsForLessonFromCorpus(questionCorpus, { topic: r.topic, slug: r.slug, bodySystem: r.bodySystem });
     const comp = completionFromSections(r.sections, hasQ);
     if (comp === "COMPLETE") continue;
     includeSlugs.push(r.slug);
@@ -393,7 +400,8 @@ async function processPathway(pathway: ExamPathwayDefinition) {
   });
 
   // Post-run counts + remaining gaps
-  const postAudit = await auditPathwayLocale(pathway, "en");
+  const postQuestionCorpus = await buildQuestionCorpusForPathway(pathway);
+  const postAudit = await auditPathwayLocale(pathway, "en", postQuestionCorpus);
   const flashcardsCount = await prisma.flashcard.count({
     where: {
       status: ContentStatus.PUBLISHED,
