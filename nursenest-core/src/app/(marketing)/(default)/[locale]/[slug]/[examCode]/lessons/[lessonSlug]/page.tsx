@@ -33,6 +33,7 @@ import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { pathwayLessonDetailBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 import { absoluteUrl } from "@/lib/seo/site-origin";
 import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
+import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { MarketingStudyCrossLinks } from "@/components/seo/marketing-study-cross-links";
 import { LessonQualityNotice } from "@/components/lessons/lesson-quality-notice";
@@ -202,6 +203,7 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
   });
   const requestedNorm = normalizePathwayLessonLocale(lessonContentLocale);
   const marketingUiLocale = await getMarketingLocaleForDefaultRoute();
+  const { t } = await getLearnerMarketingBundle();
   const showLocaleFallbackNotice = Boolean(
     lesson.localeMeta &&
       (lesson.localeMeta.usedLocaleFallback ||
@@ -347,9 +349,12 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
                     <PathwayLessonSectionContent
                       text={typeof section.body === "string" ? section.body : ""}
                       figures={section.figures}
+                      examFocus={section.examFocus}
                       lessonWikiBasePath={base}
                       viewerTier={lessonContentTier}
                       measurementSystem={lessonMeasurementSystem}
+                      emptyBodyMessage={t("learner.lessons.detail.sectionEmptyBody")}
+                      figuresVisualLeadMessage={t("learner.lessons.detail.sectionFiguresVisualLead")}
                     />
                     {section.keyRecallFacts?.length ? (
                       <LessonKeyRecallChip facts={section.keyRecallFacts} />

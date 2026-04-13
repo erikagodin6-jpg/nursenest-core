@@ -11,6 +11,7 @@ import { prisma } from "@/lib/db";
 import { withDatabaseFallback } from "@/lib/db/safe-database";
 import { appPathwayLessonVisibleToSubscriber } from "@/lib/lessons/app-pathway-lesson-list-scope";
 import { visibleSectionsForLesson } from "@/lib/lessons/pathway-lesson-access";
+import { filterLearnerPresentablePathwaySections } from "@/lib/lessons/lesson-section-presentability";
 import {
   canAccessLegacyContentMapLesson,
   getLegacyContentMapLessonById,
@@ -56,7 +57,26 @@ import { LessonPageHeader } from "@/components/lessons/lesson-page-header";
 import { LessonSectionNav } from "@/components/lessons/lesson-section-nav";
 import { LessonNavButtons } from "@/components/lessons/lesson-nav-buttons";
 
-function LessonBody({ content }: { content: unknown }) {
+function LessonBody({
+  content,
+  t,
+}: {
+  content: unknown;
+  t: (key: string) => string;
+}) {
+  const unsupported = (
+    <aside
+      className="rounded-xl border px-4 py-3 text-sm leading-relaxed"
+      style={{
+        borderColor: "color-mix(in srgb, var(--semantic-info) 28%, var(--semantic-border-soft))",
+        background: "color-mix(in srgb, var(--semantic-panel-cool) 45%, transparent)",
+        color: "var(--semantic-text-secondary)",
+      }}
+    >
+      {t("learner.lessons.detail.contentBlockUnsupported")}
+    </aside>
+  );
+
   if (Array.isArray(content)) {
     return (
       <div className="mt-6 space-y-4 text-sm leading-relaxed text-[var(--theme-body-text)]">
@@ -68,21 +88,35 @@ function LessonBody({ content }: { content: unknown }) {
               </p>
             );
           }
-          if (block && typeof block === "object" && "text" in block) {
-            const t = (block as { text?: string }).text;
-            if (typeof t === "string") {
+          if (block && typeof block === "object") {
+            const o = block as Record<string, unknown>;
+            const pickString = (...keys: string[]) => {
+              for (const k of keys) {
+                const v = o[k];
+                if (typeof v === "string" && v.trim()) return v;
+              }
+              return null;
+            };
+            const textBlock = pickString("text", "body", "markdown", "md", "html", "content");
+            if (textBlock) {
               return (
                 <p key={i} className="whitespace-pre-wrap">
-                  {t}
+                  {textBlock}
                 </p>
               );
             }
+            if (Array.isArray(o.items) && o.items.every((x) => typeof x === "string")) {
+              return (
+                <ul key={i} className="list-disc space-y-1 pl-5">
+                  {(o.items as string[]).map((line, j) => (
+                    <li key={j}>{line}</li>
+                  ))}
+                </ul>
+              );
+            }
+            return <div key={i}>{unsupported}</div>;
           }
-          return (
-            <pre key={i} className="overflow-x-auto rounded-lg bg-[var(--theme-muted-surface)] p-3 text-xs">
-              {JSON.stringify(block, null, 2)}
-            </pre>
-          );
+          return <div key={i}>{unsupported}</div>;
         })}
       </div>
     );
@@ -90,11 +124,22 @@ function LessonBody({ content }: { content: unknown }) {
   if (typeof content === "string") {
     return <div className="mt-6 whitespace-pre-wrap text-sm leading-relaxed">{content}</div>;
   }
-  return (
-    <pre className="mt-6 overflow-x-auto rounded-lg bg-[var(--theme-muted-surface)] p-4 text-xs">
-      {JSON.stringify(content, null, 2)}
-    </pre>
-  );
+  if (content && typeof content === "object" && !Array.isArray(content)) {
+    const o = content as Record<string, unknown>;
+    const one = typeof o.text === "string" ? o.text : typeof o.body === "string" ? o.body : null;
+    if (one?.trim()) {
+      return <div className="mt-6 whitespace-pre-wrap text-sm leading-relaxed">{one}</div>;
+    }
+    return <div className="mt-6">{unsupported}</div>;
+  }
+  if (content == null) {
+    return (
+      <p className="mt-6 text-sm leading-relaxed" style={{ color: "var(--semantic-text-muted)" }}>
+        {t("learner.lessons.detail.contentLessonSparse")}
+      </p>
+    );
+  }
+  return <div className="mt-6">{unsupported}</div>;
 }
 
 type Props = { params: Promise<{ id: string }> };
@@ -316,7 +361,8 @@ export default async function LessonDetailPage({ params }: Props) {
 
   if (resolvedLesson.kind === "pathway_ok") {
     const record = resolvedLesson.record;
-    const visible = visibleSectionsForLesson(record, true);
+    const visibleRaw = visibleSectionsForLesson(record, true);
+    const visible = filterLearnerPresentablePathwaySections(visibleRaw);
     const pathwayId = resolvedLesson.pathwayId;
     const pathway = getExamPathwayById(pathwayId);
     const examFraming = getLearnerExamFraming(pathwayId);
@@ -384,7 +430,7 @@ export default async function LessonDetailPage({ params }: Props) {
     const examFramingLabel =
       examFraming.region !== "unknown" ? examFraming.examIdentityLabel : null;
 
-    // Nav sections for quick-jump (only sections with non-empty headings)
+    // Nav sections for quick-jump (aligned with rendered article sections)
     const navSections = visible.map((s) => ({
       id: s.id,
       heading: s.heading?.trim() ?? "",
@@ -401,7 +447,7 @@ export default async function LessonDetailPage({ params }: Props) {
           topicSlug={record.topicSlug}
           pathwayId={pathwayId}
           examFramingLabel={examFramingLabel}
-          sectionCount={visible.length}
+          sectionCount={visible.length > 0 ? visible.length : visibleRaw.length > 0 ? 1 : 0}
           examRelevance={record.examRelevance ?? null}
           audienceTiers={record.audienceTiers ?? null}
           progress={initialProgress}
@@ -442,31 +488,46 @@ export default async function LessonDetailPage({ params }: Props) {
                 qualityNotice={<LessonQualityNotice tier={pathwayQuality.tier} wordCount={pathwayQuality.wordCount} />}
               >
                 <article className="space-y-6">
-                  {visible.map((section) => (
-                    <LessonSectionCard
-                      key={section.id}
-                      id={section.id}
-                      heading={section.heading?.trim() || t("learner.lessons.detail.sectionFallback")}
-                      kind={section.kind ?? null}
-                    >
-                      <PathwayLessonSectionContent
-                        text={typeof section.body === "string" ? section.body : ""}
-                        figures={section.figures}
-                        viewerTier={lessonViewerTier}
-                        measurementSystem={lessonMeasurementSystem ?? undefined}
-                      />
-                      {userId ? (
-                        <LessonSectionNoteInline
-                          userId={userId}
-                          sectionId={section.id}
-                          sectionHeading={section.heading?.trim() ?? ""}
-                          scope="PATHWAY_LESSON"
-                          pathwayId={pathwayId}
-                          topic={record.topic}
+                  {visible.length > 0 ? (
+                    visible.map((section) => (
+                      <LessonSectionCard
+                        key={section.id}
+                        id={section.id}
+                        heading={section.heading?.trim() || t("learner.lessons.detail.sectionFallback")}
+                        kind={section.kind ?? null}
+                      >
+                        <PathwayLessonSectionContent
+                          text={typeof section.body === "string" ? section.body : ""}
+                          figures={section.figures}
+                          examFocus={section.examFocus}
+                          viewerTier={lessonViewerTier}
+                          measurementSystem={lessonMeasurementSystem ?? undefined}
+                          emptyBodyMessage={t("learner.lessons.detail.sectionEmptyBody")}
+                          figuresVisualLeadMessage={t("learner.lessons.detail.sectionFiguresVisualLead")}
                         />
-                      ) : null}
+                        {userId ? (
+                          <LessonSectionNoteInline
+                            userId={userId}
+                            sectionId={section.id}
+                            sectionHeading={section.heading?.trim() ?? ""}
+                            scope="PATHWAY_LESSON"
+                            pathwayId={pathwayId}
+                            topic={record.topic}
+                          />
+                        ) : null}
+                      </LessonSectionCard>
+                    ))
+                  ) : visibleRaw.length > 0 ? (
+                    <LessonSectionCard
+                      id="lesson-reading-refine"
+                      heading={t("learner.lessons.detail.lessonArticleRefiningTitle")}
+                      kind={null}
+                    >
+                      <p className="text-sm leading-relaxed" style={{ color: "var(--semantic-text-secondary)" }}>
+                        {t("learner.lessons.detail.lessonArticleRefiningBody")}
+                      </p>
                     </LessonSectionCard>
-                  ))}
+                  ) : null}
                 </article>
               </PremiumLessonShell>
             </LessonAssessmentFlow>
@@ -593,7 +654,7 @@ export default async function LessonDetailPage({ params }: Props) {
           sourceLabel={row.title}
           qualityNotice={<LessonQualityNotice tier={contentQ.tier} wordCount={contentQ.wordCount} />}
         >
-          <LessonBody content={row.content as unknown} />
+          <LessonBody content={row.content as unknown} t={t} />
         </PremiumLessonShell>
         {isStudyCoachEnabled() && (
           <CoachLessonHelper

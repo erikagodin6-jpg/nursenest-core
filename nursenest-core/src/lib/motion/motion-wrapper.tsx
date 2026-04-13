@@ -5,8 +5,8 @@ import { type ReactNode, forwardRef } from "react";
 import { useReducedMotion } from "./use-reduced-motion";
 import { pickTransition, pickVariants } from "./reduced-motion";
 import {
+  fadeInVariants,
   fadeUpVariants,
-  fadeVariants,
   scaleInVariants,
   softRevealVariants,
   staggerContainer,
@@ -76,7 +76,7 @@ export const Fade = forwardRef<HTMLDivElement, RevealProps>(
     return (
       <motion.div
         ref={ref}
-        variants={pickVariants(reduced, fadeVariants)}
+        variants={pickVariants(reduced, fadeInVariants)}
         initial="hidden"
         {...(whenInView
           ? { whileInView: "visible", viewport: { once, margin: viewMargin } }
