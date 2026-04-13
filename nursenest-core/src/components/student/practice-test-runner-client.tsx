@@ -612,18 +612,25 @@ export function PracticeTestRunnerClient({
   if (phase === "loading") {
     return (
       <div className="nn-card space-y-3 p-6 text-sm text-muted-foreground" aria-busy="true">
-        <p className="font-medium text-foreground">Loading test…</p>
+        <p className="font-medium text-foreground">
+          {tx("learner.practiceTests.run.loadingTest", "Loading test...")}
+        </p>
         <div className="h-2 w-full animate-pulse rounded-full bg-muted" />
-        <p className="text-xs">Restoring session from the server.</p>
+        <p className="text-xs">
+          {tx(
+            "learner.practiceTests.run.restoringSession",
+            "Restoring session from the server.",
+          )}
+        </p>
       </div>
     );
   }
   if (phase === "error") {
     return (
       <div className="nn-card p-6 text-sm text-muted-foreground">
-        <p>{error ?? "Error"}</p>
+        <p>{error ?? tx("learner.practiceTests.run.error", "Error")}</p>
         <Link className="mt-2 inline-block font-medium text-primary" href="/app/practice-tests">
-          Back to test bank
+          {tx("learner.practiceTests.run.backToBank", "Back to test bank")}
         </Link>
       </div>
     );
@@ -664,7 +671,10 @@ export function PracticeTestRunnerClient({
             <div className="mt-6">
               <CatStudyFeedbackPanel
                 feedback={catFinalStudyFeedback}
-                continueLabel="View results summary"
+                continueLabel={tx(
+                  "learner.practiceTests.run.viewResultsSummary",
+                  "View results summary",
+                )}
                 onContinue={() => setCatFinalStudyFeedback(null)}
                 continueDisabled={false}
                 pathwayId={testConfig?.pathwayId ?? null}
@@ -888,9 +898,9 @@ export function PracticeTestRunnerClient({
   if (status === "ABANDONED") {
     return (
       <p className="text-sm text-muted-foreground">
-        This test was abandoned.{" "}
+        {tx("learner.practiceTests.run.abandoned", "This test was abandoned.")}{" "}
         <Link className="font-medium text-primary underline" href="/app/practice-tests">
-          Back to test bank
+          {tx("learner.practiceTests.run.backToBank", "Back to test bank")}
         </Link>
       </p>
     );
@@ -899,13 +909,17 @@ export function PracticeTestRunnerClient({
   if (phase === "ready" && status === "IN_PROGRESS" && questionIds.length === 0) {
     return (
       <div className="nn-card space-y-3 p-6 text-sm">
-        <p className="font-medium text-foreground">No questions in this practice test.</p>
+        <p className="font-medium text-foreground">
+          {tx("learner.practiceTests.run.noQuestionsTitle", "No questions in this practice test.")}
+        </p>
         <p className="text-muted-foreground">
-          The pool may have been empty for your filters and tier, or the test was saved in an incomplete state. Start a
-          new adaptive (CAT) or linear test from the list. Broaden topics or difficulty if you see this again.
+          {tx(
+            "learner.practiceTests.run.noQuestionsBody",
+            "The pool may have been empty for your filters and tier, or the test was saved in an incomplete state. Start a new adaptive (CAT) or linear test from the list. Broaden topics or difficulty if you see this again.",
+          )}
         </p>
         <Link className="inline-block font-semibold text-primary underline" href="/app/practice-tests">
-          Back to practice tests
+          {tx("learner.practiceTests.run.backToPracticeTests", "Back to practice tests")}
         </Link>
       </div>
     );
@@ -914,9 +928,9 @@ export function PracticeTestRunnerClient({
   if (status !== "IN_PROGRESS") {
     return (
       <p className="text-sm text-muted-foreground">
-        This test is not in progress.{" "}
+        {tx("learner.practiceTests.run.notInProgress", "This test is not in progress.")}{" "}
         <Link className="font-medium text-primary underline" href="/app/practice-tests">
-          Back
+          {tx("learner.practiceTests.run.back", "Back")}
         </Link>
       </p>
     );
@@ -929,7 +943,9 @@ export function PracticeTestRunnerClient({
     if (error && !qLoading) {
       return (
         <div className="nn-card space-y-3 p-6 text-sm text-muted-foreground">
-          <p className="font-medium text-foreground">Could not load this question.</p>
+          <p className="font-medium text-foreground">
+            {tx("learner.practiceTests.run.loadQuestionFailed", "Could not load this question.")}
+          </p>
           <p>{error}</p>
           <div className="flex flex-wrap gap-2 pt-1">
             <button
@@ -947,17 +963,17 @@ export function PracticeTestRunnerClient({
                 setQuestionFetchNonce((n) => n + 1);
               }}
             >
-              Retry this item
+              {tx("learner.practiceTests.run.retryItem", "Retry this item")}
             </button>
             <button
               type="button"
               className="rounded-full border border-border px-4 py-2 text-sm font-semibold"
               onClick={() => void load()}
             >
-              Reload test
+              {tx("learner.practiceTests.run.reloadTest", "Reload test")}
             </button>
             <Link className="inline-flex items-center font-medium text-primary underline" href="/app/practice-tests">
-              Back
+              {tx("learner.practiceTests.run.back", "Back")}
             </Link>
           </div>
         </div>
@@ -969,10 +985,14 @@ export function PracticeTestRunnerClient({
           <ExamSessionTopBar
             left={
               <p className="nn-marketing-caption font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">
-                Item {idx + 1} of {total}
+                {tx("learner.practiceTests.run.item", "Item")} {idx + 1} {tx("learner.practiceTests.run.of", "of")} {total}
               </p>
             }
-            center={<span className="nn-marketing-caption text-[var(--theme-muted-text)]">Loading</span>}
+            center={
+              <span className="nn-marketing-caption text-[var(--theme-muted-text)]">
+                {tx("learner.practiceTests.run.loading", "Loading")}
+              </span>
+            }
             right={<ExamTimerReadout remainingSec={timedMode ? remainingSec : null} />}
           />
           {total > 0 ? <ExamProgressBar current={idx + 1} total={total} /> : null}
@@ -980,7 +1000,9 @@ export function PracticeTestRunnerClient({
             <div className="h-4 w-[75%] animate-pulse rounded-md bg-muted/60" />
             <div className="h-4 w-full animate-pulse rounded-md bg-muted/60" />
             <div className="h-4 w-[83%] animate-pulse rounded-md bg-muted/60" />
-            <p className="nn-marketing-body-sm text-[var(--theme-muted-text)]">Loading question…</p>
+            <p className="nn-marketing-body-sm text-[var(--theme-muted-text)]">
+              {tx("learner.practiceTests.run.loadingQuestion", "Loading question...")}
+            </p>
           </div>
         </ExamSessionShell>
       </div>
@@ -990,16 +1012,16 @@ export function PracticeTestRunnerClient({
   if (!current) {
     return (
       <div className="nn-card space-y-3 p-6 text-sm text-muted-foreground">
-        <p>Could not display this item.</p>
+        <p>{tx("learner.practiceTests.run.displayItemFailed", "Could not display this item.")}</p>
         <button
           type="button"
           className="rounded-full border border-border px-4 py-2 text-sm font-semibold"
           onClick={() => void load()}
         >
-          Retry
+          {tx("learner.practiceTests.run.retry", "Retry")}
         </button>
         <Link className="ml-2 font-medium text-primary underline" href="/app/practice-tests">
-          Back
+          {tx("learner.practiceTests.run.back", "Back")}
         </Link>
       </div>
     );

@@ -27,6 +27,10 @@ export type SendPasswordResetResult = {
   devResetUrl?: string;
 };
 
+export function isPasswordResetEmailConfigured(): boolean {
+  return Boolean(process.env.RESEND_API_KEY?.trim());
+}
+
 /**
  * Sends reset email via Resend when `RESEND_API_KEY` is set.
  * Production: never returns `devResetUrl`. Does not log raw tokens.

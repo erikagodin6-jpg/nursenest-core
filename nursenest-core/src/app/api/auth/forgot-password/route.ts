@@ -6,7 +6,11 @@ import { generatePasswordResetRawToken, hashPasswordResetToken } from "@/lib/pas
 import { PASSWORD_RESET_TOKEN_TTL_MS } from "@/lib/auth/password-reset-constants";
 import { captureServerEvent, analyticsDistinctId } from "@/lib/observability/posthog-server";
 import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
-import { buildPasswordResetUrl, sendPasswordResetEmail } from "@/lib/send-password-reset-email";
+import {
+  buildPasswordResetUrl,
+  isPasswordResetEmailConfigured,
+  sendPasswordResetEmail,
+} from "@/lib/send-password-reset-email";
 
 export const runtime = "nodejs";
 
@@ -37,6 +41,20 @@ export async function POST(req: Request) {
     return NextResponse.json(
       { ok: false, error: "Too many requests. Try again shortly." },
       { status: 429 },
+    );
+  }
+
+  const isProd = process.env.NODE_ENV === "production";
+  if (isProd && !isPasswordResetEmailConfigured()) {
+    safeServerLogCritical(
+      "auth",
+      "password_reset_email_unavailable",
+      { reason: "missing_resend_key", surface: "api" },
+      new Error("RESEND_API_KEY is required for password reset emails in production"),
+    );
+    return NextResponse.json(
+      { ok: false, error: "Password reset email is temporarily unavailable. Please contact support." },
+      { status: 503 },
     );
   }
 

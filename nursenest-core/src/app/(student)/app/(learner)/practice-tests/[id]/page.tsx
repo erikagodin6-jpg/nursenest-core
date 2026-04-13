@@ -70,27 +70,16 @@ export default async function PracticeTestRunPage({ params }: Props) {
   }
 
   return (
-    <main>
-      <div className="mb-4">
-        <BreadcrumbTrail items={appShellBreadcrumbs("practice-tests")} />
-      </div>
-      <h1 className="text-2xl font-bold">{t("learner.practiceTests.run.title")}</h1>
-      <p className="mt-1 text-sm text-muted">
-        <Link className="font-medium text-primary underline" href="/app/practice-tests">
-          {t("learner.practiceTests.run.backToBank")}
-        </Link>
-      </p>
-      <div className="mt-6">
-        <ExamSessionErrorBoundary surface="practice_test">
-          <PracticeTestRunnerClient
-            testId={id}
-            userId={userId}
-            userLabel={userLabel}
-            protectionFlags={protectionFlags}
-            studySettings={studySettings}
-          />
-        </ExamSessionErrorBoundary>
-      </div>
+    <main className="pt-2 md:pt-4">
+      <ExamSessionErrorBoundary surface="practice_test">
+        <PracticeTestRunnerClient
+          testId={id}
+          userId={userId}
+          userLabel={userLabel}
+          protectionFlags={protectionFlags}
+          studySettings={studySettings}
+        />
+      </ExamSessionErrorBoundary>
     </main>
   );
 }

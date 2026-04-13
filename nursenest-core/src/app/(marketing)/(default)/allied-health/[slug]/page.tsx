@@ -134,6 +134,12 @@ export default async function AlliedHealthSlugPage({ params }: Props) {
               Paginated lessons
             </Link>
             <Link
+              href={`/allied-health/${prof.professionKey}/blog`}
+              className="inline-flex rounded-full border border-border bg-card px-5 py-2.5 text-sm font-semibold hover:bg-muted/80"
+            >
+              Blog
+            </Link>
+            <Link
               href={pathwayHub}
               className="inline-flex rounded-full border border-border bg-card px-5 py-2.5 text-sm font-semibold hover:bg-muted/80"
             >

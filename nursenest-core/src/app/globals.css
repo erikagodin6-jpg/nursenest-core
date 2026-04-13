@@ -4537,6 +4537,19 @@ html[data-theme="deep-twilight"] .nn-exam-session.nn-cat-exam-session {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 24px;
+  --nn-exam-accent: color-mix(in srgb, var(--semantic-info) 68%, var(--semantic-text-primary));
+}
+
+.nn-cat-session.nn-exam-variant--nclex {
+  --nn-exam-accent: color-mix(in srgb, var(--semantic-info) 72%, var(--semantic-text-primary));
+}
+
+.nn-cat-session.nn-exam-variant--rex {
+  --nn-exam-accent: color-mix(in srgb, var(--semantic-chart-2) 64%, var(--semantic-text-primary));
+}
+
+.nn-cat-session.nn-exam-variant--np {
+  --nn-exam-accent: color-mix(in srgb, var(--semantic-text-primary) 82%, var(--semantic-info));
 }
 
 /* ── TOP BAR ───────────────────────────────────────────────── */
@@ -4560,6 +4573,15 @@ html[data-theme="deep-twilight"] .nn-exam-session.nn-cat-exam-session {
   font-weight: 600;
   color: var(--semantic-text-primary);
   letter-spacing: -0.01em;
+}
+
+.nn-cat-top-bar__exam-name {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--semantic-text-muted);
+  margin-bottom: 4px;
 }
 
 .nn-cat-top-bar__meta {
@@ -4590,7 +4612,7 @@ html[data-theme="deep-twilight"] .nn-exam-session.nn-cat-exam-session {
 
 .nn-cat-top-bar__progress-fill {
   height: 100%;
-  background: var(--theme-primary, var(--semantic-brand));
+  background: var(--nn-exam-accent);
   transition: width 0.55s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
@@ -4735,9 +4757,9 @@ html[data-theme="deep-twilight"] .nn-exam-session.nn-cat-exam-session {
 
 /* Selected (before submit) — theme primary border only */
 .nn-cat-opt--selected {
-  border-color: color-mix(in srgb, var(--theme-primary) 48%, var(--semantic-border-soft));
-  background: color-mix(in srgb, var(--theme-primary) 5%, var(--bg-card));
-  box-shadow: 0 0 0 1px color-mix(in srgb, var(--theme-primary) 16%, transparent);
+  border-color: color-mix(in srgb, var(--nn-exam-accent) 48%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--nn-exam-accent) 5%, var(--bg-card));
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--nn-exam-accent) 16%, transparent);
 }
 
 /* Correct — soft success surface */
@@ -4788,8 +4810,8 @@ html[data-theme="deep-twilight"] .nn-cat-opt--incorrect {
 }
 
 .nn-cat-opt--selected .nn-cat-opt__letter {
-  border-color: color-mix(in srgb, var(--theme-primary) 32%, var(--semantic-border-soft));
-  background: color-mix(in srgb, var(--theme-primary) 12%, var(--bg-card));
+  border-color: color-mix(in srgb, var(--nn-exam-accent) 32%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--nn-exam-accent) 12%, var(--bg-card));
   color: var(--semantic-text-primary);
 }
 
@@ -4819,7 +4841,23 @@ html[data-theme="deep-twilight"] .nn-cat-opt--incorrect {
   outline: none;
   box-shadow:
     0 0 0 2px var(--bg-card),
-    0 0 0 4px color-mix(in srgb, var(--theme-primary) 36%, transparent);
+    0 0 0 4px color-mix(in srgb, var(--nn-exam-accent) 36%, transparent);
+}
+
+.nn-cat-opt__control {
+  width: 1.125rem;
+  height: 1.125rem;
+  margin-top: 0.22rem;
+  border-radius: 999px;
+  border: 1.5px solid var(--semantic-border-soft);
+  background: var(--semantic-surface);
+  box-shadow: inset 0 0 0 2px var(--semantic-surface);
+  flex-shrink: 0;
+}
+
+.nn-cat-opt__control--checked {
+  border-color: color-mix(in srgb, var(--nn-exam-accent) 70%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--nn-exam-accent) 80%, var(--semantic-surface));
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -4934,6 +4972,19 @@ html[data-theme="deep-twilight"] .nn-cat-opt--incorrect {
 
 .nn-cat-question-nav__flag {
   margin-right: auto;
+}
+
+@media (max-width: 767px) {
+  .nn-cat-question-nav {
+    position: sticky;
+    bottom: 0;
+    z-index: 30;
+    margin: 1.25rem -1.25rem -1.25rem;
+    padding: 0.9rem 1rem calc(0.9rem + env(safe-area-inset-bottom));
+    border-top: 1px solid var(--semantic-border-soft);
+    background: color-mix(in srgb, var(--semantic-surface) 94%, transparent);
+    backdrop-filter: blur(8px);
+  }
 }
 
 /* ── RESULTS SUMMARY PAGE ──────────────────────────────────── */
@@ -5443,6 +5494,19 @@ html[data-theme="deep-twilight"] .nn-cat-opt--incorrect {
   max-width: 1280px;
   margin: 0 auto;
   padding: 0 24px;
+  --nn-exam-accent: color-mix(in srgb, var(--semantic-info) 68%, var(--semantic-text-primary));
+}
+
+.nn-practice-session.nn-exam-variant--nclex {
+  --nn-exam-accent: color-mix(in srgb, var(--semantic-info) 72%, var(--semantic-text-primary));
+}
+
+.nn-practice-session.nn-exam-variant--rex {
+  --nn-exam-accent: color-mix(in srgb, var(--semantic-chart-2) 64%, var(--semantic-text-primary));
+}
+
+.nn-practice-session.nn-exam-variant--np {
+  --nn-exam-accent: color-mix(in srgb, var(--semantic-text-primary) 82%, var(--semantic-info));
 }
 
 /* On desktop: fill remaining viewport so page itself does not scroll */
@@ -5476,6 +5540,19 @@ html[data-theme="deep-twilight"] .nn-cat-opt--incorrect {
   min-height: 36px;
 }
 
+.nn-practice-top-bar__left-stack {
+  min-width: 0;
+}
+
+.nn-practice-top-bar__exam-name {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--semantic-text-muted);
+  margin-bottom: 2px;
+}
+
 .nn-practice-top-bar__left {
   font-size: 0.9375rem;
   font-weight: 700;
@@ -5498,7 +5575,7 @@ html[data-theme="deep-twilight"] .nn-cat-opt--incorrect {
 
 .nn-practice-top-bar__progress-fill {
   height: 100%;
-  background: var(--theme-primary, var(--semantic-brand));
+  background: var(--nn-exam-accent);
   border-radius: 99px;
   transition: width 0.4s ease;
 }
@@ -5624,19 +5701,19 @@ html[data-theme="deep-twilight"] .nn-cat-opt--incorrect {
 }
 
 .nn-practice-opt:hover:not(:disabled) {
-  background: color-mix(in srgb, var(--theme-primary) 4%, var(--semantic-surface));
-  border-color: color-mix(in srgb, var(--theme-primary) 30%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--nn-exam-accent) 4%, var(--semantic-surface));
+  border-color: color-mix(in srgb, var(--nn-exam-accent) 30%, var(--semantic-border-soft));
 }
 
 .nn-practice-opt:focus-visible {
-  outline: 2px solid var(--theme-primary);
+  outline: 2px solid var(--nn-exam-accent);
   outline-offset: 2px;
 }
 
 /* Selected — theme-primary border before submit */
 .nn-practice-opt--selected {
-  border-color: var(--theme-primary);
-  background: color-mix(in srgb, var(--theme-primary) 6%, var(--semantic-surface));
+  border-color: var(--nn-exam-accent);
+  background: color-mix(in srgb, var(--nn-exam-accent) 6%, var(--semantic-surface));
 }
 
 /* Correct option — after submit */
@@ -5670,12 +5747,28 @@ html[data-theme="deep-twilight"] .nn-cat-opt--incorrect {
   width: 2rem;
   height: 2rem;
   border-radius: 50%;
-  background: color-mix(in srgb, var(--theme-primary) 12%, var(--semantic-surface));
+  background: color-mix(in srgb, var(--nn-exam-accent) 12%, var(--semantic-surface));
   color: var(--semantic-text-primary);
   font-size: 0.8125rem;
   font-weight: 700;
   flex-shrink: 0;
   letter-spacing: 0;
+}
+
+.nn-practice-opt__control {
+  width: 1.125rem;
+  height: 1.125rem;
+  margin-top: 0.24rem;
+  border-radius: 999px;
+  border: 1.5px solid var(--semantic-border-soft);
+  background: var(--semantic-surface);
+  box-shadow: inset 0 0 0 2px var(--semantic-surface);
+  flex-shrink: 0;
+}
+
+.nn-practice-opt__control--checked {
+  border-color: color-mix(in srgb, var(--nn-exam-accent) 70%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--nn-exam-accent) 80%, var(--semantic-surface));
 }
 
 .nn-practice-opt--correct .nn-practice-opt__letter {
@@ -5705,6 +5798,19 @@ html[data-theme="deep-twilight"] .nn-cat-opt--incorrect {
   margin-top: 4px;
   padding-top: 16px;
   border-top: 1px solid var(--semantic-border-soft);
+}
+
+@media (max-width: 767px) {
+  .nn-practice-q-nav {
+    position: sticky;
+    bottom: 0;
+    z-index: 30;
+    margin: 1rem -1.25rem -1.25rem;
+    padding: 0.9rem 1rem calc(0.9rem + env(safe-area-inset-bottom));
+    border-top: 1px solid var(--semantic-border-soft);
+    background: color-mix(in srgb, var(--semantic-surface) 94%, transparent);
+    backdrop-filter: blur(8px);
+  }
 }
 
 .nn-practice-q-nav__spacer {
