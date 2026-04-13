@@ -7,6 +7,7 @@ import { prisma } from "@/lib/db";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 import { isCatExamSimulationFeatureEnabled } from "@/lib/exams/cat-exam-simulation";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
+import { readinessConfigForPathwayId } from "@/lib/exam-pathways/pathway-readiness-config";
 import {
   listPathwaysCompatibleWithSubscription,
   pathwayAllowsCatAdaptiveStart,
@@ -282,25 +283,52 @@ export async function POST(req: Request) {
     }
     const basis = resolveCatSelectionBasisForPost(d.catPresentationMode, d.catSelectionBasis);
     const simPathway = getExamPathwayById(pathwayIdForCat) ?? null;
+    const readinessConfig = readinessConfigForPathwayId(pathwayIdForCat);
+    if (readinessConfig?.mode === "unavailable") {
+      return NextResponse.json(
+        {
+          error: "Readiness exam is not available for this pathway yet. Start with pathway practice questions first.",
+          code: PRACTICE_TEST_CAT_CREATE_CODE.pathway_track_not_ready,
+        },
+        { status: 400 },
+      );
+    }
+    const enforcedQuestionCount = readinessConfig?.maxQuestions ?? d.questionCount;
+    const enforcedTimedMode = readinessConfig?.mode === "production_ready" ? true : d.timedMode;
     const examTimedLimit = resolveCatPostExamTimedLimitSec({
-      timedMode: d.timedMode,
-      timeLimitSec: d.timeLimitSec,
-      questionCount: d.questionCount,
+      timedMode: enforcedTimedMode,
+      timeLimitSec: readinessConfig ? readinessConfig.timeLimitMinutes * 60 : d.timeLimitSec,
+      questionCount: enforcedQuestionCount,
       catPresentationMode: d.catPresentationMode,
       pathway: simPathway,
     });
+    const existingInProgress = await prisma.practiceTest.findFirst({
+      where: {
+        userId: gate.userId,
+        status: PracticeTestStatus.IN_PROGRESS,
+        AND: [
+          { config: { path: ["selectionMode"], equals: "cat" } },
+          { config: { path: ["pathwayId"], equals: pathwayIdForCat } },
+        ],
+      },
+      select: { id: true },
+      orderBy: { updatedAt: "desc" },
+    });
+    if (existingInProgress) {
+      return NextResponse.json({ id: existingInProgress.id, resumed: true as const }, { status: 200 });
+    }
     const cat = await createCatPracticeTestPayload(
       gate.userId,
       gate.entitlement,
       basis,
       {
-        questionCount: d.questionCount,
+        questionCount: enforcedQuestionCount,
         topicNames,
         difficultyMin,
         difficultyMax,
         pathwayId: pathwayIdForCat,
       },
-      d.timedMode,
+      enforcedTimedMode,
       examTimedLimit,
       d.catPresentationMode,
       d.catExamFeedbackMode,
@@ -325,7 +353,7 @@ export async function POST(req: Request) {
         questionIds: cat.questionIds,
         adaptiveState: cat.adaptiveState as object,
         status: PracticeTestStatus.IN_PROGRESS,
-        timedMode: d.timedMode,
+        timedMode: enforcedTimedMode,
         timeLimitSec: examTimedLimit,
         cursorIndex: 0,
       },
@@ -335,8 +363,8 @@ export async function POST(req: Request) {
       pathway_id: pathwayIdForCat,
       exam_simulation: d.catPresentationMode === "exam_simulation",
       cat_exam_feedback_mode: cat.config.catExamFeedbackMode ?? "test",
-      question_cap: d.questionCount,
-      timed: d.timedMode,
+      question_cap: enforcedQuestionCount,
+      timed: enforcedTimedMode,
       ...examContextAnalyticsProps(buildGlobalExamContext(pathwayIdForCat, "en")),
     });
 

@@ -97,6 +97,8 @@ export type CatAdaptiveState = {
   stoppedReason: CatStoppedReason | null;
   /** Final classification after enough evidence. */
   decision: "pass" | "fail" | "uncertain" | null;
+  /** Ability cutoff used for pass/fail boundary in this session. */
+  passingThreshold?: number;
   /** How the learner chose to run CAT (affects UI only; server still scores the same). */
   catPresentationMode?: CatPresentationMode;
   /**

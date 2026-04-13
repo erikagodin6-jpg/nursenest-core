@@ -316,6 +316,7 @@ export async function createCatPracticeTestPayload(
 
   const state: CatAdaptiveState = {
     ...createInitialAdaptiveState(),
+    passingThreshold: pathwayReadiness?.passingThreshold ?? 0,
     catPresentationMode: presentationMode,
     catBlueprintDiagnostics: diagnostics,
   };
@@ -646,12 +647,15 @@ export async function advanceCatPracticeTest(params: {
   });
 }
 
-function seedAdaptiveStateFromPersisted(raw: unknown): Pick<CatAdaptiveState, "catPresentationMode" | "catBlueprintDiagnostics"> {
+function seedAdaptiveStateFromPersisted(
+  raw: unknown,
+): Pick<CatAdaptiveState, "catPresentationMode" | "catBlueprintDiagnostics" | "passingThreshold"> {
   const parsed = parseAdaptiveState(raw);
   if (parsed) {
     return {
       catPresentationMode: parsed.catPresentationMode,
       catBlueprintDiagnostics: parsed.catBlueprintDiagnostics,
+      ...(typeof parsed.passingThreshold === "number" ? { passingThreshold: parsed.passingThreshold } : {}),
     };
   }
   if (raw && typeof raw === "object") {
@@ -659,6 +663,7 @@ function seedAdaptiveStateFromPersisted(raw: unknown): Pick<CatAdaptiveState, "c
     return {
       catPresentationMode: o.catPresentationMode as CatPresentationMode | undefined,
       catBlueprintDiagnostics: coerceCatBlueprintDiagnostics(o.catBlueprintDiagnostics),
+      ...(typeof o.passingThreshold === "number" ? { passingThreshold: o.passingThreshold } : {}),
     };
   }
   return {};

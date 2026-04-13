@@ -140,6 +140,7 @@ export function parseAdaptiveState(raw: unknown): CatAdaptiveState | null {
     incidents: Array.isArray(o.incidents) ? (o.incidents as CatIncident[]) : [],
     stoppedReason: o.stoppedReason ?? null,
     decision: o.decision ?? null,
+    passingThreshold: typeof o.passingThreshold === "number" ? o.passingThreshold : 0,
     catPresentationMode: o.catPresentationMode,
     catStudyAwaitingContinue: o.catStudyAwaitingContinue === true,
     catBlueprintDiagnostics: coerceCatBlueprintDiagnostics(o.catBlueprintDiagnostics),
@@ -422,7 +423,7 @@ export function buildCatReport(state: CatAdaptiveState): CatExamReport {
   const correctCount = state.results.filter((r) => r.correct).length;
   const totalQuestions = state.results.length;
   const decision =
-    state.decision ?? (totalQuestions > 0 ? finalizeThetaDecision(state.theta) : "uncertain");
+    state.decision ?? (totalQuestions > 0 ? finalizeThetaDecision(state.theta, state.passingThreshold ?? 0) : "uncertain");
 
   const examCfg = state.catBlueprintDiagnostics ? getExamConfig(state.catBlueprintDiagnostics.examConfigId) : null;
 
