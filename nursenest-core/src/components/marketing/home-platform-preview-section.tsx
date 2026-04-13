@@ -71,7 +71,7 @@ export function HomePlatformPreviewSection() {
             <p className="nn-card-system__description">
               {formatSentenceCase("Exam-style prompts with pathway-specific decision making and realistic distractors.", locale)}
             </p>
-            <div className="mt-4 rounded-xl border border-[var(--border-subtle)] bg-[var(--surface)] p-4">
+            <div className="mt-4 rounded-xl border border-[var(--border-subtle)] bg-[color-mix(in_srgb,var(--surface)_88%,white)] p-4">
               <p className="text-sm font-semibold text-[var(--palette-text)]">
                 {formatSentenceCase("A postoperative learner reports new shortness of breath, oxygen saturation of 88%, and increasing restlessness. What is the best immediate nursing action?", locale)}
               </p>
@@ -107,7 +107,7 @@ export function HomePlatformPreviewSection() {
             <p className="nn-card-system__description">
               {formatSentenceCase("Every option receives feedback so learners understand why an answer is safe or unsafe.", locale)}
             </p>
-            <div className="mt-4 rounded-xl border border-[var(--border-subtle)] bg-[var(--surface)] p-4">
+            <div className="mt-4 rounded-xl border border-[var(--border-subtle)] bg-[color-mix(in_srgb,var(--surface)_88%,white)] p-4">
               <p className={`text-sm font-semibold ${isCorrect ? "text-[var(--semantic-success)]" : "text-[var(--semantic-warning)]"}`}>
                 {isCorrect
                   ? formatTitleCase("Correct: Immediate respiratory assessment and escalation.", locale)
@@ -134,7 +134,7 @@ export function HomePlatformPreviewSection() {
               {formatSentenceCase("After each session, learners get clear readiness metrics, weak-area targeting, and next-step guidance.", locale)}
             </p>
             <div className="mt-4 grid gap-4 lg:grid-cols-2">
-              <div className="rounded-xl border border-[var(--border-subtle)] bg-[var(--surface)] p-4">
+              <div className="rounded-xl border border-[var(--border-subtle)] bg-[color-mix(in_srgb,var(--surface)_88%,white)] p-4">
                 <p className="text-sm font-semibold text-[var(--palette-text)]">{formatTitleCase("Readiness Snapshot", locale)}</p>
                 <ul className="mt-3 space-y-3">
                   {readinessBands.map((band) => (
@@ -154,7 +154,7 @@ export function HomePlatformPreviewSection() {
                   ))}
                 </ul>
               </div>
-              <div className="rounded-xl border border-[var(--border-subtle)] bg-[var(--surface)] p-4">
+              <div className="rounded-xl border border-[var(--border-subtle)] bg-[color-mix(in_srgb,var(--surface)_88%,white)] p-4">
                 <p className="text-sm font-semibold text-[var(--palette-text)]">{formatTitleCase("Weak Areas To Prioritize", locale)}</p>
                 <div className="mt-3 flex flex-wrap gap-2">
                   {weakAreas.map((topic) => (
@@ -167,7 +167,7 @@ export function HomePlatformPreviewSection() {
                     </span>
                   ))}
                 </div>
-                <p className="mt-4 rounded-lg border border-[var(--border-subtle)] bg-[var(--bg-card)] px-3 py-3 text-sm text-[var(--palette-text-muted)]">
+                <p className="mt-4 rounded-lg border border-[var(--border-subtle)] bg-[color-mix(in_srgb,var(--bg-card)_88%,white)] px-3 py-3 text-sm text-[var(--palette-text-muted)]">
                   {formatSentenceCase("Adaptive recommendation: complete a 15-question focused set on pharmacology, then run a readiness check to validate improvement.", locale)}
                 </p>
               </div>

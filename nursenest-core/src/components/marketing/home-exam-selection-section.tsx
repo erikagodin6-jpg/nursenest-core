@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowRight, Stethoscope, HeartPulse, Award, Dna } from "lucide-react";
+import { ArrowRight, Stethoscope, HeartPulse, Award, Dna, GraduationCap } from "lucide-react";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { marketingExamHubPath } from "@/lib/marketing/country-exam-offerings";
@@ -17,16 +17,17 @@ type ExamCard = {
   icon: LucideIcon;
   iconColor: string;
   accentColor: string;
-  titleKey: string;
-  descKey: string;
+  titleKey?: string;
+  descKey?: string;
+  titleLabel?: string;
+  descLabel?: string;
   pathwayLabel: string;
-  metaKey: string;
   href: string;
   featured?: boolean;
 };
 
 /**
- * Prominent exam selection: four rich pathway cards — RN, LPN/RPN, NP, Allied.
+ * Prominent exam selection: rich pathway cards — RN, LPN/RPN, NP, New Grad, Allied.
  * Each card has a colored top accent and semantic icon for immediate visual differentiation.
  * Section uses `page-bg` (not `bg-card`) so pathway cards read clearly above the band.
  */
@@ -44,7 +45,6 @@ export function HomeExamSelectionSection() {
       titleKey: "home.conversion.examCard.rnTitle",
       descKey: "home.conversion.examCard.rnDesc",
       pathwayLabel: "RN",
-      metaKey: "home.conversion.examCard.metaRn",
       href: loc(marketingExamHubPath(region, "rn")),
       featured: true,
     },
@@ -56,7 +56,6 @@ export function HomeExamSelectionSection() {
       titleKey: region === "US" ? "home.conversion.examCard.pnTitleUS" : "home.conversion.examCard.pnTitleCA",
       descKey: region === "US" ? "home.conversion.examCard.pnDescUS" : "home.conversion.examCard.pnDescCA",
       pathwayLabel: "PN",
-      metaKey: region === "US" ? "home.conversion.examCard.metaPnUS" : "home.conversion.examCard.metaPnCA",
       href: loc(marketingExamHubPath(region, "pn")),
     },
     {
@@ -67,8 +66,17 @@ export function HomeExamSelectionSection() {
       titleKey: region === "US" ? "home.conversion.examCard.npTitleUS" : "home.conversion.examCard.npTitleCA",
       descKey: region === "US" ? "home.conversion.examCard.npDescUS" : "home.conversion.examCard.npDescCA",
       pathwayLabel: "NP",
-      metaKey: region === "US" ? "home.conversion.examCard.metaNpUS" : "home.conversion.examCard.metaNpCA",
       href: loc(marketingExamHubPath(region, "np")),
+    },
+    {
+      id: "newgrad",
+      icon: GraduationCap,
+      iconColor: "text-[var(--semantic-chart-4)]",
+      accentColor: "var(--semantic-chart-4)",
+      titleLabel: "New Grad",
+      descLabel: "Build your fundamentals with structured lessons, flashcards, practice, and exam-mode prep.",
+      pathwayLabel: "New Grad",
+      href: loc("/pre-nursing"),
     },
     {
       id: "allied",
@@ -78,7 +86,6 @@ export function HomeExamSelectionSection() {
       titleKey: "home.conversion.examCard.alliedTitle",
       descKey: "home.conversion.examCard.alliedDesc",
       pathwayLabel: "Allied Health",
-      metaKey: "home.conversion.examCard.metaAllied",
       href: loc(marketingExamHubPath(region, "allied")),
     },
   ];
@@ -101,7 +108,7 @@ export function HomeExamSelectionSection() {
         </FadeUp>
 
         <StaggerGroup
-          className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4"
+          className="grid gap-5 sm:grid-cols-2 lg:grid-cols-5"
           staggerMs={65}
           whenInView
           once
@@ -109,6 +116,8 @@ export function HomeExamSelectionSection() {
         >
           {cards.map((c) => {
             const Icon = c.icon;
+            const title = c.titleLabel ?? (c.titleKey ? formatTitleCase(t(c.titleKey), locale) : "");
+            const description = c.descLabel ?? (c.descKey ? formatSentenceCase(t(c.descKey), locale) : "");
             return (
               <StaggerItem
                 key={c.id}
@@ -143,13 +152,8 @@ export function HomeExamSelectionSection() {
                       <Icon className={`h-5 w-5 ${c.iconColor}`} />
                     </span>
 
-                    {/* Exam label chip */}
-                    <span className="nn-card-system__eyebrow">
-                      {formatEyebrow(t(c.metaKey), locale)}
-                    </span>
-
-                    <span className="nn-card-system__title">{formatTitleCase(t(c.titleKey), locale)}</span>
-                    <span className="nn-card-system__description">{formatSentenceCase(t(c.descKey), locale)}</span>
+                    <span className="nn-card-system__title">{title}</span>
+                    <span className="nn-card-system__description">{description}</span>
 
                     <span className="nn-card-system__cta">
                       {formatTitleCase(getPathwayHubCta(c.pathwayLabel), locale)}
