@@ -1526,8 +1526,8 @@ html[data-theme] .nn-marketing-surface {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: var(--nn-aesthetic-gradient-primary);
-  color: var(--text-on-accent);
+  background: var(--background-gradient, var(--nn-aesthetic-gradient-primary));
+  color: var(--text-on-gradient);
   border-radius: 0.875rem;
   padding: 0.75rem 1.125rem;
   font-weight: 600;
@@ -1968,11 +1968,29 @@ html[data-theme] .nn-marketing-surface {
   background: var(--surface-accent-soft);
 }
 .nn-theme-gradient-br {
+  position: relative;
+  isolation: isolate;
   background-image: linear-gradient(
     to bottom right,
     var(--theme-primary),
     color-mix(in srgb, var(--theme-primary) 68%, var(--theme-heading-text))
   );
+  color: var(--text-on-gradient);
+}
+
+.nn-theme-gradient-br::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--gradient-overlay);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.nn-theme-gradient-br > * {
+  position: relative;
+  z-index: 1;
 }
 .nn-trust-check {
   /* Heading tone so contrast holds on every light theme (avoid fixed slate hex). */

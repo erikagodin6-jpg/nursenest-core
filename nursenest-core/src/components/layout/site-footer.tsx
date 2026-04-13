@@ -23,7 +23,7 @@ function formatFooterNode(children: React.ReactNode, locale: string): React.Reac
 function FLink({
   href,
   children,
-  className = "nn-footer-link break-words leading-snug [overflow-wrap:anywhere]",
+  className = "nn-footer-link break-words text-sm leading-relaxed [overflow-wrap:anywhere]",
 }: {
   href: string;
   children: React.ReactNode;
@@ -66,8 +66,8 @@ export function SiteFooter() {
           <EmailSignupBanner />
         </div>
 
-        <div className="mb-8 rounded-2xl border border-[var(--footer-border)] bg-[color-mix(in_srgb,var(--footer-fg)_4%,var(--footer-bg))] px-5 py-6 sm:px-6 sm:py-7">
-          <div className="grid gap-7 md:grid-cols-2 lg:grid-cols-4">
+        <div className="mb-6 rounded-2xl border border-[var(--footer-border)] bg-[color-mix(in_srgb,var(--footer-fg)_4%,var(--footer-bg))] px-5 py-6 sm:px-6 sm:py-7">
+          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
             <div className="space-y-4">
               <div className="flex items-center bg-transparent">
                 <SiteBrandLogoMark variant="footer" logoVariant="leaf" />
@@ -77,9 +77,9 @@ export function SiteFooter() {
               </p>
             </div>
 
-            <div>
-              <h3 className="mb-3 text-sm font-semibold text-[var(--footer-fg)]">{formatTitleCase("Exam Pathways", locale)}</h3>
-              <ul className="space-y-2 text-sm text-[var(--footer-fg)]">
+            <div className="space-y-3">
+              <h3 className="text-sm font-semibold tracking-wide text-[var(--footer-fg)]">{formatTitleCase("Exam Pathways", locale)}</h3>
+              <ul className="space-y-2.5 text-sm text-[var(--footer-fg)]">
                 <li><FLink href={examHubs.rn}>RN</FLink></li>
                 <li><FLink href={examHubs.pn}>PN / RPN</FLink></li>
                 <li><FLink href={examHubs.np}>NP</FLink></li>
@@ -87,9 +87,9 @@ export function SiteFooter() {
               </ul>
             </div>
 
-            <div>
-              <h3 className="mb-3 text-sm font-semibold text-[var(--footer-fg)]">{formatTitleCase("Explore", locale)}</h3>
-              <ul className="space-y-2 text-sm text-[var(--footer-fg)]">
+            <div className="space-y-3">
+              <h3 className="text-sm font-semibold tracking-wide text-[var(--footer-fg)]">{formatTitleCase("Explore", locale)}</h3>
+              <ul className="space-y-2.5 text-sm text-[var(--footer-fg)]">
                 <li><FLink href="/pricing">Pricing</FLink></li>
                 <li><FLink href="/lessons">Lessons</FLink></li>
                 <li><FLink href={rnQuestions(region)}>Practice Questions</FLink></li>
@@ -98,9 +98,9 @@ export function SiteFooter() {
               </ul>
             </div>
 
-            <div>
-              <h3 className="mb-3 text-sm font-semibold text-[var(--footer-fg)]">{formatTitleCase("Account", locale)}</h3>
-              <ul className="space-y-2 text-sm text-[var(--footer-fg)]">
+            <div className="space-y-3">
+              <h3 className="text-sm font-semibold tracking-wide text-[var(--footer-fg)]">{formatTitleCase("Account", locale)}</h3>
+              <ul className="space-y-2.5 text-sm text-[var(--footer-fg)]">
                 <li><FLink href={learnerSignInHref}>Login</FLink></li>
                 <li>
                   <Link
@@ -117,31 +117,38 @@ export function SiteFooter() {
           </div>
         </div>
 
-        <div className="mb-6 rounded-xl border border-[var(--footer-border)] bg-[color-mix(in_srgb,var(--footer-fg)_4%,var(--footer-bg))] px-4 pb-6 pt-6">
-          <h3 className="mb-3 break-words text-sm font-semibold text-[var(--footer-fg)]">{formatTitleCase(t("footer.studyInYourLanguage"), locale)}</h3>
-          <div className="mb-3 flex flex-wrap gap-2">
+        <div className="mb-6 rounded-2xl border border-[var(--footer-border)] bg-[color-mix(in_srgb,var(--footer-fg)_6%,var(--footer-bg))] px-5 py-5 sm:px-6 sm:py-6">
+          <h3 className="mb-3 break-words text-base font-semibold leading-tight text-[var(--footer-fg)]">
+            {formatTitleCase(t("footer.studyInYourLanguage"), locale)}
+          </h3>
+          <div className="mb-4 flex flex-wrap items-center gap-2.5">
             <MarketingLanguagePreferenceList
               renderItem={({ code, name, flag, disabled, onSelect }) => (
                 <button
                   type="button"
                   disabled={disabled}
                   onClick={onSelect}
-                  className={`inline-flex items-center gap-1 text-xs transition-colors hover:text-[var(--footer-fg)] ${
-                    code === locale ? "font-semibold text-[var(--footer-fg)]" : "text-[var(--footer-muted)]"
+                  className={`inline-flex min-h-[34px] items-center rounded-full border px-3 py-1.5 text-sm leading-none transition-colors ${
+                    code === locale
+                      ? "border-[color-mix(in_srgb,var(--footer-fg)_42%,transparent)] bg-[color-mix(in_srgb,var(--footer-fg)_16%,transparent)] font-semibold text-[var(--footer-fg)]"
+                      : "border-[color-mix(in_srgb,var(--footer-fg)_24%,transparent)] bg-[color-mix(in_srgb,var(--footer-fg)_8%,transparent)] text-[color-mix(in_srgb,var(--footer-fg)_90%,var(--footer-bg))] hover:border-[color-mix(in_srgb,var(--footer-fg)_36%,transparent)] hover:text-[var(--footer-fg)]"
                   }`}
                 >
-                  <span>{flag}</span>
-                  <span>{name}</span>
+                  <span aria-hidden>{flag}</span>
+                  <span className="whitespace-nowrap">{name}</span>
                 </button>
               )}
             />
           </div>
-          <Link href={mapLegacyMarketingHref("/languages")} className="nn-footer-link text-xs">
+          <Link
+            href={mapLegacyMarketingHref("/languages")}
+            className="inline-flex min-h-[36px] items-center rounded-full border border-[color-mix(in_srgb,var(--footer-fg)_30%,transparent)] bg-[color-mix(in_srgb,var(--footer-fg)_10%,transparent)] px-3 py-1.5 text-sm font-medium text-[var(--footer-fg)] transition-colors hover:bg-[color-mix(in_srgb,var(--footer-fg)_18%,transparent)]"
+          >
             {formatTitleCase(t("footer.viewAllLanguages"), locale)}
           </Link>
         </div>
 
-        <div className="flex flex-col items-center justify-between gap-4 rounded-xl border border-[var(--footer-border)] bg-[color-mix(in_srgb,var(--footer-fg)_5%,var(--footer-bg))] px-4 py-5 md:flex-row">
+        <div className="flex flex-col items-center justify-between gap-4 rounded-2xl border border-[var(--footer-border)] bg-[color-mix(in_srgb,var(--footer-fg)_5%,var(--footer-bg))] px-5 py-5 sm:px-6 md:flex-row">
           <div className="text-sm text-[var(--footer-muted)]">
             © {new Date().getFullYear()} {t("brand.nurseNest")}. {t("footer.rights")}
           </div>
