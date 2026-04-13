@@ -33,6 +33,7 @@ import {
   Cpu,
   Server,
   Workflow,
+  MessageSquare,
 } from "lucide-react";
 import { isNavHrefAllowedForStaffTier } from "@/lib/auth/admin-path-policy";
 import type { StaffTier } from "@/lib/auth/staff-roles";
@@ -60,6 +61,7 @@ const GROUPS: NavGroup[] = [
       { href: "/admin/analytics/funnels", label: "Funnel analytics", icon: Workflow },
       { href: "/admin/analytics/study-performance", label: "Study & CAT performance", icon: BookMarked },
       { href: "/admin/users", label: "Users & support", icon: Users },
+      { href: "/admin/feedback", label: "User feedback", icon: MessageSquare },
       { href: "/admin/subscriptions", label: "Revenue & subscriptions", icon: Activity },
     ],
   },

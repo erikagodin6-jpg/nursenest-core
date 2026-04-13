@@ -8,6 +8,7 @@ import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messa
 import { NursenestRegionRoot } from "@/lib/region/use-nursenest-region";
 import type { MarketingRegionToggle } from "@/lib/marketing/marketing-entry-routes";
 import { PageTransitionShell } from "@/lib/motion/page-transition-shell";
+import { MarketingFeedbackShell } from "@/components/feedback/marketing-feedback-shell";
 
 export default async function MarketingDefaultLocaleLayout({ children }: { children: React.ReactNode }) {
   const resolvedLocale: string = DEFAULT_MARKETING_LOCALE;
@@ -34,14 +35,16 @@ export default async function MarketingDefaultLocaleLayout({ children }: { child
       <NursenestRegionRoot serverRegion={serverRegion}>
         <OrganizationJsonLd />
         <WebSiteJsonLd />
-        <div className="nn-marketing-surface flex min-h-screen flex-col">
-          <SiteHeader />
-          <PathwayLessonProgressRefreshListener />
-          <main className="flex min-h-0 flex-1 flex-col">
-            <PageTransitionShell>{children}</PageTransitionShell>
-          </main>
-          <SiteFooter />
-        </div>
+        <MarketingFeedbackShell>
+          <div className="nn-marketing-surface flex min-h-screen flex-col">
+            <SiteHeader />
+            <PathwayLessonProgressRefreshListener />
+            <main className="flex min-h-0 flex-1 flex-col">
+              <PageTransitionShell>{children}</PageTransitionShell>
+            </main>
+            <SiteFooter />
+          </div>
+        </MarketingFeedbackShell>
       </NursenestRegionRoot>
     </MarketingI18nProvider>
   );

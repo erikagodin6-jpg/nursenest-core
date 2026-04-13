@@ -14,6 +14,7 @@ import { marketingExamPrepHubs } from "@/lib/marketing/marketing-exam-navigation
 import { loginWithCallback, rnQuestions } from "@/lib/marketing/marketing-entry-routes";
 import { PRIMARY_CTA } from "@/lib/copy/cta-copy";
 import { formatTitleCase } from "@/lib/format/text-case";
+import { SiteFooterFeedbackTrigger } from "@/components/layout/site-footer-feedback-trigger";
 
 function formatFooterNode(children: React.ReactNode, locale: string): React.ReactNode {
   return typeof children === "string" ? formatTitleCase(children, locale) : children;
@@ -110,6 +111,7 @@ export function SiteFooter() {
                   </Link>
                 </li>
                 <li><FLink href="/contact">Contact Support</FLink></li>
+                <SiteFooterFeedbackTrigger />
               </ul>
             </div>
           </div>

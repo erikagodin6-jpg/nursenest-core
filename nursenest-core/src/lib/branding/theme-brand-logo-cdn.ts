@@ -3,10 +3,7 @@
  * Spaces keys below remain for legacy `/api/marketing-assets` and catalog tooling.
  */
 import { getThemeBrandLogoSpaceKeyForCanonicalId } from "@/config/theme-brand-logo-space-keys";
-import {
-  NURSENEST_IMAGES_SPACE_PUBLIC_BASE_URL,
-  nursenestImagesSpaceObjectUrl,
-} from "@/config/marketing-cdn.catalog";
+import { NURSENEST_IMAGES_SPACE_PUBLIC_BASE_URL } from "@/config/marketing-cdn.catalog";
 import { resolveThemeLogo } from "@/lib/branding/resolve-theme-logo";
 import { NURSENEST_DEFAULT_THEME, THEME_OPTIONS } from "@/lib/theme/theme-registry";
 import { parseRegisteredThemeId } from "@/lib/theme/theme-logo-resolve";

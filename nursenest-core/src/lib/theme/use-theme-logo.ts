@@ -72,7 +72,6 @@ export function useThemeLogo(logoVariant: ThemeLogoVariant = "full"): {
 
   useEffect(() => {
     if (process.env.NODE_ENV === "production") return;
-    // eslint-disable-next-line no-console -- dev-only theme logo diagnostic
     console.debug("[theme-logo]", {
       themeId: registeredThemeId ?? rawThemeId,
       resolvedLogoUrl: resolved.url,

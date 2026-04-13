@@ -4,8 +4,6 @@
  * `THEME_LOGO_SPACE_KEYS` remains for Spaces-backed marketing proxies and tooling; runtime header/footer
  * marks use local SVGs only (no CSS tinting, no PNG chain).
  */
-import { nursenestImagesSpaceObjectUrl } from "@/config/marketing-cdn.catalog";
-import { marketingImageUsesProxy, marketingProxyPathForKey } from "@/lib/marketing-resolve-image-url";
 import { THEME_LOGOS } from "@/lib/theme/theme-logo-config";
 import { parseRegisteredThemeId } from "@/lib/theme/theme-logo-resolve";
 import { NURSENEST_DEFAULT_THEME } from "@/lib/theme/theme-registry";
@@ -92,19 +90,15 @@ const THEME_LOGO_FALLBACK_THEME_ID: Readonly<Record<string, string>> = {
   "dark-academia": "deep-twilight",
 };
 
-function urlForObjectKey(objectKey: string): string {
-  if (marketingImageUsesProxy()) return marketingProxyPathForKey(objectKey);
-  return nursenestImagesSpaceObjectUrl(objectKey);
-}
-
 /**
  * Registered theme id → Spaces object key, or null when neither a direct nor family fallback map applies.
  * `logoVariant` is reserved for future split full/leaf keys; today both use the same mapped raster.
  */
 export function themeLogoSpaceKeyForRegisteredTheme(
   themeId: string | null | undefined,
-  _logoVariant: ThemeLogoVariant = "full",
+  logoVariant: ThemeLogoVariant = "full",
 ): string | null {
+  void logoVariant;
   if (!themeId) return null;
   const direct = THEME_LOGO_SPACE_KEYS[themeId];
   if (direct) return direct;

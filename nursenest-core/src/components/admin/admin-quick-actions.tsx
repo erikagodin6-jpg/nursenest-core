@@ -21,6 +21,7 @@ import {
   Workflow,
   BookMarked,
   Upload,
+  MessageSquare,
 } from "lucide-react";
 import { isNavHrefAllowedForStaffTier } from "@/lib/auth/admin-path-policy";
 import type { StaffTier } from "@/lib/auth/staff-roles";
@@ -54,6 +55,13 @@ const actions = [
   { href: "/admin/questions/import", label: "Bulk question import", desc: "JSON validate + stem dedupe", icon: Upload, tone: "from-zinc-500/12 to-slate-500/8" },
   { href: "/admin/subscriptions", label: "Subscriptions", desc: "Plans & Stripe gaps", icon: CreditCard, tone: "from-rose-500/12 to-pink-500/10" },
   { href: "/admin/users", label: "Users", desc: "Growth & roles", icon: Users, tone: "from-cyan-500/12 to-primary/10" },
+  {
+    href: "/admin/feedback",
+    label: "User feedback",
+    desc: "Bugs & product messages from the app",
+    icon: MessageSquare,
+    tone: "from-sky-500/12 to-indigo-500/10",
+  },
   { href: "/admin/operations", label: "Site health", desc: "DB, APIs, safe mode", icon: Wrench, tone: "from-red-500/10 to-amber-500/10" },
   { href: "/admin/ai/exam-questions", label: "AI question studio", desc: "Drafts & section regen", icon: Stethoscope, tone: "from-indigo-500/12 to-purple-500/10" },
   { href: "/admin/ai/exam-questions/batch", label: "AI question batch", desc: "One draft per topic + queue", icon: Stethoscope, tone: "from-sky-500/12 to-indigo-500/10" },

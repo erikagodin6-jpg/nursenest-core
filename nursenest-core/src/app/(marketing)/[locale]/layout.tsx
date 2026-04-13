@@ -11,6 +11,7 @@ import { MarketingMainErrorBoundary } from "@/components/marketing/marketing-mai
 import { NursenestRegionRoot } from "@/lib/region/use-nursenest-region";
 import type { MarketingRegionToggle } from "@/lib/marketing/marketing-entry-routes";
 import { PageTransitionShell } from "@/lib/motion/page-transition-shell";
+import { MarketingFeedbackShell } from "@/components/feedback/marketing-feedback-shell";
 
 export default async function MarketingLocaleLayout({
   children,
@@ -47,15 +48,17 @@ export default async function MarketingLocaleLayout({
         <MarketingLocaleUrlSync locale={locale} />
         <OrganizationJsonLd />
         <WebSiteJsonLd />
-        <div className="nn-marketing-surface flex min-h-screen flex-col">
-          <SiteHeader />
-          <main className="flex-1">
-            <MarketingMainErrorBoundary name="marketing_locale_main">
-              <PageTransitionShell>{children}</PageTransitionShell>
-            </MarketingMainErrorBoundary>
-          </main>
-          <SiteFooter />
-        </div>
+        <MarketingFeedbackShell>
+          <div className="nn-marketing-surface flex min-h-screen flex-col">
+            <SiteHeader />
+            <main className="flex-1">
+              <MarketingMainErrorBoundary name="marketing_locale_main">
+                <PageTransitionShell>{children}</PageTransitionShell>
+              </MarketingMainErrorBoundary>
+            </main>
+            <SiteFooter />
+          </div>
+        </MarketingFeedbackShell>
       </NursenestRegionRoot>
     </MarketingI18nProvider>
   );

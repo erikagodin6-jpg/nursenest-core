@@ -26,6 +26,8 @@ import {
 } from "@/lib/motion/page-transition-shell";
 import { isLearnerTutorShellEnabled } from "@/lib/learner/tutor/learner-tutor-policy";
 import { LearnerTutorShell } from "@/components/learner-tutor";
+import { LearnerFeedbackShell } from "@/components/feedback/learner-feedback-shell";
+import { UserFeedbackNavPill } from "@/components/feedback/user-feedback-nav-pill";
 
 /** Auth is enforced in `src/proxy.ts` (Next.js 16+) so this layout never calls `redirect()` for missing session. Locale + i18n: `app/(student)/app/layout.tsx`. */
 export const dynamic = "force-dynamic";
@@ -89,7 +91,8 @@ export default async function LearnerShellLayout({ children }: { children: React
   return (
     <SentryLearnerShell userId={userId}>
       <LearnerExamChromeGate>
-        <div className="nn-learner-app mx-auto w-full max-w-6xl px-4 py-[var(--nn-rhythm-shell-y)] sm:px-6">
+        <LearnerFeedbackShell pathwayId={pathwayId}>
+          <div className="nn-learner-app mx-auto w-full max-w-6xl px-4 py-[var(--nn-rhythm-shell-y)] sm:px-6">
           <PathwayLessonProgressRefreshListener />
           <LearnerAppSectionAnalytics />
           <header className="nn-learner-exam-chrome-target nn-card mb-[var(--nn-rhythm-tight-y)] flex min-h-14 flex-col gap-3 rounded-2xl p-3 sm:gap-4 lg:min-h-16 lg:flex-row lg:items-center lg:justify-between lg:p-4">
@@ -99,6 +102,7 @@ export default async function LearnerShellLayout({ children }: { children: React
             </div>
             <div className="flex flex-wrap items-center gap-3">
               <LearnerShellUserBar pathwayShortLabel={pathwayShortLabel} />
+              <UserFeedbackNavPill />
               <LearnerShellLanguageControl />
               <LearnerThemeControl />
             </div>
@@ -125,7 +129,8 @@ export default async function LearnerShellLayout({ children }: { children: React
             {children}
           </PageTransitionShell>
           {tutorContext ? <LearnerTutorShell context={tutorContext} /> : null}
-        </div>
+          </div>
+        </LearnerFeedbackShell>
       </LearnerExamChromeGate>
     </SentryLearnerShell>
   );
