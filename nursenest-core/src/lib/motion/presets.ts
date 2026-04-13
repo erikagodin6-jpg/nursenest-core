@@ -4,6 +4,7 @@ import {
   BRAND_MOTION_DISTANCE_PX,
   BRAND_HOVER_LIFT_Y,
   BRAND_PRESS_SCALE,
+  BRAND_STAGGER_CHILD_MS,
   EASE_LUXURY,
   EASE_CALM_OUT,
   EASE_SOFT_OUT,
@@ -39,6 +40,38 @@ export const transitionSlow: Transition = {
   ease: EASE_LUXURY,
 };
 
+/** Hero headline / CTA stagger items (~220ms, no overshoot). */
+export const transitionHeroReveal: Transition = {
+  duration: BRAND_MOTION.heroRevealSec,
+  ease: EASE_LUXURY,
+};
+
+/** Card hover: shadow + translate polish. */
+export const transitionCardHover: Transition = {
+  duration: BRAND_MOTION.cardHoverSec,
+  ease: EASE_LUXURY,
+};
+
+/** 404 leaf first paint (single entrance). */
+export const transitionNotFoundLeafEntrance: Transition = {
+  duration: 0.32,
+  ease: EASE_LUXURY,
+};
+
+/** Success leaf scale-in (matches product spec ~220ms). */
+export const successLeafTransition: Transition = {
+  duration: BRAND_MOTION.heroRevealSec,
+  ease: EASE_LUXURY,
+};
+
+/** Slow mirror loop for decorative leaf only. */
+export const notFoundLeafFloatTransition: Transition = {
+  duration: BRAND_MOTION.notFoundLeafFloatSec,
+  repeat: Infinity,
+  repeatType: "mirror",
+  ease: "easeInOut",
+};
+
 /** @deprecated Prefer `transitionMedium` */
 export const transitionEntrance: Transition = transitionMedium;
 
@@ -66,14 +99,14 @@ export const scaleInVariants: Variants = {
   visible: { opacity: 1, scale: 1 },
 };
 
-/** Stagger container — shallow stagger only. */
-export function staggerContainer(staggerMs = 50): Variants {
+/** Stagger container — shallow stagger only (default 65ms between children). */
+export function staggerContainer(staggerMs: number = BRAND_STAGGER_CHILD_MS): Variants {
   return {
     hidden: {},
     visible: {
       transition: {
         staggerChildren: staggerMs / 1000,
-        delayChildren: 0.03,
+        delayChildren: 0.04,
       },
     },
   };
@@ -118,7 +151,7 @@ export const gentleCarouselTransition: Transition = {
 export { reducedMotionVariants } from "./reduced-motion";
 
 export const hoverLiftTransition: Transition = {
-  duration: BRAND_MOTION.fastSec,
+  duration: BRAND_MOTION.cardHoverSec,
   ease: EASE_LUXURY,
 };
 

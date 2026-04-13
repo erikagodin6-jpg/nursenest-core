@@ -305,7 +305,7 @@ export function UserFeedbackDialog() {
                     return (
                       <label
                         key={c.value}
-                        className={`nn-focus-within-ring cursor-pointer rounded-2xl border p-3 transition ${
+                        className={`cursor-pointer rounded-2xl border p-3 outline-none transition focus-within:ring-2 focus-within:ring-[color-mix(in_srgb,var(--semantic-brand)_35%,transparent)] focus-within:ring-offset-2 focus-within:ring-offset-[var(--surface-strong)] ${
                           selected
                             ? "border-[color-mix(in_srgb,var(--semantic-brand)_45%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-positive)_22%,var(--surface-strong))] shadow-sm"
                             : "border-[color-mix(in_srgb,var(--semantic-border-soft)_90%,transparent)] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_18%,var(--surface-strong))] hover:border-[color-mix(in_srgb,var(--semantic-info)_30%,var(--semantic-border-soft))]"
@@ -363,7 +363,7 @@ export function UserFeedbackDialog() {
                         return (
                           <label
                             key={s.value}
-                            className={`nn-focus-within-ring cursor-pointer rounded-full border px-3 py-1.5 text-xs font-semibold transition ${
+                            className={`cursor-pointer rounded-full border px-3 py-1.5 text-xs font-semibold outline-none transition focus-within:ring-2 focus-within:ring-[color-mix(in_srgb,var(--semantic-brand)_35%,transparent)] focus-within:ring-offset-1 focus-within:ring-offset-[var(--surface-strong)] ${
                               on
                                 ? "border-[color-mix(in_srgb,var(--semantic-warning)_50%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_14%,var(--surface-strong))] text-[var(--theme-heading-text)]"
                                 : "border-[color-mix(in_srgb,var(--semantic-border-soft)_80%,transparent)] bg-[var(--surface-strong)] text-[var(--semantic-text-muted)] hover:border-[color-mix(in_srgb,var(--semantic-info)_28%,var(--semantic-border-soft))]"

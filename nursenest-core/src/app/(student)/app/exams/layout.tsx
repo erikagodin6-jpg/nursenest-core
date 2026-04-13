@@ -2,6 +2,7 @@ import Link from "next/link";
 import { auth } from "@/lib/auth";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 import "./exam-shell.css";
+import { LearnerFeedbackShell } from "@/components/feedback/learner-feedback-shell";
 
 /**
  * Isolated exam surface: no learner nav row; theme tokens locked for readability.
@@ -40,13 +41,15 @@ export default async function ExamShellLayout({ children }: { children: React.Re
   }
 
   return (
-    <div className="nn-exam-surface mx-auto w-full max-w-4xl px-6 py-8">
-      <nav className="mb-6 text-sm">
-        <Link href="/app" className="font-medium text-primary hover:underline">
-          {t("learner.exams.shell.backToDashboard")}
-        </Link>
-      </nav>
-      {children}
-    </div>
+    <LearnerFeedbackShell pathwayId={null}>
+      <div className="nn-exam-surface mx-auto w-full max-w-4xl px-6 py-8">
+        <nav className="mb-6 text-sm">
+          <Link href="/app" className="font-medium text-primary hover:underline">
+            {t("learner.exams.shell.backToDashboard")}
+          </Link>
+        </nav>
+        {children}
+      </div>
+    </LearnerFeedbackShell>
   );
 }

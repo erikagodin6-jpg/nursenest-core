@@ -4,6 +4,7 @@ export {
   BRAND_MOTION_DISTANCE_PX,
   BRAND_HOVER_LIFT_Y,
   BRAND_PRESS_SCALE,
+  BRAND_STAGGER_CHILD_MS,
   EASE_LUXURY,
   EASE_CALM_OUT,
   EASE_SOFT_OUT,
@@ -22,6 +23,11 @@ export {
   transitionEntrance,
   transitionFast,
   transitionNormal,
+  transitionHeroReveal,
+  transitionCardHover,
+  transitionNotFoundLeafEntrance,
+  successLeafTransition,
+  notFoundLeafFloatTransition,
   transitionMedium,
   transitionSlow,
   fadeInVariants,
@@ -52,6 +58,7 @@ export {
   StaggerItem,
 } from "./motion-wrapper";
 export type { StaggerItemVariant } from "./motion-wrapper";
+export type { ScaleInProps } from "./motion-wrapper";
 export {
   PageTransitionShell,
   learnerShellShouldDisablePageTransition,

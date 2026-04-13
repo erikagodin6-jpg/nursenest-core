@@ -22,7 +22,9 @@ import type {
   ReadinessScore,
   WeaknessPriority,
 } from "@/lib/coach/study-coach-types";
-import { followUpsForIntent, titleForIntent } from "@/lib/coach/study-coach-actions";
+import { buildLearnerStudySnapshot } from "@/lib/learner/build-learner-study-snapshot";
+import { loadPremiumDashboardSnapshot } from "@/lib/learner/premium-dashboard-snapshot";
+import { followUpsForIntent, titleForIntent } from "@/lib/coach/study-coach-followups";
 
 export type CoachDashboardBundle = {
   contextInput: CoachContextInput;
@@ -267,3 +269,19 @@ export function formatInterventionResponse(top: CoachIntervention): CoachRespons
 }
 
 export { filterInterventionsByCooldown, rankInterventions };
+
+/**
+ * Load dashboard + study snapshots and build the coach bundle (for API deterministic intents).
+ */
+export async function loadCoachBundleForApi(
+  userId: string,
+  entitlement: AccessScope,
+): Promise<CoachDashboardBundle | null> {
+  const [snapshot, studySnap] = await Promise.all([
+    loadPremiumDashboardSnapshot(userId, entitlement),
+    buildLearnerStudySnapshot(userId, entitlement, undefined),
+  ]);
+  if (!snapshot || !studySnap) return null;
+  const days = await loadDaysSinceLastActivity(userId);
+  return buildCoachDashboardBundle(snapshot, studySnap, days);
+}

@@ -33,6 +33,7 @@ function bandFromScore(score: number): ReadinessBand {
  * Does not call the network. When signals are thin, confidence is low and the score is conservative.
  */
 export function computeReadinessScore(input: CoachReadinessInput): ReadinessScore {
+  const accCombined = input.recentAccuracyPct ?? input.practiceAccuracyPct ?? null;
   const factors: ReadinessFactor[] = [];
   let weighted = 0;
   let weightSum = 0;
@@ -74,7 +75,6 @@ export function computeReadinessScore(input: CoachReadinessInput): ReadinessScor
     );
   }
 
-  const accCombined = input.recentAccuracyPct ?? input.practiceAccuracyPct;
   if (accCombined != null) {
     const acc = clamp(accCombined, 0, 100);
     const impact: ReadinessFactor["impact"] = acc >= 72 ? "positive" : acc < 58 ? "negative" : "neutral";

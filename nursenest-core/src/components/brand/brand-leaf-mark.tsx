@@ -2,7 +2,13 @@
 
 import { motion } from "framer-motion";
 import { BrandLeafIcon } from "@/components/brand/brand-leaf-icon";
+import {
+  notFoundLeafFloatTransition,
+  transitionNotFoundLeafEntrance,
+} from "@/lib/motion/presets";
+import { pickTransition, pickVariants } from "@/lib/motion/reduced-motion";
 import { useReducedMotion } from "@/lib/motion/use-reduced-motion";
+import { fadeUpVariants } from "@/lib/motion/presets";
 
 type Props = {
   /** Visual width in px */
@@ -10,9 +16,11 @@ type Props = {
   className?: string;
 };
 
+const leafEntranceHidden = { opacity: 0, y: 8 };
+const leafEntranceVisible = { opacity: 1, y: 0 };
+
 /**
- * Subtle entrance motion for the brand leaf (404 and similar surfaces).
- * Reduced motion: static leaf, no travel.
+ * 404 and similar surfaces: calm entrance, then a very slow decorative float (disabled when reduced motion).
  */
 export function BrandLeafMark({ size = 56, className = "" }: Props) {
   const reduced = useReducedMotion();
@@ -20,16 +28,26 @@ export function BrandLeafMark({ size = 56, className = "" }: Props) {
   return (
     <motion.div
       className={`inline-flex items-center justify-center ${className}`.trim()}
-      initial={reduced ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={
-        reduced
-          ? { duration: 0 }
-          : { duration: 0.55, ease: [0.22, 1, 0.36, 1] }
-      }
+      initial={reduced ? { opacity: 1, y: 0 } : leafEntranceHidden}
+      animate={reduced ? { opacity: 1, y: 0 } : leafEntranceVisible}
+      transition={pickTransition(reduced, transitionNotFoundLeafEntrance)}
       aria-hidden
     >
-      <BrandLeafIcon tone="brand" size={size} />
+      <motion.div
+        className="inline-flex"
+        animate={
+          reduced
+            ? { y: 0, rotate: 0, opacity: 1 }
+            : {
+                y: [0, -3, 0],
+                rotate: [0, 1.25, 0],
+                opacity: [1, 0.94, 1],
+              }
+        }
+        transition={reduced ? { duration: 0 } : notFoundLeafFloatTransition}
+      >
+        <BrandLeafIcon tone="brand" size={size} />
+      </motion.div>
     </motion.div>
   );
 }

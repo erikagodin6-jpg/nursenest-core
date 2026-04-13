@@ -1,68 +1,30 @@
 import "server-only";
 
-/**
- * Study Coach action model.
- *
- * Each intent maps to a focused, structured guidance request.
- * The coach never appears as a chatbot; it surfaces as contextual
- * actions embedded in existing learning surfaces.
- */
+import type {
+  CoachActionDefinition,
+  CoachContext,
+  CoachIntent,
+  CoachRequest,
+  CoachResponse,
+  CoachSection,
+} from "./study-coach-types";
+import { followUpsForIntent, titleForIntent } from "./study-coach-followups";
 
-export type CoachIntent =
-  | "explain_simply"
-  | "why_wrong"
-  | "what_next"
-  | "weak_summary"
-  | "topic_review"
-  | "quick_plan"
-  | "quiz_concept";
+export type {
+  CoachIntent,
+  CoachContext,
+  CoachRequest,
+  CoachResponse,
+  CoachSection,
+  CoachFollowUpAction,
+} from "./study-coach-types";
 
-export interface CoachAction {
-  intent: CoachIntent;
-  label: string;
-  description: string;
-}
+export { followUpsForIntent, titleForIntent } from "./study-coach-followups";
 
-export interface CoachRequest {
-  intent: CoachIntent;
-  context: CoachContext;
-}
+/** @deprecated Use CoachActionDefinition */
+export type CoachAction = CoachActionDefinition;
 
-export interface CoachContext {
-  /** Question stem or lesson content to explain */
-  content?: string;
-  /** Topic being studied */
-  topic?: string;
-  /** Subtopic if available */
-  subtopic?: string;
-  /** Whether the user answered correctly (for review contexts) */
-  wasCorrect?: boolean;
-  /** Existing rationale to build on */
-  rationale?: string;
-  /** User's weak topics for personalization */
-  weakTopics?: string[];
-  /** Exam target (NCLEX_RN, etc.) */
-  examTarget?: string;
-  /** Days until exam */
-  daysUntilExam?: number;
-}
-
-export interface CoachResponse {
-  intent: CoachIntent;
-  title: string;
-  content: string;
-  /** Structured sections for rich display */
-  sections?: CoachSection[];
-  /** Suggested follow-up actions */
-  followUp?: { label: string; intent: CoachIntent }[];
-}
-
-export interface CoachSection {
-  heading: string;
-  body: string;
-}
-
-export const REVIEW_ACTIONS: CoachAction[] = [
+export const REVIEW_ACTIONS: CoachActionDefinition[] = [
   {
     intent: "explain_simply",
     label: "Explain This More Clearly",
@@ -80,7 +42,7 @@ export const REVIEW_ACTIONS: CoachAction[] = [
   },
 ];
 
-export const LESSON_ACTIONS: CoachAction[] = [
+export const LESSON_ACTIONS: CoachActionDefinition[] = [
   {
     intent: "explain_simply",
     label: "Simplify This",
@@ -98,7 +60,7 @@ export const LESSON_ACTIONS: CoachAction[] = [
   },
 ];
 
-export const DASHBOARD_ACTIONS: CoachAction[] = [
+export const DASHBOARD_ACTIONS: CoachActionDefinition[] = [
   {
     intent: "what_next",
     label: "What to Study Next",
@@ -116,9 +78,22 @@ export const DASHBOARD_ACTIONS: CoachAction[] = [
   },
 ];
 
+const GENERATIVE_INTENTS: CoachIntent[] = [
+  "explain_simply",
+  "why_wrong",
+  "what_next",
+  "weak_summary",
+  "topic_review",
+  "quick_plan",
+  "quiz_concept",
+];
+
+export function isGenerativeCoachIntent(intent: CoachIntent): boolean {
+  return GENERATIVE_INTENTS.includes(intent);
+}
+
 /**
- * Build the system prompt for a given intent.
- * Keeps the coach voice human, concise, and structured.
+ * Build the system prompt for a given intent (generative path only).
  */
 export function buildCoachSystemPrompt(intent: CoachIntent): string {
   const base = [
@@ -171,6 +146,22 @@ export function buildCoachSystemPrompt(intent: CoachIntent): string {
       "Include 4 options (A through D) with one correct answer.",
       "After the options, provide the correct answer and a brief explanation.",
       "Make the question test understanding, not memorization.",
+    ].join(" "),
+    readiness_explain: [
+      "Polish the following readiness summary without changing any numbers or band labels.",
+      "Do not invent metrics. Keep the same structure and bullets.",
+    ].join(" "),
+    study_priority_ranked: [
+      "Polish the following ranked topic list without changing order or scores.",
+      "Do not invent topics. Keep bullets intact.",
+    ].join(" "),
+    pattern_insight: [
+      "Polish the following pattern summary without adding new claims.",
+      "Do not invent learner data.",
+    ].join(" "),
+    intervention_alert: [
+      "Polish the short intervention note. Keep the same meaning and calm tone.",
+      "Do not add new risks or statistics.",
     ].join(" "),
   };
 
@@ -239,55 +230,14 @@ export function buildCoachUserPrompt(req: CoachRequest): string {
         parts.push(`Days until exam: ${req.context.daysUntilExam}`);
       }
       break;
+
+    case "readiness_explain":
+    case "study_priority_ranked":
+    case "pattern_insight":
+    case "intervention_alert":
+      if (req.context.content) parts.push(req.context.content);
+      break;
   }
 
   return parts.join("\n");
-}
-
-const INTENT_TITLES: Record<CoachIntent, string> = {
-  explain_simply: "Simplified Explanation",
-  why_wrong: "Why This Was Wrong",
-  what_next: "What to Study Next",
-  weak_summary: "Focus Areas to Review",
-  topic_review: "Key Points",
-  quick_plan: "Quick Study Session",
-  quiz_concept: "Quick Check",
-};
-
-export function titleForIntent(intent: CoachIntent): string {
-  return INTENT_TITLES[intent];
-}
-
-const FOLLOW_UPS: Record<CoachIntent, { label: string; intent: CoachIntent }[]> = {
-  explain_simply: [
-    { label: "Quiz Me on This", intent: "quiz_concept" },
-    { label: "Key Points Only", intent: "topic_review" },
-  ],
-  why_wrong: [
-    { label: "Simplify This", intent: "explain_simply" },
-    { label: "Quiz Me on This", intent: "quiz_concept" },
-  ],
-  what_next: [
-    { label: "Build a Quick Review", intent: "quick_plan" },
-    { label: "Focus Areas to Review", intent: "weak_summary" },
-  ],
-  weak_summary: [
-    { label: "Build a Quick Review", intent: "quick_plan" },
-    { label: "What to Study Next", intent: "what_next" },
-  ],
-  topic_review: [
-    { label: "Quiz Me on This", intent: "quiz_concept" },
-    { label: "Simplify This", intent: "explain_simply" },
-  ],
-  quick_plan: [
-    { label: "Focus Areas to Review", intent: "weak_summary" },
-  ],
-  quiz_concept: [
-    { label: "Simplify This", intent: "explain_simply" },
-    { label: "Key Points Only", intent: "topic_review" },
-  ],
-};
-
-export function followUpsForIntent(intent: CoachIntent): { label: string; intent: CoachIntent }[] {
-  return FOLLOW_UPS[intent] ?? [];
 }

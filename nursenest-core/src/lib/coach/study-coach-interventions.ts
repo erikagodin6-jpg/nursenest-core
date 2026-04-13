@@ -134,21 +134,23 @@ export function detectReviewSessionInterventions(
     );
   }
 
-  const topicCounts = new Map<string, number>();
+  const topicCounts = new Map<string, { n: number; label: string }>();
   for (const i of items) {
     if (i.isCorrect || !i.topic?.trim()) continue;
-    const k = i.topic.trim().toLowerCase();
-    topicCounts.set(k, (topicCounts.get(k) ?? 0) + 1);
+    const label = i.topic.trim();
+    const k = label.toLowerCase();
+    const cur = topicCounts.get(k);
+    topicCounts.set(k, { n: (cur?.n ?? 0) + 1, label: cur?.label ?? label });
   }
-  for (const [topic, n] of topicCounts) {
+  for (const { n, label } of topicCounts.values()) {
     if (n >= 2) {
       out.push(
         iv(
-          `repeat_${topic.slice(0, 24)}`,
+          `repeat_${label.toLowerCase().slice(0, 24)}`,
           "same_topic_misses",
           "action",
           "Repeated Misses Detected",
-          `This review batch has multiple misses in the same topic area (${topic}). A short drill on that topic is the next best step.`,
+          `This review batch has multiple misses in the same topic area (${label}). A short drill on that topic is the next best step.`,
           act("Quiz Me on This", "quiz_concept"),
           surface,
         ),

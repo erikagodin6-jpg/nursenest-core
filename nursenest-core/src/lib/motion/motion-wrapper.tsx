@@ -10,6 +10,7 @@ import {
   scaleInVariants,
   softRevealVariants,
   staggerContainer,
+  transitionHeroReveal,
   transitionNormal,
   reducedMotionVariants,
 } from "./presets";
@@ -91,9 +92,15 @@ export const Fade = forwardRef<HTMLDivElement, RevealProps>(
 );
 Fade.displayName = "Fade";
 
-export const ScaleIn = forwardRef<HTMLDivElement, RevealProps>(
-  ({ children, whenInView = true, viewMargin = "-40px", once = true, ...rest }, ref) => {
+export interface ScaleInProps extends RevealProps {
+  /** `hero` uses {@link transitionHeroReveal} for homepage media framing. */
+  timing?: "default" | "hero";
+}
+
+export const ScaleIn = forwardRef<HTMLDivElement, ScaleInProps>(
+  ({ children, whenInView = true, viewMargin = "-40px", once = true, timing = "default", ...rest }, ref) => {
     const reduced = useReducedMotion();
+    const t = timing === "hero" ? transitionHeroReveal : transitionNormal;
     return (
       <motion.div
         ref={ref}
@@ -102,7 +109,7 @@ export const ScaleIn = forwardRef<HTMLDivElement, RevealProps>(
         {...(whenInView
           ? { whileInView: "visible", viewport: { once, margin: viewMargin } }
           : { animate: "visible" })}
-        transition={pickTransition(reduced, transitionNormal)}
+        transition={pickTransition(reduced, t)}
         {...rest}
       >
         {children}
@@ -140,15 +147,20 @@ export type StaggerItemVariant = "fadeUp" | "softReveal";
 
 export const StaggerItem = forwardRef<
   HTMLDivElement,
-  Omit<HTMLMotionProps<"div">, "variants"> & { variant?: StaggerItemVariant }
->(({ children, variant = "fadeUp", ...rest }, ref) => {
+  Omit<HTMLMotionProps<"div">, "variants"> & {
+    variant?: StaggerItemVariant;
+    /** `hero` tightens item duration to the brand hero tier (~220ms). */
+    timing?: "default" | "hero";
+  }
+>(({ children, variant = "fadeUp", timing = "default", ...rest }, ref) => {
   const reduced = useReducedMotion();
   const full = variant === "softReveal" ? softRevealVariants : fadeUpVariants;
+  const tr = timing === "hero" ? transitionHeroReveal : transitionNormal;
   return (
     <motion.div
       ref={ref}
       variants={reduced ? reducedMotionVariants : full}
-      transition={pickTransition(reduced, transitionNormal)}
+      transition={pickTransition(reduced, tr)}
       {...rest}
     >
       {children}
