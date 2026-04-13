@@ -7,6 +7,7 @@ import { getFreemiumSnapshot } from "@/lib/entitlements/freemium";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { listPathwaysCompatibleWithSubscription, pathwayAllowsCatAdaptiveStart } from "@/lib/exam-pathways/pathway-entitlements";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
+import { getPathwayLessonsPage } from "@/lib/lessons/pathway-lesson-loader";
 import { appShellBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import type { Metadata } from "next";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
@@ -80,6 +81,25 @@ export default async function PathwayCatStartPage({ searchParams }: Props) {
     label: `${p.shortName} — ${p.displayName}`,
     examFamily: String(p.examFamily),
   }));
+  const lessonsByPathway = Object.fromEntries(
+    await Promise.all(
+      catEligiblePathways.map(async (pathway) => {
+        let page;
+        try {
+          page = await getPathwayLessonsPage(pathway.id, 1, 5);
+        } catch {
+          page = { items: [] as Array<{ slug: string; title: string }> };
+        }
+        return [
+          pathway.id,
+          page.items.map((item) => ({
+            slug: item.slug,
+            title: item.title,
+          })),
+        ] as const;
+      }),
+    ),
+  );
 
   return (
     <main>
@@ -109,7 +129,11 @@ export default async function PathwayCatStartPage({ searchParams }: Props) {
         </aside>
       ) : null}
       <div className="mt-6">
-        <PathwayCatSessionStartClient initialPathwayId={initialPathwayId} pathwayOptions={pathwayOptions} />
+        <PathwayCatSessionStartClient
+          initialPathwayId={initialPathwayId}
+          pathwayOptions={pathwayOptions}
+          fallbackLessonsByPathway={lessonsByPathway}
+        />
       </div>
     </main>
   );

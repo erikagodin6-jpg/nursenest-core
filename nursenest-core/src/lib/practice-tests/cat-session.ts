@@ -334,7 +334,7 @@ export async function createCatPracticeTestPayload(
     ? { blueprintWeights }
     : mergeBlueprintIntoBoost(practiceBoost, blueprintWeights);
 
-  const first = selectNextQuestion(pool, new Set(), state.targetDifficulty, delivered, selectOpts);
+  const first = selectNextQuestion(pool, new Set(), state.targetDifficulty, delivered, null, selectOpts);
   if (!first.selected) {
     return {
       ok: false,
@@ -481,7 +481,8 @@ async function catAfterScoredStep(params: {
     return { kind: "completed", results: enrichWithCat(baseResults, report, presentationMode), adaptiveState: state };
   }
 
-  const next = selectNextQuestion(pool, used, state.targetDifficulty, deliveredCounts, selectOpts);
+  const lastCategoryKey = state.results[state.results.length - 1]?.categoryKey ?? null;
+  const next = selectNextQuestion(pool, used, state.targetDifficulty, deliveredCounts, lastCategoryKey, selectOpts);
   if (!next.selected) {
     state = pushIncident(state, "pool_exhausted", next.detail);
     state = {

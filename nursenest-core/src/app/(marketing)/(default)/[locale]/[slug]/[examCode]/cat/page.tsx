@@ -24,6 +24,7 @@ import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlemen
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { ContentEmptyState } from "@/components/ui/content-empty-state";
 import { MarketingPathwayCatViewBeacon } from "@/components/observability/marketing-study-surface-view-beacons";
+import { getPathwayLessonsPage } from "@/lib/lessons/pathway-lesson-loader";
 
 export const dynamic = "force-dynamic";
 export const dynamicParams = true;
@@ -166,6 +167,10 @@ export default async function PathwayCatEntryPage({ params }: Props) {
   const questionsHref = buildExamPathwayPath(pathway, "questions");
   const pricingHref = buildExamPathwayPath(pathway, "pricing");
   const appBankHref = `/app/questions?pathwayId=${encodeURIComponent(pathway.id)}`;
+  const fallbackLessons =
+    !assessment.eligible && assessment.reason === "insufficient_cat_pool"
+      ? (await getPathwayLessonsPage(pathway.id, 1, 5, countrySlug)).items
+      : [];
 
   const showExplainerAside =
     assessment.marketingPrimaryCta === "none" || (isSignedIn && !assessment.eligible && assessment.reason !== "ok");
@@ -275,30 +280,51 @@ export default async function PathwayCatEntryPage({ params }: Props) {
       </section>
 
       {showExplainerAside ? (
-        <ContentEmptyState
-          variant="cat"
-          body={assessment.safeUserMessage}
-          showGrowthBadge={assessment.reason === "insufficient_cat_pool"}
-          primaryCta={{
-            label:
-              assessment.nextAction === "upgrade" || assessment.nextAction === "switch_pathway"
-                ? "Review your plan"
-                : "Study question bank",
-            href:
-              assessment.nextAction === "upgrade" || assessment.nextAction === "switch_pathway"
-                ? "/app/account/billing"
-                : questionsHref,
-          }}
-          secondaryCtas={[
-            { label: "Browse lessons", href: lessonsHref },
-            ...(assessment.nextAction === "join_waitlist"
-              ? [{ label: "Pathway hub", href: overviewHref, variant: "ghost" as const }]
-              : []),
-            ...(!isSignedIn
-              ? [{ label: "Create account", href: "/signup", variant: "ghost" as const }]
-              : [{ label: "App question bank", href: appBankHref, variant: "ghost" as const }]),
-          ]}
-        />
+        <>
+          <ContentEmptyState
+            variant="cat"
+            body={assessment.safeUserMessage}
+            showGrowthBadge={assessment.reason === "insufficient_cat_pool"}
+            primaryCta={{
+              label:
+                assessment.nextAction === "upgrade" || assessment.nextAction === "switch_pathway"
+                  ? "Review your plan"
+                  : "Study question bank",
+              href:
+                assessment.nextAction === "upgrade" || assessment.nextAction === "switch_pathway"
+                  ? "/app/account/billing"
+                  : questionsHref,
+            }}
+            secondaryCtas={[
+              { label: "Browse lessons", href: lessonsHref },
+              ...(assessment.nextAction === "join_waitlist"
+                ? [{ label: "Pathway hub", href: overviewHref, variant: "ghost" as const }]
+                : []),
+              ...(!isSignedIn
+                ? [{ label: "Create account", href: "/signup", variant: "ghost" as const }]
+                : [{ label: "App question bank", href: appBankHref, variant: "ghost" as const }]),
+            ]}
+          />
+          {assessment.reason === "insufficient_cat_pool" && fallbackLessons.length > 0 ? (
+            <section className="mt-4 rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5">
+              <h3 className="text-sm font-semibold text-[var(--theme-heading-text)]">
+                Complete lessons available now
+              </h3>
+              <ul className="mt-3 space-y-2 text-sm">
+                {fallbackLessons.slice(0, 5).map((lesson) => (
+                  <li key={lesson.id}>
+                    <Link
+                      href={`${lessonsHref}/${encodeURIComponent(lesson.slug)}`}
+                      className="font-medium text-primary hover:underline"
+                    >
+                      {lesson.title}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          ) : null}
+        </>
       ) : null}
 
       <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">

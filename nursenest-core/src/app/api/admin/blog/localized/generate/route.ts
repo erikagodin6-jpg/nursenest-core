@@ -5,7 +5,6 @@ import { prisma } from "@/lib/db";
 import { openAiChatCompletion } from "@/lib/ai/openai-chat-completions";
 import { assertOpenAiKeyConfigured } from "@/lib/ai/openai-env";
 
-// @ts-expect-error — available after prisma generate + migration
 const localizedModel = () => prisma.localizedBlogArticle as Record<string, (...args: unknown[]) => Promise<unknown>>;
 import {
   extractCanonicalBrief,

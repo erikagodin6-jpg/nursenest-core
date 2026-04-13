@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { BookOpen, ClipboardList, Layers } from "lucide-react";
 import { getOptionalPublicSession } from "@/lib/auth/optional-public-session";
@@ -31,6 +32,7 @@ import { StudyModeCards, defaultLessonModeCards } from "@/components/study/study
 import { StudyBottomNav } from "@/components/study/study-bottom-nav";
 import { HUB } from "@/lib/marketing/marketing-entry-routes";
 import { buildPathwayLessonSystemSections } from "@/lib/lessons/pathway-lesson-body-system-groups";
+import { CAT_MIN_COMPLETE_POOL } from "@/lib/practice-tests/cat-pool";
 
 export const dynamic = "force-dynamic";
 export const dynamicParams = true;
@@ -81,7 +83,7 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
   const qEffective = normalizePathwayHubSearchQuery(sp.q);
   const listOpts = typeof sp.q === "string" && sp.q.trim().length > 0 ? { q: sp.q } : undefined;
 
-  const { pageResult } = await loadPathwayLessonsHubAggregates(
+  const { pageResult, questionSnapshot } = await loadPathwayLessonsHubAggregates(
     pathway,
     {
       pageRequested: 1,
@@ -110,6 +112,7 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
   const overviewHref = marketingExamHubBasePath(pathway);
   const questionsHref = buildExamPathwayPath(pathway, "questions");
   const catHref = buildExamPathwayPath(pathway, "cat");
+  const canStartCat = questionSnapshot.status === "ok" && questionSnapshot.adaptiveEligibleCount >= CAT_MIN_COMPLETE_POOL;
 
   const querySuffix = qEffective ? `?q=${encodeURIComponent(qEffective)}` : "";
   const canadaHref =
@@ -160,9 +163,10 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
             </Link>
             <Link
               href={buildExamPathwayPath(pathway, "cat")}
+              aria-disabled={!canStartCat}
               className="inline-flex min-h-[44px] items-center justify-center rounded-full border border-border px-5 py-2.5 text-sm font-semibold hover:bg-card"
             >
-              Start adaptive exam
+              {canStartCat ? "Start adaptive exam" : "Adaptive exam unavailable"}
             </Link>
           </div>
         </div>
@@ -282,7 +286,7 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
       <StudyBottomNav
         relatedLinks={[
           { label: "Practice questions", href: questionsHref },
-          { label: "Adaptive CAT", href: catHref },
+          { label: canStartCat ? "Adaptive CAT" : "Adaptive CAT unavailable", href: catHref },
           { label: "Practice exams", href: HUB.practiceExams },
           { label: "Exam overview", href: overviewHref },
         ]}

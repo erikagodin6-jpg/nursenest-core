@@ -29,6 +29,8 @@ import { alliedHealthLessonsIndexPath, alliedHealthSegmentPath } from "@/lib/les
 import { alliedLessonsHubBreadcrumbs } from "@/lib/seo/allied-breadcrumbs";
 import { absoluteUrl } from "@/lib/seo/site-origin";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
+import { loadPathwayQuestionBankSnapshot } from "@/lib/exam-pathways/pathway-question-bank-snapshot";
+import { CAT_MIN_COMPLETE_POOL } from "@/lib/practice-tests/cat-pool";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 86400;
@@ -118,6 +120,8 @@ export default async function AlliedHealthSlugLessonsPage({ params, searchParams
   if (prof.topicSlugsIn && prof.topicSlugsIn.length > 0) listOptsRaw.topicSlugsIn = prof.topicSlugsIn;
   if (typeof sp.q === "string" && sp.q.trim().length > 0) listOptsRaw.q = sp.q;
   const listOpts = Object.keys(listOptsRaw).length > 0 ? listOptsRaw : undefined;
+  const questionSnapshot = await loadPathwayQuestionBankSnapshot(pathway.id);
+  const canStartCat = questionSnapshot.status === "ok" && questionSnapshot.adaptiveEligibleCount >= CAT_MIN_COMPLETE_POOL;
 
   let pageResult;
   try {
@@ -167,9 +171,10 @@ export default async function AlliedHealthSlugLessonsPage({ params, searchParams
           </Link>
           <Link
             href={buildExamPathwayPath(pathway, "cat")}
+            aria-disabled={!canStartCat}
             className="inline-flex min-h-[44px] items-center justify-center rounded-full border border-border px-5 py-2.5 text-sm font-semibold hover:bg-card"
           >
-            Start adaptive exam
+            {canStartCat ? "Start adaptive exam" : "Adaptive exam unavailable"}
           </Link>
         </div>
         <p className="mt-4 text-xs text-muted">

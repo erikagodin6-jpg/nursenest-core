@@ -139,6 +139,9 @@ const PATHWAY_READINESS_OVERRIDES: Record<string, Omit<PathwayReadinessConfig, "
 export function readinessConfigForPathway(pathway: Pick<ExamPathwayDefinition, "id" | "shortName" | "roleTrack">): PathwayReadinessConfig {
   const override = PATHWAY_READINESS_OVERRIDES[pathway.id];
   const questionRangeLabel = (base: Omit<PathwayReadinessConfig, "label" | "questionRange" | "timeEstimate">): string => {
+    if (base.engineType === "CAT") {
+      return "Up to 15 adaptive questions";
+    }
     if (base.mode === "mini_adaptive") {
       return base.maxQuestions <= 50
         ? `Up to ${base.maxQuestions} adaptive questions`
@@ -147,6 +150,9 @@ export function readinessConfigForPathway(pathway: Pick<ExamPathwayDefinition, "
     return `${base.minQuestions}-${base.maxQuestions} questions`;
   };
   const timeEstimateLabel = (base: Omit<PathwayReadinessConfig, "label" | "questionRange" | "timeEstimate">): string => {
+    if (base.engineType === "CAT") {
+      return "~15-25m";
+    }
     const h = Math.floor(base.timeLimitMinutes / 60);
     const m = base.timeLimitMinutes % 60;
     if (base.mode === "mini_adaptive") {

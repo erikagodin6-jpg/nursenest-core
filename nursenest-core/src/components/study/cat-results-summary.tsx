@@ -197,6 +197,12 @@ function buildStrengthTopics(
     .slice(0, 5);
 }
 
+function performanceLevelFromScore(score: number): "Beginner" | "Developing" | "Strong" {
+  if (score >= 75) return "Strong";
+  if (score >= 50) return "Developing";
+  return "Beginner";
+}
+
 // ── Main component ─────────────────────────────────────────────────────────
 
 /**
@@ -244,6 +250,7 @@ export function ResultsSummary({
   const passProbabilityBand = catReport?.passProbabilityBand ?? results.passProbabilityBand ?? null;
 
   const band = getReadinessBand(score);
+  const performanceLevel = performanceLevelFromScore(score);
 
   // One-sentence interpretation: prefer coach narrative, fall back to band helper
   const interpretation =
@@ -283,6 +290,23 @@ export function ResultsSummary({
         testId={testId}
         lessonsHref={lessonsHref}
       />
+
+      <section className="nn-cat-results__section">
+        <h2 className="nn-cat-results__section-title">Performance Snapshot</h2>
+        <div className="mt-3 grid gap-3 sm:grid-cols-3">
+          <PerformanceCard label="Performance level" value={performanceLevel} />
+          <PerformanceCard label="Score %" value={`${score}%`} />
+          <PerformanceCard label="Weak areas" value={guidedWeakAreas.slice(0, 3).join(", ") || "None identified"} />
+        </div>
+        <div className="mt-3">
+          <Link
+            href={performanceLevel === "Strong" ? "/app/lessons" : "/pricing"}
+            className="nn-btn-primary inline-flex min-h-[2.5rem] items-center rounded-lg px-4 text-sm font-semibold shadow-none"
+          >
+            {performanceLevel === "Strong" ? "Start full NCLEX prep" : "Unlock full exam prep"}
+          </Link>
+        </div>
+      </section>
 
       {/* 2 — Guided next steps ──────────────────────────────── */}
       <GuidedNextSteps

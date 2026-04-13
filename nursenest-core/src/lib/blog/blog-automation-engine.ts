@@ -201,7 +201,6 @@ async function upsertLocalizedVariant(params: {
     throw new Error(`Localization validation failed (${params.locale}): ${processed.error}`);
   }
 
-  // @ts-expect-error model available in runtime after prisma generate/migrations
   const localizedModel = prisma.localizedBlogArticle as {
     findUnique: (args: Record<string, unknown>) => Promise<{ id: string } | null>;
     create: (args: Record<string, unknown>) => Promise<{ localizedSlug: string }>;

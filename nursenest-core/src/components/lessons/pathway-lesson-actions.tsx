@@ -14,6 +14,8 @@ import {
   buildAppPracticeTestsHubHref,
   practiceTestsWeakFocusHref,
 } from "@/lib/learner/study-loop-recommendations";
+import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
+import { pathwayAllowsCatAdaptiveStart } from "@/lib/exam-pathways/pathway-entitlements";
 
 export function PathwayLessonActions({
   pathwayId,
@@ -101,6 +103,8 @@ export function PathwayLessonActions({
   const qbHref = `/app/questions?pathwayId=${encodeURIComponent(pathwayId)}${topicCodeParam}${topicLabelParam}&preset=topic_drill`;
   const catWeakHref = practiceTestsWeakFocusHref(pathwayId);
   const practiceTestsHubHref = buildAppPracticeTestsHubHref(pathwayId);
+  const pathway = getExamPathwayById(pathwayId);
+  const showCatCta = pathway ? pathwayAllowsCatAdaptiveStart(pathway) : false;
   const flashcardsHref = topicCode?.trim()
     ? `/app/flashcards?pathwayId=${encodeURIComponent(pathwayId)}&topicCode=${encodeURIComponent(topicCode.trim())}`
     : `/app/flashcards?pathwayId=${encodeURIComponent(pathwayId)}`;
@@ -127,14 +131,16 @@ export function PathwayLessonActions({
       >
         {t("learner.studyLoop.sameTopicFlashcards")}
       </Link>
-      <Link
-        href={catWeakHref}
-        data-testid="pathway-lesson-cta-cat-practice"
-        data-nn-pathway-id={pathwayId}
-        className="nn-study-pill-secondary nn-study-pill-secondary--accent"
-      >
-        {t("learner.studyLoop.catFromLesson")}
-      </Link>
+      {showCatCta ? (
+        <Link
+          href={catWeakHref}
+          data-testid="pathway-lesson-cta-cat-practice"
+          data-nn-pathway-id={pathwayId}
+          className="nn-study-pill-secondary nn-study-pill-secondary--accent"
+        >
+          {t("learner.studyLoop.catFromLesson")}
+        </Link>
+      ) : null}
       <Link
         href={practiceTestsHubHref}
         data-testid="pathway-lesson-cta-practice-tests-hub"

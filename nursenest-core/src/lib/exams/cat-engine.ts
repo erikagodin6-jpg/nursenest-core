@@ -318,6 +318,7 @@ export function selectNextQuestion(
   usedIds: Set<string>,
   targetDifficulty: number,
   deliveredCountsByCategory: Map<string, number>,
+  lastCategoryKey?: string | null,
   options?: CatSelectOptions,
 ): { selected: CatPoolRow | null; fallback: boolean; detail?: string } {
   const unused = pool.filter((p) => !usedIds.has(p.id));
@@ -343,7 +344,8 @@ export function selectNextQuestion(
     } else {
       balanceTerm = delivered * 3;
     }
-    const score = band(row.difficulty) * 12 + balanceTerm - boost;
+    const sameCategoryPenalty = lastCategoryKey && cat === lastCategoryKey ? 24 : 0;
+    const score = band(row.difficulty) * 12 + balanceTerm + sameCategoryPenalty - boost;
     return { row, score };
   });
 
@@ -383,13 +385,23 @@ export function shouldStopAfterAnswer(
   bounds?: CatStopBounds,
 ): CatAdaptiveState["stoppedReason"] {
   const minQ = bounds?.min ?? CAT_MIN_QUESTIONS;
-  const maxQ = bounds?.max ?? CAT_MAX_QUESTIONS;
+  const maxQ = Math.min(bounds?.max ?? CAT_MAX_QUESTIONS, 15);
   const minForConfidence =
     bounds?.minAnsweredForConfidenceStop ?? CAT_MIN_ANSWERED_FOR_CONFIDENCE_STOP;
   const passingThreshold = bounds?.passingThreshold ?? 0;
   const earlyStopMargin = Math.max(0.18, bounds?.earlyStopMargin ?? 0.32);
   const passCutoff = passingThreshold + earlyStopMargin;
   const failCutoff = passingThreshold - earlyStopMargin;
+
+  if (nAnswered >= 8) {
+    const lastFive = state.results.slice(-5);
+    if (lastFive.length === 5) {
+      const allCorrect = lastFive.every((entry) => entry.correct);
+      const allWrong = lastFive.every((entry) => !entry.correct);
+      if (allCorrect) return "confidence_pass";
+      if (allWrong) return "confidence_fail";
+    }
+  }
 
   if (nAnswered >= maxQ) return "max_length";
   if (nAnswered < minQ) return null;

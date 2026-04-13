@@ -13,9 +13,11 @@ import { CatAmbiguityPathwayPicker } from "@/components/student/cat-ambiguity-pa
 export function PathwayCatSessionStartClient({
   initialPathwayId,
   pathwayOptions,
+  fallbackLessonsByPathway,
 }: {
   initialPathwayId: string | null;
   pathwayOptions: PracticeTestPathwayOption[];
+  fallbackLessonsByPathway?: Record<string, Array<{ slug: string; title: string }>>;
 }) {
   const [pathwayId, setPathwayId] = useState(() => {
     if (initialPathwayId && pathwayOptions.some((p) => p.id === initialPathwayId)) return initialPathwayId;
@@ -41,6 +43,8 @@ export function PathwayCatSessionStartClient({
     [readinessConfig],
   );
   const examTitle = publicCopy?.title ?? (pathwayMeta ? catShort : "Exam pathway");
+  const fallbackLessons = pathwayId ? (fallbackLessonsByPathway?.[pathwayId] ?? []) : [];
+  const lessonsHubHref = pathwayMeta ? buildExamPathwayPath(pathwayMeta, "lessons") : "/app/lessons";
 
   useEffect(() => {
     if (!pathwayId.trim()) {
@@ -191,8 +195,29 @@ export function PathwayCatSessionStartClient({
       ) : null}
       {readiness && !readiness.ok ? (
         <aside className="rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-warning-soft)] p-4 text-sm text-[var(--semantic-text-primary)] shadow-sm">
-          <p className="font-semibold">{catShort ? `${catShort} cannot start yet` : "CAT cannot start yet"}</p>
+          <p className="font-semibold">
+            Adaptive exam not available yet for this pathway
+          </p>
           <p className="mt-1 text-muted-foreground">{readiness.message}</p>
+          {fallbackLessons.length > 0 ? (
+            <div className="mt-3">
+              <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                Complete lessons you can study now
+              </p>
+              <ul className="mt-2 space-y-1 text-sm">
+                {fallbackLessons.slice(0, 5).map((lesson) => (
+                  <li key={lesson.slug}>
+                    <Link
+                      className="font-medium text-primary underline"
+                      href={`${lessonsHubHref}/${encodeURIComponent(lesson.slug)}`}
+                    >
+                      {lesson.title}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ) : null}
           <ul className="mt-3 list-inside list-disc space-y-1 text-muted-foreground">
             {readiness.code === PRACTICE_TEST_CAT_CREATE_CODE.cat_pool_invalid && pathwayMeta ? (
               <li>
@@ -219,6 +244,16 @@ export function PathwayCatSessionStartClient({
                 for lessons, waitlist, or alternate tracks
               </li>
             ) : null}
+            <li>
+              <Link className="font-medium text-primary underline" href="/app/practice-tests">
+                Practice exams
+              </Link>
+            </li>
+            <li>
+              <Link className="font-medium text-primary underline" href={lessonsHubHref}>
+                Explore available content
+              </Link>
+            </li>
             <li>
               <Link className="font-medium text-primary underline" href="/app/questions">
                 App question bank
