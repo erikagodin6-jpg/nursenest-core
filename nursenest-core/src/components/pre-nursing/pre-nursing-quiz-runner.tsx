@@ -308,14 +308,20 @@ type Props = {
   examTitle: string;
   examDescription?: string;
   examLabel?: string;
+  /** Optional per-question overlay for non-English locales. */
+  questionsOverlay?: Record<string, PreNursingQuestionOverlay>;
 };
 
-export function PreNursingQuizRunner({ questions, examTitle, examDescription, examLabel }: Props) {
+export function PreNursingQuizRunner({ questions, examTitle, examDescription, examLabel, questionsOverlay = {} }: Props) {
+  // Apply locale overlay to all questions upfront for display; grading uses canonical `correct`
+  const displayQuestions = Object.keys(questionsOverlay).length > 0
+    ? applyPreNursingQuestionsOverlay(questions, questionsOverlay)
+    : questions;
   const [state, setState] = useState<RunnerState>({ phase: "intro" });
   // Track which option was selected per question (for result computation)
   const correctAnswersRef = { value: [] as boolean[] };
 
-  if (questions.length === 0) {
+  if (displayQuestions.length === 0) {
     return (
       <p className="text-sm" style={{ color: "var(--semantic-text-secondary)" }}>
         No practice questions available for this module yet.
@@ -328,8 +334,8 @@ export function PreNursingQuizRunner({ questions, examTitle, examDescription, ex
     return (
       <IntroScreen
         title={examTitle}
-        description={examDescription ?? `Test your knowledge with ${questions.length} practice questions. You'll get instant feedback and rationale after each answer.`}
-        questionCount={questions.length}
+        description={examDescription ?? `Test your knowledge with ${displayQuestions.length} practice questions. You'll get instant feedback and rationale after each answer.`}
+        questionCount={displayQuestions.length}
         onStart={() =>
           setState({
             phase: "in_progress",
@@ -355,13 +361,15 @@ export function PreNursingQuizRunner({ questions, examTitle, examDescription, ex
 
   // ── In progress ──
   const { questionIndex, answerState, correctAnswers } = state;
-  const question = questions[questionIndex];
-  if (!question) return null;
+  const question = displayQuestions[questionIndex];
+  // Canonical question for grading (correct index is immutable)
+  const canonicalQuestion = questions[questionIndex];
+  if (!question || !canonicalQuestion) return null;
 
   function handleSelect(selectedIndex: number) {
     if (state.phase !== "in_progress") return;
     if (state.answerState.phase === "answered") return;
-    const correct = selectedIndex === question!.correct;
+    const correct = selectedIndex === canonicalQuestion!.correct;
     setState((prev) => {
       if (prev.phase !== "in_progress") return prev;
       return { ...prev, answerState: { phase: "answered", selectedIndex, correct } };
@@ -376,8 +384,8 @@ export function PreNursingQuizRunner({ questions, examTitle, examDescription, ex
     const newCorrectAnswers = [...correctAnswers, state.answerState.correct];
     const nextIndex = questionIndex + 1;
 
-    if (nextIndex >= questions.length) {
-      // Done — compute result
+    if (nextIndex >= displayQuestions.length) {
+      // Done — compute result (always use canonical questions for scoring)
       const result = computePracticeExamResult(questions, newCorrectAnswers);
       setState({ phase: "complete", result });
     } else {
@@ -392,7 +400,7 @@ export function PreNursingQuizRunner({ questions, examTitle, examDescription, ex
 
   return (
     <div className="flex flex-col gap-6">
-      <ProgressBar current={questionIndex} total={questions.length} />
+      <ProgressBar current={questionIndex} total={displayQuestions.length} />
       <QuestionCard
         question={question}
         index={questionIndex}

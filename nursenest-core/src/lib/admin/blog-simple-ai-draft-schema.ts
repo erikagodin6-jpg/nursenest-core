@@ -1,5 +1,6 @@
 import { BlogFunnelStage, BlogPostIntent, BlogPostTemplate } from "@prisma/client";
 import { z } from "zod";
+import { GLOBAL_LOCALE_CODES, GLOBAL_REGION_SLUGS } from "@/lib/i18n/global-regions";
 
 /** Shared body schema for legacy single-post AI draft + automation-log retries. */
 export const blogSimpleAiDraftBodySchema = z.object({
@@ -47,6 +48,17 @@ export const blogSimpleAiDraftBodySchema = z.object({
   allowDuplicateCanonicalTopic: z.boolean().optional(),
   /** Admin trigger default: publish immediately (PUBLISHED). */
   publishNow: z.boolean().optional(),
+  /** Auto-generate localized variants from canonical post. */
+  generateTranslations: z.boolean().optional(),
+  /** Up to 4 locale variants per run for safety/cost control. */
+  translationLocales: z
+    .array(z.enum(GLOBAL_LOCALE_CODES))
+    .min(1)
+    .max(4)
+    .optional(),
+  translationRegion: z.enum(GLOBAL_REGION_SLUGS).optional(),
+  translationProfession: z.string().max(32).optional(),
+  translationExam: z.string().max(48).optional(),
 });
 
 export type BlogSimpleAiDraftBody = z.infer<typeof blogSimpleAiDraftBodySchema>;

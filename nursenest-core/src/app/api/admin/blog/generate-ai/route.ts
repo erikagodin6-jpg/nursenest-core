@@ -7,7 +7,7 @@ import {
 import { logSimpleAiDraftRun } from "@/lib/admin/blog-content-automation-log";
 import { isAdminAiGenerationEnabled } from "@/lib/ai/admin-ai-policy";
 import { assertOpenAiKeyConfigured } from "@/lib/ai/openai-env";
-import { generateBlogPost } from "@/lib/blog/generate-blog-ai-draft";
+import { generateAutomatedBlogPost } from "@/lib/blog/blog-automation-engine";
 import { BLOG_ARTICLE_MIN_WORDS, countWordsFromHtml } from "@/lib/blog/blog-word-count";
 import { prisma } from "@/lib/db";
 
@@ -69,6 +69,7 @@ export async function POST(req: Request) {
           postStatus: string;
         };
         warnings: string[];
+        localized: Array<{ locale: string; region: string; localizedSlug: string; mode: "created" | "updated" }>;
       }
     | {
         ok: true;
@@ -82,11 +83,11 @@ export async function POST(req: Request) {
   > = [];
 
   for (const topic of topics) {
-    const result = await generateBlogPost({
+    const result = await generateAutomatedBlogPost({
       topic,
       keywords: d.keywords,
       exam: d.exam,
-      country: d.country,
+      country: d.country ?? "unspecified",
       template: d.template,
       intent: d.intent,
       funnelStage: d.funnelStage,
@@ -95,11 +96,15 @@ export async function POST(req: Request) {
       includeAiImage: d.includeAiImage,
       targetKeyword: d.targetKeyword ?? topic,
       keywordCluster: d.keywordCluster,
-      countryTarget: d.countryTarget,
-      sourceRecords: d.sourceRecords,
-      slug: topics.length === 1 ? d.slug : undefined,
-      allowDuplicateCanonicalTopic: d.allowDuplicateCanonicalTopic,
+      sourceRecords: d.sourceRecords as unknown,
+      fixedSlug: topics.length === 1 ? d.slug : undefined,
+      autoPublish: publishNow,
       publishAt: publishNow ? runAt : undefined,
+      generateTranslations: d.generateTranslations === true,
+      translationLocales: d.translationLocales,
+      translationRegion: d.translationRegion,
+      translationProfession: d.translationProfession,
+      translationExam: d.translationExam,
     });
 
     const bodyForLog: BlogSimpleAiDraftBody = {
@@ -120,6 +125,11 @@ export async function POST(req: Request) {
       slug: topics.length === 1 ? d.slug : undefined,
       allowDuplicateCanonicalTopic: d.allowDuplicateCanonicalTopic,
       publishNow,
+      generateTranslations: d.generateTranslations,
+      translationLocales: d.translationLocales,
+      translationRegion: d.translationRegion,
+      translationProfession: d.translationProfession,
+      translationExam: d.translationExam,
     };
     await logSimpleAiDraftRun({ createdById: gate.admin.userId, body: bodyForLog, result });
 
@@ -163,7 +173,7 @@ export async function POST(req: Request) {
       ok: true,
       skipped: false,
       topic,
-      post: {
+        post: {
         id: saved.id,
         slug: saved.slug,
         title: saved.title,
@@ -176,7 +186,13 @@ export async function POST(req: Request) {
         isFullLength: bodyWordCount >= BLOG_ARTICLE_MIN_WORDS,
         postStatus: saved.postStatus,
       },
-      warnings: result.warnings,
+      warnings: [
+        ...result.warnings,
+        ...(result.localizationErrors.length > 0
+          ? [`Localization errors: ${result.localizationErrors.join(" | ")}`]
+          : []),
+      ],
+      localized: result.localized,
     });
   }
 

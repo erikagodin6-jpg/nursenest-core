@@ -6,13 +6,13 @@ import {
 } from "@/lib/exam-pathways/pathway-entitlements";
 import { readinessConfigForPathwayId } from "@/lib/exam-pathways/pathway-readiness-config";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
-import { fetchCatPracticePool } from "@/lib/practice-tests/cat-pool";
+import { CAT_MIN_COMPLETE_POOL, fetchCatPracticePool } from "@/lib/practice-tests/cat-pool";
 import { PRACTICE_TEST_CAT_CREATE_CODE } from "@/lib/practice-tests/practice-test-cat-create-codes";
 import type { PickQuestionsInput } from "@/lib/practice-tests/pick-question-ids";
 
 export type CatPracticeReadinessResult =
-  | { ok: true }
-  | { ok: false; code: string; message: string };
+  | { ok: true; availableQuestions: number; requiredQuestions: number }
+  | { ok: false; code: string; message: string; availableQuestions?: number; requiredQuestions?: number };
 
 /**
  * Server-only preflight for pathway CAT practice (same gates as {@link createCatPracticeTestPayload} pool phase).
@@ -70,14 +70,26 @@ export async function assessCatPracticeReadinessForPathway(
   };
 
   const pool = await fetchCatPracticePool(userId, entitlement, poolInput);
+  if (pool.length < CAT_MIN_COMPLETE_POOL) {
+    return {
+      ok: false,
+      code: PRACTICE_TEST_CAT_CREATE_CODE.cat_pool_invalid,
+      message: `Adaptive exam not available yet for this pathway. We currently have ${pool.length} complete questions; at least ${CAT_MIN_COMPLETE_POOL} are required.`,
+      availableQuestions: pool.length,
+      requiredQuestions: CAT_MIN_COMPLETE_POOL,
+    };
+  }
+
   const v = validatePracticeCatPool(pool);
   if (!v.ok) {
     return {
       ok: false,
       code: PRACTICE_TEST_CAT_CREATE_CODE.cat_pool_invalid,
-      message: "Your readiness exam pool is still calibrating for this pathway. Keep practicing questions and lessons, then try again.",
+      message: "Adaptive exam not available yet for this pathway. Keep practicing complete lessons and questions, then try again.",
+      availableQuestions: pool.length,
+      requiredQuestions: CAT_MIN_COMPLETE_POOL,
     };
   }
 
-  return { ok: true };
+  return { ok: true, availableQuestions: pool.length, requiredQuestions: CAT_MIN_COMPLETE_POOL };
 }

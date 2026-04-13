@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
 import { prisma } from "@/lib/db";
+import { openAiChatCompletion } from "@/lib/ai/openai-chat-completions";
+import { assertOpenAiKeyConfigured } from "@/lib/ai/openai-env";
 
 // @ts-expect-error — available after prisma generate + migration
 const localizedModel = () => prisma.localizedBlogArticle as Record<string, (...args: unknown[]) => Promise<unknown>>;
@@ -26,6 +28,7 @@ const generateSchema = z.object({
   seoKeywordSecondary: z.array(z.string().max(200)).max(10).optional(),
   searchIntent: z.string().max(48).nullable().optional(),
   targetAudience: z.string().max(64).nullable().optional(),
+  promptOnly: z.boolean().optional(),
   /** Pre-computed AI output — skip AI call and go straight to post-processing. */
   precomputedAiOutput: z.unknown().optional(),
 });
@@ -35,11 +38,9 @@ const generateSchema = z.object({
  *
  * Two modes:
  * 1. With `precomputedAiOutput`: skips AI call, runs post-processing + persistence only.
- * 2. Without: returns the system+user prompts so the caller (admin UI or background job)
- *    can make the AI call with their preferred provider, then POST again with the output.
+ * 2. Without: runs AI adaptation internally and persists the localized variant.
  *
- * This separation keeps the AI provider choice out of the route handler and allows
- * the admin to preview/edit prompts before sending.
+ * Set `promptOnly=true` to return prompts without making an AI call.
  */
 export async function POST(req: NextRequest) {
   const gate = await requireAdmin();
@@ -65,6 +66,8 @@ export async function POST(req: NextRequest) {
       targetKeyword: true,
       apaReferences: true,
       sourcesJson: true,
+      postStatus: true,
+      publishAt: true,
     },
   });
 
@@ -170,14 +173,127 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ article: created, mode: "created" }, { status: 201 });
   }
 
-  // Mode 2: return prompts for the caller to run through their AI provider
+  const keyCheck = assertOpenAiKeyConfigured();
+  if (!keyCheck.ok) {
+    return NextResponse.json({ error: keyCheck.message }, { status: 503 });
+  }
+
+  // Mode 2: prompt preview only (no AI call)
   const systemPrompt = buildAdaptationSystemPrompt(brief);
   const userPrompt = buildAdaptationUserPrompt(brief);
+  if (d.promptOnly) {
+    return NextResponse.json({
+      brief,
+      systemPrompt,
+      userPrompt,
+      instructions: "Prompt preview mode only. Re-send without promptOnly to generate and persist.",
+    });
+  }
 
-  return NextResponse.json({
-    brief,
-    systemPrompt,
-    userPrompt,
-    instructions: "Send these prompts to your AI provider, then POST the JSON output back as `precomputedAiOutput`.",
+  // Mode 3: run AI adaptation and persist immediately
+  let generatedOutput: LocalizedBlogAiOutput;
+  try {
+    const completion = await openAiChatCompletion({
+      messages: [
+        { role: "system", content: systemPrompt },
+        { role: "user", content: userPrompt },
+      ],
+      temperature: 0.35,
+      maxTokens: 8192,
+    });
+    const raw = completion.content.trim();
+    const start = raw.indexOf("{");
+    const end = raw.lastIndexOf("}");
+    if (start < 0 || end <= start) {
+      return NextResponse.json({ error: "Localized generation did not return JSON." }, { status: 502 });
+    }
+    generatedOutput = JSON.parse(raw.slice(start, end + 1)) as LocalizedBlogAiOutput;
+  } catch (error) {
+    return NextResponse.json(
+      { error: error instanceof Error ? error.message : String(error) },
+      { status: 502 },
+    );
+  }
+
+  const result = postProcessAiOutput(generatedOutput, brief);
+  if (!result.ok) {
+    return NextResponse.json(
+      { error: result.error, stage: result.stage, partialOutput: result.partialOutput },
+      { status: 422 },
+    );
+  }
+
+  const existing = await localizedModel().findUnique({
+    where: {
+      canonicalArticleId_locale_region: {
+        canonicalArticleId: d.canonicalArticleId,
+        locale: d.targetLocale,
+        region: d.targetRegion,
+      },
+    },
+    select: { id: true, generationLog: true },
   });
+
+  const canonicalStatus = canonical.postStatus;
+  const canonicalPublishAt = canonical.publishAt ?? new Date();
+  const localizedStatus =
+    canonicalStatus === "SCHEDULED" && canonicalPublishAt.getTime() > Date.now()
+      ? ("SCHEDULED" as const)
+      : ("PUBLISHED" as const);
+
+  const articleData = {
+    locale: d.targetLocale,
+    region: d.targetRegion,
+    profession: d.targetProfession ?? null,
+    exam: d.targetExam ?? null,
+    sourceLanguage: "en",
+    adaptationType: brief.adaptationType === "adapted" ? ("ADAPTED" as const) : ("LOCALIZED_REWRITE" as const),
+    contentStatus: localizedStatus,
+    localizedTitle: result.aiOutput.localizedTitle,
+    localizedExcerpt: result.aiOutput.localizedExcerpt,
+    localizedBody: result.aiOutput.localizedBody,
+    canonicalSlug: brief.canonicalSlug,
+    localizedSlug: result.aiOutput.localizedSlug,
+    localizedMetaTitle: result.aiOutput.localizedMetaTitle,
+    localizedMetaDescription: result.aiOutput.localizedMetaDescription,
+    seoKeywordPrimary: result.aiOutput.seoKeywordPrimary,
+    seoKeywordSecondary: result.aiOutput.seoKeywordSecondary,
+    searchIntent: result.aiOutput.searchIntent,
+    targetAudience: brief.targetAudience,
+    ctaVariant: result.aiOutput.ctaVariant,
+    ctaText: result.aiOutput.ctaText,
+    ctaHref: result.aiOutput.ctaHref,
+    internalLinkTargets: result.aiOutput.internalLinkTargets as unknown,
+    complianceReviewRequired: result.aiOutput.complianceReviewRequired,
+    medicalReviewRequired: result.aiOutput.medicalReviewRequired,
+    editorialReviewRequired: true,
+    reviewFlags: result.aiOutput.reviewFlags,
+    scheduledAt: localizedStatus === "SCHEDULED" ? canonicalPublishAt : null,
+    publishedAt: localizedStatus === "PUBLISHED" ? new Date() : null,
+  };
+
+  if (existing) {
+    const ex = existing as { id: string; generationLog: unknown };
+    const updatedLog = appendGenerationLog(
+      ex.generationLog,
+      createLogEntry("generate", `AI adaptation generated for ${d.targetRegion}/${d.targetLocale}`),
+    );
+    const updated = await localizedModel().update({
+      where: { id: ex.id },
+      data: { ...articleData, generationLog: updatedLog },
+    });
+    return NextResponse.json({ article: updated, mode: "updated" });
+  }
+
+  const created = await localizedModel().create({
+    data: {
+      canonicalArticleId: d.canonicalArticleId,
+      ...articleData,
+      generationLog: [
+        createLogEntry("generate", `AI adaptation generated for ${d.targetRegion}/${d.targetLocale}`),
+      ],
+    },
+  });
+
+  return NextResponse.json({ article: created, mode: "created" }, { status: 201 });
 }

@@ -147,6 +147,33 @@
   --hero-gradient-start: color-mix(in srgb, var(--semantic-info) 9%, var(--semantic-surface));
   --hero-gradient-mid: color-mix(in srgb, var(--semantic-brand) 7%, var(--semantic-surface));
   --hero-gradient-end: color-mix(in srgb, var(--semantic-success) 8%, var(--semantic-surface));
+
+  /* ── Requested surface aliases ── */
+  --surface-soft: var(--surface-soft-a);
+  --surface-muted: var(--semantic-panel-muted);
+
+  /* ── Requested text aliases ── */
+  --text-inverse: var(--text-on-accent);
+
+  /* ── Requested accent aliases ── */
+  --accent-muted: var(--semantic-brand-soft);
+  --accent-strong: var(--surface-emphasis);
+
+  /* ── CTA aliases (map to existing role-cta) ── */
+  --cta-primary-bg: var(--role-cta);
+  --cta-primary-text: var(--role-cta-foreground);
+  --cta-secondary-bg: var(--role-cta-soft);
+  --cta-secondary-text: var(--role-cta-on-soft);
+  --cta-emphasis-bg: color-mix(in srgb, var(--role-cta) 82%, var(--semantic-warning));
+  --cta-emphasis-text: var(--role-cta-foreground);
+
+  /* ── Semantic application (learner-context brand alias) ── */
+  --semantic-application: var(--semantic-brand);
+
+  /* ── Progress aliases ── */
+  --progress-low: var(--semantic-mastery-low);
+  --progress-mid: var(--semantic-mastery-mid);
+  --progress-high: var(--semantic-mastery-high);
 }
 
 /* Lavender: brand violet — success mint, info sky, warning amber, danger coral-rose */

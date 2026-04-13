@@ -11,6 +11,55 @@ import { getWeakTopicNamesForPractice } from "@/lib/learner/topic-performance";
 import { difficultyWhere, type PickQuestionsInput } from "@/lib/practice-tests/pick-question-ids";
 
 const MAX_POOL = 4000;
+export const CAT_MIN_COMPLETE_POOL = 30;
+
+function hasValidStem(stem: string | null | undefined): boolean {
+  return typeof stem === "string" && stem.trim().length > 0;
+}
+
+function hasValidRationale(rationale: string | null | undefined): boolean {
+  return typeof rationale === "string" && rationale.trim().length > 0;
+}
+
+function hasValidOptions(options: Prisma.JsonValue | null | undefined): boolean {
+  if (!Array.isArray(options)) return false;
+  if (options.length < 2) return false;
+  return options.every((opt) => {
+    if (typeof opt === "string") return opt.trim().length > 0;
+    if (typeof opt === "number") return Number.isFinite(opt);
+    return false;
+  });
+}
+
+function hasValidCorrectAnswer(correctAnswer: Prisma.JsonValue | null | undefined): boolean {
+  if (correctAnswer == null) return false;
+  if (typeof correctAnswer === "string") return correctAnswer.trim().length > 0;
+  if (typeof correctAnswer === "number") return Number.isFinite(correctAnswer);
+  if (Array.isArray(correctAnswer)) {
+    return correctAnswer.length > 0 && correctAnswer.every((entry) => {
+      if (typeof entry === "string") return entry.trim().length > 0;
+      if (typeof entry === "number") return Number.isFinite(entry);
+      return false;
+    });
+  }
+  return typeof correctAnswer === "object";
+}
+
+export type CompleteCatQuestionRow = {
+  stem: string;
+  options: Prisma.JsonValue | null;
+  correctAnswer: Prisma.JsonValue | null;
+  rationale: string | null;
+};
+
+export function isCompleteCatQuestionRow(row: CompleteCatQuestionRow): boolean {
+  return (
+    hasValidStem(row.stem) &&
+    hasValidOptions(row.options) &&
+    hasValidCorrectAnswer(row.correctAnswer) &&
+    hasValidRationale(row.rationale)
+  );
+}
 
 /**
  * Tier-scoped pool for adaptive practice (same gates as linear practice tests).
@@ -63,6 +112,10 @@ export async function fetchCatPracticePool(
       difficulty: true,
       bodySystem: true,
       topic: true,
+      stem: true,
+      options: true,
+      correctAnswer: true,
+      rationale: true,
       nclexClientNeedsCategory: true,
       nclexClientNeedsSubcategory: true,
     },
@@ -70,7 +123,9 @@ export async function fetchCatPracticePool(
     take: MAX_POOL,
   });
 
-  return rows.map((r) => ({
+  const completeRows = rows.filter((r) => isCompleteCatQuestionRow(r));
+
+  return completeRows.map((r) => ({
     id: r.id,
     difficulty: typeof r.difficulty === "number" && Number.isFinite(r.difficulty) ? Math.round(r.difficulty) : 3,
     bodySystem: r.bodySystem,
@@ -78,4 +133,13 @@ export async function fetchCatPracticePool(
     nclexClientNeedsCategory: r.nclexClientNeedsCategory,
     nclexClientNeedsSubcategory: r.nclexClientNeedsSubcategory,
   }));
+}
+
+export async function countCompleteCatPracticePool(
+  userId: string,
+  entitlement: AccessScope,
+  input: PickQuestionsInput,
+): Promise<number> {
+  const pool = await fetchCatPracticePool(userId, entitlement, input);
+  return pool.length;
 }

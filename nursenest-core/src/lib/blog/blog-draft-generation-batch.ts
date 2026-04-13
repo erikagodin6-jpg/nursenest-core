@@ -6,7 +6,7 @@ import {
   BlogPostTemplate,
 } from "@prisma/client";
 import { normalizeBlogTopicKey } from "@/lib/blog/blog-intent-dedupe";
-import { generateBlogPost } from "@/lib/blog/generate-blog-ai-draft";
+import { generateAutomatedBlogPost } from "@/lib/blog/blog-automation-engine";
 import { isAdminAiGenerationEnabled } from "@/lib/ai/admin-ai-policy";
 import { assertOpenAiKeyConfigured } from "@/lib/ai/openai-env";
 import { logDraftBatchItemRun } from "@/lib/admin/blog-content-automation-log";
@@ -130,7 +130,7 @@ export async function processDraftGenerationBatchItems(
         data: { status: BlogDraftGenerationBatchItemStatus.GENERATING, error: null },
       });
 
-      const result = await generateBlogPost({
+      const result = await generateAutomatedBlogPost({
         topic: item.topicRaw,
         keywords: batch.keywords ?? undefined,
         exam: batch.exam,
@@ -143,8 +143,7 @@ export async function processDraftGenerationBatchItems(
         includeAiImage: batch.includeAiImage,
         targetKeyword: item.topicRaw,
         keywordCluster: batch.keywordCluster ?? undefined,
-        countryTarget: batch.countryTarget ?? undefined,
-        allowDuplicateCanonicalTopic: batch.allowDuplicateCanonicalTopic,
+        autoPublish: true,
       });
 
       if (!result.ok) {
