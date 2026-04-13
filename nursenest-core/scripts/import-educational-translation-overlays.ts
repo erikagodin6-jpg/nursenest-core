@@ -1,6 +1,7 @@
 #!/usr/bin/env npx tsx
 /**
  * Idempotent import of educational translation overlays (DB only — never touches canonical English rows).
+ * At serve time, `src/lib/i18n/educational-translation-quality.ts` gates overlays; failed strings fall back to English.
  *
  * Usage:
  *   npx tsx scripts/import-educational-translation-overlays.ts --file tools/i18n/content-import/samples/sample.manifest.json --dry-run

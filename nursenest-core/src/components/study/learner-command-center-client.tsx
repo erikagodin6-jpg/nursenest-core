@@ -275,7 +275,6 @@ export function LearnerCommandCenterClient() {
             icon={<BookMarked className="h-4 w-4" />}
             title="Notes & highlights"
             slug="notes"
-            empty="No notes yet — open a lesson or question and jot a takeaway."
             footerHref="/app/account/notes"
             footerLabel="Open notes library"
           >
@@ -290,7 +289,7 @@ export function LearnerCommandCenterClient() {
                 />
               ))
             ) : (
-              <EmptyBrowse />
+              <EmptyBrowse message="No notes yet — open a lesson or question and jot a takeaway." />
             )}
           </BrowseGroup>
 
@@ -298,7 +297,6 @@ export function LearnerCommandCenterClient() {
             icon={<Target className="h-4 w-4" />}
             title="Weak topics"
             slug="weak"
-            empty="No weak-topic signal yet — answer a few more questions to personalize this list."
             footerHref="/app/account/focus-areas"
             footerLabel="Focus areas"
           >
@@ -307,7 +305,7 @@ export function LearnerCommandCenterClient() {
                 <BrowseRow key={w.topic} href={w.href} title={w.topic} meta={`${w.missRate}% miss`} sub="Topic drill in question bank" />
               ))
             ) : (
-              <EmptyBrowse />
+              <EmptyBrowse message="No weak-topic signal yet — answer a few more questions to personalize this list." />
             )}
           </BrowseGroup>
 
@@ -315,7 +313,6 @@ export function LearnerCommandCenterClient() {
             icon={<ClipboardList className="h-4 w-4" />}
             title="Recent mistakes"
             slug="mistakes"
-            empty="No mistakes logged — complete a practice set to populate your notebook."
             footerHref="/app/account/mistakes"
             footerLabel="Mistake notebook"
           >
@@ -324,7 +321,7 @@ export function LearnerCommandCenterClient() {
                 <BrowseRow key={m.id} href={m.href} title={m.topic ?? "Question"} meta="Missed" sub={m.stemSnippet} />
               ))
             ) : (
-              <EmptyBrowse />
+              <EmptyBrowse message="No mistakes logged — complete a practice set to populate your notebook." />
             )}
           </BrowseGroup>
 
@@ -332,7 +329,6 @@ export function LearnerCommandCenterClient() {
             icon={<BookOpen className="h-4 w-4" />}
             title="Planned lessons"
             slug="lessons"
-            empty="No lesson picks queued — your study plan will suggest the next step soon."
             footerHref="/app/study-plan"
             footerLabel="Study plan"
           >
@@ -341,7 +337,7 @@ export function LearnerCommandCenterClient() {
                 <BrowseRow key={`${l.href}-${i}`} href={l.href} title={l.title} meta="Plan" sub="Continue your pathway" />
               ))
             ) : (
-              <EmptyBrowse />
+              <EmptyBrowse message="No lesson picks queued — your study plan will suggest the next step soon." />
             )}
           </BrowseGroup>
         </div>
@@ -394,7 +390,7 @@ function QuickActionCard({
   href,
   tone,
 }: {
-  icon: React.ReactNode;
+  icon: ReactNode;
   title: string;
   body: string;
   href: string;
@@ -412,13 +408,21 @@ function QuickActionCard({
     info: "color-mix(in srgb, var(--semantic-info) 7%, var(--semantic-surface))",
     success: "color-mix(in srgb, var(--semantic-success) 7%, var(--semantic-surface))",
   };
+  const iconColor =
+    tone === "brand"
+      ? "var(--semantic-brand)"
+      : tone === "warning"
+        ? "var(--semantic-warning-contrast)"
+        : tone === "info"
+          ? "var(--semantic-info)"
+          : "var(--semantic-success)";
   return (
     <Link
       href={href}
       className="group flex flex-col rounded-2xl border p-4 transition-shadow hover:shadow-md"
       style={{ borderColor: ring[tone], background: wash[tone] }}
     >
-      <span className="text-[var(--semantic-brand)] opacity-90" style={{ color: tone === "brand" ? "var(--semantic-brand)" : undefined }}>
+      <span className="opacity-90" style={{ color: iconColor }}>
         {icon}
       </span>
       <p className="mt-3 text-sm font-bold text-[var(--semantic-text-primary)]">{title}</p>
@@ -430,37 +434,37 @@ function QuickActionCard({
   );
 }
 
+function EmptyBrowse({ message }: { message: string }) {
+  return <p className="text-sm leading-relaxed text-[var(--semantic-text-muted)]">{message}</p>;
+}
+
 function BrowseGroup({
   icon,
   title,
-  empty,
+  slug,
   children,
   footerHref,
   footerLabel,
 }: {
-  icon: React.ReactNode;
+  icon: ReactNode;
   title: string;
-  empty: string;
-  children: React.ReactNode;
+  slug: string;
+  children: ReactNode;
   footerHref: string;
   footerLabel: string;
 }) {
-  const childArr = Array.isArray(children) ? children : [children];
-  const hasRows = childArr.some(Boolean);
   return (
     <section
       className="flex flex-col rounded-3xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5 shadow-sm"
-      aria-labelledby={`cc-${title.replace(/\s+/g, "-")}`}
+      aria-labelledby={`cc-${slug}`}
     >
       <div className="mb-4 flex items-center gap-2">
         <span className="text-[var(--semantic-text-muted)]">{icon}</span>
-        <h2 id={`cc-${title.replace(/\s+/g, "-")}`} className="text-sm font-bold text-[var(--semantic-text-primary)]">
+        <h2 id={`cc-${slug}`} className="text-sm font-bold text-[var(--semantic-text-primary)]">
           {title}
         </h2>
       </div>
-      <div className="min-h-[120px] flex-1 space-y-2">
-        {hasRows ? children : <p className="text-sm leading-relaxed text-[var(--semantic-text-muted)]">{empty}</p>}
-      </div>
+      <div className="min-h-[120px] flex-1 space-y-2">{children}</div>
       <Link
         href={footerHref}
         className="mt-4 inline-flex items-center gap-1 text-xs font-bold text-[var(--semantic-brand)]"

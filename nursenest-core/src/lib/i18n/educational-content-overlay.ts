@@ -646,9 +646,36 @@ export function applyQuestionEducationalOverlayForDisplay(
   }
 
   const canonical = normalizeExamQuestionOptionsArray(row.options);
+  let overlayApplied = false;
+  let overlayTranslationFallback = false;
+
+  const stemPick = o.stem?.trim()
+    ? pickLocalizedOverlayString(row.stem, o.stem, locale, { surface: "question_stem", questionId: row.id })
+    : { value: row.stem, fellBack: false };
+  const stem = stemPick.value;
+  if (o.stem?.trim()) {
+    if (!stemPick.fellBack) overlayApplied = true;
+    else overlayTranslationFallback = true;
+  }
+
   let displayOptions: string[] | undefined;
   if (Array.isArray(o.options) && o.options.length === canonical.length) {
-    displayOptions = o.options.map((x) => String(x));
+    let anyOptUsed = false;
+    const built = o.options.map((x, i) => {
+      const r = pickLocalizedOverlayString(canonical[i] ?? "", String(x), locale, {
+        surface: "question_option",
+        questionId: row.id,
+        optionIndex: i,
+      });
+      if (!r.fellBack) anyOptUsed = true;
+      else overlayTranslationFallback = true;
+      return r.value;
+    });
+    if (anyOptUsed) {
+      overlayApplied = true;
+      const identical = built.every((v, i) => v === canonical[i]);
+      displayOptions = identical ? undefined : built;
+    }
   } else if (o.options !== undefined && o.options.length !== canonical.length) {
     safeServerLog("i18n", "educational_question_overlay_options_length_mismatch", {
       locale,
@@ -658,28 +685,61 @@ export function applyQuestionEducationalOverlayForDisplay(
     });
   }
 
-  const overlayApplied = Boolean(
-    displayOptions ||
-      Object.keys(o).length > 0 ||
-      mergeStringField(row.rationale, o.rationale) !== row.rationale,
+  const rat = mergeQuestionNullableStringWithQuality(row.rationale, o.rationale, locale, "rationale", row.id);
+  if (rat.usedOverlay) overlayApplied = true;
+  if (rat.fellBack) overlayTranslationFallback = true;
+
+  const cae = mergeQuestionNullableStringWithQuality(
+    row.correctAnswerExplanation,
+    o.correctAnswerExplanation,
+    locale,
+    "correctAnswerExplanation",
+    row.id,
   );
+  if (cae.usedOverlay) overlayApplied = true;
+  if (cae.fellBack) overlayTranslationFallback = true;
+
+  const cr = mergeQuestionNullableStringWithQuality(row.clinicalReasoning, o.clinicalReasoning, locale, "clinicalReasoning", row.id);
+  if (cr.usedOverlay) overlayApplied = true;
+  if (cr.fellBack) overlayTranslationFallback = true;
+
+  const kt = mergeQuestionNullableStringWithQuality(row.keyTakeaway, o.keyTakeaway, locale, "keyTakeaway", row.id);
+  if (kt.usedOverlay) overlayApplied = true;
+  if (kt.fellBack) overlayTranslationFallback = true;
+
+  const cp = mergeQuestionNullableStringWithQuality(row.clinicalPearl, o.clinicalPearl, locale, "clinicalPearl", row.id);
+  if (cp.usedOverlay) overlayApplied = true;
+  if (cp.fellBack) overlayTranslationFallback = true;
+
+  const es = mergeQuestionNullableStringWithQuality(row.examStrategy, o.examStrategy, locale, "examStrategy", row.id);
+  if (es.usedOverlay) overlayApplied = true;
+  if (es.fellBack) overlayTranslationFallback = true;
+
+  const mh = mergeQuestionNullableStringWithQuality(row.memoryHook, o.memoryHook, locale, "memoryHook", row.id);
+  if (mh.usedOverlay) overlayApplied = true;
+  if (mh.fellBack) overlayTranslationFallback = true;
+
+  const ct = mergeQuestionNullableStringWithQuality(row.clinicalTrap, o.clinicalTrap, locale, "clinicalTrap", row.id);
+  if (ct.usedOverlay) overlayApplied = true;
+  if (ct.fellBack) overlayTranslationFallback = true;
 
   return {
-    stem: o.stem?.trim() ? o.stem : row.stem,
+    stem,
     options: row.options,
     ...(displayOptions ? { displayOptions } : {}),
-    rationale: mergeStringField(row.rationale, o.rationale) ?? null,
-    correctAnswerExplanation: mergeStringField(row.correctAnswerExplanation, o.correctAnswerExplanation) ?? null,
-    clinicalReasoning: mergeStringField(row.clinicalReasoning, o.clinicalReasoning) ?? null,
-    keyTakeaway: mergeStringField(row.keyTakeaway, o.keyTakeaway) ?? null,
-    clinicalPearl: mergeStringField(row.clinicalPearl, o.clinicalPearl) ?? null,
-    examStrategy: mergeStringField(row.examStrategy, o.examStrategy) ?? null,
-    memoryHook: mergeStringField(row.memoryHook, o.memoryHook) ?? null,
-    clinicalTrap: mergeStringField(row.clinicalTrap, o.clinicalTrap) ?? null,
+    rationale: rat.value,
+    correctAnswerExplanation: cae.value,
+    clinicalReasoning: cr.value,
+    keyTakeaway: kt.value,
+    clinicalPearl: cp.value,
+    examStrategy: es.value,
+    memoryHook: mh.value,
+    clinicalTrap: ct.value,
     distractorRationales: o.distractorRationales !== undefined ? o.distractorRationales : row.distractorRationales,
     incorrectAnswerRationale:
       o.incorrectAnswerRationale !== undefined ? o.incorrectAnswerRationale : row.incorrectAnswerRationale,
     overlayApplied,
+    ...(overlayTranslationFallback ? { overlayTranslationFallback: true } : {}),
   };
 }
 
@@ -702,6 +762,8 @@ export function mergeQuestionApiPayload(
   out.clinicalTrap = m.clinicalTrap;
   out.distractorRationales = m.distractorRationales;
   out.incorrectAnswerRationale = m.incorrectAnswerRationale;
+  out.overlayApplied = m.overlayApplied;
+  if (m.overlayTranslationFallback) out.overlayTranslationFallback = true;
   return out;
 }
 
@@ -750,17 +812,43 @@ export function mergeQuestionOverlayForGradeResponse<T extends ExamQuestionGrade
   const bundle = overlayBundle ?? loadQuestionEducationalOverlayBundle(locale);
   const o = bundle[questionId];
   if (!o) return row;
+  const stem = o.stem?.trim()
+    ? pickLocalizedOverlayString(row.stem, o.stem, locale, {
+        surface: "question_stem_grade",
+        questionId,
+      }).value
+    : row.stem;
+  const rationale = mergeQuestionNullableStringWithQuality(row.rationale, o.rationale, locale, "rationale", questionId).value;
+  const correctAnswerExplanation = mergeQuestionNullableStringWithQuality(
+    row.correctAnswerExplanation,
+    o.correctAnswerExplanation,
+    locale,
+    "correctAnswerExplanation",
+    questionId,
+  ).value;
+  const clinicalReasoning = mergeQuestionNullableStringWithQuality(
+    row.clinicalReasoning,
+    o.clinicalReasoning,
+    locale,
+    "clinicalReasoning",
+    questionId,
+  ).value;
+  const keyTakeaway = mergeQuestionNullableStringWithQuality(row.keyTakeaway, o.keyTakeaway, locale, "keyTakeaway", questionId).value;
+  const clinicalPearl = mergeQuestionNullableStringWithQuality(row.clinicalPearl, o.clinicalPearl, locale, "clinicalPearl", questionId).value;
+  const examStrategy = mergeQuestionNullableStringWithQuality(row.examStrategy, o.examStrategy, locale, "examStrategy", questionId).value;
+  const memoryHook = mergeQuestionNullableStringWithQuality(row.memoryHook, o.memoryHook, locale, "memoryHook", questionId).value;
+  const clinicalTrap = mergeQuestionNullableStringWithQuality(row.clinicalTrap, o.clinicalTrap, locale, "clinicalTrap", questionId).value;
   return {
     ...row,
-    stem: o.stem?.trim() ? o.stem : row.stem,
-    rationale: mergeStringField(row.rationale, o.rationale) ?? row.rationale,
-    correctAnswerExplanation: mergeStringField(row.correctAnswerExplanation, o.correctAnswerExplanation) ?? row.correctAnswerExplanation,
-    clinicalReasoning: mergeStringField(row.clinicalReasoning, o.clinicalReasoning) ?? row.clinicalReasoning,
-    keyTakeaway: mergeStringField(row.keyTakeaway, o.keyTakeaway) ?? row.keyTakeaway,
-    clinicalPearl: mergeStringField(row.clinicalPearl, o.clinicalPearl) ?? row.clinicalPearl,
-    examStrategy: mergeStringField(row.examStrategy, o.examStrategy) ?? row.examStrategy,
-    memoryHook: mergeStringField(row.memoryHook, o.memoryHook) ?? row.memoryHook,
-    clinicalTrap: mergeStringField(row.clinicalTrap, o.clinicalTrap) ?? row.clinicalTrap,
+    stem,
+    rationale: rationale ?? row.rationale,
+    correctAnswerExplanation: correctAnswerExplanation ?? row.correctAnswerExplanation,
+    clinicalReasoning: clinicalReasoning ?? row.clinicalReasoning,
+    keyTakeaway: keyTakeaway ?? row.keyTakeaway,
+    clinicalPearl: clinicalPearl ?? row.clinicalPearl,
+    examStrategy: examStrategy ?? row.examStrategy,
+    memoryHook: memoryHook ?? row.memoryHook,
+    clinicalTrap: clinicalTrap ?? row.clinicalTrap,
     distractorRationales: o.distractorRationales !== undefined ? o.distractorRationales : row.distractorRationales,
     incorrectAnswerRationale:
       o.incorrectAnswerRationale !== undefined ? o.incorrectAnswerRationale : row.incorrectAnswerRationale,
@@ -787,10 +875,21 @@ export function applyFlashcardDeckOverlay(
     }
     return { title: deck.title, description: deck.description };
   }
-  return {
-    title: d.title?.trim() ? d.title! : deck.title,
-    description: d.description !== undefined ? d.description : deck.description,
-  };
+  const title = d.title?.trim()
+    ? pickLocalizedOverlayString(deck.title, d.title, locale, {
+        surface: "flashcard_deck_title",
+        deckId: deck.id,
+      }).value
+    : deck.title;
+  let description: string | null = deck.description;
+  if (d.description !== undefined) {
+    const r = pickLocalizedOverlayString(deck.description ?? "", d.description, locale, {
+      surface: "flashcard_deck_description",
+      deckId: deck.id,
+    });
+    description = r.fellBack ? deck.description : r.value.length ? r.value : deck.description;
+  }
+  return { title, description };
 }
 
 export function applyFlashcardCardOverlay(
@@ -810,10 +909,29 @@ export function applyFlashcardCardOverlay(
     }
     return { front: card.front, back: card.back };
   }
-  const explanation = c.explanation?.trim() ? c.explanation.trim() : undefined;
+  const front = c.front?.trim()
+    ? pickLocalizedOverlayString(card.front, c.front, locale, {
+        surface: "flashcard_card_front",
+        cardId: card.id,
+      }).value
+    : card.front;
+  const back = c.back?.trim()
+    ? pickLocalizedOverlayString(card.back, c.back, locale, {
+        surface: "flashcard_card_back",
+        cardId: card.id,
+      }).value
+    : card.back;
+  let explanation: string | undefined;
+  if (c.explanation?.trim()) {
+    const r = pickLocalizedOverlayString("", c.explanation, locale, {
+      surface: "flashcard_card_explanation",
+      cardId: card.id,
+    });
+    explanation = r.fellBack ? undefined : r.value.trim() || undefined;
+  }
   return {
-    front: c.front?.trim() ? c.front! : card.front,
-    back: c.back?.trim() ? c.back! : card.back,
+    front,
+    back,
     ...(explanation ? { explanation } : {}),
   };
 }
