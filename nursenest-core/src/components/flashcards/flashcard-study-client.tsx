@@ -24,6 +24,12 @@ type StudyResponse = {
   slug: string;
   cards: CardPayload[];
   session: { cursor: number; queueLength: number; done: boolean; batchSize?: number } | null;
+  sessionMeta?: {
+    requestedCount?: number;
+    returnedCount?: number;
+    totalAvailable?: number;
+    hasMore?: boolean;
+  };
 };
 
 type ReviewRating = "incorrect" | "unsure" | "known";
@@ -39,9 +45,11 @@ export function FlashcardStudyClient({
   /** From `?shuffle=1` — new sessions shuffle the queue. */
   shuffleInitially?: boolean;
 }) {
+  const DECK_SESSION_REQUEST_COUNT = 40;
   const [title, setTitle] = useState<string>("");
   const [mode, setMode] = useState<"preview" | "subscriber" | null>(null);
   const [queue, setQueue] = useState<CardPayload[]>([]);
+  const [studyMeta, setStudyMeta] = useState<StudyResponse["sessionMeta"] | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [resetToken, setResetToken] = useState(0);
@@ -54,7 +62,7 @@ export function FlashcardStudyClient({
       try {
         const q = reset ? "&reset=1" : "";
         const sh = shuffleOn ? "&shuffle=1" : "";
-        const res = await fetch(`/api/flashcards/decks/${encodeURIComponent(deckRef)}/study?limit=40${q}${sh}`, {
+        const res = await fetch(`/api/flashcards/decks/${encodeURIComponent(deckRef)}/study?limit=${DECK_SESSION_REQUEST_COUNT}${q}${sh}`, {
           credentials: "include",
         });
         const data = (await res.json()) as StudyResponse & { error?: string; code?: string };
@@ -63,9 +71,11 @@ export function FlashcardStudyClient({
         }
         setMode(data.mode);
         setQueue(data.cards);
+        setStudyMeta(data.sessionMeta ?? null);
       } catch (e) {
         setError(e instanceof Error ? e.message : "Error");
         setQueue([]);
+        setStudyMeta(null);
       } finally {
         setLoading(false);
       }
@@ -188,6 +198,12 @@ export function FlashcardStudyClient({
       <ActiveStudySession
         cards={activeCards}
         loading={loading}
+        sessionMeta={{
+          requestedCount: studyMeta?.requestedCount ?? DECK_SESSION_REQUEST_COUNT,
+          returnedCount: studyMeta?.returnedCount ?? activeCards.length,
+          totalAvailable: studyMeta?.totalAvailable ?? activeCards.length,
+          hasMore: studyMeta?.hasMore ?? false,
+        }}
         header={{
           sessionTitle: title || "Flashcard Study Session",
           modeLabel: "Active Recall",

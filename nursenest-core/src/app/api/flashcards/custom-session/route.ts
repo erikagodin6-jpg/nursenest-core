@@ -6,6 +6,7 @@ import { flashcardAccessWhere } from "@/lib/entitlements/content-access-scope";
 import { resolveEntitlement } from "@/lib/entitlements/resolve-entitlement";
 import {
   applyCountsToBuilderCategories,
+  builderCategoryTitleForId,
   resolveBuilderCategoryId,
 } from "@/lib/flashcards/flashcard-builder-taxonomy";
 
@@ -178,8 +179,9 @@ export async function GET(req: NextRequest) {
           id: card.id,
           front: swap ? card.back : card.front,
           back: swap ? card.front : card.back,
-          topic: card.category.name,
+          topic: builderCategoryTitleForId(pathwayId, card.builderCategoryId),
           subtopic: card.category.topicCode,
+          rawTopic: card.category.name,
           sourceKey: card.sourceKey,
           pathwayId: card.deck?.pathwayId ?? pathwayId,
         };

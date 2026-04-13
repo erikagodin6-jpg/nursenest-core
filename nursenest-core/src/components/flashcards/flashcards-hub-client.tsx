@@ -8,7 +8,7 @@ import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { FlashcardDeckGrid } from "@/components/study/flashcard-deck-grid";
 import { FlashcardFilters, type FlashcardFiltersValue } from "@/components/study/flashcard-filters";
 import type { DeckCardRow } from "@/components/study/flashcard-deck-card";
-import { countSavedStudyItems, getStudyItemIdsMatchingFilters } from "@/lib/flashcards/study-session-persistence";
+import { countSavedStudyItems } from "@/lib/flashcards/study-session-persistence";
 
 type TagRow = { slug: string; name: string };
 
@@ -236,16 +236,6 @@ export function FlashcardsHubClient({
     setSavedStats(countSavedStudyItems());
   }, [starredOnly, savedOnly, notesOnly, revisitOnly]);
 
-  const persistenceStateIds = getStudyItemIdsMatchingFilters(
-    {
-      starredOnly,
-      savedOnly,
-      notesOnly,
-      confusingOnly: revisitOnly,
-    },
-    500,
-  );
-
   const runBuilderSummary = useCallback(async () => {
     setBuilderLoading(true);
     setBuilderError(null);
@@ -258,11 +248,6 @@ export function FlashcardsHubClient({
       if (shuffleOn) params.set("shuffle", "1");
       if (weakOnly) params.set("weakOnly", "1");
       if (incorrectOnly) params.set("incorrectOnly", "1");
-      if (starredOnly) params.set("starredOnly", "1");
-      if (savedOnly) params.set("savedOnly", "1");
-      if (notesOnly) params.set("notesOnly", "1");
-      if (revisitOnly) params.set("revisitOnly", "1");
-      if (persistenceStateIds.length > 0) params.set("stateIds", persistenceStateIds.join(","));
       const res = await fetch(`/api/flashcards/custom-session?${params.toString()}`, { credentials: "include" });
       const json = (await res.json()) as {
         summary?: BuilderSummary;
@@ -280,7 +265,7 @@ export function FlashcardsHubClient({
     } finally {
       setBuilderLoading(false);
     }
-  }, [filters.pathwayId, selectedCategoryIds, cardLimit, studyMode, shuffleOn, weakOnly, incorrectOnly, starredOnly, savedOnly, notesOnly, revisitOnly, persistenceStateIds]);
+  }, [filters.pathwayId, selectedCategoryIds, cardLimit, studyMode, shuffleOn, weakOnly, incorrectOnly]);
 
   useEffect(() => {
     void runBuilderSummary();
@@ -304,14 +289,12 @@ export function FlashcardsHubClient({
   if (savedOnly) builderParams.set("savedOnly", "1");
   if (notesOnly) builderParams.set("notesOnly", "1");
   if (revisitOnly) builderParams.set("revisitOnly", "1");
-  if (persistenceStateIds.length > 0) builderParams.set("stateIds", persistenceStateIds.join(","));
   const startHref = `/app/flashcards/custom?${builderParams.toString()}`;
   const previewCustomCards = async () => {
     setBuilderError(null);
     try {
       const params = new URLSearchParams(builderParams.toString());
       params.set("includeCards", "1");
-      params.set("cardLimit", "10");
       const res = await fetch(`/api/flashcards/custom-session?${params.toString()}`, { credentials: "include" });
       const json = (await res.json()) as { cards?: Array<{ id: string; front: string; topic?: string | null }>; error?: string };
       if (!res.ok) throw new Error(json.error ?? "Unable to preview cards.");
@@ -448,6 +431,9 @@ export function FlashcardsHubClient({
           <summary className="cursor-pointer text-xs font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">
             Review Filters
           </summary>
+          <p className="mt-2 text-xs text-[var(--theme-muted-text)]">
+            Server Filters: Weak Areas, Previously Incorrect. Local Review Filters: Starred, Saved, Notes, Marked for Revisit.
+          </p>
           <div className="mt-3 grid gap-2 sm:grid-cols-2">
             <label className="flex items-center gap-2 text-xs text-[var(--theme-muted-text)]">
               <input type="checkbox" checked={weakOnly} onChange={(e) => setWeakOnly(e.target.checked)} />
@@ -496,8 +482,11 @@ export function FlashcardsHubClient({
               ]
                 .filter(Boolean)
                 .join(", ")}{" "}
-              (applied when the session starts)
+              (applied locally after session cards load)
             </p>
+          ) : null}
+          {(starredOnly || savedOnly || notesOnly || revisitOnly) && builderSummary ? (
+            <p>Estimated before local review filters: {builderSummary.matchingCards}</p>
           ) : null}
         </div>
 

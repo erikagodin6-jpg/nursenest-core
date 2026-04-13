@@ -36,7 +36,7 @@ const NO_ACCESS: AccessScope = {
 };
 
 const PREVIEW_CARD_CAP = 12;
-const MAX_BATCH = 12;
+const MAX_BATCH = 40;
 
 type Props = { params: Promise<{ deckRef: string }> };
 
@@ -48,7 +48,9 @@ export async function GET(req: NextRequest, { params }: Props) {
   const userId = (session?.user as { id?: string } | undefined)?.id;
 
   const sp = req.nextUrl.searchParams;
-  const limit = Math.min(MAX_BATCH, Math.max(1, Number(sp.get("limit") ?? "8")));
+  const rawLimit = Number(sp.get("limit") ?? "8");
+  const requestedCount = Number.isFinite(rawLimit) ? Math.max(1, rawLimit) : 8;
+  const limit = Math.min(MAX_BATCH, requestedCount);
   const reset = sp.get("reset") === "1";
   const shuffle = sp.get("shuffle") === "1";
   const educationalLocale = getMarketingLocaleFromRequestCookie(req);
@@ -127,6 +129,12 @@ export async function GET(req: NextRequest, { params }: Props) {
           };
         }),
         session: null,
+        sessionMeta: {
+          requestedCount,
+          returnedCount: cards.length,
+          totalAvailable: cards.length,
+          hasMore: false,
+        },
       };
       const approx = estimateJsonUtf8Bytes(body);
       logLargeApiResponse(`/api/flashcards/decks/${deckRef}/study`, approx);
@@ -166,6 +174,12 @@ export async function GET(req: NextRequest, { params }: Props) {
         slug: deck.slug,
         cards: [],
         session: { cursor: 0, queueLength: 0, done: true },
+        sessionMeta: {
+          requestedCount,
+          returnedCount: 0,
+          totalAvailable: 0,
+          hasMore: false,
+        },
       });
     }
 
@@ -270,6 +284,12 @@ export async function GET(req: NextRequest, { params }: Props) {
         queueLength: storedQueue.length,
         done: cursor >= storedQueue.length,
         batchSize: ordered.length,
+      },
+      sessionMeta: {
+        requestedCount,
+        returnedCount: ordered.length,
+        totalAvailable: storedQueue.length,
+        hasMore: cursor + ordered.length < storedQueue.length,
       },
     };
 
