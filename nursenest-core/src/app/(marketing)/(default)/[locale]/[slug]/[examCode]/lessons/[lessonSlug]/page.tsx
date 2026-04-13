@@ -340,7 +340,7 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
               <div className="mx-auto mb-3 flex max-w-[44rem] justify-end">
                 <LessonRecallToggle />
               </div>
-              <article className="mx-auto max-w-[44rem] space-y-5">
+              <article className="mx-auto max-w-[44rem] space-y-8">
                 {visible.map((section) => (
                   <LessonSectionCard
                     key={section.id}

@@ -533,7 +533,7 @@ export default async function LessonDetailPage({ params }: Props) {
             sourceLabel={record.title}
             qualityNotice={<LessonQualityNotice tier={pathwayQuality.tier} wordCount={pathwayQuality.wordCount} />}
           >
-            <article className="space-y-6">
+            <article className="space-y-8">
               {visible.length > 0 ? (
                 visible.map((section) => (
                   <LessonSectionCard
