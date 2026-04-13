@@ -1,6 +1,7 @@
 import { ContentAutomationLogCategory, ContentAutomationLogStatus } from "@prisma/client";
 import { isAdminAiGenerationEnabled } from "@/lib/ai/admin-ai-policy";
 import { assertOpenAiKeyConfigured } from "@/lib/ai/openai-env";
+import { BLOG_AUTOMATION_LOG_JOB_TYPES } from "@/lib/admin/blog-content-automation-log";
 import { canUseStaticBlogFallback } from "@/lib/blog/safe-blog-queries";
 import { prisma } from "@/lib/db";
 import { withDatabaseFallback } from "@/lib/db/safe-database";
@@ -27,6 +28,16 @@ async function getLatestActivity(where: Record<string, unknown>): Promise<Activi
       }),
     null,
   );
+}
+
+function generationJobTypeWhere(): Record<string, unknown> {
+  return {
+    in: [
+      BLOG_AUTOMATION_LOG_JOB_TYPES.GENERATE_AI,
+      BLOG_AUTOMATION_LOG_JOB_TYPES.GENERATE_AI_LEGACY,
+      BLOG_AUTOMATION_LOG_JOB_TYPES.GENERATE_LOCALIZED,
+    ],
+  };
 }
 
 export type AdminBlogOperationsStatus = {
@@ -56,22 +67,37 @@ export async function getAdminBlogOperationsStatus(): Promise<AdminBlogOperation
       ),
       canUseStaticBlogFallback(),
       getLatestActivity({
-        category: ContentAutomationLogCategory.BLOG_AI_SIMPLE,
-        jobType: "legacy_generate_ai",
+        OR: [
+          { category: ContentAutomationLogCategory.BLOG_AI_SIMPLE, jobType: generationJobTypeWhere() },
+          {
+            category: ContentAutomationLogCategory.BLOG_CONTROL_PANEL_PIPELINE,
+            jobType: BLOG_AUTOMATION_LOG_JOB_TYPES.GENERATE_LOCALIZED,
+          },
+        ],
       }),
       getLatestActivity({
-        category: ContentAutomationLogCategory.BLOG_AI_SIMPLE,
-        jobType: "legacy_generate_ai",
+        OR: [
+          { category: ContentAutomationLogCategory.BLOG_AI_SIMPLE, jobType: generationJobTypeWhere() },
+          {
+            category: ContentAutomationLogCategory.BLOG_CONTROL_PANEL_PIPELINE,
+            jobType: BLOG_AUTOMATION_LOG_JOB_TYPES.GENERATE_LOCALIZED,
+          },
+        ],
         status: ContentAutomationLogStatus.SUCCEEDED,
       }),
       getLatestActivity({
-        category: ContentAutomationLogCategory.BLOG_AI_SIMPLE,
-        jobType: "legacy_generate_ai",
+        OR: [
+          { category: ContentAutomationLogCategory.BLOG_AI_SIMPLE, jobType: generationJobTypeWhere() },
+          {
+            category: ContentAutomationLogCategory.BLOG_CONTROL_PANEL_PIPELINE,
+            jobType: BLOG_AUTOMATION_LOG_JOB_TYPES.GENERATE_LOCALIZED,
+          },
+        ],
         status: ContentAutomationLogStatus.FAILED,
       }),
       getLatestActivity({
         category: ContentAutomationLogCategory.BLOG_AI_SIMPLE,
-        jobType: "upgrade_weak",
+        jobType: BLOG_AUTOMATION_LOG_JOB_TYPES.UPGRADE_WEAK,
       }),
     ]);
 

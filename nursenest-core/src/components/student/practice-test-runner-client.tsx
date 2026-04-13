@@ -172,7 +172,6 @@ export function PracticeTestRunnerClient({
   const navInFlightRef = useRef(false);
   const persistInFlightRef = useRef(false);
   const pendingPersistRef = useRef<{ answers: Record<string, unknown>; cursorIndex: number } | null>(null);
-  const remainingSnapshotRef = useRef<number | null>(null);
   const answersRef = useRef<Record<string, unknown>>({});
   const idxRef = useRef(0);
   const confidenceTrackingEnabled = studySettings.enableConfidenceTracking;
@@ -184,16 +183,9 @@ export function PracticeTestRunnerClient({
   useEffect(() => {
     idxRef.current = idx;
   }, [idx]);
-  useEffect(() => {
-    remainingSnapshotRef.current = remainingSec;
-  }, [remainingSec]);
 
   const logSessionEvent = useCallback(
     (event: string, detail?: Record<string, unknown>) => {
-      if (process.env.NODE_ENV === "production") {
-        console.info("[practice-test-runner]", event, { testId, ...(detail ?? {}) });
-        return;
-      }
       console.info("[practice-test-runner]", event, { testId, ...(detail ?? {}) });
     },
     [testId],
@@ -286,12 +278,19 @@ export function PracticeTestRunnerClient({
       } else {
         setRemainingSec(null);
       }
+      logSessionEvent("session_loaded", {
+        mode: data.catMode ? "cat" : "linear",
+        status: data.status ?? "IN_PROGRESS",
+        totalQuestions: ids.length,
+      });
       setPhase("ready");
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Error");
+      const message = e instanceof Error ? e.message : "Error";
+      setError(message);
+      logSessionEvent("session_load_failed", { message });
       setPhase("error");
     }
-  }, [testId]);
+  }, [testId, logSessionEvent]);
 
   useEffect(() => {
     void load();
@@ -331,14 +330,18 @@ export function PracticeTestRunnerClient({
           });
         }
       } catch {
-        if (!ac.signal.aborted) setError("Could not load question.");
+        if (!ac.signal.aborted) {
+          const message = "Could not load question.";
+          setError(message);
+          logSessionEvent("question_load_failed", { idx, message });
+        }
       } finally {
         if (!ac.signal.aborted) setQLoading(false);
       }
     })();
 
     return () => ac.abort();
-  }, [phase, status, testId, idx, questionIds, questionFetchNonce]);
+  }, [phase, status, testId, idx, questionIds, questionFetchNonce, logSessionEvent]);
 
   useEffect(() => {
     if (phase !== "ready" || !timedMode || status !== "IN_PROGRESS") return;
@@ -445,6 +448,13 @@ export function PracticeTestRunnerClient({
     (current.questionType.toUpperCase() === "SATA" || current.questionType.toUpperCase() === "SELECT_ALL_THAT_APPLY");
   const raw = current ? answers[current.id] : undefined;
 
+  useEffect(() => {
+    if (!current || !catStudyFeedback) return;
+    if (catStudyFeedback.questionId !== current.id) {
+      setCatStudyFeedback(null);
+    }
+  }, [current, catStudyFeedback]);
+
   const linearDelivery = testConfig?.linearDeliveryMode;
   const isLinearEngine = Boolean(!catMode && linearDelivery);
   const committedSet = useMemo(() => new Set(linearCommittedIds), [linearCommittedIds]);
@@ -454,7 +464,7 @@ export function PracticeTestRunnerClient({
   const committedAnsweredPct = total > 0 ? Math.round((committedCount / total) * 100) : 0;
 
   const hasMeaningfulAnswer = (qid: string): boolean => {
-    const v = answers[qid];
+    const v = answersRef.current[qid];
     if (v === undefined || v === null) return false;
     if (typeof v === "string") return v.trim().length > 0;
     if (Array.isArray(v)) return v.length > 0;
@@ -476,7 +486,7 @@ export function PracticeTestRunnerClient({
         pendingPersistRef.current = null;
         const elapsedMs =
           sessionStartMs != null ? Math.max(0, Date.now() - sessionStartMs) : undefined;
-        await fetch(`/api/practice-tests/${testId}`, {
+        const res = await fetch(`/api/practice-tests/${testId}`, {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -486,7 +496,23 @@ export function PracticeTestRunnerClient({
             ...(elapsedMs !== undefined ? { elapsedMs } : {}),
           }),
         });
+        if (!res.ok) {
+          let message = "Could not save progress.";
+          try {
+            const data = (await res.json()) as { error?: string };
+            if (data?.error) message = data.error;
+          } catch {
+            // Keep default fallback if response body is unavailable.
+          }
+          throw new Error(message);
+        }
       }
+      if (error) setError(null);
+      logSessionEvent("save_success", { idx: nextIdx });
+    } catch (e) {
+      const message = e instanceof Error ? e.message : "Could not save progress.";
+      setError(message);
+      logSessionEvent("save_failed", { idx: nextIdx, message });
     } finally {
       persistInFlightRef.current = false;
       setSaving(false);
@@ -523,7 +549,8 @@ export function PracticeTestRunnerClient({
     if (!current) return;
     if (submitInFlightRef.current || catAdvanceInFlightRef.current || linearCommitInFlightRef.current) return;
     if (isLinearEngine && committedSet.has(current.id)) return;
-    const nextAnswers = { ...answers, [current.id]: next };
+    const nextAnswers = { ...answersRef.current, [current.id]: next };
+    answersRef.current = nextAnswers;
     setAnswers(nextAnswers);
     void persistSave(nextAnswers, idx);
   }
@@ -544,7 +571,7 @@ export function PracticeTestRunnerClient({
         body: JSON.stringify({
           action: "linear_commit",
           questionId: current.id,
-          answers,
+          answers: answersRef.current,
           cursorIndex: idx,
           ...(elapsedMs !== undefined ? { elapsedMs } : {}),
         }),
@@ -597,7 +624,14 @@ export function PracticeTestRunnerClient({
 
   async function catAdvance() {
     if (catAdvanceInFlightRef.current || submitInFlightRef.current) return;
-    if (!current || !hasMeaningfulAnswer(current.id)) return;
+    if (!current || !hasMeaningfulAnswer(current.id)) {
+      logSessionEvent("invalid_transition_guard_hit", {
+        action: "cat_advance",
+        reason: "missing_answer_or_question",
+        idx,
+      });
+      return;
+    }
     catAdvanceInFlightRef.current = true;
     logSessionEvent("submit_cat_advance_start", { idx, questionId: current.id });
     setSaving(true);
@@ -609,7 +643,7 @@ export function PracticeTestRunnerClient({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           action: "cat_advance",
-          answers,
+          answers: answersRef.current,
           cursorIndex: idx,
           ...(elapsedMs !== undefined ? { elapsedMs } : {}),
         }),
@@ -662,26 +696,33 @@ export function PracticeTestRunnerClient({
   }
 
   async function goNext() {
-    if (navInFlightRef.current || submitInFlightRef.current || catAdvanceInFlightRef.current) return;
+    if (saving || navInFlightRef.current || submitInFlightRef.current || catAdvanceInFlightRef.current) return;
     if (catMode && idx >= total - 1) {
       await catAdvance();
       return;
     }
-    if (isLinearEngine && qid && !committedSet.has(qid)) return;
+    if (isLinearEngine && qid && !committedSet.has(qid)) {
+      logSessionEvent("invalid_transition_guard_hit", {
+        action: "go_next",
+        reason: "linear_uncommitted_current_item",
+        idx,
+      });
+      return;
+    }
     if (idx >= total - 1) return;
     navInFlightRef.current = true;
     logSessionEvent("navigation_next", { from: idx, to: idx + 1 });
     const nextIdx = idx + 1;
     setIdx(nextIdx);
     try {
-      await persistSave(answers, nextIdx);
+      await persistSave(answersRef.current, nextIdx);
     } finally {
       navInFlightRef.current = false;
     }
   }
 
   async function goPrev() {
-    if (navInFlightRef.current || submitInFlightRef.current || catAdvanceInFlightRef.current) return;
+    if (saving || navInFlightRef.current || submitInFlightRef.current || catAdvanceInFlightRef.current) return;
     if (catMode || isLinearEngine) return;
     if (idx <= 0) return;
     navInFlightRef.current = true;
@@ -689,7 +730,7 @@ export function PracticeTestRunnerClient({
     const nextIdx = idx - 1;
     setIdx(nextIdx);
     try {
-      await persistSave(answers, nextIdx);
+      await persistSave(answersRef.current, nextIdx);
     } finally {
       navInFlightRef.current = false;
     }
@@ -1127,6 +1168,7 @@ export function PracticeTestRunnerClient({
           ? tx("learner.practiceTests.run.catStudyMode", "CAT · Study Mode")
           : tx("learner.practiceTests.run.catTestMode", "CAT · Test Mode")
       : tx("learner.practiceTests.run.practiceMode", "Practice test");
+  const controlsBusy = saving || qLoading;
 
   const sessionPct = total > 0 ? Math.min(100, Math.max(0, ((idx + 1) / total) * 100)) : 0;
 
@@ -1185,7 +1227,8 @@ export function PracticeTestRunnerClient({
                   isCheckbox
                   checked={selected}
                   onChange={(checked) => {
-                    const prev = Array.isArray(raw) ? [...raw] : [];
+                    const prior = answersRef.current[current.id];
+                    const prev = Array.isArray(prior) ? [...prior] : [];
                     setAnswerForCurrent(
                       checked ? [...prev, canonical] : prev.filter((x) => x !== canonical),
                     );
@@ -1316,6 +1359,7 @@ export function PracticeTestRunnerClient({
                     <button
                       type="button"
                       aria-pressed={Boolean(flagged[current.id])}
+                      disabled={controlsBusy}
                       className={`nn-cat-question-nav__flag inline-flex items-center gap-1.5 rounded border px-3 py-1.5 text-xs font-semibold transition ${
                         flagged[current.id]
                           ? "border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] text-[var(--semantic-text-primary)]"
@@ -1330,7 +1374,7 @@ export function PracticeTestRunnerClient({
                     </button>
                     <button
                       type="button"
-                      disabled={saving}
+                      disabled={controlsBusy}
                       className="text-xs font-medium text-[var(--semantic-text-muted)] underline-offset-2 hover:text-[var(--semantic-text-secondary)] hover:underline"
                       onClick={() => void abandon()}
                     >
@@ -1339,7 +1383,7 @@ export function PracticeTestRunnerClient({
                     {idx < total - 1 ? (
                       <button
                         type="button"
-                        disabled={saving || !hasMeaningfulAnswer(current.id)}
+                        disabled={controlsBusy || !hasMeaningfulAnswer(current.id)}
                         className="nn-btn-primary min-h-[2.75rem] rounded-lg px-6 text-sm font-semibold shadow-none disabled:opacity-40"
                         onClick={() => void catAdvance()}
                       >
@@ -1350,7 +1394,7 @@ export function PracticeTestRunnerClient({
                     ) : (
                       <button
                         type="button"
-                        disabled={saving || !hasMeaningfulAnswer(current.id)}
+                        disabled={controlsBusy || !hasMeaningfulAnswer(current.id)}
                         className="nn-btn-primary min-h-[2.75rem] rounded-lg px-6 text-sm font-semibold shadow-none disabled:opacity-40"
                         onClick={() => void catAdvance()}
                       >
@@ -1437,6 +1481,7 @@ export function PracticeTestRunnerClient({
                     <button
                       type="button"
                       aria-pressed={Boolean(flagged[current.id])}
+                      disabled={controlsBusy}
                       className={`nn-cat-question-nav__flag inline-flex items-center gap-1.5 rounded border px-3 py-1.5 text-xs font-semibold transition ${
                         flagged[current.id]
                           ? "border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] text-[var(--semantic-text-primary)]"
@@ -1451,7 +1496,7 @@ export function PracticeTestRunnerClient({
                     </button>
                     <button
                       type="button"
-                      disabled={saving}
+                      disabled={controlsBusy}
                       className="text-xs font-medium text-[var(--semantic-text-muted)] underline-offset-2 hover:text-[var(--semantic-text-secondary)] hover:underline"
                       onClick={() => void abandon()}
                     >
@@ -1461,7 +1506,7 @@ export function PracticeTestRunnerClient({
                     {rationalePanelMode === "feedback" ? null : idx < total - 1 ? (
                       <button
                         type="button"
-                        disabled={saving || !hasMeaningfulAnswer(current.id)}
+                        disabled={controlsBusy || !hasMeaningfulAnswer(current.id)}
                         className="nn-btn-primary min-h-[2.75rem] rounded-lg px-6 text-sm font-semibold shadow-none disabled:opacity-40"
                         onClick={() => void catAdvance()}
                       >
@@ -1472,7 +1517,7 @@ export function PracticeTestRunnerClient({
                     ) : (
                       <button
                         type="button"
-                        disabled={saving || !hasMeaningfulAnswer(current.id)}
+                        disabled={controlsBusy || !hasMeaningfulAnswer(current.id)}
                         className="nn-btn-primary min-h-[2.75rem] rounded-lg px-6 text-sm font-semibold shadow-none disabled:opacity-40"
                         onClick={() => void catAdvance()}
                       >
@@ -1555,7 +1600,8 @@ export function PracticeTestRunnerClient({
                 isCheckbox
                 checked={selected}
                 onChange={(checked) => {
-                  const prev = Array.isArray(raw) ? [...raw] : [];
+                  const prior = answersRef.current[current.id];
+                  const prev = Array.isArray(prior) ? [...prior] : [];
                   setAnswerForCurrent(
                     checked
                       ? [...prev, canonical]
@@ -1697,7 +1743,7 @@ export function PracticeTestRunnerClient({
                 {!isLinearEngine ? (
                   <button
                     type="button"
-                    disabled={idx === 0}
+                    disabled={idx === 0 || controlsBusy}
                     className="nn-btn-secondary min-h-[2.5rem] rounded-lg px-4 text-sm font-semibold disabled:opacity-40"
                     onClick={() => void goPrev()}
                   >
@@ -1707,7 +1753,7 @@ export function PracticeTestRunnerClient({
                 {isLinearEngine && !currentCommitted ? (
                   <button
                     type="button"
-                    disabled={saving || !hasMeaningfulAnswer(current.id)}
+                    disabled={controlsBusy || !hasMeaningfulAnswer(current.id)}
                     className="nn-btn-primary min-h-[2.5rem] rounded-lg px-5 text-sm font-semibold shadow-none disabled:opacity-40"
                     onClick={() => void submitLinearCommit()}
                   >
@@ -1719,7 +1765,7 @@ export function PracticeTestRunnerClient({
                 {idx < total - 1 ? (
                   <button
                     type="button"
-                    disabled={isLinearEngine && !currentCommitted}
+                    disabled={controlsBusy || (isLinearEngine && !currentCommitted)}
                     className="nn-btn-primary min-h-[2.5rem] rounded-lg px-5 text-sm font-semibold shadow-none disabled:opacity-40"
                     onClick={() => void goNext()}
                   >
@@ -1728,7 +1774,7 @@ export function PracticeTestRunnerClient({
                 ) : (
                   <button
                     type="button"
-                    disabled={saving || (isLinearEngine && !currentCommitted)}
+                    disabled={controlsBusy || (isLinearEngine && !currentCommitted)}
                     className="nn-btn-primary min-h-[2.5rem] rounded-lg px-5 text-sm font-semibold shadow-none disabled:opacity-40"
                     onClick={() => void submitTest()}
                   >
@@ -1739,6 +1785,7 @@ export function PracticeTestRunnerClient({
                 )}
                 <button
                   type="button"
+                  disabled={controlsBusy}
                   className="text-xs font-medium text-[var(--semantic-text-muted)] underline-offset-2 hover:text-[var(--semantic-text-secondary)] hover:underline"
                   onClick={() => void abandon()}
                 >

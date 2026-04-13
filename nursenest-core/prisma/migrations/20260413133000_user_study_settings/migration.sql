@@ -1,4 +1,4 @@
-ALTER TABLE "users"
+ALTER TABLE "User"
 ADD COLUMN "enable_adaptive_plan" BOOLEAN,
 ADD COLUMN "enable_spaced_repetition" BOOLEAN,
 ADD COLUMN "enable_confidence_tracking" BOOLEAN,

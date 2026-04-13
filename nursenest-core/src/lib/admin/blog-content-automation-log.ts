@@ -5,6 +5,14 @@ import type { GenerateBlogAiDraftResult } from "@/lib/blog/generate-blog-ai-draf
 import { summarizeBrokenInternalLessonLinks } from "@/lib/blog/blog-automation-internal-links";
 import type { BlogControlPanelPlan } from "@/lib/blog/blog-control-panel-schema";
 
+export const BLOG_AUTOMATION_LOG_JOB_TYPES = {
+  GENERATE_AI: "generate_ai",
+  GENERATE_AI_LEGACY: "legacy_generate_ai",
+  GENERATE_LOCALIZED: "generate_localized",
+  DRAFT_BATCH_ITEM: "draft_batch_item",
+  UPGRADE_WEAK: "upgrade_weak",
+} as const;
+
 export async function logSimpleAiDraftRun(opts: {
   createdById: string;
   body: BlogSimpleAiDraftBody;
@@ -17,7 +25,7 @@ export async function logSimpleAiDraftRun(opts: {
   if (!result.ok) {
     await createContentAutomationLogSafe({
       category: ContentAutomationLogCategory.BLOG_AI_SIMPLE,
-      jobType: "legacy_generate_ai",
+      jobType: BLOG_AUTOMATION_LOG_JOB_TYPES.GENERATE_AI,
       status: ContentAutomationLogStatus.FAILED,
       topic: body.topic,
       summary: "AI draft generation error",
@@ -32,7 +40,7 @@ export async function logSimpleAiDraftRun(opts: {
   if (result.skipped) {
     await createContentAutomationLogSafe({
       category: ContentAutomationLogCategory.BLOG_AI_SIMPLE,
-      jobType: "legacy_generate_ai",
+      jobType: BLOG_AUTOMATION_LOG_JOB_TYPES.GENERATE_AI,
       status: ContentAutomationLogStatus.SKIPPED,
       topic: body.topic,
       summary: result.reason,
@@ -47,7 +55,7 @@ export async function logSimpleAiDraftRun(opts: {
 
   await createContentAutomationLogSafe({
     category: ContentAutomationLogCategory.BLOG_AI_SIMPLE,
-    jobType: "legacy_generate_ai",
+    jobType: BLOG_AUTOMATION_LOG_JOB_TYPES.GENERATE_AI,
     status: ContentAutomationLogStatus.SUCCEEDED,
     topic: body.topic,
     summary: result.post.slug,
@@ -76,7 +84,7 @@ export async function logDraftBatchItemRun(opts: {
 
   await createContentAutomationLogSafe({
     category: ContentAutomationLogCategory.BLOG_AI_BATCH_ITEM,
-    jobType: "draft_batch_item",
+    jobType: BLOG_AUTOMATION_LOG_JOB_TYPES.DRAFT_BATCH_ITEM,
     status: st,
     topic: opts.topicRaw,
     summary: `batch ${opts.batchId.slice(0, 8)}… #${opts.ordinal + 1}`,
@@ -86,6 +94,39 @@ export async function logDraftBatchItemRun(opts: {
     correlationId: opts.batchId,
     sourceItemId: opts.itemId,
     createdById: opts.createdById ?? null,
+  });
+}
+
+export async function logLocalizedGenerationRun(opts: {
+  createdById: string;
+  canonicalArticleId: string;
+  locale: string;
+  region: string;
+  status: "SUCCEEDED" | "FAILED" | "SKIPPED";
+  summary: string;
+  error?: string | null;
+  metadata?: Record<string, unknown> | null;
+}): Promise<void> {
+  const status =
+    opts.status === "FAILED" ? ContentAutomationLogStatus.FAILED
+    : opts.status === "SKIPPED" ? ContentAutomationLogStatus.SKIPPED
+    : ContentAutomationLogStatus.SUCCEEDED;
+
+  await createContentAutomationLogSafe({
+    category: ContentAutomationLogCategory.BLOG_CONTROL_PANEL_PIPELINE,
+    jobType: BLOG_AUTOMATION_LOG_JOB_TYPES.GENERATE_LOCALIZED,
+    status,
+    topic: `localized:${opts.locale}/${opts.region}`,
+    summary: opts.summary.slice(0, 480),
+    error: opts.error?.slice(0, 4000) ?? null,
+    metadata: {
+      canonicalArticleId: opts.canonicalArticleId,
+      locale: opts.locale,
+      region: opts.region,
+      ...(opts.metadata ?? {}),
+    },
+    blogPostId: opts.canonicalArticleId,
+    createdById: opts.createdById,
   });
 }
 
@@ -341,7 +382,7 @@ export async function logWeakUpgradeRun(opts: {
 
   await createContentAutomationLogSafe({
     category: ContentAutomationLogCategory.BLOG_AI_SIMPLE,
-    jobType: "upgrade_weak",
+    jobType: BLOG_AUTOMATION_LOG_JOB_TYPES.UPGRADE_WEAK,
     status,
     topic: "weak_post_upgrade",
     summary: opts.summary.slice(0, 480),

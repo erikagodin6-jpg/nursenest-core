@@ -237,7 +237,9 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
 
   const merged =
     parsed.data.answers != null ? { ...prevAnswers, ...parsed.data.answers } : prevAnswers;
-  const cursorIndex = parsed.data.cursorIndex ?? row.cursorIndex;
+  const requestedCursorIndex = parsed.data.cursorIndex ?? row.cursorIndex;
+  const maxCursor = Math.max(0, ids.length - 1);
+  const cursorIndex = Math.min(Math.max(requestedCursorIndex, 0), maxCursor);
   const elapsedMs = parsed.data.elapsedMs ?? row.elapsedMs ?? undefined;
   const cfg = practiceTestRouteDeps.parsePracticeTestConfigAtBoundary(row.config, {
     practiceTestId: id,

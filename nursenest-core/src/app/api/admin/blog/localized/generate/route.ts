@@ -4,6 +4,7 @@ import { requireAdmin } from "@/lib/admin/ensure-admin";
 import { prisma } from "@/lib/db";
 import { openAiChatCompletion } from "@/lib/ai/openai-chat-completions";
 import { assertOpenAiKeyConfigured } from "@/lib/ai/openai-env";
+import { logLocalizedGenerationRun } from "@/lib/admin/blog-content-automation-log";
 
 const localizedModel = () => prisma.localizedBlogArticle as Record<string, (...args: unknown[]) => Promise<unknown>>;
 import {
@@ -76,6 +77,15 @@ export async function POST(req: NextRequest) {
   });
 
   if (!canonical) {
+    await logLocalizedGenerationRun({
+      createdById: gate.admin.userId,
+      canonicalArticleId: d.canonicalArticleId,
+      locale: d.targetLocale,
+      region: d.targetRegion,
+      status: "FAILED",
+      summary: "localized canonical lookup failed",
+      error: "Canonical article not found",
+    });
     return NextResponse.json({ error: "Canonical article not found" }, { status: 404 });
   }
 
@@ -109,6 +119,15 @@ export async function POST(req: NextRequest) {
     const result = postProcessAiOutput(aiOutput, brief);
 
     if (!result.ok) {
+      await logLocalizedGenerationRun({
+        createdById: gate.admin.userId,
+        canonicalArticleId: d.canonicalArticleId,
+        locale: d.targetLocale,
+        region: d.targetRegion,
+        status: "FAILED",
+        summary: "localized precomputed validation failed",
+        error: result.error,
+      });
       return NextResponse.json(
         { error: result.error, stage: result.stage, partialOutput: result.partialOutput },
         { status: 422 },
@@ -185,6 +204,15 @@ export async function POST(req: NextRequest) {
         region: d.targetRegion,
         mode: "updated",
       });
+      await logLocalizedGenerationRun({
+        createdById: gate.admin.userId,
+        canonicalArticleId: d.canonicalArticleId,
+        locale: d.targetLocale,
+        region: d.targetRegion,
+        status: "SUCCEEDED",
+        summary: "localized persist updated (precomputed)",
+        metadata: { mode: "updated", source: "precomputed" },
+      });
       return NextResponse.json({ article: updated, mode: "updated" });
     }
 
@@ -201,12 +229,30 @@ export async function POST(req: NextRequest) {
       region: d.targetRegion,
       mode: "created",
     });
+    await logLocalizedGenerationRun({
+      createdById: gate.admin.userId,
+      canonicalArticleId: d.canonicalArticleId,
+      locale: d.targetLocale,
+      region: d.targetRegion,
+      status: "SUCCEEDED",
+      summary: "localized persist created (precomputed)",
+      metadata: { mode: "created", source: "precomputed" },
+    });
 
     return NextResponse.json({ article: created, mode: "created" }, { status: 201 });
   }
 
   const keyCheck = assertOpenAiKeyConfigured();
   if (!keyCheck.ok) {
+    await logLocalizedGenerationRun({
+      createdById: gate.admin.userId,
+      canonicalArticleId: d.canonicalArticleId,
+      locale: d.targetLocale,
+      region: d.targetRegion,
+      status: "FAILED",
+      summary: "localized generation unavailable",
+      error: keyCheck.message,
+    });
     return NextResponse.json({ error: keyCheck.message }, { status: 503 });
   }
 
@@ -214,6 +260,15 @@ export async function POST(req: NextRequest) {
   const systemPrompt = buildAdaptationSystemPrompt(brief);
   const userPrompt = buildAdaptationUserPrompt(brief);
   if (d.promptOnly) {
+    await logLocalizedGenerationRun({
+      createdById: gate.admin.userId,
+      canonicalArticleId: d.canonicalArticleId,
+      locale: d.targetLocale,
+      region: d.targetRegion,
+      status: "SKIPPED",
+      summary: "localized prompt-only preview",
+      metadata: { promptOnly: true },
+    });
     return NextResponse.json({
       brief,
       systemPrompt,
@@ -242,18 +297,37 @@ export async function POST(req: NextRequest) {
     const start = raw.indexOf("{");
     const end = raw.lastIndexOf("}");
     if (start < 0 || end <= start) {
+      await logLocalizedGenerationRun({
+        createdById: gate.admin.userId,
+        canonicalArticleId: d.canonicalArticleId,
+        locale: d.targetLocale,
+        region: d.targetRegion,
+        status: "FAILED",
+        summary: "localized ai response invalid",
+        error: "Localized generation did not return JSON.",
+      });
       return NextResponse.json({ error: "Localized generation did not return JSON." }, { status: 502 });
     }
     generatedOutput = JSON.parse(raw.slice(start, end + 1)) as LocalizedBlogAiOutput;
   } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
     console.error("[localized_blog_generate] ai_failed", {
       canonicalArticleId: d.canonicalArticleId,
       locale: d.targetLocale,
       region: d.targetRegion,
-      error: error instanceof Error ? error.message : String(error),
+      error: message,
+    });
+    await logLocalizedGenerationRun({
+      createdById: gate.admin.userId,
+      canonicalArticleId: d.canonicalArticleId,
+      locale: d.targetLocale,
+      region: d.targetRegion,
+      status: "FAILED",
+      summary: "localized ai generation failed",
+      error: message,
     });
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : String(error) },
+      { error: message },
       { status: 502 },
     );
   }
@@ -264,6 +338,15 @@ export async function POST(req: NextRequest) {
       canonicalArticleId: d.canonicalArticleId,
       locale: d.targetLocale,
       region: d.targetRegion,
+      error: result.error,
+    });
+    await logLocalizedGenerationRun({
+      createdById: gate.admin.userId,
+      canonicalArticleId: d.canonicalArticleId,
+      locale: d.targetLocale,
+      region: d.targetRegion,
+      status: "FAILED",
+      summary: "localized post-processing failed",
       error: result.error,
     });
     return NextResponse.json(
@@ -337,6 +420,15 @@ export async function POST(req: NextRequest) {
       region: d.targetRegion,
       mode: "updated",
     });
+    await logLocalizedGenerationRun({
+      createdById: gate.admin.userId,
+      canonicalArticleId: d.canonicalArticleId,
+      locale: d.targetLocale,
+      region: d.targetRegion,
+      status: "SUCCEEDED",
+      summary: "localized persist updated",
+      metadata: { mode: "updated", source: "ai" },
+    });
     return NextResponse.json({ article: updated, mode: "updated" });
   }
 
@@ -354,6 +446,15 @@ export async function POST(req: NextRequest) {
     locale: d.targetLocale,
     region: d.targetRegion,
     mode: "created",
+  });
+  await logLocalizedGenerationRun({
+    createdById: gate.admin.userId,
+    canonicalArticleId: d.canonicalArticleId,
+    locale: d.targetLocale,
+    region: d.targetRegion,
+    status: "SUCCEEDED",
+    summary: "localized persist created",
+    metadata: { mode: "created", source: "ai" },
   });
 
   return NextResponse.json({ article: created, mode: "created" }, { status: 201 });
