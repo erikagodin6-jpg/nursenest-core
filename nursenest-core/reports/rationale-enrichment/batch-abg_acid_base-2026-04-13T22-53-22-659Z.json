@@ -1,0 +1,248 @@
+{
+  "generatedAt": "2026-04-13T22:53:22.659Z",
+  "config": {
+    "maxItems": 15,
+    "includeFlashcards": true,
+    "batch": "abg_acid_base"
+  },
+  "questionCount": 0,
+  "flashcardCount": 15,
+  "questions": [],
+  "flashcards": [
+    {
+      "id": "ff053eac-1986-45a8-b573-47e6db8dd199",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:36.428Z",
+      "batchId": "abg_acid_base",
+      "applied": false,
+      "whyCorrect": "Clinical reasoning is not yet on file for this item.",
+      "clinicalPearl": "A concise clinical pearl is not available for this item yet.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": "below_minimum_substance_threshold",
+      "flags": [
+        "too_short",
+        "too_short"
+      ]
+    },
+    {
+      "id": "fddee292-f265-47e0-812b-3e6491043508",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:36.345Z",
+      "batchId": "abg_acid_base",
+      "applied": false,
+      "whyCorrect": "Clinical reasoning is not yet on file for this item.",
+      "clinicalPearl": "A concise clinical pearl is not available for this item yet.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": "source_content_too_weak",
+      "flags": [
+        "too_short",
+        "too_short"
+      ]
+    },
+    {
+      "id": "f9f01122-e1ba-42f8-9d92-6ab188e069f8",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:36.114Z",
+      "batchId": "abg_acid_base",
+      "applied": false,
+      "whyCorrect": "Clinical reasoning is not yet on file for this item.",
+      "clinicalPearl": "A concise clinical pearl is not available for this item yet.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": "source_content_too_weak",
+      "flags": [
+        "too_short",
+        "too_short"
+      ]
+    },
+    {
+      "id": "f91f0d7d-2258-46e8-b8b6-3a940f101502",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:36.075Z",
+      "batchId": "abg_acid_base",
+      "applied": false,
+      "whyCorrect": "Clinical reasoning is not yet on file for this item.",
+      "clinicalPearl": "A concise clinical pearl is not available for this item yet.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": "below_minimum_substance_threshold",
+      "flags": [
+        "too_short",
+        "too_short"
+      ]
+    },
+    {
+      "id": "f3b0138e-742e-471a-a9ab-6649c886f0da",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:35.666Z",
+      "batchId": "abg_acid_base",
+      "applied": false,
+      "whyCorrect": "Clinical reasoning is not yet on file for this item.",
+      "clinicalPearl": "A concise clinical pearl is not available for this item yet.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": "below_minimum_substance_threshold",
+      "flags": [
+        "too_short",
+        "too_short"
+      ]
+    },
+    {
+      "id": "f2b0e0ee-92d4-4885-afe4-181d11afdb01",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:35.556Z",
+      "batchId": "abg_acid_base",
+      "applied": false,
+      "whyCorrect": "Clinical reasoning is not yet on file for this item.",
+      "clinicalPearl": "A concise clinical pearl is not available for this item yet.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": "source_content_too_weak",
+      "flags": [
+        "too_short",
+        "too_short"
+      ]
+    },
+    {
+      "id": "f1a578a7-e4db-4c54-8d30-e81f36465538",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:35.448Z",
+      "batchId": "abg_acid_base",
+      "applied": true,
+      "whyCorrect": "Educating patients helps them understand treatment options and symptom management.",
+      "clinicalPearl": "Educating patients helps them understand treatment options and symptom management. Classify pH first, then PaCO2/HCO3 to identify the primary process before selecting the intervention.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": null,
+      "flags": [
+        "too_short"
+      ]
+    },
+    {
+      "id": "f1198089-fc6e-45cd-89fb-4399ba7ab3f2",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:35.426Z",
+      "batchId": "abg_acid_base",
+      "applied": false,
+      "whyCorrect": "Clinical reasoning is not yet on file for this item.",
+      "clinicalPearl": "A concise clinical pearl is not available for this item yet.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": "source_content_too_weak",
+      "flags": [
+        "too_short",
+        "too_short"
+      ]
+    },
+    {
+      "id": "f09ebf85-3988-4264-9de2-1fcaa4fef537",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:35.374Z",
+      "batchId": "abg_acid_base",
+      "applied": false,
+      "whyCorrect": "Clinical reasoning is not yet on file for this item.",
+      "clinicalPearl": "A concise clinical pearl is not available for this item yet.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": "below_minimum_substance_threshold",
+      "flags": [
+        "too_short",
+        "too_short"
+      ]
+    },
+    {
+      "id": "e807c77d-9981-446c-b4ad-abb0ad185008",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:34.712Z",
+      "batchId": "abg_acid_base",
+      "applied": false,
+      "whyCorrect": "Clinical reasoning is not yet on file for this item.",
+      "clinicalPearl": "A concise clinical pearl is not available for this item yet.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": "source_content_too_weak",
+      "flags": [
+        "too_short",
+        "too_short"
+      ]
+    },
+    {
+      "id": "e7f93f74-9257-4b68-a806-e113671f4446",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:34.690Z",
+      "batchId": "abg_acid_base",
+      "applied": false,
+      "whyCorrect": "Clinical reasoning is not yet on file for this item.",
+      "clinicalPearl": "A concise clinical pearl is not available for this item yet.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": "source_content_too_weak",
+      "flags": [
+        "too_short",
+        "too_short"
+      ]
+    },
+    {
+      "id": "e69a64c2-f3a1-4bc0-9de4-7e0be65a7f30",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:34.587Z",
+      "batchId": "abg_acid_base",
+      "applied": true,
+      "whyCorrect": "Respiratory = Opposite (pH and CO2 go opposite ways). Metabolic = Equal (pH and HCO3 go same way)",
+      "clinicalPearl": "Respiratory = Opposite (pH and CO2 go opposite ways). Classify pH first, then PaCO2/HCO3 to identify the primary process before selecting the intervention.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": null,
+      "flags": []
+    },
+    {
+      "id": "e5cfbf96-d534-466c-8716-ebad3392288c",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:34.525Z",
+      "batchId": "abg_acid_base",
+      "applied": false,
+      "whyCorrect": "Clinical reasoning is not yet on file for this item.",
+      "clinicalPearl": "A concise clinical pearl is not available for this item yet.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": "below_minimum_substance_threshold",
+      "flags": [
+        "too_short",
+        "too_short"
+      ]
+    },
+    {
+      "id": "e3adea2a-d4e6-4dea-bc0a-1d5df926bb62",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:34.389Z",
+      "batchId": "abg_acid_base",
+      "applied": true,
+      "whyCorrect": "pH: 7.35-7.45 | PaCO2: 35-45 | HCO3: 22-26 | PaO2: 80-100",
+      "clinicalPearl": "pH: 7.35-7.45 | PaCO2: 35-45 | HCO3: 22-26 | PaO2: 80-100 Classify pH first, then PaCO2/HCO3 to identify the primary process before selecting the intervention.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": null,
+      "flags": [
+        "too_short"
+      ]
+    },
+    {
+      "id": "e30c7b81-f73a-4396-b72e-75a1546e38b3",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:34.303Z",
+      "batchId": "abg_acid_base",
+      "applied": false,
+      "whyCorrect": "Clinical reasoning is not yet on file for this item.",
+      "clinicalPearl": "A concise clinical pearl is not available for this item yet.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": "below_minimum_substance_threshold",
+      "flags": [
+        "too_short",
+        "too_short"
+      ]
+    }
+  ]
+}
