@@ -369,19 +369,3 @@
     }
   }
 }
-
-/* ── Learner report card stack (account + session results) ───────────── */
-
-.nn-rc-page {
-  display: flex;
-  flex-direction: column;
-  gap: clamp(2.25rem, 4.5vw, 3.25rem);
-}
-
-.nn-rc-page > .nn-dash-section {
-  margin-block: 0;
-}
-
-.nn-rc-section-soft {
-  box-shadow: 0 1px 0 color-mix(in srgb, var(--semantic-border-soft) 55%, transparent);
-}

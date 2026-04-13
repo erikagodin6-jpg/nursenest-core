@@ -219,11 +219,6 @@ export default async function PracticeTestResultsPage({ params }: Props) {
           sessionInsightFocus={sessionInsightFocus}
           weakFollowUpCopy={weakFollowUpCopy}
           benchmarkResult={benchmarkResult}
-          percentileSlotCopy={{
-            eyebrow: t("learner.reportCard.percentileSlot.eyebrow"),
-            title: t("learner.reportCard.percentileSlot.title"),
-            body: t("learner.reportCard.percentileSlot.body"),
-          }}
         />
       </div>
     </main>

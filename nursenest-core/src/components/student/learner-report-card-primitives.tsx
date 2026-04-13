@@ -3,71 +3,12 @@ import type { ReactNode } from "react";
 import { LearnerStatCard } from "@/components/learner-ui/learner-stat-card";
 import { LearnerSurface } from "@/components/learner-ui/learner-surface";
 import type { LearnerSurfaceTone } from "@/components/learner-ui/learner-surface-tone";
-import { LearnerStudySurfaceSection } from "@/components/learner-ui/learner-study-surface-section";
 
 /**
- * Shared layout + chrome for learner “report card” surfaces (account overview,
- * practice test / CAT results). Keeps percentile / cohort overlays as a single
- * composable hook without wiring data yet.
+ * Shared presentation for learner report card surfaces (account overview,
+ * practice test / CAT results) — composes existing learner-ui surfaces and
+ * dashboard stat tiles only.
  */
-
-export function LearnerReportCardSection({
-  id,
-  eyebrow,
-  title,
-  intro,
-  tone,
-  className = "",
-  children,
-}: {
-  id: string;
-  eyebrow: string;
-  title: string;
-  intro?: string | null;
-  tone: LearnerSurfaceTone;
-  className?: string;
-  children: ReactNode;
-}) {
-  return (
-    <LearnerStudySurfaceSection
-      id={id}
-      eyebrow={eyebrow}
-      title={title}
-      intro={intro ?? undefined}
-      tone={tone}
-      className={`nn-rc-section-soft ${className}`.trim()}
-    >
-      {children}
-    </LearnerStudySurfaceSection>
-  );
-}
-
-/** Reserved horizontal band for future percentile / cohort overlays (benchmark service, etc.). */
-export function LearnerReportPercentileSlot({
-  eyebrow,
-  title,
-  body,
-  className = "",
-}: {
-  eyebrow: string;
-  title: string;
-  body: string;
-  className?: string;
-}) {
-  return (
-    <div
-      className={`nn-dash-section ${className}`.trim()}
-      data-nn-report-percentile-slot=""
-      aria-label={title}
-    >
-      <LearnerSurface tone="supportive" padding="md" radius="lg" shadow={false} className="border border-dashed border-[color-mix(in_srgb,var(--semantic-info)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_28%,var(--semantic-surface))]">
-        <p className="nn-ls-kicker">{eyebrow}</p>
-        <p className="mt-1.5 text-sm font-semibold tracking-tight text-[var(--semantic-text-primary)]">{title}</p>
-        <p className="mt-2 max-w-2xl text-xs leading-relaxed text-[var(--semantic-text-muted)]">{body}</p>
-      </LearnerSurface>
-    </div>
-  );
-}
 
 export type LearnerReportOutcomeTile = {
   icon: LucideIcon;
@@ -105,9 +46,7 @@ export function LearnerReportInset({ tone = "secondary", children }: { tone?: Le
 
 export type PracticeSessionHeroBadge = { label: string; tone?: "brand" | "info" | "muted" };
 
-/**
- * Premium session header for practice test + CAT results pages.
- */
+/** Session header for practice test + CAT results (bookmarkable results route). */
 export function PracticeSessionReportHero({
   eyebrow,
   title,

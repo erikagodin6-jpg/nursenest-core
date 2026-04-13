@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import * as Sentry from "@sentry/nextjs";
+import { BrandLeafIcon } from "@/components/brand/brand-leaf-icon";
 import { SiteBrandLogoMark } from "@/components/brand/site-brand-logo";
 
 export type NnErrorCardProps = {
@@ -58,11 +59,15 @@ export function NnErrorCard({
       <div className="nn-card w-full max-w-md p-8 text-center">
         <a
           href={primaryAction.href}
-          className="mb-6 inline-flex justify-center bg-transparent"
+          className="mb-5 inline-flex justify-center bg-transparent"
           aria-label="NurseNest home"
         >
           <SiteBrandLogoMark variant="auth" />
         </a>
+
+        <div className="mx-auto mb-4 flex h-10 w-10 items-center justify-center rounded-xl border border-[color-mix(in_srgb,var(--semantic-brand)_16%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_06%,var(--semantic-surface))]">
+          <BrandLeafIcon tone="muted" size={24} />
+        </div>
 
         <h1 className="nn-marketing-h3">{title}</h1>
         <p className="nn-marketing-body-sm mt-2 text-[var(--theme-muted-text)]">{description}</p>

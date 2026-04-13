@@ -13,11 +13,7 @@ import { semanticFillClassForAccuracyPct } from "@/lib/ui/semantic-progress-fill
 import type { BenchmarkServiceResult } from "@/lib/study/benchmarking/benchmark-service";
 import { PracticeBenchmarkBlock } from "@/components/study/practice-benchmark-block";
 import { LearnerSurface } from "@/components/learner-ui/learner-surface";
-import {
-  LearnerReportPercentileSlot,
-  PracticeSessionReportHero,
-  type LearnerReportOutcomeTile,
-} from "@/components/student/learner-report-card-primitives";
+import { PracticeSessionReportHero, type LearnerReportOutcomeTile } from "@/components/student/learner-report-card-primitives";
 
 export type PracticeTestWeakFollowUpCopy = {
   weakTitle: string;
@@ -33,12 +29,6 @@ export type PracticeTestIncorrectReviewItem = {
   id: string;
   stemPreview: string;
   topic: string | null;
-};
-
-export type PracticeTestPercentileSlotCopy = {
-  eyebrow: string;
-  title: string;
-  body: string;
 };
 
 function humanizeKey(s: string): string {
@@ -182,7 +172,6 @@ export function PracticeTestResultsStatic({
   sessionInsightFocus = null,
   weakFollowUpCopy = null,
   benchmarkResult = null,
-  percentileSlotCopy = null,
 }: {
   testId: string;
   title: string | null;
@@ -197,8 +186,6 @@ export function PracticeTestResultsStatic({
   weakFollowUpCopy?: PracticeTestWeakFollowUpCopy | null;
   /** Pathway-aware benchmark result. Null when not enough cohort data yet. */
   benchmarkResult?: BenchmarkServiceResult | null;
-  /** Reserved cohort / percentile lane (i18n from results page). */
-  percentileSlotCopy?: PracticeTestPercentileSlotCopy | null;
 }) {
   const cat = config?.selectionMode === "cat";
   const incorrect = Math.max(0, results.scoreTotal - results.scoreCorrect);
@@ -448,14 +435,6 @@ export function PracticeTestResultsStatic({
             Open full review on test page
           </Link>
         </div>
-      ) : null}
-
-      {percentileSlotCopy ? (
-        <LearnerReportPercentileSlot
-          eyebrow={percentileSlotCopy.eyebrow}
-          title={percentileSlotCopy.title}
-          body={percentileSlotCopy.body}
-        />
       ) : null}
 
       {benchmarkResult != null ? (

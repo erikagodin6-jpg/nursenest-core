@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect } from "react";
 import * as Sentry from "@sentry/nextjs";
 import { SiteBrandLogoMark } from "@/components/brand/site-brand-logo";
@@ -25,9 +26,9 @@ export default function LearnerError({
 
   return (
     <main className="space-y-6">
-      <a href="/app" className="inline-flex bg-transparent" aria-label={t("brand.homeAriaLabel")}>
+      <Link href="/app" className="inline-flex bg-transparent" aria-label={t("brand.homeAriaLabel")}>
         <SiteBrandLogoMark variant="auth" logoVariant="leaf" />
-      </a>
+      </Link>
       <ProductErrorState
         title={t("learner.error.section.title")}
         description={t("learner.error.section.description")}

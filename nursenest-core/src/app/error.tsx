@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect } from "react";
 import * as Sentry from "@sentry/nextjs";
 import { SiteBrandLogoMark } from "@/components/brand/site-brand-logo";
@@ -22,9 +23,9 @@ export default function GlobalError({
 
   return (
     <main className="mx-auto mt-16 w-full max-w-xl px-6">
-      <a href="/" className="mb-6 inline-flex bg-transparent" aria-label="NurseNest home">
+      <Link href="/" className="mb-6 inline-flex bg-transparent" aria-label="NurseNest home">
         <SiteBrandLogoMark variant="auth" logoVariant="leaf" />
-      </a>
+      </Link>
       <ProductErrorState
         title="Something went wrong"
         description="A recoverable issue occurred. You can try again, or return to the home page. Access rules are still enforced on the server."

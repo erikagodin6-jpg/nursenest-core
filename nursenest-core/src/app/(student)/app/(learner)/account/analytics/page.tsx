@@ -106,6 +106,14 @@ export default async function AccountAnalyticsPage() {
     <main className="space-y-6">
       <BreadcrumbTrail items={crumbs} />
 
+      {/* Page header */}
+      <div className="nn-learner-page-hero">
+        <h1 className="text-2xl font-bold text-[var(--semantic-text-primary)]">Analytics</h1>
+        <p className="mt-2 max-w-2xl text-sm text-[var(--semantic-text-secondary)]">
+          Understand what you know, where you struggle, and how your readiness is evolving.
+        </p>
+      </div>
+
       {noAnalyticsYet ? (
         <PremiumEmptyState
           data-nn-empty="account-analytics-quiet"
@@ -120,33 +128,24 @@ export default async function AccountAnalyticsPage() {
           visualLayout="stack"
           ctaLayout="stack"
         />
-      ) : null}
-
-      {/* Page header */}
-      <div className="nn-learner-page-hero">
-        <h1 className="text-2xl font-bold text-[var(--semantic-text-primary)]">Analytics</h1>
-        <p className="mt-2 max-w-2xl text-sm text-[var(--semantic-text-secondary)]">
-          Understand what you know, where you struggle, and how your readiness is evolving.
-        </p>
-      </div>
-
-      {/* 1 — Hero (surface-emphasis) */}
-      <AnalyticsHero
-        latestReadinessScore={summary.latestReadinessScore}
-        latestReadinessBand={summary.latestReadinessBand}
-        streakDays={summary.streakDays}
-        studySessionCount={summary.studySessionCount}
-        catSessionCount={summary.catSessionCount}
-      />
-
-      {/* 2 — Summary cards (mixed soft surfaces) */}
-      <AnalyticsSummaryCards
-        totalQuestionsAnswered={summary.totalQuestionsAnswered}
-        overallAccuracyPct={summary.overallAccuracyPct}
-        streakDays={summary.streakDays}
-        latestReadinessScore={summary.latestReadinessScore}
-        topicRows={[]}
-      />
+      ) : (
+        <>
+          <AnalyticsHero
+            latestReadinessScore={summary.latestReadinessScore}
+            latestReadinessBand={summary.latestReadinessBand}
+            streakDays={summary.streakDays}
+            studySessionCount={summary.studySessionCount}
+            catSessionCount={summary.catSessionCount}
+          />
+          <AnalyticsSummaryCards
+            totalQuestionsAnswered={summary.totalQuestionsAnswered}
+            overallAccuracyPct={summary.overallAccuracyPct}
+            streakDays={summary.streakDays}
+            latestReadinessScore={summary.latestReadinessScore}
+            topicRows={[]}
+          />
+        </>
+      )}
 
       {/*
         3–7: Trend, Time, Confidence, Topics, Next Steps

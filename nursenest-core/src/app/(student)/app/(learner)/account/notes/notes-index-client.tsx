@@ -186,7 +186,7 @@ function NotesList({
           tone="early"
           density="compact"
           headline="No matching notes"
-          body={`Nothing matched your search. Try fewer words or clear the search box.`}
+          body="Nothing matched your search. Try fewer words or clear the search box."
           primaryCta={{ label: BROWSE_LESSONS_CTA, href: "/app/lessons", variant: "primary" }}
           secondaryCtas={[{ label: BROWSE_QUESTIONS_CTA, href: "/app/questions", variant: "secondary" }]}
           visualLayout="stack"

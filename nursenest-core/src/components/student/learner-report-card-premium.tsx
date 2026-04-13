@@ -9,14 +9,9 @@ import { readinessBandLabel, readinessBandProgressFillClass } from "@/lib/learne
 import type { LearnerMarketingT } from "@/lib/learner/learner-marketing-server";
 import { PeerComparisonPanel } from "@/components/study/peer-comparison-panel";
 import { LearnerSurface } from "@/components/learner-ui/learner-surface";
+import { LearnerStudySurfaceSection } from "@/components/learner-ui/learner-study-surface-section";
 import { semanticFillClassForAccuracyPct } from "@/lib/ui/semantic-progress-fill";
-import {
-  LearnerReportCardSection,
-  LearnerReportInset,
-  LearnerReportOutcomeStatStrip,
-  LearnerReportPercentileSlot,
-  type LearnerReportOutcomeTile,
-} from "@/components/student/learner-report-card-primitives";
+import { LearnerReportInset, LearnerReportOutcomeStatStrip, type LearnerReportOutcomeTile } from "@/components/student/learner-report-card-primitives";
 
 function pctBar(pct: number | null, label: string) {
   const v = pct == null ? 0 : Math.min(100, Math.max(0, pct));
@@ -128,7 +123,7 @@ export function LearnerReportCardPremium({
   const tiles = heroTiles(data, t);
 
   return (
-    <div className="nn-rc-page">
+    <div className="flex flex-col gap-10 sm:gap-12">
       {scopeBits ? (
         <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[var(--semantic-text-muted)]">
           {t("learner.reportCard.scopeLabel", { scope: scopeBits })}
@@ -145,13 +140,7 @@ export function LearnerReportCardPremium({
         </div>
       </LearnerSurface>
 
-      <LearnerReportPercentileSlot
-        eyebrow={t("learner.reportCard.percentileSlot.eyebrow")}
-        title={t("learner.reportCard.percentileSlot.title")}
-        body={t("learner.reportCard.percentileSlot.body")}
-      />
-
-      <LearnerReportCardSection
+      <LearnerStudySurfaceSection
         id="rc-readiness"
         eyebrow={t("learner.reportCard.section.readinessSub")}
         title={t("learner.reportCard.section.readiness")}
@@ -256,9 +245,9 @@ export function LearnerReportCardPremium({
             </LearnerReportInset>
           </div>
         )}
-      </LearnerReportCardSection>
+      </LearnerStudySurfaceSection>
 
-      <LearnerReportCardSection
+      <LearnerStudySurfaceSection
         id="rc-performance"
         eyebrow={t("learner.reportCard.section.overallSub")}
         title={t("learner.reportCard.section.overall")}
@@ -303,10 +292,10 @@ export function LearnerReportCardPremium({
         {data.bankGraded.total === 0 && data.mockAggregate.sumTotal === 0 ? (
           <p className="mt-4 text-xs text-muted-foreground">{t("learner.reportCard.overallEmptyHint")}</p>
         ) : null}
-      </LearnerReportCardSection>
+      </LearnerStudySurfaceSection>
 
       <div className="grid gap-8 lg:grid-cols-2 lg:gap-10">
-        <LearnerReportCardSection
+        <LearnerStudySurfaceSection
           id="rc-pathways"
           eyebrow={t("learner.reportCard.section.pathwaysSub")}
           title={t("learner.reportCard.section.pathways")}
@@ -332,9 +321,9 @@ export function LearnerReportCardPremium({
           ) : (
             <Na>{t("learner.reportCard.pathwaysNa")}</Na>
           )}
-        </LearnerReportCardSection>
+        </LearnerStudySurfaceSection>
 
-        <LearnerReportCardSection
+        <LearnerStudySurfaceSection
           id="rc-question-tier"
           eyebrow={t("learner.reportCard.section.questionTierSub")}
           title={t("learner.reportCard.section.questionTier")}
@@ -358,10 +347,10 @@ export function LearnerReportCardPremium({
           ) : (
             <Na>{t("learner.reportCard.questionTierNa")}</Na>
           )}
-        </LearnerReportCardSection>
+        </LearnerStudySurfaceSection>
       </div>
 
-      <LearnerReportCardSection
+      <LearnerStudySurfaceSection
         id="rc-mock-tier"
         eyebrow={t("learner.reportCard.section.mockTierSub")}
         title={t("learner.reportCard.section.mockTier")}
@@ -383,9 +372,9 @@ export function LearnerReportCardPremium({
         ) : (
           <Na>{t("learner.reportCard.mockTierNa")}</Na>
         )}
-      </LearnerReportCardSection>
+      </LearnerStudySurfaceSection>
 
-      <LearnerReportCardSection
+      <LearnerStudySurfaceSection
         id="rc-topic-signals"
         eyebrow={t("learner.reportCard.section.weakTopicsSub")}
         title={t("learner.reportCard.section.weakTopics")}
@@ -432,10 +421,10 @@ export function LearnerReportCardPremium({
             )}
           </div>
         </div>
-      </LearnerReportCardSection>
+      </LearnerStudySurfaceSection>
 
       {data.topicTrends.length > 0 ? (
-        <LearnerReportCardSection
+        <LearnerStudySurfaceSection
           id="rc-topic-trends"
           eyebrow={t("learner.reportCard.section.trendsSub")}
           title={t("learner.reportCard.section.trends")}
@@ -454,10 +443,10 @@ export function LearnerReportCardPremium({
               </li>
             ))}
           </ul>
-        </LearnerReportCardSection>
+        </LearnerStudySurfaceSection>
       ) : null}
 
-      <LearnerReportCardSection
+      <LearnerStudySurfaceSection
         id="rc-mock-trend"
         eyebrow={t("learner.reportCard.section.mockTrendSub")}
         title={t("learner.reportCard.section.mockTrend")}
@@ -496,9 +485,9 @@ export function LearnerReportCardPremium({
         ) : (
           <Na>{t("learner.reportCard.trendNa")}</Na>
         )}
-      </LearnerReportCardSection>
+      </LearnerStudySurfaceSection>
 
-      <LearnerReportCardSection
+      <LearnerStudySurfaceSection
         id="rc-sessions"
         eyebrow={`${t("learner.reportCard.section.recentBankSub")} · ${t("learner.reportCard.section.practiceTestsSub")}`}
         title={`${t("learner.reportCard.section.recentBank")} · ${t("learner.reportCard.section.practiceTests")}`}
@@ -560,7 +549,7 @@ export function LearnerReportCardPremium({
             )}
           </LearnerReportInset>
         </div>
-      </LearnerReportCardSection>
+      </LearnerStudySurfaceSection>
 
       {data.peerBenchmark && data.peerBenchmark.activationState !== "unavailable" ? (
         <div data-nn-report-peer-benchmark="">
@@ -568,7 +557,7 @@ export function LearnerReportCardPremium({
         </div>
       ) : null}
 
-      <LearnerReportCardSection
+      <LearnerStudySurfaceSection
         id="rc-next"
         eyebrow={t("learner.reportCard.section.nextStepsSub")}
         title={t("learner.reportCard.section.nextSteps")}
@@ -630,9 +619,9 @@ export function LearnerReportCardPremium({
             </div>
           </LearnerReportInset>
         </div>
-      </LearnerReportCardSection>
+      </LearnerStudySurfaceSection>
 
-      <LearnerReportCardSection
+      <LearnerStudySurfaceSection
         id="rc-mock-log"
         eyebrow={t("learner.reportCard.mockLogSub")}
         title={t("learner.reportCard.mockLogHeading")}
@@ -675,7 +664,7 @@ export function LearnerReportCardPremium({
             </tbody>
           </table>
         </div>
-      </LearnerReportCardSection>
+      </LearnerStudySurfaceSection>
 
       <LearnerSurface tone="secondary" padding="md" radius="lg" shadow={false} className="border-[color-mix(in_srgb,var(--semantic-brand)_12%,var(--semantic-border-soft))]">
         <p className="text-sm font-semibold text-[var(--semantic-text-primary)]">{t("learner.exams.page.reportCardTitle")}</p>
