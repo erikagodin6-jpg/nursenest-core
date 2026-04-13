@@ -14,9 +14,7 @@ function ThemeQaCard({ opt }: { opt: ThemeOption }) {
   const [loadFailed, setLoadFailed] = useState(false);
   const resolved = useMemo(() => resolveThemeLogo(opt.id, "full"), [opt.id]);
   const firstUrl = resolved.url ?? "";
-  const usesCdn = resolved.kind === "cdn" && Boolean(firstUrl);
-  const borrowed =
-    usesCdn && resolved.assetThemeId && resolved.assetThemeId !== opt.id;
+  const usesLocalSvg = resolved.kind === "local" && Boolean(firstUrl);
   const contrastClass = brandLogoRasterContrastClass(opt.id);
   const lum = relativeLuminanceFromHex(opt.color);
   const softMark = lum >= 0.88 && opt.group === "light";
@@ -44,20 +42,13 @@ function ThemeQaCard({ opt }: { opt: ThemeOption }) {
       </div>
 
       <div className="flex flex-wrap gap-1.5 text-[9px]">
-        {!usesCdn ? (
+        {!usesLocalSvg ? (
           <span className="rounded bg-amber-500/15 px-1.5 py-0.5 font-medium text-amber-900 dark:text-amber-100">
-            No CDN map
-          </span>
-        ) : borrowed ? (
-          <span
-            className="rounded bg-sky-500/10 px-1.5 py-0.5 font-medium text-sky-950 dark:text-sky-100"
-            title={`Asset from theme: ${resolved.assetThemeId}`}
-          >
-            CDN borrow → {resolved.assetThemeId}
+            No logo path
           </span>
         ) : (
           <span className="rounded bg-emerald-500/10 px-1.5 py-0.5 font-medium text-emerald-900 dark:text-emerald-100">
-            CDN mapped
+            Local SVG
           </span>
         )}
         {loadFailed ? (

@@ -23,7 +23,7 @@ export const THEME_BRAND_LOGO_PREFIX = "branding/themes" as const;
 export const THEME_BRAND_LOGO_CDN_BY_ID = Object.fromEntries(
   THEME_OPTIONS.flatMap((t) => {
     const r = resolveThemeLogo(t.id, "full");
-    return r.kind === "cdn" && r.url ? ([[t.id, r.url]] as const) : [];
+    return r.kind === "local" && r.url ? ([[t.id, r.url]] as const) : [];
   }),
 ) as Partial<Record<(typeof THEME_OPTIONS)[number]["id"], string>>;
 
@@ -54,8 +54,10 @@ export function getThemeLogoObjectKeyFromNormalizedId(themeId: string): string |
   return getThemeBrandLogoSpaceKeyForCanonicalId(id);
 }
 
-/** @deprecated Local SVG paths are not used when a CDN logo is mapped; prefer {@link resolveThemeLogo}. */
-export function getThemeLogoPublicPath(_theme: string | undefined): null {
-  void _theme;
-  return null;
+/** Same-origin SVG path for a registered theme id, or null when unknown. */
+export function getThemeLogoPublicPath(theme: string | undefined): string | null {
+  const id = parseRegisteredThemeId(theme ?? NURSENEST_DEFAULT_THEME);
+  if (!id) return null;
+  const r = resolveThemeLogo(id, "full");
+  return r.kind === "local" ? r.url : null;
 }

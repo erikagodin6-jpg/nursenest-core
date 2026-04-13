@@ -1,6 +1,6 @@
 /**
  * Header presentation helpers for the brand mark (contrast mode only).
- * Theme → logo raster URLs: {@link resolveThemeLogo} in `resolve-theme-logo.ts`.
+ * Theme → logo URLs: {@link resolveThemeLogo} in `resolve-theme-logo.ts`.
  */
 import { relativeLuminanceFromHex } from "@/lib/color/hex-luminance";
 import { getThemeSurfaceContrastTokens } from "@/lib/theme/theme-palette-tokens";

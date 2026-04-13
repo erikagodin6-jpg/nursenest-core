@@ -55,6 +55,7 @@
     "generate:marketing-assets": "node scripts/generate-marketing-assets.mjs",
     "generate:brand-logos": "node scripts/build-transparent-theme-logos.mjs",
     "generate:theme-logos": "npx tsx scripts/generate-theme-logos-from-registry.ts",
+    "generate:theme-brandlogo-svgs": "npx tsx scripts/generate-theme-brandlogo-svgs.ts",
     "generate:favicon": "node scripts/build-favicon-from-leaf.mjs",
     "generate:education-inventory": "node scripts/build-education-image-inventory.mjs",
     "i18n:generate-from-en": "node scripts/generate-locales-from-en.mjs",

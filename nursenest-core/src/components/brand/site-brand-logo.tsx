@@ -14,7 +14,7 @@ import type { ThemeLogoVariant } from "@/lib/theme/theme-logo-url";
 export type BrandMarkLoadState = "loading" | "ready" | "error";
 
 /**
- * Theme-aware brand mark. Single CDN URL from {@link resolveThemeLogo}; on error → text only (no chain).
+ * Theme-aware brand mark. Same-origin SVG from {@link resolveThemeLogo}; on error → text only (no chain).
  *
  * `variant`     — presentation slot sizing (header / footer / auth / learner / hero).
  * `logoVariant` — reserved for future full vs leaf assets; same resolver key today.

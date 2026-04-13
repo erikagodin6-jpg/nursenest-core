@@ -4,26 +4,23 @@ import {
   THEME_LOGO_SPACE_KEYS,
   resolveThemeLogo,
 } from "@/lib/branding/resolve-theme-logo";
+import { THEME_LOGOS } from "@/lib/theme/theme-logo-config";
 import { THEME_OPTIONS } from "@/lib/theme/theme-registry";
 
-const CDN_BASE = "https://nursenest-images.tor1.cdn.digitaloceanspaces.com";
-
 describe("resolveThemeLogo", () => {
-  it("returns exact public CDN URL for a mapped theme (full variant)", () => {
+  it("returns a same-origin SVG path for a mapped theme (full variant)", () => {
     const r = resolveThemeLogo("teal", "full");
-    assert.equal(r.kind, "cdn");
-    assert.ok(r.url?.startsWith(CDN_BASE), r.url ?? "");
-    assert.equal(r.url, `${CDN_BASE}/Logos/teal-leaf_transparent.png`);
-    assert.equal(r.objectKey, "Logos/teal-leaf_transparent.png");
+    assert.equal(r.kind, "local");
+    assert.equal(r.url, "/logos/teal-brandlogo.svg");
+    assert.equal(r.objectKey, null);
     assert.equal(r.assetThemeId, "teal");
   });
 
-  it("borrows a same-family mapped logo when the theme has no dedicated CDN key", () => {
+  it("resolves every registered theme id to its own local SVG (no CDN borrow)", () => {
     const r = resolveThemeLogo("ocean-mist", "full");
-    assert.equal(r.kind, "cdn");
-    assert.equal(r.assetThemeId, "ocean");
-    assert.equal(r.objectKey, THEME_LOGO_SPACE_KEYS.ocean);
-    assert.equal(r.url, `${CDN_BASE}/Logos/north-sea-leaf-transparent.png`);
+    assert.equal(r.kind, "local");
+    assert.equal(r.assetThemeId, "ocean-mist");
+    assert.equal(r.url, "/logos/ocean-mist-brandlogo.svg");
   });
 
   it("returns text-fallback for a non-registry / unknown theme string", () => {
@@ -34,17 +31,20 @@ describe("resolveThemeLogo", () => {
     assert.equal(r.assetThemeId, null);
   });
 
-  it("does not return a same-origin path for a mapped theme", () => {
+  it("returns a /logos path for slate", () => {
     const r = resolveThemeLogo("slate", "full");
-    assert.equal(r.kind, "cdn");
-    assert.ok(r.url && !r.url.startsWith("/"), r.url ?? "");
+    assert.equal(r.kind, "local");
+    assert.ok(r.url?.startsWith("/logos/"), r.url ?? "");
+    assert.equal(r.url, "/logos/slate-brandlogo.svg");
   });
 
-  it("resolves every registered theme to a CDN URL (direct or family borrow)", () => {
+  it("resolves every registered theme to a local URL", () => {
     for (const t of THEME_OPTIONS) {
       const r = resolveThemeLogo(t.id, "full");
-      assert.equal(r.kind, "cdn", t.id);
-      assert.ok(r.url && r.objectKey && r.assetThemeId, t.id);
+      assert.equal(r.kind, "local", t.id);
+      assert.ok(r.url && r.url.startsWith("/logos/"), t.id);
+      assert.equal(r.url, THEME_LOGOS[t.id], t.id);
+      assert.equal(r.assetThemeId, t.id, t.id);
     }
   });
 

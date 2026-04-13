@@ -11,7 +11,7 @@ import { useThemeLogo } from "@/lib/theme/use-theme-logo";
 
 export function AuthLeafWatermark() {
   const { url, kind } = useThemeLogo("leaf");
-  if (kind !== "cdn" || !url) return null;
+  if (kind !== "local" || !url) return null;
 
   return (
     <img

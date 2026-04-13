@@ -1,7 +1,8 @@
 /**
  * Theme → logo URL resolution (server- and client-safe; no React hooks).
  *
- * Canonical API: {@link resolveThemeLogo} — one Spaces key per registered theme, proxy or public CDN URL only.
+ * Canonical API: {@link resolveThemeLogo} — same-origin `/logos/{theme}-brandlogo.svg` per registry id.
+ * {@link THEME_LOGO_SPACE_KEYS} remains for Spaces-backed marketing proxies.
  */
 import { getPrimaryBrandMarkObjectKey, getSpacesBlueBrandLogoObjectKey, nursenestImagesSpaceObjectUrl } from "@/config/marketing-cdn.catalog";
 import {
