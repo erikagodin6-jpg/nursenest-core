@@ -50,6 +50,7 @@ import { CoachLessonHelper } from "@/components/study/coach-lesson-helper";
 import { isStudyCoachEnabled } from "@/lib/ai/learner-ai-policy";
 import { buildLearnerStudySnapshot } from "@/lib/learner/build-learner-study-snapshot";
 import { lessonTopicMatchesTopPriority } from "@/lib/coach/study-coach-lesson-priority";
+import { buildPathwayLessonCoachExcerpt } from "@/lib/coach/build-pathway-lesson-coach-excerpt";
 import { loadPathwayLessonProgressForSlug } from "@/lib/lessons/pathway-lesson-progress";
 import { LessonAssessmentFlow } from "@/components/lessons/lesson-assessment-flow";
 import { LessonSectionNoteInline } from "@/components/lessons/lesson-section-note-inline";

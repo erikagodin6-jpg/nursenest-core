@@ -18,6 +18,8 @@ export type LearnerReportOutcomeTile = {
   accent?: "c1" | "c2" | "c3" | "c4" | "c5";
 };
 
+const REPORT_STRIP_ACCENTS = ["c1", "c2", "c3", "c4"] as const;
+
 export function LearnerReportOutcomeStatStrip({ tiles }: { tiles: LearnerReportOutcomeTile[] }) {
   if (tiles.length === 0) return null;
   return (
@@ -29,7 +31,7 @@ export function LearnerReportOutcomeStatStrip({ tiles }: { tiles: LearnerReportO
           label={tile.label}
           value={tile.value}
           hint={tile.hint}
-          accent={tile.accent ?? (["c1", "c2", "c3", "c4"][i % 4] as const)}
+          accent={tile.accent ?? REPORT_STRIP_ACCENTS[i % 4]}
         />
       ))}
     </div>

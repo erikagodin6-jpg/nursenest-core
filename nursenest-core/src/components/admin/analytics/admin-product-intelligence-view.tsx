@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import Link from "next/link";
 import type { ProductIntelligenceData } from "@/lib/admin/load-admin-product-intelligence";
 
@@ -5,7 +6,7 @@ import type { ProductIntelligenceData } from "@/lib/admin/load-admin-product-int
 function EvidenceLine({ text }: { text: string }) {
   const parts = text.split(/\*\*(.+?)\*\*/g);
   if (parts.length === 1) return <span>{text}</span>;
-  const nodes: React.ReactNode[] = [];
+  const nodes: ReactNode[] = [];
   for (let i = 0; i < parts.length; i++) {
     if (i % 2 === 1) nodes.push(<strong key={i}>{parts[i]}</strong>);
     else if (parts[i]) nodes.push(<span key={i}>{parts[i]}</span>);

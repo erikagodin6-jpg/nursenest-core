@@ -60,6 +60,7 @@ const GROUPS: NavGroup[] = [
       { href: "/admin/analytics/subscriptions", label: "Subscription analytics", icon: CircleDollarSign },
       { href: "/admin/analytics/funnels", label: "Funnel analytics", icon: Workflow },
       { href: "/admin/analytics/study-performance", label: "Study & CAT performance", icon: BookMarked },
+      { href: "/admin/analytics/product-intelligence", label: "Product intelligence", icon: Sparkles },
       { href: "/admin/users", label: "Users & support", icon: Users },
       { href: "/admin/feedback", label: "User feedback", icon: MessageSquare },
       { href: "/admin/subscriptions", label: "Revenue & subscriptions", icon: Activity },

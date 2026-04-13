@@ -86,5 +86,9 @@ test("every coach intent has follow-up graph entries and a title", () => {
     assert.ok(INTENT_TITLES[intent]?.length, `missing title for ${intent}`);
     const ups = followUpsForIntent(intent);
     assert.ok(Array.isArray(ups), `followUpsForIntent(${intent})`);
+    assert.ok(
+      ups.length > 0,
+      `followUpsForIntent(${intent}) should expose at least one follow-up for embedded surfaces`,
+    );
   }
 });
