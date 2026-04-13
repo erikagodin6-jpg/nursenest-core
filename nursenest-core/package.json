@@ -154,7 +154,10 @@
     "ops:np-recovery": "tsx scripts/np-recovery-audit-and-import.ts",
     "ops:recover-rn-rpn-historical": "tsx scripts/recover-rn-rpn-historical-lessons.ts",
     "ops:reconcile-rn-rpn-inventory": "tsx scripts/reconcile-rn-rpn-inventory-reports.ts",
-    "ops:recover-np-historical": "tsx scripts/recover-np-historical-lessons.ts"
+    "ops:recover-np-historical": "tsx scripts/recover-np-historical-lessons.ts",
+    "lessons:dedupe:scan": "tsx scripts/pathway-lesson-dedupe-cleanup.ts",
+    "lessons:dedupe:report": "tsx scripts/pathway-lesson-dedupe-cleanup.ts --report-only",
+    "lessons:dedupe:apply": "tsx scripts/pathway-lesson-dedupe-cleanup.ts --apply"
   },
   "dependencies": {
     "@auth/core": "0.37.2",

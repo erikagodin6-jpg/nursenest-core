@@ -7,6 +7,7 @@ function normalizeLessonTitleForDedupe(title: string): string {
     .toLowerCase()
     .replace(/&/g, " and ")
     .replace(/[^\p{L}\p{N}\s]+/gu, " ")
+    .replace(/\band\b/gu, " ")
     .replace(/\s+/g, " ")
     .trim();
 }

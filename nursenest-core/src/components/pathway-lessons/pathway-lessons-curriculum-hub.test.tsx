@@ -29,7 +29,7 @@ function lesson(overrides: Partial<PathwayLessonRecord>): PathwayLessonRecord {
 }
 
 describe("PathwayLessonsCurriculumHub", () => {
-  it("renders a compact board card with progress and show-more affordance", () => {
+  it("renders a compact board card with progress and wrapped lesson titles", () => {
     const lessons = Array.from({ length: 6 }, (_, index) =>
       lesson({
         slug: `cardiac-${index + 1}`,
@@ -52,7 +52,7 @@ describe("PathwayLessonsCurriculumHub", () => {
 
     assert.match(html, /Cardiac/);
     assert.match(html, /2\/6/);
-    assert.match(html, /Show more/);
     assert.match(html, /Category progress/i);
+    assert.match(html, /line-clamp-3/);
   });
 });
