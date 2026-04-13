@@ -17,8 +17,15 @@ export type BuilderCategoryOption = {
   count: number;
 };
 
-export function resolveBuilderCategoryId(input: { label: string; topicCode?: string | null; pathwayId?: string | null }): string {
-  const text = `${input.label} ${input.topicCode ?? ""}`.trim();
+export function resolveBuilderCategoryId(input: {
+  label: string;
+  topicCode?: string | null;
+  pathwayId?: string | null;
+  front?: string | null;
+  back?: string | null;
+  deckTitle?: string | null;
+}): string {
+  const text = `${input.label} ${input.topicCode ?? ""} ${input.deckTitle ?? ""} ${input.front ?? ""} ${input.back ?? ""}`.trim();
   for (const override of OVERRIDES) {
     if (override.pattern.test(text)) return override.categoryId;
   }

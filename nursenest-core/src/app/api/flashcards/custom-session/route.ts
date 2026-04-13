@@ -11,6 +11,18 @@ import {
 
 type StudyMode = "term_to_definition" | "definition_to_term" | "mixed";
 
+function pathwayScope(pathwayId: string | null): { tier?: "RN" | "RPN" | "NP"; country?: "US" | "CA" } {
+  if (!pathwayId) return {};
+  const lower = pathwayId.toLowerCase();
+  const country = lower.startsWith("ca-") ? "CA" : lower.startsWith("us-") ? "US" : undefined;
+  const tier =
+    lower.includes("-np-") ? "NP"
+    : lower.includes("-rpn-") || lower.includes("-pn-") || lower.includes("rex-pn") ? "RPN"
+    : lower.includes("-rn-") ? "RN"
+    : undefined;
+  return { tier, country };
+}
+
 function parseCategories(value: string | null): string[] {
   return (value ?? "")
     .split(",")
@@ -74,10 +86,14 @@ export async function GET(req: NextRequest) {
     AND: [{ status: ContentStatus.PUBLISHED }, flashcardAccessWhere(entitlement)],
   };
 
+  const scope = pathwayScope(pathwayId);
+  const scopedClauses: Prisma.FlashcardWhereInput[] = [];
+  if (scope.tier) scopedClauses.push({ tier: scope.tier });
+  if (scope.country) scopedClauses.push({ country: scope.country });
   const pathwayFilter: Prisma.FlashcardWhereInput | null = pathwayId
-    ? {
-        OR: [{ deck: { pathwayId } }, { deckId: null }],
-      }
+    ? scopedClauses.length > 0
+      ? { AND: scopedClauses }
+      : null
     : null;
 
   const where: Prisma.FlashcardWhereInput =
@@ -90,7 +106,7 @@ export async function GET(req: NextRequest) {
       front: true,
       back: true,
       category: { select: { name: true, topicCode: true } },
-      deck: { select: { pathwayId: true } },
+      deck: { select: { pathwayId: true, title: true } },
     },
     orderBy: { updatedAt: "desc" },
     take: 5000,
@@ -102,6 +118,9 @@ export async function GET(req: NextRequest) {
       label: card.category.name,
       topicCode: card.category.topicCode,
       pathwayId: card.deck?.pathwayId ?? pathwayId,
+      deckTitle: card.deck?.title,
+      front: card.front,
+      back: card.back,
     });
     categoryCounts[categoryId] = (categoryCounts[categoryId] ?? 0) + 1;
     return { ...card, builderCategoryId: categoryId };
