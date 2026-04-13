@@ -35,7 +35,7 @@ export const BRAND_NAME = "NurseNest" as const;
  * The img uses {@link HEADER_BRAND_LOGO_IMG_CLASSNAME} (`h-full`, `object-contain`) inside this slot.
  */
 export const HEADER_BRAND_LOGO_SLOT_CLASSNAME =
-  "nn-brand-header-logo-slot inline-flex flex-none shrink-0 items-center justify-start overflow-visible self-center bg-transparent shadow-none ring-0 outline-none h-8 max-h-8 w-auto max-w-[min(92vw,11rem)] sm:h-9 sm:max-h-9 sm:max-w-[13rem] lg:h-10 lg:max-h-10 lg:max-w-[15rem]" as const;
+  "nn-brand-header-logo-slot inline-flex flex-none shrink-0 items-center justify-start overflow-visible self-center bg-transparent shadow-none ring-0 outline-none h-10 max-h-10 w-auto max-w-[min(92vw,13rem)] sm:h-11 sm:max-h-11 sm:max-w-[15rem] lg:h-12 lg:max-h-12 lg:max-w-[18rem]" as const;
 
 /** @deprecated Homepage no longer enlarges the mark; kept as empty merge for older call sites. */
 export const HOME_BRAND_LOGO_MARK_CLASSNAME = "" as const;

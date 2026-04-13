@@ -76,7 +76,7 @@ export function SiteBrandLogoMark({
     return (
       <span className={`${slotClassName} ${className}`.trim()} aria-label={`${BRAND_NAME} logo unavailable`}>
         <span
-          className="inline-flex h-full min-h-8 items-center rounded-md border border-[var(--nav-border,var(--border-subtle))] bg-[var(--surface,var(--bg-card))] px-2 text-[10px] font-semibold uppercase tracking-wide text-[var(--theme-muted-text,var(--text-muted))]"
+          className="inline-flex h-full min-h-8 items-center bg-transparent px-1 text-[10px] font-semibold uppercase tracking-wide text-[var(--theme-muted-text,var(--text-muted))]"
           title={`Missing logo mapping for theme: ${registeredThemeId ?? rawThemeId}`}
         >
           {`Missing logo: ${registeredThemeId ?? rawThemeId}`}

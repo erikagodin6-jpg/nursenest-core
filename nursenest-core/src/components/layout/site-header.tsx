@@ -484,6 +484,74 @@ export function SiteHeader() {
   const mobileMoreNav: { key: string; href: string; label: string }[] = [
     { key: "pre-nursing", href: "/pre-nursing", label: formatTitleCase(t("nav.preNursing"), locale) },
   ];
+  const marketingDesktopUtilityControls = (
+    <div className="hidden items-center gap-1.5 lg:flex">
+      <div className="relative" ref={desktopCountryRef}>
+        <button
+          type="button"
+          onClick={() => setDesktopCountryOpen((open) => !open)}
+          className={HEADER_UTILITY_BUTTON_CLASS}
+          aria-expanded={desktopCountryOpen}
+          aria-label={`Region: ${globalRegion === "canada" ? "Canada" : "US"}. Click to change.`}
+        >
+          <span>{globalRegion === "canada" ? "CA" : "US"}</span>
+          <ChevronDown className={`h-3 w-3 shrink-0 opacity-60 transition-transform ${desktopCountryOpen ? "rotate-180" : ""}`} aria-hidden />
+        </button>
+        {desktopCountryOpen ? (
+          <div className="absolute end-0 z-[120] mt-2">
+            <CountrySelector
+              currentRegion={globalRegion}
+              onSelect={handleDesktopRegionSelect}
+              onClose={() => setDesktopCountryOpen(false)}
+              variant="popover"
+            />
+          </div>
+        ) : null}
+      </div>
+      <div className="relative" ref={desktopLangRef}>
+        <button
+          type="button"
+          onClick={() => setDesktopLangOpen((open) => !open)}
+          className={HEADER_UTILITY_BUTTON_CLASS}
+          aria-expanded={desktopLangOpen}
+          aria-label={`${t("nav.language")}: ${locale.toUpperCase()}. Click to change.`}
+        >
+          <span>{locale.toUpperCase()}</span>
+          <ChevronDown className={`h-3 w-3 shrink-0 opacity-60 transition-transform ${desktopLangOpen ? "rotate-180" : ""}`} aria-hidden />
+        </button>
+        {desktopLangOpen ? (
+          <div className="absolute end-0 z-[120] mt-2 max-h-56 w-52 overflow-y-auto rounded-xl border border-[var(--nav-border)] bg-[var(--nav-bg)] p-1 shadow-[var(--shadow-card-hover)]">
+            <MarketingLanguagePreferenceList
+              onDone={() => setDesktopLangOpen(false)}
+              renderItem={({ code, name, flag, disabled, onSelect }) => (
+                <button
+                  type="button"
+                  disabled={disabled}
+                  onClick={onSelect}
+                  className={`flex w-full items-center gap-2 rounded-lg px-2 py-2 text-left text-xs hover:bg-[var(--nav-hover)] ${
+                    code === locale ? "bg-[var(--nav-active)] font-medium text-[var(--nav-fg)]" : "text-[var(--nav-muted)]"
+                  }`}
+                >
+                  <span>{flag}</span>
+                  {name}
+                </button>
+              )}
+            />
+          </div>
+        ) : null}
+      </div>
+      <div className="text-[var(--nav-fg)] [&_button]:min-h-0 [&_button]:border-[var(--nav-border)] [&_button]:bg-transparent [&_button]:px-2.5 [&_button]:py-1.5 [&_button]:text-[11px] [&_button]:font-medium [&_button]:shadow-none [&_button]:hover:bg-[var(--nav-hover)] [&_button]:hover:text-[var(--nav-fg)]">
+        <ThemePicker
+          className="shrink-0"
+          labels={{
+            navTheme: t("nav.theme"),
+            themeGroupLight: t("nav.themeGroupLight"),
+            themeGroupDark: t("nav.themeGroupDark"),
+          }}
+        />
+      </div>
+    </div>
+  );
 
   const strippedPath = stripMarketingLocalePrefix(pathname).pathname;
 
@@ -543,6 +611,11 @@ export function SiteHeader() {
         onMouseLeave={isMarketingNav ? scheduleMegaClose : undefined}
       >
         <div className="nn-section-shell flex flex-col">
+          {isMarketingNav ? (
+            <div className="hidden h-10 items-center justify-end border-b border-[var(--nn-nav-border)] nn-header-utility-dark lg:flex">
+              {marketingDesktopUtilityControls}
+            </div>
+          ) : null}
           {/* ── Mobile brand row ── */}
           <div className="flex h-[4.5rem] items-center justify-between gap-4 border-b border-[var(--header-border)] lg:hidden">
             <Link
@@ -661,74 +734,6 @@ export function SiteHeader() {
           <div className="flex shrink-0 items-center justify-end gap-2">
               {!isAuthenticated ? (
                 <div className="flex items-center gap-2">
-                  {isMarketingNav ? (
-                    <div className="hidden items-center gap-1.5 lg:flex">
-                      <div className="relative" ref={desktopCountryRef}>
-                        <button
-                          type="button"
-                          onClick={() => setDesktopCountryOpen((open) => !open)}
-                          className={HEADER_UTILITY_BUTTON_CLASS}
-                          aria-expanded={desktopCountryOpen}
-                          aria-label={`Region: ${globalRegion === "canada" ? "Canada" : "US"}. Click to change.`}
-                        >
-                          <span>{globalRegion === "canada" ? "CA" : "US"}</span>
-                          <ChevronDown className={`h-3 w-3 shrink-0 opacity-60 transition-transform ${desktopCountryOpen ? "rotate-180" : ""}`} aria-hidden />
-                        </button>
-                        {desktopCountryOpen ? (
-                          <div className="absolute end-0 z-[120] mt-2">
-                            <CountrySelector
-                              currentRegion={globalRegion}
-                              onSelect={handleDesktopRegionSelect}
-                              onClose={() => setDesktopCountryOpen(false)}
-                              variant="popover"
-                            />
-                          </div>
-                        ) : null}
-                      </div>
-                      <div className="relative" ref={desktopLangRef}>
-                        <button
-                          type="button"
-                          onClick={() => setDesktopLangOpen((open) => !open)}
-                          className={HEADER_UTILITY_BUTTON_CLASS}
-                          aria-expanded={desktopLangOpen}
-                          aria-label={`${t("nav.language")}: ${locale.toUpperCase()}. Click to change.`}
-                        >
-                          <span>{locale.toUpperCase()}</span>
-                          <ChevronDown className={`h-3 w-3 shrink-0 opacity-60 transition-transform ${desktopLangOpen ? "rotate-180" : ""}`} aria-hidden />
-                        </button>
-                        {desktopLangOpen ? (
-                          <div className="absolute end-0 z-[120] mt-2 max-h-56 w-52 overflow-y-auto rounded-xl border border-[var(--nav-border)] bg-[var(--nav-bg)] p-1 shadow-[var(--shadow-card-hover)]">
-                            <MarketingLanguagePreferenceList
-                              onDone={() => setDesktopLangOpen(false)}
-                              renderItem={({ code, name, flag, disabled, onSelect }) => (
-                                <button
-                                  type="button"
-                                  disabled={disabled}
-                                  onClick={onSelect}
-                                  className={`flex w-full items-center gap-2 rounded-lg px-2 py-2 text-left text-xs hover:bg-[var(--nav-hover)] ${
-                                    code === locale ? "bg-[var(--nav-active)] font-medium text-[var(--nav-fg)]" : "text-[var(--nav-muted)]"
-                                  }`}
-                                >
-                                  <span>{flag}</span>
-                                  {name}
-                                </button>
-                              )}
-                            />
-                          </div>
-                        ) : null}
-                      </div>
-                      <div className="text-[var(--nav-fg)] [&_button]:min-h-0 [&_button]:border-[var(--nav-border)] [&_button]:bg-transparent [&_button]:px-2.5 [&_button]:py-1.5 [&_button]:text-[11px] [&_button]:font-medium [&_button]:shadow-none [&_button]:hover:bg-[var(--nav-hover)] [&_button]:hover:text-[var(--nav-fg)]">
-                        <ThemePicker
-                          className="shrink-0"
-                          labels={{
-                            navTheme: t("nav.theme"),
-                            themeGroupLight: t("nav.themeGroupLight"),
-                            themeGroupDark: t("nav.themeGroupDark"),
-                          }}
-                        />
-                      </div>
-                    </div>
-                  ) : null}
                   <Link href={localizeHref(`/login?callbackUrl=${encodeURIComponent("/app")}`)} className={HEADER_SECONDARY_ACTION_CLASS}>
                     {formatTitleCase("Login", locale)}
                   </Link>
@@ -766,6 +771,7 @@ export function SiteHeader() {
               )}
           </div>
           </div>{/* /nav-row */}
+          {isMarketingNav ? <div className="hidden lg:block nn-header-accent-bar" /> : null}
         </div>{/* /shell */}
         {isMarketingNav && openMega ? (
           <div
