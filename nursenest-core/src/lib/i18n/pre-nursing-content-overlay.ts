@@ -1,6 +1,6 @@
 import "server-only";
 
-import { existsSync, readFileSync } from "fs";
+import { existsSync, readFileSync, readdirSync } from "fs";
 import path from "path";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
@@ -117,6 +117,27 @@ export function loadPreNursingQuestionsOverlay(
   const bundle = data && typeof data === "object" ? data : null;
   questionOverlayCache.set(locale, bundle);
   return bundle ?? {};
+}
+
+/**
+ * Returns the set of module slugs that have an overlay file for the given locale.
+ * Used by the sitemap generator to avoid emitting URLs that would 404.
+ * English always returns an empty set (no overlay files needed for the default locale).
+ */
+export function getPreNursingOverlaySlugsForLocale(locale: string): Set<string> {
+  if (locale === DEFAULT_MARKETING_LOCALE) return new Set();
+  const base = resolveEducationalI18nRoot();
+  const dir = path.join(base, locale, "pre-nursing-modules");
+  if (!existsSync(dir)) return new Set();
+  try {
+    return new Set(
+      readdirSync(dir)
+        .filter((f) => f.endsWith(".json"))
+        .map((f) => f.replace(/\.json$/, "")),
+    );
+  } catch {
+    return new Set();
+  }
 }
 
 /**

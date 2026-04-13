@@ -45,7 +45,12 @@ export async function POST(req: NextRequest) {
   const gate = await requireAdmin();
   if (!gate.ok) return gate.response;
 
-  const body = await req.json();
+  let body: unknown;
+  try {
+    body = await req.json();
+  } catch {
+    return NextResponse.json({ error: "Invalid JSON payload." }, { status: 400 });
+  }
   const parsed = generateSchema.safeParse(body);
   if (!parsed.success) {
     return NextResponse.json({ error: "Validation failed", issues: parsed.error.issues }, { status: 400 });
@@ -95,6 +100,11 @@ export async function POST(req: NextRequest) {
 
   // Mode 1: pre-computed AI output — post-process and persist
   if (d.precomputedAiOutput) {
+    console.info("[localized_blog_generate] start_precomputed", {
+      canonicalArticleId: d.canonicalArticleId,
+      locale: d.targetLocale,
+      region: d.targetRegion,
+    });
     const aiOutput = d.precomputedAiOutput as LocalizedBlogAiOutput;
     const result = postProcessAiOutput(aiOutput, brief);
 
@@ -129,7 +139,10 @@ export async function POST(req: NextRequest) {
       exam: d.targetExam ?? null,
       sourceLanguage: "en",
       adaptationType: brief.adaptationType === "adapted" ? "ADAPTED" as const : "LOCALIZED_REWRITE" as const,
-      contentStatus: "AI_GENERATED" as const,
+      contentStatus:
+        canonical.postStatus === "SCHEDULED" && (canonical.publishAt?.getTime() ?? 0) > Date.now()
+          ? ("SCHEDULED" as const)
+          : ("PUBLISHED" as const),
       localizedTitle: result.aiOutput.localizedTitle,
       localizedExcerpt: result.aiOutput.localizedExcerpt,
       localizedBody: result.aiOutput.localizedBody,
@@ -149,6 +162,14 @@ export async function POST(req: NextRequest) {
       medicalReviewRequired: result.aiOutput.medicalReviewRequired,
       editorialReviewRequired: true,
       reviewFlags: result.aiOutput.reviewFlags,
+      scheduledAt:
+        canonical.postStatus === "SCHEDULED" && canonical.publishAt && canonical.publishAt.getTime() > Date.now()
+          ? canonical.publishAt
+          : null,
+      publishedAt:
+        canonical.postStatus === "SCHEDULED" && canonical.publishAt && canonical.publishAt.getTime() > Date.now()
+          ? null
+          : new Date(),
     };
 
     if (existing) {
@@ -157,6 +178,12 @@ export async function POST(req: NextRequest) {
       const updated = await localizedModel().update({
         where: { id: ex.id },
         data: { ...articleData, generationLog: updatedLog },
+      });
+      console.info("[localized_blog_generate] persist_success", {
+        canonicalArticleId: d.canonicalArticleId,
+        locale: d.targetLocale,
+        region: d.targetRegion,
+        mode: "updated",
       });
       return NextResponse.json({ article: updated, mode: "updated" });
     }
@@ -167,6 +194,12 @@ export async function POST(req: NextRequest) {
         ...articleData,
         generationLog: [logEntry],
       },
+    });
+    console.info("[localized_blog_generate] persist_success", {
+      canonicalArticleId: d.canonicalArticleId,
+      locale: d.targetLocale,
+      region: d.targetRegion,
+      mode: "created",
     });
 
     return NextResponse.json({ article: created, mode: "created" }, { status: 201 });
@@ -192,6 +225,11 @@ export async function POST(req: NextRequest) {
   // Mode 3: run AI adaptation and persist immediately
   let generatedOutput: LocalizedBlogAiOutput;
   try {
+    console.info("[localized_blog_generate] start_ai", {
+      canonicalArticleId: d.canonicalArticleId,
+      locale: d.targetLocale,
+      region: d.targetRegion,
+    });
     const completion = await openAiChatCompletion({
       messages: [
         { role: "system", content: systemPrompt },
@@ -208,6 +246,12 @@ export async function POST(req: NextRequest) {
     }
     generatedOutput = JSON.parse(raw.slice(start, end + 1)) as LocalizedBlogAiOutput;
   } catch (error) {
+    console.error("[localized_blog_generate] ai_failed", {
+      canonicalArticleId: d.canonicalArticleId,
+      locale: d.targetLocale,
+      region: d.targetRegion,
+      error: error instanceof Error ? error.message : String(error),
+    });
     return NextResponse.json(
       { error: error instanceof Error ? error.message : String(error) },
       { status: 502 },
@@ -216,6 +260,12 @@ export async function POST(req: NextRequest) {
 
   const result = postProcessAiOutput(generatedOutput, brief);
   if (!result.ok) {
+    console.error("[localized_blog_generate] validation_failed", {
+      canonicalArticleId: d.canonicalArticleId,
+      locale: d.targetLocale,
+      region: d.targetRegion,
+      error: result.error,
+    });
     return NextResponse.json(
       { error: result.error, stage: result.stage, partialOutput: result.partialOutput },
       { status: 422 },
@@ -281,6 +331,12 @@ export async function POST(req: NextRequest) {
       where: { id: ex.id },
       data: { ...articleData, generationLog: updatedLog },
     });
+    console.info("[localized_blog_generate] persist_success", {
+      canonicalArticleId: d.canonicalArticleId,
+      locale: d.targetLocale,
+      region: d.targetRegion,
+      mode: "updated",
+    });
     return NextResponse.json({ article: updated, mode: "updated" });
   }
 
@@ -292,6 +348,12 @@ export async function POST(req: NextRequest) {
         createLogEntry("generate", `AI adaptation generated for ${d.targetRegion}/${d.targetLocale}`),
       ],
     },
+  });
+  console.info("[localized_blog_generate] persist_success", {
+    canonicalArticleId: d.canonicalArticleId,
+    locale: d.targetLocale,
+    region: d.targetRegion,
+    mode: "created",
   });
 
   return NextResponse.json({ article: created, mode: "created" }, { status: 201 });

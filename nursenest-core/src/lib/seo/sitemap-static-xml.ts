@@ -31,6 +31,7 @@ import {
   PRE_NURSING_LESSONS_INDEX_PATH,
 } from "@/lib/lessons/lesson-routes";
 import { PRE_NURSING_MODULE_REGISTRY } from "@/content/pre-nursing/pre-nursing-registry";
+import { getPreNursingOverlaySlugsForLocale } from "@/lib/i18n/pre-nursing-content-overlay";
 import { PROGRAMMATIC_SLUG_TO_PATHWAY_PATH } from "@/lib/exam-pathways/programmatic-slug-redirects";
 import { buildExamPathwayPath, getExamPathwayById, listPublicExamPathways } from "@/lib/exam-pathways/exam-product-registry";
 import { listNpPracticeTestSegmentPaths } from "@/lib/exam-pathways/np-practice-test-segments";

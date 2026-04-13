@@ -7,7 +7,7 @@ import {
 import { logSimpleAiDraftRun } from "@/lib/admin/blog-content-automation-log";
 import { isAdminAiGenerationEnabled } from "@/lib/ai/admin-ai-policy";
 import { assertOpenAiKeyConfigured } from "@/lib/ai/openai-env";
-import { generateAutomatedBlogPost } from "@/lib/blog/blog-automation-engine";
+import { generateAutomatedBlogPost, normalizeUniqueTopics } from "@/lib/blog/blog-automation-engine";
 import { BLOG_ARTICLE_MIN_WORDS, countWordsFromHtml } from "@/lib/blog/blog-word-count";
 import { prisma } from "@/lib/db";
 
@@ -30,22 +30,35 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: keyCheck.message }, { status: 503 });
   }
 
-  const parsed = blogGenerateByTopicRequestSchema.safeParse(await req.json());
+  let payload: unknown;
+  try {
+    payload = await req.json();
+  } catch {
+    return NextResponse.json({ error: "Invalid JSON payload." }, { status: 400 });
+  }
+  const parsed = blogGenerateByTopicRequestSchema.safeParse(payload);
   if (!parsed.success) {
     return NextResponse.json({ error: "Invalid payload", details: parsed.error.flatten() }, { status: 400 });
   }
   const d = parsed.data;
-  const topics =
+  const rawTopics =
     d.topics && d.topics.length > 0
       ? d.topics
       : d.topic
         ? [d.topic]
         : [];
+  const topics = normalizeUniqueTopics(rawTopics, 3);
   if (topics.length === 0) {
     return NextResponse.json({ error: "Provide at least one topic." }, { status: 400 });
   }
   if (topics.length > 3) {
     return NextResponse.json({ error: "Batch limit exceeded (max 3 topics per run)." }, { status: 400 });
+  }
+  if (d.generateTranslations && (!d.translationLocales || d.translationLocales.length === 0)) {
+    return NextResponse.json(
+      { error: "translationLocales required when generateTranslations=true (max 4)." },
+      { status: 400 },
+    );
   }
 
   const publishNow = d.publishNow !== false;
@@ -83,6 +96,12 @@ export async function POST(req: Request) {
   > = [];
 
   for (const topic of topics) {
+    console.info("[admin_blog_generate] start", {
+      topic,
+      exam: d.exam,
+      publishNow,
+      generateTranslations: d.generateTranslations === true,
+    });
     const result = await generateAutomatedBlogPost({
       topic,
       keywords: d.keywords,
@@ -134,6 +153,11 @@ export async function POST(req: Request) {
     await logSimpleAiDraftRun({ createdById: gate.admin.userId, body: bodyForLog, result });
 
     if (!result.ok) {
+      console.error("[admin_blog_generate] failed", {
+        topic,
+        exam: d.exam,
+        error: result.error,
+      });
       results.push({ ok: false, topic, error: result.error });
       continue;
     }
@@ -144,6 +168,11 @@ export async function POST(req: Request) {
         topic,
         reason: result.reason === "duplicate_topic" ? "duplicate_topic" : result.reason,
         ...(result.reason === "duplicate_topic" ? { existingSlug: result.existingSlug, slug: undefined } : { slug: result.slug }),
+      });
+      console.info("[admin_blog_generate] skipped", {
+        topic,
+        reason: result.reason,
+        existingSlug: result.existingSlug ?? null,
       });
       continue;
     }
@@ -193,6 +222,13 @@ export async function POST(req: Request) {
           : []),
       ],
       localized: result.localized,
+    });
+    console.info("[admin_blog_generate] success", {
+      topic,
+      postId: result.post.id,
+      slug: result.post.slug,
+      localizedCount: result.localized.length,
+      localizationErrors: result.localizationErrors.length,
     });
   }
 

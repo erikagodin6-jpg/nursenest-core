@@ -19,7 +19,6 @@ import type { LocalizedBlogAiOutput } from "@/lib/blog/blog-localization-types";
 import { prisma } from "@/lib/db";
 import {
   GLOBAL_LOCALE_CODES,
-  GLOBAL_REGION_SLUGS,
   isAllowedLocaleForRegion,
   type GlobalLocaleCode,
   type GlobalRegionSlug,
@@ -145,6 +144,21 @@ function countryToRegion(country: "US" | "CA" | "unspecified"): GlobalRegionSlug
   return "us";
 }
 
+export function normalizeUniqueTopics(topics: string[], max: number = 3): string[] {
+  const seen = new Set<string>();
+  const out: string[] = [];
+  for (const topic of topics) {
+    const trimmed = topic.trim();
+    if (!trimmed) continue;
+    const key = trimmed.toLowerCase();
+    if (seen.has(key)) continue;
+    seen.add(key);
+    out.push(trimmed);
+    if (out.length >= max) break;
+  }
+  return out;
+}
+
 async function upsertLocalizedVariant(params: {
   canonicalPostId: string;
   locale: GlobalLocaleCode;
@@ -266,6 +280,12 @@ async function upsertLocalizedVariant(params: {
 }
 
 export async function generateAutomatedBlogPost(input: AutomationInput): Promise<AutomationResult> {
+  console.info("[blog_automation] generation_start", {
+    topic: input.topic,
+    exam: input.exam,
+    autoPublish: input.autoPublish ?? true,
+    translationsRequested: input.generateTranslations === true,
+  });
   const pipelineResult = await runBlogArticleGenerationPipeline(
     {
       topic: input.topic,
@@ -287,8 +307,20 @@ export async function generateAutomatedBlogPost(input: AutomationInput): Promise
     { persist: true },
   );
 
-  if (!pipelineResult.ok) return { ok: false, error: pipelineResult.error };
+  if (!pipelineResult.ok) {
+    console.error("[blog_automation] generation_failed", {
+      topic: input.topic,
+      exam: input.exam,
+      error: pipelineResult.error,
+    });
+    return { ok: false, error: pipelineResult.error };
+  }
   if (pipelineResult.persistSkipped) {
+    console.info("[blog_automation] generation_skipped", {
+      topic: input.topic,
+      reason: pipelineResult.persistSkipped.reason,
+      existingSlug: pipelineResult.persistSkipped.existingSlug ?? null,
+    });
     return {
       ok: true,
       skipped: true,
@@ -298,7 +330,14 @@ export async function generateAutomatedBlogPost(input: AutomationInput): Promise
     };
   }
   const persisted = pipelineResult.persist;
-  if (!persisted) return { ok: false, error: "No persisted post returned from generation pipeline." };
+  if (!persisted) {
+    console.error("[blog_automation] generation_failed", {
+      topic: input.topic,
+      exam: input.exam,
+      error: "No persisted post returned from generation pipeline.",
+    });
+    return { ok: false, error: "No persisted post returned from generation pipeline." };
+  }
 
   const publish = resolvePublishState(input.autoPublish ?? true, input.publishAt, new Date());
   const post = await prisma.blogPost.update({
@@ -315,8 +354,7 @@ export async function generateAutomatedBlogPost(input: AutomationInput): Promise
   const localizationErrors: string[] = [];
   if (input.generateTranslations) {
     const region = input.translationRegion ?? countryToRegion(input.country);
-    const defaultLocales = GLOBAL_LOCALE_CODES.filter((code) => code !== "en");
-    const locales = (input.translationLocales ?? defaultLocales).slice(0, 4);
+    const locales = (input.translationLocales ?? []).slice(0, 4);
     for (const locale of locales) {
       if (!GLOBAL_LOCALE_CODES.includes(locale)) continue;
       if (!isAllowedLocaleForRegion(locale, region)) continue;
@@ -328,12 +366,34 @@ export async function generateAutomatedBlogPost(input: AutomationInput): Promise
           profession: input.translationProfession ?? "rn",
           exam: input.translationExam ?? input.exam,
         });
+        console.info("[blog_automation] translation_persisted", {
+          canonicalPostId: post.id,
+          locale,
+          region,
+          mode: out.mode,
+          localizedSlug: out.localizedSlug,
+        });
         localized.push({ locale, region, localizedSlug: out.localizedSlug, mode: out.mode });
       } catch (error) {
-        localizationErrors.push(error instanceof Error ? error.message : String(error));
+        const message = error instanceof Error ? error.message : String(error);
+        console.error("[blog_automation] translation_failed", {
+          canonicalPostId: post.id,
+          locale,
+          region,
+          error: message,
+        });
+        localizationErrors.push(message);
       }
     }
   }
+
+  console.info("[blog_automation] generation_success", {
+    topic: input.topic,
+    postId: post.id,
+    slug: post.slug,
+    localizedCount: localized.length,
+    localizationErrors: localizationErrors.length,
+  });
 
   return {
     ok: true,
