@@ -8,6 +8,7 @@ import {
   getMarketingHeroImageUrlChain,
   MARKETING_HERO_LOCAL_FALLBACK,
 } from "@/lib/marketing-hero-image";
+import { useReducedMotion } from "@/lib/motion/use-reduced-motion";
 import {
   MARKETING_CAROUSEL_SIZES,
   MARKETING_HERO_LCP_SIZES,

@@ -49,6 +49,13 @@ body {
   --motion-base: 160ms;
   --motion-slow: 180ms;
   --motion-ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  /* NurseNest brand motion — mirrors `src/lib/motion/tokens.ts` (Framer uses seconds; CSS uses ms) */
+  --brand-motion-fast: 160ms;
+  --brand-motion-normal: 200ms;
+  --brand-motion-medium: 280ms;
+  --brand-motion-slow: 360ms;
+  --brand-motion-ease-luxury: cubic-bezier(0.25, 0.1, 0.25, 1);
+  --brand-motion-ease-calm-out: cubic-bezier(0.16, 1, 0.3, 1);
   /* Primary / CTA press & lift — 120–180ms, calm ease (used by .nn-ui-btn, .nn-btn-*, dashboard CTAs) */
   --nn-btn-motion-duration: 150ms;
   --nn-btn-motion-ease: cubic-bezier(0.25, 0.1, 0.25, 1);
@@ -2139,12 +2146,32 @@ html[data-theme="deep-twilight"] .nn-trust-mark {
 @keyframes nn-mega-panel-enter {
   from {
     opacity: 0;
-    transform: translateY(-6px);
+    transform: translateY(4px);
   }
   to {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+/* Marketing / product carousels — opacity crossfade (pair with `prefers-reduced-motion` in component) */
+.nn-carousel-slide-crossfade {
+  transition-property: opacity;
+  transition-duration: var(--brand-motion-medium);
+  transition-timing-function: var(--brand-motion-ease-calm-out);
+}
+
+@keyframes nn-skeleton-fade-in {
+  from {
+    opacity: 0.4;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.nn-skeleton-fade {
+  animation: nn-skeleton-fade-in var(--brand-motion-medium) var(--brand-motion-ease-luxury) both;
 }
 
 @keyframes nn-drawer-slide-up {
@@ -2163,6 +2190,16 @@ html[data-theme="deep-twilight"] .nn-trust-mark {
   [class*="animate-[nn-drawer-slide-up"],
   [class*="animate-[nn-mega-panel-enter"] {
     animation: none;
+  }
+  .nn-carousel-slide-crossfade {
+    transition-duration: 0.01ms;
+  }
+  .nn-skeleton-fade {
+    animation: none;
+  }
+  .nn-motion-standard:hover,
+  .nn-motion-standard:active {
+    transform: none;
   }
 }
 

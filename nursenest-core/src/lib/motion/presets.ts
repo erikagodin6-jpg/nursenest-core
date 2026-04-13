@@ -1,67 +1,143 @@
 import type { Transition, Variants } from "framer-motion";
+import {
+  BRAND_MOTION,
+  BRAND_MOTION_DISTANCE_PX,
+  BRAND_HOVER_LIFT_Y,
+  BRAND_PRESS_SCALE,
+  EASE_LUXURY,
+  EASE_CALM_OUT,
+  EASE_SOFT_OUT,
+  LEGACY_TIMING,
+} from "./tokens";
 
-/**
- * Timing constants -- short, calm durations for a premium feel.
- * Interaction: 160-280ms, Entrance: 280-420ms.
- */
-export const TIMING = {
-  fast: 0.16,
-  normal: 0.24,
-  entrance: 0.36,
-  slow: 0.42,
-} as const;
+/** @deprecated Use `BRAND_MOTION` from `./tokens` */
+export const TIMING = LEGACY_TIMING;
 
-export const EASE_SOFT = [0.25, 0.1, 0.25, 1.0] as [number, number, number, number];
-export const EASE_OUT = [0.0, 0.0, 0.2, 1.0] as [number, number, number, number];
+export const EASE_SOFT = EASE_LUXURY;
+export const EASE_OUT = EASE_SOFT_OUT;
 
-export const transitionEntrance: Transition = {
-  duration: TIMING.entrance,
-  ease: EASE_SOFT,
-};
+const yFade = BRAND_MOTION_DISTANCE_PX.fadeUp;
+const ySoft = BRAND_MOTION_DISTANCE_PX.softReveal;
 
 export const transitionFast: Transition = {
-  duration: TIMING.fast,
-  ease: EASE_OUT,
+  duration: BRAND_MOTION.fastSec,
+  ease: EASE_LUXURY,
 };
 
 export const transitionNormal: Transition = {
-  duration: TIMING.normal,
-  ease: EASE_SOFT,
+  duration: BRAND_MOTION.normalSec,
+  ease: EASE_LUXURY,
 };
 
-/** Fade up from 12px below with opacity. */
-export const fadeUpVariants: Variants = {
-  hidden: { opacity: 0, y: 12 },
-  visible: { opacity: 1, y: 0 },
+export const transitionMedium: Transition = {
+  duration: BRAND_MOTION.mediumSec,
+  ease: EASE_LUXURY,
 };
 
-/** Simple opacity fade. */
-export const fadeVariants: Variants = {
+export const transitionSlow: Transition = {
+  duration: BRAND_MOTION.slowSec,
+  ease: EASE_LUXURY,
+};
+
+/** @deprecated Prefer `transitionMedium` */
+export const transitionEntrance: Transition = transitionMedium;
+
+export const fadeInVariants: Variants = {
   hidden: { opacity: 0 },
   visible: { opacity: 1 },
 };
 
-/** Subtle scale-in from 97%. */
+export const fadeUpVariants: Variants = {
+  hidden: { opacity: 0, y: yFade },
+  visible: { opacity: 1, y: 0 },
+};
+
+/** Tighter vertical travel than fadeUp — section lines, captions. */
+export const softRevealVariants: Variants = {
+  hidden: { opacity: 0, y: ySoft },
+  visible: { opacity: 1, y: 0 },
+};
+
 export const scaleInVariants: Variants = {
-  hidden: { opacity: 0, scale: 0.97 },
+  hidden: { opacity: 0, scale: 0.992 },
   visible: { opacity: 1, scale: 1 },
 };
 
-/** Stagger container -- children animate in sequence. */
-export function staggerContainer(staggerMs = 60): Variants {
+/** Stagger container — shallow stagger only. */
+export function staggerContainer(staggerMs = 50): Variants {
   return {
     hidden: {},
     visible: {
       transition: {
         staggerChildren: staggerMs / 1000,
-        delayChildren: 0.04,
+        delayChildren: 0.03,
       },
     },
   };
 }
 
-/** Reduced-motion safe: instantly visible, no spatial movement. */
-export const reducedMotionVariants: Variants = {
-  hidden: { opacity: 1 },
+export const modalEnterVariants: Variants = {
+  hidden: { opacity: 0, y: BRAND_MOTION_DISTANCE_PX.modal },
+  visible: { opacity: 1, y: 0 },
+};
+
+export const modalExitVariants: Variants = {
+  hidden: { opacity: 0, y: BRAND_MOTION_DISTANCE_PX.modal },
+  visible: { opacity: 1, y: 0 },
+};
+
+export const sheetEnterVariants: Variants = {
+  hidden: { opacity: 0, y: BRAND_MOTION_DISTANCE_PX.sheet },
+  visible: { opacity: 1, y: 0 },
+};
+
+export const dropdownRevealVariants: Variants = {
+  hidden: { opacity: 0, y: BRAND_MOTION_DISTANCE_PX.dropdown },
+  visible: { opacity: 1, y: 0 },
+};
+
+export const tabSwapVariants: Variants = {
+  hidden: { opacity: 0, x: BRAND_MOTION_DISTANCE_PX.tab },
+  visible: { opacity: 1, x: 0 },
+};
+
+export const skeletonFadeVariants: Variants = {
+  hidden: { opacity: 0.35 },
   visible: { opacity: 1 },
 };
+
+export const gentleCarouselTransition: Transition = {
+  duration: BRAND_MOTION.mediumSec,
+  ease: EASE_CALM_OUT,
+};
+
+/** Re-export for components that still import from `presets`. */
+export { reducedMotionVariants } from "./reduced-motion";
+
+export const hoverLiftTransition: Transition = {
+  duration: BRAND_MOTION.fastSec,
+  ease: EASE_LUXURY,
+};
+
+export const pressDownTransition: Transition = {
+  duration: BRAND_MOTION.fastSec,
+  ease: EASE_LUXURY,
+};
+
+/** Framer `whileHover` payload — max 3px lift. */
+export const hoverLiftMotion = {
+  y: BRAND_HOVER_LIFT_Y,
+  transition: hoverLiftTransition,
+} as const;
+
+/** Framer `whileTap` / press. */
+export const pressDownMotion = {
+  scale: BRAND_PRESS_SCALE,
+  transition: pressDownTransition,
+} as const;
+
+/** Card polish: tiny lift + no overshoot. */
+export const cardHoverMotion = {
+  y: BRAND_HOVER_LIFT_Y,
+  transition: hoverLiftTransition,
+} as const;

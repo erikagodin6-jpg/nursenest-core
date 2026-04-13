@@ -274,7 +274,6 @@ export function LearnerCommandCenterClient() {
           <BrowseGroup
             icon={<BookMarked className="h-4 w-4" />}
             title="Notes & highlights"
-            slug="notes"
             footerHref="/app/account/notes"
             footerLabel="Open notes library"
           >
@@ -441,14 +440,14 @@ function EmptyBrowse({ message }: { message: string }) {
 function BrowseGroup({
   icon,
   title,
-  slug,
+  slug = "notes",
   children,
   footerHref,
   footerLabel,
 }: {
   icon: ReactNode;
   title: string;
-  slug: string;
+  slug?: string;
   children: ReactNode;
   footerHref: string;
   footerLabel: string;
