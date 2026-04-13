@@ -1,6 +1,7 @@
 /**
  * Per-user study defaults stored in localStorage (device-local).
- * Used by `/app/account/study-preferences` and consumed by question bank / practice exam UIs.
+ * Used for device-local display preferences only. Shared adaptive settings live in
+ * `src/lib/learner/study-settings.ts` and persist on the user record.
  */
 
 export const LEARNER_STUDY_DEFAULTS_VERSION = 1 as const;

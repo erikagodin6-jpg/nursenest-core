@@ -10,6 +10,7 @@ import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
+import { loadStudySettings } from "@/lib/learner/load-study-settings";
 import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { appAccountBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
@@ -69,6 +70,7 @@ export default async function AccountStudyPreferencesPage() {
 
   const verifyFailed = entitlement === "error";
   const showExamPlan = !verifyFailed && entitlement.hasAccess;
+  const studySettings = await loadStudySettings(userId);
 
   return (
     <main className="space-y-6">
@@ -95,6 +97,7 @@ export default async function AccountStudyPreferencesPage() {
         userId={userId}
         defaultPathwayLabel={defaultPathwayLabel}
         showExamPlanForm={showExamPlan}
+        initialStudySettings={studySettings}
         t={t}
       />
 

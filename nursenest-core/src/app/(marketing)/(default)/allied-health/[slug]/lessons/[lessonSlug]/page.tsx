@@ -70,6 +70,7 @@ import { LessonRecallProvider } from "@/components/lessons/lesson-recall-context
 import { LessonRecallToggle } from "@/components/lessons/lesson-recall-toggle";
 import { LessonRecallBlock } from "@/components/lessons/lesson-recall-block";
 import { LessonKeyRecallChip } from "@/components/lessons/lesson-key-recall-chip";
+import { loadStudySettings } from "@/lib/learner/load-study-settings";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 86400;
@@ -143,6 +144,7 @@ export default async function AlliedHealthSlugLessonDetailPage({ params }: Props
   const session = await auth();
   const userId = (session?.user as { id?: string })?.id ?? "";
   const entitlement = await resolveEntitlementForPage(userId);
+  const studySettings = await loadStudySettings(userId);
 
   let learnerPath: string | null = null;
   if (userId && isDatabaseUrlConfigured()) {
@@ -318,6 +320,7 @@ export default async function AlliedHealthSlugLessonDetailPage({ params }: Props
         preTest={lesson.preTest}
         postTest={lesson.postTest}
         fullAccess={fullAccess}
+        assessmentsEnabled={studySettings.enablePrePostQuizzes}
       >
         <LessonRecallProvider>
           <div className="mb-3 flex justify-end">

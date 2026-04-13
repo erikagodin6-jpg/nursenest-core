@@ -26,6 +26,7 @@ export function PathwayLessonAssessmentExperience({
   preTest,
   postTest,
   fullAccess,
+  assessmentsEnabled = true,
   children,
 }: {
   userId: string;
@@ -35,6 +36,7 @@ export function PathwayLessonAssessmentExperience({
   preTest?: PathwayLessonQuizItem[];
   postTest?: PathwayLessonQuizItem[];
   fullAccess: boolean;
+  assessmentsEnabled?: boolean;
   children: ReactNode;
 }) {
   const hasPre = Boolean(preTest?.length);
@@ -50,9 +52,8 @@ export function PathwayLessonAssessmentExperience({
 
   useEffect(() => {
     if (!hasAnyAssessments) return;
-    const defaults = readLearnerStudyDefaults(effectiveUserId);
-    setEnabled(defaults.lessonAssessments.enabled);
-  }, [effectiveUserId, hasAnyAssessments]);
+    setEnabled(assessmentsEnabled);
+  }, [assessmentsEnabled, effectiveUserId, hasAnyAssessments]);
 
   useEffect(() => {
     if (!hasAnyAssessments) return;
@@ -101,54 +102,60 @@ export function PathwayLessonAssessmentExperience({
             <h2 className="mt-2 text-xl font-semibold text-[var(--theme-heading-text)]">Pre/post lesson tests</h2>
             <p className="mt-2 max-w-2xl text-sm leading-6 text-[var(--theme-muted-text)]">{statusCopy}</p>
           </div>
-          <div
-            className="inline-flex rounded-full border border-[var(--semantic-border-soft)] bg-[var(--theme-page-bg)] p-1"
-            role="tablist"
-            aria-label="Lesson assessments"
-          >
-            <button
-              type="button"
-              role="tab"
-              aria-selected={enabled ? "true" : "false"}
-              onClick={() => {
-                const current = readLearnerStudyDefaults(effectiveUserId);
-                const next = {
-                  ...current,
-                  lessonAssessments: { enabled: true },
-                };
-                writeLearnerStudyDefaults(effectiveUserId, next);
-                setEnabled(true);
-              }}
-              className={`min-h-11 rounded-full px-4 py-2 text-sm font-semibold transition ${
-                enabled
-                  ? "bg-[var(--semantic-surface)] text-[var(--theme-heading-text)] shadow-[var(--semantic-shadow-soft)]"
-                  : "text-[var(--theme-muted-text)] hover:text-[var(--theme-heading-text)]"
-              }`}
+          {assessmentsEnabled ? (
+            <div
+              className="inline-flex rounded-full border border-[var(--semantic-border-soft)] bg-[var(--theme-page-bg)] p-1"
+              role="tablist"
+              aria-label="Lesson assessments"
             >
-              Pre + Post On
-            </button>
-            <button
-              type="button"
-              role="tab"
-              aria-selected={!enabled ? "true" : "false"}
-              onClick={() => {
-                const current = readLearnerStudyDefaults(effectiveUserId);
-                const next = {
-                  ...current,
-                  lessonAssessments: { enabled: false },
-                };
-                writeLearnerStudyDefaults(effectiveUserId, next);
-                setEnabled(false);
-              }}
-              className={`min-h-11 rounded-full px-4 py-2 text-sm font-semibold transition ${
-                !enabled
-                  ? "bg-[var(--semantic-surface)] text-[var(--theme-heading-text)] shadow-[var(--semantic-shadow-soft)]"
-                  : "text-[var(--theme-muted-text)] hover:text-[var(--theme-heading-text)]"
-              }`}
-            >
-              Tests Off
-            </button>
-          </div>
+              <button
+                type="button"
+                role="tab"
+                aria-selected={enabled ? "true" : "false"}
+                onClick={() => {
+                  const current = readLearnerStudyDefaults(effectiveUserId);
+                  const next = {
+                    ...current,
+                    lessonAssessments: { enabled: true },
+                  };
+                  writeLearnerStudyDefaults(effectiveUserId, next);
+                  setEnabled(true);
+                }}
+                className={`min-h-11 rounded-full px-4 py-2 text-sm font-semibold transition ${
+                  enabled
+                    ? "bg-[var(--semantic-surface)] text-[var(--theme-heading-text)] shadow-[var(--semantic-shadow-soft)]"
+                    : "text-[var(--theme-muted-text)] hover:text-[var(--theme-heading-text)]"
+                }`}
+              >
+                Pre + Post On
+              </button>
+              <button
+                type="button"
+                role="tab"
+                aria-selected={!enabled ? "true" : "false"}
+                onClick={() => {
+                  const current = readLearnerStudyDefaults(effectiveUserId);
+                  const next = {
+                    ...current,
+                    lessonAssessments: { enabled: false },
+                  };
+                  writeLearnerStudyDefaults(effectiveUserId, next);
+                  setEnabled(false);
+                }}
+                className={`min-h-11 rounded-full px-4 py-2 text-sm font-semibold transition ${
+                  !enabled
+                    ? "bg-[var(--semantic-surface)] text-[var(--theme-heading-text)] shadow-[var(--semantic-shadow-soft)]"
+                    : "text-[var(--theme-muted-text)] hover:text-[var(--theme-heading-text)]"
+                }`}
+              >
+                Tests Off
+              </button>
+            </div>
+          ) : (
+            <p className="max-w-sm text-sm leading-6 text-[var(--theme-muted-text)]">
+              Pre/post lesson quizzes are off in your study settings, so this lesson opens directly into the teaching flow.
+            </p>
+          )}
         </div>
       </section>
 

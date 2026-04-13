@@ -5,6 +5,7 @@ import { useCallback, useEffect, useState } from "react";
 import { LearnerAccountSettingsPanel } from "@/components/student/learner-account-settings-panel";
 import { ExamPlanSettingsCard } from "@/components/student/exam-plan-settings-card";
 import type { LearnerMarketingT } from "@/lib/learner/learner-marketing-server";
+import type { StudySettings } from "@/lib/learner/study-settings";
 import {
   ALLOWED_QBANK_SESSION_SIZES,
   defaultLearnerStudyDefaults,
@@ -17,24 +18,30 @@ export function LearnerStudySettingsHub({
   userId,
   defaultPathwayLabel,
   showExamPlanForm,
+  initialStudySettings,
   t,
 }: {
   userId: string;
   /** Resolved display label for `User.learnerPath`, or null if unset. */
   defaultPathwayLabel: string | null;
   showExamPlanForm: boolean;
+  initialStudySettings: StudySettings;
   t: LearnerMarketingT;
 }) {
   const [bank, setBank] = useState<LearnerStudyDefaultsV1["questionBank"]>(() => defaultLearnerStudyDefaults().questionBank);
   const [examPref, setExamPref] = useState<LearnerStudyDefaultsV1["practiceExam"]>(() => defaultLearnerStudyDefaults().practiceExam);
+  const [settings, setSettings] = useState<StudySettings>(initialStudySettings);
   const [deviceSaved, setDeviceSaved] = useState(false);
   const [deviceBusy, setDeviceBusy] = useState(false);
+  const [settingsSaved, setSettingsSaved] = useState(false);
+  const [settingsBusy, setSettingsBusy] = useState(false);
 
   useEffect(() => {
     const d = readLearnerStudyDefaults(userId);
     setBank(d.questionBank);
     setExamPref(d.practiceExam);
-  }, [userId]);
+    setSettings(initialStudySettings);
+  }, [initialStudySettings, userId]);
 
   const saveDeviceDefaults = useCallback(() => {
     setDeviceBusy(true);
@@ -53,6 +60,26 @@ export function LearnerStudySettingsHub({
       setDeviceBusy(false);
     }
   }, [userId, bank, examPref]);
+
+  const saveStudySettings = useCallback(async () => {
+    setSettingsBusy(true);
+    setSettingsSaved(false);
+    try {
+      const res = await fetch("/api/learner/study-settings", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(settings),
+      });
+      if (!res.ok) return;
+      const body = (await res.json()) as { settings?: StudySettings };
+      if (body.settings) {
+        setSettings(body.settings);
+        setSettingsSaved(true);
+      }
+    } finally {
+      setSettingsBusy(false);
+    }
+  }, [settings]);
 
   return (
     <div className="space-y-8">
@@ -191,6 +218,112 @@ export function LearnerStudySettingsHub({
         </div>
       </section>
 
+      <section className="overflow-hidden rounded-2xl border border-border/60 bg-[var(--bg-card)] shadow-sm">
+        <div className="border-b border-border/60 px-5 py-4">
+          <h2 className="text-base font-semibold text-[var(--theme-heading-text)]">Study system</h2>
+          <p className="mt-1 text-xs text-muted-foreground">
+            Control how much adaptive guidance, spaced review, and advanced learner intelligence NurseNest surfaces for you.
+          </p>
+        </div>
+        <div className="space-y-5 p-5">
+          <div className="grid gap-4 md:grid-cols-2">
+            {[
+              {
+                key: "enableAdaptivePlan" as const,
+                title: "Adaptive study plan",
+                body: "Turn the intelligent next-step engine on or fall back to neutral manual study entry points.",
+              },
+              {
+                key: "enableSpacedRepetition" as const,
+                title: "Spaced repetition",
+                body: "Use due-review and retention-based recommendations in dashboard and study flows.",
+              },
+              {
+                key: "enableConfidenceTracking" as const,
+                title: "Confidence-based review",
+                body: "Show confidence chips, confidence grouping, and confidence-derived coaching in learner-facing review flows.",
+              },
+              {
+                key: "enablePrePostQuizzes" as const,
+                title: "Pre/post lesson quizzes",
+                body: "Offer lesson diagnostics and post-lesson checks around lesson content.",
+              },
+              {
+                key: "showHeatmap" as const,
+                title: "Weakness heatmap",
+                body: "Display the weakness heatmap and similar topic intensity surfaces on the learner dashboard.",
+              },
+              {
+                key: "showAdvancedInsights" as const,
+                title: "Advanced insights",
+                body: "Keep deeper readiness and dashboard intelligence surfaces visible instead of a simplified view.",
+              },
+              {
+                key: "enableWeaknessAlerts" as const,
+                title: "Weakness alerts",
+                body: "Show weak-area nudges and prompt cards when the system detects underperforming topics.",
+              },
+              {
+                key: "enableDecayAlerts" as const,
+                title: "Forgetting-risk alerts",
+                body: "Show alerts when spaced review suggests you are at risk of forgetting material.",
+              },
+            ].map((item) => {
+              const enabled = settings[item.key];
+              return (
+                <div key={item.key} className="rounded-2xl border border-border/60 bg-background/70 p-4">
+                  <div className="flex items-start justify-between gap-4">
+                    <div>
+                      <p className="text-sm font-semibold text-[var(--theme-heading-text)]">{item.title}</p>
+                      <p className="mt-1 text-xs leading-6 text-muted-foreground">{item.body}</p>
+                    </div>
+                    <button
+                      type="button"
+                      aria-pressed={enabled}
+                      onClick={() => {
+                        setSettingsSaved(false);
+                        setSettings((prev) => ({ ...prev, [item.key]: !prev[item.key] }));
+                      }}
+                      className={`inline-flex min-h-10 shrink-0 items-center rounded-full px-4 text-xs font-semibold transition-colors ${
+                        enabled
+                          ? "bg-role-cta text-role-cta-foreground"
+                          : "border border-border bg-card text-foreground hover:bg-muted/40"
+                      }`}
+                    >
+                      {enabled ? "On" : "Off"}
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          <div>
+            <label htmlFor="study-default-session-size" className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+              Smart session length
+            </label>
+            <p className="mt-1 text-xs text-muted-foreground">
+              This becomes the default session length for smart session builders and other guided practice entry points.
+            </p>
+            <select
+              id="study-default-session-size"
+              value={settings.preferredSessionLength}
+              onChange={(e) => {
+                setSettingsSaved(false);
+                setSettings((prev) => ({ ...prev, preferredSessionLength: Number(e.target.value) as StudySettings["preferredSessionLength"] }));
+              }}
+              className="mt-2 w-full max-w-md rounded-lg border border-border bg-card px-3 py-2 text-sm"
+            >
+              {ALLOWED_QBANK_SESSION_SIZES.map((n) => (
+                <option key={n} value={n}>
+                  {n} questions
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+      </section>
+
       <div className="flex flex-wrap items-center gap-3">
         <button
           type="button"
@@ -207,6 +340,22 @@ export function LearnerStudySettingsHub({
         ) : null}
       </div>
       <p className="text-xs text-muted-foreground">{t("learner.studySettings.deviceNote")}</p>
+
+      <div className="flex flex-wrap items-center gap-3">
+        <button
+          type="button"
+          disabled={settingsBusy}
+          onClick={() => void saveStudySettings()}
+          className="inline-flex rounded-full bg-role-cta px-5 py-3 text-sm font-semibold text-role-cta-foreground disabled:opacity-50"
+        >
+          {settingsBusy ? "Saving study system..." : "Save study system"}
+        </button>
+        {settingsSaved ? (
+          <span className="text-sm text-role-success" role="status">
+            Study system saved.
+          </span>
+        ) : null}
+      </div>
 
       {showExamPlanForm ? (
         <div id="exam-plan">

@@ -63,6 +63,7 @@ import {
 } from "@/components/lessons/pathway-lesson-detail-deferred";
 import { PathwayLessonRecordChips } from "@/components/pathway-lessons/pathway-lesson-record-chips";
 import { MarketingPathwayLessonDetailViewBeacon } from "@/components/observability/marketing-study-surface-view-beacons";
+import { loadStudySettings } from "@/lib/learner/load-study-settings";
 
 /** Avoid enumerating every lesson at build (large `.next` output + ENOSPC on small disks). */
 export const dynamic = "force-dynamic";
@@ -153,6 +154,7 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
   const session = sessionResult.status === "fulfilled" ? sessionResult.value : null;
 
   const userId = (session?.user as { id?: string })?.id ?? "";
+  const studySettings = await loadStudySettings(userId);
 
   const [entRes, lpRes] = await Promise.allSettled([
     resolveEntitlementForPage(userId),
@@ -327,6 +329,7 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
           preTest={fullAccess ? lesson.preTest : undefined}
           postTest={fullAccess ? lesson.postTest : undefined}
           fullAccess={fullAccess}
+          assessmentsEnabled={studySettings.enablePrePostQuizzes}
         >
           <LessonRecallProvider>
             <main className="mt-8">

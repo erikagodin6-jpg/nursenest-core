@@ -45,12 +45,26 @@ const TONE_COLORS: Record<string, string> = {
   encourage: "var(--semantic-brand)",
 };
 
-export function EngagementNudgeStrip({ maxItems = 3 }: { maxItems?: number }) {
+export function EngagementNudgeStrip({
+  maxItems = 3,
+  includeWeaknessAlerts = true,
+  includeDecayAlerts = true,
+}: {
+  maxItems?: number;
+  includeWeaknessAlerts?: boolean;
+  includeDecayAlerts?: boolean;
+}) {
   const { nudges, loading, dismiss } = useEngagementNudges();
 
-  if (loading || nudges.length === 0) return null;
+  const filtered = nudges.filter((nudge) => {
+    if (!includeWeaknessAlerts && nudge.kind === "weak_area_review") return false;
+    if (!includeDecayAlerts && nudge.kind === "flashcard_due") return false;
+    return true;
+  });
 
-  const visible = nudges.slice(0, maxItems);
+  if (loading || filtered.length === 0) return null;
+
+  const visible = filtered.slice(0, maxItems);
 
   return (
     <section aria-label="Study reminders" className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">

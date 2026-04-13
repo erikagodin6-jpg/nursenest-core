@@ -210,6 +210,24 @@ model User {
   preNursingFuturePathwayHint String?    @db.VarChar(16)
   /** Optional learner preference: light | steady | intensive — used for copy only, not hours math. */
   studyCadencePreference  String?        @db.VarChar(32)
+  /** When false, dashboard and study-entry surfaces avoid adaptive next-step recommendations. */
+  enableAdaptivePlan      Boolean?
+  /** When false, spaced-repetition recommendations and due-review nudges are suppressed. */
+  enableSpacedRepetition  Boolean?
+  /** When false, confidence-driven grouping and review insights are hidden from learner-facing flows. */
+  enableConfidenceTracking Boolean?
+  /** When false, lesson pre/post quiz prompts and modules stay hidden. */
+  enablePrePostQuizzes    Boolean?
+  /** When false, weakness heatmap surfaces are hidden. */
+  showHeatmap             Boolean?
+  /** When false, advanced readiness and dashboard insight surfaces stay simplified. */
+  showAdvancedInsights    Boolean?
+  /** When false, weak-area nudges and prompt cards are suppressed. */
+  enableWeaknessAlerts    Boolean?
+  /** When false, forgetting-risk alerts and decay-oriented reminders are suppressed. */
+  enableDecayAlerts       Boolean?
+  /** Default smart-session size for learner flows; null uses product default. */
+  preferredSessionLength  Int?
   onboardingCompletedAt   DateTime?
   /** User dismissed the baseline assessment prompt (non-blocking). */
   baselineAssessmentSkippedAt    DateTime?

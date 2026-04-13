@@ -194,6 +194,7 @@ export function LessonAssessmentFlow({
   initialProgress,
   preTest,
   postTest,
+  assessmentsEnabled = true,
   children,
 }: {
   userId: string;
@@ -204,6 +205,7 @@ export function LessonAssessmentFlow({
   initialProgress: PathwayLessonProgressStatus;
   preTest?: PathwayLessonQuizItem[];
   postTest?: PathwayLessonQuizItem[];
+  assessmentsEnabled?: boolean;
   children: ReactNode;
 }) {
   const effectiveUserId = userId.trim() || "public";
@@ -223,9 +225,8 @@ export function LessonAssessmentFlow({
   // ── Read localStorage toggle ───────────────────────────────────────────────
   useEffect(() => {
     if (!hasAnyAssessments) return;
-    const defaults = readLearnerStudyDefaults(effectiveUserId);
-    setEnabled(defaults.lessonAssessments.enabled);
-  }, [effectiveUserId, hasAnyAssessments]);
+    setEnabled(assessmentsEnabled);
+  }, [assessmentsEnabled, effectiveUserId, hasAnyAssessments]);
 
   // ── Fetch prior scores ─────────────────────────────────────────────────────
   useEffect(() => {
@@ -289,12 +290,25 @@ export function LessonAssessmentFlow({
   return (
     <div className="space-y-6">
       {/* ── Assessment toggle ────────────────────────────────────────────── */}
-      <AssessmentToggle
-        enabled={enabled}
-        hasPre={hasPre}
-        hasPost={hasPost}
-        onChange={handleToggle}
-      />
+      {assessmentsEnabled ? (
+        <AssessmentToggle
+          enabled={enabled}
+          hasPre={hasPre}
+          hasPost={hasPost}
+          onChange={handleToggle}
+        />
+      ) : (
+        <section
+          className="rounded-xl border px-4 py-3 text-sm"
+          style={{
+            background: "color-mix(in srgb, var(--semantic-panel-muted) 75%, var(--theme-page-bg))",
+            borderColor: "var(--semantic-border-soft)",
+            color: "var(--semantic-text-secondary)",
+          }}
+        >
+          Pre/post lesson quizzes are turned off in your study settings, so this lesson opens directly into the content.
+        </section>
+      )}
 
       {/* ── Pre-lesson diagnostic ────────────────────────────────────────── */}
       {enabled && hasPre ? (

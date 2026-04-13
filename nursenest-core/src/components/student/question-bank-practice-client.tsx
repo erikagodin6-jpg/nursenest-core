@@ -51,6 +51,7 @@ import { resolveMeasurementSystemForLearnerPathway } from "@/lib/measurements/me
 import { resolveMeasurementTokens } from "@/lib/measurements/measurement-tokens";
 import { buildGlobalExamContext } from "@/lib/exam-context/exam-registry";
 import { examContextAnalyticsProps } from "@/lib/exam-context/global-exam-context";
+import type { StudySettings } from "@/lib/learner/study-settings";
 
 export type { QuestionBankDifficultyBand, QuestionBankPreset, SavedQuestionBankPreset } from "@/lib/questions/question-bank-client-types";
 
@@ -188,6 +189,7 @@ export function QuestionBankPracticeClient({
   defaultPathwayId = null,
   pathwayExamKeysByPathwayId = {},
   pathwayCountryByPathwayId = {},
+  studySettings,
 }: {
   userId: string;
   userLabel: string;
@@ -198,6 +200,7 @@ export function QuestionBankPracticeClient({
   pathwayExamKeysByPathwayId?: Record<string, string[]>;
   /** Maps pathway id → country code (US/CA/…) for region-aware clinical units in stems and rationales. */
   pathwayCountryByPathwayId?: Record<string, string>;
+  studySettings: StudySettings;
 }) {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -288,10 +291,10 @@ export function QuestionBankPracticeClient({
 
   useEffect(() => {
     const d = readLearnerStudyDefaults(userId);
-    setSessionSize(d.questionBank.sessionSize);
+    setSessionSize(studySettings.preferredSessionLength ?? d.questionBank.sessionSize);
     setExamShell(d.questionBank.examShell);
     setExamShowExplanation(!d.questionBank.examShell);
-  }, [userId]);
+  }, [studySettings.preferredSessionLength, userId]);
 
   useEffect(() => {
     setStrikeOut({});
@@ -1422,33 +1425,39 @@ export function QuestionBankPracticeClient({
             {!g ? (
               <div className="space-y-4">
                 {/* Confidence rating — support tool, UI only */}
-                <div className="flex items-center gap-2 flex-wrap">
-                  <span className="text-xs font-semibold uppercase tracking-wide text-[var(--semantic-text-muted)] shrink-0">
-                    Confidence
-                  </span>
-                  <div className="nn-confidence-row">
-                    {(["low", "medium", "high"] as const).map((level) => {
-                      const sel = confidence[current.id] === level;
-                      const labels: Record<string, string> = { low: "Not sure", medium: "Probably", high: "Confident" };
-                      return (
-                        <button
-                          key={level}
-                          type="button"
-                          aria-pressed={sel}
-                          onClick={() =>
-                            setConfidence((prev) => ({
-                              ...prev,
-                              [current.id]: sel ? (undefined as unknown as "low") : level,
-                            }))
-                          }
-                          className={`nn-confidence-chip nn-confidence-chip--${level} ${sel ? "nn-confidence-chip--selected" : ""}`}
-                        >
-                          {labels[level]}
-                        </button>
-                      );
-                    })}
+                {studySettings.enableConfidenceTracking ? (
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="text-xs font-semibold uppercase tracking-wide text-[var(--semantic-text-muted)] shrink-0">
+                      Confidence
+                    </span>
+                    <div className="nn-confidence-row">
+                      {(["low", "medium", "high"] as const).map((level) => {
+                        const sel = confidence[current.id] === level;
+                        const labels: Record<string, string> = { low: "Not sure", medium: "Probably", high: "Confident" };
+                        return (
+                          <button
+                            key={level}
+                            type="button"
+                            aria-pressed={sel}
+                            onClick={() =>
+                              setConfidence((prev) => ({
+                                ...prev,
+                                [current.id]: sel ? (undefined as unknown as "low") : level,
+                              }))
+                            }
+                            className={`nn-confidence-chip nn-confidence-chip--${level} ${sel ? "nn-confidence-chip--selected" : ""}`}
+                          >
+                            {labels[level]}
+                          </button>
+                        );
+                      })}
+                    </div>
                   </div>
-                </div>
+                ) : (
+                  <p className="text-xs leading-relaxed text-[var(--semantic-text-muted)]">
+                    Confidence-based review is off in your study settings, so this session uses correctness-only review.
+                  </p>
+                )}
 
                 <div className="nn-question-nav-actions !flex-col !items-stretch sm:!flex-row sm:!items-center">
                   {examShell ? (

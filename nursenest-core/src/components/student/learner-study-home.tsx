@@ -35,6 +35,7 @@ import type { TopicTrendRow } from "@/lib/learner/topic-performance";
 import type { WeakTopicRow } from "@/lib/learner/weak-topics-from-sessions";
 import type { DashboardIdentity } from "@/lib/learner/resolve-dashboard-identity";
 import type { CoachDashboardSummary } from "@/lib/coach/study-coach-types";
+import type { StudySettings } from "@/lib/learner/study-settings";
 import {
   LearnerFilterChips,
   LearnerKickerHeading,
@@ -124,6 +125,7 @@ export type LearnerStudyHomeProps = {
   readinessDeferHint: string;
   showCoach: boolean;
   coachSummary?: CoachDashboardSummary | null;
+  studySettings: StudySettings;
 };
 
 export function LearnerStudyHome({
@@ -152,9 +154,15 @@ export function LearnerStudyHome({
   readinessDeferHint,
   showCoach,
   coachSummary,
+  studySettings,
 }: LearnerStudyHomeProps) {
   const trends = studySnap?.topicTrends ?? [];
   const strongHighlight = studySnap?.strongTopicsHighlight ?? [];
+  const showAdvancedInsights = studySettings.showAdvancedInsights;
+  const showHeatmap = studySettings.showHeatmap;
+  const showWeaknessAlerts = studySettings.enableWeaknessAlerts;
+  const showDecayAlerts = studySettings.enableSpacedRepetition && studySettings.enableDecayAlerts;
+  const showAdaptivePlan = studySettings.enableAdaptivePlan;
 
   return (
     <main className="nn-dash">
@@ -214,7 +222,7 @@ export function LearnerStudyHome({
           kicker={t("learner.studyHome.sectionReadinessEyebrow")}
           title={t("learner.studyHome.sectionReadinessTitle")}
         />
-        <ReadinessScoreCard readiness={snapshot.readiness} t={t} maxFactors={4} />
+        <ReadinessScoreCard readiness={snapshot.readiness} t={t} maxFactors={showAdvancedInsights ? 4 : 2} />
         {showCoach && coachSummary ? (
           <div
             className={`mt-5 grid gap-4 ${coachSummary.topIntervention ? "lg:grid-cols-2" : ""}`}
@@ -252,11 +260,17 @@ export function LearnerStudyHome({
           />
         ) : null}
         <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-start">
-          <div className="min-w-0 flex-1 sm:min-w-[240px]">
-            <SpacedReviewReminder />
-          </div>
+          {showDecayAlerts ? (
+            <div className="min-w-0 flex-1 sm:min-w-[240px]">
+              <SpacedReviewReminder />
+            </div>
+          ) : null}
           <div className="min-w-0 flex-[2]">
-            <EngagementNudgeStrip maxItems={3} />
+            <EngagementNudgeStrip
+              maxItems={showDecayAlerts ? 3 : 2}
+              includeWeaknessAlerts={showWeaknessAlerts}
+              includeDecayAlerts={showDecayAlerts}
+            />
           </div>
         </div>
       </LearnerStudySurfaceSection>
@@ -283,9 +297,9 @@ export function LearnerStudyHome({
         intro={t("learner.studyHome.sectionAttentionIntro")}
         tone="supportive"
       >
-        <LearnerDashboardInsightPanels snapshot={snapshot} t={t} />
+        {showAdvancedInsights ? <LearnerDashboardInsightPanels snapshot={snapshot} t={t} /> : null}
         {benchmark ? <BenchmarkCard data={benchmark} /> : null}
-        {heatmapTopics.length > 0 ? <WeaknessHeatmap topics={heatmapTopics} /> : null}
+        {showHeatmap && heatmapTopics.length > 0 ? <WeaknessHeatmap topics={heatmapTopics} /> : null}
         {showCoach && weakTopicTitles.length > 0 ? (
           <CoachWeakSummary
             weakTopics={weakTopicTitles}
@@ -306,7 +320,7 @@ export function LearnerStudyHome({
         tone="success"
       >
         <RecentGainsBlock trends={trends} strongTopics={strongHighlight} t={t} />
-        {studySnap ? <LearnerAdaptiveFocusCard snapshot={studySnap} /> : null}
+        {showAdaptivePlan && studySnap ? <LearnerAdaptiveFocusCard snapshot={studySnap} /> : null}
         {showCoach && coachSummary ? (
           <div className="grid gap-4 md:grid-cols-2">
             <CoachPriorityList priorities={coachSummary.priorities} />
@@ -339,7 +353,7 @@ export function LearnerStudyHome({
           omitRecentMocks
           readinessDeferHint={readinessDeferHint}
         />
-        <SmartActionsBar />
+        <SmartActionsBar showAdaptiveAction={showAdaptivePlan} showWeaknessAction={showWeaknessAlerts} />
         <LearnerDashboardAdvantageStrip t={t} />
         <section className="nn-card flex flex-col gap-3 p-5 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
           <p className="text-sm text-muted-foreground">{t("learner.dashboard.accountTeaser")}</p>

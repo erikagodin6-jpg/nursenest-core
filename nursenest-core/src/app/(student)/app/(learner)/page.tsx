@@ -38,6 +38,7 @@ import { computeBenchmarkData, type BenchmarkData } from "@/lib/learner/benchmar
 import { BenchmarkLockedCard } from "@/components/student/dashboard/benchmark-card";
 import { resolveDisplayName } from "@/lib/user/resolve-display-name";
 import { resolveDashboardIdentity } from "@/lib/learner/resolve-dashboard-identity";
+import { loadStudySettings } from "@/lib/learner/load-study-settings";
 
 function retentionPersonalNote(t: LearnerMarketingT, prefs: Awaited<ReturnType<typeof loadLearnerRetentionPreferences>>): string | null {
   if (!prefs) return null;
@@ -178,6 +179,7 @@ export default async function LearnerDashboardPage() {
   let studySnap: Awaited<ReturnType<typeof buildLearnerStudySnapshot>> = null;
   let weakTopicTitles: string[] = [];
   let benchmark: BenchmarkData | null = null;
+  const studySettings = await loadStudySettings(userId);
   try {
     const [snap, nextSnap, notes, todayGoal, questionBankGoal, retentionPrefs, examUser, daysSinceLastActivity] =
       await Promise.all([
@@ -210,7 +212,7 @@ export default async function LearnerDashboardPage() {
       const streakProtect =
         todayGoal != null && snapshot.studyStreakDays > 0 && todayGoal.credits < todayGoal.target;
 
-      const dashModel = buildDashboardModel(snapshot, studySnap, todayGoal);
+      const dashModel = buildDashboardModel(snapshot, studySnap, todayGoal, studySettings);
 
       const countdown = buildCountdownCopy({
         examDatePlanType: examUser?.examDatePlanType ?? null,
@@ -277,6 +279,7 @@ export default async function LearnerDashboardPage() {
           readinessDeferHint={t("learner.dashboard.hub.readinessDeferHint")}
           showCoach={isStudyCoachEnabled()}
           coachSummary={coachSummary}
+          studySettings={studySettings}
         />
       );
     }

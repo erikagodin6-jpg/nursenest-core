@@ -18,6 +18,7 @@ import { getServerPremiumProtectionFlags } from "@/lib/premium-protection/config
 import { maskUserLabelForWatermark } from "@/lib/premium-protection/mask-user-label";
 import { appShellBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { freemiumLessonsExhausted, freemiumQuestionsExhausted } from "@/lib/conversion/freemium-gates";
+import { loadStudySettings } from "@/lib/learner/load-study-settings";
 
 export default async function QuestionBankPage() {
   const { t } = await getLearnerMarketingBundle();
@@ -27,6 +28,7 @@ export default async function QuestionBankPage() {
   const email = (session?.user as { email?: string | null })?.email ?? null;
   const protectionFlags = getServerPremiumProtectionFlags();
   const userLabel = maskUserLabelForWatermark(email, userId || "unknown");
+  const studySettings = await loadStudySettings(userId);
 
   if (entitlement === "error") {
     return (
@@ -137,6 +139,7 @@ export default async function QuestionBankPage() {
             defaultPathwayId={defaultPathwayId}
             pathwayExamKeysByPathwayId={pathwayExamKeysByPathwayId}
             pathwayCountryByPathwayId={pathwayCountryByPathwayId}
+            studySettings={studySettings}
           />
         </Suspense>
       ) : null}

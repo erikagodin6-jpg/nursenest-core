@@ -59,6 +59,7 @@ import { PathwayLessonSectionContent } from "@/components/lessons/pathway-lesson
 import { LessonPageHeader } from "@/components/lessons/lesson-page-header";
 import { LessonSectionNav } from "@/components/lessons/lesson-section-nav";
 import { LessonNavButtons } from "@/components/lessons/lesson-nav-buttons";
+import { loadStudySettings } from "@/lib/learner/load-study-settings";
 
 function LessonBody({
   content,
@@ -153,6 +154,7 @@ export default async function LessonDetailPage({ params }: Props) {
   const userId = (session?.user as { id?: string })?.id ?? "";
   const entitlement = await resolveEntitlementForPage(userId);
   const { t } = await getLearnerMarketingBundle();
+  const studySettings = await loadStudySettings(userId);
 
   if (entitlement === "error") {
     return (
@@ -488,6 +490,7 @@ export default async function LessonDetailPage({ params }: Props) {
               initialProgress={initialProgress}
               preTest={record.preTest}
               postTest={record.postTest}
+              assessmentsEnabled={studySettings.enablePrePostQuizzes}
             >
               <PremiumLessonShell
                 userId={userId}

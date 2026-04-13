@@ -4,6 +4,7 @@ import type { PremiumDashboardSnapshot } from "@/lib/learner/premium-dashboard-s
 import type { LearnerStudySnapshot } from "@/lib/learner/build-learner-study-snapshot";
 import type { TodayGoalProgress } from "@/lib/learner/load-today-goal-progress";
 import type { ExplainableAction } from "@/lib/insights/types";
+import type { StudySettings } from "@/lib/learner/study-settings";
 
 /**
  * Next-best-action resolution for the dashboard primary CTA.
@@ -29,7 +30,27 @@ export function getNextBestAction(
   snapshot: PremiumDashboardSnapshot | null,
   studySnap: LearnerStudySnapshot | null,
   todayGoal: TodayGoalProgress | null,
+  studySettings: StudySettings,
 ): NextBestAction {
+  if (!studySettings.enableAdaptivePlan) {
+    if (todayGoal && todayGoal.credits < todayGoal.target) {
+      return {
+        title: "Start a Manual Study Session",
+        subtitle: "Choose a lesson, question set, or exam practice block",
+        href: "/app/questions",
+        kind: "fallback",
+        reasoning: "Adaptive planning is off, so manual study entry points are shown instead.",
+      };
+    }
+    return {
+      title: "Manual Study Hub",
+      subtitle: "Open question practice, lessons, or exams directly",
+      href: "/app/questions",
+      kind: "fallback",
+      reasoning: "Adaptive planning is disabled in your study settings.",
+    };
+  }
+
   // 1. Insight engine primary recommendation
   const primary = snapshot?.insights?.recommendations.primary;
   if (primary) {
@@ -105,12 +126,17 @@ export function buildDashboardModel(
   snapshot: PremiumDashboardSnapshot | null,
   studySnap: LearnerStudySnapshot | null,
   todayGoal: TodayGoalProgress | null,
+  studySettings: StudySettings,
 ): DashboardModel {
-  const nextAction = getNextBestAction(snapshot, studySnap, todayGoal);
+  const nextAction = getNextBestAction(snapshot, studySnap, todayGoal, studySettings);
 
-  const secondaryActions = snapshot?.insights?.recommendations.secondary ?? [];
+  const secondaryActions = studySettings.enableAdaptivePlan
+    ? (snapshot?.insights?.recommendations.secondary ?? [])
+    : [];
 
-  const todayTasks = snapshot?.insights?.dailyPlan.todayTasks ?? [];
+  const todayTasks = studySettings.enableAdaptivePlan
+    ? (snapshot?.insights?.dailyPlan.todayTasks ?? [])
+    : [];
 
   return { nextAction, secondaryActions, todayTasks };
 }

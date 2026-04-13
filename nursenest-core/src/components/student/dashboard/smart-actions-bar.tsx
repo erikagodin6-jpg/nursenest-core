@@ -38,11 +38,25 @@ const ACTIONS = [
 /**
  * SmartActionsBar — quick-launch buttons for common study actions.
  */
-export function SmartActionsBar() {
+export function SmartActionsBar({
+  showAdaptiveAction = true,
+  showWeaknessAction = true,
+}: {
+  showAdaptiveAction?: boolean;
+  showWeaknessAction?: boolean;
+}) {
+  const actions = ACTIONS.filter((action) => {
+    if (action.id === "smart_session" && !showAdaptiveAction) return false;
+    if (action.id === "weak_areas" && !showWeaknessAction) return false;
+    return true;
+  });
+
+  if (actions.length === 0) return null;
+
   return (
     <div className="nn-smart-actions-section">
       <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-4">
-        {ACTIONS.map((action) => (
+        {actions.map((action) => (
           <Link
             key={action.id}
             href={action.href}
