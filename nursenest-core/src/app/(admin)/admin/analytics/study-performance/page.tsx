@@ -36,6 +36,9 @@ export default async function AdminStudyPerformancePage({ searchParams }: Props)
           <Link href="/admin/analytics/users" className="text-muted-foreground underline">
             Users
           </Link>
+          <Link href="/admin/analytics/product-intelligence" className="text-primary underline">
+            Product intelligence →
+          </Link>
         </div>
       </div>
 

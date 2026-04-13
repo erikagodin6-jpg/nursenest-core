@@ -556,6 +556,7 @@ export default async function LessonDetailPage({ params }: Props) {
             {isStudyCoachEnabled() && (
               <CoachLessonHelper
                 lessonTitle={record.title}
+                lessonContent={pathwayCoachExcerpt || undefined}
                 topic={record.topic}
                 studyNextHint={studyNextHint}
               />
