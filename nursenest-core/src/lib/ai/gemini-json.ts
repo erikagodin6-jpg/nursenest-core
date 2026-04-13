@@ -65,7 +65,10 @@ function classifyUpstreamError(status: number, bodyText: string): GeminiJsonErro
 export async function generateGeminiJson<T>(params: GeminiGenerateJsonParams<T>): Promise<T> {
   const apiKey = process.env.GEMINI_API_KEY?.trim();
   if (!apiKey) {
-    throw new GeminiJsonError("missing_api_key", "Missing GEMINI_API_KEY.");
+    throw new GeminiJsonError(
+      "missing_api_key",
+      "Missing GEMINI_API_KEY. For local dev, set it in nursenest-core/.env.local (or .env) and restart next dev.",
+    );
   }
 
   const model = params.model ?? process.env.GEMINI_MODEL?.trim() ?? "gemini-2.5-flash";

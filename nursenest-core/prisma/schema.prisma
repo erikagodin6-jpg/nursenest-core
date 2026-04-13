@@ -211,28 +211,28 @@ model User {
   /** Optional learner preference: light | steady | intensive — used for copy only, not hours math. */
   studyCadencePreference  String?        @db.VarChar(32)
   /** When false, dashboard and study-entry surfaces avoid adaptive next-step recommendations. */
-  enableAdaptivePlan      Boolean?
+  enableAdaptivePlan      Boolean?       @map("enable_adaptive_plan")
   /** When false, spaced-repetition recommendations and due-review nudges are suppressed. */
-  enableSpacedRepetition  Boolean?
+  enableSpacedRepetition  Boolean?       @map("enable_spaced_repetition")
   /** When false, confidence-driven grouping and review insights are hidden from learner-facing flows. */
-  enableConfidenceTracking Boolean?
+  enableConfidenceTracking Boolean?      @map("enable_confidence_tracking")
   /** When false, lesson pre/post quiz prompts and modules stay hidden. */
-  enablePrePostQuizzes    Boolean?
+  enablePrePostQuizzes    Boolean?       @map("enable_pre_post_quizzes")
   /**
    * When false, guided lesson study loop (optional bank-backed pre/post quick check + review) stays off.
    * Null defaults to enabled in app normalization.
    */
   lessonStudyLoopEnabled  Boolean?  @map("lesson_study_loop_enabled")
   /** When false, weakness heatmap surfaces are hidden. */
-  showHeatmap             Boolean?
+  showHeatmap             Boolean?       @map("show_heatmap")
   /** When false, advanced readiness and dashboard insight surfaces stay simplified. */
-  showAdvancedInsights    Boolean?
+  showAdvancedInsights    Boolean?       @map("show_advanced_insights")
   /** When false, weak-area nudges and prompt cards are suppressed. */
-  enableWeaknessAlerts    Boolean?
+  enableWeaknessAlerts    Boolean?       @map("enable_weakness_alerts")
   /** When false, forgetting-risk alerts and decay-oriented reminders are suppressed. */
-  enableDecayAlerts       Boolean?
+  enableDecayAlerts       Boolean?       @map("enable_decay_alerts")
   /** Default smart-session size for learner flows; null uses product default. */
-  preferredSessionLength  Int?
+  preferredSessionLength  Int?           @map("preferred_session_length")
   onboardingCompletedAt   DateTime?
   /** User dismissed the baseline assessment prompt (non-blocking). */
   baselineAssessmentSkippedAt    DateTime?

@@ -22,9 +22,7 @@ import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { getOptionalPublicSession } from "@/lib/auth/optional-public-session";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
-import { ContentEmptyState } from "@/components/ui/content-empty-state";
 import { MarketingPathwayCatViewBeacon } from "@/components/observability/marketing-study-surface-view-beacons";
-import { getPathwayLessonsPage } from "@/lib/lessons/pathway-lesson-loader";
 
 export const dynamic = "force-dynamic";
 export const dynamicParams = true;
@@ -81,7 +79,6 @@ export default async function PathwayCatEntryPage({ params }: Props) {
   const { crumbs, schemaItems } = pathwayCatPracticeBreadcrumbs(pathway);
   const overviewHref = hubBase;
   const marketingCatPath = buildExamPathwayPath(pathway, "cat");
-  /** After login, return to this public CAT page (exam URLs are not locale-prefixed). */
   const signInReturnHref = loginWithCallback(marketingCatPath);
 
   let assessment = assessMarketingCatSurfaceWithoutAuth(pathway, questionSnapshot);
@@ -151,14 +148,6 @@ export default async function PathwayCatEntryPage({ params }: Props) {
           "Use with lessons and question practice while coverage expands",
           ];
   const primaryCtaLabel = publicCopy.effectiveMode === "production_ready" ? "Start Readiness Exam" : "Start Assessment";
-  const startUnavailableLabel =
-    publicCopy.effectiveMode === "production_ready"
-      ? "Readiness exam unavailable — use links below"
-      : "Assessment unavailable — use links below";
-  const footerUnavailableLabel =
-    publicCopy.effectiveMode === "production_ready"
-      ? `${catShort} unavailable — use links below`
-      : "Assessment unavailable — use links below";
   const questionsFirstLabel =
     publicCopy.effectiveMode === "production_ready"
       ? "Practice Questions First"
@@ -166,14 +155,24 @@ export default async function PathwayCatEntryPage({ params }: Props) {
   const lessonsHref = buildExamPathwayPath(pathway, "lessons");
   const questionsHref = buildExamPathwayPath(pathway, "questions");
   const pricingHref = buildExamPathwayPath(pathway, "pricing");
-  const appBankHref = `/app/questions?pathwayId=${encodeURIComponent(pathway.id)}`;
-  const fallbackLessons =
-    !assessment.eligible && assessment.reason === "insufficient_cat_pool"
-      ? (await getPathwayLessonsPage(pathway.id, 1, 5, countrySlug)).items
-      : [];
-
-  const showExplainerAside =
-    assessment.marketingPrimaryCta === "none" || (isSignedIn && !assessment.eligible && assessment.reason !== "ok");
+  const isCatAvailable =
+    assessment.marketingPrimaryCta === "open_app_cat" || assessment.marketingPrimaryCta === "sign_in_to_cat";
+  const lockedReasonCopy =
+    assessment.reason === "wrong_subscription_tier"
+      ? `Your current tier or country track does not include the Readiness Exam for ${catShort}.`
+      : assessment.reason === "no_subscription"
+        ? `Your plan does not include the Readiness Exam for ${catShort}.`
+        : assessment.reason === "unauthenticated"
+          ? `Sign in with a plan that includes the Readiness Exam for ${catShort}.`
+          : assessment.safeUserMessage;
+  const lockedContextCopy =
+    assessment.reason === "wrong_subscription_tier" || assessment.reason === "no_subscription"
+      ? "This usually means your current plan is the wrong tier, on the wrong country track, or does not include this exam."
+      : null;
+  const lockedQuestionBankCopy =
+    questionSnapshot.status === "ok"
+      ? `You have access to ${questionSnapshot.pathwayScopedCount} practice questions.`
+      : "You have access to practice questions for this pathway.";
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-12">
@@ -201,187 +200,131 @@ export default async function PathwayCatEntryPage({ params }: Props) {
         <p className="mt-2 text-sm text-[var(--theme-muted-text)]">Adaptive Practice ({publicCopy.betaLabel})</p>
       ) : null}
 
-      <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-        {assessment.marketingPrimaryCta === "open_app_cat" && assessment.appCatStartPath ? (
-          <Link
-            href={assessment.appCatStartPath}
-            className="inline-flex min-h-[48px] items-center justify-center rounded-full bg-primary px-8 py-3 text-sm font-semibold text-primary-foreground shadow-sm"
-          >
-            {primaryCtaLabel}
-          </Link>
-        ) : assessment.marketingPrimaryCta === "sign_in_to_cat" ? (
-          <Link
-            href={signInReturnHref}
-            className="inline-flex min-h-[48px] items-center justify-center rounded-full bg-primary px-8 py-3 text-sm font-semibold text-primary-foreground shadow-sm"
-          >
-            {primaryCtaLabel}
-          </Link>
-        ) : (
-          <span className="inline-flex min-h-[48px] cursor-default items-center justify-center rounded-full border border-border bg-muted/50 px-8 py-3 text-sm font-semibold text-muted-foreground">
-            {startUnavailableLabel}
-          </span>
-        )}
-        <Link
-          href={questionsHref}
-          className="inline-flex min-h-[48px] items-center justify-center rounded-full border border-border px-8 py-3 text-sm font-semibold hover:bg-card"
-        >
-          {questionsFirstLabel}
-        </Link>
-      </div>
-
-      <PathwayLiveInventoryStrip pathway={pathway} questionSnapshot={questionSnapshot} variant="cat" />
-
-      <section className="mt-6 rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5">
-        <h2 className="text-base font-semibold text-[var(--theme-heading-text)]">How it works</h2>
-        <ul className="mt-3 list-inside list-disc space-y-2 text-sm text-[var(--theme-body-text)]">
-          {howItWorksItems.map((item) => (
-            <li key={item}>{item}</li>
-          ))}
-        </ul>
-      </section>
-
-      <section className="mt-4 rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5">
-        <h2 className="text-base font-semibold text-[var(--theme-heading-text)]">Who this is for</h2>
-        <ul className="mt-3 list-inside list-disc space-y-2 text-sm text-[var(--theme-body-text)]">
-          <li>Finished studying core topics</li>
-          <li>Practiced questions</li>
-          <li>Ready to test readiness</li>
-        </ul>
-      </section>
-
-      <section className="mt-4 rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5">
-        <h2 className="text-base font-semibold text-[var(--theme-heading-text)]">What to expect</h2>
-        <ul className="mt-3 list-inside list-disc space-y-2 text-sm text-[var(--theme-body-text)]">
-          <li>
-            <span className="font-semibold">Question range:</span> {readinessConfig.questionRange}
-          </li>
-          <li>
-            <span className="font-semibold">Time estimate:</span> {readinessConfig.timeEstimate}
-          </li>
-          <li>
-            <span className="font-semibold">Time limit:</span> {readinessConfig.timeLimitMinutes} minutes
-          </li>
-          <li>
-            <span className="font-semibold">Experience:</span> {publicCopy.experienceLabel}
-          </li>
-          <li>
-            <span className="font-semibold">Navigation:</span> {readinessConfig.allowBackNavigation ? "Back navigation allowed." : "No backtracking once an answer is submitted."}
-          </li>
-        </ul>
-      </section>
-
-      <section className="mt-4 rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5">
-        <h2 className="text-base font-semibold text-[var(--theme-heading-text)]">After the exam</h2>
-        <ul className="mt-3 list-inside list-disc space-y-2 text-sm text-[var(--theme-body-text)]">
-          <li>Readiness score</li>
-          <li>Weak areas</li>
-          <li>Recommended next steps</li>
-        </ul>
-      </section>
-
-      {showExplainerAside ? (
+      {isCatAvailable ? (
         <>
-          <ContentEmptyState
-            variant="cat"
-            body={assessment.safeUserMessage}
-            showGrowthBadge={assessment.reason === "insufficient_cat_pool"}
-            primaryCta={{
-              label:
-                assessment.nextAction === "upgrade" || assessment.nextAction === "switch_pathway"
-                  ? "Review your plan"
-                  : "Study question bank",
-              href:
-                assessment.nextAction === "upgrade" || assessment.nextAction === "switch_pathway"
-                  ? "/app/account/billing"
-                  : questionsHref,
-            }}
-            secondaryCtas={[
-              { label: "Browse lessons", href: lessonsHref },
-              ...(assessment.nextAction === "join_waitlist"
-                ? [{ label: "Pathway hub", href: overviewHref, variant: "ghost" as const }]
-                : []),
-              ...(!isSignedIn
-                ? [{ label: "Create account", href: "/signup", variant: "ghost" as const }]
-                : [{ label: "App question bank", href: appBankHref, variant: "ghost" as const }]),
-            ]}
-          />
-          {assessment.reason === "insufficient_cat_pool" && fallbackLessons.length > 0 ? (
-            <section className="mt-4 rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5">
-              <h3 className="text-sm font-semibold text-[var(--theme-heading-text)]">
-                Complete lessons available now
-              </h3>
-              <ul className="mt-3 space-y-2 text-sm">
-                {fallbackLessons.slice(0, 5).map((lesson) => (
-                  <li key={lesson.slug}>
-                    <Link
-                      href={`${lessonsHref}/${encodeURIComponent(lesson.slug)}`}
-                      className="font-medium text-primary hover:underline"
-                    >
-                      {lesson.title}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </section>
-          ) : null}
-        </>
-      ) : null}
+          <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+            <Link
+              href={
+                assessment.marketingPrimaryCta === "sign_in_to_cat"
+                  ? signInReturnHref
+                  : (assessment.appCatStartPath ?? appPathwayCatSessionStartPath(pathway.id))
+              }
+              className="inline-flex min-h-[48px] items-center justify-center rounded-full bg-primary px-8 py-3 text-sm font-semibold text-primary-foreground shadow-sm"
+            >
+              {primaryCtaLabel}
+            </Link>
+            <Link
+              href={questionsHref}
+              className="inline-flex min-h-[48px] items-center justify-center rounded-full border border-border px-8 py-3 text-sm font-semibold hover:bg-card"
+            >
+              {questionsFirstLabel}
+            </Link>
+          </div>
 
-      <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-        {assessment.marketingPrimaryCta === "open_app_cat" && assessment.appCatStartPath ? (
+          <PathwayLiveInventoryStrip pathway={pathway} questionSnapshot={questionSnapshot} variant="cat" />
+
+          <section className="mt-6 rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5">
+            <h2 className="text-base font-semibold text-[var(--theme-heading-text)]">How it works</h2>
+            <ul className="mt-3 list-inside list-disc space-y-2 text-sm text-[var(--theme-body-text)]">
+              {howItWorksItems.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
+          </section>
+
+          <section className="mt-4 rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5">
+            <h2 className="text-base font-semibold text-[var(--theme-heading-text)]">Who this is for</h2>
+            <ul className="mt-3 list-inside list-disc space-y-2 text-sm text-[var(--theme-body-text)]">
+              <li>Finished studying core topics</li>
+              <li>Practiced questions</li>
+              <li>Ready to test readiness</li>
+            </ul>
+          </section>
+
+          <section className="mt-4 rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5">
+            <h2 className="text-base font-semibold text-[var(--theme-heading-text)]">What to expect</h2>
+            <ul className="mt-3 list-inside list-disc space-y-2 text-sm text-[var(--theme-body-text)]">
+              <li>
+                <span className="font-semibold">Question range:</span> {readinessConfig.questionRange}
+              </li>
+              <li>
+                <span className="font-semibold">Time estimate:</span> {readinessConfig.timeEstimate}
+              </li>
+              <li>
+                <span className="font-semibold">Time limit:</span> {readinessConfig.timeLimitMinutes} minutes
+              </li>
+              <li>
+                <span className="font-semibold">Experience:</span> {publicCopy.experienceLabel}
+              </li>
+              <li>
+                <span className="font-semibold">Navigation:</span>{" "}
+                {readinessConfig.allowBackNavigation
+                  ? "Back navigation allowed."
+                  : "No backtracking once an answer is submitted."}
+              </li>
+            </ul>
+          </section>
+
+          <section className="mt-4 rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5">
+            <h2 className="text-base font-semibold text-[var(--theme-heading-text)]">After the exam</h2>
+            <ul className="mt-3 list-inside list-disc space-y-2 text-sm text-[var(--theme-body-text)]">
+              <li>Readiness score</li>
+              <li>Weak areas</li>
+              <li>Recommended next steps</li>
+            </ul>
+          </section>
+        </>
+      ) : (
+        <section className="mt-6 rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5">
+          <h2 className="text-lg font-semibold text-[var(--theme-heading-text)]">Readiness exam locked for your current plan</h2>
+          <p className="mt-2 text-sm text-[var(--theme-body-text)]">{lockedReasonCopy}</p>
+          {lockedContextCopy ? <p className="mt-1 text-sm text-[var(--theme-muted-text)]">{lockedContextCopy}</p> : null}
+          <p className="mt-3 text-sm text-[var(--theme-muted-text)]">{lockedQuestionBankCopy}</p>
+          <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+            <Link
+              href={pricingHref}
+              className="inline-flex min-h-[48px] items-center justify-center rounded-full bg-primary px-8 py-3 text-sm font-semibold text-primary-foreground shadow-sm"
+            >
+              Unlock Readiness Exam
+            </Link>
+            <Link
+              href={questionsHref}
+              className="inline-flex min-h-[48px] items-center justify-center rounded-full border border-border px-8 py-3 text-sm font-semibold hover:bg-card"
+            >
+              Start Practice Questions
+            </Link>
+            <Link
+              href={lessonsHref}
+              className="inline-flex min-h-[48px] items-center justify-center rounded-full border border-border px-8 py-3 text-sm font-semibold hover:bg-card"
+            >
+              Browse Lessons
+            </Link>
+          </div>
+        </section>
+      )}
+
+      {isCatAvailable ? (
+        <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
           <Link
-            href={assessment.appCatStartPath}
-            className="inline-flex min-h-[48px] items-center justify-center rounded-full bg-primary px-8 py-3 text-sm font-semibold text-primary-foreground shadow-sm"
+            href={lessonsHref}
+            className="inline-flex min-h-[48px] items-center justify-center rounded-full border border-border px-8 py-3 text-sm font-semibold hover:bg-card"
           >
-            Start {catShort}
+            Lessons
           </Link>
-        ) : assessment.marketingPrimaryCta === "sign_in_to_cat" ? (
           <Link
-            href={signInReturnHref}
-            className="inline-flex min-h-[48px] items-center justify-center rounded-full bg-primary px-8 py-3 text-sm font-semibold text-primary-foreground shadow-sm"
+            href={questionsHref}
+            className="inline-flex min-h-[48px] items-center justify-center rounded-full border border-border px-8 py-3 text-sm font-semibold hover:bg-card"
           >
-            Start {catShort}
+            Question bank
           </Link>
-        ) : (
-          <span className="inline-flex min-h-[48px] cursor-default items-center justify-center rounded-full border border-border bg-muted/50 px-8 py-3 text-sm font-semibold text-muted-foreground">
-            {footerUnavailableLabel}
-          </span>
-        )}
-        <Link
-          href={lessonsHref}
-          className="inline-flex min-h-[48px] items-center justify-center rounded-full border border-border px-8 py-3 text-sm font-semibold hover:bg-card"
-        >
-          Lessons
-        </Link>
-        <Link
-          href={questionsHref}
-          className="inline-flex min-h-[48px] items-center justify-center rounded-full border border-border px-8 py-3 text-sm font-semibold hover:bg-card"
-        >
-          Question bank
-        </Link>
-        {(assessment.reason === "no_subscription" || assessment.reason === "wrong_subscription_tier") && (
           <Link
-            href={pricingHref}
-            className="inline-flex min-h-[48px] items-center justify-center rounded-full border border-primary/30 px-8 py-3 text-sm font-semibold text-primary hover:bg-primary/5"
+            href={HUB.practiceExams}
+            className="inline-flex min-h-[48px] w-full items-center justify-center rounded-full border border-dashed border-border px-8 py-3 text-sm font-semibold text-[var(--theme-muted-text)] hover:bg-card sm:w-auto"
           >
-            Plans &amp; pricing
+            All practice exams (every pathway)
           </Link>
-        )}
-        {!isSignedIn ? (
-          <Link
-            href="/signup"
-            className="inline-flex min-h-[48px] items-center justify-center rounded-full border border-primary/30 px-8 py-3 text-sm font-semibold text-primary hover:bg-primary/5"
-          >
-            Create account
-          </Link>
-        ) : null}
-        <Link
-          href={HUB.practiceExams}
-          className="inline-flex min-h-[48px] w-full items-center justify-center rounded-full border border-dashed border-border px-8 py-3 text-sm font-semibold text-[var(--theme-muted-text)] hover:bg-card sm:w-auto"
-        >
-          All practice exams (every pathway)
-        </Link>
-      </div>
+        </div>
+      ) : null}
     </div>
   );
 }

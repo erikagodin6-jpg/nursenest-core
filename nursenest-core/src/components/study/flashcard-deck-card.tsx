@@ -3,6 +3,7 @@
 import Link from "next/link";
 import type { DeckDisplaySource } from "@/lib/flashcards/flashcard-generation";
 import { deriveDeckDisplaySource, deckSourceAccentVar } from "@/lib/flashcards/flashcard-generation";
+import { formatTitleCase } from "@/lib/format/text-case";
 
 export type DeckCardRow = {
   id: string;
@@ -103,6 +104,7 @@ export function FlashcardDeckCard({ deck }: { deck: DeckCardRow }) {
   const due = deck.due ?? 0;
   const overdue = deck.overdue ?? 0;
 
+  const displayTitle = formatTitleCase(deck.title);
   return (
     <article
       className="group relative flex flex-col overflow-hidden rounded-2xl transition-shadow hover:shadow-md"
@@ -126,7 +128,7 @@ export function FlashcardDeckCard({ deck }: { deck: DeckCardRow }) {
           className="text-base font-semibold leading-snug"
           style={{ color: "var(--theme-heading-text)" }}
         >
-          {deck.title}
+          {displayTitle}
         </h3>
 
         {/* Description */}
@@ -152,7 +154,7 @@ export function FlashcardDeckCard({ deck }: { deck: DeckCardRow }) {
                   color: "var(--theme-muted-text)",
                 }}
               >
-                {tag.name}
+                {formatTitleCase(tag.name)}
               </span>
             ))}
           </div>

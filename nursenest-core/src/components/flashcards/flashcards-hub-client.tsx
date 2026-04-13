@@ -26,6 +26,20 @@ type DueSummary = {
 };
 
 type ApiDeckRow = DeckCardRow & { tags?: TagRow[] };
+type BuilderCategory = { id: string; title: string; description?: string; count: number };
+type BuilderMode = "term_to_definition" | "definition_to_term" | "mixed";
+type BuilderSummary = {
+  pathwayId: string | null;
+  selectedCategories: string[];
+  matchingCards: number;
+  returnedCards: number;
+  mode: BuilderMode;
+  shuffle: boolean;
+  weakOnly: boolean;
+  incorrectOnly: boolean;
+  starredOnly: boolean;
+  cardLimit: string;
+};
 
 export function FlashcardsHubClient({
   pathwayOptions = [],
@@ -70,6 +84,18 @@ export function FlashcardsHubClient({
   const [error, setError] = useState<string | null>(null);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [builderCategories, setBuilderCategories] = useState<BuilderCategory[]>([]);
+  const [selectedCategoryIds, setSelectedCategoryIds] = useState<string[]>([]);
+  const [cardLimit, setCardLimit] = useState("20");
+  const [studyMode, setStudyMode] = useState<BuilderMode>("mixed");
+  const [shuffleOn, setShuffleOn] = useState(true);
+  const [weakOnly, setWeakOnly] = useState(false);
+  const [incorrectOnly, setIncorrectOnly] = useState(false);
+  const [starredOnly, setStarredOnly] = useState(false);
+  const [builderSummary, setBuilderSummary] = useState<BuilderSummary | null>(null);
+  const [previewCards, setPreviewCards] = useState<Array<{ id: string; front: string; topic?: string | null }>>([]);
+  const [builderLoading, setBuilderLoading] = useState(false);
+  const [builderError, setBuilderError] = useState<string | null>(null);
 
   // Debounce timer for search input
   const searchTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -192,6 +218,79 @@ export function FlashcardsHubClient({
         });
 
   const totalDue = (dueSummary?.dueToday ?? 0) + (dueSummary?.overdue ?? 0);
+  const modeLabel: Record<BuilderMode, string> = {
+    term_to_definition: "Term → Definition",
+    definition_to_term: "Definition → Term",
+    mixed: "Mixed",
+  };
+
+  const runBuilderSummary = useCallback(async () => {
+    setBuilderLoading(true);
+    setBuilderError(null);
+    try {
+      const params = new URLSearchParams();
+      if (filters.pathwayId) params.set("pathwayId", filters.pathwayId);
+      if (selectedCategoryIds.length > 0) params.set("categories", selectedCategoryIds.join(","));
+      params.set("cardLimit", cardLimit);
+      params.set("mode", studyMode);
+      if (shuffleOn) params.set("shuffle", "1");
+      if (weakOnly) params.set("weakOnly", "1");
+      if (incorrectOnly) params.set("incorrectOnly", "1");
+      if (starredOnly) params.set("starredOnly", "1");
+      const res = await fetch(`/api/flashcards/custom-session?${params.toString()}`, { credentials: "include" });
+      const json = (await res.json()) as {
+        summary?: BuilderSummary;
+        categoryOptions?: BuilderCategory[];
+        unsupportedFilters?: string[];
+        error?: string;
+      };
+      if (!res.ok) throw new Error(json.error ?? "Unable to build custom session.");
+      if (json.summary) setBuilderSummary(json.summary);
+      setBuilderCategories(json.categoryOptions ?? []);
+      if ((json.unsupportedFilters ?? []).includes("starredOnly")) setStarredOnly(false);
+    } catch (e) {
+      setBuilderError(e instanceof Error ? e.message : "Unable to build custom session.");
+      setBuilderSummary(null);
+      setBuilderCategories([]);
+    } finally {
+      setBuilderLoading(false);
+    }
+  }, [filters.pathwayId, selectedCategoryIds, cardLimit, studyMode, shuffleOn, weakOnly, incorrectOnly, starredOnly]);
+
+  useEffect(() => {
+    void runBuilderSummary();
+  }, [runBuilderSummary]);
+
+  const toggleCategory = (categoryId: string) => {
+    setSelectedCategoryIds((prev) =>
+      prev.includes(categoryId) ? prev.filter((c) => c !== categoryId) : [...prev, categoryId],
+    );
+  };
+
+  const builderParams = new URLSearchParams();
+  if (filters.pathwayId) builderParams.set("pathwayId", filters.pathwayId);
+  if (selectedCategoryIds.length > 0) builderParams.set("categories", selectedCategoryIds.join(","));
+  builderParams.set("cardLimit", cardLimit);
+  builderParams.set("mode", studyMode);
+  if (shuffleOn) builderParams.set("shuffle", "1");
+  if (weakOnly) builderParams.set("weakOnly", "1");
+  if (incorrectOnly) builderParams.set("incorrectOnly", "1");
+  const startHref = `/app/flashcards/custom?${builderParams.toString()}`;
+  const previewCustomCards = async () => {
+    setBuilderError(null);
+    try {
+      const params = new URLSearchParams(builderParams.toString());
+      params.set("includeCards", "1");
+      params.set("cardLimit", "10");
+      const res = await fetch(`/api/flashcards/custom-session?${params.toString()}`, { credentials: "include" });
+      const json = (await res.json()) as { cards?: Array<{ id: string; front: string; topic?: string | null }>; error?: string };
+      if (!res.ok) throw new Error(json.error ?? "Unable to preview cards.");
+      setPreviewCards((json.cards ?? []).slice(0, 5));
+    } catch (e) {
+      setPreviewCards([]);
+      setBuilderError(e instanceof Error ? e.message : "Unable to preview cards.");
+    }
+  };
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-8">
@@ -231,6 +330,142 @@ export function FlashcardsHubClient({
           </Link>
         </div>
       </div>
+
+      {/* Quizlet-style custom builder (primary experience) */}
+      <section className="mb-8 rounded-2xl border border-border bg-[var(--theme-card-bg)] p-5">
+        <p className="text-xs font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">Step 1: Build Your Session</p>
+        <h2 className="mt-1 text-xl font-bold text-[var(--theme-heading-text)]">Custom Flashcards Study Builder</h2>
+        <p className="mt-1 text-sm text-[var(--theme-muted-text)]">
+          Choose body systems, customize your study options, then start one mixed session.
+        </p>
+
+        <div className="mt-4 grid gap-3 sm:grid-cols-2">
+          <label className="block text-xs font-semibold text-[var(--theme-muted-text)]">
+            Pathway
+            <select
+              className="mt-1 w-full rounded-lg border border-border px-3 py-2 text-sm"
+              value={filters.pathwayId}
+              onChange={(e) => applyFilters({ pathwayId: e.target.value })}
+            >
+              <option value="">Use my scoped plan</option>
+              {pathwayOptions.map((o) => (
+                <option key={o.id} value={o.id}>
+                  {o.label}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label className="block text-xs font-semibold text-[var(--theme-muted-text)]">
+            Number of cards
+            <select className="mt-1 w-full rounded-lg border border-border px-3 py-2 text-sm" value={cardLimit} onChange={(e) => setCardLimit(e.target.value)}>
+              <option value="10">10</option>
+              <option value="20">20</option>
+              <option value="30">30</option>
+              <option value="50">50</option>
+              <option value="all">All available</option>
+            </select>
+          </label>
+          <label className="block text-xs font-semibold text-[var(--theme-muted-text)]">
+            Study mode
+            <select className="mt-1 w-full rounded-lg border border-border px-3 py-2 text-sm" value={studyMode} onChange={(e) => setStudyMode(e.target.value as BuilderMode)}>
+              <option value="term_to_definition">Term → Definition</option>
+              <option value="definition_to_term">Definition → Term</option>
+              <option value="mixed">Mixed</option>
+            </select>
+          </label>
+        </div>
+
+        <div className="mt-4 grid gap-2 sm:grid-cols-2">
+          <label className="flex items-center gap-2 text-xs text-[var(--theme-muted-text)]">
+            <input type="checkbox" checked={shuffleOn} onChange={(e) => setShuffleOn(e.target.checked)} />
+            Shuffle cards
+          </label>
+          <label className="flex items-center gap-2 text-xs text-[var(--theme-muted-text)]">
+            <input type="checkbox" checked={weakOnly} onChange={(e) => setWeakOnly(e.target.checked)} />
+            Include only weak areas
+          </label>
+          <label className="flex items-center gap-2 text-xs text-[var(--theme-muted-text)]">
+            <input type="checkbox" checked={incorrectOnly} onChange={(e) => setIncorrectOnly(e.target.checked)} />
+            Include previously incorrect cards
+          </label>
+          <label className="flex items-center gap-2 text-xs text-[var(--theme-muted-text)] opacity-60">
+            <input type="checkbox" checked={starredOnly} onChange={(e) => setStarredOnly(e.target.checked)} disabled />
+            Include starred/saved cards (coming soon)
+          </label>
+        </div>
+
+        <div className="mt-4">
+          <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">Body Systems</p>
+          <div className="flex flex-wrap gap-2">
+            {builderCategories.map((category) => {
+              const selected = selectedCategoryIds.includes(category.id);
+              return (
+                <button
+                  key={category.id}
+                  type="button"
+                  onClick={() => toggleCategory(category.id)}
+                  className="rounded-full border px-3 py-1.5 text-xs font-semibold transition"
+                  style={
+                    selected
+                      ? {
+                          borderColor: "var(--semantic-brand)",
+                          background: "color-mix(in srgb, var(--semantic-brand) 14%, transparent)",
+                          color: "var(--theme-heading-text)",
+                        }
+                      : {
+                          borderColor: "var(--border-subtle)",
+                          background: "color-mix(in srgb, var(--semantic-panel-cool) 12%, transparent)",
+                          color: "var(--theme-muted-text)",
+                        }
+                  }
+                >
+                  {category.title} ({category.count})
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        <div className="mt-4 rounded-xl border border-border bg-muted/20 p-3 text-sm text-[var(--theme-muted-text)]">
+          <p>
+            Pathway: {filters.pathwayId ? pathwayOptions.find((p) => p.id === filters.pathwayId)?.label ?? filters.pathwayId : "Scoped to your entitlement"}
+          </p>
+          <p>
+            Categories: {selectedCategoryIds.length > 0 ? builderCategories.filter((c) => selectedCategoryIds.includes(c.id)).map((c) => c.title).join(", ") : "All available"}
+          </p>
+          <p>
+            Cards: {builderSummary?.matchingCards ?? 0} · Mode: {modeLabel[studyMode]} · Shuffle: {shuffleOn ? "On" : "Off"}
+          </p>
+        </div>
+
+        <div className="mt-4 flex flex-wrap gap-3">
+          <Link href={startHref} className="inline-flex rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground">
+            Start Flashcards
+          </Link>
+          <button
+            type="button"
+            onClick={() => void previewCustomCards()}
+            className="inline-flex rounded-full border border-border px-5 py-2.5 text-sm font-semibold text-[var(--theme-heading-text)]"
+          >
+            Preview Cards
+          </button>
+        </div>
+        {builderLoading ? <p className="mt-2 text-xs text-[var(--theme-muted-text)]">Refreshing session options…</p> : null}
+        {builderError ? <p className="mt-2 text-xs text-[var(--semantic-danger)]">{builderError}</p> : null}
+        {previewCards.length > 0 ? (
+          <div className="mt-4 rounded-xl border border-border bg-[var(--theme-card-bg)] p-3">
+            <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">Preview</p>
+            <ul className="space-y-2 text-sm">
+              {previewCards.map((card) => (
+                <li key={card.id} className="rounded-lg border border-border/70 p-2">
+                  <p className="font-medium text-[var(--theme-heading-text)]">{card.front}</p>
+                  {card.topic ? <p className="text-xs text-[var(--theme-muted-text)]">{card.topic}</p> : null}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : null}
+      </section>
 
       {/* Stats hero — due summary + study streak */}
       {(dueSummary || stats) ? (
@@ -359,7 +594,13 @@ export function FlashcardsHubClient({
         </div>
       ) : null}
 
-      {/* Filters */}
+      {/* Ready-made decks (secondary) */}
+      <h2 className="mb-2 text-lg font-semibold text-[var(--theme-heading-text)]">Browse Ready-Made Decks</h2>
+      <p className="mb-4 text-sm text-[var(--theme-muted-text)]">
+        Prebuilt decks are still available, but the custom builder above is the primary study flow.
+      </p>
+
+      {/* Deck filters */}
       <div
         className="mb-8 rounded-2xl p-5"
         style={{

@@ -12,6 +12,29 @@ const requestSchema = z.object({
   template: z.nativeEnum(BlogPostTemplate).default(BlogPostTemplate.TOPIC_EXPLAINED),
 });
 
+export async function GET(req: Request) {
+  const gate = await requireAdmin(req);
+  if (!gate.ok) return gate.response;
+  if (process.env.NODE_ENV === "production") {
+    return NextResponse.json({ error: "Not found" }, { status: 404 });
+  }
+  const model = process.env.GEMINI_MODEL?.trim() || "gemini-2.5-flash";
+  const key = process.env.GEMINI_API_KEY?.trim() || "";
+  return NextResponse.json(
+    {
+      ok: true,
+      env: {
+        geminiApiKeyPresent: key.length > 0,
+        geminiApiKeyPrefix: key.length > 6 ? `${key.slice(0, 3)}***` : null,
+        geminiApiKeyLength: key.length || 0,
+        geminiModel: model,
+      },
+      note: "Local-development diagnostic only.",
+    },
+    { status: 200 },
+  );
+}
+
 export async function POST(req: Request) {
   const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;

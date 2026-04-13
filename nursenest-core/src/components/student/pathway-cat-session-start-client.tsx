@@ -20,6 +20,7 @@ export function PathwayCatSessionStartClient({
   pathwayOptions: PracticeTestPathwayOption[];
   fallbackLessonsByPathway?: Record<string, Array<{ slug: string; title: string }>>;
 }) {
+  const isDev = process.env.NODE_ENV !== "production";
   const [pathwayId, setPathwayId] = useState(() => {
     if (initialPathwayId && pathwayOptions.some((p) => p.id === initialPathwayId)) return initialPathwayId;
     if (pathwayOptions.length === 1) return pathwayOptions[0]!.id;
@@ -95,38 +96,60 @@ export function PathwayCatSessionStartClient({
       });
       const timedMode = true;
       const timeLimitSec = (readinessConfig?.timeLimitMinutes ?? 300) * 60;
+      const payload = {
+        title: publicCopy?.title ?? `${pathwayMeta?.shortName ?? "Pathway"} Readiness Exam`,
+        questionCount,
+        topicNames: [],
+        difficultyMin: null,
+        difficultyMax: null,
+        selectionMode: "cat" as const,
+        catSelectionBasis: "random" as const,
+        catPresentationMode,
+        catExamFeedbackMode: "test" as const,
+        pathwayId,
+        timedMode,
+        timeLimitSec,
+      };
+      if (isDev) {
+        console.info("[CAT start] attempt", {
+          pathwayId,
+          questionCount,
+          catPresentationMode,
+          examFamily: pathwayMeta?.examFamily ?? null,
+          timeLimitSec,
+        });
+      }
       const res = await fetch("/api/practice-tests", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          title: publicCopy?.title ?? `${pathwayMeta?.shortName ?? "Pathway"} Readiness Exam`,
-          questionCount,
-          topicNames: [],
-          difficultyMin: null,
-          difficultyMax: null,
-          selectionMode: "cat",
-          catSelectionBasis: "random",
-          catPresentationMode,
-          catExamFeedbackMode: "test",
-          pathwayId,
-          timedMode,
-          timeLimitSec,
-        }),
+        body: JSON.stringify(payload),
       });
       const data = (await res.json()) as { id?: string; error?: string; code?: string };
       if (!res.ok) {
+        if (isDev) {
+          console.error("[CAT start] rejected", {
+            status: res.status,
+            code: data.code ?? null,
+            error: data.error ?? "Could not start session.",
+          });
+        }
         setErrorCode(typeof data.code === "string" ? data.code : null);
         throw new Error(data.error ?? "Could not start session.");
       }
-      if (data.id) {
-        window.location.href = `/app/practice-tests/${data.id}`;
+      if (!data.id) {
+        if (isDev) {
+          console.error("[CAT start] missing session id", { status: res.status });
+        }
+        throw new Error("Session was created without an id. Please try again.");
       }
+      window.location.href = `/app/practice-tests/${data.id}`;
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Error");
+      const message = e instanceof Error ? e.message : "Could not start session.";
+      setError(`Unable to start exam: ${message}`);
     } finally {
       setCreating(false);
     }
-  }, [pathwayId, pathwayMeta?.examFamily, pathwayMeta?.shortName, readinessConfig, publicCopy?.title]);
+  }, [pathwayId, pathwayMeta?.examFamily, pathwayMeta?.shortName, readinessConfig, publicCopy?.title, isDev]);
 
   if (pathwayOptions.length === 0) {
     return (
@@ -272,7 +295,7 @@ export function PathwayCatSessionStartClient({
 
       {error ? (
         <div className="rounded-lg border border-destructive/30 bg-destructive/5 p-4 text-sm">
-          <p className="font-semibold text-destructive">Something went wrong</p>
+          <p className="font-semibold text-destructive">Unable to start exam</p>
           <p className="mt-1 text-foreground">{error}</p>
           {errorCode === PRACTICE_TEST_CAT_CREATE_CODE.cat_pathway_ambiguous ? (
             <CatAmbiguityPathwayPicker catEligibleOptions={pathwayOptions} surface="start_page" className="mt-3" />

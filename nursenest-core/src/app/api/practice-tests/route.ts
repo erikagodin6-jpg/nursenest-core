@@ -163,6 +163,7 @@ export async function POST(req: Request) {
   }
 
   const d = parsed.data;
+  const isDev = process.env.NODE_ENV !== "production";
   const topicNames = d.topicNames ?? [];
   const difficultyMin = d.difficultyMin ?? null;
   const difficultyMax = d.difficultyMax ?? null;
@@ -172,6 +173,15 @@ export async function POST(req: Request) {
     : null;
 
   if (d.selectionMode === "cat") {
+    if (isDev) {
+      safeServerLog("practice_tests", "CAT_START_ATTEMPT_DEV", {
+        userIdPrefix: gate.userId.slice(0, 8),
+        pathwayId: d.pathwayId?.trim() || null,
+        questionCount: d.questionCount,
+        catPresentationMode: d.catPresentationMode,
+        selectionMode: d.selectionMode,
+      });
+    }
     if (d.catPresentationMode === "exam_simulation" && !isCatExamSimulationFeatureEnabled()) {
       return NextResponse.json(
         { error: "Exam simulation is not enabled.", code: PRACTICE_TEST_CAT_CREATE_CODE.exam_sim_disabled },
@@ -284,7 +294,12 @@ export async function POST(req: Request) {
     const basis = resolveCatSelectionBasisForPost(d.catPresentationMode, d.catSelectionBasis);
     const simPathway = getExamPathwayById(pathwayIdForCat) ?? null;
     const readinessConfig = readinessConfigForPathwayId(pathwayIdForCat);
-    const enforcedQuestionCount = readinessConfig?.maxQuestions ?? d.questionCount;
+    const pathwayCap =
+      d.catPresentationMode === "exam_simulation" && simPathway?.examFamily !== ExamFamily.NP
+        ? 145
+        : 150;
+    const configuredCount = readinessConfig?.maxQuestions ?? d.questionCount;
+    const enforcedQuestionCount = Math.min(configuredCount, pathwayCap);
     const enforcedTimedMode =
       readinessConfig?.mode === "production_ready" || readinessConfig?.mode === "simulation"
         ? true
@@ -361,6 +376,15 @@ export async function POST(req: Request) {
       timed: enforcedTimedMode,
       ...examContextAnalyticsProps(buildGlobalExamContext(pathwayIdForCat, "en")),
     });
+    if (isDev) {
+      safeServerLog("practice_tests", "CAT_START_SUCCESS_DEV", {
+        userIdPrefix: gate.userId.slice(0, 8),
+        pathwayId: pathwayIdForCat,
+        questionCap: enforcedQuestionCount,
+        returnedQuestionCount: cat.questionIds.length,
+        practiceTestId: row.id,
+      });
+    }
 
     return NextResponse.json(
       { id: row.id, questionCount: cat.questionIds.length, config: cat.config, adaptive: true },
