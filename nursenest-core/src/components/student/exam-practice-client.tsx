@@ -80,6 +80,7 @@ export function ExamPracticeClient({
 }) {
   const { t } = useMarketingI18n();
   const { session: STORAGE_SESSION, exam: STORAGE_EXAM } = storageKeys(sessionNamespace);
+  const adaptivePlanEnabled = studySettings.enableAdaptivePlan;
   const [phase, setPhase] = useState<"loading" | "pickMode" | "ready" | "empty" | "error">("loading");
   const [sessionId, setSessionId] = useState<string | null>(null);
   const [resolvedExamId, setResolvedExamId] = useState<string | null>(examId);
@@ -567,8 +568,16 @@ export function ExamPracticeClient({
             </ul>
           </div>
         ) : null}
-        <PostSessionExamInsights review={r ?? null} studyNext={done.studyNext ?? null} />
-        {done.studyNext ? <PostTestStudyNextCard bundle={done.studyNext} /> : null}
+        {adaptivePlanEnabled ? (
+          <>
+            <PostSessionExamInsights review={r ?? null} studyNext={done.studyNext ?? null} />
+            {done.studyNext ? <PostTestStudyNextCard bundle={done.studyNext} /> : null}
+          </>
+        ) : (
+          <div className="rounded-2xl border border-border bg-card/80 p-4 text-sm text-muted">
+            Adaptive recommendations are turned off in your study settings, so this summary sticks to your results and leaves the next step up to you.
+          </div>
+        )}
         <p className="text-sm text-muted">
           Re-run missed topics in practice, then shore up systems with{" "}
           <Link href="/lessons" className="font-medium text-primary underline">

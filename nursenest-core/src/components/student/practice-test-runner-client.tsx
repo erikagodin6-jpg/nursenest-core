@@ -55,6 +55,7 @@ import { QuestionCard, AnswerOptionRow } from "@/components/study/cat-question-c
 import type { AnswerOptionState } from "@/components/study/cat-question-card";
 import { RationalePanel } from "@/components/study/cat-rationale-panel";
 import { ResultsSummary } from "@/components/study/cat-results-summary";
+import type { StudySettings } from "@/lib/learner/study-settings";
 
 type QRow = {
   id: string;
@@ -80,12 +81,14 @@ export function PracticeTestRunnerClient({
   userId,
   userLabel,
   protectionFlags,
+  studySettings,
   isEntitled = true,
 }: {
   testId: string;
   userId: string;
   userLabel: string;
   protectionFlags: PremiumProtectionFlags;
+  studySettings: StudySettings;
   /**
    * Whether this user has an active premium subscription.
    * Controls gating of Adaptive Study Plan, Smart Review, and Confidence Analytics.
@@ -146,6 +149,8 @@ export function PracticeTestRunnerClient({
   const autoSubmitRef = useRef(false);
   const answersRef = useRef<Record<string, unknown>>({});
   const idxRef = useRef(0);
+  const confidenceTrackingEnabled = studySettings.enableConfidenceTracking;
+  const adaptivePlanEnabled = studySettings.enableAdaptivePlan;
 
   useEffect(() => {
     answersRef.current = answers;
@@ -735,7 +740,7 @@ export function PracticeTestRunnerClient({
         />
 
         {/* ── Confidence analytics (shown when rated questions exist) ── */}
-        {Object.keys(confidence).length > 0 ? (
+        {confidenceTrackingEnabled && Object.keys(confidence).length > 0 ? (
           <div className="mx-auto max-w-[900px] px-6 pb-8">
             <div className="nn-cat-question-card">
               <h3 className="mb-5 font-semibold text-[var(--semantic-text-primary)]">
@@ -767,7 +772,9 @@ export function PracticeTestRunnerClient({
               topic: q?.topic ?? null,
               subtopic: q?.subtopic ?? null,
               isCorrect: fb.isCorrect,
-              confidence: (confidence[qid] as (typeof confidence)[string] | undefined) ?? null,
+              confidence: confidenceTrackingEnabled
+                ? ((confidence[qid] as (typeof confidence)[string] | undefined) ?? null)
+                : null,
               rationale: fb.rationale,
               correctAnswerExplanation: fb.correctAnswerExplanation ?? null,
               relatedLessons: fb.relatedLessons ?? [],
@@ -786,7 +793,7 @@ export function PracticeTestRunnerClient({
         })() : null}
 
         {/* ── Adaptive Study Plan (CAT or linear practice with results) ── */}
-        {(() => {
+        {adaptivePlanEnabled ? (() => {
           const readinessScore = results.catReport?.readinessScore ?? results.accuracyPct;
           const weakAreas = results.catReport?.weakAreas ?? results.weakAreas ?? [];
           // Derive overconfidence signal from confidence + correctness maps
@@ -823,7 +830,32 @@ export function PracticeTestRunnerClient({
               </div>
             </div>
           );
-        })()}
+        })() : (
+          <div className="mx-auto max-w-[900px] px-6 pb-8">
+            <div className="nn-cat-question-card space-y-3">
+              <h3 className="font-semibold text-[var(--semantic-text-primary)]">
+                Continue your study your way
+              </h3>
+              <p className="text-sm text-[var(--semantic-text-secondary)]">
+                Adaptive planning is turned off in your study settings, so this session ends with neutral next steps instead of an auto-generated plan.
+              </p>
+              <div className="flex flex-wrap gap-2">
+                <Link
+                  href="/app/questions"
+                  className="nn-btn-primary inline-flex min-h-[2.5rem] items-center rounded-lg px-4 text-sm font-semibold shadow-none"
+                >
+                  Open question bank
+                </Link>
+                <Link
+                  href="/app/lessons"
+                  className="nn-btn-secondary inline-flex min-h-[2.5rem] items-center rounded-lg px-4 text-sm font-semibold"
+                >
+                  Browse lessons
+                </Link>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* ── Coach card (CAT-specific, premium) ──────────────────── */}
         {results.catReport ? (
@@ -837,9 +869,11 @@ export function PracticeTestRunnerClient({
         ) : null}
 
         {/* ── Study loop next card ─────────────────────────────────── */}
-        <div className="mx-auto max-w-[900px] px-6 pb-6">
-          <PracticeTestStudyLoopNext results={results} pathwayId={testConfig?.pathwayId ?? null} />
-        </div>
+        {adaptivePlanEnabled ? (
+          <div className="mx-auto max-w-[900px] px-6 pb-6">
+            <PracticeTestStudyLoopNext results={results} pathwayId={testConfig?.pathwayId ?? null} />
+          </div>
+        ) : null}
 
         {/* ── Teaching review (post-exam rationale access) ─────────── */}
         <div className="mx-auto max-w-[900px] px-6 pb-8">
@@ -1230,7 +1264,7 @@ export function PracticeTestRunnerClient({
                   {catOptions}
 
                   {/* Confidence selector — exam mode: forced neutral (spec §7, §12) */}
-                  {hasMeaningfulAnswer(current.id) ? (
+                  {confidenceTrackingEnabled && hasMeaningfulAnswer(current.id) ? (
                     <div className="mt-4">
                       <ConfidenceSelector
                         questionId={current.id}
@@ -1325,7 +1359,7 @@ export function PracticeTestRunnerClient({
                   {catOptions}
 
                   {/* Confidence selector — study mode: forced neutral palette (spec §7, §12) */}
-                  {hasMeaningfulAnswer(current.id) ? (
+                  {confidenceTrackingEnabled && hasMeaningfulAnswer(current.id) ? (
                     <div className="mt-4">
                       <ConfidenceSelector
                         questionId={current.id}
@@ -1555,11 +1589,17 @@ export function PracticeTestRunnerClient({
               {practiceOptionRows}
 
               {/* Confidence selector — practice mode: full semantic palette */}
-              <ConfidenceSelector
-                questionId={current.id}
-                value={confidence[current.id] ?? null}
-                onChange={setConfidenceForQuestion}
-              />
+              {confidenceTrackingEnabled ? (
+                <ConfidenceSelector
+                  questionId={current.id}
+                  value={confidence[current.id] ?? null}
+                  onChange={setConfidenceForQuestion}
+                />
+              ) : (
+                <div className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-4 py-3 text-sm text-[var(--semantic-text-secondary)]">
+                  Confidence tracking is off in your study settings for this session.
+                </div>
+              )}
 
               <div className="nn-practice-q-nav">
                 <button
@@ -1638,7 +1678,7 @@ export function PracticeTestRunnerClient({
               distractorRationalesMap={linearFeedback?.distractorRationalesMap}
               keyTakeaway={linearFeedback?.keyTakeaway}
               relatedLessons={linearFeedback?.relatedLessons ?? []}
-              confidenceLevel={confidence[current.id] ?? null}
+              confidenceLevel={confidenceTrackingEnabled ? (confidence[current.id] ?? null) : null}
             />
           </div>
         </PracticeSessionGrid>
