@@ -9,6 +9,7 @@ import {
 } from "@/lib/lessons/pathway-lesson-types";
 import type { PathwayLessonProgressStatus } from "@/lib/lessons/pathway-lesson-progress";
 import { emptyStateCopy } from "@/lib/ui/empty-state-copy";
+import { dedupePathwayLessonsForLibrary } from "@/lib/lessons/pathway-lesson-dedupe";
 
 type Props = {
   lessons: PathwayLessonRecord[];
@@ -27,7 +28,12 @@ export function PathwayLessonsCurriculumHub({
   canShowProgressMap = false,
 }: Props) {
   const safeLessons = lessons.filter(pathwayLessonHasRenderableHubSlug);
-  const sections = buildPathwayLessonSystemSections(safeLessons, pathwayId);
+  const dedupedSafeLessons = dedupePathwayLessonsForLibrary(safeLessons, {
+    pathwayIdHint: pathwayId,
+    source: `curriculum_hub:${pathwayId ?? "unknown"}`,
+    devLog: true,
+  }).items;
+  const sections = buildPathwayLessonSystemSections(dedupedSafeLessons, pathwayId);
 
   if (sections.length === 0) {
     const thinInventoryCopy = emptyStateCopy.thinInventory();
@@ -46,7 +52,7 @@ export function PathwayLessonsCurriculumHub({
   }
 
   return (
-    <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+    <div className="grid grid-cols-1 gap-5 lg:grid-cols-2 2xl:grid-cols-3">
       {sections.map((section) => (
         <LessonSystemCard
           key={section.id}

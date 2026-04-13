@@ -173,11 +173,29 @@ async function executeLessonUpserts(
   upserts: PathwayLessonUpsert[],
   dryRun: boolean,
 ): Promise<{ inserted: number; skipped: number }> {
-  let inserted = 0;
-  let skipped = 0;
+  const dedupedUpserts: PathwayLessonUpsert[] = [];
+  const seenImportKeys = new Set<string>();
+  let importDuplicateSkips = 0;
+  for (const u of upserts) {
+    const key = `${u.data.pathwayId}::${u.data.slug}::${u.data.locale}`;
+    if (seenImportKeys.has(key)) {
+      importDuplicateSkips += 1;
+      continue;
+    }
+    seenImportKeys.add(key);
+    dedupedUpserts.push(u);
+  }
+  if (importDuplicateSkips > 0) {
+    process.stderr.write(
+      `  [lessons] importer dedupe skipped ${importDuplicateSkips} duplicate upsert row(s) by (pathwayId, slug, locale)\n`,
+    );
+  }
 
-  for (let i = 0; i < upserts.length; i += BATCH_SIZE) {
-    const chunk = upserts.slice(i, i + BATCH_SIZE);
+  let inserted = 0;
+  let skipped = importDuplicateSkips;
+
+  for (let i = 0; i < dedupedUpserts.length; i += BATCH_SIZE) {
+    const chunk = dedupedUpserts.slice(i, i + BATCH_SIZE);
 
     // Check which (pathwayId, slug, locale) combos already exist
     const keys = chunk.map((u) => ({
@@ -277,7 +295,7 @@ async function executeLessonUpserts(
     }
 
     process.stderr.write(
-      `  [lessons] chunk ${i}–${Math.min(i + BATCH_SIZE, upserts.length)}: inserted=${inserted} skipped=${skipped}
+      `  [lessons] chunk ${i}–${Math.min(i + BATCH_SIZE, dedupedUpserts.length)}: inserted=${inserted} skipped=${skipped}
 `,
     );
   }

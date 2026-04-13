@@ -65,6 +65,7 @@ import {
   PATHWAY_HUB_PAGE_SIZE_MAX,
 } from "@/lib/lessons/pathway-lesson-scale";
 import { pathwayLessonYieldWeight } from "@/lib/lessons/pathway-lesson-yield";
+import { dedupePathwayLessonsForLibrary } from "@/lib/lessons/pathway-lesson-dedupe";
 
 type CatalogShape = {
   version: number;
@@ -1138,8 +1139,13 @@ async function getPathwayLessonsPageImpl(
       total,
       hubSearch: qRaw ? "1" : "0",
     });
+    const deduped = dedupePathwayLessonsForLibrary(contextItems, {
+      pathwayIdHint: pathwayId,
+      source: `hub_page:${pathwayId}:db`,
+      devLog: true,
+    });
     return {
-      items: contextItems,
+      items: deduped.items,
       total,
       page: safePage,
       pageSize: ps,
@@ -1185,8 +1191,13 @@ async function getPathwayLessonsPageImpl(
       pathwayId,
     ),
   );
+  const dedupedCatalog = dedupePathwayLessonsForLibrary(contextItems, {
+    pathwayIdHint: pathwayId,
+    source: `hub_page:${pathwayId}:catalog`,
+    devLog: true,
+  });
   return {
-    items: contextItems,
+    items: dedupedCatalog.items,
     total,
     page: safePage,
     pageSize: ps,
@@ -1299,8 +1310,13 @@ async function getLessonsForTopicPageImpl(
           total: contextCat.length,
           catalogSupplement: true,
         });
+        const dedupedSliceCat = dedupePathwayLessonsForLibrary(sliceCat, {
+          pathwayIdHint: pathwayId,
+          source: `topic_page:${pathwayId}:${topicSlug}:catalog_supplement`,
+          devLog: true,
+        });
         return {
-          items: sliceCat,
+          items: dedupedSliceCat.items,
           total: contextCat.length,
           page: safePageCat,
           pageSize: ps,
@@ -1384,8 +1400,13 @@ async function getLessonsForTopicPageImpl(
       pageSize: ps,
       total: totalReady,
     });
+    const dedupedTopicItems = dedupePathwayLessonsForLibrary(items, {
+      pathwayIdHint: pathwayId,
+      source: `topic_page:${pathwayId}:${topicSlug}:db`,
+      devLog: true,
+    });
     return {
-      items,
+      items: dedupedTopicItems.items,
       total: totalReady,
       page: safePage,
       pageSize: ps,
@@ -1430,8 +1451,13 @@ async function getLessonsForTopicPageImpl(
     page: safePage,
     pageSize: ps,
   });
+  const dedupedTopicCatalog = dedupePathwayLessonsForLibrary(contextItems, {
+    pathwayIdHint: pathwayId,
+    source: `topic_page:${pathwayId}:${topicSlug}:catalog`,
+    devLog: true,
+  });
   return {
-    items: contextItems,
+    items: dedupedTopicCatalog.items,
     total,
     page: safePage,
     pageSize: ps,

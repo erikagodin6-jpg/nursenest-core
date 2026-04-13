@@ -29,21 +29,29 @@ export function LessonRow({ href, title, progressStatus, durationLabel, difficul
   return (
     <Link
       href={href}
-      className="group flex min-h-11 items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-colors hover:bg-[color-mix(in_srgb,var(--semantic-brand)_6%,var(--semantic-surface))] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_24%,transparent)]"
+      className="group block rounded-xl px-3 py-2.5 text-sm transition-colors hover:bg-[color-mix(in_srgb,var(--semantic-brand)_6%,var(--semantic-surface))] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_24%,transparent)]"
     >
-      <StatusIcon status={progressStatus} />
-      <span className="min-w-0 flex-1 truncate font-medium text-[var(--theme-heading-text)]">{displayTitle}</span>
-      {yieldBadgeLabel ? (
-        <span className="shrink-0 rounded-full border border-[var(--semantic-border-soft)] px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">
-          {yieldBadgeLabel}
-        </span>
-      ) : null}
-      <span className="shrink-0 text-xs font-medium text-[var(--theme-muted-text)]">{durationLabel}</span>
-      <DifficultyBadge difficulty={difficulty} />
-      <ChevronRight
-        className="h-4 w-4 shrink-0 text-[var(--semantic-text-muted)] transition-transform group-hover:translate-x-0.5 group-hover:text-[var(--theme-heading-text)]"
-        aria-hidden
-      />
+      <div className="flex items-start gap-3">
+        <StatusIcon status={progressStatus} />
+        <div className="min-w-0 flex-1">
+          <p className="line-clamp-3 text-sm font-medium leading-snug text-[var(--theme-heading-text)] sm:line-clamp-2">
+            {displayTitle}
+          </p>
+          <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
+            {yieldBadgeLabel ? (
+              <span className="rounded-full border border-[var(--semantic-border-soft)] px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">
+                {yieldBadgeLabel}
+              </span>
+            ) : null}
+            <span className="text-xs font-medium text-[var(--theme-muted-text)]">{durationLabel}</span>
+            <DifficultyBadge difficulty={difficulty} />
+          </div>
+        </div>
+        <ChevronRight
+          className="mt-1 h-4 w-4 shrink-0 text-[var(--semantic-text-muted)] transition-transform group-hover:translate-x-0.5 group-hover:text-[var(--theme-heading-text)]"
+          aria-hidden
+        />
+      </div>
     </Link>
   );
 }

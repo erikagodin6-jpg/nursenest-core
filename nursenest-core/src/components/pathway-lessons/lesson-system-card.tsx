@@ -92,7 +92,7 @@ export function LessonSystemCard({
           <div className="flex items-center justify-between gap-3">
             <h2
               id={`lesson-system-card-${section.id}`}
-              className="truncate text-base font-semibold text-[var(--theme-heading-text)]"
+              className="line-clamp-2 text-base font-semibold leading-snug text-[var(--theme-heading-text)]"
             >
               {section.label}
             </h2>
