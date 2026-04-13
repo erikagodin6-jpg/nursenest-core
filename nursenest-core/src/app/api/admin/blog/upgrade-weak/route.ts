@@ -4,6 +4,7 @@ import { z } from "zod";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
 import { isAdminAiGenerationEnabled } from "@/lib/ai/admin-ai-policy";
 import { assertOpenAiKeyConfigured } from "@/lib/ai/openai-env";
+import { logWeakUpgradeRun } from "@/lib/admin/blog-content-automation-log";
 import { runBlogArticleGenerationPipeline } from "@/lib/blog/blog-article-generation-pipeline";
 import { countWordsFromHtml } from "@/lib/blog/blog-word-count";
 import { prisma } from "@/lib/db";
@@ -81,6 +82,12 @@ export async function POST(req: Request) {
 
   if (dryRun) {
     console.info("[blog_upgrade_weak] dry_run_selected", { count: weak.length });
+    await logWeakUpgradeRun({
+      createdById: gate.admin.userId,
+      status: "SKIPPED",
+      summary: `Dry run selected ${weak.length} weak post(s).`,
+      metadata: { dryRun: true, limit, minWords, selectedCount: weak.length },
+    });
     return NextResponse.json({
       ok: true,
       dryRun: true,
@@ -198,6 +205,14 @@ export async function POST(req: Request) {
       });
     }
   }
+
+  const failedCount = results.filter((r) => !r.upgraded || r.error).length;
+  await logWeakUpgradeRun({
+    createdById: gate.admin.userId,
+    status: failedCount > 0 ? "FAILED" : "SUCCEEDED",
+    summary: `Processed ${results.length} weak post(s), failures: ${failedCount}.`,
+    metadata: { dryRun: false, limit, minWords, processed: results.length, failedCount },
+  });
 
   return NextResponse.json({
     ok: true,

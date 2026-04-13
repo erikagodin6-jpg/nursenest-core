@@ -165,6 +165,14 @@ export function PracticeTestRunnerClient({
   /** Confidence ratings per question: Map<questionId, ConfidenceLevel>. Client-only, not persisted. */
   const [confidence, setConfidence] = useState<Record<string, ConfidenceLevel>>({});
   const autoSubmitRef = useRef(false);
+  const submitInFlightRef = useRef(false);
+  const catAdvanceInFlightRef = useRef(false);
+  const linearCommitInFlightRef = useRef(false);
+  const abandonInFlightRef = useRef(false);
+  const navInFlightRef = useRef(false);
+  const persistInFlightRef = useRef(false);
+  const pendingPersistRef = useRef<{ answers: Record<string, unknown>; cursorIndex: number } | null>(null);
+  const remainingSnapshotRef = useRef<number | null>(null);
   const answersRef = useRef<Record<string, unknown>>({});
   const idxRef = useRef(0);
   const confidenceTrackingEnabled = studySettings.enableConfidenceTracking;
@@ -176,6 +184,20 @@ export function PracticeTestRunnerClient({
   useEffect(() => {
     idxRef.current = idx;
   }, [idx]);
+  useEffect(() => {
+    remainingSnapshotRef.current = remainingSec;
+  }, [remainingSec]);
+
+  const logSessionEvent = useCallback(
+    (event: string, detail?: Record<string, unknown>) => {
+      if (process.env.NODE_ENV === "production") {
+        console.info("[practice-test-runner]", event, { testId, ...(detail ?? {}) });
+        return;
+      }
+      console.info("[practice-test-runner]", event, { testId, ...(detail ?? {}) });
+    },
+    [testId],
+  );
 
   const load = useCallback(async () => {
     setPhase("loading");
@@ -255,7 +277,12 @@ export function PracticeTestRunnerClient({
       }
       if (data.status === "IN_PROGRESS" && data.timedMode && data.timeLimitSec) {
         const usedSec = data.elapsedMs != null ? Math.floor(data.elapsedMs / 1000) : 0;
-        setRemainingSec(Math.max(0, data.timeLimitSec - usedSec));
+        const serverRemaining = Math.max(0, data.timeLimitSec - usedSec);
+        setRemainingSec((prev) => {
+          if (prev == null) return serverRemaining;
+          // Never increase remaining time on refresh/reload due to stale network snapshots.
+          return Math.min(prev, serverRemaining);
+        });
       } else {
         setRemainingSec(null);
       }
@@ -326,8 +353,11 @@ export function PracticeTestRunnerClient({
 
   const submitTest = useCallback(
     async (fromTimer = false) => {
+      if (submitInFlightRef.current) return;
       if (fromTimer && autoSubmitRef.current) return;
       if (fromTimer) autoSubmitRef.current = true;
+      submitInFlightRef.current = true;
+      logSessionEvent("submit_start", { fromTimer, idx: idxRef.current, total: questionIds.length });
       setSaving(true);
       try {
         const cfg = testConfig;
@@ -359,14 +389,20 @@ export function PracticeTestRunnerClient({
         setStatus("COMPLETED");
         setSavedElapsedMs(elapsedMs ?? null);
         if (fromTimer) setRemainingSec(0);
+        logSessionEvent("submit_success", { fromTimer, elapsedMs: elapsedMs ?? null });
       } catch (e) {
         if (fromTimer) autoSubmitRef.current = false;
         setError(e instanceof Error ? e.message : "Submit failed");
+        logSessionEvent("submit_failed", {
+          fromTimer,
+          message: e instanceof Error ? e.message : "Submit failed",
+        });
       } finally {
+        submitInFlightRef.current = false;
         setSaving(false);
       }
     },
-    [sessionStartMs, testId, testConfig, questionIds, linearCommittedIds],
+    [sessionStartMs, testId, testConfig, questionIds, linearCommittedIds, logSessionEvent],
   );
 
   useEffect(() => {
@@ -430,27 +466,38 @@ export function PracticeTestRunnerClient({
   }
 
   async function persistSave(nextAnswers: Record<string, unknown>, nextIdx: number) {
+    pendingPersistRef.current = { answers: nextAnswers, cursorIndex: nextIdx };
+    if (persistInFlightRef.current) return;
+    persistInFlightRef.current = true;
     setSaving(true);
     try {
-      const elapsedMs =
-        sessionStartMs != null ? Math.max(0, Date.now() - sessionStartMs) : undefined;
-      await fetch(`/api/practice-tests/${testId}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          action: "save",
-          answers: nextAnswers,
-          cursorIndex: nextIdx,
-          ...(elapsedMs !== undefined ? { elapsedMs } : {}),
-        }),
-      });
+      while (pendingPersistRef.current) {
+        const payload = pendingPersistRef.current;
+        pendingPersistRef.current = null;
+        const elapsedMs =
+          sessionStartMs != null ? Math.max(0, Date.now() - sessionStartMs) : undefined;
+        await fetch(`/api/practice-tests/${testId}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            action: "save",
+            answers: payload.answers,
+            cursorIndex: payload.cursorIndex,
+            ...(elapsedMs !== undefined ? { elapsedMs } : {}),
+          }),
+        });
+      }
     } finally {
+      persistInFlightRef.current = false;
       setSaving(false);
     }
   }
 
   async function abandon() {
+    if (abandonInFlightRef.current || submitInFlightRef.current) return;
     if (!window.confirm("Abandon this test? Progress is saved but marked abandoned.")) return;
+    abandonInFlightRef.current = true;
+    logSessionEvent("navigation_abandon", { idx, total });
     setSaving(true);
     try {
       const elapsedMs =
@@ -467,12 +514,14 @@ export function PracticeTestRunnerClient({
       });
       window.location.href = "/app/practice-tests";
     } finally {
+      abandonInFlightRef.current = false;
       setSaving(false);
     }
   }
 
   function setAnswerForCurrent(next: unknown) {
     if (!current) return;
+    if (submitInFlightRef.current || catAdvanceInFlightRef.current || linearCommitInFlightRef.current) return;
     if (isLinearEngine && committedSet.has(current.id)) return;
     const nextAnswers = { ...answers, [current.id]: next };
     setAnswers(nextAnswers);
@@ -480,8 +529,11 @@ export function PracticeTestRunnerClient({
   }
 
   async function submitLinearCommit() {
+    if (linearCommitInFlightRef.current || submitInFlightRef.current) return;
     if (!current || !isLinearEngine || currentCommitted) return;
     if (!hasMeaningfulAnswer(current.id)) return;
+    linearCommitInFlightRef.current = true;
+    logSessionEvent("submit_linear_commit_start", { idx, questionId: current.id });
     setSaving(true);
     try {
       const elapsedMs =
@@ -529,14 +581,25 @@ export function PracticeTestRunnerClient({
           },
         }));
       }
+      logSessionEvent("submit_linear_commit_success", { idx, questionId: current.id });
     } catch (e) {
       setError(e instanceof Error ? e.message : "Submit failed");
+      logSessionEvent("submit_linear_commit_failed", {
+        idx,
+        questionId: current.id,
+        message: e instanceof Error ? e.message : "Submit failed",
+      });
     } finally {
+      linearCommitInFlightRef.current = false;
       setSaving(false);
     }
   }
 
   async function catAdvance() {
+    if (catAdvanceInFlightRef.current || submitInFlightRef.current) return;
+    if (!current || !hasMeaningfulAnswer(current.id)) return;
+    catAdvanceInFlightRef.current = true;
+    logSessionEvent("submit_cat_advance_start", { idx, questionId: current.id });
     setSaving(true);
     try {
       const elapsedMs =
@@ -567,6 +630,7 @@ export function PracticeTestRunnerClient({
       if (!res.ok) throw new Error(data.error ?? "Could not advance.");
       if (data.catStudyReveal) {
         await load();
+        logSessionEvent("submit_cat_advance_reveal", { idx, questionId: current.id });
         return;
       }
       if (data.catCompleted && data.results) {
@@ -576,37 +640,59 @@ export function PracticeTestRunnerClient({
           setCatFinalStudyFeedback(data.studyFeedback);
         }
         setStatus("COMPLETED");
+        logSessionEvent("submit_cat_advance_completed", { idx, questionId: current.id });
         return;
       }
       if (data.catAdvanced) {
         setCatStudyFeedback(null);
         await load();
+        logSessionEvent("submit_cat_advance_next", { idx, questionId: current.id });
       }
     } catch (e) {
       setError(e instanceof Error ? e.message : "Advance failed");
+      logSessionEvent("submit_cat_advance_failed", {
+        idx,
+        questionId: current?.id ?? null,
+        message: e instanceof Error ? e.message : "Advance failed",
+      });
     } finally {
+      catAdvanceInFlightRef.current = false;
       setSaving(false);
     }
   }
 
   async function goNext() {
+    if (navInFlightRef.current || submitInFlightRef.current || catAdvanceInFlightRef.current) return;
     if (catMode && idx >= total - 1) {
       await catAdvance();
       return;
     }
     if (isLinearEngine && qid && !committedSet.has(qid)) return;
     if (idx >= total - 1) return;
+    navInFlightRef.current = true;
+    logSessionEvent("navigation_next", { from: idx, to: idx + 1 });
     const nextIdx = idx + 1;
     setIdx(nextIdx);
-    await persistSave(answers, nextIdx);
+    try {
+      await persistSave(answers, nextIdx);
+    } finally {
+      navInFlightRef.current = false;
+    }
   }
 
   async function goPrev() {
+    if (navInFlightRef.current || submitInFlightRef.current || catAdvanceInFlightRef.current) return;
     if (catMode || isLinearEngine) return;
     if (idx <= 0) return;
+    navInFlightRef.current = true;
+    logSessionEvent("navigation_prev", { from: idx, to: idx - 1 });
     const nextIdx = idx - 1;
     setIdx(nextIdx);
-    await persistSave(answers, nextIdx);
+    try {
+      await persistSave(answers, nextIdx);
+    } finally {
+      navInFlightRef.current = false;
+    }
   }
 
   if (phase === "loading") {

@@ -326,3 +326,27 @@ export async function logMarkFailed(opts: {
     createdById: opts.createdById,
   });
 }
+
+export async function logWeakUpgradeRun(opts: {
+  createdById: string;
+  status: "SUCCEEDED" | "FAILED" | "SKIPPED";
+  summary: string;
+  error?: string | null;
+  metadata?: Record<string, unknown> | null;
+}): Promise<void> {
+  const status =
+    opts.status === "FAILED" ? ContentAutomationLogStatus.FAILED
+    : opts.status === "SKIPPED" ? ContentAutomationLogStatus.SKIPPED
+    : ContentAutomationLogStatus.SUCCEEDED;
+
+  await createContentAutomationLogSafe({
+    category: ContentAutomationLogCategory.BLOG_AI_SIMPLE,
+    jobType: "upgrade_weak",
+    status,
+    topic: "weak_post_upgrade",
+    summary: opts.summary.slice(0, 480),
+    error: opts.error?.slice(0, 4000) ?? null,
+    metadata: opts.metadata ?? null,
+    createdById: opts.createdById,
+  });
+}
