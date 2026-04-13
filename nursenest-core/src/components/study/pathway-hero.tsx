@@ -26,12 +26,12 @@ type Props = {
  */
 export function PathwayHero({ title, subtitle, toolbar, ctas, backLink }: Props) {
   return (
-    <header className="nn-gradient-safe relative overflow-hidden rounded-[1.75rem] border border-[var(--semantic-border-soft)] bg-gradient-to-br from-[var(--hero-gradient-start)] via-[var(--semantic-surface)] to-[var(--hero-gradient-end)] p-3.5 shadow-[var(--semantic-shadow-soft)] sm:p-4">
+    <header className="nn-gradient-safe relative overflow-hidden rounded-[1.75rem] border border-[var(--semantic-border-soft)] bg-gradient-to-br from-[var(--hero-gradient-start)] via-[var(--semantic-surface)] to-[var(--hero-gradient-end)] p-3 shadow-[var(--semantic-shadow-soft)] sm:p-3.5">
       <div className="relative">
         {backLink ? (
           <Link
             href={backLink.href}
-            className="mb-2 inline-flex text-sm font-medium text-[var(--semantic-brand)] hover:underline"
+            className="mb-1.5 inline-flex text-sm font-medium text-[var(--semantic-brand)] hover:underline"
           >
             ← {backLink.label}
           </Link>
@@ -41,10 +41,10 @@ export function PathwayHero({ title, subtitle, toolbar, ctas, backLink }: Props)
           {title}
         </h1>
 
-        <p className="mt-1 max-w-3xl text-sm leading-5 text-[var(--theme-muted-text)]">{subtitle}</p>
+        <p className="mt-0.5 max-w-3xl text-sm leading-5 text-[var(--theme-muted-text)]">{subtitle}</p>
 
         {ctas && ctas.length > 0 ? (
-          <div className="mt-2.5 flex flex-wrap gap-2">
+          <div className="mt-2 flex flex-wrap gap-2">
             {ctas.map((cta) => (
               <Link key={cta.href + cta.label} href={cta.href} className={ctaClass(cta.variant)}>
                 {cta.label}
@@ -53,7 +53,7 @@ export function PathwayHero({ title, subtitle, toolbar, ctas, backLink }: Props)
           </div>
         ) : null}
 
-        {toolbar ? <div className="mt-2.5">{toolbar}</div> : null}
+        {toolbar ? <div className="mt-2">{toolbar}</div> : null}
       </div>
     </header>
   );

@@ -1952,9 +1952,33 @@ export async function listPathwayLessonSlugBatch(
 
 /** Total lessons for pathway — count/sum only (audit, metrics). */
 export async function countPathwayLessons(pathwayId: string): Promise<number> {
+  return countPathwayLessonsDbOnly(pathwayId);
+}
+
+/** DB-only pathway lesson count (internal/admin/reporting semantics). */
+export async function countPathwayLessonsDbOnly(pathwayId: string): Promise<number> {
   const dbState = await countPublishedDbLessonsAllLocalesWithHealth(pathwayId);
   if (dbState.unavailable) return 0;
   const dbN = dbState.count;
   if (dbN > 0) return dbN;
   return getCatalogLessonsRaw(pathwayId).length;
+}
+
+/**
+ * Public-facing pathway lesson total for hubs/libraries.
+ * Matches fresh loader inclusion semantics: published DB rows + scoped-gold hub rows not yet in DB.
+ */
+export async function countPathwayLessonsPublic(
+  pathwayId: string,
+  marketingLocale?: string,
+): Promise<number> {
+  const dbState = await countPublishedDbLessonsAllLocalesWithHealth(pathwayId);
+  if (dbState.unavailable) return 0;
+  if (dbState.count <= 0) return getCatalogLessonsRaw(pathwayId).length;
+
+  const requested = normalizePathwayLessonLocale(marketingLocale);
+  const effective = await effectiveLocaleForPathwayLessonDbRows(pathwayId, requested);
+  const dbTotal = await countPublishedLessonRows(pathwayId, effective);
+  const missingGolds = await listMissingScopedGoldHubRows(pathwayId, effective);
+  return dbTotal + missingGolds.length;
 }

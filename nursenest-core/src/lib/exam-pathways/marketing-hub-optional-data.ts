@@ -7,7 +7,7 @@ import {
 import type { PathwayQuestionBankSnapshot } from "@/lib/exam-pathways/pathway-question-bank-snapshot";
 import { loadPathwayQuestionBankSnapshot } from "@/lib/exam-pathways/pathway-question-bank-snapshot";
 import {
-  countPathwayLessons,
+  countPathwayLessonsPublic,
   getPathwayLessonsPage,
   getPathwayLessonsPageFresh,
   listTopicClusters,
@@ -95,7 +95,7 @@ export async function loadMarketingExamHubOptionalBlocks(
       run: () => (pathway.id === "ca-np-cnple" ? loadNpCanadaInventoryGate() : Promise.resolve(null)),
     },
     { name: "question_snapshot", run: () => loadPathwayQuestionBankSnapshot(pathway.id) },
-    { name: "lesson_count", run: () => countPathwayLessons(pathway.id) },
+    { name: "lesson_count", run: () => countPathwayLessonsPublic(pathway.id) },
   ];
 
   const settled = await Promise.allSettled(tasks.map((t) => runHubOptionalTask(t.run())));
@@ -183,7 +183,7 @@ export async function loadPathwayLessonsHubAggregates(
         getPathwayLessonsPageFresh(pathway.id, pageRequested, pageSizeRequested, lessonContentLocale, listOpts),
     },
     { name: "question_snapshot", run: () => loadPathwayQuestionBankSnapshot(pathway.id) },
-    { name: "lesson_count", run: () => countPathwayLessons(pathway.id) },
+    { name: "lesson_count", run: () => countPathwayLessonsPublic(pathway.id) },
     {
       name: "launch_bundle",
       run: () =>
