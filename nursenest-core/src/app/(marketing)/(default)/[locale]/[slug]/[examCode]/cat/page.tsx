@@ -25,7 +25,9 @@ import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { ContentEmptyState } from "@/components/ui/content-empty-state";
 import { MarketingPathwayCatViewBeacon } from "@/components/observability/marketing-study-surface-view-beacons";
 
+export const dynamic = "force-dynamic";
 export const dynamicParams = true;
+export const revalidate = 86400;
 
 type Props = { params: Promise<{ locale: string; slug: string; examCode: string }> };
 

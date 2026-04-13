@@ -88,6 +88,7 @@ const nextConfig: NextConfig = {
   // Allow importing shared monolith modules (`../shared/*`) without publishing a package.
   experimental: {
     externalDir: true,
+    optimizePackageImports: ["@prisma/client"],
   },
   // next.config.ts is evaluated at build time only; exclude it from server-component NFT so
   // dynamic process.cwd() usage in load-marketing-messages.ts does not trigger the

@@ -65,7 +65,9 @@ import { PathwayLessonRecordChips } from "@/components/pathway-lessons/pathway-l
 import { MarketingPathwayLessonDetailViewBeacon } from "@/components/observability/marketing-study-surface-view-beacons";
 
 /** Avoid enumerating every lesson at build (large `.next` output + ENOSPC on small disks). */
+export const dynamic = "force-dynamic";
 export const dynamicParams = true;
+export const revalidate = 86400;
 /** Room for lesson body + related queries on cold DB under traffic spikes (Vercel Fluid / Node). */
 export const maxDuration = 60;
 

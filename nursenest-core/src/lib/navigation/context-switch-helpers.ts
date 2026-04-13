@@ -94,6 +94,11 @@ const LOCALE_DISPLAY: Record<GlobalLocaleCode, { label: string; flag: string }> 
   es: { label: "Español", flag: "🇪🇸" },
   tl: { label: "Tagalog", flag: "🇵🇭" },
   hi: { label: "हिन्दी", flag: "🇮🇳" },
+  ja: { label: "日本語", flag: "🇯🇵" },
+  ko: { label: "한국어", flag: "🇰🇷" },
+  de: { label: "Deutsch", flag: "🇩🇪" },
+  it: { label: "Italiano", flag: "🇮🇹" },
+  el: { label: "Ελληνικά", flag: "🇬🇷" },
 };
 
 export function getLocaleDisplay(locale: GlobalLocaleCode) {

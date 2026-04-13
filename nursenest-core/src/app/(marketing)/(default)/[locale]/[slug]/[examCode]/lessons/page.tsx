@@ -30,7 +30,9 @@ import { StudyBottomNav } from "@/components/study/study-bottom-nav";
 import { HUB } from "@/lib/marketing/marketing-entry-routes";
 import { buildPathwayLessonSystemSections } from "@/lib/lessons/pathway-lesson-body-system-groups";
 
+export const dynamic = "force-dynamic";
 export const dynamicParams = true;
+export const revalidate = 86400;
 /** Aggregates + paginated hub queries can run long on cold DB; avoid hard serverless timeouts under spike load. */
 export const maxDuration = 60;
 

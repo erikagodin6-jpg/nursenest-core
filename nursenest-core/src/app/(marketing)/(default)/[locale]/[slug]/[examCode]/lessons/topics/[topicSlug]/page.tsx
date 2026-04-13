@@ -32,7 +32,9 @@ import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { recordRouteRenderFallback } from "@/lib/observability/route-fallback-tracker";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 
+export const dynamic = "force-dynamic";
 export const dynamicParams = true;
+export const revalidate = 86400;
 export const maxDuration = 60;
 
 type Props = {

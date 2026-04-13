@@ -6,6 +6,9 @@ const RESERVED = new Set(["lessons", "study-plan"]);
 
 type Props = { params: Promise<{ slug: string }> };
 
+export const dynamic = "force-dynamic";
+export const revalidate = 86400;
+
 /**
  * Legacy module URLs `/pre-nursing/:slug` → canonical `/pre-nursing/lessons/:slug`.
  * Reserved segments are handled by more specific routes.

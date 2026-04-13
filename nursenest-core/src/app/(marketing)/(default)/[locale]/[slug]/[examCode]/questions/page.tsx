@@ -36,7 +36,9 @@ import { PathwayStatsCards } from "@/components/study/pathway-stats-cards";
 import { StudyModeCards, defaultStudyModeCards } from "@/components/study/study-mode-cards";
 import { StudyBottomNav } from "@/components/study/study-bottom-nav";
 
+export const dynamic = "force-dynamic";
 export const dynamicParams = true;
+export const revalidate = 86400;
 
 type Props = {
   params: Promise<{ locale: string; slug: string; examCode: string }>;
