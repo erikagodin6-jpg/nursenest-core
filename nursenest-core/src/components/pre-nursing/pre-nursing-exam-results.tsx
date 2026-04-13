@@ -15,32 +15,54 @@
 import Link from "next/link";
 import type { PreNursingExamResult, PerformanceLevel } from "@/lib/pre-nursing/pre-nursing-exam-engine";
 
-// ── Performance badge ─────────────────────────────────────────────────────────
+// ── Performance level config ───────────────────────────────────────────────────
 
-const LEVEL_CONFIG: Record<
-  PerformanceLevel,
-  { label: string; emoji: string; color: string; bg: string; message: string }
-> = {
+type LevelConfig = {
+  label: string;
+  emoji: string;
+  color: string;
+  bg: string;
+  /** One-line badge message shown under the heading. */
+  message: string;
+  /** Two-sentence interpretation paragraph. */
+  interpretation: string;
+  /** What this result means for their next step. */
+  whatItMeans: string;
+};
+
+const LEVEL_CONFIG: Record<PerformanceLevel, LevelConfig> = {
   Beginner: {
     label: "Beginner",
     emoji: "🌱",
     color: "var(--semantic-warning)",
     bg: "color-mix(in srgb, var(--semantic-warning) 12%, var(--semantic-surface))",
-    message: "Great start! Focus on the fundamentals — the lessons below will build your foundation.",
+    message: "You're at the starting line — that's exactly where this course begins.",
+    interpretation:
+      "Your results show gaps in foundational pre-nursing concepts, which is completely normal at this stage. Most students who work through 2–3 modules see a significant improvement on their next attempt.",
+    whatItMeans:
+      "Focus on the modules below before retaking. Each lesson is short and self-contained — you can work through one in 15–20 minutes.",
   },
   Developing: {
     label: "Developing",
     emoji: "📈",
     color: "var(--semantic-info)",
     bg: "color-mix(in srgb, var(--semantic-info) 12%, var(--semantic-surface))",
-    message: "You're building solid knowledge. Review the weak areas and keep practicing.",
+    message: "Solid foundation — you have the core concepts, now sharpen the edges.",
+    interpretation:
+      "You're demonstrating real knowledge across multiple pre-nursing topics, with a few areas that need reinforcement. Students at this level typically reach \"Strong\" after targeted review of their 2–3 weakest modules.",
+    whatItMeans:
+      "Review the weak areas listed below, then retake the adaptive exam. A second attempt usually shows a 15–25 point improvement.",
   },
   Strong: {
     label: "Strong",
     emoji: "⭐",
     color: "var(--semantic-success)",
     bg: "color-mix(in srgb, var(--semantic-success) 12%, var(--semantic-surface))",
-    message: "Excellent performance! You're ready to tackle more advanced nursing content.",
+    message: "Outstanding — your pre-nursing foundation is exam-ready.",
+    interpretation:
+      "You demonstrated strong command of pre-nursing concepts across multiple topic areas. This level of performance suggests you're ready to begin structured NCLEX or nursing school prep.",
+    whatItMeans:
+      "You've outgrown the basics. The next step is applying this knowledge to clinical reasoning questions — NCLEX-style practice will accelerate your readiness.",
   },
 };
 
@@ -94,14 +116,28 @@ function ScoreBar({ score, total, level }: { score: number; total: number; level
   );
 }
 
-function WeakAreaList({ areas, heading }: { areas: PreNursingExamResult["weakAreas"]; heading: string }) {
+const BANK_MODULE_SET = new Set([
+  "anatomy-physiology", "medical-terminology", "pharmacology",
+  "fluids-electrolytes", "infection-control", "pathophysiology",
+  "chemistry", "nutrition-foundations", "oxygenation", "health-assessment",
+]);
+
+function WeakAreaList({
+  areas,
+  heading,
+  showLinks = false,
+}: {
+  areas: PreNursingExamResult["weakAreas"];
+  heading: string;
+  showLinks?: boolean;
+}) {
   if (areas.length === 0) return null;
   return (
-    <div className="space-y-2">
+    <div className="space-y-2.5">
       <h3 className="text-xs font-semibold uppercase tracking-wide" style={{ color: "var(--semantic-text-secondary)" }}>
         {heading}
       </h3>
-      <ul className="space-y-1.5">
+      <ul className="space-y-3">
         {areas.map((a) => {
           const pct = a.accuracyPct;
           const fillCls =
@@ -109,29 +145,55 @@ function WeakAreaList({ areas, heading }: { areas: PreNursingExamResult["weakAre
             pct >= 50 ? "nn-progress-fill-semantic-info" :
             pct >= 30 ? "nn-progress-fill-semantic-warning" :
             "nn-progress-fill-semantic-danger";
+          const practiceHref = BANK_MODULE_SET.has(a.moduleSlug)
+            ? `/pre-nursing/practice/${a.moduleSlug}`
+            : `/pre-nursing/lessons/${a.moduleSlug}`;
           return (
-            <li key={a.moduleSlug} className="flex items-center gap-3">
-              <span
-                className="w-36 shrink-0 truncate text-sm font-medium"
-                style={{ color: "var(--theme-body-text)" }}
-              >
-                {a.moduleTitle}
-              </span>
-              <div
-                className="nn-progress-track-semantic h-2 flex-1 overflow-hidden rounded-full"
-                role="progressbar"
-                aria-valuenow={pct}
-                aria-valuemin={0}
-                aria-valuemax={100}
-              >
-                <div className={`${fillCls} h-full rounded-full transition-all duration-500`} style={{ width: `${pct}%` }} />
+            <li key={a.moduleSlug} className="flex flex-col gap-1.5">
+              <div className="flex items-center gap-3">
+                <span
+                  className="w-36 shrink-0 truncate text-sm font-medium"
+                  style={{ color: "var(--theme-body-text)" }}
+                >
+                  {a.moduleTitle}
+                </span>
+                <div
+                  className="nn-progress-track-semantic h-2 flex-1 overflow-hidden rounded-full"
+                  role="progressbar"
+                  aria-valuenow={pct}
+                  aria-valuemin={0}
+                  aria-valuemax={100}
+                >
+                  <div
+                    className={`${fillCls} h-full rounded-full transition-all duration-500`}
+                    style={{ width: `${pct}%` }}
+                  />
+                </div>
+                <span
+                  className="w-10 shrink-0 text-right text-xs tabular-nums"
+                  style={{ color: "var(--semantic-text-secondary)" }}
+                >
+                  {pct}%
+                </span>
               </div>
-              <span
-                className="w-10 shrink-0 text-right text-xs tabular-nums"
-                style={{ color: "var(--semantic-text-secondary)" }}
-              >
-                {pct}%
-              </span>
+              {showLinks && pct < 60 && (
+                <div className="ml-[9.5rem] flex gap-3 text-xs">
+                  <Link
+                    href={practiceHref}
+                    className="font-medium hover:underline"
+                    style={{ color: "var(--semantic-info)" }}
+                  >
+                    Practice →
+                  </Link>
+                  <Link
+                    href={`/pre-nursing/lessons/${a.moduleSlug}`}
+                    className="font-medium hover:underline"
+                    style={{ color: "var(--semantic-text-secondary)" }}
+                  >
+                    Review lesson
+                  </Link>
+                </div>
+              )}
             </li>
           );
         })}
@@ -217,8 +279,38 @@ function NextStepsBlock({ nextSteps }: { nextSteps: PreNursingExamResult["nextSt
   );
 }
 
+const CTA_COPY: Record<
+  PerformanceLevel,
+  { heading: string; body: string; primary: string; primaryHref: string; secondary: string; secondaryHref: string }
+> = {
+  Beginner: {
+    heading: "The right foundation changes everything.",
+    body: "NurseNest's full platform includes thousands of NCLEX-style questions, adaptive CAT exams, and structured study plans — all aligned to nursing school and beyond.",
+    primary: "Create a free account",
+    primaryHref: "/signup",
+    secondary: "See what's included",
+    secondaryHref: "/pricing",
+  },
+  Developing: {
+    heading: "You're closer than you think.",
+    body: "Upgrade to the full NurseNest platform to access a complete NCLEX question bank, targeted flashcard decks, and a full readiness CAT exam that tracks your progress over time.",
+    primary: "Start free — no card needed",
+    primaryHref: "/signup",
+    secondary: "Browse flashcard decks",
+    secondaryHref: "/flashcards",
+  },
+  Strong: {
+    heading: "You're ready for the next level.",
+    body: "Your pre-nursing foundation is strong. NurseNest's full NCLEX prep — 2,000+ adaptive questions, structured lessons, and a readiness CAT — is the natural next step.",
+    primary: "Start NCLEX prep free",
+    primaryHref: "/signup",
+    secondary: "Explore the question bank",
+    secondaryHref: "/question-bank",
+  },
+};
+
 function ConversionCTA({ level }: { level: PerformanceLevel }) {
-  const isStrong = level === "Strong";
+  const copy = CTA_COPY[level];
   return (
     <div
       className="rounded-xl border-2 p-5 sm:p-6"
@@ -228,49 +320,32 @@ function ConversionCTA({ level }: { level: PerformanceLevel }) {
       }}
     >
       <p className="mb-1 text-base font-bold" style={{ color: "var(--theme-heading-text)" }}>
-        {isStrong
-          ? "You're ready for nursing school prep!"
-          : "Keep building — unlock full exam preparation"}
+        {copy.heading}
       </p>
-      <p className="mb-4 text-sm" style={{ color: "var(--semantic-text-secondary)" }}>
-        {isStrong
-          ? "Access the full NCLEX question bank, adaptive CAT exams, and structured study plans."
-          : "Get access to thousands of practice questions, flashcards, and a full readiness CAT exam."}
+      <p className="mb-4 text-sm leading-6" style={{ color: "var(--semantic-text-secondary)" }}>
+        {copy.body}
       </p>
       <div className="flex flex-wrap gap-3">
         <Link
-          href="/signup"
-          className="rounded-full px-5 py-2.5 text-sm font-semibold transition-opacity hover:opacity-90"
+          href={copy.primaryHref}
+          className="rounded-full px-5 py-2.5 text-sm font-semibold transition-opacity hover:opacity-90 active:scale-[0.98]"
           style={{
             background: "var(--role-cta, var(--semantic-brand))",
             color: "var(--role-cta-foreground, #fff)",
           }}
         >
-          Start free — no card needed
+          {copy.primary}
         </Link>
-        {isStrong ? (
-          <Link
-            href="/question-bank"
-            className="rounded-full border px-5 py-2.5 text-sm font-semibold"
-            style={{
-              borderColor: "var(--semantic-border-soft)",
-              color: "var(--theme-body-text)",
-            }}
-          >
-            Explore question bank
-          </Link>
-        ) : (
-          <Link
-            href="/flashcards"
-            className="rounded-full border px-5 py-2.5 text-sm font-semibold"
-            style={{
-              borderColor: "var(--semantic-border-soft)",
-              color: "var(--theme-body-text)",
-            }}
-          >
-            Browse flashcards
-          </Link>
-        )}
+        <Link
+          href={copy.secondaryHref}
+          className="rounded-full border px-5 py-2.5 text-sm font-semibold transition-colors hover:bg-[var(--semantic-surface-hover)]"
+          style={{
+            borderColor: "var(--semantic-border-soft)",
+            color: "var(--theme-body-text)",
+          }}
+        >
+          {copy.secondary}
+        </Link>
       </div>
     </div>
   );
@@ -295,7 +370,7 @@ export function PreNursingExamResults({ result, examLabel = "Exam", onRetry }: P
         <h2 className="text-xl font-bold" style={{ color: "var(--theme-heading-text)" }}>
           {examLabel} complete
         </h2>
-        <p className="text-sm leading-6" style={{ color: "var(--semantic-text-secondary)" }}>
+        <p className="text-sm font-medium" style={{ color: "var(--semantic-text-secondary)" }}>
           {cfg.message}
         </p>
       </div>
@@ -303,12 +378,27 @@ export function PreNursingExamResults({ result, examLabel = "Exam", onRetry }: P
       {/* Score */}
       <ScoreBar score={result.score} total={result.total} level={result.performanceLevel} />
 
-      {/* Areas */}
+      {/* Interpretation */}
+      <div
+        className="rounded-xl border-l-4 px-4 py-3 text-sm leading-6"
+        style={{
+          borderLeftColor: LEVEL_CONFIG[result.performanceLevel].color,
+          background: LEVEL_CONFIG[result.performanceLevel].bg,
+          color: "var(--theme-body-text)",
+        }}
+      >
+        <p className="mb-1">{cfg.interpretation}</p>
+        <p className="font-medium" style={{ color: "var(--theme-heading-text)" }}>{cfg.whatItMeans}</p>
+      </div>
+
+      {/* Weak areas — top 3 max, with inline links */}
       {result.weakAreas.length > 0 && (
-        <WeakAreaList areas={result.weakAreas} heading="Areas to strengthen" />
+        <WeakAreaList areas={result.weakAreas} heading="Areas to strengthen" showLinks />
       )}
+
+      {/* Strengths — no links needed */}
       {result.strengths.length > 0 && (
-        <WeakAreaList areas={result.strengths} heading="Strong areas" />
+        <WeakAreaList areas={result.strengths} heading="What you nailed" />
       )}
 
       {/* Next steps */}

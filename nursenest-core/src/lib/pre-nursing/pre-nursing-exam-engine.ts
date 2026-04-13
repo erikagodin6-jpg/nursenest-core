@@ -6,17 +6,19 @@
  * 1. Mini CAT — lightweight adaptive exam:
  *    - 10–15 questions, ~10 minutes
  *    - Ability scale 1.0–3.0 (maps directly to difficulty 1/2/3)
- *    - Starts at ability 2.0 (medium), adjusts ±0.5 per answer
- *    - Early stop: after 8+ questions if last 5 are all correct (strong) or all wrong (beginner)
+ *    - Difficulty-weighted ability updates + ±0.1 jitter:
+ *        easy correct +0.3, medium +0.5, hard +0.7
+ *        easy wrong   −0.3, medium −0.5, hard −0.7
+ *    - Jitter (±0.1) prevents mechanical predictability
+ *    - Early stop: after 8+ questions if last 5 are all correct or all wrong
  *    - Performance level: Beginner (<50% correct), Developing (50–74%), Strong (≥75%)
  *
  * 2. Practice Exam — fixed non-adaptive set:
- *    - 10–20 questions per module
- *    - Balanced difficulty distribution (easy/medium/hard)
- *    - Returns same score + weak areas
+ *    - 10 questions per module, balanced difficulty (40/40/20)
+ *    - Returns same score + weak areas (capped at top 3)
  *
  * Both modes return `PreNursingExamResult` at completion.
- * All logic is pure / stateless so it runs on the client with no network calls.
+ * All logic is pure / stateless — no network calls, no DB.
  */
 
 import type { PreNursingQuestion } from "@/lib/pre-nursing/pre-nursing-question-bank";
@@ -73,12 +75,22 @@ export type MiniCatState = {
 // ── Mini CAT constants ─────────────────────────────────────────────────────────
 
 const MINI_CAT_START_ABILITY = 2.0;
-const MINI_CAT_STEP_CORRECT = 0.5;
-const MINI_CAT_STEP_INCORRECT = 0.5;
 const MINI_CAT_MIN_ABILITY = 1.0;
 const MINI_CAT_MAX_ABILITY = 3.0;
 const MINI_CAT_MAX_QUESTIONS = 15;
 const MINI_CAT_EARLY_STOP_AFTER = 8;
+const MINI_CAT_JITTER = 0.1; // small random nudge to prevent mechanical pattern
+
+/**
+ * Difficulty-weighted ability delta.
+ * Correct on a hard question moves the needle more than correct on an easy one.
+ * Jitter (±MINI_CAT_JITTER) adds subtle unpredictability without instability.
+ */
+const ABILITY_DELTA: Record<1 | 2 | 3, { correct: number; wrong: number }> = {
+  1: { correct:  0.3, wrong: -0.3 },
+  2: { correct:  0.5, wrong: -0.5 },
+  3: { correct:  0.7, wrong: -0.7 },
+};
 
 // ── Mini CAT engine functions ──────────────────────────────────────────────────
 
@@ -134,14 +146,23 @@ export function selectNextQuestion(
 
 /**
  * Record a graded answer and update the ability estimate.
- * Returns the new state (immutable-style — always return new object).
+ *
+ * Uses difficulty-weighted deltas so a correct hard answer lifts ability more
+ * than a correct easy answer. A small jitter (±0.1) prevents mechanical step
+ * patterns without destabilising the estimate.
+ *
+ * Returns a new state object (immutable-style).
  */
 export function recordAnswer(
   state: MiniCatState,
   question: PreNursingQuestion,
   correct: boolean,
 ): MiniCatState {
-  const delta = correct ? MINI_CAT_STEP_CORRECT : -MINI_CAT_STEP_INCORRECT;
+  const deltas = ABILITY_DELTA[question.difficulty];
+  const base = correct ? deltas.correct : deltas.wrong;
+  // Jitter: random in [-MINI_CAT_JITTER, +MINI_CAT_JITTER]
+  const jitter = (Math.random() * 2 - 1) * MINI_CAT_JITTER;
+  const delta = base + jitter;
   const newAbility = Math.max(
     MINI_CAT_MIN_ABILITY,
     Math.min(MINI_CAT_MAX_ABILITY, state.abilityEstimate + delta),
@@ -247,7 +268,8 @@ function buildWeakAreas(answers: AnswerRecord[]): { weakAreas: WeakArea[]; stren
     }))
     .sort((a, b) => a.accuracyPct - b.accuracyPct);
 
-  const weakAreas = all.filter((a) => a.accuracyPct < 60);
+  // Cap weak areas at top 3 (lowest accuracy) to avoid overload
+  const weakAreas = all.filter((a) => a.accuracyPct < 60).slice(0, 3);
   const strengths = all.filter((a) => a.accuracyPct >= 75);
 
   return { weakAreas, strengths };
@@ -257,28 +279,40 @@ function buildNextSteps(
   weakAreas: WeakArea[],
   performanceLevel: PerformanceLevel,
 ): PreNursingExamResult["nextSteps"] {
-  const topWeak = weakAreas.slice(0, 3).map((w) => w.moduleSlug);
+  // Already capped to ≤3 by buildWeakAreas
+  const topWeak = weakAreas.map((w) => w.moduleSlug);
 
-  const lessons = topWeak.map((slug) => ({
-    title: `Review: ${MODULE_TITLES[slug] ?? slug}`,
-    href: `/pre-nursing/lessons/${slug}`,
-  }));
+  // Lessons: prefer the practice exam page when available (more actionable than passive reading)
+  const BANK_MODULE_SLUGS_SET = new Set([
+    "anatomy-physiology", "medical-terminology", "pharmacology",
+    "fluids-electrolytes", "infection-control", "pathophysiology",
+    "chemistry", "nutrition-foundations", "oxygenation", "health-assessment",
+  ]);
 
+  const lessons = topWeak.map((slug) => {
+    const title = MODULE_TITLES[slug] ?? slug;
+    // Link to practice exam if available, otherwise lesson
+    const href = BANK_MODULE_SLUGS_SET.has(slug)
+      ? `/pre-nursing/practice/${slug}`
+      : `/pre-nursing/lessons/${slug}`;
+    const label = BANK_MODULE_SLUGS_SET.has(slug)
+      ? `Practice: ${title}`
+      : `Review: ${title}`;
+    return { title: label, href };
+  });
+
+  // Flashcards: top 2 weak modules
   const flashcards = topWeak.slice(0, 2).map((slug) => ({
-    title: `${MODULE_TITLES[slug] ?? slug} flashcards`,
+    title: `${MODULE_TITLES[slug] ?? slug} — study flashcards`,
     href: `/flashcards/${slug}`,
   }));
 
   const questions =
-    performanceLevel !== "Strong"
-      ? {
-          title: "Practice more pre-nursing questions",
-          href: "/pre-nursing/mini-cat",
-        }
-      : {
-          title: "Challenge yourself with NCLEX-level questions",
-          href: "/question-bank",
-        };
+    performanceLevel === "Strong"
+      ? { title: "Try NCLEX-level practice questions", href: "/question-bank" }
+      : performanceLevel === "Developing"
+        ? { title: "Retake the adaptive mini exam", href: "/pre-nursing/mini-cat" }
+        : { title: "Restart from the beginning — adaptive exam", href: "/pre-nursing/mini-cat" };
 
   return { lessons, flashcards, questions };
 }
