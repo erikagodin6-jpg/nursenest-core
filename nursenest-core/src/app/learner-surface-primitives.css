@@ -94,6 +94,10 @@
   border-top-color: color-mix(in srgb, var(--semantic-success) 62%, var(--semantic-border-soft));
 }
 
+.nn-ls-surface[data-nn-ls-tone="warm"].nn-ls-surface--accent-top {
+  border-top-color: color-mix(in srgb, var(--semantic-warning) 55%, var(--semantic-border-soft));
+}
+
 /* ── Section typography (page sections, cards) ───────────────────────── */
 
 .nn-ls-kicker {
