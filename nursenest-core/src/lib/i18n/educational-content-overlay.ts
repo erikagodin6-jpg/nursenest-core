@@ -404,15 +404,50 @@ export function applyPathwayLessonEducationalOverlay(
   }
 
   let applied = false;
+  let overlayTranslationFallback = lesson.localeMeta?.overlayTranslationFallback ?? false;
 
-  const title = o.title !== undefined && o.title.trim() ? o.title : lesson.title;
+  let title = lesson.title;
+  if (o.title !== undefined && o.title.trim()) {
+    const r = pickLocalizedOverlayString(lesson.title, o.title, locale, {
+      surface: "lesson_title",
+      lessonSlug: lesson.slug,
+    });
+    title = r.value;
+    if (r.fellBack) overlayTranslationFallback = true;
+  }
   if (title !== lesson.title) applied = true;
-  const topic = o.topic !== undefined && o.topic.trim() ? o.topic : lesson.topic;
+
+  let topic = lesson.topic;
+  if (o.topic !== undefined && o.topic.trim()) {
+    const r = pickLocalizedOverlayString(lesson.topic, o.topic, locale, {
+      surface: "lesson_topic",
+      lessonSlug: lesson.slug,
+    });
+    topic = r.value;
+    if (r.fellBack) overlayTranslationFallback = true;
+  }
   if (topic !== lesson.topic) applied = true;
-  const seoTitle = o.seoTitle !== undefined && o.seoTitle.trim() ? o.seoTitle : lesson.seoTitle;
+
+  let seoTitle = lesson.seoTitle;
+  if (o.seoTitle !== undefined && o.seoTitle.trim()) {
+    const r = pickLocalizedOverlayString(lesson.seoTitle, o.seoTitle, locale, {
+      surface: "lesson_seo_title",
+      lessonSlug: lesson.slug,
+    });
+    seoTitle = r.value;
+    if (r.fellBack) overlayTranslationFallback = true;
+  }
   if (seoTitle !== lesson.seoTitle) applied = true;
-  const seoDescription =
-    o.seoDescription !== undefined && o.seoDescription.trim() ? o.seoDescription : lesson.seoDescription;
+
+  let seoDescription = lesson.seoDescription;
+  if (o.seoDescription !== undefined && o.seoDescription.trim()) {
+    const r = pickLocalizedOverlayString(lesson.seoDescription, o.seoDescription, locale, {
+      surface: "lesson_seo_description",
+      lessonSlug: lesson.slug,
+    });
+    seoDescription = r.value;
+    if (r.fellBack) overlayTranslationFallback = true;
+  }
   if (seoDescription !== lesson.seoDescription) applied = true;
 
   let sections = lesson.sections;
@@ -422,7 +457,9 @@ export function applyPathwayLessonEducationalOverlay(
       const patch = byId[s.id];
       if (!patch) return s;
       applied = true;
-      return mergeLessonSection(s, patch);
+      const { section, fellBack } = mergeLessonSection(s, patch, locale, lesson.slug);
+      if (fellBack) overlayTranslationFallback = true;
+      return section;
     });
     sections = next;
   }
@@ -430,18 +467,20 @@ export function applyPathwayLessonEducationalOverlay(
   let preTest = lesson.preTest;
   let postTest = lesson.postTest;
   if (o.preTest?.length) {
-    const merged = mergeQuizList(lesson.preTest, o.preTest, "preTest", locale, lesson.slug);
+    const { merged, fellBack } = mergeQuizList(lesson.preTest, o.preTest, "preTest", locale, lesson.slug);
     if (merged !== lesson.preTest) {
       preTest = merged;
       applied = true;
     }
+    if (fellBack) overlayTranslationFallback = true;
   }
   if (o.postTest?.length) {
-    const merged = mergeQuizList(lesson.postTest, o.postTest, "postTest", locale, lesson.slug);
+    const { merged, fellBack } = mergeQuizList(lesson.postTest, o.postTest, "postTest", locale, lesson.slug);
     if (merged !== lesson.postTest) {
       postTest = merged;
       applied = true;
     }
+    if (fellBack) overlayTranslationFallback = true;
   }
 
   if (!applied) return lesson;
@@ -462,7 +501,11 @@ export function applyPathwayLessonEducationalOverlay(
     sections,
     ...(preTest ? { preTest } : {}),
     ...(postTest ? { postTest } : {}),
-    localeMeta: { ...baseMeta, educationalOverlayApplied: true },
+    localeMeta: {
+      ...baseMeta,
+      educationalOverlayApplied: true,
+      ...(overlayTranslationFallback ? { overlayTranslationFallback: true } : {}),
+    },
   };
 }
 
@@ -487,6 +530,29 @@ function mergeStringField(base: string | null | undefined, overlay: string | und
   return t.length ? overlay : base;
 }
 
+function mergeQuestionNullableStringWithQuality(
+  base: string | null | undefined,
+  overlay: string | undefined,
+  locale: string,
+  field: string,
+  questionId: string,
+): { value: string | null | undefined; usedOverlay: boolean; fellBack: boolean } {
+  if (overlay === undefined) return { value: base ?? null, usedOverlay: false, fellBack: false };
+  const t = overlay.trim();
+  if (!t.length) return { value: base ?? null, usedOverlay: false, fellBack: false };
+  const r = pickLocalizedOverlayString(base ?? "", overlay, locale, {
+    surface: "question_field",
+    field,
+    questionId,
+  });
+  const value = (r.value.length ? r.value : base) ?? null;
+  return {
+    value,
+    usedOverlay: !r.fellBack,
+    fellBack: r.fellBack,
+  };
+}
+
 export type QuestionDisplayLocalization = {
   /** Fields safe for display; `options` remains canonical from DB for grading. */
   stem: string;
@@ -505,6 +571,8 @@ export type QuestionDisplayLocalization = {
   incorrectAnswerRationale?: unknown;
   /** True when any overlay field was applied for non-English locale. */
   overlayApplied: boolean;
+  /** At least one overlay string failed quality checks and was reverted to English. */
+  overlayTranslationFallback?: boolean;
 };
 
 type QuestionRowForDisplay = {

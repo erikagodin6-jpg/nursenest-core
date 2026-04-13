@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import type { ReactNode } from "react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { ArrowRight, BookMarked, BookOpen, ClipboardList, Layers, Loader2, Search, Sparkles, Target } from "lucide-react";
 import type { StudyNextRecommendation } from "@/lib/learner/study-next-types";
@@ -273,49 +274,75 @@ export function LearnerCommandCenterClient() {
           <BrowseGroup
             icon={<BookMarked className="h-4 w-4" />}
             title="Notes & highlights"
+            slug="notes"
             empty="No notes yet — open a lesson or question and jot a takeaway."
             footerHref="/app/account/notes"
             footerLabel="Open notes library"
           >
-            {payload.notes.slice(0, 6).map((n) => (
-              <BrowseRow key={n.id} href={n.href} title={n.title?.trim() || n.snippet.slice(0, 56)} meta={n.kind === "bookmark" ? "Bookmark" : n.scopeLabel} sub={n.snippet} />
-            ))}
+            {payload.notes.length ? (
+              payload.notes.slice(0, 6).map((n) => (
+                <BrowseRow
+                  key={n.id}
+                  href={n.href}
+                  title={n.title?.trim() || n.snippet.slice(0, 56)}
+                  meta={n.kind === "bookmark" ? "Bookmark" : n.scopeLabel}
+                  sub={n.snippet}
+                />
+              ))
+            ) : (
+              <EmptyBrowse />
+            )}
           </BrowseGroup>
 
           <BrowseGroup
             icon={<Target className="h-4 w-4" />}
             title="Weak topics"
+            slug="weak"
             empty="No weak-topic signal yet — answer a few more questions to personalize this list."
             footerHref="/app/account/focus-areas"
             footerLabel="Focus areas"
           >
-            {payload.weakTopics.slice(0, 6).map((w) => (
-              <BrowseRow key={w.topic} href={w.href} title={w.topic} meta={`${w.missRate}% miss`} sub="Topic drill in question bank" />
-            ))}
+            {payload.weakTopics.length ? (
+              payload.weakTopics.slice(0, 6).map((w) => (
+                <BrowseRow key={w.topic} href={w.href} title={w.topic} meta={`${w.missRate}% miss`} sub="Topic drill in question bank" />
+              ))
+            ) : (
+              <EmptyBrowse />
+            )}
           </BrowseGroup>
 
           <BrowseGroup
             icon={<ClipboardList className="h-4 w-4" />}
             title="Recent mistakes"
+            slug="mistakes"
             empty="No mistakes logged — complete a practice set to populate your notebook."
             footerHref="/app/account/mistakes"
             footerLabel="Mistake notebook"
           >
-            {payload.mistakes.slice(0, 6).map((m) => (
-              <BrowseRow key={m.id} href={m.href} title={m.topic ?? "Question"} meta="Missed" sub={m.stemSnippet} />
-            ))}
+            {payload.mistakes.length ? (
+              payload.mistakes.slice(0, 6).map((m) => (
+                <BrowseRow key={m.id} href={m.href} title={m.topic ?? "Question"} meta="Missed" sub={m.stemSnippet} />
+              ))
+            ) : (
+              <EmptyBrowse />
+            )}
           </BrowseGroup>
 
           <BrowseGroup
             icon={<BookOpen className="h-4 w-4" />}
             title="Planned lessons"
+            slug="lessons"
             empty="No lesson picks queued — your study plan will suggest the next step soon."
             footerHref="/app/study-plan"
             footerLabel="Study plan"
           >
-            {payload.plannedLessons.map((l, i) => (
-              <BrowseRow key={`${l.href}-${i}`} href={l.href} title={l.title} meta="Plan" sub="Continue your pathway" />
-            ))}
+            {payload.plannedLessons.length ? (
+              payload.plannedLessons.map((l, i) => (
+                <BrowseRow key={`${l.href}-${i}`} href={l.href} title={l.title} meta="Plan" sub="Continue your pathway" />
+              ))
+            ) : (
+              <EmptyBrowse />
+            )}
           </BrowseGroup>
         </div>
       ) : null}

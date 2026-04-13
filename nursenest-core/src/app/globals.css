@@ -1476,12 +1476,22 @@ html[data-theme] .nn-marketing-surface {
   font-weight: 600;
   border: 1px solid color-mix(in srgb, var(--theme-primary) 22%, transparent);
   box-shadow: 0 6px 18px color-mix(in srgb, var(--theme-heading-text) 8%, transparent);
-  transition: filter 0.15s ease, box-shadow 0.15s ease;
+  transition:
+    filter var(--nn-btn-motion-duration) var(--nn-btn-motion-ease),
+    box-shadow var(--nn-btn-motion-duration) var(--nn-btn-motion-ease),
+    transform var(--nn-btn-motion-duration) var(--nn-btn-motion-ease);
 }
 
-.nn-button-primary-pastel:hover:not(:disabled):not([aria-disabled="true"]) {
+.nn-button-primary-pastel:hover:not(:disabled):not([aria-disabled="true"]):not(:active) {
   filter: brightness(1.03);
   box-shadow: 0 8px 22px color-mix(in srgb, var(--theme-heading-text) 10%, transparent);
+  transform: translateY(-1px);
+}
+
+.nn-button-primary-pastel:active:not(:disabled):not([aria-disabled="true"]) {
+  filter: brightness(1);
+  box-shadow: 0 3px 12px color-mix(in srgb, var(--theme-heading-text) 7%, transparent);
+  transform: translateY(0) scale(0.98);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1877,10 +1887,10 @@ html[data-theme] .nn-marketing-surface {
   border-radius: 9999px;
   box-shadow: 0 4px 14px var(--role-cta-shadow, color-mix(in srgb, var(--theme-primary) 28%, transparent));
   transition:
-    filter 0.15s ease,
-    background-color 0.15s ease,
-    transform 0.12s ease,
-    box-shadow 0.15s ease;
+    filter var(--nn-btn-motion-duration) var(--nn-btn-motion-ease),
+    background-color var(--nn-btn-motion-duration) var(--nn-btn-motion-ease),
+    transform var(--nn-btn-motion-duration) var(--nn-btn-motion-ease),
+    box-shadow var(--nn-btn-motion-duration) var(--nn-btn-motion-ease);
 }
 
 /** Header / compact CTAs: primary fill with rounded-xl (not full pill). */
