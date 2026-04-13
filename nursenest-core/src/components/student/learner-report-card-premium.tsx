@@ -9,6 +9,7 @@ import { readinessBandLabel, readinessBandProgressFillClass } from "@/lib/learne
 import type { LearnerMarketingT } from "@/lib/learner/learner-marketing-server";
 import { PeerComparisonPanel } from "@/components/study/peer-comparison-panel";
 import { LearnerSurface } from "@/components/learner-ui/learner-surface";
+import { semanticFillClassForAccuracyPct } from "@/lib/ui/semantic-progress-fill";
 import {
   LearnerReportCardSection,
   LearnerReportInset,
@@ -19,23 +20,21 @@ import {
 
 function pctBar(pct: number | null, label: string) {
   const v = pct == null ? 0 : Math.min(100, Math.max(0, pct));
+  const fillClass = pct == null ? "nn-progress-fill-semantic-muted" : semanticFillClassForAccuracyPct(pct);
   return (
-    <div className="space-y-1">
-      <div className="flex justify-between text-xs text-muted-foreground">
-        <span>{label}</span>
-        <span className="tabular-nums font-medium text-foreground">{pct == null ? "—" : `${pct}%`}</span>
+    <div className="space-y-2">
+      <div className="flex justify-between gap-3 text-xs text-[var(--semantic-text-secondary)]">
+        <span className="min-w-0 font-medium">{label}</span>
+        <span className="shrink-0 tabular-nums text-[var(--semantic-text-primary)]">{pct == null ? "—" : `${pct}%`}</span>
       </div>
       <div
-        className="nn-progress-track-semantic"
+        className="nn-progress-track-semantic nn-progress-track-semantic--md"
         role="progressbar"
         aria-valuenow={v}
         aria-valuemin={0}
         aria-valuemax={100}
       >
-        <div
-          className="h-full rounded-full nn-progress-fill-semantic-success transition-[width] duration-500"
-          style={{ width: `${v}%` }}
-        />
+        <div className={`h-full rounded-full ${fillClass} transition-[width] duration-500`} style={{ width: `${v}%` }} />
       </div>
     </div>
   );
@@ -43,9 +42,9 @@ function pctBar(pct: number | null, label: string) {
 
 function Na({ children }: { children: ReactNode }) {
   return (
-    <p className="rounded-lg border border-dashed border-border/70 bg-muted/10 px-4 py-6 text-center text-sm text-muted-foreground">
-      {children}
-    </p>
+    <div className="rounded-2xl border border-dashed border-[color-mix(in_srgb,var(--semantic-text-muted)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-muted)_65%,var(--semantic-surface))] px-5 py-8 text-center">
+      <p className="text-sm leading-relaxed text-[var(--semantic-text-muted)]">{children}</p>
+    </div>
   );
 }
 
@@ -129,19 +128,19 @@ export function LearnerReportCardPremium({
   const tiles = heroTiles(data, t);
 
   return (
-    <div className="space-y-10">
+    <div className="nn-rc-page">
       {scopeBits ? (
-        <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[var(--semantic-text-muted)]">
           {t("learner.reportCard.scopeLabel", { scope: scopeBits })}
         </p>
       ) : null}
 
-      <LearnerSurface tone="primary" padding="lg" accentTop className="overflow-hidden">
-        <header className="max-w-3xl space-y-1">
+      <LearnerSurface tone="primary" padding="lg" accentTop className="overflow-hidden shadow-[var(--semantic-shadow-soft)]">
+        <header className="max-w-3xl space-y-3">
           <p className="nn-ls-kicker">{t("learner.account.reportCard.title")}</p>
           <p className="text-sm leading-relaxed text-[var(--semantic-text-muted)]">{t("learner.account.reportCard.intro")}</p>
         </header>
-        <div className="mt-6">
+        <div className="mt-8">
           <LearnerReportOutcomeStatStrip tiles={tiles} />
         </div>
       </LearnerSurface>
@@ -160,14 +159,20 @@ export function LearnerReportCardPremium({
         tone="supportive"
       >
         {data.readiness.band === "insufficient_data" || data.readiness.score == null ? (
-          <div className="rounded-xl border border-dashed border-border/60 bg-muted/10 px-5 py-6 text-center">
-            <p className="text-sm font-medium text-[var(--theme-heading-text)]">{t("learner.reportCard.readiness.insufficientTitle")}</p>
-            <p className="mt-1.5 text-xs text-muted-foreground">{t("learner.reportCard.readiness.insufficientBody")}</p>
-            <div className="mt-4 flex flex-wrap justify-center gap-2">
-              <Link href="/app/questions" className="inline-flex rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground">
+          <div className="rounded-2xl border border-dashed border-[color-mix(in_srgb,var(--semantic-info)_20%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_35%,var(--semantic-surface))] px-6 py-8 text-center">
+            <p className="text-sm font-semibold text-[var(--semantic-text-primary)]">{t("learner.reportCard.readiness.insufficientTitle")}</p>
+            <p className="mx-auto mt-2 max-w-md text-xs leading-relaxed text-[var(--semantic-text-muted)]">{t("learner.reportCard.readiness.insufficientBody")}</p>
+            <div className="mt-6 flex flex-col items-stretch justify-center gap-3 xs:flex-row xs:flex-wrap xs:items-center">
+              <Link
+                href="/app/questions"
+                className="inline-flex justify-center rounded-full bg-role-cta px-5 py-2.5 text-sm font-semibold text-role-cta-foreground shadow-sm transition hover:opacity-95"
+              >
                 {t("learner.reportCard.readiness.ctaQuestions")}
               </Link>
-              <Link href="/app/exams" className="inline-flex rounded-full border border-border px-4 py-2 text-sm font-semibold hover:bg-muted/80">
+              <Link
+                href="/app/exams"
+                className="inline-flex justify-center rounded-full border border-[color-mix(in_srgb,var(--semantic-border-soft)_90%,var(--semantic-brand))] bg-[var(--semantic-surface)] px-5 py-2.5 text-sm font-semibold text-[var(--semantic-text-primary)] shadow-sm transition hover:bg-[var(--semantic-panel-muted)]"
+              >
                 {t("learner.reportCard.readiness.ctaMocks")}
               </Link>
             </div>

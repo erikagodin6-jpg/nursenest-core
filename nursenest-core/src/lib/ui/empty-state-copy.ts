@@ -167,6 +167,69 @@ const notFoundMinimal = Object.assign(
   } satisfies EmptyStateCopyEntry,
 );
 
+const noAnalyticsYet = Object.assign(
+  (): EmptyStateCopyEntry => ({
+    headline: "Analytics will appear here",
+    body: "After you answer questions or complete a practice session, trends and topic balance show up in this view.",
+    hint: "Start with a short question set or one lesson to generate your first signals.",
+  }),
+  {
+    headline: "Analytics will appear here",
+    body: "After you answer questions or complete a practice session, trends and topic balance show up in this view.",
+    hint: "Start with a short question set or one lesson to generate your first signals.",
+  } satisfies EmptyStateCopyEntry,
+);
+
+const noRecentPractice = Object.assign(
+  (): EmptyStateCopyEntry => ({
+    headline: "No recent practice yet",
+    body: "Your latest sessions will list here so you can pick up where you left off.",
+    hint: "Open the question bank or a saved practice exam to create your first entry.",
+  }),
+  {
+    headline: "No recent practice yet",
+    body: "Your latest sessions will list here so you can pick up where you left off.",
+    hint: "Open the question bank or a saved practice exam to create your first entry.",
+  } satisfies EmptyStateCopyEntry,
+);
+
+const noWeakTopicsYet = Object.assign(
+  (): EmptyStateCopyEntry => ({
+    headline: "No weak topics to highlight yet",
+    body: "We look for patterns across graded questions. A little more volume helps us suggest focused review.",
+  }),
+  {
+    headline: "No weak topics to highlight yet",
+    body: "We look for patterns across graded questions. A little more volume helps us suggest focused review.",
+  } satisfies EmptyStateCopyEntry,
+);
+
+const noSavedNotes = Object.assign(
+  (): EmptyStateCopyEntry => ({
+    headline: "No saved notes yet",
+    body: "Notes you add from lessons or questions collect here for quick review before exams.",
+    hint: "Open any lesson or question and use the notes panel to capture what you want to remember.",
+  }),
+  {
+    headline: "No saved notes yet",
+    body: "Notes you add from lessons or questions collect here for quick review before exams.",
+    hint: "Open any lesson or question and use the notes panel to capture what you want to remember.",
+  } satisfies EmptyStateCopyEntry,
+);
+
+const noStudyActivityYet = Object.assign(
+  (): EmptyStateCopyEntry => ({
+    headline: "No study activity yet",
+    body: "Once you study, this area fills in with momentum, streaks, and the next sensible step for your plan.",
+    hint: "Your dashboard stays available whenever you are ready to begin.",
+  }),
+  {
+    headline: "No study activity yet",
+    body: "Once you study, this area fills in with momentum, streaks, and the next sensible step for your plan.",
+    hint: "Your dashboard stays available whenever you are ready to begin.",
+  } satisfies EmptyStateCopyEntry,
+);
+
 export const emptyStateCopy = {
   noLessonsThin: thinInventory,
   thinInventory,
@@ -177,6 +240,12 @@ export const emptyStateCopy = {
   },
   noProgressYet,
   noWeakAreasYet,
+  /** Alias with clearer wording for dashboards. */
+  noWeakTopicsYet,
+  noAnalyticsYet,
+  noRecentPractice,
+  noSavedNotes,
+  noStudyActivityYet,
   noExamHistory: {
     headline: "No exam sessions yet",
     body: "Start a practice exam to build your readiness picture and track how you improve over time.",

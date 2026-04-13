@@ -29,7 +29,14 @@ export function LearnerReportCardSection({
   children: ReactNode;
 }) {
   return (
-    <LearnerStudySurfaceSection id={id} eyebrow={eyebrow} title={title} intro={intro ?? undefined} tone={tone} className={className}>
+    <LearnerStudySurfaceSection
+      id={id}
+      eyebrow={eyebrow}
+      title={title}
+      intro={intro ?? undefined}
+      tone={tone}
+      className={`nn-rc-section-soft ${className}`.trim()}
+    >
       {children}
     </LearnerStudySurfaceSection>
   );
@@ -53,10 +60,10 @@ export function LearnerReportPercentileSlot({
       data-nn-report-percentile-slot=""
       aria-label={title}
     >
-      <LearnerSurface tone="secondary" padding="md" radius="lg" shadow={false} className="border-dashed">
+      <LearnerSurface tone="supportive" padding="md" radius="lg" shadow={false} className="border border-dashed border-[color-mix(in_srgb,var(--semantic-info)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_28%,var(--semantic-surface))]">
         <p className="nn-ls-kicker">{eyebrow}</p>
-        <p className="mt-1 text-sm font-semibold text-[var(--semantic-text-primary)]">{title}</p>
-        <p className="mt-1.5 max-w-2xl text-xs leading-relaxed text-[var(--semantic-text-muted)]">{body}</p>
+        <p className="mt-1.5 text-sm font-semibold tracking-tight text-[var(--semantic-text-primary)]">{title}</p>
+        <p className="mt-2 max-w-2xl text-xs leading-relaxed text-[var(--semantic-text-muted)]">{body}</p>
       </LearnerSurface>
     </div>
   );
@@ -73,7 +80,7 @@ export type LearnerReportOutcomeTile = {
 export function LearnerReportOutcomeStatStrip({ tiles }: { tiles: LearnerReportOutcomeTile[] }) {
   if (tiles.length === 0) return null;
   return (
-    <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 xl:grid-cols-4">
       {tiles.map((tile, i) => (
         <LearnerStatCard
           key={`${tile.label}-${i}`}
@@ -90,7 +97,7 @@ export function LearnerReportOutcomeStatStrip({ tiles }: { tiles: LearnerReportO
 
 export function LearnerReportInset({ tone = "secondary", children }: { tone?: LearnerSurfaceTone; children: ReactNode }) {
   return (
-    <LearnerSurface tone={tone} padding="md" radius="lg" shadow={false} className="h-full">
+    <LearnerSurface tone={tone} padding="md" radius="lg" shadow className="h-full border-[color-mix(in_srgb,var(--semantic-border-soft)_88%,transparent)]">
       {children}
     </LearnerSurface>
   );
@@ -123,12 +130,12 @@ export function PracticeSessionReportHero({
   statTiles: LearnerReportOutcomeTile[];
 }) {
   return (
-    <LearnerSurface tone="primary" padding="lg" accentTop className="overflow-hidden">
-      <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
-        <div className="min-w-0 max-w-2xl space-y-2">
+    <LearnerSurface tone="primary" padding="lg" accentTop className="overflow-hidden shadow-[var(--semantic-shadow-soft)]">
+      <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between lg:gap-10">
+        <div className="min-w-0 max-w-2xl space-y-3">
           <p className="nn-ls-kicker">{eyebrow}</p>
           <h2 className="nn-ls-title text-balance">{title}</h2>
-          <p className="nn-ls-intro text-pretty">{subtitle}</p>
+          <p className="nn-ls-intro text-pretty leading-relaxed">{subtitle}</p>
           {badges?.length ? (
             <div className="flex flex-wrap gap-2 pt-1">
               {badges.map((b) => {
@@ -147,14 +154,18 @@ export function PracticeSessionReportHero({
             </div>
           ) : null}
         </div>
-        <div className="shrink-0 rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5 shadow-[var(--semantic-shadow-soft)] sm:min-w-[14rem]">
-          <p className="text-[11px] font-semibold uppercase tracking-wide text-[var(--semantic-text-secondary)]">{scoreLabel}</p>
-          <p className="mt-1 text-3xl font-bold tabular-nums tracking-tight text-[var(--semantic-text-primary)]">{scorePrimary}</p>
-          <p className="mt-1 text-sm font-semibold text-[var(--semantic-chart-2)]">{scoreSecondary}</p>
+        <div className="w-full shrink-0 rounded-2xl border border-[color-mix(in_srgb,var(--semantic-brand)_14%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-surface)_92%,var(--semantic-panel-muted))] p-6 shadow-[var(--semantic-shadow-soft)] sm:min-w-[15rem] lg:max-w-sm">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[var(--semantic-text-secondary)]">{scoreLabel}</p>
+          <p className="mt-2 text-3xl font-bold tabular-nums tracking-tight text-[var(--semantic-text-primary)]">{scorePrimary}</p>
+          <p className="mt-2 text-sm font-semibold leading-snug text-[var(--semantic-chart-2)]">{scoreSecondary}</p>
         </div>
       </div>
-      {footnote ? <div className="mt-4 text-xs leading-relaxed text-[var(--semantic-text-muted)]">{footnote}</div> : null}
-      <div className="mt-8 border-t border-[color-mix(in_srgb,var(--semantic-border-soft)_85%,transparent)] pt-6">
+      {footnote ? (
+        <div className="mt-6 rounded-xl border border-[color-mix(in_srgb,var(--semantic-border-soft)_70%,transparent)] bg-[color-mix(in_srgb,var(--semantic-surface)_40%,transparent)] px-4 py-3 text-xs leading-relaxed text-[var(--semantic-text-muted)]">
+          {footnote}
+        </div>
+      ) : null}
+      <div className="mt-10 border-t border-[color-mix(in_srgb,var(--semantic-border-soft)_75%,transparent)] pt-8">
         <LearnerReportOutcomeStatStrip tiles={statTiles} />
       </div>
     </LearnerSurface>

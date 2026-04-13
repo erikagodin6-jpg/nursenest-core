@@ -1,6 +1,7 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
+import { BrandLeafIcon } from "@/components/brand/brand-leaf-icon";
 import { useReducedMotion } from "@/lib/motion/use-reduced-motion";
 
 interface SuccessLeafProps {
@@ -29,21 +30,7 @@ export function SuccessLeaf({ show, size = 28, className = "" }: SuccessLeafProp
           transition={reduced ? { duration: 0 } : { duration: 0.22, ease: [0.25, 0.1, 0.25, 1] }}
           aria-hidden
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 50 32"
-            width={size}
-            height={Math.round(size * 0.64)}
-          >
-            <path
-              d="M6 28 C6 17 14.5 9 25 9 S44 17 44 28 Z"
-              fill="var(--semantic-success, var(--theme-primary))"
-            />
-            <path
-              d="M11 28 C11 20.5 17 15 25 15 S39 20.5 39 28 Z"
-              fill="var(--theme-card-bg, #fff)"
-            />
-          </svg>
+          <BrandLeafIcon tone="success" size={size} />
         </motion.span>
       )}
     </AnimatePresence>

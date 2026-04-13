@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, type LucideIcon } from "lucide-react";
 import type { ReactNode } from "react";
+import { BrandLeafIcon } from "@/components/brand/brand-leaf-icon";
 import { sanitizeRelativeNavHrefOrFallback } from "@/lib/ui/safe-relative-href";
 
 export type PremiumEmptyCtaVariant = "primary" | "secondary" | "ghost";
@@ -37,9 +38,15 @@ function ctaClass(v: PremiumEmptyCtaVariant = "secondary"): string {
   }
 }
 
+export type PremiumEmptyMark = "leaf" | "none";
+
 export type PremiumEmptyStateProps = {
   /** Analytics / QA hook */
   "data-nn-empty"?: string;
+  /** Small brand leaf when no custom `visual` or `Icon` is provided. */
+  brandMark?: PremiumEmptyMark;
+  /** One-shot fade-in (CSS, respects reduced motion). Default true. */
+  animateEntrance?: boolean;
   tone?: PremiumEmptyTone;
   headline: string;
   body: string;
@@ -71,6 +78,8 @@ export type PremiumEmptyStateProps = {
  */
 export function PremiumEmptyState({
   "data-nn-empty": dataNnEmpty,
+  brandMark = "none",
+  animateEntrance = true,
   tone = "default",
   headline,
   body,
@@ -108,13 +117,24 @@ export function PremiumEmptyState({
         : "justify-center sm:justify-start";
   const ctaItemClass = ctaLayout === "stack" ? "w-full sm:w-auto" : "";
 
-  const visualEl = visual ?? (Icon ? (
+  const leafMark =
+    brandMark === "leaf" && !visual && !Icon ? (
+      <span
+        className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-[color-mix(in_srgb,var(--semantic-brand)_16%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_08%,var(--semantic-surface))] ${split ? "mt-0.5" : "mx-auto mb-4 sm:mx-0"}`}
+      >
+        <BrandLeafIcon tone="brand" size={26} />
+      </span>
+    ) : null;
+
+  const iconEl = Icon ? (
     <span
       className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[color-mix(in_srgb,var(--semantic-brand)_10%,var(--semantic-bg-base))] text-[var(--semantic-brand)] ${split ? "mt-0.5" : "mx-auto mb-4 sm:mx-0"}`}
     >
       <Icon className="h-5 w-5" strokeWidth={1.75} aria-hidden />
     </span>
-  ) : null);
+  ) : null;
+
+  const visualEl = visual ?? iconEl ?? leafMark;
 
   const textBlock = (
     <div className={`min-w-0 flex-1 ${split ? "" : "flex flex-col items-center text-center sm:items-start sm:text-left"}`}>
@@ -138,10 +158,12 @@ export function PremiumEmptyState({
     </div>
   );
 
+  const entranceClass = animateEntrance ? "nn-empty-state-enter" : "";
+
   return (
     <div className={containerClassName}>
       <section
-        className={`nn-study-card nn-study-card--wash ${pad} ${toneCardClass(tone)} ${className}`.trim()}
+        className={`nn-study-card nn-study-card--wash ${pad} ${toneCardClass(tone)} ${entranceClass} ${className}`.trim()}
         data-nn-premium-empty={dataNnEmpty ?? true}
         role="region"
         aria-label={regionLabel}

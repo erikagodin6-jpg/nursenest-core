@@ -1119,6 +1119,22 @@ html[data-theme="deep-twilight"] .nn-ui-btn--destructive {
   animation: nn-section-fade-up var(--motion-slow) var(--motion-ease) both;
 }
 
+/* Premium empty states: one-shot fade, token timing */
+.nn-empty-state-enter {
+  animation: nn-empty-state-fade var(--motion-slow) var(--motion-ease) both;
+}
+
+@keyframes nn-empty-state-fade {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* Icon standardization: one size ladder + semantic color inheritance. */
 .nn-icon-sm { width: 0.875rem; height: 0.875rem; stroke-width: 1.9; }
 .nn-icon-md { width: 1rem; height: 1rem; stroke-width: 1.9; }
@@ -1549,6 +1565,9 @@ html[data-theme] .nn-marketing-surface {
     animation: none;
   }
   .nn-section-enter {
+    animation: none;
+  }
+  .nn-empty-state-enter {
     animation: none;
   }
 }
