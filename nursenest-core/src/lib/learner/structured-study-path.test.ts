@@ -2,11 +2,28 @@ import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import {
   buildStructuredStudyPath,
+  coalesceStudyPathKindParam,
+  inferStudyPathKindFromLearnerProfile,
   resolveStructuredStudyPathwayId,
   type StudyPathKind,
 } from "@/lib/learner/structured-study-path";
 
 describe("structured-study-path", () => {
+  it("infers kind from tier and pathway", () => {
+    assert.equal(inferStudyPathKindFromLearnerProfile({ tier: "ALLIED", learnerPathId: null }), "allied");
+    assert.equal(inferStudyPathKindFromLearnerProfile({ tier: "NP", learnerPathId: null }), "np");
+    assert.equal(inferStudyPathKindFromLearnerProfile({ tier: "LVN_LPN", learnerPathId: null }), "pn");
+    assert.equal(inferStudyPathKindFromLearnerProfile({ tier: "RPN", learnerPathId: null }), "pn");
+    assert.equal(inferStudyPathKindFromLearnerProfile({ tier: "RN", learnerPathId: "us-rn-nclex-rn" }), "rn");
+    assert.equal(inferStudyPathKindFromLearnerProfile({ tier: "RN", learnerPathId: "us-lpn-nclex-pn" }), "pn");
+    assert.equal(inferStudyPathKindFromLearnerProfile({ tier: "RN", learnerPathId: "us-np-fnp" }), "np");
+  });
+
+  it("coalesceStudyPathKindParam ignores invalid query values", () => {
+    assert.equal(coalesceStudyPathKindParam("bogus", "rn"), "rn");
+    assert.equal(coalesceStudyPathKindParam("new_grad", "rn"), "new_grad");
+  });
+
   it("defaults pathway per kind", () => {
     assert.equal(resolveStructuredStudyPathwayId("rn", null), "us-rn-nclex-rn");
     assert.equal(resolveStructuredStudyPathwayId("pn", null), "us-lpn-nclex-pn");

@@ -47,6 +47,9 @@ export const fadeInVariants: Variants = {
   visible: { opacity: 1 },
 };
 
+/** @deprecated Use `fadeInVariants` — same opacity-only fade. */
+export const fadeVariants = fadeInVariants;
+
 export const fadeUpVariants: Variants = {
   hidden: { opacity: 0, y: yFade },
   visible: { opacity: 1, y: 0 },

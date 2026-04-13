@@ -61,6 +61,7 @@ export function MarketingHeroCarousel({
   onActiveSlideAnalytics,
 }: MarketingHeroCarouselProps) {
   const { t } = useMarketingI18n();
+  const reducedMotion = useReducedMotion();
   const [current, setCurrent] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
   const [failed, setFailed] = useState<Set<number>>(() => new Set());
@@ -240,7 +241,9 @@ export function MarketingHeroCarousel({
       >
         {!hasLoaded && mediaOk ? (
           <div
-            className="absolute inset-0 animate-pulse bg-gradient-to-br from-[var(--theme-separator)] via-[var(--theme-muted-surface)] to-[var(--theme-input-border)]"
+            className={`absolute inset-0 bg-gradient-to-br from-[var(--theme-separator)] via-[var(--theme-muted-surface)] to-[var(--theme-input-border)] ${
+              reducedMotion ? "opacity-90" : "nn-skeleton-fade animate-pulse"
+            }`}
             aria-hidden
           />
         ) : null}
@@ -265,7 +268,7 @@ export function MarketingHeroCarousel({
               quality={MARKETING_PHOTO_QUALITY}
               priority={lcp}
               unoptimized={marketingImageShouldUnoptimize(src)}
-              className={`pointer-events-none object-contain bg-[var(--theme-muted-surface)] transition-opacity duration-700 ease-in-out will-change-[opacity] ${
+              className={`pointer-events-none object-contain bg-[var(--theme-muted-surface)] nn-carousel-slide-crossfade will-change-[opacity] ${
                 active ? "opacity-100" : "opacity-0"
               }`}
               data-testid={`img-${imgTestIdPrefix}-slide-${index}`}

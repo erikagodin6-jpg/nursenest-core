@@ -47,10 +47,10 @@ export function StructuredStudyPathSection({
   t: LearnerMarketingT;
   /** Kind from profile (before URL override). */
   inferredKind: StudyPathKind;
-  /** When set, `path.kind` came from `?kind=`. */
+  /** When set, the URL `?kind=` differs from the profile-inferred track (caller normalizes). */
   kindFromQuery: StudyPathKind | null;
 }) {
-  const overridden = kindFromQuery != null && kindFromQuery !== inferredKind;
+  const overridden = Boolean(kindFromQuery);
   const showNewGradLink = path.kind === "rn" && inferredKind === "rn" && !kindFromQuery;
 
   return (

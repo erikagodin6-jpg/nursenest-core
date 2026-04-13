@@ -2,7 +2,7 @@
  * NurseNest learner UI design system — surfaces, sections, and study primitives.
  *
  * **When building new `/app` features:**
- * 1. Pick a {@link LearnerSurface} `tone` (primary / secondary / supportive / danger / success) instead of one-off borders.
+ * 1. Pick a {@link LearnerSurface} `tone` (primary / secondary / supportive / warm / danger / success) instead of one-off borders.
  * 2. Use {@link LearnerStudySurfaceSection} for major study blocks (kicker + title + intro + children).
  * 3. Use {@link LearnerStatCard} for KPIs; rotate `accent` keys (c1–c5) across rows.
  * 4. Use {@link LearnerProgressCard} or {@link ProgressBarSemantic} directly for bars — never raw gray tracks.

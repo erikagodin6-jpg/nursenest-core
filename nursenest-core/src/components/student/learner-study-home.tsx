@@ -178,18 +178,13 @@ export function LearnerStudyHome({
           </div>
           <div className="flex flex-col gap-4 lg:col-span-4">
             <ExamCountdownCard countdown={countdown} questionsPerDay={questionsPerDay} />
-            <LearnerSurface tone="supportive" padding="sm" radius="lg" className="shadow-none">
+            <LearnerSurface tone="supportive" padding="sm" radius="lg" shadow={false}>
               <LearnerFilterChips
                 aria-label={t("learner.studyHome.quickLinksAria")}
                 items={[
                   { id: "plan", label: t("learner.studyHome.linkStudyPlan"), href: "/app/study-plan" },
                   { id: "exam", label: t("learner.studyHome.linkExamPlan"), href: "/app/exam-plan" },
-                  {
-                    id: "reviews",
-                    label: t("learner.studyHome.linkReviewQueue"),
-                    href: "/app/account/review-queue",
-                    tone: "danger",
-                  },
+                  { id: "reviews", label: t("learner.studyHome.linkReviewQueue"), href: "/app/account/review-queue" },
                 ]}
               />
             </LearnerSurface>
@@ -271,34 +266,34 @@ export function LearnerStudyHome({
         {showCoach && weakTopicTitles.length > 0 ? (
           <CoachWeakSummary weakTopics={weakTopicTitles} examTarget={undefined} daysUntilExam={daysLeft} />
         ) : null}
-      </StudySurface>
+      </LearnerStudySurfaceSection>
 
       <div className="nn-dash-divider" />
 
       {/* Recent gains + plan depth */}
-      <StudySurface
+      <LearnerStudySurfaceSection
         id="study-momentum"
         eyebrow={t("learner.studyHome.sectionMomentumEyebrow")}
         title={t("learner.studyHome.sectionMomentumTitle")}
         intro={t("learner.studyHome.sectionMomentumIntro")}
-        variant="positive"
+        tone="success"
       >
         <RecentGainsBlock trends={trends} strongTopics={strongHighlight} t={t} />
         {studySnap ? <LearnerAdaptiveFocusCard snapshot={studySnap} /> : null}
         {showCoach ? (
           <DashboardCoachCard weakTopics={weakTopicTitles} examTarget={undefined} daysUntilExam={daysLeft} />
         ) : null}
-      </StudySurface>
+      </LearnerStudySurfaceSection>
 
       <div className="nn-dash-divider" />
 
       {/* Explore kit */}
-      <StudySurface
+      <LearnerStudySurfaceSection
         id="study-explore"
         eyebrow={t("learner.studyHome.sectionExploreEyebrow")}
         title={t("learner.studyHome.sectionExploreTitle")}
         intro={t("learner.studyHome.sectionExploreIntro")}
-        variant="brand"
+        tone="primary"
       >
         <LearnerContinueLearningCard t={t} links={continueLinks} />
         <PremiumLearnerHub
@@ -322,7 +317,7 @@ export function LearnerStudyHome({
             {t("learner.dashboard.openAccountHub")}
           </Link>
         </section>
-      </StudySurface>
+      </LearnerStudySurfaceSection>
     </main>
   );
 }

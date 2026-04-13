@@ -1,4 +1,3 @@
-import type { ReactNode } from "react";
 import { PremiumEmptyState, type PremiumEmptyStateProps } from "@/components/ui/premium-empty-state";
 
 export type LearnerEmptyStateProps = PremiumEmptyStateProps & {
