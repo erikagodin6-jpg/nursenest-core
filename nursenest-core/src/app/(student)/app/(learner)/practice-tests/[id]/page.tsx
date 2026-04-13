@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { ExamSessionErrorBoundary } from "@/components/exam/exam-session-error-boundary";
 import { PracticeTestRunnerClient } from "@/components/student/practice-test-runner-client";
@@ -75,9 +76,9 @@ export default async function PracticeTestRunPage({ params }: Props) {
       </div>
       <h1 className="text-2xl font-bold">{t("learner.practiceTests.run.title")}</h1>
       <p className="mt-1 text-sm text-muted">
-        <a className="font-medium text-primary underline" href="/app/practice-tests">
+        <Link className="font-medium text-primary underline" href="/app/practice-tests">
           {t("learner.practiceTests.run.backToBank")}
-        </a>
+        </Link>
       </p>
       <div className="mt-6">
         <ExamSessionErrorBoundary surface="practice_test">
