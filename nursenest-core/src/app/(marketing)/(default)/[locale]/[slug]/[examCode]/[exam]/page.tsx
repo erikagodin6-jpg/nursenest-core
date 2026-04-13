@@ -15,26 +15,26 @@ export const dynamicParams = true;
 /** Must be a numeric literal for Next static route config (keep aligned with `PROGRAMMATIC_SEO_ISR_REVALIDATE_SECONDS`). */
 export const revalidate = 86400;
 
-export function generateStaticParams(): { locale: string; slug: string; examCode: string; seoSlug: string }[] {
+export function generateStaticParams(): { locale: string; slug: string; examCode: string; exam: string }[] {
   return [];
 }
 
-type Props = { params: Promise<{ locale: string; slug: string; examCode: string; seoSlug: string }> };
+type Props = { params: Promise<{ locale: string; slug: string; examCode: string; exam: string }> };
 
 function marketingRegionForPathway(countrySlug: string): MarketingRegionToggle {
   return countrySlug === "us" ? "US" : "CA";
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { locale: countrySlug, slug: roleTrack, examCode, seoSlug } = await params;
-  const pathname = `/${countrySlug}/${roleTrack}/${examCode}/${seoSlug}`;
+  const { locale: countrySlug, slug: roleTrack, examCode, exam } = await params;
+  const pathname = `/${countrySlug}/${roleTrack}/${examCode}/${exam}`;
   return safeGenerateMetadata(
     async () => {
       const pathway = resolveExamPathwaySafe(countrySlug, roleTrack, examCode, { pathname });
       if (!pathway) return {};
-      const row = getPathwayTopicProgrammaticRow(pathway.id, seoSlug);
+      const row = getPathwayTopicProgrammaticRow(pathway.id, exam);
       if (!row) return {};
-      const enPath = buildExamPathwayPath(pathway, seoSlug);
+      const enPath = buildExamPathwayPath(pathway, exam);
       return buildPathwayTopicProgrammaticMetadata(row.page, enPath);
     },
     { pathname, routeGroup: "marketing.exam_hub.pathway_topic_programmatic" },
@@ -42,17 +42,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function PathwayTopicProgrammaticPage({ params }: Props) {
-  const { locale: countrySlug, slug: roleTrack, examCode, seoSlug } = await params;
-  const pathname = `/${countrySlug}/${roleTrack}/${examCode}/${seoSlug}`;
+  const { locale: countrySlug, slug: roleTrack, examCode, exam } = await params;
+  const pathname = `/${countrySlug}/${roleTrack}/${examCode}/${exam}`;
   const pathway = resolveExamPathwaySafe(countrySlug, roleTrack, examCode, { pathname });
   if (!pathway) notFound();
-  const row = getPathwayTopicProgrammaticRow(pathway.id, seoSlug);
+  const row = getPathwayTopicProgrammaticRow(pathway.id, exam);
   if (!row) notFound();
 
   const uiLocale = await getMarketingLocaleForDefaultRoute();
   const marketingRegion = marketingRegionForPathway(pathway.countrySlug);
-  const jsonLdResourcePath = buildExamPathwayPath(pathway, seoSlug);
-  const breadcrumbResolution = buildPathwayTopicProgrammaticBreadcrumbResolution(pathway, seoSlug, row.page);
+  const jsonLdResourcePath = buildExamPathwayPath(pathway, exam);
+  const breadcrumbResolution = buildPathwayTopicProgrammaticBreadcrumbResolution(pathway, exam, row.page);
 
   return (
     <ProgrammaticSeoPage

@@ -54,9 +54,6 @@ const examPathwayFromProgrammaticRedirects = Object.entries(PROGRAMMATIC_SLUG_TO
 const STATIC_ASSET_CACHE_CONTROL = "public, max-age=31536000, immutable" as const;
 
 const nextConfig: NextConfig = {
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
   typescript: {
     ignoreBuildErrors: true,
   },
