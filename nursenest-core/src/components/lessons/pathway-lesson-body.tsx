@@ -144,6 +144,52 @@ function PathwayLessonExamFocusInlineBlocks({
   );
 }
 
+/**
+ * Classifies a resolved paragraph block so the renderer can pick the right
+ * HTML element — plain text, bullet list, or a labelled list (bold header + bullets).
+ *
+ * Patterns we handle:
+ *   "text" — regular prose paragraph (no bullet lines)
+ *   "list" — every line starts with "- " (pure bullet list)
+ *   "headed-list" — first line is prose, remaining lines all start with "- "
+ *
+ * This converts markdown-style lesson content into scannable HTML structure
+ * without requiring a full markdown parser.
+ */
+type ParagraphBlock =
+  | { kind: "text"; text: string }
+  | { kind: "list"; items: string[] }
+  | { kind: "headed-list"; header: string; items: string[] };
+
+function isBulletLine(line: string): boolean {
+  return /^[ \t]*-\s+/.test(line);
+}
+
+function stripBullet(line: string): string {
+  return line.replace(/^[ \t]*-\s+/, "");
+}
+
+function parseParagraphBlock(raw: string): ParagraphBlock {
+  const p = raw.trim();
+  const lines = p.split("\n");
+
+  // Pure bullet list: every line starts with "- "
+  if (lines.length > 0 && lines.every(isBulletLine)) {
+    return { kind: "list", items: lines.map(stripBullet) };
+  }
+
+  // Labelled list: first line is a prose header; all remaining lines are bullets
+  if (lines.length >= 2 && !isBulletLine(lines[0]) && lines.slice(1).every(isBulletLine)) {
+    return {
+      kind: "headed-list",
+      header: lines[0],
+      items: lines.slice(1).map(stripBullet),
+    };
+  }
+
+  return { kind: "text", text: p };
+}
+
 export function PathwayLessonBody({
   text,
   lessonWikiBasePath,
@@ -173,12 +219,45 @@ export function PathwayLessonBody({
     return null;
   }
   return (
-    <div className="nn-lesson-prose space-y-7">
-      {paragraphs.map((p, idx) => (
-        <p key={idx} className="whitespace-pre-wrap">
-          {renderParagraphWithLinks(p.trim(), lessonWikiBasePath, `para-${idx}`)}
-        </p>
-      ))}
+    <div className="nn-lesson-prose space-y-5">
+      {paragraphs.map((p, idx) => {
+        const block = parseParagraphBlock(p);
+
+        if (block.kind === "list") {
+          return (
+            <ul key={idx}>
+              {block.items.map((item, i) => (
+                <li key={i}>
+                  {renderParagraphWithLinks(item, lessonWikiBasePath, `para-${idx}-li-${i}`)}
+                </li>
+              ))}
+            </ul>
+          );
+        }
+
+        if (block.kind === "headed-list") {
+          return (
+            <div key={idx}>
+              <p className="whitespace-pre-wrap nn-lesson-list-header">
+                {renderParagraphWithLinks(block.header, lessonWikiBasePath, `para-${idx}-h`)}
+              </p>
+              <ul className="mt-2">
+                {block.items.map((item, i) => (
+                  <li key={i}>
+                    {renderParagraphWithLinks(item, lessonWikiBasePath, `para-${idx}-li-${i}`)}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          );
+        }
+
+        return (
+          <p key={idx} className="whitespace-pre-wrap">
+            {renderParagraphWithLinks(p.trim(), lessonWikiBasePath, `para-${idx}`)}
+          </p>
+        );
+      })}
     </div>
   );
 }

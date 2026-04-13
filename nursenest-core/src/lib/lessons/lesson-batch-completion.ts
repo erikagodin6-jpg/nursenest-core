@@ -97,6 +97,7 @@ type BatchInput = {
   onlyCompleted?: boolean;
   onlyNotComplete?: boolean;
   focusArea?: FocusArea;
+  includeSlugs?: string[];
 };
 
 type LessonRow = {
@@ -942,6 +943,7 @@ function majorGapSummary(items: BatchItemResult[]): string[] {
 }
 
 export async function runLessonCompletionBatch(input: BatchInput): Promise<LessonCompletionBatchReport> {
+  const includeSlugSet = input.includeSlugs?.length ? new Set(input.includeSlugs.map((s) => s.trim()).filter(Boolean)) : null;
   const batchSize = Math.max(MIN_BATCH_SIZE, Math.min(MAX_BATCH_SIZE, Math.floor(input.batchSize)));
   const offset = Math.max(0, Math.floor(input.offset ?? 0));
   const write = Boolean(input.write);
@@ -974,6 +976,7 @@ export async function runLessonCompletionBatch(input: BatchInput): Promise<Lesso
   }> = [];
 
   for (const row of lessonRows) {
+    if (includeSlugSet && !includeSlugSet.has(row.slug)) continue;
     if (input.focusArea === "cardiovascular" && !isCardiovascularTargetLesson(row)) continue;
     if (input.focusArea === "respiratory" && !isRespiratoryTargetLesson(row)) continue;
     if (input.focusArea === "neurological" && !isNeurologicalTargetLesson(row)) continue;

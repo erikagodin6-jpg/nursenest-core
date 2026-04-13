@@ -59,7 +59,10 @@ const KIND_TO_ROLE: Record<PathwayLessonSectionKind, LessonSectionRole> = {
   red_flags: "danger",
   labs_diagnostics: "diagnostic",
   nursing_assessment_interventions: "action",
-  clinical_pearls: "review",
+  // clinical_pearls gets "application" (purple/chart-5) to visually distinguish
+  // it from "takeaways" which stays "review" (brand). Both are high-value but
+  // clinical pearls = practitioner insights; takeaways = exam summary.
+  clinical_pearls: "application",
   client_education: "education",
   tier_specific_relevance: "review",
   country_specific_notes: "info",
@@ -88,12 +91,29 @@ const ROLE_CHIP_LABELS: Record<LessonSectionRole, string> = {
   concept: "Pathophysiology",
   action: "Nursing Care",
   diagnostic: "Assessment",
-  danger: "Complications",
+  danger: "Red Flags",
   success: "Treatment",
   education: "Patient Teaching",
   application: "Clinical Scenario",
-  review: "Exam Focus",
+  review: "Key Takeaways",
   cta: "Next Steps",
+};
+
+/**
+ * Kind-level chip label overrides.
+ * Applied AFTER the role-derived label, so specific kinds can show a precise label
+ * even when they share a visual role with other kinds.
+ *
+ * Example: clinical_pearls and clinical_scenario both use "application" role (purple)
+ * but should show different labels.
+ */
+const KIND_CHIP_LABEL_OVERRIDES: Partial<Record<PathwayLessonSectionKind, string>> = {
+  clinical_pearls: "Clinical Pearls",
+  exam_relevance: "Exam Relevance",
+  exam_tips: "Exam Tips",
+  exam_focus: "Exam Focus",
+  tier_specific_relevance: "Tier Notes",
+  country_specific_notes: "Regional Notes",
 };
 
 export type LessonSectionTheme = {
@@ -115,9 +135,11 @@ export function getLessonSectionTheme(
   kind: PathwayLessonSectionKind | undefined | null,
 ): LessonSectionTheme {
   const role: LessonSectionRole = (kind != null && KIND_TO_ROLE[kind]) || "info";
+  const roleChipLabel = ROLE_CHIP_LABELS[role];
+  const kindChipLabel = kind != null ? KIND_CHIP_LABEL_OVERRIDES[kind] : undefined;
   return {
     role,
-    chipLabel: ROLE_CHIP_LABELS[role],
+    chipLabel: kindChipLabel ?? roleChipLabel,
     dataRole: role,
     lessonToken: ROLE_LESSON_TOKEN[role],
   };

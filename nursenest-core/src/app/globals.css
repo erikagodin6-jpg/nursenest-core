@@ -2470,7 +2470,7 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-exam-chrome-dim {
 
 .nn-lesson-prose {
   font-size: 1.0625rem;
-  line-height: 1.8;
+  line-height: 1.82;
   letter-spacing: -0.008em;
   color: var(--semantic-text-secondary, var(--palette-text));
   max-width: 72ch;
@@ -2479,30 +2479,51 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-exam-chrome-dim {
 @media (min-width: 768px) {
   .nn-lesson-prose {
     font-size: 1.075rem;
-    line-height: 1.84;
+    line-height: 1.86;
   }
 }
 
-/* Hierarchy: lists / emphasis inside lesson bodies (when markup includes ul/ol). */
+/* ── Prose bullet and numbered lists ───────────────────────────────────────
+ * Lists are used heavily in lesson body content. Comfortable spacing and
+ * colored markers (inheriting --lsc-color from the section card) make
+ * bullet-dense clinical content scannable without eye fatigue.
+ * ─────────────────────────────────────────────────────────────────────── */
 .nn-lesson-prose ul,
 .nn-lesson-prose ol {
-  margin-top: 0.5rem;
-  margin-bottom: 1rem;
-  padding-left: 1.35rem;
+  margin-top: 0.375rem;
+  margin-bottom: 0.25rem;
+  padding-left: 1.5rem;
 }
+
 .nn-lesson-prose li {
-  margin-top: 0.4rem;
-  margin-bottom: 0.4rem;
+  margin-top: 0.45rem;
+  margin-bottom: 0.45rem;
+  line-height: 1.75;
 }
+
 .nn-lesson-prose ul {
   list-style-type: disc;
 }
+
 .nn-lesson-prose ol {
   list-style-type: decimal;
 }
-.nn-lesson-prose strong {
+
+/* Color bullet markers with the section's semantic hue */
+.nn-lesson-section-card .nn-lesson-prose li::marker {
+  color: color-mix(in srgb, var(--lsc-color) 75%, currentColor);
+}
+
+/* Header line preceding a bullet list (parsed "headed-list" pattern) */
+.nn-lesson-prose .nn-lesson-list-header {
   font-weight: 600;
-  color: var(--palette-heading);
+  color: var(--palette-heading, var(--semantic-text-primary));
+  margin-bottom: 0;
+}
+
+.nn-lesson-prose strong {
+  font-weight: 650;
+  color: var(--palette-heading, var(--semantic-text-primary));
 }
 
 /* ==========================================================================
@@ -2563,6 +2584,11 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-exam-chrome-dim {
   --lsc-color: var(--semantic-danger);
   --lsc-soft: var(--lesson-red-flags, var(--semantic-danger-soft));
   --lsc-contrast: var(--semantic-danger-contrast);
+  /* Red flags demand immediate visual attention — stronger left accent + subtle glow */
+  border-left-width: 5px;
+  box-shadow:
+    var(--elevation-rest),
+    0 0 0 1px color-mix(in srgb, var(--semantic-danger) 10%, transparent);
 }
 .nn-lesson-section-card[data-lsc-role="success"] {
   --lsc-color: var(--semantic-success);
@@ -2615,16 +2641,31 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-exam-chrome-dim {
   align-items: center;
   gap: 0.3125rem;
   border-radius: 0.5rem;
-  font-size: 0.6875rem;
+  font-size: 0.675rem;
   font-weight: 700;
-  letter-spacing: 0.07em;
+  letter-spacing: 0.075em;
   text-transform: uppercase;
-  padding: 0.3rem 0.7rem;
+  padding: 0.3rem 0.75rem;
   line-height: 1.4;
   white-space: nowrap;
   color: var(--lsc-contrast);
-  background: color-mix(in srgb, var(--lsc-color) 16%, var(--bg-card, white));
-  border: 1px solid color-mix(in srgb, var(--lsc-color) 42%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--lsc-color) 18%, var(--bg-card, white));
+  border: 1px solid color-mix(in srgb, var(--lsc-color) 38%, var(--semantic-border-soft));
+}
+
+/* ── Figures embedded inside lesson sections ────────────────────────────────
+ * Match the section's role color for a cohesive look.
+ * ─────────────────────────────────────────────────────────────────────────── */
+.nn-lesson-section-card figure {
+  border-color: color-mix(in srgb, var(--lsc-color) 28%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--lsc-color) 4%, var(--bg-card, white));
+}
+
+.nn-lesson-section-card figcaption {
+  border-color: color-mix(in srgb, var(--lsc-color) 20%, var(--semantic-border-soft));
+  color: var(--semantic-text-secondary);
+  font-size: 0.8125rem;
+  line-height: 1.5;
 }
 
 /* ==========================================================================

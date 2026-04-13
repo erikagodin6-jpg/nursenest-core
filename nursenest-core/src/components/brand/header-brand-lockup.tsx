@@ -13,22 +13,22 @@ export function HeaderBrandLockup() {
   const showLeafAsset = kind === "local" && Boolean(url);
 
   return (
-    <span className="inline-flex items-center gap-2.5 overflow-visible align-middle leading-none">
+    <span className="inline-flex items-center gap-2.25 overflow-visible align-middle leading-none">
       {showLeafAsset ? (
         <img
           src={url ?? ""}
           alt=""
           aria-hidden="true"
           draggable={false}
-          width={72}
-          height={72}
-          className="block h-[30px] w-[30px] shrink-0 bg-transparent object-contain sm:h-[34px] sm:w-[34px] lg:h-[36px] lg:w-[36px]"
+          width={68}
+          height={68}
+          className="block h-[28px] w-[28px] shrink-0 bg-transparent object-contain sm:h-[31px] sm:w-[31px] lg:h-[33px] lg:w-[33px]"
         />
       ) : (
-        <BrandLeafIcon size={36} className="shrink-0" />
+        <BrandLeafIcon size={33} className="shrink-0" />
       )}
       <span
-        className="text-[1.125rem] font-semibold tracking-[-0.01em] leading-none text-[var(--nav-fg)] sm:text-[1.2rem] lg:text-[1.25rem]"
+        className="text-[1.125rem] font-semibold tracking-[-0.01em] leading-none text-[var(--nav-fg)] sm:text-[1.2rem] lg:text-[1.3125rem]"
         style={{ fontFamily: "var(--font-inter), system-ui, sans-serif" }}
       >
         NurseNest
