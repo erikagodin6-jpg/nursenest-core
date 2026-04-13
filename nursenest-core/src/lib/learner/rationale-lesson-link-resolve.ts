@@ -47,36 +47,52 @@ function ctaKeyForCandidate(
   return "learner.qbank.rationaleLinks.reviewTopic";
 }
 
-async function resolveSlugHref(
-  prisma: PrismaClient,
-  pathwayId: string,
-  language: string,
-  slug: string,
-): Promise<{ href: string; title: string; hrefSource: "app" | "hub" } | null> {
-  const examContext = buildGlobalExamContext(pathwayId, language);
-  if (!examContext) return null;
-  const row = await prisma.pathwayLesson.findFirst({
-    where: { ...pathwayLessonWhere(examContext), slug, status: ContentStatus.PUBLISHED },
-    select: { id: true, title: true },
-  });
-  const pathway = getExamPathwayById(pathwayId);
-  if (!pathway) return null;
-
-  if (row) {
-    return { href: `/app/lessons/${row.id}`, title: row.title, hrefSource: "app" };
-  }
-  /** Avoid synthesizing marketing lesson URLs without a published row for Canadian pathways — reduces cross-catalog mismatches. */
-  if (pathway.countryCode === CountryCode.CA) {
-    return null;
-  }
-  const hub = buildExamPathwayPath(pathway, `lessons/${slug}`);
-  const titleFromSlug = slug
+function titleFromLessonSlug(slug: string): string {
+  return slug
     .replace(/-gold$/i, "")
     .split("-")
     .filter(Boolean)
     .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
     .join(" ");
-  return { href: hub, title: titleFromSlug || slug, hrefSource: "hub" };
+}
+
+/** Single round-trip for registry candidate slugs (replaces per-slug lookups). */
+async function resolveSlugHrefBatch(
+  prisma: PrismaClient,
+  pathwayId: string,
+  language: string,
+  slugs: string[],
+): Promise<Map<string, { href: string; title: string; hrefSource: "app" | "hub" }>> {
+  const out = new Map<string, { href: string; title: string; hrefSource: "app" | "hub" }>();
+  const unique = [...new Set(slugs.filter((s) => s.length > 0))].slice(0, 24);
+  if (unique.length === 0) return out;
+
+  const examContext = buildGlobalExamContext(pathwayId, language);
+  const pathway = getExamPathwayById(pathwayId);
+  if (!examContext || !pathway) return out;
+
+  const rows = await prisma.pathwayLesson.findMany({
+    where: {
+      ...pathwayLessonWhere(examContext),
+      slug: { in: unique },
+      status: ContentStatus.PUBLISHED,
+    },
+    select: { id: true, slug: true, title: true },
+  });
+  for (const r of rows) {
+    out.set(r.slug, { href: `/app/lessons/${r.id}`, title: r.title, hrefSource: "app" });
+  }
+
+  if (pathway.countryCode !== CountryCode.CA) {
+    for (const slug of unique) {
+      if (out.has(slug)) continue;
+      const hub = buildExamPathwayPath(pathway, `lessons/${slug}`);
+      const title = titleFromLessonSlug(slug) || slug;
+      out.set(slug, { href: hub, title, hrefSource: "hub" });
+    }
+  }
+
+  return out;
 }
 
 function topicHubFallback(pathwayId: string, topicSlug: string, titleLabel?: string): RationaleLessonLinkResolved | null {
@@ -199,10 +215,13 @@ export async function resolveRationaleLessonLinksForQuestion(
     if (out.length >= 2) break;
   }
 
+  const candidateSlugs = candidates.filter((c) => !seenSlug.has(c.slug)).map((c) => c.slug);
+  const resolvedBatch = await resolveSlugHrefBatch(prisma, pathwayId, examContext.language, candidateSlugs);
+
   for (const c of candidates) {
     if (out.length >= 3) break;
     if (seenSlug.has(c.slug)) continue;
-    const resolved = await resolveSlugHref(prisma, pathwayId, examContext.language, c.slug);
+    const resolved = resolvedBatch.get(c.slug);
     if (!resolved) continue;
     if (seenHref.has(resolved.href)) continue;
     seenSlug.add(c.slug);

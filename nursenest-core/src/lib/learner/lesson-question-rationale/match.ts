@@ -43,6 +43,8 @@ function isAllowedEmitSlug(slug: string): boolean {
  * Score and rank lesson slugs from **question metadata** + optional **pathway context**.
  *
  * **Ranking model**
+ * 0. **Explicit tiered topic map** (`tryExplicitTieredTopicLinks`): pathway tier + normalized topic keys →
+ *    fixed slug at score 115 (wins over registry regex / catalog overlap).
  * 1. For each registry entry, if `haystackPattern` matches the haystack, start from `baseWeight`.
  * 2. Add `topicKeyBonus` when `topicCode` matches or contains a listed key.
  * 3. Add capped tag hints (substring match on each question tag).
@@ -61,8 +63,6 @@ export function rankRelatedLessonSlugsForQuestion(
   const diversityStrong = options?.diversityStrongThreshold ?? 92;
 
   const hay = haystackFromQuestionSignals(signals);
-  if (hay.trim().length < 3) return [];
-
   const topicCode = (signals.topicCode ?? "").trim().toLowerCase();
   const bySlug = new Map<string, RankedLessonSlug>();
 
@@ -73,42 +73,44 @@ export function rankRelatedLessonSlugsForQuestion(
     }
   }
 
-  for (const entry of LESSON_RATIONALE_MAPPING_ENTRIES) {
-    if (!gatesAllowEntry(entry, pathwayCtx)) continue;
-    if (!entry.haystackPattern.test(hay)) continue;
+  if (hay.trim().length >= 3) {
+    for (const entry of LESSON_RATIONALE_MAPPING_ENTRIES) {
+      if (!gatesAllowEntry(entry, pathwayCtx)) continue;
+      if (!entry.haystackPattern.test(hay)) continue;
 
-    let score = entry.baseWeight;
+      let score = entry.baseWeight;
 
-    if (entry.topicKeyBonus && topicCode) {
-      const { keys, bonus } = entry.topicKeyBonus;
-      if (keys.some((k) => topicCode === k || topicCode.includes(k))) {
-        score += bonus;
+      if (entry.topicKeyBonus && topicCode) {
+        const { keys, bonus } = entry.topicKeyBonus;
+        if (keys.some((k) => topicCode === k || topicCode.includes(k))) {
+          score += bonus;
+        }
       }
-    }
 
-    if (entry.tagHints && signals.tags.length > 0) {
-      const { hints, bonusEach, maxBonus } = entry.tagHints;
-      let add = 0;
-      const lowered = signals.tags.map((t) => String(t).toLowerCase());
-      for (const h of hints) {
-        if (lowered.some((t) => t.includes(h))) add += bonusEach;
+      if (entry.tagHints && signals.tags.length > 0) {
+        const { hints, bonusEach, maxBonus } = entry.tagHints;
+        let add = 0;
+        const lowered = signals.tags.map((t) => String(t).toLowerCase());
+        for (const h of hints) {
+          if (lowered.some((t) => t.includes(h))) add += bonusEach;
+        }
+        score += Math.min(add, maxBonus);
       }
-      score += Math.min(add, maxBonus);
-    }
 
-    if (!isAllowedEmitSlug(entry.lessonSlug)) continue;
+      if (!isAllowedEmitSlug(entry.lessonSlug)) continue;
 
-    const next: RankedLessonSlug = {
-      lessonSlug: entry.lessonSlug,
-      kind: entry.linkKind,
-      domain: entry.domain,
-      score,
-      matchedEntryId: entry.id,
-    };
+      const next: RankedLessonSlug = {
+        lessonSlug: entry.lessonSlug,
+        kind: entry.linkKind,
+        domain: entry.domain,
+        score,
+        matchedEntryId: entry.id,
+      };
 
-    const prev = bySlug.get(entry.lessonSlug);
-    if (!prev || next.score > prev.score) {
-      bySlug.set(entry.lessonSlug, next);
+      const prev = bySlug.get(entry.lessonSlug);
+      if (!prev || next.score > prev.score) {
+        bySlug.set(entry.lessonSlug, next);
+      }
     }
   }
 

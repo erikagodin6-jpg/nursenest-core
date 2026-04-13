@@ -4,9 +4,10 @@ import { EXAM_PATHWAYS } from "@/lib/exam-pathways/exam-product-registry";
 /** Exam goal from {@link TrialOnboardingFlow} step 0. */
 export type OnboardingExamGoalSlug = "rn" | "rpn" | "np" | "allied";
 
-function pathwayById(id: string): string | null {
+/** Pathway ids we may assign to `User.learnerPath` (active / legacy / beta — not waitlist-only). */
+function assignablePathwayId(id: string): string | null {
   const p = EXAM_PATHWAYS.find((row) => row.id === id);
-  if (!p || p.status === "hidden") return null;
+  if (!p || p.status === "hidden" || p.status === "upcoming") return null;
   return p.id;
 }
 
@@ -22,19 +23,17 @@ export function resolveDefaultPathwayIdForOnboarding(
   const us = country === CountryCode.US;
 
   if (g === "rn") {
-    return pathwayById(us ? "us-rn-nclex-rn" : "ca-rn-nclex-rn");
+    return assignablePathwayId(us ? "us-rn-nclex-rn" : "ca-rn-nclex-rn");
   }
   if (g === "rpn") {
-    return pathwayById(us ? "us-lpn-nclex-pn" : "ca-rpn-rex-pn");
+    return assignablePathwayId(us ? "us-lpn-nclex-pn" : "ca-rpn-rex-pn");
   }
   if (g === "np") {
-    if (us) return pathwayById("us-np-fnp");
-    const caNp = pathwayById("ca-np-cnple");
-    if (caNp) return caNp;
-    return pathwayById("ca-rn-nclex-rn");
+    if (us) return assignablePathwayId("us-np-fnp");
+    return assignablePathwayId("ca-np-cnple") ?? assignablePathwayId("ca-rn-nclex-rn");
   }
   if (g === "allied") {
-    return pathwayById(us ? "us-allied-core" : "ca-allied-core");
+    return assignablePathwayId(us ? "us-allied-core" : "ca-allied-core");
   }
 
   const fallback = EXAM_PATHWAYS.find(

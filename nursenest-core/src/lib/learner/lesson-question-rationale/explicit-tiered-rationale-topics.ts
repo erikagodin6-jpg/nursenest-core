@@ -313,6 +313,9 @@ export const PRIORITIZED_RATIONALE_TOPIC_KEYS_BY_TIER: Record<RationaleTierGroup
     "prioritization",
     "infection control",
     "medication safety",
+    /** Cues often tagged for early-career / transition items (registry: `tier-newgrad-orientation`). */
+    "new graduate",
+    "orientation",
   ],
   pn_us: [
     "sepsis",
@@ -325,6 +328,8 @@ export const PRIORITIZED_RATIONALE_TOPIC_KEYS_BY_TIER: Record<RationaleTierGroup
     "delegation",
     "prioritization",
     "infection control",
+    "new graduate",
+    "orientation",
   ],
   pn_ca: [
     "sepsis",
