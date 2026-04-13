@@ -610,7 +610,7 @@ export const NP_ADV_POSTS_PART_B: NpAdvPost[] = [
         heading: "Introduction — highest-value users deserve the highest honesty standard",
         body:
           `Canadian NP licensure is **provincially regulated** and subject to national integration discussions that can change timelines and requirements. This article does not replace provincial college guidance, employer legal teams, or immigration counsel.\n\n` +
-          `NurseNest maintains a **CNPLE-track** marketing hub for Canadian NP preparation (`/canada/np/cnple`). Depending on product status, some acquisition modes may be waitlist-oriented—always confirm what is available in-app on ${caNp.pricing} before assuming checkout.\n\n` +
+          `NurseNest maintains a **CNPLE-track** marketing hub for Canadian NP preparation (\`/canada/np/cnple\`). Depending on product status, some acquisition modes may be waitlist-oriented—always confirm what is available in-app on ${caNp.pricing} before assuming checkout.\n\n` +
           `**Start NP practice questions** on ${caNp.questions} when you are preparing for the Canadian NP track content offered here. **Prepare with adaptive exams** on ${caNp.cat} to stress-test readiness without guessing.`,
       },
       {
