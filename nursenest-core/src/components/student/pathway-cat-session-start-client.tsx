@@ -9,6 +9,7 @@ import { buildExamPathwayPath, getExamPathwayById } from "@/lib/exam-pathways/ex
 import type { CatPracticeReadinessResult } from "@/lib/practice-tests/cat-practice-readiness";
 import { PRACTICE_TEST_CAT_CREATE_CODE } from "@/lib/practice-tests/practice-test-cat-create-codes";
 import { CatAmbiguityPathwayPicker } from "@/components/student/cat-ambiguity-pathway-picker";
+import { resolveReadinessStartQuestionCount } from "@/components/student/pathway-cat-start-payload";
 
 export function PathwayCatSessionStartClient({
   initialPathwayId,
@@ -85,7 +86,13 @@ export function PathwayCatSessionStartClient({
     setError(null);
     setErrorCode(null);
     try {
-      const questionCount = readinessConfig?.maxQuestions ?? 150;
+      const catPresentationMode =
+        readinessConfig?.engineType === "CAT" ? "exam_simulation" : "practice";
+      const questionCount = resolveReadinessStartQuestionCount({
+        configuredMaxQuestions: readinessConfig?.maxQuestions ?? 150,
+        catPresentationMode,
+        examFamily: pathwayMeta?.examFamily,
+      });
       const timedMode = true;
       const timeLimitSec = (readinessConfig?.timeLimitMinutes ?? 300) * 60;
       const res = await fetch("/api/practice-tests", {
@@ -99,7 +106,7 @@ export function PathwayCatSessionStartClient({
           difficultyMax: null,
           selectionMode: "cat",
           catSelectionBasis: "random",
-          catPresentationMode: readinessConfig?.engineType === "CAT" ? "exam_simulation" : "practice",
+          catPresentationMode,
           catExamFeedbackMode: "test",
           pathwayId,
           timedMode,
@@ -119,7 +126,7 @@ export function PathwayCatSessionStartClient({
     } finally {
       setCreating(false);
     }
-  }, [pathwayId, pathwayMeta?.shortName, readinessConfig, publicCopy?.title]);
+  }, [pathwayId, pathwayMeta?.examFamily, pathwayMeta?.shortName, readinessConfig, publicCopy?.title]);
 
   if (pathwayOptions.length === 0) {
     return (
