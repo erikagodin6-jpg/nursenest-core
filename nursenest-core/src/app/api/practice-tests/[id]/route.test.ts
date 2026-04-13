@@ -208,3 +208,51 @@ describe("PATCH /api/practice-tests/[id] CAT completion paths", () => {
     assert.equal(captureCoach.mock.callCount(), 1);
   });
 });
+
+describe("PATCH /api/practice-tests/[id] cursor safety", () => {
+  it("clamps out-of-range cursorIndex before persistence", async () => {
+    const update = mock.fn(async () => ({}));
+
+    mock.method(practiceTestRouteDeps, "requireSubscriberSession", async () => gate);
+    mock.method(practiceTestRouteDeps, "enforcePracticeTestMutationProtection", () => null);
+    mock.method(practiceTestRouteDeps, "setSentryServerContext", () => {});
+    mock.method(practiceTestRouteDeps, "parsePracticeTestConfigAtBoundary", () => ({
+      questionCount: 10,
+      topicNames: [],
+      difficultyMin: null,
+      difficultyMax: null,
+      selectionMode: "random" as const,
+      pathwayId: "us-rn-nclex-rn",
+      timedMode: false,
+      timeLimitSec: null,
+    }));
+    mock.method(practiceTestRouteDeps, "findPracticeTest", async () => ({
+      id: "test_12345678",
+      userId: gate.userId,
+      status: PracticeTestStatus.IN_PROGRESS,
+      questionIds: ["q12345", "q23456", "q34567"],
+      answers: {},
+      cursorIndex: 0,
+      elapsedMs: null,
+      config: {},
+      adaptiveState: {},
+    }));
+    mock.method(practiceTestRouteDeps, "updatePracticeTest", update);
+
+    const res = await PATCH(
+      makeRequest({
+        action: "save",
+        answers: { q12345: "A" },
+        cursorIndex: 999, // intentionally invalid/out-of-range
+      }) as never,
+      { params: Promise.resolve({ id: "test_12345678" }) },
+    );
+    const data = (await res.json()) as { ok?: boolean; error?: string };
+
+    assert.equal(res.status, 200);
+    assert.equal(data.ok, true);
+    assert.equal(update.mock.callCount(), 1);
+    const updateArg = update.mock.calls[0]?.arguments[0] as { data?: { cursorIndex?: number } } | undefined;
+    assert.equal(updateArg?.data?.cursorIndex, 2);
+  });
+});

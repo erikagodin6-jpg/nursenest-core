@@ -278,19 +278,13 @@ export function PracticeTestRunnerClient({
       } else {
         setRemainingSec(null);
       }
-      logSessionEvent("session_loaded", {
-        mode: data.catMode ? "cat" : "linear",
-        status: data.status ?? "IN_PROGRESS",
-        totalQuestions: ids.length,
-      });
       setPhase("ready");
     } catch (e) {
       const message = e instanceof Error ? e.message : "Error";
       setError(message);
-      logSessionEvent("session_load_failed", { message });
       setPhase("error");
     }
-  }, [testId, logSessionEvent]);
+  }, [testId]);
 
   useEffect(() => {
     void load();
@@ -333,7 +327,6 @@ export function PracticeTestRunnerClient({
         if (!ac.signal.aborted) {
           const message = "Could not load question.";
           setError(message);
-          logSessionEvent("question_load_failed", { idx, message });
         }
       } finally {
         if (!ac.signal.aborted) setQLoading(false);
@@ -341,7 +334,7 @@ export function PracticeTestRunnerClient({
     })();
 
     return () => ac.abort();
-  }, [phase, status, testId, idx, questionIds, questionFetchNonce, logSessionEvent]);
+  }, [phase, status, testId, idx, questionIds, questionFetchNonce]);
 
   useEffect(() => {
     if (phase !== "ready" || !timedMode || status !== "IN_PROGRESS") return;
@@ -508,11 +501,9 @@ export function PracticeTestRunnerClient({
         }
       }
       if (error) setError(null);
-      logSessionEvent("save_success", { idx: nextIdx });
     } catch (e) {
       const message = e instanceof Error ? e.message : "Could not save progress.";
       setError(message);
-      logSessionEvent("save_failed", { idx: nextIdx, message });
     } finally {
       persistInFlightRef.current = false;
       setSaving(false);
@@ -624,14 +615,7 @@ export function PracticeTestRunnerClient({
 
   async function catAdvance() {
     if (catAdvanceInFlightRef.current || submitInFlightRef.current) return;
-    if (!current || !hasMeaningfulAnswer(current.id)) {
-      logSessionEvent("invalid_transition_guard_hit", {
-        action: "cat_advance",
-        reason: "missing_answer_or_question",
-        idx,
-      });
-      return;
-    }
+    if (!current || !hasMeaningfulAnswer(current.id)) return;
     catAdvanceInFlightRef.current = true;
     logSessionEvent("submit_cat_advance_start", { idx, questionId: current.id });
     setSaving(true);
@@ -701,14 +685,7 @@ export function PracticeTestRunnerClient({
       await catAdvance();
       return;
     }
-    if (isLinearEngine && qid && !committedSet.has(qid)) {
-      logSessionEvent("invalid_transition_guard_hit", {
-        action: "go_next",
-        reason: "linear_uncommitted_current_item",
-        idx,
-      });
-      return;
-    }
+    if (isLinearEngine && qid && !committedSet.has(qid)) return;
     if (idx >= total - 1) return;
     navInFlightRef.current = true;
     logSessionEvent("navigation_next", { from: idx, to: idx + 1 });

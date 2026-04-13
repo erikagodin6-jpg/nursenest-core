@@ -30,6 +30,13 @@ function normalizeEmail(raw: string): string {
   return raw.trim().toLowerCase();
 }
 
+export function passwordResetCleanupWhere(userId: string, now: Date) {
+  return {
+    userId,
+    expiresAt: { lt: now },
+  };
+}
+
 /**
  * Generic JSON for any outcome (no account enumeration).
  * Development + no email provider: includes `_devResetUrl` for manual testing only.
@@ -101,7 +108,9 @@ export async function POST(req: Request) {
       });
     }
 
-    await prisma.passwordResetToken.deleteMany({ where: { userId: user.id } });
+    await prisma.passwordResetToken.deleteMany({
+      where: passwordResetCleanupWhere(user.id, new Date()),
+    });
 
     const rawToken = generatePasswordResetRawToken();
     const tokenHash = hashPasswordResetToken(rawToken);

@@ -1,0 +1,24 @@
+export type LoginSubmitResultLike = {
+  error?: string;
+  code?: string;
+  status?: number;
+  ok?: boolean;
+} | null;
+
+export type LoginSubmitOutcome = "success" | "invalid_credentials" | "generic_error";
+
+export function resolveLoginSubmitOutcome(
+  result: LoginSubmitResultLike,
+  hasConfirmedSession: boolean,
+): LoginSubmitOutcome {
+  if (hasConfirmedSession) return "success";
+  if (!result) return "generic_error";
+  if (result.error) {
+    if (result.code === "CredentialsSignin" || result.status === 401) {
+      return "invalid_credentials";
+    }
+    return "generic_error";
+  }
+  if (result.ok === false) return "generic_error";
+  return "success";
+}

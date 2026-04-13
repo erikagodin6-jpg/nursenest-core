@@ -2,10 +2,11 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { signIn } from "next-auth/react";
+import { getSession, signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { safeCallbackPath } from "@/lib/auth/safe-callback-path";
+import { resolveLoginSubmitOutcome } from "@/components/auth/login-form-result";
 
 export function LoginForm({
   forgotPasswordHref = "/forgot-password",
@@ -42,21 +43,18 @@ export function LoginForm({
         redirectTo: redirectTarget,
       });
 
-      if (!result) {
-        setError(t("pages.login.errorGeneric"));
-        return;
+      let outcome = resolveLoginSubmitOutcome(result, false);
+      if (outcome !== "success") {
+        const session = await getSession().catch(() => null);
+        outcome = resolveLoginSubmitOutcome(result, Boolean(session?.user));
       }
-      if (result.error) {
-        const code = result.code;
-        if (code === "CredentialsSignin" || result.status === 401) {
+
+      if (outcome !== "success") {
+        if (outcome === "invalid_credentials") {
           setError(t("pages.login.errorInvalid"));
         } else {
           setError(t("pages.login.errorGeneric"));
         }
-        return;
-      }
-      if (result.ok === false) {
-        setError(t("pages.login.errorGeneric"));
         return;
       }
 
