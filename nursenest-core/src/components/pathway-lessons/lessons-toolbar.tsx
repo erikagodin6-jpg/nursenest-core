@@ -13,9 +13,15 @@ type Props = {
 export function LessonsToolbar({ searchBasePath, initialQuery, countryOptions, totalCount }: Props) {
   return (
     <div className="mt-4 flex flex-col gap-3 rounded-[1.5rem] border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] p-3 sm:p-4">
-      <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
-        {countryOptions ? <CountrySwitcher options={countryOptions} /> : <div />}
-        <form method="get" action={searchBasePath} className="flex w-full flex-col gap-2 sm:flex-row lg:max-w-[32rem]">
+      <div
+        className={`flex flex-col gap-3 ${countryOptions ? "lg:flex-row lg:items-center lg:justify-between" : ""}`}
+      >
+        {countryOptions ? <CountrySwitcher options={countryOptions} /> : null}
+        <form
+          method="get"
+          action={searchBasePath}
+          className={`flex w-full flex-col gap-2 sm:flex-row ${countryOptions ? "lg:max-w-[32rem]" : ""}`}
+        >
           <label htmlFor="lessons-toolbar-q" className="sr-only">
             Search lessons
           </label>

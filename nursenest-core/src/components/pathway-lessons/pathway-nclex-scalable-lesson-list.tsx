@@ -13,6 +13,7 @@ import {
 } from "@/lib/lessons/nclex-pn-us-lesson-enrichment";
 import { pathwayHubAppQuestionsHref } from "@/lib/marketing/pathway-hub-app-questions-href";
 import { buildExamPathwayPath, getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
+import { cleanLessonTitleForDisplay } from "@/lib/lessons/lesson-title-presentation";
 
 /** Above this count per Client Needs section, show a compact link list first and tuck rich previews behind a disclosure. */
 export const NCLEX_HUB_RICH_PREVIEWS_COLLAPSE_AFTER = 5;
@@ -76,7 +77,7 @@ export function PathwayNclexScalableLessonSection({
           href={pathwayLessonMarketingDetailHref(lessonsBasePath, l.slug)!}
           className="mt-1 block text-lg font-semibold leading-snug text-[var(--theme-heading-text)] underline-offset-4 transition hover:text-primary hover:underline"
         >
-          {l.title}
+          {cleanLessonTitleForDisplay(l.title)}
         </Link>
         <div className="mt-4 grid gap-3 border-t border-[color-mix(in_srgb,var(--theme-primary)_10%,var(--border-subtle))] pt-4 text-sm sm:grid-cols-2">
           <div>
@@ -156,7 +157,7 @@ export function PathwayNclexScalableLessonSection({
                     <PathwayLessonRecordChips lesson={l} omitTopic className="mb-1" />
                     <p className="text-[10px] font-medium uppercase tracking-wide text-[var(--theme-muted-text)]">{l.topic}</p>
                     <Link href={href} className="block truncate text-sm font-semibold text-primary hover:underline sm:text-base">
-                      {l.title}
+                      {cleanLessonTitleForDisplay(l.title)}
                     </Link>
                   </div>
                   <div className="flex shrink-0 flex-wrap items-center gap-2">

@@ -24,7 +24,7 @@ type Props = {
  */
 export function LessonsPageShell({ title, subtitle, toolbar, ctas, backLink, children }: Props) {
   return (
-    <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+    <main className="mx-auto max-w-7xl px-4 py-4 sm:px-6 sm:py-5 lg:px-8">
       <PathwayHero
         title={title}
         subtitle={subtitle}
@@ -32,7 +32,7 @@ export function LessonsPageShell({ title, subtitle, toolbar, ctas, backLink, chi
         ctas={ctas}
         backLink={backLink}
       />
-      <div className="mt-8">{children}</div>
+      <div className="mt-3.5">{children}</div>
     </main>
   );
 }

@@ -1,96 +1,65 @@
 /**
- * Import blog posts into BlogPost (Prisma).
+ * Batch-safe legacy blog importer.
  *
- * Source:
- * - JSON export: `content/blog-legacy-export.json` (from `export-monolith-blog-to-json.ts` or manual)
- *
- * Usage: `npx tsx scripts/import-blog.ts`
- * Env: DATABASE_URL
- *
- * Does not modify Lesson or Question models.
- *
- * Storage policy: production blog content lives in the **database**, not in `public/`.
- * See `docs/CONTENT_WORKFLOWS.md` (blog) and `docs/STORAGE_POLICY.md`.
+ * Sources (intentionally scoped):
+ * - data/replit-exports/imaging_blog_articles.json
+ * - data/replit-exports/seo_articles.json
+ * - client/src/data/seo-content-articles.ts
  */
 import { config as loadEnv } from "dotenv";
 import fs from "node:fs";
 import path from "node:path";
+import crypto from "node:crypto";
+import vm from "node:vm";
 import { fileURLToPath } from "node:url";
 import { BlogPostStatus, PrismaClient } from "@prisma/client";
-import { PARAMEDIC_BLOG_ARTICLES } from "../../client/src/allied/data/paramedic-blog-data";
-import { legacyBlogHtmlFromRow, normalizeBlogAssetUrls } from "../src/lib/blog/serialize-content";
-import { excerptFromParamedic, paramedicArticleToHtml } from "../src/lib/blog/serialize-paramedic";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 loadEnv({ path: path.join(__dirname, "../.env") });
 loadEnv({ path: path.join(__dirname, "../../.env") });
+
 const prisma = new PrismaClient();
+const BATCH_MAX = 100;
+const BATCH_MIN = 50;
+const MEMORY_REDUCE_THRESHOLD_MB = 512;
 
-type LegacyExportRow = {
-  slug: string;
+type SourceName = "imaging_blog_articles.json" | "seo_articles.json" | "seo-content-articles.ts";
+
+type NormalizedBlogRow = {
+  source: SourceName;
+  sourceId: string;
   title: string;
-  summary?: string | null;
-  seo_description?: string | null;
-  category?: string | null;
-  tags?: string[] | null;
-  content?: unknown;
-  body?: string | null;
-  content_html?: string | null;
-  status?: string | null;
-  published_at?: string | null;
-  created_at?: string | null;
-  scheduled_at?: string | null;
-  updated_at?: string | null;
-  cover_image?: string | null;
-  legacy_source?: string | null;
-};
-
-type UnifiedImportRow = {
-  source: "legacy_export" | "paramedic_static" | "imaging_json" | "mlt_stub";
-  sourceKey: string;
+  content: string;
   slug: string | null;
-  title: string | null;
-  summary: string | null;
-  seoDescription: string | null;
-  category: string | null;
-  tags: string[];
-  bodyHtml: string | null;
-  status: string | null;
-  publishedAt: Date | null;
   createdAt: Date | null;
+  postStatus: BlogPostStatus;
+  publishAt: Date | null;
   scheduledAt: Date | null;
-  coverImage: string | null;
-  legacySource: string;
-  careerSlug: string | null;
+  seoTitle: string | null;
+  seoDescription: string | null;
+  seoKeywords: string[] | null;
 };
 
-function readLegacyJson(): LegacyExportRow[] {
-  const p = path.join(__dirname, "../content/blog-legacy-export.json");
-  if (!fs.existsSync(p)) return [];
-  const raw = JSON.parse(fs.readFileSync(p, "utf8"));
-  return Array.isArray(raw) ? raw : [];
-}
+type RunStats = {
+  batchNumber: number;
+  totalProcessed: number;
+  imported: number;
+  duplicatesSkipped: number;
+  failures: number;
+  failureReasons: string[];
+};
 
-function readImagingJson(): Record<string, unknown>[] {
-  return readJsonArray<Record<string, unknown>>(path.join(__dirname, "../data/replit-exports/imaging_blog_articles.json"));
-}
-
-function readJsonArray<T>(p: string): T[] {
-  if (!fs.existsSync(p)) return [];
-  const raw = JSON.parse(fs.readFileSync(p, "utf8"));
-  return Array.isArray(raw) ? (raw as T[]) : [];
-}
-
-/** Count <img> and non-absolute src (before or after migration fixes). */
-function scanImageRefs(html: string): { imgTags: number; nonAbsoluteSrc: number } {
-  const imgs = html.match(/<img\b[^>]*>/gi) ?? [];
-  let nonAbsoluteSrc = 0;
-  for (const tag of imgs) {
-    const m = tag.match(/\bsrc=["']([^"']+)["']/i);
-    const src = m?.[1]?.trim() ?? "";
-    if (src && !src.startsWith("http") && !src.startsWith("data:")) nonAbsoluteSrc += 1;
+class SchemaMismatchError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "SchemaMismatchError";
   }
-  return { imgTags: imgs.length, nonAbsoluteSrc };
+}
+
+const schemaFailures: string[] = [];
+
+function hashTitleContent(title: string, content: string): string {
+  return crypto.createHash("sha256").update(`${title}\n${content}`).digest("hex");
 }
 
 function normalizeSlug(seed: string): string {
@@ -102,392 +71,505 @@ function normalizeSlug(seed: string): string {
   return cleaned || "legacy-blog-post";
 }
 
-async function uniqueSlug(base: string): Promise<string> {
-  let candidate = base;
-  let n = 0;
-  while (await prisma.blogPost.findUnique({ where: { slug: candidate }, select: { id: true } })) {
-    n += 1;
-    candidate = `${base}-${n}`.slice(0, 120);
-  }
-  return candidate;
-}
-
-const AUTO_PUBLISH_PAST_SCHEDULED = true;
-
-function rowLegacyStatus(row: LegacyExportRow): "published" | "scheduled" | "draft_or_other" {
-  const st = (row.status || "").toLowerCase();
-  if (st === "published") return "published";
-  if (st === "scheduled") return "scheduled";
-  return "draft_or_other";
-}
-
-function parseDateOrNull(raw: string | null | undefined): Date | null {
-  if (!raw) return null;
-  const d = new Date(raw);
+function parseDateOrNull(value: unknown): Date | null {
+  if (typeof value !== "string" || !value.trim()) return null;
+  const d = new Date(value);
   return Number.isFinite(d.getTime()) ? d : null;
 }
 
-function parseUnknownDateOrNull(raw: unknown): Date | null {
-  if (typeof raw !== "string" || !raw.trim()) return null;
-  return parseDateOrNull(raw);
+function parseStatus(raw: unknown): BlogPostStatus {
+  const status = String(raw ?? "").toLowerCase();
+  if (status === "published") return BlogPostStatus.PUBLISHED;
+  if (status === "scheduled") return BlogPostStatus.SCHEDULED;
+  return BlogPostStatus.DRAFT;
 }
 
-function resolveImportPublishState(row: LegacyExportRow): {
-  legacyStatus: "published" | "scheduled" | "draft_or_other";
-  postStatus: BlogPostStatus;
-  publishAt: Date | null;
-  scheduledAt: Date | null;
-  autoPublishedFromPastSchedule: boolean;
-} {
-  const legacyStatus = rowLegacyStatus(row);
-  const publishedAt = parseDateOrNull(row.published_at);
-  const scheduledAt = parseDateOrNull(row.scheduled_at);
-
-  if (legacyStatus === "published") {
-    return {
-      legacyStatus,
-      postStatus: BlogPostStatus.PUBLISHED,
-      publishAt: publishedAt,
-      scheduledAt: null,
-      autoPublishedFromPastSchedule: false,
-    };
-  }
-  if (legacyStatus === "scheduled") {
-    const autoPublish =
-      AUTO_PUBLISH_PAST_SCHEDULED &&
-      scheduledAt !== null &&
-      scheduledAt.getTime() <= Date.now();
-    return {
-      legacyStatus,
-      postStatus: autoPublish ? BlogPostStatus.PUBLISHED : BlogPostStatus.SCHEDULED,
-      publishAt: scheduledAt,
-      scheduledAt,
-      autoPublishedFromPastSchedule: autoPublish,
-    };
-  }
-  return {
-    legacyStatus,
-    postStatus: BlogPostStatus.DRAFT,
-    publishAt: null,
-    scheduledAt: null,
-    autoPublishedFromPastSchedule: false,
-  };
-}
-
-function resolveUnifiedRowPublishState(row: UnifiedImportRow): {
-  legacyStatus: "published" | "scheduled" | "draft_or_other";
-  postStatus: BlogPostStatus;
-  publishAt: Date | null;
-  scheduledAt: Date | null;
-  autoPublishedFromPastSchedule: boolean;
-} {
-  const status = String(row.status ?? "").toLowerCase();
-  if (status === "published") {
-    return {
-      legacyStatus: "published",
-      postStatus: BlogPostStatus.PUBLISHED,
-      publishAt: row.publishedAt,
-      scheduledAt: null,
-      autoPublishedFromPastSchedule: false,
-    };
-  }
-  if (status === "scheduled") {
-    const autoPublish =
-      AUTO_PUBLISH_PAST_SCHEDULED &&
-      row.scheduledAt !== null &&
-      row.scheduledAt.getTime() <= Date.now();
-    return {
-      legacyStatus: "scheduled",
-      postStatus: autoPublish ? BlogPostStatus.PUBLISHED : BlogPostStatus.SCHEDULED,
-      publishAt: row.scheduledAt,
-      scheduledAt: row.scheduledAt,
-      autoPublishedFromPastSchedule: autoPublish,
-    };
-  }
-  return {
-    legacyStatus: "draft_or_other",
-    postStatus: BlogPostStatus.DRAFT,
-    publishAt: null,
-    scheduledAt: null,
-    autoPublishedFromPastSchedule: false,
-  };
-}
-
-function pickCreatedAt(row: LegacyExportRow): Date {
-  if (row.created_at) return new Date(row.created_at);
-  if (row.published_at) return new Date(row.published_at);
-  if (row.scheduled_at) return new Date(row.scheduled_at);
-  return new Date();
-}
-
-function firstParagraphExcerpt(html: string): string {
-  const p = html.match(/<p\b[^>]*>([\s\S]*?)<\/p>/i)?.[1] ?? "";
-  const plain = p.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+function excerptFromContent(content: string): string {
+  const plain = content.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
   return plain.slice(0, 500);
 }
 
-function parseMltStubRows(): UnifiedImportRow[] {
-  const p = path.join(__dirname, "../../client/src/allied/pages/mlt-blog.tsx");
-  if (!fs.existsSync(p)) return [];
-  const raw = fs.readFileSync(p, "utf8");
-  const regex =
-    /\{\s*slug:\s*"([^"]+)"\s*,\s*title:\s*"([^"]+)"\s*,\s*excerpt:\s*"([^"]+)"\s*,\s*discipline:\s*"([^"]+)"\s*,\s*date:\s*"([^"]+)"/g;
-  const rows: UnifiedImportRow[] = [];
-  for (const m of raw.matchAll(regex)) {
-    const [, slug, title, excerpt, discipline, date] = m;
-    rows.push({
-      source: "mlt_stub",
-      sourceKey: slug,
-      slug,
-      title,
-      summary: excerpt,
-      seoDescription: excerpt,
-      category: discipline || "Medical laboratory",
-      tags: ["mlt", discipline.toLowerCase().replace(/[^a-z0-9]+/g, "-")],
-      bodyHtml: `<h2>${title}</h2><p>${excerpt}</p>`,
-      status: "published",
-      publishedAt: parseDateOrNull(date),
-      createdAt: parseDateOrNull(date),
-      scheduledAt: null,
-      coverImage: null,
-      legacySource: "mlt-static-stub",
-      careerSlug: "mlt",
-    });
+function uniqueSlug(base: string, slugSet: Set<string>): string {
+  let candidate = base;
+  let i = 1;
+  while (slugSet.has(candidate)) {
+    i += 1;
+    candidate = `${base}-${i}`.slice(0, 120);
   }
-  return rows;
+  slugSet.add(candidate);
+  return candidate;
 }
 
-function deriveCareerSlug(input: { legacySource?: string | null; category?: string | null; tags?: string[]; slug?: string | null }): string | null {
-  const source = (input.legacySource ?? "").toLowerCase();
-  const category = (input.category ?? "").toLowerCase();
-  const slug = (input.slug ?? "").toLowerCase();
-  const tags = (input.tags ?? []).map((t) => t.toLowerCase());
-  if (source.includes("paramedic") || tags.includes("paramedic") || category.includes("paramedic")) return "paramedic";
-  if (source.includes("imaging") || slug.startsWith("imaging-") || tags.includes("medical-imaging") || category.includes("imaging")) return "imaging";
-  if (source.includes("mlt") || slug.startsWith("mlt-") || tags.includes("mlt") || category.includes("laboratory")) return "mlt";
-  if (tags.includes("allied-health") || category.includes("allied")) return "allied-health";
-  return null;
+async function* streamJsonArray(filePath: string): AsyncGenerator<unknown, void, void> {
+  const stream = fs.createReadStream(filePath, { encoding: "utf8", highWaterMark: 64 * 1024 });
+  let inArray = false;
+  let inString = false;
+  let escaping = false;
+  let depth = 0;
+  let objectBuffer = "";
+  let collectingObject = false;
+
+  for await (const chunk of stream) {
+    for (const char of chunk) {
+      if (!inArray) {
+        if (char === "[") inArray = true;
+        continue;
+      }
+
+      if (!collectingObject) {
+        if (char === "{") {
+          collectingObject = true;
+          depth = 1;
+          objectBuffer = "{";
+          inString = false;
+          escaping = false;
+        } else if (char === "]") {
+          return;
+        }
+        continue;
+      }
+
+      objectBuffer += char;
+      if (inString) {
+        if (escaping) {
+          escaping = false;
+          continue;
+        }
+        if (char === "\\") {
+          escaping = true;
+          continue;
+        }
+        if (char === "\"") {
+          inString = false;
+        }
+        continue;
+      }
+
+      if (char === "\"") {
+        inString = true;
+        continue;
+      }
+
+      if (char === "{") depth += 1;
+      if (char === "}") depth -= 1;
+
+      if (depth === 0) {
+        yield JSON.parse(objectBuffer);
+        objectBuffer = "";
+        collectingObject = false;
+      }
+    }
+  }
 }
 
-function buildUnifiedRows(legacyRows: LegacyExportRow[]): UnifiedImportRow[] {
-  const fromLegacy: UnifiedImportRow[] = legacyRows.map((row) => {
-    const htmlRaw = legacyBlogHtmlFromRow(row);
-    const bodyHtml = normalizeBlogAssetUrls(htmlRaw);
-    return {
-      source: "legacy_export",
-      sourceKey: row.slug || row.title || `legacy-${Math.random()}`,
-      slug: row.slug ?? null,
-      title: row.title ?? null,
-      summary: row.summary ?? null,
-      seoDescription: row.seo_description ?? null,
-      category: row.category ?? null,
-      tags: row.tags ?? [],
-      bodyHtml,
-      status: row.status ?? null,
-      publishedAt: parseDateOrNull(row.published_at),
-      createdAt: parseDateOrNull(row.created_at),
-      scheduledAt: parseDateOrNull(row.scheduled_at),
-      coverImage: row.cover_image ?? null,
-      legacySource: row.legacy_source ?? "legacy-json",
-      careerSlug: deriveCareerSlug({
-        legacySource: row.legacy_source,
-        category: row.category,
-        tags: row.tags ?? [],
-        slug: row.slug,
-      }),
-    };
-  });
-
-  const fromParamedic: UnifiedImportRow[] = PARAMEDIC_BLOG_ARTICLES.map((article) => ({
-    source: "paramedic_static",
-    sourceKey: article.slug,
-    slug: article.slug,
-    title: article.title,
-    summary: excerptFromParamedic(article),
-    seoDescription: article.metaDescription,
-    category: article.category || "Paramedic",
-    tags: article.keywords.split(",").map((k) => k.trim()).filter(Boolean),
-    bodyHtml: normalizeBlogAssetUrls(paramedicArticleToHtml(article)),
-    status: "published",
-    publishedAt: parseDateOrNull(article.publishedDate),
-    createdAt: parseDateOrNull(article.publishedDate),
-    scheduledAt: null,
-    coverImage: null,
-    legacySource: "paramedic-static",
-    careerSlug: "paramedic",
-  }));
-
-  const fromImaging: UnifiedImportRow[] = readImagingJson().map((row) => {
-    const slug = typeof row.slug === "string" ? row.slug : null;
-    const title = typeof row.title === "string" ? row.title : null;
-    const summary = typeof row.summary === "string" ? row.summary : null;
-    const contentHtml = typeof row.content_html === "string" ? row.content_html : null;
-    const category = typeof row.category === "string" ? row.category : "Medical imaging";
-    const status = typeof row.status === "string" ? row.status : "published";
-    const tags = Array.isArray(row.tags) ? row.tags.filter((t): t is string => typeof t === "string") : [];
-    return {
-      source: "imaging_json",
-      sourceKey: slug ?? title ?? "imaging-json",
-      slug: slug ? `imaging-${slug}` : null,
-      title,
-      summary,
-      seoDescription: typeof row.meta_description === "string" ? row.meta_description : null,
-      category,
-      tags,
-      bodyHtml: contentHtml,
-      status,
-      publishedAt: parseUnknownDateOrNull(row.published_at),
-      createdAt: parseUnknownDateOrNull(row.created_at),
-      scheduledAt: parseUnknownDateOrNull(row.scheduled_at),
-      coverImage: null,
-      legacySource: "imaging_json_export",
-      careerSlug: "imaging",
-    };
-  });
-
-  return [...fromLegacy, ...fromParamedic, ...fromImaging, ...parseMltStubRows()];
+function validateStringField(row: Record<string, unknown>, fieldName: string, source: string, sourceId: string): string {
+  const value = row[fieldName];
+  if (typeof value !== "string" || !value.trim()) {
+    throw new SchemaMismatchError(`${source}:${sourceId} missing required string field "${fieldName}"`);
+  }
+  return value;
 }
 
-async function main() {
-  let imported = 0;
-  let failed = 0;
-  let importedLegacy = 0;
-  let publishedImported = 0;
-  let scheduledImported = 0;
-  let scheduledAutoPublished = 0;
-  let draftsSkipped = 0;
-  let draftsImported = 0;
-  let skipped = 0;
-  let skippedDuplicate = 0;
-  const errors: string[] = [];
-  const importedByProfession: Record<string, number> = {};
-  const skippedByProfession: Record<string, number> = {};
-  const failedByProfession: Record<string, number> = {};
-  const skippedReasonCounts: Record<string, number> = {};
-  const skip = (reason: string) => {
-    skipped += 1;
-    skippedReasonCounts[reason] = (skippedReasonCounts[reason] ?? 0) + 1;
-  };
+function parseSeoContentArticlesFromTs(filePath: string): Record<string, unknown>[] {
+  const raw = fs.readFileSync(filePath, "utf8");
+  const marker = "SEO_CONTENT_ARTICLES: SeoArticle[] =";
+  const markerIndex = raw.indexOf(marker);
+  if (markerIndex < 0) {
+    throw new SchemaMismatchError("seo-content-articles.ts missing SEO_CONTENT_ARTICLES export");
+  }
+  const arrayStart = raw.indexOf("[", markerIndex);
+  if (arrayStart < 0) {
+    throw new SchemaMismatchError("seo-content-articles.ts missing SEO_CONTENT_ARTICLES array");
+  }
 
-  const legacyRows = readLegacyJson();
-  const unifiedRows = buildUnifiedRows(legacyRows);
+  let depth = 0;
+  let endIndex = -1;
+  let inString = false;
+  let escaping = false;
+  for (let i = arrayStart; i < raw.length; i += 1) {
+    const ch = raw[i];
+    if (inString) {
+      if (escaping) {
+        escaping = false;
+        continue;
+      }
+      if (ch === "\\") {
+        escaping = true;
+        continue;
+      }
+      if (ch === "\"") inString = false;
+      continue;
+    }
+    if (ch === "\"") {
+      inString = true;
+      continue;
+    }
+    if (ch === "[") depth += 1;
+    if (ch === "]") depth -= 1;
+    if (depth === 0) {
+      endIndex = i;
+      break;
+    }
+  }
 
-  for (const [idx, row] of unifiedRows.entries()) {
-    const fallbackTitle = row.slug ? row.slug.replace(/[-_]+/g, " ").trim() : `Legacy blog post ${idx + 1}`;
-    const title = (row.title ?? "").trim() || fallbackTitle || `Legacy blog post ${idx + 1}`;
-    const slugSeed = normalizeSlug((row.slug ?? "").trim() || title);
-    const slug = await uniqueSlug(slugSeed);
-    const publishState = resolveUnifiedRowPublishState(row);
-    if (publishState.legacyStatus === "draft_or_other") {
-      // Preserve drafts in DB (do not discard legacy content).
-      draftsImported += 1;
+  if (endIndex < 0) {
+    throw new SchemaMismatchError("seo-content-articles.ts array parsing failed");
+  }
+
+  const literal = raw.slice(arrayStart, endIndex + 1);
+  const parsed = vm.runInNewContext(literal, {}, { timeout: 3000 });
+  if (!Array.isArray(parsed)) {
+    throw new SchemaMismatchError("seo-content-articles.ts did not evaluate to an array");
+  }
+  return parsed as Record<string, unknown>[];
+}
+
+function buildSeoArticleBody(row: Record<string, unknown>, sourceId: string): string {
+  const sections = row.sections;
+  if (!Array.isArray(sections)) {
+    throw new SchemaMismatchError(`seo-content-articles.ts:${sourceId} missing sections[]`);
+  }
+
+  const title = validateStringField(row, "title", "seo-content-articles.ts", sourceId);
+  const parts: string[] = [`# ${title}`];
+
+  for (const section of sections) {
+    if (!section || typeof section !== "object") {
+      throw new SchemaMismatchError(`seo-content-articles.ts:${sourceId} has invalid section object`);
+    }
+    const record = section as Record<string, unknown>;
+    const heading = validateStringField(record, "heading", "seo-content-articles.ts", sourceId);
+    const content = validateStringField(record, "content", "seo-content-articles.ts", sourceId);
+    parts.push(`\n## ${heading}\n${content}`);
+
+    if (Array.isArray(record.items) && record.items.length > 0) {
+      const listItems = record.items.map((item) => {
+        if (typeof item !== "string" || !item.trim()) {
+          throw new SchemaMismatchError(`seo-content-articles.ts:${sourceId} contains non-string section item`);
+        }
+        return `- ${item}`;
+      });
+      parts.push(listItems.join("\n"));
     }
 
-    const excerpt =
-      (row.summary || row.seoDescription || "").trim().slice(0, 500) ||
-      firstParagraphExcerpt(row.bodyHtml ?? "") ||
-      title.slice(0, 500);
-    const legacySource = row.legacySource || "legacy-json";
-    const professionKey = row.careerSlug ?? "unspecified";
+    if (typeof record.tip === "string" && record.tip.trim()) {
+      parts.push(`\nTip: ${record.tip}`);
+    }
+  }
 
-    const existing = await prisma.blogPost.findUnique({ where: { slug }, select: { id: true } });
-    if (existing) {
-      skippedDuplicate += 1;
-      skippedByProfession[professionKey] = (skippedByProfession[professionKey] ?? 0) + 1;
-      skip("duplicate_slug");
+  if (Array.isArray(row.faqs) && row.faqs.length > 0) {
+    parts.push("\n## FAQs");
+    for (const faq of row.faqs) {
+      if (!faq || typeof faq !== "object") {
+        throw new SchemaMismatchError(`seo-content-articles.ts:${sourceId} has invalid faq object`);
+      }
+      const record = faq as Record<string, unknown>;
+      const q = validateStringField(record, "question", "seo-content-articles.ts", sourceId);
+      const a = validateStringField(record, "answer", "seo-content-articles.ts", sourceId);
+      parts.push(`\n### ${q}\n${a}`);
+    }
+  }
+
+  if (Array.isArray(row.relatedLinks) && row.relatedLinks.length > 0) {
+    parts.push("\n## Related Links");
+    for (const link of row.relatedLinks) {
+      if (!link || typeof link !== "object") {
+        throw new SchemaMismatchError(`seo-content-articles.ts:${sourceId} has invalid related link object`);
+      }
+      const record = link as Record<string, unknown>;
+      const label = validateStringField(record, "title", "seo-content-articles.ts", sourceId);
+      const href = validateStringField(record, "href", "seo-content-articles.ts", sourceId);
+      const description = typeof record.description === "string" ? ` - ${record.description}` : "";
+      parts.push(`- [${label}](${href})${description}`);
+    }
+  }
+
+  return parts.join("\n").trim();
+}
+
+async function* readImagingBlogRows(filePath: string): AsyncGenerator<NormalizedBlogRow, void, void> {
+  for await (const rawRow of streamJsonArray(filePath)) {
+    try {
+      if (!rawRow || typeof rawRow !== "object") {
+        throw new SchemaMismatchError("imaging_blog_articles.json contains non-object row");
+      }
+      const row = rawRow as Record<string, unknown>;
+      const sourceId = String(row.id ?? row.slug ?? "unknown");
+      const title = validateStringField(row, "title", "imaging_blog_articles.json", sourceId);
+      const content = validateStringField(row, "content_html", "imaging_blog_articles.json", sourceId);
+      const slug = typeof row.slug === "string" && row.slug.trim() ? row.slug : null;
+      const tags = Array.isArray(row.tags) ? row.tags.filter((t): t is string => typeof t === "string" && Boolean(t.trim())) : null;
+
+      yield {
+        source: "imaging_blog_articles.json",
+        sourceId,
+        title,
+        content,
+        slug,
+        createdAt: parseDateOrNull(row.created_at) ?? parseDateOrNull(row.published_at),
+        postStatus: parseStatus(row.status),
+        publishAt: parseDateOrNull(row.published_at),
+        scheduledAt: parseDateOrNull(row.scheduled_at),
+        seoTitle: typeof row.meta_title === "string" ? row.meta_title : null,
+        seoDescription: typeof row.meta_description === "string" ? row.meta_description : null,
+        seoKeywords: tags,
+      };
+    } catch (error) {
+      schemaFailures.push(error instanceof Error ? error.message : String(error));
+    }
+  }
+}
+
+async function* readSeoArticlesRows(filePath: string): AsyncGenerator<NormalizedBlogRow, void, void> {
+  for await (const rawRow of streamJsonArray(filePath)) {
+    try {
+      if (!rawRow || typeof rawRow !== "object") {
+        throw new SchemaMismatchError("seo_articles.json contains non-object row");
+      }
+      const row = rawRow as Record<string, unknown>;
+      const sourceId = String(row.id ?? row.slug ?? "unknown");
+      const title = validateStringField(row, "title", "seo_articles.json", sourceId);
+      const contentHtml = typeof row.content_html === "string" ? row.content_html.trim() : "";
+      const contentMd = typeof row.content_md === "string" ? row.content_md.trim() : "";
+      const content = contentHtml || contentMd;
+      if (!content) {
+        throw new SchemaMismatchError(`seo_articles.json:${sourceId} missing required content_html/content_md`);
+      }
+
+      const slug = typeof row.slug === "string" && row.slug.trim() ? row.slug : null;
+      const keywords = [];
+      if (typeof row.target_keyword === "string" && row.target_keyword.trim()) keywords.push(row.target_keyword);
+
+      yield {
+        source: "seo_articles.json",
+        sourceId,
+        title,
+        content,
+        slug,
+        createdAt: parseDateOrNull(row.created_at) ?? parseDateOrNull(row.published_at),
+        postStatus: parseStatus(row.status),
+        publishAt: parseDateOrNull(row.published_at),
+        scheduledAt: null,
+        seoTitle: typeof row.meta_title === "string" ? row.meta_title : null,
+        seoDescription: typeof row.meta_description === "string" ? row.meta_description : null,
+        seoKeywords: keywords.length > 0 ? keywords : null,
+      };
+    } catch (error) {
+      schemaFailures.push(error instanceof Error ? error.message : String(error));
+    }
+  }
+}
+
+async function* readClientSeoContentRows(filePath: string): AsyncGenerator<NormalizedBlogRow, void, void> {
+  try {
+    const rows = parseSeoContentArticlesFromTs(filePath);
+    for (const rawRow of rows) {
+      try {
+        if (!rawRow || typeof rawRow !== "object") {
+          throw new SchemaMismatchError("seo-content-articles.ts contains non-object row");
+        }
+        const row = rawRow as Record<string, unknown>;
+        const sourceId = validateStringField(row, "slug", "seo-content-articles.ts", "unknown");
+        const title = validateStringField(row, "title", "seo-content-articles.ts", sourceId);
+        const content = buildSeoArticleBody(row, sourceId);
+        const seoKeywords =
+          typeof row.seoKeywords === "string"
+            ? row.seoKeywords
+                .split(",")
+                .map((v) => v.trim())
+                .filter(Boolean)
+            : null;
+
+        yield {
+          source: "seo-content-articles.ts",
+          sourceId,
+          title,
+          content,
+          slug: sourceId,
+          createdAt: parseDateOrNull(row.publishDate),
+          postStatus: BlogPostStatus.PUBLISHED,
+          publishAt: parseDateOrNull(row.publishDate),
+          scheduledAt: null,
+          seoTitle: typeof row.seoTitle === "string" ? row.seoTitle : null,
+          seoDescription: typeof row.seoDescription === "string" ? row.seoDescription : null,
+          seoKeywords,
+        };
+      } catch (error) {
+        schemaFailures.push(error instanceof Error ? error.message : String(error));
+      }
+    }
+  } catch (error) {
+    schemaFailures.push(error instanceof Error ? error.message : String(error));
+  }
+}
+
+async function loadExistingDedupState(): Promise<{ hashes: Set<string>; slugs: Set<string> }> {
+  const hashes = new Set<string>();
+  const slugs = new Set<string>();
+  let cursor: string | undefined;
+
+  while (true) {
+    const page = await prisma.blogPost.findMany({
+      select: { id: true, slug: true, title: true, body: true },
+      take: 500,
+      orderBy: { id: "asc" },
+      ...(cursor ? { cursor: { id: cursor }, skip: 1 } : {}),
+    });
+    if (page.length === 0) break;
+
+    for (const post of page) {
+      slugs.add(post.slug);
+      hashes.add(hashTitleContent(post.title, post.body));
+    }
+    cursor = page[page.length - 1]?.id;
+  }
+
+  return { hashes, slugs };
+}
+
+function logBatchProgress(batchStats: RunStats): void {
+  console.log(
+    JSON.stringify(
+      {
+        batch: batchStats.batchNumber,
+        totalProcessed: batchStats.totalProcessed,
+        imported: batchStats.imported,
+        duplicatesSkipped: batchStats.duplicatesSkipped,
+        failures: batchStats.failures,
+      },
+      null,
+      2,
+    ),
+  );
+}
+
+async function processBatch(
+  batch: NormalizedBlogRow[],
+  state: { hashes: Set<string>; slugs: Set<string> },
+  run: RunStats,
+): Promise<void> {
+  for (const row of batch) {
+    const recordHash = hashTitleContent(row.title, row.content);
+    if (state.hashes.has(recordHash)) {
+      run.duplicatesSkipped += 1;
+      run.totalProcessed += 1;
       continue;
     }
 
-    const translationGroupId = normalizeSlug(slug.replace(/-(en|fr|es|de|pt|it|nl|tl|hi|zh|ar|ko|ja|ru)$/i, ""));
-    try {
-      await prisma.blogPost.create({
-        data: {
-          slug,
-          title,
-          excerpt,
-          body: row.bodyHtml || "<p></p>",
-          coverImage: row.coverImage || null,
-          tags: row.tags ?? [],
-          category: row.category ?? null,
-          postStatus: publishState.postStatus,
-          publishAt: publishState.publishAt,
-          scheduledAt: publishState.scheduledAt,
-          locale: "en",
-          sourceLocale: "en",
-          isAutoTranslated: false,
-          translationSource: row.source,
-          translationGroupId,
-          canonicalPostId: null,
-          careerSlug: row.careerSlug,
-          legacySource,
-          createdAt: row.createdAt ?? new Date(),
-          exam: row.careerSlug ? "Allied" : null,
-        },
-      });
-      imported += 1;
-      importedLegacy += 1;
-      importedByProfession[professionKey] = (importedByProfession[professionKey] ?? 0) + 1;
-      if (publishState.legacyStatus === "published") {
-        publishedImported += 1;
-      } else if (publishState.legacyStatus === "scheduled") {
-        scheduledImported += 1;
-        if (publishState.autoPublishedFromPastSchedule) scheduledAutoPublished += 1;
-      }
-    } catch (e) {
-      failed += 1;
-      failedByProfession[professionKey] = (failedByProfession[professionKey] ?? 0) + 1;
-      const reason = e instanceof Error ? e.message : String(e);
-      skip("create_failed");
-      errors.push(`legacy:${slug} import failed: ${reason}`);
-    }
-  }
+    const slugSeed = normalizeSlug(row.slug ? row.slug : row.title);
+    const slug = uniqueSlug(slugSeed, state.slugs);
 
-  let imageReport = { totalImgTagsInBodies: 0, nonAbsoluteAfterImport: 0, coverImagesHttp: 0, coverImagesRelative: 0 };
-  try {
-    const all = await prisma.blogPost.findMany({ select: { body: true, coverImage: true } });
-    for (const p of all) {
-      const s = scanImageRefs(p.body);
-      imageReport.totalImgTagsInBodies += s.imgTags;
-      imageReport.nonAbsoluteAfterImport += s.nonAbsoluteSrc;
-      if (p.coverImage) {
-        if (p.coverImage.startsWith("http")) imageReport.coverImagesHttp += 1;
-        else imageReport.coverImagesRelative += 1;
+    const createData = {
+      slug,
+      title: row.title,
+      excerpt: excerptFromContent(row.content),
+      body: row.content,
+      postStatus: row.postStatus,
+      publishAt: row.publishAt,
+      scheduledAt: row.scheduledAt,
+      createdAt: row.createdAt ?? undefined,
+      seoTitle: row.seoTitle,
+      seoDescription: row.seoDescription,
+      tags: row.seoKeywords ?? [],
+      legacySource: row.source,
+    };
+
+    let writeError: unknown = null;
+    for (let attempt = 0; attempt < 2; attempt += 1) {
+      try {
+        await prisma.blogPost.create({ data: createData });
+        writeError = null;
+        break;
+      } catch (error) {
+        writeError = error;
+        if (attempt === 0) {
+          continue;
+        }
       }
     }
-  } catch {
-    /* optional post-import scan */
+
+    if (writeError) {
+      run.failures += 1;
+      run.totalProcessed += 1;
+      run.failureReasons.push(
+        `${row.source}:${row.sourceId} -> ${writeError instanceof Error ? writeError.message : String(writeError)}`,
+      );
+      continue;
+    }
+
+    state.hashes.add(recordHash);
+    run.imported += 1;
+    run.totalProcessed += 1;
+  }
+}
+
+function maybeReduceBatchSize(current: number): number {
+  const heapUsedMb = Math.round(process.memoryUsage().heapUsed / (1024 * 1024));
+  if (heapUsedMb <= MEMORY_REDUCE_THRESHOLD_MB) return current;
+  if (current <= BATCH_MIN) return current;
+  const next = Math.max(BATCH_MIN, Math.floor(current / 2));
+  console.log(JSON.stringify({ memoryMb: heapUsedMb, action: "reduce_batch_size", from: current, to: next }, null, 2));
+  return next;
+}
+
+async function* allSourceRows(): AsyncGenerator<NormalizedBlogRow, void, void> {
+  const imagingPath = path.join(__dirname, "../data/replit-exports/imaging_blog_articles.json");
+  const seoArticlesPath = path.join(__dirname, "../data/replit-exports/seo_articles.json");
+  const clientSeoPath = path.join(__dirname, "../../client/src/data/seo-content-articles.ts");
+
+  if (fs.existsSync(imagingPath)) {
+    yield* readImagingBlogRows(imagingPath);
+  }
+  if (fs.existsSync(seoArticlesPath)) {
+    yield* readSeoArticlesRows(seoArticlesPath);
+  }
+  if (fs.existsSync(clientSeoPath)) {
+    yield* readClientSeoContentRows(clientSeoPath);
+  }
+}
+
+async function main() {
+  const state = await loadExistingDedupState();
+  const run: RunStats = {
+    batchNumber: 0,
+    totalProcessed: 0,
+    imported: 0,
+    duplicatesSkipped: 0,
+    failures: 0,
+    failureReasons: [],
+  };
+
+  let batchSize = BATCH_MAX;
+  let batch: NormalizedBlogRow[] = [];
+
+  for await (const row of allSourceRows()) {
+    batch.push(row);
+    if (batch.length < batchSize) continue;
+
+    run.batchNumber += 1;
+    await processBatch(batch, state, run);
+    logBatchProgress(run);
+    batch = [];
+    batchSize = maybeReduceBatchSize(batchSize);
   }
 
-  const total = await prisma.blogPost.count();
-  const published = await prisma.blogPost.count({ where: { postStatus: BlogPostStatus.PUBLISHED } });
+  if (batch.length > 0) {
+    run.batchNumber += 1;
+    await processBatch(batch, state, run);
+    logBatchProgress(run);
+    batch = [];
+  }
+
+  run.failures += schemaFailures.length;
+  run.failureReasons.push(...schemaFailures);
 
   console.log(
     JSON.stringify(
       {
-        sourceFile: "content/blog-legacy-export.json",
-        totalPostsFound: legacyRows.length,
-        totalUnifiedRows: unifiedRows.length,
-        imported,
-        importedLegacy,
-        publishedImported,
-        scheduledImported,
-        draftsImported,
-        draftsSkipped,
-        scheduledAutoPublished,
-        autoPublishPastScheduledEnabled: AUTO_PUBLISH_PAST_SCHEDULED,
-        failed,
-        skipped,
-        skippedDuplicate,
-        skippedReasonCounts,
-        importedByProfession,
-        skippedByProfession,
-        failedByProfession,
-        errors,
-        legacyJsonRows: legacyRows.length,
-        prismaTotalBlogPosts: total,
-        prismaPublishedBlogPosts: published,
-        imageReport,
-        note: "Published, scheduled, and draft rows are imported without length/date filtering; scheduling metadata is preserved.",
+        totalBlogPostsImported: run.imported,
+        duplicatesSkipped: run.duplicatesSkipped,
+        failures: run.failures,
+        failureReasons: run.failureReasons,
       },
       null,
       2,
@@ -496,8 +578,10 @@ async function main() {
 }
 
 main()
-  .catch((e) => {
-    console.error(e);
+  .catch((error) => {
+    console.error(error);
     process.exit(1);
   })
-  .finally(() => prisma.$disconnect());
+  .finally(async () => {
+    await prisma.$disconnect();
+  });

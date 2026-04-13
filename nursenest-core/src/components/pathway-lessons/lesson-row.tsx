@@ -3,6 +3,7 @@ import { ChevronRight, Circle, CircleCheckBig, CircleDot } from "lucide-react";
 import { DifficultyBadge } from "@/components/pathway-lessons/difficulty-badge";
 import type { LessonDifficulty } from "@/components/pathway-lessons/lesson-board-metadata";
 import type { PathwayLessonProgressStatus } from "@/lib/lessons/pathway-lesson-progress";
+import { cleanLessonTitleForDisplay } from "@/lib/lessons/lesson-title-presentation";
 
 function StatusIcon({ status }: { status: PathwayLessonProgressStatus }) {
   if (status === "completed") {
@@ -24,13 +25,14 @@ type Props = {
 };
 
 export function LessonRow({ href, title, progressStatus, durationLabel, difficulty, yieldBadgeLabel }: Props) {
+  const displayTitle = cleanLessonTitleForDisplay(title);
   return (
     <Link
       href={href}
       className="group flex min-h-11 items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-colors hover:bg-[color-mix(in_srgb,var(--semantic-brand)_6%,var(--semantic-surface))] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_24%,transparent)]"
     >
       <StatusIcon status={progressStatus} />
-      <span className="min-w-0 flex-1 truncate font-medium text-[var(--theme-heading-text)]">{title}</span>
+      <span className="min-w-0 flex-1 truncate font-medium text-[var(--theme-heading-text)]">{displayTitle}</span>
       {yieldBadgeLabel ? (
         <span className="shrink-0 rounded-full border border-[var(--semantic-border-soft)] px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">
           {yieldBadgeLabel}

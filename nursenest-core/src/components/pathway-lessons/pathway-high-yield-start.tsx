@@ -4,6 +4,7 @@ import {
   pathwayLessonMarketingDetailHref,
   type PathwayLessonRecord,
 } from "@/lib/lessons/pathway-lesson-types";
+import { cleanLessonTitleForDisplay } from "@/lib/lessons/lesson-title-presentation";
 
 type Props = {
   lessons: PathwayLessonRecord[];
@@ -47,7 +48,9 @@ export function PathwayHighYieldStart({ lessons, lessonsBasePath, maxItems = 6 }
                 className="block rounded-lg border border-border bg-card/80 p-4 transition hover:border-primary/35 hover:bg-card"
               >
                 <span className="nn-marketing-caption block text-primary">Must Know</span>
-                <span className="mt-1 block font-semibold text-[var(--theme-heading-text)]">{lesson.title}</span>
+                <span className="mt-1 block font-semibold text-[var(--theme-heading-text)]">
+                  {cleanLessonTitleForDisplay(lesson.title)}
+                </span>
               </Link>
             </li>
           );

@@ -64,7 +64,7 @@ export function ExamPathwayHub({
   const countryLine = pathway.countrySlug === "canada" ? "Canada" : "United States";
 
   return (
-    <div className="mx-auto max-w-4xl px-4 py-10 sm:py-14">
+    <div className="mx-auto max-w-4xl px-4 py-6 sm:py-8">
       <FunnelExamHubViewBeacon pathway={pathway} hubPath={marketingHubPath} />
       {npSeoAliasSegment ? (
         <NpSeoAliasHubAnalytics
@@ -77,7 +77,7 @@ export function ExamPathwayHub({
       ) : null}
       <BreadcrumbJsonLd items={schemaItems} />
       <FaqJsonLd items={pathwayHubFaqSchema(pathway)} />
-      <div className="mb-8">
+      <div className="mb-4">
         <BreadcrumbTrail items={crumbs} />
       </div>
       <p className="nn-marketing-caption font-semibold uppercase tracking-wide text-[var(--theme-primary)]">
@@ -88,7 +88,7 @@ export function ExamPathwayHub({
         {heroLead ?? pathway.seoDescription}
       </p>
 
-      <div className="mt-6 max-w-2xl">
+      <div className="mt-4 max-w-2xl">
         <MarketingTrustSignalsStrip variant="compact" examHub />
       </div>
       <ExamHubComparisonLink />

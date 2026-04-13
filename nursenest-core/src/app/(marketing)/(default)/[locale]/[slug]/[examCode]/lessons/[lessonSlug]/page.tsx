@@ -220,9 +220,9 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
   );
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-10 lg:px-8">
+    <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 sm:py-7 lg:px-8">
       <div
-        className={`nn-lesson-page-shell px-4 py-9 sm:px-8 sm:py-11${pathway.examFamily === ExamFamily.NP ? " nn-lesson-page-shell--np" : ""}`}
+        className={`nn-lesson-page-shell px-4 py-5 sm:px-8 sm:py-7${pathway.examFamily === ExamFamily.NP ? " nn-lesson-page-shell--np" : ""}`}
       >
         <MarketingPathwayLessonDetailViewBeacon
           pathway={pathway}

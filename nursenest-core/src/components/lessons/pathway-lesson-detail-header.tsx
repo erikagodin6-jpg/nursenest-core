@@ -36,10 +36,10 @@ export function PathwayLessonDetailHeader({
     <header
       data-nn-pathway-id={pathway.id}
       data-nn-exam-short={examName}
-      className="nn-gradient-safe relative overflow-hidden rounded-2xl border border-[color-mix(in_srgb,var(--theme-primary)_10%,var(--border-subtle))] bg-gradient-to-br from-[var(--nn-presentation-wash)] via-[var(--theme-page-bg)] to-[color-mix(in_srgb,var(--theme-primary)_4%,var(--theme-page-bg))] px-5 py-7 shadow-[var(--shadow-card)] sm:px-8 sm:py-9"
+      className="nn-gradient-safe relative overflow-hidden rounded-2xl border border-[color-mix(in_srgb,var(--theme-primary)_10%,var(--border-subtle))] bg-gradient-to-br from-[var(--nn-presentation-wash)] via-[var(--theme-page-bg)] to-[color-mix(in_srgb,var(--theme-primary)_4%,var(--theme-page-bg))] px-4 py-5 shadow-[var(--shadow-card)] sm:px-6 sm:py-6"
     >
       <div
-        className="pointer-events-none absolute -right-12 -top-16 h-48 w-48 rounded-full bg-[color-mix(in_srgb,var(--theme-primary)_7%,transparent)] blur-3xl"
+        className="pointer-events-none absolute -right-10 -top-12 h-36 w-36 rounded-full bg-[color-mix(in_srgb,var(--theme-primary)_7%,transparent)] blur-3xl"
         aria-hidden
       />
       <div className="relative">
@@ -60,13 +60,13 @@ export function PathwayLessonDetailHeader({
           <span className="text-[var(--theme-muted-text)]">{lessonTopic}</span>
         </div>
         {metaChips ? <div className="mt-3 flex flex-wrap gap-1.5">{metaChips}</div> : null}
-        <div className="mt-5 flex flex-wrap items-start justify-between gap-4">
+        <div className="mt-4 flex flex-wrap items-start justify-between gap-3">
           <div className="min-w-0 flex-1">
             <p className="nn-marketing-caption font-semibold text-[var(--theme-muted-text)]">{pathway.displayName}</p>
             <h1 className="nn-marketing-h2 mt-2 text-balance">
               {lessonTitle}
             </h1>
-            <p className="nn-marketing-body-sm mt-4 text-[var(--theme-muted-text)]">
+            <p className="nn-marketing-body-sm mt-3 text-[var(--theme-muted-text)]">
               <span className="font-medium text-[var(--theme-heading-text)]">{bodySystem}</span>
               <span aria-hidden className="mx-2 text-[var(--theme-muted-text)]">
                 ·
@@ -76,7 +76,7 @@ export function PathwayLessonDetailHeader({
           </div>
           {trailing ? <div className="shrink-0">{trailing}</div> : null}
         </div>
-        <div className="mt-6 border-t border-[color-mix(in_srgb,var(--border-subtle)_88%,var(--theme-primary))] pt-5">
+        <div className="mt-4 border-t border-[color-mix(in_srgb,var(--border-subtle)_88%,var(--theme-primary))] pt-3.5">
           <Link
             href={lessonsBasePath}
             className="nn-study-pill-secondary inline-flex min-h-11 items-center justify-center px-5 py-2.5 text-sm font-semibold text-primary"

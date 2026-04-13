@@ -226,7 +226,7 @@ export default async function AlliedHealthSlugLessonsPage({ params, searchParams
         }
       >
         <BreadcrumbJsonLd items={schemaItems} />
-        <section className="mt-8" id="allied-lesson-library">
+        <section className="mt-4" id="allied-lesson-library">
           <PathwayLessonsCurriculumHub lessons={lessons} lessonsBasePath={base} />
         </section>
 

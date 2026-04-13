@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { BookOpen, ClipboardList, Layers } from "lucide-react";
 import { getOptionalPublicSession } from "@/lib/auth/optional-public-session";
 import { LessonsPageShell } from "@/components/pathway-lessons/lessons-page-shell";
 import { LessonsToolbar } from "@/components/pathway-lessons/lessons-toolbar";
@@ -13,7 +12,6 @@ import { marketingPathwayLessonsIndexPath, marketingExamHubBasePath } from "@/li
 import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
 import { normalizePathwayHubSearchQuery } from "@/lib/lessons/pathway-lesson-loader";
 import { PathwayLessonsCurriculumHub } from "@/components/pathway-lessons/pathway-lessons-curriculum-hub";
-import { PathwayHighYieldStart } from "@/components/pathway-lessons/pathway-high-yield-start";
 import { pathwayLessonHubMetaDescription, pathwayLessonHubMetaTitle } from "@/lib/lessons/pathway-lesson-hub-seo";
 import { pathwayRegionAwareExamName } from "@/lib/lessons/pathway-lesson-hub-seo";
 import { pathwayLessonHasRenderableHubSlug } from "@/lib/lessons/pathway-lesson-types";
@@ -27,11 +25,9 @@ import { loadPathwayHubSubscriberData } from "@/lib/learner/pathway-lesson-conti
 import { equivalentExamHubUrlAfterRegionToggle } from "@/lib/marketing/marketing-region-equivalent-hub";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
-import { PathwayStatsCards } from "@/components/study/pathway-stats-cards";
 import { StudyModeCards, defaultLessonModeCards } from "@/components/study/study-mode-cards";
 import { StudyBottomNav } from "@/components/study/study-bottom-nav";
 import { HUB } from "@/lib/marketing/marketing-entry-routes";
-import { buildPathwayLessonSystemSections } from "@/lib/lessons/pathway-lesson-body-system-groups";
 import { CAT_MIN_COMPLETE_POOL } from "@/lib/practice-tests/cat-pool";
 
 export const dynamic = "force-dynamic";
@@ -213,10 +209,6 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
     progressMap = map;
   }
 
-  // Derive topic section count from lesson data for stat cards
-  const sections = buildPathwayLessonSystemSections(lessons, pathway.id);
-  const topicCount = sections.length;
-
   const studyCards = defaultLessonModeCards({
     lessonsHref: base,
     questionsHref,
@@ -229,40 +221,11 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
       title={pageTitle}
       subtitle={headerDescription}
       toolbar={toolbar}
-        backLink={{ label: `${examName} overview`, href: overviewHref }}
-      ctas={[
-        { label: "Start learning", href: `${base}#pathway-lesson-library`, variant: "primary" },
-        { label: "Practice questions", href: questionsHref, variant: "outline" },
-        { label: "Create account", href: "/signup", variant: "ghost" },
-      ]}
+      backLink={{ label: `${examName} overview`, href: overviewHref }}
     >
       <BreadcrumbJsonLd items={schemaItems} />
 
-      {/* 2. Stat cards */}
-      <div className="mt-6">
-        <PathwayStatsCards
-          stats={[
-            { value: pageResult.total, label: "Lessons", icon: BookOpen, accent: "brand" },
-            ...(topicCount > 0
-              ? [{ value: topicCount, label: "Clinical topics", icon: Layers, accent: "info" as const }]
-              : []),
-            { value: "Practice", label: "Questions available", icon: ClipboardList, accent: "success" },
-          ]}
-        />
-      </div>
-
-      {/* 3. Study mode cards */}
-      <div className="mt-8">
-        <StudyModeCards heading="Continue your study plan" cards={studyCards} />
-      </div>
-
-      {/* 4. Lesson library */}
-      <div className="mt-8">
-        <PathwayHighYieldStart lessons={lessons} lessonsBasePath={base} />
-      </div>
-
-      {/* 5. Lesson library */}
-      <section id="pathway-lesson-library" className="mt-8 scroll-mt-24" aria-labelledby="lesson-library-heading">
+      <section id="pathway-lesson-library" className="mt-4 scroll-mt-24" aria-labelledby="lesson-library-heading">
         {/* Section toolbar: heading + count badge */}
         <div className="mb-4 flex flex-wrap items-center justify-between gap-3 border-b border-[var(--semantic-border-soft)] pb-4">
           <h2 id="lesson-library-heading" className="text-base font-semibold text-[var(--theme-heading-text)]">
@@ -282,7 +245,10 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
         />
       </section>
 
-      {/* 7. Bottom navigation */}
+      <section className="mt-8">
+        <StudyModeCards heading="Other ways to study" cards={studyCards} />
+      </section>
+
       <StudyBottomNav
         relatedLinks={[
           { label: "Practice questions", href: questionsHref },

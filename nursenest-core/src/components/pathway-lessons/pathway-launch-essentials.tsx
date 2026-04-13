@@ -6,6 +6,7 @@ import {
   pathwayLessonMarketingDetailHref,
   type PathwayLessonRecord,
 } from "@/lib/lessons/pathway-lesson-types";
+import { cleanLessonTitleForDisplay } from "@/lib/lessons/lesson-title-presentation";
 
 type Props = {
   bundle: ResolvedPathwayLaunchBundle;
@@ -52,7 +53,9 @@ export function PathwayLaunchEssentials({ bundle, lessonsBasePath }: Props) {
           const inner = (
             <>
               <span className="nn-marketing-caption block text-primary">{dim}</span>
-              <span className="mt-1 block font-semibold text-[var(--theme-heading-text)]">{lesson.title}</span>
+              <span className="mt-1 block font-semibold text-[var(--theme-heading-text)]">
+                {cleanLessonTitleForDisplay(lesson.title)}
+              </span>
             </>
           );
           return (
