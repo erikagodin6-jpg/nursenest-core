@@ -66,6 +66,10 @@ export function PracticeAnswerOptionRow({
         <span className="nn-practice-opt__letter" aria-hidden="true">
           {letter}
         </span>
+        <span
+          className={`nn-practice-opt__control ${checked ? "nn-practice-opt__control--checked" : ""}`}
+          aria-hidden="true"
+        />
         <span className="nn-practice-opt__text">{text}</span>
       </label>
     );
@@ -82,6 +86,10 @@ export function PracticeAnswerOptionRow({
       <span className="nn-practice-opt__letter" aria-hidden="true">
         {letter}
       </span>
+      <span
+        className={`nn-practice-opt__control ${state === "selected" ? "nn-practice-opt__control--checked" : ""}`}
+        aria-hidden="true"
+      />
       <span className="nn-practice-opt__text">{text}</span>
     </button>
   );

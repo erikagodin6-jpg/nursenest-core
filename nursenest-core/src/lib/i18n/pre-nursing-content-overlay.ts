@@ -5,48 +5,16 @@ import path from "path";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 
-/**
- * Localized prose overlay for a single pre-nursing module.
- *
- * All fields are optional — the module view falls back to English TSX content
- * for any field not present.  Interactive components (quizzes, matching exercises)
- * always render from the English TSX source; only prose sections are overlaid.
- */
-export type PreNursingModuleOverlay = {
-  /** Short introductory paragraph shown above the TSX module. */
-  overview?: string;
-  /** Bullet-point list of key concepts (rendered as <ul>). */
-  key_concepts?: string[];
-  /** Nursing-action paragraph shown after the main module body. */
-  nursing_responsibilities?: string;
-  /** Clinical pearls note. */
-  clinical_pearls?: string;
-  /** Patient education paragraph. */
-  patient_education?: string;
-  /** Summary bullet list (rendered as <ul>). */
-  key_takeaways?: string[];
-};
+// Re-export types and the pure apply helper from the shared (client-safe) module
+// so that server imports from this path continue to work unchanged.
+export type { PreNursingModuleOverlay, PreNursingQuestionOverlay } from "./pre-nursing-overlay-types";
+export { applyPreNursingQuestionsOverlay } from "./pre-nursing-overlay-types";
 
-/**
- * Per-question translation overlay for the pre-nursing question bank.
- * Keyed by `PreNursingQuestion.id` (stable, e.g. "ap-01").
- * The `correct` grading index is canonical — never included in the overlay.
- */
-export type PreNursingQuestionOverlay = {
-  /** Translated question stem. */
-  stem?: string;
-  /** Translated option labels — parallel order to the English bank. */
-  options?: string[];
-  /** Translated rationale shown after answering. */
-  rationale?: string;
-};
+// ── Caches ────────────────────────────────────────────────────────────────────
 
-// ── Module overlay cache ──────────────────────────────────────────────────────
+import type { PreNursingModuleOverlay, PreNursingQuestionOverlay } from "./pre-nursing-overlay-types";
 
 const moduleOverlayCache = new Map<string, PreNursingModuleOverlay | null>();
-
-// ── Question overlay cache ────────────────────────────────────────────────────
-
 const questionOverlayCache = new Map<string, Record<string, PreNursingQuestionOverlay> | null>();
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
@@ -138,25 +106,4 @@ export function getPreNursingOverlaySlugsForLocale(locale: string): Set<string> 
   } catch {
     return new Set();
   }
-}
-
-/**
- * Applies a question overlay to a set of questions from the English bank.
- * Returns a new array; questions without an overlay entry are returned unchanged.
- * The `correct` index is never overridden.
- */
-export function applyPreNursingQuestionsOverlay<
-  Q extends { id: string; question: string; options: string[]; rationale: string },
->(questions: Q[], overlay: Record<string, PreNursingQuestionOverlay>): Q[] {
-  if (Object.keys(overlay).length === 0) return questions;
-  return questions.map((q) => {
-    const o = overlay[q.id];
-    if (!o) return q;
-    return {
-      ...q,
-      question: o.stem ?? q.question,
-      options: o.options ?? q.options,
-      rationale: o.rationale ?? q.rationale,
-    };
-  });
 }

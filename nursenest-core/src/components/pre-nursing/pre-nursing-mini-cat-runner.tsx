@@ -28,8 +28,8 @@ import {
 } from "@/lib/pre-nursing/pre-nursing-exam-engine";
 import type { MiniCatState, PreNursingExamResult } from "@/lib/pre-nursing/pre-nursing-exam-engine";
 import { PreNursingExamResults } from "@/components/pre-nursing/pre-nursing-exam-results";
-import type { PreNursingQuestionOverlay } from "@/lib/i18n/pre-nursing-content-overlay";
-import { applyPreNursingQuestionsOverlay } from "@/lib/i18n/pre-nursing-content-overlay";
+import type { PreNursingQuestionOverlay } from "@/lib/i18n/pre-nursing-overlay-types";
+import { applyPreNursingQuestionsOverlay } from "@/lib/i18n/pre-nursing-overlay-types";
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 

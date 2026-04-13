@@ -117,6 +117,7 @@
     "import:replit-data:apply": "tsx scripts/import-replit-data.ts --apply",
     "db:verify-import-schema": "tsx scripts/verify-import-schema-tables.ts",
     "export:blog-json": "tsx scripts/export-monolith-blog-to-json.ts",
+    "blog:backfill-allied-locales": "tsx scripts/backfill-allied-blog-locales.ts",
     "db:rewrite-lesson-screenshots": "tsx scripts/rewrite-lesson-screenshot-urls.ts",
     "test:entitlements": "tsx --test src/lib/entitlements/*.test.ts",
     "test:pathway-lessons": "tsx --test src/lib/entitlements/country-code.test.ts src/lib/entitlements/subscription-plan.test.ts src/lib/exam-pathways/pathway-entitlements.test.ts src/lib/lessons/pathway-lesson-access.test.ts src/lib/lessons/pathway-lesson-catalog-integrity.test.ts src/lib/lessons/pathway-lesson-premium.test.ts src/lib/lessons/pathway-lesson-preview-kind.test.ts src/lib/lessons/exam-complete-lesson-template.test.ts src/lib/lessons/scoped-lessons/copd-gold-standard.test.ts src/lib/lessons/scoped-lessons/scoped-gold-registry.test.ts && NODE_OPTIONS='--require ./scripts/stub-server-only.cjs' tsx --test src/lib/lessons/pathway-lesson-loader.test.ts",

@@ -8,8 +8,14 @@ import type { ReactNode } from "react";
  *
  * On mobile: normal flow; vertical scrolling allowed as per spec §11.
  */
-export function PracticeSessionLayout({ children }: { children: ReactNode }) {
-  return <div className="nn-practice-session">{children}</div>;
+export function PracticeSessionLayout({
+  children,
+  className,
+}: {
+  children: ReactNode;
+  className?: string;
+}) {
+  return <div className={`nn-practice-session ${className ?? ""}`.trim()}>{children}</div>;
 }
 
 /**
@@ -19,32 +25,48 @@ export function PracticeSessionLayout({ children }: { children: ReactNode }) {
  * 6px progress bar underneath.
  */
 export function PracticeTopBar({
+  examName,
   current,
   total,
   rightLabel,
   progressPct,
   saving,
+  labels,
 }: {
+  examName?: string | null;
   current: number;
   total: number;
   rightLabel?: string | null;
   progressPct: number;
   saving?: boolean;
+  labels?: {
+    question?: string;
+    of?: string;
+    saving?: string;
+    progressAria?: string;
+  };
 }) {
+  const questionLabel = labels?.question ?? "Question";
+  const ofLabel = labels?.of ?? "of";
+  const savingLabel = labels?.saving ?? "Saving...";
+  const progressAria =
+    labels?.progressAria ?? `${examName ?? "Exam"} progress: question ${current} of ${total}`;
   return (
     <div className="nn-practice-top-bar">
       <div className="nn-practice-top-bar__row">
-        <p className="nn-practice-top-bar__left">
-          Question{" "}
-          <span className="tabular-nums">{current}</span>
-          {" of "}
-          <span className="tabular-nums">{total}</span>
-          {saving ? (
-            <span className="ml-2 text-xs font-normal text-[var(--semantic-text-muted)]">
-              · Saving…
-            </span>
-          ) : null}
-        </p>
+        <div className="nn-practice-top-bar__left-stack">
+          {examName ? <p className="nn-practice-top-bar__exam-name">{examName}</p> : null}
+          <p className="nn-practice-top-bar__left">
+            {questionLabel}{" "}
+            <span className="tabular-nums">{current}</span>{" "}
+            {ofLabel} <span className="tabular-nums">{total}</span>
+            {saving ? (
+              <span className="ml-2 text-xs font-normal text-[var(--semantic-text-muted)]">
+                · {savingLabel}
+              </span>
+            ) : null}
+          </p>
+        </div>
         {rightLabel ? (
           <p className="nn-practice-top-bar__right">{rightLabel}</p>
         ) : null}
@@ -55,7 +77,7 @@ export function PracticeTopBar({
         aria-valuemin={0}
         aria-valuemax={100}
         aria-valuenow={Math.round(progressPct)}
-        aria-label={`Question ${current} of ${total}`}
+        aria-label={progressAria}
       >
         <div
           className="nn-practice-top-bar__progress-fill"

@@ -3,6 +3,7 @@
 import { LearnerNoteScope } from "@prisma/client";
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useMarketingI18n } from "@/lib/marketing-i18n";
 import {
   ExamProgressBar,
   ExamSessionShell,
@@ -52,6 +53,7 @@ import type { AnswerOptionState } from "@/components/study/cat-question-card";
 import { RationalePanel } from "@/components/study/cat-rationale-panel";
 import { ResultsSummary } from "@/components/study/cat-results-summary";
 import type { StudySettings } from "@/lib/learner/study-settings";
+import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 
 type QRow = {
   id: string;
@@ -68,6 +70,18 @@ type QRow = {
 function parseOptions(raw: unknown): string[] {
   if (Array.isArray(raw)) return raw.map((x) => String(x));
   return [];
+}
+
+type ExamChromeVariant = "nclex" | "rex" | "np" | "default";
+
+function examChromeVariantForPathway(pathwayId: string | null | undefined): ExamChromeVariant {
+  if (!pathwayId) return "default";
+  const pathway = getExamPathwayById(pathwayId);
+  if (!pathway) return "default";
+  if (pathway.roleTrack === "np") return "np";
+  if (pathway.examCode === "rex-pn") return "rex";
+  if (pathway.examCode.startsWith("nclex")) return "nclex";
+  return "default";
 }
 
 const MAX_PRACTICE_QUESTION_CACHE = 32;

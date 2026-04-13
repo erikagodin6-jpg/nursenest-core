@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import type { PreNursingModuleOverlay } from "@/lib/i18n/pre-nursing-content-overlay";
+import type { PreNursingModuleOverlay } from "@/lib/i18n/pre-nursing-overlay-types";
 
 export type PreNursingLocaleContextValue = {
   /** BCP-47 locale code (e.g. "fr", "es"). "en" = default, overlay is null. */

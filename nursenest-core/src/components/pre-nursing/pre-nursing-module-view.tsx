@@ -4,7 +4,7 @@ import { ModuleEditContext } from "@/components/pre-nursing/module-edit-context"
 import { PreNursingStringsProvider } from "@/content/pre-nursing/pre-nursing-i18n";
 import { getPreNursingModuleComponent } from "@/content/pre-nursing/pre-nursing-module-map";
 import { PreNursingLocaleProvider } from "@/lib/i18n/pre-nursing-locale-context";
-import type { PreNursingModuleOverlay } from "@/lib/i18n/pre-nursing-content-overlay";
+import type { PreNursingModuleOverlay } from "@/lib/i18n/pre-nursing-overlay-types";
 
 type Props = {
   slug: string;

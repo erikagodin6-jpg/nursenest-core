@@ -19,8 +19,8 @@ import type { PreNursingQuestion } from "@/lib/pre-nursing/pre-nursing-question-
 import type { PreNursingExamResult } from "@/lib/pre-nursing/pre-nursing-exam-engine";
 import { computePracticeExamResult } from "@/lib/pre-nursing/pre-nursing-exam-engine";
 import { PreNursingExamResults } from "@/components/pre-nursing/pre-nursing-exam-results";
-import type { PreNursingQuestionOverlay } from "@/lib/i18n/pre-nursing-content-overlay";
-import { applyPreNursingQuestionsOverlay } from "@/lib/i18n/pre-nursing-content-overlay";
+import type { PreNursingQuestionOverlay } from "@/lib/i18n/pre-nursing-overlay-types";
+import { applyPreNursingQuestionsOverlay } from "@/lib/i18n/pre-nursing-overlay-types";
 
 // ── Option labels ─────────────────────────────────────────────────────────────
 

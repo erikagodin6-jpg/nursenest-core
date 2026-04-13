@@ -4,8 +4,14 @@ import type { ReactNode } from "react";
  * CatSessionLayout — outer container for the CAT exam session.
  * Max-width 1200px, centered, 24px horizontal padding.
  */
-export function CatSessionLayout({ children }: { children: ReactNode }) {
-  return <div className="nn-cat-session">{children}</div>;
+export function CatSessionLayout({
+  children,
+  className,
+}: {
+  children: ReactNode;
+  className?: string;
+}) {
+  return <div className={`nn-cat-session ${className ?? ""}`.trim()}>{children}</div>;
 }
 
 /**
@@ -13,29 +19,46 @@ export function CatSessionLayout({ children }: { children: ReactNode }) {
  * Only the progress fill uses a color token (theme-primary). Everything else is neutral.
  */
 export function CatTopBar({
+  examName,
   current,
   total,
   saving,
   timerSlot,
+  labels,
 }: {
+  examName?: string | null;
   current: number;
   total: number;
   saving?: boolean;
   timerSlot?: ReactNode;
+  labels?: {
+    question?: string;
+    of?: string;
+    complete?: string;
+    saving?: string;
+    progressAria?: string;
+  };
 }) {
   const pct = total > 0 ? Math.min(100, Math.max(0, Math.round((current / total) * 100))) : 0;
+  const questionLabel = labels?.question ?? "Question";
+  const ofLabel = labels?.of ?? "of";
+  const completeLabel = labels?.complete ?? "complete";
+  const savingLabel = labels?.saving ?? "Saving...";
+  const progressAria =
+    labels?.progressAria ?? `${examName ?? "Exam"} progress: question ${current} of ${total}`;
 
   return (
     <div className="nn-cat-top-bar">
       <div className="nn-cat-top-bar__row">
         <div className="min-w-0">
+          {examName ? <p className="nn-cat-top-bar__exam-name">{examName}</p> : null}
           <p className="nn-cat-top-bar__counter">
-            Question <span className="tabular-nums">{current}</span>{" "}
+            {questionLabel} <span className="tabular-nums">{current}</span>{" "}
             <span className="nn-cat-top-bar__meta">
-              of <span className="tabular-nums">{total}</span>
+              {ofLabel} <span className="tabular-nums">{total}</span>
               {saving ? (
                 <span className="ml-2 font-normal text-[var(--semantic-text-muted)]">
-                  · Saving…
+                  · {savingLabel}
                 </span>
               ) : null}
             </span>
@@ -44,7 +67,7 @@ export function CatTopBar({
         <div className="nn-cat-top-bar__right">
           {timerSlot}
           <p className="nn-cat-top-bar__pct">
-            <span className="tabular-nums">{pct}%</span> complete
+            <span className="tabular-nums">{pct}%</span> {completeLabel}
           </p>
         </div>
       </div>
@@ -54,7 +77,7 @@ export function CatTopBar({
         aria-valuemin={0}
         aria-valuemax={100}
         aria-valuenow={pct}
-        aria-label={`Exam progress: question ${current} of ${total}`}
+        aria-label={progressAria}
       >
         <div className="nn-cat-top-bar__progress-fill" style={{ width: `${pct}%` }} />
       </div>

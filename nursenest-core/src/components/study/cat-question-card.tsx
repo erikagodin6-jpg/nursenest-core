@@ -98,6 +98,10 @@ export function AnswerOptionRow({
         <span className="nn-cat-opt__letter" aria-hidden="true">
           {letter}
         </span>
+        <span
+          className={`nn-cat-opt__control ${checked ? "nn-cat-opt__control--checked" : ""}`}
+          aria-hidden="true"
+        />
         <span className="nn-cat-opt__text">{text}</span>
       </label>
     );
@@ -114,6 +118,10 @@ export function AnswerOptionRow({
       <span className="nn-cat-opt__letter" aria-hidden="true">
         {letter}
       </span>
+      <span
+        className={`nn-cat-opt__control ${state === "selected" ? "nn-cat-opt__control--checked" : ""}`}
+        aria-hidden="true"
+      />
       <span className="nn-cat-opt__text">{text}</span>
     </button>
   );
