@@ -51,7 +51,7 @@ function difficultyTrendHint(label: "rising" | "falling" | "mixed" | "flat"): st
 function topicExtremes(byTopic: PracticeTestResultsJson["byTopic"], weakest: boolean): { label: string; pct: number }[] {
   return Object.entries(byTopic)
     .map(([topic, { correct, total }]) => ({
-      topic,
+      label: topic,
       pct: total > 0 ? Math.round((correct / total) * 100) : 0,
     }))
     .sort((a, b) => (weakest ? a.pct - b.pct : b.pct - a.pct))
@@ -131,7 +131,7 @@ function outcomeTilesForPractice(args: {
       hint:
         extremesHigh.length > 0
           ? `Bright spots: ${extremesHigh
-              .map((x) => `${x.topic} (${x.pct}%)`)
+              .map((x) => `${x.label} (${x.pct}%)`)
               .slice(0, 2)
               .join(" · ")}`
           : "No per-topic breakdown for this run.",
@@ -140,7 +140,7 @@ function outcomeTilesForPractice(args: {
     {
       icon: Target,
       label: "Toughest area",
-      value: extremesLow[0]?.topic ?? "—",
+      value: extremesLow[0]?.label ?? "—",
       hint:
         extremesLow[0] != null
           ? `${extremesLow[0].pct}% accuracy in this topic bucket`
