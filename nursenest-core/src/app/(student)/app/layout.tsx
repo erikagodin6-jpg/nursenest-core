@@ -2,6 +2,8 @@ import { MarketingI18nProvider } from "@/components/marketing/marketing-i18n-pro
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 
 /** Shared marketing/locale dictionary for all `/app/*` routes (learner shell, exams, practice). */
+export const dynamic = "force-dynamic";
+
 export default async function AppSegmentLayout({ children }: { children: React.ReactNode }) {
   let locale = "en";
   let messages: Record<string, string> = {};

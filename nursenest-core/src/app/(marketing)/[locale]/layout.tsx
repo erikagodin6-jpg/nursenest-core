@@ -13,6 +13,8 @@ import type { MarketingRegionToggle } from "@/lib/marketing/marketing-entry-rout
 import { PageTransitionShell } from "@/lib/motion/page-transition-shell";
 import { MarketingFeedbackShell } from "@/components/feedback/marketing-feedback-shell";
 
+export const dynamic = "force-dynamic";
+
 export default async function MarketingLocaleLayout({
   children,
   params,
