@@ -2,8 +2,9 @@
 
 import { motion } from "framer-motion";
 import { usePathname } from "next/navigation";
-import { type ReactNode, useEffect, useState } from "react";
+import { type ReactNode } from "react";
 import { useReducedMotion } from "./use-reduced-motion";
+import { usePreviousPathname } from "./use-previous-pathname";
 
 const EASE: [number, number, number, number] = [0.25, 0.1, 0.25, 1];
 /** Between 180–240ms; keeps route changes calm and quick. */
@@ -30,19 +31,15 @@ export function PageTransitionShell({
 }: PageTransitionShellProps) {
   const pathname = usePathname() ?? "";
   const reduced = useReducedMotion();
-  const [committedPathname, setCommittedPathname] = useState<string | null>(null);
+  const previousPathname = usePreviousPathname(pathname);
 
   const excluded =
     disabled || reduced || (shouldDisableTransition?.(pathname) ?? false);
 
   const shouldAnimateEnter =
     !excluded &&
-    committedPathname !== null &&
-    committedPathname !== pathname;
-
-  useEffect(() => {
-    setCommittedPathname(pathname);
-  }, [pathname]);
+    previousPathname !== undefined &&
+    previousPathname !== pathname;
 
   if (excluded) {
     return children;

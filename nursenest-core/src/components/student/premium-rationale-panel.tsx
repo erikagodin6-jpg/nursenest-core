@@ -230,9 +230,6 @@ export function PremiumRationalePanel({
       ) : useStructuredRationale ? (
         <div className="mt-3 space-y-1">
           <QuestionReviewRationaleBlocks buckets={structuredBuckets} />
-          {!useTeaching && missing ? (
-            <p className="mt-2 text-xs italic text-[var(--semantic-text-muted)]">{t("learner.qbank.examUi.noRationale")}</p>
-          ) : null}
         </div>
       ) : (
         <>

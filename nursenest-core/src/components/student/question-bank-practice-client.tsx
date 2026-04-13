@@ -247,6 +247,9 @@ export function QuestionBankPracticeClient({
   const [highlightOn, setHighlightOn] = useState<Record<string, boolean>>({});
   /** Session-local mark for review (exam-style bank); not persisted server-side. */
   const [markedForReview, setMarkedForReview] = useState<Record<string, boolean>>({});
+  /** Mistake notebook: question ids saved this session via review strip. */
+  const [mistakeNotebookByQuestion, setMistakeNotebookByQuestion] = useState<Record<string, boolean>>({});
+  const [mistakeNotebookSaving, setMistakeNotebookSaving] = useState(false);
   /** Per-question confidence self-rating (low/medium/high) — UI-only, analytics only. */
   const [confidence, setConfidence] = useState<Record<string, "low" | "medium" | "high">>({});
   const feedbackAnchorRef = useRef<HTMLDivElement | null>(null);
@@ -689,6 +692,70 @@ export function QuestionBankPracticeClient({
     () => mergeRationaleLessonLinksWithTopicFallback(g?.rationaleLessonLinks, current?.topic ?? null, pathwayIdFilter),
     [g?.rationaleLessonLinks, current?.topic, pathwayIdFilter],
   );
+
+  const scrollToQuestionNotes = useCallback(() => {
+    document.getElementById("qbank-question-notes")?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  }, []);
+
+  const addCurrentToMistakeNotebook = useCallback(async () => {
+    if (!current) return;
+    const qid = current.id;
+    if (mistakeNotebookByQuestion[qid]) return;
+    setMistakeNotebookSaving(true);
+    try {
+      const res = await fetch("/api/learner/mistakes", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          questionId: qid,
+          reason: "knowledge_gap",
+          note: "Added from question bank review",
+          topic: current.topic ?? undefined,
+        }),
+      });
+      if (res.ok) {
+        setMistakeNotebookByQuestion((prev) => ({ ...prev, [qid]: true }));
+      }
+    } finally {
+      setMistakeNotebookSaving(false);
+    }
+  }, [current, mistakeNotebookByQuestion]);
+
+  const learningLoopRecommendations = useMemo(() => {
+    if (!g?.learningLoop) return null;
+    const ll = g.learningLoop;
+    const showLesson = Boolean(ll.lessonHref && rationaleLessonLinksMerged.length === 0);
+    if (!showLesson && !ll.flashcardsHref && !ll.topicDrillHref) return null;
+    return (
+      <div className="flex flex-wrap gap-2">
+        {showLesson && ll.lessonHref ? (
+          <Link
+            href={ll.lessonHref}
+            className="inline-flex min-h-11 items-center rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-4 text-xs font-semibold text-[var(--semantic-text-primary)] shadow-sm hover:bg-[var(--semantic-panel-muted)]"
+          >
+            {t("learner.qbank.ui.relatedLesson")}
+          </Link>
+        ) : null}
+        {ll.flashcardsHref ? (
+          <Link
+            href={ll.flashcardsHref}
+            className="inline-flex min-h-11 items-center rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-4 text-xs font-semibold text-[var(--semantic-text-primary)] shadow-sm hover:bg-[var(--semantic-panel-muted)]"
+          >
+            {t("learner.qbank.ui.reviewFlashcards")}
+          </Link>
+        ) : null}
+        {ll.topicDrillHref ? (
+          <Link
+            href={ll.topicDrillHref}
+            className="inline-flex min-h-11 items-center rounded-full px-4 text-xs font-semibold text-[var(--role-cta-foreground)]"
+            style={{ background: "var(--role-cta)" }}
+          >
+            {t("learner.qbank.ui.topicDrillSameCode")}
+          </Link>
+        ) : null}
+      </div>
+    );
+  }, [g?.learningLoop, rationaleLessonLinksMerged.length, t]);
 
   async function checkAnswer() {
     if (!current) return;
@@ -1458,15 +1525,29 @@ export function QuestionBankPracticeClient({
                 ) : (
                   <PremiumRationalePanel
                     correct={g.correct}
-                    rationale={g.rationale}
+                    rationale={gradedRationaleForPanel?.rationale ?? g.rationale}
                     rationaleQuality={g.rationaleQuality}
-                    rationaleSections={g.rationaleSections}
+                    rationaleSections={gradedRationaleForPanel?.rationaleSections ?? g.rationaleSections}
                     referenceMedia={g.referenceMedia}
                     teaching={g.teaching}
                     teachingMedia={g.teachingMedia}
                     rationaleLessonLinks={rationaleLessonLinksMerged}
                     variant="exam"
                     defaultOpenExplanation={!g.correct}
+                    reviewActionStrip={
+                      <QuestionReviewActionStrip
+                        bookmarked={Boolean(markedForReview[current.id])}
+                        onToggleBookmark={() =>
+                          setMarkedForReview((f) => ({ ...f, [current.id]: !f[current.id] }))
+                        }
+                        showMistakeCta={!g.correct}
+                        onAddToMistakeNotebook={addCurrentToMistakeNotebook}
+                        mistakeAdded={Boolean(mistakeNotebookByQuestion[current.id])}
+                        mistakeBusy={mistakeNotebookSaving}
+                        onJumpToNotes={scrollToQuestionNotes}
+                      />
+                    }
+                    recommendationsSlot={learningLoopRecommendations}
                   />
                 )}
                 <div className="nn-question-nav-actions">
@@ -1510,40 +1591,6 @@ export function QuestionBankPracticeClient({
                     </button>
                   )}
                 </div>
-                {g.learningLoop &&
-                (g.learningLoop.topicDrillHref ||
-                  g.learningLoop.flashcardsHref ||
-                  (g.learningLoop.lessonHref && rationaleLessonLinksMerged.length === 0)) ? (
-                  <div className="rounded-xl border border-border/80 bg-muted/15 p-4">
-                    <div className="flex flex-wrap gap-2">
-                      {g.learningLoop.lessonHref && rationaleLessonLinksMerged.length === 0 ? (
-                        <Link
-                          href={g.learningLoop.lessonHref}
-                          className="inline-flex min-h-11 items-center rounded-full border border-border bg-card px-4 text-xs font-semibold hover:bg-muted/80"
-                        >
-                          {t("learner.qbank.ui.relatedLesson")}
-                        </Link>
-                      ) : null}
-                      {g.learningLoop.flashcardsHref ? (
-                        <Link
-                          href={g.learningLoop.flashcardsHref}
-                          className="inline-flex min-h-11 items-center rounded-full border border-border bg-card px-4 text-xs font-semibold hover:bg-muted/80"
-                        >
-                          {t("learner.qbank.ui.reviewFlashcards")}
-                        </Link>
-                      ) : null}
-                      {g.learningLoop.topicDrillHref ? (
-                        <Link
-                          href={g.learningLoop.topicDrillHref}
-                          className="inline-flex min-h-11 items-center rounded-full bg-role-cta px-4 text-xs font-semibold text-role-cta-foreground"
-                        >
-                          {t("learner.qbank.ui.topicDrillSameCode")}
-                        </Link>
-                      ) : null}
-                    </div>
-                  </div>
-                ) : null}
-
                 <QuestionSessionStudyLoopPanel
                   questions={questions}
                   graded={graded}
@@ -1555,15 +1602,17 @@ export function QuestionBankPracticeClient({
           </div>
         </ExamSessionShell>
       </ProtectedPremiumContent>
-      <StudyNotesPanel
-        userId={userId}
-        scope={LearnerNoteScope.QUESTION_BANK}
-        contextId={current.id}
-        topic={current.topic}
-        sourceLabel={`Question ${current.id.slice(0, 8)}…${current.topic ? ` · ${current.topic}` : ""}`}
-        userLabel={userLabel}
-        flags={protectionFlags}
-      />
+      <div id="qbank-question-notes" className="scroll-mt-24">
+        <StudyNotesPanel
+          userId={userId}
+          scope={LearnerNoteScope.QUESTION_BANK}
+          contextId={current.id}
+          topic={current.topic}
+          sourceLabel={`Question ${current.id.slice(0, 8)}…${current.topic ? ` · ${current.topic}` : ""}`}
+          userLabel={userLabel}
+          flags={protectionFlags}
+        />
+      </div>
     </div>
   );
 }
