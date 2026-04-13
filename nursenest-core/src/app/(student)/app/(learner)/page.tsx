@@ -30,6 +30,10 @@ import { emptyStateCopy } from "@/lib/ui/empty-state-copy";
 import { buildDashboardModel } from "@/lib/learner/next-best-action";
 import { buildCountdownCopy, daysUntilExamUtc } from "@/lib/learner/exam-timeline";
 import { isStudyCoachEnabled } from "@/lib/ai/learner-ai-policy";
+import {
+  buildCoachDashboardBundle,
+  loadDaysSinceLastActivity,
+} from "@/lib/coach/study-coach-intelligence";
 import { computeBenchmarkData, type BenchmarkData } from "@/lib/learner/benchmark-engine";
 import { BenchmarkLockedCard } from "@/components/student/dashboard/benchmark-card";
 import { resolveDisplayName } from "@/lib/user/resolve-display-name";
@@ -175,18 +179,20 @@ export default async function LearnerDashboardPage() {
   let weakTopicTitles: string[] = [];
   let benchmark: BenchmarkData | null = null;
   try {
-    const [snap, nextSnap, notes, todayGoal, questionBankGoal, retentionPrefs, examUser] = await Promise.all([
-      loadPremiumDashboardSnapshot(userId, entitlement),
-      buildLearnerStudySnapshot(userId, entitlement, undefined),
-      loadRecentLearnerNotesSummary(userId),
-      loadTodayGoalProgress(userId),
-      loadDailyQuestionGoalProgress(userId),
-      loadLearnerRetentionPreferences(userId),
-      prisma.user.findUnique({
-        where: { id: userId },
-        select: { examDate: true, examDatePlanType: true },
-      }),
-    ]);
+    const [snap, nextSnap, notes, todayGoal, questionBankGoal, retentionPrefs, examUser, daysSinceLastActivity] =
+      await Promise.all([
+        loadPremiumDashboardSnapshot(userId, entitlement),
+        buildLearnerStudySnapshot(userId, entitlement, undefined),
+        loadRecentLearnerNotesSummary(userId),
+        loadTodayGoalProgress(userId),
+        loadDailyQuestionGoalProgress(userId),
+        loadLearnerRetentionPreferences(userId),
+        prisma.user.findUnique({
+          where: { id: userId },
+          select: { examDate: true, examDatePlanType: true },
+        }),
+        loadDaysSinceLastActivity(userId),
+      ]);
     snapshot = snap;
     studySnap = nextSnap;
     weakTopicTitles = studySnap?.weakTopics.map((w) => w.topic) ?? [];
@@ -231,6 +237,19 @@ export default async function LearnerDashboardPage() {
         alliedProfessionKey: userAlliedProfessionKey,
       });
 
+      const coachSummary =
+        snapshot && studySnap
+          ? (() => {
+              const b = buildCoachDashboardBundle(snapshot, studySnap, daysSinceLastActivity);
+              return {
+                readiness: b.readiness,
+                priorities: b.priorities,
+                patterns: b.patterns,
+                topIntervention: b.topIntervention,
+              };
+            })()
+          : null;
+
       return (
         <LearnerStudyHome
           crumbs={crumbs}
@@ -257,6 +276,7 @@ export default async function LearnerDashboardPage() {
           recentNotes={notes}
           readinessDeferHint={t("learner.dashboard.hub.readinessDeferHint")}
           showCoach={isStudyCoachEnabled()}
+          coachSummary={coachSummary}
         />
       );
     }

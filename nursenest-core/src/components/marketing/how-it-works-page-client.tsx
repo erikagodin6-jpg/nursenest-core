@@ -58,7 +58,7 @@ function HeroSection() {
         }}
       />
 
-      <StaggerGroup className="relative mx-auto max-w-2xl" staggerMs={70} whenInView once>
+      <StaggerGroup className="relative mx-auto max-w-2xl" staggerMs={65} whenInView once>
         <StaggerItem>
           <p
             className="mb-4 inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wider"
@@ -154,7 +154,7 @@ function ThreeStepSection() {
         </div>
       </FadeUp>
 
-      <StaggerGroup className="mt-12 grid gap-6 sm:grid-cols-3" staggerMs={80} whenInView once>
+      <StaggerGroup className="mt-12 grid gap-6 sm:grid-cols-3" staggerMs={65} whenInView once>
         {STEPS.map((step) => (
           <StaggerItem key={step.number} className="nn-hiw-step-card group">
             <div className="flex items-start gap-4">
@@ -238,7 +238,7 @@ function IntelligentSystemSection() {
         </div>
       </FadeUp>
 
-      <StaggerGroup className="mt-12 grid gap-6 sm:grid-cols-2" staggerMs={80} whenInView once>
+      <StaggerGroup className="mt-12 grid gap-6 sm:grid-cols-2" staggerMs={65} whenInView once>
         {SYSTEM_FEATURES.map((feat) => (
           <StaggerItem key={feat.title} className="nn-hiw-feature-card group">
             <div
@@ -309,7 +309,7 @@ function ProductPreviewSection() {
         </div>
       </FadeUp>
 
-      <StaggerGroup className="mt-12 grid gap-6 lg:grid-cols-3" staggerMs={80} whenInView once>
+      <StaggerGroup className="mt-12 grid gap-6 lg:grid-cols-3" staggerMs={65} whenInView once>
         {PREVIEW_CARDS.map((card) => (
           <StaggerItem key={card.title} className="nn-hiw-preview-card">
             <div

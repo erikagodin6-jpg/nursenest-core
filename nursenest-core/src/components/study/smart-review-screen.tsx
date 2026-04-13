@@ -11,6 +11,9 @@ import {
   usePremiumGateImpression,
 } from "./premium-gate";
 import { CoachReviewHelper } from "./coach-review-helper";
+import { CoachInterventionBanner } from "./coach-intervention-banner";
+import { detectReviewSessionInterventions, rankInterventions } from "@/lib/coach/study-coach-interventions";
+import { isStudyCoachEnabled } from "@/lib/ai/learner-ai-policy";
 
 // ── Data Types ──────────────────────────────────────────────────────────────
 
@@ -499,6 +502,17 @@ export function SmartReviewLayout({ items, isEntitled = true }: SmartReviewScree
 
   const groups = useMemo(() => buildGroups(items), [items]);
 
+  const sessionTopIntervention = useMemo(() => {
+    if (!isStudyCoachEnabled()) return null;
+    const mapped = items.map((it) => ({
+      topic: it.topic ?? null,
+      isCorrect: it.isCorrect,
+      confidence: it.confidence,
+    }));
+    const ranked = rankInterventions(detectReviewSessionInterventions(mapped));
+    return ranked[0] ?? null;
+  }, [items]);
+
   const topics = useMemo(() => {
     const ts = new Set<string>();
     for (const item of items) {
@@ -528,6 +542,12 @@ export function SmartReviewLayout({ items, isEntitled = true }: SmartReviewScree
       <div className="nn-smart-review">
         {/* Summary strip (always free) */}
         <ReviewSummaryStrip groups={groups} totalItems={items.length} />
+
+        {sessionTopIntervention ? (
+          <div className="mt-3">
+            <CoachInterventionBanner intervention={sessionTopIntervention} dismissible />
+          </div>
+        ) : null}
 
         {/* Group 1 — High Priority Fixes (limited to 3, no filters) */}
         <ReviewGroupSection
@@ -570,6 +590,12 @@ export function SmartReviewLayout({ items, isEntitled = true }: SmartReviewScree
     <div className="nn-smart-review">
       {/* 1 — Summary strip */}
       <ReviewSummaryStrip groups={groups} totalItems={items.length} />
+
+      {sessionTopIntervention ? (
+        <div className="mt-3">
+          <CoachInterventionBanner intervention={sessionTopIntervention} dismissible />
+        </div>
+      ) : null}
 
       {/* 2 — Filter controls */}
       {items.length > 1 ? (

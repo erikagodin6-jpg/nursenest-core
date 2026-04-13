@@ -77,7 +77,7 @@ export function HomeHowItWorksSection() {
         <StaggerGroup
           as="ol"
           className="grid list-none gap-6 p-0 md:grid-cols-3"
-          staggerMs={56}
+          staggerMs={65}
           whenInView
           once
           viewMargin="-36px"

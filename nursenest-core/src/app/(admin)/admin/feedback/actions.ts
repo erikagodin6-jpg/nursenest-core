@@ -1,5 +1,9 @@
 "use server";
 
+/**
+ * Feedback triage actions. For future alerting (Slack/email), enqueue from these mutations
+ * when `status` becomes `NEW` or severity is `CRITICAL`, or call a notifications service — keep side effects async and bounded.
+ */
 import { revalidatePath } from "next/cache";
 import { UserFeedbackStatus } from "@prisma/client";
 import { prisma } from "@/lib/db";
@@ -63,9 +67,11 @@ export async function linkUserFeedbackDuplicate(formData: FormData): Promise<voi
 
   const [row, primary] = await Promise.all([
     prisma.userFeedbackReport.findUnique({ where: { id }, select: { id: true } }),
-    prisma.userFeedbackReport.findUnique({ where: { id: primaryId }, select: { id: true } }),
+    prisma.userFeedbackReport.findUnique({ where: { id: primaryId }, select: { id: true, duplicateOfId: true } }),
   ]);
   if (!row || !primary) return;
+  /** Avoid immediate 2-cycle (A → B while B → A). */
+  if (primary.duplicateOfId === id) return;
 
   await prisma.userFeedbackReport.update({
     where: { id },

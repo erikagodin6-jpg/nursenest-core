@@ -59,7 +59,7 @@ const VALUE_PROPS = [
 
 export function ValuePropsStrip() {
   return (
-    <StaggerGroup className="grid grid-cols-2 gap-4 sm:grid-cols-4 sm:gap-5" staggerMs={45} whenInView once>
+    <StaggerGroup className="grid grid-cols-2 gap-4 sm:grid-cols-4 sm:gap-5" staggerMs={65} whenInView once>
       {VALUE_PROPS.map(({ icon: Icon, label, accent }) => (
         <StaggerItem key={label} variant="softReveal">
           <div
@@ -146,7 +146,7 @@ export function PricingFeaturesGrid() {
           Every plan includes full access to all of these features
         </p>
       </FadeUp>
-      <StaggerGroup className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6" staggerMs={50} whenInView once>
+      <StaggerGroup className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6" staggerMs={65} whenInView once>
         {FEATURES.map((f) => (
           <StaggerItem key={f.title} variant="softReveal">
             <div
@@ -208,7 +208,7 @@ export function WhyItWorks() {
           Why NurseNest Works
         </h2>
       </FadeUp>
-      <StaggerGroup className="grid gap-5 sm:grid-cols-3 sm:gap-6" staggerMs={50} whenInView once>
+      <StaggerGroup className="grid gap-5 sm:grid-cols-3 sm:gap-6" staggerMs={65} whenInView once>
         {WHY_POINTS.map((p) => (
           <StaggerItem key={p.title} variant="softReveal">
             <div

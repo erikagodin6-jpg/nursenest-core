@@ -5,7 +5,7 @@
  * no infinite decorative loops unless explicitly approved. Prefer opacity + light translate.
  *
  * Durations are in **seconds** for Framer Motion. CSS mirrors: `globals.css` `:root`
- * `--brand-motion-fast|normal|medium|slow` and `--brand-motion-ease*`.
+ * `--brand-motion-fast|normal|hero|card-hover|medium|slow` and `--brand-motion-ease*`.
  */
 export const BRAND_MOTION = {
   /** 120–160ms — hovers, taps, small UI */

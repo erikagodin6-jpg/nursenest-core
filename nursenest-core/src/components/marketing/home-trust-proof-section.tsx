@@ -58,7 +58,7 @@ export function HomeTrustProofSection() {
           </p>
         </FadeUp>
 
-        <StaggerGroup className="grid gap-5 md:grid-cols-2" staggerMs={52} whenInView once viewMargin="-40px">
+        <StaggerGroup className="grid gap-5 md:grid-cols-2" whenInView once viewMargin="-40px">
           {POINTS.map((point, idx) => {
             const Icon = point.icon;
             return (

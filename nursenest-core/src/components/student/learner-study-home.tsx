@@ -307,6 +307,12 @@ export function LearnerStudyHome({
       >
         <RecentGainsBlock trends={trends} strongTopics={strongHighlight} t={t} />
         {studySnap ? <LearnerAdaptiveFocusCard snapshot={studySnap} /> : null}
+        {showCoach && coachSummary ? (
+          <div className="grid gap-4 md:grid-cols-2">
+            <CoachPriorityList priorities={coachSummary.priorities} />
+            <CoachPatternInsights patterns={coachSummary.patterns} />
+          </div>
+        ) : null}
         {showCoach ? (
           <DashboardCoachCard weakTopics={weakTopicTitles} examTarget={undefined} daysUntilExam={daysLeft} />
         ) : null}

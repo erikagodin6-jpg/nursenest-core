@@ -102,7 +102,7 @@ export function HomeExamSelectionSection() {
 
         <StaggerGroup
           className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4"
-          staggerMs={48}
+          staggerMs={65}
           whenInView
           once
           viewMargin="-40px"

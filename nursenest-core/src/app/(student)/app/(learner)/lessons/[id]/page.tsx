@@ -48,6 +48,8 @@ import {
 import { marketingPathwayLessonsIndexPath } from "@/lib/lessons/lesson-routes";
 import { CoachLessonHelper } from "@/components/study/coach-lesson-helper";
 import { isStudyCoachEnabled } from "@/lib/ai/learner-ai-policy";
+import { buildLearnerStudySnapshot } from "@/lib/learner/build-learner-study-snapshot";
+import { lessonTopicMatchesTopPriority } from "@/lib/coach/study-coach-lesson-priority";
 import { loadPathwayLessonProgressForSlug } from "@/lib/lessons/pathway-lesson-progress";
 import { LessonAssessmentFlow } from "@/components/lessons/lesson-assessment-flow";
 import { LessonSectionNoteInline } from "@/components/lessons/lesson-section-note-inline";
@@ -366,7 +368,7 @@ export default async function LessonDetailPage({ params }: Props) {
     const pathwayId = resolvedLesson.pathwayId;
     const pathway = getExamPathwayById(pathwayId);
     const examFraming = getLearnerExamFraming(pathwayId);
-    const [relatedQuestionStems, relatedLessonsRaw, initialProgress] = await Promise.all([
+    const [relatedQuestionStems, relatedLessonsRaw, initialProgress, pathwayStudySnap] = await Promise.all([
       pathway != null
         ? loadRelatedExamQuestionStemsForPathwayLesson({
             pathway,
@@ -390,7 +392,16 @@ export default async function LessonDetailPage({ params }: Props) {
       userId
         ? loadPathwayLessonProgressForSlug(userId, pathwayId, record.slug).catch(() => "not_started" as const)
         : Promise.resolve("not_started" as const),
+      userId
+        ? buildLearnerStudySnapshot(userId, entitlement, learnerPath).catch(() => null)
+        : Promise.resolve(null),
     ]);
+    const studyNextHint =
+      Boolean(
+        pathwayStudySnap &&
+          record.topicSlug &&
+          lessonTopicMatchesTopPriority(record.topicSlug, pathwayStudySnap),
+      );
     const relatedLessonsDisplay = mergeRelatedLessonDisplayList(
       record.relatedLessonRefs,
       relatedLessonsRaw.filter(pathwayLessonHasRenderableHubSlug),
@@ -544,6 +555,7 @@ export default async function LessonDetailPage({ params }: Props) {
               <CoachLessonHelper
                 lessonTitle={record.title}
                 topic={record.topic}
+                studyNextHint={studyNextHint}
               />
             )}
             <LessonContinueStudyNextBlock bundle={pathwayContinue} />

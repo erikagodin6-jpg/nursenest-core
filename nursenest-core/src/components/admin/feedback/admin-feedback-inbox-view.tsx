@@ -1,10 +1,6 @@
 import Link from "next/link";
-import type { Prisma, UserFeedbackCategory, UserFeedbackSeverity, UserFeedbackStatus } from "@prisma/client";
-import {
-  UserFeedbackCategory as CatEnum,
-  UserFeedbackSeverity as SevEnum,
-  UserFeedbackStatus as StatEnum,
-} from "@prisma/client";
+import type { Prisma, UserFeedbackSeverity, UserFeedbackStatus } from "@prisma/client";
+import { UserFeedbackCategory as CatEnum, UserFeedbackSeverity as SevEnum } from "@prisma/client";
 import {
   adminFeedbackInboxHref,
 } from "@/lib/admin/feedback-inbox-url";
@@ -51,13 +47,15 @@ export function buildFeedbackWhere(sp: Record<string, string | undefined>): Pris
   if (st) where.status = st;
   const sev = parseEnum(sp.severity, SEVERITY_LIST);
   if (sev) where.severity = sev;
-  const vis = sp.vis?.trim();
-  if (vis === "anon") {
-    where.userId = null;
-  } else if (vis === "in" || sp.signedIn === "1") {
-    where.userId = { not: null };
-  } else if (sp.userId?.trim()) {
+  if (sp.userId?.trim()) {
     where.userId = sp.userId.trim();
+  } else {
+    const vis = sp.vis?.trim();
+    if (vis === "anon") {
+      where.userId = null;
+    } else if (vis === "in" || sp.signedIn === "1") {
+      where.userId = { not: null };
+    }
   }
   const pageQ = sp.pageQ?.trim();
   if (pageQ) {
@@ -457,6 +455,14 @@ export function AdminFeedbackInboxView({
                           <dd>{selected.user.name}</dd>
                         </div>
                       ) : null}
+                      <div className="pt-2">
+                        <Link
+                          href={`/admin/users?q=${encodeURIComponent(selected.user.email)}`}
+                          className="text-xs font-semibold text-primary underline-offset-2 hover:underline"
+                        >
+                          Search in Users
+                        </Link>
+                      </div>
                     </dl>
                   ) : (
                     <p className="mt-2 text-sm text-muted-foreground">Anonymous session (no user id captured).</p>
@@ -529,7 +535,7 @@ export function AdminFeedbackInboxView({
                     <div className="mt-2 space-y-2 text-sm">
                       <p className="text-muted-foreground">
                         Linked to{" "}
-                        <Link href={adminFeedbackInboxHref(sp, { r: selected.duplicateOf!.id })} className="font-mono font-semibold text-primary">
+                        <Link href={adminFeedbackInboxHref(sp, { r: selected.duplicateOf.id })} className="font-mono font-semibold text-primary">
                           {selected.duplicateOf.id.slice(0, 10)}…
                         </Link>
                       </p>

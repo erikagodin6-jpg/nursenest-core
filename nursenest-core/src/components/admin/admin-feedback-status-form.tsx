@@ -31,7 +31,7 @@ export function AdminFeedbackStatusForm({ reportId, status }: { reportId: string
         name="status"
         defaultValue={status}
         onChange={(e) => e.currentTarget.form?.requestSubmit()}
-        className="rounded-lg border border-border bg-background px-2 py-1 text-xs font-medium text-foreground shadow-sm"
+        className="w-full min-h-[42px] rounded-xl border border-border bg-background px-3 py-2 text-sm font-medium text-foreground shadow-sm"
       >
         {OPTIONS.map((o) => (
           <option key={o.value} value={o.value}>
