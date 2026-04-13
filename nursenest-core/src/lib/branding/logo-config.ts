@@ -44,7 +44,7 @@ export const HOME_BRAND_LOGO_MARK_CLASSNAME = "" as const;
  * Raster mark: fills slot height; width from aspect ratio; `object-contain` keeps sharpness and trims effective padding vs stretching.
  */
 export const HEADER_BRAND_LOGO_IMG_CLASSNAME =
-  "nn-brand-header-logo block h-full w-auto max-h-full max-w-full shrink-0 bg-transparent object-contain object-left shadow-none ring-0 outline-none [image-rendering:auto] [mix-blend-mode:normal]" as const;
+  "nn-brand-header-logo block h-full w-auto max-h-full max-w-full shrink-0 bg-transparent object-contain object-left shadow-none ring-0 outline-none [image-rendering:auto] [mix-blend-mode:normal] origin-left scale-[2.05] transform-gpu" as const;
 
 /** Site footer: smaller than header; same object-contain rules, no vertical stretch. */
 export const FOOTER_BRAND_LOGO_SLOT_CLASSNAME =

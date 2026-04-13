@@ -54,6 +54,8 @@ import { CountrySelector } from "@/components/layout/global-context-switcher";
 /** Keep desktop nav pills single-line and compact so the full global IA fits cleanly. */
 const NAV_LINK_CLASS =
   "nn-marketing-body-sm nn-marketing-nav-link inline-flex h-9 items-center justify-center whitespace-nowrap px-2.5 text-center font-semibold leading-none tracking-tight xl:px-3";
+const NAV_TIER_LINK_CLASS =
+  "nn-marketing-body-sm nn-marketing-nav-link inline-flex h-8 items-center justify-center whitespace-nowrap px-2.5 text-center font-semibold leading-none tracking-tight xl:px-3";
 const HEADER_SECONDARY_ACTION_CLASS =
   "inline-flex min-h-[38px] items-center justify-center rounded-xl border border-[var(--nav-border)] px-3 py-2 text-sm font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]";
 const HEADER_UTILITY_BUTTON_CLASS =
@@ -651,12 +653,14 @@ export function SiteHeader() {
         onMouseEnter={isMarketingNav ? clearMegaCloseTimer : undefined}
         onMouseLeave={isMarketingNav ? scheduleMegaClose : undefined}
       >
-        <div className="nn-section-shell flex flex-col">
-          {isMarketingNav ? (
-            <div className="hidden h-10 items-center justify-end border-b border-[var(--nn-nav-border)] nn-header-utility-dark lg:flex">
+        {isMarketingNav ? (
+          <div className="hidden w-full border-b border-[var(--nn-nav-border)] nn-header-utility-dark lg:block">
+            <div className="nn-section-shell flex h-9 items-center justify-end">
               {marketingDesktopUtilityControls}
             </div>
-          ) : null}
+          </div>
+        ) : null}
+        <div className="nn-section-shell flex flex-col">
           {/* ── Mobile brand row ── */}
           <div className="flex h-[4.5rem] items-center justify-between gap-4 border-b border-[var(--header-border)] lg:hidden">
             <Link
@@ -790,8 +794,10 @@ export function SiteHeader() {
               )}
           </div>
           </div>{/* /nav-row */}
-          {isMarketingNav ? (
-            <div className="hidden min-h-[3.25rem] items-center nn-header-nav-row lg:flex">
+        </div>{/* /shell */}
+        {isMarketingNav ? (
+          <div className="hidden w-full border-t border-[var(--nn-nav-border)] nn-header-nav-row lg:block">
+            <div className="nn-section-shell flex min-h-11 items-center">
               <nav
                 aria-label={t("nav.marketingExplore")}
                 className="flex min-w-0 flex-1 items-center justify-center gap-0.5 xl:gap-1"
@@ -809,7 +815,7 @@ export function SiteHeader() {
                         aria-expanded={expanded}
                         aria-controls={`mega-menu-${menu.key}`}
                         data-active={isMegaMenuKeyActive(menu.key, strippedPath) || undefined}
-                        className={`${NAV_LINK_CLASS} inline-flex items-center gap-1 text-center`}
+                        className={`${NAV_TIER_LINK_CLASS} inline-flex items-center gap-1 text-center`}
                         onClick={() => setOpenMegaMenu(expanded ? null : menu.key)}
                         onFocus={() => setOpenMegaMenu(menu.key)}
                       >
@@ -821,8 +827,8 @@ export function SiteHeader() {
                 })}
               </nav>
             </div>
-          ) : null}
-        </div>{/* /shell */}
+          </div>
+        ) : null}
         {isMarketingNav && openMega ? (
           <div
             id={`mega-menu-${openMega.key}`}

@@ -254,7 +254,7 @@ export function QuestionBankPracticeClient({
   const [mistakeNotebookByQuestion, setMistakeNotebookByQuestion] = useState<Record<string, boolean>>({});
   const [mistakeNotebookSaving, setMistakeNotebookSaving] = useState(false);
   /** Per-question confidence self-rating (low/medium/high) — UI-only, analytics only. */
-  const [confidence, setConfidence] = useState<Record<string, "low" | "medium" | "high">>({});
+  const [confidence, setConfidence] = useState<Record<string, "low" | "medium" | "high" | undefined>>({});
   const feedbackAnchorRef = useRef<HTMLDivElement | null>(null);
   const feedbackScrollMarkerRef = useRef<string | null>(null);
 
@@ -1287,7 +1287,7 @@ export function QuestionBankPracticeClient({
               </div>
             }
           />
-          <ExamProgressBar current={idx + 1} total={total} />
+          <ExamProgressBar current={idx + 1} total={total} answeredCount={sessionTotal} />
 
           <div className="nn-question-session space-y-8">
             <div className="nn-question-stem-card">
@@ -1440,10 +1440,7 @@ export function QuestionBankPracticeClient({
                             type="button"
                             aria-pressed={sel}
                             onClick={() =>
-                              setConfidence((prev) => ({
-                                ...prev,
-                                [current.id]: sel ? (undefined as unknown as "low") : level,
-                              }))
+                              setConfidence((prev) => ({ ...prev, [current.id]: sel ? undefined : level }))
                             }
                             className={`nn-confidence-chip nn-confidence-chip--${level} ${sel ? "nn-confidence-chip--selected" : ""}`}
                           >

@@ -154,6 +154,8 @@ export type PathwayLessonQuizItem = {
   /** Zero-based index of correct option (aligned with legacy monolith lessons). */
   correct: number;
   rationale?: string;
+  /** When present (bank-backed study loop), used for analytics and weak-area tracking. */
+  examQuestionId?: string;
 };
 
 /** How localized pathway lesson content was resolved for this response. */

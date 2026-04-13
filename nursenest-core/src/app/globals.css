@@ -1661,10 +1661,18 @@ html[data-theme] .nn-marketing-surface {
 /* Top brand bar — uses nn-nav-bg from the sticky wrapper's CSS vars (set by getNavChromeVars) */
 .nn-header-utility-dark {
   background: var(--nn-nav-bg, var(--theme-nav-background, var(--nav-bg)));
-  color: var(--nn-nav-fg, var(--theme-nav-foreground, var(--nav-fg)));
+  color: #ffffff;
   border-bottom: 1px solid var(--nn-nav-border, color-mix(in srgb, var(--nn-nav-fg, var(--nav-fg)) 18%, transparent));
-  --header-utility-text: var(--nn-nav-fg, var(--theme-nav-foreground, var(--nav-fg)));
+  --header-utility-text: #ffffff;
   --header-utility-border: var(--nn-nav-border, color-mix(in srgb, var(--nn-nav-fg, var(--nav-fg)) 18%, transparent));
+  --nav-fg: #ffffff;
+  --nav-link: #ffffff;
+  --nav-link-hover: #ffffff;
+  --nav-link-active: #ffffff;
+  --nav-muted: color-mix(in srgb, #ffffff 70%, transparent);
+  --nav-border: color-mix(in srgb, #ffffff 22%, transparent);
+  --nav-hover: color-mix(in srgb, #ffffff 12%, transparent);
+  --nav-active: color-mix(in srgb, #ffffff 18%, transparent);
 }
 
 /* Logo/content row — sits on white/near-white surface, visually above the tinted page canvas */
@@ -1728,18 +1736,18 @@ html[data-theme] .nn-marketing-surface {
  * white-on-dark instead of inheriting the light page-surface overrides above. */
 .nn-header-nav-row {
   background: var(--nn-nav-bg, var(--theme-nav-background, var(--nav-bg)));
-  color: var(--nn-nav-fg, var(--theme-nav-foreground, var(--nav-fg)));
+  color: #ffffff;
   border-top: 1px solid color-mix(in srgb, var(--nn-nav-fg, var(--nav-fg)) 10%, transparent);
-  --nav-fg:          var(--nn-nav-fg, var(--theme-nav-foreground, var(--nav-fg)));
-  --nav-link:        var(--nn-nav-fg, var(--nav-fg));
-  --nav-link-hover:  var(--nn-nav-fg, var(--nav-fg));
-  --nav-link-active: var(--nn-nav-fg, var(--nav-fg));
-  --nav-hover:       color-mix(in srgb, var(--nn-nav-fg, var(--nav-fg)) 14%, transparent);
-  --nav-active:      color-mix(in srgb, var(--nn-nav-fg, var(--nav-fg)) 10%, transparent);
-  --nav-border:      color-mix(in srgb, var(--nn-nav-fg, var(--nav-fg)) 18%, transparent);
-  --nav-muted:       color-mix(in srgb, var(--nn-nav-fg, var(--nav-fg)) 62%, transparent);
+  --nav-fg:          #ffffff;
+  --nav-link:        #ffffff;
+  --nav-link-hover:  #ffffff;
+  --nav-link-active: #ffffff;
+  --nav-hover:       color-mix(in srgb, #ffffff 16%, transparent);
+  --nav-active:      color-mix(in srgb, #ffffff 20%, transparent);
+  --nav-border:      color-mix(in srgb, #ffffff 22%, transparent);
+  --nav-muted:       color-mix(in srgb, #ffffff 70%, transparent);
   --header-background: var(--nn-nav-bg, var(--theme-nav-background, var(--nav-bg)));
-  --header-border:   color-mix(in srgb, var(--nn-nav-fg, var(--nav-fg)) 15%, transparent);
+  --header-border:   color-mix(in srgb, #ffffff 20%, transparent);
 }
 
 /* Bottom accent strip separating logo row from page content (light themes) */

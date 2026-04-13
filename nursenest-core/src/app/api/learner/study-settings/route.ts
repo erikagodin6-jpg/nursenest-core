@@ -14,6 +14,7 @@ const patchSchema = z.object({
   enableSpacedRepetition: z.boolean().optional(),
   enableConfidenceTracking: z.boolean().optional(),
   enablePrePostQuizzes: z.boolean().optional(),
+  lessonStudyLoopEnabled: z.boolean().optional(),
   showHeatmap: z.boolean().optional(),
   showAdvancedInsights: z.boolean().optional(),
   enableWeaknessAlerts: z.boolean().optional(),

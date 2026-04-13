@@ -12,6 +12,8 @@ import { useThemeLogo } from "@/lib/theme/use-theme-logo";
 import type { ThemeLogoVariant } from "@/lib/theme/theme-logo-url";
 
 export type BrandMarkLoadState = "loading" | "ready" | "error";
+const LIGHT_FOOTER_LOGO_URL =
+  "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/Logos/arcticfrost-transparent.png";
 
 /**
  * Theme-aware brand mark. URL is resolved from an explicit theme->CDN map.
@@ -34,31 +36,32 @@ export function SiteBrandLogoMark({
 }) {
   const { slotClassName, imgClassName } = brandLogoMarkPresentation(variant);
   const { themeId, registeredThemeId, rawThemeId, url, kind } = useThemeLogo(logoVariant);
+  const resolvedUrl = variant === "footer" ? LIGHT_FOOTER_LOGO_URL : url;
   const [imageFailed, setImageFailed] = useState(false);
 
   useEffect(() => {
     setImageFailed(false);
-  }, [url, kind]);
+  }, [resolvedUrl, kind]);
 
   const handleLoad = useCallback(() => {
     if (process.env.NODE_ENV === "development") {
       // eslint-disable-next-line no-console -- dev diagnostic
-      console.debug("[logo-debug] loaded", { themeId, registeredThemeId, rawThemeId, url });
+      console.debug("[logo-debug] loaded", { themeId, registeredThemeId, rawThemeId, url: resolvedUrl });
     }
     onMarkState?.("ready");
-  }, [onMarkState, themeId, registeredThemeId, rawThemeId, url]);
+  }, [onMarkState, themeId, registeredThemeId, rawThemeId, resolvedUrl]);
 
   const handleError = useCallback(() => {
     if (process.env.NODE_ENV === "development") {
       // eslint-disable-next-line no-console -- dev diagnostic
-      console.debug("[logo-debug] image error", { themeId, url });
+      console.debug("[logo-debug] image error", { themeId, url: resolvedUrl });
     }
-    if (url) logBrandLogoLoadFailure(url, themeId, 0);
+    if (resolvedUrl) logBrandLogoLoadFailure(resolvedUrl, themeId, 0);
     setImageFailed(true);
     onMarkState?.("error");
-  }, [onMarkState, themeId, url]);
+  }, [onMarkState, themeId, resolvedUrl]);
 
-  const isMappingMissing = kind === "text-fallback" || !url;
+  const isMappingMissing = variant === "footer" ? false : kind === "text-fallback" || !resolvedUrl;
   const showMissingPlaceholder = isMappingMissing || imageFailed;
 
   useEffect(() => {
@@ -88,8 +91,8 @@ export function SiteBrandLogoMark({
   return (
     <span className={`${slotClassName} ${className}`.trim()}>
       <img
-        key={`${themeId}-${url}`}
-        src={url}
+        key={`${themeId}-${resolvedUrl}`}
+        src={resolvedUrl}
         alt={BRAND_NAME}
         width={320}
         height={96}

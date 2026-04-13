@@ -129,6 +129,18 @@ export const PH = {
   learnerCatLearningLinkClicked: "learner_cat_learning_link_clicked",
   /** Learner clicked a CAT CTA from study-loop surfaces. */
   learnerStudyLoopCatCtaClicked: "learner_study_loop_cat_cta_clicked",
+  /** Lesson page: bank-backed study loop intro card shown (eligible lesson). */
+  learnerLessonStudyLoopShown: "learner_lesson_study_loop_shown",
+  learnerLessonStudyLoopPreStarted: "learner_lesson_study_loop_pre_started",
+  learnerLessonStudyLoopPreCompleted: "learner_lesson_study_loop_pre_completed",
+  learnerLessonStudyLoopPreSkipped: "learner_lesson_study_loop_pre_skipped",
+  learnerLessonStudyLoopPostStarted: "learner_lesson_study_loop_post_started",
+  learnerLessonStudyLoopPostCompleted: "learner_lesson_study_loop_post_completed",
+  learnerLessonStudyLoopLessonSkipped: "learner_lesson_study_loop_lesson_skipped_direct",
+  learnerLessonStudyLoopDisabledToggle: "learner_lesson_study_loop_disabled_toggle",
+  learnerLessonStudyLoopScoreDelta: "learner_lesson_study_loop_score_delta",
+  learnerLessonNotesOpened: "learner_lesson_notes_opened",
+  learnerLessonNotesEdited: "learner_lesson_notes_edited",
   /** CAT / exam simulation produced a non-empty readiness label on completion. */
   learnerReadinessScoreReached: "learner_readiness_score_reached",
   /** Exam hub mock: graded attempt persisted via /api/exams/submit. */

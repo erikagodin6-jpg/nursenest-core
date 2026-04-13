@@ -195,6 +195,8 @@ export function LessonAssessmentFlow({
   preTest,
   postTest,
   assessmentsEnabled = true,
+  /** When true, embedded catalog pre/post items are hidden (e.g. bank-backed study loop owns quizzes). */
+  disableCatalogAssessments = false,
   children,
 }: {
   userId: string;
@@ -206,11 +208,12 @@ export function LessonAssessmentFlow({
   preTest?: PathwayLessonQuizItem[];
   postTest?: PathwayLessonQuizItem[];
   assessmentsEnabled?: boolean;
+  disableCatalogAssessments?: boolean;
   children: ReactNode;
 }) {
   const effectiveUserId = userId.trim() || "public";
-  const hasPre = Boolean(preTest?.length);
-  const hasPost = Boolean(postTest?.length);
+  const hasPre = !disableCatalogAssessments && Boolean(preTest?.length);
+  const hasPost = !disableCatalogAssessments && Boolean(postTest?.length);
   const hasAnyAssessments = hasPre || hasPost;
 
   // ── Local state ────────────────────────────────────────────────────────────

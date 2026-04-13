@@ -218,6 +218,11 @@ model User {
   enableConfidenceTracking Boolean?
   /** When false, lesson pre/post quiz prompts and modules stay hidden. */
   enablePrePostQuizzes    Boolean?
+  /**
+   * When false, guided lesson study loop (optional bank-backed pre/post quick check + review) stays off.
+   * Null defaults to enabled in app normalization.
+   */
+  lessonStudyLoopEnabled  Boolean?  @map("lesson_study_loop_enabled")
   /** When false, weakness heatmap surfaces are hidden. */
   showHeatmap             Boolean?
   /** When false, advanced readiness and dashboard insight surfaces stay simplified. */

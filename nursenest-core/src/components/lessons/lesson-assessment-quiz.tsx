@@ -292,9 +292,12 @@ export type QuizCompleteResult = { score: number; total: number };
 export function LessonAssessmentQuiz({
   items,
   onComplete,
+  onItemGraded,
 }: {
   items: PathwayLessonQuizItem[];
   onComplete: (result: QuizCompleteResult) => void;
+  /** Fires after each answered question (before advancing). Optional weak-area / analytics hook. */
+  onItemGraded?: (args: { index: number; correct: boolean; selectedIndex: number }) => void;
 }) {
   const [state, setState] = useState<QuizState>({
     phase: "in_progress",
@@ -333,6 +336,13 @@ export function LessonAssessmentQuiz({
     const gained = state.questionState.correct ? 1 : 0;
     const newCorrect = correctCount + gained;
     const nextIndex = questionIndex + 1;
+    if (state.questionState.phase === "answered") {
+      onItemGraded?.({
+        index: questionIndex,
+        correct: state.questionState.correct,
+        selectedIndex: state.questionState.selectedIndex,
+      });
+    }
 
     if (nextIndex >= items.length) {
       setState({ phase: "complete", score: newCorrect, total: items.length });

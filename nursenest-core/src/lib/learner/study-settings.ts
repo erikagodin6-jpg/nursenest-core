@@ -7,6 +7,8 @@ export type StudySettings = {
   enableSpacedRepetition: boolean;
   enableConfidenceTracking: boolean;
   enablePrePostQuizzes: boolean;
+  /** Guided lesson study loop: optional bank-backed pre/post quick check + review on lesson pages. */
+  lessonStudyLoopEnabled: boolean;
   showHeatmap: boolean;
   showAdvancedInsights: boolean;
   enableWeaknessAlerts: boolean;
@@ -21,6 +23,7 @@ export const DEFAULT_STUDY_SETTINGS: StudySettings = {
   enableSpacedRepetition: true,
   enableConfidenceTracking: true,
   enablePrePostQuizzes: true,
+  lessonStudyLoopEnabled: true,
   showHeatmap: true,
   showAdvancedInsights: true,
   enableWeaknessAlerts: true,
@@ -44,6 +47,7 @@ export function normalizeStudySettings(input?: PartialStudySettings): StudySetti
     enableSpacedRepetition: source.enableSpacedRepetition !== false,
     enableConfidenceTracking: source.enableConfidenceTracking !== false,
     enablePrePostQuizzes: source.enablePrePostQuizzes !== false,
+    lessonStudyLoopEnabled: source.lessonStudyLoopEnabled !== false,
     showHeatmap: source.showHeatmap !== false,
     showAdvancedInsights: source.showAdvancedInsights !== false,
     enableWeaknessAlerts: source.enableWeaknessAlerts !== false,
@@ -57,6 +61,7 @@ export type StudySettingsPersistenceRow = {
   enableSpacedRepetition: boolean | null;
   enableConfidenceTracking: boolean | null;
   enablePrePostQuizzes: boolean | null;
+  lessonStudyLoopEnabled: boolean | null;
   showHeatmap: boolean | null;
   showAdvancedInsights: boolean | null;
   enableWeaknessAlerts: boolean | null;
@@ -69,6 +74,7 @@ export const studySettingsUserSelect = {
   enableSpacedRepetition: true,
   enableConfidenceTracking: true,
   enablePrePostQuizzes: true,
+  lessonStudyLoopEnabled: true,
   showHeatmap: true,
   showAdvancedInsights: true,
   enableWeaknessAlerts: true,
@@ -99,6 +105,10 @@ export function studySettingsToPersistenceInput(
       normalized.enablePrePostQuizzes === DEFAULT_STUDY_SETTINGS.enablePrePostQuizzes
         ? null
         : normalized.enablePrePostQuizzes,
+    lessonStudyLoopEnabled:
+      normalized.lessonStudyLoopEnabled === DEFAULT_STUDY_SETTINGS.lessonStudyLoopEnabled
+        ? null
+        : normalized.lessonStudyLoopEnabled,
     showHeatmap: normalized.showHeatmap === DEFAULT_STUDY_SETTINGS.showHeatmap ? null : normalized.showHeatmap,
     showAdvancedInsights:
       normalized.showAdvancedInsights === DEFAULT_STUDY_SETTINGS.showAdvancedInsights
