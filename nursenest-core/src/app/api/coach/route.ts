@@ -8,14 +8,25 @@ import { checkRateLimit } from "@/lib/http/rate-limit-in-memory";
 import {
   buildCoachSystemPrompt,
   buildCoachUserPrompt,
-  titleForIntent,
   followUpsForIntent,
+  isGenerativeCoachIntent,
+  titleForIntent,
   type CoachIntent,
   type CoachRequest,
   type CoachResponse,
 } from "@/lib/coach/study-coach-actions";
+import type { CoachContext } from "@/lib/coach/study-coach-types";
+import {
+  formatInterventionResponse,
+  formatPatternInsightResponse,
+  formatReadinessExplainResponse,
+  formatStudyPriorityResponse,
+  loadCoachBundleForApi,
+  rankInterventions,
+} from "@/lib/coach/study-coach-intelligence";
+import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 
-const INTENTS: CoachIntent[] = [
+const INTENTS: [CoachIntent, ...CoachIntent[]] = [
   "explain_simply",
   "why_wrong",
   "what_next",
@@ -23,10 +34,14 @@ const INTENTS: CoachIntent[] = [
   "topic_review",
   "quick_plan",
   "quiz_concept",
+  "readiness_explain",
+  "study_priority_ranked",
+  "pattern_insight",
+  "intervention_alert",
 ];
 
 const bodySchema = z.object({
-  intent: z.enum(INTENTS as [CoachIntent, ...CoachIntent[]]),
+  intent: z.enum(INTENTS),
   context: z.object({
     content: z.string().max(4000).optional(),
     topic: z.string().max(200).optional(),
@@ -40,6 +55,13 @@ const bodySchema = z.object({
 });
 
 const RATE = { windowMs: 3_600_000, max: 30 } as const;
+
+const DETERMINISTIC: CoachIntent[] = [
+  "readiness_explain",
+  "study_priority_ranked",
+  "pattern_insight",
+  "intervention_alert",
+];
 
 export async function POST(req: Request) {
   const session = await auth();
@@ -56,11 +78,6 @@ export async function POST(req: Request) {
       { error: "Study Coach is not enabled.", code: "FEATURE_DISABLED" },
       { status: 403 },
     );
-  }
-
-  const keyCheck = assertOpenAiKeyConfigured();
-  if (!keyCheck.ok) {
-    return NextResponse.json({ error: keyCheck.message }, { status: 503 });
   }
 
   const rl = checkRateLimit(`study-coach:${userId}`, RATE);
@@ -89,15 +106,77 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Expected JSON body" }, { status: 400 });
   }
 
+  const intent = parsed.intent;
+  const context: CoachContext = parsed.context;
+
+  if (DETERMINISTIC.includes(intent)) {
+    const entitlement = await resolveEntitlementForPage(userId);
+    if (entitlement === "error" || !entitlement.hasAccess) {
+      return NextResponse.json(
+        { error: "An active plan is required for this view.", code: "ENTITLEMENT" },
+        { status: 403 },
+      );
+    }
+    const bundle = await loadCoachBundleForApi(userId, entitlement);
+    if (!bundle) {
+      return NextResponse.json(
+        { error: "Could not load study data. Try again later.", code: "DATA" },
+        { status: 503 },
+      );
+    }
+
+    let response: CoachResponse;
+    switch (intent) {
+      case "readiness_explain":
+        response = formatReadinessExplainResponse(bundle.readiness);
+        break;
+      case "study_priority_ranked":
+        response = formatStudyPriorityResponse(bundle.priorities);
+        break;
+      case "pattern_insight":
+        response = formatPatternInsightResponse(bundle.patterns);
+        break;
+      case "intervention_alert": {
+        const ranked = rankInterventions(bundle.interventions);
+        const top = ranked[0];
+        if (!top) {
+          response = {
+            intent: "intervention_alert",
+            title: titleForIntent("intervention_alert"),
+            content: "No proactive note for this moment. Keep the current plan.",
+            deterministic: true,
+            followUp: followUpsForIntent("intervention_alert"),
+          };
+        } else {
+          response = formatInterventionResponse(top);
+        }
+        break;
+      }
+      default:
+        return NextResponse.json({ error: "Unsupported intent" }, { status: 400 });
+    }
+
+    return NextResponse.json({ response, tokensUsed: 0 });
+  }
+
+  if (!isGenerativeCoachIntent(intent)) {
+    return NextResponse.json({ error: "Unsupported intent" }, { status: 400 });
+  }
+
+  const keyCheck = assertOpenAiKeyConfigured();
+  if (!keyCheck.ok) {
+    return NextResponse.json({ error: keyCheck.message }, { status: 503 });
+  }
+
   const coachReq: CoachRequest = {
-    intent: parsed.intent,
-    context: parsed.context,
+    intent,
+    context,
   };
 
   try {
     const result = await openAiChatCompletion({
       messages: [
-        { role: "system", content: buildCoachSystemPrompt(parsed.intent) },
+        { role: "system", content: buildCoachSystemPrompt(intent) },
         { role: "user", content: buildCoachUserPrompt(coachReq) },
       ],
       temperature: 0.5,
@@ -105,10 +184,10 @@ export async function POST(req: Request) {
     });
 
     const response: CoachResponse = {
-      intent: parsed.intent,
-      title: titleForIntent(parsed.intent),
+      intent,
+      title: titleForIntent(intent),
       content: result.content?.trim() || "",
-      followUp: followUpsForIntent(parsed.intent),
+      followUp: followUpsForIntent(intent),
     };
 
     return NextResponse.json({ response, tokensUsed: result.totalTokens ?? 0 });

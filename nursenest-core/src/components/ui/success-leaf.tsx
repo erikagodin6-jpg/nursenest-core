@@ -2,6 +2,8 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { BrandLeafIcon } from "@/components/brand/brand-leaf-icon";
+import { successLeafTransition } from "@/lib/motion/presets";
+import { pickTransition } from "@/lib/motion/reduced-motion";
 import { useReducedMotion } from "@/lib/motion/use-reduced-motion";
 
 interface SuccessLeafProps {
@@ -27,7 +29,7 @@ export function SuccessLeaf({ show, size = 28, className = "" }: SuccessLeafProp
           className={`inline-flex shrink-0 items-center justify-center ${className}`}
           initial={reduced ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={reduced ? { duration: 0 } : { duration: 0.22, ease: [0.25, 0.1, 0.25, 1] }}
+          transition={pickTransition(reduced, successLeafTransition)}
           aria-hidden
         >
           <BrandLeafIcon tone="success" size={size} />

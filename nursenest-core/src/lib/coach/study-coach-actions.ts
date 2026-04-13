@@ -3,6 +3,7 @@ import "server-only";
 import type {
   CoachActionDefinition,
   CoachContext,
+  CoachFollowUpAction,
   CoachIntent,
   CoachRequest,
   CoachResponse,

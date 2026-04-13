@@ -6,9 +6,8 @@ import {
   notFoundLeafFloatTransition,
   transitionNotFoundLeafEntrance,
 } from "@/lib/motion/presets";
-import { pickTransition, pickVariants } from "@/lib/motion/reduced-motion";
+import { pickTransition } from "@/lib/motion/reduced-motion";
 import { useReducedMotion } from "@/lib/motion/use-reduced-motion";
-import { fadeUpVariants } from "@/lib/motion/presets";
 
 type Props = {
   /** Visual width in px */

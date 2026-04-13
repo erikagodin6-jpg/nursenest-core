@@ -3,13 +3,12 @@
 import { motion } from "framer-motion";
 import { usePathname } from "next/navigation";
 import { type ReactNode } from "react";
+import { BRAND_MOTION, BRAND_MOTION_DISTANCE_PX, EASE_LUXURY } from "./tokens";
 import { useReducedMotion } from "./use-reduced-motion";
 import { usePreviousPathname } from "./use-previous-pathname";
 
-const EASE: [number, number, number, number] = [0.25, 0.1, 0.25, 1];
-/** Between 180–240ms; keeps route changes calm and quick. */
-const DURATION = 0.22;
-const ENTER_Y = 6;
+const DURATION = BRAND_MOTION.heroRevealSec;
+const ENTER_Y = Math.min(6, BRAND_MOTION_DISTANCE_PX.fadeUp);
 
 export type PageTransitionShellProps = {
   children: ReactNode;
@@ -50,7 +49,7 @@ export function PageTransitionShell({
       key={pathname}
       initial={shouldAnimateEnter ? { opacity: 0, y: ENTER_Y } : { opacity: 1, y: 0 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: DURATION, ease: EASE }}
+      transition={{ duration: DURATION, ease: EASE_LUXURY }}
       className="min-h-0"
     >
       {children}
@@ -81,5 +80,10 @@ export function learnerShellShouldDisablePageTransition(pathname: string): boole
   if (pathname.startsWith("/app/baseline-assessment")) return true;
   if (isPracticeTestRunnerPath(pathname)) return true;
   if (isStrategySessionPath(pathname)) return true;
+  /** Lesson reading: single-lesson routes only (hub list keeps a light transition). */
+  if (/^\/app\/lessons\/.+/.test(pathname)) return true;
+  /** Active flashcard deck (not the weak-areas hub). */
+  const flashDeck = pathname.match(/^\/app\/flashcards\/([^/]+)$/);
+  if (flashDeck && flashDeck[1] !== "weak-areas") return true;
   return false;
 }
