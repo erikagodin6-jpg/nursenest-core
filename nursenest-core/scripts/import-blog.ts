@@ -43,10 +43,33 @@ type NormalizedBlogRow = {
 type RunStats = {
   batchNumber: number;
   totalProcessed: number;
-  imported: number;
-  duplicatesSkipped: number;
+  created: number;
+  updated: number;
+  unchangedSkipped: number;
+  dryRunCreates: number;
+  dryRunUpdates: number;
   failures: number;
   failureReasons: string[];
+};
+
+type ExistingPost = {
+  id: string;
+  slug: string;
+  title: string;
+  body: string;
+  tags: string[];
+  postStatus: BlogPostStatus;
+  publishAt: Date | null;
+  scheduledAt: Date | null;
+  legacySource: string | null;
+  seoTitle: string | null;
+  seoDescription: string | null;
+};
+
+type ExistingPostIndex = {
+  bySlug: Map<string, ExistingPost>;
+  byHash: Map<string, ExistingPost>;
+  bySourceKey: Map<string, ExistingPost>;
 };
 
 class SchemaMismatchError extends Error {
@@ -60,6 +83,19 @@ const schemaFailures: string[] = [];
 
 function hashTitleContent(title: string, content: string): string {
   return crypto.createHash("sha256").update(`${title}\n${content}`).digest("hex");
+}
+
+function sourceKeyForRow(row: NormalizedBlogRow): string {
+  return `${row.source}:${String(row.sourceId).trim().toLowerCase()}`;
+}
+
+function sourceTagForRow(row: NormalizedBlogRow): string {
+  return `source-key:${sourceKeyForRow(row)}`;
+}
+
+function parseSourceTag(tags: string[]): string | null {
+  const hit = tags.find((tag) => tag.startsWith("source-key:"));
+  return hit ?? null;
 }
 
 function normalizeSlug(seed: string): string {
@@ -403,14 +439,27 @@ async function* readClientSeoContentRows(filePath: string): AsyncGenerator<Norma
   }
 }
 
-async function loadExistingDedupState(): Promise<{ hashes: Set<string>; slugs: Set<string> }> {
-  const hashes = new Set<string>();
-  const slugs = new Set<string>();
+async function loadExistingDedupState(): Promise<ExistingPostIndex> {
+  const byHash = new Map<string, ExistingPost>();
+  const bySlug = new Map<string, ExistingPost>();
+  const bySourceKey = new Map<string, ExistingPost>();
   let cursor: string | undefined;
 
   while (true) {
     const page = await prisma.blogPost.findMany({
-      select: { id: true, slug: true, title: true, body: true },
+      select: {
+        id: true,
+        slug: true,
+        title: true,
+        body: true,
+        tags: true,
+        postStatus: true,
+        publishAt: true,
+        scheduledAt: true,
+        legacySource: true,
+        seoTitle: true,
+        seoDescription: true,
+      },
       take: 500,
       orderBy: { id: "asc" },
       ...(cursor ? { cursor: { id: cursor }, skip: 1 } : {}),
@@ -418,13 +467,28 @@ async function loadExistingDedupState(): Promise<{ hashes: Set<string>; slugs: S
     if (page.length === 0) break;
 
     for (const post of page) {
-      slugs.add(post.slug);
-      hashes.add(hashTitleContent(post.title, post.body));
+      const fullPost: ExistingPost = {
+        id: post.id,
+        slug: post.slug,
+        title: post.title,
+        body: post.body,
+        tags: [...post.tags],
+        postStatus: post.postStatus,
+        publishAt: post.publishAt,
+        scheduledAt: post.scheduledAt,
+        legacySource: post.legacySource,
+        seoTitle: post.seoTitle,
+        seoDescription: post.seoDescription,
+      };
+      bySlug.set(post.slug, fullPost);
+      byHash.set(hashTitleContent(post.title, post.body), fullPost);
+      const sourceTag = parseSourceTag(post.tags);
+      if (sourceTag) bySourceKey.set(sourceTag.replace(/^source-key:/, ""), fullPost);
     }
     cursor = page[page.length - 1]?.id;
   }
 
-  return { hashes, slugs };
+  return { byHash, bySlug, bySourceKey };
 }
 
 function logBatchProgress(batchStats: RunStats): void {
@@ -433,8 +497,11 @@ function logBatchProgress(batchStats: RunStats): void {
       {
         batch: batchStats.batchNumber,
         totalProcessed: batchStats.totalProcessed,
-        imported: batchStats.imported,
-        duplicatesSkipped: batchStats.duplicatesSkipped,
+        created: batchStats.created,
+        updated: batchStats.updated,
+        unchangedSkipped: batchStats.unchangedSkipped,
+        dryRunCreates: batchStats.dryRunCreates,
+        dryRunUpdates: batchStats.dryRunUpdates,
         failures: batchStats.failures,
       },
       null,
@@ -526,6 +593,11 @@ async function* allSourceRows(): AsyncGenerator<NormalizedBlogRow, void, void> {
   if (fs.existsSync(clientSeoPath)) {
     yield* readClientSeoContentRows(clientSeoPath);
   }
+}
+
+function parseArgs() {
+  const dryRun = process.argv.includes("--dry-run");
+  return { dryRun };
 }
 
 async function main() {

@@ -160,13 +160,33 @@ export default async function LessonsPage({ searchParams }: Props) {
 
   const lessonsBlockFromDb = await withDatabaseFallback(async () => {
     const contentWhere = lessonAccessWhere(entitlement);
-    const contentTotal = await prisma.contentItem.count({ where: contentWhere });
+    const contentFilters: typeof contentWhere[] = [];
+    if (topicFilter || topicSlugFilter) {
+      const term = (topicSlugFilter ?? topicFilter ?? "").trim();
+      if (term.length > 0) {
+        contentFilters.push({
+          OR: [
+            { title: { contains: term, mode: "insensitive" } },
+            { bodySystem: { contains: term, mode: "insensitive" } },
+            { category: { contains: term, mode: "insensitive" } },
+          ],
+        });
+      }
+    }
+    const contentScopedWhere =
+      contentFilters.length > 0
+        ? {
+            AND: [contentWhere, ...contentFilters],
+          }
+        : contentWhere;
+    const contentTotal = await prisma.contentItem.count({ where: contentScopedWhere });
 
-    if (contentTotal > 0) {
+    // Route scoped pathway lessons first whenever pathway-specific filters are active.
+    if (contentTotal > 0 && !pathwayIdFilter) {
       const pageCount = Math.max(1, Math.ceil(contentTotal / LEARNER_APP_LESSONS_PAGE_SIZE) || 1);
       const safePage = Math.min(pageRequested, pageCount);
       const rowsRaw = await prisma.contentItem.findMany({
-        where: contentWhere,
+        where: contentScopedWhere,
         select: { id: true, title: true, summary: true },
         orderBy: { updatedAt: "desc" },
         skip: (safePage - 1) * LEARNER_APP_LESSONS_PAGE_SIZE,

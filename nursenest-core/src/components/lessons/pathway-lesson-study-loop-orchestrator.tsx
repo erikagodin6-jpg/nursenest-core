@@ -159,8 +159,15 @@ export function PathwayLessonStudyLoopOrchestrator({
   const [postWeakIds, setPostWeakIds] = useState<string[]>([]);
   const [loadingPrior, setLoadingPrior] = useState(true);
 
+  const preQuizItems = useMemo(
+    () =>
+      seededShuffle(bankItems as PathwayLessonQuizItem[], `pre:${shuffleSeed}:${questionIds.join("|")}`).slice(0, 15),
+    [bankItems, questionIds, shuffleSeed],
+  );
+
   const postQuizItems = useMemo(
-    () => seededShuffle(bankItems as PathwayLessonQuizItem[], `post:${shuffleSeed}:${questionIds.join("|")}`),
+    () =>
+      seededShuffle(bankItems as PathwayLessonQuizItem[], `post:${shuffleSeed}:${questionIds.join("|")}`).slice(0, 15),
     [bankItems, questionIds, shuffleSeed],
   );
 
@@ -199,11 +206,11 @@ export function PathwayLessonStudyLoopOrchestrator({
       trackClientEvent(PH.learnerLessonStudyLoopShown, {
         pathway_id: pathwayId,
         lesson_slug: lessonSlug,
-        question_count: bankItems.length,
+        question_count: preQuizItems.length,
         pool_count: poolCount,
       });
     }
-  }, [bankItems.length, lessonSlug, loopOn, pathwayId, poolCount, step]);
+  }, [lessonSlug, loopOn, pathwayId, poolCount, preQuizItems.length, step]);
 
   const lessonComplete = progress === "completed";
 
@@ -276,9 +283,9 @@ export function PathwayLessonStudyLoopOrchestrator({
             Test yourself before you start
           </h2>
           <p className="mt-2 max-w-prose text-sm leading-6" style={{ color: "var(--semantic-text-secondary)" }}>
-            {bankItems.length} quick questions from your question bank, matched to this lesson
+            {preQuizItems.length} quick questions from your question bank, matched to this lesson
             {poolCount < 12 ? ` (we found ${poolCount} related items; using the strongest matches).` : "."} Estimated{" "}
-            {Math.max(3, Math.ceil(bankItems.length * 0.6))} minutes. You can skip anytime; the lesson is not blocked.
+            {Math.max(3, Math.ceil(preQuizItems.length * 0.6))} minutes. You can skip anytime; the lesson is not blocked.
           </p>
           {prior?.pre && !loadingPrior ? (
             <p className="mt-2 text-xs" style={{ color: "var(--semantic-text-muted)" }}>
@@ -294,7 +301,7 @@ export function PathwayLessonStudyLoopOrchestrator({
                 trackClientEvent(PH.learnerLessonStudyLoopPreStarted, {
                   pathway_id: pathwayId,
                   lesson_slug: lessonSlug,
-                  n: bankItems.length,
+                  n: preQuizItems.length,
                 });
                 setStep("pre");
                 setPreSub("running");
@@ -337,9 +344,9 @@ export function PathwayLessonStudyLoopOrchestrator({
             Quick check
           </p>
           <LessonAssessmentQuiz
-            items={bankItems as PathwayLessonQuizItem[]}
-            onItemGraded={({ index, correct, selectedIndex }) => {
-              const id = bankItems[index]?.examQuestionId;
+            items={preQuizItems}
+            onItemGraded={({ item, correct, selectedIndex }) => {
+              const id = item.examQuestionId;
               if (id) {
                 answersRef.current[id] = selectedIndex;
                 if (!correct) wrongRef.current.push(id);
@@ -358,7 +365,9 @@ export function PathwayLessonStudyLoopOrchestrator({
                   pathwayId,
                   topic,
                   type: "pre",
-                  questionIds,
+                  questionIds: preQuizItems
+                    .map((q) => (q as LessonBankQuizItem).examQuestionId)
+                    .filter((id): id is string => Boolean(id)),
                   score,
                   total,
                   answers: answersSnap,
@@ -464,9 +473,8 @@ export function PathwayLessonStudyLoopOrchestrator({
           </p>
           <LessonAssessmentQuiz
             items={postQuizItems}
-            onItemGraded={({ index, correct, selectedIndex }) => {
-              const it = postQuizItems[index] as LessonBankQuizItem;
-              const id = it?.examQuestionId;
+            onItemGraded={({ item, correct, selectedIndex }) => {
+              const id = item.examQuestionId;
               if (id) {
                 answersRef.current[id] = selectedIndex;
                 if (!correct) wrongRef.current.push(id);
@@ -487,7 +495,9 @@ export function PathwayLessonStudyLoopOrchestrator({
                   pathwayId,
                   topic,
                   type: "post",
-                  questionIds: postQuizItems.map((q) => (q as LessonBankQuizItem).examQuestionId),
+                  questionIds: postQuizItems
+                    .map((q) => (q as LessonBankQuizItem).examQuestionId)
+                    .filter((id): id is string => Boolean(id)),
                   score,
                   total,
                   answers: answersSnapshot,

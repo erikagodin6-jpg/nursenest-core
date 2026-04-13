@@ -9,6 +9,7 @@ import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 
 /** Production DB uses lowercase status strings on `exam_questions` / `content_items`. */
 export const DB_PUBLISHED = "published" as const;
+const DB_PUBLISHED_VARIANTS = [DB_PUBLISHED, "PUBLISHED"] as const;
 
 export { getAccessibleTiers } from "@/lib/entitlements/accessible-tiers";
 
@@ -37,7 +38,7 @@ function examQuestionRegionOr(country: CountryCode) {
 function lessonPublishedWhere(): Prisma.ContentItemWhereInput {
   return {
     type: "lesson",
-    status: DB_PUBLISHED,
+    status: { in: [...DB_PUBLISHED_VARIANTS] },
   };
 }
 
@@ -153,9 +154,9 @@ export function questionAccessWhere(entitlement: AccessScope): Prisma.ExamQuesti
   if (!entitlement.hasAccess) return { id: { in: [] } };
   if (entitlement.reason === "admin_override") {
     const country = entitlement.country as CountryCode | null;
-    if (!country) return { status: DB_PUBLISHED };
+    if (!country) return { status: { in: [...DB_PUBLISHED_VARIANTS] } };
     return {
-      status: DB_PUBLISHED,
+      status: { in: [...DB_PUBLISHED_VARIANTS] },
       OR: examQuestionRegionOr(country),
     };
   }
@@ -163,7 +164,7 @@ export function questionAccessWhere(entitlement: AccessScope): Prisma.ExamQuesti
   const tier = entitlement.tier as TierCode | null;
   if (!country || !tier) return { id: { in: [] } };
   return {
-    status: DB_PUBLISHED,
+    status: { in: [...DB_PUBLISHED_VARIANTS] },
     tier: { in: examQuestionTiersForUserTier(tier) },
     OR: examQuestionRegionOr(country),
   };
@@ -175,7 +176,7 @@ export function questionAccessWhere(entitlement: AccessScope): Prisma.ExamQuesti
  */
 export function questionBankWhereForProfile(country: CountryCode, tier: TierCode): Prisma.ExamQuestionWhereInput {
   return {
-    status: DB_PUBLISHED,
+    status: { in: [...DB_PUBLISHED_VARIANTS] },
     tier: { in: examQuestionTiersForUserTier(tier) },
     OR: examQuestionRegionOr(country),
   };
@@ -188,7 +189,7 @@ export function questionBankWhereForProfile(country: CountryCode, tier: TierCode
 export function freemiumQuestionWhereForProfile(country: CountryCode, tier: TierCode): Prisma.ExamQuestionWhereInput {
   const tiers = tier === "ALLIED" ? examQuestionTiersForUserTier("ALLIED") : examQuestionTiersForUserTier("LVN_LPN");
   return {
-    status: DB_PUBLISHED,
+    status: { in: [...DB_PUBLISHED_VARIANTS] },
     tier: { in: tiers },
     OR: examQuestionRegionOr(country),
   };

@@ -3,31 +3,53 @@
 /**
  * Interactive lesson assessment quiz runner.
  *
- * Renders questions one at a time with MCQ buttons. After the learner
- * selects an answer the correct option and rationale are revealed.
- * Navigation is forward-only (Next / Finish). On completion, `onComplete`
- * is called with the final score.
+ * Renders all questions at once in a compact "mini exam" layout.
+ * Learners answer every question, submit once, then review rationale-rich
+ * feedback per question (correct answer, selected answer, correctness).
+ * Completion is finalized via a dedicated "continue" action.
  *
  * Designed to be embedded inside both the pre- and post-assessment cards.
  * Does NOT make API calls — the parent card is responsible for persistence.
  */
 
-import { useState, useId } from "react";
+import { useId, useMemo, useRef, useState } from "react";
 import type { PathwayLessonQuizItem } from "@/lib/lessons/pathway-lesson-types";
 
 // ─── Option letters ────────────────────────────────────────────────────────────
 
 const OPTION_LABELS = ["A", "B", "C", "D", "E", "F"] as const;
+const MAX_VISIBLE_QUIZ_ITEMS = 15;
 
-// ─── Types ─────────────────────────────────────────────────────────────────────
+function seededShuffle<T>(items: T[], seed: string): T[] {
+  const arr = [...items];
+  let h = 2166136261 >>> 0;
+  for (let i = 0; i < seed.length; i++) {
+    h ^= seed.charCodeAt(i);
+    h = Math.imul(h, 16777619) >>> 0;
+  }
+  for (let i = arr.length - 1; i > 0; i--) {
+    h = Math.imul(h ^ (h >>> 15), Math.imul(h | 1, 2246822519)) >>> 0;
+    h ^= h + Math.imul(h ^ (h >>> 7), 3266489917) >>> 0;
+    const j = (h >>> 0) % (i + 1);
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
 
-type QuestionState =
-  | { phase: "unanswered" }
-  | { phase: "answered"; selectedIndex: number; correct: boolean };
+function normalizeCorrectIndices(item: PathwayLessonQuizItem): number[] {
+  const raw = (item as PathwayLessonQuizItem & { correct?: number | number[] }).correct;
+  if (Array.isArray(raw)) {
+    return Array.from(new Set(raw.filter((n) => Number.isInteger(n) && n >= 0))).sort((a, b) => a - b);
+  }
+  return Number.isInteger(raw) && typeof raw === "number" && raw >= 0 ? [raw] : [];
+}
 
-type QuizState =
-  | { phase: "in_progress"; questionIndex: number; questionState: QuestionState; correctCount: number }
-  | { phase: "complete"; score: number; total: number };
+function sameSelection(a: number[], b: number[]): boolean {
+  if (a.length !== b.length) return false;
+  const as = [...a].sort((x, y) => x - y);
+  const bs = [...b].sort((x, y) => x - y);
+  return as.every((value, idx) => value === bs[idx]);
+}
 
 // ─── Single question card ──────────────────────────────────────────────────────
 
@@ -35,58 +57,72 @@ function QuestionCard({
   item,
   index,
   total,
-  state,
+  selectedIndices,
+  submitted,
   onSelect,
-  onNext,
-  isLast,
 }: {
   item: PathwayLessonQuizItem;
   index: number;
   total: number;
-  state: QuestionState;
-  onSelect: (i: number) => void;
-  onNext: () => void;
-  isLast: boolean;
+  selectedIndices: number[];
+  submitted: boolean;
+  onSelect: (optionIndex: number) => void;
 }) {
   const headingId = useId();
+  const correctIndices = normalizeCorrectIndices(item);
+  const isSata = correctIndices.length > 1;
+  const answered = selectedIndices.length > 0;
+  const isQuestionCorrect = answered && sameSelection(selectedIndices, correctIndices);
+  const selectedSet = useMemo(() => new Set(selectedIndices), [selectedIndices]);
+  const correctSet = useMemo(() => new Set(correctIndices), [correctIndices]);
 
   return (
     <div
-      className="flex flex-col gap-5"
+      className="rounded-2xl border p-4 sm:p-5"
+      style={{
+        background: "var(--semantic-surface)",
+        borderColor: "var(--semantic-border-soft)",
+      }}
       role="group"
       aria-labelledby={headingId}
     >
-      {/* Question number */}
-      <p
-        className="text-xs font-semibold uppercase tracking-[0.15em]"
-        style={{ color: "var(--semantic-text-secondary)" }}
-        aria-hidden="true"
-      >
-        Question {index + 1} of {total}
-      </p>
+      <div className="flex flex-col gap-2.5">
+        <p
+          className="text-xs font-semibold uppercase tracking-[0.15em]"
+          style={{ color: "var(--semantic-text-secondary)" }}
+          aria-hidden="true"
+        >
+          Question {index + 1} of {total}
+        </p>
+        <p
+          id={headingId}
+          className="text-base font-medium leading-7"
+          style={{ color: "var(--theme-heading-text)" }}
+        >
+          {item.question}
+        </p>
+        {isSata ? (
+          <p className="text-xs font-semibold uppercase tracking-[0.12em]" style={{ color: "var(--semantic-info)" }}>
+            Select all that apply
+          </p>
+        ) : null}
+      </div>
 
-      {/* Stem */}
-      <p
-        id={headingId}
-        className="text-base font-medium leading-7"
-        style={{ color: "var(--theme-heading-text)" }}
+      <ul
+        className="mt-4 flex flex-col gap-2.5"
+        role={isSata ? "group" : "radiogroup"}
+        aria-label={isSata ? "Answer options (multiple select)" : "Answer options"}
       >
-        {item.question}
-      </p>
-
-      {/* Options */}
-      <ul className="flex flex-col gap-2.5" role="radiogroup" aria-label="Answer options">
         {item.options.map((opt, i) => {
-          const isSelected = state.phase === "answered" && state.selectedIndex === i;
-          const isCorrect = i === item.correct;
-          const isRevealed = state.phase === "answered";
+          const isSelected = selectedSet.has(i);
+          const isCorrect = correctSet.has(i);
 
           let surface = "var(--semantic-surface)";
           let border = "var(--semantic-border-soft)";
           let labelColor = "var(--theme-body-text)";
           let badgeContent: string | null = null;
 
-          if (isRevealed) {
+          if (submitted) {
             if (isCorrect) {
               surface = "color-mix(in srgb, var(--semantic-success) 10%, var(--semantic-surface))";
               border = "color-mix(in srgb, var(--semantic-success) 45%, transparent)";
@@ -104,24 +140,24 @@ function QuestionCard({
             <li key={i} role="none">
               <button
                 type="button"
-                role="radio"
+                role={isSata ? "checkbox" : "radio"}
                 aria-checked={isSelected}
-                disabled={isRevealed}
-                onClick={() => !isRevealed && onSelect(i)}
+                disabled={submitted}
+                onClick={() => !submitted && onSelect(i)}
                 className="w-full rounded-xl border px-4 py-3 text-left text-sm font-medium transition-all duration-150 disabled:cursor-default"
                 style={{
-                  background: isRevealed
+                  background: submitted
                     ? surface
                     : isSelected
                     ? "color-mix(in srgb, var(--semantic-brand) 10%, var(--semantic-surface))"
                     : surface,
                   border: `1.5px solid ${
-                    !isRevealed && isSelected
+                    !submitted && isSelected
                       ? "color-mix(in srgb, var(--semantic-brand) 60%, transparent)"
                       : border
                   }`,
                   color: labelColor,
-                  boxShadow: isSelected && !isRevealed ? "0 0 0 3px color-mix(in srgb, var(--semantic-brand) 15%, transparent)" : "none",
+                  boxShadow: isSelected && !submitted ? "0 0 0 3px color-mix(in srgb, var(--semantic-brand) 15%, transparent)" : "none",
                 }}
                 aria-label={`Option ${OPTION_LABELS[i] ?? i + 1}: ${opt}`}
               >
@@ -129,12 +165,12 @@ function QuestionCard({
                   <span
                     className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-xs font-bold"
                     style={{
-                      background: isRevealed && isCorrect
+                      background: submitted && isCorrect
                         ? "var(--semantic-success)"
-                        : isRevealed && isSelected && !isCorrect
+                        : submitted && isSelected && !isCorrect
                         ? "var(--semantic-danger)"
                         : "color-mix(in srgb, var(--semantic-text-secondary) 18%, var(--semantic-surface))",
-                      color: isRevealed && (isCorrect || isSelected)
+                      color: submitted && (isCorrect || isSelected)
                         ? "#fff"
                         : "var(--semantic-text-secondary)",
                     }}
@@ -163,37 +199,45 @@ function QuestionCard({
         })}
       </ul>
 
-      {/* Rationale reveal */}
-      {state.phase === "answered" && item.rationale ? (
-        <div
-          className="rounded-xl border-l-4 px-4 py-3 text-sm leading-6"
-          style={{
-            borderLeftColor: "var(--semantic-info)",
-            background: "color-mix(in srgb, var(--semantic-info) 8%, var(--semantic-surface))",
-            color: "var(--theme-body-text)",
-          }}
-        >
-          <span className="font-semibold" style={{ color: "var(--semantic-info)" }}>
-            Why:{" "}
-          </span>
-          {item.rationale}
-        </div>
-      ) : null}
-
-      {/* Navigation */}
-      {state.phase === "answered" ? (
-        <div className="flex justify-end">
-          <button
-            type="button"
-            onClick={onNext}
-            className="rounded-full px-6 py-2.5 text-sm font-semibold transition-opacity hover:opacity-90 active:scale-[0.98]"
+      {submitted ? (
+        <div className="mt-4 space-y-3">
+          <div
+            className="rounded-xl border px-3.5 py-2.5 text-xs font-semibold uppercase tracking-[0.12em]"
             style={{
-              background: "var(--role-cta, var(--semantic-brand))",
-              color: "var(--role-cta-foreground, #fff)",
+              borderColor: isQuestionCorrect
+                ? "color-mix(in srgb, var(--semantic-success) 30%, transparent)"
+                : answered
+                ? "color-mix(in srgb, var(--semantic-danger) 30%, transparent)"
+                : "color-mix(in srgb, var(--semantic-warning) 30%, transparent)",
+              background: isQuestionCorrect
+                ? "color-mix(in srgb, var(--semantic-success) 10%, var(--semantic-surface))"
+                : answered
+                ? "color-mix(in srgb, var(--semantic-danger) 10%, var(--semantic-surface))"
+                : "color-mix(in srgb, var(--semantic-warning) 10%, var(--semantic-surface))",
+              color: isQuestionCorrect
+                ? "var(--semantic-success)"
+                : answered
+                ? "var(--semantic-danger)"
+                : "var(--semantic-warning)",
             }}
           >
-            {isLast ? "Finish quiz" : "Next question →"}
-          </button>
+            {isQuestionCorrect ? "Correct" : answered ? "Incorrect" : "Unanswered"}
+          </div>
+          {item.rationale ? (
+            <div
+              className="rounded-xl border-l-4 px-4 py-3 text-sm leading-6"
+              style={{
+                borderLeftColor: "var(--semantic-info)",
+                background: "color-mix(in srgb, var(--semantic-info) 8%, var(--semantic-surface))",
+                color: "var(--theme-body-text)",
+              }}
+            >
+              <span className="font-semibold" style={{ color: "var(--semantic-info)" }}>
+                Rationale:{" "}
+              </span>
+              {item.rationale}
+            </div>
+          ) : null}
         </div>
       ) : null}
     </div>
@@ -293,82 +337,161 @@ export function LessonAssessmentQuiz({
   items,
   onComplete,
   onItemGraded,
+  submitLabel = "Submit Quiz",
+  continueLabel = "Continue",
+  shuffleSeed,
+  autoCompleteOnSubmit = false,
 }: {
   items: PathwayLessonQuizItem[];
   onComplete: (result: QuizCompleteResult) => void;
-  /** Fires after each answered question (before advancing). Optional weak-area / analytics hook. */
-  onItemGraded?: (args: { index: number; correct: boolean; selectedIndex: number }) => void;
+  /**
+   * Fires for each graded question after submission.
+   * `selectedIndex` is preserved for legacy consumers (first selected index or -1).
+   */
+  onItemGraded?: (args: {
+    index: number;
+    item: PathwayLessonQuizItem;
+    correct: boolean;
+    selectedIndex: number;
+    selectedIndices: number[];
+  }) => void;
+  submitLabel?: string;
+  continueLabel?: string;
+  shuffleSeed?: string;
+  autoCompleteOnSubmit?: boolean;
 }) {
-  const [state, setState] = useState<QuizState>({
-    phase: "in_progress",
-    questionIndex: 0,
-    questionState: { phase: "unanswered" },
-    correctCount: 0,
-  });
+  const visibleItems = useMemo(() => {
+    if (!items.length) return [];
+    if (items.length <= MAX_VISIBLE_QUIZ_ITEMS) {
+      return shuffleSeed ? seededShuffle(items, `quiz:${shuffleSeed}:${items.length}`) : items;
+    }
+    const shuffled = shuffleSeed
+      ? seededShuffle(items, `quiz:${shuffleSeed}:${items.length}`)
+      : seededShuffle(items, `quiz:fallback:${items.length}:${items[0]?.question ?? ""}`);
+    return shuffled.slice(0, MAX_VISIBLE_QUIZ_ITEMS);
+  }, [items, shuffleSeed]);
 
-  if (state.phase === "complete") {
-    // Parent shows the score UI — this shouldn't stay mounted
-    return null;
+  const [answers, setAnswers] = useState<number[][]>(() => visibleItems.map(() => []));
+  const [submitted, setSubmitted] = useState(false);
+  const [result, setResult] = useState<QuizCompleteResult | null>(null);
+  const completeSentRef = useRef(false);
+
+  if (!visibleItems.length) return null;
+
+  const unansweredCount = answers.filter((selection) => selection.length === 0).length;
+  const allAnswered = unansweredCount === 0;
+
+  function commitCompletionOnce(next: QuizCompleteResult) {
+    if (completeSentRef.current) return;
+    completeSentRef.current = true;
+    onComplete(next);
   }
 
-  const { questionIndex, questionState, correctCount } = state;
-  const item = items[questionIndex];
-  if (!item) return null;
-
-  const isLast = questionIndex === items.length - 1;
-
-  function handleSelect(selectedIndex: number) {
-    if (state.phase !== "in_progress") return;
-    if (state.questionState.phase === "answered") return;
-    const correct = selectedIndex === item!.correct;
-    setState((prev) => {
-      if (prev.phase !== "in_progress") return prev;
-      return {
-        ...prev,
-        questionState: { phase: "answered", selectedIndex, correct },
-      };
+  function toggleSelection(questionIndex: number, optionIndex: number) {
+    if (submitted) return;
+    setAnswers((prev) => {
+      const item = visibleItems[questionIndex];
+      if (!item) return prev;
+      const correctIndices = normalizeCorrectIndices(item);
+      const isSata = correctIndices.length > 1;
+      const next = [...prev];
+      const current = next[questionIndex] ?? [];
+      if (isSata) {
+        next[questionIndex] = current.includes(optionIndex)
+          ? current.filter((idx) => idx !== optionIndex)
+          : [...current, optionIndex];
+      } else {
+        next[questionIndex] = [optionIndex];
+      }
+      return next;
     });
   }
 
-  function handleNext() {
-    if (state.phase !== "in_progress") return;
-    if (state.questionState.phase !== "answered") return;
-    const gained = state.questionState.correct ? 1 : 0;
-    const newCorrect = correctCount + gained;
-    const nextIndex = questionIndex + 1;
-    if (state.questionState.phase === "answered") {
+  function handleSubmit() {
+    if (submitted || !allAnswered) return;
+    let score = 0;
+    visibleItems.forEach((item, index) => {
+      const selectedIndices = [...(answers[index] ?? [])].sort((a, b) => a - b);
+      const correctIndices = normalizeCorrectIndices(item);
+      const correct = sameSelection(selectedIndices, correctIndices);
+      if (correct) score += 1;
       onItemGraded?.({
-        index: questionIndex,
-        correct: state.questionState.correct,
-        selectedIndex: state.questionState.selectedIndex,
+        index,
+        item,
+        correct,
+        selectedIndex: selectedIndices[0] ?? -1,
+        selectedIndices,
       });
+    });
+    const nextResult = { score, total: visibleItems.length };
+    setResult(nextResult);
+    setSubmitted(true);
+    if (autoCompleteOnSubmit) {
+      commitCompletionOnce(nextResult);
     }
+  }
 
-    if (nextIndex >= items.length) {
-      setState({ phase: "complete", score: newCorrect, total: items.length });
-      onComplete({ score: newCorrect, total: items.length });
-    } else {
-      setState({
-        phase: "in_progress",
-        questionIndex: nextIndex,
-        questionState: { phase: "unanswered" },
-        correctCount: newCorrect,
-      });
-    }
+  function handleContinue() {
+    if (!result) return;
+    commitCompletionOnce(result);
   }
 
   return (
     <div className="flex flex-col gap-6">
-      <QuizProgressBar current={questionIndex} total={items.length} />
-      <QuestionCard
-        item={item}
-        index={questionIndex}
-        total={items.length}
-        state={questionState}
-        onSelect={handleSelect}
-        onNext={handleNext}
-        isLast={isLast}
-      />
+      {!submitted ? <QuizProgressBar current={visibleItems.length - unansweredCount} total={visibleItems.length} /> : null}
+
+      <div className="space-y-4">
+        {visibleItems.map((item, index) => (
+          <QuestionCard
+            key={`${item.examQuestionId ?? item.question.slice(0, 40)}-${index}`}
+            item={item}
+            index={index}
+            total={visibleItems.length}
+            selectedIndices={answers[index] ?? []}
+            submitted={submitted}
+            onSelect={(optionIndex) => toggleSelection(index, optionIndex)}
+          />
+        ))}
+      </div>
+
+      {submitted && result ? (
+        <div className="rounded-2xl border p-4 sm:p-5" style={{ borderColor: "var(--semantic-border-soft)" }}>
+          <QuizScoreSummary score={result.score} total={result.total} label="Quiz score" />
+          {!autoCompleteOnSubmit ? (
+            <div className="mt-5 flex justify-end">
+              <button
+                type="button"
+                onClick={handleContinue}
+                className="rounded-full px-6 py-2.5 text-sm font-semibold transition-opacity hover:opacity-90 active:scale-[0.98]"
+                style={{
+                  background: "var(--role-cta, var(--semantic-brand))",
+                  color: "var(--role-cta-foreground, #fff)",
+                }}
+              >
+                {continueLabel}
+              </button>
+            </div>
+          ) : null}
+        </div>
+      ) : (
+        <div className="flex flex-col gap-3 rounded-2xl border p-4 sm:flex-row sm:items-center sm:justify-between sm:p-5" style={{ borderColor: "var(--semantic-border-soft)" }}>
+          <p className="text-sm" style={{ color: "var(--semantic-text-secondary)" }}>
+            {allAnswered ? "All questions answered. Submit when ready." : `${unansweredCount} question${unansweredCount === 1 ? "" : "s"} remaining`}
+          </p>
+          <button
+            type="button"
+            onClick={handleSubmit}
+            disabled={!allAnswered}
+            className="rounded-full px-6 py-2.5 text-sm font-semibold transition-opacity hover:opacity-90 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
+            style={{
+              background: "var(--role-cta, var(--semantic-brand))",
+              color: "var(--role-cta-foreground, #fff)",
+            }}
+          >
+            {submitLabel}
+          </button>
+        </div>
+      )}
     </div>
   );
 }
