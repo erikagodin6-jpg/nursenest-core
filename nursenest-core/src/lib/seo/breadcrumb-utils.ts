@@ -1,4 +1,5 @@
 import { resolveCanonicalSiteOrigin } from "@/lib/seo/canonical-site";
+import { getNursingRoleLabel } from "@/lib/labels/nursing-role-labels";
 
 /** Absolute URL for public schema.org `item` fields. */
 export function toAbsoluteSiteUrl(pathOrUrl: string): string {
@@ -17,7 +18,7 @@ export function countryLabelFromSlug(countrySlug: string): string {
 
 /**
  * Short label for role track segment (matches URL segment; wording is country-aware where needed).
- * US practical/vocational nursing uses LVN/LPN; Canada PN track uses RPN or LPN/LVN per pathway.
+ * US practical/vocational nursing uses LPN / LVN; Canada PN track uses RPN.
  */
 export function formatRoleTrackLabel(roleTrack: string, countrySlug?: string): string {
   const t = roleTrack.toLowerCase();
@@ -25,7 +26,7 @@ export function formatRoleTrackLabel(roleTrack: string, countrySlug?: string): s
   if (t === "rpn") return "RPN";
   if (t === "rn") return "RN";
   if (t === "np") return "NP";
-  if (t === "lpn") return country === "us" ? "LVN/LPN" : "LPN/LVN";
+  if (t === "lpn") return getNursingRoleLabel({ country: country === "us" ? "US" : "CA", role: "PN" });
   if (t === "allied") return "Allied health";
   return roleTrack.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
 }

@@ -37,6 +37,7 @@ import {
   MARKETING_SECONDARY_CTA_CLASS,
   MARKETING_TERTIARY_LINK_CLASS,
 } from "@/lib/theme/marketing-hero-pattern";
+import { getExamLabel, getNursingRoleLabel } from "@/lib/labels/nursing-role-labels";
 import { PricingHero } from "@/components/marketing/pricing-hero";
 import {
   ValuePropsStrip,
@@ -111,15 +112,6 @@ function tierToSegment(tier: TierCode, isUS?: boolean): Segment {
     default: return isUS ? "rn" : "rn";
   }
 }
-
-const SEGMENT_LABELS: Record<Segment, string> = {
-  prenursing: "Pre-Nursing",
-  newgrad: "New Grad",
-  rn: "RN / NCLEX-RN",
-  pn: "RPN / REx-PN",
-  np: "NP",
-  allied: "Allied Health",
-};
 
 const DURATION_LABELS: Record<BillingDuration, string> = {
   monthly: "Monthly",
@@ -243,6 +235,17 @@ export function PricingPageClient({
   }, [t]);
 
   const isUS = region === "US";
+  const segmentLabels: Record<Segment, string> = useMemo(
+    () => ({
+      prenursing: "Pre-Nursing",
+      newgrad: "New Grad",
+      rn: "RN / NCLEX-RN",
+      pn: `${getNursingRoleLabel({ country: region, role: "PN" })} / ${getExamLabel({ country: region, role: "PN" })}`,
+      np: "NP",
+      allied: "Allied Health",
+    }),
+    [region],
+  );
   const tier = segmentToTier(segment, isUS);
   const narrative = buildTierPricingNarrative(t, tier);
   const isAllied = segment === "allied";
@@ -515,7 +518,7 @@ export function PricingPageClient({
                     : "border border-[var(--border-medium)] bg-card text-[var(--palette-text)] hover:-translate-y-px hover:bg-[var(--surface-interactive-hover)] hover:shadow-[var(--elevation-hover)]"
                 }`}
               >
-                {SEGMENT_LABELS[id]}
+                {segmentLabels[id]}
               </button>
             ))}
           </div>

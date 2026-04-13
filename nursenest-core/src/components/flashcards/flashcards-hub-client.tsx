@@ -226,6 +226,7 @@ export function FlashcardsHubClient({
         });
 
   const totalDue = (dueSummary?.dueToday ?? 0) + (dueSummary?.overdue ?? 0);
+  const isNpPathwayFilter = filters.pathwayId.includes("-np-");
   const modeLabel: Record<BuilderMode, string> = {
     term_to_definition: "Active Recall",
     definition_to_term: "Reverse Recall",
@@ -684,7 +685,9 @@ export function FlashcardsHubClient({
         emptyMessage={
           filters.source
             ? `No ${filters.source} decks found. Try a different filter.`
-            : t("learner.flashcards.hub.loadingDecks")
+            : isNpPathwayFilter
+              ? "Flashcard coverage for this NP pathway is in progress. Use Question Bank and Lessons while decks are being populated."
+              : t("learner.flashcards.hub.loadingDecks")
         }
       />
 

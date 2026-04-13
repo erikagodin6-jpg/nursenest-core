@@ -103,6 +103,7 @@ export function FlashcardDeckCard({ deck }: { deck: DeckCardRow }) {
   const accentVar = deckSourceAccentVar(source);
   const due = deck.due ?? 0;
   const overdue = deck.overdue ?? 0;
+  const isCoverageInProgress = !deck.locked && deck.cardCount <= 0;
 
   const displayTitle = formatTitleCase(deck.title);
   return (
@@ -177,6 +178,18 @@ export function FlashcardDeckCard({ deck }: { deck: DeckCardRow }) {
           >
             {deck.cardCount} {deck.cardCount === 1 ? "card" : "cards"}
           </span>
+          {isCoverageInProgress ? (
+            <span
+              className="inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-semibold"
+              style={{
+                background: "color-mix(in srgb, var(--semantic-warning) 14%, transparent)",
+                color: "var(--semantic-warning)",
+                border: "1px solid color-mix(in srgb, var(--semantic-warning) 24%, transparent)",
+              }}
+            >
+              In progress
+            </span>
+          ) : null}
           {!deck.locked ? <DueBadge due={due} overdue={overdue} /> : null}
         </div>
 
@@ -190,6 +203,18 @@ export function FlashcardDeckCard({ deck }: { deck: DeckCardRow }) {
             }}
           >
             Unlock
+          </Link>
+        ) : isCoverageInProgress ? (
+          <Link
+            href="/app/questions"
+            className="inline-flex items-center rounded-full px-4 py-1.5 text-xs font-semibold transition"
+            style={{
+              background: "color-mix(in srgb, var(--semantic-info) 15%, var(--bg-card, #fff))",
+              color: "var(--semantic-info-text, var(--semantic-info))",
+              border: "1px solid color-mix(in srgb, var(--semantic-info) 30%, transparent)",
+            }}
+          >
+            Use Question Bank
           </Link>
         ) : (
           <Link

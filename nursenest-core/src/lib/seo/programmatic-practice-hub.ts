@@ -68,10 +68,10 @@ export function buildPracticeHubContext(slug: string, region: MarketingRegionTog
   }
 
   if (examKey === "PN") {
-    const examLabel = pnRegion === "US" ? "NCLEX-PN (LPN) Practice Questions" : "REx-PN (RPN) Practice Questions";
+    const examLabel = pnRegion === "US" ? "NCLEX-PN (LPN / LVN) Practice Questions" : "REx-PN (RPN) Practice Questions";
     const lead =
       pnRegion === "US"
-        ? "Prepare for the NCLEX-PN with LPN scope, safety, and delegation-focused practice."
+        ? "Prepare for the NCLEX-PN with LPN / LVN scope, safety, and delegation-focused practice."
         : "Prepare for the REx-PN entry-to-practice exam with Canadian RPN terminology and scope-aware scenarios.";
     return {
       examKey,

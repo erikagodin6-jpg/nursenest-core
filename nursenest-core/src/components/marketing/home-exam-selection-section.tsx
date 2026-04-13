@@ -11,6 +11,7 @@ import { FadeUp, StaggerGroup, StaggerItem } from "@/lib/motion";
 import { formatEyebrow, formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
 import { getPathwayHubCta } from "@/lib/copy/cta-copy";
 import type { LucideIcon } from "lucide-react";
+import { getNursingRoleLabel } from "@/lib/labels/nursing-role-labels";
 
 type ExamCard = {
   id: string;
@@ -55,7 +56,7 @@ export function HomeExamSelectionSection() {
       accentColor: "var(--semantic-warning)",
       titleKey: region === "US" ? "home.conversion.examCard.pnTitleUS" : "home.conversion.examCard.pnTitleCA",
       descKey: region === "US" ? "home.conversion.examCard.pnDescUS" : "home.conversion.examCard.pnDescCA",
-      pathwayLabel: "PN",
+      pathwayLabel: getNursingRoleLabel({ country: region, role: "PN" }),
       href: loc(marketingExamHubPath(region, "pn")),
     },
     {

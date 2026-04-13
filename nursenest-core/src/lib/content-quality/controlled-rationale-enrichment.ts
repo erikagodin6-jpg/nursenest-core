@@ -74,6 +74,11 @@ export type ControlledRationaleEnrichment = {
   clinicalPearl: string;
   topicAnchor: string | null;
   skippedReason?: string;
+  diagnostics?: {
+    sourceAnchorCount: number;
+    sourceAnchorWordCount: number;
+    minimumSubstanceMet: boolean;
+  };
 };
 
 const FILLER_PHRASES = [
@@ -184,6 +189,17 @@ function buildClinicalPearl(seed: ControlledRationaleSeed, batchId: HighYieldRat
 
 export function buildControlledRationaleEnrichment(seed: ControlledRationaleSeed): ControlledRationaleEnrichment {
   const batchId = detectBatch(seed);
+  const sourceAnchors = [
+    seed.correctAnswerExplanation,
+    seed.rationale,
+    seed.clinicalReasoning,
+    seed.keyTakeaway,
+  ]
+    .map((x) => normalizeSentenceSpacing(x ?? ""))
+    .filter(Boolean);
+  const sourceAnchorCount = sourceAnchors.length;
+  const sourceAnchorWordCount = sourceAnchors.reduce((acc, x) => acc + wordCount(x), 0);
+
   if (!batchId) {
     return {
       batchId: null,
@@ -193,17 +209,32 @@ export function buildControlledRationaleEnrichment(seed: ControlledRationaleSeed
       clinicalPearl: buildClinicalPearl(seed, null),
       topicAnchor: buildTopicAnchor(seed),
       skippedReason: "not_high_yield_batch",
+      diagnostics: {
+        sourceAnchorCount,
+        sourceAnchorWordCount,
+        minimumSubstanceMet: false,
+      },
     };
   }
 
-  const hasSourceAnchor = [
-    seed.correctAnswerExplanation,
-    seed.rationale,
-    seed.clinicalReasoning,
-    seed.keyTakeaway,
-  ].some((x) => wordCount(x ?? "") >= 6);
+  if (sourceAnchorCount === 0) {
+    return {
+      batchId,
+      applied: false,
+      whyCorrect: "Clinical reasoning is not yet on file for this item.",
+      whyWrong: "Detailed distractor explanations are not available for this item yet.",
+      clinicalPearl: "A concise clinical pearl is not available for this item yet.",
+      topicAnchor: buildTopicAnchor(seed),
+      skippedReason: "no_source_anchor",
+      diagnostics: {
+        sourceAnchorCount,
+        sourceAnchorWordCount,
+        minimumSubstanceMet: false,
+      },
+    };
+  }
 
-  if (!hasSourceAnchor) {
+  if (sourceAnchorWordCount < 12) {
     return {
       batchId,
       applied: false,
@@ -212,6 +243,11 @@ export function buildControlledRationaleEnrichment(seed: ControlledRationaleSeed
       clinicalPearl: "A concise clinical pearl is not available for this item yet.",
       topicAnchor: buildTopicAnchor(seed),
       skippedReason: "source_content_too_weak",
+      diagnostics: {
+        sourceAnchorCount,
+        sourceAnchorWordCount,
+        minimumSubstanceMet: false,
+      },
     };
   }
 
@@ -230,6 +266,11 @@ export function buildControlledRationaleEnrichment(seed: ControlledRationaleSeed
       clinicalPearl: "A concise clinical pearl is not available for this item yet.",
       topicAnchor,
       skippedReason: "below_minimum_substance_threshold",
+      diagnostics: {
+        sourceAnchorCount,
+        sourceAnchorWordCount,
+        minimumSubstanceMet: false,
+      },
     };
   }
 
@@ -240,6 +281,11 @@ export function buildControlledRationaleEnrichment(seed: ControlledRationaleSeed
     whyWrong,
     clinicalPearl,
     topicAnchor,
+    diagnostics: {
+      sourceAnchorCount,
+      sourceAnchorWordCount,
+      minimumSubstanceMet: true,
+    },
   };
 }
 

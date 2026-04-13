@@ -8,6 +8,7 @@
  */
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { resolveLessonContextForPathway } from "@/lib/lessons/lesson-region-exam";
+import { getNursingRoleLabel } from "@/lib/labels/nursing-role-labels";
 
 /** Country label for visible copy and meta. */
 export function pathwayCountryLabel(pathway: ExamPathwayDefinition): "Canada" | "United States" {
@@ -36,13 +37,14 @@ export function pathwayLessonHubH1(pathway: ExamPathwayDefinition): string {
   const place = pathwayCountryLabel(pathway);
   const sn = pathway.shortName;
   const examName = pathwayRegionAwareExamName(pathway);
+  const country = pathway.countrySlug === "canada" ? "CA" : "US";
   switch (pathway.roleTrack) {
     case "rn":
       return `NCLEX-RN clinical lessons · ${place} · ${sn}`;
     case "lpn":
-      return `${examName} (LPN) clinical lessons · ${place} · ${sn}`;
+      return `${examName} (${getNursingRoleLabel({ country, role: "PN" })}) clinical lessons · ${place} · ${sn}`;
     case "rpn":
-      return `${examName} (RPN) clinical lessons · ${place} · ${sn}`;
+      return `${examName} (${getNursingRoleLabel({ country, role: "PN" })}) clinical lessons · ${place} · ${sn}`;
     case "np":
       return `${examName} exam review lessons · ${place} · ${sn}`;
     case "allied":
