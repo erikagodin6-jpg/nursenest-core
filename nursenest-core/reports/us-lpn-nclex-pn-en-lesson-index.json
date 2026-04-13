@@ -20,7 +20,7 @@
     "title": "Heart failure — PN scope (NCLEX-PN, US)",
     "category": "cardiovascular",
     "subcategory": "Heart failure",
-    "completeness": "EMPTY",
+    "completeness": "COMPLETE",
     "questions": "yes"
   },
   {
@@ -60,7 +60,7 @@
     "title": "Shock — PN scope (NCLEX-PN, US)",
     "category": "cardiovascular",
     "subcategory": "Shock",
-    "completeness": "EMPTY",
+    "completeness": "COMPLETE",
     "questions": "yes"
   },
   {
@@ -68,7 +68,7 @@
     "title": "Asthma — PN scope (NCLEX-PN, US)",
     "category": "respiratory",
     "subcategory": "Asthma",
-    "completeness": "EMPTY",
+    "completeness": "COMPLETE",
     "questions": "yes"
   },
   {
@@ -76,7 +76,7 @@
     "title": "ARDS — PN scope (NCLEX-PN, US)",
     "category": "respiratory",
     "subcategory": "ARDS",
-    "completeness": "EMPTY",
+    "completeness": "COMPLETE",
     "questions": "yes"
   },
   {
@@ -92,7 +92,7 @@
     "title": "COPD & respiratory basics — PN scope (NCLEX-PN, US)",
     "category": "respiratory",
     "subcategory": "COPD & respiratory basics",
-    "completeness": "EMPTY",
+    "completeness": "COMPLETE",
     "questions": "yes"
   },
   {
@@ -100,7 +100,7 @@
     "title": "ABG interpretation — PN scope (NCLEX-PN, US)",
     "category": "respiratory",
     "subcategory": "ABG interpretation",
-    "completeness": "EMPTY",
+    "completeness": "COMPLETE",
     "questions": "yes"
   },
   {
@@ -108,7 +108,7 @@
     "title": "Acid–base disorders (advanced) — PN scope (NCLEX-PN, US)",
     "category": "renal",
     "subcategory": "Acid–base disorders (advanced)",
-    "completeness": "EMPTY",
+    "completeness": "COMPLETE",
     "questions": "yes"
   },
   {
@@ -116,7 +116,7 @@
     "title": "Sodium imbalance — PN scope (NCLEX-PN, US)",
     "category": "renal",
     "subcategory": "Sodium imbalance",
-    "completeness": "EMPTY",
+    "completeness": "COMPLETE",
     "questions": "yes"
   },
   {
@@ -124,7 +124,7 @@
     "title": "Potassium imbalance — PN scope (NCLEX-PN, US)",
     "category": "renal",
     "subcategory": "Potassium imbalance",
-    "completeness": "EMPTY",
+    "completeness": "COMPLETE",
     "questions": "yes"
   },
   {
@@ -196,7 +196,7 @@
     "title": "Fluid deficit vs excess — PN scope (NCLEX-PN, US)",
     "category": "renal",
     "subcategory": "Fluid deficit vs excess",
-    "completeness": "EMPTY",
+    "completeness": "COMPLETE",
     "questions": "yes"
   },
   {
@@ -252,7 +252,7 @@
     "title": "Heart Failure Monitoring (NCLEX-PN, US)",
     "category": "cardiovascular",
     "subcategory": "Cardiovascular (PN)",
-    "completeness": "EMPTY",
+    "completeness": "COMPLETE",
     "questions": "yes"
   },
   {
@@ -276,7 +276,7 @@
     "title": "Oxygen Devices for PN Care (NCLEX-PN, US)",
     "category": "respiratory",
     "subcategory": "Respiratory (PN)",
-    "completeness": "EMPTY",
+    "completeness": "COMPLETE",
     "questions": "yes"
   },
   {
@@ -292,7 +292,7 @@
     "title": "COPD Home Care (NCLEX-PN, US)",
     "category": "respiratory",
     "subcategory": "Respiratory (PN)",
-    "completeness": "EMPTY",
+    "completeness": "COMPLETE",
     "questions": "yes"
   },
   {
@@ -300,7 +300,7 @@
     "title": "Insulin Administration Checks (NCLEX-PN, US)",
     "category": "endocrine",
     "subcategory": "Pharmacology (PN)",
-    "completeness": "EMPTY",
+    "completeness": "COMPLETE",
     "questions": "yes"
   },
   {
@@ -324,7 +324,7 @@
     "title": "I&O & Fluid Restriction Teaching (NCLEX-PN, US)",
     "category": "renal",
     "subcategory": "Fluids & Electrolytes (PN)",
-    "completeness": "EMPTY",
+    "completeness": "COMPLETE",
     "questions": "yes"
   },
   {
@@ -332,7 +332,7 @@
     "title": "Hypokalemia Symptoms (NCLEX-PN, US)",
     "category": "renal",
     "subcategory": "Fluids & Electrolytes (PN)",
-    "completeness": "EMPTY",
+    "completeness": "COMPLETE",
     "questions": "yes"
   },
   {
@@ -340,7 +340,7 @@
     "title": "Daily Weights Pattern (NCLEX-PN, US)",
     "category": "renal",
     "subcategory": "Fluids & Electrolytes (PN)",
-    "completeness": "EMPTY",
+    "completeness": "COMPLETE",
     "questions": "yes"
   },
   {
@@ -364,7 +364,7 @@
     "title": "Stroke Sequela & Mobility Assist (NCLEX-PN, US)",
     "category": "neuro",
     "subcategory": "Neurological (PN)",
-    "completeness": "EMPTY",
+    "completeness": "COMPLETE",
     "questions": "yes"
   },
   {
@@ -372,7 +372,7 @@
     "title": "Seizure Observation (NCLEX-PN, US)",
     "category": "neuro",
     "subcategory": "Neurological (PN)",
-    "completeness": "EMPTY",
+    "completeness": "COMPLETE",
     "questions": "yes"
   },
   {
@@ -396,7 +396,7 @@
     "title": "Catheter Care & CAUTI Prevention (NCLEX-PN, US)",
     "category": "renal",
     "subcategory": "Renal & GU (PN)",
-    "completeness": "EMPTY",
+    "completeness": "COMPLETE",
     "questions": "yes"
   },
   {
@@ -404,7 +404,7 @@
     "title": "Dialysis Diet Teaching (NCLEX-PN, US)",
     "category": "renal",
     "subcategory": "Renal & GU (PN)",
-    "completeness": "EMPTY",
+    "completeness": "COMPLETE",
     "questions": "yes"
   },
   {
@@ -556,7 +556,7 @@
     "title": "Insulin administration safety — NCLEX-PN (United States)",
     "category": "endocrine",
     "subcategory": "Diabetes medications",
-    "completeness": "PARTIAL",
+    "completeness": "COMPLETE",
     "questions": "yes"
   },
   {
@@ -596,7 +596,7 @@
     "title": "Shock patterns & nursing cues — NCLEX-PN (United States)",
     "category": "cardiovascular",
     "subcategory": "Shock",
-    "completeness": "PARTIAL",
+    "completeness": "COMPLETE",
     "questions": "yes"
   },
   {
@@ -604,7 +604,7 @@
     "title": "AKI: urine output & creatinine cues — NCLEX-PN (United States)",
     "category": "renal",
     "subcategory": "Renal",
-    "completeness": "PARTIAL",
+    "completeness": "COMPLETE",
     "questions": "yes"
   },
   {
@@ -612,7 +612,7 @@
     "title": "Hyperglycemic crises: assessment differences — NCLEX-PN (United States)",
     "category": "endocrine",
     "subcategory": "Endocrine",
-    "completeness": "PARTIAL",
+    "completeness": "COMPLETE",
     "questions": "yes"
   },
   {
@@ -620,7 +620,7 @@
     "title": "Heart failure: volume overload cues — NCLEX-PN (United States)",
     "category": "cardiovascular",
     "subcategory": "Cardiovascular",
-    "completeness": "PARTIAL",
+    "completeness": "COMPLETE",
     "questions": "yes"
   },
   {
@@ -628,7 +628,7 @@
     "title": "COPD exacerbation: oxygen & work of breathing — NCLEX-PN (United States)",
     "category": "respiratory",
     "subcategory": "COPD",
-    "completeness": "PARTIAL",
+    "completeness": "COMPLETE",
     "questions": "yes"
   },
   {
@@ -644,7 +644,7 @@
     "title": "Acute stroke: time-sensitive reporting — NCLEX-PN (United States)",
     "category": "neuro",
     "subcategory": "Neurological",
-    "completeness": "PARTIAL",
+    "completeness": "COMPLETE",
     "questions": "yes"
   },
   {
@@ -652,7 +652,7 @@
     "title": "Neuro checks after ICH pathway — NCLEX-PN (United States)",
     "category": "neuro",
     "subcategory": "Neurological",
-    "completeness": "PARTIAL",
+    "completeness": "COMPLETE",
     "questions": "yes"
   },
   {
@@ -660,7 +660,7 @@
     "title": "GI bleed: hemodynamic stability cues — NCLEX-PN (United States)",
     "category": "cardiovascular",
     "subcategory": "Gastrointestinal",
-    "completeness": "PARTIAL",
+    "completeness": "COMPLETE",
     "questions": "yes"
   },
   {
@@ -676,7 +676,7 @@
     "title": "Asthma exacerbation: monitoring — NCLEX-PN (United States)",
     "category": "respiratory",
     "subcategory": "Respiratory",
-    "completeness": "PARTIAL",
+    "completeness": "COMPLETE",
     "questions": "yes"
   },
   {
@@ -684,7 +684,7 @@
     "title": "Hyperkalemia ECG & safety — NCLEX-PN (United States)",
     "category": "renal",
     "subcategory": "Fluids & electrolytes",
-    "completeness": "PARTIAL",
+    "completeness": "COMPLETE",
     "questions": "yes"
   },
   {
@@ -692,7 +692,7 @@
     "title": "Hyponatremia symptoms & monitoring — NCLEX-PN (United States)",
     "category": "renal",
     "subcategory": "Fluids & electrolytes",
-    "completeness": "PARTIAL",
+    "completeness": "COMPLETE",
     "questions": "yes"
   },
   {
@@ -717,7 +717,7 @@
     "category": "safety",
     "subcategory": "Mental health",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "bp26-uslpn-psy-suicide-safety",
@@ -725,7 +725,7 @@
     "category": "safety",
     "subcategory": "Mental health",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "bp26-uslpn-mat-postpartum-hem",
@@ -836,7 +836,7 @@
     "title": "Renal and genitourinary care — PN scope (NCLEX-PN, US)",
     "category": "renal",
     "subcategory": "Renal and genitourinary care",
-    "completeness": "EMPTY",
+    "completeness": "COMPLETE",
     "questions": "yes"
   },
   {
@@ -2045,7 +2045,7 @@
     "category": "safety",
     "subcategory": "Pharmacology",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "cultural-safety-rpn",
@@ -3805,7 +3805,7 @@
     "category": "safety",
     "subcategory": "Pharmacology",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "meningitis-basics-rpn",
@@ -4021,7 +4021,7 @@
     "category": "safety",
     "subcategory": "Pharmacology",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "npwt-basics-rpn",
@@ -4085,7 +4085,7 @@
     "category": "safety",
     "subcategory": "Pharmacology",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "opioid-safety-rpn",
@@ -4269,7 +4269,7 @@
     "category": "safety",
     "subcategory": "Pharmacology",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "phenylketonuria-rpn",
@@ -4325,7 +4325,7 @@
     "category": "safety",
     "subcategory": "Pharmacology",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "postmortem-care-rpn",
@@ -4437,7 +4437,7 @@
     "category": "safety",
     "subcategory": "Pharmacology",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "renal-artery-stenosis-rpn",
@@ -6141,7 +6141,7 @@
     "category": "safety",
     "subcategory": "Pharmacology",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "medication-error-prevention-for-practical-nurses-rpn",
@@ -6149,7 +6149,7 @@
     "category": "safety",
     "subcategory": "Pharmacology",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "non-pharmacological-pain-management-for-practical-rpn",
@@ -6157,7 +6157,7 @@
     "category": "safety",
     "subcategory": "Pharmacology",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "opioid-overdose-recognition-and-response-for-rpn",
@@ -6165,7 +6165,7 @@
     "category": "safety",
     "subcategory": "Pharmacology",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "pharmacology-foundations-for-practical-nurses-rpn",
@@ -6173,7 +6173,7 @@
     "category": "safety",
     "subcategory": "Pharmacology",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "polypharmacy-management-for-practical-nurses-rpn",
@@ -6181,7 +6181,7 @@
     "category": "safety",
     "subcategory": "Pharmacology",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "rectal-medication-administration-for-practical-nurses-rpn",
@@ -6189,7 +6189,7 @@
     "category": "safety",
     "subcategory": "Pharmacology",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "rpn-medication-calculations-rpn",
@@ -6197,7 +6197,7 @@
     "category": "safety",
     "subcategory": "Pharmacology",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "sucralfate-rpn-medication-guide-rpn",
@@ -6205,7 +6205,7 @@
     "category": "safety",
     "subcategory": "Pharmacology",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "reproductive-and-womens-health-for-practical-rpn",
@@ -8254,5 +8254,165 @@
     "subcategory": "General",
     "completeness": "PARTIAL",
     "questions": "no"
+  },
+  {
+    "slug": "neuro-deterioration-escalation",
+    "title": "Neuro Deterioration: Escalation Triggers (NCLEX-PN)",
+    "category": "neuro",
+    "subcategory": "Neuro Deterioration",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  },
+  {
+    "slug": "early-vs-late-shock",
+    "title": "Early vs Late Shock: Recognition and Priorities (NCLEX-PN)",
+    "category": "cardiovascular",
+    "subcategory": "Shock Stages",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  },
+  {
+    "slug": "shock-states-comparison",
+    "title": "Shock States Comparison: Hypovolemic, Cardiogenic, Obstructive, Distributive (NCLEX-PN)",
+    "category": "cardiovascular",
+    "subcategory": "Shock States",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  },
+  {
+    "slug": "hemodynamics-bedside-interpretation",
+    "title": "Hemodynamics at the Bedside (NCLEX-PN)",
+    "category": "safety",
+    "subcategory": "Hemodynamics",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  },
+  {
+    "slug": "sepsis-recognition-and-bundles",
+    "title": "Sepsis Recognition and Bundle Timing Priorities (NCLEX-PN)",
+    "category": "sepsis",
+    "subcategory": "Sepsis",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  },
+  {
+    "slug": "oxygenation-failure-patterns",
+    "title": "Oxygenation Failure Patterns (NCLEX-PN)",
+    "category": "safety",
+    "subcategory": "Oxygenation",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  },
+  {
+    "slug": "cardiac-emergencies-first-hour",
+    "title": "Cardiac Emergencies: First-Hour Prioritization (NCLEX-PN)",
+    "category": "safety",
+    "subcategory": "Cardiac Emergencies",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  },
+  {
+    "slug": "renal-emergencies-hyperkalemia-aki",
+    "title": "Renal Emergencies: Hyperkalemia and AKI Deterioration (NCLEX-PN)",
+    "category": "renal",
+    "subcategory": "Renal Emergencies",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  },
+  {
+    "slug": "endocrine-crises-rapid-differentiation",
+    "title": "Endocrine Crises: Rapid Differentiation (NCLEX-PN)",
+    "category": "safety",
+    "subcategory": "Endocrine Crises",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  },
+  {
+    "slug": "acid-base-disorders-rapid-interpretation",
+    "title": "Acid-Base Disorders: Rapid Interpretation (NCLEX-PN)",
+    "category": "renal",
+    "subcategory": "Acid-Base Disorders",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  },
+  {
+    "slug": "fluids-and-electrolytes-danger-patterns",
+    "title": "Fluids and Electrolytes: Danger Patterns (NCLEX-PN)",
+    "category": "renal",
+    "subcategory": "Fluids and Electrolytes",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  },
+  {
+    "slug": "vasopressor-selection-and-safety",
+    "title": "Vasopressor Selection and Safety Monitoring (NCLEX-PN)",
+    "category": "safety",
+    "subcategory": "Vasopressors",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  },
+  {
+    "slug": "lactate-and-perfusion-trending",
+    "title": "Lactate and Perfusion Trending (NCLEX-PN)",
+    "category": "safety",
+    "subcategory": "Perfusion Trends",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  },
+  {
+    "slug": "respiratory-failure-escalation-ladder",
+    "title": "Respiratory Failure Escalation Ladder (NCLEX-PN)",
+    "category": "safety",
+    "subcategory": "Respiratory Failure",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  },
+  {
+    "slug": "septic-vs-cardiogenic-shock-differentiation",
+    "title": "Septic vs Cardiogenic Shock: Bedside Differentiation (NCLEX-PN)",
+    "category": "cardiovascular",
+    "subcategory": "Shock Differentiation",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  },
+  {
+    "slug": "hyperkalemia-ecg-and-emergent-treatment",
+    "title": "Hyperkalemia: ECG Changes and Emergent Treatment (NCLEX-PN)",
+    "category": "renal",
+    "subcategory": "Hyperkalemia Emergencies",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  },
+  {
+    "slug": "hypoglycemia-vs-hyperglycemia-priority-response",
+    "title": "Hypoglycemia vs Hyperglycemia: Priority Response (NCLEX-PN)",
+    "category": "safety",
+    "subcategory": "Glycemic Emergencies",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  },
+  {
+    "slug": "intracranial-pressure-escalation-pathway",
+    "title": "Increased Intracranial Pressure: Escalation Pathway (NCLEX-PN)",
+    "category": "neuro",
+    "subcategory": "Increased ICP",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  },
+  {
+    "slug": "fluid-resuscitation-initial-vs-reassessment",
+    "title": "Fluid Resuscitation: Initial vs Reassessment-Driven Strategy (NCLEX-PN)",
+    "category": "renal",
+    "subcategory": "Fluid Resuscitation",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  },
+  {
+    "slug": "abg-acid-base-and-compensation-patterns",
+    "title": "ABG Compensation Patterns: Action Priorities (NCLEX-PN)",
+    "category": "respiratory",
+    "subcategory": "ABG Compensation",
+    "completeness": "EMPTY",
+    "questions": "yes"
   }
 ]

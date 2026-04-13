@@ -802,17 +802,23 @@ export function PricingCTA({ plansHref }: { plansHref: string }) {
       <FadeUp>
         <h2 className="nn-marketing-h2 mb-3">Start Studying Smarter Today</h2>
         <p className="nn-marketing-body-sm mx-auto mb-8 max-w-lg text-muted-foreground">
-          Try everything free. No charge today. Cancel anytime before your trial ends.
+          Start your 3-day free trial
         </p>
       </FadeUp>
       <div className="flex flex-wrap items-center justify-center gap-3">
         <Link href={plansHref} className={MARKETING_PRIMARY_CTA_CLASS}>
-          Start Free Trial
+          Start your 3-day free trial
         </Link>
         <Link href="#pricing-plans-heading" className={MARKETING_SECONDARY_CTA_CLASS}>
           View Plans
         </Link>
       </div>
+      <p className="mt-3 text-xs text-muted-foreground">
+        No charge today. Cancel anytime before your trial ends.
+      </p>
+      <p className="mt-1 text-[11px] text-muted-foreground">
+        Billing begins automatically after 3 days unless cancelled.
+      </p>
     </section>
   );
 }

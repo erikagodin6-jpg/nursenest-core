@@ -396,7 +396,7 @@
     "title": "Diuretics & Electrolyte Shifts (NCLEX-RN, Canada)",
     "category": "fluids-electrolytes",
     "subcategory": "Pharmacology",
-    "completeness": "EMPTY",
+    "completeness": "COMPLETE",
     "questions": "yes"
   },
   {
@@ -420,7 +420,7 @@
     "title": "Hyponatremia vs Hypernatremia (NCLEX-RN, Canada)",
     "category": "renal",
     "subcategory": "Fluids & Electrolytes",
-    "completeness": "EMPTY",
+    "completeness": "COMPLETE",
     "questions": "yes"
   },
   {
@@ -428,7 +428,7 @@
     "title": "Hypo- vs Hyperkalemia (NCLEX-RN, Canada)",
     "category": "renal",
     "subcategory": "Fluids & Electrolytes",
-    "completeness": "EMPTY",
+    "completeness": "COMPLETE",
     "questions": "yes"
   },
   {
@@ -436,7 +436,7 @@
     "title": "Fluid Volume Deficit (NCLEX-RN, Canada)",
     "category": "renal",
     "subcategory": "Fluids & Electrolytes",
-    "completeness": "EMPTY",
+    "completeness": "COMPLETE",
     "questions": "yes"
   },
   {
@@ -444,7 +444,7 @@
     "title": "Fluid Volume Excess (NCLEX-RN, Canada)",
     "category": "renal",
     "subcategory": "Fluids & Electrolytes",
-    "completeness": "EMPTY",
+    "completeness": "COMPLETE",
     "questions": "yes"
   },
   {
@@ -452,7 +452,7 @@
     "title": "Magnesium & Arrhythmia Risk (NCLEX-RN, Canada)",
     "category": "renal",
     "subcategory": "Fluids & Electrolytes",
-    "completeness": "EMPTY",
+    "completeness": "COMPLETE",
     "questions": "yes"
   },
   {
@@ -460,7 +460,7 @@
     "title": "Calcium & Tetany (NCLEX-RN, Canada)",
     "category": "renal",
     "subcategory": "Fluids & Electrolytes",
-    "completeness": "EMPTY",
+    "completeness": "COMPLETE",
     "questions": "yes"
   },
   {
@@ -468,7 +468,7 @@
     "title": "Phosphate Shifts in Renal (NCLEX-RN, Canada)",
     "category": "renal",
     "subcategory": "Fluids & Electrolytes",
-    "completeness": "EMPTY",
+    "completeness": "COMPLETE",
     "questions": "yes"
   },
   {
@@ -476,7 +476,7 @@
     "title": "Mixed Acid-Base Patterns (NCLEX-RN, Canada)",
     "category": "renal",
     "subcategory": "Fluids & Electrolytes",
-    "completeness": "EMPTY",
+    "completeness": "COMPLETE",
     "questions": "yes"
   },
   {
@@ -540,7 +540,7 @@
     "title": "Stroke Assessment & tPA Window (NCLEX-RN, Canada)",
     "category": "neuro",
     "subcategory": "Neurological",
-    "completeness": "EMPTY",
+    "completeness": "COMPLETE",
     "questions": "yes"
   },
   {
@@ -548,7 +548,7 @@
     "title": "Seizure Precautions & Rescue Meds (NCLEX-RN, Canada)",
     "category": "neuro",
     "subcategory": "Neurological",
-    "completeness": "EMPTY",
+    "completeness": "COMPLETE",
     "questions": "yes"
   },
   {
@@ -556,7 +556,7 @@
     "title": "Increased ICP & Positioning (NCLEX-RN, Canada)",
     "category": "neuro",
     "subcategory": "Neurological",
-    "completeness": "EMPTY",
+    "completeness": "COMPLETE",
     "questions": "yes"
   },
   {
@@ -596,7 +596,7 @@
     "title": "DKA vs HHS Priorities (NCLEX-RN, Canada)",
     "category": "endocrine",
     "subcategory": "Endocrine",
-    "completeness": "EMPTY",
+    "completeness": "COMPLETE",
     "questions": "yes"
   },
   {
@@ -604,7 +604,7 @@
     "title": "Thyroid Storm & Myxedema Clues (NCLEX-RN, Canada)",
     "category": "endocrine",
     "subcategory": "Endocrine",
-    "completeness": "EMPTY",
+    "completeness": "COMPLETE",
     "questions": "yes"
   },
   {
@@ -644,7 +644,7 @@
     "title": "AKI: Prerenal vs Intrarenal (NCLEX-RN, Canada)",
     "category": "renal",
     "subcategory": "Renal & GU",
-    "completeness": "EMPTY",
+    "completeness": "COMPLETE",
     "questions": "yes"
   },
   {
@@ -652,7 +652,7 @@
     "title": "Hemodialysis Access Care (NCLEX-RN, Canada)",
     "category": "renal",
     "subcategory": "Renal & GU",
-    "completeness": "EMPTY",
+    "completeness": "COMPLETE",
     "questions": "yes"
   },
   {
@@ -660,7 +660,7 @@
     "title": "Peritoneal Dialysis Complications (NCLEX-RN, Canada)",
     "category": "renal",
     "subcategory": "Renal & GU",
-    "completeness": "EMPTY",
+    "completeness": "COMPLETE",
     "questions": "yes"
   },
   {
@@ -668,7 +668,7 @@
     "title": "Kidney Stones & Strain Management (NCLEX-RN, Canada)",
     "category": "renal",
     "subcategory": "Renal & GU",
-    "completeness": "EMPTY",
+    "completeness": "COMPLETE",
     "questions": "yes"
   },
   {
@@ -676,7 +676,7 @@
     "title": "UTI vs Pyelonephritis (NCLEX-RN, Canada)",
     "category": "renal",
     "subcategory": "Renal & GU",
-    "completeness": "EMPTY",
+    "completeness": "COMPLETE",
     "questions": "yes"
   },
   {
@@ -684,7 +684,7 @@
     "title": "Indwelling Catheter Risks (NCLEX-RN, Canada)",
     "category": "renal",
     "subcategory": "Renal & GU",
-    "completeness": "EMPTY",
+    "completeness": "COMPLETE",
     "questions": "yes"
   },
   {
@@ -5780,6 +5780,158 @@
     "title": "Respiratory Failure Escalation Ladder (NCLEX-RN)",
     "category": "safety",
     "subcategory": "Respiratory Failure",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  },
+  {
+    "slug": "early-vs-late-shock",
+    "title": "Early vs Late Shock: Recognition and Priorities (NCLEX-RN)",
+    "category": "cardiovascular",
+    "subcategory": "Shock Stages",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  },
+  {
+    "slug": "shock-states-comparison",
+    "title": "Shock States Comparison: Hypovolemic, Cardiogenic, Obstructive, Distributive (NCLEX-RN)",
+    "category": "cardiovascular",
+    "subcategory": "Shock States",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  },
+  {
+    "slug": "hemodynamics-bedside-interpretation",
+    "title": "Hemodynamics at the Bedside (NCLEX-RN)",
+    "category": "safety",
+    "subcategory": "Hemodynamics",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  },
+  {
+    "slug": "sepsis-recognition-and-bundles",
+    "title": "Sepsis Recognition and Bundle Timing Priorities (NCLEX-RN)",
+    "category": "sepsis",
+    "subcategory": "Sepsis",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  },
+  {
+    "slug": "oxygenation-failure-patterns",
+    "title": "Oxygenation Failure Patterns (NCLEX-RN)",
+    "category": "safety",
+    "subcategory": "Oxygenation",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  },
+  {
+    "slug": "cardiac-emergencies-first-hour",
+    "title": "Cardiac Emergencies: First-Hour Prioritization (NCLEX-RN)",
+    "category": "safety",
+    "subcategory": "Cardiac Emergencies",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  },
+  {
+    "slug": "renal-emergencies-hyperkalemia-aki",
+    "title": "Renal Emergencies: Hyperkalemia and AKI Deterioration (NCLEX-RN)",
+    "category": "renal",
+    "subcategory": "Renal Emergencies",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  },
+  {
+    "slug": "endocrine-crises-rapid-differentiation",
+    "title": "Endocrine Crises: Rapid Differentiation (NCLEX-RN)",
+    "category": "safety",
+    "subcategory": "Endocrine Crises",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  },
+  {
+    "slug": "neuro-deterioration-escalation",
+    "title": "Neuro Deterioration: Escalation Triggers (NCLEX-RN)",
+    "category": "neuro",
+    "subcategory": "Neuro Deterioration",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  },
+  {
+    "slug": "acid-base-disorders-rapid-interpretation",
+    "title": "Acid-Base Disorders: Rapid Interpretation (NCLEX-RN)",
+    "category": "renal",
+    "subcategory": "Acid-Base Disorders",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  },
+  {
+    "slug": "fluids-and-electrolytes-danger-patterns",
+    "title": "Fluids and Electrolytes: Danger Patterns (NCLEX-RN)",
+    "category": "renal",
+    "subcategory": "Fluids and Electrolytes",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  },
+  {
+    "slug": "vasopressor-selection-and-safety",
+    "title": "Vasopressor Selection and Safety Monitoring (NCLEX-RN)",
+    "category": "safety",
+    "subcategory": "Vasopressors",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  },
+  {
+    "slug": "lactate-and-perfusion-trending",
+    "title": "Lactate and Perfusion Trending (NCLEX-RN)",
+    "category": "safety",
+    "subcategory": "Perfusion Trends",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  },
+  {
+    "slug": "septic-vs-cardiogenic-shock-differentiation",
+    "title": "Septic vs Cardiogenic Shock: Bedside Differentiation (NCLEX-RN)",
+    "category": "cardiovascular",
+    "subcategory": "Shock Differentiation",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  },
+  {
+    "slug": "hyperkalemia-ecg-and-emergent-treatment",
+    "title": "Hyperkalemia: ECG Changes and Emergent Treatment (NCLEX-RN)",
+    "category": "renal",
+    "subcategory": "Hyperkalemia Emergencies",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  },
+  {
+    "slug": "hypoglycemia-vs-hyperglycemia-priority-response",
+    "title": "Hypoglycemia vs Hyperglycemia: Priority Response (NCLEX-RN)",
+    "category": "safety",
+    "subcategory": "Glycemic Emergencies",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  },
+  {
+    "slug": "intracranial-pressure-escalation-pathway",
+    "title": "Increased Intracranial Pressure: Escalation Pathway (NCLEX-RN)",
+    "category": "neuro",
+    "subcategory": "Increased ICP",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  },
+  {
+    "slug": "fluid-resuscitation-initial-vs-reassessment",
+    "title": "Fluid Resuscitation: Initial vs Reassessment-Driven Strategy (NCLEX-RN)",
+    "category": "renal",
+    "subcategory": "Fluid Resuscitation",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  },
+  {
+    "slug": "abg-acid-base-and-compensation-patterns",
+    "title": "ABG Compensation Patterns: Action Priorities (NCLEX-RN)",
+    "category": "respiratory",
+    "subcategory": "ABG Compensation",
     "completeness": "EMPTY",
     "questions": "yes"
   }

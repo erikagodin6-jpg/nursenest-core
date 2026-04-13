@@ -349,7 +349,7 @@
     "category": "safety",
     "subcategory": "Pharmacology",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "alcohol-use-screening-np",
@@ -421,7 +421,7 @@
     "category": "safety",
     "subcategory": "Pharmacology",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "altered-mental-status-algorithm-np",
@@ -445,7 +445,7 @@
     "category": "safety",
     "subcategory": "Pharmacology",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "geriatric-polypharmacy-np",
@@ -1229,7 +1229,7 @@
     "category": "safety",
     "subcategory": "Pharmacology",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "np-testbank-differential-diagnosis",
@@ -1501,7 +1501,7 @@
     "category": "respiratory",
     "subcategory": "Pharmacology",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "copd-exacerbation-rx-np",
@@ -1637,7 +1637,7 @@
     "category": "safety",
     "subcategory": "Endocrine",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "endo-thyroid-np",
@@ -1645,7 +1645,7 @@
     "category": "endocrine",
     "subcategory": "Endocrine",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "msk-rheumatoid-arthritis-np",
@@ -1725,7 +1725,7 @@
     "category": "safety",
     "subcategory": "Pharmacology",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "womens-health-gynecologic-np",
@@ -1805,7 +1805,7 @@
     "category": "endocrine",
     "subcategory": "Endocrine",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "endo-adrenal-np",
@@ -1829,7 +1829,7 @@
     "category": "safety",
     "subcategory": "Endocrine",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "stress-chronic-disease-np",
@@ -1869,7 +1869,7 @@
     "category": "safety",
     "subcategory": "Pharmacology",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "pharmacotherapeutics-principles-np",
@@ -1877,7 +1877,7 @@
     "category": "safety",
     "subcategory": "Pharmacology",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "integumentary-pathophysiology-np",
@@ -1909,7 +1909,7 @@
     "category": "safety",
     "subcategory": "Pharmacology",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "wound-care-np-adv",
@@ -1917,7 +1917,7 @@
     "category": "safety",
     "subcategory": "Pharmacology",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "core-fundamentals-np",
@@ -1981,7 +1981,7 @@
     "category": "safety",
     "subcategory": "Endocrine",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "immune-np-exp",
@@ -2093,7 +2093,7 @@
     "category": "safety",
     "subcategory": "Pharmacology",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "safety-ethics-np",
@@ -2229,7 +2229,7 @@
     "category": "safety",
     "subcategory": "Pharmacology",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "cultural-safety-np",
@@ -2245,7 +2245,7 @@
     "category": "safety",
     "subcategory": "Pharmacology",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "pharm-np-controlled-substances",
@@ -2261,7 +2261,7 @@
     "category": "safety",
     "subcategory": "Pharmacology",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "cholecystitis-np",
@@ -2445,7 +2445,7 @@
     "category": "endocrine",
     "subcategory": "Endocrine",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "anticoagulation-therapy-np",
@@ -2565,7 +2565,7 @@
     "category": "safety",
     "subcategory": "Endocrine",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "gout-management-np",
@@ -2757,7 +2757,7 @@
     "category": "safety",
     "subcategory": "Pharmacology",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "acid-base-electrolyte-patho-np",
@@ -2869,7 +2869,7 @@
     "category": "safety",
     "subcategory": "Pharmacology",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "adrenal-crisis-np",
@@ -2949,7 +2949,7 @@
     "category": "safety",
     "subcategory": "Pharmacology",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "airflow-dynamics-np",
@@ -3277,7 +3277,7 @@
     "category": "renal",
     "subcategory": "Pharmacology",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "assessment-np",
@@ -3389,7 +3389,7 @@
     "category": "safety",
     "subcategory": "Pharmacology",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "behcet-disease-np",
@@ -3413,7 +3413,7 @@
     "category": "safety",
     "subcategory": "Pharmacology",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "benzodiazepine-risks-rx-np",
@@ -3421,7 +3421,7 @@
     "category": "safety",
     "subcategory": "Pharmacology",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "beta-agonists-saba-laba-np",
@@ -3437,7 +3437,7 @@
     "category": "safety",
     "subcategory": "Pharmacology",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "beta-blocker-selection-np",
@@ -3485,7 +3485,7 @@
     "category": "safety",
     "subcategory": "Pharmacology",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "black-box-warnings-np",
@@ -3597,7 +3597,7 @@
     "category": "safety",
     "subcategory": "Pharmacology",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "calcium-regulation-np",
@@ -4037,7 +4037,7 @@
     "category": "safety",
     "subcategory": "Pharmacology",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "contraceptive-selection-np",
@@ -4277,7 +4277,7 @@
     "category": "safety",
     "subcategory": "Pharmacology",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "depression-core-np",
@@ -4365,7 +4365,7 @@
     "category": "endocrine",
     "subcategory": "Endocrine",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "diagnostic-criteria-logic-np",
@@ -4461,7 +4461,7 @@
     "category": "safety",
     "subcategory": "Endocrine",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "doac-reversal-np",
@@ -4677,7 +4677,7 @@
     "category": "safety",
     "subcategory": "Endocrine",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "endocrine-pathophysiology-np",
@@ -4685,7 +4685,7 @@
     "category": "endocrine",
     "subcategory": "Endocrine",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "endocrine-prescribing-np",
@@ -4693,7 +4693,7 @@
     "category": "safety",
     "subcategory": "Endocrine",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "endometriosis-patho-np",
@@ -4717,7 +4717,7 @@
     "category": "safety",
     "subcategory": "Pharmacology",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "epilepsy-diagnostic-criteria-np",
@@ -4797,7 +4797,7 @@
     "category": "safety",
     "subcategory": "Pharmacology",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "fall-risk-np",
@@ -4965,7 +4965,7 @@
     "category": "safety",
     "subcategory": "Pharmacology",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "geriatric-prescribing-beers-np",
@@ -4981,7 +4981,7 @@
     "category": "safety",
     "subcategory": "Pharmacology",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "geriatrics-core-np",
@@ -4989,7 +4989,7 @@
     "category": "safety",
     "subcategory": "Pharmacology",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "gestational-diabetes-screening-np",
@@ -4997,7 +4997,7 @@
     "category": "safety",
     "subcategory": "Endocrine",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "gfr-physiology-np",
@@ -5109,7 +5109,7 @@
     "category": "safety",
     "subcategory": "Pharmacology",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "graft-vs-host-disease-np",
@@ -5421,7 +5421,7 @@
     "category": "safety",
     "subcategory": "Pharmacology",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "host-pathogen-interaction-core-np",
@@ -5453,7 +5453,7 @@
     "category": "safety",
     "subcategory": "Pharmacology",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "htn-all-stages-np",
@@ -5541,7 +5541,7 @@
     "category": "safety",
     "subcategory": "Endocrine",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "hyperthyroidism-criteria-np",
@@ -5549,7 +5549,7 @@
     "category": "safety",
     "subcategory": "Endocrine",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "hypertrophic-cardiomyopathy-np",
@@ -5573,7 +5573,7 @@
     "category": "safety",
     "subcategory": "Endocrine",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "hypothyroidism-criteria-np",
@@ -5581,7 +5581,7 @@
     "category": "safety",
     "subcategory": "Endocrine",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "ibd-advanced-np",
@@ -5693,7 +5693,7 @@
     "category": "safety",
     "subcategory": "Pharmacology",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "infectious-disease-np",
@@ -5749,7 +5749,7 @@
     "category": "safety",
     "subcategory": "Pharmacology",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "inhaled-corticosteroids-np",
@@ -5757,7 +5757,7 @@
     "category": "safety",
     "subcategory": "Pharmacology",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "innate-adaptive-immunity-np",
@@ -5773,7 +5773,7 @@
     "category": "safety",
     "subcategory": "Pharmacology",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "insulin-glucose-dynamics-np",
@@ -5781,7 +5781,7 @@
     "category": "endocrine",
     "subcategory": "Endocrine",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "insulinoma-np",
@@ -5789,7 +5789,7 @@
     "category": "safety",
     "subcategory": "Endocrine",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "insulin-resistance-t2d-np",
@@ -5797,7 +5797,7 @@
     "category": "endocrine",
     "subcategory": "Endocrine",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "insulin-types-np",
@@ -5805,7 +5805,7 @@
     "category": "endocrine",
     "subcategory": "Endocrine",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "insulin-types-titration-np",
@@ -5813,7 +5813,7 @@
     "category": "endocrine",
     "subcategory": "Endocrine",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "intussusception-np",
@@ -5925,7 +5925,7 @@
     "category": "safety",
     "subcategory": "Pharmacology",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "levothyroxine-dosing-np",
@@ -6077,7 +6077,7 @@
     "category": "safety",
     "subcategory": "Pharmacology",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "melanoma-staging-np",
@@ -6117,7 +6117,7 @@
     "category": "safety",
     "subcategory": "Pharmacology",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "menstrual-physiology-np",
@@ -6317,7 +6317,7 @@
     "category": "safety",
     "subcategory": "Pharmacology",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "narrow-broad-spectrum-np",
@@ -6349,7 +6349,7 @@
     "category": "safety",
     "subcategory": "Endocrine",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "nephrolithiasis-np",
@@ -6437,7 +6437,7 @@
     "category": "safety",
     "subcategory": "Pharmacology",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "neuropathic-pain-np",
@@ -6485,7 +6485,7 @@
     "category": "safety",
     "subcategory": "Pharmacology",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "obesity-prescribing-np",
@@ -6493,7 +6493,7 @@
     "category": "safety",
     "subcategory": "Pharmacology",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "obstructive-restrictive-mechanisms-np",
@@ -6509,7 +6509,7 @@
     "category": "safety",
     "subcategory": "Pharmacology",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "ophthalmoscopic-exam-np",
@@ -6605,7 +6605,7 @@
     "category": "safety",
     "subcategory": "Pharmacology",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "otitis-media-criteria-np",
@@ -6725,7 +6725,7 @@
     "category": "safety",
     "subcategory": "Endocrine",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "pancreatitis-advanced-np",
@@ -6765,7 +6765,7 @@
     "category": "safety",
     "subcategory": "Pharmacology",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "pcos-core-np",
@@ -6989,7 +6989,7 @@
     "category": "safety",
     "subcategory": "Pharmacology",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "pharmacokinetics-applied-np",
@@ -6997,7 +6997,7 @@
     "category": "safety",
     "subcategory": "Pharmacology",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "pharmacology-np",
@@ -7005,7 +7005,7 @@
     "category": "safety",
     "subcategory": "Pharmacology",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "pharyngitis-np",
@@ -7061,7 +7061,7 @@
     "category": "safety",
     "subcategory": "Pharmacology",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "porphyria-np",
@@ -7109,7 +7109,7 @@
     "category": "safety",
     "subcategory": "Pharmacology",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "prediabetes-criteria-np",
@@ -7117,7 +7117,7 @@
     "category": "safety",
     "subcategory": "Endocrine",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "pregnancy-basics-np",
@@ -7173,7 +7173,7 @@
     "category": "safety",
     "subcategory": "Pharmacology",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "prescribing-process-logic-np",
@@ -7181,7 +7181,7 @@
     "category": "safety",
     "subcategory": "Pharmacology",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "pres-np",
@@ -7413,7 +7413,7 @@
     "category": "safety",
     "subcategory": "Pharmacology",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "raas-physiology-np",
@@ -7613,7 +7613,7 @@
     "category": "safety",
     "subcategory": "Pharmacology",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "reversible-irreversible-injury-np",
@@ -7941,7 +7941,7 @@
     "category": "safety",
     "subcategory": "Pharmacology",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "sodium-disorders-np",
@@ -8149,7 +8149,7 @@
     "category": "safety",
     "subcategory": "Pharmacology",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "t2d-diagnostic-criteria-np",
@@ -8157,7 +8157,7 @@
     "category": "safety",
     "subcategory": "Endocrine",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "targeted-temperature-management-np",
@@ -8237,7 +8237,7 @@
     "category": "endocrine",
     "subcategory": "Endocrine",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "thyroid-disorders-patho-np",
@@ -8245,7 +8245,7 @@
     "category": "endocrine",
     "subcategory": "Endocrine",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "thyroid-exam-np",
@@ -8253,7 +8253,7 @@
     "category": "endocrine",
     "subcategory": "Endocrine",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "thyroid-hormone-therapy-np",
@@ -8261,7 +8261,7 @@
     "category": "endocrine",
     "subcategory": "Endocrine",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "thyroid-nodule-malignancy-np",
@@ -8269,7 +8269,7 @@
     "category": "endocrine",
     "subcategory": "Endocrine",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "thyroid-nodules-np",
@@ -8277,7 +8277,7 @@
     "category": "endocrine",
     "subcategory": "Endocrine",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "thyroid-regulation-np",
@@ -8285,7 +8285,7 @@
     "category": "endocrine",
     "subcategory": "Endocrine",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "tips-procedure-np",
@@ -8413,7 +8413,7 @@
     "category": "safety",
     "subcategory": "Endocrine",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "uri-differentiation-np",
@@ -8541,7 +8541,7 @@
     "category": "safety",
     "subcategory": "Pharmacology",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "vbac-management-np",
@@ -8997,7 +8997,7 @@
     "category": "safety",
     "subcategory": "Pharmacology",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "asthma-emergency-np",
@@ -9133,7 +9133,7 @@
     "category": "safety",
     "subcategory": "Pharmacology",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "seizure-safety-np",
@@ -9221,7 +9221,7 @@
     "category": "endocrine",
     "subcategory": "Endocrine",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "hyperaldosteronism-np",
@@ -9341,7 +9341,7 @@
     "category": "safety",
     "subcategory": "Endocrine",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "np-high-risk-prescribing-and-safety",
@@ -9349,7 +9349,7 @@
     "category": "safety",
     "subcategory": "Pharmacology",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "hematology-leukemia-np",
@@ -9445,7 +9445,7 @@
     "category": "safety",
     "subcategory": "Pharmacology",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "np-smoking-cessation-pharmacology",
@@ -9453,7 +9453,7 @@
     "category": "safety",
     "subcategory": "Pharmacology",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "np-parkinson-disease-management",
@@ -9525,7 +9525,7 @@
     "category": "safety",
     "subcategory": "Pharmacology",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "hypothyroidism-management-np",
@@ -9533,7 +9533,7 @@
     "category": "safety",
     "subcategory": "Endocrine",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "migraine-management-np",
@@ -9541,7 +9541,7 @@
     "category": "safety",
     "subcategory": "Pharmacology",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "type2-dm-pharmacotherapy-np",
@@ -9549,7 +9549,7 @@
     "category": "safety",
     "subcategory": "Endocrine",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "cv-patho-atherosclerosis-np",
@@ -9629,7 +9629,7 @@
     "category": "endocrine",
     "subcategory": "Endocrine",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "endo-patho-thyroid-autoimmunity-np",
@@ -9637,7 +9637,7 @@
     "category": "endocrine",
     "subcategory": "Endocrine",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "endo-patho-adrenal-axis-np",
@@ -9821,7 +9821,7 @@
     "category": "renal",
     "subcategory": "Pharmacology",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "renal-rx-ckd-anemia-epo-np",
@@ -9837,7 +9837,7 @@
     "category": "renal",
     "subcategory": "Pharmacology",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "gi-rx-ppi-stewardship-np",
@@ -9845,7 +9845,7 @@
     "category": "safety",
     "subcategory": "Pharmacology",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "gi-rx-h-pylori-eradication-np",
@@ -9861,7 +9861,7 @@
     "category": "safety",
     "subcategory": "Pharmacology",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "geriatrics-beers-criteria-np",
@@ -9909,7 +9909,7 @@
     "category": "safety",
     "subcategory": "Endocrine",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "exam-strategy-np",
@@ -9941,7 +9941,7 @@
     "category": "safety",
     "subcategory": "Pharmacology",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "maternity-np",
@@ -10037,7 +10037,7 @@
     "category": "renal",
     "subcategory": "Pharmacology",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "advanced-cardiac-auscultation-np-np",
@@ -10373,7 +10373,7 @@
     "category": "respiratory",
     "subcategory": "Pharmacology",
     "completeness": "EMPTY",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "copd-cellular-mechanisms-np",
@@ -10645,7 +10645,7 @@
     "category": "safety",
     "subcategory": "Endocrine",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "diabetes-mellitus-types-1-and-2-np",
@@ -10653,7 +10653,7 @@
     "category": "safety",
     "subcategory": "Endocrine",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "diabetic-ketoacidosis-np",
@@ -10661,7 +10661,7 @@
     "category": "safety",
     "subcategory": "Endocrine",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "thyroid-dysfunction-np",
@@ -10669,7 +10669,7 @@
     "category": "endocrine",
     "subcategory": "Endocrine",
     "completeness": "PARTIAL",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "fluid-and-electrolytes-3-np",
@@ -11005,7 +11005,7 @@
     "category": "safety",
     "subcategory": "Pharmacology",
     "completeness": "EMPTY",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "advanced-gerontology-np-scope-np",
@@ -11197,7 +11197,7 @@
     "category": "safety",
     "subcategory": "Pharmacology",
     "completeness": "EMPTY",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "np-therapeutic-communication-np",
@@ -11405,7 +11405,7 @@
     "category": "safety",
     "subcategory": "Pharmacology",
     "completeness": "EMPTY",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "endocannabinoid-pharmacology-ecs-receptor-targets-and-np",
@@ -11413,7 +11413,7 @@
     "category": "safety",
     "subcategory": "Pharmacology",
     "completeness": "EMPTY",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "methotrexate-np-molecular-pharmacology-and-prescriptive-np",
@@ -11437,7 +11437,7 @@
     "category": "safety",
     "subcategory": "Pharmacology",
     "completeness": "EMPTY",
-    "questions": "no"
+    "questions": "yes"
   },
   {
     "slug": "advanced-critical-care-np-scope-np",
@@ -11564,6 +11564,158 @@
     "title": "Neuro Deterioration: Escalation Triggers (CNPLE)",
     "category": "neuro",
     "subcategory": "Neuro Deterioration",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  },
+  {
+    "slug": "early-vs-late-shock",
+    "title": "Early vs Late Shock: Recognition and Priorities (CNPLE)",
+    "category": "cardiovascular",
+    "subcategory": "Shock Stages",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  },
+  {
+    "slug": "shock-states-comparison",
+    "title": "Shock States Comparison: Hypovolemic, Cardiogenic, Obstructive, Distributive (CNPLE)",
+    "category": "cardiovascular",
+    "subcategory": "Shock States",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  },
+  {
+    "slug": "hemodynamics-bedside-interpretation",
+    "title": "Hemodynamics at the Bedside (CNPLE)",
+    "category": "safety",
+    "subcategory": "Hemodynamics",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  },
+  {
+    "slug": "sepsis-recognition-and-bundles",
+    "title": "Sepsis Recognition and Bundle Timing Priorities (CNPLE)",
+    "category": "sepsis",
+    "subcategory": "Sepsis",
+    "completeness": "EMPTY",
+    "questions": "no"
+  },
+  {
+    "slug": "oxygenation-failure-patterns",
+    "title": "Oxygenation Failure Patterns (CNPLE)",
+    "category": "safety",
+    "subcategory": "Oxygenation",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  },
+  {
+    "slug": "cardiac-emergencies-first-hour",
+    "title": "Cardiac Emergencies: First-Hour Prioritization (CNPLE)",
+    "category": "safety",
+    "subcategory": "Cardiac Emergencies",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  },
+  {
+    "slug": "renal-emergencies-hyperkalemia-aki",
+    "title": "Renal Emergencies: Hyperkalemia and AKI Deterioration (CNPLE)",
+    "category": "renal",
+    "subcategory": "Renal Emergencies",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  },
+  {
+    "slug": "endocrine-crises-rapid-differentiation",
+    "title": "Endocrine Crises: Rapid Differentiation (CNPLE)",
+    "category": "safety",
+    "subcategory": "Endocrine Crises",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  },
+  {
+    "slug": "acid-base-disorders-rapid-interpretation",
+    "title": "Acid-Base Disorders: Rapid Interpretation (CNPLE)",
+    "category": "renal",
+    "subcategory": "Acid-Base Disorders",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  },
+  {
+    "slug": "fluids-and-electrolytes-danger-patterns",
+    "title": "Fluids and Electrolytes: Danger Patterns (CNPLE)",
+    "category": "renal",
+    "subcategory": "Fluids and Electrolytes",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  },
+  {
+    "slug": "vasopressor-selection-and-safety",
+    "title": "Vasopressor Selection and Safety Monitoring (CNPLE)",
+    "category": "safety",
+    "subcategory": "Vasopressors",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  },
+  {
+    "slug": "lactate-and-perfusion-trending",
+    "title": "Lactate and Perfusion Trending (CNPLE)",
+    "category": "safety",
+    "subcategory": "Perfusion Trends",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  },
+  {
+    "slug": "respiratory-failure-escalation-ladder",
+    "title": "Respiratory Failure Escalation Ladder (CNPLE)",
+    "category": "safety",
+    "subcategory": "Respiratory Failure",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  },
+  {
+    "slug": "septic-vs-cardiogenic-shock-differentiation",
+    "title": "Septic vs Cardiogenic Shock: Bedside Differentiation (CNPLE)",
+    "category": "cardiovascular",
+    "subcategory": "Shock Differentiation",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  },
+  {
+    "slug": "hyperkalemia-ecg-and-emergent-treatment",
+    "title": "Hyperkalemia: ECG Changes and Emergent Treatment (CNPLE)",
+    "category": "renal",
+    "subcategory": "Hyperkalemia Emergencies",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  },
+  {
+    "slug": "hypoglycemia-vs-hyperglycemia-priority-response",
+    "title": "Hypoglycemia vs Hyperglycemia: Priority Response (CNPLE)",
+    "category": "safety",
+    "subcategory": "Glycemic Emergencies",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  },
+  {
+    "slug": "intracranial-pressure-escalation-pathway",
+    "title": "Increased Intracranial Pressure: Escalation Pathway (CNPLE)",
+    "category": "neuro",
+    "subcategory": "Increased ICP",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  },
+  {
+    "slug": "fluid-resuscitation-initial-vs-reassessment",
+    "title": "Fluid Resuscitation: Initial vs Reassessment-Driven Strategy (CNPLE)",
+    "category": "renal",
+    "subcategory": "Fluid Resuscitation",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  },
+  {
+    "slug": "abg-acid-base-and-compensation-patterns",
+    "title": "ABG Compensation Patterns: Action Priorities (CNPLE)",
+    "category": "respiratory",
+    "subcategory": "ABG Compensation",
     "completeness": "EMPTY",
     "questions": "yes"
   }

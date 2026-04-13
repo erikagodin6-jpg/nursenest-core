@@ -1,0 +1,146 @@
+[
+  {
+    "slug": "vent-modes-overview",
+    "title": "Vent Modes Overview (Allied health, US)",
+    "category": "safety",
+    "subcategory": "Respiratory Therapy",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  },
+  {
+    "slug": "abg-sampling-errors",
+    "title": "ABG Sampling Errors (Allied health, US)",
+    "category": "respiratory",
+    "subcategory": "Respiratory Therapy",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  },
+  {
+    "slug": "airway-emergencies",
+    "title": "Airway Emergencies (Allied health, US)",
+    "category": "safety",
+    "subcategory": "Respiratory Therapy",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  },
+  {
+    "slug": "critical-value-reporting",
+    "title": "Critical Value Reporting (Allied health, US)",
+    "category": "safety",
+    "subcategory": "Medical Laboratory",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  },
+  {
+    "slug": "hemolysis-specimen-reject",
+    "title": "Hemolysis Specimen Reject (Allied health, US)",
+    "category": "safety",
+    "subcategory": "Medical Laboratory",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  },
+  {
+    "slug": "coag-sample-handling",
+    "title": "Coag Sample Handling (Allied health, US)",
+    "category": "safety",
+    "subcategory": "Medical Laboratory",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  },
+  {
+    "slug": "contrast-reaction-preparedness",
+    "title": "Contrast Reaction Preparedness (Allied health, US)",
+    "category": "safety",
+    "subcategory": "Diagnostic Imaging",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  },
+  {
+    "slug": "pregnancy-screening-before-imaging",
+    "title": "Pregnancy Screening Before Imaging (Allied health, US)",
+    "category": "safety",
+    "subcategory": "Diagnostic Imaging",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  },
+  {
+    "slug": "high-alert-med-storage",
+    "title": "High-Alert Med Storage (Allied health, US)",
+    "category": "safety",
+    "subcategory": "Pharmacy Technician",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  },
+  {
+    "slug": "look-alike-sound-alike-controls",
+    "title": "Look-Alike Sound-Alike Controls (Allied health, US)",
+    "category": "safety",
+    "subcategory": "Pharmacy Technician",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  },
+  {
+    "slug": "aspiration-precautions-ot-pt",
+    "title": "Aspiration Precautions OT/PT (Allied health, US)",
+    "category": "safety",
+    "subcategory": "Rehab & Therapy",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  },
+  {
+    "slug": "functional-mobility-screening",
+    "title": "Functional Mobility Screening (Allied health, US)",
+    "category": "safety",
+    "subcategory": "Rehab & Therapy",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  },
+  {
+    "slug": "trauma-triage-basics",
+    "title": "Trauma Triage Basics (Allied health, US)",
+    "category": "safety",
+    "subcategory": "EMS / Prehospital",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  },
+  {
+    "slug": "stroke-pre-notification",
+    "title": "Stroke Pre-Notification (Allied health, US)",
+    "category": "neuro",
+    "subcategory": "EMS / Prehospital",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  },
+  {
+    "slug": "sterile-field-breaks",
+    "title": "Sterile Field Breaks (Allied health, US)",
+    "category": "safety",
+    "subcategory": "Infection Control (Allied)",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  },
+  {
+    "slug": "ppe-sequence",
+    "title": "PPE Sequence (Allied health, US)",
+    "category": "safety",
+    "subcategory": "Infection Control (Allied)",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  },
+  {
+    "slug": "radiation-alara",
+    "title": "Radiation ALARA (Allied health, US)",
+    "category": "safety",
+    "subcategory": "Safety (Allied)",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  },
+  {
+    "slug": "chemical-spill-initial-steps",
+    "title": "Chemical Spill Initial Steps (Allied health, US)",
+    "category": "safety",
+    "subcategory": "Safety (Allied)",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  }
+]

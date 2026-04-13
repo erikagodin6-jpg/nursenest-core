@@ -1,0 +1,186 @@
+[
+  {
+    "slug": "vent-modes-overview",
+    "title": "Vent Modes Overview (Allied health, Canada)",
+    "category": "safety",
+    "subcategory": "Respiratory Therapy",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  },
+  {
+    "slug": "abg-sampling-errors",
+    "title": "ABG Sampling Errors (Allied health, Canada)",
+    "category": "respiratory",
+    "subcategory": "Respiratory Therapy",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  },
+  {
+    "slug": "airway-emergencies",
+    "title": "Airway Emergencies (Allied health, Canada)",
+    "category": "safety",
+    "subcategory": "Respiratory Therapy",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  },
+  {
+    "slug": "critical-value-reporting",
+    "title": "Critical Value Reporting (Allied health, Canada)",
+    "category": "safety",
+    "subcategory": "Medical Laboratory",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  },
+  {
+    "slug": "hemolysis-specimen-reject",
+    "title": "Hemolysis Specimen Reject (Allied health, Canada)",
+    "category": "safety",
+    "subcategory": "Medical Laboratory",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  },
+  {
+    "slug": "coag-sample-handling",
+    "title": "Coag Sample Handling (Allied health, Canada)",
+    "category": "safety",
+    "subcategory": "Medical Laboratory",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  },
+  {
+    "slug": "contrast-reaction-preparedness",
+    "title": "Contrast Reaction Preparedness (Allied health, Canada)",
+    "category": "safety",
+    "subcategory": "Diagnostic Imaging",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  },
+  {
+    "slug": "pregnancy-screening-before-imaging",
+    "title": "Pregnancy Screening Before Imaging (Allied health, Canada)",
+    "category": "safety",
+    "subcategory": "Diagnostic Imaging",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  },
+  {
+    "slug": "high-alert-med-storage",
+    "title": "High-Alert Med Storage (Allied health, Canada)",
+    "category": "safety",
+    "subcategory": "Pharmacy Technician",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  },
+  {
+    "slug": "look-alike-sound-alike-controls",
+    "title": "Look-Alike Sound-Alike Controls (Allied health, Canada)",
+    "category": "safety",
+    "subcategory": "Pharmacy Technician",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  },
+  {
+    "slug": "aspiration-precautions-ot-pt",
+    "title": "Aspiration Precautions OT/PT (Allied health, Canada)",
+    "category": "safety",
+    "subcategory": "Rehab & Therapy",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  },
+  {
+    "slug": "functional-mobility-screening",
+    "title": "Functional Mobility Screening (Allied health, Canada)",
+    "category": "safety",
+    "subcategory": "Rehab & Therapy",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  },
+  {
+    "slug": "trauma-triage-basics",
+    "title": "Trauma Triage Basics (Allied health, Canada)",
+    "category": "safety",
+    "subcategory": "EMS / Prehospital",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  },
+  {
+    "slug": "stroke-pre-notification",
+    "title": "Stroke Pre-Notification (Allied health, Canada)",
+    "category": "neuro",
+    "subcategory": "EMS / Prehospital",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  },
+  {
+    "slug": "sterile-field-breaks",
+    "title": "Sterile Field Breaks (Allied health, Canada)",
+    "category": "safety",
+    "subcategory": "Infection Control (Allied)",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  },
+  {
+    "slug": "ppe-sequence",
+    "title": "PPE Sequence (Allied health, Canada)",
+    "category": "safety",
+    "subcategory": "Infection Control (Allied)",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  },
+  {
+    "slug": "radiation-alara",
+    "title": "Radiation ALARA (Allied health, Canada)",
+    "category": "safety",
+    "subcategory": "Safety (Allied)",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  },
+  {
+    "slug": "chemical-spill-initial-steps",
+    "title": "Chemical Spill Initial Steps (Allied health, Canada)",
+    "category": "safety",
+    "subcategory": "Safety (Allied)",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  },
+  {
+    "slug": "sepsis-recognition-and-bundles",
+    "title": "Sepsis Recognition and Bundle Timing Priorities (Allied health)",
+    "category": "sepsis",
+    "subcategory": "Sepsis",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  },
+  {
+    "slug": "cardiac-emergencies-first-hour",
+    "title": "Cardiac Emergencies: First-Hour Prioritization (Allied health)",
+    "category": "safety",
+    "subcategory": "Cardiac Emergencies",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  },
+  {
+    "slug": "endocrine-crises-rapid-differentiation",
+    "title": "Endocrine Crises: Rapid Differentiation (Allied health)",
+    "category": "safety",
+    "subcategory": "Endocrine Crises",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  },
+  {
+    "slug": "neuro-deterioration-escalation",
+    "title": "Neuro Deterioration: Escalation Triggers (Allied health)",
+    "category": "neuro",
+    "subcategory": "Neuro Deterioration",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  },
+  {
+    "slug": "respiratory-failure-escalation-ladder",
+    "title": "Respiratory Failure Escalation Ladder (Allied health)",
+    "category": "safety",
+    "subcategory": "Respiratory Failure",
+    "completeness": "EMPTY",
+    "questions": "yes"
+  }
+]

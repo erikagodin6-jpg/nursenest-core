@@ -1,0 +1,26 @@
+[
+  {
+    "slug": "cv-pe",
+    "title": "Pulmonary embolism - recognition and initial management",
+    "category": "safety",
+    "subcategory": "Pulmonary embolism",
+    "completeness": "EMPTY",
+    "questions": "no"
+  },
+  {
+    "slug": "endo-osteoporosis",
+    "title": "Osteoporosis - diagnosis and management",
+    "category": "safety",
+    "subcategory": "Osteoporosis",
+    "completeness": "EMPTY",
+    "questions": "no"
+  },
+  {
+    "slug": "geri-polypharm",
+    "title": "Polypharmacy",
+    "category": "safety",
+    "subcategory": "Polypharmacy",
+    "completeness": "EMPTY",
+    "questions": "no"
+  }
+]

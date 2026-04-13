@@ -48,11 +48,6 @@ import {
   PricingTrustReassurance,
   PricingCTA,
 } from "@/components/marketing/pricing-sections";
-import { useExperiment } from "@/lib/experiments/use-experiment";
-import {
-  HERO_CTA_COPY,
-  TRIAL_MESSAGING_COPY,
-} from "@/lib/experiments/experiment-engine";
 
 type NursingPlanRow = {
   tier: TierCode;
@@ -121,6 +116,10 @@ const DURATION_MICROCOPY: Record<BillingDuration, string> = {
   yearly: "Best value for long-term prep",
 };
 
+const TRIAL_PRIMARY_COPY = "Start your 3-day free trial";
+const TRIAL_SECONDARY_COPY = "No charge today. Cancel anytime before your trial ends.";
+const TRIAL_FINE_PRINT_COPY = "Billing begins automatically after 3 days unless cancelled.";
+
 function checkoutErrorUserMessage(
   parsed: ParsedCheckoutErrorBody,
   httpStatus: number,
@@ -178,10 +177,8 @@ export function PricingPageClient({
   const { locale, t } = useMarketingI18n();
   const { region } = useNursenestRegion();
 
-  const heroCtaVariant = useExperiment("hero_cta");
-  const trialMsgVariant = useExperiment("trial_messaging");
-  const heroCtaLabel = HERO_CTA_COPY[heroCtaVariant] ?? "Start Free Trial";
-  const trialSubtext = TRIAL_MESSAGING_COPY[trialMsgVariant] ?? "No charge today. Cancel anytime before your trial ends.";
+  const heroCtaLabel = TRIAL_PRIMARY_COPY;
+  const trialSubtext = TRIAL_SECONDARY_COPY;
 
   useEffect(() => {
     trackProductEvent("pricing_page_viewed", {
@@ -321,6 +318,7 @@ export function PricingPageClient({
         studySystemHref={localize("/how-it-works")}
         ctaLabel={heroCtaLabel}
         trialSubtext={trialSubtext}
+        trialFinePrint={TRIAL_FINE_PRINT_COPY}
       />
 
       {/* ── Section 2: Trust + Value Strip ── */}
@@ -492,12 +490,17 @@ export function PricingPageClient({
                       onClick={() => startCheckout(duration)}
                       className={`${isHighlighted ? MARKETING_PRIMARY_CTA_CLASS : MARKETING_SECONDARY_CTA_CLASS} mt-6 w-full justify-center disabled:pointer-events-none disabled:opacity-50`}
                     >
-                      {row.checkoutAvailable ? heroCtaLabel : "Coming Soon"}
+                      {row.checkoutAvailable ? TRIAL_PRIMARY_COPY : "Coming Soon"}
                     </button>
                     {row.checkoutAvailable ? (
-                      <p className={`mt-3 text-center text-xs leading-snug ${isPop ? "font-semibold text-[var(--semantic-info)]" : "text-muted-foreground"}`}>
-                        No Charge Today
-                      </p>
+                      <>
+                        <p className={`mt-3 text-center text-xs leading-snug ${isPop ? "font-semibold text-[var(--semantic-info)]" : "text-muted-foreground"}`}>
+                          {TRIAL_SECONDARY_COPY}
+                        </p>
+                        <p className="mt-1 text-center text-[11px] leading-snug text-muted-foreground">
+                          {TRIAL_FINE_PRINT_COPY}
+                        </p>
+                      </>
                     ) : (
                       <p className="mt-3 text-center text-xs leading-snug text-muted-foreground">
                         This plan is not yet available for checkout
@@ -522,10 +525,10 @@ export function PricingPageClient({
             </p>
             <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
               Full access to all lessons, practice tests, CAT exams, and analytics.
-              No charge until your trial ends. Cancel anytime in one click.
+              {` ${TRIAL_SECONDARY_COPY}`}
             </p>
             <p className="mt-2 text-xs text-muted-foreground">
-              Payment method required to start your trial. You will not be charged during the trial period.
+              Payment method required. {TRIAL_FINE_PRINT_COPY}
             </p>
           </div>
         )}
@@ -587,13 +590,21 @@ export function PricingPageClient({
       <PricingCTA plansHref="#pricing-plans-heading" />
 
       {/* Bottom links */}
-      <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
-        <Link href="#pricing-plans-heading" className={MARKETING_PRIMARY_CTA_CLASS}>
-          {heroCtaLabel}
-        </Link>
-        <Link href={tryQuestionsHref} className={MARKETING_TERTIARY_LINK_CLASS}>
-          Or Try Free Questions First
-        </Link>
+      <div className="text-center">
+        <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
+          <Link href="#pricing-plans-heading" className={MARKETING_PRIMARY_CTA_CLASS}>
+            {TRIAL_PRIMARY_COPY}
+          </Link>
+          <Link href={tryQuestionsHref} className={MARKETING_TERTIARY_LINK_CLASS}>
+            Or Try Free Questions First
+          </Link>
+        </div>
+        <p className="mt-3 text-xs text-muted-foreground">
+          {TRIAL_SECONDARY_COPY}
+        </p>
+        <p className="mt-1 text-[11px] text-muted-foreground">
+          {TRIAL_FINE_PRINT_COPY}
+        </p>
       </div>
     </main>
   );

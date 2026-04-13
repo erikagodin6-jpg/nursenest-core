@@ -3,12 +3,14 @@ import { MARKETING_PRIMARY_CTA_CLASS, MARKETING_SECONDARY_CTA_CLASS } from "@/li
 
 export function PricingHero({
   studySystemHref,
-  ctaLabel = "Start Free Trial",
+  ctaLabel = "Start your 3-day free trial",
   trialSubtext = "No charge today. Cancel anytime before your trial ends.",
+  trialFinePrint = "Billing begins automatically after 3 days unless cancelled.",
 }: {
   studySystemHref: string;
   ctaLabel?: string;
   trialSubtext?: string;
+  trialFinePrint?: string;
 }) {
   return (
     <section
@@ -78,6 +80,9 @@ export function PricingHero({
 
         <p className="mt-3 text-xs text-muted-foreground">
           {trialSubtext}
+        </p>
+        <p className="mt-1 text-[11px] text-muted-foreground">
+          {trialFinePrint}
         </p>
       </div>
     </section>
