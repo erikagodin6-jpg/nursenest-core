@@ -23,12 +23,12 @@ describe("resolveThemeLogo", () => {
     assert.equal(r.url, "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/Logos/north-sea-leaf-transparent.png");
   });
 
-  it("returns text-fallback for a non-registry / unknown theme string", () => {
+  it("falls back to the intentional default mapped theme for unknown theme strings", () => {
     const r = resolveThemeLogo("__not_a_theme__", "full");
-    assert.equal(r.kind, "text-fallback");
-    assert.equal(r.url, null);
-    assert.equal(r.objectKey, null);
-    assert.equal(r.assetThemeId, null);
+    assert.equal(r.kind, "local");
+    assert.equal(r.assetThemeId, "ocean");
+    assert.equal(r.objectKey, "Logos/north-sea-leaf-transparent.png");
+    assert.equal(r.url, "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/Logos/north-sea-leaf-transparent.png");
   });
 
   it("returns an explicit mapped key for slate", () => {

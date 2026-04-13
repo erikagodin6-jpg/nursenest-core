@@ -70,7 +70,7 @@ export function SiteFooter() {
           <div className="grid gap-7 md:grid-cols-2 lg:grid-cols-4">
             <div className="space-y-4">
               <div className="flex items-center bg-transparent">
-                <SiteBrandLogoMark variant="footer" />
+                <SiteBrandLogoMark variant="footer" logoVariant="leaf" />
               </div>
               <p className="max-w-xs text-sm leading-relaxed text-[var(--footer-muted)]">
                 Exam-focused prep for RN, PN / RPN, NP, and Allied Health learners across the United States and Canada.

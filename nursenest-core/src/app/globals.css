@@ -111,8 +111,17 @@ body {
   --palette-top-bar-background: #1e4fa8;
   --palette-top-bar-text: #ffffff;
   --header-on-dark: #ffffff;
-  --text-primary: var(--palette-text);
+  --theme-luminance: light;
+  --text-primary: var(--palette-heading);
+  --text-secondary: var(--palette-text);
   --text-muted: var(--palette-text-muted);
+  --text-on-dark: #f8fafc;
+  --text-on-light: #0f172a;
+  --text-on-gradient: var(--text-on-light);
+  --background-primary: var(--palette-background);
+  --background-surface: var(--palette-surface);
+  --background-gradient: linear-gradient(135deg, var(--palette-surface-alt), var(--palette-surface));
+  --gradient-overlay: linear-gradient(180deg, transparent, transparent);
   --text-on-accent: var(--palette-top-bar-text);
   --border-subtle: var(--palette-border);
   --accent-primary: var(--palette-button-primary);
@@ -148,6 +157,7 @@ body {
  *            .nn-surface-accent-strong, .nn-text-accent, .nn-ring-accent, .nn-callout-accent
  */
 :where([data-theme]) {
+  --theme-luminance: light;
   /*
    * Surfaces: neutral by default — theme color is concentrated on bubble/accent surfaces below.
    * Page, sections, and cards use minimal tinting so the overall shell reads as clinical/neutral
@@ -171,11 +181,14 @@ body {
   --theme-topbar-bg: var(--palette-top-bar-background);
   --theme-topbar-text: var(--palette-top-bar-text);
   --theme-heading-text: var(--text-primary, var(--palette-heading));
-  --theme-body-text: var(--text-primary, var(--palette-text));
+  --theme-body-text: var(--text-secondary, var(--palette-text));
   --theme-muted-text: var(--text-muted, var(--palette-text-muted));
   --theme-border: var(--palette-border);
   --theme-ring: var(--palette-ring);
   --theme-primary-foreground: var(--text-on-accent, var(--palette-button-primary-text));
+  --text-on-light: color-mix(in srgb, var(--theme-heading-text) 92%, #000000);
+  --text-on-dark: #f8fafc;
+  --text-on-gradient: var(--text-on-light);
   --page-bg: var(--background);
   --bg-page: var(--background);
   --bg-section: var(--background-subtle);
@@ -341,6 +354,10 @@ body {
   /* Hero / large marketing panels — same hue, soft glow */
   --hero-gradient-start: color-mix(in srgb, var(--palette-primary-deep, var(--theme-secondary, var(--palette-primary))) 12%, transparent);
   --hero-gradient-end: transparent;
+  --background-primary: var(--bg-page);
+  --background-surface: var(--bg-card);
+  --background-gradient: var(--nn-aesthetic-gradient-primary);
+  --gradient-overlay: linear-gradient(180deg, transparent, transparent);
 
   /* Stripes / panels that sit on the page canvas */
   --theme-muted-surface: color-mix(in srgb, var(--palette-surface-alt, var(--theme-secondary, var(--palette-primary-deep))) 42%, var(--bg-page));
@@ -492,13 +509,19 @@ body {
 /* Dark palettes: stronger separation (flat navy + same accent reads as one blob) */
 html[data-theme="dark-clinical"],
 html[data-theme="dark-academia"],
-html[data-theme="midnight"],
 html[data-theme="dark-mode"],
 html[data-theme="midnight-indigo"],
 html[data-theme="deep-twilight"],
 html[data-theme="evergreen-steel"],
 html[data-theme="midnight-ink"],
 html[data-theme="storm-slate"] {
+  --theme-luminance: dark;
+  --text-primary: color-mix(in srgb, var(--theme-heading-text) 96%, #ffffff);
+  --text-secondary: color-mix(in srgb, var(--theme-body-text) 90%, #ffffff);
+  --text-muted: color-mix(in srgb, var(--theme-muted-text) 88%, #ffffff);
+  --text-on-light: color-mix(in srgb, var(--theme-heading-text) 88%, #ffffff);
+  --text-on-dark: #f8fafc;
+  --text-on-gradient: var(--text-on-dark);
   /* Dark themes keep their authored base backgrounds (no whitening). */
   --theme-page-bg: var(--theme-background, var(--palette-background));
   --background: var(--theme-page-bg);
@@ -592,6 +615,14 @@ html[data-theme="storm-slate"] {
   --focus-halo-strong: color-mix(in srgb, var(--theme-primary) 55%, transparent);
   --hero-gradient-start: color-mix(in srgb, var(--theme-primary) 14%, transparent);
   --theme-muted-surface: color-mix(in srgb, var(--theme-primary) 10%, var(--bg-page));
+  --background-primary: var(--bg-page);
+  --background-surface: var(--bg-card);
+  --background-gradient: var(--nn-aesthetic-gradient-primary);
+  --gradient-overlay: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--theme-page-bg) 22%, transparent) 0%,
+    color-mix(in srgb, var(--theme-page-bg) 30%, transparent) 100%
+  );
   --nn-presentation-wash: color-mix(in srgb, var(--theme-primary) 10%, var(--theme-page-bg));
   --nn-presentation-panel: color-mix(in srgb, var(--theme-primary) 13%, var(--theme-card-bg));
   --nn-presentation-badge: color-mix(in srgb, var(--theme-primary) 14%, var(--theme-card-bg));
