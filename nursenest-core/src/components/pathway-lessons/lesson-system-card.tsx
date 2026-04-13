@@ -21,6 +21,7 @@ import {
   lessonEstimatedDurationLabel,
 } from "@/components/pathway-lessons/lesson-board-metadata";
 import { LessonRow } from "@/components/pathway-lessons/lesson-row";
+import { pathwayLessonYieldLabel } from "@/lib/lessons/pathway-lesson-yield";
 import type {
   PathwayLessonSystemLabel,
   PathwayLessonSystemSection,
@@ -119,6 +120,7 @@ export function LessonSystemCard({
               href={href}
               title={lesson.title}
               progressStatus={showProgress ? (progressMap[lesson.slug] ?? "not_started") : "not_started"}
+              yieldBadgeLabel={pathwayLessonYieldLabel(lesson.activeExamMeta?.yieldLevel)}
               durationLabel={lessonEstimatedDurationLabel(lesson)}
               difficulty={lessonDifficultyLabel(lesson)}
             />
@@ -143,6 +145,7 @@ export function LessonSystemCard({
                   href={href}
                   title={lesson.title}
                   progressStatus={showProgress ? (progressMap[lesson.slug] ?? "not_started") : "not_started"}
+                  yieldBadgeLabel={pathwayLessonYieldLabel(lesson.activeExamMeta?.yieldLevel)}
                   durationLabel={lessonEstimatedDurationLabel(lesson)}
                   difficulty={lessonDifficultyLabel(lesson)}
                 />

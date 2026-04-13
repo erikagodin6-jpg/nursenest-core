@@ -7,10 +7,23 @@
  * - Public `/lessons` index filters by `pathwayMatchesMarketingRegion` (nursing-tier-public-labels).
  */
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
+import { resolveLessonContextForPathway } from "@/lib/lessons/lesson-region-exam";
 
 /** Country label for visible copy and meta. */
 export function pathwayCountryLabel(pathway: ExamPathwayDefinition): "Canada" | "United States" {
   return pathway.countrySlug === "canada" ? "Canada" : "United States";
+}
+
+/**
+ * Region-aware public exam label for lessons surfaces.
+ * Fallback behavior (missing/unknown region) defaults to NCLEX naming for PN/RN.
+ */
+export function pathwayRegionAwareExamName(pathway: ExamPathwayDefinition): string {
+  const { exam } = resolveLessonContextForPathway(pathway);
+  if (exam === "REX_PN") return "REx-PN";
+  if (exam === "NCLEX_PN") return "NCLEX-PN";
+  if (exam === "NCLEX_RN") return "NCLEX-RN";
+  return "NCLEX";
 }
 
 /**
@@ -20,13 +33,14 @@ export function pathwayCountryLabel(pathway: ExamPathwayDefinition): "Canada" | 
 export function pathwayLessonHubH1(pathway: ExamPathwayDefinition): string {
   const place = pathwayCountryLabel(pathway);
   const sn = pathway.shortName;
+  const examName = pathwayRegionAwareExamName(pathway);
   switch (pathway.roleTrack) {
     case "rn":
       return `NCLEX-RN clinical lessons · ${place} · ${sn}`;
     case "lpn":
-      return `NCLEX-PN (LPN) clinical lessons · ${place} · ${sn}`;
+      return `${examName} (LPN) clinical lessons · ${place} · ${sn}`;
     case "rpn":
-      return `REx-PN (RPN) clinical lessons · ${place} · ${sn}`;
+      return `${examName} (RPN) clinical lessons · ${place} · ${sn}`;
     case "np":
       return `Nurse practitioner exam review lessons · ${place} · ${sn}`;
     case "allied":
@@ -47,7 +61,8 @@ export function pathwayLessonHubMetaDescription(pathway: ExamPathwayDefinition):
 }
 
 export function pathwayLessonTopicClusterMetaTitle(pathway: ExamPathwayDefinition, topicLabel: string): string {
-  return `${topicLabel} · ${pathway.shortName} lessons (${pathwayCountryLabel(pathway)}) | NurseNest`;
+  const examName = pathwayRegionAwareExamName(pathway);
+  return `${topicLabel} · ${examName} lessons (${pathwayCountryLabel(pathway)}) | NurseNest`;
 }
 
 function truncateMetaDescription(text: string, maxLen = 158): string {
@@ -69,7 +84,8 @@ export function pathwayLessonTopicClusterMetaDescription(
 ): string {
   const place = pathway.countrySlug === "canada" ? "Canadian" : "US";
   const exam = pathway.displayName;
+  const examName = pathwayRegionAwareExamName(pathway);
   const topic = topicLabel.trim();
-  const raw = `${topic} lessons for ${pathway.shortName} (${exam}, ${place} scope): guided readings, clinical reasoning, and links to pathway-matched practice questions plus CAT-style adaptive study.`;
+  const raw = `${topic} lessons for ${examName} (${exam}, ${place} scope): guided readings, clinical reasoning, and links to pathway-matched practice questions plus CAT-style adaptive study.`;
   return truncateMetaDescription(raw);
 }

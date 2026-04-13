@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
-import { pathwayCountryLabel, pathwayLessonHubH1 } from "@/lib/lessons/pathway-lesson-hub-seo";
+import { pathwayCountryLabel, pathwayLessonHubH1, pathwayRegionAwareExamName } from "@/lib/lessons/pathway-lesson-hub-seo";
 import { pathwayLessonsHubLead } from "@/lib/lessons/pathway-lessons-hub-intro";
 import { PathwayLessonsHubSearch } from "@/components/pathway-lessons/pathway-lessons-hub-search";
 
@@ -33,6 +33,7 @@ export function PathwayLessonsStudyHero({
   heroAccent = "default",
 }: Props) {
   const place = pathwayCountryLabel(pathway);
+  const examName = pathwayRegionAwareExamName(pathway);
   const intro = lead ?? pathwayLessonsHubLead(pathway);
   const examOverviewHref = buildExamPathwayPath(pathway);
   const npAccent = heroAccent === "np";
@@ -58,7 +59,7 @@ export function PathwayLessonsStudyHero({
 
       <div className="relative">
         <p className="nn-marketing-label nn-marketing-label--accent">
-          {pathway.shortName} · {place}
+          {examName} · {place}
         </p>
         <h1 className="nn-marketing-h1 mt-3 max-w-4xl text-balance">
           {pathwayLessonHubH1(pathway)}
@@ -72,7 +73,7 @@ export function PathwayLessonsStudyHero({
             href={examOverviewHref}
             className="nn-study-pill-secondary inline-flex min-h-11 items-center justify-center px-5 py-2.5 text-sm font-semibold"
           >
-            ← {pathway.shortName} exam hub
+            ← {examName} exam hub
           </Link>
         </div>
 

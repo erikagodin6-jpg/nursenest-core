@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import { LearnerNoteScope, type TierCode } from "@prisma/client";
 import { auth } from "@/lib/auth";
 import { PremiumLessonShell } from "@/components/student/premium-lesson-shell";
@@ -227,7 +228,7 @@ export default async function LessonDetailPage({ params }: Props) {
         return { kind: "out_of_plan" as const };
       }
       const record = await getPathwayLesson(pwRow.pathwayId, pwRow.slug, marketingLocale);
-      if (!record) return { kind: "not_found" as const };
+      if (!record || !record.structuralQuality?.publicComplete) return { kind: "not_found" as const };
       return { kind: "pathway_ok" as const, record, pathwayId: pwRow.pathwayId };
     }
 
@@ -373,6 +374,13 @@ export default async function LessonDetailPage({ params }: Props) {
     const record = resolvedLesson.record;
     const visibleRaw = visibleSectionsForLesson(record, true);
     const visible = filterLearnerPresentablePathwaySections(visibleRaw);
+    if (visible.length === 0) {
+      safeServerLog("page_lesson_detail", "pathway_lesson_no_presentable_sections", {
+        id,
+        slug: record.slug,
+      });
+      notFound();
+    }
     const pathwayId = resolvedLesson.pathwayId;
     const pathway = getExamPathwayById(pathwayId);
     const examFraming = getLearnerExamFraming(pathwayId);
@@ -555,17 +563,7 @@ export default async function LessonDetailPage({ params }: Props) {
                     ) : null}
                   </LessonSectionCard>
                 ))
-              ) : visibleRaw.length > 0 ? (
-                <LessonSectionCard
-                  id="lesson-reading-refine"
-                  heading={t("learner.lessons.detail.lessonArticleRefiningTitle")}
-                  kind={null}
-                >
-                  <p className="text-sm leading-relaxed" style={{ color: "var(--semantic-text-secondary)" }}>
-                    {t("learner.lessons.detail.lessonArticleRefiningBody")}
-                  </p>
-                </LessonSectionCard>
-              ) : null}
+                  ) : null}
             </article>
           </PremiumLessonShell>
         </LessonAssessmentFlow>

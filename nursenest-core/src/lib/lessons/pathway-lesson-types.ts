@@ -44,6 +44,16 @@ export type PathwayLessonCountryScope = "us" | "ca" | "both";
 
 /** Relative exam weight for prioritization in expansion / hub ordering. */
 export type PathwayLessonExamRelevance = "high_yield" | "core" | "specialty";
+export type PathwayLessonRuntimeExam = "REX_PN" | "NCLEX_PN" | "NCLEX_RN" | "NCLEX";
+export type PathwayLessonRuntimeCountry = "CA" | "US" | "GLOBAL";
+export type PathwayLessonPriority = "high" | "medium" | "low";
+export type PathwayLessonYieldLevel = "must_know" | "common" | "advanced" | "rare";
+export type PathwayLessonClinicalPriority = "urgent" | "routine" | "foundational";
+export type PathwayLessonExamMeta = {
+  exam: PathwayLessonRuntimeExam;
+  yieldLevel: PathwayLessonYieldLevel;
+  clinicalPriority?: PathwayLessonClinicalPriority;
+};
 
 /**
  * Optional authoring tag for cross-cutting exam domains (catalog / future DB metadata).
@@ -204,6 +214,14 @@ export type PathwayLessonRecord = {
   audienceTiers?: PathwayLessonAudienceTier[];
   countryScope?: PathwayLessonCountryScope;
   examRelevance?: PathwayLessonExamRelevance;
+  /** Region-aware runtime filters (single global lesson dataset). */
+  exams?: PathwayLessonRuntimeExam[];
+  countries?: PathwayLessonRuntimeCountry[];
+  priority?: PathwayLessonPriority;
+  /** Exam-aware yield metadata for cross-surface prioritization (plans/readiness/questions). */
+  examMeta?: PathwayLessonExamMeta[];
+  /** Runtime-selected metadata for the current exam context. */
+  activeExamMeta?: PathwayLessonExamMeta;
   /**
    * Optional URL for pre-generated lesson-level audio (TTS or studio narration).
    * When present, the LessonAudioCard renders a play control above the lesson article.

@@ -13,6 +13,10 @@ import type {
   PathwayLessonStructuralGate,
 } from "@/lib/lessons/pathway-lesson-types";
 import { countWords, stripToPlainText } from "@/lib/content-quality/plain-text";
+import {
+  evaluateLegacySubscriberReadinessIssues,
+  evaluatePremiumSubscriberReadinessIssues,
+} from "@/lib/lessons/pathway-lesson-subscriber-completeness";
 
 /** Canonical premium section kinds (render order). Legacy kinds are normalized separately. */
 export const PREMIUM_SECTION_KINDS: readonly PathwayLessonPremiumSectionKind[] = [
@@ -291,19 +295,23 @@ export function evaluatePathwayLessonStructuralGate(lesson: PathwayLessonRecord)
       premiumOmittedSections: lesson.premiumOmittedSections,
       relatedLessonRefs: lesson.relatedLessonRefs,
     });
+    const subscriber = evaluatePremiumSubscriberReadinessIssues(lesson);
+    const issues = [...v.issues, ...subscriber];
     return {
       structureMode: "premium",
-      publicComplete: v.premiumReady,
-      issues: v.issues,
+      publicComplete: issues.length === 0,
+      issues,
       warnings: [],
       internalStudyLinkCount: v.internalLinkCount,
     };
   }
   const l = validatePathwayLessonLegacyStructural(lesson);
+  const subscriber = evaluateLegacySubscriberReadinessIssues(lesson);
+  const issues = [...l.issues, ...subscriber];
   return {
     structureMode: "legacy",
-    publicComplete: l.legacyReady,
-    issues: l.issues,
+    publicComplete: issues.length === 0,
+    issues,
     warnings: l.warnings,
     internalStudyLinkCount: l.internalStudyLinkCount,
   };

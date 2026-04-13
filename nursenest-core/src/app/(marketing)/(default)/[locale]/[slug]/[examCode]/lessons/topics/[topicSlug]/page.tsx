@@ -19,6 +19,7 @@ import {
 import {
   pathwayLessonTopicClusterMetaDescription,
   pathwayLessonTopicClusterMetaTitle,
+  pathwayRegionAwareExamName,
 } from "@/lib/lessons/pathway-lesson-hub-seo";
 import {
   pathwayLessonHasRenderableHubSlug,
@@ -43,15 +44,16 @@ type Props = {
 };
 
 function TopicClusterLoadFailed({ pathway, base }: { pathway: ExamPathwayDefinition; base: string }) {
+  const examName = pathwayRegionAwareExamName(pathway);
   return (
     <div className="mx-auto max-w-3xl px-4 py-12">
       <Link href={base} className="text-sm font-medium text-primary hover:underline">
-        ← All lessons ({pathway.shortName})
+        ← All lessons ({examName})
       </Link>
       <h1 className="mt-4 text-2xl font-bold text-[var(--theme-heading-text)]">Topic lessons temporarily unavailable</h1>
       <p className="mt-3 text-sm text-[var(--theme-muted-text)]">
         We couldn&apos;t load the lesson list for this topic. You can still open the full lesson index or exam hub for{" "}
-        {pathway.shortName}.
+        {examName}.
       </p>
       <div className="mt-6 flex flex-wrap gap-3">
         <Link
@@ -64,7 +66,7 @@ function TopicClusterLoadFailed({ pathway, base }: { pathway: ExamPathwayDefinit
           href={buildExamPathwayPath(pathway)}
           className="inline-flex min-h-[44px] items-center justify-center rounded-full border border-border px-5 py-2.5 text-sm font-semibold hover:bg-card"
         >
-          {pathway.shortName} exam hub
+          {examName} exam hub
         </Link>
       </div>
     </div>
@@ -226,6 +228,7 @@ export default async function PathwayLessonTopicClusterPage({ params, searchPara
   }
 
   const lessons = pageResult.items.filter(pathwayLessonHasRenderableHubSlug);
+  const examName = pathwayRegionAwareExamName(pathway);
   const label = topicClusters.find((t) => t.topicSlug === topicSlug)?.label ?? topicSlug.replace(/-/g, " ");
   const { crumbs, schemaItems } = pathwayTopicClusterBreadcrumbs(pathway, topicSlug, label);
 
@@ -236,11 +239,11 @@ export default async function PathwayLessonTopicClusterPage({ params, searchPara
         <BreadcrumbTrail items={crumbs} />
       </div>
       <Link href={base} className="text-sm font-medium text-primary hover:underline">
-        ← All lessons ({pathway.shortName})
+        ← All lessons ({examName})
       </Link>
       <p className="mt-3 text-xs font-semibold uppercase text-primary">{pathway.displayName}</p>
       <h1 className="mt-2 text-3xl font-extrabold text-[var(--theme-heading-text)]">
-        {label} · {pathway.shortName}
+        {label} · {examName}
       </h1>
 
       <div className="mt-6">
@@ -297,11 +300,11 @@ export default async function PathwayLessonTopicClusterPage({ params, searchPara
       <div className="mt-10 nn-card p-4 text-sm text-muted">
         <p>
           <Link href={buildExamPathwayPath(pathway)} className="font-semibold text-primary hover:underline">
-            {pathway.shortName} exam hub
+            {examName} exam hub
           </Link>{" "}
           ·{" "}
           <Link href={buildExamPathwayPath(pathway, "questions")} className="font-semibold text-primary hover:underline">
-            {pathway.shortName} question bank
+            {examName} question bank
           </Link>
         </p>
       </div>

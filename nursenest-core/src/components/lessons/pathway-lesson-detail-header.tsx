@@ -2,7 +2,7 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { validateLearnerCopyForExamContext } from "@/lib/learner/validate-learner-copy-context";
-import { pathwayCountryLabel } from "@/lib/lessons/pathway-lesson-hub-seo";
+import { pathwayCountryLabel, pathwayRegionAwareExamName } from "@/lib/lessons/pathway-lesson-hub-seo";
 
 type Props = {
   pathway: ExamPathwayDefinition;
@@ -29,12 +29,13 @@ export function PathwayLessonDetailHeader({
   metaChips,
 }: Props) {
   const place = pathwayCountryLabel(pathway);
+  const examName = pathwayRegionAwareExamName(pathway);
   validateLearnerCopyForExamContext(pathway, lessonTitle, "lesson_header");
 
   return (
     <header
       data-nn-pathway-id={pathway.id}
-      data-nn-exam-short={pathway.shortName}
+      data-nn-exam-short={examName}
       className="relative overflow-hidden rounded-2xl border border-[color-mix(in_srgb,var(--theme-primary)_10%,var(--border-subtle))] bg-gradient-to-br from-[var(--nn-presentation-wash)] via-[var(--theme-page-bg)] to-[color-mix(in_srgb,var(--theme-primary)_4%,var(--theme-page-bg))] px-5 py-7 shadow-[var(--shadow-card)] sm:px-8 sm:py-9"
     >
       <div
@@ -46,9 +47,9 @@ export function PathwayLessonDetailHeader({
         <div
           className="flex max-w-full flex-wrap items-center gap-x-2.5 gap-y-1.5 rounded-xl border border-[color-mix(in_srgb,var(--theme-primary)_12%,var(--border-subtle))] bg-[color-mix(in_srgb,var(--theme-primary)_4.5%,var(--bg-card))] px-3 py-2.5 text-sm shadow-[var(--shadow-card)]"
           role="group"
-          aria-label={`${pathway.shortName}, ${place}`}
+          aria-label={`${examName}, ${place}`}
         >
-          <span className="font-semibold text-[var(--theme-heading-text)]">{pathway.shortName}</span>
+          <span className="font-semibold text-[var(--theme-heading-text)]">{examName}</span>
           <span aria-hidden className="text-[var(--theme-muted-text)]">
             ·
           </span>
@@ -80,7 +81,7 @@ export function PathwayLessonDetailHeader({
             href={lessonsBasePath}
             className="nn-study-pill-secondary inline-flex min-h-11 items-center justify-center px-5 py-2.5 text-sm font-semibold text-primary"
           >
-            ← All lessons · {pathway.shortName}
+            ← All lessons · {examName}
           </Link>
         </div>
       </div>

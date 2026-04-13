@@ -1,4 +1,5 @@
 import type { PathwayLessonRecord } from "@/lib/lessons/pathway-lesson-types";
+import { pathwayLessonYieldWeight } from "@/lib/lessons/pathway-lesson-yield";
 
 export const PATHWAY_LESSON_SYSTEM_ORDER = [
   "cardiovascular",
@@ -119,6 +120,8 @@ export function normalizePathwayLessonSystemLabel(
  * Uses `examRelevance` when present; falls back to alphabetical tiebreak in callers.
  */
 function lessonPriorityScore(lesson: PathwayLessonRecord): number {
+  const yieldWeight = pathwayLessonYieldWeight(lesson.activeExamMeta?.yieldLevel);
+  if (yieldWeight < 4) return 100 - yieldWeight;
   switch (lesson.examRelevance) {
     case "high_yield": return 3;
     case "core": return 2;

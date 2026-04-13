@@ -48,7 +48,6 @@ import {
   mergeRelatedLessonDisplayList,
   pathwayLessonHasRenderableHubSlug,
 } from "@/lib/lessons/pathway-lesson-types";
-import { LessonStructuralQualityNotice } from "@/components/lessons/lesson-structural-quality-notice";
 import { PathwayLessonProgressBadgeLive } from "@/components/lessons/pathway-lesson-progress-badge-live";
 import { PathwayLessonProgressTracker } from "@/components/lessons/pathway-lesson-progress-tracker";
 import {
@@ -139,6 +138,7 @@ export default async function AlliedHealthSlugLessonDetailPage({ params }: Props
   const lessonContentLocale = await getMarketingLocaleForDefaultRoute();
   const lesson = await getPathwayLesson(pathway.id, lessonSlug, lessonContentLocale);
   if (!lesson) notFound();
+  if (!lesson.structuralQuality?.publicComplete) notFound();
   if (!alliedLessonMatchesProfessionFilter(lesson, prof.topicSlugsIn)) notFound();
 
   const session = await auth();
@@ -256,7 +256,6 @@ export default async function AlliedHealthSlugLessonDetailPage({ params }: Props
       </p>
       <div className="mt-4 space-y-3">
         <LessonQualityNotice tier={lessonQuality.tier} wordCount={lessonQuality.wordCount} />
-        <LessonStructuralQualityNotice gate={lesson.structuralQuality} />
         <PathwayLessonQuickReview bullets={buildQuickReviewBullets(lesson)} />
       </div>
       {showLocaleFallbackNotice ? (

@@ -1,5 +1,6 @@
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
+import { pathwayRegionAwareExamName } from "@/lib/lessons/pathway-lesson-hub-seo";
 import { PUBLIC_MARKETING_EXAM_LESSONS_HUB_PATH } from "@/lib/lessons/lesson-routes";
 import type { BreadcrumbCrumb, BreadcrumbSchemaItem } from "@/lib/seo/breadcrumb-types";
 import { toAbsoluteSiteUrl } from "@/lib/seo/breadcrumb-utils";
@@ -65,12 +66,13 @@ function pathwayHubChildPath(pathway: ExamPathwayDefinition, hubBasePath: string
 
 function pathwayHubCrumb(pathway: ExamPathwayDefinition, linked: boolean, hubBasePath?: string): BreadcrumbCrumb {
   const base = pathwayHubBase(pathway, hubBasePath);
-  return linked ? { name: pathway.shortName, href: base } : { name: pathway.shortName, href: undefined };
+  const examName = pathwayRegionAwareExamName(pathway);
+  return linked ? { name: examName, href: base } : { name: examName, href: undefined };
 }
 
 function pathwayHubSchema(pathway: ExamPathwayDefinition, hubBasePath?: string): BreadcrumbSchemaItem {
   const base = pathwayHubBase(pathway, hubBasePath);
-  return { name: pathway.shortName, item: toAbsoluteSiteUrl(base) };
+  return { name: pathwayRegionAwareExamName(pathway), item: toAbsoluteSiteUrl(base) };
 }
 
 /** Exam pathway overview: Home → programmatic SEO (or lessons index) → pathway hub (current). */
@@ -151,7 +153,8 @@ export function pathwayLessonDetailBreadcrumbs(
   const hub = opts?.hubBasePath;
   const lessonsPath = pathwayHubChildPath(pathway, hub, "lessons");
   const lessonPath = pathwayHubChildPath(pathway, hub, `lessons/${lessonSlug}`);
-  const lessonsLabel = `${pathway.shortName} lessons`;
+  const examName = pathwayRegionAwareExamName(pathway);
+  const lessonsLabel = `${examName} lessons`;
   const lessonsHubKey = "breadcrumbs.pathwayLessonsHub" as const;
   const crumbs: BreadcrumbCrumb[] = [
     HOME,
@@ -161,7 +164,7 @@ export function pathwayLessonDetailBreadcrumbs(
       name: lessonsLabel,
       href: lessonsPath,
       i18nKey: lessonsHubKey,
-      i18nParams: { shortName: pathway.shortName },
+      i18nParams: { shortName: examName },
     },
     { name: lessonTitle, href: undefined },
   ];
@@ -173,7 +176,7 @@ export function pathwayLessonDetailBreadcrumbs(
       name: lessonsLabel,
       item: toAbsoluteSiteUrl(lessonsPath),
       i18nKey: lessonsHubKey,
-      i18nParams: { shortName: pathway.shortName },
+      i18nParams: { shortName: examName },
     },
     { name: lessonTitle, item: toAbsoluteSiteUrl(lessonPath) },
   ];

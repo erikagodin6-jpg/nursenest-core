@@ -20,9 +20,10 @@ type Props = {
   progressStatus: PathwayLessonProgressStatus;
   durationLabel: string;
   difficulty: LessonDifficulty;
+  yieldBadgeLabel?: string | null;
 };
 
-export function LessonRow({ href, title, progressStatus, durationLabel, difficulty }: Props) {
+export function LessonRow({ href, title, progressStatus, durationLabel, difficulty, yieldBadgeLabel }: Props) {
   return (
     <Link
       href={href}
@@ -30,6 +31,11 @@ export function LessonRow({ href, title, progressStatus, durationLabel, difficul
     >
       <StatusIcon status={progressStatus} />
       <span className="min-w-0 flex-1 truncate font-medium text-[var(--theme-heading-text)]">{title}</span>
+      {yieldBadgeLabel ? (
+        <span className="shrink-0 rounded-full border border-[var(--semantic-border-soft)] px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">
+          {yieldBadgeLabel}
+        </span>
+      ) : null}
       <span className="shrink-0 text-xs font-medium text-[var(--theme-muted-text)]">{durationLabel}</span>
       <DifficultyBadge difficulty={difficulty} />
       <ChevronRight

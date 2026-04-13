@@ -12,7 +12,9 @@ import { marketingPathwayLessonsIndexPath, marketingExamHubBasePath } from "@/li
 import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
 import { normalizePathwayHubSearchQuery } from "@/lib/lessons/pathway-lesson-loader";
 import { PathwayLessonsCurriculumHub } from "@/components/pathway-lessons/pathway-lessons-curriculum-hub";
+import { PathwayHighYieldStart } from "@/components/pathway-lessons/pathway-high-yield-start";
 import { pathwayLessonHubMetaDescription, pathwayLessonHubMetaTitle } from "@/lib/lessons/pathway-lesson-hub-seo";
+import { pathwayRegionAwareExamName } from "@/lib/lessons/pathway-lesson-hub-seo";
 import { pathwayLessonHasRenderableHubSlug } from "@/lib/lessons/pathway-lesson-types";
 import { pathwayLessonsHubBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 import { absoluteUrl } from "@/lib/seo/site-origin";
@@ -101,8 +103,9 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
 
   const lessons = pageResult.items.filter(pathwayLessonHasRenderableHubSlug);
   const { schemaItems } = pathwayLessonsHubBreadcrumbs(pathway);
-  const pageTitle = `${pathway.shortName} lessons`;
-  const headerDescription = `Browse ${pathway.shortName} lessons by clinical area.`;
+  const examName = pathwayRegionAwareExamName(pathway);
+  const pageTitle = `${examName} lessons`;
+  const headerDescription = `Browse ${examName} lessons by clinical area.`;
 
   const overviewHref = marketingExamHubBasePath(pathway);
   const questionsHref = buildExamPathwayPath(pathway, "questions");
@@ -136,7 +139,7 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
         title={pageTitle}
         subtitle={headerDescription}
         toolbar={toolbar}
-        backLink={{ label: `${pathway.shortName} overview`, href: overviewHref }}
+        backLink={{ label: `${examName} overview`, href: overviewHref }}
       >
         <BreadcrumbJsonLd items={schemaItems} />
         <div className="mt-6 rounded-[1.75rem] border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5">
@@ -208,7 +211,7 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
       title={pageTitle}
       subtitle={headerDescription}
       toolbar={toolbar}
-      backLink={{ label: `${pathway.shortName} overview`, href: overviewHref }}
+        backLink={{ label: `${examName} overview`, href: overviewHref }}
       ctas={[
         { label: "Start learning", href: `${base}#pathway-lesson-library`, variant: "primary" },
         { label: "Practice questions", href: questionsHref, variant: "outline" },
@@ -236,6 +239,11 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
       </div>
 
       {/* 4. Lesson library */}
+      <div className="mt-8">
+        <PathwayHighYieldStart lessons={lessons} lessonsBasePath={base} />
+      </div>
+
+      {/* 5. Lesson library */}
       <section id="pathway-lesson-library" className="mt-8 scroll-mt-24" aria-labelledby="lesson-library-heading">
         {/* Section toolbar: heading + count badge */}
         <div className="mb-4 flex flex-wrap items-center justify-between gap-3 border-b border-[var(--semantic-border-soft)] pb-4">

@@ -2,6 +2,7 @@
  * Exam-pathway-specific lead copy for public lesson index hubs (single source for tone + scope).
  */
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
+import { pathwayRegionAwareExamName } from "@/lib/lessons/pathway-lesson-hub-seo";
 
 export function pathwayLessonsHubLead(pathway: ExamPathwayDefinition): string {
   switch (pathway.id) {
@@ -27,7 +28,8 @@ export function pathwayLessonsHubLead(pathway: ExamPathwayDefinition): string {
       return "Canadian NP licensure (CNPLE) is evolving—this hub stays aligned as requirements finalize. Use pathway-scoped questions and CAT practice now; structured lessons will deepen here as they publish. Join the waitlist on the exam hub if checkout is not yet open for this track.";
     default: {
       const place = pathway.countrySlug === "canada" ? "Canada" : "the United States";
-      return `Exam-scoped clinical lessons for ${pathway.shortName} (${place}). Terminology matches this pathway only—pair reading with the question bank and CAT practice. Subscription unlocks full lesson depth; previews remain indexable.`;
+      const examName = pathwayRegionAwareExamName(pathway);
+      return `Exam-scoped clinical lessons for ${examName} (${place}). Terminology matches this pathway only—pair reading with the question bank and CAT practice. Subscription unlocks full lesson depth; previews remain indexable.`;
     }
   }
 }

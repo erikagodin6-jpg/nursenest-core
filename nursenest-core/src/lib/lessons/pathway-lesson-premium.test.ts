@@ -72,6 +72,9 @@ describe("pathway-lesson-premium", () => {
 
   it("validatePathwayLessonPremium passes for filled premium lesson with links and refs", () => {
     const sections = minimalPremiumSections({
+      signs_symptoms: {
+        body: `**Vignette — 58-year-old patient presents with progressive dyspnea.** ${fillerWords(130)} Nursing assessment includes vitals, work of breathing, and oxygenation. Prioritize airway and circulation while gathering history.\n\n${fillerWords(90)}`,
+      },
       related_next_steps: {
         body: `${fillerWords(45)}\n\n- [One](LESSON:a)\n- [Two](LESSON:b)\n- [Three](/tools)`,
       },
@@ -92,7 +95,9 @@ describe("pathway-lesson-premium", () => {
     assert.ok(v.internalLinkCount >= 3);
   });
 
-  it("evaluatePathwayLessonStructuralGate marks legacy catalog-style lesson complete when SEO valid", () => {
+  it("evaluatePathwayLessonStructuralGate marks legacy lesson complete when SEO + spine + scenario pass", () => {
+    const scenarioLead =
+      "**Vignette — 44-year-old patient presents to the unit with chest pressure.** Nursing assessment includes vitals, pain, and cardiac monitoring. Prioritize airway, breathing, and circulation while notifying the provider per protocol.\n\n";
     const lesson: PathwayLessonRecord = {
       slug: "x",
       title: "T",
@@ -103,11 +108,11 @@ describe("pathway-lesson-premium", () => {
       seoTitle: "SEO",
       seoDescription: fillerWords(22),
       sections: [
-        { id: "clinical_meaning", heading: "H", kind: "clinical_meaning", body: fillerWords(50) },
-        { id: "exam_relevance", heading: "H", kind: "exam_relevance", body: fillerWords(50) },
-        { id: "core_concept", heading: "H", kind: "core_concept", body: fillerWords(50) },
-        { id: "clinical_scenario", heading: "H", kind: "clinical_scenario", body: fillerWords(50) },
-        { id: "takeaways", heading: "H", kind: "takeaways", body: fillerWords(50) },
+        { id: "clinical_meaning", heading: "H", kind: "clinical_meaning", body: fillerWords(200) },
+        { id: "exam_relevance", heading: "H", kind: "exam_relevance", body: fillerWords(100) },
+        { id: "core_concept", heading: "H", kind: "core_concept", body: fillerWords(160) },
+        { id: "clinical_scenario", heading: "H", kind: "clinical_scenario", body: scenarioLead + fillerWords(160) },
+        { id: "takeaways", heading: "H", kind: "takeaways", body: fillerWords(120) },
       ],
     };
     const g = evaluatePathwayLessonStructuralGate(lesson);

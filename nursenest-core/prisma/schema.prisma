@@ -1123,6 +1123,12 @@ model PathwayLesson {
   /** Optional row-level filter; null means “follow pathway registry” (country implied by pathway). */
   countryCode         CountryCode?  @map("country_code")
   tierCode            TierCode?     @map("tier_code")
+  /** Runtime region-aware lesson filtering metadata (single global lesson dataset). */
+  exams               String[]      @default([])
+  countries           String[]      @default([])
+  priority            String        @default("medium")
+  /** Exam-specific yield metadata: [{ exam, yieldLevel, clinicalPriority? }]. */
+  examMeta            Json          @default("[]") @map("exam_meta")
   status              ContentStatus @default(PUBLISHED)
   sortOrder           Int           @default(0) @map("sort_order")
   /** BCP 47-style language tag (`en`, `fr`, …). Default `en` for catalog imports. */
@@ -1133,6 +1139,7 @@ model PathwayLesson {
   @@unique([pathwayId, slug, locale])
   @@index([pathwayId, status, sortOrder])
   @@index([pathwayId, locale, status, sortOrder])
+  @@index([pathwayId, locale, status, priority, bodySystem, sortOrder])
   @@index([pathwayId, topicSlug, locale, status])
   /** Student app lesson list sorted by updatedAt (recently changed lessons appear first). */
   @@index([pathwayId, status, locale, updatedAt(sort: Desc)])

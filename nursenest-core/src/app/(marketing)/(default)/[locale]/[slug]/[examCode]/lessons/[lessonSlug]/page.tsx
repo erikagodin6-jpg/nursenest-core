@@ -55,8 +55,8 @@ import {
   type PathwayLessonProgressStatus,
 } from "@/lib/lessons/pathway-lesson-progress";
 import { PathwayLessonAssessmentExperience } from "@/components/lessons/pathway-lesson-assessment-experience";
-import { LessonStructuralQualityNotice } from "@/components/lessons/lesson-structural-quality-notice";
 import { PathwayLessonDetailHeader } from "@/components/lessons/pathway-lesson-detail-header";
+import { pathwayRegionAwareExamName } from "@/lib/lessons/pathway-lesson-hub-seo";
 import {
   PathwayLessonDetailDeferred,
   PathwayLessonDetailDeferredSkeleton,
@@ -90,6 +90,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         ? await loadPathwayLessonWithLegacySlugRedirect(pathway, lessonSlug, viewerLessonLocale)
         : undefined;
       if (!pathway || !lesson) return {};
+      if (!lesson.structuralQuality?.publicComplete) {
+        return { title: "Lesson", robots: { index: false, follow: false } };
+      }
       const path = pathwayLessonPublicDetailPath(pathway, lesson.slug);
       if (!path) return {};
       const canonical = absoluteUrl(path);
@@ -150,6 +153,8 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
   const lesson =
     lessonResult.status === "fulfilled" ? lessonResult.value : undefined;
   if (!lesson) notFound();
+  if (!lesson.structuralQuality?.publicComplete) notFound();
+  const examName = pathwayRegionAwareExamName(pathway);
 
   const session = sessionResult.status === "fulfilled" ? sessionResult.value : null;
 
@@ -257,7 +262,6 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
         <div className="mt-6 space-y-3">
           <PremiumLessonPublishNotice validation={lesson.premiumValidation} />
           <LessonQualityNotice tier={lessonQuality.tier} wordCount={lessonQuality.wordCount} />
-          <LessonStructuralQualityNotice gate={lesson.structuralQuality} />
           <PathwayLessonQuickReview bullets={buildQuickReviewBullets(lesson)} />
         </div>
         {showLocaleFallbackNotice ? (
@@ -452,7 +456,7 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
           </Link>
           {" · "}
           <Link href={buildExamPathwayPath(pathway)} className="font-medium text-primary hover:underline">
-            {pathway.shortName} exam hub
+            {examName} exam hub
           </Link>
         </p>
 

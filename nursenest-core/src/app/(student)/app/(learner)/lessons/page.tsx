@@ -24,7 +24,11 @@ import { FreemiumLessonPeek } from "@/components/student/freemium-lesson-peek";
 import { LearnerStudyQuickLinksCard } from "@/components/student/learner-study-quick-links-card";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
 import { LEARNER_APP_LESSONS_PAGE_SIZE } from "@/lib/lessons/pathway-lesson-scale";
-import { loadPathwayLessonProgressMap, type PathwayLessonProgressStatus } from "@/lib/lessons/pathway-lesson-progress";
+import {
+  loadPathwayLessonProgressMap,
+  type PathwayLessonProgressStatus,
+} from "@/lib/lessons/pathway-lesson-progress";
+import { normalizeLesson, pathwayLessonRowToInput } from "@/lib/lessons/pathway-lesson-loader";
 import { LessonCard, LessonCardChip } from "@/components/student/product/lesson-card";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { freemiumLessonsExhausted, freemiumQuestionsExhausted } from "@/lib/conversion/freemium-gates";
@@ -187,12 +191,13 @@ export default async function LessonsPage({ searchParams }: Props) {
       topicSlug: topicSlugFilter,
       pathwayId: pathwayIdFilter,
     });
-    const pathwayTotal = await prisma.pathwayLesson.count({ where: pathwayWhere });
+    const pathwaySample = await prisma.pathwayLesson.findFirst({
+      where: pathwayWhere,
+      select: { id: true },
+    });
 
-    if (pathwayTotal > 0) {
-      const pageCount = Math.max(1, Math.ceil(pathwayTotal / LEARNER_APP_LESSONS_PAGE_SIZE) || 1);
-      const safePage = Math.min(pageRequested, pageCount);
-      const pathwayRows = await prisma.pathwayLesson.findMany({
+    if (pathwaySample) {
+      const pathwayAllRows = await prisma.pathwayLesson.findMany({
         where: pathwayWhere,
         select: {
           id: true,
@@ -203,11 +208,26 @@ export default async function LessonsPage({ searchParams }: Props) {
           slug: true,
           pathwayId: true,
           updatedAt: true,
+          topicSlug: true,
+          previewSectionCount: true,
+          seoTitle: true,
+          sections: true,
+          locale: true,
         },
         orderBy: { updatedAt: "desc" },
-        skip: (safePage - 1) * LEARNER_APP_LESSONS_PAGE_SIZE,
-        take: LEARNER_APP_LESSONS_PAGE_SIZE,
+        take: 500,
       });
+      const readyRows = pathwayAllRows.filter((r) => {
+        const rec = normalizeLesson(pathwayLessonRowToInput(r), r.pathwayId);
+        return Boolean(rec.structuralQuality?.publicComplete);
+      });
+      const pathwayTotal = readyRows.length;
+      const pageCount = Math.max(1, Math.ceil(pathwayTotal / LEARNER_APP_LESSONS_PAGE_SIZE) || 1);
+      const safePage = Math.min(pageRequested, pageCount);
+      const pathwayRows = readyRows.slice(
+        (safePage - 1) * LEARNER_APP_LESSONS_PAGE_SIZE,
+        safePage * LEARNER_APP_LESSONS_PAGE_SIZE,
+      );
       const rows: AppLessonListRow[] = pathwayRows.map((r) => ({
         id: r.id,
         title: r.title,
