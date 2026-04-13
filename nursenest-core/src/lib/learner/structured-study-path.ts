@@ -189,6 +189,39 @@ export function resolveStructuredStudyPathwayId(kind: StudyPathKind, preferred?:
   return getExamPathwayById(fallback) ? fallback : "us-rn-nclex-rn";
 }
 
+const KIND_SET = new Set<string>(STUDY_PATH_KINDS);
+
+/** Parse optional `kind` query value; invalid values fall back to `inferred`. */
+export function coalesceStudyPathKindParam(raw: string | null | undefined, inferred: StudyPathKind): StudyPathKind {
+  const k = raw?.trim().toLowerCase() ?? "";
+  if (k && KIND_SET.has(k)) return k as StudyPathKind;
+  return inferred;
+}
+
+/**
+ * Map subscription tier + saved exam pathway to a path kind.
+ * Does not return `new_grad` — use {@link coalesceStudyPathKindParam} with `kind=new_grad` or the Study Plan link.
+ */
+export function inferStudyPathKindFromLearnerProfile(args: {
+  tier?: string | null;
+  learnerPathId?: string | null;
+}): StudyPathKind {
+  const tierRaw = (args.tier ?? "").trim().toUpperCase();
+  if (tierRaw === "ALLIED") return "allied";
+  if (tierRaw === "NP") return "np";
+  if (tierRaw === "LVN_LPN" || tierRaw === "RPN") return "pn";
+
+  const pid = args.learnerPathId?.trim();
+  const path = pid ? getExamPathwayById(pid) : null;
+  if (path) {
+    if (path.roleTrack === "allied") return "allied";
+    if (path.roleTrack === "np") return "np";
+    if (path.roleTrack === "lpn" || path.roleTrack === "rpn") return "pn";
+  }
+
+  return "rn";
+}
+
 export type WeakTopicInput = { topic: string; normalizedTopic?: string | null };
 
 /**

@@ -2,6 +2,7 @@
 @import "./theme-palettes.css";
 @import "./color-roles.css";
 @import "./semantic-status-tokens.css";
+@import "./learner-surface-primitives.css";
 
 html,
 body {

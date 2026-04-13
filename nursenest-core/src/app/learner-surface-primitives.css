@@ -1,0 +1,348 @@
+/**
+ * NurseNest learner UI primitives — token-only surfaces for /app study experiences.
+ * Compose with `components/learner-ui/*`. Works with `[data-theme]` via semantic aliases.
+ * Do not hardcode hex here; use var(--semantic-*), color-mix(in srgb, …).
+ */
+
+/* ── Base surface ─────────────────────────────────────────────────────── */
+
+.nn-ls-surface {
+  border-radius: 1.5rem;
+  border: 1px solid var(--semantic-border-soft);
+  background: var(--semantic-surface);
+  box-shadow: var(--semantic-shadow-soft);
+}
+
+.nn-ls-surface--shadow-none {
+  box-shadow: none;
+}
+
+.nn-ls-surface--radius-lg {
+  border-radius: 1.25rem;
+}
+
+.nn-ls-surface--pad-sm {
+  padding: 1rem 1.15rem;
+}
+
+.nn-ls-surface--pad-md {
+  padding: 1.25rem 1.4rem;
+}
+
+@media (min-width: 640px) {
+  .nn-ls-surface--pad-md {
+    padding: 1.35rem 1.65rem;
+  }
+}
+
+.nn-ls-surface--pad-lg {
+  padding: 1.5rem 1.35rem;
+}
+
+@media (min-width: 640px) {
+  .nn-ls-surface--pad-lg {
+    padding: 2rem 1.75rem;
+  }
+}
+
+/* Tones: primary (brand), secondary (muted), supportive (cool), danger, success */
+
+.nn-ls-surface[data-nn-ls-tone="primary"] {
+  border-color: color-mix(in srgb, var(--semantic-brand) 22%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-brand) 7%, var(--semantic-surface));
+}
+
+.nn-ls-surface[data-nn-ls-tone="secondary"] {
+  border-color: color-mix(in srgb, var(--semantic-text-muted) 18%, var(--semantic-border-soft));
+  background: var(--semantic-panel-muted);
+}
+
+.nn-ls-surface[data-nn-ls-tone="supportive"] {
+  border-color: color-mix(in srgb, var(--semantic-info) 24%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-panel-cool) 42%, var(--semantic-surface));
+}
+
+.nn-ls-surface[data-nn-ls-tone="warm"] {
+  border-color: color-mix(in srgb, var(--semantic-warning) 20%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-panel-warm) 38%, var(--semantic-surface));
+}
+
+.nn-ls-surface[data-nn-ls-tone="danger"] {
+  border-color: color-mix(in srgb, var(--semantic-danger) 26%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-danger-soft) 55%, var(--semantic-surface));
+}
+
+.nn-ls-surface[data-nn-ls-tone="success"] {
+  border-color: color-mix(in srgb, var(--semantic-success) 24%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-panel-positive) 38%, var(--semantic-surface));
+}
+
+/* Optional top emphasis bar (distinct from full danger fill) */
+.nn-ls-surface--accent-top {
+  border-top-width: 3px;
+}
+
+.nn-ls-surface[data-nn-ls-tone="primary"].nn-ls-surface--accent-top {
+  border-top-color: color-mix(in srgb, var(--semantic-brand) 72%, var(--semantic-border-soft));
+}
+
+.nn-ls-surface[data-nn-ls-tone="danger"].nn-ls-surface--accent-top {
+  border-top-color: color-mix(in srgb, var(--semantic-danger) 65%, var(--semantic-border-soft));
+}
+
+.nn-ls-surface[data-nn-ls-tone="success"].nn-ls-surface--accent-top {
+  border-top-color: color-mix(in srgb, var(--semantic-success) 62%, var(--semantic-border-soft));
+}
+
+/* ── Section typography (page sections, cards) ───────────────────────── */
+
+.nn-ls-kicker {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--semantic-text-muted);
+}
+
+.nn-ls-title {
+  margin-top: 0.45rem;
+  font-size: clamp(1.05rem, 2.2vw, 1.45rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  color: var(--semantic-text-primary);
+}
+
+.nn-ls-intro {
+  margin-top: 0.45rem;
+  max-width: 42rem;
+  font-size: 0.875rem;
+  line-height: 1.62;
+  color: var(--semantic-text-secondary);
+}
+
+.nn-ls-section-head {
+  margin-bottom: 1.25rem;
+}
+
+/* ── Filter chips (pill filters, tag toggles) ───────────────────────── */
+
+.nn-ls-chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.nn-ls-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2rem;
+  padding: 0.35rem 0.85rem;
+  border-radius: 9999px;
+  border: 1px solid color-mix(in srgb, var(--semantic-brand) 22%, var(--semantic-border-soft));
+  background: var(--semantic-surface);
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--semantic-text-primary);
+  text-decoration: none;
+  transition:
+    background-color var(--motion-base, 160ms) var(--motion-ease, ease),
+    border-color var(--motion-base, 160ms) var(--motion-ease, ease);
+}
+
+.nn-ls-chip:hover {
+  background: color-mix(in srgb, var(--semantic-brand) 7%, var(--semantic-surface));
+}
+
+.nn-ls-chip[data-selected="true"] {
+  border-color: color-mix(in srgb, var(--semantic-brand) 48%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-brand) 11%, var(--semantic-surface));
+}
+
+.nn-ls-chip[data-tone="supportive"] {
+  border-color: color-mix(in srgb, var(--semantic-info) 26%, var(--semantic-border-soft));
+}
+
+.nn-ls-chip[data-tone="supportive"]:hover {
+  background: color-mix(in srgb, var(--semantic-info) 9%, var(--semantic-surface));
+}
+
+.nn-ls-chip[data-tone="danger"] {
+  border-color: color-mix(in srgb, var(--semantic-danger) 28%, var(--semantic-border-soft));
+  color: var(--semantic-danger-contrast);
+}
+
+.nn-ls-chip[data-tone="danger"]:hover {
+  background: color-mix(in srgb, var(--semantic-danger) 8%, var(--semantic-surface));
+}
+
+/* ── Segmented blocks (compare, dual summary) ───────────────────────── */
+
+.nn-ls-segments {
+  display: grid;
+  gap: 0;
+  overflow: hidden;
+  border-radius: 1rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 92%, transparent);
+}
+
+.nn-ls-segment {
+  padding: 1rem 1.2rem;
+  background: var(--semantic-panel-muted);
+}
+
+.nn-ls-segment:nth-child(even) {
+  background: color-mix(in srgb, var(--semantic-info) 5%, var(--semantic-surface));
+}
+
+.nn-ls-segment + .nn-ls-segment {
+  border-top: 1px solid color-mix(in srgb, var(--semantic-border-soft) 75%, transparent);
+}
+
+@media (min-width: 640px) {
+  .nn-ls-segments[data-nn-ls-cols="2"] {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .nn-ls-segments[data-nn-ls-cols="2"] .nn-ls-segment + .nn-ls-segment {
+    border-top: none;
+    border-left: 1px solid color-mix(in srgb, var(--semantic-border-soft) 75%, transparent);
+  }
+}
+
+.nn-ls-segment__label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--semantic-text-muted);
+}
+
+.nn-ls-segment__body {
+  margin-top: 0.35rem;
+  font-size: 0.875rem;
+  line-height: 1.55;
+  color: var(--semantic-text-secondary);
+}
+
+/* ── Note / callout panels ───────────────────────────────────────────── */
+
+.nn-ls-note {
+  border-radius: 1rem;
+  padding: 0.95rem 1.15rem;
+  border: 1px solid var(--semantic-border-soft);
+  background: var(--semantic-panel-muted);
+  font-size: 0.8125rem;
+  line-height: 1.55;
+  color: var(--semantic-text-secondary);
+}
+
+.nn-ls-note[data-nn-ls-note-tone="info"] {
+  border-color: color-mix(in srgb, var(--semantic-info) 22%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-panel-cool) 50%, var(--semantic-surface));
+}
+
+.nn-ls-note[data-nn-ls-note-tone="success"] {
+  border-color: color-mix(in srgb, var(--semantic-success) 22%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-panel-positive) 45%, var(--semantic-surface));
+}
+
+.nn-ls-note[data-nn-ls-note-tone="danger"] {
+  border-color: color-mix(in srgb, var(--semantic-danger) 24%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-danger-soft) 70%, var(--semantic-surface));
+  color: var(--semantic-danger-contrast);
+}
+
+/* ── Study recommendation (compact next-step) ───────────────────────── */
+
+.nn-ls-rec {
+  display: block;
+  text-decoration: none;
+  border-radius: 1.25rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-brand) 20%, var(--semantic-border-soft));
+  padding: 1.1rem 1.25rem;
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--semantic-brand) 8%, var(--semantic-surface)) 0%,
+    var(--semantic-surface) 48%,
+    color-mix(in srgb, var(--semantic-chart-3) 7%, var(--semantic-surface)) 100%
+  );
+  box-shadow: var(--semantic-shadow-soft);
+  transition:
+    transform var(--nn-btn-motion-duration, 150ms) var(--nn-btn-motion-ease, ease),
+    border-color var(--motion-base, 160ms) ease;
+}
+
+.nn-ls-rec:hover {
+  border-color: color-mix(in srgb, var(--semantic-brand) 32%, var(--semantic-border-soft));
+  transform: translateY(-1px);
+}
+
+.nn-ls-rec__title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--semantic-text-primary);
+}
+
+.nn-ls-rec__body {
+  margin-top: 0.35rem;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--semantic-text-secondary);
+}
+
+.nn-ls-rec__meta {
+  margin-top: 0.65rem;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--semantic-brand);
+}
+
+/* ── Progress card shell (wrap semantic track inside) ─────────────────── */
+
+.nn-ls-progress-card {
+  border-radius: 1.25rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 95%, var(--semantic-text-muted));
+  background: var(--semantic-surface);
+  padding: 1.1rem 1.25rem;
+  box-shadow: var(--semantic-shadow-soft);
+}
+
+.nn-ls-progress-card__label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--semantic-text-muted);
+}
+
+.nn-ls-progress-card__title {
+  margin-top: 0.25rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--semantic-text-primary);
+}
+
+/* ── Empty state inset (optional wrapper around empty UI) ────────────── */
+
+.nn-ls-empty {
+  border-radius: 1.5rem;
+  border: 1px dashed color-mix(in srgb, var(--semantic-border-soft) 70%, var(--semantic-text-muted));
+  background: linear-gradient(
+    160deg,
+    color-mix(in srgb, var(--semantic-panel-muted) 80%, var(--semantic-surface)),
+    color-mix(in srgb, var(--semantic-panel-cool) 35%, var(--semantic-surface))
+  );
+  padding: 2rem 1.5rem;
+}
+
+/* Stat grid rhythm when composing multiple AnalyticsMetricTile / stat cards */
+.nn-ls-stat-grid {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(auto-fill, minmax(10.5rem, 1fr));
+}
