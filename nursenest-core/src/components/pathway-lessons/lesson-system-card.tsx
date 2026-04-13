@@ -12,7 +12,6 @@ import {
   Sparkles,
   Stethoscope,
   Timer,
-  Users,
   Wind,
 } from "lucide-react";
 import { CategoryProgressBar } from "@/components/pathway-lessons/category-progress-bar";
@@ -23,7 +22,6 @@ import {
 import { LessonRow } from "@/components/pathway-lessons/lesson-row";
 import { pathwayLessonYieldLabel } from "@/lib/lessons/pathway-lesson-yield";
 import type {
-  PathwayLessonSystemLabel,
   PathwayLessonSystemSection,
 } from "@/lib/lessons/pathway-lesson-body-system-groups";
 import { pathwayLessonMarketingDetailHref } from "@/lib/lessons/pathway-lesson-types";
@@ -34,21 +32,26 @@ type SystemVisual = {
   accentVar: string;
 };
 
-const SYSTEM_VISUALS: Record<PathwayLessonSystemLabel, SystemVisual> = {
+const SYSTEM_VISUALS: Record<string, SystemVisual> = {
   cardiovascular: { icon: HeartPulse, accentVar: "--semantic-danger" },
   respiratory: { icon: Wind, accentVar: "--semantic-info" },
   neurological: { icon: Brain, accentVar: "--semantic-chart-2" },
-  "vital-signs": { icon: Timer, accentVar: "--semantic-chart-3" },
-  "clinical-deterioration": { icon: AlertTriangle, accentVar: "--semantic-warning" },
+  endocrine: { icon: Activity, accentVar: "--semantic-chart-3" },
+  gi: { icon: Sparkles, accentVar: "--semantic-chart-5" },
+  renal: { icon: Timer, accentVar: "--semantic-chart-3" },
   pharmacology: { icon: Pill, accentVar: "--semantic-brand" },
-  "infection-immunity": { icon: Shield, accentVar: "--semantic-success" },
   "maternal-newborn": { icon: Baby, accentVar: "--semantic-chart-5" },
   pediatrics: { icon: Sparkles, accentVar: "--semantic-chart-1" },
   "mental-health": { icon: Brain, accentVar: "--semantic-chart-4" },
-  "special-populations": { icon: Users, accentVar: "--semantic-chart-5" },
-  communication: { icon: MessageSquare, accentVar: "--semantic-chart-4" },
-  safety: { icon: Shield, accentVar: "--semantic-warning" },
+  "prioritization-safety": { icon: AlertTriangle, accentVar: "--semantic-warning" },
+  "assessment-triage": { icon: AlertTriangle, accentVar: "--semantic-warning" },
+  "diagnostics-monitoring": { icon: Timer, accentVar: "--semantic-chart-3" },
+  "interventions-procedures": { icon: Activity, accentVar: "--semantic-chart-2" },
+  "pharmacology-medication-safety": { icon: Pill, accentVar: "--semantic-brand" },
+  "communication-teamwork": { icon: MessageSquare, accentVar: "--semantic-chart-4" },
+  "professional-safety": { icon: Shield, accentVar: "--semantic-warning" },
   fundamentals: { icon: Stethoscope, accentVar: "--semantic-chart-1" },
+  foundations: { icon: Stethoscope, accentVar: "--semantic-chart-1" },
 };
 
 type Props = {

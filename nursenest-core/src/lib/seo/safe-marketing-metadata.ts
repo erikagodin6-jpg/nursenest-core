@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { localeRobotsOverride } from "@/lib/i18n/language-readiness";
 
 export const FALLBACK_SITE_METADATA: Metadata = {
   title: "NurseNest | Nursing exam prep",
@@ -15,6 +16,11 @@ export type SafeMetadataContext = {
 
 /**
  * Global guard: `generateMetadata` must never throw. Logs `metadata_generation_failed` on errors.
+ *
+ * Automatically injects `robots: { index: false, follow: true }` for locales that are
+ * not yet fully indexed (tier=partial or tier=incomplete). This prevents thin-content
+ * or mostly-English pages from being indexed before a language is fully translated.
+ * Full-tier (active) locales are unaffected.
  */
 export async function safeGenerateMetadata(
   run: () => Promise<Metadata>,
@@ -28,6 +34,13 @@ export async function safeGenerateMetadata(
     // Preserve intentional `{}` so layouts/parent metadata can apply (e.g. unresolved pathway before notFound).
     if (Object.keys(m).length === 0) {
       return m;
+    }
+    // Enforce noindex for non-indexable locales regardless of what the page sets.
+    if (ctx.locale) {
+      const robotsOverride = localeRobotsOverride(ctx.locale);
+      if (robotsOverride) {
+        return { ...m, robots: robotsOverride };
+      }
     }
     return m;
   } catch (e) {

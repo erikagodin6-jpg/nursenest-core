@@ -23,6 +23,8 @@ const linearDeliveryZ = z.enum(["practice", "exam"]);
 const catSelectionBasisZ = z.enum(["random", "targeted", "weak"]);
 const catPresentationZ = z.enum(["practice", "exam_simulation"]);
 const catFeedbackZ = z.enum(["study", "test"]);
+const catEngineTypeZ = z.enum(["CAT", "SIMULATION"]);
+const catEngineModeZ = z.enum(["production_ready", "beta", "unavailable"]);
 
 /** Defaults on every field so partial persisted JSON still parses; unknown keys stripped. */
 const practiceTestConfigSchema = z.object({
@@ -41,8 +43,11 @@ const practiceTestConfigSchema = z.object({
   catSelectionBasis: catSelectionBasisZ.optional(),
   catMinQuestions: z.coerce.number().int().min(1).max(500).optional(),
   catMaxQuestions: z.coerce.number().int().min(1).max(500).optional(),
+  catPassingThreshold: z.coerce.number().min(-3).max(3).optional(),
+  catEngineType: catEngineTypeZ.optional(),
+  catEngineMode: catEngineModeZ.optional(),
   catWeakCategories: z.array(z.string()).optional(),
-    catWeakPriorityByCanonical: z.record(z.coerce.number()).optional(),
+  catWeakPriorityByCanonical: z.record(z.coerce.number()).optional(),
   catPresentationMode: catPresentationZ.optional(),
   catExamFeedbackMode: catFeedbackZ.optional(),
   catExamConfigId: z.union([z.null(), z.string()]).optional(),

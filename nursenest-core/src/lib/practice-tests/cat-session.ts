@@ -8,6 +8,7 @@ import {
   pathwayAllowsCatAdaptiveStart,
   subscriptionCoversPathwayBase,
 } from "@/lib/exam-pathways/pathway-entitlements";
+import { readinessConfigForPathwayId } from "@/lib/exam-pathways/pathway-readiness-config";
 import { answerMatches } from "@/lib/exams/score-session-answers";
 import {
   appendScoredResult,
@@ -78,6 +79,12 @@ function readinessFromReport(report: CatExamReport, presentationMode?: CatPresen
   return sim ? "Exam simulation: estimate still forming" : "Building confidence";
 }
 
+function readinessResultLabel(decision: CatExamReport["decision"]): "PASS" | "BORDERLINE" | "FAIL" {
+  if (decision === "pass") return "PASS";
+  if (decision === "fail") return "FAIL";
+  return "BORDERLINE";
+}
+
 function enrichWithCat(
   base: PracticeTestResultsJson,
   report: CatExamReport,
@@ -88,6 +95,7 @@ function enrichWithCat(
     catReport: report,
     estimatedAbility: report.theta,
     abilityStdError: report.se,
+    readinessResult: readinessResultLabel(report.decision),
     readinessLabel: readinessFromReport(report, presentationMode),
   };
 }
@@ -252,6 +260,15 @@ export async function createCatPracticeTestPayload(
     };
   }
 
+  const pathwayReadiness = readinessConfigForPathwayId(pathway?.id ?? input.pathwayId ?? null);
+  if (pathwayReadiness?.mode === "unavailable") {
+    return {
+      ok: false,
+      code: PRACTICE_TEST_CAT_CREATE_CODE.pathway_track_not_ready,
+      message: "Readiness exam is currently unavailable for this pathway. Use practice questions first.",
+    };
+  }
+
   const effectiveBasis: CatSelectionBasis = sim ? "random" : catBasis;
 
   const weakPlan = sim
@@ -270,7 +287,10 @@ export async function createCatPracticeTestPayload(
   }
 
   const examCfg = examSimulationConfigForPathway(pathway);
-  const bounds = sim ? nclexRnSimulationBoundsFromConfig(examCfg) : practiceCatBounds(input.questionCount);
+  const fallbackBounds = sim ? nclexRnSimulationBoundsFromConfig(examCfg) : practiceCatBounds(input.questionCount);
+  const bounds = pathwayReadiness
+    ? { min: pathwayReadiness.minQuestions, max: pathwayReadiness.maxQuestions }
+    : fallbackBounds;
 
   const poolInput: PickQuestionsInput = {
     ...input,
@@ -326,6 +346,9 @@ export async function createCatPracticeTestPayload(
     catSelectionBasis: effectiveBasis,
     catMinQuestions: bounds.min,
     catMaxQuestions: bounds.max,
+    catPassingThreshold: pathwayReadiness?.passingThreshold ?? 0,
+    catEngineType: pathwayReadiness?.engineType ?? "CAT",
+    catEngineMode: pathwayReadiness?.mode ?? "production_ready",
     catWeakCategories,
     catWeakPriorityByCanonical,
     catPresentationMode: presentationMode,
@@ -436,7 +459,10 @@ async function catAfterScoredStep(params: {
   const used = new Set(ids);
   const deliveredCounts = countsFromResults(state.results);
 
-  const stop = shouldStopAfterAnswer(state, state.results.length, bounds);
+  const stop = shouldStopAfterAnswer(state, state.results.length, {
+    ...bounds,
+    passingThreshold: config.catPassingThreshold ?? 0,
+  });
   if (stop) {
     const earlyDecision =
       stop === "confidence_pass" ? ("pass" as const) : stop === "confidence_fail" ? ("fail" as const) : null;
@@ -456,7 +482,7 @@ async function catAfterScoredStep(params: {
     state = {
       ...state,
       stoppedReason: "pool_exhausted",
-      decision: finalizeThetaDecision(state.theta),
+      decision: finalizeThetaDecision(state.theta, config.catPassingThreshold ?? 0),
     };
     const report = buildCatReport(state);
     logCatBlueprintSessionMappingQualityFromReport(report, {
@@ -550,7 +576,10 @@ export async function advanceCatPracticeTest(params: {
     min: params.config.catMinQuestions ?? practiceCatBounds(30).min,
     max: params.config.catMaxQuestions ?? practiceCatBounds(30).max,
   };
-  const stop = shouldStopAfterAnswer(state, state.results.length, bounds);
+  const stop = shouldStopAfterAnswer(state, state.results.length, {
+    ...bounds,
+    passingThreshold: params.config.catPassingThreshold ?? 0,
+  });
   if (stop) {
     const tail = await catAfterScoredStep({
       ids,

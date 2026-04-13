@@ -47,6 +47,8 @@ export type PracticeTestPathwayOption = {
 
 /** Pool basis when `selectionMode === "cat"` (how items are filtered before adaptive selection). */
 export type CatSelectionBasis = "random" | "targeted" | "weak";
+export type CatEngineType = "CAT" | "SIMULATION";
+export type CatEngineMode = "production_ready" | "beta" | "unavailable";
 
 /**
  * Linear-only delivery policy (ignored when `selectionMode === "cat"`).
@@ -71,6 +73,9 @@ export type PracticeTestConfigJson = {
   catSelectionBasis?: CatSelectionBasis;
   catMinQuestions?: number;
   catMaxQuestions?: number;
+  catPassingThreshold?: number;
+  catEngineType?: CatEngineType;
+  catEngineMode?: CatEngineMode;
   /** DB topic strings matching weak areas — pool filter + legacy boost label list. */
   catWeakCategories?: string[];
   /** Canonical topic key → 0–1 weak priority for proportional CAT boosting. */
@@ -99,6 +104,7 @@ export type PracticeTestResultsJson = {
   /** Internal ability estimate (theta), roughly −3…+3. */
   estimatedAbility?: number;
   abilityStdError?: number;
+  readinessResult?: "PASS" | "BORDERLINE" | "FAIL";
   readinessLabel?: string;
   /** Echo of config for analytics / review UI when session was CAT. */
   catExamFeedbackMode?: CatExamFeedbackMode;

@@ -288,7 +288,12 @@ export function ResultsSummary({
       <ReadinessTrendCard currentScore={score} priorScore={priorScore} />
 
       {/* 6 — What To Do Next ────────────────────────────────── */}
-      <NextStepsCards testId={testId} lessonsHref={lessonsHref} />
+      <NextStepsCards
+        testId={testId}
+        lessonsHref={lessonsHref}
+        readinessTier={results.catCoach?.readinessTier ?? null}
+        lessonPrimaryReady={results.catCoach?.lessonContentSignal?.lessonPrimaryReady ?? null}
+      />
 
       {/* 7 — Optional upgrade/paywall block ────────────────── */}
       <OptionalUpgradeCard isEntitled={isEntitled} />

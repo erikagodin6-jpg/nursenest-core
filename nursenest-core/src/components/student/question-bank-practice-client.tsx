@@ -760,6 +760,24 @@ export function QuestionBankPracticeClient({
     );
   }, [g?.learningLoop, rationaleLessonLinksMerged.length, t]);
 
+  const reviewLessonHref = useMemo(() => {
+    const fromLoop = g?.learningLoop?.lessonHref;
+    if (fromLoop) return fromLoop;
+    const fromRationale = rationaleLessonLinksMerged[0]?.href;
+    if (fromRationale) return fromRationale;
+    const topicLabel = current?.topic?.trim();
+    if (topicLabel) return `/lessons?q=${encodeURIComponent(topicLabel)}`;
+    return null;
+  }, [g?.learningLoop?.lessonHref, rationaleLessonLinksMerged, current?.topic]);
+
+  const flashcardsHref = useMemo(() => {
+    if (g?.learningLoop?.flashcardsHref) return g.learningLoop.flashcardsHref;
+    const topicLabel = current?.topic?.trim();
+    if (topicLabel) return `/app/flashcards?q=${encodeURIComponent(topicLabel)}`;
+    return "/app/flashcards";
+  }, [g?.learningLoop?.flashcardsHref, current?.topic]);
+  const topicDrillHref = g?.learningLoop?.topicDrillHref ?? null;
+
   async function checkAnswer() {
     if (!current) return;
     if (answer === null || (Array.isArray(answer) && answer.length === 0)) return;
@@ -778,6 +796,7 @@ export function QuestionBankPracticeClient({
         correct?: boolean;
         correctKeys?: unknown;
         rationale?: string | null;
+        clinicalPearl?: string | null;
         rationaleQuality?: RationaleQualityClient | null;
         rationaleSections?: Array<{ heading: string; body: string }> | null;
         referenceMedia?: RationaleReferenceMedia[] | null;
@@ -807,6 +826,7 @@ export function QuestionBankPracticeClient({
           correct,
           ...(correctKeys && correctKeys.length > 0 ? { correctKeys } : {}),
           rationale: data.rationale ?? null,
+          clinicalPearl: data.clinicalPearl ?? null,
           rationaleQuality: data.rationaleQuality ?? null,
           rationaleSections: data.rationaleSections ?? null,
           referenceMedia: data.referenceMedia ?? null,
@@ -1556,6 +1576,72 @@ export function QuestionBankPracticeClient({
                     recommendationsSlot={learningLoopRecommendations}
                   />
                 )}
+                {g.clinicalPearl ? (
+                  <div className="rounded-xl border border-[color-mix(in_srgb,var(--semantic-info)_24%,var(--semantic-border-soft))] bg-[var(--semantic-panel-cool)] px-4 py-3 sm:px-5">
+                    <p className="text-[11px] font-bold uppercase tracking-widest text-[var(--semantic-info)]">
+                      Clinical Pearl
+                    </p>
+                    <p className="mt-1 text-sm leading-relaxed text-[var(--theme-body-text)]">{g.clinicalPearl}</p>
+                  </div>
+                ) : null}
+                {!g.correct && reviewLessonHref ? (
+                  <div className="rounded-xl border border-[color-mix(in_srgb,var(--semantic-warning)_24%,var(--semantic-border-soft))] bg-[var(--semantic-warning-soft)] px-4 py-3 sm:px-5">
+                    <p className="text-sm font-semibold text-[var(--theme-heading-text)]">
+                      You may need to review:{" "}
+                      <Link href={reviewLessonHref} className="underline underline-offset-2 hover:no-underline">
+                        {current.topic?.trim() || "this topic"}
+                      </Link>
+                    </p>
+                  </div>
+                ) : null}
+                <div className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-4 py-3 sm:px-5">
+                  <p className="text-[11px] font-bold uppercase tracking-widest text-[var(--semantic-text-muted)]">
+                    Reinforce this question
+                  </p>
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    {reviewLessonHref ? (
+                      <Link
+                        href={reviewLessonHref}
+                        className="inline-flex min-h-11 items-center rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-4 text-xs font-semibold text-[var(--semantic-text-primary)] shadow-sm hover:bg-[var(--semantic-panel-muted)]"
+                      >
+                        Review Lesson
+                      </Link>
+                    ) : null}
+                    {flashcardsHref ? (
+                      <Link
+                        href={flashcardsHref}
+                        className="inline-flex min-h-11 items-center rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-4 text-xs font-semibold text-[var(--semantic-text-primary)] shadow-sm hover:bg-[var(--semantic-panel-muted)]"
+                      >
+                        Practice Flashcards
+                      </Link>
+                    ) : null}
+                    {!g.correct && topicDrillHref ? (
+                      <Link
+                        href={topicDrillHref}
+                        className="inline-flex min-h-11 items-center rounded-full border border-[color-mix(in_srgb,var(--semantic-info)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-info)_10%,var(--semantic-surface))] px-4 text-xs font-semibold text-[var(--semantic-info)] shadow-sm hover:opacity-90"
+                      >
+                        Try more questions like this
+                      </Link>
+                    ) : null}
+                    {idx < total - 1 ? (
+                      <button
+                        type="button"
+                        className="nn-btn-primary inline-flex min-h-11 items-center justify-center rounded-full px-5 text-xs font-semibold shadow-none"
+                        onClick={next}
+                      >
+                        Next Question
+                      </button>
+                    ) : (
+                      <button
+                        type="button"
+                        className="nn-btn-secondary inline-flex min-h-11 items-center justify-center rounded-full px-5 text-xs font-semibold"
+                        onClick={() => void loadBatch(true)}
+                      >
+                        Load More
+                      </button>
+                    )}
+                  </div>
+                </div>
                 <div className="nn-question-nav-actions">
                   {examShell ? (
                     <button

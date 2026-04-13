@@ -11,6 +11,7 @@ import {
   isSafeInternalStudyLinkHref,
   normalizeCatResultsCoachSnapshot,
 } from "@/lib/practice-tests/cat-practice-fallbacks";
+import { readinessTierLabel } from "@/lib/lessons/lesson-content-readiness";
 
 function difficultySparkline(series: number[], height = 40, width = 200) {
   if (series.length === 0) {
@@ -71,9 +72,24 @@ export function CatResultsCoachPanel({
           </p>
           <p className="mt-3 text-sm leading-relaxed text-[var(--semantic-text-secondary)]">{coach.readinessNarrative}</p>
         </div>
-        <span className="shrink-0 rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
-          {modeLabel}
-        </span>
+        <div className="flex shrink-0 flex-col items-end gap-2">
+          <span className="rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
+            {modeLabel}
+          </span>
+          {coach.readinessTier && coach.readinessTier !== "unknown" && (
+            <span
+              className={`rounded-full border px-3 py-1 text-xs font-semibold ${
+                coach.readinessTier === "likely_pass"
+                  ? "border-[color-mix(in_srgb,var(--semantic-success)_30%,transparent)] bg-[var(--semantic-success-soft)] text-[var(--semantic-success)]"
+                  : coach.readinessTier === "at_risk"
+                    ? "border-[color-mix(in_srgb,var(--semantic-danger)_30%,transparent)] bg-[var(--semantic-danger-soft)] text-[var(--semantic-danger)]"
+                    : "border-[color-mix(in_srgb,var(--semantic-warning)_30%,transparent)] bg-[var(--semantic-warning-soft)] text-[var(--semantic-warning)]"
+              }`}
+            >
+              {readinessTierLabel(coach.readinessTier)}
+            </span>
+          )}
+        </div>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-[1fr_auto] sm:items-end">
@@ -203,37 +219,60 @@ export function CatResultsCoachPanel({
       ) : null}
 
       <div>
-        <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">What to study next</p>
-        <ol className="mt-3 space-y-4">
-          {(coach.studyNext ?? []).map((s, i) => (
-            <li key={`${s.title}-${i}`} className="rounded-xl border border-[var(--semantic-border-soft)] bg-background/80 p-4">
-              <p className="text-sm font-semibold text-foreground">
-                {i + 1}. {s.title}
-              </p>
-              <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{s.reason}</p>
-              <div className="mt-3 flex flex-wrap gap-2">
-                {(s.links ?? [])
-                  .filter((l) => l && typeof l.href === "string" && isSafeInternalStudyLinkHref(l.href))
-                  .map((l) => (
-                  <Link
-                    key={`${s.title}-${l.kind}-${l.href.slice(0, 40)}`}
-                    href={l.href}
-                    className="inline-flex rounded-full border border-primary/25 bg-primary/5 px-3 py-1.5 text-xs font-semibold text-primary hover:bg-primary/10"
-                    onClick={() =>
-                      trackClientEvent(PH.learnerCatLearningLinkClicked, {
-                        surface: "cat_results_coach",
-                        link_kind: l.kind,
-                        coach_reliability_level: coach.reliabilityLevel,
-                        ...examContextProps,
-                      })
-                    }
-                  >
-                    {l.label}
-                  </Link>
-                ))}
-              </div>
-            </li>
-          ))}
+        <div className="mb-3 flex flex-wrap items-baseline gap-3">
+          <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">What to study next</p>
+          {coach.lessonContentSignal && !coach.lessonContentSignal.lessonPrimaryReady && (
+            <span className="rounded-full border border-[color-mix(in_srgb,var(--semantic-info)_30%,transparent)] bg-[var(--semantic-info-soft,var(--semantic-panel-cool))] px-2 py-0.5 text-[10px] font-semibold text-[var(--semantic-info,var(--semantic-brand))]">
+              Questions &amp; flashcards first — lessons expanding
+            </span>
+          )}
+        </div>
+        <ol className="space-y-4">
+          {(coach.studyNext ?? []).map((s, i) => {
+            const safeLinks = (s.links ?? []).filter(
+              (l) => l && typeof l.href === "string" && isSafeInternalStudyLinkHref(l.href),
+            );
+            const hasLesson = safeLinks.some((l) => l.kind === "lesson");
+            const lessonPartial = coach.lessonContentSignal?.lessonPartialAvailable;
+            return (
+              <li key={`${s.title}-${i}`} className="rounded-xl border border-[var(--semantic-border-soft)] bg-background/80 p-4">
+                <p className="text-sm font-semibold text-foreground">
+                  {i + 1}. {s.title}
+                </p>
+                <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{s.reason}</p>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {safeLinks.map((l) => (
+                    <Link
+                      key={`${s.title}-${l.kind}-${l.href.slice(0, 40)}`}
+                      href={l.href}
+                      className={`inline-flex rounded-full border px-3 py-1.5 text-xs font-semibold hover:opacity-90 ${
+                        l.kind === "drill"
+                          ? "border-primary/25 bg-primary/5 text-primary hover:bg-primary/10"
+                          : l.kind === "flashcards"
+                            ? "border-[color-mix(in_srgb,var(--semantic-info)_25%,transparent)] bg-[var(--semantic-panel-cool)] text-[var(--semantic-brand)] hover:bg-[var(--semantic-panel-cool)]/80"
+                            : "border-[color-mix(in_srgb,var(--semantic-success)_25%,transparent)] bg-[var(--semantic-success-soft)] text-[var(--semantic-success)] hover:opacity-80"
+                      }`}
+                      onClick={() =>
+                        trackClientEvent(PH.learnerCatLearningLinkClicked, {
+                          surface: "cat_results_coach",
+                          link_kind: l.kind,
+                          coach_reliability_level: coach.reliabilityLevel,
+                          ...examContextProps,
+                        })
+                      }
+                    >
+                      {l.label}
+                    </Link>
+                  ))}
+                  {!hasLesson && lessonPartial && (
+                    <span className="inline-flex items-center rounded-full border border-dashed border-muted-foreground/30 bg-muted/30 px-3 py-1.5 text-xs text-muted-foreground">
+                      Lesson coming soon
+                    </span>
+                  )}
+                </div>
+              </li>
+            );
+          })}
         </ol>
       </div>
 

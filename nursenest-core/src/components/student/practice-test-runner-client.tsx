@@ -805,7 +805,7 @@ export function PracticeTestRunnerClient({
         {/* ── Study loop next card ─────────────────────────────────── */}
         {adaptivePlanEnabled ? (
           <div className="mx-auto max-w-[900px] px-6 pb-6">
-            <PracticeTestStudyLoopNext results={results} pathwayId={testConfig?.pathwayId ?? null} />
+            <PracticeTestStudyLoopNext results={results} pathwayId={testConfig?.pathwayId ?? null} coach={results.catCoach ?? null} />
           </div>
         ) : null}
 

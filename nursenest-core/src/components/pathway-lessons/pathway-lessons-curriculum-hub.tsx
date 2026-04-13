@@ -13,6 +13,7 @@ import { emptyStateCopy } from "@/lib/ui/empty-state-copy";
 type Props = {
   lessons: PathwayLessonRecord[];
   lessonsBasePath: string;
+  pathwayId?: string;
   progressMap?: Record<string, PathwayLessonProgressStatus>;
   canShowProgressMap?: boolean;
   showLockedState?: boolean;
@@ -21,11 +22,12 @@ type Props = {
 export function PathwayLessonsCurriculumHub({
   lessons,
   lessonsBasePath,
+  pathwayId,
   progressMap = {},
   canShowProgressMap = false,
 }: Props) {
   const safeLessons = lessons.filter(pathwayLessonHasRenderableHubSlug);
-  const sections = buildPathwayLessonSystemSections(safeLessons);
+  const sections = buildPathwayLessonSystemSections(safeLessons, pathwayId);
 
   if (sections.length === 0) {
     const thinInventoryCopy = emptyStateCopy.thinInventory();

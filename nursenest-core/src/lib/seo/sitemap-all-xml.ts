@@ -11,7 +11,7 @@ import {
   normalizeOrigin,
   resolveSitemapOrigin,
 } from "@/lib/seo/sitemap-static-xml";
-import { CORE_HOSTED_MARKETING_LOCALES } from "@/lib/i18n/marketing-locale-policy";
+import { getSitemapIncludedLocales } from "@/lib/i18n/language-readiness";
 
 /**
  * Single sitemap urlset used by `/sitemap.xml`.
@@ -33,7 +33,7 @@ export async function buildSingleSitemapXmlSafe(): Promise<string> {
     all.add(url);
   }
 
-  for (const locale of CORE_HOSTED_MARKETING_LOCALES) {
+  for (const locale of getSitemapIncludedLocales()) {
     for (const url of collectLocaleMarketingUrls(origin, locale)) {
       all.add(url);
     }

@@ -10,8 +10,39 @@ import {
   type CatCoachIncorrectRow,
 } from "@/lib/practice-tests/cat-results-coach";
 import type { PracticeTestConfigJson, PracticeTestResultsJson } from "@/lib/practice-tests/types";
+import {
+  computeLessonContentSignal,
+  type LessonContentSignal,
+} from "@/lib/lessons/lesson-content-readiness";
 
 const STEM_PREVIEW = 240;
+
+/** Maximum lessons to sample when computing pathway content readiness (performance cap). */
+const LESSON_QUALITY_SAMPLE_LIMIT = 150;
+
+/**
+ * Sample published PathwayLesson sections for the given pathway, then compute an
+ * aggregate content readiness signal. Returns null when no pathwayId is available
+ * or the query fails (callers should treat null as "unknown / conservative").
+ */
+async function loadLessonContentSignal(pathwayId: string | null | undefined): Promise<LessonContentSignal | null> {
+  if (!pathwayId?.trim()) return null;
+  try {
+    const rows = await prisma.pathwayLesson.findMany({
+      where: { pathwayId, status: { not: "draft" } },
+      select: { sections: true },
+      take: LESSON_QUALITY_SAMPLE_LIMIT,
+    });
+    return computeLessonContentSignal(rows as Array<{ sections: unknown }>);
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : String(e);
+    safeServerLog("cat_results", "lesson_content_signal_load_failed", {
+      error_message: msg.slice(0, 200),
+      pathwayId,
+    });
+    return null;
+  }
+}
 
 async function loadIncorrectRows(
   ids: string[],
@@ -81,7 +112,12 @@ export async function enrichPracticeTestResultsWithCatCoach(
     const incorrectIds = Array.isArray(results.incorrectQuestionIds)
       ? results.incorrectQuestionIds.filter((x): x is string => typeof x === "string" && x.length > 4)
       : [];
-    const incorrectRows = await loadIncorrectRows(incorrectIds, entitlement);
+
+    // Load lesson quality signal and incorrect rows in parallel
+    const [incorrectRows, lessonContentSignal] = await Promise.all([
+      loadIncorrectRows(incorrectIds, entitlement),
+      loadLessonContentSignal(config.pathwayId),
+    ]);
 
     const coach = buildCatResultsCoach({
       report: results.catReport,
@@ -90,6 +126,7 @@ export async function enrichPracticeTestResultsWithCatCoach(
       difficultyHistory,
       thetaHistory,
       incorrectRows,
+      lessonContentSignal,
     });
 
     return { ...results, catCoach: coach };

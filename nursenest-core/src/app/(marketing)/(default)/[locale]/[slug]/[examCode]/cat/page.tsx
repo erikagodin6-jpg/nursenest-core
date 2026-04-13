@@ -12,9 +12,9 @@ import {
 } from "@/lib/exam-pathways/cat-eligibility";
 import { catPathwayShortCatLabel } from "@/lib/exam-pathways/cat-pathway-labels";
 import {
-  PATHWAY_CAT_PRACTICE_DEFAULT_MAX_QUESTIONS,
   appPathwayCatSessionStartPath,
 } from "@/lib/exam-pathways/pathway-cat-flow";
+import { readinessConfigForPathway } from "@/lib/exam-pathways/pathway-readiness-config";
 import { HUB, loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { PathwayLiveInventoryStrip } from "@/components/exam-pathways/pathway-live-inventory-strip";
 import { pathwayCatPracticeBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
@@ -41,10 +41,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       if (!pathway) {
         return { robots: { index: false, follow: true } };
       }
+      const readinessConfig = readinessConfigForPathway(pathway);
+      const readinessSubtitle =
+        readinessConfig.engineType === "CAT"
+          ? "Simulate the real exam and see if you're ready to pass"
+          : "Test your knowledge and assess your readiness";
       const country = pathway.countrySlug === "canada" ? "Canada" : "United States";
       return {
-        title: `CAT practice · ${pathway.shortName} (${country}) | NurseNest`,
-        description: `Pathway-scoped adaptive (CAT) practice for ${pathway.displayName}. One question at a time; sign in to run a session matched to your plan.`,
+        title: `${readinessConfig.label} readiness exam · ${country} | NurseNest`,
+        description: `${readinessSubtitle} for ${pathway.displayName}. Sign in to run a session matched to your pathway.`,
         robots: { index: false, follow: true },
       };
     },
@@ -121,6 +126,23 @@ export default async function PathwayCatEntryPage({ params }: Props) {
 
   const countryLabel = pathway.countrySlug === "canada" ? "Canada" : "US";
   const catShort = catPathwayShortCatLabel(pathway);
+  const readinessConfig = readinessConfigForPathway(pathway);
+  const readinessSubtitle =
+    readinessConfig.engineType === "CAT"
+      ? "Simulate the real exam and see if you're ready to pass"
+      : "Test your knowledge and assess your readiness";
+  const howItWorksItems =
+    readinessConfig.engineType === "CAT"
+      ? [
+          "Adapts to your performance",
+          "Adjusts difficulty after each question",
+          "Determines if you are above passing level",
+        ]
+      : [
+          "Covers exam-relevant topics",
+          "Adjusts difficulty across questions",
+          "Helps assess your readiness",
+        ];
   const lessonsHref = buildExamPathwayPath(pathway, "lessons");
   const questionsHref = buildExamPathwayPath(pathway, "questions");
   const pricingHref = buildExamPathwayPath(pathway, "pricing");
@@ -139,26 +161,99 @@ export default async function PathwayCatEntryPage({ params }: Props) {
       <Link href={overviewHref} className="text-sm font-medium text-primary hover:underline">
         ← {pathway.shortName} overview
       </Link>
-      <h1 className="mt-4 text-3xl font-extrabold text-[var(--theme-heading-text)]">{catShort}</h1>
+      <h1 className="mt-4 text-3xl font-extrabold text-[var(--theme-heading-text)]">
+        {readinessConfig.label} Readiness Exam
+      </h1>
       <p className="mt-3 text-[var(--theme-muted-text)]">
-        One question at a time, difficulty adjusts from your answers. Pool is limited to{" "}
-        <strong className="text-[var(--theme-heading-text)]">{pathway.shortName}</strong> items for {countryLabel} (
+        {readinessSubtitle} for <strong className="text-[var(--theme-heading-text)]">{countryLabel}</strong> (
         {pathway.displayName}).
       </p>
+      {readinessConfig.engineType === "CAT" && readinessConfig.mode === "production_ready" ? (
+        <p className="mt-2 text-sm font-medium text-[var(--theme-heading-text)]">
+          This is the closest simulation to the real exam.
+        </p>
+      ) : null}
+      {readinessConfig.mode === "beta" ? (
+        <p className="mt-2 text-sm text-[var(--theme-muted-text)]">Adaptive Practice (Beta)</p>
+      ) : null}
+
+      <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+        {readinessConfig.mode !== "unavailable" && assessment.marketingPrimaryCta === "open_app_cat" && assessment.appCatStartPath ? (
+          <Link
+            href={assessment.appCatStartPath}
+            className="inline-flex min-h-[48px] items-center justify-center rounded-full bg-primary px-8 py-3 text-sm font-semibold text-primary-foreground shadow-sm"
+          >
+            Start Exam
+          </Link>
+        ) : readinessConfig.mode !== "unavailable" && assessment.marketingPrimaryCta === "sign_in_to_cat" ? (
+          <Link
+            href={signInReturnHref}
+            className="inline-flex min-h-[48px] items-center justify-center rounded-full bg-primary px-8 py-3 text-sm font-semibold text-primary-foreground shadow-sm"
+          >
+            Start Exam
+          </Link>
+        ) : (
+          <span className="inline-flex min-h-[48px] cursor-default items-center justify-center rounded-full border border-border bg-muted/50 px-8 py-3 text-sm font-semibold text-muted-foreground">
+            Readiness exam unavailable — use links below
+          </span>
+        )}
+        <Link
+          href={questionsHref}
+          className="inline-flex min-h-[48px] items-center justify-center rounded-full border border-border px-8 py-3 text-sm font-semibold hover:bg-card"
+        >
+          Practice Questions First
+        </Link>
+      </div>
+
       <PathwayLiveInventoryStrip pathway={pathway} questionSnapshot={questionSnapshot} variant="cat" />
 
-      <ul className="mt-6 list-inside list-disc space-y-2 text-sm text-[var(--theme-body-text)]">
-        <li>
-          <span className="font-semibold">Mode:</span> CAT practice (untimed; rationale unlocks after you finish)
-        </li>
-        <li>
-          <span className="font-semibold">Length cap:</span> up to {PATHWAY_CAT_PRACTICE_DEFAULT_MAX_QUESTIONS} questions
-          (server may stop earlier based on adaptive rules)
-        </li>
-        <li>
-          <span className="font-semibold">Requires:</span> an active plan that covers this pathway when you start in the app
-        </li>
-      </ul>
+      <section className="mt-6 rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5">
+        <h2 className="text-base font-semibold text-[var(--theme-heading-text)]">How it works</h2>
+        <ul className="mt-3 list-inside list-disc space-y-2 text-sm text-[var(--theme-body-text)]">
+          {howItWorksItems.map((item) => (
+            <li key={item}>{item}</li>
+          ))}
+        </ul>
+      </section>
+
+      <section className="mt-4 rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5">
+        <h2 className="text-base font-semibold text-[var(--theme-heading-text)]">Who this is for</h2>
+        <ul className="mt-3 list-inside list-disc space-y-2 text-sm text-[var(--theme-body-text)]">
+          <li>Finished studying core topics</li>
+          <li>Practiced questions</li>
+          <li>Ready to test readiness</li>
+        </ul>
+      </section>
+
+      <section className="mt-4 rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5">
+        <h2 className="text-base font-semibold text-[var(--theme-heading-text)]">What to expect</h2>
+        <ul className="mt-3 list-inside list-disc space-y-2 text-sm text-[var(--theme-body-text)]">
+          <li>
+            <span className="font-semibold">Question range:</span> {readinessConfig.questionRange}
+          </li>
+          <li>
+            <span className="font-semibold">Time estimate:</span> {readinessConfig.timeEstimate}
+          </li>
+          <li>
+            <span className="font-semibold">Time limit:</span> {readinessConfig.timeLimitMinutes} minutes
+          </li>
+          <li>
+            <span className="font-semibold">Experience:</span> Exam-style flow with pathway-scoped content.
+          </li>
+          <li>
+            <span className="font-semibold">Navigation:</span> {readinessConfig.allowBackNavigation ? "Back navigation allowed." : "No backtracking once an answer is submitted."}
+          </li>
+        </ul>
+      </section>
+
+      <section className="mt-4 rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5">
+        <h2 className="text-base font-semibold text-[var(--theme-heading-text)]">After the exam</h2>
+        <ul className="mt-3 list-inside list-disc space-y-2 text-sm text-[var(--theme-body-text)]">
+          <li>Readiness score</li>
+          <li>Weak areas</li>
+          <li>Recommended next steps</li>
+        </ul>
+      </section>
 
       {showExplainerAside ? (
         <ContentEmptyState
@@ -200,7 +295,7 @@ export default async function PathwayCatEntryPage({ params }: Props) {
             href={signInReturnHref}
             className="inline-flex min-h-[48px] items-center justify-center rounded-full bg-primary px-8 py-3 text-sm font-semibold text-primary-foreground shadow-sm"
           >
-            Sign in for {catShort}
+            Start {catShort}
           </Link>
         ) : (
           <span className="inline-flex min-h-[48px] cursor-default items-center justify-center rounded-full border border-border bg-muted/50 px-8 py-3 text-sm font-semibold text-muted-foreground">

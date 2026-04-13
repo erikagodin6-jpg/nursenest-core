@@ -8,8 +8,6 @@ import {
   lessonNameFromSlug,
   lessonSlugFromSourceKey,
   PUBLIC_FLASHCARD_CATEGORIES,
-  type PublicFlashcardCategoryId,
-  type PublicFlashcardSubcategoryId,
 } from "@/lib/flashcards/public-flashcard-categories";
 
 export type PublicFlashcardTopicRow = { slug: string; name: string };
@@ -20,19 +18,20 @@ export type PublicFeaturedDeck = {
   description: string | null;
   cardCount: number;
   sampleFront: string | null;
-  categoryId: PublicFlashcardCategoryId;
-  subcategoryId?: PublicFlashcardSubcategoryId;
+  pathwayId: string | null;
+  categoryId: string;
+  subcategoryId?: string;
   highYield: boolean;
   lessonSource?: { slug: string; name: string };
 };
 
 export type PublicFlashcardCategorySection = {
-  id: PublicFlashcardCategoryId;
+  id: string;
   title: string;
   description: string;
   decks: PublicFeaturedDeck[];
   subcategories?: Array<{
-    id: PublicFlashcardSubcategoryId;
+    id: string;
     title: string;
     decks: PublicFeaturedDeck[];
   }>;
@@ -60,6 +59,7 @@ export async function loadPublicFlashcardHub(): Promise<{
         take: 24,
         select: {
           id: true,
+          pathwayId: true,
           slug: true,
           title: true,
           description: true,
@@ -113,6 +113,7 @@ export async function loadPublicFlashcardHub(): Promise<{
         title: d.title,
         description: d.description,
         tags,
+        pathwayId: d.pathwayId,
       });
       return {
         slug: d.slug,
@@ -120,6 +121,7 @@ export async function loadPublicFlashcardHub(): Promise<{
         description: d.description,
         cardCount: d.cardCount,
         sampleFront: d.cards[0]?.front?.slice(0, 200) ?? null,
+        pathwayId: d.pathwayId,
         categoryId: category.categoryId,
         ...(category.subcategoryId ? { subcategoryId: category.subcategoryId } : {}),
         highYield: category.highYield,
@@ -127,26 +129,30 @@ export async function loadPublicFlashcardHub(): Promise<{
       } satisfies PublicFeaturedDeck;
     });
 
-    const categorySections: PublicFlashcardCategorySection[] = PUBLIC_FLASHCARD_CATEGORIES.map((category) => {
-      const categoryDecks = decorated.filter((deck) => deck.categoryId === category.id);
-      const subcategories = category.subcategories
-        ?.map((sub) => ({
-          id: sub.id,
-          title: sub.title,
-          decks: categoryDecks.filter((deck) => deck.subcategoryId === sub.id),
-        }))
-        .filter((sub) => sub.decks.length > 0);
-      const topDecks = subcategories?.length
-        ? categoryDecks.filter((deck) => !deck.subcategoryId)
-        : categoryDecks;
-      return {
-        id: category.id,
-        title: category.title,
-        description: category.description,
-        decks: topDecks,
-        ...(subcategories?.length ? { subcategories } : {}),
-      };
-    }).filter((section) => section.decks.length > 0 || (section.subcategories?.length ?? 0) > 0);
+    const pathwayIds = [...new Set(decorated.map((deck) => deck.pathwayId ?? "default-nursing"))];
+    const categorySections: PublicFlashcardCategorySection[] = pathwayIds.flatMap((pathwayId) => {
+      const scopedDecks = decorated.filter((deck) => (deck.pathwayId ?? "default-nursing") === pathwayId);
+      return PUBLIC_FLASHCARD_CATEGORIES(pathwayId)
+        .map((category) => {
+          const categoryDecks = scopedDecks.filter((deck) => deck.categoryId === category.id);
+          const subcategories = category.subcategories
+            ?.map((sub) => ({
+              id: sub.id,
+              title: sub.title,
+              decks: categoryDecks.filter((deck) => deck.subcategoryId === sub.id),
+            }))
+            .filter((sub) => sub.decks.length > 0);
+          const topDecks = subcategories?.length ? categoryDecks.filter((deck) => !deck.subcategoryId) : categoryDecks;
+          return {
+            id: `${pathwayId}:${category.id}`,
+            title: category.title,
+            description: category.description ?? "",
+            decks: topDecks,
+            ...(subcategories?.length ? { subcategories } : {}),
+          };
+        })
+        .filter((section) => section.decks.length > 0 || (section.subcategories?.length ?? 0) > 0);
+    });
 
     return {
       topics,

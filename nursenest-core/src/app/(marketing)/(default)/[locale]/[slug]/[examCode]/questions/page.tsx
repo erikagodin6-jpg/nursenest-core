@@ -39,9 +39,7 @@ import { StudyModeCards } from "@/components/study/study-mode-cards";
 import { StudyBottomNav } from "@/components/study/study-bottom-nav";
 import {
   classifyQuestionTopicIntoLessonCategory,
-  QUESTION_CATEGORY_STRUCTURE,
-  type QuestionCategoryId,
-  type QuestionSubcategoryId,
+  questionCategoryStructureForPathway,
 } from "@/lib/questions/pathway-question-category-structure";
 
 export const dynamic = "force-dynamic";
@@ -445,11 +443,11 @@ type GroupedTopicSet = {
 };
 
 type QuestionCategorySection = {
-  id: QuestionCategoryId;
+  id: string;
   title: string;
   description?: string;
   topicSets: GroupedTopicSet[];
-  subsections?: Array<{ id: QuestionSubcategoryId; title: string; topicSets: GroupedTopicSet[] }>;
+  subsections?: Array<{ id: string; title: string; topicSets: GroupedTopicSet[] }>;
 };
 
 function groupQuestionSetsByLessonCategory(
@@ -463,17 +461,18 @@ function groupQuestionSetsByLessonCategory(
     lessonReviewHref: `${lessonsHref}?q=${encodeURIComponent(cluster.label)}`,
   }));
 
-  return QUESTION_CATEGORY_STRUCTURE.map((category) => {
-    const categorySets = withLinks.filter((set) => classifyQuestionTopicIntoLessonCategory(set.label).categoryId === category.id);
+  const structure = questionCategoryStructureForPathway(pathway.id);
+  return structure.map((category) => {
+    const categorySets = withLinks.filter((set) => classifyQuestionTopicIntoLessonCategory(set.label, pathway.id).categoryId === category.id);
     const subsections = category.subcategories
       ?.map((sub) => ({
         id: sub.id,
         title: sub.title,
-        topicSets: categorySets.filter((set) => classifyQuestionTopicIntoLessonCategory(set.label).subcategoryId === sub.id),
+        topicSets: categorySets.filter((set) => classifyQuestionTopicIntoLessonCategory(set.label, pathway.id).subcategoryId === sub.id),
       }))
       .filter((sub) => sub.topicSets.length > 0);
     const topLevelSets = subsections?.length
-      ? categorySets.filter((set) => !classifyQuestionTopicIntoLessonCategory(set.label).subcategoryId)
+      ? categorySets.filter((set) => !classifyQuestionTopicIntoLessonCategory(set.label, pathway.id).subcategoryId)
       : categorySets;
     return {
       id: category.id,

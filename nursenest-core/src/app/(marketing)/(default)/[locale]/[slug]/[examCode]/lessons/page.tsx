@@ -196,7 +196,7 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
   }
 
   // Derive topic section count from lesson data for stat cards
-  const sections = buildPathwayLessonSystemSections(lessons);
+  const sections = buildPathwayLessonSystemSections(lessons, pathway.id);
   const topicCount = sections.length;
 
   const studyCards = defaultLessonModeCards({
@@ -257,6 +257,7 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
         <PathwayLessonsCurriculumHub
           lessons={lessons}
           lessonsBasePath={base}
+          pathwayId={pathway.id}
           progressMap={progressMap}
           canShowProgressMap={canShowProgressMap}
           showLockedState={!canShowResume}

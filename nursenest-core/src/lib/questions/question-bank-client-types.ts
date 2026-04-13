@@ -63,6 +63,8 @@ export type QuestionBankGradedStateEntry = {
   teaching?: NormalizedTeachingPayload | null;
   /** Present when rehydrated from storage; may be null if the blob was invalid. */
   teachingMedia?: TeachingMediaBundle | null;
+  /** Optional concise clinical pearl surfaced in post-answer review. */
+  clinicalPearl?: string | null;
   learningLoop?: QuestionBankLearningLoopPersisted | null;
   rationaleLessonLinks?: RationaleLessonLinkClient[] | null;
 };
@@ -287,6 +289,7 @@ export function parseQuestionBankGradedStateMap(raw: unknown): QuestionBankGrade
       rationaleQuality: isRationaleQualityClient(e.rationaleQuality) ? e.rationaleQuality : null,
       rationaleSections: parseRationaleSections(e.rationaleSections),
       teaching: isNormalizedTeachingPayload(e.teaching) ? e.teaching : null,
+      clinicalPearl: typeof e.clinicalPearl === "string" ? e.clinicalPearl : null,
       learningLoop: parseLearningLoopPersisted(e.learningLoop),
       rationaleLessonLinks: parseRationaleLessonLinksPersisted(e.rationaleLessonLinks),
     };

@@ -44,6 +44,7 @@ import { PATHWAY_LESSON_SITEMAP_LOCALE } from "@/lib/lessons/pathway-lesson-loca
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { resolveCanonicalSiteOrigin } from "@/lib/seo/canonical-site";
 import { CORE_HOSTED_MARKETING_LOCALES } from "@/lib/i18n/marketing-locale-policy";
+import { getSitemapIncludedLocales } from "@/lib/i18n/language-readiness";
 import {
   getAllProgrammaticSlugs,
   MAX_PROGRAMMATIC_SEO_SITEMAP_SLUGS,
@@ -51,7 +52,11 @@ import {
 import { getAllToolSlugs } from "@/lib/tools/tool-registry";
 import { collectPathwayTopicProgrammaticPublicPaths } from "@/lib/seo/pathway-topic-programmatic-registry";
 
-const SORTED_LOCALES = [...CORE_HOSTED_MARKETING_LOCALES].sort();
+/**
+ * Locales included in the sitemap index (full + partial tier only).
+ * Incomplete locales are excluded — they are mostly-English and not worth indexing.
+ */
+const SORTED_SITEMAP_LOCALES = [...getSitemapIncludedLocales()].sort();
 
 /** Hard cap for pathway lesson + topic URLs in core sitemap (prevents multi‑GB XML / OOM). */
 const MAX_PATHWAY_DERIVED_SITEMAP_URLS = 48_000;
@@ -180,7 +185,7 @@ export function getChildSitemapLocs(origin: string): string[] {
     `${o}/sitemaps/blog.xml`,
     `${o}/sitemaps/tools.xml`,
   ];
-  for (const code of SORTED_LOCALES) {
+  for (const code of SORTED_SITEMAP_LOCALES) {
     children.push(`${o}/sitemaps/locale-${code}.xml`);
   }
   return children;
@@ -347,7 +352,7 @@ export function collectToolsUrls(origin: string): string[] {
   for (const slug of getAllToolSlugs()) {
     urls.push(add(`/tools/${slug}`));
   }
-  for (const loc of CORE_HOSTED_MARKETING_LOCALES) {
+  for (const loc of SORTED_SITEMAP_LOCALES) {
     urls.push(add(`/${loc}/tools`));
     for (const slug of getAllToolSlugs()) {
       urls.push(add(`/${loc}/tools/${slug}`));

@@ -195,6 +195,7 @@ export async function POST(req: Request) {
       /** Canonical option key(s) for client-side review styling (same strings as `options` JSON). */
       correctKeys: expected,
       rationale: displayRow.rationale ?? null,
+      clinicalPearl: displayRow.clinicalPearl ?? null,
       rationaleQuality: rationaleBundle.rationaleQuality,
       rationaleSections: rationaleBundle.sections,
       teaching,

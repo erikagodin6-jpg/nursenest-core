@@ -10,6 +10,10 @@ import { normalizeTopicKey } from "@/lib/learner/topic-normalize";
 import { remediationLessonsTopicHref, remediationTopicDrillHref } from "@/lib/learner/remediation-links";
 import { recordRouteRenderFallback } from "@/lib/observability/route-fallback-tracker";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
+import {
+  deriveReadinessTier,
+  type LessonContentSignal,
+} from "@/lib/lessons/lesson-content-readiness";
 
 export type CatCoachStudyLinkKind = "lesson" | "flashcards" | "drill";
 
@@ -74,6 +78,19 @@ export type CatResultsCoachSnapshot = {
    * When true, pass outlook block uses neutral copy — omit false precision for legacy rows missing outlook.
    */
   passOutlookOmitted?: boolean;
+  /**
+   * Readiness tier derived from the session score/decision. Controls study plan ordering in UI.
+   * Optional for backwards-compat with persisted snapshots that pre-date this field.
+   */
+  readinessTier?: "at_risk" | "borderline" | "likely_pass" | "unknown";
+  /**
+   * Content readiness signal for lesson recommendation gating.
+   * When absent (legacy snapshots), UI should default to conservative (questions-first) mode.
+   */
+  lessonContentSignal?: Pick<
+    LessonContentSignal,
+    "lessonPrimaryReady" | "lessonPartialAvailable" | "primaryStudyResource"
+  >;
 };
 
 /** UI-only fallback when coach payload is missing or failed to deserialize — does not affect scoring. */
@@ -145,12 +162,32 @@ function lessonHubHref(topicLabel: string): string {
   return remediationLessonsTopicHref(topicLabel);
 }
 
-function linksForTopic(title: string, pathwayId: string | null): CatCoachStudyLink[] {
-  return [
-    { label: "Review this topic (lessons)", href: lessonHubHref(title), kind: "lesson" },
-    { label: "Flashcards for this topic", href: flashcardsHref(pathwayId, title), kind: "flashcards" },
-    { label: "Practice questions (targeted drill)", href: drillHref(pathwayId, title), kind: "drill" },
-  ];
+function linksForTopic(
+  title: string,
+  pathwayId: string | null,
+  lessonContentSignal?: Pick<LessonContentSignal, "lessonPrimaryReady" | "lessonPartialAvailable"> | null,
+): CatCoachStudyLink[] {
+  const links: CatCoachStudyLink[] = [];
+
+  // Always include drill (questions) — always available
+  links.push({ label: "Practice questions (targeted drill)", href: drillHref(pathwayId, title), kind: "drill" });
+
+  // Always include flashcards — always available
+  links.push({ label: "Flashcards for this topic", href: flashcardsHref(pathwayId, title), kind: "flashcards" });
+
+  // Lessons: only include when content is ready to be a meaningful resource
+  const lessonReady = lessonContentSignal == null || lessonContentSignal.lessonPrimaryReady;
+  const lessonPartial = lessonContentSignal?.lessonPartialAvailable ?? true;
+
+  if (lessonReady) {
+    links.push({ label: "Review lesson", href: lessonHubHref(title), kind: "lesson" });
+  } else if (lessonPartial) {
+    // Surface lesson as supplementary, not primary
+    links.push({ label: "Lesson preview (content being expanded)", href: lessonHubHref(title), kind: "lesson" });
+  }
+  // If neither, omit the lesson link entirely — no dead ends
+
+  return links;
 }
 
 function difficultyTrend(difficultyHistory: number[]): CatResultsCoachSnapshot["difficultyTrendLabel"] {
@@ -810,6 +847,8 @@ export function buildCatResultsCoach(args: {
   difficultyHistory: number[];
   thetaHistory: number[];
   incorrectRows: CatCoachIncorrectRow[];
+  /** Optional content readiness signal for lesson recommendation gating. */
+  lessonContentSignal?: LessonContentSignal | null;
 }): CatResultsCoachSnapshot {
   try {
     const report = sanitizeCatExamReportForCoach(args.report);
@@ -850,11 +889,14 @@ export function buildCatResultsCoach(args: {
       .map((c) => c.category)
       .slice(0, 4);
 
+    const { lessonContentSignal } = args;
+    const readinessTier = deriveReadinessTier(report.readinessScore, report.decision);
+
     const studyTopics = pickStudyTopics(report, patterns, weakestDomains);
     const studyNext: CatCoachStudyNextTopic[] = studyTopics.map((s) => ({
       title: s.title,
       reason: s.reason,
-      links: linksForTopic(s.title, pathwayId),
+      links: linksForTopic(s.title, pathwayId, lessonContentSignal),
     }));
 
     const band = passingBandCopy(report, presentationMode, pathwayId, reliability);
@@ -912,6 +954,14 @@ export function buildCatResultsCoach(args: {
         framing.region === "unknown"
           ? undefined
           : `Performance is interpreted relative to ${framing.passingStandardPhrase}.`,
+      readinessTier,
+      lessonContentSignal: lessonContentSignal
+        ? {
+            lessonPrimaryReady: lessonContentSignal.lessonPrimaryReady,
+            lessonPartialAvailable: lessonContentSignal.lessonPartialAvailable,
+            primaryStudyResource: lessonContentSignal.primaryStudyResource,
+          }
+        : undefined,
     };
   } catch (e) {
     const message = e instanceof Error ? e.message : String(e);

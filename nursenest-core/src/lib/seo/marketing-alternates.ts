@@ -1,4 +1,5 @@
-import { CORE_HOSTED_MARKETING_LOCALES, DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
+import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
+import { getHreflangEligibleLocales } from "@/lib/i18n/language-readiness";
 import { absoluteUrl } from "@/lib/seo/site-origin";
 
 /**
@@ -29,8 +30,14 @@ export function absoluteMarketingCanonical(locale: string, enPath: string): stri
 }
 
 /**
- * Full hreflang cluster for pages that exist at the same English path across all core-hosted locales
- * (`/` + `/{code}/…`). `x-default` points at the English-default URL.
+ * Full hreflang cluster for pages that exist at the same English path across all
+ * hreflang-eligible locales (`/` + `/{code}/…`).
+ *
+ * Only includes locales with tier=full or tier=partial — incomplete locales are
+ * excluded to prevent diluting hreflang signal and avoid recommending mostly-English
+ * pages to search engines.
+ *
+ * `x-default` points at the English-default URL.
  */
 export function marketingHreflangLanguagesForEnPath(enPath: string): Record<string, string> {
   const path = normalizeEnMarketingPath(enPath);
@@ -39,7 +46,7 @@ export function marketingHreflangLanguagesForEnPath(enPath: string): Record<stri
     "x-default": enUrl,
     en: enUrl,
   };
-  for (const code of CORE_HOSTED_MARKETING_LOCALES) {
+  for (const code of getHreflangEligibleLocales()) {
     const localized = path === "/" ? `/${code}` : `/${code}${path}`;
     out[code] = absoluteUrl(localized);
   }

@@ -1,8 +1,5 @@
 import {
-  CAT_EARLY_FAIL_THETA,
-  CAT_EARLY_PASS_THETA,
   CAT_EARLY_STOP_SE,
-  CAT_FINAL_FAIL_THETA,
   CAT_FINAL_PASS_THETA,
   CAT_MAX_QUESTIONS,
   CAT_MIN_ANSWERED_FOR_CONFIDENCE_STOP,
@@ -363,6 +360,8 @@ export function selectNextQuestion(
 export type CatStopBounds = {
   min: number;
   max: number;
+  passingThreshold?: number;
+  earlyStopMargin?: number;
   /**
    * Minimum scored items before theta/SE confidence-based early stop is allowed.
    * Defaults to `CAT_MIN_ANSWERED_FOR_CONFIDENCE_STOP`. Exam simulations with a high `min`
@@ -380,18 +379,28 @@ export function shouldStopAfterAnswer(
   const maxQ = bounds?.max ?? CAT_MAX_QUESTIONS;
   const minForConfidence =
     bounds?.minAnsweredForConfidenceStop ?? CAT_MIN_ANSWERED_FOR_CONFIDENCE_STOP;
+  const passingThreshold = bounds?.passingThreshold ?? 0;
+  const earlyStopMargin = Math.max(0.18, bounds?.earlyStopMargin ?? 0.32);
+  const passCutoff = passingThreshold + earlyStopMargin;
+  const failCutoff = passingThreshold - earlyStopMargin;
 
   if (nAnswered >= maxQ) return "max_length";
   if (nAnswered < minQ) return null;
   if (nAnswered < minForConfidence) return null;
-  if (state.se <= CAT_EARLY_STOP_SE && state.theta >= CAT_EARLY_PASS_THETA) return "confidence_pass";
-  if (state.se <= CAT_EARLY_STOP_SE && state.theta <= CAT_EARLY_FAIL_THETA) return "confidence_fail";
+  if (state.se <= CAT_EARLY_STOP_SE && state.theta >= passCutoff) return "confidence_pass";
+  if (state.se <= CAT_EARLY_STOP_SE && state.theta <= failCutoff) return "confidence_fail";
   return null;
 }
 
-export function finalizeThetaDecision(theta: number): "pass" | "fail" | "uncertain" {
-  if (theta >= CAT_FINAL_PASS_THETA) return "pass";
-  if (theta <= CAT_FINAL_FAIL_THETA) return "fail";
+export function finalizeThetaDecision(
+  theta: number,
+  passingThreshold = 0,
+  finalBand = Math.max(Math.abs(CAT_FINAL_PASS_THETA), Math.abs(CAT_FINAL_FAIL_THETA)),
+): "pass" | "fail" | "uncertain" {
+  const passCutoff = passingThreshold + finalBand;
+  const failCutoff = passingThreshold - finalBand;
+  if (theta >= passCutoff) return "pass";
+  if (theta <= failCutoff) return "fail";
   return "uncertain";
 }
 
