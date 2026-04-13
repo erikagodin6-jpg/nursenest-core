@@ -476,6 +476,12 @@ export function SiteHeader() {
   ];
   const openMega = megaMenus.find((menu) => menu.key === openMegaMenu) ?? null;
 
+  const darkHeaderShadow = useMemo(() => {
+    const inset = "inset 0 1px 0 0 rgba(255,255,255,0.15)";
+    if (!isScrolled) return inset;
+    return `${inset}, 0 12px 36px -14px color-mix(in srgb, var(--theme-heading-text) 18%, transparent)`;
+  }, [isScrolled]);
+
   const mobileMoreNav: { key: string; href: string; label: string }[] = [
     { key: "pre-nursing", href: "/pre-nursing", label: formatTitleCase(t("nav.preNursing"), locale) },
   ];
@@ -528,8 +534,12 @@ export function SiteHeader() {
   return (
     <div style={navChromeVars} className="sticky top-0 z-50 nn-header-animate-in" ref={headerRef}>
       <header
-        style={isLightTheme ? undefined : { ...navChromeStyle, boxShadow: "inset 0 1px 0 0 rgba(255,255,255,0.15)" }}
-        className={`relative w-full border-b${isLightTheme ? " nn-header-logo-row nn-header-logo-row--scrolled" : " nn-header-dark-surface"}`}
+        style={isLightTheme ? undefined : { ...navChromeStyle, boxShadow: darkHeaderShadow }}
+        className={`relative w-full border-b${
+          isLightTheme
+            ? ` nn-header-logo-row${isScrolled ? " nn-header-logo-row--scrolled" : ""}`
+            : " nn-header-dark-surface"
+        }`}
         onMouseEnter={isMarketingNav ? clearMegaCloseTimer : undefined}
         onMouseLeave={isMarketingNav ? scheduleMegaClose : undefined}
       >

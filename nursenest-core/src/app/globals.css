@@ -1669,6 +1669,16 @@ html[data-theme] .nn-marketing-surface {
     0 8px 28px -6px color-mix(in srgb, var(--theme-heading-text) 14%, transparent);
 }
 
+.nn-header-logo-row:not(.nn-header-logo-row--scrolled) {
+  backdrop-filter: saturate(1.15) blur(10px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nn-header-logo-row:not(.nn-header-logo-row--scrolled) {
+    backdrop-filter: none;
+  }
+}
+
 /* Dark-theme headers need explicit nav token rebinding so text stays white on the dark chrome surface. */
 .nn-header-dark-surface {
   --nav-fg: var(--nn-nav-fg, #ffffff);
@@ -1752,6 +1762,13 @@ html[data-theme] .nn-marketing-surface {
 /* Hero branded surface — opt-in wash for above-fold sections */
 .nn-hero-branded {
   background: var(--hero-branded-wash);
+}
+
+/* Token-only ambient depth on hero (does not fight `background` shorthand on `.nn-hero-branded`). */
+.nn-hero-branded.nn-hero-branded--ambient-depth {
+  background-color: var(--hero-branded-wash);
+  background-image: var(--nn-aesthetic-hero-glow), var(--nn-aesthetic-hero-mesh);
+  background-repeat: no-repeat;
 }
 
 /* Accent surfaces — structured multi-role palette classes */
