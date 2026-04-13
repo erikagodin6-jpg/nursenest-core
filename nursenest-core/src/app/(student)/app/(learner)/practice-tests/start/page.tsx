@@ -50,7 +50,7 @@ export default async function PathwayCatStartPage({ searchParams }: Props) {
         <div className="mb-4">
           <BreadcrumbTrail items={appShellBreadcrumbs("practice-tests")} />
         </div>
-        <h1 className="text-3xl font-bold">Pathway CAT practice</h1>
+        <h1 className="text-3xl font-bold">Pathway Readiness Exam</h1>
         <p className="mt-2 text-sm text-muted">Subscribe to run adaptive sessions matched to your exam track.</p>
         <div className="mt-6">
           <SubscriptionPaywall
@@ -86,9 +86,9 @@ export default async function PathwayCatStartPage({ searchParams }: Props) {
       <div className="mb-4">
         <BreadcrumbTrail items={appShellBreadcrumbs("practice-tests")} />
       </div>
-      <h1 className="text-3xl font-bold">Pathway CAT practice</h1>
+      <h1 className="text-3xl font-bold">Pathway Readiness Exam</h1>
       <p className="mt-2 text-sm text-muted">
-        Confirm the pathway and length, then start. You can switch pathways or open the full builder anytime.
+        Confirm the pathway and start your readiness exam. Exam constraints are applied automatically per pathway.
       </p>
       {catEligiblePathways.length > 1 ? (
         <p className="mt-3 text-sm text-[var(--semantic-text-secondary)]">

@@ -24,7 +24,7 @@ const catSelectionBasisZ = z.enum(["random", "targeted", "weak"]);
 const catPresentationZ = z.enum(["practice", "exam_simulation"]);
 const catFeedbackZ = z.enum(["study", "test"]);
 const catEngineTypeZ = z.enum(["CAT", "SIMULATION"]);
-const catEngineModeZ = z.enum(["production_ready", "beta", "unavailable"]);
+const catEngineModeZ = z.enum(["production_ready", "beta", "mini_adaptive", "simulation", "unavailable"]);
 
 /** Defaults on every field so partial persisted JSON still parses; unknown keys stripped. */
 const practiceTestConfigSchema = z.object({

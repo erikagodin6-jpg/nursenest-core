@@ -96,6 +96,10 @@ function enrichWithCat(
     estimatedAbility: report.theta,
     abilityStdError: report.se,
     readinessResult: readinessResultLabel(report.decision),
+    readinessLevel: report.readinessLevel,
+    confidenceLevel: report.confidenceLevelLabel,
+    passProbability: report.passProbability,
+    passProbabilityBand: report.passProbabilityBand,
     readinessLabel: readinessFromReport(report, presentationMode),
   };
 }
@@ -261,13 +265,6 @@ export async function createCatPracticeTestPayload(
   }
 
   const pathwayReadiness = readinessConfigForPathwayId(pathway?.id ?? input.pathwayId ?? null);
-  if (pathwayReadiness?.mode === "unavailable") {
-    return {
-      ok: false,
-      code: PRACTICE_TEST_CAT_CREATE_CODE.pathway_track_not_ready,
-      message: "Readiness exam is currently unavailable for this pathway. Use practice questions first.",
-    };
-  }
 
   const effectiveBasis: CatSelectionBasis = sim ? "random" : catBasis;
 
@@ -302,7 +299,14 @@ export async function createCatPracticeTestPayload(
   const v = sim
     ? validateCatQuestionPool(pool, { minPoolSize: bounds.min })
     : validatePracticeCatPool(pool);
-  if (!v.ok) return { ok: false, code: PRACTICE_TEST_CAT_CREATE_CODE.cat_pool_invalid, message: v.error };
+  if (!v.ok) {
+    return {
+      ok: false,
+      code: PRACTICE_TEST_CAT_CREATE_CODE.cat_pool_invalid,
+      message:
+        "This readiness exam is not ready to launch for your pathway yet. Continue with targeted questions and lessons, then try again.",
+    };
+  }
 
   const blueprintWeights = nclexBlueprintWeightMap(examCfg);
   const diagnostics = buildPoolBlueprintDiagnostics(pool, examCfg.id);
@@ -525,6 +529,13 @@ export async function advanceCatPracticeTest(params: {
   if (userAns === undefined) return { kind: "error", message: "Answer the current question before continuing." };
 
   let state = parseAdaptiveState(params.adaptiveState) ?? createInitialAdaptiveState();
+  state = {
+    ...state,
+    passingThreshold:
+      typeof state.passingThreshold === "number"
+        ? state.passingThreshold
+        : (params.config.catPassingThreshold ?? 0),
+  };
   const feedbackMode: CatExamFeedbackMode = params.config.catExamFeedbackMode ?? "test";
   const study = feedbackMode === "study";
 

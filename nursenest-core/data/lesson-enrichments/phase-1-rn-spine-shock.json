@@ -1,0 +1,338 @@
+{
+  "version": 1,
+  "description": "Phase 1 – Shock: complete enrichment for CA-RN and US-RN spine lessons",
+  "lessons": [
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-shock",
+      "previewSectionCount": 2,
+      "seoTitle": "Shock nursing: types, pathophysiology, assessment & NCLEX-RN Canada",
+      "seoDescription": "Complete RN lesson on shock: hypovolemic, distributive, cardiogenic, obstructive types, compensated vs decompensated stages, vasopressors, and Canadian NCLEX nursing priorities.",
+      "sections": [
+        {
+          "id": "introduction",
+          "heading": "Overview",
+          "kind": "introduction",
+          "body": "**Shock** is a state of acute circulatory failure in which inadequate oxygen delivery to tissues leads to cellular dysfunction and, if untreated, multi-organ failure and death. It is not simply hypotension — shock is defined by **tissue hypoperfusion**, which can exist even when blood pressure appears normal in early compensated stages.\n\nShock is classified into four main types based on the underlying mechanism:\n- **Hypovolemic**: inadequate intravascular volume (hemorrhage, burns, severe dehydration)\n- **Distributive**: maldistribution of blood flow despite normal or elevated volume (septic, anaphylactic, neurogenic)\n- **Cardiogenic**: pump failure (MI, cardiomyopathy, dysrhythmia)\n- **Obstructive**: mechanical obstruction to flow (cardiac tamponade, tension pneumothorax, massive PE)\n\nFor the NCLEX-RN, the priority is to recognize the type, identify the stage (compensated vs decompensated), and implement the correct intervention for each type."
+        },
+        {
+          "id": "pathophysiology_overview",
+          "heading": "Pathophysiology",
+          "kind": "pathophysiology_overview",
+          "body": "**Common pathway: inadequate oxygen delivery.** All types of shock share a final common pathway: reduced oxygen delivery (DO₂ = CO × CaO₂) to tissues. Cells switch from aerobic to anaerobic metabolism, producing lactic acid. Rising lactate (> 2 mmol/L) indicates significant tissue hypoperfusion. The cellular consequence is energy failure — ATP depletion, cell swelling, lysosomal rupture, and apoptosis. Uncontrolled, this leads to multi-organ dysfunction (MODS).\n\n**Hypovolemic shock.** Loss of intravascular volume (blood, plasma, or water) reduces venous return → decreased preload → decreased stroke volume → decreased cardiac output. The body compensates via SNS activation (tachycardia, vasoconstriction, shunting blood to vital organs), RAAS activation (aldosterone → sodium/water retention), and ADH release (water conservation). Early vasoconstriction maintains BP despite volume loss — this is the **compensated phase** where the nurse can act to prevent progression.\n\n**Distributive shock.** The volume is not lost — it is misallocated. Massive vasodilation (from mediators like histamine in anaphylaxis, nitric oxide in sepsis, or loss of sympathetic tone in neurogenic shock) creates a \"relative hypovolemia\" — the vascular bed is too large for the existing volume. Despite often-elevated CO (especially in early sepsis), the dilated periphery cannot perfuse adequately. Skin findings differ: early septic shock = warm, flushed, bounding pulses; late septic shock = cool, mottled skin as compensatory vasoconstriction fails.\n\n**Cardiogenic shock.** The heart fails as a pump — from MI, end-stage HF, severe valve disease, or dysrhythmia. CO falls → compensatory vasoconstriction (cold, clammy skin), sympathetic tachycardia, and fluid retention. Signs: low BP, high filling pressures (elevated JVP, crackles, S3 gallop), and markedly elevated SVR. This creates a downward spiral: increased afterload further impairs the failing heart.\n\n**Obstructive shock.** Physical obstruction prevents adequate filling or outflow: cardiac tamponade compresses the heart during diastole; tension pneumothorax causes mediastinal shift and vena cava compression; massive PE occludes the pulmonary vasculature. Treatment is removing the obstruction (pericardiocentesis, needle decompression, thrombectomy) — NOT aggressive fluid loading."
+        },
+        {
+          "id": "signs_symptoms",
+          "heading": "Signs & Symptoms by Stage",
+          "kind": "signs_symptoms",
+          "body": "**Compensated shock (early — most reversible):**\n- HR > 100 bpm (tachycardia — first compensatory sign)\n- Normal or slightly decreased BP (compensatory vasoconstriction maintains BP)\n- Narrowed pulse pressure\n- Cool, pale, clammy skin (vasoconstriction, except distributive)\n- Anxiety, restlessness (cerebral hypoperfusion begins)\n- Decreased urine output (< 0.5 mL/kg/hr — renal vasoconstriction)\n- Lactate 2–4 mmol/L\n\n**Decompensated shock (later — urgent):**\n- Marked hypotension: SBP < 90 mmHg or MAP < 65 mmHg\n- Severe tachycardia (> 120 bpm)\n- Altered mental status: confusion → stupor → coma\n- Oliguria → anuria\n- Metabolic acidosis (lactate ≥ 4 mmol/L, pH < 7.35, HCO₃ low)\n- Cold, mottled, cyanotic extremities\n\n**Type-specific signs:**\n- **Hypovolemic**: hemoconcentration (high Hgb/Hct early in dehydration, falling in hemorrhage), narrow pulse pressure, flat neck veins\n- **Septic**: fever or hypothermia, source of infection, warm/flushed skin early, later cold and mottled\n- **Cardiogenic**: crackles, JVD, S3 gallop, elevated BNP, chest pain (if ACS)\n- **Anaphylactic**: urticaria, angioedema, bronchospasm (wheeze), hypotension within minutes of allergen\n- **Neurogenic**: bradycardia with hypotension (loss of sympathetic tone — no tachycardia); warm, dry skin (no vasospasm); poikilothermia\n- **Tamponade**: Beck's triad = hypotension + JVD + muffled heart sounds; pulsus paradoxus\n- **Tension pneumothorax**: absent breath sounds, tracheal deviation, JVD, respiratory distress — immediate needle decompression"
+        },
+        {
+          "id": "red_flags",
+          "heading": "Red Flags / Clinical Deterioration",
+          "kind": "red_flags",
+          "body": "**Escalate immediately for:**\n- **SBP < 90 mmHg or MAP < 65 mmHg**: hemodynamic instability — initiate shock protocol\n- **Lactate ≥ 4 mmol/L**: severe tissue hypoperfusion — notify provider stat\n- **Altered mental status** developing in a previously alert patient with suspected shock\n- **Oliguria progressing to anuria**: AKI — urgent assessment and provider notification\n- **Tracheal deviation + absent breath sounds + JVD**: tension pneumothorax — needle decompression NOW before imaging\n- **Beck's triad (hypotension + JVD + muffled heart sounds)**: cardiac tamponade — prepare for emergency pericardiocentesis\n- **Urticaria + bronchospasm + hypotension within minutes of exposure**: anaphylactic shock — epinephrine IM immediately\n- **New wide-complex tachycardia or bradycardia with hemodynamic instability**: dysrhythmia-induced cardiogenic shock"
+        },
+        {
+          "id": "labs_diagnostics",
+          "heading": "Diagnostics / Labs",
+          "kind": "labs_diagnostics",
+          "body": "**Universal shock workup:**\n- **Serum lactate**: tissue hypoperfusion marker; trend to assess response to treatment\n- **ABG**: metabolic acidosis (low pH, low HCO₃, elevated base deficit) + respiratory compensation\n- **BMP/CMP**: electrolytes, glucose, creatinine (AKI), BUN\n- **CBC**: Hgb/Hct (hemorrhage, anemia), WBC (infection), platelets (DIC)\n- **Coagulation panel (PT, PTT, INR, fibrinogen, D-dimer)**: DIC evaluation\n- **Type and crossmatch**: in hemorrhagic shock or pre-surgical emergency\n\n**Type-specific:**\n- **Hypovolemic**: Hgb falling in hemorrhage; BUN:Cr ratio > 20 in dehydration\n- **Septic**: blood cultures × 2, procalcitonin, urinalysis, source-specific cultures\n- **Cardiogenic**: troponin, BNP, 12-lead ECG, echocardiogram\n- **Anaphylactic**: tryptase level (confirms mast cell degranulation)\n- **Obstructive (PE)**: D-dimer, CT pulmonary angiogram, troponin, BNP\n- **Tamponade**: echocardiogram (diagnostic)\n- **Tension pneumothorax**: clinical diagnosis — do NOT wait for imaging before needle decompression"
+        },
+        {
+          "id": "nursing_assessment_interventions",
+          "heading": "Nursing Responsibilities",
+          "kind": "nursing_assessment_interventions",
+          "body": "**General shock nursing priorities:**\n- Continuous cardiac monitoring and frequent vital signs (every 15 minutes in active shock)\n- Establish IV access: two large-bore peripheral IVs (16–18G minimum) for rapid fluid administration\n- Insert urinary catheter for continuous urine output monitoring (target ≥ 0.5 mL/kg/hr)\n- Administer oxygen: titrate to SpO₂ ≥ 94%; prepare for intubation if respiratory failure\n- Position: supine with legs elevated for hypovolemic/distributive — do NOT Trendelenburg (worsens resp work); HOB elevated for cardiogenic\n- Draw labs and blood cultures as ordered\n- Reassess frequently: mental status (GCS/AVPU), skin perfusion, BP, UO, lactate trends\n\n**Type-specific interventions:**\n- **Hypovolemic (hemorrhagic)**: 2 large-bore IVs → rapid crystalloid (NS or LR) followed by PRBCs when available; pressure on bleeding source; prepare for OR\n- **Septic**: Hour-1 Bundle (cultures, antibiotics, 30 mL/kg fluids, vasopressors if needed); see Sepsis lesson\n- **Anaphylactic**: **Epinephrine 0.3–0.5 mg IM (anterolateral thigh)** immediately — this is the only life-saving intervention; then antihistamines (diphenhydramine), corticosteroids, bronchodilators, IV fluids, airway management\n- **Cardiogenic**: reduce preload/afterload (diuretics, vasodilators if BP allows), inotropes (dobutamine), vasopressors (norepinephrine), prepare for possible LVAD or IABP\n- **Neurogenic**: cautious fluid resuscitation; atropine for bradycardia; vasopressors (norepinephrine) for hypotension; spinal immobilization\n- **Obstructive — tamponade**: prepare for emergency pericardiocentesis\n- **Obstructive — tension pneumothorax**: needle decompression (14–16G needle, 2nd ICS MCL) — immediate nursing action when clinical signs are present"
+        },
+        {
+          "id": "clinical_pearls",
+          "heading": "Clinical Pearls",
+          "kind": "clinical_pearls",
+          "body": "- **Normal BP does not rule out shock.** Compensated shock maintains BP through vasoconstriction. Tachycardia + altered mental status + oliguria = shock until proven otherwise.\n- **Anaphylaxis: epinephrine first, everything else second.** Antihistamines alone will NOT reverse anaphylactic shock — only epinephrine reverses bronchospasm and vasodilation.\n- **Neurogenic shock paradox**: bradycardia + hypotension. Other shock types cause tachycardia. The absence of tachycardia in a trauma patient with spinal injury = neurogenic shock.\n- **Tamponade Beck's triad**: hypotension + JVD + muffled heart sounds. JVD + hypotension together = obstructive cause until proven otherwise.\n- **Tension pneumothorax is a clinical diagnosis** — do not wait for X-ray when signs are present.\n- **Dobutamine vs norepinephrine**: dobutamine is an inotrope for cardiogenic shock (increases CO but may drop BP further); norepinephrine is a vasopressor for distributive shock (raises SVR/MAP). Do not confuse.\n- **Lactate clearance** is the treatment goal — normalization of lactate indicates adequate tissue reperfusion regardless of the cause."
+        },
+        {
+          "id": "client_education",
+          "heading": "Patient Education",
+          "kind": "client_education",
+          "body": "**For patients at risk for or recovering from shock:**\n\n**Anaphylaxis (allergy-related shock):**\n- Carry an epinephrine auto-injector (EpiPen) at all times — teach patient AND family how to use it\n- Wear medical alert bracelet listing allergens\n- Avoid known allergens; read labels; inform all healthcare providers of allergies\n- After any epinephrine use, go to emergency immediately — biphasic anaphylaxis can occur up to 12 hours later\n\n**Post-shock recovery:**\n- Explain the ICU/monitoring environment and why close observation is needed\n- Reassure family about equipment (monitors, IVs, catheter) — normalize the care\n- Explain medication purposes (vasopressors, antibiotics, IV fluids)\n- PTSD/anxiety screening post-ICU: many patients develop psychological trauma after critical illness\n\n**Prevention of future events:**\n- Hypovolemic shock (dehydration): recognize early warning signs — dark urine, dizziness, rapid heart rate; increase fluids with fever or exercise\n- Sepsis source prevention: wound care, catheter care education, hand hygiene"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- Shock = tissue hypoperfusion, not just low BP. Four types: hypovolemic, distributive (septic/anaphylactic/neurogenic), cardiogenic, obstructive.\n- Compensated stage: tachycardia + normal BP; treat aggressively before decompensation (hypotension + mental status changes).\n- **Anaphylaxis**: epinephrine IM first, always. **Tension pneumothorax**: needle decompression immediately. **Tamponade**: Beck's triad → pericardiocentesis.\n- Cardiogenic shock needs inotropes (dobutamine) + vasopressors; avoid fluid overload. Hypovolemic needs rapid volume.\n- Norepinephrine: first-line vasopressor (distributive shock). Dobutamine: first-line inotrope (cardiogenic shock).\n- Monitor lactate as the key tissue perfusion marker. Target clearance ≥ 10–20%."
+        }
+      ],
+      "preTest": [
+        {
+          "question": "A nurse is assessing four clients. Which client should the nurse assess first, as this presentation most likely represents shock?",
+          "options": [
+            "Client A: BP 118/74, HR 88, SpO₂ 96%, anxious",
+            "Client B: BP 94/60, HR 124, cool clammy skin, urine output 15 mL/hr",
+            "Client C: BP 130/82, HR 72, temperature 38.2°C, no focal complaints",
+            "Client D: BP 110/70, HR 96, mild dyspnea on exertion"
+          ],
+          "correct": 1,
+          "rationale": "Client B shows classic signs of decompensated shock: hypotension (SBP 94), tachycardia (HR 124), cool clammy skin (vasoconstriction), and oliguria (15 mL/hr = < 0.5 mL/kg/hr). This requires immediate assessment and intervention."
+        },
+        {
+          "question": "A client develops urticaria, angioedema of the lips, stridor, and severe hypotension 5 minutes after receiving IV ampicillin. What is the nurse's immediate priority action?",
+          "options": [
+            "Administer diphenhydramine 50 mg IV",
+            "Stop the infusion and call rapid response",
+            "Administer epinephrine 0.3 mg IM in the anterolateral thigh",
+            "Apply oxygen via non-rebreather mask"
+          ],
+          "correct": 2,
+          "rationale": "Anaphylactic shock requires epinephrine IM as the FIRST intervention — it is the only treatment that reverses bronchospasm and vasodilation. Diphenhydramine and oxygen are important adjuncts but do not treat the underlying anaphylaxis. The IV infusion should also be stopped, but epinephrine is the immediate priority."
+        },
+        {
+          "question": "A trauma client with a fractured pelvis becomes increasingly confused, HR 128, BP 86/52 mmHg, with pale, diaphoretic skin. Which type of shock is most likely?",
+          "options": [
+            "Neurogenic shock from spinal cord injury",
+            "Cardiogenic shock from traumatic myocardial contusion",
+            "Hypovolemic hemorrhagic shock from blood loss",
+            "Distributive septic shock from wound contamination"
+          ],
+          "correct": 2,
+          "rationale": "Pelvic fractures can cause massive retroperitoneal hemorrhage. The constellation of tachycardia, hypotension, cool clammy diaphoretic skin, and confusion after significant trauma is classic hypovolemic hemorrhagic shock. Neurogenic shock would show bradycardia (not tachycardia). Sepsis would take hours to develop. Cardiogenic requires cardiac history or ECG changes."
+        }
+      ],
+      "postTest": [
+        {
+          "question": "Beck's triad is present in a client following a motor vehicle accident. Which intervention does the nurse prepare for?",
+          "options": [
+            "Needle decompression of the chest",
+            "Emergency pericardiocentesis",
+            "Rapid IV fluid bolus",
+            "Administration of norepinephrine infusion"
+          ],
+          "correct": 1,
+          "rationale": "Beck's triad (hypotension + elevated JVP/JVD + muffled heart sounds) indicates cardiac tamponade — blood in the pericardial sac compresses the heart. Emergency pericardiocentesis (needle aspiration of pericardial blood) is the treatment. Needle decompression treats tension pneumothorax. Fluids are temporizing but not definitive. Norepinephrine does not address the obstruction."
+        },
+        {
+          "question": "A client is brought in after a high-speed crash with absent breath sounds on the right, deviated trachea to the left, and severe respiratory distress. BP 82/54. The nurse's priority action is:",
+          "options": [
+            "Obtain a STAT chest X-ray",
+            "Prepare for emergency thoracotomy",
+            "Assist with needle decompression of the right chest immediately",
+            "Administer 2 L of normal saline via rapid IV infusion"
+          ],
+          "correct": 2,
+          "rationale": "This is tension pneumothorax — a clinical diagnosis requiring immediate needle decompression (14–16G needle, 2nd intercostal space, midclavicular line). Delaying for imaging is dangerous. Thoracotomy is not the first step. IV fluids will not relieve the obstructive cause of hypotension."
+        },
+        {
+          "question": "A client in septic shock receives 30 mL/kg IV fluid but MAP remains 60 mmHg. What medication should the nurse prepare to administer?",
+          "options": [
+            "Dobutamine — to increase cardiac output",
+            "Norepinephrine — to increase systemic vascular resistance",
+            "Epinephrine — as the first-line vasopressor in septic shock",
+            "Dopamine — first-line agent per current guidelines"
+          ],
+          "correct": 1,
+          "rationale": "Norepinephrine is the first-line vasopressor for septic shock per the Surviving Sepsis Campaign. It raises SVR and MAP without the tachycardia and arrhythmia risk of dopamine. Dobutamine is an inotrope used when the cardiac output is low (cardiogenic component). Epinephrine is second or third-line. Dopamine is no longer first-line due to worse safety profile."
+        },
+        {
+          "question": "A nurse is caring for a client in neurogenic shock after a T4 spinal cord injury. Which assessment finding is consistent with this diagnosis?",
+          "options": [
+            "Tachycardia of 136 bpm with cold, diaphoretic skin",
+            "Bradycardia of 48 bpm with warm, dry, vasodilated skin and hypotension",
+            "Fever, confusion, and warm flushed skin consistent with sepsis",
+            "JVD, S3 gallop, and pulmonary crackles suggesting cardiogenic shock"
+          ],
+          "correct": 1,
+          "rationale": "Neurogenic shock is caused by loss of sympathetic tone below the spinal lesion. Hallmarks: bradycardia (no tachycardia — sympathetic outflow is lost), hypotension, AND warm, dry, vasodilated skin (no vasoconstriction). This differentiates it from other shock types that cause cool, clammy skin."
+        },
+        {
+          "question": "A nurse is giving report on a client in hypovolemic shock after GI bleeding. Hemoglobin has fallen from 12 to 7.2 g/dL. Two peripheral large-bore IVs are in place. Which action is the nurse's immediate priority?",
+          "options": [
+            "Administer 2 units of packed red blood cells as ordered",
+            "Place an NG tube to assess ongoing bleeding",
+            "Elevate the head of the bed to 45 degrees",
+            "Obtain a 12-lead ECG to rule out ACS"
+          ],
+          "correct": 0,
+          "rationale": "Hemorrhagic hypovolemic shock with a hemoglobin of 7.2 g/dL requires volume replacement with blood products. Packed red blood cells restore both volume and oxygen-carrying capacity. NG tube is appropriate for assessment but not the first priority. Head elevation reduces cerebral perfusion in hypotension. ECG may be needed but blood replacement is the immediate hemodynamic intervention."
+        },
+        {
+          "question": "A client's lactate was 6.2 mmol/L at hour 0 and is now 4.1 mmol/L at hour 2 after initiating the sepsis bundle. How should the nurse interpret this trend?",
+          "options": [
+            "No improvement — the lactate must normalize completely within 2 hours",
+            "Lactate clearance of ~34% indicates improving tissue perfusion — continue current management",
+            "The treatment has failed — escalate vasopressor dosing immediately",
+            "The client is ready for ICU transfer downgrade"
+          ],
+          "correct": 1,
+          "rationale": "Lactate clearance ≥ 10–20% from baseline within 2 hours indicates response to resuscitation and improving tissue perfusion. A decrease from 6.2 to 4.1 is ~34% clearance — a positive response. However, lactate remains elevated (goal < 2) — continue resuscitation, monitoring, and reassess. Vasopressor escalation is not needed if perfusion is improving."
+        }
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "us-rn-shock",
+      "previewSectionCount": 2,
+      "seoTitle": "Shock nursing: types, pathophysiology, assessment & NCLEX-RN Canada",
+      "seoDescription": "Complete RN lesson on shock: hypovolemic, distributive, cardiogenic, obstructive types, compensated vs decompensated stages, vasopressors, and US NCLEX nursing priorities.",
+      "sections": [
+        {
+          "id": "introduction",
+          "heading": "Overview",
+          "kind": "introduction",
+          "body": "**Shock** is a state of acute circulatory failure in which inadequate oxygen delivery to tissues leads to cellular dysfunction and, if untreated, multi-organ failure and death. It is not simply hypotension — shock is defined by **tissue hypoperfusion**, which can exist even when blood pressure appears normal in early compensated stages.\n\nShock is classified into four main types based on the underlying mechanism:\n- **Hypovolemic**: inadequate intravascular volume (hemorrhage, burns, severe dehydration)\n- **Distributive**: maldistribution of blood flow despite normal or elevated volume (septic, anaphylactic, neurogenic)\n- **Cardiogenic**: pump failure (MI, cardiomyopathy, dysrhythmia)\n- **Obstructive**: mechanical obstruction to flow (cardiac tamponade, tension pneumothorax, massive PE)\n\nFor the NCLEX-RN, the priority is to recognize the type, identify the stage (compensated vs decompensated), and implement the correct intervention for each type."
+        },
+        {
+          "id": "pathophysiology_overview",
+          "heading": "Pathophysiology",
+          "kind": "pathophysiology_overview",
+          "body": "**Common pathway: inadequate oxygen delivery.** All types of shock share a final common pathway: reduced oxygen delivery (DO₂ = CO × CaO₂) to tissues. Cells switch from aerobic to anaerobic metabolism, producing lactic acid. Rising lactate (> 2 mg/dL or mEq/L) indicates significant tissue hypoperfusion. The cellular consequence is energy failure — ATP depletion, cell swelling, lysosomal rupture, and apoptosis. Uncontrolled, this leads to multi-organ dysfunction (MODS).\n\n**Hypovolemic shock.** Loss of intravascular volume (blood, plasma, or water) reduces venous return → decreased preload → decreased stroke volume → decreased cardiac output. The body compensates via SNS activation (tachycardia, vasoconstriction, shunting blood to vital organs), RAAS activation (aldosterone → sodium/water retention), and ADH release (water conservation). Early vasoconstriction maintains BP despite volume loss — this is the **compensated phase** where the nurse can act to prevent progression.\n\n**Distributive shock.** The volume is not lost — it is misallocated. Massive vasodilation (from mediators like histamine in anaphylaxis, nitric oxide in sepsis, or loss of sympathetic tone in neurogenic shock) creates a \"relative hypovolemia\" — the vascular bed is too large for the existing volume. Despite often-elevated CO (especially in early sepsis), the dilated periphery cannot perfuse adequately. Skin findings differ: early septic shock = warm, flushed, bounding pulses; late septic shock = cool, mottled skin as compensatory vasoconstriction fails.\n\n**Cardiogenic shock.** The heart fails as a pump — from MI, end-stage HF, severe valve disease, or dysrhythmia. CO falls → compensatory vasoconstriction (cold, clammy skin), sympathetic tachycardia, and fluid retention. Signs: low BP, high filling pressures (elevated JVP, crackles, S3 gallop), and markedly elevated SVR. This creates a downward spiral: increased afterload further impairs the failing heart.\n\n**Obstructive shock.** Physical obstruction prevents adequate filling or outflow: cardiac tamponade compresses the heart during diastole; tension pneumothorax causes mediastinal shift and vena cava compression; massive PE occludes the pulmonary vasculature. Treatment is removing the obstruction (pericardiocentesis, needle decompression, thrombectomy) — NOT aggressive fluid loading."
+        },
+        {
+          "id": "signs_symptoms",
+          "heading": "Signs & Symptoms by Stage",
+          "kind": "signs_symptoms",
+          "body": "**Compensated shock (early — most reversible):**\n- HR > 100 bpm (tachycardia — first compensatory sign)\n- Normal or slightly decreased BP (compensatory vasoconstriction maintains BP)\n- Narrowed pulse pressure\n- Cool, pale, clammy skin (vasoconstriction, except distributive)\n- Anxiety, restlessness (cerebral hypoperfusion begins)\n- Decreased urine output (< 0.5 mL/kg/hr — renal vasoconstriction)\n- Lactate 2–4 mg/dL or mEq/L\n\n**Decompensated shock (later — urgent):**\n- Marked hypotension: SBP < 90 mmHg or MAP < 65 mmHg\n- Severe tachycardia (> 120 bpm)\n- Altered mental status: confusion → stupor → coma\n- Oliguria → anuria\n- Metabolic acidosis (lactate ≥ 4 mg/dL or mEq/L, pH < 7.35, HCO₃ low)\n- Cold, mottled, cyanotic extremities\n\n**Type-specific signs:**\n- **Hypovolemic**: hemoconcentration (high Hgb/Hct early in dehydration, falling in hemorrhage), narrow pulse pressure, flat neck veins\n- **Septic**: fever or hypothermia, source of infection, warm/flushed skin early, later cold and mottled\n- **Cardiogenic**: crackles, JVD, S3 gallop, elevated BNP, chest pain (if ACS)\n- **Anaphylactic**: urticaria, angioedema, bronchospasm (wheeze), hypotension within minutes of allergen\n- **Neurogenic**: bradycardia with hypotension (loss of sympathetic tone — no tachycardia); warm, dry skin (no vasospasm); poikilothermia\n- **Tamponade**: Beck's triad = hypotension + JVD + muffled heart sounds; pulsus paradoxus\n- **Tension pneumothorax**: absent breath sounds, tracheal deviation, JVD, respiratory distress — immediate needle decompression"
+        },
+        {
+          "id": "red_flags",
+          "heading": "Red Flags / Clinical Deterioration",
+          "kind": "red_flags",
+          "body": "**Escalate immediately for:**\n- **SBP < 90 mmHg or MAP < 65 mmHg**: hemodynamic instability — initiate shock protocol\n- **Lactate ≥ 4 mg/dL or mEq/L**: severe tissue hypoperfusion — notify provider stat\n- **Altered mental status** developing in a previously alert patient with suspected shock\n- **Oliguria progressing to anuria**: AKI — urgent assessment and provider notification\n- **Tracheal deviation + absent breath sounds + JVD**: tension pneumothorax — needle decompression NOW before imaging\n- **Beck's triad (hypotension + JVD + muffled heart sounds)**: cardiac tamponade — prepare for emergency pericardiocentesis\n- **Urticaria + bronchospasm + hypotension within minutes of exposure**: anaphylactic shock — epinephrine IM immediately\n- **New wide-complex tachycardia or bradycardia with hemodynamic instability**: dysrhythmia-induced cardiogenic shock"
+        },
+        {
+          "id": "labs_diagnostics",
+          "heading": "Diagnostics / Labs",
+          "kind": "labs_diagnostics",
+          "body": "**Universal shock workup:**\n- **Serum lactate**: tissue hypoperfusion marker; trend to assess response to treatment\n- **ABG**: metabolic acidosis (low pH, low HCO₃, elevated base deficit) + respiratory compensation\n- **BMP/CMP**: electrolytes, glucose, creatinine (AKI), BUN\n- **CBC**: Hgb/Hct (hemorrhage, anemia), WBC (infection), platelets (DIC)\n- **Coagulation panel (PT, PTT, INR, fibrinogen, D-dimer)**: DIC evaluation\n- **Type and crossmatch**: in hemorrhagic shock or pre-surgical emergency\n\n**Type-specific:**\n- **Hypovolemic**: Hgb falling in hemorrhage; BUN:Cr ratio > 20 in dehydration\n- **Septic**: blood cultures × 2, procalcitonin, urinalysis, source-specific cultures\n- **Cardiogenic**: troponin, BNP, 12-lead ECG, echocardiogram\n- **Anaphylactic**: tryptase level (confirms mast cell degranulation)\n- **Obstructive (PE)**: D-dimer, CT pulmonary angiogram, troponin, BNP\n- **Tamponade**: echocardiogram (diagnostic)\n- **Tension pneumothorax**: clinical diagnosis — do NOT wait for imaging before needle decompression"
+        },
+        {
+          "id": "nursing_assessment_interventions",
+          "heading": "Nursing Responsibilities",
+          "kind": "nursing_assessment_interventions",
+          "body": "**General shock nursing priorities:**\n- Continuous cardiac monitoring and frequent vital signs (every 15 minutes in active shock)\n- Establish IV access: two large-bore peripheral IVs (16–18G minimum) for rapid fluid administration\n- Insert urinary catheter for continuous urine output monitoring (target ≥ 0.5 mL/kg/hr)\n- Administer oxygen: titrate to SpO₂ ≥ 94%; prepare for intubation if respiratory failure\n- Position: supine with legs elevated for hypovolemic/distributive — do NOT Trendelenburg (worsens resp work); HOB elevated for cardiogenic\n- Draw labs and blood cultures as ordered\n- Reassess frequently: mental status (GCS/AVPU), skin perfusion, BP, UO, lactate trends\n\n**Type-specific interventions:**\n- **Hypovolemic (hemorrhagic)**: 2 large-bore IVs → rapid crystalloid (NS or LR) followed by PRBCs when available; pressure on bleeding source; prepare for OR\n- **Septic**: Hour-1 Bundle (cultures, antibiotics, 30 mL/kg fluids, vasopressors if needed); see Sepsis lesson\n- **Anaphylactic**: **Epinephrine 0.3–0.5 mg IM (anterolateral thigh)** immediately — this is the only life-saving intervention; then antihistamines (diphenhydramine), corticosteroids, bronchodilators, IV fluids, airway management\n- **Cardiogenic**: reduce preload/afterload (diuretics, vasodilators if BP allows), inotropes (dobutamine), vasopressors (norepinephrine), prepare for possible LVAD or IABP\n- **Neurogenic**: cautious fluid resuscitation; atropine for bradycardia; vasopressors (norepinephrine) for hypotension; spinal immobilization\n- **Obstructive — tamponade**: prepare for emergency pericardiocentesis\n- **Obstructive — tension pneumothorax**: needle decompression (14–16G needle, 2nd ICS MCL) — immediate nursing action when clinical signs are present"
+        },
+        {
+          "id": "clinical_pearls",
+          "heading": "Clinical Pearls",
+          "kind": "clinical_pearls",
+          "body": "- **Normal BP does not rule out shock.** Compensated shock maintains BP through vasoconstriction. Tachycardia + altered mental status + oliguria = shock until proven otherwise.\n- **Anaphylaxis: epinephrine first, everything else second.** Antihistamines alone will NOT reverse anaphylactic shock — only epinephrine reverses bronchospasm and vasodilation.\n- **Neurogenic shock paradox**: bradycardia + hypotension. Other shock types cause tachycardia. The absence of tachycardia in a trauma patient with spinal injury = neurogenic shock.\n- **Tamponade Beck's triad**: hypotension + JVD + muffled heart sounds. JVD + hypotension together = obstructive cause until proven otherwise.\n- **Tension pneumothorax is a clinical diagnosis** — do not wait for X-ray when signs are present.\n- **Dobutamine vs norepinephrine**: dobutamine is an inotrope for cardiogenic shock (increases CO but may drop BP further); norepinephrine is a vasopressor for distributive shock (raises SVR/MAP). Do not confuse.\n- **Lactate clearance** is the treatment goal — normalization of lactate indicates adequate tissue reperfusion regardless of the cause."
+        },
+        {
+          "id": "client_education",
+          "heading": "Patient Education",
+          "kind": "client_education",
+          "body": "**For patients at risk for or recovering from shock:**\n\n**Anaphylaxis (allergy-related shock):**\n- Carry an epinephrine auto-injector (EpiPen) at all times — teach patient AND family how to use it\n- Wear medical alert bracelet listing allergens\n- Avoid known allergens; read labels; inform all healthcare providers of allergies\n- After any epinephrine use, go to emergency immediately — biphasic anaphylaxis can occur up to 12 hours later\n\n**Post-shock recovery:**\n- Explain the ICU/monitoring environment and why close observation is needed\n- Reassure family about equipment (monitors, IVs, catheter) — normalize the care\n- Explain medication purposes (vasopressors, antibiotics, IV fluids)\n- PTSD/anxiety screening post-ICU: many patients develop psychological trauma after critical illness\n\n**Prevention of future events:**\n- Hypovolemic shock (dehydration): recognize early warning signs — dark urine, dizziness, rapid heart rate; increase fluids with fever or exercise\n- Sepsis source prevention: wound care, catheter care education, hand hygiene"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- Shock = tissue hypoperfusion, not just low BP. Four types: hypovolemic, distributive (septic/anaphylactic/neurogenic), cardiogenic, obstructive.\n- Compensated stage: tachycardia + normal BP; treat aggressively before decompensation (hypotension + mental status changes).\n- **Anaphylaxis**: epinephrine IM first, always. **Tension pneumothorax**: needle decompression immediately. **Tamponade**: Beck's triad → pericardiocentesis.\n- Cardiogenic shock needs inotropes (dobutamine) + vasopressors; avoid fluid overload. Hypovolemic needs rapid volume.\n- Norepinephrine: first-line vasopressor (distributive shock). Dobutamine: first-line inotrope (cardiogenic shock).\n- Monitor lactate as the key tissue perfusion marker. Target clearance ≥ 10–20%."
+        }
+      ],
+      "preTest": [
+        {
+          "question": "A nurse is assessing four clients. Which client should the nurse assess first, as this presentation most likely represents shock?",
+          "options": [
+            "Client A: BP 118/74, HR 88, SpO₂ 96%, anxious",
+            "Client B: BP 94/60, HR 124, cool clammy skin, urine output 15 mL/hr",
+            "Client C: BP 130/82, HR 72, temperature 38.2°C, no focal complaints",
+            "Client D: BP 110/70, HR 96, mild dyspnea on exertion"
+          ],
+          "correct": 1,
+          "rationale": "Client B shows classic signs of decompensated shock: hypotension (SBP 94), tachycardia (HR 124), cool clammy skin (vasoconstriction), and oliguria (15 mL/hr = < 0.5 mL/kg/hr). This requires immediate assessment and intervention."
+        },
+        {
+          "question": "A client develops urticaria, angioedema of the lips, stridor, and severe hypotension 5 minutes after receiving IV ampicillin. What is the nurse's immediate priority action?",
+          "options": [
+            "Administer diphenhydramine 50 mg IV",
+            "Stop the infusion and call rapid response",
+            "Administer epinephrine 0.3 mg IM in the anterolateral thigh",
+            "Apply oxygen via non-rebreather mask"
+          ],
+          "correct": 2,
+          "rationale": "Anaphylactic shock requires epinephrine IM as the FIRST intervention — it is the only treatment that reverses bronchospasm and vasodilation. Diphenhydramine and oxygen are important adjuncts but do not treat the underlying anaphylaxis. The IV infusion should also be stopped, but epinephrine is the immediate priority."
+        },
+        {
+          "question": "A trauma client with a fractured pelvis becomes increasingly confused, HR 128, BP 86/52 mmHg, with pale, diaphoretic skin. Which type of shock is most likely?",
+          "options": [
+            "Neurogenic shock from spinal cord injury",
+            "Cardiogenic shock from traumatic myocardial contusion",
+            "Hypovolemic hemorrhagic shock from blood loss",
+            "Distributive septic shock from wound contamination"
+          ],
+          "correct": 2,
+          "rationale": "Pelvic fractures can cause massive retroperitoneal hemorrhage. The constellation of tachycardia, hypotension, cool clammy diaphoretic skin, and confusion after significant trauma is classic hypovolemic hemorrhagic shock. Neurogenic shock would show bradycardia (not tachycardia). Sepsis would take hours to develop. Cardiogenic requires cardiac history or ECG changes."
+        }
+      ],
+      "postTest": [
+        {
+          "question": "Beck's triad is present in a client following a motor vehicle accident. Which intervention does the nurse prepare for?",
+          "options": [
+            "Needle decompression of the chest",
+            "Emergency pericardiocentesis",
+            "Rapid IV fluid bolus",
+            "Administration of norepinephrine infusion"
+          ],
+          "correct": 1,
+          "rationale": "Beck's triad (hypotension + elevated JVP/JVD + muffled heart sounds) indicates cardiac tamponade — blood in the pericardial sac compresses the heart. Emergency pericardiocentesis (needle aspiration of pericardial blood) is the treatment. Needle decompression treats tension pneumothorax. Fluids are temporizing but not definitive. Norepinephrine does not address the obstruction."
+        },
+        {
+          "question": "A client is brought in after a high-speed crash with absent breath sounds on the right, deviated trachea to the left, and severe respiratory distress. BP 82/54. The nurse's priority action is:",
+          "options": [
+            "Obtain a STAT chest X-ray",
+            "Prepare for emergency thoracotomy",
+            "Assist with needle decompression of the right chest immediately",
+            "Administer 2 L of normal saline via rapid IV infusion"
+          ],
+          "correct": 2,
+          "rationale": "This is tension pneumothorax — a clinical diagnosis requiring immediate needle decompression (14–16G needle, 2nd intercostal space, midclavicular line). Delaying for imaging is dangerous. Thoracotomy is not the first step. IV fluids will not relieve the obstructive cause of hypotension."
+        },
+        {
+          "question": "A client in septic shock receives 30 mL/kg IV fluid but MAP remains 60 mmHg. What medication should the nurse prepare to administer?",
+          "options": [
+            "Dobutamine — to increase cardiac output",
+            "Norepinephrine — to increase systemic vascular resistance",
+            "Epinephrine — as the first-line vasopressor in septic shock",
+            "Dopamine — first-line agent per current guidelines"
+          ],
+          "correct": 1,
+          "rationale": "Norepinephrine is the first-line vasopressor for septic shock per the Surviving Sepsis Campaign. It raises SVR and MAP without the tachycardia and arrhythmia risk of dopamine. Dobutamine is an inotrope used when the cardiac output is low (cardiogenic component). Epinephrine is second or third-line. Dopamine is no longer first-line due to worse safety profile."
+        },
+        {
+          "question": "A nurse is caring for a client in neurogenic shock after a T4 spinal cord injury. Which assessment finding is consistent with this diagnosis?",
+          "options": [
+            "Tachycardia of 136 bpm with cold, diaphoretic skin",
+            "Bradycardia of 48 bpm with warm, dry, vasodilated skin and hypotension",
+            "Fever, confusion, and warm flushed skin consistent with sepsis",
+            "JVD, S3 gallop, and pulmonary crackles suggesting cardiogenic shock"
+          ],
+          "correct": 1,
+          "rationale": "Neurogenic shock is caused by loss of sympathetic tone below the spinal lesion. Hallmarks: bradycardia (no tachycardia — sympathetic outflow is lost), hypotension, AND warm, dry, vasodilated skin (no vasoconstriction). This differentiates it from other shock types that cause cool, clammy skin."
+        },
+        {
+          "question": "A nurse is giving report on a client in hypovolemic shock after GI bleeding. Hemoglobin has fallen from 12 to 7.2 g/dL. Two peripheral large-bore IVs are in place. Which action is the nurse's immediate priority?",
+          "options": [
+            "Administer 2 units of packed red blood cells as ordered",
+            "Place an NG tube to assess ongoing bleeding",
+            "Elevate the head of the bed to 45 degrees",
+            "Obtain a 12-lead ECG to rule out ACS"
+          ],
+          "correct": 0,
+          "rationale": "Hemorrhagic hypovolemic shock with a hemoglobin of 7.2 g/dL requires volume replacement with blood products. Packed red blood cells restore both volume and oxygen-carrying capacity. NG tube is appropriate for assessment but not the first priority. Head elevation reduces cerebral perfusion in hypotension. ECG may be needed but blood replacement is the immediate hemodynamic intervention."
+        },
+        {
+          "question": "A client's lactate was 6.2 mmol/L at hour 0 and is now 4.1 mmol/L at hour 2 after initiating the sepsis bundle. How should the nurse interpret this trend?",
+          "options": [
+            "No improvement — the lactate must normalize completely within 2 hours",
+            "Lactate clearance of ~34% indicates improving tissue perfusion — continue current management",
+            "The treatment has failed — escalate vasopressor dosing immediately",
+            "The client is ready for ICU transfer downgrade"
+          ],
+          "correct": 1,
+          "rationale": "Lactate clearance ≥ 10–20% from baseline within 2 hours indicates response to resuscitation and improving tissue perfusion. A decrease from 6.2 to 4.1 is ~34% clearance — a positive response. However, lactate remains elevated (goal < 2) — continue resuscitation, monitoring, and reassess. Vasopressor escalation is not needed if perfusion is improving."
+        }
+      ]
+    }
+  ]
+}

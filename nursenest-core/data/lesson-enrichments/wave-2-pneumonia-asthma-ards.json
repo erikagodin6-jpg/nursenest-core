@@ -1,0 +1,350 @@
+{
+  "version": 1,
+  "description": "Wave 2 – Pneumonia, Asthma, ARDS: complete enrichment for CA-RN spine",
+  "lessons": [
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-pneumonia",
+      "previewSectionCount": 2,
+      "seoTitle": "Pneumonia nursing: CAP vs HAP, organisms, antibiotics, oxygen & NCLEX-RN Canada",
+      "seoDescription": "Complete RN lesson on pneumonia: community-acquired vs hospital-acquired, atypical organisms, oxygen targets, antibiotic therapy, aspiration precautions, and Canadian NCLEX-RN priorities.",
+      "sections": [
+        {
+          "id": "introduction",
+          "heading": "Overview",
+          "kind": "introduction",
+          "body": "**Pneumonia** is an acute infection of the pulmonary parenchyma (alveoli and interstitium), causing inflammation and impaired gas exchange. It is a leading cause of infection-related morbidity and mortality in Canada, particularly in older adults, immunocompromised patients, and those with underlying pulmonary disease.\n\n**Classification by acquisition setting:**\n- **Community-acquired pneumonia (CAP)**: develops outside of a healthcare facility; most common pathogens: S. pneumoniae (most common), H. influenzae, atypical organisms (Mycoplasma, Chlamydophila, Legionella)\n- **Hospital-acquired (nosocomial) pneumonia (HAP)**: develops ≥ 48h after hospital admission; higher risk of drug-resistant organisms (MRSA, P. aeruginosa)\n- **Ventilator-associated pneumonia (VAP)**: HAP occurring ≥ 48h after intubation\n- **Aspiration pneumonia**: inhalation of oropharyngeal or gastric contents; risk factors: altered consciousness, dysphagia, nasogastric tube, supine positioning\n\n**For NCLEX-RN:** Know nursing interventions for hypoxia, antibiotic principles, and aspiration prevention. Recognize the patient at risk for deterioration."
+        },
+        {
+          "id": "pathophysiology_overview",
+          "heading": "Pathophysiology",
+          "kind": "pathophysiology_overview",
+          "body": "**Infection and alveolar infiltration.** Normally, the lower respiratory tract is sterile, maintained by mucociliary clearance, alveolar macrophages, cough reflex, and secretory IgA. Pneumonia develops when the infectious burden overwhelms these defenses, or when host defenses are impaired (immunosuppression, aspiration, post-viral damage to mucociliary epithelium).\n\n**Phases of lobar pneumonia (classical):** Congestion (day 1–2): vascular engorgement, exudate begins filling alveoli. Red hepatization (day 2–4): alveoli packed with red blood cells, neutrophils, fibrin — the affected lobe becomes solid and airless. Gray hepatization (day 4–8): fibrin consolidation, RBCs lyse, neutrophils remain. Resolution (day 8+): macrophages clear debris, normal architecture restored.\n\n**Gas exchange impairment.** Alveolar consolidation creates V/Q mismatch — blood continues perfusing non-ventilating alveoli (intrapulmonary shunt) → hypoxemia. Because CO₂ diffuses more easily than O₂, hypercapnia occurs later. With worsening consolidation or bilateral involvement (PNA → ARDS spectrum), respiratory failure develops. The patient initially hyperventilates (respiratory alkalosis), but as muscles fatigue and work of breathing becomes unsustainable, CO₂ rises (respiratory acidosis) — a worrying sign.\n\n**Systemic inflammatory response.** Bacterial infection triggers a systemic inflammatory cascade: fever, leukocytosis, elevated CRP/procalcitonin, tachycardia. In severe cases, especially with bacteremia: sepsis, distributive shock. Elderly patients may NOT mount a fever — hypothermia, confusion, or falling O₂ saturation may be the presenting signs."
+        },
+        {
+          "id": "signs_symptoms",
+          "heading": "Signs & Symptoms",
+          "kind": "signs_symptoms",
+          "body": "**Typical pneumonia (S. pneumoniae):**\n- Sudden high fever (39–40°C), chills, rigors\n- Productive cough: rust-colored or purulent sputum\n- Pleuritic chest pain (sharp, worsens with inspiration or cough)\n- Dyspnea, increased RR\n- Decreased O₂ saturation\n\n**Atypical pneumonia (Mycoplasma, Chlamydophila, Legionella):**\n- Gradual onset (1–2 weeks)\n- Persistent dry, nonproductive cough ('walking pneumonia')\n- Low-grade fever, headache, myalgia, malaise — extrapulmonary symptoms prominent\n- Auscultation: may have few findings despite significant consolidation on CXR\n- Legionella: GI symptoms (nausea, diarrhea), hyponatremia, altered mental status; diagnosed by urine antigen test; NOT transmitted person-to-person\n\n**Auscultation findings:**\n- Crackles (crepitations) over affected area — due to reopening of collapsed alveoli\n- Bronchial breath sounds — normally heard over trachea; when heard over periphery = consolidation\n- Egophony (E-to-A change), whispered pectoriloquy, dullness to percussion over consolidated area\n\n**Aspiration pneumonia signs:**\n- Typically lower lobe, right > left (right mainstem bronchus more vertical)\n- May present with gradual onset if aspiration occurred during sleep\n\n**Red flag signs (impending deterioration):**\n- SpO₂ falling despite supplemental O₂\n- Increasing respiratory rate > 30/min\n- Confusion or altered LOC (new or worsening)\n- Hypotension\n- Cyanosis"
+        },
+        {
+          "id": "red_flags",
+          "heading": "Red Flags / Deterioration",
+          "kind": "red_flags",
+          "body": "**Call provider or activate rapid response immediately:**\n- SpO₂ < 90% despite supplemental O₂\n- Respiratory rate > 30/min, accessory muscle use, inability to complete sentences\n- New or worsening confusion — especially in elderly (may be only sign of sepsis)\n- SBP < 90 mmHg (septic shock from bacteremic pneumonia)\n- Cyanosis\n- Patient appearing exhausted, impending respiratory arrest\n\n**CURB-65 severity score** (pneumonia severity, not for NCLEX but for clinical context):\n- Confusion (new), Urea > 7 mmol/L, Respiratory rate ≥ 30, BP SBP < 90 or DBP ≤ 60, Age ≥ 65\n- Score 0–1: outpatient; Score 2: consider admission; Score ≥ 3: ICU consideration\n\n**High-risk populations — monitor more closely:**\n- Age > 65 years (atypical presentations, rapid decompensation)\n- Immunocompromised (transplant, HIV, chemotherapy)\n- COPD, asthma, bronchiectasis\n- Diabetes, HF, renal disease"
+        },
+        {
+          "id": "labs_diagnostics",
+          "heading": "Diagnostics / Labs",
+          "kind": "labs_diagnostics",
+          "body": "**Imaging:**\n- **Chest X-ray (CXR)**: lobar consolidation, patchy infiltrates, interstitial pattern; may lag behind clinical presentation by up to 48 hours\n- **CT chest**: more sensitive; used when CXR inconclusive or complication suspected (empyema, abscess)\n\n**Microbiological:**\n- **Sputum culture and Gram stain**: collect BEFORE antibiotics if possible; paired with sensitivity for targeted therapy\n- **Blood cultures** (× 2, from 2 different sites, before antibiotics): if bacteremia suspected\n- **Legionella urine antigen**: rapid; positive in Legionella pneumophila serogroup 1\n- **Pneumococcal urine antigen**: positive in pneumococcal pneumonia\n- **Nasopharyngeal swab**: influenza, COVID-19, RSV (viral pneumonia)\n\n**Blood labs:**\n- **CBC**: leukocytosis (bacterial), normal/low WBC (viral, atypical), left shift (bands) = bacterial\n- **CRP, procalcitonin**: elevated in bacterial infection; procalcitonin helps guide antibiotic stewardship\n- **BMP**: hyponatremia (Legionella, SIADH), renal function (guide antibiotic dosing)\n- **Lactate**: if sepsis suspected; > 2 mmol/L = lactate clearance target\n- **ABG**: if SpO₂ < 90% or clinical deterioration — assess for hypercapnia (respiratory failure)\n\n**Oxygen therapy:**\n- Maintain SpO₂ 94–98% in most patients\n- COPD patients with risk of hypercapnia: target SpO₂ 88–92%"
+        },
+        {
+          "id": "nursing_assessment_interventions",
+          "heading": "Nursing Responsibilities",
+          "kind": "nursing_assessment_interventions",
+          "body": "**Infection control:**\n- Standard precautions for all patients with pneumonia\n- Droplet precautions for MRSA pneumonia, influenza (until 24h afebrile), COVID-19 (airborne if aerosolizing procedures)\n- Proper PPE: surgical mask for droplet; N95 for airborne\n- Hand hygiene before and after every patient contact\n\n**Airway and respiratory care:**\n- Position: HOB 30–45 degrees → improves ventilation/perfusion matching and reduces aspiration risk\n- Encourage deep breathing and coughing q1–2h (incentive spirometry if able)\n- Chest physiotherapy, vibration, postural drainage — if ordered and patient can tolerate\n- Nebulized bronchodilators if bronchospasm component\n- Suctioning if patient unable to clear secretions\n\n**Sputum collection:**\n- Collect BEFORE first antibiotic dose\n- First morning specimen preferred (most concentrated)\n- Instruct patient to rinse mouth with water (NOT mouthwash with antibacterials) to reduce contamination\n- Deep cough → collect in sterile specimen cup → transport to lab within 2 hours\n\n**Fever and fluid management:**\n- Acetaminophen or ibuprofen for comfort (fever increases metabolic demand)\n- IV fluid replacement if dehydrated or septic (guided by BP, HR, urine output, MAP)\n- Monitor I&O\n\n**Antibiotic stewardship:**\n- Administer antibiotics on time — timing of first dose matters in septic patients (within 1–3 hours of diagnosis)\n- Monitor for drug reactions (especially with beta-lactams, fluoroquinolones)\n- Assess for C. difficile if new diarrhea after antibiotics\n\n**Aspiration prevention (key nursing intervention):**\n- Head of bed > 30 degrees at all times for high-risk patients\n- Oral care every 2–4 hours — colonized oropharyngeal bacteria is the primary source of aspiration pneumonia\n- Assess swallow reflex before oral intake (especially post-stroke, TBI, altered LOC)\n- Speech-language pathology referral for dysphagia evaluation\n- Proper NG tube placement verification before each feeding\n- Pause tube feeds if RR increasing or patient vomiting"
+        },
+        {
+          "id": "clinical_pearls",
+          "heading": "Clinical Pearls",
+          "kind": "clinical_pearls",
+          "body": "- **Elderly patients often present without fever** — hypothermia, new confusion, or unexplained fall may be the only sign. SpO₂ drop in an otherwise 'stable' elder is a red flag.\n- **Sputum before antibiotics** — once antibiotics are started, culture sensitivity plummets. If 2 minutes of delay is the difference between getting a culture and not, always attempt.\n- **Legionella is not person-to-person** — outbreak investigation targets the water source (hotel cooling towers, hospital water systems). No isolation beyond standard precautions needed.\n- **Aspiration pneumonia vs aspiration pneumonitis**: pneumonitis is chemical (gastric acid, no bacteria); pneumonia is bacterial (colonized oropharynx). Both require the same positioning and monitoring.\n- **O₂ target in COPD**: 88–92%, not 100%. High-flow O₂ in COPD can suppress hypoxic drive and worsen hypercapnia.\n- **Pleural effusion complication**: parapneumonic effusion → empyema if pus develops. Suspect if fever persists despite antibiotics. Drainage required."
+        },
+        {
+          "id": "client_education",
+          "heading": "Patient Education",
+          "kind": "client_education",
+          "body": "**Vaccination (primary prevention):**\n- **Pneumococcal vaccine (PCV15/PCV20 or PPSV23)**: recommended for adults ≥ 65, immunocompromised, chronic lung/heart/kidney/liver disease\n- **Influenza vaccine annually**: influenza is a major cause of secondary bacterial pneumonia\n- **COVID-19 vaccination**: reduces risk of severe COVID-19 pneumonia\n\n**Recovery at home:**\n- Complete the full antibiotic course — do not stop when feeling better; stopping early promotes resistance and relapse\n- Expect full recovery to take 4–6 weeks for some patients\n- Rest and increase activity gradually\n- Hydration: 8–10 glasses of water/day to thin secretions\n- Return to ED if: fever returns, worsening shortness of breath, coughing up blood, confusion\n\n**Aspiration risk education (for patient and family):**\n- Always sit upright or at 30–45 degrees during meals and for 30–60 minutes after eating\n- Small, frequent meals; avoid rushing\n- Report any difficulty swallowing"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- CAP: S. pneumoniae most common; Legionella: hyponatremia, diarrhea, urine antigen. HAP: drug-resistant organisms — contact precautions likely needed.\n- Auscultation: crackles + dullness to percussion + bronchial breath sounds over periphery = consolidation\n- SpO₂ 94–98% (88–92% in COPD). Rising RR + falling SpO₂ + confusion = impending respiratory failure\n- Sputum specimen BEFORE antibiotics. HOB 30–45 degrees. Oral care q2–4h for aspiration prevention.\n- Elderly: may not have fever — new confusion, SpO₂ drop, or failure to thrive may be only sign\n- Antibiotic first dose within 1–3 hours if sepsis suspected"
+        }
+      ],
+      "preTest": [
+        {
+          "question": "A nurse is preparing to collect a sputum specimen for culture on a client with suspected pneumonia. The client received the first dose of antibiotics 20 minutes ago. What should the nurse do?",
+          "options": [
+            "Collect the sputum specimen now — one antibiotic dose is unlikely to affect the culture result",
+            "Document that the antibiotic was given before specimen collection; proceed and note this on the lab requisition",
+            "Wait 24 hours before collecting a sputum specimen to ensure accurate results",
+            "Cancel the sputum order since antibiotics are already started"
+          ],
+          "correct": 1,
+          "rationale": "The ideal is to collect sputum BEFORE antibiotics. Since the antibiotic was given, the nurse should still collect the specimen (partial information is better than none), document the timing, and note on the requisition that antibiotics were initiated first so the lab can interpret results accordingly. Waiting 24 hours provides no benefit. Cancelling the order removes valuable diagnostic data."
+        },
+        {
+          "question": "An 80-year-old client in a long-term care facility becomes acutely confused and has a SpO₂ of 88% on room air. Temperature is 36.8°C. What does the nurse suspect?",
+          "options": [
+            "Delirium secondary to constipation or UTI — pneumonia is unlikely without fever",
+            "Possible pneumonia — elderly patients frequently lack fever; confusion and hypoxia may be the only presenting signs",
+            "Normal age-related changes in mental status — reorient the client",
+            "Possible MI — confusion and hypoxia can present similarly"
+          ],
+          "correct": 1,
+          "rationale": "Elderly patients frequently present atypically with pneumonia — no fever, no cough, no pleuritic pain. New confusion and declining SpO₂ are common presentations in older adults. Assuming delirium from another cause without investigating hypoxia would delay treatment. Both MI and pneumonia should be considered, but confusion + SpO₂ drop in an elderly person with recent cold exposure or respiratory symptoms points strongly to pneumonia as a priority assessment."
+        }
+      ],
+      "postTest": [
+        {
+          "question": "A client with community-acquired pneumonia is receiving supplemental O₂ via nasal cannula at 2 L/min with SpO₂ 89%. The RR is 28/min, and the patient is using accessory muscles. What is the nurse's priority action?",
+          "options": [
+            "Increase O₂ to 4 L/min and reassess in 30 minutes",
+            "Notify the provider immediately — signs of impending respiratory failure require urgent evaluation",
+            "Encourage the patient to deep breathe and use the incentive spirometer",
+            "Obtain a sputum specimen and await culture results"
+          ],
+          "correct": 1,
+          "rationale": "SpO₂ 89% + RR 28 + accessory muscle use indicates respiratory distress with impending failure. The provider must be notified immediately for evaluation, possible ABG, and escalation of care (BiPAP, intubation). Increasing O₂ by 2 L/min without clinical reassessment is inadequate. Incentive spirometry is beneficial for stable patients, not those in active respiratory distress."
+        },
+        {
+          "question": "A client with aspiration pneumonia history is about to receive oral medications. The nurse's most important action is:",
+          "options": [
+            "Crush all medications and mix with applesauce to make swallowing easier without assessment",
+            "Assess the client's swallow reflex and positioning before administering any oral medications",
+            "Administer medications with the client lying flat to reduce the effort of swallowing",
+            "Convert all medications to IV to prevent aspiration risk"
+          ],
+          "correct": 1,
+          "rationale": "Before any oral intake in a client with aspiration risk, the nurse must assess swallowing safety (gag reflex, swallow reflex, conscious level) and ensure the client is upright (HOB 30–90 degrees). Lying flat increases aspiration risk. Crushing medications without a speech-language pathology assessment and diet texture order is inappropriate. Converting to IV is a provider decision, not a nursing one."
+        },
+        {
+          "question": "A client has a known Legionella pneumonia outbreak exposure and is admitted with fever, confusion, diarrhea, and Na⁺ of 128 mEq/L. Which isolation precautions are required?",
+          "options": [
+            "Airborne precautions — Legionella spreads through the air",
+            "Standard precautions only — Legionella is not transmitted person-to-person",
+            "Contact precautions — Legionella spreads via fomites",
+            "Droplet precautions — Legionella spreads through respiratory droplets"
+          ],
+          "correct": 1,
+          "rationale": "Legionella pneumophila is NOT transmitted person-to-person. It spreads via inhalation of aerosolized water from environmental sources (cooling towers, hospital water systems). Standard precautions are sufficient — no additional isolation is needed. Hyponatremia and GI symptoms with pneumonia are classic Legionella findings."
+        }
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-asthma",
+      "previewSectionCount": 2,
+      "seoTitle": "Asthma nursing: pathophysiology, SABA, severity, status asthmaticus & NCLEX-RN Canada",
+      "seoDescription": "Complete RN lesson on asthma: allergen triggers, bronchospasm, peak flow zones, SABA vs LABA vs ICS, status asthmaticus, and Canadian NCLEX-RN clinical priorities.",
+      "sections": [
+        {
+          "id": "introduction",
+          "heading": "Overview",
+          "kind": "introduction",
+          "body": "**Asthma** is a chronic, reversible obstructive airway disease characterized by airway inflammation, bronchospasm, and mucus hypersecretion. Approximately 3 million Canadians have asthma, making it one of the most common chronic diseases. Most asthma deaths are preventable — they result from delayed treatment, underestimation of severity, and suboptimal use of inhaled corticosteroids.\n\n**Key characteristic: reversibility.** Unlike COPD, asthma airway obstruction is largely (or completely) reversible with bronchodilator treatment. Post-bronchodilator spirometry showing FEV₁ improvement ≥ 12% confirms diagnosis.\n\n**Extrinsic (allergic) asthma**: most common; triggered by allergens — pollen, dust mites, animal dander, mold. IgE-mediated early and late phase reactions. Usually begins in childhood.\n\n**Intrinsic asthma**: non-allergic triggers — cold air, exercise, viral infections, NSAIDs/ASA (aspirin-exacerbated respiratory disease), occupational exposures, emotional stress.\n\n**For NCLEX-RN:** Recognize severity, implement SABA protocols, identify status asthmaticus, and know when to escalate."
+        },
+        {
+          "id": "pathophysiology_overview",
+          "heading": "Pathophysiology",
+          "kind": "pathophysiology_overview",
+          "body": "**Allergic sensitization and early-phase reaction.** In atopic individuals, allergen exposure leads to IgE production by B cells. IgE binds to mast cells in the bronchial mucosa. On re-exposure, the allergen cross-links IgE → mast cell degranulation → release of histamine, leukotrienes, prostaglandins, and tryptase within minutes. Immediate bronchospasm: smooth muscle contraction → airway narrowing. Histamine also increases vascular permeability → airway mucosal edema. This is the early-phase response (0–1 hour).\n\n**Late-phase reaction (3–12 hours).** Recruitment of eosinophils, T-helper 2 lymphocytes, and basophils into the airway mucosa. These release cytokines (IL-4, IL-5, IL-13) that sustain inflammation. Eosinophils release major basic protein → further airway epithelial damage. This is why inhaled corticosteroids (ICS) are the cornerstone of long-term control — they target eosinophilic inflammation. Mast cell mediators alone (addressed by antihistamines) are insufficient.\n\n**Airway remodeling.** Repeated inflammation causes structural changes: basement membrane thickening, subepithelial fibrosis, smooth muscle hypertrophy, mucous gland hyperplasia. Over years, some obstruction becomes irreversible — similar to COPD. This is why controllers are started early: to prevent remodeling.\n\n**Airflow obstruction mechanism.** Triple obstruction: bronchospasm (narrowed lumen) + mucosal edema + mucus plugging. Air is trapped distal to narrowed airways (air trapping, auto-PEEP). Expiratory flow is primarily limited → prolonged expiration → wheezing. Hyperinflation: barrel chest, increased FRC, flattened diaphragm on CXR.\n\n**Gas exchange.** V/Q mismatch → hypoxemia (early). Hypercapnia is late and ominous: it means the patient is exhausted and cannot maintain the hyperventilation needed to blow off CO₂. A 'normal' PaCO₂ in a severe asthma attack = early warning of impending respiratory failure (expect low PaCO₂ early in attack; normalization is danger sign)."
+        },
+        {
+          "id": "signs_symptoms",
+          "heading": "Signs & Symptoms",
+          "kind": "signs_symptoms",
+          "body": "**Mild-moderate exacerbation:**\n- Wheezing (diffuse expiratory, may be biphasic)\n- Dyspnea, chest tightness\n- Productive or dry cough (worse at night and early morning)\n- Tachycardia, mild tachypnea\n- SpO₂ > 92% on room air\n- Can speak in sentences\n- Accessory muscle use: mild or absent\n\n**Severe exacerbation:**\n- Significant respiratory distress — speaks in words only, not sentences\n- SpO₂ < 92%\n- RR > 30/min\n- HR > 120 bpm\n- Accessory muscle use prominent (sternocleidomastoid, intercostal retractions)\n- Diaphoresis\n- Paradoxical pulse (pulsus paradoxus > 25 mmHg — BP drops > 25 mmHg with inspiration)\n\n**Status asthmaticus (life-threatening):**\n- Severe attack not responding to bronchodilators\n- Diminished or ABSENT breath sounds: 'silent chest' — bronchospasm so severe that no air movement creates wheezing; this is a pre-arrest sign\n- Cyanosis\n- Altered LOC, agitation, exhaustion\n- Rising PaCO₂ on ABG despite severe dyspnea\n\n**Peak expiratory flow (PEF) zones:**\n- Green: 80–100% of personal best — good control, no action needed\n- Yellow: 50–79% — caution, increase SABA, consider ICS boost\n- Red: < 50% — emergency, SABA immediately, seek emergency care"
+        },
+        {
+          "id": "red_flags",
+          "heading": "Red Flags / Status Asthmaticus",
+          "kind": "red_flags",
+          "body": "**Immediate emergency response for:**\n- **Silent chest**: no audible wheeze despite severe distress — minimal or no air entry; impending respiratory arrest\n- **SpO₂ persistently < 90% despite O₂ and SABAs**\n- **Rising PaCO₂** on ABG during an acute attack (expected: low PaCO₂; normalizing CO₂ in severe dyspnea = impending fatigue)\n- **Pulsus paradoxus > 25 mmHg**\n- **Altered LOC** — confusion, agitation, decreased responsiveness\n- **SABA failure**: no response after 3 doses of salbutamol 20 minutes apart\n\n**IMPORTANT:** Do NOT delay epinephrine in life-threatening anaphylaxis-associated bronchospasm. Epinephrine IM is first-line for anaphylaxis — do not substitute with SABA alone."
+        },
+        {
+          "id": "labs_diagnostics",
+          "heading": "Diagnostics / Labs",
+          "kind": "labs_diagnostics",
+          "body": "**Pulmonary function tests (PFTs) — outpatient diagnosis:**\n- **Spirometry**: FEV₁/FVC ratio < 0.70 (obstructive pattern)\n- **Post-bronchodilator test**: FEV₁ increase ≥ 12% AND ≥ 200 mL after SABA confirms reversibility\n- **Methacholine challenge**: if spirometry normal but asthma suspected — positive if FEV₁ drops ≥ 20% with methacholine\n\n**During acute exacerbation:**\n- **Peak expiratory flow (PEF)**: bedside measurement of airflow limitation; compare to personal best or predicted\n- **SpO₂ continuous monitoring**\n- **ABG**: if SpO₂ < 90%, severe distress, not responding to treatment\n  - Expected in moderate attack: pH ↑ (alkalotic), PaCO₂ ↓ (hyperventilation), PaO₂ ↓\n  - Danger in severe attack: PaCO₂ normalizing or rising → respiratory failure\n- **CXR**: rule out complications — pneumothorax (spontaneous from air trapping), pneumonia\n- **CBC**: eosinophilia (allergic asthma); neutrophilia (infection trigger)\n- **IgE level, allergen skin testing**: for outpatient atopy workup (not for acute management)"
+        },
+        {
+          "id": "nursing_assessment_interventions",
+          "heading": "Nursing Responsibilities",
+          "kind": "nursing_assessment_interventions",
+          "body": "**Acute exacerbation protocol:**\n1. Position client upright (tripod position if needed): maximizes diaphragmatic excursion\n2. Supplemental O₂: target SpO₂ > 94%\n3. Administer SABA (salbutamol/albuterol) 2.5 mg via nebulizer or 4–8 puffs MDI with spacer every 20 minutes × 3 doses\n4. Ipratropium (anticholinergic) nebulizer: added to SABA for moderate-severe exacerbations\n5. Systemic corticosteroids: oral prednisone 40–60 mg or IV methylprednisolone if unable to take PO; takes 4–6 hours to take effect; given early\n6. IV magnesium sulfate: for severe/life-threatening exacerbation not responding to SABAs; bronchodilates via smooth muscle relaxation\n7. Reassess after each SABA treatment: RR, HR, SpO₂, auscultation, speech capacity, PEF\n8. Continuous monitoring: telemetry, SpO₂, RR\n\n**Inhaler technique (MDI + spacer):**\n- Shake inhaler, attach spacer\n- Exhale fully; place mouthpiece in mouth (sealed lips)\n- Press canister and simultaneously inhale slowly and deeply\n- Hold breath 10 seconds\n- Wait 1 minute between puffs\n- Rinse mouth after ICS (prevent oral candidiasis)\n- Assess technique regularly — incorrect technique = treatment failure\n\n**Triggger identification and avoidance:**\n- Review likely triggers with patient: dust mites, pet dander, mold, tobacco smoke, cold air, NSAIDs\n- Occupational exposures: refer for environmental assessment\n\n**Medication classes:**\n- **SABA (salbutamol)**: rescue inhaler; onset 5–15 min; use for acute symptoms; frequent use (> 2×/week outside exercise) = poor control → needs step-up\n- **ICS (fluticasone, budesonide)**: cornerstone long-term controller; reduces airway inflammation; does NOT work for acute attacks; must be used daily even when asymptomatic\n- **LABA (salmeterol, formoterol)**: long-acting bronchodilator; only as add-on with ICS — NEVER as monotherapy in asthma (increases asthma death risk)\n- **LTRA (montelukast)**: leukotriene receptor antagonist; add-on controller; useful in aspirin-exacerbated and exercise-induced asthma\n- **Biologics (omalizumab, mepolizumab)**: for severe eosinophilic or allergic asthma not controlled by high-dose ICS/LABA"
+        },
+        {
+          "id": "clinical_pearls",
+          "heading": "Clinical Pearls",
+          "kind": "clinical_pearls",
+          "body": "- **Silent chest ≠ improvement** — it means no air is moving at all. This is a pre-arrest finding. Escalate immediately.\n- **ICS takes 4–6 weeks for full effect**; systemic corticosteroids take 4–6 hours. Neither is useful for immediate bronchospasm relief — that is what SABAs are for.\n- **LABAs must NOT be used as monotherapy in asthma** — they are ALWAYS combined with ICS. Monotherapy LABA increases asthma-related deaths.\n- **Salbutamol overuse (> 2 canisters/year)** is associated with increased asthma mortality — signals poor control and under-treatment with ICS.\n- **Teach PEF zones** — the most concrete tool for patient self-management. Red zone = act now, do not wait.\n- **NSAIDs/ASA**: aspirin-exacerbated respiratory disease — avoid all NSAIDs. Use acetaminophen instead.\n- **Exercise-induced asthma**: pre-treat with SABA 15 minutes before exercise. Warming up in cold weather and using a mask can reduce triggers."
+        },
+        {
+          "id": "client_education",
+          "heading": "Patient Education",
+          "kind": "client_education",
+          "body": "**Asthma Action Plan (written, individualized):**\n- Green zone (PEF 80–100% of best): no symptoms; take daily controller medications; no SABA needed\n- Yellow zone (PEF 50–79%): take SABA 2–4 puffs; if no improvement in 20 min, repeat; if still in yellow after 1 hour → call provider or go to clinic\n- Red zone (PEF < 50%): take SABA immediately; if no rapid improvement → call 911 / go to ED\n\n**Inhaler technique review at every visit.**\n\n**Trigger avoidance:**\n- Smoke: no smoking, no secondhand smoke exposure\n- Dust mites: allergen-proof mattress/pillow covers, hot wash bedding weekly, reduce carpets\n- Pets: keep out of bedroom; consider HEPA air purifier\n- Mold: fix water leaks promptly; use dehumidifier\n- Exercise in cold: warm up gradually; wear a face covering or scarf\n\n**Medication reminders:**\n- Never stop ICS without telling your doctor — even when symptom-free\n- Rinse mouth after ICS: prevents oral thrush\n- Rescue inhaler (SABA) is for symptoms; controller (ICS) is for prevention — both are needed"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- Asthma: reversible obstruction from inflammation + bronchospasm + mucus. Confirmed by post-bronchodilator FEV₁ improvement ≥ 12%.\n- SABA (salbutamol): rescue; fast-acting. ICS (fluticasone): controller; must take daily. LABA: never monotherapy.\n- Severity: mild (SpO₂ > 92%, sentences) → severe (< 92%, words, accessory muscles) → status asthmaticus (silent chest, rising CO₂) = pre-arrest\n- Acute protocol: upright position → O₂ → SABA × 3 doses q20 min → ipratropium → systemic steroids → Mg sulfate if no response\n- Silent chest = NO air movement = emergency. PaCO₂ normalizing in severe attack = pre-respiratory failure.\n- PEF zones guide self-management. Frequent SABA use (> 2×/week) signals poor control → step up therapy."
+        }
+      ],
+      "preTest": [
+        {
+          "question": "A client with asthma is brought to the ED with severe dyspnea. Auscultation reveals no audible breath sounds bilaterally. SpO₂ is 84%. What does the nurse recognize about the absence of wheezing?",
+          "options": [
+            "The asthma has resolved — wheezing is gone",
+            "The client requires an immediate CXR to rule out pneumothorax before treating",
+            "A silent chest in this context indicates critical bronchospasm with minimal air movement — this is a pre-arrest emergency",
+            "The client is hyperventilating, which eliminates the turbulent flow that causes wheezing"
+          ],
+          "correct": 2,
+          "rationale": "A 'silent chest' (no breath sounds despite severe respiratory distress) in an asthma patient means bronchospasm is so severe that no air is moving — there is no turbulent airflow to generate wheezing. This is a pre-arrest, life-threatening finding requiring immediate escalation: oxygen, IV SABAs, IV magnesium, and preparation for intubation. CXR is obtained concurrently but must not delay treatment."
+        }
+      ],
+      "postTest": [
+        {
+          "question": "A nurse is reviewing the medication regimen for a client with moderate persistent asthma. The provider has ordered salmeterol (a LABA) without any inhaled corticosteroid. What is the nurse's appropriate action?",
+          "options": [
+            "Administer as ordered — salmeterol is safe for asthma as a standalone bronchodilator",
+            "Contact the provider to clarify — LABAs must not be used as asthma monotherapy due to increased mortality risk",
+            "Substitute a SABA for the LABA — they have the same mechanism",
+            "Hold the medication and document it as a patient refusal"
+          ],
+          "correct": 1,
+          "rationale": "Long-acting beta-2 agonists (LABAs) must NEVER be used as monotherapy in asthma — clinical trials demonstrated increased asthma-related deaths. They are only safe and effective when combined with inhaled corticosteroids. The nurse should contact the provider to clarify and add an ICS or change the prescription. This is a patient safety concern."
+        },
+        {
+          "question": "A client with asthma is prescribed fluticasone inhaler (ICS) and asks why they need to rinse their mouth after each use. The nurse explains:",
+          "options": [
+            "To prevent tooth decay from the propellants in the inhaler",
+            "To remove residual drug from the oropharynx and prevent oral candidiasis (thrush)",
+            "To hydrate the vocal cords and prevent hoarseness",
+            "To remove excess drug and prevent systemic absorption through the mucosa"
+          ],
+          "correct": 1,
+          "rationale": "Inhaled corticosteroids deposit in the oropharynx and can suppress local immune defenses, allowing Candida overgrowth (oral thrush). Rinsing the mouth (and gargling) after each ICS dose removes residual drug from the oral mucosa, preventing candidiasis. Hoarseness is a separate ICS side effect related to local steroid effects on the larynx, not prevented by rinsing."
+        },
+        {
+          "question": "An ABG is obtained from a client in severe status asthmaticus. Results: pH 7.38, PaCO₂ 42 mmHg, PaO₂ 68 mmHg. The nurse recognizes this as:",
+          "options": [
+            "Normal ABG — no action needed",
+            "Respiratory alkalosis from hyperventilation — expected in severe asthma",
+            "Ominous finding — a 'normal' or rising PaCO₂ in severe asthma indicates impending respiratory failure from fatigue",
+            "Metabolic acidosis from lactate production"
+          ],
+          "correct": 2,
+          "rationale": "In an acute asthma attack, the expected compensatory response to hypoxemia is tachypnea → hyperventilation → LOW PaCO₂ and ELEVATED pH (respiratory alkalosis). A 'normal' PaCO₂ (40–45) in a severely dyspneic asthma patient means the patient is exhausted and can no longer hyperventilate enough to keep CO₂ down. This is a pre-failure sign requiring immediate escalation. The PaO₂ of 68 on room air is also significantly hypoxemic."
+        }
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-ards",
+      "previewSectionCount": 2,
+      "seoTitle": "ARDS nursing: diffuse alveolar damage, Berlin criteria, lung-protective ventilation & NCLEX-RN",
+      "seoDescription": "Complete RN lesson on ARDS: causes, pathophysiology, Berlin definition, low tidal volume ventilation, proning, hemodynamic monitoring, and Canadian NCLEX-RN priorities.",
+      "sections": [
+        {
+          "id": "introduction",
+          "heading": "Overview",
+          "kind": "introduction",
+          "body": "**Acute Respiratory Distress Syndrome (ARDS)** is a severe, diffuse form of acute lung injury characterized by refractory hypoxemia, bilateral pulmonary infiltrates, and decreased lung compliance — NOT caused by heart failure. ARDS carries a mortality rate of 35–46% and requires ICU-level care. Survivors often have long-term functional and cognitive impairments.\n\n**Berlin Definition (2012) — required for diagnosis:**\n- Onset within 1 week of a known clinical insult or new/worsening respiratory symptoms\n- Bilateral chest infiltrates on imaging (not explained by effusion, atelectasis, or nodules)\n- Respiratory failure NOT explained by cardiac failure or fluid overload (echocardiogram or BNP to exclude)\n- PaO₂/FiO₂ ratio (P/F ratio) < 300 mmHg on ≥ 5 cmH₂O PEEP/CPAP\n  - Mild ARDS: P/F 200–300\n  - Moderate ARDS: P/F 100–200\n  - Severe ARDS: P/F < 100\n\n**Common triggers:** Pneumonia (most common) > aspiration > sepsis > trauma/pulmonary contusion > pancreatitis > transfusion (TRALI) > drowning > inhalation injury."
+        },
+        {
+          "id": "pathophysiology_overview",
+          "heading": "Pathophysiology",
+          "kind": "pathophysiology_overview",
+          "body": "**Exudative phase (day 1–7): diffuse alveolar damage.** The inciting injury — direct lung injury (pneumonia, aspiration) or indirect (sepsis, trauma) — activates alveolar macrophages → massive release of pro-inflammatory cytokines (IL-1, IL-8, TNF-α). Neutrophils flood into the alveolar space, releasing toxic oxygen radicals, proteases, and platelet activating factor → alveolar epithelial and endothelial injury. The alveolar-capillary membrane becomes highly permeable → protein-rich fluid floods into the interstitium and alveoli (non-cardiogenic pulmonary edema). Surfactant is destroyed → alveoli collapse → massive atelectasis. Intravascular hyaline membrane formation further disrupts gas exchange.\n\n**Result:** Severely non-compliant, stiff lungs. Diffuse bilateral atelectasis and consolidation → refractory hypoxemia (right-to-left shunt — blood passes through flooded, non-ventilated alveoli). Increased work of breathing. Most of the remaining functional lung is in the non-dependent (anterior/dorsal) regions (the 'baby lung' concept — much less functional lung than it appears).\n\n**Proliferative phase (week 1–3).** Fibroblast proliferation and early fibrosis. Surfactant partially restored. Some improvement in gas exchange if the underlying cause is treated. Recovery may begin.\n\n**Fibrotic phase (> 3 weeks).** Progressive fibrosis in severe cases. May lead to permanent, irreversible restrictive lung disease. Prolonged ventilator dependency, pulmonary hypertension.\n\n**Why ventilator-induced lung injury (VILI) is critical:** The 'baby lung' (functional lung regions) is subjected to the full tidal volume delivered by the ventilator → overdistension → volutrauma and barotrauma. Low tidal volume ventilation (6 mL/kg ideal body weight) distributes pressure across the functional lung more safely."
+        },
+        {
+          "id": "signs_symptoms",
+          "heading": "Signs & Symptoms",
+          "kind": "signs_symptoms",
+          "body": "**Early ARDS (within hours of trigger):**\n- Tachypnea (RR > 30/min)\n- Dyspnea, air hunger\n- Restlessness, anxiety\n- Hypoxemia despite increasing supplemental O₂ — SpO₂ drops or fails to improve appropriately\n- Bilateral crackles on auscultation\n- CXR: bilateral diffuse infiltrates ('white out')\n\n**Progressing ARDS:**\n- Refractory hypoxemia: PaO₂/FiO₂ ratio < 300 and falling despite high FiO₂\n- Increasing respiratory distress, accessory muscle use\n- Cyanosis\n- Decreasing lung compliance: ventilator shows higher airway pressures needed for same tidal volumes\n- Hemodynamic changes: pulmonary hypertension → right heart strain\n\n**What makes ARDS hypoxemia 'refractory':** It does NOT respond to simple increases in FiO₂ because the cause is intrapulmonary shunt (flooded alveoli with blood flow) — giving more O₂ to the inspired air does not oxygenate blood flowing through non-ventilated alveoli. PEEP physically reopens and stabilizes alveoli, which is why it is the key intervention."
+        },
+        {
+          "id": "red_flags",
+          "heading": "Red Flags / Deterioration",
+          "kind": "red_flags",
+          "body": "**Immediate escalation needed:**\n- SpO₂ < 88% or PaO₂ < 60 mmHg despite high-flow O₂\n- Rapidly rising FiO₂ requirement (> 0.6) — patient on brink of intubation\n- Worsening bilateral infiltrates on serial CXR\n- Sudden hemodynamic deterioration (tachycardia + hypotension): septic shock driving ARDS or right heart failure\n- Rising plateau pressures on ventilator: approach 30 cmH₂O — risk of barotrauma\n- Pneumothorax complication: sudden unilateral deterioration, tracheal deviation, loss of breath sounds, hemodynamic collapse\n\n**On the ventilator — alert provider for:**\n- High-pressure alarms not resolved by suctioning or repositioning\n- Persistent O₂ desaturation despite PEEP adjustments\n- Signs of circuit disconnect or ventilator malfunction"
+        },
+        {
+          "id": "labs_diagnostics",
+          "heading": "Diagnostics / Labs",
+          "kind": "labs_diagnostics",
+          "body": "**Respiratory:**\n- **ABG**: defining: PaO₂/FiO₂ < 300; follow pH, PaCO₂ trend; permissive hypercapnia is tolerated in lung-protective ventilation\n- **CXR / CT chest**: bilateral infiltrates; CT better characterizes distribution (dependent consolidation, 'baby lung' areas)\n- **SpO₂ continuous** on pulse oximetry — less accurate in dark skin tones or low-perfusion states; ABG more reliable\n\n**Ruling out cardiogenic pulmonary edema (important for Berlin definition):**\n- **BNP or NT-proBNP**: elevated in heart failure; normal/mildly elevated in ARDS\n- **Echocardiogram**: confirms or excludes LV dysfunction\n\n**Labs to identify ARDS trigger:**\n- CBC, procalcitonin, blood cultures (sepsis)\n- Sputum culture (pneumonia)\n- Amylase/lipase (pancreatitis)\n- Transfusion records (TRALI)\n\n**Hemodynamic monitoring:**\n- Arterial line: continuous BP + serial ABGs\n- Central venous pressure (CVP): guide fluid balance (goal: conservative fluid management — excess fluid worsens edema)\n- May need pulmonary artery catheter in complex cases"
+        },
+        {
+          "id": "nursing_assessment_interventions",
+          "heading": "Nursing Responsibilities",
+          "kind": "nursing_assessment_interventions",
+          "body": "**Mechanical ventilation — lung-protective strategy (ARDSNet protocol):**\n- **Low tidal volume**: 4–8 mL/kg ideal body weight (NOT actual body weight) — prevents volutrauma\n- **Plateau pressure**: target < 30 cmH₂O — prevents barotrauma\n- **PEEP**: 5–20 cmH₂O as needed — opens and stabilizes collapsed alveoli, improves oxygenation, reduces shunt\n- **FiO₂**: titrate to lowest needed to maintain PaO₂ 55–80 mmHg or SpO₂ 88–95%\n- **Permissive hypercapnia**: PaCO₂ may rise (pH > 7.20 is generally tolerated) — acceptable trade-off for lung protection\n\n**Prone positioning:**\n- Repositioning the patient face-down redistributes dependent atelectasis; the posterior lung regions (non-dependent in prone) are better ventilated\n- Improves V/Q matching and oxygenation in moderate-severe ARDS (P/F < 150)\n- Requires dedicated nursing team: requires 3–5 staff, careful ETT and line management\n- Assess: skin integrity (pressure injury from prone), ETT position (may dislodge)\n- Duration: 16–18 continuous hours/day typically\n\n**Sedation, analgesia, neuromuscular blockade:**\n- Sedation (propofol, midazolam): reduce patient-ventilator dyssynchrony\n- Analgesia first approach: fentanyl, morphine for pain\n- NMB (cisatracurium) in severe ARDS: eliminates breathing efforts that fight the ventilator; prevents VILI from dysynchrony — monitor train-of-four\n\n**Fluid management:**\n- Conservative fluid strategy: goal is euvolemia — avoid fluid overload (worsens pulmonary edema)\n- Monitor: I&O every hour, daily weights, CVP, MAP\n- Diuretics if overloaded; albumin if hypoalbuminemic with diuretic\n\n**VAP (ventilator-associated pneumonia) prevention:**\n- HOB 30–45 degrees\n- Daily sedation interruption ('sedation vacations') if appropriate — assess neurological status\n- Subglottic suctioning\n- Oral care with chlorhexidine q2–4h\n- Cuff pressure monitoring\n- ETT maintenance and securement"
+        },
+        {
+          "id": "clinical_pearls",
+          "heading": "Clinical Pearls",
+          "kind": "clinical_pearls",
+          "body": "- **ARDS hypoxemia is refractory** — it is NOT fixed by just turning up FiO₂ because it is caused by intrapulmonary shunt. PEEP physically reopens flooded alveoli — this is the mechanism of oxygenation improvement.\n- **Tidal volume is based on IDEAL body weight**, not actual weight. Obese patients with short torsos have small lungs — using actual weight overdistends the 'baby lung'.\n- **Prone positioning improves oxygenation** but requires significant nursing preparation and staffing. It is an independent mortality reducer in severe ARDS.\n- **Permissive hypercapnia**: PaCO₂ 55–80 is acceptable to protect the lungs — do not increase TV just to normalize CO₂.\n- **TRALI (transfusion-related acute lung injury)**: ARDS within 6 hours of transfusion. Stop the transfusion, notify the blood bank, manage as ARDS.\n- **Right ventricular failure in ARDS**: pulmonary hypertension from severe hypoxemia + high PEEP → cor pulmonale. PEEP must be balanced against RV afterload."
+        },
+        {
+          "id": "client_education",
+          "heading": "Patient / Family Education",
+          "kind": "client_education",
+          "body": "**Communicating with intubated patients:**\n- Use letter boards, eye blinks, and simple yes/no questions\n- Speak clearly and calmly — reassure that the breathing tube is helping\n- Allow family presence — it reduces anxiety\n\n**Family education during ICU care:**\n- Explain ARDS: 'the lungs are severely injured and inflamed, like a burn inside the lungs; the ventilator is doing the breathing while the lungs heal'\n- Prone positioning: explain why and reassure that careful monitoring is in place\n- Recovery timeline: weeks to months; some patients have lingering fatigue, cognitive changes, and muscle weakness (Post-ICU Syndrome)\n- Encourage participation in care: touching, talking to patient\n\n**Long-term recovery:**\n- Pulmonary rehabilitation after ICU discharge\n- Cognitive and psychological sequelae are common — PTSD, depression, anxiety; refer to follow-up mental health support\n- Occupational and physical therapy for deconditioning\n- Follow-up spirometry to assess residual lung function"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- ARDS: Berlin definition — bilateral infiltrates + P/F < 300 + not cardiac. Most common trigger: pneumonia/sepsis.\n- Refractory hypoxemia from intrapulmonary shunt — FiO₂ alone does not fix it; PEEP recruits and stabilizes alveoli\n- Lung-protective ventilation: TV 4–8 mL/kg ideal body weight; plateau < 30 cmH₂O; permissive hypercapnia acceptable\n- Prone positioning: 16–18h/day; improves V/Q; reduces mortality in severe ARDS (P/F < 150)\n- VAP prevention bundle: HOB 30–45°, oral care, sedation vacations, subglottic suctioning\n- Right heart monitoring: high PEEP increases RV afterload; assess for cor pulmonale"
+        }
+      ],
+      "preTest": [
+        {
+          "question": "A client with septic shock develops worsening hypoxemia despite 100% FiO₂ via non-rebreather mask. SpO₂ is 84%, and the CXR shows new bilateral infiltrates. BNP is within normal limits. What does the nurse suspect?",
+          "options": [
+            "Acute decompensated heart failure — bilateral infiltrates confirm cardiogenic pulmonary edema",
+            "ARDS — bilateral infiltrates + refractory hypoxemia not from cardiac cause fits the Berlin criteria",
+            "Pleural effusion from sepsis-related hypoalbuminemia",
+            "Worsening pneumonia — the antibiotics are not working"
+          ],
+          "correct": 1,
+          "rationale": "The combination of: (1) bilateral infiltrates, (2) refractory hypoxemia on high FiO₂ (not responding to O₂ alone), (3) normal BNP ruling out cardiogenic cause, and (4) a known trigger (septic shock) — meets the Berlin definition of ARDS. Cardiogenic pulmonary edema is excluded by the normal BNP and echocardiogram findings."
+        }
+      ],
+      "postTest": [
+        {
+          "question": "A 180 cm patient with severe ARDS is being mechanically ventilated. The ideal body weight is 80 kg. The respiratory therapist sets the tidal volume at 480 mL. Is this correct, and why?",
+          "options": [
+            "No — the tidal volume should be based on actual body weight, not ideal body weight",
+            "Yes — 480 mL is 6 mL/kg of ideal body weight, which follows lung-protective ventilation guidelines",
+            "No — 6 mL/kg of actual body weight is required, and 480 mL may be too low for a heavy patient",
+            "Yes — any TV < 500 mL is considered lung-protective"
+          ],
+          "correct": 1,
+          "rationale": "The ARDSNet protocol specifies 4–8 mL/kg of IDEAL body weight, not actual body weight. For a patient with IBW of 80 kg: 6 mL/kg × 80 kg = 480 mL. Using actual body weight in obese patients would over-distend the functional 'baby lung' regions. The goal is to minimize volutrauma while maintaining oxygenation."
+        },
+        {
+          "question": "An ARDS patient in prone position for 8 hours develops increased redness and skin breakdown over the forehead. What nursing action is the priority?",
+          "options": [
+            "Continue prone positioning — the skin will recover when the patient is repositioned",
+            "Reposition head to a different angle, apply protective dressings, and document; reassess every 2 hours",
+            "Immediately return the patient to supine position and discontinue prone therapy",
+            "Notify the provider that prone positioning should be permanently discontinued"
+          ],
+          "correct": 1,
+          "rationale": "Pressure injuries are a known complication of prone positioning. The correct response is to reposition the head (if the protocol allows head-turning during prone), apply prophylactic foam or hydrocolloid dressings, and reassess frequently — not to permanently discontinue prone therapy (which has mortality benefit). Discontinuation is reserved for hemodynamic instability or unmanageable complications. This is a skin integrity management issue."
+        },
+        {
+          "question": "An ARDS patient on mechanical ventilation has an ABG showing pH 7.26, PaCO₂ 58 mmHg, PaO₂ 72 mmHg on FiO₂ 0.55. What is the nurse's interpretation and appropriate response?",
+          "options": [
+            "The patient is in respiratory failure — increase tidal volume immediately to lower PaCO₂",
+            "This represents permissive hypercapnia — an acceptable trade-off for lung-protective low tidal volumes; no immediate change in ventilator settings is needed without provider order",
+            "Immediately increase FiO₂ to 1.0 — the PaO₂ is dangerously low",
+            "The metabolic acidosis must be corrected with IV bicarbonate before adjusting ventilator"
+          ],
+          "correct": 1,
+          "rationale": "Permissive hypercapnia (elevated PaCO₂, mildly acidic pH) is intentionally tolerated in ARDS to allow low tidal volume ventilation that prevents VILI. A pH > 7.20 is generally acceptable. The PaO₂ of 72 on FiO₂ 0.55 is within the acceptable target (55–80 mmHg). Increasing tidal volumes to fix CO₂ would harm the 'baby lung'. FiO₂ 1.0 is not indicated at a PaO₂ of 72. Provider orders should guide any changes."
+        }
+      ]
+    }
+  ]
+}

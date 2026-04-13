@@ -7,6 +7,7 @@
 
 import type { GlobalLocaleCode, GlobalRegionSlug } from "@/lib/i18n/global-regions";
 import { REGION_CONFIG } from "@/lib/i18n/global-regions";
+import { isLocaleHreflangEligible } from "@/lib/i18n/language-readiness";
 import type { LocalizedBlogSeoMeta } from "./blog-localization-types";
 import { localizedBlogPath } from "./blog-slug-localized";
 
@@ -25,7 +26,11 @@ export type HreflangVariant = {
 
 /**
  * Build hreflang entries for all known variants of a canonical article.
- * Includes x-default pointing to the English variant (or first available).
+ *
+ * Only includes variants whose locale is hreflang-eligible (full or partial tier).
+ * Disabled/incomplete locales are excluded to avoid polluting the hreflang cluster
+ * with mostly-English content. x-default points to the English variant (or the
+ * current locale's variant if no English one exists).
  */
 export function buildHreflangEntries(
   currentLocale: GlobalLocaleCode,
@@ -35,6 +40,9 @@ export function buildHreflangEntries(
   const entries: { locale: string; href: string }[] = [];
 
   for (const v of variants) {
+    // Filter out locales that are not hreflang-eligible (incomplete tier).
+    if (!isLocaleHreflangEligible(v.locale)) continue;
+
     const path = localizedBlogPath({
       locale: v.locale,
       region: v.region,
@@ -46,9 +54,13 @@ export function buildHreflangEntries(
     entries.push({ locale: langRegionCode, href: `${SITE_ORIGIN}${path}` });
   }
 
-  // x-default: prefer en variant, or the current one
+  // x-default: prefer en variant, or the current one (if hreflang-eligible)
   const enVariant = variants.find((v) => v.locale === "en");
-  const defaultVariant = enVariant ?? variants.find((v) => v.locale === currentLocale && v.region === currentRegion);
+  const currentVariant = variants.find((v) => v.locale === currentLocale && v.region === currentRegion);
+  const defaultVariant =
+    enVariant ??
+    (currentVariant && isLocaleHreflangEligible(currentLocale) ? currentVariant : undefined) ??
+    variants.find((v) => isLocaleHreflangEligible(v.locale));
   if (defaultVariant) {
     const defaultPath = localizedBlogPath({
       locale: defaultVariant.locale,

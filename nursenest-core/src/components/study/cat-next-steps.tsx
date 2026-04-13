@@ -3,7 +3,7 @@ import Link from "next/link";
 /**
  * NextStepsCards — 3 action cards (spec §8) after a CAT session.
  *
- * Order: Review missed questions → Study weak topics → Retest readiness.
+ * Order: Review lessons → Practice questions → Practice flashcards.
  * The "Study weak topics" card is content-aware: it points to questions
  * when lesson content is not yet ready, and to lessons when it is.
  */
@@ -21,7 +21,6 @@ export function NextStepsCards({
   lessonPrimaryReady?: boolean | null;
 }) {
   const isAtRisk = readinessTier === "at_risk";
-  const isLikelyPass = readinessTier === "likely_pass";
   const showLessons = lessonPrimaryReady === true;
 
   // Card 2 content depends on content quality and readiness tier
@@ -44,42 +43,32 @@ export function NextStepsCards({
         note: "Lesson content is being expanded and will be recommended as it becomes complete.",
       };
 
-  const retestLabel = isLikelyPass
-    ? "Confirm your readiness"
-    : isAtRisk
-      ? "Retest after focused study"
-      : "Retest your readiness";
-
-  const retestDesc = isLikelyPass
-    ? "Run another CAT to confirm consistency — multiple sessions give the most reliable readiness signal."
-    : isAtRisk
-      ? "After a focused question and flashcard session, rerun the CAT to measure real progress."
-      : "Take another CAT after review to see if your score and stability improve.";
-
   const cards = [
     {
       step: "01",
-      title: "Review missed questions",
-      desc: "Go through the questions that lowered your score and read the explanations carefully.",
-      cta: "Review questions",
-      href: `/app/practice-tests/${testId}/results`,
+      title: "Review lessons for weak topics",
+      desc: showLessons
+        ? "Use lessons to fix the concepts that most lowered your readiness result."
+        : "Lesson coverage is expanding for this pathway; use targeted practice questions for weak topics first.",
+      cta: showLessons ? "Review lessons" : "Practice weak topics",
+      href: showLessons ? lessonsHref : "/app/questions?preset=topic_drill",
       primary: true,
     },
     {
       step: "02",
-      title: topicCard.title,
-      desc: topicCard.desc,
+      title: "Practice questions",
+      desc: "Run focused question sets to reinforce weak categories and verify improvement.",
       note: "note" in topicCard ? topicCard.note : undefined,
-      cta: topicCard.cta,
-      href: topicCard.href,
+      cta: "Practice questions",
+      href: "/app/questions?preset=topic_drill",
       primary: false,
     },
     {
       step: "03",
-      title: retestLabel,
-      desc: retestDesc,
-      cta: "Start another CAT",
-      href: "/app/practice-tests",
+      title: "Practice flashcards",
+      desc: "Use spaced recall on weak areas before your next readiness exam attempt.",
+      cta: "Open flashcards",
+      href: "/app/flashcards",
       primary: false,
     },
   ] as const;

@@ -3,9 +3,6 @@
  * Delivery uses existing {@link createCatPracticeTestPayload} + `/api/practice-tests` + {@link PracticeTestRunnerClient}.
  */
 
-/** Default max-length cap for `catPresentationMode: "practice"` sessions started from pathway hubs. */
-export const PATHWAY_CAT_PRACTICE_DEFAULT_MAX_QUESTIONS = 25;
-
 export type ResolveStudySurfaceCatHrefArgs = {
   pathwayId?: string | null;
   availablePathwayIds?: Array<string | null | undefined>;

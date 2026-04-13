@@ -47,6 +47,8 @@ export type LocalizedBlogBrief = {
   seoKeywordSecondary: string[];
   searchIntent: string | null;
   targetAudience: string | null;
+  /** Verified reference lines inherited from canonical source set (APA-ish). */
+  evidenceReferences: string[];
 };
 
 // ── AI adaptation output ─────────────────────────────────────────────────────
@@ -75,6 +77,10 @@ export type LocalizedBlogAiOutput = {
 
   faqSuggestions: { question: string; answer: string }[];
   snippetSummary: string | null;
+  /** 3-8 references that must map to authoritative, verified sources. */
+  referenceLines: string[];
+  /** Short note on why these sources were selected for this article. */
+  sourceSelectionNotes: string | null;
 };
 
 // ── Internal linking ─────────────────────────────────────────────────────────

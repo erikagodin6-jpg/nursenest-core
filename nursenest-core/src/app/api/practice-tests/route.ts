@@ -52,8 +52,8 @@ const createSchema = z
     /** Linear sessions: per-question lock + practice rationales vs exam-style deferred rationales. */
     linearDeliveryMode: z.enum(["practice", "exam"]).optional(),
   })
-  .refine((d) => d.selectionMode !== "cat" || d.catPresentationMode !== "practice" || d.questionCount <= 75, {
-    message: "Practice CAT maximum question cap is 75.",
+  .refine((d) => d.selectionMode !== "cat" || d.catPresentationMode !== "practice" || d.questionCount <= 200, {
+    message: "CAT maximum question cap is 200.",
     path: ["questionCount"],
   })
   .refine((d) => d.selectionMode !== "cat" || d.catPresentationMode !== "exam_simulation" || d.questionCount <= 150, {
@@ -284,17 +284,11 @@ export async function POST(req: Request) {
     const basis = resolveCatSelectionBasisForPost(d.catPresentationMode, d.catSelectionBasis);
     const simPathway = getExamPathwayById(pathwayIdForCat) ?? null;
     const readinessConfig = readinessConfigForPathwayId(pathwayIdForCat);
-    if (readinessConfig?.mode === "unavailable") {
-      return NextResponse.json(
-        {
-          error: "Readiness exam is not available for this pathway yet. Start with pathway practice questions first.",
-          code: PRACTICE_TEST_CAT_CREATE_CODE.pathway_track_not_ready,
-        },
-        { status: 400 },
-      );
-    }
     const enforcedQuestionCount = readinessConfig?.maxQuestions ?? d.questionCount;
-    const enforcedTimedMode = readinessConfig?.mode === "production_ready" ? true : d.timedMode;
+    const enforcedTimedMode =
+      readinessConfig?.mode === "production_ready" || readinessConfig?.mode === "simulation"
+        ? true
+        : d.timedMode;
     const examTimedLimit = resolveCatPostExamTimedLimitSec({
       timedMode: enforcedTimedMode,
       timeLimitSec: readinessConfig ? readinessConfig.timeLimitMinutes * 60 : d.timeLimitSec,

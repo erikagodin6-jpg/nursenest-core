@@ -7,7 +7,7 @@
 
 import type { GlobalLocaleCode, GlobalRegionSlug } from "@/lib/i18n/global-regions";
 import { REGION_CONFIG, isGlobalRegionSlug } from "@/lib/i18n/global-regions";
-import type { LocalizedBlogValidationIssue, LocalizedBlogValidationResult } from "./blog-localization-types";
+import type { LocalizedBlogValidationIssue, LocalizedBlogValidationResult, LocalizedInternalLink } from "./blog-localization-types";
 import { validateLocalizedSlug } from "./blog-slug-localized";
 
 const MIN_TITLE_LENGTH = 20;
@@ -17,6 +17,8 @@ const MAX_EXCERPT_LENGTH = 320;
 const MIN_BODY_LENGTH = 800;
 const MAX_META_TITLE_LENGTH = 70;
 const MAX_META_DESCRIPTION_LENGTH = 170;
+const MIN_REFERENCES = 3;
+const MAX_REFERENCES = 8;
 
 /**
  * Validate a localized blog article before publish.
@@ -31,6 +33,9 @@ export function validateLocalizedBlogContent(params: {
   metaDescription: string | null;
   locale: GlobalLocaleCode;
   region: GlobalRegionSlug;
+  referenceLines?: string[];
+  internalLinkTargets?: LocalizedInternalLink[];
+  canonicalBody?: string;
 }): LocalizedBlogValidationResult {
   const issues: LocalizedBlogValidationIssue[] = [];
 
@@ -71,6 +76,26 @@ export function validateLocalizedBlogContent(params: {
         code: "BODY_THIN",
       });
     }
+  }
+
+  // ── Heading structure (SEO + readability) ─────────────────────────────────
+  const h2Count = (params.body.match(/<h2[^>]*>/gi) ?? []).length;
+  const h3Count = (params.body.match(/<h3[^>]*>/gi) ?? []).length;
+  if (h2Count < 2) {
+    issues.push({
+      field: "body",
+      severity: "error",
+      message: "Body requires at least 2 H2 sections for clear structure.",
+      code: "BODY_H2_REQUIRED",
+    });
+  }
+  if (h3Count < 1) {
+    issues.push({
+      field: "body",
+      severity: "warning",
+      message: "Add at least one H3 subsection for scannable depth.",
+      code: "BODY_H3_RECOMMENDED",
+    });
   }
 
   // ── Slug ─────────────────────────────────────────────────────────────────
@@ -134,6 +159,11 @@ export function validateLocalizedBlogContent(params: {
   // ── Duplicate / thin content signals ─────────────────────────────────────
   const thinContentIssues = checkThinContentSignals(params.body, params.title);
   issues.push(...thinContentIssues);
+  issues.push(...checkReferenceQuality(params.body, params.referenceLines ?? []));
+  issues.push(...checkRequiredStudyLinks(params.body, params.internalLinkTargets ?? []));
+  if (params.canonicalBody?.trim() && params.locale !== "en") {
+    issues.push(...checkCrossLanguageDuplication(params.body, params.canonicalBody));
+  }
 
   const hasErrors = issues.some((i) => i.severity === "error");
   const reviewRequired = issues.some((i) => i.severity === "error" || i.severity === "warning");
@@ -218,5 +248,131 @@ function checkThinContentSignals(body: string, title: string): LocalizedBlogVali
     });
   }
 
+  return issues;
+}
+
+function extractReferencesFromBody(body: string): string[] {
+  const heading = /<h2[^>]*>\s*references\s*<\/h2>/i;
+  const h2Matches = [...body.matchAll(/<h2[^>]*>[\s\S]*?<\/h2>/gi)];
+  let startIndex = -1;
+  for (const m of h2Matches) {
+    if (heading.test(m[0])) {
+      startIndex = (m.index ?? -1) + m[0].length;
+      break;
+    }
+  }
+  if (startIndex < 0) return [];
+  const rest = body.slice(startIndex);
+  const nextH2 = rest.search(/<h2[^>]*>/i);
+  const refSection = (nextH2 >= 0 ? rest.slice(0, nextH2) : rest).replace(/\n+/g, "\n");
+  const liMatches = [...refSection.matchAll(/<li[^>]*>([\s\S]*?)<\/li>/gi)];
+  if (liMatches.length > 0) {
+    return liMatches.map((m) => m[1].replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim()).filter(Boolean);
+  }
+  const pMatches = [...refSection.matchAll(/<p[^>]*>([\s\S]*?)<\/p>/gi)];
+  return pMatches.map((m) => m[1].replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim()).filter(Boolean);
+}
+
+function checkReferenceQuality(body: string, providedReferenceLines: string[]): LocalizedBlogValidationIssue[] {
+  const issues: LocalizedBlogValidationIssue[] = [];
+  const refsInBody = extractReferencesFromBody(body);
+  const refs = refsInBody.length > 0 ? refsInBody : providedReferenceLines;
+
+  if (!/<h2[^>]*>\s*references\s*<\/h2>/i.test(body)) {
+    issues.push({
+      field: "body",
+      severity: "error",
+      message: "Missing References section (H2 heading required).",
+      code: "REFERENCES_HEADING_MISSING",
+    });
+  }
+  if (refs.length < MIN_REFERENCES) {
+    issues.push({
+      field: "references",
+      severity: "error",
+      message: `Provide ${MIN_REFERENCES}-${MAX_REFERENCES} references; found ${refs.length}.`,
+      code: "REFERENCES_TOO_FEW",
+    });
+  }
+  if (refs.length > MAX_REFERENCES) {
+    issues.push({
+      field: "references",
+      severity: "warning",
+      message: `Reference count is high (${refs.length}); keep to ${MAX_REFERENCES} max for readability.`,
+      code: "REFERENCES_TOO_MANY",
+    });
+  }
+  for (const line of refs) {
+    if (!/\b(19|20)\d{2}\b/.test(line)) {
+      issues.push({
+        field: "references",
+        severity: "warning",
+        message: `Reference line may be missing year: "${line.slice(0, 80)}"`,
+        code: "REFERENCE_YEAR_MISSING",
+      });
+    }
+  }
+  return issues;
+}
+
+function checkRequiredStudyLinks(body: string, links: LocalizedInternalLink[]): LocalizedBlogValidationIssue[] {
+  const issues: LocalizedBlogValidationIssue[] = [];
+  const hrefsFromBody = [...body.matchAll(/href=["']([^"']+)["']/gi)].map((m) => m[1]?.trim() ?? "");
+  const hrefs = [...hrefsFromBody, ...links.map((l) => l.href)].filter(Boolean);
+  const hasLessons = hrefs.some((href) => href.includes("/lessons"));
+  const hasFlashcards = hrefs.some((href) => href.includes("/flashcards"));
+  const hasQuestions = hrefs.some((href) => href.includes("/questions"));
+
+  if (!hasLessons) {
+    issues.push({
+      field: "internalLinks",
+      severity: "error",
+      message: "At least one lessons internal link is required.",
+      code: "LINK_LESSONS_REQUIRED",
+    });
+  }
+  if (!hasFlashcards) {
+    issues.push({
+      field: "internalLinks",
+      severity: "error",
+      message: "At least one flashcards internal link is required.",
+      code: "LINK_FLASHCARDS_REQUIRED",
+    });
+  }
+  if (!hasQuestions) {
+    issues.push({
+      field: "internalLinks",
+      severity: "error",
+      message: "At least one questions internal link is required.",
+      code: "LINK_QUESTIONS_REQUIRED",
+    });
+  }
+  return issues;
+}
+
+function normalizedTokenSet(html: string): Set<string> {
+  const text = html.toLowerCase().replace(/<[^>]*>/g, " ").replace(/[^a-z0-9\s]/g, " ").replace(/\s+/g, " ").trim();
+  const tokens = text.split(" ").filter((t) => t.length >= 5);
+  return new Set(tokens);
+}
+
+function checkCrossLanguageDuplication(localizedBody: string, canonicalBody: string): LocalizedBlogValidationIssue[] {
+  const issues: LocalizedBlogValidationIssue[] = [];
+  const localized = normalizedTokenSet(localizedBody);
+  const canonical = normalizedTokenSet(canonicalBody);
+  if (localized.size === 0 || canonical.size === 0) return issues;
+  let overlap = 0;
+  for (const t of localized) {
+    if (canonical.has(t)) overlap += 1;
+  }
+  const ratio = overlap / Math.max(1, localized.size);
+  if (ratio > 0.72) {
+    issues.push({
+      field: "body",
+      severity: "error",
+      message: "Localized content is too similar to canonical text; rewrite for native-language originality.",
+      code: "LOCALIZATION_DUPLICATE_CONTENT",
+    });
+  }
   return issues;
 }

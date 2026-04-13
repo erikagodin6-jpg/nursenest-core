@@ -145,7 +145,7 @@ export function assessMarketingCatSurfaceWithoutAuth(
       reason: "insufficient_cat_pool",
       nextAction: "use_question_bank",
       marketingPrimaryCta: "none",
-      safeUserMessage: `The adaptive question pool for ${cat} is still building. Use the question bank and lessons — sessions unlock when enough items pass quality checks.`,
+      safeUserMessage: `${cat} readiness is still being prepared for this pathway. Keep building momentum with practice questions and lessons, then return to run the full readiness exam.`,
       pathway,
       pathwayId: pathway.id,
       marketingCatPath,
@@ -236,8 +236,8 @@ export async function assessCatEligibilityForSubscriberAndPathway(input: Subscri
   if (!readiness.ok) {
     const poolTooSmall = readiness.code === "cat_pool_invalid";
     const safeUserMessage = poolTooSmall
-      ? readiness.message
-      : "We could not start adaptive practice right now. Use the pathway question bank or lessons, refresh and try again, or contact support if this keeps happening.";
+      ? "This readiness exam is still being calibrated for your pathway. Continue with targeted questions and lessons, then try again."
+      : "We could not start the readiness exam right now. Use pathway questions first, then retry.";
     return {
       eligible: false,
       reason: poolTooSmall ? "insufficient_cat_pool" : "internal_error",

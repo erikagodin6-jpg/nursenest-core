@@ -63,6 +63,8 @@ export async function POST(req: NextRequest) {
       body: true,
       exam: true,
       targetKeyword: true,
+      apaReferences: true,
+      sourcesJson: true,
     },
   });
 
@@ -85,6 +87,8 @@ export async function POST(req: NextRequest) {
     seoKeywordSecondary: d.seoKeywordSecondary ?? [],
     searchIntent: d.searchIntent ?? null,
     targetAudience: d.targetAudience ?? null,
+    canonicalApaReferences: canonical.apaReferences,
+    canonicalSourcesJson: canonical.sourcesJson,
   });
 
   // Mode 1: pre-computed AI output — post-process and persist

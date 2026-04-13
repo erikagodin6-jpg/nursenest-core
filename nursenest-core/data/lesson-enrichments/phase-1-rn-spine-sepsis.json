@@ -1,0 +1,338 @@
+{
+  "version": 1,
+  "description": "Phase 1 – Sepsis: complete enrichment for CA-RN and US-RN spine lessons",
+  "lessons": [
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-sepsis",
+      "previewSectionCount": 2,
+      "seoTitle": "Sepsis nursing: early recognition, SOFA, bundles & NCLEX-RN Canada",
+      "seoDescription": "Complete RN lesson on sepsis: SIRS vs sepsis vs septic shock, SOFA score, Hour-1 Bundle, vasopressors, and Canadian NCLEX-RN clinical judgment priorities.",
+      "sections": [
+        {
+          "id": "introduction",
+          "heading": "Overview",
+          "kind": "introduction",
+          "body": "**Sepsis** is a life-threatening organ dysfunction caused by a dysregulated host response to infection. It is a medical emergency with mortality rates of 20–30% for sepsis and 40–50% for septic shock. Early recognition and the rapid initiation of evidence-based bundles (Hour-1 Bundle / Surviving Sepsis Campaign) are the most critical nursing priorities and frequent NCLEX-RN test points.\n\nSepsis exists on a spectrum: **uncomplicated infection → systemic inflammatory response (SIRS) → sepsis (organ dysfunction) → septic shock (vasodilatory failure + refractory hypotension)**. The 2016 Sepsis-3 definition removed \"severe sepsis\" as a separate category and now defines sepsis as infection plus organ dysfunction, measured by a **SOFA score** increase of ≥ 2 points.\n\n**Quick SOFA (qSOFA)** — a bedside screening tool: altered mental status + respiratory rate ≥ 22 + SBP ≤ 100 mmHg. Two or more criteria = high risk for sepsis-related poor outcomes. Use this to initiate sepsis workup."
+        },
+        {
+          "id": "pathophysiology_overview",
+          "heading": "Pathophysiology",
+          "kind": "pathophysiology_overview",
+          "body": "**Mechanism: dysregulated inflammation.** Sepsis begins with an infection — bacteria (Gram-positive or Gram-negative), fungi, viruses, or parasites. Gram-negative endotoxin (lipopolysaccharide, LPS) or Gram-positive toxins activate pattern recognition receptors (Toll-like receptors) on innate immune cells. This triggers the release of pro-inflammatory cytokines (TNF-α, IL-1, IL-6) and activates the coagulation cascade, complement system, and kinin–kallikrein pathway simultaneously.\n\n**Distributive shock and endothelial injury.** In sepsis, massive cytokine release causes diffuse endothelial cell damage and activation of nitric oxide synthase (iNOS), producing large amounts of nitric oxide (NO). NO causes pathological vasodilation — arterioles and venules lose tone, peripheral vascular resistance (SVR) plummets, and blood pools in the periphery. Despite a compensatory increase in cardiac output (high-output state), mean arterial pressure (MAP) falls below 65 mmHg. This is **distributive shock** — the fundamental pathophysiology of septic shock.\n\n**Microvascular failure, organ dysfunction, and DIC.** Endothelial injury causes platelet aggregation and fibrin deposition in the microcirculation, impairing oxygen delivery to tissues even when macrovascular flow appears adequate. Simultaneously, the endothelium becomes permeable, causing massive third-spacing of fluid into the interstitium. Consumption of clotting factors leads to **disseminated intravascular coagulation (DIC)** — a paradoxical state of simultaneous diffuse thrombosis and bleeding. Tissue hypoxia causes anaerobic metabolism → lactic acidosis (lactate > 2 mmol/L in sepsis; ≥ 4 in septic shock). This cascade affects every organ system: acute kidney injury (AKI), acute lung injury (ALI/ARDS), hepatic dysfunction, encephalopathy, and adrenal insufficiency. Multi-organ dysfunction syndrome (MODS) is the final pathway when sepsis is not controlled."
+        },
+        {
+          "id": "signs_symptoms",
+          "heading": "Signs & Symptoms",
+          "kind": "signs_symptoms",
+          "body": "**Sepsis (organ dysfunction):**\n- Fever > 38.3°C OR hypothermia < 36°C (hypothermia indicates severe illness)\n- Tachycardia > 90 bpm\n- Tachypnea > 20 breaths/min\n- Altered mental status (confusion, agitation, somnolence) — often an early sign in elderly\n- Oliguria (< 0.5 mL/kg/hr) — AKI onset\n- Hypoxia (PaO₂/FiO₂ < 300 mmHg) — lung involvement\n- Elevated lactate (> 2 mmol/L) — tissue hypoperfusion\n- Leukocytosis (WBC > 12,000) or leukopenia (WBC < 4,000) or > 10% bands\n- Elevated creatinine, bilirubin — organ damage markers\n\n**Septic shock (in addition to above):**\n- SBP < 90 mmHg OR MAP < 65 mmHg despite adequate fluid resuscitation\n- Vasopressors required to maintain MAP ≥ 65 mmHg\n- Serum lactate ≥ 4 mmol/L (tissue hypoperfusion confirmed)\n- Warm flushed skin (early distributive), then cold clammy skin (late, compensatory vasoconstriction)\n- Bounding pulses early; weak/thready late"
+        },
+        {
+          "id": "red_flags",
+          "heading": "Red Flags / Clinical Deterioration",
+          "kind": "red_flags",
+          "body": "**Initiate rapid response and escalate immediately for:**\n\n- **Lactate ≥ 4 mmol/L**: indicates severe tissue hypoperfusion and high mortality risk — activate sepsis protocol\n- **MAP < 65 mmHg not responding to 30 mL/kg IV fluid**: requires vasopressor initiation\n- **Altered level of consciousness**: new confusion, restlessness, or unresponsiveness in a febrile patient\n- **Oliguria not responding to fluids**: AKI progression, may need nephrology consult\n- **Respiratory rate > 25 or SpO₂ < 90%**: impending respiratory failure; prepare for HFNC, BiPAP, or intubation\n- **Purpuric rash or petechiae**: may indicate DIC or meningococcemia — activate emergency response\n- **Hypothermia < 36°C in a septic patient**: paradoxically worse prognosis than fever\n- **Absence of fever in an infected patient on immunosuppressants or elderly**: sepsis may present without pyrexia — do not use fever alone to rule out sepsis\n- **Bleeding from IV sites or mucous membranes**: DIC — coagulation panel urgent"
+        },
+        {
+          "id": "labs_diagnostics",
+          "heading": "Diagnostics / Labs",
+          "kind": "labs_diagnostics",
+          "body": "**The Hour-1 Bundle requires these within the first 60 minutes:**\n- **Blood cultures × 2 (from 2 different sites)**: draw BEFORE antibiotics — critical for identifying organism and guiding therapy; do not delay antibiotics > 1 hour waiting for cultures\n- **Lactate level**: ≥ 2 mmol/L = sepsis; ≥ 4 = septic shock. Re-measure in 2 hours — normalization predicts survival\n- **Serum creatinine and BUN**: establish AKI baseline\n- **CBC with differential**: leukocytosis or leukopenia; thrombocytopenia (DIC risk)\n- **CMP/metabolic panel**: liver function, glucose (hyperglycemia from stress response), electrolytes\n- **Coagulation panel (PT, PTT, INR, fibrinogen, D-dimer)**: evaluate DIC\n- **Procalcitonin (PCT)**: elevated in bacterial sepsis; used to guide antibiotic de-escalation\n- **Urinalysis and urine culture**: if UTI suspected as source\n- **Chest X-ray**: pneumonia source; identify ARDS\n- **Additional cultures** as source-directed: sputum, wound, CSF if meningitis suspected"
+        },
+        {
+          "id": "nursing_assessment_interventions",
+          "heading": "Nursing Responsibilities",
+          "kind": "nursing_assessment_interventions",
+          "body": "**The Surviving Sepsis Hour-1 Bundle (memorize this):**\n1. **Measure lactate** — if ≥ 2 mmol/L, initiate sepsis protocol; if ≥ 4, activate septic shock protocol\n2. **Blood cultures × 2** before antibiotics (from two sites, ideally peripheral and central if line available)\n3. **Broad-spectrum IV antibiotics** within 1 hour of sepsis recognition (do NOT delay for cultures)\n4. **IV fluid resuscitation**: crystalloid 30 mL/kg (normal saline or Lactated Ringer's) over 3 hours if hypotensive or lactate ≥ 4\n5. **Vasopressors**: norepinephrine is first-line if MAP < 65 mmHg despite adequate fluids; target MAP ≥ 65 mmHg\n\n**Ongoing assessment priorities:**\n- Vital signs every 15–60 minutes depending on acuity; continuous telemetry\n- Strict intake and output hourly; report UO < 0.5 mL/kg/hr\n- Assess level of consciousness frequently (use GCS or AVPU scale)\n- SpO₂ monitoring — administer O₂ as ordered; target SpO₂ ≥ 94%\n- Monitor for fluid overload during aggressive resuscitation: new crackles, rising CVP, worsening oxygenation\n- Reassess lactate in 2 hours after initial management — normalization = adequate perfusion restoration\n- Skin: assess for petechiae, purpura, DIC signs, perfusion to extremities\n\n**Additional interventions:**\n- Insert urinary catheter for continuous output monitoring\n- Establish large-bore IV access (two peripheral 18G minimum) or prepare for central line\n- Implement glucose control protocol: target glucose 140–180 mg/dL\n- DVT prophylaxis (heparin/LMWH when not contraindicated)\n- Mouth care, HOB 30–45° for VAP prevention if intubated\n- Communicate clearly with physician regarding response to interventions using SBAR format"
+        },
+        {
+          "id": "clinical_pearls",
+          "heading": "Clinical Pearls",
+          "kind": "clinical_pearls",
+          "body": "- **Lactate, not blood pressure, defines early tissue hypoperfusion.** A patient with normal BP can have sepsis if lactate ≥ 2. Act on lactate.\n- **Cultures before antibiotics, but antibiotics within 1 hour.** If you cannot get cultures without significant delay, give antibiotics first. Every hour of delay increases mortality by 7%.\n- **Norepinephrine first-line** vasopressor in septic shock. Dopamine is second-line due to higher arrhythmia risk.\n- **LR over NS for large-volume resuscitation**: large amounts of normal saline cause hyperchloremic metabolic acidosis. Balanced crystalloids (LR or PlasmaLyte) are preferred.\n- **qSOFA** is a screening tool — two of three criteria flags high risk. SOFA score is the definitive organ dysfunction measure.\n- **Elderly patients may not mount a fever** — confusion alone in an elderly patient with a possible infection source is a sepsis red flag.\n- **Steroid controversy**: hydrocortisone may be used in refractory septic shock (vasopressor-dependent despite adequate fluids). Not routine."
+        },
+        {
+          "id": "client_education",
+          "heading": "Patient Education",
+          "kind": "client_education",
+          "body": "**For patients and families during sepsis care:**\n- Explain the seriousness of sepsis: it is a medical emergency, not just an infection\n- Explain why IV lines, catheter, and frequent monitoring are necessary — not optional\n- Reassure that the care team is acting quickly and following evidence-based protocols\n\n**Sepsis prevention education (post-recovery / high-risk patients):**\n- Wound care: keep wounds clean and covered; seek care for any signs of infection (redness, warmth, swelling, pus)\n- Immunocompromised patients: avoid sick contacts; follow up with any fever ≥ 38°C immediately\n- Urinary catheters and IV lines: know the signs of CAUTI and CLABSI — burning, fever, site redness\n- Vaccinations: influenza and pneumococcal vaccines reduce the risk of respiratory sepsis sources\n- Post-sepsis syndrome: survivors may experience fatigue, cognitive changes, and weakness for months — validate this experience and connect with follow-up care"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- Sepsis = infection + organ dysfunction (SOFA ≥ 2). Septic shock = sepsis + vasopressor-dependent hypotension + lactate ≥ 2 despite resuscitation.\n- Pathophysiology: massive cytokine release → NO-mediated vasodilation → distributive shock → microvascular failure → MODS\n- Hour-1 Bundle: lactate, blood cultures × 2, broad-spectrum antibiotics (within 1 hr), 30 mL/kg IV fluid bolus, vasopressors if needed\n- Norepinephrine is first-line vasopressor. Target MAP ≥ 65 mmHg.\n- Monitor: lactate trending, UO hourly, mental status, SpO₂, signs of DIC\n- Red flags: lactate ≥ 4, new confusion, oliguria, purpuric rash, refractory hypotension"
+        }
+      ],
+      "preTest": [
+        {
+          "question": "A nurse is assessing a 72-year-old client post-op day 2 after abdominal surgery. The client has a temperature of 38.8°C, HR 102, RR 22, and new confusion. What should the nurse suspect?",
+          "options": [
+            "Normal post-operative inflammatory response",
+            "Early sepsis — initiate sepsis protocol immediately",
+            "Malignant hyperthermia requiring dantrolene",
+            "Pulmonary embolism requiring anticoagulation"
+          ],
+          "correct": 1,
+          "rationale": "This client meets criteria for suspected sepsis: fever, tachycardia, tachypnea, and new altered mental status in the context of a recent surgical wound (infection source). The nurse should initiate the sepsis protocol (notify provider, obtain lactate, blood cultures, prepare antibiotics). Post-operative fever is expected on days 1–3 but the addition of tachycardia, tachypnea, and confusion elevates this to suspected sepsis."
+        },
+        {
+          "question": "Which element of the Surviving Sepsis Hour-1 Bundle must be completed before administering antibiotics?",
+          "options": [
+            "CT scan to identify infection source",
+            "Blood cultures from two different sites",
+            "Arterial line placement",
+            "Central venous catheter insertion"
+          ],
+          "correct": 1,
+          "rationale": "Blood cultures must be obtained before antibiotics to allow organism identification and sensitivity testing. However, antibiotics should still be given within 1 hour — do not delay antibiotics if obtaining cultures will take longer than a few minutes. A CT scan, arterial line, and central line are not required before antibiotics."
+        },
+        {
+          "question": "A client in septic shock has a MAP of 58 mmHg after receiving 2 L of IV normal saline. What is the nurse's priority action?",
+          "options": [
+            "Administer another 2 L bolus of IV fluid",
+            "Prepare to administer vasopressors as ordered; continue fluid resuscitation",
+            "Place the client in Trendelenburg position to improve BP",
+            "Hold all fluids to prevent pulmonary edema"
+          ],
+          "correct": 1,
+          "rationale": "When MAP remains < 65 mmHg after initial fluid resuscitation, vasopressors (norepinephrine first-line) are required. Fluid resuscitation is not abandoned — the 30 mL/kg target should be completed unless signs of fluid overload appear. Trendelenburg is not recommended in shock (does not improve outcomes and may worsen respiratory status). Holding fluids prematurely risks end-organ underperfusion."
+        }
+      ],
+      "postTest": [
+        {
+          "question": "A client with suspected sepsis has a serum lactate of 4.8 mmol/L and BP 86/50 mmHg after 30 mL/kg IV fluid bolus. The nurse understands this presentation is consistent with which diagnosis?",
+          "options": [
+            "Sepsis without shock — lactate elevation is expected",
+            "Septic shock — vasopressor-dependent hypotension and elevated lactate despite resuscitation",
+            "Cardiogenic shock — elevated filling pressures",
+            "Hypovolemic shock — volume depletion from dehydration"
+          ],
+          "correct": 1,
+          "rationale": "Septic shock is defined as sepsis with MAP < 65 mmHg requiring vasopressors AND lactate ≥ 2 mmol/L despite adequate fluid resuscitation. This client has a lactate of 4.8 mmol/L and refractory hypotension — classic septic shock. Cardiogenic shock involves low CO with elevated filling pressures. Hypovolemic shock responds to fluids."
+        },
+        {
+          "question": "A nurse has just drawn blood cultures and is preparing to administer the first dose of IV cefazolin for a client with suspected sepsis. The microbiologist calls to say sensitivity results won't be available for 48 hours. What should the nurse do?",
+          "options": [
+            "Wait for culture results before giving the antibiotic",
+            "Administer the cefazolin now and update the plan when results return",
+            "Use the results to select the most appropriate narrow-spectrum antibiotic first",
+            "Delay antibiotic until the provider chooses a different agent"
+          ],
+          "correct": 1,
+          "rationale": "In sepsis, broad-spectrum antibiotics must be given within 1 hour of recognition — every hour of delay increases mortality by ~7%. Cultures are drawn before antibiotics to preserve sensitivity results, but the antibiotic is not delayed for results. When culture data returns, the team can de-escalate to narrower-spectrum coverage (antibiotic stewardship)."
+        },
+        {
+          "question": "Which vasopressor is the first-line agent for septic shock according to the Surviving Sepsis Campaign guidelines?",
+          "options": [
+            "Epinephrine",
+            "Dopamine",
+            "Norepinephrine",
+            "Vasopressin"
+          ],
+          "correct": 2,
+          "rationale": "Norepinephrine (noradrenaline) is the first-line vasopressor in septic shock. It is an α₁ and β₁ agonist that increases SVR and MAP with less tachycardia than dopamine. Dopamine is second-line due to higher arrhythmia risk. Vasopressin is added as a second agent. Epinephrine is reserved for refractory shock."
+        },
+        {
+          "question": "A nurse re-checks the lactate of a client with septic shock 2 hours after initiating the Hour-1 Bundle. The lactate has decreased from 5.2 to 2.8 mmol/L. How does the nurse interpret this?",
+          "options": [
+            "The lactate is still abnormal — interventions have failed",
+            "Lactate clearance indicates improved tissue perfusion — continue current management",
+            "The patient is now ready for discharge",
+            "The lactate decrease is expected without treatment and is not clinically meaningful"
+          ],
+          "correct": 1,
+          "rationale": "Lactate clearance (≥ 10–20% decrease from baseline) indicates improved tissue perfusion and is a marker of response to resuscitation. A value of 2.8 mmol/L remains elevated (goal < 2) but the downward trend is clinically significant and reassuring. Continue resuscitation, monitoring, and reassess again in 2 hours."
+        },
+        {
+          "question": "A nurse is monitoring a client on norepinephrine infusion for septic shock. Which finding should the nurse report immediately to the provider?",
+          "options": [
+            "MAP 68 mmHg",
+            "New mottled purplish discoloration of the toes and fingers",
+            "Heart rate 88 bpm",
+            "Urine output 35 mL over the past hour"
+          ],
+          "correct": 1,
+          "rationale": "Peripheral ischemia (digital ischemia, mottling) is a serious complication of norepinephrine — excessive vasoconstriction compromises distal perfusion. This requires urgent reassessment of the dose and possibly adding a vasodilator or titrating down. MAP 68 is appropriate (target ≥ 65). HR 88 and UO 35 mL/hr are within acceptable ranges."
+        },
+        {
+          "question": "A post-sepsis client is being discharged and tells the nurse: 'I feel exhausted and my memory is not right. Is something wrong?' How should the nurse respond?",
+          "options": [
+            "These symptoms are unrelated to your hospitalization",
+            "Post-sepsis syndrome is common — fatigue, cognitive changes, and weakness can persist for months after sepsis",
+            "You need to return immediately — this suggests a new infection",
+            "These feelings will resolve completely within 48 hours"
+          ],
+          "correct": 1,
+          "rationale": "Post-sepsis syndrome is a well-recognized condition affecting 50–70% of survivors. It includes physical, cognitive, and psychological sequelae that can last months to years. Educating the patient validates their experience and prepares them to seek appropriate follow-up care. Dismissing or pathologizing the symptoms leads to worse outcomes."
+        }
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "us-rn-sepsis",
+      "previewSectionCount": 2,
+      "seoTitle": "Sepsis nursing: early recognition, SOFA, bundles & NCLEX-RN Canada",
+      "seoDescription": "Complete RN lesson on sepsis: SIRS vs sepsis vs septic shock, SOFA score, Hour-1 Bundle, vasopressors, and NCLEX-RN clinical judgment priorities.",
+      "sections": [
+        {
+          "id": "introduction",
+          "heading": "Overview",
+          "kind": "introduction",
+          "body": "**Sepsis** is a life-threatening organ dysfunction caused by a dysregulated host response to infection. It is a medical emergency with mortality rates of 20–30% for sepsis and 40–50% for septic shock. Early recognition and the rapid initiation of evidence-based bundles (Hour-1 Bundle / Surviving Sepsis Campaign) are the most critical nursing priorities and frequent NCLEX-RN test points.\n\nSepsis exists on a spectrum: **uncomplicated infection → systemic inflammatory response (SIRS) → sepsis (organ dysfunction) → septic shock (vasodilatory failure + refractory hypotension)**. The 2016 Sepsis-3 definition removed \"severe sepsis\" as a separate category and now defines sepsis as infection plus organ dysfunction, measured by a **SOFA score** increase of ≥ 2 points.\n\n**Quick SOFA (qSOFA)** — a bedside screening tool: altered mental status + respiratory rate ≥ 22 + SBP ≤ 100 mmHg. Two or more criteria = high risk for sepsis-related poor outcomes. Use this to initiate sepsis workup."
+        },
+        {
+          "id": "pathophysiology_overview",
+          "heading": "Pathophysiology",
+          "kind": "pathophysiology_overview",
+          "body": "**Mechanism: dysregulated inflammation.** Sepsis begins with an infection — bacteria (Gram-positive or Gram-negative), fungi, viruses, or parasites. Gram-negative endotoxin (lipopolysaccharide, LPS) or Gram-positive toxins activate pattern recognition receptors (Toll-like receptors) on innate immune cells. This triggers the release of pro-inflammatory cytokines (TNF-α, IL-1, IL-6) and activates the coagulation cascade, complement system, and kinin–kallikrein pathway simultaneously.\n\n**Distributive shock and endothelial injury.** In sepsis, massive cytokine release causes diffuse endothelial cell damage and activation of nitric oxide synthase (iNOS), producing large amounts of nitric oxide (NO). NO causes pathological vasodilation — arterioles and venules lose tone, peripheral vascular resistance (SVR) plummets, and blood pools in the periphery. Despite a compensatory increase in cardiac output (high-output state), mean arterial pressure (MAP) falls below 65 mmHg. This is **distributive shock** — the fundamental pathophysiology of septic shock.\n\n**Microvascular failure, organ dysfunction, and DIC.** Endothelial injury causes platelet aggregation and fibrin deposition in the microcirculation, impairing oxygen delivery to tissues even when macrovascular flow appears adequate. Simultaneously, the endothelium becomes permeable, causing massive third-spacing of fluid into the interstitium. Consumption of clotting factors leads to **disseminated intravascular coagulation (DIC)** — a paradoxical state of simultaneous diffuse thrombosis and bleeding. Tissue hypoxia causes anaerobic metabolism → lactic acidosis (lactate > 2 mg/dL or mEq/L in sepsis; ≥ 4 in septic shock). This cascade affects every organ system: acute kidney injury (AKI), acute lung injury (ALI/ARDS), hepatic dysfunction, encephalopathy, and adrenal insufficiency. Multi-organ dysfunction syndrome (MODS) is the final pathway when sepsis is not controlled."
+        },
+        {
+          "id": "signs_symptoms",
+          "heading": "Signs & Symptoms",
+          "kind": "signs_symptoms",
+          "body": "**Sepsis (organ dysfunction):**\n- Fever > 38.3°C OR hypothermia < 36°C (hypothermia indicates severe illness)\n- Tachycardia > 90 bpm\n- Tachypnea > 20 breaths/min\n- Altered mental status (confusion, agitation, somnolence) — often an early sign in elderly\n- Oliguria (< 0.5 mL/kg/hr) — AKI onset\n- Hypoxia (PaO₂/FiO₂ < 300 mmHg) — lung involvement\n- Elevated lactate (> 2 mg/dL or mEq/L) — tissue hypoperfusion\n- Leukocytosis (WBC > 12,000) or leukopenia (WBC < 4,000) or > 10% bands\n- Elevated creatinine, bilirubin — organ damage markers\n\n**Septic shock (in addition to above):**\n- SBP < 90 mmHg OR MAP < 65 mmHg despite adequate fluid resuscitation\n- Vasopressors required to maintain MAP ≥ 65 mmHg\n- Serum lactate ≥ 4 mg/dL or mEq/L (tissue hypoperfusion confirmed)\n- Warm flushed skin (early distributive), then cold clammy skin (late, compensatory vasoconstriction)\n- Bounding pulses early; weak/thready late"
+        },
+        {
+          "id": "red_flags",
+          "heading": "Red Flags / Clinical Deterioration",
+          "kind": "red_flags",
+          "body": "**Initiate rapid response and escalate immediately for:**\n\n- **Lactate ≥ 4 mg/dL or mEq/L**: indicates severe tissue hypoperfusion and high mortality risk — activate sepsis protocol\n- **MAP < 65 mmHg not responding to 30 mL/kg IV fluid**: requires vasopressor initiation\n- **Altered level of consciousness**: new confusion, restlessness, or unresponsiveness in a febrile patient\n- **Oliguria not responding to fluids**: AKI progression, may need nephrology consult\n- **Respiratory rate > 25 or SpO₂ < 90%**: impending respiratory failure; prepare for HFNC, BiPAP, or intubation\n- **Purpuric rash or petechiae**: may indicate DIC or meningococcemia — activate emergency response\n- **Hypothermia < 36°C in a septic patient**: paradoxically worse prognosis than fever\n- **Absence of fever in an infected patient on immunosuppressants or elderly**: sepsis may present without pyrexia — do not use fever alone to rule out sepsis\n- **Bleeding from IV sites or mucous membranes**: DIC — coagulation panel urgent"
+        },
+        {
+          "id": "labs_diagnostics",
+          "heading": "Diagnostics / Labs",
+          "kind": "labs_diagnostics",
+          "body": "**The Hour-1 Bundle requires these within the first 60 minutes:**\n- **Blood cultures × 2 (from 2 different sites)**: draw BEFORE antibiotics — critical for identifying organism and guiding therapy; do not delay antibiotics > 1 hour waiting for cultures\n- **Lactate level**: ≥ 2 mg/dL or mEq/L = sepsis; ≥ 4 = septic shock. Re-measure in 2 hours — normalization predicts survival\n- **Serum creatinine and BUN**: establish AKI baseline\n- **CBC with differential**: leukocytosis or leukopenia; thrombocytopenia (DIC risk)\n- **CMP/metabolic panel**: liver function, glucose (hyperglycemia from stress response), electrolytes\n- **Coagulation panel (PT, PTT, INR, fibrinogen, D-dimer)**: evaluate DIC\n- **Procalcitonin (PCT)**: elevated in bacterial sepsis; used to guide antibiotic de-escalation\n- **Urinalysis and urine culture**: if UTI suspected as source\n- **Chest X-ray**: pneumonia source; identify ARDS\n- **Additional cultures** as source-directed: sputum, wound, CSF if meningitis suspected"
+        },
+        {
+          "id": "nursing_assessment_interventions",
+          "heading": "Nursing Responsibilities",
+          "kind": "nursing_assessment_interventions",
+          "body": "**The Surviving Sepsis Hour-1 Bundle (memorize this):**\n1. **Measure lactate** — if ≥ 2 mg/dL or mEq/L, initiate sepsis protocol; if ≥ 4, activate septic shock protocol\n2. **Blood cultures × 2** before antibiotics (from two sites, ideally peripheral and central if line available)\n3. **Broad-spectrum IV antibiotics** within 1 hour of sepsis recognition (do NOT delay for cultures)\n4. **IV fluid resuscitation**: crystalloid 30 mL/kg (normal saline or Lactated Ringer's) over 3 hours if hypotensive or lactate ≥ 4\n5. **Vasopressors**: norepinephrine is first-line if MAP < 65 mmHg despite adequate fluids; target MAP ≥ 65 mmHg\n\n**Ongoing assessment priorities:**\n- Vital signs every 15–60 minutes depending on acuity; continuous telemetry\n- Strict intake and output hourly; report UO < 0.5 mL/kg/hr\n- Assess level of consciousness frequently (use GCS or AVPU scale)\n- SpO₂ monitoring — administer O₂ as ordered; target SpO₂ ≥ 94%\n- Monitor for fluid overload during aggressive resuscitation: new crackles, rising CVP, worsening oxygenation\n- Reassess lactate in 2 hours after initial management — normalization = adequate perfusion restoration\n- Skin: assess for petechiae, purpura, DIC signs, perfusion to extremities\n\n**Additional interventions:**\n- Insert urinary catheter for continuous output monitoring\n- Establish large-bore IV access (two peripheral 18G minimum) or prepare for central line\n- Implement glucose control protocol: target glucose 140–180 mg/dL\n- DVT prophylaxis (heparin/LMWH when not contraindicated)\n- Mouth care, HOB 30–45° for VAP prevention if intubated\n- Communicate clearly with physician regarding response to interventions using SBAR format"
+        },
+        {
+          "id": "clinical_pearls",
+          "heading": "Clinical Pearls",
+          "kind": "clinical_pearls",
+          "body": "- **Lactate, not blood pressure, defines early tissue hypoperfusion.** A patient with normal BP can have sepsis if lactate ≥ 2. Act on lactate.\n- **Cultures before antibiotics, but antibiotics within 1 hour.** If you cannot get cultures without significant delay, give antibiotics first. Every hour of delay increases mortality by 7%.\n- **Norepinephrine first-line** vasopressor in septic shock. Dopamine is second-line due to higher arrhythmia risk.\n- **LR over NS for large-volume resuscitation**: large amounts of normal saline cause hyperchloremic metabolic acidosis. Balanced crystalloids (LR or PlasmaLyte) are preferred.\n- **qSOFA** is a screening tool — two of three criteria flags high risk. SOFA score is the definitive organ dysfunction measure.\n- **Elderly patients may not mount a fever** — confusion alone in an elderly patient with a possible infection source is a sepsis red flag.\n- **Steroid controversy**: hydrocortisone may be used in refractory septic shock (vasopressor-dependent despite adequate fluids). Not routine."
+        },
+        {
+          "id": "client_education",
+          "heading": "Patient Education",
+          "kind": "client_education",
+          "body": "**For patients and families during sepsis care:**\n- Explain the seriousness of sepsis: it is a medical emergency, not just an infection\n- Explain why IV lines, catheter, and frequent monitoring are necessary — not optional\n- Reassure that the care team is acting quickly and following evidence-based protocols\n\n**Sepsis prevention education (post-recovery / high-risk patients):**\n- Wound care: keep wounds clean and covered; seek care for any signs of infection (redness, warmth, swelling, pus)\n- Immunocompromised patients: avoid sick contacts; follow up with any fever ≥ 38°C immediately\n- Urinary catheters and IV lines: know the signs of CAUTI and CLABSI — burning, fever, site redness\n- Vaccinations: influenza and pneumococcal vaccines reduce the risk of respiratory sepsis sources\n- Post-sepsis syndrome: survivors may experience fatigue, cognitive changes, and weakness for months — validate this experience and connect with follow-up care"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- Sepsis = infection + organ dysfunction (SOFA ≥ 2). Septic shock = sepsis + vasopressor-dependent hypotension + lactate ≥ 2 despite resuscitation.\n- Pathophysiology: massive cytokine release → NO-mediated vasodilation → distributive shock → microvascular failure → MODS\n- Hour-1 Bundle: lactate, blood cultures × 2, broad-spectrum antibiotics (within 1 hr), 30 mL/kg IV fluid bolus, vasopressors if needed\n- Norepinephrine is first-line vasopressor. Target MAP ≥ 65 mmHg.\n- Monitor: lactate trending, UO hourly, mental status, SpO₂, signs of DIC\n- Red flags: lactate ≥ 4, new confusion, oliguria, purpuric rash, refractory hypotension"
+        }
+      ],
+      "preTest": [
+        {
+          "question": "A nurse is assessing a 72-year-old client post-op day 2 after abdominal surgery. The client has a temperature of 38.8°C, HR 102, RR 22, and new confusion. What should the nurse suspect?",
+          "options": [
+            "Normal post-operative inflammatory response",
+            "Early sepsis — initiate sepsis protocol immediately",
+            "Malignant hyperthermia requiring dantrolene",
+            "Pulmonary embolism requiring anticoagulation"
+          ],
+          "correct": 1,
+          "rationale": "This client meets criteria for suspected sepsis: fever, tachycardia, tachypnea, and new altered mental status in the context of a recent surgical wound (infection source). The nurse should initiate the sepsis protocol (notify provider, obtain lactate, blood cultures, prepare antibiotics). Post-operative fever is expected on days 1–3 but the addition of tachycardia, tachypnea, and confusion elevates this to suspected sepsis."
+        },
+        {
+          "question": "Which element of the Surviving Sepsis Hour-1 Bundle must be completed before administering antibiotics?",
+          "options": [
+            "CT scan to identify infection source",
+            "Blood cultures from two different sites",
+            "Arterial line placement",
+            "Central venous catheter insertion"
+          ],
+          "correct": 1,
+          "rationale": "Blood cultures must be obtained before antibiotics to allow organism identification and sensitivity testing. However, antibiotics should still be given within 1 hour — do not delay antibiotics if obtaining cultures will take longer than a few minutes. A CT scan, arterial line, and central line are not required before antibiotics."
+        },
+        {
+          "question": "A client in septic shock has a MAP of 58 mmHg after receiving 2 L of IV normal saline. What is the nurse's priority action?",
+          "options": [
+            "Administer another 2 L bolus of IV fluid",
+            "Prepare to administer vasopressors as ordered; continue fluid resuscitation",
+            "Place the client in Trendelenburg position to improve BP",
+            "Hold all fluids to prevent pulmonary edema"
+          ],
+          "correct": 1,
+          "rationale": "When MAP remains < 65 mmHg after initial fluid resuscitation, vasopressors (norepinephrine first-line) are required. Fluid resuscitation is not abandoned — the 30 mL/kg target should be completed unless signs of fluid overload appear. Trendelenburg is not recommended in shock (does not improve outcomes and may worsen respiratory status). Holding fluids prematurely risks end-organ underperfusion."
+        }
+      ],
+      "postTest": [
+        {
+          "question": "A client with suspected sepsis has a serum lactate of 4.8 mmol/L and BP 86/50 mmHg after 30 mL/kg IV fluid bolus. The nurse understands this presentation is consistent with which diagnosis?",
+          "options": [
+            "Sepsis without shock — lactate elevation is expected",
+            "Septic shock — vasopressor-dependent hypotension and elevated lactate despite resuscitation",
+            "Cardiogenic shock — elevated filling pressures",
+            "Hypovolemic shock — volume depletion from dehydration"
+          ],
+          "correct": 1,
+          "rationale": "Septic shock is defined as sepsis with MAP < 65 mmHg requiring vasopressors AND lactate ≥ 2 mmol/L despite adequate fluid resuscitation. This client has a lactate of 4.8 mmol/L and refractory hypotension — classic septic shock. Cardiogenic shock involves low CO with elevated filling pressures. Hypovolemic shock responds to fluids."
+        },
+        {
+          "question": "A nurse has just drawn blood cultures and is preparing to administer the first dose of IV cefazolin for a client with suspected sepsis. The microbiologist calls to say sensitivity results won't be available for 48 hours. What should the nurse do?",
+          "options": [
+            "Wait for culture results before giving the antibiotic",
+            "Administer the cefazolin now and update the plan when results return",
+            "Use the results to select the most appropriate narrow-spectrum antibiotic first",
+            "Delay antibiotic until the provider chooses a different agent"
+          ],
+          "correct": 1,
+          "rationale": "In sepsis, broad-spectrum antibiotics must be given within 1 hour of recognition — every hour of delay increases mortality by ~7%. Cultures are drawn before antibiotics to preserve sensitivity results, but the antibiotic is not delayed for results. When culture data returns, the team can de-escalate to narrower-spectrum coverage (antibiotic stewardship)."
+        },
+        {
+          "question": "Which vasopressor is the first-line agent for septic shock according to the Surviving Sepsis Campaign guidelines?",
+          "options": [
+            "Epinephrine",
+            "Dopamine",
+            "Norepinephrine",
+            "Vasopressin"
+          ],
+          "correct": 2,
+          "rationale": "Norepinephrine (noradrenaline) is the first-line vasopressor in septic shock. It is an α₁ and β₁ agonist that increases SVR and MAP with less tachycardia than dopamine. Dopamine is second-line due to higher arrhythmia risk. Vasopressin is added as a second agent. Epinephrine is reserved for refractory shock."
+        },
+        {
+          "question": "A nurse re-checks the lactate of a client with septic shock 2 hours after initiating the Hour-1 Bundle. The lactate has decreased from 5.2 to 2.8 mmol/L. How does the nurse interpret this?",
+          "options": [
+            "The lactate is still abnormal — interventions have failed",
+            "Lactate clearance indicates improved tissue perfusion — continue current management",
+            "The patient is now ready for discharge",
+            "The lactate decrease is expected without treatment and is not clinically meaningful"
+          ],
+          "correct": 1,
+          "rationale": "Lactate clearance (≥ 10–20% decrease from baseline) indicates improved tissue perfusion and is a marker of response to resuscitation. A value of 2.8 mmol/L remains elevated (goal < 2) but the downward trend is clinically significant and reassuring. Continue resuscitation, monitoring, and reassess again in 2 hours."
+        },
+        {
+          "question": "A nurse is monitoring a client on norepinephrine infusion for septic shock. Which finding should the nurse report immediately to the provider?",
+          "options": [
+            "MAP 68 mmHg",
+            "New mottled purplish discoloration of the toes and fingers",
+            "Heart rate 88 bpm",
+            "Urine output 35 mL over the past hour"
+          ],
+          "correct": 1,
+          "rationale": "Peripheral ischemia (digital ischemia, mottling) is a serious complication of norepinephrine — excessive vasoconstriction compromises distal perfusion. This requires urgent reassessment of the dose and possibly adding a vasodilator or titrating down. MAP 68 is appropriate (target ≥ 65). HR 88 and UO 35 mL/hr are within acceptable ranges."
+        },
+        {
+          "question": "A post-sepsis client is being discharged and tells the nurse: 'I feel exhausted and my memory is not right. Is something wrong?' How should the nurse respond?",
+          "options": [
+            "These symptoms are unrelated to your hospitalization",
+            "Post-sepsis syndrome is common — fatigue, cognitive changes, and weakness can persist for months after sepsis",
+            "You need to return immediately — this suggests a new infection",
+            "These feelings will resolve completely within 48 hours"
+          ],
+          "correct": 1,
+          "rationale": "Post-sepsis syndrome is a well-recognized condition affecting 50–70% of survivors. It includes physical, cognitive, and psychological sequelae that can last months to years. Educating the patient validates their experience and prepares them to seek appropriate follow-up care. Dismissing or pathologizing the symptoms leads to worse outcomes."
+        }
+      ]
+    }
+  ]
+}

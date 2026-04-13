@@ -43,7 +43,6 @@ import {
 import { PATHWAY_LESSON_SITEMAP_LOCALE } from "@/lib/lessons/pathway-lesson-locale";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { resolveCanonicalSiteOrigin } from "@/lib/seo/canonical-site";
-import { CORE_HOSTED_MARKETING_LOCALES } from "@/lib/i18n/marketing-locale-policy";
 import { getSitemapIncludedLocales } from "@/lib/i18n/language-readiness";
 import {
   getAllProgrammaticSlugs,

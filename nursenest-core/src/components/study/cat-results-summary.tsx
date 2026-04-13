@@ -9,7 +9,7 @@ import { ReadinessSummaryCards } from "./cat-readiness-cards";
 import { TopicImpactBars } from "./cat-topic-impact";
 import type { TopicWithAccuracy } from "./cat-topic-impact";
 import { ReadinessTrendCard } from "./cat-readiness-trend";
-import { NextStepsCards } from "./cat-next-steps";
+import { GuidedNextSteps } from "./cat-guided-next-steps";
 import { OptionalUpgradeCard } from "./cat-upgrade-card";
 
 /** Stat card: 24px padding, rectangular, soft surface variation. */
@@ -204,11 +204,11 @@ function buildStrengthTopics(
  *
  * Final page order (spec §12):
  *  1. CatResultsHero (score + band + interpretation + CTAs)
- *  2. ReadinessSummaryCards (accuracy · difficulty · consistency)
- *  3. TopicImpactBars — Weak Areas Holding You Back
- *  4. TopicImpactBars — Current Strengths
- *  5. ReadinessTrendCard
- *  6. NextStepsCards — What To Do Next
+ *  2. GuidedNextSteps — What To Do Next
+ *  3. ReadinessSummaryCards (accuracy · difficulty · consistency)
+ *  4. TopicImpactBars — Weak Areas Holding You Back
+ *  5. TopicImpactBars — Current Strengths
+ *  6. ReadinessTrendCard
  *  7. OptionalUpgradeCard (hidden when isEntitled = true)
  *
  * `isEntitled` defaults to true so existing call sites without entitlement
@@ -238,12 +238,20 @@ export function ResultsSummary({
     catReport?.readinessScore != null
       ? Math.round(catReport.readinessScore)
       : results.accuracyPct;
+  const readinessLevel = catReport?.readinessLevel ?? results.readinessLevel ?? "Borderline";
+  const confidenceLevel = catReport?.confidenceLevelLabel ?? results.confidenceLevel ?? "Moderate";
+  const passProbability = catReport?.passProbability ?? results.passProbability ?? null;
+  const passProbabilityBand = catReport?.passProbabilityBand ?? results.passProbabilityBand ?? null;
 
   const band = getReadinessBand(score);
 
   // One-sentence interpretation: prefer coach narrative, fall back to band helper
   const interpretation =
     results.catCoach?.readinessNarrative ?? BAND_HELPER[band];
+  const readinessResult = results.readinessResult ?? (results.catReport?.result ?? null);
+  const interpretationWithResult = readinessResult
+    ? `${readinessLevel} (${readinessResult}): ${interpretation}`
+    : `${readinessLevel}: ${interpretation}`;
 
   // ── Summary card values ────────────────────────────────────
   const difficultyLabel = deriveDifficultyLabel(results);
@@ -252,6 +260,9 @@ export function ResultsSummary({
   // ── Topic data ─────────────────────────────────────────────
   const weakTopics = buildWeakTopics(results);
   const strengthTopics = buildStrengthTopics(results);
+  const guidedWeakAreas =
+    catReport?.weakAreaPriority?.map((entry) => entry.category).filter(Boolean) ??
+    weakTopics.map((t) => t.topic);
 
   // ── Navigation targets ─────────────────────────────────────
   const lessonsHref = pathwayId
@@ -262,14 +273,25 @@ export function ResultsSummary({
     <div className="nn-cat-results">
       {/* 1 — Results hero ───────────────────────────────────── */}
       <CatResultsHero
+        readinessLevel={readinessLevel}
+        confidenceLevel={confidenceLevel}
+        passProbability={passProbability}
+        passProbabilityBand={passProbabilityBand}
         score={score}
         band={band}
-        interpretation={interpretation}
+        interpretation={interpretationWithResult}
         testId={testId}
         lessonsHref={lessonsHref}
       />
 
-      {/* 2 — 3-card summary row ─────────────────────────────── */}
+      {/* 2 — Guided next steps ──────────────────────────────── */}
+      <GuidedNextSteps
+        readinessLevel={readinessLevel}
+        weakAreas={guidedWeakAreas}
+        pathwayId={pathwayId ?? null}
+      />
+
+      {/* 3 — 3-card summary row ─────────────────────────────── */}
       <ReadinessSummaryCards
         accuracyPct={results.accuracyPct}
         difficultyLabel={difficultyLabel}
@@ -278,22 +300,14 @@ export function ResultsSummary({
         totalCount={results.scoreTotal}
       />
 
-      {/* 3 & 4 — Weak areas + Strengths ────────────────────── */}
+      {/* 4 & 5 — Weak areas + Strengths ────────────────────── */}
       <TopicImpactBars
         weakTopics={weakTopics}
         strengthTopics={strengthTopics}
       />
 
-      {/* 5 — Readiness trend ────────────────────────────────── */}
+      {/* 6 — Readiness trend ────────────────────────────────── */}
       <ReadinessTrendCard currentScore={score} priorScore={priorScore} />
-
-      {/* 6 — What To Do Next ────────────────────────────────── */}
-      <NextStepsCards
-        testId={testId}
-        lessonsHref={lessonsHref}
-        readinessTier={results.catCoach?.readinessTier ?? null}
-        lessonPrimaryReady={results.catCoach?.lessonContentSignal?.lessonPrimaryReady ?? null}
-      />
 
       {/* 7 — Optional upgrade/paywall block ────────────────── */}
       <OptionalUpgradeCard isEntitled={isEntitled} />

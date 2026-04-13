@@ -4,6 +4,7 @@ import {
   pathwayAllowsCatAdaptiveStart,
   subscriptionCoversPathwayBase,
 } from "@/lib/exam-pathways/pathway-entitlements";
+import { readinessConfigForPathwayId } from "@/lib/exam-pathways/pathway-readiness-config";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { fetchCatPracticePool } from "@/lib/practice-tests/cat-pool";
 import { PRACTICE_TEST_CAT_CREATE_CODE } from "@/lib/practice-tests/practice-test-cat-create-codes";
@@ -58,8 +59,9 @@ export async function assessCatPracticeReadinessForPathway(
     };
   }
 
+  const readinessConfig = readinessConfigForPathwayId(trimmed);
   const poolInput: PickQuestionsInput = {
-    questionCount: 75,
+    questionCount: readinessConfig?.maxQuestions ?? 75,
     topicNames: [],
     difficultyMin: null,
     difficultyMax: null,
@@ -73,7 +75,7 @@ export async function assessCatPracticeReadinessForPathway(
     return {
       ok: false,
       code: PRACTICE_TEST_CAT_CREATE_CODE.cat_pool_invalid,
-      message: v.error,
+      message: "Your readiness exam pool is still calibrating for this pathway. Keep practicing questions and lessons, then try again.",
     };
   }
 

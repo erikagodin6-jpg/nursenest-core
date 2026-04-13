@@ -37,6 +37,8 @@ const localizedBlogAiOutputSchema = z.object({
   medicalReviewRequired: z.boolean().optional(),
   faqSuggestions: z.array(z.object({ question: z.string(), answer: z.string() })).optional(),
   snippetSummary: z.string().nullable().optional(),
+  referenceLines: z.array(z.string()).optional(),
+  sourceSelectionNotes: z.string().nullable().optional(),
 });
 
 function normalizeLinkContext(raw: string | undefined): LocalizedInternalLink["context"] {
@@ -81,6 +83,8 @@ function parseLocalizedAiJson(raw: string): LocalizedBlogAiOutput | null {
     medicalReviewRequired: d.medicalReviewRequired ?? false,
     faqSuggestions: d.faqSuggestions ?? [],
     snippetSummary: d.snippetSummary ?? null,
+    referenceLines: d.referenceLines ?? [],
+    sourceSelectionNotes: d.sourceSelectionNotes ?? null,
   };
 }
 
@@ -115,6 +119,8 @@ export async function runBlogBatchLocalizedFollowup(params: {
       body: true,
       exam: true,
       targetKeyword: true,
+      apaReferences: true,
+      sourcesJson: true,
     },
   });
   if (!canonical) {
@@ -148,6 +154,8 @@ export async function runBlogBatchLocalizedFollowup(params: {
         seoKeywordSecondary: [],
         searchIntent: null,
         targetAudience: null,
+        canonicalApaReferences: canonical.apaReferences,
+        canonicalSourcesJson: canonical.sourcesJson,
       });
 
       const systemPrompt =

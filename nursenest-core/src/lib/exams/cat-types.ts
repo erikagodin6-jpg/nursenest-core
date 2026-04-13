@@ -112,6 +112,12 @@ export type CatAdaptiveState = {
 
 export type CatExamReport = {
   decision: "pass" | "fail" | "uncertain";
+  result: "PASS" | "BORDERLINE" | "FAIL";
+  readinessLevel: "Likely Pass" | "Borderline" | "At Risk";
+  abilityScore: number;
+  confidenceLevelLabel: "High" | "Moderate" | "Low";
+  passProbability?: number;
+  passProbabilityBand?: "Very likely to pass" | "Likely to pass" | "Borderline" | "At risk";
   theta: number;
   se: number;
   totalQuestions: number;
@@ -127,6 +133,12 @@ export type CatExamReport = {
     strength: "strong" | "weak" | "mixed";
   }>;
   weakAreas: string[];
+  weakAreaPriority?: Array<{
+    category: string;
+    wrongCount: number;
+    averageDifficulty: number;
+    priorityScore: number;
+  }>;
   suggestedNextSteps: string[];
   readinessScore: number;
   confidenceLevel: CatConfidenceLevel;

@@ -1,0 +1,360 @@
+{
+  "version": 1,
+  "description": "Phase 1 – Myocardial Infarction: complete enrichment for CA-RN and US-RN spine lessons",
+  "lessons": [
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-myocardial-infarction",
+      "previewSectionCount": 2,
+      "seoTitle": "Myocardial infarction nursing: STEMI, NSTEMI, troponin & NCLEX-RN Canada",
+      "seoDescription": "Complete RN lesson on MI: STEMI vs NSTEMI, coronary anatomy, troponin, 12-lead ECG, reperfusion therapy, dual antiplatelet, and Canadian NCLEX-RN clinical nursing priorities.",
+      "sections": [
+        {
+          "id": "introduction",
+          "heading": "Overview",
+          "kind": "introduction",
+          "body": "**Myocardial infarction (MI)** occurs when prolonged ischemia causes irreversible myocardial cell death. MI is classified by ECG pattern and biomarker elevation:\n- **STEMI** (ST-elevation MI): complete occlusion of a coronary artery; ST elevation in ≥ 2 contiguous leads. Requires emergent reperfusion within 90 minutes (door-to-balloon time ≤ 90 min for primary PCI, or fibrinolytics within 30 minutes if PCI unavailable).\n- **NSTEMI** (non-ST-elevation MI): partial or temporary occlusion; elevated troponin without ST elevation. Managed with anticoagulation and early catheterization (within 24–72 hours).\n- **Unstable angina**: chest pain without troponin elevation — no myocardial necrosis but high risk of progression.\n\nFor NCLEX-RN, recognize the classic presentation, understand the time-sensitive reperfusion window, and know the nursing priorities in the first hours."
+        },
+        {
+          "id": "pathophysiology_overview",
+          "heading": "Pathophysiology",
+          "kind": "pathophysiology_overview",
+          "body": "**Atherosclerotic plaque rupture.** The underlying cause of most MIs is rupture or erosion of an atherosclerotic plaque. Atherosclerosis develops over decades: LDL cholesterol penetrates the arterial intima, oxidizes, and triggers chronic inflammation. Macrophages engulf oxidized LDL to form foam cells, which accumulate into a **lipid-rich core** covered by a thin fibrous cap. When this vulnerable plaque ruptures — often triggered by hemodynamic stress, inflammation, or vasoconstriction — the lipid core is exposed to the bloodstream.\n\n**Thrombus formation.** Exposed collagen and tissue factor activate platelets (primary hemostasis) and the coagulation cascade (secondary hemostasis). Within minutes, a coronary thrombus forms. If the thrombus completely occludes the coronary artery, a STEMI occurs. If it partially occludes or temporarily occludes, the result is an NSTEMI or unstable angina. The affected coronary artery determines the territory of myocardial ischemia:\n- **LAD (left anterior descending)**: anterior wall, septum — largest territory, worst prognosis\n- **RCA (right coronary artery)**: inferior wall, right ventricle — inferior STEMI; AV node (bradycardia risk)\n- **LCx (left circumflex)**: lateral wall\n\n**Ischemic cascade and necrosis.** Myocardial cells cease aerobic metabolism within seconds of ischemia. Contractility fails within minutes (wall motion abnormality). Irreversible cell death (necrosis) begins after 20–40 minutes of sustained ischemia. The **wavefront** of necrosis progresses from subendocardium (innermost layer, highest O₂ demand, first to be affected) outward toward the epicardium. Reperfusion within 90 minutes salvages viable myocardium; beyond 12 hours, the infarct is typically complete. Necrotic cells release **troponin I and T** into the bloodstream — these are the definitive biomarkers of MI, detectable within 3–6 hours and remaining elevated for 10–14 days."
+        },
+        {
+          "id": "signs_symptoms",
+          "heading": "Signs & Symptoms",
+          "kind": "signs_symptoms",
+          "body": "**Classic presentation (typical angina, more common in men):**\n- Crushing, pressure, or squeezing chest pain; often described as 'elephant on chest'\n- Pain radiates to left arm, jaw, neck, or back\n- Onset at rest or with minimal exertion (unlike stable angina which resolves with rest)\n- Duration > 20 minutes\n- Accompanied by diaphoresis (cold sweat), nausea/vomiting, pallor\n- Dyspnea (from ventricular dysfunction or pulmonary edema if extensive MI)\n\n**Atypical presentation (women, elderly, diabetics — more common than teaching suggests):**\n- Epigastric pain or 'indigestion' — frequently misattributed\n- Fatigue as the chief complaint (especially in women)\n- Jaw pain only, or neck/arm pain without chest pain\n- Dyspnea without chest pain\n- Syncope or dizziness\n- **NOTE**: Elderly diabetic patients may have a completely silent MI (pain threshold altered by autonomic neuropathy)\n\n**Physical exam findings:**\n- Tachycardia (sympathetic activation) or bradycardia (inferior MI affecting RCA/AV node)\n- Hypotension (large territory MI or cardiogenic shock) or hypertension (pain-related catecholamine surge)\n- New S3 or S4 gallop\n- New systolic murmur (mitral regurgitation from papillary muscle dysfunction; interventricular septal rupture — rare but catastrophic complications)\n- Crackles if pulmonary edema is developing"
+        },
+        {
+          "id": "red_flags",
+          "heading": "Red Flags / Clinical Deterioration",
+          "kind": "red_flags",
+          "body": "**Notify provider and activate emergency response for:**\n\n- **Hypotension (SBP < 90) + ST elevation**: cardiogenic shock — highest mortality; requires emergent PCI and mechanical support\n- **New onset chest pain with diaphoresis** in any patient: treat as STEMI until ECG proves otherwise\n- **ST elevation on telemetry**: activate cath lab, prepare for emergency PCI\n- **Bradycardia + hypotension + inferior ST elevation**: right ventricular MI (RCA occlusion) — do NOT give nitroglycerin (preload-dependent, will cause severe hypotension); IV fluids and pacing may be needed\n- **New systolic murmur post-MI**: papillary muscle rupture (acute MR) or ventricular septal defect (interventricular rupture) — surgical emergency\n- **Sudden cardiac arrest (VF/VT)**: most common cause of death in first hour; defibrillate immediately\n- **Worsening dyspnea with crackles**: developing pulmonary edema from LV failure\n- **Pericardial friction rub 2–5 days post-MI**: Dressler syndrome (autoimmune pericarditis) — NSAIDs, colchicine"
+        },
+        {
+          "id": "labs_diagnostics",
+          "heading": "Diagnostics / Labs",
+          "kind": "labs_diagnostics",
+          "body": "**12-lead ECG** — obtain within 10 minutes of symptom onset:\n- STEMI: ST elevation ≥ 1 mm in ≥ 2 contiguous limb leads or ≥ 2 mm in precordial leads; new LBBB\n- NSTEMI/UA: ST depression, T-wave inversions, or no ECG change with elevated troponin\n- Reciprocal changes: ST depression in leads opposite the infarct zone confirms STEMI\n- Hyperacute T waves: earliest ECG change, before ST elevation\n\n**Cardiac biomarkers:**\n- **Troponin I or T** (high-sensitivity): gold standard for MI diagnosis. Rises 3–6 hours post-infarct, peaks at 12–24 hours, remains elevated 7–14 days. Serial troponins (0h, 1h, 3h) used in rapid-rule-out protocols.\n- **CK-MB**: rises 3–6 hours, peaks 12–24 hours, returns to normal in 36–72 hours — useful for detecting reinfarction (re-elevation after return to normal)\n\n**Imaging:**\n- Chest X-ray: cardiomegaly, pulmonary congestion\n- Echocardiogram: wall motion abnormalities, EF assessment, complications (pericardial effusion, MR)\n- Coronary angiography: definitive — identifies culprit lesion, guides PCI\n\n**Other labs:**\n- CBC (anemia worsens outcomes), BMP (K⁺ and Mg²⁺ — arrhythmia prevention), lipid panel, BNP, INR (if fibrinolysis considered)"
+        },
+        {
+          "id": "nursing_assessment_interventions",
+          "heading": "Nursing Responsibilities",
+          "kind": "nursing_assessment_interventions",
+          "body": "**Immediate nursing priorities (first 10 minutes): MONA-B**\n- **M**orphine: 2–4 mg IV for severe unrelieved pain (analgesic + venodilation) — use cautiously; data suggest may worsen outcomes in some patients\n- **O**xygen: only if SpO₂ < 90% — routine oxygen without hypoxia is no longer recommended (may increase infarct size)\n- **N**itrates: sublingual nitroglycerin 0.4 mg every 5 minutes × 3 for ongoing pain — HOLD if SBP < 90 or inferior/right ventricular MI suspected; HOLD if recent PDE-5 inhibitor use (sildenafil, tadalafil — risk of severe hypotension)\n- **A**spirin: 162–325 mg chewed immediately (not swallowed whole) — ensures faster absorption\n- **B**eta-blocker: metoprolol IV or oral if no cardiogenic shock — reduces HR, O₂ demand, arrhythmia\n\n**Immediate nursing actions:**\n- Obtain 12-lead ECG within 10 minutes and transmit to physician/cardiologist immediately\n- Establish 2 large-bore IV lines\n- Continuous cardiac monitoring (telemetry) and 12-lead ECG\n- Pain assessment every 5–15 minutes during active chest pain\n- Prepare for cath lab activation (STEMI): consent, shave bilateral groins, allergy check, NPO\n- Administer P2Y12 inhibitor (clopidogrel, ticagrelor) as ordered — dual antiplatelet\n- Anticoagulation: heparin or enoxaparin as ordered — do NOT administer enoxaparin IM (SQ only)\n- Fall risk: bedrest during active ischemia; assist with all activity\n\n**Post-reperfusion monitoring:**\n- Monitor for reperfusion dysrhythmias (accelerated idioventricular rhythm — usually benign, self-limiting)\n- Monitor access site (femoral or radial): bleeding, hematoma, pulse checks\n- Monitor troponin trend — peak confirms infarct size\n- Begin early mobilization protocol per cardiac rehab order set"
+        },
+        {
+          "id": "clinical_pearls",
+          "heading": "Clinical Pearls",
+          "kind": "clinical_pearls",
+          "body": "- **Inferior MI (inferior leads II, III, aVF)** + bradycardia → check right-sided leads (V4R). Right ventricular MI: avoid nitrates and diuretics (preload-dependent). Give IV fluids cautiously.\n- **Aspirin chewed, not swallowed**: buccal absorption is faster, which matters when 90-minute door-to-balloon is the target.\n- **Door-to-balloon ≤ 90 minutes** (STEMI + PCI available): activate the team the moment you see ST elevation — do not wait for the cardiologist to see the ECG.\n- **Troponin timing**: high-sensitivity troponin can be positive within 1 hour of symptom onset. Serial testing is needed — a single negative troponin does not rule out MI.\n- **Contraindications to fibrinolytics** (when PCI unavailable): prior hemorrhagic stroke ever; ischemic stroke < 3 months; active bleeding; severe uncontrolled hypertension (> 180/110); recent major surgery or trauma < 3 weeks; known intracranial neoplasm.\n- **Cocaine-induced MI**: treat with benzodiazepines and nitroglycerin. Beta-blockers are contraindicated (worsen coronary spasm via unopposed alpha-stimulation).\n- **Secondary prevention after MI**: aspirin + P2Y12 (12 months), statin (high-intensity), ACEi/ARB, beta-blocker. All four unless contraindicated."
+        },
+        {
+          "id": "client_education",
+          "heading": "Patient Education",
+          "kind": "client_education",
+          "body": "**Before discharge after MI:**\n\n**Medications — must know:**\n- Aspirin 81 mg daily: lifelong unless contraindicated. Do NOT stop without provider approval.\n- P2Y12 inhibitor (e.g. clopidogrel, ticagrelor): typically 12 months after stent. Stopping early dramatically increases stent thrombosis risk.\n- Statin (atorvastatin, rosuvastatin): reduces risk of future MI. Take even if cholesterol 'looks normal' — it is cardioprotective beyond cholesterol reduction.\n- Beta-blocker: take consistently; do not stop abruptly (rebound tachycardia/angina)\n- ACE inhibitor or ARB: reduces remodeling and mortality post-MI\n\n**Warning signs — call 911 (Canada: 911 or local emergency) immediately for:**\n- Any chest pain, pressure, or squeezing not relieved by 1 nitroglycerine tablet after 5 minutes\n- Shortness of breath at rest\n- Fainting or near-fainting\n- Palpitations or racing heart\n\n**Lifestyle:**\n- Smoking cessation: single most impactful modifiable risk factor\n- Cardiac rehabilitation program: reduces mortality by 20–25%, improves function and quality of life\n- Diet: Mediterranean or DASH diet; reduce saturated fat, trans fat, sodium\n- Sexual activity: typically safe 1–2 weeks post-uncomplicated MI (if patient can climb 2 flights of stairs without symptoms)\n- Driving restrictions: typically 1 week after uncomplicated MI; longer after cardiac arrest or surgery — confirm with provider"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- MI = plaque rupture → coronary thrombus → myocardial necrosis. STEMI = complete occlusion. NSTEMI = partial.\n- ECG within 10 minutes; troponin 0h, 1h, 3h. ST elevation → activate cath lab → door-to-balloon ≤ 90 min.\n- MONA-B: Morphine, Oxygen (only if SpO₂ < 90%), Nitrates (hold if inferior/RV MI or SBP < 90), Aspirin chewed, Beta-blocker\n- Hold nitrates in: SBP < 90, inferior/RV MI, PDE-5 inhibitor use. Hold O₂ if SpO₂ ≥ 90%.\n- Red flags post-MI: new systolic murmur (septal rupture or papillary muscle), cardiogenic shock, sudden VF\n- Secondary prevention: aspirin + P2Y12 + statin + ACEi + beta-blocker"
+        }
+      ],
+      "preTest": [
+        {
+          "question": "A client arrives at the ED with crushing chest pain, diaphoresis, and jaw pain for 45 minutes. HR 94, BP 130/84, SpO₂ 97%. A 12-lead ECG shows ST elevation in leads II, III, and aVF. What is the nurse's priority action?",
+          "options": [
+            "Apply oxygen via non-rebreather mask at 15 L/min",
+            "Activate the cardiac catheterization team and administer aspirin 325 mg chewed",
+            "Administer nitroglycerin 0.4 mg sublingual",
+            "Obtain a stat troponin level and wait for results before intervening"
+          ],
+          "correct": 1,
+          "rationale": "ST elevation in II, III, aVF indicates an inferior STEMI. The priority is to activate the cath lab (target door-to-balloon ≤ 90 min) and give aspirin immediately. Oxygen is not indicated if SpO₂ is ≥ 94%. Nitroglycerin is contraindicated in inferior MI (RV involvement risk). Do not delay reperfusion waiting for troponin results."
+        },
+        {
+          "question": "A client with inferior STEMI develops bradycardia of 38 bpm, BP 78/48 mmHg. What medication should the nurse anticipate administering?",
+          "options": [
+            "Nitroglycerin IV to reduce preload",
+            "Furosemide IV to treat suspected pulmonary edema",
+            "IV normal saline and atropine for RV MI with bradycardia/hypotension",
+            "Metoprolol IV to control the heart rate"
+          ],
+          "correct": 2,
+          "rationale": "Inferior STEMI often involves RCA occlusion with right ventricular MI. RV MI is preload-dependent — the RV needs adequate venous return to maintain output. Bradycardia and hypotension are treated with IV fluids (carefully) and atropine. Nitroglycerin and diuretics are contraindicated (reduce preload → catastrophic hypotension). Metoprolol would worsen bradycardia."
+        },
+        {
+          "question": "Which instruction is most important for the nurse to include when teaching a client about dual antiplatelet therapy (DAPT) after coronary stent placement?",
+          "options": [
+            "Take both aspirin and the P2Y12 inhibitor until you feel better, then aspirin only",
+            "Do not stop the P2Y12 inhibitor without consulting your cardiologist — stopping early causes stent thrombosis",
+            "If you develop any bleeding, stop both medications immediately and call the office on Monday",
+            "Ibuprofen can be substituted if you develop stomach irritation from aspirin"
+          ],
+          "correct": 1,
+          "rationale": "Early discontinuation of P2Y12 inhibitors (clopidogrel, ticagrelor, prasugrel) dramatically increases the risk of in-stent thrombosis, which can cause sudden MI and death. Patients must complete the full course (typically 12 months). If bleeding occurs, the patient should call immediately — not wait. NSAIDs like ibuprofen worsen bleeding risk and are not substitutes."
+        }
+      ],
+      "postTest": [
+        {
+          "question": "A nurse is caring for a client who received aspirin and nitroglycerin in the ED for chest pain. The client's pain was 9/10 on arrival and is now 3/10. Repeat ECG shows no ST changes, but troponin I returns at 0.08 ng/mL (normal < 0.04). How should the nurse interpret this?",
+          "options": [
+            "Normal — troponin slightly above normal is not clinically significant",
+            "The client likely has NSTEMI — elevated troponin with symptom relief indicates partial infarction",
+            "The troponin elevation indicates unstable angina",
+            "The troponin is elevated from the physical exertion of chest pain — repeat in 24 hours"
+          ],
+          "correct": 1,
+          "rationale": "An elevated troponin (above the 99th percentile of a normal population) combined with symptoms of acute coronary syndrome and no ST elevation meets the definition of NSTEMI. Unstable angina, by definition, has no troponin elevation. Troponin does not rise from physical exertion or pain alone."
+        },
+        {
+          "question": "A client 30 minutes post-PCI for STEMI develops sudden hypotension (BP 74/40), JVD, muffled heart sounds, and worsening dyspnea. What complication should the nurse suspect?",
+          "options": [
+            "Cardiogenic shock from left ventricular failure",
+            "Cardiac tamponade from pericardial bleeding — a procedural complication",
+            "Tension pneumothorax from central line placement",
+            "Allergic reaction to contrast dye"
+          ],
+          "correct": 1,
+          "rationale": "Beck's triad (hypotension + JVD + muffled heart sounds) following catheterization/PCI suggests cardiac tamponade, which can result from coronary artery perforation or pericardial bleeding as a procedural complication. Emergency pericardiocentesis is required. Cardiogenic shock would not cause JVD + muffled sounds this acutely. Tension pneumothorax causes absent breath sounds + tracheal deviation."
+        },
+        {
+          "question": "A nurse is preparing a client who received fibrinolytic therapy (alteplase) for STEMI to be transferred. Which finding indicates successful reperfusion?",
+          "options": [
+            "Return of ST segments toward baseline + pain resolution + brief accelerated idioventricular rhythm",
+            "ST segments remain elevated but the client states pain is 5/10 instead of 10/10",
+            "Troponin has decreased from the initial level",
+            "Blood pressure has improved from 88/54 to 110/70"
+          ],
+          "correct": 0,
+          "rationale": "Signs of successful reperfusion after fibrinolytics: ST segment resolution (the most specific indicator), resolution or marked reduction of chest pain, and brief reperfusion dysrhythmias (most commonly accelerated idioventricular rhythm — AIVR — which is self-limiting and benign). Troponin rises during reperfusion (washout from necrotic cells) — it does not decrease early. BP improvement alone is not a reperfusion sign."
+        },
+        {
+          "question": "Three days post-MI, a client develops sharp pleuritic chest pain that worsens when lying flat and improves when leaning forward. Temperature is 38.1°C. A pericardial friction rub is heard. What complication should the nurse suspect?",
+          "options": [
+            "Reinfarction — obtain 12-lead ECG stat",
+            "Pulmonary embolism — obtain CT pulmonary angiogram",
+            "Dressler syndrome (post-MI pericarditis)",
+            "Aortic dissection — obtain chest CT immediately"
+          ],
+          "correct": 2,
+          "rationale": "Dressler syndrome is an autoimmune pericarditis occurring 2–10 weeks after MI. Classic features: pleuritic chest pain (worse supine, better leaning forward), friction rub, fever, and elevated ESR/CRP. It is treated with aspirin or NSAIDs plus colchicine. Reinfarction would show new ST elevation. PE would cause tachycardia, dyspnea, and pleuritic pain without friction rub. Aortic dissection presents with tearing back pain."
+        },
+        {
+          "question": "A nurse is assessing a client who had a large anterior MI 2 hours ago. The client suddenly develops an HR of 180 bpm with a wide QRS complex, BP 68/40, and loss of consciousness. What is the nurse's immediate action?",
+          "options": [
+            "Administer amiodarone 150 mg IV push",
+            "Prepare for synchronized cardioversion",
+            "Activate the code team and defibrillate immediately",
+            "Administer adenosine 6 mg IV push"
+          ],
+          "correct": 2,
+          "rationale": "Pulseless ventricular tachycardia or ventricular fibrillation in a hemodynamically unstable (pulseless) client requires immediate defibrillation (unsynchronized). This is pulseless VT — do not delay for medications. Amiodarone is given after defibrillation attempts. Synchronized cardioversion is for stable monomorphic VT with a pulse. Adenosine is for stable SVT, not VT."
+        },
+        {
+          "question": "A client asks the nurse why they need to take atorvastatin 80 mg daily after their MI, since their cholesterol is 'normal.' What is the best response?",
+          "options": [
+            "You are right — if your cholesterol is normal, the statin is not needed",
+            "Statins are prescribed post-MI to prevent clots, not primarily to lower cholesterol",
+            "High-intensity statins reduce cardiovascular events and mortality after MI through multiple mechanisms, including anti-inflammatory and plaque-stabilizing effects, regardless of baseline cholesterol",
+            "The statin prevents kidney damage from the contrast dye used during catheterization"
+          ],
+          "correct": 2,
+          "rationale": "Post-MI, high-intensity statins (atorvastatin 40–80 mg or rosuvastatin 20–40 mg) are a pillar of secondary prevention regardless of baseline LDL. Benefits include LDL reduction, atherosclerotic plaque stabilization, anti-inflammatory effects, and reduced risk of future MI, stroke, and cardiovascular death. These benefits are independent of the starting cholesterol level."
+        },
+        {
+          "question": "A client who had a STEMI 5 days ago is preparing for discharge. Which statement by the client indicates a need for further teaching?",
+          "options": [
+            "I will call 911 immediately if I have chest pain not relieved by one nitroglycerine tablet",
+            "I plan to start the cardiac rehabilitation program next week",
+            "I will stop my clopidogrel if I need a dental extraction — I don't want to bleed",
+            "I will not smoke and will follow a heart-healthy diet"
+          ],
+          "correct": 2,
+          "rationale": "Stopping a P2Y12 inhibitor like clopidogrel without cardiologist guidance is dangerous — stent thrombosis risk is highest in the first 12 months. The patient must be taught to contact the cardiologist before any procedure requiring antiplatelet interruption. The other statements all demonstrate correct understanding of post-MI self-care."
+        }
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "us-rn-myocardial-infarction",
+      "previewSectionCount": 2,
+      "seoTitle": "Myocardial infarction nursing: STEMI, NSTEMI, troponin & NCLEX-RN Canada",
+      "seoDescription": "Complete RN lesson on MI: STEMI vs NSTEMI, coronary anatomy, troponin, 12-lead ECG, reperfusion therapy, dual antiplatelet, and NCLEX-RN clinical nursing priorities.",
+      "sections": [
+        {
+          "id": "introduction",
+          "heading": "Overview",
+          "kind": "introduction",
+          "body": "**Myocardial infarction (MI)** occurs when prolonged ischemia causes irreversible myocardial cell death. MI is classified by ECG pattern and biomarker elevation:\n- **STEMI** (ST-elevation MI): complete occlusion of a coronary artery; ST elevation in ≥ 2 contiguous leads. Requires emergent reperfusion within 90 minutes (door-to-balloon time ≤ 90 min for primary PCI, or fibrinolytics within 30 minutes if PCI unavailable).\n- **NSTEMI** (non-ST-elevation MI): partial or temporary occlusion; elevated troponin without ST elevation. Managed with anticoagulation and early catheterization (within 24–72 hours).\n- **Unstable angina**: chest pain without troponin elevation — no myocardial necrosis but high risk of progression.\n\nFor NCLEX-RN, recognize the classic presentation, understand the time-sensitive reperfusion window, and know the nursing priorities in the first hours."
+        },
+        {
+          "id": "pathophysiology_overview",
+          "heading": "Pathophysiology",
+          "kind": "pathophysiology_overview",
+          "body": "**Atherosclerotic plaque rupture.** The underlying cause of most MIs is rupture or erosion of an atherosclerotic plaque. Atherosclerosis develops over decades: LDL cholesterol penetrates the arterial intima, oxidizes, and triggers chronic inflammation. Macrophages engulf oxidized LDL to form foam cells, which accumulate into a **lipid-rich core** covered by a thin fibrous cap. When this vulnerable plaque ruptures — often triggered by hemodynamic stress, inflammation, or vasoconstriction — the lipid core is exposed to the bloodstream.\n\n**Thrombus formation.** Exposed collagen and tissue factor activate platelets (primary hemostasis) and the coagulation cascade (secondary hemostasis). Within minutes, a coronary thrombus forms. If the thrombus completely occludes the coronary artery, a STEMI occurs. If it partially occludes or temporarily occludes, the result is an NSTEMI or unstable angina. The affected coronary artery determines the territory of myocardial ischemia:\n- **LAD (left anterior descending)**: anterior wall, septum — largest territory, worst prognosis\n- **RCA (right coronary artery)**: inferior wall, right ventricle — inferior STEMI; AV node (bradycardia risk)\n- **LCx (left circumflex)**: lateral wall\n\n**Ischemic cascade and necrosis.** Myocardial cells cease aerobic metabolism within seconds of ischemia. Contractility fails within minutes (wall motion abnormality). Irreversible cell death (necrosis) begins after 20–40 minutes of sustained ischemia. The **wavefront** of necrosis progresses from subendocardium (innermost layer, highest O₂ demand, first to be affected) outward toward the epicardium. Reperfusion within 90 minutes salvages viable myocardium; beyond 12 hours, the infarct is typically complete. Necrotic cells release **troponin I and T** into the bloodstream — these are the definitive biomarkers of MI, detectable within 3–6 hours and remaining elevated for 10–14 days."
+        },
+        {
+          "id": "signs_symptoms",
+          "heading": "Signs & Symptoms",
+          "kind": "signs_symptoms",
+          "body": "**Classic presentation (typical angina, more common in men):**\n- Crushing, pressure, or squeezing chest pain; often described as 'elephant on chest'\n- Pain radiates to left arm, jaw, neck, or back\n- Onset at rest or with minimal exertion (unlike stable angina which resolves with rest)\n- Duration > 20 minutes\n- Accompanied by diaphoresis (cold sweat), nausea/vomiting, pallor\n- Dyspnea (from ventricular dysfunction or pulmonary edema if extensive MI)\n\n**Atypical presentation (women, elderly, diabetics — more common than teaching suggests):**\n- Epigastric pain or 'indigestion' — frequently misattributed\n- Fatigue as the chief complaint (especially in women)\n- Jaw pain only, or neck/arm pain without chest pain\n- Dyspnea without chest pain\n- Syncope or dizziness\n- **NOTE**: Elderly diabetic patients may have a completely silent MI (pain threshold altered by autonomic neuropathy)\n\n**Physical exam findings:**\n- Tachycardia (sympathetic activation) or bradycardia (inferior MI affecting RCA/AV node)\n- Hypotension (large territory MI or cardiogenic shock) or hypertension (pain-related catecholamine surge)\n- New S3 or S4 gallop\n- New systolic murmur (mitral regurgitation from papillary muscle dysfunction; interventricular septal rupture — rare but catastrophic complications)\n- Crackles if pulmonary edema is developing"
+        },
+        {
+          "id": "red_flags",
+          "heading": "Red Flags / Clinical Deterioration",
+          "kind": "red_flags",
+          "body": "**Notify provider and activate emergency response for:**\n\n- **Hypotension (SBP < 90) + ST elevation**: cardiogenic shock — highest mortality; requires emergent PCI and mechanical support\n- **New onset chest pain with diaphoresis** in any patient: treat as STEMI until ECG proves otherwise\n- **ST elevation on telemetry**: activate cath lab, prepare for emergency PCI\n- **Bradycardia + hypotension + inferior ST elevation**: right ventricular MI (RCA occlusion) — do NOT give nitroglycerin (preload-dependent, will cause severe hypotension); IV fluids and pacing may be needed\n- **New systolic murmur post-MI**: papillary muscle rupture (acute MR) or ventricular septal defect (interventricular rupture) — surgical emergency\n- **Sudden cardiac arrest (VF/VT)**: most common cause of death in first hour; defibrillate immediately\n- **Worsening dyspnea with crackles**: developing pulmonary edema from LV failure\n- **Pericardial friction rub 2–5 days post-MI**: Dressler syndrome (autoimmune pericarditis) — NSAIDs, colchicine"
+        },
+        {
+          "id": "labs_diagnostics",
+          "heading": "Diagnostics / Labs",
+          "kind": "labs_diagnostics",
+          "body": "**12-lead ECG** — obtain within 10 minutes of symptom onset:\n- STEMI: ST elevation ≥ 1 mm in ≥ 2 contiguous limb leads or ≥ 2 mm in precordial leads; new LBBB\n- NSTEMI/UA: ST depression, T-wave inversions, or no ECG change with elevated troponin\n- Reciprocal changes: ST depression in leads opposite the infarct zone confirms STEMI\n- Hyperacute T waves: earliest ECG change, before ST elevation\n\n**Cardiac biomarkers:**\n- **Troponin I or T** (high-sensitivity): gold standard for MI diagnosis. Rises 3–6 hours post-infarct, peaks at 12–24 hours, remains elevated 7–14 days. Serial troponins (0h, 1h, 3h) used in rapid-rule-out protocols.\n- **CK-MB**: rises 3–6 hours, peaks 12–24 hours, returns to normal in 36–72 hours — useful for detecting reinfarction (re-elevation after return to normal)\n\n**Imaging:**\n- Chest X-ray: cardiomegaly, pulmonary congestion\n- Echocardiogram: wall motion abnormalities, EF assessment, complications (pericardial effusion, MR)\n- Coronary angiography: definitive — identifies culprit lesion, guides PCI\n\n**Other labs:**\n- CBC (anemia worsens outcomes), BMP (K⁺ and Mg²⁺ — arrhythmia prevention), lipid panel, BNP, INR (if fibrinolysis considered)"
+        },
+        {
+          "id": "nursing_assessment_interventions",
+          "heading": "Nursing Responsibilities",
+          "kind": "nursing_assessment_interventions",
+          "body": "**Immediate nursing priorities (first 10 minutes): MONA-B**\n- **M**orphine: 2–4 mg IV for severe unrelieved pain (analgesic + venodilation) — use cautiously; data suggest may worsen outcomes in some patients\n- **O**xygen: only if SpO₂ < 90% — routine oxygen without hypoxia is no longer recommended (may increase infarct size)\n- **N**itrates: sublingual nitroglycerin 0.4 mg every 5 minutes × 3 for ongoing pain — HOLD if SBP < 90 or inferior/right ventricular MI suspected; HOLD if recent PDE-5 inhibitor use (sildenafil, tadalafil — risk of severe hypotension)\n- **A**spirin: 162–325 mg chewed immediately (not swallowed whole) — ensures faster absorption\n- **B**eta-blocker: metoprolol IV or oral if no cardiogenic shock — reduces HR, O₂ demand, arrhythmia\n\n**Immediate nursing actions:**\n- Obtain 12-lead ECG within 10 minutes and transmit to physician/cardiologist immediately\n- Establish 2 large-bore IV lines\n- Continuous cardiac monitoring (telemetry) and 12-lead ECG\n- Pain assessment every 5–15 minutes during active chest pain\n- Prepare for cath lab activation (STEMI): consent, shave bilateral groins, allergy check, NPO\n- Administer P2Y12 inhibitor (clopidogrel, ticagrelor) as ordered — dual antiplatelet\n- Anticoagulation: heparin or enoxaparin as ordered — do NOT administer enoxaparin IM (SQ only)\n- Fall risk: bedrest during active ischemia; assist with all activity\n\n**Post-reperfusion monitoring:**\n- Monitor for reperfusion dysrhythmias (accelerated idioventricular rhythm — usually benign, self-limiting)\n- Monitor access site (femoral or radial): bleeding, hematoma, pulse checks\n- Monitor troponin trend — peak confirms infarct size\n- Begin early mobilization protocol per cardiac rehab order set"
+        },
+        {
+          "id": "clinical_pearls",
+          "heading": "Clinical Pearls",
+          "kind": "clinical_pearls",
+          "body": "- **Inferior MI (inferior leads II, III, aVF)** + bradycardia → check right-sided leads (V4R). Right ventricular MI: avoid nitrates and diuretics (preload-dependent). Give IV fluids cautiously.\n- **Aspirin chewed, not swallowed**: buccal absorption is faster, which matters when 90-minute door-to-balloon is the target.\n- **Door-to-balloon ≤ 90 minutes** (STEMI + PCI available): activate the team the moment you see ST elevation — do not wait for the cardiologist to see the ECG.\n- **Troponin timing**: high-sensitivity troponin can be positive within 1 hour of symptom onset. Serial testing is needed — a single negative troponin does not rule out MI.\n- **Contraindications to fibrinolytics** (when PCI unavailable): prior hemorrhagic stroke ever; ischemic stroke < 3 months; active bleeding; severe uncontrolled hypertension (> 180/110); recent major surgery or trauma < 3 weeks; known intracranial neoplasm.\n- **Cocaine-induced MI**: treat with benzodiazepines and nitroglycerin. Beta-blockers are contraindicated (worsen coronary spasm via unopposed alpha-stimulation).\n- **Secondary prevention after MI**: aspirin + P2Y12 (12 months), statin (high-intensity), ACEi/ARB, beta-blocker. All four unless contraindicated."
+        },
+        {
+          "id": "client_education",
+          "heading": "Patient Education",
+          "kind": "client_education",
+          "body": "**Before discharge after MI:**\n\n**Medications — must know:**\n- Aspirin 81 mg daily: lifelong unless contraindicated. Do NOT stop without provider approval.\n- P2Y12 inhibitor (e.g. clopidogrel, ticagrelor): typically 12 months after stent. Stopping early dramatically increases stent thrombosis risk.\n- Statin (atorvastatin, rosuvastatin): reduces risk of future MI. Take even if cholesterol 'looks normal' — it is cardioprotective beyond cholesterol reduction.\n- Beta-blocker: take consistently; do not stop abruptly (rebound tachycardia/angina)\n- ACE inhibitor or ARB: reduces remodeling and mortality post-MI\n\n**Warning signs — call 911 (US: 911 or local emergency) immediately for:**\n- Any chest pain, pressure, or squeezing not relieved by 1 nitroglycerine tablet after 5 minutes\n- Shortness of breath at rest\n- Fainting or near-fainting\n- Palpitations or racing heart\n\n**Lifestyle:**\n- Smoking cessation: single most impactful modifiable risk factor\n- Cardiac rehabilitation program: reduces mortality by 20–25%, improves function and quality of life\n- Diet: Mediterranean or DASH diet; reduce saturated fat, trans fat, sodium\n- Sexual activity: typically safe 1–2 weeks post-uncomplicated MI (if patient can climb 2 flights of stairs without symptoms)\n- Driving restrictions: typically 1 week after uncomplicated MI; longer after cardiac arrest or surgery — confirm with provider"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- MI = plaque rupture → coronary thrombus → myocardial necrosis. STEMI = complete occlusion. NSTEMI = partial.\n- ECG within 10 minutes; troponin 0h, 1h, 3h. ST elevation → activate cath lab → door-to-balloon ≤ 90 min.\n- MONA-B: Morphine, Oxygen (only if SpO₂ < 90%), Nitrates (hold if inferior/RV MI or SBP < 90), Aspirin chewed, Beta-blocker\n- Hold nitrates in: SBP < 90, inferior/RV MI, PDE-5 inhibitor use. Hold O₂ if SpO₂ ≥ 90%.\n- Red flags post-MI: new systolic murmur (septal rupture or papillary muscle), cardiogenic shock, sudden VF\n- Secondary prevention: aspirin + P2Y12 + statin + ACEi + beta-blocker"
+        }
+      ],
+      "preTest": [
+        {
+          "question": "A client arrives at the ED with crushing chest pain, diaphoresis, and jaw pain for 45 minutes. HR 94, BP 130/84, SpO₂ 97%. A 12-lead ECG shows ST elevation in leads II, III, and aVF. What is the nurse's priority action?",
+          "options": [
+            "Apply oxygen via non-rebreather mask at 15 L/min",
+            "Activate the cardiac catheterization team and administer aspirin 325 mg chewed",
+            "Administer nitroglycerin 0.4 mg sublingual",
+            "Obtain a stat troponin level and wait for results before intervening"
+          ],
+          "correct": 1,
+          "rationale": "ST elevation in II, III, aVF indicates an inferior STEMI. The priority is to activate the cath lab (target door-to-balloon ≤ 90 min) and give aspirin immediately. Oxygen is not indicated if SpO₂ is ≥ 94%. Nitroglycerin is contraindicated in inferior MI (RV involvement risk). Do not delay reperfusion waiting for troponin results."
+        },
+        {
+          "question": "A client with inferior STEMI develops bradycardia of 38 bpm, BP 78/48 mmHg. What medication should the nurse anticipate administering?",
+          "options": [
+            "Nitroglycerin IV to reduce preload",
+            "Furosemide IV to treat suspected pulmonary edema",
+            "IV normal saline and atropine for RV MI with bradycardia/hypotension",
+            "Metoprolol IV to control the heart rate"
+          ],
+          "correct": 2,
+          "rationale": "Inferior STEMI often involves RCA occlusion with right ventricular MI. RV MI is preload-dependent — the RV needs adequate venous return to maintain output. Bradycardia and hypotension are treated with IV fluids (carefully) and atropine. Nitroglycerin and diuretics are contraindicated (reduce preload → catastrophic hypotension). Metoprolol would worsen bradycardia."
+        },
+        {
+          "question": "Which instruction is most important for the nurse to include when teaching a client about dual antiplatelet therapy (DAPT) after coronary stent placement?",
+          "options": [
+            "Take both aspirin and the P2Y12 inhibitor until you feel better, then aspirin only",
+            "Do not stop the P2Y12 inhibitor without consulting your cardiologist — stopping early causes stent thrombosis",
+            "If you develop any bleeding, stop both medications immediately and call the office on Monday",
+            "Ibuprofen can be substituted if you develop stomach irritation from aspirin"
+          ],
+          "correct": 1,
+          "rationale": "Early discontinuation of P2Y12 inhibitors (clopidogrel, ticagrelor, prasugrel) dramatically increases the risk of in-stent thrombosis, which can cause sudden MI and death. Patients must complete the full course (typically 12 months). If bleeding occurs, the patient should call immediately — not wait. NSAIDs like ibuprofen worsen bleeding risk and are not substitutes."
+        }
+      ],
+      "postTest": [
+        {
+          "question": "A nurse is caring for a client who received aspirin and nitroglycerin in the ED for chest pain. The client's pain was 9/10 on arrival and is now 3/10. Repeat ECG shows no ST changes, but troponin I returns at 0.08 ng/mL (normal < 0.04). How should the nurse interpret this?",
+          "options": [
+            "Normal — troponin slightly above normal is not clinically significant",
+            "The client likely has NSTEMI — elevated troponin with symptom relief indicates partial infarction",
+            "The troponin elevation indicates unstable angina",
+            "The troponin is elevated from the physical exertion of chest pain — repeat in 24 hours"
+          ],
+          "correct": 1,
+          "rationale": "An elevated troponin (above the 99th percentile of a normal population) combined with symptoms of acute coronary syndrome and no ST elevation meets the definition of NSTEMI. Unstable angina, by definition, has no troponin elevation. Troponin does not rise from physical exertion or pain alone."
+        },
+        {
+          "question": "A client 30 minutes post-PCI for STEMI develops sudden hypotension (BP 74/40), JVD, muffled heart sounds, and worsening dyspnea. What complication should the nurse suspect?",
+          "options": [
+            "Cardiogenic shock from left ventricular failure",
+            "Cardiac tamponade from pericardial bleeding — a procedural complication",
+            "Tension pneumothorax from central line placement",
+            "Allergic reaction to contrast dye"
+          ],
+          "correct": 1,
+          "rationale": "Beck's triad (hypotension + JVD + muffled heart sounds) following catheterization/PCI suggests cardiac tamponade, which can result from coronary artery perforation or pericardial bleeding as a procedural complication. Emergency pericardiocentesis is required. Cardiogenic shock would not cause JVD + muffled sounds this acutely. Tension pneumothorax causes absent breath sounds + tracheal deviation."
+        },
+        {
+          "question": "A nurse is preparing a client who received fibrinolytic therapy (alteplase) for STEMI to be transferred. Which finding indicates successful reperfusion?",
+          "options": [
+            "Return of ST segments toward baseline + pain resolution + brief accelerated idioventricular rhythm",
+            "ST segments remain elevated but the client states pain is 5/10 instead of 10/10",
+            "Troponin has decreased from the initial level",
+            "Blood pressure has improved from 88/54 to 110/70"
+          ],
+          "correct": 0,
+          "rationale": "Signs of successful reperfusion after fibrinolytics: ST segment resolution (the most specific indicator), resolution or marked reduction of chest pain, and brief reperfusion dysrhythmias (most commonly accelerated idioventricular rhythm — AIVR — which is self-limiting and benign). Troponin rises during reperfusion (washout from necrotic cells) — it does not decrease early. BP improvement alone is not a reperfusion sign."
+        },
+        {
+          "question": "Three days post-MI, a client develops sharp pleuritic chest pain that worsens when lying flat and improves when leaning forward. Temperature is 38.1°C. A pericardial friction rub is heard. What complication should the nurse suspect?",
+          "options": [
+            "Reinfarction — obtain 12-lead ECG stat",
+            "Pulmonary embolism — obtain CT pulmonary angiogram",
+            "Dressler syndrome (post-MI pericarditis)",
+            "Aortic dissection — obtain chest CT immediately"
+          ],
+          "correct": 2,
+          "rationale": "Dressler syndrome is an autoimmune pericarditis occurring 2–10 weeks after MI. Classic features: pleuritic chest pain (worse supine, better leaning forward), friction rub, fever, and elevated ESR/CRP. It is treated with aspirin or NSAIDs plus colchicine. Reinfarction would show new ST elevation. PE would cause tachycardia, dyspnea, and pleuritic pain without friction rub. Aortic dissection presents with tearing back pain."
+        },
+        {
+          "question": "A nurse is assessing a client who had a large anterior MI 2 hours ago. The client suddenly develops an HR of 180 bpm with a wide QRS complex, BP 68/40, and loss of consciousness. What is the nurse's immediate action?",
+          "options": [
+            "Administer amiodarone 150 mg IV push",
+            "Prepare for synchronized cardioversion",
+            "Activate the code team and defibrillate immediately",
+            "Administer adenosine 6 mg IV push"
+          ],
+          "correct": 2,
+          "rationale": "Pulseless ventricular tachycardia or ventricular fibrillation in a hemodynamically unstable (pulseless) client requires immediate defibrillation (unsynchronized). This is pulseless VT — do not delay for medications. Amiodarone is given after defibrillation attempts. Synchronized cardioversion is for stable monomorphic VT with a pulse. Adenosine is for stable SVT, not VT."
+        },
+        {
+          "question": "A client asks the nurse why they need to take atorvastatin 80 mg daily after their MI, since their cholesterol is 'normal.' What is the best response?",
+          "options": [
+            "You are right — if your cholesterol is normal, the statin is not needed",
+            "Statins are prescribed post-MI to prevent clots, not primarily to lower cholesterol",
+            "High-intensity statins reduce cardiovascular events and mortality after MI through multiple mechanisms, including anti-inflammatory and plaque-stabilizing effects, regardless of baseline cholesterol",
+            "The statin prevents kidney damage from the contrast dye used during catheterization"
+          ],
+          "correct": 2,
+          "rationale": "Post-MI, high-intensity statins (atorvastatin 40–80 mg or rosuvastatin 20–40 mg) are a pillar of secondary prevention regardless of baseline LDL. Benefits include LDL reduction, atherosclerotic plaque stabilization, anti-inflammatory effects, and reduced risk of future MI, stroke, and cardiovascular death. These benefits are independent of the starting cholesterol level."
+        },
+        {
+          "question": "A client who had a STEMI 5 days ago is preparing for discharge. Which statement by the client indicates a need for further teaching?",
+          "options": [
+            "I will call 911 immediately if I have chest pain not relieved by one nitroglycerine tablet",
+            "I plan to start the cardiac rehabilitation program next week",
+            "I will stop my clopidogrel if I need a dental extraction — I don't want to bleed",
+            "I will not smoke and will follow a heart-healthy diet"
+          ],
+          "correct": 2,
+          "rationale": "Stopping a P2Y12 inhibitor like clopidogrel without cardiologist guidance is dangerous — stent thrombosis risk is highest in the first 12 months. The patient must be taught to contact the cardiologist before any procedure requiring antiplatelet interruption. The other statements all demonstrate correct understanding of post-MI self-care."
+        }
+      ]
+    }
+  ]
+}

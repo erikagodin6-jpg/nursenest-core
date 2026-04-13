@@ -8,11 +8,17 @@ import {
   CAT_START_THETA,
 } from "@/lib/exams/cat-config";
 import {
+  abilityScoreFromSignals,
+  confidenceLabelFromSignals,
   confidenceLevelFromSe,
   confidenceText,
+  passProbabilityBandFromPct,
+  passProbabilityFromAbility,
   readinessHeadlineFromSignals,
+  readinessLevelFromAbility,
   readinessScoreFromTheta,
   trajectorySummary,
+  weakAreaPriorityFromResults,
 } from "@/lib/exams/cat-readiness";
 import { buildCatBlueprintAdminDiagnostics } from "@/lib/exams/cat-blueprint-mapping-quality";
 import { getExamConfig } from "@/lib/exams/exam-config";
@@ -444,7 +450,36 @@ export function buildCatReport(state: CatAdaptiveState): CatExamReport {
     })
     .sort((a, b) => b.total - a.total);
 
-  const weakAreas = categoryBreakdown.filter((c) => c.strength === "weak").map((c) => c.category);
+  const weakAreaPriority = weakAreaPriorityFromResults(state.results);
+  const weakAreaPriorityLabeled = weakAreaPriority.map((entry) => ({
+    category: examCfg?.categories.find((c) => c.id === entry.categoryKey)?.label ?? entry.categoryKey,
+    wrongCount: entry.wrongCount,
+    averageDifficulty: entry.averageDifficulty,
+    priorityScore: entry.priorityScore,
+  }));
+  const weakAreas = weakAreaPriorityLabeled.map((entry) => entry.category).slice(0, 5);
+
+  const abilityScore = abilityScoreFromSignals(state.theta, state.results);
+  const trajectory = trajectorySummary(state.results.map((r) => r.correct));
+  const consistency = (() => {
+    if (state.results.length < 3) return 0.5;
+    let flips = 0;
+    for (let i = 1; i < state.results.length; i++) {
+      if (state.results[i]!.correct !== state.results[i - 1]!.correct) flips += 1;
+    }
+    return Math.max(0, Math.min(1, 1 - flips / Math.max(1, state.results.length - 1)));
+  })();
+  const readinessLevel = readinessLevelFromAbility(abilityScore, state.passingThreshold ?? 0);
+  const confidenceLevelLabel = confidenceLabelFromSignals({
+    se: state.se,
+    answeredCount: totalQuestions,
+    abilityScore,
+    passingThreshold: state.passingThreshold ?? 0,
+    trend: trajectory,
+    consistency,
+  });
+  const passProbability = passProbabilityFromAbility(abilityScore, state.passingThreshold ?? 0, confidenceLevelLabel);
+  const passProbabilityBand = passProbabilityBandFromPct(passProbability);
 
   const suggestedNextSteps: string[] = [];
   if (weakAreas.length) {
@@ -480,7 +515,6 @@ export function buildCatReport(state: CatAdaptiveState): CatExamReport {
 
   const readinessScore = readinessScoreFromTheta(state.theta);
   const confidenceLevel = confidenceLevelFromSe(state.se);
-  const trajectory = trajectorySummary(state.results.map((r) => r.correct));
   const readinessHeadline = readinessHeadlineFromSignals({
     readinessScore,
     confidenceLevel,
@@ -502,6 +536,12 @@ export function buildCatReport(state: CatAdaptiveState): CatExamReport {
 
   return {
     decision,
+    result: decision === "pass" ? "PASS" : decision === "fail" ? "FAIL" : "BORDERLINE",
+    readinessLevel,
+    abilityScore,
+    confidenceLevelLabel,
+    passProbability,
+    passProbabilityBand,
     theta: state.theta,
     se: state.se,
     totalQuestions,
@@ -509,6 +549,7 @@ export function buildCatReport(state: CatAdaptiveState): CatExamReport {
     stoppedReason: reportStoppedReason(state.stoppedReason),
     categoryBreakdown,
     weakAreas,
+    weakAreaPriority: weakAreaPriorityLabeled.slice(0, 5),
     suggestedNextSteps,
     readinessScore,
     confidenceLevel,

@@ -1,0 +1,472 @@
+{
+  "version": 1,
+  "description": "Phase 2 – Electrolytes and Pharmacology: potassium, sodium, anticoagulants, antibiotics, insulin for CA-RN and US-RN",
+  "lessons": [
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-potassium-imbalance",
+      "previewSectionCount": 2,
+      "seoTitle": "Potassium imbalance nursing: hypokalemia, hyperkalemia & NCLEX-RN Canada",
+      "seoDescription": "Complete RN lesson on potassium imbalances: ECG changes, causes, nursing interventions, IV potassium safety, Kayexalate, and Canadian NCLEX-RN clinical priorities.",
+      "sections": [
+        {
+          "id": "introduction",
+          "heading": "Overview",
+          "kind": "introduction",
+          "body": "**Potassium (K⁺)** is the predominant intracellular cation (normal: 3.5–5.0 mEq/L in serum). Potassium imbalances — **hypokalemia** (< 3.5 mEq/L) and **hyperkalemia** (> 5.0 mEq/L) — are among the most dangerous electrolyte disorders because both extremes cause life-threatening cardiac dysrhythmias.\n\nPotassium is critical for maintaining the resting membrane potential of excitable cells (myocardium, skeletal muscle, neurons). The Na/K-ATPase pump maintains intracellular K⁺ at ~150 mEq/L versus extracellular ~4 mEq/L. This steep gradient drives the resting membrane potential (approximately –70 mV), which determines excitability. Any significant shift in serum K⁺ alters this gradient and disturbs electrical activity.\n\nFor NCLEX-RN: know the ECG changes for each, understand medication causes, know IV potassium safety rules, and recognize the clinical sequelae."
+        },
+        {
+          "id": "pathophysiology_overview",
+          "heading": "Pathophysiology",
+          "kind": "pathophysiology_overview",
+          "body": "**Hypokalemia mechanism.** Low serum K⁺ increases the resting membrane potential (hyperpolarization) — cells become harder to depolarize. In skeletal muscle: weakness, cramping, paralysis. In the heart: the ECG shows characteristic changes (flattened T waves, prominent U waves, ST depression) and predisposes to atrial and ventricular dysrhythmias, particularly dangerous in patients on digoxin (hypokalemia dramatically increases digoxin toxicity by increasing myocardial sensitivity). Causes: loop and thiazide diuretics (most common pharmacologic cause), vomiting (H⁺ loss → alkalosis → K⁺ shifts into cells), diarrhea (GI K⁺ loss), nasogastric suctioning, inadequate dietary intake, hyperaldosteronism, alkalosis.\n\n**Hyperkalemia mechanism.** High serum K⁺ depolarizes the resting membrane potential — cells become easier to trigger but then refractory (less responsive to repeated stimuli). The heart is particularly sensitive: peaked T waves appear early, then PR prolongation, widened QRS, sine wave pattern, ventricular fibrillation, and asystole. Causes: renal failure (K⁺ cannot be excreted), potassium-sparing diuretics (spironolactone), ACE inhibitors/ARBs (reduce aldosterone → reduce K⁺ excretion), tissue destruction (rhabdomyolysis, tumor lysis syndrome, massive hemolysis, burns — intracellular K⁺ released), acidosis (H⁺ enters cells, K⁺ exits), excessive K⁺ supplementation, blood transfusions (stored blood contains elevated K⁺)."
+        },
+        {
+          "id": "signs_symptoms",
+          "heading": "Signs & Symptoms",
+          "kind": "signs_symptoms",
+          "body": "**Hypokalemia (K⁺ < 3.5 mEq/L):**\n- Muscle weakness (begins in legs; ascending weakness in severe cases)\n- Muscle cramps, leg cramps\n- Fatigue\n- Constipation, paralytic ileus (smooth muscle affected)\n- Polyuria (hypokalemia interferes with ADH → concentrating ability impaired)\n- ECG changes: flat or inverted T waves, prominent U waves (after T wave), ST depression, prolonged QU interval\n- Dysrhythmias: PVCs, paroxysmal atrial tachycardia, ventricular tachycardia/fibrillation\n- Life-threatening K⁺ < 2.5: paralysis, respiratory arrest\n\n**Hyperkalemia (K⁺ > 5.0 mEq/L):**\n- Muscle weakness (similar pattern to hypokalemia — both cause weakness)\n- Paresthesias: tingling, numbness (typically hands, feet, around mouth)\n- Nausea, vomiting, diarrhea\n- Abdominal cramping\n- ECG changes (in order of progression):\n  1. Tall, peaked (tented) T waves — first ECG sign\n  2. Prolonged PR interval\n  3. Widened QRS complex\n  4. Absent P waves\n  5. Sine wave pattern\n  6. Ventricular fibrillation / asystole\n- Dysrhythmias: bradycardia, heart blocks, VF, asystole (K⁺ > 6.5 is a cardiac emergency)"
+        },
+        {
+          "id": "red_flags",
+          "heading": "Red Flags / Clinical Deterioration",
+          "kind": "red_flags",
+          "body": "**Escalate immediately:**\n\n**Hypokalemia:**\n- K⁺ < 2.5 mEq/L: risk for dangerous dysrhythmias and respiratory muscle weakness → notify provider, prepare for IV K⁺\n- New dysrhythmias in hypokalemic patient: may be K⁺-mediated — do NOT give more digoxin\n- Patient on digoxin with K⁺ < 3.5: digoxin toxicity risk even at 'therapeutic' levels\n- Ascending muscle weakness to trunk/respiratory muscles: prepare for respiratory support\n\n**Hyperkalemia:**\n- K⁺ > 6.0 mEq/L: cardiac risk — continuous ECG monitoring, emergency treatment\n- ECG shows peaked T waves, widened QRS, or sine wave pattern: life-threatening — prepare calcium gluconate (IV), sodium bicarbonate, insulin + D50, Kayexalate\n- K⁺ > 6.5 with ECG changes: cardiac emergency — may require dialysis"
+        },
+        {
+          "id": "labs_diagnostics",
+          "heading": "Diagnostics / Labs",
+          "kind": "labs_diagnostics",
+          "body": "**Key labs:**\n- **Serum K⁺**: normal 3.5–5.0 mEq/L\n- **Serum Mg²⁺**: hypomagnesemia causes refractory hypokalemia — replace magnesium first if low\n- **Serum Na⁺, Cl⁻, HCO₃⁻ (CO₂)**: assess acid-base (alkalosis → hypokalemia; acidosis → hyperkalemia)\n- **BUN, creatinine**: renal function — failure → hyperkalemia\n- **Urine K⁺**: differentiates renal vs GI loss\n- **Digoxin level**: if applicable\n- **ABG**: pH affects K⁺ distribution\n\n**ECG monitoring:**\n- Continuous telemetry for K⁺ < 3.0 or > 5.5\n- Identify: U waves, peaked T waves, widened QRS — know the sequence"
+        },
+        {
+          "id": "nursing_assessment_interventions",
+          "heading": "Nursing Responsibilities",
+          "kind": "nursing_assessment_interventions",
+          "body": "**Hypokalemia treatment and nursing care:**\n- Oral replacement: KCl liquid or tablets with food/water (reduces GI irritation) for mild hypokalemia\n- **IV potassium (HIGH-ALERT MEDICATION)**:\n  - NEVER IV push — cardiac arrest risk\n  - Maximum rate: 10–20 mEq/hr via peripheral IV (40 mEq/hr via central line with cardiac monitoring in ICU)\n  - Maximum concentration peripheral: 40 mEq/100 mL (burns veins — dilute more if possible)\n  - Must dilute: ALWAYS dilute before infusing — never give concentrated K⁺ undiluted\n  - Infuse via pump only — NOT gravity\n  - Monitor ECG during rapid infusion\n  - Assess IV site for phlebitis (K⁺ is irritating)\n  - Recheck K⁺ level 1–2 hours after replacement\n- Correct magnesium first: hypomagnesemia causes refractory hypokalemia\n- Dietary sources of K⁺: bananas, oranges, potatoes, spinach, tomatoes\n\n**Hyperkalemia treatment (emergency sequence):**\n1. **Calcium gluconate IV**: does NOT lower K⁺ — temporarily stabilizes myocardial cell membrane and protects the heart while other measures work. Give first if ECG changes present.\n2. **Regular insulin + D50W IV**: drives K⁺ into cells within 30 minutes; glucose prevents hypoglycemia; monitor blood glucose q1h\n3. **Sodium bicarbonate IV**: creates alkalosis → drives K⁺ into cells (less reliable in renal failure)\n4. **Inhaled albuterol**: drives K⁺ into cells (additive with insulin)\n5. **Sodium polystyrene sulfonate (Kayexalate)**: exchange resin — removes K⁺ from GI tract; takes hours; give with sorbitol to prevent constipation\n6. **Furosemide**: increases renal K⁺ excretion if kidneys are functioning\n7. **Dialysis**: definitive removal for severe hyperkalemia with renal failure\n\n**Medication hold decisions (NCLEX safety):**\n- Hold K⁺-sparing diuretics (spironolactone) if K⁺ > 5.0 — notify provider\n- Hold ACE inhibitors if K⁺ > 5.5 — notify provider\n- Hold digoxin if K⁺ < 3.5 — hypokalemia causes toxicity"
+        },
+        {
+          "id": "clinical_pearls",
+          "heading": "Clinical Pearls",
+          "kind": "clinical_pearls",
+          "body": "- **Both hypo and hyperkalemia cause muscle weakness** — you cannot tell them apart by symptoms alone. Always check the serum level.\n- **IV potassium is never given undiluted or IV push** — this is a high-alert medication and a frequently tested NCLEX safety priority.\n- **Magnesium before potassium**: if Mg²⁺ is low and K⁺ is low, replacing K⁺ without Mg²⁺ first is ineffective — K⁺ will continue to waste.\n- **Peaked T waves** = hyperkalemia. **U waves** = hypokalemia. Know the difference.\n- **Digoxin + hypokalemia = toxicity**: low K⁺ competes with digoxin for the Na/K-ATPase, but digoxin also inhibits the pump — the two effects are additive and can cause fatal arrhythmias at normally therapeutic digoxin levels.\n- **Kayexalate works slowly** — hours to days. It is not for acute life-threatening hyperkalemia. Calcium gluconate works in minutes and is given first."
+        },
+        {
+          "id": "client_education",
+          "heading": "Patient Education",
+          "kind": "client_education",
+          "body": "**For patients at risk for hypokalemia (on diuretics):**\n- Eat potassium-rich foods daily: bananas, oranges, melon, tomatoes, potatoes, spinach, dairy\n- Report: muscle cramps, leg weakness, palpitations, constipation\n- Take oral potassium supplements exactly as prescribed — do not skip doses; take with food and full glass of water\n- Extended-release K⁺ tablets: do not crush or chew — may cause esophageal burns\n\n**For patients at risk for hyperkalemia (renal failure, ACEi, spironolactone):**\n- Limit high-potassium foods as instructed by dietitian\n- Avoid salt substitutes (most contain KCl)\n- Report: tingling sensations, unusual fatigue, palpitations\n- Never take extra doses of potassium supplements unless specifically ordered"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- Normal K⁺: 3.5–5.0 mEq/L. Both imbalances cause cardiac dysrhythmias and muscle weakness.\n- Hypokalemia: flat T waves + U waves + weakness + dysrhythmias. Causes: diuretics, vomiting, diarrhea, alkalosis.\n- Hyperkalemia: peaked T waves → widened QRS → VF/asystole. Causes: renal failure, ACEi, spironolactone, acidosis, cell lysis.\n- IV K⁺ safety: NEVER undiluted, NEVER IV push, NEVER > 10–20 mEq/hr via peripheral, infuse via pump only.\n- Hyperkalemia emergency sequence: Calcium gluconate (membrane stabilizer) → Insulin/D50 → Bicarb → Kayexalate → Dialysis.\n- Correct Mg²⁺ before K⁺; check digoxin level if K⁺ is low"
+        }
+      ],
+      "preTest": [
+        {
+          "question": "A client's potassium level is 2.8 mEq/L. The nurse is about to administer the prescribed digoxin 0.125 mg. What should the nurse do?",
+          "options": [
+            "Give the digoxin as ordered — it is a therapeutic dose",
+            "Hold the digoxin, notify the provider, and initiate potassium replacement as ordered",
+            "Double the digoxin dose to compensate for reduced effectiveness in hypokalemia",
+            "Administer the digoxin and recheck potassium in 4 hours"
+          ],
+          "correct": 1,
+          "rationale": "Hypokalemia (K⁺ < 3.5) dramatically increases the risk of digoxin toxicity by increasing myocardial sensitivity. Digoxin should be held, the provider notified, and potassium replacement initiated before giving digoxin. Even 'therapeutic' digoxin levels can cause fatal dysrhythmias in a hypokalemic patient."
+        },
+        {
+          "question": "A nurse is preparing to administer prescribed IV potassium chloride 40 mEq. Which action is correct?",
+          "options": [
+            "Administer IV push over 2 minutes to quickly raise the level",
+            "Add to IV bag and infuse via pump at the ordered rate; do not exceed 10–20 mEq/hr via peripheral",
+            "Mix with dextrose water and push slowly over 5 minutes",
+            "Administer undiluted via the central line at 60 mEq/hr"
+          ],
+          "correct": 1,
+          "rationale": "IV potassium is a high-alert medication. It must always be diluted in IV fluid and administered via infusion pump. It is NEVER given IV push (causes immediate cardiac arrest). Maximum rate via peripheral IV is 10–20 mEq/hr. Via central line with cardiac monitoring, up to 40 mEq/hr may be permitted — but this is an ICU setting with continuous ECG."
+        }
+      ],
+      "postTest": [
+        {
+          "question": "A patient with end-stage renal disease has a potassium of 6.8 mEq/L and ECG shows peaked T waves and widening QRS. What is the nurse's first priority intervention?",
+          "options": [
+            "Administer sodium polystyrene sulfonate (Kayexalate) orally",
+            "Administer calcium gluconate IV as ordered to stabilize the myocardial membrane",
+            "Initiate hemodialysis immediately",
+            "Restrict dietary potassium"
+          ],
+          "correct": 1,
+          "rationale": "In acute hyperkalemia with ECG changes (peaked T waves, wide QRS), the immediate priority is to protect the heart with calcium gluconate IV, which stabilizes the myocardial membrane within minutes. Kayexalate removes K⁺ but takes hours. Dialysis is definitive but not immediately available. Dietary restriction is a long-term measure."
+        },
+        {
+          "question": "Which ECG finding is most characteristic of hypokalemia?",
+          "options": [
+            "Tall, peaked (tented) T waves",
+            "Absent P waves",
+            "Prominent U waves and flattened T waves",
+            "Shortened QT interval"
+          ],
+          "correct": 2,
+          "rationale": "Hypokalemia characteristically produces prominent U waves (a positive deflection after the T wave) and flattened or inverted T waves on ECG. Peaked T waves are characteristic of hyperkalemia. Absent P waves suggest hyperkalemia (K⁺ > 7). Shortened QT is seen with hypercalcemia."
+        },
+        {
+          "question": "A nurse is educating a patient who is starting spironolactone and lisinopril for heart failure. What dietary teaching is most important?",
+          "options": [
+            "Increase consumption of bananas and orange juice to prevent hypokalemia",
+            "Limit high-potassium foods and avoid salt substitutes — both medications raise serum potassium",
+            "Drink extra fluids to prevent the dehydration caused by both medications",
+            "Restrict all fruits and vegetables to prevent hyperkalemia"
+          ],
+          "correct": 1,
+          "rationale": "Spironolactone (potassium-sparing diuretic) and lisinopril (ACE inhibitor) both raise serum potassium. Together, they significantly increase hyperkalemia risk. Patients should limit high-potassium foods and avoid salt substitutes, which contain potassium chloride. Restricting all fruits/vegetables is unnecessarily restrictive — specific guidance from a dietitian is appropriate."
+        }
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-anticoagulants",
+      "previewSectionCount": 2,
+      "seoTitle": "Anticoagulants nursing: heparin, warfarin, DOACs, HIT & NCLEX-RN Canada",
+      "seoDescription": "Complete RN lesson on anticoagulant therapy: UFH vs LMWH, warfarin INR monitoring, DOACs, bleeding management, HIT, reversal agents, and Canadian NCLEX-RN clinical priorities.",
+      "sections": [
+        {
+          "id": "introduction",
+          "heading": "Overview",
+          "kind": "introduction",
+          "body": "**Anticoagulants** ('blood thinners') prevent thrombus formation or extension and are among the highest-risk medications in clinical practice. They are used to treat and prevent VTE (DVT, PE), atrial fibrillation (stroke prevention), ACS, mechanical heart valves, and post-procedure anticoagulation.\n\nAnticoagulants do not dissolve existing clots — they prevent further clot growth and new clot formation. Three main classes:\n- **Unfractionated heparin (UFH)**: IV/SQ, monitored by aPTT, reversed by protamine sulfate\n- **Low molecular weight heparin (LMWH)**: enoxaparin, SQ only, monitored by anti-Xa in special populations, partially reversed by protamine\n- **Warfarin (Coumadin)**: oral, monitored by INR (target 2–3 for most indications), slow onset, reversed by vitamin K + FFP\n- **Direct oral anticoagulants (DOACs)**: rivaroxaban, apixaban, dabigatran — no routine monitoring, specific reversal agents available\n\nFor NCLEX-RN: monitoring parameters, bleeding precautions, HIT recognition, and reversal agents are the highest-yield content."
+        },
+        {
+          "id": "pathophysiology_overview",
+          "heading": "Mechanisms of Action",
+          "kind": "pathophysiology_overview",
+          "body": "**Unfractionated Heparin (UFH).** UFH binds antithrombin III (AT-III), a naturally occurring coagulation inhibitor, and dramatically accelerates its ability to inactivate thrombin (Factor IIa) and Factor Xa. The result is prolonged aPTT (activated partial thromboplastin time). UFH has a short half-life (60–90 minutes), is immediately reversible with protamine sulfate, and is used when rapid anticoagulation reversal is needed (surgery, bleeding). Monitored by aPTT (therapeutic goal: 60–100 seconds, or 1.5–2.5× the control value — always follow your institution's protocol).\n\n**Low Molecular Weight Heparin (LMWH — enoxaparin).** LMWH primarily inhibits Factor Xa with minimal effect on thrombin. More predictable pharmacokinetics allow weight-based dosing without routine aPTT monitoring. Monitored with anti-Xa level in special populations: obese patients (BMI > 40), pregnant patients, and significant renal impairment (dose-adjust when CrCl < 30 mL/min). Half-life 4–6 hours. Only partially reversed by protamine.\n\n**Warfarin.** Inhibits vitamin K epoxide reductase → blocks activation of vitamin K-dependent clotting factors (II, VII, IX, X) and anticoagulant proteins C and S. Slow onset (3–5 days to reach therapeutic INR). INR monitoring required; target INR 2–3 for AF, DVT/PE, bioprosthetic valves; 2.5–3.5 for mechanical valves. Reversed by: vitamin K (phytonadione — slow, hours to days), Fresh Frozen Plasma (FFP — immediate), or 4-factor PCC (Kcentra — fast, for emergency bleeding).\n\n**DOACs (Direct Oral Anticoagulants):** rivaroxaban and apixaban inhibit Factor Xa directly; dabigatran inhibits thrombin directly. Predictable effect eliminates routine INR monitoring. Reversal: andexanet alfa (for rivaroxaban/apixaban); idarucizumab (for dabigatran). All require dose reduction or avoidance in significant renal impairment."
+        },
+        {
+          "id": "signs_symptoms",
+          "heading": "Bleeding Complications — Recognition",
+          "kind": "signs_symptoms",
+          "body": "**Major bleeding (requires immediate intervention):**\n- Intracranial bleeding: sudden severe headache, altered mental status, focal neurological deficits — most feared complication\n- GI bleeding: hematemesis (vomiting blood), melena (black tarry stools), hematochezia (bright red blood per rectum)\n- Retroperitoneal bleeding: severe back/flank pain, falling hemoglobin without visible source\n- Frank hematuria: visible blood in urine (distinguish from expected microscopic hematuria)\n\n**Minor bleeding / monitoring:**\n- Gum bleeding with tooth brushing\n- Easy bruising, prolonged bleeding from minor cuts\n- Petechiae or purpura (with LMWH: also consider HIT)\n- Longer-than-expected bleeding from IV sites or venipuncture\n\n**HIT (Heparin-Induced Thrombocytopenia):**\n- Platelet drop > 50% from baseline, typically 4–10 days after UFH initiation (may be 1–3 days if prior heparin exposure)\n- Paradoxically causes THROMBOSIS, not just bleeding\n- Must stop all heparin products (including line flushes) immediately\n- Replace with direct thrombin inhibitor (argatroban) or fondaparinux\n- Do NOT give warfarin until platelets have recovered (risk of warfarin-induced skin necrosis in HIT)"
+        },
+        {
+          "id": "red_flags",
+          "heading": "Red Flags / Clinical Deterioration",
+          "kind": "red_flags",
+          "body": "**Stop anticoagulant and notify provider immediately:**\n- **Active major bleeding**: GI bleed, intracranial bleed, retroperitoneal bleed, falling hemoglobin without visible source\n- **aPTT > 150 seconds**: supratherapeutic UFH → hold infusion, recheck in 4 hours, contact provider for dose adjustment\n- **INR > 4**: significantly supratherapeutic warfarin → hold dose, assess for bleeding, provider notification\n- **Platelet drop > 50% on heparin**: suspect HIT — stop all heparin, notify provider, do NOT restart heparin\n- **Sudden neurological change**: rule out intracranial hemorrhage\n- **Severe HTN (SBP > 180)**: bleeding risk increases dramatically — hold anticoagulant until BP controlled\n- **Fall in anticoagulated patient**: assess for head injury, intracranial bleeding risk"
+        },
+        {
+          "id": "labs_diagnostics",
+          "heading": "Monitoring Parameters",
+          "kind": "labs_diagnostics",
+          "body": "**UFH:**\n- aPTT: draw 6 hours after initiation or dose change\n- Therapeutic goal: 60–100 seconds (or 1.5–2.5× control — check your institutional protocol)\n- Supratherapeutic: aPTT > 150 → reduce rate or hold\n- Platelet count: baseline, then every 2–3 days on heparin (HIT surveillance)\n\n**LMWH (Enoxaparin):**\n- No routine aPTT monitoring in most patients (predictable pharmacokinetics)\n- Anti-Xa level: check in obese, pregnant, or renal impairment patients (draw 4 hours after dose)\n- Platelet count: monitor for HIT (less common with LMWH than UFH, but still possible)\n- Creatinine/eGFR: dose reduction required if CrCl < 30 mL/min\n\n**Warfarin (INR):**\n- Target INR 2–3 (most indications); 2.5–3.5 (mechanical mitral valve)\n- Draw INR daily during initiation; every 1–4 weeks when stable\n- Bridge heparin: overlap until INR 2–3 for 2 consecutive days, THEN stop heparin\n- Factors increasing INR: antibiotics (kill gut bacteria that produce vitamin K), amiodarone, NSAIDs, alcohol\n- Factors decreasing INR: vitamin K-rich foods (sudden increase), rifampin, carbamazepine\n\n**DOACs:**\n- No routine monitoring required\n- Renal function (creatinine, CrCl): dose adjustment or contraindication in renal failure\n- Dabigatran: contraindicated if CrCl < 15 mL/min"
+        },
+        {
+          "id": "nursing_assessment_interventions",
+          "heading": "Nursing Responsibilities",
+          "kind": "nursing_assessment_interventions",
+          "body": "**Before any anticoagulant:**\n- Verify indication and correct agent\n- Check baseline aPTT, INR, CBC, creatinine, and platelet count\n- Assess for bleeding risk: active GI ulcer, recent surgery, intracranial pathology, thrombocytopenia\n- Confirm allergy history (heparin: pork-derived; some patients with HIT history)\n\n**Administration safety — enoxaparin (LMWH):**\n- Subcutaneous ONLY — NEVER IM (causes hematoma)\n- Preferred site: anterolateral or posterolateral abdominal wall (at least 5 cm from navel)\n- Do NOT aspirate before injection\n- Apply gentle pressure after injection — do NOT massage (increases bruising)\n- Rotate injection sites — document location\n- Do NOT remove air bubble from prefilled syringe (ensures full dose delivery)\n\n**Administration safety — warfarin:**\n- Give at the same time every day (evening preferred to allow same-day INR-to-dose adjustment)\n- Do NOT give if INR > 4 without provider order\n- Assess and document bleeding signs at every assessment\n\n**Bleeding precautions (all anticoagulants):**\n- Soft toothbrush; electric razor (not safety razor)\n- Fall precautions: call light, bed in lowest position, non-slip footwear\n- Avoid IM injections when possible; if needed, apply prolonged pressure to site\n- Avoid NSAIDs (increased bleeding risk)\n- Apply firm pressure to any bleeding site for at least 5–10 minutes\n- Monitor: stool color (guaiac testing as ordered), urine color, neurological status\n\n**Reversal agents (know these for NCLEX):**\n- UFH: protamine sulfate IV (1 mg neutralizes ~100 units heparin)\n- LMWH: protamine sulfate (only partial reversal)\n- Warfarin: vitamin K (slow) + FFP or 4-factor PCC (fast, for emergency)\n- Rivaroxaban/Apixaban: andexanet alfa (AnexXa)\n- Dabigatran: idarucizumab (Praxbind)"
+        },
+        {
+          "id": "clinical_pearls",
+          "heading": "Clinical Pearls",
+          "kind": "clinical_pearls",
+          "body": "- **HIT paradox**: platelet drop + MORE clotting (not bleeding). Stop ALL heparin including flushes and heparin-coated catheters immediately.\n- **Warfarin's drug interactions are enormous**: antibiotics, amiodarone, antifungals all interact. NCLEX often tests INR changes with medication changes.\n- **Enoxaparin SQ only**: this is a high-frequency NCLEX error topic. Never administer IM.\n- **Warfarin bridge**: heparin must overlap until INR 2–3 for 2 consecutive days. Stopping heparin before INR is therapeutic = DVT/PE risk.\n- **Dietary vitamin K consistency**: patients on warfarin should NOT avoid leafy greens — they should eat a consistent amount. Wild swings in vitamin K intake destabilize INR.\n- **Hold warfarin before procedures**: typically hold 5 days before elective surgery; consult provider for individual decision based on clot risk."
+        },
+        {
+          "id": "client_education",
+          "heading": "Patient Education",
+          "kind": "client_education",
+          "body": "**Warfarin patient education:**\n- Take at the same time every day; do not miss doses or double up if missed — call provider\n- INR monitoring schedule: understand why regular blood tests are needed\n- Dietary consistency: eat the same amount of vitamin K foods weekly; large changes affect INR. Dark leafy greens (spinach, kale, broccoli) are high in vitamin K — do not avoid them, just be consistent.\n- Avoid: cranberry juice (increases INR), grapefruit (with some statins/meds), alcohol (unstable INR + bleeding risk)\n- Medication interactions: always tell all providers and pharmacists you are on warfarin before adding any new medication\n\n**Bleeding precautions for all anticoagulated patients:**\n- Use soft-bristle toothbrush; electric razor\n- Report immediately: unusual bruising, blood in urine/stool, prolonged bleeding from cuts, headache/dizziness (may indicate intracranial bleed)\n- Carry wallet card or wear medical alert bracelet identifying anticoagulant use\n- Inform all dentists and surgeons before any procedures"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- UFH: IV/SQ, monitor aPTT (goal 60–100 s), reverse with protamine sulfate\n- LMWH (enoxaparin): SQ ONLY, no routine monitoring, anti-Xa for special populations, reduce dose in renal failure\n- Warfarin: oral, monitor INR (goal 2–3), slow onset → bridge with heparin, reversed by vit K + FFP\n- DOACs: no routine monitoring, renal function required, specific reversal agents (andexanet alfa for Xa inhibitors; idarucizumab for dabigatran)\n- HIT: platelet drop > 50% on heparin → stop ALL heparin, causes thrombosis, switch to argatroban\n- Bleeding precautions: soft brush, electric razor, fall prevention, apply pressure, avoid NSAIDs"
+        }
+      ],
+      "preTest": [
+        {
+          "question": "A client on heparin infusion for DVT has an aPTT of 175 seconds. The nurse's priority action is:",
+          "options": [
+            "Continue the infusion — the goal is to keep aPTT above normal",
+            "Hold the infusion and notify the provider — aPTT is supratherapeutic with increased bleeding risk",
+            "Increase the infusion rate to dilute the heparin",
+            "Draw blood cultures to rule out sepsis affecting coagulation"
+          ],
+          "correct": 1,
+          "rationale": "Therapeutic aPTT is typically 60–100 seconds (1.5–2.5× normal). An aPTT of 175 seconds is significantly supratherapeutic, indicating over-anticoagulation with high bleeding risk. The nurse should hold the infusion and notify the provider for dose adjustment. Increasing the rate would worsen the problem."
+        }
+      ],
+      "postTest": [
+        {
+          "question": "A client on UFH for 6 days has a platelet count that has decreased from 220,000 to 88,000/mm³. What complication should the nurse suspect?",
+          "options": [
+            "Immune thrombocytopenic purpura (ITP)",
+            "Heparin-induced thrombocytopenia (HIT) — a prothrombotic immune complication",
+            "Thrombotic thrombocytopenic purpura (TTP)",
+            "Disseminated intravascular coagulation (DIC)"
+          ],
+          "correct": 1,
+          "rationale": "HIT occurs in 1–5% of patients on UFH. It presents with a platelet drop of > 50% (typically days 4–10 of heparin therapy — or sooner with prior heparin exposure). HIT causes thrombosis, not bleeding. All heparin must be stopped immediately and replaced with a direct thrombin inhibitor (argatroban). Warfarin must NOT be started until platelets recover."
+        },
+        {
+          "question": "A client on warfarin for atrial fibrillation has an INR of 5.2. She reports no active bleeding. What should the nurse do first?",
+          "options": [
+            "Administer protamine sulfate IV immediately",
+            "Hold the next warfarin dose and notify the provider for further management",
+            "Give vitamin K 10 mg IV push to reverse warfarin immediately",
+            "Continue warfarin as prescribed — INR of 5 is within therapeutic range"
+          ],
+          "correct": 1,
+          "rationale": "An INR of 5.2 is significantly above the therapeutic range (2–3). With no active bleeding, the first step is to hold the next dose and notify the provider — they may order vitamin K orally or observe. IV vitamin K reversal is reserved for significant or life-threatening bleeding. Protamine sulfate reverses heparin, not warfarin. INR 5.2 is NOT therapeutic."
+        },
+        {
+          "question": "A nurse is administering enoxaparin 80 mg subcutaneous injection. Which action by the nurse is correct?",
+          "options": [
+            "Aspirate before injecting to confirm needle is not in a blood vessel",
+            "Inject into the deltoid muscle for fastest absorption",
+            "Inject into the anterolateral abdominal wall without aspiration; apply gentle pressure afterward",
+            "Massage the injection site vigorously to promote absorption"
+          ],
+          "correct": 2,
+          "rationale": "Correct enoxaparin technique: subcutaneous injection into the anterolateral or posterolateral abdominal wall. Do NOT aspirate (SQ injection does not require aspiration). Do NOT massage (increases bruising). Do NOT inject IM (causes hematoma). The deltoid is an IM site — not appropriate for enoxaparin."
+        }
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "us-rn-potassium-imbalance",
+      "previewSectionCount": 2,
+      "seoTitle": "Potassium imbalance nursing: hypokalemia, hyperkalemia & NCLEX-RN Canada",
+      "seoDescription": "Complete RN lesson on potassium imbalances: ECG changes, causes, nursing interventions, IV potassium safety, Kayexalate, and NCLEX-RN clinical priorities.",
+      "sections": [
+        {
+          "id": "introduction",
+          "heading": "Overview",
+          "kind": "introduction",
+          "body": "**Potassium (K⁺)** is the predominant intracellular cation (normal: 3.5–5.0 mEq/L in serum). Potassium imbalances — **hypokalemia** (< 3.5 mEq/L) and **hyperkalemia** (> 5.0 mEq/L) — are among the most dangerous electrolyte disorders because both extremes cause life-threatening cardiac dysrhythmias.\n\nPotassium is critical for maintaining the resting membrane potential of excitable cells (myocardium, skeletal muscle, neurons). The Na/K-ATPase pump maintains intracellular K⁺ at ~150 mEq/L versus extracellular ~4 mEq/L. This steep gradient drives the resting membrane potential (approximately –70 mV), which determines excitability. Any significant shift in serum K⁺ alters this gradient and disturbs electrical activity.\n\nFor NCLEX-RN: know the ECG changes for each, understand medication causes, know IV potassium safety rules, and recognize the clinical sequelae."
+        },
+        {
+          "id": "pathophysiology_overview",
+          "heading": "Pathophysiology",
+          "kind": "pathophysiology_overview",
+          "body": "**Hypokalemia mechanism.** Low serum K⁺ increases the resting membrane potential (hyperpolarization) — cells become harder to depolarize. In skeletal muscle: weakness, cramping, paralysis. In the heart: the ECG shows characteristic changes (flattened T waves, prominent U waves, ST depression) and predisposes to atrial and ventricular dysrhythmias, particularly dangerous in patients on digoxin (hypokalemia dramatically increases digoxin toxicity by increasing myocardial sensitivity). Causes: loop and thiazide diuretics (most common pharmacologic cause), vomiting (H⁺ loss → alkalosis → K⁺ shifts into cells), diarrhea (GI K⁺ loss), nasogastric suctioning, inadequate dietary intake, hyperaldosteronism, alkalosis.\n\n**Hyperkalemia mechanism.** High serum K⁺ depolarizes the resting membrane potential — cells become easier to trigger but then refractory (less responsive to repeated stimuli). The heart is particularly sensitive: peaked T waves appear early, then PR prolongation, widened QRS, sine wave pattern, ventricular fibrillation, and asystole. Causes: renal failure (K⁺ cannot be excreted), potassium-sparing diuretics (spironolactone), ACE inhibitors/ARBs (reduce aldosterone → reduce K⁺ excretion), tissue destruction (rhabdomyolysis, tumor lysis syndrome, massive hemolysis, burns — intracellular K⁺ released), acidosis (H⁺ enters cells, K⁺ exits), excessive K⁺ supplementation, blood transfusions (stored blood contains elevated K⁺)."
+        },
+        {
+          "id": "signs_symptoms",
+          "heading": "Signs & Symptoms",
+          "kind": "signs_symptoms",
+          "body": "**Hypokalemia (K⁺ < 3.5 mEq/L):**\n- Muscle weakness (begins in legs; ascending weakness in severe cases)\n- Muscle cramps, leg cramps\n- Fatigue\n- Constipation, paralytic ileus (smooth muscle affected)\n- Polyuria (hypokalemia interferes with ADH → concentrating ability impaired)\n- ECG changes: flat or inverted T waves, prominent U waves (after T wave), ST depression, prolonged QU interval\n- Dysrhythmias: PVCs, paroxysmal atrial tachycardia, ventricular tachycardia/fibrillation\n- Life-threatening K⁺ < 2.5: paralysis, respiratory arrest\n\n**Hyperkalemia (K⁺ > 5.0 mEq/L):**\n- Muscle weakness (similar pattern to hypokalemia — both cause weakness)\n- Paresthesias: tingling, numbness (typically hands, feet, around mouth)\n- Nausea, vomiting, diarrhea\n- Abdominal cramping\n- ECG changes (in order of progression):\n  1. Tall, peaked (tented) T waves — first ECG sign\n  2. Prolonged PR interval\n  3. Widened QRS complex\n  4. Absent P waves\n  5. Sine wave pattern\n  6. Ventricular fibrillation / asystole\n- Dysrhythmias: bradycardia, heart blocks, VF, asystole (K⁺ > 6.5 is a cardiac emergency)"
+        },
+        {
+          "id": "red_flags",
+          "heading": "Red Flags / Clinical Deterioration",
+          "kind": "red_flags",
+          "body": "**Escalate immediately:**\n\n**Hypokalemia:**\n- K⁺ < 2.5 mEq/L: risk for dangerous dysrhythmias and respiratory muscle weakness → notify provider, prepare for IV K⁺\n- New dysrhythmias in hypokalemic patient: may be K⁺-mediated — do NOT give more digoxin\n- Patient on digoxin with K⁺ < 3.5: digoxin toxicity risk even at 'therapeutic' levels\n- Ascending muscle weakness to trunk/respiratory muscles: prepare for respiratory support\n\n**Hyperkalemia:**\n- K⁺ > 6.0 mEq/L: cardiac risk — continuous ECG monitoring, emergency treatment\n- ECG shows peaked T waves, widened QRS, or sine wave pattern: life-threatening — prepare calcium gluconate (IV), sodium bicarbonate, insulin + D50, Kayexalate\n- K⁺ > 6.5 with ECG changes: cardiac emergency — may require dialysis"
+        },
+        {
+          "id": "labs_diagnostics",
+          "heading": "Diagnostics / Labs",
+          "kind": "labs_diagnostics",
+          "body": "**Key labs:**\n- **Serum K⁺**: normal 3.5–5.0 mEq/L\n- **Serum Mg²⁺**: hypomagnesemia causes refractory hypokalemia — replace magnesium first if low\n- **Serum Na⁺, Cl⁻, HCO₃⁻ (CO₂)**: assess acid-base (alkalosis → hypokalemia; acidosis → hyperkalemia)\n- **BUN, creatinine**: renal function — failure → hyperkalemia\n- **Urine K⁺**: differentiates renal vs GI loss\n- **Digoxin level**: if applicable\n- **ABG**: pH affects K⁺ distribution\n\n**ECG monitoring:**\n- Continuous telemetry for K⁺ < 3.0 or > 5.5\n- Identify: U waves, peaked T waves, widened QRS — know the sequence"
+        },
+        {
+          "id": "nursing_assessment_interventions",
+          "heading": "Nursing Responsibilities",
+          "kind": "nursing_assessment_interventions",
+          "body": "**Hypokalemia treatment and nursing care:**\n- Oral replacement: KCl liquid or tablets with food/water (reduces GI irritation) for mild hypokalemia\n- **IV potassium (HIGH-ALERT MEDICATION)**:\n  - NEVER IV push — cardiac arrest risk\n  - Maximum rate: 10–20 mEq/hr via peripheral IV (40 mEq/hr via central line with cardiac monitoring in ICU)\n  - Maximum concentration peripheral: 40 mEq/100 mL (burns veins — dilute more if possible)\n  - Must dilute: ALWAYS dilute before infusing — never give concentrated K⁺ undiluted\n  - Infuse via pump only — NOT gravity\n  - Monitor ECG during rapid infusion\n  - Assess IV site for phlebitis (K⁺ is irritating)\n  - Recheck K⁺ level 1–2 hours after replacement\n- Correct magnesium first: hypomagnesemia causes refractory hypokalemia\n- Dietary sources of K⁺: bananas, oranges, potatoes, spinach, tomatoes\n\n**Hyperkalemia treatment (emergency sequence):**\n1. **Calcium gluconate IV**: does NOT lower K⁺ — temporarily stabilizes myocardial cell membrane and protects the heart while other measures work. Give first if ECG changes present.\n2. **Regular insulin + D50W IV**: drives K⁺ into cells within 30 minutes; glucose prevents hypoglycemia; monitor blood glucose q1h\n3. **Sodium bicarbonate IV**: creates alkalosis → drives K⁺ into cells (less reliable in renal failure)\n4. **Inhaled albuterol**: drives K⁺ into cells (additive with insulin)\n5. **Sodium polystyrene sulfonate (Kayexalate)**: exchange resin — removes K⁺ from GI tract; takes hours; give with sorbitol to prevent constipation\n6. **Furosemide**: increases renal K⁺ excretion if kidneys are functioning\n7. **Dialysis**: definitive removal for severe hyperkalemia with renal failure\n\n**Medication hold decisions (NCLEX safety):**\n- Hold K⁺-sparing diuretics (spironolactone) if K⁺ > 5.0 — notify provider\n- Hold ACE inhibitors if K⁺ > 5.5 — notify provider\n- Hold digoxin if K⁺ < 3.5 — hypokalemia causes toxicity"
+        },
+        {
+          "id": "clinical_pearls",
+          "heading": "Clinical Pearls",
+          "kind": "clinical_pearls",
+          "body": "- **Both hypo and hyperkalemia cause muscle weakness** — you cannot tell them apart by symptoms alone. Always check the serum level.\n- **IV potassium is never given undiluted or IV push** — this is a high-alert medication and a frequently tested NCLEX safety priority.\n- **Magnesium before potassium**: if Mg²⁺ is low and K⁺ is low, replacing K⁺ without Mg²⁺ first is ineffective — K⁺ will continue to waste.\n- **Peaked T waves** = hyperkalemia. **U waves** = hypokalemia. Know the difference.\n- **Digoxin + hypokalemia = toxicity**: low K⁺ competes with digoxin for the Na/K-ATPase, but digoxin also inhibits the pump — the two effects are additive and can cause fatal arrhythmias at normally therapeutic digoxin levels.\n- **Kayexalate works slowly** — hours to days. It is not for acute life-threatening hyperkalemia. Calcium gluconate works in minutes and is given first."
+        },
+        {
+          "id": "client_education",
+          "heading": "Patient Education",
+          "kind": "client_education",
+          "body": "**For patients at risk for hypokalemia (on diuretics):**\n- Eat potassium-rich foods daily: bananas, oranges, melon, tomatoes, potatoes, spinach, dairy\n- Report: muscle cramps, leg weakness, palpitations, constipation\n- Take oral potassium supplements exactly as prescribed — do not skip doses; take with food and full glass of water\n- Extended-release K⁺ tablets: do not crush or chew — may cause esophageal burns\n\n**For patients at risk for hyperkalemia (renal failure, ACEi, spironolactone):**\n- Limit high-potassium foods as instructed by dietitian\n- Avoid salt substitutes (most contain KCl)\n- Report: tingling sensations, unusual fatigue, palpitations\n- Never take extra doses of potassium supplements unless specifically ordered"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- Normal K⁺: 3.5–5.0 mEq/L. Both imbalances cause cardiac dysrhythmias and muscle weakness.\n- Hypokalemia: flat T waves + U waves + weakness + dysrhythmias. Causes: diuretics, vomiting, diarrhea, alkalosis.\n- Hyperkalemia: peaked T waves → widened QRS → VF/asystole. Causes: renal failure, ACEi, spironolactone, acidosis, cell lysis.\n- IV K⁺ safety: NEVER undiluted, NEVER IV push, NEVER > 10–20 mEq/hr via peripheral, infuse via pump only.\n- Hyperkalemia emergency sequence: Calcium gluconate (membrane stabilizer) → Insulin/D50 → Bicarb → Kayexalate → Dialysis.\n- Correct Mg²⁺ before K⁺; check digoxin level if K⁺ is low"
+        }
+      ],
+      "preTest": [
+        {
+          "question": "A client's potassium level is 2.8 mEq/L. The nurse is about to administer the prescribed digoxin 0.125 mg. What should the nurse do?",
+          "options": [
+            "Give the digoxin as ordered — it is a therapeutic dose",
+            "Hold the digoxin, notify the provider, and initiate potassium replacement as ordered",
+            "Double the digoxin dose to compensate for reduced effectiveness in hypokalemia",
+            "Administer the digoxin and recheck potassium in 4 hours"
+          ],
+          "correct": 1,
+          "rationale": "Hypokalemia (K⁺ < 3.5) dramatically increases the risk of digoxin toxicity by increasing myocardial sensitivity. Digoxin should be held, the provider notified, and potassium replacement initiated before giving digoxin. Even 'therapeutic' digoxin levels can cause fatal dysrhythmias in a hypokalemic patient."
+        },
+        {
+          "question": "A nurse is preparing to administer prescribed IV potassium chloride 40 mEq. Which action is correct?",
+          "options": [
+            "Administer IV push over 2 minutes to quickly raise the level",
+            "Add to IV bag and infuse via pump at the ordered rate; do not exceed 10–20 mEq/hr via peripheral",
+            "Mix with dextrose water and push slowly over 5 minutes",
+            "Administer undiluted via the central line at 60 mEq/hr"
+          ],
+          "correct": 1,
+          "rationale": "IV potassium is a high-alert medication. It must always be diluted in IV fluid and administered via infusion pump. It is NEVER given IV push (causes immediate cardiac arrest). Maximum rate via peripheral IV is 10–20 mEq/hr. Via central line with cardiac monitoring, up to 40 mEq/hr may be permitted — but this is an ICU setting with continuous ECG."
+        }
+      ],
+      "postTest": [
+        {
+          "question": "A patient with end-stage renal disease has a potassium of 6.8 mEq/L and ECG shows peaked T waves and widening QRS. What is the nurse's first priority intervention?",
+          "options": [
+            "Administer sodium polystyrene sulfonate (Kayexalate) orally",
+            "Administer calcium gluconate IV as ordered to stabilize the myocardial membrane",
+            "Initiate hemodialysis immediately",
+            "Restrict dietary potassium"
+          ],
+          "correct": 1,
+          "rationale": "In acute hyperkalemia with ECG changes (peaked T waves, wide QRS), the immediate priority is to protect the heart with calcium gluconate IV, which stabilizes the myocardial membrane within minutes. Kayexalate removes K⁺ but takes hours. Dialysis is definitive but not immediately available. Dietary restriction is a long-term measure."
+        },
+        {
+          "question": "Which ECG finding is most characteristic of hypokalemia?",
+          "options": [
+            "Tall, peaked (tented) T waves",
+            "Absent P waves",
+            "Prominent U waves and flattened T waves",
+            "Shortened QT interval"
+          ],
+          "correct": 2,
+          "rationale": "Hypokalemia characteristically produces prominent U waves (a positive deflection after the T wave) and flattened or inverted T waves on ECG. Peaked T waves are characteristic of hyperkalemia. Absent P waves suggest hyperkalemia (K⁺ > 7). Shortened QT is seen with hypercalcemia."
+        },
+        {
+          "question": "A nurse is educating a patient who is starting spironolactone and lisinopril for heart failure. What dietary teaching is most important?",
+          "options": [
+            "Increase consumption of bananas and orange juice to prevent hypokalemia",
+            "Limit high-potassium foods and avoid salt substitutes — both medications raise serum potassium",
+            "Drink extra fluids to prevent the dehydration caused by both medications",
+            "Restrict all fruits and vegetables to prevent hyperkalemia"
+          ],
+          "correct": 1,
+          "rationale": "Spironolactone (potassium-sparing diuretic) and lisinopril (ACE inhibitor) both raise serum potassium. Together, they significantly increase hyperkalemia risk. Patients should limit high-potassium foods and avoid salt substitutes, which contain potassium chloride. Restricting all fruits/vegetables is unnecessarily restrictive — specific guidance from a dietitian is appropriate."
+        }
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "us-rn-anticoagulants",
+      "previewSectionCount": 2,
+      "seoTitle": "Anticoagulants nursing: heparin, warfarin, DOACs, HIT & NCLEX-RN Canada",
+      "seoDescription": "Complete RN lesson on anticoagulant therapy: UFH vs LMWH, warfarin INR monitoring, DOACs, bleeding management, HIT, reversal agents, and NCLEX-RN clinical priorities.",
+      "sections": [
+        {
+          "id": "introduction",
+          "heading": "Overview",
+          "kind": "introduction",
+          "body": "**Anticoagulants** ('blood thinners') prevent thrombus formation or extension and are among the highest-risk medications in clinical practice. They are used to treat and prevent VTE (DVT, PE), atrial fibrillation (stroke prevention), ACS, mechanical heart valves, and post-procedure anticoagulation.\n\nAnticoagulants do not dissolve existing clots — they prevent further clot growth and new clot formation. Three main classes:\n- **Unfractionated heparin (UFH)**: IV/SQ, monitored by aPTT, reversed by protamine sulfate\n- **Low molecular weight heparin (LMWH)**: enoxaparin, SQ only, monitored by anti-Xa in special populations, partially reversed by protamine\n- **Warfarin (Coumadin)**: oral, monitored by INR (target 2–3 for most indications), slow onset, reversed by vitamin K + FFP\n- **Direct oral anticoagulants (DOACs)**: rivaroxaban, apixaban, dabigatran — no routine monitoring, specific reversal agents available\n\nFor NCLEX-RN: monitoring parameters, bleeding precautions, HIT recognition, and reversal agents are the highest-yield content."
+        },
+        {
+          "id": "pathophysiology_overview",
+          "heading": "Mechanisms of Action",
+          "kind": "pathophysiology_overview",
+          "body": "**Unfractionated Heparin (UFH).** UFH binds antithrombin III (AT-III), a naturally occurring coagulation inhibitor, and dramatically accelerates its ability to inactivate thrombin (Factor IIa) and Factor Xa. The result is prolonged aPTT (activated partial thromboplastin time). UFH has a short half-life (60–90 minutes), is immediately reversible with protamine sulfate, and is used when rapid anticoagulation reversal is needed (surgery, bleeding). Monitored by aPTT (therapeutic goal: 60–100 seconds, or 1.5–2.5× the control value — always follow your institution's protocol).\n\n**Low Molecular Weight Heparin (LMWH — enoxaparin).** LMWH primarily inhibits Factor Xa with minimal effect on thrombin. More predictable pharmacokinetics allow weight-based dosing without routine aPTT monitoring. Monitored with anti-Xa level in special populations: obese patients (BMI > 40), pregnant patients, and significant renal impairment (dose-adjust when CrCl < 30 mL/min). Half-life 4–6 hours. Only partially reversed by protamine.\n\n**Warfarin.** Inhibits vitamin K epoxide reductase → blocks activation of vitamin K-dependent clotting factors (II, VII, IX, X) and anticoagulant proteins C and S. Slow onset (3–5 days to reach therapeutic INR). INR monitoring required; target INR 2–3 for AF, DVT/PE, bioprosthetic valves; 2.5–3.5 for mechanical valves. Reversed by: vitamin K (phytonadione — slow, hours to days), Fresh Frozen Plasma (FFP — immediate), or 4-factor PCC (Kcentra — fast, for emergency bleeding).\n\n**DOACs (Direct Oral Anticoagulants):** rivaroxaban and apixaban inhibit Factor Xa directly; dabigatran inhibits thrombin directly. Predictable effect eliminates routine INR monitoring. Reversal: andexanet alfa (for rivaroxaban/apixaban); idarucizumab (for dabigatran). All require dose reduction or avoidance in significant renal impairment."
+        },
+        {
+          "id": "signs_symptoms",
+          "heading": "Bleeding Complications — Recognition",
+          "kind": "signs_symptoms",
+          "body": "**Major bleeding (requires immediate intervention):**\n- Intracranial bleeding: sudden severe headache, altered mental status, focal neurological deficits — most feared complication\n- GI bleeding: hematemesis (vomiting blood), melena (black tarry stools), hematochezia (bright red blood per rectum)\n- Retroperitoneal bleeding: severe back/flank pain, falling hemoglobin without visible source\n- Frank hematuria: visible blood in urine (distinguish from expected microscopic hematuria)\n\n**Minor bleeding / monitoring:**\n- Gum bleeding with tooth brushing\n- Easy bruising, prolonged bleeding from minor cuts\n- Petechiae or purpura (with LMWH: also consider HIT)\n- Longer-than-expected bleeding from IV sites or venipuncture\n\n**HIT (Heparin-Induced Thrombocytopenia):**\n- Platelet drop > 50% from baseline, typically 4–10 days after UFH initiation (may be 1–3 days if prior heparin exposure)\n- Paradoxically causes THROMBOSIS, not just bleeding\n- Must stop all heparin products (including line flushes) immediately\n- Replace with direct thrombin inhibitor (argatroban) or fondaparinux\n- Do NOT give warfarin until platelets have recovered (risk of warfarin-induced skin necrosis in HIT)"
+        },
+        {
+          "id": "red_flags",
+          "heading": "Red Flags / Clinical Deterioration",
+          "kind": "red_flags",
+          "body": "**Stop anticoagulant and notify provider immediately:**\n- **Active major bleeding**: GI bleed, intracranial bleed, retroperitoneal bleed, falling hemoglobin without visible source\n- **aPTT > 150 seconds**: supratherapeutic UFH → hold infusion, recheck in 4 hours, contact provider for dose adjustment\n- **INR > 4**: significantly supratherapeutic warfarin → hold dose, assess for bleeding, provider notification\n- **Platelet drop > 50% on heparin**: suspect HIT — stop all heparin, notify provider, do NOT restart heparin\n- **Sudden neurological change**: rule out intracranial hemorrhage\n- **Severe HTN (SBP > 180)**: bleeding risk increases dramatically — hold anticoagulant until BP controlled\n- **Fall in anticoagulated patient**: assess for head injury, intracranial bleeding risk"
+        },
+        {
+          "id": "labs_diagnostics",
+          "heading": "Monitoring Parameters",
+          "kind": "labs_diagnostics",
+          "body": "**UFH:**\n- aPTT: draw 6 hours after initiation or dose change\n- Therapeutic goal: 60–100 seconds (or 1.5–2.5× control — check your institutional protocol)\n- Supratherapeutic: aPTT > 150 → reduce rate or hold\n- Platelet count: baseline, then every 2–3 days on heparin (HIT surveillance)\n\n**LMWH (Enoxaparin):**\n- No routine aPTT monitoring in most patients (predictable pharmacokinetics)\n- Anti-Xa level: check in obese, pregnant, or renal impairment patients (draw 4 hours after dose)\n- Platelet count: monitor for HIT (less common with LMWH than UFH, but still possible)\n- Creatinine/eGFR: dose reduction required if CrCl < 30 mL/min\n\n**Warfarin (INR):**\n- Target INR 2–3 (most indications); 2.5–3.5 (mechanical mitral valve)\n- Draw INR daily during initiation; every 1–4 weeks when stable\n- Bridge heparin: overlap until INR 2–3 for 2 consecutive days, THEN stop heparin\n- Factors increasing INR: antibiotics (kill gut bacteria that produce vitamin K), amiodarone, NSAIDs, alcohol\n- Factors decreasing INR: vitamin K-rich foods (sudden increase), rifampin, carbamazepine\n\n**DOACs:**\n- No routine monitoring required\n- Renal function (creatinine, CrCl): dose adjustment or contraindication in renal failure\n- Dabigatran: contraindicated if CrCl < 15 mL/min"
+        },
+        {
+          "id": "nursing_assessment_interventions",
+          "heading": "Nursing Responsibilities",
+          "kind": "nursing_assessment_interventions",
+          "body": "**Before any anticoagulant:**\n- Verify indication and correct agent\n- Check baseline aPTT, INR, CBC, creatinine, and platelet count\n- Assess for bleeding risk: active GI ulcer, recent surgery, intracranial pathology, thrombocytopenia\n- Confirm allergy history (heparin: pork-derived; some patients with HIT history)\n\n**Administration safety — enoxaparin (LMWH):**\n- Subcutaneous ONLY — NEVER IM (causes hematoma)\n- Preferred site: anterolateral or posterolateral abdominal wall (at least 5 cm from navel)\n- Do NOT aspirate before injection\n- Apply gentle pressure after injection — do NOT massage (increases bruising)\n- Rotate injection sites — document location\n- Do NOT remove air bubble from prefilled syringe (ensures full dose delivery)\n\n**Administration safety — warfarin:**\n- Give at the same time every day (evening preferred to allow same-day INR-to-dose adjustment)\n- Do NOT give if INR > 4 without provider order\n- Assess and document bleeding signs at every assessment\n\n**Bleeding precautions (all anticoagulants):**\n- Soft toothbrush; electric razor (not safety razor)\n- Fall precautions: call light, bed in lowest position, non-slip footwear\n- Avoid IM injections when possible; if needed, apply prolonged pressure to site\n- Avoid NSAIDs (increased bleeding risk)\n- Apply firm pressure to any bleeding site for at least 5–10 minutes\n- Monitor: stool color (guaiac testing as ordered), urine color, neurological status\n\n**Reversal agents (know these for NCLEX):**\n- UFH: protamine sulfate IV (1 mg neutralizes ~100 units heparin)\n- LMWH: protamine sulfate (only partial reversal)\n- Warfarin: vitamin K (slow) + FFP or 4-factor PCC (fast, for emergency)\n- Rivaroxaban/Apixaban: andexanet alfa (AnexXa)\n- Dabigatran: idarucizumab (Praxbind)"
+        },
+        {
+          "id": "clinical_pearls",
+          "heading": "Clinical Pearls",
+          "kind": "clinical_pearls",
+          "body": "- **HIT paradox**: platelet drop + MORE clotting (not bleeding). Stop ALL heparin including flushes and heparin-coated catheters immediately.\n- **Warfarin's drug interactions are enormous**: antibiotics, amiodarone, antifungals all interact. NCLEX often tests INR changes with medication changes.\n- **Enoxaparin SQ only**: this is a high-frequency NCLEX error topic. Never administer IM.\n- **Warfarin bridge**: heparin must overlap until INR 2–3 for 2 consecutive days. Stopping heparin before INR is therapeutic = DVT/PE risk.\n- **Dietary vitamin K consistency**: patients on warfarin should NOT avoid leafy greens — they should eat a consistent amount. Wild swings in vitamin K intake destabilize INR.\n- **Hold warfarin before procedures**: typically hold 5 days before elective surgery; consult provider for individual decision based on clot risk."
+        },
+        {
+          "id": "client_education",
+          "heading": "Patient Education",
+          "kind": "client_education",
+          "body": "**Warfarin patient education:**\n- Take at the same time every day; do not miss doses or double up if missed — call provider\n- INR monitoring schedule: understand why regular blood tests are needed\n- Dietary consistency: eat the same amount of vitamin K foods weekly; large changes affect INR. Dark leafy greens (spinach, kale, broccoli) are high in vitamin K — do not avoid them, just be consistent.\n- Avoid: cranberry juice (increases INR), grapefruit (with some statins/meds), alcohol (unstable INR + bleeding risk)\n- Medication interactions: always tell all providers and pharmacists you are on warfarin before adding any new medication\n\n**Bleeding precautions for all anticoagulated patients:**\n- Use soft-bristle toothbrush; electric razor\n- Report immediately: unusual bruising, blood in urine/stool, prolonged bleeding from cuts, headache/dizziness (may indicate intracranial bleed)\n- Carry wallet card or wear medical alert bracelet identifying anticoagulant use\n- Inform all dentists and surgeons before any procedures"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- UFH: IV/SQ, monitor aPTT (goal 60–100 s), reverse with protamine sulfate\n- LMWH (enoxaparin): SQ ONLY, no routine monitoring, anti-Xa for special populations, reduce dose in renal failure\n- Warfarin: oral, monitor INR (goal 2–3), slow onset → bridge with heparin, reversed by vit K + FFP\n- DOACs: no routine monitoring, renal function required, specific reversal agents (andexanet alfa for Xa inhibitors; idarucizumab for dabigatran)\n- HIT: platelet drop > 50% on heparin → stop ALL heparin, causes thrombosis, switch to argatroban\n- Bleeding precautions: soft brush, electric razor, fall prevention, apply pressure, avoid NSAIDs"
+        }
+      ],
+      "preTest": [
+        {
+          "question": "A client on heparin infusion for DVT has an aPTT of 175 seconds. The nurse's priority action is:",
+          "options": [
+            "Continue the infusion — the goal is to keep aPTT above normal",
+            "Hold the infusion and notify the provider — aPTT is supratherapeutic with increased bleeding risk",
+            "Increase the infusion rate to dilute the heparin",
+            "Draw blood cultures to rule out sepsis affecting coagulation"
+          ],
+          "correct": 1,
+          "rationale": "Therapeutic aPTT is typically 60–100 seconds (1.5–2.5× normal). An aPTT of 175 seconds is significantly supratherapeutic, indicating over-anticoagulation with high bleeding risk. The nurse should hold the infusion and notify the provider for dose adjustment. Increasing the rate would worsen the problem."
+        }
+      ],
+      "postTest": [
+        {
+          "question": "A client on UFH for 6 days has a platelet count that has decreased from 220,000 to 88,000/mm³. What complication should the nurse suspect?",
+          "options": [
+            "Immune thrombocytopenic purpura (ITP)",
+            "Heparin-induced thrombocytopenia (HIT) — a prothrombotic immune complication",
+            "Thrombotic thrombocytopenic purpura (TTP)",
+            "Disseminated intravascular coagulation (DIC)"
+          ],
+          "correct": 1,
+          "rationale": "HIT occurs in 1–5% of patients on UFH. It presents with a platelet drop of > 50% (typically days 4–10 of heparin therapy — or sooner with prior heparin exposure). HIT causes thrombosis, not bleeding. All heparin must be stopped immediately and replaced with a direct thrombin inhibitor (argatroban). Warfarin must NOT be started until platelets recover."
+        },
+        {
+          "question": "A client on warfarin for atrial fibrillation has an INR of 5.2. She reports no active bleeding. What should the nurse do first?",
+          "options": [
+            "Administer protamine sulfate IV immediately",
+            "Hold the next warfarin dose and notify the provider for further management",
+            "Give vitamin K 10 mg IV push to reverse warfarin immediately",
+            "Continue warfarin as prescribed — INR of 5 is within therapeutic range"
+          ],
+          "correct": 1,
+          "rationale": "An INR of 5.2 is significantly above the therapeutic range (2–3). With no active bleeding, the first step is to hold the next dose and notify the provider — they may order vitamin K orally or observe. IV vitamin K reversal is reserved for significant or life-threatening bleeding. Protamine sulfate reverses heparin, not warfarin. INR 5.2 is NOT therapeutic."
+        },
+        {
+          "question": "A nurse is administering enoxaparin 80 mg subcutaneous injection. Which action by the nurse is correct?",
+          "options": [
+            "Aspirate before injecting to confirm needle is not in a blood vessel",
+            "Inject into the deltoid muscle for fastest absorption",
+            "Inject into the anterolateral abdominal wall without aspiration; apply gentle pressure afterward",
+            "Massage the injection site vigorously to promote absorption"
+          ],
+          "correct": 2,
+          "rationale": "Correct enoxaparin technique: subcutaneous injection into the anterolateral or posterolateral abdominal wall. Do NOT aspirate (SQ injection does not require aspiration). Do NOT massage (increases bruising). Do NOT inject IM (causes hematoma). The deltoid is an IM site — not appropriate for enoxaparin."
+        }
+      ]
+    }
+  ]
+}

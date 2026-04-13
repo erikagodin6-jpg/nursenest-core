@@ -53,12 +53,20 @@ export function ReadinessBandBadge({ band }: { band: ReadinessBand }) {
  * one-sentence interpretation → primary CTA row (spec §2).
  */
 export function CatResultsHero({
+  readinessLevel,
+  confidenceLevel,
+  passProbabilityBand,
+  passProbability,
   score,
   band,
   interpretation,
   testId,
   lessonsHref,
 }: {
+  readinessLevel: "Likely Pass" | "Borderline" | "At Risk";
+  confidenceLevel: "High" | "Moderate" | "Low";
+  passProbabilityBand?: "Very likely to pass" | "Likely to pass" | "Borderline" | "At risk" | null;
+  passProbability?: number | null;
   score: number;
   band: ReadinessBand;
   interpretation: string;
@@ -67,13 +75,17 @@ export function CatResultsHero({
 }) {
   return (
     <div className="nn-cat-readiness-hero">
-      <p
-        className="nn-cat-readiness-hero__score tabular-nums"
-        aria-label={`Readiness score: ${score}%`}
-      >
-        {score}%
+      <p className="nn-cat-readiness-hero__score" aria-label={`Readiness level: ${readinessLevel}`}>
+        {readinessLevel}
       </p>
-      <p className="nn-cat-readiness-hero__score-label">Readiness Score</p>
+      <p className="nn-cat-readiness-hero__score-label">
+        Confidence: {confidenceLevel}
+        {typeof passProbability === "number"
+          ? ` · Pass probability: ${passProbability}%`
+          : passProbabilityBand
+            ? ` · ${passProbabilityBand}`
+            : ""}
+      </p>
 
       <ReadinessBandBadge band={band} />
 

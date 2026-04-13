@@ -14,7 +14,7 @@ import { catPathwayShortCatLabel } from "@/lib/exam-pathways/cat-pathway-labels"
 import {
   appPathwayCatSessionStartPath,
 } from "@/lib/exam-pathways/pathway-cat-flow";
-import { readinessConfigForPathway } from "@/lib/exam-pathways/pathway-readiness-config";
+import { publicCopyForReadinessConfig, readinessConfigForPathway } from "@/lib/exam-pathways/pathway-readiness-config";
 import { HUB, loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { PathwayLiveInventoryStrip } from "@/components/exam-pathways/pathway-live-inventory-strip";
 import { pathwayCatPracticeBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
@@ -42,14 +42,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         return { robots: { index: false, follow: true } };
       }
       const readinessConfig = readinessConfigForPathway(pathway);
-      const readinessSubtitle =
-        readinessConfig.engineType === "CAT"
-          ? "Simulate the real exam and see if you're ready to pass"
-          : "Test your knowledge and assess your readiness";
+      const publicCopy = publicCopyForReadinessConfig(readinessConfig);
       const country = pathway.countrySlug === "canada" ? "Canada" : "United States";
       return {
-        title: `${readinessConfig.label} readiness exam · ${country} | NurseNest`,
-        description: `${readinessSubtitle} for ${pathway.displayName}. Sign in to run a session matched to your pathway.`,
+        title: `${publicCopy.title} · ${country} | NurseNest`,
+        description: `${publicCopy.subtitle} for ${pathway.displayName}. Sign in to run a session matched to your pathway.`,
         robots: { index: false, follow: true },
       };
     },
@@ -127,22 +124,44 @@ export default async function PathwayCatEntryPage({ params }: Props) {
   const countryLabel = pathway.countrySlug === "canada" ? "Canada" : "US";
   const catShort = catPathwayShortCatLabel(pathway);
   const readinessConfig = readinessConfigForPathway(pathway);
-  const readinessSubtitle =
-    readinessConfig.engineType === "CAT"
-      ? "Simulate the real exam and see if you're ready to pass"
-      : "Test your knowledge and assess your readiness";
+  const publicCopy = publicCopyForReadinessConfig(readinessConfig);
   const howItWorksItems =
-    readinessConfig.engineType === "CAT"
+    publicCopy.effectiveMode === "production_ready" && readinessConfig.engineType === "CAT"
       ? [
           "Adapts to your performance",
           "Adjusts difficulty after each question",
-          "Determines if you are above passing level",
+          "Determines if you are above passing level under exam-style stopping rules",
         ]
-      : [
+      : publicCopy.effectiveMode === "mini_adaptive"
+        ? [
+            "Adapts question difficulty as you answer",
+            "Provides a short readiness check for your current level",
+            "Highlights weak categories to review before full readiness testing",
+          ]
+        : publicCopy.effectiveMode === "simulation"
+          ? [
+              "Covers exam-relevant scenarios across key categories",
+              "Uses timed progression to simulate test pressure",
+              "Returns readiness guidance and weak-area follow-up",
+            ]
+          : [
           "Covers exam-relevant topics",
-          "Adjusts difficulty across questions",
-          "Helps assess your readiness",
-        ];
+          "Adaptive scoring calibrates to your current performance",
+          "Use with lessons and question practice while coverage expands",
+          ];
+  const primaryCtaLabel = publicCopy.effectiveMode === "production_ready" ? "Start Readiness Exam" : "Start Assessment";
+  const startUnavailableLabel =
+    publicCopy.effectiveMode === "production_ready"
+      ? "Readiness exam unavailable — use links below"
+      : "Assessment unavailable — use links below";
+  const footerUnavailableLabel =
+    publicCopy.effectiveMode === "production_ready"
+      ? `${catShort} unavailable — use links below`
+      : "Assessment unavailable — use links below";
+  const questionsFirstLabel =
+    publicCopy.effectiveMode === "production_ready"
+      ? "Practice Questions First"
+      : "Practice Questions";
   const lessonsHref = buildExamPathwayPath(pathway, "lessons");
   const questionsHref = buildExamPathwayPath(pathway, "questions");
   const pricingHref = buildExamPathwayPath(pathway, "pricing");
@@ -162,46 +181,46 @@ export default async function PathwayCatEntryPage({ params }: Props) {
         ← {pathway.shortName} overview
       </Link>
       <h1 className="mt-4 text-3xl font-extrabold text-[var(--theme-heading-text)]">
-        {readinessConfig.label} Readiness Exam
+        {publicCopy.title}
       </h1>
       <p className="mt-3 text-[var(--theme-muted-text)]">
-        {readinessSubtitle} for <strong className="text-[var(--theme-heading-text)]">{countryLabel}</strong> (
+        {publicCopy.subtitle} for <strong className="text-[var(--theme-heading-text)]">{countryLabel}</strong> (
         {pathway.displayName}).
       </p>
-      {readinessConfig.engineType === "CAT" && readinessConfig.mode === "production_ready" ? (
+      {publicCopy.strongSimulationClaim ? (
         <p className="mt-2 text-sm font-medium text-[var(--theme-heading-text)]">
           This is the closest simulation to the real exam.
         </p>
       ) : null}
-      {readinessConfig.mode === "beta" ? (
-        <p className="mt-2 text-sm text-[var(--theme-muted-text)]">Adaptive Practice (Beta)</p>
+      {publicCopy.betaLabel ? (
+        <p className="mt-2 text-sm text-[var(--theme-muted-text)]">Adaptive Practice ({publicCopy.betaLabel})</p>
       ) : null}
 
       <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-        {readinessConfig.mode !== "unavailable" && assessment.marketingPrimaryCta === "open_app_cat" && assessment.appCatStartPath ? (
+        {assessment.marketingPrimaryCta === "open_app_cat" && assessment.appCatStartPath ? (
           <Link
             href={assessment.appCatStartPath}
             className="inline-flex min-h-[48px] items-center justify-center rounded-full bg-primary px-8 py-3 text-sm font-semibold text-primary-foreground shadow-sm"
           >
-            Start Exam
+            {primaryCtaLabel}
           </Link>
-        ) : readinessConfig.mode !== "unavailable" && assessment.marketingPrimaryCta === "sign_in_to_cat" ? (
+        ) : assessment.marketingPrimaryCta === "sign_in_to_cat" ? (
           <Link
             href={signInReturnHref}
             className="inline-flex min-h-[48px] items-center justify-center rounded-full bg-primary px-8 py-3 text-sm font-semibold text-primary-foreground shadow-sm"
           >
-            Start Exam
+            {primaryCtaLabel}
           </Link>
         ) : (
           <span className="inline-flex min-h-[48px] cursor-default items-center justify-center rounded-full border border-border bg-muted/50 px-8 py-3 text-sm font-semibold text-muted-foreground">
-            Readiness exam unavailable — use links below
+            {startUnavailableLabel}
           </span>
         )}
         <Link
           href={questionsHref}
           className="inline-flex min-h-[48px] items-center justify-center rounded-full border border-border px-8 py-3 text-sm font-semibold hover:bg-card"
         >
-          Practice Questions First
+          {questionsFirstLabel}
         </Link>
       </div>
 
@@ -238,7 +257,7 @@ export default async function PathwayCatEntryPage({ params }: Props) {
             <span className="font-semibold">Time limit:</span> {readinessConfig.timeLimitMinutes} minutes
           </li>
           <li>
-            <span className="font-semibold">Experience:</span> Exam-style flow with pathway-scoped content.
+            <span className="font-semibold">Experience:</span> {publicCopy.experienceLabel}
           </li>
           <li>
             <span className="font-semibold">Navigation:</span> {readinessConfig.allowBackNavigation ? "Back navigation allowed." : "No backtracking once an answer is submitted."}
@@ -299,7 +318,7 @@ export default async function PathwayCatEntryPage({ params }: Props) {
           </Link>
         ) : (
           <span className="inline-flex min-h-[48px] cursor-default items-center justify-center rounded-full border border-border bg-muted/50 px-8 py-3 text-sm font-semibold text-muted-foreground">
-            {catShort} unavailable — use links below
+            {footerUnavailableLabel}
           </span>
         )}
         <Link

@@ -1,0 +1,444 @@
+{
+  "version": 1,
+  "description": "Phase 1 – Fundamentals: fluid balance, prioritization, delegation, wound care, infection control, pain management",
+  "lessons": [
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "fluid-balance-acute-care",
+      "previewSectionCount": 2,
+      "seoTitle": "Fluid balance & IV therapy nursing: assessment, imbalances & NCLEX-RN Canada",
+      "seoDescription": "Complete RN lesson on fluid balance: isotonic vs hypertonic vs hypotonic IV fluids, hypervolemia, hypovolemia, edema, third-spacing, and Canadian NCLEX-RN priorities.",
+      "sections": [
+        {
+          "id": "introduction",
+          "heading": "Overview",
+          "kind": "introduction",
+          "body": "**Fluid and electrolyte balance** is the foundation of virtually every acute care nursing decision. Approximately 60% of adult body weight is water, distributed between the intracellular fluid (ICF, ~40%) and extracellular fluid (ECF, ~20% — divided into intravascular plasma, interstitial fluid, and transcellular fluid). Fluid shifts between compartments are governed by **osmotic** and **hydrostatic** pressures, and imbalances in either direction cause predictable, testable clinical syndromes.\n\nFor NCLEX-RN, the critical skills are: (1) interpreting intake and output trends, (2) recognizing hypovolemia vs hypervolemia by clinical signs, (3) selecting and safely administering the correct IV fluid type, and (4) monitoring for electrolyte consequences of fluid therapy."
+        },
+        {
+          "id": "pathophysiology_overview",
+          "heading": "Pathophysiology",
+          "kind": "pathophysiology_overview",
+          "body": "**Fluid tonicity and osmolality.** Tonicity describes the effective osmolality of a solution relative to plasma (~285–295 mOsm/kg). Isotonic solutions have the same osmolality as plasma — they stay in the ECF compartment. Hypertonic solutions pull fluid from cells into the ECF. Hypotonic solutions shift fluid into cells.\n\n**Hypovolemia: insufficient intravascular volume.** Causes: hemorrhage, severe vomiting/diarrhea, burns, excessive diuresis, third-spacing. In third-spacing, fluid shifts from the intravascular space to a non-functional compartment (peritoneum in ascites, interstitium in burns, bowel lumen in ileus) — the patient is clinically hypovolemic despite total body water excess. The body compensates via RAAS activation (aldosterone → Na/water retention), ADH release, and sympathetic vasoconstriction. Early signs: thirst, tachycardia, decreased urine output, orthostatic hypotension. Late signs: hypotension at rest, confusion, cold extremities.\n\n**Hypervolemia: excess intravascular volume.** Causes: excessive IV fluids, renal failure, heart failure, liver failure, SIADH, excessive sodium intake. Signs: peripheral edema (pitting), pulmonary crackles, JVD, weight gain, hypertension, bounding pulses. Risk: pulmonary edema, pleural effusions, respiratory distress."
+        },
+        {
+          "id": "signs_symptoms",
+          "heading": "Hypovolemia vs Hypervolemia: Clinical Comparison",
+          "kind": "signs_symptoms",
+          "body": "**Hypovolemia (fluid deficit):**\n- Weight loss (reliable early sign: 1 kg = 1 L of fluid)\n- Dry mucous membranes, poor skin turgor\n- Sunken eyes\n- Thirst\n- Decreased urine output (oliguria < 30 mL/hr)\n- Dark, concentrated urine (high specific gravity > 1.030)\n- Tachycardia → hypotension\n- Orthostatic hypotension (BP drops > 20 systolic when standing)\n- Cool, pale extremities; slow capillary refill\n- Labs: elevated BUN:Cr ratio > 20 (pre-renal), elevated hematocrit (hemoconcentration), elevated serum Na (hypernatremia if pure water loss)\n\n**Hypervolemia (fluid excess):**\n- Weight gain (> 1 kg/day = significant fluid retention)\n- Peripheral pitting edema (rate 1+ to 4+)\n- Distended neck veins (JVD) at > 45°\n- Crackles at lung bases (pulmonary edema)\n- Dyspnea, orthopnea\n- Bounding pulses, hypertension\n- Dilute urine (low specific gravity < 1.010)\n- Labs: low hematocrit (hemodilution), low BUN and creatinine (dilution effect), low serum Na (hyponatremia in SIADH/fluid excess)"
+        },
+        {
+          "id": "labs_diagnostics",
+          "heading": "IV Fluid Types and Selection",
+          "kind": "labs_diagnostics",
+          "body": "**Isotonic fluids (expand ECF without shifting into cells):**\n- **Normal saline (0.9% NaCl)**: 154 mEq/L Na and Cl. Use: volume replacement, hyponatremia correction, irrigation. Risk: hyperchloremic metabolic acidosis with large volumes.\n- **Lactated Ringer's (LR)**: most physiologic crystalloid; contains Na, K, Cl, lactate, Ca. Use: large-volume resuscitation (burns, sepsis, surgery). Contraindicated in liver failure (cannot metabolize lactate).\n- **D5W (5% dextrose)**: isotonic in the bag but acts as hypotonic once glucose is metabolized. Use: medication compatibility, hypoglycemia, hypernatremia correction (gives free water). Risk: hyperglycemia.\n\n**Hypertonic fluids (pull fluid from cells into ECF):**\n- **3% NaCl**: used for severe symptomatic hyponatremia (seizures, coma). Must be given slowly via central line with intensive monitoring — rapid correction causes osmotic demyelination syndrome.\n- **D5NS, D5½NS**: provide calories + fluid; used for maintenance and some electrolyte replacements.\n\n**Hypotonic fluids (shift fluid into cells):**\n- **0.45% NaCl (half-normal saline)**: free water expands ICF. Use: free water replacement, cellular hydration. Risk: cellular edema, worsen cerebral edema — avoid in head trauma.\n\n**Monitoring IV therapy:**\n- Verify the 'rights' (patient, drug, dose, time, route, reason) before each infusion\n- Assess IV site: phlebitis (redness, warmth, swelling, pain), infiltration (swelling around site, cool skin), extravasation\n- Monitor vital signs, UO, lung sounds, and edema during infusion\n- Maintain strict I&O; report discrepancies"
+        },
+        {
+          "id": "nursing_assessment_interventions",
+          "heading": "Nursing Responsibilities",
+          "kind": "nursing_assessment_interventions",
+          "body": "**Assessment priorities:**\n- Daily weight at same time — 1 kg difference = approximately 1 L fluid change\n- Strict intake and output every shift; report UO < 30 mL/hr (< 0.5 mL/kg/hr)\n- Skin turgor assessment: pinch skin over sternum or inner forearm — tenting > 2 seconds = dehydration. Not reliable in elderly (skin loses elasticity normally).\n- Mucous membrane moisture, tongue moisture\n- Lung auscultation every 4–8 hours during IV fluid therapy\n- Peripheral edema: grade and document location (pretibial, sacral, periorbital)\n- Vital signs: BP trends, HR, and orthostatic assessment\n- Urine specific gravity (1.010–1.030 normal range)\n\n**Nursing interventions for hypovolemia:**\n- Administer ordered IV fluids at prescribed rate — typically isotonic (NS or LR) for acute volume replacement\n- Monitor response: improvement in HR, UO, BP, skin turgor\n- Oral rehydration for mild-moderate dehydration when GI tract is intact\n- Treat the underlying cause: antiemetics for vomiting, antidiarrheals, wound care for burns\n\n**Nursing interventions for hypervolemia:**\n- Restrict fluids as ordered (typically 1.5–2 L/day in heart failure, renal failure)\n- Low-sodium diet (≤ 2 g/day) if ordered\n- Administer diuretics as ordered (furosemide); monitor electrolytes — hypokalemia risk\n- Elevate edematous extremities to facilitate reabsorption\n- Skin care: edematous tissue is fragile — reposition every 2 hours\n- Monitor for pulmonary edema: crackles, SpO₂, dyspnea"
+        },
+        {
+          "id": "clinical_pearls",
+          "heading": "Clinical Pearls",
+          "kind": "clinical_pearls",
+          "body": "- **Weight is the most accurate fluid monitoring tool** — use it before adjusting diuretics or fluid rates.\n- **Third-spacing** patients are hypovolemic despite edema — they may need IV fluids even with visible peripheral edema. The critical distinction is intravascular vs total body fluid.\n- **Hyponatremia correction**: for every 100 mEq/L of Na deficit, plasma Na increases by approximately 1 mEq/L. Correct no faster than 10–12 mEq/L per 24 hours to avoid osmotic demyelination syndrome.\n- **BUN:Cr ratio > 20** = pre-renal cause (dehydration, poor perfusion) — not intrinsic renal disease. Treat the volume deficit first.\n- **Albumin** maintains plasma oncotic pressure. Low albumin (malnutrition, liver failure, nephrotic syndrome) → fluid leaks into interstitium → peripheral edema despite low intravascular volume.\n- **D5W is not a resuscitation fluid** — it distributes widely (only 1/12 stays intravascular after glucose metabolism). Use isotonic crystalloids for volume replacement."
+        },
+        {
+          "id": "client_education",
+          "heading": "Patient Education",
+          "kind": "client_education",
+          "body": "**For patients with chronic fluid management needs (HF, renal failure, liver disease):**\n- Daily weight monitoring: same time, same scale, same clothes — report > 1 kg/day gain to provider\n- Fluid restriction: measure exact amounts; remember all fluids (soups, ice cream, gelatin count)\n- Sodium restriction: read food labels; processed and restaurant foods contain very high sodium\n- Signs of hypovolemia to report: dizziness on standing, dark urine, dry mouth, decreased urination\n- Signs of hypervolemia to report: weight gain, swelling, difficulty breathing\n\n**Safe IV therapy education for patients:**\n- Report immediately: redness, swelling, pain, or coolness at IV site\n- Do not kink or pull on IV tubing\n- Keep IV arm still during infusion to prevent dislodgement"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- Fluid balance is maintained by osmotic and hydrostatic forces across compartments; imbalance causes hypovolemia or hypervolemia\n- Hypovolemia: weight loss, oliguria, concentrated urine, tachycardia, dry membranes → isotonic fluid replacement\n- Hypervolemia: weight gain, edema, crackles, JVD, dilute urine → fluid restriction + diuretics\n- IV fluid selection: NS/LR for volume, hypotonic for cellular hydration, hypertonic for severe hyponatremia\n- Monitor: daily weight, strict I&O, lung sounds, skin turgor, edema, electrolytes\n- Third-spacing = fluid trapped outside functional compartments — clinically hypovolemic despite edema"
+        }
+      ],
+      "preTest": [
+        {
+          "question": "A client with acute pancreatitis has abdominal ascites and appears pale with HR 118 and BP 88/52 mmHg despite 2L of IV fluid. The nurse suspects:",
+          "options": [
+            "Hypervolemia from too much IV fluid administration",
+            "Third-spacing — fluid trapped in the peritoneum causing effective intravascular hypovolemia",
+            "Cardiogenic shock from stress-induced cardiomyopathy",
+            "Liver failure causing hepatorenal syndrome"
+          ],
+          "correct": 1,
+          "rationale": "Third-spacing occurs when fluid shifts into non-functional compartments (peritoneum in pancreatitis, burns, bowel obstruction). Despite visible ascites (total body fluid excess), the patient is intravascularly depleted — hemodynamically hypovolemic. Continued fluid resuscitation and monitoring of hemodynamics are required. This is different from true hypervolemia where the intravascular space is overfilled."
+        }
+      ],
+      "postTest": [
+        {
+          "question": "A nurse is hanging an IV bag of D5½NS for a client with hypernatremia. What does the nurse understand about this solution's mechanism of action?",
+          "options": [
+            "It is isotonic and will expand intravascular volume without shifting fluid",
+            "The dextrose is metabolized, leaving hypotonic free water that distributes into cells to dilute elevated serum sodium",
+            "It provides hypertonic glucose to feed cells in a catabolic state",
+            "It replaces sodium and chloride lost from diaphoresis"
+          ],
+          "correct": 1,
+          "rationale": "D5½NS initially appears moderately hypertonic in the bag, but the dextrose is metabolized rapidly, leaving ½ normal saline (~hypotonic). The hypotonic effect shifts free water into cells, expanding ICF and diluting elevated serum sodium (hypernatremia). This is a common mechanism for gradual hypernatremia correction — never rapidly."
+        },
+        {
+          "question": "A nurse is assessing a client 8 hours post-IV fluid infusion. Today's weight is 3 kg more than yesterday. Auscultation reveals bilateral crackles at the lung bases. SpO₂ is 91%. What is the nurse's priority?",
+          "options": [
+            "Increase the IV infusion rate to correct the hypoxemia",
+            "Place in high-Fowler's, apply supplemental oxygen, and notify the provider — possible pulmonary edema from fluid overload",
+            "Reassure the client that weight fluctuations are normal",
+            "Administer a potassium supplement for the hypokalemia"
+          ],
+          "correct": 1,
+          "rationale": "3 kg weight gain (= ~3 L fluid) + bilateral crackles + SpO₂ 91% indicates pulmonary edema from fluid overload. Immediate nursing actions: high-Fowler's (reduce preload and improve ventilation), supplemental oxygen, notify provider (anticipate diuretic order). Increasing fluids would worsen the situation. There is no indication of hypokalemia here."
+        }
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "cardiovascular-prioritization",
+      "previewSectionCount": 2,
+      "seoTitle": "Cardiovascular prioritization nursing: stable vs unstable, ischemia & NCLEX-RN Canada",
+      "seoDescription": "Complete RN lesson on cardiovascular prioritization: stable vs unstable angina, ischemia red flags, troponin, hemodynamic instability, and NCLEX-RN clinical judgment for Canadian nurses.",
+      "preTest": [
+        {
+          "question": "A nurse is managing 4 clients. Which client should the nurse assess first?",
+          "options": [
+            "Client A: post-op day 2, asking for pain medication, BP 118/74",
+            "Client B: chest pain 7/10 with diaphoresis, shortness of breath, HR 112",
+            "Client C: HTN baseline, BP 148/92, no acute complaints",
+            "Client D: needs daily weight documented, stable CHF"
+          ],
+          "correct": 1,
+          "rationale": "Client B has chest pain + diaphoresis + tachycardia — the classic triad of an acute coronary event. This is a time-sensitive emergency requiring immediate assessment. Diaphoresis indicates massive sympathetic activation and cannot be dismissed. Clients A, C, and D have stable, predictable findings that do not indicate imminent clinical deterioration."
+        },
+        {
+          "question": "A nurse is about to administer nitroglycerin 0.4 mg sublingual to a client with chest pain. Which finding is an absolute contraindication to giving this medication?",
+          "options": [
+            "Heart rate of 88 bpm",
+            "Systolic BP of 86 mmHg",
+            "Temperature of 37.8°C",
+            "SpO₂ of 94%"
+          ],
+          "correct": 1,
+          "rationale": "Nitroglycerin causes significant venodilation, reducing preload. If the systolic BP is already < 90 mmHg, nitroglycerin can cause catastrophic hypotension and cardiovascular collapse. It is absolutely contraindicated. HR of 88, temperature 37.8°C, and SpO₂ 94% are not contraindications."
+        },
+        {
+          "question": "A client on telemetry is reporting new, sudden onset severe tearing chest pain radiating to the back. Blood pressure in the left arm is 162/94 mmHg and in the right arm is 108/70 mmHg. What does the nurse suspect?",
+          "options": [
+            "Pulmonary embolism — prepare anticoagulants",
+            "Aortic dissection — notify provider immediately and do NOT give nitroglycerin",
+            "Unstable angina — administer sublingual nitroglycerin",
+            "Cardiac tamponade — prepare for pericardiocentesis"
+          ],
+          "correct": 1,
+          "rationale": "Sudden severe tearing or ripping chest/back pain + significant blood pressure difference between arms (> 20 mmHg) = aortic dissection until proven otherwise. This is a surgical emergency. Nitroglycerin is contraindicated because the patient may require surgery. The provider must be notified immediately for CT angiogram and surgical consultation."
+        }
+      ],
+      "postTest": [
+        {
+          "question": "A nurse receives report on 5 clients. In what order should the nurse perform assessments?",
+          "options": [
+            "Post-op hip replacement (day 1), needs ROM assessment; diabetic client with fasting glucose 8.2 mmol/L; client with new-onset atrial fibrillation HR 148 and BP 88/52; client requesting their morning medications; surgical client with mild wound redness",
+            "Medications first, then wound assessment, then glucose check, then vitals on AFib client",
+            "Address new-onset AFib with hemodynamic instability first, then glucose check, then post-op ROM, then wound, then medications",
+            "Wound assessment first due to infection risk, then all others in order received"
+          ],
+          "correct": 2,
+          "rationale": "New-onset AFib with rapid ventricular response (HR 148) + hemodynamic instability (BP 88/52) represents an unstable dysrhythmia that may cause further hemodynamic collapse. This is the first priority. Glucose 8.2 mmol/L is mildly elevated and is second priority. Post-op ROM is important but not urgent. Wound redness is routine. Medications can be scheduled around clinical priorities."
+        },
+        {
+          "question": "A nurse is caring for a client who had an anterior STEMI 2 hours ago. The client suddenly becomes confused and has a BP of 76/40 mmHg with cool, pale, diaphoretic skin. What does the nurse suspect?",
+          "options": [
+            "Hypovolemic shock from hemorrhage",
+            "Cardiogenic shock from extensive left ventricular infarction",
+            "Neurogenic shock from pain-induced vasovagal response",
+            "Distributive septic shock from post-procedure infection"
+          ],
+          "correct": 1,
+          "rationale": "Anterior STEMI (LAD territory) + sudden hypotension + cold, pale, diaphoretic skin + altered mental status 2 hours after infarct = cardiogenic shock. The left ventricle cannot generate adequate cardiac output because of massive myocardial necrosis. This carries > 50% mortality and requires immediate escalation, inotropic support, and likely mechanical circulatory assistance."
+        }
+      ],
+      "sections": [
+        {
+          "id": "introduction",
+          "heading": "Overview",
+          "kind": "introduction",
+          "body": "**Cardiovascular prioritization** is tested heavily on NCLEX-RN because nurses must differentiate stable from unstable presentations, recognize time-sensitive deterioration, and sequence interventions correctly under competing demands. This lesson trains the clinical judgment framework: what changes first, what needs immediate escalation, and when stable nursing actions become unsafe.\n\nThe three core cardiovascular judgment priorities are:\n1. **Hemodynamic stability**: perfusion to vital organs — brain (mentation), kidneys (UO), heart (chest pain/ECG), skin (color, temperature, moisture)\n2. **Time-sensitive ischemia**: any combination of chest pain + diaphoresis + ST changes = emergent\n3. **Rhythm recognition**: dysrhythmias can precipitate hemodynamic compromise — distinguish stable from unstable rhythm"
+        },
+        {
+          "id": "pathophysiology_overview",
+          "heading": "Stable vs Unstable Cardiovascular Presentations",
+          "kind": "pathophysiology_overview",
+          "body": "**Stable angina:** chest pain or pressure triggered by exertion or emotional stress, predictable, relieved by rest or nitroglycerine within 5 minutes. Caused by fixed coronary artery stenosis reducing blood flow during increased demand. No myocardial necrosis — troponin is negative.\n\n**Unstable angina / ACS:** rest pain, increasing frequency or severity, or new-onset pain at rest. Caused by dynamic plaque rupture/thrombosis — an evolving coronary event. May progress to NSTEMI (troponin positive) or STEMI (ST elevation + troponin positive). This is a cardiac emergency.\n\n**Hemodynamic instability red flags:** SBP < 90 mmHg (or > 30 mmHg drop from baseline), HR < 40 or > 150 bpm, altered mental status, SpO₂ < 90%, diaphoresis, pallor, mottled skin. These indicate pump failure, critical arrhythmia, or cardiogenic shock.\n\n**Clinical judgment model for cardiovascular prioritization:**\n- Step 1: identify the most unstable patient (worst risk if no intervention)\n- Step 2: match the urgency of the intervention to the urgency of the finding\n- Step 3: do not confuse task complexity with clinical urgency\n- Step 4: always reassess after each intervention"
+        },
+        {
+          "id": "signs_symptoms",
+          "heading": "High-Yield Assessment Findings",
+          "kind": "signs_symptoms",
+          "body": "**Ischemia — must recognize immediately:**\n- Chest pain/pressure with diaphoresis = ACS until proven otherwise\n- Pain radiating to jaw, left arm, neck\n- Sudden onset dyspnea at rest in a cardiac patient\n- New ST changes on telemetry (elevation = STEMI; depression = ischemia/NSTEMI)\n- New bundle branch block on ECG\n\n**Perfusion compromise — assess all of these together:**\n- Mentation changes (confusion, agitation, somnolence) = cerebral hypoperfusion\n- Urine output < 30 mL/hr = renal hypoperfusion\n- Cool, mottled, clammy skin = peripheral vasoconstriction (compensatory shock)\n- Pallor or central cyanosis = low oxygen delivery\n- Weak/absent peripheral pulses or asymmetric pulses\n\n**Multi-patient prioritization framework:**\n- Client with chest pain + diaphoresis: See immediately — unstable angina/ACS\n- Client with scheduled medication: Can wait — stable\n- Client requesting pain medication (controlled, stable pain): Can delegate or see next\n- Client with dressing change: Can delay without immediate risk\n- Client who just returned from cath lab with groin access site: Assess soon — bleeding risk"
+        },
+        {
+          "id": "red_flags",
+          "heading": "Red Flags Requiring Immediate Action",
+          "kind": "red_flags",
+          "body": "**Activate emergency response / call provider immediately:**\n- New or worsening chest pain + diaphoresis + ST elevation on telemetry: STEMI — activate cath lab\n- SBP < 90 mmHg in a cardiac patient: cardiogenic shock workup\n- Heart rate < 40 or > 150 with hemodynamic compromise: unstable arrhythmia\n- Sudden altered mental status in a monitored cardiac patient: rule out dysrhythmia, hypoxia, cardiogenic shock\n- Unequal blood pressures between arms (> 20 mmHg difference): possible aortic dissection — emergency\n- Sudden severe 'tearing' or 'ripping' back pain: aortic dissection — do not give nitroglycerin\n- New systolic murmur after MI: papillary muscle rupture or VSD — surgical emergency\n- Pulsatile abdominal mass in a hypotensive patient: AAA rupture — emergency surgery"
+        },
+        {
+          "id": "nursing_assessment_interventions",
+          "heading": "Nursing Responsibilities",
+          "kind": "nursing_assessment_interventions",
+          "body": "**Assessment sequence for any cardiovascular complaint:**\n1. Chief complaint and current severity (pain scale, quality, radiation)\n2. Vital signs including pulse oximetry\n3. 12-lead ECG within 10 minutes if chest pain\n4. IV access, blood draw (troponin, BMP, CBC)\n5. Targeted physical exam: lung sounds, heart sounds, peripheral pulses, JVD, edema\n6. Level of consciousness and orientation\n7. Last intake, medications, allergies\n\n**Nitroglycerine administration (NCLEX safety):**\n- Administer 0.4 mg SL every 5 minutes × 3 for ongoing chest pain\n- Hold if SBP < 90 mmHg\n- Hold if right/inferior MI suspected (RV preload-dependent)\n- Hold if patient has taken sildenafil/tadalafil/vardenafil (PDE-5 inhibitors) in last 24–48 hours — fatal hypotension\n- Educate patient: burning sensation under tongue confirms potency; store in dark glass bottle; replace every 6 months\n\n**Telemetry monitoring responsibilities:**\n- Verify monitor leads are correctly placed and obtaining clear signal\n- Document rhythm every shift and PRN\n- Respond to alarms promptly — do not silence without assessment\n- Report: new ST changes, new dysrhythmias, rate outside ordered parameters\n- Keep crash cart accessible and check availability every shift"
+        },
+        {
+          "id": "clinical_pearls",
+          "heading": "Clinical Pearls",
+          "kind": "clinical_pearls",
+          "body": "- **Prioritization on NCLEX is about whose condition worsens fastest without action** — not who has been waiting longest or who has the most complex task.\n- **Diaphoresis + chest pain = emergency** — diaphoresis indicates massive sympathetic activation and catecholamine release. Do not dismiss it as anxiety.\n- **Troponin elevation timing**: rises 3–6 hours after infarct onset. A negative troponin at presentation does not rule out ACS — serial troponins are required.\n- **Nitroglycerine burns under the tongue** — this is normal and indicates the tablet is still potent. If no burn, tablet may be expired.\n- **ABCs still apply** in cardiovascular prioritization. If the patient is not breathing or has no pulse, that supersedes chest pain assessment.\n- **NCLEX trap**: if a stable patient with chronic chest pain is listed alongside a patient with new-onset diaphoresis + chest pain — always see the NEW or ACUTE presentation first."
+        },
+        {
+          "id": "client_education",
+          "heading": "Patient Education",
+          "kind": "client_education",
+          "body": "**Emergency response — teach every cardiac patient:**\n- Call 911 (or local emergency number) immediately for: chest pain not relieved by nitroglycerine after 5 minutes, sudden severe shortness of breath, palpitations with dizziness or fainting\n- Do not drive yourself to the hospital during an acute cardiac event\n- Chew an aspirin 325 mg (or 2 × 162 mg) immediately if ACS is suspected and no contraindication\n\n**Nitroglycerine use at home:**\n- Take one tablet under the tongue at the first sign of chest pain\n- If pain persists after 5 minutes, take a second tablet and call 911\n- After 3 tablets in 15 minutes with no relief → call 911 immediately\n- Store nitroglycerin in original dark glass container; avoid heat\n\n**Risk factor modification:**\n- Blood pressure control (target < 130/80 for most cardiac patients)\n- Regular follow-up for medication adjustment\n- Low-sodium diet; weight management; physical activity as tolerated"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- Cardiovascular prioritization: assess whose condition worsens fastest without nursing intervention — not who asks most loudly or has the longest task list\n- Chest pain + diaphoresis + ST elevation = STEMI → ECG within 10 minutes → cath lab activation\n- Hold nitroglycerine: SBP < 90, inferior/RV MI, PDE-5 inhibitors in last 24–48 hours\n- Hemodynamic instability signs: hypotension, altered mentation, oliguria, cool clammy skin → escalate immediately\n- NCLEX approach: new/acute/changing > stable/chronic; unstable rhythm > stable rhythm; airway > breathing > circulation"
+        }
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-delegation",
+      "previewSectionCount": 2,
+      "seoTitle": "Delegation & assignment nursing: RN, RPN, UAP scope & NCLEX-RN Canada",
+      "seoDescription": "Complete RN lesson on delegation: five rights of delegation, RN vs RPN vs UAP scope, assessment delegation rules, and Canadian NCLEX-RN clinical judgment priorities.",
+      "sections": [
+        {
+          "id": "introduction",
+          "heading": "Overview",
+          "kind": "introduction",
+          "body": "**Delegation** is the transfer of authority to perform a nursing task to a competent individual while retaining accountability for the outcome. It is one of the most frequently tested topics on NCLEX-RN because errors in delegation cause patient harm and represent failures of professional nursing judgment.\n\nIn Canada, delegation occurs within the framework of provincial regulatory bodies (e.g. CNO in Ontario, BCCNPS in BC) and employer policy. The RN retains accountability regardless of who performs the delegated task. The critical rule: **delegation never transfers accountability** — the RN is always responsible for appropriate task assignment and patient outcome.\n\nDelegation must be distinguished from **assignment** (directing a team member to perform tasks within their own scope) — you assign tasks to RNs/RPNs; you delegate tasks outside the normal scope to unlicensed personnel or other regulated staff."
+        },
+        {
+          "id": "pathophysiology_overview",
+          "heading": "The Five Rights of Delegation",
+          "kind": "pathophysiology_overview",
+          "body": "The **Five Rights of Delegation** provide the decision framework the RN must apply before any delegation:\n\n1. **Right Task**: Is this task appropriate to delegate for this patient? Tasks with predictable outcomes, standardized procedures, and minimal need for nursing judgment are delegable. Assessment, care planning, evaluation, and teaching are NOT delegable.\n\n2. **Right Circumstance**: Is this patient stable enough for delegation? Unstable patients (new, changing, or complex conditions) require RN direct care. Delegation is appropriate for stable, chronic patients with predictable care needs.\n\n3. **Right Person**: Does this person have the documented competency and licensure/certification to perform this task? Match the complexity of the task to the level of the provider. Example: vital signs → UAP; IV medication → RN; wound assessment → RN, not UAP.\n\n4. **Right Direction/Communication**: Did the RN give clear, specific instructions including what to do, when to do it, and what to report back? Vague delegation is inadequate delegation.\n\n5. **Right Supervision/Evaluation**: Is the RN monitoring the outcome and available to be notified of changes? Delegation without follow-through is abandonment."
+        },
+        {
+          "id": "signs_symptoms",
+          "heading": "Scope of Practice: What Can Be Delegated and to Whom",
+          "kind": "signs_symptoms",
+          "body": "**CANNOT be delegated by RN to anyone (RN-only):**\n- Initial patient assessment (head-to-toe on admission or for new/unstable patients)\n- Nursing diagnosis and care planning\n- Care plan evaluation\n- Patient and family teaching (initial; basic reinforcement may be delegated in some settings)\n- Medication administration via complex routes (IV push, epidural, intrathecal)\n- Insertion of NG tubes, central lines, chest tubes\n- Care of unstable patients requiring frequent reassessment\n\n**CAN be delegated to RPNs/LPNs (within their scope):**\n- Medication administration via established peripheral IV, oral, topical, SQ\n- Catheter insertion and care\n- Wound care (stable wounds per policy)\n- Focused assessments for stable patients with predictable outcomes\n- Documentation as per scope\n\n**CAN be delegated to UAP (unlicensed assistive personnel — PSW, HCA, CNA):**\n- Vital signs (stable, routine patients)\n- Blood glucose monitoring (routine, stable — not for hypoglycemia protocol)\n- Ambulation assistance\n- ADL assistance: bathing, dressing, feeding (stable patients)\n- Intake and output recording\n- Weighing patients\n- Specimen collection (urine via collection hat — not catheter insertion)\n\n**Cannot delegate to UAP:**\n- Assessment or interpretation of findings\n- Medication administration of any kind\n- Care for unstable, new, or complex patients\n- Any skill requiring nursing judgment"
+        },
+        {
+          "id": "red_flags",
+          "heading": "Unsafe Delegation — Recognize and Refuse",
+          "kind": "red_flags",
+          "body": "**The RN must refuse or correct these delegation patterns:**\n\n- **Delegating assessment**: 'Tell me if he looks worse' is NOT appropriate delegation. Assessment is an RN function. The UAP observes; the RN assesses.\n- **Delegating unstable patients**: A client with new-onset chest pain, acute deterioration, or a recent procedure cannot have care delegated to UAP or even RPN for complex needs.\n- **Delegating without direction**: Handing off a patient without specifying what to do, what to watch for, and what to report is negligent.\n- **Delegating to avoid accountability**: If the outcome of a task requires nursing judgment (e.g. 'take vitals and adjust the IV rate if BP drops'), you cannot delegate this as a single task.\n- **Accepting delegation that exceeds your scope**: As an RN, you must also not accept tasks outside your own knowledge base or competency — scope has upper limits too.\n- **Over-delegating from workload pressure**: Feeling overwhelmed does not make unsafe delegation acceptable. Escalate to charge nurse if assignment load is unsafe."
+        },
+        {
+          "id": "nursing_assessment_interventions",
+          "heading": "Nursing Responsibilities",
+          "kind": "nursing_assessment_interventions",
+          "body": "**Before delegating:**\n- Apply the Five Rights of Delegation to every task\n- Verify the delegate's competency (not just licensure — verify current skills and familiarity with the specific patient)\n- Ensure the patient is stable enough for delegated care\n- Set a clear time frame for the task and reporting\n\n**Communication standard:**\n- Give specific direction: 'Please take vital signs on Mr. Smith in Room 412 every 30 minutes and report immediately if systolic BP drops below 100 or heart rate goes above 110.'\n- Avoid vague instruction: 'Keep an eye on the patient in 412.'\n- Use SBAR (Situation, Background, Assessment, Recommendation) for verbal hand-offs\n\n**After delegating:**\n- Follow up on the delegated task before end of shift\n- Evaluate the patient directly — do not rely solely on the delegate's report when assessment is indicated\n- Document your supervision: the RN signs for oversight, not just the task performer\n\n**In the Canadian context:**\n- Provincial college standards (e.g. CNO, CRNBC) define regulated controlled acts and who may perform them\n- Employer policies and position descriptions further define assignment scope within regulated boundaries\n- When in doubt, consult the provincial regulatory document or charge nurse"
+        },
+        {
+          "id": "clinical_pearls",
+          "heading": "Clinical Pearls",
+          "kind": "clinical_pearls",
+          "body": "- **NCLEX rule**: 'Assessment' is always RN-only. If an answer option involves any assessment function, UAPs or RPNs should not be assigned it.\n- **Stable = predictable, chronic, uncomplicated.** If any of those conditions change — patient becomes unstable, new complaint arises, recent intervention — return to direct RN care.\n- **Delegating is not avoiding work** — the RN must still supervise, evaluate, and remain responsible for outcomes. You cannot 'give away' accountability.\n- **Prioritize the RN's direct care time** on: unstable patients, complex assessments, teaching for understanding, complex medication administration, psychosocial care requiring therapeutic communication.\n- **Charge nurse escalation**: if the assignment itself is unsafe (too many unstable patients, inadequate staffing), the RN must communicate this professionally and document the concern — do not silently accept unsafe conditions."
+        },
+        {
+          "id": "client_education",
+          "heading": "Patient Education",
+          "kind": "client_education",
+          "body": "**For patients and families regarding the care team:**\n- Explain who will be providing care: RN, RPN, and support staff each have specific roles\n- Reassure that the registered nurse is always accountable for care planning and assessment\n- Encourage patients to report changes in their condition to any member of the team — an RN will be notified immediately for clinical changes\n- Patients have the right to ask which provider is caring for them and their scope of practice\n- If a patient expresses concern about a task being performed by a support worker, acknowledge the concern and clarify the delegation was appropriate — or reassess if it was not"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- Delegation = transfer of task authority; the RN retains accountability always\n- Five Rights: right task, right circumstance, right person, right direction, right supervision\n- Never delegate: assessment, care planning, evaluation, teaching, unstable patient care, complex medication routes\n- UAP can: vital signs, ADLs, I&O, ambulation assistance, blood glucose (routine/stable), specimen collection\n- Unsafe delegation: assigning assessment to UAP, delegating unstable patients, delegating without direction or follow-up\n- NCLEX key: if the option involves assessment, it stays with the RN regardless of how small it seems"
+        }
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-wound-care",
+      "previewSectionCount": 2,
+      "seoTitle": "Wound care nursing: pressure injuries, wound assessment, dressings & NCLEX-RN Canada",
+      "seoDescription": "Complete RN lesson on wound care: pressure injury staging, wound assessment, dressing types, infection signs, healing phases, and Canadian NCLEX-RN clinical priorities.",
+      "sections": [
+        {
+          "id": "introduction",
+          "heading": "Overview",
+          "kind": "introduction",
+          "body": "**Wound care** spans everything from surgical incisions and traumatic lacerations to pressure injuries, diabetic foot ulcers, and venous or arterial ulcers. For NCLEX-RN, the highest-yield areas are: (1) pressure injury staging and prevention, (2) wound assessment (size, depth, exudate, wound bed, periwound skin), (3) selection of appropriate dressing types, and (4) recognition of wound infection.\n\nWound healing follows a predictable sequence (hemostasis → inflammation → proliferation → remodeling) and can be disrupted by infection, poor perfusion, malnutrition, diabetes, and immunosuppression. The nurse's role is to create and maintain an environment that supports optimal healing, prevent complications, and educate patients on wound self-management."
+        },
+        {
+          "id": "pathophysiology_overview",
+          "heading": "Pressure Injury Staging and Pathophysiology",
+          "kind": "pathophysiology_overview",
+          "body": "**Pressure injury pathophysiology.** Pressure injuries (formerly called pressure ulcers or decubitus ulcers) result from prolonged pressure that compresses microvascular capillaries, reducing perfusion to the skin and underlying tissue. Ischemia begins within hours on bony prominences (sacrum, heels, occiput, greater trochanter, malleoli, ischial tuberosities). Contributing factors: shear forces (skin moving over underlying tissue during repositioning), friction, moisture (incontinence-associated dermatitis destroys the protective skin barrier), malnutrition, and immobility.\n\n**NPUAP/EPUAP Pressure Injury Staging:**\n\n- **Stage 1**: Non-blanchable erythema of intact skin. Skin is intact but does not turn white when pressed — indicates early tissue damage. Most visible on lighter skin; darker skin may show discoloration, warmth, or firmness.\n\n- **Stage 2**: Partial thickness skin loss. Loss of dermis presenting as a shallow open ulcer with pink/red wound bed OR intact/open/ruptured serum-filled blister. No slough or eschar. Do NOT call blisters from tape, incontinence, or moisture 'Stage 2' — these are not pressure injuries.\n\n- **Stage 3**: Full thickness skin loss. Subcutaneous fat visible. Slough or eschar may be present. May have tunneling or undermining. Bone, tendon, and muscle are NOT visible — if they were, it would be Stage 4.\n\n- **Stage 4**: Full thickness tissue loss with exposed bone, tendon, or muscle. Slough and/or eschar may be present. Deep undermining and tunneling common. High risk for osteomyelitis.\n\n- **Unstageable**: Full thickness skin/tissue loss where the extent cannot be determined because the wound is covered by slough or eschar that cannot be removed without debridement.\n\n- **Deep Tissue Pressure Injury (DTPI)**: Intact or non-intact skin with persistent non-blanchable deep red, maroon, or purple discoloration. May indicate soft tissue injury from pressure/shear occurring below the surface — may evolve rapidly to Stage 3 or 4."
+        },
+        {
+          "id": "signs_symptoms",
+          "heading": "Wound Assessment & Infection Recognition",
+          "kind": "signs_symptoms",
+          "body": "**Systematic wound assessment (document every dressing change):**\n- Location (anatomical description)\n- Size: length × width × depth in centimeters\n- Wound bed: granulation (red/pink — healthy), slough (yellow/tan/grey — necrotic fibrin), eschar (black/brown — dead tissue), epithelial tissue (pink/white — healing)\n- Exudate: type (serous, serosanguineous, purulent), amount (minimal, moderate, large), odor\n- Wound edges: attached vs undermining/tunneling; assess direction (clock face notation)\n- Periwound skin: erythema (extending from wound edge), maceration (white, soft — moisture damage), induration, warmth\n- Pain: location, character, severity — new or worsening pain in a chronic wound = infection or ischemia signal\n\n**Signs of wound infection (NERDS for superficial; STONES for deep):**\n- NERDS (superficial critical colonization): Non-healing, Exudate increase, Red/bleeding granulation, Debris, Smell\n- STONES (deep infection): Size increasing, Temperature elevated, Os (bone probe positive/osteomyelitis), New breakdown, Erythema/edema, Smell, Exudate\n\n**General wound infection signs:**\n- Purulent drainage (green/yellow/thick)\n- Surrounding erythema > 2 cm from wound edge and extending\n- Warmth and induration\n- Fever, leukocytosis (systemic signs)\n- Increasing pain in a previously comfortable wound"
+        },
+        {
+          "id": "labs_diagnostics",
+          "heading": "Dressing Selection Guide",
+          "kind": "labs_diagnostics",
+          "body": "**Wound dressing selection is based on wound moisture needs:**\n\n**Dry wounds (need moisture):**\n- **Hydrogel**: adds moisture to dry, necrotic wounds; promotes autolytic debridement\n- **Transparent film**: maintains moisture; useful for Stage 1 pressure injuries and superficial wounds without exudate; allows visualization without removal\n\n**Moist wounds with moderate exudate:**\n- **Hydrocolloid**: absorbs moderate exudate; maintains moist environment; do not use over infected wounds or deep wounds; common for Stage 2 pressure injuries\n- **Foam dressings**: highly absorbent; good for moderate-heavy exudate wounds; provide cushioning over bony prominences\n\n**High exudate wounds:**\n- **Alginate dressings**: made from seaweed; highly absorbent; manage heavy exudate (e.g. deep ulcers, heavily draining wounds); require secondary dressing\n\n**Infected wounds:**\n- **Silver-containing dressings** (silver foam, silver alginate): antimicrobial; used for infected or critically colonized wounds; not for clean, healing wounds (toxic to new granulation tissue)\n- **Iodosorb/Iodine gauze**: antimicrobial for infected wounds\n\n**General rules:**\n- Do NOT use occlusive dressings (hydrocolloid, film) over infected wounds or tunnels\n- Change dressings per order and when soiled, saturated, or disturbed\n- Use sterile technique for new surgical wounds and clean technique for chronic wounds per agency policy"
+        },
+        {
+          "id": "nursing_assessment_interventions",
+          "heading": "Nursing Responsibilities",
+          "kind": "nursing_assessment_interventions",
+          "body": "**Pressure injury prevention (priority: every admission):**\n- Complete validated skin risk assessment on admission (Braden Scale or Waterlow score) and re-assess per policy\n- Reposition every 2 hours (bed) or every 1 hour (chair) — clock document\n- Protect bony prominences: foam wedges, heel offloading boots, pressure-redistribution mattress\n- Keep skin clean and dry: incontinence-associated dermatitis → protective barrier cream immediately\n- Nutrition consult for patients at risk: protein intake critical for wound healing\n\n**Wound care procedure:**\n- Verify wound care order (type of dressing, solution, frequency)\n- Gather all supplies before beginning\n- Apply appropriate PPE (gloves; sterile gloves for new surgical wounds)\n- Clean wound per order: most wounds — normal saline irrigation; infected wounds — per protocol\n- Measure wound at each assessment; photograph if policy allows\n- Apply ordered dressing; secure without restricting circulation\n- Document assessment and procedure\n\n**Pain management during wound care:**\n- Pre-medicate 30–45 minutes before dressing change if prescribed\n- Use time-outs if patient requests during procedure\n- Non-pharmacologic: distraction, positioning for comfort, warming irrigation solution"
+        },
+        {
+          "id": "clinical_pearls",
+          "heading": "Clinical Pearls",
+          "kind": "clinical_pearls",
+          "body": "- **Heels are the second most common pressure injury site** (after sacrum). Offload heels in ALL bedridden patients — this is a nursing standard, not an order-dependent action.\n- **Stage cannot be reverse-staged** — a Stage 3 wound healing does not 'become' Stage 1 as it heals. Document as 'Stage 3, healing' and describe the wound bed accurately.\n- **Unstageable ≠ Stage 4** — Unstageable means the staging cannot be determined without removing the eschar/slough. Do NOT call it Stage 4 by default.\n- **Moist wound healing** is the gold standard: wounds heal faster in a moist environment than in a dry one. Do not allow wounds to dry out between dressing changes.\n- **Protein is the key nutrition factor** for wound healing: minimum 1.25–1.5 g/kg/day in wound healing patients. Assess albumin/prealbumin as indicators.\n- **Wound cultures**: swab cultures of wound exudate identify surface colonizers, not deep tissue bacteria. Use a quantitative biopsy or deep-tissue swab technique for reliable results — consult wound care specialist."
+        },
+        {
+          "id": "client_education",
+          "heading": "Patient Education",
+          "kind": "client_education",
+          "body": "**For patients being discharged with wounds or at risk for pressure injuries:**\n- Inspect skin daily: use a mirror for areas you can't see directly (heels, sacrum)\n- If you see a red area that does not go away after 30 minutes of offloading the pressure, report immediately\n- Reposition frequently: if you're in a wheelchair or chair, shift weight every 30 minutes\n- Keep skin dry: manage incontinence promptly; use barrier cream on at-risk skin\n\n**Wound self-care at home:**\n- Follow dressing change instructions exactly — when to change, how to clean, type of dressing\n- Infection warning signs to report: increasing pain, odor, warmth, spreading redness, pus\n- Keep follow-up appointments for wound assessment\n- Nutrition: adequate protein (lean meats, eggs, legumes, dairy) supports healing\n- Diabetic patients: blood glucose control is essential for wound healing — hyperglycemia impairs neutrophil function and tissue repair"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- Pressure injuries: caused by sustained pressure + shear → ischemia. Stage 1–4, Unstageable, Deep Tissue PI. Never reverse-stage.\n- Prevention: reposition q2h (bed), q1h (chair), offload heels, skin barrier products, risk assessment (Braden Scale), nutrition\n- Wound assessment: LOCATION, SIZE, BED (granulation/slough/eschar), EXUDATE, EDGES, PERIWOUND SKIN, PAIN\n- Infection signs: purulent drainage, surrounding erythema > 2 cm, warmth, fever, leukocytosis, new/worsening pain\n- Dressing selection: dry wound → hydrogel; moderate exudate → hydrocolloid/foam; heavy exudate → alginate; infected → silver-containing\n- Moist wound healing > dry: never let wounds desiccate between dressing changes"
+        }
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "us-rn-delegation",
+      "previewSectionCount": 2,
+      "seoTitle": "Delegation & assignment nursing: RN, RPN, UAP scope & NCLEX-RN Canada",
+      "seoDescription": "Complete RN lesson on delegation: five rights of delegation, RN vs RPN vs UAP scope, assessment delegation rules, and NCLEX-RN clinical judgment priorities.",
+      "sections": [
+        {
+          "id": "introduction",
+          "heading": "Overview",
+          "kind": "introduction",
+          "body": "**Delegation** is the transfer of authority to perform a nursing task to a competent individual while retaining accountability for the outcome. It is one of the most frequently tested topics on NCLEX-RN because errors in delegation cause patient harm and represent failures of professional nursing judgment.\n\nIn Canada, delegation occurs within the framework of provincial regulatory bodies (e.g. CNO in Ontario, BCCNPS in BC) and employer policy. The RN retains accountability regardless of who performs the delegated task. The critical rule: **delegation never transfers accountability** — the RN is always responsible for appropriate task assignment and patient outcome.\n\nDelegation must be distinguished from **assignment** (directing a team member to perform tasks within their own scope) — you assign tasks to RNs/RPNs; you delegate tasks outside the normal scope to unlicensed personnel or other regulated staff."
+        },
+        {
+          "id": "pathophysiology_overview",
+          "heading": "The Five Rights of Delegation",
+          "kind": "pathophysiology_overview",
+          "body": "The **Five Rights of Delegation** provide the decision framework the RN must apply before any delegation:\n\n1. **Right Task**: Is this task appropriate to delegate for this patient? Tasks with predictable outcomes, standardized procedures, and minimal need for nursing judgment are delegable. Assessment, care planning, evaluation, and teaching are NOT delegable.\n\n2. **Right Circumstance**: Is this patient stable enough for delegation? Unstable patients (new, changing, or complex conditions) require RN direct care. Delegation is appropriate for stable, chronic patients with predictable care needs.\n\n3. **Right Person**: Does this person have the documented competency and licensure/certification to perform this task? Match the complexity of the task to the level of the provider. Example: vital signs → UAP; IV medication → RN; wound assessment → RN, not UAP.\n\n4. **Right Direction/Communication**: Did the RN give clear, specific instructions including what to do, when to do it, and what to report back? Vague delegation is inadequate delegation.\n\n5. **Right Supervision/Evaluation**: Is the RN monitoring the outcome and available to be notified of changes? Delegation without follow-through is abandonment."
+        },
+        {
+          "id": "signs_symptoms",
+          "heading": "Scope of Practice: What Can Be Delegated and to Whom",
+          "kind": "signs_symptoms",
+          "body": "**CANNOT be delegated by RN to anyone (RN-only):**\n- Initial patient assessment (head-to-toe on admission or for new/unstable patients)\n- Nursing diagnosis and care planning\n- Care plan evaluation\n- Patient and family teaching (initial; basic reinforcement may be delegated in some settings)\n- Medication administration via complex routes (IV push, epidural, intrathecal)\n- Insertion of NG tubes, central lines, chest tubes\n- Care of unstable patients requiring frequent reassessment\n\n**CAN be delegated to RPNs/LPNs (within their scope):**\n- Medication administration via established peripheral IV, oral, topical, SQ\n- Catheter insertion and care\n- Wound care (stable wounds per policy)\n- Focused assessments for stable patients with predictable outcomes\n- Documentation as per scope\n\n**CAN be delegated to UAP (unlicensed assistive personnel — PSW, HCA, CNA):**\n- Vital signs (stable, routine patients)\n- Blood glucose monitoring (routine, stable — not for hypoglycemia protocol)\n- Ambulation assistance\n- ADL assistance: bathing, dressing, feeding (stable patients)\n- Intake and output recording\n- Weighing patients\n- Specimen collection (urine via collection hat — not catheter insertion)\n\n**Cannot delegate to UAP:**\n- Assessment or interpretation of findings\n- Medication administration of any kind\n- Care for unstable, new, or complex patients\n- Any skill requiring nursing judgment"
+        },
+        {
+          "id": "red_flags",
+          "heading": "Unsafe Delegation — Recognize and Refuse",
+          "kind": "red_flags",
+          "body": "**The RN must refuse or correct these delegation patterns:**\n\n- **Delegating assessment**: 'Tell me if he looks worse' is NOT appropriate delegation. Assessment is an RN function. The UAP observes; the RN assesses.\n- **Delegating unstable patients**: A client with new-onset chest pain, acute deterioration, or a recent procedure cannot have care delegated to UAP or even RPN for complex needs.\n- **Delegating without direction**: Handing off a patient without specifying what to do, what to watch for, and what to report is negligent.\n- **Delegating to avoid accountability**: If the outcome of a task requires nursing judgment (e.g. 'take vitals and adjust the IV rate if BP drops'), you cannot delegate this as a single task.\n- **Accepting delegation that exceeds your scope**: As an RN, you must also not accept tasks outside your own knowledge base or competency — scope has upper limits too.\n- **Over-delegating from workload pressure**: Feeling overwhelmed does not make unsafe delegation acceptable. Escalate to charge nurse if assignment load is unsafe."
+        },
+        {
+          "id": "nursing_assessment_interventions",
+          "heading": "Nursing Responsibilities",
+          "kind": "nursing_assessment_interventions",
+          "body": "**Before delegating:**\n- Apply the Five Rights of Delegation to every task\n- Verify the delegate's competency (not just licensure — verify current skills and familiarity with the specific patient)\n- Ensure the patient is stable enough for delegated care\n- Set a clear time frame for the task and reporting\n\n**Communication standard:**\n- Give specific direction: 'Please take vital signs on Mr. Smith in Room 412 every 30 minutes and report immediately if systolic BP drops below 100 or heart rate goes above 110.'\n- Avoid vague instruction: 'Keep an eye on the patient in 412.'\n- Use SBAR (Situation, Background, Assessment, Recommendation) for verbal hand-offs\n\n**After delegating:**\n- Follow up on the delegated task before end of shift\n- Evaluate the patient directly — do not rely solely on the delegate's report when assessment is indicated\n- Document your supervision: the RN signs for oversight, not just the task performer\n\n**In the US context:**\n- Provincial college standards (e.g. CNO, CRNBC) define regulated controlled acts and who may perform them\n- Employer policies and position descriptions further define assignment scope within regulated boundaries\n- When in doubt, consult the provincial regulatory document or charge nurse"
+        },
+        {
+          "id": "clinical_pearls",
+          "heading": "Clinical Pearls",
+          "kind": "clinical_pearls",
+          "body": "- **NCLEX rule**: 'Assessment' is always RN-only. If an answer option involves any assessment function, UAPs or RPNs should not be assigned it.\n- **Stable = predictable, chronic, uncomplicated.** If any of those conditions change — patient becomes unstable, new complaint arises, recent intervention — return to direct RN care.\n- **Delegating is not avoiding work** — the RN must still supervise, evaluate, and remain responsible for outcomes. You cannot 'give away' accountability.\n- **Prioritize the RN's direct care time** on: unstable patients, complex assessments, teaching for understanding, complex medication administration, psychosocial care requiring therapeutic communication.\n- **Charge nurse escalation**: if the assignment itself is unsafe (too many unstable patients, inadequate staffing), the RN must communicate this professionally and document the concern — do not silently accept unsafe conditions."
+        },
+        {
+          "id": "client_education",
+          "heading": "Patient Education",
+          "kind": "client_education",
+          "body": "**For patients and families regarding the care team:**\n- Explain who will be providing care: RN, RPN, and support staff each have specific roles\n- Reassure that the registered nurse is always accountable for care planning and assessment\n- Encourage patients to report changes in their condition to any member of the team — an RN will be notified immediately for clinical changes\n- Patients have the right to ask which provider is caring for them and their scope of practice\n- If a patient expresses concern about a task being performed by a support worker, acknowledge the concern and clarify the delegation was appropriate — or reassess if it was not"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- Delegation = transfer of task authority; the RN retains accountability always\n- Five Rights: right task, right circumstance, right person, right direction, right supervision\n- Never delegate: assessment, care planning, evaluation, teaching, unstable patient care, complex medication routes\n- UAP can: vital signs, ADLs, I&O, ambulation assistance, blood glucose (routine/stable), specimen collection\n- Unsafe delegation: assigning assessment to UAP, delegating unstable patients, delegating without direction or follow-up\n- NCLEX key: if the option involves assessment, it stays with the RN regardless of how small it seems"
+        }
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "us-rn-wound-care",
+      "previewSectionCount": 2,
+      "seoTitle": "Wound care nursing: pressure injuries, wound assessment, dressings & NCLEX-RN Canada",
+      "seoDescription": "Complete RN lesson on wound care: pressure injury staging, wound assessment, dressing types, infection signs, healing phases, and NCLEX-RN clinical priorities.",
+      "sections": [
+        {
+          "id": "introduction",
+          "heading": "Overview",
+          "kind": "introduction",
+          "body": "**Wound care** spans everything from surgical incisions and traumatic lacerations to pressure injuries, diabetic foot ulcers, and venous or arterial ulcers. For NCLEX-RN, the highest-yield areas are: (1) pressure injury staging and prevention, (2) wound assessment (size, depth, exudate, wound bed, periwound skin), (3) selection of appropriate dressing types, and (4) recognition of wound infection.\n\nWound healing follows a predictable sequence (hemostasis → inflammation → proliferation → remodeling) and can be disrupted by infection, poor perfusion, malnutrition, diabetes, and immunosuppression. The nurse's role is to create and maintain an environment that supports optimal healing, prevent complications, and educate patients on wound self-management."
+        },
+        {
+          "id": "pathophysiology_overview",
+          "heading": "Pressure Injury Staging and Pathophysiology",
+          "kind": "pathophysiology_overview",
+          "body": "**Pressure injury pathophysiology.** Pressure injuries (formerly called pressure ulcers or decubitus ulcers) result from prolonged pressure that compresses microvascular capillaries, reducing perfusion to the skin and underlying tissue. Ischemia begins within hours on bony prominences (sacrum, heels, occiput, greater trochanter, malleoli, ischial tuberosities). Contributing factors: shear forces (skin moving over underlying tissue during repositioning), friction, moisture (incontinence-associated dermatitis destroys the protective skin barrier), malnutrition, and immobility.\n\n**NPUAP/EPUAP Pressure Injury Staging:**\n\n- **Stage 1**: Non-blanchable erythema of intact skin. Skin is intact but does not turn white when pressed — indicates early tissue damage. Most visible on lighter skin; darker skin may show discoloration, warmth, or firmness.\n\n- **Stage 2**: Partial thickness skin loss. Loss of dermis presenting as a shallow open ulcer with pink/red wound bed OR intact/open/ruptured serum-filled blister. No slough or eschar. Do NOT call blisters from tape, incontinence, or moisture 'Stage 2' — these are not pressure injuries.\n\n- **Stage 3**: Full thickness skin loss. Subcutaneous fat visible. Slough or eschar may be present. May have tunneling or undermining. Bone, tendon, and muscle are NOT visible — if they were, it would be Stage 4.\n\n- **Stage 4**: Full thickness tissue loss with exposed bone, tendon, or muscle. Slough and/or eschar may be present. Deep undermining and tunneling common. High risk for osteomyelitis.\n\n- **Unstageable**: Full thickness skin/tissue loss where the extent cannot be determined because the wound is covered by slough or eschar that cannot be removed without debridement.\n\n- **Deep Tissue Pressure Injury (DTPI)**: Intact or non-intact skin with persistent non-blanchable deep red, maroon, or purple discoloration. May indicate soft tissue injury from pressure/shear occurring below the surface — may evolve rapidly to Stage 3 or 4."
+        },
+        {
+          "id": "signs_symptoms",
+          "heading": "Wound Assessment & Infection Recognition",
+          "kind": "signs_symptoms",
+          "body": "**Systematic wound assessment (document every dressing change):**\n- Location (anatomical description)\n- Size: length × width × depth in centimeters\n- Wound bed: granulation (red/pink — healthy), slough (yellow/tan/grey — necrotic fibrin), eschar (black/brown — dead tissue), epithelial tissue (pink/white — healing)\n- Exudate: type (serous, serosanguineous, purulent), amount (minimal, moderate, large), odor\n- Wound edges: attached vs undermining/tunneling; assess direction (clock face notation)\n- Periwound skin: erythema (extending from wound edge), maceration (white, soft — moisture damage), induration, warmth\n- Pain: location, character, severity — new or worsening pain in a chronic wound = infection or ischemia signal\n\n**Signs of wound infection (NERDS for superficial; STONES for deep):**\n- NERDS (superficial critical colonization): Non-healing, Exudate increase, Red/bleeding granulation, Debris, Smell\n- STONES (deep infection): Size increasing, Temperature elevated, Os (bone probe positive/osteomyelitis), New breakdown, Erythema/edema, Smell, Exudate\n\n**General wound infection signs:**\n- Purulent drainage (green/yellow/thick)\n- Surrounding erythema > 2 cm from wound edge and extending\n- Warmth and induration\n- Fever, leukocytosis (systemic signs)\n- Increasing pain in a previously comfortable wound"
+        },
+        {
+          "id": "labs_diagnostics",
+          "heading": "Dressing Selection Guide",
+          "kind": "labs_diagnostics",
+          "body": "**Wound dressing selection is based on wound moisture needs:**\n\n**Dry wounds (need moisture):**\n- **Hydrogel**: adds moisture to dry, necrotic wounds; promotes autolytic debridement\n- **Transparent film**: maintains moisture; useful for Stage 1 pressure injuries and superficial wounds without exudate; allows visualization without removal\n\n**Moist wounds with moderate exudate:**\n- **Hydrocolloid**: absorbs moderate exudate; maintains moist environment; do not use over infected wounds or deep wounds; common for Stage 2 pressure injuries\n- **Foam dressings**: highly absorbent; good for moderate-heavy exudate wounds; provide cushioning over bony prominences\n\n**High exudate wounds:**\n- **Alginate dressings**: made from seaweed; highly absorbent; manage heavy exudate (e.g. deep ulcers, heavily draining wounds); require secondary dressing\n\n**Infected wounds:**\n- **Silver-containing dressings** (silver foam, silver alginate): antimicrobial; used for infected or critically colonized wounds; not for clean, healing wounds (toxic to new granulation tissue)\n- **Iodosorb/Iodine gauze**: antimicrobial for infected wounds\n\n**General rules:**\n- Do NOT use occlusive dressings (hydrocolloid, film) over infected wounds or tunnels\n- Change dressings per order and when soiled, saturated, or disturbed\n- Use sterile technique for new surgical wounds and clean technique for chronic wounds per agency policy"
+        },
+        {
+          "id": "nursing_assessment_interventions",
+          "heading": "Nursing Responsibilities",
+          "kind": "nursing_assessment_interventions",
+          "body": "**Pressure injury prevention (priority: every admission):**\n- Complete validated skin risk assessment on admission (Braden Scale or Waterlow score) and re-assess per policy\n- Reposition every 2 hours (bed) or every 1 hour (chair) — clock document\n- Protect bony prominences: foam wedges, heel offloading boots, pressure-redistribution mattress\n- Keep skin clean and dry: incontinence-associated dermatitis → protective barrier cream immediately\n- Nutrition consult for patients at risk: protein intake critical for wound healing\n\n**Wound care procedure:**\n- Verify wound care order (type of dressing, solution, frequency)\n- Gather all supplies before beginning\n- Apply appropriate PPE (gloves; sterile gloves for new surgical wounds)\n- Clean wound per order: most wounds — normal saline irrigation; infected wounds — per protocol\n- Measure wound at each assessment; photograph if policy allows\n- Apply ordered dressing; secure without restricting circulation\n- Document assessment and procedure\n\n**Pain management during wound care:**\n- Pre-medicate 30–45 minutes before dressing change if prescribed\n- Use time-outs if patient requests during procedure\n- Non-pharmacologic: distraction, positioning for comfort, warming irrigation solution"
+        },
+        {
+          "id": "clinical_pearls",
+          "heading": "Clinical Pearls",
+          "kind": "clinical_pearls",
+          "body": "- **Heels are the second most common pressure injury site** (after sacrum). Offload heels in ALL bedridden patients — this is a nursing standard, not an order-dependent action.\n- **Stage cannot be reverse-staged** — a Stage 3 wound healing does not 'become' Stage 1 as it heals. Document as 'Stage 3, healing' and describe the wound bed accurately.\n- **Unstageable ≠ Stage 4** — Unstageable means the staging cannot be determined without removing the eschar/slough. Do NOT call it Stage 4 by default.\n- **Moist wound healing** is the gold standard: wounds heal faster in a moist environment than in a dry one. Do not allow wounds to dry out between dressing changes.\n- **Protein is the key nutrition factor** for wound healing: minimum 1.25–1.5 g/kg/day in wound healing patients. Assess albumin/prealbumin as indicators.\n- **Wound cultures**: swab cultures of wound exudate identify surface colonizers, not deep tissue bacteria. Use a quantitative biopsy or deep-tissue swab technique for reliable results — consult wound care specialist."
+        },
+        {
+          "id": "client_education",
+          "heading": "Patient Education",
+          "kind": "client_education",
+          "body": "**For patients being discharged with wounds or at risk for pressure injuries:**\n- Inspect skin daily: use a mirror for areas you can't see directly (heels, sacrum)\n- If you see a red area that does not go away after 30 minutes of offloading the pressure, report immediately\n- Reposition frequently: if you're in a wheelchair or chair, shift weight every 30 minutes\n- Keep skin dry: manage incontinence promptly; use barrier cream on at-risk skin\n\n**Wound self-care at home:**\n- Follow dressing change instructions exactly — when to change, how to clean, type of dressing\n- Infection warning signs to report: increasing pain, odor, warmth, spreading redness, pus\n- Keep follow-up appointments for wound assessment\n- Nutrition: adequate protein (lean meats, eggs, legumes, dairy) supports healing\n- Diabetic patients: blood glucose control is essential for wound healing — hyperglycemia impairs neutrophil function and tissue repair"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- Pressure injuries: caused by sustained pressure + shear → ischemia. Stage 1–4, Unstageable, Deep Tissue PI. Never reverse-stage.\n- Prevention: reposition q2h (bed), q1h (chair), offload heels, skin barrier products, risk assessment (Braden Scale), nutrition\n- Wound assessment: LOCATION, SIZE, BED (granulation/slough/eschar), EXUDATE, EDGES, PERIWOUND SKIN, PAIN\n- Infection signs: purulent drainage, surrounding erythema > 2 cm, warmth, fever, leukocytosis, new/worsening pain\n- Dressing selection: dry wound → hydrogel; moderate exudate → hydrocolloid/foam; heavy exudate → alginate; infected → silver-containing\n- Moist wound healing > dry: never let wounds desiccate between dressing changes"
+        }
+      ]
+    }
+  ]
+}

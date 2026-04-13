@@ -1,0 +1,538 @@
+{
+  "version": 1,
+  "description": "Phase 1 – COPD and Pulmonary Embolism: complete enrichment for CA-RN spine lessons",
+  "lessons": [
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-copd-respiratory",
+      "previewSectionCount": 2,
+      "seoTitle": "COPD nursing: pathophysiology, exacerbations, spirometry & NCLEX-RN Canada",
+      "seoDescription": "Complete RN lesson on COPD: emphysema vs chronic bronchitis, GOLD staging, exacerbation triggers, bronchodilators, oxygen therapy, and Canadian NCLEX-RN clinical priorities.",
+      "sections": [
+        {
+          "id": "introduction",
+          "heading": "Overview",
+          "kind": "introduction",
+          "body": "**Chronic obstructive pulmonary disease (COPD)** is a preventable and treatable disease characterized by persistent, usually progressive airflow limitation that is not fully reversible. It is the third leading cause of death globally and a high-frequency NCLEX-RN topic.\n\nCOPD encompasses two clinical phenotypes that often overlap:\n- **Emphysema**: destruction of alveolar walls → loss of elastic recoil → air trapping → hyperinflation. Classic presentation: thin, barrel-chested patient with pursed-lip breathing, minimal cough.\n- **Chronic bronchitis**: inflammation and mucus hypersecretion in bronchi for ≥ 3 months/year for ≥ 2 consecutive years. Classic: overweight, chronic productive cough, cyanosis.\n\nThe most important modifiable risk factor is **cigarette smoking** (responsible for ~85% of cases). Other causes: occupational dust/chemical exposure, alpha-1 antitrypsin deficiency (hereditary COPD in young non-smokers), biomass fuel smoke.\n\nFor NCLEX-RN: prioritize recognizing exacerbations, safe oxygen administration, and discharge teaching."
+        },
+        {
+          "id": "pathophysiology_overview",
+          "heading": "Pathophysiology",
+          "kind": "pathophysiology_overview",
+          "body": "**Airway inflammation and structural destruction.** Inhaled irritants (primarily cigarette smoke) trigger chronic inflammation in the airways and lung parenchyma. Activated macrophages and neutrophils release proteases (elastase, matrix metalloproteinases) that destroy the lung's structural scaffolding. Normally, antiproteases (alpha-1 antitrypsin) balance this destruction — in COPD, the protease–antiprotease balance is overwhelmed. This results in destruction of alveolar septa (emphysema) and goblet cell hyperplasia + submucosal gland hypertrophy (chronic bronchitis pattern) simultaneously.\n\n**Air trapping and hyperinflation.** Loss of alveolar elastic recoil means airways collapse during exhalation before all air is expelled — this is called **dynamic airway collapse** or **air trapping**. Residual volume and functional residual capacity increase dramatically. The diaphragm becomes flat and mechanically disadvantaged (low dome position), forcing accessory muscles to compensate. The barrel chest (increased AP diameter) is a physical manifestation of chronic hyperinflation.\n\n**Gas exchange failure and hypoxic/hypercapnic respiratory failure.** Ventilation-perfusion (V/Q) mismatch is the primary gas exchange defect. In emphysema: alveoli ventilate poorly (destroyed walls, poor elastic recoil) → low V/Q or dead space. In chronic bronchitis: airways obstructed by mucus → reduced ventilation relative to perfusion. Both patterns cause hypoxemia. In severe COPD, CO₂ retention develops — chronically elevated PaCO₂ causes the kidneys to retain bicarbonate, shifting the acid-base balance to a **compensated respiratory acidosis** (PaCO₂ elevated, pH near-normal, HCO₃ elevated).\n\n**Hypoxic drive and the oxygen caution in COPD.** In severe COPD, the central chemoreceptors (sensitive to CO₂) become blunted after years of hypercapnia. The patient then depends on the **peripheral chemoreceptors' hypoxic drive** (stimulated by low PaO₂) to maintain respiratory effort. The clinical teaching — still relevant on NCLEX — is that administering very high-flow oxygen to a hypercapnic COPD patient may suppress the hypoxic drive and cause apnea or CO₂ narcosis. **Target SpO₂ for COPD: 88–92%** (not ≥ 94%), especially in known hypercapnic patients."
+        },
+        {
+          "id": "signs_symptoms",
+          "heading": "Signs & Symptoms",
+          "kind": "signs_symptoms",
+          "body": "**Chronic stable COPD:**\n- Dyspnea on exertion, progressive over years (early) → dyspnea at rest (severe)\n- Chronic productive cough (chronic bronchitis pattern) or minimal cough (emphysema)\n- Sputum production: mucoid (stable); purulent (exacerbation signal)\n- Decreased exercise tolerance\n- Expiratory wheeze\n- Prolonged expiration\n- Barrel chest (increased AP diameter)\n- Hyperresonance on percussion\n- Diminished breath sounds (emphysema)\n- Use of accessory muscles: sternocleidomastoid, scalene\n- Pursed-lip breathing (physiological PEEP to prevent dynamic collapse)\n\n**COPD Exacerbation (AECOPD):**\n- Acute worsening of dyspnea beyond normal day-to-day variation\n- Increased sputum volume or change in sputum color (yellow/green = bacterial)\n- Increased wheezing and chest tightness\n- Hypoxemia: SpO₂ dropping below baseline\n- Confusion/somnolence in severe cases (CO₂ narcosis)\n\n**GOLD Severity (FEV₁ % predicted post-bronchodilator):**\n- GOLD 1 (Mild): FEV₁ ≥ 80%\n- GOLD 2 (Moderate): FEV₁ 50–79%\n- GOLD 3 (Severe): FEV₁ 30–49%\n- GOLD 4 (Very Severe): FEV₁ < 30%"
+        },
+        {
+          "id": "red_flags",
+          "heading": "Red Flags / Clinical Deterioration",
+          "kind": "red_flags",
+          "body": "**Escalate immediately for:**\n\n- **SpO₂ < 85% or rapidly falling despite supplemental O₂**: respiratory failure — prepare for NPPV (BiPAP) or intubation\n- **ABG: pH < 7.35 + rising PaCO₂**: acute hypercapnic respiratory failure — failure to compensate\n- **SpO₂ > 95% in known hypercapnic COPD**: over-oxygenation may suppress hypoxic drive — reduce O₂ and reassess ABG\n- **Altered mental status, somnolence, or CO₂ narcosis**: PaCO₂ likely > 70–80 mmHg — urgent NPPV or mechanical ventilation\n- **Purulent sputum + fever + markedly increased dyspnea**: severe bacterial exacerbation — antibiotics + systemic steroids + bronchodilators\n- **New peripheral cyanosis or mottling**: severe hypoxemia\n- **Inspiratory crackles + new leg edema + JVD**: cor pulmonale (right heart failure from pulmonary hypertension) — new decompensation\n- **Pneumothorax in COPD**: bullae rupture → sudden worsening dyspnea + absent breath sounds → needle decompression"
+        },
+        {
+          "id": "labs_diagnostics",
+          "heading": "Diagnostics / Labs",
+          "kind": "labs_diagnostics",
+          "body": "**Pulmonary function tests (spirometry — definitive diagnosis):**\n- Post-bronchodilator FEV₁/FVC < 0.70 (< 70%): obstructive pattern — required for COPD diagnosis\n- FEV₁ % predicted: grades severity (GOLD 1–4)\n- Total lung capacity (TLC) increased; residual volume (RV) increased (air trapping)\n\n**ABG (arterial blood gas) — critical in exacerbation:**\n- Stable COPD: compensated respiratory acidosis: pH 7.35–7.45, ↑PaCO₂, ↑HCO₃, hypoxemia\n- Acute exacerbation: uncompensated respiratory acidosis: pH < 7.35, ↑↑PaCO₂, HCO₃ not yet compensated\n- Target PaO₂ 55–80 mmHg; PaCO₂ at patient's baseline (often 50–60 mmHg chronically)\n\n**Labs:**\n- CBC: polycythemia (chronic hypoxemia → elevated RBC/Hct — compensatory)\n- Sputum culture: in exacerbation; H. influenzae, S. pneumoniae, M. catarrhalis most common\n- BNP/troponin: if cor pulmonale or concurrent cardiac disease suspected\n- Alpha-1 antitrypsin level: in young patients (< 45) with COPD without clear smoking history\n\n**Imaging:**\n- CXR: hyperinflation, flattened diaphragm, widened intercostal spaces, bullae in emphysema; increased vascular markings in chronic bronchitis\n- CT chest: if pneumonia, malignancy, or bullae (for surgical consideration)"
+        },
+        {
+          "id": "nursing_assessment_interventions",
+          "heading": "Nursing Responsibilities",
+          "kind": "nursing_assessment_interventions",
+          "body": "**Oxygen administration in COPD (critical safety point):**\n- Target SpO₂ **88–92%** in known or suspected hypercapnic COPD patients\n- Use **Venturi mask** (precise FiO₂ delivery) or nasal cannula at 1–2 L/min\n- Do NOT use high-flow O₂ without ABG monitoring\n- If SpO₂ > 92%: reduce O₂ flow, reassess ABG (check PaCO₂)\n- If SpO₂ < 88% despite O₂: prepare for NIV (BiPAP — first-line for AECOPD with respiratory failure)\n\n**Assessment priorities:**\n- Respiratory rate, depth, use of accessory muscles, lip color\n- Auscultate: expiratory wheeze, air entry, prolonged I:E ratio\n- SpO₂ continuously during exacerbation\n- Level of consciousness — confusion indicates hypercapnia\n- Sputum: amount, color, consistency\n- Assess fluid status: peripheral edema (cor pulmonale)\n\n**Pharmacologic interventions (AECOPD):**\n- **Short-acting bronchodilators** (SABA): albuterol (salbutamol in Canada) via nebulizer or MDI — first-line immediate relief\n- **Short-acting anticholinergics** (SAAC): ipratropium — often combined with albuterol (Duoneb/Combivent) for additive bronchodilation\n- **Systemic corticosteroids**: methylprednisolone IV or prednisone oral — reduce inflammation, shorten exacerbation duration (5 days typical)\n- **Antibiotics**: if purulent sputum (color change) — azithromycin, amoxicillin-clavulanate, or doxycycline per local guidelines\n\n**Non-pharmacologic:**\n- High Fowler's positioning: optimize diaphragmatic excursion\n- Pursed-lip breathing instruction\n- Chest physiotherapy: postural drainage for secretion clearance if applicable\n- Energy conservation techniques\n- Incentive spirometry for post-acute phase lung expansion"
+        },
+        {
+          "id": "clinical_pearls",
+          "heading": "Clinical Pearls",
+          "kind": "clinical_pearls",
+          "body": "- **O₂ target in COPD is 88–92%, not 94–98%.** High-flow O₂ in hypercapnic COPD can cause CO₂ narcosis — this is a critical NCLEX-RN safety point.\n- **BiPAP (NIV) is first-line for AECOPD with hypercapnia** — reduces intubation rates, mortality, and ICU stay compared to early intubation.\n- **Pursed-lip breathing** = physiologic PEEP. It keeps airways open during exhalation, reduces air trapping, and improves CO₂ elimination — teach and reinforce.\n- **Barrel chest** is a sign of chronic air trapping, not acute decompensation. It reflects years of disease.\n- **Polycythemia** in COPD = compensatory erythropoiesis from chronic hypoxemia → increased RBC mass → increased blood viscosity → increased DVT/stroke risk.\n- **COPD exacerbations predict mortality**: each hospitalization for exacerbation increases 1-year mortality risk by 20–30%.\n- **Smoking cessation** is the single most effective intervention to slow COPD progression. Refer to cessation counseling at every visit."
+        },
+        {
+          "id": "client_education",
+          "heading": "Patient Education",
+          "kind": "client_education",
+          "body": "**Inhaler technique (critical — most patients use incorrectly):**\n- MDI: shake, remove cap, breathe out completely, seal lips around mouthpiece, inhale slowly over 3–5 seconds while pressing canister, hold breath 10 seconds\n- Use a spacer/valved holding chamber: dramatically increases drug delivery to lungs\n- Clean inhaler mouthpiece weekly with warm water\n- Count remaining doses — do not assume inhaler is empty or full based on weight alone\n\n**Daily management:**\n- Do not smoke and avoid secondhand smoke, wood smoke, strong fumes\n- Know the difference between controller (LABA, LAMA, ICS — daily prevention) and rescue (SABA — symptom relief) inhalers\n- Never use rescue inhaler more than 4 times per week without contacting provider\n- Pulmonary rehabilitation: improves exercise tolerance, reduces hospitalizations, improves quality of life\n- Annual influenza vaccine and pneumococcal vaccine: reduce infectious exacerbations\n\n**Recognize an exacerbation:**\n- Increased dyspnea worse than usual, sputum changes (color or amount), increased wheeze\n- Take rescue inhaler; if not better in 20 minutes, call provider or go to emergency\n- Keep an exacerbation action plan in writing\n\n**Oxygen use at home:**\n- If prescribed, use exactly as ordered (flow rate, hours/day) — do not increase without instruction\n- Never smoke or allow smoking near oxygen equipment (fire hazard)\n- Oxygen does not relieve breathlessness caused by anxiety — teach diaphragmatic breathing"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- COPD = irreversible airflow obstruction from emphysema (alveolar destruction) and/or chronic bronchitis (mucus hypersecretion)\n- Pathophysiology: protease-antiprotease imbalance → lung destruction → V/Q mismatch → hypoxemia + hypercapnia (chronic respiratory acidosis)\n- O₂ target in COPD: SpO₂ **88–92%** — high-flow O₂ may suppress hypoxic drive and cause CO₂ narcosis\n- AECOPD treatment: SABA + SAAC bronchodilators, systemic steroids 5 days, antibiotics if purulent sputum, BiPAP for hypercapnic failure\n- Most important teaching: inhaler technique, smoking cessation, recognizing exacerbation, pulmonary rehab"
+        }
+      ],
+      "preTest": [
+        {
+          "question": "A client with COPD has an SpO₂ of 91% on room air and is comfortable at rest. What is the nurse's priority action?",
+          "options": [
+            "Apply a non-rebreather mask at 15 L/min to raise SpO₂ above 95%",
+            "Continue monitoring — SpO₂ of 88–92% is the appropriate target for COPD",
+            "Notify the provider immediately as SpO₂ below 95% requires intervention",
+            "Place the client in Trendelenburg to improve oxygen delivery"
+          ],
+          "correct": 1,
+          "rationale": "For patients with COPD and chronic hypercapnia, the target SpO₂ is 88–92% (not 94–98%). An SpO₂ of 91% is within this therapeutic range. Administering high-flow oxygen to raise SpO₂ above 92% may suppress the hypoxic drive and precipitate CO₂ narcosis in a chronically hypercapnic patient."
+        },
+        {
+          "question": "A nurse is assessing a client with COPD who is experiencing an acute exacerbation. Which finding should the nurse prioritize?",
+          "options": [
+            "SpO₂ 90%, pursed-lip breathing, using accessory muscles",
+            "SpO₂ 87%, new confusion, respiratory rate 32, and SpO₂ declining",
+            "Productive cough with white mucus, mild dyspnea on exertion",
+            "HR 88, BP 134/78, no change from baseline breathlessness"
+          ],
+          "correct": 1,
+          "rationale": "SpO₂ 87% with new confusion indicates CO₂ narcosis or severe hypoxemia with CNS involvement. Declining SpO₂ + altered mental status = impending respiratory failure. This requires immediate escalation: notify provider, prepare for BiPAP, ABG stat. The other options represent concerning but less immediately dangerous findings."
+        }
+      ],
+      "postTest": [
+        {
+          "question": "A client's ABG results during an acute COPD exacerbation show: pH 7.29, PaCO₂ 72 mmHg, HCO₃ 34 mEq/L, PaO₂ 54 mmHg. How should the nurse interpret this?",
+          "options": [
+            "Metabolic acidosis with respiratory compensation",
+            "Acute-on-chronic respiratory acidosis with hypoxemia — requires urgent intervention",
+            "Respiratory alkalosis indicating hyperventilation",
+            "Fully compensated respiratory acidosis — no intervention needed"
+          ],
+          "correct": 1,
+          "rationale": "pH 7.29 is acidotic. PaCO₂ 72 mmHg = CO₂ retention (respiratory cause). HCO₃ 34 is elevated (renal compensation from chronic hypercapnia). But pH < 7.35 means compensation is incomplete = acute-on-chronic respiratory acidosis. PaO₂ 54 = significant hypoxemia. This requires NIV (BiPAP), bronchodilators, and possible escalation to ICU."
+        },
+        {
+          "question": "A nurse is teaching a COPD patient how to use an MDI with a spacer. Which statement indicates the patient needs further instruction?",
+          "options": [
+            "I should breathe out fully before pressing the inhaler",
+            "I should inhale quickly and forcefully when pressing the canister",
+            "I should hold my breath for 10 seconds after inhaling",
+            "The spacer helps more medicine reach my lungs"
+          ],
+          "correct": 1,
+          "rationale": "Correct MDI technique requires slow, controlled inhalation (3–5 seconds) — not quick, forceful breathing. Fast inhalation causes medication to impact the back of the throat rather than reaching the airways. Breathing out before, holding breath 10 seconds, and using a spacer are all correct."
+        },
+        {
+          "question": "A client with COPD is prescribed ipratropium bromide. Which statement best explains the expected mechanism of this medication?",
+          "options": [
+            "It relaxes bronchial smooth muscle by stimulating beta-2 receptors",
+            "It reduces airway inflammation by inhibiting prostaglandin synthesis",
+            "It blocks muscarinic receptors in the airway to reduce bronchoconstriction and secretions",
+            "It prevents mast cell degranulation to reduce allergic bronchoconstriction"
+          ],
+          "correct": 2,
+          "rationale": "Ipratropium is an anticholinergic (muscarinic antagonist). It blocks parasympathetic bronchoconstriction, reduces mucus secretion, and produces bronchodilation. Beta-2 agonists (albuterol/salbutamol) relax smooth muscle via adrenergic receptors. NSAIDs inhibit prostaglandins. Cromolyn/nedocromil stabilize mast cells."
+        },
+        {
+          "question": "A client with COPD has been started on long-term home oxygen at 2 L/min via nasal cannula. Which instruction by the nurse is most important for safety?",
+          "options": [
+            "Do not use the oxygen near open flames or while smoking",
+            "Increase the flow rate when feeling short of breath",
+            "Cover the tubing with blankets to prevent tripping",
+            "Remove oxygen during meals to prevent interference with swallowing"
+          ],
+          "correct": 0,
+          "rationale": "Oxygen is highly flammable. Smoking or using open flames near oxygen equipment is a serious fire hazard. Patients must not smoke while on oxygen. Flow rate should never be self-adjusted — it is ordered to maintain target SpO₂. Covering tubing creates fire hazard. Oxygen is generally safe to use while eating."
+        }
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-pulmonary-embolism",
+      "previewSectionCount": 2,
+      "seoTitle": "Pulmonary embolism nursing: DVT, Wells score, anticoagulants & NCLEX-RN Canada",
+      "seoDescription": "Complete RN lesson on PE: Virchow's triad, Wells criteria, D-dimer, CTPA, heparin, thrombolytics, VTE prevention, and Canadian NCLEX-RN clinical priorities.",
+      "sections": [
+        {
+          "id": "introduction",
+          "heading": "Overview",
+          "kind": "introduction",
+          "body": "**Pulmonary embolism (PE)** is an obstruction of one or more pulmonary arteries, most commonly by a blood clot (thrombus) originating from the deep veins of the legs or pelvis (deep vein thrombosis — DVT). PE is the third most common acute cardiovascular syndrome (after MI and stroke) and carries a mortality rate of 10–30% if untreated.\n\nPE exists on a clinical spectrum:\n- **Submassive (intermediate-risk)**: right ventricular strain on echocardiogram or elevated troponin/BNP but hemodynamically stable\n- **Massive (high-risk)**: hemodynamically unstable — SBP < 90 mmHg or requiring vasopressors; mortality > 50%\n\nMost PEs arise from DVT — the term **venous thromboembolism (VTE)** encompasses both conditions. Risk factors and prevention are inseparable from treatment: VTE prophylaxis is one of the most testable nursing interventions on NCLEX-RN.\n\nFor the NCLEX-RN: recognize the sudden onset dyspnea + pleuritic chest pain + tachycardia triad, know the DVT risk factors (Virchow's triad), and understand anticoagulation management and safety."
+        },
+        {
+          "id": "pathophysiology_overview",
+          "heading": "Pathophysiology",
+          "kind": "pathophysiology_overview",
+          "body": "**Virchow's Triad — the foundation of VTE pathophysiology.** Three conditions predispose to thrombus formation:\n1. **Venous stasis**: slowing of venous blood flow activates clotting factors that accumulate without being washed away. Causes: immobility (hospital bed rest, long flights), obesity, heart failure, inferior vena cava compression (pregnancy, tumor).\n2. **Endothelial injury**: damage to vessel walls exposes subendothelial collagen and tissue factor, activating the coagulation cascade. Causes: trauma, surgery, central venous catheters, inflammatory vasculitis.\n3. **Hypercoagulability**: inherited or acquired states favoring clot formation. Causes: Factor V Leiden, prothrombin G20210A mutation, protein C/S deficiency, antiphospholipid syndrome, cancer (tumors release procoagulant factors), oral contraceptives, pregnancy.\n\n**From thrombus to embolism.** A DVT typically begins in the deep calf veins (distal DVT) and may propagate proximally to the popliteal, femoral, and iliac veins. Once a clot propagates to the proximal deep veins, its risk of embolization increases dramatically. When the clot dislodges, it travels through the right heart and lodges in the pulmonary arterial tree.\n\n**Pulmonary arterial obstruction and its consequences.** The clot increases pulmonary vascular resistance (PVR), which raises right ventricular afterload. The RV dilates and fails. Simultaneously, the obstruction creates **dead space** — perfused alveoli receive no blood flow (V/Q mismatch, high V/Q ratio), causing progressive hypoxemia through redistribution of blood flow to other, now overperfused lung segments. The combination of dead space, hypoxia-driven bronchoconstriction (low CO₂ in affected areas), and surfactant loss causes respiratory failure. In massive PE, RV failure → reduced left ventricular filling → decreased CO → cardiogenic-obstructive shock → cardiac arrest."
+        },
+        {
+          "id": "signs_symptoms",
+          "heading": "Signs & Symptoms",
+          "kind": "signs_symptoms",
+          "body": "**Classic triad (present together in only ~20% — but each component independently common):**\n- **Sudden onset dyspnea** (most common symptom, 80% of cases)\n- **Pleuritic chest pain** (sharp, worsens with breathing — from pulmonary infarction irritating pleura)\n- **Hemoptysis** (blood-streaked sputum — 30%; from pulmonary infarction)\n\n**Vital sign abnormalities:**\n- Tachycardia (most consistent finding: HR > 100 bpm in > 90% of significant PEs)\n- Tachypnea (RR > 20)\n- Hypoxemia (SpO₂ may drop precipitously)\n- Hypotension (only in massive PE — poor prognosis sign)\n\n**DVT symptoms (50–70% of PE patients have concurrent DVT):**\n- Unilateral leg pain, swelling, warmth, and erythema\n- Positive Homan's sign (calf pain with dorsiflexion) — low sensitivity and specificity, not reliable\n- Palpable cord in the leg\n\n**Examination findings:**\n- Decreased breath sounds or dullness over infarct area\n- Pleural friction rub\n- Loud P2 (pulmonary component of S2) — pulmonary hypertension\n- S3 right-sided gallop (RV strain)\n- JVD in massive PE (RV failure)\n- Calf asymmetry (DVT)\n\n**The clinical paradox:** many PEs present subtly — dyspnea alone, unexplained tachycardia, or mild hypoxia. NCLEX-RN often tests recognizing PE in a post-op or immobilized patient with unexplained new onset symptoms."
+        },
+        {
+          "id": "red_flags",
+          "heading": "Red Flags / Clinical Deterioration",
+          "kind": "red_flags",
+          "body": "**Escalate immediately:**\n\n- **Sudden severe dyspnea + SpO₂ < 90% in a post-operative or immobilized patient**: PE until proven otherwise\n- **Hemodynamic instability (SBP < 90, HR > 110)**: massive PE — prepare for emergency thrombolysis or surgical embolectomy\n- **Cardiac arrest in suspected PE**: reconsider immediate thrombolysis (alteplase) — the only intervention that may reverse obstructive arrest\n- **New right heart strain on ECG** (S1Q3T3 pattern, new right bundle branch block, sinus tachycardia with P-pulmonale): sign of RV overload\n- **Syncope**: may indicate transient hemodynamic compromise from large embolus\n- **Worsening hypoxemia despite supplemental O₂**: reconsider PE diagnosis or impending respiratory failure\n- **Signs of DVT in a symptomatic patient**: bilateral asymmetric leg swelling + dyspnea = VTE until proven otherwise"
+        },
+        {
+          "id": "labs_diagnostics",
+          "heading": "Diagnostics / Labs",
+          "kind": "labs_diagnostics",
+          "body": "**Pre-test probability: Wells PE Score** (used before ordering imaging):\n- Clinical signs of DVT: 3 points\n- PE most likely diagnosis: 3 points\n- HR > 100: 1.5 points\n- Immobilization/surgery in last 4 weeks: 1.5 points\n- Prior DVT/PE: 1.5 points\n- Hemoptysis: 1 point\n- Malignancy: 1 point\n- Score ≤ 4 (low/intermediate): D-dimer first; if negative → PE ruled out\n- Score > 4 (high): proceed directly to CT pulmonary angiography (CTPA)\n\n**D-dimer:**\n- Highly sensitive (> 95%) but not specific — elevated in infection, pregnancy, malignancy, surgery\n- A negative D-dimer in a low-probability patient effectively rules out PE (PERC rule)\n- A positive D-dimer does NOT diagnose PE — it requires imaging confirmation\n\n**CT Pulmonary Angiography (CTPA):**\n- Gold standard imaging: identifies clot to segmental and sub-segmental level\n- Requires IV contrast — check creatinine (contrast nephropathy risk) and shellfish/contrast allergy\n\n**Other:**\n- ABG: low PaO₂, low PaCO₂ (hyperventilation), respiratory alkalosis (early), metabolic acidosis (late if cardiogenic shock)\n- 12-lead ECG: sinus tachycardia (most common); S1Q3T3 (deep S in I, Q wave in III, inverted T in III); new RBBB — signs of acute RV strain\n- Echocardiogram: RV dilation, septal flattening (D-sign) — guides risk stratification in intermediate/massive PE\n- Troponin: elevated with RV injury — intermediate risk marker\n- BNP: elevated with RV strain"
+        },
+        {
+          "id": "nursing_assessment_interventions",
+          "heading": "Nursing Responsibilities",
+          "kind": "nursing_assessment_interventions",
+          "body": "**Immediate nursing priorities (suspected PE):**\n- Position semi-Fowler's to optimize ventilation\n- Administer supplemental oxygen to maintain SpO₂ ≥ 94% (or as ordered)\n- Establish IV access; prepare for urgent labs and imaging\n- Continuous cardiac monitoring (ECG, SpO₂, vital signs)\n- Notify provider immediately — suspected PE is a medical emergency\n- Prepare for CTPA — check allergy history, creatinine, consent\n\n**Anticoagulation — the primary treatment (hemodynamically stable PE):**\n- **Unfractionated heparin (UFH)** IV: weight-based bolus then infusion; monitor aPTT (goal 60–100 seconds or per protocol); check platelet count (HIT risk)\n- **Enoxaparin (LMWH)**: 1 mg/kg SQ q12h or 1.5 mg/kg daily; monitor anti-Xa in obese patients or renal impairment; SQ injection only (not IM)\n- **DOACs** (direct oral anticoagulants): rivaroxaban, apixaban — increasingly first-line; no routine monitoring required\n- **Transition to warfarin** (if used): overlap with heparin until INR 2–3 for 2 consecutive days; monitor INR closely\n\n**Thrombolytics (massive PE with hemodynamic instability):**\n- Alteplase (tPA) IV: 100 mg over 2 hours\n- Nursing: monitor for bleeding at all sites; hold all IM injections; minimize invasive procedures; monitor neurological status (intracranial hemorrhage risk)\n- Absolute contraindications: prior hemorrhagic stroke; active internal bleeding; recent major surgery < 3 months\n\n**VTE prevention (every admission — critical nursing responsibility):**\n- Pneumatic compression devices (PCDs): apply on admission for all surgical/immobile patients\n- LMWH or UFH prophylaxis as ordered\n- Early ambulation: most important post-op intervention\n- Adequate hydration\n- Leg exercises in immobile patients (ankle pumps, quadriceps sets)"
+        },
+        {
+          "id": "clinical_pearls",
+          "heading": "Clinical Pearls",
+          "kind": "clinical_pearls",
+          "body": "- **Sudden, unexplained dyspnea + tachycardia in a post-op patient = PE until proven otherwise.** This is one of the most common NCLEX-RN clinical scenarios.\n- **D-dimer is a rule-OUT test** — useful only if pre-test probability is low. A positive D-dimer does not diagnose PE.\n- **ABG pattern in PE**: low PaO₂ + low PaCO₂ + respiratory alkalosis (hyperventilating to compensate). Not hypercapnic like COPD.\n- **Enoxaparin is SQ only** — never IM. Rotate injection sites; do not aspirate; apply pressure after.\n- **Warfarin requires 3–5 days** to reach therapeutic effect. Always bridge with heparin until INR 2–3 for 2 days before discontinuing heparin.\n- **HIT (Heparin-Induced Thrombocytopenia)**: platelet drop > 50% on UFH = stop heparin, switch to argatroban or fondaparinux. This is a NCLEX safety topic.\n- **Compression stockings** do not prevent PE — only sequential compression devices (SCDs/PCDs) and anticoagulants have proven efficacy."
+        },
+        {
+          "id": "client_education",
+          "heading": "Patient Education",
+          "kind": "client_education",
+          "body": "**After PE diagnosis — anticoagulation education:**\n- Duration of anticoagulation: 3 months for provoked PE (reversible cause); indefinite if unprovoked or recurrent\n- If on warfarin: INR monitoring (target 2–3), dietary consistency with vitamin K foods, avoid NSAIDs, report any bleeding\n- If on DOAC (rivaroxaban, apixaban): take as prescribed, do not skip doses, report unusual bruising or bleeding\n\n**Warning signs — seek emergency care immediately:**\n- Sudden worsening of shortness of breath\n- Coughing up blood\n- Leg swelling or pain (possible new DVT)\n- Chest pain or racing heart\n\n**Prevention of future VTE:**\n- Stay well hydrated\n- Avoid prolonged immobility: move legs frequently during long trips (flights, car), get up and walk every 1–2 hours\n- Wear graduated compression stockings as prescribed during high-risk periods\n- Avoid oral contraceptives/hormone therapy if history of VTE — discuss alternatives with provider\n- Inform all healthcare providers of VTE history"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- PE = most commonly a DVT embolizing to the pulmonary vasculature → increased PVR → RV strain → V/Q mismatch → hypoxemia\n- Virchow's Triad: venous stasis + endothelial injury + hypercoagulability → DVT/PE\n- Classic presentation: sudden dyspnea + pleuritic chest pain + tachycardia in post-op or immobilized patient\n- Diagnosis: Wells score → D-dimer (rule-out) → CTPA (gold standard)\n- Treatment: heparin/enoxaparin/DOAC (stable PE); alteplase (massive PE with shock)\n- VTE prevention: SCDs, LMWH prophylaxis, early ambulation — nursing is the first line of defense"
+        }
+      ],
+      "preTest": [
+        {
+          "question": "A nurse is assessing a 58-year-old client who is 2 days post-total knee replacement. The client suddenly reports shortness of breath and right-sided pleuritic chest pain. HR 118, RR 26, SpO₂ 89%. What does the nurse suspect?",
+          "options": [
+            "Pneumothorax from central line placement",
+            "Pulmonary embolism — post-operative VTE is a major risk",
+            "Pulmonary edema from excessive IV fluids",
+            "Atelectasis from inadequate deep breathing post-operatively"
+          ],
+          "correct": 1,
+          "rationale": "Post-operative orthopedic surgery patients are at extremely high risk for DVT/PE. Sudden dyspnea + pleuritic chest pain + tachycardia + hypoxemia 2 days post-op = PE until proven otherwise. This presentation requires immediate notification of the provider and preparation for urgent diagnostic workup (CTPA)."
+        },
+        {
+          "question": "A client is prescribed enoxaparin 80 mg subcutaneously for PE treatment. Which nursing action is correct?",
+          "options": [
+            "Administer into the deltoid muscle for fastest absorption",
+            "Inject into the anterolateral or posterolateral abdominal wall subcutaneously; do not aspirate",
+            "Mix with normal saline before injection to reduce local irritation",
+            "Massage the injection site firmly after administration"
+          ],
+          "correct": 1,
+          "rationale": "Enoxaparin (LMWH) is administered subcutaneously — NEVER intramuscularly (causes large hematomas). The preferred site is the anterolateral or posterolateral abdominal wall (at least 5 cm from the navel). Do not aspirate (no blood return needed for SQ injection). Do not massage (disrupts depot, increases bruising). Do not mix with other medications."
+        }
+      ],
+      "postTest": [
+        {
+          "question": "A client with confirmed PE is started on a UFH infusion. Four days later, the platelet count has decreased from 220,000 to 95,000/mm³. What should the nurse do first?",
+          "options": [
+            "Increase the heparin infusion rate — thrombocytopenia may worsen the PE",
+            "Hold the heparin infusion and notify the provider — suspected HIT",
+            "Obtain a peripheral blood smear to rule out thrombotic thrombocytopenic purpura",
+            "Reassure the client that mild platelet drops are expected with heparin therapy"
+          ],
+          "correct": 1,
+          "rationale": "A platelet drop of > 50% (from 220,000 to 95,000 = 57% drop) 4–10 days after UFH initiation is the classic pattern of Heparin-Induced Thrombocytopenia (HIT) — an immune-mediated complication that paradoxically causes thrombosis. The heparin must be stopped immediately and a direct thrombin inhibitor (argatroban) or fondaparinux substituted. This is a major NCLEX safety priority."
+        },
+        {
+          "question": "Which discharge instruction is most important for a client being discharged on warfarin after PE?",
+          "options": [
+            "Take ibuprofen for any pain or fever during anticoagulation therapy",
+            "Eat a consistently portioned diet of vitamin K-containing foods; major changes affect INR",
+            "Avoid all leafy green vegetables while on warfarin",
+            "Your INR only needs to be checked once monthly"
+          ],
+          "correct": 1,
+          "rationale": "Consistency of vitamin K intake (from leafy greens, etc.) is key — patients do not need to avoid these foods, but sudden large increases or decreases in intake destabilize the INR. NSAIDs increase bleeding risk significantly on warfarin. INR frequency depends on stability — typically weekly when initiating, then every 4 weeks when stable. Avoiding all leafy greens is neither necessary nor sustainable."
+        },
+        {
+          "question": "A nurse is implementing VTE prevention measures for a post-surgical patient. Which intervention has the highest evidence for preventing DVT/PE?",
+          "options": [
+            "Graduated compression stockings applied to the lower extremities",
+            "Aspirin 81 mg daily",
+            "Early ambulation combined with sequential compression devices and pharmacologic prophylaxis",
+            "Elevating the head of the bed to 30 degrees"
+          ],
+          "correct": 2,
+          "rationale": "The most effective VTE prevention strategy combines early ambulation (reduces venous stasis), sequential compression devices/pneumatic compression (mechanical prophylaxis), and pharmacologic prophylaxis (LMWH or UFH). Graduated compression stockings alone do not have strong evidence for preventing PE. Aspirin is insufficient as sole VTE prophylaxis in most surgical patients. HOB elevation does not prevent VTE."
+        },
+        {
+          "question": "A client in massive PE becomes hemodynamically unstable: BP 72/40, HR 136, SpO₂ 82% despite 15 L O₂. What should the nurse prepare to administer?",
+          "options": [
+            "Enoxaparin 1.5 mg/kg subcutaneously",
+            "Alteplase (tPA) 100 mg IV per protocol for massive PE",
+            "Warfarin loading dose to achieve rapid anticoagulation",
+            "Furosemide IV to reduce right heart preload"
+          ],
+          "correct": 1,
+          "rationale": "Massive PE with hemodynamic collapse (obstructive shock) is an indication for systemic thrombolysis with alteplase (tPA) — the only therapy that can rapidly dissolve the clot and restore hemodynamics in this scenario. Enoxaparin SQ does not act fast enough in shock. Warfarin has a delayed onset of 3–5 days. Furosemide reduces preload — the RV in massive PE is preload-dependent and diuretics are contraindicated."
+        }
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "us-rn-copd-respiratory",
+      "previewSectionCount": 2,
+      "seoTitle": "COPD nursing: pathophysiology, exacerbations, spirometry & NCLEX-RN Canada",
+      "seoDescription": "Complete RN lesson on COPD: emphysema vs chronic bronchitis, GOLD staging, exacerbation triggers, bronchodilators, oxygen therapy, and NCLEX-RN clinical priorities.",
+      "sections": [
+        {
+          "id": "introduction",
+          "heading": "Overview",
+          "kind": "introduction",
+          "body": "**Chronic obstructive pulmonary disease (COPD)** is a preventable and treatable disease characterized by persistent, usually progressive airflow limitation that is not fully reversible. It is the third leading cause of death globally and a high-frequency NCLEX-RN topic.\n\nCOPD encompasses two clinical phenotypes that often overlap:\n- **Emphysema**: destruction of alveolar walls → loss of elastic recoil → air trapping → hyperinflation. Classic presentation: thin, barrel-chested patient with pursed-lip breathing, minimal cough.\n- **Chronic bronchitis**: inflammation and mucus hypersecretion in bronchi for ≥ 3 months/year for ≥ 2 consecutive years. Classic: overweight, chronic productive cough, cyanosis.\n\nThe most important modifiable risk factor is **cigarette smoking** (responsible for ~85% of cases). Other causes: occupational dust/chemical exposure, alpha-1 antitrypsin deficiency (hereditary COPD in young non-smokers), biomass fuel smoke.\n\nFor NCLEX-RN: prioritize recognizing exacerbations, safe oxygen administration, and discharge teaching."
+        },
+        {
+          "id": "pathophysiology_overview",
+          "heading": "Pathophysiology",
+          "kind": "pathophysiology_overview",
+          "body": "**Airway inflammation and structural destruction.** Inhaled irritants (primarily cigarette smoke) trigger chronic inflammation in the airways and lung parenchyma. Activated macrophages and neutrophils release proteases (elastase, matrix metalloproteinases) that destroy the lung's structural scaffolding. Normally, antiproteases (alpha-1 antitrypsin) balance this destruction — in COPD, the protease–antiprotease balance is overwhelmed. This results in destruction of alveolar septa (emphysema) and goblet cell hyperplasia + submucosal gland hypertrophy (chronic bronchitis pattern) simultaneously.\n\n**Air trapping and hyperinflation.** Loss of alveolar elastic recoil means airways collapse during exhalation before all air is expelled — this is called **dynamic airway collapse** or **air trapping**. Residual volume and functional residual capacity increase dramatically. The diaphragm becomes flat and mechanically disadvantaged (low dome position), forcing accessory muscles to compensate. The barrel chest (increased AP diameter) is a physical manifestation of chronic hyperinflation.\n\n**Gas exchange failure and hypoxic/hypercapnic respiratory failure.** Ventilation-perfusion (V/Q) mismatch is the primary gas exchange defect. In emphysema: alveoli ventilate poorly (destroyed walls, poor elastic recoil) → low V/Q or dead space. In chronic bronchitis: airways obstructed by mucus → reduced ventilation relative to perfusion. Both patterns cause hypoxemia. In severe COPD, CO₂ retention develops — chronically elevated PaCO₂ causes the kidneys to retain bicarbonate, shifting the acid-base balance to a **compensated respiratory acidosis** (PaCO₂ elevated, pH near-normal, HCO₃ elevated).\n\n**Hypoxic drive and the oxygen caution in COPD.** In severe COPD, the central chemoreceptors (sensitive to CO₂) become blunted after years of hypercapnia. The patient then depends on the **peripheral chemoreceptors' hypoxic drive** (stimulated by low PaO₂) to maintain respiratory effort. The clinical teaching — still relevant on NCLEX — is that administering very high-flow oxygen to a hypercapnic COPD patient may suppress the hypoxic drive and cause apnea or CO₂ narcosis. **Target SpO₂ for COPD: 88–92%** (not ≥ 94%), especially in known hypercapnic patients."
+        },
+        {
+          "id": "signs_symptoms",
+          "heading": "Signs & Symptoms",
+          "kind": "signs_symptoms",
+          "body": "**Chronic stable COPD:**\n- Dyspnea on exertion, progressive over years (early) → dyspnea at rest (severe)\n- Chronic productive cough (chronic bronchitis pattern) or minimal cough (emphysema)\n- Sputum production: mucoid (stable); purulent (exacerbation signal)\n- Decreased exercise tolerance\n- Expiratory wheeze\n- Prolonged expiration\n- Barrel chest (increased AP diameter)\n- Hyperresonance on percussion\n- Diminished breath sounds (emphysema)\n- Use of accessory muscles: sternocleidomastoid, scalene\n- Pursed-lip breathing (physiological PEEP to prevent dynamic collapse)\n\n**COPD Exacerbation (AECOPD):**\n- Acute worsening of dyspnea beyond normal day-to-day variation\n- Increased sputum volume or change in sputum color (yellow/green = bacterial)\n- Increased wheezing and chest tightness\n- Hypoxemia: SpO₂ dropping below baseline\n- Confusion/somnolence in severe cases (CO₂ narcosis)\n\n**GOLD Severity (FEV₁ % predicted post-bronchodilator):**\n- GOLD 1 (Mild): FEV₁ ≥ 80%\n- GOLD 2 (Moderate): FEV₁ 50–79%\n- GOLD 3 (Severe): FEV₁ 30–49%\n- GOLD 4 (Very Severe): FEV₁ < 30%"
+        },
+        {
+          "id": "red_flags",
+          "heading": "Red Flags / Clinical Deterioration",
+          "kind": "red_flags",
+          "body": "**Escalate immediately for:**\n\n- **SpO₂ < 85% or rapidly falling despite supplemental O₂**: respiratory failure — prepare for NPPV (BiPAP) or intubation\n- **ABG: pH < 7.35 + rising PaCO₂**: acute hypercapnic respiratory failure — failure to compensate\n- **SpO₂ > 95% in known hypercapnic COPD**: over-oxygenation may suppress hypoxic drive — reduce O₂ and reassess ABG\n- **Altered mental status, somnolence, or CO₂ narcosis**: PaCO₂ likely > 70–80 mmHg — urgent NPPV or mechanical ventilation\n- **Purulent sputum + fever + markedly increased dyspnea**: severe bacterial exacerbation — antibiotics + systemic steroids + bronchodilators\n- **New peripheral cyanosis or mottling**: severe hypoxemia\n- **Inspiratory crackles + new leg edema + JVD**: cor pulmonale (right heart failure from pulmonary hypertension) — new decompensation\n- **Pneumothorax in COPD**: bullae rupture → sudden worsening dyspnea + absent breath sounds → needle decompression"
+        },
+        {
+          "id": "labs_diagnostics",
+          "heading": "Diagnostics / Labs",
+          "kind": "labs_diagnostics",
+          "body": "**Pulmonary function tests (spirometry — definitive diagnosis):**\n- Post-bronchodilator FEV₁/FVC < 0.70 (< 70%): obstructive pattern — required for COPD diagnosis\n- FEV₁ % predicted: grades severity (GOLD 1–4)\n- Total lung capacity (TLC) increased; residual volume (RV) increased (air trapping)\n\n**ABG (arterial blood gas) — critical in exacerbation:**\n- Stable COPD: compensated respiratory acidosis: pH 7.35–7.45, ↑PaCO₂, ↑HCO₃, hypoxemia\n- Acute exacerbation: uncompensated respiratory acidosis: pH < 7.35, ↑↑PaCO₂, HCO₃ not yet compensated\n- Target PaO₂ 55–80 mmHg; PaCO₂ at patient's baseline (often 50–60 mmHg chronically)\n\n**Labs:**\n- CBC: polycythemia (chronic hypoxemia → elevated RBC/Hct — compensatory)\n- Sputum culture: in exacerbation; H. influenzae, S. pneumoniae, M. catarrhalis most common\n- BNP/troponin: if cor pulmonale or concurrent cardiac disease suspected\n- Alpha-1 antitrypsin level: in young patients (< 45) with COPD without clear smoking history\n\n**Imaging:**\n- CXR: hyperinflation, flattened diaphragm, widened intercostal spaces, bullae in emphysema; increased vascular markings in chronic bronchitis\n- CT chest: if pneumonia, malignancy, or bullae (for surgical consideration)"
+        },
+        {
+          "id": "nursing_assessment_interventions",
+          "heading": "Nursing Responsibilities",
+          "kind": "nursing_assessment_interventions",
+          "body": "**Oxygen administration in COPD (critical safety point):**\n- Target SpO₂ **88–92%** in known or suspected hypercapnic COPD patients\n- Use **Venturi mask** (precise FiO₂ delivery) or nasal cannula at 1–2 L/min\n- Do NOT use high-flow O₂ without ABG monitoring\n- If SpO₂ > 92%: reduce O₂ flow, reassess ABG (check PaCO₂)\n- If SpO₂ < 88% despite O₂: prepare for NIV (BiPAP — first-line for AECOPD with respiratory failure)\n\n**Assessment priorities:**\n- Respiratory rate, depth, use of accessory muscles, lip color\n- Auscultate: expiratory wheeze, air entry, prolonged I:E ratio\n- SpO₂ continuously during exacerbation\n- Level of consciousness — confusion indicates hypercapnia\n- Sputum: amount, color, consistency\n- Assess fluid status: peripheral edema (cor pulmonale)\n\n**Pharmacologic interventions (AECOPD):**\n- **Short-acting bronchodilators** (SABA): albuterol (salbutamol in Canada) via nebulizer or MDI — first-line immediate relief\n- **Short-acting anticholinergics** (SAAC): ipratropium — often combined with albuterol (Duoneb/Combivent) for additive bronchodilation\n- **Systemic corticosteroids**: methylprednisolone IV or prednisone oral — reduce inflammation, shorten exacerbation duration (5 days typical)\n- **Antibiotics**: if purulent sputum (color change) — azithromycin, amoxicillin-clavulanate, or doxycycline per local guidelines\n\n**Non-pharmacologic:**\n- High Fowler's positioning: optimize diaphragmatic excursion\n- Pursed-lip breathing instruction\n- Chest physiotherapy: postural drainage for secretion clearance if applicable\n- Energy conservation techniques\n- Incentive spirometry for post-acute phase lung expansion"
+        },
+        {
+          "id": "clinical_pearls",
+          "heading": "Clinical Pearls",
+          "kind": "clinical_pearls",
+          "body": "- **O₂ target in COPD is 88–92%, not 94–98%.** High-flow O₂ in hypercapnic COPD can cause CO₂ narcosis — this is a critical NCLEX-RN safety point.\n- **BiPAP (NIV) is first-line for AECOPD with hypercapnia** — reduces intubation rates, mortality, and ICU stay compared to early intubation.\n- **Pursed-lip breathing** = physiologic PEEP. It keeps airways open during exhalation, reduces air trapping, and improves CO₂ elimination — teach and reinforce.\n- **Barrel chest** is a sign of chronic air trapping, not acute decompensation. It reflects years of disease.\n- **Polycythemia** in COPD = compensatory erythropoiesis from chronic hypoxemia → increased RBC mass → increased blood viscosity → increased DVT/stroke risk.\n- **COPD exacerbations predict mortality**: each hospitalization for exacerbation increases 1-year mortality risk by 20–30%.\n- **Smoking cessation** is the single most effective intervention to slow COPD progression. Refer to cessation counseling at every visit."
+        },
+        {
+          "id": "client_education",
+          "heading": "Patient Education",
+          "kind": "client_education",
+          "body": "**Inhaler technique (critical — most patients use incorrectly):**\n- MDI: shake, remove cap, breathe out completely, seal lips around mouthpiece, inhale slowly over 3–5 seconds while pressing canister, hold breath 10 seconds\n- Use a spacer/valved holding chamber: dramatically increases drug delivery to lungs\n- Clean inhaler mouthpiece weekly with warm water\n- Count remaining doses — do not assume inhaler is empty or full based on weight alone\n\n**Daily management:**\n- Do not smoke and avoid secondhand smoke, wood smoke, strong fumes\n- Know the difference between controller (LABA, LAMA, ICS — daily prevention) and rescue (SABA — symptom relief) inhalers\n- Never use rescue inhaler more than 4 times per week without contacting provider\n- Pulmonary rehabilitation: improves exercise tolerance, reduces hospitalizations, improves quality of life\n- Annual influenza vaccine and pneumococcal vaccine: reduce infectious exacerbations\n\n**Recognize an exacerbation:**\n- Increased dyspnea worse than usual, sputum changes (color or amount), increased wheeze\n- Take rescue inhaler; if not better in 20 minutes, call provider or go to emergency\n- Keep an exacerbation action plan in writing\n\n**Oxygen use at home:**\n- If prescribed, use exactly as ordered (flow rate, hours/day) — do not increase without instruction\n- Never smoke or allow smoking near oxygen equipment (fire hazard)\n- Oxygen does not relieve breathlessness caused by anxiety — teach diaphragmatic breathing"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- COPD = irreversible airflow obstruction from emphysema (alveolar destruction) and/or chronic bronchitis (mucus hypersecretion)\n- Pathophysiology: protease-antiprotease imbalance → lung destruction → V/Q mismatch → hypoxemia + hypercapnia (chronic respiratory acidosis)\n- O₂ target in COPD: SpO₂ **88–92%** — high-flow O₂ may suppress hypoxic drive and cause CO₂ narcosis\n- AECOPD treatment: SABA + SAAC bronchodilators, systemic steroids 5 days, antibiotics if purulent sputum, BiPAP for hypercapnic failure\n- Most important teaching: inhaler technique, smoking cessation, recognizing exacerbation, pulmonary rehab"
+        }
+      ],
+      "preTest": [
+        {
+          "question": "A client with COPD has an SpO₂ of 91% on room air and is comfortable at rest. What is the nurse's priority action?",
+          "options": [
+            "Apply a non-rebreather mask at 15 L/min to raise SpO₂ above 95%",
+            "Continue monitoring — SpO₂ of 88–92% is the appropriate target for COPD",
+            "Notify the provider immediately as SpO₂ below 95% requires intervention",
+            "Place the client in Trendelenburg to improve oxygen delivery"
+          ],
+          "correct": 1,
+          "rationale": "For patients with COPD and chronic hypercapnia, the target SpO₂ is 88–92% (not 94–98%). An SpO₂ of 91% is within this therapeutic range. Administering high-flow oxygen to raise SpO₂ above 92% may suppress the hypoxic drive and precipitate CO₂ narcosis in a chronically hypercapnic patient."
+        },
+        {
+          "question": "A nurse is assessing a client with COPD who is experiencing an acute exacerbation. Which finding should the nurse prioritize?",
+          "options": [
+            "SpO₂ 90%, pursed-lip breathing, using accessory muscles",
+            "SpO₂ 87%, new confusion, respiratory rate 32, and SpO₂ declining",
+            "Productive cough with white mucus, mild dyspnea on exertion",
+            "HR 88, BP 134/78, no change from baseline breathlessness"
+          ],
+          "correct": 1,
+          "rationale": "SpO₂ 87% with new confusion indicates CO₂ narcosis or severe hypoxemia with CNS involvement. Declining SpO₂ + altered mental status = impending respiratory failure. This requires immediate escalation: notify provider, prepare for BiPAP, ABG stat. The other options represent concerning but less immediately dangerous findings."
+        }
+      ],
+      "postTest": [
+        {
+          "question": "A client's ABG results during an acute COPD exacerbation show: pH 7.29, PaCO₂ 72 mmHg, HCO₃ 34 mEq/L, PaO₂ 54 mmHg. How should the nurse interpret this?",
+          "options": [
+            "Metabolic acidosis with respiratory compensation",
+            "Acute-on-chronic respiratory acidosis with hypoxemia — requires urgent intervention",
+            "Respiratory alkalosis indicating hyperventilation",
+            "Fully compensated respiratory acidosis — no intervention needed"
+          ],
+          "correct": 1,
+          "rationale": "pH 7.29 is acidotic. PaCO₂ 72 mmHg = CO₂ retention (respiratory cause). HCO₃ 34 is elevated (renal compensation from chronic hypercapnia). But pH < 7.35 means compensation is incomplete = acute-on-chronic respiratory acidosis. PaO₂ 54 = significant hypoxemia. This requires NIV (BiPAP), bronchodilators, and possible escalation to ICU."
+        },
+        {
+          "question": "A nurse is teaching a COPD patient how to use an MDI with a spacer. Which statement indicates the patient needs further instruction?",
+          "options": [
+            "I should breathe out fully before pressing the inhaler",
+            "I should inhale quickly and forcefully when pressing the canister",
+            "I should hold my breath for 10 seconds after inhaling",
+            "The spacer helps more medicine reach my lungs"
+          ],
+          "correct": 1,
+          "rationale": "Correct MDI technique requires slow, controlled inhalation (3–5 seconds) — not quick, forceful breathing. Fast inhalation causes medication to impact the back of the throat rather than reaching the airways. Breathing out before, holding breath 10 seconds, and using a spacer are all correct."
+        },
+        {
+          "question": "A client with COPD is prescribed ipratropium bromide. Which statement best explains the expected mechanism of this medication?",
+          "options": [
+            "It relaxes bronchial smooth muscle by stimulating beta-2 receptors",
+            "It reduces airway inflammation by inhibiting prostaglandin synthesis",
+            "It blocks muscarinic receptors in the airway to reduce bronchoconstriction and secretions",
+            "It prevents mast cell degranulation to reduce allergic bronchoconstriction"
+          ],
+          "correct": 2,
+          "rationale": "Ipratropium is an anticholinergic (muscarinic antagonist). It blocks parasympathetic bronchoconstriction, reduces mucus secretion, and produces bronchodilation. Beta-2 agonists (albuterol/salbutamol) relax smooth muscle via adrenergic receptors. NSAIDs inhibit prostaglandins. Cromolyn/nedocromil stabilize mast cells."
+        },
+        {
+          "question": "A client with COPD has been started on long-term home oxygen at 2 L/min via nasal cannula. Which instruction by the nurse is most important for safety?",
+          "options": [
+            "Do not use the oxygen near open flames or while smoking",
+            "Increase the flow rate when feeling short of breath",
+            "Cover the tubing with blankets to prevent tripping",
+            "Remove oxygen during meals to prevent interference with swallowing"
+          ],
+          "correct": 0,
+          "rationale": "Oxygen is highly flammable. Smoking or using open flames near oxygen equipment is a serious fire hazard. Patients must not smoke while on oxygen. Flow rate should never be self-adjusted — it is ordered to maintain target SpO₂. Covering tubing creates fire hazard. Oxygen is generally safe to use while eating."
+        }
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "us-rn-pulmonary-embolism",
+      "previewSectionCount": 2,
+      "seoTitle": "Pulmonary embolism nursing: DVT, Wells score, anticoagulants & NCLEX-RN Canada",
+      "seoDescription": "Complete RN lesson on PE: Virchow's triad, Wells criteria, D-dimer, CTPA, heparin, thrombolytics, VTE prevention, and NCLEX-RN clinical priorities.",
+      "sections": [
+        {
+          "id": "introduction",
+          "heading": "Overview",
+          "kind": "introduction",
+          "body": "**Pulmonary embolism (PE)** is an obstruction of one or more pulmonary arteries, most commonly by a blood clot (thrombus) originating from the deep veins of the legs or pelvis (deep vein thrombosis — DVT). PE is the third most common acute cardiovascular syndrome (after MI and stroke) and carries a mortality rate of 10–30% if untreated.\n\nPE exists on a clinical spectrum:\n- **Submassive (intermediate-risk)**: right ventricular strain on echocardiogram or elevated troponin/BNP but hemodynamically stable\n- **Massive (high-risk)**: hemodynamically unstable — SBP < 90 mmHg or requiring vasopressors; mortality > 50%\n\nMost PEs arise from DVT — the term **venous thromboembolism (VTE)** encompasses both conditions. Risk factors and prevention are inseparable from treatment: VTE prophylaxis is one of the most testable nursing interventions on NCLEX-RN.\n\nFor the NCLEX-RN: recognize the sudden onset dyspnea + pleuritic chest pain + tachycardia triad, know the DVT risk factors (Virchow's triad), and understand anticoagulation management and safety."
+        },
+        {
+          "id": "pathophysiology_overview",
+          "heading": "Pathophysiology",
+          "kind": "pathophysiology_overview",
+          "body": "**Virchow's Triad — the foundation of VTE pathophysiology.** Three conditions predispose to thrombus formation:\n1. **Venous stasis**: slowing of venous blood flow activates clotting factors that accumulate without being washed away. Causes: immobility (hospital bed rest, long flights), obesity, heart failure, inferior vena cava compression (pregnancy, tumor).\n2. **Endothelial injury**: damage to vessel walls exposes subendothelial collagen and tissue factor, activating the coagulation cascade. Causes: trauma, surgery, central venous catheters, inflammatory vasculitis.\n3. **Hypercoagulability**: inherited or acquired states favoring clot formation. Causes: Factor V Leiden, prothrombin G20210A mutation, protein C/S deficiency, antiphospholipid syndrome, cancer (tumors release procoagulant factors), oral contraceptives, pregnancy.\n\n**From thrombus to embolism.** A DVT typically begins in the deep calf veins (distal DVT) and may propagate proximally to the popliteal, femoral, and iliac veins. Once a clot propagates to the proximal deep veins, its risk of embolization increases dramatically. When the clot dislodges, it travels through the right heart and lodges in the pulmonary arterial tree.\n\n**Pulmonary arterial obstruction and its consequences.** The clot increases pulmonary vascular resistance (PVR), which raises right ventricular afterload. The RV dilates and fails. Simultaneously, the obstruction creates **dead space** — perfused alveoli receive no blood flow (V/Q mismatch, high V/Q ratio), causing progressive hypoxemia through redistribution of blood flow to other, now overperfused lung segments. The combination of dead space, hypoxia-driven bronchoconstriction (low CO₂ in affected areas), and surfactant loss causes respiratory failure. In massive PE, RV failure → reduced left ventricular filling → decreased CO → cardiogenic-obstructive shock → cardiac arrest."
+        },
+        {
+          "id": "signs_symptoms",
+          "heading": "Signs & Symptoms",
+          "kind": "signs_symptoms",
+          "body": "**Classic triad (present together in only ~20% — but each component independently common):**\n- **Sudden onset dyspnea** (most common symptom, 80% of cases)\n- **Pleuritic chest pain** (sharp, worsens with breathing — from pulmonary infarction irritating pleura)\n- **Hemoptysis** (blood-streaked sputum — 30%; from pulmonary infarction)\n\n**Vital sign abnormalities:**\n- Tachycardia (most consistent finding: HR > 100 bpm in > 90% of significant PEs)\n- Tachypnea (RR > 20)\n- Hypoxemia (SpO₂ may drop precipitously)\n- Hypotension (only in massive PE — poor prognosis sign)\n\n**DVT symptoms (50–70% of PE patients have concurrent DVT):**\n- Unilateral leg pain, swelling, warmth, and erythema\n- Positive Homan's sign (calf pain with dorsiflexion) — low sensitivity and specificity, not reliable\n- Palpable cord in the leg\n\n**Examination findings:**\n- Decreased breath sounds or dullness over infarct area\n- Pleural friction rub\n- Loud P2 (pulmonary component of S2) — pulmonary hypertension\n- S3 right-sided gallop (RV strain)\n- JVD in massive PE (RV failure)\n- Calf asymmetry (DVT)\n\n**The clinical paradox:** many PEs present subtly — dyspnea alone, unexplained tachycardia, or mild hypoxia. NCLEX-RN often tests recognizing PE in a post-op or immobilized patient with unexplained new onset symptoms."
+        },
+        {
+          "id": "red_flags",
+          "heading": "Red Flags / Clinical Deterioration",
+          "kind": "red_flags",
+          "body": "**Escalate immediately:**\n\n- **Sudden severe dyspnea + SpO₂ < 90% in a post-operative or immobilized patient**: PE until proven otherwise\n- **Hemodynamic instability (SBP < 90, HR > 110)**: massive PE — prepare for emergency thrombolysis or surgical embolectomy\n- **Cardiac arrest in suspected PE**: reconsider immediate thrombolysis (alteplase) — the only intervention that may reverse obstructive arrest\n- **New right heart strain on ECG** (S1Q3T3 pattern, new right bundle branch block, sinus tachycardia with P-pulmonale): sign of RV overload\n- **Syncope**: may indicate transient hemodynamic compromise from large embolus\n- **Worsening hypoxemia despite supplemental O₂**: reconsider PE diagnosis or impending respiratory failure\n- **Signs of DVT in a symptomatic patient**: bilateral asymmetric leg swelling + dyspnea = VTE until proven otherwise"
+        },
+        {
+          "id": "labs_diagnostics",
+          "heading": "Diagnostics / Labs",
+          "kind": "labs_diagnostics",
+          "body": "**Pre-test probability: Wells PE Score** (used before ordering imaging):\n- Clinical signs of DVT: 3 points\n- PE most likely diagnosis: 3 points\n- HR > 100: 1.5 points\n- Immobilization/surgery in last 4 weeks: 1.5 points\n- Prior DVT/PE: 1.5 points\n- Hemoptysis: 1 point\n- Malignancy: 1 point\n- Score ≤ 4 (low/intermediate): D-dimer first; if negative → PE ruled out\n- Score > 4 (high): proceed directly to CT pulmonary angiography (CTPA)\n\n**D-dimer:**\n- Highly sensitive (> 95%) but not specific — elevated in infection, pregnancy, malignancy, surgery\n- A negative D-dimer in a low-probability patient effectively rules out PE (PERC rule)\n- A positive D-dimer does NOT diagnose PE — it requires imaging confirmation\n\n**CT Pulmonary Angiography (CTPA):**\n- Gold standard imaging: identifies clot to segmental and sub-segmental level\n- Requires IV contrast — check creatinine (contrast nephropathy risk) and shellfish/contrast allergy\n\n**Other:**\n- ABG: low PaO₂, low PaCO₂ (hyperventilation), respiratory alkalosis (early), metabolic acidosis (late if cardiogenic shock)\n- 12-lead ECG: sinus tachycardia (most common); S1Q3T3 (deep S in I, Q wave in III, inverted T in III); new RBBB — signs of acute RV strain\n- Echocardiogram: RV dilation, septal flattening (D-sign) — guides risk stratification in intermediate/massive PE\n- Troponin: elevated with RV injury — intermediate risk marker\n- BNP: elevated with RV strain"
+        },
+        {
+          "id": "nursing_assessment_interventions",
+          "heading": "Nursing Responsibilities",
+          "kind": "nursing_assessment_interventions",
+          "body": "**Immediate nursing priorities (suspected PE):**\n- Position semi-Fowler's to optimize ventilation\n- Administer supplemental oxygen to maintain SpO₂ ≥ 94% (or as ordered)\n- Establish IV access; prepare for urgent labs and imaging\n- Continuous cardiac monitoring (ECG, SpO₂, vital signs)\n- Notify provider immediately — suspected PE is a medical emergency\n- Prepare for CTPA — check allergy history, creatinine, consent\n\n**Anticoagulation — the primary treatment (hemodynamically stable PE):**\n- **Unfractionated heparin (UFH)** IV: weight-based bolus then infusion; monitor aPTT (goal 60–100 seconds or per protocol); check platelet count (HIT risk)\n- **Enoxaparin (LMWH)**: 1 mg/kg SQ q12h or 1.5 mg/kg daily; monitor anti-Xa in obese patients or renal impairment; SQ injection only (not IM)\n- **DOACs** (direct oral anticoagulants): rivaroxaban, apixaban — increasingly first-line; no routine monitoring required\n- **Transition to warfarin** (if used): overlap with heparin until INR 2–3 for 2 consecutive days; monitor INR closely\n\n**Thrombolytics (massive PE with hemodynamic instability):**\n- Alteplase (tPA) IV: 100 mg over 2 hours\n- Nursing: monitor for bleeding at all sites; hold all IM injections; minimize invasive procedures; monitor neurological status (intracranial hemorrhage risk)\n- Absolute contraindications: prior hemorrhagic stroke; active internal bleeding; recent major surgery < 3 months\n\n**VTE prevention (every admission — critical nursing responsibility):**\n- Pneumatic compression devices (PCDs): apply on admission for all surgical/immobile patients\n- LMWH or UFH prophylaxis as ordered\n- Early ambulation: most important post-op intervention\n- Adequate hydration\n- Leg exercises in immobile patients (ankle pumps, quadriceps sets)"
+        },
+        {
+          "id": "clinical_pearls",
+          "heading": "Clinical Pearls",
+          "kind": "clinical_pearls",
+          "body": "- **Sudden, unexplained dyspnea + tachycardia in a post-op patient = PE until proven otherwise.** This is one of the most common NCLEX-RN clinical scenarios.\n- **D-dimer is a rule-OUT test** — useful only if pre-test probability is low. A positive D-dimer does not diagnose PE.\n- **ABG pattern in PE**: low PaO₂ + low PaCO₂ + respiratory alkalosis (hyperventilating to compensate). Not hypercapnic like COPD.\n- **Enoxaparin is SQ only** — never IM. Rotate injection sites; do not aspirate; apply pressure after.\n- **Warfarin requires 3–5 days** to reach therapeutic effect. Always bridge with heparin until INR 2–3 for 2 days before discontinuing heparin.\n- **HIT (Heparin-Induced Thrombocytopenia)**: platelet drop > 50% on UFH = stop heparin, switch to argatroban or fondaparinux. This is a NCLEX safety topic.\n- **Compression stockings** do not prevent PE — only sequential compression devices (SCDs/PCDs) and anticoagulants have proven efficacy."
+        },
+        {
+          "id": "client_education",
+          "heading": "Patient Education",
+          "kind": "client_education",
+          "body": "**After PE diagnosis — anticoagulation education:**\n- Duration of anticoagulation: 3 months for provoked PE (reversible cause); indefinite if unprovoked or recurrent\n- If on warfarin: INR monitoring (target 2–3), dietary consistency with vitamin K foods, avoid NSAIDs, report any bleeding\n- If on DOAC (rivaroxaban, apixaban): take as prescribed, do not skip doses, report unusual bruising or bleeding\n\n**Warning signs — seek emergency care immediately:**\n- Sudden worsening of shortness of breath\n- Coughing up blood\n- Leg swelling or pain (possible new DVT)\n- Chest pain or racing heart\n\n**Prevention of future VTE:**\n- Stay well hydrated\n- Avoid prolonged immobility: move legs frequently during long trips (flights, car), get up and walk every 1–2 hours\n- Wear graduated compression stockings as prescribed during high-risk periods\n- Avoid oral contraceptives/hormone therapy if history of VTE — discuss alternatives with provider\n- Inform all healthcare providers of VTE history"
+        },
+        {
+          "id": "key_takeaways",
+          "heading": "Key Takeaways",
+          "kind": "takeaways",
+          "body": "- PE = most commonly a DVT embolizing to the pulmonary vasculature → increased PVR → RV strain → V/Q mismatch → hypoxemia\n- Virchow's Triad: venous stasis + endothelial injury + hypercoagulability → DVT/PE\n- Classic presentation: sudden dyspnea + pleuritic chest pain + tachycardia in post-op or immobilized patient\n- Diagnosis: Wells score → D-dimer (rule-out) → CTPA (gold standard)\n- Treatment: heparin/enoxaparin/DOAC (stable PE); alteplase (massive PE with shock)\n- VTE prevention: SCDs, LMWH prophylaxis, early ambulation — nursing is the first line of defense"
+        }
+      ],
+      "preTest": [
+        {
+          "question": "A nurse is assessing a 58-year-old client who is 2 days post-total knee replacement. The client suddenly reports shortness of breath and right-sided pleuritic chest pain. HR 118, RR 26, SpO₂ 89%. What does the nurse suspect?",
+          "options": [
+            "Pneumothorax from central line placement",
+            "Pulmonary embolism — post-operative VTE is a major risk",
+            "Pulmonary edema from excessive IV fluids",
+            "Atelectasis from inadequate deep breathing post-operatively"
+          ],
+          "correct": 1,
+          "rationale": "Post-operative orthopedic surgery patients are at extremely high risk for DVT/PE. Sudden dyspnea + pleuritic chest pain + tachycardia + hypoxemia 2 days post-op = PE until proven otherwise. This presentation requires immediate notification of the provider and preparation for urgent diagnostic workup (CTPA)."
+        },
+        {
+          "question": "A client is prescribed enoxaparin 80 mg subcutaneously for PE treatment. Which nursing action is correct?",
+          "options": [
+            "Administer into the deltoid muscle for fastest absorption",
+            "Inject into the anterolateral or posterolateral abdominal wall subcutaneously; do not aspirate",
+            "Mix with normal saline before injection to reduce local irritation",
+            "Massage the injection site firmly after administration"
+          ],
+          "correct": 1,
+          "rationale": "Enoxaparin (LMWH) is administered subcutaneously — NEVER intramuscularly (causes large hematomas). The preferred site is the anterolateral or posterolateral abdominal wall (at least 5 cm from the navel). Do not aspirate (no blood return needed for SQ injection). Do not massage (disrupts depot, increases bruising). Do not mix with other medications."
+        }
+      ],
+      "postTest": [
+        {
+          "question": "A client with confirmed PE is started on a UFH infusion. Four days later, the platelet count has decreased from 220,000 to 95,000/mm³. What should the nurse do first?",
+          "options": [
+            "Increase the heparin infusion rate — thrombocytopenia may worsen the PE",
+            "Hold the heparin infusion and notify the provider — suspected HIT",
+            "Obtain a peripheral blood smear to rule out thrombotic thrombocytopenic purpura",
+            "Reassure the client that mild platelet drops are expected with heparin therapy"
+          ],
+          "correct": 1,
+          "rationale": "A platelet drop of > 50% (from 220,000 to 95,000 = 57% drop) 4–10 days after UFH initiation is the classic pattern of Heparin-Induced Thrombocytopenia (HIT) — an immune-mediated complication that paradoxically causes thrombosis. The heparin must be stopped immediately and a direct thrombin inhibitor (argatroban) or fondaparinux substituted. This is a major NCLEX safety priority."
+        },
+        {
+          "question": "Which discharge instruction is most important for a client being discharged on warfarin after PE?",
+          "options": [
+            "Take ibuprofen for any pain or fever during anticoagulation therapy",
+            "Eat a consistently portioned diet of vitamin K-containing foods; major changes affect INR",
+            "Avoid all leafy green vegetables while on warfarin",
+            "Your INR only needs to be checked once monthly"
+          ],
+          "correct": 1,
+          "rationale": "Consistency of vitamin K intake (from leafy greens, etc.) is key — patients do not need to avoid these foods, but sudden large increases or decreases in intake destabilize the INR. NSAIDs increase bleeding risk significantly on warfarin. INR frequency depends on stability — typically weekly when initiating, then every 4 weeks when stable. Avoiding all leafy greens is neither necessary nor sustainable."
+        },
+        {
+          "question": "A nurse is implementing VTE prevention measures for a post-surgical patient. Which intervention has the highest evidence for preventing DVT/PE?",
+          "options": [
+            "Graduated compression stockings applied to the lower extremities",
+            "Aspirin 81 mg daily",
+            "Early ambulation combined with sequential compression devices and pharmacologic prophylaxis",
+            "Elevating the head of the bed to 30 degrees"
+          ],
+          "correct": 2,
+          "rationale": "The most effective VTE prevention strategy combines early ambulation (reduces venous stasis), sequential compression devices/pneumatic compression (mechanical prophylaxis), and pharmacologic prophylaxis (LMWH or UFH). Graduated compression stockings alone do not have strong evidence for preventing PE. Aspirin is insufficient as sole VTE prophylaxis in most surgical patients. HOB elevation does not prevent VTE."
+        },
+        {
+          "question": "A client in massive PE becomes hemodynamically unstable: BP 72/40, HR 136, SpO₂ 82% despite 15 L O₂. What should the nurse prepare to administer?",
+          "options": [
+            "Enoxaparin 1.5 mg/kg subcutaneously",
+            "Alteplase (tPA) 100 mg IV per protocol for massive PE",
+            "Warfarin loading dose to achieve rapid anticoagulation",
+            "Furosemide IV to reduce right heart preload"
+          ],
+          "correct": 1,
+          "rationale": "Massive PE with hemodynamic collapse (obstructive shock) is an indication for systemic thrombolysis with alteplase (tPA) — the only therapy that can rapidly dissolve the clot and restore hemodynamics in this scenario. Enoxaparin SQ does not act fast enough in shock. Warfarin has a delayed onset of 3–5 days. Furosemide reduces preload — the RV in massive PE is preload-dependent and diuretics are contraindicated."
+        }
+      ]
+    }
+  ]
+}

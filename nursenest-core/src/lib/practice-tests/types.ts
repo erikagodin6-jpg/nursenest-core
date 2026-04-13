@@ -48,7 +48,7 @@ export type PracticeTestPathwayOption = {
 /** Pool basis when `selectionMode === "cat"` (how items are filtered before adaptive selection). */
 export type CatSelectionBasis = "random" | "targeted" | "weak";
 export type CatEngineType = "CAT" | "SIMULATION";
-export type CatEngineMode = "production_ready" | "beta" | "unavailable";
+export type CatEngineMode = "production_ready" | "beta" | "mini_adaptive" | "simulation" | "unavailable";
 
 /**
  * Linear-only delivery policy (ignored when `selectionMode === "cat"`).
@@ -105,6 +105,10 @@ export type PracticeTestResultsJson = {
   estimatedAbility?: number;
   abilityStdError?: number;
   readinessResult?: "PASS" | "BORDERLINE" | "FAIL";
+  readinessLevel?: "Likely Pass" | "Borderline" | "At Risk";
+  confidenceLevel?: "High" | "Moderate" | "Low";
+  passProbability?: number;
+  passProbabilityBand?: "Very likely to pass" | "Likely to pass" | "Borderline" | "At risk";
   readinessLabel?: string;
   /** Echo of config for analytics / review UI when session was CAT. */
   catExamFeedbackMode?: CatExamFeedbackMode;
