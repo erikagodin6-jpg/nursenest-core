@@ -265,10 +265,16 @@ async function main() {
       } else {
         applyAttemptCount += 1;
         try {
-          await prisma.examQuestion.update({
-            where: { id: q.id },
-            data: updateData,
-          });
+          await prisma.$executeRaw`
+            UPDATE "exam_questions"
+            SET
+              "rationale" = ${updateData.rationale},
+              "correct_answer_explanation" = ${updateData.correctAnswerExplanation},
+              "incorrect_answer_rationale" = jsonb_build_object('summary', ${updateData.incorrectAnswerRationale}),
+              "clinical_pearl" = ${updateData.clinicalPearl},
+              "updated_at" = NOW()
+            WHERE "id" = ${q.id}
+          `;
           action = "applied";
           questionBreakdown.candidatesSuccessfullyApplied += 1;
         } catch (error) {
