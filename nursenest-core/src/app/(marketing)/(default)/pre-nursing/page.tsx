@@ -1,19 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
-import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
-import { PreNursingAccountCapture } from "@/components/pre-nursing/pre-nursing-account-capture";
-import { PreNursingLandingClient } from "@/components/pre-nursing/pre-nursing-landing-client";
-import { PreNursingMilestoneStrip } from "@/components/pre-nursing/pre-nursing-milestone-strip";
-import { PreNursingNextStepsBlock } from "@/components/pre-nursing/pre-nursing-next-steps-block";
+import { Activity, BookOpen, ClipboardList, Layers } from "lucide-react";
 import { PreNursingSurfaceAnalytics } from "@/components/pre-nursing/pre-nursing-surface-analytics";
 import { WebPageJsonLd } from "@/components/seo/seo-json-ld";
-import strings from "@/content/pre-nursing/pre-nursing-strings-en.json";
+import { StudyCard } from "@/components/ui/study-card";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
-import { preNursingHubBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
-
-const dict = strings as Record<string, string>;
 
 export const revalidate = 86400;
 
@@ -40,8 +32,6 @@ export const metadata: Metadata = {
 };
 
 export default function PreNursingLandingPage() {
-  const { crumbs, schemaItems } = preNursingHubBreadcrumbs();
-
   return (
     <div className="nn-marketing-surface">
       <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
@@ -52,79 +42,91 @@ export default function PreNursingLandingPage() {
           path="/pre-nursing"
           inLanguage="en"
         />
-        <BreadcrumbJsonLd items={schemaItems} />
-        <div className="mb-8">
-          <BreadcrumbTrail items={crumbs} />
-        </div>
 
-        <PreNursingMilestoneStrip sourceSurface="hub" />
-        <PreNursingLandingClient />
-        <PreNursingAccountCapture sourceSurface="hub" />
-        <PreNursingNextStepsBlock sourceSurface="hub" />
-
-        <section className="mt-16 border-t border-border pt-12">
-          <h2 className="text-2xl font-bold text-[var(--theme-heading-text)]">What Pre-Nursing is</h2>
-          <p className="mt-3 max-w-3xl text-muted">
-            NurseNest Pre-Nursing is a free, structured library of interactive modules (anatomy, chemistry, infection
-            control, communication, and more) so you can strengthen prerequisites and habits before you invest in full NCLEX
-            or RPN exam prep.
+        <section className="rounded-[1.75rem] border border-[var(--accent-surface-b-border)] bg-[var(--accent-surface-b)] p-6 shadow-[var(--shadow-card)] sm:p-8">
+          <p className="nn-marketing-caption font-semibold uppercase tracking-[0.12em] text-[var(--text-accent)]">
+            Pre-Nursing
+          </p>
+          <h1 className="nn-marketing-h1 mt-3 max-w-3xl text-balance">Pre-Nursing study hub</h1>
+          <p className="nn-marketing-body mt-3 max-w-3xl text-pretty text-[var(--theme-muted-text)]">
+            Choose how you want to study today.
           </p>
         </section>
 
-        <section className="mt-10 grid gap-8 lg:grid-cols-2">
-          <div>
-            <h3 className="text-lg font-semibold text-[var(--theme-heading-text)]">Who it’s for</h3>
-            <ul className="mt-3 list-inside list-disc space-y-2 text-sm text-muted">
-              <li>Students preparing to apply to nursing programs</li>
-              <li>Anyone refreshing sciences before clinical coursework</li>
-              <li>Learners who want structured foundations without a paywall</li>
-            </ul>
-          </div>
-          <div>
-            <h3 className="text-lg font-semibold text-[var(--theme-heading-text)]">What happens next</h3>
-            <p className="mt-3 text-sm text-muted">
-              When you’re ready, NurseNest offers paid exam pathways with full question banks, mocks, and lessons aligned to
-              NCLEX-RN, practical nursing (NCLEX-PN in the US or REx-PN in Canada), and NP tracks. Same product family, with
-              entitlements that match your
-              subscription.
-            </p>
-            <div className="mt-4 flex flex-wrap gap-3 text-sm font-semibold">
-              <Link href="/pricing" className="text-primary hover:underline">
-                View plans
-              </Link>
-              <Link href="/lessons" className="text-primary hover:underline">
-                Exam lesson hubs
-              </Link>
-            </div>
-          </div>
+        <section className="mt-10" aria-labelledby="pre-nursing-actions-heading">
+          <h2 id="pre-nursing-actions-heading" className="nn-marketing-h2">
+            Start studying
+          </h2>
+          <ul className="mt-6 grid list-none gap-5 p-0 sm:grid-cols-2 lg:grid-cols-4">
+            <li>
+              <StudyCard
+                surface="hub"
+                variant="featured"
+                href="/pre-nursing/lessons"
+                icon={BookOpen}
+                title="Lessons"
+                description="Review core concepts by topic."
+                cta="Lessons"
+                ctaVariant="primary"
+              />
+            </li>
+            <li>
+              <StudyCard
+                surface="hub"
+                variant="locked"
+                href="#"
+                icon={Layers}
+                title="Flashcards"
+                description="Reinforce recall and retention."
+                cta="Flashcards"
+                ctaVariant="primary"
+                footer={<span className="mt-2 text-xs text-[var(--theme-muted-text)]">Available after choosing an exam pathway.</span>}
+              />
+            </li>
+            <li>
+              <StudyCard
+                surface="hub"
+                variant="featured"
+                href="/pre-nursing/lessons"
+                icon={ClipboardList}
+                title="Practice Questions"
+                description="Answer questions by topic or weakness."
+                cta="Practice Questions"
+                ctaVariant="primary"
+                footer={<span className="mt-2 text-xs text-[var(--theme-muted-text)]">Open a lesson to start module questions.</span>}
+              />
+            </li>
+            <li>
+              <StudyCard
+                surface="hub"
+                variant="featured"
+                href="/pre-nursing/mini-cat"
+                icon={Activity}
+                title="Exams"
+                description="Take longer exam-style sessions."
+                cta="Exams"
+                ctaVariant="primary"
+              />
+            </li>
+          </ul>
         </section>
 
-        <section className="mt-12 rounded-2xl border border-border bg-card p-6">
-          <h3 className="text-lg font-semibold text-[var(--theme-heading-text)]">Quick links</h3>
-          <ul className="mt-4 flex flex-wrap gap-4 text-sm font-medium">
-            <li>
-              <Link href="/pre-nursing/lessons" className="text-primary hover:underline">
-                Browse all lessons
-              </Link>
-            </li>
-            <li>
-              <Link href="/pre-nursing/mini-cat" className="text-primary hover:underline">
-                🎯 Adaptive mini exam
-              </Link>
-            </li>
+        <section className="nn-study-card nn-study-card--wash mt-10 p-5 sm:p-6">
+          <p className="nn-marketing-label">More options</p>
+          <ul className="mt-3 flex flex-wrap gap-3 text-sm font-semibold">
             <li>
               <Link href="/pre-nursing/study-plan" className="text-primary hover:underline">
-                Study planning
+                Study Plan
               </Link>
             </li>
             <li>
               <Link href="/tools/med-math" className="text-primary hover:underline">
-                Med math tools
+                Clinical Tools
               </Link>
             </li>
             <li>
-              <Link href="/signup" className="text-primary hover:underline">
-                {dict["preNursing.explorePlans"] ?? "Create account"}
+              <Link href="/blog" className="text-primary hover:underline">
+                Articles / Tips
               </Link>
             </li>
           </ul>

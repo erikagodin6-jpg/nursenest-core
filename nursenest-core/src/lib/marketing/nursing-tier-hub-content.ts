@@ -1,14 +1,15 @@
 import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 
-export type NursingTierHubActionId = "lessons" | "practice" | "cat";
+export type NursingTierHubActionId = "lessons" | "flashcards" | "practice_questions" | "exams";
 
 export type NursingTierHubAction = {
   id: NursingTierHubActionId;
   label: string;
   description: string;
-  href: string;
-  recommended?: boolean;
+  href?: string;
+  disabled?: boolean;
+  disabledNote?: string;
 };
 
 export type NursingTierHubContent = {
@@ -65,30 +66,35 @@ export function buildNursingTierHubContent(pathway: ExamPathwayDefinition): Nurs
     audienceLabel,
     examLabel,
     title: `${audienceLabel} learning and exam prep`,
-    intro: `Choose how you want to study for ${audienceLabel} in ${countryLabel}.`,
-    description: `This area contains ${examLabel} learning and exam-prep resources, with clear paths into lessons, practice questions, and pathway-specific CAT prep.`,
+    intro: "Choose how you want to study today.",
+    description: `This area contains ${examLabel} learning and exam-prep resources for ${audienceLabel} learners in ${countryLabel}.`,
     includedNote: `Included for this tier: ${examLabel} study resources, pathway-specific lessons, exam-style practice, and CAT readiness work for ${audienceLabel} learners in ${countryLabel}.`,
-    startHere: "Start with Lessons if you are new to the material, then move into Practice and CAT prep as your accuracy and speed improve.",
+    startHere: "Start with Lessons, then move into Practice Questions and Exams as your confidence grows.",
     differenceHeading: "What is the difference?",
-    differenceBody: "Choose Lessons for teaching, Practice for question drilling with rationales, and CAT prep for pathway-scoped adaptive sessions.",
+    differenceBody: "Use Lessons for core concepts, Flashcards for recall, Practice Questions for focused drills, and Exams for longer exam-style sessions.",
     actions: [
       {
         id: "lessons",
         label: "Lessons",
-        description: "Learn the concepts and review core exam topics.",
+        description: "Review core concepts by topic.",
         href: buildExamPathwayPath(pathway, "lessons"),
-        recommended: true,
       },
       {
-        id: "practice",
-        label: "Practice",
-        description: "Answer exam-style questions and study rationales.",
+        id: "flashcards",
+        label: "Flashcards",
+        description: "Reinforce recall and retention.",
+        href: `/app/flashcards?pathwayId=${encodeURIComponent(pathway.id)}`,
+      },
+      {
+        id: "practice_questions",
+        label: "Practice Questions",
+        description: "Answer questions by topic or weakness.",
         href: buildExamPathwayPath(pathway, "questions"),
       },
       {
-        id: "cat",
-        label: "CAT prep",
-        description: "Open the pathway CAT page and start adaptive practice when ready.",
+        id: "exams",
+        label: "Exams",
+        description: "Take longer exam-style sessions.",
         href: buildExamPathwayPath(pathway, "cat"),
       },
     ],

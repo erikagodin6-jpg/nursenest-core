@@ -4,7 +4,7 @@ import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import { buildNursingTierHubContent } from "@/lib/marketing/nursing-tier-hub-content";
 
 describe("buildNursingTierHubContent", () => {
-  it("builds stable RN hub content with the three primary study actions", () => {
+  it("builds stable RN hub content with the four primary study actions", () => {
     const pathway = getExamPathwayById("us-rn-nclex-rn");
     assert.ok(pathway);
 
@@ -17,8 +17,9 @@ describe("buildNursingTierHubContent", () => {
       content.actions.map((action) => [action.id, action.label, action.href]),
       [
         ["lessons", "Lessons", "/us/rn/nclex-rn/lessons"],
-        ["practice", "Practice", "/us/rn/nclex-rn/questions"],
-        ["cat", "CAT prep", "/us/rn/nclex-rn/cat"],
+        ["flashcards", "Flashcards", "/app/flashcards?pathwayId=us-rn-nclex-rn"],
+        ["practice_questions", "Practice Questions", "/us/rn/nclex-rn/questions"],
+        ["exams", "Exams", "/us/rn/nclex-rn/cat"],
       ],
     );
   });
