@@ -31,6 +31,7 @@ import {
 import { LessonCard, LessonCardChip } from "@/components/student/product/lesson-card";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { freemiumLessonsExhausted, freemiumQuestionsExhausted } from "@/lib/conversion/freemium-gates";
+import { cleanLessonTitleForDisplay } from "@/lib/lessons/lesson-title-presentation";
 
 type AppLessonListRow = {
   id: string;
@@ -59,6 +60,29 @@ function pathwayLessonCardSummary(row: {
   if (d) return d.length > 220 ? `${d.slice(0, 217)}…` : d;
   const parts = [row.topic?.trim(), row.bodySystem?.trim()].filter(Boolean);
   return parts.length ? parts.join(" · ") : null;
+}
+
+function pathwayLessonSafetyGateWhere() {
+  return {
+    AND: [
+      { title: { not: "" } },
+      { slug: { not: "" } },
+      { topic: { not: "" } },
+      { topicSlug: { not: "" } },
+      { previewSectionCount: { gt: 0 } },
+      {
+        OR: [{ seoDescription: { not: "" } }, { seoTitle: { not: "" } }],
+      },
+      {
+        NOT: [
+          { title: { contains: "placeholder", mode: "insensitive" as const } },
+          { title: { contains: "tbd", mode: "insensitive" as const } },
+          { slug: { startsWith: "tmp-" } },
+          { slug: { startsWith: "draft-" } },
+        ],
+      },
+    ],
+  };
 }
 
 type Props = { searchParams: Promise<{ page?: string; topic?: string; topicSlug?: string; pathwayId?: string }> };
@@ -210,17 +234,20 @@ export default async function LessonsPage({ searchParams }: Props) {
       topicSlug: topicSlugFilter,
       pathwayId: pathwayIdFilter,
     });
+    const pathwayWhereWithSafety = {
+      AND: [pathwayWhere, pathwayLessonSafetyGateWhere()],
+    };
     const pathwaySample = await prisma.pathwayLesson.findFirst({
-      where: pathwayWhere,
+      where: pathwayWhereWithSafety,
       select: { id: true },
     });
 
     if (pathwaySample) {
-      const pathwayTotal = await prisma.pathwayLesson.count({ where: pathwayWhere });
+      const pathwayTotal = await prisma.pathwayLesson.count({ where: pathwayWhereWithSafety });
       const pageCount = Math.max(1, Math.ceil(pathwayTotal / LEARNER_APP_LESSONS_PAGE_SIZE) || 1);
       const safePage = Math.min(pageRequested, pageCount);
       const pathwayRows = await prisma.pathwayLesson.findMany({
-        where: pathwayWhere,
+        where: pathwayWhereWithSafety,
         select: {
           id: true,
           title: true,
@@ -324,17 +351,11 @@ export default async function LessonsPage({ searchParams }: Props) {
   return (
     <main className="space-y-6">
       <div className="nn-learner-page-hero">
-        <h1 className="text-3xl font-bold text-[var(--semantic-text-primary)]">{t("learner.lessons.list.title")}</h1>
+        <h1 className="text-2xl font-bold text-[var(--semantic-text-primary)] sm:text-[1.7rem]">
+          {t("learner.lessons.list.title")}
+        </h1>
         <p className="mt-2 text-sm text-[var(--semantic-text-secondary)]">{t("learner.lessons.list.subscriberIntro")}</p>
-        <p className="mt-2 text-sm text-[var(--semantic-text-secondary)]">
-          {t("learner.lessons.list.paginationExplainer", { pageSize: LEARNER_APP_LESSONS_PAGE_SIZE })}{" "}
-          <Link className="font-medium text-[var(--semantic-info)] underline decoration-[color-mix(in_srgb,var(--semantic-info)_35%,transparent)] underline-offset-2" href="/lessons">
-            {t("learner.lessons.list.paginationLink")}
-          </Link>
-          {t("learner.lessons.list.paginationEnd")}
-        </p>
       </div>
-      <LearnerStudyQuickLinksCard t={t} id="lessons-study-quick-links" catHref={catHref} />
       {(topicFilter || topicSlugFilter) && lessonsBlock.source === "pathway_lessons" ? (
         <div className="nn-card border-[color-mix(in_srgb,var(--semantic-info)_22%,var(--semantic-border-soft))] bg-[var(--semantic-panel-cool)] p-4 text-sm text-[var(--semantic-text-secondary)]">
           <p className="font-semibold text-[var(--semantic-text-primary)]">{t("learner.lessons.list.topicFilterTitle")}</p>
@@ -352,10 +373,6 @@ export default async function LessonsPage({ searchParams }: Props) {
           <p>{t("learner.lessons.list.topicFilterIgnored")}</p>
         </div>
       ) : null}
-      <aside className="nn-card border-[color-mix(in_srgb,var(--semantic-success)_22%,var(--semantic-border-soft))] bg-[var(--semantic-panel-positive)] p-4 text-sm text-[var(--semantic-text-secondary)] shadow-[var(--semantic-shadow-soft)]">
-        <p className="font-semibold text-[var(--semantic-text-primary)]">{t("learner.lessons.list.studyRhythmTitle")}</p>
-        <p className="mt-1">{t("learner.lessons.list.studyRhythmBody")}</p>
-      </aside>
       {lessons.length === 0 ? (
         <div className="nn-card mt-4 space-y-3 p-6 text-sm text-muted">
           <p className="font-semibold text-[var(--semantic-text-primary)]">No lessons available yet for this topic</p>
@@ -393,7 +410,7 @@ export default async function LessonsPage({ searchParams }: Props) {
             <LessonCard
               key={lesson.id}
               href={`/app/lessons/${lesson.id}`}
-              title={lesson.title}
+              title={cleanLessonTitleForDisplay(lesson.title)}
               summary={lesson.summary}
               chips={chips}
               progressStatus={lesson.pathwayMeta ? (progressByRowId[lesson.id] ?? "not_started") : undefined}
@@ -419,6 +436,22 @@ export default async function LessonsPage({ searchParams }: Props) {
         topic={topicFilter ?? undefined}
         topicSlug={topicSlugFilter ?? undefined}
       />
+
+      <LearnerStudyQuickLinksCard t={t} id="lessons-study-quick-links" catHref={catHref} />
+      <aside className="nn-card border-[color-mix(in_srgb,var(--semantic-success)_22%,var(--semantic-border-soft))] bg-[var(--semantic-panel-positive)] p-4 text-sm text-[var(--semantic-text-secondary)] shadow-[var(--semantic-shadow-soft)]">
+        <p className="font-semibold text-[var(--semantic-text-primary)]">{t("learner.lessons.list.studyRhythmTitle")}</p>
+        <p className="mt-1">{t("learner.lessons.list.studyRhythmBody")}</p>
+      </aside>
+      <p className="text-sm text-[var(--semantic-text-secondary)]">
+        {t("learner.lessons.list.paginationExplainer", { pageSize: LEARNER_APP_LESSONS_PAGE_SIZE })}{" "}
+        <Link
+          className="font-medium text-[var(--semantic-info)] underline decoration-[color-mix(in_srgb,var(--semantic-info)_35%,transparent)] underline-offset-2"
+          href="/lessons"
+        >
+          {t("learner.lessons.list.paginationLink")}
+        </Link>
+        {t("learner.lessons.list.paginationEnd")}
+      </p>
     </main>
   );
 }

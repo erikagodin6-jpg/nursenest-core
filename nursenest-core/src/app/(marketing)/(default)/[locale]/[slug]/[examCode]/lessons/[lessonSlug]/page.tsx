@@ -184,6 +184,10 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
 
   const fullAccess = canViewFullPathwayLesson(scope, pathway, learnerPathResolved);
   const visible = visibleSectionsForLesson(lesson, fullAccess);
+  const previewLesson =
+    fullAccess
+      ? lesson
+      : { ...lesson, sections: visible, preTest: undefined, postTest: undefined };
 
   const lessonContentTier = contentTierForPathwayLessonRender(
     pathway,
@@ -207,6 +211,7 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
   const displayLessonTitle = cleanLessonTitleForDisplay(lesson.title);
   const { crumbs, schemaItems } = pathwayLessonDetailBreadcrumbs(pathway, lesson.slug, displayLessonTitle);
   const lessonQuality = classifyPathwayLesson(lesson);
+  const quickReviewBullets = buildQuickReviewBullets(previewLesson);
   const matchedLessonImage = resolveLessonImage({
     slug: lesson.slug,
     title: lesson.title,
@@ -222,9 +227,9 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
   );
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 sm:py-7 lg:px-8">
+    <div className="mx-auto max-w-6xl px-4 py-4 sm:px-6 sm:py-5 lg:px-8">
       <div
-        className={`nn-lesson-page-shell px-4 py-5 sm:px-8 sm:py-7${pathway.examFamily === ExamFamily.NP ? " nn-lesson-page-shell--np" : ""}`}
+        className={`nn-lesson-page-shell px-4 py-4 sm:px-8 sm:py-6${pathway.examFamily === ExamFamily.NP ? " nn-lesson-page-shell--np" : ""}`}
       >
         <MarketingPathwayLessonDetailViewBeacon
           pathway={pathway}
@@ -264,11 +269,11 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
         <div className="mt-6 space-y-3">
           <PremiumLessonPublishNotice validation={lesson.premiumValidation} />
           <LessonQualityNotice tier={lessonQuality.tier} wordCount={lessonQuality.wordCount} />
-          <PathwayLessonQuickReview bullets={buildQuickReviewBullets(lesson)} />
+          <PathwayLessonQuickReview bullets={quickReviewBullets} />
         </div>
         {showLocaleFallbackNotice ? (
           <aside
-            className="nn-card mt-4 border-border bg-[var(--theme-muted-surface)] p-3 text-sm text-muted"
+            className="nn-card mt-4 border-border bg-[var(--theme-muted-surface)] p-3 text-sm text-[var(--theme-body-text)]"
             data-testid="aside-pathway-lesson-locale-en"
           >
             {lesson.localeMeta?.isCatalogEnglishSource ? (
@@ -293,7 +298,7 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
             <>
               <aside className="nn-card mt-6 border-amber-200 bg-amber-50 p-4 text-sm text-[var(--theme-body-text)] dark:border-amber-900/40 dark:bg-amber-950/30">
                 <p className="font-semibold">Access check didn’t complete</p>
-                <p className="mt-1 text-muted">
+                <p className="mt-1 text-[var(--theme-body-text)]">
                   We couldn’t confirm your plan (temporary server or data issue). This is not the same as being denied access.
                   Refresh in a moment; you can still read the preview sections below. Sign in again or contact support if it
                   persists.
@@ -312,6 +317,17 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
               pathwayCountryLabel={pathway.countryCode === "CA" ? "Canada" : "United States"}
             />
           )
+        ) : null}
+
+        {!fullAccess ? (
+          <aside className="nn-card mt-5 border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-cool)] p-4">
+            <p className="text-xs font-semibold uppercase tracking-wide text-[var(--semantic-brand)]">
+              Lesson preview
+            </p>
+            <p className="mt-2 text-sm leading-6 text-[var(--theme-body-text)]">
+              {lesson.seoDescription || `Preview the first section of ${displayLessonTitle}. Subscribe to unlock full pathophysiology, interventions, and exam-focused breakdowns.`}
+            </p>
+          </aside>
         ) : null}
 
         {matchedLessonImage.url ? (
@@ -402,7 +418,7 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
         <Suspense fallback={<PathwayLessonDetailDeferredSkeleton />}>
           <PathwayLessonDetailDeferred
             pathway={pathway}
-            lesson={lesson}
+            lesson={previewLesson}
             lessonsBasePath={base}
             contentLocale={lessonContentLocale}
           />

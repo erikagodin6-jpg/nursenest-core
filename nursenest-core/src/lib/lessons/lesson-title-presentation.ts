@@ -1,6 +1,6 @@
 import { formatTitleCase } from "@/lib/format/text-case";
 
-const PATHWAY_LABEL_PATTERN = /\b(?:nclex[\s-]?rn|nclex[\s-]?pn|rex[\s-]?pn)\b/i;
+const PATHWAY_LABEL_PATTERN = /\b(?:nclex[\s-]?rn|nclex[\s-]?pn|rex[\s-]?pn|cnple|fnp|aanp|ancc)\b/i;
 const COUNTRY_PATTERN = /\b(?:canada|us|u\.s\.|united states)\b/i;
 const MEDICAL_ACRONYMS = new Map<string, string>([
   ["acs", "ACS"],
@@ -38,8 +38,14 @@ function stripPathwaySuffixParentheticals(value: string): string {
 
 function stripPathwaySegments(value: string): string {
   return value
-    .replace(/\s*[-–—,:|]\s*(?:nclex[\s-]?rn|nclex[\s-]?pn|rex[\s-]?pn)\b(?:\s*,?\s*(?:canada|us|u\.s\.|united states))?/gi, " ")
-    .replace(/\b(?:nclex[\s-]?rn|nclex[\s-]?pn|rex[\s-]?pn)\b(?:\s*,?\s*(?:canada|us|u\.s\.|united states))?/gi, " ");
+    .replace(
+      /\s*[-–—,:|]\s*(?:nclex[\s-]?rn|nclex[\s-]?pn|rex[\s-]?pn|cnple|fnp|aanp|ancc)(?:\s*(?:exam|test))?\b(?:\s*,?\s*(?:canada|us|u\.s\.|united states))?/gi,
+      " ",
+    )
+    .replace(
+      /\b(?:nclex[\s-]?rn|nclex[\s-]?pn|rex[\s-]?pn|cnple|fnp|aanp|ancc)(?:\s*(?:exam|test))?\b(?:\s*,?\s*(?:canada|us|u\.s\.|united states))?/gi,
+      " ",
+    );
 }
 
 function restoreAcronymCasing(value: string, sourceTitle: string): string {
@@ -79,5 +85,6 @@ export function cleanLessonTitleForDisplay(rawTitle: string): string {
 export function compactPathwayLabel(value: string): string {
   if (/nclex[\s-]?rn/i.test(value)) return "RN";
   if (/nclex[\s-]?pn/i.test(value) || /rex[\s-]?pn/i.test(value)) return "PN";
+  if (/\b(?:cnple|fnp|aanp|ancc|np)\b/i.test(value)) return "NP";
   return value;
 }

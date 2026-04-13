@@ -9,6 +9,7 @@ import { loadPathwayQuestionBankSnapshot } from "@/lib/exam-pathways/pathway-que
 import {
   countPathwayLessons,
   getPathwayLessonsPage,
+  getPathwayLessonsPageFresh,
   listTopicClusters,
   resolvePathwayLaunchBundle,
   type PathwayLessonsPageResult,
@@ -178,7 +179,8 @@ export async function loadPathwayLessonsHubAggregates(
   const tasks: { name: string; run: () => Promise<unknown> }[] = [
     {
       name: "lessons_page",
-      run: () => getPathwayLessonsPage(pathway.id, pageRequested, pageSizeRequested, lessonContentLocale, listOpts),
+      run: () =>
+        getPathwayLessonsPageFresh(pathway.id, pageRequested, pageSizeRequested, lessonContentLocale, listOpts),
     },
     { name: "question_snapshot", run: () => loadPathwayQuestionBankSnapshot(pathway.id) },
     { name: "lesson_count", run: () => countPathwayLessons(pathway.id) },

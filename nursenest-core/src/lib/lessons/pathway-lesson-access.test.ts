@@ -37,9 +37,20 @@ describe("visibleSectionsForLesson", () => {
     assert.equal(v[0].body, "body-0");
   });
 
-  it("clamps preview count to section length", () => {
+  it("always returns one section when locked", () => {
     const lesson = makeLesson({ previewSectionCount: 99 });
-    assert.equal(visibleSectionsForLesson(lesson, false).length, 5);
+    assert.equal(visibleSectionsForLesson(lesson, false).length, 1);
+  });
+
+  it("caps preview text to safe snippet length", () => {
+    const longBody = Array.from({ length: 260 }, (_, i) => `word${i}`).join(" ");
+    const lesson = makeLesson({
+      sections: [{ id: "s0", heading: "H0", kind: "clinical_meaning", body: longBody }],
+    });
+    const v = visibleSectionsForLesson(lesson, false);
+    assert.equal(v.length, 1);
+    assert.equal(v[0].body.endsWith("..."), true);
+    assert.equal(v[0].body.split(" ").length, 180);
   });
 
   it("returns empty when no sections and locked", () => {

@@ -1,8 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Activity, BookOpen, ClipboardList } from "lucide-react";
-import { Lock } from "lucide-react";
+import { Activity, ArrowRight, BookOpen, ClipboardList, Target } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { ExamPathwayWaitlistBanner } from "@/components/exam-pathways/exam-pathway-waitlist-banner";
@@ -18,9 +17,11 @@ import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry"
 const ACTION_ICON: Record<NursingTierHubActionId, LucideIcon> = {
   lessons: BookOpen,
   flashcards: ClipboardList,
-  practice_questions: ClipboardList,
+  practice_questions: Target,
   exams: Activity,
 };
+
+const ACTION_ORDER: NursingTierHubActionId[] = ["lessons", "flashcards", "practice_questions", "exams"];
 
 const ACTION_CLASS: Partial<Record<NursingTierHubActionId, string>> = {
   lessons: "nn-exam-hub-study-card--lessons",
@@ -64,6 +65,16 @@ export function NursingTierHubPage({
   npSeoAliasSegment?: string;
 }) {
   const linkCtx = pathwayMarketingHubLinkContext(pathway, npSeoAliasSegment);
+  const actionsById = new Map(content.actions.map((action) => [action.id, action]));
+  const orderedActions = ACTION_ORDER.map((actionId) => actionsById.get(actionId)).filter(
+    (action): action is NonNullable<typeof action> => Boolean(action),
+  );
+  const lessonsHref = actionsById.get("lessons")?.href ?? buildExamPathwayPath(pathway, "lessons");
+  const questionsHref = actionsById.get("practice_questions")?.href ?? buildExamPathwayPath(pathway, "questions");
+  const examsHref = actionsById.get("exams")?.href ?? buildExamPathwayPath(pathway, "cat");
+  const title = heroTitle ?? content.audienceLabel;
+  const geographyLabel = pathway.countrySlug === "canada" ? "Canada" : "United States";
+  const examLabel = pathway.shortName === content.audienceLabel ? null : pathway.shortName;
 
   return (
     <>
@@ -78,37 +89,28 @@ export function NursingTierHubPage({
         />
       ) : null}
 
-      <section
-        className="rounded-[1.75rem] border border-[var(--accent-surface-b-border)] bg-[var(--accent-surface-b)] p-6 shadow-[var(--shadow-card)] sm:p-8"
-        data-nn-tier-hub="hero"
-      >
-        <h1 className="nn-marketing-h1 max-w-3xl text-balance">{heroTitle ?? `${pathway.shortName} study hub`}</h1>
-        <p className="nn-marketing-body mt-3 max-w-3xl text-pretty text-[var(--theme-muted-text)]">{content.intro}</p>
-      </section>
-
-      <section className="mt-10" aria-labelledby="tier-hub-actions-heading" data-nn-tier-hub="actions">
-        <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
-          <div>
-            <h2 id="tier-hub-actions-heading" className="nn-marketing-h2">
-              Start studying
-            </h2>
-            <p className="nn-marketing-body-sm mt-2 max-w-2xl text-[var(--theme-muted-text)]">
-              Choose one of the main study actions.
-            </p>
-          </div>
+      <section aria-labelledby="tier-hub-title" data-nn-tier-hub="actions">
+        <h1 id="tier-hub-title" className="nn-marketing-h2 max-w-3xl text-balance">
+          {title}
+        </h1>
+        <p className="nn-marketing-body mt-1.5 max-w-3xl text-pretty text-[var(--theme-muted-text)]">
+          Choose how you want to study today.
+        </p>
+        <div className="mt-3 flex flex-wrap items-center gap-2 text-xs font-medium">
+          <span className="rounded-full border border-[var(--border-subtle)] bg-[var(--theme-card-bg)] px-2.5 py-1 text-[var(--theme-muted-text)]">
+            {geographyLabel}
+          </span>
+          {examLabel ? (
+            <span className="rounded-full border border-[var(--border-subtle)] bg-[var(--theme-card-bg)] px-2.5 py-1 text-[var(--theme-muted-text)]">
+              {examLabel}
+            </span>
+          ) : null}
         </div>
-
-        <ul className="mt-6 grid list-none gap-5 p-0 sm:grid-cols-2 lg:grid-cols-4">
-          {content.actions.map((action) => {
+        <ul className="mt-4 grid list-none gap-4 p-0 sm:grid-cols-2 lg:grid-cols-4">
+          {orderedActions.map((action) => {
             const Icon = ACTION_ICON[action.id];
             const eventMeta = ACTION_EVENT_TARGET[action.id];
-            const footer = action.disabledNote ? (
-              <span className="mt-2 inline-flex items-center gap-1 text-xs text-[var(--theme-muted-text)]">
-                <Lock className="h-3.5 w-3.5" />
-                {action.disabledNote}
-              </span>
-            ) : null;
-            const variant = action.disabled ? "locked" : "featured";
+            const variant = "featured";
             const ctaVariant = "primary";
 
             return (
@@ -116,17 +118,15 @@ export function NursingTierHubPage({
                 <StudyCard
                   surface="hub"
                   variant={variant}
-                  href={action.href ?? "#"}
+                  href={action.href ?? buildExamPathwayPath(pathway)}
                   icon={Icon}
                   title={action.label}
                   description={action.description}
                   cta={action.label}
                   ctaVariant={ctaVariant}
-                  footer={footer}
                   className={ACTION_CLASS[action.id]}
                   ariaLabel={`${action.label} - ${pathway.shortName}`}
                   onClick={() => {
-                    if (action.disabled) return;
                     const base = { ...linkCtx, ...pathwayAnalyticsDimensions(pathway) };
                     trackProductEvent(PH.marketingPathwayHubCta, {
                       ...base,
@@ -147,25 +147,37 @@ export function NursingTierHubPage({
         </ul>
       </section>
 
-      <section className="nn-study-card nn-study-card--wash mt-10 p-5 sm:p-6">
-        <p className="nn-marketing-label">More options</p>
-        <ul className="mt-3 flex flex-wrap gap-3 text-sm font-semibold text-primary">
-          <li>
-            <Link href="/app/strategy" className="hover:underline">
-              Study Plan
+      <section aria-labelledby="tier-hub-lesson-library" className="mt-6">
+        <div className="nn-card border border-[var(--border-subtle)] bg-[var(--theme-card-bg)] p-4 sm:p-5">
+          <div className="flex flex-wrap items-start justify-between gap-3">
+            <div className="max-w-2xl">
+              <h2 id="tier-hub-lesson-library" className="nn-marketing-h4">
+                Lesson Library
+              </h2>
+              <p className="nn-marketing-body-sm mt-1 text-[var(--theme-body-text)]">
+                Start with focused lessons, then move into questions and exams as your confidence grows.
+              </p>
+            </div>
+            <Link
+              href={lessonsHref}
+              className="inline-flex min-h-10 items-center gap-1.5 rounded-full nn-btn-primary px-4 py-2 text-sm font-semibold"
+            >
+              Open Lessons
+              <ArrowRight className="h-3.5 w-3.5" aria-hidden />
             </Link>
-          </li>
-          <li>
-            <Link href="/app/practice-tests/cat-insights" className="hover:underline">
-              Progress / Readiness
+          </div>
+          <div className="mt-4 flex flex-wrap gap-2">
+            <Link
+              href={questionsHref}
+              className="inline-flex min-h-10 items-center rounded-full nn-btn-secondary px-4 py-2 text-sm font-semibold"
+            >
+              Practice Questions
             </Link>
-          </li>
-          <li>
-            <Link href="/blog" className="hover:underline">
-              Articles / Tips
+            <Link href={examsHref} className="inline-flex min-h-10 items-center rounded-full nn-btn-secondary px-4 py-2 text-sm font-semibold">
+              Exams
             </Link>
-          </li>
-        </ul>
+          </div>
+        </div>
       </section>
 
       {pathway.status === "upcoming" || pathway.acquisitionMode === "waitlist" ? (

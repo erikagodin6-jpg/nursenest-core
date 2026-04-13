@@ -64,23 +64,22 @@ export default async function PreNursingLessonsHubPage({ searchParams }: Props) 
 
   return (
     <div className="nn-marketing-surface">
-      <div className="mx-auto max-w-5xl px-4 py-10 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-5xl px-4 py-4 sm:px-6 sm:py-6 lg:px-8">
         <PreNursingSurfaceAnalytics surface="lessons_hub" />
         <BreadcrumbJsonLd items={schemaItems} />
         <div className="mb-6">
           <BreadcrumbTrail items={crumbs} />
         </div>
-        <PreNursingMilestoneStrip sourceSurface="lessons_hub" />
 
-        <header className="mb-10">
-          <p className="text-xs font-semibold uppercase tracking-wide text-primary">Free · Pre-Nursing</p>
-          <h1 className="mt-2 text-3xl font-extrabold tracking-tight text-[var(--theme-heading-text)] sm:text-4xl">
-            Pre-nursing lessons &amp; modules
+        <header className="mb-6">
+          <p className="text-xs font-semibold uppercase tracking-wide text-primary">Pre-Nursing</p>
+          <h1 className="mt-2 text-2xl font-extrabold tracking-tight text-[var(--theme-heading-text)] sm:text-3xl">
+            Lesson Library
           </h1>
-          <p className="mt-3 max-w-2xl text-muted">
-            Every card opens a full interactive module. Lessons load quickly as you browse the catalog.
+          <p className="mt-2 max-w-2xl text-[var(--theme-body-text)]">
+            Review concepts by topic. Open any lesson to study, then move into flashcards, practice questions, and exams.
           </p>
-          <div className="mt-4 flex flex-wrap gap-3 text-sm">
+          <div className="mt-3 flex flex-wrap gap-3 text-sm">
             <Link href="/pre-nursing" className="font-semibold text-primary hover:underline">
               ← Pre-Nursing overview
             </Link>
@@ -116,6 +115,10 @@ export default async function PreNursingLessonsHubPage({ searchParams }: Props) 
           pageSize={pageSize}
           label="modules"
         />
+
+        <section className="mt-10">
+          <PreNursingMilestoneStrip sourceSurface="lessons_hub" />
+        </section>
       </div>
     </div>
   );

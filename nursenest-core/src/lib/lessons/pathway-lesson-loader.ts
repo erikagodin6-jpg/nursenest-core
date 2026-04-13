@@ -896,6 +896,22 @@ async function countPublishedDbLessonsAllLocales(pathwayId: string): Promise<num
 }
 
 /**
+ * Same count as {@link countPublishedDbLessonsAllLocales} but with timeout detection.
+ * When unavailable, caller can fail closed instead of silently surfacing catalog subset.
+ */
+async function countPublishedDbLessonsAllLocalesWithHealth(
+  pathwayId: string,
+): Promise<{ count: number; unavailable: boolean }> {
+  const sentinel = -1;
+  const n = await dbCall(
+    () => prisma.pathwayLesson.count({ where: { pathwayId, status: ContentStatus.PUBLISHED } }),
+    sentinel,
+  );
+  if (n === sentinel) return { count: 0, unavailable: true };
+  return { count: n, unavailable: false };
+}
+
+/**
  * Pick which `locale` key to query for list/topic pages — one `groupBy` per request.
  * Prefers requested locale when present, else English, else first available.
  */
@@ -1054,7 +1070,25 @@ async function getPathwayLessonsPageImpl(
   const qRaw = normalizePathwayHubSearchQuery(listOptions?.q);
   const qLower = qRaw ? qRaw.toLowerCase() : "";
 
-  const dbAny = await pathwayHasPublishedDbLessons(pathwayId);
+  const dbPresence = await countPublishedDbLessonsAllLocalesWithHealth(pathwayId);
+  if (dbPresence.unavailable) {
+    safeServerLog("pathway_lessons", "hub_list_db_unavailable_fail_closed", {
+      pathwayId,
+      page: p,
+      pageSize: ps,
+      hubSearch: qRaw ? "1" : "0",
+    });
+    return {
+      ...emptyPathwayLessonsPageResult(p, ps),
+      locale: {
+        requested,
+        effective: requested,
+        usedEnglishFallback: false,
+        catalogEnglishOnlySource: false,
+      },
+    };
+  }
+  const dbAny = dbPresence.count > 0;
   if (dbAny) {
     const t0 = performance.now();
     const effective = await effectiveLocaleForPathwayLessonDbRows(pathwayId, requested);
@@ -1184,6 +1218,19 @@ async function getPathwayLessonsPageWithDataCache(
 
 /** Dedupes identical hub list fetches within a single request (metadata + page, etc.). */
 export const getPathwayLessonsPage = cache(getPathwayLessonsPageWithDataCache);
+/**
+ * Non-persistent cached variant for live hubs that must reflect recent imports immediately.
+ * Uses request-scope memoization only (React cache), bypassing Next Data Cache.
+ */
+export const getPathwayLessonsPageFresh = cache(async function getPathwayLessonsPageFresh(
+  pathwayId: string,
+  page: number,
+  pageSize: number,
+  marketingLocale?: string,
+  listOptions?: { topicSlugsIn?: string[]; q?: string },
+): Promise<PathwayLessonsPageResult> {
+  return getPathwayLessonsPageImpl(pathwayId, page, pageSize, marketingLocale, listOptions);
+});
 
 export type TopicLessonsPageResult = PathwayLessonsPageResult;
 
@@ -1905,7 +1952,9 @@ export async function listPathwayLessonSlugBatch(
 
 /** Total lessons for pathway — count/sum only (audit, metrics). */
 export async function countPathwayLessons(pathwayId: string): Promise<number> {
-  const dbN = await countPublishedDbLessonsAllLocales(pathwayId);
+  const dbState = await countPublishedDbLessonsAllLocalesWithHealth(pathwayId);
+  if (dbState.unavailable) return 0;
+  const dbN = dbState.count;
   if (dbN > 0) return dbN;
   return getCatalogLessonsRaw(pathwayId).length;
 }

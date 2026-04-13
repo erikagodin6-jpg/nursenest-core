@@ -67,12 +67,12 @@ export function PathwayLessonDetailHeader({
             <h1 className="nn-marketing-h2 mt-2 text-balance">
               {lessonTitle}
             </h1>
-            <p className="nn-marketing-body-sm mt-3 text-[var(--theme-muted-text)]">
+            <p className="nn-marketing-body-sm mt-3 text-[var(--theme-body-text)]">
               <span className="font-medium text-[var(--theme-heading-text)]">{lessonTopic}</span>
               <span aria-hidden className="mx-2 text-[var(--theme-muted-text)]">
                 ·
               </span>
-              Exam-scoped lesson — not generic nursing overview. Use the study strip at the end to practice in the same scope.
+              Focused lesson content with practice questions and exam-style drills linked below.
             </p>
           </div>
           {trailing ? <div className="shrink-0">{trailing}</div> : null}
@@ -82,7 +82,7 @@ export function PathwayLessonDetailHeader({
             href={lessonsBasePath}
             className="nn-study-pill-secondary inline-flex min-h-11 items-center justify-center px-5 py-2.5 text-sm font-semibold text-primary"
           >
-            ← All lessons · {examName}
+            ← All lessons
           </Link>
         </div>
       </div>

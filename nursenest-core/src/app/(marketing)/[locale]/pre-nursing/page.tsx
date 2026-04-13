@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Activity, BookOpen, ClipboardList, Layers } from "lucide-react";
+import { Activity, BookOpen, Layers, Target } from "lucide-react";
 import { isCoreHostedNonDefaultLocale } from "@/lib/i18n/marketing-locale-policy";
 import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
@@ -63,7 +62,7 @@ export default async function LocalizedPreNursingPage({ params }: Props) {
 
   return (
     <div className="nn-marketing-surface">
-      <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-6xl px-4 py-4 sm:px-6 sm:py-6 lg:px-8">
         <PreNursingSurfaceAnalytics surface="hub" />
         <WebPageJsonLd
           title={pageTitle}
@@ -72,22 +71,13 @@ export default async function LocalizedPreNursingPage({ params }: Props) {
           inLanguage={locale}
         />
 
-        <section className="rounded-[1.75rem] border border-[var(--accent-surface-b-border)] bg-[var(--accent-surface-b)] p-6 shadow-[var(--shadow-card)] sm:p-8">
-          <p className="nn-marketing-caption font-semibold uppercase tracking-[0.12em] text-[var(--text-accent)]">
+        <section aria-labelledby="pre-nursing-actions-heading">
+          <h1 id="pre-nursing-actions-heading" className="nn-marketing-h1 max-w-3xl text-balance">
             {msgs["preNursing.hub.heroLabel"] ?? "Pre-Nursing"}
-          </p>
-          <h1 className="nn-marketing-h1 mt-3 max-w-3xl text-balance">
-            {msgs["preNursing.hub.heroTitle"] ?? "Pre-Nursing study hub"}
           </h1>
-          <p className="nn-marketing-body mt-3 max-w-3xl text-pretty text-[var(--theme-muted-text)]">
+          <p className="nn-marketing-body mt-2 max-w-3xl text-pretty text-[var(--theme-muted-text)]">
             {msgs["preNursing.hub.heroSubtitle"] ?? "Choose how you want to study today."}
           </p>
-        </section>
-
-        <section className="mt-10" aria-labelledby="pre-nursing-actions-heading">
-          <h2 id="pre-nursing-actions-heading" className="nn-marketing-h2">
-            {msgs["preNursing.hub.actionsHeading"] ?? "Start studying"}
-          </h2>
           <ul className="mt-6 grid list-none gap-5 p-0 sm:grid-cols-2 lg:grid-cols-4">
             <li>
               <StudyCard
@@ -96,7 +86,7 @@ export default async function LocalizedPreNursingPage({ params }: Props) {
                 href={l("/pre-nursing/lessons")}
                 icon={BookOpen}
                 title="Lessons"
-                description="Review core concepts by topic."
+                description="Review concepts by topic."
                 cta="Lessons"
                 ctaVariant="primary"
               />
@@ -104,35 +94,25 @@ export default async function LocalizedPreNursingPage({ params }: Props) {
             <li>
               <StudyCard
                 surface="hub"
-                variant="locked"
-                href="#"
+                variant="featured"
+                href={l("/flashcards")}
                 icon={Layers}
                 title="Flashcards"
-                description="Reinforce recall and retention."
+                description="Strengthen recall quickly."
                 cta="Flashcards"
                 ctaVariant="primary"
-                footer={
-                  <span className="mt-2 text-xs text-[var(--theme-muted-text)]">
-                    {msgs["preNursing.hub.flashcardsUnavailable"] ?? "Available after choosing an exam pathway."}
-                  </span>
-                }
               />
             </li>
             <li>
               <StudyCard
                 surface="hub"
                 variant="featured"
-                href={l("/pre-nursing/lessons")}
-                icon={ClipboardList}
-                title="Practice Questions"
-                description="Answer questions by topic or weakness."
-                cta="Practice Questions"
+                href={l("/question-bank")}
+                icon={Target}
+                title="Practice"
+                description="Drill by topic or weakness."
+                cta="Practice"
                 ctaVariant="primary"
-                footer={
-                  <span className="mt-2 text-xs text-[var(--theme-muted-text)]">
-                    {msgs["preNursing.hub.practiceNote"] ?? "Open a lesson to start module questions."}
-                  </span>
-                }
               />
             </li>
             <li>
@@ -146,27 +126,6 @@ export default async function LocalizedPreNursingPage({ params }: Props) {
                 cta="Exams"
                 ctaVariant="primary"
               />
-            </li>
-          </ul>
-        </section>
-
-        <section className="nn-study-card nn-study-card--wash mt-10 p-5 sm:p-6">
-          <p className="nn-marketing-label">{msgs["preNursing.hub.moreOptions"] ?? "More options"}</p>
-          <ul className="mt-3 flex flex-wrap gap-3 text-sm font-semibold">
-            <li>
-              <Link href={l("/pre-nursing/study-plan")} className="text-primary hover:underline">
-                {msgs["preNursing.hub.quickLinks.studyPlan"] ?? "Study Plan"}
-              </Link>
-            </li>
-            <li>
-              <Link href={l("/tools/med-math")} className="text-primary hover:underline">
-                {msgs["preNursing.hub.quickLinks.medMath"] ?? "Clinical Tools"}
-              </Link>
-            </li>
-            <li>
-              <Link href={l("/blog")} className="text-primary hover:underline">
-                {msgs["preNursing.hub.articlesTips"] ?? "Articles / Tips"}
-              </Link>
             </li>
           </ul>
         </section>

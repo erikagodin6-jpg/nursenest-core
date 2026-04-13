@@ -66,6 +66,7 @@ import {
   loadLessonStudyLoopBankPack,
 } from "@/lib/lessons/load-lesson-study-loop-bank-pack";
 import { PathwayLessonStudyLoopOrchestrator } from "@/components/lessons/pathway-lesson-study-loop-orchestrator";
+import { cleanLessonTitleForDisplay } from "@/lib/lessons/lesson-title-presentation";
 
 function LessonBody({
   content,
@@ -295,7 +296,7 @@ export default async function LessonDetailPage({ params }: Props) {
   }
 
   if (resolvedLesson.kind === "legacy_ok") {
-    const title = legacyContentMapLessonTitle(resolvedLesson.lesson, id);
+    const title = cleanLessonTitleForDisplay(legacyContentMapLessonTitle(resolvedLesson.lesson, id));
     const anchorNorm = normalizeTopicKey(title);
     let legacyContinue = null;
     if (userId) {
@@ -365,6 +366,7 @@ export default async function LessonDetailPage({ params }: Props) {
 
   if (resolvedLesson.kind === "pathway_ok") {
     const record = resolvedLesson.record;
+    const displayTitle = cleanLessonTitleForDisplay(record.title);
     const visibleRaw = visibleSectionsForLesson(record, true);
     const visible = filterLearnerPresentablePathwaySections(visibleRaw);
     if (visible.length === 0) {
@@ -523,7 +525,7 @@ export default async function LessonDetailPage({ params }: Props) {
             contextId={id}
             pathwayId={pathwayId}
             topic={record.topic}
-            sourceLabel={record.title}
+            sourceLabel={displayTitle}
             qualityNotice={<LessonQualityNotice tier={pathwayQuality.tier} wordCount={pathwayQuality.wordCount} />}
           >
             <article className="space-y-8">
@@ -570,7 +572,7 @@ export default async function LessonDetailPage({ params }: Props) {
 
         {isStudyCoachEnabled() && (
           <CoachLessonHelper
-            lessonTitle={record.title}
+            lessonTitle={displayTitle}
             lessonContent={pathwayCoachExcerpt || undefined}
             topic={record.topic}
             studyNextHint={studyNextHint}
@@ -631,7 +633,7 @@ export default async function LessonDetailPage({ params }: Props) {
       <main className="nn-lesson-page">
         {/* ── Premium lesson header ──────────────────────────────────────── */}
         <LessonPageHeader
-          title={record.title}
+          title={displayTitle}
           topic={record.topic}
           bodySystem={record.bodySystem}
           topicSlug={record.topicSlug}
@@ -677,9 +679,10 @@ export default async function LessonDetailPage({ params }: Props) {
   }
 
   const row = resolvedLesson.row;
+  const displayTitle = cleanLessonTitleForDisplay(row.title);
   const contentQ = classifyContentItemLesson(row.content);
   const bs = row.bodySystem?.trim() ?? "";
-  const anchorNorm = normalizeTopicKey(bs || row.title);
+  const anchorNorm = normalizeTopicKey(bs || displayTitle);
   const topicCode = bs.length > 0 ? normalizeTopicKey(bs) : null;
   let contentContinue = null;
   if (userId) {
@@ -709,7 +712,7 @@ export default async function LessonDetailPage({ params }: Props) {
           className="mt-4 text-2xl font-bold leading-tight tracking-tight sm:text-3xl"
           style={{ color: "var(--semantic-text-primary)" }}
         >
-          {row.title}
+          {displayTitle}
         </h1>
         {row.summary ? (
           <p className="mt-2 text-sm leading-relaxed" style={{ color: "var(--semantic-text-muted)" }}>
@@ -724,14 +727,14 @@ export default async function LessonDetailPage({ params }: Props) {
           flags={flags}
           scope={LearnerNoteScope.CONTENT_LESSON}
           contextId={id}
-          sourceLabel={row.title}
+          sourceLabel={displayTitle}
           qualityNotice={<LessonQualityNotice tier={contentQ.tier} wordCount={contentQ.wordCount} />}
         >
           <LessonBody content={row.content as unknown} t={t} />
         </PremiumLessonShell>
         {isStudyCoachEnabled() && (
           <CoachLessonHelper
-            lessonTitle={row.title}
+            lessonTitle={displayTitle}
             topic={row.bodySystem?.trim() || undefined}
           />
         )}

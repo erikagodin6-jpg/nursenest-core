@@ -10,9 +10,8 @@ import { LearnerAppSectionAnalytics } from "@/components/observability/learner-a
 import { SentryLearnerShell } from "@/components/observability/sentry-learner-shell";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { loadLearnerStudyNextBlock } from "@/lib/learner/load-learner-study-next-block";
-import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
+import { buildExamPathwayPath, getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import { prisma } from "@/lib/db";
-import { resolveDashboardIdentity } from "@/lib/learner/resolve-dashboard-identity";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { userShouldSeeBaselinePrompt } from "@/lib/baseline/baseline-assessment";
 import { BaselineAssessmentPrompt } from "@/components/student/baseline-assessment-prompt";
@@ -32,6 +31,14 @@ import { UserFeedbackNavPill } from "@/components/feedback/user-feedback-nav-pil
 /** Auth is enforced in `src/proxy.ts` (Next.js 16+) so this layout never calls `redirect()` for missing session. Locale + i18n: `app/(student)/app/layout.tsx`. */
 export const dynamic = "force-dynamic";
 
+function pillLabelForRoleTrack(roleTrack: string): string {
+  if (roleTrack === "rn") return "RN";
+  if (roleTrack === "lpn" || roleTrack === "rpn") return "PN";
+  if (roleTrack === "np") return "NP";
+  if (roleTrack === "allied") return "Allied";
+  return "Pathway";
+}
+
 export default async function LearnerShellLayout({ children }: { children: React.ReactNode }) {
   const session = await auth();
   const userId = (session?.user as { id?: string })?.id ?? "";
@@ -40,6 +47,8 @@ export default async function LearnerShellLayout({ children }: { children: React
   let showBaselinePrompt = false;
   let pathwayShortLabel: string | null = null;
   let pathwayId: string | null = null;
+  let pathwayHubHref: string | null = null;
+  let examsLabel: "CAT Exams" | "Exams" = "Exams";
   let entitlement: Awaited<ReturnType<typeof resolveEntitlementForPage>> = "error";
 
   if (userId) {
@@ -63,20 +72,39 @@ export default async function LearnerShellLayout({ children }: { children: React
         pathwayId = lp && lp.length > 0 ? lp : null;
         if (lp) {
           const p = getExamPathwayById(lp);
-          pathwayShortLabel = p ? p.shortName || p.displayName : lp.slice(0, 48);
+          pathwayShortLabel = p ? pillLabelForRoleTrack(p.roleTrack) : lp.slice(0, 48);
+          if (p) {
+            pathwayHubHref = buildExamPathwayPath(p);
+            if (p.roleTrack === "rn" || p.roleTrack === "rpn" || p.roleTrack === "lpn" || p.roleTrack === "np") {
+              examsLabel = "CAT Exams";
+            }
+          }
         } else if (u?.alliedProfessionKey) {
-          // Allied users don't have a learnerPath; derive label from career identity
-          const identity = resolveDashboardIdentity({
-            tier: (session?.user as { tier?: string })?.tier,
-            learnerPathId: null,
-            alliedProfessionKey: u.alliedProfessionKey,
-          });
-          pathwayShortLabel = identity.pill;
+          // Allied users don't always have a learnerPath.
+          pathwayShortLabel = "Allied";
+          pathwayHubHref = "/us/allied/allied-health";
         }
       } catch {
         showBaselinePrompt = false;
       }
     }
+  }
+
+  if (!pathwayHubHref) {
+    const tier = ((session?.user as { tier?: string | null })?.tier ?? "").toUpperCase();
+    if (tier === "RN") {
+      pathwayHubHref = "/us/rn/nclex-rn";
+      examsLabel = "CAT Exams";
+    } else if (tier === "RPN") {
+      pathwayHubHref = "/canada/rpn/rex-pn";
+      examsLabel = "CAT Exams";
+    } else if (tier === "LVN_LPN") {
+      pathwayHubHref = "/us/lpn/nclex-pn";
+      examsLabel = "CAT Exams";
+    } else if (tier === "NP") {
+      pathwayHubHref = "/us/np/fnp";
+      examsLabel = "CAT Exams";
+    } else if (tier === "ALLIED") pathwayHubHref = "/us/allied/allied-health";
   }
 
   if (!userId) {
@@ -92,13 +120,19 @@ export default async function LearnerShellLayout({ children }: { children: React
     <SentryLearnerShell userId={userId}>
       <LearnerExamChromeGate>
         <LearnerFeedbackShell pathwayId={pathwayId}>
-          <div className="nn-learner-app mx-auto w-full max-w-6xl px-4 py-[var(--nn-rhythm-shell-y)] sm:px-6">
+          <div className="nn-learner-app mx-auto w-full max-w-6xl px-4 pt-[var(--nn-rhythm-shell-y)] pb-[calc(var(--nn-rhythm-shell-y)+5rem)] sm:px-6 md:pb-[var(--nn-rhythm-shell-y)]">
             <PathwayLessonProgressRefreshListener />
             <LearnerAppSectionAnalytics />
             <header className="nn-learner-exam-chrome-target nn-card mb-[var(--nn-rhythm-tight-y)] flex min-h-14 flex-col gap-3 rounded-2xl p-3 sm:gap-4 lg:min-h-16 lg:flex-row lg:items-center lg:justify-between lg:p-4">
               <div className="flex min-w-0 flex-wrap items-center gap-3 md:gap-4">
                 <LearnerShellBrandHomeLink />
-                <LearnerShellPrimaryNav />
+                <LearnerShellPrimaryNav
+                  hasActiveSubscription={entitlement !== "error" && entitlement.hasAccess}
+                  pathwayPillLabel={pathwayShortLabel}
+                  pathwayId={pathwayId}
+                  pathwayHubHref={pathwayHubHref}
+                  examsLabel={examsLabel}
+                />
               </div>
               <div className="flex flex-wrap items-center gap-3">
                 <LearnerShellUserBar pathwayShortLabel={pathwayShortLabel} />

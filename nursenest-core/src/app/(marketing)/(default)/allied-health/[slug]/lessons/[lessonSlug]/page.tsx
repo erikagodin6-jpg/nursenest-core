@@ -161,8 +161,11 @@ export default async function AlliedHealthSlugLessonDetailPage({ params }: Props
   const fullAccess = canViewFullPathwayLesson(scope, pathway, learnerPath);
   const lessonMeasurementSystem = getMeasurementSystemForCountry(pathway.countryCode);
   const visible = visibleSectionsForLesson(lesson, fullAccess);
+  const previewLesson = fullAccess ? lesson : { ...lesson, sections: visible, preTest: undefined, postTest: undefined };
   const lockedSections =
-    !fullAccess && lesson.sections.length > visible.length ? lesson.sections.slice(visible.length) : [];
+    !fullAccess && lesson.sections.length > visible.length
+      ? lesson.sections.slice(visible.length).map(({ id, heading }) => ({ id, heading }))
+      : [];
 
   const lessonProgress: PathwayLessonProgressStatus =
     userId && fullAccess
@@ -211,6 +214,7 @@ export default async function AlliedHealthSlugLessonDetailPage({ params }: Props
     lessonPath,
   );
   const lessonQuality = classifyPathwayLesson(lesson);
+  const quickReviewBullets = buildQuickReviewBullets(previewLesson);
   const matchedLessonImage = resolveLessonImage({
     slug: lesson.slug,
     title: lesson.title,
@@ -254,7 +258,7 @@ export default async function AlliedHealthSlugLessonDetailPage({ params }: Props
       </p>
       <div className="mt-4 space-y-3">
         <LessonQualityNotice tier={lessonQuality.tier} wordCount={lessonQuality.wordCount} />
-        <PathwayLessonQuickReview bullets={buildQuickReviewBullets(lesson)} />
+        <PathwayLessonQuickReview bullets={quickReviewBullets} />
       </div>
       {showLocaleFallbackNotice ? (
         <aside
@@ -296,6 +300,15 @@ export default async function AlliedHealthSlugLessonDetailPage({ params }: Props
         )
       ) : null}
 
+      {!fullAccess ? (
+        <aside className="nn-card mt-5 border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-cool)] p-4">
+          <p className="text-xs font-semibold uppercase tracking-wide text-[var(--semantic-brand)]">Lesson preview</p>
+          <p className="mt-2 text-sm leading-6 text-[var(--theme-body-text)]">
+            {lesson.seoDescription || `Preview the first section of ${displayLessonTitle}. Subscribe to unlock full lesson sections, interventions, and exam strategy guidance.`}
+          </p>
+        </aside>
+      ) : null}
+
       {matchedLessonImage.url ? (
         <LessonClinicalImageCard
           url={matchedLessonImage.url}
@@ -314,8 +327,8 @@ export default async function AlliedHealthSlugLessonDetailPage({ params }: Props
         pathwayId={pathway.id}
         lessonSlug={lesson.slug}
         initialProgress={lessonProgress}
-        preTest={lesson.preTest}
-        postTest={lesson.postTest}
+        preTest={fullAccess ? lesson.preTest : undefined}
+        postTest={fullAccess ? lesson.postTest : undefined}
         fullAccess={fullAccess}
         assessmentsEnabled={studySettings.enablePrePostQuizzes}
       >

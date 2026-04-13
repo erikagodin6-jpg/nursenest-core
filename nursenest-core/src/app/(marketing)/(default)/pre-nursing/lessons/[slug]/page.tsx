@@ -62,7 +62,7 @@ export default async function PreNursingLessonModulePage({ params }: Props) {
 
   return (
     <div className="nn-marketing-surface">
-      <div className="mx-auto max-w-4xl px-4 pt-8 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-4xl px-4 pt-4 sm:px-6 sm:pt-5 lg:px-8">
         <PreNursingSurfaceAnalytics surface="module" moduleSlug={slug} />
         <BreadcrumbJsonLd items={schemaItems} />
         <div className="mb-4">

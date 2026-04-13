@@ -56,7 +56,7 @@ export default async function ExamPathwayOverviewPage({ params }: Props) {
   const content = buildNursingTierHubContent(pathway);
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 sm:py-14 lg:px-8">
+    <div className="mx-auto max-w-6xl px-4 py-4 sm:px-6 sm:py-6 lg:px-8">
       <NursingTierHubPage
         pathway={pathway}
         hubPath={pathname}

@@ -17,8 +17,12 @@ import {
   PATHWAY_HUB_PAGE_SIZE_MAX,
 } from "@/lib/lessons/pathway-lesson-loader";
 import { PathwayLessonsCurriculumHub } from "@/components/pathway-lessons/pathway-lessons-curriculum-hub";
-import { pathwayLessonHubMetaDescription, pathwayLessonHubMetaTitle } from "@/lib/lessons/pathway-lesson-hub-seo";
-import { pathwayRegionAwareExamName } from "@/lib/lessons/pathway-lesson-hub-seo";
+import {
+  pathwayCountryLabel,
+  pathwayLessonHubMetaDescription,
+  pathwayLessonHubMetaTitle,
+  pathwayRegionAwareExamName,
+} from "@/lib/lessons/pathway-lesson-hub-seo";
 import { pathwayLessonHasRenderableHubSlug } from "@/lib/lessons/pathway-lesson-types";
 import { pathwayLessonsHubBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 import { absoluteUrl } from "@/lib/seo/site-origin";
@@ -118,8 +122,8 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
   const lessons = pageResult.items.filter(pathwayLessonHasRenderableHubSlug);
   const { schemaItems } = pathwayLessonsHubBreadcrumbs(pathway);
   const examName = pathwayRegionAwareExamName(pathway);
-  const pageTitle = `${examName} lessons`;
-  const headerDescription = `Browse ${examName} lessons by clinical area.`;
+  const pageTitle = "Lessons";
+  const headerDescription = `Browse lessons by clinical area for ${pathway.shortName} in ${pathwayCountryLabel(pathway)}.`;
 
   const overviewHref = marketingExamHubBasePath(pathway);
   const questionsHref = buildExamPathwayPath(pathway, "questions");
@@ -269,7 +273,7 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
         hubSearch={qEffective}
       />
 
-      <section className="mt-8">
+      <section className="mt-10">
         <StudyModeCards heading="Other ways to study" cards={studyCards} />
       </section>
 
