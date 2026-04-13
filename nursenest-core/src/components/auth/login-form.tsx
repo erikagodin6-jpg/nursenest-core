@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
-import { getSession, signIn } from "next-auth/react";
+import { useEffect, useMemo, useState } from "react";
+import { getSession, signIn, useSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { safeCallbackPath } from "@/lib/auth/safe-callback-path";
@@ -20,8 +20,19 @@ export function LoginForm({
   const { t } = useMarketingI18n();
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { status } = useSession();
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
+  const redirectTarget = useMemo(() => {
+    const fromQuery = safeCallbackPath(searchParams.get("callbackUrl"));
+    return fromQuery ?? "/app";
+  }, [searchParams]);
+
+  useEffect(() => {
+    if (status === "authenticated") {
+      router.replace(redirectTarget);
+    }
+  }, [status, router, redirectTarget]);
 
   async function onSubmit(formData: FormData) {
     setError(null);
@@ -31,8 +42,10 @@ export function LoginForm({
       setError(t("pages.login.errorInvalid"));
       return;
     }
-    const fromQuery = safeCallbackPath(searchParams.get("callbackUrl"));
-    const redirectTarget = fromQuery ?? "/app";
+    if (status === "authenticated") {
+      router.replace(redirectTarget);
+      return;
+    }
 
     setPending(true);
     try {
@@ -63,6 +76,10 @@ export function LoginForm({
     } finally {
       setPending(false);
     }
+  }
+
+  if (status === "authenticated") {
+    return <p className="mt-6 text-sm text-muted-foreground">You are already signed in. Redirecting...</p>;
   }
 
   return (
