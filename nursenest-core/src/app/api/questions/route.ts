@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { Prisma } from "@prisma/client";
+import { ExamFamily, Prisma } from "@prisma/client";
 import { auth } from "@/lib/auth";
 import { getFreemiumSnapshot } from "@/lib/entitlements/freemium";
 import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-session";
@@ -344,7 +344,8 @@ export async function GET(req: NextRequest) {
       let questions;
 
       if (sort === "random") {
-        if (studyModeFilters.length > 0) {
+        const usePrismaRandomSelection = studyModeFilters.length > 0 || pathway?.examFamily === ExamFamily.NP;
+        if (usePrismaRandomSelection) {
           const pool = await withRetry(() =>
             prisma.examQuestion.findMany({
               where: buildWhereParts(true),

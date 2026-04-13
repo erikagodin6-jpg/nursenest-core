@@ -3,7 +3,7 @@ import { stripToPlainText } from "@/lib/content-quality/plain-text";
 export const HIGH_YIELD_RATIONALE_BATCHES = [
   {
     id: "electrolytes",
-    patterns: [/\belectrolyte|potassium|hyperkal|hypokal|sodium|hyponat|hypernat|calcium|magnesium|clinical chemistry|fluid balance\b/i],
+    patterns: [/\belectrolyte|potassium|hyperkal|hypokal|sodium|hyponat|hypernat|calcium|magnesium|phosphate|electrolyte imbalance\b/i],
     examTip: "Trend labs with symptoms and ECG changes; treat unstable findings first.",
   },
   {
@@ -78,6 +78,11 @@ export type ControlledRationaleEnrichment = {
     sourceAnchorCount: number;
     sourceAnchorWordCount: number;
     minimumSubstanceMet: boolean;
+    matchPrecision?: "true_positive_estimate" | "borderline" | "false_positive";
+    topInclusionTrigger?: string | null;
+    topExclusionTrigger?: string | null;
+    inclusionHitCount?: number;
+    exclusionHitCount?: number;
   };
 };
 
@@ -137,6 +142,76 @@ function clipWords(text: string, maxWords: number): string {
   return `${words.slice(0, maxWords).join(" ")}…`;
 }
 
+type TriggerRule = { id: string; re: RegExp };
+
+const ELECTROLYTE_STRONG_INCLUDE_RULES: TriggerRule[] = [
+  { id: "potassium_disorder", re: /\b(hyperkal|hypokal|k\+|potassium(?:\s+(?:level|shift|replacement|repletion|supplement))?)\b/i },
+  { id: "sodium_disorder", re: /\b(hyponat|hypernat|na\+|sodium(?:\s+(?:level|correction|replacement|disorder|imbalance))?)\b/i },
+  { id: "calcium_disorder", re: /\b(hypocal|hypercal|ionized calcium|ca\+\+|calcium gluconate|calcium chloride)\b/i },
+  { id: "magnesium_disorder", re: /\b(hypomag|hypermag|mg\+\+|magnesium sulfate|magnesium replacement)\b/i },
+  { id: "phosphate_disorder", re: /\b(hypophosph|hyperphosph|phosphate(?:\s+(?:level|replacement|repletion))?|phosphorus(?:\s+level)?)\b/i },
+  { id: "electrolyte_emergency", re: /\b(electrolyte (?:imbalance|disturbance)|ecg changes|peaked t waves|widened qrs|arrhythmia due to)\b/i },
+  { id: "electrolyte_repletion", re: /\b(potassium replacement|magnesium replacement|phosphate repletion|electrolyte protocol|electrolyte replacement|oral rehydration salts?)\b/i },
+];
+
+const ELECTROLYTE_CONTEXT_RULES: TriggerRule[] = [
+  { id: "electrolyte_context", re: /\b(electrolyte|lab interpretation|clinical chemistry|fluid balance)\b/i },
+  { id: "acid_base_overlap", re: /\b(abg|acid[- ]base|hco3|anion gap)\b/i },
+];
+
+const ELECTROLYTE_EXCLUSION_RULES: TriggerRule[] = [
+  { id: "osteoporosis_only", re: /\b(osteoporosis|denosumab|bisphosphonate)\b/i },
+  { id: "diabetes_medication_only", re: /\b(sglt2|glp-?1|metformin titration|a1c goal)\b/i },
+  { id: "general_htn_only", re: /\b(resistant hypertension|bp target|antihypertensive regimen)\b/i },
+  { id: "non_clinical_meta", re: /\b(replit import|deck cards|placeholder)\b/i },
+  { id: "nutrition_general_only", re: /\b(dietary counseling|nutrition education|meal plan)\b/i },
+];
+
+function collectTriggerHits(haystack: string, rules: TriggerRule[]): string[] {
+  const hits: string[] = [];
+  for (const rule of rules) {
+    if (rule.re.test(haystack)) hits.push(rule.id);
+  }
+  return hits;
+}
+
+function detectElectrolytesMatch(haystack: string): {
+  matched: boolean;
+  precision: "true_positive_estimate" | "borderline" | "false_positive";
+  inclusionHits: string[];
+  exclusionHits: string[];
+} {
+  const inclusionHits = collectTriggerHits(haystack, ELECTROLYTE_STRONG_INCLUDE_RULES);
+  const contextHits = collectTriggerHits(haystack, ELECTROLYTE_CONTEXT_RULES);
+  const exclusionHits = collectTriggerHits(haystack, ELECTROLYTE_EXCLUSION_RULES);
+  const hasStrong = inclusionHits.length > 0;
+  const hasContext = contextHits.length > 0;
+  const hasExclusion = exclusionHits.length > 0;
+
+  if (hasStrong && !hasExclusion) {
+    return {
+      matched: true,
+      precision: "true_positive_estimate",
+      inclusionHits: [...inclusionHits, ...contextHits],
+      exclusionHits,
+    };
+  }
+  if (hasStrong && hasExclusion) {
+    return {
+      matched: true,
+      precision: "borderline",
+      inclusionHits: [...inclusionHits, ...contextHits],
+      exclusionHits,
+    };
+  }
+  return {
+    matched: false,
+    precision: hasExclusion ? "false_positive" : "borderline",
+    inclusionHits: [...inclusionHits, ...contextHits],
+    exclusionHits,
+  };
+}
+
 function detectBatch(seed: ControlledRationaleSeed): HighYieldRationaleBatchId | null {
   const haystack = [
     seed.topic,
@@ -148,6 +223,8 @@ function detectBatch(seed: ControlledRationaleSeed): HighYieldRationaleBatchId |
     .filter(Boolean)
     .join(" ");
   if (!haystack.trim()) return null;
+  const electrolyteGate = detectElectrolytesMatch(haystack);
+  if (electrolyteGate.matched) return "electrolytes";
   const match = HIGH_YIELD_RATIONALE_BATCHES.find((batch) => batch.patterns.some((re) => re.test(haystack)));
   return match?.id ?? null;
 }
@@ -188,6 +265,16 @@ function buildClinicalPearl(seed: ControlledRationaleSeed, batchId: HighYieldRat
 }
 
 export function buildControlledRationaleEnrichment(seed: ControlledRationaleSeed): ControlledRationaleEnrichment {
+  const matchHaystack = [
+    seed.topic,
+    seed.subtopic,
+    seed.bodySystem,
+    seed.stem,
+    ...(seed.tags ?? []),
+  ]
+    .filter(Boolean)
+    .join(" ");
+  const electrolytesGate = detectElectrolytesMatch(matchHaystack);
   const batchId = detectBatch(seed);
   const sourceAnchors = [
     seed.correctAnswerExplanation,
@@ -213,6 +300,15 @@ export function buildControlledRationaleEnrichment(seed: ControlledRationaleSeed
         sourceAnchorCount,
         sourceAnchorWordCount,
         minimumSubstanceMet: false,
+        ...(batchId === "electrolytes"
+          ? {
+              matchPrecision: electrolytesGate.precision,
+              topInclusionTrigger: electrolytesGate.inclusionHits[0] ?? null,
+              topExclusionTrigger: electrolytesGate.exclusionHits[0] ?? null,
+              inclusionHitCount: electrolytesGate.inclusionHits.length,
+              exclusionHitCount: electrolytesGate.exclusionHits.length,
+            }
+          : {}),
       },
     };
   }
@@ -230,6 +326,15 @@ export function buildControlledRationaleEnrichment(seed: ControlledRationaleSeed
         sourceAnchorCount,
         sourceAnchorWordCount,
         minimumSubstanceMet: false,
+        ...(batchId === "electrolytes"
+          ? {
+              matchPrecision: electrolytesGate.precision,
+              topInclusionTrigger: electrolytesGate.inclusionHits[0] ?? null,
+              topExclusionTrigger: electrolytesGate.exclusionHits[0] ?? null,
+              inclusionHitCount: electrolytesGate.inclusionHits.length,
+              exclusionHitCount: electrolytesGate.exclusionHits.length,
+            }
+          : {}),
       },
     };
   }
@@ -247,6 +352,15 @@ export function buildControlledRationaleEnrichment(seed: ControlledRationaleSeed
         sourceAnchorCount,
         sourceAnchorWordCount,
         minimumSubstanceMet: false,
+        ...(batchId === "electrolytes"
+          ? {
+              matchPrecision: electrolytesGate.precision,
+              topInclusionTrigger: electrolytesGate.inclusionHits[0] ?? null,
+              topExclusionTrigger: electrolytesGate.exclusionHits[0] ?? null,
+              inclusionHitCount: electrolytesGate.inclusionHits.length,
+              exclusionHitCount: electrolytesGate.exclusionHits.length,
+            }
+          : {}),
       },
     };
   }
@@ -285,6 +399,15 @@ export function buildControlledRationaleEnrichment(seed: ControlledRationaleSeed
       sourceAnchorCount,
       sourceAnchorWordCount,
       minimumSubstanceMet: true,
+      ...(batchId === "electrolytes"
+        ? {
+            matchPrecision: electrolytesGate.precision,
+            topInclusionTrigger: electrolytesGate.inclusionHits[0] ?? null,
+            topExclusionTrigger: electrolytesGate.exclusionHits[0] ?? null,
+            inclusionHitCount: electrolytesGate.inclusionHits.length,
+            exclusionHitCount: electrolytesGate.exclusionHits.length,
+          }
+        : {}),
     },
   };
 }

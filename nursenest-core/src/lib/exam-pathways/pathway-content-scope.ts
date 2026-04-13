@@ -4,6 +4,7 @@ import { questionAccessWhere } from "@/lib/entitlements/content-access-scope";
 import { buildGlobalExamContext } from "@/lib/exam-context/exam-registry";
 import { examQuestionPoolWhereForContext } from "@/lib/exam-context/query-scope";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
+import { npPathwaySpecialtyWhere } from "@/lib/exam-pathways/np-question-specialty-scope";
 
 /**
  * Interim: ANDs pathway exam keys onto existing tier/country gates.
@@ -21,7 +22,13 @@ export function questionAccessWhereWithPathway(
   if (scoped.examIn.length === 0 || scoped.tierMatches.length === 0) {
     return { id: { in: [] } };
   }
+  const npSpecialtyScope = npPathwaySpecialtyWhere(pathway);
+  const pathwayScope: Prisma.ExamQuestionWhereInput = npSpecialtyScope
+    ? {
+        AND: [{ exam: { in: scoped.examIn } }, { tier: { in: scoped.tierMatches } }, npSpecialtyScope],
+      }
+    : { exam: { in: scoped.examIn }, tier: { in: scoped.tierMatches } };
   return {
-    AND: [base, { exam: { in: scoped.examIn } }, { tier: { in: scoped.tierMatches } }],
+    AND: [base, pathwayScope],
   };
 }

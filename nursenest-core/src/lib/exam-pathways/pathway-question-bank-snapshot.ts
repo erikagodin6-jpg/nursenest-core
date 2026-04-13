@@ -4,6 +4,7 @@ import { prisma } from "@/lib/db";
 import { withDatabaseFallbackTimeout } from "@/lib/db/safe-database";
 import { questionBankWhereForProfile } from "@/lib/entitlements/content-access-scope";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
+import { npPathwaySpecialtyWhere } from "@/lib/exam-pathways/np-question-specialty-scope";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { recordRouteRenderFallback } from "@/lib/observability/route-fallback-tracker";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
@@ -19,7 +20,15 @@ const REVALIDATE_SECONDS = 3600;
  */
 export function pathwayExamQuestionMarketingWhere(pathway: ExamPathwayDefinition): Prisma.ExamQuestionWhereInput {
   const profile = questionBankWhereForProfile(pathway.countryCode, pathway.stripeTier);
-  if (pathway.contentExamKeys.length === 0) return profile;
+  const npSpecialtyScope = npPathwaySpecialtyWhere(pathway);
+  if (pathway.contentExamKeys.length === 0) {
+    return npSpecialtyScope ? { AND: [profile, npSpecialtyScope] } : profile;
+  }
+  if (npSpecialtyScope) {
+    return {
+      AND: [profile, { exam: { in: [...new Set(pathway.contentExamKeys)] } }, npSpecialtyScope],
+    };
+  }
   return {
     AND: [profile, { exam: { in: [...new Set(pathway.contentExamKeys)] } }],
   };

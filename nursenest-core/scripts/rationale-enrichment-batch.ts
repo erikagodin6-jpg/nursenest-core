@@ -40,6 +40,16 @@ type QuestionTraceRow = {
   rejectionReason: QuestionSkipReason | null;
 };
 
+type ElectrolytePrecisionSnapshot = {
+  sampleSize: number;
+  truePositiveEstimatedSampleCount: number;
+  borderlineSampleCount: number;
+  falsePositiveEstimatedSampleCount: number;
+  topInclusionTriggers: Array<{ trigger: string; count: number }>;
+  topExclusionTriggers: Array<{ trigger: string; count: number }>;
+  appliedCandidatesAfterNarrowing: number;
+};
+
 function parseArgs(argv: string[]): Args {
   const out: Args = {
     maxItems: 25,
@@ -171,6 +181,14 @@ async function main() {
     candidatesSuccessfullyApplied: 0,
     eligibleDryRun: 0,
   };
+  const electrolyteSampleLimit = 200;
+  const electrolyteSampleRows: Array<{
+    precision: "true_positive_estimate" | "borderline" | "false_positive";
+    inclusion: string | null;
+    exclusion: string | null;
+    inclusionHitCount: number;
+    exclusionHitCount: number;
+  }> = [];
 
   const questionRows: Array<Record<string, unknown>> = [];
   const questionTrace: QuestionTraceRow[] = [];
@@ -210,6 +228,15 @@ async function main() {
 
     if (sourceAnchorCount > 0 && sourceAnchorWordCount >= 12) {
       questionBreakdown.candidatesWithUsableSourceAnchors += 1;
+    }
+    if (args.batch === "electrolytes" && electrolyteSampleRows.length < electrolyteSampleLimit) {
+      electrolyteSampleRows.push({
+        precision: enrichment.diagnostics?.matchPrecision ?? "borderline",
+        inclusion: enrichment.diagnostics?.topInclusionTrigger ?? null,
+        exclusion: enrichment.diagnostics?.topExclusionTrigger ?? null,
+        inclusionHitCount: enrichment.diagnostics?.inclusionHitCount ?? 0,
+        exclusionHitCount: enrichment.diagnostics?.exclusionHitCount ?? 0,
+      });
     }
 
     let action: QuestionAction = "skipped";
@@ -324,6 +351,50 @@ async function main() {
     }
   }
 
+  let electrolytePrecision: ElectrolytePrecisionSnapshot | null = null;
+  if (args.batch === "electrolytes") {
+    const inclusionMap = new Map<string, number>();
+    const exclusionMap = new Map<string, number>();
+    let truePositiveEstimatedSampleCount = 0;
+    let borderlineSampleCount = 0;
+    let falsePositiveEstimatedSampleCount = 0;
+
+    for (const row of electrolyteSampleRows) {
+      if (row.precision === "true_positive_estimate") truePositiveEstimatedSampleCount += 1;
+      else if (row.precision === "borderline") borderlineSampleCount += 1;
+      else falsePositiveEstimatedSampleCount += 1;
+
+      // Treat exclusion+weak inclusion combinations as estimated false positives.
+      if (row.exclusionHitCount > 0 && (row.inclusion === "electrolyte_context" || row.inclusion === "acid_base_overlap")) {
+        falsePositiveEstimatedSampleCount += 1;
+      }
+
+      if (row.inclusion) inclusionMap.set(row.inclusion, (inclusionMap.get(row.inclusion) ?? 0) + 1);
+      if (row.exclusion) exclusionMap.set(row.exclusion, (exclusionMap.get(row.exclusion) ?? 0) + 1);
+    }
+
+    const topInclusionTriggers = [...inclusionMap.entries()]
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 5)
+      .map(([trigger, count]) => ({ trigger, count }));
+    const topExclusionTriggers = [...exclusionMap.entries()]
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 5)
+      .map(([trigger, count]) => ({ trigger, count }));
+
+    electrolytePrecision = {
+      sampleSize: electrolyteSampleRows.length,
+      truePositiveEstimatedSampleCount,
+      borderlineSampleCount,
+      falsePositiveEstimatedSampleCount,
+      topInclusionTriggers,
+      topExclusionTriggers,
+      appliedCandidatesAfterNarrowing: args.apply
+        ? questionBreakdown.candidatesSuccessfullyApplied
+        : questionBreakdown.eligibleDryRun,
+    };
+  }
+
   let flashcardRows: Array<Record<string, unknown>> = [];
   if (args.includeFlashcards) {
     const flashcards = await prisma.flashcard.findMany({
@@ -385,6 +456,7 @@ async function main() {
     questions: questionRows,
     flashcards: flashcardRows,
     questionTrace,
+    electrolytePrecision,
   };
   writeFileSync(jsonPath, JSON.stringify(payload, null, 2), "utf8");
 
@@ -399,6 +471,13 @@ async function main() {
     `- Question candidates matched: ${questionBreakdown.candidateQuestionsMatched}`,
     `- Question applied: ${questionBreakdown.candidatesSuccessfullyApplied}`,
     `- Question eligible dry-run: ${questionBreakdown.eligibleDryRun}`,
+    ...(electrolytePrecision
+      ? [
+          `- Electrolyte precision sample: ${electrolytePrecision.sampleSize}`,
+          `- True-positive estimated sample count: ${electrolytePrecision.truePositiveEstimatedSampleCount}`,
+          `- False-positive estimated sample count: ${electrolytePrecision.falsePositiveEstimatedSampleCount}`,
+        ]
+      : []),
     ``,
     `## Notes`,
     `- This report is deterministic and source-anchored.`,

@@ -1,6 +1,10 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import { isHardBlockingReadinessCode, resolveReadinessStartQuestionCount } from "@/components/student/pathway-cat-start-payload";
+import {
+  isHardBlockingReadinessCode,
+  resolveCatStartUiState,
+  resolveReadinessStartQuestionCount,
+} from "@/components/student/pathway-cat-start-payload";
 import { PRACTICE_TEST_CAT_CREATE_CODE } from "@/lib/practice-tests/practice-test-cat-create-codes";
 
 describe("resolveReadinessStartQuestionCount", () => {
@@ -48,5 +52,65 @@ describe("isHardBlockingReadinessCode", () => {
     assert.equal(isHardBlockingReadinessCode(PRACTICE_TEST_CAT_CREATE_CODE.pathway_track_not_ready), false);
     assert.equal(isHardBlockingReadinessCode("readiness_fetch_failed"), false);
     assert.equal(isHardBlockingReadinessCode(null), false);
+  });
+});
+
+describe("resolveCatStartUiState", () => {
+  it("keeps start disabled and pathway-required message visible when no pathway is selected", () => {
+    const state = resolveCatStartUiState({
+      pathwayId: "",
+      pathwayChoiceRequired: true,
+      readinessLoading: false,
+      readiness: null,
+    });
+    assert.equal(state.startDisabled, true);
+    assert.equal(state.showPathwayRequiredMessage, true);
+    assert.equal(state.showReadinessMessage, false);
+  });
+
+  it("enables start and hides pathway-required message when pathway is selected and readiness is ok", () => {
+    const state = resolveCatStartUiState({
+      pathwayId: "us-rn-nclex-rn",
+      pathwayChoiceRequired: true,
+      readinessLoading: false,
+      readiness: { ok: true, availableQuestions: 3622, requiredQuestions: 30 },
+    });
+    assert.equal(state.startDisabled, false);
+    assert.equal(state.showPathwayRequiredMessage, false);
+    assert.equal(state.showReadinessMessage, false);
+  });
+
+  it("disables start and shows readiness message when pool is insufficient", () => {
+    const state = resolveCatStartUiState({
+      pathwayId: "us-rn-nclex-rn",
+      pathwayChoiceRequired: true,
+      readinessLoading: false,
+      readiness: {
+        ok: false,
+        code: PRACTICE_TEST_CAT_CREATE_CODE.cat_pool_invalid,
+        message: "not enough pool",
+        availableQuestions: 10,
+        requiredQuestions: 30,
+      },
+    });
+    assert.equal(state.startDisabled, true);
+    assert.equal(state.showPathwayRequiredMessage, false);
+    assert.equal(state.showReadinessMessage, true);
+  });
+
+  it("disables start and shows fallback readiness message when readiness API errors", () => {
+    const state = resolveCatStartUiState({
+      pathwayId: "us-rn-nclex-rn",
+      pathwayChoiceRequired: true,
+      readinessLoading: false,
+      readiness: {
+        ok: false,
+        code: "readiness_fetch_failed",
+        message: "Could not verify readiness",
+      },
+    });
+    assert.equal(state.startDisabled, true);
+    assert.equal(state.showPathwayRequiredMessage, false);
+    assert.equal(state.showReadinessMessage, true);
   });
 });

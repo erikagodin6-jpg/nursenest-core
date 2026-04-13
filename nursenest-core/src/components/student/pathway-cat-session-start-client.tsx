@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { PracticeTestPathwayOption } from "@/lib/practice-tests/types";
 import { catPathwayRegionalExamLine, catPathwayShortCatLabel } from "@/lib/exam-pathways/cat-pathway-labels";
 import { publicCopyForReadinessConfig, readinessConfigForPathway } from "@/lib/exam-pathways/pathway-readiness-config";
@@ -11,6 +11,8 @@ import { PRACTICE_TEST_CAT_CREATE_CODE } from "@/lib/practice-tests/practice-tes
 import { CatAmbiguityPathwayPicker } from "@/components/student/cat-ambiguity-pathway-picker";
 import {
   isHardBlockingReadinessCode,
+  normalizePathwaySelection,
+  resolveCatStartUiState,
   resolveReadinessStartQuestionCount,
 } from "@/components/student/pathway-cat-start-payload";
 
@@ -29,7 +31,10 @@ export function PathwayCatSessionStartClient({
     if (pathwayOptions.length === 1) return pathwayOptions[0]!.id;
     return "";
   });
-  const needsPathwayChoice = pathwayOptions.length > 1 && pathwayId.length === 0;
+  const pathwaySelectRef = useRef<HTMLSelectElement | null>(null);
+  const normalizedPathwayId = normalizePathwaySelection(pathwayId);
+  const pathwayChoiceRequired = pathwayOptions.length > 1;
+  const needsPathwayChoice = pathwayChoiceRequired && normalizedPathwayId.length === 0;
   const [creating, setCreating] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [errorCode, setErrorCode] = useState<string | null>(null);
@@ -37,7 +42,7 @@ export function PathwayCatSessionStartClient({
   const [readiness, setReadiness] = useState<CatPracticeReadinessResult | null>(null);
   const [readinessRefreshToken, setReadinessRefreshToken] = useState(0);
 
-  const pathwayMeta = useMemo(() => (pathwayId ? getExamPathwayById(pathwayId) : undefined), [pathwayId]);
+  const pathwayMeta = useMemo(() => (normalizedPathwayId ? getExamPathwayById(normalizedPathwayId) : undefined), [normalizedPathwayId]);
   const catShort = pathwayMeta ? catPathwayShortCatLabel(pathwayMeta) : null;
   const catLine = pathwayMeta ? catPathwayRegionalExamLine(pathwayMeta) : null;
   const readinessConfig = useMemo(
@@ -49,9 +54,15 @@ export function PathwayCatSessionStartClient({
     [readinessConfig],
   );
   const examTitle = publicCopy?.title ?? (pathwayMeta ? catShort : "Exam pathway");
-  const fallbackLessons = pathwayId ? (fallbackLessonsByPathway?.[pathwayId] ?? []) : [];
+  const fallbackLessons = normalizedPathwayId ? (fallbackLessonsByPathway?.[normalizedPathwayId] ?? []) : [];
   const lessonsHubHref = pathwayMeta ? buildExamPathwayPath(pathwayMeta, "lessons") : "/app/lessons";
-  const readinessCode = readiness?.ok === false ? readiness.code : null;
+  const uiState = resolveCatStartUiState({
+    pathwayId: normalizedPathwayId,
+    pathwayChoiceRequired,
+    readinessLoading,
+    readiness,
+  });
+  const readinessCode = uiState.readinessCode;
   const readinessGate = useMemo(() => {
     if (!readiness || readiness.ok) return { blocked: false, title: "" };
     if (readiness.code === PRACTICE_TEST_CAT_CREATE_CODE.pathway_not_entitled) {
@@ -73,7 +84,7 @@ export function PathwayCatSessionStartClient({
   }, [readiness]);
 
   useEffect(() => {
-    if (!pathwayId.trim()) {
+    if (!normalizedPathwayId) {
       setReadiness(null);
       return;
     }
@@ -82,7 +93,7 @@ export function PathwayCatSessionStartClient({
     setReadiness(null);
     void (async () => {
       try {
-        const res = await fetch(`/api/practice-tests/cat-readiness?pathwayId=${encodeURIComponent(pathwayId)}`, {
+        const res = await fetch(`/api/practice-tests/cat-readiness?pathwayId=${encodeURIComponent(normalizedPathwayId)}`, {
           method: "GET",
           credentials: "same-origin",
         });
@@ -92,6 +103,7 @@ export function PathwayCatSessionStartClient({
           if (isDev) {
             console.info("[CAT start] readiness", {
               pathwayId,
+              normalizedPathwayId,
               ok: Boolean(data.ok),
               code: data.ok ? null : data.code,
               message: data.ok ? null : data.message,
@@ -113,10 +125,21 @@ export function PathwayCatSessionStartClient({
     return () => {
       cancelled = true;
     };
-  }, [pathwayId, isDev, readinessRefreshToken]);
+  }, [normalizedPathwayId, pathwayId, isDev, readinessRefreshToken]);
+
+  useEffect(() => {
+    if (!needsPathwayChoice || normalizedPathwayId.length > 0) return;
+    const intervalId = window.setInterval(() => {
+      const domValue = normalizePathwaySelection(pathwaySelectRef.current?.value);
+      if (domValue.length > 0) {
+        setPathwayId(domValue);
+      }
+    }, 300);
+    return () => window.clearInterval(intervalId);
+  }, [needsPathwayChoice, normalizedPathwayId]);
 
   const start = useCallback(async () => {
-    if (!pathwayId.trim()) return;
+    if (!normalizedPathwayId) return;
     setCreating(true);
     setError(null);
     setErrorCode(null);
@@ -139,13 +162,14 @@ export function PathwayCatSessionStartClient({
         catSelectionBasis: "random" as const,
         catPresentationMode,
         catExamFeedbackMode: "test" as const,
-        pathwayId,
+        pathwayId: normalizedPathwayId,
         timedMode,
         timeLimitSec,
       };
       if (isDev) {
         console.info("[CAT start] attempt", {
           pathwayId,
+          normalizedPathwayId,
           questionCount,
           catPresentationMode,
           examFamily: pathwayMeta?.examFamily ?? null,
@@ -182,7 +206,7 @@ export function PathwayCatSessionStartClient({
     } finally {
       setCreating(false);
     }
-  }, [pathwayId, pathwayMeta?.examFamily, pathwayMeta?.shortName, readinessConfig, publicCopy?.title, isDev]);
+  }, [normalizedPathwayId, pathwayId, pathwayMeta?.examFamily, pathwayMeta?.shortName, readinessConfig, publicCopy?.title, isDev]);
 
   if (pathwayOptions.length === 0) {
     return (
@@ -230,10 +254,15 @@ export function PathwayCatSessionStartClient({
       <label className="block text-sm">
         <span className="text-muted-foreground">Pathway</span>
         <select
+          ref={pathwaySelectRef}
           data-nn-qa-cat-pathway-select
           className="mt-1 w-full max-w-xl rounded-lg border border-border px-3 py-2 text-sm"
           value={pathwayId}
-          onChange={(e) => setPathwayId(e.target.value)}
+          onChange={(e) => setPathwayId(normalizePathwaySelection(e.target.value))}
+          onInput={(e) => {
+            const target = e.target as HTMLSelectElement;
+            setPathwayId(normalizePathwaySelection(target.value));
+          }}
         >
           {pathwayOptions.length > 1 ? (
             <option value="">Choose which exam pathway you want to practice…</option>
@@ -256,7 +285,7 @@ export function PathwayCatSessionStartClient({
           Checking adaptive question pool{catShort ? ` for ${catShort}` : ""}…
         </p>
       ) : null}
-      {readiness && !readiness.ok ? (
+      {uiState.showReadinessMessage && readiness && !readiness.ok ? (
         <aside className="rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-warning-soft)] p-4 text-sm text-[var(--semantic-text-primary)] shadow-sm">
           <p className="font-semibold">
             {readinessGate.title}
@@ -346,9 +375,7 @@ export function PathwayCatSessionStartClient({
           data-nn-qa-cat-start-session
           disabled={
             creating ||
-            !pathwayId.trim() ||
-            needsPathwayChoice ||
-            readinessLoading ||
+            uiState.startDisabled ||
             isHardBlockingReadinessCode(readinessCode) ||
             false
           }
