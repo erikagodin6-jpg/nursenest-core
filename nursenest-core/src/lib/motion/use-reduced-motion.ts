@@ -20,7 +20,7 @@ export function useReducedMotion(): boolean {
     const mql = window.matchMedia(QUERY);
     const handler = (e: MediaQueryListEvent) => setReduced(e.matches);
     mql.addEventListener("change", handler);
-    setReduced(mql.matches);
+    queueMicrotask(() => setReduced(mql.matches));
     return () => mql.removeEventListener("change", handler);
   }, []);
 

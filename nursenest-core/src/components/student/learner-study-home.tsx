@@ -18,6 +18,10 @@ import { PremiumLearnerHub, type RecentLearnerNoteSummary } from "@/components/s
 import { LearnerDashboardAdvantageStrip } from "@/components/student/learner-dashboard-advantage-strip";
 import { DashboardCoachCard } from "@/components/student/dashboard/coach-card";
 import { CoachWeakSummary } from "@/components/study/coach-weak-summary";
+import { CoachReadinessCard } from "@/components/study/coach-readiness-card";
+import { CoachPriorityList } from "@/components/study/coach-priority-list";
+import { CoachPatternInsights } from "@/components/study/coach-pattern-insights";
+import { CoachInterventionBanner } from "@/components/study/coach-intervention-banner";
 import type { LearnerMarketingT } from "@/lib/learner/learner-marketing-server";
 import type { PremiumDashboardSnapshot } from "@/lib/learner/premium-dashboard-snapshot";
 import type { LearnerStudySnapshot } from "@/lib/learner/build-learner-study-snapshot";
@@ -30,6 +34,7 @@ import type { BenchmarkData } from "@/lib/learner/benchmark-engine";
 import type { TopicTrendRow } from "@/lib/learner/topic-performance";
 import type { WeakTopicRow } from "@/lib/learner/weak-topics-from-sessions";
 import type { DashboardIdentity } from "@/lib/learner/resolve-dashboard-identity";
+import type { CoachDashboardSummary } from "@/lib/coach/study-coach-types";
 import {
   LearnerFilterChips,
   LearnerKickerHeading,
@@ -118,6 +123,7 @@ export type LearnerStudyHomeProps = {
   recentNotes: RecentLearnerNoteSummary[];
   readinessDeferHint: string;
   showCoach: boolean;
+  coachSummary?: CoachDashboardSummary | null;
 };
 
 export function LearnerStudyHome({
@@ -145,6 +151,7 @@ export function LearnerStudyHome({
   recentNotes,
   readinessDeferHint,
   showCoach,
+  coachSummary,
 }: LearnerStudyHomeProps) {
   const trends = studySnap?.topicTrends ?? [];
   const strongHighlight = studySnap?.strongTopicsHighlight ?? [];
@@ -208,6 +215,16 @@ export function LearnerStudyHome({
           title={t("learner.studyHome.sectionReadinessTitle")}
         />
         <ReadinessScoreCard readiness={snapshot.readiness} t={t} maxFactors={4} />
+        {showCoach && coachSummary ? (
+          <div
+            className={`mt-5 grid gap-4 ${coachSummary.topIntervention ? "lg:grid-cols-2" : ""}`}
+          >
+            <CoachReadinessCard readiness={coachSummary.readiness} />
+            {coachSummary.topIntervention ? (
+              <CoachInterventionBanner intervention={coachSummary.topIntervention} dismissible />
+            ) : null}
+          </div>
+        ) : null}
       </section>
 
       <div className="nn-dash-divider" />

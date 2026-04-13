@@ -140,7 +140,7 @@ export function MarketingHeroCarousel({
   }, []);
 
   useEffect(() => {
-    setExtraSlidesMounted(false);
+    queueMicrotask(() => setExtraSlidesMounted(false));
     const run = () => setExtraSlidesMounted(true);
     const ric = window.requestIdleCallback ?? ((cb: () => void) => window.setTimeout(cb, 320));
     const id = ric(run);

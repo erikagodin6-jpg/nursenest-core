@@ -152,3 +152,11 @@ export interface CoachContextInput {
   practiceTrend: "improving" | "stable" | "declining" | null;
   lessonsCompletedRatio: number | null;
 }
+
+/** Serializable slice of the coach dashboard bundle for learner UI props. */
+export type CoachDashboardSummary = {
+  readiness: ReadinessScore;
+  priorities: WeaknessPriority[];
+  patterns: LearnerPatternSnapshot;
+  topIntervention: CoachIntervention | null;
+};
