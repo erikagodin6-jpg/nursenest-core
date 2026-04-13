@@ -51,6 +51,9 @@ export function getLocalThemeBrandLogoPublicPath(themeId: string): string {
   );
 }
 
+/** Alias for {@link getLocalThemeBrandLogoPublicPath}. */
+export const getLocalThemeBrandLogoPath = getLocalThemeBrandLogoPublicPath;
+
 export function getThemeColors(themeId: string): ThemeColors | null {
   const entry = THEME_LOGO_CONFIG[themeId];
   if (!entry) return null;

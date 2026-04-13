@@ -24,7 +24,7 @@ export const THEME_BRAND_LOGO_CDN_BY_ID = Object.fromEntries(
   }),
 ) as Partial<Record<(typeof THEME_OPTIONS)[number]["id"], string>>;
 
-/** Public CDN URL for the theme’s mapped raster, or null when unmapped. */
+/** Same-origin `/logos/{theme}-brandlogo.svg` URL for a registered theme, or null when unmapped. */
 export function getThemeLogoUrl(themeId?: string | null): string | null {
   const id = parseRegisteredThemeId(themeId ?? NURSENEST_DEFAULT_THEME);
   if (!id) return null;

@@ -37,7 +37,10 @@ export async function POST(req: Request) {
     });
     return NextResponse.json({ ok: true, id: row.id }, { status: 201 });
   } catch (e) {
-    safeServerLog("api_feedback_report", "create_failed", { userId: userId ?? "" }, e);
+    safeServerLog("api_feedback_report", "create_failed", {
+      userId: userId ?? "",
+      error: e instanceof Error ? e.message : String(e),
+    });
     return NextResponse.json({ error: "Could not save your report. Please try again." }, { status: 500 });
   }
 }

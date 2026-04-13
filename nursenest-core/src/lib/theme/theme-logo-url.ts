@@ -40,7 +40,7 @@ export function getThemeLogoObjectKey(themeId: string, variant: ThemeLogoVariant
   return themeLogoSpaceKeyForRegisteredTheme(id, variant);
 }
 
-/** Public CDN URL for the active theme's pre-colored logo raster (alias of {@link getThemeLogoUrl}). */
+/** Same-origin SVG URL for the active theme wordmark (alias of {@link getThemeLogoUrl}). */
 export function getThemeLogoPublicUrl(themeId: string): string | null {
   return getThemeLogoUrl(themeId);
 }
@@ -85,7 +85,7 @@ export function getBlueBrandMarkLoadChain(): string[] {
 }
 
 /**
- * Single resolved theme logo URL for marketing header/footer/auth (no chain, no local assets).
+ * Single resolved theme logo URL for marketing header/footer/auth (one same-origin SVG path).
  * @deprecated Prefer {@link resolveThemeLogo}; kept for rare callers expecting an array of one URL.
  */
 export function getHeaderBrandLogoLoadChain(
