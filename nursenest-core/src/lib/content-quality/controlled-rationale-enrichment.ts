@@ -225,7 +225,9 @@ function detectBatch(seed: ControlledRationaleSeed): HighYieldRationaleBatchId |
   if (!haystack.trim()) return null;
   const electrolyteGate = detectElectrolytesMatch(haystack);
   if (electrolyteGate.matched) return "electrolytes";
-  const match = HIGH_YIELD_RATIONALE_BATCHES.find((batch) => batch.patterns.some((re) => re.test(haystack)));
+  const match = HIGH_YIELD_RATIONALE_BATCHES.find(
+    (batch) => batch.id !== "electrolytes" && batch.patterns.some((re) => re.test(haystack)),
+  );
   return match?.id ?? null;
 }
 

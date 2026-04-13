@@ -1,0 +1,1173 @@
+{
+  "generatedAt": "2026-04-13T23:14:50.437Z",
+  "config": {
+    "maxItems": 20,
+    "includeFlashcards": true,
+    "apply": false,
+    "trace": 20,
+    "batch": "electrolytes"
+  },
+  "questionBreakdown": {
+    "totalScanned": 25000,
+    "candidateQuestionsMatched": 947,
+    "candidatesWithUsableSourceAnchors": 927,
+    "rejectedNoQuestionMatch": 24053,
+    "rejectedNoSourceAnchor": 0,
+    "rejectedWeakSource": 20,
+    "rejectedThreshold": 6,
+    "rejectedTargetAlreadyQuality": 29,
+    "rejectedWriteBlocked": 0,
+    "rejectedSchemaValidation": 0,
+    "candidatesSuccessfullyApplied": 0,
+    "eligibleDryRun": 892
+  },
+  "questionCount": 20,
+  "flashcardCount": 20,
+  "questions": [
+    {
+      "id": "650fcde7-1fc4-4121-9660-79b4c11a1c63",
+      "topic": null,
+      "subtopic": null,
+      "updatedAt": "2026-04-13T23:10:16.982Z",
+      "batchId": "electrolytes",
+      "applied": false,
+      "action": "skipped",
+      "whyCorrect": "Calcium carbonate (and iron, aluminum-containing antacids, and proton pump inhibitors) significantly impairs levothyroxine absorption. These medications must be separated by at least 4 hours.",
+      "whyWrong": "Detailed distractor explanations are not available for this item yet.",
+      "clinicalPearl": "Trend labs with symptoms and ECG changes; treat unstable findings first.",
+      "topicAnchor": "Endocrine",
+      "skippedReason": "target_already_has_quality_rationale",
+      "flags": [
+        "too_short",
+        "honest_distractor_fallback"
+      ],
+      "diagnostics": {
+        "sourceAnchorCount": 2,
+        "sourceAnchorWordCount": 72,
+        "minimumSubstanceMet": true,
+        "matchPrecision": "borderline",
+        "topInclusionTrigger": null,
+        "topExclusionTrigger": null,
+        "inclusionHitCount": 0,
+        "exclusionHitCount": 0
+      }
+    },
+    {
+      "id": "7f428f49-8b36-4141-ba41-e588bb34896d",
+      "topic": null,
+      "subtopic": null,
+      "updatedAt": "2026-04-13T23:10:16.958Z",
+      "batchId": "electrolytes",
+      "applied": false,
+      "action": "skipped",
+      "whyCorrect": "Refractory angina despite optimal medical therapy (OMT) warrants coronary angiography to assess anatomy and suitability for revascularization (PCI or CABG). Revascularization improves symptoms and quality of life in patients with significant coronary disease failing medical therapy.",
+      "whyWrong": "Detailed distractor explanations are not available for this item yet.",
+      "clinicalPearl": "Trend labs with symptoms and ECG changes; treat unstable findings first.",
+      "topicAnchor": "Cardiovascular",
+      "skippedReason": "target_already_has_quality_rationale",
+      "flags": [
+        "too_short",
+        "honest_distractor_fallback"
+      ],
+      "diagnostics": {
+        "sourceAnchorCount": 2,
+        "sourceAnchorWordCount": 82,
+        "minimumSubstanceMet": true,
+        "matchPrecision": "borderline",
+        "topInclusionTrigger": null,
+        "topExclusionTrigger": null,
+        "inclusionHitCount": 0,
+        "exclusionHitCount": 0
+      }
+    },
+    {
+      "id": "9389d8ee-4239-4c3c-8f82-17761a870558",
+      "topic": null,
+      "subtopic": null,
+      "updatedAt": "2026-04-13T23:10:16.946Z",
+      "batchId": "electrolytes",
+      "applied": false,
+      "action": "skipped",
+      "whyCorrect": "Oral bisphosphonates such as alendronate are the first-line pharmacotherapy for osteoporosis. They inhibit osteoclast-mediated bone resorption and reduce fracture risk.",
+      "whyWrong": "Detailed distractor explanations are not available for this item yet.",
+      "clinicalPearl": "Trend labs with symptoms and ECG changes; treat unstable findings first.",
+      "topicAnchor": "Pharmacology",
+      "skippedReason": "target_already_has_quality_rationale",
+      "flags": [
+        "too_short",
+        "honest_distractor_fallback"
+      ],
+      "diagnostics": {
+        "sourceAnchorCount": 2,
+        "sourceAnchorWordCount": 72,
+        "minimumSubstanceMet": true,
+        "matchPrecision": "false_positive",
+        "topInclusionTrigger": null,
+        "topExclusionTrigger": "osteoporosis_only",
+        "inclusionHitCount": 0,
+        "exclusionHitCount": 1
+      }
+    },
+    {
+      "id": "58a092e1-49f7-4bd1-bfa7-b59a727a3269",
+      "topic": null,
+      "subtopic": null,
+      "updatedAt": "2026-04-13T23:10:16.929Z",
+      "batchId": "electrolytes",
+      "applied": false,
+      "action": "skipped",
+      "whyCorrect": "CKD-mineral bone disorder with hyperphosphatemia, secondary hyperparathyroidism, and hypocalcemia requires a multi-pronged approach: dietary phosphate restriction (800-1000 mg/day), phosphate binders taken with meals (calcium-based or non-calcium-based), and active vitamin D (calcitriol) to suppress PTH and improve calcium absorption. Cinacalcet is for tertiary hyperparathyroidism or dialysis patients.",
+      "whyWrong": "Detailed distractor explanations are not available for this item yet.",
+      "clinicalPearl": "Trend labs with symptoms and ECG changes; treat unstable findings first.",
+      "topicAnchor": "Renal",
+      "skippedReason": "target_already_has_quality_rationale",
+      "flags": [
+        "too_short",
+        "honest_distractor_fallback"
+      ],
+      "diagnostics": {
+        "sourceAnchorCount": 2,
+        "sourceAnchorWordCount": 104,
+        "minimumSubstanceMet": true,
+        "matchPrecision": "true_positive_estimate",
+        "topInclusionTrigger": "phosphate_disorder",
+        "topExclusionTrigger": null,
+        "inclusionHitCount": 1,
+        "exclusionHitCount": 0
+      }
+    },
+    {
+      "id": "e0ee950c-cbef-4053-ac23-efec808f5ad2",
+      "topic": "Hyponatremia",
+      "subtopic": null,
+      "updatedAt": "2026-04-13T23:10:16.920Z",
+      "batchId": "electrolytes",
+      "applied": false,
+      "action": "skipped",
+      "whyCorrect": "In this case, elevated creatinine suggests acute kidney injury, likely due to inadequate renal perfusion from dehydration, which can cause hyponatremia. Option A is less likely without evidence of fluid overload.",
+      "whyWrong": "Detailed distractor explanations are not available for this item yet.",
+      "clinicalPearl": "Trend labs with symptoms and ECG changes; treat unstable findings first.",
+      "topicAnchor": "Hyponatremia · Renal",
+      "skippedReason": "target_already_has_quality_rationale",
+      "flags": [
+        "too_short",
+        "honest_distractor_fallback"
+      ],
+      "diagnostics": {
+        "sourceAnchorCount": 2,
+        "sourceAnchorWordCount": 95,
+        "minimumSubstanceMet": true,
+        "matchPrecision": "borderline",
+        "topInclusionTrigger": null,
+        "topExclusionTrigger": null,
+        "inclusionHitCount": 0,
+        "exclusionHitCount": 0
+      }
+    },
+    {
+      "id": "30ab7256-da57-48df-abbe-3278be1c2a38",
+      "topic": "Electrolyte Imbalance",
+      "subtopic": null,
+      "updatedAt": "2026-04-13T23:10:16.839Z",
+      "batchId": "electrolytes",
+      "applied": false,
+      "action": "skipped",
+      "whyCorrect": "In this case, the patient is experiencing hyponatremia, likely due to the effect of thiazide diuretics. The most appropriate management step is to discontinue the thiazide diuretic to prevent further sodium loss.",
+      "whyWrong": "Detailed distractor explanations are not available for this item yet.",
+      "clinicalPearl": "Trend labs with symptoms and ECG changes; treat unstable findings first.",
+      "topicAnchor": "Electrolyte Imbalance · Renal",
+      "skippedReason": "target_already_has_quality_rationale",
+      "flags": [
+        "too_short",
+        "honest_distractor_fallback"
+      ],
+      "diagnostics": {
+        "sourceAnchorCount": 2,
+        "sourceAnchorWordCount": 97,
+        "minimumSubstanceMet": true,
+        "matchPrecision": "true_positive_estimate",
+        "topInclusionTrigger": "sodium_disorder",
+        "topExclusionTrigger": null,
+        "inclusionHitCount": 3,
+        "exclusionHitCount": 0
+      }
+    },
+    {
+      "id": "3244e9ce-1e09-44f6-b597-7d6284abdf31",
+      "topic": null,
+      "subtopic": null,
+      "updatedAt": "2026-04-13T23:10:16.734Z",
+      "batchId": "electrolytes",
+      "applied": false,
+      "action": "skipped",
+      "whyCorrect": "Heart failure with reduced ejection fraction (HFrEF) guideline-directed medical therapy includes ACE inhibitor or ARB, evidence-based beta-blocker (bisoprolol, carvedilol, or metoprolol succinate), and mineralocorticoid receptor antagonist (spironolactone). Calcium channel blockers (except amlodipine) are contraindicated in HFrEF.",
+      "whyWrong": "Detailed distractor explanations are not available for this item yet.",
+      "clinicalPearl": "Trend labs with symptoms and ECG changes; treat unstable findings first.",
+      "topicAnchor": "Cardiovascular",
+      "skippedReason": "target_already_has_quality_rationale",
+      "flags": [
+        "too_short",
+        "honest_distractor_fallback"
+      ],
+      "diagnostics": {
+        "sourceAnchorCount": 2,
+        "sourceAnchorWordCount": 93,
+        "minimumSubstanceMet": true,
+        "matchPrecision": "true_positive_estimate",
+        "topInclusionTrigger": "potassium_disorder",
+        "topExclusionTrigger": null,
+        "inclusionHitCount": 1,
+        "exclusionHitCount": 0
+      }
+    },
+    {
+      "id": "4eae2b8d-a313-4e29-b61a-d54d9a2b5313",
+      "topic": null,
+      "subtopic": null,
+      "updatedAt": "2026-04-13T23:10:16.677Z",
+      "batchId": "electrolytes",
+      "applied": false,
+      "action": "skipped",
+      "whyCorrect": "The combination of an ACE inhibitor and NSAID is a well-recognised cause of acute kidney injury. ACEi dilates the efferent arteriole (reducing filtration pressure) while NSAIDs constrict the afferent arteriole (reducing renal blood flow).",
+      "whyWrong": "Detailed distractor explanations are not available for this item yet.",
+      "clinicalPearl": "Trend labs with symptoms and ECG changes; treat unstable findings first.",
+      "topicAnchor": "Renal",
+      "skippedReason": "target_already_has_quality_rationale",
+      "flags": [
+        "too_short",
+        "honest_distractor_fallback"
+      ],
+      "diagnostics": {
+        "sourceAnchorCount": 2,
+        "sourceAnchorWordCount": 118,
+        "minimumSubstanceMet": true,
+        "matchPrecision": "true_positive_estimate",
+        "topInclusionTrigger": "potassium_disorder",
+        "topExclusionTrigger": null,
+        "inclusionHitCount": 1,
+        "exclusionHitCount": 0
+      }
+    },
+    {
+      "id": "26d6e644-d0d3-4906-81bc-6014ce0bec92",
+      "topic": "Heart failure management",
+      "subtopic": null,
+      "updatedAt": "2026-04-13T23:10:16.658Z",
+      "batchId": "electrolytes",
+      "applied": false,
+      "action": "skipped",
+      "whyCorrect": "Furosemide is a loop diuretic that can lead to significant potassium loss, resulting in hypokalemia. It is crucial to monitor potassium levels to prevent complications such as arrhythmias.",
+      "whyWrong": "Detailed distractor explanations are not available for this item yet.",
+      "clinicalPearl": "Trend labs with symptoms and ECG changes; treat unstable findings first.",
+      "topicAnchor": "Heart failure management · Renal",
+      "skippedReason": "target_already_has_quality_rationale",
+      "flags": [
+        "too_short",
+        "honest_distractor_fallback"
+      ],
+      "diagnostics": {
+        "sourceAnchorCount": 2,
+        "sourceAnchorWordCount": 74,
+        "minimumSubstanceMet": true,
+        "matchPrecision": "borderline",
+        "topInclusionTrigger": "electrolyte_context",
+        "topExclusionTrigger": null,
+        "inclusionHitCount": 1,
+        "exclusionHitCount": 0
+      }
+    },
+    {
+      "id": "41832976-901b-4585-9ff3-d5bb30d38466",
+      "topic": "Hyperphosphatemia management",
+      "subtopic": null,
+      "updatedAt": "2026-04-13T23:10:16.099Z",
+      "batchId": "electrolytes",
+      "applied": false,
+      "action": "skipped",
+      "whyCorrect": "In patients with CKD stage 4, managing hyperphosphatemia typically involves the use of phosphate binders such as sevelamer. Sevelamer is preferred as it does not contain calcium, which can lead to hypercalcemia, and does not have significant aluminum absorption issues.",
+      "whyWrong": "Detailed distractor explanations are not available for this item yet.",
+      "clinicalPearl": "Trend labs with symptoms and ECG changes; treat unstable findings first.",
+      "topicAnchor": "Hyperphosphatemia management · Renal",
+      "skippedReason": "target_already_has_quality_rationale",
+      "flags": [
+        "too_short",
+        "honest_distractor_fallback"
+      ],
+      "diagnostics": {
+        "sourceAnchorCount": 2,
+        "sourceAnchorWordCount": 111,
+        "minimumSubstanceMet": true,
+        "matchPrecision": "true_positive_estimate",
+        "topInclusionTrigger": "phosphate_disorder",
+        "topExclusionTrigger": null,
+        "inclusionHitCount": 1,
+        "exclusionHitCount": 0
+      }
+    },
+    {
+      "id": "d662ced0-c76c-4589-918a-2e2d60e7f46c",
+      "topic": null,
+      "subtopic": null,
+      "updatedAt": "2026-04-13T23:04:53.685Z",
+      "batchId": "electrolytes",
+      "applied": false,
+      "action": "skipped",
+      "whyCorrect": "Elevated ARR (aldosterone-to-renin ratio greater than 30 with aldosterone greater than 15 ng/dL) is a screening test for primary aldosteronism, which accounts for 5-10% of hypertension. Confirmatory testing is required (salt loading test -- oral 3-day or IV 4-hour -- demonstrating failure to suppress aldosterone).",
+      "whyWrong": "Detailed distractor explanations are not available for this item yet.",
+      "clinicalPearl": "Trend labs with symptoms and ECG changes; treat unstable findings first.",
+      "topicAnchor": "Endocrine",
+      "skippedReason": "target_already_has_quality_rationale",
+      "flags": [
+        "too_short",
+        "honest_distractor_fallback"
+      ],
+      "diagnostics": {
+        "sourceAnchorCount": 2,
+        "sourceAnchorWordCount": 122,
+        "minimumSubstanceMet": true,
+        "matchPrecision": "true_positive_estimate",
+        "topInclusionTrigger": "potassium_disorder",
+        "topExclusionTrigger": null,
+        "inclusionHitCount": 1,
+        "exclusionHitCount": 0
+      }
+    },
+    {
+      "id": "fcbcc20f-ebd9-4707-946d-d1e0775253bb",
+      "topic": null,
+      "subtopic": null,
+      "updatedAt": "2026-04-13T23:04:53.672Z",
+      "batchId": "electrolytes",
+      "applied": false,
+      "action": "skipped",
+      "whyCorrect": "CKD-mineral bone disorder (CKD-MBD) with secondary hyperparathyroidism results from phosphate retention, reduced active vitamin D synthesis, and hypocalcemia driving PTH secretion. KDIGO management: 1) Dietary phosphorus restriction (800-1000 mg/day), 2) Phosphate binders with meals (sevelamer or lanthanum preferred; calcium-based binders limited due to vascular calcification risk), 3) Active vitamin D (calcitriol) or analogs (paricalcitol) to suppress PTH, 4) Cinacalcet (calcimimetic) directly suppresses PTH secretion.",
+      "whyWrong": "Detailed distractor explanations are not available for this item yet.",
+      "clinicalPearl": "Trend labs with symptoms and ECG changes; treat unstable findings first.",
+      "topicAnchor": "Renal",
+      "skippedReason": "target_already_has_quality_rationale",
+      "flags": [
+        "too_short",
+        "honest_distractor_fallback"
+      ],
+      "diagnostics": {
+        "sourceAnchorCount": 2,
+        "sourceAnchorWordCount": 147,
+        "minimumSubstanceMet": true,
+        "matchPrecision": "true_positive_estimate",
+        "topInclusionTrigger": "phosphate_disorder",
+        "topExclusionTrigger": null,
+        "inclusionHitCount": 1,
+        "exclusionHitCount": 0
+      }
+    },
+    {
+      "id": "ab284c37-faf8-4645-93ef-9ed8648c68c6",
+      "topic": "Hypertension and Diabetes Management",
+      "subtopic": null,
+      "updatedAt": "2026-04-13T23:04:53.660Z",
+      "batchId": "electrolytes",
+      "applied": false,
+      "action": "skipped",
+      "whyCorrect": "Lisinopril can increase potassium levels, and combining it with other medications may heighten the risk of hyperkalemia, especially in patients with diabetes or renal dysfunction. Therefore, monitoring potassium levels is crucial to prevent serious complications.",
+      "whyWrong": "Detailed distractor explanations are not available for this item yet.",
+      "clinicalPearl": "Trend labs with symptoms and ECG changes; treat unstable findings first.",
+      "topicAnchor": "Hypertension and Diabetes Management · Cardiac",
+      "skippedReason": "target_already_has_quality_rationale",
+      "flags": [
+        "too_short",
+        "honest_distractor_fallback"
+      ],
+      "diagnostics": {
+        "sourceAnchorCount": 2,
+        "sourceAnchorWordCount": 100,
+        "minimumSubstanceMet": true,
+        "matchPrecision": "true_positive_estimate",
+        "topInclusionTrigger": "potassium_disorder",
+        "topExclusionTrigger": null,
+        "inclusionHitCount": 1,
+        "exclusionHitCount": 0
+      }
+    },
+    {
+      "id": "b253704b-41e5-4a2d-a922-4b34db6e2cbd",
+      "topic": "Bone and Mineral Disorders",
+      "subtopic": null,
+      "updatedAt": "2026-04-13T23:04:53.654Z",
+      "batchId": "electrolytes",
+      "applied": false,
+      "action": "skipped",
+      "whyCorrect": "The patient's presentation of pruritus, fatigue, and bone pain, along with elevated PTH levels and low serum calcium, is indicative of secondary hyperparathyroidism, often seen in patients with chronic kidney disease. The kidneys are unable to excrete phosphate efficiently, leading to low serum calcium and compensatory elevation in PTH.",
+      "whyWrong": "Detailed distractor explanations are not available for this item yet.",
+      "clinicalPearl": "Trend labs with symptoms and ECG changes; treat unstable findings first.",
+      "topicAnchor": "Bone and Mineral Disorders · Renal",
+      "skippedReason": "target_already_has_quality_rationale",
+      "flags": [
+        "too_short",
+        "honest_distractor_fallback"
+      ],
+      "diagnostics": {
+        "sourceAnchorCount": 2,
+        "sourceAnchorWordCount": 134,
+        "minimumSubstanceMet": true,
+        "matchPrecision": "borderline",
+        "topInclusionTrigger": null,
+        "topExclusionTrigger": null,
+        "inclusionHitCount": 0,
+        "exclusionHitCount": 0
+      }
+    },
+    {
+      "id": "267887cc-9494-4822-a55e-37ec56b33ca1",
+      "topic": "Diabetes Management",
+      "subtopic": null,
+      "updatedAt": "2026-04-13T23:04:53.647Z",
+      "batchId": "electrolytes",
+      "applied": false,
+      "action": "skipped",
+      "whyCorrect": "SGLT2 inhibitors can increase the risk of urinary tract infections due to increased glucose in the urine, which can promote bacterial growth. This is a critical counseling point for patients starting this medication.",
+      "whyWrong": "Detailed distractor explanations are not available for this item yet.",
+      "clinicalPearl": "Trend labs with symptoms and ECG changes; treat unstable findings first.",
+      "topicAnchor": "Diabetes Management · Endocrine",
+      "skippedReason": "target_already_has_quality_rationale",
+      "flags": [
+        "too_short",
+        "honest_distractor_fallback"
+      ],
+      "diagnostics": {
+        "sourceAnchorCount": 2,
+        "sourceAnchorWordCount": 99,
+        "minimumSubstanceMet": true,
+        "matchPrecision": "borderline",
+        "topInclusionTrigger": "sodium_disorder",
+        "topExclusionTrigger": "diabetes_medication_only",
+        "inclusionHitCount": 1,
+        "exclusionHitCount": 1
+      }
+    },
+    {
+      "id": "94e06f4c-b663-4eeb-8ea3-ed3ae6e2c2e5",
+      "topic": "Electrolyte Imbalances",
+      "subtopic": null,
+      "updatedAt": "2026-04-13T23:04:53.641Z",
+      "batchId": "electrolytes",
+      "applied": false,
+      "action": "skipped",
+      "whyCorrect": "The patient's low serum sodium level suggests hyponatremia, which can often result from excessive fluid intake, leading to dilutional hyponatremia. This can occur in conditions such as psychogenic polydipsia or heart failure where fluid overload occurs.",
+      "whyWrong": "Detailed distractor explanations are not available for this item yet.",
+      "clinicalPearl": "Trend labs with symptoms and ECG changes; treat unstable findings first.",
+      "topicAnchor": "Electrolyte Imbalances · Renal",
+      "skippedReason": "target_already_has_quality_rationale",
+      "flags": [
+        "too_short",
+        "honest_distractor_fallback"
+      ],
+      "diagnostics": {
+        "sourceAnchorCount": 2,
+        "sourceAnchorWordCount": 113,
+        "minimumSubstanceMet": true,
+        "matchPrecision": "true_positive_estimate",
+        "topInclusionTrigger": "sodium_disorder",
+        "topExclusionTrigger": null,
+        "inclusionHitCount": 2,
+        "exclusionHitCount": 0
+      }
+    },
+    {
+      "id": "6d6be8b0-1c9c-4ee7-8321-d08d4089e3ac",
+      "topic": null,
+      "subtopic": null,
+      "updatedAt": "2026-04-13T23:04:53.634Z",
+      "batchId": "electrolytes",
+      "applied": false,
+      "action": "skipped",
+      "whyCorrect": "Hyperkalemia with ECG changes (peaked T waves, widened QRS, or sine wave pattern) is a medical emergency requiring immediate treatment. Step 1: IV calcium gluconate (stabilizes cardiac membrane within minutes -- does not lower K).",
+      "whyWrong": "Detailed distractor explanations are not available for this item yet.",
+      "clinicalPearl": "Trend labs with symptoms and ECG changes; treat unstable findings first.",
+      "topicAnchor": "Renal",
+      "skippedReason": "target_already_has_quality_rationale",
+      "flags": [
+        "too_short",
+        "honest_distractor_fallback"
+      ],
+      "diagnostics": {
+        "sourceAnchorCount": 2,
+        "sourceAnchorWordCount": 114,
+        "minimumSubstanceMet": true,
+        "matchPrecision": "true_positive_estimate",
+        "topInclusionTrigger": "potassium_disorder",
+        "topExclusionTrigger": null,
+        "inclusionHitCount": 2,
+        "exclusionHitCount": 0
+      }
+    },
+    {
+      "id": "9c9276dc-9708-4ca8-a65c-12b0ea8af88e",
+      "topic": null,
+      "subtopic": null,
+      "updatedAt": "2026-04-13T23:04:53.624Z",
+      "batchId": "electrolytes",
+      "applied": false,
+      "action": "skipped",
+      "whyCorrect": "Severe hyperkalemia (potassium above 6.5 mmol/L) with ECG changes (peaked T waves, widened QRS, absent P waves) is a cardiac emergency. IV calcium gluconate is the immediate priority to stabilize the cardiac membrane and prevent arrhythmias.",
+      "whyWrong": "Detailed distractor explanations are not available for this item yet.",
+      "clinicalPearl": "Trend labs with symptoms and ECG changes; treat unstable findings first.",
+      "topicAnchor": "Renal",
+      "skippedReason": "target_already_has_quality_rationale",
+      "flags": [
+        "too_short",
+        "honest_distractor_fallback"
+      ],
+      "diagnostics": {
+        "sourceAnchorCount": 2,
+        "sourceAnchorWordCount": 104,
+        "minimumSubstanceMet": true,
+        "matchPrecision": "true_positive_estimate",
+        "topInclusionTrigger": "potassium_disorder",
+        "topExclusionTrigger": null,
+        "inclusionHitCount": 2,
+        "exclusionHitCount": 0
+      }
+    },
+    {
+      "id": "ca889cd6-5373-47c5-9972-34a0eb2289b9",
+      "topic": null,
+      "subtopic": null,
+      "updatedAt": "2026-04-13T23:04:53.602Z",
+      "batchId": "electrolytes",
+      "applied": false,
+      "action": "skipped",
+      "whyCorrect": "SSRIs can cause syndrome of inappropriate antidiuretic hormone secretion (SIADH), particularly in elderly patients. Management includes discontinuing the causative agent, fluid restriction (800-1000 mL/day), and close sodium monitoring.",
+      "whyWrong": "Detailed distractor explanations are not available for this item yet.",
+      "clinicalPearl": "Trend labs with symptoms and ECG changes; treat unstable findings first.",
+      "topicAnchor": "Psychiatry",
+      "skippedReason": "target_already_has_quality_rationale",
+      "flags": [
+        "too_short",
+        "honest_distractor_fallback"
+      ],
+      "diagnostics": {
+        "sourceAnchorCount": 2,
+        "sourceAnchorWordCount": 84,
+        "minimumSubstanceMet": true,
+        "matchPrecision": "true_positive_estimate",
+        "topInclusionTrigger": "sodium_disorder",
+        "topExclusionTrigger": null,
+        "inclusionHitCount": 1,
+        "exclusionHitCount": 0
+      }
+    },
+    {
+      "id": "b8d9e075-0af2-4594-a03e-07e70057e51e",
+      "topic": null,
+      "subtopic": null,
+      "updatedAt": "2026-04-13T23:04:53.588Z",
+      "batchId": "electrolytes",
+      "applied": false,
+      "action": "skipped",
+      "whyCorrect": "Hyperglycemic hyperosmolar state (HHS) presents with severe hyperglycemia, hyperosmolality, altered mentation, and minimal ketosis (pH above 7.30). The priority is aggressive IV fluid resuscitation (0.9% NaCl) to correct severe dehydration (average deficit 8-10 L) before insulin.",
+      "whyWrong": "Detailed distractor explanations are not available for this item yet.",
+      "clinicalPearl": "Trend labs with symptoms and ECG changes; treat unstable findings first.",
+      "topicAnchor": "Endocrine",
+      "skippedReason": "target_already_has_quality_rationale",
+      "flags": [
+        "too_short",
+        "honest_distractor_fallback"
+      ],
+      "diagnostics": {
+        "sourceAnchorCount": 2,
+        "sourceAnchorWordCount": 97,
+        "minimumSubstanceMet": true,
+        "matchPrecision": "true_positive_estimate",
+        "topInclusionTrigger": "sodium_disorder",
+        "topExclusionTrigger": null,
+        "inclusionHitCount": 1,
+        "exclusionHitCount": 0
+      }
+    }
+  ],
+  "flashcards": [
+    {
+      "id": "ff8b656b-09ed-4ed6-a842-ef1b5a0037db",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:36.475Z",
+      "batchId": "electrolytes",
+      "applied": false,
+      "whyCorrect": "Clinical reasoning is not yet on file for this item.",
+      "clinicalPearl": "A concise clinical pearl is not available for this item yet.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": "source_content_too_weak",
+      "flags": [
+        "too_short",
+        "too_short"
+      ]
+    },
+    {
+      "id": "fd22218c-9bb6-4d33-914d-638ebc7a9528",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:36.315Z",
+      "batchId": "electrolytes",
+      "applied": false,
+      "whyCorrect": "Clinical reasoning is not yet on file for this item.",
+      "clinicalPearl": "A concise clinical pearl is not available for this item yet.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": "source_content_too_weak",
+      "flags": [
+        "too_short",
+        "too_short"
+      ]
+    },
+    {
+      "id": "f931769d-46f5-411c-9a10-faee0fe5a350",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:36.092Z",
+      "batchId": "electrolytes",
+      "applied": false,
+      "whyCorrect": "Clinical reasoning is not yet on file for this item.",
+      "clinicalPearl": "A concise clinical pearl is not available for this item yet.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": "below_minimum_substance_threshold",
+      "flags": [
+        "too_short",
+        "too_short"
+      ]
+    },
+    {
+      "id": "f6417655-8f88-41b7-9b69-d4ff6d35bcc2",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:35.891Z",
+      "batchId": "electrolytes",
+      "applied": false,
+      "whyCorrect": "Clinical reasoning is not yet on file for this item.",
+      "clinicalPearl": "A concise clinical pearl is not available for this item yet.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": "below_minimum_substance_threshold",
+      "flags": [
+        "too_short",
+        "too_short"
+      ]
+    },
+    {
+      "id": "f3f754be-fc45-4669-ba67-c29b9cf85421",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:35.683Z",
+      "batchId": "electrolytes",
+      "applied": false,
+      "whyCorrect": "Clinical reasoning is not yet on file for this item.",
+      "clinicalPearl": "A concise clinical pearl is not available for this item yet.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": "below_minimum_substance_threshold",
+      "flags": [
+        "too_short",
+        "too_short"
+      ]
+    },
+    {
+      "id": "f36b66ae-c491-4bda-956c-892e06b37998",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:35.627Z",
+      "batchId": "electrolytes",
+      "applied": false,
+      "whyCorrect": "Clinical reasoning is not yet on file for this item.",
+      "clinicalPearl": "A concise clinical pearl is not available for this item yet.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": "below_minimum_substance_threshold",
+      "flags": [
+        "too_short",
+        "too_short"
+      ]
+    },
+    {
+      "id": "ed9b0c70-6a48-40bb-b334-579c9f5f93e2",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:35.154Z",
+      "batchId": "electrolytes",
+      "applied": false,
+      "whyCorrect": "Clinical reasoning is not yet on file for this item.",
+      "clinicalPearl": "A concise clinical pearl is not available for this item yet.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": "below_minimum_substance_threshold",
+      "flags": [
+        "too_short",
+        "too_short"
+      ]
+    },
+    {
+      "id": "ed006acf-c96d-4681-87ed-a79d87330479",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:35.129Z",
+      "batchId": "electrolytes",
+      "applied": false,
+      "whyCorrect": "Clinical reasoning is not yet on file for this item.",
+      "clinicalPearl": "A concise clinical pearl is not available for this item yet.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": "below_minimum_substance_threshold",
+      "flags": [
+        "too_short",
+        "too_short"
+      ]
+    },
+    {
+      "id": "ea94bc01-5132-4d74-b2ab-405f95e32558",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:34.943Z",
+      "batchId": "electrolytes",
+      "applied": false,
+      "whyCorrect": "Clinical reasoning is not yet on file for this item.",
+      "clinicalPearl": "A concise clinical pearl is not available for this item yet.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": "source_content_too_weak",
+      "flags": [
+        "too_short",
+        "too_short"
+      ]
+    },
+    {
+      "id": "e92744a0-af18-4a4b-b69c-41e718755f3d",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:34.839Z",
+      "batchId": "electrolytes",
+      "applied": false,
+      "whyCorrect": "Clinical reasoning is not yet on file for this item.",
+      "clinicalPearl": "A concise clinical pearl is not available for this item yet.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": "below_minimum_substance_threshold",
+      "flags": [
+        "too_short",
+        "too_short"
+      ]
+    },
+    {
+      "id": "e88b1bd9-772b-44cc-aa78-032fa9673e66",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:34.773Z",
+      "batchId": "electrolytes",
+      "applied": false,
+      "whyCorrect": "Clinical reasoning is not yet on file for this item.",
+      "clinicalPearl": "A concise clinical pearl is not available for this item yet.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": "source_content_too_weak",
+      "flags": [
+        "too_short",
+        "too_short"
+      ]
+    },
+    {
+      "id": "e887374b-9f8b-4c2a-8bc0-6cfb9f683ed3",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:34.760Z",
+      "batchId": "electrolytes",
+      "applied": false,
+      "whyCorrect": "Clinical reasoning is not yet on file for this item.",
+      "clinicalPearl": "A concise clinical pearl is not available for this item yet.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": "below_minimum_substance_threshold",
+      "flags": [
+        "too_short",
+        "too_short"
+      ]
+    },
+    {
+      "id": "e841fd4f-47b5-4460-9245-363f26d04895",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:34.735Z",
+      "batchId": "electrolytes",
+      "applied": false,
+      "whyCorrect": "Clinical reasoning is not yet on file for this item.",
+      "clinicalPearl": "A concise clinical pearl is not available for this item yet.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": "source_content_too_weak",
+      "flags": [
+        "too_short",
+        "too_short"
+      ]
+    },
+    {
+      "id": "e64d828c-8e99-4904-8ee8-97d7cf5d66f1",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:34.560Z",
+      "batchId": "electrolytes",
+      "applied": false,
+      "whyCorrect": "Clinical reasoning is not yet on file for this item.",
+      "clinicalPearl": "A concise clinical pearl is not available for this item yet.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": "source_content_too_weak",
+      "flags": [
+        "too_short",
+        "too_short"
+      ]
+    },
+    {
+      "id": "e2513eeb-52ad-49b2-bd4d-1e128405055d",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:34.257Z",
+      "batchId": "electrolytes",
+      "applied": true,
+      "whyCorrect": "Prolonged PR interval, widened QRS, bradycardia, heart block, cardiac arrest at very high levels (>10 mEq/L)",
+      "clinicalPearl": "Prolonged PR interval, widened QRS, bradycardia, heart block, cardiac arrest at very high levels (>10 mEq/L) Trend labs with symptoms and ECG changes; treat unstable findings first.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": null,
+      "flags": []
+    },
+    {
+      "id": "e1e47f76-4f77-4994-9163-44dbdec40708",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:34.222Z",
+      "batchId": "electrolytes",
+      "applied": false,
+      "whyCorrect": "Clinical reasoning is not yet on file for this item.",
+      "clinicalPearl": "A concise clinical pearl is not available for this item yet.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": "source_content_too_weak",
+      "flags": [
+        "too_short",
+        "too_short"
+      ]
+    },
+    {
+      "id": "df62d566-8272-457c-9aca-abb5a22c4907",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:34.092Z",
+      "batchId": "electrolytes",
+      "applied": true,
+      "whyCorrect": "Dark leafy greens, nuts, seeds, whole grains, dark chocolate, avocados, beans",
+      "clinicalPearl": "Dark leafy greens, nuts, seeds, whole grains, dark chocolate, avocados, beans Trend labs with symptoms and ECG changes; treat unstable findings first.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": null,
+      "flags": [
+        "too_short"
+      ]
+    },
+    {
+      "id": "de304f79-560e-4527-ae12-cb8d15224152",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:33.980Z",
+      "batchId": "electrolytes",
+      "applied": true,
+      "whyCorrect": "Water follows sodium — where sodium goes, water follows (osmotic pull)",
+      "clinicalPearl": "Water follows sodium — where sodium goes, water follows (osmotic pull) Trend labs with symptoms and ECG changes; treat unstable findings first.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": null,
+      "flags": [
+        "too_short"
+      ]
+    },
+    {
+      "id": "dd94ee71-3ecb-49c1-ae86-e0d2862e5d46",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:33.921Z",
+      "batchId": "electrolytes",
+      "applied": false,
+      "whyCorrect": "Clinical reasoning is not yet on file for this item.",
+      "clinicalPearl": "A concise clinical pearl is not available for this item yet.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": "below_minimum_substance_threshold",
+      "flags": [
+        "too_short",
+        "too_short"
+      ]
+    },
+    {
+      "id": "dafb633c-fa49-4651-acd9-11a6b4c9d4a8",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:33.753Z",
+      "batchId": "electrolytes",
+      "applied": true,
+      "whyCorrect": "Administer hypotonic fluids (0.45% NS or D5W) to replace free water.",
+      "clinicalPearl": "Administer hypotonic fluids (0.45% NS or D5W) to replace free water. Trend labs with symptoms and ECG changes; treat unstable findings first.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": null,
+      "flags": [
+        "too_short"
+      ]
+    }
+  ],
+  "questionTrace": [
+    {
+      "questionId": "650fcde7-1fc4-4121-9660-79b4c11a1c63",
+      "topic": null,
+      "sourceMatched": true,
+      "sourceAnchorCount": 2,
+      "sourceAnchorWordCount": 72,
+      "thresholdScore": 6,
+      "eligible": false,
+      "finalAction": "skipped",
+      "rejectionReason": "target_already_has_quality_rationale"
+    },
+    {
+      "questionId": "7f428f49-8b36-4141-ba41-e588bb34896d",
+      "topic": null,
+      "sourceMatched": true,
+      "sourceAnchorCount": 2,
+      "sourceAnchorWordCount": 82,
+      "thresholdScore": 6,
+      "eligible": false,
+      "finalAction": "skipped",
+      "rejectionReason": "target_already_has_quality_rationale"
+    },
+    {
+      "questionId": "9389d8ee-4239-4c3c-8f82-17761a870558",
+      "topic": null,
+      "sourceMatched": true,
+      "sourceAnchorCount": 2,
+      "sourceAnchorWordCount": 72,
+      "thresholdScore": 5,
+      "eligible": false,
+      "finalAction": "skipped",
+      "rejectionReason": "target_already_has_quality_rationale"
+    },
+    {
+      "questionId": "58a092e1-49f7-4bd1-bfa7-b59a727a3269",
+      "topic": null,
+      "sourceMatched": true,
+      "sourceAnchorCount": 2,
+      "sourceAnchorWordCount": 104,
+      "thresholdScore": 6,
+      "eligible": false,
+      "finalAction": "skipped",
+      "rejectionReason": "target_already_has_quality_rationale"
+    },
+    {
+      "questionId": "e0ee950c-cbef-4053-ac23-efec808f5ad2",
+      "topic": "Hyponatremia",
+      "sourceMatched": true,
+      "sourceAnchorCount": 2,
+      "sourceAnchorWordCount": 95,
+      "thresholdScore": 6,
+      "eligible": false,
+      "finalAction": "skipped",
+      "rejectionReason": "target_already_has_quality_rationale"
+    },
+    {
+      "questionId": "30ab7256-da57-48df-abbe-3278be1c2a38",
+      "topic": "Electrolyte Imbalance",
+      "sourceMatched": true,
+      "sourceAnchorCount": 2,
+      "sourceAnchorWordCount": 97,
+      "thresholdScore": 6,
+      "eligible": false,
+      "finalAction": "skipped",
+      "rejectionReason": "target_already_has_quality_rationale"
+    },
+    {
+      "questionId": "3244e9ce-1e09-44f6-b597-7d6284abdf31",
+      "topic": null,
+      "sourceMatched": true,
+      "sourceAnchorCount": 2,
+      "sourceAnchorWordCount": 93,
+      "thresholdScore": 6,
+      "eligible": false,
+      "finalAction": "skipped",
+      "rejectionReason": "target_already_has_quality_rationale"
+    },
+    {
+      "questionId": "4eae2b8d-a313-4e29-b61a-d54d9a2b5313",
+      "topic": null,
+      "sourceMatched": true,
+      "sourceAnchorCount": 2,
+      "sourceAnchorWordCount": 118,
+      "thresholdScore": 6,
+      "eligible": false,
+      "finalAction": "skipped",
+      "rejectionReason": "target_already_has_quality_rationale"
+    },
+    {
+      "questionId": "26d6e644-d0d3-4906-81bc-6014ce0bec92",
+      "topic": "Heart failure management",
+      "sourceMatched": true,
+      "sourceAnchorCount": 2,
+      "sourceAnchorWordCount": 74,
+      "thresholdScore": 6,
+      "eligible": false,
+      "finalAction": "skipped",
+      "rejectionReason": "target_already_has_quality_rationale"
+    },
+    {
+      "questionId": "41832976-901b-4585-9ff3-d5bb30d38466",
+      "topic": "Hyperphosphatemia management",
+      "sourceMatched": true,
+      "sourceAnchorCount": 2,
+      "sourceAnchorWordCount": 111,
+      "thresholdScore": 6,
+      "eligible": false,
+      "finalAction": "skipped",
+      "rejectionReason": "target_already_has_quality_rationale"
+    },
+    {
+      "questionId": "d662ced0-c76c-4589-918a-2e2d60e7f46c",
+      "topic": null,
+      "sourceMatched": true,
+      "sourceAnchorCount": 2,
+      "sourceAnchorWordCount": 122,
+      "thresholdScore": 6,
+      "eligible": false,
+      "finalAction": "skipped",
+      "rejectionReason": "target_already_has_quality_rationale"
+    },
+    {
+      "questionId": "fcbcc20f-ebd9-4707-946d-d1e0775253bb",
+      "topic": null,
+      "sourceMatched": true,
+      "sourceAnchorCount": 2,
+      "sourceAnchorWordCount": 147,
+      "thresholdScore": 6,
+      "eligible": false,
+      "finalAction": "skipped",
+      "rejectionReason": "target_already_has_quality_rationale"
+    },
+    {
+      "questionId": "ab284c37-faf8-4645-93ef-9ed8648c68c6",
+      "topic": "Hypertension and Diabetes Management",
+      "sourceMatched": true,
+      "sourceAnchorCount": 2,
+      "sourceAnchorWordCount": 100,
+      "thresholdScore": 6,
+      "eligible": false,
+      "finalAction": "skipped",
+      "rejectionReason": "target_already_has_quality_rationale"
+    },
+    {
+      "questionId": "b253704b-41e5-4a2d-a922-4b34db6e2cbd",
+      "topic": "Bone and Mineral Disorders",
+      "sourceMatched": true,
+      "sourceAnchorCount": 2,
+      "sourceAnchorWordCount": 134,
+      "thresholdScore": 6,
+      "eligible": false,
+      "finalAction": "skipped",
+      "rejectionReason": "target_already_has_quality_rationale"
+    },
+    {
+      "questionId": "267887cc-9494-4822-a55e-37ec56b33ca1",
+      "topic": "Diabetes Management",
+      "sourceMatched": true,
+      "sourceAnchorCount": 2,
+      "sourceAnchorWordCount": 99,
+      "thresholdScore": 6,
+      "eligible": false,
+      "finalAction": "skipped",
+      "rejectionReason": "target_already_has_quality_rationale"
+    },
+    {
+      "questionId": "94e06f4c-b663-4eeb-8ea3-ed3ae6e2c2e5",
+      "topic": "Electrolyte Imbalances",
+      "sourceMatched": true,
+      "sourceAnchorCount": 2,
+      "sourceAnchorWordCount": 113,
+      "thresholdScore": 6,
+      "eligible": false,
+      "finalAction": "skipped",
+      "rejectionReason": "target_already_has_quality_rationale"
+    },
+    {
+      "questionId": "6d6be8b0-1c9c-4ee7-8321-d08d4089e3ac",
+      "topic": null,
+      "sourceMatched": true,
+      "sourceAnchorCount": 2,
+      "sourceAnchorWordCount": 114,
+      "thresholdScore": 6,
+      "eligible": false,
+      "finalAction": "skipped",
+      "rejectionReason": "target_already_has_quality_rationale"
+    },
+    {
+      "questionId": "9c9276dc-9708-4ca8-a65c-12b0ea8af88e",
+      "topic": null,
+      "sourceMatched": true,
+      "sourceAnchorCount": 2,
+      "sourceAnchorWordCount": 104,
+      "thresholdScore": 6,
+      "eligible": false,
+      "finalAction": "skipped",
+      "rejectionReason": "target_already_has_quality_rationale"
+    },
+    {
+      "questionId": "ca889cd6-5373-47c5-9972-34a0eb2289b9",
+      "topic": null,
+      "sourceMatched": true,
+      "sourceAnchorCount": 2,
+      "sourceAnchorWordCount": 84,
+      "thresholdScore": 6,
+      "eligible": false,
+      "finalAction": "skipped",
+      "rejectionReason": "target_already_has_quality_rationale"
+    },
+    {
+      "questionId": "b8d9e075-0af2-4594-a03e-07e70057e51e",
+      "topic": null,
+      "sourceMatched": true,
+      "sourceAnchorCount": 2,
+      "sourceAnchorWordCount": 97,
+      "thresholdScore": 6,
+      "eligible": false,
+      "finalAction": "skipped",
+      "rejectionReason": "target_already_has_quality_rationale"
+    }
+  ],
+  "electrolytePrecision": {
+    "sampleSize": 200,
+    "truePositiveEstimatedSampleCount": 135,
+    "borderlineSampleCount": 61,
+    "falsePositiveEstimatedSampleCount": 4,
+    "topInclusionTriggers": [
+      {
+        "trigger": "potassium_disorder",
+        "count": 62
+      },
+      {
+        "trigger": "sodium_disorder",
+        "count": 26
+      },
+      {
+        "trigger": "phosphate_disorder",
+        "count": 18
+      },
+      {
+        "trigger": "electrolyte_emergency",
+        "count": 17
+      },
+      {
+        "trigger": "magnesium_disorder",
+        "count": 14
+      }
+    ],
+    "topExclusionTriggers": [
+      {
+        "trigger": "osteoporosis_only",
+        "count": 5
+      },
+      {
+        "trigger": "diabetes_medication_only",
+        "count": 1
+      },
+      {
+        "trigger": "general_htn_only",
+        "count": 1
+      },
+      {
+        "trigger": "nutrition_general_only",
+        "count": 1
+      }
+    ],
+    "appliedCandidatesAfterNarrowing": 892
+  }
+}
