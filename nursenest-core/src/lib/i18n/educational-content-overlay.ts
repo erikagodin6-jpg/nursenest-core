@@ -12,7 +12,6 @@ import type {
 } from "@/lib/lessons/pathway-lesson-types";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { evaluateEducationalTranslation } from "@/lib/i18n/educational-translation-quality";
-import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 
 /** Per-question overlay keyed by `ExamQuestion.id` (stable). */
 export type QuestionEducationalOverlay = {
@@ -130,19 +129,115 @@ function mergeExamFocus(
   return { ...(base ?? {}), ...patch };
 }
 
+type PickLocalizedResult = { value: string; fellBack: boolean };
+
+/** Prefer localized overlay; fall back to English when quality heuristics fail (logged). */
+function pickLocalizedOverlayString(
+  englishBase: string,
+  overlay: string | undefined,
+  locale: string,
+  logCtx: Record<string, unknown>,
+): PickLocalizedResult {
+  if (locale === DEFAULT_MARKETING_LOCALE) {
+    return {
+      value: overlay !== undefined && overlay.trim() ? overlay : englishBase,
+      fellBack: false,
+    };
+  }
+  if (overlay === undefined) return { value: englishBase, fellBack: false };
+  const t = overlay.trim();
+  if (!t.length) return { value: englishBase, fellBack: false };
+  const q = evaluateEducationalTranslation(englishBase, t, locale);
+  if (!q.acceptTranslation) {
+    safeServerLog("i18n", "educational_translation_quality_fallback", {
+      locale,
+      reasons: q.reasons.slice(0, 8),
+      ...logCtx,
+    });
+    return { value: englishBase, fellBack: true };
+  }
+  return { value: overlay, fellBack: false };
+}
+
+function mergeExamFocusLocalized(
+  base: PathwayLessonExamFocus | undefined,
+  patch: Partial<PathwayLessonExamFocus> | undefined,
+  locale: string,
+  lessonSlug: string,
+  sectionId: string,
+): { focus: PathwayLessonExamFocus | undefined; fellBack: boolean } {
+  const merged = mergeExamFocus(base, patch);
+  if (!patch || locale === DEFAULT_MARKETING_LOCALE) {
+    return { focus: merged, fellBack: false };
+  }
+  let fellBack = false;
+  const keys: (keyof PathwayLessonExamFocus)[] = ["howTested", "commonTraps", "prioritizationCues"];
+  const out: PathwayLessonExamFocus = { ...(merged ?? {}) };
+  let touched = false;
+  for (const k of keys) {
+    const pv = patch[k];
+    if (typeof pv !== "string" || !pv.trim()) continue;
+    const bv = String(base?.[k] ?? merged?.[k] ?? "");
+    const r = pickLocalizedOverlayString(bv, pv, locale, {
+      surface: "lesson_exam_focus",
+      lessonSlug,
+      sectionId,
+      field: k,
+    });
+    out[k] = r.value;
+    if (r.fellBack) fellBack = true;
+    touched = true;
+  }
+  return { focus: touched ? out : merged, fellBack };
+}
+
 type PathwayLessonSectionOverlayPatch = Partial<Pick<PathwayLessonSection, "heading" | "body">> & {
   examFocus?: Partial<PathwayLessonExamFocus>;
 };
 
-function mergeLessonSection(base: PathwayLessonSection, patch: PathwayLessonSectionOverlayPatch): PathwayLessonSection {
-  const heading = patch.heading !== undefined && patch.heading.trim() ? patch.heading : base.heading;
-  const body = patch.body !== undefined && patch.body.trim() ? patch.body : base.body;
-  const examFocus = mergeExamFocus(base.examFocus, patch.examFocus);
+function mergeLessonSection(
+  base: PathwayLessonSection,
+  patch: PathwayLessonSectionOverlayPatch,
+  locale: string,
+  lessonSlug: string,
+): { section: PathwayLessonSection; fellBack: boolean } {
+  let fellBack = false;
+  let heading = base.heading;
+  if (patch.heading !== undefined && patch.heading.trim()) {
+    const r = pickLocalizedOverlayString(base.heading, patch.heading, locale, {
+      surface: "lesson_section_heading",
+      lessonSlug,
+      sectionId: base.id,
+    });
+    heading = r.value;
+    if (r.fellBack) fellBack = true;
+  }
+  let body = base.body;
+  if (patch.body !== undefined && patch.body.trim()) {
+    const r = pickLocalizedOverlayString(base.body, patch.body, locale, {
+      surface: "lesson_section_body",
+      lessonSlug,
+      sectionId: base.id,
+    });
+    body = r.value;
+    if (r.fellBack) fellBack = true;
+  }
+  const { focus: examFocus, fellBack: efFb } = mergeExamFocusLocalized(
+    base.examFocus,
+    patch.examFocus,
+    locale,
+    lessonSlug,
+    base.id,
+  );
+  if (efFb) fellBack = true;
   return {
-    ...base,
-    heading,
-    body,
-    ...(examFocus !== undefined ? { examFocus } : {}),
+    section: {
+      ...base,
+      heading,
+      body,
+      ...(examFocus !== undefined ? { examFocus } : {}),
+    },
+    fellBack,
   };
 }
 
@@ -152,15 +247,34 @@ function mergeQuizList(
   label: string,
   locale: string,
   slug: string,
-): PathwayLessonQuizItem[] | undefined {
-  if (!base?.length || !patch?.length) return base;
+): { merged: PathwayLessonQuizItem[] | undefined; fellBack: boolean } {
+  if (!base?.length || !patch?.length) return { merged: base, fellBack: false };
+  let fellBack = false;
   const out = base.map((item, i) => {
     const p = patch[i];
     if (!p) return item;
-    const question = p.question?.trim() ? p.question : item.question;
+    let question = item.question;
+    if (p.question?.trim()) {
+      const r = pickLocalizedOverlayString(item.question, p.question, locale, {
+        surface: `lesson_${label}_question`,
+        lessonSlug: slug,
+        index: i,
+      });
+      question = r.value;
+      if (r.fellBack) fellBack = true;
+    }
     let options = item.options;
     if (Array.isArray(p.options) && p.options.length === item.options.length) {
-      options = p.options.map((x) => String(x));
+      options = p.options.map((x, j) => {
+        const r = pickLocalizedOverlayString(item.options[j] ?? "", String(x), locale, {
+          surface: `lesson_${label}_option`,
+          lessonSlug: slug,
+          index: i,
+          optionIndex: j,
+        });
+        if (r.fellBack) fellBack = true;
+        return r.value;
+      });
     } else if (p.options !== undefined && p.options.length !== item.options.length) {
       safeServerLog("i18n", "educational_lesson_overlay_quiz_options_length_mismatch", {
         locale,
@@ -171,10 +285,19 @@ function mergeQuizList(
         patchLen: p.options.length,
       });
     }
-    const rationale = p.rationale?.trim() ? p.rationale : item.rationale;
+    let rationale = item.rationale;
+    if (p.rationale?.trim()) {
+      const r = pickLocalizedOverlayString(item.rationale ?? "", p.rationale, locale, {
+        surface: `lesson_${label}_rationale`,
+        lessonSlug: slug,
+        index: i,
+      });
+      rationale = r.value;
+      if (r.fellBack) fellBack = true;
+    }
     return { ...item, question, options, correct: item.correct, ...(rationale ? { rationale } : {}) };
   });
-  return out;
+  return { merged: out, fellBack };
 }
 
 type QuizOverlayPatchRow = Partial<Pick<PathwayLessonQuizItem, "question" | "options" | "rationale">>;

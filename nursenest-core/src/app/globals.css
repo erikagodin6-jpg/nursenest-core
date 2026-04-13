@@ -972,6 +972,12 @@ html[data-theme="deep-twilight"] .nn-ui-btn--destructive {
   border-color: color-mix(in srgb, #f87171 35%, var(--border-subtle));
   background: color-mix(in srgb, #f87171 10%, var(--bg-card, var(--theme-card-bg)));
 }
+.nn-ui-btn--destructive:hover:not(:disabled):not([aria-disabled="true"]):not(:active) {
+  box-shadow: 0 3px 12px -3px color-mix(in srgb, #b91c1c 22%, transparent);
+}
+.nn-ui-btn--destructive:active:not(:disabled):not([aria-disabled="true"]) {
+  box-shadow: 0 1px 5px -2px color-mix(in srgb, #b91c1c 16%, transparent);
+}
 .nn-ui-btn--link {
   background: transparent;
   border-color: transparent;
@@ -1481,10 +1487,40 @@ html[data-theme] .nn-marketing-surface {
 @media (prefers-reduced-motion: reduce) {
   .nn-card-soft:hover,
   .nn-card-interactive:hover,
-  .nn-primary-action-card:hover {
+  .nn-primary-action-card:hover,
+  .nn-primary-action-card:active {
     transform: none;
   }
+  .nn-ui-btn:hover:not(:disabled):not([aria-disabled="true"]),
   .nn-ui-btn:active:not(:disabled):not([aria-disabled="true"]) {
+    transform: none;
+  }
+  .nn-btn-primary:hover:not(:disabled):not([aria-disabled="true"]),
+  .nn-btn-primary:active:not(:disabled):not([aria-disabled="true"]) {
+    transform: none;
+  }
+  .nn-btn-secondary:hover:not(:disabled):not([aria-disabled="true"]),
+  .nn-btn-secondary:active:not(:disabled):not([aria-disabled="true"]) {
+    transform: none;
+  }
+  .nn-button-primary:hover:not(:disabled):not([aria-disabled="true"]),
+  .nn-button-primary:active:not(:disabled):not([aria-disabled="true"]) {
+    transform: none;
+  }
+  .nn-nav-cta:hover:not(:disabled):not([aria-disabled="true"]),
+  .nn-nav-cta:active:not(:disabled):not([aria-disabled="true"]) {
+    transform: none;
+  }
+  .nn-study-pill-secondary:hover,
+  .nn-study-pill-secondary:active {
+    transform: none;
+  }
+  .nn-dashboard-empty-cta:hover,
+  .nn-dashboard-empty-cta:active {
+    transform: none;
+  }
+  .nn-button-primary-pastel:hover:not(:disabled):not([aria-disabled="true"]),
+  .nn-button-primary-pastel:active:not(:disabled):not([aria-disabled="true"]) {
     transform: none;
   }
   .nn-dash-section {

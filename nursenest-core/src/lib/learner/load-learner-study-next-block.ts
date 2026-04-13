@@ -83,6 +83,14 @@ export async function loadLearnerStudyNextBlock(
     href: weakTopicDrillHref(w.topic, w.normalizedTopic ?? null),
   }));
 
+  if (
+    continueWhere &&
+    primary.type === "continue_pathway_lesson" &&
+    continueWhere.href === primary.href
+  ) {
+    continueWhere = null;
+  }
+
   const credits = todayGoal?.credits ?? 0;
   const target = todayGoal?.target ?? TODAY_GOAL_CREDIT_TARGET;
 
