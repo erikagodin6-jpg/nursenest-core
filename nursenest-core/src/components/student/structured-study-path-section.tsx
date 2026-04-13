@@ -1,5 +1,10 @@
 import Link from "next/link";
-import type { StructuredStudyPath, StructuredStudyPathStep, StudyPathPhase } from "@/lib/learner/structured-study-path";
+import type {
+  StructuredStudyPath,
+  StructuredStudyPathStep,
+  StudyPathKind,
+  StudyPathPhase,
+} from "@/lib/learner/structured-study-path";
 import type { LearnerMarketingT } from "@/lib/learner/learner-marketing-server";
 
 function phaseLabel(phase: StudyPathPhase, t: LearnerMarketingT): string {
@@ -41,14 +46,12 @@ export function StructuredStudyPathSection({
   path: StructuredStudyPath;
   t: LearnerMarketingT;
   /** Kind from profile (before URL override). */
-  inferredKind: import("@/lib/learner/structured-study-path").StudyPathKind;
+  inferredKind: StudyPathKind;
   /** When set, `path.kind` came from `?kind=`. */
-  kindFromQuery: import("@/lib/learner/structured-study-path").StudyPathKind | null;
+  kindFromQuery: StudyPathKind | null;
 }) {
   const overridden = kindFromQuery != null && kindFromQuery !== inferredKind;
   const showNewGradLink = path.kind === "rn" && inferredKind === "rn" && !kindFromQuery;
-
-  let lastPhase: StudyPathPhase | null = null;
 
   return (
     <section className="nn-card space-y-4 p-5 sm:p-6" aria-labelledby="structured-study-path-heading">
@@ -77,12 +80,11 @@ export function StructuredStudyPathSection({
         {overridden ? <p className="text-xs text-amber-700 dark:text-amber-400">{t("learner.structuredStudyPath.overrideHint")}</p> : null}
       </header>
 
-      <ol className="space-y-6 border-t border-[var(--semantic-border-soft)] pt-4">
-        {path.steps.map((step) => {
-          const showPhase = step.phase !== lastPhase;
-          if (showPhase) lastPhase = step.phase;
+      <div className="space-y-6 border-t border-[var(--semantic-border-soft)] pt-4" role="list" aria-label={t("learner.structuredStudyPath.title")}>
+        {path.steps.map((step, i) => {
+          const showPhase = i === 0 || path.steps[i - 1]!.phase !== step.phase;
           return (
-            <li key={step.id} className="list-none">
+            <div key={step.id} role="listitem">
               {showPhase ? (
                 <p className="mb-3 text-[11px] font-bold uppercase tracking-[0.16em] text-[var(--semantic-text-muted)]">
                   {phaseLabel(step.phase, t)}
@@ -103,10 +105,10 @@ export function StructuredStudyPathSection({
                   {t("learner.structuredStudyPath.open")}
                 </Link>
               </div>
-            </li>
+            </div>
           );
         })}
-      </ol>
+      </div>
 
       {showNewGradLink ? (
         <p className="border-t border-[var(--semantic-border-soft)] pt-4 text-sm">

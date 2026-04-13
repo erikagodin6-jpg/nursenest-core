@@ -3,6 +3,7 @@ import type { ReadinessBand, ReadinessFactor, ReadinessScore } from "./study-coa
 /** Inputs for {@link computeReadinessScore}, all optional where data may be missing. */
 export interface CoachReadinessInput {
   latestReadinessScore: number | null;
+  recentAccuracyPct?: number | null;
   practiceAccuracyPct: number | null;
   weakTopicCount: number;
   improvingTopicCount: number;

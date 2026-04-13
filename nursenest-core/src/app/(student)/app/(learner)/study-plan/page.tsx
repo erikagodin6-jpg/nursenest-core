@@ -5,15 +5,27 @@ import { AdaptiveStudyOverview } from "@/components/student/adaptive-study-overv
 import { ExamPlanSettingsCard } from "@/components/student/exam-plan-settings-card";
 import { LearnerInsightEnginePanel } from "@/components/student/learner-insight-engine-panel";
 import { StudyPlanToolGateway } from "@/components/student/study-plan-tool-gateway";
+import { StructuredStudyPathSection } from "@/components/student/structured-study-path-section";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { buildAdaptiveRecommendations } from "@/lib/learner/adaptive-recommendations";
+import {
+  coalesceStudyPathKindParam,
+  inferStudyPathKindFromLearnerProfile,
+  loadStructuredStudyPathForSubscriber,
+  STUDY_PATH_KINDS,
+} from "@/lib/learner/structured-study-path";
 import { loadPremiumDashboardSnapshot } from "@/lib/learner/premium-dashboard-snapshot";
 import { loadUnifiedTopicPerformance } from "@/lib/learner/topic-performance";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 
-export default async function StudyPlanPage() {
+const KIND_LOOKUP = new Set<string>(STUDY_PATH_KINDS);
+
+type Props = { searchParams: Promise<{ kind?: string }> };
+
+export default async function StudyPlanPage({ searchParams }: Props) {
+  const sp = await searchParams;
   const { t } = await getLearnerMarketingBundle();
   const session = await auth();
   const userId = (session?.user as { id?: string })?.id ?? "";
@@ -38,6 +50,9 @@ export default async function StudyPlanPage() {
 
   let adaptive = null;
   let insightSnapshot = null;
+  let structuredPath: Awaited<ReturnType<typeof loadStructuredStudyPathForSubscriber>> | null = null;
+  let inferredStudyKind = inferStudyPathKindFromLearnerProfile({});
+  let studyKindFromQuery: (typeof STUDY_PATH_KINDS)[number] | null = null;
 
   if (userId && entitlement.hasAccess && isDatabaseUrlConfigured()) {
     try {
@@ -46,7 +61,13 @@ export default async function StudyPlanPage() {
         loadUnifiedTopicPerformance(userId, entitlement, 12),
         prisma.user.findUnique({
           where: { id: userId },
-          select: { examDate: true, examDatePlanType: true, studyCadencePreference: true },
+          select: {
+            examDate: true,
+            examDatePlanType: true,
+            studyCadencePreference: true,
+            tier: true,
+            learnerPath: true,
+          },
         }),
       ]);
       if (premiumSnapshot && topicPerf) {
@@ -72,8 +93,27 @@ export default async function StudyPlanPage() {
           availablePathwayIds: premiumSnapshot.pathways.map((p) => p.pathwayId),
         });
       }
+
+      if (userExam) {
+        inferredStudyKind = inferStudyPathKindFromLearnerProfile({
+          tier: userExam.tier,
+          learnerPathId: userExam.learnerPath,
+        });
+        const rawKind = sp.kind?.trim().toLowerCase() ?? "";
+        if (rawKind && KIND_LOOKUP.has(rawKind)) {
+          studyKindFromQuery = rawKind as (typeof STUDY_PATH_KINDS)[number];
+        }
+        const activeKind = coalesceStudyPathKindParam(sp.kind, inferredStudyKind);
+        structuredPath = await loadStructuredStudyPathForSubscriber({
+          kind: activeKind,
+          pathwayId: userExam.learnerPath,
+          userId,
+          entitlement,
+        });
+      }
     } catch {
       adaptive = null;
+      structuredPath = null;
     }
   }
 
@@ -86,6 +126,15 @@ export default async function StudyPlanPage() {
       </div>
 
       <ExamPlanSettingsCard />
+
+      {structuredPath ? (
+        <StructuredStudyPathSection
+          path={structuredPath}
+          t={t}
+          inferredKind={inferredStudyKind}
+          kindFromQuery={studyKindFromQuery !== inferredStudyKind ? studyKindFromQuery : null}
+        />
+      ) : null}
 
       {adaptive ? <AdaptiveStudyOverview adaptive={adaptive} showHeading userId={userId} /> : null}
 

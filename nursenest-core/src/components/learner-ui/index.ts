@@ -16,6 +16,7 @@
 
 export type { LearnerSurfaceTone, LearnerNoteTone } from "@/components/learner-ui/learner-surface-tone";
 export { LearnerSurface } from "@/components/learner-ui/learner-surface";
+export { LearnerKickerHeading } from "@/components/learner-ui/learner-kicker-heading";
 export { LearnerStudySurfaceSection } from "@/components/learner-ui/learner-study-surface-section";
 export { LearnerStatCard } from "@/components/learner-ui/learner-stat-card";
 export { LearnerProgressCard } from "@/components/learner-ui/learner-progress-card";

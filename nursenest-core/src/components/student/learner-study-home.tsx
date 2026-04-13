@@ -30,48 +30,12 @@ import type { BenchmarkData } from "@/lib/learner/benchmark-engine";
 import type { TopicTrendRow } from "@/lib/learner/topic-performance";
 import type { WeakTopicRow } from "@/lib/learner/weak-topics-from-sessions";
 import type { DashboardIdentity } from "@/lib/learner/resolve-dashboard-identity";
-
-function StudySurface({
-  id,
-  eyebrow,
-  title,
-  intro,
-  variant,
-  children,
-}: {
-  id: string;
-  eyebrow: string;
-  title: string;
-  intro?: string | null;
-  variant: "brand" | "cool" | "warm" | "positive";
-  children: React.ReactNode;
-}) {
-  const shell =
-    variant === "cool"
-      ? "border-[color-mix(in_srgb,var(--semantic-info)_24%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_42%,var(--semantic-surface))]"
-      : variant === "warm"
-        ? "border-[color-mix(in_srgb,var(--semantic-warning)_20%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-warm)_38%,var(--semantic-surface))]"
-        : variant === "positive"
-          ? "border-[color-mix(in_srgb,var(--semantic-success)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-positive)_36%,var(--semantic-surface))]"
-          : "border-[color-mix(in_srgb,var(--semantic-brand)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_7%,var(--semantic-surface))]";
-
-  return (
-    <section
-      id={id}
-      aria-labelledby={`${id}-heading`}
-      className={`nn-dash-section rounded-3xl border px-4 py-8 sm:px-7 sm:py-9 ${shell}`}
-    >
-      <header className="mb-6 max-w-3xl">
-        <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[var(--semantic-text-muted)]">{eyebrow}</p>
-        <h2 id={`${id}-heading`} className="mt-2 text-xl font-semibold tracking-tight text-[var(--semantic-text-primary)] sm:text-2xl">
-          {title}
-        </h2>
-        {intro ? <p className="mt-2 text-sm leading-relaxed text-[var(--semantic-text-secondary)]">{intro}</p> : null}
-      </header>
-      <div className="flex flex-col gap-5">{children}</div>
-    </section>
-  );
-}
+import {
+  LearnerFilterChips,
+  LearnerKickerHeading,
+  LearnerStudySurfaceSection,
+  LearnerSurface,
+} from "@/components/learner-ui";
 
 function RecentGainsBlock({
   trends,
@@ -92,7 +56,7 @@ function RecentGainsBlock({
   return (
     <div className="grid gap-5 lg:grid-cols-2">
       {improving.length > 0 ? (
-        <div className="rounded-2xl border border-[color-mix(in_srgb,var(--semantic-success)_25%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-success)_6%,transparent)] p-4 sm:p-5">
+        <LearnerSurface tone="success" padding="md" radius="lg" accentTop>
           <p className="text-xs font-bold uppercase tracking-wide text-[var(--semantic-success)]">{t("learner.studyHome.recentGainsImprovingLabel")}</p>
           <ul className="mt-3 space-y-2.5">
             {improving.slice(0, 4).map((row) => (
@@ -102,10 +66,10 @@ function RecentGainsBlock({
               </li>
             ))}
           </ul>
-        </div>
+        </LearnerSurface>
       ) : null}
       {strengths.length > 0 ? (
-        <div className="rounded-2xl border border-[color-mix(in_srgb,var(--semantic-chart-3)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-chart-3)_8%,transparent)] p-4 sm:p-5">
+        <LearnerSurface tone="supportive" padding="md" radius="lg">
           <p className="text-xs font-bold uppercase tracking-wide text-[color-mix(in_srgb,var(--semantic-chart-3)_90%,var(--semantic-text-primary))]">
             {t("learner.studyHome.recentGainsStrengthLabel")}
           </p>
@@ -117,7 +81,7 @@ function RecentGainsBlock({
               </li>
             ))}
           </ul>
-        </div>
+        </LearnerSurface>
       ) : null}
     </div>
   );
@@ -201,12 +165,12 @@ export function LearnerStudyHome({
       </header>
 
       {/* Continue + exam pacing */}
-      <StudySurface
+      <LearnerStudySurfaceSection
         id="study-priority"
         eyebrow={t("learner.studyHome.sectionPriorityEyebrow")}
         title={t("learner.studyHome.sectionPriorityTitle")}
         intro={t("learner.studyHome.sectionPriorityIntro")}
-        variant="brand"
+        tone="primary"
       >
         <div className="grid gap-5 lg:grid-cols-12 lg:items-stretch">
           <div className="lg:col-span-8">
@@ -214,55 +178,46 @@ export function LearnerStudyHome({
           </div>
           <div className="flex flex-col gap-4 lg:col-span-4">
             <ExamCountdownCard countdown={countdown} questionsPerDay={questionsPerDay} />
-            <nav
-              className="flex flex-wrap gap-2 rounded-2xl border border-[color-mix(in_srgb,var(--semantic-info)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_35%,transparent)] p-3"
-              aria-label={t("learner.studyHome.quickLinksAria")}
-            >
-              <Link
-                href="/app/study-plan"
-                className="inline-flex items-center rounded-full border border-[color-mix(in_srgb,var(--semantic-brand)_25%,var(--semantic-border-soft))] bg-[var(--semantic-surface)] px-3 py-1.5 text-xs font-semibold text-[var(--semantic-text-primary)] transition-colors hover:bg-[color-mix(in_srgb,var(--semantic-brand)_6%,var(--semantic-surface))]"
-              >
-                {t("learner.studyHome.linkStudyPlan")}
-              </Link>
-              <Link
-                href="/app/exam-plan"
-                className="inline-flex items-center rounded-full border border-[color-mix(in_srgb,var(--semantic-brand)_25%,var(--semantic-border-soft))] bg-[var(--semantic-surface)] px-3 py-1.5 text-xs font-semibold text-[var(--semantic-text-primary)] transition-colors hover:bg-[color-mix(in_srgb,var(--semantic-brand)_6%,var(--semantic-surface))]"
-              >
-                {t("learner.studyHome.linkExamPlan")}
-              </Link>
-              <Link
-                href="/app/account/review-queue"
-                className="inline-flex items-center rounded-full border border-[color-mix(in_srgb,var(--semantic-warning)_22%,var(--semantic-border-soft))] bg-[var(--semantic-surface)] px-3 py-1.5 text-xs font-semibold text-[var(--semantic-text-primary)] transition-colors hover:bg-[color-mix(in_srgb,var(--semantic-warning)_8%,var(--semantic-surface))]"
-              >
-                {t("learner.studyHome.linkReviewQueue")}
-              </Link>
-            </nav>
+            <LearnerSurface tone="supportive" padding="sm" radius="lg" className="shadow-none">
+              <LearnerFilterChips
+                aria-label={t("learner.studyHome.quickLinksAria")}
+                items={[
+                  { id: "plan", label: t("learner.studyHome.linkStudyPlan"), href: "/app/study-plan" },
+                  { id: "exam", label: t("learner.studyHome.linkExamPlan"), href: "/app/exam-plan" },
+                  {
+                    id: "reviews",
+                    label: t("learner.studyHome.linkReviewQueue"),
+                    href: "/app/account/review-queue",
+                    tone: "danger",
+                  },
+                ]}
+              />
+            </LearnerSurface>
           </div>
         </div>
-      </StudySurface>
+      </LearnerStudySurfaceSection>
 
       <div className="nn-dash-divider" />
 
       {/* Readiness snapshot */}
       <section className="nn-dash-section" aria-labelledby="readiness-snapshot-heading">
-        <header>
-          <p className="nn-dash-section-label">{t("learner.studyHome.sectionReadinessEyebrow")}</p>
-          <h2 id="readiness-snapshot-heading" className="mt-1 text-lg font-semibold text-[var(--semantic-text-primary)]">
-            {t("learner.studyHome.sectionReadinessTitle")}
-          </h2>
-        </header>
+        <LearnerKickerHeading
+          id="readiness-snapshot-heading"
+          kicker={t("learner.studyHome.sectionReadinessEyebrow")}
+          title={t("learner.studyHome.sectionReadinessTitle")}
+        />
         <ReadinessScoreCard readiness={snapshot.readiness} t={t} maxFactors={4} />
       </section>
 
       <div className="nn-dash-divider" />
 
       {/* Today + due reviews */}
-      <StudySurface
+      <LearnerStudySurfaceSection
         id="study-today"
         eyebrow={t("learner.studyHome.sectionTodayEyebrow")}
         title={t("learner.studyHome.sectionTodayTitle")}
         intro={t("learner.studyHome.sectionTodayIntro")}
-        variant="warm"
+        tone="warm"
       >
         {todayGoal ? (
           <LearnerDailyMomentumCard
@@ -286,28 +241,29 @@ export function LearnerStudyHome({
             <EngagementNudgeStrip maxItems={3} />
           </div>
         </div>
-      </StudySurface>
+      </LearnerStudySurfaceSection>
 
       <div className="nn-dash-divider" />
 
       {/* KPI snapshot */}
       <section className="nn-dash-section" aria-labelledby="numbers-h">
-        <p id="numbers-h" className="nn-dash-section-label">
-          {t("learner.studyHome.sectionNumbersEyebrow")}
-        </p>
-        <h2 className="text-lg font-semibold text-[var(--semantic-text-primary)]">{t("learner.studyHome.sectionNumbersTitle")}</h2>
+        <LearnerKickerHeading
+          id="numbers-h"
+          kicker={t("learner.studyHome.sectionNumbersEyebrow")}
+          title={t("learner.studyHome.sectionNumbersTitle")}
+        />
         <LearnerDashboardCommandCenter snapshot={snapshot} t={t} />
       </section>
 
       <div className="nn-dash-divider" />
 
       {/* Attention map */}
-      <StudySurface
+      <LearnerStudySurfaceSection
         id="study-attention"
         eyebrow={t("learner.studyHome.sectionAttentionEyebrow")}
         title={t("learner.studyHome.sectionAttentionTitle")}
         intro={t("learner.studyHome.sectionAttentionIntro")}
-        variant="cool"
+        tone="supportive"
       >
         <LearnerDashboardInsightPanels snapshot={snapshot} t={t} />
         {benchmark ? <BenchmarkCard data={benchmark} /> : null}
