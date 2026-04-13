@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
 import type { TierCode } from "@prisma/client";
-import type { PathwayLessonFigure } from "@/lib/lessons/pathway-lesson-types";
+import type { PathwayLessonExamFocus, PathwayLessonFigure } from "@/lib/lessons/pathway-lesson-types";
 import { PathwayLessonFigures } from "@/components/lessons/pathway-lesson-figures";
 import { resolveTierBlocksForViewer } from "@/lib/lessons/tier-block-content";
 import type { MeasurementSystem } from "@/lib/measurements/measurement-system";
@@ -62,6 +62,88 @@ function renderParagraphWithLinks(
   });
 }
 
+/** Resolved paragraph strings after tier + measurement transforms (used for layout / empty detection). */
+export function pathwayLessonResolvedParagraphs(
+  text: string,
+  opts?: {
+    viewerTier?: TierCode | null;
+    measurementSystem?: MeasurementSystem | null;
+    measurementDual?: boolean;
+  },
+): string[] {
+  const raw = typeof text === "string" ? text : "";
+  let safe = resolveTierBlocksForViewer(raw, opts?.viewerTier);
+  if (opts?.measurementSystem != null) {
+    safe = resolveMeasurementTokens(safe, opts.measurementSystem, { dual: opts.measurementDual === true });
+  }
+  return safe.split(/\n\n/).filter((p) => p.trim().length > 0);
+}
+
+function pathwayLessonExamFocusHasStructured(examFocus?: PathwayLessonExamFocus | null): boolean {
+  return Boolean(
+    examFocus &&
+      (examFocus.howTested?.trim() ||
+        examFocus.commonTraps?.trim() ||
+        examFocus.prioritizationCues?.trim()),
+  );
+}
+
+function LearnerSparsePanel({ children }: { children: ReactNode }) {
+  return (
+    <div
+      className="rounded-xl border px-4 py-3 text-sm leading-relaxed"
+      style={{
+        borderColor: "color-mix(in srgb, var(--semantic-info) 32%, var(--semantic-border-soft))",
+        background: "color-mix(in srgb, var(--semantic-panel-cool) 50%, transparent)",
+        color: "var(--semantic-text-secondary)",
+      }}
+    >
+      {children}
+    </div>
+  );
+}
+
+function PathwayLessonExamFocusInlineBlocks({
+  examFocus,
+  viewerTier,
+  measurementSystem,
+  measurementDual,
+}: {
+  examFocus: PathwayLessonExamFocus;
+  viewerTier?: TierCode | null;
+  measurementSystem?: MeasurementSystem | null;
+  measurementDual?: boolean;
+}) {
+  const blocks: { title: string; text: string }[] = [];
+  if (examFocus.howTested?.trim()) {
+    blocks.push({ title: "How this concept is tested", text: examFocus.howTested });
+  }
+  if (examFocus.commonTraps?.trim()) {
+    blocks.push({ title: "Common traps", text: examFocus.commonTraps });
+  }
+  if (examFocus.prioritizationCues?.trim()) {
+    blocks.push({ title: "Prioritization cues", text: examFocus.prioritizationCues });
+  }
+  if (blocks.length === 0) return null;
+  return (
+    <div className="space-y-5 rounded-xl border border-primary/20 bg-primary/[0.04] p-4">
+      {blocks.map((b) => (
+        <div key={b.title}>
+          <h3 className="nn-marketing-label nn-marketing-label--accent">{b.title}</h3>
+          <div className="mt-2">
+            <PathwayLessonBody
+              text={b.text}
+              viewerTier={viewerTier}
+              measurementSystem={measurementSystem ?? undefined}
+              measurementDual={measurementDual}
+            />
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 export function PathwayLessonBody({
   text,
   lessonWikiBasePath,
@@ -82,18 +164,13 @@ export function PathwayLessonBody({
   measurementSystem?: MeasurementSystem | null;
   measurementDual?: boolean;
 }) {
-  const raw = typeof text === "string" ? text : "";
-  let safe = resolveTierBlocksForViewer(raw, viewerTier);
-  if (measurementSystem != null) {
-    safe = resolveMeasurementTokens(safe, measurementSystem, { dual: measurementDual === true });
-  }
-  const paragraphs = safe.split(/\n\n/).filter((p) => p.trim().length > 0);
+  const paragraphs = pathwayLessonResolvedParagraphs(text, {
+    viewerTier,
+    measurementSystem,
+    measurementDual,
+  });
   if (paragraphs.length === 0) {
-    return (
-      <p className="nn-lesson-prose italic text-muted-foreground">
-        This section has no content yet. Check back after the next content update.
-      </p>
-    );
+    return null;
   }
   return (
     <div className="nn-lesson-prose space-y-7">
@@ -110,20 +187,35 @@ export function PathwayLessonBody({
 export function PathwayLessonSectionContent({
   text,
   figures,
+  examFocus,
   lessonWikiBasePath,
   viewerTier,
   measurementSystem,
   measurementDual,
+  emptyBodyMessage,
+  figuresVisualLeadMessage,
 }: {
   text: string;
   figures?: PathwayLessonFigure[] | undefined;
+  examFocus?: PathwayLessonExamFocus | null;
   lessonWikiBasePath?: string | null;
   viewerTier?: TierCode | null;
   measurementSystem?: MeasurementSystem | null;
   measurementDual?: boolean;
+  /** Shown when there is no prose, no exam-focus blocks, and no figures (subscriber lesson). */
+  emptyBodyMessage: string;
+  /** Short line when prose is empty but figures carry the teaching. */
+  figuresVisualLeadMessage: string;
 }) {
-  return (
-    <div>
+  const paragraphs = pathwayLessonResolvedParagraphs(text, {
+    viewerTier,
+    measurementSystem,
+    measurementDual,
+  });
+  const hasFigures = Boolean(figures && figures.length > 0);
+  const hasExamBlocks = pathwayLessonExamFocusHasStructured(examFocus);
+  const bodyEl =
+    paragraphs.length > 0 ? (
       <PathwayLessonBody
         text={text}
         lessonWikiBasePath={lessonWikiBasePath}
@@ -131,7 +223,28 @@ export function PathwayLessonSectionContent({
         measurementSystem={measurementSystem}
         measurementDual={measurementDual}
       />
-      {figures && figures.length > 0 ? <PathwayLessonFigures figures={figures} /> : null}
+    ) : null;
+  const examEl =
+    !bodyEl && hasExamBlocks && examFocus ? (
+      <PathwayLessonExamFocusInlineBlocks
+        examFocus={examFocus}
+        viewerTier={viewerTier}
+        measurementSystem={measurementSystem}
+        measurementDual={measurementDual}
+      />
+    ) : null;
+  const figuresEl = hasFigures ? <PathwayLessonFigures figures={figures!} /> : null;
+
+  const showFiguresLead = !bodyEl && !examEl && hasFigures;
+  const showEmptyPanel = !bodyEl && !examEl && !hasFigures;
+
+  return (
+    <div className="space-y-4">
+      {bodyEl}
+      {examEl}
+      {showFiguresLead ? <LearnerSparsePanel>{figuresVisualLeadMessage}</LearnerSparsePanel> : null}
+      {figuresEl}
+      {showEmptyPanel ? <LearnerSparsePanel>{emptyBodyMessage}</LearnerSparsePanel> : null}
     </div>
   );
 }
