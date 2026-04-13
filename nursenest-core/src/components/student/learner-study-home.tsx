@@ -163,26 +163,63 @@ export function LearnerStudyHome({
   const showWeaknessAlerts = studySettings.enableWeaknessAlerts;
   const showDecayAlerts = studySettings.enableSpacedRepetition && studySettings.enableDecayAlerts;
   const showAdaptivePlan = studySettings.enableAdaptivePlan;
+  const heroContextLine = progressFeedbackLine ?? personalNote ?? momentumLine;
+  const heroFocusTopic = weakTopicTitles[0] ?? strongHighlight[0]?.topic ?? null;
 
   return (
-    <main className="nn-dash">
+    <main className="nn-dash nn-dash--learner-home">
       <BreadcrumbTrail items={crumbs} />
 
       {/* Editorial hero */}
-      <header className="relative overflow-hidden rounded-3xl border border-[color-mix(in_srgb,var(--semantic-brand)_18%,var(--semantic-border-soft))] bg-gradient-to-br from-[color-mix(in_srgb,var(--semantic-brand)_10%,var(--semantic-surface))] via-[var(--semantic-surface)] to-[color-mix(in_srgb,var(--semantic-panel-cool)_55%,var(--semantic-surface))] px-5 py-8 sm:px-8 sm:py-10">
+      <header className="nn-dash-hero-shell">
         <div
-          className="pointer-events-none absolute -right-20 -top-16 h-56 w-56 rounded-full bg-[radial-gradient(circle_at_center,color-mix(in_srgb,var(--semantic-chart-4)_18%,transparent),transparent_62%)] blur-2xl"
+          className="nn-dash-hero-shell__glow"
           aria-hidden
         />
-        <div className="relative flex flex-wrap items-center gap-2">
-          <span className="inline-flex items-center rounded-full bg-[color-mix(in_srgb,var(--semantic-brand)_14%,var(--semantic-surface))] px-3 py-1 text-[11px] font-bold uppercase tracking-widest text-[var(--semantic-brand)]">
-            {identity.pill}
-          </span>
-          <p className="text-[0.6875rem] font-medium text-[var(--semantic-text-secondary)]">{identity.subtitle}</p>
+        <div className="nn-dash-hero-shell__grid">
+          <div className="nn-dash-hero-shell__body">
+            <div className="relative flex flex-wrap items-center gap-2">
+              <span className="inline-flex items-center rounded-full bg-[color-mix(in_srgb,var(--semantic-brand)_14%,var(--semantic-surface))] px-3 py-1 text-[11px] font-bold uppercase tracking-widest text-[var(--semantic-brand)]">
+                {identity.pill}
+              </span>
+              <p className="text-[0.6875rem] font-medium text-[var(--semantic-text-secondary)]">{identity.subtitle}</p>
+            </div>
+            <p className="nn-dash-hero-shell__eyebrow">{t("learner.studyHome.heroEyebrow")}</p>
+            <h1 className="nn-dash-hero-shell__title">{heroHeading}</h1>
+            <p className="nn-dash-hero-shell__lead">{t("learner.studyHome.heroLead")}</p>
+            <div className="nn-dash-hero-shell__chips">
+              <LearnerFilterChips
+                aria-label={t("learner.studyHome.quickLinksAria")}
+                items={[
+                  { id: "plan", label: t("learner.studyHome.linkStudyPlan"), href: "/app/study-plan" },
+                  { id: "exam", label: t("learner.studyHome.linkExamPlan"), href: "/app/exam-plan" },
+                  { id: "reviews", label: t("learner.studyHome.linkReviewQueue"), href: "/app/account/review-queue" },
+                ]}
+              />
+            </div>
+          </div>
+          <div className="nn-dash-hero-shell__aside">
+            {resume ? (
+              <Link href={resume.href} className="nn-dash-context-link">
+                <span className="nn-dash-context-link__kicker">Resume</span>
+                <span className="nn-dash-context-link__title">{resume.title}</span>
+              </Link>
+            ) : null}
+            {heroContextLine || heroFocusTopic ? (
+              <LearnerSurface tone="supportive" padding="sm" radius="lg" shadow={false} className="nn-dash-hero-note">
+                {heroFocusTopic ? (
+                  <p className="nn-dash-hero-note__eyebrow">Current focus</p>
+                ) : null}
+                {heroFocusTopic ? (
+                  <p className="nn-dash-hero-note__title">{heroFocusTopic}</p>
+                ) : null}
+                {heroContextLine ? (
+                  <p className="nn-dash-hero-note__body">{heroContextLine}</p>
+                ) : null}
+              </LearnerSurface>
+            ) : null}
+          </div>
         </div>
-        <p className="relative mt-3 text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--semantic-text-muted)]">{t("learner.studyHome.heroEyebrow")}</p>
-        <h1 className="relative mt-2 text-2xl font-extrabold tracking-tight text-[var(--semantic-text-primary)] sm:text-3xl">{heroHeading}</h1>
-        <p className="relative mt-3 max-w-2xl text-[0.9375rem] leading-relaxed text-[var(--semantic-text-secondary)]">{t("learner.studyHome.heroLead")}</p>
       </header>
 
       {/* Continue + exam pacing */}
@@ -192,50 +229,45 @@ export function LearnerStudyHome({
         title={t("learner.studyHome.sectionPriorityTitle")}
         intro={t("learner.studyHome.sectionPriorityIntro")}
         tone="primary"
+        className="nn-dash-band nn-dash-band--priority"
       >
-        <div className="grid gap-5 lg:grid-cols-12 lg:items-stretch">
-          <div className="lg:col-span-8">
+        <div className="nn-dash-priority-grid">
+          <div className="nn-dash-priority-grid__main">
             <PrimaryActionCard action={nextAction} />
           </div>
-          <div className="flex flex-col gap-4 lg:col-span-4">
+          <div className="nn-dash-priority-grid__rail">
             <ExamCountdownCard countdown={countdown} questionsPerDay={questionsPerDay} />
-            <LearnerSurface tone="supportive" padding="sm" radius="lg" shadow={false}>
-              <LearnerFilterChips
-                aria-label={t("learner.studyHome.quickLinksAria")}
-                items={[
-                  { id: "plan", label: t("learner.studyHome.linkStudyPlan"), href: "/app/study-plan" },
-                  { id: "exam", label: t("learner.studyHome.linkExamPlan"), href: "/app/exam-plan" },
-                  { id: "reviews", label: t("learner.studyHome.linkReviewQueue"), href: "/app/account/review-queue" },
-                ]}
-              />
-            </LearnerSurface>
           </div>
         </div>
       </LearnerStudySurfaceSection>
 
-      <div className="nn-dash-divider" />
-
       {/* Readiness snapshot */}
-      <section className="nn-dash-section" aria-labelledby="readiness-snapshot-heading">
+      <section className="nn-dash-section nn-dash-section--snapshot" aria-labelledby="readiness-snapshot-heading">
         <LearnerKickerHeading
           id="readiness-snapshot-heading"
           kicker={t("learner.studyHome.sectionReadinessEyebrow")}
           title={t("learner.studyHome.sectionReadinessTitle")}
         />
-        <ReadinessScoreCard readiness={snapshot.readiness} t={t} maxFactors={showAdvancedInsights ? 4 : 2} />
-        {showCoach && coachSummary ? (
-          <div
-            className={`mt-5 grid gap-4 ${coachSummary.topIntervention ? "lg:grid-cols-2" : ""}`}
-          >
-            <CoachReadinessCard readiness={coachSummary.readiness} />
-            {coachSummary.topIntervention ? (
-              <CoachInterventionBanner intervention={coachSummary.topIntervention} dismissible />
+        <div className="nn-dash-snapshot-grid">
+          <div className="nn-dash-snapshot-grid__main">
+            <ReadinessScoreCard readiness={snapshot.readiness} t={t} maxFactors={showAdvancedInsights ? 4 : 2} />
+            {showCoach && coachSummary ? (
+              <div
+                className={`mt-5 grid gap-4 ${coachSummary.topIntervention ? "lg:grid-cols-2" : ""}`}
+              >
+                <CoachReadinessCard readiness={coachSummary.readiness} />
+                {coachSummary.topIntervention ? (
+                  <CoachInterventionBanner intervention={coachSummary.topIntervention} dismissible />
+                ) : null}
+              </div>
             ) : null}
           </div>
-        ) : null}
+          <div className="nn-dash-snapshot-grid__aside">
+            <LearnerDashboardCommandCenter snapshot={snapshot} t={t} />
+            {benchmark ? <BenchmarkCard data={benchmark} /> : null}
+          </div>
+        </div>
       </section>
-
-      <div className="nn-dash-divider" />
 
       {/* Today + due reviews */}
       <LearnerStudySurfaceSection
@@ -244,50 +276,41 @@ export function LearnerStudyHome({
         title={t("learner.studyHome.sectionTodayTitle")}
         intro={t("learner.studyHome.sectionTodayIntro")}
         tone="warm"
+        className="nn-dash-band nn-dash-band--today"
       >
-        {todayGoal ? (
-          <LearnerDailyMomentumCard
-            t={t}
-            streakDays={snapshot.studyStreakDays}
-            todayGoal={todayGoal}
-            questionGoal={questionBankGoal}
-            resume={resume}
-            momentumLine={momentumLine}
-            focusTopic={weakTopicTitles[0] ?? null}
-            personalNote={personalNote}
-            showStreakProtectNudge={streakProtect}
-            progressFeedbackLine={progressFeedbackLine}
-          />
-        ) : null}
-        <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-start">
-          {showDecayAlerts ? (
-            <div className="min-w-0 flex-1 sm:min-w-[240px]">
-              <SpacedReviewReminder />
+        <div className="nn-dash-today-grid">
+          {todayGoal ? (
+            <div className="nn-dash-today-grid__main">
+              <LearnerDailyMomentumCard
+                t={t}
+                streakDays={snapshot.studyStreakDays}
+                todayGoal={todayGoal}
+                questionGoal={questionBankGoal}
+                resume={resume}
+                momentumLine={momentumLine}
+                focusTopic={weakTopicTitles[0] ?? null}
+                personalNote={personalNote}
+                showStreakProtectNudge={streakProtect}
+                progressFeedbackLine={progressFeedbackLine}
+              />
             </div>
           ) : null}
-          <div className="min-w-0 flex-[2]">
-            <EngagementNudgeStrip
-              maxItems={showDecayAlerts ? 3 : 2}
-              includeWeaknessAlerts={showWeaknessAlerts}
-              includeDecayAlerts={showDecayAlerts}
-            />
+          <div className="nn-dash-today-grid__rail">
+            {showDecayAlerts ? (
+              <div className="min-w-0">
+                <SpacedReviewReminder />
+              </div>
+            ) : null}
+            <div className="min-w-0">
+              <EngagementNudgeStrip
+                maxItems={showDecayAlerts ? 3 : 2}
+                includeWeaknessAlerts={showWeaknessAlerts}
+                includeDecayAlerts={showDecayAlerts}
+              />
+            </div>
           </div>
         </div>
       </LearnerStudySurfaceSection>
-
-      <div className="nn-dash-divider" />
-
-      {/* KPI snapshot */}
-      <section className="nn-dash-section" aria-labelledby="numbers-h">
-        <LearnerKickerHeading
-          id="numbers-h"
-          kicker={t("learner.studyHome.sectionNumbersEyebrow")}
-          title={t("learner.studyHome.sectionNumbersTitle")}
-        />
-        <LearnerDashboardCommandCenter snapshot={snapshot} t={t} />
-      </section>
-
-      <div className="nn-dash-divider" />
 
       {/* Attention map */}
       <LearnerStudySurfaceSection
@@ -296,20 +319,30 @@ export function LearnerStudyHome({
         title={t("learner.studyHome.sectionAttentionTitle")}
         intro={t("learner.studyHome.sectionAttentionIntro")}
         tone="supportive"
+        className="nn-dash-band nn-dash-band--attention"
       >
-        {showAdvancedInsights ? <LearnerDashboardInsightPanels snapshot={snapshot} t={t} /> : null}
-        {benchmark ? <BenchmarkCard data={benchmark} /> : null}
-        {showHeatmap && heatmapTopics.length > 0 ? <WeaknessHeatmap topics={heatmapTopics} /> : null}
-        {showCoach && weakTopicTitles.length > 0 ? (
-          <CoachWeakSummary
-            weakTopics={weakTopicTitles}
-            examTarget={undefined}
-            daysUntilExam={daysLeft}
-          />
-        ) : null}
+        <div className="nn-dash-attention-grid">
+          {showAdvancedInsights ? (
+            <div className="nn-dash-attention-grid__wide">
+              <LearnerDashboardInsightPanels snapshot={snapshot} t={t} />
+            </div>
+          ) : null}
+          {showHeatmap && heatmapTopics.length > 0 ? (
+            <div className="nn-dash-attention-grid__full">
+              <WeaknessHeatmap topics={heatmapTopics} />
+            </div>
+          ) : null}
+          {showCoach && weakTopicTitles.length > 0 ? (
+            <div className="nn-dash-attention-grid__aside">
+              <CoachWeakSummary
+                weakTopics={weakTopicTitles}
+                examTarget={undefined}
+                daysUntilExam={daysLeft}
+              />
+            </div>
+          ) : null}
+        </div>
       </LearnerStudySurfaceSection>
-
-      <div className="nn-dash-divider" />
 
       {/* Recent gains + plan depth */}
       <LearnerStudySurfaceSection
@@ -318,21 +351,26 @@ export function LearnerStudyHome({
         title={t("learner.studyHome.sectionMomentumTitle")}
         intro={t("learner.studyHome.sectionMomentumIntro")}
         tone="success"
+        className="nn-dash-band nn-dash-band--momentum"
       >
-        <RecentGainsBlock trends={trends} strongTopics={strongHighlight} t={t} />
-        {showAdaptivePlan && studySnap ? <LearnerAdaptiveFocusCard snapshot={studySnap} /> : null}
-        {showCoach && coachSummary ? (
-          <div className="grid gap-4 md:grid-cols-2">
-            <CoachPriorityList priorities={coachSummary.priorities} />
-            <CoachPatternInsights patterns={coachSummary.patterns} />
+        <div className="nn-dash-momentum-grid">
+          <div className="nn-dash-momentum-grid__main">
+            <RecentGainsBlock trends={trends} strongTopics={strongHighlight} t={t} />
+            {showAdaptivePlan && studySnap ? <LearnerAdaptiveFocusCard snapshot={studySnap} /> : null}
           </div>
-        ) : null}
-        {showCoach ? (
-          <DashboardCoachCard weakTopics={weakTopicTitles} examTarget={undefined} daysUntilExam={daysLeft} />
-        ) : null}
+          <div className="nn-dash-momentum-grid__aside">
+            {showCoach && coachSummary ? (
+              <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-1">
+                <CoachPriorityList priorities={coachSummary.priorities} />
+                <CoachPatternInsights patterns={coachSummary.patterns} />
+              </div>
+            ) : null}
+            {showCoach ? (
+              <DashboardCoachCard weakTopics={weakTopicTitles} examTarget={undefined} daysUntilExam={daysLeft} />
+            ) : null}
+          </div>
+        </div>
       </LearnerStudySurfaceSection>
-
-      <div className="nn-dash-divider" />
 
       {/* Explore kit */}
       <LearnerStudySurfaceSection
@@ -341,29 +379,38 @@ export function LearnerStudyHome({
         title={t("learner.studyHome.sectionExploreTitle")}
         intro={t("learner.studyHome.sectionExploreIntro")}
         tone="primary"
+        className="nn-dash-band nn-dash-band--explore"
       >
-        <LearnerContinueLearningCard t={t} links={continueLinks} />
-        <PremiumLearnerHub
-          snapshot={snapshot}
-          weakTopicTitles={weakTopicTitles}
-          recentNotes={recentNotes}
-          suppressFlashcardWeakLine={weakTopicTitles.length > 0}
-          compactIntro
-          omitReadinessBreakdown
-          omitRecentMocks
-          readinessDeferHint={readinessDeferHint}
-        />
-        <SmartActionsBar showAdaptiveAction={showAdaptivePlan} showWeaknessAction={showWeaknessAlerts} />
-        <LearnerDashboardAdvantageStrip t={t} />
-        <section className="nn-card flex flex-col gap-3 p-5 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
-          <p className="text-sm text-muted-foreground">{t("learner.dashboard.accountTeaser")}</p>
-          <Link
-            href="/app/account/overview"
-            className="inline-flex w-full shrink-0 justify-center rounded-full border border-role-cta/30 bg-role-cta-soft px-4 py-2.5 text-sm font-semibold text-role-cta-on-soft sm:w-auto"
-          >
-            {t("learner.dashboard.openAccountHub")}
-          </Link>
-        </section>
+        <div className="nn-dash-explore-grid">
+          <div className="nn-dash-explore-grid__primary">
+            <LearnerContinueLearningCard t={t} links={continueLinks} />
+          </div>
+          <div className="nn-dash-explore-grid__secondary">
+            <PremiumLearnerHub
+              snapshot={snapshot}
+              weakTopicTitles={weakTopicTitles}
+              recentNotes={recentNotes}
+              suppressFlashcardWeakLine={weakTopicTitles.length > 0}
+              compactIntro
+              omitReadinessBreakdown
+              omitRecentMocks
+              readinessDeferHint={readinessDeferHint}
+            />
+          </div>
+        </div>
+        <div className="nn-dash-explore-stack">
+          <SmartActionsBar showAdaptiveAction={showAdaptivePlan} showWeaknessAction={showWeaknessAlerts} />
+          <LearnerDashboardAdvantageStrip t={t} />
+          <LearnerSurface tone="secondary" padding="md" radius="lg" shadow={false} className="nn-dash-account-cta">
+            <p className="text-sm text-muted-foreground">{t("learner.dashboard.accountTeaser")}</p>
+            <Link
+              href="/app/account/overview"
+              className="inline-flex w-full shrink-0 justify-center rounded-full border border-role-cta/30 bg-role-cta-soft px-4 py-2.5 text-sm font-semibold text-role-cta-on-soft sm:w-auto"
+            >
+              {t("learner.dashboard.openAccountHub")}
+            </Link>
+          </LearnerSurface>
+        </div>
       </LearnerStudySurfaceSection>
     </main>
   );

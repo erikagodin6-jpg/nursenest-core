@@ -7587,19 +7587,25 @@ html[data-theme="deep-twilight"] .nn-cat-opt--incorrect {
 .nn-dash {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 2.5rem;
+  padding-bottom: 1rem;
 }
 @media (min-width: 640px) {
   .nn-dash {
-    gap: 2.5rem;
+    gap: 3.25rem;
   }
 }
 
 .nn-dash-section {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 1.25rem;
   animation: pageEnter 0.36s cubic-bezier(0.25, 0.1, 0.25, 1) both;
+}
+@media (min-width: 640px) {
+  .nn-dash-section {
+    gap: 1.5rem;
+  }
 }
 .nn-dash-section:nth-child(2) { animation-delay: 0.06s; }
 .nn-dash-section:nth-child(3) { animation-delay: 0.12s; }
@@ -7626,108 +7632,375 @@ html[data-theme="deep-twilight"] .nn-cat-opt--incorrect {
   );
 }
 
+.nn-dash-hero-shell {
+  position: relative;
+  overflow: hidden;
+  border-radius: 2rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-brand) 22%, var(--semantic-border-soft));
+  background:
+    linear-gradient(
+      140deg,
+      color-mix(in srgb, var(--semantic-brand) 11%, var(--semantic-surface)) 0%,
+      color-mix(in srgb, var(--semantic-panel-cool) 45%, var(--semantic-surface)) 52%,
+      color-mix(in srgb, var(--semantic-panel-positive) 26%, var(--semantic-surface)) 100%
+    );
+  box-shadow:
+    0 1px 3px -1px color-mix(in srgb, var(--semantic-brand) 10%, transparent),
+    0 22px 48px -28px color-mix(in srgb, var(--semantic-brand) 18%, transparent);
+  padding: 1.5rem 1.25rem;
+}
+@media (min-width: 640px) {
+  .nn-dash-hero-shell {
+    padding: 2rem;
+  }
+}
+.nn-dash-hero-shell__glow {
+  pointer-events: none;
+  position: absolute;
+  right: -4rem;
+  top: -3.5rem;
+  height: 18rem;
+  width: 18rem;
+  border-radius: 9999px;
+  background:
+    radial-gradient(circle at center, color-mix(in srgb, var(--semantic-chart-4) 16%, transparent), transparent 62%);
+  filter: blur(32px);
+}
+.nn-dash-hero-shell__grid {
+  position: relative;
+  display: grid;
+  gap: 1rem;
+}
+@media (min-width: 1024px) {
+  .nn-dash-hero-shell__grid {
+    grid-template-columns: minmax(0, 1.4fr) minmax(16rem, 0.72fr);
+    gap: 1.25rem;
+    align-items: end;
+  }
+}
+.nn-dash-hero-shell__body {
+  min-width: 0;
+}
+.nn-dash-hero-shell__eyebrow {
+  margin-top: 0.9rem;
+  font-size: 0.6875rem;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--semantic-text-muted);
+}
+.nn-dash-hero-shell__title {
+  margin-top: 0.65rem;
+  max-width: 18ch;
+  font-size: 2rem;
+  font-weight: 800;
+  line-height: 1.02;
+  letter-spacing: -0.035em;
+  color: var(--semantic-text-primary);
+  text-wrap: balance;
+}
+@media (min-width: 640px) {
+  .nn-dash-hero-shell__title {
+    font-size: 2.85rem;
+  }
+}
+.nn-dash-hero-shell__lead {
+  margin-top: 0.9rem;
+  max-width: 42rem;
+  font-size: 0.975rem;
+  line-height: 1.8;
+  color: var(--semantic-text-secondary);
+}
+.nn-dash-hero-shell__chips {
+  margin-top: 1.1rem;
+}
+.nn-dash-hero-shell__aside {
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+  min-width: 0;
+}
+.nn-dash-context-link {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  border-radius: 1.25rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-info) 24%, var(--semantic-border-soft));
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--semantic-info) 7%, var(--semantic-surface)) 0%,
+      color-mix(in srgb, var(--semantic-brand) 3%, var(--semantic-surface)) 100%
+    );
+  padding: 1rem 1rem 1.05rem;
+  box-shadow: 0 10px 24px -22px color-mix(in srgb, var(--semantic-info) 30%, transparent);
+  transition:
+    border-color var(--nn-btn-motion-duration) var(--nn-btn-motion-ease),
+    transform var(--nn-btn-motion-duration) var(--nn-btn-motion-ease),
+    box-shadow var(--nn-btn-motion-duration) var(--nn-btn-motion-ease);
+}
+.nn-dash-context-link:hover:not(:active) {
+  transform: translateY(-1px);
+  border-color: color-mix(in srgb, var(--semantic-brand) 34%, var(--semantic-border-soft));
+  box-shadow: 0 18px 30px -26px color-mix(in srgb, var(--semantic-brand) 28%, transparent);
+}
+.nn-dash-context-link__kicker {
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--semantic-text-muted);
+}
+.nn-dash-context-link__title {
+  font-size: 0.925rem;
+  font-weight: 700;
+  line-height: 1.45;
+  color: var(--semantic-text-primary);
+}
+.nn-dash-hero-note {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+.nn-dash-hero-note__eyebrow {
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--semantic-text-muted);
+}
+.nn-dash-hero-note__title {
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--semantic-text-primary);
+}
+.nn-dash-hero-note__body {
+  font-size: 0.875rem;
+  line-height: 1.7;
+  color: var(--semantic-text-secondary);
+}
+
+.nn-dash-band {
+  scroll-margin-top: 6rem;
+}
+
+.nn-dash-priority-grid,
+.nn-dash-today-grid,
+.nn-dash-snapshot-grid,
+.nn-dash-attention-grid,
+.nn-dash-momentum-grid,
+.nn-dash-explore-grid {
+  display: grid;
+  gap: 1rem;
+}
+@media (min-width: 1024px) {
+  .nn-dash-priority-grid {
+    grid-template-columns: minmax(0, 1.45fr) minmax(16rem, 0.72fr);
+    gap: 1.1rem;
+    align-items: stretch;
+  }
+  .nn-dash-snapshot-grid {
+    grid-template-columns: minmax(0, 1.32fr) minmax(19rem, 0.78fr);
+    gap: 1.25rem;
+    align-items: start;
+  }
+  .nn-dash-today-grid {
+    grid-template-columns: minmax(0, 1.25fr) minmax(18rem, 0.82fr);
+    gap: 1.1rem;
+    align-items: start;
+  }
+  .nn-dash-attention-grid {
+    grid-template-columns: minmax(0, 1.22fr) minmax(17rem, 0.78fr);
+    gap: 1.1rem;
+    align-items: start;
+  }
+  .nn-dash-momentum-grid {
+    grid-template-columns: minmax(0, 1.15fr) minmax(18rem, 0.85fr);
+    gap: 1.1rem;
+    align-items: start;
+  }
+  .nn-dash-explore-grid {
+    grid-template-columns: minmax(0, 1.02fr) minmax(0, 1fr);
+    gap: 1.1rem;
+    align-items: start;
+  }
+}
+.nn-dash-priority-grid__rail,
+.nn-dash-today-grid__rail,
+.nn-dash-snapshot-grid__aside,
+.nn-dash-momentum-grid__aside {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.nn-dash-attention-grid__wide,
+.nn-dash-attention-grid__full,
+.nn-dash-attention-grid__aside,
+.nn-dash-momentum-grid__main,
+.nn-dash-momentum-grid__aside,
+.nn-dash-explore-grid__primary,
+.nn-dash-explore-grid__secondary,
+.nn-dash-today-grid__main,
+.nn-dash-priority-grid__main {
+  min-width: 0;
+}
+@media (min-width: 1024px) {
+  .nn-dash-attention-grid__full {
+    grid-column: 1 / -1;
+  }
+}
+.nn-dash-explore-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.nn-dash-account-cta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+}
+@media (min-width: 640px) {
+  .nn-dash-account-cta {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
 /* ── Dashboard: Primary Action Card ───────────────────────────────────── */
 
 .nn-primary-action-card {
   display: block;
-  padding: 1.5rem 1.75rem;
-  border-radius: 1.25rem;
-  border: 2px solid color-mix(in srgb, var(--theme-primary) 30%, var(--semantic-border-soft));
-  background: linear-gradient(
-    145deg,
-    color-mix(in srgb, var(--theme-primary) 8%, var(--semantic-surface)) 0%,
-    color-mix(in srgb, var(--semantic-info) 4%, var(--semantic-surface)) 60%,
-    color-mix(in srgb, var(--theme-primary) 2%, var(--semantic-surface)) 100%
-  );
+  position: relative;
+  overflow: hidden;
+  padding: 1.75rem;
+  border-radius: 1.5rem;
+  border: 1px solid color-mix(in srgb, var(--theme-primary) 26%, var(--semantic-border-soft));
+  background:
+    linear-gradient(
+      145deg,
+      color-mix(in srgb, var(--theme-primary) 10%, var(--semantic-surface)) 0%,
+      color-mix(in srgb, var(--semantic-info) 5%, var(--semantic-surface)) 56%,
+      color-mix(in srgb, var(--semantic-panel-positive) 32%, var(--semantic-surface)) 100%
+    );
   box-shadow:
-    0 1px 3px -1px color-mix(in srgb, var(--theme-primary) 8%, transparent),
-    0 4px 16px -8px color-mix(in srgb, var(--theme-primary) 6%, transparent);
+    0 1px 3px -1px color-mix(in srgb, var(--theme-primary) 10%, transparent),
+    0 24px 42px -30px color-mix(in srgb, var(--theme-primary) 28%, transparent);
   transition:
     border-color var(--nn-btn-motion-duration) var(--nn-btn-motion-ease),
     box-shadow var(--nn-btn-motion-duration) var(--nn-btn-motion-ease),
     transform var(--nn-btn-motion-duration) var(--nn-btn-motion-ease);
 }
+.nn-primary-action-card::before {
+  content: "";
+  position: absolute;
+  inset: auto -3rem -5.25rem auto;
+  height: 11rem;
+  width: 11rem;
+  border-radius: 9999px;
+  background:
+    radial-gradient(circle at center, color-mix(in srgb, var(--semantic-chart-4) 18%, transparent), transparent 68%);
+  filter: blur(10px);
+  pointer-events: none;
+}
 @media (min-width: 640px) {
   .nn-primary-action-card {
-    padding: 1.75rem 2rem;
+    padding: 2rem 2.15rem;
   }
 }
 .nn-primary-action-card:hover:not(:active) {
-  border-color: var(--theme-primary);
+  border-color: color-mix(in srgb, var(--theme-primary) 48%, var(--semantic-border-soft));
   box-shadow:
-    0 2px 6px -2px color-mix(in srgb, var(--theme-primary) 12%, transparent),
-    0 10px 32px -12px color-mix(in srgb, var(--theme-primary) 14%, transparent);
-  transform: translateY(-1px);
+    0 2px 6px -2px color-mix(in srgb, var(--theme-primary) 14%, transparent),
+    0 28px 48px -30px color-mix(in srgb, var(--theme-primary) 32%, transparent);
+  transform: translateY(-2px);
 }
 .nn-primary-action-card:active {
   transform: translateY(0) scale(0.99);
   box-shadow:
-    0 1px 3px -1px color-mix(in srgb, var(--theme-primary) 8%, transparent),
-    0 3px 12px -6px color-mix(in srgb, var(--theme-primary) 8%, transparent);
+    0 1px 3px -1px color-mix(in srgb, var(--theme-primary) 10%, transparent),
+    0 8px 18px -12px color-mix(in srgb, var(--theme-primary) 18%, transparent);
 }
 .nn-primary-action-card__icon {
   flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 3.25rem;
-  height: 3.25rem;
-  border-radius: 1rem;
-  background: color-mix(in srgb, var(--theme-primary) 14%, var(--semantic-surface));
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 1.125rem;
+  background: color-mix(in srgb, var(--theme-primary) 16%, var(--semantic-surface));
   color: var(--theme-primary);
-  box-shadow: 0 2px 8px -4px color-mix(in srgb, var(--theme-primary) 20%, transparent);
+  box-shadow: 0 10px 18px -14px color-mix(in srgb, var(--theme-primary) 34%, transparent);
 }
 .nn-primary-action-card__title {
-  font-size: 1.125rem;
+  font-size: 1.2rem;
   font-weight: 800;
-  line-height: 1.2;
-  letter-spacing: -0.01em;
+  line-height: 1.05;
+  letter-spacing: -0.025em;
   color: var(--semantic-text-primary);
+  text-wrap: balance;
 }
 @media (min-width: 640px) {
   .nn-primary-action-card__title {
-    font-size: 1.25rem;
+    font-size: 1.6rem;
   }
 }
 .nn-primary-action-card__subtitle {
-  margin-top: 0.25rem;
-  font-size: 0.875rem;
-  line-height: 1.5;
+  margin-top: 0.45rem;
+  max-width: 40rem;
+  font-size: 0.95rem;
+  line-height: 1.65;
   color: var(--semantic-text-secondary);
 }
 .nn-primary-action-card__reasoning {
-  margin-top: 0.375rem;
+  margin-top: 0.8rem;
+  max-width: 36rem;
   font-size: 0.75rem;
-  font-style: italic;
-  color: var(--semantic-text-muted);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--semantic-text-muted) 88%, var(--semantic-text-secondary));
 }
 .nn-primary-action-card__arrow {
   flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 2.5rem;
-  height: 2.5rem;
-  border-radius: 0.75rem;
-  background: color-mix(in srgb, var(--theme-primary) 10%, var(--semantic-surface));
+  width: 2.85rem;
+  height: 2.85rem;
+  border-radius: 9999px;
+  background: color-mix(in srgb, var(--theme-primary) 12%, var(--semantic-surface));
   color: var(--theme-primary);
-  transition: background 0.2s, transform 0.2s;
+  transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
 }
 .nn-primary-action-card:hover:not(:active) .nn-primary-action-card__arrow {
-  background: color-mix(in srgb, var(--theme-primary) 18%, var(--semantic-surface));
-  transform: translateX(2px);
+  background: color-mix(in srgb, var(--theme-primary) 20%, var(--semantic-surface));
+  box-shadow: 0 10px 20px -16px color-mix(in srgb, var(--theme-primary) 40%, transparent);
+  transform: translateX(3px);
 }
 
 /* ── Dashboard: Exam Countdown ────────────────────────────────────────── */
 
 .nn-countdown-card {
-  border-radius: 1.125rem;
-  border: 1.5px solid var(--semantic-border-soft);
-  background: var(--semantic-surface);
-  box-shadow: var(--semantic-shadow-soft);
-  padding: 1.25rem 1.5rem;
+  border-radius: 1.35rem;
+  border: 1px solid color-mix(in srgb, var(--countdown-accent) 18%, var(--semantic-border-soft));
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--countdown-accent) 4%, var(--semantic-surface)) 0%,
+      color-mix(in srgb, var(--semantic-panel-muted) 58%, var(--semantic-surface)) 100%
+    );
+  box-shadow:
+    0 1px 3px -1px color-mix(in srgb, var(--countdown-accent) 12%, transparent),
+    0 16px 28px -24px color-mix(in srgb, var(--countdown-accent) 22%, transparent);
+  padding: 1.35rem 1.4rem;
   position: relative;
   overflow: hidden;
+}
+.nn-countdown-card:hover {
+  border-color: color-mix(in srgb, var(--countdown-accent) 32%, var(--semantic-border-soft));
 }
 .nn-countdown-card::after {
   content: "";
@@ -7742,34 +8015,46 @@ html[data-theme="deep-twilight"] .nn-cat-opt--incorrect {
 /* ── Dashboard: Heatmap ───────────────────────────────────────────────── */
 
 .nn-heatmap-card {
-  border-radius: 1.125rem;
-  border: 1.5px solid var(--semantic-border-soft);
+  border-radius: 1.35rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-info) 18%, var(--semantic-border-soft));
   background: linear-gradient(
     180deg,
-    var(--semantic-surface) 0%,
-    color-mix(in srgb, var(--semantic-panel-warm) 30%, var(--semantic-surface)) 100%
+    color-mix(in srgb, var(--semantic-panel-cool) 32%, var(--semantic-surface)) 0%,
+    color-mix(in srgb, var(--semantic-panel-warm) 24%, var(--semantic-surface)) 100%
   );
-  box-shadow: var(--semantic-shadow-soft);
-  padding: 1.5rem;
+  box-shadow:
+    0 1px 3px -1px color-mix(in srgb, var(--semantic-info) 10%, transparent),
+    0 18px 34px -28px color-mix(in srgb, var(--semantic-warning) 18%, transparent);
+  padding: 1.5rem 1.4rem;
 }
 @media (min-width: 640px) {
   .nn-heatmap-card {
-    padding: 1.75rem;
+    padding: 1.8rem;
   }
 }
 
 .nn-heatmap-cell {
   position: relative;
   overflow: hidden;
-  padding: 0.875rem 0.75rem;
-  border-radius: 0.75rem;
-  border: 1.5px solid var(--semantic-border-soft);
-  background: var(--semantic-surface);
-  transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s;
+  min-height: 7rem;
+  padding: 1rem 0.95rem;
+  border-radius: 1rem;
+  border: 1px solid var(--semantic-border-soft);
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--semantic-surface) 92%, transparent) 0%,
+      color-mix(in srgb, var(--semantic-panel-muted) 38%, var(--semantic-surface)) 100%
+    );
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s,
+    transform 0.15s,
+    background 0.2s;
 }
 .nn-heatmap-cell:hover {
-  box-shadow: 0 4px 12px -4px rgba(0, 0, 0, 0.08);
-  transform: translateY(-1px);
+  box-shadow: 0 18px 28px -26px color-mix(in srgb, var(--semantic-brand) 30%, transparent);
+  transform: translateY(-2px);
 }
 .nn-heatmap-cell__bar {
   position: absolute;
@@ -7780,19 +8065,21 @@ html[data-theme="deep-twilight"] .nn-cat-opt--incorrect {
 /* ── Dashboard: Smart Actions ─────────────────────────────────────────── */
 
 .nn-smart-actions-section {
-  border-radius: 1.125rem;
-  border: 1.5px solid var(--semantic-border-soft);
+  border-radius: 1.35rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-brand) 18%, var(--semantic-border-soft));
   background: linear-gradient(
     160deg,
-    var(--semantic-surface) 0%,
-    color-mix(in srgb, var(--semantic-panel-cool) 25%, var(--semantic-surface)) 100%
+    color-mix(in srgb, var(--semantic-panel-cool) 28%, var(--semantic-surface)) 0%,
+    color-mix(in srgb, var(--semantic-panel-positive) 20%, var(--semantic-surface)) 100%
   );
-  box-shadow: var(--semantic-shadow-soft);
-  padding: 1.25rem;
+  box-shadow:
+    0 1px 3px -1px color-mix(in srgb, var(--semantic-brand) 10%, transparent),
+    0 18px 30px -26px color-mix(in srgb, var(--semantic-brand) 20%, transparent);
+  padding: 1.1rem;
 }
 @media (min-width: 640px) {
   .nn-smart-actions-section {
-    padding: 1.5rem;
+    padding: 1.3rem;
   }
 }
 
@@ -7800,16 +8087,26 @@ html[data-theme="deep-twilight"] .nn-cat-opt--incorrect {
   display: flex;
   align-items: center;
   gap: 0.625rem;
-  padding: 0.875rem 1rem;
-  border-radius: 0.875rem;
-  border: 1.5px solid var(--semantic-border-soft);
-  background: var(--semantic-surface);
-  transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s;
+  min-height: 4rem;
+  padding: 1rem 1rem;
+  border-radius: 1rem;
+  border: 1px solid var(--semantic-border-soft);
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--semantic-surface) 94%, transparent) 0%,
+      color-mix(in srgb, var(--semantic-panel-muted) 24%, var(--semantic-surface)) 100%
+    );
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s,
+    transform 0.15s,
+    background 0.2s;
 }
 .nn-smart-action:hover {
-  border-color: color-mix(in srgb, var(--theme-primary) 25%, var(--semantic-border-soft));
-  box-shadow: 0 3px 10px -3px rgba(0, 0, 0, 0.07);
-  transform: translateY(-1px);
+  border-color: color-mix(in srgb, var(--theme-primary) 28%, var(--semantic-border-soft));
+  box-shadow: 0 16px 28px -26px color-mix(in srgb, var(--theme-primary) 26%, transparent);
+  transform: translateY(-2px);
 }
 
 /* ── Dashboard: Locked Feature Cards ──────────────────────────────────── */

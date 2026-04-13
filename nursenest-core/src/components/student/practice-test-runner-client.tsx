@@ -21,13 +21,10 @@ import { CatResultsCoachSection } from "@/components/student/cat-results-coach-s
 import { CatStudyFeedbackPanel } from "@/components/student/cat-study-feedback-panel";
 import { ProtectedPremiumContent } from "@/components/student/protected-premium-content";
 import { StudyNotesPanel } from "@/components/student/study-notes-panel";
-import { QuestionChoiceLetter } from "@/components/student/question-choice-letter";
 import { PracticeTestTeachingReviewPanel } from "@/components/student/practice-test-teaching-review-panel";
 import { PracticeTestStudyLoopNext } from "@/components/student/practice-test-study-loop-next";
 import type { PracticeTestTeachingItem } from "@/lib/practice-tests/build-teaching-review";
 import { getLinearCommittedQuestionIds } from "@/lib/practice-tests/practice-linear-engine";
-import { PracticeRationalePanel } from "@/components/study/practice-rationale-panel";
-import type { RationalePanelStatus } from "@/components/study/practice-rationale-panel";
 import {
   PracticeSessionLayout,
   PracticeTopBar,
@@ -41,7 +38,6 @@ import type { PracticeOptionState } from "@/components/study/practice-question-c
 import { PracticeRationaleFullPanel } from "@/components/study/practice-rationale-full-panel";
 import {
   ConfidenceSelector,
-  ConfidenceChip,
   type ConfidenceLevel,
 } from "@/components/study/confidence-selector";
 import { ConfidenceAnalyticsBlock } from "@/components/study/confidence-analytics";
@@ -369,7 +365,6 @@ export function PracticeTestRunnerClient({
     catFeedbackStudy &&
     Boolean(catStudyFeedback && current && catStudyFeedback.questionId === current.id && idx === total - 1);
   const aanpNpExamSim = examSimulation && testConfig?.catExamConfigId === "aanp-np-us";
-  const catMaxCap = testConfig?.catMaxQuestions ?? total;
   const optsCanonical = useMemo(() => (current ? parseOptions(current.options) : []), [current]);
   const optsDisplay = useMemo(() => {
     if (!current) return [];
@@ -402,67 +397,6 @@ export function PracticeTestRunnerClient({
 
   function setConfidenceForQuestion(qid: string, level: ConfidenceLevel) {
     setConfidence((c) => ({ ...c, [qid]: level }));
-  }
-
-  function linearPracticeMcqClasses(canonical: string): string {
-    const selected = raw === canonical;
-    const base =
-      "nn-qopt-surface flex min-h-[3.25rem] w-full items-start gap-3 px-4 py-4 text-left text-base font-normal leading-relaxed text-[var(--theme-body-text)] transition sm:min-h-[3.5rem] sm:px-5";
-    const idle = "nn-qopt-surface--interactive";
-    const picked = "nn-qopt-surface--selected";
-    if (isLinearEngine && currentCommitted && linearDelivery === "exam") {
-      return `${base} cursor-default opacity-90 nn-qopt-surface--dim ${
-        selected ? "ring-1 ring-[color-mix(in_srgb,var(--theme-primary)_15%,transparent)] opacity-100" : ""
-      }`;
-    }
-    if (
-      !isLinearEngine ||
-      linearDelivery !== "practice" ||
-      !linearFeedback ||
-      !current ||
-      !currentCommitted
-    ) {
-      return `${base} ${selected ? picked : idle}`;
-    }
-    const ck = new Set(linearFeedback.correctKeys);
-    const ok = ck.has(canonical);
-    if (ok) {
-      return `${base} nn-qopt-surface--correct font-medium`;
-    }
-    if (selected) {
-      return `${base} nn-qopt-surface--incorrect font-medium`;
-    }
-    return `${base} nn-qopt-surface--dim`;
-  }
-
-  function linearPracticeSataClasses(canonical: string, selected: boolean): string {
-    const base =
-      "flex min-h-[3.25rem] items-start gap-3 px-4 py-3.5 text-base leading-relaxed transition sm:min-h-[3.5rem] nn-qopt-surface";
-    const idleUnsel = "nn-qopt-surface--interactive cursor-pointer";
-    const idleSel = "nn-qopt-surface--interactive nn-qopt-surface--selected cursor-pointer";
-    if (isLinearEngine && currentCommitted && linearDelivery === "exam") {
-      return `${base} cursor-default nn-qopt-surface--dim ${
-        selected ? "ring-1 ring-[color-mix(in_srgb,var(--theme-primary)_12%,transparent)]" : ""
-      }`;
-    }
-    if (
-      !isLinearEngine ||
-      linearDelivery !== "practice" ||
-      !linearFeedback ||
-      !current ||
-      !currentCommitted
-    ) {
-      return `${base} ${selected ? idleSel : idleUnsel}`;
-    }
-    const ck = new Set(linearFeedback.correctKeys);
-    const ok = ck.has(canonical);
-    if (ok) {
-      return `${base} cursor-default nn-qopt-surface--correct`;
-    }
-    if (selected && !ok) {
-      return `${base} cursor-default nn-qopt-surface--incorrect`;
-    }
-    return `${base} cursor-default nn-qopt-surface--dim`;
   }
 
   async function persistSave(nextAnswers: Record<string, unknown>, nextIdx: number) {
@@ -976,7 +910,8 @@ export function PracticeTestRunnerClient({
                 setQuestionCache((c) => {
                   const id = questionIds[idx];
                   if (!id) return c;
-                  const { [id]: _, ...rest } = c;
+                  const { [id]: removedQuestion, ...rest } = c;
+                  void removedQuestion;
                   return rest;
                 });
                 setQuestionFetchNonce((n) => n + 1);
@@ -1057,76 +992,9 @@ export function PracticeTestRunnerClient({
 
   const sessionPct = total > 0 ? Math.min(100, Math.max(0, ((idx + 1) / total) * 100)) : 0;
 
-  const rationalePanelStatus: RationalePanelStatus =
-    isLinearEngine && linearDelivery === "practice" && currentCommitted && linearFeedback
-      ? linearFeedback.isCorrect
-        ? "correct"
-        : "incorrect"
-      : isLinearEngine && linearDelivery === "exam" && currentCommitted
-        ? "exam_locked"
-        : "waiting";
-
   const optionDisplayMap = Object.fromEntries(
     optsCanonical.map((k, i) => [k, optsDisplay[i] ?? k]),
   );
-
-  // ── Linear practice option rows (used only in the non-CAT 2-col path) ───
-  const linearOptionRows =
-    optsCanonical.length === 0 ? (
-      <p className="rounded-md border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-4 py-3 text-sm text-[var(--semantic-text-muted)]">
-        No answer choices were returned for this item. Use Retry, reload the test, or contact
-        support if this persists.
-      </p>
-    ) : isSata ? (
-      <ul className="nn-qopt-list" role="group" aria-label="Answer choices (select all that apply)">
-        {optsCanonical.map((canonical, i) => {
-          const label = optsDisplay[i] ?? canonical;
-          const selected = Array.isArray(raw) ? raw.includes(canonical) : false;
-          const locked = isLinearEngine && currentCommitted;
-          return (
-            <li key={canonical}>
-              <label className={linearPracticeSataClasses(canonical, selected)}>
-                <input
-                  type="checkbox"
-                  disabled={locked}
-                  checked={selected}
-                  onChange={(e) => {
-                    const prev = Array.isArray(raw) ? [...raw] : [];
-                    const next = e.target.checked
-                      ? [...prev, canonical]
-                      : prev.filter((x) => x !== canonical);
-                    setAnswerForCurrent(next);
-                  }}
-                  className="mt-1 size-[1.125rem] shrink-0 rounded border-border text-primary focus-visible:ring-2 focus-visible:ring-primary/30 disabled:opacity-50 sm:size-4"
-                />
-                <QuestionChoiceLetter index={i} />
-                <span className="min-w-0 flex-1 text-[var(--theme-body-text)]">{label}</span>
-              </label>
-            </li>
-          );
-        })}
-      </ul>
-    ) : (
-      <ul className="nn-qopt-list" role="radiogroup" aria-label="Answer choices">
-        {optsCanonical.map((canonical, i) => {
-          const label = optsDisplay[i] ?? canonical;
-          const locked = isLinearEngine && currentCommitted;
-          return (
-            <li key={canonical}>
-              <button
-                type="button"
-                disabled={locked}
-                onClick={() => setAnswerForCurrent(canonical)}
-                className={linearPracticeMcqClasses(canonical)}
-              >
-                <QuestionChoiceLetter index={i} />
-                <span className="min-w-0 flex-1">{label}</span>
-              </button>
-            </li>
-          );
-        })}
-      </ul>
-    );
 
   // ══════════════════════════════════════════════════════════════════════════
   // CAT MODE — spec-driven 2-column layout (65% / 35%, max 1200px)
