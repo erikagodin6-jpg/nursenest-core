@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { PRE_NURSING_MODULE_REGISTRY } from "@/content/pre-nursing/pre-nursing-registry";
 import strings from "@/content/pre-nursing/pre-nursing-strings-en.json";
+import { BANK_MODULE_SLUGS } from "@/lib/pre-nursing/pre-nursing-question-bank";
 import {
   examPrepHrefForHint,
   secondaryExamPrepHrefForHint,
@@ -239,6 +240,18 @@ export function PreNursingModuleEngagement({
         <div className="nn-card p-6">
           <h3 className="text-base font-semibold text-[var(--theme-heading-text)]">Stay in Pre-Nursing</h3>
           <ul className="mt-3 list-inside list-disc space-y-2 text-sm text-muted">
+            {(BANK_MODULE_SLUGS as readonly string[]).includes(slug) ? (
+              <li>
+                <Link href={`/pre-nursing/practice/${slug}`} className="text-primary hover:underline">
+                  Practice exam for this module
+                </Link>
+              </li>
+            ) : null}
+            <li>
+              <Link href="/pre-nursing/mini-cat" className="text-primary hover:underline">
+                Try the adaptive mini exam
+              </Link>
+            </li>
             <li>
               <Link href="/pre-nursing/lessons" className="text-primary hover:underline">
                 Browse all modules (paginated)

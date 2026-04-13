@@ -108,6 +108,11 @@ export default function PreNursingLandingPage() {
               </Link>
             </li>
             <li>
+              <Link href="/pre-nursing/mini-cat" className="text-primary hover:underline">
+                🎯 Adaptive mini exam
+              </Link>
+            </li>
+            <li>
               <Link href="/pre-nursing/study-plan" className="text-primary hover:underline">
                 Study planning
               </Link>
