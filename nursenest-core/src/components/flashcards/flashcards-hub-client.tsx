@@ -39,6 +39,9 @@ type BuilderSummary = {
   weakOnly: boolean;
   incorrectOnly: boolean;
   starredOnly: boolean;
+  savedOnly?: boolean;
+  notesOnly?: boolean;
+  revisitOnly?: boolean;
   cardLimit: string;
 };
 
@@ -246,6 +249,9 @@ export function FlashcardsHubClient({
       if (weakOnly) params.set("weakOnly", "1");
       if (incorrectOnly) params.set("incorrectOnly", "1");
       if (starredOnly) params.set("starredOnly", "1");
+      if (savedOnly) params.set("savedOnly", "1");
+      if (notesOnly) params.set("notesOnly", "1");
+      if (revisitOnly) params.set("revisitOnly", "1");
       const res = await fetch(`/api/flashcards/custom-session?${params.toString()}`, { credentials: "include" });
       const json = (await res.json()) as {
         summary?: BuilderSummary;
@@ -263,7 +269,7 @@ export function FlashcardsHubClient({
     } finally {
       setBuilderLoading(false);
     }
-  }, [filters.pathwayId, selectedCategoryIds, cardLimit, studyMode, shuffleOn, weakOnly, incorrectOnly, starredOnly]);
+  }, [filters.pathwayId, selectedCategoryIds, cardLimit, studyMode, shuffleOn, weakOnly, incorrectOnly, starredOnly, savedOnly, notesOnly, revisitOnly]);
 
   useEffect(() => {
     void runBuilderSummary();

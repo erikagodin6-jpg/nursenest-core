@@ -129,7 +129,7 @@ export function ActiveStudySession({
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 overflow-x-hidden">
       <section className="rounded-2xl border border-border bg-[var(--theme-card-bg)] p-4">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <div>
@@ -150,10 +150,10 @@ export function ActiveStudySession({
         </div>
       </section>
 
-      <section className="grid gap-4 lg:grid-cols-[minmax(0,1.25fr)_minmax(300px,1fr)]">
+      <section className="grid gap-4 lg:grid-cols-[minmax(0,1.2fr)_minmax(280px,1fr)]">
         <div className="rounded-2xl border border-border bg-[var(--theme-card-bg)] p-4">
           <p className="text-xs font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">Prompt</p>
-          <h2 className="mt-2 text-base font-semibold leading-snug text-[var(--theme-heading-text)]">{current.prompt}</h2>
+          <h2 className="mt-2 break-words text-base font-semibold leading-snug text-[var(--theme-heading-text)]">{current.prompt}</h2>
           {(current.topic || current.subtopic) ? (
             <p className="mt-2 text-xs text-[var(--theme-muted-text)]">
               {current.topic ?? "General"}
@@ -172,7 +172,7 @@ export function ActiveStudySession({
           ) : (
             <div className="mt-4 rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-cool)] p-3">
               <p className="text-xs font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">Correct Answer</p>
-              <p className="mt-1 text-sm font-medium leading-relaxed text-[var(--theme-heading-text)]">{current.answer}</p>
+              <p className="mt-1 break-words text-sm font-medium leading-relaxed text-[var(--theme-heading-text)]">{current.answer}</p>
             </div>
           )}
 
@@ -209,16 +209,16 @@ export function ActiveStudySession({
               <div className="mt-2 space-y-3 text-sm">
                 <section>
                   <h3 className="text-xs font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">1. Correct Answer</h3>
-                  <p className="mt-1 font-medium text-[var(--theme-heading-text)]">{current.answer}</p>
+                  <p className="mt-1 break-words font-medium text-[var(--theme-heading-text)]">{current.answer}</p>
                 </section>
                 <section>
                   <h3 className="text-xs font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">2. Why It Is Correct</h3>
-                  <p className="mt-1 text-[var(--theme-heading-text)]">{current.explanation ?? "This response matches the core clinical concept and safest nursing action for the prompt."}</p>
+                  <p className="mt-1 break-words text-[var(--theme-heading-text)]">{current.explanation ?? "This response matches the core clinical concept and safest nursing action for the prompt."}</p>
                 </section>
                 <section>
                   <h3 className="text-xs font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">3. Why the Other Options Are Wrong</h3>
                   {current.distractors && current.distractors.length > 0 ? (
-                    <ul className="mt-1 space-y-1 text-[var(--theme-heading-text)]">
+                    <ul className="mt-1 space-y-1 break-words text-[var(--theme-heading-text)]">
                       {current.distractors.map((d) => (
                         <li key={d.option}>
                           <span className="font-semibold">{d.option}:</span> {d.rationale}
@@ -233,7 +233,7 @@ export function ActiveStudySession({
                 </section>
                 <section>
                   <h3 className="text-xs font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">4. Clinical Pearl / Exam Tip</h3>
-                  <p className="mt-1 text-[var(--theme-heading-text)]">{buildClinicalPearl(current)}</p>
+                  <p className="mt-1 break-words text-[var(--theme-heading-text)]">{buildClinicalPearl(current)}</p>
                 </section>
                 <section>
                   <h3 className="text-xs font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">5. Related Lesson Link</h3>
@@ -252,10 +252,10 @@ export function ActiveStudySession({
                 {itemState.starred ? "Starred" : "Star for Later"}
               </button>
               <button type="button" onClick={() => applyItemState({ saved: !itemState.saved })} className="rounded-full border border-border px-3 py-1 text-xs font-semibold text-[var(--theme-heading-text)]">
-                {itemState.saved ? "Saved" : "Save for Later"}
+                {itemState.saved ? "Saved" : "Save / Bookmark"}
               </button>
               <button type="button" onClick={() => applyItemState({ confusing: !itemState.confusing })} className="rounded-full border border-border px-3 py-1 text-xs font-semibold text-[var(--theme-heading-text)]">
-                {itemState.confusing ? "Marked for Revisit" : "Mark as Confusing"}
+                {itemState.confusing ? "Marked for Revisit" : "Review Later / Revisit"}
               </button>
               <button type="button" onClick={() => applyItemState({ highlighted: !itemState.highlighted })} className="rounded-full border border-border px-3 py-1 text-xs font-semibold text-[var(--theme-heading-text)]">
                 {itemState.highlighted ? "Highlighted" : "Highlight Rationale"}

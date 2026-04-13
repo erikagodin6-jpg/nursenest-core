@@ -71,6 +71,10 @@ export function cardMatchesStudyFilters(cardId: string, filters: StudyQuickFilte
   return true;
 }
 
+export function hasActiveStudyFilters(filters: StudyQuickFilters): boolean {
+  return Boolean(filters.starredOnly || filters.savedOnly || filters.notesOnly || filters.confusingOnly);
+}
+
 export function countSavedStudyItems(): { starred: number; saved: number; noted: number; confusing: number } {
   const all = readRawState();
   let starred = 0;

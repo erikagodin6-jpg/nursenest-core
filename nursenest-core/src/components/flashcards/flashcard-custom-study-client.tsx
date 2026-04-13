@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { ActiveStudySession, type ActiveStudyCard } from "@/components/study/active-study-session";
-import { cardMatchesStudyFilters } from "@/lib/flashcards/study-session-persistence";
+import { cardMatchesStudyFilters, hasActiveStudyFilters } from "@/lib/flashcards/study-session-persistence";
 
 type SessionPayload = {
   ok: boolean;
@@ -41,6 +41,13 @@ const MODE_LABEL: Record<SessionPayload["summary"]["mode"], string> = {
   mixed: "Mixed",
 };
 
+function parseCardLimitValue(value: string): number {
+  if (value === "all") return Number.POSITIVE_INFINITY;
+  const n = Number(value);
+  if (!Number.isFinite(n) || n <= 0) return 20;
+  return n;
+}
+
 export function FlashcardCustomStudyClient() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -69,6 +76,11 @@ export function FlashcardCustomStudyClient() {
       try {
         const params = new URLSearchParams(query);
         params.set("includeCards", "1");
+        if (hasActiveStudyFilters(localFilters)) {
+          // Local persistence filters (starred/saved/notes/revisit) live in browser storage.
+          // Fetch the full scoped candidate set first, then filter and limit locally.
+          params.set("cardLimit", "all");
+        }
         const res = await fetch(`/api/flashcards/custom-session?${params.toString()}`, { credentials: "include" });
         const json = (await res.json()) as SessionPayload & { error?: string };
         if (!res.ok) throw new Error(json.error ?? "Unable to load custom session");
@@ -104,7 +116,9 @@ export function FlashcardCustomStudyClient() {
     .map((c) => c.title);
 
   const filteredCards = payload.cards.filter((card) => cardMatchesStudyFilters(card.id, localFilters));
-  const activeCards: ActiveStudyCard[] = filteredCards.map((card) => ({
+  const cardLimit = parseCardLimitValue(payload.summary.cardLimit);
+  const limitedCards = Number.isFinite(cardLimit) ? filteredCards.slice(0, cardLimit) : filteredCards;
+  const activeCards: ActiveStudyCard[] = limitedCards.map((card) => ({
     id: card.id,
     prompt: card.front,
     answer: card.back,
@@ -135,7 +149,7 @@ export function FlashcardCustomStudyClient() {
         </p>
         {enabledQuickFilters.length > 0 ? (
           <p className="mt-1 text-sm text-[var(--theme-muted-text)]">
-            Review Filters: {enabledQuickFilters.join(", ")} · Session Items: {activeCards.length}
+            Review Filters: {enabledQuickFilters.join(", ")} · Matching Saved Items: {filteredCards.length} · Session Items: {activeCards.length}
           </p>
         ) : null}
       </div>
