@@ -42,7 +42,7 @@ import { trackClientEvent } from "@/lib/observability/posthog-client";
 function HeroSection() {
   return (
     <section
-      className="relative overflow-hidden rounded-2xl px-6 py-16 text-center sm:px-12 sm:py-24"
+      className="nn-gradient-safe relative overflow-hidden rounded-2xl px-6 py-16 text-center sm:px-12 sm:py-24"
       style={{
         background:
           "linear-gradient(160deg, color-mix(in srgb, var(--theme-primary) 8%, var(--semantic-surface)) 0%, color-mix(in srgb, var(--theme-primary) 3%, var(--semantic-surface)) 100%)",
@@ -399,7 +399,7 @@ function OutcomeSection() {
 function FinalCtaSection() {
   return (
     <section
-      className="nn-hiw-section rounded-2xl text-center"
+      className="nn-gradient-safe nn-hiw-section rounded-2xl text-center"
       style={{
         background:
           "linear-gradient(180deg, color-mix(in srgb, var(--theme-primary) 6%, var(--semantic-surface)) 0%, color-mix(in srgb, var(--theme-primary) 2%, var(--semantic-surface)) 100%)",
