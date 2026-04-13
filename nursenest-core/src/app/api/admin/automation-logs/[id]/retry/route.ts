@@ -10,7 +10,7 @@ import { logSimpleAiDraftRun } from "@/lib/admin/blog-content-automation-log";
 import { isAdminAiGenerationEnabled } from "@/lib/ai/admin-ai-policy";
 import { assertOpenAiKeyConfigured } from "@/lib/ai/openai-env";
 import { processDraftGenerationBatchItems } from "@/lib/blog/blog-draft-generation-batch";
-import { generateBlogAiDraft } from "@/lib/blog/generate-blog-ai-draft";
+import { generateBlogPost } from "@/lib/blog/generate-blog-ai-draft";
 import { prisma } from "@/lib/db";
 
 type RouteContext = { params: Promise<{ id: string }> };
@@ -81,7 +81,7 @@ export async function POST(_req: Request, ctx: RouteContext) {
     }
     const d = parsed.data;
 
-    const result = await generateBlogAiDraft({
+    const result = await generateBlogPost({
       topic: d.topic,
       keywords: d.keywords,
       exam: d.exam,

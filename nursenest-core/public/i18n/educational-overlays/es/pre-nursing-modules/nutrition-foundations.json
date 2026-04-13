@@ -1,0 +1,19 @@
+{
+  "overview": "La nutrición es un determinante fundamental de la salud y la recuperación. Las necesidades nutricionales varían según la edad, el estado de salud, el nivel de actividad y las patologías. La enfermera desempeña un papel clave en la valoración nutricional, la detección de la malnutrición y la educación terapéutica.",
+  "key_concepts": [
+    "Macronutrientes: hidratos de carbono (4 kcal/g, fuente de energía principal), proteínas (4 kcal/g, reparación tisular), grasas (9 kcal/g, hormonas y vitaminas liposolubles)",
+    "Micronutrientes: vitaminas hidrosolubles (C, grupo B — no se almacenan, aporte diario necesario) y liposolubles (A, D, E, K — se almacenan, riesgo de toxicidad en exceso)",
+    "IMC (Índice de Masa Corporal): peso (kg) / talla² (m²) — normal: 18,5–24,9; sobrepeso: 25–29,9; obesidad: ≥ 30",
+    "Malnutrición: déficit o exceso de nutrientes que afecta la función corporal — detectada por cribado nutricional (MNA, NRS-2002)",
+    "Dietas terapéuticas: hiposódica (insuficiencia cardíaca, HTA), hiperproteica (heridas, quemaduras), diabética (control glucémico)"
+  ],
+  "nursing_responsibilities": "La enfermera valora el estado nutricional (peso, IMC, apetito, capacidad para alimentarse), identifica a los pacientes en riesgo de malnutrición y deriva a la dietista si es necesario. Vigila la tolerancia a las comidas y suplementos, asiste a los pacientes con dificultades para alimentarse y educa sobre las dietas prescritas. Monitoriza los signos de deficiencias vitamínicas o minerales (piel, cabello, mucosas).",
+  "clinical_pearls": "La vitamina K es antagonista de la warfarina — los pacientes anticoagulados deben mantener un aporte estable de verduras de hoja verde (no necesariamente evitarlas). El magnesio a menudo se olvida pero es esencial: su déficit agrava la hipopotasemia y la hipocalcemia. Los pacientes postoperatorios, quemados o con heridas crónicas tienen necesidades proteicas elevadas — hasta 1,5–2 g/kg/día.",
+  "patient_education": "Adapte los consejos a la dieta prescrita. Para una dieta hiposódica: identificar las fuentes ocultas de sal (conservas, embutidos, quesos). Para una dieta diabética: comprender el índice glucémico y la importancia de las comidas regulares. Valore los cambios progresivos en lugar de las restricciones estrictas para favorecer la adherencia.",
+  "key_takeaways": [
+    "Las proteínas son esenciales para la cicatrización y la reparación tisular — las necesidades aumentan en caso de enfermedad o lesión",
+    "Las vitaminas liposolubles (A, D, E, K) pueden acumularse y ser tóxicas — atención a la suplementación no controlada",
+    "La valoración nutricional es un componente de la valoración enfermera completa — no solo de la dietética",
+    "Las dietas terapéuticas deben ser comprendidas y aceptadas por el paciente para ser eficaces"
+  ]
+}

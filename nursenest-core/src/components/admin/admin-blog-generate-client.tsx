@@ -14,6 +14,9 @@ const templates: BlogPostTemplate[] = [
 
 export function AdminBlogGenerateClient() {
   const [topic, setTopic] = useState("");
+  const [topicsBatch, setTopicsBatch] = useState("");
+  const [enableBatch, setEnableBatch] = useState(false);
+  const [publishNow, setPublishNow] = useState(true);
   const [keywords, setKeywords] = useState("");
   const [exam, setExam] = useState(ADMIN_BLOG_TARGET_EXAM_OPTIONS[0].value);
   const [template, setTemplate] = useState<BlogPostTemplate>(BlogPostTemplate.TOPIC_EXPLAINED);
@@ -36,11 +39,17 @@ export function AdminBlogGenerateClient() {
     setMsg(null);
     setErr(null);
     try {
+      const parsedTopics = topicsBatch
+        .split(/\r?\n/)
+        .map((s) => s.trim())
+        .filter(Boolean)
+        .slice(0, 3);
       const res = await fetch("/api/admin/blog/generate-ai", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          topic,
+          topic: enableBatch ? undefined : topic,
+          topics: enableBatch ? parsedTopics : undefined,
           keywords: keywords || undefined,
           exam,
           template,
@@ -53,14 +62,27 @@ export function AdminBlogGenerateClient() {
           includeAiImage,
           sourceRecords: sourceRecordsJson.trim() ? JSON.parse(sourceRecordsJson) : undefined,
           slug: slug.trim() || undefined,
+          publishNow,
         }),
       });
-      const json = (await res.json()) as { post?: { slug: string; id: string }; error?: string };
+      const json = (await res.json()) as {
+        summary?: { created: number; skipped: number; failed: number };
+        results?: Array<{ post?: { slug: string }; reason?: string }>;
+        error?: string;
+      };
       if (!res.ok) {
         setErr(json.error ?? "Request failed");
         return;
       }
-      setMsg(`Draft created: ${json.post?.slug ?? ""}. Review in scheduler or edit via API.`);
+      const created = json.summary?.created ?? 0;
+      const skipped = json.summary?.skipped ?? 0;
+      const failed = json.summary?.failed ?? 0;
+      const firstSlug = json.results?.find((r) => r.post?.slug)?.post?.slug;
+      setMsg(
+        created > 0
+          ? `Generated ${created} post(s)${firstSlug ? ` (e.g. ${firstSlug})` : ""}. Skipped ${skipped}, failed ${failed}.`
+          : `No posts created. Skipped ${skipped}, failed ${failed}.`,
+      );
     } catch (e) {
       setErr(e instanceof Error ? e.message : String(e));
     } finally {
@@ -76,16 +98,33 @@ export function AdminBlogGenerateClient() {
         <code className="rounded bg-muted px-1">AI_INTEGRATIONS_OPENAI_API_KEY</code>. One model call per submit. No batch timeouts.
       </p>
       <div className="grid gap-3 sm:grid-cols-2">
+        <label className="flex items-center gap-2 text-sm sm:col-span-2">
+          <input type="checkbox" checked={enableBatch} onChange={(e) => setEnableBatch(e.target.checked)} />
+          Batch mode (up to 3 topics per run)
+        </label>
         <label className="block space-y-1">
           <span className="text-xs font-medium text-muted-foreground">Topic *</span>
           <input
             className="w-full rounded-md border border-border px-3 py-2 text-sm"
             value={topic}
             onChange={(e) => setTopic(e.target.value)}
-            required
+            required={!enableBatch}
+            disabled={enableBatch}
             minLength={3}
           />
         </label>
+        {enableBatch ? (
+          <label className="block space-y-1 sm:col-span-2">
+            <span className="text-xs font-medium text-muted-foreground">Topics (one per line, max 3)</span>
+            <textarea
+              className="w-full rounded-md border border-border px-3 py-2 text-sm"
+              rows={4}
+              value={topicsBatch}
+              onChange={(e) => setTopicsBatch(e.target.value)}
+              placeholder={"acid-base imbalance\nheart failure priorities\ninsulin safety"}
+            />
+          </label>
+        ) : null}
         <label className="block space-y-1">
           <span className="text-xs font-medium text-muted-foreground">Exam focus *</span>
           <select
@@ -177,8 +216,13 @@ export function AdminBlogGenerateClient() {
             className="w-full rounded-md border border-border px-3 py-2 font-mono text-sm"
             value={slug}
             onChange={(e) => setSlug(e.target.value)}
+            disabled={enableBatch}
             placeholder="auto if empty"
           />
+        </label>
+        <label className="flex items-center gap-2 text-sm sm:col-span-2">
+          <input type="checkbox" checked={publishNow} onChange={(e) => setPublishNow(e.target.checked)} />
+          Publish immediately (recommended)
         </label>
       </div>
       <button
@@ -186,7 +230,7 @@ export function AdminBlogGenerateClient() {
         disabled={busy}
         className="rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground disabled:opacity-60"
       >
-        {busy ? "Generating…" : "Generate draft"}
+        {busy ? "Generating…" : "Generate blog post"}
       </button>
       {msg ? <p className="text-sm text-emerald-700 dark:text-emerald-300">{msg}</p> : null}
       {err ? <p className="text-sm text-rose-700 dark:text-rose-300">{err}</p> : null}

@@ -11,7 +11,6 @@ import {
   getPublishedBlogPostBySlug,
   isBlogPostMetaVisible,
 } from "@/lib/blog/safe-blog-queries";
-import { getStaticBlogPost, staticRecordToBlogDisplay } from "@/lib/blog/static-blog-posts";
 import { BlogFaqPageJsonLd, BlogPostingJsonLd } from "@/components/seo/seo-json-ld";
 import { MarketingStudyCrossLinks } from "@/components/seo/marketing-study-cross-links";
 import {
@@ -21,8 +20,6 @@ import {
   resolveOpenGraphCopy,
   resolvePublicCanonicalUrl,
 } from "@/lib/blog/blog-seo-automation";
-import { blogPostBreadcrumbsWithOptionalCategory } from "@/lib/seo/pathway-breadcrumbs";
-import type { BlogPost } from "@prisma/client";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -60,51 +57,34 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   );
 }
 
-function isDbPost(p: BlogPost | ReturnType<typeof staticRecordToBlogDisplay>): p is BlogPost {
-  return "postStatus" in p;
-}
-
 export default async function BlogPostPage({ params }: Props) {
   const { slug } = await params;
-  const dbPost = await getPublishedBlogPostBySlug(slug);
-  let post: BlogPost | ReturnType<typeof staticRecordToBlogDisplay> | null = null;
-  if (dbPost) {
-    post = dbPost;
-  } else {
-    const s = getStaticBlogPost(slug);
-    post = s ? staticRecordToBlogDisplay(s) : null;
-  }
+  const post = await getPublishedBlogPostBySlug(slug);
   if (!post) notFound();
 
-  const seo = isDbPost(post) ? parseInternalLinkPlanJson(post.internalLinkPlan).seo : null;
-  const crumbs = isDbPost(post)
-    ? blogDisplayCrumbsFromSeo(seo, post.title, slug, post.category)
-    : blogPostBreadcrumbsWithOptionalCategory(post.title, slug, post.category).crumbs;
-  const schemaItems = isDbPost(post)
-    ? blogPostSchemaItemsForPublic(post.title, slug, post.category)
-    : blogPostBreadcrumbsWithOptionalCategory(post.title, slug, post.category).schemaItems;
+  const seo = parseInternalLinkPlanJson(post.internalLinkPlan).seo;
+  const crumbs = blogDisplayCrumbsFromSeo(seo, post.title, slug, post.category);
+  const schemaItems = blogPostSchemaItemsForPublic(post.title, slug, post.category);
 
   const faqItems =
-    isDbPost(post) && post.faqBlock && typeof post.faqBlock === "object" && "items" in post.faqBlock
+    post.faqBlock && typeof post.faqBlock === "object" && "items" in post.faqBlock
       ? ((post.faqBlock as { items?: { q: string; a: string }[] }).items ?? []).filter((x) => x.q?.trim() && x.a?.trim())
       : [];
   const emitFaqJsonLd =
     faqItems.length >= 2 && (seo === null ? true : seo.emitFaqSchema !== false);
 
-  const publishedAt = isDbPost(post) ? post.publishAt ?? post.createdAt : post.publishAt ?? post.createdAt;
-  const bodyHtml = isDbPost(post)
-    ? stripBrokenOrEmptyImagesFromHtml(
-        applyAutoLinksToHtml(post.body, {
-          exam: post.exam,
-          countryTarget: post.countryTarget,
-          relatedLessonPaths: post.relatedLessonPaths,
-          relatedTools: post.relatedTools,
-          maxTotalAutoLinks: 14,
-        }),
-      )
-    : stripBrokenOrEmptyImagesFromHtml(post.body);
+  const publishedAt = post.publishAt ?? post.createdAt;
+  const bodyHtml = stripBrokenOrEmptyImagesFromHtml(
+    applyAutoLinksToHtml(post.body, {
+      exam: post.exam,
+      countryTarget: post.countryTarget,
+      relatedLessonPaths: post.relatedLessonPaths,
+      relatedTools: post.relatedTools,
+      maxTotalAutoLinks: 14,
+    }),
+  );
 
-  const schemaKeywords = isDbPost(post) ? blogSchemaKeywords(seo, post.tags) : blogSchemaKeywords(null, post.tags);
+  const schemaKeywords = blogSchemaKeywords(seo, post.tags);
 
   return (
     <article className="mx-auto max-w-3xl px-4 py-12">
@@ -131,7 +111,7 @@ export default async function BlogPostPage({ params }: Props) {
         {post.category ? (
           <p className="text-xs font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">{post.category}</p>
         ) : null}
-        {isDbPost(post) && post.exam ? (
+        {post.exam ? (
           <p className="text-xs font-medium text-primary">Exam focus: {post.exam}</p>
         ) : null}
         <h1 className="text-3xl font-extrabold tracking-tight text-[var(--theme-heading-text)]">{post.title}</h1>
@@ -156,15 +136,13 @@ export default async function BlogPostPage({ params }: Props) {
         className="prose prose-neutral mt-8 max-w-none dark:prose-invert [&_a]:text-primary [&_h2]:text-[var(--theme-heading-text)] [&_h3]:text-[var(--theme-heading-text)]"
         dangerouslySetInnerHTML={{ __html: bodyHtml }}
       />
-      {isDbPost(post) ? (
-        <BlogPostDistributionFooter
-          exam={post.exam}
-          countryTarget={post.countryTarget}
-          relatedLessonPaths={post.relatedLessonPaths}
-          relatedQuestionIds={post.relatedQuestionIds}
-          relatedTools={post.relatedTools}
-        />
-      ) : null}
+      <BlogPostDistributionFooter
+        exam={post.exam}
+        countryTarget={post.countryTarget}
+        relatedLessonPaths={post.relatedLessonPaths}
+        relatedQuestionIds={post.relatedQuestionIds}
+        relatedTools={post.relatedTools}
+      />
       {"apaReferences" in post && Array.isArray(post.apaReferences) && post.apaReferences.length > 0 ? (
         <section className="mt-10 rounded-xl border border-border/60 bg-muted/20 p-5">
           <h2 className="text-base font-semibold text-[var(--theme-heading-text)]">References (APA 7)</h2>

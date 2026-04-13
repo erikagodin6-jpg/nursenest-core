@@ -1,9 +1,8 @@
 /**
  * Import blog posts into BlogPost (Prisma).
  *
- * Sources:
- * 1. Static paramedic articles from monolith `client/src/allied/data/paramedic-blog-data.ts`
- * 2. JSON export: `content/blog-legacy-export.json` (from `export-monolith-blog-to-json.ts` or manual)
+ * Source:
+ * - JSON export: `content/blog-legacy-export.json` (from `export-monolith-blog-to-json.ts` or manual)
  *
  * Usage: `npx tsx scripts/import-blog.ts`
  * Env: DATABASE_URL
@@ -18,8 +17,6 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { BlogPostStatus, PrismaClient } from "@prisma/client";
-import { PARAMEDIC_BLOG_ARTICLES } from "../../client/src/allied/data/paramedic-blog-data";
-import { excerptFromParamedic, paramedicArticleToHtml } from "../src/lib/blog/serialize-paramedic";
 import { legacyBlogHtmlFromRow, normalizeBlogAssetUrls } from "../src/lib/blog/serialize-content";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -65,16 +62,80 @@ function scanImageRefs(html: string): { imgTags: number; nonAbsoluteSrc: number 
   return { imgTags: imgs.length, nonAbsoluteSrc };
 }
 
-const MIN_BODY_CHARS = 80;
+function normalizeSlug(seed: string): string {
+  const cleaned = seed
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 110);
+  return cleaned || "legacy-blog-post";
+}
 
-function rowShouldPublish(row: LegacyExportRow): boolean {
-  const st = (row.status || "").toLowerCase();
-  if (st === "published") return true;
-  if (st === "scheduled") {
-    if (!row.scheduled_at) return false;
-    return new Date(row.scheduled_at) <= new Date();
+async function uniqueSlug(base: string): Promise<string> {
+  let candidate = base;
+  let n = 0;
+  while (await prisma.blogPost.findUnique({ where: { slug: candidate }, select: { id: true } })) {
+    n += 1;
+    candidate = `${base}-${n}`.slice(0, 120);
   }
-  return false;
+  return candidate;
+}
+
+const AUTO_PUBLISH_PAST_SCHEDULED = true;
+
+function rowLegacyStatus(row: LegacyExportRow): "published" | "scheduled" | "draft_or_other" {
+  const st = (row.status || "").toLowerCase();
+  if (st === "published") return "published";
+  if (st === "scheduled") return "scheduled";
+  return "draft_or_other";
+}
+
+function parseDateOrNull(raw: string | null | undefined): Date | null {
+  if (!raw) return null;
+  const d = new Date(raw);
+  return Number.isFinite(d.getTime()) ? d : null;
+}
+
+function resolveImportPublishState(row: LegacyExportRow): {
+  legacyStatus: "published" | "scheduled" | "draft_or_other";
+  postStatus: BlogPostStatus;
+  publishAt: Date | null;
+  scheduledAt: Date | null;
+  autoPublishedFromPastSchedule: boolean;
+} {
+  const legacyStatus = rowLegacyStatus(row);
+  const publishedAt = parseDateOrNull(row.published_at);
+  const scheduledAt = parseDateOrNull(row.scheduled_at);
+
+  if (legacyStatus === "published") {
+    return {
+      legacyStatus,
+      postStatus: BlogPostStatus.PUBLISHED,
+      publishAt: publishedAt,
+      scheduledAt: null,
+      autoPublishedFromPastSchedule: false,
+    };
+  }
+  if (legacyStatus === "scheduled") {
+    const autoPublish =
+      AUTO_PUBLISH_PAST_SCHEDULED &&
+      scheduledAt !== null &&
+      scheduledAt.getTime() <= Date.now();
+    return {
+      legacyStatus,
+      postStatus: autoPublish ? BlogPostStatus.PUBLISHED : BlogPostStatus.SCHEDULED,
+      publishAt: scheduledAt,
+      scheduledAt,
+      autoPublishedFromPastSchedule: autoPublish,
+    };
+  }
+  return {
+    legacyStatus,
+    postStatus: BlogPostStatus.DRAFT,
+    publishAt: null,
+    scheduledAt: null,
+    autoPublishedFromPastSchedule: false,
+  };
 }
 
 function pickCreatedAt(row: LegacyExportRow): Date {
@@ -84,100 +145,81 @@ function pickCreatedAt(row: LegacyExportRow): Date {
   return new Date();
 }
 
+function firstParagraphExcerpt(html: string): string {
+  const p = html.match(/<p\b[^>]*>([\s\S]*?)<\/p>/i)?.[1] ?? "";
+  const plain = p.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+  return plain.slice(0, 500);
+}
+
 async function main() {
   let imported = 0;
-  let skippedDuplicate = 0;
-  let skippedDraft = 0;
-  let skippedThin = 0;
+  let failed = 0;
+  let importedLegacy = 0;
+  let publishedImported = 0;
+  let scheduledImported = 0;
+  let scheduledAutoPublished = 0;
+  let draftsSkipped = 0;
+  let skipped = 0;
   const errors: string[] = [];
+  const skippedReasonCounts: Record<string, number> = {};
+  const skip = (reason: string) => {
+    skipped += 1;
+    skippedReasonCounts[reason] = (skippedReasonCounts[reason] ?? 0) + 1;
+  };
 
   const legacyRows = readLegacyJson();
-  let legacyPublishedInFile = 0;
-  let legacyDraftInFile = 0;
-  for (const row of legacyRows) {
-    const st = (row.status || "").toLowerCase();
-    if (st === "published") legacyPublishedInFile += 1;
-    else if (st === "draft") legacyDraftInFile += 1;
-  }
 
-  for (const article of PARAMEDIC_BLOG_ARTICLES) {
-    const bodyRaw = paramedicArticleToHtml(article);
-    const body = normalizeBlogAssetUrls(bodyRaw);
-    const excerpt = excerptFromParamedic(article).slice(0, 2000);
-    const tags = [...(article.keywords ?? "").split(",").map((s) => s.trim()).filter(Boolean), "allied-health", "paramedic"];
-    const created = new Date(article.publishedDate);
-    if (!body.trim()) {
-      errors.push(`paramedic:${article.slug} empty body`);
-      continue;
-    }
-    const existing = await prisma.blogPost.findUnique({ where: { slug: article.slug } });
-    if (existing) {
-      skippedDuplicate += 1;
-      continue;
-    }
-    await prisma.blogPost.create({
-      data: {
-        slug: article.slug,
-        title: article.title,
-        excerpt,
-        body,
-        coverImage: null,
-        tags,
-        category: article.category || "allied-health",
-        postStatus: BlogPostStatus.PUBLISHED,
-        legacySource: "paramedic-static",
-        createdAt: created,
-      },
-    });
-    imported += 1;
-  }
-
-  for (const row of legacyRows) {
-    if (!row.slug || !row.title) {
-      errors.push("legacy: missing slug or title");
-      continue;
-    }
-    if (!rowShouldPublish(row)) {
-      skippedDraft += 1;
-      continue;
-    }
-
+  for (const [idx, row] of legacyRows.entries()) {
     const htmlRaw = legacyBlogHtmlFromRow(row);
     const body = normalizeBlogAssetUrls(htmlRaw);
-    if (body.trim().length < MIN_BODY_CHARS) {
-      skippedThin += 1;
-      errors.push(`legacy:${row.slug} skipped (body under ${MIN_BODY_CHARS} chars)`);
+    const fallbackTitle = row.slug ? row.slug.replace(/[-_]+/g, " ").trim() : `Legacy blog post ${idx + 1}`;
+    const title = (row.title ?? "").trim() || fallbackTitle || `Legacy blog post ${idx + 1}`;
+    const slugSeed = normalizeSlug((row.slug ?? "").trim() || title);
+    const slug = await uniqueSlug(slugSeed);
+    const publishState = resolveImportPublishState(row);
+    if (publishState.legacyStatus === "draft_or_other") {
+      draftsSkipped += 1;
+      skip("draft_or_other_status");
       continue;
     }
 
     const excerpt =
-      (row.seo_description || row.summary || "").trim().slice(0, 2000) || "(No excerpt)";
+      (row.summary || row.seo_description || "").trim().slice(0, 500) ||
+      firstParagraphExcerpt(body) ||
+      title.slice(0, 500);
     const legacySource = row.legacy_source || "legacy-json";
-
-    const existing = await prisma.blogPost.findUnique({ where: { slug: row.slug } });
-    if (existing) {
-      skippedDuplicate += 1;
-      continue;
+    try {
+      await prisma.blogPost.create({
+        data: {
+          slug,
+          title,
+          excerpt,
+          body: body || "<p></p>",
+          coverImage: row.cover_image || null,
+          tags: row.tags ?? [],
+          category: row.category ?? null,
+          postStatus: publishState.postStatus,
+          publishAt: publishState.publishAt,
+          scheduledAt: publishState.scheduledAt,
+          legacySource,
+          createdAt: pickCreatedAt(row),
+        },
+      });
+      imported += 1;
+      importedLegacy += 1;
+      if (publishState.legacyStatus === "published") {
+        publishedImported += 1;
+      } else if (publishState.legacyStatus === "scheduled") {
+        scheduledImported += 1;
+        if (publishState.autoPublishedFromPastSchedule) scheduledAutoPublished += 1;
+      }
+    } catch (e) {
+      failed += 1;
+      const reason = e instanceof Error ? e.message : String(e);
+      skip("create_failed");
+      errors.push(`legacy:${slug} import failed: ${reason}`);
     }
-    await prisma.blogPost.create({
-      data: {
-        slug: row.slug,
-        title: row.title,
-        excerpt,
-        body: body || "<p></p>",
-        coverImage: row.cover_image || null,
-        tags: row.tags ?? [],
-        category: row.category ?? null,
-        postStatus: BlogPostStatus.PUBLISHED,
-        legacySource,
-        createdAt: pickCreatedAt(row),
-      },
-    });
-    imported += 1;
   }
-
-  const paramedicSlugs = PARAMEDIC_BLOG_ARTICLES.map((a) => a.slug);
-  const totalLegacySourcesFound = PARAMEDIC_BLOG_ARTICLES.length + legacyRows.length;
 
   let imageReport = { totalImgTagsInBodies: 0, nonAbsoluteAfterImport: 0, coverImagesHttp: 0, coverImagesRelative: 0 };
   try {
@@ -201,21 +243,24 @@ async function main() {
   console.log(
     JSON.stringify(
       {
+        sourceFile: "content/blog-legacy-export.json",
+        totalPostsFound: legacyRows.length,
         imported,
-        skippedDuplicate,
-        skippedDraft,
-        skippedThin,
+        importedLegacy,
+        publishedImported,
+        scheduledImported,
+        draftsSkipped,
+        scheduledAutoPublished,
+        autoPublishPastScheduledEnabled: AUTO_PUBLISH_PAST_SCHEDULED,
+        failed,
+        skipped,
+        skippedReasonCounts,
         errors,
-        totalLegacySourcesFound,
-        paramedicSourceCount: paramedicSlugs.length,
         legacyJsonRows: legacyRows.length,
-        legacyPublishedInExportFile: legacyPublishedInFile,
-        legacyDraftInExportFile: legacyDraftInFile,
         prismaTotalBlogPosts: total,
         prismaPublishedBlogPosts: published,
         imageReport,
-        note:
-          "Run scripts/export-monolith-blog-to-json.ts with LEGACY_DATABASE_URL to refresh content/blog-legacy-export.json from content_items, imaging_blog_articles, and mlt_blog_posts.",
+        note: "Published and scheduled rows are imported regardless of body length/date; drafts are skipped by status only.",
       },
       null,
       2,

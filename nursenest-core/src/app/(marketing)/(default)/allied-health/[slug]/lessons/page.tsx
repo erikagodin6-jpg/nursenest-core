@@ -21,6 +21,7 @@ import {
   normalizePathwayHubSearchQuery,
   PATHWAY_HUB_PAGE_SIZE_MAX,
 } from "@/lib/lessons/pathway-lesson-loader";
+import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
 import {
   pathwayLessonHasRenderableHubSlug,
 } from "@/lib/lessons/pathway-lesson-types";
@@ -155,11 +156,22 @@ export default async function AlliedHealthSlugLessonsPage({ params, searchParams
         </Link>
         <h1 className="mt-4 text-3xl font-bold text-[var(--theme-heading-text)]">Lessons · {prof.h1}</h1>
         <p className="mt-3 text-muted">
-          No published lessons for this filter yet. Check back after import, or browse the full pathway hub.
+          No lessons available yet for this topic. Explore available study surfaces while this set is finalized.
         </p>
-        <Link href={professionHeroPath} className="mt-4 inline-block font-semibold text-primary hover:underline">
-          Back to overview
-        </Link>
+        <div className="mt-4 flex flex-wrap gap-3">
+          <Link
+            href={buildExamPathwayPath(pathway, "questions")}
+            className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground"
+          >
+            Explore available questions
+          </Link>
+          <Link
+            href={buildExamPathwayPath(pathway, "cat")}
+            className="inline-flex min-h-[44px] items-center justify-center rounded-full border border-border px-5 py-2.5 text-sm font-semibold hover:bg-card"
+          >
+            Start adaptive exam
+          </Link>
+        </div>
         <p className="mt-4 text-xs text-muted">
           This page is not indexed for search until content exists.
         </p>

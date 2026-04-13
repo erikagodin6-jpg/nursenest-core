@@ -33,7 +33,7 @@ type Props = {
 export function CatHeroSection({ examLabel, primaryCta, inventoryStrip, backHref, backLabel }: Props) {
   return (
     <section
-      className="relative overflow-hidden rounded-[1.75rem] border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-6 shadow-[var(--semantic-shadow-soft)] sm:p-8"
+      className="nn-gradient-safe relative overflow-hidden rounded-[1.75rem] border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-6 shadow-[var(--semantic-shadow-soft)] sm:p-8"
       aria-labelledby="cat-hero-heading"
     >
       {/* Purple-brand gradient backdrop */}

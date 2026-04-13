@@ -1,0 +1,19 @@
+{
+  "overview": "El equilibrio hidroelectrolítico es fundamental para el funcionamiento celular. Los electrolitos (sodio, potasio, calcio, magnesio, fósforo) regulan la transmisión nerviosa, la contracción muscular y el equilibrio ácido-base. Los desequilibrios pueden comprometer la vida y requieren reconocimiento rápido.",
+  "key_concepts": [
+    "Compartimentos de líquidos: intracelular (2/3 del volumen total), extracelular (1/3: plasma + líquido intersticial)",
+    "Ósmosis: movimiento del agua desde zonas hipotónicas hacia hipertónicas a través de una membrana semipermeable",
+    "Sodio (Na⁺ 135–145 mEq/L): principal catión extracelular, regula la osmolaridad y la volemia",
+    "Potasio (K⁺ 3,5–5,0 mEq/L): principal catión intracelular, esencial para la conducción cardíaca",
+    "Soluciones IV: isotónica (NaCl 0,9%, suero glucosado 5%), hipotónica (NaCl 0,45%), hipertónica (NaCl 3%)"
+  ],
+  "nursing_responsibilities": "Vigilar el balance hídrico (ingresos/egresos), pesar al paciente diariamente a la misma hora, evaluar signos de sobrecarga o deshidratación (turgencia cutánea, mucosas, presión arterial, diuresis). Controlar los resultados de laboratorio antes de administrar suplementos electrolíticos, especialmente potasio IV. Educar al paciente sobre restricción o aumento de aportes según la patología.",
+  "clinical_pearls": "La hipopotasemia potencia la toxicidad de la digoxina — verificar K⁺ antes de la administración. La hiponatremia grave no debe corregirse demasiado rápido (riesgo de mielinólisis central pontina). El potasio IV nunca debe administrarse en bolo directo — siempre diluido y en infusión lenta con monitorización cardíaca. La pesada diaria es más fiable que el balance hídrico para detectar retención de líquidos.",
+  "patient_education": "Explique a los pacientes la importancia de un aporte hídrico adecuado (aprox. 1,5–2 L/día salvo restricción), los signos de deshidratación (sed intensa, orina oscura, mareos) y los alimentos ricos en potasio (plátanos, naranjas, patatas) si se prescribe suplementación.",
+  "key_takeaways": [
+    "El agua sigue siempre al sodio — entender la natremia permite predecir los movimientos de líquidos",
+    "La hipopotasemia y la hiperpotasemia son ambas peligrosas para el ritmo cardíaco — vigilar el ECG",
+    "El potasio IV siempre debe diluirse y administrarse lentamente con monitorización — nunca en bolo",
+    "El balance hídrico y la pesada diaria son las herramientas de vigilancia básicas en enfermería"
+  ]
+}

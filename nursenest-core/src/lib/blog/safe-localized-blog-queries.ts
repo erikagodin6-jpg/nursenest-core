@@ -184,6 +184,33 @@ export async function getPublishedLocalizedBlogPostsPage(params: {
     withDatabaseFallback(() => m.count({ where }), 0),
   ]);
 
+  if (posts.length === 0 && params.locale !== "en") {
+    const fallbackWhere = {
+      AND: [
+        localizedBlogLiveWhere(now),
+        { locale: "en" },
+        { region: params.region },
+        { profession: params.profession },
+        { exam: params.exam },
+      ],
+    };
+    const [fallbackPosts, fallbackTotal] = await Promise.all([
+      withDatabaseFallback(
+        () =>
+          m.findMany({
+            where: fallbackWhere,
+            orderBy: { createdAt: "desc" },
+            select: indexSelect,
+            skip: (safePage - 1) * safeSize,
+            take: safeSize,
+          }) as Promise<LocalizedBlogIndexPost[]>,
+        [] as LocalizedBlogIndexPost[],
+      ),
+      withDatabaseFallback(() => m.count({ where: fallbackWhere }), 0),
+    ]);
+    return { posts: fallbackPosts, total: fallbackTotal, page: safePage, pageSize: safeSize };
+  }
+
   return { posts, total, page: safePage, pageSize: safeSize };
 }
 
@@ -253,6 +280,34 @@ export async function getPublishedLocalizedBlogBySlug(params: {
   );
 
   const row = rows[0] ?? null;
+  if (!row && params.locale !== "en") {
+    const fallbackRows = await withDatabaseFallback(
+      () =>
+        m.findMany({
+          where: {
+            OR: [{ localizedSlug: params.slug }, { canonicalSlug: params.slug }],
+            locale: "en",
+            region: params.region,
+            profession: params.profession,
+            exam: params.exam,
+          },
+          select: fullSelect,
+          take: 1,
+        }) as Promise<LocalizedBlogFullPost[]>,
+      [] as LocalizedBlogFullPost[],
+    );
+    const fallback = fallbackRows[0] ?? null;
+    if (!fallback) return null;
+    if (
+      !localizedBlogIsLive(
+        { contentStatus: fallback.contentStatus, scheduledAt: fallback.scheduledAt },
+        now,
+      )
+    ) {
+      return null;
+    }
+    return fallback;
+  }
   if (!row) return null;
   if (!localizedBlogIsLive({ contentStatus: row.contentStatus, scheduledAt: row.scheduledAt }, now)) return null;
   return row;

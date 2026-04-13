@@ -26,7 +26,7 @@ type Props = {
  */
 export function PathwayHero({ title, subtitle, toolbar, ctas, backLink }: Props) {
   return (
-    <header className="relative overflow-hidden rounded-[1.75rem] border border-[var(--semantic-border-soft)] bg-gradient-to-br from-[var(--hero-gradient-start)] via-[var(--semantic-surface)] to-[var(--hero-gradient-end)] p-5 shadow-[var(--semantic-shadow-soft)] sm:p-7">
+    <header className="nn-gradient-safe relative overflow-hidden rounded-[1.75rem] border border-[var(--semantic-border-soft)] bg-gradient-to-br from-[var(--hero-gradient-start)] via-[var(--semantic-surface)] to-[var(--hero-gradient-end)] p-5 shadow-[var(--semantic-shadow-soft)] sm:p-7">
       {/* Subtle background glow blobs */}
       <div
         className="pointer-events-none absolute -right-12 -top-20 h-52 w-52 rounded-full bg-[color-mix(in_srgb,var(--semantic-brand)_7%,transparent)] blur-3xl"
@@ -73,7 +73,7 @@ function ctaClass(variant: CtaButton["variant"]): string {
   const base = "inline-flex min-h-[44px] items-center justify-center rounded-full px-6 py-2.5 text-sm font-semibold transition-colors";
   switch (variant) {
     case "primary":
-      return `${base} bg-[var(--semantic-success)] text-white hover:opacity-90`;
+      return `${base} bg-[var(--semantic-success)] text-[var(--text-on-dark)] hover:opacity-90`;
     case "outline":
       return `${base} border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] text-[var(--theme-heading-text)] hover:bg-[color-mix(in_srgb,var(--semantic-brand)_5%,var(--semantic-surface))]`;
     case "ghost":

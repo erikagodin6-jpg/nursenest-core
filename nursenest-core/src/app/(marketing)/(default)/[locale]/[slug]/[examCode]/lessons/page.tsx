@@ -144,13 +144,27 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
         <BreadcrumbJsonLd items={schemaItems} />
         <div className="mt-6 rounded-[1.75rem] border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5">
           <p className="text-sm font-medium text-[var(--theme-heading-text)]">
-            {qEffective ? `No lessons match "${qEffective}".` : `No lessons are published for ${pathway.shortName} yet.`}
+            {qEffective ? `No lessons match "${qEffective}".` : "No lessons available yet for this topic."}
           </p>
           <p className="mt-2 text-sm text-[var(--theme-muted-text)]">
             {qEffective
               ? "Try a broader search or clear the search to view the full lesson library."
-              : "Check back here for structured lessons as this pathway library grows."}
+              : "Explore available study surfaces below while this lesson set is finalized."}
           </p>
+          <div className="mt-4 flex flex-wrap gap-3">
+            <Link
+              href={buildExamPathwayPath(pathway, "questions")}
+              className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground"
+            >
+              Explore available questions
+            </Link>
+            <Link
+              href={buildExamPathwayPath(pathway, "cat")}
+              className="inline-flex min-h-[44px] items-center justify-center rounded-full border border-border px-5 py-2.5 text-sm font-semibold hover:bg-card"
+            >
+              Start adaptive exam
+            </Link>
+          </div>
         </div>
       </LessonsPageShell>
     );

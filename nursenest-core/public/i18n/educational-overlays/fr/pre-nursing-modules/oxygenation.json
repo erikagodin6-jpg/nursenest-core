@@ -1,0 +1,19 @@
+{
+  "overview": "L'oxygénation est un besoin physiologique prioritaire. Sans apport suffisant en oxygène aux tissus, la mort cellulaire survient en quelques minutes. L'infirmière doit évaluer rapidement la fonction respiratoire, identifier les signes d'hypoxie et intervenir sans délai pour maintenir une oxygénation adéquate.",
+  "key_concepts": [
+    "Ventilation : mouvement de l'air dans et hors des poumons (fréquence respiratoire normale : 12–20/min chez l'adulte)",
+    "Diffusion : échanges gazeux alvéolo-capillaires (O₂ entre dans le sang, CO₂ en sort) — compromis dans l'œdème pulmonaire, la pneumonie",
+    "Perfusion : apport sanguin aux poumons — compromis dans l'embolie pulmonaire",
+    "SpO₂ normale : 95–100 % (valeur cible pouvant varier chez le patient BPCO : 88–92 %)",
+    "Signes d'hypoxie : agitation, confusion, cyanose, tachycardie, SpO₂ < 90 %"
+  ],
+  "nursing_responsibilities": "L'infirmière évalue la fréquence, le rythme et l'effort respiratoire, la SpO₂ et l'auscultation pulmonaire. Elle positionne le patient en semi-Fowler ou Fowler haute pour optimiser l'expansion pulmonaire. Elle administre l'oxygène selon prescription et adapte l'interface (lunettes nasales, masque simple, masque à haute concentration, masque Venturi). Elle aspire les sécrétions si nécessaire et mobilise le patient pour prévenir l'atélectasie.",
+  "clinical_pearls": "Chez le patient BPCO, l'oxygène à haut débit peut supprimer le stimulus hypoxique à la ventilation — cibler une SpO₂ de 88–92 % sauf prescription contraire. L'agitation soudaine chez un patient peut être le premier signe d'hypoxie — évaluer avant de sédater. La position latérale de sécurité est indiquée pour le patient inconscient avec respiration spontanée pour prévenir l'inhalation.",
+  "patient_education": "Enseignez la respiration diaphragmatique et les techniques de toux contrôlée pour les patients avec affection respiratoire. Expliquez l'importance de ne pas fumer et d'éviter les irritants respiratoires. Pour les patients oxygéno-dépendants à domicile : sécurité (interdiction de fumer, de flammes nues), entretien de l'équipement, surveillance de la SpO₂.",
+  "key_takeaways": [
+    "L'hypoxie est une urgence — agitation, confusion ou cyanose nécessitent une évaluation et une action immédiates",
+    "Chez le patient BPCO, cibler SpO₂ 88–92 % pour éviter la suppression du drive hypoxique",
+    "La position semi-Fowler optimise la mécanique respiratoire — c'est une intervention simple et efficace",
+    "Ventilation (air entrant), diffusion (échanges gazeux) et perfusion (apport sanguin) doivent être évalués séparément"
+  ]
+}

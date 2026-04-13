@@ -7,7 +7,7 @@ import {
   BlogPostTemplate,
 } from "@prisma/client";
 import { normalizeBlogTopicKey } from "@/lib/blog/blog-intent-dedupe";
-import { generateBlogAiDraft } from "@/lib/blog/generate-blog-ai-draft";
+import { generateBlogPost } from "@/lib/blog/generate-blog-ai-draft";
 import { runBlogBatchLocalizedFollowup } from "@/lib/blog/blog-batch-localized-followup";
 import { isAdminAiGenerationEnabled } from "@/lib/ai/admin-ai-policy";
 import { assertOpenAiKeyConfigured } from "@/lib/ai/openai-env";
@@ -247,7 +247,7 @@ export async function processDueBlogBatchScheduleItems(now: Date = new Date()): 
 
       const publishAt = effectivePublishAtForBatchItem(schedule.publishMode, item.plannedPublishAt, now);
 
-      const result = await generateBlogAiDraft({
+      const result = await generateBlogPost({
         topic: item.topicRaw,
         exam: schedule.exam,
         country: schedule.country === "US" || schedule.country === "CA" ? schedule.country : "unspecified",

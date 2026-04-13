@@ -1,0 +1,19 @@
+{
+  "overview": "L'évaluation clinique (assessment) est la première étape de la démarche de soins. Elle permet de collecter des données objectives et subjectives pour identifier les problèmes de santé, établir des priorités et planifier des interventions. Une évaluation précise et systématique est la base de soins infirmiers sûrs.",
+  "key_concepts": [
+    "Données subjectives (symptômes) : ce que le patient décrit — douleur, fatigue, nausées ; collectées par l'entretien",
+    "Données objectives (signes) : ce que l'infirmière observe et mesure — signes vitaux, résultats biologiques, aspect clinique",
+    "PQRSTU pour la douleur : Provoque/Pallier, Qualité, Région/Irradiation, Sévérité, Timing/Traitement, Understanding (compréhension du patient)",
+    "Signes vitaux : température, pouls, fréquence respiratoire, pression artérielle, SpO₂, douleur (6ème signe vital)",
+    "Évaluation par systèmes : tête aux pieds (head-to-toe) ou par systèmes — systématique pour ne rien oublier"
+  ],
+  "nursing_responsibilities": "L'infirmière recueille les données de façon structurée, prioritise selon l'urgence, documente avec précision et objectivité, et transmet les anomalies à l'équipe médicale. Elle utilise des outils validés (échelle de douleur, Glasgow, Braden) et répète les évaluations pour suivre l'évolution. Elle prend en compte le contexte culturel et adapte sa communication.",
+  "clinical_pearls": "Les valeurs normales varient selon l'âge — la tachycardie chez un nourrisson (< 100/min est normal jusqu'à 160/min) n'est pas la même que chez l'adulte. Une pression artérielle « normale » pour un patient hypertendu chronique peut être hypotensive pour lui. Documentez toujours les tendances, pas seulement les valeurs isolées — une PA qui chute progressivement de 150/90 à 100/60 sur 2 heures est plus alarmante qu'une valeur unique.",
+  "patient_education": "Expliquez aux patients comment surveiller leurs propres signes vitaux à domicile si pertinent (tensiomètre, oxymètre de pouls). Enseignez-leur à décrire leurs symptômes avec précision (localisation, intensité, durée, ce qui aggrave ou soulage) pour faciliter les consultations. Encouragez-les à signaler tout changement nouveau ou inhabituel.",
+  "key_takeaways": [
+    "L'évaluation systématique (tête aux pieds) prévient les oublis — établissez une routine et suivez-la",
+    "Documentez les tendances et l'évolution dans le temps, pas seulement les valeurs ponctuelles",
+    "Les données subjectives (symptômes) et objectives (signes) se complètent — ne négligez pas ce que le patient ressent",
+    "Les signes vitaux de base incluent maintenant la douleur comme 6ème signe — évaluez-la systématiquement"
+  ]
+}

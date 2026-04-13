@@ -146,7 +146,7 @@ export function LearnerStudentDashboard({
     <div className="space-y-5">
       {/* Readiness */}
       <section
-        className="relative overflow-hidden rounded-2xl border border-role-premium-border bg-gradient-to-br from-role-premium-surface via-[var(--theme-card-bg)] to-primary/[0.06] p-5 shadow-sm sm:p-6"
+        className="nn-gradient-safe relative overflow-hidden rounded-2xl border border-role-premium-border bg-gradient-to-br from-role-premium-surface via-[var(--theme-card-bg)] to-primary/[0.06] p-5 shadow-sm sm:p-6"
         aria-label={t("learner.dashboard.insight.readinessTitle")}
       >
         <div className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-role-premium-glow blur-3xl" aria-hidden />

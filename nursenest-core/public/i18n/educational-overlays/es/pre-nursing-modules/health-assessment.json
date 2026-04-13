@@ -1,0 +1,19 @@
+{
+  "overview": "La valoración clínica es el primer paso del proceso enfermero. Permite recopilar datos objetivos y subjetivos para identificar los problemas de salud, establecer prioridades y planificar intervenciones. Una valoración precisa y sistemática es la base de los cuidados enfermeros seguros.",
+  "key_concepts": [
+    "Datos subjetivos (síntomas): lo que el paciente describe — dolor, fatiga, náuseas; recogidos mediante la entrevista",
+    "Datos objetivos (signos): lo que la enfermera observa y mide — constantes vitales, resultados de laboratorio, aspecto clínico",
+    "PQRSTU para el dolor: Provoca/Palía, Calidad, Región/Irradiación, Severidad, Tiempo/Tratamiento, Understanding (comprensión del paciente)",
+    "Constantes vitales: temperatura, pulso, frecuencia respiratoria, presión arterial, SpO₂, dolor (6.ª constante vital)",
+    "Valoración sistemática: de cabeza a pies o por sistemas — sistemática para no omitir nada"
+  ],
+  "nursing_responsibilities": "La enfermera recoge los datos de forma estructurada, prioriza según la urgencia, documenta con precisión y objetividad, y comunica las anomalías al equipo médico. Utiliza herramientas validadas (escala de dolor, Glasgow, Braden) y repite las valoraciones para seguir la evolución. Tiene en cuenta el contexto cultural y adapta su comunicación.",
+  "clinical_pearls": "Los valores normales varían según la edad — la taquicardia en un lactante (hasta 160/min es normal) no es lo mismo que en un adulto. Una presión arterial 'normal' para un paciente hipertenso crónico puede ser hipotensión para él. Documente siempre las tendencias, no solo los valores aislados — una PA que cae progresivamente de 150/90 a 100/60 en 2 horas es más alarmante que un valor único.",
+  "patient_education": "Explique a los pacientes cómo monitorizar sus propias constantes vitales en domicilio si es pertinente (tensiómetro, pulsioxímetro). Enséñeles a describir sus síntomas con precisión (localización, intensidad, duración, qué los agrava o alivia) para facilitar las consultas. Anímeles a notificar cualquier cambio nuevo o inusual.",
+  "key_takeaways": [
+    "La valoración sistemática (de cabeza a pies) previene omisiones — establezca una rutina y sígala",
+    "Documente las tendencias y la evolución en el tiempo, no solo los valores puntuales",
+    "Los datos subjetivos (síntomas) y objetivos (signos) se complementan — no ignore lo que el paciente siente",
+    "Las constantes vitales básicas incluyen ahora el dolor como 6.ª constante — valórelo sistemáticamente"
+  ]
+}

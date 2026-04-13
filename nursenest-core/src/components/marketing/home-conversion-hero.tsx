@@ -47,7 +47,7 @@ export function HomeConversionHero() {
 
   return (
     <section
-      className="nn-hero-branded nn-hero-branded--ambient-depth relative overflow-hidden border-b border-[var(--header-nav-border)]"
+      className="nn-gradient-safe nn-hero-branded nn-hero-branded--ambient-depth relative overflow-hidden border-b border-[var(--header-nav-border)]"
       data-testid="hero-section"
       aria-labelledby="home-conversion-hero-heading"
     >

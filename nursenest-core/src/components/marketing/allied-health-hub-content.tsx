@@ -260,7 +260,7 @@ export function AlliedHealthTrustStrip({ copy }: { copy: AlliedHealthHubCopy["tr
   ] as const;
   return (
     <section
-      className="mt-20 rounded-[1.75rem] border border-[var(--border-subtle)] bg-gradient-to-b from-[var(--bg-section-alt)] to-[var(--bg-section)] px-5 py-10 shadow-[var(--shadow-card)] sm:px-10 sm:py-12"
+      className="nn-gradient-safe mt-20 rounded-[1.75rem] border border-[var(--border-subtle)] bg-gradient-to-b from-[var(--bg-section-alt)] to-[var(--bg-section)] px-5 py-10 shadow-[var(--shadow-card)] sm:px-10 sm:py-12"
       aria-label="Why allied learners use NurseNest"
     >
       <h2 className="nn-marketing-h2 max-w-xl">{copy.h2}</h2>

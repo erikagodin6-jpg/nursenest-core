@@ -1,0 +1,19 @@
+{
+  "overview": "La prevención y el control de infecciones protegen tanto a los pacientes como a los profesionales de la salud. Las infecciones asociadas a la atención sanitaria (IAAS) son prevenibles en muchos casos mediante la aplicación rigurosa de las precauciones estándar y las precauciones adicionales. La cadena de transmisión infecciosa debe interrumpirse en cada eslabón.",
+  "key_concepts": [
+    "Cadena de transmisión: agente infeccioso → reservorio → puerta de salida → modo de transmisión → puerta de entrada → huésped susceptible",
+    "Precauciones estándar: se aplican a todos los pacientes, independientemente de su estado infeccioso (higiene de manos, EPI, material de un solo uso)",
+    "Precauciones adicionales: contacto (SARM, C. diff), gotas (gripe, COVID-19), aérea (tuberculosis, sarampión, varicela)",
+    "Higiene de manos: 5 momentos de la OMS — antes del contacto con el paciente, antes de una técnica aséptica, después del riesgo de exposición, después del contacto con el paciente, después del contacto con el entorno",
+    "Niveles de descontaminación: limpieza → desinfección → esterilización"
+  ],
+  "nursing_responsibilities": "La enfermera respeta y hace respetar las precauciones adecuadas, realiza la higiene de manos en los 5 momentos recomendados, usa correctamente el EPI (ponérselo y quitárselo sin contaminación), identifica a los pacientes infectados en riesgo y notifica cualquier caso sospechoso. Educa a pacientes y visitantes sobre las medidas de prevención. Participa en la vigilancia de infecciones y en el cumplimiento de los protocolos institucionales.",
+  "clinical_pearls": "La fricción con solución hidroalcohólica (SHA) es más eficaz que el jabón para la mayoría de los patógenos — excepto Clostridium difficile (esporas), donde el lavado con agua y jabón es imprescindible. El aislamiento en habitación individual con presión negativa es necesario para las precauciones aéreas (tuberculosis). El uso de guantes no sustituye la higiene de manos. Las infecciones urinarias asociadas a sonda son las IAAS más frecuentes — retirar la sonda lo antes posible.",
+  "patient_education": "Enseñe a los pacientes la importancia del lavado de manos, especialmente antes de las comidas y después del aseo. Explique las medidas de aislamiento sin estigmatizar: 'Estas precauciones le protegen a usted y a los demás pacientes.' Anime a los familiares a informar al personal si su estado de salud ha cambiado antes de entrar.",
+  "key_takeaways": [
+    "Interrumpir la cadena de transmisión en cualquier eslabón impide la propagación de la infección",
+    "Las precauciones estándar se aplican a TODOS los pacientes — nunca presuma que un paciente está 'limpio'",
+    "C. difficile requiere agua y jabón (no SHA) — excepción importante a memorizar",
+    "La higiene de manos en los 5 momentos de la OMS es la intervención más eficaz para prevenir las IAAS"
+  ]
+}

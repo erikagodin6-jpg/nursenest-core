@@ -50,7 +50,7 @@ export function LearnerDashboardHero({
     : primaryNext.reason;
 
   return (
-    <section className="relative overflow-hidden rounded-3xl border border-primary/15 bg-gradient-to-br from-primary/[0.07] via-[var(--theme-card-bg)] to-[var(--theme-page-bg)] p-5 shadow-sm sm:p-8">
+    <section className="nn-gradient-safe relative overflow-hidden rounded-3xl border border-primary/15 bg-gradient-to-br from-primary/[0.07] via-[var(--theme-card-bg)] to-[var(--theme-page-bg)] p-5 shadow-sm sm:p-8">
       <div className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-primary/[0.06] blur-3xl" aria-hidden />
       <div className="relative grid gap-8 lg:grid-cols-[1fr_minmax(0,280px)] lg:items-start lg:gap-10">
         <div className="min-w-0 space-y-4">

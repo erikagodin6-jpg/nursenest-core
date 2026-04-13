@@ -6,7 +6,7 @@ import {
   BlogPostTemplate,
 } from "@prisma/client";
 import { normalizeBlogTopicKey } from "@/lib/blog/blog-intent-dedupe";
-import { generateBlogAiDraft } from "@/lib/blog/generate-blog-ai-draft";
+import { generateBlogPost } from "@/lib/blog/generate-blog-ai-draft";
 import { isAdminAiGenerationEnabled } from "@/lib/ai/admin-ai-policy";
 import { assertOpenAiKeyConfigured } from "@/lib/ai/openai-env";
 import { logDraftBatchItemRun } from "@/lib/admin/blog-content-automation-log";
@@ -130,7 +130,7 @@ export async function processDraftGenerationBatchItems(
         data: { status: BlogDraftGenerationBatchItemStatus.GENERATING, error: null },
       });
 
-      const result = await generateBlogAiDraft({
+      const result = await generateBlogPost({
         topic: item.topicRaw,
         keywords: batch.keywords ?? undefined,
         exam: batch.exam,

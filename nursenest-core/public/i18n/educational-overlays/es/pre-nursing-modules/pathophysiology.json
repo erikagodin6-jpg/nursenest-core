@@ -1,0 +1,19 @@
+{
+  "overview": "La fisiopatología estudia los mecanismos por los que las enfermedades alteran el funcionamiento normal del organismo. Comprender por qué aparecen los síntomas — no solo memorizarlos — permite a la enfermera anticipar la evolución clínica, reconocer las complicaciones y justificar sus intervenciones.",
+  "key_concepts": [
+    "Enfermedad: ruptura de la homeostasis con alteración estructural o funcional identificable",
+    "Signos vs síntomas: signos = objetivos (medibles: fiebre, bradicardia), síntomas = subjetivos (sentidos: dolor, fatiga)",
+    "Inflamación: respuesta protectora inespecífica — enrojecimiento, calor, dolor, edema, pérdida de función",
+    "Isquemia vs necrosis: isquemia = aporte sanguíneo insuficiente (reversible si se corrige); necrosis = muerte celular (irreversible)",
+    "Compensación fisiológica: mecanismos adaptativos (taquicardia, vasoconstricción) que pueden enmascarar una descompensación inminente"
+  ],
+  "nursing_responsibilities": "La enfermera identifica los signos de descompensación (alteración del nivel de conciencia, inestabilidad hemodinámica, dificultad respiratoria) y escala rápidamente. Relaciona los síntomas del paciente con el mecanismo fisiopatológico subyacente para priorizar sus acciones. Vigila la eficacia de los tratamientos y documenta la evolución de forma cronológica y objetiva.",
+  "clinical_pearls": "La compensación puede enmascarar el deterioro — un paciente en choque compensado puede parecer 'estable' hasta la descompensación brusca. Ante cualquier duda sobre la evolución, reevalúe frecuentemente y documente las tendencias en lugar de valores aislados. La inflamación crónica de bajo grado es un mecanismo común en muchas enfermedades crónicas (aterosclerosis, diabetes tipo 2, insuficiencia cardíaca).",
+  "patient_education": "Explique los síntomas en términos sencillos relacionándolos con su causa: 'Su tobillo está hinchado porque su corazón no bombea con suficiente fuerza para que la sangre regrese correctamente.' Esta comprensión ayuda a los pacientes a seguir las restricciones (sal, líquidos) y a notificar los empeoramientos.",
+  "key_takeaways": [
+    "Comprender el mecanismo de una enfermedad permite predecir sus complicaciones y prevenirlas",
+    "Los mecanismos compensatorios tienen límites — un paciente 'estable' puede descompensarse rápidamente",
+    "Signos objetivos (medibles) y síntomas subjetivos (sentidos) se complementan en la valoración clínica",
+    "La inflamación es un mecanismo protector que puede volverse dañino cuando es excesivo o crónico"
+  ]
+}

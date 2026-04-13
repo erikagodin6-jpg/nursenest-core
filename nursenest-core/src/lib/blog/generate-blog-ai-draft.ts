@@ -223,6 +223,10 @@ Title (for context only, do not repeat as H1 in body): ${title}`;
 
   const excerpt = bodyWithStudy.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim().slice(0, 480);
   const seoDescription = excerpt.slice(0, 320);
+  const fallbackTopicTag = normalizeBlogTopicKey(d.targetKeyword ?? d.topic)?.replace(/-/g, " ") ?? d.topic;
+  const tags = d.keywords
+    ? d.keywords.split(",").map((s) => s.trim()).filter(Boolean).slice(0, 12)
+    : [d.exam, fallbackTopicTag].map((s) => s.trim()).filter(Boolean).slice(0, 12);
   const sources = (d.sourceRecords ?? []) as BlogSourceRecord[];
   const apaReferences = buildApa7References(sources);
   const sourceCheck = validateSources(sources);
@@ -290,7 +294,7 @@ Title (for context only, do not repeat as H1 in body): ${title}`;
         publishAt,
         seoTitle: title.slice(0, 200),
         seoDescription,
-        tags: d.keywords ? d.keywords.split(",").map((s) => s.trim()).filter(Boolean).slice(0, 12) : [],
+        tags,
         outlineJson: outline,
         keyQuestions: [
           `What matters most about ${d.topic} on ${d.exam}?`,
@@ -340,4 +344,12 @@ Title (for context only, do not repeat as H1 in body): ${title}`;
     }
     throw e;
   }
+}
+
+/**
+ * Canonical entrypoint for creating AI blog posts.
+ * Kept as a stable alias while older call-sites still reference `generateBlogAiDraft`.
+ */
+export async function generateBlogPost(d: GenerateBlogAiDraftInput): Promise<GenerateBlogAiDraftResult> {
+  return generateBlogAiDraft(d);
 }

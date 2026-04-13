@@ -1,0 +1,19 @@
+{
+  "overview": "La physiopathologie étudie les mécanismes par lesquels les maladies altèrent le fonctionnement normal de l'organisme. Comprendre pourquoi les symptômes apparaissent — et non seulement les mémoriser — permet à l'infirmière d'anticiper l'évolution clinique, de reconnaître les complications et de justifier ses interventions.",
+  "key_concepts": [
+    "Maladie : rupture de l'homéostasie avec altération structurelle ou fonctionnelle identifiable",
+    "Signes vs symptômes : signes = objectifs (mesurables : fièvre, bradycardie), symptômes = subjectifs (ressentis : douleur, fatigue)",
+    "Inflammation : réponse protectrice non spécifique — rougeur, chaleur, douleur, œdème, perte de fonction",
+    "Ischémie vs nécrose : ischémie = apport sanguin insuffisant (réversible si corrigé) ; nécrose = mort cellulaire (irréversible)",
+    "Compensation physiologique : mécanismes adaptatifs (tachycardie, vasoconstriction) qui peuvent masquer une décompensation imminente"
+  ],
+  "nursing_responsibilities": "L'infirmière identifie les signes de décompensation (modification de l'état de conscience, instabilité hémodynamique, détresse respiratoire) et escalade rapidement. Elle relie les symptômes du patient au mécanisme physiopathologique sous-jacent pour prioriser ses actions. Elle surveille l'efficacité des traitements et documente l'évolution de manière chronologique et factuelle.",
+  "clinical_pearls": "La compensation peut masquer une dégradation — un patient en choc compensé peut paraître « stable » jusqu'à la décompensation brutale. En cas de doute sur l'évolution, réévaluez fréquemment et documentez les tendances plutôt que les valeurs isolées. L'inflammation chronique de bas grade est un mécanisme commun à de nombreuses maladies chroniques (athérosclérose, diabète de type 2, insuffisance cardiaque).",
+  "patient_education": "Expliquez les symptômes en termes simples en les reliant à leur cause : « Votre cheville est gonflée parce que votre cœur ne pompe pas assez fort pour que le sang remonte correctement. » Cette compréhension aide les patients à suivre les restrictions (sel, liquides) et à signaler les aggravations.",
+  "key_takeaways": [
+    "Comprendre le mécanisme d'une maladie permet de prédire ses complications et de les prévenir",
+    "Les mécanismes compensatoires sont limités — un patient « stable » peut décompenser rapidement",
+    "Signes objectifs (mesurables) et symptômes subjectifs (ressentis) se complètent dans l'évaluation clinique",
+    "L'inflammation est un mécanisme protecteur qui peut devenir délétère lorsqu'il est excessif ou chronique"
+  ]
+}

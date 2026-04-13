@@ -1,16 +1,9 @@
-import raw from "@/content/blog-static-posts.json";
+import {
+  STATIC_BLOG_POSTS,
+  type StaticBlogPostRecord,
+} from "@/content/blog-static-posts";
 
-export type StaticBlogPostRecord = {
-  slug: string;
-  title: string;
-  excerpt: string;
-  category: string;
-  createdAt: string;
-  tags: string[];
-  bodyHtml: string;
-};
-
-const posts: StaticBlogPostRecord[] = raw as StaticBlogPostRecord[];
+const posts: StaticBlogPostRecord[] = STATIC_BLOG_POSTS;
 
 export function listStaticBlogPostsForIndex(): StaticBlogPostRecord[] {
   return [...posts].sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));

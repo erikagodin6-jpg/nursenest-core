@@ -4,7 +4,6 @@ import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured, withDatabaseFallback } from "@/lib/db/safe-database";
 import { blogLiveWhere, blogPostIsLive } from "@/lib/blog/blog-visibility";
 import {
-  countStaticBlogPosts,
   getStaticBlogPost,
   listStaticBlogPostsForIndex,
 } from "@/lib/blog/static-blog-posts";
@@ -14,6 +13,16 @@ export const isBlogDatabaseConfigured = isDatabaseUrlConfigured;
 
 async function withBlogFallback<T>(run: () => Promise<T>, fallback: T): Promise<T> {
   return withDatabaseFallback(run, fallback);
+}
+
+function isDevMode(): boolean {
+  return process.env.NODE_ENV !== "production";
+}
+
+export async function canUseStaticBlogFallback(): Promise<boolean> {
+  if (!isDevMode()) return false;
+  const totalRows = await withBlogFallback(() => prisma.blogPost.count(), 0);
+  return totalRows === 0;
 }
 
 const indexSelect = {
@@ -45,8 +54,7 @@ export async function getPublishedBlogPostsPage(
 ): Promise<{ posts: BlogIndexPost[]; total: number; page: number; pageSize: number }> {
   const safePage = Math.max(1, page);
   const safeSize = Math.min(100, Math.max(1, Math.floor(pageSize)));
-  const now = new Date();
-  const where = blogLiveWhere(now);
+  const where = { postStatus: BlogPostStatus.PUBLISHED } satisfies Prisma.BlogPostWhereInput;
   const [dbPosts, dbTotal] = await Promise.all([
     withBlogFallback(
       () =>
@@ -61,7 +69,8 @@ export async function getPublishedBlogPostsPage(
     ),
     withBlogFallback(() => prisma.blogPost.count({ where }), 0),
   ]);
-  if (dbTotal > 0) {
+  const fallbackAllowed = await canUseStaticBlogFallback();
+  if (!fallbackAllowed) {
     return { posts: dbPosts, total: dbTotal, page: safePage, pageSize: safeSize };
   }
   const all = listStaticBlogPostsForIndex().map((p) => ({
@@ -75,6 +84,7 @@ export async function getPublishedBlogPostsPage(
   }));
   const total = all.length;
   const posts = all.slice((safePage - 1) * safeSize, (safePage - 1) * safeSize + safeSize);
+  if (total === 0) return { posts: dbPosts, total: dbTotal, page: safePage, pageSize: safeSize };
   return { posts, total, page: safePage, pageSize: safeSize };
 }
 
@@ -103,6 +113,7 @@ export async function getBlogPostMetaBySlug(slug: string): Promise<BlogPostMeta 
     null,
   );
   if (db) return db;
+  if (!(await canUseStaticBlogFallback())) return null;
   const s = getStaticBlogPost(slug);
   if (!s) return null;
   return {
@@ -137,7 +148,11 @@ export async function isBlogPostMetaVisible(slug: string): Promise<boolean> {
 export async function getPublishedBlogPostBySlug(slug: string): Promise<BlogPost | null> {
   const now = new Date();
   const row = await withBlogFallback(() => prisma.blogPost.findUnique({ where: { slug } }), null);
-  if (!row) return null;
+  if (!row) {
+    if (!(await canUseStaticBlogFallback())) return null;
+    return null;
+  }
+  if (row.postStatus !== BlogPostStatus.PUBLISHED) return null;
   if (!blogPostIsLive({ postStatus: row.postStatus, publishAt: row.publishAt }, now)) return null;
   return row;
 }
@@ -194,7 +209,7 @@ const SITEMAP_BLOG_ROW_CAP = 50_000;
 
 export async function getSitemapPublishedBlogSlugs(): Promise<{ slug: string; updatedAt: Date }[]> {
   const now = new Date();
-  const rows = await withBlogFallback(
+  return withBlogFallback(
     () =>
       prisma.blogPost.findMany({
         where: blogLiveWhere(now),
@@ -204,12 +219,6 @@ export async function getSitemapPublishedBlogSlugs(): Promise<{ slug: string; up
       }),
     [],
   );
-  if (rows.length > 0) return rows;
-  const t = new Date();
-  return listStaticBlogPostsForIndex().map((p) => ({
-    slug: p.slug,
-    updatedAt: t,
-  }));
 }
 
 export async function getSitemapBlogTagRows(): Promise<{ tags: string[] }[]> {

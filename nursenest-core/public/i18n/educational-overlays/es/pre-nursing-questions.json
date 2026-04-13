@@ -1,0 +1,402 @@
+{
+  "ap-01": {
+    "stem": "¿Cuál es la función principal del sistema cardiovascular?",
+    "options": ["Filtrar los residuos de la sangre", "Transportar oxígeno, nutrientes y productos de desecho", "Producir hormonas que regulan el metabolismo", "Proteger el organismo de los patógenos"],
+    "rationale": "El sistema cardiovascular está formado por el corazón y los vasos sanguíneos. Su función principal es hacer circular la sangre por todo el organismo, aportando oxígeno y nutrientes a los tejidos y eliminando los productos de desecho como el dióxido de carbono."
+  },
+  "ap-02": {
+    "stem": "¿Qué cavidad corporal contiene el corazón y los pulmones?",
+    "options": ["Cavidad abdominal", "Cavidad pélvica", "Cavidad torácica", "Cavidad craneal"],
+    "rationale": "La cavidad torácica (caja torácica) alberga el corazón y los pulmones. Está separada de la cavidad abdominal por el diafragma."
+  },
+  "ap-03": {
+    "stem": "La unidad funcional más pequeña del sistema nervioso es:",
+    "options": ["El axón", "La dendrita", "La neurona", "La vaina de mielina"],
+    "rationale": "La neurona (célula nerviosa) es la unidad estructural y funcional básica del sistema nervioso. Está compuesta por un cuerpo celular, dendritas (reciben señales) y un axón (transmite señales)."
+  },
+  "ap-04": {
+    "stem": "¿Cuál de los siguientes describe un bucle de retroalimentación negativa?",
+    "options": ["Un cambio lleva a más cambio en la misma dirección", "Un cambio desencadena una respuesta que revierte el cambio original", "Dos hormonas se estimulan mutuamente de forma simultánea", "Retroalimentación que solo ocurre durante una enfermedad"],
+    "rationale": "La retroalimentación negativa es el mecanismo homeostático más común. Cuando una variable (p. ej., temperatura corporal) se desvía del punto de ajuste, el organismo responde de una manera que la devuelve a la normalidad, es decir, en sentido opuesto al cambio original."
+  },
+  "ap-05": {
+    "stem": "Los osteocitos son células que se encuentran en qué tejido:",
+    "options": ["Tejido muscular", "Tejido nervioso", "Tejido epitelial", "Tejido óseo"],
+    "rationale": "Los osteocitos son células óseas maduras incrustadas en la matriz dura del tejido óseo. Mantienen la densidad mineral ósea y se comunican con otras células óseas."
+  },
+  "ap-06": {
+    "stem": "El término 'ipsilateral' significa:",
+    "options": ["En el lado opuesto del cuerpo", "En el mismo lado del cuerpo", "Por encima de la línea media", "Hacia la superficie"],
+    "rationale": "Ipsilateral significa en el mismo lado. Por ejemplo, la mano derecha y el pie derecho son ipsilaterales. 'Contralateral' significa el lado opuesto."
+  },
+  "ap-07": {
+    "stem": "¿Qué parte del cerebro regula las funciones involuntarias como la frecuencia cardíaca y la respiración?",
+    "options": ["Corteza cerebral", "Cerebelo", "Bulbo raquídeo", "Tálamo"],
+    "rationale": "El bulbo raquídeo, ubicado en el tronco encefálico, controla las funciones autonómicas vitales, incluyendo la frecuencia cardíaca, la frecuencia respiratoria, la presión arterial y la deglución."
+  },
+  "ap-08": {
+    "stem": "El proceso por el cual las células se dividen para producir dos células hijas idénticas se llama:",
+    "options": ["Meiosis", "Mitosis", "Apoptosis", "Fagocitosis"],
+    "rationale": "La mitosis es la división celular para el crecimiento, la reparación y el reemplazo. Produce dos células hijas genéticamente idénticas (46 cromosomas en humanos). La meiosis produce gametos (espermatozoides/óvulos) con 23 cromosomas."
+  },
+  "mt-01": {
+    "stem": "El prefijo 'bradi-' significa:",
+    "options": ["Rápido", "Lento", "Doloroso", "Sin"],
+    "rationale": "'Bradi-' significa lento. Ejemplos: bradicardia (frecuencia cardíaca lenta) y bradipnea (frecuencia respiratoria lenta)."
+  },
+  "mt-02": {
+    "stem": "El sufijo '-itis' indica:",
+    "options": ["Extirpación de", "Inflamación de", "Condición de", "Reparación quirúrgica"],
+    "rationale": "'-itis' significa inflamación. Ejemplos: apendicitis (inflamación del apéndice), artritis (inflamación de las articulaciones), dermatitis (inflamación de la piel)."
+  },
+  "mt-03": {
+    "stem": "El término médico 'taquicardia' significa:",
+    "options": ["Frecuencia cardíaca lenta", "Ritmo cardíaco irregular", "Frecuencia cardíaca rápida", "Ausencia de latidos cardíacos"],
+    "rationale": "'Taqui-' significa rápido y '-cardia' se refiere al corazón. La taquicardia es una frecuencia cardíaca superior a 100 latidos por minuto en adultos."
+  },
+  "mt-04": {
+    "stem": "¿Qué significa el prefijo 'hipo-'?",
+    "options": ["Por encima de lo normal", "Por debajo de lo normal", "Sin", "Excesivo"],
+    "rationale": "'Hipo-' significa por debajo o deficiente. Ejemplos: hipoglucemia (glucosa en sangre baja), hipotensión (presión arterial baja), hipotermia (temperatura corporal baja). 'Hiper-' significa por encima o excesivo."
+  },
+  "mt-05": {
+    "stem": "El término 'disnea' se refiere a:",
+    "options": ["Ausencia de respiración", "Dificultad para respirar", "Respiración rápida", "Dolor al tragar"],
+    "rationale": "'Dis-' significa difícil/doloroso y '-pnea' significa respiración. La disnea es la sensación subjetiva de falta de aire o dificultad para respirar."
+  },
+  "mt-06": {
+    "stem": "¿Qué sufijo significa 'extirpación quirúrgica'?",
+    "options": ["-plastia", "-scopia", "-ectomía", "-otomía"],
+    "rationale": "'-ectomía' significa extirpación quirúrgica. Ejemplos: apendicectomía (extirpación del apéndice), amigdalectomía (extirpación de las amígdalas). '-otomía' = incisión; '-plastia' = reparación quirúrgica; '-scopia' = examen visual."
+  },
+  "mt-07": {
+    "stem": "La forma combinada 'hepat/o' se refiere a:",
+    "options": ["El corazón", "El hígado", "El riñón", "El pulmón"],
+    "rationale": "'Hepat/o' se refiere al hígado. Hepatitis = inflamación del hígado, hepatomegalia = hígado agrandado. 'Cardio' = corazón, 'nefro' = riñón, 'neumo' = pulmón."
+  },
+  "mt-08": {
+    "stem": "¿Qué significa la abreviatura 'NPO' en el entorno clínico?",
+    "options": ["Oximetría de pulso normal", "Nada por vía oral", "No observado previamente", "Opción no farmacológica"],
+    "rationale": "NPO significa 'nil per os' (latín), que significa 'nada por vía oral'. Los pacientes se ponen en NPO antes de una cirugía o procedimientos que requieren anestesia para prevenir la aspiración."
+  },
+  "ph-01": {
+    "stem": "¿Qué vía de administración de medicamentos tiene el inicio de acción más rápido?",
+    "options": ["Oral (VO)", "Subcutánea (SC)", "Intravenosa (IV)", "Intramuscular (IM)"],
+    "rationale": "La administración intravenosa (IV) suministra el fármaco directamente al torrente sanguíneo, sin barreras de absorción. Esto resulta en el inicio de acción más rápido: casi inmediato."
+  },
+  "ph-02": {
+    "stem": "El término 'rango terapéutico' se refiere a:",
+    "options": ["La dosis máxima antes de que ocurra toxicidad", "El rango de concentración en el que un fármaco es eficaz sin causar toxicidad", "El tiempo necesario para eliminar un fármaco", "La dosis que causa efectos secundarios en el 50% de los pacientes"],
+    "rationale": "El rango (o ventana) terapéutico es el rango de concentración del fármaco que produce el efecto deseado sin causar efectos adversos o tóxicos significativos. Mantenerse dentro de este rango es un objetivo clave de la terapia farmacológica."
+  },
+  "ph-03": {
+    "stem": "A un paciente se le prescribe un fármaco con un índice terapéutico estrecho. Esto significa:",
+    "options": ["El fármaco es seguro a cualquier dosis", "Pequeños errores de dosificación pueden llevar a toxicidad o fracaso del tratamiento", "El fármaco no tiene efectos secundarios", "El fármaco solo puede administrarse por vía intravenosa"],
+    "rationale": "Los fármacos con índice terapéutico estrecho (p. ej., warfarina, digoxina, litio) requieren una monitorización cuidadosa porque la diferencia entre la dosis eficaz y la tóxica es pequeña. Incluso pequeños cambios en la dosis o la fisiología del paciente pueden causar problemas graves."
+  },
+  "ph-04": {
+    "stem": "Los 'cinco correctos' de la administración de medicamentos incluyen todos los siguientes EXCEPTO:",
+    "options": ["Paciente correcto", "Dosis correcta", "Diagnóstico correcto", "Vía correcta"],
+    "rationale": "Los cinco correctos son: paciente correcto, medicamento correcto, dosis correcta, vía correcta y hora correcta. El 'diagnóstico correcto' no es uno de ellos: las enfermeras administran medicamentos según órdenes, no según su propio diagnóstico."
+  },
+  "ph-05": {
+    "stem": "La tolerancia a los fármacos se define mejor como:",
+    "options": ["Una reacción alérgica a un medicamento", "Una respuesta disminuida a un fármaco tras una exposición repetida, que requiere dosis más altas para el mismo efecto", "La incapacidad del organismo para metabolizar un fármaco", "Una respuesta inmunitaria potencialmente mortal"],
+    "rationale": "La tolerancia se desarrolla cuando la exposición repetida a un fármaco lleva a un efecto disminuido a la misma dosis. El organismo se adapta a la presencia del fármaco, a menudo mediante la regulación negativa de receptores o la inducción enzimática."
+  },
+  "ph-06": {
+    "stem": "¿Qué órgano es principalmente responsable del metabolismo de los fármacos?",
+    "options": ["Riñón", "Hígado", "Pulmón", "Intestino delgado"],
+    "rationale": "El hígado es el principal sitio de metabolismo farmacológico (biotransformación). Utiliza enzimas (principalmente el sistema CYP450) para convertir los fármacos en formas más hidrosolubles que puedan excretarse. Las enfermedades hepáticas pueden alterar significativamente el metabolismo."
+  },
+  "ph-07": {
+    "stem": "Un efecto adverso de un medicamento se describe mejor como:",
+    "options": ["El efecto terapéutico previsto de un medicamento", "Un efecto nocivo no deseado que ocurre a dosis terapéuticas normales", "Una sobredosis de medicamento", "Una alergia a un medicamento"],
+    "rationale": "Los efectos adversos a los medicamentos son respuestas nocivas y no deseadas que ocurren a dosis normalmente utilizadas en terapéutica. Difieren de los efectos secundarios (previsibles pero no deseados) y de la sobredosis."
+  },
+  "ph-08": {
+    "stem": "El término 'vida media' de un fármaco se refiere a:",
+    "options": ["El tiempo que tarda un fármaco en comenzar a actuar", "El tiempo necesario para que la concentración plasmática de un fármaco disminuya en un 50%", "La duración del efecto máximo del fármaco", "El tiempo entre dosis"],
+    "rationale": "La vida media (t½) es el tiempo necesario para que la concentración plasmática del fármaco disminuya a la mitad. Determina la frecuencia de dosificación: los fármacos con vida media corta necesitan administrarse con más frecuencia; los de vida media larga pueden administrarse una vez al día o menos."
+  },
+  "fe-01": {
+    "stem": "¿Qué electrolito es el más abundante en el líquido intracelular (LIC)?",
+    "options": ["Sodio (Na+)", "Potasio (K+)", "Calcio (Ca2+)", "Cloruro (Cl-)"],
+    "rationale": "El potasio (K+) es el principal catión intracelular. El sodio (Na+) es el principal catión extracelular. Esta diferencia es mantenida por la bomba sodio-potasio ATPasa y es fundamental para el potencial de membrana celular."
+  },
+  "fe-02": {
+    "stem": "El nivel normal de sodio sérico (Na+) en adultos es aproximadamente:",
+    "options": ["115–125 mEq/L", "135–145 mEq/L", "150–160 mEq/L", "3,5–5,0 mEq/L"],
+    "rationale": "El sodio sérico normal es 135–145 mEq/L. Por debajo de 135 = hiponatremia; por encima de 145 = hipernatremia. El sodio es el principal regulador de la osmolalidad del líquido extracelular."
+  },
+  "fe-03": {
+    "stem": "El edema es causado más comúnmente por:",
+    "options": ["Aumento de la presión osmótica plasmática", "Aumento de la presión hidrostática capilar o disminución de la presión oncótica plasmática", "Disminución del volumen sanguíneo", "Hipopotasemia"],
+    "rationale": "El edema (acumulación de líquido en los espacios intersticiales) resulta de desequilibrios en las fuerzas de Starling: aumento de la presión hidrostática capilar (empuja el líquido hacia afuera) o disminución de la presión oncótica plasmática (menos fuerza para atraerlo de regreso)."
+  },
+  "fe-04": {
+    "stem": "Un paciente con hipopotasemia (potasio bajo) tiene mayor riesgo de:",
+    "options": ["Fracturas óseas", "Arritmias cardíacas", "Trastornos de la coagulación", "Convulsiones"],
+    "rationale": "El potasio es esencial para mantener el potencial de membrana en reposo de las células cardíacas y musculares. La hipopotasemia hace que las células sean más excitables y susceptibles a arritmias cardíacas peligrosas, incluida la fibrilación ventricular."
+  },
+  "fe-05": {
+    "stem": "¿Qué condición se caracteriza por exceso de líquido en el espacio intravascular?",
+    "options": ["Deshidratación", "Hipovolemia", "Hipervolemia (exceso de volumen de líquido)", "Tercer espacio"],
+    "rationale": "La hipervolemia (exceso de volumen de líquido) es un estado de exceso de líquido en el compartimento vascular. Puede causar hipertensión, edema, disnea e insuficiencia cardíaca. Las causas incluyen líquidos IV excesivos, insuficiencia cardíaca o renal."
+  },
+  "fe-06": {
+    "stem": "¿Qué electrolito es el principal regulador de la función neuromuscular y se suplementa frecuentemente en los líquidos IV?",
+    "options": ["Potasio (K+)", "Magnesio (Mg2+)", "Calcio (Ca2+)", "Fosfato (PO4)"],
+    "rationale": "El calcio (Ca2+) es fundamental para la función neuromuscular, la contractilidad cardíaca y la salud ósea. La hipocalcemia aumenta la excitabilidad neuromuscular (tetania, signo de Trousseau, signo de Chvostek). Se suplementa habitualmente como gluconato o cloruro de calcio."
+  },
+  "fe-07": {
+    "stem": "Los líquidos IV isotónicos (como el suero salino al 0,9%) se utilizan porque:",
+    "options": ["Hacen entrar líquido en las células para hidratarlas", "Tienen la misma osmolalidad que la sangre y no provocan desplazamientos de líquido entre compartimentos", "Son hipertónicos respecto al plasma", "Reponen rápidamente los déficits electrolíticos"],
+    "rationale": "Los líquidos isotónicos tienen una osmolalidad aproximadamente igual a la del plasma (~290 mOsm/kg). Expanden el volumen de líquido extracelular sin provocar desplazamientos significativos de líquido entre los compartimentos intracelular y extracelular."
+  },
+  "fe-08": {
+    "stem": "¿Qué hallazgo es más compatible con la acidosis metabólica?",
+    "options": ["pH > 7,45 con HCO3- elevado", "pH < 7,35 con HCO3- disminuido", "pH < 7,35 con CO2 elevado", "pH > 7,45 con CO2 disminuido"],
+    "rationale": "La acidosis metabólica se define por pH < 7,35 y HCO3- < 22 mEq/L. El bajo nivel de bicarbonato refleja una causa metabólica (p. ej., cetoacidosis diabética, acidosis láctica, diarrea). La acidosis respiratoria tiene pH bajo con CO2 elevado."
+  },
+  "ic-01": {
+    "stem": "La forma más eficaz de prevenir la propagación de las infecciones es:",
+    "options": ["Usar guantes en todo momento", "La higiene de manos con agua y jabón o solución hidroalcohólica", "Usar una mascarilla quirúrgica", "Administrar antibióticos de forma profiláctica"],
+    "rationale": "La higiene de manos es la medida de prevención de infecciones más eficaz. La Organización Mundial de la Salud identifica 5 momentos para la higiene de manos: antes del contacto con el paciente, antes de una técnica limpia/aséptica, tras exposición a fluidos corporales, después del contacto con el paciente y después del contacto con el entorno del paciente."
+  },
+  "ic-02": {
+    "stem": "Las precauciones de contacto se utilizan para pacientes con qué tipo de patógeno:",
+    "options": ["Infecciones aéreas como la tuberculosis", "Infecciones transmitidas por contacto directo o indirecto, como el SARM", "Infecciones por gotas como la gripe", "Todas las infecciones asociadas a la atención sanitaria"],
+    "rationale": "Las precauciones de contacto se usan para patógenos transmitidos por contacto directo (tocar al paciente) o indirecto (tocar superficies/equipos contaminados). Ejemplos: SARM, ERV, C. difficile e infecciones de heridas."
+  },
+  "ic-03": {
+    "stem": "¿Qué tipo de precaución requiere que el paciente esté en una habitación con presión negativa?",
+    "options": ["Precauciones de contacto", "Precauciones por gotas", "Precauciones aéreas", "Precauciones estándar"],
+    "rationale": "Las precauciones aéreas se usan para infecciones que se propagan por partículas pequeñas que permanecen suspendidas en el aire (p. ej., tuberculosis, sarampión, varicela). Una habitación con presión negativa impide que el aire contaminado escape al pasillo."
+  },
+  "ic-04": {
+    "stem": "Las precauciones estándar se aplican a:",
+    "options": ["Solo los pacientes conocidos por tener infecciones", "Todos los pacientes, independientemente de su estado infeccioso", "Solo los pacientes inmunodeprimidos", "Solo los pacientes en UCI"],
+    "rationale": "Las precauciones estándar son el nivel mínimo de prevención de infecciones aplicado a TODOS los pacientes en todos los entornos sanitarios, independientemente de su estado infeccioso sospechado o confirmado. Incluyen higiene de manos, uso de EPI, prácticas seguras de inyección e higiene respiratoria."
+  },
+  "ic-05": {
+    "stem": "La cadena de infección incluye todos los siguientes EXCEPTO:",
+    "options": ["Agente infeccioso", "Modo de transmisión", "Huésped susceptible", "Resistencia antibiótica"],
+    "rationale": "La cadena de infección tiene 6 eslabones: agente infeccioso, reservorio, puerta de salida, modo de transmisión, puerta de entrada y huésped susceptible. La resistencia antibiótica es una propiedad de algunos patógenos (parte del eslabón 'agente infeccioso'), no un eslabón separado."
+  },
+  "ic-06": {
+    "stem": "Se requieren precauciones por gotas para un paciente diagnosticado con gripe. Además de las precauciones estándar, la enfermera debe:",
+    "options": ["Colocar al paciente en una habitación con presión negativa", "Usar una mascarilla quirúrgica/de procedimiento cuando esté a menos de 1 metro del paciente", "Usar respirador N95 en todo momento", "Aislar al paciente en una habitación con presión positiva"],
+    "rationale": "Las precauciones por gotas para la gripe requieren mascarilla quirúrgica cuando se esté a menos de 1 metro del paciente, más habitación individual. A diferencia de las precauciones aéreas, no se requiere habitación con presión negativa ni respirador N95 para la gripe estándar."
+  },
+  "ic-07": {
+    "stem": "¿Cuál de los siguientes rompe la cadena de infección en el eslabón del 'huésped susceptible'?",
+    "options": ["Higiene de manos", "Esterilizar el equipo", "Vacunación", "Usar guantes"],
+    "rationale": "La vacunación reduce la susceptibilidad del huésped estimulando una respuesta inmunitaria antes de la exposición. Romper la cadena en el eslabón del huésped susceptible hace al individuo resistente. La higiene de manos y el EPI rompen la cadena en otros eslabones (transmisión, puerta de entrada)."
+  },
+  "ic-08": {
+    "stem": "El equipo de protección individual (EPI) debe retirarse en qué orden:",
+    "options": ["Mascarilla, guantes, bata, protección ocular", "Guantes, bata, protección ocular, mascarilla/respirador", "Bata, guantes, mascarilla, protección ocular", "Protección ocular, bata, guantes, mascarilla"],
+    "rationale": "Los CDC recomiendan retirar el EPI en este orden: (1) guantes (los más contaminados), (2) bata, (3) protección ocular, (4) mascarilla/respirador (guardada para el final ya que protege el tracto respiratorio). La higiene de manos se realiza tras retirar cada elemento."
+  },
+  "pp-01": {
+    "stem": "La homeostasis se describe mejor como:",
+    "options": ["La ausencia total de enfermedades", "La capacidad del organismo para mantener condiciones internas estables a pesar de los cambios externos", "Un estado de reposo e inactividad", "El equilibrio entre anabolismo y catabolismo únicamente"],
+    "rationale": "La homeostasis es el proceso dinámico mediante el cual el organismo mantiene condiciones internas relativamente estables (p. ej., temperatura, pH, glucemia) a través de ajustes continuos que implican mecanismos de retroalimentación."
+  },
+  "pp-02": {
+    "stem": "La inflamación se caracteriza por todos los siguientes EXCEPTO:",
+    "options": ["Enrojecimiento (rubor)", "Hinchazón (tumor)", "Disminución del número de glóbulos blancos", "Dolor (dolor)"],
+    "rationale": "Los signos cardinales de la inflamación son: enrojecimiento (rubor), hinchazón (tumor), calor (calor), dolor (dolor) y pérdida de función (functio laesa). La inflamación en realidad aumenta el número de glóbulos blancos, ya que son reclutados al sitio."
+  },
+  "pp-03": {
+    "stem": "La hipoxia se define como:",
+    "options": ["Exceso de oxígeno en el torrente sanguíneo", "Disminución del suministro de oxígeno a los tejidos", "Aumento del dióxido de carbono en la sangre", "Disminución de la frecuencia respiratoria"],
+    "rationale": "La hipoxia se refiere al suministro inadecuado de oxígeno a los tejidos y células. Puede resultar de baja oxigenación sanguínea (hipoxemia), flujo sanguíneo reducido (isquemia) o utilización celular de oxígeno alterada."
+  },
+  "pp-04": {
+    "stem": "Una embolia se describe mejor como:",
+    "options": ["Un coágulo de sangre que se forma en una vena y permanece allí", "Una sustancia (coágulo, grasa, aire) que viaja por el torrente sanguíneo y bloquea un vaso", "Inflamación de un vaso sanguíneo", "Estrechamiento de una arteria debido a la placa"],
+    "rationale": "Una embolia ocurre cuando una sustancia (más comúnmente un trombo/coágulo sanguíneo, pero también grasa, aire o líquido amniótico) viaja por el torrente sanguíneo hasta alojarse en un vaso demasiado pequeño para que pase, obstruyendo el flujo sanguíneo."
+  },
+  "pp-05": {
+    "stem": "La isquemia se refiere a:",
+    "options": ["Flujo sanguíneo excesivo a un tejido", "Flujo sanguíneo insuficiente a un tejido, lo que lleva a privación de oxígeno", "Una respuesta inmunitaria a una lesión tisular", "La muerte celular debida a una infección"],
+    "rationale": "La isquemia es un suministro sanguíneo inadecuado a un tejido u órgano, que resulta en privación de oxígeno y nutrientes. Si se prolonga, la isquemia lleva al infarto (muerte tisular). Ejemplos comunes: isquemia miocárdica, isquemia cerebral."
+  },
+  "pp-06": {
+    "stem": "La necrosis se define como:",
+    "options": ["Muerte celular programada (suicidio celular)", "Muerte celular no controlada debida a lesión o enfermedad", "Crecimiento celular anormal", "División celular para reparación"],
+    "rationale": "La necrosis es la muerte celular no controlada causada por lesión, isquemia, infección o toxinas. Desencadena inflamación. Esto la diferencia de la apoptosis, que es la muerte celular programada (intencional) que no causa inflamación."
+  },
+  "pp-07": {
+    "stem": "¿Qué fase de la enfermedad ocurre antes de que aparezcan los síntomas?",
+    "options": ["Fase aguda", "Fase prodrómica", "Período de incubación", "Fase de resolución"],
+    "rationale": "El período de incubación es el tiempo entre la exposición a un patógeno y los primeros síntomas (cuando el patógeno se está multiplicando pero aún no causa síntomas detectables). La fase prodrómica presenta síntomas tempranos inespecíficos. La fase aguda tiene síntomas máximos."
+  },
+  "pp-08": {
+    "stem": "El shock compensado se caracteriza por:",
+    "options": ["Presión arterial baja y estado mental alterado", "Signos vitales normales o casi normales debido a los mecanismos compensatorios del organismo", "Fallo orgánico completo", "Fiebre alta y taquicardia únicamente"],
+    "rationale": "En el shock compensado, los mecanismos compensatorios del organismo (vasoconstricción, taquicardia, aumento de la contractilidad) mantienen la presión arterial y la perfusión casi normales a pesar del déficit subyacente. Sin tratamiento, la compensación falla y se desarrolla el shock descompensado."
+  },
+  "ch-01": {
+    "stem": "Un átomo que ha ganado o perdido electrones se llama:",
+    "options": ["Molécula", "Ion", "Isótopo", "Compuesto"],
+    "rationale": "Un ion es un átomo o grupo de átomos que tiene carga eléctrica neta porque ha perdido o ganado electrones. Los cationes están cargados positivamente (perdieron electrones); los aniones están cargados negativamente (ganaron electrones)."
+  },
+  "ch-02": {
+    "stem": "¿Cuál es el pH de una solución neutra?",
+    "options": ["0", "7", "14", "7,4"],
+    "rationale": "La escala de pH va de 0 (más ácido) a 14 (más básico/alcalino). Un pH de 7 es neutro (agua pura). La sangre humana tiene un pH ligeramente alcalino de 7,35–7,45."
+  },
+  "ch-03": {
+    "stem": "Una solución con pH 3 es:",
+    "options": ["Neutra", "Ligeramente alcalina", "Ácida", "Fuertemente alcalina"],
+    "rationale": "El pH por debajo de 7 es ácido. Un pH de 3 indica un ácido fuerte. Cada unidad de cambio en el pH representa un cambio de 10 veces en la concentración de iones hidrógeno (escala logarítmica)."
+  },
+  "ch-04": {
+    "stem": "¿Qué tipo de enlace mantiene unidas las moléculas de agua y le da al agua sus propiedades únicas?",
+    "options": ["Enlaces iónicos", "Enlaces covalentes", "Enlaces de hidrógeno", "Enlaces peptídicos"],
+    "rationale": "Los enlaces de hidrógeno entre las moléculas de agua (debido a la polaridad del agua) le confieren su alta tensión superficial, alto calor específico y propiedades disolventes. Estos enlaces son individualmente débiles pero colectivamente fuertes."
+  },
+  "ch-05": {
+    "stem": "Un sistema tampón mantiene:",
+    "options": ["Glucemia constante", "pH estable resistiendo cambios en la concentración de iones hidrógeno", "Temperatura corporal", "Volumen sanguíneo"],
+    "rationale": "Los sistemas tampón resisten los cambios de pH aceptando o cediendo iones hidrógeno (H+). El sistema tampón bicarbonato es el principal tampón en la sangre. Sin tampones, pequeñas adiciones de ácido o base causarían grandes cambios de pH peligrosos."
+  },
+  "ch-06": {
+    "stem": "El proceso de romper moléculas grandes en moléculas más pequeñas con la adición de agua se llama:",
+    "options": ["Síntesis por deshidratación", "Hidrólisis", "Oxidación", "Fosforilación"],
+    "rationale": "La hidrólisis (hidro = agua, lisis = romper) divide moléculas grandes (proteínas, carbohidratos, lípidos) en unidades más pequeñas usando agua. La síntesis por deshidratación es el proceso inverso: unir monómeros liberando agua."
+  },
+  "ch-07": {
+    "stem": "¿Qué macromolécula lleva la información genética?",
+    "options": ["Proteínas", "Lípidos", "Carbohidratos", "Ácidos nucleicos (ADN/ARN)"],
+    "rationale": "Los ácidos nucleicos (ADN y ARN) almacenan y transmiten la información genética. El ADN contiene el plano genético; el ARN lleva las instrucciones para la síntesis de proteínas. Las proteínas se construyen según esta información."
+  },
+  "ch-08": {
+    "stem": "La actividad enzimática puede verse afectada por todos los siguientes EXCEPTO:",
+    "options": ["Temperatura", "pH", "Concentración de sustrato", "El color de la solución"],
+    "rationale": "Las enzimas se ven afectadas por la temperatura (desnaturalización por encima de la temperatura óptima), el pH (cada enzima tiene un pH óptimo), la concentración de sustrato (cinética enzimática), inhibidores y cofactores. El color de una solución no tiene efecto directo sobre la actividad enzimática."
+  },
+  "nf-01": {
+    "stem": "La fuente de energía primaria para el organismo es:",
+    "options": ["Grasas", "Proteínas", "Carbohidratos", "Vitaminas"],
+    "rationale": "Los carbohidratos son la fuente de energía preferida del organismo. Se descomponen en glucosa, que es utilizada por las células para producir ATP. El cerebro depende casi exclusivamente de la glucosa para obtener energía."
+  },
+  "nf-02": {
+    "stem": "¿Qué vitamina produce la piel cuando se expone a la luz solar?",
+    "options": ["Vitamina A", "Vitamina C", "Vitamina D", "Vitamina K"],
+    "rationale": "La vitamina D (calciferol) se sintetiza en la piel cuando la radiación UVB convierte el 7-dehidrocolesterol en previtamina D3. Es esencial para la absorción de calcio, la salud ósea y la función inmunitaria."
+  },
+  "nf-03": {
+    "stem": "Un paciente desnutrido con baja albúmina sérica tiene riesgo de:",
+    "options": ["Hipertensión", "Edema (presión oncótica baja)", "Hiperglucemia", "Fracturas óseas"],
+    "rationale": "La albúmina es la principal proteína plasmática que mantiene la presión oncótica (osmótica coloidal), que atrae líquido hacia los capilares. La albúmina baja reduce la presión oncótica, permitiendo que el líquido escape a los espacios intersticiales, causando edema."
+  },
+  "nf-04": {
+    "stem": "La anemia ferropénica se trata más eficazmente con:",
+    "options": ["Suplementos de vitamina B12", "Aumento de la ingesta de fibra dietética", "Suplementos de hierro y alimentos ricos en hierro (p. ej., carne roja, verduras de hoja verde)", "Suplementos de calcio"],
+    "rationale": "La anemia ferropénica resulta del hierro inadecuado para la síntesis de hemoglobina. El tratamiento incluye suplementos orales de hierro y alimentos ricos en hierro hemo (carne roja) o no hemo (legumbres, espinacas) más vitamina C para mejorar la absorción del hierro no hemo."
+  },
+  "nf-05": {
+    "stem": "El índice de masa corporal (IMC) se calcula usando:",
+    "options": ["Edad y circunferencia de la cintura", "Peso en kilogramos dividido por la altura en metros al cuadrado", "Ingesta calórica y nivel de actividad física", "Niveles de colesterol y presión arterial"],
+    "rationale": "IMC = peso (kg) ÷ talla (m²). Es una herramienta de cribado para categorías de peso: bajo peso (<18,5), normal (18,5–24,9), sobrepeso (25–29,9), obesidad (≥30). El IMC tiene limitaciones y no mide directamente la grasa corporal."
+  },
+  "nf-06": {
+    "stem": "¿Qué electrolito está más estrechamente asociado con la formación de huesos y dientes?",
+    "options": ["Sodio", "Potasio", "Calcio", "Hierro"],
+    "rationale": "El calcio es el mineral más abundante del organismo. El 99% está almacenado en huesos y dientes como hidroxiapatita. El 1% restante en la sangre es fundamental para la contracción muscular, la transmisión nerviosa y la coagulación sanguínea."
+  },
+  "nf-07": {
+    "stem": "Los aminoácidos esenciales son aquellos que:",
+    "options": ["El organismo puede sintetizar por sí mismo", "Deben obtenerse a través de la dieta porque el organismo no puede producirlos", "Solo se encuentran en productos animales", "Son perjudiciales en grandes cantidades"],
+    "rationale": "Hay 9 aminoácidos esenciales (p. ej., leucina, lisina, triptófano) que el cuerpo humano no puede sintetizar y debe obtener de los alimentos. Las proteínas completas (carne, pescado, huevos, soja) contienen todos los aminoácidos esenciales."
+  },
+  "nf-08": {
+    "stem": "La vitamina K es esencial para:",
+    "options": ["La función inmunitaria y la síntesis de colágeno", "La coagulación sanguínea y el metabolismo óseo", "La visión y la integridad de las células epiteliales", "El metabolismo energético y la función nerviosa"],
+    "rationale": "La vitamina K es necesaria para la síntesis de los factores de coagulación (II, VII, IX, X) y las proteínas implicadas en la mineralización ósea. La deficiencia lleva a un aumento del tiempo de sangrado. La warfarina actúa bloqueando la actividad de la vitamina K."
+  },
+  "ox-01": {
+    "stem": "La saturación de oxígeno normal (SpO₂) en un adulto sano es:",
+    "options": ["85–90%", "90–94%", "95–100%", "75–85%"],
+    "rationale": "La SpO₂ normal es del 95–100%. Valores de 90–94% son límite (hipoxia leve); por debajo del 90% es hipoxemia significativa que requiere intervención. La SpO₂ se mide de forma no invasiva mediante pulsioximetría."
+  },
+  "ox-02": {
+    "stem": "¿Qué estructura separa los lados derecho e izquierdo del corazón?",
+    "options": ["Pericardio", "Tabique", "Pleura", "Diafragma"],
+    "rationale": "El tabique cardíaco (tabique interauricular entre aurículas; tabique interventricular entre ventrículos) separa los lados derecho e izquierdo del corazón, evitando la mezcla de sangre oxigenada y desoxigenada."
+  },
+  "ox-03": {
+    "stem": "El músculo principal responsable de la respiración es:",
+    "options": ["Los músculos intercostales", "El diafragma", "El esternocleidomastoideo", "El pectoral mayor"],
+    "rationale": "El diafragma, un músculo con forma de cúpula que separa las cavidades torácica y abdominal, es el músculo principal de la respiración. Durante la inhalación, se contrae y aplana, aumentando el volumen torácico y permitiendo la entrada de aire."
+  },
+  "ox-04": {
+    "stem": "La cianosis (coloración azulada) indica:",
+    "options": ["Exceso de oxígeno en la sangre", "Oxigenación inadecuada, resultando en niveles altos de hemoglobina desoxigenada", "Insuficiencia hepática", "Aumento del número de glóbulos rojos"],
+    "rationale": "La cianosis ocurre cuando hay aproximadamente ≥5 g/dL de hemoglobina desoxigenada en la sangre. Aparece en los labios, yemas de los dedos y lechos ungueales. La cianosis central (labios/lengua) indica hipoxemia significativa."
+  },
+  "ox-05": {
+    "stem": "En un paciente con enfermedad pulmonar obstructiva crónica (EPOC), la oxigenoterapia de alto flujo debe usarse con precaución porque:",
+    "options": ["El oxígeno es demasiado costoso para uso a largo plazo", "Algunos pacientes con EPOC dependen de un estímulo hipóxico para respirar; el O₂ alto puede suprimir la respiración", "El oxígeno causa broncoconstricción en la EPOC", "Los pacientes con EPOC no pueden absorber oxígeno a través de los alvéolos"],
+    "rationale": "Algunos pacientes con EPOC con retención crónica de CO₂ se desensibilizan al CO₂ como estímulo respiratorio y dependen en cambio de niveles bajos de oxígeno (estímulo hipóxico) para desencadenar la respiración. El oxígeno de alto flujo puede atenuar este estímulo, causando potencialmente depresión respiratoria."
+  },
+  "ox-06": {
+    "stem": "El volumen corriente se define como:",
+    "options": ["El volumen máximo de aire exhalado tras una respiración profunda", "El volumen de aire inhalado o exhalado en una sola respiración normal", "El volumen de aire que queda en los pulmones tras la exhalación máxima", "La capacidad pulmonar total"],
+    "rationale": "El volumen corriente (VC) es la cantidad de aire que entra o sale de los pulmones con cada respiración tranquila normal: aproximadamente 500 mL en adultos. Se usa para calcular la ventilación minuto (VC × frecuencia respiratoria)."
+  },
+  "ox-07": {
+    "stem": "La curva de disociación de la oxihemoglobina se desplaza hacia la derecha cuando:",
+    "options": ["El pH aumenta y la temperatura disminuye", "El pH disminuye, la temperatura aumenta o el CO₂ aumenta", "Los niveles de oxígeno en la sangre aumentan", "El paciente está en altitud"],
+    "rationale": "Un desplazamiento hacia la derecha de la curva de oxihemoglobina significa que la hemoglobina tiene menor afinidad por el oxígeno, facilitando la liberación de O₂ a los tejidos. Ocurre con: acidosis (pH bajo), aumento de CO₂, aumento de temperatura y aumento de 2,3-DPG, a menudo en tejidos activos/estresados."
+  },
+  "ox-08": {
+    "stem": "¿Qué hallazgo de evaluación justifica la administración inmediata de oxígeno?",
+    "options": ["SpO₂ del 97%, frecuencia respiratoria de 14", "SpO₂ del 88%, uso de músculos accesorios y agitación", "Disnea leve solo con esfuerzo", "Frecuencia respiratoria de 18 con sonidos pulmonares claros"],
+    "rationale": "Una SpO₂ del 88% combinada con uso de músculos accesorios y agitación indica hipoxia significativa. Los tres signos juntos sugieren que el paciente está compensando (usando músculos adicionales) y está angustiado: se requiere oxígeno suplementario inmediato y evaluación adicional."
+  },
+  "ha-01": {
+    "stem": "El orden correcto de las técnicas de evaluación física es:",
+    "options": ["Inspección, percusión, palpación, auscultación", "Inspección, auscultación, palpación, percusión", "Palpación, inspección, auscultación, percusión", "Auscultación, inspección, palpación, percusión"],
+    "rationale": "El orden estándar para la mayoría de los sistemas corporales es IPPA: Inspección, Palpación, Percusión, Auscultación. El abdomen es la excepción: Inspección, Auscultación, Percusión, Palpación, porque la palpación y percusión pueden alterar los ruidos intestinales."
+  },
+  "ha-02": {
+    "stem": "La frecuencia cardíaca en reposo normal para un adulto es:",
+    "options": ["40–60 latidos por minuto", "60–100 latidos por minuto", "100–120 latidos por minuto", "50–70 latidos por minuto"],
+    "rationale": "La frecuencia cardíaca en reposo normal para un adulto es de 60–100 lpm. Por debajo de 60 = bradicardia; por encima de 100 = taquicardia. Los atletas entrenados pueden tener frecuencias en reposo por debajo de 60 como variante normal."
+  },
+  "ha-03": {
+    "stem": "Al auscultar los sonidos pulmonares, los crepitantes (rales) indican:",
+    "options": ["Obstrucción por moco en las vías aéreas grandes", "Líquido en los alvéolos o pequeñas vías aéreas que se abren y cierran", "Bronquiolos estrechos", "Movimiento normal del aire por las vías aéreas grandes"],
+    "rationale": "Los crepitantes son sonidos discontinuos no musicales causados por líquido en los alvéolos (como en la neumonía o edema pulmonar) o pequeñas vías aéreas que se abren durante la inspiración. Se describen como 'finos' o 'gruesos'."
+  },
+  "ha-04": {
+    "stem": "La Escala de Coma de Glasgow (ECG) evalúa:",
+    "options": ["Nivel de dolor, movilidad y diuresis", "Apertura ocular, respuesta verbal y respuesta motora", "Presión arterial, frecuencia cardíaca y frecuencia respiratoria", "Orientación, memoria y atención"],
+    "rationale": "La ECG evalúa tres componentes: apertura ocular (1–4), respuesta verbal (1–5) y respuesta motora (1–6). Las puntuaciones totales van de 3 (inconsciencia profunda) a 15 (totalmente alerta). Puntuaciones ≤8 generalmente indican lesión cerebral grave."
+  },
+  "ha-05": {
+    "stem": "La hipotensión ortostática se diagnostica cuando la presión arterial al ponerse de pie disminuye al menos:",
+    "options": ["5 mmHg sistólica o 3 mmHg diastólica", "20 mmHg sistólica o 10 mmHg diastólica", "10 mmHg sistólica o 5 mmHg diastólica", "30 mmHg sistólica o 15 mmHg diastólica"],
+    "rationale": "La hipotensión ortostática (postural) se define como una caída de ≥20 mmHg sistólica o ≥10 mmHg diastólica dentro de los 3 minutos de ponerse de pie. Puede causar mareos/caídas e indicar deshidratación, disfunción autonómica o efectos de medicación."
+  },
+  "ha-06": {
+    "stem": "Durante la evaluación abdominal, ¿qué sonido es normal al auscultarlo?",
+    "options": ["Ningún sonido", "Ruidos intestinales hiperactivos cada 5 segundos", "Ruidos intestinales cada 5–30 segundos (5–30 por minuto)", "Soplos sobre la aorta"],
+    "rationale": "Los ruidos intestinales normales son sonidos suaves y gorgoteantes que se escuchan aproximadamente 5–30 veces por minuto (cada 5–30 segundos). La ausencia de ruidos sugiere íleo paralítico; los sonidos hiperactivos sugieren obstrucción o diarrea. Los soplos aórticos son anormales."
+  },
+  "ha-07": {
+    "stem": "El edema con fóvea se clasifica en una escala de 1+ a 4+. Un edema con fóvea de 3+ significa:",
+    "options": ["Depresión leve que desaparece rápidamente", "Depresión moderada que desaparece en 10–15 segundos", "Depresión profunda (>5 mm) que puede persistir 1–2 minutos", "Depresión grave con deformidad permanente"],
+    "rationale": "El edema con fóvea 3+ se caracteriza por una depresión profunda (aproximadamente 5–6 mm) que tarda 1–2 minutos en recuperarse. Indica acumulación significativa de líquido. El 4+ es el más grave con depresión >8 mm que dura más de 2 minutos."
+  },
+  "ha-08": {
+    "stem": "El dolor de un paciente se valora en 8/10 en la escala numérica. Según la clasificación estándar, este nivel de dolor es:",
+    "options": ["Leve", "Moderado", "Severo", "Sin dolor"],
+    "rationale": "La escala numérica (NRS): 0 = sin dolor, 1–3 = leve, 4–6 = moderado, 7–10 = severo. Una valoración de 8/10 es dolor severo que requiere evaluación urgente e intervención probable."
+  }
+}

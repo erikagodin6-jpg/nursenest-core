@@ -1,0 +1,19 @@
+{
+  "overview": "L'équilibre hydro-électrolytique est fondamental pour le fonctionnement cellulaire. Les électrolytes (sodium, potassium, calcium, magnésium, phosphore) régulent la transmission nerveuse, la contraction musculaire et l'équilibre acido-basique. Les déséquilibres peuvent engager le pronostic vital et nécessitent une reconnaissance rapide.",
+  "key_concepts": [
+    "Compartiments liquidiens : intracellulaire (2/3 du volume total), extracellulaire (1/3 : plasma + liquide interstitiel)",
+    "Osmose : déplacement de l'eau des zones hypotoniques vers hypertoniques à travers une membrane semi-perméable",
+    "Sodium (Na⁺ 135–145 mEq/L) : principal cation extracellulaire, régule l'osmolarité et la volémie",
+    "Potassium (K⁺ 3,5–5,0 mEq/L) : principal cation intracellulaire, essentiel à la conduction cardiaque",
+    "Solutions IV : isotonique (NaCl 0,9%, sérum glucosé 5%), hypotonique (NaCl 0,45%), hypertonique (NaCl 3%)"
+  ],
+  "nursing_responsibilities": "Surveiller le bilan hydrique (entrées/sorties), peser le patient quotidiennement à la même heure, évaluer les signes de surcharge ou de déshydratation (turgor cutané, muqueuses, pression artérielle, diurèse). Contrôler les résultats biologiques avant d'administrer des suppléments électrolytiques, notamment le potassium IV. Éduquer le patient sur la restriction ou l'augmentation des apports selon la pathologie.",
+  "clinical_pearls": "L'hypokaliémie potentialise la toxicité de la digoxine — vérifier le K⁺ avant administration. L'hyponatrémie sévère ne doit pas être corrigée trop rapidement (risque de myélinolyse centropontine). Le potassium IV ne doit jamais être administré en bolus direct — toujours dilué et en perfusion lente avec monitoring cardiaque. La pesée quotidienne est plus fiable que le bilan entrées/sorties pour détecter une rétention hydrique.",
+  "patient_education": "Expliquez aux patients l'importance d'un apport hydrique adapté (environ 1,5–2 L/jour en l'absence de restriction), les signes de déshydratation (soif intense, urines foncées, étourdissements) et les aliments riches en potassium (bananes, oranges, pommes de terre) si une supplémentation est prescrite ou recommandée.",
+  "key_takeaways": [
+    "L'eau suit toujours le sodium — comprendre la natrémie permet de prédire les mouvements liquidiens",
+    "L'hypokaliémie et l'hyperkaliémie sont toutes deux dangereuses pour le rythme cardiaque — surveiller l'ECG",
+    "Le potassium IV doit toujours être dilué et administré lentement avec monitoring — jamais en IVD",
+    "Le bilan hydrique et la pesée quotidienne sont les outils de surveillance de base en soins infirmiers"
+  ]
+}

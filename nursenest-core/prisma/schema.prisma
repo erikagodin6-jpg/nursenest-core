@@ -676,6 +676,8 @@ model BlogPost {
   postStatus   BlogPostStatus @default(DRAFT)
   /** When status is SCHEDULED, this is the go-live instant (UTC). Also used as canonical “publish” time for SEO when set. */
   publishAt    DateTime?
+  /** Original legacy schedule timestamp (if imported from scheduled content). */
+  scheduledAt  DateTime?
   /** RN | PN | NP | Allied — drives cross-links and topic hubs (string for flexibility vs exam registry keys). */
   exam         String?
   /** Optional: overrides <title> / OG when set. */
@@ -752,6 +754,7 @@ model BlogPost {
   adminPublishLog Json @default("[]")
 
   @@index([postStatus, publishAt])
+  @@index([scheduledAt])
   @@index([createdAt])
   @@index([campaignId, postStatus, publishAt])
   @@index([targetKeyword])

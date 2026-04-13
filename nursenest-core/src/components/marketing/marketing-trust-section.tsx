@@ -35,7 +35,7 @@ export function MarketingTrustSection({
 
   return (
     <section
-      className="border-t border-[var(--theme-card-border)] bg-gradient-to-b from-[var(--theme-muted-surface)]/80 to-[var(--theme-card-bg)]"
+      className="nn-gradient-safe border-t border-[var(--theme-card-border)] bg-gradient-to-b from-[var(--theme-muted-surface)]/80 to-[var(--theme-card-bg)]"
       style={{ paddingTop: "var(--space-block)", paddingBottom: "var(--space-block)" }}
       data-testid="section-marketing-trust"
       aria-labelledby="marketing-trust-heading"

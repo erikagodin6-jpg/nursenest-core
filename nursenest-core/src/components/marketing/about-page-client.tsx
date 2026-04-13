@@ -84,7 +84,7 @@ const TRUST_POINTS = [
 function HeroSection() {
   return (
     <section
-      className="relative overflow-hidden px-4 py-20 text-center sm:px-6 sm:py-24 lg:px-8"
+      className="nn-gradient-safe relative overflow-hidden px-4 py-20 text-center sm:px-6 sm:py-24 lg:px-8"
       style={{ background: `linear-gradient(135deg, ${BG_BASE} 60%, color-mix(in srgb, ${ACCENT} 5%, ${BG_BASE}))` }}
     >
       <div

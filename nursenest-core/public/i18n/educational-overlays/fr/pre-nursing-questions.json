@@ -1,0 +1,402 @@
+{
+  "ap-01": {
+    "stem": "Quelle est la fonction principale du système cardiovasculaire ?",
+    "options": ["Filtrer les déchets du sang", "Transporter l'oxygène, les nutriments et les déchets", "Produire des hormones qui régulent le métabolisme", "Protéger l'organisme contre les agents pathogènes"],
+    "rationale": "Le système cardiovasculaire comprend le cœur et les vaisseaux sanguins. Son rôle principal est de faire circuler le sang dans tout l'organisme, en apportant l'oxygène et les nutriments aux tissus et en éliminant les déchets comme le dioxyde de carbone."
+  },
+  "ap-02": {
+    "stem": "Quelle cavité corporelle contient le cœur et les poumons ?",
+    "options": ["Cavité abdominale", "Cavité pelvienne", "Cavité thoracique", "Cavité crânienne"],
+    "rationale": "La cavité thoracique (cage thoracique) abrite le cœur et les poumons. Elle est séparée de la cavité abdominale par le diaphragme."
+  },
+  "ap-03": {
+    "stem": "La plus petite unité fonctionnelle du système nerveux est :",
+    "options": ["L'axone", "La dendrite", "Le neurone", "La gaine de myéline"],
+    "rationale": "Le neurone (cellule nerveuse) est l'unité structurale et fonctionnelle de base du système nerveux. Il est composé d'un corps cellulaire, de dendrites (reçoivent les signaux) et d'un axone (transmet les signaux)."
+  },
+  "ap-04": {
+    "stem": "Lequel des éléments suivants décrit une boucle de rétroaction négative ?",
+    "options": ["Un changement entraîne davantage de changement dans la même direction", "Un changement déclenche une réponse qui inverse le changement initial", "Deux hormones se stimulent mutuellement de façon simultanée", "Une rétroaction qui ne survient que lors d'une maladie"],
+    "rationale": "La rétroaction négative est le mécanisme homéostatique le plus courant. Lorsqu'une variable (ex. : température corporelle) dévie du point de consigne, l'organisme réagit d'une façon qui la ramène à la normale — c'est-à-dire dans le sens opposé au changement initial."
+  },
+  "ap-05": {
+    "stem": "Les ostéocytes sont des cellules présentes dans quel tissu ?",
+    "options": ["Tissu musculaire", "Tissu nerveux", "Tissu épithélial", "Tissu osseux"],
+    "rationale": "Les ostéocytes sont des cellules osseuses matures enchâssées dans la matrice dure du tissu osseux. Ils maintiennent la densité minérale osseuse et communiquent avec les autres cellules osseuses."
+  },
+  "ap-06": {
+    "stem": "Le terme « ipsilatéral » signifie :",
+    "options": ["Du côté opposé du corps", "Du même côté du corps", "Au-dessus de la ligne médiane", "Vers la surface"],
+    "rationale": "Ipsilatéral signifie du même côté. Par exemple, la main droite et le pied droit sont ipsilatéraux. « Controlatéral » désigne le côté opposé."
+  },
+  "ap-07": {
+    "stem": "Quelle partie du cerveau régule les fonctions involontaires telles que la fréquence cardiaque et la respiration ?",
+    "options": ["Cortex cérébral", "Cervelet", "Bulbe rachidien", "Thalamus"],
+    "rationale": "Le bulbe rachidien, situé dans le tronc cérébral, contrôle les fonctions autonomes vitales, notamment la fréquence cardiaque, la fréquence respiratoire, la pression artérielle et la déglutition."
+  },
+  "ap-08": {
+    "stem": "Le processus par lequel les cellules se divisent pour produire deux cellules filles identiques s'appelle :",
+    "options": ["Méiose", "Mitose", "Apoptose", "Phagocytose"],
+    "rationale": "La mitose est la division cellulaire destinée à la croissance, la réparation et le remplacement. Elle produit deux cellules filles génétiquement identiques (46 chromosomes chez l'être humain). La méiose produit des gamètes (spermatozoïdes/ovules) avec 23 chromosomes."
+  },
+  "mt-01": {
+    "stem": "Le préfixe « brady- » signifie :",
+    "options": ["Rapide", "Lent", "Douloureux", "Sans"],
+    "rationale": "« Brady- » signifie lent. Exemples : bradycardie (fréquence cardiaque lente) et bradypnée (fréquence respiratoire lente)."
+  },
+  "mt-02": {
+    "stem": "Le suffixe « -ite » indique :",
+    "options": ["Ablation de", "Inflammation de", "Condition de", "Réparation chirurgicale"],
+    "rationale": "« -ite » signifie inflammation. Exemples : appendicite (inflammation de l'appendice), arthrite (inflammation des articulations), dermatite (inflammation de la peau)."
+  },
+  "mt-03": {
+    "stem": "Le terme médical « tachycardie » signifie :",
+    "options": ["Fréquence cardiaque lente", "Rythme cardiaque irrégulier", "Fréquence cardiaque rapide", "Absence de battements cardiaques"],
+    "rationale": "« Tachy- » signifie rapide, et « -cardie » se réfère au cœur. La tachycardie est une fréquence cardiaque supérieure à 100 battements par minute chez l'adulte."
+  },
+  "mt-04": {
+    "stem": "Que signifie le préfixe « hypo- » ?",
+    "options": ["Au-dessus de la normale", "En dessous de la normale", "Sans", "Excessif"],
+    "rationale": "« Hypo- » signifie en dessous ou insuffisant. Exemples : hypoglycémie (glycémie basse), hypotension (pression artérielle basse), hypothermie (température corporelle basse). « Hyper- » signifie au-dessus ou excessif."
+  },
+  "mt-05": {
+    "stem": "Le terme « dyspnée » désigne :",
+    "options": ["Absence de respiration", "Difficulté à respirer", "Respiration rapide", "Douleur à la déglutition"],
+    "rationale": "« Dys- » signifie difficile/douloureux et « -pnée » signifie respiration. La dyspnée est la sensation subjective d'essoufflement ou de difficulté à respirer."
+  },
+  "mt-06": {
+    "stem": "Quel suffixe signifie « ablation chirurgicale » ?",
+    "options": ["-plastie", "-scopie", "-ectomie", "-otomie"],
+    "rationale": "« -ectomie » signifie ablation chirurgicale. Exemples : appendicectomie (ablation de l'appendice), amygdalectomie (ablation des amygdales). « -otomie » = incision ; « -plastie » = réparation chirurgicale ; « -scopie » = examen visuel."
+  },
+  "mt-07": {
+    "stem": "La racine combinatoire « hépatique/hépato- » se réfère à :",
+    "options": ["Le cœur", "Le foie", "Le rein", "Le poumon"],
+    "rationale": "« Hépato- » se réfère au foie. Hépatite = inflammation du foie, hépatomégalie = foie hypertrophié. « Cardio » = cœur, « néphro » = rein, « pneumo » = poumon."
+  },
+  "mt-08": {
+    "stem": "Que signifie l'abréviation « NPO » en milieu clinique ?",
+    "options": ["Oxymétrie de pouls normale", "Rien par voie orale", "Non observé précédemment", "Option non pharmacologique"],
+    "rationale": "NPO signifie « nil per os » (latin) = « rien par voie orale ». Les patients sont mis à jeun avant une chirurgie ou une procédure nécessitant une anesthésie pour prévenir l'inhalation."
+  },
+  "ph-01": {
+    "stem": "Quelle voie d'administration médicamenteuse a l'effet le plus rapide ?",
+    "options": ["Orale (PO)", "Sous-cutanée (SC)", "Intraveineuse (IV)", "Intramusculaire (IM)"],
+    "rationale": "L'administration intraveineuse (IV) délivre le médicament directement dans le flux sanguin, contournant les barrières d'absorption. Cela entraîne l'effet le plus rapide — quasi immédiat."
+  },
+  "ph-02": {
+    "stem": "L'expression « fenêtre thérapeutique » désigne :",
+    "options": ["La dose maximale avant la survenue d'une toxicité", "La plage de concentration dans laquelle un médicament est efficace sans toxicité", "Le temps nécessaire à l'élimination d'un médicament", "La dose causant des effets indésirables chez 50 % des patients"],
+    "rationale": "La fenêtre (ou plage) thérapeutique est la plage de concentration du médicament qui produit l'effet souhaité sans causer d'effets indésirables ou toxiques significatifs. Maintenir une concentration dans cette plage est un objectif clé du traitement médicamenteux."
+  },
+  "ph-03": {
+    "stem": "Un patient reçoit un médicament à index thérapeutique étroit. Cela signifie :",
+    "options": ["Le médicament peut être utilisé à n'importe quelle dose en toute sécurité", "De petites erreurs de dosage peuvent entraîner une toxicité ou un échec thérapeutique", "Le médicament n'a pas d'effets indésirables", "Le médicament ne peut être administré qu'en intraveineux"],
+    "rationale": "Les médicaments à index thérapeutique étroit (ex. : warfarine, digoxine, lithium) nécessitent une surveillance attentive car la différence entre la dose efficace et la dose toxique est faible. Même de petites variations de dose ou de physiologie peuvent causer des problèmes graves."
+  },
+  "ph-04": {
+    "stem": "Les « cinq bons » de l'administration médicamenteuse comprennent tous les éléments suivants SAUF :",
+    "options": ["Bon patient", "Bonne dose", "Bon diagnostic", "Bonne voie"],
+    "rationale": "Les cinq « bons » sont : bon patient, bon médicament, bonne dose, bonne voie et bon moment. Le « bon diagnostic » n'en fait pas partie — les infirmières administrent les médicaments selon les ordonnances, pas selon leur propre diagnostic."
+  },
+  "ph-05": {
+    "stem": "La tolérance médicamenteuse est définie comme :",
+    "options": ["Une réaction allergique à un médicament", "Une réponse diminuée à un médicament après une exposition répétée, nécessitant des doses plus élevées pour le même effet", "L'incapacité de l'organisme à métaboliser un médicament", "Une réponse immunitaire potentiellement mortelle"],
+    "rationale": "La tolérance se développe lorsqu'une exposition répétée à un médicament entraîne un effet diminué à la même dose. L'organisme s'adapte à la présence du médicament, souvent par une régulation négative des récepteurs ou une induction enzymatique."
+  },
+  "ph-06": {
+    "stem": "Quel organe est principalement responsable du métabolisme des médicaments ?",
+    "options": ["Le rein", "Le foie", "Le poumon", "L'intestin grêle"],
+    "rationale": "Le foie est le principal site du métabolisme médicamenteux (biotransformation). Il utilise des enzymes (principalement le système CYP450) pour convertir les médicaments en formes plus hydrosolubles pouvant être excrétées. Une maladie hépatique peut significativement altérer le métabolisme."
+  },
+  "ph-07": {
+    "stem": "Un effet indésirable médicamenteux est mieux décrit comme :",
+    "options": ["L'effet thérapeutique voulu d'un médicament", "Un effet nocif et non intentionnel survenant aux doses thérapeutiques normales", "Un surdosage médicamenteux", "Une allergie à un médicament"],
+    "rationale": "Les effets indésirables (ou réactions indésirables aux médicaments) sont des réponses nocives et non voulues survenant aux doses normalement utilisées en thérapeutique. Ils diffèrent des effets secondaires (prévisibles mais indésirables) et du surdosage."
+  },
+  "ph-08": {
+    "stem": "La « demi-vie » d'un médicament désigne :",
+    "options": ["Le temps nécessaire à un médicament pour commencer à agir", "Le temps nécessaire pour que la concentration plasmatique d'un médicament diminue de 50 %", "La durée d'efficacité maximale d'un médicament", "L'intervalle entre les doses"],
+    "rationale": "La demi-vie (t½) est le temps nécessaire pour que la concentration plasmatique d'un médicament diminue de moitié. Elle détermine la fréquence d'administration — les médicaments à courte demi-vie nécessitent des prises plus fréquentes ; ceux à longue demi-vie peuvent être pris une fois par jour ou moins."
+  },
+  "fe-01": {
+    "stem": "Quel électrolyte est le plus abondant dans le liquide intracellulaire (LIC) ?",
+    "options": ["Sodium (Na+)", "Potassium (K+)", "Calcium (Ca2+)", "Chlorure (Cl-)"],
+    "rationale": "Le potassium (K+) est le principal cation intracellulaire. Le sodium (Na+) est le principal cation extracellulaire. Cette différence est maintenue par la pompe sodium-potassium ATPase et est essentielle au potentiel de membrane cellulaire."
+  },
+  "fe-02": {
+    "stem": "La natrémie normale chez l'adulte est d'environ :",
+    "options": ["115–125 mEq/L", "135–145 mEq/L", "150–160 mEq/L", "3,5–5,0 mEq/L"],
+    "rationale": "La natrémie normale est de 135–145 mEq/L. En dessous de 135 = hyponatrémie ; au-dessus de 145 = hypernatrémie. Le sodium est le principal régulateur de l'osmolalité du liquide extracellulaire."
+  },
+  "fe-03": {
+    "stem": "L'œdème est le plus souvent causé par :",
+    "options": ["Augmentation de la pression osmotique plasmatique", "Augmentation de la pression hydrostatique capillaire ou diminution de la pression oncotique plasmatique", "Diminution de la volémie", "Hypokaliémie"],
+    "rationale": "L'œdème (accumulation de liquide dans les espaces interstitiels) résulte d'un déséquilibre des forces de Starling : augmentation de la pression hydrostatique capillaire (pousse le liquide vers l'extérieur) ou diminution de la pression oncotique plasmatique (moins de force pour le ramener)."
+  },
+  "fe-04": {
+    "stem": "Un patient présentant une hypokaliémie (potassium bas) est davantage exposé au risque de :",
+    "options": ["Fractures osseuses", "Arythmies cardiaques", "Troubles de la coagulation", "Convulsions"],
+    "rationale": "Le potassium est essentiel au maintien du potentiel de membrane au repos des cellules cardiaques et musculaires. L'hypokaliémie rend les cellules plus excitables et susceptibles de développer des arythmies cardiaques dangereuses, notamment la fibrillation ventriculaire."
+  },
+  "fe-05": {
+    "stem": "Quelle condition est caractérisée par un excès de liquide dans l'espace intravasculaire ?",
+    "options": ["Déshydratation", "Hypovolémie", "Hypervolémie (surcharge volémique)", "Troisième secteur"],
+    "rationale": "L'hypervolémie (surcharge en liquide) est un état d'excès de liquide dans le compartiment vasculaire. Elle peut causer une hypertension, un œdème, une dyspnée et une insuffisance cardiaque. Les causes incluent une perfusion IV excessive, une insuffisance cardiaque ou rénale."
+  },
+  "fe-06": {
+    "stem": "Quel électrolyte est le principal régulateur de la fonction neuromusculaire et est souvent supplémenté dans les solutions IV ?",
+    "options": ["Potassium (K+)", "Magnésium (Mg2+)", "Calcium (Ca2+)", "Phosphate (PO4)"],
+    "rationale": "Le calcium (Ca2+) est essentiel à la fonction neuromusculaire, à la contractilité cardiaque et à la santé osseuse. L'hypocalcémie augmente l'excitabilité neuromusculaire (tétanie, signe de Trousseau, signe de Chvostek). Il est couramment supplémenté sous forme de gluconate ou de chlorure de calcium."
+  },
+  "fe-07": {
+    "stem": "Les solutions IV isotoniques (telles que le sérum physiologique à 0,9 %) sont utilisées car :",
+    "options": ["Elles font entrer le liquide dans les cellules pour les hydrater", "Elles ont la même osmolalité que le sang et ne provoquent pas de transferts liquidiens entre les compartiments", "Elles sont hypertoniques par rapport au plasma", "Elles remplacent rapidement les déficits électrolytiques"],
+    "rationale": "Les solutions isotoniques ont une osmolalité approximativement égale à celle du plasma (~290 mOsm/kg). Elles augmentent le volume de liquide extracellulaire sans provoquer de transferts importants entre les compartiments intra et extracellulaires."
+  },
+  "fe-08": {
+    "stem": "Quel résultat est le plus compatible avec une acidose métabolique ?",
+    "options": ["pH > 7,45 avec HCO3- élevé", "pH < 7,35 avec HCO3- diminué", "pH < 7,35 avec CO2 élevé", "pH > 7,45 avec CO2 diminué"],
+    "rationale": "L'acidose métabolique est définie par un pH < 7,35 et un HCO3- < 22 mEq/L. Le faible taux de bicarbonate reflète une cause métabolique (ex. : acidocétose diabétique, acidose lactique, diarrhée). L'acidose respiratoire se caractérise par un pH bas avec un CO2 élevé."
+  },
+  "ic-01": {
+    "stem": "Le moyen le plus efficace pour prévenir la propagation des infections est :",
+    "options": ["Porter des gants en permanence", "L'hygiène des mains au savon et à l'eau ou par friction hydro-alcoolique", "Porter un masque chirurgical", "Administrer des antibiotiques en prophylaxie"],
+    "rationale": "L'hygiène des mains est la mesure de prévention des infections la plus efficace. L'Organisation mondiale de la Santé identifie 5 moments pour l'hygiène des mains : avant le contact avec le patient, avant un geste propre/aseptique, après un risque d'exposition aux liquides biologiques, après le contact avec le patient, et après contact avec l'environnement du patient."
+  },
+  "ic-02": {
+    "stem": "Les précautions « contact » sont utilisées pour les patients porteurs de quel type d'agent pathogène ?",
+    "options": ["Infections aériennes comme la tuberculose", "Infections transmises par contact direct ou indirect, telles que le SARM", "Infections par gouttelettes comme la grippe", "Toutes les infections associées aux soins"],
+    "rationale": "Les précautions contact sont utilisées pour les agents pathogènes transmis par contact direct (toucher le patient) ou indirect (toucher des surfaces/équipements contaminés). Exemples : SARM, ERV, C. difficile, infections de plaies."
+  },
+  "ic-03": {
+    "stem": "Quel type de précautions nécessite de placer le patient dans une chambre à pression négative ?",
+    "options": ["Précautions contact", "Précautions gouttelettes", "Précautions air", "Précautions standard"],
+    "rationale": "Les précautions air sont utilisées pour les infections propagées par de minuscules noyaux de gouttelettes restant en suspension dans l'air (ex. : tuberculose, rougeole, varicelle). Une chambre à pression négative empêche l'air contaminé de s'échapper dans les couloirs."
+  },
+  "ic-04": {
+    "stem": "Les précautions standard s'appliquent à :",
+    "options": ["Uniquement aux patients connus comme étant infectés", "Tous les patients, indépendamment de leur statut infectieux", "Uniquement aux patients immunodéprimés", "Uniquement aux patients en soins intensifs"],
+    "rationale": "Les précautions standard constituent le niveau minimal de prévention des infections appliqué à TOUS les patients dans tous les milieux de soins, quel que soit leur statut infectieux suspecté ou confirmé. Elles comprennent l'hygiène des mains, le port d'EPI, des pratiques d'injection sécurisées et l'hygiène respiratoire."
+  },
+  "ic-05": {
+    "stem": "La chaîne de transmission des infections comprend tous les éléments suivants SAUF :",
+    "options": ["L'agent infectieux", "Le mode de transmission", "L'hôte réceptif", "La résistance aux antibiotiques"],
+    "rationale": "La chaîne de transmission comporte 6 maillons : agent infectieux, réservoir, porte de sortie, mode de transmission, porte d'entrée et hôte réceptif. La résistance aux antibiotiques est une propriété de certains agents pathogènes (partie du maillon « agent infectieux »), pas un maillon séparé."
+  },
+  "ic-06": {
+    "stem": "Des précautions gouttelettes sont requises pour un patient diagnostiqué avec la grippe. En plus des précautions standard, l'infirmière doit :",
+    "options": ["Placer le patient dans une chambre à pression négative", "Porter un masque chirurgical/de procédure lorsqu'elle se trouve à moins de 1 mètre du patient", "Porter un masque FFP2 en permanence", "Isoler le patient dans une chambre à pression positive"],
+    "rationale": "Les précautions gouttelettes pour la grippe nécessitent un masque chirurgical dans un rayon de 1 mètre (ou 3 pieds) du patient, plus une chambre individuelle. Contrairement aux précautions air, une chambre à pression négative et un masque FFP2 ne sont pas requis pour la grippe standard."
+  },
+  "ic-07": {
+    "stem": "Laquelle des mesures suivantes rompt la chaîne de transmission au maillon « hôte réceptif » ?",
+    "options": ["L'hygiène des mains", "La stérilisation du matériel", "La vaccination", "Le port de gants"],
+    "rationale": "La vaccination réduit la réceptivité de l'hôte en stimulant une réponse immunitaire avant l'exposition. Rompre la chaîne au maillon de l'hôte réceptif rend l'individu résistant. L'hygiène des mains et les EPI rompent la chaîne à d'autres maillons (transmission, porte d'entrée)."
+  },
+  "ic-08": {
+    "stem": "Les équipements de protection individuelle (EPI) doivent être retirés dans quel ordre ?",
+    "options": ["Masque, gants, blouse, protection oculaire", "Gants, blouse, protection oculaire, masque/respirateur", "Blouse, gants, masque, protection oculaire", "Protection oculaire, blouse, gants, masque"],
+    "rationale": "Le CDC recommande de retirer les EPI dans cet ordre : (1) gants (les plus contaminés), (2) blouse, (3) protection oculaire, (4) masque/respirateur (réservé en dernier car il protège les voies respiratoires). Une hygiène des mains est effectuée après le retrait de chaque élément."
+  },
+  "pp-01": {
+    "stem": "L'homéostasie est mieux définie comme :",
+    "options": ["L'absence totale de maladie", "La capacité de l'organisme à maintenir des conditions internes stables malgré les changements externes", "Un état de repos et d'inactivité", "L'équilibre entre anabolisme et catabolisme uniquement"],
+    "rationale": "L'homéostasie est le processus dynamique par lequel l'organisme maintient des conditions internes relativement stables (ex. : température, pH, glycémie) grâce à des ajustements continus impliquant des mécanismes de rétroaction."
+  },
+  "pp-02": {
+    "stem": "L'inflammation est caractérisée par tous les éléments suivants SAUF :",
+    "options": ["Rougeur (rubor)", "Gonflement (tumor)", "Diminution du nombre de globules blancs", "Douleur (dolor)"],
+    "rationale": "Les signes cardinaux de l'inflammation sont : rougeur (rubor), gonflement (tumor), chaleur (calor), douleur (dolor) et perte de fonction (functio laesa). L'inflammation augmente en réalité le nombre de globules blancs car ils sont recrutés sur le site."
+  },
+  "pp-03": {
+    "stem": "L'hypoxie est définie comme :",
+    "options": ["Un excès d'oxygène dans le flux sanguin", "Une diminution de l'apport d'oxygène aux tissus", "Une augmentation du dioxyde de carbone dans le sang", "Une diminution de la fréquence respiratoire"],
+    "rationale": "L'hypoxie désigne un apport insuffisant en oxygène aux tissus et aux cellules. Elle peut résulter d'une faible oxygénation sanguine (hypoxémie), d'une réduction du débit sanguin (ischémie) ou d'une utilisation cellulaire de l'oxygène altérée."
+  },
+  "pp-04": {
+    "stem": "Une embolie est mieux décrite comme :",
+    "options": ["Un caillot sanguin qui se forme dans une veine et y reste", "Une substance (caillot, graisse, air) qui voyage dans le flux sanguin et obstrue un vaisseau", "Une inflammation d'un vaisseau sanguin", "Un rétrécissement d'une artère dû à la plaque athéromateuse"],
+    "rationale": "Une embolie survient lorsqu'une substance (le plus souvent un thrombus/caillot sanguin, mais aussi de la graisse, de l'air ou du liquide amniotique) voyage dans le flux sanguin jusqu'à se loger dans un vaisseau trop petit pour la laisser passer, obstruant ainsi la circulation."
+  },
+  "pp-05": {
+    "stem": "L'ischémie désigne :",
+    "options": ["Un apport excessif de sang à un tissu", "Un apport insuffisant de sang à un tissu, entraînant une privation d'oxygène", "Une réponse immunitaire à une lésion tissulaire", "La mort des cellules due à une infection"],
+    "rationale": "L'ischémie est un apport sanguin insuffisant à un tissu ou un organe, entraînant une privation d'oxygène et de nutriments. Si elle se prolonge, l'ischémie conduit à l'infarctus (mort tissulaire). Exemples courants : ischémie myocardique, ischémie cérébrale."
+  },
+  "pp-06": {
+    "stem": "La nécrose est définie comme :",
+    "options": ["La mort cellulaire programmée (suicide cellulaire)", "La mort cellulaire incontrôlée due à une lésion ou à une maladie", "Une croissance cellulaire anormale", "La division cellulaire pour la réparation"],
+    "rationale": "La nécrose est une mort cellulaire incontrôlée causée par une lésion, une ischémie, une infection ou des toxines. Elle déclenche une inflammation. Cela la distingue de l'apoptose, qui est une mort cellulaire programmée (intentionnelle) ne provoquant pas d'inflammation."
+  },
+  "pp-07": {
+    "stem": "Quelle phase de la maladie survient avant l'apparition des symptômes ?",
+    "options": ["Phase aiguë", "Phase prodromique", "Période d'incubation", "Phase de résolution"],
+    "rationale": "La période d'incubation est le temps entre l'exposition à un agent pathogène et les premiers symptômes (le pathogène se multiplie sans encore causer de symptômes détectables). La phase prodromique comporte des symptômes précoces non spécifiques. La phase aiguë présente les symptômes au maximum."
+  },
+  "pp-08": {
+    "stem": "Le choc compensé est caractérisé par :",
+    "options": ["Une hypotension et une altération de l'état de conscience", "Des signes vitaux normaux ou quasi normaux grâce aux mécanismes compensateurs de l'organisme", "Une défaillance complète des organes", "Une fièvre élevée et une tachycardie uniquement"],
+    "rationale": "Dans le choc compensé, les mécanismes compensateurs de l'organisme (vasoconstriction, tachycardie, augmentation de la contractilité) maintiennent une pression artérielle et une perfusion quasi normales malgré le déficit sous-jacent. Sans traitement, la compensation échoue et le choc décompensé s'installe."
+  },
+  "ch-01": {
+    "stem": "Un atome qui a gagné ou perdu des électrons s'appelle :",
+    "options": ["Une molécule", "Un ion", "Un isotope", "Un composé"],
+    "rationale": "Un ion est un atome ou un groupe d'atomes ayant une charge électrique nette car il a perdu ou gagné des électrons. Les cations sont chargés positivement (perte d'électrons) ; les anions sont chargés négativement (gain d'électrons)."
+  },
+  "ch-02": {
+    "stem": "Quel est le pH d'une solution neutre ?",
+    "options": ["0", "7", "14", "7,4"],
+    "rationale": "L'échelle de pH va de 0 (plus acide) à 14 (plus basique/alcalin). Un pH de 7 est neutre (eau pure). Le sang humain a un pH légèrement alcalin de 7,35–7,45."
+  },
+  "ch-03": {
+    "stem": "Une solution de pH 3 est :",
+    "options": ["Neutre", "Légèrement alcaline", "Acide", "Fortement alcaline"],
+    "rationale": "Un pH inférieur à 7 est acide. Un pH de 3 indique un acide fort. Chaque unité de pH représente un changement d'un facteur 10 de la concentration en ions hydrogène (échelle logarithmique)."
+  },
+  "ch-04": {
+    "stem": "Quel type de liaison maintient les molécules d'eau ensemble et confère à l'eau ses propriétés uniques ?",
+    "options": ["Liaisons ioniques", "Liaisons covalentes", "Liaisons hydrogène", "Liaisons peptidiques"],
+    "rationale": "Les liaisons hydrogène entre les molécules d'eau (dues à la polarité de l'eau) lui confèrent sa forte tension superficielle, sa chaleur spécifique élevée et ses propriétés de solvant. Ces liaisons sont individuellement faibles mais collectivement fortes."
+  },
+  "ch-05": {
+    "stem": "Un système tampon maintient :",
+    "options": ["Une glycémie constante", "Un pH stable en résistant aux variations de concentration en ions hydrogène", "La température corporelle", "La volémie"],
+    "rationale": "Les systèmes tampons résistent aux variations de pH en acceptant ou en cédant des ions hydrogène (H+). Le système tampon bicarbonate est le principal tampon sanguin. Sans tampons, de petites additions d'acide ou de base provoqueraient de grandes variations de pH dangereuses."
+  },
+  "ch-06": {
+    "stem": "Le processus de fragmentation de grandes molécules en molécules plus petites avec addition d'eau s'appelle :",
+    "options": ["Synthèse par déshydratation", "Hydrolyse", "Oxydation", "Phosphorylation"],
+    "rationale": "L'hydrolyse (hydro = eau, lyse = briser) fractionne les grandes molécules (protéines, glucides, lipides) en unités plus petites en utilisant l'eau. La synthèse par déshydratation est l'inverse — assemblage de monomères avec libération d'eau."
+  },
+  "ch-07": {
+    "stem": "Quelle macromolécule porte l'information génétique ?",
+    "options": ["Protéines", "Lipides", "Glucides", "Acides nucléiques (ADN/ARN)"],
+    "rationale": "Les acides nucléiques (ADN et ARN) stockent et transmettent l'information génétique. L'ADN contient le plan génétique ; l'ARN transporte les instructions pour la synthèse des protéines. Les protéines sont construites selon ces informations."
+  },
+  "ch-08": {
+    "stem": "L'activité enzymatique peut être affectée par tous les éléments suivants SAUF :",
+    "options": ["La température", "Le pH", "La concentration en substrat", "La couleur de la solution"],
+    "rationale": "Les enzymes sont influencées par la température (dénaturation au-dessus de l'optimum), le pH (chaque enzyme a un pH optimal), la concentration en substrat (cinétique enzymatique), les inhibiteurs et les cofacteurs. La couleur d'une solution n'a pas d'effet direct sur l'activité enzymatique."
+  },
+  "nf-01": {
+    "stem": "La principale source d'énergie pour l'organisme est :",
+    "options": ["Les graisses", "Les protéines", "Les glucides", "Les vitamines"],
+    "rationale": "Les glucides sont la source d'énergie préférée de l'organisme. Ils sont dégradés en glucose, qui est utilisé par les cellules pour produire de l'ATP. Le cerveau dépend presque exclusivement du glucose pour son énergie."
+  },
+  "nf-02": {
+    "stem": "Quelle vitamine est produite par la peau lorsqu'elle est exposée au soleil ?",
+    "options": ["Vitamine A", "Vitamine C", "Vitamine D", "Vitamine K"],
+    "rationale": "La vitamine D (calciférol) est synthétisée dans la peau lorsque les rayonnements UVB convertissent le 7-déhydrocholestérol en prévitamine D3. Elle est essentielle à l'absorption du calcium, à la santé osseuse et à la fonction immunitaire."
+  },
+  "nf-03": {
+    "stem": "Un patient dénutri avec une albuminémie basse est exposé au risque de :",
+    "options": ["Hypertension", "Œdème (pression oncotique basse)", "Hyperglycémie", "Fractures osseuses"],
+    "rationale": "L'albumine est la principale protéine plasmatique maintenant la pression oncotique (osmotique colloïdale), qui attire les liquides vers les capillaires. Un faible taux d'albumine réduit la pression oncotique, permettant aux liquides de fuir vers les espaces interstitiels et causant des œdèmes."
+  },
+  "nf-04": {
+    "stem": "L'anémie ferriprive est le plus efficacement traitée par :",
+    "options": ["Des suppléments de vitamine B12", "Une augmentation des fibres alimentaires", "Des suppléments de fer et des aliments riches en fer (ex. : viande rouge, légumes à feuilles vertes)", "Des suppléments de calcium"],
+    "rationale": "L'anémie ferriprive résulte d'un apport insuffisant en fer pour la synthèse de l'hémoglobine. Le traitement comprend des suppléments de fer oraux et des aliments riches en fer héminique (viande rouge) ou non héminique (légumineuses, épinards) plus de la vitamine C pour améliorer l'absorption du fer non héminique."
+  },
+  "nf-05": {
+    "stem": "L'indice de masse corporelle (IMC) est calculé à partir de :",
+    "options": ["L'âge et le tour de taille", "Le poids en kilogrammes divisé par la taille en mètres au carré", "L'apport calorique et le niveau d'activité physique", "Le taux de cholestérol et la pression artérielle"],
+    "rationale": "IMC = poids (kg) ÷ taille (m²). C'est un outil de dépistage des catégories de poids : insuffisance pondérale (<18,5), normal (18,5–24,9), surpoids (25–29,9), obésité (≥30). L'IMC a des limites et ne mesure pas directement la masse grasse."
+  },
+  "nf-06": {
+    "stem": "Quel électrolyte est le plus étroitement associé à la formation des os et des dents ?",
+    "options": ["Sodium", "Potassium", "Calcium", "Fer"],
+    "rationale": "Le calcium est le minéral le plus abondant dans l'organisme. 99 % est stocké dans les os et les dents sous forme d'hydroxyapatite. Le 1 % restant dans le sang est essentiel à la contraction musculaire, la transmission nerveuse et la coagulation sanguine."
+  },
+  "nf-07": {
+    "stem": "Les acides aminés essentiels sont ceux que :",
+    "options": ["L'organisme peut synthétiser seul", "L'alimentation doit fournir car l'organisme ne peut pas les produire", "L'on trouve uniquement dans les produits animaux", "L'on trouve nocifs en grande quantité"],
+    "rationale": "Il existe 9 acides aminés essentiels (ex. : leucine, lysine, tryptophane) que l'organisme humain ne peut pas synthétiser et doit obtenir par l'alimentation. Les protéines complètes (viande, poisson, œufs, soja) contiennent tous les acides aminés essentiels."
+  },
+  "nf-08": {
+    "stem": "La vitamine K est essentielle pour :",
+    "options": ["La fonction immunitaire et la synthèse du collagène", "La coagulation sanguine et le métabolisme osseux", "La vision et l'intégrité des cellules épithéliales", "Le métabolisme énergétique et la fonction nerveuse"],
+    "rationale": "La vitamine K est nécessaire à la synthèse des facteurs de coagulation (II, VII, IX, X) et des protéines impliquées dans la minéralisation osseuse. Une carence entraîne une augmentation du temps de saignement. La warfarine agit en bloquant l'activité de la vitamine K."
+  },
+  "ox-01": {
+    "stem": "La saturation normale en oxygène (SpO₂) chez un adulte en bonne santé est :",
+    "options": ["85–90 %", "90–94 %", "95–100 %", "75–85 %"],
+    "rationale": "La SpO₂ normale est de 95–100 %. Des valeurs de 90–94 % sont limites (hypoxie légère) ; en dessous de 90 %, il s'agit d'une hypoxémie significative nécessitant une intervention. La SpO₂ est mesurée de manière non invasive par oxymétrie de pouls."
+  },
+  "ox-02": {
+    "stem": "Quelle structure sépare les côtés droit et gauche du cœur ?",
+    "options": ["Péricarde", "Septum", "Plèvre", "Diaphragme"],
+    "rationale": "Le septum cardiaque (septum interauriculaire entre les oreillettes ; septum interventriculaire entre les ventricules) sépare les côtés droit et gauche du cœur, empêchant le mélange du sang oxygéné et désoxygéné."
+  },
+  "ox-03": {
+    "stem": "Le muscle principal responsable de la respiration est :",
+    "options": ["Les muscles intercostaux", "Le diaphragme", "Le sternocléidomastoïdien", "Le grand pectoral"],
+    "rationale": "Le diaphragme, muscle en forme de dôme séparant les cavités thoracique et abdominale, est le muscle principal de la respiration. Lors de l'inspiration, il se contracte et s'aplatit, augmentant le volume thoracique et aspirant l'air."
+  },
+  "ox-04": {
+    "stem": "La cyanose (coloration bleutée) indique :",
+    "options": ["Un excès d'oxygène dans le sang", "Une oxygénation inadéquate, entraînant des taux élevés d'hémoglobine désoxygénée", "Une insuffisance hépatique", "Une augmentation du nombre de globules rouges"],
+    "rationale": "La cyanose survient lorsqu'il y a environ ≥5 g/dL d'hémoglobine désoxygénée dans le sang. Elle apparaît sur les lèvres, les extrémités des doigts et les lits unguéaux. La cyanose centrale (lèvres/langue) indique une hypoxémie significative."
+  },
+  "ox-05": {
+    "stem": "Chez un patient atteint de bronchopneumopathie chronique obstructive (BPCO), l'oxygénothérapie à haut débit doit être utilisée avec prudence car :",
+    "options": ["L'oxygène est trop coûteux pour une utilisation à long terme", "Certains patients BPCO dépendent d'un stimulus hypoxique pour respirer ; un apport élevé d'O₂ peut supprimer la respiration", "L'oxygène provoque une bronchoconstriction dans la BPCO", "Les patients BPCO ne peuvent pas absorber l'oxygène par les alvéoles"],
+    "rationale": "Certains patients BPCO présentant une rétention chronique de CO₂ deviennent insensibles au CO₂ comme stimulus respiratoire et dépendent plutôt du faible taux d'oxygène (stimulus hypoxique) pour déclencher la respiration. Un apport élevé en oxygène peut atténuer ce stimulus, entraînant potentiellement une dépression respiratoire."
+  },
+  "ox-06": {
+    "stem": "Le volume courant est défini comme :",
+    "options": ["Le volume maximum d'air expiré après une inspiration profonde", "Le volume d'air inspiré ou expiré lors d'une seule respiration normale", "Le volume d'air restant dans les poumons après une expiration maximale", "La capacité pulmonaire totale"],
+    "rationale": "Le volume courant (VC) est la quantité d'air entrant ou sortant des poumons à chaque respiration normale et tranquille — environ 500 mL chez l'adulte. Il est utilisé dans le calcul de la ventilation-minute (VC × fréquence respiratoire)."
+  },
+  "ox-07": {
+    "stem": "La courbe de dissociation de l'oxyhémoglobine se déplace vers la droite lorsque :",
+    "options": ["Le pH augmente et la température diminue", "Le pH diminue, la température augmente ou le CO₂ augmente", "Le taux d'oxygène dans le sang augmente", "Le patient est en altitude"],
+    "rationale": "Un déplacement vers la droite de la courbe d'oxyhémoglobine signifie que l'hémoglobine a une affinité plus faible pour l'oxygène, facilitant la libération d'O₂ aux tissus. Il survient lors d'une acidose (pH bas), d'une augmentation du CO₂, d'une augmentation de la température et d'une augmentation du 2,3-DPG — souvent dans les tissus actifs/stressés."
+  },
+  "ox-08": {
+    "stem": "Quelle évaluation justifie une administration immédiate d'oxygène ?",
+    "options": ["SpO₂ à 97 %, fréquence respiratoire à 14", "SpO₂ à 88 %, utilisation des muscles accessoires et agitation", "Légère dyspnée uniquement à l'effort", "Fréquence respiratoire à 18 avec des bruits respiratoires clairs"],
+    "rationale": "Une SpO₂ à 88 % combinée à l'utilisation des muscles accessoires et à une agitation indique une hypoxie significative. Ces trois signes ensemble suggèrent que le patient compense (utilise des muscles supplémentaires) et est en détresse — de l'oxygène supplémentaire et une évaluation approfondie sont immédiatement nécessaires."
+  },
+  "ha-01": {
+    "stem": "L'ordre correct des techniques d'évaluation physique est :",
+    "options": ["Inspection, percussion, palpation, auscultation", "Inspection, auscultation, palpation, percussion", "Palpation, inspection, auscultation, percussion", "Auscultation, inspection, palpation, percussion"],
+    "rationale": "L'ordre standard pour la plupart des systèmes corporels est IPPA : Inspection, Palpation, Percussion, Auscultation. L'abdomen est l'exception : Inspection, Auscultation, Percussion, Palpation — car la palpation et la percussion peuvent modifier les bruits intestinaux."
+  },
+  "ha-02": {
+    "stem": "La fréquence cardiaque au repos normale pour un adulte est :",
+    "options": ["40–60 battements par minute", "60–100 battements par minute", "100–120 battements par minute", "50–70 battements par minute"],
+    "rationale": "La fréquence cardiaque au repos normale chez l'adulte est de 60–100 bpm. En dessous de 60 = bradycardie ; au-dessus de 100 = tachycardie. Les sportifs entraînés peuvent avoir une fréquence au repos inférieure à 60 bpm comme variante normale."
+  },
+  "ha-03": {
+    "stem": "Lors de l'auscultation des bruits respiratoires, les crépitants indiquent :",
+    "options": ["Une obstruction par du mucus dans les grandes voies aériennes", "La présence de liquide dans les alvéoles ou de petites voies aériennes s'ouvrant et se fermant", "Des bronchioles rétrécies", "Un mouvement normal de l'air dans les grandes voies aériennes"],
+    "rationale": "Les crépitants sont des bruits discontinus et non musicaux causés par la présence de liquide dans les alvéoles (comme dans la pneumonie ou l'œdème pulmonaire) ou par des petites voies aériennes qui s'ouvrent lors de l'inspiration. Ils sont décrits comme fins ou grossiers."
+  },
+  "ha-04": {
+    "stem": "L'échelle de coma de Glasgow (GCS) évalue :",
+    "options": ["Le niveau de douleur, la mobilité et la diurèse", "L'ouverture des yeux, la réponse verbale et la réponse motrice", "La pression artérielle, la fréquence cardiaque et la fréquence respiratoire", "L'orientation, la mémoire et l'attention"],
+    "rationale": "La GCS évalue trois composantes : ouverture des yeux (1–4), réponse verbale (1–5) et réponse motrice (1–6). Les scores totaux vont de 3 (inconscience profonde) à 15 (totalement éveillé). Les scores ≤8 indiquent généralement une lésion cérébrale grave."
+  },
+  "ha-05": {
+    "stem": "L'hypotension orthostatique est diagnostiquée lorsque la pression artérielle en position debout diminue d'au moins :",
+    "options": ["5 mmHg en systolique ou 3 mmHg en diastolique", "20 mmHg en systolique ou 10 mmHg en diastolique", "10 mmHg en systolique ou 5 mmHg en diastolique", "30 mmHg en systolique ou 15 mmHg en diastolique"],
+    "rationale": "L'hypotension orthostatique (posturale) est définie par une chute de ≥20 mmHg en systolique ou ≥10 mmHg en diastolique dans les 3 minutes suivant le passage en position debout. Elle peut causer des étourdissements/chutes et peut indiquer une déshydratation, une dysfonction autonome ou des effets médicamenteux."
+  },
+  "ha-06": {
+    "stem": "Lors de l'évaluation abdominale, quel son est normal à l'auscultation ?",
+    "options": ["Aucun son", "Bruits intestinaux hyperactifs toutes les 5 secondes", "Bruits intestinaux toutes les 5–30 secondes (5–30 par minute)", "Des souffles sur l'aorte"],
+    "rationale": "Les bruits intestinaux normaux sont des sons doux et gargouillants entendus environ 5–30 fois par minute (toutes les 5–30 secondes). L'absence de bruits suggère un iléus paralytique ; des sons hyperactifs évoquent une obstruction ou une diarrhée. Les souffles aortiques sont anormaux."
+  },
+  "ha-07": {
+    "stem": "L'œdème prenant le godet est coté sur une échelle de 1+ à 4+. Un œdème prenant le godet à 3+ signifie :",
+    "options": ["Légère empreinte, disparaissant rapidement", "Empreinte modérée disparaissant en 10–15 secondes", "Empreinte profonde (>5 mm) pouvant persister 1–2 minutes", "Empreinte sévère avec déformation permanente"],
+    "rationale": "Un œdème prenant le godet à 3+ est caractérisé par une empreinte profonde (environ 5–6 mm) qui met 1–2 minutes à se remplir. Il indique une accumulation liquidienne significative. Le 4+ est le plus sévère avec une empreinte >8 mm persistant plus de 2 minutes."
+  },
+  "ha-08": {
+    "stem": "Un patient cote sa douleur à 8/10 sur l'échelle numérique. Selon la classification standard, ce niveau de douleur est :",
+    "options": ["Légère", "Modérée", "Sévère", "Absence de douleur"],
+    "rationale": "L'échelle numérique (NRS) : 0 = pas de douleur, 1–3 = légère, 4–6 = modérée, 7–10 = sévère. Une cote de 8/10 correspond à une douleur sévère nécessitant une évaluation rapide et probablement une intervention."
+  }
+}

@@ -28,6 +28,8 @@ import {
 } from "@/lib/pre-nursing/pre-nursing-exam-engine";
 import type { MiniCatState, PreNursingExamResult } from "@/lib/pre-nursing/pre-nursing-exam-engine";
 import { PreNursingExamResults } from "@/components/pre-nursing/pre-nursing-exam-results";
+import type { PreNursingQuestionOverlay } from "@/lib/i18n/pre-nursing-content-overlay";
+import { applyPreNursingQuestionsOverlay } from "@/lib/i18n/pre-nursing-content-overlay";
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 
@@ -309,7 +311,12 @@ function CatQuestionCard({
 
 // ── Main component ────────────────────────────────────────────────────────────
 
-export function PreNursingMiniCatRunner() {
+type MiniCatRunnerProps = {
+  /** Optional per-question overlay for non-English locales. */
+  questionsOverlay?: Record<string, PreNursingQuestionOverlay>;
+};
+
+export function PreNursingMiniCatRunner({ questionsOverlay = {} }: MiniCatRunnerProps) {
   const [phase, setPhase] = useState<RunnerPhase>({ phase: "intro" });
 
   const startExam = useCallback(() => {
@@ -344,6 +351,10 @@ export function PreNursingMiniCatRunner() {
   // In progress
   const { catState, currentQuestion, answerState } = phase;
   const answered = catState.answers.length;
+  // Apply locale overlay for display only; grading uses canonical `correct` from original
+  const displayQuestion = Object.keys(questionsOverlay).length > 0
+    ? (applyPreNursingQuestionsOverlay([currentQuestion], questionsOverlay)[0] ?? currentQuestion)
+    : currentQuestion;
 
   function handleSelect(selectedIndex: number) {
     if (phase.phase !== "in_progress") return;
@@ -391,7 +402,7 @@ export function PreNursingMiniCatRunner() {
         abilityEstimate={catState.abilityEstimate}
       />
       <CatQuestionCard
-        question={currentQuestion}
+        question={displayQuestion}
         answered={answered}
         answerState={answerState}
         onSelect={handleSelect}

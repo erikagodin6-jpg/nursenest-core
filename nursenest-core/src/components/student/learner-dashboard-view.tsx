@@ -37,7 +37,7 @@ export async function LearnerDashboardView({ data }: { data: LearnerDashboardMod
 
   return (
     <div className="space-y-8">
-      <header className="relative overflow-hidden rounded-3xl border border-primary/20 bg-gradient-to-br from-primary/[0.12] via-[var(--theme-card-bg)] to-[var(--theme-page-bg)] p-6 sm:p-8">
+      <header className="nn-gradient-safe relative overflow-hidden rounded-3xl border border-primary/20 bg-gradient-to-br from-primary/[0.12] via-[var(--theme-card-bg)] to-[var(--theme-page-bg)] p-6 sm:p-8">
         <div className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-primary/10 blur-3xl" aria-hidden />
         <div className="relative">
           <p className="text-xs font-semibold uppercase tracking-wider text-primary">Study hub</p>

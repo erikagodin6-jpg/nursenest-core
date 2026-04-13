@@ -45,6 +45,27 @@ export const blogSimpleAiDraftBodySchema = z.object({
     .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/)
     .optional(),
   allowDuplicateCanonicalTopic: z.boolean().optional(),
+  /** Admin trigger default: publish immediately (PUBLISHED). */
+  publishNow: z.boolean().optional(),
 });
 
 export type BlogSimpleAiDraftBody = z.infer<typeof blogSimpleAiDraftBodySchema>;
+
+/** Admin API payload: single topic or up to 3 topics per run for cost control. */
+export const blogGenerateByTopicRequestSchema = z
+  .object({
+    topic: z.string().min(3).max(200).optional(),
+    topics: z.array(z.string().min(3).max(200)).min(1).max(3).optional(),
+  })
+  .and(blogSimpleAiDraftBodySchema.omit({ topic: true }))
+  .superRefine((data, ctx) => {
+    if (!data.topic && (!data.topics || data.topics.length === 0)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["topic"],
+        message: "Provide `topic` or `topics` (max 3).",
+      });
+    }
+  });
+
+export type BlogGenerateByTopicRequest = z.infer<typeof blogGenerateByTopicRequestSchema>;

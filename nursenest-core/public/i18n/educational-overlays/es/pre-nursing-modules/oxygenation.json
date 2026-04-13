@@ -1,0 +1,19 @@
+{
+  "overview": "La oxigenación es una necesidad fisiológica prioritaria. Sin un aporte suficiente de oxígeno a los tejidos, la muerte celular ocurre en minutos. La enfermera debe evaluar rápidamente la función respiratoria, identificar los signos de hipoxia e intervenir sin demora para mantener una oxigenación adecuada.",
+  "key_concepts": [
+    "Ventilación: movimiento del aire hacia adentro y afuera de los pulmones (frecuencia respiratoria normal: 12–20/min en adultos)",
+    "Difusión: intercambio gaseoso alvéolo-capilar (O₂ entra en sangre, CO₂ sale) — comprometida en edema pulmonar, neumonía",
+    "Perfusión: aporte sanguíneo a los pulmones — comprometida en embolia pulmonar",
+    "SpO₂ normal: 95–100% (el valor objetivo puede variar en pacientes con EPOC: 88–92%)",
+    "Signos de hipoxia: agitación, confusión, cianosis, taquicardia, SpO₂ < 90%"
+  ],
+  "nursing_responsibilities": "La enfermera evalúa la frecuencia, el ritmo y el esfuerzo respiratorio, la SpO₂ y la auscultación pulmonar. Posiciona al paciente en semi-Fowler o Fowler alta para optimizar la expansión pulmonar. Administra oxígeno según prescripción y adapta la interfaz (gafas nasales, mascarilla simple, mascarilla de alta concentración, mascarilla Venturi). Aspira secreciones si es necesario y moviliza al paciente para prevenir la atelectasia.",
+  "clinical_pearls": "En el paciente con EPOC, el oxígeno a alto flujo puede suprimir el estímulo hipóxico de la ventilación — objetivo de SpO₂ 88–92% salvo indicación contraria. La agitación repentina en un paciente puede ser el primer signo de hipoxia — valorar antes de sedar. La posición lateral de seguridad está indicada en el paciente inconsciente con respiración espontánea para prevenir la aspiración.",
+  "patient_education": "Enseñe la respiración diafragmática y las técnicas de tos controlada para los pacientes con afección respiratoria. Explique la importancia de no fumar y evitar los irritantes respiratorios. Para los pacientes oxigenodependientes en domicilio: seguridad (prohibición de fumar, llamas abiertas), mantenimiento del equipo, monitorización de la SpO₂.",
+  "key_takeaways": [
+    "La hipoxia es una urgencia — la agitación, confusión o cianosis requieren evaluación e intervención inmediatas",
+    "En el paciente con EPOC, objetivo de SpO₂ 88–92% para evitar la supresión del estímulo hipóxico",
+    "La posición semi-Fowler optimiza la mecánica respiratoria — intervención sencilla y eficaz",
+    "Ventilación (aire que entra), difusión (intercambio gaseoso) y perfusión (aporte sanguíneo) deben evaluarse por separado"
+  ]
+}

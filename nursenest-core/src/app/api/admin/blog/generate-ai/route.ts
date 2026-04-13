@@ -1,14 +1,19 @@
 import { NextResponse } from "next/server";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
-import { blogSimpleAiDraftBodySchema } from "@/lib/admin/blog-simple-ai-draft-schema";
+import {
+  blogGenerateByTopicRequestSchema,
+  type BlogSimpleAiDraftBody,
+} from "@/lib/admin/blog-simple-ai-draft-schema";
 import { logSimpleAiDraftRun } from "@/lib/admin/blog-content-automation-log";
 import { isAdminAiGenerationEnabled } from "@/lib/ai/admin-ai-policy";
 import { assertOpenAiKeyConfigured } from "@/lib/ai/openai-env";
-import { generateBlogAiDraft } from "@/lib/blog/generate-blog-ai-draft";
-import { normalizeBlogTopicKey } from "@/lib/blog/blog-intent-dedupe";
+import { generateBlogPost } from "@/lib/blog/generate-blog-ai-draft";
+import { BLOG_ARTICLE_MIN_WORDS, countWordsFromHtml } from "@/lib/blog/blog-word-count";
+import { prisma } from "@/lib/db";
 
 /**
- * Single-post AI draft generation (one model call per request — batch uses /api/admin/blog/batch-chunk).
+ * Admin-only AI blog generation by topic.
+ * Supports one topic or up to 3 topics per request (cost control).
  */
 export async function POST(req: Request) {
   const gate = await requireAdmin();
@@ -25,55 +30,169 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: keyCheck.message }, { status: 503 });
   }
 
-  const parsed = blogSimpleAiDraftBodySchema.safeParse(await req.json());
+  const parsed = blogGenerateByTopicRequestSchema.safeParse(await req.json());
   if (!parsed.success) {
     return NextResponse.json({ error: "Invalid payload", details: parsed.error.flatten() }, { status: 400 });
   }
   const d = parsed.data;
-  const normalizedTopic = normalizeBlogTopicKey(d.targetKeyword ?? d.topic);
-
-  const result = await generateBlogAiDraft({
-    topic: d.topic,
-    keywords: d.keywords,
-    exam: d.exam,
-    country: d.country,
-    template: d.template,
-    intent: d.intent,
-    funnelStage: d.funnelStage,
-    tone: d.tone,
-    includeImage: d.includeImage,
-    includeAiImage: d.includeAiImage,
-    targetKeyword: d.targetKeyword,
-    keywordCluster: d.keywordCluster,
-    countryTarget: d.countryTarget,
-    sourceRecords: d.sourceRecords,
-    slug: d.slug,
-    allowDuplicateCanonicalTopic: d.allowDuplicateCanonicalTopic,
-  });
-
-  await logSimpleAiDraftRun({ createdById: gate.admin.userId, body: d, result });
-
-  if (!result.ok) {
-    return NextResponse.json({ error: result.error }, { status: 502 });
+  const topics =
+    d.topics && d.topics.length > 0
+      ? d.topics
+      : d.topic
+        ? [d.topic]
+        : [];
+  if (topics.length === 0) {
+    return NextResponse.json({ error: "Provide at least one topic." }, { status: 400 });
   }
-  if (result.skipped) {
-    if (result.reason === "duplicate_topic") {
-      return NextResponse.json(
-        { ok: true, skipped: true, reason: "duplicate_topic", existingSlug: result.existingSlug, normalizedTopic },
-        { status: 200 },
-      );
+  if (topics.length > 3) {
+    return NextResponse.json({ error: "Batch limit exceeded (max 3 topics per run)." }, { status: 400 });
+  }
+
+  const publishNow = d.publishNow !== false;
+  const runAt = new Date();
+  const results: Array<
+    | {
+        ok: true;
+        skipped: false;
+        topic: string;
+        post: {
+          id: string;
+          slug: string;
+          title: string;
+          excerpt: string;
+          tags: string[];
+          seoTitle: string | null;
+          seoDescription: string | null;
+          structuredContent: unknown[];
+          bodyWordCount: number;
+          isFullLength: boolean;
+          postStatus: string;
+        };
+        warnings: string[];
+      }
+    | {
+        ok: true;
+        skipped: true;
+        topic: string;
+        reason: string;
+        existingSlug?: string;
+        slug?: string;
+      }
+    | { ok: false; topic: string; error: string }
+  > = [];
+
+  for (const topic of topics) {
+    const result = await generateBlogPost({
+      topic,
+      keywords: d.keywords,
+      exam: d.exam,
+      country: d.country,
+      template: d.template,
+      intent: d.intent,
+      funnelStage: d.funnelStage,
+      tone: d.tone,
+      includeImage: d.includeImage,
+      includeAiImage: d.includeAiImage,
+      targetKeyword: d.targetKeyword ?? topic,
+      keywordCluster: d.keywordCluster,
+      countryTarget: d.countryTarget,
+      sourceRecords: d.sourceRecords,
+      slug: topics.length === 1 ? d.slug : undefined,
+      allowDuplicateCanonicalTopic: d.allowDuplicateCanonicalTopic,
+      publishAt: publishNow ? runAt : undefined,
+    });
+
+    const bodyForLog: BlogSimpleAiDraftBody = {
+      topic,
+      keywords: d.keywords,
+      exam: d.exam,
+      country: d.country,
+      template: d.template,
+      intent: d.intent,
+      funnelStage: d.funnelStage,
+      tone: d.tone,
+      includeImage: d.includeImage,
+      includeAiImage: d.includeAiImage,
+      targetKeyword: d.targetKeyword ?? topic,
+      keywordCluster: d.keywordCluster,
+      countryTarget: d.countryTarget,
+      sourceRecords: d.sourceRecords,
+      slug: topics.length === 1 ? d.slug : undefined,
+      allowDuplicateCanonicalTopic: d.allowDuplicateCanonicalTopic,
+      publishNow,
+    };
+    await logSimpleAiDraftRun({ createdById: gate.admin.userId, body: bodyForLog, result });
+
+    if (!result.ok) {
+      results.push({ ok: false, topic, error: result.error });
+      continue;
     }
-    return NextResponse.json(
-      { ok: true, skipped: true, reason: result.reason, slug: result.slug },
-      { status: 200 },
-    );
+    if (result.skipped) {
+      results.push({
+        ok: true,
+        skipped: true,
+        topic,
+        reason: result.reason === "duplicate_topic" ? "duplicate_topic" : result.reason,
+        ...(result.reason === "duplicate_topic" ? { existingSlug: result.existingSlug, slug: undefined } : { slug: result.slug }),
+      });
+      continue;
+    }
+
+    const saved = await prisma.blogPost.findUnique({
+      where: { id: result.post.id },
+      select: {
+        id: true,
+        slug: true,
+        title: true,
+        excerpt: true,
+        body: true,
+        tags: true,
+        seoTitle: true,
+        seoDescription: true,
+        outlineJson: true,
+        postStatus: true,
+      },
+    });
+    if (!saved) {
+      results.push({ ok: false, topic, error: "Post created but could not be reloaded." });
+      continue;
+    }
+    const bodyWordCount = countWordsFromHtml(saved.body);
+    const structuredContent = Array.isArray(saved.outlineJson) ? saved.outlineJson : [];
+    results.push({
+      ok: true,
+      skipped: false,
+      topic,
+      post: {
+        id: saved.id,
+        slug: saved.slug,
+        title: saved.title,
+        excerpt: saved.excerpt,
+        tags: saved.tags,
+        seoTitle: saved.seoTitle,
+        seoDescription: saved.seoDescription,
+        structuredContent,
+        bodyWordCount,
+        isFullLength: bodyWordCount >= BLOG_ARTICLE_MIN_WORDS,
+        postStatus: saved.postStatus,
+      },
+      warnings: result.warnings,
+    });
   }
+
+  const successCount = results.filter((r) => r.ok && !r.skipped).length;
+  const skippedCount = results.filter((r) => r.ok && r.skipped).length;
+  const failedCount = results.filter((r) => !r.ok).length;
 
   return NextResponse.json(
     {
-      post: result.post,
-      warnings: result.warnings,
+      ok: failedCount === 0,
+      mode: topics.length > 1 ? "batch" : "single",
+      publishNow,
+      limits: { maxTopicsPerRun: 3 },
+      summary: { requested: topics.length, created: successCount, skipped: skippedCount, failed: failedCount },
+      results,
     },
-    { status: 201 },
+    { status: successCount > 0 ? 201 : failedCount > 0 ? 502 : 200 },
   );
 }
