@@ -89,3 +89,15 @@ export function countSavedStudyItems(): { starred: number; saved: number; noted:
   }
   return { starred, saved, noted, confusing };
 }
+
+/**
+ * Deterministic local-only bridge for server-side session building.
+ * Returns card IDs that match the selected quick filters.
+ */
+export function getStudyItemIdsMatchingFilters(filters: StudyQuickFilters, max = 500): string[] {
+  const all = readRawState();
+  const ids = Object.keys(all)
+    .filter((cardId) => cardMatchesStudyFilters(cardId, filters))
+    .sort();
+  return ids.slice(0, Math.max(0, max));
+}

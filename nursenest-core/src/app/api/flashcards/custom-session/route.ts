@@ -74,6 +74,7 @@ export async function GET(req: NextRequest) {
   const sp = req.nextUrl.searchParams;
   const pathwayId = sp.get("pathwayId")?.trim() || null;
   const selectedCategories = parseCategories(sp.get("categories"));
+  const stateIds = parseCategories(sp.get("stateIds"));
   const weakOnly = sp.get("weakOnly") === "1";
   const incorrectOnly = sp.get("incorrectOnly") === "1";
   const starredOnly = sp.get("starredOnly") === "1";
@@ -159,8 +160,15 @@ export async function GET(req: NextRequest) {
     }
   }
 
+  const persistenceFiltersActive = starredOnly || savedOnly || notesOnly || revisitOnly;
+  if (persistenceFiltersActive) {
+    const allowedIds = new Set(stateIds);
+    scoped = allowedIds.size > 0 ? scoped.filter((c) => allowedIds.has(c.id)) : [];
+  }
+
   const selectedRows = shuffle ? shuffled(scoped, `${userId}:${selectedCategories.join(",")}:${mode}`) : scoped;
   const limited = selectedRows.slice(0, limit);
+  const plannedCount = limited.length;
 
   const cardsForSession = includeCards
     ? limited.map((card, index) => {
@@ -185,7 +193,7 @@ export async function GET(req: NextRequest) {
       pathwayId,
       selectedCategories,
       matchingCards: scoped.length,
-      returnedCards: cardsForSession.length,
+      returnedCards: plannedCount,
       mode,
       shuffle,
       weakOnly,
