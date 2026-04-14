@@ -60,6 +60,10 @@ const catResults: PracticeTestResultsJson = {
   readinessLabel: "Building confidence",
   catReport: {
     decision: "uncertain",
+    result: "BORDERLINE",
+    readinessLevel: "Borderline",
+    abilityScore: 0.55,
+    confidenceLevelLabel: "Low",
     theta: 0.32,
     se: 0.58,
     totalQuestions: 14,
@@ -252,7 +256,8 @@ describe("PATCH /api/practice-tests/[id] cursor safety", () => {
     assert.equal(res.status, 200);
     assert.equal(data.ok, true);
     assert.equal(update.mock.callCount(), 1);
-    const updateArg = update.mock.calls[0]?.arguments[0] as { data?: { cursorIndex?: number } } | undefined;
+    const firstCall = update.mock.calls.at(0) as { arguments: Array<unknown> } | undefined;
+    const updateArg = firstCall?.arguments[0] as { data?: { cursorIndex?: number } } | undefined;
     assert.equal(updateArg?.data?.cursorIndex, 2);
   });
 });

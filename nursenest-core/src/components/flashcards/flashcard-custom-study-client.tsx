@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { ActiveStudySession, type ActiveStudyCard } from "@/components/study/active-study-session";
 import { cardMatchesStudyFilters, hasActiveStudyFilters } from "@/lib/flashcards/study-session-persistence";
+import { formatTitleCase } from "@/lib/format/text-case";
 
 type SessionPayload = {
   ok: boolean;
@@ -111,7 +112,7 @@ export function FlashcardCustomStudyClient() {
 
   const selectedTitles = payload.categoryOptions
     .filter((c) => payload.summary.selectedCategories.includes(c.id))
-    .map((c) => c.title);
+    .map((c) => formatTitleCase(c.title));
 
   const filteredCards = payload.cards.filter((card) => cardMatchesStudyFilters(card.id, localFilters));
   const cardLimit = parseCardLimitValue(payload.summary.cardLimit);

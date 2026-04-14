@@ -30,6 +30,7 @@ import {
   resolvePriorityMessage,
 } from "@/lib/student/interaction-priority";
 import { emptyStateCopy } from "@/lib/ui/empty-state-copy";
+import { buildPracticeExamStartPayload } from "@/lib/practice-tests/practice-exam-start-payload";
 
 type TestListRow = {
   id: string;
@@ -83,6 +84,7 @@ export function PracticeTestsHubClient({
   const [timedMode, setTimedMode] = useState(false);
   const [timeLimitMin, setTimeLimitMin] = useState(45);
   const [linearDeliveryMode, setLinearDeliveryMode] = useState<"practice" | "exam">("practice");
+  const [linearRationaleVisibility, setLinearRationaleVisibility] = useState<"after_each" | "end_of_exam">("after_each");
   const [pathwayId, setPathwayId] = useState(
     () => defaultPathwayId ?? pathwayOptions[0]?.id ?? "",
   );
@@ -173,6 +175,12 @@ export function PracticeTestsHubClient({
     if (cat === "1" || cat === "true") {
       setSelectionMode("cat");
     }
+    const startMode = searchParams.get("startMode");
+    if (startMode === "practice_exam") {
+      setSelectionMode("random");
+      setLinearDeliveryMode("practice");
+      setLinearRationaleVisibility("after_each");
+    }
     if (searchParams.get("focus") !== "weak") return;
     setSelectionMode((prev) => {
       if (prev === "cat") {
@@ -235,28 +243,41 @@ export function PracticeTestsHubClient({
           throw new Error("Choose which exam pathway you want to practice before starting adaptive (CAT).");
         }
       }
+      const linearPayload = buildPracticeExamStartPayload({
+        title: title.trim() || null,
+        questionCount,
+        selectionMode: selectionMode === "targeted" ? "targeted" : selectionMode === "weak" ? "weak" : "random",
+        topicNames: topicPicks,
+        pathwayId: pathwayId.trim() || null,
+        timedMode,
+        timeLimitSec: timedMode ? Math.round(timeLimitMin * 60) : null,
+        difficultyMin: difficultyMin === "" ? null : difficultyMin,
+        difficultyMax: difficultyMax === "" ? null : difficultyMax,
+        sessionMode: linearDeliveryMode === "exam" ? "exam" : "tutor",
+        rationaleVisibilityMode: linearRationaleVisibility === "after_each" ? "immediate" : "review",
+      });
+      const payload =
+        selectionMode === "cat"
+          ? {
+              title: title.trim() || undefined,
+              questionCount: Math.max(10, questionCount),
+              topicNames: topicPicks,
+              difficultyMin: difficultyMin === "" ? null : difficultyMin,
+              difficultyMax: difficultyMax === "" ? null : difficultyMax,
+              selectionMode,
+              catSelectionBasis,
+              catPresentationMode,
+              catExamFeedbackMode:
+                catPresentationMode === "practice" ? catExamFeedbackMode : ("test" satisfies CatExamFeedbackMode),
+              pathwayId: pathwayId.trim() || null,
+              timedMode,
+              timeLimitSec: timedMode ? Math.round(timeLimitMin * 60) : null,
+            }
+          : linearPayload;
       const res = await fetch("/api/practice-tests", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-          title: title.trim() || undefined,
-          questionCount: selectionMode === "cat" ? Math.max(10, questionCount) : questionCount,
-          topicNames: topicPicks,
-          difficultyMin: difficultyMin === "" ? null : difficultyMin,
-          difficultyMax: difficultyMax === "" ? null : difficultyMax,
-          selectionMode,
-          ...(selectionMode === "cat"
-            ? {
-                catSelectionBasis,
-                catPresentationMode,
-                catExamFeedbackMode:
-                  catPresentationMode === "practice" ? catExamFeedbackMode : ("test" satisfies CatExamFeedbackMode),
-              }
-            : { linearDeliveryMode }),
-          pathwayId: pathwayId.trim() || null,
-          timedMode,
-          timeLimitSec: timedMode ? Math.round(timeLimitMin * 60) : null,
-        }),
+          body: JSON.stringify(payload),
       });
       const data = (await res.json()) as { id?: string; error?: string; code?: string };
       if (!res.ok) {
@@ -290,9 +311,9 @@ export function PracticeTestsHubClient({
             : "border-[var(--semantic-border-soft)]"
         }`}
       >
-        <h2 className="text-xl font-bold tracking-tight text-[var(--theme-heading-text)]">Build a practice test</h2>
+        <h2 className="text-xl font-bold tracking-tight text-[var(--theme-heading-text)]">Build Practice Exam</h2>
         <p className="mt-1 max-w-3xl text-sm leading-relaxed text-muted-foreground">
-          Questions are drawn only from your plan’s tier and region. Choose a linear test or{" "}
+          Questions are drawn only from your plan’s tier and region. Choose a customizable practice exam or{" "}
           <strong className="text-foreground">adaptive (CAT)</strong> that adjusts difficulty from your performance and
           weak-area history.
         </p>
@@ -418,7 +439,7 @@ export function PracticeTestsHubClient({
           <div className="mt-2 flex flex-wrap gap-2">
             {(
               [
-                ["random", "Random mix"],
+                ["random", "Random mix (mixed quiz)"],
                 ["targeted", "Targeted topics"],
                 ["weak", "Target weak areas"],
                 ["cat", "Adaptive (CAT)"],
@@ -460,28 +481,60 @@ export function PracticeTestsHubClient({
 
         {selectionMode !== "cat" ? (
           <div className="mt-4 rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] p-4 shadow-sm">
-            <span className="text-sm font-medium text-foreground">Linear session style</span>
+            <span className="text-sm font-medium text-foreground">Session mode</span>
             <div className="mt-2 flex flex-wrap gap-2">
               <button
                 type="button"
-                onClick={() => setLinearDeliveryMode("practice")}
+                onClick={() => {
+                  setLinearDeliveryMode("practice");
+                  setLinearRationaleVisibility("after_each");
+                }}
                 data-active={linearDeliveryMode === "practice"}
                 className="nn-tab-pill px-4 py-1.5 text-sm font-medium"
               >
-                Practice (per-item feedback)
+                Tutor mode
               </button>
               <button
                 type="button"
-                onClick={() => setLinearDeliveryMode("exam")}
+                onClick={() => {
+                  setLinearDeliveryMode("exam");
+                  setLinearRationaleVisibility("end_of_exam");
+                }}
                 data-active={linearDeliveryMode === "exam"}
                 className="nn-tab-pill px-4 py-1.5 text-sm font-medium"
               >
-                Exam (lock until end)
+                Exam mode
               </button>
             </div>
+            <div className="mt-4 space-y-2">
+              <span className="text-sm font-medium text-foreground">Rationale visibility</span>
+              <div className="flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setLinearRationaleVisibility("after_each");
+                    setLinearDeliveryMode("practice");
+                  }}
+                  data-active={linearRationaleVisibility === "after_each"}
+                  className="nn-tab-pill px-4 py-1.5 text-sm font-medium"
+                >
+                  After each question
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setLinearRationaleVisibility("end_of_exam");
+                    setLinearDeliveryMode("exam");
+                  }}
+                  data-active={linearRationaleVisibility === "end_of_exam"}
+                  className="nn-tab-pill px-4 py-1.5 text-sm font-medium"
+                >
+                  Only at the end
+                </button>
+              </div>
+            </div>
             <p className="mt-2 text-xs text-muted-foreground">
-              Practice shows rationales after each submitted answer. Exam locks choices and hides rationales until you
-              finish the full run.
+              Tutor mode reveals rationales after each submitted answer. Exam mode keeps rationales for end-of-exam review.
             </p>
           </div>
         ) : null}
@@ -722,12 +775,12 @@ export function PracticeTestsHubClient({
           onClick={() => void createTest()}
           className="nn-btn-primary mt-6 px-6 py-2.5 text-sm font-semibold disabled:opacity-50"
         >
-          {creating ? "Building…" : "Start test"}
+          {creating ? "Building…" : "Start Practice Exam"}
         </button>
       </section>
 
       <section>
-        <h2 className="text-lg font-bold tracking-tight text-[var(--theme-heading-text)]">Saved tests & history</h2>
+        <h2 className="text-lg font-bold tracking-tight text-[var(--theme-heading-text)]">Saved practice exams & history</h2>
         <p className="mt-1 text-sm text-muted-foreground">Resume in-progress sessions or review completed scores.</p>
         {historyPriorityMessage ? <p className="mt-2 text-xs text-[var(--semantic-text-secondary)]">{historyPriorityMessage}</p> : null}
         {loading ? (
@@ -740,9 +793,9 @@ export function PracticeTestsHubClient({
               density="compact"
               visualLayout="stack"
               headline={emptyStateCopy.noHistoryYet({ area: "saved tests" }).headline}
-              body="You haven’t saved any practice tests yet. Start a new test and your in-progress sessions and recent scores will show up here."
+              body="You haven’t saved any practice exams yet. Start a new exam and your in-progress sessions and recent scores will show up here."
               hint={emptyStateCopy.noHistoryYet({ area: "saved tests" }).body}
-              primaryCta={{ label: "Start test", href: "/app/practice-tests/start", variant: "primary" }}
+              primaryCta={{ label: "Build Practice Exam", href: "/app/practice-tests/start", variant: "primary" }}
             />
           </div>
         ) : (

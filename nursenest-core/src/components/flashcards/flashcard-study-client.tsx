@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import { ActiveStudySession, type ActiveStudyCard } from "@/components/study/active-study-session";
+import { formatTitleCase } from "@/lib/format/text-case";
 import type { PremiumProtectionFlags } from "@/lib/premium-protection/config";
 
 type CardPayload = {
@@ -93,7 +94,7 @@ export function FlashcardStudyClient({
       const meta = await fetch(`/api/flashcards/decks/${encodeURIComponent(deckRef)}`, { credentials: "include" });
       if (!meta.ok || cancelled) return;
       const m = await meta.json();
-      if (!cancelled && m.deck?.title) setTitle(m.deck.title);
+      if (!cancelled && m.deck?.title) setTitle(formatTitleCase(String(m.deck.title)));
     })();
     return () => {
       cancelled = true;

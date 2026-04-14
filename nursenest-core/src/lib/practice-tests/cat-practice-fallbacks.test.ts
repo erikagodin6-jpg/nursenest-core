@@ -79,6 +79,10 @@ describe("cat-practice-fallbacks", () => {
 describe("buildCatResultsCoach resilience", () => {
   const minimalReport: CatExamReport = {
     decision: "uncertain",
+    result: "BORDERLINE",
+    readinessLevel: "Borderline",
+    abilityScore: 0.5,
+    confidenceLevelLabel: "Moderate",
     theta: 0,
     se: 0.5,
     totalQuestions: 6,

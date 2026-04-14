@@ -449,6 +449,8 @@ export function PracticeTestRunnerClient({
   }, [current, catStudyFeedback]);
 
   const linearDelivery = testConfig?.linearDeliveryMode;
+  const linearRationaleVisibility =
+    testConfig?.linearRationaleVisibility ?? (linearDelivery === "exam" ? "end_of_exam" : "after_each");
   const isLinearEngine = Boolean(!catMode && linearDelivery);
   const committedSet = useMemo(() => new Set(linearCommittedIds), [linearCommittedIds]);
   const currentCommitted = Boolean(current && committedSet.has(current.id));
@@ -585,7 +587,7 @@ export function PracticeTestRunnerClient({
       if (Array.isArray(data.committedQuestionIds)) {
         setLinearCommittedIds(data.committedQuestionIds);
       }
-      if (data.feedback && linearDelivery === "practice") {
+      if (data.feedback && linearRationaleVisibility === "after_each") {
         setLinearPracticeFeedback((prev) => ({
           ...prev,
           [current.id]: {
@@ -1133,7 +1135,7 @@ export function PracticeTestRunnerClient({
 
   // Derived layout / display values
   const modeLabel = isLinearEngine
-    ? linearDelivery === "exam"
+    ? linearRationaleVisibility === "end_of_exam"
       ? tx("learner.practiceTests.run.linearExamMode", "Linear exam")
       : tx("learner.practiceTests.run.linearPracticeMode", "Linear practice")
     : catMode
@@ -1535,7 +1537,7 @@ export function PracticeTestRunnerClient({
     if (
       isLinearEngine &&
       currentCommitted &&
-      linearDelivery === "practice" &&
+      linearRationaleVisibility === "after_each" &&
       linearFeedback
     ) {
       const ck = new Set(linearFeedback.correctKeys);
@@ -1543,7 +1545,7 @@ export function PracticeTestRunnerClient({
       if (isSelected) return "incorrect";
       return "dim";
     }
-    if (isLinearEngine && currentCommitted && linearDelivery === "exam") {
+    if (isLinearEngine && currentCommitted && linearRationaleVisibility === "end_of_exam") {
       return isSelected ? "selected" : "dim";
     }
     return isSelected ? "selected" : "default";
@@ -1611,11 +1613,11 @@ export function PracticeTestRunnerClient({
     );
 
   const rationaleFullStatus: import("@/components/study/practice-rationale-full-panel").PracticeRationaleFullPanelStatus =
-    isLinearEngine && linearDelivery === "practice" && currentCommitted && linearFeedback
+    isLinearEngine && linearRationaleVisibility === "after_each" && currentCommitted && linearFeedback
       ? linearFeedback.isCorrect
         ? "correct"
         : "incorrect"
-      : isLinearEngine && linearDelivery === "exam" && currentCommitted
+      : isLinearEngine && linearRationaleVisibility === "end_of_exam" && currentCommitted
         ? "exam_locked"
         : "waiting";
 
