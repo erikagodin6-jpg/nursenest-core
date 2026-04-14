@@ -19,6 +19,7 @@ import { stripToPlainText, countWords } from "@/lib/content-quality/plain-text";
 import { DB_PUBLISHED } from "@/lib/entitlements/content-access-scope";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { prisma } from "@/lib/db";
+import { ALLIED_PROFESSIONS } from "@/lib/allied/allied-professions-registry";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 /** Repo workspace root (parent of inner `nursenest-core/` app folder). */
@@ -476,6 +477,9 @@ async function main() {
 
   const parityFinalStatus = {
     ...reportMeta,
+    alliedHealthMarketingProfessions: ALLIED_PROFESSIONS.length,
+    alliedHealthNote:
+      "Allied lesson hubs use /allied-health/{professionKey}/lessons — parallel to EXAM_PATHWAYS us-allied-core / ca-allied-core.",
     countries: {
       US: pathwayRows.filter((r) => r.countrySlug === "us").length,
       CA: pathwayRows.filter((r) => r.countrySlug === "canada").length,

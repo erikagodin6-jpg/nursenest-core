@@ -1,6 +1,6 @@
 # Parity audit summary (evidence-based)
 
-Generated: 2026-04-14T17:36:13.521Z
+Generated: 2026-04-14T17:41:20.982Z
 
 ## Methodology
 
@@ -17,11 +17,7 @@ Generated: 2026-04-14T17:36:13.521Z
 
 See `routeableButNoLessonOrDbContent` in `data/audit/country-exam-locale-parity.json`.
 
-- `ca-np-cnple` → /canada/np/cnple/lessons
-- `us-np-agpcnp` → /us/np/agpcnp/lessons
-- `us-np-pmhnp` → /us/np/pmhnp/lessons
-- `us-np-whnp` → /us/np/whnp/lessons
-- `us-np-pnp-pc` → /us/np/pnp-pc/lessons
+- None matched this definition in this run.
 
 **Important**: Marketing UI locales (`MARKETING_LOCALE_CODES`) add a **language prefix** for many marketing pages; exam hub paths still use **`us` / `canada`** as the first segment in `(default)/[locale]/[slug]/[examCode]` (that `locale` param is **country**, not UI language). Localized *lesson bodies* are mostly **EN** in catalog; DB may store other locales separately.
 
@@ -31,7 +27,7 @@ Evidence: `data/audit/unimported-legacy-content.json` — **~4084** legacy lesso
 
 ### 3. Published / catalog lessons: non-empty but structurally incomplete
 
-Lessons with **approxWords ≥ 80** in combined section corpus but **`publicComplete: false`**: **539** (see `incompleteNonEmptyShell` in `lesson-content-completeness-audit.json`, capped).
+Lessons with **approxWords ≥ 80** in combined section corpus but **`publicComplete: false`**: **633** (see `incompleteNonEmptyShell` in `lesson-content-completeness-audit.json`, capped).
 
 ### 4. Flashcard / question pathways: code vs public UI
 

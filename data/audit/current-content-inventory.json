@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-14T17:36:13.521Z",
+  "generatedAt": "2026-04-14T17:41:20.982Z",
   "dbConnected": false,
   "legacySourcesScanned": [
     "data/audit/legacy-lessons-inventory.json (summary)",
@@ -77,7 +77,7 @@
       "dbPublishedLessonCount": null,
       "dbPublishedQuestionCount": null,
       "dbPublishedFlashcardDeckCount": null,
-      "contentStatus": "route_only",
+      "contentStatus": "catalog_only",
       "evidence": [
         "registry:ca-np-cnple",
         "catalog.sync.lessons=21",
@@ -182,7 +182,7 @@
       "dbPublishedLessonCount": null,
       "dbPublishedQuestionCount": null,
       "dbPublishedFlashcardDeckCount": null,
-      "contentStatus": "route_only",
+      "contentStatus": "catalog_only",
       "evidence": [
         "registry:us-np-agpcnp",
         "catalog.sync.lessons=70",
@@ -203,7 +203,7 @@
       "dbPublishedLessonCount": null,
       "dbPublishedQuestionCount": null,
       "dbPublishedFlashcardDeckCount": null,
-      "contentStatus": "route_only",
+      "contentStatus": "catalog_only",
       "evidence": [
         "registry:us-np-pmhnp",
         "catalog.sync.lessons=50",
@@ -224,7 +224,7 @@
       "dbPublishedLessonCount": null,
       "dbPublishedQuestionCount": null,
       "dbPublishedFlashcardDeckCount": null,
-      "contentStatus": "route_only",
+      "contentStatus": "catalog_only",
       "evidence": [
         "registry:us-np-whnp",
         "catalog.sync.lessons=21",
@@ -245,7 +245,7 @@
       "dbPublishedLessonCount": null,
       "dbPublishedQuestionCount": null,
       "dbPublishedFlashcardDeckCount": null,
-      "contentStatus": "route_only",
+      "contentStatus": "catalog_only",
       "evidence": [
         "registry:us-np-pnp-pc",
         "catalog.sync.lessons=21",

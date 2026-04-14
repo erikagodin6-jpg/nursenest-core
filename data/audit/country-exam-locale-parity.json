@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-14T17:36:13.521Z",
+  "generatedAt": "2026-04-14T17:41:20.982Z",
   "dbConnected": false,
   "legacySourcesScanned": [
     "data/audit/legacy-lessons-inventory.json (summary)",
@@ -99,7 +99,7 @@
       "dbPublishedLessonCount": null,
       "dbPublishedQuestionCount": null,
       "dbPublishedFlashcardDeckCount": null,
-      "contentStatus": "route_only",
+      "contentStatus": "catalog_only",
       "evidence": [
         "registry:ca-np-cnple",
         "catalog.sync.lessons=21",
@@ -204,7 +204,7 @@
       "dbPublishedLessonCount": null,
       "dbPublishedQuestionCount": null,
       "dbPublishedFlashcardDeckCount": null,
-      "contentStatus": "route_only",
+      "contentStatus": "catalog_only",
       "evidence": [
         "registry:us-np-agpcnp",
         "catalog.sync.lessons=70",
@@ -225,7 +225,7 @@
       "dbPublishedLessonCount": null,
       "dbPublishedQuestionCount": null,
       "dbPublishedFlashcardDeckCount": null,
-      "contentStatus": "route_only",
+      "contentStatus": "catalog_only",
       "evidence": [
         "registry:us-np-pmhnp",
         "catalog.sync.lessons=50",
@@ -246,7 +246,7 @@
       "dbPublishedLessonCount": null,
       "dbPublishedQuestionCount": null,
       "dbPublishedFlashcardDeckCount": null,
-      "contentStatus": "route_only",
+      "contentStatus": "catalog_only",
       "evidence": [
         "registry:us-np-whnp",
         "catalog.sync.lessons=21",
@@ -267,7 +267,7 @@
       "dbPublishedLessonCount": null,
       "dbPublishedQuestionCount": null,
       "dbPublishedFlashcardDeckCount": null,
-      "contentStatus": "route_only",
+      "contentStatus": "catalog_only",
       "evidence": [
         "registry:us-np-pnp-pc",
         "catalog.sync.lessons=21",
@@ -319,112 +319,6 @@
       ]
     }
   ],
-  "routeableButNoLessonOrDbContent": [
-    {
-      "pathwayId": "ca-np-cnple",
-      "countrySlug": "canada",
-      "roleTrack": "np",
-      "examCode": "cnple",
-      "registryStatus": "upcoming",
-      "stripeTier": "NP",
-      "routeLessonsIndex": "/canada/np/cnple/lessons",
-      "catalogLessonCount": 21,
-      "dbPublishedLessonCount": null,
-      "dbPublishedQuestionCount": null,
-      "dbPublishedFlashcardDeckCount": null,
-      "contentStatus": "route_only",
-      "evidence": [
-        "registry:ca-np-cnple",
-        "catalog.sync.lessons=21",
-        "db:skipped",
-        "db.questions:skipped",
-        "db.decks:skipped"
-      ]
-    },
-    {
-      "pathwayId": "us-np-agpcnp",
-      "countrySlug": "us",
-      "roleTrack": "np",
-      "examCode": "agpcnp",
-      "registryStatus": "active",
-      "stripeTier": "NP",
-      "routeLessonsIndex": "/us/np/agpcnp/lessons",
-      "catalogLessonCount": 70,
-      "dbPublishedLessonCount": null,
-      "dbPublishedQuestionCount": null,
-      "dbPublishedFlashcardDeckCount": null,
-      "contentStatus": "route_only",
-      "evidence": [
-        "registry:us-np-agpcnp",
-        "catalog.sync.lessons=70",
-        "db:skipped",
-        "db.questions:skipped",
-        "db.decks:skipped"
-      ]
-    },
-    {
-      "pathwayId": "us-np-pmhnp",
-      "countrySlug": "us",
-      "roleTrack": "np",
-      "examCode": "pmhnp",
-      "registryStatus": "active",
-      "stripeTier": "NP",
-      "routeLessonsIndex": "/us/np/pmhnp/lessons",
-      "catalogLessonCount": 50,
-      "dbPublishedLessonCount": null,
-      "dbPublishedQuestionCount": null,
-      "dbPublishedFlashcardDeckCount": null,
-      "contentStatus": "route_only",
-      "evidence": [
-        "registry:us-np-pmhnp",
-        "catalog.sync.lessons=50",
-        "db:skipped",
-        "db.questions:skipped",
-        "db.decks:skipped"
-      ]
-    },
-    {
-      "pathwayId": "us-np-whnp",
-      "countrySlug": "us",
-      "roleTrack": "np",
-      "examCode": "whnp",
-      "registryStatus": "active",
-      "stripeTier": "NP",
-      "routeLessonsIndex": "/us/np/whnp/lessons",
-      "catalogLessonCount": 21,
-      "dbPublishedLessonCount": null,
-      "dbPublishedQuestionCount": null,
-      "dbPublishedFlashcardDeckCount": null,
-      "contentStatus": "route_only",
-      "evidence": [
-        "registry:us-np-whnp",
-        "catalog.sync.lessons=21",
-        "db:skipped",
-        "db.questions:skipped",
-        "db.decks:skipped"
-      ]
-    },
-    {
-      "pathwayId": "us-np-pnp-pc",
-      "countrySlug": "us",
-      "roleTrack": "np",
-      "examCode": "pnp-pc",
-      "registryStatus": "active",
-      "stripeTier": "NP",
-      "routeLessonsIndex": "/us/np/pnp-pc/lessons",
-      "catalogLessonCount": 21,
-      "dbPublishedLessonCount": null,
-      "dbPublishedQuestionCount": null,
-      "dbPublishedFlashcardDeckCount": null,
-      "contentStatus": "route_only",
-      "evidence": [
-        "registry:us-np-pnp-pc",
-        "catalog.sync.lessons=21",
-        "db:skipped",
-        "db.questions:skipped",
-        "db.decks:skipped"
-      ]
-    }
-  ],
+  "routeableButNoLessonOrDbContent": [],
   "note": "routeableButNoLessonOrDbContent: registry public pathway with 0 catalog lessons and 0 published DB lessons (questions/decks may still exist)."
 }
