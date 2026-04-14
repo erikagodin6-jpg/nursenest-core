@@ -12,58 +12,17 @@ import { productEvent } from "@/lib/observability/product-events";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 import { findTierCountryByPriceId } from "@/lib/stripe/pricing-map";
 import {
+  billingLifecycleFields,
+  firstSubscriptionPriceId,
+  mapStripeSubscriptionStatus,
+} from "@/lib/stripe/stripe-subscription-field-map";
+import {
   planFromCheckoutMetadata,
   syncUserFromCheckoutSessionMetadata,
   syncUserFromStripePriceId,
 } from "@/lib/stripe/sync-user-from-stripe-subscription";
 
-/**
- * Maps Stripe subscription status to DB. Returns `null` when we should **not** overwrite the row
- * (e.g. `incomplete` during Checkout can arrive after `checkout.session.completed` already set ACTIVE).
- */
-function mapStripeSubscriptionStatus(status: Stripe.Subscription.Status): SubscriptionStatus | null {
-  switch (status) {
-    case "active":
-    case "trialing":
-      return SubscriptionStatus.ACTIVE;
-    case "past_due":
-    case "unpaid":
-      return SubscriptionStatus.PAST_DUE;
-    case "canceled":
-    case "incomplete_expired":
-      return SubscriptionStatus.CANCELLED;
-    case "incomplete":
-    case "paused":
-      return null;
-    default:
-      return SubscriptionStatus.CANCELLED;
-  }
-}
-
-function firstSubscriptionPriceId(sub: Stripe.Subscription): string | undefined {
-  const item = sub.items?.data?.[0];
-  if (!item?.price) return undefined;
-  return typeof item.price === "string" ? item.price : item.price.id;
-}
-
-type LifecycleData = {
-  currentPeriodEnd?: Date;
-  trialEnd?: Date;
-  cancelAtPeriodEnd: boolean;
-};
-
-function billingLifecycleFields(sub: Stripe.Subscription): LifecycleData {
-  const fields: LifecycleData = { cancelAtPeriodEnd: Boolean(sub.cancel_at_period_end) };
-  const periodEnd = (sub as unknown as Record<string, unknown>).current_period_end;
-  if (typeof periodEnd === "number" && periodEnd > 0) {
-    fields.currentPeriodEnd = new Date(periodEnd * 1000);
-  }
-  const trialEnd = (sub as unknown as Record<string, unknown>).trial_end;
-  if (typeof trialEnd === "number" && trialEnd > 0) {
-    fields.trialEnd = new Date(trialEnd * 1000);
-  }
-  return fields;
-}
+type LifecycleData = ReturnType<typeof billingLifecycleFields>;
 
 function warnIfStripeKeyModeMismatch(): void {
   const key = process.env.STRIPE_SECRET_KEY?.trim() ?? "";
