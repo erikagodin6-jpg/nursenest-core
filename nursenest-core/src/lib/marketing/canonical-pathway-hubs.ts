@@ -7,8 +7,8 @@
 export const CANONICAL_PATHWAY_HUB = {
   usRn: "/us/rn/nclex-rn",
   caRn: "/canada/rn/nclex-rn",
-  usPn: "/us/lpn/nclex-pn",
-  caPn: "/canada/rpn/rex-pn",
+  usPn: "/us/pn/nclex-pn",
+  caPn: "/canada/pn/rex-pn",
   usNp: "/us/np/fnp",
   caNp: "/canada/np/cnple",
 } as const;

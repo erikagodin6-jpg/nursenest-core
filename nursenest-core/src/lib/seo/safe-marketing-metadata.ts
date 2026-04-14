@@ -7,6 +7,15 @@ export const FALLBACK_SITE_METADATA: Metadata = {
   description: "Adaptive practice, lessons, and exam-focused prep for nursing candidates.",
 };
 
+const BRAND_SUFFIX = "| NurseNest";
+
+function stripDuplicateBrandSuffix(title: Metadata["title"]): Metadata["title"] {
+  if (typeof title !== "string") return title;
+  const trimmed = title.trim();
+  if (!trimmed.endsWith(BRAND_SUFFIX)) return title;
+  return trimmed.slice(0, -BRAND_SUFFIX.length).trimEnd();
+}
+
 export type SafeMetadataContext = {
   pathname?: string;
   /** e.g. marketing.exam_hub, marketing.blog, app.learner */
@@ -35,14 +44,15 @@ export async function safeGenerateMetadata(
     if (Object.keys(m).length === 0) {
       return m;
     }
+    const normalized = { ...m, title: stripDuplicateBrandSuffix(m.title) };
     // Enforce noindex for non-indexable locales regardless of what the page sets.
     if (ctx.locale) {
       const robotsOverride = localeRobotsOverride(ctx.locale);
       if (robotsOverride) {
-        return { ...m, robots: robotsOverride };
+        return { ...normalized, robots: robotsOverride };
       }
     }
-    return m;
+    return normalized;
   } catch (e) {
     const message = e instanceof Error ? e.message : String(e);
     safeServerLog("metadata", "metadata_generation_failed", {

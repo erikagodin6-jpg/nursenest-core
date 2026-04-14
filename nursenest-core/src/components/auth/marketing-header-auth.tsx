@@ -13,6 +13,7 @@ import { formatTitleCase } from "@/lib/format/text-case";
 import { PRIMARY_CTA } from "@/lib/copy/cta-copy";
 import { getNavChromeStyle } from "@/lib/theme/nav-chrome";
 import { UserFeedbackAccountMenuItem } from "@/components/feedback/user-feedback-account-menu-item";
+import { ADMIN_DASHBOARD_HREF } from "@/lib/auth/admin-dashboard-link";
 
 const SIGN_IN_CLASS =
   "nn-marketing-body-sm inline-flex items-center rounded-md px-3 py-2 font-medium tracking-normal text-[color:var(--nn-nav-fg,var(--nav-link))] transition-colors duration-150 hover:bg-[color:var(--nn-nav-hover-bg,var(--nav-hover))] hover:text-[color:var(--nn-nav-hover-fg,var(--nav-link-hover))]";
@@ -115,7 +116,7 @@ export function MarketingHeaderAuthDesktop() {
           </Link>
           {admin ? (
             <Link
-              href="/admin"
+              href={ADMIN_DASHBOARD_HREF}
               className="block break-words px-3 py-2 text-start nn-marketing-body-sm font-medium tracking-normal text-[var(--nav-fg)] [overflow-wrap:anywhere] hover:bg-[var(--nav-hover)]"
               role="menuitem"
               onClick={() => setOpen(false)}
@@ -188,7 +189,7 @@ export function MarketingHeaderAuthMobile({ onNavigate }: { onNavigate: () => vo
       </Link>
       {admin ? (
         <Link
-          href="/admin"
+          href={ADMIN_DASHBOARD_HREF}
           className="block rounded-xl border border-primary/20 bg-primary/5 px-3 py-2.5 nn-marketing-body-sm font-medium tracking-normal text-primary hover:bg-primary/10"
           onClick={onNavigate}
         >

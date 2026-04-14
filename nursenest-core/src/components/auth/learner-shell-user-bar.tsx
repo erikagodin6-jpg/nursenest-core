@@ -7,6 +7,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { isStaffRole } from "@/lib/auth/staff-roles";
 import { UserFeedbackAccountMenuItem } from "@/components/feedback/user-feedback-account-menu-item";
+import { ADMIN_DASHBOARD_HREF } from "@/lib/auth/admin-dashboard-link";
 
 type MenuItem = { href: string; i18nKey: string };
 
@@ -191,7 +192,7 @@ export function LearnerShellUserBar({ pathwayShortLabel = null }: { pathwayShort
           {admin ? (
             <div className="border-t border-[var(--border-subtle)] px-2 py-1.5">
               <Link
-                href="/admin"
+                href={ADMIN_DASHBOARD_HREF}
                 className={`${linkClass} font-medium text-primary`}
                 role="menuitem"
                 onClick={close}

@@ -1,3 +1,4 @@
+import { formatTitleCase } from "@/lib/format/text-case";
 type DeckInput = {
   title: string;
   description: string | null;
@@ -44,10 +45,11 @@ export function lessonSlugFromSourceKey(sourceKey: string | null | undefined): s
 }
 
 export function lessonNameFromSlug(slug: string): string {
-  return slug
+  const spaced = slug
     .split("-")
     .filter(Boolean)
     .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
     .join(" ");
+  return formatTitleCase(spaced);
 }
 

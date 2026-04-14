@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useEffect } from "react";
 import * as Sentry from "@sentry/nextjs";
-import { SiteBrandLogoMark } from "@/components/brand/site-brand-logo";
+import { BrandLeafIcon } from "@/components/brand/brand-leaf-icon";
 import { ProductErrorState } from "@/components/ui/product-error-state";
 import { getErrorMessage } from "@/lib/runtime/error-message";
 
@@ -23,8 +23,12 @@ export default function GlobalError({
 
   return (
     <main className="mx-auto mt-16 w-full max-w-xl px-6">
-      <Link href="/" className="mb-6 inline-flex bg-transparent" aria-label="NurseNest home">
-        <SiteBrandLogoMark variant="auth" logoVariant="leaf" />
+      <Link
+        href="/"
+        className="mb-6 inline-flex h-14 w-14 items-center justify-center rounded-xl border border-[color-mix(in_srgb,var(--semantic-brand)_18%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_07%,var(--semantic-surface))]"
+        aria-label="NurseNest home"
+      >
+        <BrandLeafIcon tone="brand" size={32} />
       </Link>
       <ProductErrorState
         title="Something went wrong"

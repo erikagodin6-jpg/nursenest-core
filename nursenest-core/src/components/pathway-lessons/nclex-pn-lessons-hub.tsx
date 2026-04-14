@@ -87,7 +87,7 @@ export function NclexPnLessonsHub({
           </li>
           <li>
             <span className="font-semibold text-[var(--theme-heading-text)]">2. Apply with questions.</span> Use this pathway in the bank so
-            stems stay PN-scoped (delegation, basic care, ordered interventions), not RN-level analysis items.
+            stems stay practical-nursing scoped (delegation, basic care, ordered interventions), not RN-level analysis items.
           </li>
           <li>
             <span className="font-semibold text-[var(--theme-heading-text)]">3. Review rationale deeply.</span> For each wrong option, ask:
@@ -215,12 +215,12 @@ export function NclexPnLessonsHub({
 
       <PathwayHubSupplementaryDisclosure
         summary="Clinical judgment, study loops, sample items & next steps"
-        hint="Expand for PN-scope guidance and shortcuts after you browse lessons on this page."
+        hint="Expand for practical-nursing scope guidance and shortcuts after you browse lessons on this page."
         className="mt-2"
       >
       <PathwayHubSection kind="card" aria-labelledby="cj-nclex-pn">
         <h2 id="cj-nclex-pn" className="nn-marketing-h3">
-          Clinical judgment at PN scope
+          Clinical judgment at practical-nursing scope
         </h2>
         <div className="mt-3 space-y-3 text-sm leading-relaxed text-[var(--theme-muted-text)]">
           <p>
@@ -238,7 +238,7 @@ export function NclexPnLessonsHub({
             </li>
             <li>
               <strong className="text-[var(--theme-heading-text)]">Scope:</strong> When in doubt, select report, clarify orders, or request the
-              RN when assessment or judgment exceeds PN practice.
+              RN when assessment or judgment exceeds practical-nursing practice.
             </li>
           </ul>
         </div>
@@ -249,7 +249,7 @@ export function NclexPnLessonsHub({
           Lesson → practice questions → weak areas → CAT exam
         </h2>
         <ol className="nn-marketing-body-sm mt-4 list-none space-y-2 pl-0 text-[var(--theme-muted-text)]">
-          <li>Lesson: pattern recognition for PN-appropriate actions and delegation.</li>
+          <li>Lesson: pattern recognition for practical-nurse appropriate actions and delegation.</li>
           <li>Practice: commit under time; read every distractor against scope and safety.</li>
           <li>Weak areas: let rationales drive what you re-study. Avoid endless new topics.</li>
           <li>
@@ -309,7 +309,7 @@ export function NclexPnLessonsHub({
           </p>
           <p className="nn-marketing-body-sm mt-2 text-[var(--theme-muted-text)]">
             <strong className="text-[var(--theme-heading-text)]">Takeaway:</strong> {labels.examShort} prioritization still follows patient outcome
-            risk. Then stay inside what you can assess, perform, and report within PN scope.
+            risk. Then stay inside what you can assess, perform, and report within practical-nursing scope.
           </p>
         </div>
       </PathwayHubSection>

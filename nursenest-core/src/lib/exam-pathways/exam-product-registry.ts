@@ -269,13 +269,25 @@ function normalizeMarketingHubSegment(segment: string): string {
   return segment.trim().toLowerCase();
 }
 
+function normalizeRoleTrackSegmentForCountry(countrySlug: string, roleTrack: string, examCode: string): string {
+  const country = normalizeMarketingHubSegment(countrySlug);
+  const role = normalizeMarketingHubSegment(roleTrack);
+  const exam = normalizeMarketingHubSegment(examCode);
+  if (role !== "pn") return role;
+  if (country === "canada" || exam === "rex-pn") return "rpn";
+  return "lpn";
+}
+
 export function getExamPathwayByRoute(
   countrySlug: string,
   roleTrack: string,
   examCode: string,
 ): ExamPathwayDefinition | undefined {
+  const normalizedCountry = normalizeMarketingHubSegment(countrySlug);
+  const normalizedRole = normalizeRoleTrackSegmentForCountry(countrySlug, roleTrack, examCode);
+  const normalizedExam = normalizeMarketingHubSegment(examCode);
   return byRoute.get(
-    `${normalizeMarketingHubSegment(countrySlug)}/${normalizeMarketingHubSegment(roleTrack)}/${normalizeMarketingHubSegment(examCode)}`,
+    `${normalizedCountry}/${normalizedRole}/${normalizedExam}`,
   );
 }
 
@@ -323,7 +335,8 @@ export function buildExamPathwayPath(
   p: Pick<ExamPathwayDefinition, "countrySlug" | "roleTrack" | "examCode">,
   subpath?: string,
 ): string {
-  const base = `/${p.countrySlug}/${p.roleTrack}/${p.examCode}`;
+  const roleSlug = p.roleTrack === "lpn" || p.roleTrack === "rpn" ? "pn" : p.roleTrack;
+  const base = `/${p.countrySlug}/${roleSlug}/${p.examCode}`;
   if (!subpath) return base;
   return `${base}/${subpath.replace(/^\//, "")}`;
 }

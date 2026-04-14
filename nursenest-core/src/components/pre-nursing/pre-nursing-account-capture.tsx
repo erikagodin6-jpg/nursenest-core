@@ -35,7 +35,7 @@ export function PreNursingAccountCapture({
       <section className="nn-card mt-6 p-5">
         <h3 className="text-base font-semibold text-[var(--theme-heading-text)]">Personalize your pathway</h3>
         <p className="mt-2 text-sm text-muted">
-          Your progress can sync across devices. Add your likely RN/PN/RPN/NP direction to sharpen recommendations while
+          Your progress can sync across devices. Add your likely RN, LPN / LVN, RPN, or NP direction to sharpen recommendations while
           keeping Pre-Nursing free.
         </p>
         <Link href="/pre-nursing/study-plan" className="mt-3 inline-block text-sm font-semibold text-primary hover:underline">

@@ -12,7 +12,8 @@ const STAFF_ROLES: ReadonlySet<UserRole> = new Set([
 
 export function isStaffRole(role: UserRole | string | null | undefined): boolean {
   if (role == null || role === "") return false;
-  return STAFF_ROLES.has(role as UserRole);
+  const normalized = String(role).trim().toUpperCase();
+  return STAFF_ROLES.has(normalized as UserRole);
 }
 
 export function staffTierFromRole(role: UserRole): StaffTier {

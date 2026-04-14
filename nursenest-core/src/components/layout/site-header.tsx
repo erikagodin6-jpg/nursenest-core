@@ -51,6 +51,7 @@ import { CONTINUE_STUDYING_CTA, PRIMARY_CTA } from "@/lib/copy/cta-copy";
 import { THEME_OPTIONS } from "@/lib/theme/theme-registry";
 import { CountrySelector } from "@/components/layout/global-context-switcher";
 import { getNursingRoleLabel } from "@/lib/labels/nursing-role-labels";
+import { ADMIN_DASHBOARD_HREF } from "@/lib/auth/admin-dashboard-link";
 
 /** Keep desktop nav pills single-line and compact so the full global IA fits cleanly. */
 const NAV_LINK_CLASS =
@@ -784,7 +785,7 @@ export function SiteHeader() {
               ) : (
                 <div className="flex items-center gap-2">
                   <Link
-                    href="/admin"
+                    href={ADMIN_DASHBOARD_HREF}
                     className="nn-nav-cta inline-flex min-h-0 items-center justify-center rounded-xl px-4 py-2 text-sm font-semibold"
                   >
                     {formatTitleCase(t("nav.admin"), locale)}
@@ -1294,7 +1295,7 @@ export function SiteHeader() {
                 ) : (
                   <>
                     <Link
-                      href="/admin"
+                      href={ADMIN_DASHBOARD_HREF}
                       className="nn-nav-cta inline-flex min-h-[48px] items-center justify-center rounded-xl px-4 py-3 text-sm font-semibold"
                       onClick={() => setMobileOpen(false)}
                     >

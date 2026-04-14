@@ -9,6 +9,17 @@ import { Suspense, useEffect, useMemo } from "react";
  * so the experience feels closer to a testing environment. Shows a minimal exit strip instead.
  * Does not claim to replicate any vendor’s proprietary exam UI.
  */
+function isFocusedExamSessionPath(pathname: string): boolean {
+  // Hide learner chrome only for the live session route (`/app/practice-tests/:id`).
+  // Keep chrome visible on start, list, history, and results routes.
+  const parts = pathname.split("/").filter(Boolean);
+  if (parts.length !== 3) return false;
+  if (parts[0] !== "app" || parts[1] !== "practice-tests") return false;
+  const leaf = parts[2] ?? "";
+  if (leaf === "start" || leaf === "cat-insights") return false;
+  return leaf.length > 0;
+}
+
 function LearnerExamChromeGateInner({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -16,8 +27,7 @@ function LearnerExamChromeGateInner({ children }: { children: React.ReactNode })
   const examFocus = useMemo(() => {
     const shell = searchParams.get("examShell");
     if (shell === "1" || shell === "true") return true;
-    if (pathname.startsWith("/app/practice-tests/") && pathname !== "/app/practice-tests") return true;
-    return false;
+    return isFocusedExamSessionPath(pathname);
   }, [pathname, searchParams]);
 
   useEffect(() => {

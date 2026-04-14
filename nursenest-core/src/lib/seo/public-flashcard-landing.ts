@@ -9,6 +9,7 @@ import {
   lessonSlugFromSourceKey,
   PUBLIC_FLASHCARD_CATEGORIES,
 } from "@/lib/flashcards/public-flashcard-categories";
+import { formatTitleCase } from "@/lib/format/text-case";
 
 export type PublicFlashcardTopicRow = { slug: string; name: string };
 
@@ -117,7 +118,7 @@ export async function loadPublicFlashcardHub(): Promise<{
       });
       return {
         slug: d.slug,
-        title: d.title,
+        title: formatTitleCase(d.title),
         description: d.description,
         cardCount: d.cardCount,
         sampleFront: d.cards[0]?.front?.slice(0, 200) ?? null,
@@ -203,7 +204,7 @@ export async function loadPublicFlashcardSlugLanding(slug: string): Promise<Publ
       return {
         kind: "deck",
         slug: deck.slug,
-        title: deck.title,
+        title: formatTitleCase(deck.title),
         description: deck.description,
         cardCount: deck.cardCount,
         samples: deck.cards.map((c) => ({
@@ -250,7 +251,7 @@ export async function loadPublicFlashcardSlugLanding(slug: string): Promise<Publ
       samples.push({
         front: c.front,
         backTeaser: truncateForPreview(c.back),
-        deckTitle: row.deck.title,
+        deckTitle: formatTitleCase(row.deck.title),
       });
       if (samples.length >= 6) break;
     }
@@ -258,8 +259,8 @@ export async function loadPublicFlashcardSlugLanding(slug: string): Promise<Publ
     return {
       kind: "topic",
       slug: tag.slug,
-      name: tag.name,
-      decks: [...deckMap.entries()].map(([slug, title]) => ({ slug, title })),
+      name: formatTitleCase(tag.name),
+      decks: [...deckMap.entries()].map(([slug, title]) => ({ slug, title: formatTitleCase(title) })),
       samples,
     };
   }, null);

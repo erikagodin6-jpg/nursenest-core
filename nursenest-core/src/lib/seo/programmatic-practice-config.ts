@@ -102,7 +102,7 @@ const NCLEX: ProgrammaticPracticeConversionConfig = {
 
 const PN: ProgrammaticPracticeConversionConfig = {
   valueLead:
-    "Practice PN-style questions and see where practical nursing scope and safety items cost you marks. Short runs beat long passive reading after shifts.",
+    "Practice practical-nursing-style questions and see where practical nursing scope and safety items cost you marks. Short runs beat long passive reading after shifts.",
   howToUse: [
     "Answer under time pressure when you can. Scope questions punish slow lookups.",
     "Tag guesses. Review rationales for those first.",
@@ -117,7 +117,7 @@ const PN: ProgrammaticPracticeConversionConfig = {
   ],
   rationale: {
     stem:
-      "A practical nurse is assigned to a group of clients. Which task is most appropriate for the PN to perform?",
+      "A practical nurse is assigned to a group of clients. Which task is most appropriate for the practical nurse to perform?",
     choices: [
       "Adjust IV pump rate after the RN changes the order",
       "Perform sterile dressing change per protocol after competency validation",
@@ -126,18 +126,19 @@ const PN: ProgrammaticPracticeConversionConfig = {
     ],
     correctIndex: 1,
     whyCorrect:
-      "Sterile dressing change within PN scope is appropriate when policy and competency support it. The PN does not independently titrate IV rates off new orders, author initial care plans, or give first doses of new IV meds without RN context per common scope rules.",
+      "Sterile dressing change within practical-nursing scope is appropriate when policy and competency support it. The practical nurse does not independently titrate IV rates off new orders, author initial care plans, or give first doses of new IV meds without RN context per common scope rules.",
     whyIncorrect: [
       "Pump adjustments after order changes typically stay with RN oversight in many settings.",
       "Initial planning is RN scope in team models covered on exams.",
       "First-dose IV antibiotics usually require RN assessment first.",
     ],
-    takeaway: "Exam items love scope edges. When tasks sound similar, pick the one your regulator would list as PN-appropriate in black and white.",
+    takeaway:
+      "Exam items love scope edges. When tasks sound similar, pick the one your regulator would list as practical-nurse appropriate in black and white.",
   },
   mistakes: [
     {
       title: "Assuming more tasks mean more responsibility",
-      body: "Harder is not always yours. If two answers sound clinical, the one that stays inside PN scope wins.",
+      body: "Harder is not always yours. If two answers sound clinical, the one that stays inside practical-nursing scope wins.",
     },
     {
       title: "Ignoring delegation language",
@@ -145,7 +146,7 @@ const PN: ProgrammaticPracticeConversionConfig = {
     },
     {
       title: "Skipping infection control basics",
-      body: "PN exams still heavy-hand PPE sequence and transmission basics when you are tired.",
+      body: "Practical nursing exams still heavy-hand PPE sequence and transmission basics when you are tired.",
     },
   ],
 };
