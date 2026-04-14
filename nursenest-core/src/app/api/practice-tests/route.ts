@@ -21,6 +21,7 @@ import { PRACTICE_TEST_CAT_CREATE_CODE } from "@/lib/practice-tests/practice-tes
 import { resolveCatPathwayIdForCatPost } from "@/lib/practice-tests/resolve-cat-pathway-for-post";
 import { configFromInput, pickPracticeQuestionIds } from "@/lib/practice-tests/pick-question-ids";
 import { parsePracticeTestConfigAtBoundary } from "@/lib/practice-tests/practice-test-config-boundary";
+import type { PracticeTestConfigJson } from "@/lib/practice-tests/types";
 import { buildGlobalExamContext } from "@/lib/exam-context/exam-registry";
 import { examContextAnalyticsProps } from "@/lib/exam-context/global-exam-context";
 import { captureLearnerProductEvent } from "@/lib/observability/learner-product-analytics";
@@ -50,6 +51,8 @@ const createSchema = z
     timeLimitSec: z.union([z.number().int().min(120).max(18_000), z.null()]).optional(),
     /** Linear sessions: per-question lock + practice rationales vs exam-style deferred rationales. */
     linearDeliveryMode: z.enum(["practice", "exam"]).optional(),
+    /** Linear sessions: rationale timing controls (mirrors tutor vs exam behavior). */
+    linearRationaleVisibility: z.enum(["after_each", "end_of_exam"]).optional(),
   })
   .refine((d) => d.selectionMode !== "cat" || d.catPresentationMode !== "practice" || d.questionCount <= 200, {
     message: "CAT maximum question cap is 200.",
@@ -84,6 +87,23 @@ const createSchema = z
     message: "Linear practice tests support up to 100 questions.",
     path: ["questionCount"],
   });
+
+function linearConfigFingerprint(config: PracticeTestConfigJson) {
+  return JSON.stringify({
+    questionCount: config.questionCount,
+    topicNames: [...(config.topicNames ?? [])].sort((a, b) => a.localeCompare(b)),
+    difficultyMin: config.difficultyMin ?? null,
+    difficultyMax: config.difficultyMax ?? null,
+    selectionMode: config.selectionMode,
+    pathwayId: config.pathwayId ?? null,
+    timedMode: config.timedMode,
+    timeLimitSec: config.timedMode ? config.timeLimitSec ?? null : null,
+    linearDeliveryMode: config.linearDeliveryMode ?? "practice",
+    linearRationaleVisibility:
+      config.linearRationaleVisibility ??
+      ((config.linearDeliveryMode ?? "practice") === "exam" ? "end_of_exam" : "after_each"),
+  });
+}
 
 export async function GET(req: NextRequest) {
   const gate = await requireSubscriberSession();
@@ -190,7 +210,7 @@ export async function POST(req: Request) {
     if (isDev) {
       safeServerLog("practice_tests", "CAT_START_ATTEMPT_DEV", {
         userIdPrefix: gate.userId.slice(0, 8),
-        pathwayId: d.pathwayId?.trim() || null,
+        pathwayId: d.pathwayId?.trim() || undefined,
         questionCount: d.questionCount,
         catPresentationMode: d.catPresentationMode,
         selectionMode: d.selectionMode,
@@ -424,6 +444,50 @@ export async function POST(req: Request) {
     );
   }
 
+  const linearMode = d.linearDeliveryMode;
+  const linearRationaleVisibility =
+    d.linearRationaleVisibility ??
+    (linearMode === "exam" ? "end_of_exam" : "after_each");
+  const resolvedLinearMode = linearRationaleVisibility === "after_each" ? "practice" : "exam";
+  const config = configFromInput(
+    {
+      questionCount: d.questionCount,
+      topicNames,
+      difficultyMin,
+      difficultyMax,
+      selectionMode: d.selectionMode,
+      pathwayId: d.pathwayId?.trim() || null,
+    },
+    d.timedMode,
+    timeLimitSec,
+    {
+      linearDeliveryMode: linearMode ?? resolvedLinearMode,
+      linearRationaleVisibility,
+    },
+  );
+
+  const requestedLinearFingerprint = linearConfigFingerprint(config);
+  const existingLinearInProgress = await prisma.practiceTest.findMany({
+    where: {
+      userId: gate.userId,
+      status: PracticeTestStatus.IN_PROGRESS,
+    },
+    select: { id: true, config: true },
+    orderBy: { updatedAt: "desc" },
+    take: 20,
+  });
+  const resumeLinear = existingLinearInProgress.find((candidate) => {
+    const candidateConfig = parsePracticeTestConfigAtBoundary(candidate.config, {
+      practiceTestId: candidate.id,
+      surface: "practice_test_linear_resume_match",
+    });
+    if (candidateConfig.selectionMode === "cat") return false;
+    return linearConfigFingerprint(candidateConfig) === requestedLinearFingerprint;
+  });
+  if (resumeLinear) {
+    return NextResponse.json({ id: resumeLinear.id, resumed: true as const }, { status: 200 });
+  }
+
   const picked = await pickPracticeQuestionIds(gate.userId, gate.entitlement, {
     questionCount: d.questionCount,
     topicNames,
@@ -436,21 +500,6 @@ export async function POST(req: Request) {
   if (!picked.ok) {
     return NextResponse.json({ error: picked.message, code: "pool_too_small" }, { status: 400 });
   }
-
-  const linearMode = d.linearDeliveryMode;
-  const config = configFromInput(
-    {
-      questionCount: d.questionCount,
-      topicNames,
-      difficultyMin,
-      difficultyMax,
-      selectionMode: d.selectionMode,
-      pathwayId: d.pathwayId?.trim() || null,
-    },
-    d.timedMode,
-    timeLimitSec,
-    linearMode ? { linearDeliveryMode: linearMode } : undefined,
-  );
 
   const row = await prisma.practiceTest.create({
     data: {

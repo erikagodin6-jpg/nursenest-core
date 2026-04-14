@@ -125,7 +125,7 @@ function isActivePath(current: string, base: string): boolean {
 function isMegaMenuKeyActive(key: ExamMenuKey, strippedPath: string): boolean {
   const prefixes: Record<ExamMenuKey, string[]> = {
     rn:     ["/us/rn/", "/canada/rn/"],
-    pn:     ["/us/lpn/", "/canada/rpn/"],
+    pn:     ["/us/pn/", "/canada/pn/"],
     np:     ["/us/np/", "/canada/np/"],
     newgrad:[ "/pre-nursing/", "/lessons", "/question-bank", "/flashcards", "/practice-exams" ],
     allied: ["/us/allied/", "/canada/allied/"],

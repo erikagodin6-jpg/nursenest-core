@@ -124,9 +124,9 @@ export function preNursingLessonDetailPath(moduleSlug: string): string {
  * Intended for tests and audits — not a full router parser.
  */
 export function isMarketingPathwayLessonDetailPath(pathname: string): boolean {
-  return /^\/(canada|us)\/(rpn|lpn|rn|np|allied)\/[^/]+\/lessons\/[^/]+$/.test(pathname);
+  return /^\/(canada|us)\/(pn|rpn|lpn|rn|np|allied)\/[^/]+\/lessons\/[^/]+$/.test(pathname);
 }
 
 export function isMarketingPathwayLessonsIndexPath(pathname: string): boolean {
-  return /^\/(canada|us)\/(rpn|lpn|rn|np|allied)\/[^/]+\/lessons$/.test(pathname);
+  return /^\/(canada|us)\/(pn|rpn|lpn|rn|np|allied)\/[^/]+\/lessons$/.test(pathname);
 }

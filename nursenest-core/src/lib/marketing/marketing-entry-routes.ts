@@ -24,11 +24,11 @@ export const RN = {
 
 /** LPN / RPN / PN */
 export const PN = {
-  usLessons: "/us/lpn/nclex-pn/lessons",
-  usQuestions: "/us/lpn/nclex-pn/questions",
-  caHub: "/canada/rpn/rex-pn",
-  caLessons: "/canada/rpn/rex-pn/lessons",
-  caQuestions: "/canada/rpn/rex-pn/questions",
+  usLessons: "/us/pn/nclex-pn/lessons",
+  usQuestions: "/us/pn/nclex-pn/questions",
+  caHub: "/canada/pn/rex-pn",
+  caLessons: "/canada/pn/rex-pn/lessons",
+  caQuestions: "/canada/pn/rex-pn/questions",
   /** Legacy: Canada PN canonical pathway hub (not `/rex-pn-practice-questions`). */
   practiceProgrammatic: CANONICAL_PATHWAY_HUB.caPn,
   /** Legacy: US PN canonical pathway hub (not `/nclex-pn-practice-questions`). */
@@ -100,7 +100,7 @@ export function pnQuestions(region: MarketingRegionToggle): string {
 }
 
 export function pnPrimaryHub(region: MarketingRegionToggle): string {
-  return region === "US" ? "/us/lpn/nclex-pn" : PN.caHub;
+  return region === "US" ? "/us/pn/nclex-pn" : PN.caHub;
 }
 
 /** Programmatic practice hub slug for PN — NCLEX-PN (US) vs REx-PN (Canada). */

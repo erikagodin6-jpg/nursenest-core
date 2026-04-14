@@ -30,6 +30,7 @@ import {
   resolvePriorityMessage,
 } from "@/lib/student/interaction-priority";
 import { emptyStateCopy } from "@/lib/ui/empty-state-copy";
+import { buildPracticeExamStartPayload } from "@/lib/practice-tests/practice-exam-start-payload";
 
 type TestListRow = {
   id: string;
@@ -83,6 +84,7 @@ export function PracticeTestsHubClient({
   const [timedMode, setTimedMode] = useState(false);
   const [timeLimitMin, setTimeLimitMin] = useState(45);
   const [linearDeliveryMode, setLinearDeliveryMode] = useState<"practice" | "exam">("practice");
+  const [linearRationaleVisibility, setLinearRationaleVisibility] = useState<"after_each" | "end_of_exam">("after_each");
   const [pathwayId, setPathwayId] = useState(
     () => defaultPathwayId ?? pathwayOptions[0]?.id ?? "",
   );
@@ -173,6 +175,12 @@ export function PracticeTestsHubClient({
     if (cat === "1" || cat === "true") {
       setSelectionMode("cat");
     }
+    const startMode = searchParams.get("startMode");
+    if (startMode === "practice_exam") {
+      setSelectionMode("random");
+      setLinearDeliveryMode("practice");
+      setLinearRationaleVisibility("after_each");
+    }
     if (searchParams.get("focus") !== "weak") return;
     setSelectionMode((prev) => {
       if (prev === "cat") {
@@ -235,28 +243,41 @@ export function PracticeTestsHubClient({
           throw new Error("Choose which exam pathway you want to practice before starting adaptive (CAT).");
         }
       }
+      const linearPayload = buildPracticeExamStartPayload({
+        title: title.trim() || null,
+        questionCount,
+        selectionMode: selectionMode === "targeted" ? "targeted" : selectionMode === "weak" ? "weak" : "random",
+        topicNames: topicPicks,
+        pathwayId: pathwayId.trim() || null,
+        timedMode,
+        timeLimitSec: timedMode ? Math.round(timeLimitMin * 60) : null,
+        difficultyMin: difficultyMin === "" ? null : difficultyMin,
+        difficultyMax: difficultyMax === "" ? null : difficultyMax,
+        sessionMode: linearDeliveryMode === "exam" ? "exam" : "tutor",
+        rationaleVisibilityMode: linearRationaleVisibility === "after_each" ? "immediate" : "review",
+      });
+      const payload =
+        selectionMode === "cat"
+          ? {
+              title: title.trim() || undefined,
+              questionCount: Math.max(10, questionCount),
+              topicNames: topicPicks,
+              difficultyMin: difficultyMin === "" ? null : difficultyMin,
+              difficultyMax: difficultyMax === "" ? null : difficultyMax,
+              selectionMode,
+              catSelectionBasis,
+              catPresentationMode,
+              catExamFeedbackMode:
+                catPresentationMode === "practice" ? catExamFeedbackMode : ("test" satisfies CatExamFeedbackMode),
+              pathwayId: pathwayId.trim() || null,
+              timedMode,
+              timeLimitSec: timedMode ? Math.round(timeLimitMin * 60) : null,
+            }
+          : linearPayload;
       const res = await fetch("/api/practice-tests", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-          title: title.trim() || undefined,
-          questionCount: selectionMode === "cat" ? Math.max(10, questionCount) : questionCount,
-          topicNames: topicPicks,
-          difficultyMin: difficultyMin === "" ? null : difficultyMin,
-          difficultyMax: difficultyMax === "" ? null : difficultyMax,
-          selectionMode,
-          ...(selectionMode === "cat"
-            ? {
-                catSelectionBasis,
-                catPresentationMode,
-                catExamFeedbackMode:
-                  catPresentationMode === "practice" ? catExamFeedbackMode : ("test" satisfies CatExamFeedbackMode),
-              }
-            : { linearDeliveryMode }),
-          pathwayId: pathwayId.trim() || null,
-          timedMode,
-          timeLimitSec: timedMode ? Math.round(timeLimitMin * 60) : null,
-        }),
+          body: JSON.stringify(payload),
       });
       const data = (await res.json()) as { id?: string; error?: string; code?: string };
       if (!res.ok) {
@@ -281,6 +302,13 @@ export function PracticeTestsHubClient({
     return `${m}m ${r}s`;
   }
 
+  const formFieldClass =
+    "mt-1 w-full rounded-lg border border-[color-mix(in_srgb,var(--semantic-text-secondary)_30%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-surface)_88%,var(--semantic-panel-muted))] px-3 py-2 text-sm text-[var(--semantic-text-primary)] placeholder:text-[color-mix(in_srgb,var(--semantic-text-secondary)_78%,var(--semantic-text-muted))] shadow-[0_1px_0_color-mix(in_srgb,var(--semantic-text-primary)_6%,transparent)] transition hover:border-[color-mix(in_srgb,var(--semantic-brand)_38%,var(--semantic-border-soft))] hover:bg-[color-mix(in_srgb,var(--semantic-surface)_94%,var(--semantic-panel-muted))] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_45%,transparent)] focus-visible:ring-offset-1 focus-visible:ring-offset-[var(--semantic-surface)] disabled:cursor-not-allowed disabled:border-[color-mix(in_srgb,var(--semantic-border-soft)_80%,var(--semantic-border-soft))] disabled:bg-[color-mix(in_srgb,var(--semantic-panel-muted)_85%,var(--semantic-surface))] disabled:text-[var(--semantic-text-muted)] disabled:placeholder:text-[var(--semantic-text-muted)]";
+  const tabClass =
+    "rounded-lg border border-[color-mix(in_srgb,var(--semantic-text-secondary)_26%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-surface)_90%,var(--semantic-panel-muted))] px-4 py-2 text-sm font-semibold text-[var(--semantic-text-primary)] transition hover:border-[color-mix(in_srgb,var(--semantic-brand)_35%,var(--semantic-border-soft))] hover:bg-[color-mix(in_srgb,var(--semantic-surface)_97%,var(--semantic-panel-muted))] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_45%,transparent)] focus-visible:ring-offset-1 focus-visible:ring-offset-[var(--semantic-surface)] data-[active=true]:border-[color-mix(in_srgb,var(--semantic-brand)_55%,var(--semantic-border-soft))] data-[active=true]:bg-[color-mix(in_srgb,var(--semantic-brand)_15%,var(--semantic-surface))] data-[active=true]:text-[var(--semantic-text-primary)] data-[active=true]:shadow-[0_0_0_1px_color-mix(in_srgb,var(--semantic-brand)_25%,transparent)_inset]";
+  const sectionLabelClass = "text-sm font-semibold text-[var(--semantic-text-primary)]";
+  const fieldLabelClass = "text-[var(--semantic-text-primary)]";
+
   return (
     <div className="space-y-8">
       <section
@@ -290,9 +318,9 @@ export function PracticeTestsHubClient({
             : "border-[var(--semantic-border-soft)]"
         }`}
       >
-        <h2 className="text-xl font-bold tracking-tight text-[var(--theme-heading-text)]">Build a practice test</h2>
+        <h2 className="text-xl font-bold tracking-tight text-[var(--theme-heading-text)]">Build a Practice Test</h2>
         <p className="mt-1 max-w-3xl text-sm leading-relaxed text-muted-foreground">
-          Questions are drawn only from your plan’s tier and region. Choose a linear test or{" "}
+          Questions are drawn only from your plan’s tier and region. Choose a customizable practice exam or{" "}
           <strong className="text-foreground">adaptive (CAT)</strong> that adjusts difficulty from your performance and
           weak-area history.
         </p>
@@ -305,10 +333,10 @@ export function PracticeTestsHubClient({
         {pathwayOptions.length > 0 ? (
           <div className="mt-4">
             <label className="block text-sm">
-              <span className="text-muted-foreground">Exam pathway (filters the question pool)</span>
+              <span className={fieldLabelClass}>Exam Pathway</span>
               <select
                 data-nn-qa-practice-hub-pathway-select
-                className="mt-1 w-full max-w-xl rounded-lg border border-border px-3 py-2 text-sm"
+                className={`${formFieldClass} max-w-xl`}
                 value={pathwayId}
                 onChange={(e) => {
                   const next = e.target.value;
@@ -338,7 +366,7 @@ export function PracticeTestsHubClient({
             {selectionMode === "cat" && catOptions.length > 1 ? (
               <>
                 <p className="mt-3 text-sm text-[var(--semantic-text-secondary)]">
-                  Your plan includes more than one adaptive exam track —{" "}
+                  Your plan includes more than one adaptive exam track.{" "}
                   <span className="font-medium text-[var(--semantic-text-primary)]">
                     pick which pathway this CAT session is for
                   </span>{" "}
@@ -360,24 +388,16 @@ export function PracticeTestsHubClient({
 
         <div className="mt-6 grid gap-4 md:grid-cols-2">
           <label className="block text-sm">
-            <span className="text-muted-foreground">Title (optional)</span>
+            <span className={fieldLabelClass}>Title (Optional)</span>
             <input
-              className="mt-1 w-full rounded-lg border border-border px-3 py-2 text-sm"
+              className={formFieldClass}
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="e.g. Cardio sprint"
             />
           </label>
           <label className="block text-sm">
-            <span className="text-muted-foreground">
-              {selectionMode === "cat"
-                ? catPresentationMode === "exam_simulation"
-                  ? isNpPathway
-                    ? "Maximum length (AANP-style NP sim: 75–150)"
-                    : `Maximum length (${selectedExamLabel ?? "NCLEX-style"} exam sim: 75–145)`
-                  : "Maximum questions (cap, 10–75)"
-                : "Number of questions (5–100)"}
-            </span>
+            <span className={fieldLabelClass}>Number of Questions (5–100)</span>
             <input
               type="number"
               min={selectionMode === "cat" ? 10 : 5}
@@ -390,7 +410,7 @@ export function PracticeTestsHubClient({
                     ? 75
                     : 100
               }
-              className="mt-1 w-full rounded-lg border border-border px-3 py-2 text-sm"
+              className={formFieldClass}
               value={questionCount}
               onChange={(e) => setQuestionCount(Number(e.target.value))}
             />
@@ -414,13 +434,13 @@ export function PracticeTestsHubClient({
         </div>
 
         <div className="mt-4">
-          <span className="text-sm text-muted-foreground">Selection</span>
+          <span className={sectionLabelClass}>Selection</span>
           <div className="mt-2 flex flex-wrap gap-2">
             {(
               [
-                ["random", "Random mix"],
-                ["targeted", "Targeted topics"],
-                ["weak", "Target weak areas"],
+                ["random", "Random Mix"],
+                ["targeted", "Targeted Topics"],
+                ["weak", "Target Weak Areas"],
                 ["cat", "Adaptive (CAT)"],
               ] as const
             ).map(([v, label]) => (
@@ -437,7 +457,7 @@ export function PracticeTestsHubClient({
                   }
                 }}
                 data-active={selectionMode === v}
-                className="nn-tab-pill px-4 py-1.5 text-sm font-medium"
+                className={tabClass}
               >
                 {label}
               </button>
@@ -460,28 +480,60 @@ export function PracticeTestsHubClient({
 
         {selectionMode !== "cat" ? (
           <div className="mt-4 rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] p-4 shadow-sm">
-            <span className="text-sm font-medium text-foreground">Linear session style</span>
+            <span className={sectionLabelClass}>Linear Session Style</span>
             <div className="mt-2 flex flex-wrap gap-2">
               <button
                 type="button"
-                onClick={() => setLinearDeliveryMode("practice")}
+                onClick={() => {
+                  setLinearDeliveryMode("practice");
+                  setLinearRationaleVisibility("after_each");
+                }}
                 data-active={linearDeliveryMode === "practice"}
-                className="nn-tab-pill px-4 py-1.5 text-sm font-medium"
+                className={tabClass}
               >
-                Practice (per-item feedback)
+                Practice (Per-Item Feedback)
               </button>
               <button
                 type="button"
-                onClick={() => setLinearDeliveryMode("exam")}
+                onClick={() => {
+                  setLinearDeliveryMode("exam");
+                  setLinearRationaleVisibility("end_of_exam");
+                }}
                 data-active={linearDeliveryMode === "exam"}
-                className="nn-tab-pill px-4 py-1.5 text-sm font-medium"
+                className={tabClass}
               >
-                Exam (lock until end)
+                Exam (Lock Until End)
               </button>
             </div>
+            <div className="mt-4 space-y-2">
+              <span className="text-sm font-medium text-foreground">Rationale visibility</span>
+              <div className="flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setLinearRationaleVisibility("after_each");
+                    setLinearDeliveryMode("practice");
+                  }}
+                  data-active={linearRationaleVisibility === "after_each"}
+                  className={tabClass}
+                >
+                  After each question
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setLinearRationaleVisibility("end_of_exam");
+                    setLinearDeliveryMode("exam");
+                  }}
+                  data-active={linearRationaleVisibility === "end_of_exam"}
+                  className={tabClass}
+                >
+                  Only at the end
+                </button>
+              </div>
+            </div>
             <p className="mt-2 text-xs text-muted-foreground">
-              Practice shows rationales after each submitted answer. Exam locks choices and hides rationales until you
-              finish the full run.
+              Tutor mode reveals rationales after each submitted answer. Exam mode keeps rationales for end-of-exam review.
             </p>
           </div>
         ) : null}
@@ -497,7 +549,7 @@ export function PracticeTestsHubClient({
                   if (questionCount > 75) setQuestionCount(75);
                 }}
                 data-active={catPresentationMode === "practice"}
-                className="nn-tab-pill px-4 py-1.5 text-sm font-medium"
+                className={tabClass}
               >
                 Practice CAT
               </button>
@@ -518,7 +570,7 @@ export function PracticeTestsHubClient({
                   }
                 }}
                 data-active={catPresentationMode === "exam_simulation"}
-                className="nn-tab-pill px-4 py-1.5 text-sm font-medium"
+                className={tabClass}
               >
                 Exam simulation
               </button>
@@ -527,12 +579,12 @@ export function PracticeTestsHubClient({
               Practice CAT keeps shorter runs and weak-area boosts. Exam simulation uses your selected pathway:{" "}
               {isNpPathway ? (
                 <>
-                  <strong className="text-foreground">{selectedExamLabel ?? "NP"}</strong> — 75–150 items, default{" "}
+                  <strong className="text-foreground">{selectedExamLabel ?? "NP"}</strong> - 75–150 items, default{" "}
                   <strong className="text-foreground">3 hours</strong> timed, AANP-style four-domain blueprint.
                 </>
               ) : (
                 <>
-                  <strong className="text-foreground">{selectedExamLabel ?? "NCLEX-style"}</strong> — defaults follow your
+                  <strong className="text-foreground">{selectedExamLabel ?? "NCLEX-style"}</strong> - defaults follow your
                   track in the builder (timed length and item cap), with blueprint coverage when items are tagged.
                 </>
               )}{" "}
@@ -545,7 +597,7 @@ export function PracticeTestsHubClient({
 
         {selectionMode === "cat" && catPresentationMode === "practice" ? (
           <div className="mt-4">
-            <span className="text-sm text-muted-foreground">Pool for adaptive draws</span>
+            <span className={sectionLabelClass}>Pool for Adaptive Draws</span>
             <div className="mt-2 flex flex-wrap gap-2">
               {(
                 [
@@ -559,7 +611,7 @@ export function PracticeTestsHubClient({
                   type="button"
                   onClick={() => setCatSelectionBasis(v)}
                   data-active={catSelectionBasis === v}
-                  className="nn-tab-pill px-4 py-1.5 text-sm font-medium"
+                  className={tabClass}
                 >
                   {label}
                 </button>
@@ -569,9 +621,9 @@ export function PracticeTestsHubClient({
               Same tier rules apply. Weak-area mode needs prior scored exam history.
             </p>
             <div className="mt-4 space-y-2">
-              <span className="text-sm font-medium text-foreground">CAT mode</span>
+              <span className={sectionLabelClass}>CAT Mode</span>
               <p className="text-xs text-muted-foreground">
-                Same adaptive engine for both — choose whether you want teaching after each item or a stricter run.
+                Same adaptive engine for both. Choose whether you want teaching after each item or a stricter run.
               </p>
               <div className="grid gap-2 sm:grid-cols-2">
                 <button
@@ -605,7 +657,7 @@ export function PracticeTestsHubClient({
 
         {(selectionMode === "random" || selectionMode === "targeted" || selectionMode === "cat") && (
           <div className="mt-4 space-y-2">
-            <span className="text-sm text-muted-foreground">Topics (optional unless targeted)</span>
+            <span className={sectionLabelClass}>Topics (Optional Unless Targeted)</span>
             <div className="flex flex-wrap gap-2">
               {topicPicks.map((t) => (
                 <button
@@ -621,14 +673,14 @@ export function PracticeTestsHubClient({
             </div>
             <div className="flex flex-wrap gap-2">
               <select
-                className="rounded-lg border border-border px-2 py-1.5 text-sm"
+                className={`${formFieldClass} mt-0 w-auto min-w-[14rem] px-2 py-1.5`}
                 value=""
                 onChange={(e) => {
                   addTopicFromMenu(e.target.value);
                   e.target.value = "";
                 }}
               >
-                <option value="">Add from bank…</option>
+                <option value="">Add from Bank</option>
                 {topics.map((b) => (
                   <option key={b.topic} value={b.topic}>
                     {b.topic} ({b.count})
@@ -636,13 +688,17 @@ export function PracticeTestsHubClient({
                 ))}
               </select>
               <input
-                className="rounded-lg border border-border px-2 py-1.5 text-sm"
-                placeholder="Custom topic label"
+                className={`${formFieldClass} mt-0 w-auto min-w-[14rem] px-2 py-1.5`}
+                placeholder="Custom Topic Label"
                 value={topicInput}
                 onChange={(e) => setTopicInput(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), addCustomTopic())}
               />
-              <button type="button" className="nn-premium-action-chip rounded-lg border border-border px-3 py-1.5 text-sm" onClick={addCustomTopic}>
+              <button
+                type="button"
+                className={`${tabClass} px-3 py-1.5`}
+                onClick={addCustomTopic}
+              >
                 Add
               </button>
             </div>
@@ -651,23 +707,23 @@ export function PracticeTestsHubClient({
 
         <div className="mt-4 grid gap-4 md:grid-cols-2">
           <label className="block text-sm">
-            <span className="text-muted-foreground">Difficulty min (1–5, optional)</span>
+            <span className={fieldLabelClass}>Difficulty Min (1–5, Optional)</span>
             <input
               type="number"
               min={1}
               max={5}
-              className="mt-1 w-full rounded-lg border border-border px-3 py-2 text-sm"
+              className={formFieldClass}
               value={difficultyMin}
               onChange={(e) => setDifficultyMin(e.target.value === "" ? "" : Number(e.target.value))}
             />
           </label>
           <label className="block text-sm">
-            <span className="text-muted-foreground">Difficulty max (1–5, optional)</span>
+            <span className={fieldLabelClass}>Difficulty Max (1–5, Optional)</span>
             <input
               type="number"
               min={1}
               max={5}
-              className="mt-1 w-full rounded-lg border border-border px-3 py-2 text-sm"
+              className={formFieldClass}
               value={difficultyMax}
               onChange={(e) => setDifficultyMax(e.target.value === "" ? "" : Number(e.target.value))}
             />
@@ -679,17 +735,22 @@ export function PracticeTestsHubClient({
 
         <div className="mt-6 flex flex-wrap items-center gap-4 border-t border-[var(--semantic-border-soft)] pt-4">
           <label className="flex items-center gap-2 text-sm">
-            <input type="checkbox" checked={timedMode} onChange={(e) => setTimedMode(e.target.checked)} />
-            Timed mode
+            <input
+              type="checkbox"
+              className="h-4 w-4 rounded border-[color-mix(in_srgb,var(--semantic-text-secondary)_35%,var(--semantic-border-soft))] bg-[var(--semantic-surface)] text-[var(--semantic-brand)] focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_45%,transparent)] focus-visible:ring-offset-1 focus-visible:ring-offset-[var(--semantic-surface)]"
+              checked={timedMode}
+              onChange={(e) => setTimedMode(e.target.checked)}
+            />
+            <span className={fieldLabelClass}>Timed Mode</span>
           </label>
           {timedMode ? (
             <label className="text-sm">
-              <span className="text-muted-foreground">Time limit (minutes)</span>
+              <span className={fieldLabelClass}>Time Limit (Minutes)</span>
               <input
                 type="number"
                 min={2}
                 max={selectionMode === "cat" && catPresentationMode === "exam_simulation" ? 400 : 240}
-                className="ml-2 rounded-lg border border-border px-2 py-1 text-sm"
+                className={`${formFieldClass} ml-2 inline-block w-28 px-2 py-1`}
                 value={timeLimitMin}
                 onChange={(e) => setTimeLimitMin(Number(e.target.value))}
               />
@@ -722,12 +783,12 @@ export function PracticeTestsHubClient({
           onClick={() => void createTest()}
           className="nn-btn-primary mt-6 px-6 py-2.5 text-sm font-semibold disabled:opacity-50"
         >
-          {creating ? "Building…" : "Start test"}
+          {creating ? "Building..." : "Start Test"}
         </button>
       </section>
 
       <section>
-        <h2 className="text-lg font-bold tracking-tight text-[var(--theme-heading-text)]">Saved tests & history</h2>
+        <h2 className="text-lg font-bold tracking-tight text-[var(--theme-heading-text)]">Saved Tests & History</h2>
         <p className="mt-1 text-sm text-muted-foreground">Resume in-progress sessions or review completed scores.</p>
         {historyPriorityMessage ? <p className="mt-2 text-xs text-[var(--semantic-text-secondary)]">{historyPriorityMessage}</p> : null}
         {loading ? (
@@ -740,9 +801,9 @@ export function PracticeTestsHubClient({
               density="compact"
               visualLayout="stack"
               headline={emptyStateCopy.noHistoryYet({ area: "saved tests" }).headline}
-              body="You haven’t saved any practice tests yet. Start a new test and your in-progress sessions and recent scores will show up here."
+              body="You haven’t saved any practice exams yet. Start a new exam and your in-progress sessions and recent scores will show up here."
               hint={emptyStateCopy.noHistoryYet({ area: "saved tests" }).body}
-              primaryCta={{ label: "Start test", href: "/app/practice-tests/start", variant: "primary" }}
+              primaryCta={{ label: "Build Practice Exam", href: "/app/practice-tests/start", variant: "primary" }}
             />
           </div>
         ) : (

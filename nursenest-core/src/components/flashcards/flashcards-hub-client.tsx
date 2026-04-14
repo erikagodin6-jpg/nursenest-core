@@ -9,6 +9,7 @@ import { FlashcardDeckGrid } from "@/components/study/flashcard-deck-grid";
 import { FlashcardFilters, type FlashcardFiltersValue } from "@/components/study/flashcard-filters";
 import type { DeckCardRow } from "@/components/study/flashcard-deck-card";
 import { countSavedStudyItems } from "@/lib/flashcards/study-session-persistence";
+import { formatTitleCase } from "@/lib/format/text-case";
 
 type TagRow = { slug: string; name: string };
 
@@ -421,7 +422,7 @@ export function FlashcardsHubClient({
                         }
                   }
                 >
-                  {category.title} ({category.count})
+                  {formatTitleCase(category.title)} ({category.count})
                 </button>
               );
             })}
@@ -468,7 +469,7 @@ export function FlashcardsHubClient({
             Pathway: {filters.pathwayId ? pathwayOptions.find((p) => p.id === filters.pathwayId)?.label ?? filters.pathwayId : "Scoped to your entitlement"}
           </p>
           <p>
-            Categories: {selectedCategoryIds.length > 0 ? builderCategories.filter((c) => selectedCategoryIds.includes(c.id)).map((c) => c.title).join(", ") : "All available"}
+            Categories: {selectedCategoryIds.length > 0 ? builderCategories.filter((c) => selectedCategoryIds.includes(c.id)).map((c) => formatTitleCase(c.title)).join(", ") : "All available"}
           </p>
           <p>
             Cards: {builderSummary?.returnedCards ?? 0} of {builderSummary?.matchingCards ?? 0} · Mode: {modeLabel[studyMode]} · Shuffle:{" "}
