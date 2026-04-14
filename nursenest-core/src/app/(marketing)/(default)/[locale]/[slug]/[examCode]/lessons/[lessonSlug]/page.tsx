@@ -379,40 +379,40 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
                     hasCheckpointQuestions: Boolean(section.checkpointQuestions?.length),
                   });
                   return (
-                  <LessonSectionCard
-                    key={section.id}
-                    id={section.id}
-                    heading={section.heading}
-                    kind={section.kind}
-                    className={wide ? "md:col-span-2" : undefined}
-                  >
-                    {section.audioUrl ? (
-                      <LessonSectionAudioButton
-                        audioUrl={section.audioUrl}
-                        sectionId={section.id}
-                        sectionHeading={section.heading}
+                    <LessonSectionCard
+                      key={section.id}
+                      id={section.id}
+                      heading={section.heading}
+                      kind={section.kind}
+                      className={wide ? "md:col-span-2" : undefined}
+                    >
+                      {section.audioUrl ? (
+                        <LessonSectionAudioButton
+                          audioUrl={section.audioUrl}
+                          sectionId={section.id}
+                          sectionHeading={section.heading}
+                        />
+                      ) : null}
+                      <PathwayLessonSectionContent
+                        text={typeof section.body === "string" ? section.body : ""}
+                        figures={section.figures}
+                        examFocus={section.examFocus}
+                        lessonWikiBasePath={base}
+                        viewerTier={lessonContentTier}
+                        measurementSystem={lessonMeasurementSystem}
+                        emptyBodyMessage={t("learner.lessons.detail.sectionEmptyBody")}
+                        figuresVisualLeadMessage={t("learner.lessons.detail.sectionFiguresVisualLead")}
                       />
-                    ) : null}
-                    <PathwayLessonSectionContent
-                      text={typeof section.body === "string" ? section.body : ""}
-                      figures={section.figures}
-                      examFocus={section.examFocus}
-                      lessonWikiBasePath={base}
-                      viewerTier={lessonContentTier}
-                      measurementSystem={lessonMeasurementSystem}
-                      emptyBodyMessage={t("learner.lessons.detail.sectionEmptyBody")}
-                      figuresVisualLeadMessage={t("learner.lessons.detail.sectionFiguresVisualLead")}
-                    />
-                    {section.keyRecallFacts?.length ? (
-                      <LessonKeyRecallChip facts={section.keyRecallFacts} />
-                    ) : null}
-                    {section.recallPrompts?.length ? (
-                      <LessonRecallBlock prompts={section.recallPrompts} />
-                    ) : null}
-                    {section.checkpointQuestions?.length ? (
-                      <LessonCheckpointCard questions={section.checkpointQuestions} />
-                    ) : null}
-                  </LessonSectionCard>
+                      {section.keyRecallFacts?.length ? (
+                        <LessonKeyRecallChip facts={section.keyRecallFacts} />
+                      ) : null}
+                      {section.recallPrompts?.length ? (
+                        <LessonRecallBlock prompts={section.recallPrompts} />
+                      ) : null}
+                      {section.checkpointQuestions?.length ? (
+                        <LessonCheckpointCard questions={section.checkpointQuestions} />
+                      ) : null}
+                    </LessonSectionCard>
                   );
                 })}
               </article>

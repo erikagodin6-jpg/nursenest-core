@@ -25,6 +25,7 @@
     "audit:blog-quality": "tsx scripts/audit-blog-quality.ts",
     "audit:allied-blog-recovery": "tsx scripts/audit-allied-blog-recovery.ts",
     "audit:lesson-links": "tsx scripts/audit-lesson-links.ts",
+    "audit:lesson-health": "tsx scripts/audit-lesson-content-health.ts",
     "audit:lesson-question-coverage": "tsx scripts/lesson-question-link-coverage.ts",
     "audit:lesson-question-gap-fill": "tsx scripts/lesson-question-gap-fill.ts",
     "audit:full-content-coverage": "tsx scripts/full-content-coverage-audit.ts",

@@ -567,36 +567,36 @@ export default async function LessonDetailPage({ params }: Props) {
                     hasCheckpointQuestions: Boolean(section.checkpointQuestions?.length),
                   });
                   return (
-                  <LessonSectionCard
-                    key={section.id}
-                    id={section.id}
-                    heading={section.heading?.trim() || t("learner.lessons.detail.sectionFallback")}
-                    kind={section.kind ?? null}
-                    className={wide ? "md:col-span-2" : undefined}
-                  >
-                    <PathwayLessonSectionContent
-                      text={typeof section.body === "string" ? section.body : ""}
-                      figures={section.figures}
-                      examFocus={section.examFocus}
-                      viewerTier={lessonViewerTier}
-                      measurementSystem={lessonMeasurementSystem ?? undefined}
-                      emptyBodyMessage={t("learner.lessons.detail.sectionEmptyBody")}
-                      figuresVisualLeadMessage={t("learner.lessons.detail.sectionFiguresVisualLead")}
-                    />
-                    {userId ? (
-                      <LessonSectionNoteInline
-                        userId={userId}
-                        sectionId={section.id}
-                        sectionHeading={section.heading?.trim() ?? ""}
-                        scope="PATHWAY_LESSON"
-                        pathwayId={pathwayId}
-                        topic={record.topic}
+                    <LessonSectionCard
+                      key={section.id}
+                      id={section.id}
+                      heading={section.heading?.trim() || t("learner.lessons.detail.sectionFallback")}
+                      kind={section.kind ?? null}
+                      className={wide ? "md:col-span-2" : undefined}
+                    >
+                      <PathwayLessonSectionContent
+                        text={typeof section.body === "string" ? section.body : ""}
+                        figures={section.figures}
+                        examFocus={section.examFocus}
+                        viewerTier={lessonViewerTier}
+                        measurementSystem={lessonMeasurementSystem ?? undefined}
+                        emptyBodyMessage={t("learner.lessons.detail.sectionEmptyBody")}
+                        figuresVisualLeadMessage={t("learner.lessons.detail.sectionFiguresVisualLead")}
                       />
-                    ) : null}
-                  </LessonSectionCard>
+                      {userId ? (
+                        <LessonSectionNoteInline
+                          userId={userId}
+                          sectionId={section.id}
+                          sectionHeading={section.heading?.trim() ?? ""}
+                          scope="PATHWAY_LESSON"
+                          pathwayId={pathwayId}
+                          topic={record.topic}
+                        />
+                      ) : null}
+                    </LessonSectionCard>
                   );
                 })
-                  ) : null}
+              ) : null}
             </article>
             {pathway && record.studyCommonTraps && record.studyCommonTraps.length > 0 ? (
               <div className="mt-6 max-w-5xl">

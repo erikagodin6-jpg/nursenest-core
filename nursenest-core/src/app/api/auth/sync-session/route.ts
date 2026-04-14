@@ -15,8 +15,8 @@ export async function GET() {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const exists = await prisma.user.findUnique({ where: { id: userId }, select: { id: true } });
-  if (!exists) {
+  const userRow = await prisma.user.findUnique({ where: { id: userId }, select: { id: true, role: true } });
+  if (!userRow) {
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
 
@@ -31,6 +31,8 @@ export async function GET() {
     tier: userAccess.allowedProfession.tier,
     country: userAccess.allowedRegion.country,
     subscriptionStatus,
+    /** Authoritative Prisma `User.role` — merge into JWT via `useSession().update({ role })`. */
+    role: userRow.role,
     subscription: {
       planCode: userAccess.plan.planCode,
       planDuration: userAccess.plan.duration,

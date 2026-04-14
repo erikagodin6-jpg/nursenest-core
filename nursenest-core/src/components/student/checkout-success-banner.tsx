@@ -23,11 +23,13 @@ function Inner() {
           tier?: string;
           country?: string;
           subscriptionStatus?: string;
+          role?: string;
         };
         await update({
           tier: data.tier,
           country: data.country,
           subscriptionStatus: data.subscriptionStatus,
+          ...(data.role !== undefined ? { role: data.role } : {}),
         });
       } catch {
         /* JWT still valid; server routes use DB entitlements */

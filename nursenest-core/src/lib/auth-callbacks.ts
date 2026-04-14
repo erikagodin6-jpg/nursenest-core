@@ -1,6 +1,22 @@
 import type { NextAuthConfig } from "next-auth";
 import type { SessionUserRole } from "@/types/next-auth";
 
+/** Validate client-supplied role on `update()` so JWT cannot be escalated with arbitrary strings. */
+function sessionRoleFromUpdate(value: unknown): SessionUserRole | undefined {
+  if (typeof value !== "string") return undefined;
+  const r = value.trim().toUpperCase();
+  if (
+    r === "LEARNER" ||
+    r === "ADMIN" ||
+    r === "SUPER_ADMIN" ||
+    r === "CONTENT_ADMIN" ||
+    r === "SUPPORT_ADMIN"
+  ) {
+    return r;
+  }
+  return undefined;
+}
+
 /**
  * Shared JWT + session callbacks for the Node auth handler and the Edge middleware
  * auth instance. Both must stay identical so session tokens validate everywhere.
@@ -36,10 +52,13 @@ export const authCallbacks: NonNullable<NextAuthConfig["callbacks"]> = {
         tier: typeof token.tier;
         country: typeof token.country;
         subscriptionStatus: typeof token.subscriptionStatus;
+        role: unknown;
       }>;
       if (s.tier !== undefined) token.tier = s.tier;
       if (s.country !== undefined) token.country = s.country;
       if (s.subscriptionStatus !== undefined) token.subscriptionStatus = s.subscriptionStatus;
+      const nextRole = sessionRoleFromUpdate(s.role);
+      if (nextRole !== undefined) token.role = nextRole;
     }
     return token;
   },

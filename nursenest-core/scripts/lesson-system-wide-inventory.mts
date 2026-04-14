@@ -22,7 +22,7 @@ import {
   getEffectiveCatalogLessonsForPathwaySync,
   normalizeLesson,
   pathwayLessonRowToInput,
-} from "../src/lib/lessons/pathway-lesson-loader";
+} from "../src/lib/lessons/pathway-lesson-catalog-sync";
 import { prependScopedGoldCatalogLessons } from "../src/lib/lessons/scoped-lessons/scoped-gold-registry";
 import { alliedHealthLessonDetailPath } from "../src/lib/lessons/lesson-routes";
 import type { PathwayLessonRecord, PathwayLessonSectionKind } from "../src/lib/lessons/pathway-lesson-types";
