@@ -98,10 +98,10 @@ export async function POST(req: Request) {
   try {
     const user = await prisma.user.findUnique({
       where: { email },
-      select: { id: true, passwordHash: true },
+      select: { id: true, passwordHash: true, isDemoUser: true },
     });
 
-    if (!user?.passwordHash) {
+    if (!user?.passwordHash || user.isDemoUser) {
       return NextResponse.json({
         ok: true,
         message: "If an account exists for that email, a reset link has been sent.",

@@ -1,0 +1,12 @@
+{
+  "generatedAt": "2026-04-14T16:34:50.117Z",
+  "legacyGeneratorRestored": true,
+  "legacySchedulerScript": "scripts/blog/legacy-scheduler.ts",
+  "legacyImportScript": "scripts/import-blog.ts",
+  "databaseConfigured": true,
+  "postsImportedTotal": null,
+  "databaseError": "",
+  "note": "DATABASE_URL set but query failed (offline DB or network).",
+  "schedulerStatus": "Use cron POST /api/cron/blog-batch-schedule or scripts/blog/legacy-scheduler.ts",
+  "duplicatesSkipped": "See data/audit/blog-deduplication-report.json from import --dedupe-report"
+}

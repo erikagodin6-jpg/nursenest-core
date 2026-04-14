@@ -1,0 +1,1201 @@
+{
+  "generatedAt": "2026-04-14T16:24:44.619Z",
+  "databaseAvailable": false,
+  "summary": {
+    "lessonsTotal": 562,
+    "quizParityOk": 78,
+    "missingPre": 456,
+    "missingPost": 456,
+    "rationaleGaps": 28,
+    "malformed": 0
+  },
+  "samples": [
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "heart-failure-nursing-priorities-hy",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "acute-myocardial-infarction-troponin",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "shock-recognition-fluids",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "hypertensive-crisis-vs-urgency",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "atrial-fibrillation-rate-control",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "endocarditis-blood-cultures",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "pericarditis-ecg-clues",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "dvt-pe-nursing-priorities",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "abg-interpretation-basics-hy",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "copd-exacerbation-oxygen",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "asthma-status-asthmaticus",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ards-ventilation-basics",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "pneumonia-oxygenation",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "pulmonary-embolism-clues",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "tb-isolation-compliance",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "pleural-effusion-chest-tubes",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "insulin-hypoglycemia-hy",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "anticoagulants-bleeding-risk",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "antibiotic-classes-allergies-hy",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "opioids-respiratory-depression",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "cardiac-glycosides-toxicity",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "diuretics-electrolyte-shifts",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "antihypertensive-combos",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "chemo-safe-handling-extravasation",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "hyponatremia-vs-hypernatremia-hy",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "hypo-vs-hyperkalemia-hy",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "fluid-volume-deficit",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "fluid-volume-excess",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "magnesium-arrhythmia-risk",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "calcium-tetany",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "phosphate-shifts-in-renal",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "mixed-acid-base-patterns",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "liver-failure-hepatic-encephalopathy",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "acute-pancreatitis-nursing-care",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "bowel-obstruction-vs-paralytic-ileus",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "gerd-pud-bleeding-clues",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "gi-bleed-assessment",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "c-diff-infection-control",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ostomy-skin-protection",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "stroke-assessment-tpa-window",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "seizure-precautions-rescue-meds",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "increased-icp-positioning",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "spinal-cord-injury-autonomic-dysreflexia",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "meningitis-isolation-assessment",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "migraine-vs-red-flag-headache",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "parkinson-disease-med-timing",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "dka-vs-hhs-priorities-hy",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "thyroid-storm-myxedema-clues",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "addisonian-crisis",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "cushing-syndrome-assessment",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "diabetes-self-management-teaching",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "siadh-vs-di-basics",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "aki-prerenal-vs-intrarenal",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "hemodialysis-access-care",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "peritoneal-dialysis-complications",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "kidney-stones-strain-management",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "uti-vs-pyelonephritis",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "indwelling-catheter-risks",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "anemia-types-transfusion-thresholds",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "transfusion-reaction-recognition",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "neutropenic-precautions",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "sickle-cell-pain-acs",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "hip-fracture-fall-risk",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ra-flare-immune-modulators",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "immobility-dvt-prophylaxis",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "sepsis-early-recognition-hy",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "hiv-confidentiality-pep-basics",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "isolation-precautions-in-practice",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "wound-infection-vs-colonization",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "burn-depth-fluid-resuscitation-basics",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "pressure-injury-staging",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "severe-dermatitis-skin-care",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "suicide-risk-assessment-hy",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "psychotropic-side-effects",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "alcohol-withdrawal-ciwa",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "preeclampsia-vs-eclampsia",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "postpartum-hemorrhage",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "late-decelerations-fhr",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "newborn-thermoregulation-feeding",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "rh-incompatibility-basics",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "pediatric-fever-dehydration",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "rsv-pediatric-resp-distress",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "immunization-schedule-essentials",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "growth-failure-red-flags",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "non-accidental-trauma-suspicion",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "assignment-vs-delegation",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ethical-distress-advocacy",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "legal-nurse-practice-act",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "qi-incident-reporting",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "falls-hourly-rounding",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "restraint-alternatives-policy",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "medication-error-disclosure",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "sharp-safety-exposure",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "enteral-feeding-tube-safety",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "tpn-line-care-basics",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "abdominal-aortic-aneurysm-nclex-rn",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "acute-coronary-syndrome-nclex-rn",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "atrial-fibrillation-nclex-rn",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "cabg-and-postoperative-cabg-complications-nclex-rn",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "cardiac-tamponade-nclex-rn",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "deep-vein-thrombosis-dvt-prevention-and-nursing-management-nclex-rn",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "defibrillation-vs-synchronized-cardioversion-nclex-rn",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "heart-failure-nclex-rn",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "hypertensive-encephalopathy-nclex-rn",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "infective-endocarditis-nclex-rn",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "myocardial-infarction-nclex-rn",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "peripheral-artery-disease-nclex-rn",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "phlebostatic-axis-nclex-rn",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "pulmonary-embolism-nclex-rn",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "pn-scope-safety-basics",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "ca-rpn-pulmonary-embolism",
+      "issues": [
+        "blank_or_weak_rationales"
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "ca-rpn-heart-failure",
+      "issues": [
+        "blank_or_weak_rationales"
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "ca-rpn-myocardial-infarction",
+      "issues": [
+        "blank_or_weak_rationales"
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "ca-rpn-dysrhythmias",
+      "issues": [
+        "blank_or_weak_rationales"
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "ca-rpn-shock",
+      "issues": [
+        "blank_or_weak_rationales"
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "ca-rpn-asthma",
+      "issues": [
+        "blank_or_weak_rationales"
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "ca-rpn-ards",
+      "issues": [
+        "blank_or_weak_rationales"
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "ca-rpn-abg-interpretation",
+      "issues": [
+        "blank_or_weak_rationales"
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "ca-rpn-acid-base-advanced",
+      "issues": [
+        "blank_or_weak_rationales"
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "ca-rpn-sodium-imbalance",
+      "issues": [
+        "blank_or_weak_rationales"
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "ca-rpn-insulin-hypoglycemia",
+      "issues": [
+        "blank_or_weak_rationales"
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "ca-rpn-sepsis",
+      "issues": [
+        "blank_or_weak_rationales"
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "ca-rpn-infection-control",
+      "issues": [
+        "blank_or_weak_rationales"
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "ca-rpn-fluid-balance",
+      "issues": [
+        "blank_or_weak_rationales"
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "pn-scope-boundaries-delegation-rules-hy",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "therapeutic-communication",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "vital-signs-escalation",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "documentation-do-nots",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "heart-failure-monitoring",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "hypertension-teaching",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "edema-daily-weights",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "oxygen-devices-for-pn-care",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "inhaler-technique-teaching",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "copd-home-care",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "insulin-administration-checks",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "oral-hypoglycemics",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "antibiotic-side-effect-reporting",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "i-o-fluid-restriction-teaching",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "hypokalemia-symptoms",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "daily-weights-pattern",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "npo-post-op-diet-progression",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "stool-assessment-report",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "stroke-sequela-mobility-assist",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "seizure-observation",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "fingerstick-hypoglycemia-response",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "foot-inspection-teaching",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "catheter-care-cauti-prevention",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "dialysis-diet-teaching",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "postpartum-fundus-lochia",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "newborn-safety-bath",
+      "issues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    }
+  ],
+  "quizParityPercent": 14
+}

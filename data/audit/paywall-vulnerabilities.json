@@ -1,0 +1,41 @@
+{
+  "generatedAt": "2026-04-14T16:26:45.193Z",
+  "methodology": "Static code review + route inventory; not a substitute for authenticated DAST in staging/production.",
+  "severityCounts": {
+    "CRITICAL": 0,
+    "HIGH": 0,
+    "MEDIUM": 0,
+    "LOW": 1,
+    "INFORMATIONAL": 2
+  },
+  "findings": [
+    {
+      "id": "INF-001",
+      "severity": "INFORMATIONAL",
+      "title": "Freemium grade returns correctKeys after answer submission",
+      "detail": "POST /api/questions/freemium-grade returns normalized correct keys for grading feedback. Requires signed-in user + freemium quota; intentional for free-tier UX, not a subscription bypass.",
+      "file": "src/app/api/questions/freemium-grade/route.ts"
+    },
+    {
+      "id": "INF-002",
+      "severity": "INFORMATIONAL",
+      "title": "Public marketing lesson HTML is visible for structurally complete lessons",
+      "detail": "Published pathway lessons with publicComplete true render article body to all visitors; premium depth may still be gated in UI via canViewFullPathwayLesson for subscriber-only sections — verify product intent per pathway.",
+      "file": "src/app/(marketing)/.../lessons/[lessonSlug]/page.tsx"
+    },
+    {
+      "id": "LOW-001",
+      "severity": "LOW",
+      "title": "Heuristic scan flags some routes for manual review",
+      "detail": "Files without obvious requireSubscriberSession/auth in first-pass regex (2): review for non-educational public responses only.",
+      "samples": [
+        "src/app/api/signup/route.ts",
+        "src/app/api/subscribe/route.ts"
+      ]
+    }
+  ],
+  "routesFlaggedForManualReview": [
+    "src/app/api/signup/route.ts",
+    "src/app/api/subscribe/route.ts"
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "generatedAt": "2026-04-14T18:00:00.000Z",
+  "localesSupportedCompilePipeline": 22,
+  "countriesInMatrix": 14,
+  "percentTranslated": null,
+  "missingTranslations": "Use `npm run i18n:validate` and marketing CSV reports under `tools/i18n/reports/` for per-locale gaps; educational overlays are partial (fr/es/tl sample present).",
+  "examMappingCompleteness": "Authoritative entries in `data/config/global-locale-matrix.json` — not yet wired to all UI surfaces.",
+  "seoReadiness": "PARTIAL — canonical + sitemaps exist; full hreflang matrix pending incremental implementation.",
+  "paywallIntegrity": "SERVER_ENFORCED — revalidate when new localized learner routes ship.",
+  "artifacts": {
+    "audit": "data/audit/i18n-global-audit.json",
+    "matrix": "data/config/global-locale-matrix.json",
+    "translationProgress": "data/audit/translation-progress-global.json",
+    "batchScript": "scripts/i18n/run-global-translation.ts"
+  },
+  "blockingIssues": [],
+  "successCriteriaProgress": {
+    "fullSiteTranslatableViaOverlays": "IN_PROGRESS — pattern established; coverage grows per locale batch",
+    "zeroSeoConflicts": "REQUIRES_INCREMENTAL_HREFLANG_WORK",
+    "zeroPaywallLeaksAcrossLocales": "VERIFY_ON_NEW_ROUTES",
+    "examTerminologyPerCountry": "CONFIG_READY — UI wiring pending",
+    "noEnglishLeakage": "POLICY_EXISTS — enforce via i18n:validate + missing-key policy"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "summary": {
+    "generatedAt": null,
+    "note": "Generated when you run: cd nursenest-core && npx tsx scripts/import-blog.ts --dry-run --dedupe-report (optional --batch-size=25). Replaces this file with per-row decisions (slug/hash/title similarity + quality gate)."
+  },
+  "entries": []
+}

@@ -1,0 +1,11 @@
+{
+  "generatedAt": "2026-04-14T16:24:44.619Z",
+  "CAT_MIN_COMPLETE_POOL": 30,
+  "poolSource": "src/lib/practice-tests/cat-pool.ts",
+  "adaptivePolicy": "src/lib/exams/cat-adaptive-policy.ts",
+  "session": "src/lib/practice-tests/cat-session.ts",
+  "notes": [
+    "CAT creation blocked when pool < CAT_MIN_COMPLETE_POOL (cat-practice-readiness.ts).",
+    "Adaptive state persisted on practice test rows; see cat-session.ts."
+  ]
+}

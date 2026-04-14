@@ -1,0 +1,17 @@
+{
+  "generatedAt": "2026-04-14T16:24:44.619Z",
+  "databaseAvailable": false,
+  "summary": {
+    "high": 3,
+    "medium": 0,
+    "low": 0,
+    "none": 4220,
+    "mergeIntoExisting": 3,
+    "createMissing": 4220,
+    "reviewNeeded": 0,
+    "duplicateFlag": 0
+  },
+  "notImportedEstimate": 4220,
+  "safeMode": "no_auto_restore_this_run",
+  "batchLimit": 25
+}

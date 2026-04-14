@@ -33,6 +33,7 @@ import {
   Cpu,
   Crosshair,
   Server,
+  TestTube2,
   Workflow,
   MessageSquare,
 } from "lucide-react";
@@ -126,6 +127,7 @@ const GROUPS: NavGroup[] = [
       { href: "/admin/content-quality", label: "Content quality", icon: Shield },
       { href: "/admin/fraud", label: "Fraud detection", icon: ShieldAlert },
       { href: "/admin/premium-protection", label: "Premium protection", icon: Shield },
+      { href: "/admin/demo-users", label: "Demo users (QA)", icon: TestTube2 },
       { href: "/admin/i18n", label: "i18n", icon: Globe },
       { href: "/admin/diagnostics/theme-qa", label: "Theme QA", icon: Search },
     ],

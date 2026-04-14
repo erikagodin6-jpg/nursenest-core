@@ -1,0 +1,63 @@
+{
+  "reportKind": "multi_tier_production_readiness",
+  "generatedAt": "2026-04-14T23:59:00.000Z",
+  "safeMode": true,
+  "disclaimer": "This report is a structured baseline, not a certification. Journey success rates, conversion scores, and per-tier completeness were not measured in the pass that created this file. UWorld-level conversion work was not implemented (requires product/design sign-off).",
+  "journeySuccessRateByTier": {
+    "rn": null,
+    "pn": null,
+    "np": null,
+    "allied": null,
+    "pre_nursing": null,
+    "new_grad": null,
+    "unit": "percent_successful_steps",
+    "source": "Populate from user-journeys-by-tier.json after E2E runs."
+  },
+  "contentCompletenessByTier": {
+    "rn": { "percent": null, "refs": ["data/audit/final-lesson-completeness.json", "data/audit/lesson-quiz-parity.json"] },
+    "pn": { "percent": null, "note": "Run tier-scoped audits when DB available." },
+    "np": { "percent": null, "note": "Run tier-scoped audits when DB available." },
+    "allied": { "percent": null, "refs": ["data/audit/audit-summary.md (allied row heuristics)"] },
+    "pre_nursing": { "percent": null },
+    "new_grad": { "percent": null }
+  },
+  "conversionReadinessScore": {
+    "value": null,
+    "scale": "0_to_100",
+    "note": "Not scored. Trust signals, previews, and CTA consistency require marketing/product audit and A/B policy; do not invent a number.",
+    "existingAssets": [
+      "nursenest-core/src/lib/marketing/screenshot-registry.ts (CDN screenshots)",
+      "Pricing and home components under marketing routes (review with design system)"
+    ]
+  },
+  "paywallIntegrityByTier": {
+    "label": "intended_identical_server_enforcement",
+    "status": "not_retested_this_pass",
+    "baselineRefs": [
+      "data/audit/paywall-final-security.json",
+      "data/audit/entitlement-final-status.json"
+    ],
+    "risk": "Smaller pathways must not accidentally ship weaker gating; verify per tier after route changes."
+  },
+  "performanceStatus": {
+    "summary": "Pagination and caps are design goals; validate per pathway in Lighthouse/CI as applicable.",
+    "refs": ["data/audit/final-system-status.json", "docs/legacy-restoration-map.md"]
+  },
+  "missingFeatures": [
+    "Live multi-tier E2E results (user-journeys-by-tier.json still not_executed).",
+    "Per-tier content completeness not separately tallied in existing global audits.",
+    "Admin automation per pathway (fake students, screenshot pipeline) not implemented; see legacy-feature-parity.json.",
+    "Conversion optimization beyond current marketing assets not implemented in code this pass."
+  ],
+  "whatWasFixedPerUserType": [],
+  "overallProductionReadiness": {
+    "certified": false,
+    "rationale": "Documentation-only pass; no code changes; no cross-tier QA executed."
+  },
+  "nextSteps": [
+    "Execute user-journeys-by-tier.json QA matrix in staging; merge failures into the same file.",
+    "Add tier-scoped completeness jobs (batched) only after legacy-restoration-map layer order.",
+    "Align conversion copy and CTAs via design system review (no duplicate marketing systems).",
+    "Re-run paywall audits when entitlements or pathway routes change."
+  ]
+}

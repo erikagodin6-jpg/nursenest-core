@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": null,
+  "lastBatchIndex": 0,
+  "batchSize": 25,
+  "status": "idle",
+  "totals": {
+    "localesScanned": 0,
+    "overlayFilesChecked": 0,
+    "uiKeyParityWarnings": 0,
+    "marketsInMatrix": 14
+  },
+  "batches": [],
+  "note": "Populated by `scripts/i18n/run-global-translation.ts`. Safe to reset — overlays and source TS remain canonical."
+}

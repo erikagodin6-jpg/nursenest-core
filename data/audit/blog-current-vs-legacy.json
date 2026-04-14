@@ -1,0 +1,36 @@
+{
+  "generatedAt": "2026-04-14T00:00:00.000Z",
+  "summary": "Current Next.js stack already implements most legacy behaviors; gaps are mainly CLI ergonomics, explicit 20–25 batch defaults for imports, and quality-preserving dedupe rules.",
+  "currentSystem": {
+    "import": {
+      "script": "nursenest-core/scripts/import-blog.ts",
+      "batchDefault": 25,
+      "dedupe": "source-key, slug, title+body hash; optional --dedupe-report JSON; skips overwrite when existing content is longer/richer (preserveExistingOverIncoming)"
+    },
+    "generation": {
+      "aiDraft": "generateBlogAiDraft / generateBlogPost with template + intent + exam context",
+      "pipeline": "blog-article-generation-pipeline (plan, body, optional persist)"
+    },
+    "scheduling": {
+      "batchSchedule": "BlogBatchSchedule + BlogBatchScheduleItem with plannedPublishAt, stagger via cadencePerDay",
+      "autoPublish": "promoteScheduledBlogPosts flips SCHEDULED → PUBLISHED when due; retries capped"
+    },
+    "seo": {
+      "modules": ["blog-seo-automation.ts", "blog-internal-lesson-links.ts", "blog-auto-link-html.ts"]
+    }
+  },
+  "legacySystem": {
+    "sources": ["Replit JSON exports", "client SEO articles TS", "optional content_items linkage"],
+    "notablePatterns": ["Static section arrays → markdown/HTML body", "meta_title/meta_description columns in JSON"]
+  },
+  "featureParity": {
+    "batch_generation": { "legacy": "Topic list → AI posts", "current": "Yes (admin APIs + batch schedule + autopilot queue)", "gap": "CLI wrapper added as legacy-generator.ts" },
+    "staggered_publish": { "legacy": "Time slots", "current": "Yes via BlogBatchSchedule + slotIntervalMs", "gap": "Cron max 12 items/invocation (by design); use more frequent cron for throughput" },
+    "retries": { "legacy": "Varies", "current": "Yes in promoteScheduledBlogPosts + adminPublishLog", "gap": "None critical" },
+    "deduplication": { "legacy": "Minimal", "current": "Stronger (hash + slug + source key + quality gate)", "gap": "Documented in blog-deduplication-report.json per run" }
+  },
+  "seoDifferences": {
+    "titles": "Current supports metaTitleVariant, titleAlternates, featuredSnippet — imports map seoTitle/seoDescription from legacy meta fields",
+    "internalLinks": "Current persists relatedLessonPaths, relatedTools, internalLinkPlan; legacy imports preserve hrefs embedded in HTML"
+  }
+}

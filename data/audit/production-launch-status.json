@@ -1,0 +1,109 @@
+{
+  "generatedAt": "2026-04-14T16:40:00.000Z",
+  "repository": {
+    "localMainHead": "902d1d49988513a5d6c7085dce0c293385955d6e",
+    "localMainMessage": "Move nested audit and blog pipeline outputs into repo root",
+    "origin": "git@github.com:erikagodin6-jpg/nursenest-core.git"
+  },
+  "deployment": {
+    "status": "CORRECT",
+    "evidence": [
+      "Production HTML response includes Sentry baggage: sentry-release=902d1d49988513a5d6c7085dce0c293385955d6e (matches local main HEAD).",
+      "GET https://www.nursenest.ca/healthz returns JSON: {\"status\":\"ok\",\"service\":\"nursenest-core\",...}"
+    ],
+    "digitalOceanAppSpec": {
+      "source": "Repo file .do/app-nursenest-core-next.yaml documents github repo erikagodin6-jpg/nursenest-core, branch main, deploy_on_push true, source_dir nursenest-core.",
+      "note": "Confirm in DigitalOcean UI that the live app uses this spec (or equivalent): wrong source_dir (repo root vs nursenest-core) causes wrong build."
+    },
+    "staleBuildRisk": "LOW",
+    "staleBuildNotes": "Cannot read DO build logs or GitHub Actions from this environment. If release ever mismatches Sentry release in page HTML, redeploy from main."
+  },
+  "environmentVariables": {
+    "status": "NOT_VERIFIED_REMOTELY",
+    "requiredForNextApp": [
+      "DATABASE_URL",
+      "AUTH_SECRET or NEXTAUTH_SECRET",
+      "AUTH_TRUST_HOST",
+      "STRIPE_SECRET_KEY / STRIPE_WEBHOOK_SECRET (checkout + webhooks)",
+      "NEXT_PUBLIC_APP_URL or equivalent for Stripe return URLs",
+      "CRON_SECRET (scheduled blog/cron routes)"
+    ],
+    "verifyIn": "DigitalOcean App Platform → Settings → App-Level Environment Variables (and encrypted secrets)."
+  },
+  "cache": {
+    "status": "ADDRESSED_IN_CODE",
+    "cdnPurge": {
+      "status": "MANUAL_OPS",
+      "note": "DigitalOcean Spaces CDN / any front cache: purge after hotfixes if HTML/assets appear stale. Not invoked from this repo."
+    },
+    "nextJs": {
+      "marketingPathwayLessons": "src/app/(marketing)/.../lessons/[lessonSlug]/page.tsx exports dynamic=force-dynamic (SSR); revalidate=86400 is subordinate to force-dynamic for caching behavior.",
+      "blogCronRevalidation": "src/app/api/cron/blog-batch-schedule/route.ts calls revalidatePath for /blog and sitemaps after publish."
+    },
+    "paywalledContentPublicCacheRisk": "MITIGATED",
+    "paywallNotes": "Subscriber lesson APIs (e.g. /api/lessons) require auth (401 without session). Public marketing lesson pages use pathway-lesson-access + preview/locked UI; verify periodically that API routes never return full rationales to anonymous callers (existing server guards)."
+  },
+  "paywall": {
+    "status": "SECURE_BY_DESIGN",
+    "anonymousSpotChecks": [
+      "GET https://www.nursenest.ca/us/rn/nclex-rn/lessons → 200; page content includes preview/locked/subscribe style gating language.",
+      "GET https://www.nursenest.ca/us/rn/nclex-rn/lessons/fundamentals-of-nursing-1 → 200; HTML contains many preview/Unlock tokens (marketing preview surface)."
+    ],
+    "limitations": [
+      "FREE vs PAID session flows require authenticated test accounts in production — not executed here.",
+      "Full guarantee that zero rationale text appears in HTML for anonymous users should be spot-checked on multiple pathways and in Network tab for API responses."
+    ]
+  },
+  "lessonsAndQuizzes": {
+    "status": "PARTIALLY_VERIFIED_LIVE",
+    "checks": [
+      "Public lessons hub and a sample lesson detail URL return HTTP 200.",
+      "Large HTML payloads indicate SSR content (not blank)."
+    ],
+    "notVerifiedHere": [
+      "Pre/post quizzes for every pathway",
+      "Rationale visibility only after entitlement on question bank routes"
+    ]
+  },
+  "blog": {
+    "status": "OK",
+    "checks": [
+      "GET https://www.nursenest.ca/blog → 200; title/meta present in HTML.",
+      "GET https://www.nursenest.ca/sitemap.xml → 200",
+      "GET https://www.nursenest.ca/sitemaps/blog.xml → 200 with many blog post loc entries"
+    ]
+  },
+  "stripe": {
+    "status": "NOT_TESTED",
+    "note": "Live checkout, cancel, and failed-payment flows require Stripe test/live keys and controlled test accounts. instrumentation.ts warns if NEXT_PUBLIC_APP_URL is unset (checkout URLs may default to localhost) — confirm in production env."
+  },
+  "catExam": {
+    "status": "PARTIALLY_VERIFIED",
+    "checks": [
+      "Sample path https://www.nursenest.ca/us/rn/nclex-rn/cat returned HTTP 200 in curl probe (CAT surface reachable)."
+    ],
+    "notVerifiedHere": [
+      "Full exam session: question payload, progress persistence, completion screen"
+    ]
+  },
+  "errorsAnd404": {
+    "status": "NOT_SYSTEMATICALLY_CRAWLED",
+    "note": "No sitewide link crawl in this pass. Health endpoint and primary marketing URLs respond 200."
+  },
+  "performance": {
+    "status": "QUALITATIVE",
+    "note": "Marketing pages are large HTML; lesson listing uses pagination patterns in app code — no OOM detected in curl smoke tests."
+  },
+  "remainingRisks": [
+    "Stripe and subscription lifecycle not exercised in this validation run.",
+    "DigitalOcean build logs and exact deployed commit (outside Sentry HTML) not independently fetched.",
+    "app.nursenest.ca did not resolve from this environment (may be unset or different hostname); confirm learner app URL in DNS and env.",
+    "E2E paywall testing for rationales should include authenticated API inspection, not only HTML grep."
+  ],
+  "summary": {
+    "deploymentAlignedWithMain": true,
+    "cacheIssuesResolved": "N/A — operational CDN purge if needed",
+    "paywallVerdict": "SECURE_BY_DESIGN_WITH_SPOT_CHECKS",
+    "blockingIssuesFound": []
+  }
+}

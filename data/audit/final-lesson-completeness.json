@@ -1,0 +1,1917 @@
+{
+  "generatedAt": "2026-04-14T16:24:44.619Z",
+  "databaseAvailable": false,
+  "criteria": {
+    "strict": "six premium kinds (introduction … clinical_pearls) with min word counts per pathway-lesson-premium.ts",
+    "lenient": "introduction + ≥5 sections + ≥1200 total words (legacy-normalized catalog)"
+  },
+  "spineRequired": [
+    {
+      "id": "overview",
+      "kind": "introduction",
+      "minWords": 180
+    },
+    {
+      "id": "pathophysiology",
+      "kind": "pathophysiology_overview",
+      "minWords": 140
+    },
+    {
+      "id": "signs_symptoms",
+      "kind": "signs_symptoms",
+      "minWords": 120
+    },
+    {
+      "id": "nursing_interventions",
+      "kind": "nursing_assessment_interventions",
+      "minWords": 180
+    },
+    {
+      "id": "complications",
+      "kind": "red_flags",
+      "minWords": 80
+    },
+    {
+      "id": "clinical_pearls",
+      "kind": "clinical_pearls",
+      "minWords": 100
+    }
+  ],
+  "inventoryRef": "reports/lesson-system-inventory.json",
+  "summary": {
+    "complete": 4,
+    "incomplete": 558,
+    "missing": 0,
+    "brokenRoute": 0
+  },
+  "lenientSummary": {
+    "viable": 53,
+    "notViable": 509
+  },
+  "byPathway": {
+    "ca-rn-nclex-rn": {
+      "complete": 2,
+      "incomplete": 135,
+      "missing": 0,
+      "brokenRoute": 0
+    },
+    "ca-rpn-rex-pn": {
+      "complete": 0,
+      "incomplete": 99,
+      "missing": 0,
+      "brokenRoute": 0
+    },
+    "us-lpn-nclex-pn": {
+      "complete": 0,
+      "incomplete": 99,
+      "missing": 0,
+      "brokenRoute": 0
+    },
+    "us-rn-nclex-rn": {
+      "complete": 2,
+      "incomplete": 134,
+      "missing": 0,
+      "brokenRoute": 0
+    },
+    "us-np-fnp": {
+      "complete": 0,
+      "incomplete": 91,
+      "missing": 0,
+      "brokenRoute": 0
+    }
+  },
+  "samples": [
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "fluid-balance-acute-care",
+      "spine": [
+        "complications"
+      ],
+      "quizIssues": []
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "cardiovascular-prioritization",
+      "spine": [
+        {
+          "id": "overview",
+          "kind": "introduction",
+          "words": 104,
+          "minWords": 180
+        }
+      ],
+      "quizIssues": []
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-pulmonary-embolism",
+      "spine": [
+        {
+          "id": "overview",
+          "kind": "introduction",
+          "words": 156,
+          "minWords": 180
+        }
+      ],
+      "quizIssues": []
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-heart-failure",
+      "spine": [
+        {
+          "id": "overview",
+          "kind": "introduction",
+          "words": 131,
+          "minWords": 180
+        }
+      ],
+      "quizIssues": []
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-myocardial-infarction",
+      "spine": [
+        {
+          "id": "overview",
+          "kind": "introduction",
+          "words": 120,
+          "minWords": 180
+        }
+      ],
+      "quizIssues": []
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-angina",
+      "spine": [
+        {
+          "id": "overview",
+          "kind": "introduction",
+          "words": 141,
+          "minWords": 180
+        }
+      ],
+      "quizIssues": []
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-dysrhythmias",
+      "spine": [
+        {
+          "id": "overview",
+          "kind": "introduction",
+          "words": 136,
+          "minWords": 180
+        }
+      ],
+      "quizIssues": []
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-hypertension",
+      "spine": [
+        {
+          "id": "overview",
+          "kind": "introduction",
+          "words": 151,
+          "minWords": 180
+        }
+      ],
+      "quizIssues": []
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-shock",
+      "spine": [
+        {
+          "id": "overview",
+          "kind": "introduction",
+          "words": 134,
+          "minWords": 180
+        }
+      ],
+      "quizIssues": []
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-asthma",
+      "spine": [
+        {
+          "id": "overview",
+          "kind": "introduction",
+          "words": 136,
+          "minWords": 180
+        }
+      ],
+      "quizIssues": []
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-ards",
+      "spine": [
+        {
+          "id": "overview",
+          "kind": "introduction",
+          "words": 151,
+          "minWords": 180
+        }
+      ],
+      "quizIssues": []
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-pneumonia",
+      "spine": [
+        {
+          "id": "overview",
+          "kind": "introduction",
+          "words": 140,
+          "minWords": 180
+        }
+      ],
+      "quizIssues": []
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-copd-respiratory",
+      "spine": [
+        {
+          "id": "overview",
+          "kind": "introduction",
+          "words": 138,
+          "minWords": 180
+        }
+      ],
+      "quizIssues": []
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-abg-interpretation",
+      "spine": [
+        {
+          "id": "overview",
+          "kind": "introduction",
+          "words": 131,
+          "minWords": 180
+        }
+      ],
+      "quizIssues": []
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-acid-base-advanced",
+      "spine": [
+        {
+          "id": "overview",
+          "kind": "introduction",
+          "words": 87,
+          "minWords": 180
+        }
+      ],
+      "quizIssues": []
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-sodium-imbalance",
+      "spine": [
+        {
+          "id": "overview",
+          "kind": "introduction",
+          "words": 130,
+          "minWords": 180
+        }
+      ],
+      "quizIssues": []
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-potassium-imbalance",
+      "spine": [
+        {
+          "id": "overview",
+          "kind": "introduction",
+          "words": 116,
+          "minWords": 180
+        }
+      ],
+      "quizIssues": []
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-insulin-hypoglycemia",
+      "spine": [
+        {
+          "id": "overview",
+          "kind": "introduction",
+          "words": 116,
+          "minWords": 180
+        }
+      ],
+      "quizIssues": []
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-sepsis",
+      "spine": [
+        {
+          "id": "overview",
+          "kind": "introduction",
+          "words": 150,
+          "minWords": 180
+        }
+      ],
+      "quizIssues": []
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-infection-control",
+      "spine": [
+        {
+          "id": "overview",
+          "kind": "introduction",
+          "words": 165,
+          "minWords": 180
+        }
+      ],
+      "quizIssues": []
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-anticoagulants",
+      "spine": [
+        {
+          "id": "overview",
+          "kind": "introduction",
+          "words": 143,
+          "minWords": 180
+        }
+      ],
+      "quizIssues": []
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-antibiotics",
+      "spine": [
+        {
+          "id": "overview",
+          "kind": "introduction",
+          "words": 124,
+          "minWords": 180
+        }
+      ],
+      "quizIssues": []
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-wound-care",
+      "spine": [
+        "complications"
+      ],
+      "quizIssues": []
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-delegation",
+      "spine": [
+        {
+          "id": "overview",
+          "kind": "introduction",
+          "words": 135,
+          "minWords": 180
+        }
+      ],
+      "quizIssues": []
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-prioritization-abcs",
+      "spine": [
+        {
+          "id": "overview",
+          "kind": "introduction",
+          "words": 154,
+          "minWords": 180
+        }
+      ],
+      "quizIssues": []
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-general-nursing-clinical",
+      "spine": [
+        {
+          "id": "overview",
+          "kind": "introduction",
+          "words": 115,
+          "minWords": 180
+        }
+      ],
+      "quizIssues": []
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "heart-failure-nursing-priorities-hy",
+      "spine": [
+        "overview",
+        "pathophysiology",
+        "signs_symptoms",
+        "nursing_interventions",
+        "complications",
+        "clinical_pearls"
+      ],
+      "quizIssues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "acute-myocardial-infarction-troponin",
+      "spine": [
+        "overview",
+        "pathophysiology",
+        "signs_symptoms",
+        "nursing_interventions",
+        "complications",
+        "clinical_pearls"
+      ],
+      "quizIssues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "shock-recognition-fluids",
+      "spine": [
+        "overview",
+        "pathophysiology",
+        "signs_symptoms",
+        "nursing_interventions",
+        "complications",
+        "clinical_pearls"
+      ],
+      "quizIssues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "hypertensive-crisis-vs-urgency",
+      "spine": [
+        "overview",
+        "pathophysiology",
+        "signs_symptoms",
+        "nursing_interventions",
+        "complications",
+        "clinical_pearls"
+      ],
+      "quizIssues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "atrial-fibrillation-rate-control",
+      "spine": [
+        "overview",
+        "pathophysiology",
+        "signs_symptoms",
+        "nursing_interventions",
+        "complications",
+        "clinical_pearls"
+      ],
+      "quizIssues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "endocarditis-blood-cultures",
+      "spine": [
+        "overview",
+        "pathophysiology",
+        "signs_symptoms",
+        "nursing_interventions",
+        "complications",
+        "clinical_pearls"
+      ],
+      "quizIssues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "pericarditis-ecg-clues",
+      "spine": [
+        "overview",
+        "pathophysiology",
+        "signs_symptoms",
+        "nursing_interventions",
+        "complications",
+        "clinical_pearls"
+      ],
+      "quizIssues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "dvt-pe-nursing-priorities",
+      "spine": [
+        "overview",
+        "pathophysiology",
+        "signs_symptoms",
+        "nursing_interventions",
+        "complications",
+        "clinical_pearls"
+      ],
+      "quizIssues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "abg-interpretation-basics-hy",
+      "spine": [
+        "overview",
+        "pathophysiology",
+        "signs_symptoms",
+        "nursing_interventions",
+        "complications",
+        "clinical_pearls"
+      ],
+      "quizIssues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "copd-exacerbation-oxygen",
+      "spine": [
+        "overview",
+        "pathophysiology",
+        "signs_symptoms",
+        "nursing_interventions",
+        "complications",
+        "clinical_pearls"
+      ],
+      "quizIssues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "asthma-status-asthmaticus",
+      "spine": [
+        "overview",
+        "pathophysiology",
+        "signs_symptoms",
+        "nursing_interventions",
+        "complications",
+        "clinical_pearls"
+      ],
+      "quizIssues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ards-ventilation-basics",
+      "spine": [
+        "overview",
+        "pathophysiology",
+        "signs_symptoms",
+        "nursing_interventions",
+        "complications",
+        "clinical_pearls"
+      ],
+      "quizIssues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "pneumonia-oxygenation",
+      "spine": [
+        "overview",
+        "pathophysiology",
+        "signs_symptoms",
+        "nursing_interventions",
+        "complications",
+        "clinical_pearls"
+      ],
+      "quizIssues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "pulmonary-embolism-clues",
+      "spine": [
+        "overview",
+        "pathophysiology",
+        "signs_symptoms",
+        "nursing_interventions",
+        "complications",
+        "clinical_pearls"
+      ],
+      "quizIssues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "tb-isolation-compliance",
+      "spine": [
+        "overview",
+        "pathophysiology",
+        "signs_symptoms",
+        "nursing_interventions",
+        "complications",
+        "clinical_pearls"
+      ],
+      "quizIssues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "pleural-effusion-chest-tubes",
+      "spine": [
+        "overview",
+        "pathophysiology",
+        "signs_symptoms",
+        "nursing_interventions",
+        "complications",
+        "clinical_pearls"
+      ],
+      "quizIssues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "insulin-hypoglycemia-hy",
+      "spine": [
+        "overview",
+        "pathophysiology",
+        "signs_symptoms",
+        "nursing_interventions",
+        "complications",
+        "clinical_pearls"
+      ],
+      "quizIssues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "anticoagulants-bleeding-risk",
+      "spine": [
+        "overview",
+        "pathophysiology",
+        "signs_symptoms",
+        "nursing_interventions",
+        "complications",
+        "clinical_pearls"
+      ],
+      "quizIssues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "antibiotic-classes-allergies-hy",
+      "spine": [
+        "overview",
+        "pathophysiology",
+        "signs_symptoms",
+        "nursing_interventions",
+        "complications",
+        "clinical_pearls"
+      ],
+      "quizIssues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "opioids-respiratory-depression",
+      "spine": [
+        "overview",
+        "pathophysiology",
+        "signs_symptoms",
+        "nursing_interventions",
+        "complications",
+        "clinical_pearls"
+      ],
+      "quizIssues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "cardiac-glycosides-toxicity",
+      "spine": [
+        "overview",
+        "pathophysiology",
+        "signs_symptoms",
+        "nursing_interventions",
+        "complications",
+        "clinical_pearls"
+      ],
+      "quizIssues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "diuretics-electrolyte-shifts",
+      "spine": [
+        "overview",
+        "pathophysiology",
+        "signs_symptoms",
+        "nursing_interventions",
+        "complications",
+        "clinical_pearls"
+      ],
+      "quizIssues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "antihypertensive-combos",
+      "spine": [
+        "overview",
+        "pathophysiology",
+        "signs_symptoms",
+        "nursing_interventions",
+        "complications",
+        "clinical_pearls"
+      ],
+      "quizIssues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "chemo-safe-handling-extravasation",
+      "spine": [
+        "overview",
+        "pathophysiology",
+        "signs_symptoms",
+        "nursing_interventions",
+        "complications",
+        "clinical_pearls"
+      ],
+      "quizIssues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "hyponatremia-vs-hypernatremia-hy",
+      "spine": [
+        "overview",
+        "pathophysiology",
+        "signs_symptoms",
+        "nursing_interventions",
+        "complications",
+        "clinical_pearls"
+      ],
+      "quizIssues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "hypo-vs-hyperkalemia-hy",
+      "spine": [
+        "overview",
+        "pathophysiology",
+        "signs_symptoms",
+        "nursing_interventions",
+        "complications",
+        "clinical_pearls"
+      ],
+      "quizIssues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "fluid-volume-deficit",
+      "spine": [
+        "overview",
+        "pathophysiology",
+        "signs_symptoms",
+        "nursing_interventions",
+        "complications",
+        "clinical_pearls"
+      ],
+      "quizIssues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "fluid-volume-excess",
+      "spine": [
+        "overview",
+        "pathophysiology",
+        "signs_symptoms",
+        "nursing_interventions",
+        "complications",
+        "clinical_pearls"
+      ],
+      "quizIssues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "magnesium-arrhythmia-risk",
+      "spine": [
+        "overview",
+        "pathophysiology",
+        "signs_symptoms",
+        "nursing_interventions",
+        "complications",
+        "clinical_pearls"
+      ],
+      "quizIssues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "calcium-tetany",
+      "spine": [
+        "overview",
+        "pathophysiology",
+        "signs_symptoms",
+        "nursing_interventions",
+        "complications",
+        "clinical_pearls"
+      ],
+      "quizIssues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "phosphate-shifts-in-renal",
+      "spine": [
+        "overview",
+        "pathophysiology",
+        "signs_symptoms",
+        "nursing_interventions",
+        "complications",
+        "clinical_pearls"
+      ],
+      "quizIssues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "mixed-acid-base-patterns",
+      "spine": [
+        "overview",
+        "pathophysiology",
+        "signs_symptoms",
+        "nursing_interventions",
+        "complications",
+        "clinical_pearls"
+      ],
+      "quizIssues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "liver-failure-hepatic-encephalopathy",
+      "spine": [
+        "overview",
+        "pathophysiology",
+        "signs_symptoms",
+        "nursing_interventions",
+        "complications",
+        "clinical_pearls"
+      ],
+      "quizIssues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "acute-pancreatitis-nursing-care",
+      "spine": [
+        "overview",
+        "pathophysiology",
+        "signs_symptoms",
+        "nursing_interventions",
+        "complications",
+        "clinical_pearls"
+      ],
+      "quizIssues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "bowel-obstruction-vs-paralytic-ileus",
+      "spine": [
+        "overview",
+        "pathophysiology",
+        "signs_symptoms",
+        "nursing_interventions",
+        "complications",
+        "clinical_pearls"
+      ],
+      "quizIssues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "gerd-pud-bleeding-clues",
+      "spine": [
+        "overview",
+        "pathophysiology",
+        "signs_symptoms",
+        "nursing_interventions",
+        "complications",
+        "clinical_pearls"
+      ],
+      "quizIssues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "gi-bleed-assessment",
+      "spine": [
+        "overview",
+        "pathophysiology",
+        "signs_symptoms",
+        "nursing_interventions",
+        "complications",
+        "clinical_pearls"
+      ],
+      "quizIssues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "c-diff-infection-control",
+      "spine": [
+        "overview",
+        "pathophysiology",
+        "signs_symptoms",
+        "nursing_interventions",
+        "complications",
+        "clinical_pearls"
+      ],
+      "quizIssues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ostomy-skin-protection",
+      "spine": [
+        "overview",
+        "pathophysiology",
+        "signs_symptoms",
+        "nursing_interventions",
+        "complications",
+        "clinical_pearls"
+      ],
+      "quizIssues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "stroke-assessment-tpa-window",
+      "spine": [
+        "overview",
+        "pathophysiology",
+        "signs_symptoms",
+        "nursing_interventions",
+        "complications",
+        "clinical_pearls"
+      ],
+      "quizIssues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "seizure-precautions-rescue-meds",
+      "spine": [
+        "overview",
+        "pathophysiology",
+        "signs_symptoms",
+        "nursing_interventions",
+        "complications",
+        "clinical_pearls"
+      ],
+      "quizIssues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "increased-icp-positioning",
+      "spine": [
+        "overview",
+        "pathophysiology",
+        "signs_symptoms",
+        "nursing_interventions",
+        "complications",
+        "clinical_pearls"
+      ],
+      "quizIssues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "spinal-cord-injury-autonomic-dysreflexia",
+      "spine": [
+        "overview",
+        "pathophysiology",
+        "signs_symptoms",
+        "nursing_interventions",
+        "complications",
+        "clinical_pearls"
+      ],
+      "quizIssues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "meningitis-isolation-assessment",
+      "spine": [
+        "overview",
+        "pathophysiology",
+        "signs_symptoms",
+        "nursing_interventions",
+        "complications",
+        "clinical_pearls"
+      ],
+      "quizIssues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "migraine-vs-red-flag-headache",
+      "spine": [
+        "overview",
+        "pathophysiology",
+        "signs_symptoms",
+        "nursing_interventions",
+        "complications",
+        "clinical_pearls"
+      ],
+      "quizIssues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "parkinson-disease-med-timing",
+      "spine": [
+        "overview",
+        "pathophysiology",
+        "signs_symptoms",
+        "nursing_interventions",
+        "complications",
+        "clinical_pearls"
+      ],
+      "quizIssues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "dka-vs-hhs-priorities-hy",
+      "spine": [
+        "overview",
+        "pathophysiology",
+        "signs_symptoms",
+        "nursing_interventions",
+        "complications",
+        "clinical_pearls"
+      ],
+      "quizIssues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "thyroid-storm-myxedema-clues",
+      "spine": [
+        "overview",
+        "pathophysiology",
+        "signs_symptoms",
+        "nursing_interventions",
+        "complications",
+        "clinical_pearls"
+      ],
+      "quizIssues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "addisonian-crisis",
+      "spine": [
+        "overview",
+        "pathophysiology",
+        "signs_symptoms",
+        "nursing_interventions",
+        "complications",
+        "clinical_pearls"
+      ],
+      "quizIssues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "cushing-syndrome-assessment",
+      "spine": [
+        "overview",
+        "pathophysiology",
+        "signs_symptoms",
+        "nursing_interventions",
+        "complications",
+        "clinical_pearls"
+      ],
+      "quizIssues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "diabetes-self-management-teaching",
+      "spine": [
+        "overview",
+        "pathophysiology",
+        "signs_symptoms",
+        "nursing_interventions",
+        "complications",
+        "clinical_pearls"
+      ],
+      "quizIssues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "siadh-vs-di-basics",
+      "spine": [
+        "overview",
+        "pathophysiology",
+        "signs_symptoms",
+        "nursing_interventions",
+        "complications",
+        "clinical_pearls"
+      ],
+      "quizIssues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "aki-prerenal-vs-intrarenal",
+      "spine": [
+        "overview",
+        "pathophysiology",
+        "signs_symptoms",
+        "nursing_interventions",
+        "complications",
+        "clinical_pearls"
+      ],
+      "quizIssues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "hemodialysis-access-care",
+      "spine": [
+        "overview",
+        "pathophysiology",
+        "signs_symptoms",
+        "nursing_interventions",
+        "complications",
+        "clinical_pearls"
+      ],
+      "quizIssues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "peritoneal-dialysis-complications",
+      "spine": [
+        "overview",
+        "pathophysiology",
+        "signs_symptoms",
+        "nursing_interventions",
+        "complications",
+        "clinical_pearls"
+      ],
+      "quizIssues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "kidney-stones-strain-management",
+      "spine": [
+        "overview",
+        "pathophysiology",
+        "signs_symptoms",
+        "nursing_interventions",
+        "complications",
+        "clinical_pearls"
+      ],
+      "quizIssues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "uti-vs-pyelonephritis",
+      "spine": [
+        "overview",
+        "pathophysiology",
+        "signs_symptoms",
+        "nursing_interventions",
+        "complications",
+        "clinical_pearls"
+      ],
+      "quizIssues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "indwelling-catheter-risks",
+      "spine": [
+        "overview",
+        "pathophysiology",
+        "signs_symptoms",
+        "nursing_interventions",
+        "complications",
+        "clinical_pearls"
+      ],
+      "quizIssues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "anemia-types-transfusion-thresholds",
+      "spine": [
+        "overview",
+        "pathophysiology",
+        "signs_symptoms",
+        "nursing_interventions",
+        "complications",
+        "clinical_pearls"
+      ],
+      "quizIssues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "transfusion-reaction-recognition",
+      "spine": [
+        "overview",
+        "pathophysiology",
+        "signs_symptoms",
+        "nursing_interventions",
+        "complications",
+        "clinical_pearls"
+      ],
+      "quizIssues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "neutropenic-precautions",
+      "spine": [
+        "overview",
+        "pathophysiology",
+        "signs_symptoms",
+        "nursing_interventions",
+        "complications",
+        "clinical_pearls"
+      ],
+      "quizIssues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "sickle-cell-pain-acs",
+      "spine": [
+        "overview",
+        "pathophysiology",
+        "signs_symptoms",
+        "nursing_interventions",
+        "complications",
+        "clinical_pearls"
+      ],
+      "quizIssues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "hip-fracture-fall-risk",
+      "spine": [
+        "overview",
+        "pathophysiology",
+        "signs_symptoms",
+        "nursing_interventions",
+        "complications",
+        "clinical_pearls"
+      ],
+      "quizIssues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ra-flare-immune-modulators",
+      "spine": [
+        "overview",
+        "pathophysiology",
+        "signs_symptoms",
+        "nursing_interventions",
+        "complications",
+        "clinical_pearls"
+      ],
+      "quizIssues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "immobility-dvt-prophylaxis",
+      "spine": [
+        "overview",
+        "pathophysiology",
+        "signs_symptoms",
+        "nursing_interventions",
+        "complications",
+        "clinical_pearls"
+      ],
+      "quizIssues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "sepsis-early-recognition-hy",
+      "spine": [
+        "overview",
+        "pathophysiology",
+        "signs_symptoms",
+        "nursing_interventions",
+        "complications",
+        "clinical_pearls"
+      ],
+      "quizIssues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "hiv-confidentiality-pep-basics",
+      "spine": [
+        "overview",
+        "pathophysiology",
+        "signs_symptoms",
+        "nursing_interventions",
+        "complications",
+        "clinical_pearls"
+      ],
+      "quizIssues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "isolation-precautions-in-practice",
+      "spine": [
+        "overview",
+        "pathophysiology",
+        "signs_symptoms",
+        "nursing_interventions",
+        "complications",
+        "clinical_pearls"
+      ],
+      "quizIssues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "wound-infection-vs-colonization",
+      "spine": [
+        "overview",
+        "pathophysiology",
+        "signs_symptoms",
+        "nursing_interventions",
+        "complications",
+        "clinical_pearls"
+      ],
+      "quizIssues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "burn-depth-fluid-resuscitation-basics",
+      "spine": [
+        "overview",
+        "pathophysiology",
+        "signs_symptoms",
+        "nursing_interventions",
+        "complications",
+        "clinical_pearls"
+      ],
+      "quizIssues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "pressure-injury-staging",
+      "spine": [
+        "overview",
+        "pathophysiology",
+        "signs_symptoms",
+        "nursing_interventions",
+        "complications",
+        "clinical_pearls"
+      ],
+      "quizIssues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "severe-dermatitis-skin-care",
+      "spine": [
+        "overview",
+        "pathophysiology",
+        "signs_symptoms",
+        "nursing_interventions",
+        "complications",
+        "clinical_pearls"
+      ],
+      "quizIssues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "suicide-risk-assessment-hy",
+      "spine": [
+        "overview",
+        "pathophysiology",
+        "signs_symptoms",
+        "nursing_interventions",
+        "complications",
+        "clinical_pearls"
+      ],
+      "quizIssues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "psychotropic-side-effects",
+      "spine": [
+        "overview",
+        "pathophysiology",
+        "signs_symptoms",
+        "nursing_interventions",
+        "complications",
+        "clinical_pearls"
+      ],
+      "quizIssues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "alcohol-withdrawal-ciwa",
+      "spine": [
+        "overview",
+        "pathophysiology",
+        "signs_symptoms",
+        "nursing_interventions",
+        "complications",
+        "clinical_pearls"
+      ],
+      "quizIssues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "preeclampsia-vs-eclampsia",
+      "spine": [
+        "overview",
+        "pathophysiology",
+        "signs_symptoms",
+        "nursing_interventions",
+        "complications",
+        "clinical_pearls"
+      ],
+      "quizIssues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "postpartum-hemorrhage",
+      "spine": [
+        "overview",
+        "pathophysiology",
+        "signs_symptoms",
+        "nursing_interventions",
+        "complications",
+        "clinical_pearls"
+      ],
+      "quizIssues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "late-decelerations-fhr",
+      "spine": [
+        "overview",
+        "pathophysiology",
+        "signs_symptoms",
+        "nursing_interventions",
+        "complications",
+        "clinical_pearls"
+      ],
+      "quizIssues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "newborn-thermoregulation-feeding",
+      "spine": [
+        "overview",
+        "pathophysiology",
+        "signs_symptoms",
+        "nursing_interventions",
+        "complications",
+        "clinical_pearls"
+      ],
+      "quizIssues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "rh-incompatibility-basics",
+      "spine": [
+        "overview",
+        "pathophysiology",
+        "signs_symptoms",
+        "nursing_interventions",
+        "complications",
+        "clinical_pearls"
+      ],
+      "quizIssues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "pediatric-fever-dehydration",
+      "spine": [
+        "overview",
+        "pathophysiology",
+        "signs_symptoms",
+        "nursing_interventions",
+        "complications",
+        "clinical_pearls"
+      ],
+      "quizIssues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "rsv-pediatric-resp-distress",
+      "spine": [
+        "overview",
+        "pathophysiology",
+        "signs_symptoms",
+        "nursing_interventions",
+        "complications",
+        "clinical_pearls"
+      ],
+      "quizIssues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "immunization-schedule-essentials",
+      "spine": [
+        "overview",
+        "pathophysiology",
+        "signs_symptoms",
+        "nursing_interventions",
+        "complications",
+        "clinical_pearls"
+      ],
+      "quizIssues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "growth-failure-red-flags",
+      "spine": [
+        "overview",
+        "pathophysiology",
+        "signs_symptoms",
+        "nursing_interventions",
+        "complications",
+        "clinical_pearls"
+      ],
+      "quizIssues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "non-accidental-trauma-suspicion",
+      "spine": [
+        "overview",
+        "pathophysiology",
+        "signs_symptoms",
+        "nursing_interventions",
+        "complications",
+        "clinical_pearls"
+      ],
+      "quizIssues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "assignment-vs-delegation",
+      "spine": [
+        "overview",
+        "pathophysiology",
+        "signs_symptoms",
+        "nursing_interventions",
+        "complications",
+        "clinical_pearls"
+      ],
+      "quizIssues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ethical-distress-advocacy",
+      "spine": [
+        "overview",
+        "pathophysiology",
+        "signs_symptoms",
+        "nursing_interventions",
+        "complications",
+        "clinical_pearls"
+      ],
+      "quizIssues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "legal-nurse-practice-act",
+      "spine": [
+        "overview",
+        "pathophysiology",
+        "signs_symptoms",
+        "nursing_interventions",
+        "complications",
+        "clinical_pearls"
+      ],
+      "quizIssues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "qi-incident-reporting",
+      "spine": [
+        "overview",
+        "pathophysiology",
+        "signs_symptoms",
+        "nursing_interventions",
+        "complications",
+        "clinical_pearls"
+      ],
+      "quizIssues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "falls-hourly-rounding",
+      "spine": [
+        "overview",
+        "pathophysiology",
+        "signs_symptoms",
+        "nursing_interventions",
+        "complications",
+        "clinical_pearls"
+      ],
+      "quizIssues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "restraint-alternatives-policy",
+      "spine": [
+        "overview",
+        "pathophysiology",
+        "signs_symptoms",
+        "nursing_interventions",
+        "complications",
+        "clinical_pearls"
+      ],
+      "quizIssues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "medication-error-disclosure",
+      "spine": [
+        "overview",
+        "pathophysiology",
+        "signs_symptoms",
+        "nursing_interventions",
+        "complications",
+        "clinical_pearls"
+      ],
+      "quizIssues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "sharp-safety-exposure",
+      "spine": [
+        "overview",
+        "pathophysiology",
+        "signs_symptoms",
+        "nursing_interventions",
+        "complications",
+        "clinical_pearls"
+      ],
+      "quizIssues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "enteral-feeding-tube-safety",
+      "spine": [
+        "overview",
+        "pathophysiology",
+        "signs_symptoms",
+        "nursing_interventions",
+        "complications",
+        "clinical_pearls"
+      ],
+      "quizIssues": [
+        "missing_pre_test",
+        "missing_post_test"
+      ]
+    }
+  ]
+}

@@ -7,6 +7,7 @@ import { strongPasswordSchema } from "@/lib/auth/password-policy";
 import { createAndSendVerificationEmail, normalizeEmailForDedup } from "@/lib/auth/email-verification";
 import { validateUsernameForSignup } from "@/lib/auth/username-rules";
 import { isTurnstileEnforced, verifyTurnstileToken } from "@/lib/captcha/verify-turnstile";
+import { DEMO_USER_EMAIL_DOMAIN } from "@/lib/demo-users/create-demo-user";
 import { prisma } from "@/lib/db";
 import { checkRateLimit } from "@/lib/http/rate-limit-in-memory";
 import { analyticsDistinctId, captureServerEvent } from "@/lib/observability/posthog-server";
@@ -79,6 +80,14 @@ export async function POST(req: Request) {
         ? first.message
         : "Invalid payload";
     return NextResponse.json({ error: hint, code: "validation" }, { status: 400 });
+  }
+
+  const signupEmail = parsed.data.email.toLowerCase();
+  if (signupEmail.endsWith(`@${DEMO_USER_EMAIL_DOMAIN}`)) {
+    return NextResponse.json(
+      { error: "This email domain is reserved for internal demo accounts.", code: "reserved_email" },
+      { status: 400 },
+    );
   }
 
   const usernameCheck = validateUsernameForSignup(parsed.data.username);

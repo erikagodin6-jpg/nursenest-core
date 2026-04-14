@@ -15,6 +15,7 @@ import {
   type AlliedCareerKey,
 } from "@/lib/pricing/display-catalog";
 import {
+  CHECKOUT_DEMO_USER_FORBIDDEN_CODE,
   CHECKOUT_INVALID_PAYLOAD_CODE,
   CHECKOUT_POLICY_VERSION_MISMATCH_CODE,
   CHECKOUT_SESSION_FAILED_CODE,
@@ -62,6 +63,18 @@ export async function POST(req: Request) {
       return NextResponse.json(
         { code: CHECKOUT_UNAUTHORIZED_CODE, message: msg, error: msg },
         { status: 401 },
+      );
+    }
+
+    const demoBlock = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { isDemoUser: true },
+    });
+    if (demoBlock?.isDemoUser) {
+      const msg = "Demo accounts cannot use real billing. Use a full test account for checkout.";
+      return NextResponse.json(
+        { code: CHECKOUT_DEMO_USER_FORBIDDEN_CODE, message: msg, error: msg },
+        { status: 403 },
       );
     }
 

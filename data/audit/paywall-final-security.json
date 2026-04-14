@@ -1,0 +1,28 @@
+{
+  "generatedAt": "2026-04-14T16:26:45.193Z",
+  "criticalLeaksConfirmed": 0,
+  "highLeaksConfirmed": 0,
+  "fixesApplied": [
+    {
+      "id": "FIX-001",
+      "title": "Central pathway entitlement helper for server routes",
+      "detail": "Added assertSubscriberPathwayAccess() in src/lib/entitlements/api-pathway-guard.ts — use for new pathway-scoped APIs; existing routes already use resolveEntitlement + subscriptionCoversPathwayBase patterns.",
+      "files": [
+        "src/lib/entitlements/api-pathway-guard.ts"
+      ]
+    }
+  ],
+  "endpointsReviewed": 204,
+  "subscriberGatedApis": 43,
+  "retestInstructions": [
+    "Run authenticated API tests against staging: curl without Cookie → 401 on /api/questions, /api/lessons",
+    "Verify freemium user cannot GET /api/questions/[id]?includeRationale=1 (expect 403)",
+    "Create CAT session without subscription → expect 401/403 from /api/practice-tests POST"
+  ],
+  "paywallFinalStatus": "No CRITICAL or HIGH bypass identified in static review; manual DAST still recommended before release.",
+  "artifacts": [
+    "paywall-surface-map.json",
+    "paywall-vulnerabilities.json",
+    "paywall-final-security.json"
+  ]
+}

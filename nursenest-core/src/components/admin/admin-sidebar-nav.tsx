@@ -30,6 +30,7 @@ import {
   Globe,
   Workflow,
   Upload,
+  TestTube2,
 } from "lucide-react";
 import { isNavHrefAllowedForStaffTier } from "@/lib/auth/admin-path-policy";
 import type { StaffTier } from "@/lib/auth/staff-roles";
@@ -82,6 +83,7 @@ const sections: NavSection[] = [
       { href: "/admin/operations", label: "Operations", icon: Wrench },
       { href: "/admin/diagnostics", label: "Diagnostics", icon: Stethoscope },
       { href: "/admin/premium-protection", label: "Premium protection", icon: Shield },
+      { href: "/admin/demo-users", label: "Demo users (QA)", icon: TestTube2 },
       { href: "/admin/i18n", label: "i18n", icon: Globe },
       { href: "/admin/ai/exam-questions", label: "AI · Question studio", icon: Sparkles },
       { href: "/admin/ai/exam-questions/batch", label: "AI · Question batch", icon: Sparkles },

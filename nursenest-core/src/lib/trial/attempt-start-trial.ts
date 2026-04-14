@@ -81,6 +81,7 @@ export async function attemptStartTrial(args: {
     select: {
       email: true,
       emailVerified: true,
+      isDemoUser: true,
       trialStatus: true,
       trialUsedAt: true,
       trialEndsAt: true,
@@ -90,6 +91,16 @@ export async function attemptStartTrial(args: {
 
   if (!user) {
     return { ok: false, code: "user_not_found", message: "Account not found.", status: 404 };
+  }
+
+  if (user.isDemoUser) {
+    captureServerEvent(analyticsDistinctId(userId), "trial_blocked", { reason: "demo_user" }).catch(() => {});
+    return {
+      ok: false,
+      code: "demo_user",
+      message: "Demo accounts already have full access for QA. Trials do not apply.",
+      status: 403,
+    };
   }
 
   if (!user.emailVerified) {

@@ -1,0 +1,29 @@
+{
+  "generatedAt": "2026-04-14T17:45:00.000Z",
+  "pipelineStrategy": "Additive and safe: legacy generator, scheduler CLI, and manifest import run alongside existing blog APIs and cron routes. The current pipeline was not removed (preserves production stability).",
+  "sourceFileUsed": "data/blog-manifest/batch-01/batch-01-import-ready.json",
+  "sourceGeneratedAt": "2026-04-14T04:04:09.449Z",
+  "postsExtracted": 10,
+  "postsEligibleForImport": 10,
+  "postsInvalidDropped": 0,
+  "postsImported": null,
+  "postsUpdated": null,
+  "duplicatesSkippedInferior": null,
+  "failedImports": null,
+  "importMode": "Run `cd nursenest-core && npm run blog:import:legacy-manifest:apply` against production DATABASE_URL to persist rows (default command is dry-run).",
+  "deduplicationReportPath": "data/audit/blog-deduplication-from-legacy.json",
+  "generatorRestored": true,
+  "generatorPath": "nursenest-core/scripts/blog/legacy-generator.ts",
+  "schedulerRestored": true,
+  "schedulerPath": "nursenest-core/scripts/blog/legacy-scheduler.ts",
+  "legacyImportPipeline": {
+    "replitJson": "nursenest-core/scripts/import-blog.ts (imaging_blog_articles.json, seo_articles.json, seo-content-articles.ts when present)",
+    "manifestBatch": "nursenest-core/scripts/blog/import-legacy-manifest.ts"
+  },
+  "step7_frontendVerification": "Manual: open /blog and sample post URLs on production; confirm /sitemaps/blog.xml lists slugs; category pages as your app defines them.",
+  "notes": [
+    "Last run in CI/dev used databaseStatus=unreachable; dedupe file lists would_create for all 10 slugs until DB is available.",
+    "Legacy tools wrap generateBlogPost and existing cron routes; admin batch schedule unchanged.",
+    "Preserves slugs/SEO: manifest rows include seoTitle, seoDescription, relatedLessonPaths, relatedTools."
+  ]
+}

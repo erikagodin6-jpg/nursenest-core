@@ -176,6 +176,11 @@ model User {
   /** Bumped on password change/reset so JWTs can be invalidated without per-device session rows. */
   credentialVersion       Int            @default(0)
   emailVerified           Boolean        @default(false)
+  /**
+   * QA / screenshot accounts created via /admin/demo-users only.
+   * Blocks Stripe checkout and trials; uses reserved @nursenest.demo.invalid emails.
+   */
+  isDemoUser              Boolean        @default(false) @map("is_demo_user")
   /** How the account was created (credentials, google, etc.). */
   authProvider            String         @default("credentials") @db.VarChar(32)
   role                    UserRole       @default(LEARNER)
@@ -291,6 +296,7 @@ model User {
 
   @@index([alliedProfessionKey])
   @@index([normalizedEmail])
+  @@index([isDemoUser])
 }
 
 /** Admin-managed binary assets on Spaces (blogs, lessons, marketing). */

@@ -1,0 +1,78 @@
+{
+  "generatedAt": "2026-04-14T16:28:26.970Z",
+  "userModel": {
+    "prismaModel": "User",
+    "fields": {
+      "tier": "TierCode — profile / default; subscription may override via Subscription.planTier",
+      "country": "CountryCode — CA/US for pathway gating",
+      "role": "UserRole — admin override for entitlements (isLearnerEntitlementAdminOverrideRole)",
+      "learnerPath": "optional target pathway id",
+      "alliedProfessionKey": "when tier ALLIED",
+      "trialStatus": "TrialStatus + trialEndsAt for active_trial access",
+      "freeQuestionViews": "freemium counter"
+    },
+    "source": "prisma/schema.prisma model User"
+  },
+  "subscriptionModel": {
+    "prismaModel": "Subscription",
+    "fields": {
+      "status": "ACTIVE | CANCELLED | PAST_DUE | GRACE (see SubscriptionStatus enum)",
+      "stripeSubscriptionId": "unique Stripe sub id",
+      "planTier": "preferred over User.tier for access (effectiveTierCountryForAccess)",
+      "planCountry": "CountryCode",
+      "planDuration": "metadata string e.g. monthly",
+      "planCode": "checkout metadata",
+      "currentPeriodEnd": "access period boundary",
+      "cancelAtPeriodEnd": "Stripe cancel-at-period-end"
+    },
+    "source": "prisma/schema.prisma model Subscription"
+  },
+  "entitlementResolution": {
+    "primary": "getUserAccess → accessScopeFromUserAccess → resolveEntitlement",
+    "files": [
+      "src/lib/entitlements/get-user-access.ts",
+      "src/lib/entitlements/resolve-entitlement.ts",
+      "src/lib/entitlements/subscription-plan.ts (effectiveTierCountryForAccess)"
+    ],
+    "activeSubscriptionQuery": "findFirst where status in ACTIVE, GRACE, PAST_DUE — orderBy createdAt desc",
+    "premiumReasons": [
+      "active_subscription",
+      "grace_period",
+      "active_trial",
+      "admin_override"
+    ]
+  },
+  "tierLadder": {
+    "description": "prismaTierCodesForProfileTier / examQuestionTierStringsForProfileTier",
+    "file": "src/lib/entitlements/accessible-tiers.ts",
+    "ladder": {
+      "NP": [
+        "RPN",
+        "LVN_LPN",
+        "RN",
+        "NP"
+      ],
+      "RN": [
+        "RPN",
+        "LVN_LPN",
+        "RN"
+      ],
+      "LVN_LPN": [
+        "RPN",
+        "LVN_LPN"
+      ],
+      "RPN": [
+        "RPN"
+      ],
+      "ALLIED": [
+        "ALLIED"
+      ]
+    },
+    "pathwayGate": "subscriptionCoversPathwayBase(scope, pathway) in pathway-entitlements.ts"
+  },
+  "stripeMapping": {
+    "priceIds": "STRIPE_PRICE_* env vars → findTierCountryByPriceId in pricing-map.ts",
+    "checkoutMetadata": "planFromCheckoutMetadata — country CA|US + tier TierCode",
+    "syncUser": "sync-user-from-stripe-subscription.ts"
+  }
+}

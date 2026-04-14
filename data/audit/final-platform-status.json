@@ -1,0 +1,80 @@
+{
+  "reportKind": "final_platform_status",
+  "generatedAt": "2026-04-14T23:59:00.000Z",
+  "executionScope": "documentation_and_audit_baseline_snapshot",
+  "disclaimer": "This is not a claim that all platform steps 1–11 are complete. Percentages below are copied from the latest on-disk audit artifacts where available, or marked unknown. Re-run generators with DB access for live numbers.",
+  "parityVsLegacy": {
+    "target": "full_parity_or_better",
+    "currentAssessment": "in_progress_controlled_restoration",
+    "authoritativeProcess": "docs/legacy-restoration-map.md"
+  },
+  "metrics": {
+    "lessonCompletenessPct": {
+      "valueStrict": 1,
+      "source": "final-system-status.json (completenessPctStrict)",
+      "note": "Lenient viable ~9% per same file; 562 evaluated."
+    },
+    "quizTestBankCompletenessPct": {
+      "value": 14,
+      "source": "final-system-status.json (quizParityPercent)"
+    },
+    "blogSystemStatus": {
+      "summary": "see blog-final-verification.json and legacy-blog-inventory.json",
+      "automatedGenerator": "verify against admin/blog API routes and blog import scripts; not re-validated in this pass."
+    },
+    "toolsImplemented": {
+      "summary": "partial_vs_legacy",
+      "inventoryRef": "legacy-tools-calculators-inventory.json",
+      "appRoutes": "nursenest-core/src/app/**/tools/** (existence only; not feature-audited here)."
+    },
+    "adminSystemCompleteness": {
+      "summary": "broad_surface_present",
+      "evidence": "Many routes under (admin)/admin/*; completeness vs legacy requires functional QA.",
+      "ref": "proposed-implementation-backlog.json"
+    },
+    "paywallSecurityStatus": "SECURE_per_last_audit_with_caveat",
+    "paywallRefs": [
+      "paywall-final-security.json",
+      "paywall-security.json",
+      "entitlement-final-status.json"
+    ],
+    "performanceStatus": {
+      "summary": "patterns_documented",
+      "refs": [
+        "final-system-status.json (pagination section)",
+        "docs/legacy-restoration-map.md (performance protections)"
+      ]
+    },
+    "catSystem": {
+      "summary": "see cat-exam-parity.json",
+      "poolConstantRef": "final-system-status.json cat section"
+    }
+  },
+  "remainingGaps": [
+    "Large lesson ID mapping backlog (legacy-vs-current-gap-analysis.json).",
+    "Strict lesson section template completeness low vs target (final-lesson-completeness.json).",
+    "Quiz parity 14% vs target 100% (final-system-status.json).",
+    "External full-site tree may be unavailable for exact parity diff (audit-summary.md).",
+    "CAT UX parity (resume/checkpoint) may need selective port (legacy-vs-current-gap-analysis.json)."
+  ],
+  "whatWasMissing": [
+    "Single consolidated cross-system view (addressed by full-system-gap-analysis.json in this pass).",
+    "Live DB-backed recalculation of all metrics in one run (not performed; databaseAvailable was false in prior final-system-status snapshot)."
+  ],
+  "whatWasFixed": [
+    "Added data/audit/full-system-gap-analysis.json linking systems to routes and existing audit JSON.",
+    "Added data/audit/final-platform-status.json summarizing status and gaps without fabricating completion."
+  ],
+  "whatStillNeedsAttention": [
+    "Execute restoration layers per docs/legacy-restoration-map.md with batching and validation after each slice.",
+    "Re-run lesson/quiz/CAT/blog audits with production or staging DB when safe.",
+    "Close paywall and SEO/cache findings using paywall-*.json baselines.",
+    "Expand tools to match legacy-tools-calculators-inventory.json where product-approved.",
+    "Admin: prioritize proposed-implementation-backlog.json items with ops sign-off."
+  ],
+  "relatedArtifacts": [
+    "full-system-gap-analysis.json",
+    "final-system-status.json",
+    "audit-summary.md"
+  ]
+}

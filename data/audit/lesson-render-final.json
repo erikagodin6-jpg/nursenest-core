@@ -1,0 +1,23 @@
+{
+  "generatedAt": "2026-04-14T16:23:05.281Z",
+  "databaseAvailable": false,
+  "baseUrl": "",
+  "attemptedAt": "2026-04-14T16:23:05.754Z",
+  "results": [],
+  "note": "VERIFY_BASE_URL unset — skipped HTTP checks",
+  "pathwayPatternsTested": [
+    {
+      "id": "us-rn-nclex-rn",
+      "pattern": "/us/rn/nclex-rn/lessons"
+    },
+    {
+      "id": "ca-rpn-rex-pn",
+      "pattern": "/canada/rpn/rex-pn/lessons"
+    },
+    {
+      "id": "us-np-fnp",
+      "pattern": "/us/np/fnp/lessons"
+    }
+  ],
+  "http404LessonDetailCount": 0
+}

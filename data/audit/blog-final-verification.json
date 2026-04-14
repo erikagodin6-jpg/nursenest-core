@@ -1,0 +1,12 @@
+{
+  "generatedAt": "2026-04-14T16:23:05.281Z",
+  "databaseAvailable": false,
+  "byStatus": {},
+  "recent24h": {
+    "created": 0,
+    "updated": 0
+  },
+  "thinBodySamples": [],
+  "failed": null,
+  "note": "Database unavailable — blog counts skipped"
+}

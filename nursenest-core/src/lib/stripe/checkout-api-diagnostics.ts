@@ -3,6 +3,8 @@ export const STRIPE_PRICE_NOT_CONFIGURED_CODE = "stripe_price_not_configured";
 
 /** Structured checkout error codes (POST /api/subscriptions/checkout). */
 export const CHECKOUT_UNAUTHORIZED_CODE = "checkout_unauthorized";
+/** Demo / QA accounts cannot start real Stripe checkout. */
+export const CHECKOUT_DEMO_USER_FORBIDDEN_CODE = "checkout_demo_user_forbidden";
 export const CHECKOUT_INVALID_PAYLOAD_CODE = "checkout_invalid_payload";
 export const CHECKOUT_POLICY_VERSION_MISMATCH_CODE = "checkout_policy_version_mismatch";
 export const CHECKOUT_STRIPE_UNAVAILABLE_CODE = "checkout_stripe_unavailable";

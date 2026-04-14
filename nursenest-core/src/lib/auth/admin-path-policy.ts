@@ -18,6 +18,8 @@ const SUPER_ONLY_PREFIXES = [
   "/api/admin/fraud-dashboard",
   "/admin/i18n",
   "/api/admin/i18n-diagnostics",
+  "/admin/demo-users",
+  "/api/admin/demo-users",
 ];
 
 /** User PII + billing list/analytics — not for content editors. */
