@@ -1,0 +1,2006 @@
+{
+  "generatedAt": "2026-04-14T20:39:08.404Z",
+  "count": 200,
+  "entries": [
+    {
+      "title": "how to become a nurse in mexico — Mexico nursing (en 1)",
+      "slug": "en-0001-how-to-become-a-nurse-in-mexico-how-to-become-a-nurse-in-mexico-mexico-nursing-en-1",
+      "primaryKeyword": "how to become a nurse in mexico",
+      "language": "en",
+      "category": "Mexico nursing",
+      "intentType": "transactional",
+      "translationGroupId": "mx-nurse-0001-how-to-become-a-nurse-in-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration mexico — Mexico nursing (en 2)",
+      "slug": "en-0002-nurse-registration-mexico-nurse-registration-mexico-mexico-nursing-en-2",
+      "primaryKeyword": "nurse registration mexico",
+      "language": "en",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0001-nurse-registration-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "nclex for mexican nurses — Mexico nursing (en 3)",
+      "slug": "en-0003-nclex-for-mexican-nurses-nclex-for-mexican-nurses-mexico-nursing-en-3",
+      "primaryKeyword": "nclex for mexican nurses",
+      "language": "en",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0001-nclex-for-mexican-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "mexico to usa nurse pathway — Mexico nursing (en 4)",
+      "slug": "en-0004-mexico-to-usa-nurse-pathway-mexico-to-usa-nurse-pathway-mexico-nursing-en-4",
+      "primaryKeyword": "mexico to usa nurse pathway",
+      "language": "en",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0001-mexico-to-usa-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "mexico to canada nurse pathway — Mexico nursing (en 5)",
+      "slug": "en-0005-mexico-to-canada-nurse-pathway-mexico-to-canada-nurse-pathway-mexico-nursing-en-5",
+      "primaryKeyword": "mexico to canada nurse pathway",
+      "language": "en",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0001-mexico-to-canada-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "nursing salary mexico — Mexico nursing (en 6)",
+      "slug": "en-0006-nursing-salary-mexico-nursing-salary-mexico-mexico-nursing-en-6",
+      "primaryKeyword": "nursing salary mexico",
+      "language": "en",
+      "category": "Mexico nursing",
+      "intentType": "transactional",
+      "translationGroupId": "mx-nurse-0001-nursing-salary-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "best nursing jobs in mexico — Mexico nursing (en 7)",
+      "slug": "en-0007-best-nursing-jobs-in-mexico-best-nursing-jobs-in-mexico-mexico-nursing-en-7",
+      "primaryKeyword": "best nursing jobs in mexico",
+      "language": "en",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0001-best-nursing-jobs-in-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in mexico — Mexico nursing (en 8)",
+      "slug": "en-0008-how-to-become-a-nurse-in-mexico-how-to-become-a-nurse-in-mexico-mexico-nursing-en-8",
+      "primaryKeyword": "how to become a nurse in mexico",
+      "language": "en",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0002-how-to-become-a-nurse-in-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration mexico — Mexico nursing (en 9)",
+      "slug": "en-0009-nurse-registration-mexico-nurse-registration-mexico-mexico-nursing-en-9",
+      "primaryKeyword": "nurse registration mexico",
+      "language": "en",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0002-nurse-registration-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "nclex for mexican nurses — Mexico nursing (en 10)",
+      "slug": "en-0010-nclex-for-mexican-nurses-nclex-for-mexican-nurses-mexico-nursing-en-10",
+      "primaryKeyword": "nclex for mexican nurses",
+      "language": "en",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0002-nclex-for-mexican-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "mexico to usa nurse pathway — Mexico nursing (en 11)",
+      "slug": "en-0011-mexico-to-usa-nurse-pathway-mexico-to-usa-nurse-pathway-mexico-nursing-en-11",
+      "primaryKeyword": "mexico to usa nurse pathway",
+      "language": "en",
+      "category": "Mexico nursing",
+      "intentType": "transactional",
+      "translationGroupId": "mx-nurse-0002-mexico-to-usa-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "mexico to canada nurse pathway — Mexico nursing (en 12)",
+      "slug": "en-0012-mexico-to-canada-nurse-pathway-mexico-to-canada-nurse-pathway-mexico-nursing-en-12",
+      "primaryKeyword": "mexico to canada nurse pathway",
+      "language": "en",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0002-mexico-to-canada-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "nursing salary mexico — Mexico nursing (en 13)",
+      "slug": "en-0013-nursing-salary-mexico-nursing-salary-mexico-mexico-nursing-en-13",
+      "primaryKeyword": "nursing salary mexico",
+      "language": "en",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0002-nursing-salary-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "best nursing jobs in mexico — Mexico nursing (en 14)",
+      "slug": "en-0014-best-nursing-jobs-in-mexico-best-nursing-jobs-in-mexico-mexico-nursing-en-14",
+      "primaryKeyword": "best nursing jobs in mexico",
+      "language": "en",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0002-best-nursing-jobs-in-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in mexico — Mexico nursing (en 15)",
+      "slug": "en-0015-how-to-become-a-nurse-in-mexico-how-to-become-a-nurse-in-mexico-mexico-nursing-en-15",
+      "primaryKeyword": "how to become a nurse in mexico",
+      "language": "en",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0003-how-to-become-a-nurse-in-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration mexico — Mexico nursing (en 16)",
+      "slug": "en-0016-nurse-registration-mexico-nurse-registration-mexico-mexico-nursing-en-16",
+      "primaryKeyword": "nurse registration mexico",
+      "language": "en",
+      "category": "Mexico nursing",
+      "intentType": "transactional",
+      "translationGroupId": "mx-nurse-0003-nurse-registration-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "nclex for mexican nurses — Mexico nursing (en 17)",
+      "slug": "en-0017-nclex-for-mexican-nurses-nclex-for-mexican-nurses-mexico-nursing-en-17",
+      "primaryKeyword": "nclex for mexican nurses",
+      "language": "en",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0003-nclex-for-mexican-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "mexico to usa nurse pathway — Mexico nursing (en 18)",
+      "slug": "en-0018-mexico-to-usa-nurse-pathway-mexico-to-usa-nurse-pathway-mexico-nursing-en-18",
+      "primaryKeyword": "mexico to usa nurse pathway",
+      "language": "en",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0003-mexico-to-usa-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "mexico to canada nurse pathway — Mexico nursing (en 19)",
+      "slug": "en-0019-mexico-to-canada-nurse-pathway-mexico-to-canada-nurse-pathway-mexico-nursing-en-19",
+      "primaryKeyword": "mexico to canada nurse pathway",
+      "language": "en",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0003-mexico-to-canada-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "nursing salary mexico — Mexico nursing (en 20)",
+      "slug": "en-0020-nursing-salary-mexico-nursing-salary-mexico-mexico-nursing-en-20",
+      "primaryKeyword": "nursing salary mexico",
+      "language": "en",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0003-nursing-salary-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "best nursing jobs in mexico — Mexico nursing (en 21)",
+      "slug": "en-0021-best-nursing-jobs-in-mexico-best-nursing-jobs-in-mexico-mexico-nursing-en-21",
+      "primaryKeyword": "best nursing jobs in mexico",
+      "language": "en",
+      "category": "Mexico nursing",
+      "intentType": "transactional",
+      "translationGroupId": "mx-nurse-0003-best-nursing-jobs-in-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in mexico — Mexico nursing (en 22)",
+      "slug": "en-0022-how-to-become-a-nurse-in-mexico-how-to-become-a-nurse-in-mexico-mexico-nursing-en-22",
+      "primaryKeyword": "how to become a nurse in mexico",
+      "language": "en",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0004-how-to-become-a-nurse-in-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration mexico — Mexico nursing (en 23)",
+      "slug": "en-0023-nurse-registration-mexico-nurse-registration-mexico-mexico-nursing-en-23",
+      "primaryKeyword": "nurse registration mexico",
+      "language": "en",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0004-nurse-registration-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "nclex for mexican nurses — Mexico nursing (en 24)",
+      "slug": "en-0024-nclex-for-mexican-nurses-nclex-for-mexican-nurses-mexico-nursing-en-24",
+      "primaryKeyword": "nclex for mexican nurses",
+      "language": "en",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0004-nclex-for-mexican-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "mexico to usa nurse pathway — Mexico nursing (en 25)",
+      "slug": "en-0025-mexico-to-usa-nurse-pathway-mexico-to-usa-nurse-pathway-mexico-nursing-en-25",
+      "primaryKeyword": "mexico to usa nurse pathway",
+      "language": "en",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0004-mexico-to-usa-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "mexico to canada nurse pathway — Mexico nursing (en 26)",
+      "slug": "en-0026-mexico-to-canada-nurse-pathway-mexico-to-canada-nurse-pathway-mexico-nursing-en-26",
+      "primaryKeyword": "mexico to canada nurse pathway",
+      "language": "en",
+      "category": "Mexico nursing",
+      "intentType": "transactional",
+      "translationGroupId": "mx-nurse-0004-mexico-to-canada-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "nursing salary mexico — Mexico nursing (en 27)",
+      "slug": "en-0027-nursing-salary-mexico-nursing-salary-mexico-mexico-nursing-en-27",
+      "primaryKeyword": "nursing salary mexico",
+      "language": "en",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0004-nursing-salary-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "best nursing jobs in mexico — Mexico nursing (en 28)",
+      "slug": "en-0028-best-nursing-jobs-in-mexico-best-nursing-jobs-in-mexico-mexico-nursing-en-28",
+      "primaryKeyword": "best nursing jobs in mexico",
+      "language": "en",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0004-best-nursing-jobs-in-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in mexico — Mexico nursing (en 29)",
+      "slug": "en-0029-how-to-become-a-nurse-in-mexico-how-to-become-a-nurse-in-mexico-mexico-nursing-en-29",
+      "primaryKeyword": "how to become a nurse in mexico",
+      "language": "en",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0005-how-to-become-a-nurse-in-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration mexico — Mexico nursing (en 30)",
+      "slug": "en-0030-nurse-registration-mexico-nurse-registration-mexico-mexico-nursing-en-30",
+      "primaryKeyword": "nurse registration mexico",
+      "language": "en",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0005-nurse-registration-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "nclex for mexican nurses — Mexico nursing (en 31)",
+      "slug": "en-0031-nclex-for-mexican-nurses-nclex-for-mexican-nurses-mexico-nursing-en-31",
+      "primaryKeyword": "nclex for mexican nurses",
+      "language": "en",
+      "category": "Mexico nursing",
+      "intentType": "transactional",
+      "translationGroupId": "mx-nurse-0005-nclex-for-mexican-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "mexico to usa nurse pathway — Mexico nursing (en 32)",
+      "slug": "en-0032-mexico-to-usa-nurse-pathway-mexico-to-usa-nurse-pathway-mexico-nursing-en-32",
+      "primaryKeyword": "mexico to usa nurse pathway",
+      "language": "en",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0005-mexico-to-usa-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "mexico to canada nurse pathway — Mexico nursing (en 33)",
+      "slug": "en-0033-mexico-to-canada-nurse-pathway-mexico-to-canada-nurse-pathway-mexico-nursing-en-33",
+      "primaryKeyword": "mexico to canada nurse pathway",
+      "language": "en",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0005-mexico-to-canada-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "nursing salary mexico — Mexico nursing (en 34)",
+      "slug": "en-0034-nursing-salary-mexico-nursing-salary-mexico-mexico-nursing-en-34",
+      "primaryKeyword": "nursing salary mexico",
+      "language": "en",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0005-nursing-salary-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "best nursing jobs in mexico — Mexico nursing (en 35)",
+      "slug": "en-0035-best-nursing-jobs-in-mexico-best-nursing-jobs-in-mexico-mexico-nursing-en-35",
+      "primaryKeyword": "best nursing jobs in mexico",
+      "language": "en",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0005-best-nursing-jobs-in-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in mexico — Mexico nursing (en 36)",
+      "slug": "en-0036-how-to-become-a-nurse-in-mexico-how-to-become-a-nurse-in-mexico-mexico-nursing-en-36",
+      "primaryKeyword": "how to become a nurse in mexico",
+      "language": "en",
+      "category": "Mexico nursing",
+      "intentType": "transactional",
+      "translationGroupId": "mx-nurse-0006-how-to-become-a-nurse-in-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration mexico — Mexico nursing (en 37)",
+      "slug": "en-0037-nurse-registration-mexico-nurse-registration-mexico-mexico-nursing-en-37",
+      "primaryKeyword": "nurse registration mexico",
+      "language": "en",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0006-nurse-registration-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "nclex for mexican nurses — Mexico nursing (en 38)",
+      "slug": "en-0038-nclex-for-mexican-nurses-nclex-for-mexican-nurses-mexico-nursing-en-38",
+      "primaryKeyword": "nclex for mexican nurses",
+      "language": "en",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0006-nclex-for-mexican-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "mexico to usa nurse pathway — Mexico nursing (en 39)",
+      "slug": "en-0039-mexico-to-usa-nurse-pathway-mexico-to-usa-nurse-pathway-mexico-nursing-en-39",
+      "primaryKeyword": "mexico to usa nurse pathway",
+      "language": "en",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0006-mexico-to-usa-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "mexico to canada nurse pathway — Mexico nursing (en 40)",
+      "slug": "en-0040-mexico-to-canada-nurse-pathway-mexico-to-canada-nurse-pathway-mexico-nursing-en-40",
+      "primaryKeyword": "mexico to canada nurse pathway",
+      "language": "en",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0006-mexico-to-canada-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "nursing salary mexico — Mexico nursing (en 41)",
+      "slug": "en-0041-nursing-salary-mexico-nursing-salary-mexico-mexico-nursing-en-41",
+      "primaryKeyword": "nursing salary mexico",
+      "language": "en",
+      "category": "Mexico nursing",
+      "intentType": "transactional",
+      "translationGroupId": "mx-nurse-0006-nursing-salary-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "best nursing jobs in mexico — Mexico nursing (en 42)",
+      "slug": "en-0042-best-nursing-jobs-in-mexico-best-nursing-jobs-in-mexico-mexico-nursing-en-42",
+      "primaryKeyword": "best nursing jobs in mexico",
+      "language": "en",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0006-best-nursing-jobs-in-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in mexico — Mexico nursing (en 43)",
+      "slug": "en-0043-how-to-become-a-nurse-in-mexico-how-to-become-a-nurse-in-mexico-mexico-nursing-en-43",
+      "primaryKeyword": "how to become a nurse in mexico",
+      "language": "en",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0007-how-to-become-a-nurse-in-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration mexico — Mexico nursing (en 44)",
+      "slug": "en-0044-nurse-registration-mexico-nurse-registration-mexico-mexico-nursing-en-44",
+      "primaryKeyword": "nurse registration mexico",
+      "language": "en",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0007-nurse-registration-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "nclex for mexican nurses — Mexico nursing (en 45)",
+      "slug": "en-0045-nclex-for-mexican-nurses-nclex-for-mexican-nurses-mexico-nursing-en-45",
+      "primaryKeyword": "nclex for mexican nurses",
+      "language": "en",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0007-nclex-for-mexican-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "mexico to usa nurse pathway — Mexico nursing (en 46)",
+      "slug": "en-0046-mexico-to-usa-nurse-pathway-mexico-to-usa-nurse-pathway-mexico-nursing-en-46",
+      "primaryKeyword": "mexico to usa nurse pathway",
+      "language": "en",
+      "category": "Mexico nursing",
+      "intentType": "transactional",
+      "translationGroupId": "mx-nurse-0007-mexico-to-usa-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "mexico to canada nurse pathway — Mexico nursing (en 47)",
+      "slug": "en-0047-mexico-to-canada-nurse-pathway-mexico-to-canada-nurse-pathway-mexico-nursing-en-47",
+      "primaryKeyword": "mexico to canada nurse pathway",
+      "language": "en",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0007-mexico-to-canada-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "nursing salary mexico — Mexico nursing (en 48)",
+      "slug": "en-0048-nursing-salary-mexico-nursing-salary-mexico-mexico-nursing-en-48",
+      "primaryKeyword": "nursing salary mexico",
+      "language": "en",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0007-nursing-salary-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "best nursing jobs in mexico — Mexico nursing (en 49)",
+      "slug": "en-0049-best-nursing-jobs-in-mexico-best-nursing-jobs-in-mexico-mexico-nursing-en-49",
+      "primaryKeyword": "best nursing jobs in mexico",
+      "language": "en",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0007-best-nursing-jobs-in-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in mexico — Mexico nursing (en 50)",
+      "slug": "en-0050-how-to-become-a-nurse-in-mexico-how-to-become-a-nurse-in-mexico-mexico-nursing-en-50",
+      "primaryKeyword": "how to become a nurse in mexico",
+      "language": "en",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0008-how-to-become-a-nurse-in-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration mexico — Mexico nursing (en 51)",
+      "slug": "en-0051-nurse-registration-mexico-nurse-registration-mexico-mexico-nursing-en-51",
+      "primaryKeyword": "nurse registration mexico",
+      "language": "en",
+      "category": "Mexico nursing",
+      "intentType": "transactional",
+      "translationGroupId": "mx-nurse-0008-nurse-registration-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "nclex for mexican nurses — Mexico nursing (en 52)",
+      "slug": "en-0052-nclex-for-mexican-nurses-nclex-for-mexican-nurses-mexico-nursing-en-52",
+      "primaryKeyword": "nclex for mexican nurses",
+      "language": "en",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0008-nclex-for-mexican-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "mexico to usa nurse pathway — Mexico nursing (en 53)",
+      "slug": "en-0053-mexico-to-usa-nurse-pathway-mexico-to-usa-nurse-pathway-mexico-nursing-en-53",
+      "primaryKeyword": "mexico to usa nurse pathway",
+      "language": "en",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0008-mexico-to-usa-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "mexico to canada nurse pathway — Mexico nursing (en 54)",
+      "slug": "en-0054-mexico-to-canada-nurse-pathway-mexico-to-canada-nurse-pathway-mexico-nursing-en-54",
+      "primaryKeyword": "mexico to canada nurse pathway",
+      "language": "en",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0008-mexico-to-canada-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "nursing salary mexico — Mexico nursing (en 55)",
+      "slug": "en-0055-nursing-salary-mexico-nursing-salary-mexico-mexico-nursing-en-55",
+      "primaryKeyword": "nursing salary mexico",
+      "language": "en",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0008-nursing-salary-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "best nursing jobs in mexico — Mexico nursing (en 56)",
+      "slug": "en-0056-best-nursing-jobs-in-mexico-best-nursing-jobs-in-mexico-mexico-nursing-en-56",
+      "primaryKeyword": "best nursing jobs in mexico",
+      "language": "en",
+      "category": "Mexico nursing",
+      "intentType": "transactional",
+      "translationGroupId": "mx-nurse-0008-best-nursing-jobs-in-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in mexico — Mexico nursing (en 57)",
+      "slug": "en-0057-how-to-become-a-nurse-in-mexico-how-to-become-a-nurse-in-mexico-mexico-nursing-en-57",
+      "primaryKeyword": "how to become a nurse in mexico",
+      "language": "en",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0009-how-to-become-a-nurse-in-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration mexico — Mexico nursing (en 58)",
+      "slug": "en-0058-nurse-registration-mexico-nurse-registration-mexico-mexico-nursing-en-58",
+      "primaryKeyword": "nurse registration mexico",
+      "language": "en",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0009-nurse-registration-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "nclex for mexican nurses — Mexico nursing (en 59)",
+      "slug": "en-0059-nclex-for-mexican-nurses-nclex-for-mexican-nurses-mexico-nursing-en-59",
+      "primaryKeyword": "nclex for mexican nurses",
+      "language": "en",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0009-nclex-for-mexican-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "mexico to usa nurse pathway — Mexico nursing (en 60)",
+      "slug": "en-0060-mexico-to-usa-nurse-pathway-mexico-to-usa-nurse-pathway-mexico-nursing-en-60",
+      "primaryKeyword": "mexico to usa nurse pathway",
+      "language": "en",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0009-mexico-to-usa-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "mexico to canada nurse pathway — Mexico nursing (es 1)",
+      "slug": "es-0061-mexico-to-canada-nurse-pathway-mexico-to-canada-nurse-pathway-mexico-nursing-es-1",
+      "primaryKeyword": "mexico to canada nurse pathway",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "transactional",
+      "translationGroupId": "mx-nurse-0009-mexico-to-canada-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "nursing salary mexico — Mexico nursing (es 2)",
+      "slug": "es-0062-nursing-salary-mexico-nursing-salary-mexico-mexico-nursing-es-2",
+      "primaryKeyword": "nursing salary mexico",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0009-nursing-salary-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "best nursing jobs in mexico — Mexico nursing (es 3)",
+      "slug": "es-0063-best-nursing-jobs-in-mexico-best-nursing-jobs-in-mexico-mexico-nursing-es-3",
+      "primaryKeyword": "best nursing jobs in mexico",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0009-best-nursing-jobs-in-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in mexico — Mexico nursing (es 4)",
+      "slug": "es-0064-how-to-become-a-nurse-in-mexico-how-to-become-a-nurse-in-mexico-mexico-nursing-es-4",
+      "primaryKeyword": "how to become a nurse in mexico",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0010-how-to-become-a-nurse-in-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration mexico — Mexico nursing (es 5)",
+      "slug": "es-0065-nurse-registration-mexico-nurse-registration-mexico-mexico-nursing-es-5",
+      "primaryKeyword": "nurse registration mexico",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0010-nurse-registration-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "nclex for mexican nurses — Mexico nursing (es 6)",
+      "slug": "es-0066-nclex-for-mexican-nurses-nclex-for-mexican-nurses-mexico-nursing-es-6",
+      "primaryKeyword": "nclex for mexican nurses",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "transactional",
+      "translationGroupId": "mx-nurse-0010-nclex-for-mexican-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "mexico to usa nurse pathway — Mexico nursing (es 7)",
+      "slug": "es-0067-mexico-to-usa-nurse-pathway-mexico-to-usa-nurse-pathway-mexico-nursing-es-7",
+      "primaryKeyword": "mexico to usa nurse pathway",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0010-mexico-to-usa-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "mexico to canada nurse pathway — Mexico nursing (es 8)",
+      "slug": "es-0068-mexico-to-canada-nurse-pathway-mexico-to-canada-nurse-pathway-mexico-nursing-es-8",
+      "primaryKeyword": "mexico to canada nurse pathway",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0010-mexico-to-canada-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "nursing salary mexico — Mexico nursing (es 9)",
+      "slug": "es-0069-nursing-salary-mexico-nursing-salary-mexico-mexico-nursing-es-9",
+      "primaryKeyword": "nursing salary mexico",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0010-nursing-salary-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "best nursing jobs in mexico — Mexico nursing (es 10)",
+      "slug": "es-0070-best-nursing-jobs-in-mexico-best-nursing-jobs-in-mexico-mexico-nursing-es-10",
+      "primaryKeyword": "best nursing jobs in mexico",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0010-best-nursing-jobs-in-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in mexico — Mexico nursing (es 11)",
+      "slug": "es-0071-how-to-become-a-nurse-in-mexico-how-to-become-a-nurse-in-mexico-mexico-nursing-es-11",
+      "primaryKeyword": "how to become a nurse in mexico",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "transactional",
+      "translationGroupId": "mx-nurse-0011-how-to-become-a-nurse-in-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration mexico — Mexico nursing (es 12)",
+      "slug": "es-0072-nurse-registration-mexico-nurse-registration-mexico-mexico-nursing-es-12",
+      "primaryKeyword": "nurse registration mexico",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0011-nurse-registration-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "nclex for mexican nurses — Mexico nursing (es 13)",
+      "slug": "es-0073-nclex-for-mexican-nurses-nclex-for-mexican-nurses-mexico-nursing-es-13",
+      "primaryKeyword": "nclex for mexican nurses",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0011-nclex-for-mexican-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "mexico to usa nurse pathway — Mexico nursing (es 14)",
+      "slug": "es-0074-mexico-to-usa-nurse-pathway-mexico-to-usa-nurse-pathway-mexico-nursing-es-14",
+      "primaryKeyword": "mexico to usa nurse pathway",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0011-mexico-to-usa-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "mexico to canada nurse pathway — Mexico nursing (es 15)",
+      "slug": "es-0075-mexico-to-canada-nurse-pathway-mexico-to-canada-nurse-pathway-mexico-nursing-es-15",
+      "primaryKeyword": "mexico to canada nurse pathway",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0011-mexico-to-canada-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "nursing salary mexico — Mexico nursing (es 16)",
+      "slug": "es-0076-nursing-salary-mexico-nursing-salary-mexico-mexico-nursing-es-16",
+      "primaryKeyword": "nursing salary mexico",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "transactional",
+      "translationGroupId": "mx-nurse-0011-nursing-salary-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "best nursing jobs in mexico — Mexico nursing (es 17)",
+      "slug": "es-0077-best-nursing-jobs-in-mexico-best-nursing-jobs-in-mexico-mexico-nursing-es-17",
+      "primaryKeyword": "best nursing jobs in mexico",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0011-best-nursing-jobs-in-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in mexico — Mexico nursing (es 18)",
+      "slug": "es-0078-how-to-become-a-nurse-in-mexico-how-to-become-a-nurse-in-mexico-mexico-nursing-es-18",
+      "primaryKeyword": "how to become a nurse in mexico",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0012-how-to-become-a-nurse-in-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration mexico — Mexico nursing (es 19)",
+      "slug": "es-0079-nurse-registration-mexico-nurse-registration-mexico-mexico-nursing-es-19",
+      "primaryKeyword": "nurse registration mexico",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0012-nurse-registration-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "nclex for mexican nurses — Mexico nursing (es 20)",
+      "slug": "es-0080-nclex-for-mexican-nurses-nclex-for-mexican-nurses-mexico-nursing-es-20",
+      "primaryKeyword": "nclex for mexican nurses",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0012-nclex-for-mexican-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "mexico to usa nurse pathway — Mexico nursing (es 21)",
+      "slug": "es-0081-mexico-to-usa-nurse-pathway-mexico-to-usa-nurse-pathway-mexico-nursing-es-21",
+      "primaryKeyword": "mexico to usa nurse pathway",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "transactional",
+      "translationGroupId": "mx-nurse-0012-mexico-to-usa-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "mexico to canada nurse pathway — Mexico nursing (es 22)",
+      "slug": "es-0082-mexico-to-canada-nurse-pathway-mexico-to-canada-nurse-pathway-mexico-nursing-es-22",
+      "primaryKeyword": "mexico to canada nurse pathway",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0012-mexico-to-canada-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "nursing salary mexico — Mexico nursing (es 23)",
+      "slug": "es-0083-nursing-salary-mexico-nursing-salary-mexico-mexico-nursing-es-23",
+      "primaryKeyword": "nursing salary mexico",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0012-nursing-salary-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "best nursing jobs in mexico — Mexico nursing (es 24)",
+      "slug": "es-0084-best-nursing-jobs-in-mexico-best-nursing-jobs-in-mexico-mexico-nursing-es-24",
+      "primaryKeyword": "best nursing jobs in mexico",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0012-best-nursing-jobs-in-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in mexico — Mexico nursing (es 25)",
+      "slug": "es-0085-how-to-become-a-nurse-in-mexico-how-to-become-a-nurse-in-mexico-mexico-nursing-es-25",
+      "primaryKeyword": "how to become a nurse in mexico",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0013-how-to-become-a-nurse-in-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration mexico — Mexico nursing (es 26)",
+      "slug": "es-0086-nurse-registration-mexico-nurse-registration-mexico-mexico-nursing-es-26",
+      "primaryKeyword": "nurse registration mexico",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "transactional",
+      "translationGroupId": "mx-nurse-0013-nurse-registration-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "nclex for mexican nurses — Mexico nursing (es 27)",
+      "slug": "es-0087-nclex-for-mexican-nurses-nclex-for-mexican-nurses-mexico-nursing-es-27",
+      "primaryKeyword": "nclex for mexican nurses",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0013-nclex-for-mexican-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "mexico to usa nurse pathway — Mexico nursing (es 28)",
+      "slug": "es-0088-mexico-to-usa-nurse-pathway-mexico-to-usa-nurse-pathway-mexico-nursing-es-28",
+      "primaryKeyword": "mexico to usa nurse pathway",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0013-mexico-to-usa-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "mexico to canada nurse pathway — Mexico nursing (es 29)",
+      "slug": "es-0089-mexico-to-canada-nurse-pathway-mexico-to-canada-nurse-pathway-mexico-nursing-es-29",
+      "primaryKeyword": "mexico to canada nurse pathway",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0013-mexico-to-canada-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "nursing salary mexico — Mexico nursing (es 30)",
+      "slug": "es-0090-nursing-salary-mexico-nursing-salary-mexico-mexico-nursing-es-30",
+      "primaryKeyword": "nursing salary mexico",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0013-nursing-salary-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "best nursing jobs in mexico — Mexico nursing (es 31)",
+      "slug": "es-0091-best-nursing-jobs-in-mexico-best-nursing-jobs-in-mexico-mexico-nursing-es-31",
+      "primaryKeyword": "best nursing jobs in mexico",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "transactional",
+      "translationGroupId": "mx-nurse-0013-best-nursing-jobs-in-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in mexico — Mexico nursing (es 32)",
+      "slug": "es-0092-how-to-become-a-nurse-in-mexico-how-to-become-a-nurse-in-mexico-mexico-nursing-es-32",
+      "primaryKeyword": "how to become a nurse in mexico",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0014-how-to-become-a-nurse-in-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration mexico — Mexico nursing (es 33)",
+      "slug": "es-0093-nurse-registration-mexico-nurse-registration-mexico-mexico-nursing-es-33",
+      "primaryKeyword": "nurse registration mexico",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0014-nurse-registration-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "nclex for mexican nurses — Mexico nursing (es 34)",
+      "slug": "es-0094-nclex-for-mexican-nurses-nclex-for-mexican-nurses-mexico-nursing-es-34",
+      "primaryKeyword": "nclex for mexican nurses",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0014-nclex-for-mexican-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "mexico to usa nurse pathway — Mexico nursing (es 35)",
+      "slug": "es-0095-mexico-to-usa-nurse-pathway-mexico-to-usa-nurse-pathway-mexico-nursing-es-35",
+      "primaryKeyword": "mexico to usa nurse pathway",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0014-mexico-to-usa-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "mexico to canada nurse pathway — Mexico nursing (es 36)",
+      "slug": "es-0096-mexico-to-canada-nurse-pathway-mexico-to-canada-nurse-pathway-mexico-nursing-es-36",
+      "primaryKeyword": "mexico to canada nurse pathway",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "transactional",
+      "translationGroupId": "mx-nurse-0014-mexico-to-canada-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "nursing salary mexico — Mexico nursing (es 37)",
+      "slug": "es-0097-nursing-salary-mexico-nursing-salary-mexico-mexico-nursing-es-37",
+      "primaryKeyword": "nursing salary mexico",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0014-nursing-salary-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "best nursing jobs in mexico — Mexico nursing (es 38)",
+      "slug": "es-0098-best-nursing-jobs-in-mexico-best-nursing-jobs-in-mexico-mexico-nursing-es-38",
+      "primaryKeyword": "best nursing jobs in mexico",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0014-best-nursing-jobs-in-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in mexico — Mexico nursing (es 39)",
+      "slug": "es-0099-how-to-become-a-nurse-in-mexico-how-to-become-a-nurse-in-mexico-mexico-nursing-es-39",
+      "primaryKeyword": "how to become a nurse in mexico",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0015-how-to-become-a-nurse-in-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration mexico — Mexico nursing (es 40)",
+      "slug": "es-0100-nurse-registration-mexico-nurse-registration-mexico-mexico-nursing-es-40",
+      "primaryKeyword": "nurse registration mexico",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0015-nurse-registration-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "nclex for mexican nurses — Mexico nursing (es 41)",
+      "slug": "es-0101-nclex-for-mexican-nurses-nclex-for-mexican-nurses-mexico-nursing-es-41",
+      "primaryKeyword": "nclex for mexican nurses",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "transactional",
+      "translationGroupId": "mx-nurse-0015-nclex-for-mexican-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "mexico to usa nurse pathway — Mexico nursing (es 42)",
+      "slug": "es-0102-mexico-to-usa-nurse-pathway-mexico-to-usa-nurse-pathway-mexico-nursing-es-42",
+      "primaryKeyword": "mexico to usa nurse pathway",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0015-mexico-to-usa-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "mexico to canada nurse pathway — Mexico nursing (es 43)",
+      "slug": "es-0103-mexico-to-canada-nurse-pathway-mexico-to-canada-nurse-pathway-mexico-nursing-es-43",
+      "primaryKeyword": "mexico to canada nurse pathway",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0015-mexico-to-canada-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "nursing salary mexico — Mexico nursing (es 44)",
+      "slug": "es-0104-nursing-salary-mexico-nursing-salary-mexico-mexico-nursing-es-44",
+      "primaryKeyword": "nursing salary mexico",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0015-nursing-salary-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "best nursing jobs in mexico — Mexico nursing (es 45)",
+      "slug": "es-0105-best-nursing-jobs-in-mexico-best-nursing-jobs-in-mexico-mexico-nursing-es-45",
+      "primaryKeyword": "best nursing jobs in mexico",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0015-best-nursing-jobs-in-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in mexico — Mexico nursing (es 46)",
+      "slug": "es-0106-how-to-become-a-nurse-in-mexico-how-to-become-a-nurse-in-mexico-mexico-nursing-es-46",
+      "primaryKeyword": "how to become a nurse in mexico",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "transactional",
+      "translationGroupId": "mx-nurse-0016-how-to-become-a-nurse-in-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration mexico — Mexico nursing (es 47)",
+      "slug": "es-0107-nurse-registration-mexico-nurse-registration-mexico-mexico-nursing-es-47",
+      "primaryKeyword": "nurse registration mexico",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0016-nurse-registration-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "nclex for mexican nurses — Mexico nursing (es 48)",
+      "slug": "es-0108-nclex-for-mexican-nurses-nclex-for-mexican-nurses-mexico-nursing-es-48",
+      "primaryKeyword": "nclex for mexican nurses",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0016-nclex-for-mexican-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "mexico to usa nurse pathway — Mexico nursing (es 49)",
+      "slug": "es-0109-mexico-to-usa-nurse-pathway-mexico-to-usa-nurse-pathway-mexico-nursing-es-49",
+      "primaryKeyword": "mexico to usa nurse pathway",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0016-mexico-to-usa-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "mexico to canada nurse pathway — Mexico nursing (es 50)",
+      "slug": "es-0110-mexico-to-canada-nurse-pathway-mexico-to-canada-nurse-pathway-mexico-nursing-es-50",
+      "primaryKeyword": "mexico to canada nurse pathway",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0016-mexico-to-canada-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "nursing salary mexico — Mexico nursing (es 51)",
+      "slug": "es-0111-nursing-salary-mexico-nursing-salary-mexico-mexico-nursing-es-51",
+      "primaryKeyword": "nursing salary mexico",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "transactional",
+      "translationGroupId": "mx-nurse-0016-nursing-salary-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "best nursing jobs in mexico — Mexico nursing (es 52)",
+      "slug": "es-0112-best-nursing-jobs-in-mexico-best-nursing-jobs-in-mexico-mexico-nursing-es-52",
+      "primaryKeyword": "best nursing jobs in mexico",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0016-best-nursing-jobs-in-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in mexico — Mexico nursing (es 53)",
+      "slug": "es-0113-how-to-become-a-nurse-in-mexico-how-to-become-a-nurse-in-mexico-mexico-nursing-es-53",
+      "primaryKeyword": "how to become a nurse in mexico",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0017-how-to-become-a-nurse-in-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration mexico — Mexico nursing (es 54)",
+      "slug": "es-0114-nurse-registration-mexico-nurse-registration-mexico-mexico-nursing-es-54",
+      "primaryKeyword": "nurse registration mexico",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0017-nurse-registration-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "nclex for mexican nurses — Mexico nursing (es 55)",
+      "slug": "es-0115-nclex-for-mexican-nurses-nclex-for-mexican-nurses-mexico-nursing-es-55",
+      "primaryKeyword": "nclex for mexican nurses",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0017-nclex-for-mexican-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "mexico to usa nurse pathway — Mexico nursing (es 56)",
+      "slug": "es-0116-mexico-to-usa-nurse-pathway-mexico-to-usa-nurse-pathway-mexico-nursing-es-56",
+      "primaryKeyword": "mexico to usa nurse pathway",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "transactional",
+      "translationGroupId": "mx-nurse-0017-mexico-to-usa-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "mexico to canada nurse pathway — Mexico nursing (es 57)",
+      "slug": "es-0117-mexico-to-canada-nurse-pathway-mexico-to-canada-nurse-pathway-mexico-nursing-es-57",
+      "primaryKeyword": "mexico to canada nurse pathway",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0017-mexico-to-canada-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "nursing salary mexico — Mexico nursing (es 58)",
+      "slug": "es-0118-nursing-salary-mexico-nursing-salary-mexico-mexico-nursing-es-58",
+      "primaryKeyword": "nursing salary mexico",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0017-nursing-salary-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "best nursing jobs in mexico — Mexico nursing (es 59)",
+      "slug": "es-0119-best-nursing-jobs-in-mexico-best-nursing-jobs-in-mexico-mexico-nursing-es-59",
+      "primaryKeyword": "best nursing jobs in mexico",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0017-best-nursing-jobs-in-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in mexico — Mexico nursing (es 60)",
+      "slug": "es-0120-how-to-become-a-nurse-in-mexico-how-to-become-a-nurse-in-mexico-mexico-nursing-es-60",
+      "primaryKeyword": "how to become a nurse in mexico",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0018-how-to-become-a-nurse-in-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration mexico — Mexico nursing (es 61)",
+      "slug": "es-0121-nurse-registration-mexico-nurse-registration-mexico-mexico-nursing-es-61",
+      "primaryKeyword": "nurse registration mexico",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "transactional",
+      "translationGroupId": "mx-nurse-0018-nurse-registration-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "nclex for mexican nurses — Mexico nursing (es 62)",
+      "slug": "es-0122-nclex-for-mexican-nurses-nclex-for-mexican-nurses-mexico-nursing-es-62",
+      "primaryKeyword": "nclex for mexican nurses",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0018-nclex-for-mexican-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "mexico to usa nurse pathway — Mexico nursing (es 63)",
+      "slug": "es-0123-mexico-to-usa-nurse-pathway-mexico-to-usa-nurse-pathway-mexico-nursing-es-63",
+      "primaryKeyword": "mexico to usa nurse pathway",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0018-mexico-to-usa-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "mexico to canada nurse pathway — Mexico nursing (es 64)",
+      "slug": "es-0124-mexico-to-canada-nurse-pathway-mexico-to-canada-nurse-pathway-mexico-nursing-es-64",
+      "primaryKeyword": "mexico to canada nurse pathway",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0018-mexico-to-canada-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "nursing salary mexico — Mexico nursing (es 65)",
+      "slug": "es-0125-nursing-salary-mexico-nursing-salary-mexico-mexico-nursing-es-65",
+      "primaryKeyword": "nursing salary mexico",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0018-nursing-salary-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "best nursing jobs in mexico — Mexico nursing (es 66)",
+      "slug": "es-0126-best-nursing-jobs-in-mexico-best-nursing-jobs-in-mexico-mexico-nursing-es-66",
+      "primaryKeyword": "best nursing jobs in mexico",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "transactional",
+      "translationGroupId": "mx-nurse-0018-best-nursing-jobs-in-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in mexico — Mexico nursing (es 67)",
+      "slug": "es-0127-how-to-become-a-nurse-in-mexico-how-to-become-a-nurse-in-mexico-mexico-nursing-es-67",
+      "primaryKeyword": "how to become a nurse in mexico",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0019-how-to-become-a-nurse-in-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration mexico — Mexico nursing (es 68)",
+      "slug": "es-0128-nurse-registration-mexico-nurse-registration-mexico-mexico-nursing-es-68",
+      "primaryKeyword": "nurse registration mexico",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0019-nurse-registration-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "nclex for mexican nurses — Mexico nursing (es 69)",
+      "slug": "es-0129-nclex-for-mexican-nurses-nclex-for-mexican-nurses-mexico-nursing-es-69",
+      "primaryKeyword": "nclex for mexican nurses",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0019-nclex-for-mexican-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "mexico to usa nurse pathway — Mexico nursing (es 70)",
+      "slug": "es-0130-mexico-to-usa-nurse-pathway-mexico-to-usa-nurse-pathway-mexico-nursing-es-70",
+      "primaryKeyword": "mexico to usa nurse pathway",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0019-mexico-to-usa-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "mexico to canada nurse pathway — Mexico nursing (es 71)",
+      "slug": "es-0131-mexico-to-canada-nurse-pathway-mexico-to-canada-nurse-pathway-mexico-nursing-es-71",
+      "primaryKeyword": "mexico to canada nurse pathway",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "transactional",
+      "translationGroupId": "mx-nurse-0019-mexico-to-canada-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "nursing salary mexico — Mexico nursing (es 72)",
+      "slug": "es-0132-nursing-salary-mexico-nursing-salary-mexico-mexico-nursing-es-72",
+      "primaryKeyword": "nursing salary mexico",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0019-nursing-salary-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "best nursing jobs in mexico — Mexico nursing (es 73)",
+      "slug": "es-0133-best-nursing-jobs-in-mexico-best-nursing-jobs-in-mexico-mexico-nursing-es-73",
+      "primaryKeyword": "best nursing jobs in mexico",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0019-best-nursing-jobs-in-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in mexico — Mexico nursing (es 74)",
+      "slug": "es-0134-how-to-become-a-nurse-in-mexico-how-to-become-a-nurse-in-mexico-mexico-nursing-es-74",
+      "primaryKeyword": "how to become a nurse in mexico",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0020-how-to-become-a-nurse-in-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration mexico — Mexico nursing (es 75)",
+      "slug": "es-0135-nurse-registration-mexico-nurse-registration-mexico-mexico-nursing-es-75",
+      "primaryKeyword": "nurse registration mexico",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0020-nurse-registration-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "nclex for mexican nurses — Mexico nursing (es 76)",
+      "slug": "es-0136-nclex-for-mexican-nurses-nclex-for-mexican-nurses-mexico-nursing-es-76",
+      "primaryKeyword": "nclex for mexican nurses",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "transactional",
+      "translationGroupId": "mx-nurse-0020-nclex-for-mexican-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "mexico to usa nurse pathway — Mexico nursing (es 77)",
+      "slug": "es-0137-mexico-to-usa-nurse-pathway-mexico-to-usa-nurse-pathway-mexico-nursing-es-77",
+      "primaryKeyword": "mexico to usa nurse pathway",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0020-mexico-to-usa-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "mexico to canada nurse pathway — Mexico nursing (es 78)",
+      "slug": "es-0138-mexico-to-canada-nurse-pathway-mexico-to-canada-nurse-pathway-mexico-nursing-es-78",
+      "primaryKeyword": "mexico to canada nurse pathway",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0020-mexico-to-canada-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "nursing salary mexico — Mexico nursing (es 79)",
+      "slug": "es-0139-nursing-salary-mexico-nursing-salary-mexico-mexico-nursing-es-79",
+      "primaryKeyword": "nursing salary mexico",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0020-nursing-salary-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "best nursing jobs in mexico — Mexico nursing (es 80)",
+      "slug": "es-0140-best-nursing-jobs-in-mexico-best-nursing-jobs-in-mexico-mexico-nursing-es-80",
+      "primaryKeyword": "best nursing jobs in mexico",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0020-best-nursing-jobs-in-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in mexico — Mexico nursing (es 81)",
+      "slug": "es-0141-how-to-become-a-nurse-in-mexico-how-to-become-a-nurse-in-mexico-mexico-nursing-es-81",
+      "primaryKeyword": "how to become a nurse in mexico",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "transactional",
+      "translationGroupId": "mx-nurse-0021-how-to-become-a-nurse-in-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration mexico — Mexico nursing (es 82)",
+      "slug": "es-0142-nurse-registration-mexico-nurse-registration-mexico-mexico-nursing-es-82",
+      "primaryKeyword": "nurse registration mexico",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0021-nurse-registration-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "nclex for mexican nurses — Mexico nursing (es 83)",
+      "slug": "es-0143-nclex-for-mexican-nurses-nclex-for-mexican-nurses-mexico-nursing-es-83",
+      "primaryKeyword": "nclex for mexican nurses",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0021-nclex-for-mexican-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "mexico to usa nurse pathway — Mexico nursing (es 84)",
+      "slug": "es-0144-mexico-to-usa-nurse-pathway-mexico-to-usa-nurse-pathway-mexico-nursing-es-84",
+      "primaryKeyword": "mexico to usa nurse pathway",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0021-mexico-to-usa-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "mexico to canada nurse pathway — Mexico nursing (es 85)",
+      "slug": "es-0145-mexico-to-canada-nurse-pathway-mexico-to-canada-nurse-pathway-mexico-nursing-es-85",
+      "primaryKeyword": "mexico to canada nurse pathway",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0021-mexico-to-canada-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "nursing salary mexico — Mexico nursing (es 86)",
+      "slug": "es-0146-nursing-salary-mexico-nursing-salary-mexico-mexico-nursing-es-86",
+      "primaryKeyword": "nursing salary mexico",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "transactional",
+      "translationGroupId": "mx-nurse-0021-nursing-salary-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "best nursing jobs in mexico — Mexico nursing (es 87)",
+      "slug": "es-0147-best-nursing-jobs-in-mexico-best-nursing-jobs-in-mexico-mexico-nursing-es-87",
+      "primaryKeyword": "best nursing jobs in mexico",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0021-best-nursing-jobs-in-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in mexico — Mexico nursing (es 88)",
+      "slug": "es-0148-how-to-become-a-nurse-in-mexico-how-to-become-a-nurse-in-mexico-mexico-nursing-es-88",
+      "primaryKeyword": "how to become a nurse in mexico",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0022-how-to-become-a-nurse-in-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration mexico — Mexico nursing (es 89)",
+      "slug": "es-0149-nurse-registration-mexico-nurse-registration-mexico-mexico-nursing-es-89",
+      "primaryKeyword": "nurse registration mexico",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0022-nurse-registration-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "nclex for mexican nurses — Mexico nursing (es 90)",
+      "slug": "es-0150-nclex-for-mexican-nurses-nclex-for-mexican-nurses-mexico-nursing-es-90",
+      "primaryKeyword": "nclex for mexican nurses",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0022-nclex-for-mexican-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "mexico to usa nurse pathway — Mexico nursing (es 91)",
+      "slug": "es-0151-mexico-to-usa-nurse-pathway-mexico-to-usa-nurse-pathway-mexico-nursing-es-91",
+      "primaryKeyword": "mexico to usa nurse pathway",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "transactional",
+      "translationGroupId": "mx-nurse-0022-mexico-to-usa-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "mexico to canada nurse pathway — Mexico nursing (es 92)",
+      "slug": "es-0152-mexico-to-canada-nurse-pathway-mexico-to-canada-nurse-pathway-mexico-nursing-es-92",
+      "primaryKeyword": "mexico to canada nurse pathway",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0022-mexico-to-canada-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "nursing salary mexico — Mexico nursing (es 93)",
+      "slug": "es-0153-nursing-salary-mexico-nursing-salary-mexico-mexico-nursing-es-93",
+      "primaryKeyword": "nursing salary mexico",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0022-nursing-salary-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "best nursing jobs in mexico — Mexico nursing (es 94)",
+      "slug": "es-0154-best-nursing-jobs-in-mexico-best-nursing-jobs-in-mexico-mexico-nursing-es-94",
+      "primaryKeyword": "best nursing jobs in mexico",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0022-best-nursing-jobs-in-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in mexico — Mexico nursing (es 95)",
+      "slug": "es-0155-how-to-become-a-nurse-in-mexico-how-to-become-a-nurse-in-mexico-mexico-nursing-es-95",
+      "primaryKeyword": "how to become a nurse in mexico",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0023-how-to-become-a-nurse-in-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration mexico — Mexico nursing (es 96)",
+      "slug": "es-0156-nurse-registration-mexico-nurse-registration-mexico-mexico-nursing-es-96",
+      "primaryKeyword": "nurse registration mexico",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "transactional",
+      "translationGroupId": "mx-nurse-0023-nurse-registration-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "nclex for mexican nurses — Mexico nursing (es 97)",
+      "slug": "es-0157-nclex-for-mexican-nurses-nclex-for-mexican-nurses-mexico-nursing-es-97",
+      "primaryKeyword": "nclex for mexican nurses",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0023-nclex-for-mexican-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "mexico to usa nurse pathway — Mexico nursing (es 98)",
+      "slug": "es-0158-mexico-to-usa-nurse-pathway-mexico-to-usa-nurse-pathway-mexico-nursing-es-98",
+      "primaryKeyword": "mexico to usa nurse pathway",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0023-mexico-to-usa-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "mexico to canada nurse pathway — Mexico nursing (es 99)",
+      "slug": "es-0159-mexico-to-canada-nurse-pathway-mexico-to-canada-nurse-pathway-mexico-nursing-es-99",
+      "primaryKeyword": "mexico to canada nurse pathway",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0023-mexico-to-canada-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "nursing salary mexico — Mexico nursing (es 100)",
+      "slug": "es-0160-nursing-salary-mexico-nursing-salary-mexico-mexico-nursing-es-100",
+      "primaryKeyword": "nursing salary mexico",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0023-nursing-salary-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "best nursing jobs in mexico — Mexico nursing (es 101)",
+      "slug": "es-0161-best-nursing-jobs-in-mexico-best-nursing-jobs-in-mexico-mexico-nursing-es-101",
+      "primaryKeyword": "best nursing jobs in mexico",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "transactional",
+      "translationGroupId": "mx-nurse-0023-best-nursing-jobs-in-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in mexico — Mexico nursing (es 102)",
+      "slug": "es-0162-how-to-become-a-nurse-in-mexico-how-to-become-a-nurse-in-mexico-mexico-nursing-es-102",
+      "primaryKeyword": "how to become a nurse in mexico",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0024-how-to-become-a-nurse-in-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration mexico — Mexico nursing (es 103)",
+      "slug": "es-0163-nurse-registration-mexico-nurse-registration-mexico-mexico-nursing-es-103",
+      "primaryKeyword": "nurse registration mexico",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0024-nurse-registration-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "nclex for mexican nurses — Mexico nursing (es 104)",
+      "slug": "es-0164-nclex-for-mexican-nurses-nclex-for-mexican-nurses-mexico-nursing-es-104",
+      "primaryKeyword": "nclex for mexican nurses",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0024-nclex-for-mexican-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "mexico to usa nurse pathway — Mexico nursing (es 105)",
+      "slug": "es-0165-mexico-to-usa-nurse-pathway-mexico-to-usa-nurse-pathway-mexico-nursing-es-105",
+      "primaryKeyword": "mexico to usa nurse pathway",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0024-mexico-to-usa-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "mexico to canada nurse pathway — Mexico nursing (es 106)",
+      "slug": "es-0166-mexico-to-canada-nurse-pathway-mexico-to-canada-nurse-pathway-mexico-nursing-es-106",
+      "primaryKeyword": "mexico to canada nurse pathway",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "transactional",
+      "translationGroupId": "mx-nurse-0024-mexico-to-canada-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "nursing salary mexico — Mexico nursing (es 107)",
+      "slug": "es-0167-nursing-salary-mexico-nursing-salary-mexico-mexico-nursing-es-107",
+      "primaryKeyword": "nursing salary mexico",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0024-nursing-salary-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "best nursing jobs in mexico — Mexico nursing (es 108)",
+      "slug": "es-0168-best-nursing-jobs-in-mexico-best-nursing-jobs-in-mexico-mexico-nursing-es-108",
+      "primaryKeyword": "best nursing jobs in mexico",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0024-best-nursing-jobs-in-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in mexico — Mexico nursing (es 109)",
+      "slug": "es-0169-how-to-become-a-nurse-in-mexico-how-to-become-a-nurse-in-mexico-mexico-nursing-es-109",
+      "primaryKeyword": "how to become a nurse in mexico",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0025-how-to-become-a-nurse-in-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration mexico — Mexico nursing (es 110)",
+      "slug": "es-0170-nurse-registration-mexico-nurse-registration-mexico-mexico-nursing-es-110",
+      "primaryKeyword": "nurse registration mexico",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0025-nurse-registration-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "nclex for mexican nurses — Mexico nursing (es 111)",
+      "slug": "es-0171-nclex-for-mexican-nurses-nclex-for-mexican-nurses-mexico-nursing-es-111",
+      "primaryKeyword": "nclex for mexican nurses",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "transactional",
+      "translationGroupId": "mx-nurse-0025-nclex-for-mexican-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "mexico to usa nurse pathway — Mexico nursing (es 112)",
+      "slug": "es-0172-mexico-to-usa-nurse-pathway-mexico-to-usa-nurse-pathway-mexico-nursing-es-112",
+      "primaryKeyword": "mexico to usa nurse pathway",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0025-mexico-to-usa-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "mexico to canada nurse pathway — Mexico nursing (es 113)",
+      "slug": "es-0173-mexico-to-canada-nurse-pathway-mexico-to-canada-nurse-pathway-mexico-nursing-es-113",
+      "primaryKeyword": "mexico to canada nurse pathway",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0025-mexico-to-canada-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "nursing salary mexico — Mexico nursing (es 114)",
+      "slug": "es-0174-nursing-salary-mexico-nursing-salary-mexico-mexico-nursing-es-114",
+      "primaryKeyword": "nursing salary mexico",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0025-nursing-salary-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "best nursing jobs in mexico — Mexico nursing (es 115)",
+      "slug": "es-0175-best-nursing-jobs-in-mexico-best-nursing-jobs-in-mexico-mexico-nursing-es-115",
+      "primaryKeyword": "best nursing jobs in mexico",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0025-best-nursing-jobs-in-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in mexico — Mexico nursing (es 116)",
+      "slug": "es-0176-how-to-become-a-nurse-in-mexico-how-to-become-a-nurse-in-mexico-mexico-nursing-es-116",
+      "primaryKeyword": "how to become a nurse in mexico",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "transactional",
+      "translationGroupId": "mx-nurse-0026-how-to-become-a-nurse-in-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration mexico — Mexico nursing (es 117)",
+      "slug": "es-0177-nurse-registration-mexico-nurse-registration-mexico-mexico-nursing-es-117",
+      "primaryKeyword": "nurse registration mexico",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0026-nurse-registration-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "nclex for mexican nurses — Mexico nursing (es 118)",
+      "slug": "es-0178-nclex-for-mexican-nurses-nclex-for-mexican-nurses-mexico-nursing-es-118",
+      "primaryKeyword": "nclex for mexican nurses",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0026-nclex-for-mexican-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "mexico to usa nurse pathway — Mexico nursing (es 119)",
+      "slug": "es-0179-mexico-to-usa-nurse-pathway-mexico-to-usa-nurse-pathway-mexico-nursing-es-119",
+      "primaryKeyword": "mexico to usa nurse pathway",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0026-mexico-to-usa-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "mexico to canada nurse pathway — Mexico nursing (es 120)",
+      "slug": "es-0180-mexico-to-canada-nurse-pathway-mexico-to-canada-nurse-pathway-mexico-nursing-es-120",
+      "primaryKeyword": "mexico to canada nurse pathway",
+      "language": "es",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0026-mexico-to-canada-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "nursing salary mexico — Mexico nursing (pt 1)",
+      "slug": "pt-0181-nursing-salary-mexico-nursing-salary-mexico-mexico-nursing-pt-1",
+      "primaryKeyword": "nursing salary mexico",
+      "language": "pt",
+      "category": "Mexico nursing",
+      "intentType": "transactional",
+      "translationGroupId": "mx-nurse-0026-nursing-salary-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "best nursing jobs in mexico — Mexico nursing (pt 2)",
+      "slug": "pt-0182-best-nursing-jobs-in-mexico-best-nursing-jobs-in-mexico-mexico-nursing-pt-2",
+      "primaryKeyword": "best nursing jobs in mexico",
+      "language": "pt",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0026-best-nursing-jobs-in-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in mexico — Mexico nursing (pt 3)",
+      "slug": "pt-0183-how-to-become-a-nurse-in-mexico-how-to-become-a-nurse-in-mexico-mexico-nursing-pt-3",
+      "primaryKeyword": "how to become a nurse in mexico",
+      "language": "pt",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0027-how-to-become-a-nurse-in-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration mexico — Mexico nursing (pt 4)",
+      "slug": "pt-0184-nurse-registration-mexico-nurse-registration-mexico-mexico-nursing-pt-4",
+      "primaryKeyword": "nurse registration mexico",
+      "language": "pt",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0027-nurse-registration-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "nclex for mexican nurses — Mexico nursing (pt 5)",
+      "slug": "pt-0185-nclex-for-mexican-nurses-nclex-for-mexican-nurses-mexico-nursing-pt-5",
+      "primaryKeyword": "nclex for mexican nurses",
+      "language": "pt",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0027-nclex-for-mexican-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "mexico to usa nurse pathway — Mexico nursing (pt 6)",
+      "slug": "pt-0186-mexico-to-usa-nurse-pathway-mexico-to-usa-nurse-pathway-mexico-nursing-pt-6",
+      "primaryKeyword": "mexico to usa nurse pathway",
+      "language": "pt",
+      "category": "Mexico nursing",
+      "intentType": "transactional",
+      "translationGroupId": "mx-nurse-0027-mexico-to-usa-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "mexico to canada nurse pathway — Mexico nursing (pt 7)",
+      "slug": "pt-0187-mexico-to-canada-nurse-pathway-mexico-to-canada-nurse-pathway-mexico-nursing-pt-7",
+      "primaryKeyword": "mexico to canada nurse pathway",
+      "language": "pt",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0027-mexico-to-canada-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "nursing salary mexico — Mexico nursing (pt 8)",
+      "slug": "pt-0188-nursing-salary-mexico-nursing-salary-mexico-mexico-nursing-pt-8",
+      "primaryKeyword": "nursing salary mexico",
+      "language": "pt",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0027-nursing-salary-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "best nursing jobs in mexico — Mexico nursing (pt 9)",
+      "slug": "pt-0189-best-nursing-jobs-in-mexico-best-nursing-jobs-in-mexico-mexico-nursing-pt-9",
+      "primaryKeyword": "best nursing jobs in mexico",
+      "language": "pt",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0027-best-nursing-jobs-in-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in mexico — Mexico nursing (pt 10)",
+      "slug": "pt-0190-how-to-become-a-nurse-in-mexico-how-to-become-a-nurse-in-mexico-mexico-nursing-pt-10",
+      "primaryKeyword": "how to become a nurse in mexico",
+      "language": "pt",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0028-how-to-become-a-nurse-in-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration mexico — Mexico nursing (fr 1)",
+      "slug": "fr-0191-nurse-registration-mexico-nurse-registration-mexico-mexico-nursing-fr-1",
+      "primaryKeyword": "nurse registration mexico",
+      "language": "fr",
+      "category": "Mexico nursing",
+      "intentType": "transactional",
+      "translationGroupId": "mx-nurse-0028-nurse-registration-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "nclex for mexican nurses — Mexico nursing (fr 2)",
+      "slug": "fr-0192-nclex-for-mexican-nurses-nclex-for-mexican-nurses-mexico-nursing-fr-2",
+      "primaryKeyword": "nclex for mexican nurses",
+      "language": "fr",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0028-nclex-for-mexican-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "mexico to usa nurse pathway — Mexico nursing (fr 3)",
+      "slug": "fr-0193-mexico-to-usa-nurse-pathway-mexico-to-usa-nurse-pathway-mexico-nursing-fr-3",
+      "primaryKeyword": "mexico to usa nurse pathway",
+      "language": "fr",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0028-mexico-to-usa-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "mexico to canada nurse pathway — Mexico nursing (fr 4)",
+      "slug": "fr-0194-mexico-to-canada-nurse-pathway-mexico-to-canada-nurse-pathway-mexico-nursing-fr-4",
+      "primaryKeyword": "mexico to canada nurse pathway",
+      "language": "fr",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0028-mexico-to-canada-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "nursing salary mexico — Mexico nursing (fr 5)",
+      "slug": "fr-0195-nursing-salary-mexico-nursing-salary-mexico-mexico-nursing-fr-5",
+      "primaryKeyword": "nursing salary mexico",
+      "language": "fr",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0028-nursing-salary-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "best nursing jobs in mexico — Mexico nursing (ar 1)",
+      "slug": "ar-0196-best-nursing-jobs-in-mexico-best-nursing-jobs-in-mexico-mexico-nursing-ar-1",
+      "primaryKeyword": "best nursing jobs in mexico",
+      "language": "ar",
+      "category": "Mexico nursing",
+      "intentType": "transactional",
+      "translationGroupId": "mx-nurse-0028-best-nursing-jobs-in-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in mexico — Mexico nursing (ar 2)",
+      "slug": "ar-0197-how-to-become-a-nurse-in-mexico-how-to-become-a-nurse-in-mexico-mexico-nursing-ar-2",
+      "primaryKeyword": "how to become a nurse in mexico",
+      "language": "ar",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0029-how-to-become-a-nurse-in-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration mexico — Mexico nursing (ar 3)",
+      "slug": "ar-0198-nurse-registration-mexico-nurse-registration-mexico-mexico-nursing-ar-3",
+      "primaryKeyword": "nurse registration mexico",
+      "language": "ar",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0029-nurse-registration-mexico",
+      "status": "planned"
+    },
+    {
+      "title": "nclex for mexican nurses — Mexico nursing (ar 4)",
+      "slug": "ar-0199-nclex-for-mexican-nurses-nclex-for-mexican-nurses-mexico-nursing-ar-4",
+      "primaryKeyword": "nclex for mexican nurses",
+      "language": "ar",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0029-nclex-for-mexican-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "mexico to usa nurse pathway — Mexico nursing (ar 5)",
+      "slug": "ar-0200-mexico-to-usa-nurse-pathway-mexico-to-usa-nurse-pathway-mexico-nursing-ar-5",
+      "primaryKeyword": "mexico to usa nurse pathway",
+      "language": "ar",
+      "category": "Mexico nursing",
+      "intentType": "informational",
+      "translationGroupId": "mx-nurse-0029-mexico-to-usa-nurse-pathway",
+      "status": "planned"
+    }
+  ]
+}

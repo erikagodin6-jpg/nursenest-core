@@ -1,28 +1,35 @@
 {
-  "generatedAt": "2026-04-14T17:56:51.860Z",
-  "dbConnected": false,
-  "legacySourcesScanned": [
-    "data/audit/legacy-lessons-inventory.json (summary)",
-    "data/audit/unimported-legacy-content.json",
-    "external/NurseNest (legacyRoot in inventories when present)"
+  "schemaVersion": 3,
+  "generatedAt": "2026-04-14T18:13:35.924Z",
+  "gitHead": "c6d27507",
+  "methodology": "Separated CONTENT parity from FEATURE parity. Counts from data/audit/unimported-legacy-content.json, pathway catalog sync, optional Prisma, and route scans — not claims without file evidence.",
+  "evidenceRootsScanned": [
+    "client/src",
+    "nursenest-core",
+    "external/NurseNest",
+    "data/audit"
   ],
-  "currentSourcesScanned": [
-    "src/lib/exam-pathways/exam-product-registry.ts (EXAM_PATHWAYS)",
-    "src/lib/lessons/pathway-lesson-catalog-sync.ts (catalog + allied + new-grad + scoped gold)",
-    "prisma/schema.prisma (PathwayLesson, ExamQuestion, FlashcardDeck)",
-    "Prisma skipped (no DATABASE_URL or query failed)"
-  ],
-  "alliedHealthMarketingProfessions": 8,
-  "alliedHealthNote": "Allied lesson hubs use /allied-health/{professionKey}/lessons — parallel to EXAM_PATHWAYS us-allied-core / ca-allied-core.",
-  "countries": {
-    "US": 9,
-    "CA": 4
+  "summary": {
+    "pathwaysInRegistry": 13,
+    "catalogLessonRows": 906,
+    "dbPublishedLessons": null,
+    "dbPublishedQuestions": null,
+    "dbPublishedDecks": null,
+    "legacyLessonRowsReported": 4223,
+    "missingLessonKeysFromSnapshots": 4084,
+    "programmaticSeoSlugs": 39,
+    "learnerAppTsFilesScannedApprox": 71,
+    "adminAppTsFilesScannedApprox": 63,
+    "databaseVerified": false
   },
-  "routeOnlyPathways": [],
-  "structuralIncompleteLessonCount": 633,
-  "structuralIncompleteNonEmptyCount": 633,
-  "claims": {
-    "parityNotClaimedWithoutDb": true,
-    "note": "Re-run with DATABASE_URL for bank/deck/DB lesson counts."
-  }
+  "structuralGateFromLessonAudit": {
+    "structuralIncompleteLessonCount": 633,
+    "structuralIncompleteNonEmptyCount": 633,
+    "sourceFile": "parity-registry-lesson-snapshot.json (from npm run audit:full-parity)"
+  },
+  "definitionOfDone": [
+    "Trace: legacy source → current source → route → audit row (this matrix).",
+    "If UI not routable or DB not wired, status cannot be matched.",
+    "Run `npm run audit:full-parity` before this script to refresh parity-registry-lesson-snapshot.json (structural gate)."
+  ]
 }

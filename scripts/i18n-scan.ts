@@ -249,7 +249,8 @@ function classifySeverity(text: string, context: string): Severity {
   return "low";
 }
 
-function scanFile(filePath: string): Violation[] {
+/** Exported for nursenest-core UI audits (`--preset=nursenest-ui`). */
+export function scanFile(filePath: string): Violation[] {
   const violations: Violation[] = [];
   const code = fs.readFileSync(filePath, "utf-8");
 
@@ -382,14 +383,27 @@ function scanFile(filePath: string): Violation[] {
   return violations;
 }
 
-export async function runScan(): Promise<ScanReport> {
-  const files = await fg(
-    ["client/src/**/*.{tsx,ts,jsx,js}"],
-    {
-      ignore: EXCLUDE_PATTERNS,
-      absolute: false,
-    }
-  );
+const NURSE_NEST_UI_GLOBS = [
+  "nursenest-core/src/app/(marketing)/**/*.{tsx,ts}",
+  "nursenest-core/src/app/(student)/**/*.{tsx,ts}",
+  "nursenest-core/src/components/**/*.{tsx,ts}",
+] as const;
+
+const NURSE_NEST_UI_IGNORE = [
+  ...EXCLUDE_PATTERNS,
+  "nursenest-core/src/**/admin/**",
+  "nursenest-core/src/components/admin/**",
+  "nursenest-core/src/app/(admin)/**",
+];
+
+export async function runScan(options?: { globs?: string[]; ignore?: string[] }): Promise<ScanReport> {
+  const globs = options?.globs ?? ["client/src/**/*.{tsx,ts,jsx,js}"];
+  const ignore = options?.ignore ?? EXCLUDE_PATTERNS;
+
+  const files = await fg(globs, {
+    ignore,
+    absolute: false,
+  });
 
   const allViolations: Violation[] = [];
 
@@ -421,11 +435,22 @@ export async function runScan(): Promise<ScanReport> {
 const args = process.argv.slice(2);
 const isCI = args.includes("--ci");
 const isBuildGuard = args.includes("--build-guard");
+const isNursenestUi = args.includes("--preset=nursenest-ui");
 const threshold = parseInt(args.find((a) => a.startsWith("--threshold="))?.split("=")[1] || "0");
 
-runScan()
+const scanPromise = isNursenestUi
+  ? runScan({ globs: [...NURSE_NEST_UI_GLOBS], ignore: NURSE_NEST_UI_IGNORE })
+  : runScan();
+
+scanPromise
   .then((report) => {
-    const reportPath = path.resolve("scripts/i18n-scan-report.json");
+    const reportPath = isNursenestUi
+      ? path.resolve("data/audit/hardcoded-ui-strings-nursenest-core.json")
+      : path.resolve("scripts/i18n-scan-report.json");
+    if (isNursenestUi) {
+      const dir = path.dirname(reportPath);
+      if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+    }
     fs.writeFileSync(reportPath, JSON.stringify(report, null, 2));
 
     console.log("\n=== i18n Hardcoded String Scanner ===");

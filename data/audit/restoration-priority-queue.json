@@ -1,25 +1,76 @@
 {
-  "generatedAt": "2026-04-14T17:56:51.860Z",
-  "dbConnected": false,
-  "legacySourcesScanned": [
-    "data/audit/legacy-lessons-inventory.json (summary)",
-    "data/audit/unimported-legacy-content.json",
-    "external/NurseNest (legacyRoot in inventories when present)"
+  "schemaVersion": 3,
+  "generatedAt": "2026-04-14T18:13:35.924Z",
+  "gitHead": "c6d27507",
+  "methodology": "Separated CONTENT parity from FEATURE parity. Counts from data/audit/unimported-legacy-content.json, pathway catalog sync, optional Prisma, and route scans — not claims without file evidence.",
+  "evidenceRootsScanned": [
+    "client/src",
+    "nursenest-core",
+    "external/NurseNest",
+    "data/audit"
   ],
-  "currentSourcesScanned": [
-    "src/lib/exam-pathways/exam-product-registry.ts (EXAM_PATHWAYS)",
-    "src/lib/lessons/pathway-lesson-catalog-sync.ts (catalog + allied + new-grad + scoped gold)",
-    "prisma/schema.prisma (PathwayLesson, ExamQuestion, FlashcardDeck)",
-    "Prisma skipped (no DATABASE_URL or query failed)"
-  ],
-  "tier1": [
-    "Pathways with route_only and zero bank questions (verify registry intent)",
-    "Published lessons with empty sections (catalog)",
-    "Broken locale/country routing (middleware)"
-  ],
-  "tier2": [
-    "Lessons failing structuralQuality.publicComplete with substantive copy (editorial)",
-    "Translation coverage gaps (tools/i18n)"
-  ],
-  "evidence": "See lesson-content-completeness-audit.json and country-exam-locale-parity.json"
+  "tiers": {
+    "tier1_content_core": {
+      "focus": [
+        "Pathway lessons",
+        "Exam questions",
+        "Flashcards",
+        "Pre/post lesson quizzes in payloads"
+      ],
+      "evidenceFiles": [
+        "unimported-legacy-content.json",
+        "lesson-content-completeness-audit.json"
+      ],
+      "nursingFirst": true
+    },
+    "tier2_user_study": {
+      "focus": [
+        "Dashboard",
+        "practice flows",
+        "weak areas",
+        "CAT insights"
+      ],
+      "evidenceFiles": [
+        "user-surface-parity.json",
+        "src/app/(student)/**"
+      ]
+    },
+    "tier3_admin_editorial": {
+      "focus": [
+        "Admin lessons/questions/blog",
+        "E-E-A-T editorial",
+        "imports"
+      ],
+      "evidenceFiles": [
+        "admin-surface-parity.json",
+        "data/audit/eeat-*.json"
+      ]
+    },
+    "tier4_tools_secondary": {
+      "focus": [
+        "Calculators",
+        "activities",
+        "case studies",
+        "media"
+      ],
+      "evidenceFiles": [
+        "legacy-activities-inventory.json",
+        "tools/**"
+      ]
+    },
+    "tier5_obsolete": {
+      "focus": [
+        "Legacy-only UI",
+        "abandoned Replit experiments"
+      ],
+      "status": "intentionally_skipped_or_obsolete",
+      "evidenceFiles": [
+        "docs/legacy-restoration-map.md"
+      ]
+    }
+  },
+  "rules": [
+    "No single giant import — chunked batches with import-reports/*.json",
+    "Each batch: before/after counts + duplicates skipped"
+  ]
 }

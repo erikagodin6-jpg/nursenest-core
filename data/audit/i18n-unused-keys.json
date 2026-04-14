@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-04-14T17:51:27.124Z",
+  "generatedAt": "2026-04-14T18:16:53.118Z",
   "methodology": "Full unused-key detection needs a static reference index for 15k+ keys. This report includes nav.* sampling (rg) and total English key count.",
-  "englishKeyCount": 20701,
+  "englishKeyCount": 20706,
   "navKeySample": {
     "unchecked": 85,
     "possiblyUnused": [

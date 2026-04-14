@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-14T17:51:27.124Z",
+  "generatedAt": "2026-04-14T18:16:53.118Z",
   "note": "Route-level mixed-language detection is not automated in this pass. Use identicalToEnglishCount + content overlay presence + manual QA for prioritized locales.",
   "heuristicSignals": {
     "highIdenticalToEnglishLocales": [

@@ -1,25 +1,327 @@
 {
-  "generatedAt": "2026-04-14T17:56:51.860Z",
-  "dbConnected": false,
-  "legacySourcesScanned": [
-    "data/audit/legacy-lessons-inventory.json (summary)",
-    "data/audit/unimported-legacy-content.json",
-    "external/NurseNest (legacyRoot in inventories when present)"
+  "schemaVersion": 3,
+  "generatedAt": "2026-04-14T18:13:35.924Z",
+  "gitHead": "c6d27507",
+  "methodology": "Separated CONTENT parity from FEATURE parity. Counts from data/audit/unimported-legacy-content.json, pathway catalog sync, optional Prisma, and route scans — not claims without file evidence.",
+  "evidenceRootsScanned": [
+    "client/src",
+    "nursenest-core",
+    "external/NurseNest",
+    "data/audit"
   ],
-  "currentSourcesScanned": [
-    "src/lib/exam-pathways/exam-product-registry.ts (EXAM_PATHWAYS)",
-    "src/lib/lessons/pathway-lesson-catalog-sync.ts (catalog + allied + new-grad + scoped gold)",
-    "prisma/schema.prisma (PathwayLesson, ExamQuestion, FlashcardDeck)",
-    "Prisma skipped (no DATABASE_URL or query failed)"
-  ],
-  "adminSurfaces": {
-    "evidence": "glob src/app/(admin)/admin/**/*.tsx",
-    "samplePaths": [
-      "/admin",
-      "/admin/lessons",
-      "/admin/questions",
-      "/admin/content-coverage",
-      "/admin/ai/flashcards"
-    ]
-  }
+  "auditKind": "admin_surface",
+  "items": [
+    {
+      "category": "ADMIN_SURFACE",
+      "subcategory": "lessons_crud",
+      "name": "Lessons list / edit / generate",
+      "legacyExists": true,
+      "currentExists": true,
+      "status": "partial",
+      "legacySourcePaths": [
+        "external/NurseNest client admin (if present)",
+        "docs/legacy-restoration-map.md"
+      ],
+      "currentSourcePaths": [
+        "nursenest-core/src/app/(admin)/admin"
+      ],
+      "routes": [
+        "/admin/lessons",
+        "/admin/lessons/[id]",
+        "/admin/lessons/new",
+        "/admin/lessons/generate"
+      ],
+      "dataModelOrSource": "Admin React pages + API routes /api/admin/**",
+      "beforeCount": null,
+      "currentCount": 63,
+      "missingCount": null,
+      "confidence": "medium",
+      "recommendedAction": "Compare feature-by-feature to legacy admin; mark intentionally skipped in notes",
+      "notes": "Routes listed are canonical patterns; verify auth + staff tier on each."
+    },
+    {
+      "category": "ADMIN_SURFACE",
+      "subcategory": "questions",
+      "name": "Question bank admin",
+      "legacyExists": true,
+      "currentExists": true,
+      "status": "partial",
+      "legacySourcePaths": [
+        "external/NurseNest client admin (if present)",
+        "docs/legacy-restoration-map.md"
+      ],
+      "currentSourcePaths": [
+        "nursenest-core/src/app/(admin)/admin"
+      ],
+      "routes": [
+        "/admin/questions",
+        "/admin/questions/import",
+        "/admin/questions/nclex-mapping"
+      ],
+      "dataModelOrSource": "Admin React pages + API routes /api/admin/**",
+      "beforeCount": null,
+      "currentCount": 63,
+      "missingCount": null,
+      "confidence": "medium",
+      "recommendedAction": "Compare feature-by-feature to legacy admin; mark intentionally skipped in notes",
+      "notes": "Routes listed are canonical patterns; verify auth + staff tier on each."
+    },
+    {
+      "category": "ADMIN_SURFACE",
+      "subcategory": "flashcards_ai",
+      "name": "Flashcard AI / review",
+      "legacyExists": true,
+      "currentExists": true,
+      "status": "partial",
+      "legacySourcePaths": [
+        "external/NurseNest client admin (if present)",
+        "docs/legacy-restoration-map.md"
+      ],
+      "currentSourcePaths": [
+        "nursenest-core/src/app/(admin)/admin"
+      ],
+      "routes": [
+        "/admin/ai/flashcards",
+        "/admin/ai/review"
+      ],
+      "dataModelOrSource": "Admin React pages + API routes /api/admin/**",
+      "beforeCount": null,
+      "currentCount": 63,
+      "missingCount": null,
+      "confidence": "medium",
+      "recommendedAction": "Compare feature-by-feature to legacy admin; mark intentionally skipped in notes",
+      "notes": "Routes listed are canonical patterns; verify auth + staff tier on each."
+    },
+    {
+      "category": "ADMIN_SURFACE",
+      "subcategory": "blog",
+      "name": "Blog management",
+      "legacyExists": true,
+      "currentExists": true,
+      "status": "partial",
+      "legacySourcePaths": [
+        "external/NurseNest client admin (if present)",
+        "docs/legacy-restoration-map.md"
+      ],
+      "currentSourcePaths": [
+        "nursenest-core/src/app/(admin)/admin"
+      ],
+      "routes": [
+        "/admin/blog",
+        "/admin/blog/studio",
+        "/admin/blog/scheduler"
+      ],
+      "dataModelOrSource": "Admin React pages + API routes /api/admin/**",
+      "beforeCount": null,
+      "currentCount": 63,
+      "missingCount": null,
+      "confidence": "medium",
+      "recommendedAction": "Compare feature-by-feature to legacy admin; mark intentionally skipped in notes",
+      "notes": "Routes listed are canonical patterns; verify auth + staff tier on each."
+    },
+    {
+      "category": "ADMIN_SURFACE",
+      "subcategory": "media",
+      "name": "Media / screenshots",
+      "legacyExists": true,
+      "currentExists": true,
+      "status": "partial",
+      "legacySourcePaths": [
+        "external/NurseNest client admin (if present)",
+        "docs/legacy-restoration-map.md"
+      ],
+      "currentSourcePaths": [
+        "nursenest-core/src/app/(admin)/admin"
+      ],
+      "routes": [
+        "/admin/media",
+        "/admin/media/screenshots"
+      ],
+      "dataModelOrSource": "Admin React pages + API routes /api/admin/**",
+      "beforeCount": null,
+      "currentCount": 63,
+      "missingCount": null,
+      "confidence": "medium",
+      "recommendedAction": "Compare feature-by-feature to legacy admin; mark intentionally skipped in notes",
+      "notes": "Routes listed are canonical patterns; verify auth + staff tier on each."
+    },
+    {
+      "category": "ADMIN_SURFACE",
+      "subcategory": "users",
+      "name": "Users",
+      "legacyExists": true,
+      "currentExists": true,
+      "status": "partial",
+      "legacySourcePaths": [
+        "external/NurseNest client admin (if present)",
+        "docs/legacy-restoration-map.md"
+      ],
+      "currentSourcePaths": [
+        "nursenest-core/src/app/(admin)/admin"
+      ],
+      "routes": [
+        "/admin/users"
+      ],
+      "dataModelOrSource": "Admin React pages + API routes /api/admin/**",
+      "beforeCount": null,
+      "currentCount": 63,
+      "missingCount": null,
+      "confidence": "medium",
+      "recommendedAction": "Compare feature-by-feature to legacy admin; mark intentionally skipped in notes",
+      "notes": "Routes listed are canonical patterns; verify auth + staff tier on each."
+    },
+    {
+      "category": "ADMIN_SURFACE",
+      "subcategory": "subscriptions",
+      "name": "Subscriptions",
+      "legacyExists": true,
+      "currentExists": true,
+      "status": "partial",
+      "legacySourcePaths": [
+        "external/NurseNest client admin (if present)",
+        "docs/legacy-restoration-map.md"
+      ],
+      "currentSourcePaths": [
+        "nursenest-core/src/app/(admin)/admin"
+      ],
+      "routes": [
+        "/admin/subscriptions"
+      ],
+      "dataModelOrSource": "Admin React pages + API routes /api/admin/**",
+      "beforeCount": null,
+      "currentCount": 63,
+      "missingCount": null,
+      "confidence": "medium",
+      "recommendedAction": "Compare feature-by-feature to legacy admin; mark intentionally skipped in notes",
+      "notes": "Routes listed are canonical patterns; verify auth + staff tier on each."
+    },
+    {
+      "category": "ADMIN_SURFACE",
+      "subcategory": "analytics",
+      "name": "Analytics hub",
+      "legacyExists": true,
+      "currentExists": true,
+      "status": "partial",
+      "legacySourcePaths": [
+        "external/NurseNest client admin (if present)",
+        "docs/legacy-restoration-map.md"
+      ],
+      "currentSourcePaths": [
+        "nursenest-core/src/app/(admin)/admin"
+      ],
+      "routes": [
+        "/admin/analytics",
+        "/admin/analytics/content"
+      ],
+      "dataModelOrSource": "Admin React pages + API routes /api/admin/**",
+      "beforeCount": null,
+      "currentCount": 63,
+      "missingCount": null,
+      "confidence": "medium",
+      "recommendedAction": "Compare feature-by-feature to legacy admin; mark intentionally skipped in notes",
+      "notes": "Routes listed are canonical patterns; verify auth + staff tier on each."
+    },
+    {
+      "category": "ADMIN_SURFACE",
+      "subcategory": "seo",
+      "name": "SEO & internal links",
+      "legacyExists": true,
+      "currentExists": true,
+      "status": "partial",
+      "legacySourcePaths": [
+        "external/NurseNest client admin (if present)",
+        "docs/legacy-restoration-map.md"
+      ],
+      "currentSourcePaths": [
+        "nursenest-core/src/app/(admin)/admin"
+      ],
+      "routes": [
+        "/admin/seo"
+      ],
+      "dataModelOrSource": "Admin React pages + API routes /api/admin/**",
+      "beforeCount": null,
+      "currentCount": 63,
+      "missingCount": null,
+      "confidence": "medium",
+      "recommendedAction": "Compare feature-by-feature to legacy admin; mark intentionally skipped in notes",
+      "notes": "Routes listed are canonical patterns; verify auth + staff tier on each."
+    },
+    {
+      "category": "ADMIN_SURFACE",
+      "subcategory": "eeat",
+      "name": "E-E-A-T editorial",
+      "legacyExists": true,
+      "currentExists": true,
+      "status": "partial",
+      "legacySourcePaths": [
+        "external/NurseNest client admin (if present)",
+        "docs/legacy-restoration-map.md"
+      ],
+      "currentSourcePaths": [
+        "nursenest-core/src/app/(admin)/admin"
+      ],
+      "routes": [
+        "/admin/eeat-editorial"
+      ],
+      "dataModelOrSource": "Admin React pages + API routes /api/admin/**",
+      "beforeCount": null,
+      "currentCount": 63,
+      "missingCount": null,
+      "confidence": "medium",
+      "recommendedAction": "Compare feature-by-feature to legacy admin; mark intentionally skipped in notes",
+      "notes": "Routes listed are canonical patterns; verify auth + staff tier on each."
+    },
+    {
+      "category": "ADMIN_SURFACE",
+      "subcategory": "i18n",
+      "name": "i18n tools",
+      "legacyExists": true,
+      "currentExists": true,
+      "status": "partial",
+      "legacySourcePaths": [
+        "external/NurseNest client admin (if present)",
+        "docs/legacy-restoration-map.md"
+      ],
+      "currentSourcePaths": [
+        "nursenest-core/src/app/(admin)/admin"
+      ],
+      "routes": [
+        "/admin/i18n"
+      ],
+      "dataModelOrSource": "Admin React pages + API routes /api/admin/**",
+      "beforeCount": null,
+      "currentCount": 63,
+      "missingCount": null,
+      "confidence": "medium",
+      "recommendedAction": "Compare feature-by-feature to legacy admin; mark intentionally skipped in notes",
+      "notes": "Routes listed are canonical patterns; verify auth + staff tier on each."
+    },
+    {
+      "category": "ADMIN_SURFACE",
+      "subcategory": "inventory",
+      "name": "Content inventory / coverage",
+      "legacyExists": true,
+      "currentExists": true,
+      "status": "partial",
+      "legacySourcePaths": [
+        "external/NurseNest client admin (if present)",
+        "docs/legacy-restoration-map.md"
+      ],
+      "currentSourcePaths": [
+        "nursenest-core/src/app/(admin)/admin"
+      ],
+      "routes": [
+        "/admin/inventory",
+        "/admin/content-coverage",
+        "/admin/content-quality"
+      ],
+      "dataModelOrSource": "Admin React pages + API routes /api/admin/**",
+      "beforeCount": null,
+      "currentCount": 63,
+      "missingCount": null,
+      "confidence": "medium",
+      "recommendedAction": "Compare feature-by-feature to legacy admin; mark intentionally skipped in notes",
+      "notes": "Routes listed are canonical patterns; verify auth + staff tier on each."
+    }
+  ]
 }

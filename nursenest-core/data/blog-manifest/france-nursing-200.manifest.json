@@ -1,0 +1,2006 @@
+{
+  "generatedAt": "2026-04-14T19:43:51.706Z",
+  "count": 200,
+  "entries": [
+    {
+      "title": "how to become a nurse in france — France nursing (en 1)",
+      "slug": "en-0001-how-to-become-a-nurse-in-france-how-to-become-a-nurse-in-france-france-nursing-en-1",
+      "primaryKeyword": "how to become a nurse in france",
+      "language": "en",
+      "category": "France nursing",
+      "intentType": "transactional",
+      "translationGroupId": "fr-nurse-0001-how-to-become-a-nurse-in-france",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration france — France nursing (en 2)",
+      "slug": "en-0002-nurse-registration-france-nurse-registration-france-france-nursing-en-2",
+      "primaryKeyword": "nurse registration france",
+      "language": "en",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0001-nurse-registration-france",
+      "status": "planned"
+    },
+    {
+      "title": "france for foreign nurses — France nursing (en 3)",
+      "slug": "en-0003-france-for-foreign-nurses-france-for-foreign-nurses-france-nursing-en-3",
+      "primaryKeyword": "france for foreign nurses",
+      "language": "en",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0001-france-for-foreign-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "language requirements france — France nursing (en 4)",
+      "slug": "en-0004-language-requirements-france-language-requirements-france-france-nursing-en-4",
+      "primaryKeyword": "language requirements france",
+      "language": "en",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0001-language-requirements-france",
+      "status": "planned"
+    },
+    {
+      "title": "france nursing jobs — France nursing (en 5)",
+      "slug": "en-0005-france-nursing-jobs-france-nursing-jobs-france-nursing-en-5",
+      "primaryKeyword": "france nursing jobs",
+      "language": "en",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0001-france-nursing-jobs",
+      "status": "planned"
+    },
+    {
+      "title": "france to canada nurse pathway — France nursing (en 6)",
+      "slug": "en-0006-france-to-canada-nurse-pathway-france-to-canada-nurse-pathway-france-nursing-en-6",
+      "primaryKeyword": "france to canada nurse pathway",
+      "language": "en",
+      "category": "France nursing",
+      "intentType": "transactional",
+      "translationGroupId": "fr-nurse-0001-france-to-canada-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "france to australia nurse pathway — France nursing (en 7)",
+      "slug": "en-0007-france-to-australia-nurse-pathway-france-to-australia-nurse-pathway-france-nursing-en-7",
+      "primaryKeyword": "france to australia nurse pathway",
+      "language": "en",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0001-france-to-australia-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in france — France nursing (en 8)",
+      "slug": "en-0008-how-to-become-a-nurse-in-france-how-to-become-a-nurse-in-france-france-nursing-en-8",
+      "primaryKeyword": "how to become a nurse in france",
+      "language": "en",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0002-how-to-become-a-nurse-in-france",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration france — France nursing (en 9)",
+      "slug": "en-0009-nurse-registration-france-nurse-registration-france-france-nursing-en-9",
+      "primaryKeyword": "nurse registration france",
+      "language": "en",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0002-nurse-registration-france",
+      "status": "planned"
+    },
+    {
+      "title": "france for foreign nurses — France nursing (en 10)",
+      "slug": "en-0010-france-for-foreign-nurses-france-for-foreign-nurses-france-nursing-en-10",
+      "primaryKeyword": "france for foreign nurses",
+      "language": "en",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0002-france-for-foreign-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "language requirements france — France nursing (en 11)",
+      "slug": "en-0011-language-requirements-france-language-requirements-france-france-nursing-en-11",
+      "primaryKeyword": "language requirements france",
+      "language": "en",
+      "category": "France nursing",
+      "intentType": "transactional",
+      "translationGroupId": "fr-nurse-0002-language-requirements-france",
+      "status": "planned"
+    },
+    {
+      "title": "france nursing jobs — France nursing (en 12)",
+      "slug": "en-0012-france-nursing-jobs-france-nursing-jobs-france-nursing-en-12",
+      "primaryKeyword": "france nursing jobs",
+      "language": "en",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0002-france-nursing-jobs",
+      "status": "planned"
+    },
+    {
+      "title": "france to canada nurse pathway — France nursing (en 13)",
+      "slug": "en-0013-france-to-canada-nurse-pathway-france-to-canada-nurse-pathway-france-nursing-en-13",
+      "primaryKeyword": "france to canada nurse pathway",
+      "language": "en",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0002-france-to-canada-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "france to australia nurse pathway — France nursing (en 14)",
+      "slug": "en-0014-france-to-australia-nurse-pathway-france-to-australia-nurse-pathway-france-nursing-en-14",
+      "primaryKeyword": "france to australia nurse pathway",
+      "language": "en",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0002-france-to-australia-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in france — France nursing (en 15)",
+      "slug": "en-0015-how-to-become-a-nurse-in-france-how-to-become-a-nurse-in-france-france-nursing-en-15",
+      "primaryKeyword": "how to become a nurse in france",
+      "language": "en",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0003-how-to-become-a-nurse-in-france",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration france — France nursing (en 16)",
+      "slug": "en-0016-nurse-registration-france-nurse-registration-france-france-nursing-en-16",
+      "primaryKeyword": "nurse registration france",
+      "language": "en",
+      "category": "France nursing",
+      "intentType": "transactional",
+      "translationGroupId": "fr-nurse-0003-nurse-registration-france",
+      "status": "planned"
+    },
+    {
+      "title": "france for foreign nurses — France nursing (en 17)",
+      "slug": "en-0017-france-for-foreign-nurses-france-for-foreign-nurses-france-nursing-en-17",
+      "primaryKeyword": "france for foreign nurses",
+      "language": "en",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0003-france-for-foreign-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "language requirements france — France nursing (en 18)",
+      "slug": "en-0018-language-requirements-france-language-requirements-france-france-nursing-en-18",
+      "primaryKeyword": "language requirements france",
+      "language": "en",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0003-language-requirements-france",
+      "status": "planned"
+    },
+    {
+      "title": "france nursing jobs — France nursing (en 19)",
+      "slug": "en-0019-france-nursing-jobs-france-nursing-jobs-france-nursing-en-19",
+      "primaryKeyword": "france nursing jobs",
+      "language": "en",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0003-france-nursing-jobs",
+      "status": "planned"
+    },
+    {
+      "title": "france to canada nurse pathway — France nursing (en 20)",
+      "slug": "en-0020-france-to-canada-nurse-pathway-france-to-canada-nurse-pathway-france-nursing-en-20",
+      "primaryKeyword": "france to canada nurse pathway",
+      "language": "en",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0003-france-to-canada-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "france to australia nurse pathway — France nursing (en 21)",
+      "slug": "en-0021-france-to-australia-nurse-pathway-france-to-australia-nurse-pathway-france-nursing-en-21",
+      "primaryKeyword": "france to australia nurse pathway",
+      "language": "en",
+      "category": "France nursing",
+      "intentType": "transactional",
+      "translationGroupId": "fr-nurse-0003-france-to-australia-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in france — France nursing (en 22)",
+      "slug": "en-0022-how-to-become-a-nurse-in-france-how-to-become-a-nurse-in-france-france-nursing-en-22",
+      "primaryKeyword": "how to become a nurse in france",
+      "language": "en",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0004-how-to-become-a-nurse-in-france",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration france — France nursing (en 23)",
+      "slug": "en-0023-nurse-registration-france-nurse-registration-france-france-nursing-en-23",
+      "primaryKeyword": "nurse registration france",
+      "language": "en",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0004-nurse-registration-france",
+      "status": "planned"
+    },
+    {
+      "title": "france for foreign nurses — France nursing (en 24)",
+      "slug": "en-0024-france-for-foreign-nurses-france-for-foreign-nurses-france-nursing-en-24",
+      "primaryKeyword": "france for foreign nurses",
+      "language": "en",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0004-france-for-foreign-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "language requirements france — France nursing (en 25)",
+      "slug": "en-0025-language-requirements-france-language-requirements-france-france-nursing-en-25",
+      "primaryKeyword": "language requirements france",
+      "language": "en",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0004-language-requirements-france",
+      "status": "planned"
+    },
+    {
+      "title": "france nursing jobs — France nursing (en 26)",
+      "slug": "en-0026-france-nursing-jobs-france-nursing-jobs-france-nursing-en-26",
+      "primaryKeyword": "france nursing jobs",
+      "language": "en",
+      "category": "France nursing",
+      "intentType": "transactional",
+      "translationGroupId": "fr-nurse-0004-france-nursing-jobs",
+      "status": "planned"
+    },
+    {
+      "title": "france to canada nurse pathway — France nursing (en 27)",
+      "slug": "en-0027-france-to-canada-nurse-pathway-france-to-canada-nurse-pathway-france-nursing-en-27",
+      "primaryKeyword": "france to canada nurse pathway",
+      "language": "en",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0004-france-to-canada-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "france to australia nurse pathway — France nursing (en 28)",
+      "slug": "en-0028-france-to-australia-nurse-pathway-france-to-australia-nurse-pathway-france-nursing-en-28",
+      "primaryKeyword": "france to australia nurse pathway",
+      "language": "en",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0004-france-to-australia-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in france — France nursing (en 29)",
+      "slug": "en-0029-how-to-become-a-nurse-in-france-how-to-become-a-nurse-in-france-france-nursing-en-29",
+      "primaryKeyword": "how to become a nurse in france",
+      "language": "en",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0005-how-to-become-a-nurse-in-france",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration france — France nursing (en 30)",
+      "slug": "en-0030-nurse-registration-france-nurse-registration-france-france-nursing-en-30",
+      "primaryKeyword": "nurse registration france",
+      "language": "en",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0005-nurse-registration-france",
+      "status": "planned"
+    },
+    {
+      "title": "france for foreign nurses — France nursing (en 31)",
+      "slug": "en-0031-france-for-foreign-nurses-france-for-foreign-nurses-france-nursing-en-31",
+      "primaryKeyword": "france for foreign nurses",
+      "language": "en",
+      "category": "France nursing",
+      "intentType": "transactional",
+      "translationGroupId": "fr-nurse-0005-france-for-foreign-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "language requirements france — France nursing (en 32)",
+      "slug": "en-0032-language-requirements-france-language-requirements-france-france-nursing-en-32",
+      "primaryKeyword": "language requirements france",
+      "language": "en",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0005-language-requirements-france",
+      "status": "planned"
+    },
+    {
+      "title": "france nursing jobs — France nursing (en 33)",
+      "slug": "en-0033-france-nursing-jobs-france-nursing-jobs-france-nursing-en-33",
+      "primaryKeyword": "france nursing jobs",
+      "language": "en",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0005-france-nursing-jobs",
+      "status": "planned"
+    },
+    {
+      "title": "france to canada nurse pathway — France nursing (en 34)",
+      "slug": "en-0034-france-to-canada-nurse-pathway-france-to-canada-nurse-pathway-france-nursing-en-34",
+      "primaryKeyword": "france to canada nurse pathway",
+      "language": "en",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0005-france-to-canada-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "france to australia nurse pathway — France nursing (en 35)",
+      "slug": "en-0035-france-to-australia-nurse-pathway-france-to-australia-nurse-pathway-france-nursing-en-35",
+      "primaryKeyword": "france to australia nurse pathway",
+      "language": "en",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0005-france-to-australia-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in france — France nursing (en 36)",
+      "slug": "en-0036-how-to-become-a-nurse-in-france-how-to-become-a-nurse-in-france-france-nursing-en-36",
+      "primaryKeyword": "how to become a nurse in france",
+      "language": "en",
+      "category": "France nursing",
+      "intentType": "transactional",
+      "translationGroupId": "fr-nurse-0006-how-to-become-a-nurse-in-france",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration france — France nursing (en 37)",
+      "slug": "en-0037-nurse-registration-france-nurse-registration-france-france-nursing-en-37",
+      "primaryKeyword": "nurse registration france",
+      "language": "en",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0006-nurse-registration-france",
+      "status": "planned"
+    },
+    {
+      "title": "france for foreign nurses — France nursing (en 38)",
+      "slug": "en-0038-france-for-foreign-nurses-france-for-foreign-nurses-france-nursing-en-38",
+      "primaryKeyword": "france for foreign nurses",
+      "language": "en",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0006-france-for-foreign-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "language requirements france — France nursing (en 39)",
+      "slug": "en-0039-language-requirements-france-language-requirements-france-france-nursing-en-39",
+      "primaryKeyword": "language requirements france",
+      "language": "en",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0006-language-requirements-france",
+      "status": "planned"
+    },
+    {
+      "title": "france nursing jobs — France nursing (en 40)",
+      "slug": "en-0040-france-nursing-jobs-france-nursing-jobs-france-nursing-en-40",
+      "primaryKeyword": "france nursing jobs",
+      "language": "en",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0006-france-nursing-jobs",
+      "status": "planned"
+    },
+    {
+      "title": "france to canada nurse pathway — France nursing (en 41)",
+      "slug": "en-0041-france-to-canada-nurse-pathway-france-to-canada-nurse-pathway-france-nursing-en-41",
+      "primaryKeyword": "france to canada nurse pathway",
+      "language": "en",
+      "category": "France nursing",
+      "intentType": "transactional",
+      "translationGroupId": "fr-nurse-0006-france-to-canada-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "france to australia nurse pathway — France nursing (en 42)",
+      "slug": "en-0042-france-to-australia-nurse-pathway-france-to-australia-nurse-pathway-france-nursing-en-42",
+      "primaryKeyword": "france to australia nurse pathway",
+      "language": "en",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0006-france-to-australia-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in france — France nursing (en 43)",
+      "slug": "en-0043-how-to-become-a-nurse-in-france-how-to-become-a-nurse-in-france-france-nursing-en-43",
+      "primaryKeyword": "how to become a nurse in france",
+      "language": "en",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0007-how-to-become-a-nurse-in-france",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration france — France nursing (en 44)",
+      "slug": "en-0044-nurse-registration-france-nurse-registration-france-france-nursing-en-44",
+      "primaryKeyword": "nurse registration france",
+      "language": "en",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0007-nurse-registration-france",
+      "status": "planned"
+    },
+    {
+      "title": "france for foreign nurses — France nursing (en 45)",
+      "slug": "en-0045-france-for-foreign-nurses-france-for-foreign-nurses-france-nursing-en-45",
+      "primaryKeyword": "france for foreign nurses",
+      "language": "en",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0007-france-for-foreign-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "language requirements france — France nursing (en 46)",
+      "slug": "en-0046-language-requirements-france-language-requirements-france-france-nursing-en-46",
+      "primaryKeyword": "language requirements france",
+      "language": "en",
+      "category": "France nursing",
+      "intentType": "transactional",
+      "translationGroupId": "fr-nurse-0007-language-requirements-france",
+      "status": "planned"
+    },
+    {
+      "title": "france nursing jobs — France nursing (en 47)",
+      "slug": "en-0047-france-nursing-jobs-france-nursing-jobs-france-nursing-en-47",
+      "primaryKeyword": "france nursing jobs",
+      "language": "en",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0007-france-nursing-jobs",
+      "status": "planned"
+    },
+    {
+      "title": "france to canada nurse pathway — France nursing (en 48)",
+      "slug": "en-0048-france-to-canada-nurse-pathway-france-to-canada-nurse-pathway-france-nursing-en-48",
+      "primaryKeyword": "france to canada nurse pathway",
+      "language": "en",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0007-france-to-canada-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "france to australia nurse pathway — France nursing (en 49)",
+      "slug": "en-0049-france-to-australia-nurse-pathway-france-to-australia-nurse-pathway-france-nursing-en-49",
+      "primaryKeyword": "france to australia nurse pathway",
+      "language": "en",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0007-france-to-australia-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in france — France nursing (en 50)",
+      "slug": "en-0050-how-to-become-a-nurse-in-france-how-to-become-a-nurse-in-france-france-nursing-en-50",
+      "primaryKeyword": "how to become a nurse in france",
+      "language": "en",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0008-how-to-become-a-nurse-in-france",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration france — France nursing (en 51)",
+      "slug": "en-0051-nurse-registration-france-nurse-registration-france-france-nursing-en-51",
+      "primaryKeyword": "nurse registration france",
+      "language": "en",
+      "category": "France nursing",
+      "intentType": "transactional",
+      "translationGroupId": "fr-nurse-0008-nurse-registration-france",
+      "status": "planned"
+    },
+    {
+      "title": "france for foreign nurses — France nursing (en 52)",
+      "slug": "en-0052-france-for-foreign-nurses-france-for-foreign-nurses-france-nursing-en-52",
+      "primaryKeyword": "france for foreign nurses",
+      "language": "en",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0008-france-for-foreign-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "language requirements france — France nursing (en 53)",
+      "slug": "en-0053-language-requirements-france-language-requirements-france-france-nursing-en-53",
+      "primaryKeyword": "language requirements france",
+      "language": "en",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0008-language-requirements-france",
+      "status": "planned"
+    },
+    {
+      "title": "france nursing jobs — France nursing (en 54)",
+      "slug": "en-0054-france-nursing-jobs-france-nursing-jobs-france-nursing-en-54",
+      "primaryKeyword": "france nursing jobs",
+      "language": "en",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0008-france-nursing-jobs",
+      "status": "planned"
+    },
+    {
+      "title": "france to canada nurse pathway — France nursing (en 55)",
+      "slug": "en-0055-france-to-canada-nurse-pathway-france-to-canada-nurse-pathway-france-nursing-en-55",
+      "primaryKeyword": "france to canada nurse pathway",
+      "language": "en",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0008-france-to-canada-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "france to australia nurse pathway — France nursing (en 56)",
+      "slug": "en-0056-france-to-australia-nurse-pathway-france-to-australia-nurse-pathway-france-nursing-en-56",
+      "primaryKeyword": "france to australia nurse pathway",
+      "language": "en",
+      "category": "France nursing",
+      "intentType": "transactional",
+      "translationGroupId": "fr-nurse-0008-france-to-australia-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in france — France nursing (en 57)",
+      "slug": "en-0057-how-to-become-a-nurse-in-france-how-to-become-a-nurse-in-france-france-nursing-en-57",
+      "primaryKeyword": "how to become a nurse in france",
+      "language": "en",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0009-how-to-become-a-nurse-in-france",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration france — France nursing (en 58)",
+      "slug": "en-0058-nurse-registration-france-nurse-registration-france-france-nursing-en-58",
+      "primaryKeyword": "nurse registration france",
+      "language": "en",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0009-nurse-registration-france",
+      "status": "planned"
+    },
+    {
+      "title": "france for foreign nurses — France nursing (en 59)",
+      "slug": "en-0059-france-for-foreign-nurses-france-for-foreign-nurses-france-nursing-en-59",
+      "primaryKeyword": "france for foreign nurses",
+      "language": "en",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0009-france-for-foreign-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "language requirements france — France nursing (en 60)",
+      "slug": "en-0060-language-requirements-france-language-requirements-france-france-nursing-en-60",
+      "primaryKeyword": "language requirements france",
+      "language": "en",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0009-language-requirements-france",
+      "status": "planned"
+    },
+    {
+      "title": "france nursing jobs — France nursing (en 61)",
+      "slug": "en-0061-france-nursing-jobs-france-nursing-jobs-france-nursing-en-61",
+      "primaryKeyword": "france nursing jobs",
+      "language": "en",
+      "category": "France nursing",
+      "intentType": "transactional",
+      "translationGroupId": "fr-nurse-0009-france-nursing-jobs",
+      "status": "planned"
+    },
+    {
+      "title": "france to canada nurse pathway — France nursing (en 62)",
+      "slug": "en-0062-france-to-canada-nurse-pathway-france-to-canada-nurse-pathway-france-nursing-en-62",
+      "primaryKeyword": "france to canada nurse pathway",
+      "language": "en",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0009-france-to-canada-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "france to australia nurse pathway — France nursing (en 63)",
+      "slug": "en-0063-france-to-australia-nurse-pathway-france-to-australia-nurse-pathway-france-nursing-en-63",
+      "primaryKeyword": "france to australia nurse pathway",
+      "language": "en",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0009-france-to-australia-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in france — France nursing (en 64)",
+      "slug": "en-0064-how-to-become-a-nurse-in-france-how-to-become-a-nurse-in-france-france-nursing-en-64",
+      "primaryKeyword": "how to become a nurse in france",
+      "language": "en",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0010-how-to-become-a-nurse-in-france",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration france — France nursing (en 65)",
+      "slug": "en-0065-nurse-registration-france-nurse-registration-france-france-nursing-en-65",
+      "primaryKeyword": "nurse registration france",
+      "language": "en",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0010-nurse-registration-france",
+      "status": "planned"
+    },
+    {
+      "title": "france for foreign nurses — France nursing (en 66)",
+      "slug": "en-0066-france-for-foreign-nurses-france-for-foreign-nurses-france-nursing-en-66",
+      "primaryKeyword": "france for foreign nurses",
+      "language": "en",
+      "category": "France nursing",
+      "intentType": "transactional",
+      "translationGroupId": "fr-nurse-0010-france-for-foreign-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "language requirements france — France nursing (en 67)",
+      "slug": "en-0067-language-requirements-france-language-requirements-france-france-nursing-en-67",
+      "primaryKeyword": "language requirements france",
+      "language": "en",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0010-language-requirements-france",
+      "status": "planned"
+    },
+    {
+      "title": "france nursing jobs — France nursing (en 68)",
+      "slug": "en-0068-france-nursing-jobs-france-nursing-jobs-france-nursing-en-68",
+      "primaryKeyword": "france nursing jobs",
+      "language": "en",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0010-france-nursing-jobs",
+      "status": "planned"
+    },
+    {
+      "title": "france to canada nurse pathway — France nursing (en 69)",
+      "slug": "en-0069-france-to-canada-nurse-pathway-france-to-canada-nurse-pathway-france-nursing-en-69",
+      "primaryKeyword": "france to canada nurse pathway",
+      "language": "en",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0010-france-to-canada-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "france to australia nurse pathway — France nursing (en 70)",
+      "slug": "en-0070-france-to-australia-nurse-pathway-france-to-australia-nurse-pathway-france-nursing-en-70",
+      "primaryKeyword": "france to australia nurse pathway",
+      "language": "en",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0010-france-to-australia-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in france — France nursing (fr 1)",
+      "slug": "fr-0071-how-to-become-a-nurse-in-france-how-to-become-a-nurse-in-france-france-nursing-fr-1",
+      "primaryKeyword": "how to become a nurse in france",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "transactional",
+      "translationGroupId": "fr-nurse-0011-how-to-become-a-nurse-in-france",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration france — France nursing (fr 2)",
+      "slug": "fr-0072-nurse-registration-france-nurse-registration-france-france-nursing-fr-2",
+      "primaryKeyword": "nurse registration france",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0011-nurse-registration-france",
+      "status": "planned"
+    },
+    {
+      "title": "france for foreign nurses — France nursing (fr 3)",
+      "slug": "fr-0073-france-for-foreign-nurses-france-for-foreign-nurses-france-nursing-fr-3",
+      "primaryKeyword": "france for foreign nurses",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0011-france-for-foreign-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "language requirements france — France nursing (fr 4)",
+      "slug": "fr-0074-language-requirements-france-language-requirements-france-france-nursing-fr-4",
+      "primaryKeyword": "language requirements france",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0011-language-requirements-france",
+      "status": "planned"
+    },
+    {
+      "title": "france nursing jobs — France nursing (fr 5)",
+      "slug": "fr-0075-france-nursing-jobs-france-nursing-jobs-france-nursing-fr-5",
+      "primaryKeyword": "france nursing jobs",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0011-france-nursing-jobs",
+      "status": "planned"
+    },
+    {
+      "title": "france to canada nurse pathway — France nursing (fr 6)",
+      "slug": "fr-0076-france-to-canada-nurse-pathway-france-to-canada-nurse-pathway-france-nursing-fr-6",
+      "primaryKeyword": "france to canada nurse pathway",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "transactional",
+      "translationGroupId": "fr-nurse-0011-france-to-canada-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "france to australia nurse pathway — France nursing (fr 7)",
+      "slug": "fr-0077-france-to-australia-nurse-pathway-france-to-australia-nurse-pathway-france-nursing-fr-7",
+      "primaryKeyword": "france to australia nurse pathway",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0011-france-to-australia-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in france — France nursing (fr 8)",
+      "slug": "fr-0078-how-to-become-a-nurse-in-france-how-to-become-a-nurse-in-france-france-nursing-fr-8",
+      "primaryKeyword": "how to become a nurse in france",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0012-how-to-become-a-nurse-in-france",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration france — France nursing (fr 9)",
+      "slug": "fr-0079-nurse-registration-france-nurse-registration-france-france-nursing-fr-9",
+      "primaryKeyword": "nurse registration france",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0012-nurse-registration-france",
+      "status": "planned"
+    },
+    {
+      "title": "france for foreign nurses — France nursing (fr 10)",
+      "slug": "fr-0080-france-for-foreign-nurses-france-for-foreign-nurses-france-nursing-fr-10",
+      "primaryKeyword": "france for foreign nurses",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0012-france-for-foreign-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "language requirements france — France nursing (fr 11)",
+      "slug": "fr-0081-language-requirements-france-language-requirements-france-france-nursing-fr-11",
+      "primaryKeyword": "language requirements france",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "transactional",
+      "translationGroupId": "fr-nurse-0012-language-requirements-france",
+      "status": "planned"
+    },
+    {
+      "title": "france nursing jobs — France nursing (fr 12)",
+      "slug": "fr-0082-france-nursing-jobs-france-nursing-jobs-france-nursing-fr-12",
+      "primaryKeyword": "france nursing jobs",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0012-france-nursing-jobs",
+      "status": "planned"
+    },
+    {
+      "title": "france to canada nurse pathway — France nursing (fr 13)",
+      "slug": "fr-0083-france-to-canada-nurse-pathway-france-to-canada-nurse-pathway-france-nursing-fr-13",
+      "primaryKeyword": "france to canada nurse pathway",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0012-france-to-canada-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "france to australia nurse pathway — France nursing (fr 14)",
+      "slug": "fr-0084-france-to-australia-nurse-pathway-france-to-australia-nurse-pathway-france-nursing-fr-14",
+      "primaryKeyword": "france to australia nurse pathway",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0012-france-to-australia-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in france — France nursing (fr 15)",
+      "slug": "fr-0085-how-to-become-a-nurse-in-france-how-to-become-a-nurse-in-france-france-nursing-fr-15",
+      "primaryKeyword": "how to become a nurse in france",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0013-how-to-become-a-nurse-in-france",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration france — France nursing (fr 16)",
+      "slug": "fr-0086-nurse-registration-france-nurse-registration-france-france-nursing-fr-16",
+      "primaryKeyword": "nurse registration france",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "transactional",
+      "translationGroupId": "fr-nurse-0013-nurse-registration-france",
+      "status": "planned"
+    },
+    {
+      "title": "france for foreign nurses — France nursing (fr 17)",
+      "slug": "fr-0087-france-for-foreign-nurses-france-for-foreign-nurses-france-nursing-fr-17",
+      "primaryKeyword": "france for foreign nurses",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0013-france-for-foreign-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "language requirements france — France nursing (fr 18)",
+      "slug": "fr-0088-language-requirements-france-language-requirements-france-france-nursing-fr-18",
+      "primaryKeyword": "language requirements france",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0013-language-requirements-france",
+      "status": "planned"
+    },
+    {
+      "title": "france nursing jobs — France nursing (fr 19)",
+      "slug": "fr-0089-france-nursing-jobs-france-nursing-jobs-france-nursing-fr-19",
+      "primaryKeyword": "france nursing jobs",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0013-france-nursing-jobs",
+      "status": "planned"
+    },
+    {
+      "title": "france to canada nurse pathway — France nursing (fr 20)",
+      "slug": "fr-0090-france-to-canada-nurse-pathway-france-to-canada-nurse-pathway-france-nursing-fr-20",
+      "primaryKeyword": "france to canada nurse pathway",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0013-france-to-canada-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "france to australia nurse pathway — France nursing (fr 21)",
+      "slug": "fr-0091-france-to-australia-nurse-pathway-france-to-australia-nurse-pathway-france-nursing-fr-21",
+      "primaryKeyword": "france to australia nurse pathway",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "transactional",
+      "translationGroupId": "fr-nurse-0013-france-to-australia-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in france — France nursing (fr 22)",
+      "slug": "fr-0092-how-to-become-a-nurse-in-france-how-to-become-a-nurse-in-france-france-nursing-fr-22",
+      "primaryKeyword": "how to become a nurse in france",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0014-how-to-become-a-nurse-in-france",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration france — France nursing (fr 23)",
+      "slug": "fr-0093-nurse-registration-france-nurse-registration-france-france-nursing-fr-23",
+      "primaryKeyword": "nurse registration france",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0014-nurse-registration-france",
+      "status": "planned"
+    },
+    {
+      "title": "france for foreign nurses — France nursing (fr 24)",
+      "slug": "fr-0094-france-for-foreign-nurses-france-for-foreign-nurses-france-nursing-fr-24",
+      "primaryKeyword": "france for foreign nurses",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0014-france-for-foreign-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "language requirements france — France nursing (fr 25)",
+      "slug": "fr-0095-language-requirements-france-language-requirements-france-france-nursing-fr-25",
+      "primaryKeyword": "language requirements france",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0014-language-requirements-france",
+      "status": "planned"
+    },
+    {
+      "title": "france nursing jobs — France nursing (fr 26)",
+      "slug": "fr-0096-france-nursing-jobs-france-nursing-jobs-france-nursing-fr-26",
+      "primaryKeyword": "france nursing jobs",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "transactional",
+      "translationGroupId": "fr-nurse-0014-france-nursing-jobs",
+      "status": "planned"
+    },
+    {
+      "title": "france to canada nurse pathway — France nursing (fr 27)",
+      "slug": "fr-0097-france-to-canada-nurse-pathway-france-to-canada-nurse-pathway-france-nursing-fr-27",
+      "primaryKeyword": "france to canada nurse pathway",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0014-france-to-canada-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "france to australia nurse pathway — France nursing (fr 28)",
+      "slug": "fr-0098-france-to-australia-nurse-pathway-france-to-australia-nurse-pathway-france-nursing-fr-28",
+      "primaryKeyword": "france to australia nurse pathway",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0014-france-to-australia-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in france — France nursing (fr 29)",
+      "slug": "fr-0099-how-to-become-a-nurse-in-france-how-to-become-a-nurse-in-france-france-nursing-fr-29",
+      "primaryKeyword": "how to become a nurse in france",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0015-how-to-become-a-nurse-in-france",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration france — France nursing (fr 30)",
+      "slug": "fr-0100-nurse-registration-france-nurse-registration-france-france-nursing-fr-30",
+      "primaryKeyword": "nurse registration france",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0015-nurse-registration-france",
+      "status": "planned"
+    },
+    {
+      "title": "france for foreign nurses — France nursing (fr 31)",
+      "slug": "fr-0101-france-for-foreign-nurses-france-for-foreign-nurses-france-nursing-fr-31",
+      "primaryKeyword": "france for foreign nurses",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "transactional",
+      "translationGroupId": "fr-nurse-0015-france-for-foreign-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "language requirements france — France nursing (fr 32)",
+      "slug": "fr-0102-language-requirements-france-language-requirements-france-france-nursing-fr-32",
+      "primaryKeyword": "language requirements france",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0015-language-requirements-france",
+      "status": "planned"
+    },
+    {
+      "title": "france nursing jobs — France nursing (fr 33)",
+      "slug": "fr-0103-france-nursing-jobs-france-nursing-jobs-france-nursing-fr-33",
+      "primaryKeyword": "france nursing jobs",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0015-france-nursing-jobs",
+      "status": "planned"
+    },
+    {
+      "title": "france to canada nurse pathway — France nursing (fr 34)",
+      "slug": "fr-0104-france-to-canada-nurse-pathway-france-to-canada-nurse-pathway-france-nursing-fr-34",
+      "primaryKeyword": "france to canada nurse pathway",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0015-france-to-canada-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "france to australia nurse pathway — France nursing (fr 35)",
+      "slug": "fr-0105-france-to-australia-nurse-pathway-france-to-australia-nurse-pathway-france-nursing-fr-35",
+      "primaryKeyword": "france to australia nurse pathway",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0015-france-to-australia-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in france — France nursing (fr 36)",
+      "slug": "fr-0106-how-to-become-a-nurse-in-france-how-to-become-a-nurse-in-france-france-nursing-fr-36",
+      "primaryKeyword": "how to become a nurse in france",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "transactional",
+      "translationGroupId": "fr-nurse-0016-how-to-become-a-nurse-in-france",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration france — France nursing (fr 37)",
+      "slug": "fr-0107-nurse-registration-france-nurse-registration-france-france-nursing-fr-37",
+      "primaryKeyword": "nurse registration france",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0016-nurse-registration-france",
+      "status": "planned"
+    },
+    {
+      "title": "france for foreign nurses — France nursing (fr 38)",
+      "slug": "fr-0108-france-for-foreign-nurses-france-for-foreign-nurses-france-nursing-fr-38",
+      "primaryKeyword": "france for foreign nurses",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0016-france-for-foreign-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "language requirements france — France nursing (fr 39)",
+      "slug": "fr-0109-language-requirements-france-language-requirements-france-france-nursing-fr-39",
+      "primaryKeyword": "language requirements france",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0016-language-requirements-france",
+      "status": "planned"
+    },
+    {
+      "title": "france nursing jobs — France nursing (fr 40)",
+      "slug": "fr-0110-france-nursing-jobs-france-nursing-jobs-france-nursing-fr-40",
+      "primaryKeyword": "france nursing jobs",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0016-france-nursing-jobs",
+      "status": "planned"
+    },
+    {
+      "title": "france to canada nurse pathway — France nursing (fr 41)",
+      "slug": "fr-0111-france-to-canada-nurse-pathway-france-to-canada-nurse-pathway-france-nursing-fr-41",
+      "primaryKeyword": "france to canada nurse pathway",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "transactional",
+      "translationGroupId": "fr-nurse-0016-france-to-canada-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "france to australia nurse pathway — France nursing (fr 42)",
+      "slug": "fr-0112-france-to-australia-nurse-pathway-france-to-australia-nurse-pathway-france-nursing-fr-42",
+      "primaryKeyword": "france to australia nurse pathway",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0016-france-to-australia-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in france — France nursing (fr 43)",
+      "slug": "fr-0113-how-to-become-a-nurse-in-france-how-to-become-a-nurse-in-france-france-nursing-fr-43",
+      "primaryKeyword": "how to become a nurse in france",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0017-how-to-become-a-nurse-in-france",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration france — France nursing (fr 44)",
+      "slug": "fr-0114-nurse-registration-france-nurse-registration-france-france-nursing-fr-44",
+      "primaryKeyword": "nurse registration france",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0017-nurse-registration-france",
+      "status": "planned"
+    },
+    {
+      "title": "france for foreign nurses — France nursing (fr 45)",
+      "slug": "fr-0115-france-for-foreign-nurses-france-for-foreign-nurses-france-nursing-fr-45",
+      "primaryKeyword": "france for foreign nurses",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0017-france-for-foreign-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "language requirements france — France nursing (fr 46)",
+      "slug": "fr-0116-language-requirements-france-language-requirements-france-france-nursing-fr-46",
+      "primaryKeyword": "language requirements france",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "transactional",
+      "translationGroupId": "fr-nurse-0017-language-requirements-france",
+      "status": "planned"
+    },
+    {
+      "title": "france nursing jobs — France nursing (fr 47)",
+      "slug": "fr-0117-france-nursing-jobs-france-nursing-jobs-france-nursing-fr-47",
+      "primaryKeyword": "france nursing jobs",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0017-france-nursing-jobs",
+      "status": "planned"
+    },
+    {
+      "title": "france to canada nurse pathway — France nursing (fr 48)",
+      "slug": "fr-0118-france-to-canada-nurse-pathway-france-to-canada-nurse-pathway-france-nursing-fr-48",
+      "primaryKeyword": "france to canada nurse pathway",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0017-france-to-canada-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "france to australia nurse pathway — France nursing (fr 49)",
+      "slug": "fr-0119-france-to-australia-nurse-pathway-france-to-australia-nurse-pathway-france-nursing-fr-49",
+      "primaryKeyword": "france to australia nurse pathway",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0017-france-to-australia-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in france — France nursing (fr 50)",
+      "slug": "fr-0120-how-to-become-a-nurse-in-france-how-to-become-a-nurse-in-france-france-nursing-fr-50",
+      "primaryKeyword": "how to become a nurse in france",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0018-how-to-become-a-nurse-in-france",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration france — France nursing (fr 51)",
+      "slug": "fr-0121-nurse-registration-france-nurse-registration-france-france-nursing-fr-51",
+      "primaryKeyword": "nurse registration france",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "transactional",
+      "translationGroupId": "fr-nurse-0018-nurse-registration-france",
+      "status": "planned"
+    },
+    {
+      "title": "france for foreign nurses — France nursing (fr 52)",
+      "slug": "fr-0122-france-for-foreign-nurses-france-for-foreign-nurses-france-nursing-fr-52",
+      "primaryKeyword": "france for foreign nurses",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0018-france-for-foreign-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "language requirements france — France nursing (fr 53)",
+      "slug": "fr-0123-language-requirements-france-language-requirements-france-france-nursing-fr-53",
+      "primaryKeyword": "language requirements france",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0018-language-requirements-france",
+      "status": "planned"
+    },
+    {
+      "title": "france nursing jobs — France nursing (fr 54)",
+      "slug": "fr-0124-france-nursing-jobs-france-nursing-jobs-france-nursing-fr-54",
+      "primaryKeyword": "france nursing jobs",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0018-france-nursing-jobs",
+      "status": "planned"
+    },
+    {
+      "title": "france to canada nurse pathway — France nursing (fr 55)",
+      "slug": "fr-0125-france-to-canada-nurse-pathway-france-to-canada-nurse-pathway-france-nursing-fr-55",
+      "primaryKeyword": "france to canada nurse pathway",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0018-france-to-canada-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "france to australia nurse pathway — France nursing (fr 56)",
+      "slug": "fr-0126-france-to-australia-nurse-pathway-france-to-australia-nurse-pathway-france-nursing-fr-56",
+      "primaryKeyword": "france to australia nurse pathway",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "transactional",
+      "translationGroupId": "fr-nurse-0018-france-to-australia-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in france — France nursing (fr 57)",
+      "slug": "fr-0127-how-to-become-a-nurse-in-france-how-to-become-a-nurse-in-france-france-nursing-fr-57",
+      "primaryKeyword": "how to become a nurse in france",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0019-how-to-become-a-nurse-in-france",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration france — France nursing (fr 58)",
+      "slug": "fr-0128-nurse-registration-france-nurse-registration-france-france-nursing-fr-58",
+      "primaryKeyword": "nurse registration france",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0019-nurse-registration-france",
+      "status": "planned"
+    },
+    {
+      "title": "france for foreign nurses — France nursing (fr 59)",
+      "slug": "fr-0129-france-for-foreign-nurses-france-for-foreign-nurses-france-nursing-fr-59",
+      "primaryKeyword": "france for foreign nurses",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0019-france-for-foreign-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "language requirements france — France nursing (fr 60)",
+      "slug": "fr-0130-language-requirements-france-language-requirements-france-france-nursing-fr-60",
+      "primaryKeyword": "language requirements france",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0019-language-requirements-france",
+      "status": "planned"
+    },
+    {
+      "title": "france nursing jobs — France nursing (fr 61)",
+      "slug": "fr-0131-france-nursing-jobs-france-nursing-jobs-france-nursing-fr-61",
+      "primaryKeyword": "france nursing jobs",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "transactional",
+      "translationGroupId": "fr-nurse-0019-france-nursing-jobs",
+      "status": "planned"
+    },
+    {
+      "title": "france to canada nurse pathway — France nursing (fr 62)",
+      "slug": "fr-0132-france-to-canada-nurse-pathway-france-to-canada-nurse-pathway-france-nursing-fr-62",
+      "primaryKeyword": "france to canada nurse pathway",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0019-france-to-canada-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "france to australia nurse pathway — France nursing (fr 63)",
+      "slug": "fr-0133-france-to-australia-nurse-pathway-france-to-australia-nurse-pathway-france-nursing-fr-63",
+      "primaryKeyword": "france to australia nurse pathway",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0019-france-to-australia-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in france — France nursing (fr 64)",
+      "slug": "fr-0134-how-to-become-a-nurse-in-france-how-to-become-a-nurse-in-france-france-nursing-fr-64",
+      "primaryKeyword": "how to become a nurse in france",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0020-how-to-become-a-nurse-in-france",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration france — France nursing (fr 65)",
+      "slug": "fr-0135-nurse-registration-france-nurse-registration-france-france-nursing-fr-65",
+      "primaryKeyword": "nurse registration france",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0020-nurse-registration-france",
+      "status": "planned"
+    },
+    {
+      "title": "france for foreign nurses — France nursing (fr 66)",
+      "slug": "fr-0136-france-for-foreign-nurses-france-for-foreign-nurses-france-nursing-fr-66",
+      "primaryKeyword": "france for foreign nurses",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "transactional",
+      "translationGroupId": "fr-nurse-0020-france-for-foreign-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "language requirements france — France nursing (fr 67)",
+      "slug": "fr-0137-language-requirements-france-language-requirements-france-france-nursing-fr-67",
+      "primaryKeyword": "language requirements france",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0020-language-requirements-france",
+      "status": "planned"
+    },
+    {
+      "title": "france nursing jobs — France nursing (fr 68)",
+      "slug": "fr-0138-france-nursing-jobs-france-nursing-jobs-france-nursing-fr-68",
+      "primaryKeyword": "france nursing jobs",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0020-france-nursing-jobs",
+      "status": "planned"
+    },
+    {
+      "title": "france to canada nurse pathway — France nursing (fr 69)",
+      "slug": "fr-0139-france-to-canada-nurse-pathway-france-to-canada-nurse-pathway-france-nursing-fr-69",
+      "primaryKeyword": "france to canada nurse pathway",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0020-france-to-canada-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "france to australia nurse pathway — France nursing (fr 70)",
+      "slug": "fr-0140-france-to-australia-nurse-pathway-france-to-australia-nurse-pathway-france-nursing-fr-70",
+      "primaryKeyword": "france to australia nurse pathway",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0020-france-to-australia-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in france — France nursing (fr 71)",
+      "slug": "fr-0141-how-to-become-a-nurse-in-france-how-to-become-a-nurse-in-france-france-nursing-fr-71",
+      "primaryKeyword": "how to become a nurse in france",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "transactional",
+      "translationGroupId": "fr-nurse-0021-how-to-become-a-nurse-in-france",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration france — France nursing (fr 72)",
+      "slug": "fr-0142-nurse-registration-france-nurse-registration-france-france-nursing-fr-72",
+      "primaryKeyword": "nurse registration france",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0021-nurse-registration-france",
+      "status": "planned"
+    },
+    {
+      "title": "france for foreign nurses — France nursing (fr 73)",
+      "slug": "fr-0143-france-for-foreign-nurses-france-for-foreign-nurses-france-nursing-fr-73",
+      "primaryKeyword": "france for foreign nurses",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0021-france-for-foreign-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "language requirements france — France nursing (fr 74)",
+      "slug": "fr-0144-language-requirements-france-language-requirements-france-france-nursing-fr-74",
+      "primaryKeyword": "language requirements france",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0021-language-requirements-france",
+      "status": "planned"
+    },
+    {
+      "title": "france nursing jobs — France nursing (fr 75)",
+      "slug": "fr-0145-france-nursing-jobs-france-nursing-jobs-france-nursing-fr-75",
+      "primaryKeyword": "france nursing jobs",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0021-france-nursing-jobs",
+      "status": "planned"
+    },
+    {
+      "title": "france to canada nurse pathway — France nursing (fr 76)",
+      "slug": "fr-0146-france-to-canada-nurse-pathway-france-to-canada-nurse-pathway-france-nursing-fr-76",
+      "primaryKeyword": "france to canada nurse pathway",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "transactional",
+      "translationGroupId": "fr-nurse-0021-france-to-canada-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "france to australia nurse pathway — France nursing (fr 77)",
+      "slug": "fr-0147-france-to-australia-nurse-pathway-france-to-australia-nurse-pathway-france-nursing-fr-77",
+      "primaryKeyword": "france to australia nurse pathway",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0021-france-to-australia-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in france — France nursing (fr 78)",
+      "slug": "fr-0148-how-to-become-a-nurse-in-france-how-to-become-a-nurse-in-france-france-nursing-fr-78",
+      "primaryKeyword": "how to become a nurse in france",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0022-how-to-become-a-nurse-in-france",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration france — France nursing (fr 79)",
+      "slug": "fr-0149-nurse-registration-france-nurse-registration-france-france-nursing-fr-79",
+      "primaryKeyword": "nurse registration france",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0022-nurse-registration-france",
+      "status": "planned"
+    },
+    {
+      "title": "france for foreign nurses — France nursing (fr 80)",
+      "slug": "fr-0150-france-for-foreign-nurses-france-for-foreign-nurses-france-nursing-fr-80",
+      "primaryKeyword": "france for foreign nurses",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0022-france-for-foreign-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "language requirements france — France nursing (fr 81)",
+      "slug": "fr-0151-language-requirements-france-language-requirements-france-france-nursing-fr-81",
+      "primaryKeyword": "language requirements france",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "transactional",
+      "translationGroupId": "fr-nurse-0022-language-requirements-france",
+      "status": "planned"
+    },
+    {
+      "title": "france nursing jobs — France nursing (fr 82)",
+      "slug": "fr-0152-france-nursing-jobs-france-nursing-jobs-france-nursing-fr-82",
+      "primaryKeyword": "france nursing jobs",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0022-france-nursing-jobs",
+      "status": "planned"
+    },
+    {
+      "title": "france to canada nurse pathway — France nursing (fr 83)",
+      "slug": "fr-0153-france-to-canada-nurse-pathway-france-to-canada-nurse-pathway-france-nursing-fr-83",
+      "primaryKeyword": "france to canada nurse pathway",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0022-france-to-canada-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "france to australia nurse pathway — France nursing (fr 84)",
+      "slug": "fr-0154-france-to-australia-nurse-pathway-france-to-australia-nurse-pathway-france-nursing-fr-84",
+      "primaryKeyword": "france to australia nurse pathway",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0022-france-to-australia-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in france — France nursing (fr 85)",
+      "slug": "fr-0155-how-to-become-a-nurse-in-france-how-to-become-a-nurse-in-france-france-nursing-fr-85",
+      "primaryKeyword": "how to become a nurse in france",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0023-how-to-become-a-nurse-in-france",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration france — France nursing (fr 86)",
+      "slug": "fr-0156-nurse-registration-france-nurse-registration-france-france-nursing-fr-86",
+      "primaryKeyword": "nurse registration france",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "transactional",
+      "translationGroupId": "fr-nurse-0023-nurse-registration-france",
+      "status": "planned"
+    },
+    {
+      "title": "france for foreign nurses — France nursing (fr 87)",
+      "slug": "fr-0157-france-for-foreign-nurses-france-for-foreign-nurses-france-nursing-fr-87",
+      "primaryKeyword": "france for foreign nurses",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0023-france-for-foreign-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "language requirements france — France nursing (fr 88)",
+      "slug": "fr-0158-language-requirements-france-language-requirements-france-france-nursing-fr-88",
+      "primaryKeyword": "language requirements france",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0023-language-requirements-france",
+      "status": "planned"
+    },
+    {
+      "title": "france nursing jobs — France nursing (fr 89)",
+      "slug": "fr-0159-france-nursing-jobs-france-nursing-jobs-france-nursing-fr-89",
+      "primaryKeyword": "france nursing jobs",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0023-france-nursing-jobs",
+      "status": "planned"
+    },
+    {
+      "title": "france to canada nurse pathway — France nursing (fr 90)",
+      "slug": "fr-0160-france-to-canada-nurse-pathway-france-to-canada-nurse-pathway-france-nursing-fr-90",
+      "primaryKeyword": "france to canada nurse pathway",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0023-france-to-canada-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "france to australia nurse pathway — France nursing (fr 91)",
+      "slug": "fr-0161-france-to-australia-nurse-pathway-france-to-australia-nurse-pathway-france-nursing-fr-91",
+      "primaryKeyword": "france to australia nurse pathway",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "transactional",
+      "translationGroupId": "fr-nurse-0023-france-to-australia-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in france — France nursing (fr 92)",
+      "slug": "fr-0162-how-to-become-a-nurse-in-france-how-to-become-a-nurse-in-france-france-nursing-fr-92",
+      "primaryKeyword": "how to become a nurse in france",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0024-how-to-become-a-nurse-in-france",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration france — France nursing (fr 93)",
+      "slug": "fr-0163-nurse-registration-france-nurse-registration-france-france-nursing-fr-93",
+      "primaryKeyword": "nurse registration france",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0024-nurse-registration-france",
+      "status": "planned"
+    },
+    {
+      "title": "france for foreign nurses — France nursing (fr 94)",
+      "slug": "fr-0164-france-for-foreign-nurses-france-for-foreign-nurses-france-nursing-fr-94",
+      "primaryKeyword": "france for foreign nurses",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0024-france-for-foreign-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "language requirements france — France nursing (fr 95)",
+      "slug": "fr-0165-language-requirements-france-language-requirements-france-france-nursing-fr-95",
+      "primaryKeyword": "language requirements france",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0024-language-requirements-france",
+      "status": "planned"
+    },
+    {
+      "title": "france nursing jobs — France nursing (fr 96)",
+      "slug": "fr-0166-france-nursing-jobs-france-nursing-jobs-france-nursing-fr-96",
+      "primaryKeyword": "france nursing jobs",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "transactional",
+      "translationGroupId": "fr-nurse-0024-france-nursing-jobs",
+      "status": "planned"
+    },
+    {
+      "title": "france to canada nurse pathway — France nursing (fr 97)",
+      "slug": "fr-0167-france-to-canada-nurse-pathway-france-to-canada-nurse-pathway-france-nursing-fr-97",
+      "primaryKeyword": "france to canada nurse pathway",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0024-france-to-canada-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "france to australia nurse pathway — France nursing (fr 98)",
+      "slug": "fr-0168-france-to-australia-nurse-pathway-france-to-australia-nurse-pathway-france-nursing-fr-98",
+      "primaryKeyword": "france to australia nurse pathway",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0024-france-to-australia-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in france — France nursing (fr 99)",
+      "slug": "fr-0169-how-to-become-a-nurse-in-france-how-to-become-a-nurse-in-france-france-nursing-fr-99",
+      "primaryKeyword": "how to become a nurse in france",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0025-how-to-become-a-nurse-in-france",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration france — France nursing (fr 100)",
+      "slug": "fr-0170-nurse-registration-france-nurse-registration-france-france-nursing-fr-100",
+      "primaryKeyword": "nurse registration france",
+      "language": "fr",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0025-nurse-registration-france",
+      "status": "planned"
+    },
+    {
+      "title": "france for foreign nurses — France nursing (ar 1)",
+      "slug": "ar-0171-france-for-foreign-nurses-france-for-foreign-nurses-france-nursing-ar-1",
+      "primaryKeyword": "france for foreign nurses",
+      "language": "ar",
+      "category": "France nursing",
+      "intentType": "transactional",
+      "translationGroupId": "fr-nurse-0025-france-for-foreign-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "language requirements france — France nursing (ar 2)",
+      "slug": "ar-0172-language-requirements-france-language-requirements-france-france-nursing-ar-2",
+      "primaryKeyword": "language requirements france",
+      "language": "ar",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0025-language-requirements-france",
+      "status": "planned"
+    },
+    {
+      "title": "france nursing jobs — France nursing (ar 3)",
+      "slug": "ar-0173-france-nursing-jobs-france-nursing-jobs-france-nursing-ar-3",
+      "primaryKeyword": "france nursing jobs",
+      "language": "ar",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0025-france-nursing-jobs",
+      "status": "planned"
+    },
+    {
+      "title": "france to canada nurse pathway — France nursing (ar 4)",
+      "slug": "ar-0174-france-to-canada-nurse-pathway-france-to-canada-nurse-pathway-france-nursing-ar-4",
+      "primaryKeyword": "france to canada nurse pathway",
+      "language": "ar",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0025-france-to-canada-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "france to australia nurse pathway — France nursing (ar 5)",
+      "slug": "ar-0175-france-to-australia-nurse-pathway-france-to-australia-nurse-pathway-france-nursing-ar-5",
+      "primaryKeyword": "france to australia nurse pathway",
+      "language": "ar",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0025-france-to-australia-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in france — France nursing (ar 6)",
+      "slug": "ar-0176-how-to-become-a-nurse-in-france-how-to-become-a-nurse-in-france-france-nursing-ar-6",
+      "primaryKeyword": "how to become a nurse in france",
+      "language": "ar",
+      "category": "France nursing",
+      "intentType": "transactional",
+      "translationGroupId": "fr-nurse-0026-how-to-become-a-nurse-in-france",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration france — France nursing (ar 7)",
+      "slug": "ar-0177-nurse-registration-france-nurse-registration-france-france-nursing-ar-7",
+      "primaryKeyword": "nurse registration france",
+      "language": "ar",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0026-nurse-registration-france",
+      "status": "planned"
+    },
+    {
+      "title": "france for foreign nurses — France nursing (ar 8)",
+      "slug": "ar-0178-france-for-foreign-nurses-france-for-foreign-nurses-france-nursing-ar-8",
+      "primaryKeyword": "france for foreign nurses",
+      "language": "ar",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0026-france-for-foreign-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "language requirements france — France nursing (ar 9)",
+      "slug": "ar-0179-language-requirements-france-language-requirements-france-france-nursing-ar-9",
+      "primaryKeyword": "language requirements france",
+      "language": "ar",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0026-language-requirements-france",
+      "status": "planned"
+    },
+    {
+      "title": "france nursing jobs — France nursing (ar 10)",
+      "slug": "ar-0180-france-nursing-jobs-france-nursing-jobs-france-nursing-ar-10",
+      "primaryKeyword": "france nursing jobs",
+      "language": "ar",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0026-france-nursing-jobs",
+      "status": "planned"
+    },
+    {
+      "title": "france to canada nurse pathway — France nursing (ar 11)",
+      "slug": "ar-0181-france-to-canada-nurse-pathway-france-to-canada-nurse-pathway-france-nursing-ar-11",
+      "primaryKeyword": "france to canada nurse pathway",
+      "language": "ar",
+      "category": "France nursing",
+      "intentType": "transactional",
+      "translationGroupId": "fr-nurse-0026-france-to-canada-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "france to australia nurse pathway — France nursing (ar 12)",
+      "slug": "ar-0182-france-to-australia-nurse-pathway-france-to-australia-nurse-pathway-france-nursing-ar-12",
+      "primaryKeyword": "france to australia nurse pathway",
+      "language": "ar",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0026-france-to-australia-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in france — France nursing (ar 13)",
+      "slug": "ar-0183-how-to-become-a-nurse-in-france-how-to-become-a-nurse-in-france-france-nursing-ar-13",
+      "primaryKeyword": "how to become a nurse in france",
+      "language": "ar",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0027-how-to-become-a-nurse-in-france",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration france — France nursing (ar 14)",
+      "slug": "ar-0184-nurse-registration-france-nurse-registration-france-france-nursing-ar-14",
+      "primaryKeyword": "nurse registration france",
+      "language": "ar",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0027-nurse-registration-france",
+      "status": "planned"
+    },
+    {
+      "title": "france for foreign nurses — France nursing (ar 15)",
+      "slug": "ar-0185-france-for-foreign-nurses-france-for-foreign-nurses-france-nursing-ar-15",
+      "primaryKeyword": "france for foreign nurses",
+      "language": "ar",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0027-france-for-foreign-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "language requirements france — France nursing (pt 1)",
+      "slug": "pt-0186-language-requirements-france-language-requirements-france-france-nursing-pt-1",
+      "primaryKeyword": "language requirements france",
+      "language": "pt",
+      "category": "France nursing",
+      "intentType": "transactional",
+      "translationGroupId": "fr-nurse-0027-language-requirements-france",
+      "status": "planned"
+    },
+    {
+      "title": "france nursing jobs — France nursing (pt 2)",
+      "slug": "pt-0187-france-nursing-jobs-france-nursing-jobs-france-nursing-pt-2",
+      "primaryKeyword": "france nursing jobs",
+      "language": "pt",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0027-france-nursing-jobs",
+      "status": "planned"
+    },
+    {
+      "title": "france to canada nurse pathway — France nursing (pt 3)",
+      "slug": "pt-0188-france-to-canada-nurse-pathway-france-to-canada-nurse-pathway-france-nursing-pt-3",
+      "primaryKeyword": "france to canada nurse pathway",
+      "language": "pt",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0027-france-to-canada-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "france to australia nurse pathway — France nursing (pt 4)",
+      "slug": "pt-0189-france-to-australia-nurse-pathway-france-to-australia-nurse-pathway-france-nursing-pt-4",
+      "primaryKeyword": "france to australia nurse pathway",
+      "language": "pt",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0027-france-to-australia-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in france — France nursing (pt 5)",
+      "slug": "pt-0190-how-to-become-a-nurse-in-france-how-to-become-a-nurse-in-france-france-nursing-pt-5",
+      "primaryKeyword": "how to become a nurse in france",
+      "language": "pt",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0028-how-to-become-a-nurse-in-france",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration france — France nursing (pt 6)",
+      "slug": "pt-0191-nurse-registration-france-nurse-registration-france-france-nursing-pt-6",
+      "primaryKeyword": "nurse registration france",
+      "language": "pt",
+      "category": "France nursing",
+      "intentType": "transactional",
+      "translationGroupId": "fr-nurse-0028-nurse-registration-france",
+      "status": "planned"
+    },
+    {
+      "title": "france for foreign nurses — France nursing (pt 7)",
+      "slug": "pt-0192-france-for-foreign-nurses-france-for-foreign-nurses-france-nursing-pt-7",
+      "primaryKeyword": "france for foreign nurses",
+      "language": "pt",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0028-france-for-foreign-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "language requirements france — France nursing (pt 8)",
+      "slug": "pt-0193-language-requirements-france-language-requirements-france-france-nursing-pt-8",
+      "primaryKeyword": "language requirements france",
+      "language": "pt",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0028-language-requirements-france",
+      "status": "planned"
+    },
+    {
+      "title": "france nursing jobs — France nursing (pt 9)",
+      "slug": "pt-0194-france-nursing-jobs-france-nursing-jobs-france-nursing-pt-9",
+      "primaryKeyword": "france nursing jobs",
+      "language": "pt",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0028-france-nursing-jobs",
+      "status": "planned"
+    },
+    {
+      "title": "france to canada nurse pathway — France nursing (pt 10)",
+      "slug": "pt-0195-france-to-canada-nurse-pathway-france-to-canada-nurse-pathway-france-nursing-pt-10",
+      "primaryKeyword": "france to canada nurse pathway",
+      "language": "pt",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0028-france-to-canada-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "france to australia nurse pathway — France nursing (es 1)",
+      "slug": "es-0196-france-to-australia-nurse-pathway-france-to-australia-nurse-pathway-france-nursing-es-1",
+      "primaryKeyword": "france to australia nurse pathway",
+      "language": "es",
+      "category": "France nursing",
+      "intentType": "transactional",
+      "translationGroupId": "fr-nurse-0028-france-to-australia-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in france — France nursing (es 2)",
+      "slug": "es-0197-how-to-become-a-nurse-in-france-how-to-become-a-nurse-in-france-france-nursing-es-2",
+      "primaryKeyword": "how to become a nurse in france",
+      "language": "es",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0029-how-to-become-a-nurse-in-france",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration france — France nursing (es 3)",
+      "slug": "es-0198-nurse-registration-france-nurse-registration-france-france-nursing-es-3",
+      "primaryKeyword": "nurse registration france",
+      "language": "es",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0029-nurse-registration-france",
+      "status": "planned"
+    },
+    {
+      "title": "france for foreign nurses — France nursing (es 4)",
+      "slug": "es-0199-france-for-foreign-nurses-france-for-foreign-nurses-france-nursing-es-4",
+      "primaryKeyword": "france for foreign nurses",
+      "language": "es",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0029-france-for-foreign-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "language requirements france — France nursing (es 5)",
+      "slug": "es-0200-language-requirements-france-language-requirements-france-france-nursing-es-5",
+      "primaryKeyword": "language requirements france",
+      "language": "es",
+      "category": "France nursing",
+      "intentType": "informational",
+      "translationGroupId": "fr-nurse-0029-language-requirements-france",
+      "status": "planned"
+    }
+  ]
+}

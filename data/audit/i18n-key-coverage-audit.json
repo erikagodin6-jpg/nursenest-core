@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-04-14T17:51:27.124Z",
-  "englishKeyCount": 20701,
+  "generatedAt": "2026-04-14T18:16:53.118Z",
+  "englishKeyCount": 20706,
   "namespacesInEnglish": 77,
   "topNamespacesByKeyCount": [
     {
@@ -17,7 +17,7 @@
     },
     {
       "namespace": "learner",
-      "keys": 1172
+      "keys": 1177
     },
     {
       "namespace": "components",
@@ -166,16 +166,16 @@
   ],
   "perLocale": {
     "en": {
-      "totalKeys": 20701,
+      "totalKeys": 20706,
       "emptyKeys": 0,
       "identicalToEnglishCount": 0,
       "identicalToEnglishSample": [],
       "namespacesInLocale": 77
     },
     "fr": {
-      "totalKeys": 20701,
+      "totalKeys": 20706,
       "emptyKeys": 0,
-      "identicalToEnglishCount": 5990,
+      "identicalToEnglishCount": 5995,
       "identicalToEnglishSample": [
         "allied.alliedAdmin.accepted",
         "allied.alliedAdmin.accepted2",
@@ -221,9 +221,9 @@
       "namespacesInLocale": 77
     },
     "es": {
-      "totalKeys": 20701,
+      "totalKeys": 20706,
       "emptyKeys": 0,
-      "identicalToEnglishCount": 15206,
+      "identicalToEnglishCount": 15211,
       "identicalToEnglishSample": [
         "allied.alliedAdmin.active",
         "allied.alliedAdmin.active2",
@@ -269,9 +269,9 @@
       "namespacesInLocale": 77
     },
     "tl": {
-      "totalKeys": 20701,
+      "totalKeys": 20706,
       "emptyKeys": 0,
-      "identicalToEnglishCount": 11557,
+      "identicalToEnglishCount": 11562,
       "identicalToEnglishSample": [
         "allied.alliedAdmin.alliedContentPipeline",
         "allied.alliedAdmin.faqSchema",
@@ -317,9 +317,9 @@
       "namespacesInLocale": 77
     },
     "hi": {
-      "totalKeys": 20701,
+      "totalKeys": 20706,
       "emptyKeys": 0,
-      "identicalToEnglishCount": 16452,
+      "identicalToEnglishCount": 16457,
       "identicalToEnglishSample": [
         "allied.alliedAdmin.5layerProductionSystem",
         "allied.alliedAdmin.accepted",
@@ -365,9 +365,9 @@
       "namespacesInLocale": 77
     },
     "zh": {
-      "totalKeys": 20701,
+      "totalKeys": 20706,
       "emptyKeys": 0,
-      "identicalToEnglishCount": 16343,
+      "identicalToEnglishCount": 16348,
       "identicalToEnglishSample": [
         "allied.alliedAdmin.5layerProductionSystem",
         "allied.alliedAdmin.accepted",
@@ -413,9 +413,9 @@
       "namespacesInLocale": 77
     },
     "zh-tw": {
-      "totalKeys": 20701,
+      "totalKeys": 20706,
       "emptyKeys": 0,
-      "identicalToEnglishCount": 17013,
+      "identicalToEnglishCount": 17018,
       "identicalToEnglishSample": [
         "allied.alliedAdmin.5layerProductionSystem",
         "allied.alliedAdmin.accepted",
@@ -461,9 +461,9 @@
       "namespacesInLocale": 77
     },
     "ar": {
-      "totalKeys": 20701,
+      "totalKeys": 20706,
       "emptyKeys": 0,
-      "identicalToEnglishCount": 5706,
+      "identicalToEnglishCount": 5711,
       "identicalToEnglishSample": [
         "allied.alliedHome.youremailcom",
         "allied.alliedInstitutions.nameschooledu",
@@ -509,9 +509,9 @@
       "namespacesInLocale": 77
     },
     "ko": {
-      "totalKeys": 20701,
+      "totalKeys": 20706,
       "emptyKeys": 0,
-      "identicalToEnglishCount": 16518,
+      "identicalToEnglishCount": 16523,
       "identicalToEnglishSample": [
         "allied.alliedAdmin.5layerProductionSystem",
         "allied.alliedAdmin.accepted",
@@ -557,9 +557,9 @@
       "namespacesInLocale": 77
     },
     "pt": {
-      "totalKeys": 20701,
+      "totalKeys": 20706,
       "emptyKeys": 0,
-      "identicalToEnglishCount": 16390,
+      "identicalToEnglishCount": 16395,
       "identicalToEnglishSample": [
         "allied.alliedAdmin.5layerProductionSystem",
         "allied.alliedAdmin.accepted",
@@ -605,9 +605,9 @@
       "namespacesInLocale": 77
     },
     "pa": {
-      "totalKeys": 20701,
+      "totalKeys": 20706,
       "emptyKeys": 0,
-      "identicalToEnglishCount": 16470,
+      "identicalToEnglishCount": 16475,
       "identicalToEnglishSample": [
         "allied.alliedAdmin.5layerProductionSystem",
         "allied.alliedAdmin.accepted",
@@ -653,9 +653,9 @@
       "namespacesInLocale": 77
     },
     "vi": {
-      "totalKeys": 20701,
+      "totalKeys": 20706,
       "emptyKeys": 0,
-      "identicalToEnglishCount": 16497,
+      "identicalToEnglishCount": 16502,
       "identicalToEnglishSample": [
         "allied.alliedAdmin.5layerProductionSystem",
         "allied.alliedAdmin.accepted",
@@ -701,9 +701,9 @@
       "namespacesInLocale": 77
     },
     "ht": {
-      "totalKeys": 20701,
+      "totalKeys": 20706,
       "emptyKeys": 0,
-      "identicalToEnglishCount": 16618,
+      "identicalToEnglishCount": 16623,
       "identicalToEnglishSample": [
         "allied.alliedAdmin.5layerProductionSystem",
         "allied.alliedAdmin.accepted",
@@ -749,9 +749,9 @@
       "namespacesInLocale": 77
     },
     "ur": {
-      "totalKeys": 20701,
+      "totalKeys": 20706,
       "emptyKeys": 0,
-      "identicalToEnglishCount": 16488,
+      "identicalToEnglishCount": 16493,
       "identicalToEnglishSample": [
         "allied.alliedAdmin.5layerProductionSystem",
         "allied.alliedAdmin.accepted",
@@ -797,9 +797,9 @@
       "namespacesInLocale": 77
     },
     "ja": {
-      "totalKeys": 20701,
+      "totalKeys": 20706,
       "emptyKeys": 0,
-      "identicalToEnglishCount": 16484,
+      "identicalToEnglishCount": 16489,
       "identicalToEnglishSample": [
         "allied.alliedAdmin.5layerProductionSystem",
         "allied.alliedAdmin.accepted",
@@ -845,9 +845,9 @@
       "namespacesInLocale": 77
     },
     "fa": {
-      "totalKeys": 20701,
+      "totalKeys": 20706,
       "emptyKeys": 0,
-      "identicalToEnglishCount": 16527,
+      "identicalToEnglishCount": 16532,
       "identicalToEnglishSample": [
         "allied.alliedAdmin.5layerProductionSystem",
         "allied.alliedAdmin.accepted",
@@ -893,9 +893,9 @@
       "namespacesInLocale": 77
     },
     "de": {
-      "totalKeys": 20701,
+      "totalKeys": 20706,
       "emptyKeys": 0,
-      "identicalToEnglishCount": 17094,
+      "identicalToEnglishCount": 17099,
       "identicalToEnglishSample": [
         "allied.alliedAdmin.5layerProductionSystem",
         "allied.alliedAdmin.accepted",
@@ -941,9 +941,9 @@
       "namespacesInLocale": 77
     },
     "th": {
-      "totalKeys": 20701,
+      "totalKeys": 20706,
       "emptyKeys": 0,
-      "identicalToEnglishCount": 17161,
+      "identicalToEnglishCount": 17166,
       "identicalToEnglishSample": [
         "allied.alliedAdmin.5layerProductionSystem",
         "allied.alliedAdmin.accepted",
@@ -989,9 +989,9 @@
       "namespacesInLocale": 77
     },
     "tr": {
-      "totalKeys": 20701,
+      "totalKeys": 20706,
       "emptyKeys": 0,
-      "identicalToEnglishCount": 17186,
+      "identicalToEnglishCount": 17191,
       "identicalToEnglishSample": [
         "allied.alliedAdmin.5layerProductionSystem",
         "allied.alliedAdmin.accepted",
@@ -1037,9 +1037,9 @@
       "namespacesInLocale": 77
     },
     "id": {
-      "totalKeys": 20701,
+      "totalKeys": 20706,
       "emptyKeys": 0,
-      "identicalToEnglishCount": 17217,
+      "identicalToEnglishCount": 17222,
       "identicalToEnglishSample": [
         "allied.alliedAdmin.5layerProductionSystem",
         "allied.alliedAdmin.accepted",
@@ -1085,9 +1085,9 @@
       "namespacesInLocale": 77
     },
     "it": {
-      "totalKeys": 20701,
+      "totalKeys": 20706,
       "emptyKeys": 0,
-      "identicalToEnglishCount": 20325,
+      "identicalToEnglishCount": 20330,
       "identicalToEnglishSample": [
         "allied.alliedAdmin.5layerProductionSystem",
         "allied.alliedAdmin.accepted",
@@ -1133,9 +1133,9 @@
       "namespacesInLocale": 77
     },
     "ru": {
-      "totalKeys": 20701,
+      "totalKeys": 20706,
       "emptyKeys": 0,
-      "identicalToEnglishCount": 20321,
+      "identicalToEnglishCount": 20326,
       "identicalToEnglishSample": [
         "allied.alliedAdmin.5layerProductionSystem",
         "allied.alliedAdmin.accepted",
@@ -1187,7 +1187,7 @@
       "status": "disabled",
       "coveragePct": 72,
       "translatedKeys": 14995,
-      "totalEnglishKeys": 20701,
+      "totalEnglishKeys": 20706,
       "missingCriticalPrefixes": [
         "nav.",
         "pages.home.",
@@ -1202,7 +1202,7 @@
       "status": "active",
       "coveragePct": 71,
       "translatedKeys": 14711,
-      "totalEnglishKeys": 20701,
+      "totalEnglishKeys": 20706,
       "missingCriticalPrefixes": [
         "nav.",
         "pages.home.",
@@ -1216,7 +1216,7 @@
       "status": "partial",
       "coveragePct": 44,
       "translatedKeys": 9144,
-      "totalEnglishKeys": 20701,
+      "totalEnglishKeys": 20706,
       "missingCriticalPrefixes": [
         "nav.",
         "footer.",
@@ -1233,7 +1233,7 @@
       "status": "active",
       "coveragePct": 27,
       "translatedKeys": 5495,
-      "totalEnglishKeys": 20701,
+      "totalEnglishKeys": 20706,
       "missingCriticalPrefixes": [
         "nav.",
         "pages.home.",
@@ -1249,7 +1249,7 @@
       "status": "partial",
       "coveragePct": 21,
       "translatedKeys": 4249,
-      "totalEnglishKeys": 20701,
+      "totalEnglishKeys": 20706,
       "missingCriticalPrefixes": [
         "nav.",
         "pages.home.",
@@ -1265,7 +1265,7 @@
       "status": "disabled",
       "coveragePct": 21,
       "translatedKeys": 4358,
-      "totalEnglishKeys": 20701,
+      "totalEnglishKeys": 20706,
       "missingCriticalPrefixes": [
         "nav.",
         "pages.home.",
@@ -1281,7 +1281,7 @@
       "status": "disabled",
       "coveragePct": 21,
       "translatedKeys": 4311,
-      "totalEnglishKeys": 20701,
+      "totalEnglishKeys": 20706,
       "missingCriticalPrefixes": [
         "nav.",
         "pages.home.",
@@ -1297,7 +1297,7 @@
       "status": "disabled",
       "coveragePct": 20,
       "translatedKeys": 4183,
-      "totalEnglishKeys": 20701,
+      "totalEnglishKeys": 20706,
       "missingCriticalPrefixes": [
         "nav.",
         "footer.",
@@ -1314,7 +1314,7 @@
       "status": "disabled",
       "coveragePct": 20,
       "translatedKeys": 4231,
-      "totalEnglishKeys": 20701,
+      "totalEnglishKeys": 20706,
       "missingCriticalPrefixes": [
         "nav.",
         "pages.home.",
@@ -1330,7 +1330,7 @@
       "status": "disabled",
       "coveragePct": 20,
       "translatedKeys": 4204,
-      "totalEnglishKeys": 20701,
+      "totalEnglishKeys": 20706,
       "missingCriticalPrefixes": [
         "nav.",
         "pages.home.",
@@ -1346,7 +1346,7 @@
       "status": "disabled",
       "coveragePct": 20,
       "translatedKeys": 4083,
-      "totalEnglishKeys": 20701,
+      "totalEnglishKeys": 20706,
       "missingCriticalPrefixes": [
         "nav.",
         "footer.",
@@ -1363,7 +1363,7 @@
       "status": "disabled",
       "coveragePct": 20,
       "translatedKeys": 4213,
-      "totalEnglishKeys": 20701,
+      "totalEnglishKeys": 20706,
       "missingCriticalPrefixes": [
         "nav.",
         "pages.home.",
@@ -1379,7 +1379,7 @@
       "status": "disabled",
       "coveragePct": 20,
       "translatedKeys": 4217,
-      "totalEnglishKeys": 20701,
+      "totalEnglishKeys": 20706,
       "missingCriticalPrefixes": [
         "nav.",
         "pages.home.",
@@ -1395,7 +1395,7 @@
       "status": "disabled",
       "coveragePct": 20,
       "translatedKeys": 4174,
-      "totalEnglishKeys": 20701,
+      "totalEnglishKeys": 20706,
       "missingCriticalPrefixes": [
         "nav.",
         "footer.",
@@ -1412,7 +1412,7 @@
       "status": "disabled",
       "coveragePct": 18,
       "translatedKeys": 3688,
-      "totalEnglishKeys": 20701,
+      "totalEnglishKeys": 20706,
       "missingCriticalPrefixes": [
         "nav.",
         "pages.home.",
@@ -1428,7 +1428,7 @@
       "status": "disabled",
       "coveragePct": 17,
       "translatedKeys": 3607,
-      "totalEnglishKeys": 20701,
+      "totalEnglishKeys": 20706,
       "missingCriticalPrefixes": [
         "nav.",
         "pages.home.",
@@ -1444,7 +1444,7 @@
       "status": "disabled",
       "coveragePct": 17,
       "translatedKeys": 3540,
-      "totalEnglishKeys": 20701,
+      "totalEnglishKeys": 20706,
       "missingCriticalPrefixes": [
         "nav.",
         "footer.",
@@ -1461,7 +1461,7 @@
       "status": "disabled",
       "coveragePct": 17,
       "translatedKeys": 3515,
-      "totalEnglishKeys": 20701,
+      "totalEnglishKeys": 20706,
       "missingCriticalPrefixes": [
         "nav.",
         "footer.",
@@ -1478,7 +1478,7 @@
       "status": "disabled",
       "coveragePct": 17,
       "translatedKeys": 3484,
-      "totalEnglishKeys": 20701,
+      "totalEnglishKeys": 20706,
       "missingCriticalPrefixes": [
         "nav.",
         "footer.",
@@ -1495,7 +1495,7 @@
       "status": "disabled",
       "coveragePct": 2,
       "translatedKeys": 376,
-      "totalEnglishKeys": 20701,
+      "totalEnglishKeys": 20706,
       "missingCriticalPrefixes": [
         "nav.",
         "pages.home.",
@@ -1511,7 +1511,7 @@
       "status": "disabled",
       "coveragePct": 2,
       "translatedKeys": 380,
-      "totalEnglishKeys": 20701,
+      "totalEnglishKeys": 20706,
       "missingCriticalPrefixes": [
         "nav.",
         "pages.home.",
@@ -1527,7 +1527,7 @@
       "status": "active",
       "coveragePct": 0,
       "translatedKeys": 0,
-      "totalEnglishKeys": 20701,
+      "totalEnglishKeys": 20706,
       "missingCriticalPrefixes": [
         "nav.",
         "footer.",

@@ -120,7 +120,7 @@ export default async function LearnerShellLayout({ children }: { children: React
     <SentryLearnerShell userId={userId}>
       <LearnerExamChromeGate>
         <LearnerFeedbackShell pathwayId={pathwayId}>
-          <div className="nn-learner-app mx-auto w-full max-w-6xl px-4 pt-[var(--nn-rhythm-shell-y)] pb-[calc(var(--nn-rhythm-shell-y)+5rem)] sm:px-6 md:pb-[var(--nn-rhythm-shell-y)]">
+          <div className="nn-learner-app mx-auto w-full max-w-6xl px-4 pt-[var(--nn-rhythm-shell-y)] pb-[calc(var(--nn-rhythm-shell-y)+5rem+env(safe-area-inset-bottom,0px))] sm:px-6 md:pb-[var(--nn-rhythm-shell-y)]">
             <PathwayLessonProgressRefreshListener />
             <LearnerAppSectionAnalytics />
             <header className="nn-learner-exam-chrome-target nn-card mb-[var(--nn-rhythm-tight-y)] flex min-h-14 flex-col gap-3 rounded-2xl p-3 sm:gap-4 lg:min-h-16 lg:flex-row lg:items-center lg:justify-between lg:p-4">

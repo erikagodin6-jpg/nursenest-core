@@ -1,0 +1,2006 @@
+{
+  "generatedAt": "2026-04-14T19:25:22.809Z",
+  "count": 200,
+  "entries": [
+    {
+      "title": "national nursing examination japan — Japan nursing (en 1)",
+      "slug": "en-0001-national-nursing-examination-japan-national-nursing-examination-japan-japan-nursing-en-1",
+      "primaryKeyword": "national nursing examination japan",
+      "language": "en",
+      "category": "Japan nursing",
+      "intentType": "transactional",
+      "translationGroupId": "jp-nurse-0001-national-nursing-examination-japan",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in japan — Japan nursing (en 2)",
+      "slug": "en-0002-how-to-become-a-nurse-in-japan-how-to-become-a-nurse-in-japan-japan-nursing-en-2",
+      "primaryKeyword": "how to become a nurse in japan",
+      "language": "en",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0001-how-to-become-a-nurse-in-japan",
+      "status": "planned"
+    },
+    {
+      "title": "japanese nursing licensure guide — Japan nursing (en 3)",
+      "slug": "en-0003-japanese-nursing-licensure-guide-japanese-nursing-licensure-guide-japan-nursing-en-3",
+      "primaryKeyword": "japanese nursing licensure guide",
+      "language": "en",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0001-japanese-nursing-licensure-guide",
+      "status": "planned"
+    },
+    {
+      "title": "nursing jobs in japan — Japan nursing (en 4)",
+      "slug": "en-0004-nursing-jobs-in-japan-nursing-jobs-in-japan-japan-nursing-en-4",
+      "primaryKeyword": "nursing jobs in japan",
+      "language": "en",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0001-nursing-jobs-in-japan",
+      "status": "planned"
+    },
+    {
+      "title": "japanese nurses abroad — Japan nursing (en 5)",
+      "slug": "en-0005-japanese-nurses-abroad-japanese-nurses-abroad-japan-nursing-en-5",
+      "primaryKeyword": "japanese nurses abroad",
+      "language": "en",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0001-japanese-nurses-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "nclex for japanese nurses — Japan nursing (en 6)",
+      "slug": "en-0006-nclex-for-japanese-nurses-nclex-for-japanese-nurses-japan-nursing-en-6",
+      "primaryKeyword": "nclex for japanese nurses",
+      "language": "en",
+      "category": "Japan nursing",
+      "intentType": "transactional",
+      "translationGroupId": "jp-nurse-0001-nclex-for-japanese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "australia for japanese nurses — Japan nursing (en 7)",
+      "slug": "en-0007-australia-for-japanese-nurses-australia-for-japanese-nurses-japan-nursing-en-7",
+      "primaryKeyword": "australia for japanese nurses",
+      "language": "en",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0001-australia-for-japanese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "english test pathways for japanese nurses — Japan nursing (en 8)",
+      "slug": "en-0008-english-test-pathways-for-japanese-nurses-english-test-pathways-for-japanese-nurses-japan-nursing-en-8",
+      "primaryKeyword": "english test pathways for japanese nurses",
+      "language": "en",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0001-english-test-pathways-for-japanese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "study tips for nursing exam japan — Japan nursing (en 9)",
+      "slug": "en-0009-study-tips-for-nursing-exam-japan-study-tips-for-nursing-exam-japan-japan-nursing-en-9",
+      "primaryKeyword": "study tips for nursing exam japan",
+      "language": "en",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0001-study-tips-for-nursing-exam-japan",
+      "status": "planned"
+    },
+    {
+      "title": "working in japanese hospitals — Japan nursing (en 10)",
+      "slug": "en-0010-working-in-japanese-hospitals-working-in-japanese-hospitals-japan-nursing-en-10",
+      "primaryKeyword": "working in japanese hospitals",
+      "language": "en",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0001-working-in-japanese-hospitals",
+      "status": "planned"
+    },
+    {
+      "title": "national nursing examination japan — Japan nursing (en 11)",
+      "slug": "en-0011-national-nursing-examination-japan-national-nursing-examination-japan-japan-nursing-en-11",
+      "primaryKeyword": "national nursing examination japan",
+      "language": "en",
+      "category": "Japan nursing",
+      "intentType": "transactional",
+      "translationGroupId": "jp-nurse-0002-national-nursing-examination-japan",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in japan — Japan nursing (en 12)",
+      "slug": "en-0012-how-to-become-a-nurse-in-japan-how-to-become-a-nurse-in-japan-japan-nursing-en-12",
+      "primaryKeyword": "how to become a nurse in japan",
+      "language": "en",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0002-how-to-become-a-nurse-in-japan",
+      "status": "planned"
+    },
+    {
+      "title": "japanese nursing licensure guide — Japan nursing (en 13)",
+      "slug": "en-0013-japanese-nursing-licensure-guide-japanese-nursing-licensure-guide-japan-nursing-en-13",
+      "primaryKeyword": "japanese nursing licensure guide",
+      "language": "en",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0002-japanese-nursing-licensure-guide",
+      "status": "planned"
+    },
+    {
+      "title": "nursing jobs in japan — Japan nursing (en 14)",
+      "slug": "en-0014-nursing-jobs-in-japan-nursing-jobs-in-japan-japan-nursing-en-14",
+      "primaryKeyword": "nursing jobs in japan",
+      "language": "en",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0002-nursing-jobs-in-japan",
+      "status": "planned"
+    },
+    {
+      "title": "japanese nurses abroad — Japan nursing (en 15)",
+      "slug": "en-0015-japanese-nurses-abroad-japanese-nurses-abroad-japan-nursing-en-15",
+      "primaryKeyword": "japanese nurses abroad",
+      "language": "en",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0002-japanese-nurses-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "nclex for japanese nurses — Japan nursing (en 16)",
+      "slug": "en-0016-nclex-for-japanese-nurses-nclex-for-japanese-nurses-japan-nursing-en-16",
+      "primaryKeyword": "nclex for japanese nurses",
+      "language": "en",
+      "category": "Japan nursing",
+      "intentType": "transactional",
+      "translationGroupId": "jp-nurse-0002-nclex-for-japanese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "australia for japanese nurses — Japan nursing (en 17)",
+      "slug": "en-0017-australia-for-japanese-nurses-australia-for-japanese-nurses-japan-nursing-en-17",
+      "primaryKeyword": "australia for japanese nurses",
+      "language": "en",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0002-australia-for-japanese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "english test pathways for japanese nurses — Japan nursing (en 18)",
+      "slug": "en-0018-english-test-pathways-for-japanese-nurses-english-test-pathways-for-japanese-nurses-japan-nursing-en-18",
+      "primaryKeyword": "english test pathways for japanese nurses",
+      "language": "en",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0002-english-test-pathways-for-japanese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "study tips for nursing exam japan — Japan nursing (en 19)",
+      "slug": "en-0019-study-tips-for-nursing-exam-japan-study-tips-for-nursing-exam-japan-japan-nursing-en-19",
+      "primaryKeyword": "study tips for nursing exam japan",
+      "language": "en",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0002-study-tips-for-nursing-exam-japan",
+      "status": "planned"
+    },
+    {
+      "title": "working in japanese hospitals — Japan nursing (en 20)",
+      "slug": "en-0020-working-in-japanese-hospitals-working-in-japanese-hospitals-japan-nursing-en-20",
+      "primaryKeyword": "working in japanese hospitals",
+      "language": "en",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0002-working-in-japanese-hospitals",
+      "status": "planned"
+    },
+    {
+      "title": "national nursing examination japan — Japan nursing (en 21)",
+      "slug": "en-0021-national-nursing-examination-japan-national-nursing-examination-japan-japan-nursing-en-21",
+      "primaryKeyword": "national nursing examination japan",
+      "language": "en",
+      "category": "Japan nursing",
+      "intentType": "transactional",
+      "translationGroupId": "jp-nurse-0003-national-nursing-examination-japan",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in japan — Japan nursing (en 22)",
+      "slug": "en-0022-how-to-become-a-nurse-in-japan-how-to-become-a-nurse-in-japan-japan-nursing-en-22",
+      "primaryKeyword": "how to become a nurse in japan",
+      "language": "en",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0003-how-to-become-a-nurse-in-japan",
+      "status": "planned"
+    },
+    {
+      "title": "japanese nursing licensure guide — Japan nursing (en 23)",
+      "slug": "en-0023-japanese-nursing-licensure-guide-japanese-nursing-licensure-guide-japan-nursing-en-23",
+      "primaryKeyword": "japanese nursing licensure guide",
+      "language": "en",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0003-japanese-nursing-licensure-guide",
+      "status": "planned"
+    },
+    {
+      "title": "nursing jobs in japan — Japan nursing (en 24)",
+      "slug": "en-0024-nursing-jobs-in-japan-nursing-jobs-in-japan-japan-nursing-en-24",
+      "primaryKeyword": "nursing jobs in japan",
+      "language": "en",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0003-nursing-jobs-in-japan",
+      "status": "planned"
+    },
+    {
+      "title": "japanese nurses abroad — Japan nursing (en 25)",
+      "slug": "en-0025-japanese-nurses-abroad-japanese-nurses-abroad-japan-nursing-en-25",
+      "primaryKeyword": "japanese nurses abroad",
+      "language": "en",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0003-japanese-nurses-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "nclex for japanese nurses — Japan nursing (en 26)",
+      "slug": "en-0026-nclex-for-japanese-nurses-nclex-for-japanese-nurses-japan-nursing-en-26",
+      "primaryKeyword": "nclex for japanese nurses",
+      "language": "en",
+      "category": "Japan nursing",
+      "intentType": "transactional",
+      "translationGroupId": "jp-nurse-0003-nclex-for-japanese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "australia for japanese nurses — Japan nursing (en 27)",
+      "slug": "en-0027-australia-for-japanese-nurses-australia-for-japanese-nurses-japan-nursing-en-27",
+      "primaryKeyword": "australia for japanese nurses",
+      "language": "en",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0003-australia-for-japanese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "english test pathways for japanese nurses — Japan nursing (en 28)",
+      "slug": "en-0028-english-test-pathways-for-japanese-nurses-english-test-pathways-for-japanese-nurses-japan-nursing-en-28",
+      "primaryKeyword": "english test pathways for japanese nurses",
+      "language": "en",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0003-english-test-pathways-for-japanese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "study tips for nursing exam japan — Japan nursing (en 29)",
+      "slug": "en-0029-study-tips-for-nursing-exam-japan-study-tips-for-nursing-exam-japan-japan-nursing-en-29",
+      "primaryKeyword": "study tips for nursing exam japan",
+      "language": "en",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0003-study-tips-for-nursing-exam-japan",
+      "status": "planned"
+    },
+    {
+      "title": "working in japanese hospitals — Japan nursing (en 30)",
+      "slug": "en-0030-working-in-japanese-hospitals-working-in-japanese-hospitals-japan-nursing-en-30",
+      "primaryKeyword": "working in japanese hospitals",
+      "language": "en",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0003-working-in-japanese-hospitals",
+      "status": "planned"
+    },
+    {
+      "title": "national nursing examination japan — Japan nursing (en 31)",
+      "slug": "en-0031-national-nursing-examination-japan-national-nursing-examination-japan-japan-nursing-en-31",
+      "primaryKeyword": "national nursing examination japan",
+      "language": "en",
+      "category": "Japan nursing",
+      "intentType": "transactional",
+      "translationGroupId": "jp-nurse-0004-national-nursing-examination-japan",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in japan — Japan nursing (en 32)",
+      "slug": "en-0032-how-to-become-a-nurse-in-japan-how-to-become-a-nurse-in-japan-japan-nursing-en-32",
+      "primaryKeyword": "how to become a nurse in japan",
+      "language": "en",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0004-how-to-become-a-nurse-in-japan",
+      "status": "planned"
+    },
+    {
+      "title": "japanese nursing licensure guide — Japan nursing (en 33)",
+      "slug": "en-0033-japanese-nursing-licensure-guide-japanese-nursing-licensure-guide-japan-nursing-en-33",
+      "primaryKeyword": "japanese nursing licensure guide",
+      "language": "en",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0004-japanese-nursing-licensure-guide",
+      "status": "planned"
+    },
+    {
+      "title": "nursing jobs in japan — Japan nursing (en 34)",
+      "slug": "en-0034-nursing-jobs-in-japan-nursing-jobs-in-japan-japan-nursing-en-34",
+      "primaryKeyword": "nursing jobs in japan",
+      "language": "en",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0004-nursing-jobs-in-japan",
+      "status": "planned"
+    },
+    {
+      "title": "japanese nurses abroad — Japan nursing (en 35)",
+      "slug": "en-0035-japanese-nurses-abroad-japanese-nurses-abroad-japan-nursing-en-35",
+      "primaryKeyword": "japanese nurses abroad",
+      "language": "en",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0004-japanese-nurses-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "nclex for japanese nurses — Japan nursing (en 36)",
+      "slug": "en-0036-nclex-for-japanese-nurses-nclex-for-japanese-nurses-japan-nursing-en-36",
+      "primaryKeyword": "nclex for japanese nurses",
+      "language": "en",
+      "category": "Japan nursing",
+      "intentType": "transactional",
+      "translationGroupId": "jp-nurse-0004-nclex-for-japanese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "australia for japanese nurses — Japan nursing (en 37)",
+      "slug": "en-0037-australia-for-japanese-nurses-australia-for-japanese-nurses-japan-nursing-en-37",
+      "primaryKeyword": "australia for japanese nurses",
+      "language": "en",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0004-australia-for-japanese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "english test pathways for japanese nurses — Japan nursing (en 38)",
+      "slug": "en-0038-english-test-pathways-for-japanese-nurses-english-test-pathways-for-japanese-nurses-japan-nursing-en-38",
+      "primaryKeyword": "english test pathways for japanese nurses",
+      "language": "en",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0004-english-test-pathways-for-japanese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "study tips for nursing exam japan — Japan nursing (en 39)",
+      "slug": "en-0039-study-tips-for-nursing-exam-japan-study-tips-for-nursing-exam-japan-japan-nursing-en-39",
+      "primaryKeyword": "study tips for nursing exam japan",
+      "language": "en",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0004-study-tips-for-nursing-exam-japan",
+      "status": "planned"
+    },
+    {
+      "title": "working in japanese hospitals — Japan nursing (en 40)",
+      "slug": "en-0040-working-in-japanese-hospitals-working-in-japanese-hospitals-japan-nursing-en-40",
+      "primaryKeyword": "working in japanese hospitals",
+      "language": "en",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0004-working-in-japanese-hospitals",
+      "status": "planned"
+    },
+    {
+      "title": "national nursing examination japan — Japan nursing (en 41)",
+      "slug": "en-0041-national-nursing-examination-japan-national-nursing-examination-japan-japan-nursing-en-41",
+      "primaryKeyword": "national nursing examination japan",
+      "language": "en",
+      "category": "Japan nursing",
+      "intentType": "transactional",
+      "translationGroupId": "jp-nurse-0005-national-nursing-examination-japan",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in japan — Japan nursing (en 42)",
+      "slug": "en-0042-how-to-become-a-nurse-in-japan-how-to-become-a-nurse-in-japan-japan-nursing-en-42",
+      "primaryKeyword": "how to become a nurse in japan",
+      "language": "en",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0005-how-to-become-a-nurse-in-japan",
+      "status": "planned"
+    },
+    {
+      "title": "japanese nursing licensure guide — Japan nursing (en 43)",
+      "slug": "en-0043-japanese-nursing-licensure-guide-japanese-nursing-licensure-guide-japan-nursing-en-43",
+      "primaryKeyword": "japanese nursing licensure guide",
+      "language": "en",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0005-japanese-nursing-licensure-guide",
+      "status": "planned"
+    },
+    {
+      "title": "nursing jobs in japan — Japan nursing (en 44)",
+      "slug": "en-0044-nursing-jobs-in-japan-nursing-jobs-in-japan-japan-nursing-en-44",
+      "primaryKeyword": "nursing jobs in japan",
+      "language": "en",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0005-nursing-jobs-in-japan",
+      "status": "planned"
+    },
+    {
+      "title": "japanese nurses abroad — Japan nursing (en 45)",
+      "slug": "en-0045-japanese-nurses-abroad-japanese-nurses-abroad-japan-nursing-en-45",
+      "primaryKeyword": "japanese nurses abroad",
+      "language": "en",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0005-japanese-nurses-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "nclex for japanese nurses — Japan nursing (en 46)",
+      "slug": "en-0046-nclex-for-japanese-nurses-nclex-for-japanese-nurses-japan-nursing-en-46",
+      "primaryKeyword": "nclex for japanese nurses",
+      "language": "en",
+      "category": "Japan nursing",
+      "intentType": "transactional",
+      "translationGroupId": "jp-nurse-0005-nclex-for-japanese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "australia for japanese nurses — Japan nursing (en 47)",
+      "slug": "en-0047-australia-for-japanese-nurses-australia-for-japanese-nurses-japan-nursing-en-47",
+      "primaryKeyword": "australia for japanese nurses",
+      "language": "en",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0005-australia-for-japanese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "english test pathways for japanese nurses — Japan nursing (en 48)",
+      "slug": "en-0048-english-test-pathways-for-japanese-nurses-english-test-pathways-for-japanese-nurses-japan-nursing-en-48",
+      "primaryKeyword": "english test pathways for japanese nurses",
+      "language": "en",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0005-english-test-pathways-for-japanese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "study tips for nursing exam japan — Japan nursing (en 49)",
+      "slug": "en-0049-study-tips-for-nursing-exam-japan-study-tips-for-nursing-exam-japan-japan-nursing-en-49",
+      "primaryKeyword": "study tips for nursing exam japan",
+      "language": "en",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0005-study-tips-for-nursing-exam-japan",
+      "status": "planned"
+    },
+    {
+      "title": "working in japanese hospitals — Japan nursing (en 50)",
+      "slug": "en-0050-working-in-japanese-hospitals-working-in-japanese-hospitals-japan-nursing-en-50",
+      "primaryKeyword": "working in japanese hospitals",
+      "language": "en",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0005-working-in-japanese-hospitals",
+      "status": "planned"
+    },
+    {
+      "title": "national nursing examination japan — Japan nursing (en 51)",
+      "slug": "en-0051-national-nursing-examination-japan-national-nursing-examination-japan-japan-nursing-en-51",
+      "primaryKeyword": "national nursing examination japan",
+      "language": "en",
+      "category": "Japan nursing",
+      "intentType": "transactional",
+      "translationGroupId": "jp-nurse-0006-national-nursing-examination-japan",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in japan — Japan nursing (en 52)",
+      "slug": "en-0052-how-to-become-a-nurse-in-japan-how-to-become-a-nurse-in-japan-japan-nursing-en-52",
+      "primaryKeyword": "how to become a nurse in japan",
+      "language": "en",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0006-how-to-become-a-nurse-in-japan",
+      "status": "planned"
+    },
+    {
+      "title": "japanese nursing licensure guide — Japan nursing (en 53)",
+      "slug": "en-0053-japanese-nursing-licensure-guide-japanese-nursing-licensure-guide-japan-nursing-en-53",
+      "primaryKeyword": "japanese nursing licensure guide",
+      "language": "en",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0006-japanese-nursing-licensure-guide",
+      "status": "planned"
+    },
+    {
+      "title": "nursing jobs in japan — Japan nursing (en 54)",
+      "slug": "en-0054-nursing-jobs-in-japan-nursing-jobs-in-japan-japan-nursing-en-54",
+      "primaryKeyword": "nursing jobs in japan",
+      "language": "en",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0006-nursing-jobs-in-japan",
+      "status": "planned"
+    },
+    {
+      "title": "japanese nurses abroad — Japan nursing (en 55)",
+      "slug": "en-0055-japanese-nurses-abroad-japanese-nurses-abroad-japan-nursing-en-55",
+      "primaryKeyword": "japanese nurses abroad",
+      "language": "en",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0006-japanese-nurses-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "nclex for japanese nurses — Japan nursing (en 56)",
+      "slug": "en-0056-nclex-for-japanese-nurses-nclex-for-japanese-nurses-japan-nursing-en-56",
+      "primaryKeyword": "nclex for japanese nurses",
+      "language": "en",
+      "category": "Japan nursing",
+      "intentType": "transactional",
+      "translationGroupId": "jp-nurse-0006-nclex-for-japanese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "australia for japanese nurses — Japan nursing (en 57)",
+      "slug": "en-0057-australia-for-japanese-nurses-australia-for-japanese-nurses-japan-nursing-en-57",
+      "primaryKeyword": "australia for japanese nurses",
+      "language": "en",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0006-australia-for-japanese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "english test pathways for japanese nurses — Japan nursing (en 58)",
+      "slug": "en-0058-english-test-pathways-for-japanese-nurses-english-test-pathways-for-japanese-nurses-japan-nursing-en-58",
+      "primaryKeyword": "english test pathways for japanese nurses",
+      "language": "en",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0006-english-test-pathways-for-japanese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "study tips for nursing exam japan — Japan nursing (en 59)",
+      "slug": "en-0059-study-tips-for-nursing-exam-japan-study-tips-for-nursing-exam-japan-japan-nursing-en-59",
+      "primaryKeyword": "study tips for nursing exam japan",
+      "language": "en",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0006-study-tips-for-nursing-exam-japan",
+      "status": "planned"
+    },
+    {
+      "title": "working in japanese hospitals — Japan nursing (en 60)",
+      "slug": "en-0060-working-in-japanese-hospitals-working-in-japanese-hospitals-japan-nursing-en-60",
+      "primaryKeyword": "working in japanese hospitals",
+      "language": "en",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0006-working-in-japanese-hospitals",
+      "status": "planned"
+    },
+    {
+      "title": "national nursing examination japan — Japan nursing (en 61)",
+      "slug": "en-0061-national-nursing-examination-japan-national-nursing-examination-japan-japan-nursing-en-61",
+      "primaryKeyword": "national nursing examination japan",
+      "language": "en",
+      "category": "Japan nursing",
+      "intentType": "transactional",
+      "translationGroupId": "jp-nurse-0007-national-nursing-examination-japan",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in japan — Japan nursing (en 62)",
+      "slug": "en-0062-how-to-become-a-nurse-in-japan-how-to-become-a-nurse-in-japan-japan-nursing-en-62",
+      "primaryKeyword": "how to become a nurse in japan",
+      "language": "en",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0007-how-to-become-a-nurse-in-japan",
+      "status": "planned"
+    },
+    {
+      "title": "japanese nursing licensure guide — Japan nursing (en 63)",
+      "slug": "en-0063-japanese-nursing-licensure-guide-japanese-nursing-licensure-guide-japan-nursing-en-63",
+      "primaryKeyword": "japanese nursing licensure guide",
+      "language": "en",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0007-japanese-nursing-licensure-guide",
+      "status": "planned"
+    },
+    {
+      "title": "nursing jobs in japan — Japan nursing (en 64)",
+      "slug": "en-0064-nursing-jobs-in-japan-nursing-jobs-in-japan-japan-nursing-en-64",
+      "primaryKeyword": "nursing jobs in japan",
+      "language": "en",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0007-nursing-jobs-in-japan",
+      "status": "planned"
+    },
+    {
+      "title": "japanese nurses abroad — Japan nursing (en 65)",
+      "slug": "en-0065-japanese-nurses-abroad-japanese-nurses-abroad-japan-nursing-en-65",
+      "primaryKeyword": "japanese nurses abroad",
+      "language": "en",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0007-japanese-nurses-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "nclex for japanese nurses — Japan nursing (en 66)",
+      "slug": "en-0066-nclex-for-japanese-nurses-nclex-for-japanese-nurses-japan-nursing-en-66",
+      "primaryKeyword": "nclex for japanese nurses",
+      "language": "en",
+      "category": "Japan nursing",
+      "intentType": "transactional",
+      "translationGroupId": "jp-nurse-0007-nclex-for-japanese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "australia for japanese nurses — Japan nursing (en 67)",
+      "slug": "en-0067-australia-for-japanese-nurses-australia-for-japanese-nurses-japan-nursing-en-67",
+      "primaryKeyword": "australia for japanese nurses",
+      "language": "en",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0007-australia-for-japanese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "english test pathways for japanese nurses — Japan nursing (en 68)",
+      "slug": "en-0068-english-test-pathways-for-japanese-nurses-english-test-pathways-for-japanese-nurses-japan-nursing-en-68",
+      "primaryKeyword": "english test pathways for japanese nurses",
+      "language": "en",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0007-english-test-pathways-for-japanese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "study tips for nursing exam japan — Japan nursing (en 69)",
+      "slug": "en-0069-study-tips-for-nursing-exam-japan-study-tips-for-nursing-exam-japan-japan-nursing-en-69",
+      "primaryKeyword": "study tips for nursing exam japan",
+      "language": "en",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0007-study-tips-for-nursing-exam-japan",
+      "status": "planned"
+    },
+    {
+      "title": "working in japanese hospitals — Japan nursing (en 70)",
+      "slug": "en-0070-working-in-japanese-hospitals-working-in-japanese-hospitals-japan-nursing-en-70",
+      "primaryKeyword": "working in japanese hospitals",
+      "language": "en",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0007-working-in-japanese-hospitals",
+      "status": "planned"
+    },
+    {
+      "title": "national nursing examination japan — Japan nursing (ja 1)",
+      "slug": "ja-0071-national-nursing-examination-japan-national-nursing-examination-japan-japan-nursing-ja-1",
+      "primaryKeyword": "national nursing examination japan",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "transactional",
+      "translationGroupId": "jp-nurse-0008-national-nursing-examination-japan",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in japan — Japan nursing (ja 2)",
+      "slug": "ja-0072-how-to-become-a-nurse-in-japan-how-to-become-a-nurse-in-japan-japan-nursing-ja-2",
+      "primaryKeyword": "how to become a nurse in japan",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0008-how-to-become-a-nurse-in-japan",
+      "status": "planned"
+    },
+    {
+      "title": "japanese nursing licensure guide — Japan nursing (ja 3)",
+      "slug": "ja-0073-japanese-nursing-licensure-guide-japanese-nursing-licensure-guide-japan-nursing-ja-3",
+      "primaryKeyword": "japanese nursing licensure guide",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0008-japanese-nursing-licensure-guide",
+      "status": "planned"
+    },
+    {
+      "title": "nursing jobs in japan — Japan nursing (ja 4)",
+      "slug": "ja-0074-nursing-jobs-in-japan-nursing-jobs-in-japan-japan-nursing-ja-4",
+      "primaryKeyword": "nursing jobs in japan",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0008-nursing-jobs-in-japan",
+      "status": "planned"
+    },
+    {
+      "title": "japanese nurses abroad — Japan nursing (ja 5)",
+      "slug": "ja-0075-japanese-nurses-abroad-japanese-nurses-abroad-japan-nursing-ja-5",
+      "primaryKeyword": "japanese nurses abroad",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0008-japanese-nurses-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "nclex for japanese nurses — Japan nursing (ja 6)",
+      "slug": "ja-0076-nclex-for-japanese-nurses-nclex-for-japanese-nurses-japan-nursing-ja-6",
+      "primaryKeyword": "nclex for japanese nurses",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "transactional",
+      "translationGroupId": "jp-nurse-0008-nclex-for-japanese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "australia for japanese nurses — Japan nursing (ja 7)",
+      "slug": "ja-0077-australia-for-japanese-nurses-australia-for-japanese-nurses-japan-nursing-ja-7",
+      "primaryKeyword": "australia for japanese nurses",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0008-australia-for-japanese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "english test pathways for japanese nurses — Japan nursing (ja 8)",
+      "slug": "ja-0078-english-test-pathways-for-japanese-nurses-english-test-pathways-for-japanese-nurses-japan-nursing-ja-8",
+      "primaryKeyword": "english test pathways for japanese nurses",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0008-english-test-pathways-for-japanese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "study tips for nursing exam japan — Japan nursing (ja 9)",
+      "slug": "ja-0079-study-tips-for-nursing-exam-japan-study-tips-for-nursing-exam-japan-japan-nursing-ja-9",
+      "primaryKeyword": "study tips for nursing exam japan",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0008-study-tips-for-nursing-exam-japan",
+      "status": "planned"
+    },
+    {
+      "title": "working in japanese hospitals — Japan nursing (ja 10)",
+      "slug": "ja-0080-working-in-japanese-hospitals-working-in-japanese-hospitals-japan-nursing-ja-10",
+      "primaryKeyword": "working in japanese hospitals",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0008-working-in-japanese-hospitals",
+      "status": "planned"
+    },
+    {
+      "title": "national nursing examination japan — Japan nursing (ja 11)",
+      "slug": "ja-0081-national-nursing-examination-japan-national-nursing-examination-japan-japan-nursing-ja-11",
+      "primaryKeyword": "national nursing examination japan",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "transactional",
+      "translationGroupId": "jp-nurse-0009-national-nursing-examination-japan",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in japan — Japan nursing (ja 12)",
+      "slug": "ja-0082-how-to-become-a-nurse-in-japan-how-to-become-a-nurse-in-japan-japan-nursing-ja-12",
+      "primaryKeyword": "how to become a nurse in japan",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0009-how-to-become-a-nurse-in-japan",
+      "status": "planned"
+    },
+    {
+      "title": "japanese nursing licensure guide — Japan nursing (ja 13)",
+      "slug": "ja-0083-japanese-nursing-licensure-guide-japanese-nursing-licensure-guide-japan-nursing-ja-13",
+      "primaryKeyword": "japanese nursing licensure guide",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0009-japanese-nursing-licensure-guide",
+      "status": "planned"
+    },
+    {
+      "title": "nursing jobs in japan — Japan nursing (ja 14)",
+      "slug": "ja-0084-nursing-jobs-in-japan-nursing-jobs-in-japan-japan-nursing-ja-14",
+      "primaryKeyword": "nursing jobs in japan",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0009-nursing-jobs-in-japan",
+      "status": "planned"
+    },
+    {
+      "title": "japanese nurses abroad — Japan nursing (ja 15)",
+      "slug": "ja-0085-japanese-nurses-abroad-japanese-nurses-abroad-japan-nursing-ja-15",
+      "primaryKeyword": "japanese nurses abroad",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0009-japanese-nurses-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "nclex for japanese nurses — Japan nursing (ja 16)",
+      "slug": "ja-0086-nclex-for-japanese-nurses-nclex-for-japanese-nurses-japan-nursing-ja-16",
+      "primaryKeyword": "nclex for japanese nurses",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "transactional",
+      "translationGroupId": "jp-nurse-0009-nclex-for-japanese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "australia for japanese nurses — Japan nursing (ja 17)",
+      "slug": "ja-0087-australia-for-japanese-nurses-australia-for-japanese-nurses-japan-nursing-ja-17",
+      "primaryKeyword": "australia for japanese nurses",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0009-australia-for-japanese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "english test pathways for japanese nurses — Japan nursing (ja 18)",
+      "slug": "ja-0088-english-test-pathways-for-japanese-nurses-english-test-pathways-for-japanese-nurses-japan-nursing-ja-18",
+      "primaryKeyword": "english test pathways for japanese nurses",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0009-english-test-pathways-for-japanese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "study tips for nursing exam japan — Japan nursing (ja 19)",
+      "slug": "ja-0089-study-tips-for-nursing-exam-japan-study-tips-for-nursing-exam-japan-japan-nursing-ja-19",
+      "primaryKeyword": "study tips for nursing exam japan",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0009-study-tips-for-nursing-exam-japan",
+      "status": "planned"
+    },
+    {
+      "title": "working in japanese hospitals — Japan nursing (ja 20)",
+      "slug": "ja-0090-working-in-japanese-hospitals-working-in-japanese-hospitals-japan-nursing-ja-20",
+      "primaryKeyword": "working in japanese hospitals",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0009-working-in-japanese-hospitals",
+      "status": "planned"
+    },
+    {
+      "title": "national nursing examination japan — Japan nursing (ja 21)",
+      "slug": "ja-0091-national-nursing-examination-japan-national-nursing-examination-japan-japan-nursing-ja-21",
+      "primaryKeyword": "national nursing examination japan",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "transactional",
+      "translationGroupId": "jp-nurse-0010-national-nursing-examination-japan",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in japan — Japan nursing (ja 22)",
+      "slug": "ja-0092-how-to-become-a-nurse-in-japan-how-to-become-a-nurse-in-japan-japan-nursing-ja-22",
+      "primaryKeyword": "how to become a nurse in japan",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0010-how-to-become-a-nurse-in-japan",
+      "status": "planned"
+    },
+    {
+      "title": "japanese nursing licensure guide — Japan nursing (ja 23)",
+      "slug": "ja-0093-japanese-nursing-licensure-guide-japanese-nursing-licensure-guide-japan-nursing-ja-23",
+      "primaryKeyword": "japanese nursing licensure guide",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0010-japanese-nursing-licensure-guide",
+      "status": "planned"
+    },
+    {
+      "title": "nursing jobs in japan — Japan nursing (ja 24)",
+      "slug": "ja-0094-nursing-jobs-in-japan-nursing-jobs-in-japan-japan-nursing-ja-24",
+      "primaryKeyword": "nursing jobs in japan",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0010-nursing-jobs-in-japan",
+      "status": "planned"
+    },
+    {
+      "title": "japanese nurses abroad — Japan nursing (ja 25)",
+      "slug": "ja-0095-japanese-nurses-abroad-japanese-nurses-abroad-japan-nursing-ja-25",
+      "primaryKeyword": "japanese nurses abroad",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0010-japanese-nurses-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "nclex for japanese nurses — Japan nursing (ja 26)",
+      "slug": "ja-0096-nclex-for-japanese-nurses-nclex-for-japanese-nurses-japan-nursing-ja-26",
+      "primaryKeyword": "nclex for japanese nurses",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "transactional",
+      "translationGroupId": "jp-nurse-0010-nclex-for-japanese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "australia for japanese nurses — Japan nursing (ja 27)",
+      "slug": "ja-0097-australia-for-japanese-nurses-australia-for-japanese-nurses-japan-nursing-ja-27",
+      "primaryKeyword": "australia for japanese nurses",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0010-australia-for-japanese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "english test pathways for japanese nurses — Japan nursing (ja 28)",
+      "slug": "ja-0098-english-test-pathways-for-japanese-nurses-english-test-pathways-for-japanese-nurses-japan-nursing-ja-28",
+      "primaryKeyword": "english test pathways for japanese nurses",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0010-english-test-pathways-for-japanese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "study tips for nursing exam japan — Japan nursing (ja 29)",
+      "slug": "ja-0099-study-tips-for-nursing-exam-japan-study-tips-for-nursing-exam-japan-japan-nursing-ja-29",
+      "primaryKeyword": "study tips for nursing exam japan",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0010-study-tips-for-nursing-exam-japan",
+      "status": "planned"
+    },
+    {
+      "title": "working in japanese hospitals — Japan nursing (ja 30)",
+      "slug": "ja-0100-working-in-japanese-hospitals-working-in-japanese-hospitals-japan-nursing-ja-30",
+      "primaryKeyword": "working in japanese hospitals",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0010-working-in-japanese-hospitals",
+      "status": "planned"
+    },
+    {
+      "title": "national nursing examination japan — Japan nursing (ja 31)",
+      "slug": "ja-0101-national-nursing-examination-japan-national-nursing-examination-japan-japan-nursing-ja-31",
+      "primaryKeyword": "national nursing examination japan",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "transactional",
+      "translationGroupId": "jp-nurse-0011-national-nursing-examination-japan",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in japan — Japan nursing (ja 32)",
+      "slug": "ja-0102-how-to-become-a-nurse-in-japan-how-to-become-a-nurse-in-japan-japan-nursing-ja-32",
+      "primaryKeyword": "how to become a nurse in japan",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0011-how-to-become-a-nurse-in-japan",
+      "status": "planned"
+    },
+    {
+      "title": "japanese nursing licensure guide — Japan nursing (ja 33)",
+      "slug": "ja-0103-japanese-nursing-licensure-guide-japanese-nursing-licensure-guide-japan-nursing-ja-33",
+      "primaryKeyword": "japanese nursing licensure guide",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0011-japanese-nursing-licensure-guide",
+      "status": "planned"
+    },
+    {
+      "title": "nursing jobs in japan — Japan nursing (ja 34)",
+      "slug": "ja-0104-nursing-jobs-in-japan-nursing-jobs-in-japan-japan-nursing-ja-34",
+      "primaryKeyword": "nursing jobs in japan",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0011-nursing-jobs-in-japan",
+      "status": "planned"
+    },
+    {
+      "title": "japanese nurses abroad — Japan nursing (ja 35)",
+      "slug": "ja-0105-japanese-nurses-abroad-japanese-nurses-abroad-japan-nursing-ja-35",
+      "primaryKeyword": "japanese nurses abroad",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0011-japanese-nurses-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "nclex for japanese nurses — Japan nursing (ja 36)",
+      "slug": "ja-0106-nclex-for-japanese-nurses-nclex-for-japanese-nurses-japan-nursing-ja-36",
+      "primaryKeyword": "nclex for japanese nurses",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "transactional",
+      "translationGroupId": "jp-nurse-0011-nclex-for-japanese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "australia for japanese nurses — Japan nursing (ja 37)",
+      "slug": "ja-0107-australia-for-japanese-nurses-australia-for-japanese-nurses-japan-nursing-ja-37",
+      "primaryKeyword": "australia for japanese nurses",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0011-australia-for-japanese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "english test pathways for japanese nurses — Japan nursing (ja 38)",
+      "slug": "ja-0108-english-test-pathways-for-japanese-nurses-english-test-pathways-for-japanese-nurses-japan-nursing-ja-38",
+      "primaryKeyword": "english test pathways for japanese nurses",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0011-english-test-pathways-for-japanese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "study tips for nursing exam japan — Japan nursing (ja 39)",
+      "slug": "ja-0109-study-tips-for-nursing-exam-japan-study-tips-for-nursing-exam-japan-japan-nursing-ja-39",
+      "primaryKeyword": "study tips for nursing exam japan",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0011-study-tips-for-nursing-exam-japan",
+      "status": "planned"
+    },
+    {
+      "title": "working in japanese hospitals — Japan nursing (ja 40)",
+      "slug": "ja-0110-working-in-japanese-hospitals-working-in-japanese-hospitals-japan-nursing-ja-40",
+      "primaryKeyword": "working in japanese hospitals",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0011-working-in-japanese-hospitals",
+      "status": "planned"
+    },
+    {
+      "title": "national nursing examination japan — Japan nursing (ja 41)",
+      "slug": "ja-0111-national-nursing-examination-japan-national-nursing-examination-japan-japan-nursing-ja-41",
+      "primaryKeyword": "national nursing examination japan",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "transactional",
+      "translationGroupId": "jp-nurse-0012-national-nursing-examination-japan",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in japan — Japan nursing (ja 42)",
+      "slug": "ja-0112-how-to-become-a-nurse-in-japan-how-to-become-a-nurse-in-japan-japan-nursing-ja-42",
+      "primaryKeyword": "how to become a nurse in japan",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0012-how-to-become-a-nurse-in-japan",
+      "status": "planned"
+    },
+    {
+      "title": "japanese nursing licensure guide — Japan nursing (ja 43)",
+      "slug": "ja-0113-japanese-nursing-licensure-guide-japanese-nursing-licensure-guide-japan-nursing-ja-43",
+      "primaryKeyword": "japanese nursing licensure guide",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0012-japanese-nursing-licensure-guide",
+      "status": "planned"
+    },
+    {
+      "title": "nursing jobs in japan — Japan nursing (ja 44)",
+      "slug": "ja-0114-nursing-jobs-in-japan-nursing-jobs-in-japan-japan-nursing-ja-44",
+      "primaryKeyword": "nursing jobs in japan",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0012-nursing-jobs-in-japan",
+      "status": "planned"
+    },
+    {
+      "title": "japanese nurses abroad — Japan nursing (ja 45)",
+      "slug": "ja-0115-japanese-nurses-abroad-japanese-nurses-abroad-japan-nursing-ja-45",
+      "primaryKeyword": "japanese nurses abroad",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0012-japanese-nurses-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "nclex for japanese nurses — Japan nursing (ja 46)",
+      "slug": "ja-0116-nclex-for-japanese-nurses-nclex-for-japanese-nurses-japan-nursing-ja-46",
+      "primaryKeyword": "nclex for japanese nurses",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "transactional",
+      "translationGroupId": "jp-nurse-0012-nclex-for-japanese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "australia for japanese nurses — Japan nursing (ja 47)",
+      "slug": "ja-0117-australia-for-japanese-nurses-australia-for-japanese-nurses-japan-nursing-ja-47",
+      "primaryKeyword": "australia for japanese nurses",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0012-australia-for-japanese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "english test pathways for japanese nurses — Japan nursing (ja 48)",
+      "slug": "ja-0118-english-test-pathways-for-japanese-nurses-english-test-pathways-for-japanese-nurses-japan-nursing-ja-48",
+      "primaryKeyword": "english test pathways for japanese nurses",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0012-english-test-pathways-for-japanese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "study tips for nursing exam japan — Japan nursing (ja 49)",
+      "slug": "ja-0119-study-tips-for-nursing-exam-japan-study-tips-for-nursing-exam-japan-japan-nursing-ja-49",
+      "primaryKeyword": "study tips for nursing exam japan",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0012-study-tips-for-nursing-exam-japan",
+      "status": "planned"
+    },
+    {
+      "title": "working in japanese hospitals — Japan nursing (ja 50)",
+      "slug": "ja-0120-working-in-japanese-hospitals-working-in-japanese-hospitals-japan-nursing-ja-50",
+      "primaryKeyword": "working in japanese hospitals",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0012-working-in-japanese-hospitals",
+      "status": "planned"
+    },
+    {
+      "title": "national nursing examination japan — Japan nursing (ja 51)",
+      "slug": "ja-0121-national-nursing-examination-japan-national-nursing-examination-japan-japan-nursing-ja-51",
+      "primaryKeyword": "national nursing examination japan",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "transactional",
+      "translationGroupId": "jp-nurse-0013-national-nursing-examination-japan",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in japan — Japan nursing (ja 52)",
+      "slug": "ja-0122-how-to-become-a-nurse-in-japan-how-to-become-a-nurse-in-japan-japan-nursing-ja-52",
+      "primaryKeyword": "how to become a nurse in japan",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0013-how-to-become-a-nurse-in-japan",
+      "status": "planned"
+    },
+    {
+      "title": "japanese nursing licensure guide — Japan nursing (ja 53)",
+      "slug": "ja-0123-japanese-nursing-licensure-guide-japanese-nursing-licensure-guide-japan-nursing-ja-53",
+      "primaryKeyword": "japanese nursing licensure guide",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0013-japanese-nursing-licensure-guide",
+      "status": "planned"
+    },
+    {
+      "title": "nursing jobs in japan — Japan nursing (ja 54)",
+      "slug": "ja-0124-nursing-jobs-in-japan-nursing-jobs-in-japan-japan-nursing-ja-54",
+      "primaryKeyword": "nursing jobs in japan",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0013-nursing-jobs-in-japan",
+      "status": "planned"
+    },
+    {
+      "title": "japanese nurses abroad — Japan nursing (ja 55)",
+      "slug": "ja-0125-japanese-nurses-abroad-japanese-nurses-abroad-japan-nursing-ja-55",
+      "primaryKeyword": "japanese nurses abroad",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0013-japanese-nurses-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "nclex for japanese nurses — Japan nursing (ja 56)",
+      "slug": "ja-0126-nclex-for-japanese-nurses-nclex-for-japanese-nurses-japan-nursing-ja-56",
+      "primaryKeyword": "nclex for japanese nurses",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "transactional",
+      "translationGroupId": "jp-nurse-0013-nclex-for-japanese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "australia for japanese nurses — Japan nursing (ja 57)",
+      "slug": "ja-0127-australia-for-japanese-nurses-australia-for-japanese-nurses-japan-nursing-ja-57",
+      "primaryKeyword": "australia for japanese nurses",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0013-australia-for-japanese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "english test pathways for japanese nurses — Japan nursing (ja 58)",
+      "slug": "ja-0128-english-test-pathways-for-japanese-nurses-english-test-pathways-for-japanese-nurses-japan-nursing-ja-58",
+      "primaryKeyword": "english test pathways for japanese nurses",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0013-english-test-pathways-for-japanese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "study tips for nursing exam japan — Japan nursing (ja 59)",
+      "slug": "ja-0129-study-tips-for-nursing-exam-japan-study-tips-for-nursing-exam-japan-japan-nursing-ja-59",
+      "primaryKeyword": "study tips for nursing exam japan",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0013-study-tips-for-nursing-exam-japan",
+      "status": "planned"
+    },
+    {
+      "title": "working in japanese hospitals — Japan nursing (ja 60)",
+      "slug": "ja-0130-working-in-japanese-hospitals-working-in-japanese-hospitals-japan-nursing-ja-60",
+      "primaryKeyword": "working in japanese hospitals",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0013-working-in-japanese-hospitals",
+      "status": "planned"
+    },
+    {
+      "title": "national nursing examination japan — Japan nursing (ja 61)",
+      "slug": "ja-0131-national-nursing-examination-japan-national-nursing-examination-japan-japan-nursing-ja-61",
+      "primaryKeyword": "national nursing examination japan",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "transactional",
+      "translationGroupId": "jp-nurse-0014-national-nursing-examination-japan",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in japan — Japan nursing (ja 62)",
+      "slug": "ja-0132-how-to-become-a-nurse-in-japan-how-to-become-a-nurse-in-japan-japan-nursing-ja-62",
+      "primaryKeyword": "how to become a nurse in japan",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0014-how-to-become-a-nurse-in-japan",
+      "status": "planned"
+    },
+    {
+      "title": "japanese nursing licensure guide — Japan nursing (ja 63)",
+      "slug": "ja-0133-japanese-nursing-licensure-guide-japanese-nursing-licensure-guide-japan-nursing-ja-63",
+      "primaryKeyword": "japanese nursing licensure guide",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0014-japanese-nursing-licensure-guide",
+      "status": "planned"
+    },
+    {
+      "title": "nursing jobs in japan — Japan nursing (ja 64)",
+      "slug": "ja-0134-nursing-jobs-in-japan-nursing-jobs-in-japan-japan-nursing-ja-64",
+      "primaryKeyword": "nursing jobs in japan",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0014-nursing-jobs-in-japan",
+      "status": "planned"
+    },
+    {
+      "title": "japanese nurses abroad — Japan nursing (ja 65)",
+      "slug": "ja-0135-japanese-nurses-abroad-japanese-nurses-abroad-japan-nursing-ja-65",
+      "primaryKeyword": "japanese nurses abroad",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0014-japanese-nurses-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "nclex for japanese nurses — Japan nursing (ja 66)",
+      "slug": "ja-0136-nclex-for-japanese-nurses-nclex-for-japanese-nurses-japan-nursing-ja-66",
+      "primaryKeyword": "nclex for japanese nurses",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "transactional",
+      "translationGroupId": "jp-nurse-0014-nclex-for-japanese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "australia for japanese nurses — Japan nursing (ja 67)",
+      "slug": "ja-0137-australia-for-japanese-nurses-australia-for-japanese-nurses-japan-nursing-ja-67",
+      "primaryKeyword": "australia for japanese nurses",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0014-australia-for-japanese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "english test pathways for japanese nurses — Japan nursing (ja 68)",
+      "slug": "ja-0138-english-test-pathways-for-japanese-nurses-english-test-pathways-for-japanese-nurses-japan-nursing-ja-68",
+      "primaryKeyword": "english test pathways for japanese nurses",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0014-english-test-pathways-for-japanese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "study tips for nursing exam japan — Japan nursing (ja 69)",
+      "slug": "ja-0139-study-tips-for-nursing-exam-japan-study-tips-for-nursing-exam-japan-japan-nursing-ja-69",
+      "primaryKeyword": "study tips for nursing exam japan",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0014-study-tips-for-nursing-exam-japan",
+      "status": "planned"
+    },
+    {
+      "title": "working in japanese hospitals — Japan nursing (ja 70)",
+      "slug": "ja-0140-working-in-japanese-hospitals-working-in-japanese-hospitals-japan-nursing-ja-70",
+      "primaryKeyword": "working in japanese hospitals",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0014-working-in-japanese-hospitals",
+      "status": "planned"
+    },
+    {
+      "title": "national nursing examination japan — Japan nursing (ja 71)",
+      "slug": "ja-0141-national-nursing-examination-japan-national-nursing-examination-japan-japan-nursing-ja-71",
+      "primaryKeyword": "national nursing examination japan",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "transactional",
+      "translationGroupId": "jp-nurse-0015-national-nursing-examination-japan",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in japan — Japan nursing (ja 72)",
+      "slug": "ja-0142-how-to-become-a-nurse-in-japan-how-to-become-a-nurse-in-japan-japan-nursing-ja-72",
+      "primaryKeyword": "how to become a nurse in japan",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0015-how-to-become-a-nurse-in-japan",
+      "status": "planned"
+    },
+    {
+      "title": "japanese nursing licensure guide — Japan nursing (ja 73)",
+      "slug": "ja-0143-japanese-nursing-licensure-guide-japanese-nursing-licensure-guide-japan-nursing-ja-73",
+      "primaryKeyword": "japanese nursing licensure guide",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0015-japanese-nursing-licensure-guide",
+      "status": "planned"
+    },
+    {
+      "title": "nursing jobs in japan — Japan nursing (ja 74)",
+      "slug": "ja-0144-nursing-jobs-in-japan-nursing-jobs-in-japan-japan-nursing-ja-74",
+      "primaryKeyword": "nursing jobs in japan",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0015-nursing-jobs-in-japan",
+      "status": "planned"
+    },
+    {
+      "title": "japanese nurses abroad — Japan nursing (ja 75)",
+      "slug": "ja-0145-japanese-nurses-abroad-japanese-nurses-abroad-japan-nursing-ja-75",
+      "primaryKeyword": "japanese nurses abroad",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0015-japanese-nurses-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "nclex for japanese nurses — Japan nursing (ja 76)",
+      "slug": "ja-0146-nclex-for-japanese-nurses-nclex-for-japanese-nurses-japan-nursing-ja-76",
+      "primaryKeyword": "nclex for japanese nurses",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "transactional",
+      "translationGroupId": "jp-nurse-0015-nclex-for-japanese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "australia for japanese nurses — Japan nursing (ja 77)",
+      "slug": "ja-0147-australia-for-japanese-nurses-australia-for-japanese-nurses-japan-nursing-ja-77",
+      "primaryKeyword": "australia for japanese nurses",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0015-australia-for-japanese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "english test pathways for japanese nurses — Japan nursing (ja 78)",
+      "slug": "ja-0148-english-test-pathways-for-japanese-nurses-english-test-pathways-for-japanese-nurses-japan-nursing-ja-78",
+      "primaryKeyword": "english test pathways for japanese nurses",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0015-english-test-pathways-for-japanese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "study tips for nursing exam japan — Japan nursing (ja 79)",
+      "slug": "ja-0149-study-tips-for-nursing-exam-japan-study-tips-for-nursing-exam-japan-japan-nursing-ja-79",
+      "primaryKeyword": "study tips for nursing exam japan",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0015-study-tips-for-nursing-exam-japan",
+      "status": "planned"
+    },
+    {
+      "title": "working in japanese hospitals — Japan nursing (ja 80)",
+      "slug": "ja-0150-working-in-japanese-hospitals-working-in-japanese-hospitals-japan-nursing-ja-80",
+      "primaryKeyword": "working in japanese hospitals",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0015-working-in-japanese-hospitals",
+      "status": "planned"
+    },
+    {
+      "title": "national nursing examination japan — Japan nursing (ja 81)",
+      "slug": "ja-0151-national-nursing-examination-japan-national-nursing-examination-japan-japan-nursing-ja-81",
+      "primaryKeyword": "national nursing examination japan",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "transactional",
+      "translationGroupId": "jp-nurse-0016-national-nursing-examination-japan",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in japan — Japan nursing (ja 82)",
+      "slug": "ja-0152-how-to-become-a-nurse-in-japan-how-to-become-a-nurse-in-japan-japan-nursing-ja-82",
+      "primaryKeyword": "how to become a nurse in japan",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0016-how-to-become-a-nurse-in-japan",
+      "status": "planned"
+    },
+    {
+      "title": "japanese nursing licensure guide — Japan nursing (ja 83)",
+      "slug": "ja-0153-japanese-nursing-licensure-guide-japanese-nursing-licensure-guide-japan-nursing-ja-83",
+      "primaryKeyword": "japanese nursing licensure guide",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0016-japanese-nursing-licensure-guide",
+      "status": "planned"
+    },
+    {
+      "title": "nursing jobs in japan — Japan nursing (ja 84)",
+      "slug": "ja-0154-nursing-jobs-in-japan-nursing-jobs-in-japan-japan-nursing-ja-84",
+      "primaryKeyword": "nursing jobs in japan",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0016-nursing-jobs-in-japan",
+      "status": "planned"
+    },
+    {
+      "title": "japanese nurses abroad — Japan nursing (ja 85)",
+      "slug": "ja-0155-japanese-nurses-abroad-japanese-nurses-abroad-japan-nursing-ja-85",
+      "primaryKeyword": "japanese nurses abroad",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0016-japanese-nurses-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "nclex for japanese nurses — Japan nursing (ja 86)",
+      "slug": "ja-0156-nclex-for-japanese-nurses-nclex-for-japanese-nurses-japan-nursing-ja-86",
+      "primaryKeyword": "nclex for japanese nurses",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "transactional",
+      "translationGroupId": "jp-nurse-0016-nclex-for-japanese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "australia for japanese nurses — Japan nursing (ja 87)",
+      "slug": "ja-0157-australia-for-japanese-nurses-australia-for-japanese-nurses-japan-nursing-ja-87",
+      "primaryKeyword": "australia for japanese nurses",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0016-australia-for-japanese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "english test pathways for japanese nurses — Japan nursing (ja 88)",
+      "slug": "ja-0158-english-test-pathways-for-japanese-nurses-english-test-pathways-for-japanese-nurses-japan-nursing-ja-88",
+      "primaryKeyword": "english test pathways for japanese nurses",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0016-english-test-pathways-for-japanese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "study tips for nursing exam japan — Japan nursing (ja 89)",
+      "slug": "ja-0159-study-tips-for-nursing-exam-japan-study-tips-for-nursing-exam-japan-japan-nursing-ja-89",
+      "primaryKeyword": "study tips for nursing exam japan",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0016-study-tips-for-nursing-exam-japan",
+      "status": "planned"
+    },
+    {
+      "title": "working in japanese hospitals — Japan nursing (ja 90)",
+      "slug": "ja-0160-working-in-japanese-hospitals-working-in-japanese-hospitals-japan-nursing-ja-90",
+      "primaryKeyword": "working in japanese hospitals",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0016-working-in-japanese-hospitals",
+      "status": "planned"
+    },
+    {
+      "title": "national nursing examination japan — Japan nursing (ja 91)",
+      "slug": "ja-0161-national-nursing-examination-japan-national-nursing-examination-japan-japan-nursing-ja-91",
+      "primaryKeyword": "national nursing examination japan",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "transactional",
+      "translationGroupId": "jp-nurse-0017-national-nursing-examination-japan",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in japan — Japan nursing (ja 92)",
+      "slug": "ja-0162-how-to-become-a-nurse-in-japan-how-to-become-a-nurse-in-japan-japan-nursing-ja-92",
+      "primaryKeyword": "how to become a nurse in japan",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0017-how-to-become-a-nurse-in-japan",
+      "status": "planned"
+    },
+    {
+      "title": "japanese nursing licensure guide — Japan nursing (ja 93)",
+      "slug": "ja-0163-japanese-nursing-licensure-guide-japanese-nursing-licensure-guide-japan-nursing-ja-93",
+      "primaryKeyword": "japanese nursing licensure guide",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0017-japanese-nursing-licensure-guide",
+      "status": "planned"
+    },
+    {
+      "title": "nursing jobs in japan — Japan nursing (ja 94)",
+      "slug": "ja-0164-nursing-jobs-in-japan-nursing-jobs-in-japan-japan-nursing-ja-94",
+      "primaryKeyword": "nursing jobs in japan",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0017-nursing-jobs-in-japan",
+      "status": "planned"
+    },
+    {
+      "title": "japanese nurses abroad — Japan nursing (ja 95)",
+      "slug": "ja-0165-japanese-nurses-abroad-japanese-nurses-abroad-japan-nursing-ja-95",
+      "primaryKeyword": "japanese nurses abroad",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0017-japanese-nurses-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "nclex for japanese nurses — Japan nursing (ja 96)",
+      "slug": "ja-0166-nclex-for-japanese-nurses-nclex-for-japanese-nurses-japan-nursing-ja-96",
+      "primaryKeyword": "nclex for japanese nurses",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "transactional",
+      "translationGroupId": "jp-nurse-0017-nclex-for-japanese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "australia for japanese nurses — Japan nursing (ja 97)",
+      "slug": "ja-0167-australia-for-japanese-nurses-australia-for-japanese-nurses-japan-nursing-ja-97",
+      "primaryKeyword": "australia for japanese nurses",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0017-australia-for-japanese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "english test pathways for japanese nurses — Japan nursing (ja 98)",
+      "slug": "ja-0168-english-test-pathways-for-japanese-nurses-english-test-pathways-for-japanese-nurses-japan-nursing-ja-98",
+      "primaryKeyword": "english test pathways for japanese nurses",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0017-english-test-pathways-for-japanese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "study tips for nursing exam japan — Japan nursing (ja 99)",
+      "slug": "ja-0169-study-tips-for-nursing-exam-japan-study-tips-for-nursing-exam-japan-japan-nursing-ja-99",
+      "primaryKeyword": "study tips for nursing exam japan",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0017-study-tips-for-nursing-exam-japan",
+      "status": "planned"
+    },
+    {
+      "title": "working in japanese hospitals — Japan nursing (ja 100)",
+      "slug": "ja-0170-working-in-japanese-hospitals-working-in-japanese-hospitals-japan-nursing-ja-100",
+      "primaryKeyword": "working in japanese hospitals",
+      "language": "ja",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0017-working-in-japanese-hospitals",
+      "status": "planned"
+    },
+    {
+      "title": "national nursing examination japan — Japan nursing (zh 1)",
+      "slug": "zh-0171-national-nursing-examination-japan-national-nursing-examination-japan-japan-nursing-zh-1",
+      "primaryKeyword": "national nursing examination japan",
+      "language": "zh",
+      "category": "Japan nursing",
+      "intentType": "transactional",
+      "translationGroupId": "jp-nurse-0018-national-nursing-examination-japan",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in japan — Japan nursing (zh 2)",
+      "slug": "zh-0172-how-to-become-a-nurse-in-japan-how-to-become-a-nurse-in-japan-japan-nursing-zh-2",
+      "primaryKeyword": "how to become a nurse in japan",
+      "language": "zh",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0018-how-to-become-a-nurse-in-japan",
+      "status": "planned"
+    },
+    {
+      "title": "japanese nursing licensure guide — Japan nursing (zh 3)",
+      "slug": "zh-0173-japanese-nursing-licensure-guide-japanese-nursing-licensure-guide-japan-nursing-zh-3",
+      "primaryKeyword": "japanese nursing licensure guide",
+      "language": "zh",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0018-japanese-nursing-licensure-guide",
+      "status": "planned"
+    },
+    {
+      "title": "nursing jobs in japan — Japan nursing (zh 4)",
+      "slug": "zh-0174-nursing-jobs-in-japan-nursing-jobs-in-japan-japan-nursing-zh-4",
+      "primaryKeyword": "nursing jobs in japan",
+      "language": "zh",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0018-nursing-jobs-in-japan",
+      "status": "planned"
+    },
+    {
+      "title": "japanese nurses abroad — Japan nursing (zh 5)",
+      "slug": "zh-0175-japanese-nurses-abroad-japanese-nurses-abroad-japan-nursing-zh-5",
+      "primaryKeyword": "japanese nurses abroad",
+      "language": "zh",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0018-japanese-nurses-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "nclex for japanese nurses — Japan nursing (zh 6)",
+      "slug": "zh-0176-nclex-for-japanese-nurses-nclex-for-japanese-nurses-japan-nursing-zh-6",
+      "primaryKeyword": "nclex for japanese nurses",
+      "language": "zh",
+      "category": "Japan nursing",
+      "intentType": "transactional",
+      "translationGroupId": "jp-nurse-0018-nclex-for-japanese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "australia for japanese nurses — Japan nursing (zh 7)",
+      "slug": "zh-0177-australia-for-japanese-nurses-australia-for-japanese-nurses-japan-nursing-zh-7",
+      "primaryKeyword": "australia for japanese nurses",
+      "language": "zh",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0018-australia-for-japanese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "english test pathways for japanese nurses — Japan nursing (zh 8)",
+      "slug": "zh-0178-english-test-pathways-for-japanese-nurses-english-test-pathways-for-japanese-nurses-japan-nursing-zh-8",
+      "primaryKeyword": "english test pathways for japanese nurses",
+      "language": "zh",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0018-english-test-pathways-for-japanese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "study tips for nursing exam japan — Japan nursing (zh 9)",
+      "slug": "zh-0179-study-tips-for-nursing-exam-japan-study-tips-for-nursing-exam-japan-japan-nursing-zh-9",
+      "primaryKeyword": "study tips for nursing exam japan",
+      "language": "zh",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0018-study-tips-for-nursing-exam-japan",
+      "status": "planned"
+    },
+    {
+      "title": "working in japanese hospitals — Japan nursing (zh 10)",
+      "slug": "zh-0180-working-in-japanese-hospitals-working-in-japanese-hospitals-japan-nursing-zh-10",
+      "primaryKeyword": "working in japanese hospitals",
+      "language": "zh",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0018-working-in-japanese-hospitals",
+      "status": "planned"
+    },
+    {
+      "title": "national nursing examination japan — Japan nursing (tl 1)",
+      "slug": "tl-0181-national-nursing-examination-japan-national-nursing-examination-japan-japan-nursing-tl-1",
+      "primaryKeyword": "national nursing examination japan",
+      "language": "tl",
+      "category": "Japan nursing",
+      "intentType": "transactional",
+      "translationGroupId": "jp-nurse-0019-national-nursing-examination-japan",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in japan — Japan nursing (tl 2)",
+      "slug": "tl-0182-how-to-become-a-nurse-in-japan-how-to-become-a-nurse-in-japan-japan-nursing-tl-2",
+      "primaryKeyword": "how to become a nurse in japan",
+      "language": "tl",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0019-how-to-become-a-nurse-in-japan",
+      "status": "planned"
+    },
+    {
+      "title": "japanese nursing licensure guide — Japan nursing (tl 3)",
+      "slug": "tl-0183-japanese-nursing-licensure-guide-japanese-nursing-licensure-guide-japan-nursing-tl-3",
+      "primaryKeyword": "japanese nursing licensure guide",
+      "language": "tl",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0019-japanese-nursing-licensure-guide",
+      "status": "planned"
+    },
+    {
+      "title": "nursing jobs in japan — Japan nursing (tl 4)",
+      "slug": "tl-0184-nursing-jobs-in-japan-nursing-jobs-in-japan-japan-nursing-tl-4",
+      "primaryKeyword": "nursing jobs in japan",
+      "language": "tl",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0019-nursing-jobs-in-japan",
+      "status": "planned"
+    },
+    {
+      "title": "japanese nurses abroad — Japan nursing (tl 5)",
+      "slug": "tl-0185-japanese-nurses-abroad-japanese-nurses-abroad-japan-nursing-tl-5",
+      "primaryKeyword": "japanese nurses abroad",
+      "language": "tl",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0019-japanese-nurses-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "nclex for japanese nurses — Japan nursing (tl 6)",
+      "slug": "tl-0186-nclex-for-japanese-nurses-nclex-for-japanese-nurses-japan-nursing-tl-6",
+      "primaryKeyword": "nclex for japanese nurses",
+      "language": "tl",
+      "category": "Japan nursing",
+      "intentType": "transactional",
+      "translationGroupId": "jp-nurse-0019-nclex-for-japanese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "australia for japanese nurses — Japan nursing (tl 7)",
+      "slug": "tl-0187-australia-for-japanese-nurses-australia-for-japanese-nurses-japan-nursing-tl-7",
+      "primaryKeyword": "australia for japanese nurses",
+      "language": "tl",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0019-australia-for-japanese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "english test pathways for japanese nurses — Japan nursing (tl 8)",
+      "slug": "tl-0188-english-test-pathways-for-japanese-nurses-english-test-pathways-for-japanese-nurses-japan-nursing-tl-8",
+      "primaryKeyword": "english test pathways for japanese nurses",
+      "language": "tl",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0019-english-test-pathways-for-japanese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "study tips for nursing exam japan — Japan nursing (tl 9)",
+      "slug": "tl-0189-study-tips-for-nursing-exam-japan-study-tips-for-nursing-exam-japan-japan-nursing-tl-9",
+      "primaryKeyword": "study tips for nursing exam japan",
+      "language": "tl",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0019-study-tips-for-nursing-exam-japan",
+      "status": "planned"
+    },
+    {
+      "title": "working in japanese hospitals — Japan nursing (tl 10)",
+      "slug": "tl-0190-working-in-japanese-hospitals-working-in-japanese-hospitals-japan-nursing-tl-10",
+      "primaryKeyword": "working in japanese hospitals",
+      "language": "tl",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0019-working-in-japanese-hospitals",
+      "status": "planned"
+    },
+    {
+      "title": "national nursing examination japan — Japan nursing (vi 1)",
+      "slug": "vi-0191-national-nursing-examination-japan-national-nursing-examination-japan-japan-nursing-vi-1",
+      "primaryKeyword": "national nursing examination japan",
+      "language": "vi",
+      "category": "Japan nursing",
+      "intentType": "transactional",
+      "translationGroupId": "jp-nurse-0020-national-nursing-examination-japan",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in japan — Japan nursing (vi 2)",
+      "slug": "vi-0192-how-to-become-a-nurse-in-japan-how-to-become-a-nurse-in-japan-japan-nursing-vi-2",
+      "primaryKeyword": "how to become a nurse in japan",
+      "language": "vi",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0020-how-to-become-a-nurse-in-japan",
+      "status": "planned"
+    },
+    {
+      "title": "japanese nursing licensure guide — Japan nursing (vi 3)",
+      "slug": "vi-0193-japanese-nursing-licensure-guide-japanese-nursing-licensure-guide-japan-nursing-vi-3",
+      "primaryKeyword": "japanese nursing licensure guide",
+      "language": "vi",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0020-japanese-nursing-licensure-guide",
+      "status": "planned"
+    },
+    {
+      "title": "nursing jobs in japan — Japan nursing (vi 4)",
+      "slug": "vi-0194-nursing-jobs-in-japan-nursing-jobs-in-japan-japan-nursing-vi-4",
+      "primaryKeyword": "nursing jobs in japan",
+      "language": "vi",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0020-nursing-jobs-in-japan",
+      "status": "planned"
+    },
+    {
+      "title": "japanese nurses abroad — Japan nursing (vi 5)",
+      "slug": "vi-0195-japanese-nurses-abroad-japanese-nurses-abroad-japan-nursing-vi-5",
+      "primaryKeyword": "japanese nurses abroad",
+      "language": "vi",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0020-japanese-nurses-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "nclex for japanese nurses — Japan nursing (vi 6)",
+      "slug": "vi-0196-nclex-for-japanese-nurses-nclex-for-japanese-nurses-japan-nursing-vi-6",
+      "primaryKeyword": "nclex for japanese nurses",
+      "language": "vi",
+      "category": "Japan nursing",
+      "intentType": "transactional",
+      "translationGroupId": "jp-nurse-0020-nclex-for-japanese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "australia for japanese nurses — Japan nursing (vi 7)",
+      "slug": "vi-0197-australia-for-japanese-nurses-australia-for-japanese-nurses-japan-nursing-vi-7",
+      "primaryKeyword": "australia for japanese nurses",
+      "language": "vi",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0020-australia-for-japanese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "english test pathways for japanese nurses — Japan nursing (vi 8)",
+      "slug": "vi-0198-english-test-pathways-for-japanese-nurses-english-test-pathways-for-japanese-nurses-japan-nursing-vi-8",
+      "primaryKeyword": "english test pathways for japanese nurses",
+      "language": "vi",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0020-english-test-pathways-for-japanese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "study tips for nursing exam japan — Japan nursing (vi 9)",
+      "slug": "vi-0199-study-tips-for-nursing-exam-japan-study-tips-for-nursing-exam-japan-japan-nursing-vi-9",
+      "primaryKeyword": "study tips for nursing exam japan",
+      "language": "vi",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0020-study-tips-for-nursing-exam-japan",
+      "status": "planned"
+    },
+    {
+      "title": "working in japanese hospitals — Japan nursing (vi 10)",
+      "slug": "vi-0200-working-in-japanese-hospitals-working-in-japanese-hospitals-japan-nursing-vi-10",
+      "primaryKeyword": "working in japanese hospitals",
+      "language": "vi",
+      "category": "Japan nursing",
+      "intentType": "informational",
+      "translationGroupId": "jp-nurse-0020-working-in-japanese-hospitals",
+      "status": "planned"
+    }
+  ]
+}

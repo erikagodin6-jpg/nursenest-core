@@ -1,0 +1,91 @@
+{
+  "generatedAt": "2026-04-14T18:25:00.000Z",
+  "methodology": "Static code and route-structure review targeting viewports ≤768px. No automated screenshots in CI; issues are inferred from layout classes, tap-target sizes, and navigation patterns. Re-run after major header/learner shell changes.",
+  "viewportHints": ["320px", "375px", "390px", "414px"],
+  "issues": [
+    {
+      "route": "Marketing: all /[locale]/* (SiteHeader)",
+      "issueType": "safe-area / notch",
+      "severity": "high",
+      "screenshotHint": "On iPhone, logo row sits under status bar; guest Login/Sign up use min-h 36px.",
+      "recommendedFix": "Apply env(safe-area-inset-top) padding to the mobile header row; raise guest CTA min height to ~44px on small screens."
+    },
+    {
+      "route": "Marketing: mobile nav drawer (hamburger)",
+      "issueType": "navigation clarity",
+      "severity": "medium",
+      "screenshotHint": "Accordion mega-menus are deep; primary actions also appear at bottom of drawer.",
+      "recommendedFix": "Keep single drawer pattern; ensure route changes close drawer (already on pathname effect); maintain large footer CTAs in drawer."
+    },
+    {
+      "route": "Learner: /app/* (LearnerShellPrimaryNav bottom bar)",
+      "issueType": "overflow / tap target",
+      "severity": "high",
+      "screenshotHint": "Five-column grid: long pathway pill labels can crowd adjacent nav labels on narrow phones.",
+      "recommendedFix": "Truncate pathway pill with title tooltip; keep min-h-11 on bottom links."
+    },
+    {
+      "route": "Learner: /app/* (GlobalContextBar)",
+      "issueType": "tap target",
+      "severity": "medium",
+      "screenshotHint": "Row height h-9 with py-1 pills — vertical tap area under ~44px.",
+      "recommendedFix": "Increase row min-height on mobile so context pills meet comfortable touch targets."
+    },
+    {
+      "route": "Learner: MobileContextDrawer",
+      "issueType": "tap target / a11y",
+      "severity": "medium",
+      "screenshotHint": "Close control uses compact padding; section labels at 10px.",
+      "recommendedFix": "Enlarge close button hit area; bump section label minimum text size slightly on mobile."
+    },
+    {
+      "route": "Marketing: pathway hub pages (e.g. /us/rn/*, /[locale]/lessons)",
+      "issueType": "spacing hierarchy",
+      "severity": "low",
+      "screenshotHint": "Card-heavy grids may feel tight at 320px depending on page-specific classes.",
+      "recommendedFix": "Prefer nn-section-shell / consistent px-4 sm:px-6; avoid edge-to-edge prose without horizontal padding."
+    },
+    {
+      "route": "Lessons: pathway lesson detail",
+      "issueType": "readability / long content",
+      "severity": "medium",
+      "screenshotHint": "Long markdown sections; scroll-mt on section cards for in-page anchors.",
+      "recommendedFix": "Maintain scroll-margin for sticky mini-nav patterns; ensure figures use max-width 100% (PathwayLessonFigures)."
+    },
+    {
+      "route": "Questions: /app/questions*",
+      "issueType": "tap target / layout shift",
+      "severity": "medium",
+      "screenshotHint": "Answer rows and bottom actions must stay thumb-reachable; session UI varies by surface.",
+      "recommendedFix": "Use min-h ~44px for primary answer rows where not already; reserve space for sticky footers."
+    },
+    {
+      "route": "Flashcards: /app/flashcards*",
+      "issueType": "interaction / overflow",
+      "severity": "medium",
+      "screenshotHint": "Flip/tap areas and card bounds on small widths.",
+      "recommendedFix": "Ensure card containers use w-full max-w-full; adequate padding inside flip surfaces."
+    },
+    {
+      "route": "Auth: /[locale]/login, /signup, /forgot-password",
+      "issueType": "form UX",
+      "severity": "medium",
+      "screenshotHint": "Keyboard can obscure footer actions on small devices if layouts are too tall.",
+      "recommendedFix": "Keep form stacks with comfortable input min-height and error region visibility; avoid fixed footers that overlap inputs."
+    },
+    {
+      "route": "Account: /app/account/*",
+      "issueType": "tables / filters",
+      "severity": "low",
+      "screenshotHint": "Wide tables may require horizontal scroll — verify overflow-x-auto wrappers.",
+      "recommendedFix": "Wrap tables in overflow-x-auto with min-w-0 parents; stack filters vertically on mobile where present."
+    },
+    {
+      "route": "Global: html/body",
+      "issueType": "horizontal scroll",
+      "severity": "low",
+      "screenshotHint": "globals.css sets overflow-x hidden — good baseline; stray wide children can still clip.",
+      "recommendedFix": "Audit offenders with devtools; prefer max-w-full on media and pre/code blocks."
+    }
+  ]
+}

@@ -1,25 +1,239 @@
 {
-  "generatedAt": "2026-04-14T17:56:51.860Z",
-  "dbConnected": false,
-  "legacySourcesScanned": [
-    "data/audit/legacy-lessons-inventory.json (summary)",
-    "data/audit/unimported-legacy-content.json",
-    "external/NurseNest (legacyRoot in inventories when present)"
+  "schemaVersion": 3,
+  "generatedAt": "2026-04-14T18:13:35.924Z",
+  "gitHead": "c6d27507",
+  "methodology": "Separated CONTENT parity from FEATURE parity. Counts from data/audit/unimported-legacy-content.json, pathway catalog sync, optional Prisma, and route scans — not claims without file evidence.",
+  "evidenceRootsScanned": [
+    "client/src",
+    "nursenest-core",
+    "external/NurseNest",
+    "data/audit"
   ],
-  "currentSourcesScanned": [
-    "src/lib/exam-pathways/exam-product-registry.ts (EXAM_PATHWAYS)",
-    "src/lib/lessons/pathway-lesson-catalog-sync.ts (catalog + allied + new-grad + scoped gold)",
-    "prisma/schema.prisma (PathwayLesson, ExamQuestion, FlashcardDeck)",
-    "Prisma skipped (no DATABASE_URL or query failed)"
-  ],
-  "learnerSurfaces": {
-    "evidence": "glob src/app/(student)/**/*.tsx + marketing study routes",
-    "samplePaths": [
-      "/app",
-      "/us/rn/nclex-rn/lessons",
-      "/question-bank",
-      "/flashcards",
-      "/practice-exams"
-    ]
-  }
+  "auditKind": "user_surface",
+  "items": [
+    {
+      "category": "USER_SURFACE",
+      "subcategory": "lesson_browse",
+      "name": "Lesson browsing & detail",
+      "legacyExists": true,
+      "currentExists": true,
+      "status": "partial",
+      "legacySourcePaths": [
+        "client/src"
+      ],
+      "currentSourcePaths": [
+        "nursenest-core/src/app/(student)"
+      ],
+      "routes": [
+        "/app/.../lessons",
+        "/app/.../lessons/[id]"
+      ],
+      "dataModelOrSource": "Learner app + entitlements",
+      "beforeCount": null,
+      "currentCount": 71,
+      "missingCount": null,
+      "confidence": "medium",
+      "recommendedAction": "End-to-end QA per release; compare weak-area flows to legacy",
+      "notes": "Subscriber /app routes — not marketing previews."
+    },
+    {
+      "category": "USER_SURFACE",
+      "subcategory": "questions",
+      "name": "Question practice",
+      "legacyExists": true,
+      "currentExists": true,
+      "status": "partial",
+      "legacySourcePaths": [
+        "client/src"
+      ],
+      "currentSourcePaths": [
+        "nursenest-core/src/app/(student)"
+      ],
+      "routes": [
+        "/app/.../questions"
+      ],
+      "dataModelOrSource": "Learner app + entitlements",
+      "beforeCount": null,
+      "currentCount": 71,
+      "missingCount": null,
+      "confidence": "medium",
+      "recommendedAction": "End-to-end QA per release; compare weak-area flows to legacy",
+      "notes": "Subscriber /app routes — not marketing previews."
+    },
+    {
+      "category": "USER_SURFACE",
+      "subcategory": "flashcards",
+      "name": "Flashcard study",
+      "legacyExists": true,
+      "currentExists": true,
+      "status": "partial",
+      "legacySourcePaths": [
+        "client/src"
+      ],
+      "currentSourcePaths": [
+        "nursenest-core/src/app/(student)"
+      ],
+      "routes": [
+        "/app/.../flashcards",
+        "/app/.../flashcards/[deckRef]"
+      ],
+      "dataModelOrSource": "Learner app + entitlements",
+      "beforeCount": null,
+      "currentCount": 71,
+      "missingCount": null,
+      "confidence": "medium",
+      "recommendedAction": "End-to-end QA per release; compare weak-area flows to legacy",
+      "notes": "Subscriber /app routes — not marketing previews."
+    },
+    {
+      "category": "USER_SURFACE",
+      "subcategory": "practice_tests",
+      "name": "Practice tests / CAT",
+      "legacyExists": true,
+      "currentExists": true,
+      "status": "partial",
+      "legacySourcePaths": [
+        "client/src"
+      ],
+      "currentSourcePaths": [
+        "nursenest-core/src/app/(student)"
+      ],
+      "routes": [
+        "/app/.../practice-tests",
+        "/app/.../practice-tests/cat-insights"
+      ],
+      "dataModelOrSource": "Learner app + entitlements",
+      "beforeCount": null,
+      "currentCount": 71,
+      "missingCount": null,
+      "confidence": "medium",
+      "recommendedAction": "End-to-end QA per release; compare weak-area flows to legacy",
+      "notes": "Subscriber /app routes — not marketing previews."
+    },
+    {
+      "category": "USER_SURFACE",
+      "subcategory": "progress",
+      "name": "Progress & account",
+      "legacyExists": true,
+      "currentExists": true,
+      "status": "partial",
+      "legacySourcePaths": [
+        "client/src"
+      ],
+      "currentSourcePaths": [
+        "nursenest-core/src/app/(student)"
+      ],
+      "routes": [
+        "/app/.../account/progress",
+        "/app/.../account/overview"
+      ],
+      "dataModelOrSource": "Learner app + entitlements",
+      "beforeCount": null,
+      "currentCount": 71,
+      "missingCount": null,
+      "confidence": "medium",
+      "recommendedAction": "End-to-end QA per release; compare weak-area flows to legacy",
+      "notes": "Subscriber /app routes — not marketing previews."
+    },
+    {
+      "category": "USER_SURFACE",
+      "subcategory": "weak_areas",
+      "name": "Weak areas / review",
+      "legacyExists": true,
+      "currentExists": true,
+      "status": "partial",
+      "legacySourcePaths": [
+        "client/src"
+      ],
+      "currentSourcePaths": [
+        "nursenest-core/src/app/(student)"
+      ],
+      "routes": [
+        "/app/.../flashcards/weak-areas",
+        "/app/.../account/mistakes",
+        "/app/.../review"
+      ],
+      "dataModelOrSource": "Learner app + entitlements",
+      "beforeCount": null,
+      "currentCount": 71,
+      "missingCount": null,
+      "confidence": "medium",
+      "recommendedAction": "End-to-end QA per release; compare weak-area flows to legacy",
+      "notes": "Subscriber /app routes — not marketing previews."
+    },
+    {
+      "category": "USER_SURFACE",
+      "subcategory": "readiness",
+      "name": "Readiness / CAT history",
+      "legacyExists": true,
+      "currentExists": true,
+      "status": "partial",
+      "legacySourcePaths": [
+        "client/src"
+      ],
+      "currentSourcePaths": [
+        "nursenest-core/src/app/(student)"
+      ],
+      "routes": [
+        "/app/.../account/readiness",
+        "/app/.../account/cat-history"
+      ],
+      "dataModelOrSource": "Learner app + entitlements",
+      "beforeCount": null,
+      "currentCount": 71,
+      "missingCount": null,
+      "confidence": "medium",
+      "recommendedAction": "End-to-end QA per release; compare weak-area flows to legacy",
+      "notes": "Subscriber /app routes — not marketing previews."
+    },
+    {
+      "category": "USER_SURFACE",
+      "subcategory": "billing",
+      "name": "Billing / subscription",
+      "legacyExists": true,
+      "currentExists": true,
+      "status": "partial",
+      "legacySourcePaths": [
+        "client/src"
+      ],
+      "currentSourcePaths": [
+        "nursenest-core/src/app/(student)"
+      ],
+      "routes": [
+        "/app/.../account/billing"
+      ],
+      "dataModelOrSource": "Learner app + entitlements",
+      "beforeCount": null,
+      "currentCount": 71,
+      "missingCount": null,
+      "confidence": "medium",
+      "recommendedAction": "End-to-end QA per release; compare weak-area flows to legacy",
+      "notes": "Subscriber /app routes — not marketing previews."
+    },
+    {
+      "category": "USER_SURFACE",
+      "subcategory": "search",
+      "name": "Search / filtering",
+      "legacyExists": true,
+      "currentExists": true,
+      "status": "partial",
+      "legacySourcePaths": [
+        "client/src"
+      ],
+      "currentSourcePaths": [
+        "nursenest-core/src/app/(student)"
+      ],
+      "routes": [
+        "/app/.../command-center",
+        "hubs with search params"
+      ],
+      "dataModelOrSource": "Learner app + entitlements",
+      "beforeCount": null,
+      "currentCount": 71,
+      "missingCount": null,
+      "confidence": "medium",
+      "recommendedAction": "End-to-end QA per release; compare weak-area flows to legacy",
+      "notes": "Subscriber /app routes — not marketing previews."
+    }
+  ]
 }

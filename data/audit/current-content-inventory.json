@@ -1,300 +1,60 @@
 {
-  "generatedAt": "2026-04-14T17:56:51.860Z",
-  "dbConnected": false,
-  "legacySourcesScanned": [
-    "data/audit/legacy-lessons-inventory.json (summary)",
-    "data/audit/unimported-legacy-content.json",
-    "external/NurseNest (legacyRoot in inventories when present)"
+  "schemaVersion": 3,
+  "generatedAt": "2026-04-14T18:13:35.924Z",
+  "gitHead": "c6d27507",
+  "methodology": "Separated CONTENT parity from FEATURE parity. Counts from data/audit/unimported-legacy-content.json, pathway catalog sync, optional Prisma, and route scans — not claims without file evidence.",
+  "evidenceRootsScanned": [
+    "client/src",
+    "nursenest-core",
+    "external/NurseNest",
+    "data/audit"
   ],
-  "currentSourcesScanned": [
-    "src/lib/exam-pathways/exam-product-registry.ts (EXAM_PATHWAYS)",
-    "src/lib/lessons/pathway-lesson-catalog-sync.ts (catalog + allied + new-grad + scoped gold)",
-    "prisma/schema.prisma (PathwayLesson, ExamQuestion, FlashcardDeck)",
-    "Prisma skipped (no DATABASE_URL or query failed)"
-  ],
-  "catalogPathwayIds": [
-    "ca-allied-core",
-    "ca-rn-nclex-rn",
-    "ca-rpn-rex-pn",
-    "us-allied-core",
-    "us-lpn-nclex-pn",
-    "us-np-fnp",
-    "us-rn-nclex-rn",
-    "us-rn-new-grad-transition"
-  ],
-  "pathwayRows": [
+  "auditKind": "current_content_inventory",
+  "items": [
     {
-      "pathwayId": "ca-rpn-rex-pn",
-      "countrySlug": "canada",
-      "roleTrack": "rpn",
-      "examCode": "rex-pn",
-      "registryStatus": "active",
-      "stripeTier": "RPN",
-      "routeLessonsIndex": "/canada/pn/rex-pn/lessons",
-      "catalogLessonCount": 150,
-      "dbPublishedLessonCount": null,
-      "dbPublishedQuestionCount": null,
-      "dbPublishedFlashcardDeckCount": null,
-      "contentStatus": "catalog_only_db_unverified",
-      "evidence": [
-        "registry:ca-rpn-rex-pn",
-        "catalog.sync.lessons=150",
-        "db:skipped",
-        "db.questions:skipped",
-        "db.decks:skipped"
-      ]
+      "category": "CONTENT",
+      "subcategory": "catalog",
+      "name": "Bundled pathway lesson catalog",
+      "legacyExists": false,
+      "currentExists": true,
+      "status": "matched",
+      "legacySourcePaths": [],
+      "currentSourcePaths": [
+        "nursenest-core/src/content/pathway-lessons/catalog.json",
+        "pathway-lesson-catalog-sync.ts"
+      ],
+      "routes": [
+        "marketing + sitemap lesson detail"
+      ],
+      "dataModelOrSource": "catalog.json + scoped gold + allied merges",
+      "beforeCount": null,
+      "currentCount": 906,
+      "missingCount": null,
+      "confidence": "high",
+      "recommendedAction": "Keep hub pagination; never ship full catalog to client",
+      "notes": "Pathways with lessons: 8"
     },
     {
-      "pathwayId": "ca-rn-nclex-rn",
-      "countrySlug": "canada",
-      "roleTrack": "rn",
-      "examCode": "nclex-rn",
-      "registryStatus": "active",
-      "stripeTier": "RN",
-      "routeLessonsIndex": "/canada/rn/nclex-rn/lessons",
-      "catalogLessonCount": 188,
-      "dbPublishedLessonCount": null,
-      "dbPublishedQuestionCount": null,
-      "dbPublishedFlashcardDeckCount": null,
-      "contentStatus": "catalog_only_db_unverified",
-      "evidence": [
-        "registry:ca-rn-nclex-rn",
-        "catalog.sync.lessons=188",
-        "db:skipped",
-        "db.questions:skipped",
-        "db.decks:skipped"
-      ]
-    },
-    {
-      "pathwayId": "ca-np-cnple",
-      "countrySlug": "canada",
-      "roleTrack": "np",
-      "examCode": "cnple",
-      "registryStatus": "upcoming",
-      "stripeTier": "NP",
-      "routeLessonsIndex": "/canada/np/cnple/lessons",
-      "catalogLessonCount": 21,
-      "dbPublishedLessonCount": null,
-      "dbPublishedQuestionCount": null,
-      "dbPublishedFlashcardDeckCount": null,
-      "contentStatus": "catalog_only_db_unverified",
-      "evidence": [
-        "registry:ca-np-cnple",
-        "catalog.sync.lessons=21",
-        "db:skipped",
-        "db.questions:skipped",
-        "db.decks:skipped"
-      ]
-    },
-    {
-      "pathwayId": "us-lpn-nclex-pn",
-      "countrySlug": "us",
-      "roleTrack": "lpn",
-      "examCode": "nclex-pn",
-      "registryStatus": "active",
-      "stripeTier": "LVN_LPN",
-      "routeLessonsIndex": "/us/pn/nclex-pn/lessons",
-      "catalogLessonCount": 150,
-      "dbPublishedLessonCount": null,
-      "dbPublishedQuestionCount": null,
-      "dbPublishedFlashcardDeckCount": null,
-      "contentStatus": "catalog_only_db_unverified",
-      "evidence": [
-        "registry:us-lpn-nclex-pn",
-        "catalog.sync.lessons=150",
-        "db:skipped",
-        "db.questions:skipped",
-        "db.decks:skipped"
-      ]
-    },
-    {
-      "pathwayId": "us-rn-nclex-rn",
-      "countrySlug": "us",
-      "roleTrack": "rn",
-      "examCode": "nclex-rn",
-      "registryStatus": "active",
-      "stripeTier": "RN",
-      "routeLessonsIndex": "/us/rn/nclex-rn/lessons",
-      "catalogLessonCount": 187,
-      "dbPublishedLessonCount": null,
-      "dbPublishedQuestionCount": null,
-      "dbPublishedFlashcardDeckCount": null,
-      "contentStatus": "catalog_only_db_unverified",
-      "evidence": [
-        "registry:us-rn-nclex-rn",
-        "catalog.sync.lessons=187",
-        "db:skipped",
-        "db.questions:skipped",
-        "db.decks:skipped"
-      ]
-    },
-    {
-      "pathwayId": "us-rn-new-grad-transition",
-      "countrySlug": "us",
-      "roleTrack": "rn",
-      "examCode": "new-grad-transition",
-      "registryStatus": "active",
-      "stripeTier": "NEW_GRAD",
-      "routeLessonsIndex": "/us/rn/new-grad-transition/lessons",
-      "catalogLessonCount": 40,
-      "dbPublishedLessonCount": null,
-      "dbPublishedQuestionCount": null,
-      "dbPublishedFlashcardDeckCount": null,
-      "contentStatus": "catalog_only_db_unverified",
-      "evidence": [
-        "registry:us-rn-new-grad-transition",
-        "catalog.sync.lessons=40",
-        "db:skipped",
-        "db.questions:skipped",
-        "db.decks:skipped"
-      ]
-    },
-    {
-      "pathwayId": "us-np-fnp",
-      "countrySlug": "us",
-      "roleTrack": "np",
-      "examCode": "fnp",
-      "registryStatus": "active",
-      "stripeTier": "NP",
-      "routeLessonsIndex": "/us/np/fnp/lessons",
-      "catalogLessonCount": 161,
-      "dbPublishedLessonCount": null,
-      "dbPublishedQuestionCount": null,
-      "dbPublishedFlashcardDeckCount": null,
-      "contentStatus": "catalog_only_db_unverified",
-      "evidence": [
-        "registry:us-np-fnp",
-        "catalog.sync.lessons=161",
-        "db:skipped",
-        "db.questions:skipped",
-        "db.decks:skipped"
-      ]
-    },
-    {
-      "pathwayId": "us-np-agpcnp",
-      "countrySlug": "us",
-      "roleTrack": "np",
-      "examCode": "agpcnp",
-      "registryStatus": "active",
-      "stripeTier": "NP",
-      "routeLessonsIndex": "/us/np/agpcnp/lessons",
-      "catalogLessonCount": 70,
-      "dbPublishedLessonCount": null,
-      "dbPublishedQuestionCount": null,
-      "dbPublishedFlashcardDeckCount": null,
-      "contentStatus": "catalog_only_db_unverified",
-      "evidence": [
-        "registry:us-np-agpcnp",
-        "catalog.sync.lessons=70",
-        "db:skipped",
-        "db.questions:skipped",
-        "db.decks:skipped"
-      ]
-    },
-    {
-      "pathwayId": "us-np-pmhnp",
-      "countrySlug": "us",
-      "roleTrack": "np",
-      "examCode": "pmhnp",
-      "registryStatus": "active",
-      "stripeTier": "NP",
-      "routeLessonsIndex": "/us/np/pmhnp/lessons",
-      "catalogLessonCount": 50,
-      "dbPublishedLessonCount": null,
-      "dbPublishedQuestionCount": null,
-      "dbPublishedFlashcardDeckCount": null,
-      "contentStatus": "catalog_only_db_unverified",
-      "evidence": [
-        "registry:us-np-pmhnp",
-        "catalog.sync.lessons=50",
-        "db:skipped",
-        "db.questions:skipped",
-        "db.decks:skipped"
-      ]
-    },
-    {
-      "pathwayId": "us-np-whnp",
-      "countrySlug": "us",
-      "roleTrack": "np",
-      "examCode": "whnp",
-      "registryStatus": "active",
-      "stripeTier": "NP",
-      "routeLessonsIndex": "/us/np/whnp/lessons",
-      "catalogLessonCount": 21,
-      "dbPublishedLessonCount": null,
-      "dbPublishedQuestionCount": null,
-      "dbPublishedFlashcardDeckCount": null,
-      "contentStatus": "catalog_only_db_unverified",
-      "evidence": [
-        "registry:us-np-whnp",
-        "catalog.sync.lessons=21",
-        "db:skipped",
-        "db.questions:skipped",
-        "db.decks:skipped"
-      ]
-    },
-    {
-      "pathwayId": "us-np-pnp-pc",
-      "countrySlug": "us",
-      "roleTrack": "np",
-      "examCode": "pnp-pc",
-      "registryStatus": "active",
-      "stripeTier": "NP",
-      "routeLessonsIndex": "/us/np/pnp-pc/lessons",
-      "catalogLessonCount": 21,
-      "dbPublishedLessonCount": null,
-      "dbPublishedQuestionCount": null,
-      "dbPublishedFlashcardDeckCount": null,
-      "contentStatus": "catalog_only_db_unverified",
-      "evidence": [
-        "registry:us-np-pnp-pc",
-        "catalog.sync.lessons=21",
-        "db:skipped",
-        "db.questions:skipped",
-        "db.decks:skipped"
-      ]
-    },
-    {
-      "pathwayId": "ca-allied-core",
-      "countrySlug": "canada",
-      "roleTrack": "allied",
-      "examCode": "allied-health",
-      "registryStatus": "active",
-      "stripeTier": "ALLIED",
-      "routeLessonsIndex": "/canada/allied/allied-health/lessons",
-      "catalogLessonCount": 15,
-      "dbPublishedLessonCount": null,
-      "dbPublishedQuestionCount": null,
-      "dbPublishedFlashcardDeckCount": null,
-      "contentStatus": "catalog_only_db_unverified",
-      "evidence": [
-        "registry:ca-allied-core",
-        "catalog.sync.lessons=15",
-        "db:skipped",
-        "db.questions:skipped",
-        "db.decks:skipped"
-      ]
-    },
-    {
-      "pathwayId": "us-allied-core",
-      "countrySlug": "us",
-      "roleTrack": "allied",
-      "examCode": "allied-health",
-      "registryStatus": "active",
-      "stripeTier": "ALLIED",
-      "routeLessonsIndex": "/us/allied/allied-health/lessons",
-      "catalogLessonCount": 15,
-      "dbPublishedLessonCount": null,
-      "dbPublishedQuestionCount": null,
-      "dbPublishedFlashcardDeckCount": null,
-      "contentStatus": "catalog_only_db_unverified",
-      "evidence": [
-        "registry:us-allied-core",
-        "catalog.sync.lessons=15",
-        "db:skipped",
-        "db.questions:skipped",
-        "db.decks:skipped"
-      ]
+      "category": "CONTENT",
+      "subcategory": "db_lessons",
+      "name": "Published PathwayLesson rows (en)",
+      "legacyExists": false,
+      "currentExists": false,
+      "status": "partial",
+      "legacySourcePaths": [],
+      "currentSourcePaths": [
+        "prisma/schema.prisma PathwayLesson"
+      ],
+      "routes": [
+        "/admin/lessons"
+      ],
+      "dataModelOrSource": "pathway_lessons",
+      "beforeCount": null,
+      "currentCount": null,
+      "missingCount": null,
+      "confidence": "low",
+      "recommendedAction": "Align DB rows with catalog or document DB-only experiments",
+      "notes": "DATABASE_URL absent — count not verified this run."
     }
   ]
 }

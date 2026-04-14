@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-14T17:51:27.124Z",
+  "generatedAt": "2026-04-14T18:16:53.118Z",
   "recommendation": "Repo-wide: `npx tsx scripts/i18n-scan.ts` (see i18n-scan.config.json). Report may be large; filter violations where file path contains `nursenest-core/`.",
   "nursenestCoreViolationStreamScan": {
     "reportBytes": 345529959,

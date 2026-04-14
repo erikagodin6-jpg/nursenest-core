@@ -37,6 +37,11 @@ test("content staff can access non-forbidden admin routes", () => {
   assert.equal(isPathAllowedForStaffTier("content", "/admin/lessons"), true);
 });
 
+test("support and content staff can access E-E-A-T editorial dashboard", () => {
+  assert.equal(isPathAllowedForStaffTier("support", "/admin/eeat-editorial"), true);
+  assert.equal(isPathAllowedForStaffTier("content", "/admin/eeat-editorial"), true);
+});
+
 test("nav helper matches path policy", () => {
   assert.equal(isNavHrefAllowedForStaffTier("support", "/admin"), isPathAllowedForStaffTier("support", "/admin"));
 });

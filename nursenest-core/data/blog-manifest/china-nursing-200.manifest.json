@@ -1,0 +1,2006 @@
+{
+  "generatedAt": "2026-04-14T19:09:57.076Z",
+  "count": 200,
+  "entries": [
+    {
+      "title": "national nurse qualification examination guide — China nursing (en 1)",
+      "slug": "en-0001-national-nurse-qualification-examination-guide-national-nurse-qualification-examination-guide-china-nursing-en-1",
+      "primaryKeyword": "national nurse qualification examination guide",
+      "language": "en",
+      "category": "China nursing",
+      "intentType": "transactional",
+      "translationGroupId": "cn-nurse-0001-national-nurse-qualification-examination-guide",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in china — China nursing (en 2)",
+      "slug": "en-0002-how-to-become-a-nurse-in-china-how-to-become-a-nurse-in-china-china-nursing-en-2",
+      "primaryKeyword": "how to become a nurse in china",
+      "language": "en",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0001-how-to-become-a-nurse-in-china",
+      "status": "planned"
+    },
+    {
+      "title": "chinese nursing license requirements — China nursing (en 3)",
+      "slug": "en-0003-chinese-nursing-license-requirements-chinese-nursing-license-requirements-china-nursing-en-3",
+      "primaryKeyword": "chinese nursing license requirements",
+      "language": "en",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0001-chinese-nursing-license-requirements",
+      "status": "planned"
+    },
+    {
+      "title": "best nursing jobs in china — China nursing (en 4)",
+      "slug": "en-0004-best-nursing-jobs-in-china-best-nursing-jobs-in-china-china-nursing-en-4",
+      "primaryKeyword": "best nursing jobs in china",
+      "language": "en",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0001-best-nursing-jobs-in-china",
+      "status": "planned"
+    },
+    {
+      "title": "chinese nurses working abroad — China nursing (en 5)",
+      "slug": "en-0005-chinese-nurses-working-abroad-chinese-nurses-working-abroad-china-nursing-en-5",
+      "primaryKeyword": "chinese nurses working abroad",
+      "language": "en",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0001-chinese-nurses-working-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "nclex for chinese nurses — China nursing (en 6)",
+      "slug": "en-0006-nclex-for-chinese-nurses-nclex-for-chinese-nurses-china-nursing-en-6",
+      "primaryKeyword": "nclex for chinese nurses",
+      "language": "en",
+      "category": "China nursing",
+      "intentType": "transactional",
+      "translationGroupId": "cn-nurse-0001-nclex-for-chinese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "oet vs ielts for chinese nurses — China nursing (en 7)",
+      "slug": "en-0007-oet-vs-ielts-for-chinese-nurses-oet-vs-ielts-for-chinese-nurses-china-nursing-en-7",
+      "primaryKeyword": "oet vs ielts for chinese nurses",
+      "language": "en",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0001-oet-vs-ielts-for-chinese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "china to australia nurse pathway — China nursing (en 8)",
+      "slug": "en-0008-china-to-australia-nurse-pathway-china-to-australia-nurse-pathway-china-nursing-en-8",
+      "primaryKeyword": "china to australia nurse pathway",
+      "language": "en",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0001-china-to-australia-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "china to canada nurse pathway — China nursing (en 9)",
+      "slug": "en-0009-china-to-canada-nurse-pathway-china-to-canada-nurse-pathway-china-nursing-en-9",
+      "primaryKeyword": "china to canada nurse pathway",
+      "language": "en",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0001-china-to-canada-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "study tips for chinese nursing exams — China nursing (en 10)",
+      "slug": "en-0010-study-tips-for-chinese-nursing-exams-study-tips-for-chinese-nursing-exams-china-nursing-en-10",
+      "primaryKeyword": "study tips for chinese nursing exams",
+      "language": "en",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0001-study-tips-for-chinese-nursing-exams",
+      "status": "planned"
+    },
+    {
+      "title": "national nurse qualification examination guide — China nursing (en 11)",
+      "slug": "en-0011-national-nurse-qualification-examination-guide-national-nurse-qualification-examination-guide-china-nursing-en-1",
+      "primaryKeyword": "national nurse qualification examination guide",
+      "language": "en",
+      "category": "China nursing",
+      "intentType": "transactional",
+      "translationGroupId": "cn-nurse-0002-national-nurse-qualification-examination-guide",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in china — China nursing (en 12)",
+      "slug": "en-0012-how-to-become-a-nurse-in-china-how-to-become-a-nurse-in-china-china-nursing-en-12",
+      "primaryKeyword": "how to become a nurse in china",
+      "language": "en",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0002-how-to-become-a-nurse-in-china",
+      "status": "planned"
+    },
+    {
+      "title": "chinese nursing license requirements — China nursing (en 13)",
+      "slug": "en-0013-chinese-nursing-license-requirements-chinese-nursing-license-requirements-china-nursing-en-13",
+      "primaryKeyword": "chinese nursing license requirements",
+      "language": "en",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0002-chinese-nursing-license-requirements",
+      "status": "planned"
+    },
+    {
+      "title": "best nursing jobs in china — China nursing (en 14)",
+      "slug": "en-0014-best-nursing-jobs-in-china-best-nursing-jobs-in-china-china-nursing-en-14",
+      "primaryKeyword": "best nursing jobs in china",
+      "language": "en",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0002-best-nursing-jobs-in-china",
+      "status": "planned"
+    },
+    {
+      "title": "chinese nurses working abroad — China nursing (en 15)",
+      "slug": "en-0015-chinese-nurses-working-abroad-chinese-nurses-working-abroad-china-nursing-en-15",
+      "primaryKeyword": "chinese nurses working abroad",
+      "language": "en",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0002-chinese-nurses-working-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "nclex for chinese nurses — China nursing (en 16)",
+      "slug": "en-0016-nclex-for-chinese-nurses-nclex-for-chinese-nurses-china-nursing-en-16",
+      "primaryKeyword": "nclex for chinese nurses",
+      "language": "en",
+      "category": "China nursing",
+      "intentType": "transactional",
+      "translationGroupId": "cn-nurse-0002-nclex-for-chinese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "oet vs ielts for chinese nurses — China nursing (en 17)",
+      "slug": "en-0017-oet-vs-ielts-for-chinese-nurses-oet-vs-ielts-for-chinese-nurses-china-nursing-en-17",
+      "primaryKeyword": "oet vs ielts for chinese nurses",
+      "language": "en",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0002-oet-vs-ielts-for-chinese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "china to australia nurse pathway — China nursing (en 18)",
+      "slug": "en-0018-china-to-australia-nurse-pathway-china-to-australia-nurse-pathway-china-nursing-en-18",
+      "primaryKeyword": "china to australia nurse pathway",
+      "language": "en",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0002-china-to-australia-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "china to canada nurse pathway — China nursing (en 19)",
+      "slug": "en-0019-china-to-canada-nurse-pathway-china-to-canada-nurse-pathway-china-nursing-en-19",
+      "primaryKeyword": "china to canada nurse pathway",
+      "language": "en",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0002-china-to-canada-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "study tips for chinese nursing exams — China nursing (en 20)",
+      "slug": "en-0020-study-tips-for-chinese-nursing-exams-study-tips-for-chinese-nursing-exams-china-nursing-en-20",
+      "primaryKeyword": "study tips for chinese nursing exams",
+      "language": "en",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0002-study-tips-for-chinese-nursing-exams",
+      "status": "planned"
+    },
+    {
+      "title": "national nurse qualification examination guide — China nursing (en 21)",
+      "slug": "en-0021-national-nurse-qualification-examination-guide-national-nurse-qualification-examination-guide-china-nursing-en-2",
+      "primaryKeyword": "national nurse qualification examination guide",
+      "language": "en",
+      "category": "China nursing",
+      "intentType": "transactional",
+      "translationGroupId": "cn-nurse-0003-national-nurse-qualification-examination-guide",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in china — China nursing (en 22)",
+      "slug": "en-0022-how-to-become-a-nurse-in-china-how-to-become-a-nurse-in-china-china-nursing-en-22",
+      "primaryKeyword": "how to become a nurse in china",
+      "language": "en",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0003-how-to-become-a-nurse-in-china",
+      "status": "planned"
+    },
+    {
+      "title": "chinese nursing license requirements — China nursing (en 23)",
+      "slug": "en-0023-chinese-nursing-license-requirements-chinese-nursing-license-requirements-china-nursing-en-23",
+      "primaryKeyword": "chinese nursing license requirements",
+      "language": "en",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0003-chinese-nursing-license-requirements",
+      "status": "planned"
+    },
+    {
+      "title": "best nursing jobs in china — China nursing (en 24)",
+      "slug": "en-0024-best-nursing-jobs-in-china-best-nursing-jobs-in-china-china-nursing-en-24",
+      "primaryKeyword": "best nursing jobs in china",
+      "language": "en",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0003-best-nursing-jobs-in-china",
+      "status": "planned"
+    },
+    {
+      "title": "chinese nurses working abroad — China nursing (en 25)",
+      "slug": "en-0025-chinese-nurses-working-abroad-chinese-nurses-working-abroad-china-nursing-en-25",
+      "primaryKeyword": "chinese nurses working abroad",
+      "language": "en",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0003-chinese-nurses-working-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "nclex for chinese nurses — China nursing (en 26)",
+      "slug": "en-0026-nclex-for-chinese-nurses-nclex-for-chinese-nurses-china-nursing-en-26",
+      "primaryKeyword": "nclex for chinese nurses",
+      "language": "en",
+      "category": "China nursing",
+      "intentType": "transactional",
+      "translationGroupId": "cn-nurse-0003-nclex-for-chinese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "oet vs ielts for chinese nurses — China nursing (en 27)",
+      "slug": "en-0027-oet-vs-ielts-for-chinese-nurses-oet-vs-ielts-for-chinese-nurses-china-nursing-en-27",
+      "primaryKeyword": "oet vs ielts for chinese nurses",
+      "language": "en",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0003-oet-vs-ielts-for-chinese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "china to australia nurse pathway — China nursing (en 28)",
+      "slug": "en-0028-china-to-australia-nurse-pathway-china-to-australia-nurse-pathway-china-nursing-en-28",
+      "primaryKeyword": "china to australia nurse pathway",
+      "language": "en",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0003-china-to-australia-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "china to canada nurse pathway — China nursing (en 29)",
+      "slug": "en-0029-china-to-canada-nurse-pathway-china-to-canada-nurse-pathway-china-nursing-en-29",
+      "primaryKeyword": "china to canada nurse pathway",
+      "language": "en",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0003-china-to-canada-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "study tips for chinese nursing exams — China nursing (en 30)",
+      "slug": "en-0030-study-tips-for-chinese-nursing-exams-study-tips-for-chinese-nursing-exams-china-nursing-en-30",
+      "primaryKeyword": "study tips for chinese nursing exams",
+      "language": "en",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0003-study-tips-for-chinese-nursing-exams",
+      "status": "planned"
+    },
+    {
+      "title": "national nurse qualification examination guide — China nursing (en 31)",
+      "slug": "en-0031-national-nurse-qualification-examination-guide-national-nurse-qualification-examination-guide-china-nursing-en-3",
+      "primaryKeyword": "national nurse qualification examination guide",
+      "language": "en",
+      "category": "China nursing",
+      "intentType": "transactional",
+      "translationGroupId": "cn-nurse-0004-national-nurse-qualification-examination-guide",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in china — China nursing (en 32)",
+      "slug": "en-0032-how-to-become-a-nurse-in-china-how-to-become-a-nurse-in-china-china-nursing-en-32",
+      "primaryKeyword": "how to become a nurse in china",
+      "language": "en",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0004-how-to-become-a-nurse-in-china",
+      "status": "planned"
+    },
+    {
+      "title": "chinese nursing license requirements — China nursing (en 33)",
+      "slug": "en-0033-chinese-nursing-license-requirements-chinese-nursing-license-requirements-china-nursing-en-33",
+      "primaryKeyword": "chinese nursing license requirements",
+      "language": "en",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0004-chinese-nursing-license-requirements",
+      "status": "planned"
+    },
+    {
+      "title": "best nursing jobs in china — China nursing (en 34)",
+      "slug": "en-0034-best-nursing-jobs-in-china-best-nursing-jobs-in-china-china-nursing-en-34",
+      "primaryKeyword": "best nursing jobs in china",
+      "language": "en",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0004-best-nursing-jobs-in-china",
+      "status": "planned"
+    },
+    {
+      "title": "chinese nurses working abroad — China nursing (en 35)",
+      "slug": "en-0035-chinese-nurses-working-abroad-chinese-nurses-working-abroad-china-nursing-en-35",
+      "primaryKeyword": "chinese nurses working abroad",
+      "language": "en",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0004-chinese-nurses-working-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "nclex for chinese nurses — China nursing (en 36)",
+      "slug": "en-0036-nclex-for-chinese-nurses-nclex-for-chinese-nurses-china-nursing-en-36",
+      "primaryKeyword": "nclex for chinese nurses",
+      "language": "en",
+      "category": "China nursing",
+      "intentType": "transactional",
+      "translationGroupId": "cn-nurse-0004-nclex-for-chinese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "oet vs ielts for chinese nurses — China nursing (en 37)",
+      "slug": "en-0037-oet-vs-ielts-for-chinese-nurses-oet-vs-ielts-for-chinese-nurses-china-nursing-en-37",
+      "primaryKeyword": "oet vs ielts for chinese nurses",
+      "language": "en",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0004-oet-vs-ielts-for-chinese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "china to australia nurse pathway — China nursing (en 38)",
+      "slug": "en-0038-china-to-australia-nurse-pathway-china-to-australia-nurse-pathway-china-nursing-en-38",
+      "primaryKeyword": "china to australia nurse pathway",
+      "language": "en",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0004-china-to-australia-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "china to canada nurse pathway — China nursing (en 39)",
+      "slug": "en-0039-china-to-canada-nurse-pathway-china-to-canada-nurse-pathway-china-nursing-en-39",
+      "primaryKeyword": "china to canada nurse pathway",
+      "language": "en",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0004-china-to-canada-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "study tips for chinese nursing exams — China nursing (en 40)",
+      "slug": "en-0040-study-tips-for-chinese-nursing-exams-study-tips-for-chinese-nursing-exams-china-nursing-en-40",
+      "primaryKeyword": "study tips for chinese nursing exams",
+      "language": "en",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0004-study-tips-for-chinese-nursing-exams",
+      "status": "planned"
+    },
+    {
+      "title": "national nurse qualification examination guide — China nursing (en 41)",
+      "slug": "en-0041-national-nurse-qualification-examination-guide-national-nurse-qualification-examination-guide-china-nursing-en-4",
+      "primaryKeyword": "national nurse qualification examination guide",
+      "language": "en",
+      "category": "China nursing",
+      "intentType": "transactional",
+      "translationGroupId": "cn-nurse-0005-national-nurse-qualification-examination-guide",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in china — China nursing (en 42)",
+      "slug": "en-0042-how-to-become-a-nurse-in-china-how-to-become-a-nurse-in-china-china-nursing-en-42",
+      "primaryKeyword": "how to become a nurse in china",
+      "language": "en",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0005-how-to-become-a-nurse-in-china",
+      "status": "planned"
+    },
+    {
+      "title": "chinese nursing license requirements — China nursing (en 43)",
+      "slug": "en-0043-chinese-nursing-license-requirements-chinese-nursing-license-requirements-china-nursing-en-43",
+      "primaryKeyword": "chinese nursing license requirements",
+      "language": "en",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0005-chinese-nursing-license-requirements",
+      "status": "planned"
+    },
+    {
+      "title": "best nursing jobs in china — China nursing (en 44)",
+      "slug": "en-0044-best-nursing-jobs-in-china-best-nursing-jobs-in-china-china-nursing-en-44",
+      "primaryKeyword": "best nursing jobs in china",
+      "language": "en",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0005-best-nursing-jobs-in-china",
+      "status": "planned"
+    },
+    {
+      "title": "chinese nurses working abroad — China nursing (en 45)",
+      "slug": "en-0045-chinese-nurses-working-abroad-chinese-nurses-working-abroad-china-nursing-en-45",
+      "primaryKeyword": "chinese nurses working abroad",
+      "language": "en",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0005-chinese-nurses-working-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "nclex for chinese nurses — China nursing (en 46)",
+      "slug": "en-0046-nclex-for-chinese-nurses-nclex-for-chinese-nurses-china-nursing-en-46",
+      "primaryKeyword": "nclex for chinese nurses",
+      "language": "en",
+      "category": "China nursing",
+      "intentType": "transactional",
+      "translationGroupId": "cn-nurse-0005-nclex-for-chinese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "oet vs ielts for chinese nurses — China nursing (en 47)",
+      "slug": "en-0047-oet-vs-ielts-for-chinese-nurses-oet-vs-ielts-for-chinese-nurses-china-nursing-en-47",
+      "primaryKeyword": "oet vs ielts for chinese nurses",
+      "language": "en",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0005-oet-vs-ielts-for-chinese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "china to australia nurse pathway — China nursing (en 48)",
+      "slug": "en-0048-china-to-australia-nurse-pathway-china-to-australia-nurse-pathway-china-nursing-en-48",
+      "primaryKeyword": "china to australia nurse pathway",
+      "language": "en",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0005-china-to-australia-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "china to canada nurse pathway — China nursing (en 49)",
+      "slug": "en-0049-china-to-canada-nurse-pathway-china-to-canada-nurse-pathway-china-nursing-en-49",
+      "primaryKeyword": "china to canada nurse pathway",
+      "language": "en",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0005-china-to-canada-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "study tips for chinese nursing exams — China nursing (en 50)",
+      "slug": "en-0050-study-tips-for-chinese-nursing-exams-study-tips-for-chinese-nursing-exams-china-nursing-en-50",
+      "primaryKeyword": "study tips for chinese nursing exams",
+      "language": "en",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0005-study-tips-for-chinese-nursing-exams",
+      "status": "planned"
+    },
+    {
+      "title": "national nurse qualification examination guide — China nursing (en 51)",
+      "slug": "en-0051-national-nurse-qualification-examination-guide-national-nurse-qualification-examination-guide-china-nursing-en-5",
+      "primaryKeyword": "national nurse qualification examination guide",
+      "language": "en",
+      "category": "China nursing",
+      "intentType": "transactional",
+      "translationGroupId": "cn-nurse-0006-national-nurse-qualification-examination-guide",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in china — China nursing (en 52)",
+      "slug": "en-0052-how-to-become-a-nurse-in-china-how-to-become-a-nurse-in-china-china-nursing-en-52",
+      "primaryKeyword": "how to become a nurse in china",
+      "language": "en",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0006-how-to-become-a-nurse-in-china",
+      "status": "planned"
+    },
+    {
+      "title": "chinese nursing license requirements — China nursing (en 53)",
+      "slug": "en-0053-chinese-nursing-license-requirements-chinese-nursing-license-requirements-china-nursing-en-53",
+      "primaryKeyword": "chinese nursing license requirements",
+      "language": "en",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0006-chinese-nursing-license-requirements",
+      "status": "planned"
+    },
+    {
+      "title": "best nursing jobs in china — China nursing (en 54)",
+      "slug": "en-0054-best-nursing-jobs-in-china-best-nursing-jobs-in-china-china-nursing-en-54",
+      "primaryKeyword": "best nursing jobs in china",
+      "language": "en",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0006-best-nursing-jobs-in-china",
+      "status": "planned"
+    },
+    {
+      "title": "chinese nurses working abroad — China nursing (en 55)",
+      "slug": "en-0055-chinese-nurses-working-abroad-chinese-nurses-working-abroad-china-nursing-en-55",
+      "primaryKeyword": "chinese nurses working abroad",
+      "language": "en",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0006-chinese-nurses-working-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "nclex for chinese nurses — China nursing (en 56)",
+      "slug": "en-0056-nclex-for-chinese-nurses-nclex-for-chinese-nurses-china-nursing-en-56",
+      "primaryKeyword": "nclex for chinese nurses",
+      "language": "en",
+      "category": "China nursing",
+      "intentType": "transactional",
+      "translationGroupId": "cn-nurse-0006-nclex-for-chinese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "oet vs ielts for chinese nurses — China nursing (en 57)",
+      "slug": "en-0057-oet-vs-ielts-for-chinese-nurses-oet-vs-ielts-for-chinese-nurses-china-nursing-en-57",
+      "primaryKeyword": "oet vs ielts for chinese nurses",
+      "language": "en",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0006-oet-vs-ielts-for-chinese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "china to australia nurse pathway — China nursing (en 58)",
+      "slug": "en-0058-china-to-australia-nurse-pathway-china-to-australia-nurse-pathway-china-nursing-en-58",
+      "primaryKeyword": "china to australia nurse pathway",
+      "language": "en",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0006-china-to-australia-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "china to canada nurse pathway — China nursing (en 59)",
+      "slug": "en-0059-china-to-canada-nurse-pathway-china-to-canada-nurse-pathway-china-nursing-en-59",
+      "primaryKeyword": "china to canada nurse pathway",
+      "language": "en",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0006-china-to-canada-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "study tips for chinese nursing exams — China nursing (en 60)",
+      "slug": "en-0060-study-tips-for-chinese-nursing-exams-study-tips-for-chinese-nursing-exams-china-nursing-en-60",
+      "primaryKeyword": "study tips for chinese nursing exams",
+      "language": "en",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0006-study-tips-for-chinese-nursing-exams",
+      "status": "planned"
+    },
+    {
+      "title": "national nurse qualification examination guide — China nursing (en 61)",
+      "slug": "en-0061-national-nurse-qualification-examination-guide-national-nurse-qualification-examination-guide-china-nursing-en-6",
+      "primaryKeyword": "national nurse qualification examination guide",
+      "language": "en",
+      "category": "China nursing",
+      "intentType": "transactional",
+      "translationGroupId": "cn-nurse-0007-national-nurse-qualification-examination-guide",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in china — China nursing (en 62)",
+      "slug": "en-0062-how-to-become-a-nurse-in-china-how-to-become-a-nurse-in-china-china-nursing-en-62",
+      "primaryKeyword": "how to become a nurse in china",
+      "language": "en",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0007-how-to-become-a-nurse-in-china",
+      "status": "planned"
+    },
+    {
+      "title": "chinese nursing license requirements — China nursing (en 63)",
+      "slug": "en-0063-chinese-nursing-license-requirements-chinese-nursing-license-requirements-china-nursing-en-63",
+      "primaryKeyword": "chinese nursing license requirements",
+      "language": "en",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0007-chinese-nursing-license-requirements",
+      "status": "planned"
+    },
+    {
+      "title": "best nursing jobs in china — China nursing (en 64)",
+      "slug": "en-0064-best-nursing-jobs-in-china-best-nursing-jobs-in-china-china-nursing-en-64",
+      "primaryKeyword": "best nursing jobs in china",
+      "language": "en",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0007-best-nursing-jobs-in-china",
+      "status": "planned"
+    },
+    {
+      "title": "chinese nurses working abroad — China nursing (en 65)",
+      "slug": "en-0065-chinese-nurses-working-abroad-chinese-nurses-working-abroad-china-nursing-en-65",
+      "primaryKeyword": "chinese nurses working abroad",
+      "language": "en",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0007-chinese-nurses-working-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "nclex for chinese nurses — China nursing (en 66)",
+      "slug": "en-0066-nclex-for-chinese-nurses-nclex-for-chinese-nurses-china-nursing-en-66",
+      "primaryKeyword": "nclex for chinese nurses",
+      "language": "en",
+      "category": "China nursing",
+      "intentType": "transactional",
+      "translationGroupId": "cn-nurse-0007-nclex-for-chinese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "oet vs ielts for chinese nurses — China nursing (en 67)",
+      "slug": "en-0067-oet-vs-ielts-for-chinese-nurses-oet-vs-ielts-for-chinese-nurses-china-nursing-en-67",
+      "primaryKeyword": "oet vs ielts for chinese nurses",
+      "language": "en",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0007-oet-vs-ielts-for-chinese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "china to australia nurse pathway — China nursing (en 68)",
+      "slug": "en-0068-china-to-australia-nurse-pathway-china-to-australia-nurse-pathway-china-nursing-en-68",
+      "primaryKeyword": "china to australia nurse pathway",
+      "language": "en",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0007-china-to-australia-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "china to canada nurse pathway — China nursing (en 69)",
+      "slug": "en-0069-china-to-canada-nurse-pathway-china-to-canada-nurse-pathway-china-nursing-en-69",
+      "primaryKeyword": "china to canada nurse pathway",
+      "language": "en",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0007-china-to-canada-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "study tips for chinese nursing exams — China nursing (en 70)",
+      "slug": "en-0070-study-tips-for-chinese-nursing-exams-study-tips-for-chinese-nursing-exams-china-nursing-en-70",
+      "primaryKeyword": "study tips for chinese nursing exams",
+      "language": "en",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0007-study-tips-for-chinese-nursing-exams",
+      "status": "planned"
+    },
+    {
+      "title": "national nurse qualification examination guide — China nursing (zh 1)",
+      "slug": "zh-0071-national-nurse-qualification-examination-guide-national-nurse-qualification-examination-guide-china-nursing-zh-1",
+      "primaryKeyword": "national nurse qualification examination guide",
+      "language": "zh",
+      "category": "China nursing",
+      "intentType": "transactional",
+      "translationGroupId": "cn-nurse-0008-national-nurse-qualification-examination-guide",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in china — China nursing (zh 2)",
+      "slug": "zh-0072-how-to-become-a-nurse-in-china-how-to-become-a-nurse-in-china-china-nursing-zh-2",
+      "primaryKeyword": "how to become a nurse in china",
+      "language": "zh",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0008-how-to-become-a-nurse-in-china",
+      "status": "planned"
+    },
+    {
+      "title": "chinese nursing license requirements — China nursing (zh 3)",
+      "slug": "zh-0073-chinese-nursing-license-requirements-chinese-nursing-license-requirements-china-nursing-zh-3",
+      "primaryKeyword": "chinese nursing license requirements",
+      "language": "zh",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0008-chinese-nursing-license-requirements",
+      "status": "planned"
+    },
+    {
+      "title": "best nursing jobs in china — China nursing (zh 4)",
+      "slug": "zh-0074-best-nursing-jobs-in-china-best-nursing-jobs-in-china-china-nursing-zh-4",
+      "primaryKeyword": "best nursing jobs in china",
+      "language": "zh",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0008-best-nursing-jobs-in-china",
+      "status": "planned"
+    },
+    {
+      "title": "chinese nurses working abroad — China nursing (zh 5)",
+      "slug": "zh-0075-chinese-nurses-working-abroad-chinese-nurses-working-abroad-china-nursing-zh-5",
+      "primaryKeyword": "chinese nurses working abroad",
+      "language": "zh",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0008-chinese-nurses-working-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "nclex for chinese nurses — China nursing (zh 6)",
+      "slug": "zh-0076-nclex-for-chinese-nurses-nclex-for-chinese-nurses-china-nursing-zh-6",
+      "primaryKeyword": "nclex for chinese nurses",
+      "language": "zh",
+      "category": "China nursing",
+      "intentType": "transactional",
+      "translationGroupId": "cn-nurse-0008-nclex-for-chinese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "oet vs ielts for chinese nurses — China nursing (zh 7)",
+      "slug": "zh-0077-oet-vs-ielts-for-chinese-nurses-oet-vs-ielts-for-chinese-nurses-china-nursing-zh-7",
+      "primaryKeyword": "oet vs ielts for chinese nurses",
+      "language": "zh",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0008-oet-vs-ielts-for-chinese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "china to australia nurse pathway — China nursing (zh 8)",
+      "slug": "zh-0078-china-to-australia-nurse-pathway-china-to-australia-nurse-pathway-china-nursing-zh-8",
+      "primaryKeyword": "china to australia nurse pathway",
+      "language": "zh",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0008-china-to-australia-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "china to canada nurse pathway — China nursing (zh 9)",
+      "slug": "zh-0079-china-to-canada-nurse-pathway-china-to-canada-nurse-pathway-china-nursing-zh-9",
+      "primaryKeyword": "china to canada nurse pathway",
+      "language": "zh",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0008-china-to-canada-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "study tips for chinese nursing exams — China nursing (zh 10)",
+      "slug": "zh-0080-study-tips-for-chinese-nursing-exams-study-tips-for-chinese-nursing-exams-china-nursing-zh-10",
+      "primaryKeyword": "study tips for chinese nursing exams",
+      "language": "zh",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0008-study-tips-for-chinese-nursing-exams",
+      "status": "planned"
+    },
+    {
+      "title": "national nurse qualification examination guide — China nursing (zh 11)",
+      "slug": "zh-0081-national-nurse-qualification-examination-guide-national-nurse-qualification-examination-guide-china-nursing-zh-1",
+      "primaryKeyword": "national nurse qualification examination guide",
+      "language": "zh",
+      "category": "China nursing",
+      "intentType": "transactional",
+      "translationGroupId": "cn-nurse-0009-national-nurse-qualification-examination-guide",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in china — China nursing (zh 12)",
+      "slug": "zh-0082-how-to-become-a-nurse-in-china-how-to-become-a-nurse-in-china-china-nursing-zh-12",
+      "primaryKeyword": "how to become a nurse in china",
+      "language": "zh",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0009-how-to-become-a-nurse-in-china",
+      "status": "planned"
+    },
+    {
+      "title": "chinese nursing license requirements — China nursing (zh 13)",
+      "slug": "zh-0083-chinese-nursing-license-requirements-chinese-nursing-license-requirements-china-nursing-zh-13",
+      "primaryKeyword": "chinese nursing license requirements",
+      "language": "zh",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0009-chinese-nursing-license-requirements",
+      "status": "planned"
+    },
+    {
+      "title": "best nursing jobs in china — China nursing (zh 14)",
+      "slug": "zh-0084-best-nursing-jobs-in-china-best-nursing-jobs-in-china-china-nursing-zh-14",
+      "primaryKeyword": "best nursing jobs in china",
+      "language": "zh",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0009-best-nursing-jobs-in-china",
+      "status": "planned"
+    },
+    {
+      "title": "chinese nurses working abroad — China nursing (zh 15)",
+      "slug": "zh-0085-chinese-nurses-working-abroad-chinese-nurses-working-abroad-china-nursing-zh-15",
+      "primaryKeyword": "chinese nurses working abroad",
+      "language": "zh",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0009-chinese-nurses-working-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "nclex for chinese nurses — China nursing (zh 16)",
+      "slug": "zh-0086-nclex-for-chinese-nurses-nclex-for-chinese-nurses-china-nursing-zh-16",
+      "primaryKeyword": "nclex for chinese nurses",
+      "language": "zh",
+      "category": "China nursing",
+      "intentType": "transactional",
+      "translationGroupId": "cn-nurse-0009-nclex-for-chinese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "oet vs ielts for chinese nurses — China nursing (zh 17)",
+      "slug": "zh-0087-oet-vs-ielts-for-chinese-nurses-oet-vs-ielts-for-chinese-nurses-china-nursing-zh-17",
+      "primaryKeyword": "oet vs ielts for chinese nurses",
+      "language": "zh",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0009-oet-vs-ielts-for-chinese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "china to australia nurse pathway — China nursing (zh 18)",
+      "slug": "zh-0088-china-to-australia-nurse-pathway-china-to-australia-nurse-pathway-china-nursing-zh-18",
+      "primaryKeyword": "china to australia nurse pathway",
+      "language": "zh",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0009-china-to-australia-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "china to canada nurse pathway — China nursing (zh 19)",
+      "slug": "zh-0089-china-to-canada-nurse-pathway-china-to-canada-nurse-pathway-china-nursing-zh-19",
+      "primaryKeyword": "china to canada nurse pathway",
+      "language": "zh",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0009-china-to-canada-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "study tips for chinese nursing exams — China nursing (zh 20)",
+      "slug": "zh-0090-study-tips-for-chinese-nursing-exams-study-tips-for-chinese-nursing-exams-china-nursing-zh-20",
+      "primaryKeyword": "study tips for chinese nursing exams",
+      "language": "zh",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0009-study-tips-for-chinese-nursing-exams",
+      "status": "planned"
+    },
+    {
+      "title": "national nurse qualification examination guide — China nursing (zh 21)",
+      "slug": "zh-0091-national-nurse-qualification-examination-guide-national-nurse-qualification-examination-guide-china-nursing-zh-2",
+      "primaryKeyword": "national nurse qualification examination guide",
+      "language": "zh",
+      "category": "China nursing",
+      "intentType": "transactional",
+      "translationGroupId": "cn-nurse-0010-national-nurse-qualification-examination-guide",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in china — China nursing (zh 22)",
+      "slug": "zh-0092-how-to-become-a-nurse-in-china-how-to-become-a-nurse-in-china-china-nursing-zh-22",
+      "primaryKeyword": "how to become a nurse in china",
+      "language": "zh",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0010-how-to-become-a-nurse-in-china",
+      "status": "planned"
+    },
+    {
+      "title": "chinese nursing license requirements — China nursing (zh 23)",
+      "slug": "zh-0093-chinese-nursing-license-requirements-chinese-nursing-license-requirements-china-nursing-zh-23",
+      "primaryKeyword": "chinese nursing license requirements",
+      "language": "zh",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0010-chinese-nursing-license-requirements",
+      "status": "planned"
+    },
+    {
+      "title": "best nursing jobs in china — China nursing (zh 24)",
+      "slug": "zh-0094-best-nursing-jobs-in-china-best-nursing-jobs-in-china-china-nursing-zh-24",
+      "primaryKeyword": "best nursing jobs in china",
+      "language": "zh",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0010-best-nursing-jobs-in-china",
+      "status": "planned"
+    },
+    {
+      "title": "chinese nurses working abroad — China nursing (zh 25)",
+      "slug": "zh-0095-chinese-nurses-working-abroad-chinese-nurses-working-abroad-china-nursing-zh-25",
+      "primaryKeyword": "chinese nurses working abroad",
+      "language": "zh",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0010-chinese-nurses-working-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "nclex for chinese nurses — China nursing (zh 26)",
+      "slug": "zh-0096-nclex-for-chinese-nurses-nclex-for-chinese-nurses-china-nursing-zh-26",
+      "primaryKeyword": "nclex for chinese nurses",
+      "language": "zh",
+      "category": "China nursing",
+      "intentType": "transactional",
+      "translationGroupId": "cn-nurse-0010-nclex-for-chinese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "oet vs ielts for chinese nurses — China nursing (zh 27)",
+      "slug": "zh-0097-oet-vs-ielts-for-chinese-nurses-oet-vs-ielts-for-chinese-nurses-china-nursing-zh-27",
+      "primaryKeyword": "oet vs ielts for chinese nurses",
+      "language": "zh",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0010-oet-vs-ielts-for-chinese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "china to australia nurse pathway — China nursing (zh 28)",
+      "slug": "zh-0098-china-to-australia-nurse-pathway-china-to-australia-nurse-pathway-china-nursing-zh-28",
+      "primaryKeyword": "china to australia nurse pathway",
+      "language": "zh",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0010-china-to-australia-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "china to canada nurse pathway — China nursing (zh 29)",
+      "slug": "zh-0099-china-to-canada-nurse-pathway-china-to-canada-nurse-pathway-china-nursing-zh-29",
+      "primaryKeyword": "china to canada nurse pathway",
+      "language": "zh",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0010-china-to-canada-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "study tips for chinese nursing exams — China nursing (zh 30)",
+      "slug": "zh-0100-study-tips-for-chinese-nursing-exams-study-tips-for-chinese-nursing-exams-china-nursing-zh-30",
+      "primaryKeyword": "study tips for chinese nursing exams",
+      "language": "zh",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0010-study-tips-for-chinese-nursing-exams",
+      "status": "planned"
+    },
+    {
+      "title": "national nurse qualification examination guide — China nursing (zh 31)",
+      "slug": "zh-0101-national-nurse-qualification-examination-guide-national-nurse-qualification-examination-guide-china-nursing-zh-3",
+      "primaryKeyword": "national nurse qualification examination guide",
+      "language": "zh",
+      "category": "China nursing",
+      "intentType": "transactional",
+      "translationGroupId": "cn-nurse-0011-national-nurse-qualification-examination-guide",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in china — China nursing (zh 32)",
+      "slug": "zh-0102-how-to-become-a-nurse-in-china-how-to-become-a-nurse-in-china-china-nursing-zh-32",
+      "primaryKeyword": "how to become a nurse in china",
+      "language": "zh",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0011-how-to-become-a-nurse-in-china",
+      "status": "planned"
+    },
+    {
+      "title": "chinese nursing license requirements — China nursing (zh 33)",
+      "slug": "zh-0103-chinese-nursing-license-requirements-chinese-nursing-license-requirements-china-nursing-zh-33",
+      "primaryKeyword": "chinese nursing license requirements",
+      "language": "zh",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0011-chinese-nursing-license-requirements",
+      "status": "planned"
+    },
+    {
+      "title": "best nursing jobs in china — China nursing (zh 34)",
+      "slug": "zh-0104-best-nursing-jobs-in-china-best-nursing-jobs-in-china-china-nursing-zh-34",
+      "primaryKeyword": "best nursing jobs in china",
+      "language": "zh",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0011-best-nursing-jobs-in-china",
+      "status": "planned"
+    },
+    {
+      "title": "chinese nurses working abroad — China nursing (zh 35)",
+      "slug": "zh-0105-chinese-nurses-working-abroad-chinese-nurses-working-abroad-china-nursing-zh-35",
+      "primaryKeyword": "chinese nurses working abroad",
+      "language": "zh",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0011-chinese-nurses-working-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "nclex for chinese nurses — China nursing (zh 36)",
+      "slug": "zh-0106-nclex-for-chinese-nurses-nclex-for-chinese-nurses-china-nursing-zh-36",
+      "primaryKeyword": "nclex for chinese nurses",
+      "language": "zh",
+      "category": "China nursing",
+      "intentType": "transactional",
+      "translationGroupId": "cn-nurse-0011-nclex-for-chinese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "oet vs ielts for chinese nurses — China nursing (zh 37)",
+      "slug": "zh-0107-oet-vs-ielts-for-chinese-nurses-oet-vs-ielts-for-chinese-nurses-china-nursing-zh-37",
+      "primaryKeyword": "oet vs ielts for chinese nurses",
+      "language": "zh",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0011-oet-vs-ielts-for-chinese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "china to australia nurse pathway — China nursing (zh 38)",
+      "slug": "zh-0108-china-to-australia-nurse-pathway-china-to-australia-nurse-pathway-china-nursing-zh-38",
+      "primaryKeyword": "china to australia nurse pathway",
+      "language": "zh",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0011-china-to-australia-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "china to canada nurse pathway — China nursing (zh 39)",
+      "slug": "zh-0109-china-to-canada-nurse-pathway-china-to-canada-nurse-pathway-china-nursing-zh-39",
+      "primaryKeyword": "china to canada nurse pathway",
+      "language": "zh",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0011-china-to-canada-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "study tips for chinese nursing exams — China nursing (zh 40)",
+      "slug": "zh-0110-study-tips-for-chinese-nursing-exams-study-tips-for-chinese-nursing-exams-china-nursing-zh-40",
+      "primaryKeyword": "study tips for chinese nursing exams",
+      "language": "zh",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0011-study-tips-for-chinese-nursing-exams",
+      "status": "planned"
+    },
+    {
+      "title": "national nurse qualification examination guide — China nursing (zh 41)",
+      "slug": "zh-0111-national-nurse-qualification-examination-guide-national-nurse-qualification-examination-guide-china-nursing-zh-4",
+      "primaryKeyword": "national nurse qualification examination guide",
+      "language": "zh",
+      "category": "China nursing",
+      "intentType": "transactional",
+      "translationGroupId": "cn-nurse-0012-national-nurse-qualification-examination-guide",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in china — China nursing (zh 42)",
+      "slug": "zh-0112-how-to-become-a-nurse-in-china-how-to-become-a-nurse-in-china-china-nursing-zh-42",
+      "primaryKeyword": "how to become a nurse in china",
+      "language": "zh",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0012-how-to-become-a-nurse-in-china",
+      "status": "planned"
+    },
+    {
+      "title": "chinese nursing license requirements — China nursing (zh 43)",
+      "slug": "zh-0113-chinese-nursing-license-requirements-chinese-nursing-license-requirements-china-nursing-zh-43",
+      "primaryKeyword": "chinese nursing license requirements",
+      "language": "zh",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0012-chinese-nursing-license-requirements",
+      "status": "planned"
+    },
+    {
+      "title": "best nursing jobs in china — China nursing (zh 44)",
+      "slug": "zh-0114-best-nursing-jobs-in-china-best-nursing-jobs-in-china-china-nursing-zh-44",
+      "primaryKeyword": "best nursing jobs in china",
+      "language": "zh",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0012-best-nursing-jobs-in-china",
+      "status": "planned"
+    },
+    {
+      "title": "chinese nurses working abroad — China nursing (zh 45)",
+      "slug": "zh-0115-chinese-nurses-working-abroad-chinese-nurses-working-abroad-china-nursing-zh-45",
+      "primaryKeyword": "chinese nurses working abroad",
+      "language": "zh",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0012-chinese-nurses-working-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "nclex for chinese nurses — China nursing (zh 46)",
+      "slug": "zh-0116-nclex-for-chinese-nurses-nclex-for-chinese-nurses-china-nursing-zh-46",
+      "primaryKeyword": "nclex for chinese nurses",
+      "language": "zh",
+      "category": "China nursing",
+      "intentType": "transactional",
+      "translationGroupId": "cn-nurse-0012-nclex-for-chinese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "oet vs ielts for chinese nurses — China nursing (zh 47)",
+      "slug": "zh-0117-oet-vs-ielts-for-chinese-nurses-oet-vs-ielts-for-chinese-nurses-china-nursing-zh-47",
+      "primaryKeyword": "oet vs ielts for chinese nurses",
+      "language": "zh",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0012-oet-vs-ielts-for-chinese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "china to australia nurse pathway — China nursing (zh 48)",
+      "slug": "zh-0118-china-to-australia-nurse-pathway-china-to-australia-nurse-pathway-china-nursing-zh-48",
+      "primaryKeyword": "china to australia nurse pathway",
+      "language": "zh",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0012-china-to-australia-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "china to canada nurse pathway — China nursing (zh 49)",
+      "slug": "zh-0119-china-to-canada-nurse-pathway-china-to-canada-nurse-pathway-china-nursing-zh-49",
+      "primaryKeyword": "china to canada nurse pathway",
+      "language": "zh",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0012-china-to-canada-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "study tips for chinese nursing exams — China nursing (zh 50)",
+      "slug": "zh-0120-study-tips-for-chinese-nursing-exams-study-tips-for-chinese-nursing-exams-china-nursing-zh-50",
+      "primaryKeyword": "study tips for chinese nursing exams",
+      "language": "zh",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0012-study-tips-for-chinese-nursing-exams",
+      "status": "planned"
+    },
+    {
+      "title": "national nurse qualification examination guide — China nursing (zh 51)",
+      "slug": "zh-0121-national-nurse-qualification-examination-guide-national-nurse-qualification-examination-guide-china-nursing-zh-5",
+      "primaryKeyword": "national nurse qualification examination guide",
+      "language": "zh",
+      "category": "China nursing",
+      "intentType": "transactional",
+      "translationGroupId": "cn-nurse-0013-national-nurse-qualification-examination-guide",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in china — China nursing (zh 52)",
+      "slug": "zh-0122-how-to-become-a-nurse-in-china-how-to-become-a-nurse-in-china-china-nursing-zh-52",
+      "primaryKeyword": "how to become a nurse in china",
+      "language": "zh",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0013-how-to-become-a-nurse-in-china",
+      "status": "planned"
+    },
+    {
+      "title": "chinese nursing license requirements — China nursing (zh 53)",
+      "slug": "zh-0123-chinese-nursing-license-requirements-chinese-nursing-license-requirements-china-nursing-zh-53",
+      "primaryKeyword": "chinese nursing license requirements",
+      "language": "zh",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0013-chinese-nursing-license-requirements",
+      "status": "planned"
+    },
+    {
+      "title": "best nursing jobs in china — China nursing (zh 54)",
+      "slug": "zh-0124-best-nursing-jobs-in-china-best-nursing-jobs-in-china-china-nursing-zh-54",
+      "primaryKeyword": "best nursing jobs in china",
+      "language": "zh",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0013-best-nursing-jobs-in-china",
+      "status": "planned"
+    },
+    {
+      "title": "chinese nurses working abroad — China nursing (zh 55)",
+      "slug": "zh-0125-chinese-nurses-working-abroad-chinese-nurses-working-abroad-china-nursing-zh-55",
+      "primaryKeyword": "chinese nurses working abroad",
+      "language": "zh",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0013-chinese-nurses-working-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "nclex for chinese nurses — China nursing (zh 56)",
+      "slug": "zh-0126-nclex-for-chinese-nurses-nclex-for-chinese-nurses-china-nursing-zh-56",
+      "primaryKeyword": "nclex for chinese nurses",
+      "language": "zh",
+      "category": "China nursing",
+      "intentType": "transactional",
+      "translationGroupId": "cn-nurse-0013-nclex-for-chinese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "oet vs ielts for chinese nurses — China nursing (zh 57)",
+      "slug": "zh-0127-oet-vs-ielts-for-chinese-nurses-oet-vs-ielts-for-chinese-nurses-china-nursing-zh-57",
+      "primaryKeyword": "oet vs ielts for chinese nurses",
+      "language": "zh",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0013-oet-vs-ielts-for-chinese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "china to australia nurse pathway — China nursing (zh 58)",
+      "slug": "zh-0128-china-to-australia-nurse-pathway-china-to-australia-nurse-pathway-china-nursing-zh-58",
+      "primaryKeyword": "china to australia nurse pathway",
+      "language": "zh",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0013-china-to-australia-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "china to canada nurse pathway — China nursing (zh 59)",
+      "slug": "zh-0129-china-to-canada-nurse-pathway-china-to-canada-nurse-pathway-china-nursing-zh-59",
+      "primaryKeyword": "china to canada nurse pathway",
+      "language": "zh",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0013-china-to-canada-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "study tips for chinese nursing exams — China nursing (zh 60)",
+      "slug": "zh-0130-study-tips-for-chinese-nursing-exams-study-tips-for-chinese-nursing-exams-china-nursing-zh-60",
+      "primaryKeyword": "study tips for chinese nursing exams",
+      "language": "zh",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0013-study-tips-for-chinese-nursing-exams",
+      "status": "planned"
+    },
+    {
+      "title": "national nurse qualification examination guide — China nursing (zh 61)",
+      "slug": "zh-0131-national-nurse-qualification-examination-guide-national-nurse-qualification-examination-guide-china-nursing-zh-6",
+      "primaryKeyword": "national nurse qualification examination guide",
+      "language": "zh",
+      "category": "China nursing",
+      "intentType": "transactional",
+      "translationGroupId": "cn-nurse-0014-national-nurse-qualification-examination-guide",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in china — China nursing (zh 62)",
+      "slug": "zh-0132-how-to-become-a-nurse-in-china-how-to-become-a-nurse-in-china-china-nursing-zh-62",
+      "primaryKeyword": "how to become a nurse in china",
+      "language": "zh",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0014-how-to-become-a-nurse-in-china",
+      "status": "planned"
+    },
+    {
+      "title": "chinese nursing license requirements — China nursing (zh 63)",
+      "slug": "zh-0133-chinese-nursing-license-requirements-chinese-nursing-license-requirements-china-nursing-zh-63",
+      "primaryKeyword": "chinese nursing license requirements",
+      "language": "zh",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0014-chinese-nursing-license-requirements",
+      "status": "planned"
+    },
+    {
+      "title": "best nursing jobs in china — China nursing (zh 64)",
+      "slug": "zh-0134-best-nursing-jobs-in-china-best-nursing-jobs-in-china-china-nursing-zh-64",
+      "primaryKeyword": "best nursing jobs in china",
+      "language": "zh",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0014-best-nursing-jobs-in-china",
+      "status": "planned"
+    },
+    {
+      "title": "chinese nurses working abroad — China nursing (zh 65)",
+      "slug": "zh-0135-chinese-nurses-working-abroad-chinese-nurses-working-abroad-china-nursing-zh-65",
+      "primaryKeyword": "chinese nurses working abroad",
+      "language": "zh",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0014-chinese-nurses-working-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "nclex for chinese nurses — China nursing (zh 66)",
+      "slug": "zh-0136-nclex-for-chinese-nurses-nclex-for-chinese-nurses-china-nursing-zh-66",
+      "primaryKeyword": "nclex for chinese nurses",
+      "language": "zh",
+      "category": "China nursing",
+      "intentType": "transactional",
+      "translationGroupId": "cn-nurse-0014-nclex-for-chinese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "oet vs ielts for chinese nurses — China nursing (zh 67)",
+      "slug": "zh-0137-oet-vs-ielts-for-chinese-nurses-oet-vs-ielts-for-chinese-nurses-china-nursing-zh-67",
+      "primaryKeyword": "oet vs ielts for chinese nurses",
+      "language": "zh",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0014-oet-vs-ielts-for-chinese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "china to australia nurse pathway — China nursing (zh 68)",
+      "slug": "zh-0138-china-to-australia-nurse-pathway-china-to-australia-nurse-pathway-china-nursing-zh-68",
+      "primaryKeyword": "china to australia nurse pathway",
+      "language": "zh",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0014-china-to-australia-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "china to canada nurse pathway — China nursing (zh 69)",
+      "slug": "zh-0139-china-to-canada-nurse-pathway-china-to-canada-nurse-pathway-china-nursing-zh-69",
+      "primaryKeyword": "china to canada nurse pathway",
+      "language": "zh",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0014-china-to-canada-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "study tips for chinese nursing exams — China nursing (zh 70)",
+      "slug": "zh-0140-study-tips-for-chinese-nursing-exams-study-tips-for-chinese-nursing-exams-china-nursing-zh-70",
+      "primaryKeyword": "study tips for chinese nursing exams",
+      "language": "zh",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0014-study-tips-for-chinese-nursing-exams",
+      "status": "planned"
+    },
+    {
+      "title": "national nurse qualification examination guide — China nursing (zh 71)",
+      "slug": "zh-0141-national-nurse-qualification-examination-guide-national-nurse-qualification-examination-guide-china-nursing-zh-7",
+      "primaryKeyword": "national nurse qualification examination guide",
+      "language": "zh",
+      "category": "China nursing",
+      "intentType": "transactional",
+      "translationGroupId": "cn-nurse-0015-national-nurse-qualification-examination-guide",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in china — China nursing (zh 72)",
+      "slug": "zh-0142-how-to-become-a-nurse-in-china-how-to-become-a-nurse-in-china-china-nursing-zh-72",
+      "primaryKeyword": "how to become a nurse in china",
+      "language": "zh",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0015-how-to-become-a-nurse-in-china",
+      "status": "planned"
+    },
+    {
+      "title": "chinese nursing license requirements — China nursing (zh 73)",
+      "slug": "zh-0143-chinese-nursing-license-requirements-chinese-nursing-license-requirements-china-nursing-zh-73",
+      "primaryKeyword": "chinese nursing license requirements",
+      "language": "zh",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0015-chinese-nursing-license-requirements",
+      "status": "planned"
+    },
+    {
+      "title": "best nursing jobs in china — China nursing (zh 74)",
+      "slug": "zh-0144-best-nursing-jobs-in-china-best-nursing-jobs-in-china-china-nursing-zh-74",
+      "primaryKeyword": "best nursing jobs in china",
+      "language": "zh",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0015-best-nursing-jobs-in-china",
+      "status": "planned"
+    },
+    {
+      "title": "chinese nurses working abroad — China nursing (zh 75)",
+      "slug": "zh-0145-chinese-nurses-working-abroad-chinese-nurses-working-abroad-china-nursing-zh-75",
+      "primaryKeyword": "chinese nurses working abroad",
+      "language": "zh",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0015-chinese-nurses-working-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "nclex for chinese nurses — China nursing (zh 76)",
+      "slug": "zh-0146-nclex-for-chinese-nurses-nclex-for-chinese-nurses-china-nursing-zh-76",
+      "primaryKeyword": "nclex for chinese nurses",
+      "language": "zh",
+      "category": "China nursing",
+      "intentType": "transactional",
+      "translationGroupId": "cn-nurse-0015-nclex-for-chinese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "oet vs ielts for chinese nurses — China nursing (zh 77)",
+      "slug": "zh-0147-oet-vs-ielts-for-chinese-nurses-oet-vs-ielts-for-chinese-nurses-china-nursing-zh-77",
+      "primaryKeyword": "oet vs ielts for chinese nurses",
+      "language": "zh",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0015-oet-vs-ielts-for-chinese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "china to australia nurse pathway — China nursing (zh 78)",
+      "slug": "zh-0148-china-to-australia-nurse-pathway-china-to-australia-nurse-pathway-china-nursing-zh-78",
+      "primaryKeyword": "china to australia nurse pathway",
+      "language": "zh",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0015-china-to-australia-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "china to canada nurse pathway — China nursing (zh 79)",
+      "slug": "zh-0149-china-to-canada-nurse-pathway-china-to-canada-nurse-pathway-china-nursing-zh-79",
+      "primaryKeyword": "china to canada nurse pathway",
+      "language": "zh",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0015-china-to-canada-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "study tips for chinese nursing exams — China nursing (zh 80)",
+      "slug": "zh-0150-study-tips-for-chinese-nursing-exams-study-tips-for-chinese-nursing-exams-china-nursing-zh-80",
+      "primaryKeyword": "study tips for chinese nursing exams",
+      "language": "zh",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0015-study-tips-for-chinese-nursing-exams",
+      "status": "planned"
+    },
+    {
+      "title": "national nurse qualification examination guide — China nursing (zh 81)",
+      "slug": "zh-0151-national-nurse-qualification-examination-guide-national-nurse-qualification-examination-guide-china-nursing-zh-8",
+      "primaryKeyword": "national nurse qualification examination guide",
+      "language": "zh",
+      "category": "China nursing",
+      "intentType": "transactional",
+      "translationGroupId": "cn-nurse-0016-national-nurse-qualification-examination-guide",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in china — China nursing (zh 82)",
+      "slug": "zh-0152-how-to-become-a-nurse-in-china-how-to-become-a-nurse-in-china-china-nursing-zh-82",
+      "primaryKeyword": "how to become a nurse in china",
+      "language": "zh",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0016-how-to-become-a-nurse-in-china",
+      "status": "planned"
+    },
+    {
+      "title": "chinese nursing license requirements — China nursing (zh 83)",
+      "slug": "zh-0153-chinese-nursing-license-requirements-chinese-nursing-license-requirements-china-nursing-zh-83",
+      "primaryKeyword": "chinese nursing license requirements",
+      "language": "zh",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0016-chinese-nursing-license-requirements",
+      "status": "planned"
+    },
+    {
+      "title": "best nursing jobs in china — China nursing (zh 84)",
+      "slug": "zh-0154-best-nursing-jobs-in-china-best-nursing-jobs-in-china-china-nursing-zh-84",
+      "primaryKeyword": "best nursing jobs in china",
+      "language": "zh",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0016-best-nursing-jobs-in-china",
+      "status": "planned"
+    },
+    {
+      "title": "chinese nurses working abroad — China nursing (zh 85)",
+      "slug": "zh-0155-chinese-nurses-working-abroad-chinese-nurses-working-abroad-china-nursing-zh-85",
+      "primaryKeyword": "chinese nurses working abroad",
+      "language": "zh",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0016-chinese-nurses-working-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "nclex for chinese nurses — China nursing (zh 86)",
+      "slug": "zh-0156-nclex-for-chinese-nurses-nclex-for-chinese-nurses-china-nursing-zh-86",
+      "primaryKeyword": "nclex for chinese nurses",
+      "language": "zh",
+      "category": "China nursing",
+      "intentType": "transactional",
+      "translationGroupId": "cn-nurse-0016-nclex-for-chinese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "oet vs ielts for chinese nurses — China nursing (zh 87)",
+      "slug": "zh-0157-oet-vs-ielts-for-chinese-nurses-oet-vs-ielts-for-chinese-nurses-china-nursing-zh-87",
+      "primaryKeyword": "oet vs ielts for chinese nurses",
+      "language": "zh",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0016-oet-vs-ielts-for-chinese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "china to australia nurse pathway — China nursing (zh 88)",
+      "slug": "zh-0158-china-to-australia-nurse-pathway-china-to-australia-nurse-pathway-china-nursing-zh-88",
+      "primaryKeyword": "china to australia nurse pathway",
+      "language": "zh",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0016-china-to-australia-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "china to canada nurse pathway — China nursing (zh 89)",
+      "slug": "zh-0159-china-to-canada-nurse-pathway-china-to-canada-nurse-pathway-china-nursing-zh-89",
+      "primaryKeyword": "china to canada nurse pathway",
+      "language": "zh",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0016-china-to-canada-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "study tips for chinese nursing exams — China nursing (zh 90)",
+      "slug": "zh-0160-study-tips-for-chinese-nursing-exams-study-tips-for-chinese-nursing-exams-china-nursing-zh-90",
+      "primaryKeyword": "study tips for chinese nursing exams",
+      "language": "zh",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0016-study-tips-for-chinese-nursing-exams",
+      "status": "planned"
+    },
+    {
+      "title": "national nurse qualification examination guide — China nursing (zh-tw 1)",
+      "slug": "zh-tw-0161-national-nurse-qualification-examination-guide-national-nurse-qualification-examination-guide-china-nursing-z",
+      "primaryKeyword": "national nurse qualification examination guide",
+      "language": "zh-tw",
+      "category": "China nursing",
+      "intentType": "transactional",
+      "translationGroupId": "cn-nurse-0017-national-nurse-qualification-examination-guide",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in china — China nursing (zh-tw 2)",
+      "slug": "zh-tw-0162-how-to-become-a-nurse-in-china-how-to-become-a-nurse-in-china-china-nursing-zh-tw-2",
+      "primaryKeyword": "how to become a nurse in china",
+      "language": "zh-tw",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0017-how-to-become-a-nurse-in-china",
+      "status": "planned"
+    },
+    {
+      "title": "chinese nursing license requirements — China nursing (zh-tw 3)",
+      "slug": "zh-tw-0163-chinese-nursing-license-requirements-chinese-nursing-license-requirements-china-nursing-zh-tw-3",
+      "primaryKeyword": "chinese nursing license requirements",
+      "language": "zh-tw",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0017-chinese-nursing-license-requirements",
+      "status": "planned"
+    },
+    {
+      "title": "best nursing jobs in china — China nursing (zh-tw 4)",
+      "slug": "zh-tw-0164-best-nursing-jobs-in-china-best-nursing-jobs-in-china-china-nursing-zh-tw-4",
+      "primaryKeyword": "best nursing jobs in china",
+      "language": "zh-tw",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0017-best-nursing-jobs-in-china",
+      "status": "planned"
+    },
+    {
+      "title": "chinese nurses working abroad — China nursing (zh-tw 5)",
+      "slug": "zh-tw-0165-chinese-nurses-working-abroad-chinese-nurses-working-abroad-china-nursing-zh-tw-5",
+      "primaryKeyword": "chinese nurses working abroad",
+      "language": "zh-tw",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0017-chinese-nurses-working-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "nclex for chinese nurses — China nursing (zh-tw 6)",
+      "slug": "zh-tw-0166-nclex-for-chinese-nurses-nclex-for-chinese-nurses-china-nursing-zh-tw-6",
+      "primaryKeyword": "nclex for chinese nurses",
+      "language": "zh-tw",
+      "category": "China nursing",
+      "intentType": "transactional",
+      "translationGroupId": "cn-nurse-0017-nclex-for-chinese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "oet vs ielts for chinese nurses — China nursing (zh-tw 7)",
+      "slug": "zh-tw-0167-oet-vs-ielts-for-chinese-nurses-oet-vs-ielts-for-chinese-nurses-china-nursing-zh-tw-7",
+      "primaryKeyword": "oet vs ielts for chinese nurses",
+      "language": "zh-tw",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0017-oet-vs-ielts-for-chinese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "china to australia nurse pathway — China nursing (zh-tw 8)",
+      "slug": "zh-tw-0168-china-to-australia-nurse-pathway-china-to-australia-nurse-pathway-china-nursing-zh-tw-8",
+      "primaryKeyword": "china to australia nurse pathway",
+      "language": "zh-tw",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0017-china-to-australia-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "china to canada nurse pathway — China nursing (zh-tw 9)",
+      "slug": "zh-tw-0169-china-to-canada-nurse-pathway-china-to-canada-nurse-pathway-china-nursing-zh-tw-9",
+      "primaryKeyword": "china to canada nurse pathway",
+      "language": "zh-tw",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0017-china-to-canada-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "study tips for chinese nursing exams — China nursing (zh-tw 10)",
+      "slug": "zh-tw-0170-study-tips-for-chinese-nursing-exams-study-tips-for-chinese-nursing-exams-china-nursing-zh-tw-10",
+      "primaryKeyword": "study tips for chinese nursing exams",
+      "language": "zh-tw",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0017-study-tips-for-chinese-nursing-exams",
+      "status": "planned"
+    },
+    {
+      "title": "national nurse qualification examination guide — China nursing (zh-tw 11)",
+      "slug": "zh-tw-0171-national-nurse-qualification-examination-guide-national-nurse-qualification-examination-guide-china-nursing-z",
+      "primaryKeyword": "national nurse qualification examination guide",
+      "language": "zh-tw",
+      "category": "China nursing",
+      "intentType": "transactional",
+      "translationGroupId": "cn-nurse-0018-national-nurse-qualification-examination-guide",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in china — China nursing (zh-tw 12)",
+      "slug": "zh-tw-0172-how-to-become-a-nurse-in-china-how-to-become-a-nurse-in-china-china-nursing-zh-tw-12",
+      "primaryKeyword": "how to become a nurse in china",
+      "language": "zh-tw",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0018-how-to-become-a-nurse-in-china",
+      "status": "planned"
+    },
+    {
+      "title": "chinese nursing license requirements — China nursing (zh-tw 13)",
+      "slug": "zh-tw-0173-chinese-nursing-license-requirements-chinese-nursing-license-requirements-china-nursing-zh-tw-13",
+      "primaryKeyword": "chinese nursing license requirements",
+      "language": "zh-tw",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0018-chinese-nursing-license-requirements",
+      "status": "planned"
+    },
+    {
+      "title": "best nursing jobs in china — China nursing (zh-tw 14)",
+      "slug": "zh-tw-0174-best-nursing-jobs-in-china-best-nursing-jobs-in-china-china-nursing-zh-tw-14",
+      "primaryKeyword": "best nursing jobs in china",
+      "language": "zh-tw",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0018-best-nursing-jobs-in-china",
+      "status": "planned"
+    },
+    {
+      "title": "chinese nurses working abroad — China nursing (zh-tw 15)",
+      "slug": "zh-tw-0175-chinese-nurses-working-abroad-chinese-nurses-working-abroad-china-nursing-zh-tw-15",
+      "primaryKeyword": "chinese nurses working abroad",
+      "language": "zh-tw",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0018-chinese-nurses-working-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "nclex for chinese nurses — China nursing (zh-tw 16)",
+      "slug": "zh-tw-0176-nclex-for-chinese-nurses-nclex-for-chinese-nurses-china-nursing-zh-tw-16",
+      "primaryKeyword": "nclex for chinese nurses",
+      "language": "zh-tw",
+      "category": "China nursing",
+      "intentType": "transactional",
+      "translationGroupId": "cn-nurse-0018-nclex-for-chinese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "oet vs ielts for chinese nurses — China nursing (zh-tw 17)",
+      "slug": "zh-tw-0177-oet-vs-ielts-for-chinese-nurses-oet-vs-ielts-for-chinese-nurses-china-nursing-zh-tw-17",
+      "primaryKeyword": "oet vs ielts for chinese nurses",
+      "language": "zh-tw",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0018-oet-vs-ielts-for-chinese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "china to australia nurse pathway — China nursing (zh-tw 18)",
+      "slug": "zh-tw-0178-china-to-australia-nurse-pathway-china-to-australia-nurse-pathway-china-nursing-zh-tw-18",
+      "primaryKeyword": "china to australia nurse pathway",
+      "language": "zh-tw",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0018-china-to-australia-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "china to canada nurse pathway — China nursing (zh-tw 19)",
+      "slug": "zh-tw-0179-china-to-canada-nurse-pathway-china-to-canada-nurse-pathway-china-nursing-zh-tw-19",
+      "primaryKeyword": "china to canada nurse pathway",
+      "language": "zh-tw",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0018-china-to-canada-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "study tips for chinese nursing exams — China nursing (zh-tw 20)",
+      "slug": "zh-tw-0180-study-tips-for-chinese-nursing-exams-study-tips-for-chinese-nursing-exams-china-nursing-zh-tw-20",
+      "primaryKeyword": "study tips for chinese nursing exams",
+      "language": "zh-tw",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0018-study-tips-for-chinese-nursing-exams",
+      "status": "planned"
+    },
+    {
+      "title": "national nurse qualification examination guide — China nursing (ar 1)",
+      "slug": "ar-0181-national-nurse-qualification-examination-guide-national-nurse-qualification-examination-guide-china-nursing-ar-1",
+      "primaryKeyword": "national nurse qualification examination guide",
+      "language": "ar",
+      "category": "China nursing",
+      "intentType": "transactional",
+      "translationGroupId": "cn-nurse-0019-national-nurse-qualification-examination-guide",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in china — China nursing (ar 2)",
+      "slug": "ar-0182-how-to-become-a-nurse-in-china-how-to-become-a-nurse-in-china-china-nursing-ar-2",
+      "primaryKeyword": "how to become a nurse in china",
+      "language": "ar",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0019-how-to-become-a-nurse-in-china",
+      "status": "planned"
+    },
+    {
+      "title": "chinese nursing license requirements — China nursing (ar 3)",
+      "slug": "ar-0183-chinese-nursing-license-requirements-chinese-nursing-license-requirements-china-nursing-ar-3",
+      "primaryKeyword": "chinese nursing license requirements",
+      "language": "ar",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0019-chinese-nursing-license-requirements",
+      "status": "planned"
+    },
+    {
+      "title": "best nursing jobs in china — China nursing (ar 4)",
+      "slug": "ar-0184-best-nursing-jobs-in-china-best-nursing-jobs-in-china-china-nursing-ar-4",
+      "primaryKeyword": "best nursing jobs in china",
+      "language": "ar",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0019-best-nursing-jobs-in-china",
+      "status": "planned"
+    },
+    {
+      "title": "chinese nurses working abroad — China nursing (ar 5)",
+      "slug": "ar-0185-chinese-nurses-working-abroad-chinese-nurses-working-abroad-china-nursing-ar-5",
+      "primaryKeyword": "chinese nurses working abroad",
+      "language": "ar",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0019-chinese-nurses-working-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "nclex for chinese nurses — China nursing (ar 6)",
+      "slug": "ar-0186-nclex-for-chinese-nurses-nclex-for-chinese-nurses-china-nursing-ar-6",
+      "primaryKeyword": "nclex for chinese nurses",
+      "language": "ar",
+      "category": "China nursing",
+      "intentType": "transactional",
+      "translationGroupId": "cn-nurse-0019-nclex-for-chinese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "oet vs ielts for chinese nurses — China nursing (ar 7)",
+      "slug": "ar-0187-oet-vs-ielts-for-chinese-nurses-oet-vs-ielts-for-chinese-nurses-china-nursing-ar-7",
+      "primaryKeyword": "oet vs ielts for chinese nurses",
+      "language": "ar",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0019-oet-vs-ielts-for-chinese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "china to australia nurse pathway — China nursing (ar 8)",
+      "slug": "ar-0188-china-to-australia-nurse-pathway-china-to-australia-nurse-pathway-china-nursing-ar-8",
+      "primaryKeyword": "china to australia nurse pathway",
+      "language": "ar",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0019-china-to-australia-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "china to canada nurse pathway — China nursing (ar 9)",
+      "slug": "ar-0189-china-to-canada-nurse-pathway-china-to-canada-nurse-pathway-china-nursing-ar-9",
+      "primaryKeyword": "china to canada nurse pathway",
+      "language": "ar",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0019-china-to-canada-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "study tips for chinese nursing exams — China nursing (ar 10)",
+      "slug": "ar-0190-study-tips-for-chinese-nursing-exams-study-tips-for-chinese-nursing-exams-china-nursing-ar-10",
+      "primaryKeyword": "study tips for chinese nursing exams",
+      "language": "ar",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0019-study-tips-for-chinese-nursing-exams",
+      "status": "planned"
+    },
+    {
+      "title": "national nurse qualification examination guide — China nursing (tl 1)",
+      "slug": "tl-0191-national-nurse-qualification-examination-guide-national-nurse-qualification-examination-guide-china-nursing-tl-1",
+      "primaryKeyword": "national nurse qualification examination guide",
+      "language": "tl",
+      "category": "China nursing",
+      "intentType": "transactional",
+      "translationGroupId": "cn-nurse-0020-national-nurse-qualification-examination-guide",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in china — China nursing (tl 2)",
+      "slug": "tl-0192-how-to-become-a-nurse-in-china-how-to-become-a-nurse-in-china-china-nursing-tl-2",
+      "primaryKeyword": "how to become a nurse in china",
+      "language": "tl",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0020-how-to-become-a-nurse-in-china",
+      "status": "planned"
+    },
+    {
+      "title": "chinese nursing license requirements — China nursing (tl 3)",
+      "slug": "tl-0193-chinese-nursing-license-requirements-chinese-nursing-license-requirements-china-nursing-tl-3",
+      "primaryKeyword": "chinese nursing license requirements",
+      "language": "tl",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0020-chinese-nursing-license-requirements",
+      "status": "planned"
+    },
+    {
+      "title": "best nursing jobs in china — China nursing (tl 4)",
+      "slug": "tl-0194-best-nursing-jobs-in-china-best-nursing-jobs-in-china-china-nursing-tl-4",
+      "primaryKeyword": "best nursing jobs in china",
+      "language": "tl",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0020-best-nursing-jobs-in-china",
+      "status": "planned"
+    },
+    {
+      "title": "chinese nurses working abroad — China nursing (tl 5)",
+      "slug": "tl-0195-chinese-nurses-working-abroad-chinese-nurses-working-abroad-china-nursing-tl-5",
+      "primaryKeyword": "chinese nurses working abroad",
+      "language": "tl",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0020-chinese-nurses-working-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "nclex for chinese nurses — China nursing (hi 1)",
+      "slug": "hi-0196-nclex-for-chinese-nurses-nclex-for-chinese-nurses-china-nursing-hi-1",
+      "primaryKeyword": "nclex for chinese nurses",
+      "language": "hi",
+      "category": "China nursing",
+      "intentType": "transactional",
+      "translationGroupId": "cn-nurse-0020-nclex-for-chinese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "oet vs ielts for chinese nurses — China nursing (hi 2)",
+      "slug": "hi-0197-oet-vs-ielts-for-chinese-nurses-oet-vs-ielts-for-chinese-nurses-china-nursing-hi-2",
+      "primaryKeyword": "oet vs ielts for chinese nurses",
+      "language": "hi",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0020-oet-vs-ielts-for-chinese-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "china to australia nurse pathway — China nursing (hi 3)",
+      "slug": "hi-0198-china-to-australia-nurse-pathway-china-to-australia-nurse-pathway-china-nursing-hi-3",
+      "primaryKeyword": "china to australia nurse pathway",
+      "language": "hi",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0020-china-to-australia-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "china to canada nurse pathway — China nursing (hi 4)",
+      "slug": "hi-0199-china-to-canada-nurse-pathway-china-to-canada-nurse-pathway-china-nursing-hi-4",
+      "primaryKeyword": "china to canada nurse pathway",
+      "language": "hi",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0020-china-to-canada-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "study tips for chinese nursing exams — China nursing (hi 5)",
+      "slug": "hi-0200-study-tips-for-chinese-nursing-exams-study-tips-for-chinese-nursing-exams-china-nursing-hi-5",
+      "primaryKeyword": "study tips for chinese nursing exams",
+      "language": "hi",
+      "category": "China nursing",
+      "intentType": "informational",
+      "translationGroupId": "cn-nurse-0020-study-tips-for-chinese-nursing-exams",
+      "status": "planned"
+    }
+  ]
+}

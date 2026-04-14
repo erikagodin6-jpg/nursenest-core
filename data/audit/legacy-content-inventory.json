@@ -1,50 +1,243 @@
 {
-  "generatedAt": "2026-04-14T17:56:51.860Z",
-  "dbConnected": false,
-  "legacySourcesScanned": [
-    "data/audit/legacy-lessons-inventory.json (summary)",
-    "data/audit/unimported-legacy-content.json",
-    "external/NurseNest (legacyRoot in inventories when present)"
+  "schemaVersion": 3,
+  "generatedAt": "2026-04-14T18:13:35.924Z",
+  "gitHead": "c6d27507",
+  "methodology": "Separated CONTENT parity from FEATURE parity. Counts from data/audit/unimported-legacy-content.json, pathway catalog sync, optional Prisma, and route scans — not claims without file evidence.",
+  "evidenceRootsScanned": [
+    "client/src",
+    "nursenest-core",
+    "external/NurseNest",
+    "data/audit"
   ],
-  "currentSourcesScanned": [
-    "src/lib/exam-pathways/exam-product-registry.ts (EXAM_PATHWAYS)",
-    "src/lib/lessons/pathway-lesson-catalog-sync.ts (catalog + allied + new-grad + scoped gold)",
-    "prisma/schema.prisma (PathwayLesson, ExamQuestion, FlashcardDeck)",
-    "Prisma skipped (no DATABASE_URL or query failed)"
-  ],
-  "pointer": "data/audit/legacy-lessons-inventory.json (full file; large)",
-  "unimportedLegacySummary": {
-    "totalLegacyLessonRows": 4223,
-    "totalLegacyContentMapKeys": 4223,
-    "clientLessonTsFilesApprox": 450,
-    "lessonClassification": {
-      "A_alreadyImportedMaterialized": 29,
-      "B_partialMasterMapOnly": 107,
-      "B_partialMergeIntoExisting": 3,
-      "C_notOnCatalogOrMaster": 4084
+  "auditKind": "legacy_content_inventory",
+  "items": [
+    {
+      "category": "CONTENT",
+      "subcategory": "lessons",
+      "name": "Legacy lesson / content-map rows",
+      "legacyExists": true,
+      "currentExists": true,
+      "status": "partial",
+      "legacySourcePaths": [
+        "client/src (Vite lesson maps)",
+        "data/audit/unimported-legacy-content.json"
+      ],
+      "currentSourcePaths": [
+        "nursenest-core/src/content/pathway-lessons/catalog.json",
+        "pathway-lesson-catalog-sync.ts"
+      ],
+      "routes": [
+        "/{country}/{role}/{exam}/lessons",
+        "/allied-health/.../lessons"
+      ],
+      "dataModelOrSource": "Legacy content maps + JSON; current: bundled catalog + DB PathwayLesson",
+      "beforeCount": 4223,
+      "currentCount": 906,
+      "missingCount": 4084,
+      "confidence": "high",
+      "recommendedAction": "Chunked imports + slug mapping for class C keys; see legacy-recovery-import-plan.json",
+      "notes": "Matched keys in unimported report: A/B/C buckets — majority class C not on catalog snapshots."
     },
-    "missingFromCurrentSnapshots": 4084,
-    "highQualityMissingLessonsApprox": 523,
-    "pathwayGuessOnMissing": {
-      "RN": 658,
-      "PN": 928,
-      "NP": 1190,
-      "Allied": 240,
-      "unknown": 1068
+    {
+      "category": "CONTENT",
+      "subcategory": "questions",
+      "name": "Career / question JSON (legacy bank)",
+      "legacyExists": true,
+      "currentExists": true,
+      "status": "partial",
+      "legacySourcePaths": [
+        "client career question JSON (see unimported counts)"
+      ],
+      "currentSourcePaths": [
+        "prisma ExamQuestion",
+        "src/lib/** question loaders"
+      ],
+      "routes": [
+        "/app/.../questions",
+        "/question-bank",
+        "marketing question routes"
+      ],
+      "dataModelOrSource": "exam_questions table; exam column string",
+      "beforeCount": 22742,
+      "currentCount": null,
+      "missingCount": null,
+      "confidence": "low",
+      "recommendedAction": "Dedupe imports by stem_hash; align exam keys to registry contentExamKeys",
+      "notes": "Parity is not 1:1 row count — schema and dedupe differ from monolith JSON."
     },
-    "careerQuestionJsonFiles": 165,
-    "careerQuestionItemsTotal": 22742,
-    "catalogNormalizedKeys": 87,
-    "masterMapNormalizedKeys": 216,
-    "masterNotInCatalogTopicsApprox": 209
-  },
-  "methodology": {
-    "importedSlugSources": [
-      "data/materialized/rn-pn-replit-batch-2026/catalog-lessons.json (normalized slug + topicSlug)",
-      "src/content/pathway-lessons/rn-nclex-master-map.json (normalized slug)"
-    ],
-    "dbQueried": false,
-    "note": "A = topic appears in materialized Replit catalog JSON. B = on RN master map and/or merge target only. C = no normalized match to either snapshot.",
-    "legacyMapSource": "data/audit/legacy-to-current-lesson-map.json"
-  }
+    {
+      "category": "CONTENT",
+      "subcategory": "flashcards",
+      "name": "Legacy flashcard TS modules",
+      "legacyExists": true,
+      "currentExists": true,
+      "status": "partial",
+      "legacySourcePaths": [
+        "client/src/data/flashcards*.ts (see legacy-flashcards-inventory.json)"
+      ],
+      "currentSourcePaths": [
+        "prisma FlashcardDeck / Flashcard",
+        "admin/ai/flashcards"
+      ],
+      "routes": [
+        "/app/.../flashcards",
+        "/flashcards (marketing)"
+      ],
+      "dataModelOrSource": "flashcard_decks, flashcards",
+      "beforeCount": 32,
+      "currentCount": null,
+      "missingCount": null,
+      "confidence": "medium",
+      "recommendedAction": "Pipeline import with source_key dedupe; verify PUBLIC_PREVIEW vs subscriber decks",
+      "notes": "Deck modules under client/src/data; IDs embedded as TS objects."
+    },
+    {
+      "category": "CONTENT",
+      "subcategory": "activities",
+      "name": "Legacy learning activities",
+      "legacyExists": true,
+      "currentExists": true,
+      "status": "partial",
+      "legacySourcePaths": [
+        "legacy-activities-inventory.json"
+      ],
+      "currentSourcePaths": [
+        "src/app/(marketing)/**/activities**",
+        "learner routes"
+      ],
+      "routes": [],
+      "dataModelOrSource": "Mixed — marketing + learner",
+      "beforeCount": 55,
+      "currentCount": null,
+      "missingCount": null,
+      "confidence": "low",
+      "recommendedAction": "Map activity IDs to current hubs or intentionally skip if obsolete",
+      "notes": "Inventory from legacy scan; current surface differs (Next marketing shell)."
+    },
+    {
+      "category": "CONTENT",
+      "subcategory": "case_studies",
+      "name": "Legacy case studies",
+      "legacyExists": true,
+      "currentExists": true,
+      "status": "partial",
+      "legacySourcePaths": [
+        "legacy-case-studies-inventory.json"
+      ],
+      "currentSourcePaths": [
+        "pathway lessons / blog / admin content"
+      ],
+      "routes": [],
+      "dataModelOrSource": "n/a",
+      "beforeCount": 51,
+      "currentCount": null,
+      "missingCount": null,
+      "confidence": "low",
+      "recommendedAction": "Crosswalk case study slugs to lesson or blog",
+      "notes": ""
+    },
+    {
+      "category": "CONTENT",
+      "subcategory": "blog",
+      "name": "Blog / articles",
+      "legacyExists": true,
+      "currentExists": true,
+      "status": "partial",
+      "legacySourcePaths": [
+        "legacy-blog-inventory.json",
+        "client blog TS"
+      ],
+      "currentSourcePaths": [
+        "prisma BlogPost",
+        "src/app/(marketing)/blog",
+        "admin/blog/**"
+      ],
+      "routes": [
+        "/blog",
+        "/admin/blog"
+      ],
+      "dataModelOrSource": "BlogPost",
+      "beforeCount": 47,
+      "currentCount": null,
+      "missingCount": null,
+      "confidence": "medium",
+      "recommendedAction": "Use blog import + dedupe reports; E-E-A-T editorial dashboard",
+      "notes": ""
+    },
+    {
+      "category": "CONTENT",
+      "subcategory": "seo_programmatic",
+      "name": "Programmatic SEO pages",
+      "legacyExists": true,
+      "currentExists": true,
+      "status": "partial",
+      "legacySourcePaths": [
+        "legacy programmatic / marketing"
+      ],
+      "currentSourcePaths": [
+        "src/lib/seo/programmatic-registry.ts",
+        "src/app/seo/[slug]"
+      ],
+      "routes": [
+        "/{programmaticSlug}"
+      ],
+      "dataModelOrSource": "registry + static sections",
+      "beforeCount": null,
+      "currentCount": 39,
+      "missingCount": null,
+      "confidence": "high",
+      "recommendedAction": "Expand thin slugs per eeat-page-scores.json",
+      "notes": ""
+    },
+    {
+      "category": "CONTENT",
+      "subcategory": "translations",
+      "name": "Locale / educational overlays",
+      "legacyExists": true,
+      "currentExists": true,
+      "status": "partial",
+      "legacySourcePaths": [
+        "client/public/i18n/*.json"
+      ],
+      "currentSourcePaths": [
+        "nursenest-core/public/i18n",
+        "tools/i18n",
+        "educational-content-overlay"
+      ],
+      "routes": [],
+      "dataModelOrSource": "compile pipeline + DB overlays",
+      "beforeCount": null,
+      "currentCount": null,
+      "missingCount": null,
+      "confidence": "medium",
+      "recommendedAction": "Follow docs/i18n-architecture.md — no second runtime loader",
+      "notes": ""
+    },
+    {
+      "category": "CONTENT",
+      "subcategory": "cat_readiness",
+      "name": "CAT / readiness practice sources",
+      "legacyExists": true,
+      "currentExists": true,
+      "status": "partial",
+      "legacySourcePaths": [
+        "legacy-cat-source-inventory.json"
+      ],
+      "currentSourcePaths": [
+        "current-cat-source-inventory.json",
+        "src/lib/practice-tests/**"
+      ],
+      "routes": [
+        "/app/.../practice-tests",
+        "marketing CAT entrypoints"
+      ],
+      "dataModelOrSource": "configs + exam sessions",
+      "beforeCount": 19,
+      "currentCount": 22,
+      "missingCount": null,
+      "confidence": "medium",
+      "recommendedAction": "Compare inventories in legacy-vs-current-cat parity (run audit:legacy-cat)",
+      "notes": ""
+    }
+  ]
 }

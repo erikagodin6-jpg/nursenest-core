@@ -1,0 +1,62 @@
+# Lesson & registry parity (catalog + structural gate)
+
+Generated: 2026-04-14T18:13:04.490Z
+
+## Methodology
+
+- **Registry**: `listPublicExamPathways()` in `src/lib/exam-pathways/exam-product-registry.ts`.
+- **Catalog**: `getCatalogPathwayLessonsSync(pathwayId)` (bundled JSON + scoped gold + allied + new-grad merge).
+- **DB**: **Skipped** — `DATABASE_URL` not configured or query failed; bank/deck counts are null in JSON.
+- **Structural bar**: `structuralQuality.publicComplete` from `evaluatePathwayLessonStructuralGate` on normalized catalog lessons.
+
+## Answers (from this run)
+
+### 1. Country + exam + locale combinations that are routeable but lack content
+
+**Definition used**: Public registry pathway where **catalogLessonCount = 0** AND **published DB lessons (locale en) = 0** — only computed when **DB is connected**.
+
+See `routeableButNoLessonOrDbContent` in `data/audit/country-exam-locale-parity.json`.
+
+- **Not evaluated** — re-run audit with `DATABASE_URL` to detect DB-only or empty pathways.
+
+Pathways with **no bundled catalog rows** but possible DB content are flagged as `no_catalog_db_unverified` in the matrix when DB is skipped.
+
+**Important**: Marketing UI locales (`MARKETING_LOCALE_CODES`) add a **language prefix** for many marketing pages; exam hub paths still use **`us` / `canada`** as the first segment in `(default)/[locale]/[slug]/[examCode]` (that `locale` param is **country**, not UI language). Localized *lesson bodies* are mostly **EN** in catalog; DB may store other locales separately.
+
+### 2. Legacy vs new: still missing at scale
+
+Evidence: `data/audit/unimported-legacy-content.json` — **~4084** legacy lesson keys not on current catalog/master snapshots (see file `counts.missingFromCurrentSnapshots`). This is **not** a claim of 1:1 slug parity; it is an inventory delta.
+
+### 3. Published / catalog lessons: non-empty but structurally incomplete
+
+Lessons with **approxWords ≥ 80** in combined section corpus but **`publicComplete: false`**: **633** (see `incompleteNonEmptyShell` in `lesson-content-completeness-audit.json`, capped).
+
+### 4. Flashcard / question pathways: code vs public UI
+
+- **Questions**: pools are DB-backed; pathway filters use registry `contentExamKeys` + entitlements. No single “pathway” column on `exam_questions`.
+- **Flashcards**: **`/flashcards`** lists only decks matching `publicMarketingFlashcardDeckWhere` (published + **PUBLIC_PREVIEW** + cards). **Subscriber-only** or **HIDDEN** decks, or decks with **0** published cards, are **not** shown on the public hub even if rows exist.
+
+See `flashcard-content-completeness-audit.json`.
+
+## Files changed
+
+- `scripts/audit/generate-full-parity-audit.mts` (this generator)
+- `data/audit/*.json` + `data/audit/parity-lesson-registry-summary.md` (this run)
+
+## Verification
+
+Run from `nursenest-core/`: `npm run typecheck`
+
+## Repository state (manual)
+
+- **Merge conflicts**: verify with `git diff --name-only --diff-filter=U` before merging.
+- **Allied health**: see `parity-registry-lesson-snapshot.json`; routes `/allied-health/{professionKey}/…` complement `us-allied-core` / `ca-allied-core`.
+
+## Full legacy ↔ current matrix
+
+Run `npm run audit:parity-evidence-matrix` for `parity-summary.md`, `legacy-*-inventory.json`, `admin-surface-parity.json`, `user-surface-parity.json`, and `restoration-priority-queue.json` (schema v3).
+
+## Audit tooling
+
+- Generator: `nursenest-core/scripts/audit/generate-full-parity-audit.mts` (reports only; no runtime behavior changes).
+

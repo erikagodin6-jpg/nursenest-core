@@ -6,6 +6,23 @@ import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 
 import { getMonorepoRoot } from "@/lib/monorepo-root";
+import type {
+  EeatEditorialDashboardVm,
+  EeatEditorialPriority,
+  EeatEditorialRow,
+  EeatRawPage,
+  PathwayEeatRollup,
+} from "@/lib/admin/eeat-editorial-model";
+
+export type {
+  EeatEditorialDashboardVm,
+  EeatEditorialPriority,
+  EeatEditorialRow,
+  EeatRawPage,
+  PathwayEeatRollup,
+} from "@/lib/admin/eeat-editorial-model";
+
+export { filterEeatEditorialRows, type EditorialFilterState } from "@/lib/admin/eeat-editorial-filters";
 
 const AUDIT_FILES = {
   pageScores: "eeat-page-scores.json",
@@ -14,85 +31,6 @@ const AUDIT_FILES = {
   topicalClusters: "topical-clusters.json",
   contentFreshness: "content-freshness.json",
 } as const;
-
-export type EeatEditorialPriority = "critical" | "high" | "medium" | "low";
-
-export type EeatEditorialRow = {
-  id: string;
-  pathwayKey: string;
-  pathwayLabel: string;
-  contentType: string;
-  urlPattern: string;
-  eeatScore: number;
-  sectionCompleteness: number;
-  internalLinksCount: number;
-  wordCount: number;
-  authorPresent: boolean;
-  lastUpdated: string | null;
-  flags: string[];
-  lossReasons: string[];
-  recommendedActions: string[];
-  priority: EeatEditorialPriority;
-  staleContent: boolean;
-  thinProgrammatic: boolean;
-  missingAttribution: boolean;
-  missingInternalLinks: boolean;
-  structureIncomplete: boolean;
-  recommendedFixesCopy: string;
-};
-
-export type PathwayEeatRollup = {
-  pathwayKey: string;
-  pathwayLabel: string;
-  pageCount: number;
-  averageScore: number;
-  minScore: number;
-};
-
-export type EeatEditorialDashboardVm = {
-  generatedAtPageScores: string | null;
-  generatedAtFinalStatus: string | null;
-  thresholds: { minimumPassingEeatScore: number; minimumInternalLinks: number } | null;
-  finalStatusSummary: Record<string, unknown> | null;
-  overview: {
-    totalPages: number;
-    averageScore: number;
-    belowThreshold: number;
-    internalLinkGaps: number;
-    thinProgrammaticCount: number;
-    staleFlaggedCount: number;
-    missingAttributionCount: number;
-    structureIncompleteCount: number;
-  };
-  rows: EeatEditorialRow[];
-  pathwayRollups: PathwayEeatRollup[];
-  thinProgrammaticRows: EeatEditorialRow[];
-  staleQueueRows: EeatEditorialRow[];
-  attributionQueueRows: EeatEditorialRow[];
-  topicalClusterCount: number;
-  freshnessMeta: {
-    catalogBundleMtime: string | null;
-    staleBlogPostsSample: { slug: string; updatedAt: string }[];
-    policy: { staleDaysBlog: number; staleDaysLessonCatalog: number } | null;
-  };
-  loadWarnings: string[];
-  /** First slice of eeat-completion-queue.json (audit tool order). */
-  completionQueuePreview: Array<{ id: string; score: number; flags: string[] }>;
-};
-
-type RawPage = {
-  id: string;
-  urlPattern: string;
-  contentType: string;
-  wordCount: number;
-  sectionCompleteness: number;
-  internalLinksCount: number;
-  lastUpdated: string | null;
-  authorPresent: boolean;
-  schemaPresent: boolean;
-  eeatScore: number;
-  flags: string[];
-};
 
 function humanizePathwayId(id: string): string {
   return id
@@ -166,13 +104,75 @@ function recommendedActionsForFlags(flags: string[]): string[] {
 }
 
 function computePriority(score: number, flags: string[]): EeatEditorialPriority {
-  if (score < 45 || (flags.includes("thin_programmatic") && score < 50)) return "critical";
-  if (score < 55) return "high";
-  if (score < 70) return "medium";
+  const s = Number.isFinite(score) ? score : 0;
+  if (s < 45 || (flags.includes("thin_programmatic") && s < 50)) return "critical";
+  if (s < 55) return "high";
+  if (s < 70) return "medium";
   return "low";
 }
 
-function buildRow(raw: RawPage): EeatEditorialRow {
+function clamp01(n: number): number {
+  if (!Number.isFinite(n)) return 0;
+  return Math.min(1, Math.max(0, n));
+}
+
+function asFiniteNumber(v: unknown, fallback: number): number {
+  if (typeof v === "number" && Number.isFinite(v)) return v;
+  if (typeof v === "string" && v.trim() !== "") {
+    const n = Number(v);
+    if (Number.isFinite(n)) return n;
+  }
+  return fallback;
+}
+
+function asInt(v: unknown, fallback: number): number {
+  const n = Math.round(asFiniteNumber(v, fallback));
+  return Number.isFinite(n) ? n : fallback;
+}
+
+/** Defensive coercion so malformed audit rows never throw during dashboard build. */
+export function normalizeRawPage(raw: unknown, index: number): EeatRawPage {
+  const o = raw !== null && typeof raw === "object" && !Array.isArray(raw) ? (raw as Record<string, unknown>) : {};
+  const id = typeof o.id === "string" && o.id.trim() ? o.id.trim() : `invalid-row:${index}`;
+  const contentType = typeof o.contentType === "string" ? o.contentType : "unknown";
+  const urlPattern = typeof o.urlPattern === "string" ? o.urlPattern : "";
+  const wordCount = Math.max(0, asInt(o.wordCount, 0));
+  let sectionCompleteness = asFiniteNumber(o.sectionCompleteness, 0);
+  if (sectionCompleteness > 1 && sectionCompleteness <= 100) sectionCompleteness = sectionCompleteness / 100;
+  sectionCompleteness = clamp01(sectionCompleteness);
+  const internalLinksCount = Math.max(0, asInt(o.internalLinksCount, 0));
+  const lastUpdated =
+    o.lastUpdated === null
+      ? null
+      : typeof o.lastUpdated === "string"
+        ? o.lastUpdated
+        : null;
+  const authorPresent = Boolean(o.authorPresent);
+  const schemaPresent = Boolean(o.schemaPresent);
+  let score = asFiniteNumber(o.eeatScore, 0);
+  if (score > 0 && score <= 1) score *= 100;
+  score = Math.min(100, Math.max(0, score));
+
+  const flags = Array.isArray(o.flags) ? o.flags.map((f) => String(f)) : [];
+
+  return {
+    id,
+    urlPattern,
+    contentType,
+    wordCount,
+    sectionCompleteness,
+    internalLinksCount,
+    lastUpdated,
+    authorPresent,
+    schemaPresent,
+    eeatScore: score,
+    flags,
+  };
+}
+
+
+/** Exported for unit tests — production code uses `loadEeatEditorialDashboard` → normalized `EeatRawPage`. */
+export function buildEeatEditorialRowFromRaw(raw: EeatRawPage): EeatEditorialRow {
   const { pathwayKey, pathwayLabel } = parseEeatPageId(raw.id);
   const flags = raw.flags ?? [];
   const lossReasons = lossReasonsForFlags(flags);
@@ -217,7 +217,7 @@ function buildRow(raw: RawPage): EeatEditorialRow {
   };
 }
 
-function rollupByPathway(rows: EeatEditorialRow[]): PathwayEeatRollup[] {
+export function rollupByPathway(rows: EeatEditorialRow[]): PathwayEeatRollup[] {
   const map = new Map<string, { scores: number[]; label: string }>();
   for (const r of rows) {
     const prev = map.get(r.pathwayKey);
@@ -242,13 +242,95 @@ function rollupByPathway(rows: EeatEditorialRow[]): PathwayEeatRollup[] {
   return out;
 }
 
-async function readJsonSafe<T>(path: string): Promise<{ ok: true; data: T } | { ok: false; error: string }> {
+function normalizeCompletionQueueEntry(raw: unknown, index: number): { id: string; score: number; flags: string[] } | null {
+  if (raw === null || typeof raw !== "object" || Array.isArray(raw)) return null;
+  const o = raw as Record<string, unknown>;
+  const id = typeof o.id === "string" && o.id.trim() ? o.id.trim() : `queue:${index}`;
+  const score = asFiniteNumber(o.score, 0);
+  const flags = Array.isArray(o.flags) ? o.flags.map((x) => String(x)) : [];
+  return { id, score, flags };
+}
+
+export function normalizePrioritizedQueue(input: unknown, max = 40): Array<{ id: string; score: number; flags: string[] }> {
+  if (!Array.isArray(input)) return [];
+  const out: Array<{ id: string; score: number; flags: string[] }> = [];
+  for (let i = 0; i < input.length && out.length < max; i++) {
+    const row = normalizeCompletionQueueEntry(input[i], i);
+    if (row) out.push(row);
+  }
+  return out;
+}
+
+async function readJsonSafe<T>(path: string): Promise<{ ok: true; data: T } | { ok: false; error: string; isMissing?: boolean }> {
   try {
     const raw = await readFile(path, "utf8");
-    return { ok: true, data: JSON.parse(raw) as T };
+    let parsed: unknown;
+    try {
+      parsed = JSON.parse(raw);
+    } catch {
+      return { ok: false, error: "Invalid JSON (parse error)" };
+    }
+    if (parsed === null || typeof parsed !== "object") {
+      return { ok: false, error: "JSON root must be an object" };
+    }
+    return { ok: true, data: parsed as T };
   } catch (e) {
+    const err = e as NodeJS.ErrnoException;
+    if (err.code === "ENOENT") {
+      return { ok: false, error: "File not found", isMissing: true };
+    }
     return { ok: false, error: e instanceof Error ? e.message : String(e) };
   }
+}
+
+function extractPageScoresPayload(
+  data: Record<string, unknown>,
+  warnings: string[],
+): {
+  generatedAt?: string;
+  thresholds?: { minimumPassingEeatScore: number; minimumInternalLinks: number };
+  summary?: Record<string, number>;
+  pages: EeatRawPage[];
+} {
+  const generatedAt = typeof data.generatedAt === "string" ? data.generatedAt : undefined;
+  let thresholds: { minimumPassingEeatScore: number; minimumInternalLinks: number } | undefined;
+  const t = data.thresholds;
+  if (t && typeof t === "object" && !Array.isArray(t)) {
+    const to = t as Record<string, unknown>;
+    const minScore = asFiniteNumber(to.minimumPassingEeatScore, 70);
+    const minLinks = asFiniteNumber(to.minimumInternalLinks, 3);
+    thresholds = { minimumPassingEeatScore: minScore, minimumInternalLinks: minLinks };
+  }
+  const summary = typeof data.summary === "object" && data.summary !== null && !Array.isArray(data.summary) ? (data.summary as Record<string, number>) : undefined;
+
+  const rawPages = data.pages;
+  if (rawPages === undefined) {
+    warnings.push(`${AUDIT_FILES.pageScores}: missing "pages" key — treating as empty array`);
+    return { generatedAt, thresholds, summary, pages: [] };
+  }
+  if (!Array.isArray(rawPages)) {
+    warnings.push(`${AUDIT_FILES.pageScores}: "pages" must be an array — treating as empty`);
+    return { generatedAt, thresholds, summary, pages: [] };
+  }
+  if (rawPages.length === 0) {
+    warnings.push(`${AUDIT_FILES.pageScores}: empty pages array`);
+  }
+
+  const pages = rawPages.map((item, index) => normalizeRawPage(item, index));
+  return { generatedAt, thresholds, summary, pages };
+}
+
+function normalizeStaleBlogSample(input: unknown): { slug: string; updatedAt: string }[] {
+  if (!Array.isArray(input)) return [];
+  const out: { slug: string; updatedAt: string }[] = [];
+  for (const item of input) {
+    if (!item || typeof item !== "object" || Array.isArray(item)) continue;
+    const o = item as Record<string, unknown>;
+    const slug = typeof o.slug === "string" ? o.slug : "";
+    const updatedAt = typeof o.updatedAt === "string" ? o.updatedAt : "";
+    if (slug) out.push({ slug, updatedAt });
+  }
+  return out;
 }
 
 export async function loadEeatEditorialDashboard(): Promise<EeatEditorialDashboardVm> {
@@ -263,32 +345,47 @@ export async function loadEeatEditorialDashboard(): Promise<EeatEditorialDashboa
   const queuePath = join(auditDir, AUDIT_FILES.completionQueue);
 
   const [scoresRes, finalRes, freshRes, clustersRes, queueRes] = await Promise.all([
-    readJsonSafe<{ generatedAt?: string; thresholds?: { minimumPassingEeatScore: number; minimumInternalLinks: number }; summary?: Record<string, number>; pages?: RawPage[] }>(
-      pageScoresPath,
-    ),
+    readJsonSafe<Record<string, unknown>>(pageScoresPath),
     readJsonSafe<Record<string, unknown>>(finalPath),
-    readJsonSafe<{
-      catalogBundleMtime?: string | null;
-      staleBlogPostsSample?: { slug: string; updatedAt: string }[];
-      policy?: { staleDaysBlog: number; staleDaysLessonCatalog: number };
-    }>(freshnessPath),
-    readJsonSafe<{ clusterCount?: number }>(clustersPath),
-    readJsonSafe<{ prioritized?: Array<{ id: string; score: number; flags: string[] }> }>(queuePath),
+    readJsonSafe<Record<string, unknown>>(freshnessPath),
+    readJsonSafe<Record<string, unknown>>(clustersPath),
+    readJsonSafe<Record<string, unknown>>(queuePath),
   ]);
 
   if (!scoresRes.ok) {
-    warnings.push(`Missing or invalid ${AUDIT_FILES.pageScores}: ${scoresRes.error}`);
+    warnings.push(
+      scoresRes.isMissing
+        ? `Required ${AUDIT_FILES.pageScores}: missing — run E-E-A-T audit or copy artifact into data/audit/`
+        : `${AUDIT_FILES.pageScores}: ${scoresRes.error}`,
+    );
   }
-  if (!finalRes.ok) warnings.push(`Optional ${AUDIT_FILES.finalStatus}: ${finalRes.error}`);
-  if (!freshRes.ok) warnings.push(`Optional ${AUDIT_FILES.contentFreshness}: ${freshRes.error}`);
-  if (!clustersRes.ok) warnings.push(`Optional ${AUDIT_FILES.topicalClusters}: ${clustersRes.error}`);
-  if (!queueRes.ok) warnings.push(`Optional ${AUDIT_FILES.completionQueue}: ${queueRes.error}`);
 
-  const pages = scoresRes.ok ? scoresRes.data.pages ?? [] : [];
-  const rows = pages.map(buildRow).sort((a, b) => a.eeatScore - b.eeatScore);
+  if (!finalRes.ok && !finalRes.isMissing) warnings.push(`Optional ${AUDIT_FILES.finalStatus}: ${finalRes.error}`);
+  if (!finalRes.ok && finalRes.isMissing) warnings.push(`Optional ${AUDIT_FILES.finalStatus}: file not found`);
 
-  const summary = scoresRes.ok ? scoresRes.data.summary : undefined;
-  const thresholds = scoresRes.ok ? scoresRes.data.thresholds ?? null : null;
+  if (!freshRes.ok && !freshRes.isMissing) warnings.push(`Optional ${AUDIT_FILES.contentFreshness}: ${freshRes.error}`);
+  if (!freshRes.ok && freshRes.isMissing) warnings.push(`Optional ${AUDIT_FILES.contentFreshness}: file not found`);
+
+  if (!clustersRes.ok && !clustersRes.isMissing) warnings.push(`Optional ${AUDIT_FILES.topicalClusters}: ${clustersRes.error}`);
+  if (!clustersRes.ok && clustersRes.isMissing) warnings.push(`Optional ${AUDIT_FILES.topicalClusters}: file not found`);
+
+  if (!queueRes.ok && !queueRes.isMissing) warnings.push(`Optional ${AUDIT_FILES.completionQueue}: ${queueRes.error}`);
+  if (!queueRes.ok && queueRes.isMissing) warnings.push(`Optional ${AUDIT_FILES.completionQueue}: file not found`);
+
+  let pages: EeatRawPage[] = [];
+  let generatedAtPageScores: string | null = null;
+  let thresholds: EeatEditorialDashboardVm["thresholds"] = null;
+  let summary: Record<string, number> | undefined;
+
+  if (scoresRes.ok) {
+    const extracted = extractPageScoresPayload(scoresRes.data, warnings);
+    pages = extracted.pages;
+    generatedAtPageScores = extracted.generatedAt ?? null;
+    thresholds = extracted.thresholds ?? null;
+    summary = extracted.summary;
+  }
+
+  const rows = pages.map(buildEeatEditorialRowFromRaw).sort((a, b) => a.eeatScore - b.eeatScore);
 
   const thinProgrammaticRows = rows.filter((r) => r.thinProgrammatic);
   const staleQueueRows = rows.filter((r) => r.staleContent);
@@ -296,34 +393,74 @@ export async function loadEeatEditorialDashboard(): Promise<EeatEditorialDashboa
 
   const overview = {
     totalPages: summary?.pageCount ?? rows.length,
-    averageScore: summary?.averageEeatScore ?? (rows.length ? Math.round(rows.reduce((a, r) => a + r.eeatScore, 0) / rows.length) : 0),
-    belowThreshold: summary?.pagesBelowThreshold ?? rows.filter((r) => r.eeatScore < (thresholds?.minimumPassingEeatScore ?? 70)).length,
-    internalLinkGaps: summary?.internalLinkGaps ?? rows.filter((r) => r.missingInternalLinks).length,
+    averageScore:
+      summary?.averageEeatScore ??
+      (rows.length ? Math.round(rows.reduce((a, r) => a + r.eeatScore, 0) / rows.length) : 0),
+    belowThreshold:
+      summary?.pagesBelowThreshold ??
+      rows.filter((r) => r.eeatScore < (thresholds?.minimumPassingEeatScore ?? 70)).length,
+    internalLinkGaps:
+      summary?.internalLinkGaps ?? rows.filter((r) => r.missingInternalLinks).length,
     thinProgrammaticCount: thinProgrammaticRows.length,
     staleFlaggedCount: staleQueueRows.length,
     missingAttributionCount: attributionQueueRows.length,
     structureIncompleteCount: rows.filter((r) => r.structureIncomplete).length,
   };
 
+  const finalStatusSummary = finalRes.ok ? (finalRes.data as Record<string, unknown>) : null;
+  const generatedAtFinalStatus =
+    finalRes.ok && typeof finalRes.data.generatedAt === "string" ? finalRes.data.generatedAt : null;
+
+  let topicalClusterCount = 0;
+  if (clustersRes.ok) {
+    const cc = clustersRes.data.clusterCount;
+    topicalClusterCount = typeof cc === "number" && Number.isFinite(cc) ? Math.max(0, Math.floor(cc)) : 0;
+  }
+
+  let freshnessMeta: EeatEditorialDashboardVm["freshnessMeta"] = {
+    catalogBundleMtime: null,
+    staleBlogPostsSample: [],
+    policy: null,
+  };
+  if (freshRes.ok) {
+    const d = freshRes.data;
+    const mtime = d.catalogBundleMtime;
+    freshnessMeta = {
+      catalogBundleMtime: typeof mtime === "string" || mtime === null ? mtime : null,
+      staleBlogPostsSample: normalizeStaleBlogSample(d.staleBlogPostsSample),
+      policy:
+        d.policy && typeof d.policy === "object" && !Array.isArray(d.policy)
+          ? {
+              staleDaysBlog: asInt((d.policy as Record<string, unknown>).staleDaysBlog, 0),
+              staleDaysLessonCatalog: asInt((d.policy as Record<string, unknown>).staleDaysLessonCatalog, 0),
+            }
+          : null,
+    };
+  }
+
+  let completionQueuePreview: EeatEditorialDashboardVm["completionQueuePreview"] = [];
+  if (queueRes.ok) {
+    const prioritized = (queueRes.data as Record<string, unknown>).prioritized;
+    completionQueuePreview = normalizePrioritizedQueue(prioritized, 40);
+    if (prioritized !== undefined && !Array.isArray(prioritized)) {
+      warnings.push(`${AUDIT_FILES.completionQueue}: "prioritized" is not an array — queue preview empty`);
+    }
+  }
+
   return {
-    generatedAtPageScores: scoresRes.ok ? scoresRes.data.generatedAt ?? null : null,
-    generatedAtFinalStatus: finalRes.ok ? (finalRes.data.generatedAt as string) ?? null : null,
+    generatedAtPageScores,
+    generatedAtFinalStatus,
     thresholds,
-    finalStatusSummary: finalRes.ok ? finalRes.data : null,
+    finalStatusSummary,
     overview,
     rows,
     pathwayRollups: rollupByPathway(rows),
     thinProgrammaticRows,
     staleQueueRows,
     attributionQueueRows,
-    topicalClusterCount: clustersRes.ok ? clustersRes.data.clusterCount ?? 0 : 0,
-    freshnessMeta: {
-      catalogBundleMtime: freshRes.ok ? freshRes.data.catalogBundleMtime ?? null : null,
-      staleBlogPostsSample: freshRes.ok ? freshRes.data.staleBlogPostsSample ?? [] : [],
-      policy: freshRes.ok ? freshRes.data.policy ?? null : null,
-    },
+    topicalClusterCount,
+    freshnessMeta,
     loadWarnings: warnings,
-    completionQueuePreview: queueRes.ok ? (queueRes.data.prioritized ?? []).slice(0, 40) : [],
+    completionQueuePreview,
   };
 }
-

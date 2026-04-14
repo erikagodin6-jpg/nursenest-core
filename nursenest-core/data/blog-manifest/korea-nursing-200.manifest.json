@@ -1,0 +1,2006 @@
+{
+  "generatedAt": "2026-04-14T19:16:00.166Z",
+  "count": 200,
+  "entries": [
+    {
+      "title": "korean nursing licensing examination guide — Korea nursing (en 1)",
+      "slug": "en-0001-korean-nursing-licensing-examination-guide-korean-nursing-licensing-examination-guide-korea-nursing-en-1",
+      "primaryKeyword": "korean nursing licensing examination guide",
+      "language": "en",
+      "category": "Korea nursing",
+      "intentType": "transactional",
+      "translationGroupId": "kr-nurse-0001-korean-nursing-licensing-examination-guide",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in south korea — Korea nursing (en 2)",
+      "slug": "en-0002-how-to-become-a-nurse-in-south-korea-how-to-become-a-nurse-in-south-korea-korea-nursing-en-2",
+      "primaryKeyword": "how to become a nurse in south korea",
+      "language": "en",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0001-how-to-become-a-nurse-in-south-korea",
+      "status": "planned"
+    },
+    {
+      "title": "korean nurse salary — Korea nursing (en 3)",
+      "slug": "en-0003-korean-nurse-salary-korean-nurse-salary-korea-nursing-en-3",
+      "primaryKeyword": "korean nurse salary",
+      "language": "en",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0001-korean-nurse-salary",
+      "status": "planned"
+    },
+    {
+      "title": "korean nurse licensure process — Korea nursing (en 4)",
+      "slug": "en-0004-korean-nurse-licensure-process-korean-nurse-licensure-process-korea-nursing-en-4",
+      "primaryKeyword": "korean nurse licensure process",
+      "language": "en",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0001-korean-nurse-licensure-process",
+      "status": "planned"
+    },
+    {
+      "title": "study guide for korean nursing exam — Korea nursing (en 5)",
+      "slug": "en-0005-study-guide-for-korean-nursing-exam-study-guide-for-korean-nursing-exam-korea-nursing-en-5",
+      "primaryKeyword": "study guide for korean nursing exam",
+      "language": "en",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0001-study-guide-for-korean-nursing-exam",
+      "status": "planned"
+    },
+    {
+      "title": "korean nurses moving abroad — Korea nursing (en 6)",
+      "slug": "en-0006-korean-nurses-moving-abroad-korean-nurses-moving-abroad-korea-nursing-en-6",
+      "primaryKeyword": "korean nurses moving abroad",
+      "language": "en",
+      "category": "Korea nursing",
+      "intentType": "transactional",
+      "translationGroupId": "kr-nurse-0001-korean-nurses-moving-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "nclex for korean nurses — Korea nursing (en 7)",
+      "slug": "en-0007-nclex-for-korean-nurses-nclex-for-korean-nurses-korea-nursing-en-7",
+      "primaryKeyword": "nclex for korean nurses",
+      "language": "en",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0001-nclex-for-korean-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "australia for korean nurses — Korea nursing (en 8)",
+      "slug": "en-0008-australia-for-korean-nurses-australia-for-korean-nurses-korea-nursing-en-8",
+      "primaryKeyword": "australia for korean nurses",
+      "language": "en",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0001-australia-for-korean-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "uk for korean nurses — Korea nursing (en 9)",
+      "slug": "en-0009-uk-for-korean-nurses-uk-for-korean-nurses-korea-nursing-en-9",
+      "primaryKeyword": "uk for korean nurses",
+      "language": "en",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0001-uk-for-korean-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "language requirements for nurses in korea — Korea nursing (en 10)",
+      "slug": "en-0010-language-requirements-for-nurses-in-korea-language-requirements-for-nurses-in-korea-korea-nursing-en-10",
+      "primaryKeyword": "language requirements for nurses in korea",
+      "language": "en",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0001-language-requirements-for-nurses-in-korea",
+      "status": "planned"
+    },
+    {
+      "title": "korean nursing licensing examination guide — Korea nursing (en 11)",
+      "slug": "en-0011-korean-nursing-licensing-examination-guide-korean-nursing-licensing-examination-guide-korea-nursing-en-11",
+      "primaryKeyword": "korean nursing licensing examination guide",
+      "language": "en",
+      "category": "Korea nursing",
+      "intentType": "transactional",
+      "translationGroupId": "kr-nurse-0002-korean-nursing-licensing-examination-guide",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in south korea — Korea nursing (en 12)",
+      "slug": "en-0012-how-to-become-a-nurse-in-south-korea-how-to-become-a-nurse-in-south-korea-korea-nursing-en-12",
+      "primaryKeyword": "how to become a nurse in south korea",
+      "language": "en",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0002-how-to-become-a-nurse-in-south-korea",
+      "status": "planned"
+    },
+    {
+      "title": "korean nurse salary — Korea nursing (en 13)",
+      "slug": "en-0013-korean-nurse-salary-korean-nurse-salary-korea-nursing-en-13",
+      "primaryKeyword": "korean nurse salary",
+      "language": "en",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0002-korean-nurse-salary",
+      "status": "planned"
+    },
+    {
+      "title": "korean nurse licensure process — Korea nursing (en 14)",
+      "slug": "en-0014-korean-nurse-licensure-process-korean-nurse-licensure-process-korea-nursing-en-14",
+      "primaryKeyword": "korean nurse licensure process",
+      "language": "en",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0002-korean-nurse-licensure-process",
+      "status": "planned"
+    },
+    {
+      "title": "study guide for korean nursing exam — Korea nursing (en 15)",
+      "slug": "en-0015-study-guide-for-korean-nursing-exam-study-guide-for-korean-nursing-exam-korea-nursing-en-15",
+      "primaryKeyword": "study guide for korean nursing exam",
+      "language": "en",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0002-study-guide-for-korean-nursing-exam",
+      "status": "planned"
+    },
+    {
+      "title": "korean nurses moving abroad — Korea nursing (en 16)",
+      "slug": "en-0016-korean-nurses-moving-abroad-korean-nurses-moving-abroad-korea-nursing-en-16",
+      "primaryKeyword": "korean nurses moving abroad",
+      "language": "en",
+      "category": "Korea nursing",
+      "intentType": "transactional",
+      "translationGroupId": "kr-nurse-0002-korean-nurses-moving-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "nclex for korean nurses — Korea nursing (en 17)",
+      "slug": "en-0017-nclex-for-korean-nurses-nclex-for-korean-nurses-korea-nursing-en-17",
+      "primaryKeyword": "nclex for korean nurses",
+      "language": "en",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0002-nclex-for-korean-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "australia for korean nurses — Korea nursing (en 18)",
+      "slug": "en-0018-australia-for-korean-nurses-australia-for-korean-nurses-korea-nursing-en-18",
+      "primaryKeyword": "australia for korean nurses",
+      "language": "en",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0002-australia-for-korean-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "uk for korean nurses — Korea nursing (en 19)",
+      "slug": "en-0019-uk-for-korean-nurses-uk-for-korean-nurses-korea-nursing-en-19",
+      "primaryKeyword": "uk for korean nurses",
+      "language": "en",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0002-uk-for-korean-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "language requirements for nurses in korea — Korea nursing (en 20)",
+      "slug": "en-0020-language-requirements-for-nurses-in-korea-language-requirements-for-nurses-in-korea-korea-nursing-en-20",
+      "primaryKeyword": "language requirements for nurses in korea",
+      "language": "en",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0002-language-requirements-for-nurses-in-korea",
+      "status": "planned"
+    },
+    {
+      "title": "korean nursing licensing examination guide — Korea nursing (en 21)",
+      "slug": "en-0021-korean-nursing-licensing-examination-guide-korean-nursing-licensing-examination-guide-korea-nursing-en-21",
+      "primaryKeyword": "korean nursing licensing examination guide",
+      "language": "en",
+      "category": "Korea nursing",
+      "intentType": "transactional",
+      "translationGroupId": "kr-nurse-0003-korean-nursing-licensing-examination-guide",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in south korea — Korea nursing (en 22)",
+      "slug": "en-0022-how-to-become-a-nurse-in-south-korea-how-to-become-a-nurse-in-south-korea-korea-nursing-en-22",
+      "primaryKeyword": "how to become a nurse in south korea",
+      "language": "en",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0003-how-to-become-a-nurse-in-south-korea",
+      "status": "planned"
+    },
+    {
+      "title": "korean nurse salary — Korea nursing (en 23)",
+      "slug": "en-0023-korean-nurse-salary-korean-nurse-salary-korea-nursing-en-23",
+      "primaryKeyword": "korean nurse salary",
+      "language": "en",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0003-korean-nurse-salary",
+      "status": "planned"
+    },
+    {
+      "title": "korean nurse licensure process — Korea nursing (en 24)",
+      "slug": "en-0024-korean-nurse-licensure-process-korean-nurse-licensure-process-korea-nursing-en-24",
+      "primaryKeyword": "korean nurse licensure process",
+      "language": "en",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0003-korean-nurse-licensure-process",
+      "status": "planned"
+    },
+    {
+      "title": "study guide for korean nursing exam — Korea nursing (en 25)",
+      "slug": "en-0025-study-guide-for-korean-nursing-exam-study-guide-for-korean-nursing-exam-korea-nursing-en-25",
+      "primaryKeyword": "study guide for korean nursing exam",
+      "language": "en",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0003-study-guide-for-korean-nursing-exam",
+      "status": "planned"
+    },
+    {
+      "title": "korean nurses moving abroad — Korea nursing (en 26)",
+      "slug": "en-0026-korean-nurses-moving-abroad-korean-nurses-moving-abroad-korea-nursing-en-26",
+      "primaryKeyword": "korean nurses moving abroad",
+      "language": "en",
+      "category": "Korea nursing",
+      "intentType": "transactional",
+      "translationGroupId": "kr-nurse-0003-korean-nurses-moving-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "nclex for korean nurses — Korea nursing (en 27)",
+      "slug": "en-0027-nclex-for-korean-nurses-nclex-for-korean-nurses-korea-nursing-en-27",
+      "primaryKeyword": "nclex for korean nurses",
+      "language": "en",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0003-nclex-for-korean-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "australia for korean nurses — Korea nursing (en 28)",
+      "slug": "en-0028-australia-for-korean-nurses-australia-for-korean-nurses-korea-nursing-en-28",
+      "primaryKeyword": "australia for korean nurses",
+      "language": "en",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0003-australia-for-korean-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "uk for korean nurses — Korea nursing (en 29)",
+      "slug": "en-0029-uk-for-korean-nurses-uk-for-korean-nurses-korea-nursing-en-29",
+      "primaryKeyword": "uk for korean nurses",
+      "language": "en",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0003-uk-for-korean-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "language requirements for nurses in korea — Korea nursing (en 30)",
+      "slug": "en-0030-language-requirements-for-nurses-in-korea-language-requirements-for-nurses-in-korea-korea-nursing-en-30",
+      "primaryKeyword": "language requirements for nurses in korea",
+      "language": "en",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0003-language-requirements-for-nurses-in-korea",
+      "status": "planned"
+    },
+    {
+      "title": "korean nursing licensing examination guide — Korea nursing (en 31)",
+      "slug": "en-0031-korean-nursing-licensing-examination-guide-korean-nursing-licensing-examination-guide-korea-nursing-en-31",
+      "primaryKeyword": "korean nursing licensing examination guide",
+      "language": "en",
+      "category": "Korea nursing",
+      "intentType": "transactional",
+      "translationGroupId": "kr-nurse-0004-korean-nursing-licensing-examination-guide",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in south korea — Korea nursing (en 32)",
+      "slug": "en-0032-how-to-become-a-nurse-in-south-korea-how-to-become-a-nurse-in-south-korea-korea-nursing-en-32",
+      "primaryKeyword": "how to become a nurse in south korea",
+      "language": "en",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0004-how-to-become-a-nurse-in-south-korea",
+      "status": "planned"
+    },
+    {
+      "title": "korean nurse salary — Korea nursing (en 33)",
+      "slug": "en-0033-korean-nurse-salary-korean-nurse-salary-korea-nursing-en-33",
+      "primaryKeyword": "korean nurse salary",
+      "language": "en",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0004-korean-nurse-salary",
+      "status": "planned"
+    },
+    {
+      "title": "korean nurse licensure process — Korea nursing (en 34)",
+      "slug": "en-0034-korean-nurse-licensure-process-korean-nurse-licensure-process-korea-nursing-en-34",
+      "primaryKeyword": "korean nurse licensure process",
+      "language": "en",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0004-korean-nurse-licensure-process",
+      "status": "planned"
+    },
+    {
+      "title": "study guide for korean nursing exam — Korea nursing (en 35)",
+      "slug": "en-0035-study-guide-for-korean-nursing-exam-study-guide-for-korean-nursing-exam-korea-nursing-en-35",
+      "primaryKeyword": "study guide for korean nursing exam",
+      "language": "en",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0004-study-guide-for-korean-nursing-exam",
+      "status": "planned"
+    },
+    {
+      "title": "korean nurses moving abroad — Korea nursing (en 36)",
+      "slug": "en-0036-korean-nurses-moving-abroad-korean-nurses-moving-abroad-korea-nursing-en-36",
+      "primaryKeyword": "korean nurses moving abroad",
+      "language": "en",
+      "category": "Korea nursing",
+      "intentType": "transactional",
+      "translationGroupId": "kr-nurse-0004-korean-nurses-moving-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "nclex for korean nurses — Korea nursing (en 37)",
+      "slug": "en-0037-nclex-for-korean-nurses-nclex-for-korean-nurses-korea-nursing-en-37",
+      "primaryKeyword": "nclex for korean nurses",
+      "language": "en",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0004-nclex-for-korean-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "australia for korean nurses — Korea nursing (en 38)",
+      "slug": "en-0038-australia-for-korean-nurses-australia-for-korean-nurses-korea-nursing-en-38",
+      "primaryKeyword": "australia for korean nurses",
+      "language": "en",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0004-australia-for-korean-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "uk for korean nurses — Korea nursing (en 39)",
+      "slug": "en-0039-uk-for-korean-nurses-uk-for-korean-nurses-korea-nursing-en-39",
+      "primaryKeyword": "uk for korean nurses",
+      "language": "en",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0004-uk-for-korean-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "language requirements for nurses in korea — Korea nursing (en 40)",
+      "slug": "en-0040-language-requirements-for-nurses-in-korea-language-requirements-for-nurses-in-korea-korea-nursing-en-40",
+      "primaryKeyword": "language requirements for nurses in korea",
+      "language": "en",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0004-language-requirements-for-nurses-in-korea",
+      "status": "planned"
+    },
+    {
+      "title": "korean nursing licensing examination guide — Korea nursing (en 41)",
+      "slug": "en-0041-korean-nursing-licensing-examination-guide-korean-nursing-licensing-examination-guide-korea-nursing-en-41",
+      "primaryKeyword": "korean nursing licensing examination guide",
+      "language": "en",
+      "category": "Korea nursing",
+      "intentType": "transactional",
+      "translationGroupId": "kr-nurse-0005-korean-nursing-licensing-examination-guide",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in south korea — Korea nursing (en 42)",
+      "slug": "en-0042-how-to-become-a-nurse-in-south-korea-how-to-become-a-nurse-in-south-korea-korea-nursing-en-42",
+      "primaryKeyword": "how to become a nurse in south korea",
+      "language": "en",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0005-how-to-become-a-nurse-in-south-korea",
+      "status": "planned"
+    },
+    {
+      "title": "korean nurse salary — Korea nursing (en 43)",
+      "slug": "en-0043-korean-nurse-salary-korean-nurse-salary-korea-nursing-en-43",
+      "primaryKeyword": "korean nurse salary",
+      "language": "en",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0005-korean-nurse-salary",
+      "status": "planned"
+    },
+    {
+      "title": "korean nurse licensure process — Korea nursing (en 44)",
+      "slug": "en-0044-korean-nurse-licensure-process-korean-nurse-licensure-process-korea-nursing-en-44",
+      "primaryKeyword": "korean nurse licensure process",
+      "language": "en",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0005-korean-nurse-licensure-process",
+      "status": "planned"
+    },
+    {
+      "title": "study guide for korean nursing exam — Korea nursing (en 45)",
+      "slug": "en-0045-study-guide-for-korean-nursing-exam-study-guide-for-korean-nursing-exam-korea-nursing-en-45",
+      "primaryKeyword": "study guide for korean nursing exam",
+      "language": "en",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0005-study-guide-for-korean-nursing-exam",
+      "status": "planned"
+    },
+    {
+      "title": "korean nurses moving abroad — Korea nursing (en 46)",
+      "slug": "en-0046-korean-nurses-moving-abroad-korean-nurses-moving-abroad-korea-nursing-en-46",
+      "primaryKeyword": "korean nurses moving abroad",
+      "language": "en",
+      "category": "Korea nursing",
+      "intentType": "transactional",
+      "translationGroupId": "kr-nurse-0005-korean-nurses-moving-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "nclex for korean nurses — Korea nursing (en 47)",
+      "slug": "en-0047-nclex-for-korean-nurses-nclex-for-korean-nurses-korea-nursing-en-47",
+      "primaryKeyword": "nclex for korean nurses",
+      "language": "en",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0005-nclex-for-korean-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "australia for korean nurses — Korea nursing (en 48)",
+      "slug": "en-0048-australia-for-korean-nurses-australia-for-korean-nurses-korea-nursing-en-48",
+      "primaryKeyword": "australia for korean nurses",
+      "language": "en",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0005-australia-for-korean-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "uk for korean nurses — Korea nursing (en 49)",
+      "slug": "en-0049-uk-for-korean-nurses-uk-for-korean-nurses-korea-nursing-en-49",
+      "primaryKeyword": "uk for korean nurses",
+      "language": "en",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0005-uk-for-korean-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "language requirements for nurses in korea — Korea nursing (en 50)",
+      "slug": "en-0050-language-requirements-for-nurses-in-korea-language-requirements-for-nurses-in-korea-korea-nursing-en-50",
+      "primaryKeyword": "language requirements for nurses in korea",
+      "language": "en",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0005-language-requirements-for-nurses-in-korea",
+      "status": "planned"
+    },
+    {
+      "title": "korean nursing licensing examination guide — Korea nursing (en 51)",
+      "slug": "en-0051-korean-nursing-licensing-examination-guide-korean-nursing-licensing-examination-guide-korea-nursing-en-51",
+      "primaryKeyword": "korean nursing licensing examination guide",
+      "language": "en",
+      "category": "Korea nursing",
+      "intentType": "transactional",
+      "translationGroupId": "kr-nurse-0006-korean-nursing-licensing-examination-guide",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in south korea — Korea nursing (en 52)",
+      "slug": "en-0052-how-to-become-a-nurse-in-south-korea-how-to-become-a-nurse-in-south-korea-korea-nursing-en-52",
+      "primaryKeyword": "how to become a nurse in south korea",
+      "language": "en",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0006-how-to-become-a-nurse-in-south-korea",
+      "status": "planned"
+    },
+    {
+      "title": "korean nurse salary — Korea nursing (en 53)",
+      "slug": "en-0053-korean-nurse-salary-korean-nurse-salary-korea-nursing-en-53",
+      "primaryKeyword": "korean nurse salary",
+      "language": "en",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0006-korean-nurse-salary",
+      "status": "planned"
+    },
+    {
+      "title": "korean nurse licensure process — Korea nursing (en 54)",
+      "slug": "en-0054-korean-nurse-licensure-process-korean-nurse-licensure-process-korea-nursing-en-54",
+      "primaryKeyword": "korean nurse licensure process",
+      "language": "en",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0006-korean-nurse-licensure-process",
+      "status": "planned"
+    },
+    {
+      "title": "study guide for korean nursing exam — Korea nursing (en 55)",
+      "slug": "en-0055-study-guide-for-korean-nursing-exam-study-guide-for-korean-nursing-exam-korea-nursing-en-55",
+      "primaryKeyword": "study guide for korean nursing exam",
+      "language": "en",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0006-study-guide-for-korean-nursing-exam",
+      "status": "planned"
+    },
+    {
+      "title": "korean nurses moving abroad — Korea nursing (en 56)",
+      "slug": "en-0056-korean-nurses-moving-abroad-korean-nurses-moving-abroad-korea-nursing-en-56",
+      "primaryKeyword": "korean nurses moving abroad",
+      "language": "en",
+      "category": "Korea nursing",
+      "intentType": "transactional",
+      "translationGroupId": "kr-nurse-0006-korean-nurses-moving-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "nclex for korean nurses — Korea nursing (en 57)",
+      "slug": "en-0057-nclex-for-korean-nurses-nclex-for-korean-nurses-korea-nursing-en-57",
+      "primaryKeyword": "nclex for korean nurses",
+      "language": "en",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0006-nclex-for-korean-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "australia for korean nurses — Korea nursing (en 58)",
+      "slug": "en-0058-australia-for-korean-nurses-australia-for-korean-nurses-korea-nursing-en-58",
+      "primaryKeyword": "australia for korean nurses",
+      "language": "en",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0006-australia-for-korean-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "uk for korean nurses — Korea nursing (en 59)",
+      "slug": "en-0059-uk-for-korean-nurses-uk-for-korean-nurses-korea-nursing-en-59",
+      "primaryKeyword": "uk for korean nurses",
+      "language": "en",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0006-uk-for-korean-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "language requirements for nurses in korea — Korea nursing (en 60)",
+      "slug": "en-0060-language-requirements-for-nurses-in-korea-language-requirements-for-nurses-in-korea-korea-nursing-en-60",
+      "primaryKeyword": "language requirements for nurses in korea",
+      "language": "en",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0006-language-requirements-for-nurses-in-korea",
+      "status": "planned"
+    },
+    {
+      "title": "korean nursing licensing examination guide — Korea nursing (en 61)",
+      "slug": "en-0061-korean-nursing-licensing-examination-guide-korean-nursing-licensing-examination-guide-korea-nursing-en-61",
+      "primaryKeyword": "korean nursing licensing examination guide",
+      "language": "en",
+      "category": "Korea nursing",
+      "intentType": "transactional",
+      "translationGroupId": "kr-nurse-0007-korean-nursing-licensing-examination-guide",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in south korea — Korea nursing (en 62)",
+      "slug": "en-0062-how-to-become-a-nurse-in-south-korea-how-to-become-a-nurse-in-south-korea-korea-nursing-en-62",
+      "primaryKeyword": "how to become a nurse in south korea",
+      "language": "en",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0007-how-to-become-a-nurse-in-south-korea",
+      "status": "planned"
+    },
+    {
+      "title": "korean nurse salary — Korea nursing (en 63)",
+      "slug": "en-0063-korean-nurse-salary-korean-nurse-salary-korea-nursing-en-63",
+      "primaryKeyword": "korean nurse salary",
+      "language": "en",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0007-korean-nurse-salary",
+      "status": "planned"
+    },
+    {
+      "title": "korean nurse licensure process — Korea nursing (en 64)",
+      "slug": "en-0064-korean-nurse-licensure-process-korean-nurse-licensure-process-korea-nursing-en-64",
+      "primaryKeyword": "korean nurse licensure process",
+      "language": "en",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0007-korean-nurse-licensure-process",
+      "status": "planned"
+    },
+    {
+      "title": "study guide for korean nursing exam — Korea nursing (en 65)",
+      "slug": "en-0065-study-guide-for-korean-nursing-exam-study-guide-for-korean-nursing-exam-korea-nursing-en-65",
+      "primaryKeyword": "study guide for korean nursing exam",
+      "language": "en",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0007-study-guide-for-korean-nursing-exam",
+      "status": "planned"
+    },
+    {
+      "title": "korean nurses moving abroad — Korea nursing (en 66)",
+      "slug": "en-0066-korean-nurses-moving-abroad-korean-nurses-moving-abroad-korea-nursing-en-66",
+      "primaryKeyword": "korean nurses moving abroad",
+      "language": "en",
+      "category": "Korea nursing",
+      "intentType": "transactional",
+      "translationGroupId": "kr-nurse-0007-korean-nurses-moving-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "nclex for korean nurses — Korea nursing (en 67)",
+      "slug": "en-0067-nclex-for-korean-nurses-nclex-for-korean-nurses-korea-nursing-en-67",
+      "primaryKeyword": "nclex for korean nurses",
+      "language": "en",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0007-nclex-for-korean-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "australia for korean nurses — Korea nursing (en 68)",
+      "slug": "en-0068-australia-for-korean-nurses-australia-for-korean-nurses-korea-nursing-en-68",
+      "primaryKeyword": "australia for korean nurses",
+      "language": "en",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0007-australia-for-korean-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "uk for korean nurses — Korea nursing (en 69)",
+      "slug": "en-0069-uk-for-korean-nurses-uk-for-korean-nurses-korea-nursing-en-69",
+      "primaryKeyword": "uk for korean nurses",
+      "language": "en",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0007-uk-for-korean-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "language requirements for nurses in korea — Korea nursing (en 70)",
+      "slug": "en-0070-language-requirements-for-nurses-in-korea-language-requirements-for-nurses-in-korea-korea-nursing-en-70",
+      "primaryKeyword": "language requirements for nurses in korea",
+      "language": "en",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0007-language-requirements-for-nurses-in-korea",
+      "status": "planned"
+    },
+    {
+      "title": "korean nursing licensing examination guide — Korea nursing (ko 1)",
+      "slug": "ko-0071-korean-nursing-licensing-examination-guide-korean-nursing-licensing-examination-guide-korea-nursing-ko-1",
+      "primaryKeyword": "korean nursing licensing examination guide",
+      "language": "ko",
+      "category": "Korea nursing",
+      "intentType": "transactional",
+      "translationGroupId": "kr-nurse-0008-korean-nursing-licensing-examination-guide",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in south korea — Korea nursing (ko 2)",
+      "slug": "ko-0072-how-to-become-a-nurse-in-south-korea-how-to-become-a-nurse-in-south-korea-korea-nursing-ko-2",
+      "primaryKeyword": "how to become a nurse in south korea",
+      "language": "ko",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0008-how-to-become-a-nurse-in-south-korea",
+      "status": "planned"
+    },
+    {
+      "title": "korean nurse salary — Korea nursing (ko 3)",
+      "slug": "ko-0073-korean-nurse-salary-korean-nurse-salary-korea-nursing-ko-3",
+      "primaryKeyword": "korean nurse salary",
+      "language": "ko",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0008-korean-nurse-salary",
+      "status": "planned"
+    },
+    {
+      "title": "korean nurse licensure process — Korea nursing (ko 4)",
+      "slug": "ko-0074-korean-nurse-licensure-process-korean-nurse-licensure-process-korea-nursing-ko-4",
+      "primaryKeyword": "korean nurse licensure process",
+      "language": "ko",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0008-korean-nurse-licensure-process",
+      "status": "planned"
+    },
+    {
+      "title": "study guide for korean nursing exam — Korea nursing (ko 5)",
+      "slug": "ko-0075-study-guide-for-korean-nursing-exam-study-guide-for-korean-nursing-exam-korea-nursing-ko-5",
+      "primaryKeyword": "study guide for korean nursing exam",
+      "language": "ko",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0008-study-guide-for-korean-nursing-exam",
+      "status": "planned"
+    },
+    {
+      "title": "korean nurses moving abroad — Korea nursing (ko 6)",
+      "slug": "ko-0076-korean-nurses-moving-abroad-korean-nurses-moving-abroad-korea-nursing-ko-6",
+      "primaryKeyword": "korean nurses moving abroad",
+      "language": "ko",
+      "category": "Korea nursing",
+      "intentType": "transactional",
+      "translationGroupId": "kr-nurse-0008-korean-nurses-moving-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "nclex for korean nurses — Korea nursing (ko 7)",
+      "slug": "ko-0077-nclex-for-korean-nurses-nclex-for-korean-nurses-korea-nursing-ko-7",
+      "primaryKeyword": "nclex for korean nurses",
+      "language": "ko",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0008-nclex-for-korean-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "australia for korean nurses — Korea nursing (ko 8)",
+      "slug": "ko-0078-australia-for-korean-nurses-australia-for-korean-nurses-korea-nursing-ko-8",
+      "primaryKeyword": "australia for korean nurses",
+      "language": "ko",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0008-australia-for-korean-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "uk for korean nurses — Korea nursing (ko 9)",
+      "slug": "ko-0079-uk-for-korean-nurses-uk-for-korean-nurses-korea-nursing-ko-9",
+      "primaryKeyword": "uk for korean nurses",
+      "language": "ko",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0008-uk-for-korean-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "language requirements for nurses in korea — Korea nursing (ko 10)",
+      "slug": "ko-0080-language-requirements-for-nurses-in-korea-language-requirements-for-nurses-in-korea-korea-nursing-ko-10",
+      "primaryKeyword": "language requirements for nurses in korea",
+      "language": "ko",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0008-language-requirements-for-nurses-in-korea",
+      "status": "planned"
+    },
+    {
+      "title": "korean nursing licensing examination guide — Korea nursing (ko 11)",
+      "slug": "ko-0081-korean-nursing-licensing-examination-guide-korean-nursing-licensing-examination-guide-korea-nursing-ko-11",
+      "primaryKeyword": "korean nursing licensing examination guide",
+      "language": "ko",
+      "category": "Korea nursing",
+      "intentType": "transactional",
+      "translationGroupId": "kr-nurse-0009-korean-nursing-licensing-examination-guide",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in south korea — Korea nursing (ko 12)",
+      "slug": "ko-0082-how-to-become-a-nurse-in-south-korea-how-to-become-a-nurse-in-south-korea-korea-nursing-ko-12",
+      "primaryKeyword": "how to become a nurse in south korea",
+      "language": "ko",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0009-how-to-become-a-nurse-in-south-korea",
+      "status": "planned"
+    },
+    {
+      "title": "korean nurse salary — Korea nursing (ko 13)",
+      "slug": "ko-0083-korean-nurse-salary-korean-nurse-salary-korea-nursing-ko-13",
+      "primaryKeyword": "korean nurse salary",
+      "language": "ko",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0009-korean-nurse-salary",
+      "status": "planned"
+    },
+    {
+      "title": "korean nurse licensure process — Korea nursing (ko 14)",
+      "slug": "ko-0084-korean-nurse-licensure-process-korean-nurse-licensure-process-korea-nursing-ko-14",
+      "primaryKeyword": "korean nurse licensure process",
+      "language": "ko",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0009-korean-nurse-licensure-process",
+      "status": "planned"
+    },
+    {
+      "title": "study guide for korean nursing exam — Korea nursing (ko 15)",
+      "slug": "ko-0085-study-guide-for-korean-nursing-exam-study-guide-for-korean-nursing-exam-korea-nursing-ko-15",
+      "primaryKeyword": "study guide for korean nursing exam",
+      "language": "ko",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0009-study-guide-for-korean-nursing-exam",
+      "status": "planned"
+    },
+    {
+      "title": "korean nurses moving abroad — Korea nursing (ko 16)",
+      "slug": "ko-0086-korean-nurses-moving-abroad-korean-nurses-moving-abroad-korea-nursing-ko-16",
+      "primaryKeyword": "korean nurses moving abroad",
+      "language": "ko",
+      "category": "Korea nursing",
+      "intentType": "transactional",
+      "translationGroupId": "kr-nurse-0009-korean-nurses-moving-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "nclex for korean nurses — Korea nursing (ko 17)",
+      "slug": "ko-0087-nclex-for-korean-nurses-nclex-for-korean-nurses-korea-nursing-ko-17",
+      "primaryKeyword": "nclex for korean nurses",
+      "language": "ko",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0009-nclex-for-korean-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "australia for korean nurses — Korea nursing (ko 18)",
+      "slug": "ko-0088-australia-for-korean-nurses-australia-for-korean-nurses-korea-nursing-ko-18",
+      "primaryKeyword": "australia for korean nurses",
+      "language": "ko",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0009-australia-for-korean-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "uk for korean nurses — Korea nursing (ko 19)",
+      "slug": "ko-0089-uk-for-korean-nurses-uk-for-korean-nurses-korea-nursing-ko-19",
+      "primaryKeyword": "uk for korean nurses",
+      "language": "ko",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0009-uk-for-korean-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "language requirements for nurses in korea — Korea nursing (ko 20)",
+      "slug": "ko-0090-language-requirements-for-nurses-in-korea-language-requirements-for-nurses-in-korea-korea-nursing-ko-20",
+      "primaryKeyword": "language requirements for nurses in korea",
+      "language": "ko",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0009-language-requirements-for-nurses-in-korea",
+      "status": "planned"
+    },
+    {
+      "title": "korean nursing licensing examination guide — Korea nursing (ko 21)",
+      "slug": "ko-0091-korean-nursing-licensing-examination-guide-korean-nursing-licensing-examination-guide-korea-nursing-ko-21",
+      "primaryKeyword": "korean nursing licensing examination guide",
+      "language": "ko",
+      "category": "Korea nursing",
+      "intentType": "transactional",
+      "translationGroupId": "kr-nurse-0010-korean-nursing-licensing-examination-guide",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in south korea — Korea nursing (ko 22)",
+      "slug": "ko-0092-how-to-become-a-nurse-in-south-korea-how-to-become-a-nurse-in-south-korea-korea-nursing-ko-22",
+      "primaryKeyword": "how to become a nurse in south korea",
+      "language": "ko",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0010-how-to-become-a-nurse-in-south-korea",
+      "status": "planned"
+    },
+    {
+      "title": "korean nurse salary — Korea nursing (ko 23)",
+      "slug": "ko-0093-korean-nurse-salary-korean-nurse-salary-korea-nursing-ko-23",
+      "primaryKeyword": "korean nurse salary",
+      "language": "ko",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0010-korean-nurse-salary",
+      "status": "planned"
+    },
+    {
+      "title": "korean nurse licensure process — Korea nursing (ko 24)",
+      "slug": "ko-0094-korean-nurse-licensure-process-korean-nurse-licensure-process-korea-nursing-ko-24",
+      "primaryKeyword": "korean nurse licensure process",
+      "language": "ko",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0010-korean-nurse-licensure-process",
+      "status": "planned"
+    },
+    {
+      "title": "study guide for korean nursing exam — Korea nursing (ko 25)",
+      "slug": "ko-0095-study-guide-for-korean-nursing-exam-study-guide-for-korean-nursing-exam-korea-nursing-ko-25",
+      "primaryKeyword": "study guide for korean nursing exam",
+      "language": "ko",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0010-study-guide-for-korean-nursing-exam",
+      "status": "planned"
+    },
+    {
+      "title": "korean nurses moving abroad — Korea nursing (ko 26)",
+      "slug": "ko-0096-korean-nurses-moving-abroad-korean-nurses-moving-abroad-korea-nursing-ko-26",
+      "primaryKeyword": "korean nurses moving abroad",
+      "language": "ko",
+      "category": "Korea nursing",
+      "intentType": "transactional",
+      "translationGroupId": "kr-nurse-0010-korean-nurses-moving-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "nclex for korean nurses — Korea nursing (ko 27)",
+      "slug": "ko-0097-nclex-for-korean-nurses-nclex-for-korean-nurses-korea-nursing-ko-27",
+      "primaryKeyword": "nclex for korean nurses",
+      "language": "ko",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0010-nclex-for-korean-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "australia for korean nurses — Korea nursing (ko 28)",
+      "slug": "ko-0098-australia-for-korean-nurses-australia-for-korean-nurses-korea-nursing-ko-28",
+      "primaryKeyword": "australia for korean nurses",
+      "language": "ko",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0010-australia-for-korean-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "uk for korean nurses — Korea nursing (ko 29)",
+      "slug": "ko-0099-uk-for-korean-nurses-uk-for-korean-nurses-korea-nursing-ko-29",
+      "primaryKeyword": "uk for korean nurses",
+      "language": "ko",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0010-uk-for-korean-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "language requirements for nurses in korea — Korea nursing (ko 30)",
+      "slug": "ko-0100-language-requirements-for-nurses-in-korea-language-requirements-for-nurses-in-korea-korea-nursing-ko-30",
+      "primaryKeyword": "language requirements for nurses in korea",
+      "language": "ko",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0010-language-requirements-for-nurses-in-korea",
+      "status": "planned"
+    },
+    {
+      "title": "korean nursing licensing examination guide — Korea nursing (ko 31)",
+      "slug": "ko-0101-korean-nursing-licensing-examination-guide-korean-nursing-licensing-examination-guide-korea-nursing-ko-31",
+      "primaryKeyword": "korean nursing licensing examination guide",
+      "language": "ko",
+      "category": "Korea nursing",
+      "intentType": "transactional",
+      "translationGroupId": "kr-nurse-0011-korean-nursing-licensing-examination-guide",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in south korea — Korea nursing (ko 32)",
+      "slug": "ko-0102-how-to-become-a-nurse-in-south-korea-how-to-become-a-nurse-in-south-korea-korea-nursing-ko-32",
+      "primaryKeyword": "how to become a nurse in south korea",
+      "language": "ko",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0011-how-to-become-a-nurse-in-south-korea",
+      "status": "planned"
+    },
+    {
+      "title": "korean nurse salary — Korea nursing (ko 33)",
+      "slug": "ko-0103-korean-nurse-salary-korean-nurse-salary-korea-nursing-ko-33",
+      "primaryKeyword": "korean nurse salary",
+      "language": "ko",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0011-korean-nurse-salary",
+      "status": "planned"
+    },
+    {
+      "title": "korean nurse licensure process — Korea nursing (ko 34)",
+      "slug": "ko-0104-korean-nurse-licensure-process-korean-nurse-licensure-process-korea-nursing-ko-34",
+      "primaryKeyword": "korean nurse licensure process",
+      "language": "ko",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0011-korean-nurse-licensure-process",
+      "status": "planned"
+    },
+    {
+      "title": "study guide for korean nursing exam — Korea nursing (ko 35)",
+      "slug": "ko-0105-study-guide-for-korean-nursing-exam-study-guide-for-korean-nursing-exam-korea-nursing-ko-35",
+      "primaryKeyword": "study guide for korean nursing exam",
+      "language": "ko",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0011-study-guide-for-korean-nursing-exam",
+      "status": "planned"
+    },
+    {
+      "title": "korean nurses moving abroad — Korea nursing (ko 36)",
+      "slug": "ko-0106-korean-nurses-moving-abroad-korean-nurses-moving-abroad-korea-nursing-ko-36",
+      "primaryKeyword": "korean nurses moving abroad",
+      "language": "ko",
+      "category": "Korea nursing",
+      "intentType": "transactional",
+      "translationGroupId": "kr-nurse-0011-korean-nurses-moving-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "nclex for korean nurses — Korea nursing (ko 37)",
+      "slug": "ko-0107-nclex-for-korean-nurses-nclex-for-korean-nurses-korea-nursing-ko-37",
+      "primaryKeyword": "nclex for korean nurses",
+      "language": "ko",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0011-nclex-for-korean-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "australia for korean nurses — Korea nursing (ko 38)",
+      "slug": "ko-0108-australia-for-korean-nurses-australia-for-korean-nurses-korea-nursing-ko-38",
+      "primaryKeyword": "australia for korean nurses",
+      "language": "ko",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0011-australia-for-korean-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "uk for korean nurses — Korea nursing (ko 39)",
+      "slug": "ko-0109-uk-for-korean-nurses-uk-for-korean-nurses-korea-nursing-ko-39",
+      "primaryKeyword": "uk for korean nurses",
+      "language": "ko",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0011-uk-for-korean-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "language requirements for nurses in korea — Korea nursing (ko 40)",
+      "slug": "ko-0110-language-requirements-for-nurses-in-korea-language-requirements-for-nurses-in-korea-korea-nursing-ko-40",
+      "primaryKeyword": "language requirements for nurses in korea",
+      "language": "ko",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0011-language-requirements-for-nurses-in-korea",
+      "status": "planned"
+    },
+    {
+      "title": "korean nursing licensing examination guide — Korea nursing (ko 41)",
+      "slug": "ko-0111-korean-nursing-licensing-examination-guide-korean-nursing-licensing-examination-guide-korea-nursing-ko-41",
+      "primaryKeyword": "korean nursing licensing examination guide",
+      "language": "ko",
+      "category": "Korea nursing",
+      "intentType": "transactional",
+      "translationGroupId": "kr-nurse-0012-korean-nursing-licensing-examination-guide",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in south korea — Korea nursing (ko 42)",
+      "slug": "ko-0112-how-to-become-a-nurse-in-south-korea-how-to-become-a-nurse-in-south-korea-korea-nursing-ko-42",
+      "primaryKeyword": "how to become a nurse in south korea",
+      "language": "ko",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0012-how-to-become-a-nurse-in-south-korea",
+      "status": "planned"
+    },
+    {
+      "title": "korean nurse salary — Korea nursing (ko 43)",
+      "slug": "ko-0113-korean-nurse-salary-korean-nurse-salary-korea-nursing-ko-43",
+      "primaryKeyword": "korean nurse salary",
+      "language": "ko",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0012-korean-nurse-salary",
+      "status": "planned"
+    },
+    {
+      "title": "korean nurse licensure process — Korea nursing (ko 44)",
+      "slug": "ko-0114-korean-nurse-licensure-process-korean-nurse-licensure-process-korea-nursing-ko-44",
+      "primaryKeyword": "korean nurse licensure process",
+      "language": "ko",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0012-korean-nurse-licensure-process",
+      "status": "planned"
+    },
+    {
+      "title": "study guide for korean nursing exam — Korea nursing (ko 45)",
+      "slug": "ko-0115-study-guide-for-korean-nursing-exam-study-guide-for-korean-nursing-exam-korea-nursing-ko-45",
+      "primaryKeyword": "study guide for korean nursing exam",
+      "language": "ko",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0012-study-guide-for-korean-nursing-exam",
+      "status": "planned"
+    },
+    {
+      "title": "korean nurses moving abroad — Korea nursing (ko 46)",
+      "slug": "ko-0116-korean-nurses-moving-abroad-korean-nurses-moving-abroad-korea-nursing-ko-46",
+      "primaryKeyword": "korean nurses moving abroad",
+      "language": "ko",
+      "category": "Korea nursing",
+      "intentType": "transactional",
+      "translationGroupId": "kr-nurse-0012-korean-nurses-moving-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "nclex for korean nurses — Korea nursing (ko 47)",
+      "slug": "ko-0117-nclex-for-korean-nurses-nclex-for-korean-nurses-korea-nursing-ko-47",
+      "primaryKeyword": "nclex for korean nurses",
+      "language": "ko",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0012-nclex-for-korean-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "australia for korean nurses — Korea nursing (ko 48)",
+      "slug": "ko-0118-australia-for-korean-nurses-australia-for-korean-nurses-korea-nursing-ko-48",
+      "primaryKeyword": "australia for korean nurses",
+      "language": "ko",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0012-australia-for-korean-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "uk for korean nurses — Korea nursing (ko 49)",
+      "slug": "ko-0119-uk-for-korean-nurses-uk-for-korean-nurses-korea-nursing-ko-49",
+      "primaryKeyword": "uk for korean nurses",
+      "language": "ko",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0012-uk-for-korean-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "language requirements for nurses in korea — Korea nursing (ko 50)",
+      "slug": "ko-0120-language-requirements-for-nurses-in-korea-language-requirements-for-nurses-in-korea-korea-nursing-ko-50",
+      "primaryKeyword": "language requirements for nurses in korea",
+      "language": "ko",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0012-language-requirements-for-nurses-in-korea",
+      "status": "planned"
+    },
+    {
+      "title": "korean nursing licensing examination guide — Korea nursing (ko 51)",
+      "slug": "ko-0121-korean-nursing-licensing-examination-guide-korean-nursing-licensing-examination-guide-korea-nursing-ko-51",
+      "primaryKeyword": "korean nursing licensing examination guide",
+      "language": "ko",
+      "category": "Korea nursing",
+      "intentType": "transactional",
+      "translationGroupId": "kr-nurse-0013-korean-nursing-licensing-examination-guide",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in south korea — Korea nursing (ko 52)",
+      "slug": "ko-0122-how-to-become-a-nurse-in-south-korea-how-to-become-a-nurse-in-south-korea-korea-nursing-ko-52",
+      "primaryKeyword": "how to become a nurse in south korea",
+      "language": "ko",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0013-how-to-become-a-nurse-in-south-korea",
+      "status": "planned"
+    },
+    {
+      "title": "korean nurse salary — Korea nursing (ko 53)",
+      "slug": "ko-0123-korean-nurse-salary-korean-nurse-salary-korea-nursing-ko-53",
+      "primaryKeyword": "korean nurse salary",
+      "language": "ko",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0013-korean-nurse-salary",
+      "status": "planned"
+    },
+    {
+      "title": "korean nurse licensure process — Korea nursing (ko 54)",
+      "slug": "ko-0124-korean-nurse-licensure-process-korean-nurse-licensure-process-korea-nursing-ko-54",
+      "primaryKeyword": "korean nurse licensure process",
+      "language": "ko",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0013-korean-nurse-licensure-process",
+      "status": "planned"
+    },
+    {
+      "title": "study guide for korean nursing exam — Korea nursing (ko 55)",
+      "slug": "ko-0125-study-guide-for-korean-nursing-exam-study-guide-for-korean-nursing-exam-korea-nursing-ko-55",
+      "primaryKeyword": "study guide for korean nursing exam",
+      "language": "ko",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0013-study-guide-for-korean-nursing-exam",
+      "status": "planned"
+    },
+    {
+      "title": "korean nurses moving abroad — Korea nursing (ko 56)",
+      "slug": "ko-0126-korean-nurses-moving-abroad-korean-nurses-moving-abroad-korea-nursing-ko-56",
+      "primaryKeyword": "korean nurses moving abroad",
+      "language": "ko",
+      "category": "Korea nursing",
+      "intentType": "transactional",
+      "translationGroupId": "kr-nurse-0013-korean-nurses-moving-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "nclex for korean nurses — Korea nursing (ko 57)",
+      "slug": "ko-0127-nclex-for-korean-nurses-nclex-for-korean-nurses-korea-nursing-ko-57",
+      "primaryKeyword": "nclex for korean nurses",
+      "language": "ko",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0013-nclex-for-korean-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "australia for korean nurses — Korea nursing (ko 58)",
+      "slug": "ko-0128-australia-for-korean-nurses-australia-for-korean-nurses-korea-nursing-ko-58",
+      "primaryKeyword": "australia for korean nurses",
+      "language": "ko",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0013-australia-for-korean-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "uk for korean nurses — Korea nursing (ko 59)",
+      "slug": "ko-0129-uk-for-korean-nurses-uk-for-korean-nurses-korea-nursing-ko-59",
+      "primaryKeyword": "uk for korean nurses",
+      "language": "ko",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0013-uk-for-korean-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "language requirements for nurses in korea — Korea nursing (ko 60)",
+      "slug": "ko-0130-language-requirements-for-nurses-in-korea-language-requirements-for-nurses-in-korea-korea-nursing-ko-60",
+      "primaryKeyword": "language requirements for nurses in korea",
+      "language": "ko",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0013-language-requirements-for-nurses-in-korea",
+      "status": "planned"
+    },
+    {
+      "title": "korean nursing licensing examination guide — Korea nursing (ko 61)",
+      "slug": "ko-0131-korean-nursing-licensing-examination-guide-korean-nursing-licensing-examination-guide-korea-nursing-ko-61",
+      "primaryKeyword": "korean nursing licensing examination guide",
+      "language": "ko",
+      "category": "Korea nursing",
+      "intentType": "transactional",
+      "translationGroupId": "kr-nurse-0014-korean-nursing-licensing-examination-guide",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in south korea — Korea nursing (ko 62)",
+      "slug": "ko-0132-how-to-become-a-nurse-in-south-korea-how-to-become-a-nurse-in-south-korea-korea-nursing-ko-62",
+      "primaryKeyword": "how to become a nurse in south korea",
+      "language": "ko",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0014-how-to-become-a-nurse-in-south-korea",
+      "status": "planned"
+    },
+    {
+      "title": "korean nurse salary — Korea nursing (ko 63)",
+      "slug": "ko-0133-korean-nurse-salary-korean-nurse-salary-korea-nursing-ko-63",
+      "primaryKeyword": "korean nurse salary",
+      "language": "ko",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0014-korean-nurse-salary",
+      "status": "planned"
+    },
+    {
+      "title": "korean nurse licensure process — Korea nursing (ko 64)",
+      "slug": "ko-0134-korean-nurse-licensure-process-korean-nurse-licensure-process-korea-nursing-ko-64",
+      "primaryKeyword": "korean nurse licensure process",
+      "language": "ko",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0014-korean-nurse-licensure-process",
+      "status": "planned"
+    },
+    {
+      "title": "study guide for korean nursing exam — Korea nursing (ko 65)",
+      "slug": "ko-0135-study-guide-for-korean-nursing-exam-study-guide-for-korean-nursing-exam-korea-nursing-ko-65",
+      "primaryKeyword": "study guide for korean nursing exam",
+      "language": "ko",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0014-study-guide-for-korean-nursing-exam",
+      "status": "planned"
+    },
+    {
+      "title": "korean nurses moving abroad — Korea nursing (ko 66)",
+      "slug": "ko-0136-korean-nurses-moving-abroad-korean-nurses-moving-abroad-korea-nursing-ko-66",
+      "primaryKeyword": "korean nurses moving abroad",
+      "language": "ko",
+      "category": "Korea nursing",
+      "intentType": "transactional",
+      "translationGroupId": "kr-nurse-0014-korean-nurses-moving-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "nclex for korean nurses — Korea nursing (ko 67)",
+      "slug": "ko-0137-nclex-for-korean-nurses-nclex-for-korean-nurses-korea-nursing-ko-67",
+      "primaryKeyword": "nclex for korean nurses",
+      "language": "ko",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0014-nclex-for-korean-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "australia for korean nurses — Korea nursing (ko 68)",
+      "slug": "ko-0138-australia-for-korean-nurses-australia-for-korean-nurses-korea-nursing-ko-68",
+      "primaryKeyword": "australia for korean nurses",
+      "language": "ko",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0014-australia-for-korean-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "uk for korean nurses — Korea nursing (ko 69)",
+      "slug": "ko-0139-uk-for-korean-nurses-uk-for-korean-nurses-korea-nursing-ko-69",
+      "primaryKeyword": "uk for korean nurses",
+      "language": "ko",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0014-uk-for-korean-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "language requirements for nurses in korea — Korea nursing (ko 70)",
+      "slug": "ko-0140-language-requirements-for-nurses-in-korea-language-requirements-for-nurses-in-korea-korea-nursing-ko-70",
+      "primaryKeyword": "language requirements for nurses in korea",
+      "language": "ko",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0014-language-requirements-for-nurses-in-korea",
+      "status": "planned"
+    },
+    {
+      "title": "korean nursing licensing examination guide — Korea nursing (ko 71)",
+      "slug": "ko-0141-korean-nursing-licensing-examination-guide-korean-nursing-licensing-examination-guide-korea-nursing-ko-71",
+      "primaryKeyword": "korean nursing licensing examination guide",
+      "language": "ko",
+      "category": "Korea nursing",
+      "intentType": "transactional",
+      "translationGroupId": "kr-nurse-0015-korean-nursing-licensing-examination-guide",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in south korea — Korea nursing (ko 72)",
+      "slug": "ko-0142-how-to-become-a-nurse-in-south-korea-how-to-become-a-nurse-in-south-korea-korea-nursing-ko-72",
+      "primaryKeyword": "how to become a nurse in south korea",
+      "language": "ko",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0015-how-to-become-a-nurse-in-south-korea",
+      "status": "planned"
+    },
+    {
+      "title": "korean nurse salary — Korea nursing (ko 73)",
+      "slug": "ko-0143-korean-nurse-salary-korean-nurse-salary-korea-nursing-ko-73",
+      "primaryKeyword": "korean nurse salary",
+      "language": "ko",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0015-korean-nurse-salary",
+      "status": "planned"
+    },
+    {
+      "title": "korean nurse licensure process — Korea nursing (ko 74)",
+      "slug": "ko-0144-korean-nurse-licensure-process-korean-nurse-licensure-process-korea-nursing-ko-74",
+      "primaryKeyword": "korean nurse licensure process",
+      "language": "ko",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0015-korean-nurse-licensure-process",
+      "status": "planned"
+    },
+    {
+      "title": "study guide for korean nursing exam — Korea nursing (ko 75)",
+      "slug": "ko-0145-study-guide-for-korean-nursing-exam-study-guide-for-korean-nursing-exam-korea-nursing-ko-75",
+      "primaryKeyword": "study guide for korean nursing exam",
+      "language": "ko",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0015-study-guide-for-korean-nursing-exam",
+      "status": "planned"
+    },
+    {
+      "title": "korean nurses moving abroad — Korea nursing (ko 76)",
+      "slug": "ko-0146-korean-nurses-moving-abroad-korean-nurses-moving-abroad-korea-nursing-ko-76",
+      "primaryKeyword": "korean nurses moving abroad",
+      "language": "ko",
+      "category": "Korea nursing",
+      "intentType": "transactional",
+      "translationGroupId": "kr-nurse-0015-korean-nurses-moving-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "nclex for korean nurses — Korea nursing (ko 77)",
+      "slug": "ko-0147-nclex-for-korean-nurses-nclex-for-korean-nurses-korea-nursing-ko-77",
+      "primaryKeyword": "nclex for korean nurses",
+      "language": "ko",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0015-nclex-for-korean-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "australia for korean nurses — Korea nursing (ko 78)",
+      "slug": "ko-0148-australia-for-korean-nurses-australia-for-korean-nurses-korea-nursing-ko-78",
+      "primaryKeyword": "australia for korean nurses",
+      "language": "ko",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0015-australia-for-korean-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "uk for korean nurses — Korea nursing (ko 79)",
+      "slug": "ko-0149-uk-for-korean-nurses-uk-for-korean-nurses-korea-nursing-ko-79",
+      "primaryKeyword": "uk for korean nurses",
+      "language": "ko",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0015-uk-for-korean-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "language requirements for nurses in korea — Korea nursing (ko 80)",
+      "slug": "ko-0150-language-requirements-for-nurses-in-korea-language-requirements-for-nurses-in-korea-korea-nursing-ko-80",
+      "primaryKeyword": "language requirements for nurses in korea",
+      "language": "ko",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0015-language-requirements-for-nurses-in-korea",
+      "status": "planned"
+    },
+    {
+      "title": "korean nursing licensing examination guide — Korea nursing (ko 81)",
+      "slug": "ko-0151-korean-nursing-licensing-examination-guide-korean-nursing-licensing-examination-guide-korea-nursing-ko-81",
+      "primaryKeyword": "korean nursing licensing examination guide",
+      "language": "ko",
+      "category": "Korea nursing",
+      "intentType": "transactional",
+      "translationGroupId": "kr-nurse-0016-korean-nursing-licensing-examination-guide",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in south korea — Korea nursing (ko 82)",
+      "slug": "ko-0152-how-to-become-a-nurse-in-south-korea-how-to-become-a-nurse-in-south-korea-korea-nursing-ko-82",
+      "primaryKeyword": "how to become a nurse in south korea",
+      "language": "ko",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0016-how-to-become-a-nurse-in-south-korea",
+      "status": "planned"
+    },
+    {
+      "title": "korean nurse salary — Korea nursing (ko 83)",
+      "slug": "ko-0153-korean-nurse-salary-korean-nurse-salary-korea-nursing-ko-83",
+      "primaryKeyword": "korean nurse salary",
+      "language": "ko",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0016-korean-nurse-salary",
+      "status": "planned"
+    },
+    {
+      "title": "korean nurse licensure process — Korea nursing (ko 84)",
+      "slug": "ko-0154-korean-nurse-licensure-process-korean-nurse-licensure-process-korea-nursing-ko-84",
+      "primaryKeyword": "korean nurse licensure process",
+      "language": "ko",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0016-korean-nurse-licensure-process",
+      "status": "planned"
+    },
+    {
+      "title": "study guide for korean nursing exam — Korea nursing (ko 85)",
+      "slug": "ko-0155-study-guide-for-korean-nursing-exam-study-guide-for-korean-nursing-exam-korea-nursing-ko-85",
+      "primaryKeyword": "study guide for korean nursing exam",
+      "language": "ko",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0016-study-guide-for-korean-nursing-exam",
+      "status": "planned"
+    },
+    {
+      "title": "korean nurses moving abroad — Korea nursing (ko 86)",
+      "slug": "ko-0156-korean-nurses-moving-abroad-korean-nurses-moving-abroad-korea-nursing-ko-86",
+      "primaryKeyword": "korean nurses moving abroad",
+      "language": "ko",
+      "category": "Korea nursing",
+      "intentType": "transactional",
+      "translationGroupId": "kr-nurse-0016-korean-nurses-moving-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "nclex for korean nurses — Korea nursing (ko 87)",
+      "slug": "ko-0157-nclex-for-korean-nurses-nclex-for-korean-nurses-korea-nursing-ko-87",
+      "primaryKeyword": "nclex for korean nurses",
+      "language": "ko",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0016-nclex-for-korean-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "australia for korean nurses — Korea nursing (ko 88)",
+      "slug": "ko-0158-australia-for-korean-nurses-australia-for-korean-nurses-korea-nursing-ko-88",
+      "primaryKeyword": "australia for korean nurses",
+      "language": "ko",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0016-australia-for-korean-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "uk for korean nurses — Korea nursing (ko 89)",
+      "slug": "ko-0159-uk-for-korean-nurses-uk-for-korean-nurses-korea-nursing-ko-89",
+      "primaryKeyword": "uk for korean nurses",
+      "language": "ko",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0016-uk-for-korean-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "language requirements for nurses in korea — Korea nursing (ko 90)",
+      "slug": "ko-0160-language-requirements-for-nurses-in-korea-language-requirements-for-nurses-in-korea-korea-nursing-ko-90",
+      "primaryKeyword": "language requirements for nurses in korea",
+      "language": "ko",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0016-language-requirements-for-nurses-in-korea",
+      "status": "planned"
+    },
+    {
+      "title": "korean nursing licensing examination guide — Korea nursing (ko 91)",
+      "slug": "ko-0161-korean-nursing-licensing-examination-guide-korean-nursing-licensing-examination-guide-korea-nursing-ko-91",
+      "primaryKeyword": "korean nursing licensing examination guide",
+      "language": "ko",
+      "category": "Korea nursing",
+      "intentType": "transactional",
+      "translationGroupId": "kr-nurse-0017-korean-nursing-licensing-examination-guide",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in south korea — Korea nursing (ko 92)",
+      "slug": "ko-0162-how-to-become-a-nurse-in-south-korea-how-to-become-a-nurse-in-south-korea-korea-nursing-ko-92",
+      "primaryKeyword": "how to become a nurse in south korea",
+      "language": "ko",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0017-how-to-become-a-nurse-in-south-korea",
+      "status": "planned"
+    },
+    {
+      "title": "korean nurse salary — Korea nursing (ko 93)",
+      "slug": "ko-0163-korean-nurse-salary-korean-nurse-salary-korea-nursing-ko-93",
+      "primaryKeyword": "korean nurse salary",
+      "language": "ko",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0017-korean-nurse-salary",
+      "status": "planned"
+    },
+    {
+      "title": "korean nurse licensure process — Korea nursing (ko 94)",
+      "slug": "ko-0164-korean-nurse-licensure-process-korean-nurse-licensure-process-korea-nursing-ko-94",
+      "primaryKeyword": "korean nurse licensure process",
+      "language": "ko",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0017-korean-nurse-licensure-process",
+      "status": "planned"
+    },
+    {
+      "title": "study guide for korean nursing exam — Korea nursing (ko 95)",
+      "slug": "ko-0165-study-guide-for-korean-nursing-exam-study-guide-for-korean-nursing-exam-korea-nursing-ko-95",
+      "primaryKeyword": "study guide for korean nursing exam",
+      "language": "ko",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0017-study-guide-for-korean-nursing-exam",
+      "status": "planned"
+    },
+    {
+      "title": "korean nurses moving abroad — Korea nursing (ja 1)",
+      "slug": "ja-0166-korean-nurses-moving-abroad-korean-nurses-moving-abroad-korea-nursing-ja-1",
+      "primaryKeyword": "korean nurses moving abroad",
+      "language": "ja",
+      "category": "Korea nursing",
+      "intentType": "transactional",
+      "translationGroupId": "kr-nurse-0017-korean-nurses-moving-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "nclex for korean nurses — Korea nursing (ja 2)",
+      "slug": "ja-0167-nclex-for-korean-nurses-nclex-for-korean-nurses-korea-nursing-ja-2",
+      "primaryKeyword": "nclex for korean nurses",
+      "language": "ja",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0017-nclex-for-korean-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "australia for korean nurses — Korea nursing (ja 3)",
+      "slug": "ja-0168-australia-for-korean-nurses-australia-for-korean-nurses-korea-nursing-ja-3",
+      "primaryKeyword": "australia for korean nurses",
+      "language": "ja",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0017-australia-for-korean-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "uk for korean nurses — Korea nursing (ja 4)",
+      "slug": "ja-0169-uk-for-korean-nurses-uk-for-korean-nurses-korea-nursing-ja-4",
+      "primaryKeyword": "uk for korean nurses",
+      "language": "ja",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0017-uk-for-korean-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "language requirements for nurses in korea — Korea nursing (ja 5)",
+      "slug": "ja-0170-language-requirements-for-nurses-in-korea-language-requirements-for-nurses-in-korea-korea-nursing-ja-5",
+      "primaryKeyword": "language requirements for nurses in korea",
+      "language": "ja",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0017-language-requirements-for-nurses-in-korea",
+      "status": "planned"
+    },
+    {
+      "title": "korean nursing licensing examination guide — Korea nursing (ja 6)",
+      "slug": "ja-0171-korean-nursing-licensing-examination-guide-korean-nursing-licensing-examination-guide-korea-nursing-ja-6",
+      "primaryKeyword": "korean nursing licensing examination guide",
+      "language": "ja",
+      "category": "Korea nursing",
+      "intentType": "transactional",
+      "translationGroupId": "kr-nurse-0018-korean-nursing-licensing-examination-guide",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in south korea — Korea nursing (ja 7)",
+      "slug": "ja-0172-how-to-become-a-nurse-in-south-korea-how-to-become-a-nurse-in-south-korea-korea-nursing-ja-7",
+      "primaryKeyword": "how to become a nurse in south korea",
+      "language": "ja",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0018-how-to-become-a-nurse-in-south-korea",
+      "status": "planned"
+    },
+    {
+      "title": "korean nurse salary — Korea nursing (ja 8)",
+      "slug": "ja-0173-korean-nurse-salary-korean-nurse-salary-korea-nursing-ja-8",
+      "primaryKeyword": "korean nurse salary",
+      "language": "ja",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0018-korean-nurse-salary",
+      "status": "planned"
+    },
+    {
+      "title": "korean nurse licensure process — Korea nursing (ja 9)",
+      "slug": "ja-0174-korean-nurse-licensure-process-korean-nurse-licensure-process-korea-nursing-ja-9",
+      "primaryKeyword": "korean nurse licensure process",
+      "language": "ja",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0018-korean-nurse-licensure-process",
+      "status": "planned"
+    },
+    {
+      "title": "study guide for korean nursing exam — Korea nursing (ja 10)",
+      "slug": "ja-0175-study-guide-for-korean-nursing-exam-study-guide-for-korean-nursing-exam-korea-nursing-ja-10",
+      "primaryKeyword": "study guide for korean nursing exam",
+      "language": "ja",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0018-study-guide-for-korean-nursing-exam",
+      "status": "planned"
+    },
+    {
+      "title": "korean nurses moving abroad — Korea nursing (zh 1)",
+      "slug": "zh-0176-korean-nurses-moving-abroad-korean-nurses-moving-abroad-korea-nursing-zh-1",
+      "primaryKeyword": "korean nurses moving abroad",
+      "language": "zh",
+      "category": "Korea nursing",
+      "intentType": "transactional",
+      "translationGroupId": "kr-nurse-0018-korean-nurses-moving-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "nclex for korean nurses — Korea nursing (zh 2)",
+      "slug": "zh-0177-nclex-for-korean-nurses-nclex-for-korean-nurses-korea-nursing-zh-2",
+      "primaryKeyword": "nclex for korean nurses",
+      "language": "zh",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0018-nclex-for-korean-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "australia for korean nurses — Korea nursing (zh 3)",
+      "slug": "zh-0178-australia-for-korean-nurses-australia-for-korean-nurses-korea-nursing-zh-3",
+      "primaryKeyword": "australia for korean nurses",
+      "language": "zh",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0018-australia-for-korean-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "uk for korean nurses — Korea nursing (zh 4)",
+      "slug": "zh-0179-uk-for-korean-nurses-uk-for-korean-nurses-korea-nursing-zh-4",
+      "primaryKeyword": "uk for korean nurses",
+      "language": "zh",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0018-uk-for-korean-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "language requirements for nurses in korea — Korea nursing (zh 5)",
+      "slug": "zh-0180-language-requirements-for-nurses-in-korea-language-requirements-for-nurses-in-korea-korea-nursing-zh-5",
+      "primaryKeyword": "language requirements for nurses in korea",
+      "language": "zh",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0018-language-requirements-for-nurses-in-korea",
+      "status": "planned"
+    },
+    {
+      "title": "korean nursing licensing examination guide — Korea nursing (zh 6)",
+      "slug": "zh-0181-korean-nursing-licensing-examination-guide-korean-nursing-licensing-examination-guide-korea-nursing-zh-6",
+      "primaryKeyword": "korean nursing licensing examination guide",
+      "language": "zh",
+      "category": "Korea nursing",
+      "intentType": "transactional",
+      "translationGroupId": "kr-nurse-0019-korean-nursing-licensing-examination-guide",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in south korea — Korea nursing (zh 7)",
+      "slug": "zh-0182-how-to-become-a-nurse-in-south-korea-how-to-become-a-nurse-in-south-korea-korea-nursing-zh-7",
+      "primaryKeyword": "how to become a nurse in south korea",
+      "language": "zh",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0019-how-to-become-a-nurse-in-south-korea",
+      "status": "planned"
+    },
+    {
+      "title": "korean nurse salary — Korea nursing (zh 8)",
+      "slug": "zh-0183-korean-nurse-salary-korean-nurse-salary-korea-nursing-zh-8",
+      "primaryKeyword": "korean nurse salary",
+      "language": "zh",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0019-korean-nurse-salary",
+      "status": "planned"
+    },
+    {
+      "title": "korean nurse licensure process — Korea nursing (zh 9)",
+      "slug": "zh-0184-korean-nurse-licensure-process-korean-nurse-licensure-process-korea-nursing-zh-9",
+      "primaryKeyword": "korean nurse licensure process",
+      "language": "zh",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0019-korean-nurse-licensure-process",
+      "status": "planned"
+    },
+    {
+      "title": "study guide for korean nursing exam — Korea nursing (zh 10)",
+      "slug": "zh-0185-study-guide-for-korean-nursing-exam-study-guide-for-korean-nursing-exam-korea-nursing-zh-10",
+      "primaryKeyword": "study guide for korean nursing exam",
+      "language": "zh",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0019-study-guide-for-korean-nursing-exam",
+      "status": "planned"
+    },
+    {
+      "title": "korean nurses moving abroad — Korea nursing (tl 1)",
+      "slug": "tl-0186-korean-nurses-moving-abroad-korean-nurses-moving-abroad-korea-nursing-tl-1",
+      "primaryKeyword": "korean nurses moving abroad",
+      "language": "tl",
+      "category": "Korea nursing",
+      "intentType": "transactional",
+      "translationGroupId": "kr-nurse-0019-korean-nurses-moving-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "nclex for korean nurses — Korea nursing (tl 2)",
+      "slug": "tl-0187-nclex-for-korean-nurses-nclex-for-korean-nurses-korea-nursing-tl-2",
+      "primaryKeyword": "nclex for korean nurses",
+      "language": "tl",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0019-nclex-for-korean-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "australia for korean nurses — Korea nursing (tl 3)",
+      "slug": "tl-0188-australia-for-korean-nurses-australia-for-korean-nurses-korea-nursing-tl-3",
+      "primaryKeyword": "australia for korean nurses",
+      "language": "tl",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0019-australia-for-korean-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "uk for korean nurses — Korea nursing (tl 4)",
+      "slug": "tl-0189-uk-for-korean-nurses-uk-for-korean-nurses-korea-nursing-tl-4",
+      "primaryKeyword": "uk for korean nurses",
+      "language": "tl",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0019-uk-for-korean-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "language requirements for nurses in korea — Korea nursing (tl 5)",
+      "slug": "tl-0190-language-requirements-for-nurses-in-korea-language-requirements-for-nurses-in-korea-korea-nursing-tl-5",
+      "primaryKeyword": "language requirements for nurses in korea",
+      "language": "tl",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0019-language-requirements-for-nurses-in-korea",
+      "status": "planned"
+    },
+    {
+      "title": "korean nursing licensing examination guide — Korea nursing (tl 6)",
+      "slug": "tl-0191-korean-nursing-licensing-examination-guide-korean-nursing-licensing-examination-guide-korea-nursing-tl-6",
+      "primaryKeyword": "korean nursing licensing examination guide",
+      "language": "tl",
+      "category": "Korea nursing",
+      "intentType": "transactional",
+      "translationGroupId": "kr-nurse-0020-korean-nursing-licensing-examination-guide",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in south korea — Korea nursing (tl 7)",
+      "slug": "tl-0192-how-to-become-a-nurse-in-south-korea-how-to-become-a-nurse-in-south-korea-korea-nursing-tl-7",
+      "primaryKeyword": "how to become a nurse in south korea",
+      "language": "tl",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0020-how-to-become-a-nurse-in-south-korea",
+      "status": "planned"
+    },
+    {
+      "title": "korean nurse salary — Korea nursing (tl 8)",
+      "slug": "tl-0193-korean-nurse-salary-korean-nurse-salary-korea-nursing-tl-8",
+      "primaryKeyword": "korean nurse salary",
+      "language": "tl",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0020-korean-nurse-salary",
+      "status": "planned"
+    },
+    {
+      "title": "korean nurse licensure process — Korea nursing (tl 9)",
+      "slug": "tl-0194-korean-nurse-licensure-process-korean-nurse-licensure-process-korea-nursing-tl-9",
+      "primaryKeyword": "korean nurse licensure process",
+      "language": "tl",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0020-korean-nurse-licensure-process",
+      "status": "planned"
+    },
+    {
+      "title": "study guide for korean nursing exam — Korea nursing (tl 10)",
+      "slug": "tl-0195-study-guide-for-korean-nursing-exam-study-guide-for-korean-nursing-exam-korea-nursing-tl-10",
+      "primaryKeyword": "study guide for korean nursing exam",
+      "language": "tl",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0020-study-guide-for-korean-nursing-exam",
+      "status": "planned"
+    },
+    {
+      "title": "korean nurses moving abroad — Korea nursing (hi 1)",
+      "slug": "hi-0196-korean-nurses-moving-abroad-korean-nurses-moving-abroad-korea-nursing-hi-1",
+      "primaryKeyword": "korean nurses moving abroad",
+      "language": "hi",
+      "category": "Korea nursing",
+      "intentType": "transactional",
+      "translationGroupId": "kr-nurse-0020-korean-nurses-moving-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "nclex for korean nurses — Korea nursing (hi 2)",
+      "slug": "hi-0197-nclex-for-korean-nurses-nclex-for-korean-nurses-korea-nursing-hi-2",
+      "primaryKeyword": "nclex for korean nurses",
+      "language": "hi",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0020-nclex-for-korean-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "australia for korean nurses — Korea nursing (hi 3)",
+      "slug": "hi-0198-australia-for-korean-nurses-australia-for-korean-nurses-korea-nursing-hi-3",
+      "primaryKeyword": "australia for korean nurses",
+      "language": "hi",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0020-australia-for-korean-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "uk for korean nurses — Korea nursing (hi 4)",
+      "slug": "hi-0199-uk-for-korean-nurses-uk-for-korean-nurses-korea-nursing-hi-4",
+      "primaryKeyword": "uk for korean nurses",
+      "language": "hi",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0020-uk-for-korean-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "language requirements for nurses in korea — Korea nursing (hi 5)",
+      "slug": "hi-0200-language-requirements-for-nurses-in-korea-language-requirements-for-nurses-in-korea-korea-nursing-hi-5",
+      "primaryKeyword": "language requirements for nurses in korea",
+      "language": "hi",
+      "category": "Korea nursing",
+      "intentType": "informational",
+      "translationGroupId": "kr-nurse-0020-language-requirements-for-nurses-in-korea",
+      "status": "planned"
+    }
+  ]
+}

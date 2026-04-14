@@ -1,25 +1,32 @@
-import type { EeatEditorialRow } from "@/lib/admin/eeat-editorial-dashboard";
+import type { EeatEditorialRow } from "@/lib/admin/eeat-editorial-model";
 
-/** Client-safe CSV export (no Node imports). */
+export const EEAT_EDITORIAL_CSV_HEADERS = [
+  "id",
+  "pathwayKey",
+  "contentType",
+  "eeatScore",
+  "priority",
+  "internalLinksCount",
+  "sectionCompleteness",
+  "wordCount",
+  "stale",
+  "thinProgrammatic",
+  "missingAttribution",
+  "flags",
+  "lossReasons",
+  "recommendedActions",
+  "urlPattern",
+] as const;
+
+/** Escape one CSV field (RFC-style quoting when needed). Exported for tests. */
+export function escapeCsvField(value: unknown): string {
+  const s = String(value ?? "").replace(/"/g, '""');
+  return /[",\n\r]/.test(s) ? `"${s}"` : s;
+}
+
+/** Client-safe CSV export (no Node imports). Matches filtered table rows 1:1. UTF-8 BOM prefix for Excel. */
 export function rowsToCsv(rows: EeatEditorialRow[]): string {
-  const headers = [
-    "id",
-    "pathwayKey",
-    "contentType",
-    "eeatScore",
-    "priority",
-    "internalLinksCount",
-    "sectionCompleteness",
-    "wordCount",
-    "stale",
-    "thinProgrammatic",
-    "missingAttribution",
-    "flags",
-    "lossReasons",
-    "recommendedActions",
-    "urlPattern",
-  ];
-  const lines = [headers.join(",")];
+  const lines = [EEAT_EDITORIAL_CSV_HEADERS.join(",")];
   for (const r of rows) {
     const cells = [
       r.id,
@@ -37,11 +44,8 @@ export function rowsToCsv(rows: EeatEditorialRow[]): string {
       r.lossReasons.join(" | "),
       r.recommendedActions.join(" | "),
       r.urlPattern,
-    ].map((c) => {
-      const s = String(c).replace(/"/g, '""');
-      return /[",\n]/.test(s) ? `"${s}"` : s;
-    });
+    ].map((c) => escapeCsvField(c));
     lines.push(cells.join(","));
   }
-  return lines.join("\n");
+  return `\uFEFF${lines.join("\n")}`;
 }

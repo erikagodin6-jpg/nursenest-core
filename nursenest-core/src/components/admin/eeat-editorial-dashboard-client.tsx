@@ -1,8 +1,9 @@
 "use client";
 
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo, useState, type ReactNode } from "react";
 
-import type { EeatEditorialDashboardVm, EeatEditorialRow } from "@/lib/admin/eeat-editorial-dashboard";
+import { filterEeatEditorialRows } from "@/lib/admin/eeat-editorial-filters";
+import type { EeatEditorialDashboardVm, EeatEditorialRow } from "@/lib/admin/eeat-editorial-model";
 import { rowsToCsv } from "@/lib/admin/eeat-editorial-csv";
 
 type Props = {
@@ -22,6 +23,22 @@ function priorityBadgeClass(p: EeatEditorialRow["priority"]): string {
   }
 }
 
+function TruncCell({
+  children,
+  className = "",
+  title,
+}: {
+  children: ReactNode;
+  className?: string;
+  title: string;
+}) {
+  return (
+    <td className={`max-w-[10rem] truncate sm:max-w-[14rem] lg:max-w-none ${className}`} title={title}>
+      <span className="block truncate">{children}</span>
+    </td>
+  );
+}
+
 export function EeatEditorialDashboardClient({ vm }: Props) {
   const [contentType, setContentType] = useState<string>("all");
   const [pathway, setPathway] = useState<string>("all");
@@ -37,21 +54,20 @@ export function EeatEditorialDashboardClient({ vm }: Props) {
     return [...s].sort();
   }, [vm.rows]);
 
-  const filtered = useMemo(() => {
-    return vm.rows.filter((r) => {
-      if (contentType !== "all" && r.contentType !== contentType) return false;
-      if (pathway !== "all" && r.pathwayKey !== pathway) return false;
-      if (staleOnly && !r.staleContent) return false;
-      if (thinOnly && !r.thinProgrammatic) return false;
-      if (missingLinks && !r.missingInternalLinks) return false;
-      if (missingAttr && !r.missingAttribution) return false;
-      if (scoreBand !== "all") {
-        if (scoreBand === "below70" && r.eeatScore >= 70) return false;
-        if (scoreBand !== "below70" && r.priority !== scoreBand) return false;
-      }
-      return true;
-    });
-  }, [vm.rows, contentType, pathway, staleOnly, thinOnly, missingLinks, missingAttr, scoreBand]);
+  const filterState = useMemo(
+    () => ({
+      contentType,
+      pathway,
+      scoreBand,
+      staleOnly,
+      thinOnly,
+      missingLinks,
+      missingAttr,
+    }),
+    [contentType, pathway, scoreBand, staleOnly, thinOnly, missingLinks, missingAttr],
+  );
+
+  const filtered = useMemo(() => filterEeatEditorialRows(vm.rows, filterState), [vm.rows, filterState]);
 
   const downloadCsv = useCallback(() => {
     const blob = new Blob([rowsToCsv(filtered)], { type: "text/csv;charset=utf-8" });
@@ -67,7 +83,7 @@ export function EeatEditorialDashboardClient({ vm }: Props) {
   const minLinks = vm.thresholds?.minimumInternalLinks ?? 3;
 
   return (
-    <div className="space-y-10">
+    <div className="w-full max-w-full min-w-0 space-y-10">
       {vm.loadWarnings.length > 0 ? (
         <section className="rounded-xl border border-amber-500/40 bg-amber-500/[0.07] p-4 text-sm">
           <p className="font-semibold text-amber-900 dark:text-amber-100">Audit file warnings</p>
@@ -113,9 +129,14 @@ export function EeatEditorialDashboardClient({ vm }: Props) {
             Order from eeat-completion-queue.json — use alongside score-sorted tables.
           </p>
           <ul className="mt-3 max-h-64 space-y-2 overflow-auto text-sm">
-            {vm.completionQueuePreview.map((q) => (
-              <li key={q.id} className="flex flex-wrap items-baseline justify-between gap-2 rounded-md bg-muted/35 px-2 py-1.5">
-                <span className="font-mono text-[11px] leading-snug text-muted-foreground">{q.id}</span>
+            {vm.completionQueuePreview.map((q, idx) => (
+              <li
+                key={`${q.id}-${idx}`}
+                className="flex flex-wrap items-baseline justify-between gap-2 rounded-md bg-muted/35 px-2 py-1.5"
+              >
+                <span className="min-w-0 max-w-full truncate font-mono text-[11px] leading-snug text-muted-foreground" title={q.id}>
+                  {q.id}
+                </span>
                 <span className="shrink-0 tabular-nums font-semibold">{q.score}</span>
               </li>
             ))}
@@ -151,7 +172,7 @@ export function EeatEditorialDashboardClient({ vm }: Props) {
           <button
             type="button"
             onClick={downloadCsv}
-            className="rounded-lg border border-border bg-background px-3 py-2 text-sm font-medium hover:bg-muted"
+            className="min-h-11 rounded-lg border border-border bg-background px-3 py-2 text-sm font-medium hover:bg-muted md:min-h-0"
           >
             Export filtered CSV
           </button>
@@ -162,7 +183,7 @@ export function EeatEditorialDashboardClient({ vm }: Props) {
             <select
               value={contentType}
               onChange={(e) => setContentType(e.target.value)}
-              className="rounded-md border border-border bg-background px-2 py-2 text-sm text-foreground"
+              className="min-h-11 rounded-md border border-border bg-background px-2 py-2 text-sm text-foreground md:min-h-0"
             >
               <option value="all">All</option>
               <option value="pathway_lesson">Pathway lesson</option>
@@ -175,7 +196,7 @@ export function EeatEditorialDashboardClient({ vm }: Props) {
             <select
               value={pathway}
               onChange={(e) => setPathway(e.target.value)}
-              className="rounded-md border border-border bg-background px-2 py-2 text-sm text-foreground"
+              className="min-h-11 rounded-md border border-border bg-background px-2 py-2 text-sm text-foreground md:min-h-0"
             >
               <option value="all">All</option>
               {pathwayOptions.map((pk) => (
@@ -190,7 +211,7 @@ export function EeatEditorialDashboardClient({ vm }: Props) {
             <select
               value={scoreBand}
               onChange={(e) => setScoreBand(e.target.value)}
-              className="rounded-md border border-border bg-background px-2 py-2 text-sm text-foreground"
+              className="min-h-11 rounded-md border border-border bg-background px-2 py-2 text-sm text-foreground md:min-h-0"
             >
               <option value="all">All</option>
               <option value="below70">Below 70 only</option>
@@ -202,19 +223,19 @@ export function EeatEditorialDashboardClient({ vm }: Props) {
           </label>
           <div className="flex flex-col gap-2 text-xs font-medium text-muted-foreground">
             <span>Quick flags</span>
-            <label className="flex items-center gap-2 font-normal">
+            <label className="flex min-h-11 items-center gap-2 font-normal md:min-h-0">
               <input type="checkbox" checked={staleOnly} onChange={(e) => setStaleOnly(e.target.checked)} />
               Stale only
             </label>
-            <label className="flex items-center gap-2 font-normal">
+            <label className="flex min-h-11 items-center gap-2 font-normal md:min-h-0">
               <input type="checkbox" checked={thinOnly} onChange={(e) => setThinOnly(e.target.checked)} />
               Thin programmatic only
             </label>
-            <label className="flex items-center gap-2 font-normal">
+            <label className="flex min-h-11 items-center gap-2 font-normal md:min-h-0">
               <input type="checkbox" checked={missingLinks} onChange={(e) => setMissingLinks(e.target.checked)} />
               Missing internal links
             </label>
-            <label className="flex items-center gap-2 font-normal">
+            <label className="flex min-h-11 items-center gap-2 font-normal md:min-h-0">
               <input type="checkbox" checked={missingAttr} onChange={(e) => setMissingAttr(e.target.checked)} />
               Missing attribution
             </label>
@@ -228,7 +249,7 @@ export function EeatEditorialDashboardClient({ vm }: Props) {
       <section className="rounded-xl border border-border/70 bg-[var(--theme-card-bg)] p-5">
         <h2 className="text-lg font-semibold text-[var(--theme-heading-text)]">Pathways by lowest average score</h2>
         <p className="mt-1 text-sm text-muted-foreground">Grouped from scored pages (lessons + blog + programmatic buckets).</p>
-        <div className="mt-4 overflow-x-auto">
+        <div className="mt-4 w-full max-w-full min-w-0 overflow-x-auto rounded-lg border border-border/40">
           <table className="w-full min-w-[640px] border-collapse text-sm">
             <thead>
               <tr className="border-b border-border text-left text-xs uppercase tracking-wide text-muted-foreground">
@@ -239,14 +260,24 @@ export function EeatEditorialDashboardClient({ vm }: Props) {
               </tr>
             </thead>
             <tbody>
-              {vm.pathwayRollups.slice(0, 40).map((p) => (
-                <tr key={p.pathwayKey} className="border-b border-border/60">
-                  <td className="py-2 pr-4 font-mono text-xs">{p.pathwayKey}</td>
-                  <td className="py-2 pr-4 tabular-nums">{p.pageCount}</td>
-                  <td className="py-2 pr-4 tabular-nums">{p.averageScore}</td>
-                  <td className="py-2 tabular-nums text-rose-700 dark:text-rose-300">{p.minScore}</td>
+              {vm.pathwayRollups.length === 0 ? (
+                <tr>
+                  <td colSpan={4} className="py-6 text-center text-sm text-muted-foreground">
+                    No pathway rollups — add scored pages in eeat-page-scores.json.
+                  </td>
                 </tr>
-              ))}
+              ) : (
+                vm.pathwayRollups.slice(0, 40).map((p) => (
+                  <tr key={p.pathwayKey} className="border-b border-border/60">
+                    <td className="max-w-[12rem] truncate py-2 pr-4 font-mono text-xs" title={p.pathwayKey}>
+                      {p.pathwayKey}
+                    </td>
+                    <td className="py-2 pr-4 tabular-nums">{p.pageCount}</td>
+                    <td className="py-2 pr-4 tabular-nums">{p.averageScore}</td>
+                    <td className="py-2 tabular-nums text-rose-700 dark:text-rose-300">{p.minScore}</td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>
@@ -263,8 +294,10 @@ export function EeatEditorialDashboardClient({ vm }: Props) {
           <ul className="mt-3 max-h-48 space-y-1 overflow-auto text-sm">
             {vm.freshnessMeta.staleBlogPostsSample.map((b) => (
               <li key={b.slug} className="flex justify-between gap-2 rounded bg-muted/30 px-2 py-1">
-                <span className="font-mono text-xs">{b.slug}</span>
-                <span className="text-xs text-muted-foreground">{new Date(b.updatedAt).toLocaleDateString()}</span>
+                <span className="min-w-0 truncate font-mono text-xs" title={b.slug}>
+                  {b.slug}
+                </span>
+                <span className="shrink-0 text-xs text-muted-foreground">{new Date(b.updatedAt).toLocaleDateString()}</span>
               </li>
             ))}
           </ul>
@@ -286,44 +319,65 @@ export function EeatEditorialDashboardClient({ vm }: Props) {
             </p>
           </div>
         </div>
-        <div className="mt-4 overflow-x-auto">
-          <table className="w-full min-w-[960px] border-collapse text-left text-sm">
-            <thead>
-              <tr className="border-b border-border text-xs uppercase tracking-wide text-muted-foreground">
-                <th className="py-2 pr-3">Score</th>
-                <th className="py-2 pr-3">Priority</th>
-                <th className="py-2 pr-3">Pathway</th>
-                <th className="py-2 pr-3">Type</th>
-                <th className="py-2 pr-3">Links</th>
-                <th className="py-2 pr-3">Structure</th>
-                <th className="py-2 pr-3">Flags</th>
-                <th className="py-2 pr-3">Actions</th>
-                <th className="py-2">Copy</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filtered.map((r) => (
-                <tr key={r.id} className="border-b border-border/50 align-top">
-                  <td className="py-2 pr-3 tabular-nums font-medium">{r.eeatScore}</td>
-                  <td className="py-2 pr-3">
-                    <span className={`inline-block rounded border px-2 py-0.5 text-[11px] font-medium ${priorityBadgeClass(r.priority)}`}>
-                      {r.priority}
-                    </span>
-                  </td>
-                  <td className="py-2 pr-3 font-mono text-[11px] text-muted-foreground">{r.pathwayKey}</td>
-                  <td className="py-2 pr-3 text-xs">{r.contentType.replace(/_/g, " ")}</td>
-                  <td className="py-2 pr-3 tabular-nums">{r.internalLinksCount}</td>
-                  <td className="py-2 pr-3 tabular-nums">{Math.round(r.sectionCompleteness * 100)}%</td>
-                  <td className="py-2 pr-3 text-xs text-muted-foreground">{r.flags.join(", ")}</td>
-                  <td className="py-2 pr-3 text-xs">{r.recommendedActions.join(" · ") || "—"}</td>
-                  <td className="py-2">
-                    <CopyFixesButton text={r.recommendedFixesCopy} />
-                  </td>
+        {vm.rows.length === 0 ? (
+          <p className="mt-4 text-sm text-muted-foreground">
+            No scored rows loaded. Ensure <code className="rounded bg-muted px-1">data/audit/eeat-page-scores.json</code> exists and
+            contains a <code className="rounded bg-muted px-1">pages</code> array, then refresh.
+          </p>
+        ) : (
+          <div className="mt-4 w-full max-w-full min-w-0 overflow-x-auto rounded-lg border border-border/40">
+            <table className="w-full min-w-[960px] border-collapse text-left text-sm">
+              <thead>
+                <tr className="border-b border-border text-xs uppercase tracking-wide text-muted-foreground">
+                  <th className="py-2 pr-3">Score</th>
+                  <th className="py-2 pr-3">Priority</th>
+                  <th className="py-2 pr-3">Pathway</th>
+                  <th className="py-2 pr-3">Type</th>
+                  <th className="py-2 pr-3">Links</th>
+                  <th className="py-2 pr-3">Structure</th>
+                  <th className="py-2 pr-3">Flags</th>
+                  <th className="py-2 pr-3">Actions</th>
+                  <th className="py-2">Copy</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody>
+                {filtered.length === 0 ? (
+                  <tr>
+                    <td colSpan={9} className="py-6 text-center text-sm text-muted-foreground">
+                      No rows match the current filters.
+                    </td>
+                  </tr>
+                ) : (
+                  filtered.map((r, rowIdx) => (
+                    <tr key={`${r.id}-${rowIdx}`} className="border-b border-border/50 align-top">
+                      <td className="py-2 pr-3 tabular-nums font-medium">{r.eeatScore}</td>
+                      <td className="py-2 pr-3">
+                        <span
+                          className={`inline-block rounded border px-2 py-0.5 text-[11px] font-medium ${priorityBadgeClass(r.priority)}`}
+                        >
+                          {r.priority}
+                        </span>
+                      </td>
+                      <td className="max-w-[7rem] truncate py-2 pr-3 font-mono text-[11px] text-muted-foreground" title={r.pathwayKey}>
+                        {r.pathwayKey}
+                      </td>
+                      <td className="py-2 pr-3 text-xs">{r.contentType.replace(/_/g, " ")}</td>
+                      <td className="py-2 pr-3 tabular-nums">{r.internalLinksCount}</td>
+                      <td className="py-2 pr-3 tabular-nums">{Math.round(r.sectionCompleteness * 100)}%</td>
+                      <TruncCell title={r.flags.join(", ")}>{r.flags.join(", ")}</TruncCell>
+                      <TruncCell title={r.recommendedActions.join(" · ") || "—"}>
+                        {r.recommendedActions.join(" · ") || "—"}
+                      </TruncCell>
+                      <td className="py-2">
+                        <CopyFixesButton text={r.recommendedFixesCopy} />
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
+        )}
       </section>
     </div>
   );
@@ -346,10 +400,12 @@ function QueueSection({ title, rows, emptyHint }: { title: string; rows: EeatEdi
       <p className="mt-1 text-sm text-muted-foreground">{rows.length ? `${rows.length} items` : emptyHint}</p>
       {rows.length > 0 ? (
         <ul className="mt-3 max-h-56 space-y-2 overflow-auto text-sm">
-          {rows.slice(0, 50).map((r) => (
-            <li key={r.id} className="flex flex-wrap items-start justify-between gap-2 rounded-md bg-muted/40 px-2 py-1.5">
-              <span className="font-mono text-[11px] text-muted-foreground">{r.id}</span>
-              <span className="tabular-nums font-medium">{r.eeatScore}</span>
+          {rows.slice(0, 50).map((r, idx) => (
+            <li key={`${r.id}-${idx}`} className="flex flex-wrap items-start justify-between gap-2 rounded-md bg-muted/40 px-2 py-1.5">
+              <span className="min-w-0 max-w-[min(100%,24rem)] truncate font-mono text-[11px] text-muted-foreground" title={r.id}>
+                {r.id}
+              </span>
+              <span className="shrink-0 tabular-nums font-medium">{r.eeatScore}</span>
             </li>
           ))}
         </ul>
@@ -363,7 +419,8 @@ function CopyFixesButton({ text }: { text: string }) {
   return (
     <button
       type="button"
-      className="whitespace-nowrap rounded border border-border px-2 py-1 text-[11px] hover:bg-muted"
+      className="min-h-11 whitespace-nowrap rounded border border-border px-2 py-1 text-[11px] hover:bg-muted md:min-h-0"
+      title={text.slice(0, 500)}
       onClick={async () => {
         try {
           await navigator.clipboard.writeText(text);

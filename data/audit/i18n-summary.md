@@ -1,6 +1,6 @@
 # i18n completeness audit
 
-Generated: 2026-04-14T17:51:27.124Z
+Generated: 2026-04-14T18:16:53.118Z
 
 ## Scope
 
@@ -9,7 +9,7 @@ Generated: 2026-04-14T17:51:27.124Z
 
 ## Required user UI chrome (nav, pills, auth, dashboard breadcrumbs, learner account shell)
 
-- Keys checked: **79**
+- Keys checked: **88**
 - Status: **pass**
 - Locales: **en, fr, es, tl, hi, zh, zh-tw, ar, ko, pt, pa, vi, ht, ur, ja, fa, de, th, tr, id, it, ru**
 
@@ -17,27 +17,27 @@ Generated: 2026-04-14T17:51:27.124Z
 
 | Locale | Coverage % (distinct from en) | Identical-to-English keys | Empty keys |
 |--------|------------------------------|---------------------------|------------|
-| ar | 72% | 5706 | 0 |
-| fr | 71% | 5990 | 0 |
-| tl | 44% | 11557 | 0 |
-| es | 27% | 15206 | 0 |
-| hi | 21% | 16452 | 0 |
-| zh | 21% | 16343 | 0 |
-| pt | 21% | 16390 | 0 |
-| ko | 20% | 16518 | 0 |
-| pa | 20% | 16470 | 0 |
-| vi | 20% | 16497 | 0 |
-| ht | 20% | 16618 | 0 |
-| ur | 20% | 16488 | 0 |
-| ja | 20% | 16484 | 0 |
-| fa | 20% | 16527 | 0 |
-| zh-tw | 18% | 17013 | 0 |
-| de | 17% | 17094 | 0 |
-| th | 17% | 17161 | 0 |
-| tr | 17% | 17186 | 0 |
-| id | 17% | 17217 | 0 |
-| it | 2% | 20325 | 0 |
-| ru | 2% | 20321 | 0 |
+| ar | 72% | 5711 | 0 |
+| fr | 71% | 5995 | 0 |
+| tl | 44% | 11562 | 0 |
+| es | 27% | 15211 | 0 |
+| hi | 21% | 16457 | 0 |
+| zh | 21% | 16348 | 0 |
+| pt | 21% | 16395 | 0 |
+| ko | 20% | 16523 | 0 |
+| pa | 20% | 16475 | 0 |
+| vi | 20% | 16502 | 0 |
+| ht | 20% | 16623 | 0 |
+| ur | 20% | 16493 | 0 |
+| ja | 20% | 16489 | 0 |
+| fa | 20% | 16532 | 0 |
+| zh-tw | 18% | 17018 | 0 |
+| de | 17% | 17099 | 0 |
+| th | 17% | 17166 | 0 |
+| tr | 17% | 17191 | 0 |
+| id | 17% | 17222 | 0 |
+| it | 2% | 20330 | 0 |
+| ru | 2% | 20326 | 0 |
 | en | 0% | 0 | 0 |
 
 ## Placeholder / interpolation fallbacks

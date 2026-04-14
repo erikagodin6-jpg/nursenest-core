@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useCallback, useEffect, useMemo, useRef, useState, type MouseEvent } from "react";
 import { useTheme } from "next-themes";
@@ -10,8 +10,11 @@ import { ChevronDown, ChevronRight, MapPin, Menu, Settings, X } from "lucide-rea
 import { mapLegacyMarketingHref } from "@/lib/legacy-marketing-routes";
 import { isStaffRole } from "@/lib/auth/staff-roles";
 import { useNursenestRegion } from "@/lib/region/use-nursenest-region";
+import { useClientGlobalRegionCookie } from "@/lib/region/use-client-global-region";
 import { useMarketingRegionToggleWithRefresh } from "@/lib/region/use-marketing-region-toggle";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
+import { applyGlobalRegionSelection } from "@/lib/marketing/apply-global-region-selection";
+import { resolveRegionalMarketingStrip } from "@/lib/marketing/regional-marketing-nav-priority";
 import { MarketingLanguagePreferenceList } from "@/components/i18n/marketing-language-preference";
 import { stripMarketingLocalePrefix, withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { HeaderBrandLockup } from "@/components/brand/header-brand-lockup";
@@ -25,7 +28,7 @@ import { trackClientEvent } from "@/lib/observability/posthog-client";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 import { GlobalContextBar } from "@/components/layout/global-context-bar";
 import { MobileContextDrawer } from "@/components/layout/mobile-context-drawer";
-import type { GlobalRegionSlug, GlobalLocaleCode } from "@/lib/i18n/global-regions";
+import { REGION_CONFIG, type GlobalRegionSlug, type GlobalLocaleCode } from "@/lib/i18n/global-regions";
 import {
   defaultPathwayIdForMarketingOffering,
   marketingExamHubPath,
@@ -50,6 +53,7 @@ import { formatEyebrow, formatSentenceCase, formatTitleCase } from "@/lib/format
 import { CONTINUE_STUDYING_CTA } from "@/lib/copy/cta-copy";
 import { THEME_OPTIONS } from "@/lib/theme/theme-registry";
 import { CountrySelector } from "@/components/layout/global-context-switcher";
+import { getRegionFlag } from "@/lib/navigation/context-switch-helpers";
 import { getNursingRoleLabel } from "@/lib/labels/nursing-role-labels";
 
 const ADMIN_DASHBOARD_ROUTE = "/admin" as const;
@@ -60,7 +64,7 @@ const NAV_LINK_CLASS =
 const NAV_TIER_LINK_CLASS =
   "nn-marketing-body-sm nn-marketing-nav-link inline-flex h-8 items-center justify-center whitespace-nowrap px-2.5 text-center font-semibold leading-none tracking-tight xl:px-3";
 const HEADER_SECONDARY_ACTION_CLASS =
-  "inline-flex min-h-[38px] items-center justify-center rounded-xl border border-[var(--nav-border)] px-3 py-2 text-sm font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]";
+  "inline-flex min-h-[44px] items-center justify-center rounded-xl border border-[var(--nav-border)] px-3 py-2 text-sm font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]";
 const HEADER_UTILITY_BUTTON_CLASS =
   "inline-flex h-9 items-center gap-1.5 rounded-full border border-[var(--nav-border)] bg-transparent px-2.5 text-[11px] font-medium tracking-wide text-[var(--nav-fg)] transition-colors hover:bg-[var(--nav-hover)]";
 type ExamMenuKey = "rn" | "pn" | "np" | "newgrad" | "allied";
@@ -399,6 +403,7 @@ function createMegaMenus(region: "US" | "CA"): MegaMenuConfig[] {
 
 export function SiteHeader() {
   const { t, locale } = useMarketingI18n();
+  const router = useRouter();
   const pathname = usePathname() ?? "/";
   const { theme } = useTheme();
   const navChromeStyle = getNavChromeStyle(theme);
@@ -430,7 +435,9 @@ export function SiteHeader() {
   const mobileLangRef = useRef<HTMLDivElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
 
-  const globalRegion: GlobalRegionSlug = region === "CA" ? "canada" : "us";
+  const clientGlobalRegion = useClientGlobalRegionCookie();
+  const legacyUsCaGlobalRegion: GlobalRegionSlug = region === "CA" ? "canada" : "us";
+  const effectiveGlobalRegion: GlobalRegionSlug = clientGlobalRegion ?? legacyUsCaGlobalRegion;
   const globalLocale: GlobalLocaleCode = (locale as GlobalLocaleCode) ?? "en";
 
   const localizeHref = (href: string) => {
@@ -438,6 +445,12 @@ export function SiteHeader() {
     if (mapped.startsWith("http://") || mapped.startsWith("https://")) return mapped;
     return withMarketingLocale(locale, mapped);
   };
+
+  const buildLocalizedMarketingPath = useCallback((localeCode: string, path: string) => {
+    const mapped = mapLegacyMarketingHref(path);
+    if (mapped.startsWith("http://") || mapped.startsWith("https://")) return mapped;
+    return withMarketingLocale(localeCode, mapped);
+  }, []);
 
   const clearMegaCloseTimer = () => {
     if (!closeMegaTimeoutRef.current) return;
@@ -457,13 +470,16 @@ export function SiteHeader() {
   }, []);
 
   const handleDesktopRegionSelect = useCallback(
-    (newRegion: GlobalRegionSlug) => {
-      if (newRegion === "us") setRegionAndRefresh("US");
-      else if (newRegion === "canada") setRegionAndRefresh("CA");
-      else setRegionAndRefresh(region);
+    async (newRegion: GlobalRegionSlug) => {
+      await applyGlobalRegionSelection(newRegion, {
+        marketingLocale: globalLocale,
+        setUsCaMarketingRegion: setRegionAndRefresh,
+        router,
+        buildLocalizedPath: buildLocalizedMarketingPath,
+      });
       setDesktopCountryOpen(false);
     },
-    [region, setRegionAndRefresh],
+    [globalLocale, setRegionAndRefresh, router, buildLocalizedMarketingPath],
   );
 
   useEffect(() => {
@@ -589,15 +605,26 @@ export function SiteHeader() {
           onClick={() => setDesktopCountryOpen((open) => !open)}
           className={HEADER_UTILITY_BUTTON_CLASS}
           aria-expanded={desktopCountryOpen}
-          aria-label={`Region: ${globalRegion === "canada" ? "Canada" : "US"}. Click to change.`}
+          aria-label={`Region: ${REGION_CONFIG[effectiveGlobalRegion].displayName}. Click to change.`}
         >
-          <span>{globalRegion === "canada" ? "CA" : "US"}</span>
+          <span className="flex max-w-[4rem] items-center gap-1 truncate sm:max-w-[6rem]">
+            {effectiveGlobalRegion === "canada" ? (
+              "CA"
+            ) : effectiveGlobalRegion === "us" ? (
+              "US"
+            ) : (
+              <>
+                <span aria-hidden>{getRegionFlag(effectiveGlobalRegion)}</span>
+                <span className="truncate">{REGION_CONFIG[effectiveGlobalRegion].displayName}</span>
+              </>
+            )}
+          </span>
           <ChevronDown className={`h-3 w-3 shrink-0 opacity-60 transition-transform ${desktopCountryOpen ? "rotate-180" : ""}`} aria-hidden />
         </button>
         {desktopCountryOpen ? (
           <div className="absolute end-0 z-[120] mt-2">
             <CountrySelector
-              currentRegion={globalRegion}
+              currentRegion={effectiveGlobalRegion}
               onSelect={handleDesktopRegionSelect}
               onClose={() => setDesktopCountryOpen(false)}
               variant="popover"
@@ -651,6 +678,10 @@ export function SiteHeader() {
   );
 
   const strippedPath = stripMarketingLocalePrefix(pathname).pathname;
+  const regionalStrip = useMemo(
+    () => resolveRegionalMarketingStrip(strippedPath, locale, clientGlobalRegion),
+    [strippedPath, locale, clientGlobalRegion],
+  );
 
   /** Homepage-only acquisition param; other marketing pages keep plain signup URL. */
   const guestMarketingSignupHref = useMemo(() => {
@@ -726,7 +757,7 @@ export function SiteHeader() {
         ) : null}
         <div className="nn-section-shell flex flex-col overflow-visible">
           {/* ── Mobile brand row ── */}
-          <div className="flex h-[4.5rem] items-center gap-2 overflow-visible border-b border-[var(--header-border)] sm:gap-4 lg:hidden">
+          <div className="flex min-h-[4.5rem] items-center gap-2 overflow-visible border-b border-[var(--header-border)] pt-[env(safe-area-inset-top,0px)] sm:gap-4 lg:hidden">
             <Link
               href={localizeHref("/")}
               className="nn-header-logo-link group flex min-w-0 shrink-0 items-center gap-2.5 overflow-visible bg-transparent"
@@ -739,7 +770,7 @@ export function SiteHeader() {
               <div className="flex min-w-0 flex-1 items-center justify-end gap-1.5 sm:gap-2">
                 <Link
                   href={localizeHref(`/login?callbackUrl=${encodeURIComponent("/app")}`)}
-                  className="inline-flex min-h-[36px] max-w-[38%] shrink-0 items-center justify-center rounded-xl border border-[var(--nav-border)] px-2 py-1.5 text-xs font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)] sm:max-w-none sm:min-h-[38px] sm:px-3 sm:text-sm"
+                  className="inline-flex min-h-[44px] max-w-[38%] shrink-0 items-center justify-center rounded-xl border border-[var(--nav-border)] px-2 py-2 text-xs font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)] sm:max-w-none sm:px-3 sm:text-sm"
                   onClick={isMarketingNav ? closeMegaBeforeAuthNav : undefined}
                   aria-label="Log in to your NurseNest account"
                 >
@@ -747,7 +778,7 @@ export function SiteHeader() {
                 </Link>
                 <Link
                   href={guestMarketingSignupHref}
-                  className="nn-nav-cta inline-flex min-h-[36px] min-w-0 max-w-[52%] shrink items-center justify-center rounded-xl px-2.5 py-1.5 text-xs font-semibold sm:min-h-[38px] sm:max-w-none sm:px-4 sm:text-sm"
+                  className="nn-nav-cta inline-flex min-h-[44px] min-w-0 max-w-[52%] shrink items-center justify-center rounded-xl px-2.5 py-2 text-xs font-semibold sm:max-w-none sm:px-4 sm:text-sm"
                   onClick={isMarketingNav ? closeMegaBeforeAuthNav : undefined}
                   aria-label="Start free account — nursing and healthcare exam prep"
                   title="Start free — no credit card required"
@@ -787,7 +818,7 @@ export function SiteHeader() {
                 <div className="flex w-full min-w-0 items-center justify-end gap-2">
                   <Link
                     href={resumeStudyingCta?.href ?? "/app"}
-                    className="nn-nav-cta inline-flex min-h-0 min-w-0 flex-1 items-center justify-center rounded-xl px-3 py-2 text-sm font-semibold sm:flex-initial sm:px-4"
+                    className="nn-nav-cta inline-flex min-h-11 min-w-0 flex-1 items-center justify-center rounded-xl px-3 py-2 text-sm font-semibold sm:flex-initial sm:px-4"
                   >
                     {resumeStudyingCta?.label ?? formatTitleCase(CONTINUE_STUDYING_CTA, locale)}
                   </Link>
@@ -799,7 +830,7 @@ export function SiteHeader() {
                 <div className="flex w-full min-w-0 items-center justify-end gap-2">
                   <Link
                     href={ADMIN_DASHBOARD_ROUTE}
-                    className="nn-nav-cta inline-flex min-h-0 min-w-0 flex-1 items-center justify-center rounded-xl px-3 py-2 text-sm font-semibold sm:flex-initial sm:px-4"
+                    className="nn-nav-cta inline-flex min-h-11 min-w-0 flex-1 items-center justify-center rounded-xl px-3 py-2 text-sm font-semibold sm:flex-initial sm:px-4"
                     onClick={closeMegaBeforeAuthNav}
                   >
                     {formatTitleCase(t("nav.admin"), locale)}
@@ -924,10 +955,1192 @@ export function SiteHeader() {
         </div>{/* /shell */}
         {isMarketingNav ? (
           <div className="hidden w-full border-t border-[var(--nn-nav-border)] nn-header-nav-row lg:block">
-            <div className="nn-section-shell flex min-h-11 items-center">
+            <div className="nn-section-shell flex min-h-11 flex-wrap items-center gap-x-1 gap-y-1">
+              {regionalStrip === "middle_east" ? (
+                <div className="flex min-w-0 flex-wrap items-center gap-0.5 border-e border-[var(--nn-nav-border)] pe-2 me-1">
+                  <Link
+                    href={localizeHref("/exams/middle-east")}
+                    className={`${NAV_TIER_LINK_CLASS} max-w-[11rem] truncate sm:max-w-none`}
+                    onClick={() =>
+                      trackClientEvent(PH.marketingNavClick, {
+                        actor: navActor,
+                        nav_id: "middle_east_exams_hub",
+                        surface: "site_header_middle_east_strip",
+                        marketing_region: region,
+                      })
+                    }
+                  >
+                    {formatTitleCase(t("nav.middleEast.examsHub"), locale)}
+                  </Link>
+                  <Link
+                    href={localizeHref("/middle-east/prometric-nursing-exam")}
+                    className={`${NAV_TIER_LINK_CLASS} max-w-[11rem] truncate sm:max-w-none`}
+                    onClick={() =>
+                      trackClientEvent(PH.marketingNavClick, {
+                        actor: navActor,
+                        nav_id: "middle_east_prometric",
+                        surface: "site_header_middle_east_strip",
+                        marketing_region: region,
+                      })
+                    }
+                  >
+                    {formatTitleCase(t("nav.middleEast.prometricExam"), locale)}
+                  </Link>
+                  <Link
+                    href={localizeHref("/middle-east/dha-exam")}
+                    className={`${NAV_TIER_LINK_CLASS} max-w-[11rem] truncate sm:max-w-none`}
+                    onClick={() =>
+                      trackClientEvent(PH.marketingNavClick, {
+                        actor: navActor,
+                        nav_id: "middle_east_dha",
+                        surface: "site_header_middle_east_strip",
+                        marketing_region: region,
+                      })
+                    }
+                  >
+                    {formatTitleCase(t("nav.middleEast.dhaExam"), locale)}
+                  </Link>
+                  <Link
+                    href={localizeHref("/middle-east/haad-exam")}
+                    className={`${NAV_TIER_LINK_CLASS} max-w-[11rem] truncate sm:max-w-none`}
+                    onClick={() =>
+                      trackClientEvent(PH.marketingNavClick, {
+                        actor: navActor,
+                        nav_id: "middle_east_haad",
+                        surface: "site_header_middle_east_strip",
+                        marketing_region: region,
+                      })
+                    }
+                  >
+                    {formatTitleCase(t("nav.middleEast.haadExam"), locale)}
+                  </Link>
+                  <Link
+                    href={localizeHref("/exams/middle-east#middle-east-dha")}
+                    className={`${NAV_TIER_LINK_CLASS} max-w-[12rem] truncate sm:max-w-none`}
+                    onClick={() =>
+                      trackClientEvent(PH.marketingNavClick, {
+                        actor: navActor,
+                        nav_id: "middle_east_work_uae",
+                        surface: "site_header_middle_east_strip",
+                        marketing_region: region,
+                      })
+                    }
+                  >
+                    {formatTitleCase(t("nav.middleEast.workUae"), locale)}
+                  </Link>
+                  <Link
+                    href={localizeHref("/exams/middle-east#middle-east-saudi")}
+                    className={`${NAV_TIER_LINK_CLASS} max-w-[12rem] truncate sm:max-w-none`}
+                    onClick={() =>
+                      trackClientEvent(PH.marketingNavClick, {
+                        actor: navActor,
+                        nav_id: "middle_east_saudi_guide",
+                        surface: "site_header_middle_east_strip",
+                        marketing_region: region,
+                      })
+                    }
+                  >
+                    {formatTitleCase(t("nav.middleEast.saudiGuide"), locale)}
+                  </Link>
+                  <Link
+                    href={localizeHref(HUB.questionBank)}
+                    className={`${NAV_TIER_LINK_CLASS} max-w-[12rem] truncate sm:max-w-none`}
+                    onClick={() =>
+                      trackClientEvent(PH.marketingNavClick, {
+                        actor: navActor,
+                        nav_id: "middle_east_prometric_practice",
+                        surface: "site_header_middle_east_strip",
+                        marketing_region: region,
+                      })
+                    }
+                  >
+                    {formatTitleCase(t("nav.middleEast.prometricPractice"), locale)}
+                  </Link>
+                </div>
+              ) : null}
+              {regionalStrip === "australia" ? (
+                <div className="flex min-w-0 flex-wrap items-center gap-0.5 border-e border-[var(--nn-nav-border)] pe-2 me-1">
+                  <Link
+                    href={localizeHref("/exams/australia")}
+                    className={`${NAV_TIER_LINK_CLASS} max-w-[11rem] truncate sm:max-w-none`}
+                    onClick={() =>
+                      trackClientEvent(PH.marketingNavClick, {
+                        actor: navActor,
+                        nav_id: "australia_exams_hub",
+                        surface: "site_header_australia_strip",
+                        marketing_region: region,
+                      })
+                    }
+                  >
+                    {formatTitleCase(t("nav.australia.examsHub"), locale)}
+                  </Link>
+                  <Link
+                    href={localizeHref("/australia/ahpra-registration")}
+                    className={`${NAV_TIER_LINK_CLASS} max-w-[11rem] truncate sm:max-w-none`}
+                    onClick={() =>
+                      trackClientEvent(PH.marketingNavClick, {
+                        actor: navActor,
+                        nav_id: "australia_ahpra",
+                        surface: "site_header_australia_strip",
+                        marketing_region: region,
+                      })
+                    }
+                  >
+                    {formatTitleCase(t("nav.australia.ahpra"), locale)}
+                  </Link>
+                  <Link
+                    href={localizeHref("/australia/osce-nursing")}
+                    className={`${NAV_TIER_LINK_CLASS} max-w-[11rem] truncate sm:max-w-none`}
+                    onClick={() =>
+                      trackClientEvent(PH.marketingNavClick, {
+                        actor: navActor,
+                        nav_id: "australia_osce",
+                        surface: "site_header_australia_strip",
+                        marketing_region: region,
+                      })
+                    }
+                  >
+                    {formatTitleCase(t("nav.australia.osce"), locale)}
+                  </Link>
+                  <Link
+                    href={localizeHref("/australia/oba-nursing")}
+                    className={`${NAV_TIER_LINK_CLASS} max-w-[11rem] truncate sm:max-w-none`}
+                    onClick={() =>
+                      trackClientEvent(PH.marketingNavClick, {
+                        actor: navActor,
+                        nav_id: "australia_oba",
+                        surface: "site_header_australia_strip",
+                        marketing_region: region,
+                      })
+                    }
+                  >
+                    {formatTitleCase(t("nav.australia.oba"), locale)}
+                  </Link>
+                  <Link
+                    href={localizeHref("/exams/australia#au-international")}
+                    className={`${NAV_TIER_LINK_CLASS} max-w-[12rem] truncate sm:max-w-none`}
+                    onClick={() =>
+                      trackClientEvent(PH.marketingNavClick, {
+                        actor: navActor,
+                        nav_id: "australia_work",
+                        surface: "site_header_australia_strip",
+                        marketing_region: region,
+                      })
+                    }
+                  >
+                    {formatTitleCase(t("nav.australia.workAu"), locale)}
+                  </Link>
+                  <Link
+                    href={localizeHref("/exams/australia#au-overview")}
+                    className={`${NAV_TIER_LINK_CLASS} max-w-[12rem] truncate sm:max-w-none`}
+                    onClick={() =>
+                      trackClientEvent(PH.marketingNavClick, {
+                        actor: navActor,
+                        nav_id: "australia_guide_ahpra",
+                        surface: "site_header_australia_strip",
+                        marketing_region: region,
+                      })
+                    }
+                  >
+                    {formatTitleCase(t("nav.australia.guideAhpra"), locale)}
+                  </Link>
+                  <Link
+                    href={localizeHref(HUB.questionBank)}
+                    className={`${NAV_TIER_LINK_CLASS} max-w-[12rem] truncate sm:max-w-none`}
+                    onClick={() =>
+                      trackClientEvent(PH.marketingNavClick, {
+                        actor: navActor,
+                        nav_id: "australia_osce_prep",
+                        surface: "site_header_australia_strip",
+                        marketing_region: region,
+                      })
+                    }
+                  >
+                    {formatTitleCase(t("nav.australia.oscePrep"), locale)}
+                  </Link>
+                </div>
+              ) : null}
+              {regionalStrip === "china" ? (
+                <div className="flex min-w-0 flex-wrap items-center gap-0.5 border-e border-[var(--nn-nav-border)] pe-2 me-1">
+                  <Link
+                    href={localizeHref("/exams/china")}
+                    className={`${NAV_TIER_LINK_CLASS} max-w-[11rem] truncate sm:max-w-none`}
+                    onClick={() =>
+                      trackClientEvent(PH.marketingNavClick, {
+                        actor: navActor,
+                        nav_id: "china_exams_hub",
+                        surface: "site_header_china_strip",
+                        marketing_region: region,
+                      })
+                    }
+                  >
+                    {formatTitleCase(t("nav.country.china.examsHub"), locale)}
+                  </Link>
+                  <Link
+                    href={localizeHref("/china/nursing-exam")}
+                    className={`${NAV_TIER_LINK_CLASS} max-w-[11rem] truncate sm:max-w-none`}
+                    onClick={() =>
+                      trackClientEvent(PH.marketingNavClick, {
+                        actor: navActor,
+                        nav_id: "china_nursing_exam",
+                        surface: "site_header_china_strip",
+                        marketing_region: region,
+                      })
+                    }
+                  >
+                    {formatTitleCase(t("nav.country.china.nursingExam"), locale)}
+                  </Link>
+                  <Link
+                    href={localizeHref("/china/how-to-become-a-nurse")}
+                    className={`${NAV_TIER_LINK_CLASS} max-w-[12rem] truncate sm:max-w-none`}
+                    onClick={() =>
+                      trackClientEvent(PH.marketingNavClick, {
+                        actor: navActor,
+                        nav_id: "china_how_to_become",
+                        surface: "site_header_china_strip",
+                        marketing_region: region,
+                      })
+                    }
+                  >
+                    {formatTitleCase(t("nav.country.china.howToBecome"), locale)}
+                  </Link>
+                  <Link
+                    href={localizeHref("/china/work-abroad")}
+                    className={`${NAV_TIER_LINK_CLASS} max-w-[12rem] truncate sm:max-w-none`}
+                    onClick={() =>
+                      trackClientEvent(PH.marketingNavClick, {
+                        actor: navActor,
+                        nav_id: "china_work_abroad",
+                        surface: "site_header_china_strip",
+                        marketing_region: region,
+                      })
+                    }
+                  >
+                    {formatTitleCase(t("nav.country.china.workAbroad"), locale)}
+                  </Link>
+                  <Link
+                    href={localizeHref("/china/nclex-for-chinese-nurses")}
+                    className={`${NAV_TIER_LINK_CLASS} max-w-[12rem] truncate sm:max-w-none`}
+                    onClick={() =>
+                      trackClientEvent(PH.marketingNavClick, {
+                        actor: navActor,
+                        nav_id: "china_nclex_topic",
+                        surface: "site_header_china_strip",
+                        marketing_region: region,
+                      })
+                    }
+                  >
+                    {formatTitleCase(t("nav.country.china.nclexTopic"), locale)}
+                  </Link>
+                  <Link
+                    href={localizeHref(`/blog/tag/${encodeURIComponent("China nursing")}`)}
+                    className={`${NAV_TIER_LINK_CLASS} max-w-[12rem] truncate sm:max-w-none`}
+                    onClick={() =>
+                      trackClientEvent(PH.marketingNavClick, {
+                        actor: navActor,
+                        nav_id: "china_blog_tag",
+                        surface: "site_header_china_strip",
+                        marketing_region: region,
+                      })
+                    }
+                  >
+                    {formatTitleCase(t("nav.country.china.blog"), locale)}
+                  </Link>
+                  <Link
+                    href={localizeHref("/us/rn/nclex-rn/lessons")}
+                    className={`${NAV_TIER_LINK_CLASS} max-w-[12rem] truncate sm:max-w-none`}
+                    onClick={() =>
+                      trackClientEvent(PH.marketingNavClick, {
+                        actor: navActor,
+                        nav_id: "china_nclex_compare",
+                        surface: "site_header_china_strip",
+                        marketing_region: region,
+                      })
+                    }
+                  >
+                    {formatTitleCase(t("nav.country.china.nclexPrepUs"), locale)}
+                  </Link>
+                </div>
+              ) : null}
+              {regionalStrip === "korea" ? (
+                <div className="flex min-w-0 flex-wrap items-center gap-0.5 border-e border-[var(--nn-nav-border)] pe-2 me-1">
+                  <Link
+                    href={localizeHref("/exams/korea")}
+                    className={`${NAV_TIER_LINK_CLASS} max-w-[11rem] truncate sm:max-w-none`}
+                    onClick={() =>
+                      trackClientEvent(PH.marketingNavClick, {
+                        actor: navActor,
+                        nav_id: "korea_exams_hub",
+                        surface: "site_header_korea_strip",
+                        marketing_region: region,
+                      })
+                    }
+                  >
+                    {formatTitleCase(t("nav.country.korea.examsHub"), locale)}
+                  </Link>
+                  <Link
+                    href={localizeHref("/korea/nursing-exam")}
+                    className={`${NAV_TIER_LINK_CLASS} max-w-[11rem] truncate sm:max-w-none`}
+                    onClick={() =>
+                      trackClientEvent(PH.marketingNavClick, {
+                        actor: navActor,
+                        nav_id: "korea_nursing_exam",
+                        surface: "site_header_korea_strip",
+                        marketing_region: region,
+                      })
+                    }
+                  >
+                    {formatTitleCase(t("nav.country.korea.nursingExam"), locale)}
+                  </Link>
+                  <Link
+                    href={localizeHref("/korea/how-to-become-a-nurse")}
+                    className={`${NAV_TIER_LINK_CLASS} max-w-[12rem] truncate sm:max-w-none`}
+                    onClick={() =>
+                      trackClientEvent(PH.marketingNavClick, {
+                        actor: navActor,
+                        nav_id: "korea_how_to_become",
+                        surface: "site_header_korea_strip",
+                        marketing_region: region,
+                      })
+                    }
+                  >
+                    {formatTitleCase(t("nav.country.korea.howToBecome"), locale)}
+                  </Link>
+                  <Link
+                    href={localizeHref("/korea/work-abroad")}
+                    className={`${NAV_TIER_LINK_CLASS} max-w-[12rem] truncate sm:max-w-none`}
+                    onClick={() =>
+                      trackClientEvent(PH.marketingNavClick, {
+                        actor: navActor,
+                        nav_id: "korea_work_abroad",
+                        surface: "site_header_korea_strip",
+                        marketing_region: region,
+                      })
+                    }
+                  >
+                    {formatTitleCase(t("nav.country.korea.workAbroad"), locale)}
+                  </Link>
+                  <Link
+                    href={localizeHref("/korea/nclex-for-korean-nurses")}
+                    className={`${NAV_TIER_LINK_CLASS} max-w-[12rem] truncate sm:max-w-none`}
+                    onClick={() =>
+                      trackClientEvent(PH.marketingNavClick, {
+                        actor: navActor,
+                        nav_id: "korea_nclex_topic",
+                        surface: "site_header_korea_strip",
+                        marketing_region: region,
+                      })
+                    }
+                  >
+                    {formatTitleCase(t("nav.country.korea.nclexTopic"), locale)}
+                  </Link>
+                  <Link
+                    href={localizeHref(`/blog/tag/${encodeURIComponent("Korea nursing")}`)}
+                    className={`${NAV_TIER_LINK_CLASS} max-w-[12rem] truncate sm:max-w-none`}
+                    onClick={() =>
+                      trackClientEvent(PH.marketingNavClick, {
+                        actor: navActor,
+                        nav_id: "korea_blog_tag",
+                        surface: "site_header_korea_strip",
+                        marketing_region: region,
+                      })
+                    }
+                  >
+                    {formatTitleCase(t("nav.country.korea.blog"), locale)}
+                  </Link>
+                  <Link
+                    href={localizeHref("/us/rn/nclex-rn/lessons")}
+                    className={`${NAV_TIER_LINK_CLASS} max-w-[12rem] truncate sm:max-w-none`}
+                    onClick={() =>
+                      trackClientEvent(PH.marketingNavClick, {
+                        actor: navActor,
+                        nav_id: "korea_nclex_compare",
+                        surface: "site_header_korea_strip",
+                        marketing_region: region,
+                      })
+                    }
+                  >
+                    {formatTitleCase(t("nav.country.korea.nclexPrepUs"), locale)}
+                  </Link>
+                </div>
+              ) : null}
+              {regionalStrip === "japan" ? (
+                <div className="flex min-w-0 flex-wrap items-center gap-0.5 border-e border-[var(--nn-nav-border)] pe-2 me-1">
+                  <Link
+                    href={localizeHref("/exams/japan")}
+                    className={`${NAV_TIER_LINK_CLASS} max-w-[11rem] truncate sm:max-w-none`}
+                    onClick={() =>
+                      trackClientEvent(PH.marketingNavClick, {
+                        actor: navActor,
+                        nav_id: "japan_exams_hub",
+                        surface: "site_header_japan_strip",
+                        marketing_region: region,
+                      })
+                    }
+                  >
+                    {formatTitleCase(t("nav.country.japan.examsHub"), locale)}
+                  </Link>
+                  <Link
+                    href={localizeHref("/japan/nursing-exam")}
+                    className={`${NAV_TIER_LINK_CLASS} max-w-[11rem] truncate sm:max-w-none`}
+                    onClick={() =>
+                      trackClientEvent(PH.marketingNavClick, {
+                        actor: navActor,
+                        nav_id: "japan_nursing_exam",
+                        surface: "site_header_japan_strip",
+                        marketing_region: region,
+                      })
+                    }
+                  >
+                    {formatTitleCase(t("nav.country.japan.nursingExam"), locale)}
+                  </Link>
+                  <Link
+                    href={localizeHref("/japan/how-to-become-a-nurse")}
+                    className={`${NAV_TIER_LINK_CLASS} max-w-[12rem] truncate sm:max-w-none`}
+                    onClick={() =>
+                      trackClientEvent(PH.marketingNavClick, {
+                        actor: navActor,
+                        nav_id: "japan_how_to_become",
+                        surface: "site_header_japan_strip",
+                        marketing_region: region,
+                      })
+                    }
+                  >
+                    {formatTitleCase(t("nav.country.japan.howToBecome"), locale)}
+                  </Link>
+                  <Link
+                    href={localizeHref("/japan/work-abroad")}
+                    className={`${NAV_TIER_LINK_CLASS} max-w-[12rem] truncate sm:max-w-none`}
+                    onClick={() =>
+                      trackClientEvent(PH.marketingNavClick, {
+                        actor: navActor,
+                        nav_id: "japan_work_abroad",
+                        surface: "site_header_japan_strip",
+                        marketing_region: region,
+                      })
+                    }
+                  >
+                    {formatTitleCase(t("nav.country.japan.workAbroad"), locale)}
+                  </Link>
+                  <Link
+                    href={localizeHref("/japan/nclex-for-japanese-nurses")}
+                    className={`${NAV_TIER_LINK_CLASS} max-w-[12rem] truncate sm:max-w-none`}
+                    onClick={() =>
+                      trackClientEvent(PH.marketingNavClick, {
+                        actor: navActor,
+                        nav_id: "japan_nclex_topic",
+                        surface: "site_header_japan_strip",
+                        marketing_region: region,
+                      })
+                    }
+                  >
+                    {formatTitleCase(t("nav.country.japan.nclexTopic"), locale)}
+                  </Link>
+                  <Link
+                    href={localizeHref(`/blog/tag/${encodeURIComponent("Japan nursing")}`)}
+                    className={`${NAV_TIER_LINK_CLASS} max-w-[12rem] truncate sm:max-w-none`}
+                    onClick={() =>
+                      trackClientEvent(PH.marketingNavClick, {
+                        actor: navActor,
+                        nav_id: "japan_blog_tag",
+                        surface: "site_header_japan_strip",
+                        marketing_region: region,
+                      })
+                    }
+                  >
+                    {formatTitleCase(t("nav.country.japan.blog"), locale)}
+                  </Link>
+                  <Link
+                    href={localizeHref("/us/rn/nclex-rn/lessons")}
+                    className={`${NAV_TIER_LINK_CLASS} max-w-[12rem] truncate sm:max-w-none`}
+                    onClick={() =>
+                      trackClientEvent(PH.marketingNavClick, {
+                        actor: navActor,
+                        nav_id: "japan_nclex_compare",
+                        surface: "site_header_japan_strip",
+                        marketing_region: region,
+                      })
+                    }
+                  >
+                    {formatTitleCase(t("nav.country.japan.nclexPrepUs"), locale)}
+                  </Link>
+                </div>
+              ) : null}
+              {regionalStrip === "germany" ? (
+                <div className="flex min-w-0 flex-wrap items-center gap-0.5 border-e border-[var(--nn-nav-border)] pe-2 me-1">
+                  <Link
+                    href={localizeHref("/exams/germany")}
+                    className={`${NAV_TIER_LINK_CLASS} max-w-[11rem] truncate sm:max-w-none`}
+                    onClick={() =>
+                      trackClientEvent(PH.marketingNavClick, {
+                        actor: navActor,
+                        nav_id: "germany_exams_hub",
+                        surface: "site_header_germany_strip",
+                        marketing_region: region,
+                      })
+                    }
+                  >
+                    {formatTitleCase(t("nav.country.germany.examsHub"), locale)}
+                  </Link>
+                  <Link
+                    href={localizeHref("/germany/nurse-recognition")}
+                    className={`${NAV_TIER_LINK_CLASS} max-w-[12rem] truncate sm:max-w-none`}
+                    onClick={() =>
+                      trackClientEvent(PH.marketingNavClick, {
+                        actor: navActor,
+                        nav_id: "germany_nurse_recognition",
+                        surface: "site_header_germany_strip",
+                        marketing_region: region,
+                      })
+                    }
+                  >
+                    {formatTitleCase(t("nav.country.germany.nurseRecognition"), locale)}
+                  </Link>
+                  <Link
+                    href={localizeHref("/germany/work-as-a-nurse")}
+                    className={`${NAV_TIER_LINK_CLASS} max-w-[12rem] truncate sm:max-w-none`}
+                    onClick={() =>
+                      trackClientEvent(PH.marketingNavClick, {
+                        actor: navActor,
+                        nav_id: "germany_work_as_nurse",
+                        surface: "site_header_germany_strip",
+                        marketing_region: region,
+                      })
+                    }
+                  >
+                    {formatTitleCase(t("nav.country.germany.workAsNurse"), locale)}
+                  </Link>
+                  <Link
+                    href={localizeHref("/germany/kenntnisprufung")}
+                    className={`${NAV_TIER_LINK_CLASS} max-w-[12rem] truncate sm:max-w-none`}
+                    onClick={() =>
+                      trackClientEvent(PH.marketingNavClick, {
+                        actor: navActor,
+                        nav_id: "germany_kenntnisprufung",
+                        surface: "site_header_germany_strip",
+                        marketing_region: region,
+                      })
+                    }
+                  >
+                    {formatTitleCase(t("nav.country.germany.kenntnisprufungGuide"), locale)}
+                  </Link>
+                  <Link
+                    href={localizeHref("/germany/german-language-for-nurses")}
+                    className={`${NAV_TIER_LINK_CLASS} max-w-[12rem] truncate sm:max-w-none`}
+                    onClick={() =>
+                      trackClientEvent(PH.marketingNavClick, {
+                        actor: navActor,
+                        nav_id: "germany_german_language",
+                        surface: "site_header_germany_strip",
+                        marketing_region: region,
+                      })
+                    }
+                  >
+                    {formatTitleCase(t("nav.country.germany.germanLanguageTopic"), locale)}
+                  </Link>
+                  <Link
+                    href={localizeHref(`/blog/tag/${encodeURIComponent("Germany nursing")}`)}
+                    className={`${NAV_TIER_LINK_CLASS} max-w-[12rem] truncate sm:max-w-none`}
+                    onClick={() =>
+                      trackClientEvent(PH.marketingNavClick, {
+                        actor: navActor,
+                        nav_id: "germany_blog_tag",
+                        surface: "site_header_germany_strip",
+                        marketing_region: region,
+                      })
+                    }
+                  >
+                    {formatTitleCase(t("nav.country.germany.blog"), locale)}
+                  </Link>
+                  <Link
+                    href={localizeHref("/us/rn/nclex-rn/lessons")}
+                    className={`${NAV_TIER_LINK_CLASS} max-w-[12rem] truncate sm:max-w-none`}
+                    onClick={() =>
+                      trackClientEvent(PH.marketingNavClick, {
+                        actor: navActor,
+                        nav_id: "germany_nclex_parallel",
+                        surface: "site_header_germany_strip",
+                        marketing_region: region,
+                      })
+                    }
+                  >
+                    {formatTitleCase(t("nav.country.germany.nclexPrepUs"), locale)}
+                  </Link>
+                </div>
+              ) : null}
+              {regionalStrip === "france" ? (
+                <div className="flex min-w-0 flex-wrap items-center gap-0.5 border-e border-[var(--nn-nav-border)] pe-2 me-1">
+                  <Link
+                    href={localizeHref("/exams/france")}
+                    className={`${NAV_TIER_LINK_CLASS} max-w-[11rem] truncate sm:max-w-none`}
+                    onClick={() =>
+                      trackClientEvent(PH.marketingNavClick, {
+                        actor: navActor,
+                        nav_id: "france_exams_hub",
+                        surface: "site_header_france_strip",
+                        marketing_region: region,
+                      })
+                    }
+                  >
+                    {formatTitleCase(t("nav.country.france.examsHub"), locale)}
+                  </Link>
+                  <Link
+                    href={localizeHref("/france/nurse-registration")}
+                    className={`${NAV_TIER_LINK_CLASS} max-w-[12rem] truncate sm:max-w-none`}
+                    onClick={() =>
+                      trackClientEvent(PH.marketingNavClick, {
+                        actor: navActor,
+                        nav_id: "france_nurse_registration",
+                        surface: "site_header_france_strip",
+                        marketing_region: region,
+                      })
+                    }
+                  >
+                    {formatTitleCase(t("nav.country.france.nurseRegistration"), locale)}
+                  </Link>
+                  <Link
+                    href={localizeHref("/france/how-to-become-a-nurse")}
+                    className={`${NAV_TIER_LINK_CLASS} max-w-[12rem] truncate sm:max-w-none`}
+                    onClick={() =>
+                      trackClientEvent(PH.marketingNavClick, {
+                        actor: navActor,
+                        nav_id: "france_how_to_become",
+                        surface: "site_header_france_strip",
+                        marketing_region: region,
+                      })
+                    }
+                  >
+                    {formatTitleCase(t("nav.country.france.howToBecome"), locale)}
+                  </Link>
+                  <Link
+                    href={localizeHref("/france/work-abroad")}
+                    className={`${NAV_TIER_LINK_CLASS} max-w-[12rem] truncate sm:max-w-none`}
+                    onClick={() =>
+                      trackClientEvent(PH.marketingNavClick, {
+                        actor: navActor,
+                        nav_id: "france_work_abroad",
+                        surface: "site_header_france_strip",
+                        marketing_region: region,
+                      })
+                    }
+                  >
+                    {formatTitleCase(t("nav.country.france.workAbroad"), locale)}
+                  </Link>
+                  <Link
+                    href={buildLocalizedMarketingPath("fr", "/exams/france")}
+                    className={`${NAV_TIER_LINK_CLASS} max-w-[12rem] truncate sm:max-w-none`}
+                    onClick={() =>
+                      trackClientEvent(PH.marketingNavClick, {
+                        actor: navActor,
+                        nav_id: "france_french_resources",
+                        surface: "site_header_france_strip",
+                        marketing_region: region,
+                      })
+                    }
+                  >
+                    {formatTitleCase(t("nav.country.france.frenchResources"), locale)}
+                  </Link>
+                  <Link
+                    href={localizeHref(`/blog/tag/${encodeURIComponent(t("blog.country.france.tagName"))}`)}
+                    className={`${NAV_TIER_LINK_CLASS} max-w-[12rem] truncate sm:max-w-none`}
+                    onClick={() =>
+                      trackClientEvent(PH.marketingNavClick, {
+                        actor: navActor,
+                        nav_id: "france_blog_tag",
+                        surface: "site_header_france_strip",
+                        marketing_region: region,
+                      })
+                    }
+                  >
+                    {formatTitleCase(t("nav.country.france.blog"), locale)}
+                  </Link>
+                  <Link
+                    href={localizeHref("/us/rn/nclex-rn/lessons")}
+                    className={`${NAV_TIER_LINK_CLASS} max-w-[12rem] truncate sm:max-w-none`}
+                    onClick={() =>
+                      trackClientEvent(PH.marketingNavClick, {
+                        actor: navActor,
+                        nav_id: "france_nclex_parallel",
+                        surface: "site_header_france_strip",
+                        marketing_region: region,
+                      })
+                    }
+                  >
+                    {formatTitleCase(t("nav.country.france.nclexPrepUs"), locale)}
+                  </Link>
+                </div>
+              ) : null}
+              {regionalStrip === "italy" ? (
+                <div className="flex min-w-0 flex-wrap items-center gap-0.5 border-e border-[var(--nn-nav-border)] pe-2 me-1">
+                  <Link
+                    href={localizeHref("/exams/italy")}
+                    className={`${NAV_TIER_LINK_CLASS} max-w-[11rem] truncate sm:max-w-none`}
+                    onClick={() =>
+                      trackClientEvent(PH.marketingNavClick, {
+                        actor: navActor,
+                        nav_id: "italy_exams_hub",
+                        surface: "site_header_italy_strip",
+                        marketing_region: region,
+                      })
+                    }
+                  >
+                    {formatTitleCase(t("nav.country.italy.examsHub"), locale)}
+                  </Link>
+                  <Link
+                    href={localizeHref("/italy/nurse-registration")}
+                    className={`${NAV_TIER_LINK_CLASS} max-w-[12rem] truncate sm:max-w-none`}
+                    onClick={() =>
+                      trackClientEvent(PH.marketingNavClick, {
+                        actor: navActor,
+                        nav_id: "italy_nurse_registration",
+                        surface: "site_header_italy_strip",
+                        marketing_region: region,
+                      })
+                    }
+                  >
+                    {formatTitleCase(t("nav.country.italy.nurseRegistration"), locale)}
+                  </Link>
+                  <Link
+                    href={localizeHref("/italy/how-to-become-a-nurse")}
+                    className={`${NAV_TIER_LINK_CLASS} max-w-[12rem] truncate sm:max-w-none`}
+                    onClick={() =>
+                      trackClientEvent(PH.marketingNavClick, {
+                        actor: navActor,
+                        nav_id: "italy_how_to_become",
+                        surface: "site_header_italy_strip",
+                        marketing_region: region,
+                      })
+                    }
+                  >
+                    {formatTitleCase(t("nav.country.italy.howToBecome"), locale)}
+                  </Link>
+                  <Link
+                    href={localizeHref("/italy/work-abroad")}
+                    className={`${NAV_TIER_LINK_CLASS} max-w-[12rem] truncate sm:max-w-none`}
+                    onClick={() =>
+                      trackClientEvent(PH.marketingNavClick, {
+                        actor: navActor,
+                        nav_id: "italy_work_abroad",
+                        surface: "site_header_italy_strip",
+                        marketing_region: region,
+                      })
+                    }
+                  >
+                    {formatTitleCase(t("nav.country.italy.workAbroad"), locale)}
+                  </Link>
+                  <Link
+                    href={buildLocalizedMarketingPath("it", "/exams/italy")}
+                    className={`${NAV_TIER_LINK_CLASS} max-w-[12rem] truncate sm:max-w-none`}
+                    onClick={() =>
+                      trackClientEvent(PH.marketingNavClick, {
+                        actor: navActor,
+                        nav_id: "italy_italian_resources",
+                        surface: "site_header_italy_strip",
+                        marketing_region: region,
+                      })
+                    }
+                  >
+                    {formatTitleCase(t("nav.country.italy.italianResources"), locale)}
+                  </Link>
+                  <Link
+                    href={localizeHref(`/blog/tag/${encodeURIComponent(t("blog.country.italy.tagName"))}`)}
+                    className={`${NAV_TIER_LINK_CLASS} max-w-[12rem] truncate sm:max-w-none`}
+                    onClick={() =>
+                      trackClientEvent(PH.marketingNavClick, {
+                        actor: navActor,
+                        nav_id: "italy_blog_tag",
+                        surface: "site_header_italy_strip",
+                        marketing_region: region,
+                      })
+                    }
+                  >
+                    {formatTitleCase(t("nav.country.italy.blog"), locale)}
+                  </Link>
+                  <Link
+                    href={localizeHref("/us/rn/nclex-rn/lessons")}
+                    className={`${NAV_TIER_LINK_CLASS} max-w-[12rem] truncate sm:max-w-none`}
+                    onClick={() =>
+                      trackClientEvent(PH.marketingNavClick, {
+                        actor: navActor,
+                        nav_id: "italy_nclex_parallel",
+                        surface: "site_header_italy_strip",
+                        marketing_region: region,
+                      })
+                    }
+                  >
+                    {formatTitleCase(t("nav.country.italy.nclexPrepUs"), locale)}
+                  </Link>
+                </div>
+              ) : null}
+              {regionalStrip === "hungary" ? (
+                <div className="flex min-w-0 flex-wrap items-center gap-0.5 border-e border-[var(--nn-nav-border)] pe-2 me-1">
+                  <Link
+                    href={localizeHref("/exams/hungary")}
+                    className={`${NAV_TIER_LINK_CLASS} max-w-[11rem] truncate sm:max-w-none`}
+                    onClick={() =>
+                      trackClientEvent(PH.marketingNavClick, {
+                        actor: navActor,
+                        nav_id: "hungary_exams_hub",
+                        surface: "site_header_hungary_strip",
+                        marketing_region: region,
+                      })
+                    }
+                  >
+                    {formatTitleCase(t("nav.country.hungary.examsHub"), locale)}
+                  </Link>
+                  <Link
+                    href={localizeHref("/hungary/nurse-registration")}
+                    className={`${NAV_TIER_LINK_CLASS} max-w-[12rem] truncate sm:max-w-none`}
+                    onClick={() =>
+                      trackClientEvent(PH.marketingNavClick, {
+                        actor: navActor,
+                        nav_id: "hungary_nurse_registration",
+                        surface: "site_header_hungary_strip",
+                        marketing_region: region,
+                      })
+                    }
+                  >
+                    {formatTitleCase(t("nav.country.hungary.nurseRegistration"), locale)}
+                  </Link>
+                  <Link
+                    href={localizeHref("/hungary/how-to-become-a-nurse")}
+                    className={`${NAV_TIER_LINK_CLASS} max-w-[12rem] truncate sm:max-w-none`}
+                    onClick={() =>
+                      trackClientEvent(PH.marketingNavClick, {
+                        actor: navActor,
+                        nav_id: "hungary_how_to_become",
+                        surface: "site_header_hungary_strip",
+                        marketing_region: region,
+                      })
+                    }
+                  >
+                    {formatTitleCase(t("nav.country.hungary.howToBecome"), locale)}
+                  </Link>
+                  <Link
+                    href={localizeHref("/hungary/work-abroad")}
+                    className={`${NAV_TIER_LINK_CLASS} max-w-[12rem] truncate sm:max-w-none`}
+                    onClick={() =>
+                      trackClientEvent(PH.marketingNavClick, {
+                        actor: navActor,
+                        nav_id: "hungary_work_abroad",
+                        surface: "site_header_hungary_strip",
+                        marketing_region: region,
+                      })
+                    }
+                  >
+                    {formatTitleCase(t("nav.country.hungary.workAbroad"), locale)}
+                  </Link>
+                  <Link
+                    href={buildLocalizedMarketingPath("hu", "/exams/hungary")}
+                    className={`${NAV_TIER_LINK_CLASS} max-w-[12rem] truncate sm:max-w-none`}
+                    onClick={() =>
+                      trackClientEvent(PH.marketingNavClick, {
+                        actor: navActor,
+                        nav_id: "hungary_hungarian_resources",
+                        surface: "site_header_hungary_strip",
+                        marketing_region: region,
+                      })
+                    }
+                  >
+                    {formatTitleCase(t("nav.country.hungary.hungarianResources"), locale)}
+                  </Link>
+                  <Link
+                    href={localizeHref(`/blog/tag/${encodeURIComponent(t("blog.country.hungary.tagName"))}`)}
+                    className={`${NAV_TIER_LINK_CLASS} max-w-[12rem] truncate sm:max-w-none`}
+                    onClick={() =>
+                      trackClientEvent(PH.marketingNavClick, {
+                        actor: navActor,
+                        nav_id: "hungary_blog_tag",
+                        surface: "site_header_hungary_strip",
+                        marketing_region: region,
+                      })
+                    }
+                  >
+                    {formatTitleCase(t("nav.country.hungary.blog"), locale)}
+                  </Link>
+                  <Link
+                    href={localizeHref("/us/rn/nclex-rn/lessons")}
+                    className={`${NAV_TIER_LINK_CLASS} max-w-[12rem] truncate sm:max-w-none`}
+                    onClick={() =>
+                      trackClientEvent(PH.marketingNavClick, {
+                        actor: navActor,
+                        nav_id: "hungary_nclex_parallel",
+                        surface: "site_header_hungary_strip",
+                        marketing_region: region,
+                      })
+                    }
+                  >
+                    {formatTitleCase(t("nav.country.hungary.nclexPrepUs"), locale)}
+                  </Link>
+                </div>
+              ) : null}
+              {regionalStrip === "portugal" ? (
+                <div className="flex min-w-0 flex-wrap items-center gap-0.5 border-e border-[var(--nn-nav-border)] pe-2 me-1">
+                  <Link
+                    href={localizeHref("/exams/portugal")}
+                    className={`${NAV_TIER_LINK_CLASS} max-w-[11rem] truncate sm:max-w-none`}
+                    onClick={() =>
+                      trackClientEvent(PH.marketingNavClick, {
+                        actor: navActor,
+                        nav_id: "portugal_exams_hub",
+                        surface: "site_header_portugal_strip",
+                        marketing_region: region,
+                      })
+                    }
+                  >
+                    {formatTitleCase(t("nav.country.portugal.examsHub"), locale)}
+                  </Link>
+                  <Link
+                    href={localizeHref("/portugal/nurse-registration")}
+                    className={`${NAV_TIER_LINK_CLASS} max-w-[12rem] truncate sm:max-w-none`}
+                    onClick={() =>
+                      trackClientEvent(PH.marketingNavClick, {
+                        actor: navActor,
+                        nav_id: "portugal_nurse_registration",
+                        surface: "site_header_portugal_strip",
+                        marketing_region: region,
+                      })
+                    }
+                  >
+                    {formatTitleCase(t("nav.country.portugal.nurseRegistration"), locale)}
+                  </Link>
+                  <Link
+                    href={localizeHref("/portugal/how-to-become-a-nurse")}
+                    className={`${NAV_TIER_LINK_CLASS} max-w-[12rem] truncate sm:max-w-none`}
+                    onClick={() =>
+                      trackClientEvent(PH.marketingNavClick, {
+                        actor: navActor,
+                        nav_id: "portugal_how_to_become",
+                        surface: "site_header_portugal_strip",
+                        marketing_region: region,
+                      })
+                    }
+                  >
+                    {formatTitleCase(t("nav.country.portugal.howToBecome"), locale)}
+                  </Link>
+                  <Link
+                    href={localizeHref("/portugal/work-abroad")}
+                    className={`${NAV_TIER_LINK_CLASS} max-w-[12rem] truncate sm:max-w-none`}
+                    onClick={() =>
+                      trackClientEvent(PH.marketingNavClick, {
+                        actor: navActor,
+                        nav_id: "portugal_work_abroad",
+                        surface: "site_header_portugal_strip",
+                        marketing_region: region,
+                      })
+                    }
+                  >
+                    {formatTitleCase(t("nav.country.portugal.workAbroad"), locale)}
+                  </Link>
+                  <Link
+                    href={buildLocalizedMarketingPath("pt", "/exams/portugal")}
+                    className={`${NAV_TIER_LINK_CLASS} max-w-[12rem] truncate sm:max-w-none`}
+                    onClick={() =>
+                      trackClientEvent(PH.marketingNavClick, {
+                        actor: navActor,
+                        nav_id: "portugal_portuguese_resources",
+                        surface: "site_header_portugal_strip",
+                        marketing_region: region,
+                      })
+                    }
+                  >
+                    {formatTitleCase(t("nav.country.portugal.portugueseResources"), locale)}
+                  </Link>
+                  <Link
+                    href={localizeHref(`/blog/tag/${encodeURIComponent(t("blog.country.portugal.tagName"))}`)}
+                    className={`${NAV_TIER_LINK_CLASS} max-w-[12rem] truncate sm:max-w-none`}
+                    onClick={() =>
+                      trackClientEvent(PH.marketingNavClick, {
+                        actor: navActor,
+                        nav_id: "portugal_blog_tag",
+                        surface: "site_header_portugal_strip",
+                        marketing_region: region,
+                      })
+                    }
+                  >
+                    {formatTitleCase(t("nav.country.portugal.blog"), locale)}
+                  </Link>
+                  <Link
+                    href={localizeHref("/us/rn/nclex-rn/lessons")}
+                    className={`${NAV_TIER_LINK_CLASS} max-w-[12rem] truncate sm:max-w-none`}
+                    onClick={() =>
+                      trackClientEvent(PH.marketingNavClick, {
+                        actor: navActor,
+                        nav_id: "portugal_nclex_parallel",
+                        surface: "site_header_portugal_strip",
+                        marketing_region: region,
+                      })
+                    }
+                  >
+                    {formatTitleCase(t("nav.country.portugal.nclexPrepUs"), locale)}
+                  </Link>
+                </div>
+              ) : null}
+              {regionalStrip === "mexico" ? (
+                <div className="flex min-w-0 flex-wrap items-center gap-0.5 border-e border-[var(--nn-nav-border)] pe-2 me-1">
+                  <Link
+                    href={localizeHref("/exams/mexico")}
+                    className={`${NAV_TIER_LINK_CLASS} max-w-[11rem] truncate sm:max-w-none`}
+                    onClick={() =>
+                      trackClientEvent(PH.marketingNavClick, {
+                        actor: navActor,
+                        nav_id: "mexico_exams_hub",
+                        surface: "site_header_mexico_strip",
+                        marketing_region: region,
+                      })
+                    }
+                  >
+                    {formatTitleCase(t("nav.country.mexico.examsHub"), locale)}
+                  </Link>
+                  <Link
+                    href={localizeHref("/mexico/nurse-registration")}
+                    className={`${NAV_TIER_LINK_CLASS} max-w-[12rem] truncate sm:max-w-none`}
+                    onClick={() =>
+                      trackClientEvent(PH.marketingNavClick, {
+                        actor: navActor,
+                        nav_id: "mexico_nurse_registration",
+                        surface: "site_header_mexico_strip",
+                        marketing_region: region,
+                      })
+                    }
+                  >
+                    {formatTitleCase(t("nav.country.mexico.nurseRegistration"), locale)}
+                  </Link>
+                  <Link
+                    href={localizeHref("/mexico/how-to-become-a-nurse")}
+                    className={`${NAV_TIER_LINK_CLASS} max-w-[12rem] truncate sm:max-w-none`}
+                    onClick={() =>
+                      trackClientEvent(PH.marketingNavClick, {
+                        actor: navActor,
+                        nav_id: "mexico_how_to_become",
+                        surface: "site_header_mexico_strip",
+                        marketing_region: region,
+                      })
+                    }
+                  >
+                    {formatTitleCase(t("nav.country.mexico.howToBecome"), locale)}
+                  </Link>
+                  <Link
+                    href={localizeHref("/mexico/nclex-for-mexican-nurses")}
+                    className={`${NAV_TIER_LINK_CLASS} max-w-[12rem] truncate sm:max-w-none`}
+                    onClick={() =>
+                      trackClientEvent(PH.marketingNavClick, {
+                        actor: navActor,
+                        nav_id: "mexico_nclex_for_mexican_nurses",
+                        surface: "site_header_mexico_strip",
+                        marketing_region: region,
+                      })
+                    }
+                  >
+                    {formatTitleCase(t("nav.country.mexico.nclexForMexicanNurses"), locale)}
+                  </Link>
+                  <Link
+                    href={localizeHref("/mexico/work-abroad")}
+                    className={`${NAV_TIER_LINK_CLASS} max-w-[12rem] truncate sm:max-w-none`}
+                    onClick={() =>
+                      trackClientEvent(PH.marketingNavClick, {
+                        actor: navActor,
+                        nav_id: "mexico_work_abroad",
+                        surface: "site_header_mexico_strip",
+                        marketing_region: region,
+                      })
+                    }
+                  >
+                    {formatTitleCase(t("nav.country.mexico.workAbroad"), locale)}
+                  </Link>
+                  <Link
+                    href={buildLocalizedMarketingPath("es", "/exams/mexico")}
+                    className={`${NAV_TIER_LINK_CLASS} max-w-[12rem] truncate sm:max-w-none`}
+                    onClick={() =>
+                      trackClientEvent(PH.marketingNavClick, {
+                        actor: navActor,
+                        nav_id: "mexico_spanish_resources",
+                        surface: "site_header_mexico_strip",
+                        marketing_region: region,
+                      })
+                    }
+                  >
+                    {formatTitleCase(t("nav.country.mexico.spanishResources"), locale)}
+                  </Link>
+                  <Link
+                    href={localizeHref(`/blog/tag/${encodeURIComponent(t("blog.country.mexico.tagName"))}`)}
+                    className={`${NAV_TIER_LINK_CLASS} max-w-[12rem] truncate sm:max-w-none`}
+                    onClick={() =>
+                      trackClientEvent(PH.marketingNavClick, {
+                        actor: navActor,
+                        nav_id: "mexico_blog_tag",
+                        surface: "site_header_mexico_strip",
+                        marketing_region: region,
+                      })
+                    }
+                  >
+                    {formatTitleCase(t("nav.country.mexico.blog"), locale)}
+                  </Link>
+                  <Link
+                    href={localizeHref("/us/rn/nclex-rn/lessons")}
+                    className={`${NAV_TIER_LINK_CLASS} max-w-[12rem] truncate sm:max-w-none`}
+                    onClick={() =>
+                      trackClientEvent(PH.marketingNavClick, {
+                        actor: navActor,
+                        nav_id: "mexico_nclex_parallel",
+                        surface: "site_header_mexico_strip",
+                        marketing_region: region,
+                      })
+                    }
+                  >
+                    {formatTitleCase(t("nav.country.mexico.nclexPrepUs"), locale)}
+                  </Link>
+                </div>
+              ) : null}
+              {regionalStrip === "india" ? (
+                <div className="flex min-w-0 flex-wrap items-center gap-0.5 border-e border-[var(--nn-nav-border)] pe-2 me-1">
+                  <Link
+                    href={localizeHref("/exams/india")}
+                    className={`${NAV_TIER_LINK_CLASS} max-w-[11rem] truncate sm:max-w-none`}
+                    onClick={() =>
+                      trackClientEvent(PH.marketingNavClick, {
+                        actor: navActor,
+                        nav_id: "india_exams_hub",
+                        surface: "site_header_india_strip",
+                        marketing_region: region,
+                      })
+                    }
+                  >
+                    {formatTitleCase(t("nav.india.examsHub"), locale)}
+                  </Link>
+                  <Link
+                    href={localizeHref("/exams/india#india-intl")}
+                    className={`${NAV_TIER_LINK_CLASS} max-w-[11rem] truncate sm:max-w-none`}
+                    onClick={() =>
+                      trackClientEvent(PH.marketingNavClick, {
+                        actor: navActor,
+                        nav_id: "india_work_abroad",
+                        surface: "site_header_india_strip",
+                        marketing_region: region,
+                      })
+                    }
+                  >
+                    {formatTitleCase(t("nav.india.workAbroad"), locale)}
+                  </Link>
+                  <Link
+                    href={localizeHref("/us/rn/nclex-rn/lessons")}
+                    className={`${NAV_TIER_LINK_CLASS} max-w-[12rem] truncate sm:max-w-none`}
+                    onClick={() =>
+                      trackClientEvent(PH.marketingNavClick, {
+                        actor: navActor,
+                        nav_id: "india_nclex",
+                        surface: "site_header_india_strip",
+                        marketing_region: region,
+                      })
+                    }
+                  >
+                    {formatTitleCase(t("nav.india.nclexIndia"), locale)}
+                  </Link>
+                </div>
+              ) : null}
               <nav
                 aria-label={t("nav.marketingExplore")}
-                className="flex min-w-0 flex-1 items-center justify-center gap-0.5 xl:gap-1"
+                className="flex min-w-0 flex-1 flex-wrap items-center justify-center gap-0.5 xl:gap-1"
               >
                 {megaMenus.map((menu) => {
                   const expanded = openMegaMenu === menu.key;
@@ -1102,7 +2315,7 @@ export function SiteHeader() {
       {/* Context chip row — shows current country, language, profession, exam */}
       {!isMarketingNav ? (
         <GlobalContextBar
-          region={globalRegion}
+          region={effectiveGlobalRegion}
           locale={globalLocale}
           profession={activeProfession}
           exam={activeExam}
@@ -1117,13 +2330,17 @@ export function SiteHeader() {
       <MobileContextDrawer
         open={mobileContextOpen}
         onClose={() => setMobileContextOpen(false)}
-        region={globalRegion}
+        region={effectiveGlobalRegion}
         locale={globalLocale}
         profession={activeProfession}
         exam={activeExam}
-        onRegionChange={(newRegion) => {
-          if (newRegion === "us") setRegionAndRefresh("US");
-          else if (newRegion === "canada") setRegionAndRefresh("CA");
+        onRegionChange={async (newRegion) => {
+          await applyGlobalRegionSelection(newRegion, {
+            marketingLocale: globalLocale,
+            setUsCaMarketingRegion: setRegionAndRefresh,
+            router,
+            buildLocalizedPath: buildLocalizedMarketingPath,
+          });
           setMobileContextOpen(false);
         }}
         onLocaleChange={() => {
@@ -1177,6 +2394,692 @@ export function SiteHeader() {
                   ))
                 ) : (
                   <>
+                    {regionalStrip === "middle_east" ? (
+                      <div className="mb-3 space-y-2 rounded-xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-panel-warm)_10%,var(--semantic-surface))] p-3">
+                        <p className="px-1 text-[11px] font-semibold uppercase tracking-widest text-[var(--nav-muted)]">
+                          {formatTitleCase(t("nav.middleEast.stripLabel"), locale)}
+                        </p>
+                        <Link
+                          href={localizeHref("/exams/middle-east")}
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {formatTitleCase(t("nav.middleEast.examsHub"), locale)}
+                        </Link>
+                        <Link
+                          href={localizeHref("/middle-east/prometric-nursing-exam")}
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {formatTitleCase(t("nav.middleEast.prometricExam"), locale)}
+                        </Link>
+                        <Link
+                          href={localizeHref("/middle-east/dha-exam")}
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {formatTitleCase(t("nav.middleEast.dhaExam"), locale)}
+                        </Link>
+                        <Link
+                          href={localizeHref("/middle-east/haad-exam")}
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {formatTitleCase(t("nav.middleEast.haadExam"), locale)}
+                        </Link>
+                        <Link
+                          href={localizeHref("/middle-east/dataflow-guide")}
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {formatTitleCase(t("nav.middleEast.dataflowGuide"), locale)}
+                        </Link>
+                        <Link
+                          href={localizeHref("/exams/middle-east#middle-east-dha")}
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {formatTitleCase(t("nav.middleEast.workUae"), locale)}
+                        </Link>
+                        <Link
+                          href={localizeHref("/exams/middle-east#middle-east-saudi")}
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {formatTitleCase(t("nav.middleEast.saudiGuide"), locale)}
+                        </Link>
+                        <Link
+                          href={localizeHref(HUB.questionBank)}
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {formatTitleCase(t("nav.middleEast.prometricPractice"), locale)}
+                        </Link>
+                        <Link
+                          href={localizeHref("/us/rn/nclex-rn/lessons")}
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {formatTitleCase(t("exams.middleEast.links.rnLessonsUs"), locale)}
+                        </Link>
+                      </div>
+                    ) : null}
+                    {regionalStrip === "australia" ? (
+                      <div className="mb-3 space-y-2 rounded-xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_10%,var(--semantic-surface))] p-3">
+                        <p className="px-1 text-[11px] font-semibold uppercase tracking-widest text-[var(--nav-muted)]">
+                          {formatTitleCase(t("nav.australia.stripLabel"), locale)}
+                        </p>
+                        <Link
+                          href={localizeHref("/exams/australia")}
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {formatTitleCase(t("nav.australia.examsHub"), locale)}
+                        </Link>
+                        <Link
+                          href={localizeHref("/australia/ahpra-registration")}
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {formatTitleCase(t("nav.australia.ahpra"), locale)}
+                        </Link>
+                        <Link
+                          href={localizeHref("/australia/osce-nursing")}
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {formatTitleCase(t("nav.australia.osce"), locale)}
+                        </Link>
+                        <Link
+                          href={localizeHref("/australia/oba-nursing")}
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {formatTitleCase(t("nav.australia.oba"), locale)}
+                        </Link>
+                        <Link
+                          href={localizeHref("/australia/nursing-pathway")}
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {formatTitleCase(t("exams.australia.next.linkPathway"), locale)}
+                        </Link>
+                        <Link
+                          href={localizeHref("/exams/australia#au-international")}
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {formatTitleCase(t("nav.australia.workAu"), locale)}
+                        </Link>
+                        <Link
+                          href={localizeHref(HUB.questionBank)}
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {formatTitleCase(t("nav.australia.oscePrep"), locale)}
+                        </Link>
+                        <Link
+                          href={localizeHref("/us/rn/nclex-rn/lessons")}
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {formatTitleCase(t("exams.australia.links.rnLessonsUs"), locale)}
+                        </Link>
+                      </div>
+                    ) : null}
+                    {regionalStrip === "china" ? (
+                      <div className="mb-3 space-y-2 rounded-xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-chart-3)_10%,var(--semantic-surface))] p-3">
+                        <p className="px-1 text-[11px] font-semibold uppercase tracking-widest text-[var(--nav-muted)]">
+                          {formatTitleCase(t("nav.country.china.stripLabel"), locale)}
+                        </p>
+                        <Link
+                          href={localizeHref("/exams/china")}
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {formatTitleCase(t("nav.country.china.examsHub"), locale)}
+                        </Link>
+                        <Link
+                          href={localizeHref("/china/nursing-exam")}
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {formatTitleCase(t("nav.country.china.nursingExam"), locale)}
+                        </Link>
+                        <Link
+                          href={localizeHref("/china/how-to-become-a-nurse")}
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {formatTitleCase(t("nav.country.china.howToBecome"), locale)}
+                        </Link>
+                        <Link
+                          href={localizeHref("/china/work-abroad")}
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {formatTitleCase(t("nav.country.china.workAbroad"), locale)}
+                        </Link>
+                        <Link
+                          href={localizeHref("/china/nclex-for-chinese-nurses")}
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {formatTitleCase(t("nav.country.china.nclexTopic"), locale)}
+                        </Link>
+                        <Link
+                          href={localizeHref(`/blog/tag/${encodeURIComponent("China nursing")}`)}
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {formatTitleCase(t("nav.country.china.blog"), locale)}
+                        </Link>
+                        <Link
+                          href={localizeHref("/us/rn/nclex-rn/lessons")}
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {formatTitleCase(t("nav.country.china.nclexPrepUs"), locale)}
+                        </Link>
+                      </div>
+                    ) : null}
+                    {regionalStrip === "korea" ? (
+                      <div className="mb-3 space-y-2 rounded-xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-chart-4)_10%,var(--semantic-surface))] p-3">
+                        <p className="px-1 text-[11px] font-semibold uppercase tracking-widest text-[var(--nav-muted)]">
+                          {formatTitleCase(t("nav.country.korea.stripLabel"), locale)}
+                        </p>
+                        <Link
+                          href={localizeHref("/exams/korea")}
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {formatTitleCase(t("nav.country.korea.examsHub"), locale)}
+                        </Link>
+                        <Link
+                          href={localizeHref("/korea/nursing-exam")}
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {formatTitleCase(t("nav.country.korea.nursingExam"), locale)}
+                        </Link>
+                        <Link
+                          href={localizeHref("/korea/how-to-become-a-nurse")}
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {formatTitleCase(t("nav.country.korea.howToBecome"), locale)}
+                        </Link>
+                        <Link
+                          href={localizeHref("/korea/work-abroad")}
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {formatTitleCase(t("nav.country.korea.workAbroad"), locale)}
+                        </Link>
+                        <Link
+                          href={localizeHref("/korea/nclex-for-korean-nurses")}
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {formatTitleCase(t("nav.country.korea.nclexTopic"), locale)}
+                        </Link>
+                        <Link
+                          href={localizeHref(`/blog/tag/${encodeURIComponent("Korea nursing")}`)}
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {formatTitleCase(t("nav.country.korea.blog"), locale)}
+                        </Link>
+                        <Link
+                          href={localizeHref("/us/rn/nclex-rn/lessons")}
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {formatTitleCase(t("nav.country.korea.nclexPrepUs"), locale)}
+                        </Link>
+                      </div>
+                    ) : null}
+                    {regionalStrip === "japan" ? (
+                      <div className="mb-3 space-y-2 rounded-xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-chart-5)_10%,var(--semantic-surface))] p-3">
+                        <p className="px-1 text-[11px] font-semibold uppercase tracking-widest text-[var(--nav-muted)]">
+                          {formatTitleCase(t("nav.country.japan.stripLabel"), locale)}
+                        </p>
+                        <Link
+                          href={localizeHref("/exams/japan")}
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {formatTitleCase(t("nav.country.japan.examsHub"), locale)}
+                        </Link>
+                        <Link
+                          href={localizeHref("/japan/nursing-exam")}
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {formatTitleCase(t("nav.country.japan.nursingExam"), locale)}
+                        </Link>
+                        <Link
+                          href={localizeHref("/japan/how-to-become-a-nurse")}
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {formatTitleCase(t("nav.country.japan.howToBecome"), locale)}
+                        </Link>
+                        <Link
+                          href={localizeHref("/japan/work-abroad")}
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {formatTitleCase(t("nav.country.japan.workAbroad"), locale)}
+                        </Link>
+                        <Link
+                          href={localizeHref("/japan/nclex-for-japanese-nurses")}
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {formatTitleCase(t("nav.country.japan.nclexTopic"), locale)}
+                        </Link>
+                        <Link
+                          href={localizeHref(`/blog/tag/${encodeURIComponent("Japan nursing")}`)}
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {formatTitleCase(t("nav.country.japan.blog"), locale)}
+                        </Link>
+                        <Link
+                          href={localizeHref("/us/rn/nclex-rn/lessons")}
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {formatTitleCase(t("nav.country.japan.nclexPrepUs"), locale)}
+                        </Link>
+                      </div>
+                    ) : null}
+                    {regionalStrip === "germany" ? (
+                      <div className="mb-3 space-y-2 rounded-xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-chart-4)_10%,var(--semantic-surface))] p-3">
+                        <p className="px-1 text-[11px] font-semibold uppercase tracking-widest text-[var(--nav-muted)]">
+                          {formatTitleCase(t("nav.country.germany.stripLabel"), locale)}
+                        </p>
+                        <Link
+                          href={localizeHref("/exams/germany")}
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {formatTitleCase(t("nav.country.germany.examsHub"), locale)}
+                        </Link>
+                        <Link
+                          href={localizeHref("/germany/nurse-recognition")}
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {formatTitleCase(t("nav.country.germany.nurseRecognition"), locale)}
+                        </Link>
+                        <Link
+                          href={localizeHref("/germany/work-as-a-nurse")}
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {formatTitleCase(t("nav.country.germany.workAsNurse"), locale)}
+                        </Link>
+                        <Link
+                          href={localizeHref("/germany/kenntnisprufung")}
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {formatTitleCase(t("nav.country.germany.kenntnisprufungGuide"), locale)}
+                        </Link>
+                        <Link
+                          href={localizeHref("/germany/german-language-for-nurses")}
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {formatTitleCase(t("nav.country.germany.germanLanguageTopic"), locale)}
+                        </Link>
+                        <Link
+                          href={localizeHref(`/blog/tag/${encodeURIComponent("Germany nursing")}`)}
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {formatTitleCase(t("nav.country.germany.blog"), locale)}
+                        </Link>
+                        <Link
+                          href={localizeHref("/us/rn/nclex-rn/lessons")}
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {formatTitleCase(t("nav.country.germany.nclexPrepUs"), locale)}
+                        </Link>
+                      </div>
+                    ) : null}
+                    {regionalStrip === "france" ? (
+                      <div className="mb-3 space-y-2 rounded-xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-chart-5)_10%,var(--semantic-surface))] p-3">
+                        <p className="px-1 text-[11px] font-semibold uppercase tracking-widest text-[var(--nav-muted)]">
+                          {formatTitleCase(t("nav.country.france.stripLabel"), locale)}
+                        </p>
+                        <Link
+                          href={localizeHref("/exams/france")}
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {formatTitleCase(t("nav.country.france.examsHub"), locale)}
+                        </Link>
+                        <Link
+                          href={localizeHref("/france/nurse-registration")}
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {formatTitleCase(t("nav.country.france.nurseRegistration"), locale)}
+                        </Link>
+                        <Link
+                          href={localizeHref("/france/how-to-become-a-nurse")}
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {formatTitleCase(t("nav.country.france.howToBecome"), locale)}
+                        </Link>
+                        <Link
+                          href={localizeHref("/france/work-abroad")}
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {formatTitleCase(t("nav.country.france.workAbroad"), locale)}
+                        </Link>
+                        <Link
+                          href={buildLocalizedMarketingPath("fr", "/exams/france")}
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {formatTitleCase(t("nav.country.france.frenchResources"), locale)}
+                        </Link>
+                        <Link
+                          href={localizeHref(`/blog/tag/${encodeURIComponent(t("blog.country.france.tagName"))}`)}
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {formatTitleCase(t("nav.country.france.blog"), locale)}
+                        </Link>
+                        <Link
+                          href={localizeHref("/us/rn/nclex-rn/lessons")}
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {formatTitleCase(t("nav.country.france.nclexPrepUs"), locale)}
+                        </Link>
+                      </div>
+                    ) : null}
+                    {regionalStrip === "italy" ? (
+                      <div className="mb-3 space-y-2 rounded-xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-chart-1)_10%,var(--semantic-surface))] p-3">
+                        <p className="px-1 text-[11px] font-semibold uppercase tracking-widest text-[var(--nav-muted)]">
+                          {formatTitleCase(t("nav.country.italy.stripLabel"), locale)}
+                        </p>
+                        <Link
+                          href={localizeHref("/exams/italy")}
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {formatTitleCase(t("nav.country.italy.examsHub"), locale)}
+                        </Link>
+                        <Link
+                          href={localizeHref("/italy/nurse-registration")}
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {formatTitleCase(t("nav.country.italy.nurseRegistration"), locale)}
+                        </Link>
+                        <Link
+                          href={localizeHref("/italy/how-to-become-a-nurse")}
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {formatTitleCase(t("nav.country.italy.howToBecome"), locale)}
+                        </Link>
+                        <Link
+                          href={localizeHref("/italy/work-abroad")}
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {formatTitleCase(t("nav.country.italy.workAbroad"), locale)}
+                        </Link>
+                        <Link
+                          href={buildLocalizedMarketingPath("it", "/exams/italy")}
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {formatTitleCase(t("nav.country.italy.italianResources"), locale)}
+                        </Link>
+                        <Link
+                          href={localizeHref(`/blog/tag/${encodeURIComponent(t("blog.country.italy.tagName"))}`)}
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {formatTitleCase(t("nav.country.italy.blog"), locale)}
+                        </Link>
+                        <Link
+                          href={localizeHref("/us/rn/nclex-rn/lessons")}
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {formatTitleCase(t("nav.country.italy.nclexPrepUs"), locale)}
+                        </Link>
+                      </div>
+                    ) : null}
+                    {regionalStrip === "hungary" ? (
+                      <div className="mb-3 space-y-2 rounded-xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-chart-5)_10%,var(--semantic-surface))] p-3">
+                        <p className="px-1 text-[11px] font-semibold uppercase tracking-widest text-[var(--nav-muted)]">
+                          {formatTitleCase(t("nav.country.hungary.stripLabel"), locale)}
+                        </p>
+                        <Link
+                          href={localizeHref("/exams/hungary")}
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {formatTitleCase(t("nav.country.hungary.examsHub"), locale)}
+                        </Link>
+                        <Link
+                          href={localizeHref("/hungary/nurse-registration")}
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {formatTitleCase(t("nav.country.hungary.nurseRegistration"), locale)}
+                        </Link>
+                        <Link
+                          href={localizeHref("/hungary/how-to-become-a-nurse")}
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {formatTitleCase(t("nav.country.hungary.howToBecome"), locale)}
+                        </Link>
+                        <Link
+                          href={localizeHref("/hungary/work-abroad")}
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {formatTitleCase(t("nav.country.hungary.workAbroad"), locale)}
+                        </Link>
+                        <Link
+                          href={buildLocalizedMarketingPath("hu", "/exams/hungary")}
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {formatTitleCase(t("nav.country.hungary.hungarianResources"), locale)}
+                        </Link>
+                        <Link
+                          href={localizeHref(`/blog/tag/${encodeURIComponent(t("blog.country.hungary.tagName"))}`)}
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {formatTitleCase(t("nav.country.hungary.blog"), locale)}
+                        </Link>
+                        <Link
+                          href={localizeHref("/us/rn/nclex-rn/lessons")}
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {formatTitleCase(t("nav.country.hungary.nclexPrepUs"), locale)}
+                        </Link>
+                      </div>
+                    ) : null}
+                    {regionalStrip === "portugal" ? (
+                      <div className="mb-3 space-y-2 rounded-xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-chart-2)_10%,var(--semantic-surface))] p-3">
+                        <p className="px-1 text-[11px] font-semibold uppercase tracking-widest text-[var(--nav-muted)]">
+                          {formatTitleCase(t("nav.country.portugal.stripLabel"), locale)}
+                        </p>
+                        <Link
+                          href={localizeHref("/exams/portugal")}
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {formatTitleCase(t("nav.country.portugal.examsHub"), locale)}
+                        </Link>
+                        <Link
+                          href={localizeHref("/portugal/nurse-registration")}
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {formatTitleCase(t("nav.country.portugal.nurseRegistration"), locale)}
+                        </Link>
+                        <Link
+                          href={localizeHref("/portugal/how-to-become-a-nurse")}
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {formatTitleCase(t("nav.country.portugal.howToBecome"), locale)}
+                        </Link>
+                        <Link
+                          href={localizeHref("/portugal/work-abroad")}
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {formatTitleCase(t("nav.country.portugal.workAbroad"), locale)}
+                        </Link>
+                        <Link
+                          href={buildLocalizedMarketingPath("pt", "/exams/portugal")}
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {formatTitleCase(t("nav.country.portugal.portugueseResources"), locale)}
+                        </Link>
+                        <Link
+                          href={localizeHref(`/blog/tag/${encodeURIComponent(t("blog.country.portugal.tagName"))}`)}
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {formatTitleCase(t("nav.country.portugal.blog"), locale)}
+                        </Link>
+                        <Link
+                          href={localizeHref("/us/rn/nclex-rn/lessons")}
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {formatTitleCase(t("nav.country.portugal.nclexPrepUs"), locale)}
+                        </Link>
+                      </div>
+                    ) : null}
+                    {regionalStrip === "mexico" ? (
+                      <div className="mb-3 space-y-2 rounded-xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-chart-4)_10%,var(--semantic-surface))] p-3">
+                        <p className="px-1 text-[11px] font-semibold uppercase tracking-widest text-[var(--nav-muted)]">
+                          {formatTitleCase(t("nav.country.mexico.stripLabel"), locale)}
+                        </p>
+                        <Link
+                          href={localizeHref("/exams/mexico")}
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {formatTitleCase(t("nav.country.mexico.examsHub"), locale)}
+                        </Link>
+                        <Link
+                          href={localizeHref("/mexico/nurse-registration")}
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {formatTitleCase(t("nav.country.mexico.nurseRegistration"), locale)}
+                        </Link>
+                        <Link
+                          href={localizeHref("/mexico/how-to-become-a-nurse")}
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {formatTitleCase(t("nav.country.mexico.howToBecome"), locale)}
+                        </Link>
+                        <Link
+                          href={localizeHref("/mexico/nclex-for-mexican-nurses")}
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {formatTitleCase(t("nav.country.mexico.nclexForMexicanNurses"), locale)}
+                        </Link>
+                        <Link
+                          href={localizeHref("/mexico/work-abroad")}
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {formatTitleCase(t("nav.country.mexico.workAbroad"), locale)}
+                        </Link>
+                        <Link
+                          href={buildLocalizedMarketingPath("es", "/exams/mexico")}
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {formatTitleCase(t("nav.country.mexico.spanishResources"), locale)}
+                        </Link>
+                        <Link
+                          href={localizeHref(`/blog/tag/${encodeURIComponent(t("blog.country.mexico.tagName"))}`)}
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {formatTitleCase(t("nav.country.mexico.blog"), locale)}
+                        </Link>
+                        <Link
+                          href={localizeHref("/us/rn/nclex-rn/lessons")}
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {formatTitleCase(t("nav.country.mexico.nclexPrepUs"), locale)}
+                        </Link>
+                      </div>
+                    ) : null}
+                    {regionalStrip === "india" ? (
+                      <div className="mb-3 space-y-2 rounded-xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-info)_6%,var(--semantic-surface))] p-3">
+                        <p className="px-1 text-[11px] font-semibold uppercase tracking-widest text-[var(--nav-muted)]">
+                          {formatTitleCase(t("nav.india.stripLabel"), locale)}
+                        </p>
+                        <Link
+                          href={localizeHref("/exams/india")}
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {formatTitleCase(t("nav.india.examsHub"), locale)}
+                        </Link>
+                        <Link
+                          href={localizeHref("/india/aiims-nursing")}
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {formatTitleCase(t("nav.india.aiimsNursing"), locale)}
+                        </Link>
+                        <Link
+                          href={localizeHref("/india/nursing-exams")}
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {formatTitleCase(t("nav.india.stateExams"), locale)}
+                        </Link>
+                        <Link
+                          href={localizeHref("/exams/india#india-intl")}
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {formatTitleCase(t("nav.india.workAbroad"), locale)}
+                        </Link>
+                        <Link
+                          href={localizeHref("/us/rn/nclex-rn/lessons")}
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {formatTitleCase(t("nav.india.nclexIndia"), locale)}
+                        </Link>
+                      </div>
+                    ) : null}
                     {megaMenus.map((menu) => {
                       const expanded = mobileExpandedMega === menu.key;
                       return (

@@ -363,124 +363,13 @@ async function main() {
     ) + "\n",
   );
 
-  writeFileSync(
-    join(OUT_DIR, "legacy-content-inventory.json"),
-    JSON.stringify(
-      {
-        ...reportMeta,
-        pointer: "data/audit/legacy-lessons-inventory.json (full file; large)",
-        unimportedLegacySummary: legacyUnimportedSummary.counts ?? legacyUnimportedSummary,
-        methodology: (legacyUnimportedSummary as { methodology?: unknown }).methodology,
-      },
-      null,
-      2,
-    ) + "\n",
-  );
+  /**
+   * Legacy ↔ current **matrix** files (schema v3 with per-item evidence rows) are produced by
+   * `scripts/audit/generate-parity-evidence-matrix.mts` → `npm run audit:parity-evidence-matrix`.
+   * Do not duplicate thin stubs here — they would overwrite the matrix.
+   */
 
-  writeFileSync(
-    join(OUT_DIR, "current-content-inventory.json"),
-    JSON.stringify(
-      {
-        ...reportMeta,
-        catalogPathwayIds: [...catalogPathwayIds].sort(),
-        pathwayRows,
-      },
-      null,
-      2,
-    ) + "\n",
-  );
-
-  writeFileSync(
-    join(OUT_DIR, "legacy-feature-inventory.json"),
-    JSON.stringify(
-      {
-        ...reportMeta,
-        pointer: "data/audit/legacy-feature-parity.json, data/audit/legacy-master-migration-map.md (if present)",
-        legacyClient: "external/NurseNest/client (Vite) — see legacy-full-file-inventory.json",
-      },
-      null,
-      2,
-    ) + "\n",
-  );
-
-  writeFileSync(
-    join(OUT_DIR, "current-feature-inventory.json"),
-    JSON.stringify(
-      {
-        ...reportMeta,
-        nextAppRoutes: "src/app/(marketing), src/app/(student), src/app/(admin)",
-        coreLibraries: [
-          "src/lib/exam-pathways/exam-product-registry.ts",
-          "src/lib/lessons/pathway-lesson-loader.ts",
-          "src/lib/entitlements/content-access-scope.ts",
-        ],
-      },
-      null,
-      2,
-    ) + "\n",
-  );
-
-  writeFileSync(
-    join(OUT_DIR, "admin-surface-parity.json"),
-    JSON.stringify({ ...reportMeta, adminSurfaces }, null, 2) + "\n",
-  );
-
-  writeFileSync(
-    join(OUT_DIR, "user-surface-parity.json"),
-    JSON.stringify({ ...reportMeta, learnerSurfaces }, null, 2) + "\n",
-  );
-
-  writeFileSync(
-    join(OUT_DIR, "legacy-vs-current-content-parity.json"),
-    JSON.stringify(
-      {
-        ...reportMeta,
-        legacyLessonKeysApprox: (legacyUnimportedSummary as { counts?: { totalLegacyContentMapKeys?: number } })
-          .counts?.totalLegacyContentMapKeys,
-        currentCatalogPathways: catalogPathwayIds.size,
-        gapNote:
-          "Majority of legacy lesson keys are not imported as pathway lessons; see unimported-legacy-content.json classification.",
-      },
-      null,
-      2,
-    ) + "\n",
-  );
-
-  writeFileSync(
-    join(OUT_DIR, "legacy-vs-current-feature-parity.json"),
-    JSON.stringify(
-      {
-        ...reportMeta,
-        summary:
-          "Legacy monolith features mapped in docs/legacy-restoration-map.md and data/audit/legacy-* inventories; Next app implements subset with different architecture.",
-      },
-      null,
-      2,
-    ) + "\n",
-  );
-
-  writeFileSync(
-    join(OUT_DIR, "restoration-priority-queue.json"),
-    JSON.stringify(
-      {
-        ...reportMeta,
-        tier1: [
-          "Pathways with route_only and zero bank questions (verify registry intent)",
-          "Published lessons with empty sections (catalog)",
-          "Broken locale/country routing (middleware)",
-        ],
-        tier2: [
-          "Lessons failing structuralQuality.publicComplete with substantive copy (editorial)",
-          "Translation coverage gaps (tools/i18n)",
-        ],
-        evidence: "See lesson-content-completeness-audit.json and country-exam-locale-parity.json",
-      },
-      null,
-      2,
-    ) + "\n",
-  );
-
-  const parityFinalStatus = {
+  const parityRegistrySnapshot = {
     ...reportMeta,
     alliedHealthMarketingProfessions: ALLIED_PROFESSIONS.length,
     alliedHealthNote:
@@ -499,11 +388,10 @@ async function main() {
         : "Re-run with DATABASE_URL for bank/deck/DB lesson counts.",
     },
   };
+  writeFileSync(join(OUT_DIR, "parity-registry-lesson-snapshot.json"), JSON.stringify(parityRegistrySnapshot, null, 2) + "\n");
 
-  writeFileSync(join(OUT_DIR, "parity-final-status.json"), JSON.stringify(parityFinalStatus, null, 2) + "\n");
-
-  /** Markdown summary */
-  const md = `# Parity audit summary (evidence-based)
+  /** Markdown summary (lesson/registry slice — executive parity summary is parity-summary.md from evidence matrix) */
+  const md = `# Lesson & registry parity (catalog + structural gate)
 
 Generated: ${generatedAt}
 
@@ -554,7 +442,7 @@ See \`flashcard-content-completeness-audit.json\`.
 ## Files changed
 
 - \`scripts/audit/generate-full-parity-audit.mts\` (this generator)
-- \`data/audit/*.json\` + \`data/audit/parity-summary.md\` (outputs)
+- \`data/audit/*.json\` + \`data/audit/parity-lesson-registry-summary.md\` (this run)
 
 ## Verification
 
@@ -563,7 +451,11 @@ Run from \`nursenest-core/\`: \`npm run typecheck\`
 ## Repository state (manual)
 
 - **Merge conflicts**: verify with \`git diff --name-only --diff-filter=U\` before merging.
-- **Allied health**: see \`alliedHealthMarketingProfessions\` in \`parity-final-status.json\`; routes \`/allied-health/{professionKey}/…\` complement \`us-allied-core\` / \`ca-allied-core\`.
+- **Allied health**: see \`parity-registry-lesson-snapshot.json\`; routes \`/allied-health/{professionKey}/…\` complement \`us-allied-core\` / \`ca-allied-core\`.
+
+## Full legacy ↔ current matrix
+
+Run \`npm run audit:parity-evidence-matrix\` for \`parity-summary.md\`, \`legacy-*-inventory.json\`, \`admin-surface-parity.json\`, \`user-surface-parity.json\`, and \`restoration-priority-queue.json\` (schema v3).
 
 ## Audit tooling
 
@@ -571,7 +463,7 @@ Run from \`nursenest-core/\`: \`npm run typecheck\`
 
 `;
 
-  writeFileSync(join(OUT_DIR, "parity-summary.md"), md);
+  writeFileSync(join(OUT_DIR, "parity-lesson-registry-summary.md"), md);
 
   console.log("Wrote audit outputs to", OUT_DIR);
   console.log("routeableButNoContent:", routeableNoContent.length);

@@ -1,0 +1,321 @@
+{
+  "generatedAt": "2026-04-14T18:18:08.099Z",
+  "sources": {
+    "mergedBundles": "nursenest-core/public/i18n/{locale}.json",
+    "educationalOverlays": "nursenest-core/public/i18n/educational-overlays/{locale}/",
+    "marketingLocalePages": "nursenest-core/src/app/(marketing)/[locale]/**/page.tsx"
+  },
+  "missingOrEmptyByLocaleAndNamespace": {
+    "en": {
+      "missingVsEnglish": [],
+      "empty": [],
+      "missingVsEnglishByNamespace": {},
+      "emptyByNamespace": {}
+    },
+    "fr": {
+      "missingVsEnglish": [],
+      "empty": [],
+      "missingVsEnglishByNamespace": {},
+      "emptyByNamespace": {}
+    },
+    "es": {
+      "missingVsEnglish": [],
+      "empty": [],
+      "missingVsEnglishByNamespace": {},
+      "emptyByNamespace": {}
+    },
+    "tl": {
+      "missingVsEnglish": [],
+      "empty": [],
+      "missingVsEnglishByNamespace": {},
+      "emptyByNamespace": {}
+    },
+    "hi": {
+      "missingVsEnglish": [],
+      "empty": [],
+      "missingVsEnglishByNamespace": {},
+      "emptyByNamespace": {}
+    },
+    "zh": {
+      "missingVsEnglish": [],
+      "empty": [],
+      "missingVsEnglishByNamespace": {},
+      "emptyByNamespace": {}
+    },
+    "zh-tw": {
+      "missingVsEnglish": [],
+      "empty": [],
+      "missingVsEnglishByNamespace": {},
+      "emptyByNamespace": {}
+    },
+    "ar": {
+      "missingVsEnglish": [],
+      "empty": [],
+      "missingVsEnglishByNamespace": {},
+      "emptyByNamespace": {}
+    },
+    "ko": {
+      "missingVsEnglish": [],
+      "empty": [],
+      "missingVsEnglishByNamespace": {},
+      "emptyByNamespace": {}
+    },
+    "pt": {
+      "missingVsEnglish": [],
+      "empty": [],
+      "missingVsEnglishByNamespace": {},
+      "emptyByNamespace": {}
+    },
+    "pa": {
+      "missingVsEnglish": [],
+      "empty": [],
+      "missingVsEnglishByNamespace": {},
+      "emptyByNamespace": {}
+    },
+    "vi": {
+      "missingVsEnglish": [],
+      "empty": [],
+      "missingVsEnglishByNamespace": {},
+      "emptyByNamespace": {}
+    },
+    "ht": {
+      "missingVsEnglish": [],
+      "empty": [],
+      "missingVsEnglishByNamespace": {},
+      "emptyByNamespace": {}
+    },
+    "ur": {
+      "missingVsEnglish": [],
+      "empty": [],
+      "missingVsEnglishByNamespace": {},
+      "emptyByNamespace": {}
+    },
+    "ja": {
+      "missingVsEnglish": [],
+      "empty": [],
+      "missingVsEnglishByNamespace": {},
+      "emptyByNamespace": {}
+    },
+    "fa": {
+      "missingVsEnglish": [],
+      "empty": [],
+      "missingVsEnglishByNamespace": {},
+      "emptyByNamespace": {}
+    },
+    "de": {
+      "missingVsEnglish": [],
+      "empty": [],
+      "missingVsEnglishByNamespace": {},
+      "emptyByNamespace": {}
+    },
+    "th": {
+      "missingVsEnglish": [],
+      "empty": [],
+      "missingVsEnglishByNamespace": {},
+      "emptyByNamespace": {}
+    },
+    "tr": {
+      "missingVsEnglish": [],
+      "empty": [],
+      "missingVsEnglishByNamespace": {},
+      "emptyByNamespace": {}
+    },
+    "id": {
+      "missingVsEnglish": [],
+      "empty": [],
+      "missingVsEnglishByNamespace": {},
+      "emptyByNamespace": {}
+    },
+    "it": {
+      "missingVsEnglish": [],
+      "empty": [],
+      "missingVsEnglishByNamespace": {},
+      "emptyByNamespace": {}
+    },
+    "ru": {
+      "missingVsEnglish": [],
+      "empty": [],
+      "missingVsEnglishByNamespace": {},
+      "emptyByNamespace": {}
+    }
+  },
+  "educationalOverlaySummary": {
+    "referenceLocale": "fr",
+    "referenceLessonOverlayKeyCount": 16,
+    "note": "Lesson/question/flashcard bodies are primarily catalog/DB; overlays supplement selected keys. Locales without overlay files rely on English or in-app fallbacks.",
+    "perLocale": {
+      "en": {
+        "hasLessonsOverlay": false,
+        "hasQuestionsOverlay": false,
+        "hasFlashcardsOverlay": false,
+        "lessonOverlayKeyCount": 0,
+        "gapVsReferenceLessonKeys": 16
+      },
+      "fr": {
+        "hasLessonsOverlay": true,
+        "hasQuestionsOverlay": true,
+        "hasFlashcardsOverlay": true,
+        "lessonOverlayKeyCount": 16,
+        "gapVsReferenceLessonKeys": null
+      },
+      "es": {
+        "hasLessonsOverlay": true,
+        "hasQuestionsOverlay": true,
+        "hasFlashcardsOverlay": false,
+        "lessonOverlayKeyCount": 16,
+        "gapVsReferenceLessonKeys": 0
+      },
+      "tl": {
+        "hasLessonsOverlay": true,
+        "hasQuestionsOverlay": true,
+        "hasFlashcardsOverlay": false,
+        "lessonOverlayKeyCount": 16,
+        "gapVsReferenceLessonKeys": 0
+      },
+      "hi": {
+        "hasLessonsOverlay": false,
+        "hasQuestionsOverlay": false,
+        "hasFlashcardsOverlay": false,
+        "lessonOverlayKeyCount": 0,
+        "gapVsReferenceLessonKeys": 16
+      },
+      "zh": {
+        "hasLessonsOverlay": false,
+        "hasQuestionsOverlay": false,
+        "hasFlashcardsOverlay": false,
+        "lessonOverlayKeyCount": 0,
+        "gapVsReferenceLessonKeys": 16
+      },
+      "zh-tw": {
+        "hasLessonsOverlay": false,
+        "hasQuestionsOverlay": false,
+        "hasFlashcardsOverlay": false,
+        "lessonOverlayKeyCount": 0,
+        "gapVsReferenceLessonKeys": 16
+      },
+      "ar": {
+        "hasLessonsOverlay": false,
+        "hasQuestionsOverlay": false,
+        "hasFlashcardsOverlay": false,
+        "lessonOverlayKeyCount": 0,
+        "gapVsReferenceLessonKeys": 16
+      },
+      "ko": {
+        "hasLessonsOverlay": false,
+        "hasQuestionsOverlay": false,
+        "hasFlashcardsOverlay": false,
+        "lessonOverlayKeyCount": 0,
+        "gapVsReferenceLessonKeys": 16
+      },
+      "pt": {
+        "hasLessonsOverlay": false,
+        "hasQuestionsOverlay": false,
+        "hasFlashcardsOverlay": false,
+        "lessonOverlayKeyCount": 0,
+        "gapVsReferenceLessonKeys": 16
+      },
+      "pa": {
+        "hasLessonsOverlay": false,
+        "hasQuestionsOverlay": false,
+        "hasFlashcardsOverlay": false,
+        "lessonOverlayKeyCount": 0,
+        "gapVsReferenceLessonKeys": 16
+      },
+      "vi": {
+        "hasLessonsOverlay": false,
+        "hasQuestionsOverlay": false,
+        "hasFlashcardsOverlay": false,
+        "lessonOverlayKeyCount": 0,
+        "gapVsReferenceLessonKeys": 16
+      },
+      "ht": {
+        "hasLessonsOverlay": false,
+        "hasQuestionsOverlay": false,
+        "hasFlashcardsOverlay": false,
+        "lessonOverlayKeyCount": 0,
+        "gapVsReferenceLessonKeys": 16
+      },
+      "ur": {
+        "hasLessonsOverlay": false,
+        "hasQuestionsOverlay": false,
+        "hasFlashcardsOverlay": false,
+        "lessonOverlayKeyCount": 0,
+        "gapVsReferenceLessonKeys": 16
+      },
+      "ja": {
+        "hasLessonsOverlay": false,
+        "hasQuestionsOverlay": false,
+        "hasFlashcardsOverlay": false,
+        "lessonOverlayKeyCount": 0,
+        "gapVsReferenceLessonKeys": 16
+      },
+      "fa": {
+        "hasLessonsOverlay": false,
+        "hasQuestionsOverlay": false,
+        "hasFlashcardsOverlay": false,
+        "lessonOverlayKeyCount": 0,
+        "gapVsReferenceLessonKeys": 16
+      },
+      "de": {
+        "hasLessonsOverlay": false,
+        "hasQuestionsOverlay": false,
+        "hasFlashcardsOverlay": false,
+        "lessonOverlayKeyCount": 0,
+        "gapVsReferenceLessonKeys": 16
+      },
+      "th": {
+        "hasLessonsOverlay": false,
+        "hasQuestionsOverlay": false,
+        "hasFlashcardsOverlay": false,
+        "lessonOverlayKeyCount": 0,
+        "gapVsReferenceLessonKeys": 16
+      },
+      "tr": {
+        "hasLessonsOverlay": false,
+        "hasQuestionsOverlay": false,
+        "hasFlashcardsOverlay": false,
+        "lessonOverlayKeyCount": 0,
+        "gapVsReferenceLessonKeys": 16
+      },
+      "id": {
+        "hasLessonsOverlay": false,
+        "hasQuestionsOverlay": false,
+        "hasFlashcardsOverlay": false,
+        "lessonOverlayKeyCount": 0,
+        "gapVsReferenceLessonKeys": 16
+      },
+      "it": {
+        "hasLessonsOverlay": false,
+        "hasQuestionsOverlay": false,
+        "hasFlashcardsOverlay": false,
+        "lessonOverlayKeyCount": 0,
+        "gapVsReferenceLessonKeys": 16
+      },
+      "ru": {
+        "hasLessonsOverlay": false,
+        "hasQuestionsOverlay": false,
+        "hasFlashcardsOverlay": false,
+        "lessonOverlayKeyCount": 0,
+        "gapVsReferenceLessonKeys": 16
+      }
+    }
+  },
+  "localizedMarketingRoutes": {
+    "note": "Parent layout loads `loadMarketingMessages` for `MarketingI18nProvider`. Pages listed here do not import message loaders in `page.tsx` — metadata and some child components may still be English-only.",
+    "pageFilesWithoutDirectLoaderImport": [
+      "src/app/(marketing)/[locale]/[slug]/[examCode]/[exam]/blog/[postSlug]/page.tsx",
+      "src/app/(marketing)/[locale]/[slug]/[examCode]/[exam]/blog/page.tsx",
+      "src/app/(marketing)/[locale]/[slug]/page.tsx",
+      "src/app/(marketing)/[locale]/acceptable-use/page.tsx",
+      "src/app/(marketing)/[locale]/contact/page.tsx",
+      "src/app/(marketing)/[locale]/content-review-policy/page.tsx",
+      "src/app/(marketing)/[locale]/disclaimer/page.tsx",
+      "src/app/(marketing)/[locale]/editorial-policy/page.tsx",
+      "src/app/(marketing)/[locale]/faq/page.tsx",
+      "src/app/(marketing)/[locale]/pre-nursing/lessons/[slug]/page.tsx",
+      "src/app/(marketing)/[locale]/privacy/page.tsx",
+      "src/app/(marketing)/[locale]/refund-policy/page.tsx",
+      "src/app/(marketing)/[locale]/terms/page.tsx"
+    ]
+  }
+}

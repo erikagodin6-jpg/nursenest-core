@@ -1,0 +1,2006 @@
+{
+  "generatedAt": "2026-04-14T18:46:11.171Z",
+  "count": 200,
+  "entries": [
+    {
+      "title": "how to become nurse australia — Australia nursing (en 1)",
+      "slug": "en-how-to-become-nurse-australia-001-how-to-become-nurse-australia-australia-nursing-",
+      "primaryKeyword": "how to become nurse australia",
+      "language": "en",
+      "category": "Australia nursing",
+      "intentType": "transactional",
+      "translationGroupId": "au-nurse-0001-how-to-become-nurse-australia",
+      "status": "planned"
+    },
+    {
+      "title": "ahpra registration guide — Australia nursing (en 2)",
+      "slug": "en-ahpra-registration-guide-002-ahpra-registration-guide-australia-nursing-en-2",
+      "primaryKeyword": "ahpra registration guide",
+      "language": "en",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0001-ahpra-registration-guide",
+      "status": "planned"
+    },
+    {
+      "title": "osce nursing australia — Australia nursing (en 3)",
+      "slug": "en-osce-nursing-australia-003-osce-nursing-australia-australia-nursing-en-3",
+      "primaryKeyword": "osce nursing australia",
+      "language": "en",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0001-osce-nursing-australia",
+      "status": "planned"
+    },
+    {
+      "title": "oba nursing exam australia — Australia nursing (en 4)",
+      "slug": "en-oba-nursing-exam-australia-004-oba-nursing-exam-australia-australia-nursing-en-",
+      "primaryKeyword": "oba nursing exam australia",
+      "language": "en",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0001-oba-nursing-exam-australia",
+      "status": "planned"
+    },
+    {
+      "title": "nurses moving to australia — Australia nursing (en 5)",
+      "slug": "en-nurses-moving-to-australia-005-nurses-moving-to-australia-australia-nursing-en-",
+      "primaryKeyword": "nurses moving to australia",
+      "language": "en",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0001-nurses-moving-to-australia",
+      "status": "planned"
+    },
+    {
+      "title": "ielts vs oet australia — Australia nursing (en 6)",
+      "slug": "en-ielts-vs-oet-australia-006-ielts-vs-oet-australia-australia-nursing-en-6",
+      "primaryKeyword": "ielts vs oet australia",
+      "language": "en",
+      "category": "Australia nursing",
+      "intentType": "transactional",
+      "translationGroupId": "au-nurse-0001-ielts-vs-oet-australia",
+      "status": "planned"
+    },
+    {
+      "title": "nursing salary australia — Australia nursing (en 7)",
+      "slug": "en-nursing-salary-australia-007-nursing-salary-australia-australia-nursing-en-7",
+      "primaryKeyword": "nursing salary australia",
+      "language": "en",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0001-nursing-salary-australia",
+      "status": "planned"
+    },
+    {
+      "title": "best pathway international nurses — Australia nursing (en 8)",
+      "slug": "en-best-pathway-international-nurses-008-best-pathway-international-nurses-australia-nurs",
+      "primaryKeyword": "best pathway international nurses",
+      "language": "en",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0001-best-pathway-international-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "en vs rn australia — Australia nursing (en 9)",
+      "slug": "en-en-vs-rn-australia-009-en-vs-rn-australia-australia-nursing-en-9",
+      "primaryKeyword": "en vs rn australia",
+      "language": "en",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0001-en-vs-rn-australia",
+      "status": "planned"
+    },
+    {
+      "title": "bridging programs australia nursing — Australia nursing (en 10)",
+      "slug": "en-bridging-programs-australia-nursing-010-bridging-programs-australia-nursing-australia-nu",
+      "primaryKeyword": "bridging programs australia nursing",
+      "language": "en",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0001-bridging-programs-australia-nursing",
+      "status": "planned"
+    },
+    {
+      "title": "how to become nurse australia — Australia nursing (en 11)",
+      "slug": "en-how-to-become-nurse-australia-011-how-to-become-nurse-australia-australia-nursing-",
+      "primaryKeyword": "how to become nurse australia",
+      "language": "en",
+      "category": "Australia nursing",
+      "intentType": "transactional",
+      "translationGroupId": "au-nurse-0002-how-to-become-nurse-australia",
+      "status": "planned"
+    },
+    {
+      "title": "ahpra registration guide — Australia nursing (en 12)",
+      "slug": "en-ahpra-registration-guide-012-ahpra-registration-guide-australia-nursing-en-12",
+      "primaryKeyword": "ahpra registration guide",
+      "language": "en",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0002-ahpra-registration-guide",
+      "status": "planned"
+    },
+    {
+      "title": "osce nursing australia — Australia nursing (en 13)",
+      "slug": "en-osce-nursing-australia-013-osce-nursing-australia-australia-nursing-en-13",
+      "primaryKeyword": "osce nursing australia",
+      "language": "en",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0002-osce-nursing-australia",
+      "status": "planned"
+    },
+    {
+      "title": "oba nursing exam australia — Australia nursing (en 14)",
+      "slug": "en-oba-nursing-exam-australia-014-oba-nursing-exam-australia-australia-nursing-en-",
+      "primaryKeyword": "oba nursing exam australia",
+      "language": "en",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0002-oba-nursing-exam-australia",
+      "status": "planned"
+    },
+    {
+      "title": "nurses moving to australia — Australia nursing (en 15)",
+      "slug": "en-nurses-moving-to-australia-015-nurses-moving-to-australia-australia-nursing-en-",
+      "primaryKeyword": "nurses moving to australia",
+      "language": "en",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0002-nurses-moving-to-australia",
+      "status": "planned"
+    },
+    {
+      "title": "ielts vs oet australia — Australia nursing (en 16)",
+      "slug": "en-ielts-vs-oet-australia-016-ielts-vs-oet-australia-australia-nursing-en-16",
+      "primaryKeyword": "ielts vs oet australia",
+      "language": "en",
+      "category": "Australia nursing",
+      "intentType": "transactional",
+      "translationGroupId": "au-nurse-0002-ielts-vs-oet-australia",
+      "status": "planned"
+    },
+    {
+      "title": "nursing salary australia — Australia nursing (en 17)",
+      "slug": "en-nursing-salary-australia-017-nursing-salary-australia-australia-nursing-en-17",
+      "primaryKeyword": "nursing salary australia",
+      "language": "en",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0002-nursing-salary-australia",
+      "status": "planned"
+    },
+    {
+      "title": "best pathway international nurses — Australia nursing (en 18)",
+      "slug": "en-best-pathway-international-nurses-018-best-pathway-international-nurses-australia-nurs",
+      "primaryKeyword": "best pathway international nurses",
+      "language": "en",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0002-best-pathway-international-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "en vs rn australia — Australia nursing (en 19)",
+      "slug": "en-en-vs-rn-australia-019-en-vs-rn-australia-australia-nursing-en-19",
+      "primaryKeyword": "en vs rn australia",
+      "language": "en",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0002-en-vs-rn-australia",
+      "status": "planned"
+    },
+    {
+      "title": "bridging programs australia nursing — Australia nursing (en 20)",
+      "slug": "en-bridging-programs-australia-nursing-020-bridging-programs-australia-nursing-australia-nu",
+      "primaryKeyword": "bridging programs australia nursing",
+      "language": "en",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0002-bridging-programs-australia-nursing",
+      "status": "planned"
+    },
+    {
+      "title": "how to become nurse australia — Australia nursing (en 21)",
+      "slug": "en-how-to-become-nurse-australia-021-how-to-become-nurse-australia-australia-nursing-",
+      "primaryKeyword": "how to become nurse australia",
+      "language": "en",
+      "category": "Australia nursing",
+      "intentType": "transactional",
+      "translationGroupId": "au-nurse-0003-how-to-become-nurse-australia",
+      "status": "planned"
+    },
+    {
+      "title": "ahpra registration guide — Australia nursing (en 22)",
+      "slug": "en-ahpra-registration-guide-022-ahpra-registration-guide-australia-nursing-en-22",
+      "primaryKeyword": "ahpra registration guide",
+      "language": "en",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0003-ahpra-registration-guide",
+      "status": "planned"
+    },
+    {
+      "title": "osce nursing australia — Australia nursing (en 23)",
+      "slug": "en-osce-nursing-australia-023-osce-nursing-australia-australia-nursing-en-23",
+      "primaryKeyword": "osce nursing australia",
+      "language": "en",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0003-osce-nursing-australia",
+      "status": "planned"
+    },
+    {
+      "title": "oba nursing exam australia — Australia nursing (en 24)",
+      "slug": "en-oba-nursing-exam-australia-024-oba-nursing-exam-australia-australia-nursing-en-",
+      "primaryKeyword": "oba nursing exam australia",
+      "language": "en",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0003-oba-nursing-exam-australia",
+      "status": "planned"
+    },
+    {
+      "title": "nurses moving to australia — Australia nursing (en 25)",
+      "slug": "en-nurses-moving-to-australia-025-nurses-moving-to-australia-australia-nursing-en-",
+      "primaryKeyword": "nurses moving to australia",
+      "language": "en",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0003-nurses-moving-to-australia",
+      "status": "planned"
+    },
+    {
+      "title": "ielts vs oet australia — Australia nursing (en 26)",
+      "slug": "en-ielts-vs-oet-australia-026-ielts-vs-oet-australia-australia-nursing-en-26",
+      "primaryKeyword": "ielts vs oet australia",
+      "language": "en",
+      "category": "Australia nursing",
+      "intentType": "transactional",
+      "translationGroupId": "au-nurse-0003-ielts-vs-oet-australia",
+      "status": "planned"
+    },
+    {
+      "title": "nursing salary australia — Australia nursing (en 27)",
+      "slug": "en-nursing-salary-australia-027-nursing-salary-australia-australia-nursing-en-27",
+      "primaryKeyword": "nursing salary australia",
+      "language": "en",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0003-nursing-salary-australia",
+      "status": "planned"
+    },
+    {
+      "title": "best pathway international nurses — Australia nursing (en 28)",
+      "slug": "en-best-pathway-international-nurses-028-best-pathway-international-nurses-australia-nurs",
+      "primaryKeyword": "best pathway international nurses",
+      "language": "en",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0003-best-pathway-international-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "en vs rn australia — Australia nursing (en 29)",
+      "slug": "en-en-vs-rn-australia-029-en-vs-rn-australia-australia-nursing-en-29",
+      "primaryKeyword": "en vs rn australia",
+      "language": "en",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0003-en-vs-rn-australia",
+      "status": "planned"
+    },
+    {
+      "title": "bridging programs australia nursing — Australia nursing (en 30)",
+      "slug": "en-bridging-programs-australia-nursing-030-bridging-programs-australia-nursing-australia-nu",
+      "primaryKeyword": "bridging programs australia nursing",
+      "language": "en",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0003-bridging-programs-australia-nursing",
+      "status": "planned"
+    },
+    {
+      "title": "how to become nurse australia — Australia nursing (en 31)",
+      "slug": "en-how-to-become-nurse-australia-031-how-to-become-nurse-australia-australia-nursing-",
+      "primaryKeyword": "how to become nurse australia",
+      "language": "en",
+      "category": "Australia nursing",
+      "intentType": "transactional",
+      "translationGroupId": "au-nurse-0004-how-to-become-nurse-australia",
+      "status": "planned"
+    },
+    {
+      "title": "ahpra registration guide — Australia nursing (en 32)",
+      "slug": "en-ahpra-registration-guide-032-ahpra-registration-guide-australia-nursing-en-32",
+      "primaryKeyword": "ahpra registration guide",
+      "language": "en",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0004-ahpra-registration-guide",
+      "status": "planned"
+    },
+    {
+      "title": "osce nursing australia — Australia nursing (en 33)",
+      "slug": "en-osce-nursing-australia-033-osce-nursing-australia-australia-nursing-en-33",
+      "primaryKeyword": "osce nursing australia",
+      "language": "en",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0004-osce-nursing-australia",
+      "status": "planned"
+    },
+    {
+      "title": "oba nursing exam australia — Australia nursing (en 34)",
+      "slug": "en-oba-nursing-exam-australia-034-oba-nursing-exam-australia-australia-nursing-en-",
+      "primaryKeyword": "oba nursing exam australia",
+      "language": "en",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0004-oba-nursing-exam-australia",
+      "status": "planned"
+    },
+    {
+      "title": "nurses moving to australia — Australia nursing (en 35)",
+      "slug": "en-nurses-moving-to-australia-035-nurses-moving-to-australia-australia-nursing-en-",
+      "primaryKeyword": "nurses moving to australia",
+      "language": "en",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0004-nurses-moving-to-australia",
+      "status": "planned"
+    },
+    {
+      "title": "ielts vs oet australia — Australia nursing (en 36)",
+      "slug": "en-ielts-vs-oet-australia-036-ielts-vs-oet-australia-australia-nursing-en-36",
+      "primaryKeyword": "ielts vs oet australia",
+      "language": "en",
+      "category": "Australia nursing",
+      "intentType": "transactional",
+      "translationGroupId": "au-nurse-0004-ielts-vs-oet-australia",
+      "status": "planned"
+    },
+    {
+      "title": "nursing salary australia — Australia nursing (en 37)",
+      "slug": "en-nursing-salary-australia-037-nursing-salary-australia-australia-nursing-en-37",
+      "primaryKeyword": "nursing salary australia",
+      "language": "en",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0004-nursing-salary-australia",
+      "status": "planned"
+    },
+    {
+      "title": "best pathway international nurses — Australia nursing (en 38)",
+      "slug": "en-best-pathway-international-nurses-038-best-pathway-international-nurses-australia-nurs",
+      "primaryKeyword": "best pathway international nurses",
+      "language": "en",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0004-best-pathway-international-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "en vs rn australia — Australia nursing (en 39)",
+      "slug": "en-en-vs-rn-australia-039-en-vs-rn-australia-australia-nursing-en-39",
+      "primaryKeyword": "en vs rn australia",
+      "language": "en",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0004-en-vs-rn-australia",
+      "status": "planned"
+    },
+    {
+      "title": "bridging programs australia nursing — Australia nursing (en 40)",
+      "slug": "en-bridging-programs-australia-nursing-040-bridging-programs-australia-nursing-australia-nu",
+      "primaryKeyword": "bridging programs australia nursing",
+      "language": "en",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0004-bridging-programs-australia-nursing",
+      "status": "planned"
+    },
+    {
+      "title": "how to become nurse australia — Australia nursing (en 41)",
+      "slug": "en-how-to-become-nurse-australia-041-how-to-become-nurse-australia-australia-nursing-",
+      "primaryKeyword": "how to become nurse australia",
+      "language": "en",
+      "category": "Australia nursing",
+      "intentType": "transactional",
+      "translationGroupId": "au-nurse-0005-how-to-become-nurse-australia",
+      "status": "planned"
+    },
+    {
+      "title": "ahpra registration guide — Australia nursing (en 42)",
+      "slug": "en-ahpra-registration-guide-042-ahpra-registration-guide-australia-nursing-en-42",
+      "primaryKeyword": "ahpra registration guide",
+      "language": "en",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0005-ahpra-registration-guide",
+      "status": "planned"
+    },
+    {
+      "title": "osce nursing australia — Australia nursing (en 43)",
+      "slug": "en-osce-nursing-australia-043-osce-nursing-australia-australia-nursing-en-43",
+      "primaryKeyword": "osce nursing australia",
+      "language": "en",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0005-osce-nursing-australia",
+      "status": "planned"
+    },
+    {
+      "title": "oba nursing exam australia — Australia nursing (en 44)",
+      "slug": "en-oba-nursing-exam-australia-044-oba-nursing-exam-australia-australia-nursing-en-",
+      "primaryKeyword": "oba nursing exam australia",
+      "language": "en",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0005-oba-nursing-exam-australia",
+      "status": "planned"
+    },
+    {
+      "title": "nurses moving to australia — Australia nursing (en 45)",
+      "slug": "en-nurses-moving-to-australia-045-nurses-moving-to-australia-australia-nursing-en-",
+      "primaryKeyword": "nurses moving to australia",
+      "language": "en",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0005-nurses-moving-to-australia",
+      "status": "planned"
+    },
+    {
+      "title": "ielts vs oet australia — Australia nursing (en 46)",
+      "slug": "en-ielts-vs-oet-australia-046-ielts-vs-oet-australia-australia-nursing-en-46",
+      "primaryKeyword": "ielts vs oet australia",
+      "language": "en",
+      "category": "Australia nursing",
+      "intentType": "transactional",
+      "translationGroupId": "au-nurse-0005-ielts-vs-oet-australia",
+      "status": "planned"
+    },
+    {
+      "title": "nursing salary australia — Australia nursing (en 47)",
+      "slug": "en-nursing-salary-australia-047-nursing-salary-australia-australia-nursing-en-47",
+      "primaryKeyword": "nursing salary australia",
+      "language": "en",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0005-nursing-salary-australia",
+      "status": "planned"
+    },
+    {
+      "title": "best pathway international nurses — Australia nursing (en 48)",
+      "slug": "en-best-pathway-international-nurses-048-best-pathway-international-nurses-australia-nurs",
+      "primaryKeyword": "best pathway international nurses",
+      "language": "en",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0005-best-pathway-international-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "en vs rn australia — Australia nursing (en 49)",
+      "slug": "en-en-vs-rn-australia-049-en-vs-rn-australia-australia-nursing-en-49",
+      "primaryKeyword": "en vs rn australia",
+      "language": "en",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0005-en-vs-rn-australia",
+      "status": "planned"
+    },
+    {
+      "title": "bridging programs australia nursing — Australia nursing (en 50)",
+      "slug": "en-bridging-programs-australia-nursing-050-bridging-programs-australia-nursing-australia-nu",
+      "primaryKeyword": "bridging programs australia nursing",
+      "language": "en",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0005-bridging-programs-australia-nursing",
+      "status": "planned"
+    },
+    {
+      "title": "how to become nurse australia — Australia nursing (en 51)",
+      "slug": "en-how-to-become-nurse-australia-051-how-to-become-nurse-australia-australia-nursing-",
+      "primaryKeyword": "how to become nurse australia",
+      "language": "en",
+      "category": "Australia nursing",
+      "intentType": "transactional",
+      "translationGroupId": "au-nurse-0006-how-to-become-nurse-australia",
+      "status": "planned"
+    },
+    {
+      "title": "ahpra registration guide — Australia nursing (en 52)",
+      "slug": "en-ahpra-registration-guide-052-ahpra-registration-guide-australia-nursing-en-52",
+      "primaryKeyword": "ahpra registration guide",
+      "language": "en",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0006-ahpra-registration-guide",
+      "status": "planned"
+    },
+    {
+      "title": "osce nursing australia — Australia nursing (en 53)",
+      "slug": "en-osce-nursing-australia-053-osce-nursing-australia-australia-nursing-en-53",
+      "primaryKeyword": "osce nursing australia",
+      "language": "en",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0006-osce-nursing-australia",
+      "status": "planned"
+    },
+    {
+      "title": "oba nursing exam australia — Australia nursing (en 54)",
+      "slug": "en-oba-nursing-exam-australia-054-oba-nursing-exam-australia-australia-nursing-en-",
+      "primaryKeyword": "oba nursing exam australia",
+      "language": "en",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0006-oba-nursing-exam-australia",
+      "status": "planned"
+    },
+    {
+      "title": "nurses moving to australia — Australia nursing (en 55)",
+      "slug": "en-nurses-moving-to-australia-055-nurses-moving-to-australia-australia-nursing-en-",
+      "primaryKeyword": "nurses moving to australia",
+      "language": "en",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0006-nurses-moving-to-australia",
+      "status": "planned"
+    },
+    {
+      "title": "ielts vs oet australia — Australia nursing (en 56)",
+      "slug": "en-ielts-vs-oet-australia-056-ielts-vs-oet-australia-australia-nursing-en-56",
+      "primaryKeyword": "ielts vs oet australia",
+      "language": "en",
+      "category": "Australia nursing",
+      "intentType": "transactional",
+      "translationGroupId": "au-nurse-0006-ielts-vs-oet-australia",
+      "status": "planned"
+    },
+    {
+      "title": "nursing salary australia — Australia nursing (en 57)",
+      "slug": "en-nursing-salary-australia-057-nursing-salary-australia-australia-nursing-en-57",
+      "primaryKeyword": "nursing salary australia",
+      "language": "en",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0006-nursing-salary-australia",
+      "status": "planned"
+    },
+    {
+      "title": "best pathway international nurses — Australia nursing (en 58)",
+      "slug": "en-best-pathway-international-nurses-058-best-pathway-international-nurses-australia-nurs",
+      "primaryKeyword": "best pathway international nurses",
+      "language": "en",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0006-best-pathway-international-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "en vs rn australia — Australia nursing (en 59)",
+      "slug": "en-en-vs-rn-australia-059-en-vs-rn-australia-australia-nursing-en-59",
+      "primaryKeyword": "en vs rn australia",
+      "language": "en",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0006-en-vs-rn-australia",
+      "status": "planned"
+    },
+    {
+      "title": "bridging programs australia nursing — Australia nursing (en 60)",
+      "slug": "en-bridging-programs-australia-nursing-060-bridging-programs-australia-nursing-australia-nu",
+      "primaryKeyword": "bridging programs australia nursing",
+      "language": "en",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0006-bridging-programs-australia-nursing",
+      "status": "planned"
+    },
+    {
+      "title": "how to become nurse australia — Australia nursing (en 61)",
+      "slug": "en-how-to-become-nurse-australia-061-how-to-become-nurse-australia-australia-nursing-",
+      "primaryKeyword": "how to become nurse australia",
+      "language": "en",
+      "category": "Australia nursing",
+      "intentType": "transactional",
+      "translationGroupId": "au-nurse-0007-how-to-become-nurse-australia",
+      "status": "planned"
+    },
+    {
+      "title": "ahpra registration guide — Australia nursing (en 62)",
+      "slug": "en-ahpra-registration-guide-062-ahpra-registration-guide-australia-nursing-en-62",
+      "primaryKeyword": "ahpra registration guide",
+      "language": "en",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0007-ahpra-registration-guide",
+      "status": "planned"
+    },
+    {
+      "title": "osce nursing australia — Australia nursing (en 63)",
+      "slug": "en-osce-nursing-australia-063-osce-nursing-australia-australia-nursing-en-63",
+      "primaryKeyword": "osce nursing australia",
+      "language": "en",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0007-osce-nursing-australia",
+      "status": "planned"
+    },
+    {
+      "title": "oba nursing exam australia — Australia nursing (en 64)",
+      "slug": "en-oba-nursing-exam-australia-064-oba-nursing-exam-australia-australia-nursing-en-",
+      "primaryKeyword": "oba nursing exam australia",
+      "language": "en",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0007-oba-nursing-exam-australia",
+      "status": "planned"
+    },
+    {
+      "title": "nurses moving to australia — Australia nursing (en 65)",
+      "slug": "en-nurses-moving-to-australia-065-nurses-moving-to-australia-australia-nursing-en-",
+      "primaryKeyword": "nurses moving to australia",
+      "language": "en",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0007-nurses-moving-to-australia",
+      "status": "planned"
+    },
+    {
+      "title": "ielts vs oet australia — Australia nursing (en 66)",
+      "slug": "en-ielts-vs-oet-australia-066-ielts-vs-oet-australia-australia-nursing-en-66",
+      "primaryKeyword": "ielts vs oet australia",
+      "language": "en",
+      "category": "Australia nursing",
+      "intentType": "transactional",
+      "translationGroupId": "au-nurse-0007-ielts-vs-oet-australia",
+      "status": "planned"
+    },
+    {
+      "title": "nursing salary australia — Australia nursing (en 67)",
+      "slug": "en-nursing-salary-australia-067-nursing-salary-australia-australia-nursing-en-67",
+      "primaryKeyword": "nursing salary australia",
+      "language": "en",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0007-nursing-salary-australia",
+      "status": "planned"
+    },
+    {
+      "title": "best pathway international nurses — Australia nursing (en 68)",
+      "slug": "en-best-pathway-international-nurses-068-best-pathway-international-nurses-australia-nurs",
+      "primaryKeyword": "best pathway international nurses",
+      "language": "en",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0007-best-pathway-international-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "en vs rn australia — Australia nursing (en 69)",
+      "slug": "en-en-vs-rn-australia-069-en-vs-rn-australia-australia-nursing-en-69",
+      "primaryKeyword": "en vs rn australia",
+      "language": "en",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0007-en-vs-rn-australia",
+      "status": "planned"
+    },
+    {
+      "title": "bridging programs australia nursing — Australia nursing (en 70)",
+      "slug": "en-bridging-programs-australia-nursing-070-bridging-programs-australia-nursing-australia-nu",
+      "primaryKeyword": "bridging programs australia nursing",
+      "language": "en",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0007-bridging-programs-australia-nursing",
+      "status": "planned"
+    },
+    {
+      "title": "how to become nurse australia — Australia nursing (en 71)",
+      "slug": "en-how-to-become-nurse-australia-071-how-to-become-nurse-australia-australia-nursing-",
+      "primaryKeyword": "how to become nurse australia",
+      "language": "en",
+      "category": "Australia nursing",
+      "intentType": "transactional",
+      "translationGroupId": "au-nurse-0008-how-to-become-nurse-australia",
+      "status": "planned"
+    },
+    {
+      "title": "ahpra registration guide — Australia nursing (en 72)",
+      "slug": "en-ahpra-registration-guide-072-ahpra-registration-guide-australia-nursing-en-72",
+      "primaryKeyword": "ahpra registration guide",
+      "language": "en",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0008-ahpra-registration-guide",
+      "status": "planned"
+    },
+    {
+      "title": "osce nursing australia — Australia nursing (en 73)",
+      "slug": "en-osce-nursing-australia-073-osce-nursing-australia-australia-nursing-en-73",
+      "primaryKeyword": "osce nursing australia",
+      "language": "en",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0008-osce-nursing-australia",
+      "status": "planned"
+    },
+    {
+      "title": "oba nursing exam australia — Australia nursing (en 74)",
+      "slug": "en-oba-nursing-exam-australia-074-oba-nursing-exam-australia-australia-nursing-en-",
+      "primaryKeyword": "oba nursing exam australia",
+      "language": "en",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0008-oba-nursing-exam-australia",
+      "status": "planned"
+    },
+    {
+      "title": "nurses moving to australia — Australia nursing (en 75)",
+      "slug": "en-nurses-moving-to-australia-075-nurses-moving-to-australia-australia-nursing-en-",
+      "primaryKeyword": "nurses moving to australia",
+      "language": "en",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0008-nurses-moving-to-australia",
+      "status": "planned"
+    },
+    {
+      "title": "ielts vs oet australia — Australia nursing (en 76)",
+      "slug": "en-ielts-vs-oet-australia-076-ielts-vs-oet-australia-australia-nursing-en-76",
+      "primaryKeyword": "ielts vs oet australia",
+      "language": "en",
+      "category": "Australia nursing",
+      "intentType": "transactional",
+      "translationGroupId": "au-nurse-0008-ielts-vs-oet-australia",
+      "status": "planned"
+    },
+    {
+      "title": "nursing salary australia — Australia nursing (en 77)",
+      "slug": "en-nursing-salary-australia-077-nursing-salary-australia-australia-nursing-en-77",
+      "primaryKeyword": "nursing salary australia",
+      "language": "en",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0008-nursing-salary-australia",
+      "status": "planned"
+    },
+    {
+      "title": "best pathway international nurses — Australia nursing (en 78)",
+      "slug": "en-best-pathway-international-nurses-078-best-pathway-international-nurses-australia-nurs",
+      "primaryKeyword": "best pathway international nurses",
+      "language": "en",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0008-best-pathway-international-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "en vs rn australia — Australia nursing (en 79)",
+      "slug": "en-en-vs-rn-australia-079-en-vs-rn-australia-australia-nursing-en-79",
+      "primaryKeyword": "en vs rn australia",
+      "language": "en",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0008-en-vs-rn-australia",
+      "status": "planned"
+    },
+    {
+      "title": "bridging programs australia nursing — Australia nursing (en 80)",
+      "slug": "en-bridging-programs-australia-nursing-080-bridging-programs-australia-nursing-australia-nu",
+      "primaryKeyword": "bridging programs australia nursing",
+      "language": "en",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0008-bridging-programs-australia-nursing",
+      "status": "planned"
+    },
+    {
+      "title": "how to become nurse australia — Australia nursing (en 81)",
+      "slug": "en-how-to-become-nurse-australia-081-how-to-become-nurse-australia-australia-nursing-",
+      "primaryKeyword": "how to become nurse australia",
+      "language": "en",
+      "category": "Australia nursing",
+      "intentType": "transactional",
+      "translationGroupId": "au-nurse-0009-how-to-become-nurse-australia",
+      "status": "planned"
+    },
+    {
+      "title": "ahpra registration guide — Australia nursing (en 82)",
+      "slug": "en-ahpra-registration-guide-082-ahpra-registration-guide-australia-nursing-en-82",
+      "primaryKeyword": "ahpra registration guide",
+      "language": "en",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0009-ahpra-registration-guide",
+      "status": "planned"
+    },
+    {
+      "title": "osce nursing australia — Australia nursing (en 83)",
+      "slug": "en-osce-nursing-australia-083-osce-nursing-australia-australia-nursing-en-83",
+      "primaryKeyword": "osce nursing australia",
+      "language": "en",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0009-osce-nursing-australia",
+      "status": "planned"
+    },
+    {
+      "title": "oba nursing exam australia — Australia nursing (en 84)",
+      "slug": "en-oba-nursing-exam-australia-084-oba-nursing-exam-australia-australia-nursing-en-",
+      "primaryKeyword": "oba nursing exam australia",
+      "language": "en",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0009-oba-nursing-exam-australia",
+      "status": "planned"
+    },
+    {
+      "title": "nurses moving to australia — Australia nursing (en 85)",
+      "slug": "en-nurses-moving-to-australia-085-nurses-moving-to-australia-australia-nursing-en-",
+      "primaryKeyword": "nurses moving to australia",
+      "language": "en",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0009-nurses-moving-to-australia",
+      "status": "planned"
+    },
+    {
+      "title": "ielts vs oet australia — Australia nursing (en 86)",
+      "slug": "en-ielts-vs-oet-australia-086-ielts-vs-oet-australia-australia-nursing-en-86",
+      "primaryKeyword": "ielts vs oet australia",
+      "language": "en",
+      "category": "Australia nursing",
+      "intentType": "transactional",
+      "translationGroupId": "au-nurse-0009-ielts-vs-oet-australia",
+      "status": "planned"
+    },
+    {
+      "title": "nursing salary australia — Australia nursing (en 87)",
+      "slug": "en-nursing-salary-australia-087-nursing-salary-australia-australia-nursing-en-87",
+      "primaryKeyword": "nursing salary australia",
+      "language": "en",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0009-nursing-salary-australia",
+      "status": "planned"
+    },
+    {
+      "title": "best pathway international nurses — Australia nursing (en 88)",
+      "slug": "en-best-pathway-international-nurses-088-best-pathway-international-nurses-australia-nurs",
+      "primaryKeyword": "best pathway international nurses",
+      "language": "en",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0009-best-pathway-international-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "en vs rn australia — Australia nursing (en 89)",
+      "slug": "en-en-vs-rn-australia-089-en-vs-rn-australia-australia-nursing-en-89",
+      "primaryKeyword": "en vs rn australia",
+      "language": "en",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0009-en-vs-rn-australia",
+      "status": "planned"
+    },
+    {
+      "title": "bridging programs australia nursing — Australia nursing (en 90)",
+      "slug": "en-bridging-programs-australia-nursing-090-bridging-programs-australia-nursing-australia-nu",
+      "primaryKeyword": "bridging programs australia nursing",
+      "language": "en",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0009-bridging-programs-australia-nursing",
+      "status": "planned"
+    },
+    {
+      "title": "how to become nurse australia — Australia nursing (hi 1)",
+      "slug": "hi-how-to-become-nurse-australia-091-how-to-become-nurse-australia-australia-nursing-",
+      "primaryKeyword": "how to become nurse australia",
+      "language": "hi",
+      "category": "Australia nursing",
+      "intentType": "transactional",
+      "translationGroupId": "au-nurse-0010-how-to-become-nurse-australia",
+      "status": "planned"
+    },
+    {
+      "title": "ahpra registration guide — Australia nursing (hi 2)",
+      "slug": "hi-ahpra-registration-guide-092-ahpra-registration-guide-australia-nursing-hi-2",
+      "primaryKeyword": "ahpra registration guide",
+      "language": "hi",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0010-ahpra-registration-guide",
+      "status": "planned"
+    },
+    {
+      "title": "osce nursing australia — Australia nursing (hi 3)",
+      "slug": "hi-osce-nursing-australia-093-osce-nursing-australia-australia-nursing-hi-3",
+      "primaryKeyword": "osce nursing australia",
+      "language": "hi",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0010-osce-nursing-australia",
+      "status": "planned"
+    },
+    {
+      "title": "oba nursing exam australia — Australia nursing (hi 4)",
+      "slug": "hi-oba-nursing-exam-australia-094-oba-nursing-exam-australia-australia-nursing-hi-",
+      "primaryKeyword": "oba nursing exam australia",
+      "language": "hi",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0010-oba-nursing-exam-australia",
+      "status": "planned"
+    },
+    {
+      "title": "nurses moving to australia — Australia nursing (hi 5)",
+      "slug": "hi-nurses-moving-to-australia-095-nurses-moving-to-australia-australia-nursing-hi-",
+      "primaryKeyword": "nurses moving to australia",
+      "language": "hi",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0010-nurses-moving-to-australia",
+      "status": "planned"
+    },
+    {
+      "title": "ielts vs oet australia — Australia nursing (hi 6)",
+      "slug": "hi-ielts-vs-oet-australia-096-ielts-vs-oet-australia-australia-nursing-hi-6",
+      "primaryKeyword": "ielts vs oet australia",
+      "language": "hi",
+      "category": "Australia nursing",
+      "intentType": "transactional",
+      "translationGroupId": "au-nurse-0010-ielts-vs-oet-australia",
+      "status": "planned"
+    },
+    {
+      "title": "nursing salary australia — Australia nursing (hi 7)",
+      "slug": "hi-nursing-salary-australia-097-nursing-salary-australia-australia-nursing-hi-7",
+      "primaryKeyword": "nursing salary australia",
+      "language": "hi",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0010-nursing-salary-australia",
+      "status": "planned"
+    },
+    {
+      "title": "best pathway international nurses — Australia nursing (hi 8)",
+      "slug": "hi-best-pathway-international-nurses-098-best-pathway-international-nurses-australia-nurs",
+      "primaryKeyword": "best pathway international nurses",
+      "language": "hi",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0010-best-pathway-international-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "en vs rn australia — Australia nursing (hi 9)",
+      "slug": "hi-en-vs-rn-australia-099-en-vs-rn-australia-australia-nursing-hi-9",
+      "primaryKeyword": "en vs rn australia",
+      "language": "hi",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0010-en-vs-rn-australia",
+      "status": "planned"
+    },
+    {
+      "title": "bridging programs australia nursing — Australia nursing (hi 10)",
+      "slug": "hi-bridging-programs-australia-nursing-100-bridging-programs-australia-nursing-australia-nu",
+      "primaryKeyword": "bridging programs australia nursing",
+      "language": "hi",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0010-bridging-programs-australia-nursing",
+      "status": "planned"
+    },
+    {
+      "title": "how to become nurse australia — Australia nursing (hi 11)",
+      "slug": "hi-how-to-become-nurse-australia-101-how-to-become-nurse-australia-australia-nursing-",
+      "primaryKeyword": "how to become nurse australia",
+      "language": "hi",
+      "category": "Australia nursing",
+      "intentType": "transactional",
+      "translationGroupId": "au-nurse-0011-how-to-become-nurse-australia",
+      "status": "planned"
+    },
+    {
+      "title": "ahpra registration guide — Australia nursing (hi 12)",
+      "slug": "hi-ahpra-registration-guide-102-ahpra-registration-guide-australia-nursing-hi-12",
+      "primaryKeyword": "ahpra registration guide",
+      "language": "hi",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0011-ahpra-registration-guide",
+      "status": "planned"
+    },
+    {
+      "title": "osce nursing australia — Australia nursing (hi 13)",
+      "slug": "hi-osce-nursing-australia-103-osce-nursing-australia-australia-nursing-hi-13",
+      "primaryKeyword": "osce nursing australia",
+      "language": "hi",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0011-osce-nursing-australia",
+      "status": "planned"
+    },
+    {
+      "title": "oba nursing exam australia — Australia nursing (hi 14)",
+      "slug": "hi-oba-nursing-exam-australia-104-oba-nursing-exam-australia-australia-nursing-hi-",
+      "primaryKeyword": "oba nursing exam australia",
+      "language": "hi",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0011-oba-nursing-exam-australia",
+      "status": "planned"
+    },
+    {
+      "title": "nurses moving to australia — Australia nursing (hi 15)",
+      "slug": "hi-nurses-moving-to-australia-105-nurses-moving-to-australia-australia-nursing-hi-",
+      "primaryKeyword": "nurses moving to australia",
+      "language": "hi",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0011-nurses-moving-to-australia",
+      "status": "planned"
+    },
+    {
+      "title": "ielts vs oet australia — Australia nursing (hi 16)",
+      "slug": "hi-ielts-vs-oet-australia-106-ielts-vs-oet-australia-australia-nursing-hi-16",
+      "primaryKeyword": "ielts vs oet australia",
+      "language": "hi",
+      "category": "Australia nursing",
+      "intentType": "transactional",
+      "translationGroupId": "au-nurse-0011-ielts-vs-oet-australia",
+      "status": "planned"
+    },
+    {
+      "title": "nursing salary australia — Australia nursing (hi 17)",
+      "slug": "hi-nursing-salary-australia-107-nursing-salary-australia-australia-nursing-hi-17",
+      "primaryKeyword": "nursing salary australia",
+      "language": "hi",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0011-nursing-salary-australia",
+      "status": "planned"
+    },
+    {
+      "title": "best pathway international nurses — Australia nursing (hi 18)",
+      "slug": "hi-best-pathway-international-nurses-108-best-pathway-international-nurses-australia-nurs",
+      "primaryKeyword": "best pathway international nurses",
+      "language": "hi",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0011-best-pathway-international-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "en vs rn australia — Australia nursing (hi 19)",
+      "slug": "hi-en-vs-rn-australia-109-en-vs-rn-australia-australia-nursing-hi-19",
+      "primaryKeyword": "en vs rn australia",
+      "language": "hi",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0011-en-vs-rn-australia",
+      "status": "planned"
+    },
+    {
+      "title": "bridging programs australia nursing — Australia nursing (hi 20)",
+      "slug": "hi-bridging-programs-australia-nursing-110-bridging-programs-australia-nursing-australia-nu",
+      "primaryKeyword": "bridging programs australia nursing",
+      "language": "hi",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0011-bridging-programs-australia-nursing",
+      "status": "planned"
+    },
+    {
+      "title": "how to become nurse australia — Australia nursing (hi 21)",
+      "slug": "hi-how-to-become-nurse-australia-111-how-to-become-nurse-australia-australia-nursing-",
+      "primaryKeyword": "how to become nurse australia",
+      "language": "hi",
+      "category": "Australia nursing",
+      "intentType": "transactional",
+      "translationGroupId": "au-nurse-0012-how-to-become-nurse-australia",
+      "status": "planned"
+    },
+    {
+      "title": "ahpra registration guide — Australia nursing (hi 22)",
+      "slug": "hi-ahpra-registration-guide-112-ahpra-registration-guide-australia-nursing-hi-22",
+      "primaryKeyword": "ahpra registration guide",
+      "language": "hi",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0012-ahpra-registration-guide",
+      "status": "planned"
+    },
+    {
+      "title": "osce nursing australia — Australia nursing (hi 23)",
+      "slug": "hi-osce-nursing-australia-113-osce-nursing-australia-australia-nursing-hi-23",
+      "primaryKeyword": "osce nursing australia",
+      "language": "hi",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0012-osce-nursing-australia",
+      "status": "planned"
+    },
+    {
+      "title": "oba nursing exam australia — Australia nursing (hi 24)",
+      "slug": "hi-oba-nursing-exam-australia-114-oba-nursing-exam-australia-australia-nursing-hi-",
+      "primaryKeyword": "oba nursing exam australia",
+      "language": "hi",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0012-oba-nursing-exam-australia",
+      "status": "planned"
+    },
+    {
+      "title": "nurses moving to australia — Australia nursing (hi 25)",
+      "slug": "hi-nurses-moving-to-australia-115-nurses-moving-to-australia-australia-nursing-hi-",
+      "primaryKeyword": "nurses moving to australia",
+      "language": "hi",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0012-nurses-moving-to-australia",
+      "status": "planned"
+    },
+    {
+      "title": "ielts vs oet australia — Australia nursing (hi 26)",
+      "slug": "hi-ielts-vs-oet-australia-116-ielts-vs-oet-australia-australia-nursing-hi-26",
+      "primaryKeyword": "ielts vs oet australia",
+      "language": "hi",
+      "category": "Australia nursing",
+      "intentType": "transactional",
+      "translationGroupId": "au-nurse-0012-ielts-vs-oet-australia",
+      "status": "planned"
+    },
+    {
+      "title": "nursing salary australia — Australia nursing (hi 27)",
+      "slug": "hi-nursing-salary-australia-117-nursing-salary-australia-australia-nursing-hi-27",
+      "primaryKeyword": "nursing salary australia",
+      "language": "hi",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0012-nursing-salary-australia",
+      "status": "planned"
+    },
+    {
+      "title": "best pathway international nurses — Australia nursing (hi 28)",
+      "slug": "hi-best-pathway-international-nurses-118-best-pathway-international-nurses-australia-nurs",
+      "primaryKeyword": "best pathway international nurses",
+      "language": "hi",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0012-best-pathway-international-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "en vs rn australia — Australia nursing (hi 29)",
+      "slug": "hi-en-vs-rn-australia-119-en-vs-rn-australia-australia-nursing-hi-29",
+      "primaryKeyword": "en vs rn australia",
+      "language": "hi",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0012-en-vs-rn-australia",
+      "status": "planned"
+    },
+    {
+      "title": "bridging programs australia nursing — Australia nursing (hi 30)",
+      "slug": "hi-bridging-programs-australia-nursing-120-bridging-programs-australia-nursing-australia-nu",
+      "primaryKeyword": "bridging programs australia nursing",
+      "language": "hi",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0012-bridging-programs-australia-nursing",
+      "status": "planned"
+    },
+    {
+      "title": "how to become nurse australia — Australia nursing (tl 1)",
+      "slug": "tl-how-to-become-nurse-australia-121-how-to-become-nurse-australia-australia-nursing-",
+      "primaryKeyword": "how to become nurse australia",
+      "language": "tl",
+      "category": "Australia nursing",
+      "intentType": "transactional",
+      "translationGroupId": "au-nurse-0013-how-to-become-nurse-australia",
+      "status": "planned"
+    },
+    {
+      "title": "ahpra registration guide — Australia nursing (tl 2)",
+      "slug": "tl-ahpra-registration-guide-122-ahpra-registration-guide-australia-nursing-tl-2",
+      "primaryKeyword": "ahpra registration guide",
+      "language": "tl",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0013-ahpra-registration-guide",
+      "status": "planned"
+    },
+    {
+      "title": "osce nursing australia — Australia nursing (tl 3)",
+      "slug": "tl-osce-nursing-australia-123-osce-nursing-australia-australia-nursing-tl-3",
+      "primaryKeyword": "osce nursing australia",
+      "language": "tl",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0013-osce-nursing-australia",
+      "status": "planned"
+    },
+    {
+      "title": "oba nursing exam australia — Australia nursing (tl 4)",
+      "slug": "tl-oba-nursing-exam-australia-124-oba-nursing-exam-australia-australia-nursing-tl-",
+      "primaryKeyword": "oba nursing exam australia",
+      "language": "tl",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0013-oba-nursing-exam-australia",
+      "status": "planned"
+    },
+    {
+      "title": "nurses moving to australia — Australia nursing (tl 5)",
+      "slug": "tl-nurses-moving-to-australia-125-nurses-moving-to-australia-australia-nursing-tl-",
+      "primaryKeyword": "nurses moving to australia",
+      "language": "tl",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0013-nurses-moving-to-australia",
+      "status": "planned"
+    },
+    {
+      "title": "ielts vs oet australia — Australia nursing (tl 6)",
+      "slug": "tl-ielts-vs-oet-australia-126-ielts-vs-oet-australia-australia-nursing-tl-6",
+      "primaryKeyword": "ielts vs oet australia",
+      "language": "tl",
+      "category": "Australia nursing",
+      "intentType": "transactional",
+      "translationGroupId": "au-nurse-0013-ielts-vs-oet-australia",
+      "status": "planned"
+    },
+    {
+      "title": "nursing salary australia — Australia nursing (tl 7)",
+      "slug": "tl-nursing-salary-australia-127-nursing-salary-australia-australia-nursing-tl-7",
+      "primaryKeyword": "nursing salary australia",
+      "language": "tl",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0013-nursing-salary-australia",
+      "status": "planned"
+    },
+    {
+      "title": "best pathway international nurses — Australia nursing (tl 8)",
+      "slug": "tl-best-pathway-international-nurses-128-best-pathway-international-nurses-australia-nurs",
+      "primaryKeyword": "best pathway international nurses",
+      "language": "tl",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0013-best-pathway-international-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "en vs rn australia — Australia nursing (tl 9)",
+      "slug": "tl-en-vs-rn-australia-129-en-vs-rn-australia-australia-nursing-tl-9",
+      "primaryKeyword": "en vs rn australia",
+      "language": "tl",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0013-en-vs-rn-australia",
+      "status": "planned"
+    },
+    {
+      "title": "bridging programs australia nursing — Australia nursing (tl 10)",
+      "slug": "tl-bridging-programs-australia-nursing-130-bridging-programs-australia-nursing-australia-nu",
+      "primaryKeyword": "bridging programs australia nursing",
+      "language": "tl",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0013-bridging-programs-australia-nursing",
+      "status": "planned"
+    },
+    {
+      "title": "how to become nurse australia — Australia nursing (tl 11)",
+      "slug": "tl-how-to-become-nurse-australia-131-how-to-become-nurse-australia-australia-nursing-",
+      "primaryKeyword": "how to become nurse australia",
+      "language": "tl",
+      "category": "Australia nursing",
+      "intentType": "transactional",
+      "translationGroupId": "au-nurse-0014-how-to-become-nurse-australia",
+      "status": "planned"
+    },
+    {
+      "title": "ahpra registration guide — Australia nursing (tl 12)",
+      "slug": "tl-ahpra-registration-guide-132-ahpra-registration-guide-australia-nursing-tl-12",
+      "primaryKeyword": "ahpra registration guide",
+      "language": "tl",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0014-ahpra-registration-guide",
+      "status": "planned"
+    },
+    {
+      "title": "osce nursing australia — Australia nursing (tl 13)",
+      "slug": "tl-osce-nursing-australia-133-osce-nursing-australia-australia-nursing-tl-13",
+      "primaryKeyword": "osce nursing australia",
+      "language": "tl",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0014-osce-nursing-australia",
+      "status": "planned"
+    },
+    {
+      "title": "oba nursing exam australia — Australia nursing (tl 14)",
+      "slug": "tl-oba-nursing-exam-australia-134-oba-nursing-exam-australia-australia-nursing-tl-",
+      "primaryKeyword": "oba nursing exam australia",
+      "language": "tl",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0014-oba-nursing-exam-australia",
+      "status": "planned"
+    },
+    {
+      "title": "nurses moving to australia — Australia nursing (tl 15)",
+      "slug": "tl-nurses-moving-to-australia-135-nurses-moving-to-australia-australia-nursing-tl-",
+      "primaryKeyword": "nurses moving to australia",
+      "language": "tl",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0014-nurses-moving-to-australia",
+      "status": "planned"
+    },
+    {
+      "title": "ielts vs oet australia — Australia nursing (tl 16)",
+      "slug": "tl-ielts-vs-oet-australia-136-ielts-vs-oet-australia-australia-nursing-tl-16",
+      "primaryKeyword": "ielts vs oet australia",
+      "language": "tl",
+      "category": "Australia nursing",
+      "intentType": "transactional",
+      "translationGroupId": "au-nurse-0014-ielts-vs-oet-australia",
+      "status": "planned"
+    },
+    {
+      "title": "nursing salary australia — Australia nursing (tl 17)",
+      "slug": "tl-nursing-salary-australia-137-nursing-salary-australia-australia-nursing-tl-17",
+      "primaryKeyword": "nursing salary australia",
+      "language": "tl",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0014-nursing-salary-australia",
+      "status": "planned"
+    },
+    {
+      "title": "best pathway international nurses — Australia nursing (tl 18)",
+      "slug": "tl-best-pathway-international-nurses-138-best-pathway-international-nurses-australia-nurs",
+      "primaryKeyword": "best pathway international nurses",
+      "language": "tl",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0014-best-pathway-international-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "en vs rn australia — Australia nursing (tl 19)",
+      "slug": "tl-en-vs-rn-australia-139-en-vs-rn-australia-australia-nursing-tl-19",
+      "primaryKeyword": "en vs rn australia",
+      "language": "tl",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0014-en-vs-rn-australia",
+      "status": "planned"
+    },
+    {
+      "title": "bridging programs australia nursing — Australia nursing (tl 20)",
+      "slug": "tl-bridging-programs-australia-nursing-140-bridging-programs-australia-nursing-australia-nu",
+      "primaryKeyword": "bridging programs australia nursing",
+      "language": "tl",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0014-bridging-programs-australia-nursing",
+      "status": "planned"
+    },
+    {
+      "title": "how to become nurse australia — Australia nursing (tl 21)",
+      "slug": "tl-how-to-become-nurse-australia-141-how-to-become-nurse-australia-australia-nursing-",
+      "primaryKeyword": "how to become nurse australia",
+      "language": "tl",
+      "category": "Australia nursing",
+      "intentType": "transactional",
+      "translationGroupId": "au-nurse-0015-how-to-become-nurse-australia",
+      "status": "planned"
+    },
+    {
+      "title": "ahpra registration guide — Australia nursing (tl 22)",
+      "slug": "tl-ahpra-registration-guide-142-ahpra-registration-guide-australia-nursing-tl-22",
+      "primaryKeyword": "ahpra registration guide",
+      "language": "tl",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0015-ahpra-registration-guide",
+      "status": "planned"
+    },
+    {
+      "title": "osce nursing australia — Australia nursing (tl 23)",
+      "slug": "tl-osce-nursing-australia-143-osce-nursing-australia-australia-nursing-tl-23",
+      "primaryKeyword": "osce nursing australia",
+      "language": "tl",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0015-osce-nursing-australia",
+      "status": "planned"
+    },
+    {
+      "title": "oba nursing exam australia — Australia nursing (tl 24)",
+      "slug": "tl-oba-nursing-exam-australia-144-oba-nursing-exam-australia-australia-nursing-tl-",
+      "primaryKeyword": "oba nursing exam australia",
+      "language": "tl",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0015-oba-nursing-exam-australia",
+      "status": "planned"
+    },
+    {
+      "title": "nurses moving to australia — Australia nursing (tl 25)",
+      "slug": "tl-nurses-moving-to-australia-145-nurses-moving-to-australia-australia-nursing-tl-",
+      "primaryKeyword": "nurses moving to australia",
+      "language": "tl",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0015-nurses-moving-to-australia",
+      "status": "planned"
+    },
+    {
+      "title": "ielts vs oet australia — Australia nursing (tl 26)",
+      "slug": "tl-ielts-vs-oet-australia-146-ielts-vs-oet-australia-australia-nursing-tl-26",
+      "primaryKeyword": "ielts vs oet australia",
+      "language": "tl",
+      "category": "Australia nursing",
+      "intentType": "transactional",
+      "translationGroupId": "au-nurse-0015-ielts-vs-oet-australia",
+      "status": "planned"
+    },
+    {
+      "title": "nursing salary australia — Australia nursing (tl 27)",
+      "slug": "tl-nursing-salary-australia-147-nursing-salary-australia-australia-nursing-tl-27",
+      "primaryKeyword": "nursing salary australia",
+      "language": "tl",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0015-nursing-salary-australia",
+      "status": "planned"
+    },
+    {
+      "title": "best pathway international nurses — Australia nursing (tl 28)",
+      "slug": "tl-best-pathway-international-nurses-148-best-pathway-international-nurses-australia-nurs",
+      "primaryKeyword": "best pathway international nurses",
+      "language": "tl",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0015-best-pathway-international-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "en vs rn australia — Australia nursing (tl 29)",
+      "slug": "tl-en-vs-rn-australia-149-en-vs-rn-australia-australia-nursing-tl-29",
+      "primaryKeyword": "en vs rn australia",
+      "language": "tl",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0015-en-vs-rn-australia",
+      "status": "planned"
+    },
+    {
+      "title": "bridging programs australia nursing — Australia nursing (tl 30)",
+      "slug": "tl-bridging-programs-australia-nursing-150-bridging-programs-australia-nursing-australia-nu",
+      "primaryKeyword": "bridging programs australia nursing",
+      "language": "tl",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0015-bridging-programs-australia-nursing",
+      "status": "planned"
+    },
+    {
+      "title": "how to become nurse australia — Australia nursing (ar 1)",
+      "slug": "ar-how-to-become-nurse-australia-151-how-to-become-nurse-australia-australia-nursing-",
+      "primaryKeyword": "how to become nurse australia",
+      "language": "ar",
+      "category": "Australia nursing",
+      "intentType": "transactional",
+      "translationGroupId": "au-nurse-0016-how-to-become-nurse-australia",
+      "status": "planned"
+    },
+    {
+      "title": "ahpra registration guide — Australia nursing (ar 2)",
+      "slug": "ar-ahpra-registration-guide-152-ahpra-registration-guide-australia-nursing-ar-2",
+      "primaryKeyword": "ahpra registration guide",
+      "language": "ar",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0016-ahpra-registration-guide",
+      "status": "planned"
+    },
+    {
+      "title": "osce nursing australia — Australia nursing (ar 3)",
+      "slug": "ar-osce-nursing-australia-153-osce-nursing-australia-australia-nursing-ar-3",
+      "primaryKeyword": "osce nursing australia",
+      "language": "ar",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0016-osce-nursing-australia",
+      "status": "planned"
+    },
+    {
+      "title": "oba nursing exam australia — Australia nursing (ar 4)",
+      "slug": "ar-oba-nursing-exam-australia-154-oba-nursing-exam-australia-australia-nursing-ar-",
+      "primaryKeyword": "oba nursing exam australia",
+      "language": "ar",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0016-oba-nursing-exam-australia",
+      "status": "planned"
+    },
+    {
+      "title": "nurses moving to australia — Australia nursing (ar 5)",
+      "slug": "ar-nurses-moving-to-australia-155-nurses-moving-to-australia-australia-nursing-ar-",
+      "primaryKeyword": "nurses moving to australia",
+      "language": "ar",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0016-nurses-moving-to-australia",
+      "status": "planned"
+    },
+    {
+      "title": "ielts vs oet australia — Australia nursing (ar 6)",
+      "slug": "ar-ielts-vs-oet-australia-156-ielts-vs-oet-australia-australia-nursing-ar-6",
+      "primaryKeyword": "ielts vs oet australia",
+      "language": "ar",
+      "category": "Australia nursing",
+      "intentType": "transactional",
+      "translationGroupId": "au-nurse-0016-ielts-vs-oet-australia",
+      "status": "planned"
+    },
+    {
+      "title": "nursing salary australia — Australia nursing (ar 7)",
+      "slug": "ar-nursing-salary-australia-157-nursing-salary-australia-australia-nursing-ar-7",
+      "primaryKeyword": "nursing salary australia",
+      "language": "ar",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0016-nursing-salary-australia",
+      "status": "planned"
+    },
+    {
+      "title": "best pathway international nurses — Australia nursing (ar 8)",
+      "slug": "ar-best-pathway-international-nurses-158-best-pathway-international-nurses-australia-nurs",
+      "primaryKeyword": "best pathway international nurses",
+      "language": "ar",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0016-best-pathway-international-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "en vs rn australia — Australia nursing (ar 9)",
+      "slug": "ar-en-vs-rn-australia-159-en-vs-rn-australia-australia-nursing-ar-9",
+      "primaryKeyword": "en vs rn australia",
+      "language": "ar",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0016-en-vs-rn-australia",
+      "status": "planned"
+    },
+    {
+      "title": "bridging programs australia nursing — Australia nursing (ar 10)",
+      "slug": "ar-bridging-programs-australia-nursing-160-bridging-programs-australia-nursing-australia-nu",
+      "primaryKeyword": "bridging programs australia nursing",
+      "language": "ar",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0016-bridging-programs-australia-nursing",
+      "status": "planned"
+    },
+    {
+      "title": "how to become nurse australia — Australia nursing (ar 11)",
+      "slug": "ar-how-to-become-nurse-australia-161-how-to-become-nurse-australia-australia-nursing-",
+      "primaryKeyword": "how to become nurse australia",
+      "language": "ar",
+      "category": "Australia nursing",
+      "intentType": "transactional",
+      "translationGroupId": "au-nurse-0017-how-to-become-nurse-australia",
+      "status": "planned"
+    },
+    {
+      "title": "ahpra registration guide — Australia nursing (ar 12)",
+      "slug": "ar-ahpra-registration-guide-162-ahpra-registration-guide-australia-nursing-ar-12",
+      "primaryKeyword": "ahpra registration guide",
+      "language": "ar",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0017-ahpra-registration-guide",
+      "status": "planned"
+    },
+    {
+      "title": "osce nursing australia — Australia nursing (ar 13)",
+      "slug": "ar-osce-nursing-australia-163-osce-nursing-australia-australia-nursing-ar-13",
+      "primaryKeyword": "osce nursing australia",
+      "language": "ar",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0017-osce-nursing-australia",
+      "status": "planned"
+    },
+    {
+      "title": "oba nursing exam australia — Australia nursing (ar 14)",
+      "slug": "ar-oba-nursing-exam-australia-164-oba-nursing-exam-australia-australia-nursing-ar-",
+      "primaryKeyword": "oba nursing exam australia",
+      "language": "ar",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0017-oba-nursing-exam-australia",
+      "status": "planned"
+    },
+    {
+      "title": "nurses moving to australia — Australia nursing (ar 15)",
+      "slug": "ar-nurses-moving-to-australia-165-nurses-moving-to-australia-australia-nursing-ar-",
+      "primaryKeyword": "nurses moving to australia",
+      "language": "ar",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0017-nurses-moving-to-australia",
+      "status": "planned"
+    },
+    {
+      "title": "ielts vs oet australia — Australia nursing (ar 16)",
+      "slug": "ar-ielts-vs-oet-australia-166-ielts-vs-oet-australia-australia-nursing-ar-16",
+      "primaryKeyword": "ielts vs oet australia",
+      "language": "ar",
+      "category": "Australia nursing",
+      "intentType": "transactional",
+      "translationGroupId": "au-nurse-0017-ielts-vs-oet-australia",
+      "status": "planned"
+    },
+    {
+      "title": "nursing salary australia — Australia nursing (ar 17)",
+      "slug": "ar-nursing-salary-australia-167-nursing-salary-australia-australia-nursing-ar-17",
+      "primaryKeyword": "nursing salary australia",
+      "language": "ar",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0017-nursing-salary-australia",
+      "status": "planned"
+    },
+    {
+      "title": "best pathway international nurses — Australia nursing (ar 18)",
+      "slug": "ar-best-pathway-international-nurses-168-best-pathway-international-nurses-australia-nurs",
+      "primaryKeyword": "best pathway international nurses",
+      "language": "ar",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0017-best-pathway-international-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "en vs rn australia — Australia nursing (ar 19)",
+      "slug": "ar-en-vs-rn-australia-169-en-vs-rn-australia-australia-nursing-ar-19",
+      "primaryKeyword": "en vs rn australia",
+      "language": "ar",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0017-en-vs-rn-australia",
+      "status": "planned"
+    },
+    {
+      "title": "bridging programs australia nursing — Australia nursing (ar 20)",
+      "slug": "ar-bridging-programs-australia-nursing-170-bridging-programs-australia-nursing-australia-nu",
+      "primaryKeyword": "bridging programs australia nursing",
+      "language": "ar",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0017-bridging-programs-australia-nursing",
+      "status": "planned"
+    },
+    {
+      "title": "how to become nurse australia — Australia nursing (pa 1)",
+      "slug": "pa-how-to-become-nurse-australia-171-how-to-become-nurse-australia-australia-nursing-",
+      "primaryKeyword": "how to become nurse australia",
+      "language": "pa",
+      "category": "Australia nursing",
+      "intentType": "transactional",
+      "translationGroupId": "au-nurse-0018-how-to-become-nurse-australia",
+      "status": "planned"
+    },
+    {
+      "title": "ahpra registration guide — Australia nursing (pa 2)",
+      "slug": "pa-ahpra-registration-guide-172-ahpra-registration-guide-australia-nursing-pa-2",
+      "primaryKeyword": "ahpra registration guide",
+      "language": "pa",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0018-ahpra-registration-guide",
+      "status": "planned"
+    },
+    {
+      "title": "osce nursing australia — Australia nursing (pa 3)",
+      "slug": "pa-osce-nursing-australia-173-osce-nursing-australia-australia-nursing-pa-3",
+      "primaryKeyword": "osce nursing australia",
+      "language": "pa",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0018-osce-nursing-australia",
+      "status": "planned"
+    },
+    {
+      "title": "oba nursing exam australia — Australia nursing (pa 4)",
+      "slug": "pa-oba-nursing-exam-australia-174-oba-nursing-exam-australia-australia-nursing-pa-",
+      "primaryKeyword": "oba nursing exam australia",
+      "language": "pa",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0018-oba-nursing-exam-australia",
+      "status": "planned"
+    },
+    {
+      "title": "nurses moving to australia — Australia nursing (pa 5)",
+      "slug": "pa-nurses-moving-to-australia-175-nurses-moving-to-australia-australia-nursing-pa-",
+      "primaryKeyword": "nurses moving to australia",
+      "language": "pa",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0018-nurses-moving-to-australia",
+      "status": "planned"
+    },
+    {
+      "title": "ielts vs oet australia — Australia nursing (pa 6)",
+      "slug": "pa-ielts-vs-oet-australia-176-ielts-vs-oet-australia-australia-nursing-pa-6",
+      "primaryKeyword": "ielts vs oet australia",
+      "language": "pa",
+      "category": "Australia nursing",
+      "intentType": "transactional",
+      "translationGroupId": "au-nurse-0018-ielts-vs-oet-australia",
+      "status": "planned"
+    },
+    {
+      "title": "nursing salary australia — Australia nursing (pa 7)",
+      "slug": "pa-nursing-salary-australia-177-nursing-salary-australia-australia-nursing-pa-7",
+      "primaryKeyword": "nursing salary australia",
+      "language": "pa",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0018-nursing-salary-australia",
+      "status": "planned"
+    },
+    {
+      "title": "best pathway international nurses — Australia nursing (pa 8)",
+      "slug": "pa-best-pathway-international-nurses-178-best-pathway-international-nurses-australia-nurs",
+      "primaryKeyword": "best pathway international nurses",
+      "language": "pa",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0018-best-pathway-international-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "en vs rn australia — Australia nursing (pa 9)",
+      "slug": "pa-en-vs-rn-australia-179-en-vs-rn-australia-australia-nursing-pa-9",
+      "primaryKeyword": "en vs rn australia",
+      "language": "pa",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0018-en-vs-rn-australia",
+      "status": "planned"
+    },
+    {
+      "title": "bridging programs australia nursing — Australia nursing (pa 10)",
+      "slug": "pa-bridging-programs-australia-nursing-180-bridging-programs-australia-nursing-australia-nu",
+      "primaryKeyword": "bridging programs australia nursing",
+      "language": "pa",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0018-bridging-programs-australia-nursing",
+      "status": "planned"
+    },
+    {
+      "title": "how to become nurse australia — Australia nursing (pa 11)",
+      "slug": "pa-how-to-become-nurse-australia-181-how-to-become-nurse-australia-australia-nursing-",
+      "primaryKeyword": "how to become nurse australia",
+      "language": "pa",
+      "category": "Australia nursing",
+      "intentType": "transactional",
+      "translationGroupId": "au-nurse-0019-how-to-become-nurse-australia",
+      "status": "planned"
+    },
+    {
+      "title": "ahpra registration guide — Australia nursing (pa 12)",
+      "slug": "pa-ahpra-registration-guide-182-ahpra-registration-guide-australia-nursing-pa-12",
+      "primaryKeyword": "ahpra registration guide",
+      "language": "pa",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0019-ahpra-registration-guide",
+      "status": "planned"
+    },
+    {
+      "title": "osce nursing australia — Australia nursing (pa 13)",
+      "slug": "pa-osce-nursing-australia-183-osce-nursing-australia-australia-nursing-pa-13",
+      "primaryKeyword": "osce nursing australia",
+      "language": "pa",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0019-osce-nursing-australia",
+      "status": "planned"
+    },
+    {
+      "title": "oba nursing exam australia — Australia nursing (pa 14)",
+      "slug": "pa-oba-nursing-exam-australia-184-oba-nursing-exam-australia-australia-nursing-pa-",
+      "primaryKeyword": "oba nursing exam australia",
+      "language": "pa",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0019-oba-nursing-exam-australia",
+      "status": "planned"
+    },
+    {
+      "title": "nurses moving to australia — Australia nursing (pa 15)",
+      "slug": "pa-nurses-moving-to-australia-185-nurses-moving-to-australia-australia-nursing-pa-",
+      "primaryKeyword": "nurses moving to australia",
+      "language": "pa",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0019-nurses-moving-to-australia",
+      "status": "planned"
+    },
+    {
+      "title": "ielts vs oet australia — Australia nursing (zh 1)",
+      "slug": "zh-ielts-vs-oet-australia-186-ielts-vs-oet-australia-australia-nursing-zh-1",
+      "primaryKeyword": "ielts vs oet australia",
+      "language": "zh",
+      "category": "Australia nursing",
+      "intentType": "transactional",
+      "translationGroupId": "au-nurse-0019-ielts-vs-oet-australia",
+      "status": "planned"
+    },
+    {
+      "title": "nursing salary australia — Australia nursing (zh 2)",
+      "slug": "zh-nursing-salary-australia-187-nursing-salary-australia-australia-nursing-zh-2",
+      "primaryKeyword": "nursing salary australia",
+      "language": "zh",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0019-nursing-salary-australia",
+      "status": "planned"
+    },
+    {
+      "title": "best pathway international nurses — Australia nursing (zh 3)",
+      "slug": "zh-best-pathway-international-nurses-188-best-pathway-international-nurses-australia-nurs",
+      "primaryKeyword": "best pathway international nurses",
+      "language": "zh",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0019-best-pathway-international-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "en vs rn australia — Australia nursing (zh 4)",
+      "slug": "zh-en-vs-rn-australia-189-en-vs-rn-australia-australia-nursing-zh-4",
+      "primaryKeyword": "en vs rn australia",
+      "language": "zh",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0019-en-vs-rn-australia",
+      "status": "planned"
+    },
+    {
+      "title": "bridging programs australia nursing — Australia nursing (zh 5)",
+      "slug": "zh-bridging-programs-australia-nursing-190-bridging-programs-australia-nursing-australia-nu",
+      "primaryKeyword": "bridging programs australia nursing",
+      "language": "zh",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0019-bridging-programs-australia-nursing",
+      "status": "planned"
+    },
+    {
+      "title": "how to become nurse australia — Australia nursing (zh 6)",
+      "slug": "zh-how-to-become-nurse-australia-191-how-to-become-nurse-australia-australia-nursing-",
+      "primaryKeyword": "how to become nurse australia",
+      "language": "zh",
+      "category": "Australia nursing",
+      "intentType": "transactional",
+      "translationGroupId": "au-nurse-0020-how-to-become-nurse-australia",
+      "status": "planned"
+    },
+    {
+      "title": "ahpra registration guide — Australia nursing (zh 7)",
+      "slug": "zh-ahpra-registration-guide-192-ahpra-registration-guide-australia-nursing-zh-7",
+      "primaryKeyword": "ahpra registration guide",
+      "language": "zh",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0020-ahpra-registration-guide",
+      "status": "planned"
+    },
+    {
+      "title": "osce nursing australia — Australia nursing (zh 8)",
+      "slug": "zh-osce-nursing-australia-193-osce-nursing-australia-australia-nursing-zh-8",
+      "primaryKeyword": "osce nursing australia",
+      "language": "zh",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0020-osce-nursing-australia",
+      "status": "planned"
+    },
+    {
+      "title": "oba nursing exam australia — Australia nursing (zh 9)",
+      "slug": "zh-oba-nursing-exam-australia-194-oba-nursing-exam-australia-australia-nursing-zh-",
+      "primaryKeyword": "oba nursing exam australia",
+      "language": "zh",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0020-oba-nursing-exam-australia",
+      "status": "planned"
+    },
+    {
+      "title": "nurses moving to australia — Australia nursing (zh 10)",
+      "slug": "zh-nurses-moving-to-australia-195-nurses-moving-to-australia-australia-nursing-zh-",
+      "primaryKeyword": "nurses moving to australia",
+      "language": "zh",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0020-nurses-moving-to-australia",
+      "status": "planned"
+    },
+    {
+      "title": "ielts vs oet australia — Australia nursing (zh 11)",
+      "slug": "zh-ielts-vs-oet-australia-196-ielts-vs-oet-australia-australia-nursing-zh-11",
+      "primaryKeyword": "ielts vs oet australia",
+      "language": "zh",
+      "category": "Australia nursing",
+      "intentType": "transactional",
+      "translationGroupId": "au-nurse-0020-ielts-vs-oet-australia",
+      "status": "planned"
+    },
+    {
+      "title": "nursing salary australia — Australia nursing (zh 12)",
+      "slug": "zh-nursing-salary-australia-197-nursing-salary-australia-australia-nursing-zh-12",
+      "primaryKeyword": "nursing salary australia",
+      "language": "zh",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0020-nursing-salary-australia",
+      "status": "planned"
+    },
+    {
+      "title": "best pathway international nurses — Australia nursing (zh 13)",
+      "slug": "zh-best-pathway-international-nurses-198-best-pathway-international-nurses-australia-nurs",
+      "primaryKeyword": "best pathway international nurses",
+      "language": "zh",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0020-best-pathway-international-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "en vs rn australia — Australia nursing (zh 14)",
+      "slug": "zh-en-vs-rn-australia-199-en-vs-rn-australia-australia-nursing-zh-14",
+      "primaryKeyword": "en vs rn australia",
+      "language": "zh",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0020-en-vs-rn-australia",
+      "status": "planned"
+    },
+    {
+      "title": "bridging programs australia nursing — Australia nursing (zh 15)",
+      "slug": "zh-bridging-programs-australia-nursing-200-bridging-programs-australia-nursing-australia-nu",
+      "primaryKeyword": "bridging programs australia nursing",
+      "language": "zh",
+      "category": "Australia nursing",
+      "intentType": "informational",
+      "translationGroupId": "au-nurse-0020-bridging-programs-australia-nursing",
+      "status": "planned"
+    }
+  ]
+}

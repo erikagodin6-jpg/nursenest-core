@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-14T17:51:27.124Z",
+  "generatedAt": "2026-04-14T18:16:53.118Z",
   "priority": [
     "Run npm run i18n:compile after any marketing-en.json or overlay edit.",
     "Fix placeholder interpolation gaps listed in tools/i18n/reports/placeholder-fallbacks.json.",

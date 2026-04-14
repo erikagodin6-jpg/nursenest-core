@@ -14,7 +14,33 @@
 
 // ── Locale codes ─────────────────────────────────────────────────────────────
 
-export const GLOBAL_LOCALE_CODES = ["en", "fr", "es", "tl", "hi", "ja", "ko", "it", "el", "de"] as const;
+/** Wider than legacy list: must cover marketing cookies (`zh`, `ar`, …) used with `saveContextPreferences`. */
+export const GLOBAL_LOCALE_CODES = [
+  "en",
+  "fr",
+  "es",
+  "tl",
+  "hi",
+  "ja",
+  "ko",
+  "it",
+  "el",
+  "de",
+  "zh",
+  "zh-tw",
+  "ar",
+  "vi",
+  "pa",
+  "pt",
+  "ur",
+  "fa",
+  "th",
+  "tr",
+  "id",
+  "ru",
+  "ht",
+  "hu",
+] as const;
 export type GlobalLocaleCode = (typeof GLOBAL_LOCALE_CODES)[number];
 
 export function isGlobalLocaleCode(v: string): v is GlobalLocaleCode {
@@ -42,6 +68,7 @@ export const GLOBAL_REGION_SLUGS = [
   "new-zealand",
   // Asia / Europe expansion (SEO + geo; exam hubs may still route via US/CA pathways)
   "japan",
+  "china",
   "south-korea",
   "indonesia",
   "vietnam",
@@ -49,6 +76,10 @@ export const GLOBAL_REGION_SLUGS = [
   "italy",
   "greece",
   "germany",
+  "france",
+  "hungary",
+  "portugal",
+  "mexico",
   // Legacy / competitive
   "us",
   "canada",
@@ -234,6 +265,16 @@ export const REGION_CONFIG: Record<GlobalRegionSlug, RegionConfig> = {
     currencySymbol: "¥",
     countryCodes: ["JP"],
   },
+  china: {
+    slug: "china",
+    displayName: "China",
+    priority: "secondary",
+    defaultLocale: "zh",
+    allowedLocales: ["zh", "en", "zh-tw"],
+    currencyCode: "CNY",
+    currencySymbol: "¥",
+    countryCodes: ["CN"],
+  },
   "south-korea": {
     slug: "south-korea",
     displayName: "South Korea",
@@ -303,6 +344,46 @@ export const REGION_CONFIG: Record<GlobalRegionSlug, RegionConfig> = {
     currencyCode: "EUR",
     currencySymbol: "€",
     countryCodes: ["DE"],
+  },
+  france: {
+    slug: "france",
+    displayName: "France",
+    priority: "secondary",
+    defaultLocale: "fr",
+    allowedLocales: ["fr", "en"],
+    currencyCode: "EUR",
+    currencySymbol: "€",
+    countryCodes: ["FR"],
+  },
+  hungary: {
+    slug: "hungary",
+    displayName: "Hungary",
+    priority: "secondary",
+    defaultLocale: "hu",
+    allowedLocales: ["hu", "en"],
+    currencyCode: "HUF",
+    currencySymbol: "Ft",
+    countryCodes: ["HU"],
+  },
+  portugal: {
+    slug: "portugal",
+    displayName: "Portugal",
+    priority: "secondary",
+    defaultLocale: "pt",
+    allowedLocales: ["pt", "en"],
+    currencyCode: "EUR",
+    currencySymbol: "€",
+    countryCodes: ["PT"],
+  },
+  mexico: {
+    slug: "mexico",
+    displayName: "Mexico",
+    priority: "secondary",
+    defaultLocale: "es",
+    allowedLocales: ["es", "en"],
+    currencyCode: "MXN",
+    currencySymbol: "$",
+    countryCodes: ["MX"],
   },
   // ── Legacy / competitive ───────────────────────────────────────────────────
   us: {

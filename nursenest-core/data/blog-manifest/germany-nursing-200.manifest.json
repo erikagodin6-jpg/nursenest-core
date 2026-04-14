@@ -1,0 +1,2006 @@
+{
+  "generatedAt": "2026-04-14T19:33:24.217Z",
+  "count": 200,
+  "entries": [
+    {
+      "title": "how to work as a nurse in germany — Germany nursing (en 1)",
+      "slug": "en-0001-how-to-work-as-a-nurse-in-germany-how-to-work-as-a-nurse-in-germany-germany-nursing-en-1",
+      "primaryKeyword": "how to work as a nurse in germany",
+      "language": "en",
+      "category": "Germany nursing",
+      "intentType": "transactional",
+      "translationGroupId": "de-nurse-0001-how-to-work-as-a-nurse-in-germany",
+      "status": "planned"
+    },
+    {
+      "title": "nurse recognition germany — Germany nursing (en 2)",
+      "slug": "en-0002-nurse-recognition-germany-nurse-recognition-germany-germany-nursing-en-2",
+      "primaryKeyword": "nurse recognition germany",
+      "language": "en",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0001-nurse-recognition-germany",
+      "status": "planned"
+    },
+    {
+      "title": "anerkennung guide — Germany nursing (en 3)",
+      "slug": "en-0003-anerkennung-guide-anerkennung-guide-germany-nursing-en-3",
+      "primaryKeyword": "anerkennung guide",
+      "language": "en",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0001-anerkennung-guide",
+      "status": "planned"
+    },
+    {
+      "title": "kenntnisprufung for nurses — Germany nursing (en 4)",
+      "slug": "en-0004-kenntnisprufung-for-nurses-kenntnisprufung-for-nurses-germany-nursing-en-4",
+      "primaryKeyword": "kenntnisprufung for nurses",
+      "language": "en",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0001-kenntnisprufung-for-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "b2 german for nurses — Germany nursing (en 5)",
+      "slug": "en-0005-b2-german-for-nurses-b2-german-for-nurses-germany-nursing-en-5",
+      "primaryKeyword": "b2 german for nurses",
+      "language": "en",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0001-b2-german-for-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "best german cities for nurses — Germany nursing (en 6)",
+      "slug": "en-0006-best-german-cities-for-nurses-best-german-cities-for-nurses-germany-nursing-en-6",
+      "primaryKeyword": "best german cities for nurses",
+      "language": "en",
+      "category": "Germany nursing",
+      "intentType": "transactional",
+      "translationGroupId": "de-nurse-0001-best-german-cities-for-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "germany for indian nurses — Germany nursing (en 7)",
+      "slug": "en-0007-germany-for-indian-nurses-germany-for-indian-nurses-germany-nursing-en-7",
+      "primaryKeyword": "germany for indian nurses",
+      "language": "en",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0001-germany-for-indian-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "germany for filipino nurses — Germany nursing (en 8)",
+      "slug": "en-0008-germany-for-filipino-nurses-germany-for-filipino-nurses-germany-nursing-en-8",
+      "primaryKeyword": "germany for filipino nurses",
+      "language": "en",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0001-germany-for-filipino-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "adaptation period germany — Germany nursing (en 9)",
+      "slug": "en-0009-adaptation-period-germany-adaptation-period-germany-germany-nursing-en-9",
+      "primaryKeyword": "adaptation period germany",
+      "language": "en",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0001-adaptation-period-germany",
+      "status": "planned"
+    },
+    {
+      "title": "german nursing salary guide — Germany nursing (en 10)",
+      "slug": "en-0010-german-nursing-salary-guide-german-nursing-salary-guide-germany-nursing-en-10",
+      "primaryKeyword": "german nursing salary guide",
+      "language": "en",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0001-german-nursing-salary-guide",
+      "status": "planned"
+    },
+    {
+      "title": "how to work as a nurse in germany — Germany nursing (en 11)",
+      "slug": "en-0011-how-to-work-as-a-nurse-in-germany-how-to-work-as-a-nurse-in-germany-germany-nursing-en-11",
+      "primaryKeyword": "how to work as a nurse in germany",
+      "language": "en",
+      "category": "Germany nursing",
+      "intentType": "transactional",
+      "translationGroupId": "de-nurse-0002-how-to-work-as-a-nurse-in-germany",
+      "status": "planned"
+    },
+    {
+      "title": "nurse recognition germany — Germany nursing (en 12)",
+      "slug": "en-0012-nurse-recognition-germany-nurse-recognition-germany-germany-nursing-en-12",
+      "primaryKeyword": "nurse recognition germany",
+      "language": "en",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0002-nurse-recognition-germany",
+      "status": "planned"
+    },
+    {
+      "title": "anerkennung guide — Germany nursing (en 13)",
+      "slug": "en-0013-anerkennung-guide-anerkennung-guide-germany-nursing-en-13",
+      "primaryKeyword": "anerkennung guide",
+      "language": "en",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0002-anerkennung-guide",
+      "status": "planned"
+    },
+    {
+      "title": "kenntnisprufung for nurses — Germany nursing (en 14)",
+      "slug": "en-0014-kenntnisprufung-for-nurses-kenntnisprufung-for-nurses-germany-nursing-en-14",
+      "primaryKeyword": "kenntnisprufung for nurses",
+      "language": "en",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0002-kenntnisprufung-for-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "b2 german for nurses — Germany nursing (en 15)",
+      "slug": "en-0015-b2-german-for-nurses-b2-german-for-nurses-germany-nursing-en-15",
+      "primaryKeyword": "b2 german for nurses",
+      "language": "en",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0002-b2-german-for-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "best german cities for nurses — Germany nursing (en 16)",
+      "slug": "en-0016-best-german-cities-for-nurses-best-german-cities-for-nurses-germany-nursing-en-16",
+      "primaryKeyword": "best german cities for nurses",
+      "language": "en",
+      "category": "Germany nursing",
+      "intentType": "transactional",
+      "translationGroupId": "de-nurse-0002-best-german-cities-for-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "germany for indian nurses — Germany nursing (en 17)",
+      "slug": "en-0017-germany-for-indian-nurses-germany-for-indian-nurses-germany-nursing-en-17",
+      "primaryKeyword": "germany for indian nurses",
+      "language": "en",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0002-germany-for-indian-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "germany for filipino nurses — Germany nursing (en 18)",
+      "slug": "en-0018-germany-for-filipino-nurses-germany-for-filipino-nurses-germany-nursing-en-18",
+      "primaryKeyword": "germany for filipino nurses",
+      "language": "en",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0002-germany-for-filipino-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "adaptation period germany — Germany nursing (en 19)",
+      "slug": "en-0019-adaptation-period-germany-adaptation-period-germany-germany-nursing-en-19",
+      "primaryKeyword": "adaptation period germany",
+      "language": "en",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0002-adaptation-period-germany",
+      "status": "planned"
+    },
+    {
+      "title": "german nursing salary guide — Germany nursing (en 20)",
+      "slug": "en-0020-german-nursing-salary-guide-german-nursing-salary-guide-germany-nursing-en-20",
+      "primaryKeyword": "german nursing salary guide",
+      "language": "en",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0002-german-nursing-salary-guide",
+      "status": "planned"
+    },
+    {
+      "title": "how to work as a nurse in germany — Germany nursing (en 21)",
+      "slug": "en-0021-how-to-work-as-a-nurse-in-germany-how-to-work-as-a-nurse-in-germany-germany-nursing-en-21",
+      "primaryKeyword": "how to work as a nurse in germany",
+      "language": "en",
+      "category": "Germany nursing",
+      "intentType": "transactional",
+      "translationGroupId": "de-nurse-0003-how-to-work-as-a-nurse-in-germany",
+      "status": "planned"
+    },
+    {
+      "title": "nurse recognition germany — Germany nursing (en 22)",
+      "slug": "en-0022-nurse-recognition-germany-nurse-recognition-germany-germany-nursing-en-22",
+      "primaryKeyword": "nurse recognition germany",
+      "language": "en",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0003-nurse-recognition-germany",
+      "status": "planned"
+    },
+    {
+      "title": "anerkennung guide — Germany nursing (en 23)",
+      "slug": "en-0023-anerkennung-guide-anerkennung-guide-germany-nursing-en-23",
+      "primaryKeyword": "anerkennung guide",
+      "language": "en",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0003-anerkennung-guide",
+      "status": "planned"
+    },
+    {
+      "title": "kenntnisprufung for nurses — Germany nursing (en 24)",
+      "slug": "en-0024-kenntnisprufung-for-nurses-kenntnisprufung-for-nurses-germany-nursing-en-24",
+      "primaryKeyword": "kenntnisprufung for nurses",
+      "language": "en",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0003-kenntnisprufung-for-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "b2 german for nurses — Germany nursing (en 25)",
+      "slug": "en-0025-b2-german-for-nurses-b2-german-for-nurses-germany-nursing-en-25",
+      "primaryKeyword": "b2 german for nurses",
+      "language": "en",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0003-b2-german-for-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "best german cities for nurses — Germany nursing (en 26)",
+      "slug": "en-0026-best-german-cities-for-nurses-best-german-cities-for-nurses-germany-nursing-en-26",
+      "primaryKeyword": "best german cities for nurses",
+      "language": "en",
+      "category": "Germany nursing",
+      "intentType": "transactional",
+      "translationGroupId": "de-nurse-0003-best-german-cities-for-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "germany for indian nurses — Germany nursing (en 27)",
+      "slug": "en-0027-germany-for-indian-nurses-germany-for-indian-nurses-germany-nursing-en-27",
+      "primaryKeyword": "germany for indian nurses",
+      "language": "en",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0003-germany-for-indian-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "germany for filipino nurses — Germany nursing (en 28)",
+      "slug": "en-0028-germany-for-filipino-nurses-germany-for-filipino-nurses-germany-nursing-en-28",
+      "primaryKeyword": "germany for filipino nurses",
+      "language": "en",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0003-germany-for-filipino-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "adaptation period germany — Germany nursing (en 29)",
+      "slug": "en-0029-adaptation-period-germany-adaptation-period-germany-germany-nursing-en-29",
+      "primaryKeyword": "adaptation period germany",
+      "language": "en",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0003-adaptation-period-germany",
+      "status": "planned"
+    },
+    {
+      "title": "german nursing salary guide — Germany nursing (en 30)",
+      "slug": "en-0030-german-nursing-salary-guide-german-nursing-salary-guide-germany-nursing-en-30",
+      "primaryKeyword": "german nursing salary guide",
+      "language": "en",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0003-german-nursing-salary-guide",
+      "status": "planned"
+    },
+    {
+      "title": "how to work as a nurse in germany — Germany nursing (en 31)",
+      "slug": "en-0031-how-to-work-as-a-nurse-in-germany-how-to-work-as-a-nurse-in-germany-germany-nursing-en-31",
+      "primaryKeyword": "how to work as a nurse in germany",
+      "language": "en",
+      "category": "Germany nursing",
+      "intentType": "transactional",
+      "translationGroupId": "de-nurse-0004-how-to-work-as-a-nurse-in-germany",
+      "status": "planned"
+    },
+    {
+      "title": "nurse recognition germany — Germany nursing (en 32)",
+      "slug": "en-0032-nurse-recognition-germany-nurse-recognition-germany-germany-nursing-en-32",
+      "primaryKeyword": "nurse recognition germany",
+      "language": "en",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0004-nurse-recognition-germany",
+      "status": "planned"
+    },
+    {
+      "title": "anerkennung guide — Germany nursing (en 33)",
+      "slug": "en-0033-anerkennung-guide-anerkennung-guide-germany-nursing-en-33",
+      "primaryKeyword": "anerkennung guide",
+      "language": "en",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0004-anerkennung-guide",
+      "status": "planned"
+    },
+    {
+      "title": "kenntnisprufung for nurses — Germany nursing (en 34)",
+      "slug": "en-0034-kenntnisprufung-for-nurses-kenntnisprufung-for-nurses-germany-nursing-en-34",
+      "primaryKeyword": "kenntnisprufung for nurses",
+      "language": "en",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0004-kenntnisprufung-for-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "b2 german for nurses — Germany nursing (en 35)",
+      "slug": "en-0035-b2-german-for-nurses-b2-german-for-nurses-germany-nursing-en-35",
+      "primaryKeyword": "b2 german for nurses",
+      "language": "en",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0004-b2-german-for-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "best german cities for nurses — Germany nursing (en 36)",
+      "slug": "en-0036-best-german-cities-for-nurses-best-german-cities-for-nurses-germany-nursing-en-36",
+      "primaryKeyword": "best german cities for nurses",
+      "language": "en",
+      "category": "Germany nursing",
+      "intentType": "transactional",
+      "translationGroupId": "de-nurse-0004-best-german-cities-for-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "germany for indian nurses — Germany nursing (en 37)",
+      "slug": "en-0037-germany-for-indian-nurses-germany-for-indian-nurses-germany-nursing-en-37",
+      "primaryKeyword": "germany for indian nurses",
+      "language": "en",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0004-germany-for-indian-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "germany for filipino nurses — Germany nursing (en 38)",
+      "slug": "en-0038-germany-for-filipino-nurses-germany-for-filipino-nurses-germany-nursing-en-38",
+      "primaryKeyword": "germany for filipino nurses",
+      "language": "en",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0004-germany-for-filipino-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "adaptation period germany — Germany nursing (en 39)",
+      "slug": "en-0039-adaptation-period-germany-adaptation-period-germany-germany-nursing-en-39",
+      "primaryKeyword": "adaptation period germany",
+      "language": "en",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0004-adaptation-period-germany",
+      "status": "planned"
+    },
+    {
+      "title": "german nursing salary guide — Germany nursing (en 40)",
+      "slug": "en-0040-german-nursing-salary-guide-german-nursing-salary-guide-germany-nursing-en-40",
+      "primaryKeyword": "german nursing salary guide",
+      "language": "en",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0004-german-nursing-salary-guide",
+      "status": "planned"
+    },
+    {
+      "title": "how to work as a nurse in germany — Germany nursing (en 41)",
+      "slug": "en-0041-how-to-work-as-a-nurse-in-germany-how-to-work-as-a-nurse-in-germany-germany-nursing-en-41",
+      "primaryKeyword": "how to work as a nurse in germany",
+      "language": "en",
+      "category": "Germany nursing",
+      "intentType": "transactional",
+      "translationGroupId": "de-nurse-0005-how-to-work-as-a-nurse-in-germany",
+      "status": "planned"
+    },
+    {
+      "title": "nurse recognition germany — Germany nursing (en 42)",
+      "slug": "en-0042-nurse-recognition-germany-nurse-recognition-germany-germany-nursing-en-42",
+      "primaryKeyword": "nurse recognition germany",
+      "language": "en",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0005-nurse-recognition-germany",
+      "status": "planned"
+    },
+    {
+      "title": "anerkennung guide — Germany nursing (en 43)",
+      "slug": "en-0043-anerkennung-guide-anerkennung-guide-germany-nursing-en-43",
+      "primaryKeyword": "anerkennung guide",
+      "language": "en",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0005-anerkennung-guide",
+      "status": "planned"
+    },
+    {
+      "title": "kenntnisprufung for nurses — Germany nursing (en 44)",
+      "slug": "en-0044-kenntnisprufung-for-nurses-kenntnisprufung-for-nurses-germany-nursing-en-44",
+      "primaryKeyword": "kenntnisprufung for nurses",
+      "language": "en",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0005-kenntnisprufung-for-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "b2 german for nurses — Germany nursing (en 45)",
+      "slug": "en-0045-b2-german-for-nurses-b2-german-for-nurses-germany-nursing-en-45",
+      "primaryKeyword": "b2 german for nurses",
+      "language": "en",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0005-b2-german-for-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "best german cities for nurses — Germany nursing (en 46)",
+      "slug": "en-0046-best-german-cities-for-nurses-best-german-cities-for-nurses-germany-nursing-en-46",
+      "primaryKeyword": "best german cities for nurses",
+      "language": "en",
+      "category": "Germany nursing",
+      "intentType": "transactional",
+      "translationGroupId": "de-nurse-0005-best-german-cities-for-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "germany for indian nurses — Germany nursing (en 47)",
+      "slug": "en-0047-germany-for-indian-nurses-germany-for-indian-nurses-germany-nursing-en-47",
+      "primaryKeyword": "germany for indian nurses",
+      "language": "en",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0005-germany-for-indian-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "germany for filipino nurses — Germany nursing (en 48)",
+      "slug": "en-0048-germany-for-filipino-nurses-germany-for-filipino-nurses-germany-nursing-en-48",
+      "primaryKeyword": "germany for filipino nurses",
+      "language": "en",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0005-germany-for-filipino-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "adaptation period germany — Germany nursing (en 49)",
+      "slug": "en-0049-adaptation-period-germany-adaptation-period-germany-germany-nursing-en-49",
+      "primaryKeyword": "adaptation period germany",
+      "language": "en",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0005-adaptation-period-germany",
+      "status": "planned"
+    },
+    {
+      "title": "german nursing salary guide — Germany nursing (en 50)",
+      "slug": "en-0050-german-nursing-salary-guide-german-nursing-salary-guide-germany-nursing-en-50",
+      "primaryKeyword": "german nursing salary guide",
+      "language": "en",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0005-german-nursing-salary-guide",
+      "status": "planned"
+    },
+    {
+      "title": "how to work as a nurse in germany — Germany nursing (en 51)",
+      "slug": "en-0051-how-to-work-as-a-nurse-in-germany-how-to-work-as-a-nurse-in-germany-germany-nursing-en-51",
+      "primaryKeyword": "how to work as a nurse in germany",
+      "language": "en",
+      "category": "Germany nursing",
+      "intentType": "transactional",
+      "translationGroupId": "de-nurse-0006-how-to-work-as-a-nurse-in-germany",
+      "status": "planned"
+    },
+    {
+      "title": "nurse recognition germany — Germany nursing (en 52)",
+      "slug": "en-0052-nurse-recognition-germany-nurse-recognition-germany-germany-nursing-en-52",
+      "primaryKeyword": "nurse recognition germany",
+      "language": "en",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0006-nurse-recognition-germany",
+      "status": "planned"
+    },
+    {
+      "title": "anerkennung guide — Germany nursing (en 53)",
+      "slug": "en-0053-anerkennung-guide-anerkennung-guide-germany-nursing-en-53",
+      "primaryKeyword": "anerkennung guide",
+      "language": "en",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0006-anerkennung-guide",
+      "status": "planned"
+    },
+    {
+      "title": "kenntnisprufung for nurses — Germany nursing (en 54)",
+      "slug": "en-0054-kenntnisprufung-for-nurses-kenntnisprufung-for-nurses-germany-nursing-en-54",
+      "primaryKeyword": "kenntnisprufung for nurses",
+      "language": "en",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0006-kenntnisprufung-for-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "b2 german for nurses — Germany nursing (en 55)",
+      "slug": "en-0055-b2-german-for-nurses-b2-german-for-nurses-germany-nursing-en-55",
+      "primaryKeyword": "b2 german for nurses",
+      "language": "en",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0006-b2-german-for-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "best german cities for nurses — Germany nursing (en 56)",
+      "slug": "en-0056-best-german-cities-for-nurses-best-german-cities-for-nurses-germany-nursing-en-56",
+      "primaryKeyword": "best german cities for nurses",
+      "language": "en",
+      "category": "Germany nursing",
+      "intentType": "transactional",
+      "translationGroupId": "de-nurse-0006-best-german-cities-for-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "germany for indian nurses — Germany nursing (en 57)",
+      "slug": "en-0057-germany-for-indian-nurses-germany-for-indian-nurses-germany-nursing-en-57",
+      "primaryKeyword": "germany for indian nurses",
+      "language": "en",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0006-germany-for-indian-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "germany for filipino nurses — Germany nursing (en 58)",
+      "slug": "en-0058-germany-for-filipino-nurses-germany-for-filipino-nurses-germany-nursing-en-58",
+      "primaryKeyword": "germany for filipino nurses",
+      "language": "en",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0006-germany-for-filipino-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "adaptation period germany — Germany nursing (en 59)",
+      "slug": "en-0059-adaptation-period-germany-adaptation-period-germany-germany-nursing-en-59",
+      "primaryKeyword": "adaptation period germany",
+      "language": "en",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0006-adaptation-period-germany",
+      "status": "planned"
+    },
+    {
+      "title": "german nursing salary guide — Germany nursing (en 60)",
+      "slug": "en-0060-german-nursing-salary-guide-german-nursing-salary-guide-germany-nursing-en-60",
+      "primaryKeyword": "german nursing salary guide",
+      "language": "en",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0006-german-nursing-salary-guide",
+      "status": "planned"
+    },
+    {
+      "title": "how to work as a nurse in germany — Germany nursing (en 61)",
+      "slug": "en-0061-how-to-work-as-a-nurse-in-germany-how-to-work-as-a-nurse-in-germany-germany-nursing-en-61",
+      "primaryKeyword": "how to work as a nurse in germany",
+      "language": "en",
+      "category": "Germany nursing",
+      "intentType": "transactional",
+      "translationGroupId": "de-nurse-0007-how-to-work-as-a-nurse-in-germany",
+      "status": "planned"
+    },
+    {
+      "title": "nurse recognition germany — Germany nursing (en 62)",
+      "slug": "en-0062-nurse-recognition-germany-nurse-recognition-germany-germany-nursing-en-62",
+      "primaryKeyword": "nurse recognition germany",
+      "language": "en",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0007-nurse-recognition-germany",
+      "status": "planned"
+    },
+    {
+      "title": "anerkennung guide — Germany nursing (en 63)",
+      "slug": "en-0063-anerkennung-guide-anerkennung-guide-germany-nursing-en-63",
+      "primaryKeyword": "anerkennung guide",
+      "language": "en",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0007-anerkennung-guide",
+      "status": "planned"
+    },
+    {
+      "title": "kenntnisprufung for nurses — Germany nursing (en 64)",
+      "slug": "en-0064-kenntnisprufung-for-nurses-kenntnisprufung-for-nurses-germany-nursing-en-64",
+      "primaryKeyword": "kenntnisprufung for nurses",
+      "language": "en",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0007-kenntnisprufung-for-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "b2 german for nurses — Germany nursing (en 65)",
+      "slug": "en-0065-b2-german-for-nurses-b2-german-for-nurses-germany-nursing-en-65",
+      "primaryKeyword": "b2 german for nurses",
+      "language": "en",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0007-b2-german-for-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "best german cities for nurses — Germany nursing (en 66)",
+      "slug": "en-0066-best-german-cities-for-nurses-best-german-cities-for-nurses-germany-nursing-en-66",
+      "primaryKeyword": "best german cities for nurses",
+      "language": "en",
+      "category": "Germany nursing",
+      "intentType": "transactional",
+      "translationGroupId": "de-nurse-0007-best-german-cities-for-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "germany for indian nurses — Germany nursing (en 67)",
+      "slug": "en-0067-germany-for-indian-nurses-germany-for-indian-nurses-germany-nursing-en-67",
+      "primaryKeyword": "germany for indian nurses",
+      "language": "en",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0007-germany-for-indian-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "germany for filipino nurses — Germany nursing (en 68)",
+      "slug": "en-0068-germany-for-filipino-nurses-germany-for-filipino-nurses-germany-nursing-en-68",
+      "primaryKeyword": "germany for filipino nurses",
+      "language": "en",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0007-germany-for-filipino-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "adaptation period germany — Germany nursing (en 69)",
+      "slug": "en-0069-adaptation-period-germany-adaptation-period-germany-germany-nursing-en-69",
+      "primaryKeyword": "adaptation period germany",
+      "language": "en",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0007-adaptation-period-germany",
+      "status": "planned"
+    },
+    {
+      "title": "german nursing salary guide — Germany nursing (en 70)",
+      "slug": "en-0070-german-nursing-salary-guide-german-nursing-salary-guide-germany-nursing-en-70",
+      "primaryKeyword": "german nursing salary guide",
+      "language": "en",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0007-german-nursing-salary-guide",
+      "status": "planned"
+    },
+    {
+      "title": "how to work as a nurse in germany — Germany nursing (de 1)",
+      "slug": "de-0071-how-to-work-as-a-nurse-in-germany-how-to-work-as-a-nurse-in-germany-germany-nursing-de-1",
+      "primaryKeyword": "how to work as a nurse in germany",
+      "language": "de",
+      "category": "Germany nursing",
+      "intentType": "transactional",
+      "translationGroupId": "de-nurse-0008-how-to-work-as-a-nurse-in-germany",
+      "status": "planned"
+    },
+    {
+      "title": "nurse recognition germany — Germany nursing (de 2)",
+      "slug": "de-0072-nurse-recognition-germany-nurse-recognition-germany-germany-nursing-de-2",
+      "primaryKeyword": "nurse recognition germany",
+      "language": "de",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0008-nurse-recognition-germany",
+      "status": "planned"
+    },
+    {
+      "title": "anerkennung guide — Germany nursing (de 3)",
+      "slug": "de-0073-anerkennung-guide-anerkennung-guide-germany-nursing-de-3",
+      "primaryKeyword": "anerkennung guide",
+      "language": "de",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0008-anerkennung-guide",
+      "status": "planned"
+    },
+    {
+      "title": "kenntnisprufung for nurses — Germany nursing (de 4)",
+      "slug": "de-0074-kenntnisprufung-for-nurses-kenntnisprufung-for-nurses-germany-nursing-de-4",
+      "primaryKeyword": "kenntnisprufung for nurses",
+      "language": "de",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0008-kenntnisprufung-for-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "b2 german for nurses — Germany nursing (de 5)",
+      "slug": "de-0075-b2-german-for-nurses-b2-german-for-nurses-germany-nursing-de-5",
+      "primaryKeyword": "b2 german for nurses",
+      "language": "de",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0008-b2-german-for-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "best german cities for nurses — Germany nursing (de 6)",
+      "slug": "de-0076-best-german-cities-for-nurses-best-german-cities-for-nurses-germany-nursing-de-6",
+      "primaryKeyword": "best german cities for nurses",
+      "language": "de",
+      "category": "Germany nursing",
+      "intentType": "transactional",
+      "translationGroupId": "de-nurse-0008-best-german-cities-for-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "germany for indian nurses — Germany nursing (de 7)",
+      "slug": "de-0077-germany-for-indian-nurses-germany-for-indian-nurses-germany-nursing-de-7",
+      "primaryKeyword": "germany for indian nurses",
+      "language": "de",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0008-germany-for-indian-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "germany for filipino nurses — Germany nursing (de 8)",
+      "slug": "de-0078-germany-for-filipino-nurses-germany-for-filipino-nurses-germany-nursing-de-8",
+      "primaryKeyword": "germany for filipino nurses",
+      "language": "de",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0008-germany-for-filipino-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "adaptation period germany — Germany nursing (de 9)",
+      "slug": "de-0079-adaptation-period-germany-adaptation-period-germany-germany-nursing-de-9",
+      "primaryKeyword": "adaptation period germany",
+      "language": "de",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0008-adaptation-period-germany",
+      "status": "planned"
+    },
+    {
+      "title": "german nursing salary guide — Germany nursing (de 10)",
+      "slug": "de-0080-german-nursing-salary-guide-german-nursing-salary-guide-germany-nursing-de-10",
+      "primaryKeyword": "german nursing salary guide",
+      "language": "de",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0008-german-nursing-salary-guide",
+      "status": "planned"
+    },
+    {
+      "title": "how to work as a nurse in germany — Germany nursing (de 11)",
+      "slug": "de-0081-how-to-work-as-a-nurse-in-germany-how-to-work-as-a-nurse-in-germany-germany-nursing-de-11",
+      "primaryKeyword": "how to work as a nurse in germany",
+      "language": "de",
+      "category": "Germany nursing",
+      "intentType": "transactional",
+      "translationGroupId": "de-nurse-0009-how-to-work-as-a-nurse-in-germany",
+      "status": "planned"
+    },
+    {
+      "title": "nurse recognition germany — Germany nursing (de 12)",
+      "slug": "de-0082-nurse-recognition-germany-nurse-recognition-germany-germany-nursing-de-12",
+      "primaryKeyword": "nurse recognition germany",
+      "language": "de",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0009-nurse-recognition-germany",
+      "status": "planned"
+    },
+    {
+      "title": "anerkennung guide — Germany nursing (de 13)",
+      "slug": "de-0083-anerkennung-guide-anerkennung-guide-germany-nursing-de-13",
+      "primaryKeyword": "anerkennung guide",
+      "language": "de",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0009-anerkennung-guide",
+      "status": "planned"
+    },
+    {
+      "title": "kenntnisprufung for nurses — Germany nursing (de 14)",
+      "slug": "de-0084-kenntnisprufung-for-nurses-kenntnisprufung-for-nurses-germany-nursing-de-14",
+      "primaryKeyword": "kenntnisprufung for nurses",
+      "language": "de",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0009-kenntnisprufung-for-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "b2 german for nurses — Germany nursing (de 15)",
+      "slug": "de-0085-b2-german-for-nurses-b2-german-for-nurses-germany-nursing-de-15",
+      "primaryKeyword": "b2 german for nurses",
+      "language": "de",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0009-b2-german-for-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "best german cities for nurses — Germany nursing (de 16)",
+      "slug": "de-0086-best-german-cities-for-nurses-best-german-cities-for-nurses-germany-nursing-de-16",
+      "primaryKeyword": "best german cities for nurses",
+      "language": "de",
+      "category": "Germany nursing",
+      "intentType": "transactional",
+      "translationGroupId": "de-nurse-0009-best-german-cities-for-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "germany for indian nurses — Germany nursing (de 17)",
+      "slug": "de-0087-germany-for-indian-nurses-germany-for-indian-nurses-germany-nursing-de-17",
+      "primaryKeyword": "germany for indian nurses",
+      "language": "de",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0009-germany-for-indian-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "germany for filipino nurses — Germany nursing (de 18)",
+      "slug": "de-0088-germany-for-filipino-nurses-germany-for-filipino-nurses-germany-nursing-de-18",
+      "primaryKeyword": "germany for filipino nurses",
+      "language": "de",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0009-germany-for-filipino-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "adaptation period germany — Germany nursing (de 19)",
+      "slug": "de-0089-adaptation-period-germany-adaptation-period-germany-germany-nursing-de-19",
+      "primaryKeyword": "adaptation period germany",
+      "language": "de",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0009-adaptation-period-germany",
+      "status": "planned"
+    },
+    {
+      "title": "german nursing salary guide — Germany nursing (de 20)",
+      "slug": "de-0090-german-nursing-salary-guide-german-nursing-salary-guide-germany-nursing-de-20",
+      "primaryKeyword": "german nursing salary guide",
+      "language": "de",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0009-german-nursing-salary-guide",
+      "status": "planned"
+    },
+    {
+      "title": "how to work as a nurse in germany — Germany nursing (de 21)",
+      "slug": "de-0091-how-to-work-as-a-nurse-in-germany-how-to-work-as-a-nurse-in-germany-germany-nursing-de-21",
+      "primaryKeyword": "how to work as a nurse in germany",
+      "language": "de",
+      "category": "Germany nursing",
+      "intentType": "transactional",
+      "translationGroupId": "de-nurse-0010-how-to-work-as-a-nurse-in-germany",
+      "status": "planned"
+    },
+    {
+      "title": "nurse recognition germany — Germany nursing (de 22)",
+      "slug": "de-0092-nurse-recognition-germany-nurse-recognition-germany-germany-nursing-de-22",
+      "primaryKeyword": "nurse recognition germany",
+      "language": "de",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0010-nurse-recognition-germany",
+      "status": "planned"
+    },
+    {
+      "title": "anerkennung guide — Germany nursing (de 23)",
+      "slug": "de-0093-anerkennung-guide-anerkennung-guide-germany-nursing-de-23",
+      "primaryKeyword": "anerkennung guide",
+      "language": "de",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0010-anerkennung-guide",
+      "status": "planned"
+    },
+    {
+      "title": "kenntnisprufung for nurses — Germany nursing (de 24)",
+      "slug": "de-0094-kenntnisprufung-for-nurses-kenntnisprufung-for-nurses-germany-nursing-de-24",
+      "primaryKeyword": "kenntnisprufung for nurses",
+      "language": "de",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0010-kenntnisprufung-for-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "b2 german for nurses — Germany nursing (de 25)",
+      "slug": "de-0095-b2-german-for-nurses-b2-german-for-nurses-germany-nursing-de-25",
+      "primaryKeyword": "b2 german for nurses",
+      "language": "de",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0010-b2-german-for-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "best german cities for nurses — Germany nursing (de 26)",
+      "slug": "de-0096-best-german-cities-for-nurses-best-german-cities-for-nurses-germany-nursing-de-26",
+      "primaryKeyword": "best german cities for nurses",
+      "language": "de",
+      "category": "Germany nursing",
+      "intentType": "transactional",
+      "translationGroupId": "de-nurse-0010-best-german-cities-for-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "germany for indian nurses — Germany nursing (de 27)",
+      "slug": "de-0097-germany-for-indian-nurses-germany-for-indian-nurses-germany-nursing-de-27",
+      "primaryKeyword": "germany for indian nurses",
+      "language": "de",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0010-germany-for-indian-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "germany for filipino nurses — Germany nursing (de 28)",
+      "slug": "de-0098-germany-for-filipino-nurses-germany-for-filipino-nurses-germany-nursing-de-28",
+      "primaryKeyword": "germany for filipino nurses",
+      "language": "de",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0010-germany-for-filipino-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "adaptation period germany — Germany nursing (de 29)",
+      "slug": "de-0099-adaptation-period-germany-adaptation-period-germany-germany-nursing-de-29",
+      "primaryKeyword": "adaptation period germany",
+      "language": "de",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0010-adaptation-period-germany",
+      "status": "planned"
+    },
+    {
+      "title": "german nursing salary guide — Germany nursing (de 30)",
+      "slug": "de-0100-german-nursing-salary-guide-german-nursing-salary-guide-germany-nursing-de-30",
+      "primaryKeyword": "german nursing salary guide",
+      "language": "de",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0010-german-nursing-salary-guide",
+      "status": "planned"
+    },
+    {
+      "title": "how to work as a nurse in germany — Germany nursing (de 31)",
+      "slug": "de-0101-how-to-work-as-a-nurse-in-germany-how-to-work-as-a-nurse-in-germany-germany-nursing-de-31",
+      "primaryKeyword": "how to work as a nurse in germany",
+      "language": "de",
+      "category": "Germany nursing",
+      "intentType": "transactional",
+      "translationGroupId": "de-nurse-0011-how-to-work-as-a-nurse-in-germany",
+      "status": "planned"
+    },
+    {
+      "title": "nurse recognition germany — Germany nursing (de 32)",
+      "slug": "de-0102-nurse-recognition-germany-nurse-recognition-germany-germany-nursing-de-32",
+      "primaryKeyword": "nurse recognition germany",
+      "language": "de",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0011-nurse-recognition-germany",
+      "status": "planned"
+    },
+    {
+      "title": "anerkennung guide — Germany nursing (de 33)",
+      "slug": "de-0103-anerkennung-guide-anerkennung-guide-germany-nursing-de-33",
+      "primaryKeyword": "anerkennung guide",
+      "language": "de",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0011-anerkennung-guide",
+      "status": "planned"
+    },
+    {
+      "title": "kenntnisprufung for nurses — Germany nursing (de 34)",
+      "slug": "de-0104-kenntnisprufung-for-nurses-kenntnisprufung-for-nurses-germany-nursing-de-34",
+      "primaryKeyword": "kenntnisprufung for nurses",
+      "language": "de",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0011-kenntnisprufung-for-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "b2 german for nurses — Germany nursing (de 35)",
+      "slug": "de-0105-b2-german-for-nurses-b2-german-for-nurses-germany-nursing-de-35",
+      "primaryKeyword": "b2 german for nurses",
+      "language": "de",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0011-b2-german-for-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "best german cities for nurses — Germany nursing (de 36)",
+      "slug": "de-0106-best-german-cities-for-nurses-best-german-cities-for-nurses-germany-nursing-de-36",
+      "primaryKeyword": "best german cities for nurses",
+      "language": "de",
+      "category": "Germany nursing",
+      "intentType": "transactional",
+      "translationGroupId": "de-nurse-0011-best-german-cities-for-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "germany for indian nurses — Germany nursing (de 37)",
+      "slug": "de-0107-germany-for-indian-nurses-germany-for-indian-nurses-germany-nursing-de-37",
+      "primaryKeyword": "germany for indian nurses",
+      "language": "de",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0011-germany-for-indian-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "germany for filipino nurses — Germany nursing (de 38)",
+      "slug": "de-0108-germany-for-filipino-nurses-germany-for-filipino-nurses-germany-nursing-de-38",
+      "primaryKeyword": "germany for filipino nurses",
+      "language": "de",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0011-germany-for-filipino-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "adaptation period germany — Germany nursing (de 39)",
+      "slug": "de-0109-adaptation-period-germany-adaptation-period-germany-germany-nursing-de-39",
+      "primaryKeyword": "adaptation period germany",
+      "language": "de",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0011-adaptation-period-germany",
+      "status": "planned"
+    },
+    {
+      "title": "german nursing salary guide — Germany nursing (de 40)",
+      "slug": "de-0110-german-nursing-salary-guide-german-nursing-salary-guide-germany-nursing-de-40",
+      "primaryKeyword": "german nursing salary guide",
+      "language": "de",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0011-german-nursing-salary-guide",
+      "status": "planned"
+    },
+    {
+      "title": "how to work as a nurse in germany — Germany nursing (de 41)",
+      "slug": "de-0111-how-to-work-as-a-nurse-in-germany-how-to-work-as-a-nurse-in-germany-germany-nursing-de-41",
+      "primaryKeyword": "how to work as a nurse in germany",
+      "language": "de",
+      "category": "Germany nursing",
+      "intentType": "transactional",
+      "translationGroupId": "de-nurse-0012-how-to-work-as-a-nurse-in-germany",
+      "status": "planned"
+    },
+    {
+      "title": "nurse recognition germany — Germany nursing (de 42)",
+      "slug": "de-0112-nurse-recognition-germany-nurse-recognition-germany-germany-nursing-de-42",
+      "primaryKeyword": "nurse recognition germany",
+      "language": "de",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0012-nurse-recognition-germany",
+      "status": "planned"
+    },
+    {
+      "title": "anerkennung guide — Germany nursing (de 43)",
+      "slug": "de-0113-anerkennung-guide-anerkennung-guide-germany-nursing-de-43",
+      "primaryKeyword": "anerkennung guide",
+      "language": "de",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0012-anerkennung-guide",
+      "status": "planned"
+    },
+    {
+      "title": "kenntnisprufung for nurses — Germany nursing (de 44)",
+      "slug": "de-0114-kenntnisprufung-for-nurses-kenntnisprufung-for-nurses-germany-nursing-de-44",
+      "primaryKeyword": "kenntnisprufung for nurses",
+      "language": "de",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0012-kenntnisprufung-for-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "b2 german for nurses — Germany nursing (de 45)",
+      "slug": "de-0115-b2-german-for-nurses-b2-german-for-nurses-germany-nursing-de-45",
+      "primaryKeyword": "b2 german for nurses",
+      "language": "de",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0012-b2-german-for-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "best german cities for nurses — Germany nursing (de 46)",
+      "slug": "de-0116-best-german-cities-for-nurses-best-german-cities-for-nurses-germany-nursing-de-46",
+      "primaryKeyword": "best german cities for nurses",
+      "language": "de",
+      "category": "Germany nursing",
+      "intentType": "transactional",
+      "translationGroupId": "de-nurse-0012-best-german-cities-for-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "germany for indian nurses — Germany nursing (de 47)",
+      "slug": "de-0117-germany-for-indian-nurses-germany-for-indian-nurses-germany-nursing-de-47",
+      "primaryKeyword": "germany for indian nurses",
+      "language": "de",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0012-germany-for-indian-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "germany for filipino nurses — Germany nursing (de 48)",
+      "slug": "de-0118-germany-for-filipino-nurses-germany-for-filipino-nurses-germany-nursing-de-48",
+      "primaryKeyword": "germany for filipino nurses",
+      "language": "de",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0012-germany-for-filipino-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "adaptation period germany — Germany nursing (de 49)",
+      "slug": "de-0119-adaptation-period-germany-adaptation-period-germany-germany-nursing-de-49",
+      "primaryKeyword": "adaptation period germany",
+      "language": "de",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0012-adaptation-period-germany",
+      "status": "planned"
+    },
+    {
+      "title": "german nursing salary guide — Germany nursing (de 50)",
+      "slug": "de-0120-german-nursing-salary-guide-german-nursing-salary-guide-germany-nursing-de-50",
+      "primaryKeyword": "german nursing salary guide",
+      "language": "de",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0012-german-nursing-salary-guide",
+      "status": "planned"
+    },
+    {
+      "title": "how to work as a nurse in germany — Germany nursing (de 51)",
+      "slug": "de-0121-how-to-work-as-a-nurse-in-germany-how-to-work-as-a-nurse-in-germany-germany-nursing-de-51",
+      "primaryKeyword": "how to work as a nurse in germany",
+      "language": "de",
+      "category": "Germany nursing",
+      "intentType": "transactional",
+      "translationGroupId": "de-nurse-0013-how-to-work-as-a-nurse-in-germany",
+      "status": "planned"
+    },
+    {
+      "title": "nurse recognition germany — Germany nursing (de 52)",
+      "slug": "de-0122-nurse-recognition-germany-nurse-recognition-germany-germany-nursing-de-52",
+      "primaryKeyword": "nurse recognition germany",
+      "language": "de",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0013-nurse-recognition-germany",
+      "status": "planned"
+    },
+    {
+      "title": "anerkennung guide — Germany nursing (de 53)",
+      "slug": "de-0123-anerkennung-guide-anerkennung-guide-germany-nursing-de-53",
+      "primaryKeyword": "anerkennung guide",
+      "language": "de",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0013-anerkennung-guide",
+      "status": "planned"
+    },
+    {
+      "title": "kenntnisprufung for nurses — Germany nursing (de 54)",
+      "slug": "de-0124-kenntnisprufung-for-nurses-kenntnisprufung-for-nurses-germany-nursing-de-54",
+      "primaryKeyword": "kenntnisprufung for nurses",
+      "language": "de",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0013-kenntnisprufung-for-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "b2 german for nurses — Germany nursing (de 55)",
+      "slug": "de-0125-b2-german-for-nurses-b2-german-for-nurses-germany-nursing-de-55",
+      "primaryKeyword": "b2 german for nurses",
+      "language": "de",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0013-b2-german-for-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "best german cities for nurses — Germany nursing (de 56)",
+      "slug": "de-0126-best-german-cities-for-nurses-best-german-cities-for-nurses-germany-nursing-de-56",
+      "primaryKeyword": "best german cities for nurses",
+      "language": "de",
+      "category": "Germany nursing",
+      "intentType": "transactional",
+      "translationGroupId": "de-nurse-0013-best-german-cities-for-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "germany for indian nurses — Germany nursing (de 57)",
+      "slug": "de-0127-germany-for-indian-nurses-germany-for-indian-nurses-germany-nursing-de-57",
+      "primaryKeyword": "germany for indian nurses",
+      "language": "de",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0013-germany-for-indian-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "germany for filipino nurses — Germany nursing (de 58)",
+      "slug": "de-0128-germany-for-filipino-nurses-germany-for-filipino-nurses-germany-nursing-de-58",
+      "primaryKeyword": "germany for filipino nurses",
+      "language": "de",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0013-germany-for-filipino-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "adaptation period germany — Germany nursing (de 59)",
+      "slug": "de-0129-adaptation-period-germany-adaptation-period-germany-germany-nursing-de-59",
+      "primaryKeyword": "adaptation period germany",
+      "language": "de",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0013-adaptation-period-germany",
+      "status": "planned"
+    },
+    {
+      "title": "german nursing salary guide — Germany nursing (de 60)",
+      "slug": "de-0130-german-nursing-salary-guide-german-nursing-salary-guide-germany-nursing-de-60",
+      "primaryKeyword": "german nursing salary guide",
+      "language": "de",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0013-german-nursing-salary-guide",
+      "status": "planned"
+    },
+    {
+      "title": "how to work as a nurse in germany — Germany nursing (de 61)",
+      "slug": "de-0131-how-to-work-as-a-nurse-in-germany-how-to-work-as-a-nurse-in-germany-germany-nursing-de-61",
+      "primaryKeyword": "how to work as a nurse in germany",
+      "language": "de",
+      "category": "Germany nursing",
+      "intentType": "transactional",
+      "translationGroupId": "de-nurse-0014-how-to-work-as-a-nurse-in-germany",
+      "status": "planned"
+    },
+    {
+      "title": "nurse recognition germany — Germany nursing (de 62)",
+      "slug": "de-0132-nurse-recognition-germany-nurse-recognition-germany-germany-nursing-de-62",
+      "primaryKeyword": "nurse recognition germany",
+      "language": "de",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0014-nurse-recognition-germany",
+      "status": "planned"
+    },
+    {
+      "title": "anerkennung guide — Germany nursing (de 63)",
+      "slug": "de-0133-anerkennung-guide-anerkennung-guide-germany-nursing-de-63",
+      "primaryKeyword": "anerkennung guide",
+      "language": "de",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0014-anerkennung-guide",
+      "status": "planned"
+    },
+    {
+      "title": "kenntnisprufung for nurses — Germany nursing (de 64)",
+      "slug": "de-0134-kenntnisprufung-for-nurses-kenntnisprufung-for-nurses-germany-nursing-de-64",
+      "primaryKeyword": "kenntnisprufung for nurses",
+      "language": "de",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0014-kenntnisprufung-for-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "b2 german for nurses — Germany nursing (de 65)",
+      "slug": "de-0135-b2-german-for-nurses-b2-german-for-nurses-germany-nursing-de-65",
+      "primaryKeyword": "b2 german for nurses",
+      "language": "de",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0014-b2-german-for-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "best german cities for nurses — Germany nursing (de 66)",
+      "slug": "de-0136-best-german-cities-for-nurses-best-german-cities-for-nurses-germany-nursing-de-66",
+      "primaryKeyword": "best german cities for nurses",
+      "language": "de",
+      "category": "Germany nursing",
+      "intentType": "transactional",
+      "translationGroupId": "de-nurse-0014-best-german-cities-for-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "germany for indian nurses — Germany nursing (de 67)",
+      "slug": "de-0137-germany-for-indian-nurses-germany-for-indian-nurses-germany-nursing-de-67",
+      "primaryKeyword": "germany for indian nurses",
+      "language": "de",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0014-germany-for-indian-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "germany for filipino nurses — Germany nursing (de 68)",
+      "slug": "de-0138-germany-for-filipino-nurses-germany-for-filipino-nurses-germany-nursing-de-68",
+      "primaryKeyword": "germany for filipino nurses",
+      "language": "de",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0014-germany-for-filipino-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "adaptation period germany — Germany nursing (de 69)",
+      "slug": "de-0139-adaptation-period-germany-adaptation-period-germany-germany-nursing-de-69",
+      "primaryKeyword": "adaptation period germany",
+      "language": "de",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0014-adaptation-period-germany",
+      "status": "planned"
+    },
+    {
+      "title": "german nursing salary guide — Germany nursing (de 70)",
+      "slug": "de-0140-german-nursing-salary-guide-german-nursing-salary-guide-germany-nursing-de-70",
+      "primaryKeyword": "german nursing salary guide",
+      "language": "de",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0014-german-nursing-salary-guide",
+      "status": "planned"
+    },
+    {
+      "title": "how to work as a nurse in germany — Germany nursing (de 71)",
+      "slug": "de-0141-how-to-work-as-a-nurse-in-germany-how-to-work-as-a-nurse-in-germany-germany-nursing-de-71",
+      "primaryKeyword": "how to work as a nurse in germany",
+      "language": "de",
+      "category": "Germany nursing",
+      "intentType": "transactional",
+      "translationGroupId": "de-nurse-0015-how-to-work-as-a-nurse-in-germany",
+      "status": "planned"
+    },
+    {
+      "title": "nurse recognition germany — Germany nursing (de 72)",
+      "slug": "de-0142-nurse-recognition-germany-nurse-recognition-germany-germany-nursing-de-72",
+      "primaryKeyword": "nurse recognition germany",
+      "language": "de",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0015-nurse-recognition-germany",
+      "status": "planned"
+    },
+    {
+      "title": "anerkennung guide — Germany nursing (de 73)",
+      "slug": "de-0143-anerkennung-guide-anerkennung-guide-germany-nursing-de-73",
+      "primaryKeyword": "anerkennung guide",
+      "language": "de",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0015-anerkennung-guide",
+      "status": "planned"
+    },
+    {
+      "title": "kenntnisprufung for nurses — Germany nursing (de 74)",
+      "slug": "de-0144-kenntnisprufung-for-nurses-kenntnisprufung-for-nurses-germany-nursing-de-74",
+      "primaryKeyword": "kenntnisprufung for nurses",
+      "language": "de",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0015-kenntnisprufung-for-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "b2 german for nurses — Germany nursing (de 75)",
+      "slug": "de-0145-b2-german-for-nurses-b2-german-for-nurses-germany-nursing-de-75",
+      "primaryKeyword": "b2 german for nurses",
+      "language": "de",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0015-b2-german-for-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "best german cities for nurses — Germany nursing (de 76)",
+      "slug": "de-0146-best-german-cities-for-nurses-best-german-cities-for-nurses-germany-nursing-de-76",
+      "primaryKeyword": "best german cities for nurses",
+      "language": "de",
+      "category": "Germany nursing",
+      "intentType": "transactional",
+      "translationGroupId": "de-nurse-0015-best-german-cities-for-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "germany for indian nurses — Germany nursing (de 77)",
+      "slug": "de-0147-germany-for-indian-nurses-germany-for-indian-nurses-germany-nursing-de-77",
+      "primaryKeyword": "germany for indian nurses",
+      "language": "de",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0015-germany-for-indian-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "germany for filipino nurses — Germany nursing (de 78)",
+      "slug": "de-0148-germany-for-filipino-nurses-germany-for-filipino-nurses-germany-nursing-de-78",
+      "primaryKeyword": "germany for filipino nurses",
+      "language": "de",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0015-germany-for-filipino-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "adaptation period germany — Germany nursing (de 79)",
+      "slug": "de-0149-adaptation-period-germany-adaptation-period-germany-germany-nursing-de-79",
+      "primaryKeyword": "adaptation period germany",
+      "language": "de",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0015-adaptation-period-germany",
+      "status": "planned"
+    },
+    {
+      "title": "german nursing salary guide — Germany nursing (de 80)",
+      "slug": "de-0150-german-nursing-salary-guide-german-nursing-salary-guide-germany-nursing-de-80",
+      "primaryKeyword": "german nursing salary guide",
+      "language": "de",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0015-german-nursing-salary-guide",
+      "status": "planned"
+    },
+    {
+      "title": "how to work as a nurse in germany — Germany nursing (ar 1)",
+      "slug": "ar-0151-how-to-work-as-a-nurse-in-germany-how-to-work-as-a-nurse-in-germany-germany-nursing-ar-1",
+      "primaryKeyword": "how to work as a nurse in germany",
+      "language": "ar",
+      "category": "Germany nursing",
+      "intentType": "transactional",
+      "translationGroupId": "de-nurse-0016-how-to-work-as-a-nurse-in-germany",
+      "status": "planned"
+    },
+    {
+      "title": "nurse recognition germany — Germany nursing (ar 2)",
+      "slug": "ar-0152-nurse-recognition-germany-nurse-recognition-germany-germany-nursing-ar-2",
+      "primaryKeyword": "nurse recognition germany",
+      "language": "ar",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0016-nurse-recognition-germany",
+      "status": "planned"
+    },
+    {
+      "title": "anerkennung guide — Germany nursing (ar 3)",
+      "slug": "ar-0153-anerkennung-guide-anerkennung-guide-germany-nursing-ar-3",
+      "primaryKeyword": "anerkennung guide",
+      "language": "ar",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0016-anerkennung-guide",
+      "status": "planned"
+    },
+    {
+      "title": "kenntnisprufung for nurses — Germany nursing (ar 4)",
+      "slug": "ar-0154-kenntnisprufung-for-nurses-kenntnisprufung-for-nurses-germany-nursing-ar-4",
+      "primaryKeyword": "kenntnisprufung for nurses",
+      "language": "ar",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0016-kenntnisprufung-for-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "b2 german for nurses — Germany nursing (ar 5)",
+      "slug": "ar-0155-b2-german-for-nurses-b2-german-for-nurses-germany-nursing-ar-5",
+      "primaryKeyword": "b2 german for nurses",
+      "language": "ar",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0016-b2-german-for-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "best german cities for nurses — Germany nursing (ar 6)",
+      "slug": "ar-0156-best-german-cities-for-nurses-best-german-cities-for-nurses-germany-nursing-ar-6",
+      "primaryKeyword": "best german cities for nurses",
+      "language": "ar",
+      "category": "Germany nursing",
+      "intentType": "transactional",
+      "translationGroupId": "de-nurse-0016-best-german-cities-for-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "germany for indian nurses — Germany nursing (ar 7)",
+      "slug": "ar-0157-germany-for-indian-nurses-germany-for-indian-nurses-germany-nursing-ar-7",
+      "primaryKeyword": "germany for indian nurses",
+      "language": "ar",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0016-germany-for-indian-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "germany for filipino nurses — Germany nursing (ar 8)",
+      "slug": "ar-0158-germany-for-filipino-nurses-germany-for-filipino-nurses-germany-nursing-ar-8",
+      "primaryKeyword": "germany for filipino nurses",
+      "language": "ar",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0016-germany-for-filipino-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "adaptation period germany — Germany nursing (ar 9)",
+      "slug": "ar-0159-adaptation-period-germany-adaptation-period-germany-germany-nursing-ar-9",
+      "primaryKeyword": "adaptation period germany",
+      "language": "ar",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0016-adaptation-period-germany",
+      "status": "planned"
+    },
+    {
+      "title": "german nursing salary guide — Germany nursing (ar 10)",
+      "slug": "ar-0160-german-nursing-salary-guide-german-nursing-salary-guide-germany-nursing-ar-10",
+      "primaryKeyword": "german nursing salary guide",
+      "language": "ar",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0016-german-nursing-salary-guide",
+      "status": "planned"
+    },
+    {
+      "title": "how to work as a nurse in germany — Germany nursing (ar 11)",
+      "slug": "ar-0161-how-to-work-as-a-nurse-in-germany-how-to-work-as-a-nurse-in-germany-germany-nursing-ar-11",
+      "primaryKeyword": "how to work as a nurse in germany",
+      "language": "ar",
+      "category": "Germany nursing",
+      "intentType": "transactional",
+      "translationGroupId": "de-nurse-0017-how-to-work-as-a-nurse-in-germany",
+      "status": "planned"
+    },
+    {
+      "title": "nurse recognition germany — Germany nursing (ar 12)",
+      "slug": "ar-0162-nurse-recognition-germany-nurse-recognition-germany-germany-nursing-ar-12",
+      "primaryKeyword": "nurse recognition germany",
+      "language": "ar",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0017-nurse-recognition-germany",
+      "status": "planned"
+    },
+    {
+      "title": "anerkennung guide — Germany nursing (ar 13)",
+      "slug": "ar-0163-anerkennung-guide-anerkennung-guide-germany-nursing-ar-13",
+      "primaryKeyword": "anerkennung guide",
+      "language": "ar",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0017-anerkennung-guide",
+      "status": "planned"
+    },
+    {
+      "title": "kenntnisprufung for nurses — Germany nursing (ar 14)",
+      "slug": "ar-0164-kenntnisprufung-for-nurses-kenntnisprufung-for-nurses-germany-nursing-ar-14",
+      "primaryKeyword": "kenntnisprufung for nurses",
+      "language": "ar",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0017-kenntnisprufung-for-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "b2 german for nurses — Germany nursing (ar 15)",
+      "slug": "ar-0165-b2-german-for-nurses-b2-german-for-nurses-germany-nursing-ar-15",
+      "primaryKeyword": "b2 german for nurses",
+      "language": "ar",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0017-b2-german-for-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "best german cities for nurses — Germany nursing (ar 16)",
+      "slug": "ar-0166-best-german-cities-for-nurses-best-german-cities-for-nurses-germany-nursing-ar-16",
+      "primaryKeyword": "best german cities for nurses",
+      "language": "ar",
+      "category": "Germany nursing",
+      "intentType": "transactional",
+      "translationGroupId": "de-nurse-0017-best-german-cities-for-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "germany for indian nurses — Germany nursing (ar 17)",
+      "slug": "ar-0167-germany-for-indian-nurses-germany-for-indian-nurses-germany-nursing-ar-17",
+      "primaryKeyword": "germany for indian nurses",
+      "language": "ar",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0017-germany-for-indian-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "germany for filipino nurses — Germany nursing (ar 18)",
+      "slug": "ar-0168-germany-for-filipino-nurses-germany-for-filipino-nurses-germany-nursing-ar-18",
+      "primaryKeyword": "germany for filipino nurses",
+      "language": "ar",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0017-germany-for-filipino-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "adaptation period germany — Germany nursing (ar 19)",
+      "slug": "ar-0169-adaptation-period-germany-adaptation-period-germany-germany-nursing-ar-19",
+      "primaryKeyword": "adaptation period germany",
+      "language": "ar",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0017-adaptation-period-germany",
+      "status": "planned"
+    },
+    {
+      "title": "german nursing salary guide — Germany nursing (ar 20)",
+      "slug": "ar-0170-german-nursing-salary-guide-german-nursing-salary-guide-germany-nursing-ar-20",
+      "primaryKeyword": "german nursing salary guide",
+      "language": "ar",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0017-german-nursing-salary-guide",
+      "status": "planned"
+    },
+    {
+      "title": "how to work as a nurse in germany — Germany nursing (tr 1)",
+      "slug": "tr-0171-how-to-work-as-a-nurse-in-germany-how-to-work-as-a-nurse-in-germany-germany-nursing-tr-1",
+      "primaryKeyword": "how to work as a nurse in germany",
+      "language": "tr",
+      "category": "Germany nursing",
+      "intentType": "transactional",
+      "translationGroupId": "de-nurse-0018-how-to-work-as-a-nurse-in-germany",
+      "status": "planned"
+    },
+    {
+      "title": "nurse recognition germany — Germany nursing (tr 2)",
+      "slug": "tr-0172-nurse-recognition-germany-nurse-recognition-germany-germany-nursing-tr-2",
+      "primaryKeyword": "nurse recognition germany",
+      "language": "tr",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0018-nurse-recognition-germany",
+      "status": "planned"
+    },
+    {
+      "title": "anerkennung guide — Germany nursing (tr 3)",
+      "slug": "tr-0173-anerkennung-guide-anerkennung-guide-germany-nursing-tr-3",
+      "primaryKeyword": "anerkennung guide",
+      "language": "tr",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0018-anerkennung-guide",
+      "status": "planned"
+    },
+    {
+      "title": "kenntnisprufung for nurses — Germany nursing (tr 4)",
+      "slug": "tr-0174-kenntnisprufung-for-nurses-kenntnisprufung-for-nurses-germany-nursing-tr-4",
+      "primaryKeyword": "kenntnisprufung for nurses",
+      "language": "tr",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0018-kenntnisprufung-for-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "b2 german for nurses — Germany nursing (tr 5)",
+      "slug": "tr-0175-b2-german-for-nurses-b2-german-for-nurses-germany-nursing-tr-5",
+      "primaryKeyword": "b2 german for nurses",
+      "language": "tr",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0018-b2-german-for-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "best german cities for nurses — Germany nursing (tr 6)",
+      "slug": "tr-0176-best-german-cities-for-nurses-best-german-cities-for-nurses-germany-nursing-tr-6",
+      "primaryKeyword": "best german cities for nurses",
+      "language": "tr",
+      "category": "Germany nursing",
+      "intentType": "transactional",
+      "translationGroupId": "de-nurse-0018-best-german-cities-for-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "germany for indian nurses — Germany nursing (tr 7)",
+      "slug": "tr-0177-germany-for-indian-nurses-germany-for-indian-nurses-germany-nursing-tr-7",
+      "primaryKeyword": "germany for indian nurses",
+      "language": "tr",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0018-germany-for-indian-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "germany for filipino nurses — Germany nursing (tr 8)",
+      "slug": "tr-0178-germany-for-filipino-nurses-germany-for-filipino-nurses-germany-nursing-tr-8",
+      "primaryKeyword": "germany for filipino nurses",
+      "language": "tr",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0018-germany-for-filipino-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "adaptation period germany — Germany nursing (tr 9)",
+      "slug": "tr-0179-adaptation-period-germany-adaptation-period-germany-germany-nursing-tr-9",
+      "primaryKeyword": "adaptation period germany",
+      "language": "tr",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0018-adaptation-period-germany",
+      "status": "planned"
+    },
+    {
+      "title": "german nursing salary guide — Germany nursing (tr 10)",
+      "slug": "tr-0180-german-nursing-salary-guide-german-nursing-salary-guide-germany-nursing-tr-10",
+      "primaryKeyword": "german nursing salary guide",
+      "language": "tr",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0018-german-nursing-salary-guide",
+      "status": "planned"
+    },
+    {
+      "title": "how to work as a nurse in germany — Germany nursing (tr 11)",
+      "slug": "tr-0181-how-to-work-as-a-nurse-in-germany-how-to-work-as-a-nurse-in-germany-germany-nursing-tr-11",
+      "primaryKeyword": "how to work as a nurse in germany",
+      "language": "tr",
+      "category": "Germany nursing",
+      "intentType": "transactional",
+      "translationGroupId": "de-nurse-0019-how-to-work-as-a-nurse-in-germany",
+      "status": "planned"
+    },
+    {
+      "title": "nurse recognition germany — Germany nursing (tr 12)",
+      "slug": "tr-0182-nurse-recognition-germany-nurse-recognition-germany-germany-nursing-tr-12",
+      "primaryKeyword": "nurse recognition germany",
+      "language": "tr",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0019-nurse-recognition-germany",
+      "status": "planned"
+    },
+    {
+      "title": "anerkennung guide — Germany nursing (tr 13)",
+      "slug": "tr-0183-anerkennung-guide-anerkennung-guide-germany-nursing-tr-13",
+      "primaryKeyword": "anerkennung guide",
+      "language": "tr",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0019-anerkennung-guide",
+      "status": "planned"
+    },
+    {
+      "title": "kenntnisprufung for nurses — Germany nursing (tr 14)",
+      "slug": "tr-0184-kenntnisprufung-for-nurses-kenntnisprufung-for-nurses-germany-nursing-tr-14",
+      "primaryKeyword": "kenntnisprufung for nurses",
+      "language": "tr",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0019-kenntnisprufung-for-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "b2 german for nurses — Germany nursing (tr 15)",
+      "slug": "tr-0185-b2-german-for-nurses-b2-german-for-nurses-germany-nursing-tr-15",
+      "primaryKeyword": "b2 german for nurses",
+      "language": "tr",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0019-b2-german-for-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "best german cities for nurses — Germany nursing (hi 1)",
+      "slug": "hi-0186-best-german-cities-for-nurses-best-german-cities-for-nurses-germany-nursing-hi-1",
+      "primaryKeyword": "best german cities for nurses",
+      "language": "hi",
+      "category": "Germany nursing",
+      "intentType": "transactional",
+      "translationGroupId": "de-nurse-0019-best-german-cities-for-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "germany for indian nurses — Germany nursing (hi 2)",
+      "slug": "hi-0187-germany-for-indian-nurses-germany-for-indian-nurses-germany-nursing-hi-2",
+      "primaryKeyword": "germany for indian nurses",
+      "language": "hi",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0019-germany-for-indian-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "germany for filipino nurses — Germany nursing (hi 3)",
+      "slug": "hi-0188-germany-for-filipino-nurses-germany-for-filipino-nurses-germany-nursing-hi-3",
+      "primaryKeyword": "germany for filipino nurses",
+      "language": "hi",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0019-germany-for-filipino-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "adaptation period germany — Germany nursing (hi 4)",
+      "slug": "hi-0189-adaptation-period-germany-adaptation-period-germany-germany-nursing-hi-4",
+      "primaryKeyword": "adaptation period germany",
+      "language": "hi",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0019-adaptation-period-germany",
+      "status": "planned"
+    },
+    {
+      "title": "german nursing salary guide — Germany nursing (hi 5)",
+      "slug": "hi-0190-german-nursing-salary-guide-german-nursing-salary-guide-germany-nursing-hi-5",
+      "primaryKeyword": "german nursing salary guide",
+      "language": "hi",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0019-german-nursing-salary-guide",
+      "status": "planned"
+    },
+    {
+      "title": "how to work as a nurse in germany — Germany nursing (hi 6)",
+      "slug": "hi-0191-how-to-work-as-a-nurse-in-germany-how-to-work-as-a-nurse-in-germany-germany-nursing-hi-6",
+      "primaryKeyword": "how to work as a nurse in germany",
+      "language": "hi",
+      "category": "Germany nursing",
+      "intentType": "transactional",
+      "translationGroupId": "de-nurse-0020-how-to-work-as-a-nurse-in-germany",
+      "status": "planned"
+    },
+    {
+      "title": "nurse recognition germany — Germany nursing (hi 7)",
+      "slug": "hi-0192-nurse-recognition-germany-nurse-recognition-germany-germany-nursing-hi-7",
+      "primaryKeyword": "nurse recognition germany",
+      "language": "hi",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0020-nurse-recognition-germany",
+      "status": "planned"
+    },
+    {
+      "title": "anerkennung guide — Germany nursing (hi 8)",
+      "slug": "hi-0193-anerkennung-guide-anerkennung-guide-germany-nursing-hi-8",
+      "primaryKeyword": "anerkennung guide",
+      "language": "hi",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0020-anerkennung-guide",
+      "status": "planned"
+    },
+    {
+      "title": "kenntnisprufung for nurses — Germany nursing (hi 9)",
+      "slug": "hi-0194-kenntnisprufung-for-nurses-kenntnisprufung-for-nurses-germany-nursing-hi-9",
+      "primaryKeyword": "kenntnisprufung for nurses",
+      "language": "hi",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0020-kenntnisprufung-for-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "b2 german for nurses — Germany nursing (hi 10)",
+      "slug": "hi-0195-b2-german-for-nurses-b2-german-for-nurses-germany-nursing-hi-10",
+      "primaryKeyword": "b2 german for nurses",
+      "language": "hi",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0020-b2-german-for-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "best german cities for nurses — Germany nursing (ro 1)",
+      "slug": "ro-0196-best-german-cities-for-nurses-best-german-cities-for-nurses-germany-nursing-ro-1",
+      "primaryKeyword": "best german cities for nurses",
+      "language": "ro",
+      "category": "Germany nursing",
+      "intentType": "transactional",
+      "translationGroupId": "de-nurse-0020-best-german-cities-for-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "germany for indian nurses — Germany nursing (ro 2)",
+      "slug": "ro-0197-germany-for-indian-nurses-germany-for-indian-nurses-germany-nursing-ro-2",
+      "primaryKeyword": "germany for indian nurses",
+      "language": "ro",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0020-germany-for-indian-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "germany for filipino nurses — Germany nursing (ro 3)",
+      "slug": "ro-0198-germany-for-filipino-nurses-germany-for-filipino-nurses-germany-nursing-ro-3",
+      "primaryKeyword": "germany for filipino nurses",
+      "language": "ro",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0020-germany-for-filipino-nurses",
+      "status": "planned"
+    },
+    {
+      "title": "adaptation period germany — Germany nursing (ro 4)",
+      "slug": "ro-0199-adaptation-period-germany-adaptation-period-germany-germany-nursing-ro-4",
+      "primaryKeyword": "adaptation period germany",
+      "language": "ro",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0020-adaptation-period-germany",
+      "status": "planned"
+    },
+    {
+      "title": "german nursing salary guide — Germany nursing (ro 5)",
+      "slug": "ro-0200-german-nursing-salary-guide-german-nursing-salary-guide-germany-nursing-ro-5",
+      "primaryKeyword": "german nursing salary guide",
+      "language": "ro",
+      "category": "Germany nursing",
+      "intentType": "informational",
+      "translationGroupId": "de-nurse-0020-german-nursing-salary-guide",
+      "status": "planned"
+    }
+  ]
+}

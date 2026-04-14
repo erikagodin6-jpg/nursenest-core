@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import { ChevronDown } from "lucide-react";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { MarketingLanguagePreferenceList } from "@/components/i18n/marketing-language-preference";
@@ -8,8 +9,11 @@ import { ThemePicker } from "@/components/theme/theme-picker";
 import { useNursenestRegion } from "@/lib/region/use-nursenest-region";
 import { useMarketingRegionToggleWithRefresh } from "@/lib/region/use-marketing-region-toggle";
 import { CompactCountryTrigger, CountrySelector } from "@/components/layout/global-context-switcher";
-import { getRegionFlag } from "@/lib/navigation/context-switch-helpers";
-import type { GlobalRegionSlug } from "@/lib/i18n/global-regions";
+import type { GlobalLocaleCode, GlobalRegionSlug } from "@/lib/i18n/global-regions";
+import { applyGlobalRegionSelection } from "@/lib/marketing/apply-global-region-selection";
+import { useClientGlobalRegionCookie } from "@/lib/region/use-client-global-region";
+import { mapLegacyMarketingHref } from "@/lib/legacy-marketing-routes";
+import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 
 /**
  * Desktop-only preferences rail.
@@ -19,6 +23,7 @@ import type { GlobalRegionSlug } from "@/lib/i18n/global-regions";
  */
 export function MarketingHeaderUtilityStrip({ variant = "standard" }: { variant?: "standard" | "dark-bar" }) {
   const { t, locale } = useMarketingI18n();
+  const router = useRouter();
   const { region, setRegion } = useNursenestRegion();
   const regionToggleAnalytics = useMemo(
     () => ({ currentRegion: region, surface: "utility_strip" as const }),
@@ -49,23 +54,32 @@ export function MarketingHeaderUtilityStrip({ variant = "standard" }: { variant?
     };
   }, []);
 
-  const handleCountrySelect = useCallback(
-    (newRegion: GlobalRegionSlug) => {
-      // Map global regions to the legacy US/CA toggle for existing state management
-      if (newRegion === "us") setRegionAndRefresh("US");
-      else if (newRegion === "canada") setRegionAndRefresh("CA");
-      else {
-        // For international regions, persist via the same mechanism
-        // but keep region as-is since NursenestRegionRoot only handles US/CA
-        setRegionAndRefresh(region);
-      }
-      setCountryOpen(false);
+  const globalLocale: GlobalLocaleCode = (locale as GlobalLocaleCode) ?? "en";
+  const clientGlobalRegion = useClientGlobalRegionCookie();
+  const legacyUsCa: GlobalRegionSlug = region === "CA" ? "canada" : "us";
+  const effectiveGlobalRegion: GlobalRegionSlug = clientGlobalRegion ?? legacyUsCa;
+
+  const buildLocalizedMarketingPath = useCallback(
+    (localeCode: string, path: string) => {
+      const mapped = mapLegacyMarketingHref(path);
+      if (mapped.startsWith("http://") || mapped.startsWith("https://")) return mapped;
+      return withMarketingLocale(localeCode, mapped);
     },
-    [region, setRegionAndRefresh],
+    [],
   );
 
-  // Derive GlobalRegionSlug from legacy US/CA region
-  const globalRegion: GlobalRegionSlug = region === "CA" ? "canada" : "us";
+  const handleCountrySelect = useCallback(
+    async (newRegion: GlobalRegionSlug) => {
+      await applyGlobalRegionSelection(newRegion, {
+        marketingLocale: globalLocale,
+        setUsCaMarketingRegion: setRegionAndRefresh,
+        router,
+        buildLocalizedPath: buildLocalizedMarketingPath,
+      });
+      setCountryOpen(false);
+    },
+    [globalLocale, setRegionAndRefresh, router, buildLocalizedMarketingPath],
+  );
 
   return (
     <div className={`${variant === "dark-bar" ? "nn-header-utility-dark" : "nn-header-utility"} hidden md:block`}>
@@ -73,13 +87,13 @@ export function MarketingHeaderUtilityStrip({ variant = "standard" }: { variant?
         {/* Country selector — replaces old US/CA toggle with global selector */}
         <div className="relative" ref={countryRef}>
           <CompactCountryTrigger
-            region={globalRegion}
+            region={effectiveGlobalRegion}
             onClick={() => setCountryOpen((o) => !o)}
           />
           {countryOpen && (
             <div className="absolute end-0 z-[120] mt-1">
               <CountrySelector
-                currentRegion={globalRegion}
+                currentRegion={effectiveGlobalRegion}
                 onSelect={handleCountrySelect}
                 onClose={() => setCountryOpen(false)}
                 variant="popover"

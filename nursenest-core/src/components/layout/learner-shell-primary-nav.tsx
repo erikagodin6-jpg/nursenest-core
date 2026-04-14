@@ -98,9 +98,10 @@ export function LearnerShellPrimaryNav({
         className="fixed inset-x-0 bottom-0 z-50 border-t border-[var(--border-subtle)] bg-[var(--surface-strong)] px-2 pb-[max(0.35rem,env(safe-area-inset-bottom))] pt-2 md:hidden"
         aria-label="Learner bottom navigation"
       >
-        <div className="mx-auto grid max-w-6xl grid-cols-5 gap-1">
+        <div className="mx-auto grid max-w-6xl grid-cols-5 gap-1.5">
           <Link
             href={pathwayHref}
+            title={pathwayLabel}
             onClick={() => {
               trackClientEvent(PH.learnerNavClick, {
                 actor: "authenticated",
@@ -110,7 +111,7 @@ export function LearnerShellPrimaryNav({
                 surface: "learner_bottom_nav",
               });
             }}
-            className="inline-flex min-h-11 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--semantic-brand)_14%,var(--semantic-surface))] px-2 text-[11px] font-bold uppercase tracking-widest text-[var(--semantic-brand)]"
+            className="inline-flex min-h-11 max-w-[5.5rem] shrink-0 items-center justify-center truncate rounded-full bg-[color-mix(in_srgb,var(--semantic-brand)_14%,var(--semantic-surface))] px-2 text-[11px] font-bold uppercase tracking-widest text-[var(--semantic-brand)] sm:max-w-none"
             aria-label={`Open your pathway hub: ${pathwayLabel}`}
           >
             {pathwayLabel}

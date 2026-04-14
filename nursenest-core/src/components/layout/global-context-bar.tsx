@@ -71,7 +71,7 @@ export function GlobalContextBar({
         borderColor: "var(--nn-nav-border, var(--border-subtle))",
       }}
     >
-      <div className="nn-section-shell flex h-9 items-center gap-1.5 overflow-x-auto scrollbar-none sm:gap-2">
+      <div className="nn-section-shell flex min-h-[44px] items-center gap-1.5 overflow-x-auto py-1 scrollbar-none sm:min-h-9 sm:gap-2 sm:py-0">
         {/* Country pill */}
         <ContextPill
           onClick={onRegionClick}
@@ -146,7 +146,7 @@ function ContextPill({
 } & React.ButtonHTMLAttributes<HTMLButtonElement>) {
   const isClickable = Boolean(onClick);
   const baseClass =
-    "inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-semibold tracking-wide transition-colors duration-100";
+    "inline-flex min-h-[36px] items-center gap-1 rounded-full px-2.5 py-1.5 text-[11px] font-semibold tracking-wide transition-colors duration-100 sm:min-h-0 sm:py-1";
   const interactiveClass = isClickable
     ? "cursor-pointer hover:bg-white/30 focus-visible:outline-2 focus-visible:outline-[var(--ring)]"
     : "cursor-default";

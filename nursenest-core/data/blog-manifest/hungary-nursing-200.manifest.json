@@ -1,0 +1,2006 @@
+{
+  "generatedAt": "2026-04-14T20:11:13.055Z",
+  "count": 200,
+  "entries": [
+    {
+      "title": "how to become a nurse in hungary — Hungary nursing (en 1)",
+      "slug": "en-0001-how-to-become-a-nurse-in-hungary-how-to-become-a-nurse-in-hungary-hungary-nursing-en-1",
+      "primaryKeyword": "how to become a nurse in hungary",
+      "language": "en",
+      "category": "Hungary nursing",
+      "intentType": "transactional",
+      "translationGroupId": "hu-nurse-0001-how-to-become-a-nurse-in-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration hungary — Hungary nursing (en 2)",
+      "slug": "en-0002-nurse-registration-hungary-nurse-registration-hungary-hungary-nursing-en-2",
+      "primaryKeyword": "nurse registration hungary",
+      "language": "en",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0001-nurse-registration-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "foreign nurses in hungary — Hungary nursing (en 3)",
+      "slug": "en-0003-foreign-nurses-in-hungary-foreign-nurses-in-hungary-hungary-nursing-en-3",
+      "primaryKeyword": "foreign nurses in hungary",
+      "language": "en",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0001-foreign-nurses-in-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "nursing jobs hungary — Hungary nursing (en 4)",
+      "slug": "en-0004-nursing-jobs-hungary-nursing-jobs-hungary-hungary-nursing-en-4",
+      "primaryKeyword": "nursing jobs hungary",
+      "language": "en",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0001-nursing-jobs-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "hungarian nurses abroad — Hungary nursing (en 5)",
+      "slug": "en-0005-hungarian-nurses-abroad-hungarian-nurses-abroad-hungary-nursing-en-5",
+      "primaryKeyword": "hungarian nurses abroad",
+      "language": "en",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0001-hungarian-nurses-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "hungary to germany nurse pathway — Hungary nursing (en 6)",
+      "slug": "en-0006-hungary-to-germany-nurse-pathway-hungary-to-germany-nurse-pathway-hungary-nursing-en-6",
+      "primaryKeyword": "hungary to germany nurse pathway",
+      "language": "en",
+      "category": "Hungary nursing",
+      "intentType": "transactional",
+      "translationGroupId": "hu-nurse-0001-hungary-to-germany-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "hungary to austria nurse pathway — Hungary nursing (en 7)",
+      "slug": "en-0007-hungary-to-austria-nurse-pathway-hungary-to-austria-nurse-pathway-hungary-nursing-en-7",
+      "primaryKeyword": "hungary to austria nurse pathway",
+      "language": "en",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0001-hungary-to-austria-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in hungary — Hungary nursing (en 8)",
+      "slug": "en-0008-how-to-become-a-nurse-in-hungary-how-to-become-a-nurse-in-hungary-hungary-nursing-en-8",
+      "primaryKeyword": "how to become a nurse in hungary",
+      "language": "en",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0002-how-to-become-a-nurse-in-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration hungary — Hungary nursing (en 9)",
+      "slug": "en-0009-nurse-registration-hungary-nurse-registration-hungary-hungary-nursing-en-9",
+      "primaryKeyword": "nurse registration hungary",
+      "language": "en",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0002-nurse-registration-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "foreign nurses in hungary — Hungary nursing (en 10)",
+      "slug": "en-0010-foreign-nurses-in-hungary-foreign-nurses-in-hungary-hungary-nursing-en-10",
+      "primaryKeyword": "foreign nurses in hungary",
+      "language": "en",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0002-foreign-nurses-in-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "nursing jobs hungary — Hungary nursing (en 11)",
+      "slug": "en-0011-nursing-jobs-hungary-nursing-jobs-hungary-hungary-nursing-en-11",
+      "primaryKeyword": "nursing jobs hungary",
+      "language": "en",
+      "category": "Hungary nursing",
+      "intentType": "transactional",
+      "translationGroupId": "hu-nurse-0002-nursing-jobs-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "hungarian nurses abroad — Hungary nursing (en 12)",
+      "slug": "en-0012-hungarian-nurses-abroad-hungarian-nurses-abroad-hungary-nursing-en-12",
+      "primaryKeyword": "hungarian nurses abroad",
+      "language": "en",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0002-hungarian-nurses-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "hungary to germany nurse pathway — Hungary nursing (en 13)",
+      "slug": "en-0013-hungary-to-germany-nurse-pathway-hungary-to-germany-nurse-pathway-hungary-nursing-en-13",
+      "primaryKeyword": "hungary to germany nurse pathway",
+      "language": "en",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0002-hungary-to-germany-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "hungary to austria nurse pathway — Hungary nursing (en 14)",
+      "slug": "en-0014-hungary-to-austria-nurse-pathway-hungary-to-austria-nurse-pathway-hungary-nursing-en-14",
+      "primaryKeyword": "hungary to austria nurse pathway",
+      "language": "en",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0002-hungary-to-austria-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in hungary — Hungary nursing (en 15)",
+      "slug": "en-0015-how-to-become-a-nurse-in-hungary-how-to-become-a-nurse-in-hungary-hungary-nursing-en-15",
+      "primaryKeyword": "how to become a nurse in hungary",
+      "language": "en",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0003-how-to-become-a-nurse-in-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration hungary — Hungary nursing (en 16)",
+      "slug": "en-0016-nurse-registration-hungary-nurse-registration-hungary-hungary-nursing-en-16",
+      "primaryKeyword": "nurse registration hungary",
+      "language": "en",
+      "category": "Hungary nursing",
+      "intentType": "transactional",
+      "translationGroupId": "hu-nurse-0003-nurse-registration-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "foreign nurses in hungary — Hungary nursing (en 17)",
+      "slug": "en-0017-foreign-nurses-in-hungary-foreign-nurses-in-hungary-hungary-nursing-en-17",
+      "primaryKeyword": "foreign nurses in hungary",
+      "language": "en",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0003-foreign-nurses-in-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "nursing jobs hungary — Hungary nursing (en 18)",
+      "slug": "en-0018-nursing-jobs-hungary-nursing-jobs-hungary-hungary-nursing-en-18",
+      "primaryKeyword": "nursing jobs hungary",
+      "language": "en",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0003-nursing-jobs-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "hungarian nurses abroad — Hungary nursing (en 19)",
+      "slug": "en-0019-hungarian-nurses-abroad-hungarian-nurses-abroad-hungary-nursing-en-19",
+      "primaryKeyword": "hungarian nurses abroad",
+      "language": "en",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0003-hungarian-nurses-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "hungary to germany nurse pathway — Hungary nursing (en 20)",
+      "slug": "en-0020-hungary-to-germany-nurse-pathway-hungary-to-germany-nurse-pathway-hungary-nursing-en-20",
+      "primaryKeyword": "hungary to germany nurse pathway",
+      "language": "en",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0003-hungary-to-germany-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "hungary to austria nurse pathway — Hungary nursing (en 21)",
+      "slug": "en-0021-hungary-to-austria-nurse-pathway-hungary-to-austria-nurse-pathway-hungary-nursing-en-21",
+      "primaryKeyword": "hungary to austria nurse pathway",
+      "language": "en",
+      "category": "Hungary nursing",
+      "intentType": "transactional",
+      "translationGroupId": "hu-nurse-0003-hungary-to-austria-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in hungary — Hungary nursing (en 22)",
+      "slug": "en-0022-how-to-become-a-nurse-in-hungary-how-to-become-a-nurse-in-hungary-hungary-nursing-en-22",
+      "primaryKeyword": "how to become a nurse in hungary",
+      "language": "en",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0004-how-to-become-a-nurse-in-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration hungary — Hungary nursing (en 23)",
+      "slug": "en-0023-nurse-registration-hungary-nurse-registration-hungary-hungary-nursing-en-23",
+      "primaryKeyword": "nurse registration hungary",
+      "language": "en",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0004-nurse-registration-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "foreign nurses in hungary — Hungary nursing (en 24)",
+      "slug": "en-0024-foreign-nurses-in-hungary-foreign-nurses-in-hungary-hungary-nursing-en-24",
+      "primaryKeyword": "foreign nurses in hungary",
+      "language": "en",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0004-foreign-nurses-in-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "nursing jobs hungary — Hungary nursing (en 25)",
+      "slug": "en-0025-nursing-jobs-hungary-nursing-jobs-hungary-hungary-nursing-en-25",
+      "primaryKeyword": "nursing jobs hungary",
+      "language": "en",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0004-nursing-jobs-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "hungarian nurses abroad — Hungary nursing (en 26)",
+      "slug": "en-0026-hungarian-nurses-abroad-hungarian-nurses-abroad-hungary-nursing-en-26",
+      "primaryKeyword": "hungarian nurses abroad",
+      "language": "en",
+      "category": "Hungary nursing",
+      "intentType": "transactional",
+      "translationGroupId": "hu-nurse-0004-hungarian-nurses-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "hungary to germany nurse pathway — Hungary nursing (en 27)",
+      "slug": "en-0027-hungary-to-germany-nurse-pathway-hungary-to-germany-nurse-pathway-hungary-nursing-en-27",
+      "primaryKeyword": "hungary to germany nurse pathway",
+      "language": "en",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0004-hungary-to-germany-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "hungary to austria nurse pathway — Hungary nursing (en 28)",
+      "slug": "en-0028-hungary-to-austria-nurse-pathway-hungary-to-austria-nurse-pathway-hungary-nursing-en-28",
+      "primaryKeyword": "hungary to austria nurse pathway",
+      "language": "en",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0004-hungary-to-austria-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in hungary — Hungary nursing (en 29)",
+      "slug": "en-0029-how-to-become-a-nurse-in-hungary-how-to-become-a-nurse-in-hungary-hungary-nursing-en-29",
+      "primaryKeyword": "how to become a nurse in hungary",
+      "language": "en",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0005-how-to-become-a-nurse-in-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration hungary — Hungary nursing (en 30)",
+      "slug": "en-0030-nurse-registration-hungary-nurse-registration-hungary-hungary-nursing-en-30",
+      "primaryKeyword": "nurse registration hungary",
+      "language": "en",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0005-nurse-registration-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "foreign nurses in hungary — Hungary nursing (en 31)",
+      "slug": "en-0031-foreign-nurses-in-hungary-foreign-nurses-in-hungary-hungary-nursing-en-31",
+      "primaryKeyword": "foreign nurses in hungary",
+      "language": "en",
+      "category": "Hungary nursing",
+      "intentType": "transactional",
+      "translationGroupId": "hu-nurse-0005-foreign-nurses-in-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "nursing jobs hungary — Hungary nursing (en 32)",
+      "slug": "en-0032-nursing-jobs-hungary-nursing-jobs-hungary-hungary-nursing-en-32",
+      "primaryKeyword": "nursing jobs hungary",
+      "language": "en",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0005-nursing-jobs-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "hungarian nurses abroad — Hungary nursing (en 33)",
+      "slug": "en-0033-hungarian-nurses-abroad-hungarian-nurses-abroad-hungary-nursing-en-33",
+      "primaryKeyword": "hungarian nurses abroad",
+      "language": "en",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0005-hungarian-nurses-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "hungary to germany nurse pathway — Hungary nursing (en 34)",
+      "slug": "en-0034-hungary-to-germany-nurse-pathway-hungary-to-germany-nurse-pathway-hungary-nursing-en-34",
+      "primaryKeyword": "hungary to germany nurse pathway",
+      "language": "en",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0005-hungary-to-germany-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "hungary to austria nurse pathway — Hungary nursing (en 35)",
+      "slug": "en-0035-hungary-to-austria-nurse-pathway-hungary-to-austria-nurse-pathway-hungary-nursing-en-35",
+      "primaryKeyword": "hungary to austria nurse pathway",
+      "language": "en",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0005-hungary-to-austria-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in hungary — Hungary nursing (en 36)",
+      "slug": "en-0036-how-to-become-a-nurse-in-hungary-how-to-become-a-nurse-in-hungary-hungary-nursing-en-36",
+      "primaryKeyword": "how to become a nurse in hungary",
+      "language": "en",
+      "category": "Hungary nursing",
+      "intentType": "transactional",
+      "translationGroupId": "hu-nurse-0006-how-to-become-a-nurse-in-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration hungary — Hungary nursing (en 37)",
+      "slug": "en-0037-nurse-registration-hungary-nurse-registration-hungary-hungary-nursing-en-37",
+      "primaryKeyword": "nurse registration hungary",
+      "language": "en",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0006-nurse-registration-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "foreign nurses in hungary — Hungary nursing (en 38)",
+      "slug": "en-0038-foreign-nurses-in-hungary-foreign-nurses-in-hungary-hungary-nursing-en-38",
+      "primaryKeyword": "foreign nurses in hungary",
+      "language": "en",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0006-foreign-nurses-in-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "nursing jobs hungary — Hungary nursing (en 39)",
+      "slug": "en-0039-nursing-jobs-hungary-nursing-jobs-hungary-hungary-nursing-en-39",
+      "primaryKeyword": "nursing jobs hungary",
+      "language": "en",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0006-nursing-jobs-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "hungarian nurses abroad — Hungary nursing (en 40)",
+      "slug": "en-0040-hungarian-nurses-abroad-hungarian-nurses-abroad-hungary-nursing-en-40",
+      "primaryKeyword": "hungarian nurses abroad",
+      "language": "en",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0006-hungarian-nurses-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "hungary to germany nurse pathway — Hungary nursing (en 41)",
+      "slug": "en-0041-hungary-to-germany-nurse-pathway-hungary-to-germany-nurse-pathway-hungary-nursing-en-41",
+      "primaryKeyword": "hungary to germany nurse pathway",
+      "language": "en",
+      "category": "Hungary nursing",
+      "intentType": "transactional",
+      "translationGroupId": "hu-nurse-0006-hungary-to-germany-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "hungary to austria nurse pathway — Hungary nursing (en 42)",
+      "slug": "en-0042-hungary-to-austria-nurse-pathway-hungary-to-austria-nurse-pathway-hungary-nursing-en-42",
+      "primaryKeyword": "hungary to austria nurse pathway",
+      "language": "en",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0006-hungary-to-austria-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in hungary — Hungary nursing (en 43)",
+      "slug": "en-0043-how-to-become-a-nurse-in-hungary-how-to-become-a-nurse-in-hungary-hungary-nursing-en-43",
+      "primaryKeyword": "how to become a nurse in hungary",
+      "language": "en",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0007-how-to-become-a-nurse-in-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration hungary — Hungary nursing (en 44)",
+      "slug": "en-0044-nurse-registration-hungary-nurse-registration-hungary-hungary-nursing-en-44",
+      "primaryKeyword": "nurse registration hungary",
+      "language": "en",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0007-nurse-registration-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "foreign nurses in hungary — Hungary nursing (en 45)",
+      "slug": "en-0045-foreign-nurses-in-hungary-foreign-nurses-in-hungary-hungary-nursing-en-45",
+      "primaryKeyword": "foreign nurses in hungary",
+      "language": "en",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0007-foreign-nurses-in-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "nursing jobs hungary — Hungary nursing (en 46)",
+      "slug": "en-0046-nursing-jobs-hungary-nursing-jobs-hungary-hungary-nursing-en-46",
+      "primaryKeyword": "nursing jobs hungary",
+      "language": "en",
+      "category": "Hungary nursing",
+      "intentType": "transactional",
+      "translationGroupId": "hu-nurse-0007-nursing-jobs-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "hungarian nurses abroad — Hungary nursing (en 47)",
+      "slug": "en-0047-hungarian-nurses-abroad-hungarian-nurses-abroad-hungary-nursing-en-47",
+      "primaryKeyword": "hungarian nurses abroad",
+      "language": "en",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0007-hungarian-nurses-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "hungary to germany nurse pathway — Hungary nursing (en 48)",
+      "slug": "en-0048-hungary-to-germany-nurse-pathway-hungary-to-germany-nurse-pathway-hungary-nursing-en-48",
+      "primaryKeyword": "hungary to germany nurse pathway",
+      "language": "en",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0007-hungary-to-germany-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "hungary to austria nurse pathway — Hungary nursing (en 49)",
+      "slug": "en-0049-hungary-to-austria-nurse-pathway-hungary-to-austria-nurse-pathway-hungary-nursing-en-49",
+      "primaryKeyword": "hungary to austria nurse pathway",
+      "language": "en",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0007-hungary-to-austria-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in hungary — Hungary nursing (en 50)",
+      "slug": "en-0050-how-to-become-a-nurse-in-hungary-how-to-become-a-nurse-in-hungary-hungary-nursing-en-50",
+      "primaryKeyword": "how to become a nurse in hungary",
+      "language": "en",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0008-how-to-become-a-nurse-in-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration hungary — Hungary nursing (en 51)",
+      "slug": "en-0051-nurse-registration-hungary-nurse-registration-hungary-hungary-nursing-en-51",
+      "primaryKeyword": "nurse registration hungary",
+      "language": "en",
+      "category": "Hungary nursing",
+      "intentType": "transactional",
+      "translationGroupId": "hu-nurse-0008-nurse-registration-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "foreign nurses in hungary — Hungary nursing (en 52)",
+      "slug": "en-0052-foreign-nurses-in-hungary-foreign-nurses-in-hungary-hungary-nursing-en-52",
+      "primaryKeyword": "foreign nurses in hungary",
+      "language": "en",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0008-foreign-nurses-in-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "nursing jobs hungary — Hungary nursing (en 53)",
+      "slug": "en-0053-nursing-jobs-hungary-nursing-jobs-hungary-hungary-nursing-en-53",
+      "primaryKeyword": "nursing jobs hungary",
+      "language": "en",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0008-nursing-jobs-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "hungarian nurses abroad — Hungary nursing (en 54)",
+      "slug": "en-0054-hungarian-nurses-abroad-hungarian-nurses-abroad-hungary-nursing-en-54",
+      "primaryKeyword": "hungarian nurses abroad",
+      "language": "en",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0008-hungarian-nurses-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "hungary to germany nurse pathway — Hungary nursing (en 55)",
+      "slug": "en-0055-hungary-to-germany-nurse-pathway-hungary-to-germany-nurse-pathway-hungary-nursing-en-55",
+      "primaryKeyword": "hungary to germany nurse pathway",
+      "language": "en",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0008-hungary-to-germany-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "hungary to austria nurse pathway — Hungary nursing (en 56)",
+      "slug": "en-0056-hungary-to-austria-nurse-pathway-hungary-to-austria-nurse-pathway-hungary-nursing-en-56",
+      "primaryKeyword": "hungary to austria nurse pathway",
+      "language": "en",
+      "category": "Hungary nursing",
+      "intentType": "transactional",
+      "translationGroupId": "hu-nurse-0008-hungary-to-austria-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in hungary — Hungary nursing (en 57)",
+      "slug": "en-0057-how-to-become-a-nurse-in-hungary-how-to-become-a-nurse-in-hungary-hungary-nursing-en-57",
+      "primaryKeyword": "how to become a nurse in hungary",
+      "language": "en",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0009-how-to-become-a-nurse-in-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration hungary — Hungary nursing (en 58)",
+      "slug": "en-0058-nurse-registration-hungary-nurse-registration-hungary-hungary-nursing-en-58",
+      "primaryKeyword": "nurse registration hungary",
+      "language": "en",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0009-nurse-registration-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "foreign nurses in hungary — Hungary nursing (en 59)",
+      "slug": "en-0059-foreign-nurses-in-hungary-foreign-nurses-in-hungary-hungary-nursing-en-59",
+      "primaryKeyword": "foreign nurses in hungary",
+      "language": "en",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0009-foreign-nurses-in-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "nursing jobs hungary — Hungary nursing (en 60)",
+      "slug": "en-0060-nursing-jobs-hungary-nursing-jobs-hungary-hungary-nursing-en-60",
+      "primaryKeyword": "nursing jobs hungary",
+      "language": "en",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0009-nursing-jobs-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "hungarian nurses abroad — Hungary nursing (en 61)",
+      "slug": "en-0061-hungarian-nurses-abroad-hungarian-nurses-abroad-hungary-nursing-en-61",
+      "primaryKeyword": "hungarian nurses abroad",
+      "language": "en",
+      "category": "Hungary nursing",
+      "intentType": "transactional",
+      "translationGroupId": "hu-nurse-0009-hungarian-nurses-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "hungary to germany nurse pathway — Hungary nursing (en 62)",
+      "slug": "en-0062-hungary-to-germany-nurse-pathway-hungary-to-germany-nurse-pathway-hungary-nursing-en-62",
+      "primaryKeyword": "hungary to germany nurse pathway",
+      "language": "en",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0009-hungary-to-germany-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "hungary to austria nurse pathway — Hungary nursing (en 63)",
+      "slug": "en-0063-hungary-to-austria-nurse-pathway-hungary-to-austria-nurse-pathway-hungary-nursing-en-63",
+      "primaryKeyword": "hungary to austria nurse pathway",
+      "language": "en",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0009-hungary-to-austria-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in hungary — Hungary nursing (en 64)",
+      "slug": "en-0064-how-to-become-a-nurse-in-hungary-how-to-become-a-nurse-in-hungary-hungary-nursing-en-64",
+      "primaryKeyword": "how to become a nurse in hungary",
+      "language": "en",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0010-how-to-become-a-nurse-in-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration hungary — Hungary nursing (en 65)",
+      "slug": "en-0065-nurse-registration-hungary-nurse-registration-hungary-hungary-nursing-en-65",
+      "primaryKeyword": "nurse registration hungary",
+      "language": "en",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0010-nurse-registration-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "foreign nurses in hungary — Hungary nursing (en 66)",
+      "slug": "en-0066-foreign-nurses-in-hungary-foreign-nurses-in-hungary-hungary-nursing-en-66",
+      "primaryKeyword": "foreign nurses in hungary",
+      "language": "en",
+      "category": "Hungary nursing",
+      "intentType": "transactional",
+      "translationGroupId": "hu-nurse-0010-foreign-nurses-in-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "nursing jobs hungary — Hungary nursing (en 67)",
+      "slug": "en-0067-nursing-jobs-hungary-nursing-jobs-hungary-hungary-nursing-en-67",
+      "primaryKeyword": "nursing jobs hungary",
+      "language": "en",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0010-nursing-jobs-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "hungarian nurses abroad — Hungary nursing (en 68)",
+      "slug": "en-0068-hungarian-nurses-abroad-hungarian-nurses-abroad-hungary-nursing-en-68",
+      "primaryKeyword": "hungarian nurses abroad",
+      "language": "en",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0010-hungarian-nurses-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "hungary to germany nurse pathway — Hungary nursing (en 69)",
+      "slug": "en-0069-hungary-to-germany-nurse-pathway-hungary-to-germany-nurse-pathway-hungary-nursing-en-69",
+      "primaryKeyword": "hungary to germany nurse pathway",
+      "language": "en",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0010-hungary-to-germany-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "hungary to austria nurse pathway — Hungary nursing (en 70)",
+      "slug": "en-0070-hungary-to-austria-nurse-pathway-hungary-to-austria-nurse-pathway-hungary-nursing-en-70",
+      "primaryKeyword": "hungary to austria nurse pathway",
+      "language": "en",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0010-hungary-to-austria-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in hungary — Hungary nursing (en 71)",
+      "slug": "en-0071-how-to-become-a-nurse-in-hungary-how-to-become-a-nurse-in-hungary-hungary-nursing-en-71",
+      "primaryKeyword": "how to become a nurse in hungary",
+      "language": "en",
+      "category": "Hungary nursing",
+      "intentType": "transactional",
+      "translationGroupId": "hu-nurse-0011-how-to-become-a-nurse-in-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration hungary — Hungary nursing (en 72)",
+      "slug": "en-0072-nurse-registration-hungary-nurse-registration-hungary-hungary-nursing-en-72",
+      "primaryKeyword": "nurse registration hungary",
+      "language": "en",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0011-nurse-registration-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "foreign nurses in hungary — Hungary nursing (en 73)",
+      "slug": "en-0073-foreign-nurses-in-hungary-foreign-nurses-in-hungary-hungary-nursing-en-73",
+      "primaryKeyword": "foreign nurses in hungary",
+      "language": "en",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0011-foreign-nurses-in-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "nursing jobs hungary — Hungary nursing (en 74)",
+      "slug": "en-0074-nursing-jobs-hungary-nursing-jobs-hungary-hungary-nursing-en-74",
+      "primaryKeyword": "nursing jobs hungary",
+      "language": "en",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0011-nursing-jobs-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "hungarian nurses abroad — Hungary nursing (en 75)",
+      "slug": "en-0075-hungarian-nurses-abroad-hungarian-nurses-abroad-hungary-nursing-en-75",
+      "primaryKeyword": "hungarian nurses abroad",
+      "language": "en",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0011-hungarian-nurses-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "hungary to germany nurse pathway — Hungary nursing (en 76)",
+      "slug": "en-0076-hungary-to-germany-nurse-pathway-hungary-to-germany-nurse-pathway-hungary-nursing-en-76",
+      "primaryKeyword": "hungary to germany nurse pathway",
+      "language": "en",
+      "category": "Hungary nursing",
+      "intentType": "transactional",
+      "translationGroupId": "hu-nurse-0011-hungary-to-germany-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "hungary to austria nurse pathway — Hungary nursing (en 77)",
+      "slug": "en-0077-hungary-to-austria-nurse-pathway-hungary-to-austria-nurse-pathway-hungary-nursing-en-77",
+      "primaryKeyword": "hungary to austria nurse pathway",
+      "language": "en",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0011-hungary-to-austria-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in hungary — Hungary nursing (en 78)",
+      "slug": "en-0078-how-to-become-a-nurse-in-hungary-how-to-become-a-nurse-in-hungary-hungary-nursing-en-78",
+      "primaryKeyword": "how to become a nurse in hungary",
+      "language": "en",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0012-how-to-become-a-nurse-in-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration hungary — Hungary nursing (en 79)",
+      "slug": "en-0079-nurse-registration-hungary-nurse-registration-hungary-hungary-nursing-en-79",
+      "primaryKeyword": "nurse registration hungary",
+      "language": "en",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0012-nurse-registration-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "foreign nurses in hungary — Hungary nursing (en 80)",
+      "slug": "en-0080-foreign-nurses-in-hungary-foreign-nurses-in-hungary-hungary-nursing-en-80",
+      "primaryKeyword": "foreign nurses in hungary",
+      "language": "en",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0012-foreign-nurses-in-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "nursing jobs hungary — Hungary nursing (hu 1)",
+      "slug": "hu-0081-nursing-jobs-hungary-nursing-jobs-hungary-hungary-nursing-hu-1",
+      "primaryKeyword": "nursing jobs hungary",
+      "language": "hu",
+      "category": "Hungary nursing",
+      "intentType": "transactional",
+      "translationGroupId": "hu-nurse-0012-nursing-jobs-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "hungarian nurses abroad — Hungary nursing (hu 2)",
+      "slug": "hu-0082-hungarian-nurses-abroad-hungarian-nurses-abroad-hungary-nursing-hu-2",
+      "primaryKeyword": "hungarian nurses abroad",
+      "language": "hu",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0012-hungarian-nurses-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "hungary to germany nurse pathway — Hungary nursing (hu 3)",
+      "slug": "hu-0083-hungary-to-germany-nurse-pathway-hungary-to-germany-nurse-pathway-hungary-nursing-hu-3",
+      "primaryKeyword": "hungary to germany nurse pathway",
+      "language": "hu",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0012-hungary-to-germany-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "hungary to austria nurse pathway — Hungary nursing (hu 4)",
+      "slug": "hu-0084-hungary-to-austria-nurse-pathway-hungary-to-austria-nurse-pathway-hungary-nursing-hu-4",
+      "primaryKeyword": "hungary to austria nurse pathway",
+      "language": "hu",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0012-hungary-to-austria-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in hungary — Hungary nursing (hu 5)",
+      "slug": "hu-0085-how-to-become-a-nurse-in-hungary-how-to-become-a-nurse-in-hungary-hungary-nursing-hu-5",
+      "primaryKeyword": "how to become a nurse in hungary",
+      "language": "hu",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0013-how-to-become-a-nurse-in-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration hungary — Hungary nursing (hu 6)",
+      "slug": "hu-0086-nurse-registration-hungary-nurse-registration-hungary-hungary-nursing-hu-6",
+      "primaryKeyword": "nurse registration hungary",
+      "language": "hu",
+      "category": "Hungary nursing",
+      "intentType": "transactional",
+      "translationGroupId": "hu-nurse-0013-nurse-registration-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "foreign nurses in hungary — Hungary nursing (hu 7)",
+      "slug": "hu-0087-foreign-nurses-in-hungary-foreign-nurses-in-hungary-hungary-nursing-hu-7",
+      "primaryKeyword": "foreign nurses in hungary",
+      "language": "hu",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0013-foreign-nurses-in-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "nursing jobs hungary — Hungary nursing (hu 8)",
+      "slug": "hu-0088-nursing-jobs-hungary-nursing-jobs-hungary-hungary-nursing-hu-8",
+      "primaryKeyword": "nursing jobs hungary",
+      "language": "hu",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0013-nursing-jobs-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "hungarian nurses abroad — Hungary nursing (hu 9)",
+      "slug": "hu-0089-hungarian-nurses-abroad-hungarian-nurses-abroad-hungary-nursing-hu-9",
+      "primaryKeyword": "hungarian nurses abroad",
+      "language": "hu",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0013-hungarian-nurses-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "hungary to germany nurse pathway — Hungary nursing (hu 10)",
+      "slug": "hu-0090-hungary-to-germany-nurse-pathway-hungary-to-germany-nurse-pathway-hungary-nursing-hu-10",
+      "primaryKeyword": "hungary to germany nurse pathway",
+      "language": "hu",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0013-hungary-to-germany-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "hungary to austria nurse pathway — Hungary nursing (hu 11)",
+      "slug": "hu-0091-hungary-to-austria-nurse-pathway-hungary-to-austria-nurse-pathway-hungary-nursing-hu-11",
+      "primaryKeyword": "hungary to austria nurse pathway",
+      "language": "hu",
+      "category": "Hungary nursing",
+      "intentType": "transactional",
+      "translationGroupId": "hu-nurse-0013-hungary-to-austria-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in hungary — Hungary nursing (hu 12)",
+      "slug": "hu-0092-how-to-become-a-nurse-in-hungary-how-to-become-a-nurse-in-hungary-hungary-nursing-hu-12",
+      "primaryKeyword": "how to become a nurse in hungary",
+      "language": "hu",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0014-how-to-become-a-nurse-in-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration hungary — Hungary nursing (hu 13)",
+      "slug": "hu-0093-nurse-registration-hungary-nurse-registration-hungary-hungary-nursing-hu-13",
+      "primaryKeyword": "nurse registration hungary",
+      "language": "hu",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0014-nurse-registration-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "foreign nurses in hungary — Hungary nursing (hu 14)",
+      "slug": "hu-0094-foreign-nurses-in-hungary-foreign-nurses-in-hungary-hungary-nursing-hu-14",
+      "primaryKeyword": "foreign nurses in hungary",
+      "language": "hu",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0014-foreign-nurses-in-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "nursing jobs hungary — Hungary nursing (hu 15)",
+      "slug": "hu-0095-nursing-jobs-hungary-nursing-jobs-hungary-hungary-nursing-hu-15",
+      "primaryKeyword": "nursing jobs hungary",
+      "language": "hu",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0014-nursing-jobs-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "hungarian nurses abroad — Hungary nursing (hu 16)",
+      "slug": "hu-0096-hungarian-nurses-abroad-hungarian-nurses-abroad-hungary-nursing-hu-16",
+      "primaryKeyword": "hungarian nurses abroad",
+      "language": "hu",
+      "category": "Hungary nursing",
+      "intentType": "transactional",
+      "translationGroupId": "hu-nurse-0014-hungarian-nurses-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "hungary to germany nurse pathway — Hungary nursing (hu 17)",
+      "slug": "hu-0097-hungary-to-germany-nurse-pathway-hungary-to-germany-nurse-pathway-hungary-nursing-hu-17",
+      "primaryKeyword": "hungary to germany nurse pathway",
+      "language": "hu",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0014-hungary-to-germany-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "hungary to austria nurse pathway — Hungary nursing (hu 18)",
+      "slug": "hu-0098-hungary-to-austria-nurse-pathway-hungary-to-austria-nurse-pathway-hungary-nursing-hu-18",
+      "primaryKeyword": "hungary to austria nurse pathway",
+      "language": "hu",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0014-hungary-to-austria-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in hungary — Hungary nursing (hu 19)",
+      "slug": "hu-0099-how-to-become-a-nurse-in-hungary-how-to-become-a-nurse-in-hungary-hungary-nursing-hu-19",
+      "primaryKeyword": "how to become a nurse in hungary",
+      "language": "hu",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0015-how-to-become-a-nurse-in-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration hungary — Hungary nursing (hu 20)",
+      "slug": "hu-0100-nurse-registration-hungary-nurse-registration-hungary-hungary-nursing-hu-20",
+      "primaryKeyword": "nurse registration hungary",
+      "language": "hu",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0015-nurse-registration-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "foreign nurses in hungary — Hungary nursing (hu 21)",
+      "slug": "hu-0101-foreign-nurses-in-hungary-foreign-nurses-in-hungary-hungary-nursing-hu-21",
+      "primaryKeyword": "foreign nurses in hungary",
+      "language": "hu",
+      "category": "Hungary nursing",
+      "intentType": "transactional",
+      "translationGroupId": "hu-nurse-0015-foreign-nurses-in-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "nursing jobs hungary — Hungary nursing (hu 22)",
+      "slug": "hu-0102-nursing-jobs-hungary-nursing-jobs-hungary-hungary-nursing-hu-22",
+      "primaryKeyword": "nursing jobs hungary",
+      "language": "hu",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0015-nursing-jobs-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "hungarian nurses abroad — Hungary nursing (hu 23)",
+      "slug": "hu-0103-hungarian-nurses-abroad-hungarian-nurses-abroad-hungary-nursing-hu-23",
+      "primaryKeyword": "hungarian nurses abroad",
+      "language": "hu",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0015-hungarian-nurses-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "hungary to germany nurse pathway — Hungary nursing (hu 24)",
+      "slug": "hu-0104-hungary-to-germany-nurse-pathway-hungary-to-germany-nurse-pathway-hungary-nursing-hu-24",
+      "primaryKeyword": "hungary to germany nurse pathway",
+      "language": "hu",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0015-hungary-to-germany-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "hungary to austria nurse pathway — Hungary nursing (hu 25)",
+      "slug": "hu-0105-hungary-to-austria-nurse-pathway-hungary-to-austria-nurse-pathway-hungary-nursing-hu-25",
+      "primaryKeyword": "hungary to austria nurse pathway",
+      "language": "hu",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0015-hungary-to-austria-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in hungary — Hungary nursing (hu 26)",
+      "slug": "hu-0106-how-to-become-a-nurse-in-hungary-how-to-become-a-nurse-in-hungary-hungary-nursing-hu-26",
+      "primaryKeyword": "how to become a nurse in hungary",
+      "language": "hu",
+      "category": "Hungary nursing",
+      "intentType": "transactional",
+      "translationGroupId": "hu-nurse-0016-how-to-become-a-nurse-in-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration hungary — Hungary nursing (hu 27)",
+      "slug": "hu-0107-nurse-registration-hungary-nurse-registration-hungary-hungary-nursing-hu-27",
+      "primaryKeyword": "nurse registration hungary",
+      "language": "hu",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0016-nurse-registration-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "foreign nurses in hungary — Hungary nursing (hu 28)",
+      "slug": "hu-0108-foreign-nurses-in-hungary-foreign-nurses-in-hungary-hungary-nursing-hu-28",
+      "primaryKeyword": "foreign nurses in hungary",
+      "language": "hu",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0016-foreign-nurses-in-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "nursing jobs hungary — Hungary nursing (hu 29)",
+      "slug": "hu-0109-nursing-jobs-hungary-nursing-jobs-hungary-hungary-nursing-hu-29",
+      "primaryKeyword": "nursing jobs hungary",
+      "language": "hu",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0016-nursing-jobs-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "hungarian nurses abroad — Hungary nursing (hu 30)",
+      "slug": "hu-0110-hungarian-nurses-abroad-hungarian-nurses-abroad-hungary-nursing-hu-30",
+      "primaryKeyword": "hungarian nurses abroad",
+      "language": "hu",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0016-hungarian-nurses-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "hungary to germany nurse pathway — Hungary nursing (hu 31)",
+      "slug": "hu-0111-hungary-to-germany-nurse-pathway-hungary-to-germany-nurse-pathway-hungary-nursing-hu-31",
+      "primaryKeyword": "hungary to germany nurse pathway",
+      "language": "hu",
+      "category": "Hungary nursing",
+      "intentType": "transactional",
+      "translationGroupId": "hu-nurse-0016-hungary-to-germany-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "hungary to austria nurse pathway — Hungary nursing (hu 32)",
+      "slug": "hu-0112-hungary-to-austria-nurse-pathway-hungary-to-austria-nurse-pathway-hungary-nursing-hu-32",
+      "primaryKeyword": "hungary to austria nurse pathway",
+      "language": "hu",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0016-hungary-to-austria-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in hungary — Hungary nursing (hu 33)",
+      "slug": "hu-0113-how-to-become-a-nurse-in-hungary-how-to-become-a-nurse-in-hungary-hungary-nursing-hu-33",
+      "primaryKeyword": "how to become a nurse in hungary",
+      "language": "hu",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0017-how-to-become-a-nurse-in-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration hungary — Hungary nursing (hu 34)",
+      "slug": "hu-0114-nurse-registration-hungary-nurse-registration-hungary-hungary-nursing-hu-34",
+      "primaryKeyword": "nurse registration hungary",
+      "language": "hu",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0017-nurse-registration-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "foreign nurses in hungary — Hungary nursing (hu 35)",
+      "slug": "hu-0115-foreign-nurses-in-hungary-foreign-nurses-in-hungary-hungary-nursing-hu-35",
+      "primaryKeyword": "foreign nurses in hungary",
+      "language": "hu",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0017-foreign-nurses-in-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "nursing jobs hungary — Hungary nursing (hu 36)",
+      "slug": "hu-0116-nursing-jobs-hungary-nursing-jobs-hungary-hungary-nursing-hu-36",
+      "primaryKeyword": "nursing jobs hungary",
+      "language": "hu",
+      "category": "Hungary nursing",
+      "intentType": "transactional",
+      "translationGroupId": "hu-nurse-0017-nursing-jobs-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "hungarian nurses abroad — Hungary nursing (hu 37)",
+      "slug": "hu-0117-hungarian-nurses-abroad-hungarian-nurses-abroad-hungary-nursing-hu-37",
+      "primaryKeyword": "hungarian nurses abroad",
+      "language": "hu",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0017-hungarian-nurses-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "hungary to germany nurse pathway — Hungary nursing (hu 38)",
+      "slug": "hu-0118-hungary-to-germany-nurse-pathway-hungary-to-germany-nurse-pathway-hungary-nursing-hu-38",
+      "primaryKeyword": "hungary to germany nurse pathway",
+      "language": "hu",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0017-hungary-to-germany-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "hungary to austria nurse pathway — Hungary nursing (hu 39)",
+      "slug": "hu-0119-hungary-to-austria-nurse-pathway-hungary-to-austria-nurse-pathway-hungary-nursing-hu-39",
+      "primaryKeyword": "hungary to austria nurse pathway",
+      "language": "hu",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0017-hungary-to-austria-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in hungary — Hungary nursing (hu 40)",
+      "slug": "hu-0120-how-to-become-a-nurse-in-hungary-how-to-become-a-nurse-in-hungary-hungary-nursing-hu-40",
+      "primaryKeyword": "how to become a nurse in hungary",
+      "language": "hu",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0018-how-to-become-a-nurse-in-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration hungary — Hungary nursing (hu 41)",
+      "slug": "hu-0121-nurse-registration-hungary-nurse-registration-hungary-hungary-nursing-hu-41",
+      "primaryKeyword": "nurse registration hungary",
+      "language": "hu",
+      "category": "Hungary nursing",
+      "intentType": "transactional",
+      "translationGroupId": "hu-nurse-0018-nurse-registration-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "foreign nurses in hungary — Hungary nursing (hu 42)",
+      "slug": "hu-0122-foreign-nurses-in-hungary-foreign-nurses-in-hungary-hungary-nursing-hu-42",
+      "primaryKeyword": "foreign nurses in hungary",
+      "language": "hu",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0018-foreign-nurses-in-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "nursing jobs hungary — Hungary nursing (hu 43)",
+      "slug": "hu-0123-nursing-jobs-hungary-nursing-jobs-hungary-hungary-nursing-hu-43",
+      "primaryKeyword": "nursing jobs hungary",
+      "language": "hu",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0018-nursing-jobs-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "hungarian nurses abroad — Hungary nursing (hu 44)",
+      "slug": "hu-0124-hungarian-nurses-abroad-hungarian-nurses-abroad-hungary-nursing-hu-44",
+      "primaryKeyword": "hungarian nurses abroad",
+      "language": "hu",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0018-hungarian-nurses-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "hungary to germany nurse pathway — Hungary nursing (hu 45)",
+      "slug": "hu-0125-hungary-to-germany-nurse-pathway-hungary-to-germany-nurse-pathway-hungary-nursing-hu-45",
+      "primaryKeyword": "hungary to germany nurse pathway",
+      "language": "hu",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0018-hungary-to-germany-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "hungary to austria nurse pathway — Hungary nursing (hu 46)",
+      "slug": "hu-0126-hungary-to-austria-nurse-pathway-hungary-to-austria-nurse-pathway-hungary-nursing-hu-46",
+      "primaryKeyword": "hungary to austria nurse pathway",
+      "language": "hu",
+      "category": "Hungary nursing",
+      "intentType": "transactional",
+      "translationGroupId": "hu-nurse-0018-hungary-to-austria-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in hungary — Hungary nursing (hu 47)",
+      "slug": "hu-0127-how-to-become-a-nurse-in-hungary-how-to-become-a-nurse-in-hungary-hungary-nursing-hu-47",
+      "primaryKeyword": "how to become a nurse in hungary",
+      "language": "hu",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0019-how-to-become-a-nurse-in-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration hungary — Hungary nursing (hu 48)",
+      "slug": "hu-0128-nurse-registration-hungary-nurse-registration-hungary-hungary-nursing-hu-48",
+      "primaryKeyword": "nurse registration hungary",
+      "language": "hu",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0019-nurse-registration-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "foreign nurses in hungary — Hungary nursing (hu 49)",
+      "slug": "hu-0129-foreign-nurses-in-hungary-foreign-nurses-in-hungary-hungary-nursing-hu-49",
+      "primaryKeyword": "foreign nurses in hungary",
+      "language": "hu",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0019-foreign-nurses-in-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "nursing jobs hungary — Hungary nursing (hu 50)",
+      "slug": "hu-0130-nursing-jobs-hungary-nursing-jobs-hungary-hungary-nursing-hu-50",
+      "primaryKeyword": "nursing jobs hungary",
+      "language": "hu",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0019-nursing-jobs-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "hungarian nurses abroad — Hungary nursing (hu 51)",
+      "slug": "hu-0131-hungarian-nurses-abroad-hungarian-nurses-abroad-hungary-nursing-hu-51",
+      "primaryKeyword": "hungarian nurses abroad",
+      "language": "hu",
+      "category": "Hungary nursing",
+      "intentType": "transactional",
+      "translationGroupId": "hu-nurse-0019-hungarian-nurses-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "hungary to germany nurse pathway — Hungary nursing (hu 52)",
+      "slug": "hu-0132-hungary-to-germany-nurse-pathway-hungary-to-germany-nurse-pathway-hungary-nursing-hu-52",
+      "primaryKeyword": "hungary to germany nurse pathway",
+      "language": "hu",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0019-hungary-to-germany-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "hungary to austria nurse pathway — Hungary nursing (hu 53)",
+      "slug": "hu-0133-hungary-to-austria-nurse-pathway-hungary-to-austria-nurse-pathway-hungary-nursing-hu-53",
+      "primaryKeyword": "hungary to austria nurse pathway",
+      "language": "hu",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0019-hungary-to-austria-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in hungary — Hungary nursing (hu 54)",
+      "slug": "hu-0134-how-to-become-a-nurse-in-hungary-how-to-become-a-nurse-in-hungary-hungary-nursing-hu-54",
+      "primaryKeyword": "how to become a nurse in hungary",
+      "language": "hu",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0020-how-to-become-a-nurse-in-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration hungary — Hungary nursing (hu 55)",
+      "slug": "hu-0135-nurse-registration-hungary-nurse-registration-hungary-hungary-nursing-hu-55",
+      "primaryKeyword": "nurse registration hungary",
+      "language": "hu",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0020-nurse-registration-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "foreign nurses in hungary — Hungary nursing (hu 56)",
+      "slug": "hu-0136-foreign-nurses-in-hungary-foreign-nurses-in-hungary-hungary-nursing-hu-56",
+      "primaryKeyword": "foreign nurses in hungary",
+      "language": "hu",
+      "category": "Hungary nursing",
+      "intentType": "transactional",
+      "translationGroupId": "hu-nurse-0020-foreign-nurses-in-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "nursing jobs hungary — Hungary nursing (hu 57)",
+      "slug": "hu-0137-nursing-jobs-hungary-nursing-jobs-hungary-hungary-nursing-hu-57",
+      "primaryKeyword": "nursing jobs hungary",
+      "language": "hu",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0020-nursing-jobs-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "hungarian nurses abroad — Hungary nursing (hu 58)",
+      "slug": "hu-0138-hungarian-nurses-abroad-hungarian-nurses-abroad-hungary-nursing-hu-58",
+      "primaryKeyword": "hungarian nurses abroad",
+      "language": "hu",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0020-hungarian-nurses-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "hungary to germany nurse pathway — Hungary nursing (hu 59)",
+      "slug": "hu-0139-hungary-to-germany-nurse-pathway-hungary-to-germany-nurse-pathway-hungary-nursing-hu-59",
+      "primaryKeyword": "hungary to germany nurse pathway",
+      "language": "hu",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0020-hungary-to-germany-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "hungary to austria nurse pathway — Hungary nursing (hu 60)",
+      "slug": "hu-0140-hungary-to-austria-nurse-pathway-hungary-to-austria-nurse-pathway-hungary-nursing-hu-60",
+      "primaryKeyword": "hungary to austria nurse pathway",
+      "language": "hu",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0020-hungary-to-austria-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in hungary — Hungary nursing (hu 61)",
+      "slug": "hu-0141-how-to-become-a-nurse-in-hungary-how-to-become-a-nurse-in-hungary-hungary-nursing-hu-61",
+      "primaryKeyword": "how to become a nurse in hungary",
+      "language": "hu",
+      "category": "Hungary nursing",
+      "intentType": "transactional",
+      "translationGroupId": "hu-nurse-0021-how-to-become-a-nurse-in-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration hungary — Hungary nursing (hu 62)",
+      "slug": "hu-0142-nurse-registration-hungary-nurse-registration-hungary-hungary-nursing-hu-62",
+      "primaryKeyword": "nurse registration hungary",
+      "language": "hu",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0021-nurse-registration-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "foreign nurses in hungary — Hungary nursing (hu 63)",
+      "slug": "hu-0143-foreign-nurses-in-hungary-foreign-nurses-in-hungary-hungary-nursing-hu-63",
+      "primaryKeyword": "foreign nurses in hungary",
+      "language": "hu",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0021-foreign-nurses-in-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "nursing jobs hungary — Hungary nursing (hu 64)",
+      "slug": "hu-0144-nursing-jobs-hungary-nursing-jobs-hungary-hungary-nursing-hu-64",
+      "primaryKeyword": "nursing jobs hungary",
+      "language": "hu",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0021-nursing-jobs-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "hungarian nurses abroad — Hungary nursing (hu 65)",
+      "slug": "hu-0145-hungarian-nurses-abroad-hungarian-nurses-abroad-hungary-nursing-hu-65",
+      "primaryKeyword": "hungarian nurses abroad",
+      "language": "hu",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0021-hungarian-nurses-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "hungary to germany nurse pathway — Hungary nursing (hu 66)",
+      "slug": "hu-0146-hungary-to-germany-nurse-pathway-hungary-to-germany-nurse-pathway-hungary-nursing-hu-66",
+      "primaryKeyword": "hungary to germany nurse pathway",
+      "language": "hu",
+      "category": "Hungary nursing",
+      "intentType": "transactional",
+      "translationGroupId": "hu-nurse-0021-hungary-to-germany-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "hungary to austria nurse pathway — Hungary nursing (hu 67)",
+      "slug": "hu-0147-hungary-to-austria-nurse-pathway-hungary-to-austria-nurse-pathway-hungary-nursing-hu-67",
+      "primaryKeyword": "hungary to austria nurse pathway",
+      "language": "hu",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0021-hungary-to-austria-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in hungary — Hungary nursing (hu 68)",
+      "slug": "hu-0148-how-to-become-a-nurse-in-hungary-how-to-become-a-nurse-in-hungary-hungary-nursing-hu-68",
+      "primaryKeyword": "how to become a nurse in hungary",
+      "language": "hu",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0022-how-to-become-a-nurse-in-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration hungary — Hungary nursing (hu 69)",
+      "slug": "hu-0149-nurse-registration-hungary-nurse-registration-hungary-hungary-nursing-hu-69",
+      "primaryKeyword": "nurse registration hungary",
+      "language": "hu",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0022-nurse-registration-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "foreign nurses in hungary — Hungary nursing (hu 70)",
+      "slug": "hu-0150-foreign-nurses-in-hungary-foreign-nurses-in-hungary-hungary-nursing-hu-70",
+      "primaryKeyword": "foreign nurses in hungary",
+      "language": "hu",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0022-foreign-nurses-in-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "nursing jobs hungary — Hungary nursing (hu 71)",
+      "slug": "hu-0151-nursing-jobs-hungary-nursing-jobs-hungary-hungary-nursing-hu-71",
+      "primaryKeyword": "nursing jobs hungary",
+      "language": "hu",
+      "category": "Hungary nursing",
+      "intentType": "transactional",
+      "translationGroupId": "hu-nurse-0022-nursing-jobs-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "hungarian nurses abroad — Hungary nursing (hu 72)",
+      "slug": "hu-0152-hungarian-nurses-abroad-hungarian-nurses-abroad-hungary-nursing-hu-72",
+      "primaryKeyword": "hungarian nurses abroad",
+      "language": "hu",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0022-hungarian-nurses-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "hungary to germany nurse pathway — Hungary nursing (hu 73)",
+      "slug": "hu-0153-hungary-to-germany-nurse-pathway-hungary-to-germany-nurse-pathway-hungary-nursing-hu-73",
+      "primaryKeyword": "hungary to germany nurse pathway",
+      "language": "hu",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0022-hungary-to-germany-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "hungary to austria nurse pathway — Hungary nursing (hu 74)",
+      "slug": "hu-0154-hungary-to-austria-nurse-pathway-hungary-to-austria-nurse-pathway-hungary-nursing-hu-74",
+      "primaryKeyword": "hungary to austria nurse pathway",
+      "language": "hu",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0022-hungary-to-austria-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in hungary — Hungary nursing (hu 75)",
+      "slug": "hu-0155-how-to-become-a-nurse-in-hungary-how-to-become-a-nurse-in-hungary-hungary-nursing-hu-75",
+      "primaryKeyword": "how to become a nurse in hungary",
+      "language": "hu",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0023-how-to-become-a-nurse-in-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration hungary — Hungary nursing (hu 76)",
+      "slug": "hu-0156-nurse-registration-hungary-nurse-registration-hungary-hungary-nursing-hu-76",
+      "primaryKeyword": "nurse registration hungary",
+      "language": "hu",
+      "category": "Hungary nursing",
+      "intentType": "transactional",
+      "translationGroupId": "hu-nurse-0023-nurse-registration-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "foreign nurses in hungary — Hungary nursing (hu 77)",
+      "slug": "hu-0157-foreign-nurses-in-hungary-foreign-nurses-in-hungary-hungary-nursing-hu-77",
+      "primaryKeyword": "foreign nurses in hungary",
+      "language": "hu",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0023-foreign-nurses-in-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "nursing jobs hungary — Hungary nursing (hu 78)",
+      "slug": "hu-0158-nursing-jobs-hungary-nursing-jobs-hungary-hungary-nursing-hu-78",
+      "primaryKeyword": "nursing jobs hungary",
+      "language": "hu",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0023-nursing-jobs-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "hungarian nurses abroad — Hungary nursing (hu 79)",
+      "slug": "hu-0159-hungarian-nurses-abroad-hungarian-nurses-abroad-hungary-nursing-hu-79",
+      "primaryKeyword": "hungarian nurses abroad",
+      "language": "hu",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0023-hungarian-nurses-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "hungary to germany nurse pathway — Hungary nursing (hu 80)",
+      "slug": "hu-0160-hungary-to-germany-nurse-pathway-hungary-to-germany-nurse-pathway-hungary-nursing-hu-80",
+      "primaryKeyword": "hungary to germany nurse pathway",
+      "language": "hu",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0023-hungary-to-germany-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "hungary to austria nurse pathway — Hungary nursing (hu 81)",
+      "slug": "hu-0161-hungary-to-austria-nurse-pathway-hungary-to-austria-nurse-pathway-hungary-nursing-hu-81",
+      "primaryKeyword": "hungary to austria nurse pathway",
+      "language": "hu",
+      "category": "Hungary nursing",
+      "intentType": "transactional",
+      "translationGroupId": "hu-nurse-0023-hungary-to-austria-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in hungary — Hungary nursing (hu 82)",
+      "slug": "hu-0162-how-to-become-a-nurse-in-hungary-how-to-become-a-nurse-in-hungary-hungary-nursing-hu-82",
+      "primaryKeyword": "how to become a nurse in hungary",
+      "language": "hu",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0024-how-to-become-a-nurse-in-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration hungary — Hungary nursing (hu 83)",
+      "slug": "hu-0163-nurse-registration-hungary-nurse-registration-hungary-hungary-nursing-hu-83",
+      "primaryKeyword": "nurse registration hungary",
+      "language": "hu",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0024-nurse-registration-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "foreign nurses in hungary — Hungary nursing (hu 84)",
+      "slug": "hu-0164-foreign-nurses-in-hungary-foreign-nurses-in-hungary-hungary-nursing-hu-84",
+      "primaryKeyword": "foreign nurses in hungary",
+      "language": "hu",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0024-foreign-nurses-in-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "nursing jobs hungary — Hungary nursing (hu 85)",
+      "slug": "hu-0165-nursing-jobs-hungary-nursing-jobs-hungary-hungary-nursing-hu-85",
+      "primaryKeyword": "nursing jobs hungary",
+      "language": "hu",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0024-nursing-jobs-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "hungarian nurses abroad — Hungary nursing (hu 86)",
+      "slug": "hu-0166-hungarian-nurses-abroad-hungarian-nurses-abroad-hungary-nursing-hu-86",
+      "primaryKeyword": "hungarian nurses abroad",
+      "language": "hu",
+      "category": "Hungary nursing",
+      "intentType": "transactional",
+      "translationGroupId": "hu-nurse-0024-hungarian-nurses-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "hungary to germany nurse pathway — Hungary nursing (hu 87)",
+      "slug": "hu-0167-hungary-to-germany-nurse-pathway-hungary-to-germany-nurse-pathway-hungary-nursing-hu-87",
+      "primaryKeyword": "hungary to germany nurse pathway",
+      "language": "hu",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0024-hungary-to-germany-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "hungary to austria nurse pathway — Hungary nursing (hu 88)",
+      "slug": "hu-0168-hungary-to-austria-nurse-pathway-hungary-to-austria-nurse-pathway-hungary-nursing-hu-88",
+      "primaryKeyword": "hungary to austria nurse pathway",
+      "language": "hu",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0024-hungary-to-austria-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in hungary — Hungary nursing (hu 89)",
+      "slug": "hu-0169-how-to-become-a-nurse-in-hungary-how-to-become-a-nurse-in-hungary-hungary-nursing-hu-89",
+      "primaryKeyword": "how to become a nurse in hungary",
+      "language": "hu",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0025-how-to-become-a-nurse-in-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration hungary — Hungary nursing (hu 90)",
+      "slug": "hu-0170-nurse-registration-hungary-nurse-registration-hungary-hungary-nursing-hu-90",
+      "primaryKeyword": "nurse registration hungary",
+      "language": "hu",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0025-nurse-registration-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "foreign nurses in hungary — Hungary nursing (de 1)",
+      "slug": "de-0171-foreign-nurses-in-hungary-foreign-nurses-in-hungary-hungary-nursing-de-1",
+      "primaryKeyword": "foreign nurses in hungary",
+      "language": "de",
+      "category": "Hungary nursing",
+      "intentType": "transactional",
+      "translationGroupId": "hu-nurse-0025-foreign-nurses-in-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "nursing jobs hungary — Hungary nursing (de 2)",
+      "slug": "de-0172-nursing-jobs-hungary-nursing-jobs-hungary-hungary-nursing-de-2",
+      "primaryKeyword": "nursing jobs hungary",
+      "language": "de",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0025-nursing-jobs-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "hungarian nurses abroad — Hungary nursing (de 3)",
+      "slug": "de-0173-hungarian-nurses-abroad-hungarian-nurses-abroad-hungary-nursing-de-3",
+      "primaryKeyword": "hungarian nurses abroad",
+      "language": "de",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0025-hungarian-nurses-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "hungary to germany nurse pathway — Hungary nursing (de 4)",
+      "slug": "de-0174-hungary-to-germany-nurse-pathway-hungary-to-germany-nurse-pathway-hungary-nursing-de-4",
+      "primaryKeyword": "hungary to germany nurse pathway",
+      "language": "de",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0025-hungary-to-germany-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "hungary to austria nurse pathway — Hungary nursing (de 5)",
+      "slug": "de-0175-hungary-to-austria-nurse-pathway-hungary-to-austria-nurse-pathway-hungary-nursing-de-5",
+      "primaryKeyword": "hungary to austria nurse pathway",
+      "language": "de",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0025-hungary-to-austria-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in hungary — Hungary nursing (de 6)",
+      "slug": "de-0176-how-to-become-a-nurse-in-hungary-how-to-become-a-nurse-in-hungary-hungary-nursing-de-6",
+      "primaryKeyword": "how to become a nurse in hungary",
+      "language": "de",
+      "category": "Hungary nursing",
+      "intentType": "transactional",
+      "translationGroupId": "hu-nurse-0026-how-to-become-a-nurse-in-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration hungary — Hungary nursing (de 7)",
+      "slug": "de-0177-nurse-registration-hungary-nurse-registration-hungary-hungary-nursing-de-7",
+      "primaryKeyword": "nurse registration hungary",
+      "language": "de",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0026-nurse-registration-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "foreign nurses in hungary — Hungary nursing (de 8)",
+      "slug": "de-0178-foreign-nurses-in-hungary-foreign-nurses-in-hungary-hungary-nursing-de-8",
+      "primaryKeyword": "foreign nurses in hungary",
+      "language": "de",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0026-foreign-nurses-in-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "nursing jobs hungary — Hungary nursing (de 9)",
+      "slug": "de-0179-nursing-jobs-hungary-nursing-jobs-hungary-hungary-nursing-de-9",
+      "primaryKeyword": "nursing jobs hungary",
+      "language": "de",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0026-nursing-jobs-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "hungarian nurses abroad — Hungary nursing (de 10)",
+      "slug": "de-0180-hungarian-nurses-abroad-hungarian-nurses-abroad-hungary-nursing-de-10",
+      "primaryKeyword": "hungarian nurses abroad",
+      "language": "de",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0026-hungarian-nurses-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "hungary to germany nurse pathway — Hungary nursing (ro 1)",
+      "slug": "ro-0181-hungary-to-germany-nurse-pathway-hungary-to-germany-nurse-pathway-hungary-nursing-ro-1",
+      "primaryKeyword": "hungary to germany nurse pathway",
+      "language": "ro",
+      "category": "Hungary nursing",
+      "intentType": "transactional",
+      "translationGroupId": "hu-nurse-0026-hungary-to-germany-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "hungary to austria nurse pathway — Hungary nursing (ro 2)",
+      "slug": "ro-0182-hungary-to-austria-nurse-pathway-hungary-to-austria-nurse-pathway-hungary-nursing-ro-2",
+      "primaryKeyword": "hungary to austria nurse pathway",
+      "language": "ro",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0026-hungary-to-austria-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in hungary — Hungary nursing (ro 3)",
+      "slug": "ro-0183-how-to-become-a-nurse-in-hungary-how-to-become-a-nurse-in-hungary-hungary-nursing-ro-3",
+      "primaryKeyword": "how to become a nurse in hungary",
+      "language": "ro",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0027-how-to-become-a-nurse-in-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration hungary — Hungary nursing (ro 4)",
+      "slug": "ro-0184-nurse-registration-hungary-nurse-registration-hungary-hungary-nursing-ro-4",
+      "primaryKeyword": "nurse registration hungary",
+      "language": "ro",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0027-nurse-registration-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "foreign nurses in hungary — Hungary nursing (ro 5)",
+      "slug": "ro-0185-foreign-nurses-in-hungary-foreign-nurses-in-hungary-hungary-nursing-ro-5",
+      "primaryKeyword": "foreign nurses in hungary",
+      "language": "ro",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0027-foreign-nurses-in-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "nursing jobs hungary — Hungary nursing (ro 6)",
+      "slug": "ro-0186-nursing-jobs-hungary-nursing-jobs-hungary-hungary-nursing-ro-6",
+      "primaryKeyword": "nursing jobs hungary",
+      "language": "ro",
+      "category": "Hungary nursing",
+      "intentType": "transactional",
+      "translationGroupId": "hu-nurse-0027-nursing-jobs-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "hungarian nurses abroad — Hungary nursing (ro 7)",
+      "slug": "ro-0187-hungarian-nurses-abroad-hungarian-nurses-abroad-hungary-nursing-ro-7",
+      "primaryKeyword": "hungarian nurses abroad",
+      "language": "ro",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0027-hungarian-nurses-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "hungary to germany nurse pathway — Hungary nursing (ro 8)",
+      "slug": "ro-0188-hungary-to-germany-nurse-pathway-hungary-to-germany-nurse-pathway-hungary-nursing-ro-8",
+      "primaryKeyword": "hungary to germany nurse pathway",
+      "language": "ro",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0027-hungary-to-germany-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "hungary to austria nurse pathway — Hungary nursing (ro 9)",
+      "slug": "ro-0189-hungary-to-austria-nurse-pathway-hungary-to-austria-nurse-pathway-hungary-nursing-ro-9",
+      "primaryKeyword": "hungary to austria nurse pathway",
+      "language": "ro",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0027-hungary-to-austria-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in hungary — Hungary nursing (ro 10)",
+      "slug": "ro-0190-how-to-become-a-nurse-in-hungary-how-to-become-a-nurse-in-hungary-hungary-nursing-ro-10",
+      "primaryKeyword": "how to become a nurse in hungary",
+      "language": "ro",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0028-how-to-become-a-nurse-in-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration hungary — Hungary nursing (ar 1)",
+      "slug": "ar-0191-nurse-registration-hungary-nurse-registration-hungary-hungary-nursing-ar-1",
+      "primaryKeyword": "nurse registration hungary",
+      "language": "ar",
+      "category": "Hungary nursing",
+      "intentType": "transactional",
+      "translationGroupId": "hu-nurse-0028-nurse-registration-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "foreign nurses in hungary — Hungary nursing (ar 2)",
+      "slug": "ar-0192-foreign-nurses-in-hungary-foreign-nurses-in-hungary-hungary-nursing-ar-2",
+      "primaryKeyword": "foreign nurses in hungary",
+      "language": "ar",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0028-foreign-nurses-in-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "nursing jobs hungary — Hungary nursing (ar 3)",
+      "slug": "ar-0193-nursing-jobs-hungary-nursing-jobs-hungary-hungary-nursing-ar-3",
+      "primaryKeyword": "nursing jobs hungary",
+      "language": "ar",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0028-nursing-jobs-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "hungarian nurses abroad — Hungary nursing (ar 4)",
+      "slug": "ar-0194-hungarian-nurses-abroad-hungarian-nurses-abroad-hungary-nursing-ar-4",
+      "primaryKeyword": "hungarian nurses abroad",
+      "language": "ar",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0028-hungarian-nurses-abroad",
+      "status": "planned"
+    },
+    {
+      "title": "hungary to germany nurse pathway — Hungary nursing (ar 5)",
+      "slug": "ar-0195-hungary-to-germany-nurse-pathway-hungary-to-germany-nurse-pathway-hungary-nursing-ar-5",
+      "primaryKeyword": "hungary to germany nurse pathway",
+      "language": "ar",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0028-hungary-to-germany-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "hungary to austria nurse pathway — Hungary nursing (ar 6)",
+      "slug": "ar-0196-hungary-to-austria-nurse-pathway-hungary-to-austria-nurse-pathway-hungary-nursing-ar-6",
+      "primaryKeyword": "hungary to austria nurse pathway",
+      "language": "ar",
+      "category": "Hungary nursing",
+      "intentType": "transactional",
+      "translationGroupId": "hu-nurse-0028-hungary-to-austria-nurse-pathway",
+      "status": "planned"
+    },
+    {
+      "title": "how to become a nurse in hungary — Hungary nursing (ar 7)",
+      "slug": "ar-0197-how-to-become-a-nurse-in-hungary-how-to-become-a-nurse-in-hungary-hungary-nursing-ar-7",
+      "primaryKeyword": "how to become a nurse in hungary",
+      "language": "ar",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0029-how-to-become-a-nurse-in-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "nurse registration hungary — Hungary nursing (ar 8)",
+      "slug": "ar-0198-nurse-registration-hungary-nurse-registration-hungary-hungary-nursing-ar-8",
+      "primaryKeyword": "nurse registration hungary",
+      "language": "ar",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0029-nurse-registration-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "foreign nurses in hungary — Hungary nursing (ar 9)",
+      "slug": "ar-0199-foreign-nurses-in-hungary-foreign-nurses-in-hungary-hungary-nursing-ar-9",
+      "primaryKeyword": "foreign nurses in hungary",
+      "language": "ar",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0029-foreign-nurses-in-hungary",
+      "status": "planned"
+    },
+    {
+      "title": "nursing jobs hungary — Hungary nursing (ar 10)",
+      "slug": "ar-0200-nursing-jobs-hungary-nursing-jobs-hungary-hungary-nursing-ar-10",
+      "primaryKeyword": "nursing jobs hungary",
+      "language": "ar",
+      "category": "Hungary nursing",
+      "intentType": "informational",
+      "translationGroupId": "hu-nurse-0029-nursing-jobs-hungary",
+      "status": "planned"
+    }
+  ]
+}

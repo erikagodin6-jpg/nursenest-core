@@ -66,6 +66,10 @@ const REGION_PRICING_TIER: Record<GlobalRegionSlug, PricingTier> = {
   italy: "mid",
   greece: "mid",
   germany: "high",
+  france: "high",
+  hungary: "mid",
+  portugal: "mid",
+  mexico: "mid",
   us: "high",
   canada: "high",
   uk: "high",
@@ -193,6 +197,18 @@ const LOCAL_CURRENCY_OVERRIDES: Partial<
   germany: {
     nursing: { monthly: 34.99, "3-month": 79.99, "6-month": 119.99, yearly: 179.99 },
     allied: { monthly: 27.99, "3-month": 64.99, "6-month": 99.99, yearly: 149.99 },
+  },
+  france: {
+    nursing: { monthly: 34.99, "3-month": 79.99, "6-month": 119.99, yearly: 179.99 },
+    allied: { monthly: 27.99, "3-month": 64.99, "6-month": 99.99, yearly: 149.99 },
+  },
+  hungary: {
+    nursing: { monthly: 8_990, "3-month": 20_990, "6-month": 31_990, yearly: 46_990 },
+    allied: { monthly: 6_990, "3-month": 16_990, "6-month": 25_990, yearly: 37_990 },
+  },
+  mexico: {
+    nursing: { monthly: 449, "3-month": 1_099, "6-month": 1_699, yearly: 2_499 },
+    allied: { monthly: 349, "3-month": 899, "6-month": 1_399, yearly: 1_999 },
   },
 };
 

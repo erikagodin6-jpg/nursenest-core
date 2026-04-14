@@ -1,16 +1,107 @@
 {
-  "generatedAt": "2026-04-14T17:56:51.860Z",
-  "dbConnected": false,
-  "legacySourcesScanned": [
-    "data/audit/legacy-lessons-inventory.json (summary)",
-    "data/audit/unimported-legacy-content.json",
-    "external/NurseNest (legacyRoot in inventories when present)"
+  "schemaVersion": 3,
+  "generatedAt": "2026-04-14T18:13:35.924Z",
+  "gitHead": "c6d27507",
+  "methodology": "Separated CONTENT parity from FEATURE parity. Counts from data/audit/unimported-legacy-content.json, pathway catalog sync, optional Prisma, and route scans — not claims without file evidence.",
+  "evidenceRootsScanned": [
+    "client/src",
+    "nursenest-core",
+    "external/NurseNest",
+    "data/audit"
   ],
-  "currentSourcesScanned": [
-    "src/lib/exam-pathways/exam-product-registry.ts (EXAM_PATHWAYS)",
-    "src/lib/lessons/pathway-lesson-catalog-sync.ts (catalog + allied + new-grad + scoped gold)",
-    "prisma/schema.prisma (PathwayLesson, ExamQuestion, FlashcardDeck)",
-    "Prisma skipped (no DATABASE_URL or query failed)"
-  ],
-  "summary": "Legacy monolith features mapped in docs/legacy-restoration-map.md and data/audit/legacy-* inventories; Next app implements subset with different architecture."
+  "auditKind": "feature_parity",
+  "items": [
+    {
+      "category": "FEATURE",
+      "subcategory": "entitlements",
+      "name": "Subscription gating & previews",
+      "legacyExists": true,
+      "currentExists": true,
+      "status": "partial",
+      "legacySourcePaths": [
+        "legacy client guards"
+      ],
+      "currentSourcePaths": [
+        "src/lib/entitlements/**",
+        "middleware / proxy"
+      ],
+      "routes": [],
+      "dataModelOrSource": "Stripe + resolveEntitlement",
+      "beforeCount": null,
+      "currentCount": null,
+      "missingCount": null,
+      "confidence": "high",
+      "recommendedAction": "Run audit:entitlements + paywall tests",
+      "notes": "Marketing shows previews; full body gated server-side."
+    },
+    {
+      "category": "FEATURE",
+      "subcategory": "progress",
+      "name": "Progress persistence",
+      "legacyExists": true,
+      "currentExists": true,
+      "status": "partial",
+      "legacySourcePaths": [],
+      "currentSourcePaths": [
+        "prisma progress models",
+        "src/lib/learner/**"
+      ],
+      "routes": [
+        "/app/.../account/**"
+      ],
+      "dataModelOrSource": "DB + client storage for some UX",
+      "beforeCount": null,
+      "currentCount": null,
+      "missingCount": null,
+      "confidence": "medium",
+      "recommendedAction": "Verify lesson completion + question attempts per pathway",
+      "notes": ""
+    },
+    {
+      "category": "FEATURE",
+      "subcategory": "monolith_client",
+      "name": "Legacy Vite client feature surface",
+      "legacyExists": true,
+      "currentExists": true,
+      "status": "obsolete",
+      "legacySourcePaths": [
+        "client/src"
+      ],
+      "currentSourcePaths": [
+        "nursenest-core/src"
+      ],
+      "routes": [],
+      "dataModelOrSource": "n/a",
+      "beforeCount": 450,
+      "currentCount": 134,
+      "missingCount": null,
+      "confidence": "high",
+      "recommendedAction": "Do not resurrect Vite shell; port behaviors into Next routes",
+      "notes": "Legacy client retained for reference per restoration map — not production."
+    },
+    {
+      "category": "FEATURE",
+      "subcategory": "routing",
+      "name": "Next App Router surfaces",
+      "legacyExists": false,
+      "currentExists": true,
+      "status": "matched",
+      "legacySourcePaths": [],
+      "currentSourcePaths": [
+        "nursenest-core/src/app"
+      ],
+      "routes": [
+        "(marketing)",
+        "(student)/app",
+        "(admin)/admin"
+      ],
+      "dataModelOrSource": "Next.js layouts",
+      "beforeCount": null,
+      "currentCount": 134,
+      "missingCount": null,
+      "confidence": "high",
+      "recommendedAction": "Maintain route integrity tests (marketing-route-integrity)",
+      "notes": "Learner .tsx pages under (student): ~71; admin: ~63 (capped scan)."
+    }
+  ]
 }

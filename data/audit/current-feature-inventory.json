@@ -1,21 +1,39 @@
 {
-  "generatedAt": "2026-04-14T17:56:51.860Z",
-  "dbConnected": false,
-  "legacySourcesScanned": [
-    "data/audit/legacy-lessons-inventory.json (summary)",
-    "data/audit/unimported-legacy-content.json",
-    "external/NurseNest (legacyRoot in inventories when present)"
+  "schemaVersion": 3,
+  "generatedAt": "2026-04-14T18:13:35.924Z",
+  "gitHead": "c6d27507",
+  "methodology": "Separated CONTENT parity from FEATURE parity. Counts from data/audit/unimported-legacy-content.json, pathway catalog sync, optional Prisma, and route scans — not claims without file evidence.",
+  "evidenceRootsScanned": [
+    "client/src",
+    "nursenest-core",
+    "external/NurseNest",
+    "data/audit"
   ],
-  "currentSourcesScanned": [
-    "src/lib/exam-pathways/exam-product-registry.ts (EXAM_PATHWAYS)",
-    "src/lib/lessons/pathway-lesson-catalog-sync.ts (catalog + allied + new-grad + scoped gold)",
-    "prisma/schema.prisma (PathwayLesson, ExamQuestion, FlashcardDeck)",
-    "Prisma skipped (no DATABASE_URL or query failed)"
-  ],
-  "nextAppRoutes": "src/app/(marketing), src/app/(student), src/app/(admin)",
-  "coreLibraries": [
-    "src/lib/exam-pathways/exam-product-registry.ts",
-    "src/lib/lessons/pathway-lesson-loader.ts",
-    "src/lib/entitlements/content-access-scope.ts"
+  "auditKind": "current_feature_inventory",
+  "items": [
+    {
+      "category": "FEATURE",
+      "subcategory": "routing",
+      "name": "Next App Router surfaces",
+      "legacyExists": false,
+      "currentExists": true,
+      "status": "matched",
+      "legacySourcePaths": [],
+      "currentSourcePaths": [
+        "nursenest-core/src/app"
+      ],
+      "routes": [
+        "(marketing)",
+        "(student)/app",
+        "(admin)/admin"
+      ],
+      "dataModelOrSource": "Next.js layouts",
+      "beforeCount": null,
+      "currentCount": 134,
+      "missingCount": null,
+      "confidence": "high",
+      "recommendedAction": "Maintain route integrity tests (marketing-route-integrity)",
+      "notes": "Learner .tsx pages under (student): ~71; admin: ~63 (capped scan)."
+    }
   ]
 }

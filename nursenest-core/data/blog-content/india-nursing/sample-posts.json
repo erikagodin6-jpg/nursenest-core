@@ -1,0 +1,116 @@
+{
+  "version": 1,
+  "countrySlug": "india",
+  "entries": [
+    {
+      "slug": "in-sample-001-how-to-become-nurse-india-en",
+      "title": "How to become a nurse in India — education and state registration (orientation)",
+      "language": "en",
+      "countryTargets": ["IN"],
+      "intentType": "informational",
+      "translationGroupId": "pilot-in-001",
+      "canonicalClusterId": "how-to-become-in",
+      "publicationPriority": 100,
+      "status": "sample"
+    },
+    {
+      "slug": "in-sample-002-nursing-exam-landscape-en",
+      "title": "Nursing exam landscape in India: entrance, council registration, and jobs",
+      "language": "en",
+      "countryTargets": ["IN"],
+      "intentType": "informational",
+      "translationGroupId": "pilot-in-002",
+      "canonicalClusterId": "nursing-exam-india",
+      "publicationPriority": 95,
+      "status": "sample"
+    },
+    {
+      "slug": "in-sample-003-state-registration-en",
+      "title": "State nursing council registration — document checklist mindset",
+      "language": "en",
+      "countryTargets": ["IN"],
+      "intentType": "informational",
+      "translationGroupId": "pilot-in-003",
+      "canonicalClusterId": "nurse-registration-india",
+      "publicationPriority": 90,
+      "status": "sample"
+    },
+    {
+      "slug": "in-sample-004-nclex-parallel-en",
+      "title": "NCLEX-RN for Indian nurses: eligibility vs exam prep",
+      "language": "en",
+      "countryTargets": ["IN"],
+      "intentType": "informational",
+      "translationGroupId": "pilot-in-004",
+      "canonicalClusterId": "nclex-indian-nurses",
+      "publicationPriority": 88,
+      "status": "sample"
+    },
+    {
+      "slug": "in-sample-005-gulf-pathway-en",
+      "title": "India to Gulf nursing licences: exams, verification, sponsorship framing",
+      "language": "en",
+      "countryTargets": ["IN"],
+      "intentType": "informational",
+      "translationGroupId": "pilot-in-005",
+      "canonicalClusterId": "work-abroad-india",
+      "publicationPriority": 85,
+      "status": "sample"
+    },
+    {
+      "slug": "in-sample-006-salary-jobs-en",
+      "title": "Nursing salary and employer exams in India — what changes by sector",
+      "language": "en",
+      "countryTargets": ["IN"],
+      "intentType": "informational",
+      "translationGroupId": "pilot-in-006",
+      "canonicalClusterId": "salary-jobs-india",
+      "publicationPriority": 80,
+      "status": "sample"
+    },
+    {
+      "slug": "in-sample-007-foreign-nurse-into-india-en",
+      "title": "Foreign-trained nurses and India: assessment framing (orientation only)",
+      "language": "en",
+      "countryTargets": ["IN"],
+      "intentType": "informational",
+      "translationGroupId": "pilot-in-007",
+      "canonicalClusterId": "foreign-nurse-india",
+      "publicationPriority": 78,
+      "status": "sample"
+    },
+    {
+      "slug": "in-sample-008-how-to-become-hi",
+      "title": "भारत में नर्स कैसे बनें — शिक्षा और राज्य पंजीकरण (अभिविन्यास)",
+      "language": "hi",
+      "countryTargets": ["IN"],
+      "intentType": "informational",
+      "translationGroupId": "pilot-in-008",
+      "canonicalClusterId": "how-to-become-in",
+      "publicationPriority": 92,
+      "status": "sample"
+    },
+    {
+      "slug": "in-sample-009-aiims-context-hi",
+      "title": "AIIMS नर्सिंग प्रवेश बनाम राज्य पंजीकरण — भ्रम से बचें",
+      "language": "hi",
+      "countryTargets": ["IN"],
+      "intentType": "informational",
+      "translationGroupId": "pilot-in-009",
+      "canonicalClusterId": "aiims-nursing-india",
+      "publicationPriority": 87,
+      "status": "sample"
+    },
+    {
+      "slug": "in-sample-010-canada-pathway-en",
+      "title": "India to Canada nursing pathway: province-first planning",
+      "language": "en",
+      "countryTargets": ["IN"],
+      "intentType": "informational",
+      "translationGroupId": "pilot-in-010",
+      "canonicalClusterId": "india-to-canada-nursing",
+      "publicationPriority": 82,
+      "status": "sample"
+    }
+  ]
+}

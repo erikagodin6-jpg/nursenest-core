@@ -1,17 +1,37 @@
 {
-  "generatedAt": "2026-04-14T17:56:51.860Z",
-  "dbConnected": false,
-  "legacySourcesScanned": [
-    "data/audit/legacy-lessons-inventory.json (summary)",
-    "data/audit/unimported-legacy-content.json",
-    "external/NurseNest (legacyRoot in inventories when present)"
+  "schemaVersion": 3,
+  "generatedAt": "2026-04-14T18:13:35.924Z",
+  "gitHead": "c6d27507",
+  "methodology": "Separated CONTENT parity from FEATURE parity. Counts from data/audit/unimported-legacy-content.json, pathway catalog sync, optional Prisma, and route scans — not claims without file evidence.",
+  "evidenceRootsScanned": [
+    "client/src",
+    "nursenest-core",
+    "external/NurseNest",
+    "data/audit"
   ],
-  "currentSourcesScanned": [
-    "src/lib/exam-pathways/exam-product-registry.ts (EXAM_PATHWAYS)",
-    "src/lib/lessons/pathway-lesson-catalog-sync.ts (catalog + allied + new-grad + scoped gold)",
-    "prisma/schema.prisma (PathwayLesson, ExamQuestion, FlashcardDeck)",
-    "Prisma skipped (no DATABASE_URL or query failed)"
-  ],
-  "pointer": "data/audit/legacy-feature-parity.json, data/audit/legacy-master-migration-map.md (if present)",
-  "legacyClient": "external/NurseNest/client (Vite) — see legacy-full-file-inventory.json"
+  "auditKind": "legacy_feature_inventory",
+  "items": [
+    {
+      "category": "FEATURE",
+      "subcategory": "monolith_client",
+      "name": "Legacy Vite client feature surface",
+      "legacyExists": true,
+      "currentExists": true,
+      "status": "obsolete",
+      "legacySourcePaths": [
+        "client/src"
+      ],
+      "currentSourcePaths": [
+        "nursenest-core/src"
+      ],
+      "routes": [],
+      "dataModelOrSource": "n/a",
+      "beforeCount": 450,
+      "currentCount": 134,
+      "missingCount": null,
+      "confidence": "high",
+      "recommendedAction": "Do not resurrect Vite shell; port behaviors into Next routes",
+      "notes": "Legacy client retained for reference per restoration map — not production."
+    }
+  ]
 }

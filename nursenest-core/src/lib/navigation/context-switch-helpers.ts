@@ -16,6 +16,7 @@ import {
   type GlobalLocaleCode,
   type GlobalRegionSlug,
 } from "@/lib/i18n/global-regions";
+import { getExamHubForGlobalRegion } from "@/lib/marketing/global-region-exam-hubs";
 import {
   listPublicExamPathways,
   buildExamPathwayPath,
@@ -69,6 +70,7 @@ const REGION_FLAG: Record<GlobalRegionSlug, string> = {
   ireland: "🇮🇪",
   "new-zealand": "🇳🇿",
   japan: "🇯🇵",
+  china: "🇨🇳",
   "south-korea": "🇰🇷",
   indonesia: "🇮🇩",
   vietnam: "🇻🇳",
@@ -76,6 +78,10 @@ const REGION_FLAG: Record<GlobalRegionSlug, string> = {
   italy: "🇮🇹",
   greece: "🇬🇷",
   germany: "🇩🇪",
+  france: "🇫🇷",
+  hungary: "🇭🇺",
+  portugal: "🇵🇹",
+  mexico: "🇲🇽",
   us: "🇺🇸",
   canada: "🇨🇦",
   uk: "🇬🇧",
@@ -98,6 +104,7 @@ const LOCALE_DISPLAY: Record<GlobalLocaleCode, { label: string; flag: string }> 
   ko: { label: "한국어", flag: "🇰🇷" },
   de: { label: "Deutsch", flag: "🇩🇪" },
   it: { label: "Italiano", flag: "🇮🇹" },
+  hu: { label: "Magyar", flag: "🇭🇺" },
   el: { label: "Ελληνικά", flag: "🇬🇷" },
 };
 
@@ -204,6 +211,11 @@ export function resolveCountrySwitch(
   if (matchingPathway) {
     const hubPath = buildExamPathwayPath(matchingPathway);
     return { href: hubPath, context: newContext, preservedPage: false };
+  }
+
+  const marketingHub = getExamHubForGlobalRegion(newRegion);
+  if (marketingHub) {
+    return { href: marketingHub.hubPath, context: newContext, preservedPage: false };
   }
 
   // Fallback to root for the locale
@@ -348,7 +360,9 @@ export function getRegionGroups(): RegionGroup[] {
       regions: [
         { slug: "pakistan", displayName: "Pakistan", flag: REGION_FLAG.pakistan },
         { slug: "bangladesh", displayName: "Bangladesh", flag: REGION_FLAG.bangladesh },
+        { slug: "china", displayName: "China", flag: REGION_FLAG.china },
         { slug: "singapore", displayName: "Singapore", flag: REGION_FLAG.singapore },
+        { slug: "south-korea", displayName: "South Korea", flag: REGION_FLAG["south-korea"] },
         { slug: "aus", displayName: "Australia", flag: REGION_FLAG.aus },
         { slug: "new-zealand", displayName: "New Zealand", flag: REGION_FLAG["new-zealand"] },
       ],

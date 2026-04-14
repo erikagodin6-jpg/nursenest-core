@@ -9,7 +9,8 @@
  *         admin-surface-parity.json, user-surface-parity.json,
  *         restoration-priority-queue.json, parity-final-status.json, parity-summary.md
  */
-import { existsSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from "node:fs";
+import { execSync } from "node:child_process";
+import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -32,6 +33,18 @@ const OUT = join(REPO_ROOT, "data", "audit");
 
 export type ParityStatus = "matched" | "partial" | "missing" | "intentionally_skipped" | "obsolete";
 export type Confidence = "high" | "medium" | "low";
+
+function lessonParityStatus(lc: Record<string, number>): ParityStatus {
+  const c = lc.C_notOnCatalogOrMaster ?? 0;
+  if (c > 3000) return "partial";
+  if (c > 0) return "partial";
+  return "matched";
+}
+
+function mediumConfidence(before: number | null, after: number | null): Confidence {
+  if (before == null || after == null) return "low";
+  return "medium";
+}
 
 export type ParityMatrixItem = {
   category: string;
@@ -99,22 +112,18 @@ function rel(p: string): string {
 async function main() {
   mkdirSync(OUT, { recursive: true });
   const generatedAt = new Date().toISOString();
-  const gitHead = (() => {
-    try {
-      const { execSync } = await import("node:child_process");
-      return execSync("git rev-parse --short HEAD", { cwd: REPO_ROOT, encoding: "utf8" }).trim();
-    } catch {
-      return "unknown";
-    }
-  })();
+  let gitHead = "unknown";
+  try {
+    gitHead = execSync("git rev-parse --short HEAD", { cwd: REPO_ROOT, encoding: "utf8" }).trim();
+  } catch {
+    /* ignore */
+  }
 
   const monorepo = getMonorepoRoot();
   const clientRoot = join(monorepo, "client", "src");
   const legacyMirror = join(monorepo, "external", "NurseNest");
   const studentApp = join(APP_ROOT, "src", "app", "(student)");
   const adminApp = join(APP_ROOT, "src", "app", "(admin)", "admin");
-  const marketingApp = join(APP_ROOT, "src", "app", "(marketing)");
-
   const unimported = safeReadJson(join(OUT, "unimported-legacy-content.json"));
   const counts = (unimported?.counts as Record<string, unknown> | undefined) ?? {};
   const legacyFlash = safeReadJson(join(OUT, "legacy-flashcards-inventory.json"));
@@ -135,8 +144,6 @@ async function main() {
   for (const pid of pathwayIds) {
     catalogLessonTotal += getCatalogPathwayLessonsSync(pid).length;
   }
-  const pathwayCount = listPublicExamways().length;
-  // fix typo - listPublicExamPathways
   const pathways = listPublicExamPathways();
 
   const programmaticSlugs = getAllProgrammaticSlugs().length;
@@ -382,11 +389,21 @@ async function main() {
   /** ---------- Content parity (legacy vs current) ---------- */
   const contentParityItems: ParityMatrixItem[] = [
     {
-      ...legacyContentItems[0],
-      name: "Lesson inventory parity (keys)",
+      category: "CONTENT",
       subcategory: "lessons",
+      name: "Lesson inventory parity (normalized keys)",
+      legacyExists: true,
+      currentExists: true,
       status: lessonParityStatus(lessonClass),
+      legacySourcePaths: ["data/audit/unimported-legacy-content.json", "client lesson maps"],
+      currentSourcePaths: ["pathway-lesson-catalog-sync.ts", "prisma PathwayLesson"],
+      routes: ["/{country}/{role}/{exam}/lessons/{slug}"],
+      dataModelOrSource: "Legacy content map keys vs catalog + DB",
+      beforeCount: totalLegacyLessonRows,
+      currentCount: catalogLessonTotal,
       missingCount: missingFromSnapshots,
+      confidence: "high",
+      recommendedAction: "RN-first chunked imports; dedupe; see restoration-priority-queue.json",
       notes: `Classification: A=${lessonClass.A_alreadyImportedMaterialized ?? "?"}, B_partial=${(lessonClass.B_partialMasterMapOnly ?? 0) + (lessonClass.B_partialMergeIntoExisting ?? 0)}, C=${lessonClass.C_notOnCatalogOrMaster ?? "?"}`,
     },
     {
@@ -495,7 +512,7 @@ async function main() {
       subcategory: sub,
       name,
       legacyExists: true,
-      currentExists: routes.every((r) => routeEvidenceExists(r)),
+      currentExists: existsSync(adminApp) && adminPageCount > 0,
       status,
       legacySourcePaths: ["external/NurseNest client admin (if present)", "docs/legacy-restoration-map.md"],
       currentSourcePaths: [rel(adminApp)],
@@ -516,7 +533,7 @@ async function main() {
       subcategory: sub,
       name,
       legacyExists: true,
-      currentExists: true,
+      currentExists: existsSync(studentApp) && learnerPageCount > 0,
       status,
       legacySourcePaths: [rel(clientRoot)],
       currentSourcePaths: [rel(studentApp)],
@@ -529,13 +546,6 @@ async function main() {
       recommendedAction: "End-to-end QA per release; compare weak-area flows to legacy",
       notes: "Subscriber /app routes — not marketing previews.",
     };
-  }
-
-  /** Loose check: segment exists under student app */
-  function routeEvidenceExists(pattern: string): boolean {
-    const seg = pattern.replace(/^\/app\/\.\.\//, "").split("/")[0];
-    if (!seg) return true;
-    return existsSync(studentApp);
   }
 
   /** ---------- Feature parity (high level) ---------- */
@@ -612,6 +622,7 @@ async function main() {
   };
 
   /** ---------- Final status ---------- */
+  const registrySnap = safeReadJson(join(OUT, "parity-registry-lesson-snapshot.json"));
   const parityFinalStatus = {
     ...meta,
     summary: {
@@ -627,9 +638,17 @@ async function main() {
       adminAppTsFilesScannedApprox: adminPageCount,
       databaseVerified: dbOk,
     },
+    structuralGateFromLessonAudit: registrySnap
+      ? {
+          structuralIncompleteLessonCount: registrySnap.structuralIncompleteLessonCount as number | undefined,
+          structuralIncompleteNonEmptyCount: registrySnap.structuralIncompleteNonEmptyCount as number | undefined,
+          sourceFile: "parity-registry-lesson-snapshot.json (from npm run audit:full-parity)",
+        }
+      : null,
     definitionOfDone: [
       "Trace: legacy source → current source → route → audit row (this matrix).",
       "If UI not routable or DB not wired, status cannot be matched.",
+      "Run `npm run audit:full-parity` before this script to refresh parity-registry-lesson-snapshot.json (structural gate).",
     ],
   };
 
@@ -638,7 +657,11 @@ async function main() {
   writeJson("current-content-inventory.json", { ...meta, auditKind: "current_content_inventory", items: currentContentItems });
   writeJson("legacy-feature-inventory.json", { ...meta, auditKind: "legacy_feature_inventory", items: legacyFeatureItems });
   writeJson("current-feature-inventory.json", { ...meta, auditKind: "current_feature_inventory", items: currentFeatureItems });
-  writeJson("legacy-vs-current-content-parity.json", { ...meta, auditKind: "content_parity", items: [...contentParityItems, ...legacyContentItems.slice(1)] });
+  writeJson("legacy-vs-current-content-parity.json", {
+    ...meta,
+    auditKind: "content_parity",
+    items: [...contentParityItems, ...legacyContentItems.filter((x) => x.name !== "Legacy lesson / content-map rows")],
+  });
   writeJson("legacy-vs-current-feature-parity.json", { ...meta, auditKind: "feature_parity", items: [...featureParityItems, ...legacyFeatureItems, ...currentFeatureItems] });
   writeJson("admin-surface-parity.json", { ...meta, auditKind: "admin_surface", items: adminChecklist });
   writeJson("user-surface-parity.json", { ...meta, auditKind: "user_surface", items: userChecklist });
@@ -708,23 +731,6 @@ ${meta.evidenceRootsScanned.map((e) => `- \`${e}\``).join("\n")}
 
 function writeJson(name: string, data: unknown) {
   writeFileSync(join(OUT, name), JSON.stringify(data, null, 2) + "\n");
-}
-
-function lessonParityStatus(lc: Record<string, number>): ParityStatus {
-  const c = lc.C_notOnCatalogOrMaster ?? 0;
-  if (c > 3000) return "partial";
-  if (c > 0) return "partial";
-  return "matched";
-}
-
-function mediumConfidence(before: number | null, after: number | null): Confidence {
-  if (before == null || after == null) return "low";
-  return "medium";
-}
-
-// fix function name typo
-function listPublicExamways(): never[] {
-  return [];
 }
 
 main().catch((e) => {
