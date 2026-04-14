@@ -1,0 +1,36 @@
+# Daily Stripe ↔ DB reconciliation. Set STRIPE_RECONCILE_CRON_APPLY=true on the app for apply mode.
+# Secrets: PRODUCTION_CRON_BASE_URL, CRON_SECRET
+name: scheduled-cron-stripe-daily
+
+on:
+  schedule:
+    - cron: "0 6 * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: scheduled-cron-stripe-daily
+  cancel-in-progress: false
+
+jobs:
+  reconcile:
+    runs-on: ubuntu-latest
+    steps:
+      - name: POST /api/cron/stripe-reconcile
+        env:
+          BASE: ${{ secrets.PRODUCTION_CRON_BASE_URL }}
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+        run: |
+          set -euo pipefail
+          test -n "${BASE:-}" && test -n "${CRON_SECRET:-}" || { echo "Missing PRODUCTION_CRON_BASE_URL or CRON_SECRET"; exit 1; }
+          curl -fsS -X POST "${BASE}/api/cron/stripe-reconcile" \
+            -H "Authorization: Bearer ${CRON_SECRET}" \
+            -H "Content-Type: application/json" \
+            -o stripe-reconcile.json
+          jq -e '.ok == true or .summary != null' stripe-reconcile.json
+      - name: Upload response
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stripe-reconcile-${{ github.run_id }}
+          path: stripe-reconcile.json
+          if-no-files-found: ignore

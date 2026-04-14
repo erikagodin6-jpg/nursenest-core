@@ -3,8 +3,8 @@ import type {
   PathwayLessonAudienceTier,
   PathwayLessonCountryScope,
   PathwayLessonExamRelevance,
-  PathwayLessonRecord,
 } from "@/lib/lessons/pathway-lesson-types";
+import type { PathwayLessonMarketingRecordChipsSource } from "@/lib/lessons/marketing-pathway-lesson-client-contract";
 
 function examRelevanceLabel(r: PathwayLessonExamRelevance): string {
   switch (r) {
@@ -41,13 +41,9 @@ function countryScopeLabel(s: PathwayLessonCountryScope): string {
   }
 }
 
-type ChipSource = Pick<
-  PathwayLessonRecord,
-  "topic" | "bodySystem" | "examRelevance" | "audienceTiers" | "countryScope"
->;
-
 /**
  * Standard metadata chips for pathway lesson cards — ties content to exam scope and category.
+ * Accepts metadata fields only (no `sections` / bodies) — see `PathwayLessonMarketingRecordChipsSource`.
  */
 export function PathwayLessonRecordChips({
   lesson,
@@ -55,7 +51,7 @@ export function PathwayLessonRecordChips({
   omitTopic = false,
   className = "",
 }: {
-  lesson: ChipSource;
+  lesson: PathwayLessonMarketingRecordChipsSource;
   omitTopic?: boolean;
   className?: string;
 }) {

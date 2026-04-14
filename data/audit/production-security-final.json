@@ -1,0 +1,159 @@
+{
+  "schemaVersion": 1,
+  "title": "Production security & paywall audit",
+  "generatedAt": "2026-04-14T17:06:09Z",
+  "note": "Repository audit + header hardening. Live HTTP/Stripe/CDN steps require operator execution on production; this file records evidence and blockers.",
+  "overallStatus": "BLOCKED_MERGE_CONFLICTS",
+  "overallSummary": "Local tree has unresolved merge conflicts (UU/AA paths). Do NOT deploy until main is clean, reviewed, and CI green. Cache-Control for /app and /api strengthened in next.config.ts (private, no-cache, no-store, must-revalidate).",
+  "repository": {
+    "branch": "main",
+    "localHead": "daf6bf1be98b4e8ba841787faffa685a17682ee5",
+    "originMain": "daf6bf1be98b4e8ba841787faffa685a17682ee5",
+    "originMatchesLocal": true,
+    "hasUncommittedChanges": true,
+    "mergeConflictsDetected": true,
+    "conflictPathsSample": [
+      "nursenest-core/src/app/(marketing)/(default)/[locale]/[slug]/[examCode]/lessons/page.tsx",
+      "nursenest-core/src/components/pathway-lessons/pathway-lessons-curriculum-hub.tsx"
+    ],
+    "deployReadiness": "NOT_READY"
+  },
+  "step1_deployTarget": {
+    "status": "PARTIAL_REPO_ONLY",
+    "githubMainUpToDate": true,
+    "digitalOceanAppPlatform": "VERIFY_IN_DO_UI — confirm repo erikagodin6-jpg/nursenest-core, branch main, source_dir nursenest-core",
+    "productionCommitHash": "REQUIRED_OPERATOR — compare App Platform deployment commit to git rev-parse origin/main after push",
+    "commands": [
+      "git fetch origin && git rev-parse HEAD && git rev-parse origin/main",
+      "On DO: App → Settings → Components → compare deployed commit to GitHub"
+    ]
+  },
+  "step2_cleanBuild": {
+    "status": "NOT_RUN_HERE",
+    "recommended": [
+      "Clear DO build cache / trigger deploy with clean build if platform supports it",
+      "npm ci && npm run build:verify (or CI pipeline) on the exact commit being deployed",
+      "prisma migrate deploy against production DATABASE_URL (maintenance window if needed)"
+    ],
+    "requiredEnv": [
+      "DATABASE_URL",
+      "STRIPE_SECRET_KEY",
+      "STRIPE_WEBHOOK_SECRET",
+      "AUTH_SECRET or NEXTAUTH_SECRET",
+      "CRON_SECRET (scheduled routes)"
+    ]
+  },
+  "step3_cachePurge": {
+    "status": "OPERATOR_REQUIRED",
+    "layers": [
+      {
+        "name": "DigitalOcean CDN / App Platform edge",
+        "action": "Redeploy or use DO purge tools if fronting static assets; confirm no shared cache for /app HTML"
+      },
+      {
+        "name": "Cloudflare",
+        "action": "If proxied: purge cache for site or purge by URL prefix /app /api after deploy"
+      },
+      {
+        "name": "Next.js",
+        "action": "New deployment invalidates build output; ISR not used for /app (force-dynamic layouts). On-demand revalidate for blog/marketing if applicable via existing cron routes"
+      }
+    ]
+  },
+  "step4_cacheHeaders": {
+    "paywallIntegrity": "SECURE_IN_REPO",
+    "nextConfigProduction": {
+      "/app": "Cache-Control: private, no-cache, no-store, must-revalidate",
+      "/app/:path*": "Cache-Control: private, no-cache, no-store, must-revalidate",
+      "/api/:path*": "Cache-Control: private, no-cache, no-store, must-revalidate"
+    },
+    "dynamicLayouts": "Learner and marketing route groups use export const dynamic = \"force-dynamic\" on key layouts (see codebase grep).",
+    "liveVerification": [
+      "curl -sI https://$HOST/app | grep -i cache-control",
+      "curl -sI https://$HOST/api/health | grep -i cache-control"
+    ]
+  },
+  "step5_searchEngineProtection": {
+    "robotsTxt": {
+      "route": "/robots.txt",
+      "disallows": ["/app/", "/admin/", "/api/", "/seo/"],
+      "status": "CONFIGURED"
+    },
+    "learnerAppMetadata": {
+      "robots": "noindex, nofollow on (student)/app/layout.tsx",
+      "status": "CONFIGURED"
+    },
+    "sitemap": {
+      "entry": "/sitemap.xml",
+      "policy": "Marketing/blog/tools URLs; /app /api /admin excluded per indexability-policy.ts",
+      "status": "CONFIGURED"
+    },
+    "marketingPathwayLessons": "Public lesson URLs are indexable with preview-safe metadata; premium sections gated by fullAccess in page (see paywall static tests)."
+  },
+  "step6_livePaywallBrowserTest": {
+    "status": "NOT_EXECUTED",
+    "checklist": [
+      "Anonymous: open marketing lesson URL — HTML must not contain full premium sections / rationales",
+      "Paid: sign in — /app lessons and questions show full content",
+      "View source / search for answer text — should not appear for anonymous on gated surfaces"
+    ]
+  },
+  "step7_apiLeakTest": {
+    "paywallIntegrity": "SECURE_BY_DESIGN",
+    "status": "STATIC_VERIFIED_CI",
+    "patterns": [
+      "/api/lessons — session required; resolveEntitlement + subscriber branch uses lessonAccessWhere",
+      "/api/questions — resolveEntitlement; subscriber path uses requireSubscriberSession (getUserAccess)",
+      "/api/questions/[id] — freemium path excludes rationale; 403 for rationale without sub",
+      "/api/practice-tests/* — requireSubscriberSession"
+    ],
+    "liveCurlExamples": [
+      "curl -sI -o /dev/null -w '%{http_code}' https://$HOST/api/questions",
+      "expect 401 without Authorization cookie"
+    ],
+    "automatedTests": "npm run test:paywall-surface-policy"
+  },
+  "step8_stripeEntitlement": {
+    "status": "CONFIGURED_IN_CODE",
+    "sourceOfTruth": "getUserAccess / resolveEntitlement (database + subscription rows)",
+    "cron": "POST /api/cron/stripe-reconcile with CRON_SECRET; STRIPE_RECONCILE_CRON_APPLY for apply mode",
+    "liveTest": "REQUIRED — checkout test mode or staging; verify past_due policy via ENTITLEMENT_PAST_DUE_POLICY"
+  },
+  "step9_cdnCacheLeak": {
+    "status": "NOT_EXECUTED",
+    "notes": "After deploy, verify incognito vs logged-out session for same /app URL returns login or empty shell without premium JSON in network tab from cache."
+  },
+  "step10_sitemapSeo": {
+    "status": "REVIEW_STATIC",
+    "checks": [
+      "Fetch /sitemap.xml — confirm no /app URLs",
+      "hreflang: verify on localized marketing pages per i18n policy"
+    ]
+  },
+  "remainingRisks": [
+    {
+      "severity": "HIGH",
+      "risk": "Unresolved git merge conflicts — deploying from this tree could ship broken or partial code.",
+      "mitigation": "Resolve all UU/AA files, run typecheck and test:paywall-surface-policy, merge to main, then deploy."
+    },
+    {
+      "severity": "MEDIUM",
+      "risk": "Third-party CDN not purged after deploy could serve old marketing HTML briefly.",
+      "mitigation": "Purge edge cache for hostname after production promotion; confirm Cache-Control on responses."
+    },
+    {
+      "severity": "LOW",
+      "risk": "Marketing pathway lessons intentionally expose preview content for SEO; answers must remain in subscriber-only APIs and /app.",
+      "mitigation": "Periodic manual spot-check + API curl tests after releases."
+    }
+  ],
+  "confirmation": {
+    "latestCodeLive": false,
+    "allCachesCleared": false,
+    "zeroPaywallBypassPossible": "Not proven in production — architecture and tests support SECURE; live pentest pending",
+    "zeroApiLeaks": "Not proven against production — handlers enforce server-side entitlement",
+    "zeroCachedPremiumContent": "Mitigated by headers + force-dynamic; live CDN purge recommended",
+    "stripeEntitlementsWorking": "Requires live checkout test",
+    "seoSafe": "robots + sitemap policy consistent with indexability-policy.ts"
+  }
+}

@@ -1,19 +1,18 @@
 import { BlogImageStatus, JobStatus } from "@prisma/client";
 import { stemHash } from "@/lib/content/stem-hash";
+import { CronAdvisoryLock } from "@/lib/cron/cron-advisory-lock";
 import { prisma } from "@/lib/db";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { productEvent } from "@/lib/observability/product-events";
 
 const BATCH = 5;
-/** Stable advisory lock id for cron worker overlap prevention (single integer key). */
-const CRON_ADVISORY_LOCK = 928_374_651;
 
 /**
  * Process a small batch of pending jobs (idempotent). Safe to call from cron.
  * Add handlers in `handleJob` as you introduce automation.
  */
 export async function processPendingJobs(): Promise<{ processed: number; failed: number }> {
-  await prisma.$executeRaw`SELECT pg_advisory_lock(${CRON_ADVISORY_LOCK})`;
+  await prisma.$executeRaw`SELECT pg_advisory_lock(${CronAdvisoryLock.backgroundJobs})`;
   let processed = 0;
   let failed = 0;
   try {
@@ -56,7 +55,7 @@ export async function processPendingJobs(): Promise<{ processed: number; failed:
     productEvent("cron_jobs_batch", { processed, failed });
     return { processed, failed };
   } finally {
-    await prisma.$executeRaw`SELECT pg_advisory_unlock(${CRON_ADVISORY_LOCK})`;
+    await prisma.$executeRaw`SELECT pg_advisory_unlock(${CronAdvisoryLock.backgroundJobs})`;
   }
 }
 

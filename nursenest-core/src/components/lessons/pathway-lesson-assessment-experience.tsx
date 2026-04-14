@@ -1,17 +1,17 @@
 "use client";
 
-import { useEffect, useMemo, useState, type ReactNode } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { PathwayLessonQuizzes } from "@/components/lessons/pathway-lesson-quizzes";
 import {
   readLearnerStudyDefaults,
   writeLearnerStudyDefaults,
 } from "@/lib/student/learner-study-defaults";
 import type { PathwayLessonProgressStatus } from "@/lib/lessons/pathway-lesson-progress";
-import type { PathwayLessonQuizItem } from "@/lib/lessons/pathway-lesson-types";
 import {
   PATHWAY_LESSON_PROGRESS_EVENT,
   type PathwayLessonProgressEventDetail,
 } from "@/lib/lessons/pathway-lesson-progress-events";
+import type { MarketingPathwayLessonAssessmentShellProps } from "@/lib/lessons/marketing-pathway-lesson-client-contract";
 
 function storageUserId(userId: string): string {
   const trimmed = userId.trim();
@@ -32,17 +32,7 @@ export function PathwayLessonAssessmentExperience({
   fullAccess,
   assessmentsEnabled = true,
   children,
-}: {
-  userId: string;
-  pathwayId: string;
-  lessonSlug: string;
-  initialProgress: PathwayLessonProgressStatus;
-  preTest?: PathwayLessonQuizItem[];
-  postTest?: PathwayLessonQuizItem[];
-  fullAccess: boolean;
-  assessmentsEnabled?: boolean;
-  children: ReactNode;
-}) {
+}: MarketingPathwayLessonAssessmentShellProps) {
   const hasPre = Boolean(preTest?.length);
   const hasPost = Boolean(postTest?.length);
   const hasAnyAssessments = hasPre || hasPost;

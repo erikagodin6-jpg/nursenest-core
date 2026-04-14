@@ -285,7 +285,7 @@ export default async function AlliedHealthSlugLessonDetailPage({ params }: Props
       ) : null}
       <div className="mt-4 space-y-2">
         <LessonQualityNotice tier={lessonQuality.tier} wordCount={lessonQuality.wordCount} />
-        <PathwayLessonQuickReview bullets={quickReviewBullets} />
+        <PathwayLessonQuickReview quickReviewLines={quickReviewBullets} />
       </div>
       {lesson.memoryAnchor ? (
         <div className="mt-4">

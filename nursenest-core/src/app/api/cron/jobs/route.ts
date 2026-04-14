@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { processPendingJobs } from "@/lib/jobs/process-pending";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 /**
  * Background job worker — call from your scheduler (e.g. every minute) with Authorization header.
@@ -14,6 +15,8 @@ export async function POST(req: Request) {
     }
   }
 
+  const started = Date.now();
   const result = await processPendingJobs();
+  safeServerLog("cron", "background_jobs_batch", { durationMs: Date.now() - started, ...result });
   return NextResponse.json({ ok: true, ...result });
 }

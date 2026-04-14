@@ -1,0 +1,34 @@
+# Weekly repo-local audits (no production HTTP). Fails the job if an audit exits non-zero.
+name: weekly-static-audits
+
+on:
+  schedule:
+    - cron: "0 8 * * 0"
+  workflow_dispatch:
+
+jobs:
+  audits:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: nursenest-core
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: nursenest-core/package-lock.json
+      - run: npm ci
+      - name: Internal link audit
+        run: npm run audit:internal-links
+      - name: Paywall surface audit
+        run: npm run audit:paywall-security
+      - name: Upload audit log if present
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: weekly-audit-failure-${{ github.run_id }}
+          path: |
+            nursenest-core/data/audit
+          if-no-files-found: ignore

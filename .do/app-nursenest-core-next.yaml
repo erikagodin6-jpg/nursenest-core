@@ -59,3 +59,5 @@ services:
       - key: AUTH_URL
         scope: RUN_TIME
         type: GENERAL
+      # Cron HTTP: set CRON_SECRET (SECRET) and call POST /api/cron/blog-batch-schedule, /api/cron/jobs, /api/cron/stripe-reconcile
+      # from a Scheduled Job or external scheduler (see nursenest-core/docs/cron-pipelines.md). Optional: STRIPE_RECONCILE_CRON_APPLY=true.

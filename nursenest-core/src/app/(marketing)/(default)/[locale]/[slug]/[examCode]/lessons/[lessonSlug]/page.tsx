@@ -72,6 +72,17 @@ import { ExamTakeawaysBlock } from "@/components/lessons/exam-takeaways-block";
 import { PathwayLessonCommonTrapsStrip, PathwayLessonMemoryAnchorStrip } from "@/components/lessons/pathway-lesson-study-strips";
 import { lessonHasExamTakeaways } from "@/lib/lessons/exam-takeaways-items";
 import { resolvePathwayLessonBankAssessments } from "@/lib/lessons/lesson-bank-assessment-selection";
+import {
+  pickPathwayLessonMarketingRecordChipsSource,
+  toPathwayLessonDeferredServerSnapshot,
+} from "@/lib/lessons/marketing-pathway-lesson-client-contract";
+
+/**
+ * Paywall: full `PathwayLessonRecord` / `sections[]` stay in this server component. Gate with
+ * `canViewFullPathwayLesson` / `visibleSectionsForLesson` before rendering; pass only thin props into
+ * `"use client"` surfaces (see `marketing-pathway-lesson-client-contract.ts`). Subscriber-only supplements
+ * (takeaways, memory anchor, traps) render only when `fullAccess` is true.
+ */
 
 /** Avoid enumerating every lesson at build (large `.next` output + ENOSPC on small disks). */
 export const dynamic = "force-dynamic";
@@ -272,7 +283,9 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
           lessonTitle={displayLessonTitle}
           lessonTopic={lesson.topic}
           bodySystem={lesson.bodySystem}
-          metaChips={<PathwayLessonRecordChips lesson={lesson} omitTopic />}
+          metaChips={
+            <PathwayLessonRecordChips lesson={pickPathwayLessonMarketingRecordChipsSource(lesson)} omitTopic />
+          }
           trailing={
             userId && fullAccess ? (
               <PathwayLessonProgressBadgeLive
@@ -292,7 +305,7 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
         <div className="mt-4 space-y-2">
           <PremiumLessonPublishNotice validation={lesson.premiumValidation} />
           <LessonQualityNotice tier={lessonQuality.tier} wordCount={lessonQuality.wordCount} />
-          <PathwayLessonQuickReview bullets={quickReviewBullets} />
+          <PathwayLessonQuickReview quickReviewLines={quickReviewBullets} />
         </div>
         {fullAccess && lesson.memoryAnchor ? (
           <div className="mt-4 max-w-5xl">
@@ -451,7 +464,7 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
         <Suspense fallback={<PathwayLessonDetailDeferredSkeleton />}>
           <PathwayLessonDetailDeferred
             pathway={pathway}
-            lesson={previewLesson}
+            lesson={toPathwayLessonDeferredServerSnapshot(lesson)}
             lessonsBasePath={base}
             contentLocale={lessonContentLocale}
           />

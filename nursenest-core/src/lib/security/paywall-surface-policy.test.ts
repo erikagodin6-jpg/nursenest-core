@@ -15,9 +15,9 @@ const here = dirname(fileURLToPath(import.meta.url));
 const nursenestCoreRoot = join(here, "..", "..", "..");
 
 describe("paywall surface policy (static checks)", () => {
-  it("next.config production headers include private no-store for /app routes", () => {
+  it("next.config production headers include private no-cache no-store for /app routes", () => {
     const nextConfig = readFileSync(join(nursenestCoreRoot, "next.config.ts"), "utf8");
-    assert.match(nextConfig, /private,\s*no-store,\s*must-revalidate/);
+    assert.match(nextConfig, /private,\s*no-cache,\s*no-store,\s*must-revalidate/);
     assert.match(nextConfig, /["']\/app["']/);
     assert.match(nextConfig, /["']\/app\/:path\*["']/);
   });
@@ -42,6 +42,24 @@ describe("paywall surface policy (static checks)", () => {
     assert.match(pt, /requireSubscriberSession/);
   });
 
+  it("subscriber gate resolves entitlements from DB via getUserAccess", () => {
+    const gate = readFileSync(
+      join(nursenestCoreRoot, "src", "lib", "entitlements", "require-subscriber-session.ts"),
+      "utf8",
+    );
+    assert.match(gate, /getUserAccess/);
+    assert.match(gate, /accessScopeFromUserAccess/);
+
+    const resolve = readFileSync(join(nursenestCoreRoot, "src", "lib", "entitlements", "resolve-entitlement.ts"), "utf8");
+    assert.match(resolve, /getUserAccess/);
+  });
+
+  it("production next.config sets no-cache no-store for /api to avoid shared cache leaks", () => {
+    const nextConfig = readFileSync(join(nursenestCoreRoot, "next.config.ts"), "utf8");
+    assert.match(nextConfig, /source:\s*"\/api\/:path\*"/);
+    assert.match(nextConfig, /private,\s*no-cache,\s*no-store,\s*must-revalidate/);
+  });
+
   it("marketing pathway lesson page gates teaching supplements with fullAccess (ExamTakeaways / memory / traps)", () => {
     const page = readFileSync(
       join(
@@ -62,6 +80,28 @@ describe("paywall surface policy (static checks)", () => {
     assert.match(page, /fullAccess\s*&&\s*lessonHasExamTakeaways/);
     assert.match(page, /fullAccess\s*&&\s*lesson\.memoryAnchor/);
     assert.match(page, /fullAccess\s*&&\s*lesson\.studyCommonTraps/);
+  });
+
+  it("marketing pathway lesson page uses thin client/deferred helpers (no full record across boundaries)", () => {
+    const page = readFileSync(
+      join(
+        nursenestCoreRoot,
+        "src",
+        "app",
+        "(marketing)",
+        "(default)",
+        "[locale]",
+        "[slug]",
+        "[examCode]",
+        "lessons",
+        "[lessonSlug]",
+        "page.tsx",
+      ),
+      "utf8",
+    );
+    assert.match(page, /toPathwayLessonDeferredServerSnapshot\(/);
+    assert.match(page, /pickPathwayLessonMarketingRecordChipsSource\(/);
+    assert.match(page, /<PathwayLessonQuickReview\s+quickReviewLines=/);
   });
 });
 

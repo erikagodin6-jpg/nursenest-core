@@ -16,7 +16,9 @@ import {
 } from "@/lib/learner/study-loop-recommendations";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import { pathwayAllowsCatAdaptiveStart } from "@/lib/exam-pathways/pathway-entitlements";
+import type { MarketingPathwayLessonActionsClientProps } from "@/lib/lessons/marketing-pathway-lesson-client-contract";
 
+/** Ids + flags only — no lesson bodies (contract: `marketing-pathway-lesson-client-contract.ts`). */
 export function PathwayLessonActions({
   pathwayId,
   lessonSlug,
@@ -25,15 +27,7 @@ export function PathwayLessonActions({
   userId,
   canMarkComplete,
   initialProgress = "not_started",
-}: {
-  pathwayId: string;
-  lessonSlug: string;
-  topicCode?: string | null;
-  topicLabel?: string | null;
-  userId: string;
-  canMarkComplete: boolean;
-  initialProgress?: PathwayLessonProgressStatus;
-}) {
+}: MarketingPathwayLessonActionsClientProps) {
   const { t } = useMarketingI18n();
   const [progress, setProgress] = useState<PathwayLessonProgressStatus>(initialProgress);
   const [pending, setPending] = useState<"idle" | "complete" | "uncomplete">("idle");

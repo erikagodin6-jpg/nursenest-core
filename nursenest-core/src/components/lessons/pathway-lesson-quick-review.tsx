@@ -1,10 +1,15 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import type { MarketingPathwayLessonQuickReviewClientProps } from "@/lib/lessons/marketing-pathway-lesson-client-contract";
 
-export function PathwayLessonQuickReview({ bullets }: { bullets: string[] }) {
+/**
+ * Marketing-only condensed review. Props are intentionally thin — full `PathwayLessonRecord` / `sections`
+ * must never be passed here (see `marketing-pathway-lesson-client-contract.ts`).
+ */
+export function PathwayLessonQuickReview({ quickReviewLines }: MarketingPathwayLessonQuickReviewClientProps) {
   const [on, setOn] = useState(false);
-  const safe = useMemo(() => bullets.filter(Boolean), [bullets]);
+  const safe = useMemo(() => [...quickReviewLines].filter(Boolean), [quickReviewLines]);
   if (safe.length === 0) return null;
 
   return (

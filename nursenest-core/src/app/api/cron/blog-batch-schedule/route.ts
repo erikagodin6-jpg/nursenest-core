@@ -2,6 +2,8 @@ import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 import { ensureDailyBlogQueue, processDueBlogBatchScheduleItems } from "@/lib/blog/blog-batch-schedule";
 import { promoteScheduledBlogPosts } from "@/lib/blog/blog-publish-scheduler";
+import { CronAdvisoryLock, releaseCronAdvisoryLock, tryAcquireCronAdvisoryLock } from "@/lib/cron/cron-advisory-lock";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 /**
  * Generates and schedules blog posts from **active** topic batch schedules.
@@ -21,17 +23,31 @@ export async function POST(req: Request) {
     }
   }
 
-  const [queue, result, promoted] = await Promise.all([
-    ensureDailyBlogQueue(),
-    processDueBlogBatchScheduleItems(),
-    promoteScheduledBlogPosts(),
-  ]);
-  revalidatePath("/blog");
-  revalidatePath("/blog", "layout");
-  revalidatePath("/sitemap.xml");
-  revalidatePath("/sitemaps/blog.xml");
-  revalidatePath("/sitemaps/localized-blog.xml");
-  return NextResponse.json({
+  const lockId = CronAdvisoryLock.blogBatchSchedule;
+  const acquired = await tryAcquireCronAdvisoryLock(lockId);
+  if (!acquired) {
+    safeServerLog("cron", "blog_batch_schedule_skipped_overlap", {});
+    return NextResponse.json({ ok: true, skipped: true, reason: "advisory_lock_held" });
+  }
+
+  const started = Date.now();
+  try {
+    const [queue, result, promoted] = await Promise.all([
+      ensureDailyBlogQueue(),
+      processDueBlogBatchScheduleItems(),
+      promoteScheduledBlogPosts(),
+    ]);
+    revalidatePath("/blog");
+    revalidatePath("/blog", "layout");
+    revalidatePath("/sitemap.xml");
+    revalidatePath("/sitemaps/blog.xml");
+    revalidatePath("/sitemaps/localized-blog.xml");
+    safeServerLog("cron", "blog_batch_schedule_complete", {
+      durationMs: Date.now() - started,
+      promoted: promoted.count,
+      processedItems: result.processedItems,
+    });
+    return NextResponse.json({
     ok: true,
     dailyPublishingConfirmed: queue.dailyCadence >= 1 && queue.dailyCadence <= 3,
     dailyCadence: queue.dailyCadence,
@@ -49,5 +65,8 @@ export async function POST(req: Request) {
     publishFailedCount: promoted.failures.length,
     publishFailures: promoted.failures,
     publishSkippedMaxRetries: promoted.skippedMaxRetries,
-  });
+    });
+  } finally {
+    await releaseCronAdvisoryLock(lockId);
+  }
 }

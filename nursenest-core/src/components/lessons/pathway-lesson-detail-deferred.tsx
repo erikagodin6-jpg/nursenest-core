@@ -7,15 +7,15 @@ import {
   getRelatedPathwayLessons,
   RELATED_PATHWAY_LESSONS_LIMIT,
 } from "@/lib/lessons/pathway-lesson-loader";
-import {
-  mergeRelatedLessonDisplayList,
-  pathwayLessonHasRenderableHubSlug,
-  type PathwayLessonRecord,
-} from "@/lib/lessons/pathway-lesson-types";
+import { mergeRelatedLessonDisplayList, pathwayLessonHasRenderableHubSlug } from "@/lib/lessons/pathway-lesson-types";
+import type { PathwayLessonDeferredServerSnapshot } from "@/lib/lessons/marketing-pathway-lesson-client-contract";
 
 /**
  * Secondary lesson-detail payload: related questions + study-loop CTAs.
  * Render inside `<Suspense>` so the main article shell can stream first under load.
+ *
+ * **`lesson` is a server-only snapshot without `sections[]`** — built via `toPathwayLessonDeferredServerSnapshot`
+ * so full article bodies never cross this boundary.
  */
 export async function PathwayLessonDetailDeferred({
   pathway,
@@ -24,7 +24,7 @@ export async function PathwayLessonDetailDeferred({
   contentLocale,
 }: {
   pathway: ExamPathwayDefinition;
-  lesson: PathwayLessonRecord;
+  lesson: PathwayLessonDeferredServerSnapshot;
   lessonsBasePath: string;
   contentLocale: string;
 }) {

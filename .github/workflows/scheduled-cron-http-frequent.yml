@@ -1,0 +1,49 @@
+# Calls production HTTP cron routes (blog scheduler + background job worker).
+# Requires repository secrets: PRODUCTION_CRON_BASE_URL (no trailing slash), CRON_SECRET.
+name: scheduled-cron-http-frequent
+
+on:
+  schedule:
+    # Every 10 minutes UTC — align with blog throughput docs (5–10 min cadence).
+    - cron: "*/10 * * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: scheduled-cron-http-frequent
+  cancel-in-progress: false
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: POST /api/cron/blog-batch-schedule
+        env:
+          BASE: ${{ secrets.PRODUCTION_CRON_BASE_URL }}
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+        run: |
+          set -euo pipefail
+          test -n "${BASE:-}" && test -n "${CRON_SECRET:-}" || { echo "Missing PRODUCTION_CRON_BASE_URL or CRON_SECRET"; exit 1; }
+          curl -fsS -X POST "${BASE}/api/cron/blog-batch-schedule" \
+            -H "Authorization: Bearer ${CRON_SECRET}" \
+            -H "Content-Type: application/json" \
+            -o blog-cron.json
+          jq -e '.ok == true or .skipped == true' blog-cron.json
+      - name: POST /api/cron/jobs
+        env:
+          BASE: ${{ secrets.PRODUCTION_CRON_BASE_URL }}
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+        run: |
+          curl -fsS -X POST "${BASE}/api/cron/jobs" \
+            -H "Authorization: Bearer ${CRON_SECRET}" \
+            -H "Content-Type: application/json" \
+            -o jobs-cron.json
+          jq -e '.ok == true' jobs-cron.json
+      - name: Upload cron JSON artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cron-frequent-${{ github.run_id }}
+          path: |
+            blog-cron.json
+            jobs-cron.json
+          if-no-files-found: ignore

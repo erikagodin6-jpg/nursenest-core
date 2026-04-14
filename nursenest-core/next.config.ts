@@ -163,11 +163,34 @@ const nextConfig: NextConfig = {
        */
       {
         source: "/app",
-        headers: [{ key: "Cache-Control", value: "private, no-store, must-revalidate" }],
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "private, no-cache, no-store, must-revalidate",
+          },
+        ],
       },
       {
         source: "/app/:path*",
-        headers: [{ key: "Cache-Control", value: "private, no-store, must-revalidate" }],
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "private, no-cache, no-store, must-revalidate",
+          },
+        ],
+      },
+      /**
+       * Authenticated API responses must not be cached by shared proxies/CDNs.
+       * Route handlers still set per-response headers where needed; this is a baseline.
+       */
+      {
+        source: "/api/:path*",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "private, no-cache, no-store, must-revalidate",
+          },
+        ],
       },
     ];
   },
