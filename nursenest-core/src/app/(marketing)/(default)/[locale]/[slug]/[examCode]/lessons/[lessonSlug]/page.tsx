@@ -76,8 +76,9 @@ import { resolvePathwayLessonBankAssessments } from "@/lib/lessons/lesson-bank-a
 /** Avoid enumerating every lesson at build (large `.next` output + ENOSPC on small disks). */
 export const dynamic = "force-dynamic";
 export const dynamicParams = true;
-export const revalidate = 86400;
-/** Room for lesson body + related queries on cold DB under traffic spikes (Vercel Fluid / Node). */
+/**
+ * Per-request render (no shared ISR snapshot). `maxDuration` allows cold DB + related queries under load.
+ */
 export const maxDuration = 60;
 
 type Props = {

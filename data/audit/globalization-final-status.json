@@ -1,9 +1,16 @@
 {
-  "generatedAt": "2026-04-14T18:00:00.000Z",
+  "generatedAt": "2026-04-14T16:43:24.882Z",
   "localesSupportedCompilePipeline": 22,
   "countriesInMatrix": 14,
+  "englishBaselineUiKeys": 20700,
+  "educationalOverlayJsonFiles": 35,
+  "uiKeyParity": {
+    "localesAtOrAbove95PercentOfEn": 22,
+    "localesWithParityWarnings": 0,
+    "note": "Heuristic from merged `public/i18n/{locale}.json` key counts vs `en.json`. Does not measure semantic translation quality."
+  },
   "percentTranslated": null,
-  "missingTranslations": "Use `npm run i18n:validate` and marketing CSV reports under `tools/i18n/reports/` for per-locale gaps; educational overlays are partial (fr/es/tl sample present).",
+  "missingTranslations": "Use `npm run i18n:validate` and marketing CSV reports under `tools/i18n/reports/` for per-locale gaps; educational overlays are partial (fr/es/tl sample present). Run `npm run i18n:global-progress` to refresh `data/audit/translation-progress-global.json`.",
   "examMappingCompleteness": "Authoritative entries in `data/config/global-locale-matrix.json` — not yet wired to all UI surfaces.",
   "seoReadiness": "PARTIAL — canonical + sitemaps exist; full hreflang matrix pending incremental implementation.",
   "paywallIntegrity": "SERVER_ENFORCED — revalidate when new localized learner routes ship.",

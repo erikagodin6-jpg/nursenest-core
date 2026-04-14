@@ -1,15 +1,156 @@
 {
   "schemaVersion": 1,
-  "generatedAt": null,
+  "generatedAt": "2026-04-14T16:43:24.882Z",
   "lastBatchIndex": 0,
   "batchSize": 25,
-  "status": "idle",
+  "status": "completed_scan",
   "totals": {
-    "localesScanned": 0,
-    "overlayFilesChecked": 0,
+    "localesScanned": 22,
+    "overlayFilesChecked": 35,
     "uiKeyParityWarnings": 0,
-    "marketsInMatrix": 14
+    "marketsInMatrix": 14,
+    "englishBaselineKeys": 20700
   },
-  "batches": [],
-  "note": "Populated by `scripts/i18n/run-global-translation.ts`. Safe to reset — overlays and source TS remain canonical."
+  "batches": [
+    {
+      "index": 0,
+      "locales": [
+        "en",
+        "fr",
+        "tl",
+        "hi",
+        "es",
+        "zh",
+        "zh-tw",
+        "ar",
+        "ko",
+        "pt",
+        "pa",
+        "vi",
+        "ht",
+        "ur",
+        "ja",
+        "fa",
+        "de",
+        "th",
+        "tr",
+        "id",
+        "it",
+        "ru"
+      ],
+      "localeStats": [
+        {
+          "locale": "en",
+          "mergedKeys": 20700,
+          "fileExists": true
+        },
+        {
+          "locale": "fr",
+          "mergedKeys": 20700,
+          "fileExists": true
+        },
+        {
+          "locale": "tl",
+          "mergedKeys": 20700,
+          "fileExists": true
+        },
+        {
+          "locale": "hi",
+          "mergedKeys": 20700,
+          "fileExists": true
+        },
+        {
+          "locale": "es",
+          "mergedKeys": 20700,
+          "fileExists": true
+        },
+        {
+          "locale": "zh",
+          "mergedKeys": 20700,
+          "fileExists": true
+        },
+        {
+          "locale": "zh-tw",
+          "mergedKeys": 20700,
+          "fileExists": true
+        },
+        {
+          "locale": "ar",
+          "mergedKeys": 20700,
+          "fileExists": true
+        },
+        {
+          "locale": "ko",
+          "mergedKeys": 20700,
+          "fileExists": true
+        },
+        {
+          "locale": "pt",
+          "mergedKeys": 20700,
+          "fileExists": true
+        },
+        {
+          "locale": "pa",
+          "mergedKeys": 20700,
+          "fileExists": true
+        },
+        {
+          "locale": "vi",
+          "mergedKeys": 20700,
+          "fileExists": true
+        },
+        {
+          "locale": "ht",
+          "mergedKeys": 20700,
+          "fileExists": true
+        },
+        {
+          "locale": "ur",
+          "mergedKeys": 20700,
+          "fileExists": true
+        },
+        {
+          "locale": "ja",
+          "mergedKeys": 20700,
+          "fileExists": true
+        },
+        {
+          "locale": "fa",
+          "mergedKeys": 20700,
+          "fileExists": true
+        },
+        {
+          "locale": "de",
+          "mergedKeys": 20700,
+          "fileExists": true
+        },
+        {
+          "locale": "th",
+          "mergedKeys": 20700,
+          "fileExists": true
+        },
+        {
+          "locale": "tr",
+          "mergedKeys": 20700,
+          "fileExists": true
+        },
+        {
+          "locale": "id",
+          "mergedKeys": 20700,
+          "fileExists": true
+        },
+        {
+          "locale": "it",
+          "mergedKeys": 20700,
+          "fileExists": true
+        },
+        {
+          "locale": "ru",
+          "mergedKeys": 20700,
+          "fileExists": true
+        }
+      ]
+    }
+  ],
+  "note": "Parity warning = merged key count < 95% of en.json (rough heuristic). Clinical accuracy requires human QA."
 }

@@ -1,0 +1,84 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-04-14T16:45:52Z",
+  "summary": "Subscriber and freemium boundaries are enforced server-side for APIs and app routes. Marketing pathway lessons intentionally expose a bounded preview (first section, word-clamped) to signed-out users for SEO; full bodies are not rendered until entitlement passes. Residual risks are mostly operational (future routes must keep the same patterns).",
+  "googleIndexLeak": {
+    "status": "MITIGATED_WITH_INTENTIONAL_PUBLIC_PREVIEW",
+    "routes": {
+      "/app/*": {
+        "finding": "Middleware `authorized` in `src/lib/auth-middleware.ts` requires a signed-in user for `/app`. Unauthenticated requests do not reach lesson HTML.",
+        "robots": "`src/app/(student)/app/layout.tsx` exports default `robots: { index: false, follow: false }` for the whole learner segment (covers pages without their own `generateMetadata`, e.g. `/app/lessons/[id]`).",
+        "note": "Many leaf routes also set `robots` explicitly."
+      },
+      "/{country}/{role}/{exam}/lessons/*": {
+        "finding": "Marketing pathway lesson detail uses `visibleSectionsForLesson` (`src/lib/lessons/pathway-lesson-visible-sections.ts`) — locked users get first section only with ~180-word body clamp; not full lesson.",
+        "seo": "`generateMetadata` sets canonical + conditional `robots` for incomplete/premium-gated catalog quality (`page.tsx` in marketing pathway lesson).",
+        "doc": "See `docs/pathway-lesson-catalog-security.md`."
+      },
+      "/blog/*": {
+        "finding": "Public marketing content by design (ISR `revalidate` on slug pages). Not a subscriber paywall surface."
+      },
+      "/practice-tests/*": {
+        "finding": "Learner routes under `/app/(learner)/practice-tests/*` are behind `/app` auth; metadata uses `noindex` where defined."
+      }
+    }
+  },
+  "cdnIsrCache": {
+    "status": "HARDENED_APP_SEGMENT",
+    "findings": [
+      "Marketing blog and some hubs use ISR (`revalidate`) for public SEO — expected.",
+      "Pathway marketing lesson detail is `dynamic = 'force-dynamic'` (no static snapshot of per-user HTML). Removed redundant `revalidate = 86400` from that page to avoid implying ISR."
+    ],
+    "fixes": [
+      "Production `next.config.ts` `headers()` adds `Cache-Control: private, no-store, must-revalidate` for `/app/:path*` to discourage shared edge/CDN caching of authenticated HTML."
+    ]
+  },
+  "directLinkSharing": {
+    "status": "MITIGATED",
+    "appLessonDetail": "`/app/lessons/[id]` requires session (middleware); without subscription, page returns paywall UI before loading full `contentItem` / pathway body (`lessons/[id]/page.tsx`).",
+    "marketingLesson": "Signed-out visitors see preview-only sections only; full access uses `canViewFullPathwayLesson` + pathway match."
+  },
+  "apiDataLeak": {
+    "status": "REVIEWED_OK_FOR_DOCUMENTED_ROUTES",
+    "GET /api/lessons": {
+      "auth": "401 without session",
+      "bodyFields": "List responses select `id`, `slug`, `title`, `summary` only — no `content` JSON (`api/lessons/route.ts`)."
+    },
+    "GET /api/questions/[id]": {
+      "auth": "401 without session",
+      "subscriber": "Rationale only when entitled + `includeRationale`; otherwise preview fields",
+      "freemium": "Preview stem/options; 403 for rationale requests; `rationaleLocked`"
+    },
+    "GET /api/practice-tests*": {
+      "auth": "`requireSubscriberSession` on list/detail paths reviewed (`api/practice-tests/route.ts`, `[id]/route.ts`)."
+    },
+    "POST /api/lessons/pathway-progress": {
+      "auth": "Requires subscriber + `canViewFullPathwayLesson` (`pathway-progress/route.ts`)."
+    },
+    "residual": "New API routes must repeat: session → entitlement → minimal `select` — audit any future public GET that touches `contentItem.content` or full question rows."
+  },
+  "previewContent": {
+    "status": "IMPLEMENTED",
+    "pathwayMarketing": "First section only + word clamp for locked users (`pathway-lesson-visible-sections.ts`).",
+    "relatedQuestions": "Marketing lesson surfaces truncated `stemPreview` (~155 chars), not options/rationales (`lesson-question-cross-links.ts`)."
+  },
+  "staticBuildSafety": {
+    "status": "OK_FOR_REVIEWED_SURFACES",
+    "app": "`dynamic = force-dynamic` on app layouts; pathway marketing lesson uses `force-dynamic` + `dynamicParams`."
+  },
+  "fixesAppliedThisAudit": [
+    "Default `metadata.robots` noindex/nofollow on `src/app/(student)/app/layout.tsx` for entire `/app` tree.",
+    "`Cache-Control: private, no-store, must-revalidate` for `/app/:path*` in `next.config.ts` (production).",
+    "Removed misleading `revalidate` export from marketing pathway lesson detail page (keeps `force-dynamic` as single source of truth)."
+  ],
+  "recommendedFollowUps": [
+    "Periodic grep for `select: {[^}]*content: true` on non-admin API routes.",
+    "Optional: `X-Robots-Tag: noindex` header for `/app` via same `headers()` block if search engines ignore meta in edge cases (usually unnecessary with middleware + meta).",
+    "Load testing: confirm CDN respects `private, no-store` on your host (Vercel/DO)."
+  ],
+  "successCriteria": {
+    "zeroSubscriberLessonBodyViaGoogleForAppRoutes": "EXPECTED — bots lack session; `/app` noindex by default",
+    "zeroFullLessonInMarketingWithoutEntitlement": "EXPECTED — preview-only SSR for locked pathway lessons",
+    "apisDoNotReturnFullLessonBodiesInListEndpoints": "VERIFIED — `/api/lessons` summary-only"
+  }
+}

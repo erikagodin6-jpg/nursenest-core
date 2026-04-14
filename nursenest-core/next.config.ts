@@ -157,6 +157,18 @@ const nextConfig: NextConfig = {
         source: "/favicon.ico",
         headers: [{ key: "Cache-Control", value: STATIC_ASSET_CACHE_CONTROL }],
       },
+      /**
+       * Subscriber shell: avoid shared CDN/edge caches serving personalized HTML from one session to another.
+       * Complements `dynamic = "force-dynamic"` on `/app` layouts; does not apply to public marketing routes.
+       */
+      {
+        source: "/app",
+        headers: [{ key: "Cache-Control", value: "private, no-store, must-revalidate" }],
+      },
+      {
+        source: "/app/:path*",
+        headers: [{ key: "Cache-Control", value: "private, no-store, must-revalidate" }],
+      },
     ];
   },
 };

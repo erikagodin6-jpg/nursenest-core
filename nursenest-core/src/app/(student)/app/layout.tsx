@@ -1,8 +1,14 @@
+import type { Metadata } from "next";
 import { MarketingI18nProvider } from "@/components/marketing/marketing-i18n-provider";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 
 /** Shared marketing/locale dictionary for all `/app/*` routes (learner shell, exams, practice). */
 export const dynamic = "force-dynamic";
+
+/** Learner app is auth-gated; keep subscriber lesson/question payloads out of search indexes even when metadata is missing on a leaf route. */
+export const metadata: Metadata = {
+  robots: { index: false, follow: false },
+};
 
 export default async function AppSegmentLayout({ children }: { children: React.ReactNode }) {
   let locale = "en";

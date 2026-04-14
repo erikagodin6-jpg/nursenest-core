@@ -43,6 +43,7 @@
     "i18n:report:marketing": "node script/export-marketing-translation-gaps.mjs",
     "i18n:report:educational": "node script/report-educational-translation-coverage.mjs",
     "i18n:status": "tsx scripts/generate-i18n-status.ts",
+    "i18n:global-progress": "npx tsx scripts/i18n/run-global-translation.ts",
     "i18n:scan": "tsx scripts/i18n-scan.ts",
     "i18n:scan:ci": "tsx scripts/i18n-scan.ts --ci",
     "build:guard": "tsx scripts/i18n-scan.ts --build-guard",

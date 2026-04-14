@@ -2,7 +2,12 @@ import { ContentStatus, type Prisma } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { resolveLessonContextForPathwayId } from "@/lib/lessons/lesson-region-exam";
 import { examRowToLessonBankItem, type LessonBankQuizItem } from "@/lib/lessons/exam-question-to-lesson-quiz-item";
-import { PREMIUM_SECTION_HEADINGS, PREMIUM_SECTION_KINDS } from "@/lib/lessons/pathway-lesson-premium";
+import {
+  NN_LESSON_DB_PAYLOAD_V2,
+  sanitizeQuizItems,
+  unwrapPathwayLessonDbSections,
+} from "@/lib/lessons/pathway-lesson-catalog-sync";
+import { PREMIUM_SECTION_HEADINGS } from "@/lib/lessons/pathway-lesson-premium";
 import type {
   PathwayLessonFigure,
   PathwayLessonPremiumSectionKind,
@@ -71,6 +76,8 @@ type BatchItemResult = {
   priorityBand: PriorityBand;
   statusBefore: CompletionStatus;
   statusAfter: CompletionStatus;
+  /** True when the lesson already met completion rules and was left unchanged (no overwrite). */
+  skippedAlreadyComplete?: boolean;
   updated: boolean;
   relatedQuestionCount: number;
   preQuestionCount: number;
@@ -83,7 +90,10 @@ export type LessonCompletionBatchReport = {
   batchSize: number;
   write: boolean;
   selectedAt: string;
+  /** Lessons that reached COMPLETE after this run (excludes already-complete skips). */
   lessonsCompleted: number;
+  /** Lessons that were already COMPLETE and not modified. */
+  lessonsSkippedAlreadyComplete: number;
   lessonsUpdated: number;
   lessonsStillPartial: number;
   majorGapsRemaining: string[];
@@ -116,8 +126,9 @@ const CORE_SYSTEM_KEYS = ["cardio", "cardiovascular", "respir", "renal", "kidney
 const HIGH_YIELD_KEYS = ["pharm", "medication", "priorit", "triage", "delegat", "safety", "infection"];
 const REMAINING_KEYS = ["gastro", "gi", "hemat", "matern", "obst", "pedi", "child", "mental", "psych"];
 
-const MIN_BATCH_SIZE = 20;
-const MAX_BATCH_SIZE = 50;
+/** Safe default batch size for incremental completion (operator may pass 10–20). */
+const MIN_BATCH_SIZE = 10;
+const MAX_BATCH_SIZE = 20;
 const MAX_QUESTION_ROWS = 24;
 
 const REQUIRED_SECTIONS: PathwayLessonPremiumSectionKind[] = [
@@ -583,6 +594,102 @@ function normalizeSections(raw: Prisma.JsonValue): PathwayLessonSection[] {
   return out;
 }
 
+/** Preserves recall / checkpoint payloads when merging or rewriting DB JSON. */
+function normalizeSectionsRich(raw: Prisma.JsonValue): PathwayLessonSection[] {
+  if (!Array.isArray(raw)) return [];
+  const out: PathwayLessonSection[] = [];
+  for (let i = 0; i < raw.length; i += 1) {
+    const x = raw[i];
+    if (!x || typeof x !== "object") continue;
+    const item = x as Record<string, unknown>;
+    const kind = typeof item.kind === "string" ? item.kind.trim() : "";
+    const body = typeof item.body === "string" ? item.body.trim() : "";
+    if (!kind || !body) continue;
+    out.push({
+      id: typeof item.id === "string" && item.id.trim() ? item.id : `${kind}-${i}`,
+      heading: typeof item.heading === "string" && item.heading.trim() ? item.heading : "Section",
+      kind: kind as PathwayLessonSection["kind"],
+      body,
+      ...(Array.isArray(item.figures) ? { figures: item.figures as PathwayLessonFigure[] } : {}),
+      ...(Array.isArray(item.recallPrompts) ? { recallPrompts: item.recallPrompts as PathwayLessonSection["recallPrompts"] } : {}),
+      ...(Array.isArray(item.checkpointQuestions)
+        ? { checkpointQuestions: item.checkpointQuestions as PathwayLessonSection["checkpointQuestions"] }
+        : {}),
+      ...(Array.isArray(item.keyRecallFacts) ? { keyRecallFacts: item.keyRecallFacts as PathwayLessonSection["keyRecallFacts"] } : {}),
+      ...(typeof item.audioUrl === "string" || item.audioUrl === null ? { audioUrl: item.audioUrl as string | null } : {}),
+    });
+  }
+  return out;
+}
+
+const MIN_SECTION_BODY_WORDS_TO_PRESERVE = 50;
+
+function mergeIncrementalPremiumSections(
+  current: PathwayLessonSection[],
+  proposed: PathwayLessonSection[],
+): PathwayLessonSection[] {
+  const curMap = sectionMap(current);
+  const propMap = sectionMap(proposed);
+  const out: PathwayLessonSection[] = [];
+  for (const kind of REQUIRED_SECTIONS) {
+    const cur = curMap.get(kind);
+    const prop = propMap.get(kind);
+    if (cur && words(cur.body) >= MIN_SECTION_BODY_WORDS_TO_PRESERVE) {
+      out.push(cur);
+      continue;
+    }
+    if (prop) out.push(prop);
+    else if (cur) out.push(cur);
+  }
+  return out;
+}
+
+function quizDedupeKey(q: PathwayLessonQuizItem): string {
+  const ext = q as PathwayLessonQuizItem & { examQuestionId?: string };
+  if (typeof ext.examQuestionId === "string" && ext.examQuestionId.trim()) {
+    return `id:${ext.examQuestionId.trim()}`;
+  }
+  return `stem:${q.question.trim().slice(0, 160)}`;
+}
+
+/** Puts existing items first, then adds generated items without duplicates. */
+function mergeQuizItemsNoDup(
+  existing: PathwayLessonQuizItem[],
+  generated: PathwayLessonQuizItem[],
+): PathwayLessonQuizItem[] {
+  const seen = new Set<string>();
+  const out: PathwayLessonQuizItem[] = [];
+  for (const q of existing) {
+    const k = quizDedupeKey(q);
+    if (seen.has(k)) continue;
+    seen.add(k);
+    out.push(q);
+  }
+  for (const q of generated) {
+    const k = quizDedupeKey(q);
+    if (seen.has(k)) continue;
+    seen.add(k);
+    out.push(q);
+  }
+  return out;
+}
+
+function buildSectionsDbPayload(
+  sections: PathwayLessonSection[],
+  pre: PathwayLessonQuizItem[],
+  post: PathwayLessonQuizItem[],
+): Prisma.InputJsonValue {
+  if (pre.length > 0 || post.length > 0) {
+    return {
+      [NN_LESSON_DB_PAYLOAD_V2]: true,
+      sections,
+      preTest: pre,
+      postTest: post,
+    } as unknown as Prisma.InputJsonValue;
+  }
+  return sections as unknown as Prisma.InputJsonValue;
+}
+
 function sectionMap(sections: PathwayLessonSection[]): Map<string, PathwayLessonSection> {
   return new Map(sections.map((s) => [s.kind, s]));
 }
@@ -991,7 +1098,8 @@ export async function runLessonCompletionBatch(input: BatchInput): Promise<Lesso
     if (input.focusArea === "pediatrics" && !isPediatricTargetLesson(row)) continue;
     if (input.focusArea === "mental_health" && !isMentalHealthTargetLesson(row)) continue;
     if (input.focusArea === "prioritization_safety" && !isPrioritizationSafetyTargetLesson(row)) continue;
-    const sections = normalizeSections(row.sections);
+    const uw = unwrapPathwayLessonDbSections(row.sections);
+    const sections = normalizeSectionsRich(uw.sectionList as Prisma.JsonValue);
     const roughWordCount = sections.reduce((sum, s) => sum + words(s.body), 0);
     const roughStatus: CompletionStatus = roughWordCount < 180 ? "EMPTY" : hasRequiredSectionKinds(sections) ? "COMPLETE" : "PARTIAL";
     const band = rankBand(row);
@@ -1008,13 +1116,47 @@ export async function runLessonCompletionBatch(input: BatchInput): Promise<Lesso
   const items: BatchItemResult[] = [];
 
   for (const pick of selected) {
-    const currentSections = normalizeSections(pick.row.sections);
+    const unwrapped = unwrapPathwayLessonDbSections(pick.row.sections);
+    const dbPreRaw = sanitizeQuizItems(unwrapped.preTest as unknown) ?? [];
+    const dbPostRaw = sanitizeQuizItems(unwrapped.postTest as unknown) ?? [];
+    const currentSections = normalizeSectionsRich(unwrapped.sectionList as Prisma.JsonValue);
+
     const questionRows = await relatedQuestionRowsForLesson(input.pathwayId, pick.row);
     const quizItems = questionRows.map(examRowToLessonBankItem).filter((x): x is LessonBankQuizItem => Boolean(x));
     const { pre, post } = pickPrePost(quizItems);
     const rationaleParagraphs = buildQuestionBackedParagraphs(quizItems);
     const mediaFigures = extractImagesFromQuestionRows(questionRows);
-    const upgradedSections =
+
+    const preForEval = dbPreRaw.length >= 3 ? dbPreRaw : pre;
+    const postForEval = dbPostRaw.length >= 5 ? dbPostRaw : post;
+    const beforeEval = evaluateCompletion({
+      lesson: pick.row,
+      sections: currentSections,
+      preQuestions: preForEval,
+      postQuestions: postForEval,
+    });
+
+    if (beforeEval.status === "COMPLETE") {
+      items.push({
+        lessonId: pick.row.id,
+        slug: pick.row.slug,
+        title: pick.row.title,
+        topic: pick.row.topic,
+        bodySystem: pick.row.bodySystem,
+        priorityBand: pick.band,
+        statusBefore: beforeEval.status,
+        statusAfter: beforeEval.status,
+        skippedAlreadyComplete: true,
+        updated: false,
+        relatedQuestionCount: questionRows.length,
+        preQuestionCount: Math.max(dbPreRaw.length, preForEval.length),
+        postQuestionCount: Math.max(dbPostRaw.length, postForEval.length),
+        gaps: beforeEval.gaps,
+      });
+      continue;
+    }
+
+    const upgradedBuilt =
       mode === "refine"
         ? refineSectionsForPerfectStandard({
             lesson: pick.row,
@@ -1029,18 +1171,37 @@ export async function runLessonCompletionBatch(input: BatchInput): Promise<Lesso
             mediaFigures,
           });
 
-    const beforeEval = evaluateCompletion({ lesson: pick.row, sections: currentSections, preQuestions: pre, postQuestions: post });
-    const afterEval = evaluateCompletion({ lesson: pick.row, sections: upgradedSections, preQuestions: pre, postQuestions: post });
+    const upgradedSections =
+      mode === "refine" ? upgradedBuilt : mergeIncrementalPremiumSections(currentSections, upgradedBuilt);
+
+    const newPre = mergeQuizItemsNoDup(dbPreRaw, pre);
+    const newPost = mergeQuizItemsNoDup(dbPostRaw, post);
+
+    const afterEval = evaluateCompletion({
+      lesson: pick.row,
+      sections: upgradedSections,
+      preQuestions: newPre,
+      postQuestions: newPost,
+    });
+
     const finalizedSections =
       mode === "refine" && completionRank(afterEval.status) < completionRank(beforeEval.status) ? currentSections : upgradedSections;
-    const finalizedEval = mode === "refine" && completionRank(afterEval.status) < completionRank(beforeEval.status) ? beforeEval : afterEval;
-    const updated = JSON.stringify(currentSections) !== JSON.stringify(finalizedSections);
+    const finalizedEval =
+      mode === "refine" && completionRank(afterEval.status) < completionRank(beforeEval.status) ? beforeEval : afterEval;
+
+    const newPreFinal =
+      mode === "refine" && completionRank(afterEval.status) < completionRank(beforeEval.status) ? dbPreRaw : newPre;
+    const newPostFinal =
+      mode === "refine" && completionRank(afterEval.status) < completionRank(beforeEval.status) ? dbPostRaw : newPost;
+
+    const nextPayload = buildSectionsDbPayload(finalizedSections, newPreFinal, newPostFinal);
+    const updated = JSON.stringify(pick.row.sections) !== JSON.stringify(nextPayload);
 
     if (write && updated) {
       await prisma.pathwayLesson.update({
         where: { id: pick.row.id },
         data: {
-          sections: finalizedSections as unknown as Prisma.InputJsonValue,
+          sections: nextPayload,
         },
       });
     }
@@ -1056,13 +1217,14 @@ export async function runLessonCompletionBatch(input: BatchInput): Promise<Lesso
       statusAfter: finalizedEval.status,
       updated,
       relatedQuestionCount: questionRows.length,
-      preQuestionCount: pre.length,
-      postQuestionCount: post.length,
+      preQuestionCount: newPreFinal.length,
+      postQuestionCount: newPostFinal.length,
       gaps: finalizedEval.gaps,
     });
   }
 
-  const lessonsCompleted = items.filter((i) => i.statusAfter === "COMPLETE").length;
+  const lessonsSkippedAlreadyComplete = items.filter((i) => i.skippedAlreadyComplete).length;
+  const lessonsCompleted = items.filter((i) => i.statusAfter === "COMPLETE" && !i.skippedAlreadyComplete).length;
   const lessonsUpdated = items.filter((i) => i.updated).length;
   const lessonsStillPartial = items.filter((i) => i.statusAfter !== "COMPLETE").length;
 
@@ -1072,9 +1234,45 @@ export async function runLessonCompletionBatch(input: BatchInput): Promise<Lesso
     write,
     selectedAt: new Date().toISOString(),
     lessonsCompleted,
+    lessonsSkippedAlreadyComplete,
     lessonsUpdated,
     lessonsStillPartial,
     majorGapsRemaining: majorGapSummary(items),
     items,
   };
+}
+
+/**
+ * Rough hub-level completeness for progress tracking (section spine + word count heuristic).
+ * Inexpensive full-pathway scan — not identical to {@link evaluateCompletion} (bank-linked quizzes).
+ */
+export async function estimatePathwayContentCompleteness(pathwayId: string): Promise<{
+  pathwayId: string;
+  total: number;
+  completeRough: number;
+  partialRough: number;
+  emptyRough: number;
+  /** Percent of lessons scoring "complete" on the rough heuristic (0–100, one decimal). */
+  completenessApproxPct: number;
+}> {
+  const rows = await prisma.pathwayLesson.findMany({
+    where: { pathwayId, locale: "en", status: ContentStatus.PUBLISHED },
+    select: { sections: true },
+  });
+  let completeRough = 0;
+  let partialRough = 0;
+  let emptyRough = 0;
+  for (const row of rows) {
+    const uw = unwrapPathwayLessonDbSections(row.sections);
+    const sections = normalizeSectionsRich(uw.sectionList as Prisma.JsonValue);
+    const roughWordCount = sections.reduce((sum, s) => sum + words(s.body), 0);
+    const roughStatus: CompletionStatus =
+      roughWordCount < 180 ? "EMPTY" : hasRequiredSectionKinds(sections) ? "COMPLETE" : "PARTIAL";
+    if (roughStatus === "EMPTY") emptyRough += 1;
+    else if (roughStatus === "COMPLETE") completeRough += 1;
+    else partialRough += 1;
+  }
+  const total = rows.length;
+  const completenessApproxPct = total ? Math.round((completeRough / total) * 1000) / 10 : 0;
+  return { pathwayId, total, completeRough, partialRough, emptyRough, completenessApproxPct };
 }
