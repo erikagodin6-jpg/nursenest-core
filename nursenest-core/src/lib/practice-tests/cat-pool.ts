@@ -8,7 +8,8 @@ import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import type { CatPoolRow } from "@/lib/exams/cat-engine";
 import { getWeakTopicNamesForPractice } from "@/lib/learner/topic-performance";
-import { difficultyWhere, type PickQuestionsInput } from "@/lib/practice-tests/pick-question-ids";
+import { difficultyWhere } from "@/lib/practice-tests/practice-pool-shared";
+import type { PickQuestionsInput } from "@/lib/practice-tests/pick-question-ids";
 
 const MAX_POOL = 4000;
 export const CAT_MIN_COMPLETE_POOL = 30;

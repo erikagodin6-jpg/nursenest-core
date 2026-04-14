@@ -57,6 +57,7 @@ export type CatEngineMode = "production_ready" | "beta" | "mini_adaptive" | "sim
  * - Omitted / undefined: legacy linear — free prev/next without per-question lock (older sessions).
  */
 export type LinearDeliveryMode = "practice" | "exam";
+export type LinearRationaleVisibility = "after_each" | "end_of_exam";
 
 export type PracticeTestConfigJson = {
   questionCount: number;
@@ -69,6 +70,8 @@ export type PracticeTestConfigJson = {
   timeLimitSec: number | null;
   /** Linear sessions only — see {@link LinearDeliveryMode}. */
   linearDeliveryMode?: LinearDeliveryMode;
+  /** Linear sessions: rationale timing policy. */
+  linearRationaleVisibility?: LinearRationaleVisibility;
   /** When mode is CAT: which pool strategy to use for tier-scoped draws. */
   catSelectionBasis?: CatSelectionBasis;
   catMinQuestions?: number;

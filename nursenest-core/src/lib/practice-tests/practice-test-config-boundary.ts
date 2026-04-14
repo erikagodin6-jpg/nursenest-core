@@ -20,6 +20,7 @@ export const DEFAULT_SAFE_PRACTICE_TEST_CONFIG: PracticeTestConfigJson = {
 
 const selectionModeZ = z.enum(["random", "targeted", "weak", "cat"]);
 const linearDeliveryZ = z.enum(["practice", "exam"]);
+const linearRationaleVisibilityZ = z.enum(["after_each", "end_of_exam"]);
 const catSelectionBasisZ = z.enum(["random", "targeted", "weak"]);
 const catPresentationZ = z.enum(["practice", "exam_simulation"]);
 const catFeedbackZ = z.enum(["study", "test"]);
@@ -40,6 +41,7 @@ const practiceTestConfigSchema = z.object({
   timedMode: z.boolean().default(false),
   timeLimitSec: z.union([z.null(), z.coerce.number().int().min(0).max(48 * 60 * 60)]).default(null),
   linearDeliveryMode: linearDeliveryZ.optional(),
+  linearRationaleVisibility: linearRationaleVisibilityZ.optional(),
   catSelectionBasis: catSelectionBasisZ.optional(),
   catMinQuestions: z.coerce.number().int().min(1).max(500).optional(),
   catMaxQuestions: z.coerce.number().int().min(1).max(500).optional(),
