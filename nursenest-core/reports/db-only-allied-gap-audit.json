@@ -1,0 +1,215 @@
+{
+  "generatedAt": "2026-04-14T14:12:00.000Z",
+  "source": "reports/lesson-system-inventory.json vs src/content/pathway-lessons/allied-bundled-catalog.json",
+  "note": "Unique slugs that appear only from database inventory (sources include database, not catalog) and are absent from allied-bundled-catalog.json. Prior note of '8' slugs may reflect an earlier snapshot; current inventory diff shows 23 unique slugs (mirrored US+CA rows share the same slug set).",
+  "uniqueSlugCount": 23,
+  "slugs": [
+    {
+      "slug": "abg-sampling-errors",
+      "titleHint": "ABG Sampling Errors",
+      "source": "database pathway_lessons (published rows per inventory)",
+      "inBundledJson": false,
+      "renderableInMarketingLikely": "unknown_without_row_payload",
+      "gapResolution": "export_from_db_or_editorial_create",
+      "priority": "medium"
+    },
+    {
+      "slug": "airway-emergencies",
+      "titleHint": "Airway Emergencies",
+      "source": "database",
+      "inBundledJson": false,
+      "renderableInMarketingLikely": "unknown_without_row_payload",
+      "gapResolution": "export_from_db_or_editorial_create",
+      "priority": "medium"
+    },
+    {
+      "slug": "aspiration-precautions-ot-pt",
+      "titleHint": "Aspiration Precautions OT/PT",
+      "source": "database",
+      "inBundledJson": false,
+      "renderableInMarketingLikely": "unknown_without_row_payload",
+      "gapResolution": "export_from_db_or_editorial_create",
+      "priority": "medium"
+    },
+    {
+      "slug": "cardiac-emergencies-first-hour",
+      "titleHint": "Cardiac Emergencies: First-Hour Prioritization",
+      "source": "database",
+      "inBundledJson": false,
+      "renderableInMarketingLikely": "unknown_without_row_payload",
+      "gapResolution": "export_from_db_or_editorial_create",
+      "priority": "high"
+    },
+    {
+      "slug": "chemical-spill-initial-steps",
+      "titleHint": "Chemical Spill Initial Steps",
+      "source": "database",
+      "inBundledJson": false,
+      "renderableInMarketingLikely": "unknown_without_row_payload",
+      "gapResolution": "export_from_db_or_editorial_create",
+      "priority": "medium"
+    },
+    {
+      "slug": "coag-sample-handling",
+      "titleHint": "Coag Sample Handling",
+      "source": "database",
+      "inBundledJson": false,
+      "renderableInMarketingLikely": "unknown_without_row_payload",
+      "gapResolution": "export_from_db_or_editorial_create",
+      "priority": "medium"
+    },
+    {
+      "slug": "contrast-reaction-preparedness",
+      "titleHint": "Contrast Reaction Preparedness",
+      "source": "database",
+      "inBundledJson": false,
+      "renderableInMarketingLikely": "unknown_without_row_payload",
+      "gapResolution": "export_from_db_or_editorial_create",
+      "priority": "medium"
+    },
+    {
+      "slug": "critical-value-reporting",
+      "titleHint": "Critical Value Reporting",
+      "source": "database",
+      "inBundledJson": false,
+      "renderableInMarketingLikely": "unknown_without_row_payload",
+      "gapResolution": "export_from_db_or_editorial_create",
+      "priority": "medium"
+    },
+    {
+      "slug": "endocrine-crises-rapid-differentiation",
+      "titleHint": "Endocrine Crises: Rapid Differentiation",
+      "source": "database",
+      "inBundledJson": false,
+      "renderableInMarketingLikely": "unknown_without_row_payload",
+      "gapResolution": "export_from_db_or_editorial_create",
+      "priority": "high"
+    },
+    {
+      "slug": "functional-mobility-screening",
+      "titleHint": "Functional Mobility Screening",
+      "source": "database",
+      "inBundledJson": false,
+      "renderableInMarketingLikely": "unknown_without_row_payload",
+      "gapResolution": "export_from_db_or_editorial_create",
+      "priority": "medium"
+    },
+    {
+      "slug": "hemolysis-specimen-reject",
+      "titleHint": "Hemolysis Specimen Reject",
+      "source": "database",
+      "inBundledJson": false,
+      "renderableInMarketingLikely": "unknown_without_row_payload",
+      "gapResolution": "export_from_db_or_editorial_create",
+      "priority": "medium"
+    },
+    {
+      "slug": "high-alert-med-storage",
+      "titleHint": "High-Alert Med Storage",
+      "source": "database",
+      "inBundledJson": false,
+      "renderableInMarketingLikely": "unknown_without_row_payload",
+      "gapResolution": "export_from_db_or_editorial_create",
+      "priority": "medium"
+    },
+    {
+      "slug": "look-alike-sound-alike-controls",
+      "titleHint": "Look-Alike Sound-Alike Controls",
+      "source": "database",
+      "inBundledJson": false,
+      "renderableInMarketingLikely": "unknown_without_row_payload",
+      "gapResolution": "export_from_db_or_editorial_create",
+      "priority": "medium"
+    },
+    {
+      "slug": "neuro-deterioration-escalation",
+      "titleHint": "Neuro Deterioration: Escalation Triggers",
+      "source": "database",
+      "inBundledJson": false,
+      "renderableInMarketingLikely": "unknown_without_row_payload",
+      "gapResolution": "export_from_db_or_editorial_create",
+      "priority": "high"
+    },
+    {
+      "slug": "ppe-sequence",
+      "titleHint": "PPE Sequence",
+      "source": "database",
+      "inBundledJson": false,
+      "renderableInMarketingLikely": "unknown_without_row_payload",
+      "gapResolution": "export_from_db_or_editorial_create",
+      "priority": "medium"
+    },
+    {
+      "slug": "pregnancy-screening-before-imaging",
+      "titleHint": "Pregnancy Screening Before Imaging",
+      "source": "database",
+      "inBundledJson": false,
+      "renderableInMarketingLikely": "unknown_without_row_payload",
+      "gapResolution": "export_from_db_or_editorial_create",
+      "priority": "medium"
+    },
+    {
+      "slug": "radiation-alara",
+      "titleHint": "Radiation ALARA",
+      "source": "database",
+      "inBundledJson": false,
+      "renderableInMarketingLikely": "unknown_without_row_payload",
+      "gapResolution": "export_from_db_or_editorial_create",
+      "priority": "medium"
+    },
+    {
+      "slug": "respiratory-failure-escalation-ladder",
+      "titleHint": "Respiratory Failure Escalation Ladder",
+      "source": "database",
+      "inBundledJson": false,
+      "renderableInMarketingLikely": "unknown_without_row_payload",
+      "gapResolution": "export_from_db_or_editorial_create",
+      "priority": "high"
+    },
+    {
+      "slug": "sepsis-recognition-and-bundles",
+      "titleHint": "Sepsis Recognition and Bundle Timing Priorities",
+      "source": "database",
+      "inBundledJson": false,
+      "renderableInMarketingLikely": "unknown_without_row_payload",
+      "gapResolution": "export_from_db_or_editorial_create",
+      "priority": "high"
+    },
+    {
+      "slug": "sterile-field-breaks",
+      "titleHint": "Sterile Field Breaks",
+      "source": "database",
+      "inBundledJson": false,
+      "renderableInMarketingLikely": "unknown_without_row_payload",
+      "gapResolution": "export_from_db_or_editorial_create",
+      "priority": "medium"
+    },
+    {
+      "slug": "stroke-pre-notification",
+      "titleHint": "Stroke Pre-Notification",
+      "source": "database",
+      "inBundledJson": false,
+      "renderableInMarketingLikely": "unknown_without_row_payload",
+      "gapResolution": "export_from_db_or_editorial_create",
+      "priority": "high"
+    },
+    {
+      "slug": "trauma-triage-basics",
+      "titleHint": "Trauma Triage Basics",
+      "source": "database",
+      "inBundledJson": false,
+      "renderableInMarketingLikely": "unknown_without_row_payload",
+      "gapResolution": "export_from_db_or_editorial_create",
+      "priority": "medium"
+    },
+    {
+      "slug": "vent-modes-overview",
+      "titleHint": "Vent Modes Overview",
+      "source": "database",
+      "inBundledJson": false,
+      "renderableInMarketingLikely": "unknown_without_row_payload",
+      "gapResolution": "export_from_db_or_editorial_create",
+      "priority": "medium"
+    }
+  ]
+}

@@ -34,6 +34,7 @@ import {
   type PathwayLessonSectionKind,
   type PathwayLessonYieldLevel,
 } from "@/lib/lessons/pathway-lesson-types";
+import { countWords, stripToPlainText } from "@/lib/content-quality/plain-text";
 import { pathwayLessonYieldWeight } from "@/lib/lessons/pathway-lesson-yield";
 import { prependScopedGoldCatalogLessons } from "@/lib/lessons/scoped-lessons/scoped-gold-registry";
 
@@ -348,11 +349,25 @@ function expandToStandardFiveSections(sections: PathwayLessonSection[]): Pathway
     Record<PathwayLessonSectionKind, PathwayLessonSection>
   >;
 
-  const intro = byKind.intro ?? byKind.clinical_meaning;
-  const core = byKind.core ?? byKind.core_concept;
-  const clinical = byKind.clinical_application ?? byKind.clinical_scenario;
-  const exam = byKind.exam_tips ?? byKind.exam_relevance;
-  const explicitTakeaways = byKind.takeaways;
+  const intro = byKind.intro ?? byKind.clinical_meaning ?? byKind.introduction;
+  const core = byKind.core ?? byKind.core_concept ?? byKind.pathophysiology_overview;
+  const clinical =
+    byKind.clinical_application ??
+    byKind.clinical_scenario ??
+    byKind.nursing_assessment_interventions ??
+    byKind.signs_symptoms;
+  const exam = byKind.exam_tips ?? byKind.exam_relevance ?? byKind.labs_diagnostics;
+  const explicitTakeaways =
+    byKind.takeaways ??
+    (byKind.clinical_pearls
+      ? {
+          id: `${byKind.clinical_pearls.id}-takeaways`,
+          heading: "Key takeaways",
+          kind: "takeaways" as const,
+          body: byKind.clinical_pearls.body ?? "",
+          ...(byKind.clinical_pearls.figures ? { figures: byKind.clinical_pearls.figures } : {}),
+        }
+      : undefined);
 
   const examBody = (exam?.body ?? "").trim();
   const sentences = examBody.split(/(?<=[.!?])\s+/).filter(Boolean);
@@ -498,6 +513,18 @@ export function sortAndFilterLessonsForPathwayContext(
     });
 }
 
+/**
+ * Catalog JSON sometimes ships short seoDescription strings that still describe the lesson but fall
+ * below the structural gate’s ~12-word floor. Pad deterministically from title — no new editorial claims.
+ */
+function ensureCatalogLessonSeoDescriptionWordFloor(seoDescription: string, title: string): string {
+  const t = seoDescription.trim();
+  if (countWords(stripToPlainText(t)) >= 12) return t;
+  const shortTitle = title.replace(/\s*\([^)]*\)\s*$/, "").trim() || title.trim() || "this topic";
+  const pad = `Clinical framing, safety cues, prioritization patterns, and exam-style rationale for ${shortTitle}.`;
+  return t.length > 0 ? `${t} ${pad}`.trim() : pad.trim();
+}
+
 export function sanitizeQuizItems(raw: unknown): PathwayLessonQuizItem[] | undefined {
   if (!Array.isArray(raw)) return undefined;
   const out: PathwayLessonQuizItem[] = [];
@@ -519,7 +546,10 @@ export function sanitizeQuizItems(raw: unknown): PathwayLessonQuizItem[] | undef
 export function normalizeLesson(raw: LessonInput, pathwayId?: string): PathwayLessonRecord {
   const title = typeof raw.title === "string" ? raw.title : "Lesson";
   const seoTitle = typeof raw.seoTitle === "string" ? raw.seoTitle : title;
-  const seoDescription = typeof raw.seoDescription === "string" ? raw.seoDescription : "";
+  const seoDescription = ensureCatalogLessonSeoDescriptionWordFloor(
+    typeof raw.seoDescription === "string" ? raw.seoDescription : "",
+    title,
+  );
   const rawPc = raw.previewSectionCount;
   const previewCandidate =
     typeof rawPc === "number" && Number.isFinite(rawPc) && rawPc > 0 ? Math.floor(rawPc) : 1;
@@ -612,6 +642,35 @@ export function listCatalogPathwayIdsWithLessonsSync(): string[] {
   return [...ids].filter((id) => getCatalogPathwayLessonsSync(id).length > 0);
 }
 
+/**
+ * Marker for `pathway_lessons.sections` JSON when pre/post quizzes are stored alongside section bodies
+ * (plain array cannot hold `preTest` / `postTest` at the top level).
+ */
+export const NN_LESSON_DB_PAYLOAD_V2 = "nnLessonPayloadV2" as const;
+
+/**
+ * Unwrap DB `sections` JSON: either a section array (legacy) or {@link NN_LESSON_DB_PAYLOAD_V2} with nested sections + quizzes.
+ */
+export function unwrapPathwayLessonDbSections(sections: unknown): {
+  sectionList: unknown;
+  preTest?: PathwayLessonQuizItem[];
+  postTest?: PathwayLessonQuizItem[];
+} {
+  if (sections && typeof sections === "object" && !Array.isArray(sections)) {
+    const o = sections as Record<string, unknown>;
+    if (o[NN_LESSON_DB_PAYLOAD_V2] === true && Array.isArray(o.sections)) {
+      const pre = sanitizeQuizItems(o.preTest);
+      const post = sanitizeQuizItems(o.postTest);
+      return {
+        sectionList: o.sections,
+        ...(pre ? { preTest: pre } : {}),
+        ...(post ? { postTest: post } : {}),
+      };
+    }
+  }
+  return { sectionList: sections };
+}
+
 export function pathwayLessonRowToInput(row: {
   slug: string;
   title: string;
@@ -628,6 +687,7 @@ export function pathwayLessonRowToInput(row: {
   priority?: string;
   examMeta?: unknown;
 }): LessonInput {
+  const unwrapped = unwrapPathwayLessonDbSections(row.sections);
   return {
     slug: row.slug,
     title: row.title,
@@ -637,12 +697,14 @@ export function pathwayLessonRowToInput(row: {
     previewSectionCount: row.previewSectionCount,
     seoTitle: row.seoTitle,
     seoDescription: row.seoDescription,
-    sections: row.sections as LessonInput["sections"],
+    sections: unwrapped.sectionList as LessonInput["sections"],
     ...(Array.isArray(row.exams) ? { exams: row.exams as PathwayLessonRuntimeExam[] } : {}),
     ...(Array.isArray(row.countries) ? { countries: row.countries as PathwayLessonRuntimeCountry[] } : {}),
     ...(typeof row.priority === "string" ? { priority: row.priority as PathwayLessonPriority } : {}),
     ...(Array.isArray(row.examMeta) ? { examMeta: row.examMeta as PathwayLessonExamMeta[] } : {}),
-  };
+    ...(unwrapped.preTest ? { preTest: unwrapped.preTest } : {}),
+    ...(unwrapped.postTest ? { postTest: unwrapped.postTest } : {}),
+  } as LessonInput;
 }
 
 /** @deprecated Prefer {@link normalizeLesson} */

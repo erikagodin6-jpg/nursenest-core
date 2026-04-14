@@ -1,26 +1,42 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { CheckCircle2, XCircle } from "lucide-react";
 import type { PathwayLessonQuizItem } from "@/lib/lessons/pathway-lesson-types";
 
 const OPTION_LETTERS = ["A", "B", "C", "D", "E", "F"];
 
+type QuizVariant = "pre" | "post";
+
 /**
  * Marketing pathway pre/post quizzes — immediate per-question feedback when `fullAccess`
  * (legacy monolith embed pattern), preview-safe when locked.
+ * Post-test supports practice (immediate feedback) vs exam-style (reveal all at once).
  */
 function QuizSet({
   title,
+  subtitle,
   items,
   fullAccess,
+  variant,
 }: {
   title: string;
+  subtitle?: string;
   items: PathwayLessonQuizItem[] | undefined;
   fullAccess: boolean;
+  variant: QuizVariant;
 }) {
-  if (!items?.length) return null;
   const [answers, setAnswers] = useState<Record<number, number | null>>({});
+  /** Post-test only: practice = rationale after each; exam = reveal scoring after "Show results". */
+  const [postMode, setPostMode] = useState<"practice" | "exam">("practice");
+  const [examRevealed, setExamRevealed] = useState(false);
+
+  useEffect(() => {
+    setAnswers({});
+    setExamRevealed(false);
+  }, [items, postMode]);
+
+  if (!items?.length) return null;
 
   const total = items.length;
   const answeredCount = useMemo(
@@ -29,22 +45,93 @@ function QuizSet({
   );
   const allAnswered = answeredCount === total;
   const score =
-    fullAccess && allAnswered
+    fullAccess && allAnswered && (variant === "pre" || postMode === "practice" || examRevealed)
       ? items.reduce((acc, q, i) => (answers[i] === q.correct ? acc + 1 : acc), 0)
       : null;
 
+  const onQuestion = answeredCount === total ? total : answeredCount + 1;
+
+  function shouldShowGrading(questionIndex: number): boolean {
+    if (!fullAccess || typeof answers[questionIndex] !== "number") return false;
+    if (variant === "pre" || postMode === "practice") return true;
+    return examRevealed;
+  }
+
   return (
     <section className="border-b border-[var(--semantic-border-soft)] pb-8 last:border-b-0 last:pb-0">
-      <h2 className="nn-marketing-h3 text-[var(--theme-heading-text)]">{title}</h2>
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+        <div>
+          <h2 className="nn-marketing-h3 text-[var(--theme-heading-text)]">{title}</h2>
+          {subtitle ? (
+            <p className="mt-1 text-xs font-medium uppercase tracking-[0.14em] text-[var(--semantic-text-secondary)]">
+              {subtitle}
+            </p>
+          ) : null}
+        </div>
+        <div
+          className="inline-flex shrink-0 items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-semibold tabular-nums"
+          style={{
+            borderColor: "var(--semantic-border-soft)",
+            background: "color-mix(in srgb, var(--semantic-chart-2) 10%, var(--semantic-surface))",
+            color: "var(--semantic-chart-2)",
+          }}
+          aria-live="polite"
+        >
+          {onQuestion}/{total}
+        </div>
+      </div>
       <p className="mt-2 text-sm text-[var(--theme-muted-text)]">
-        {fullAccess
-          ? "Choose an answer for each question — feedback and rationales appear as you go."
-          : "Work through each question. Highlights and rationales unlock with full lesson access."}
+        {!fullAccess
+          ? "Work through each question. Highlights and rationales unlock with full lesson access."
+          : variant === "pre"
+            ? "Practice mode: pick an answer, then review the rationale before moving on."
+            : postMode === "practice"
+              ? "Practice mode: immediate feedback and rationales after each question."
+              : "Exam-style: answer every question, then reveal scoring and rationales together."}
       </p>
+
+      {variant === "post" && fullAccess ? (
+        <div
+          className="mt-4 inline-flex rounded-full border p-0.5"
+          style={{ borderColor: "var(--semantic-border-soft)" }}
+          role="tablist"
+          aria-label="Post-test mode"
+        >
+          <button
+            type="button"
+            role="tab"
+            aria-selected={postMode === "practice"}
+            onClick={() => setPostMode("practice")}
+            className="min-h-9 rounded-full px-4 py-2 text-xs font-semibold transition"
+            style={{
+              background: postMode === "practice" ? "var(--semantic-surface)" : "transparent",
+              color: postMode === "practice" ? "var(--theme-heading-text)" : "var(--semantic-text-secondary)",
+              boxShadow: postMode === "practice" ? "var(--semantic-shadow-soft)" : "none",
+            }}
+          >
+            Practice
+          </button>
+          <button
+            type="button"
+            role="tab"
+            aria-selected={postMode === "exam"}
+            onClick={() => setPostMode("exam")}
+            className="min-h-9 rounded-full px-4 py-2 text-xs font-semibold transition"
+            style={{
+              background: postMode === "exam" ? "var(--semantic-surface)" : "transparent",
+              color: postMode === "exam" ? "var(--theme-heading-text)" : "var(--semantic-text-secondary)",
+              boxShadow: postMode === "exam" ? "var(--semantic-shadow-soft)" : "none",
+            }}
+          >
+            Exam-style
+          </button>
+        </div>
+      ) : null}
+
       <ol className="mt-5 list-none space-y-7 pl-0">
         {items.map((q, i) => {
           const picked = answers[i];
-          const showGrading = fullAccess && typeof picked === "number";
+          const showGrading = shouldShowGrading(i);
           const isCorrect = showGrading && picked === q.correct;
           return (
             <li key={i}>
@@ -62,11 +149,13 @@ function QuizSet({
                       if (j === q.correct) {
                         rowClass =
                           "flex items-baseline gap-2.5 rounded-lg px-3 py-2 text-[0.9rem] leading-relaxed font-medium";
-                        rowClass += " bg-[color-mix(in_srgb,var(--semantic-success)_14%,var(--semantic-surface))] text-[var(--semantic-success-contrast)]";
+                        rowClass +=
+                          " bg-[color-mix(in_srgb,var(--semantic-success)_14%,var(--semantic-surface))] text-[var(--semantic-success-contrast)]";
                       } else if (selected && j !== q.correct) {
                         rowClass =
                           "flex items-baseline gap-2.5 rounded-lg px-3 py-2 text-[0.9rem] leading-relaxed font-medium";
-                        rowClass += " bg-[color-mix(in_srgb,var(--semantic-danger)_12%,var(--semantic-surface))] text-[var(--semantic-danger-contrast)]";
+                        rowClass +=
+                          " bg-[color-mix(in_srgb,var(--semantic-danger)_12%,var(--semantic-surface))] text-[var(--semantic-danger-contrast)]";
                       }
                     }
                     return (
@@ -123,12 +212,29 @@ function QuizSet({
           );
         })}
       </ol>
+
+      {variant === "post" && fullAccess && postMode === "exam" && allAnswered && !examRevealed ? (
+        <div className="mt-6">
+          <button
+            type="button"
+            onClick={() => setExamRevealed(true)}
+            className="rounded-xl border px-5 py-2.5 text-sm font-semibold text-[var(--theme-heading-text)]"
+            style={{
+              borderColor: "var(--semantic-border-soft)",
+              background: "color-mix(in srgb, var(--semantic-brand) 14%, var(--semantic-surface))",
+            }}
+          >
+            Show results
+          </button>
+        </div>
+      ) : null}
+
       <div className="mt-5 flex flex-wrap items-center gap-3">
         {!fullAccess ? (
           <p className="text-xs text-[var(--semantic-warning-contrast)]">
             {answeredCount}/{total} answered · full access unlocks answer highlights and rationales.
           </p>
-        ) : allAnswered && score !== null ? (
+        ) : allAnswered && score !== null && (variant === "pre" || postMode === "practice" || examRevealed) ? (
           <p className="text-sm font-semibold text-[var(--theme-heading-text)]">
             Score: {score}/{total}
           </p>
@@ -161,8 +267,14 @@ export function PathwayLessonQuizzes({
           review aligned with your plan.
         </aside>
       ) : null}
-      <QuizSet title="Pre-test" items={preTest} fullAccess={fullAccess} />
-      <QuizSet title="Post-test" items={postTest} fullAccess={fullAccess} />
+      <QuizSet
+        variant="pre"
+        title="Pre-test"
+        subtitle="Practice"
+        items={preTest}
+        fullAccess={fullAccess}
+      />
+      <QuizSet variant="post" title="Post-test" items={postTest} fullAccess={fullAccess} />
     </div>
   );
 }

@@ -17,8 +17,10 @@
  * **Public URLs:** `/{slug}` (rewritten to `/seo/[slug]`). Localized: `/{locale}/{slug}`. Canonical + hreflang via
  * `buildProgrammaticMetadata`. JSON-LD: `ProgrammaticPageJsonLd` (LearningResource + optional FAQPage).
  */
-import type { SeoPageKind } from "@/lib/seo/programmatic-page-kind";
 import { PROGRAMMATIC_SEO_AUTHORITY_BATCH } from "./programmatic-seo-authority-batch";
+import type { SeoCluster, SeoPageDefinition } from "./programmatic-seo-definitions";
+
+export type { SeoCluster, SeoPageDefinition };
 
 /** Matches `revalidate` on `/seo/[slug]` and `/[locale]/[slug]` programmatic pages (24h ISR). */
 export const PROGRAMMATIC_SEO_ISR_REVALIDATE_SECONDS = 86_400;
@@ -29,49 +31,6 @@ export const MAX_CROSS_CLUSTER_PROGRAMMATIC_LINKS = 6;
 
 /** Hard cap for sitemap + locale sitemap loops over programmatic slugs (safety rail if the array grows). */
 export const MAX_PROGRAMMATIC_SEO_SITEMAP_SLUGS = 2_000;
-
-export type SeoCluster =
-  | "exam-nclex"
-  | "exam-pn"
-  | "exam-np"
-  | "allied"
-  | "category"
-  | "hub"
-  | "study-format"
-  /** Shared cluster for lab, pharmacology, prioritization, and study plan guides */
-  | "study-guide";
-
-export type SeoPageDefinition = {
-  slug: string;
-  title: string;
-  description: string;
-  h1: string;
-  cluster: SeoCluster;
-  /** Optional taxonomy for pipelines and quality gates (see `programmatic-page-kind.ts`). */
-  pageKind?: SeoPageKind;
-  /** Primary keyword phrase for related linking */
-  keywords: string[];
-  sections: { heading: string; level: 2 | 3; body: string[] }[];
-  faq?: { question: string; answer: string }[];
-  /** Optional 3-level breadcrumb: Home → hub → current */
-  breadcrumb?: { midLabel: string; midPath: string; currentLabel: string };
-  /** Render practice conversion blocks (see `programmatic-practice-config.ts`) */
-  practiceConversion?: boolean;
-  /**
-   * Optional pathway pack for product links (lessons, questions, test bank, CAT, tools, flashcards).
-   * When omitted, links are inferred from `cluster` for exam pages, otherwise general test bank routing applies.
-   */
-  linkPack?: "nclex-rn" | "nclex-pn" | "np" | "allied" | "general";
-  /**
-   * Optional comparison table for “X vs Y” pages. Rendered after the first section body
-   * (explanation first, then table, then remaining sections).
-   */
-  comparisonTable?: {
-    caption?: string;
-    columns: string[];
-    rows: string[][];
-  };
-};
 
 const SITE = "NurseNest";
 

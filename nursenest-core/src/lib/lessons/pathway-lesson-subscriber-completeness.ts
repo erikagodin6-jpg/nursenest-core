@@ -54,7 +54,7 @@ export function bodyLooksLikeClinicalScenario(body: string): boolean {
   if (countWords(plain) < 38) return false;
   const joined = plain.toLowerCase();
   const hasPatientFrame =
-    /\b(vignette|scenario|case|patient|client|resident|infant|adolescent|mother|father|woman|man|male|female|school-age|older\s+adult)\b/i.test(
+    /\b(vignette|scenario|case|patients?|client|resident|infant|adolescent|mother|father|woman|man|male|female|school-age|older\s+adult)\b/i.test(
       joined,
     ) || /\b\d{1,3}\s*(y\.?o\.?|years?\s+old|year-old)\b/i.test(joined);
   const hasExamStyleFrame =

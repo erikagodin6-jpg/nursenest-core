@@ -1,0 +1,15 @@
+{
+  "pathwayId": "ca-np-cnple",
+  "generatedAt": "2026-04-14T14:12:00.000Z",
+  "targetThresholdLessons": 150,
+  "sourceThreshold": "src/lib/lessons/pathway-lesson-scale.ts — MIN_PATHWAY_LESSONS_SCALE_TARGET",
+  "effectiveCatalogLessonRows": 21,
+  "publicCompleteMarketingReadyCount": 6,
+  "missingToThreshold": 129,
+  "gapNature": "Lessons exist in bundled/effective catalog (21 rows) but most fail structuralQuality.publicComplete — primarily legacy section depth floors and scenario checks, not total absence from catalog. CNPLE is far below the 150-lesson scale target; closing the gap requires content production or DB publish plus meeting gates.",
+  "safestWayToRaiseLater": [
+    "Add or import CNPLE-scoped lessons in batches with normalizeLesson passing publicComplete (depth + scenario + SEO).",
+    "Prefer exam-complete premium spine where NP content is authored as premium; otherwise ensure legacy five-block meets subscriber floors.",
+    "Re-run reports/lesson-system-inventory after content drops to verify marketingWouldRender counts."
+  ]
+}

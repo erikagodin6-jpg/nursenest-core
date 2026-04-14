@@ -17,6 +17,7 @@ import crypto from "node:crypto";
 import vm from "node:vm";
 import { fileURLToPath } from "node:url";
 import { BlogPostStatus, PrismaClient } from "@prisma/client";
+import { streamJsonArray } from "./lib/stream-json-array";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 loadEnv({ path: path.join(__dirname, "../.env") });
@@ -127,68 +128,6 @@ function parseStatus(raw: unknown): BlogPostStatus {
 function excerptFromContent(content: string): string {
   const plain = content.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
   return plain.slice(0, 500);
-}
-
-async function* streamJsonArray(filePath: string): AsyncGenerator<unknown, void, void> {
-  const stream = fs.createReadStream(filePath, { encoding: "utf8", highWaterMark: 64 * 1024 });
-  let inArray = false;
-  let inString = false;
-  let escaping = false;
-  let depth = 0;
-  let objectBuffer = "";
-  let collectingObject = false;
-
-  for await (const chunk of stream) {
-    for (const char of chunk) {
-      if (!inArray) {
-        if (char === "[") inArray = true;
-        continue;
-      }
-
-      if (!collectingObject) {
-        if (char === "{") {
-          collectingObject = true;
-          depth = 1;
-          objectBuffer = "{";
-          inString = false;
-          escaping = false;
-        } else if (char === "]") {
-          return;
-        }
-        continue;
-      }
-
-      objectBuffer += char;
-      if (inString) {
-        if (escaping) {
-          escaping = false;
-          continue;
-        }
-        if (char === "\\") {
-          escaping = true;
-          continue;
-        }
-        if (char === "\"") {
-          inString = false;
-        }
-        continue;
-      }
-
-      if (char === "\"") {
-        inString = true;
-        continue;
-      }
-
-      if (char === "{") depth += 1;
-      if (char === "}") depth -= 1;
-
-      if (depth === 0) {
-        yield JSON.parse(objectBuffer);
-        objectBuffer = "";
-        collectingObject = false;
-      }
-    }
-  }
 }
 
 function validateStringField(row: Record<string, unknown>, fieldName: string, source: string, sourceId: string): string {

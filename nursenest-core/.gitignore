@@ -46,6 +46,8 @@ next-env.d.ts
 
 # local import pipeline output (do not commit)
 nursing-import-quarantine.jsonl
+/data/import-checkpoints/nurse-nest-legacy.json
+/data/import-quarantine/nurse-nest/
 
 # NP spine↔DB alignment dry-run output (large; use --out to override)
 /data/reports/pathway-lessons/np-db-alignment-report.dry-run.json

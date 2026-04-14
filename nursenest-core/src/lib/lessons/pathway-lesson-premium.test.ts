@@ -62,10 +62,23 @@ describe("pathway-lesson-premium", () => {
     assert.equal(countInternalStudyLinks(s), 2);
   });
 
-  it("lessonUsesPremiumStructure is true when any premium kind is present", () => {
+  it("lessonUsesPremiumStructure is true only when premium spine commitment sections are substantive", () => {
     assert.equal(lessonUsesPremiumStructure([]), false);
     assert.equal(
       lessonUsesPremiumStructure([{ id: "x", heading: "H", kind: "introduction", body: "a" }]),
+      false,
+    );
+    assert.equal(
+      lessonUsesPremiumStructure([
+        { id: "i", heading: "I", kind: "introduction", body: "x".repeat(50) },
+        { id: "p", heading: "P", kind: "pathophysiology_overview", body: "y".repeat(200) },
+      ]),
+      false,
+    );
+    assert.equal(
+      lessonUsesPremiumStructure([
+        { id: "rf", heading: "RF", kind: "red_flags", body: `${fillerWords(45)}` },
+      ]),
       true,
     );
   });

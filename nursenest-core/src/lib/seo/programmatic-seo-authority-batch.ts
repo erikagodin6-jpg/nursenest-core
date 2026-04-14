@@ -1,4 +1,4 @@
-import type { SeoPageDefinition } from "./programmatic-registry";
+import type { SeoPageDefinition } from "./programmatic-seo-definitions";
 
 const SITE = "NurseNest";
 

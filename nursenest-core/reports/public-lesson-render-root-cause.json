@@ -1,0 +1,73 @@
+{
+  "generatedAt": "2026-04-14T14:12:00.000Z",
+  "codePathsReviewed": [
+    "src/lib/lessons/pathway-lesson-catalog-sync.ts (normalizeLesson, expandToStandardFiveSections, getCatalogLessonsRaw merge)",
+    "src/lib/lessons/pathway-lesson-premium.ts (lessonUsesPremiumStructure, evaluatePathwayLessonStructuralGate)",
+    "src/lib/lessons/pathway-lesson-subscriber-completeness.ts (legacy subscriber + scenario heuristic)",
+    "src/lib/lessons/pathway-lesson-loader.ts (marketing/detail uses getPathwayLesson → normalizeLesson + same structural gate)"
+  ],
+  "primaryRootCause": "Bundled allied lessons used premium section kinds from legacy conversion but did not opt into a complete premium spine. lessonUsesPremiumStructure treated any premium kind as premium, so validatePathwayLessonPremium ran and structuralQuality.publicComplete stayed false. Secondary: bundled seoDescription template was 11 words (below 12-word gate). Tertiary: clinical scenario heuristic did not count plural \"patients\" as a patient frame.",
+  "pathways": [
+    {
+      "pathwayId": "us-allied-core",
+      "effectiveCatalogCount": 15,
+      "rowsReachingLoaderMergedRaw": 15,
+      "visibleAfterFilteringCount": 15,
+      "renderedCountPublicComplete": 15,
+      "blockersBeforeFix": [
+        "Premium misclassification → premium structural gate",
+        "seoDescription word floor",
+        "scenario vignette heuristic missed plural patients"
+      ],
+      "blockersAfterFix": [],
+      "confidence": "high",
+      "recommendedSafeFixApplied": "Commitment-based premium detection; map premium kinds into legacy five-block expansion; pad short seoDescription; broaden patients? in scenario heuristic"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "effectiveCatalogCount": 187,
+      "rowsReachingLoaderMergedRaw": 187,
+      "visibleAfterFilteringCount": 187,
+      "renderedCountPublicComplete": 37,
+      "blockersBeforeFix": [
+        "Same gate: legacy lessons failing subscriber depth floors (word counts per legacy section)",
+        "scenario line where applicable"
+      ],
+      "blockersAfterFix": [
+        "Unchanged count: most rows still fail legacy depth/scenario checks — not a catalog-merge visibility bug"
+      ],
+      "confidence": "high",
+      "recommendedSafeFixApplied": "None beyond shared normalization; remaining failures are content depth, not pathway vs bundle source"
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "effectiveCatalogCount": 150,
+      "rowsReachingLoaderMergedRaw": 150,
+      "visibleAfterFilteringCount": 150,
+      "renderedCountPublicComplete": 74,
+      "blockersBeforeFix": [
+        "Legacy structural + subscriber issues (section word floors)"
+      ],
+      "blockersAfterFix": [
+        "Same — allied-specific fixes do not change PN catalog completeness mix"
+      ],
+      "confidence": "high",
+      "recommendedSafeFixApplied": "Shared scenario plural fix may marginally increase passes; majority still content-depth gated"
+    },
+    {
+      "pathwayId": "us-np-fnp",
+      "effectiveCatalogCount": 161,
+      "rowsReachingLoaderMergedRaw": 161,
+      "visibleAfterFilteringCount": 161,
+      "renderedCountPublicComplete": 115,
+      "blockersBeforeFix": [
+        "Mix of legacy depth failures; some lessons may still use premium commitment and premium validator"
+      ],
+      "blockersAfterFix": [
+        "Remaining failures primarily legacy word floors / scenario, not missing merged catalog rows"
+      ],
+      "confidence": "medium",
+      "recommendedSafeFixApplied": "Shared normalization only"
+    }
+  ]
+}

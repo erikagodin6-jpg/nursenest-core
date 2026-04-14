@@ -71,6 +71,7 @@ export function inferTrackFromRaw(raw: Record<string, unknown>, fallback: Produc
     raw.product,
     raw.level,
     raw.pathway,
+    raw.pathwayKey,
     raw.examFamily,
     raw.exam_family,
     raw.tier,

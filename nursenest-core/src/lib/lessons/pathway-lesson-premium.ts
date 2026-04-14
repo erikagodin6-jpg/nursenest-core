@@ -1,6 +1,7 @@
 /**
  * Premium pathway lesson standard: section order, minimum prose depth, internal links, publish readiness.
- * Legacy catalog lessons use five-block normalization; premium kinds opt into the full spine + validation.
+ * Legacy catalog lessons use five-block normalization; premium validation runs only when a lesson
+ * commits to the premium spine (substantive red_flags / related_next_steps / tier_specific_relevance).
  *
  * Exam-complete spine checklist / builders live in `exam-complete-lesson-template.ts` (same folder).
  */
@@ -90,8 +91,32 @@ export function isPremiumSectionKind(kind: string): kind is PathwayLessonPremium
   return PREMIUM_KIND_SET.has(kind);
 }
 
+/**
+ * Premium spine "commitment": legacy conversions and partial bundles often use premium *section kinds*
+ * (introduction, pathophysiology_overview, …) without the full exam-complete premium spine, links, or
+ * related-lesson metadata. Those must normalize through the legacy five-block path unless the lesson
+ * clearly opts into premium via substantive commitment sections.
+ */
+const PREMIUM_SPINE_COMMITMENT_KINDS: readonly PathwayLessonPremiumSectionKind[] = [
+  "red_flags",
+  "related_next_steps",
+  "tier_specific_relevance",
+] as const;
+
+const PREMIUM_COMMITMENT_MIN_PLAIN_CHARS = 40;
+
+function sectionCommitsToPremiumSpine(sec: PathwayLessonSection | undefined): boolean {
+  if (!sec?.body?.trim()) return false;
+  const plain = stripToPlainText(sec.body).replace(/\s+/g, " ").trim();
+  return plain.length >= PREMIUM_COMMITMENT_MIN_PLAIN_CHARS;
+}
+
 export function lessonUsesPremiumStructure(sections: PathwayLessonSection[] | undefined): boolean {
-  return (sections ?? []).some((s) => isPremiumSectionKind(s.kind));
+  const list = sections ?? [];
+  return PREMIUM_SPINE_COMMITMENT_KINDS.some((kind) => {
+    const sec = list.find((s) => s.kind === kind);
+    return sectionCommitsToPremiumSpine(sec);
+  });
 }
 
 /** Explicit N/A marker for optional sections (no filler prose). */
