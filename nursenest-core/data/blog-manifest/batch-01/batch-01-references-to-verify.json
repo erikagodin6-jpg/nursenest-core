@@ -1,0 +1,296 @@
+{
+  "generatedAt": "2026-04-14T00:00:00.000Z",
+  "policy": "These are unverified search and document targets for editorial or librarian confirmation. Do not format as APA 7 until each source is retrieved and checked. No fabricated DOI or PMID.",
+  "posts": [
+    {
+      "manifestId": 1,
+      "slug": "nclex-seo-001-why-does-heart-failure-cause-pulmonary-edema-pathophysiology-for-nclex",
+      "suggestedSources": [
+        {
+          "type": "PubMed search topic",
+          "label": "heart failure pulmonary edema pathophysiology review",
+          "notes": "Prefer recent peer-reviewed reviews; confirm year and journal at retrieval."
+        },
+        {
+          "type": "guideline",
+          "label": "ACC or AHA heart failure guideline, acute decompensated HF section",
+          "notes": "Verify edition year your editorial team will cite."
+        },
+        {
+          "type": "textbook",
+          "label": "Pathophysiology or medical-surgical nursing chapter on HF and fluid overload",
+          "notes": "Use program-approved edition."
+        },
+        {
+          "type": "local policy",
+          "label": "Hospital policy on oxygen titration and rapid response",
+          "notes": "Site-specific; not a journal citation."
+        }
+      ]
+    },
+    {
+      "manifestId": 2,
+      "slug": "nclex-seo-002-why-does-k-rise-in-dka-before-insulin-nclex-trap-explained",
+      "suggestedSources": [
+        {
+          "type": "guideline",
+          "label": "ADA Standards of Care, DKA and hyperglycemic crises",
+          "notes": "Verify current publication year."
+        },
+        {
+          "type": "review article",
+          "label": "PubMed: diabetic ketoacidosis potassium management",
+          "notes": "Select a recent review after search; record PMID at retrieval."
+        },
+        {
+          "type": "textbook",
+          "label": "Medical-surgical nursing, endocrine emergencies",
+          "notes": "Program-approved edition."
+        },
+        {
+          "type": "PubMed search topic",
+          "label": "insulin potassium shift DKA",
+          "notes": "Mechanism-focused articles for teaching accuracy."
+        },
+        {
+          "type": "local policy",
+          "label": "Institutional DKA order set",
+          "notes": "Verify potassium thresholds against guideline after retrieval."
+        }
+      ]
+    },
+    {
+      "manifestId": 3,
+      "slug": "nclex-seo-003-why-does-siadh-cause-hyponatremia-but-wet-on-exam-questions",
+      "suggestedSources": [
+        {
+          "type": "guideline",
+          "label": "Society consensus on hyponatremia evaluation and management",
+          "notes": "Verify which society and year the team adopts."
+        },
+        {
+          "type": "review article",
+          "label": "PubMed: SIADH hyponatremia inappropriate ADH",
+          "notes": "Pick a review after search; record PMID at retrieval."
+        },
+        {
+          "type": "textbook",
+          "label": "Fluids and electrolytes or endocrine chapter",
+          "notes": "Program-approved edition."
+        },
+        {
+          "type": "PubMed search topic",
+          "label": "cerebral salt wasting vs SIADH",
+          "notes": "For contrast reading only; confirm diagnosis criteria in retrieved papers."
+        },
+        {
+          "type": "drug information",
+          "label": "Package insert or trusted database for ADH-affecting drugs named in your item bank",
+          "notes": "Use for interaction teaching, not as sole pathophysiology source."
+        }
+      ]
+    },
+    {
+      "manifestId": 4,
+      "slug": "nclex-seo-004-why-does-left-sided-hf-show-crackles-before-peripheral-edema",
+      "suggestedSources": [
+        {
+          "type": "guideline",
+          "label": "ACC or AHA heart failure guideline, presentation and staging",
+          "notes": "Verify edition year."
+        },
+        {
+          "type": "review article",
+          "label": "PubMed: left heart failure pulmonary congestion pathophysiology",
+          "notes": "Confirm relevance to L vs R failure teaching."
+        },
+        {
+          "type": "textbook",
+          "label": "Cardiac nursing or med-surg HF chapter",
+          "notes": "Program-approved edition."
+        },
+        {
+          "type": "PubMed search topic",
+          "label": "biventricular heart failure presentation",
+          "notes": "For mixed-picture nuance after primary sources are set."
+        }
+      ]
+    },
+    {
+      "manifestId": 5,
+      "slug": "nclex-seo-005-why-does-hypoalbuminemia-cause-edema-fluid-shifts-nclex",
+      "suggestedSources": [
+        {
+          "type": "textbook",
+          "label": "Fluids and electrolytes chapter on edema formation",
+          "notes": "Starling forces conceptual coverage."
+        },
+        {
+          "type": "review article",
+          "label": "PubMed: hypoalbuminemia edema pathophysiology",
+          "notes": "Select after search."
+        },
+        {
+          "type": "guideline",
+          "label": "Nutrition support in malnutrition (society source TBD)",
+          "notes": "Verify society and scope match your article claims."
+        },
+        {
+          "type": "PubMed search topic",
+          "label": "nephrotic syndrome edema mechanism",
+          "notes": "If article emphasizes protein loss."
+        },
+        {
+          "type": "textbook",
+          "label": "Hepatic ascites pathophysiology chapter",
+          "notes": "If article emphasizes liver disease."
+        }
+      ]
+    },
+    {
+      "manifestId": 6,
+      "slug": "nclex-seo-006-why-does-fever-tachycardia-happen-in-sepsis-not-just-anxiety",
+      "suggestedSources": [
+        {
+          "type": "guideline",
+          "label": "Surviving Sepsis Campaign summary",
+          "notes": "Verify year; align any bundle timing claims in items."
+        },
+        {
+          "type": "review article",
+          "label": "PubMed: sepsis pathophysiology tachycardia fever",
+          "notes": "Select after search."
+        },
+        {
+          "type": "textbook",
+          "label": "Critical care or med-surg sepsis chapter",
+          "notes": "Program-approved edition."
+        },
+        {
+          "type": "PubMed search topic",
+          "label": "sepsis lactate monitoring",
+          "notes": "For advanced items only."
+        },
+        {
+          "type": "local policy",
+          "label": "Hospital sepsis alert and escalation policy",
+          "notes": "Not a journal citation."
+        }
+      ]
+    },
+    {
+      "manifestId": 7,
+      "slug": "nclex-seo-007-why-does-hyperventilation-lower-co2-on-the-abg-quick-nclex-logic",
+      "suggestedSources": [
+        {
+          "type": "textbook",
+          "label": "Acid-base chapter with ventilation rules",
+          "notes": "Program-approved edition."
+        },
+        {
+          "type": "review article",
+          "label": "PubMed: respiratory alkalosis hyperventilation mechanism",
+          "notes": "Select after search."
+        },
+        {
+          "type": "PubMed search topic",
+          "label": "minute ventilation PaCO2 relationship",
+          "notes": "Conceptual reinforcement."
+        },
+        {
+          "type": "textbook",
+          "label": "Respiratory physiology, alveolar ventilation (conceptual)",
+          "notes": "Verify edition."
+        }
+      ]
+    },
+    {
+      "manifestId": 8,
+      "slug": "nclex-seo-008-why-does-copd-sometimes-show-high-co2-while-satting-ok",
+      "suggestedSources": [
+        {
+          "type": "guideline",
+          "label": "GOLD COPD report excerpt on oxygen in exacerbation",
+          "notes": "Verify year and chapter your team will cite."
+        },
+        {
+          "type": "review article",
+          "label": "PubMed: COPD hypercapnia oxygen therapy",
+          "notes": "Select after search."
+        },
+        {
+          "type": "textbook",
+          "label": "Respiratory nursing, COPD exacerbation",
+          "notes": "Program-approved edition."
+        },
+        {
+          "type": "PubMed search topic",
+          "label": "COPD noninvasive ventilation acute exacerbation",
+          "notes": "For BiPAP-related items."
+        }
+      ]
+    },
+    {
+      "manifestId": 9,
+      "slug": "nclex-seo-009-why-does-digoxin-toxicity-cause-vision-changes-and-bradycardia",
+      "suggestedSources": [
+        {
+          "type": "drug reference",
+          "label": "Digoxin monograph in trusted pharmacology database",
+          "notes": "Verify interaction and toxicity sections."
+        },
+        {
+          "type": "review article",
+          "label": "PubMed: digoxin toxicity management",
+          "notes": "Select after search; record PMID at retrieval."
+        },
+        {
+          "type": "textbook",
+          "label": "Pharmacology chapter on cardiac glycosides",
+          "notes": "Program-approved edition."
+        },
+        {
+          "type": "PubMed search topic",
+          "label": "digoxin toxicity hyperkalemia management",
+          "notes": "Advanced reading; confirm with toxicology references."
+        },
+        {
+          "type": "local reference",
+          "label": "Regional poison center digoxin sheet",
+          "notes": "Verify locally; not a substitute for institutional protocol."
+        }
+      ]
+    },
+    {
+      "manifestId": 10,
+      "slug": "nclex-seo-010-why-does-mannitol-lower-icp-but-risk-fluidelectrolyte-chaos",
+      "suggestedSources": [
+        {
+          "type": "guideline",
+          "label": "Traumatic brain injury ICP management excerpt (society TBD)",
+          "notes": "Verify source and year before citing in public copy."
+        },
+        {
+          "type": "review article",
+          "label": "PubMed: mannitol intracranial pressure electrolyte complications",
+          "notes": "Select after search."
+        },
+        {
+          "type": "textbook",
+          "label": "Neuro critical care nursing chapter",
+          "notes": "Program-approved edition."
+        },
+        {
+          "type": "PubMed search topic",
+          "label": "mannitol acute kidney injury risk",
+          "notes": "For renal monitoring claims."
+        },
+        {
+          "type": "pharmacy reference",
+          "label": "Institutional IV compatibility and concentration limits",
+          "notes": "Verify administration claims against local pharmacy manual."
+        }
+      ]
+    }
+  ]
+}
