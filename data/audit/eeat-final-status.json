@@ -1,56 +1,37 @@
 {
-  "generatedAt": "2026-04-14T17:23:48.307Z",
-  "contentQualityScore": 53,
-  "contentQualityNotes": "Heuristic from bundled pathway catalog only (word count + section labels). Production DB lessons may differ.",
-  "trustSignals": {
-    "aboutPage": {
-      "path": "/about",
-      "status": "present"
-    },
-    "editorialPolicy": {
-      "path": "/editorial-policy",
-      "status": "implemented"
-    },
-    "contentReviewPolicy": {
-      "path": "/content-review-policy",
-      "status": "implemented"
-    },
-    "contactPage": {
-      "path": "/contact",
-      "status": "present"
-    },
-    "privacyPolicy": {
-      "path": "/privacy",
-      "status": "present"
-    },
-    "disclaimer": {
-      "path": "/disclaimer",
-      "status": "present"
-    },
-    "blogAuthorAttribution": {
-      "status": "unknown",
-      "publishedPostsWithNamedAuthorPct": null
-    }
+  "generatedAt": "2026-04-14T17:24:48.380Z",
+  "runMode": "safe_batch",
+  "averageEeatScore": 61,
+  "pagesBelowThreshold70": 547,
+  "totalPagesScored": 601,
+  "missingAuthorSignals": {
+    "blogPostsWithoutNamedAuthor": 0,
+    "note": "Lessons use institutional author in JSON-LD (Organization); optional per-lesson bylines are future work."
   },
-  "seoReadiness": {
-    "score": 77,
-    "sitemapIndex": "/sitemap.xml",
-    "canonicalUrls": "Enforced per route via safeGenerateMetadata / marketing alternates",
-    "hreflang": "Partial — English default + selected locales in marketing alternates; incomplete locales noindex",
-    "notes": "Added /about, /editorial-policy, /content-review-policy to core sitemap list."
+  "missingSchema": 0,
+  "internalLinkingGaps": 538,
+  "contentCompletenessPercent": 89.2,
+  "seoReadinessScore": 63,
+  "trustPages": {
+    "about": "/about",
+    "editorialPolicy": "/editorial-policy",
+    "contentReviewPolicy": "/content-review-policy",
+    "contact": "/contact",
+    "privacy": "/privacy"
   },
-  "paywallSeoSafety": {
-    "status": "aligned",
-    "notes": "Marketing lessons use preview sections for non-subscribers; /app surfaces noindex. See paywallSeo in content audit."
+  "paywallSeo": {
+    "status": "preview_only_indexing",
+    "notes": "Marketing lessons: index public URL with preview sections; full body gated. Subscriber /app remains noindex."
   },
-  "missingElements": [
-    "Catalog lessons flagged thin — expand sections or merge duplicates",
-    "Duplicate lesson titles across pathways — dedupe or differentiate",
-    "Some lessons missing one or more E-E-A-T section kinds in catalog JSON",
-    "Clinical tone QA: sample manual review of high-traffic lessons and blog posts"
+  "programmaticSeo": {
+    "slugCount": 39,
+    "thinFlags": 26
+  },
+  "prioritizedActions": [
+    "Backfill blog authorDisplayName for published posts missing a named author",
+    "Raise internal links to 3+ on pages flagged internal_links_low",
+    "Complete lesson spine sections on structure_incomplete rows (do not auto-fill thin copy)",
+    "Refresh stale blog posts listed in content-freshness.json"
   ],
-  "rankingReadiness": {
-    "level": "needs_work",
-    "summary": "Ship trust pages + author schema; continue systematic lesson spine completion and author backfill for YMYL blog content."
-  }
+  "rankingReadiness": "moderate_needs_content_ops"
 }

@@ -201,7 +201,7 @@ async function main() {
     const flags: string[] = [];
     if (score < THRESHOLD) flags.push(`below_score_${THRESHOLD}`);
     if (links < MIN_LINKS) flags.push("internal_links_low");
-    if (wc < 600) flags.push("thin_programmatic");
+    if (wc < 280 && p.sections.length < 3) flags.push("thin_programmatic");
 
     pages.push({
       id: `seo:${p.slug}`,

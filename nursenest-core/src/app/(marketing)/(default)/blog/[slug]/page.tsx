@@ -100,6 +100,8 @@ export default async function BlogPostPage({ params }: Props) {
         articleSection={post.category ?? null}
         authorName={"authorDisplayName" in post ? post.authorDisplayName : null}
         authorJobTitle={"authorCredentials" in post ? post.authorCredentials : null}
+        reviewerName={"medicalReviewerName" in post ? post.medicalReviewerName : null}
+        reviewerJobTitle={"medicalReviewerCredentials" in post ? post.medicalReviewerCredentials : null}
       />
       {emitFaqJsonLd ? (
         <BlogFaqPageJsonLd items={faqItems.map((f) => ({ question: f.q, answer: f.a }))} />

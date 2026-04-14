@@ -90,6 +90,8 @@ export function BlogPostingJsonLd({
   articleSection,
   authorName,
   authorJobTitle,
+  reviewerName,
+  reviewerJobTitle,
 }: {
   slug: string;
   title: string;
@@ -105,6 +107,9 @@ export function BlogPostingJsonLd({
   authorName?: string | null;
   /** E-E-A-T: credential line (e.g. RN, BSN). */
   authorJobTitle?: string | null;
+  /** Optional clinical / editorial reviewer (YMYL). */
+  reviewerName?: string | null;
+  reviewerJobTitle?: string | null;
 }) {
   const url = absoluteUrl(`/blog/${slug}`);
   const kw = keywords?.map((k) => k.trim()).filter(Boolean) ?? [];
@@ -116,6 +121,14 @@ export function BlogPostingJsonLd({
         ...(authorJobTitle?.trim() ? { jobTitle: authorJobTitle.trim() } : {}),
       }
     : { "@id": ORG_ID };
+  const reviewedBy =
+    reviewerName?.trim() ?
+      {
+        "@type": "Person" as const,
+        name: reviewerName.trim(),
+        ...(reviewerJobTitle?.trim() ? { jobTitle: reviewerJobTitle.trim() } : {}),
+      }
+    : undefined;
   return (
     <JsonLd
       data={{
@@ -128,6 +141,7 @@ export function BlogPostingJsonLd({
         url,
         mainEntityOfPage: { "@type": "WebPage", "@id": url },
         author,
+        ...(reviewedBy ? { reviewedBy } : {}),
         publisher: { "@id": ORG_ID },
         ...(coverImage ? { image: coverImage } : {}),
         ...(kw.length ? { keywords: kw.join(", ") } : {}),

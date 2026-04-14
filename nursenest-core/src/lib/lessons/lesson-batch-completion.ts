@@ -112,7 +112,8 @@ type BatchInput = {
   includeSlugs?: string[];
 };
 
-type LessonRow = {
+/** Row shape used by completion evaluation (exported for incremental pipeline tests). */
+export type LessonCompletionLessonRow = {
   id: string;
   slug: string;
   title: string;
@@ -121,6 +122,8 @@ type LessonRow = {
   bodySystem: string;
   sections: Prisma.JsonValue;
 };
+
+type LessonRow = LessonCompletionLessonRow;
 
 const CORE_SYSTEM_KEYS = ["cardio", "cardiovascular", "respir", "renal", "kidney", "endocr", "neuro"];
 const HIGH_YIELD_KEYS = ["pharm", "medication", "priorit", "triage", "delegat", "safety", "infection"];
@@ -595,7 +598,7 @@ function normalizeSections(raw: Prisma.JsonValue): PathwayLessonSection[] {
 }
 
 /** Preserves recall / checkpoint payloads when merging or rewriting DB JSON. */
-function normalizeSectionsRich(raw: Prisma.JsonValue): PathwayLessonSection[] {
+export function normalizeSectionsRich(raw: Prisma.JsonValue): PathwayLessonSection[] {
   if (!Array.isArray(raw)) return [];
   const out: PathwayLessonSection[] = [];
   for (let i = 0; i < raw.length; i += 1) {
@@ -622,9 +625,10 @@ function normalizeSectionsRich(raw: Prisma.JsonValue): PathwayLessonSection[] {
   return out;
 }
 
-const MIN_SECTION_BODY_WORDS_TO_PRESERVE = 50;
+/** Sections with at least this many words are treated as substantive and preserved during incremental merge. */
+export const MIN_SECTION_BODY_WORDS_TO_PRESERVE = 50;
 
-function mergeIncrementalPremiumSections(
+export function mergeIncrementalPremiumSections(
   current: PathwayLessonSection[],
   proposed: PathwayLessonSection[],
 ): PathwayLessonSection[] {
@@ -644,7 +648,7 @@ function mergeIncrementalPremiumSections(
   return out;
 }
 
-function quizDedupeKey(q: PathwayLessonQuizItem): string {
+export function quizDedupeKey(q: PathwayLessonQuizItem): string {
   const ext = q as PathwayLessonQuizItem & { examQuestionId?: string };
   if (typeof ext.examQuestionId === "string" && ext.examQuestionId.trim()) {
     return `id:${ext.examQuestionId.trim()}`;
@@ -653,7 +657,7 @@ function quizDedupeKey(q: PathwayLessonQuizItem): string {
 }
 
 /** Puts existing items first, then adds generated items without duplicates. */
-function mergeQuizItemsNoDup(
+export function mergeQuizItemsNoDup(
   existing: PathwayLessonQuizItem[],
   generated: PathwayLessonQuizItem[],
 ): PathwayLessonQuizItem[] {
@@ -674,7 +678,7 @@ function mergeQuizItemsNoDup(
   return out;
 }
 
-function buildSectionsDbPayload(
+export function buildSectionsDbPayload(
   sections: PathwayLessonSection[],
   pre: PathwayLessonQuizItem[],
   post: PathwayLessonQuizItem[],
@@ -928,7 +932,7 @@ function buildPremiumSections(args: {
   return out;
 }
 
-function evaluateCompletion(args: {
+export function evaluateCompletion(args: {
   lesson: LessonRow;
   sections: PathwayLessonSection[];
   preQuestions: PathwayLessonQuizItem[];

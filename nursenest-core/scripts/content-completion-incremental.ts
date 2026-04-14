@@ -17,52 +17,22 @@
  * Dry-run (default): no DB writes; still updates the progress JSON with snapshot + report.
  */
 import "../src/lib/db/env-bootstrap";
-import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { prisma } from "../src/lib/db";
 import {
   estimatePathwayContentCompleteness,
   runLessonCompletionBatch,
-  type LessonCompletionBatchReport,
 } from "../src/lib/lessons/lesson-batch-completion";
+import {
+  loadProgressFromPath,
+  saveProgressToPath,
+  type ContentCompletionProgressRun,
+} from "../src/lib/lessons/content-completion-progress-storage";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.join(__dirname, "..", "..");
 const PROGRESS_PATH = path.join(REPO_ROOT, "data/audit/content-completion-progress.json");
-
-type ProgressRun = {
-  at: string;
-  pathwayId: string;
-  batchSize: number;
-  offset: number;
-  write: boolean;
-  mode: "complete" | "refine";
-  onlyNotComplete: boolean;
-  completenessApproxPctBefore: number;
-  completenessApproxPctAfter: number;
-  report: LessonCompletionBatchReport;
-  notes: string[];
-};
-
-type ProgressFile = {
-  schemaVersion: 1;
-  description: string;
-  lastUpdated: string;
-  /** Most recent run per pathway id (rough completeness snapshot after the run). */
-  latestSnapshotByPathway: Record<
-    string,
-    {
-      completenessApproxPct: number;
-      total: number;
-      completeRough: number;
-      partialRough: number;
-      emptyRough: number;
-      lastRunAt: string;
-    }
-  >;
-  runs: ProgressRun[];
-};
 
 type FocusAreaArg =
   | "cardiovascular"
@@ -103,46 +73,6 @@ function parseArgs(argv: string[]) {
   return { pathwayId, batchSize, offset, write, mode, onlyNotComplete, focusArea };
 }
 
-function loadProgress(): ProgressFile {
-  if (!fs.existsSync(PROGRESS_PATH)) {
-    return {
-      schemaVersion: 1,
-      description:
-        "Append-only log for incremental lesson + quiz completion batches. completenessApproxPct is a rough hub metric (section spine + word count), not full bank-linked validation.",
-      lastUpdated: new Date().toISOString(),
-      latestSnapshotByPathway: {},
-      runs: [],
-    };
-  }
-  try {
-    const raw = fs.readFileSync(PROGRESS_PATH, "utf8");
-    const parsed = JSON.parse(raw) as ProgressFile;
-    if (parsed.schemaVersion !== 1 || !Array.isArray(parsed.runs)) {
-      throw new Error("Invalid progress file shape");
-    }
-    return parsed;
-  } catch {
-    return {
-      schemaVersion: 1,
-      description:
-        "Append-only log for incremental lesson + quiz completion batches. completenessApproxPct is a rough hub metric (section spine + word count), not full bank-linked validation.",
-      lastUpdated: new Date().toISOString(),
-      latestSnapshotByPathway: {},
-      runs: [],
-    };
-  }
-}
-
-function saveProgress(next: ProgressFile) {
-  fs.mkdirSync(path.dirname(PROGRESS_PATH), { recursive: true });
-  next.lastUpdated = new Date().toISOString();
-  const maxRuns = 200;
-  if (next.runs.length > maxRuns) {
-    next.runs = next.runs.slice(-maxRuns);
-  }
-  fs.writeFileSync(PROGRESS_PATH, `${JSON.stringify(next, null, 2)}\n`, "utf8");
-}
-
 async function main() {
   const { pathwayId, batchSize, offset, write, mode, onlyNotComplete, focusArea } = parseArgs(process.argv.slice(2));
 
@@ -165,7 +95,7 @@ async function main() {
     write ? "DB writes applied." : "Dry-run: no prisma updates.",
   ];
 
-  const run: ProgressRun = {
+  const run: ContentCompletionProgressRun = {
     at: new Date().toISOString(),
     pathwayId,
     batchSize,
@@ -179,7 +109,7 @@ async function main() {
     notes,
   };
 
-  const progress = loadProgress();
+  const progress = loadProgressFromPath(PROGRESS_PATH, new Date().toISOString());
   progress.runs.push(run);
   progress.latestSnapshotByPathway[pathwayId] = {
     completenessApproxPct: afterSnap.completenessApproxPct,
@@ -189,7 +119,7 @@ async function main() {
     emptyRough: afterSnap.emptyRough,
     lastRunAt: run.at,
   };
-  saveProgress(progress);
+  saveProgressToPath(PROGRESS_PATH, progress, new Date().toISOString());
 
   console.log(JSON.stringify({ beforeSnap, afterSnap, report, progressFile: PROGRESS_PATH }, null, 2));
 

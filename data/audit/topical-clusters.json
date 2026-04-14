@@ -1,0 +1,2099 @@
+{
+  "generatedAt": "2026-04-14T17:24:48.380Z",
+  "clusterCount": 194,
+  "note": "Clusters derived from pathway catalog topicSlug + pathwayId. Pillar URLs follow exam hub topic pattern.",
+  "clusters": [
+    {
+      "topicSlug": "cardiovascular",
+      "label": "Cardiovascular",
+      "lessonCount": 23,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/cardiovascular",
+      "supportingSlugs": [
+        "cardiovascular-prioritization",
+        "heart-failure-nursing-priorities-hy",
+        "acute-myocardial-infarction-troponin",
+        "shock-recognition-fluids",
+        "hypertensive-crisis-vs-urgency",
+        "atrial-fibrillation-rate-control",
+        "endocarditis-blood-cultures",
+        "pericarditis-ecg-clues",
+        "dvt-pe-nursing-priorities",
+        "abdominal-aortic-aneurysm-nclex-rn",
+        "acute-coronary-syndrome-nclex-rn",
+        "atrial-fibrillation-nclex-rn"
+      ]
+    },
+    {
+      "topicSlug": "cardiovascular",
+      "label": "Cardiovascular",
+      "lessonCount": 22,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/cardiovascular",
+      "supportingSlugs": [
+        "heart-failure-nursing-priorities-hy",
+        "acute-myocardial-infarction-troponin",
+        "shock-recognition-fluids",
+        "hypertensive-crisis-vs-urgency",
+        "atrial-fibrillation-rate-control",
+        "endocarditis-blood-cultures",
+        "pericarditis-ecg-clues",
+        "dvt-pe-nursing-priorities",
+        "abdominal-aortic-aneurysm-nclex-rn",
+        "acute-coronary-syndrome-nclex-rn",
+        "atrial-fibrillation-nclex-rn",
+        "cabg-and-postoperative-cabg-complications-nclex-rn"
+      ]
+    },
+    {
+      "topicSlug": "prioritization-delegation",
+      "label": "Clinical judgment",
+      "lessonCount": 13,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/prioritization-delegation",
+      "supportingSlugs": [
+        "bp26-usnp-x027-first-day-admissions-data-collection-ord",
+        "bp26-usnp-x028-rapid-response-activation-criteria",
+        "bp26-usnp-x029-overflow-unit-prioritization",
+        "bp26-usnp-x030-chronic-disease-self-management-coaching",
+        "bp26-usnp-x031-health-literacy-teach-back",
+        "bp26-usnp-x032-social-determinants-screening",
+        "bp26-usnp-pad-009-management_of_care-prioritization-delegation",
+        "bp26-usnp-pad-019-physiological_adaptation-prioritization-delegation",
+        "bp26-usnp-pad-029-risk_reduction-prioritization-delegation",
+        "bp26-usnp-pad-039-basic_care_comfort-prioritization-delegation",
+        "bp26-usnp-pad-049-management_of_care-prioritization-delegation",
+        "bp26-usnp-pad-059-physiological_adaptation-prioritization-delegation"
+      ]
+    },
+    {
+      "topicSlug": "fluids-electrolytes",
+      "label": "Fluids & electrolytes",
+      "lessonCount": 10,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/fluids-electrolytes",
+      "supportingSlugs": [
+        "fluid-balance-acute-care",
+        "ca-rn-fluid-balance",
+        "hyponatremia-vs-hypernatremia-hy",
+        "hypo-vs-hyperkalemia-hy",
+        "fluid-volume-deficit",
+        "fluid-volume-excess",
+        "magnesium-arrhythmia-risk",
+        "calcium-tetany",
+        "phosphate-shifts-in-renal",
+        "mixed-acid-base-patterns"
+      ]
+    },
+    {
+      "topicSlug": "cardiovascular",
+      "label": "Cardiovascular (PN)",
+      "lessonCount": 9,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/cardiovascular",
+      "supportingSlugs": [
+        "heart-failure-monitoring",
+        "hypertension-teaching",
+        "edema-daily-weights",
+        "bp26-carpn-pa-afib-rate",
+        "bp26-carpn-x001-stemi-vs-nstemi-first-nursing-moves",
+        "bp26-carpn-x002-angina-vs-infarction-data-that-changes-r",
+        "bp26-carpn-x003-heart-failure-discharge-teaching",
+        "bp26-carpn-x004-pacemaker-site-monitoring",
+        "bp26-carpn-x005-cardiac-catheterization-post-procedure-c"
+      ]
+    },
+    {
+      "topicSlug": "respiratory",
+      "label": "Respiratory",
+      "lessonCount": 9,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/respiratory",
+      "supportingSlugs": [
+        "respiratory-assessment-ngn",
+        "abg-interpretation-basics-hy",
+        "copd-exacerbation-oxygen",
+        "asthma-status-asthmaticus",
+        "ards-ventilation-basics",
+        "pneumonia-oxygenation",
+        "pulmonary-embolism-clues",
+        "tb-isolation-compliance",
+        "pleural-effusion-chest-tubes"
+      ]
+    },
+    {
+      "topicSlug": "fluids-electrolytes",
+      "label": "Fluid deficit vs excess",
+      "lessonCount": 9,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/fluids-electrolytes",
+      "supportingSlugs": [
+        "us-rn-fluid-balance",
+        "hyponatremia-vs-hypernatremia-hy",
+        "hypo-vs-hyperkalemia-hy",
+        "fluid-volume-deficit",
+        "fluid-volume-excess",
+        "magnesium-arrhythmia-risk",
+        "calcium-tetany",
+        "phosphate-shifts-in-renal",
+        "mixed-acid-base-patterns"
+      ]
+    },
+    {
+      "topicSlug": "cardiovascular",
+      "label": "Cardiovascular",
+      "lessonCount": 9,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/cardiovascular",
+      "supportingSlugs": [
+        "fnp-adult-hypertension-intensification",
+        "bp26-usnp-pad-000-safety_and_infection-cardiovascular",
+        "bp26-usnp-pad-010-pharmacological_therapies-cardiovascular",
+        "bp26-usnp-pad-020-psychosocial_integrity-cardiovascular",
+        "bp26-usnp-pad-030-health_promotion_maintenance-cardiovascular",
+        "bp26-usnp-pad-040-safety_and_infection-cardiovascular",
+        "bp26-usnp-pad-050-pharmacological_therapies-cardiovascular",
+        "bp26-usnp-pad-060-psychosocial_integrity-cardiovascular",
+        "bp26-usnp-pad-070-health_promotion_maintenance-cardiovascular"
+      ]
+    },
+    {
+      "topicSlug": "respiratory",
+      "label": "Respiratory",
+      "lessonCount": 8,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/respiratory",
+      "supportingSlugs": [
+        "abg-interpretation-basics-hy",
+        "copd-exacerbation-oxygen",
+        "asthma-status-asthmaticus",
+        "ards-ventilation-basics",
+        "pneumonia-oxygenation",
+        "pulmonary-embolism-clues",
+        "tb-isolation-compliance",
+        "pleural-effusion-chest-tubes"
+      ]
+    },
+    {
+      "topicSlug": "pharmacology",
+      "label": "Pharmacology",
+      "lessonCount": 8,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/pharmacology",
+      "supportingSlugs": [
+        "insulin-hypoglycemia-hy",
+        "anticoagulants-bleeding-risk",
+        "antibiotic-classes-allergies-hy",
+        "opioids-respiratory-depression",
+        "cardiac-glycosides-toxicity",
+        "diuretics-electrolyte-shifts",
+        "antihypertensive-combos",
+        "chemo-safe-handling-extravasation"
+      ]
+    },
+    {
+      "topicSlug": "pharmacology",
+      "label": "Pharmacology",
+      "lessonCount": 8,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/pharmacology",
+      "supportingSlugs": [
+        "insulin-hypoglycemia-hy",
+        "anticoagulants-bleeding-risk",
+        "antibiotic-classes-allergies-hy",
+        "opioids-respiratory-depression",
+        "cardiac-glycosides-toxicity",
+        "diuretics-electrolyte-shifts",
+        "antihypertensive-combos",
+        "chemo-safe-handling-extravasation"
+      ]
+    },
+    {
+      "topicSlug": "respiratory",
+      "label": "Respiratory",
+      "lessonCount": 8,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/respiratory",
+      "supportingSlugs": [
+        "bp26-usnp-pad-001-management_of_care-respiratory",
+        "bp26-usnp-pad-011-physiological_adaptation-respiratory",
+        "bp26-usnp-pad-021-risk_reduction-respiratory",
+        "bp26-usnp-pad-031-basic_care_comfort-respiratory",
+        "bp26-usnp-pad-041-management_of_care-respiratory",
+        "bp26-usnp-pad-051-physiological_adaptation-respiratory",
+        "bp26-usnp-pad-061-risk_reduction-respiratory",
+        "bp26-usnp-pad-071-basic_care_comfort-respiratory"
+      ]
+    },
+    {
+      "topicSlug": "renal-gu",
+      "label": "Renal",
+      "lessonCount": 8,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/renal-gu",
+      "supportingSlugs": [
+        "bp26-usnp-pad-003-physiological_adaptation-renal-gu",
+        "bp26-usnp-pad-013-risk_reduction-renal-gu",
+        "bp26-usnp-pad-023-basic_care_comfort-renal-gu",
+        "bp26-usnp-pad-033-management_of_care-renal-gu",
+        "bp26-usnp-pad-043-physiological_adaptation-renal-gu",
+        "bp26-usnp-pad-053-risk_reduction-renal-gu",
+        "bp26-usnp-pad-063-basic_care_comfort-renal-gu",
+        "bp26-usnp-pad-073-management_of_care-renal-gu"
+      ]
+    },
+    {
+      "topicSlug": "endocrine",
+      "label": "Endocrine",
+      "lessonCount": 8,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/endocrine",
+      "supportingSlugs": [
+        "bp26-usnp-pad-004-psychosocial_integrity-endocrine",
+        "bp26-usnp-pad-014-health_promotion_maintenance-endocrine",
+        "bp26-usnp-pad-024-safety_and_infection-endocrine",
+        "bp26-usnp-pad-034-pharmacological_therapies-endocrine",
+        "bp26-usnp-pad-044-psychosocial_integrity-endocrine",
+        "bp26-usnp-pad-054-health_promotion_maintenance-endocrine",
+        "bp26-usnp-pad-064-safety_and_infection-endocrine",
+        "bp26-usnp-pad-074-pharmacological_therapies-endocrine"
+      ]
+    },
+    {
+      "topicSlug": "gastrointestinal",
+      "label": "GI",
+      "lessonCount": 8,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/gastrointestinal",
+      "supportingSlugs": [
+        "bp26-usnp-pad-005-risk_reduction-gastrointestinal",
+        "bp26-usnp-pad-015-basic_care_comfort-gastrointestinal",
+        "bp26-usnp-pad-025-management_of_care-gastrointestinal",
+        "bp26-usnp-pad-035-physiological_adaptation-gastrointestinal",
+        "bp26-usnp-pad-045-risk_reduction-gastrointestinal",
+        "bp26-usnp-pad-055-basic_care_comfort-gastrointestinal",
+        "bp26-usnp-pad-065-management_of_care-gastrointestinal",
+        "bp26-usnp-pad-075-physiological_adaptation-gastrointestinal"
+      ]
+    },
+    {
+      "topicSlug": "fluids-electrolytes",
+      "label": "Fluids & electrolytes",
+      "lessonCount": 8,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/fluids-electrolytes",
+      "supportingSlugs": [
+        "bp26-usnp-pad-006-health_promotion_maintenance-fluids-electrolytes",
+        "bp26-usnp-pad-016-safety_and_infection-fluids-electrolytes",
+        "bp26-usnp-pad-026-pharmacological_therapies-fluids-electrolytes",
+        "bp26-usnp-pad-036-psychosocial_integrity-fluids-electrolytes",
+        "bp26-usnp-pad-046-health_promotion_maintenance-fluids-electrolytes",
+        "bp26-usnp-pad-056-safety_and_infection-fluids-electrolytes",
+        "bp26-usnp-pad-066-pharmacological_therapies-fluids-electrolytes",
+        "bp26-usnp-pad-076-psychosocial_integrity-fluids-electrolytes"
+      ]
+    },
+    {
+      "topicSlug": "infection-control",
+      "label": "Infection",
+      "lessonCount": 8,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/infection-control",
+      "supportingSlugs": [
+        "bp26-usnp-pad-007-basic_care_comfort-infection-control",
+        "bp26-usnp-pad-017-management_of_care-infection-control",
+        "bp26-usnp-pad-027-physiological_adaptation-infection-control",
+        "bp26-usnp-pad-037-risk_reduction-infection-control",
+        "bp26-usnp-pad-047-basic_care_comfort-infection-control",
+        "bp26-usnp-pad-057-management_of_care-infection-control",
+        "bp26-usnp-pad-067-physiological_adaptation-infection-control",
+        "bp26-usnp-pad-077-risk_reduction-infection-control"
+      ]
+    },
+    {
+      "topicSlug": "gastrointestinal",
+      "label": "Gastrointestinal",
+      "lessonCount": 7,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/gastrointestinal",
+      "supportingSlugs": [
+        "liver-failure-hepatic-encephalopathy",
+        "acute-pancreatitis-nursing-care",
+        "bowel-obstruction-vs-paralytic-ileus",
+        "gerd-pud-bleeding-clues",
+        "gi-bleed-assessment",
+        "c-diff-infection-control",
+        "ostomy-skin-protection"
+      ]
+    },
+    {
+      "topicSlug": "neurological",
+      "label": "Neurological",
+      "lessonCount": 7,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/neurological",
+      "supportingSlugs": [
+        "stroke-assessment-tpa-window",
+        "seizure-precautions-rescue-meds",
+        "increased-icp-positioning",
+        "spinal-cord-injury-autonomic-dysreflexia",
+        "meningitis-isolation-assessment",
+        "migraine-vs-red-flag-headache",
+        "parkinson-disease-med-timing"
+      ]
+    },
+    {
+      "topicSlug": "fluids-electrolytes",
+      "label": "Fluid deficit vs excess",
+      "lessonCount": 7,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/fluids-electrolytes",
+      "supportingSlugs": [
+        "ca-rpn-fluid-balance",
+        "i-o-fluid-restriction-teaching",
+        "hypokalemia-symptoms",
+        "daily-weights-pattern",
+        "bp26-carpn-x009-calcium-imbalance-cues",
+        "bp26-carpn-x010-magnesium-monitoring-on-replacement",
+        "bp26-carpn-x011-fluid-restriction-teaching"
+      ]
+    },
+    {
+      "topicSlug": "respiratory",
+      "label": "Respiratory (PN)",
+      "lessonCount": 7,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/respiratory",
+      "supportingSlugs": [
+        "oxygen-devices-for-pn-care",
+        "inhaler-technique-teaching",
+        "copd-home-care",
+        "bp26-carpn-lab-abg-interpret",
+        "bp26-carpn-x006-pleural-effusion-breath-sounds-positioni",
+        "bp26-carpn-x007-home-oxygen-teaching",
+        "bp26-carpn-x008-pneumothorax-signs"
+      ]
+    },
+    {
+      "topicSlug": "gastrointestinal",
+      "label": "Gastrointestinal",
+      "lessonCount": 7,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/gastrointestinal",
+      "supportingSlugs": [
+        "liver-failure-hepatic-encephalopathy",
+        "acute-pancreatitis-nursing-care",
+        "bowel-obstruction-vs-paralytic-ileus",
+        "gerd-pud-bleeding-clues",
+        "gi-bleed-assessment",
+        "c-diff-infection-control",
+        "ostomy-skin-protection"
+      ]
+    },
+    {
+      "topicSlug": "neurological",
+      "label": "Neurological",
+      "lessonCount": 7,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/neurological",
+      "supportingSlugs": [
+        "stroke-assessment-tpa-window",
+        "seizure-precautions-rescue-meds",
+        "increased-icp-positioning",
+        "spinal-cord-injury-autonomic-dysreflexia",
+        "meningitis-isolation-assessment",
+        "migraine-vs-red-flag-headache",
+        "parkinson-disease-med-timing"
+      ]
+    },
+    {
+      "topicSlug": "medication-safety",
+      "label": "Medication safety",
+      "lessonCount": 7,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/medication-safety",
+      "supportingSlugs": [
+        "bp26-usnp-pad-008-safety_and_infection-medication-safety",
+        "bp26-usnp-pad-018-pharmacological_therapies-medication-safety",
+        "bp26-usnp-pad-028-psychosocial_integrity-medication-safety",
+        "bp26-usnp-pad-038-health_promotion_maintenance-medication-safety",
+        "bp26-usnp-pad-048-safety_and_infection-medication-safety",
+        "bp26-usnp-pad-058-pharmacological_therapies-medication-safety",
+        "bp26-usnp-pad-068-psychosocial_integrity-medication-safety"
+      ]
+    },
+    {
+      "topicSlug": "endocrine",
+      "label": "Endocrine",
+      "lessonCount": 6,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/endocrine",
+      "supportingSlugs": [
+        "dka-vs-hhs-priorities-hy",
+        "thyroid-storm-myxedema-clues",
+        "addisonian-crisis",
+        "cushing-syndrome-assessment",
+        "diabetes-self-management-teaching",
+        "siadh-vs-di-basics"
+      ]
+    },
+    {
+      "topicSlug": "renal-gu",
+      "label": "Renal & GU",
+      "lessonCount": 6,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/renal-gu",
+      "supportingSlugs": [
+        "aki-prerenal-vs-intrarenal",
+        "hemodialysis-access-care",
+        "peritoneal-dialysis-complications",
+        "kidney-stones-strain-management",
+        "uti-vs-pyelonephritis",
+        "indwelling-catheter-risks"
+      ]
+    },
+    {
+      "topicSlug": "pharmacology",
+      "label": "Pharmacology (PN)",
+      "lessonCount": 6,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/pharmacology",
+      "supportingSlugs": [
+        "insulin-administration-checks",
+        "oral-hypoglycemics",
+        "antibiotic-side-effect-reporting",
+        "bp26-carpn-x012-beta-blocker-hold-peri-op-considerations",
+        "bp26-carpn-x013-diuretic-teaching-orthostasis",
+        "bp26-carpn-x014-steroid-taper-teaching"
+      ]
+    },
+    {
+      "topicSlug": "mental-health",
+      "label": "Mental Health (PN)",
+      "lessonCount": 6,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/mental-health",
+      "supportingSlugs": [
+        "suicide-precautions-observation",
+        "behavioral-escalation-reporting",
+        "bp26-carpn-psy-dementia-wandering",
+        "bp26-carpn-x015-delirium-vs-dementia-nursing-differentia",
+        "bp26-carpn-x016-substance-withdrawal-monitoring",
+        "bp26-carpn-x017-trauma-informed-care-basics"
+      ]
+    },
+    {
+      "topicSlug": "safety",
+      "label": "Safety (PN)",
+      "lessonCount": 6,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/safety",
+      "supportingSlugs": [
+        "falls-risk-side-rails-policy",
+        "restraint-monitoring-requirements",
+        "bp26-carpn-sf-fire-evac-chair",
+        "bp26-carpn-x024-wrong-patient-near-miss-reporting",
+        "bp26-carpn-x025-barcode-scanning-discipline",
+        "bp26-carpn-x026-line-identification-labeling"
+      ]
+    },
+    {
+      "topicSlug": "endocrine",
+      "label": "Endocrine",
+      "lessonCount": 6,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/endocrine",
+      "supportingSlugs": [
+        "dka-vs-hhs-priorities-hy",
+        "thyroid-storm-myxedema-clues",
+        "addisonian-crisis",
+        "cushing-syndrome-assessment",
+        "diabetes-self-management-teaching",
+        "siadh-vs-di-basics"
+      ]
+    },
+    {
+      "topicSlug": "renal-gu",
+      "label": "Renal & GU",
+      "lessonCount": 6,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/renal-gu",
+      "supportingSlugs": [
+        "aki-prerenal-vs-intrarenal",
+        "hemodialysis-access-care",
+        "peritoneal-dialysis-complications",
+        "kidney-stones-strain-management",
+        "uti-vs-pyelonephritis",
+        "indwelling-catheter-risks"
+      ]
+    },
+    {
+      "topicSlug": "fluids-electrolytes",
+      "label": "Fluid deficit vs excess",
+      "lessonCount": 6,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/fluids-electrolytes",
+      "supportingSlugs": [
+        "us-pn-fluid-balance",
+        "i-o-fluid-restriction-teaching",
+        "hypokalemia-symptoms",
+        "daily-weights-pattern",
+        "bp26-uslpn-pa-hyperk-emerg",
+        "bp26-uslpn-pa-hyponat-symp"
+      ]
+    },
+    {
+      "topicSlug": "maternity",
+      "label": "Maternity",
+      "lessonCount": 5,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/maternity",
+      "supportingSlugs": [
+        "preeclampsia-vs-eclampsia",
+        "postpartum-hemorrhage",
+        "late-decelerations-fhr",
+        "newborn-thermoregulation-feeding",
+        "rh-incompatibility-basics"
+      ]
+    },
+    {
+      "topicSlug": "pediatrics",
+      "label": "Pediatrics",
+      "lessonCount": 5,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/pediatrics",
+      "supportingSlugs": [
+        "pediatric-fever-dehydration",
+        "rsv-pediatric-resp-distress",
+        "immunization-schedule-essentials",
+        "growth-failure-red-flags",
+        "non-accidental-trauma-suspicion"
+      ]
+    },
+    {
+      "topicSlug": "maternity",
+      "label": "Maternity (PN)",
+      "lessonCount": 5,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/maternity",
+      "supportingSlugs": [
+        "postpartum-fundus-lochia",
+        "newborn-safety-bath",
+        "bp26-carpn-x018-preeclampsia-symptom-triad",
+        "bp26-carpn-x019-newborn-thermoregulation",
+        "bp26-carpn-x020-breastfeeding-latch-troubleshooting"
+      ]
+    },
+    {
+      "topicSlug": "pediatrics",
+      "label": "Pediatrics (PN)",
+      "lessonCount": 5,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/pediatrics",
+      "supportingSlugs": [
+        "growth-chart-basics",
+        "immunization-consent",
+        "bp26-carpn-x021-pediatric-dosing-verification-mindset",
+        "bp26-carpn-x022-airway-obstruction-in-toddlers",
+        "bp26-carpn-x023-immunization-catch-up-planning"
+      ]
+    },
+    {
+      "topicSlug": "maternity",
+      "label": "Maternity",
+      "lessonCount": 5,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/maternity",
+      "supportingSlugs": [
+        "preeclampsia-vs-eclampsia",
+        "postpartum-hemorrhage",
+        "late-decelerations-fhr",
+        "newborn-thermoregulation-feeding",
+        "rh-incompatibility-basics"
+      ]
+    },
+    {
+      "topicSlug": "pediatrics",
+      "label": "Pediatrics",
+      "lessonCount": 5,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/pediatrics",
+      "supportingSlugs": [
+        "pediatric-fever-dehydration",
+        "rsv-pediatric-resp-distress",
+        "immunization-schedule-essentials",
+        "growth-failure-red-flags",
+        "non-accidental-trauma-suspicion"
+      ]
+    },
+    {
+      "topicSlug": "cardiovascular",
+      "label": "Cardiovascular (PN)",
+      "lessonCount": 5,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/cardiovascular",
+      "supportingSlugs": [
+        "heart-failure-monitoring",
+        "hypertension-teaching",
+        "edema-daily-weights",
+        "bp26-uslpn-pa-chf-volume",
+        "bp26-uslpn-rr-vte-mechanical"
+      ]
+    },
+    {
+      "topicSlug": "safety",
+      "label": "Safety (PN)",
+      "lessonCount": 5,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/safety",
+      "supportingSlugs": [
+        "falls-risk-side-rails-policy",
+        "restraint-monitoring-requirements",
+        "bp26-uslpn-sf-falls-bed-exit",
+        "bp26-uslpn-sf-restraint-alternatives",
+        "bp26-uslpn-rr-pressure-injury"
+      ]
+    },
+    {
+      "topicSlug": "hematology",
+      "label": "Hematology & Oncology",
+      "lessonCount": 4,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/hematology",
+      "supportingSlugs": [
+        "anemia-types-transfusion-thresholds",
+        "transfusion-reaction-recognition",
+        "neutropenic-precautions",
+        "sickle-cell-pain-acs"
+      ]
+    },
+    {
+      "topicSlug": "infectious",
+      "label": "Infectious Disease",
+      "lessonCount": 4,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/infectious",
+      "supportingSlugs": [
+        "sepsis-early-recognition-hy",
+        "hiv-confidentiality-pep-basics",
+        "isolation-precautions-in-practice",
+        "wound-infection-vs-colonization"
+      ]
+    },
+    {
+      "topicSlug": "leadership",
+      "label": "Leadership & Management",
+      "lessonCount": 4,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/leadership",
+      "supportingSlugs": [
+        "assignment-vs-delegation",
+        "ethical-distress-advocacy",
+        "legal-nurse-practice-act",
+        "qi-incident-reporting"
+      ]
+    },
+    {
+      "topicSlug": "safety",
+      "label": "Safety & Infection Control",
+      "lessonCount": 4,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/safety",
+      "supportingSlugs": [
+        "falls-hourly-rounding",
+        "restraint-alternatives-policy",
+        "medication-error-disclosure",
+        "sharp-safety-exposure"
+      ]
+    },
+    {
+      "topicSlug": "pn-foundation",
+      "label": "Scope & Foundations",
+      "lessonCount": 4,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/pn-foundation",
+      "supportingSlugs": [
+        "pn-scope-boundaries-delegation-rules-hy",
+        "therapeutic-communication",
+        "vital-signs-escalation",
+        "documentation-do-nots"
+      ]
+    },
+    {
+      "topicSlug": "hematology",
+      "label": "Hematology & Oncology",
+      "lessonCount": 4,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/hematology",
+      "supportingSlugs": [
+        "anemia-types-transfusion-thresholds",
+        "transfusion-reaction-recognition",
+        "neutropenic-precautions",
+        "sickle-cell-pain-acs"
+      ]
+    },
+    {
+      "topicSlug": "infectious",
+      "label": "Infectious Disease",
+      "lessonCount": 4,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/infectious",
+      "supportingSlugs": [
+        "sepsis-early-recognition-hy",
+        "hiv-confidentiality-pep-basics",
+        "isolation-precautions-in-practice",
+        "wound-infection-vs-colonization"
+      ]
+    },
+    {
+      "topicSlug": "leadership",
+      "label": "Leadership & Management",
+      "lessonCount": 4,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/leadership",
+      "supportingSlugs": [
+        "assignment-vs-delegation",
+        "ethical-distress-advocacy",
+        "legal-nurse-practice-act",
+        "qi-incident-reporting"
+      ]
+    },
+    {
+      "topicSlug": "safety",
+      "label": "Safety & Infection Control",
+      "lessonCount": 4,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/safety",
+      "supportingSlugs": [
+        "falls-hourly-rounding",
+        "restraint-alternatives-policy",
+        "medication-error-disclosure",
+        "sharp-safety-exposure"
+      ]
+    },
+    {
+      "topicSlug": "pn-foundation",
+      "label": "Scope & Foundations",
+      "lessonCount": 4,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/pn-foundation",
+      "supportingSlugs": [
+        "pn-scope-boundaries-delegation-rules-hy",
+        "therapeutic-communication",
+        "vital-signs-escalation",
+        "documentation-do-nots"
+      ]
+    },
+    {
+      "topicSlug": "respiratory",
+      "label": "Respiratory (PN)",
+      "lessonCount": 4,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/respiratory",
+      "supportingSlugs": [
+        "oxygen-devices-for-pn-care",
+        "inhaler-technique-teaching",
+        "copd-home-care",
+        "bp26-uslpn-pa-asthma-exac"
+      ]
+    },
+    {
+      "topicSlug": "neurological",
+      "label": "Neurological (PN)",
+      "lessonCount": 4,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/neurological",
+      "supportingSlugs": [
+        "stroke-sequela-mobility-assist",
+        "seizure-observation",
+        "bp26-uslpn-pa-stroke-window",
+        "bp26-uslpn-pa-ich-nih"
+      ]
+    },
+    {
+      "topicSlug": "maternity",
+      "label": "Maternity (PN)",
+      "lessonCount": 4,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/maternity",
+      "supportingSlugs": [
+        "postpartum-fundus-lochia",
+        "newborn-safety-bath",
+        "bp26-uslpn-mat-postpartum-hem",
+        "bp26-uslpn-mat-labor-fhr"
+      ]
+    },
+    {
+      "topicSlug": "pediatrics",
+      "label": "Pediatrics (PN)",
+      "lessonCount": 4,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/pediatrics",
+      "supportingSlugs": [
+        "growth-chart-basics",
+        "immunization-consent",
+        "bp26-uslpn-ped-febrile-infant",
+        "bp26-uslpn-ped-growth-chart"
+      ]
+    },
+    {
+      "topicSlug": "mental-health",
+      "label": "Mental Health (PN)",
+      "lessonCount": 4,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/mental-health",
+      "supportingSlugs": [
+        "suicide-precautions-observation",
+        "behavioral-escalation-reporting",
+        "bp26-uslpn-psy-anxiety-therapeutic",
+        "bp26-uslpn-psy-suicide-safety"
+      ]
+    },
+    {
+      "topicSlug": "prioritization-delegation",
+      "label": "Professional ethics",
+      "lessonCount": 4,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/prioritization-delegation",
+      "supportingSlugs": [
+        "bp26-uslpn-mo-ethical-concern",
+        "bp26-uslpn-mo-care-conference",
+        "bp26-uslpn-cs-multiorgan-triage",
+        "bp26-uslpn-cs-two-patients"
+      ]
+    },
+    {
+      "topicSlug": "musculoskeletal",
+      "label": "Musculoskeletal",
+      "lessonCount": 3,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/musculoskeletal",
+      "supportingSlugs": [
+        "hip-fracture-fall-risk",
+        "ra-flare-immune-modulators",
+        "immobility-dvt-prophylaxis"
+      ]
+    },
+    {
+      "topicSlug": "integumentary",
+      "label": "Integumentary",
+      "lessonCount": 3,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/integumentary",
+      "supportingSlugs": [
+        "burn-depth-fluid-resuscitation-basics",
+        "pressure-injury-staging",
+        "severe-dermatitis-skin-care"
+      ]
+    },
+    {
+      "topicSlug": "mental-health",
+      "label": "Mental Health",
+      "lessonCount": 3,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/mental-health",
+      "supportingSlugs": [
+        "suicide-risk-assessment-hy",
+        "psychotropic-side-effects",
+        "alcohol-withdrawal-ciwa"
+      ]
+    },
+    {
+      "topicSlug": "infection-control",
+      "label": "Infection control",
+      "lessonCount": 3,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/infection-control",
+      "supportingSlugs": [
+        "ca-rpn-infection-control",
+        "bp26-carpn-lab-cultures-timing",
+        "bp26-carpn-proc-cvc-dressing"
+      ]
+    },
+    {
+      "topicSlug": "gastrointestinal",
+      "label": "GI (PN)",
+      "lessonCount": 3,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/gastrointestinal",
+      "supportingSlugs": [
+        "npo-post-op-diet-progression",
+        "stool-assessment-report",
+        "bp26-carpn-proc-ngt-placement-care"
+      ]
+    },
+    {
+      "topicSlug": "renal-gu",
+      "label": "Renal & GU (PN)",
+      "lessonCount": 3,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/renal-gu",
+      "supportingSlugs": [
+        "catheter-care-cauti-prevention",
+        "dialysis-diet-teaching",
+        "bp26-carpn-pa-dialysis-access"
+      ]
+    },
+    {
+      "topicSlug": "musculoskeletal",
+      "label": "Musculoskeletal",
+      "lessonCount": 3,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/musculoskeletal",
+      "supportingSlugs": [
+        "hip-fracture-fall-risk",
+        "ra-flare-immune-modulators",
+        "immobility-dvt-prophylaxis"
+      ]
+    },
+    {
+      "topicSlug": "integumentary",
+      "label": "Integumentary",
+      "lessonCount": 3,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/integumentary",
+      "supportingSlugs": [
+        "burn-depth-fluid-resuscitation-basics",
+        "pressure-injury-staging",
+        "severe-dermatitis-skin-care"
+      ]
+    },
+    {
+      "topicSlug": "mental-health",
+      "label": "Mental Health",
+      "lessonCount": 3,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/mental-health",
+      "supportingSlugs": [
+        "suicide-risk-assessment-hy",
+        "psychotropic-side-effects",
+        "alcohol-withdrawal-ciwa"
+      ]
+    },
+    {
+      "topicSlug": "pharmacology",
+      "label": "Pharmacology (PN)",
+      "lessonCount": 3,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/pharmacology",
+      "supportingSlugs": [
+        "insulin-administration-checks",
+        "oral-hypoglycemics",
+        "antibiotic-side-effect-reporting"
+      ]
+    },
+    {
+      "topicSlug": "gastrointestinal",
+      "label": "GI (PN)",
+      "lessonCount": 3,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/gastrointestinal",
+      "supportingSlugs": [
+        "npo-post-op-diet-progression",
+        "stool-assessment-report",
+        "bp26-uslpn-pa-gi-bleed-stable"
+      ]
+    },
+    {
+      "topicSlug": "endocrine",
+      "label": "Endocrine (PN)",
+      "lessonCount": 3,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/endocrine",
+      "supportingSlugs": [
+        "fingerstick-hypoglycemia-response",
+        "foot-inspection-teaching",
+        "bp26-uslpn-pa-dka-vs-hhs"
+      ]
+    },
+    {
+      "topicSlug": "renal-gu",
+      "label": "Renal & GU (PN)",
+      "lessonCount": 3,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/renal-gu",
+      "supportingSlugs": [
+        "catheter-care-cauti-prevention",
+        "dialysis-diet-teaching",
+        "bp26-uslpn-pa-aki-urine-labs"
+      ]
+    },
+    {
+      "topicSlug": "nutrition",
+      "label": "Nutrition & Elimination",
+      "lessonCount": 2,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/nutrition",
+      "supportingSlugs": [
+        "enteral-feeding-tube-safety",
+        "tpn-line-care-basics"
+      ]
+    },
+    {
+      "topicSlug": "hypertension",
+      "label": "Hypertension",
+      "lessonCount": 2,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/hypertension",
+      "supportingSlugs": [
+        "ca-rpn-hypertension",
+        "bp26-carpn-pa-htn-crisis"
+      ]
+    },
+    {
+      "topicSlug": "shock",
+      "label": "Shock",
+      "lessonCount": 2,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/shock",
+      "supportingSlugs": [
+        "ca-rpn-shock",
+        "bp26-carpn-pa-burn-fluid-first"
+      ]
+    },
+    {
+      "topicSlug": "delegation",
+      "label": "Delegation & assignment",
+      "lessonCount": 2,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/delegation",
+      "supportingSlugs": [
+        "ca-rpn-delegation",
+        "bp26-carpn-mo-legal-scope"
+      ]
+    },
+    {
+      "topicSlug": "neurological",
+      "label": "Neurological (PN)",
+      "lessonCount": 2,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/neurological",
+      "supportingSlugs": [
+        "stroke-sequela-mobility-assist",
+        "seizure-observation"
+      ]
+    },
+    {
+      "topicSlug": "endocrine",
+      "label": "Endocrine (PN)",
+      "lessonCount": 2,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/endocrine",
+      "supportingSlugs": [
+        "fingerstick-hypoglycemia-response",
+        "foot-inspection-teaching"
+      ]
+    },
+    {
+      "topicSlug": "infectious",
+      "label": "Infection Control (PN)",
+      "lessonCount": 2,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/infectious",
+      "supportingSlugs": [
+        "ppe-transmission-basics",
+        "c-diff-contact-precautions"
+      ]
+    },
+    {
+      "topicSlug": "nutrition",
+      "label": "Nutrition & Elimination",
+      "lessonCount": 2,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/nutrition",
+      "supportingSlugs": [
+        "enteral-feeding-tube-safety",
+        "tpn-line-care-basics"
+      ]
+    },
+    {
+      "topicSlug": "pulmonary-embolism",
+      "label": "Pulmonary embolism",
+      "lessonCount": 2,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/pulmonary-embolism",
+      "supportingSlugs": [
+        "us-pn-pulmonary-embolism",
+        "bp26-uslpn-pa-pe-suspect"
+      ]
+    },
+    {
+      "topicSlug": "shock",
+      "label": "Shock",
+      "lessonCount": 2,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/shock",
+      "supportingSlugs": [
+        "us-pn-shock",
+        "bp26-uslpn-pa-shock-classify"
+      ]
+    },
+    {
+      "topicSlug": "pneumonia",
+      "label": "Pneumonia",
+      "lessonCount": 2,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/pneumonia",
+      "supportingSlugs": [
+        "us-pn-pneumonia",
+        "bp26-uslpn-pa-pneumonia-curbs"
+      ]
+    },
+    {
+      "topicSlug": "copd",
+      "label": "COPD & respiratory basics",
+      "lessonCount": 2,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/copd",
+      "supportingSlugs": [
+        "us-pn-copd-respiratory",
+        "bp26-uslpn-pa-copd-exac"
+      ]
+    },
+    {
+      "topicSlug": "diabetes-meds",
+      "label": "Insulin & hypoglycemia",
+      "lessonCount": 2,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/diabetes-meds",
+      "supportingSlugs": [
+        "us-pn-insulin-hypoglycemia",
+        "bp26-uslpn-ph-insulin-safety"
+      ]
+    },
+    {
+      "topicSlug": "sepsis",
+      "label": "Sepsis",
+      "lessonCount": 2,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/sepsis",
+      "supportingSlugs": [
+        "us-pn-sepsis",
+        "bp26-uslpn-pa-sepsis-trending"
+      ]
+    },
+    {
+      "topicSlug": "infection-control",
+      "label": "Infection control",
+      "lessonCount": 2,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/infection-control",
+      "supportingSlugs": [
+        "us-pn-infection-control",
+        "bp26-uslpn-sf-ppe-isolation"
+      ]
+    },
+    {
+      "topicSlug": "anticoagulation",
+      "label": "Anticoagulants",
+      "lessonCount": 2,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/anticoagulation",
+      "supportingSlugs": [
+        "us-pn-anticoagulants",
+        "bp26-uslpn-ph-anticoag-bridging"
+      ]
+    },
+    {
+      "topicSlug": "antibiotics",
+      "label": "Antibiotics",
+      "lessonCount": 2,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/antibiotics",
+      "supportingSlugs": [
+        "us-pn-antibiotics",
+        "bp26-uslpn-ph-abx-stewardship"
+      ]
+    },
+    {
+      "topicSlug": "pain",
+      "label": "Pain management",
+      "lessonCount": 2,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/pain",
+      "supportingSlugs": [
+        "us-pn-pain-management",
+        "bp26-uslpn-ph-opioid-resp-depr"
+      ]
+    },
+    {
+      "topicSlug": "delegation",
+      "label": "Delegation & assignment",
+      "lessonCount": 2,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/delegation",
+      "supportingSlugs": [
+        "us-pn-delegation",
+        "bp26-uslpn-mo-delegate-uap"
+      ]
+    },
+    {
+      "topicSlug": "prioritization",
+      "label": "Prioritization, ABCs & safety",
+      "lessonCount": 2,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/prioritization",
+      "supportingSlugs": [
+        "us-pn-prioritization-abcs",
+        "bp26-uslpn-mo-shift-report-sbar"
+      ]
+    },
+    {
+      "topicSlug": "infectious",
+      "label": "Infection Control (PN)",
+      "lessonCount": 2,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/infectious",
+      "supportingSlugs": [
+        "ppe-transmission-basics",
+        "c-diff-contact-precautions"
+      ]
+    },
+    {
+      "topicSlug": "pulmonary-embolism",
+      "label": "Pulmonary embolism",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/pulmonary-embolism",
+      "supportingSlugs": [
+        "ca-rn-pulmonary-embolism"
+      ]
+    },
+    {
+      "topicSlug": "heart-failure",
+      "label": "Heart failure",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/heart-failure",
+      "supportingSlugs": [
+        "ca-rn-heart-failure"
+      ]
+    },
+    {
+      "topicSlug": "acute-coronary",
+      "label": "Myocardial infarction",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/acute-coronary",
+      "supportingSlugs": [
+        "ca-rn-myocardial-infarction"
+      ]
+    },
+    {
+      "topicSlug": "angina",
+      "label": "Angina",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/angina",
+      "supportingSlugs": [
+        "ca-rn-angina"
+      ]
+    },
+    {
+      "topicSlug": "dysrhythmias",
+      "label": "Dysrhythmias",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/dysrhythmias",
+      "supportingSlugs": [
+        "ca-rn-dysrhythmias"
+      ]
+    },
+    {
+      "topicSlug": "hypertension",
+      "label": "Hypertension",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/hypertension",
+      "supportingSlugs": [
+        "ca-rn-hypertension"
+      ]
+    },
+    {
+      "topicSlug": "shock",
+      "label": "Shock",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/shock",
+      "supportingSlugs": [
+        "ca-rn-shock"
+      ]
+    },
+    {
+      "topicSlug": "asthma",
+      "label": "Asthma",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/asthma",
+      "supportingSlugs": [
+        "ca-rn-asthma"
+      ]
+    },
+    {
+      "topicSlug": "ards",
+      "label": "ARDS",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/ards",
+      "supportingSlugs": [
+        "ca-rn-ards"
+      ]
+    },
+    {
+      "topicSlug": "pneumonia",
+      "label": "Pneumonia",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/pneumonia",
+      "supportingSlugs": [
+        "ca-rn-pneumonia"
+      ]
+    },
+    {
+      "topicSlug": "copd",
+      "label": "COPD & respiratory basics",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/copd",
+      "supportingSlugs": [
+        "ca-rn-copd-respiratory"
+      ]
+    },
+    {
+      "topicSlug": "abg",
+      "label": "ABG interpretation",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/abg",
+      "supportingSlugs": [
+        "ca-rn-abg-interpretation"
+      ]
+    },
+    {
+      "topicSlug": "acid-base",
+      "label": "Acid–base disorders (advanced)",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/acid-base",
+      "supportingSlugs": [
+        "ca-rn-acid-base-advanced"
+      ]
+    },
+    {
+      "topicSlug": "sodium",
+      "label": "Sodium imbalance",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/sodium",
+      "supportingSlugs": [
+        "ca-rn-sodium-imbalance"
+      ]
+    },
+    {
+      "topicSlug": "potassium",
+      "label": "Potassium imbalance",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/potassium",
+      "supportingSlugs": [
+        "ca-rn-potassium-imbalance"
+      ]
+    },
+    {
+      "topicSlug": "diabetes-meds",
+      "label": "Insulin & hypoglycemia",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/diabetes-meds",
+      "supportingSlugs": [
+        "ca-rn-insulin-hypoglycemia"
+      ]
+    },
+    {
+      "topicSlug": "sepsis",
+      "label": "Sepsis",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/sepsis",
+      "supportingSlugs": [
+        "ca-rn-sepsis"
+      ]
+    },
+    {
+      "topicSlug": "infection-control",
+      "label": "Infection control",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/infection-control",
+      "supportingSlugs": [
+        "ca-rn-infection-control"
+      ]
+    },
+    {
+      "topicSlug": "anticoagulation",
+      "label": "Anticoagulants",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/anticoagulation",
+      "supportingSlugs": [
+        "ca-rn-anticoagulants"
+      ]
+    },
+    {
+      "topicSlug": "antibiotics",
+      "label": "Antibiotics",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/antibiotics",
+      "supportingSlugs": [
+        "ca-rn-antibiotics"
+      ]
+    },
+    {
+      "topicSlug": "pain",
+      "label": "Pain management",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/pain",
+      "supportingSlugs": [
+        "ca-rn-pain-management"
+      ]
+    },
+    {
+      "topicSlug": "wounds",
+      "label": "Wound care",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/wounds",
+      "supportingSlugs": [
+        "ca-rn-wound-care"
+      ]
+    },
+    {
+      "topicSlug": "delegation",
+      "label": "Delegation & assignment",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/delegation",
+      "supportingSlugs": [
+        "ca-rn-delegation"
+      ]
+    },
+    {
+      "topicSlug": "prioritization",
+      "label": "Prioritization, ABCs & safety",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/prioritization",
+      "supportingSlugs": [
+        "ca-rn-prioritization-abcs"
+      ]
+    },
+    {
+      "topicSlug": "clinical-judgment",
+      "label": "General nursing clinical judgment",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/clinical-judgment",
+      "supportingSlugs": [
+        "ca-rn-general-nursing-clinical"
+      ]
+    },
+    {
+      "topicSlug": "safety-scope",
+      "label": "Safety & scope",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/safety-scope",
+      "supportingSlugs": [
+        "pn-scope-safety-basics"
+      ]
+    },
+    {
+      "topicSlug": "pulmonary-embolism",
+      "label": "Pulmonary embolism",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/pulmonary-embolism",
+      "supportingSlugs": [
+        "ca-rpn-pulmonary-embolism"
+      ]
+    },
+    {
+      "topicSlug": "heart-failure",
+      "label": "Heart failure",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/heart-failure",
+      "supportingSlugs": [
+        "ca-rpn-heart-failure"
+      ]
+    },
+    {
+      "topicSlug": "acute-coronary",
+      "label": "Myocardial infarction",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/acute-coronary",
+      "supportingSlugs": [
+        "ca-rpn-myocardial-infarction"
+      ]
+    },
+    {
+      "topicSlug": "angina",
+      "label": "Angina",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/angina",
+      "supportingSlugs": [
+        "ca-rpn-angina"
+      ]
+    },
+    {
+      "topicSlug": "dysrhythmias",
+      "label": "Dysrhythmias",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/dysrhythmias",
+      "supportingSlugs": [
+        "ca-rpn-dysrhythmias"
+      ]
+    },
+    {
+      "topicSlug": "asthma",
+      "label": "Asthma",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/asthma",
+      "supportingSlugs": [
+        "ca-rpn-asthma"
+      ]
+    },
+    {
+      "topicSlug": "ards",
+      "label": "ARDS",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/ards",
+      "supportingSlugs": [
+        "ca-rpn-ards"
+      ]
+    },
+    {
+      "topicSlug": "pneumonia",
+      "label": "Pneumonia",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/pneumonia",
+      "supportingSlugs": [
+        "ca-rpn-pneumonia"
+      ]
+    },
+    {
+      "topicSlug": "copd",
+      "label": "COPD & respiratory basics",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/copd",
+      "supportingSlugs": [
+        "ca-rpn-copd-respiratory"
+      ]
+    },
+    {
+      "topicSlug": "abg",
+      "label": "ABG interpretation",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/abg",
+      "supportingSlugs": [
+        "ca-rpn-abg-interpretation"
+      ]
+    },
+    {
+      "topicSlug": "acid-base",
+      "label": "Acid–base disorders (advanced)",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/acid-base",
+      "supportingSlugs": [
+        "ca-rpn-acid-base-advanced"
+      ]
+    },
+    {
+      "topicSlug": "sodium",
+      "label": "Sodium imbalance",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/sodium",
+      "supportingSlugs": [
+        "ca-rpn-sodium-imbalance"
+      ]
+    },
+    {
+      "topicSlug": "potassium",
+      "label": "Potassium imbalance",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/potassium",
+      "supportingSlugs": [
+        "ca-rpn-potassium-imbalance"
+      ]
+    },
+    {
+      "topicSlug": "diabetes-meds",
+      "label": "Insulin & hypoglycemia",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/diabetes-meds",
+      "supportingSlugs": [
+        "ca-rpn-insulin-hypoglycemia"
+      ]
+    },
+    {
+      "topicSlug": "sepsis",
+      "label": "Sepsis",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/sepsis",
+      "supportingSlugs": [
+        "ca-rpn-sepsis"
+      ]
+    },
+    {
+      "topicSlug": "anticoagulation",
+      "label": "Anticoagulants",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/anticoagulation",
+      "supportingSlugs": [
+        "ca-rpn-anticoagulants"
+      ]
+    },
+    {
+      "topicSlug": "antibiotics",
+      "label": "Antibiotics",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/antibiotics",
+      "supportingSlugs": [
+        "ca-rpn-antibiotics"
+      ]
+    },
+    {
+      "topicSlug": "pain",
+      "label": "Pain management",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/pain",
+      "supportingSlugs": [
+        "ca-rpn-pain-management"
+      ]
+    },
+    {
+      "topicSlug": "wounds",
+      "label": "Wound care",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/wounds",
+      "supportingSlugs": [
+        "ca-rpn-wound-care"
+      ]
+    },
+    {
+      "topicSlug": "prioritization",
+      "label": "Prioritization, ABCs & safety",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/prioritization",
+      "supportingSlugs": [
+        "ca-rpn-prioritization-abcs"
+      ]
+    },
+    {
+      "topicSlug": "clinical-judgment",
+      "label": "General nursing clinical judgment",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/clinical-judgment",
+      "supportingSlugs": [
+        "ca-rpn-general-nursing-clinical"
+      ]
+    },
+    {
+      "topicSlug": "medication-safety",
+      "label": "Medication safety",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/medication-safety",
+      "supportingSlugs": [
+        "bp26-carpn-ph-high-alert-rounds"
+      ]
+    },
+    {
+      "topicSlug": "pulmonary-embolism",
+      "label": "Pulmonary embolism",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/pulmonary-embolism",
+      "supportingSlugs": [
+        "us-rn-pulmonary-embolism"
+      ]
+    },
+    {
+      "topicSlug": "heart-failure",
+      "label": "Heart failure",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/heart-failure",
+      "supportingSlugs": [
+        "us-rn-heart-failure"
+      ]
+    },
+    {
+      "topicSlug": "acute-coronary",
+      "label": "Myocardial infarction",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/acute-coronary",
+      "supportingSlugs": [
+        "us-rn-myocardial-infarction"
+      ]
+    },
+    {
+      "topicSlug": "angina",
+      "label": "Angina",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/angina",
+      "supportingSlugs": [
+        "us-rn-angina"
+      ]
+    },
+    {
+      "topicSlug": "dysrhythmias",
+      "label": "Dysrhythmias",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/dysrhythmias",
+      "supportingSlugs": [
+        "us-rn-dysrhythmias"
+      ]
+    },
+    {
+      "topicSlug": "hypertension",
+      "label": "Hypertension",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/hypertension",
+      "supportingSlugs": [
+        "us-rn-hypertension"
+      ]
+    },
+    {
+      "topicSlug": "shock",
+      "label": "Shock",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/shock",
+      "supportingSlugs": [
+        "us-rn-shock"
+      ]
+    },
+    {
+      "topicSlug": "asthma",
+      "label": "Asthma",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/asthma",
+      "supportingSlugs": [
+        "us-rn-asthma"
+      ]
+    },
+    {
+      "topicSlug": "ards",
+      "label": "ARDS",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/ards",
+      "supportingSlugs": [
+        "us-rn-ards"
+      ]
+    },
+    {
+      "topicSlug": "pneumonia",
+      "label": "Pneumonia",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/pneumonia",
+      "supportingSlugs": [
+        "us-rn-pneumonia"
+      ]
+    },
+    {
+      "topicSlug": "copd",
+      "label": "COPD & respiratory basics",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/copd",
+      "supportingSlugs": [
+        "us-rn-copd-respiratory"
+      ]
+    },
+    {
+      "topicSlug": "abg",
+      "label": "ABG interpretation",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/abg",
+      "supportingSlugs": [
+        "us-rn-abg-interpretation"
+      ]
+    },
+    {
+      "topicSlug": "acid-base",
+      "label": "Acid–base disorders (advanced)",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/acid-base",
+      "supportingSlugs": [
+        "us-rn-acid-base-advanced"
+      ]
+    },
+    {
+      "topicSlug": "sodium",
+      "label": "Sodium imbalance",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/sodium",
+      "supportingSlugs": [
+        "us-rn-sodium-imbalance"
+      ]
+    },
+    {
+      "topicSlug": "potassium",
+      "label": "Potassium imbalance",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/potassium",
+      "supportingSlugs": [
+        "us-rn-potassium-imbalance"
+      ]
+    },
+    {
+      "topicSlug": "diabetes-meds",
+      "label": "Insulin & hypoglycemia",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/diabetes-meds",
+      "supportingSlugs": [
+        "us-rn-insulin-hypoglycemia"
+      ]
+    },
+    {
+      "topicSlug": "sepsis",
+      "label": "Sepsis",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/sepsis",
+      "supportingSlugs": [
+        "us-rn-sepsis"
+      ]
+    },
+    {
+      "topicSlug": "infection-control",
+      "label": "Infection control",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/infection-control",
+      "supportingSlugs": [
+        "us-rn-infection-control"
+      ]
+    },
+    {
+      "topicSlug": "anticoagulation",
+      "label": "Anticoagulants",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/anticoagulation",
+      "supportingSlugs": [
+        "us-rn-anticoagulants"
+      ]
+    },
+    {
+      "topicSlug": "antibiotics",
+      "label": "Antibiotics",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/antibiotics",
+      "supportingSlugs": [
+        "us-rn-antibiotics"
+      ]
+    },
+    {
+      "topicSlug": "pain",
+      "label": "Pain management",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/pain",
+      "supportingSlugs": [
+        "us-rn-pain-management"
+      ]
+    },
+    {
+      "topicSlug": "wounds",
+      "label": "Wound care",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/wounds",
+      "supportingSlugs": [
+        "us-rn-wound-care"
+      ]
+    },
+    {
+      "topicSlug": "delegation",
+      "label": "Delegation & assignment",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/delegation",
+      "supportingSlugs": [
+        "us-rn-delegation"
+      ]
+    },
+    {
+      "topicSlug": "prioritization",
+      "label": "Prioritization, ABCs & safety",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/prioritization",
+      "supportingSlugs": [
+        "us-rn-prioritization-abcs"
+      ]
+    },
+    {
+      "topicSlug": "clinical-judgment",
+      "label": "General nursing clinical judgment",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/clinical-judgment",
+      "supportingSlugs": [
+        "us-rn-general-nursing-clinical"
+      ]
+    },
+    {
+      "topicSlug": "coordinated-care",
+      "label": "Coordinated care",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/coordinated-care",
+      "supportingSlugs": [
+        "lpn-scope-delegation-priority"
+      ]
+    },
+    {
+      "topicSlug": "heart-failure",
+      "label": "Heart failure",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/heart-failure",
+      "supportingSlugs": [
+        "us-pn-heart-failure"
+      ]
+    },
+    {
+      "topicSlug": "acute-coronary",
+      "label": "Myocardial infarction",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/acute-coronary",
+      "supportingSlugs": [
+        "us-pn-myocardial-infarction"
+      ]
+    },
+    {
+      "topicSlug": "angina",
+      "label": "Angina",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/angina",
+      "supportingSlugs": [
+        "us-pn-angina"
+      ]
+    },
+    {
+      "topicSlug": "dysrhythmias",
+      "label": "Dysrhythmias",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/dysrhythmias",
+      "supportingSlugs": [
+        "us-pn-dysrhythmias"
+      ]
+    },
+    {
+      "topicSlug": "hypertension",
+      "label": "Hypertension",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/hypertension",
+      "supportingSlugs": [
+        "us-pn-hypertension"
+      ]
+    },
+    {
+      "topicSlug": "asthma",
+      "label": "Asthma",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/asthma",
+      "supportingSlugs": [
+        "us-pn-asthma"
+      ]
+    },
+    {
+      "topicSlug": "ards",
+      "label": "ARDS",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/ards",
+      "supportingSlugs": [
+        "us-pn-ards"
+      ]
+    },
+    {
+      "topicSlug": "abg",
+      "label": "ABG interpretation",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/abg",
+      "supportingSlugs": [
+        "us-pn-abg-interpretation"
+      ]
+    },
+    {
+      "topicSlug": "acid-base",
+      "label": "Acid–base disorders (advanced)",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/acid-base",
+      "supportingSlugs": [
+        "us-pn-acid-base-advanced"
+      ]
+    },
+    {
+      "topicSlug": "sodium",
+      "label": "Sodium imbalance",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/sodium",
+      "supportingSlugs": [
+        "us-pn-sodium-imbalance"
+      ]
+    },
+    {
+      "topicSlug": "potassium",
+      "label": "Potassium imbalance",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/potassium",
+      "supportingSlugs": [
+        "us-pn-potassium-imbalance"
+      ]
+    },
+    {
+      "topicSlug": "wounds",
+      "label": "Wound care",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/wounds",
+      "supportingSlugs": [
+        "us-pn-wound-care"
+      ]
+    },
+    {
+      "topicSlug": "clinical-judgment",
+      "label": "General nursing clinical judgment",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/clinical-judgment",
+      "supportingSlugs": [
+        "us-pn-general-nursing-clinical"
+      ]
+    },
+    {
+      "topicSlug": "medication-safety",
+      "label": "Medication safety",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/medication-safety",
+      "supportingSlugs": [
+        "bp26-uslpn-sf-med-reconciliation"
+      ]
+    },
+    {
+      "topicSlug": "health-promotion",
+      "label": "Health promotion",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/health-promotion",
+      "supportingSlugs": [
+        "bp26-uslpn-hp-immunization-ed"
+      ]
+    },
+    {
+      "topicSlug": "psychosocial",
+      "label": "Palliative basics",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/psychosocial",
+      "supportingSlugs": [
+        "bp26-uslpn-bc-comfort-dying"
+      ]
+    },
+    {
+      "topicSlug": "clinical-reasoning",
+      "label": "Clinical reasoning",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/clinical-reasoning",
+      "supportingSlugs": [
+        "fnp-differential-primary-care"
+      ]
+    },
+    {
+      "topicSlug": "womens-health",
+      "label": "Women’s health",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/womens-health",
+      "supportingSlugs": [
+        "fnp-womens-prenatal-anemia-workup"
+      ]
+    },
+    {
+      "topicSlug": "pediatrics",
+      "label": "Pediatrics",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/pediatrics",
+      "supportingSlugs": [
+        "fnp-pediatric-fever-urgency"
+      ]
+    },
+    {
+      "topicSlug": "adolescent-health",
+      "label": "Adolescent health",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/adolescent-health",
+      "supportingSlugs": [
+        "fnp-adolescent-mental-health-screening"
+      ]
+    },
+    {
+      "topicSlug": "geriatrics",
+      "label": "Geriatrics",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/geriatrics",
+      "supportingSlugs": [
+        "fnp-geriatric-falls-syncope"
+      ]
+    },
+    {
+      "topicSlug": "heart-failure",
+      "label": "Heart failure",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/heart-failure",
+      "supportingSlugs": [
+        "fnp-overlay-heart-failure"
+      ]
+    },
+    {
+      "topicSlug": "myocardial-infarction",
+      "label": "MI / ACS",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/myocardial-infarction",
+      "supportingSlugs": [
+        "fnp-overlay-myocardial-infarction"
+      ]
+    },
+    {
+      "topicSlug": "shock",
+      "label": "Shock",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/shock",
+      "supportingSlugs": [
+        "fnp-overlay-shock"
+      ]
+    },
+    {
+      "topicSlug": "abg-acid-base",
+      "label": "ABG & acid–base",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/abg-acid-base",
+      "supportingSlugs": [
+        "fnp-overlay-abg-acid-base"
+      ]
+    },
+    {
+      "topicSlug": "respiratory-acute",
+      "label": "COPD, asthma, ARDS, pneumonia, PE",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/respiratory-acute",
+      "supportingSlugs": [
+        "fnp-overlay-respiratory-acute"
+      ]
+    },
+    {
+      "topicSlug": "diabetes-metabolic",
+      "label": "Diabetes & metabolic",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/diabetes-metabolic",
+      "supportingSlugs": [
+        "fnp-overlay-diabetes-metabolic"
+      ]
+    },
+    {
+      "topicSlug": "sepsis-infection",
+      "label": "Sepsis & infection control",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/sepsis-infection",
+      "supportingSlugs": [
+        "fnp-overlay-sepsis-infection"
+      ]
+    },
+    {
+      "topicSlug": "electrolytes-volume",
+      "label": "Electrolytes & volume",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/electrolytes-volume",
+      "supportingSlugs": [
+        "fnp-overlay-electrolytes-volume"
+      ]
+    },
+    {
+      "topicSlug": "np-differential-prescribing-chronic",
+      "label": "Differential, prescribing & chronic care",
+      "lessonCount": 1,
+      "examplePillarPattern": "/{country}/{role}/{exam}/lessons/topics/np-differential-prescribing-chronic",
+      "supportingSlugs": [
+        "fnp-overlay-np-differential-prescribing-chronic"
+      ]
+    }
+  ]
+}

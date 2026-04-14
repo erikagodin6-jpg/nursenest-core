@@ -216,72 +216,7 @@ async function main() {
   const outFile = join(OUT_DIR, "eeat-content-audit.json");
   await writeFile(outFile, `${JSON.stringify(payload, null, 2)}\n`, "utf8");
   console.log(`Wrote ${outFile}`);
-
-  const thinRatio = totalLessons ? thinLessons.length / totalLessons : 0;
-  const eeatGapRatio = totalLessons ? incompleteEeat.length / totalLessons : 0;
-  const contentQualityScore = Math.max(
-    0,
-    Math.min(100, Math.round(100 - thinRatio * 35 - eeatGapRatio * 25)),
-  );
-  const blogAuthorPct =
-    typeof blogAudit === "object" &&
-    blogAudit !== null &&
-    "authorCoveragePct" in blogAudit &&
-    typeof (blogAudit as { authorCoveragePct?: number }).authorCoveragePct === "number"
-      ? (blogAudit as { authorCoveragePct: number }).authorCoveragePct
-      : null;
-
-  const finalStatus = {
-    generatedAt,
-    contentQualityScore,
-    contentQualityNotes:
-      "Heuristic from bundled pathway catalog only (word count + section labels). Production DB lessons may differ.",
-    trustSignals: {
-      aboutPage: { path: "/about", status: "present" },
-      editorialPolicy: { path: "/editorial-policy", status: "implemented" },
-      contentReviewPolicy: { path: "/content-review-policy", status: "implemented" },
-      contactPage: { path: "/contact", status: "present" },
-      privacyPolicy: { path: "/privacy", status: "present" },
-      disclaimer: { path: "/disclaimer", status: "present" },
-      blogAuthorAttribution: {
-        status: blogAuthorPct === null ? "unknown" : blogAuthorPct >= 80 ? "strong" : "needs_backfill",
-        publishedPostsWithNamedAuthorPct: blogAuthorPct,
-      },
-    },
-    seoReadiness: {
-      score: Math.max(0, Math.min(100, 88 - Math.round(thinRatio * 15))),
-      sitemapIndex: "/sitemap.xml",
-      canonicalUrls: "Enforced per route via safeGenerateMetadata / marketing alternates",
-      hreflang: "Partial — English default + selected locales in marketing alternates; incomplete locales noindex",
-      notes: "Added /about, /editorial-policy, /content-review-policy to core sitemap list.",
-    },
-    paywallSeoSafety: {
-      status: "aligned",
-      notes:
-        "Marketing lessons use preview sections for non-subscribers; /app surfaces noindex. See paywallSeo in content audit.",
-    },
-    missingElements: [
-      ...(thinLessons.length > 0 ? ["Catalog lessons flagged thin — expand sections or merge duplicates"] : []),
-      ...(duplicateTitles.length > 0 ? ["Duplicate lesson titles across pathways — dedupe or differentiate"] : []),
-      ...(incompleteEeat.length > 0 ? ["Some lessons missing one or more E-E-A-T section kinds in catalog JSON"] : []),
-      blogAuthorPct !== null && blogAuthorPct < 50
-        ? ["Backfill authorDisplayName on published BlogPost rows for stronger E-E-A-T"]
-        : null,
-      "Clinical tone QA: sample manual review of high-traffic lessons and blog posts",
-    ].filter(Boolean),
-    rankingReadiness: {
-      level:
-        contentQualityScore >= 75 && (blogAuthorPct === null || blogAuthorPct >= 40)
-          ? "good_with_gaps"
-          : "needs_work",
-      summary:
-        "Ship trust pages + author schema; continue systematic lesson spine completion and author backfill for YMYL blog content.",
-    },
-  };
-
-  const finalFile = join(OUT_DIR, "eeat-final-status.json");
-  await writeFile(finalFile, `${JSON.stringify(finalStatus, null, 2)}\n`, "utf8");
-  console.log(`Wrote ${finalFile}`);
+  console.log("For consolidated page scores + eeat-final-status.json, run: npm run audit:eeat-system");
 }
 
 main().catch((e) => {
