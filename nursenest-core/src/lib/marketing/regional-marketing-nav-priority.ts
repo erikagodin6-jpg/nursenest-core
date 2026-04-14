@@ -6,6 +6,7 @@
 import type { GlobalRegionSlug } from "@/lib/i18n/global-regions";
 
 export type RegionalMarketingStrip =
+  | "philippines"
   | "middle_east"
   | "australia"
   | "china"
@@ -26,6 +27,9 @@ function p(pathname: string): string {
 
 function pathStrip(strippedPath: string): RegionalMarketingStrip {
   const path = p(strippedPath);
+  if (path === "/exams/philippines" || path.startsWith("/exams/philippines/")) {
+    return "philippines";
+  }
   if (path === "/exams/middle-east" || path.startsWith("/exams/middle-east/") || path.startsWith("/middle-east/")) {
     return "middle_east";
   }
@@ -67,6 +71,7 @@ function pathStrip(strippedPath: string): RegionalMarketingStrip {
 
 function cookieStrip(globalRegion: GlobalRegionSlug | null | undefined): RegionalMarketingStrip {
   if (!globalRegion) return null;
+  if (globalRegion === "philippines") return "philippines";
   if (globalRegion === "uae" || globalRegion === "saudi-arabia") return "middle_east";
   if (globalRegion === "aus") return "australia";
   if (globalRegion === "china") return "china";
@@ -89,6 +94,7 @@ const INDIA_LOCALES = new Set(["hi", "ta", "te", "bn", "mr", "gu"]);
 const MIDDLE_EAST_LOCALES = new Set(["ar", "ur"]);
 
 function localeStrip(locale: string): RegionalMarketingStrip {
+  if (locale === "tl") return "philippines";
   if (locale === "zh" || locale === "zh-tw") return "china";
   if (locale === "ko") return "korea";
   if (locale === "ja") return "japan";
