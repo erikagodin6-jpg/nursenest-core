@@ -31,6 +31,7 @@
     "audit:full-content-coverage": "tsx scripts/full-content-coverage-audit.ts",
     "test:lesson-links-audit": "tsx --test scripts/audit-lesson-links.test.ts",
     "audit:pathway-lessons": "tsx scripts/audit-pathway-lesson-inventory.ts",
+    "audit:lesson-system-inventory": "tsx scripts/lesson-system-wide-inventory.mts",
     "audit:np-spine-db": "tsx scripts/np-lesson-spine-vs-db.mts",
     "audit:lesson-accessibility": "tsx scripts/lesson-accessibility-audit.mts",
     "test:lesson-accessibility": "tsx --test src/lib/pathway-lessons/lesson-accessibility-audit.test.ts src/lib/learner/find-lessons-for-exam-context.test.ts",

@@ -21,11 +21,13 @@ function Inner() {
           tier?: string;
           country?: string;
           subscriptionStatus?: string;
+          role?: string;
         };
         await update({
           tier: data.tier,
           country: data.country,
           subscriptionStatus: data.subscriptionStatus,
+          ...(data.role !== undefined ? { role: data.role } : {}),
         });
       } catch {
         /* Session still valid; entitlements use DB */

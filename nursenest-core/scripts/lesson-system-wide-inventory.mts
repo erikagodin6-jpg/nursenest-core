@@ -122,6 +122,23 @@ async function loadDbLessonsByPathway(): Promise<Map<string, PathwayLessonRecord
       where: { status: ContentStatus.PUBLISHED, locale: "en" },
       take: 20000,
       orderBy: [{ pathwayId: "asc" }, { slug: "asc" }],
+      select: {
+        pathwayId: true,
+        slug: true,
+        title: true,
+        topic: true,
+        topicSlug: true,
+        bodySystem: true,
+        previewSectionCount: true,
+        seoTitle: true,
+        seoDescription: true,
+        sections: true,
+        locale: true,
+        exams: true,
+        countries: true,
+        priority: true,
+        examMeta: true,
+      },
     });
     for (const row of rows) {
       const lesson = normalizeLesson(pathwayLessonRowToInput(row), row.pathwayId);
