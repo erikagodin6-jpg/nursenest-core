@@ -101,7 +101,9 @@ export function LearnerShellUserBar({ pathwayShortLabel = null }: { pathwayShort
       ? "learner.userBar.plan.active"
       : sub === "grace"
         ? "learner.userBar.plan.grace"
-        : "learner.userBar.plan.none";
+        : sub === "past_due"
+          ? "learner.userBar.plan.past_due"
+          : "learner.userBar.plan.none";
 
   const scopeLine =
     tier && country

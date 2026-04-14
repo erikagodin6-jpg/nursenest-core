@@ -284,7 +284,7 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
             ) : null
           }
         />
-        {lessonHasExamTakeaways(lesson.studyTakeaways) ? (
+        {fullAccess && lessonHasExamTakeaways(lesson.studyTakeaways) ? (
           <div className="mt-4 max-w-5xl">
             <ExamTakeawaysBlock pathway={pathway} items={lesson.studyTakeaways} position="top" />
           </div>
@@ -294,7 +294,7 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
           <LessonQualityNotice tier={lessonQuality.tier} wordCount={lessonQuality.wordCount} />
           <PathwayLessonQuickReview bullets={quickReviewBullets} />
         </div>
-        {lesson.memoryAnchor ? (
+        {fullAccess && lesson.memoryAnchor ? (
           <div className="mt-4 max-w-5xl">
             <PathwayLessonMemoryAnchorStrip text={lesson.memoryAnchor} />
           </div>
@@ -418,13 +418,13 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
                   );
                 })}
               </article>
-              {lesson.studyCommonTraps && lesson.studyCommonTraps.length > 0 ? (
+              {fullAccess && lesson.studyCommonTraps && lesson.studyCommonTraps.length > 0 ? (
                 <div className="mx-auto mt-6 max-w-5xl">
                   <PathwayLessonCommonTrapsStrip items={lesson.studyCommonTraps} />
                 </div>
               ) : null}
             </main>
-            {lessonHasExamTakeaways(lesson.studyTakeaways) ? (
+            {fullAccess && lessonHasExamTakeaways(lesson.studyTakeaways) ? (
               <div className="mx-auto mt-6 max-w-5xl">
                 <ExamTakeawaysBlock pathway={pathway} items={lesson.studyTakeaways} position="bottom" />
               </div>

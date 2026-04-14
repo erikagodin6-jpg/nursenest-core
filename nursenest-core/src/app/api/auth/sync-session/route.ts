@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
-import { getUserAccess } from "@/lib/entitlements/get-user-access";
+import { getUserAccess, subscriptionStatusForSession } from "@/lib/entitlements/get-user-access";
 import { prisma } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
@@ -21,11 +21,7 @@ export async function GET() {
   }
 
   const userAccess = await getUserAccess(userId);
-
-  let subscriptionStatus: "active" | "grace" | "none" = "none";
-  if (userAccess.hasPremium) {
-    subscriptionStatus = userAccess.reason === "grace_period" ? "grace" : "active";
-  }
+  const subscriptionStatus = subscriptionStatusForSession(userAccess);
 
   return NextResponse.json({
     tier: userAccess.allowedProfession.tier,

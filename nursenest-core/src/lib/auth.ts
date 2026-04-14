@@ -16,8 +16,9 @@ import {
 } from "@/lib/auth/login-lockout";
 import { isEmailLikeIdentifier, normalizeLoginIdentifier } from "@/lib/auth/normalize-login-identifier";
 import { checkRateLimit } from "@/lib/http/rate-limit-in-memory";
-import { SubscriptionStatus, UserRole } from "@prisma/client";
+import { UserRole } from "@prisma/client";
 import { isLearnerEntitlementAdminOverrideRole } from "@/lib/auth/staff-roles";
+import { getUserAccess, subscriptionStatusForSession } from "@/lib/entitlements/get-user-access";
 import { prisma } from "@/lib/db";
 import * as Sentry from "@sentry/nextjs";
 import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
@@ -197,18 +198,13 @@ export const authConfig: NextAuthConfig = {
           userIdPrefix: user.id.slice(0, 8),
         });
 
-        let subscriptionStatus: "active" | "grace" | "none" = "none";
+        let subscriptionStatus: "active" | "grace" | "none" | "past_due" = "none";
         if (isLearnerEntitlementAdminOverrideRole(user.role)) {
           subscriptionStatus = "active";
         } else {
           try {
-            const sub = await prisma.subscription.findFirst({
-              where: { userId: user.id, status: { in: [SubscriptionStatus.ACTIVE, SubscriptionStatus.GRACE] } },
-              orderBy: { createdAt: "desc" },
-              select: { status: true },
-            });
-            if (sub?.status === SubscriptionStatus.ACTIVE) subscriptionStatus = "active";
-            else if (sub?.status === SubscriptionStatus.GRACE) subscriptionStatus = "grace";
+            const ua = await getUserAccess(user.id);
+            subscriptionStatus = subscriptionStatusForSession(ua);
           } catch {
             /* DB unavailable — session still usable; entitlements resolve server-side */
           }

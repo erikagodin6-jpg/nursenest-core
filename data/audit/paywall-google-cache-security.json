@@ -1,7 +1,8 @@
 {
   "schemaVersion": 1,
   "generatedAt": "2026-04-14T16:45:52Z",
-  "summary": "Subscriber and freemium boundaries are enforced server-side for APIs and app routes. Marketing pathway lessons intentionally expose a bounded preview (first section, word-clamped) to signed-out users for SEO; full bodies are not rendered until entitlement passes. Residual risks are mostly operational (future routes must keep the same patterns).",
+  "endToEndAudit": "2026-04-14T17:10:00Z",
+  "summary": "Subscriber and freemium boundaries are enforced server-side for APIs and app routes. Marketing pathway lessons expose a bounded preview (first section, word-clamped). Exam takeaways, memory-anchor strip, and common-traps strip are subscriber-only (fullAccess) so they are not duplicated in HTML/RSC output for locked users. Regression tests: `npm run test:paywall-surface-policy` in `nursenest-core/`.",
   "googleIndexLeak": {
     "status": "MITIGATED_WITH_INTENTIONAL_PUBLIC_PREVIEW",
     "routes": {
@@ -11,7 +12,7 @@
         "note": "Many leaf routes also set `robots` explicitly."
       },
       "/{country}/{role}/{exam}/lessons/*": {
-        "finding": "Marketing pathway lesson detail uses `visibleSectionsForLesson` (`src/lib/lessons/pathway-lesson-visible-sections.ts`) — locked users get first section only with ~180-word body clamp; not full lesson.",
+        "finding": "Marketing pathway lesson detail uses `visibleSectionsForLesson` (`src/lib/lessons/pathway-lesson-visible-sections.ts`) — locked users get first section only with ~180-word body clamp; not full lesson. Teaching supplements (ExamTakeawaysBlock, memory anchor, common traps) render only when `fullAccess` is true.",
         "seo": "`generateMetadata` sets canonical + conditional `robots` for incomplete/premium-gated catalog quality (`page.tsx` in marketing pathway lesson).",
         "doc": "See `docs/pathway-lesson-catalog-security.md`."
       },
@@ -69,7 +70,8 @@
   "fixesAppliedThisAudit": [
     "Default `metadata.robots` noindex/nofollow on `src/app/(student)/app/layout.tsx` for entire `/app` tree.",
     "`Cache-Control: private, no-store, must-revalidate` for `/app/:path*` in `next.config.ts` (production).",
-    "Removed misleading `revalidate` export from marketing pathway lesson detail page (keeps `force-dynamic` as single source of truth)."
+    "Removed misleading `revalidate` export from marketing pathway lesson detail page (keeps `force-dynamic` as single source of truth).",
+    "Gated `ExamTakeawaysBlock`, `PathwayLessonMemoryAnchorStrip`, and `PathwayLessonCommonTrapsStrip` behind `fullAccess` on marketing pathway lesson detail (`.../lessons/[lessonSlug]/page.tsx`)."
   ],
   "recommendedFollowUps": [
     "Periodic grep for `select: {[^}]*content: true` on non-admin API routes.",

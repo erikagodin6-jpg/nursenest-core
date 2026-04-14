@@ -84,7 +84,9 @@ export const authCallbacks: NonNullable<NextAuthConfig["callbacks"]> = {
     su.alliedProfessionKey =
       typeof token.alliedProfessionKey === "string" ? token.alliedProfessionKey : null;
     su.subscriptionStatus =
-      token.subscriptionStatus === "active" || token.subscriptionStatus === "grace"
+      token.subscriptionStatus === "active" ||
+      token.subscriptionStatus === "grace" ||
+      token.subscriptionStatus === "past_due"
         ? token.subscriptionStatus
         : "none";
     su.credentialVersion = typeof token.credentialVersion === "number" ? token.credentialVersion : 0;
